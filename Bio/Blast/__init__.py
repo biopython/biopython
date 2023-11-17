@@ -58,7 +58,8 @@ class Record(list):
       - mbstat: A dictionary with summary statistics of a Mega BLAST search.
                 As this information is stored near the end of the XML file,
                 this attribute can only be accessed after the full file has
-                been read.
+                been read. This dictionary can contain the same keys as the
+                dictionary stored under the stat dictionary.
 
     """
 
@@ -85,17 +86,18 @@ class Records:
      - param:      A dictionary with the parameters used for the BLAST run.
                    You may find the following information in this dictionary:
                    'expect':      threshold on the expected number of chance
-                                  matches [float];
-                   'sc-match':    score for matching nucleotides [int];
-                   'sc-mismatch': score for mismatched nucleotides [int];
-                   'gap-open':    gap opening penalty [int];
-                   'gap-extend':  gap extension penalty [int];
+                                  matches (float);
+                   'sc-match':    score for matching nucleotides (integer);
+                   'sc-mismatch': score for mismatched nucleotides (integer);
+                   'gap-open':    gap opening penalty (integer);
+                   'gap-extend':  gap extension penalty (integer);
                    'filter':      filtering options applied in the BLAST run
-                                  [str];
+                                  (integer);
                    'matrix':      the scoring matrix used in the BLAST run
-                                  (e.g., 'BLOSUM62') [str];
-                   'include':     [float];
-                   'pattern':     [str].
+                                  (e.g., 'BLOSUM62') (string);
+                   'include':     e-value threshold for inclusion in multipass
+                                  model in psiblast (float);
+                   'pattern':     PHI-BLAST pattern (string).
 
     """  # noqa: RST201, RST203, RST301
 

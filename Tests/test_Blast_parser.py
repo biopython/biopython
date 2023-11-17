@@ -40942,6 +40942,1099 @@ lcl|QUERY        94 YQQAKAFLASPATQVRNIEREEVLSKGAK 123
 """,
             )
 
+    def test_phiblast(self):
+        """Parsing BLASTP 2.14.1+ (phiblast.xml)."""
+        filename = "phiblast.xml"
+        datafile = os.path.join("Blast", filename)
+        with open(datafile, "rb") as handle:
+            records = Blast.parse(handle)
+            self.assertEqual(records.program, "blastp")
+            self.assertEqual(records.version, "BLASTP 2.14.1+")
+            self.assertEqual(
+                records.reference,
+                'Zheng Zhang, Alejandro A. Sch&auml;ffer, Webb Miller, Thomas L. Madden, David J. Lipman, Eugene V. Koonin, and Stephen F. Altschul (1998), "Protein sequence similarity searches using patterns as seeds", Nucleic Acids Res. 26:3986-3990.',
+            )
+            self.assertEqual(records.db, "nr")
+            self.assertIsInstance(records.query, SeqRecord)
+            self.assertEqual(records.query.id, "Query_74414")
+            self.assertEqual(records.query.description, "unnamed protein product")
+            self.assertEqual(repr(records.query.seq), "Seq(None, length=664)")
+            self.assertEqual(len(records.param), 6)
+            self.assertEqual(records.param["matrix"], "BLOSUM62")
+            self.assertAlmostEqual(records.param["expect"], 0.05)
+            self.assertEqual(records.param["gap-open"], 11)
+            self.assertEqual(records.param["gap-extend"], 1)
+            self.assertEqual(records.param["filter"], "F")
+            self.assertEqual(
+                records.param["pattern"],
+                "[LIVMF]-G-E-x-[GAS]-[LIVM]-x(5,11)-R-[STAQ]-A-x-[LIVMA]-x-[STACV]",
+            )
+            record = next(records)
+            self.assertIsInstance(record.query, SeqRecord)
+            self.assertEqual(record.query.id, "Query_74414")
+            self.assertEqual(record.query.description, "unnamed protein product")
+            self.assertEqual(repr(record.query.seq), "Seq(None, length=664)")
+
+            self.assertEqual(len(record.stat), 7)
+            self.assertEqual(record.stat["db-num"], 633473216)
+            self.assertEqual(record.stat["db-len"], 248084082182)
+            self.assertEqual(record.stat["hsp-len"], 0)
+            self.assertAlmostEqual(record.stat["eff-space"], 0.0)
+            self.assertAlmostEqual(record.stat["kappa"], 0.047)
+            self.assertAlmostEqual(record.stat["lambda"], 0.27)
+            self.assertAlmostEqual(record.stat["entropy"], 1.0)
+            self.assertEqual(len(record), 10)
+            hit = record[0]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "ref|NP_001075863.1|")
+            self.assertEqual(hit.target.name, "NP_001075863")
+            self.assertEqual(
+                hit.target.description,
+                "cyclic nucleotide-gated olfactory channel [Oryctolagus cuniculus] >emb|CAA42201.1| aorta CNG channel (rACNG) [Oryctolagus cuniculus] >prf||1919268A cyclic nucleotide-gated channel [Oryctolagus cuniculus]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=732)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 3336.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 1290.65)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 664)
+            self.assertEqual(hsp.annotations["positive"], 664)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[ 68, 732],
+                              [  0, 664]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 664)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 68)
+            self.assertEqual(hsp.target.annotations["end"], 732)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 664))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLA...EQP')",
+            )
+            self.assertEqual(hsp.query.id, "Query_74414")
+            self.assertEqual(hsp.query.description, "unnamed protein product")
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({68: 'MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLA...EQP'}, length=732)",
+            )
+            self.assertEqual(hsp.target.id, "ref|NP_001075863.1|")
+            self.assertEqual(hsp.target.name, "NP_001075863")
+            self.assertEqual(
+                hsp.target.description,
+                "cyclic nucleotide-gated olfactory channel [Oryctolagus cuniculus] >emb|CAA42201.1| aorta CNG channel (rACNG) [Oryctolagus cuniculus] >prf||1919268A cyclic nucleotide-gated channel [Oryctolagus cuniculus]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLAEMDAPQQRRGGFRRIVRLVGVIRQWANRNFREEEARPDSFLERFRGPELQTVTTQQGDGKGDKDGDGKGTKKKFELFVLDPAGDWYYRWLFVIAMPVLYNWCLLVARACFSDLQRGYFLVWLVLDYFSDVVYIADLFIRLRTGFLEQGLLVKDPKKLRDNYIHTLQFKLDVASIIPTDLIYFAVGIHNPELRFNRLLHFARMFEFFDRTETRTSYPNIFRISNLVLYILVIIHWNACIYYAISKSIGFGVDTWVYPNITDPEYGYLAREYIYCLYWSTLTLTTIGETPPPVKDEEYLFVIFDFLIGVLIFATIVGNVGSMISNMNATRAEFQAKIDAVKHYMQFRKVSKEMEAKVIKWFDYLWTNKKTVDEREVLKNLPAKLRAEIAINVHLSTLKKVRIFQDCEAGLLVELVLKLRPQVFSPGDYICRKGDIGKEMYIIKEGKLAVVADDGVTQYALLSAGSCFGEISILNIKGSKMGNRRTANIRSLGYSDLFCLSKDDLMEAVTEYPDAKKVLEERGREILMKEGLLDENEVAASMEVDVQEKLKQLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLEVKMKQNTEDDYLSDGMNSPEPAAAEQP",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+ref|NP_00        68 MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLAEMDAPQ
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744         0 MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLAEMDAPQ
+
+ref|NP_00       128 QRRGGFRRIVRLVGVIRQWANRNFREEEARPDSFLERFRGPELQTVTTQQGDGKGDKDGD
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744        60 QRRGGFRRIVRLVGVIRQWANRNFREEEARPDSFLERFRGPELQTVTTQQGDGKGDKDGD
+
+ref|NP_00       188 GKGTKKKFELFVLDPAGDWYYRWLFVIAMPVLYNWCLLVARACFSDLQRGYFLVWLVLDY
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       120 GKGTKKKFELFVLDPAGDWYYRWLFVIAMPVLYNWCLLVARACFSDLQRGYFLVWLVLDY
+
+ref|NP_00       248 FSDVVYIADLFIRLRTGFLEQGLLVKDPKKLRDNYIHTLQFKLDVASIIPTDLIYFAVGI
+                180 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       180 FSDVVYIADLFIRLRTGFLEQGLLVKDPKKLRDNYIHTLQFKLDVASIIPTDLIYFAVGI
+
+ref|NP_00       308 HNPELRFNRLLHFARMFEFFDRTETRTSYPNIFRISNLVLYILVIIHWNACIYYAISKSI
+                240 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       240 HNPELRFNRLLHFARMFEFFDRTETRTSYPNIFRISNLVLYILVIIHWNACIYYAISKSI
+
+ref|NP_00       368 GFGVDTWVYPNITDPEYGYLAREYIYCLYWSTLTLTTIGETPPPVKDEEYLFVIFDFLIG
+                300 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       300 GFGVDTWVYPNITDPEYGYLAREYIYCLYWSTLTLTTIGETPPPVKDEEYLFVIFDFLIG
+
+ref|NP_00       428 VLIFATIVGNVGSMISNMNATRAEFQAKIDAVKHYMQFRKVSKEMEAKVIKWFDYLWTNK
+                360 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       360 VLIFATIVGNVGSMISNMNATRAEFQAKIDAVKHYMQFRKVSKEMEAKVIKWFDYLWTNK
+
+ref|NP_00       488 KTVDEREVLKNLPAKLRAEIAINVHLSTLKKVRIFQDCEAGLLVELVLKLRPQVFSPGDY
+                420 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       420 KTVDEREVLKNLPAKLRAEIAINVHLSTLKKVRIFQDCEAGLLVELVLKLRPQVFSPGDY
+
+ref|NP_00       548 ICRKGDIGKEMYIIKEGKLAVVADDGVTQYALLSAGSCFGEISILNIKGSKMGNRRTANI
+                480 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       480 ICRKGDIGKEMYIIKEGKLAVVADDGVTQYALLSAGSCFGEISILNIKGSKMGNRRTANI
+
+ref|NP_00       608 RSLGYSDLFCLSKDDLMEAVTEYPDAKKVLEERGREILMKEGLLDENEVAASMEVDVQEK
+                540 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       540 RSLGYSDLFCLSKDDLMEAVTEYPDAKKVLEERGREILMKEGLLDENEVAASMEVDVQEK
+
+ref|NP_00       668 LKQLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLEVKMKQNTEDDYLSDGMNSPEPAA
+                600 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       600 LKQLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLEVKMKQNTEDDYLSDGMNSPEPAA
+
+ref|NP_00       728 AEQP 732
+                660 |||| 664
+Query_744       660 AEQP 664
+""",
+            )
+            hit = record[1]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "ref|XP_051689802.1|")
+            self.assertEqual(hit.target.name, "XP_051689802")
+            self.assertEqual(
+                hit.target.description,
+                "cyclic nucleotide-gated olfactory channel isoform X3 [Oryctolagus cuniculus] >sp|Q28718.1| RecName: Full=Cyclic nucleotide-gated olfactory channel; AltName: Full=Aorta CNG channel; Short=RACNG; AltName: Full=Cyclic nucleotide-gated cation channel 2; AltName: Full=Cyclic nucleotide-gated channel alpha-2; Short=CNG channel alpha-2; Short=CNG-2; Short=CNG2 [Oryctolagus cuniculus]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=664)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 3336.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 1290.65)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 664)
+            self.assertEqual(hsp.annotations["positive"], 664)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 664],
+                              [  0, 664]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 664)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 664)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 664))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLA...EQP')",
+            )
+            self.assertEqual(hsp.query.id, "Query_74414")
+            self.assertEqual(hsp.query.description, "unnamed protein product")
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLA...EQP')",
+            )
+            self.assertEqual(hsp.target.id, "ref|XP_051689802.1|")
+            self.assertEqual(hsp.target.name, "XP_051689802")
+            self.assertEqual(
+                hsp.target.description,
+                "cyclic nucleotide-gated olfactory channel isoform X3 [Oryctolagus cuniculus] >sp|Q28718.1| RecName: Full=Cyclic nucleotide-gated olfactory channel; AltName: Full=Aorta CNG channel; Short=RACNG; AltName: Full=Cyclic nucleotide-gated cation channel 2; AltName: Full=Cyclic nucleotide-gated channel alpha-2; Short=CNG channel alpha-2; Short=CNG-2; Short=CNG2 [Oryctolagus cuniculus]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLAEMDAPQQRRGGFRRIVRLVGVIRQWANRNFREEEARPDSFLERFRGPELQTVTTQQGDGKGDKDGDGKGTKKKFELFVLDPAGDWYYRWLFVIAMPVLYNWCLLVARACFSDLQRGYFLVWLVLDYFSDVVYIADLFIRLRTGFLEQGLLVKDPKKLRDNYIHTLQFKLDVASIIPTDLIYFAVGIHNPELRFNRLLHFARMFEFFDRTETRTSYPNIFRISNLVLYILVIIHWNACIYYAISKSIGFGVDTWVYPNITDPEYGYLAREYIYCLYWSTLTLTTIGETPPPVKDEEYLFVIFDFLIGVLIFATIVGNVGSMISNMNATRAEFQAKIDAVKHYMQFRKVSKEMEAKVIKWFDYLWTNKKTVDEREVLKNLPAKLRAEIAINVHLSTLKKVRIFQDCEAGLLVELVLKLRPQVFSPGDYICRKGDIGKEMYIIKEGKLAVVADDGVTQYALLSAGSCFGEISILNIKGSKMGNRRTANIRSLGYSDLFCLSKDDLMEAVTEYPDAKKVLEERGREILMKEGLLDENEVAASMEVDVQEKLKQLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLEVKMKQNTEDDYLSDGMNSPEPAAAEQP",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+ref|XP_05         0 MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLAEMDAPQ
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744         0 MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLAEMDAPQ
+
+ref|XP_05        60 QRRGGFRRIVRLVGVIRQWANRNFREEEARPDSFLERFRGPELQTVTTQQGDGKGDKDGD
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744        60 QRRGGFRRIVRLVGVIRQWANRNFREEEARPDSFLERFRGPELQTVTTQQGDGKGDKDGD
+
+ref|XP_05       120 GKGTKKKFELFVLDPAGDWYYRWLFVIAMPVLYNWCLLVARACFSDLQRGYFLVWLVLDY
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       120 GKGTKKKFELFVLDPAGDWYYRWLFVIAMPVLYNWCLLVARACFSDLQRGYFLVWLVLDY
+
+ref|XP_05       180 FSDVVYIADLFIRLRTGFLEQGLLVKDPKKLRDNYIHTLQFKLDVASIIPTDLIYFAVGI
+                180 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       180 FSDVVYIADLFIRLRTGFLEQGLLVKDPKKLRDNYIHTLQFKLDVASIIPTDLIYFAVGI
+
+ref|XP_05       240 HNPELRFNRLLHFARMFEFFDRTETRTSYPNIFRISNLVLYILVIIHWNACIYYAISKSI
+                240 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       240 HNPELRFNRLLHFARMFEFFDRTETRTSYPNIFRISNLVLYILVIIHWNACIYYAISKSI
+
+ref|XP_05       300 GFGVDTWVYPNITDPEYGYLAREYIYCLYWSTLTLTTIGETPPPVKDEEYLFVIFDFLIG
+                300 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       300 GFGVDTWVYPNITDPEYGYLAREYIYCLYWSTLTLTTIGETPPPVKDEEYLFVIFDFLIG
+
+ref|XP_05       360 VLIFATIVGNVGSMISNMNATRAEFQAKIDAVKHYMQFRKVSKEMEAKVIKWFDYLWTNK
+                360 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       360 VLIFATIVGNVGSMISNMNATRAEFQAKIDAVKHYMQFRKVSKEMEAKVIKWFDYLWTNK
+
+ref|XP_05       420 KTVDEREVLKNLPAKLRAEIAINVHLSTLKKVRIFQDCEAGLLVELVLKLRPQVFSPGDY
+                420 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       420 KTVDEREVLKNLPAKLRAEIAINVHLSTLKKVRIFQDCEAGLLVELVLKLRPQVFSPGDY
+
+ref|XP_05       480 ICRKGDIGKEMYIIKEGKLAVVADDGVTQYALLSAGSCFGEISILNIKGSKMGNRRTANI
+                480 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       480 ICRKGDIGKEMYIIKEGKLAVVADDGVTQYALLSAGSCFGEISILNIKGSKMGNRRTANI
+
+ref|XP_05       540 RSLGYSDLFCLSKDDLMEAVTEYPDAKKVLEERGREILMKEGLLDENEVAASMEVDVQEK
+                540 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       540 RSLGYSDLFCLSKDDLMEAVTEYPDAKKVLEERGREILMKEGLLDENEVAASMEVDVQEK
+
+ref|XP_05       600 LKQLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLEVKMKQNTEDDYLSDGMNSPEPAA
+                600 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       600 LKQLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLEVKMKQNTEDDYLSDGMNSPEPAA
+
+ref|XP_05       660 AEQP 664
+                660 |||| 664
+Query_744       660 AEQP 664
+""",
+            )
+            hit = record[2]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "ref|XP_017206345.1|")
+            self.assertEqual(hit.target.name, "XP_017206345")
+            self.assertEqual(
+                hit.target.description,
+                "cyclic nucleotide-gated olfactory channel isoform X2 [Oryctolagus cuniculus]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=677)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 3336.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 1290.65)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 664)
+            self.assertEqual(hsp.annotations["positive"], 664)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[ 13, 677],
+                              [  0, 664]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 664)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 13)
+            self.assertEqual(hsp.target.annotations["end"], 677)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 664))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLA...EQP')",
+            )
+            self.assertEqual(hsp.query.id, "Query_74414")
+            self.assertEqual(hsp.query.description, "unnamed protein product")
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({13: 'MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLA...EQP'}, length=677)",
+            )
+            self.assertEqual(hsp.target.id, "ref|XP_017206345.1|")
+            self.assertEqual(hsp.target.name, "XP_017206345")
+            self.assertEqual(
+                hsp.target.description,
+                "cyclic nucleotide-gated olfactory channel isoform X2 [Oryctolagus cuniculus]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLAEMDAPQQRRGGFRRIVRLVGVIRQWANRNFREEEARPDSFLERFRGPELQTVTTQQGDGKGDKDGDGKGTKKKFELFVLDPAGDWYYRWLFVIAMPVLYNWCLLVARACFSDLQRGYFLVWLVLDYFSDVVYIADLFIRLRTGFLEQGLLVKDPKKLRDNYIHTLQFKLDVASIIPTDLIYFAVGIHNPELRFNRLLHFARMFEFFDRTETRTSYPNIFRISNLVLYILVIIHWNACIYYAISKSIGFGVDTWVYPNITDPEYGYLAREYIYCLYWSTLTLTTIGETPPPVKDEEYLFVIFDFLIGVLIFATIVGNVGSMISNMNATRAEFQAKIDAVKHYMQFRKVSKEMEAKVIKWFDYLWTNKKTVDEREVLKNLPAKLRAEIAINVHLSTLKKVRIFQDCEAGLLVELVLKLRPQVFSPGDYICRKGDIGKEMYIIKEGKLAVVADDGVTQYALLSAGSCFGEISILNIKGSKMGNRRTANIRSLGYSDLFCLSKDDLMEAVTEYPDAKKVLEERGREILMKEGLLDENEVAASMEVDVQEKLKQLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLEVKMKQNTEDDYLSDGMNSPEPAAAEQP",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+ref|XP_01        13 MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLAEMDAPQ
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744         0 MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLAEMDAPQ
+
+ref|XP_01        73 QRRGGFRRIVRLVGVIRQWANRNFREEEARPDSFLERFRGPELQTVTTQQGDGKGDKDGD
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744        60 QRRGGFRRIVRLVGVIRQWANRNFREEEARPDSFLERFRGPELQTVTTQQGDGKGDKDGD
+
+ref|XP_01       133 GKGTKKKFELFVLDPAGDWYYRWLFVIAMPVLYNWCLLVARACFSDLQRGYFLVWLVLDY
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       120 GKGTKKKFELFVLDPAGDWYYRWLFVIAMPVLYNWCLLVARACFSDLQRGYFLVWLVLDY
+
+ref|XP_01       193 FSDVVYIADLFIRLRTGFLEQGLLVKDPKKLRDNYIHTLQFKLDVASIIPTDLIYFAVGI
+                180 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       180 FSDVVYIADLFIRLRTGFLEQGLLVKDPKKLRDNYIHTLQFKLDVASIIPTDLIYFAVGI
+
+ref|XP_01       253 HNPELRFNRLLHFARMFEFFDRTETRTSYPNIFRISNLVLYILVIIHWNACIYYAISKSI
+                240 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       240 HNPELRFNRLLHFARMFEFFDRTETRTSYPNIFRISNLVLYILVIIHWNACIYYAISKSI
+
+ref|XP_01       313 GFGVDTWVYPNITDPEYGYLAREYIYCLYWSTLTLTTIGETPPPVKDEEYLFVIFDFLIG
+                300 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       300 GFGVDTWVYPNITDPEYGYLAREYIYCLYWSTLTLTTIGETPPPVKDEEYLFVIFDFLIG
+
+ref|XP_01       373 VLIFATIVGNVGSMISNMNATRAEFQAKIDAVKHYMQFRKVSKEMEAKVIKWFDYLWTNK
+                360 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       360 VLIFATIVGNVGSMISNMNATRAEFQAKIDAVKHYMQFRKVSKEMEAKVIKWFDYLWTNK
+
+ref|XP_01       433 KTVDEREVLKNLPAKLRAEIAINVHLSTLKKVRIFQDCEAGLLVELVLKLRPQVFSPGDY
+                420 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       420 KTVDEREVLKNLPAKLRAEIAINVHLSTLKKVRIFQDCEAGLLVELVLKLRPQVFSPGDY
+
+ref|XP_01       493 ICRKGDIGKEMYIIKEGKLAVVADDGVTQYALLSAGSCFGEISILNIKGSKMGNRRTANI
+                480 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       480 ICRKGDIGKEMYIIKEGKLAVVADDGVTQYALLSAGSCFGEISILNIKGSKMGNRRTANI
+
+ref|XP_01       553 RSLGYSDLFCLSKDDLMEAVTEYPDAKKVLEERGREILMKEGLLDENEVAASMEVDVQEK
+                540 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       540 RSLGYSDLFCLSKDDLMEAVTEYPDAKKVLEERGREILMKEGLLDENEVAASMEVDVQEK
+
+ref|XP_01       613 LKQLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLEVKMKQNTEDDYLSDGMNSPEPAA
+                600 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       600 LKQLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLEVKMKQNTEDDYLSDGMNSPEPAA
+
+ref|XP_01       673 AEQP 677
+                660 |||| 664
+Query_744       660 AEQP 664
+""",
+            )
+            hit = record[3]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "ref|XP_051689801.1|")
+            self.assertEqual(hit.target.name, "XP_051689801")
+            self.assertEqual(
+                hit.target.description,
+                "cyclic nucleotide-gated olfactory channel isoform X1 [Oryctolagus cuniculus]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=687)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 3336.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 1290.65)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 664)
+            self.assertEqual(hsp.annotations["positive"], 664)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[ 23, 687],
+                              [  0, 664]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 664)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 23)
+            self.assertEqual(hsp.target.annotations["end"], 687)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 664))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLA...EQP')",
+            )
+            self.assertEqual(hsp.query.id, "Query_74414")
+            self.assertEqual(hsp.query.description, "unnamed protein product")
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({23: 'MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLA...EQP'}, length=687)",
+            )
+            self.assertEqual(hsp.target.id, "ref|XP_051689801.1|")
+            self.assertEqual(hsp.target.name, "XP_051689801")
+            self.assertEqual(
+                hsp.target.description,
+                "cyclic nucleotide-gated olfactory channel isoform X1 [Oryctolagus cuniculus]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLAEMDAPQQRRGGFRRIVRLVGVIRQWANRNFREEEARPDSFLERFRGPELQTVTTQQGDGKGDKDGDGKGTKKKFELFVLDPAGDWYYRWLFVIAMPVLYNWCLLVARACFSDLQRGYFLVWLVLDYFSDVVYIADLFIRLRTGFLEQGLLVKDPKKLRDNYIHTLQFKLDVASIIPTDLIYFAVGIHNPELRFNRLLHFARMFEFFDRTETRTSYPNIFRISNLVLYILVIIHWNACIYYAISKSIGFGVDTWVYPNITDPEYGYLAREYIYCLYWSTLTLTTIGETPPPVKDEEYLFVIFDFLIGVLIFATIVGNVGSMISNMNATRAEFQAKIDAVKHYMQFRKVSKEMEAKVIKWFDYLWTNKKTVDEREVLKNLPAKLRAEIAINVHLSTLKKVRIFQDCEAGLLVELVLKLRPQVFSPGDYICRKGDIGKEMYIIKEGKLAVVADDGVTQYALLSAGSCFGEISILNIKGSKMGNRRTANIRSLGYSDLFCLSKDDLMEAVTEYPDAKKVLEERGREILMKEGLLDENEVAASMEVDVQEKLKQLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLEVKMKQNTEDDYLSDGMNSPEPAAAEQP",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+ref|XP_05        23 MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLAEMDAPQ
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744         0 MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLAEMDAPQ
+
+ref|XP_05        83 QRRGGFRRIVRLVGVIRQWANRNFREEEARPDSFLERFRGPELQTVTTQQGDGKGDKDGD
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744        60 QRRGGFRRIVRLVGVIRQWANRNFREEEARPDSFLERFRGPELQTVTTQQGDGKGDKDGD
+
+ref|XP_05       143 GKGTKKKFELFVLDPAGDWYYRWLFVIAMPVLYNWCLLVARACFSDLQRGYFLVWLVLDY
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       120 GKGTKKKFELFVLDPAGDWYYRWLFVIAMPVLYNWCLLVARACFSDLQRGYFLVWLVLDY
+
+ref|XP_05       203 FSDVVYIADLFIRLRTGFLEQGLLVKDPKKLRDNYIHTLQFKLDVASIIPTDLIYFAVGI
+                180 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       180 FSDVVYIADLFIRLRTGFLEQGLLVKDPKKLRDNYIHTLQFKLDVASIIPTDLIYFAVGI
+
+ref|XP_05       263 HNPELRFNRLLHFARMFEFFDRTETRTSYPNIFRISNLVLYILVIIHWNACIYYAISKSI
+                240 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       240 HNPELRFNRLLHFARMFEFFDRTETRTSYPNIFRISNLVLYILVIIHWNACIYYAISKSI
+
+ref|XP_05       323 GFGVDTWVYPNITDPEYGYLAREYIYCLYWSTLTLTTIGETPPPVKDEEYLFVIFDFLIG
+                300 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       300 GFGVDTWVYPNITDPEYGYLAREYIYCLYWSTLTLTTIGETPPPVKDEEYLFVIFDFLIG
+
+ref|XP_05       383 VLIFATIVGNVGSMISNMNATRAEFQAKIDAVKHYMQFRKVSKEMEAKVIKWFDYLWTNK
+                360 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       360 VLIFATIVGNVGSMISNMNATRAEFQAKIDAVKHYMQFRKVSKEMEAKVIKWFDYLWTNK
+
+ref|XP_05       443 KTVDEREVLKNLPAKLRAEIAINVHLSTLKKVRIFQDCEAGLLVELVLKLRPQVFSPGDY
+                420 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       420 KTVDEREVLKNLPAKLRAEIAINVHLSTLKKVRIFQDCEAGLLVELVLKLRPQVFSPGDY
+
+ref|XP_05       503 ICRKGDIGKEMYIIKEGKLAVVADDGVTQYALLSAGSCFGEISILNIKGSKMGNRRTANI
+                480 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       480 ICRKGDIGKEMYIIKEGKLAVVADDGVTQYALLSAGSCFGEISILNIKGSKMGNRRTANI
+
+ref|XP_05       563 RSLGYSDLFCLSKDDLMEAVTEYPDAKKVLEERGREILMKEGLLDENEVAASMEVDVQEK
+                540 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       540 RSLGYSDLFCLSKDDLMEAVTEYPDAKKVLEERGREILMKEGLLDENEVAASMEVDVQEK
+
+ref|XP_05       623 LKQLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLEVKMKQNTEDDYLSDGMNSPEPAA
+                600 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       600 LKQLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLEVKMKQNTEDDYLSDGMNSPEPAA
+
+ref|XP_05       683 AEQP 687
+                660 |||| 664
+Query_744       660 AEQP 664
+""",
+            )
+            hit = record[4]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "ref|XP_004407164.1|")
+            self.assertEqual(hit.target.name, "XP_004407164")
+            self.assertEqual(
+                hit.target.description,
+                "PREDICTED: cyclic nucleotide-gated olfactory channel [Odobenus rosmarus divergens]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=664)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 3231.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 1249.79)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 639)
+            self.assertEqual(hsp.annotations["positive"], 652)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 664],
+                              [  0, 664]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 664)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 664)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 664))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLA...EQP')",
+            )
+            self.assertEqual(hsp.query.id, "Query_74414")
+            self.assertEqual(hsp.query.description, "unnamed protein product")
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('MTEKSNGVKSSPANNHNHHTPPAIKANGKDDHRTNSRPQSAADDDTSSELQRLA...DEP')",
+            )
+            self.assertEqual(hsp.target.id, "ref|XP_004407164.1|")
+            self.assertEqual(hsp.target.name, "XP_004407164")
+            self.assertEqual(
+                hsp.target.description,
+                "PREDICTED: cyclic nucleotide-gated olfactory channel [Odobenus rosmarus divergens]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MTEKSNGVKSSPANNHN+H P  IKANGKD+ RT SRPQSAADDDTSSELQRLAEMDAPQQ RGGFRRIVRLVG+IR+WAN+NFREEE RPDSFLERFRGPELQTVTTQQGDGKGDKDG+GKGTKKKFELFVLDPAGDWYYRWLFVIAMPVLYNWCLLVARACFSDLQRGY+LVWLVLDYFSDVVYI DLFIRLRTGFLEQGLLVKDPKKLRDNYIHTLQFKLDVASIIPTDLIYFAVGIH+PELRFNRLLHFARMFEFFDRTETRTSYPNIFRISNLVLYILVIIHWNACIYYAISKSIGFGVDTWVYPNITDPEYGYLAREYIYCLYWSTLTLTTIGETPPPVKDEEYLFVIFDFLIGVLIFATIVGNVGSMISNMNATRAEFQAKIDAVKHYMQFRKVSKEMEAKVIKWFDYLWTNKK+VDEREVLKNLPAKLRAEIAINVHLSTLKKVRIFQDCEAGLLVELVLKLRPQVFSPGDYICRKGDIGKEMYIIKEGKLAVVADDGVTQYALLSAGSCFGEISILNIKGSKMGNRRTANIRSLGYSDLFCLSKDDLMEAVTEYPDAKKVLEERGREILMKEGLLDENEVAASMEVDVQEKL+QLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLE KMKQN  DDYLSDG+NSPEP AA++P",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+ref|XP_00         0 MTEKSNGVKSSPANNHNHHTPPAIKANGKDDHRTNSRPQSAADDDTSSELQRLAEMDAPQ
+                  0 |||||||||||||||||.|.|..|||||||..||.|||||||||||||||||||||||||
+Query_744         0 MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLAEMDAPQ
+
+ref|XP_00        60 QGRGGFRRIVRLVGIIREWANKNFREEEPRPDSFLERFRGPELQTVTTQQGDGKGDKDGE
+                 60 |.||||||||||||.||.|||.||||||.||||||||||||||||||||||||||||||.
+Query_744        60 QRRGGFRRIVRLVGVIRQWANRNFREEEARPDSFLERFRGPELQTVTTQQGDGKGDKDGD
+
+ref|XP_00       120 GKGTKKKFELFVLDPAGDWYYRWLFVIAMPVLYNWCLLVARACFSDLQRGYYLVWLVLDY
+                120 |||||||||||||||||||||||||||||||||||||||||||||||||||.||||||||
+Query_744       120 GKGTKKKFELFVLDPAGDWYYRWLFVIAMPVLYNWCLLVARACFSDLQRGYFLVWLVLDY
+
+ref|XP_00       180 FSDVVYITDLFIRLRTGFLEQGLLVKDPKKLRDNYIHTLQFKLDVASIIPTDLIYFAVGI
+                180 |||||||.||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       180 FSDVVYIADLFIRLRTGFLEQGLLVKDPKKLRDNYIHTLQFKLDVASIIPTDLIYFAVGI
+
+ref|XP_00       240 HSPELRFNRLLHFARMFEFFDRTETRTSYPNIFRISNLVLYILVIIHWNACIYYAISKSI
+                240 |.||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       240 HNPELRFNRLLHFARMFEFFDRTETRTSYPNIFRISNLVLYILVIIHWNACIYYAISKSI
+
+ref|XP_00       300 GFGVDTWVYPNITDPEYGYLAREYIYCLYWSTLTLTTIGETPPPVKDEEYLFVIFDFLIG
+                300 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       300 GFGVDTWVYPNITDPEYGYLAREYIYCLYWSTLTLTTIGETPPPVKDEEYLFVIFDFLIG
+
+ref|XP_00       360 VLIFATIVGNVGSMISNMNATRAEFQAKIDAVKHYMQFRKVSKEMEAKVIKWFDYLWTNK
+                360 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       360 VLIFATIVGNVGSMISNMNATRAEFQAKIDAVKHYMQFRKVSKEMEAKVIKWFDYLWTNK
+
+ref|XP_00       420 KSVDEREVLKNLPAKLRAEIAINVHLSTLKKVRIFQDCEAGLLVELVLKLRPQVFSPGDY
+                420 |.||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       420 KTVDEREVLKNLPAKLRAEIAINVHLSTLKKVRIFQDCEAGLLVELVLKLRPQVFSPGDY
+
+ref|XP_00       480 ICRKGDIGKEMYIIKEGKLAVVADDGVTQYALLSAGSCFGEISILNIKGSKMGNRRTANI
+                480 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       480 ICRKGDIGKEMYIIKEGKLAVVADDGVTQYALLSAGSCFGEISILNIKGSKMGNRRTANI
+
+ref|XP_00       540 RSLGYSDLFCLSKDDLMEAVTEYPDAKKVLEERGREILMKEGLLDENEVAASMEVDVQEK
+                540 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       540 RSLGYSDLFCLSKDDLMEAVTEYPDAKKVLEERGREILMKEGLLDENEVAASMEVDVQEK
+
+ref|XP_00       600 LEQLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLETKMKQNNMDDYLSDGVNSPEPTA
+                600 |.|||||||||||||||||||||||||||||||||||.|||||..|||||||.|||||.|
+Query_744       600 LKQLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLEVKMKQNTEDDYLSDGMNSPEPAA
+
+ref|XP_00       660 ADEP 664
+                660 |..| 664
+Query_744       660 AEQP 664
+""",
+            )
+            hit = record[5]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "ref|XP_008688471.1|")
+            self.assertEqual(hit.target.name, "XP_008688471")
+            self.assertEqual(
+                hit.target.description,
+                "cyclic nucleotide-gated olfactory channel [Ursus maritimus] >ref|XP_026343324.1| cyclic nucleotide-gated olfactory channel [Ursus arctos]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=664)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 3228.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 1248.63)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 638)
+            self.assertEqual(hsp.annotations["positive"], 652)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 664],
+                              [  0, 664]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 664)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 664)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 664))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLA...EQP')",
+            )
+            self.assertEqual(hsp.query.id, "Query_74414")
+            self.assertEqual(hsp.query.description, "unnamed protein product")
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('MTEKSNGVKSSPANNHNHHAPPAIKANGKDDHRSSSRPQSAVDDDTSSELQRLA...DEP')",
+            )
+            self.assertEqual(hsp.target.id, "ref|XP_008688471.1|")
+            self.assertEqual(hsp.target.name, "XP_008688471")
+            self.assertEqual(
+                hsp.target.description,
+                "cyclic nucleotide-gated olfactory channel [Ursus maritimus] >ref|XP_026343324.1| cyclic nucleotide-gated olfactory channel [Ursus arctos]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MTEKSNGVKSSPANNHN+H P  IKANGKD+ R+ SRPQSA DDDTSSELQRLAEMDAPQ+ RGGFRRIVRLVG+IR WAN+NFREEE RPDSFLERFRGPELQTVTTQQGDGKGDKDG+GKGTKKKFELFVLDPAGDWYYRWLFVIAMPVLYNWCLLVARACFSDLQ+GY+LVWLVLDYFSDVVYI DLFIRLRTGFLEQGLLVKDPKKLRDNYIHTLQFKLDVASIIPTDLIYFAVGIH+PELRFNRLLHFARMFEFFDRTETRTSYPNIFRISNLVLYILVIIHWNACIYYAISKSIGFGVDTWVYPNITDPEYGYLAREYIYCLYWSTLTLTTIGETPPPVKDEEYLFVIFDFLIGVLIFATIVGNVGSMISNMNATRAEFQAKIDAVKHYMQFRKVSKEMEAKVIKWFDYLWTNKK+VDEREVLKNLPAKLRAEIAINVHLSTLKKVRIFQDCEAGLLVELVLKLRPQVFSPGDYICRKGDIGKEMYIIKEGKLAVVADDGVTQYALLSAGSCFGEISILNIKGSKMGNRRTANIRSLGYSDLFCLSKDDLMEAVTEYPDAKKVLEERGREILMKEGLLDENEVAASMEVDVQEKL+QLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLE KMKQN EDDYLSDGMNSPEPAAA++P",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+ref|XP_00         0 MTEKSNGVKSSPANNHNHHAPPAIKANGKDDHRSSSRPQSAVDDDTSSELQRLAEMDAPQ
+                  0 |||||||||||||||||.|.|..|||||||..|..||||||.||||||||||||||||||
+Query_744         0 MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLAEMDAPQ
+
+ref|XP_00        60 RGRGGFRRIVRLVGIIRDWANKNFREEEPRPDSFLERFRGPELQTVTTQQGDGKGDKDGE
+                 60 ..||||||||||||.||.|||.||||||.||||||||||||||||||||||||||||||.
+Query_744        60 QRRGGFRRIVRLVGVIRQWANRNFREEEARPDSFLERFRGPELQTVTTQQGDGKGDKDGD
+
+ref|XP_00       120 GKGTKKKFELFVLDPAGDWYYRWLFVIAMPVLYNWCLLVARACFSDLQKGYYLVWLVLDY
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||.||.||||||||
+Query_744       120 GKGTKKKFELFVLDPAGDWYYRWLFVIAMPVLYNWCLLVARACFSDLQRGYFLVWLVLDY
+
+ref|XP_00       180 FSDVVYITDLFIRLRTGFLEQGLLVKDPKKLRDNYIHTLQFKLDVASIIPTDLIYFAVGI
+                180 |||||||.||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       180 FSDVVYIADLFIRLRTGFLEQGLLVKDPKKLRDNYIHTLQFKLDVASIIPTDLIYFAVGI
+
+ref|XP_00       240 HSPELRFNRLLHFARMFEFFDRTETRTSYPNIFRISNLVLYILVIIHWNACIYYAISKSI
+                240 |.||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       240 HNPELRFNRLLHFARMFEFFDRTETRTSYPNIFRISNLVLYILVIIHWNACIYYAISKSI
+
+ref|XP_00       300 GFGVDTWVYPNITDPEYGYLAREYIYCLYWSTLTLTTIGETPPPVKDEEYLFVIFDFLIG
+                300 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       300 GFGVDTWVYPNITDPEYGYLAREYIYCLYWSTLTLTTIGETPPPVKDEEYLFVIFDFLIG
+
+ref|XP_00       360 VLIFATIVGNVGSMISNMNATRAEFQAKIDAVKHYMQFRKVSKEMEAKVIKWFDYLWTNK
+                360 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       360 VLIFATIVGNVGSMISNMNATRAEFQAKIDAVKHYMQFRKVSKEMEAKVIKWFDYLWTNK
+
+ref|XP_00       420 KSVDEREVLKNLPAKLRAEIAINVHLSTLKKVRIFQDCEAGLLVELVLKLRPQVFSPGDY
+                420 |.||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       420 KTVDEREVLKNLPAKLRAEIAINVHLSTLKKVRIFQDCEAGLLVELVLKLRPQVFSPGDY
+
+ref|XP_00       480 ICRKGDIGKEMYIIKEGKLAVVADDGVTQYALLSAGSCFGEISILNIKGSKMGNRRTANI
+                480 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       480 ICRKGDIGKEMYIIKEGKLAVVADDGVTQYALLSAGSCFGEISILNIKGSKMGNRRTANI
+
+ref|XP_00       540 RSLGYSDLFCLSKDDLMEAVTEYPDAKKVLEERGREILMKEGLLDENEVAASMEVDVQEK
+                540 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       540 RSLGYSDLFCLSKDDLMEAVTEYPDAKKVLEERGREILMKEGLLDENEVAASMEVDVQEK
+
+ref|XP_00       600 LEQLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLETKMKQNNEDDYLSDGMNSPEPAA
+                600 |.|||||||||||||||||||||||||||||||||||.|||||.||||||||||||||||
+Query_744       600 LKQLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLEVKMKQNTEDDYLSDGMNSPEPAA
+
+ref|XP_00       660 ADEP 664
+                660 |..| 664
+Query_744       660 AEQP 664
+""",
+            )
+            hit = record[6]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "ref|XP_011229794.1|")
+            self.assertEqual(hit.target.name, "XP_011229794")
+            self.assertEqual(
+                hit.target.description,
+                "cyclic nucleotide-gated olfactory channel [Ailuropoda melanoleuca] >gb|EFB14215.1| hypothetical protein PANDA_013994, partial [Ailuropoda melanoleuca]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=664)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 3227.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 1248.24)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 638)
+            self.assertEqual(hsp.annotations["positive"], 652)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 664],
+                              [  0, 664]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 664)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 664)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 664))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLA...EQP')",
+            )
+            self.assertEqual(hsp.query.id, "Query_74414")
+            self.assertEqual(hsp.query.description, "unnamed protein product")
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('MTEKSNGVKSSPANNHNHHAPPAIKANGKDDHRSSSRPQSAVDDDTSSELQRLA...DEP')",
+            )
+            self.assertEqual(hsp.target.id, "ref|XP_011229794.1|")
+            self.assertEqual(hsp.target.name, "XP_011229794")
+            self.assertEqual(
+                hsp.target.description,
+                "cyclic nucleotide-gated olfactory channel [Ailuropoda melanoleuca] >gb|EFB14215.1| hypothetical protein PANDA_013994, partial [Ailuropoda melanoleuca]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MTEKSNGVKSSPANNHN+H P  IKANGKD+ R+ SRPQSA DDDTSSELQRLAEMDAPQ+ RGGFRRIVRLVG+IR WAN+NFREEE RPDSFLERFRGPELQTVTTQQGDGKGDKDG+GKGTKKKFELFVLDPAGDWYYRWLFVIAMPVLYNWCLLVARACFSDLQ+GY+LVWLVLDYFSDVVYI DLFIRLRTGFLEQGLLVKDPKKLRDNYIHTLQFKLDVASIIPTDLIYFAVGIH+PELRFNRLLHFARMFEFFDRTETRTSYPNIFRISNLVLYILVIIHWNACIYYAISKSIGFGVDTWVYPNITDPEYGYLAREYIYCLYWSTLTLTTIGETPPPVKDEEYLFVIFDFLIGVLIFATIVGNVGSMISNMNATRAEFQAKIDAVKHYMQFRKVSKEMEAKVIKWFDYLWTNKK+VDEREVLKNLPAKLRAEIAINVHLSTLKKVRIFQDCEAGLLVELVLKLRPQVFSPGDYICRKGDIGKEMYIIKEGKLAVVADDGVTQYALLSAGSCFGEISILNIKGSKMGNRRTANIRSLGYSDLFCLSKDDLMEAVTEYPDAKKVLEERGREILMKEGLLDENEVAASMEVDVQEKL+QLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLE KMKQN EDDYLSDGMNSPEPAAA++P",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+ref|XP_01         0 MTEKSNGVKSSPANNHNHHAPPAIKANGKDDHRSSSRPQSAVDDDTSSELQRLAEMDAPQ
+                  0 |||||||||||||||||.|.|..|||||||..|..||||||.||||||||||||||||||
+Query_744         0 MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLAEMDAPQ
+
+ref|XP_01        60 RGRGGFRRIVRLVGIIRDWANKNFREEEPRPDSFLERFRGPELQTVTTQQGDGKGDKDGE
+                 60 ..||||||||||||.||.|||.||||||.||||||||||||||||||||||||||||||.
+Query_744        60 QRRGGFRRIVRLVGVIRQWANRNFREEEARPDSFLERFRGPELQTVTTQQGDGKGDKDGD
+
+ref|XP_01       120 GKGTKKKFELFVLDPAGDWYYRWLFVIAMPVLYNWCLLVARACFSDLQKGYYLVWLVLDY
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||.||.||||||||
+Query_744       120 GKGTKKKFELFVLDPAGDWYYRWLFVIAMPVLYNWCLLVARACFSDLQRGYFLVWLVLDY
+
+ref|XP_01       180 FSDVVYIIDLFIRLRTGFLEQGLLVKDPKKLRDNYIHTLQFKLDVASIIPTDLIYFAVGI
+                180 |||||||.||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       180 FSDVVYIADLFIRLRTGFLEQGLLVKDPKKLRDNYIHTLQFKLDVASIIPTDLIYFAVGI
+
+ref|XP_01       240 HSPELRFNRLLHFARMFEFFDRTETRTSYPNIFRISNLVLYILVIIHWNACIYYAISKSI
+                240 |.||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       240 HNPELRFNRLLHFARMFEFFDRTETRTSYPNIFRISNLVLYILVIIHWNACIYYAISKSI
+
+ref|XP_01       300 GFGVDTWVYPNITDPEYGYLAREYIYCLYWSTLTLTTIGETPPPVKDEEYLFVIFDFLIG
+                300 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       300 GFGVDTWVYPNITDPEYGYLAREYIYCLYWSTLTLTTIGETPPPVKDEEYLFVIFDFLIG
+
+ref|XP_01       360 VLIFATIVGNVGSMISNMNATRAEFQAKIDAVKHYMQFRKVSKEMEAKVIKWFDYLWTNK
+                360 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       360 VLIFATIVGNVGSMISNMNATRAEFQAKIDAVKHYMQFRKVSKEMEAKVIKWFDYLWTNK
+
+ref|XP_01       420 KSVDEREVLKNLPAKLRAEIAINVHLSTLKKVRIFQDCEAGLLVELVLKLRPQVFSPGDY
+                420 |.||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       420 KTVDEREVLKNLPAKLRAEIAINVHLSTLKKVRIFQDCEAGLLVELVLKLRPQVFSPGDY
+
+ref|XP_01       480 ICRKGDIGKEMYIIKEGKLAVVADDGVTQYALLSAGSCFGEISILNIKGSKMGNRRTANI
+                480 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       480 ICRKGDIGKEMYIIKEGKLAVVADDGVTQYALLSAGSCFGEISILNIKGSKMGNRRTANI
+
+ref|XP_01       540 RSLGYSDLFCLSKDDLMEAVTEYPDAKKVLEERGREILMKEGLLDENEVAASMEVDVQEK
+                540 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       540 RSLGYSDLFCLSKDDLMEAVTEYPDAKKVLEERGREILMKEGLLDENEVAASMEVDVQEK
+
+ref|XP_01       600 LEQLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLETKMKQNNEDDYLSDGMNSPEPAA
+                600 |.|||||||||||||||||||||||||||||||||||.|||||.||||||||||||||||
+Query_744       600 LKQLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLEVKMKQNTEDDYLSDGMNSPEPAA
+
+ref|XP_01       660 ADEP 664
+                660 |..| 664
+Query_744       660 AEQP 664
+""",
+            )
+            hit = record[7]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "ref|XP_045646452.1|")
+            self.assertEqual(hit.target.name, "XP_045646452")
+            self.assertEqual(
+                hit.target.description,
+                "cyclic nucleotide-gated olfactory channel [Ursus americanus]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=664)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 3223.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 1246.68)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 637)
+            self.assertEqual(hsp.annotations["positive"], 651)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 664],
+                              [  0, 664]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 664)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 664)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 664))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLA...EQP')",
+            )
+            self.assertEqual(hsp.query.id, "Query_74414")
+            self.assertEqual(hsp.query.description, "unnamed protein product")
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('MTEKSNGVKCSPANNHNHHAPPAIKANGKDDHRSSSRPQSAVDDDTSSELQRLA...DEP')",
+            )
+            self.assertEqual(hsp.target.id, "ref|XP_045646452.1|")
+            self.assertEqual(hsp.target.name, "XP_045646452")
+            self.assertEqual(
+                hsp.target.description,
+                "cyclic nucleotide-gated olfactory channel [Ursus americanus]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MTEKSNGVK SPANNHN+H P  IKANGKD+ R+ SRPQSA DDDTSSELQRLAEMDAPQ+ RGGFRRIVRLVG+IR WAN+NFREEE RPDSFLERFRGPELQTVTTQQGDGKGDKDG+GKGTKKKFELFVLDPAGDWYYRWLFVIAMPVLYNWCLLVARACFSDLQ+GY+LVWLVLDYFSDVVYI DLFIRLRTGFLEQGLLVKDPKKLRDNYIHTLQFKLDVASIIPTDLIYFAVGIH+PELRFNRLLHFARMFEFFDRTETRTSYPNIFRISNLVLYILVIIHWNACIYYAISKSIGFGVDTWVYPNITDPEYGYLAREYIYCLYWSTLTLTTIGETPPPVKDEEYLFVIFDFLIGVLIFATIVGNVGSMISNMNATRAEFQAKIDAVKHYMQFRKVSKEMEAKVIKWFDYLWTNKK+VDEREVLKNLPAKLRAEIAINVHLSTLKKVRIFQDCEAGLLVELVLKLRPQVFSPGDYICRKGDIGKEMYIIKEGKLAVVADDGVTQYALLSAGSCFGEISILNIKGSKMGNRRTANIRSLGYSDLFCLSKDDLMEAVTEYPDAKKVLEERGREILMKEGLLDENEVAASMEVDVQEKL+QLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLE KMKQN EDDYLSDGMNSPEPAAA++P",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+ref|XP_04         0 MTEKSNGVKCSPANNHNHHAPPAIKANGKDDHRSSSRPQSAVDDDTSSELQRLAEMDAPQ
+                  0 |||||||||.|||||||.|.|..|||||||..|..||||||.||||||||||||||||||
+Query_744         0 MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLAEMDAPQ
+
+ref|XP_04        60 RGRGGFRRIVRLVGIIRDWANKNFREEEPRPDSFLERFRGPELQTVTTQQGDGKGDKDGE
+                 60 ..||||||||||||.||.|||.||||||.||||||||||||||||||||||||||||||.
+Query_744        60 QRRGGFRRIVRLVGVIRQWANRNFREEEARPDSFLERFRGPELQTVTTQQGDGKGDKDGD
+
+ref|XP_04       120 GKGTKKKFELFVLDPAGDWYYRWLFVIAMPVLYNWCLLVARACFSDLQKGYYLVWLVLDY
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||.||.||||||||
+Query_744       120 GKGTKKKFELFVLDPAGDWYYRWLFVIAMPVLYNWCLLVARACFSDLQRGYFLVWLVLDY
+
+ref|XP_04       180 FSDVVYITDLFIRLRTGFLEQGLLVKDPKKLRDNYIHTLQFKLDVASIIPTDLIYFAVGI
+                180 |||||||.||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       180 FSDVVYIADLFIRLRTGFLEQGLLVKDPKKLRDNYIHTLQFKLDVASIIPTDLIYFAVGI
+
+ref|XP_04       240 HSPELRFNRLLHFARMFEFFDRTETRTSYPNIFRISNLVLYILVIIHWNACIYYAISKSI
+                240 |.||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       240 HNPELRFNRLLHFARMFEFFDRTETRTSYPNIFRISNLVLYILVIIHWNACIYYAISKSI
+
+ref|XP_04       300 GFGVDTWVYPNITDPEYGYLAREYIYCLYWSTLTLTTIGETPPPVKDEEYLFVIFDFLIG
+                300 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       300 GFGVDTWVYPNITDPEYGYLAREYIYCLYWSTLTLTTIGETPPPVKDEEYLFVIFDFLIG
+
+ref|XP_04       360 VLIFATIVGNVGSMISNMNATRAEFQAKIDAVKHYMQFRKVSKEMEAKVIKWFDYLWTNK
+                360 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       360 VLIFATIVGNVGSMISNMNATRAEFQAKIDAVKHYMQFRKVSKEMEAKVIKWFDYLWTNK
+
+ref|XP_04       420 KSVDEREVLKNLPAKLRAEIAINVHLSTLKKVRIFQDCEAGLLVELVLKLRPQVFSPGDY
+                420 |.||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       420 KTVDEREVLKNLPAKLRAEIAINVHLSTLKKVRIFQDCEAGLLVELVLKLRPQVFSPGDY
+
+ref|XP_04       480 ICRKGDIGKEMYIIKEGKLAVVADDGVTQYALLSAGSCFGEISILNIKGSKMGNRRTANI
+                480 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       480 ICRKGDIGKEMYIIKEGKLAVVADDGVTQYALLSAGSCFGEISILNIKGSKMGNRRTANI
+
+ref|XP_04       540 RSLGYSDLFCLSKDDLMEAVTEYPDAKKVLEERGREILMKEGLLDENEVAASMEVDVQEK
+                540 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       540 RSLGYSDLFCLSKDDLMEAVTEYPDAKKVLEERGREILMKEGLLDENEVAASMEVDVQEK
+
+ref|XP_04       600 LEQLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLETKMKQNNEDDYLSDGMNSPEPAA
+                600 |.|||||||||||||||||||||||||||||||||||.|||||.||||||||||||||||
+Query_744       600 LKQLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLEVKMKQNTEDDYLSDGMNSPEPAA
+
+ref|XP_04       660 ADEP 664
+                660 |..| 664
+Query_744       660 AEQP 664
+""",
+            )
+            hit = record[8]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "ref|XP_035942617.1|")
+            self.assertEqual(hit.target.name, "XP_035942617")
+            self.assertEqual(
+                hit.target.description,
+                "cyclic nucleotide-gated olfactory channel [Halichoerus grypus]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=664)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 3221.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 1245.9)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 638)
+            self.assertEqual(hsp.annotations["positive"], 651)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 664],
+                              [  0, 664]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 664)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 664)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 664))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLA...EQP')",
+            )
+            self.assertEqual(hsp.query.id, "Query_74414")
+            self.assertEqual(hsp.query.description, "unnamed protein product")
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('MTEKSNGVKSSPANNHNHHAPPVIKANGKDDHRTSSRPQSAADDDTSSELQRLA...DEP')",
+            )
+            self.assertEqual(hsp.target.id, "ref|XP_035942617.1|")
+            self.assertEqual(hsp.target.name, "XP_035942617")
+            self.assertEqual(
+                hsp.target.description,
+                "cyclic nucleotide-gated olfactory channel [Halichoerus grypus]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MTEKSNGVKSSPANNHN+H P  IKANGKD+ RT SRPQSAADDDTSSELQRLAEMD PQQ RGGFRRIVRLVG+IR+WAN+NFREEE RPDSFLERFRGPELQTVTTQQGDGKGDKDG+GKGTKKKFELFVLDPAGDWYYRWLFVIAM VLYNWCLLVARACFSDLQ+GY+LVWLVLDYFSDVVYI DLFIRLRTGFLEQGLLVKDPKKLRDNYIHTLQFKLDVASIIPTDLIYFAVGIH+PELRFNRLLHFARMFEFFDRTETRTSYPNIFRISNLVLYILVIIHWNACIYYAISKSIGFGVDTWVYPNITDPEYGYLAREYIYCLYWSTLTLTTIGETPPPVKDEEYLFVIFDFLIGVLIFATIVGNVGSMISNMNATRAEFQAKIDAVKHYMQFRKVSKEMEAKVIKWFDYLWTNKK+VDEREVLKNLPAKLRAEIAINVHLSTLKKVRIFQDCEAGLLVELVLKLRPQVFSPGDYICRKGDIGKEMYIIKEGKLAVVADDGVTQYALLSAGSCFGEISILNIKGSKMGNRRTANIRSLGYSDLFCLSKDDLMEAVTEYPDAKKVLEERGREILMKEGLLDENEVAASMEVDVQEKL+QLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLE KMKQN  DDYLSDGMNSPEPAAA++P",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+ref|XP_03         0 MTEKSNGVKSSPANNHNHHAPPVIKANGKDDHRTSSRPQSAADDDTSSELQRLAEMDVPQ
+                  0 |||||||||||||||||.|.|..|||||||..||.||||||||||||||||||||||.||
+Query_744         0 MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLAEMDAPQ
+
+ref|XP_03        60 QGRGGFRRIVRLVGIIREWANKNFREEELRPDSFLERFRGPELQTVTTQQGDGKGDKDGE
+                 60 |.||||||||||||.||.|||.||||||.||||||||||||||||||||||||||||||.
+Query_744        60 QRRGGFRRIVRLVGVIRQWANRNFREEEARPDSFLERFRGPELQTVTTQQGDGKGDKDGD
+
+ref|XP_03       120 GKGTKKKFELFVLDPAGDWYYRWLFVIAMLVLYNWCLLVARACFSDLQKGYYLVWLVLDY
+                120 |||||||||||||||||||||||||||||.||||||||||||||||||.||.||||||||
+Query_744       120 GKGTKKKFELFVLDPAGDWYYRWLFVIAMPVLYNWCLLVARACFSDLQRGYFLVWLVLDY
+
+ref|XP_03       180 FSDVVYITDLFIRLRTGFLEQGLLVKDPKKLRDNYIHTLQFKLDVASIIPTDLIYFAVGI
+                180 |||||||.||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       180 FSDVVYIADLFIRLRTGFLEQGLLVKDPKKLRDNYIHTLQFKLDVASIIPTDLIYFAVGI
+
+ref|XP_03       240 HSPELRFNRLLHFARMFEFFDRTETRTSYPNIFRISNLVLYILVIIHWNACIYYAISKSI
+                240 |.||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       240 HNPELRFNRLLHFARMFEFFDRTETRTSYPNIFRISNLVLYILVIIHWNACIYYAISKSI
+
+ref|XP_03       300 GFGVDTWVYPNITDPEYGYLAREYIYCLYWSTLTLTTIGETPPPVKDEEYLFVIFDFLIG
+                300 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       300 GFGVDTWVYPNITDPEYGYLAREYIYCLYWSTLTLTTIGETPPPVKDEEYLFVIFDFLIG
+
+ref|XP_03       360 VLIFATIVGNVGSMISNMNATRAEFQAKIDAVKHYMQFRKVSKEMEAKVIKWFDYLWTNK
+                360 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       360 VLIFATIVGNVGSMISNMNATRAEFQAKIDAVKHYMQFRKVSKEMEAKVIKWFDYLWTNK
+
+ref|XP_03       420 KSVDEREVLKNLPAKLRAEIAINVHLSTLKKVRIFQDCEAGLLVELVLKLRPQVFSPGDY
+                420 |.||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       420 KTVDEREVLKNLPAKLRAEIAINVHLSTLKKVRIFQDCEAGLLVELVLKLRPQVFSPGDY
+
+ref|XP_03       480 ICRKGDIGKEMYIIKEGKLAVVADDGVTQYALLSAGSCFGEISILNIKGSKMGNRRTANI
+                480 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       480 ICRKGDIGKEMYIIKEGKLAVVADDGVTQYALLSAGSCFGEISILNIKGSKMGNRRTANI
+
+ref|XP_03       540 RSLGYSDLFCLSKDDLMEAVTEYPDAKKVLEERGREILMKEGLLDENEVAASMEVDVQEK
+                540 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       540 RSLGYSDLFCLSKDDLMEAVTEYPDAKKVLEERGREILMKEGLLDENEVAASMEVDVQEK
+
+ref|XP_03       600 LEQLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLETKMKQNNMDDYLSDGMNSPEPAA
+                600 |.|||||||||||||||||||||||||||||||||||.|||||..|||||||||||||||
+Query_744       600 LKQLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLEVKMKQNTEDDYLSDGMNSPEPAA
+
+ref|XP_03       660 ADEP 664
+                660 |..| 664
+Query_744       660 AEQP 664
+""",
+            )
+            hit = record[9]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "ref|XP_049729369.1|")
+            self.assertEqual(hit.target.name, "XP_049729369")
+            self.assertEqual(
+                hit.target.description,
+                "cyclic nucleotide-gated olfactory channel [Elephas maximus indicus]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=664)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 3219.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 1245.12)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 635)
+            self.assertEqual(hsp.annotations["positive"], 654)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 664],
+                              [  0, 664]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 664)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 664)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 664))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLA...EQP')",
+            )
+            self.assertEqual(hsp.query.id, "Query_74414")
+            self.assertEqual(hsp.query.description, "unnamed protein product")
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('MTEKSNGVKSSPANNHNHHVPSTIKANGKDDRRTSSRPQSAADDDTSSELQRLA...EKP')",
+            )
+            self.assertEqual(hsp.target.id, "ref|XP_049729369.1|")
+            self.assertEqual(hsp.target.name, "XP_049729369")
+            self.assertEqual(
+                hsp.target.description,
+                "cyclic nucleotide-gated olfactory channel [Elephas maximus indicus]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MTEKSNGVKSSPANNHN+HVP+TIKANGKD+ RT SRPQSAADDDTSSELQRLAEMDAPQQ RGGFRRI+RLVGVIR+WAN+NFREE+ RPDSFLERFRGPELQTVTTQQGDGK DKDG+GKGTKKKFELFVLDPAGDWYYRWLF IA+PVLYNWCLLVARACFSDLQ+GY+LVWLVLDYFSD+VYIADLFIRLRTGFLEQGLLVKDPKKLRDNYIHT+QFKLDVASIIPTDLIYFAVGIH+PELRFNRLLHFARMFEFFDRTETRTSYPNIFRISNLVLYILVIIHWNACIYYAISKSIGFGVDTWVYPNITDP YGYLAREYIYCLYWSTLTLTTIGETPPPVKDEEYLFVIFDFLIGVLIFATIVGNVGSMISNMNATRAEFQAKIDAVKHYMQFRKVSKEMEAKVIKWFDYLWTNKKTVDEREVLKNLPAKLRAEIAINVHLSTLKKVRIFQDCEAGLLVELVLKLRPQVFSPGDYICRKGDIGKEMYIIKEGKLAVVADDGVTQYALLSAGSCFGEISILNIKGSKMGNRRTANIRSLGYSDLFCLSKDDLMEAVTEYPDAKKVLEERGREILMKEGLLDENEVAA+MEVDVQEKL+QLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLE KMKQN E+DYLSDG+NSPEPAA E+P",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+ref|XP_04         0 MTEKSNGVKSSPANNHNHHVPSTIKANGKDDRRTSSRPQSAADDDTSSELQRLAEMDAPQ
+                  0 |||||||||||||||||.|||.||||||||..||.|||||||||||||||||||||||||
+Query_744         0 MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLAEMDAPQ
+
+ref|XP_04        60 QWRGGFRRIIRLVGVIREWANKNFREEDPRPDSFLERFRGPELQTVTTQQGDGKSDKDGE
+                 60 |.|||||||.|||||||.|||.|||||..|||||||||||||||||||||||||.||||.
+Query_744        60 QRRGGFRRIVRLVGVIRQWANRNFREEEARPDSFLERFRGPELQTVTTQQGDGKGDKDGD
+
+ref|XP_04       120 GKGTKKKFELFVLDPAGDWYYRWLFFIALPVLYNWCLLVARACFSDLQKGYYLVWLVLDY
+                120 |||||||||||||||||||||||||.||.|||||||||||||||||||.||.||||||||
+Query_744       120 GKGTKKKFELFVLDPAGDWYYRWLFVIAMPVLYNWCLLVARACFSDLQRGYFLVWLVLDY
+
+ref|XP_04       180 FSDMVYIADLFIRLRTGFLEQGLLVKDPKKLRDNYIHTMQFKLDVASIIPTDLIYFAVGI
+                180 |||.||||||||||||||||||||||||||||||||||.|||||||||||||||||||||
+Query_744       180 FSDVVYIADLFIRLRTGFLEQGLLVKDPKKLRDNYIHTLQFKLDVASIIPTDLIYFAVGI
+
+ref|XP_04       240 HSPELRFNRLLHFARMFEFFDRTETRTSYPNIFRISNLVLYILVIIHWNACIYYAISKSI
+                240 |.||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       240 HNPELRFNRLLHFARMFEFFDRTETRTSYPNIFRISNLVLYILVIIHWNACIYYAISKSI
+
+ref|XP_04       300 GFGVDTWVYPNITDPAYGYLAREYIYCLYWSTLTLTTIGETPPPVKDEEYLFVIFDFLIG
+                300 |||||||||||||||.||||||||||||||||||||||||||||||||||||||||||||
+Query_744       300 GFGVDTWVYPNITDPEYGYLAREYIYCLYWSTLTLTTIGETPPPVKDEEYLFVIFDFLIG
+
+ref|XP_04       360 VLIFATIVGNVGSMISNMNATRAEFQAKIDAVKHYMQFRKVSKEMEAKVIKWFDYLWTNK
+                360 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       360 VLIFATIVGNVGSMISNMNATRAEFQAKIDAVKHYMQFRKVSKEMEAKVIKWFDYLWTNK
+
+ref|XP_04       420 KTVDEREVLKNLPAKLRAEIAINVHLSTLKKVRIFQDCEAGLLVELVLKLRPQVFSPGDY
+                420 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       420 KTVDEREVLKNLPAKLRAEIAINVHLSTLKKVRIFQDCEAGLLVELVLKLRPQVFSPGDY
+
+ref|XP_04       480 ICRKGDIGKEMYIIKEGKLAVVADDGVTQYALLSAGSCFGEISILNIKGSKMGNRRTANI
+                480 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Query_744       480 ICRKGDIGKEMYIIKEGKLAVVADDGVTQYALLSAGSCFGEISILNIKGSKMGNRRTANI
+
+ref|XP_04       540 RSLGYSDLFCLSKDDLMEAVTEYPDAKKVLEERGREILMKEGLLDENEVAATMEVDVQEK
+                540 |||||||||||||||||||||||||||||||||||||||||||||||||||.||||||||
+Query_744       540 RSLGYSDLFCLSKDDLMEAVTEYPDAKKVLEERGREILMKEGLLDENEVAASMEVDVQEK
+
+ref|XP_04       600 LEQLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLETKMKQNNEEDYLSDGINSPEPAA
+                600 |.|||||||||||||||||||||||||||||||||||.|||||.|.||||||.|||||||
+Query_744       600 LKQLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLEVKMKQNTEDDYLSDGMNSPEPAA
+
+ref|XP_04       660 VEKP 664
+                660 .|.| 664
+Query_744       660 AEQP 664
+""",
+            )
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

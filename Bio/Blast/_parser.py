@@ -204,7 +204,6 @@ class XMLHandler(deque):
         self._characters = ""
 
     def _start_parameters_pattern(self, name, attrs):
-        raise Exception
         assert self._characters.strip() == ""
         self._characters = ""
 
@@ -500,12 +499,11 @@ class XMLHandler(deque):
         self._records.param["filter"] = self._characters
         self._characters = ""
 
-    def _end_parameters_pattern(self, name, attrs):
-        raise Exception
+    def _end_parameters_pattern(self, name):
         self._records.param["pattern"] = self._characters
         self._characters = ""
 
-    def _end_parameters_entrez_query(self, name, attrs):
+    def _end_parameters_entrez_query(self, name):
         raise Exception
         self._records.param["entrez-query"] = self._characters
         self._characters = ""
