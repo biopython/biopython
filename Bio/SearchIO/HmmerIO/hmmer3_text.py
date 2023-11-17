@@ -385,7 +385,6 @@ class Hmmer3TextParser:
                     aliseq = ""
                     annot = {}
                     aln_prefix_len = None
-                    similarity = ""
                     break
                 # check if it's an annotation line and parse it
                 # len(hmmseq) is only != len(aliseq) when the cursor is parsing
