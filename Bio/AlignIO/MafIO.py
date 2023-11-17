@@ -848,8 +848,8 @@ class MafIndex:
             seq = (
                 seq
                 if strand == ref_first_strand
-                else seq.reverse_complement(inplace=False)
-            )  # TODO: remove inplace=False
+                else seq.reverse_complement()
+            )
 
             result_multiseq.append(SeqRecord(seq, id=seqid, name=seqid, description=""))
 

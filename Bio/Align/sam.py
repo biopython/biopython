@@ -149,7 +149,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             flag = 0
         else:  # mapped to reverse strand
             flag = 16
-            query = reverse_complement(query, inplace=False)
+            query = reverse_complement(query)
             coordinates = np.array(coordinates)
             coordinates[:, 1] = qSize - coordinates[:, 1]
             hard_clip_left, hard_clip_right = hard_clip_right, hard_clip_left

@@ -257,13 +257,13 @@ class AlignmentWriter(bigbed.AlignmentWriter):
             if coordinates[1, 0] > coordinates[1, -1]:
                 # DNA/RNA mapped to reverse strand of DNA/RNA
                 strand = "-"
-                query = reverse_complement(query, inplace=False)
+                query = reverse_complement(query)
                 coordinates = coordinates.copy()
                 coordinates[1, :] = qSize - coordinates[1, :]
             elif coordinates[0, 0] > coordinates[0, -1]:
                 # protein mapped to reverse strand of DNA
                 strand = "-"
-                target = reverse_complement(target, inplace=False)
+                target = reverse_complement(target)
                 coordinates = coordinates.copy()
                 coordinates[0, :] = tSize - coordinates[0, :]
                 dnax = True

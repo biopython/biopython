@@ -744,14 +744,7 @@ class TestMutableSeq(unittest.TestCase):
         """Test reverse using -1 stride."""
         self.assertEqual(Seq.MutableSeq("GTACTACGTAGGAAAACT"), self.mutable_s[::-1])
 
-    def test_complement_old(self):
-        # old approach
-        with self.assertWarns(BiopythonDeprecationWarning):
-            self.mutable_s.complement()
-        self.assertEqual("AGTTTTCCTACGTAGTAC", self.mutable_s)
-
     def test_complement(self):
-        # new approach
         self.mutable_s.complement(inplace=True)
         self.assertEqual("AGTTTTCCTACGTAGTAC", self.mutable_s)
 
@@ -794,47 +787,22 @@ class TestMutableSeq(unittest.TestCase):
         self.assertEqual(d, "TCAAAAGGATGCATCATG")
 
     def test_complement_mixed_aphabets(self):
-        # new approach
         seq = Seq.MutableSeq("AUGaaaCTG")
         seq.complement_rna(inplace=True)
         self.assertEqual("UACuuuGAC", seq)
-        # old approach
-        seq = Seq.MutableSeq("AUGaaaCTG")
-        with self.assertWarns(BiopythonDeprecationWarning):
-            with self.assertRaises(ValueError):
-                seq.complement()
 
     def test_complement_rna_string(self):
-        # new approach
         seq = Seq.MutableSeq("AUGaaaCUG")
         seq.complement_rna(inplace=True)
-        self.assertEqual("UACuuuGAC", seq)
-        # old approach
-        seq = Seq.MutableSeq("AUGaaaCUG")
-        with self.assertWarns(BiopythonDeprecationWarning):
-            seq.complement()
         self.assertEqual("UACuuuGAC", seq)
 
     def test_complement_dna_string(self):
-        # new approach
         seq = Seq.MutableSeq("ATGaaaCTG")
         seq.complement(inplace=True)
         self.assertEqual("TACtttGAC", seq)
-        # old approach
-        seq = Seq.MutableSeq("ATGaaaCTG")
-        with self.assertWarns(BiopythonDeprecationWarning):
-            seq.complement()
-        self.assertEqual("TACtttGAC", seq)
 
     def test_reverse_complement(self):
-        # new approach
         self.mutable_s.reverse_complement(inplace=True)
-        self.assertEqual("CATGATGCATCCTTTTGA", self.mutable_s)
-
-    def test_reverse_complement_old(self):
-        # old approach
-        with self.assertWarns(BiopythonDeprecationWarning):
-            self.mutable_s.reverse_complement()
         self.assertEqual("CATGATGCATCCTTTTGA", self.mutable_s)
 
     def test_extend_method(self):
@@ -891,30 +859,21 @@ class TestComplement(unittest.TestCase):
 
     def test_complement_incompatible_letters(self):
         seq = Seq.Seq("CAGGTU")
-        # new approach
-        dna = seq.complement(inplace=False)  # TODO: remove inplace=False
+        dna = seq.complement()
         self.assertEqual("GTCCAA", dna)
         rna = seq.complement_rna()
         self.assertEqual("GUCCAA", rna)
-        # old approach
-        with self.assertWarns(BiopythonDeprecationWarning):
-            with self.assertRaises(ValueError):
-                seq.complement()
 
     def test_complement_of_mixed_dna_rna(self):
         seq = "AUGAAACTG"  # U and T
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
-            self.assertRaises(ValueError, Seq.complement, seq)
+        dna = Seq.complement(seq)
+        self.assertEqual("TACTTTGAC", dna)
+        rna = Seq.complement_rna(seq)
+        self.assertEqual("UACUUUGAC", rna)
 
     def test_complement_of_rna(self):
         seq = "AUGAAACUG"
-        # new approach
         rna = Seq.complement_rna(seq)
-        self.assertEqual("UACUUUGAC", rna)
-        # old approach
-        with self.assertWarns(BiopythonDeprecationWarning):
-            rna = Seq.complement(seq)
         self.assertEqual("UACUUUGAC", rna)
 
     def test_complement_of_dna(self):
@@ -982,18 +941,14 @@ class TestReverseComplement(unittest.TestCase):
 
     def test_reverse_complement_of_mixed_dna_rna(self):
         seq = "AUGAAACTG"  # U and T
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
-            self.assertRaises(ValueError, Seq.reverse_complement, seq)
+        dna = Seq.reverse_complement(seq)
+        self.assertEqual("CAGTTTCAT", dna)
+        rna = Seq.reverse_complement_rna(seq)
+        self.assertEqual("CAGUUUCAU", rna)
 
     def test_reverse_complement_of_rna(self):
-        # old approach
         seq = "AUGAAACUG"
-        with self.assertWarns(BiopythonDeprecationWarning):
-            rna = Seq.reverse_complement(seq)
-        self.assertEqual("CAGUUUCAU", rna)
-        # new approach
-        dna = Seq.reverse_complement(seq, inplace=False)  # TODO: remove inplace=False
+        dna = Seq.reverse_complement(seq)
         self.assertEqual("CAGTTTCAT", dna)
 
     def test_reverse_complement_of_dna(self):
