@@ -1807,6 +1807,10 @@ class HmmersearchCases(unittest.TestCase):
             "67899**********7666611155667*****************99999****************************************************************************************************************************.******************************...999999999999999998866....99******************9999999*****997",
             hsp.aln_annotation["PP"],
         )
+        self.assertEqual(
+            "+ell+ lG+Gs+GkV+ ++k   ++ g+ +A+K+lkk + k + + +++ E  il++++Hp+ivkl+ +f+t+ +lyl+l++++ggdlf+ l+ke  ++ee++k+++ +++ +l++lH  gii+rDLKpeNiLld++g++ki+DFGl+k+++ +++++++++gt eYmAPEv++ ++++t+++D+Ws+Gv+++e+ltg+lpf+g+   d++e+++ ilk kl  ++  s    +e+++l++ l++++p +Rl      +eei++hp++",
+            hsp.aln_annotation["similarity"],
+        )
 
     def test_30_hmmsearch_001(self):
         """Parsing hmmersearch 3.0 (text_30_hmmsearch_001)."""
