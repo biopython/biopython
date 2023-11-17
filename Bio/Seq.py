@@ -1231,7 +1231,7 @@ class _SeqAbstractBaseClass(ABC):
         in-place and returned.
 
         >>> seq = MutableSeq(" ACGT ")
-        >>> seq.lstrip(inplace=False)
+        >>> seq.lstrip()
         MutableSeq('ACGT ')
         >>> seq
         MutableSeq(' ACGT ')

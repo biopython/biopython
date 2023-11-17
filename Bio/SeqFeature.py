@@ -1495,9 +1495,7 @@ class SimpleLocation(Location):
         if isinstance(f_seq, MutableSeq):
             f_seq = Seq(f_seq)
         if self.strand == -1:
-            f_seq = reverse_complement(
-                f_seq, inplace=False
-            )  # TODO: remove inplace=False
+            f_seq = reverse_complement(f_seq)
         return f_seq
 
 

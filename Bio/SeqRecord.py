@@ -1286,14 +1286,10 @@ class SeqRecord:
         if "protein" in cast(str, self.annotations.get("molecule_type", "")):
             raise ValueError("Proteins do not have complements!")
         if "RNA" in cast(str, self.annotations.get("molecule_type", "")):
-            seq = self.seq.reverse_complement_rna(
-                inplace=False
-            )  # TODO: remove inplace=False
+            seq = self.seq.reverse_complement_rna()
         else:
-            # Default to DNA)
-            seq = self.seq.reverse_complement(
-                inplace=False
-            )  # TODO: remove inplace=False
+            # Default to DNA
+            seq = self.seq.reverse_complement()
         if isinstance(self.seq, MutableSeq):
             seq = Seq(seq)
         answer = type(self)(seq)
