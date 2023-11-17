@@ -761,7 +761,7 @@ static PyGetSetDef PyNode_getset[] = {
      (getter)PyNode_getdistance,
      (setter)PyNode_setdistance,
      PyNode_distance__doc__, NULL},
-    {NULL}  /* Sentinel */
+    {NULL, NULL, NULL, NULL, NULL}  /* Sentinel */
 };
 
 static char PyNode_doc[] =
