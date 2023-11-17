@@ -537,10 +537,11 @@ def six_frame_translations(seq, genetic_code=1):
     for nt in ["a", "t", "g", "c"]:
         header += " %s:%d" % (nt, seq.count(nt.upper()))
 
+    gc = 100 * gc_fraction(seq, ambiguous="ignore")
     header += "\nSequence: %s, %d nt, %0.2f %%GC\n\n\n" % (
         short.lower(),
         length,
-        gc_fraction(seq),
+        gc,
     )
     res = header
 
@@ -553,7 +554,7 @@ def six_frame_translations(seq, genetic_code=1):
         res += " " + "  ".join(frames[2][p : p + 20]) + "\n"
         res += "  ".join(frames[1][p : p + 20]) + "\n"
         # seq
-        res += subseq.lower() + "%5d %%\n" % int(gc_fraction(subseq))
+        res += subseq.lower() + "%5d %%\n" % int(gc)
         res += csubseq.lower() + "\n"
         # - frames
         res += "  ".join(frames[-2][p : p + 20]) + "\n"
