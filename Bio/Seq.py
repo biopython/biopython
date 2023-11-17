@@ -28,7 +28,6 @@ from abc import ABC
 from abc import abstractmethod
 from typing import overload, Optional, Union, Dict
 
-from Bio import BiopythonDeprecationWarning
 from Bio import BiopythonWarning
 from Bio.Data import CodonTable
 from Bio.Data import IUPACData

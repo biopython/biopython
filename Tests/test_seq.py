@@ -13,7 +13,7 @@ try:
 except ImportError:
     numpy = None
 
-from Bio import BiopythonWarning, BiopythonDeprecationWarning
+from Bio import BiopythonWarning
 from Bio import Seq
 from Bio.Data.IUPACData import (
     ambiguous_dna_complement,
