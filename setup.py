@@ -178,7 +178,6 @@ PACKAGES = [
     "Bio.Phylo.PAML",
     "Bio.UniGene",
     "Bio.UniProt",
-    "Bio.Wise",
     # Other top level packages,
     "BioSQL",
 ]

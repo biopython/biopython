@@ -516,7 +516,8 @@ The ``Bio.pairwise2`` module was deprecated in Release 1.80.
 
 Bio.Wise
 --------
-The ``Bio.Wise`` module was deprecated in Release 1.80.
+The ``Bio.Wise`` module was deprecated in Release 1.80, and removed in Release
+1.82.
 
 Scripts/Restriction/ranacompiler.py
 -----------------------------------
