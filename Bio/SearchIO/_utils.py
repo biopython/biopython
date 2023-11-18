@@ -176,7 +176,7 @@ def removesuffix(string, suffix):
     # 3.8 is already the oldest supported version.
     major, minor, *_ = sys.version_info
     if major == 3 and minor == 8:
-        if string.endswith(suffix):
+        if suffix and string.endswith(suffix):
             return string[: -len(suffix)]
         return string
     return string.removesuffix(suffix)
