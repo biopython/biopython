@@ -416,7 +416,9 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual("swvswidiglivnspllsllfqlLndpe", hsp.hit.seq)
         self.assertEqual("SFVQWEAMTLFLES-VITQMFRTLNREE", hsp.query.seq)
         self.assertEqual("899*********98.8888899998776", hsp.aln_annotation["PP"])
-        self.assertEqual("s+v+w  ++l+++s +++ +f+ Ln++e", hsp.aln_annotation["similarity"])
+        self.assertEqual(
+            "s+v+w  ++l+++s +++ +f+ Ln++e", hsp.aln_annotation["similarity"]
+        )
 
         hit = qresult[-1]
         self.assertEqual("IBN_N", hit.id)
@@ -631,7 +633,8 @@ class HmmscanCases(unittest.TestCase):
             "6999***********************************99", hsp.aln_annotation["PP"]
         )
         self.assertEqual(
-            "+++ +L++ R + G tq++v+  lg      +S++t++r E", hsp.aln_annotation["similarity"]
+            "+++ +L++ R + G tq++v+  lg      +S++t++r E",
+            hsp.aln_annotation["similarity"],
         )
 
         hsp = hit.hsps[1]
@@ -1035,7 +1038,9 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual("swvswidiglivnspllsllfqlLndpe", hsp.hit.seq)
         self.assertEqual("SFVQWEAMTLFLES-VITQMFRTLNREE", hsp.query.seq)
         self.assertEqual("899*********98.8888899998776", hsp.aln_annotation["PP"])
-        self.assertEqual("s+v+w  ++l+++s +++ +f+ Ln++e", hsp.aln_annotation["similarity"])
+        self.assertEqual(
+            "s+v+w  ++l+++s +++ +f+ Ln++e", hsp.aln_annotation["similarity"]
+        )
 
         hit = qresult[-1]
         self.assertEqual("IBN_N", hit.id)
