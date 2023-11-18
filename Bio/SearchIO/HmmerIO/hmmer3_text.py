@@ -405,7 +405,9 @@ class Hmmer3TextParser:
                 # should strip from the beginning of the line. We can't call `strip()`
                 # since the similarity string might start with empty characters.
                 elif aln_prefix_len is not None:
-                    similarity = self.line[aln_prefix_len:-1]
+                    similarity = (
+                        self.line[aln_prefix_len:].removesuffix("\n").removesuffix("\r")
+                    )
                     if "similarity" not in annot:
                         annot["similarity"] = similarity
                     else:
