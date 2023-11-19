@@ -1775,10 +1775,10 @@ class GenBankScanner(InsdcScanner):
                                     comment_list.append(data)
                             elif (
                                 structured_comment_key is not None
-                                and self.STRUCTURED_COMMENT_DELIM in data
+                                and self.STRUCTURED_COMMENT_DELIM.strip() in data
                             ):
                                 match = re.search(
-                                    rf"(.+?)\s*{self.STRUCTURED_COMMENT_DELIM}\s*(.+)",
+                                    rf"(.+?)\s*{self.STRUCTURED_COMMENT_DELIM.strip()}\s*(.*)",
                                     data,
                                 )
                                 structured_comment_dict[structured_comment_key][

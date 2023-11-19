@@ -7704,7 +7704,7 @@ KEYWORDS    """,
         self.assertEqual(
             record.annotations["structured_comment"]["FluData"]["LabID"], "2008704957"
         )
-        self.assertEqual(len(record.annotations["structured_comment"]["FluData"]), 5)
+        self.assertEqual(len(record.annotations["structured_comment"]["FluData"]), 6)
         path = "GenBank/EU851978_output.gbk"
         with open(path) as ifile:
             self.assertEqual(record.format("gb"), ifile.read())
