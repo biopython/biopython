@@ -8,6 +8,7 @@ import warnings
 
 from io import StringIO
 
+from Bio import BiopythonParserWarning
 from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqFeature import SimpleLocation
@@ -52,7 +53,8 @@ class TestEmbl(unittest.TestCase):
 
     def test_annotation4(self):
         """Check parsing of annotation from EMBL files (4)."""
-        record = SeqIO.read("EMBL/location_wrap.embl", "embl")
+        with self.assertWarns(BiopythonParserWarning):
+            record = SeqIO.read("EMBL/location_wrap.embl", "embl")
         self.assertEqual(len(record), 120)
         self.assertNotIn("keywords", record.annotations)
         # The ID line has the topology as unspecified:
