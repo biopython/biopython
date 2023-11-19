@@ -22,6 +22,7 @@ import warnings
 from Bio.Blast import Record
 from Bio.Seq import Seq, reverse_complement
 from Bio.SeqRecord import SeqRecord
+from Bio.SeqFeature import SeqFeature, SimpleLocation
 from Bio.Align import Alignment, Alignments
 from Bio import Entrez
 
@@ -730,21 +731,26 @@ class XMLHandler(deque):
         )
         query_seq_data = query_seq_aligned.replace("-", "")
         query_frame = hsp["query-frame"]
+        query = SeqRecord(None, query_id, description=query_description)
+        query_start = hsp["query-from"] - 1
+        query_end = hsp["query-to"]
         if self._program in ("blastx", "tblastx"):
-            query_start = hsp["query-from"] - 1
-            query_end = hsp["query-to"]
             assert query_end - query_start == 3 * len(query_seq_data)
+            location = SimpleLocation(0, len(query_seq_data))
+            coded_by = f"{query_id}:{hsp['query-from']}..{hsp['query-to']}"
+            if query_frame > 0:
+                assert query_start % 3 == query_frame - 1
+            elif query_frame < 0:
+                assert (query_length - query_end) % 3 == -query_frame - 1
+                coded_by = f"complement({coded_by})"
+            qualifiers = {"coded_by": coded_by}
+            feature = SeqFeature(location, type="CDS", qualifiers=qualifiers)
+            query.features.append(feature)
         else:
-            query_start = hsp["query-from"] - 1
-            query_end = hsp["query-to"]
             coordinates[1, :] += query_start
             assert query_end - query_start == len(query_seq_data)
             query_seq_data = {query_start: query_seq_data}
-        query_seq = Seq(query_seq_data, query_length)
-        query = SeqRecord(query_seq, query_id, description=query_description)
-        query.annotations["start"] = query_start
-        query.annotations["end"] = query_end
-        query.annotations["frame"] = query_frame
+        query.seq = Seq(query_seq_data, query_length)
         target = self._alignment.target
         target_id = target.id
         target_name = target.name
@@ -752,11 +758,22 @@ class XMLHandler(deque):
         target_length = len(target.seq)
         target_seq_data = target_seq_aligned.replace("-", "")
         target_frame = hsp["hit-frame"]
+        target = SeqRecord(None, target_id, target_name, description=target_description)
         if self._program in ("tblastn", "tblastx"):
             target_start = hsp["hit-from"] - 1
             target_end = hsp["hit-to"]
             assert target_end - target_start == 3 * len(target_seq_data)
             target_seq = Seq(target_seq_data, target_length)
+            location = SimpleLocation(0, target_length)
+            coded_by = f"{target_id}:{hsp['hit-from']}..{hsp['hit-to']}"
+            if target_frame > 0:
+                assert target_start % 3 == target_frame - 1
+            elif query_frame < 0:
+                assert (target_length - target_end) % 3 == -target_frame - 1
+                coded_by = f"complement({coded_by})"
+            qualifiers = {"coded_by": coded_by}
+            feature = SeqFeature(location, type="CDS", qualifiers=qualifiers)
+            target.features.append(feature)
         else:
             if target_frame == +1 or target_frame == 0:
                 target_start = hsp["hit-from"] - 1
@@ -768,13 +785,8 @@ class XMLHandler(deque):
                 target_seq_data = reverse_complement(target_seq_data)
                 coordinates[0, :] = target_end - coordinates[0, :]
             assert target_end - target_start == len(target_seq_data)
-            target_seq = Seq({target_start: target_seq_data}, target_length)
-        target = SeqRecord(
-            target_seq, target_id, target_name, description=target_description
-        )
-        target.annotations["start"] = target_start
-        target.annotations["end"] = target_end
-        target.annotations["frame"] = target_frame
+            target_seq_data = {target_start: target_seq_data}
+        target.seq = Seq(target_seq_data, target_length)
         sequences = [target, query]
         alignment = Alignment(sequences, coordinates)
         alignment.score = hsp["score"]

@@ -51,15 +51,43 @@ class Record(list):
     A ``Bio.Blast.Record`` object is a list of ``Bio.Align.Alignments`` objects,
     each corresponding to one hit for the query in the BLAST output.
 
-    The ``Bio.Blast.Record`` object has the following attributes:
-      - query:  The query on which BLAST was run [str];
-      - stat:   A dictionary with summary statistics of the BLAST run. It may
+    The ``Bio.Blast.Record`` object may have the following attributes:
+     - query:   A ``SeqRecord`` object which may contain some or all of the
+                following information:
+                 - query.id:          SeqId of query;
+                 - query.description: Definition line of query;
+                 - len(query.seq):    Length of the query sequence.
+     - stat:    A dictionary with summary statistics of the BLAST run. It may
                 contain the following keys:
-      - mbstat: A dictionary with summary statistics of a Mega BLAST search.
-                As this information is stored near the end of the XML file,
-                this attribute can only be accessed after the full file has
-                been read. This dictionary can contain the same keys as the
-                dictionary stored under the stat dictionary.
+                'db-num':    number of sequences in BLAST db (integer);
+                'db-len':    length of BLAST db (integer);
+                'hsp-len':   effective HSP length (integer);
+                'eff-space': effective search space (float);
+                'kappa':     Karlin-Altschul parameter K (float);
+                'lambda':    Karlin-Altschul parameter Lambda (float);
+                'entropy':   Karlin-Altschul parameter H (float).
+     - message: Some (error?) information.
+
+    Each ``Bio.Align.Alignments`` object has a ``target`` attribute containing
+    the following information:
+
+     - target.id:          seqId of subject;
+     - target.description: definition line of subject;
+     - target.name:        accession of subject;
+     - len(target.seq):    sequence length of subject.
+
+    Each ``Bio.Align.Alignment`` object stored in the ``Bio.Align.Alignments``
+    object has the attributes ``target``, ``query``, and ``coordinates`` as
+    usual, as well as the following attributes:
+
+     - score:       score of HSP;
+     - annotations: a dictionary that may contain the following keys:
+                    'bit score': score (in bits) of HSP (float);
+                    'evalue':    e-value of HSP (float);
+                    'identity':  number of identities in HSP (integer);
+                    'positive':  number of positives in HSP (integer);
+                    'gaps':      number of gaps in HSP (integer);
+                    'midline':   formating middle line.
 
     """
 
@@ -83,21 +111,35 @@ class Records:
      - reference:  The literature reference to the BLAST publication.
      - db:         The BLAST database against which the query was run
                    (e.g., 'nr').
+     - query:      A ``SeqRecord`` object which may contain some or all of the
+                   following information:
+                    - query.id:          SeqId of query;
+                    - query.description: Definition line of query;
+                    - len(query.seq):    Length of the query sequence;
+                    - query.seq:         The query sequence itself.
      - param:      A dictionary with the parameters used for the BLAST run.
                    You may find the following information in this dictionary:
-                   'expect':      threshold on the expected number of chance
-                                  matches (float);
-                   'sc-match':    score for matching nucleotides (integer);
-                   'sc-mismatch': score for mismatched nucleotides (integer);
-                   'gap-open':    gap opening penalty (integer);
-                   'gap-extend':  gap extension penalty (integer);
-                   'filter':      filtering options applied in the BLAST run
-                                  (integer);
-                   'matrix':      the scoring matrix used in the BLAST run
-                                  (e.g., 'BLOSUM62') (string);
-                   'include':     e-value threshold for inclusion in multipass
-                                  model in psiblast (float);
-                   'pattern':     PHI-BLAST pattern (string).
+                   'matrix':       the scoring matrix used in the BLAST run
+                                   (e.g., 'BLOSUM62') (string);
+                   'expect':       threshold on the expected number of chance
+                                   matches (float);
+                   'include':      e-value threshold for inclusion in multipass
+                                   model in psiblast (float);
+                   'sc-match':     score for matching nucleotides (integer);
+                   'sc-mismatch':  score for mismatched nucleotides (integer);
+                   'gap-open':     gap opening penalty (integer);
+                   'gap-extend':   gap extension penalty (integer);
+                   'filter':       filtering options applied in the BLAST run
+                                   (integer);
+                   'pattern':      PHI-BLAST pattern (string);
+                   'entrez-query': Limit of request to Entrez query (string).
+
+      - mbstat: A dictionary with summary statistics of a Mega BLAST search.
+                As this information is stored near the end of the XML file,
+                this attribute can only be accessed after the full file has
+                been read. This dictionary can contain the same keys as the
+                dictionary stored under the ``stat`` attribute of a ``Record``
+                object.
 
     """  # noqa: RST201, RST203, RST301
 
