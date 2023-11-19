@@ -365,8 +365,9 @@ from math import log
 from Bio import BiopythonParserWarning
 from Bio import BiopythonWarning
 from Bio import BiopythonDeprecationWarning
-from Bio import StreamModeError
 from Bio.File import as_handle
+from Bio.File import check_handle_mode
+from Bio.File import _TextIOSource
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
@@ -374,7 +375,6 @@ from .Interfaces import _clean
 from .Interfaces import _get_seq_string
 from .Interfaces import SequenceIterator
 from .Interfaces import SequenceWriter
-from .Interfaces import _TextIOSource
 
 from typing import (
     Any,
@@ -930,8 +930,7 @@ def FastqGeneralIterator(source: _TextIOSource) -> Iterator[Tuple[str, str, str]
     would prevent the above problem with the "@" character.
     """
     with as_handle(source) as handle:
-        if handle.read(0) != "":
-            raise StreamModeError("Fastq files must be opened in text mode") from None
+        check_handle_mode(handle, "r", fmt="Fastq")
         try:
             line = next(handle)
         except StopIteration:
