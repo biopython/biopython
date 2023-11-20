@@ -526,20 +526,26 @@ In Biopython, the information in a BLAST output file is stored in an \verb|Bio.B
 \item \verb|version|: The version of the BLAST program (e.g., 'BLASTN 2.2.27+').
 \item \verb|reference|:  The literature reference to the BLAST publication.
 \item \verb|db|: The BLAST database against which the query was run (e.g., 'nr').
+\item \verb|query|:  A \verb|SeqRecord| object which may contain some or all of the following information:
+\begin{itemize}
+\item \verb|query.id|: SeqId of the query;
+\item \verb|query.description|: Definition line of the query;
+\item \verb|query.seq|: The query sequence.
+\end{itemize}
 \item \verb|param|: A dictionary with the parameters used for the BLAST run. You may find the following keys in this dictionary:
 \begin{itemize}
 \item \verb|'matrix'|: the scoring matrix used in the BLAST run (e.g., 'BLOSUM62') (string);
-\item \verb|'expect'|: expectation threshold (float);
+\item \verb|'expect'|: threshold on the expected number of chance matches (float);
+\item \verb|'include'|: e-value threshold for inclusion in multipass model in psiblast (float);
 \item \verb|'sc-match'|: score for matching nucleotides (integer);
 \item \verb|'sc-mismatch'|: score for mismatched nucleotides (integer;
 \item \verb|'gap-open'|: gap opening cost (integer);
 \item \verb|'gap-extend'|: gap extension cost (integer);
 \item \verb|'filter'|: filtering options applied in the BLAST run (string);
-\item \verb|'include'|: e-value threshold for inclusion in multipass model in psiblast (float);
 \item \verb|'pattern'|: PHI-BLAST pattern (string);
 \item \verb|'entrez-query'|: Limit of request to Entrez query (string).
 \end{itemize}
-\item \verb|mbstat|: A dictionary with Mega BLAST search statistics. See the description of the \verb|Record.stat| attribute below (in subSection \ref{subsec:blast-record}) for a description of the items in this dictionary. Only older versions of Mega BLAST store this information. As it is stored near the end of the BLAST output file, this attribute can only be accessed after the file has been read completely (by iterating over the records until a \verb|StopIteration| is issued).
+\item \verb|mbstat|: A dictionary with Mega BLAST search statistics. See the description of the \verb|Record.stat| attribute below (in subsection \ref{subsec:blast-record}) for a description of the items in this dictionary. Only older versions of Mega BLAST store this information. As it is stored near the end of the BLAST output file, this attribute can only be accessed after the file has been read completely (by iterating over the records until a \verb|StopIteration| is issued).
 \end{itemize}
 
 For our example, we find:
@@ -563,7 +569,12 @@ For our example, we find:
 
 A \verb|Bio.Blast.Record| object stores the information provided by BLAST for a single query. The \verb|Bio.Blast.Record| class inherits from \verb+list+, and is essentially a list of \verb|Bio.Align.Alignments| objects (see \ref{sec:alignments}). A \verb|Bio.Blast.Record| object has the following two attributes:
 \begin{itemize}
-\item \verb|query|: The BLAST query.
+\item \verb|query|:  A \verb|SeqRecord| object which may contain some or all of the following information:
+\begin{itemize}
+\item \verb|query.id|: SeqId of the query;
+\item \verb|query.description|: Definition line of the query;
+\item \verb|query.seq|: The query sequence.
+\end{itemize}
 \item \verb|stat|: A dictionary with statistical data of the BLAST hit. You may find the following keys in this dictionary:
 \begin{itemize}
 \item \verb|'db-num'|: number of sequences in BLAST db (integer);
@@ -574,6 +585,7 @@ A \verb|Bio.Blast.Record| object stores the information provided by BLAST for a 
 \item \verb|'lambda'|: Karlin-Altschul parameter Lambda (float);
 \item \verb|'entropy'|: Karlin-Altschul parameter H (float)
 \end{itemize}
+\item \verb|message|: Some (error?) information.
 \end{itemize}
 Continuing with our example,
 \begin{minted}{pycon}
@@ -598,7 +610,25 @@ However, typically a hit consists of only one or a few alignments, especially fo
 >>> type(alignment)
 <class 'Bio.Align.Alignment'>
 \end{minted}
-The \verb|alignment| object has attributes pointing to the target and query sequences, as well as a \verb|coordinates| attribute describing the sequence alignment. The usual \verb|Alignment| methods (see Section \ref{sec:alignmentobject}) can therefore be applied to \verb|alignment|. For example, we can print the alignment:
+The \verb|alignment| object has attributes pointing to the target and query sequences, as well as a \verb|coordinates| attribute describing the sequence alignment.
+
+For translated BLAST searches, the \verb|features| attribute of the target or query may contain a \verb|SeqFeature| of type CDS that stores the amino acid sequence region.  The \verb|qualifiers| attribute of such a feature is a dictionary with  a single key \verb|'coded_by'|; the corresponding value specifies the nucleotide sequence region, in a GenBank-style string with 1-based coordinates, that encodes the amino acid sequence.
+
+Each \verb|Alignment| object has the following additional attributes:
+\begin{itemize}
+\item \verb|score|: score of the High Scoring Pair (HSP);
+\item \verb|annotations|: a dictionary that may contain the following keys:
+\begin{itemize}
+\item \verb|'bit score'|: score (in bits) of HSP (float);
+\item \verb|'evalue'|:    e-value of HSP (float);
+\item \verb|'identity|':  number of identities in HSP (integer);
+\item \verb|'positive'|:  number of positives in HSP (integer);
+\item \verb|'gaps'|:      number of gaps in HSP (integer);
+\item \verb|'midline'|:   formatting middle line.
+\end{itemize}
+\end{itemize}
+
+The usual \verb|Alignment| methods (see Section \ref{sec:alignmentobject}) can therefore be applied to \verb|alignment|. For example, we can print the alignment:
 \begin{minted}{pycon}
 >>> alignment.target
 SeqRecord(seq=Seq('CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTT...GGG'), id='gi|262205317|ref|NR_030195.1|', name='NR_030195', description='Homo sapiens microRNA 520b (MIR520B), microRNA', dbxrefs=[])
@@ -664,11 +694,6 @@ gi|270133        12 CCCTCTAGAGGGAAGCGCTTTCTGTGGTCTGAAAGAAAAGAAAGTGCTTC 62
 
 ...
 \end{minted}
-
-Basically, you can do anything you want to with the info in the BLAST
-report once you have parsed it. This will, of course, depend on what
-you want to use it for, but hopefully this helps you get started on
-doing what you need to do!
 
 \section{Dealing with PSI-BLAST}
 

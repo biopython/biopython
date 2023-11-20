@@ -170,19 +170,18 @@ class Records:
     Common attributes of a ``Bio.Blast.Records`` object are
      - source:     The input data from which the ``Bio.Blast.Records`` object
                    was constructed.
-     - program:    The specific BLAST program that was used (e.g., 'blastn')
-     - version:    The version of the BLAST program (e.g., 'BLASTN 2.2.27+')
+     - program:    The specific BLAST program that was used (e.g., 'blastn').
+     - version:    The version of the BLAST program (e.g., 'BLASTN 2.2.27+').
      - reference:  The literature reference to the BLAST publication.
      - db:         The BLAST database against which the query was run
                    (e.g., 'nr').
      - query:      A ``SeqRecord`` object which may contain some or all of the
                    following information:
-                    - query.id:          SeqId of query;
-                    - query.description: Definition line of query;
-                    - len(query.seq):    Length of the query sequence;
-                    - query.seq:         The query sequence itself.
+                    - query.id:          SeqId of the query;
+                    - query.description: Definition line of the query;
+                    - query.seq:         The query sequence.
      - param:      A dictionary with the parameters used for the BLAST run.
-                   You may find the following information in this dictionary:
+                   You may find the following keys in this dictionary:
                    'matrix':       the scoring matrix used in the BLAST run
                                    (e.g., 'BLOSUM62') (string);
                    'expect':       threshold on the expected number of chance
@@ -191,19 +190,20 @@ class Records:
                                    model in psiblast (float);
                    'sc-match':     score for matching nucleotides (integer);
                    'sc-mismatch':  score for mismatched nucleotides (integer);
-                   'gap-open':     gap opening penalty (integer);
-                   'gap-extend':   gap extension penalty (integer);
+                   'gap-open':     gap opening cost (integer);
+                   'gap-extend':   gap extension cost (integer);
                    'filter':       filtering options applied in the BLAST run
-                                   (integer);
+                                   (string);
                    'pattern':      PHI-BLAST pattern (string);
                    'entrez-query': Limit of request to Entrez query (string).
 
-      - mbstat: A dictionary with summary statistics of a Mega BLAST search.
-                As this information is stored near the end of the XML file,
-                this attribute can only be accessed after the full file has
-                been read. This dictionary can contain the same keys as the
-                dictionary stored under the ``stat`` attribute of a ``Record``
-                object.
+      - mbstat: A dictionary with Mega BLAST search statistics.  As this
+                information is stored near the end of the XML file, this
+                attribute can only be accessed after the file has been read
+                completely (by iterating over the records until a
+                ``StopIteration`` is issued. This dictionary can contain the
+                same keys as the dictionary stored under the ``stat`` attribute
+                of a ``Record`` object.
 
     >>> from Bio import Blast
     >>> records = Blast.parse("Blast/xml_2218_blastp_002.xml")

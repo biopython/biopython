@@ -209,7 +209,6 @@ class XMLHandler(deque):
         self._characters = ""
 
     def _start_parameters_entrez_query(self, name, attrs):
-        raise Exception
         assert self._characters.strip() == ""
         self._characters = ""
 
@@ -222,7 +221,6 @@ class XMLHandler(deque):
         self._characters = ""
 
     def _start_blastoutput_query_seq(self, name, attrs):
-        raise Exception
         assert self._characters.strip() == ""
         self._characters = ""
 
@@ -317,12 +315,10 @@ class XMLHandler(deque):
         self._characters = ""
 
     def _start_hsp_pattern_from(self, name, attrs):
-        raise Exception
         assert self._characters.strip() == ""
         self._characters = ""
 
     def _start_hsp_pattern_to(self, name, attrs):
-        raise Exception
         assert self._characters.strip() == ""
         self._characters = ""
 
@@ -351,7 +347,6 @@ class XMLHandler(deque):
         self._characters = ""
 
     def _start_hsp_density(self, name, attrs):
-        raise Exception
         assert self._characters.strip() == ""
         self._characters = ""
 
@@ -448,7 +443,6 @@ class XMLHandler(deque):
         self._characters = ""
 
     def _end_blastoutput_query_seq(self, name):
-        raise Exception
         seq = Seq(self._characters)
         self._characters = ""
         assert len(seq) == len(self._records.query.seq)
@@ -505,7 +499,6 @@ class XMLHandler(deque):
         self._characters = ""
 
     def _end_parameters_entrez_query(self, name):
-        raise Exception
         self._records.param["entrez-query"] = self._characters
         self._characters = ""
 
@@ -618,15 +611,11 @@ class XMLHandler(deque):
         self._characters = ""
 
     def _end_hsp_pattern_from(self, name):
-        raise Exception
-        # ignore for now
-        assert self._characters.strip() == ""
+        self._hsp["pattern-from"] = int(self._characters)
         self._characters = ""
 
     def _end_hsp_pattern_to(self, name):
-        raise Exception
-        # ignore for now
-        assert self._characters.strip() == ""
+        self._hsp["pattern-to"] = int(self._characters)
         self._characters = ""
 
     def _end_hsp_query_frame(self, name):
@@ -694,7 +683,6 @@ class XMLHandler(deque):
         self._characters = ""
 
     def _end_hsp_density(self, name):
-        raise Exception
         self._hsp["density"] = int(self._characters)
         self._characters = ""
 
