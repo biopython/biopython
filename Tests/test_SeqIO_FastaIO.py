@@ -8,7 +8,6 @@ import unittest
 
 from io import StringIO
 
-from Bio import BiopythonDeprecationWarning
 from Bio import SeqIO
 from Bio.SeqIO.FastaIO import FastaIterator
 from Bio.SeqIO.FastaIO import FastaTwoLineParser
