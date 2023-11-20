@@ -16,6 +16,10 @@ The latest news is at the top of this file.
 This release of Biopython supports Python 3.8, 3.9, 3.10, 3.11 and 3.12. It
 has also been tested on PyPy3.8 v7.8.16.
 
+The ``inplace`` argument of ``complement`` and ``reverse_complement`` in
+``Bio.Seq`` now always default to ``False`` both for ``Seq`` and ``MutableSeq``
+objects. To modify a ``MutableSeq`` in-place, use ``inplace=True``.
+
 A new class ``CodonAligner`` was added to ``Bio.Align``. A ``CodonAligner``
 object can align a nucleotide sequence to the amino acid sequence it encodes,
 using a dynamic programming algorithm modeled on ``PairwiseAligner`` to take

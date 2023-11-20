@@ -214,8 +214,8 @@ Bio.Seq.MutableSeq(myseq) or Bio.Seq.Seq(mymutableseq), respectively.
 
 Bio.Seq.Seq.ungap()
 -------------------
-Declared obsolete in release 1.79, and deprecated in release 1.80.
-Instead of myseq.ungap(), please use myseq.replace("-", "").
+Declared obsolete in release 1.79, deprecated in release 1.80, and removed in
+release 1.82.  Instead of myseq.ungap(), please use myseq.replace("-", "").
 
 Bio.Seq.UnknownSeq
 ------------------
