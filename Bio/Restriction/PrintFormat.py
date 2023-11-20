@@ -363,9 +363,7 @@ class PrintFormat:
             mapping = remaining
         cutloc[x] = mapping
         sequence = str(self.sequence)
-        revsequence = str(
-            self.sequence.complement(inplace=False)
-        )  # TODO: remove inplace=False
+        revsequence = str(self.sequence.complement())
         a = "|"
         base, counter = 0, 0
         emptyline = " " * 60

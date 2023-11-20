@@ -479,7 +479,7 @@ def molecular_weight(
         if seq_type == "protein":
             raise ValueError("protein sequences cannot be double-stranded")
         elif seq_type == "DNA":
-            seq = complement(seq, inplace=False)  # TODO: remove inplace=False
+            seq = complement(seq)
         elif seq_type == "RNA":
             seq = complement_rna(seq)
         weight += sum(weight_table[x] for x in seq) - (len(seq) - 1) * water
@@ -519,7 +519,7 @@ def six_frame_translations(seq, genetic_code=1):
     if "u" in seq.lower():
         anti = reverse_complement_rna(seq)
     else:
-        anti = reverse_complement(seq, inplace=False)  # TODO: remove inplace=False
+        anti = reverse_complement(seq)
     comp = anti[::-1]
     length = len(seq)
     frames = {}

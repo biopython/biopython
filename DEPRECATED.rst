@@ -214,8 +214,8 @@ Bio.Seq.MutableSeq(myseq) or Bio.Seq.Seq(mymutableseq), respectively.
 
 Bio.Seq.Seq.ungap()
 -------------------
-Declared obsolete in release 1.79, and deprecated in release 1.80.
-Instead of myseq.ungap(), please use myseq.replace("-", "").
+Declared obsolete in release 1.79, deprecated in release 1.80, and removed in
+release 1.82.  Instead of myseq.ungap(), please use myseq.replace("-", "").
 
 Bio.Seq.UnknownSeq
 ------------------
@@ -225,6 +225,13 @@ Note that the sequence contents of a ``Seq`` object constructed in this way
 is considered to be unknown, and any attempt to access the sequence contents
 (for example, by calling ``print`` on the object) will result in an
 ``UndefinedSequenceError``.
+
+Bio.Seq: Functions and methods ``complement`` and ``reverse_complement``
+------------------------------------------------------------------------
+Starting from release 1.82, the ``inplace`` argument of ``complement`` and
+``reverse_complement`` in ``Bio.Seq`` always default to ``False`` both for
+``Seq`` and ``MutableSeq`` objects.
+To modify a ``MutableSeq`` in-place, use ``inplace=True``.
 
 Iterator .next() methods
 ------------------------

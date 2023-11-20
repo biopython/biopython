@@ -225,7 +225,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     if strand == "+":
                         pass
                     elif strand == "-":
-                        seq = reverse_complement(seq, inplace=False)
+                        seq = reverse_complement(seq)
                         coordinates[index, :] = len(seq) - coordinates[index, :]
                     else:
                         raise ValueError("Unexpected strand '%s'" % strand)

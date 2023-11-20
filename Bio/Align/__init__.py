@@ -1106,7 +1106,7 @@ class Alignment:
             if (row >= 0).all():
                 pass
             elif (row <= 0).all():
-                sequences[i] = reverse_complement(sequence, inplace=False)
+                sequences[i] = reverse_complement(sequence)
                 coordinates[i, :] = len(sequence) - coordinates[i, :]
                 steps[i, :] = -steps[i, :]
             else:
@@ -1309,7 +1309,7 @@ class Alignment:
             if (row >= 0).all():
                 pass
             elif (row <= 0).all():
-                sequences[i] = reverse_complement(sequence, inplace=False)
+                sequences[i] = reverse_complement(sequence)
                 coordinates[i, :] = len(sequence) - coordinates[i, :]
                 steps[i, :] = -steps[i, :]
             else:
@@ -1577,7 +1577,7 @@ class Alignment:
             if sum(aligned_steps > 0) < sum(aligned_steps < 0):
                 steps[i, :] = -steps[i, :]
                 if i == index:
-                    sequence = reverse_complement(sequence, inplace=False)
+                    sequence = reverse_complement(sequence)
                     coordinates = len(sequence) - coordinates
         gaps = steps.max(0)
         try:
@@ -2043,7 +2043,7 @@ class Alignment:
             elif (row <= 0).all():
                 steps[i, :] = -steps[i, :]
                 coordinates[i, :] = len(sequence) - coordinates[i, :]
-                sequences[i] = reverse_complement(sequence, inplace=False)
+                sequences[i] = reverse_complement(sequence)
                 try:
                     sequences[i].id = sequence.id
                 except AttributeError:
@@ -2229,7 +2229,7 @@ class Alignment:
                 row[:] = positions - start
             else:
                 steps[i, :] = -steps[i, :]
-                seq = reverse_complement(seq, inplace=False)
+                seq = reverse_complement(seq)
                 end = max(positions)
                 row[:] = end - positions
             if isinstance(seq, str):
@@ -2403,7 +2403,7 @@ class Alignment:
                 return self._format_generalized()
             if row[0] > row[-1]:  # mapped to reverse strand
                 row[:] = len(seq) - row[:]
-                seq = reverse_complement(seq, inplace=False)
+                seq = reverse_complement(seq)
             seqs.append(seq)
             try:
                 name = seq.id
@@ -3468,7 +3468,7 @@ class Alignment:
             if (row >= 0).all():
                 pass
             elif (row <= 0).all():
-                sequences[i] = reverse_complement(sequence, inplace=False)
+                sequences[i] = reverse_complement(sequence)
                 coordinates[i, :] = len(sequence) - coordinates[i, :]
             else:
                 raise ValueError(f"Inconsistent steps in row {i}")
@@ -3578,9 +3578,7 @@ class Alignment:
         >>> print(rc_alignment.column_annotations)
         {'score': [2, 2, 2, 3]}
         """
-        sequences = [
-            reverse_complement(sequence, inplace=False) for sequence in self.sequences
-        ]
+        sequences = [reverse_complement(sequence) for sequence in self.sequences]
         coordinates = np.array(
             [
                 len(sequence) - row[::-1]
@@ -3923,7 +3921,7 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
         if strand == "+":
             sB = seqB
         else:  # strand == "-":
-            sB = reverse_complement(seqB, inplace=False)
+            sB = reverse_complement(seqB)
         if isinstance(seqB, (Seq, MutableSeq, SeqRecord)):
             sB = bytes(sB)
         score, paths = super().align(sA, sB, strand)
@@ -3935,7 +3933,7 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
         if isinstance(seqA, (Seq, MutableSeq, SeqRecord)):
             seqA = bytes(seqA)
         if strand == "-":
-            seqB = reverse_complement(seqB, inplace=False)
+            seqB = reverse_complement(seqB)
         if isinstance(seqB, (Seq, MutableSeq, SeqRecord)):
             seqB = bytes(seqB)
         return super().score(seqA, seqB, strand)
