@@ -364,7 +364,6 @@ from math import log
 
 from Bio import BiopythonParserWarning
 from Bio import BiopythonWarning
-from Bio import BiopythonDeprecationWarning
 from Bio import StreamModeError
 from Bio.File import as_handle
 from Bio.Seq import Seq
@@ -1006,20 +1005,12 @@ class FastqPhredIterator(SequenceIterator[str]):
         self,
         source: _TextIOSource,
         alphabet: None = None,
-        title2ids: Optional[Callable[[str], Tuple[str, str, str]]] = None,
     ):
         """Iterate over FASTQ records as SeqRecord objects.
 
         Arguments:
          - source - input stream opened in text mode, or a path to a file
          - alphabet - optional alphabet, no longer used. Leave as None.
-         - title2ids (DEPRECATED) - A function that, when given the title line
-           from the FASTQ file (without the beginning >), will return the id,
-           name and description (in that order) for the record as a tuple of
-           strings.  If this is not given, then the entire title line will be
-           used as the description, and the first word as the id and name.
-
-        The use of title2ids matches that of Bio.SeqIO.FastaIO.
 
         For each sequence in a (Sanger style) FASTQ file there is a matching string
         encoding the PHRED qualities (integers between 0 and about 90) using ASCII
@@ -1070,9 +1061,9 @@ class FastqPhredIterator(SequenceIterator[str]):
         >>> print(record.letter_annotations["phred_quality"])
         [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]
 
-        The title2ids argument is deprecated. Instead, please use a generator
-        function to modify the records returned by the parser. For example, to
-        store the mean PHRED quality in the record description, use
+        To modify the records returned by the parser, you can use a generator
+        function. For example, to store the mean PHRED quality in the record
+        description, use
 
         >>> from statistics import mean
         >>> def modify_records(records):
@@ -1091,26 +1082,6 @@ class FastqPhredIterator(SequenceIterator[str]):
         """
         if alphabet is not None:
             raise ValueError("The alphabet argument is no longer supported")
-        if title2ids is not None:
-            warnings.warn(
-                "The title2ids argument is deprecated. Instead, please use a "
-                "generator function to modify records returned by the parser. "
-                "For example, to change the record description to a counter, "
-                "use\n"
-                "\n"
-                ">>> from statistics import mean\n"
-                ">>> def modify_records(records):\n"
-                "...     for record in records:\n"
-                "...         record.description = mean(record.letter_annotations['phred_quality'])\n"
-                "...         yield record\n"
-                "...\n"
-                ">>> with open('Quality/example.fastq') as handle:\n"
-                "...     for record in modify_records(FastqPhredIterator(handle)):\n"
-                "...         print(record.id, record.description)\n"
-                "\n",
-                BiopythonDeprecationWarning,
-            )
-        self.title2ids = title2ids
         super().__init__(source, mode="t", fmt="Fastq")
 
     def parse(self, handle: IO[str]) -> Iterator[SeqRecord]:
@@ -1120,7 +1091,6 @@ class FastqPhredIterator(SequenceIterator[str]):
 
     def iterate(self, handle: IO[str]) -> Iterator[SeqRecord]:
         """Parse the file and generate SeqRecord objects."""
-        title2ids = self.title2ids
         assert SANGER_SCORE_OFFSET == ord("!")
         # Originally, I used a list expression for each record:
         #
@@ -1133,12 +1103,9 @@ class FastqPhredIterator(SequenceIterator[str]):
         }
 
         for title_line, seq_string, quality_string in FastqGeneralIterator(handle):
-            if title2ids:
-                id, name, descr = title2ids(title_line)
-            else:
-                descr = title_line
-                id = descr.split()[0]
-                name = id
+            descr = title_line
+            id = descr.split()[0]
+            name = id
             record = SeqRecord(Seq(seq_string), id=id, name=name, description=descr)
             try:
                 qualities = [q_mapping[letter2] for letter2 in quality_string]
@@ -1156,7 +1123,6 @@ class FastqPhredIterator(SequenceIterator[str]):
 def FastqSolexaIterator(
     source: _TextIOSource,
     alphabet: None = None,
-    title2ids: Optional[Callable[[str], Tuple[str, str, str]]] = None,
 ) -> Iterator[SeqRecord]:
     r"""Parse old Solexa/Illumina FASTQ like files (which differ in the quality mapping).
 
@@ -1300,12 +1266,9 @@ def FastqSolexaIterator(
     }
 
     for title_line, seq_string, quality_string in FastqGeneralIterator(source):
-        if title2ids:
-            id, name, descr = title2ids(title_line)
-        else:
-            descr = title_line
-            id = descr.split()[0]
-            name = id
+        descr = title_line
+        id = descr.split()[0]
+        name = id
         record = SeqRecord(Seq(seq_string), id=id, name=name, description=descr)
         try:
             qualities = [q_mapping[letter2] for letter2 in quality_string]
@@ -1321,7 +1284,6 @@ def FastqSolexaIterator(
 def FastqIlluminaIterator(
     source: _TextIOSource,
     alphabet: None = None,
-    title2ids: Optional[Callable[[str], Tuple[str, str, str]]] = None,
 ) -> Iterator[SeqRecord]:
     """Parse Illumina 1.3 to 1.7 FASTQ like files (which differ in the quality mapping).
 
@@ -1360,12 +1322,9 @@ def FastqIlluminaIterator(
     }
 
     for title_line, seq_string, quality_string in FastqGeneralIterator(source):
-        if title2ids:
-            id, name, descr = title2ids(title_line)
-        else:
-            descr = title_line
-            id = descr.split()[0]
-            name = id
+        descr = title_line
+        id = descr.split()[0]
+        name = id
         record = SeqRecord(Seq(seq_string), id=id, name=name, description=descr)
         try:
             qualities = [q_mapping[letter2] for letter2 in quality_string]
@@ -1384,7 +1343,6 @@ class QualPhredIterator(SequenceIterator):
         self,
         source: _TextIOSource,
         alphabet: None = None,
-        title2ids: Optional[Callable[[str], Tuple[str, str, str]]] = None,
     ) -> None:
         """For QUAL files which include PHRED quality scores, but no sequence.
 
@@ -1441,7 +1399,6 @@ class QualPhredIterator(SequenceIterator):
         """
         if alphabet is not None:
             raise ValueError("The alphabet argument is no longer supported")
-        self.title2ids = title2ids
         super().__init__(source, mode="t", fmt="QUAL")
 
     def parse(self, handle: IO) -> Iterator[SeqRecord]:
@@ -1463,12 +1420,9 @@ class QualPhredIterator(SequenceIterator):
                 raise ValueError(
                     "Records in Fasta files should start with '>' character"
                 )
-            if self.title2ids:
-                id, name, descr = self.title2ids(line[1:].rstrip())
-            else:
-                descr = line[1:].rstrip()
-                id = descr.split()[0]
-                name = id
+            descr = line[1:].rstrip()
+            id = descr.split()[0]
+            name = id
 
             qualities: List[int] = []
             for line in handle:
@@ -1944,7 +1898,6 @@ def PairedFastaQualIterator(
     fasta_source: _TextIOSource,
     qual_source: _TextIOSource,
     alphabet: None = None,
-    title2ids: Optional[Callable[[str], Tuple[str, str, str]]] = None,
 ) -> Iterator[SeqRecord]:
     """Iterate over matched FASTA and QUAL files as SeqRecord objects.
 
@@ -2013,8 +1966,8 @@ def PairedFastaQualIterator(
 
     from Bio.SeqIO.FastaIO import FastaIterator
 
-    fasta_iter = FastaIterator(fasta_source, title2ids=title2ids)
-    qual_iter = QualPhredIterator(qual_source, title2ids=title2ids)
+    fasta_iter = FastaIterator(fasta_source)
+    qual_iter = QualPhredIterator(qual_source)
 
     # Using zip wouldn't load everything into memory, but also would not catch
     # any extra records found in only one file.
