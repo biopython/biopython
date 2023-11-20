@@ -164,8 +164,8 @@ class Records:
     """Stores the BLAST results of a single BLAST run.
 
     A ``Bio.Blast.Records`` object is an iterator. Iterating over it returns
-    returns ``Bio.Blast.Record`` objects. Each of the ``Bio.Blast.Record``
-    objects corresponds to one BLAST query.
+    returns ``Bio.Blast.Record`` objects, each of which corresponds to one
+    BLAST query.
 
     Common attributes of a ``Bio.Blast.Records`` object are
      - source:     The input data from which the ``Bio.Blast.Records`` object
@@ -204,6 +204,40 @@ class Records:
                 been read. This dictionary can contain the same keys as the
                 dictionary stored under the ``stat`` attribute of a ``Record``
                 object.
+
+    >>> from Bio import Blast
+    >>> records = Blast.parse("Blast/xml_2218_blastp_002.xml")
+    >>> type(records)
+    <class 'Bio.Blast.Records'>
+    >>> records.source
+    'Blast/xml_2218_blastp_002.xml'
+    >>> records.program
+    'blastp'
+    >>> records.version
+    'BLASTP 2.2.18+'
+    >>> records.reference
+    'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.'
+    >>> records.db
+    'gpipe/9606/Previous/protein'
+    >>> records.param
+    {'matrix': 'BLOSUM62', 'expect': 0.01, 'gap-open': 11, 'gap-extend': 1, 'filter': 'm L; R -d repeat/repeat_9606;'}
+
+    Iterating over the records returns Bio.Blast.Record objects:
+
+    >>> record = next(records)
+    >>> type(record)
+    <class 'Bio.Blast.Record'>
+    >>> record.query.id
+    'gi|585505|sp|Q08386|MOPB_RHOCA'
+    >>> record = next(records)
+    >>> type(record)
+    <class 'Bio.Blast.Record'>
+    >>> record.query.id
+    'gi|129628|sp|P07175.1|PARA_AGRTU'
+    >>> record = next(records)  # doctest:+ELLIPSIS
+    Traceback (most recent call last):
+    ...
+    StopIteration
 
     """  # noqa: RST201, RST203, RST301
 
