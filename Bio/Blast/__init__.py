@@ -76,9 +76,18 @@ class Record(list):
      - target.name:        accession of subject;
      - len(target.seq):    sequence length of subject.
 
-    Each ``Bio.Align.Alignment`` object stored in the ``Bio.Align.Alignments``
-    object has the attributes ``target``, ``query``, and ``coordinates`` as
-    usual, as well as the following attributes:
+    The ``Bio.Align.Alignments`` class inherits from a list storing
+    ``Bio.Align.Alignment`` objects.  The ``target`` and ``query`` attributes
+    of a ``Bio.Align.Alignment`` object point to a ``SeqRecord`` object
+    representing the target and query, respectively.  For translated BLAST
+    searches, The ``features`` attribute of the target or query may contain a
+    ``SeqFeature`` of type CDS that stores the amino acid sequence region.  The
+    ``qualifiers`` attribute of such a feature is a dictionary with  a single
+    key 'coded_by'; the corresponding value specifies the nucleotide sequence
+    region, in a GenBank-style string with 1-based coordinates, that encodes
+    the amino acid sequence.
+
+    Each ``Bio.Align.Alignment`` object has the following additional attributes:
 
      - score:       score of HSP;
      - annotations: a dictionary that may contain the following keys:
@@ -88,6 +97,61 @@ class Record(list):
                     'positive':  number of positives in HSP (integer);
                     'gaps':      number of gaps in HSP (integer);
                     'midline':   formating middle line.
+
+    >>> from Bio import Blast
+    >>> record = Blast.read("Blast/xml_2212L_blastx_001.xml")
+    >>> record.query
+    SeqRecord(seq=Seq(None, length=556), id='gi|1347369|gb|G25137.1|G25137', name='<unknown name>', description='human STS EST48004, sequence tagged site', dbxrefs=[])
+    >>> record.stat
+    {'db-num': 2934173, 'db-len': 1011751523, 'hsp-len': 0, 'eff-space': 0.0, 'kappa': 0.041, 'lambda': 0.267, 'entropy': 0.14}
+    >>> len(record)
+    78
+    >>> alignments = record[0]
+    >>> type(alignments)
+    <class 'Bio.Align.Alignments'>
+    >>> alignments.target
+    SeqRecord(seq=Seq(None, length=319), id='gi|12654095|gb|AAH00859.1|', name='AAH00859', description='Unknown (protein for IMAGE:3459481) [Homo sapiens]', dbxrefs=[])
+
+    Most alignments consist of only 1 or a few Alignment objects:
+
+    >>> len(alignments)
+    1
+    >>> alignment = alignments[0]
+    >>> type(alignment)
+    <class 'Bio.Align.Alignment'>
+    >>> alignment.score
+    630.0
+    >>> alignment.annotations
+    {'bit score': 247.284, 'evalue': 1.69599e-64, 'identity': 122, 'positive': 123, 'gaps': 0, 'midline': 'DLQLLIKAVNLFPAGTNSRWEVIANYMNIHSSSGVKRTAKDVIGKAKSLQKLDPHQKDDINKKAFDKFKKEHGVVPQADNATPSERF GPYTDFTP TTE QKL EQAL TYPVNT ERW  IA AVPGR K+'}
+
+    Target and query information are stored in the respective attributes of the
+    alignment:
+
+    >>> alignment.target
+    SeqRecord(seq=Seq({155: 'DLQLLIKAVNLFPAGTNSRWEVIANYMNIHSSSGVKRTAKDVIGKAKSLQKLDP...TKK'}, length=319), id='gi|12654095|gb|AAH00859.1|', name='AAH00859', description='Unknown (protein for IMAGE:3459481) [Homo sapiens]', dbxrefs=[])
+    >>> alignment.query
+    SeqRecord(seq=Seq('DLQLLIKAVNLFPAGTNSRWEVIANYMNIHSSSGVKRTAKDVIGKAKSLQKLDP...XKE'), id='gi|1347369|gb|G25137.1|G25137', name='<unknown name>', description='human STS EST48004, sequence tagged site', dbxrefs=[])
+
+    This was a BLASTX run, so the query sequence was translated:
+
+    >>> len(alignment.target.features)
+    0
+    >>> len(alignment.query.features)
+    1
+    >>> feature = alignment.query.features[0]
+    >>> feature
+    SeqFeature(SimpleLocation(ExactPosition(0), ExactPosition(133)), type='CDS', qualifiers=...)
+    >>> feature.qualifiers
+    {'coded_by': 'gi|1347369|gb|G25137.1|G25137:1..399'}
+
+    i.e., nucleotides 0:399 (in zero-based coordinates) encode the amino acids
+    of the query in the alignment.
+
+    For an alignment against the reverse strand, the location in the qualifier
+    is shown as in this example:
+
+    >>> record[72][0].query.features[0].qualifiers
+    {'coded_by': 'complement(gi|1347369|gb|G25137.1|G25137:345..530)'}
 
     """
 
