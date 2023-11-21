@@ -3374,7 +3374,7 @@ class TestFeatureParser(unittest.TestCase):
         self.assertEqual(references_found, references)
         for feature1, (feature2, strand) in zip(record.features, features):
             self.assertEqual(str(feature1), feature2)
-            self.assertEqual(feature1.strand, strand)
+            self.assertEqual(feature1.location.strand, strand)
         self.assertEqual(record.dbxrefs, dbxrefs)
 
     def test_feature_parser_01(self):

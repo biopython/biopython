@@ -549,7 +549,7 @@ class SeqRecord:
                 # Select relevant features, add them with shifted locations
                 # assert str(self.seq)[index] == str(self.seq)[start:stop]
                 for f in self.features:
-                    if f.ref or f.ref_db:
+                    if f.location.ref or f.location.ref_db:
                         # TODO - Implement this (with lots of tests)?
                         import warnings
 

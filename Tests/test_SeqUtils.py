@@ -48,7 +48,7 @@ class SeqUtilsTests(unittest.TestCase):
                 start = feature.location.start
                 end = feature.location.end
                 table = int(feature.qualifiers["transl_table"][0])
-                if feature.strand == -1:
+                if feature.location.strand == -1:
                     seq = record.seq[start:end].reverse_complement()
                 else:
                     seq = record.seq[start:end]
