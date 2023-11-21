@@ -339,7 +339,7 @@ class CircularDrawer(AbstractDrawer):
             top,
             startangle,
             endangle,
-            feature.strand,
+            feature.location.strand,
             color=feature.color,
             border=feature.border,
             **kwargs,
@@ -360,7 +360,7 @@ class CircularDrawer(AbstractDrawer):
             if feature.label_strand:
                 strand = feature.label_strand
             else:
-                strand = feature.strand
+                strand = feature.location.strand
             if feature.label_position in ("start", "5'", "left"):
                 # Position the label at the feature's start
                 if strand != -1:
@@ -420,7 +420,7 @@ class CircularDrawer(AbstractDrawer):
             # No label required
             labelgroup = None
         # if locstart > locend:
-        #    print(locstart, locend, feature.strand, sigil, feature.name)
+        #    print(locstart, locend, feature.location.strand, sigil, feature.name)
         # print(locstart, locend, feature.name)
         return sigil, labelgroup
 
