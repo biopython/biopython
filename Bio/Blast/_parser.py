@@ -17,7 +17,7 @@ https://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd
 import os.path
 from collections import deque
 from xml.parsers import expat
-import warnings
+from typing import Dict, Callable
 
 from Bio.Blast import Record
 from Bio.Seq import Seq, reverse_complement
@@ -25,36 +25,6 @@ from Bio.SeqRecord import SeqRecord
 from Bio.SeqFeature import SeqFeature, SimpleLocation
 from Bio.Align import Alignment, Alignments
 from Bio import Entrez
-
-
-class NotXMLError(ValueError):
-    """Failed to parse file as XML."""
-
-    def __init__(self, message):
-        """Initialize the class."""
-        self.msg = message
-
-    def __str__(self):
-        """Return a string summary of the exception."""
-        return (
-            "Failed to parse the XML data (%s). Please make sure that the input data "
-            "are in XML format." % self.msg
-        )
-
-
-class CorruptedXMLError(ValueError):
-    """Corrupted XML."""
-
-    def __init__(self, message):
-        """Initialize the class."""
-        self.msg = message
-
-    def __str__(self):
-        """Return a string summary of the exception."""
-        return (
-            "Failed to parse the XML data (%s). Please make sure that the input data "
-            "are not corrupted." % self.msg
-        )
 
 
 class DTDHandler:
@@ -66,11 +36,12 @@ class DTDHandler:
         parser.SetParamEntityParsing(expat.XML_PARAM_ENTITY_PARSING_ALWAYS)
         parser.ExternalEntityRefHandler = self._externalEntityRefHandler
         self.parser = parser
-        self.names = []
         self._externalEntityRefHandler(None, None, "NCBI_BlastOutput.dtd", None)
 
     def _elementDeclHandler(self, name, model):
-        self.names.append(name)
+        method_name = name.lower().replace("-", "_")
+        XMLHandler._start_methods[name] = getattr(XMLHandler, "_start_" + method_name)
+        XMLHandler._end_methods[name] = getattr(XMLHandler, "_end_" + method_name)
 
     def _externalEntityRefHandler(self, context, base, systemId, publicId):
         assert context is None
@@ -84,52 +55,17 @@ class DTDHandler:
         return 1
 
 
-class XMLHandler(deque):
+class XMLHandler:
     """Handler for BLAST XML data."""
 
-    BLOCK = 2048  # default block size from expat
+    _start_methods: Dict[str, Callable] = {}
+    _end_methods: Dict[str, Callable] = {}
 
-    _start_methods = {}
-    _end_methods = {}
-
-    def __init__(self, stream):
+    def __init__(self, parser):
         """Initialize the expat parser."""
-        parser = expat.ParserCreate()
         parser.XmlDeclHandler = self._xmlDeclHandler
         parser.SetParamEntityParsing(expat.XML_PARAM_ENTITY_PARSING_ALWAYS)
         self._parser = parser
-        self._stream = stream
-
-    def read_header(self, records):
-        """Read the BLAST XML file header and store as attributes on records."""
-        self._records = records
-        parser = self._parser
-        stream = self._stream
-        BLOCK = self.BLOCK
-        while True:
-            data = stream.read(BLOCK)
-            if data == b"":
-                del self._stream
-                try:
-                    self._records
-                except AttributeError:
-                    raise StopIteration from None
-                else:
-                    raise ValueError("premature end of XML file")
-            try:
-                parser.Parse(data, False)
-            except expat.ExpatError as e:
-                if parser.StartElementHandler:
-                    # We saw the initial <!xml declaration, so we can be sure
-                    # that we are parsing XML data. Most likely, the XML file
-                    # is corrupted.
-                    raise CorruptedXMLError(e) from None
-                else:
-                    # We have not seen the initial <!xml declaration, so
-                    # probably the input data is not in XML format.
-                    raise NotXMLError(e) from None
-            if len(self) > 0:
-                break
 
     def _start_blastoutput(self, name, attrs):
         assert self._characters.strip() == ""
@@ -213,6 +149,7 @@ class XMLHandler(deque):
         self._characters = ""
 
     def _start_blastoutput_iterations(self, name, attrs):
+        self._records._cache = deque()
         assert self._characters.strip() == ""
         self._characters = ""
 
@@ -405,9 +342,13 @@ class XMLHandler(deque):
 
     def _end_blastoutput(self, name):
         assert self._characters.strip() == ""
+        parser = self._parser
+        parser.StartElementHandler = None
+        parser.EndElementHandler = None
+        parser.CharacterDataHandler = None
         del self._characters
-        del self._parser
         del self._records
+        del self._parser
 
     def _end_blastoutput_program(self, name):
         program = self._characters
@@ -509,7 +450,7 @@ class XMLHandler(deque):
     def _end_iteration(self, name):
         assert self._characters.strip() == ""
         self._characters = ""
-        self.append(self._record)
+        self._records._cache.append(self._record)
         del self._record
 
     def _end_iteration_iter_num(self, name):
@@ -840,6 +781,7 @@ class XMLHandler(deque):
         parser.EndElementHandler = self._endElementHandler
         parser.CharacterDataHandler = self._characterDataHandler
         self._characters = ""
+        parser.XmlDeclHandler = None
 
     def _externalEntityRefHandler(self, context, base, systemId, publicId):
         """Handle the DTD declaration."""
@@ -851,6 +793,7 @@ class XMLHandler(deque):
         ):
             raise ValueError("output from legacy BLAST program")
         assert publicId == "-//NCBI//NCBI BlastOutput/EN"
+        self._parser.ExternalEntityRefHandler = None
         return 1
 
     def _startElementHandler(self, name, attr):
@@ -911,46 +854,6 @@ class XMLHandler(deque):
         else:
             return f"<Bio.Blast._parser.XMLHandler object at {address} with stream {stream} and parser {parser}>"
 
-    def __next__(self):
-        try:
-            stream = self._stream
-        except AttributeError:
-            raise StopIteration from None
-        try:
-            parser = self._parser
-        except AttributeError:
-            parser = None
-        BLOCK = self.BLOCK
-        while True:
-            try:
-                record = self.popleft()
-            except IndexError:  # no record ready to be returned
-                pass
-            else:
-                return record
-            # Read in another block of data from the file.
-            data = stream.read(BLOCK)
-            if data == b"":
-                del self._stream
-                if parser is not None:
-                    raise ValueError("premature end of XML file")
-                raise StopIteration
-            try:
-                parser.Parse(data, False)
-            except expat.ExpatError as e:
-                if parser.StartElementHandler:
-                    # We saw the initial <!xml declaration, so we can be sure
-                    # that we are parsing XML data. Most likely, the XML file
-                    # is corrupted.
-                    raise CorruptedXMLError(e) from None
-                else:
-                    # We have not seen the initial <!xml declaration, so
-                    # probably the input data is not in XML format.
-                    raise NotXMLError(e) from None
 
-    for name in DTDHandler().names:
-        method_name = name.lower().replace("-", "_")
-        _start_methods[name] = eval("_start_" + method_name)
-        _end_methods[name] = eval("_end_" + method_name)
-    del name
-    del method_name
+# Initialize XMLHandler by parsing the DTD
+DTDHandler()

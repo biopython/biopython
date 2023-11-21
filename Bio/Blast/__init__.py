@@ -32,6 +32,8 @@ from urllib.request import build_opener, install_opener
 from urllib.request import urlopen
 from urllib.request import HTTPPasswordMgrWithDefaultRealm, HTTPBasicAuthHandler
 from urllib.request import Request
+from xml.parsers import expat
+
 
 from Bio import BiopythonWarning
 from Bio import StreamModeError
@@ -43,6 +45,38 @@ tool = "biopython"
 
 
 NCBI_BLAST_URL = "https://blast.ncbi.nlm.nih.gov/Blast.cgi"
+
+BLOCK = 2048  # default block size from expat
+
+
+class NotXMLError(ValueError):
+    """Failed to parse file as XML."""
+
+    def __init__(self, message):
+        """Initialize the class."""
+        self.msg = message
+
+    def __str__(self):
+        """Return a string summary of the exception."""
+        return (
+            "Failed to parse the XML data (%s). Please make sure that the input data "
+            "are in XML format." % self.msg
+        )
+
+
+class CorruptedXMLError(ValueError):
+    """Corrupted XML."""
+
+    def __init__(self, message):
+        """Initialize the class."""
+        self.msg = message
+
+    def __str__(self):
+        """Return a string summary of the exception."""
+        return (
+            "Failed to parse the XML data (%s). Please make sure that the input data "
+            "are not corrupted." % self.msg
+        )
 
 
 class Record(list):
@@ -206,7 +240,22 @@ class Records:
                 of a ``Record`` object.
 
     >>> from Bio import Blast
+    >>> path = "Blast/xml_2218_blastp_002.xml"
+
+    In a script, you would use a ``with`` block, as in
+
+    >>> with Blast.parse(path) as records:
+    ...     print(records.source)
+    ...
+    Blast/xml_2218_blastp_002.xml
+
+    to ensure that the file is closed at the end of the block.
+    Here, we will simply do
+
     >>> records = Blast.parse("Blast/xml_2218_blastp_002.xml")
+
+    so we can see the output of each command right away.
+
     >>> type(records)
     <class 'Bio.Blast.Records'>
     >>> records.source
@@ -255,9 +304,41 @@ class Records:
                 ) from None
             stream = source
         self._stream = stream
-        handler = XMLHandler(stream)
-        handler.read_header(self)
-        self._handler = handler
+
+        parser = expat.ParserCreate()
+        self._parser = parser
+
+        handler = XMLHandler(parser)
+        handler._records = self
+
+        while True:
+            data = stream.read(BLOCK)
+            if data == b"":
+                try:
+                    handler._parser
+                except AttributeError:
+                    raise ValueError("premature end of XML file")
+                else:
+                    break
+            try:
+                parser.Parse(data, False)
+            except expat.ExpatError as e:
+                if parser.StartElementHandler:
+                    # We saw the initial <!xml declaration, so we can be sure
+                    # that we are parsing XML data. Most likely, the XML file
+                    # is corrupted.
+                    raise CorruptedXMLError(e) from None
+                else:
+                    # We have not seen the initial <!xml declaration, so
+                    # probably the input data is not in XML format.
+                    raise NotXMLError(e) from None
+            try:
+                self._cache
+            except AttributeError:
+                pass
+            else:
+                # We have finished reading the header
+                break
 
     def __enter__(self):
         return self
@@ -270,17 +351,36 @@ class Records:
         if stream is not self.source:
             stream.close()
         del self._stream
-        del self._handler
 
     def __iter__(self):
         return self
 
     def __next__(self):
         try:
-            handler = self._handler
+            cache = self._cache
         except AttributeError:
-            raise StopIteration
-        return next(handler)
+            raise StopIteration from None
+        parser = self._parser
+        stream = self._stream
+        while True:
+            try:
+                record = self._cache.popleft()
+            except IndexError:  # no record ready to be returned
+                pass
+            else:
+                return record
+            # Read in another block of data from the file.
+            data = stream.read(BLOCK)
+            if data == b"":
+                del self._cache
+                del self._parser
+                if parser.StartElementHandler is not None:
+                    raise ValueError("premature end of XML file")
+                raise StopIteration
+            try:
+                parser.Parse(data, False)
+            except expat.ExpatError as e:
+                raise CorruptedXMLError(e) from None
 
 
 def parse(source):
@@ -686,3 +786,9 @@ def _parse_qblast_ref_page(handle):
         raise ValueError(
             f"A non-integer RTOE found in the 'please wait' page, {rtoe!r}"
         ) from None
+
+
+if __name__ == "__main__":
+    from Bio._utils import run_doctest
+
+    run_doctest()
