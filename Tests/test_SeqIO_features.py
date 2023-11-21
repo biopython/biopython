@@ -93,7 +93,11 @@ class SeqIOFeatureTestBaseClass(SeqIOTestBaseClass):
             self.assertEqual(old.location.strand, new.location.strand, msg=msg)
         self.assertEqual(old.location.ref, new.location.ref, msg=msg)
         self.assertEqual(old.location.ref_db, new.location.ref_db, msg=msg)
-        self.assertEqual(getattr(old.location, "operator", None), getattr(new.location, "operator", None), msg=msg)
+        self.assertEqual(
+            getattr(old.location, "operator", None),
+            getattr(new.location, "operator", None),
+            msg=msg,
+        )
         self.assertEqual(old.location.start, new.location.start, msg=msg)
         self.assertEqual(str(old.location.start), str(new.location.start), msg=msg)
         self.assertEqual(old.location.end, new.location.end, msg=msg)
