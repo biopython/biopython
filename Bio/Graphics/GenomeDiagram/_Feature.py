@@ -139,12 +139,12 @@ class Feature:
             bounds += [start, end]
         self.type = str(self._feature.type)  # Feature type
         # TODO - Strand can vary with subfeatures (e.g. mixed strand tRNA)
-        if self._feature.strand is None:
+        if self._feature.location.strand is None:
             # This is the SeqFeature default (None), but the drawing code
             # only expects 0, +1 or -1.
             self.strand = 0
         else:
-            self.strand = int(self._feature.strand)  # Feature strand
+            self.strand = int(self._feature.location.strand)  # Feature strand
         if "color" in self._feature.qualifiers:  # Artemis color (if present)
             self.color = self._colortranslator.artemis_color(
                 self._feature.qualifiers["color"][0]

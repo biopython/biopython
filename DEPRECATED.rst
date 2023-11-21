@@ -289,9 +289,11 @@ With the introduction of the CompoundLocation in Release 1.62, the SeqFeature
 attribute sub_features was deprecated. It was removed in Release 1.68.
 
 Note that in Release 1.80 the location_operator argument can no longer be
-used, instead do this via the CompoundLocation object.
+used, instead do this via the CompoundLocation object. The location_operator
+argument was removed from the SeqFeature initializer in Release 1.82.
 
-There were multiple deprecations in Release 1.80:
+There were multiple deprecations in Release 1.80, listed below. The
+deprecated code was removed in Release 1.82.
 
 * Class ``FeatureLocation`` renamed to ``SimpleLocation``, with the old
   name preserved for now solely for backward compatibility.

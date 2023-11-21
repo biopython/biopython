@@ -687,7 +687,7 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
                 # Assume SeqFeature objects
                 start = f.location.start
                 end = f.location.end
-                strand = f.strand
+                strand = f.location.strand
                 try:
                     # Handles Artemis colour integers, HTML colors, etc
                     color = _color_trans.translate(f.qualifiers["color"][0])

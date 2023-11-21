@@ -60,9 +60,9 @@ class SeqRecordTestBaseClass(unittest.TestCase):
         self.assertIsInstance(old_f, SeqFeature)
         self.assertIsInstance(new_f, SeqFeature)
         self.assertEqual(old_f.type, new_f.type)
-        self.assertEqual(old_f.strand, new_f.strand)
-        self.assertEqual(old_f.ref, new_f.ref)
-        self.assertEqual(old_f.ref_db, new_f.ref_db)
+        self.assertEqual(old_f.location.strand, new_f.location.strand)
+        self.assertEqual(old_f.location.ref, new_f.location.ref)
+        self.assertEqual(old_f.location.ref_db, new_f.location.ref_db)
         # TODO - BioSQL does not store/retrieve feature's id (Bug 2526)
         if new_f.id != "<unknown id>":
             self.assertEqual(old_f.id, new_f.id)
