@@ -11368,6 +11368,116 @@ class TestBlastErrors(unittest.TestCase):
             records = Blast.parse(path)
         self.assertEqual(str(cm.exception), message)
 
+    def test_premature_end_header(self):
+        """Try to parse an XML file terminating in the header."""
+        message = "premature end of XML file (after reading 710 bytes)"
+        filename = "broken1.xml"
+        path = os.path.join("Blast", filename)
+        with open(path, "rb") as stream:
+            with self.assertRaises(ValueError) as cm:
+                records = Blast.parse(stream)
+            self.assertEqual(str(cm.exception), message)
+        with self.assertRaises(ValueError) as cm:
+            records = Blast.parse(path)
+        self.assertEqual(str(cm.exception), message)
+        with open(path, "rb") as stream:
+            with self.assertRaises(ValueError) as cm:
+                records = Blast.read(stream)
+            self.assertEqual(str(cm.exception), message)
+        with self.assertRaises(ValueError) as cm:
+            records = Blast.read(path)
+        self.assertEqual(str(cm.exception), message)
+
+    def test_premature_end_first_block(self):
+        """Try to parse an XML file terminating within the first block."""
+        message = "premature end of XML file (after reading 1623 bytes)"
+        filename = "broken2.xml"
+        path = os.path.join("Blast", filename)
+        with open(path, "rb") as stream:
+            records = Blast.parse(stream)
+            with self.assertRaises(ValueError) as cm:
+                record = next(records)
+            self.assertEqual(str(cm.exception), message)
+        with Blast.parse(path) as records:
+            with self.assertRaises(ValueError) as cm:
+                record = next(records)
+            self.assertEqual(str(cm.exception), message)
+        with open(path, "rb") as stream:
+            with self.assertRaises(ValueError) as cm:
+                record = Blast.read(stream)
+            self.assertEqual(str(cm.exception), message)
+        with self.assertRaises(ValueError) as cm:
+            record = Blast.read(path)
+        self.assertEqual(str(cm.exception), message)
+
+    def test_premature_end_second_block(self):
+        """Try to parse an XML file terminating in the second block."""
+        message = "premature end of XML file (after reading 3614 bytes)"
+        filename = "broken3.xml"
+        path = os.path.join("Blast", filename)
+        with open(path, "rb") as stream:
+            records = Blast.parse(stream)
+            with self.assertRaises(ValueError) as cm:
+                record = next(records)
+            self.assertEqual(str(cm.exception), message)
+        with Blast.parse(path) as records:
+            with self.assertRaises(ValueError) as cm:
+                record = next(records)
+            self.assertEqual(str(cm.exception), message)
+        with open(path, "rb") as stream:
+            with self.assertRaises(ValueError) as cm:
+                record = Blast.read(stream)
+            self.assertEqual(str(cm.exception), message)
+        with self.assertRaises(ValueError) as cm:
+            record = Blast.read(path)
+        self.assertEqual(str(cm.exception), message)
+
+    def test_premature_end_after_one_record(self):
+        """Try to parse an XML file terminating after the first record."""
+        message = "premature end of XML file (after reading 4410 bytes)"
+        filename = "broken4.xml"
+        path = os.path.join("Blast", filename)
+        with open(path, "rb") as stream:
+            records = Blast.parse(stream)
+            record = next(records)
+            with self.assertRaises(ValueError) as cm:
+                record = next(records)
+            self.assertEqual(str(cm.exception), message)
+        with Blast.parse(path) as records:
+            record = next(records)
+            with self.assertRaises(ValueError) as cm:
+                record = next(records)
+            self.assertEqual(str(cm.exception), message)
+        with open(path, "rb") as stream:
+            with self.assertRaises(ValueError) as cm:
+                record = Blast.read(stream)
+            self.assertEqual(str(cm.exception), message)
+        with self.assertRaises(ValueError) as cm:
+            record = Blast.read(path)
+        self.assertEqual(str(cm.exception), message)
+
+    def test_corrupt_xml(self):
+        """Try to parse a broken XML file."""
+        message = "Failed to parse the XML data (not well-formed (invalid token): line 10, column 2). Please make sure that the input data are not corrupted."
+
+        filename = "broken5.xml"
+        path = os.path.join("Blast", filename)
+        with open(path, "rb") as stream:
+            with self.assertRaises(Blast.CorruptedXMLError) as cm:
+                records = Blast.parse(stream)
+            self.assertEqual(str(cm.exception), message)
+        with self.assertRaises(Blast.CorruptedXMLError) as cm:
+            with Blast.parse(path) as records:
+                pass
+            self.assertEqual(str(cm.exception), message)
+        with open(path, "rb") as stream:
+            with self.assertRaises(Blast.CorruptedXMLError) as cm:
+                record = Blast.read(stream)
+            self.assertEqual(str(cm.exception), message)
+        with self.assertRaises(Blast.CorruptedXMLError) as cm:
+            record = Blast.read(path)
+        self.assertEqual(str(cm.exception), message)
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

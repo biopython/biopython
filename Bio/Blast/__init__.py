@@ -303,42 +303,50 @@ class Records:
                     "BLAST output files must be opened in binary mode."
                 ) from None
             stream = source
-        self._stream = stream
 
-        parser = expat.ParserCreate()
-        self._parser = parser
+        try:  # context manager won't kick in until after parse returns
+            self._stream = stream
 
-        handler = XMLHandler(parser)
-        handler._records = self
+            parser = expat.ParserCreate()
+            self._parser = parser
 
-        while True:
-            data = stream.read(BLOCK)
-            if data == b"":
+            handler = XMLHandler(parser)
+            handler._records = self
+
+            while True:
+                data = stream.read(BLOCK)
+                if data == b"":
+                    try:
+                        handler._parser
+                    except AttributeError:
+                        break
+                    else:
+                        raise ValueError(
+                            f"premature end of XML file (after reading {parser.CurrentByteIndex} bytes)"
+                        )
                 try:
-                    handler._parser
+                    parser.Parse(data, False)
+                except expat.ExpatError as e:
+                    if parser.StartElementHandler:
+                        # We saw the initial <!xml declaration, so we can be
+                        # sure that we are parsing XML data. Most likely, the
+                        # XML file is corrupted.
+                        raise CorruptedXMLError(e) from None
+                    else:
+                        # We have not seen the initial <!xml declaration, so
+                        # probably the input data is not in XML format.
+                        raise NotXMLError(e) from None
+                try:
+                    self._cache
                 except AttributeError:
-                    raise ValueError("premature end of XML file")
+                    pass
                 else:
+                    # We have finished reading the header
                     break
-            try:
-                parser.Parse(data, False)
-            except expat.ExpatError as e:
-                if parser.StartElementHandler:
-                    # We saw the initial <!xml declaration, so we can be sure
-                    # that we are parsing XML data. Most likely, the XML file
-                    # is corrupted.
-                    raise CorruptedXMLError(e) from None
-                else:
-                    # We have not seen the initial <!xml declaration, so
-                    # probably the input data is not in XML format.
-                    raise NotXMLError(e) from None
-            try:
-                self._cache
-            except AttributeError:
-                pass
-            else:
-                # We have finished reading the header
-                break
+        except Exception:
+            if stream is not source:
+                stream.close()
+            raise
 
     def __enter__(self):
         return self
@@ -375,7 +383,9 @@ class Records:
                 del self._cache
                 del self._parser
                 if parser.StartElementHandler is not None:
-                    raise ValueError("premature end of XML file")
+                    raise ValueError(
+                        f"premature end of XML file (after reading {parser.CurrentByteIndex} bytes)"
+                    )
                 raise StopIteration
             try:
                 parser.Parse(data, False)
