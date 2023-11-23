@@ -218,17 +218,17 @@ class Records:
      - param:      A dictionary with the parameters used for the BLAST run.
                    You may find the following keys in this dictionary:
                    'matrix':       the scoring matrix used in the BLAST run
-                                   (e.g., 'BLOSUM62') (string);
+                   _               (e.g., 'BLOSUM62') (string);
                    'expect':       threshold on the expected number of chance
-                                   matches (float);
+                   _               matches (float);
                    'include':      e-value threshold for inclusion in multipass
-                                   model in psiblast (float);
+                   _               model in psiblast (float);
                    'sc-match':     score for matching nucleotides (integer);
                    'sc-mismatch':  score for mismatched nucleotides (integer);
                    'gap-open':     gap opening cost (integer);
                    'gap-extend':   gap extension cost (integer);
                    'filter':       filtering options applied in the BLAST run
-                                   (string);
+                   _               (string);
                    'pattern':      PHI-BLAST pattern (string);
                    'entrez-query': Limit of request to Entrez query (string).
      - mbstat:     A dictionary with Mega BLAST search statistics.  As this
