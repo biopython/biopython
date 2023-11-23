@@ -93,13 +93,13 @@ class Record(list):
                  - len(query.seq):    Length of the query sequence.
      - stat:    A dictionary with summary statistics of the BLAST run. It may
                 contain the following keys:
-                'db-num':    number of sequences in BLAST db (integer);
-                'db-len':    length of BLAST db (integer);
-                'hsp-len':   effective HSP length (integer);
-                'eff-space': effective search space (float);
-                'kappa':     Karlin-Altschul parameter K (float);
-                'lambda':    Karlin-Altschul parameter Lambda (float);
-                'entropy':   Karlin-Altschul parameter H (float).
+                 - 'db-num':    number of sequences in BLAST db (integer);
+                 - 'db-len':    length of BLAST db (integer);
+                 - 'hsp-len':   effective HSP length (integer);
+                 - 'eff-space': effective search space (float);
+                 - 'kappa':     Karlin-Altschul parameter K (float);
+                 - 'lambda':    Karlin-Altschul parameter Lambda (float);
+                 - 'entropy':   Karlin-Altschul parameter H (float).
      - message: Some (error?) information.
 
     Each ``Bio.Align.Alignments`` object has a ``target`` attribute containing
@@ -125,12 +125,12 @@ class Record(list):
 
      - score:       score of HSP;
      - annotations: a dictionary that may contain the following keys:
-                    'bit score': score (in bits) of HSP (float);
-                    'evalue':    e-value of HSP (float);
-                    'identity':  number of identities in HSP (integer);
-                    'positive':  number of positives in HSP (integer);
-                    'gaps':      number of gaps in HSP (integer);
-                    'midline':   formating middle line.
+                     - 'bit score': score (in bits) of HSP (float);
+                     - 'evalue':    e-value of HSP (float);
+                     - 'identity':  number of identities in HSP (integer);
+                     - 'positive':  number of positives in HSP (integer);
+                     - 'gaps':      number of gaps in HSP (integer);
+                     - 'midline':   formating middle line.
 
     >>> from Bio import Blast
     >>> record = Blast.read("Blast/xml_2212L_blastx_001.xml")
@@ -218,20 +218,21 @@ class Records:
                                          The query sequence.
      - param:      A dictionary with the parameters used for the BLAST run.
                    You may find the following keys in this dictionary:
-                   'matrix':       the scoring matrix used in the BLAST run
-                   _               (e.g., 'BLOSUM62') (string);
-                   'expect':       threshold on the expected number of chance
-                   _               matches (float);
-                   'include':      e-value threshold for inclusion in multipass
-                   _               model in psiblast (float);
-                   'sc-match':     score for matching nucleotides (integer);
-                   'sc-mismatch':  score for mismatched nucleotides (integer);
-                   'gap-open':     gap opening cost (integer);
-                   'gap-extend':   gap extension cost (integer);
-                   'filter':       filtering options applied in the BLAST run
-                   _               (string);
-                   'pattern':      PHI-BLAST pattern (string);
-                   'entrez-query': Limit of request to Entrez query (string).
+                    - 'matrix':       the scoring matrix used in the BLAST run
+                                      (e.g., 'BLOSUM62') (string);
+                    - 'expect':       threshold on the expected number of chance
+                                      matches (float);
+                    - 'include':      e-value threshold for inclusion in
+                                      multipass model in psiblast (float);
+                    - 'sc-match':     score for matching nucleotides (integer);
+                    - 'sc-mismatch':  score for mismatched nucleotides
+                                      (integer);
+                    - 'gap-open':     gap opening cost (integer);
+                    - 'gap-extend':   gap extension cost (integer);
+                    - 'filter':       filtering options applied in the BLAST
+                                      run (string);
+                    - 'pattern':      PHI-BLAST pattern (string);
+                    - 'entrez-query': Limit of request to Entrez query (string).
      - mbstat:     A dictionary with Mega BLAST search statistics.  As this
                    information is stored near the end of the XML file, this
                    attribute can only be accessed after the file has been read
