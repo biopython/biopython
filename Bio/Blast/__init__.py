@@ -214,7 +214,8 @@ class Records:
                    following information:
                     - query.id:          SeqId of the query;
                     - query.description: Definition line of the query;
-                    - query.seq:         The query sequence.
+                    - query.seq:         The query sequence. The query sequence.
+                                         The query sequence.
      - param:      A dictionary with the parameters used for the BLAST run.
                    You may find the following keys in this dictionary:
                    'matrix':       the scoring matrix used in the BLAST run
