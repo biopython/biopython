@@ -202,6 +202,7 @@ class Records:
     BLAST query.
 
     Common attributes of a ``Bio.Blast.Records`` object are
+
      - source:     The input data from which the ``Bio.Blast.Records`` object
                    was constructed.
      - program:    The specific BLAST program that was used (e.g., 'blastn').
@@ -230,14 +231,13 @@ class Records:
                                    (string);
                    'pattern':      PHI-BLAST pattern (string);
                    'entrez-query': Limit of request to Entrez query (string).
-
-      - mbstat: A dictionary with Mega BLAST search statistics.  As this
-                information is stored near the end of the XML file, this
-                attribute can only be accessed after the file has been read
-                completely (by iterating over the records until a
-                ``StopIteration`` is issued. This dictionary can contain the
-                same keys as the dictionary stored under the ``stat`` attribute
-                of a ``Record`` object.
+     - mbstat:     A dictionary with Mega BLAST search statistics.  As this
+                   information is stored near the end of the XML file, this
+                   attribute can only be accessed after the file has been read
+                   completely (by iterating over the records until a
+                   ``StopIteration`` is issued. This dictionary can contain the
+                   same keys as the dictionary stored under the ``stat``
+                   attribute of a ``Record`` object.
 
     >>> from Bio import Blast
     >>> path = "Blast/xml_2218_blastp_002.xml"
