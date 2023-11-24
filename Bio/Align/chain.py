@@ -196,8 +196,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 "expected first line of chain block to start with 'chain '"
             )
         score = float(words[1])
-        if score.is_integer():
-            score = int(score)
         tName = words[2]
         tSize = int(words[3])
         tStrand = words[4]
