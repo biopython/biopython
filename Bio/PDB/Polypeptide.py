@@ -52,7 +52,6 @@ last residues) have been shown as M (methionine) by the get_sequence method.
 
 import warnings
 
-from Bio import BiopythonDeprecationWarning
 
 from Bio.Data.PDBData import nucleic_letters_3to1
 from Bio.Data.PDBData import nucleic_letters_3to1_extended
@@ -124,47 +123,6 @@ def three_to_index(s):
     19
     """
     return d3_to_index[s]
-
-
-def three_to_one(s):
-    """Three letter code to one letter code.
-
-    >>> three_to_one('ALA')
-    'A'
-    >>> three_to_one('TYR')
-    'Y'
-
-    For non-standard amino acids, you get a KeyError:
-
-    >>> three_to_one('MSE')
-    Traceback (most recent call last):
-       ...
-    KeyError: 'MSE'
-    """
-    warnings.warn(
-        "'three_to_one' will be deprecated in a future release of Biopython "
-        "in favor of 'Bio.PDB.Polypeptide.protein_letters_3to1'.",
-        BiopythonDeprecationWarning,
-    )
-    i = d3_to_index[s]
-    return dindex_to_1[i]
-
-
-def one_to_three(s):
-    """One letter code to three letter code.
-
-    >>> one_to_three('A')
-    'ALA'
-    >>> one_to_three('Y')
-    'TYR'
-    """
-    warnings.warn(
-        "'one_to_three' will be deprecated in a future release of Biopython "
-        "in favor of 'Bio.PDB.Polypeptide.protein_letters_1to3'.",
-        BiopythonDeprecationWarning,
-    )
-    i = d1_to_index[s]
-    return dindex_to_3[i]
 
 
 def is_aa(residue, standard=False):
