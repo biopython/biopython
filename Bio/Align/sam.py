@@ -323,7 +323,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         except AttributeError:
             pass
         else:
-            field = "AS:i:%d" % int(round(score))
+            field = "AS:i:%.0f" % score
             fields.append(field)
         try:
             annotations = alignment.annotations

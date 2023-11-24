@@ -4412,7 +4412,7 @@ query            26 -ATACTTT-CGAGC------ 38
         self.assertEqual(
             alignment.format("bed"),
             """\
-target	10	73	query	19.0	+	10	73	0	5	10,3,12,7,5,	0,10,24,50,58,
+target	10	73	query	19	+	10	73	0	5	10,3,12,7,5,	0,10,24,50,58,
 """,
         )
         self.assertEqual(
@@ -4449,7 +4449,7 @@ query            12 -ATACTTT-CGAGC------  0
         self.assertEqual(
             alignment.format("bed"),
             """\
-target	10	73	query	19.0	-	10	73	0	5	10,3,12,7,5,	0,10,24,50,58,
+target	10	73	query	19	-	10	73	0	5	10,3,12,7,5,	0,10,24,50,58,
 """,
         )
         self.assertEqual(
@@ -4486,7 +4486,7 @@ query             0 CCCCACGTAGCATCAGC 17
         self.assertEqual(
             alignment.format("bed"),
             """\
-target	0	13	query	13.0	+	0	13	0	1	13,	0,
+target	0	13	query	13	+	0	13	0	1	13,	0,
 """,
         )
         self.assertEqual(
@@ -4519,7 +4519,7 @@ query            17 CCCCACGTAGCATCAGC  0
         self.assertEqual(
             alignment.format("bed"),
             """\
-target	0	13	query	13.0	-	0	13	0	1	13,	0,
+target	0	13	query	13	-	0	13	0	1	13,	0,
 """,
         )
         self.assertEqual(
@@ -4550,7 +4550,7 @@ query             0 ----ACGTAGCATCAGC 13
         self.assertEqual(
             alignment.format("bed"),
             """\
-target	4	17	query	13.0	+	4	17	0	1	13,	0,
+target	4	17	query	13	+	4	17	0	1	13,	0,
 """,
         )
         self.assertEqual(
@@ -4583,7 +4583,7 @@ query            13 ----ACGTAGCATCAGC  0
         self.assertEqual(
             alignment.format("bed"),
             """\
-target	4	17	query	13.0	-	4	17	0	1	13,	0,
+target	4	17	query	13	-	4	17	0	1	13,	0,
 """,
         )
         self.assertEqual(
@@ -4613,7 +4613,7 @@ query             0 ACGTAGCATCAGCGGGG 17
         self.assertEqual(
             alignment.format("bed"),
             """\
-target	0	13	query	13.0	+	0	13	0	1	13,	0,
+target	0	13	query	13	+	0	13	0	1	13,	0,
 """,
         )
         self.assertEqual(
@@ -4645,7 +4645,7 @@ query            17 ACGTAGCATCAGCGGGG  0
         self.assertEqual(
             alignment.format("bed"),
             """\
-target	0	13	query	13.0	-	0	13	0	1	13,	0,
+target	0	13	query	13	-	0	13	0	1	13,	0,
 """,
         )
         self.assertEqual(
@@ -4676,7 +4676,7 @@ query             0 ACGTAGCATCAGC---- 13
         self.assertEqual(
             alignment.format("bed"),
             """\
-target	0	13	query	13.0	+	0	13	0	1	13,	0,
+target	0	13	query	13	+	0	13	0	1	13,	0,
 """,
         )
         self.assertEqual(
@@ -4709,7 +4709,7 @@ query            13 ACGTAGCATCAGC----  0
         self.assertEqual(
             alignment.format("bed"),
             """\
-target	0	13	query	13.0	-	0	13	0	1	13,	0,
+target	0	13	query	13	-	0	13	0	1	13,	0,
 """,
         )
         self.assertEqual(
@@ -4750,7 +4750,7 @@ query             0 ACGATCGAGCNGCTACG 17
         self.assertEqual(
             alignment.format("bed"),
             """\
-target	6	23	query	13.0	+	6	23	0	1	17,	0,
+target	6	23	query	13	+	6	23	0	1	17,	0,
 """,
         )
         self.assertEqual(
@@ -4780,7 +4780,7 @@ query            22 ACGATCGAGCNGCTACG  5
         self.assertEqual(
             alignment.format("bed"),
             """\
-target	6	23	query	13.0	-	6	23	0	1	17,	0,
+target	6	23	query	13	-	6	23	0	1	17,	0,
 """,
         )
         self.assertEqual(
@@ -4811,7 +4811,7 @@ query             0 ACGATCGAGCNGCTACG 17
         self.assertEqual(
             alignment.format("bed"),
             """\
-target	6	23	query	13.0	+	6	23	0	1	17,	0,
+target	6	23	query	13	+	6	23	0	1	17,	0,
 """,
         )
         self.assertEqual(
@@ -4843,7 +4843,7 @@ query            22 ACGATCGAGCNGCTACG  5
         self.assertEqual(
             alignment.format("bed"),
             """\
-target	6	23	query	13.0	-	6	23	0	1	17,	0,
+target	6	23	query	13	-	6	23	0	1	17,	0,
 """,
         )
         self.assertEqual(
@@ -4877,7 +4877,7 @@ query             0 ------ACGATCGAGCNGCTACGCCCNC 22
         self.assertEqual(
             alignment.format("bed"),
             """\
-target	6	23	query	13.0	+	6	23	0	1	17,	0,
+target	6	23	query	13	+	6	23	0	1	17,	0,
 """,
         )
         self.assertEqual(
@@ -4907,7 +4907,7 @@ query            22 ------ACGATCGAGCNGCTACGCCCNC  0
         self.assertEqual(
             alignment.format("bed"),
             """\
-target	6	23	query	13.0	-	6	23	0	1	17,	0,
+target	6	23	query	13	-	6	23	0	1	17,	0,
 """,
         )
         self.assertEqual(
@@ -4938,7 +4938,7 @@ query             0 ------ACGATCGAGCNGCTACGCCCNC 22
         self.assertEqual(
             alignment.format("bed"),
             """\
-target	6	23	query	13.0	+	6	23	0	1	17,	0,
+target	6	23	query	13	+	6	23	0	1	17,	0,
 """,
         )
         self.assertEqual(
@@ -4970,7 +4970,7 @@ query            22 ------ACGATCGAGCNGCTACGCCCNC  0
         self.assertEqual(
             alignment.format("bed"),
             """\
-target	6	23	query	13.0	-	6	23	0	1	17,	0,
+target	6	23	query	13	-	6	23	0	1	17,	0,
 """,
         )
         self.assertEqual(
