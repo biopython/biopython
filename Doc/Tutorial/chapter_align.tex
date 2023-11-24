@@ -1986,7 +1986,7 @@ Now we can print the alignment in BED and PSL format:
 %cont-doctest
 \begin{minted}{pycon}
 >>> print(format(alignment, "bed"))  # doctest: +NORMALIZE_WHITESPACE
-gi|330443520|ref|NC_001136.10|	1318045	1319275	gi|296143771|ref|NM_001180731.1| 6146.0	-	1318045	1319275	0	3	1226,3,1,	0,1226,1229,
+gi|330443520|ref|NC_001136.10|	1318045	1319275	gi|296143771|ref|NM_001180731.1| 6146	-	1318045	1319275	0	3	1226,3,1,	0,1226,1229,
 <BLANKLINE>
 >>> print(format(alignment, "psl"))  # doctest: +NORMALIZE_WHITESPACE
 1230	0	0	0	0	0	0	0	-	gi|296143771|ref|NM_001180731.1|	1230	0	1230	gi|330443520|ref|NC_001136.10|	1319275	1318045	1319275	3	1226,3,1,	0,1226,1229,	1318045,1319271,1319274,
@@ -2009,7 +2009,7 @@ The second alignment already has the target on the forward strand and the query 
 array([[1318045, 1318174, 1318177, 1319275],
        [   1230,    1101,    1098,       0]])
 >>> print(format(alignment, "BED"))  # doctest: +NORMALIZE_WHITESPACE
-gi|330443520|ref|NC_001136.10|	1318045	1319275	gi|296143771|ref|NM_001180731.1| 6146.0	-	1318045	1319275	0	3	129,3,1098,	0,129,132,
+gi|330443520|ref|NC_001136.10|	1318045	1319275	gi|296143771|ref|NM_001180731.1| 6146	-	1318045	1319275	0	3	129,3,1098,	0,129,132,
 <BLANKLINE>
 \end{minted}
 The third alignment contains a long gap:
@@ -2046,7 +2046,7 @@ As the target sequence (and also the query sequence) is on the forward strand, w
 %cont-doctest
 \begin{minted}{pycon}
 >>> print(format(alignment, "BED"))  # doctest: +NORMALIZE_WHITESPACE
-gi|330443688|ref|NC_001145.3|	85010	667216	gi|296143771|ref|NM_001180731.1| 518.0	+	85010	667216	0	34	11,15,4,1,8,17,4,8,3,33,7,102,14,10,5,10,4,20,15,5,4,20,6,12,5,7,1,12,75,6,4,2,3,41,	0,11,26,30,31,39,168964,168969,168977,168980,169015,169023,265949,265965,265975,265982,265992,265997,266017,266033,266038,388160,388185,582030,582044,582049,582058,582060,582072,582147,582153,582158,582161,582165,
+gi|330443688|ref|NC_001145.3|	85010	667216	gi|296143771|ref|NM_001180731.1| 518	+	85010	667216	0	34	11,15,4,1,8,17,4,8,3,33,7,102,14,10,5,10,4,20,15,5,4,20,6,12,5,7,1,12,75,6,4,2,3,41,	0,11,26,30,31,39,168964,168969,168977,168980,169015,169023,265949,265965,265975,265982,265992,265997,266017,266033,266038,388160,388185,582030,582044,582049,582058,582060,582072,582147,582153,582158,582161,582165,
 <BLANKLINE>
 \end{minted}
 
@@ -3077,7 +3077,7 @@ The alignment score (field 5) and information stored in fields 7-9 (referred to 
 %cont-doctest
 \begin{minted}{pycon}
 >>> alignment.score
-900
+900.0
 >>> alignment.thickStart
 2300
 >>> alignment.thickEnd
@@ -3900,7 +3900,7 @@ Check the alignment score and chain ID (the first and last number, respectively,
 %cont-doctest
 \begin{minted}{pycon}
 >>> alignment.score
-41
+41.0
 >>> alignment.annotations["id"]
 '7'
 \end{minted}

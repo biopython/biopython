@@ -112,7 +112,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             score = alignment.score
         except AttributeError:
             score = 0
-        fields.append(str(score))
+        fields.append(format(score, "g"))
         if bedN == 5:
             return "\t".join(fields) + "\n"
         fields.append(strand)
@@ -243,9 +243,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 score = float(score)
             except ValueError:
                 pass
-            else:
-                if score.is_integer():
-                    score = int(score)
             alignment.score = score
             if bedN <= 6:
                 return alignment
