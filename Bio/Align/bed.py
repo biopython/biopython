@@ -68,7 +68,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         else:
             if chrom is None:
                 chrom = "target"
-        assert coordinates[0, 0] <= coordinates[0, -1]
+        if coordinates[0, 0] > coordinates[0, -1]:
+            # read the alignment right-to-left to be consistent with BED
+            coordinates = coordinates[:, ::-1]
         if coordinates[1, 0] > coordinates[1, -1]:
             # DNA/RNA mapped to reverse strand of DNA/RNA
             strand = "-"

@@ -3666,6 +3666,99 @@ chain 32 chr1 249250621 + 220325687 220325721 hg19_dna 50 - 3 37 22
         self.check_reading_psl_34_005(alignments)
 
 
+class TestAlign_strand(unittest.TestCase):
+    def test_format(self):
+        """Test alignment with the target on the opposite strand."""
+        sequences = ["AACAGCAGCGTGTCG", "CAGCTAGCGAA"]
+        coordinates = np.array(
+            [[0, 2, 2, 3, 4, 6, 6, 9, 10, 12, 15], [11, 11, 9, 8, 8, 6, 5, 2, 2, 0, 0]]
+        )
+        score = 8
+        alignment = Alignment(sequences, coordinates)
+        alignment.score = score
+        chain1 = """\
+chain 8 target 15 + 0 15 query 11 - 0 11
+0	2	2
+1	1	0
+2	0	1
+3	1	0
+0	3	0
+2
+
+"""
+        chain2 = """\
+chain 8 target 15 - 0 15 query 11 + 0 11
+2	3	0
+3	1	0
+2	0	1
+1	1	0
+0	2	2
+0
+
+"""
+        chain3 = """\
+chain 8 target 15 + 0 15 query 11 - 0 11
+2	3	0
+3	1	0
+2	0	1
+1	1	0
+0	2	2
+0
+
+"""
+        chain4 = """\
+chain 8 target 15 - 0 15 query 11 + 0 11
+0	2	2
+1	1	0
+2	0	1
+3	1	0
+0	3	0
+2
+
+"""
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 AA--CAGC-AGCGTGTCG 15
+                  0 ----|-||-|||-||--- 18
+query            11 --TTC-GCTAGC-TG---  0
+""",
+        )
+        self.assertEqual(format(alignment, "chain"), chain1)
+        alignment.coordinates = alignment.coordinates[:, ::-1]
+        self.assertEqual(
+            str(alignment),
+            """\
+target           15 CGACACGCT-GCTG--TT  0
+                  0 ---||-|||-||-|---- 18
+query             0 ---CA-GCTAGC-GAA-- 11
+""",
+        )
+        self.assertEqual(format(alignment, "chain"), chain2)
+        alignment.coordinates = alignment.coordinates[:, ::-1]
+        alignment = alignment.reverse_complement()
+        alignment.score = score
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 CGACACGCT-GCTG--TT 15
+                  0 ---||-|||-||-|---- 18
+query            11 ---CA-GCTAGC-GAA--  0
+""",
+        )
+        self.assertEqual(format(alignment, "chain"), chain3)
+        alignment.coordinates = alignment.coordinates[:, ::-1]
+        self.assertEqual(
+            str(alignment),
+            """\
+target           15 AA--CAGC-AGCGTGTCG  0
+                  0 ----|-||-|||-||--- 18
+query             0 --TTC-GCTAGC-TG--- 11
+""",
+        )
+        self.assertEqual(format(alignment, "chain"), chain4)
+
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
