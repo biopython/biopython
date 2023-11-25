@@ -35,7 +35,6 @@ except ImportError:
         "See http://www.numpy.org/"
     ) from None
 
-from Bio import BiopythonDeprecationWarning
 from Bio.Align import _pairwisealigner  # type: ignore
 from Bio.Align import _codonaligner  # type: ignore
 from Bio.Align import substitution_matrices
@@ -1523,31 +1522,6 @@ class Alignment:
             if left < right:
                 return False
         return True
-
-    @property
-    def path(self):
-        """Return the path through the trace matrix."""
-        warnings.warn(
-            "The path attribute is deprecated; please use the coordinates "
-            "attribute instead. The coordinates attribute is a NumPy array "
-            "containing the same values as the path attributes, after "
-            "transposition.",
-            BiopythonDeprecationWarning,
-            stacklevel=2,
-        )
-        return tuple(tuple(row) for row in self.coordinates.transpose())
-
-    @path.setter
-    def path(self, value):
-        warnings.warn(
-            "The path attribute is deprecated; please use the coordinates "
-            "attribute instead. The coordinates attribute is a NumPy array "
-            "containing the same values as the path attributes, after "
-            "transposition.",
-            BiopythonDeprecationWarning,
-            stacklevel=2,
-        )
-        self.coordinates = np.array(value).transpose()
 
     def _get_row(self, index):
         """Return self[index], where index is an integer (PRIVATE).
@@ -3985,41 +3959,6 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
             self.mismatch_score = state["mismatch_score"]
         else:
             self.substitution_matrix = substitution_matrix
-
-
-class PairwiseAlignment(Alignment):
-    """Represents a pairwise sequence alignment.
-
-    Internally, the pairwise alignment is stored as the path through
-    the traceback matrix, i.e. a tuple of pairs of indices corresponding
-    to the vertices of the path in the traceback matrix.
-    """
-
-    def __init__(self, target, query, path, score):
-        """Initialize a new PairwiseAlignment object.
-
-        Arguments:
-         - target  - The first sequence, as a plain string, without gaps.
-         - query   - The second sequence, as a plain string, without gaps.
-         - path    - The path through the traceback matrix, defining an
-                     alignment.
-         - score   - The alignment score.
-
-        You would normally obtain a PairwiseAlignment object by iterating
-        over a PairwiseAlignments object.
-        """
-        warnings.warn(
-            "The PairwiseAlignment class is deprecated; please use the "
-            "Alignment class instead.  Note that the coordinates attribute of "
-            "an Alignment object is a NumPy array and the transpose of the "
-            "path attribute of a PairwiseAlignment object.",
-            BiopythonDeprecationWarning,
-            stacklevel=2,
-        )
-        sequences = [target, query]
-        coordinates = np.array(path).transpose()
-        super().__init__(sequences, coordinates)
-        self.score = score
 
 
 class CodonAligner(_codonaligner.CodonAligner):

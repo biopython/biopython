@@ -474,8 +474,8 @@ reversed in Release 1.79.
 The ``__format__`` method of the Array class in Bio.Align.substitution_matrices
 was deprecated in Release 1.79.
 
-The PairwiseAlignment class was deprecated in Release 1.80; please use the new
-Alignment class instead.
+The PairwiseAlignment class was deprecated in Release 1.80, and removed in
+Release 1.82. Please use the new Alignment class instead.
 
 Bio.Align.Generic
 -----------------
