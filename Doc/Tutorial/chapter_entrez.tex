@@ -621,11 +621,11 @@ The XML file \verb+Homo_sapiens.xml+ consists of a list of Entrez gene records, 
 >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
 >>> stream = open("Homo_sapiens.xml", "rb")
 >>> records = Entrez.parse(stream)
-\end{minted}{pycon}
+\end{minted}
 Alternatively, you can use
 \begin{minted}{pycon}
 >>> records = Entrez.parse("Homo_sapiens.xml")
-\end{minted}{pycon}
+\end{minted}
 and let \verb+Bio.Entrez+ take care of opening and closing the file. This is safer, as the file will then automatically be closed after parsing it, or if an error occurs.
 \begin{minted}{pycon}
 >>> for record in records:
