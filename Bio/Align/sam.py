@@ -145,6 +145,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             rname = "target"
         else:
             target = target.seq
+        if coordinates[0, 0] > coordinates[-1, 0]:
+            coordinates = coordinates[::-1, :]
         if coordinates[0, 1] < coordinates[-1, 1]:  # mapped to forward strand
             flag = 0
         else:  # mapped to reverse strand

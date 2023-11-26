@@ -6721,6 +6721,63 @@ CAG33136.       180 YELDAIEVCKKFMERDPDELRFNAIALSAA 210
             self.assertEqual(alignment.nCount, protein_alignment.nCount)
 
 
+class TestAlign_strand(unittest.TestCase):
+    def test_format(self):
+        """Test alignment with the target on the opposite strand."""
+        sequences = ["AACAGCAGCGTGTCG", "CAGCTAGCGAA"]
+        coordinates = np.array(
+            [[0, 2, 2, 3, 4, 6, 6, 9, 10, 12, 15], [11, 11, 9, 8, 8, 6, 5, 2, 2, 0, 0]]
+        )
+        alignment = Alignment(sequences, coordinates)
+        alignment.score = 8
+        line = """\
+8	0	0	0	1	1	2	2	-	query	11	0	9	target	15	2	12	4	1,2,3,2,	2,3,6,9,	2,4,6,10,
+"""
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 AA--CAGC-AGCGTGTCG 15
+                  0 ----|-||-|||-||--- 18
+query            11 --TTC-GCTAGC-TG---  0
+""",
+        )
+        self.assertEqual(format(alignment, "psl"), line)
+        alignment.coordinates = alignment.coordinates[:, ::-1]
+        self.assertEqual(
+            str(alignment),
+            """\
+target           15 CGACACGCT-GCTG--TT  0
+                  0 ---||-|||-||-|---- 18
+query             0 ---CA-GCTAGC-GAA-- 11
+""",
+        )
+        self.assertEqual(format(alignment, "psl"), line)
+        alignment.coordinates = alignment.coordinates[:, ::-1]
+        line = """\
+8	0	0	0	1	1	2	2	-	query	11	2	11	target	15	3	13	4	2,3,2,1,	0,2,6,8,	3,6,9,12,
+"""
+        alignment = alignment.reverse_complement()
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 CGACACGCT-GCTG--TT 15
+                  0 ---||-|||-||-|---- 18
+query            11 ---CA-GCTAGC-GAA--  0
+""",
+        )
+        self.assertEqual(format(alignment, "psl"), line)
+        alignment.coordinates = alignment.coordinates[:, ::-1]
+        self.assertEqual(
+            str(alignment),
+            """\
+target           15 AA--CAGC-AGCGTGTCG  0
+                  0 ----|-||-|||-||--- 18
+query             0 --TTC-GCTAGC-TG--- 11
+""",
+        )
+        self.assertEqual(format(alignment, "psl"), line)
+
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
