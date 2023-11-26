@@ -1918,6 +1918,7 @@ gi|330443   1318075 ?????????????????????????????? 1318045
 gi|296143      1200 ??????????????????????????????    1230
 <BLANKLINE>
 \end{minted}
+Note that the target (the first sequence) in the printed alignment is on the reverse strand while the query (the second sequence) is on the forward strand, with the target coordinate decreasing and the query coordinate increasing.
 Printing this alignment in \verb|exonerate| format using Python's built-in \verb|format| function writes a vulgar line:
 %cont-doctest
 \begin{minted}{pycon}
@@ -1945,19 +1946,6 @@ See the Exonerate documentation for the definition of other operation codes.
 
 Similarly, the \verb|"vulgar"| or \verb|"cigar"| argument can be used when calling \verb|Bio.Align.write| to write a file with vulgar or cigar alignment lines.
 
-Note that the target (the first sequence) in the printed alignment is on the reverse strand while the query (the second sequence) is on the forward strand, with the target coordinate decreasing and the query coordinate increasing:
-%cont-doctest
-\begin{minted}{pycon}
->>> print(alignment)  # doctest: +ELLIPSIS
-gi|330443   1319275 ????????????????????????????????????????????????????????????
-                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-gi|296143         0 ????????????????????????????????????????????????????????????
-...
-gi|330443   1318075 ?????????????????????????????? 1318045
-               1200 ||||||||||||||||||||||||||||||    1230
-gi|296143      1200 ??????????????????????????????    1230
-<BLANKLINE>
-\end{minted}
 We can print the alignment in BED and PSL format:
 %cont-doctest
 \begin{minted}{pycon}
@@ -1977,21 +1965,11 @@ gi|296143771|ref|NM_001180731.1|	16	gi|330443520|ref|NC_001136.10|	1318046	255	1
 <BLANKLINE>
 \end{minted}
 
-The second alignment already has the target on the forward strand and the query on the reverse strand:
+The third alignment contains four long gaps:
 %cont-doctest
 \begin{minted}{pycon}
->>> alignment = next(alignments)
->>> alignment.coordinates
-array([[1318045, 1318174, 1318177, 1319275],
-       [   1230,    1101,    1098,       0]])
->>> print(format(alignment, "BED"))  # doctest: +NORMALIZE_WHITESPACE
-gi|330443520|ref|NC_001136.10|	1318045	1319275	gi|296143771|ref|NM_001180731.1| 6146	-	1318045	1319275	0	3	129,3,1098,	0,129,132,
-<BLANKLINE>
-\end{minted}
-The third alignment contains a long gap:
-%cont-doctest
-\begin{minted}{pycon}
->>> alignment = next(alignments)
+>>> alignment = next(alignments)  # second alignment
+>>> alignment = next(alignments)  # third alignment
 >>> print(alignment)  # doctest: +ELLIPSIS
 gi|330443     85010 ???????????-???????????????--????-?-????????----????????????
                   0 |||||||||||-|||||||||||||||--||||-|-||||||||----||||||||||||
@@ -2017,8 +1995,15 @@ gi|330443    667168 ???????????????????????????????????????????????? 667216
              582180 ||-|||-||||||||||||||||||||||||||||||||||||||||| 582228
 gi|296143       470 ??-???-?????????????????????????????????????????    516
 <BLANKLINE>
->>> print(format(alignment, "BED"))  # doctest: +NORMALIZE_WHITESPACE
-gi|330443688|ref|NC_001145.3|	85010	667216	gi|296143771|ref|NM_001180731.1| 518	+	85010	667216	0	34	11,15,4,1,8,17,4,8,3,33,7,102,14,10,5,10,4,20,15,5,4,20,6,12,5,7,1,12,75,6,4,2,3,41,	0,11,26,30,31,39,168964,168969,168977,168980,169015,169023,265949,265965,265975,265982,265992,265997,266017,266033,266038,388160,388185,582030,582044,582049,582058,582060,582072,582147,582153,582158,582161,582165,
+>>> print(format(alignment, "exonerate"))  # doctest: +NORMALIZE_WHITESPACE
+vulgar: gi|296143771|ref|NM_001180731.1| 0 516 + gi|330443688|ref|NC_001145.3|
+85010 667216 + 518 M 11 11 G 1 0 M 15 15 G 2 0 M 4 4 G 1 0 M 1 1 G 1 0 M 8 8
+ G 4 0 M 17 17 5 0 2 I 0 168904 3 0 2 M 4 4 G 0 1 M 8 8 G 2 0 M 3 3 G 1 0
+ M 33 33 G 0 2 M 7 7 G 0 1 M 102 102 5 0 2 I 0 96820 3 0 2 M 14 14 G 0 2 M 10 10
+ G 2 0 M 5 5 G 0 2 M 10 10 G 2 0 M 4 4 G 0 1 M 20 20 G 1 0 M 15 15 G 0 1 M 5 5
+ G 3 0 M 4 4 5 0 2 I 0 122114 3 0 2 M 20 20 G 0 5 M 6 6 5 0 2 I 0 193835 3 0 2
+ M 12 12 G 0 2 M 5 5 G 1 0 M 7 7 G 0 2 M 1 1 G 0 1 M 12 12 C 75 75 M 6 6 G 1 0
+ M 4 4 G 0 1 M 2 2 G 0 1 M 3 3 G 0 1 M 41 41
 <BLANKLINE>
 \end{minted}
 
