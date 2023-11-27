@@ -283,6 +283,11 @@ Bio.PDB.ResidueDepth
 Use of the ``PDB_TO_XYZR`` bash script was removed from ``get_surface`` in
 Release 1.79.
 
+Bio.PDB.QCPSuperimposer
+-----------------------
+The ``Bio.PDB.QCPSuperimposer`` module was deprecated in release 1.80, and
+removed in release 1.82. Please use the ``Bio.PDB.qcprot`` module instead.
+
 Bio.SeqFeature
 --------------
 With the introduction of the CompoundLocation in Release 1.62, the SeqFeature
