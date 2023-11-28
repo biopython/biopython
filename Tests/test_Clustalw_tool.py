@@ -15,10 +15,16 @@ from Bio import MissingExternalDependencyError
 import sys
 import os
 import unittest
+import warnings
 from Bio import SeqIO
 from Bio import AlignIO
-from Bio.Align.Applications import ClustalwCommandline
-from Bio.Application import ApplicationError
+
+from Bio import BiopythonDeprecationWarning
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
+    from Bio.Align.Applications import ClustalwCommandline
+    from Bio.Application import ApplicationError
 
 #################################################################
 
