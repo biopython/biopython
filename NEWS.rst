@@ -16,6 +16,10 @@ The latest news is at the top of this file.
 This release of Biopython supports Python 3.8, 3.9, 3.10, 3.11 and 3.12. It
 has also been tested on PyPy3.8 v7.8.16.
 
+The ``inplace`` argument of ``complement`` and ``reverse_complement`` in
+``Bio.Seq`` now always default to ``False`` both for ``Seq`` and ``MutableSeq``
+objects. To modify a ``MutableSeq`` in-place, use ``inplace=True``.
+
 A new class ``CodonAligner`` was added to ``Bio.Align``. A ``CodonAligner``
 object can align a nucleotide sequence to the amino acid sequence it encodes,
 using a dynamic programming algorithm modeled on ``PairwiseAligner`` to take
@@ -30,6 +34,11 @@ multiple sequence alignments. Together, this provides the same functionality as
 the ``Bio.codonalign`` module, but uses the standard ``Alignment`` class, and
 does not rely on regular expression searching to align a nucleotide sequence to
 an amino acid sequence.
+
+The ``hmmer3-text`` SearchIO format now also extracts the similarity string of
+the parsed alignments. This value is available under the 'similarity' key of
+the ``aln_annotation`` attribute of each HSP, the same as how it is done in
+other SearchIO formats.
 
 HMMER results with the full path to the hmmer executable in the banner are
 now parsed correctly. This should help Windows users and users with python
@@ -111,6 +120,7 @@ possible, especially the following contributors:
 - Rob Miller
 - Thomas Holder
 - Vladislav Kuznetsov (first contribution)
+- Wibowo Arindrarto
 - Yiming Qu (first contribution)
 
 12 February 2023: Biopython 1.81

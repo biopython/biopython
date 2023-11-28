@@ -7888,6 +7888,63 @@ class TestAlign_bed12(unittest.TestCase):
             self.assertEqual(original_data, written_data, msg=filename)
 
 
+class TestAlign_strand(unittest.TestCase):
+    def test_format(self):
+        """Test alignment with the target on the opposite strand."""
+        sequences = ["AACAGCAGCGTGTCG", "CAGCTAGCGAA"]
+        coordinates = np.array(
+            [[0, 2, 2, 3, 4, 6, 6, 9, 10, 12, 15], [11, 11, 9, 8, 8, 6, 5, 2, 2, 0, 0]]
+        )
+        alignment = Alignment(sequences, coordinates)
+        alignment.score = 8
+        line = """\
+target	2	12	query	8	-	2	12	0	4	1,2,3,2,	0,2,4,8,
+"""
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 AA--CAGC-AGCGTGTCG 15
+                  0 ----|-||-|||-||--- 18
+query            11 --TTC-GCTAGC-TG---  0
+""",
+        )
+        self.assertEqual(format(alignment, "bed"), line)
+        alignment.coordinates = alignment.coordinates[:, ::-1]
+        self.assertEqual(
+            str(alignment),
+            """\
+target           15 CGACACGCT-GCTG--TT  0
+                  0 ---||-|||-||-|---- 18
+query             0 ---CA-GCTAGC-GAA-- 11
+""",
+        )
+        self.assertEqual(format(alignment, "bed"), line)
+        alignment.coordinates = alignment.coordinates[:, ::-1]
+        line = """\
+target	3	13	query	0	-	3	13	0	4	2,3,2,1,	0,3,6,9,
+"""
+        alignment = alignment.reverse_complement()
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 CGACACGCT-GCTG--TT 15
+                  0 ---||-|||-||-|---- 18
+query            11 ---CA-GCTAGC-GAA--  0
+""",
+        )
+        self.assertEqual(format(alignment, "bed"), line)
+        alignment.coordinates = alignment.coordinates[:, ::-1]
+        self.assertEqual(
+            str(alignment),
+            """\
+target           15 AA--CAGC-AGCGTGTCG  0
+                  0 ----|-||-|||-||--- 18
+query             0 --TTC-GCTAGC-TG--- 11
+""",
+        )
+        self.assertEqual(format(alignment, "bed"), line)
+
+
 class TestAlign_searching(unittest.TestCase):
     path = "Blat/bigbedtest.bed"
 

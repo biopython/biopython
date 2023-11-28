@@ -170,7 +170,6 @@ PACKAGES = [
     "Bio.Sequencing",
     "Bio.Sequencing.Applications",
     "Bio.SVDSuperimposer",
-    "Bio.PDB.QCPSuperimposer",
     "Bio.SwissProt",
     "Bio.TogoWS",
     "Bio.Phylo",
@@ -178,7 +177,6 @@ PACKAGES = [
     "Bio.Phylo.PAML",
     "Bio.UniGene",
     "Bio.UniProt",
-    "Bio.Wise",
     # Other top level packages,
     "BioSQL",
 ]
@@ -188,10 +186,6 @@ EXTENSIONS = [
     Extension("Bio.Align._pairwisealigner", ["Bio/Align/_pairwisealigner.c"]),
     Extension("Bio.cpairwise2", ["Bio/cpairwise2module.c"]),
     Extension("Bio.Nexus.cnexus", ["Bio/Nexus/cnexus.c"]),
-    Extension(
-        "Bio.PDB.QCPSuperimposer.qcprotmodule",
-        ["Bio/PDB/QCPSuperimposer/qcprotmodule.c"],
-    ),
     Extension("Bio.motifs._pwm", ["Bio/motifs/_pwm.c"]),
     Extension(
         "Bio.Cluster._cluster", ["Bio/Cluster/cluster.c", "Bio/Cluster/clustermodule.c"]

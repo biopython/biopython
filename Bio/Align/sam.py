@@ -145,11 +145,13 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             rname = "target"
         else:
             target = target.seq
+        if coordinates[0, 0] > coordinates[-1, 0]:
+            coordinates = coordinates[::-1, :]
         if coordinates[0, 1] < coordinates[-1, 1]:  # mapped to forward strand
             flag = 0
         else:  # mapped to reverse strand
             flag = 16
-            query = reverse_complement(query, inplace=False)
+            query = reverse_complement(query)
             coordinates = np.array(coordinates)
             coordinates[:, 1] = qSize - coordinates[:, 1]
             hard_clip_left, hard_clip_right = hard_clip_right, hard_clip_left
@@ -323,7 +325,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         except AttributeError:
             pass
         else:
-            field = "AS:i:%d" % int(round(score))
+            field = "AS:i:%.0f" % score
             fields.append(field)
         try:
             annotations = alignment.annotations

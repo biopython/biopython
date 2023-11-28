@@ -278,9 +278,9 @@ def _retrieve_features(adaptor, primary_id):
             )
             dbname, version = lookup.get(location_id, (None, None))
             feature.location = SeqFeature.SimpleLocation(start, end)
-            feature.strand = strand
-            feature.ref_db = dbname
-            feature.ref = version
+            feature.location.strand = strand
+            feature.location.ref_db = dbname
+            feature.location.ref = version
         else:
             locs = []
             for location in locations:

@@ -277,10 +277,7 @@ class Instances(list):
         instances = Instances(alphabet=self.alphabet)
         instances.length = self.length
         for instance in self:
-            # TODO: remove inplace=False
-            if isinstance(instance, (Seq, MutableSeq)):
-                instance = instance.reverse_complement(inplace=False)
-            elif isinstance(instance, SeqRecord):
+            if isinstance(instance, (Seq, MutableSeq, SeqRecord)):
                 instance = instance.reverse_complement()
             elif isinstance(instance, str):
                 instance = reverse_complement(instance)

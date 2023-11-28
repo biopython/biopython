@@ -68,7 +68,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         else:
             if chrom is None:
                 chrom = "target"
-        assert coordinates[0, 0] <= coordinates[0, -1]
+        if coordinates[0, 0] > coordinates[0, -1]:
+            # read the alignment right-to-left to be consistent with BED
+            coordinates = coordinates[:, ::-1]
         if coordinates[1, 0] > coordinates[1, -1]:
             # DNA/RNA mapped to reverse strand of DNA/RNA
             strand = "-"
@@ -112,7 +114,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             score = alignment.score
         except AttributeError:
             score = 0
-        fields.append(str(score))
+        fields.append(format(score, "g"))
         if bedN == 5:
             return "\t".join(fields) + "\n"
         fields.append(strand)
@@ -243,9 +245,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 score = float(score)
             except ValueError:
                 pass
-            else:
-                if score.is_integer():
-                    score = int(score)
             alignment.score = score
             if bedN <= 6:
                 return alignment

@@ -95,7 +95,6 @@ if np is None:
             "Bio.PDB.PDBParser",
             "Bio.PDB.Polypeptide",
             "Bio.PDB.PSEA",
-            "Bio.PDB.QCPSuperimposer",
             "Bio.PDB.Residue",
             "Bio.PDB.Selection",
             "Bio.PDB.StructureAlignment",

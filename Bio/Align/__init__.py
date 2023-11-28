@@ -35,7 +35,6 @@ except ImportError:
         "See http://www.numpy.org/"
     ) from None
 
-from Bio import BiopythonDeprecationWarning
 from Bio.Align import _pairwisealigner  # type: ignore
 from Bio.Align import _codonaligner  # type: ignore
 from Bio.Align import substitution_matrices
@@ -1106,7 +1105,7 @@ class Alignment:
             if (row >= 0).all():
                 pass
             elif (row <= 0).all():
-                sequences[i] = reverse_complement(sequence, inplace=False)
+                sequences[i] = reverse_complement(sequence)
                 coordinates[i, :] = len(sequence) - coordinates[i, :]
                 steps[i, :] = -steps[i, :]
             else:
@@ -1309,7 +1308,7 @@ class Alignment:
             if (row >= 0).all():
                 pass
             elif (row <= 0).all():
-                sequences[i] = reverse_complement(sequence, inplace=False)
+                sequences[i] = reverse_complement(sequence)
                 coordinates[i, :] = len(sequence) - coordinates[i, :]
                 steps[i, :] = -steps[i, :]
             else:
@@ -1524,31 +1523,6 @@ class Alignment:
                 return False
         return True
 
-    @property
-    def path(self):
-        """Return the path through the trace matrix."""
-        warnings.warn(
-            "The path attribute is deprecated; please use the coordinates "
-            "attribute instead. The coordinates attribute is a NumPy array "
-            "containing the same values as the path attributes, after "
-            "transposition.",
-            BiopythonDeprecationWarning,
-            stacklevel=2,
-        )
-        return tuple(tuple(row) for row in self.coordinates.transpose())
-
-    @path.setter
-    def path(self, value):
-        warnings.warn(
-            "The path attribute is deprecated; please use the coordinates "
-            "attribute instead. The coordinates attribute is a NumPy array "
-            "containing the same values as the path attributes, after "
-            "transposition.",
-            BiopythonDeprecationWarning,
-            stacklevel=2,
-        )
-        self.coordinates = np.array(value).transpose()
-
     def _get_row(self, index):
         """Return self[index], where index is an integer (PRIVATE).
 
@@ -1577,7 +1551,7 @@ class Alignment:
             if sum(aligned_steps > 0) < sum(aligned_steps < 0):
                 steps[i, :] = -steps[i, :]
                 if i == index:
-                    sequence = reverse_complement(sequence, inplace=False)
+                    sequence = reverse_complement(sequence)
                     coordinates = len(sequence) - coordinates
         gaps = steps.max(0)
         try:
@@ -2043,7 +2017,7 @@ class Alignment:
             elif (row <= 0).all():
                 steps[i, :] = -steps[i, :]
                 coordinates[i, :] = len(sequence) - coordinates[i, :]
-                sequences[i] = reverse_complement(sequence, inplace=False)
+                sequences[i] = reverse_complement(sequence)
                 try:
                     sequences[i].id = sequence.id
                 except AttributeError:
@@ -2229,7 +2203,7 @@ class Alignment:
                 row[:] = positions - start
             else:
                 steps[i, :] = -steps[i, :]
-                seq = reverse_complement(seq, inplace=False)
+                seq = reverse_complement(seq)
                 end = max(positions)
                 row[:] = end - positions
             if isinstance(seq, str):
@@ -2403,7 +2377,7 @@ class Alignment:
                 return self._format_generalized()
             if row[0] > row[-1]:  # mapped to reverse strand
                 row[:] = len(seq) - row[:]
-                seq = reverse_complement(seq, inplace=False)
+                seq = reverse_complement(seq)
             seqs.append(seq)
             try:
                 name = seq.id
@@ -3468,7 +3442,7 @@ class Alignment:
             if (row >= 0).all():
                 pass
             elif (row <= 0).all():
-                sequences[i] = reverse_complement(sequence, inplace=False)
+                sequences[i] = reverse_complement(sequence)
                 coordinates[i, :] = len(sequence) - coordinates[i, :]
             else:
                 raise ValueError(f"Inconsistent steps in row {i}")
@@ -3578,9 +3552,7 @@ class Alignment:
         >>> print(rc_alignment.column_annotations)
         {'score': [2, 2, 2, 3]}
         """
-        sequences = [
-            reverse_complement(sequence, inplace=False) for sequence in self.sequences
-        ]
+        sequences = [reverse_complement(sequence) for sequence in self.sequences]
         coordinates = np.array(
             [
                 len(sequence) - row[::-1]
@@ -3923,7 +3895,7 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
         if strand == "+":
             sB = seqB
         else:  # strand == "-":
-            sB = reverse_complement(seqB, inplace=False)
+            sB = reverse_complement(seqB)
         if isinstance(seqB, (Seq, MutableSeq, SeqRecord)):
             sB = bytes(sB)
         score, paths = super().align(sA, sB, strand)
@@ -3935,7 +3907,7 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
         if isinstance(seqA, (Seq, MutableSeq, SeqRecord)):
             seqA = bytes(seqA)
         if strand == "-":
-            seqB = reverse_complement(seqB, inplace=False)
+            seqB = reverse_complement(seqB)
         if isinstance(seqB, (Seq, MutableSeq, SeqRecord)):
             seqB = bytes(seqB)
         return super().score(seqA, seqB, strand)
@@ -3987,41 +3959,6 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
             self.mismatch_score = state["mismatch_score"]
         else:
             self.substitution_matrix = substitution_matrix
-
-
-class PairwiseAlignment(Alignment):
-    """Represents a pairwise sequence alignment.
-
-    Internally, the pairwise alignment is stored as the path through
-    the traceback matrix, i.e. a tuple of pairs of indices corresponding
-    to the vertices of the path in the traceback matrix.
-    """
-
-    def __init__(self, target, query, path, score):
-        """Initialize a new PairwiseAlignment object.
-
-        Arguments:
-         - target  - The first sequence, as a plain string, without gaps.
-         - query   - The second sequence, as a plain string, without gaps.
-         - path    - The path through the traceback matrix, defining an
-                     alignment.
-         - score   - The alignment score.
-
-        You would normally obtain a PairwiseAlignment object by iterating
-        over a PairwiseAlignments object.
-        """
-        warnings.warn(
-            "The PairwiseAlignment class is deprecated; please use the "
-            "Alignment class instead.  Note that the coordinates attribute of "
-            "an Alignment object is a NumPy array and the transpose of the "
-            "path attribute of a PairwiseAlignment object.",
-            BiopythonDeprecationWarning,
-            stacklevel=2,
-        )
-        sequences = [target, query]
-        coordinates = np.array(path).transpose()
-        super().__init__(sequences, coordinates)
-        self.score = score
 
 
 class CodonAligner(_codonaligner.CodonAligner):

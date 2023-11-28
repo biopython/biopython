@@ -4454,7 +4454,7 @@ class TestAlign_sambam(unittest.TestCase):
         self.assertEqual(n, 200)
 
 
-class TestAlign_clippping(unittest.TestCase):
+class TestAlign_clipping(unittest.TestCase):
     def test_6M(self):
         """Test alignment starting at non-zero position."""
         target_seq = Seq("AAAAAAAACCCCCC")
@@ -4915,6 +4915,63 @@ np.array([['-', '-', '-', '-', '-', '-', '-', '-', 'C', 'C', 'C', 'C', 'C',
         alignment = next(alignments)
         stream.close()
         self.assertTrue(np.array_equal(alignment.coordinates, coordinates))
+
+
+class TestAlign_strand(unittest.TestCase):
+    def test_format(self):
+        """Test alignment with the target on the opposite strand."""
+        sequences = ["AACAGCAGCGTGTCG", "CAGCTAGCGAA"]
+        coordinates = np.array(
+            [[0, 2, 2, 3, 4, 6, 6, 9, 10, 12, 15], [11, 11, 9, 8, 8, 6, 5, 2, 2, 0, 0]]
+        )
+        alignment = Alignment(sequences, coordinates)
+        alignment.score = 8
+        line = """\
+query	16	target	1	255	2D2I1M1D2M1I3M1D2M3D	*	0	0	TTCGCTAGCTG	*	AS:i:8
+"""
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 AA--CAGC-AGCGTGTCG 15
+                  0 ----|-||-|||-||--- 18
+query            11 --TTC-GCTAGC-TG---  0
+""",
+        )
+        self.assertEqual(format(alignment, "sam"), line)
+        alignment.coordinates = alignment.coordinates[:, ::-1]
+        self.assertEqual(
+            str(alignment),
+            """\
+target           15 CGACACGCT-GCTG--TT  0
+                  0 ---||-|||-||-|---- 18
+query             0 ---CA-GCTAGC-GAA-- 11
+""",
+        )
+        self.assertEqual(format(alignment, "sam"), line)
+        alignment.coordinates = alignment.coordinates[:, ::-1]
+        line = """\
+query	16	target	1	255	3D2M1D3M1I2M1D1M2I2D	*	0	0	CAGCTAGCGAA	*
+"""
+        alignment = alignment.reverse_complement()
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 CGACACGCT-GCTG--TT 15
+                  0 ---||-|||-||-|---- 18
+query            11 ---CA-GCTAGC-GAA--  0
+""",
+        )
+        self.assertEqual(format(alignment, "sam"), line)
+        alignment.coordinates = alignment.coordinates[:, ::-1]
+        self.assertEqual(
+            str(alignment),
+            """\
+target           15 AA--CAGC-AGCGTGTCG  0
+                  0 ----|-||-|||-||--- 18
+query             0 --TTC-GCTAGC-TG--- 11
+""",
+        )
+        self.assertEqual(format(alignment, "sam"), line)
 
 
 if __name__ == "__main__":

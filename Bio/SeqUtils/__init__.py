@@ -136,23 +136,6 @@ def gc_fraction(seq, ambiguous="remove"):
     return gc / length
 
 
-def GC(seq):
-    """Calculate G+C content (DEPRECATED).
-
-    Use Bio.SeqUtils.gc_fraction instead.
-    """
-    warnings.warn(
-        "GC is deprecated; please use gc_fraction instead.",
-        BiopythonDeprecationWarning,
-    )
-
-    gc = sum(seq.count(x) for x in ["G", "C", "g", "c", "S", "s"])
-    try:
-        return gc * 100.0 / len(seq)
-    except ZeroDivisionError:
-        return 0.0
-
-
 def GC123(seq):
     """Calculate G+C content: total, for first, second and third positions.
 
@@ -244,7 +227,7 @@ def xGC_skew(seq, window=1000, zoom=100, r=300, px=100, py=100):
     ty = Y0
     canvas.create_text(X0, ty, text="%s...%s (%d nt)" % (seq[:7], seq[-7:], len(seq)))
     ty += 20
-    canvas.create_text(X0, ty, text=f"GC {GC(seq):3.2f}%")
+    canvas.create_text(X0, ty, text=f"GC {gc_fraction(seq):3.2f}%")
     ty += 20
     canvas.create_text(X0, ty, text="GC Skew", fill="blue")
     ty += 20
@@ -496,7 +479,7 @@ def molecular_weight(
         if seq_type == "protein":
             raise ValueError("protein sequences cannot be double-stranded")
         elif seq_type == "DNA":
-            seq = complement(seq, inplace=False)  # TODO: remove inplace=False
+            seq = complement(seq)
         elif seq_type == "RNA":
             seq = complement_rna(seq)
         weight += sum(weight_table[x] for x in seq) - (len(seq) - 1) * water
@@ -536,7 +519,7 @@ def six_frame_translations(seq, genetic_code=1):
     if "u" in seq.lower():
         anti = reverse_complement_rna(seq)
     else:
-        anti = reverse_complement(seq, inplace=False)  # TODO: remove inplace=False
+        anti = reverse_complement(seq)
     comp = anti[::-1]
     length = len(seq)
     frames = {}
@@ -554,10 +537,11 @@ def six_frame_translations(seq, genetic_code=1):
     for nt in ["a", "t", "g", "c"]:
         header += " %s:%d" % (nt, seq.count(nt.upper()))
 
+    gc = 100 * gc_fraction(seq, ambiguous="ignore")
     header += "\nSequence: %s, %d nt, %0.2f %%GC\n\n\n" % (
         short.lower(),
         length,
-        GC(seq),
+        gc,
     )
     res = header
 
@@ -570,7 +554,7 @@ def six_frame_translations(seq, genetic_code=1):
         res += " " + "  ".join(frames[2][p : p + 20]) + "\n"
         res += "  ".join(frames[1][p : p + 20]) + "\n"
         # seq
-        res += subseq.lower() + "%5d %%\n" % int(GC(subseq))
+        res += subseq.lower() + "%5d %%\n" % int(gc)
         res += csubseq.lower() + "\n"
         # - frames
         res += "  ".join(frames[-2][p : p + 20]) + "\n"

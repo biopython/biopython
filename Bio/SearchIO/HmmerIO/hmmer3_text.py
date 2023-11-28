@@ -7,7 +7,7 @@
 
 import re
 
-from Bio.SearchIO._utils import read_forward
+from Bio.SearchIO._utils import read_forward, removesuffix
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
 from ._base import _BaseHmmerTextIndexer
@@ -341,6 +341,7 @@ class Hmmer3TextParser:
             hmmseq = ""
             aliseq = ""
             annot = {}
+            aln_prefix_len = None
             self.line = self.handle.readline()
 
             # parse all the alignment blocks in the hsp
@@ -352,6 +353,12 @@ class Hmmer3TextParser:
                 # to anticipate special cases where query id == hit id
                 regx = re.search(_HRE_ID_LINE, self.line)
                 if regx:
+                    # Try to capture the block prefix len, to parse the similarity
+                    # string later.
+                    if aln_prefix_len is None:
+                        aln_prefix_len = len(regx.group(1))
+                    else:
+                        assert aln_prefix_len == len(regx.group(1))
                     # the first hit/query self.line we encounter is the hmmseq
                     if len(hmmseq) == len(aliseq):
                         hmmseq += regx.group(2)
@@ -377,11 +384,11 @@ class Hmmer3TextParser:
                     hmmseq = ""
                     aliseq = ""
                     annot = {}
+                    aln_prefix_len = None
                     break
-                # otherwise check if it's an annotation line and parse it
+                # check if it's an annotation line and parse it
                 # len(hmmseq) is only != len(aliseq) when the cursor is parsing
-                # the similarity character. Since we're not parsing that, we
-                # check for when the condition is False (i.e. when it's ==)
+                # the similarity character.
                 elif len(hmmseq) == len(aliseq):
                     regx = re.search(_HRE_ANNOT_LINE, self.line)
                     if regx:
@@ -390,6 +397,22 @@ class Hmmer3TextParser:
                             annot[annot_name] += regx.group(2)
                         else:
                             annot[annot_name] = regx.group(2)
+                # otherwise, assume we are seeing the similarity string (the string
+                # between the two alignments). We do that by checking if we have
+                # defined the aln_prefix_len variable, which is the length of string
+                # from the beginning of the line to the start of the actual alignment
+                # (sans the IDs). We need this string to see how many characters we
+                # should strip from the beginning of the line. We can't call `strip()`
+                # since the similarity string might start with empty characters.
+                elif aln_prefix_len is not None:
+                    similarity = removesuffix(
+                        removesuffix(self.line[aln_prefix_len:], "\n"),
+                        "\r",
+                    )
+                    if "similarity" not in annot:
+                        annot["similarity"] = similarity
+                    else:
+                        annot["similarity"] += similarity
 
                 self.line = self.handle.readline()
 

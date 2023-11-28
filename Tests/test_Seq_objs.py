@@ -1794,18 +1794,14 @@ class PartialSequenceTests(unittest.TestCase):
         s = Seq({3: "AACC", 11: "CGT"}, length=20)
         u = Seq({3: "AACC", 11: "CGU"}, length=20)
         self.assertEqual(repr(s.complement()), "Seq({3: 'TTGG', 11: 'GCA'}, length=20)")
-        self.assertEqual(
-            repr(u.complement(inplace=False)), "Seq({3: 'TTGG', 11: 'GCA'}, length=20)"
-        )
-        # TODO: remove inplace=False
+        self.assertEqual(repr(u.complement()), "Seq({3: 'TTGG', 11: 'GCA'}, length=20)")
         self.assertEqual(
             repr(s.reverse_complement()), "Seq({6: 'ACG', 13: 'GGTT'}, length=20)"
         )
         self.assertEqual(
-            repr(u.reverse_complement(inplace=False)),
+            repr(u.reverse_complement()),
             "Seq({6: 'ACG', 13: 'GGTT'}, length=20)",
         )
-        # TODO: remove inplace=False
         self.assertEqual(
             repr(s.complement_rna()), "Seq({3: 'UUGG', 11: 'GCA'}, length=20)"
         )

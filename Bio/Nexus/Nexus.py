@@ -671,8 +671,7 @@ class Nexus:
         warnings.warn(
             "The get_original_taxon_order method has been deprecated "
             "and will likely be removed from Biopython in the near "
-            "future. Please use the original_taxon_order attribute "
-            "instead.",
+            "future. Please use the taxlabels attribute instead.",
             BiopythonDeprecationWarning,
         )
         return self.taxlabels
@@ -682,8 +681,7 @@ class Nexus:
         warnings.warn(
             "The set_original_taxon_order method has been deprecated "
             "and will likely be removed from Biopython in the near "
-            "future. Please use the original_taxon_order attribute "
-            "instead.",
+            "future. Please use the taxlabels attribute instead.",
             BiopythonDeprecationWarning,
         )
         self.taxlabels = value

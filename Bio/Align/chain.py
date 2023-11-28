@@ -59,15 +59,10 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         tSize = len(target)
         qSize = len(query)
         lines = []
-        words = [None] * 12
-        words[0] = "chain"
         try:
             score = alignment.score
         except AttributeError:
             score = 0
-        words[1] = str(score)
-        words[2] = tName
-        words[3] = str(tSize)
         if coordinates[0, 0] > coordinates[0, -1]:
             tStrand = "-"
             coordinates = coordinates.copy()
@@ -80,25 +75,16 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             coordinates[1, :] = qSize - coordinates[1, :]
         else:
             qStrand = "+"
-        words[4] = tStrand
         tStart = coordinates[0, 0]
         tEnd = coordinates[0, -1]
         qStart = coordinates[1, 0]
         qEnd = coordinates[1, -1]
-        words[5] = str(tStart)
-        words[6] = str(tEnd)
-        words[7] = qName
-        words[8] = str(qSize)
-        words[9] = qStrand
-        words[10] = str(qStart)
-        words[11] = str(qEnd)
         try:
             chainID = alignment.annotations["id"]
         except (AttributeError, KeyError):
-            pass
+            line = f"chain {score:g} {tName} {tSize} {tStrand} {tStart} {tEnd} {qName} {qSize} {qStrand} {qStart} {qEnd}"
         else:
-            words.append(chainID)
-        line = " ".join(words)
+            line = f"chain {score:g} {tName} {tSize} {tStrand} {tStart} {tEnd} {qName} {qSize} {qStrand} {qStart} {qEnd} {chainID}"
         lines.append(line)
         # variable names follow those in the UCSC chain file format description
         tStart, qStart = coordinates[:, 0]
@@ -179,7 +165,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
     Each chain block in the file contains one pairwise alignment, which are
     loaded and returned incrementally.  The alignment score is scored as an
-    attribute of the alignment; the ID is stored as an attribute.
+    attribute of the alignment; the ID is stored under the key "id" in the
+    dictionary referred to by the annotations attribute of the alignment.
     """
 
     fmt = "chain"
@@ -209,8 +196,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 "expected first line of chain block to start with 'chain '"
             )
         score = float(words[1])
-        if score.is_integer():
-            score = int(score)
         tName = words[2]
         tSize = int(words[3])
         tStrand = words[4]

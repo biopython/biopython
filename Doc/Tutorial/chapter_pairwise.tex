@@ -721,7 +721,7 @@ target            0 AAAACCC 7
 query             0 --AACC- 4
 <BLANKLINE>
 >>> print(alignments[0].format("bed"))  # doctest: +NORMALIZE_WHITESPACE
-target   2   6   query   4.0   +   2   6   0   1   4,   0,
+target   2   6   query   4   +   2   6   0   1   4,   0,
 <BLANKLINE>
 >>> alignments = aligner.align(target, reverse_complement(query), strand="-")
 >>> len(alignments)
@@ -732,7 +732,7 @@ target            0 AAAACCC 7
 query             4 --AACC- 0
 <BLANKLINE>
 >>> print(alignments[0].format("bed"))  # doctest: +NORMALIZE_WHITESPACE
-target   2   6   query   4.0   -   2   6   0   1   4,   0,
+target   2   6   query   4   -   2   6   0   1   4,   0,
 <BLANKLINE>
 >>> alignments = aligner.align(target, query, strand="-")
 >>> len(alignments)

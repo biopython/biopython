@@ -549,7 +549,7 @@ class SeqRecord:
                 # Select relevant features, add them with shifted locations
                 # assert str(self.seq)[index] == str(self.seq)[start:stop]
                 for f in self.features:
-                    if f.ref or f.ref_db:
+                    if f.location.ref or f.location.ref_db:
                         # TODO - Implement this (with lots of tests)?
                         import warnings
 
@@ -1286,14 +1286,10 @@ class SeqRecord:
         if "protein" in cast(str, self.annotations.get("molecule_type", "")):
             raise ValueError("Proteins do not have complements!")
         if "RNA" in cast(str, self.annotations.get("molecule_type", "")):
-            seq = self.seq.reverse_complement_rna(
-                inplace=False
-            )  # TODO: remove inplace=False
+            seq = self.seq.reverse_complement_rna()
         else:
-            # Default to DNA)
-            seq = self.seq.reverse_complement(
-                inplace=False
-            )  # TODO: remove inplace=False
+            # Default to DNA
+            seq = self.seq.reverse_complement()
         if isinstance(self.seq, MutableSeq):
             seq = Seq(seq)
         answer = type(self)(seq)

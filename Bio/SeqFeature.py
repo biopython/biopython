@@ -66,7 +66,6 @@ import warnings
 from abc import ABC, abstractmethod
 
 from Bio import BiopythonParserWarning
-from Bio import BiopythonDeprecationWarning
 from Bio.Seq import MutableSeq
 from Bio.Seq import reverse_complement
 from Bio.Seq import Seq
@@ -170,22 +169,7 @@ class SeqFeature:
     Attributes:
      - location - the location of the feature on the sequence (SimpleLocation)
      - type - the specified type of the feature (ie. CDS, exon, repeat...)
-     - location_operator - a string specifying how this SeqFeature may
-       be related to others. For example, in the example GenBank feature
-       shown below, the location_operator would be "join". This is a proxy
-       for feature.location.operator and only applies to compound locations.
-     - strand - A value specifying on which strand (of a DNA sequence, for
-       instance) the feature deals with. 1 indicates the plus strand, -1
-       indicates the minus strand, 0 indicates stranded but unknown (? in GFF3),
-       while the default of None indicates that strand doesn't apply (dot in GFF3,
-       e.g. features on proteins). Note this is a shortcut for accessing the
-       strand property of the feature's location.
      - id - A string identifier for the feature.
-     - ref - A reference to another sequence. This could be an accession
-       number for some different sequence. Note this is a shortcut for the
-       reference property of the feature's location.
-     - ref_db - A different database for the reference accession number.
-       Note this is a shortcut for the reference property of the location
      - qualifiers - A dictionary of qualifiers on the feature. These are
        analogous to the qualifiers from a GenBank feature table. The keys of
        the dictionary are qualifier names, the values are the qualifier
@@ -197,13 +181,9 @@ class SeqFeature:
         self,
         location=None,
         type="",
-        location_operator="",
-        strand=None,
         id="<unknown id>",
         qualifiers=None,
         sub_features=None,
-        ref=None,
-        ref_db=None,
     ):
         """Initialize a SeqFeature on a sequence.
 
@@ -214,25 +194,18 @@ class SeqFeature:
 
         >>> from Bio.SeqFeature import SeqFeature, SimpleLocation
         >>> f1 = SeqFeature(SimpleLocation(5, 10), type="domain")
-        >>> f1.strand == f1.location.strand == None
+        >>> f1.location.strand == None
         True
         >>> f2 = SeqFeature(SimpleLocation(7, 110, strand=1), type="CDS")
-        >>> f2.strand == f2.location.strand == +1
+        >>> f2.location.strand == +1
         True
         >>> f3 = SeqFeature(SimpleLocation(9, 108, strand=-1), type="CDS")
-        >>> f3.strand == f3.location.strand == -1
+        >>> f3.location.strand == -1
         True
 
         For exact start/end positions, an integer can be used (as shown above)
         as shorthand for the ExactPosition object. For non-exact locations, the
         SimpleLocation must be specified via the appropriate position objects.
-
-        Note that the strand, ref and ref_db arguments to the SeqFeature are
-        now deprecated and will later be removed. Set them via the location
-        object instead.
-
-        Note that location_operator and sub_features arguments can no longer
-        be used, instead do this via the CompoundLocation object.
         """
         if (
             location is not None
@@ -244,136 +217,12 @@ class SeqFeature:
             )
         self.location = location
         self.type = type
-        if location_operator:
-            warnings.warn(
-                "Using the location_operator argument is deprecated, and will be removed in a future release. "
-                "Please do this via the CompoundLocation object instead.",
-                BiopythonDeprecationWarning,
-            )
-            self.location_operator = location_operator
-        if strand is not None:
-            warnings.warn(
-                "Using the strand argument is deprecated, and will be removed in a future release. "
-                "Please set it via the location object instead.",
-                BiopythonDeprecationWarning,
-            )
-            self.strand = strand
         self.id = id
         self.qualifiers = {}
         if qualifiers is not None:
             self.qualifiers.update(qualifiers)
         if sub_features is not None:
             raise TypeError("Rather than sub_features, use a CompoundLocation")
-        if ref is not None:
-            warnings.warn(
-                "Using the ref argument is deprecated, and will be removed in a future release. "
-                "Please set it via the location object instead.",
-                BiopythonDeprecationWarning,
-            )
-            self.ref = ref
-        if ref_db is not None:
-            warnings.warn(
-                "Using the ref_db argument is deprecated, and will be removed in a future release. "
-                "Please set it via the location object instead.",
-                BiopythonDeprecationWarning,
-            )
-            self.ref_db = ref_db
-
-    def _get_strand(self):
-        """Get function for the strand property (PRIVATE)."""
-        return self.location.strand
-
-    def _set_strand(self, value):
-        """Set function for the strand property (PRIVATE)."""
-        try:
-            self.location.strand = value
-        except AttributeError:
-            if self.location is None:
-                if value is not None:
-                    raise ValueError("Can't set strand without a location.") from None
-            else:
-                raise
-
-    strand = property(
-        fget=_get_strand,
-        fset=_set_strand,
-        doc="""Feature's strand
-
-                          This is a shortcut for feature.location.strand
-                          """,
-    )
-
-    def _get_ref(self):
-        """Get function for the reference property (PRIVATE)."""
-        try:
-            return self.location.ref
-        except AttributeError:
-            return None
-
-    def _set_ref(self, value):
-        """Set function for the reference property (PRIVATE)."""
-        try:
-            self.location.ref = value
-        except AttributeError:
-            if self.location is None:
-                if value is not None:
-                    raise ValueError("Can't set ref without a location.") from None
-            else:
-                raise
-
-    ref = property(
-        fget=_get_ref,
-        fset=_set_ref,
-        doc="""Feature location reference (e.g. accession).
-
-                       This is a shortcut for feature.location.ref
-                       """,
-    )
-
-    def _get_ref_db(self):
-        """Get function for the database reference property (PRIVATE)."""
-        try:
-            return self.location.ref_db
-        except AttributeError:
-            return None
-
-    def _set_ref_db(self, value):
-        """Set function for the database reference property (PRIVATE)."""
-        self.location.ref_db = value
-
-    ref_db = property(
-        fget=_get_ref_db,
-        fset=_set_ref_db,
-        doc="""Feature location reference's database.
-
-                          This is a shortcut for feature.location.ref_db
-                          """,
-    )
-
-    def _get_location_operator(self):
-        """Get function for the location operator property (PRIVATE)."""
-        try:
-            return self.location.operator
-        except AttributeError:
-            return None
-
-    def _set_location_operator(self, value):
-        """Set function for the location operator property (PRIVATE)."""
-        if value:
-            if isinstance(self.location, CompoundLocation):
-                self.location.operator = value
-            elif self.location is None:
-                raise ValueError(
-                    f"Location is None so can't set its operator (to {value!r})"
-                )
-            else:
-                raise ValueError(f"Only CompoundLocation gets an operator ({value!r})")
-
-    location_operator = property(
-        fget=_get_location_operator,
-        fset=_set_location_operator,
-        doc="Location operator for compound locations (e.g. join).",
-    )
 
     def __eq__(self, other):
         """Check if two SeqFeature objects should be considered equal."""
@@ -390,16 +239,10 @@ class SeqFeature:
         answer = f"{self.__class__.__name__}({self.location!r}"
         if self.type:
             answer += f", type={self.type!r}"
-        if self.location_operator:
-            answer += f", location_operator={self.location_operator!r}"
         if self.id and self.id != "<unknown id>":
             answer += f", id={self.id!r}"
         if self.qualifiers:
             answer += ", qualifiers=..."
-        if self.ref:
-            answer += f", ref={self.ref!r}"
-        if self.ref_db:
-            answer += f", ref_db={self.ref_db!r}"
         answer += ")"
         return answer
 
@@ -1423,44 +1266,6 @@ class SimpleLocation(Location):
         """
         return self._end
 
-    @property
-    def nofuzzy_start(self):
-        """Start position (integer, approximated if fuzzy, read only) (DEPRECATED).
-
-        This is now an alias for int(feature.start), which should be
-        used in preference -- unless you are trying to support old
-        versions of Biopython.
-        """
-        warnings.warn(
-            "Use int(feature.start) rather than feature.nofuzzy_start",
-            BiopythonDeprecationWarning,
-        )
-        try:
-            return int(self._start)
-        except TypeError:
-            if isinstance(self._start, UnknownPosition):
-                return None
-            raise
-
-    @property
-    def nofuzzy_end(self):
-        """End position (integer, approximated if fuzzy, read only) (DEPRECATED).
-
-        This is now an alias for int(feature.end), which should be
-        used in preference -- unless you are trying to support old
-        versions of Biopython.
-        """
-        warnings.warn(
-            "Use int(feature.end) rather than feature.nofuzzy_end",
-            BiopythonDeprecationWarning,
-        )
-        try:
-            return int(self._end)
-        except TypeError:
-            if isinstance(self._end, UnknownPosition):
-                return None
-            raise
-
     def extract(self, parent_sequence, references=None):
         """Extract the sequence from supplied parent sequence using the SimpleLocation object.
 
@@ -1495,9 +1300,7 @@ class SimpleLocation(Location):
         if isinstance(f_seq, MutableSeq):
             f_seq = Seq(f_seq)
         if self.strand == -1:
-            f_seq = reverse_complement(
-                f_seq, inplace=False
-            )  # TODO: remove inplace=False
+            f_seq = reverse_complement(f_seq)
         return f_seq
 
 
@@ -1849,44 +1652,6 @@ class CompoundLocation(Location):
         return max(loc.end for loc in self.parts)
 
     @property
-    def nofuzzy_start(self):
-        """Start position (integer, approximated if fuzzy, read only) (DEPRECATED).
-
-        This is an alias for int(feature.start), which should be used in
-        preference -- unless you are trying to support old versions of
-        Biopython.
-        """
-        warnings.warn(
-            "Use int(feature.start) rather than feature.nofuzzy_start",
-            BiopythonDeprecationWarning,
-        )
-        try:
-            return int(self.start)
-        except TypeError:
-            if isinstance(self.start, UnknownPosition):
-                return None
-            raise
-
-    @property
-    def nofuzzy_end(self):
-        """End position (integer, approximated if fuzzy, read only) (DEPRECATED).
-
-        This is an alias for int(feature.end), which should be used in
-        preference -- unless you are trying to support old versions of
-        Biopython.
-        """
-        warnings.warn(
-            "Use int(feature.end) rather than feature.nofuzzy_end",
-            BiopythonDeprecationWarning,
-        )
-        try:
-            return int(self.end)
-        except TypeError:
-            if isinstance(self.end, UnknownPosition):
-                return None
-            raise
-
-    @property
     def ref(self):
         """Not present in CompoundLocation, dummy method for API compatibility."""
         return None
@@ -1930,30 +1695,6 @@ class Position(ABC):
     def __repr__(self):
         """Represent the Position object as a string for debugging."""
         return f"{self.__class__.__name__}(...)"
-
-    @property
-    def position(self):
-        """Legacy attribute to get (left-most) position as an integer (DEPRECATED)."""
-        warnings.warn(
-            "Alias location.position is deprecated and will be removed in a future "
-            "release. Use location directly, or int(location). However, that will "
-            "fail for UnknownPosition, and for OneOfPosition and WithinPosition "
-            "will give the default rather than left-most value.",
-            BiopythonDeprecationWarning,
-        )
-        return int(self)
-
-    @property
-    def extension(self):
-        """Legacy attribute to get the position's 'width' as an integer, typically zero (DEPRECATED)."""
-        warnings.warn(
-            "Alias location.extension is deprecated and will be removed in a "
-            "future release. It was undefined or zero except for OneOfPosition, "
-            "WithinPosition and WithinPosition which must now be handled "
-            "explicitly instead.",
-            BiopythonDeprecationWarning,
-        )
-        return 0
 
     @staticmethod
     def fromstring(text, offset=0):
@@ -2133,29 +1874,6 @@ class UnknownPosition(Position):
         """Return the hash value of the UnknownPosition object."""
         return hash(None)
 
-    @property
-    def position(self):
-        """Legacy attribute to get location (None) (DEPRECATED).
-
-        In general you can use the location directly as with the exception of
-        UnknownPosition it subclasses int, or use int(location), rather than
-        this location.position legacy attribute.
-
-        However, the UnknownPosition cannot be cast to an integer, and thus
-        does not subclass int, and int(...) will fail. The legacy attribute
-        would return None instead.
-
-        Note that while None == None, UnknownPosition() != UnknownPosition()
-        which is like the behavour for NaN.
-        """
-        warnings.warn(
-            "Alias location.position is deprecated and will be removed in a future release. "
-            "In general use position directly, but not note for UnknownPosition "
-            "int(location) will fail. Use try/except or isinstance(location, UnknownPosition).",
-            BiopythonDeprecationWarning,
-        )
-        return None
-
     def __add__(self, offset):
         """Return a copy of the position object with its location shifted (PRIVATE)."""
         return self
@@ -2266,27 +1984,6 @@ class WithinPosition(int, Position):
         """Return a representation of the WithinPosition object (with python counting)."""
         return f"({self._left}.{self._right})"
 
-    @property
-    def position(self):
-        """Legacy attribute to get (left) position as integer (DEPRECATED)."""
-        warnings.warn(
-            "Alias location.position is deprecated and will be removed in a future release. "
-            "Use location directly, or int(location) which will return the preferred location "
-            "defined for WithinPosition (which may not be the left-most position).",
-            BiopythonDeprecationWarning,
-        )
-        return self._left
-
-    @property
-    def extension(self):
-        """Legacy attribute to get the within-position's 'width' as an integer (DEPRECATED)."""
-        warnings.warn(
-            "Alias location.extension is deprecated and will be removed in a future release. "
-            "This is usually zero, but there is no neat replacement for the WithinPosition object.",
-            BiopythonDeprecationWarning,
-        )
-        return self._right - self._left
-
     def __add__(self, offset):
         """Return a copy of the position object with its location shifted."""
         return self.__class__(
@@ -2387,27 +2084,6 @@ class BetweenPosition(int, Position):
     def __str__(self):
         """Return a representation of the BetweenPosition object (with python counting)."""
         return f"({self._left}^{self._right})"
-
-    @property
-    def position(self):
-        """Legacy attribute to get (left) position as integer (DEPRECATED)."""
-        warnings.warn(
-            "Alias location.position is deprecated and will be removed in a future release. "
-            "Use location directly, or int(location) which will return the preferred location "
-            "defined for a BetweenPosition (which may not be the left-most position).",
-            BiopythonDeprecationWarning,
-        )
-        return self._left
-
-    @property
-    def extension(self):
-        """Legacy attribute to get the between-position's 'width' as an integer (DEPRECATED)."""
-        warnings.warn(
-            "Alias location.extension is deprecated and will be removed in a future release. "
-            "This is usually zero, but there is no neat replacement for the BetweenPosition object.",
-            BiopythonDeprecationWarning,
-        )
-        return self._right - self._left
 
     def __add__(self, offset):
         """Return a copy of the position object with its location shifted (PRIVATE)."""
@@ -2599,30 +2275,6 @@ class OneOfPosition(int, Position):
         """
         return (int(self), self.position_choices)
 
-    @property
-    def position(self):
-        """Legacy attribute to get (left) position as integer (DEPRECATED)."""
-        warnings.warn(
-            "Alias location.position is deprecated and will be removed in a future release. "
-            "Use location directly, or int(location) which will return the preferred location "
-            "defined for a OneOfPosition (which may not be the left-most position), or "
-            "min(location.position_choices) instead.",
-            BiopythonDeprecationWarning,
-        )
-        return min(int(pos) for pos in self.position_choices)
-
-    @property
-    def extension(self):
-        """Legacy attribute to get the one-of-position's 'width' as an integer (DEPRECATED)."""
-        warnings.warn(
-            "Alias location.extension is deprecated and will be removed in a future release. "
-            "This is usually zero, but for a OneOfPosition you can use "
-            "max(position.position_choices) - min(position.position_choices)",
-            BiopythonDeprecationWarning,
-        )
-        positions = [int(pos) for pos in self.position_choices]
-        return max(positions) - min(positions)
-
     def __repr__(self):
         """Represent the OneOfPosition object as a string for debugging."""
         return "%s(%i, choices=%r)" % (
@@ -2650,27 +2302,6 @@ class OneOfPosition(int, Position):
         return self.__class__(
             length - int(self), [p._flip(length) for p in self.position_choices[::-1]]
         )
-
-
-class PositionGap:
-    """Simple class to hold information about a gap between positions (DEPRECATED)."""
-
-    def __init__(self, gap_size):
-        """Initialize with a position object containing the gap information."""
-        self.gap_size = gap_size
-        warnings.warn(
-            "The PositionGap class is deprecated and will be removed in a future release. "
-            "It has not been used in Biopython for over ten years.",
-            BiopythonDeprecationWarning,
-        )
-
-    def __repr__(self):
-        """Represent the position gap as a string for debugging."""
-        return f"{self.__class__.__name__}({self.gap_size!r})"
-
-    def __str__(self):
-        """Return a representation of the PositionGap object (with python counting)."""
-        return f"gap({self.gap_size})"
 
 
 if __name__ == "__main__":
