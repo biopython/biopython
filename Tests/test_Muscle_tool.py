@@ -9,12 +9,19 @@ import os
 import sys
 import subprocess
 import unittest
+import warnings
 
-from Bio.Application import _escape_filename
+from Bio import BiopythonDeprecationWarning
 from Bio import MissingExternalDependencyError
-from Bio.Align.Applications import MuscleCommandline
 from Bio import SeqIO
 from Bio import AlignIO
+
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
+    from Bio.Application import _escape_filename
+    from Bio.Align.Applications import MuscleCommandline
+
 
 #################################################################
 

@@ -13,18 +13,24 @@ from Bio import MissingExternalDependencyError
 import sys
 import os
 import unittest
+import warnings
 
-from Bio.Application import ApplicationError
-from Bio.Sequencing.Applications import SamtoolsViewCommandline
-from Bio.Sequencing.Applications import SamtoolsCalmdCommandline
-from Bio.Sequencing.Applications import SamtoolsCatCommandline
-from Bio.Sequencing.Applications import SamtoolsFaidxCommandline
-from Bio.Sequencing.Applications import SamtoolsIdxstatsCommandline
-from Bio.Sequencing.Applications import SamtoolsIndexCommandline
-from Bio.Sequencing.Applications import SamtoolsMergeCommandline
-from Bio.Sequencing.Applications import SamtoolsMpileupCommandline
-from Bio.Sequencing.Applications import SamtoolsVersion1xSortCommandline
-from Bio.Sequencing.Applications import SamtoolsSortCommandline
+
+from Bio import BiopythonDeprecationWarning
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
+    from Bio.Application import ApplicationError
+    from Bio.Sequencing.Applications import SamtoolsViewCommandline
+    from Bio.Sequencing.Applications import SamtoolsCalmdCommandline
+    from Bio.Sequencing.Applications import SamtoolsCatCommandline
+    from Bio.Sequencing.Applications import SamtoolsFaidxCommandline
+    from Bio.Sequencing.Applications import SamtoolsIdxstatsCommandline
+    from Bio.Sequencing.Applications import SamtoolsIndexCommandline
+    from Bio.Sequencing.Applications import SamtoolsMergeCommandline
+    from Bio.Sequencing.Applications import SamtoolsMpileupCommandline
+    from Bio.Sequencing.Applications import SamtoolsVersion1xSortCommandline
+    from Bio.Sequencing.Applications import SamtoolsSortCommandline
 
 # TODO from Bio.Sequencing.Applications import SamtoolsPhaseCommandline
 # TODO from Bio.Sequencing.Applications import SamtoolsReheaderCommandline

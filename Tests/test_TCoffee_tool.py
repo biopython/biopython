@@ -7,8 +7,14 @@
 import sys
 import os
 import unittest
+import warnings
+
 from Bio import AlignIO, SeqIO, MissingExternalDependencyError
-from Bio.Align.Applications import TCoffeeCommandline
+from Bio import BiopythonDeprecationWarning
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
+    from Bio.Align.Applications import TCoffeeCommandline
 
 # Try to avoid problems when the OS is in another language
 os.environ["LANG"] = "C"

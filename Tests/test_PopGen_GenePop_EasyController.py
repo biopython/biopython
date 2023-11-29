@@ -7,9 +7,14 @@
 
 import os
 import unittest
+import warnings
 
+from Bio import BiopythonDeprecationWarning
 from Bio import MissingExternalDependencyError
-from Bio.PopGen.GenePop.EasyController import EasyController
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
+    from Bio.PopGen.GenePop.EasyController import EasyController
 
 # Tests genepop related code for easy contorller. Note: this requires genepop
 # test_PopGen_GenePop_nodepend tests code that does not require genepop
