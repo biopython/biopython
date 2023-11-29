@@ -11,6 +11,7 @@ Uses Improved Iterative Scaling.
 # TODO Define terminology
 
 from functools import reduce
+import warnings
 
 try:
     import numpy as np
@@ -21,6 +22,15 @@ except ImportError:
         "Please install NumPy if you want to use Bio.MaxEntropy. "
         "See http://www.numpy.org/"
     ) from None
+
+
+from Bio import BiopythonDeprecationWarning
+
+warnings.warn(
+    "The 'Bio.MaxEntropy' module is deprecated and will be removed in a future "
+    "release of Biopython. Consider using scikit-learn instead.",
+    BiopythonDeprecationWarning,
+)
 
 
 class MaxEntropy:
