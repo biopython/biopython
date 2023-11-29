@@ -37,7 +37,8 @@ import warnings
 from Bio import BiopythonDeprecationWarning
 
 
-warnings.warn("""\
+warnings.warn(
+    """\
 The Bio.Application modules and modules relying on it have been "deprecated.
 
 Due to the on going maintenance burden or keeping command line "application
@@ -46,7 +47,7 @@ modules.
 
 We instead now recommend building your command line and invoking it directly
 with the subprocess module.""",
-            BiopythonDeprecationWarning,
+    BiopythonDeprecationWarning,
 )
 
 

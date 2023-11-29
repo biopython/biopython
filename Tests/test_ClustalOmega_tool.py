@@ -18,6 +18,7 @@ from Bio import SeqIO
 from Bio import Align
 
 from Bio import BiopythonDeprecationWarning
+
 with warnings.catch_warnings():
     warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
     from Bio.Align.Applications import ClustalOmegaCommandline

@@ -23,6 +23,7 @@ from io import StringIO
 from Bio import SeqIO
 from Bio import Phylo
 from Bio import BiopythonDeprecationWarning
+
 with warnings.catch_warnings():
     warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
     from Bio.Phylo.Applications import FastTreeCommandline
