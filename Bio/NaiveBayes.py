@@ -5,7 +5,7 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 
-"""General Naive Bayes learner.
+"""General Naive Bayes learner (DEPRECATED).
 
 Naive Bayes is a supervised classification algorithm that uses Bayes
 rule to compute the fit between a new observation and some previously
@@ -27,6 +27,16 @@ Functions:
  - classify  - Classify an observation into a class.
 
 """
+
+
+import warnings
+from Bio import BiopythonDeprecationWarning
+
+warnings.warn(
+    "The 'Bio.NaiveBayes' module is deprecated and will be removed in a future "
+    "release of Biopython. Consider using scikit-learn instead.",
+    BiopythonDeprecationWarning,
+)
 
 
 try:

@@ -7,8 +7,13 @@
 
 import copy
 import unittest
+import warnings
 
-from Bio import NaiveBayes
+from Bio import BiopythonDeprecationWarning
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
+    from Bio import NaiveBayes
 
 # Importing NaiveBayes will itself raise MissingPythonDependencyError
 # if NumPy is unavailable.
