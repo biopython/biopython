@@ -68,6 +68,10 @@ Deprecated in release 1.82, consider using scikit-learn instead.
 
 Bio.NaiveBayes
 --------------
+Deprecated in release 1.82, consider using skikit-learn instead.
+
+Bio.MaxEntropy
+--------------
 Deprecated in release 1.82, consider using scikit-learn instead.
 
 Bio.Data.SCOPData
