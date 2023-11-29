@@ -66,6 +66,10 @@ Bio.LogisticRegression
 ----------------------
 Deprecated in release 1.82, consider using scikit-learn instead.
 
+Bio.MaxEntropy
+--------------
+Deprecated in release 1.82, consider using scikit-learn instead.
+
 Bio.Data.SCOPData
 -----------------
 Declared obsolete in release 1.80, and removed in release 1.82. Please use
