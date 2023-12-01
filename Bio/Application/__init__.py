@@ -39,9 +39,9 @@ from Bio import BiopythonDeprecationWarning
 
 warnings.warn(
     """\
-The Bio.Application modules and modules relying on it have been "deprecated.
+The Bio.Application modules and modules relying on it have been deprecated.
 
-Due to the on going maintenance burden or keeping command line "application
+Due to the on going maintenance burden of keeping command line application
 wrappers up to date, we have decided to deprecate and eventually remove these
 modules.
 
