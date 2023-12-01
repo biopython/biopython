@@ -15,8 +15,9 @@ Note that both \verb|Bio.SeqIO| and \verb|Bio.AlignIO| can read and write sequen
 alignment files.  The appropriate choice will depend largely on what you want to do
 with the data.
 
-The final part of this chapter is about our command line wrappers for common multiple
-sequence alignment tools like ClustalW and MUSCLE.
+The final part of this chapter is about using common multiple
+sequence alignment tools like ClustalW and MUSCLE from Python, and parsing
+the results with Biopython.
 
 \section{Parsing or Reading Sequence Alignments}
 
@@ -167,7 +168,7 @@ However, as you should expect, if you check each \verb|SeqRecord| there is no an
 
 Note that rather than using the Sanger website, you could have used \verb|Bio.AlignIO| to convert the original Stockholm format file into a FASTA file yourself (see below).
 
-With any supported file format, you can load an alignment in exactly the same way just by changing the format string.  For example, use ``phylip'' for PHYLIP files, ``nexus'' for NEXUS files or ``emboss'' for the alignments output by the EMBOSS tools.  There is a full listing on the wiki page (\url{http://biopython.org/wiki/AlignIO}) and in the built in documentation (also \href{http://biopython.org/docs/\bpversion/api/Bio.AlignIO.html}{online}):
+With any supported file format, you can load an alignment in exactly the same way just by changing the format string.  For example, use ``phylip'' for PHYLIP files, ``nexus'' for NEXUS files or ``emboss'' for the alignments output by the EMBOSS tools.  There is a full listing on the wiki page (\url{http://biopython.org/wiki/AlignIO}) and in the built-in documentation (also \href{http://biopython.org/docs/\bpversion/api/Bio.AlignIO.html}{online}):
 
 \begin{minted}{pycon}
 >>> from Bio import AlignIO
@@ -1240,80 +1241,41 @@ query             0 DHHKK 5
 
 There are \emph{lots} of algorithms out there for aligning sequences, both pairwise alignments
 and multiple sequence alignments. These calculations are relatively slow, and you generally
-wouldn't want to write such an algorithm in Python. For pairwise alignments Biopython contains \verb|PairwiseAligner| (see Chapter~\ref{chapter:pairwise}). In addition,
-you can use Biopython to invoke a command line tool on your behalf. Normally you would:
+wouldn't want to write such an algorithm in Python.
+For pairwise alignments, you can use Biopython's \verb|PairwiseAligner| (see Chapter~\ref{chapter:pairwise}), which is implemented in C and therefore fast.
+Alternatively, you can run an external alignment program by invoking it from Python. Normally you would:
 \begin{enumerate}
 \item Prepare an input file of your unaligned sequences, typically this will be a FASTA file
       which you might create using \verb|Bio.SeqIO| (see Chapter~\ref{chapter:seqio}).
-\item Call the command line tool to process this input file, typically via one of Biopython's
-      command line wrappers (which we'll discuss here).
+\item Run the alignment program by running its command using Python's \texttt{subprocess} module.
 \item Read the output from the tool, i.e. your aligned sequences, typically using
       \verb|Bio.AlignIO| (see earlier in this chapter).
 \end{enumerate}
 
-All the command line wrappers we're going to talk about in this chapter follow the same style.
-You create a command line object specifying the options (e.g. the input filename and the
-output filename), then invoke this command line via a Python operating system call (e.g.
-using the \texttt{subprocess} module).
-
-\emph{WARNING:} We have decided to drop these command line wrappers in a future Biopython
-release. We will be updating this documentation to instead build the command line
-directly, and invoke it with the \texttt{subprocess} module.
-
-Most of these wrappers are defined in the \verb|Bio.Align.Applications| module:
-
-%doctest
-\begin{minted}{pycon}
->>> import Bio.Align.Applications
->>> dir(Bio.Align.Applications)  # doctest:+ELLIPSIS
-['ClustalOmegaCommandline', 'ClustalwCommandline', 'DialignCommandline', 'MSAProbsCommandline', 'MafftCommandline', 'MuscleCommandline', 'PrankCommandline', 'ProbconsCommandline', 'TCoffeeCommandline', ...]
-\end{minted}
-
-\noindent (Ignore the entries starting with an underscore -- these have
-special meaning in Python.)
-The module \verb|Bio.Emboss.Applications| has wrappers for some of the
-\href{http://emboss.sourceforge.net/}{EMBOSS suite}, including
-\texttt{needle} and \texttt{water}, which are described below in
-Section~\ref{sec:emboss-needle-water}, and wrappers for the EMBOSS
-packaged versions of the PHYLIP tools (which EMBOSS refer to as one
-of their EMBASSY packages - third party tools with an EMBOSS style
-interface).
-We won't explore all these alignment tools here in the section, just a
-sample, but the same principles apply.
+Here, we will show a few examples of this workflow.
 
 \subsection{ClustalW}
 \label{sec:alignio_clustal}
 ClustalW is a popular command line tool for multiple sequence alignment
-(there is also a graphical interface called ClustalX). Biopython's
-\verb|Bio.Align.Applications| module has a wrapper for this alignment tool
-(and several others).
-
+(there is also a graphical interface called ClustalX).
 Before trying to use ClustalW from within Python, you should first try running
 the ClustalW tool yourself by hand at the command line, to familiarize
-yourself the other options. You'll find the Biopython wrapper is very
-faithful to the actual command line API:
-
-\begin{minted}{pycon}
->>> from Bio.Align.Applications import ClustalwCommandline
->>> help(ClustalwCommandline)
-\end{minted}
+yourself the other options.
 
 For the most basic usage, all you need is to have a FASTA input file, such as
 \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/opuntia.fasta}{opuntia.fasta}
 (available online or in the Doc/examples subdirectory of the Biopython source
 code). This is a small FASTA file containing seven prickly-pear DNA sequences
 (from the cactus family \textit{Opuntia}).
-
 By default ClustalW will generate an alignment and guide tree file with names
 based on the input FASTA file, in this case \texttt{opuntia.aln} and
 \texttt{opuntia.dnd}, but you can override this or make it explicit:
 
 %doctest
 \begin{minted}{pycon}
->>> from Bio.Align.Applications import ClustalwCommandline
->>> cline = ClustalwCommandline("clustalw2", infile="opuntia.fasta")
->>> print(cline)
-clustalw2 -infile=opuntia.fasta
+>>> import subprocess
+>>> cmd = "clustalw2 -infile=opuntia.fasta"
+>>> results = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE, text=True)
 \end{minted}
 
 Notice here we have given the executable name as \texttt{clustalw2},
@@ -1328,30 +1290,18 @@ on Windows). This indicated that the ClustalW executable is not on your PATH
 (an environment variable, a list of directories to be searched). You can
 either update your PATH setting to include the location of your copy of
 ClustalW tools (how you do this will depend on your OS), or simply type in
-the full path of the tool. For example:
-
-%doctest
-\begin{minted}{pycon}
->>> import os
->>> from Bio.Align.Applications import ClustalwCommandline
->>> clustalw_exe = r"C:\Program Files\new clustal\clustalw2.exe"
->>> clustalw_cline = ClustalwCommandline(clustalw_exe, infile="opuntia.fasta")
-\end{minted}
-%Don't run it in the doctest
-\begin{minted}{pycon}
->>> assert os.path.isfile(clustalw_exe), "Clustal W executable missing"
->>> stdout, stderr = clustalw_cline()
-\end{minted}
-
-\noindent Remember, in Python strings \verb|\n| and \verb|\t| are by default
+the full path of the tool. Remember, in Python strings \verb|\n| and \verb|\t| are by default
 interpreted as a new line and a tab -- which is why we're put a letter
 ``r'' at the start for a raw string that isn't translated in this way.
 This is generally good practice when specifying a Windows style file name.
 
-Internally this uses the
-\verb|subprocess| module which is now the recommended way to run another
-program in Python. This replaces older options like the \verb|os.system()|
-and the \verb|os.popen*| functions.
+\begin{minted}{pycon}
+>>> import os
+>>> clustalw_exe = r"C:\Program Files\new clustal\clustalw2.exe"
+>>> assert os.path.isfile(clustalw_exe), "Clustal W executable missing"
+>>> cmd = clustalw_exe + " -infile=opuntia.fasta"
+>>> results = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE, text=True)
+\end{minted}
 
 Now, at this point it helps to know about how command line tools ``work''.
 When you run a tool at the command line, it will often print text output
@@ -1360,17 +1310,13 @@ two ``pipes'', called standard output (the normal results) and standard
 error (for error messages and debug messages). There is also standard
 input, which is any text fed into the tool. These names get shortened
 to stdin, stdout and stderr. When the tool finishes, it has a return
-code (an integer), which by convention is zero for success.
+code (an integer), which by convention is zero for success, while a
+non-zero return code indicates that an error has occurred.
 
-When you run the command line tool like this via the Biopython wrapper,
-it will wait for it to finish, and check the return code. If this is
-non zero (indicating an error), an exception is raised. The wrapper
-then returns two strings, stdout and stderr.
-
-In the case of ClustalW, when run at the command line all the important
+In the example of ClustalW above, when run at the command line all the important
 output is written directly to the output files. Everything normally printed to
-screen while you wait (via stdout or stderr) is boring and can be
-ignored (assuming it worked).
+screen while you wait is captured in \verb|results.stdout| and \verb|results.stderr|,
+while the return code is stored in \verb|results.returncode|.
 
 What we care about are the two output files, the alignment and the guide
 tree. We didn't tell ClustalW what filenames to use, but it defaults to
@@ -1424,100 +1370,28 @@ _|_________________ gi|6273287|gb|AF191661.1|AF191661
 depth.
 
 \subsection{MUSCLE}
-MUSCLE is a more recent multiple sequence alignment tool than ClustalW, and
-Biopython also has a wrapper for it under the \verb|Bio.Align.Applications|
-module. As before, we recommend you try using MUSCLE from the command line before
-trying it from within Python, as the Biopython wrapper is very faithful to the
-actual command line API:
-
-\begin{minted}{pycon}
->>> from Bio.Align.Applications import MuscleCommandline
->>> help(MuscleCommandline)
-\end{minted}
+MUSCLE is a more recent multiple sequence alignment tool than ClustalW.
+As before, we recommend you try using MUSCLE from the command line before
+trying to run it from Python.
 
 For the most basic usage, all you need is to have a FASTA input file, such as
 \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/opuntia.fasta}{opuntia.fasta}
 (available online or in the Doc/examples subdirectory of the Biopython source
 code). You can then tell MUSCLE to read in this FASTA file, and write the
-alignment to an output file:
+alignment to an output file named \verb|opuntia.txt|:
 
-%doctest
 \begin{minted}{pycon}
->>> from Bio.Align.Applications import MuscleCommandline
->>> cline = MuscleCommandline(input="opuntia.fasta", out="opuntia.txt")
->>> print(cline)
-muscle -in opuntia.fasta -out opuntia.txt
+>>> import subprocess
+>>> cmd = "muscle -align opuntia.fasta -output opuntia.txt"
+>>> results = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE, text=True)
 \end{minted}
 
-Note that MUSCLE uses ``-in'' and ``-out'' but in Biopython we have to use
-``input'' and ``out'' as the keyword arguments or property names. This is
-because ``in'' is a reserved word in Python.
-
-By default MUSCLE will output the alignment as a FASTA file (using gapped
-sequences). The \verb|Bio.AlignIO| module should be able to read this
-alignment using \texttt{format="fasta"}.
-You can also ask for ClustalW-like output:
-
-%doctest
+MUSCLE will output the alignment as a FASTA file (using gapped
+sequences). The \verb|Bio.AlignIO| module is able to read this
+alignment using \texttt{format="fasta"}:
 \begin{minted}{pycon}
->>> from Bio.Align.Applications import MuscleCommandline
->>> cline = MuscleCommandline(input="opuntia.fasta", out="opuntia.aln", clw=True)
->>> print(cline)
-muscle -in opuntia.fasta -out opuntia.aln -clw
-\end{minted}
-
-Or, strict ClustalW output where the original ClustalW header line is
-used for maximum compatibility:
-
-%doctest
-\begin{minted}{pycon}
->>> from Bio.Align.Applications import MuscleCommandline
->>> cline = MuscleCommandline(input="opuntia.fasta", out="opuntia.aln", clwstrict=True)
->>> print(cline)
-muscle -in opuntia.fasta -out opuntia.aln -clwstrict
-\end{minted}
-
-\noindent The \verb|Bio.AlignIO| module should be able to read these alignments
-using \texttt{format="clustal"}.
-
-MUSCLE can also output in GCG MSF format (using the \texttt{msf} argument), but
-Biopython can't currently parse that, or using HTML which would give a human
-readable web page (not suitable for parsing).
-
-You can also set the other optional parameters, for example the maximum number
-of iterations. See the built in help for details.
-
-You would then run MUSCLE command line string as described above for
-ClustalW, and parse the output using \verb|Bio.AlignIO| to get an
-alignment object.
-
-\subsection{MUSCLE using stdout}
-
-Using a MUSCLE command line as in the examples above will write the alignment
-to a file. This means there will be no important information written to the
-standard out (stdout) or standard error (stderr) handles. However, by default
-MUSCLE will write the alignment to standard output (stdout). We can take
-advantage of this to avoid having a temporary output file! For example:
-
-%doctest
-\begin{minted}{pycon}
->>> from Bio.Align.Applications import MuscleCommandline
->>> muscle_cline = MuscleCommandline(input="opuntia.fasta")
->>> print(muscle_cline)
-muscle -in opuntia.fasta
-\end{minted}
-
-If we run this via the wrapper, we get back the output as a string. In order
-to parse this we can use \verb|StringIO| to turn it into a handle.
-Remember that MUSCLE defaults to using FASTA as the output format:
-
-\begin{minted}{pycon}
->>> from Bio.Align.Applications import MuscleCommandline
->>> muscle_cline = MuscleCommandline(input="opuntia.fasta")
->>> stdout, stderr = muscle_cline()
->>> from io import StringIO
 >>> from Bio import AlignIO
->>> align = AlignIO.read(StringIO(stdout), "fasta")
+>>> align = AlignIO.read("opuntia.txt", "fasta")
 >>> print(align)
 Alignment with 7 rows and 906 columns
 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273289|gb|AF191663.1|AF191663
@@ -1529,153 +1403,7 @@ TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273285|gb|AF191659.1|AF19
 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273284|gb|AF191658.1|AF191658
 \end{minted}
 
-The above approach is fairly simple, but if you are dealing with very large output
-text the fact that all of stdout and stderr is loaded into memory as a string can
-be a potential drawback. Using the \verb|subprocess| module we can work directly
-with handles instead:
-
-\begin{minted}{pycon}
->>> import subprocess
->>> from Bio.Align.Applications import MuscleCommandline
->>> muscle_cline = MuscleCommandline(input="opuntia.fasta")
->>> child = subprocess.Popen(
-...     str(muscle_cline),
-...     stdout=subprocess.PIPE,
-...     stderr=subprocess.PIPE,
-...     text=True,
-...     shell=(sys.platform != "win32"),
-... )
->>> from Bio import AlignIO
->>> align = AlignIO.read(child.stdout, "fasta")
->>> print(align)
-Alignment with 7 rows and 906 columns
-TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273289|gb|AF191663.1|AF191663
-TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273291|gb|AF191665.1|AF191665
-TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273290|gb|AF191664.1|AF191664
-TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273287|gb|AF191661.1|AF191661
-TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273286|gb|AF191660.1|AF191660
-TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273285|gb|AF191659.1|AF191659
-TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273284|gb|AF191658.1|AF191658
-\end{minted}
-
-\subsection{MUSCLE using stdin and stdout}
-
-We don't actually \emph{need} to have our FASTA input sequences prepared in a file,
-because by default MUSCLE will read in the input sequence from standard input!
-Note this is a bit more advanced and fiddly, so don't bother with this technique
-unless you need to.
-
-First, we'll need some unaligned sequences in memory as \verb|SeqRecord| objects.
-For this demonstration I'm going to use a filtered version of the original FASTA
-file (using a generator expression), taking just six of the seven sequences:
-
-%doctest
-\begin{minted}{pycon}
->>> from Bio import SeqIO
->>> records = (r for r in SeqIO.parse("opuntia.fasta", "fasta") if len(r) < 900)
-\end{minted}
-
-Then we create the MUSCLE command line, leaving the input and output to their
-defaults (stdin and stdout). I'm also going to ask for strict ClustalW format
-as for the output.
-
-%doctest
-\begin{minted}{pycon}
->>> from Bio.Align.Applications import MuscleCommandline
->>> muscle_cline = MuscleCommandline(clwstrict=True)
->>> print(muscle_cline)
-muscle -clwstrict
-\end{minted}
-
-Now for the fiddly bits using the \verb|subprocess| module, stdin and stdout:
-
-\begin{minted}{pycon}
->>> import subprocess
->>> import sys
->>> child = subprocess.Popen(
-...     str(cline),
-...     stdin=subprocess.PIPE,
-...     stdout=subprocess.PIPE,
-...     stderr=subprocess.PIPE,
-...     text=True,
-...     shell=(sys.platform != "win32"),
-... )
-\end{minted}
-
-That should start MUSCLE, but it will be sitting waiting for its FASTA input
-sequences, which we must supply via its stdin handle:
-
-\begin{minted}{pycon}
->>> SeqIO.write(records, child.stdin, "fasta")
-6
->>> child.stdin.close()
-\end{minted}
-
-After writing the six sequences to the handle, MUSCLE will still be waiting
-to see if that is all the FASTA sequences or not -- so we must signal that
-this is all the input data by closing the handle. At that point MUSCLE should
-start to run, and we can ask for the output:
-
-\begin{minted}{pycon}
->>> from Bio import AlignIO
->>> align = AlignIO.read(child.stdout, "clustal")
->>> print(align)
-Alignment with 6 rows and 900 columns
-TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273290|gb|AF191664.1|AF19166
-TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273289|gb|AF191663.1|AF19166
-TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273287|gb|AF191661.1|AF19166
-TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273286|gb|AF191660.1|AF19166
-TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273285|gb|AF191659.1|AF19165
-TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273284|gb|AF191658.1|AF19165
-\end{minted}
-
-Wow! There we are with a new alignment of just the six records, without having created
-a temporary FASTA input file, or a temporary alignment output file. However, a word of
-caution: Dealing with errors with this style of calling external programs is much more
-complicated.
-It also becomes far harder to diagnose problems, because you can't try running MUSCLE
-manually outside of Biopython (because you don't have the input file to supply).
-There can also be subtle cross platform issues (e.g. Windows versus Linux), and how
-you run your script can have an impact (e.g. at the command line, from IDLE or an
-IDE, or as a GUI script). These are all generic Python issues though, and not
-specific to Biopython.
-
-If you find working directly with \texttt{subprocess} like this scary, there is an
-alternative. If you execute the tool with \texttt{muscle\_cline()} you can supply
-any standard input as a big string, \texttt{muscle\_cline(stdin=...)}. So,
-provided your data isn't very big, you can prepare the FASTA input in memory as
-a string using \texttt{StringIO} (see Section~\ref{sec:appendix-handles}):
-
-%doctest
-\begin{minted}{pycon}
->>> from Bio import SeqIO
->>> records = (r for r in SeqIO.parse("opuntia.fasta", "fasta") if len(r) < 900)
->>> from io import StringIO
->>> handle = StringIO()
->>> SeqIO.write(records, handle, "fasta")
-6
->>> data = handle.getvalue()
-\end{minted}
-
-\noindent You can then run the tool and parse the alignment as follows:
-
-%not a doctest as can't assume the MUSCLE binary is present
-\begin{minted}{pycon}
->>> stdout, stderr = muscle_cline(stdin=data)
->>> from Bio import AlignIO
->>> align = AlignIO.read(StringIO(stdout), "clustal")
->>> print(align)
-Alignment with 6 rows and 900 columns
-TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273290|gb|AF191664.1|AF19166
-TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273289|gb|AF191663.1|AF19166
-TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273287|gb|AF191661.1|AF19166
-TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273286|gb|AF191660.1|AF19166
-TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273285|gb|AF191659.1|AF19165
-TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273284|gb|AF191658.1|AF19165
-\end{minted}
-
-You might find this easier, but it does require more memory (RAM) for the strings
-used for the input FASTA and output Clustal formatted data.
+You can also set the other optional parameters; see MUSCLE's built-in help for details.
 
 \subsection{EMBOSS needle and water}
 \label{sec:emboss-needle-water}
@@ -1706,19 +1434,9 @@ KEFTPPVQAAYQKVVAGVANALAHKYH
 You can find copies of these example files with the Biopython source code
 under the \verb|Doc/examples/| directory.
 
-Let's start by creating a complete \texttt{needle} command line object in one go:
+The command to align these two sequences against each other using \texttt{needle} is as follows:
 
-%doctest
-\begin{minted}{pycon}
->>> from Bio.Emboss.Applications import NeedleCommandline
->>> needle_cline = NeedleCommandline(
-...     asequence="alpha.faa",
-...     bsequence="beta.faa",
-...     gapopen=10,
-...     gapextend=0.5,
-...     outfile="needle.txt",
-... )
->>> print(needle_cline)
+\begin{minted}{text}
 needle -outfile=needle.txt -asequence=alpha.faa -bsequence=beta.faa -gapopen=10 -gapextend=0.5
 \end{minted}
 
@@ -1729,64 +1447,34 @@ default EMBOSS alignment file format).
 Even if you have EMBOSS installed, running this command may not work -- you
 might get a message about ``command not found'' (especially on Windows). This
 probably means that the EMBOSS tools are not on your PATH environment
-variable. You can either update your PATH setting, or simply tell Biopython
+variable. You can either update your PATH setting, or simply use
 the full path to the tool, for example:
-
-%doctest
-\begin{minted}{pycon}
->>> from Bio.Emboss.Applications import NeedleCommandline
->>> needle_cline = NeedleCommandline(
-...     r"C:\EMBOSS\needle.exe",
-...     asequence="alpha.faa",
-...     bsequence="beta.faa",
-...     gapopen=10,
-...     gapextend=0.5,
-...     outfile="needle.txt",
-... )
-\end{minted}
-
-\noindent Remember in Python that for a default string \verb|\n| or \verb|\t| means a
-new line or a tab -- which is why we're put a letter ``r'' at the start for a raw string.
-
-At this point it might help to try running the EMBOSS tools yourself by hand at the
-command line, to familiarize yourself the other options and compare them to the
-Biopython help text:
-
-\begin{minted}{pycon}
->>> from Bio.Emboss.Applications import NeedleCommandline
->>> help(NeedleCommandline)
-\end{minted}
-
-Note that you can also specify (or change or look at) the settings like this:
-
-%doctest
-\begin{minted}{pycon}
->>> from Bio.Emboss.Applications import NeedleCommandline
->>> needle_cline = NeedleCommandline()
->>> needle_cline.asequence = "alpha.faa"
->>> needle_cline.bsequence = "beta.faa"
->>> needle_cline.gapopen = 10
->>> needle_cline.gapextend = 0.5
->>> needle_cline.outfile = "needle.txt"
->>> print(needle_cline)
-needle -outfile=needle.txt -asequence=alpha.faa -bsequence=beta.faa -gapopen=10 -gapextend=0.5
->>> print(needle_cline.outfile)
-needle.txt
+\begin{minted}{text}
+C:\EMBOSS\needle.exe -outfile=needle.txt -asequence=alpha.faa -bsequence=beta.faa -gapopen=10 -gapextend=0.5
 \end{minted}
 
 Next we want to use Python to run this command for us. As explained above,
-for full control, we recommend you use the built in Python \texttt{subprocess}
-module, but for simple usage the wrapper object usually suffices:
-
+for full control, we recommend you use Python's built-in \texttt{subprocess}
+module:
 \begin{minted}{pycon}
->>> stdout, stderr = needle_cline()
->>> print(stdout + stderr)
-Needleman-Wunsch global alignment of two sequences
-\end{minted}
+>>> import sys
+>>> import subprocess
+>>> cmd = "needle -outfile=needle.txt -asequence=alpha.faa -bsequence=beta.faa -gapopen=10 -gapextend=0.5"
+>>> results = subprocess.run(
+...     cmd,
+...     stdout=subprocess.PIPE,
+...     stderr=subprocess.PIPE,
+...     text=True,
+...     shell=(sys, platform != "win32"),
+... )
+>>> print(results.stdout)
 
+>>> print(results.stderr)
+Needleman-Wunsch global alignment of two sequences
+
+\end{minted}
 Next we can load the output file with \verb|Bio.AlignIO| as
 discussed earlier in this chapter, as the \texttt{emboss} format:
-
 \begin{minted}{pycon}
 >>> from Bio import AlignIO
 >>> align = AlignIO.read("needle.txt", "emboss")
@@ -1799,10 +1487,25 @@ MVHLTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRF...KYH HBB_HUMAN
 In this example, we told EMBOSS to write the output to a file, but you
 \emph{can} tell it to write the output to stdout instead (useful if you
 don't want a temporary output file to get rid of -- use
-\texttt{stdout=True} rather than the \texttt{outfile} argument), and
-also to read \emph{one} of the one of the inputs from stdin (e.g.
-\texttt{asequence="stdin"}, much like in the MUSCLE example in the
-section above).
+\texttt{outfile=stdout} argument):
+
+\begin{minted}{pycon}
+>>> cmd = "needle -outfile=stdout -asequence=alpha.faa -bsequence=beta.faa -gapopen=10 -gapextend=0.5"
+>>> child = subprocess.Popen(
+...     cmd,
+...     stdout=subprocess.PIPE,
+...     stderr=subprocess.PIPE,
+...     text=True,
+...     shell=(sys.platform != "win32"),
+... )
+>>> align = AlignIO.read(child.stdout, "emboss")
+>>> print(align)
+Alignment with 2 rows and 149 columns
+MV-LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTY...KYR HBA_HUMAN
+MVHLTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRF...KYH HBB_HUMAN
+\end{minted}
+Similarly, it is possible to read \emph{one} of the inputs from stdin (e.g.
+\texttt{asequence="stdin"}).
 
 This has only scratched the surface of what you can do with \texttt{needle}
 and \texttt{water}. One useful trick is that the second file can contain

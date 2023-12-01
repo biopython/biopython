@@ -8,14 +8,19 @@ import os
 import sys
 import unittest
 import subprocess
+import warnings
 from io import StringIO
+from Bio import BiopythonDeprecationWarning
 
-from Bio.Emboss.Applications import WaterCommandline, NeedleCommandline
-from Bio.Emboss.Applications import SeqretCommandline, SeqmatchallCommandline
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
+    from Bio.Emboss.Applications import WaterCommandline, NeedleCommandline
+    from Bio.Emboss.Applications import SeqretCommandline, SeqmatchallCommandline
+    from Bio.Application import _escape_filename
+
 from Bio import SeqIO
 from Bio import AlignIO
 from Bio import MissingExternalDependencyError
-from Bio.Application import _escape_filename
 from Bio.Seq import Seq, translate
 from Bio.SeqRecord import SeqRecord
 

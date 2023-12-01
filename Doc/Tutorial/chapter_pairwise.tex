@@ -1723,7 +1723,7 @@ Codon aligner with parameters
 <BLANKLINE>
 \end{minted}
 The \verb+wildcard+, \verb+match_score+, and \verb+mismatch_score+ parameters are defined in the same was as for the \verb+PairwiseAligner+ class described above (see Section~\ref{sec:pairwise-aligner}). The values specified by the \verb+frameshift_minus_two_score+, \verb+frameshift_minus_one_score+, \verb+frameshift_plus_one_score+, and \verb+frameshift_plus_two_score+ parameters are added to the alignment score whenever a -2, -1, +1, or +2 frame shift, respectively, occurs in the alignment. By default, the frame shift scores are set to -3.0.
-Similar to the \verb+PairwiseAligner+ class (Table\label{table:align-meta-attributes}), the \verb+CodonAligner+ class defines additional attributes that refer to a number of these values collectively, as shown in Table~\ref{table:codonalign-meta-attributes}.
+Similar to the \verb+PairwiseAligner+ class (Table~\ref{table:align-meta-attributes}), the \verb+CodonAligner+ class defines additional attributes that refer to a number of these values collectively, as shown in Table~\ref{table:codonalign-meta-attributes}.
 \begin{table}
 \caption{Meta-attributes of CodonAligner objects.}
 \begin{tabular}{|l|l|}

@@ -15,14 +15,20 @@ import sys
 import os
 import itertools
 import unittest
+import warnings
+
 
 from io import StringIO
 
 from Bio import SeqIO
 from Bio import Phylo
-from Bio.Phylo.Applications import FastTreeCommandline
-from Bio.Phylo.Applications import _Fasttree
-from Bio.Application import ApplicationError
+from Bio import BiopythonDeprecationWarning
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
+    from Bio.Phylo.Applications import FastTreeCommandline
+    from Bio.Phylo.Applications import _Fasttree
+    from Bio.Application import ApplicationError
 
 #################################################################
 

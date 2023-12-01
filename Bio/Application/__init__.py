@@ -31,6 +31,24 @@ import platform
 import sys
 import subprocess
 import re
+import warnings
+
+
+from Bio import BiopythonDeprecationWarning
+
+
+warnings.warn(
+    """\
+The Bio.Application modules and modules relying on it have been "deprecated.
+
+Due to the on going maintenance burden or keeping command line "application
+wrappers up to date, we have decided to deprecate and eventually remove these
+modules.
+
+We instead now recommend building your command line and invoking it directly
+with the subprocess module.""",
+    BiopythonDeprecationWarning,
+)
 
 
 # Use this regular expression to test the property names are going to

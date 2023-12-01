@@ -81,8 +81,8 @@ Bio.Data.PDBData instead.
 
 Bio.Application and the command line wrappers using it
 ------------------------------------------------------
-Declared obsolete in release 1.79. Please use the standard library subprocess
-module directly instead.
+Declared obsolete in release 1.79, and deprecated in release 1.82. Please use
+the standard library subprocess module directly instead.
 
 Bio.Index
 ---------
