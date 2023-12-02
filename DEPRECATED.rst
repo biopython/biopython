@@ -74,9 +74,10 @@ Bio.MaxEntropy
 --------------
 Deprecated in release 1.82, consider using scikit-learn instead.
 
-Bio.MarkoveModel
-----------------
-Deprecated in release 1.82, consider using hmmlearn instead.
+Bio.MarkovModel
+---------------
+Deprecated in release 1.82, consider using hmmlearn
+(https://pypi.org/project/hmmlearn/) instead.
 
 Bio.Data.SCOPData
 -----------------

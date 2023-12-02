@@ -26,8 +26,8 @@ import warnings
 from Bio import BiopythonDeprecationWarning
 
 warnings.warn(
-    "The 'Bio.markovModel' module is deprecated and will be removed in a "
-    "future release of Biopython. Consider using the hmmlearn pacage instead.",
+    "The 'Bio.MarkovModel' module is deprecated and will be removed in a "
+    "future release of Biopython. Consider using the hmmlearn package instead.",
     BiopythonDeprecationWarning,
 )
 
