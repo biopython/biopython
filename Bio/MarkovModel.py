@@ -22,6 +22,16 @@ Classes:
 MarkovModel     Holds the description of a markov model
 """
 
+import warnings
+from Bio import BiopythonDeprecationWarning
+
+warnings.warn(
+    "The 'Bio.markovModel' module is deprecated and will be removed in a "
+    "future release of Biopython. Consider using the hmmlearn pacage instead.",
+    BiopythonDeprecationWarning,
+)
+
+
 try:
     import numpy as np
 except ImportError:
