@@ -29,10 +29,13 @@ except ImportError:
         "Install NumPy if you want to use Bio.MarkovModel."
     ) from None
 
+from Bio import BiopythonDeprecationWarning
+
 with warnings.catch_warnings():
     # Silence this warning:
     # For optimal speed, please update to Numpy version 1.3 or later
     warnings.simplefilter("ignore", UserWarning)
+    warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
     from Bio import MarkovModel
 
 
