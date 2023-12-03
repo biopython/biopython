@@ -971,7 +971,17 @@ class MultipleSeqAlignment:
             lines = [str(record.seq) for record in records]
             coordinates = Alignment.infer_coordinates(lines)
             for record in records:
-                record.seq = record.seq.replace("-", "")
+                if record.letter_annotations:
+                    indices = [i for i, c in enumerate(record.seq) if c != "-"]
+                    letter_annotations = dict(record.letter_annotations)
+                    record.letter_annotations.clear()
+                    record.seq = record.seq.replace("-", "")
+                    for key, value in letter_annotations.items():
+                        value = "".join([value[i] for i in indices])
+                        letter_annotations[key] = value
+                    record.letter_annotations = letter_annotations
+                else:
+                    record.seq = record.seq.replace("-", "")
             alignment = Alignment(records, coordinates)
         else:
             alignment = Alignment([])
@@ -1321,6 +1331,10 @@ class Alignment:
         counts = {}
         for i in range(n):
             sequence = sequences[i]
+            try:
+                weight = sequence.annotations.get("weight", 1.0)
+            except AttributeError:
+                weight = 1.0
             k = coordinates[i, 0]
             m = 0
             for step, gap in zip(steps[i], gaps):
@@ -1337,7 +1351,7 @@ class Alignment:
                         if row is None:
                             row = np.zeros(length, int)
                             counts[character] = row
-                        row[index] += 1
+                        row[index] += weight
                     k = j
                     m = n
                 elif step < 0:

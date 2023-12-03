@@ -1018,6 +1018,33 @@ You can access any element of the PSSM by subscripting like \verb|your_pssm[sequ
 
 The structure of the PSSM class hopefully makes it easy both to access elements and to pretty print the matrix.
 
+Alternatively, you can convert the multiple sequence alignment object \verb|msa| to a new-style \verb|Alignment| object (see section \ref{sec:alignmentobject}) by using the \verb|alignment| attribute:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment = msa.alignment
+\end{minted}
+You can then create a \verb|Motif| object (see section \ref{sec:motif_object}):
+%cont-doctest
+\begin{minted}{pycon}
+>>> from Bio.motifs import Motif
+>>> motif = Motif("ACGT", alignment)
+\end{minted}
+and obtain the counts of each nucleotide in each position:
+%cont-doctest
+\begin{minted}{pycon}
+>>> counts = motif.counts
+>>> print(counts)
+        0      1      2      3      4      5      6
+A:   2.00   1.00   0.00   1.00   0.00   0.00   2.00
+C:   1.00   3.00   0.00   2.00   4.00   0.00   1.00
+G:   0.00   0.00   0.00   0.00   0.00   0.00   0.00
+T:   1.00   0.00   4.00   0.00   0.00   4.00   0.00
+<BLANKLINE>
+>>> print(counts["T"][5])
+4
+\end{minted}
+
+
 \subsection{Information Content}
 \label{sec:getting_info_content}
 
@@ -1271,7 +1298,6 @@ By default ClustalW will generate an alignment and guide tree file with names
 based on the input FASTA file, in this case \texttt{opuntia.aln} and
 \texttt{opuntia.dnd}, but you can override this or make it explicit:
 
-%doctest
 \begin{minted}{pycon}
 >>> import subprocess
 >>> cmd = "clustalw2 -infile=opuntia.fasta"

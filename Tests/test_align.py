@@ -362,6 +362,14 @@ gi|671626|emb|CAA85685.1|           -
         self.assertAlmostEqual(dictionary[("T", "G")], 0, places=1)
         self.assertAlmostEqual(dictionary[("T", "T")], 874.0, places=1)
         matrix = align_info.pos_specific_score_matrix(consensus, ["N", "-"])
+
+        alignment = msa.alignment
+        motif = motifs.Motif("ACGT", alignment)
+        counts = motif.counts
+        for i in range(alignment.length):
+            for letter in "ACGT":
+                self.assertAlmostEqual(counts[letter][i], matrix[i][letter])
+
         self.assertEqual(
             str(matrix),
             """\
@@ -526,6 +534,14 @@ A  7.0 0.0 0.0 0.0
         )
 
         matrix = align_info.pos_specific_score_matrix(chars_to_ignore=["N", "-"])
+
+        alignment = msa.alignment
+        motif = motifs.Motif("ACGT", alignment)
+        counts = motif.counts
+        for i in range(alignment.length):
+            for letter in "ACGT":
+                self.assertAlmostEqual(counts[letter][i], matrix[i][letter])
+
         self.assertEqual(
             str(matrix),
             """\
@@ -691,6 +707,14 @@ A  7.0 0.0 0.0 0.0
 
         second_seq = msa[1].seq
         matrix = align_info.pos_specific_score_matrix(second_seq, ["N", "-"])
+
+        alignment = msa.alignment
+        motif = motifs.Motif("ACGT", alignment)
+        counts = motif.counts
+        for i in range(alignment.length):
+            for letter in "ACGT":
+                self.assertAlmostEqual(counts[letter][i], matrix[i][letter])
+
         self.assertEqual(
             str(matrix),
             """\
