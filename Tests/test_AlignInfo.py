@@ -6,6 +6,7 @@
 """Bio.Align.AlignInfo related tests."""
 import unittest
 
+from Bio import BiopythonDeprecationWarning
 from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -40,7 +41,8 @@ class AlignInfoTests(unittest.TestCase):
 
         expected = {"A": 0.25, "G": 0.25, "T": 0.25, "C": 0.25}
 
-        m = summary.pos_specific_score_matrix(chars_to_ignore=["-"], axis_seq=c)
+        with self.assertWarns(BiopythonDeprecationWarning):
+            m = summary.pos_specific_score_matrix(chars_to_ignore=["-"], axis_seq=c)
 
         counts = motif.counts
 
@@ -85,7 +87,8 @@ N  0.0 2.0 1.0 0.0
         c = s.gap_consensus(ambiguous="X")
         self.assertEqual(c, "MHXXIFIYQIGYXXLKSGYIQSIRSPEYXNWX")
 
-        m = s.pos_specific_score_matrix(chars_to_ignore=["-", "*"], axis_seq=c)
+        with self.assertWarns(BiopythonDeprecationWarning):
+            m = s.pos_specific_score_matrix(chars_to_ignore=["-", "*"], axis_seq=c)
         all_letters = s._get_all_letters()
         alignment = a.alignment
         motif = Motif(letters, alignment)

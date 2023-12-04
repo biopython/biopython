@@ -18,9 +18,11 @@ Right now we've got tests for:
 # standard library
 import os
 import unittest
+import warnings
 from io import StringIO
 
 # biopython
+from Bio import BiopythonDeprecationWarning
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import AlignInfo
@@ -361,7 +363,8 @@ gi|671626|emb|CAA85685.1|           -
         self.assertAlmostEqual(dictionary[("T", "C")], 12.0, places=1)
         self.assertAlmostEqual(dictionary[("T", "G")], 0, places=1)
         self.assertAlmostEqual(dictionary[("T", "T")], 874.0, places=1)
-        matrix = align_info.pos_specific_score_matrix(consensus, ["N", "-"])
+        with self.assertWarns(BiopythonDeprecationWarning):
+            matrix = align_info.pos_specific_score_matrix(consensus, ["N", "-"])
 
         alignment = msa.alignment
         motif = motifs.Motif("ACGT", alignment)
@@ -533,7 +536,8 @@ A  7.0 0.0 0.0 0.0
 """,
         )
 
-        matrix = align_info.pos_specific_score_matrix(chars_to_ignore=["N", "-"])
+        with self.assertWarns(BiopythonDeprecationWarning):
+            matrix = align_info.pos_specific_score_matrix(chars_to_ignore=["N", "-"])
 
         alignment = msa.alignment
         motif = motifs.Motif("ACGT", alignment)
@@ -706,7 +710,8 @@ A  7.0 0.0 0.0 0.0
         )
 
         second_seq = msa[1].seq
-        matrix = align_info.pos_specific_score_matrix(second_seq, ["N", "-"])
+        with self.assertWarns(BiopythonDeprecationWarning):
+            matrix = align_info.pos_specific_score_matrix(second_seq, ["N", "-"])
 
         alignment = msa.alignment
         motif = motifs.Motif("ACGT", alignment)

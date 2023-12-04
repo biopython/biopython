@@ -8,6 +8,7 @@ import warnings
 
 from io import StringIO
 
+from Bio import BiopythonDeprecationWarning
 from Bio import AlignIO
 from Bio import SeqIO
 from Bio.Align import AlignInfo
@@ -265,7 +266,8 @@ class TestAlignIO_reading(unittest.TestCase):
         counts = motif.counts
         dumb_consensus = summary.dumb_consensus()
         # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
+        with self.assertWarns(BiopythonDeprecationWarning):
+            pssm = summary.pos_specific_score_matrix()
         all_letters = summary._get_all_letters()
         j = 0
         for i in range(alignment.length):
@@ -291,7 +293,8 @@ class TestAlignIO_reading(unittest.TestCase):
         summary = AlignInfo.SummaryInfo(msa)
         dumb_consensus = summary.dumb_consensus()
         # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
+        with self.assertWarns(BiopythonDeprecationWarning):
+            pssm = summary.pos_specific_score_matrix()
         all_letters = summary._get_all_letters()
         alignment = msa.alignment
         motif = Motif(letters, alignment)
