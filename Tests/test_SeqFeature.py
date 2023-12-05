@@ -337,6 +337,26 @@ class TestExtract(unittest.TestCase):
         self.assertEqual(type(sequence), Seq.Seq)
         self.assertEqual(sequence, "ccaatgg")
 
+    def test_origin_spanning_location(self):
+        """Test location spanning origin."""
+        # Regular origin-spanning sequence
+        self.assertEqual(
+            str(SimpleLocation.fromstring("4..2", 4, True)), "join{[3:4], [0:2]}"
+        )
+        self.assertEqual(
+            str(SimpleLocation.fromstring("complement(4..2)", 4, True)),
+            "join{[0:2](-), [3:4](-)}",
+        )
+
+        # Origin-spanning location containing the entire sequence
+        self.assertEqual(
+            str(SimpleLocation.fromstring("3..2", 4, True)), "join{[2:4], [0:2]}"
+        )
+        self.assertEqual(
+            str(SimpleLocation.fromstring("complement(3..2)", 4, True)),
+            "join{[0:2](-), [2:4](-)}",
+        )
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
