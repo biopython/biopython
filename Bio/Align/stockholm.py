@@ -286,7 +286,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     break
             else:
                 raise ValueError(f"Failed to find seqname {seqname}")
-            # print(letter_annotations)
             for key, letter_annotation in letter_annotations.items():
                 feature = AlignmentIterator.gr_mapping.get(key, key)
                 if key == "CSA":
