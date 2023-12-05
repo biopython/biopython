@@ -909,7 +909,7 @@ class SimpleLocation(Location):
         except ValueError:
             pass
         else:
-            if 0 <= s <= e:
+            if 0 <= s < e:
                 return SimpleLocation(s, e, strand)
         # Try general case
         try:
@@ -941,7 +941,7 @@ class SimpleLocation(Location):
             # Attempt to fix features that span the origin
             s_pos = Position.fromstring(s, -1)
             e_pos = Position.fromstring(e)
-            if s_pos > e_pos:
+            if s_pos >= e_pos:
                 # There is likely a problem with origin wrapping.
                 # Create a CompoundLocation of the wrapped feature,
                 # consisting of two SimpleLocation objects to extend to
