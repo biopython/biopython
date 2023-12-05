@@ -113,6 +113,7 @@ possible, especially the following contributors:
 - Jacob Byerly (first contribution)
 - João Rodrigues
 - Joe Greener
+- Manuel Lera Ramirez
 - Michael R. Crusoe
 - Michiel de Hoon
 - Peter Cock
