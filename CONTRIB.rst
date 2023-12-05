@@ -320,6 +320,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Tiago Antao <https://github.com/tiagoantao>
 - Tianyi Shi <https://github.com/TianyiShi2001>
 - Tim Burke <https://github.com/tipabu>
+- Tom Eulenfeld <https://github.com/trichter>
 - Tommy Carstensen <https://github.com/tommycarstensen>
 - Tyghe Vallard <https://github.com/necrolyte2>
 - Uri Laserson <https://github.com/laserson>
