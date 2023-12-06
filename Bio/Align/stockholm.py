@@ -236,10 +236,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 value = value.pop()
             if key in AlignmentIterator.gf_mapping:
                 alignment.annotations[AlignmentIterator.gf_mapping[key]] = value
-            else:
-                from warnings import warn
-
-                warn("Unknown GF annotation %s found, it will be ignored" % key)
 
     @staticmethod
     def _store_per_column_annotations(alignment, gc, columns, skipped_columns):

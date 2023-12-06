@@ -4,7 +4,6 @@
 # as part of this package.
 """Tests for Align.stockholm module."""
 import unittest
-import warnings
 from io import StringIO
 
 
@@ -6696,9 +6695,7 @@ np.array([['V', 'E', 'R', 'Y', 'S', 'L', 'S', 'P', 'M', 'K', 'D', 'L', 'W',
         # both inpiut and output.
         path = "Stockholm/example_nonstandardannotations.sth"
         alignments = Align.parse(path, "stockholm")
-        with warnings.catch_warnings():
-            warnings.filterwarnings("ignore", "Unknown GF annotation nondefaultgf")
-            alignment = next(alignments)
+        alignment = next(alignments)
         self.assertNotIn("nonstandardgf", alignment.annotations.keys())
         stream = StringIO()
         Align.write(alignment, stream, "stockholm")
