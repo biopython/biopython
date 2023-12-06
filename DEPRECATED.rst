@@ -77,6 +77,15 @@ The ``counts`` object contains the same information as the PSSM returned by
 >>> counts[letter][i] == pssm[index][letter]
 True
 
+The ``replacement_dictionary`` method of the ``SummaryInfo`` class was
+deprecated in release 1.82. As an alternative, please use the ``alignment``
+property of the ``MultipleSeqAlignment`` object to obtains a new-style
+``Alignment`` object, and use its ``substitutions`` attribute to obtain the
+replacement dictionary:
+
+>>> alignment = msa.alignment
+>>> dictionary = alignment.substitutions
+
 If the multiple sequence alignment object ``msa`` was obtained using
 ``Bio.AlignIO``, then you can obtain a new-style ``Alignment`` object directly
 by using ``Bio.Align.read`` instead of ``Bio.AlignIO.read``, or
