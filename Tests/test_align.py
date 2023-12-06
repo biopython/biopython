@@ -345,7 +345,10 @@ gi|671626|emb|CAA85685.1|           -
             consensus,
             "TATACATTAAAGXAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATATATATAATATATTTCAAATTXCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA",
         )
-        dictionary = align_info.replacement_dictionary(skip_chars=None, letters="ACGT")
+        with self.assertWarns(BiopythonDeprecationWarning):
+            dictionary = align_info.replacement_dictionary(
+                skip_chars=None, letters="ACGT"
+            )
         self.assertEqual(len(dictionary), 16)
         self.assertAlmostEqual(dictionary[("A", "A")], 1395.0, places=1)
         self.assertAlmostEqual(dictionary[("A", "C")], 3.0, places=1)
@@ -363,10 +366,30 @@ gi|671626|emb|CAA85685.1|           -
         self.assertAlmostEqual(dictionary[("T", "C")], 12.0, places=1)
         self.assertAlmostEqual(dictionary[("T", "G")], 0, places=1)
         self.assertAlmostEqual(dictionary[("T", "T")], 874.0, places=1)
+        alignment = msa.alignment
+        dictionary = alignment.substitutions
+        self.assertEqual(len(dictionary), 4)
+        self.assertEqual(dictionary.shape, (4, 4))
+        self.assertEqual(len(dictionary.keys()), 16)
+        self.assertAlmostEqual(dictionary[("A", "A")], 1395)
+        self.assertAlmostEqual(dictionary[("A", "C")], 3)
+        self.assertAlmostEqual(dictionary[("A", "G")], 13)
+        self.assertAlmostEqual(dictionary[("A", "T")], 6)
+        self.assertAlmostEqual(dictionary[("C", "A")], 3)
+        self.assertAlmostEqual(dictionary[("C", "C")], 271)
+        self.assertAlmostEqual(dictionary[("C", "G")], 0)
+        self.assertAlmostEqual(dictionary[("C", "T")], 16)
+        self.assertAlmostEqual(dictionary[("G", "A")], 5)
+        self.assertAlmostEqual(dictionary[("G", "C")], 0)
+        self.assertAlmostEqual(dictionary[("G", "G")], 480)
+        self.assertAlmostEqual(dictionary[("G", "T")], 0)
+        self.assertAlmostEqual(dictionary[("T", "A")], 6)
+        self.assertAlmostEqual(dictionary[("T", "C")], 12)
+        self.assertAlmostEqual(dictionary[("T", "G")], 0)
+        self.assertAlmostEqual(dictionary[("T", "T")], 874)
         with self.assertWarns(BiopythonDeprecationWarning):
             matrix = align_info.pos_specific_score_matrix(consensus, ["N", "-"])
 
-        alignment = msa.alignment
         motif = motifs.Motif("ACGT", alignment)
         counts = motif.counts
         for i in range(alignment.length):

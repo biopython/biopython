@@ -280,7 +280,9 @@ class TestAlignIO_reading(unittest.TestCase):
                 else:
                     self.assertAlmostEqual(count, 0.0)
             j += 1
-        rep_dict = summary.replacement_dictionary(skip_chars=None, letters=letters)
+        with self.assertWarns(BiopythonDeprecationWarning):
+            rep_dict = summary.replacement_dictionary(skip_chars=None, letters=letters)
+        rep_dict = alignment.substitutions
         e_freq = 1.0 / len(letters)
         ambiguous_letters = ambiguous_letters.upper() + ambiguous_letters.lower()
         e_freq_table = dict.fromkeys(ambiguous_letters, e_freq)
@@ -310,7 +312,9 @@ class TestAlignIO_reading(unittest.TestCase):
                 else:
                     self.assertAlmostEqual(count, 0.0)
             j += 1
-        rep_dict = summary.replacement_dictionary(skip_chars=None, letters=letters)
+        with self.assertWarns(BiopythonDeprecationWarning):
+            rep_dict = summary.replacement_dictionary(skip_chars=None, letters=letters)
+        rep_dict = alignment.substitutions
         e_freq = 1.0 / len(letters)
         all_letters = letters.upper() + letters.lower()
         e_freq_table = dict.fromkeys(all_letters, e_freq)

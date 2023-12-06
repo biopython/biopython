@@ -190,6 +190,25 @@ class SummaryInfo:
            will raise a ValueError
          - letters - An iterable (e.g. a string or list of characters to include.
         """
+        warnings.warn(
+            "The `replacement_dictionary` method is deprecated and will be "
+            "removed in a future release of Biopython. As an alternative, you "
+            "can convert the multiple sequence alignment object to a new-style "
+            "Alignment object by via its `.alignment` property, and then "
+            "use the `.substitutions` property  of the `Alignment` object. "
+            "For example, for a multiple sequence alignment `msa` of DNA "
+            "nucleotides, you would do: "
+            "\n"
+            ">>> alignment = msa.alignment\n"
+            ">>> dictionary = alignment.substitutions\n"
+            "\n"
+            "If your multiple sequence alignment object was obtained using "
+            "Bio.AlignIO, then you can obtain a new-style Alignment object "
+            "directly by using Bio.Align.read instead of Bio.AlignIO.read, "
+            "or Bio.Align.parse instead of Bio.AlignIO.parse.",
+            BiopythonDeprecationWarning,
+        )
+
         if skip_chars is not None:
             raise ValueError(
                 "argument skip_chars has been deprecated; instead, please use 'letters' to specify the characters you want to include"
