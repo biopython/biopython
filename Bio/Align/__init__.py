@@ -977,7 +977,11 @@ class MultipleSeqAlignment:
                     record.letter_annotations.clear()
                     record.seq = record.seq.replace("-", "")
                     for key, value in letter_annotations.items():
-                        value = "".join([value[i] for i in indices])
+                        if isinstance(value, str):
+                            value = "".join([value[i] for i in indices])
+                        else:  # list, tuple
+                            cls = type(value)
+                            value = cls(value[i] for i in indices)
                         letter_annotations[key] = value
                     record.letter_annotations = letter_annotations
                 else:
