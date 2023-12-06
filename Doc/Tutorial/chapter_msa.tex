@@ -1018,6 +1018,33 @@ You can access any element of the PSSM by subscripting like \verb|your_pssm[sequ
 
 The structure of the PSSM class hopefully makes it easy both to access elements and to pretty print the matrix.
 
+Alternatively, you can convert the multiple sequence alignment object \verb|msa| to a new-style \verb|Alignment| object (see section \ref{sec:alignmentobject}) by using the \verb|alignment| attribute (see section \ref{sec:alignment_newstyle}):
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment = msa.alignment
+\end{minted}
+You can then create a \verb|Motif| object (see section \ref{sec:motif_object}):
+%cont-doctest
+\begin{minted}{pycon}
+>>> from Bio.motifs import Motif
+>>> motif = Motif("ACGT", alignment)
+\end{minted}
+and obtain the counts of each nucleotide in each position:
+%cont-doctest
+\begin{minted}{pycon}
+>>> counts = motif.counts
+>>> print(counts)
+        0      1      2      3      4      5      6
+A:   2.00   1.00   0.00   1.00   0.00   0.00   2.00
+C:   1.00   3.00   0.00   2.00   4.00   0.00   1.00
+G:   0.00   0.00   0.00   0.00   0.00   0.00   0.00
+T:   1.00   0.00   4.00   0.00   0.00   4.00   0.00
+<BLANKLINE>
+>>> print(counts["T"][5])
+4
+\end{minted}
+
+
 \subsection{Information Content}
 \label{sec:getting_info_content}
 
@@ -1097,6 +1124,7 @@ P_{ij} = \frac{n_{ij} + k\times Q_{i}}{N_{j} + k}
 Well, now you are ready to calculate information content. If you want to try applying this to some real life problems, it would probably be best to dig into the literature on information content to get an idea of how it is used. Hopefully your digging won't reveal any mistakes made in coding this function!
 
 \section{Getting a new-style Alignment object}
+\label{sec:alignment_newstyle}
 
 Use the \verb+alignment+ property to create a new-style \verb+Alignment+ object (see section~\ref{sec:alignmentobject}) from an old-style \verb+MultipleSeqAlignment+ object:
 
@@ -1271,7 +1299,6 @@ By default ClustalW will generate an alignment and guide tree file with names
 based on the input FASTA file, in this case \texttt{opuntia.aln} and
 \texttt{opuntia.dnd}, but you can override this or make it explicit:
 
-%doctest
 \begin{minted}{pycon}
 >>> import subprocess
 >>> cmd = "clustalw2 -infile=opuntia.fasta"

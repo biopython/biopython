@@ -58,6 +58,31 @@ was deprecated as of Release 1.70.
 Biopython modules, methods, functions
 =====================================
 
+Bio.AlignInfo
+-------------
+The ``pos_specific_score_matrix`` method of the ``SummaryInfo`` class and the
+``PSSM`` class were deprecated in release 1.82. As an alternative, please use
+the ``alignment`` property of a ``MultipleSeqAlignment`` object to obtains a
+new-style ``Alignment`` object, and use it to create a ``Bio.motifs.Motif``
+object. For example,
+
+>>> alignment = msa.alignment
+>>> from Bio.motifs import Motif
+>>> motif = Motif('ACGT', alignment)
+>>> counts = motif.counts
+
+The ``counts`` object contains the same information as the PSSM returned by
+``pos_specific_score_matrix``, but note that the indices are reversed:
+
+>>> counts[letter][i] == pssm[index][letter]
+True
+
+If the multiple sequence alignment object ``msa`` was obtained using
+``Bio.AlignIO``, then you can obtain a new-style ``Alignment`` object directly
+by using ``Bio.Align.read`` instead of ``Bio.AlignIO.read``, or
+``Bio.Align.parse`` instead of ``Bio.AlignIO.parse``.
+
+
 Bio.kNN
 -------
 Deprecated in release 1.82, consider using scikit-learn instead.

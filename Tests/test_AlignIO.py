@@ -8,11 +8,13 @@ import warnings
 
 from io import StringIO
 
+from Bio import BiopythonDeprecationWarning
 from Bio import AlignIO
 from Bio import SeqIO
 from Bio.Align import AlignInfo
 from Bio.Align import MultipleSeqAlignment
 from Bio.Data import IUPACData
+from Bio.motifs import Motif
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
@@ -245,37 +247,69 @@ class TestAlignIO_reading(unittest.TestCase):
         dumb_consensus = summary.dumb_consensus()
         # gap_consensus = summary.gap_consensus()
 
-    def check_summary(self, alignment, molecule_type):
+    def check_summary(self, msa, molecule_type):
         # Check AlignInfo.SummaryInfo likes the alignment; smoke test only
         if molecule_type == "DNA":
             letters = IUPACData.unambiguous_dna_letters
-            all_letters = IUPACData.ambiguous_dna_letters
+            ambiguous_letters = IUPACData.ambiguous_dna_letters
         elif molecule_type == "RNA":
             letters = IUPACData.unambiguous_rna_letters
-            all_letters = IUPACData.ambiguous_rna_letters
+            ambiguous_letters = IUPACData.ambiguous_rna_letters
         elif molecule_type == "protein":
             letters = IUPACData.protein_letters
-            all_letters = IUPACData.protein_letters
+            ambiguous_letters = IUPACData.protein_letters
         else:
             raise ValueError(f"Unknown molecule type '{molecule_type}'")
-        summary = AlignInfo.SummaryInfo(alignment)
+        summary = AlignInfo.SummaryInfo(msa)
+        alignment = msa.alignment  # New-style alignment
+        motif = Motif(letters, alignment)
+        counts = motif.counts
         dumb_consensus = summary.dumb_consensus()
         # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
+        with self.assertWarns(BiopythonDeprecationWarning):
+            pssm = summary.pos_specific_score_matrix()
+        all_letters = summary._get_all_letters()
+        j = 0
+        for i in range(alignment.length):
+            while set(msa[:, j]) == set("-"):
+                j += 1
+            for letter in letters:
+                count = counts[letter][i]
+                if letter in all_letters:
+                    self.assertAlmostEqual(count, pssm[j][letter])
+                else:
+                    self.assertAlmostEqual(count, 0.0)
+            j += 1
         rep_dict = summary.replacement_dictionary(skip_chars=None, letters=letters)
         e_freq = 1.0 / len(letters)
-        all_letters = all_letters.upper() + all_letters.lower()
-        e_freq_table = dict.fromkeys(all_letters, e_freq)
+        ambiguous_letters = ambiguous_letters.upper() + ambiguous_letters.lower()
+        e_freq_table = dict.fromkeys(ambiguous_letters, e_freq)
         info_content = summary.information_content(
             e_freq_table=e_freq_table, chars_to_ignore=["N", "X"]
         )
 
-    def check_summary_pir(self, alignment):
+    def check_summary_pir(self, msa):
         letters = IUPACData.unambiguous_dna_letters
-        summary = AlignInfo.SummaryInfo(alignment)
+        summary = AlignInfo.SummaryInfo(msa)
         dumb_consensus = summary.dumb_consensus()
         # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
+        with self.assertWarns(BiopythonDeprecationWarning):
+            pssm = summary.pos_specific_score_matrix()
+        all_letters = summary._get_all_letters()
+        alignment = msa.alignment
+        motif = Motif(letters, alignment)
+        counts = motif.counts
+        j = 0
+        for i in range(alignment.length):
+            while set(msa[:, j]) == set("-"):
+                j += 1
+            for letter in letters:
+                count = counts[letter][i]
+                if letter in all_letters:
+                    self.assertAlmostEqual(count, pssm[j][letter])
+                else:
+                    self.assertAlmostEqual(count, 0.0)
+            j += 1
         rep_dict = summary.replacement_dictionary(skip_chars=None, letters=letters)
         e_freq = 1.0 / len(letters)
         all_letters = letters.upper() + letters.lower()

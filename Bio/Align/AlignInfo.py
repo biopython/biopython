@@ -14,8 +14,10 @@ be put into classes in this module.
 
 import math
 import sys
+import warnings
 from collections import Counter
 
+from Bio import BiopythonDeprecationWarning
 from Bio.Seq import Seq
 
 
@@ -256,6 +258,33 @@ class SummaryInfo:
 
         """
         # determine all of the letters we have to deal with
+        warnings.warn(
+            "The `pos_specific_score_matrix` method is deprecated and will be "
+            "removed in a future release of Biopython. As an alternative, you "
+            "can convert the multiple sequence alignment object to a new-style "
+            "Alignment object by via its `.alignment` property, and then "
+            "create a Motif object. For example, for a multiple sequence "
+            "alignment `msa` of DNA nucleotides, you would do: "
+            "\n"
+            ">>> alignment = msa.alignment\n"
+            ">>> from Bio.motifs import Motif\n"
+            ">>> motif = Motif('ACGT', alignment)\n"
+            ">>> counts = motif.counts\n"
+            "\n"
+            "The `counts` object contains the same information as the PSSM "
+            "returned by `pos_specific_score_matrix`, but note that the "
+            "indices are reversed:\n"
+            "\n"
+            ">>> counts[letter][i] == pssm[index][letter]\n"
+            "True\n"
+            "\n"
+            "If your multiple sequence alignment object was obtained using "
+            "Bio.AlignIO, then you can obtain a new-style Alignment object "
+            "directly by using Bio.Align.read instead of Bio.AlignIO.read, "
+            "or Bio.Align.parse instead of Bio.AlignIO.parse.",
+            BiopythonDeprecationWarning,
+        )
+
         all_letters = self._get_all_letters()
         if not all_letters:
             raise ValueError("_get_all_letters returned empty string")
@@ -558,6 +587,32 @@ class PSSM:
         from the example above, the first few list[0]s would be GTAT...
         list[1] - A dictionary with the letter substitutions and counts.
         """
+        warnings.warn(
+            "The `PSSM` class is deprecated and will be removed in a future "
+            "release of Biopython. As an alternative, you can convert the "
+            "multiple sequence alignment object to a new-style Alignment "
+            "object by via its `.alignment` property, and then create a Motif "
+            "object. For example, for a multiple sequence alignment `msa` of "
+            "DNA nucleotides, you would do: "
+            "\n"
+            ">>> alignment = msa.alignment\n"
+            ">>> from Bio.motifs import Motif\n"
+            ">>> motif = Motif('ACGT', alignment)\n"
+            ">>> counts = motif.counts\n"
+            "\n"
+            "The `counts` object contains the same information as the PSSM "
+            "returned by `pos_specific_score_matrix`, but note that the "
+            "indices are reversed:\n"
+            "\n"
+            ">>> counts[letter][i] == pssm[index][letter]\n"
+            "True\n"
+            "\n"
+            "If your multiple sequence alignment object was obtained using "
+            "Bio.AlignIO, then you can obtain a new-style Alignment object "
+            "directly by using Bio.Align.read instead of Bio.AlignIO.read, "
+            "or Bio.Align.parse instead of Bio.AlignIO.parse.",
+            BiopythonDeprecationWarning,
+        )
         self.pssm = pssm
 
     def __getitem__(self, pos):

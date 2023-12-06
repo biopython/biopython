@@ -6,12 +6,14 @@
 """Bio.Align.AlignInfo related tests."""
 import unittest
 
+from Bio import BiopythonDeprecationWarning
 from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio import AlignIO
 from Bio.Align.AlignInfo import SummaryInfo
 from Bio.Data import IUPACData
+from Bio.motifs import Motif
 import math
 
 
@@ -26,8 +28,10 @@ class AlignInfoTests(unittest.TestCase):
     def test_nucleotides(self):
         filename = "GFF/multi.fna"
         fmt = "fasta"
-        alignment = AlignIO.read(filename, fmt)
-        summary = SummaryInfo(alignment)
+        msa = AlignIO.read(filename, fmt)
+        summary = SummaryInfo(msa)
+        alignment = msa.alignment
+        motif = Motif("ACGT", alignment)
 
         c = summary.dumb_consensus(ambiguous="N")
         self.assertEqual(c, "NNNNNNNN")
@@ -37,7 +41,15 @@ class AlignInfoTests(unittest.TestCase):
 
         expected = {"A": 0.25, "G": 0.25, "T": 0.25, "C": 0.25}
 
-        m = summary.pos_specific_score_matrix(chars_to_ignore=["-"], axis_seq=c)
+        with self.assertWarns(BiopythonDeprecationWarning):
+            m = summary.pos_specific_score_matrix(chars_to_ignore=["-"], axis_seq=c)
+
+        counts = motif.counts
+
+        for i in range(alignment.length):
+            for letter in "ACGT":
+                self.assertAlmostEqual(counts[letter][i], m[i][letter])
+
         self.assertEqual(
             str(m),
             """    A   C   G   T
@@ -57,6 +69,7 @@ N  0.0 2.0 1.0 0.0
         self.assertAlmostEqual(ic, 7.32029999423075, places=6)
 
     def test_proteins(self):
+        letters = IUPACData.protein_letters
         a = MultipleSeqAlignment(
             [
                 SeqRecord(Seq("MHQAIFIYQIGYP*LKSGYIQSIRSPEYDNW-"), id="ID001"),
@@ -74,7 +87,21 @@ N  0.0 2.0 1.0 0.0
         c = s.gap_consensus(ambiguous="X")
         self.assertEqual(c, "MHXXIFIYQIGYXXLKSGYIQSIRSPEYXNWX")
 
-        m = s.pos_specific_score_matrix(chars_to_ignore=["-", "*"], axis_seq=c)
+        with self.assertWarns(BiopythonDeprecationWarning):
+            m = s.pos_specific_score_matrix(chars_to_ignore=["-", "*"], axis_seq=c)
+        all_letters = s._get_all_letters()
+        alignment = a.alignment
+        motif = Motif(letters, alignment)
+        counts = motif.counts
+        j = 0
+        for i in range(alignment.length):
+            for letter in letters:
+                count = counts[letter][i]
+                if letter in all_letters:
+                    self.assertAlmostEqual(count, m[j][letter])
+                else:
+                    self.assertAlmostEqual(count, 0.0)
+            j += 1
         self.assertEqual(
             str(m),
             """    A   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   W   Y
@@ -113,7 +140,6 @@ X  0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0
 """,
         )
 
-        letters = IUPACData.protein_letters
         base_freq = 1.0 / len(letters)
         e_freq_table = {letter: base_freq for letter in letters}
         ic = s.information_content(
