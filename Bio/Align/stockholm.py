@@ -234,8 +234,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             else:
                 assert len(value) == 1, (key, value)
                 value = value.pop()
-            if key in AlignmentIterator.gf_mapping:
+            try:
                 alignment.annotations[AlignmentIterator.gf_mapping[key]] = value
+            except KeyError:
+                pass
 
     @staticmethod
     def _store_per_column_annotations(alignment, gc, columns, skipped_columns):
