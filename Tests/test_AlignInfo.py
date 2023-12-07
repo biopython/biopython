@@ -66,7 +66,9 @@ N  0.0 2.0 1.0 0.0
 
         # provide the frequencies and chars to ignore explicitly.
         ic = summary.information_content(e_freq_table=expected, chars_to_ignore=["-"])
-        self.assertAlmostEqual(ic, 7.32029999423075, places=6)
+        self.assertAlmostEqual(ic, 7.32029999423075)
+        ic = sum(motif.relative_entropy)
+        self.assertAlmostEqual(ic, 7.32029999423075)
 
     def test_proteins(self):
         letters = IUPACData.protein_letters
@@ -145,12 +147,14 @@ X  0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0
         ic = s.information_content(
             e_freq_table=e_freq_table, chars_to_ignore=["-", "*"]
         )
-        self.assertAlmostEqual(ic, 133.061475107, places=6)
+        self.assertAlmostEqual(ic, 133.061475107)
+        ic = sum(motif.relative_entropy)
+        self.assertAlmostEqual(ic, 133.061475107)
 
     def test_pseudo_count(self):
         # use example from
         # http://biologie.univ-mrs.fr/upload/p202/01.4.PSSM_theory.pdf
-        dna_align = MultipleSeqAlignment(
+        msa = MultipleSeqAlignment(
             [
                 SeqRecord(Seq("AACCACGTTTAA"), id="ID001"),
                 SeqRecord(Seq("CACCACGTGGGT"), id="ID002"),
@@ -163,30 +167,35 @@ X  0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0
             ]
         )
 
-        summary = SummaryInfo(dna_align)
+        summary = SummaryInfo(msa)
         expected = {"A": 0.325, "G": 0.175, "T": 0.325, "C": 0.175}
         ic = summary.information_content(
             e_freq_table=expected, log_base=math.exp(1), pseudo_count=1
         )
-        self.assertAlmostEqualList(
-            summary.ic_vector,
-            [
-                0.110,
-                0.090,
-                0.360,
-                1.290,
-                0.800,
-                1.290,
-                1.290,
-                0.80,
-                0.610,
-                0.390,
-                0.470,
-                0.040,
-            ],
-            places=2,
-        )
-        self.assertAlmostEqual(ic, 7.546, places=3)
+        self.assertAlmostEqual(ic, 7.546369561463767)
+        ic_vector = [
+            0.11112361,
+            0.08677812,
+            0.35598044,
+            1.29445419,
+            0.80272907,
+            1.29445419,
+            1.29445419,
+            0.80272907,
+            0.60929642,
+            0.39157892,
+            0.46539767,
+            0.03739368,
+        ]
+        self.assertAlmostEqualList(summary.ic_vector, ic_vector)
+        # One more time, now using a new-style Alignment object:
+        alignment = msa.alignment
+        motif = Motif("ACGT", alignment)
+        motif.background = expected
+        motif.pseudocounts = expected
+        self.assertAlmostEqualList(motif.relative_entropy * math.log(2), ic_vector)
+        ic = sum(ic_vector)
+        self.assertAlmostEqual(ic, 7.546369561463767)
 
 
 if __name__ == "__main__":

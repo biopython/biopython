@@ -909,11 +909,15 @@ A  7.0 0.0 0.0 0.0
         value = align_info.information_content(
             5, 50, chars_to_ignore=["N"], e_freq_table=e_freq_table
         )
-        self.assertAlmostEqual(value, 88.42309908538343)
+        self.assertAlmostEqual(value, 88.42309908538343)  # MultipleSeqAlignment
+        value = sum(motif[5:50].relative_entropy)
+        self.assertAlmostEqual(value, 88.42309908538343)  # Alignment
         value = align_info.information_content(
             e_freq_table=e_freq_table, chars_to_ignore=["N"]
         )
-        self.assertAlmostEqual(value, 287.55, places=2)
+        self.assertAlmostEqual(value, 287.54558448976394)  # MultipleSeqAlignment
+        value = sum(motif.relative_entropy)
+        self.assertAlmostEqual(value, 287.54558448976394)  # Alignment
         self.assertEqual(align_info.get_column(1), "AAAAAAA")
         self.assertAlmostEqual(align_info.ic_vector[1], 2.00, places=2)
         self.assertEqual(align_info.get_column(7), "TTTATTT")
