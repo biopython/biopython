@@ -65,7 +65,10 @@ N  0.0 2.0 1.0 0.0
         )
 
         # provide the frequencies and chars to ignore explicitly.
-        ic = summary.information_content(e_freq_table=expected, chars_to_ignore=["-"])
+        with self.assertWarns(BiopythonDeprecationWarning):
+            ic = summary.information_content(
+                e_freq_table=expected, chars_to_ignore=["-"]
+            )
         self.assertAlmostEqual(ic, 7.32029999423075)
         ic = sum(motif.relative_entropy)
         self.assertAlmostEqual(ic, 7.32029999423075)
@@ -144,9 +147,10 @@ X  0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0
 
         base_freq = 1.0 / len(letters)
         e_freq_table = {letter: base_freq for letter in letters}
-        ic = s.information_content(
-            e_freq_table=e_freq_table, chars_to_ignore=["-", "*"]
-        )
+        with self.assertWarns(BiopythonDeprecationWarning):
+            ic = s.information_content(
+                e_freq_table=e_freq_table, chars_to_ignore=["-", "*"]
+            )
         self.assertAlmostEqual(ic, 133.061475107)
         ic = sum(motif.relative_entropy)
         self.assertAlmostEqual(ic, 133.061475107)
@@ -169,9 +173,10 @@ X  0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0
 
         summary = SummaryInfo(msa)
         expected = {"A": 0.325, "G": 0.175, "T": 0.325, "C": 0.175}
-        ic = summary.information_content(
-            e_freq_table=expected, log_base=math.exp(1), pseudo_count=1
-        )
+        with self.assertWarns(BiopythonDeprecationWarning):
+            ic = summary.information_content(
+                e_freq_table=expected, log_base=math.exp(1), pseudo_count=1
+            )
         self.assertAlmostEqual(ic, 7.546369561463767)
         ic_vector = [
             0.11112361,

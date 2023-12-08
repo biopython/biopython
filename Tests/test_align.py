@@ -906,15 +906,17 @@ A  7.0 0.0 0.0 0.0
 """,
         )
         e_freq_table = {"G": 0.25, "C": 0.25, "A": 0.25, "T": 0.25}
-        value = align_info.information_content(
-            5, 50, chars_to_ignore=["N"], e_freq_table=e_freq_table
-        )
+        with self.assertWarns(BiopythonDeprecationWarning):
+            value = align_info.information_content(
+                5, 50, chars_to_ignore=["N"], e_freq_table=e_freq_table
+            )
         self.assertAlmostEqual(value, 88.42309908538343)  # MultipleSeqAlignment
         value = sum(motif[5:50].relative_entropy)
         self.assertAlmostEqual(value, 88.42309908538343)  # Alignment
-        value = align_info.information_content(
-            e_freq_table=e_freq_table, chars_to_ignore=["N", "-"]
-        )
+        with self.assertWarns(BiopythonDeprecationWarning):
+            value = align_info.information_content(
+                e_freq_table=e_freq_table, chars_to_ignore=["N", "-"]
+            )
         self.assertAlmostEqual(value, 306.2080592664532)  # MultipleSeqAlignment
         value = sum(motif.relative_entropy)
         self.assertAlmostEqual(value, 306.2080592664532)  # Alignment

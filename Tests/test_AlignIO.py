@@ -291,9 +291,10 @@ class TestAlignIO_reading(unittest.TestCase):
         e_freq = 1.0 / len(letters)
         ambiguous_letters = ambiguous_letters.upper() + ambiguous_letters.lower()
         e_freq_table = dict.fromkeys(ambiguous_letters, e_freq)
-        info_content = summary.information_content(
-            e_freq_table=e_freq_table, chars_to_ignore=chars_to_ignore
-        )
+        with self.assertWarns(BiopythonDeprecationWarning):
+            info_content = summary.information_content(
+                e_freq_table=e_freq_table, chars_to_ignore=chars_to_ignore
+            )
         motif.background = e_freq_table
         relative_entropy = sum(motif.relative_entropy)
         self.assertAlmostEqual(info_content, relative_entropy)
@@ -326,9 +327,10 @@ class TestAlignIO_reading(unittest.TestCase):
         e_freq = 1.0 / len(letters)
         all_letters = letters.upper() + letters.lower()
         e_freq_table = dict.fromkeys(all_letters, e_freq)
-        info_content = summary.information_content(
-            e_freq_table=e_freq_table, chars_to_ignore=["-"]
-        )
+        with self.assertWarns(BiopythonDeprecationWarning):
+            info_content = summary.information_content(
+                e_freq_table=e_freq_table, chars_to_ignore=["-"]
+            )
         relative_entropy = sum(motif.relative_entropy)
         self.assertAlmostEqual(info_content, relative_entropy)
 

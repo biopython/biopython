@@ -20,6 +20,7 @@ import subprocess
 from Bio.Align.Applications import ClustalwCommandline
 from Bio import AlignIO
 from Bio.Align import AlignInfo
+from Bio.motifs import Motif
 
 # create the command line to run clustalw
 # this assumes you've got clustalw somewhere on your path, otherwise
@@ -31,26 +32,28 @@ return_code = subprocess.call(str(cline), shell=(sys.platform != "win32"))
 assert return_code == 0, "Calling ClustalW failed"
 
 # Parse the output
-alignment = AlignIO.read("test.aln", "clustal")
+msa = AlignIO.read("test.aln", "clustal")
 
-print(alignment)
+print(msa)
 
-print("first description: %s" % alignment[0].description)
-print("first sequence: %s" % alignment[0].seq)
+print("first description: %s" % msa[0].description)
+print("first sequence: %s" % msa[0].seq)
 
 # get the length of the alignment
-print("length %i" % alignment.get_alignment_length())
+print("length %i" % msa.get_alignment_length())
 
-print(alignment)
+print(msa)
 
 # print out interesting information about the alignment
-summary_align = AlignInfo.SummaryInfo(alignment)
+summary_align = AlignInfo.SummaryInfo(msa)
 
 consensus = summary_align.dumb_consensus()
 print("consensus %s" % consensus)
 
-my_pssm = summary_align.pos_specific_score_matrix(consensus, chars_to_ignore=["N"])
-print(my_pssm)
+alignment = msa.alignment
+motif = Motif("ACGT", alignment)
+counts = motif.counts
+print(counts)
 
 expect_freq = {"A": 0.3, "G": 0.2, "T": 0.3, "C": 0.2}
 
