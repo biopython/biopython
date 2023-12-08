@@ -913,15 +913,17 @@ A  7.0 0.0 0.0 0.0
         value = sum(motif[5:50].relative_entropy)
         self.assertAlmostEqual(value, 88.42309908538343)  # Alignment
         value = align_info.information_content(
-            e_freq_table=e_freq_table, chars_to_ignore=["N"]
+            e_freq_table=e_freq_table, chars_to_ignore=["N", "-"]
         )
-        self.assertAlmostEqual(value, 287.54558448976394)  # MultipleSeqAlignment
+        self.assertAlmostEqual(value, 306.2080592664532)  # MultipleSeqAlignment
         value = sum(motif.relative_entropy)
-        self.assertAlmostEqual(value, 287.54558448976394)  # Alignment
+        self.assertAlmostEqual(value, 306.2080592664532)  # Alignment
         self.assertEqual(align_info.get_column(1), "AAAAAAA")
-        self.assertAlmostEqual(align_info.ic_vector[1], 2.00, places=2)
+        self.assertAlmostEqual(align_info.ic_vector[1], 2.00)
+        self.assertAlmostEqual(motif.relative_entropy[1], 2.00)
         self.assertEqual(align_info.get_column(7), "TTTATTT")
-        self.assertAlmostEqual(align_info.ic_vector[7], 1.41, places=2)
+        self.assertAlmostEqual(align_info.ic_vector[7], 1.4083272214176725)
+        self.assertAlmostEqual(motif.relative_entropy[7], 1.4083272214176725)
         handle = StringIO()
         AlignInfo.print_info_content(align_info, fout=handle)
         self.assertEqual(
@@ -983,16 +985,16 @@ A  7.0 0.0 0.0 0.0
 53 A 2.000
 54 T 2.000
 55 A 2.000
-56 - 0.682
-57 - 0.682
-58 - 0.333
-59 - 0.333
-60 - -0.115
-61 - -0.115
-62 - -0.115
-63 - -0.115
-64 - -0.115
-65 - -0.115
+56 - 2.000
+57 - 2.000
+58 - 2.000
+59 - 2.000
+60 - 2.000
+61 - 2.000
+62 - 2.000
+63 - 2.000
+64 - 2.000
+65 - 2.000
 66 A 2.000
 67 T 2.000
 68 A 2.000
@@ -1375,7 +1377,8 @@ XX
         )
         self.assertAlmostEqual(sum(motif[5:50].relative_entropy), 88.42309908538343)
         relative_entropy = motif.relative_entropy
-        self.assertAlmostEqual(sum(relative_entropy), 287.54558448976394)
+        self.assertAlmostEqual(sum(relative_entropy[5:50]), 88.42309908538343)
+        self.assertAlmostEqual(sum(relative_entropy), 306.20805926645323)
         self.assertEqual(alignment[:, 1], "AAAAAAA")
         self.assertAlmostEqual(motif.relative_entropy[1], 2.0)
         self.assertEqual(alignment[:, 7], "TTTATTT")
