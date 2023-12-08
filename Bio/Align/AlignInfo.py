@@ -387,6 +387,31 @@ class SummaryInfo:
         content is calculated.
 
         """
+        warnings.warn(
+            "The `informatton_content` method and `ic_vector` attribute of the "
+            "`SummaryInfo` class are deprecated and will be removed in a "
+            "future release of Biopython. As an alternative, you can convert "
+            "the multiple sequence alignment object to a new-style Alignment "
+            "object by via its `.alignment` property, and use the "
+            "`information_content` attribute of the Alignment obecjt. "
+            "For example, for a multiple sequence alignment `msa` of "
+            "DNA nucleotides, you would do: "
+            "\n"
+            ">>> alignment = msa.alignment\n"
+            ">>> from Bio.motifs import Motif\n"
+            ">>> motif = Motif('ACGT', alignment)\n"
+            ">>> information_content = motif.information_content\n"
+            "\n"
+            "The `information_content` object contains the same values as the "
+            "`ic_vector` attribute of the `SummaryInfo` object. Its sum is "
+            "equal to the value return by the `information_content` method. "
+            "\n"
+            "If your multiple sequence alignment object was obtained using "
+            "Bio.AlignIO, then you can obtain a new-style Alignment object "
+            "directly by using Bio.Align.read instead of Bio.AlignIO.read, "
+            "or Bio.Align.parse instead of Bio.AlignIO.parse.",
+            BiopythonDeprecationWarning,
+        )
         # if no end was specified, then we default to the end of the sequence
         if end is None:
             end = len(self.alignment[0].seq)

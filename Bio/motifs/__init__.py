@@ -582,11 +582,13 @@ class Motif:
                 frequencies = frequencies[mask] / total[mask]
                 values[mask] += frequencies * np.log2(frequencies / background[letter])
         else:
-            total = len(self.alignment) + sum(pseudocounts.values())
+            total = np.zeros(length)
+            for letter, frequencies in counts.items():
+                total += np.array(frequencies) + pseudocounts[letter]
             for letter, frequencies in counts.items():
                 frequencies = np.array(frequencies) + pseudocounts[letter]
                 mask = frequencies > 0
-                frequencies = frequencies[mask] / total
+                frequencies = frequencies[mask] / total[mask]
                 values[mask] += frequencies * np.log2(frequencies / background[letter])
         return values
 

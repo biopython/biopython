@@ -77,9 +77,16 @@ The ``counts`` object contains the same information as the PSSM returned by
 >>> counts[letter][i] == pssm[index][letter]
 True
 
+The ``information_content`` method and the ``ic_vector`` attribute of the
+``SummaryInfo`` class were deprecated in release 1.82. As an alternative,
+please use the ``relative_entropy`` attribute of the ``motif`` instance (see
+above); it contains the same values as the ``ic_vector`` attribute, while
+``sum(relative_entropy)`` is equal to the value returned by
+``information_content``.
+
 The ``replacement_dictionary`` method of the ``SummaryInfo`` class was
 deprecated in release 1.82. As an alternative, please use the ``alignment``
-property of the ``MultipleSeqAlignment`` object to obtains a new-style
+property of the ``MultipleSeqAlignment`` object to obtain a new-style
 ``Alignment`` object, and use its ``substitutions`` attribute to obtain the
 replacement dictionary:
 
