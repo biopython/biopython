@@ -98,6 +98,8 @@ If the multiple sequence alignment object ``msa`` was obtained using
 by using ``Bio.Align.read`` instead of ``Bio.AlignIO.read``, or
 ``Bio.Align.parse`` instead of ``Bio.AlignIO.parse``.
 
+The ``print_info_content`` function in ``Bio.Align.AlignInfo`` was deprecated
+in Release 1.82.
 
 Bio.kNN
 -------

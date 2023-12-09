@@ -721,6 +721,9 @@ class Motif:
 
             motifs = [self]
             return clusterbuster.write(motifs)
+        elif not format_spec:
+            # Follow python convention and default to using __str__
+            return str(self)
         else:
             raise ValueError("Unknown format type %s" % format_spec)
 
