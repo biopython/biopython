@@ -134,9 +134,11 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             except (AttributeError, KeyError):
                 pass
             try:
-                qual = query.letter_annotations["phred_quality"]
+                phred = query.letter_annotations["phred_quality"]
             except (AttributeError, KeyError):
                 qual = "*"
+            else:
+                qual = "".join(chr(value + 33) for value in phred)
             query = query.seq
         qSize = len(query)
         try:
@@ -723,7 +725,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             if hard_clip_right is not None:
                 query.annotations["hard_clip_right"] = hard_clip_right
             if qual != "*":
-                query.letter_annotations["phred_quality"] = qual
+                phred = [ord(c) - 33 for c in qual]
+                query.letter_annotations["phred_quality"] = phred
             records = [target, query]
             alignment = Alignment(records, coordinates)
             alignment.flag = flag
