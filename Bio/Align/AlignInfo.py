@@ -687,6 +687,11 @@ class PSSM:
 
 def print_info_content(summary_info, fout=None, rep_record=0):
     """3 column output: position, aa in representative sequence, ic_vector value."""
+    warnings.warn(
+        "The `print_info_content` function is deprecated and will be removed "
+        "in a future release of Biopython.",
+        BiopythonDeprecationWarning,
+    )
     fout = fout or sys.stdout
     if not summary_info.ic_vector:
         summary_info.information_content()
