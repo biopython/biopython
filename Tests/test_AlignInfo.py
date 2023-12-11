@@ -36,7 +36,8 @@ class AlignInfoTests(unittest.TestCase):
         c = summary.dumb_consensus(ambiguous="N")
         self.assertEqual(c, "NNNNNNNN")
 
-        c = summary.gap_consensus(ambiguous="N")
+        with self.assertWarns(BiopythonDeprecationWarning):
+            c = summary.gap_consensus(ambiguous="N")
         self.assertEqual(c, "NNNNNNNN")
 
         expected = {"A": 0.25, "G": 0.25, "T": 0.25, "C": 0.25}
@@ -89,7 +90,8 @@ N  0.0 2.0 1.0 0.0
         c = s.dumb_consensus(ambiguous="X")
         self.assertEqual(c, "MHQAIFIYQIGYXXLKSGYIQSIRSPEYDNW*")
 
-        c = s.gap_consensus(ambiguous="X")
+        with self.assertWarns(BiopythonDeprecationWarning):
+            c = s.gap_consensus(ambiguous="X")
         self.assertEqual(c, "MHXXIFIYQIGYXXLKSGYIQSIRSPEYXNWX")
 
         with self.assertWarns(BiopythonDeprecationWarning):

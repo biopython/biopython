@@ -246,7 +246,6 @@ class TestAlignIO_reading(unittest.TestCase):
     def check_summary_simple(self, alignment):
         summary = AlignInfo.SummaryInfo(alignment)
         dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
 
     def check_summary(self, msa, molecule_type):
         # Check AlignInfo.SummaryInfo likes the alignment; smoke test only
@@ -270,7 +269,6 @@ class TestAlignIO_reading(unittest.TestCase):
         motif = Motif(letters, alignment)
         counts = motif.counts
         dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
         with self.assertWarns(BiopythonDeprecationWarning):
             pssm = summary.pos_specific_score_matrix()
         all_letters = summary._get_all_letters()
@@ -303,7 +301,6 @@ class TestAlignIO_reading(unittest.TestCase):
         letters = IUPACData.unambiguous_dna_letters
         summary = AlignInfo.SummaryInfo(msa)
         dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
         with self.assertWarns(BiopythonDeprecationWarning):
             pssm = summary.pos_specific_score_matrix()
         all_letters = summary._get_all_letters()
