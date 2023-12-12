@@ -206,6 +206,45 @@ class GenericPositionMatrix(dict):
             sequence += nucleotide
         return Seq(sequence)
 
+    def calculate_consensus(
+        self, substitution_matrix=None, plurality=None, identity=0, setcase=None
+    ):
+        """Return the consensus sequence (as a string) for the given parameters.
+
+        This function largely follows the conventions of the EMBOSS `cons` tool.
+
+        Arguments:
+         - substitution_matrix - the scoring matrix used when comparing
+           sequences. By default, it is None. In this case a score of 1 is used
+           for a matching letter, and a score of 0 otherwise. This is equivalent
+           to counting the frequency of each letter. Instead of the default
+           value, you can use the substitution matrices available in
+           Bio.Align.substitution_matrices. Common choices are BLOSUM62 (also
+           known as EBLOSUM62) for protein, and NUC.4.4 (also known as EDNAFULL)
+           for nucleotides.
+         - plurality           - threshold value for the number of positive
+           matches required to reach consensus. The default plurality is taken
+           as half the total count in a column.
+         - identity            - number of identities required to define a
+           consensus value. If this is equal to the total count in a column,
+           then only columns of identities contribute to the consensus. Default
+           value is zero.
+         - setcase             - threshold for the positive matches above which
+           the consensus is is upper-case and below which the consensus is in
+           lower-case. By default, this is equal to half the total count in a
+           column.
+        """
+        sequence = ""
+        for i in range(self.length):
+            maximum = -math.inf
+            for letter in self.alphabet:
+                count = self[letter][i]
+                if count > maximum:
+                    maximum = count
+                    sequence_letter = letter
+            sequence += sequence_letter
+        return sequence
+
     @property
     def gc_content(self):
         """Compute the fraction GC content."""
