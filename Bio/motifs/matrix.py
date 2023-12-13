@@ -215,34 +215,56 @@ class GenericPositionMatrix(dict):
 
         Arguments:
          - substitution_matrix - the scoring matrix used when comparing
-           sequences. By default, it is None. In this case a score of 1 is used
-           for a matching letter, and a score of 0 otherwise. This is equivalent
-           to counting the frequency of each letter. Instead of the default
-           value, you can use the substitution matrices available in
-           Bio.Align.substitution_matrices. Common choices are BLOSUM62 (also
-           known as EBLOSUM62) for protein, and NUC.4.4 (also known as EDNAFULL)
-           for nucleotides.
+           sequences. By default, it is None, in which case we simply count the
+           frequency of each letter.
+           Instead of the default value, you can use the substitution matrices
+           available in Bio.Align.substitution_matrices. Common choices are
+           BLOSUM62 (also known as EBLOSUM62) for protein, and NUC.4.4 (also
+           known as EDNAFULL) for nucleotides. NOTE: This has not yet been
+           implemented.
          - plurality           - threshold value for the number of positive
            matches required to reach consensus. The default plurality is taken
            as half the total count in a column.
+           This argument is ignored if substitution_matrix is None.
          - identity            - number of identities required to define a
-           consensus value. If this is equal to the total count in a column,
-           then only columns of identities contribute to the consensus. Default
-           value is zero.
+           consensus value. If this is set to greater than 1.0, then only
+           columns of identitical letters contribute to the consensus.
+           Default value is zero.
          - setcase             - threshold for the positive matches above which
            the consensus is is upper-case and below which the consensus is in
            lower-case. By default, this is equal to half the total count in a
            column.
         """
-        sequence = ""
-        for i in range(self.length):
-            maximum = -math.inf
-            for letter in self.alphabet:
-                count = self[letter][i]
-                if count > maximum:
-                    maximum = count
-                    sequence_letter = letter
-            sequence += sequence_letter
+        alphabet = set(self.alphabet)
+        if alphabet == set("ACGT") or alphabet == set("ACGU"):
+            undefined = "N"
+        else:
+            undefined = "X"
+        if substitution_matrix is None:
+            sequence = ""
+            for i in range(self.length):
+                maximum = 0
+                total = 0
+                for letter in self.alphabet:
+                    count = self[letter][i]
+                    total += count
+                    if count > maximum:
+                        maximum = count
+                        consensus_letter = letter
+                if maximum < identity * total:
+                    consensus_letter = undefined
+                else:
+                    if setcase is None:
+                        setcase_threshold = total / 2
+                    else:
+                        setcase_threshold = setcase * total
+                    if maximum <= setcase_threshold:
+                        consensus_letter = consensus_letter.lower()
+                sequence += consensus_letter
+        else:
+            raise NotImplementedError(
+                "calculate_consensus currently only supports substitution_matrix=None"
+            )
         return sequence
 
     @property

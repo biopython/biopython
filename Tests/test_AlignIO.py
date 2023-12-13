@@ -269,6 +269,7 @@ class TestAlignIO_reading(unittest.TestCase):
         motif = Motif(letters, alignment)
         counts = motif.counts
         dumb_consensus = summary.dumb_consensus()
+        consensus = counts.calculate_consensus(identity=0.7)
         with self.assertWarns(BiopythonDeprecationWarning):
             pssm = summary.pos_specific_score_matrix()
         all_letters = summary._get_all_letters()
@@ -300,13 +301,14 @@ class TestAlignIO_reading(unittest.TestCase):
     def check_summary_pir(self, msa):
         letters = IUPACData.unambiguous_dna_letters
         summary = AlignInfo.SummaryInfo(msa)
-        dumb_consensus = summary.dumb_consensus()
-        with self.assertWarns(BiopythonDeprecationWarning):
-            pssm = summary.pos_specific_score_matrix()
         all_letters = summary._get_all_letters()
         alignment = msa.alignment
         motif = Motif(letters, alignment)
         counts = motif.counts
+        dumb_consensus = summary.dumb_consensus(ambiguous="N")
+        consensus = counts.calculate_consensus(identity=1.1)
+        with self.assertWarns(BiopythonDeprecationWarning):
+            pssm = summary.pos_specific_score_matrix()
         j = 0
         for i in range(alignment.length):
             while set(msa[:, j]) == set("-"):
