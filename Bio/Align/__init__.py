@@ -1287,6 +1287,7 @@ class Alignment:
     def frequencies(self):
         """Return the frequency of each letter in each column of the alignment.
 
+        Gaps are represented by a dash ("-") character.
         For example,
 
         >>> from Bio import Align
@@ -1300,7 +1301,7 @@ class Alignment:
         query             0 CGA--TCG 6
         <BLANKLINE>
         >>> alignment.frequencies
-        {'G': array([0, 2, 0, 0, 0, 0, 0, 2]), 'A': array([0, 0, 2, 0, 0, 0, 0, 0]), 'C': array([1, 0, 0, 1, 1, 0, 1, 0]), 'T': array([0, 0, 0, 0, 0, 2, 0, 0])}
+        {'-': array([ 1.,  0.,  0.,  1.,  1.,  0.,  1.,  0.]), 'G': array([ 0.,  2.,  0.,  0.,  0.,  0.,  0.,  2.]), 'A': array([ 0.,  0.,  2.,  0.,  0.,  0.,  0.,  0.]), 'C': array([ 1.,  0.,  0.,  1.,  1.,  0.,  1.,  0.]), 'T': array([ 0.,  0.,  0.,  0.,  0.,  2.,  0.,  0.])}
         >>> aligner.mode = "local"
         >>> alignments = aligner.align("GACCTG", "CGATCG")
         >>> alignment = alignments[0]
@@ -1310,7 +1311,7 @@ class Alignment:
         query             1 GA--TCG 6
         <BLANKLINE>
         >>> alignment.frequencies
-        {'G': array([2, 0, 0, 0, 0, 0, 2]), 'A': array([0, 2, 0, 0, 0, 0, 0]), 'C': array([0, 0, 1, 1, 0, 1, 0]), 'T': array([0, 0, 0, 0, 2, 0, 0])}
+        {'G': array([ 2.,  0.,  0.,  0.,  0.,  0.,  2.]), 'A': array([ 0.,  2.,  0.,  0.,  0.,  0.,  0.]), 'C': array([ 0.,  0.,  1.,  1.,  0.,  1.,  0.]), 'T': array([ 0.,  0.,  0.,  0.,  2.,  0.,  0.]), '-': array([ 0.,  0.,  1.,  1.,  0.,  1.,  0.])}
         """
         coordinates = self.coordinates.copy()
         sequences = list(self.sequences)
@@ -1353,7 +1354,7 @@ class Alignment:
                         character = chr(letter)
                         row = counts.get(character)
                         if row is None:
-                            row = np.zeros(length, int)
+                            row = np.zeros(length)
                             counts[character] = row
                         row[index] += weight
                     k = j
@@ -1362,6 +1363,12 @@ class Alignment:
                     k += step
                 else:  # step == 0
                     n = m + gap
+                    character = "-"
+                    row = counts.get(character)
+                    if row is None:
+                        row = np.zeros(length)
+                        counts[character] = row
+                    row[m:n] += weight
                     m = n
         return counts
 
