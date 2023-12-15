@@ -34,8 +34,10 @@ class AlignInfoTests(unittest.TestCase):
         motif = Motif("ACGT", alignment)
 
         c = summary.dumb_consensus(threshold=0.1, ambiguous="N")
+        # dumb_consensus uses ambiguous if multiple letters have the same score
         self.assertEqual(c, "ANGNCCCC")
         c = motif.counts.calculate_consensus(identity=0.1)
+        # Instead, EMBOSS uses the first letter it encounters
         self.assertEqual(c, "AaGcCCCC")
         c = summary.dumb_consensus(ambiguous="N")
         self.assertEqual(c, "NNNNNNNN")
@@ -97,10 +99,10 @@ N  0.0 2.0 1.0 0.0
         motif = Motif(letters + "*", alignment)
         counts = motif.counts
 
-        c = s.dumb_consensus(ambiguous="X")
-        self.assertEqual(c, "MHQAIFIYQIGYXXLKSGYIQSIRSPEYDNW*")
-        c = counts.calculate_consensus(identity=0.7)
-        self.assertEqual(c, "MHQAIFIYQIGYXXLKSGYIQSIRSPEYDNW*")
+        dumb_consensus = s.dumb_consensus()
+        self.assertEqual(dumb_consensus, "MHQAIFIYQIGYXXLKSGYIQSIRSPEYDNW*")
+        consensus = counts.calculate_consensus(identity=0.7)
+        self.assertEqual(consensus, dumb_consensus)
 
         with self.assertWarns(BiopythonDeprecationWarning):
             c = s.gap_consensus(ambiguous="X")
