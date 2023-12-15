@@ -243,21 +243,38 @@ class TestAlignIO_reading(unittest.TestCase):
         if alignment_len > 5:
             self.assertEqual(alignment[:, -1], columns[-1])
 
-    def check_summary_simple(self, alignment):
-        summary = AlignInfo.SummaryInfo(alignment)
-        dumb_consensus = summary.dumb_consensus()
+    def check_summary_simple(self, msa):
+        summary = AlignInfo.SummaryInfo(msa)
+        dumb_consensus = summary.dumb_consensus(threshold=0.7)
+        all_letters = summary._get_all_letters()
+        letters = all_letters.replace("-", "")
+        alignment = msa.alignment
+        motif = Motif(letters, alignment)
+        gaps = "-" * len(alignment)
+        dumb_consensus = "".join(
+            [
+                letter
+                for index, letter in enumerate(dumb_consensus)
+                if msa[:, index] != gaps
+            ]
+        )
+        consensus = motif.counts.calculate_consensus(identity=0.7)
+        self.assertEqual(dumb_consensus, consensus)
 
     def check_summary(self, msa, molecule_type):
         # Check AlignInfo.SummaryInfo likes the alignment; smoke test only
         if molecule_type == "DNA":
             letters = IUPACData.unambiguous_dna_letters
             ambiguous_letters = IUPACData.ambiguous_dna_letters
+            ambiguous = "N"
         elif molecule_type == "RNA":
             letters = IUPACData.unambiguous_rna_letters
             ambiguous_letters = IUPACData.ambiguous_rna_letters
+            ambiguous = "N"
         elif molecule_type == "protein":
             letters = IUPACData.protein_letters
             ambiguous_letters = IUPACData.protein_letters
+            ambiguous = "X"
         else:
             raise ValueError(f"Unknown molecule type '{molecule_type}'")
         chars_to_ignore = set("-" + string.ascii_uppercase).difference(letters)
@@ -266,10 +283,25 @@ class TestAlignIO_reading(unittest.TestCase):
         summary = AlignInfo.SummaryInfo(msa)
         alignment = msa.alignment  # New-style alignment
         alignment.sequences = [sequence.upper() for sequence in alignment.sequences]
-        motif = Motif(letters, alignment)
+        all_letters = summary._get_all_letters()
+        motif_letters = "".join(set(all_letters).union(letters))
+        motif_letters = motif_letters.replace("-", "")
+        if set(motif_letters) == set("CGYTWAR"):
+            ambiguous = "X"
+        motif = Motif(motif_letters, alignment)
         counts = motif.counts
-        dumb_consensus = summary.dumb_consensus()
+        dumb_consensus = summary.dumb_consensus(ambiguous=ambiguous)
         consensus = counts.calculate_consensus(identity=0.7)
+        # skip columns consisting of gaps only:
+        gaps = "-" * len(alignment)
+        dumb_consensus = "".join(
+            [
+                letter
+                for index, letter in enumerate(dumb_consensus)
+                if msa[:, index] != gaps
+            ]
+        )
+        self.assertEqual(consensus, dumb_consensus)
         with self.assertWarns(BiopythonDeprecationWarning):
             pssm = summary.pos_specific_score_matrix()
         all_letters = summary._get_all_letters()
@@ -289,6 +321,7 @@ class TestAlignIO_reading(unittest.TestCase):
         rep_dict = alignment.substitutions
         e_freq = 1.0 / len(letters)
         ambiguous_letters = ambiguous_letters.upper() + ambiguous_letters.lower()
+        motif = Motif(letters, alignment)
         e_freq_table = dict.fromkeys(ambiguous_letters, e_freq)
         with self.assertWarns(BiopythonDeprecationWarning):
             info_content = summary.information_content(
@@ -306,7 +339,16 @@ class TestAlignIO_reading(unittest.TestCase):
         motif = Motif(letters, alignment)
         counts = motif.counts
         dumb_consensus = summary.dumb_consensus(ambiguous="N")
-        consensus = counts.calculate_consensus(identity=1.1)
+        gaps = "-" * len(alignment)
+        dumb_consensus = "".join(
+            [
+                letter
+                for index, letter in enumerate(dumb_consensus)
+                if msa[:, index] != gaps
+            ]
+        )
+        consensus = counts.calculate_consensus(identity=0.7)
+        self.assertEqual(consensus, dumb_consensus)
         with self.assertWarns(BiopythonDeprecationWarning):
             pssm = summary.pos_specific_score_matrix()
         j = 0

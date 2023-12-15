@@ -235,8 +235,8 @@ class GenericPositionMatrix(dict):
            lower-case. By default, this is equal to half the total count in a
            column.
         """
-        alphabet = set(self.alphabet)
-        if alphabet == set("ACGT") or alphabet == set("ACGU"):
+        alphabet = self.alphabet
+        if set(alphabet).union("ACGTUN-") == set("ACGTUN-"):
             undefined = "N"
         else:
             undefined = "X"
@@ -245,7 +245,7 @@ class GenericPositionMatrix(dict):
             for i in range(self.length):
                 maximum = 0
                 total = 0
-                for letter in self.alphabet:
+                for letter in alphabet:
                     count = self[letter][i]
                     total += count
                     if count > maximum:
