@@ -553,15 +553,16 @@ def distancematrix(data, mask=None, weight=None, transpose=False, dist="e"):
     ...               [1, 2,  3,  4]])
     >>> distances = distancematrix(data, dist='e')
     >>> distances
-    [array([], dtype=float64), array([ 16.]), array([ 64.,  16.]), array([  1.,   9.,  49.])]
+    [array([], dtype=float64), array([16.]), array([64., 16.]), array([ 1.,  9., 49.])]
 
-    which can be rewritten as
-       distances = [array([], dtype=float64),
-                    array([ 16.]),
-                    array([ 64.,  16.]),
-                    array([  1.,   9.,  49.])]
+    which can be rewritten as::
 
-    This corresponds to the distance matrix:
+        distances = [array([], dtype=float64),
+                     array([ 16.]),
+                     array([ 64.,  16.]),
+                     array([  1.,   9.,  49.])]
+
+    This corresponds to the distance matrix::
 
         [ 0., 16., 64.,  1.]
         [16.,  0., 16.,  9.]

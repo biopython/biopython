@@ -37,15 +37,6 @@ from io import StringIO
 
 try:
     import numpy as np
-
-    try:
-        # NumPy 1.14 changed repr output breaking our doctests,
-        # request the legacy 1.13 style
-        np.set_printoptions(legacy="1.13")
-    except TypeError:
-        # Old Numpy, output should be fine as it is :)
-        # TypeError: set_printoptions() got an unexpected keyword argument 'legacy'
-        pass
 except ImportError:
     np = None
 
