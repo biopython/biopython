@@ -950,6 +950,31 @@ You can adjust how \verb|dumb_consensus| works by passing optional parameters:
 
 \end{description}
 
+Alternatively, you can convert the multiple sequence alignment object \verb|msa| to a new-style \verb|Alignment| object (see section \ref{sec:alignmentobject}) by using the \verb|alignment| attribute (see section \ref{sec:alignment_newstyle}):
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment = msa.alignment
+\end{minted}
+You can then create a \verb|Motif| object (see section \ref{sec:motif_object}):
+%cont-doctest
+\begin{minted}{pycon}
+>>> from Bio.motifs import Motif
+>>> motif = Motif("ACGT", alignment)
+\end{minted}
+and obtain a quick consensus sequence:
+%cont-doctest
+\begin{minted}{pycon}
+>>> motif.consensus
+Seq('ACTCCTA')
+\end{minted}
+The \verb|motif.counts.calculate_consensus| method (see section \ref{sec:motif_consensus}) lets you specify in detail how the consensus sequence should be calculated. For example,
+%cont-doctest
+\begin{minted}{pycon}
+>>> motif.counts.calculate_consensus(identity=0.7)
+'NCTNCTN'
+\end{minted}
+
+
 \subsection{Position Specific Score Matrices}
 \label{sec:pssm}
 

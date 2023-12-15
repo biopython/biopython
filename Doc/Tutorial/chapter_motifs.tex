@@ -139,6 +139,7 @@ in the alphabet of the motif:
 \end{minted}
 
 \subsection{Consensus, anticonsensus, and degenerate consensus  sequence}
+\label{sec:motif_consensus}
 
 The consensus sequence of a motif is defined as the sequence of
 letters along the positions of the motif for which the largest value in the
@@ -169,6 +170,14 @@ Seq('WACVC')
 Here, W and R follow the IUPAC nucleotide ambiguity codes: W is either A or T,
 and V is A, C, or G \cite{cornish1985}. The degenerate consensus sequence is
 constructed following the rules specified by Cavener \cite{cavener1987}.
+
+The \verb|motif.counts.calculate_consensus| method lets you specify in detail how the consensus sequence should be calculated. For example,
+%cont-doctest
+\begin{minted}{pycon}
+>>> m.counts.calculate_consensus(identity=0.5, setcase=0.7)
+'tACNC'
+\end{minted}
+
 
 \subsection{Reverse-complementing a motif}
 
