@@ -94,7 +94,7 @@ N  0.0 2.0 1.0 0.0
         s = SummaryInfo(a)
 
         alignment = a.alignment
-        motif = Motif(letters + "-*", alignment)
+        motif = Motif(letters + "*", alignment)
         counts = motif.counts
 
         c = s.dumb_consensus(ambiguous="X")
