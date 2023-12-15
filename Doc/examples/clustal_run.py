@@ -17,8 +17,7 @@ import sys
 import subprocess
 
 # biopython
-from Bio import AlignIO
-from Bio.Align import AlignInfo
+from Bio import Align
 from Bio.motifs import Motif
 
 # create the command line to run clustalw
@@ -31,8 +30,7 @@ return_code = subprocess.call(command, shell=(sys.platform != "win32"))
 assert return_code == 0, "Calling ClustalW failed"
 
 # Parse the output
-msa = AlignIO.read("test.aln", "clustal")
-alignment = msa.alignment
+alignment = Align.read("test.aln", "clustal")
 
 print(alignment)
 
@@ -42,14 +40,12 @@ print("first sequence: %s" % alignment.sequences[0].seq)
 # get the length of the alignment
 print("length %i" % alignment.length)
 
-# print out interesting information about the alignment
-summary_align = AlignInfo.SummaryInfo(msa)
-consensus = summary_align.dumb_consensus()
-print("consensus %s" % consensus)
-
 motif = Motif("ACGT", alignment)
 counts = motif.counts
-print(counts)
+
+# print out interesting information about the alignment
+consensus = motif.counts.calculate_consensus(identity=0.7)
+print("consensus %s" % consensus)
 
 motif.background = {"A": 0.3, "G": 0.2, "T": 0.3, "C": 0.2}
 relative_entropy = motif.relative_entropy
