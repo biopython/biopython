@@ -1301,7 +1301,7 @@ class Alignment:
         query             0 CGA--TCG 6
         <BLANKLINE>
         >>> alignment.frequencies
-        {'-': array([ 1.,  0.,  0.,  1.,  1.,  0.,  1.,  0.]), 'G': array([ 0.,  2.,  0.,  0.,  0.,  0.,  0.,  2.]), 'A': array([ 0.,  0.,  2.,  0.,  0.,  0.,  0.,  0.]), 'C': array([ 1.,  0.,  0.,  1.,  1.,  0.,  1.,  0.]), 'T': array([ 0.,  0.,  0.,  0.,  0.,  2.,  0.,  0.])}
+        {'-': array([1., 0., 0., 1., 1., 0., 1., 0.]), 'G': array([0., 2., 0., 0., 0., 0., 0., 2.]), 'A': array([0., 0., 2., 0., 0., 0., 0., 0.]), 'C': array([1., 0., 0., 1., 1., 0., 1., 0.]), 'T': array([0., 0., 0., 0., 0., 2., 0., 0.])}
         >>> aligner.mode = "local"
         >>> alignments = aligner.align("GACCTG", "CGATCG")
         >>> alignment = alignments[0]
@@ -1311,7 +1311,7 @@ class Alignment:
         query             1 GA--TCG 6
         <BLANKLINE>
         >>> alignment.frequencies
-        {'G': array([ 2.,  0.,  0.,  0.,  0.,  0.,  2.]), 'A': array([ 0.,  2.,  0.,  0.,  0.,  0.,  0.]), 'C': array([ 0.,  0.,  1.,  1.,  0.,  1.,  0.]), 'T': array([ 0.,  0.,  0.,  0.,  2.,  0.,  0.]), '-': array([ 0.,  0.,  1.,  1.,  0.,  1.,  0.])}
+        {'G': array([2., 0., 0., 0., 0., 0., 2.]), 'A': array([0., 2., 0., 0., 0., 0., 0.]), 'C': array([0., 0., 1., 1., 0., 1., 0.]), 'T': array([0., 0., 0., 0., 2., 0., 0.]), '-': array([0., 0., 1., 1., 0., 1., 0.])}
         """
         coordinates = self.coordinates.copy()
         sequences = list(self.sequences)
