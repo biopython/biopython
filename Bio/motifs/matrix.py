@@ -223,17 +223,22 @@ class GenericPositionMatrix(dict):
            known as EDNAFULL) for nucleotides. NOTE: This has not yet been
            implemented.
          - plurality           - threshold value for the number of positive
-           matches required to reach consensus. The default plurality is taken
-           as half the total count in a column.
-           This argument is ignored if substitution_matrix is None.
-         - identity            - number of identities required to define a
-           consensus value. If this is set to greater than 1.0, then only
-           columns of identitical letters contribute to the consensus.
-           Default value is zero.
-         - setcase             - threshold for the positive matches above which
-           the consensus is is upper-case and below which the consensus is in
-           lower-case. By default, this is equal to half the total count in a
-           column.
+           matches, divided by the total count in a column, required to reach
+           consensus. If substitution_matrix is None, then this argument must
+           be None, and is ignored; a ValueError is raised otherwise. If
+           substitution_matrix is not None, then the default value of the
+           plurality is 0.5.
+         - identity            - number of identities, divided by the total
+           count in a column, required to define a consensus value. If the
+           number of identities is less than identity * total count in a column,
+           then the undefined character ('N' for nucleotides and 'X' for amino
+           acid sequences) is used in the consensus sequence. If identity is
+           1.0, then only columns of identical letters contribute to the
+           consensus. Default value is zero.
+         - setcase             - threshold for the positive matches, divided by
+           the total count in a column, above which the consensus is is
+           upper-case and below which the consensus is in lower-case. By
+           default, this is equal to 0.5.
         """
         alphabet = self.alphabet
         if set(alphabet).union("ACGTUN-") == set("ACGTUN-"):
@@ -241,6 +246,10 @@ class GenericPositionMatrix(dict):
         else:
             undefined = "X"
         if substitution_matrix is None:
+            if plurality is not None:
+                raise ValueError(
+                    "plurality must be None if substitution_matrix is None"
+                )
             sequence = ""
             for i in range(self.length):
                 maximum = 0

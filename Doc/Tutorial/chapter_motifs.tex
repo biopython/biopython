@@ -138,7 +138,7 @@ in the alphabet of the motif:
 (3.0, 7.0, 0.0, 2.0, 1.0)
 \end{minted}
 
-\subsection{Consensus, anticonsensus, and degenerate consensus  sequence}
+\subsection{Obtaining a consensus sequence}
 \label{sec:motif_consensus}
 
 The consensus sequence of a motif is defined as the sequence of
@@ -171,7 +171,15 @@ Here, W and R follow the IUPAC nucleotide ambiguity codes: W is either A or T,
 and V is A, C, or G \cite{cornish1985}. The degenerate consensus sequence is
 constructed following the rules specified by Cavener \cite{cavener1987}.
 
-The \verb|motif.counts.calculate_consensus| method lets you specify in detail how the consensus sequence should be calculated. For example,
+The \verb|motif.counts.calculate_consensus| method lets you specify in detail how the consensus sequence should be calculated. This method largely follows the conventions of the EMBOSS program \verb|cons|, and takes the following arguments:
+
+\begin{description}
+\item[substitution\_matrix] The scoring matrix used when comparing sequences. By default, it is \verb|None|, in which case we simply count the frequency of each letter.  Instead of the default value, you can use the substitution matrices available in \verb|Bio.Align.substitution\_matrices|. Common choices are BLOSUM62 (also known as EBLOSUM62) for protein, and NUC.4.4 (also known as EDNAFULL) for nucleotides. NOTE: Currently, this method has not yet been implemented for values other than the default value \verb|None|.
+\item[plurality] Threshold value for the number of positive matches, divided by the total count in a column, required to reach consensus. If \verb|substitution_matrix| is \verb|None|, then this argument must also be \verb|None|, and is ignored; a \verb|ValueError| is raised otherwise. If \verb|substitution_matrix| is not \verb|None|, then the default value of the plurality is 0.5.
+\item[identity] Number of identities, divided by the total count in a column, required to define a consensus value. If the number of identities is less than identity multiplied by the total count in a column, then the undefined character (\verb|N| for nucleotides and \verb|X| for amino acid sequences) is used in the consensus sequence. If \verb|identity| is 1.0, then only columns of identical letters contribute to the consensus. Default value is zero.
+\item[setcase] threshold for the positive matches, divided by the total count in a column, above which the consensus is is upper-case and below which the consensus is in lower-case. By default, this is equal to 0.5.
+\end{description}
+This is an example:
 %cont-doctest
 \begin{minted}{pycon}
 >>> m.counts.calculate_consensus(identity=0.5, setcase=0.7)
