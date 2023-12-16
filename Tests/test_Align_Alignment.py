@@ -75,20 +75,29 @@ query             7 A-C-GG-AAC--  0
                 msg=msg,
             )
         frequencies = alignment.frequencies
-        self.assertEqual(list(frequencies.keys()), ["A", "C", "G"])
+        self.assertEqual(list(frequencies.keys()), ["A", "C", "G", "-"])
         self.assertTrue(
             np.array_equal(
-                frequencies["A"], np.array([2, 1, 0, 0, 0, 0, 0, 2, 1, 0, 0, 0])
+                frequencies["A"],
+                np.array([2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.0, 1.0, 0.0, 0.0, 0.0]),
             )
         )
         self.assertTrue(
             np.array_equal(
-                frequencies["C"], np.array([0, 0, 2, 1, 0, 0, 0, 0, 0, 2, 1, 0])
+                frequencies["C"],
+                np.array([0.0, 0.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.0, 1.0, 0.0]),
             )
         )
         self.assertTrue(
             np.array_equal(
-                frequencies["G"], np.array([0, 0, 0, 0, 2, 2, 1, 0, 0, 0, 0, 1])
+                frequencies["G"],
+                np.array([0.0, 0.0, 0.0, 0.0, 2.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0]),
+            )
+        )
+        self.assertTrue(
+            np.array_equal(
+                frequencies["-"],
+                np.array([0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 1.0]),
             )
         )
         self.assertAlmostEqual(alignment.score, 6.0)
@@ -605,20 +614,29 @@ query             0 -AG 2
             )
         )
         frequencies = subalignment.frequencies
-        self.assertEqual(list(frequencies.keys()), ["A", "C", "G"])
+        self.assertEqual(list(frequencies.keys()), ["A", "C", "G", "-"])
         self.assertTrue(
             np.array_equal(
-                frequencies["A"], np.array([1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0])
+                frequencies["A"],
+                np.array([1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0]),
             )
         )
         self.assertTrue(
             np.array_equal(
-                frequencies["C"], np.array([0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0])
+                frequencies["C"],
+                np.array([0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0]),
             )
         )
         self.assertTrue(
             np.array_equal(
-                frequencies["G"], np.array([0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1])
+                frequencies["G"],
+                np.array([0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0]),
+            )
+        )
+        self.assertTrue(
+            np.array_equal(
+                frequencies["-"],
+                np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]),
             )
         )
         subalignment = alignment[:1, :]
@@ -637,20 +655,29 @@ query             0 -AG 2
             )
         )
         frequencies = subalignment.frequencies
-        self.assertEqual(list(frequencies.keys()), ["A", "C", "G"])
+        self.assertEqual(list(frequencies.keys()), ["A", "C", "G", "-"])
         self.assertTrue(
             np.array_equal(
-                frequencies["A"], np.array([1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0])
+                frequencies["A"],
+                np.array([1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0]),
             )
         )
         self.assertTrue(
             np.array_equal(
-                frequencies["C"], np.array([0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0])
+                frequencies["C"],
+                np.array([0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0]),
             )
         )
         self.assertTrue(
             np.array_equal(
-                frequencies["G"], np.array([0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1])
+                frequencies["G"],
+                np.array([0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0]),
+            )
+        )
+        self.assertTrue(
+            np.array_equal(
+                frequencies["-"],
+                np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]),
             )
         )
         subalignment = alignment[:]

@@ -105,7 +105,7 @@ You can access these counts as a dictionary:
 %cont-doctest
 \begin{minted}{pycon}
 >>> m.counts["A"]
-[3, 7, 0, 2, 1]
+[3.0, 7.0, 0.0, 2.0, 1.0]
 \end{minted}
 but you can also think of it as a 2D array with the nucleotide as the first
 dimension and the position as the second dimension:
@@ -113,17 +113,17 @@ dimension and the position as the second dimension:
 %cont-doctest
 \begin{minted}{pycon}
 >>> m.counts["T", 0]
-4
+4.0
 >>> m.counts["T", 2]
-2
+2.0
 >>> m.counts["T", 3]
-0
+0.0
 \end{minted}
 You can also directly access columns of the counts matrix
 %Don't doctest this as dictionary order is platform dependent:
 \begin{minted}{pycon}
 >>> m.counts[:, 3]
-{'A': 2, 'C': 2, 'T': 0, 'G': 3}
+{'A': 2.0, 'C': 2.0, 'T': 0.0, 'G': 3.0}
 \end{minted}
 Instead of the nucleotide itself, you can also use the index of the nucleotide
 in the alphabet of the motif:
@@ -133,12 +133,13 @@ in the alphabet of the motif:
 >>> m.alphabet
 'ACGT'
 >>> m.counts["A", :]
-(3, 7, 0, 2, 1)
+(3.0, 7.0, 0.0, 2.0, 1.0)
 >>> m.counts[0, :]
-(3, 7, 0, 2, 1)
+(3.0, 7.0, 0.0, 2.0, 1.0)
 \end{minted}
 
 \subsection{Consensus, anticonsensus, and degenerate consensus  sequence}
+\label{sec:motif_consensus}
 
 The consensus sequence of a motif is defined as the sequence of
 letters along the positions of the motif for which the largest value in the
@@ -169,6 +170,14 @@ Seq('WACVC')
 Here, W and R follow the IUPAC nucleotide ambiguity codes: W is either A or T,
 and V is A, C, or G \cite{cornish1985}. The degenerate consensus sequence is
 constructed following the rules specified by Cavener \cite{cavener1987}.
+
+The \verb|motif.counts.calculate_consensus| method lets you specify in detail how the consensus sequence should be calculated. For example,
+%cont-doctest
+\begin{minted}{pycon}
+>>> m.counts.calculate_consensus(identity=0.5, setcase=0.7)
+'tACNC'
+\end{minted}
+
 
 \subsection{Reverse-complementing a motif}
 

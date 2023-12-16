@@ -33,10 +33,19 @@ class AlignInfoTests(unittest.TestCase):
         alignment = msa.alignment
         motif = Motif("ACGT", alignment)
 
+        c = summary.dumb_consensus(threshold=0.1, ambiguous="N")
+        # dumb_consensus uses ambiguous if multiple letters have the same score
+        self.assertEqual(c, "ANGNCCCC")
+        c = motif.counts.calculate_consensus(identity=0.1)
+        # Instead, EMBOSS uses the first letter it encounters
+        self.assertEqual(c, "AaGcCCCC")
         c = summary.dumb_consensus(ambiguous="N")
         self.assertEqual(c, "NNNNNNNN")
+        c = motif.counts.calculate_consensus(identity=0.7)
+        self.assertEqual(c, "NNNNNNNN")
 
-        c = summary.gap_consensus(ambiguous="N")
+        with self.assertWarns(BiopythonDeprecationWarning):
+            c = summary.gap_consensus(ambiguous="N")
         self.assertEqual(c, "NNNNNNNN")
 
         expected = {"A": 0.25, "G": 0.25, "T": 0.25, "C": 0.25}
@@ -86,19 +95,23 @@ N  0.0 2.0 1.0 0.0
 
         s = SummaryInfo(a)
 
-        c = s.dumb_consensus(ambiguous="X")
-        self.assertEqual(c, "MHQAIFIYQIGYXXLKSGYIQSIRSPEYDNW*")
+        alignment = a.alignment
+        motif = Motif(letters + "*", alignment)
+        counts = motif.counts
 
-        c = s.gap_consensus(ambiguous="X")
+        dumb_consensus = s.dumb_consensus()
+        self.assertEqual(dumb_consensus, "MHQAIFIYQIGYXXLKSGYIQSIRSPEYDNW*")
+        consensus = counts.calculate_consensus(identity=0.7)
+        self.assertEqual(consensus, dumb_consensus)
+
+        with self.assertWarns(BiopythonDeprecationWarning):
+            c = s.gap_consensus(ambiguous="X")
         self.assertEqual(c, "MHXXIFIYQIGYXXLKSGYIQSIRSPEYXNWX")
 
         with self.assertWarns(BiopythonDeprecationWarning):
             m = s.pos_specific_score_matrix(chars_to_ignore=["-", "*"], axis_seq=c)
-        all_letters = s._get_all_letters()
-        alignment = a.alignment
-        motif = Motif(letters, alignment)
-        counts = motif.counts
         j = 0
+        all_letters = s._get_all_letters()
         for i in range(alignment.length):
             for letter in letters:
                 count = counts[letter][i]
@@ -152,6 +165,7 @@ X  0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0
                 e_freq_table=e_freq_table, chars_to_ignore=["-", "*"]
             )
         self.assertAlmostEqual(ic, 133.061475107)
+        motif = Motif(letters, alignment)
         ic = sum(motif.relative_entropy)
         self.assertAlmostEqual(ic, 133.061475107)
 

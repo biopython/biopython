@@ -115,6 +115,12 @@ class SummaryInfo:
            it takes the same as input.
 
         """
+        warnings.warn(
+            "The `gap_consensus` method is deprecated and will be removed "
+            "in a future release of Biopython. Please let the Biopython "
+            "developers know if you need this method.",
+            BiopythonDeprecationWarning,
+        )
         consensus = ""
 
         # find the length of the consensus we are creating

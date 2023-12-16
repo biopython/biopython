@@ -410,10 +410,11 @@ The \verb+frequencies+ method calculates how often each letter appears in each c
 %cont-doctest
 \begin{minted}{pycon}
 >>> alignment.frequencies  # doctest: +NORMALIZE_WHITESPACE
-{'C': array([1, 0, 0, 0, 0, 0, 0, 0]),
- 'G': array([0, 3, 2, 0, 0, 0, 0, 0]),
- 'T': array([0, 0, 0, 3, 3, 3, 1, 1]),
- 'A': array([2, 0, 0, 0, 0, 0, 0, 0])}
+{'C': array([ 1.,  0.,  0.,  0.,  0.,  0.,  0.,  0.]),
+ 'G': array([ 0.,  3.,  2.,  0.,  0.,  0.,  0.,  0.]),
+ 'T': array([ 0.,  0.,  0.,  3.,  3.,  3.,  1.,  1.]),
+ 'A': array([ 2.,  0.,  0.,  0.,  0.,  0.,  0.,  0.]),
+ '-': array([ 0.,  0.,  1.,  0.,  0.,  0.,  2.,  2.])}
 \end{minted}
 
 \subsection{Substitutions}

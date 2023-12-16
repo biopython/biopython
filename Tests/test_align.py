@@ -339,11 +339,11 @@ gi|671626|emb|CAA85685.1|           -
         )
         self.assertEqual(msa.get_alignment_length(), 156)
         align_info = AlignInfo.SummaryInfo(msa)
-        consensus = align_info.dumb_consensus()
+        consensus = align_info.dumb_consensus(ambiguous="N")
         self.assertIsInstance(consensus, Seq)
         self.assertEqual(
             consensus,
-            "TATACATTAAAGXAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATATATATAATATATTTCAAATTXCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA",
+            "TATACATTAAAGNAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATATATATAATATATTTCAAATTNCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA",
         )
         with self.assertWarns(BiopythonDeprecationWarning):
             dictionary = align_info.replacement_dictionary(
@@ -395,7 +395,7 @@ gi|671626|emb|CAA85685.1|           -
         for i in range(alignment.length):
             for letter in "ACGT":
                 self.assertAlmostEqual(counts[letter][i], matrix[i][letter])
-
+        self.assertEqual(counts.calculate_consensus(identity=0.7), consensus)
         self.assertEqual(
             str(matrix),
             """\
@@ -412,7 +412,7 @@ A  7.0 0.0 0.0 0.0
 A  7.0 0.0 0.0 0.0
 A  7.0 0.0 0.0 0.0
 G  0.0 0.0 7.0 0.0
-X  4.0 0.0 3.0 0.0
+N  4.0 0.0 3.0 0.0
 A  7.0 0.0 0.0 0.0
 G  0.0 0.0 7.0 0.0
 G  0.0 0.0 7.0 0.0
@@ -480,7 +480,7 @@ A  7.0 0.0 0.0 0.0
 A  7.0 0.0 0.0 0.0
 T  0.0 0.0 0.0 7.0
 T  0.0 0.0 0.0 7.0
-X  0.0 3.0 0.0 4.0
+N  0.0 3.0 0.0 4.0
 C  0.0 7.0 0.0 0.0
 C  0.0 7.0 0.0 0.0
 T  0.0 0.0 0.0 7.0
@@ -1591,6 +1591,7 @@ EAS54_6_R         0 TTGGCAGGCCAAGGCCGATGGATCA 25
 EAS54_6_R         0 GTTGCTTCTGGCGTGGGTGGGGGGG 25
 """,
         )
+        self.assertEqual(motif.counts.calculate_consensus(identity=0.6), consensus)
 
 
 if __name__ == "__main__":
