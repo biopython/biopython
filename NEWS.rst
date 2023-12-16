@@ -120,6 +120,7 @@ possible, especially the following contributors:
 - Ricardas Ralys (first contribution)
 - Rob Miller
 - Thomas Holder
+- Tom Eulenfeld (first contribution)
 - Vladislav Kuznetsov (first contribution)
 - Wibowo Arindrarto
 - Yiming Qu (first contribution)

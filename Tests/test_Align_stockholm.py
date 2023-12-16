@@ -6,6 +6,7 @@
 import unittest
 from io import StringIO
 
+
 from Bio import Align
 
 
@@ -6687,6 +6688,25 @@ np.array([['V', 'E', 'R', 'Y', 'S', 'L', 'S', 'P', 'M', 'K', 'D', 'L', 'W',
         alignment = next(alignments)
         stream.close()
         self.check_alignment_cath3(alignment)
+
+    def test_io_nonstandard_annotations(self):
+        """Test input and output of nonstandard GC, GS and GR annotation lines."""
+        # We write the alignment once to a stream and read it again to test
+        # both inpiut and output.
+        path = "Stockholm/example_nonstandardannotations.sth"
+        alignments = Align.parse(path, "stockholm")
+        alignment = next(alignments)
+        self.assertNotIn("nonstandardgf", alignment.annotations.keys())
+        stream = StringIO()
+        Align.write(alignment, stream, "stockholm")
+        stream.seek(0)
+        alignments = Align.parse(stream, "stockholm")
+        alignment = next(alignments)
+        stream.close()
+        self.assertIn("nonstandardgc", alignment.column_annotations.keys())
+        self.assertIn("nonstandardgs", alignment.sequences[0].annotations.keys())
+        self.assertIn("nonstandardgr", alignment.sequences[0].letter_annotations.keys())
+        self.assertNotIn("nonstandardgf", alignment.annotations.keys())
 
 
 if __name__ == "__main__":
