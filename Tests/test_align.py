@@ -339,7 +339,8 @@ gi|671626|emb|CAA85685.1|           -
         )
         self.assertEqual(msa.get_alignment_length(), 156)
         align_info = AlignInfo.SummaryInfo(msa)
-        consensus = align_info.dumb_consensus(ambiguous="N")
+        with self.assertWarns(BiopythonDeprecationWarning):
+            consensus = align_info.dumb_consensus(ambiguous="N")
         self.assertIsInstance(consensus, Seq)
         self.assertEqual(
             consensus,
@@ -1557,7 +1558,8 @@ XX
         self.assertEqual(seq_record.seq, "GTTGCTTCTGGCGTGGGTGGGGGGG")
         self.assertEqual(msa.get_alignment_length(), 25)
         align_info = AlignInfo.SummaryInfo(msa)
-        consensus = align_info.dumb_consensus(ambiguous="N", threshold=0.6)
+        with self.assertWarns(BiopythonDeprecationWarning):
+            consensus = align_info.dumb_consensus(ambiguous="N", threshold=0.6)
         self.assertIsInstance(consensus, Seq)
         self.assertEqual(consensus, "NTNGCNTNNNNNGNNGGNTGGNTCN")
         self.assertEqual(
