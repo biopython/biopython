@@ -21,12 +21,10 @@ This aims to estimate two parameters:
 """
 # standard modules
 import math
+import warnings
 
 # local stuff
 from .DynamicProgramming import ScaledDPAlgorithms
-
-
-import warnings
 
 from Bio import BiopythonDeprecationWarning
 
