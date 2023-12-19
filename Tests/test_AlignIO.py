@@ -245,7 +245,8 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def check_summary_simple(self, msa):
         summary = AlignInfo.SummaryInfo(msa)
-        dumb_consensus = summary.dumb_consensus(threshold=0.7)
+        with self.assertWarns(BiopythonDeprecationWarning):
+            dumb_consensus = summary.dumb_consensus(threshold=0.7)
         all_letters = summary._get_all_letters()
         letters = all_letters.replace("-", "")
         alignment = msa.alignment
@@ -290,7 +291,8 @@ class TestAlignIO_reading(unittest.TestCase):
             ambiguous = "X"
         motif = Motif(motif_letters, alignment)
         counts = motif.counts
-        dumb_consensus = summary.dumb_consensus(ambiguous=ambiguous)
+        with self.assertWarns(BiopythonDeprecationWarning):
+            dumb_consensus = summary.dumb_consensus(ambiguous=ambiguous)
         consensus = counts.calculate_consensus(identity=0.7)
         # skip columns consisting of gaps only:
         gaps = "-" * len(alignment)
@@ -338,7 +340,8 @@ class TestAlignIO_reading(unittest.TestCase):
         alignment = msa.alignment
         motif = Motif(letters, alignment)
         counts = motif.counts
-        dumb_consensus = summary.dumb_consensus(ambiguous="N")
+        with self.assertWarns(BiopythonDeprecationWarning):
+            dumb_consensus = summary.dumb_consensus(ambiguous="N")
         gaps = "-" * len(alignment)
         dumb_consensus = "".join(
             [

@@ -98,8 +98,8 @@ If the multiple sequence alignment object ``msa`` was obtained using
 by using ``Bio.Align.read`` instead of ``Bio.AlignIO.read``, or
 ``Bio.Align.parse`` instead of ``Bio.AlignIO.parse``.
 
-The ``gap_consensus`` method of the ``SummaryInfo`` class was deprecated in
-Release 1.82. Please let the Biopython developers know if you need this method.
+The ``dumb_consensus`` and ``gap_consensus`` methods of the ``SummaryInfo``
+class were deprecated in Release 1.82.
 
 The ``print_info_content`` function in ``Bio.Align.AlignInfo`` was deprecated
 in Release 1.82.
