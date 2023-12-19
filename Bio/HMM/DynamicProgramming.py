@@ -12,6 +12,18 @@ algorithms that can be used generally.
 """
 
 
+import warnings
+
+from Bio import BiopythonDeprecationWarning
+
+warnings.warn(
+    "The 'Bio.HMM.DynamicProgramming' module is deprecated and will "
+    "be removed in a future release of Biopython. Consider using the "
+    "hmmlearn package instead.",
+    BiopythonDeprecationWarning,
+)
+
+
 class AbstractDPAlgorithms:
     """An abstract class to calculate forward and backward probabilities.
 

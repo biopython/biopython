@@ -125,6 +125,13 @@ Bio.MarkovModel
 Deprecated in release 1.82, consider using hmmlearn
 (https://pypi.org/project/hmmlearn/) instead.
 
+Bio.HMM
+-------
+The `Bio.HMM.DynamicProgramming`, `Bio.HMM.Trainer`, `Bio.HMM.MarkovModel`, and
+`Bio.HMM.Utilities` modules were deprecated in release 1.82. Consider using
+hmmlearn (https://pypi.org/project/hmmlearn/) instead.
+
+
 Bio.Data.SCOPData
 -----------------
 Declared obsolete in release 1.80, and removed in release 1.82. Please use

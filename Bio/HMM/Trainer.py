@@ -26,6 +26,18 @@ import math
 from .DynamicProgramming import ScaledDPAlgorithms
 
 
+import warnings
+
+from Bio import BiopythonDeprecationWarning
+
+warnings.warn(
+    "The 'Bio.HMM.Trainer' module is deprecated and will be removed "
+    "in a future release of Biopython. Consider using the hmmlearn "
+    "package instead.",
+    BiopythonDeprecationWarning,
+)
+
+
 class TrainingSequence:
     """Hold a training sequence with emissions and optionally, a state path."""
 

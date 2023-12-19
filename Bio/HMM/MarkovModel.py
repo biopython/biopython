@@ -11,8 +11,17 @@ import copy
 import math
 import random
 from collections import defaultdict
+import warnings
 
 from Bio.Seq import Seq
+from Bio import BiopythonDeprecationWarning
+
+warnings.warn(
+    "The 'Bio.HMM.MarkovModule' module is deprecated and will be "
+    "removed in a future release of Biopython. Consider using the "
+    "hmmlearn package instead.",
+    BiopythonDeprecationWarning,
+)
 
 
 def _gen_random_array(n):
