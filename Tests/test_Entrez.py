@@ -344,13 +344,16 @@ class TestURLConstruction(unittest.TestCase):
                 for set_global in [False, True]:
                     variables = dict(vars_base)
 
-                    with patch_urlopen() as patched:
-                        if set_global:
-                            with mock.patch("Bio.Entrez." + param, alt_value):
+                    with warnings.catch_warnings():
+                        # Ignore no email address warning:
+                        warnings.simplefilter("ignore", category=UserWarning)
+                        with patch_urlopen() as patched:
+                            if set_global:
+                                with mock.patch("Bio.Entrez." + param, alt_value):
+                                    Entrez.efetch(**variables)
+                            else:
+                                variables[param] = alt_value
                                 Entrez.efetch(**variables)
-                        else:
-                            variables[param] = alt_value
-                            Entrez.efetch(**variables)
 
                     request = get_patched_request(patched, self)
                     base_url, query = deconstruct_request(request, self)
