@@ -452,6 +452,7 @@ CRAFQYHSKEQQCVIMAENRKSSIIIRMRDVVLFEKKVYLSECKTGNGKNYRGTMSKTKN
 
 you can use the following code:
 
+%doctest . internet
 \begin{minted}{pycon}
 >>> sequence = (
 ...     "MEHKEVVLLLLLFLKSGQGEPLDDYVNTQGASLFSVTKKQLGAGSIEECAAKCEEDEEFT"
@@ -463,6 +464,7 @@ you can use the following code:
 
 By executing \verb+handle.read()+, you can obtain the search results in raw XML format. Instead, let's use \verb+Bio.ExPASy.ScanProsite.read+ to parse the raw XML into a Python object:
 
+%cont-doctest
 \begin{minted}{pycon}
 >>> result = ScanProsite.read(handle)
 >>> type(result)
@@ -471,32 +473,24 @@ By executing \verb+handle.read()+, you can obtain the search results in raw XML 
 
 A \verb+Bio.ExPASy.ScanProsite.Record+ object is derived from a list, with each element in the list storing one ScanProsite hit. This object also stores the number of hits, as well as the number of search sequences, as returned by ScanProsite. This ScanProsite search resulted in six hits:
 
+%cont-doctest
 \begin{minted}{pycon}
 >>> result.n_seq
 1
 >>> result.n_match
-6
+1
 >>> len(result)
-6
+1
 >>> result[0]
-{'signature_ac': u'PS50948', 'level': u'0', 'stop': 98, 'sequence_ac': u'USERSEQ1', 'start': 16, 'score': u'8.873'}
->>> result[1]
-{'start': 37, 'stop': 39, 'sequence_ac': u'USERSEQ1', 'signature_ac': u'PS00005'}
->>> result[2]
-{'start': 45, 'stop': 48, 'sequence_ac': u'USERSEQ1', 'signature_ac': u'PS00006'}
->>> result[3]
-{'start': 60, 'stop': 62, 'sequence_ac': u'USERSEQ1', 'signature_ac': u'PS00005'}
->>> result[4]
-{'start': 80, 'stop': 83, 'sequence_ac': u'USERSEQ1', 'signature_ac': u'PS00004'}
->>> result[5]
-{'start': 106, 'stop': 111, 'sequence_ac': u'USERSEQ1', 'signature_ac': u'PS00008'}
+{'sequence_ac': 'USERSEQ1', 'start': 16, 'stop': 98, 'signature_ac': 'PS50948', 'score': '8.873', 'level': '0'}
 \end{minted}
 
 Other ScanProsite parameters can be passed as keyword arguments; see the \href{https://prosite.expasy.org/scanprosite/scanprosite_doc.html#rest}{documentation for programmatic access of ScanProsite} for more information. As an example, passing \verb+lowscore=1+ to include matches with low level scores lets use find one additional hit:
 
+%cont-doctest
 \begin{minted}{pycon}
 >>> handle = ScanProsite.scan(seq=sequence, lowscore=1)
 >>> result = ScanProsite.read(handle)
 >>> result.n_match
-7
+2
 \end{minted}
