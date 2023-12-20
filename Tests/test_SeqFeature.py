@@ -6,6 +6,7 @@
 # as part of this package.
 """Tests Bio.SeqFeature."""
 import unittest
+import warnings
 
 from copy import deepcopy
 from os import path
@@ -13,6 +14,7 @@ from os import path
 from Bio import Seq
 from Bio import SeqIO
 from Bio import SeqRecord
+from Bio import BiopythonParserWarning
 from Bio.Data.CodonTable import TranslationError
 from Bio.SeqFeature import AfterPosition
 from Bio.SeqFeature import BeforePosition
@@ -340,13 +342,15 @@ class TestExtract(unittest.TestCase):
     def test_origin_spanning_location(self):
         """Test location spanning origin."""
         # Regular origin-spanning sequence
-        self.assertEqual(
-            str(SimpleLocation.fromstring("4..2", 4, True)), "join{[3:4], [0:2]}"
-        )
-        self.assertEqual(
-            str(SimpleLocation.fromstring("complement(4..2)", 4, True)),
-            "join{[0:2](-), [3:4](-)}",
-        )
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", category=BiopythonParserWarning)
+            self.assertEqual(
+                str(SimpleLocation.fromstring("4..2", 4, True)), "join{[3:4], [0:2]}"
+            )
+            self.assertEqual(
+                str(SimpleLocation.fromstring("complement(4..2)", 4, True)),
+                "join{[0:2](-), [3:4](-)}",
+            )
 
         # Origin-spanning location containing the entire sequence
         self.assertEqual(
