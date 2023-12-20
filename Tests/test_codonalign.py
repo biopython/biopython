@@ -106,7 +106,9 @@ class TestAddition(unittest.TestCase):
 
     def test_addition_CodonAlignment(self):
         """Check addition of CodonAlignment and CodonAlignment."""
-        new_aln = self.codon_aln + self.codon_aln
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", category=BiopythonWarning)
+            new_aln = self.codon_aln + self.codon_aln
 
         self.assertIsInstance(new_aln, codonalign.CodonAlignment)
         for x in range(len(self.codon_aln)):
@@ -275,7 +277,11 @@ class Test_build(unittest.TestCase):
         codon_aln3 = codonalign.build(
             self.aln3, self.seqlist3, codon_table=self.codontable3
         )
-        codon_aln4 = codonalign.build(self.aln1, self.seqlist1, complete_protein=True)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", category=BiopythonWarning)
+            codon_aln4 = codonalign.build(
+                self.aln1, self.seqlist1, complete_protein=True
+            )
 
 
 class Test_dn_ds(unittest.TestCase):
