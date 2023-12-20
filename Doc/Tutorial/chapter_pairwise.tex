@@ -1851,7 +1851,7 @@ Suppose we have a third related amino acid sequence and its associated nucleotid
 \begin{minted}{pycon}
 >>> aa3 = Seq("MGTALLLLLAALCAAGGALE")
 >>> pro3 = SeqRecord(aa3, id="pro3")
->>> nuc3 = Seq("ATGGGAACCGCGCTGCTTTTGCTACTGGCCGCGCTCTGCGCCGCAGGTGGGGCCCTGGAGGA")
+>>> nuc3 = Seq("ATGGGAACCGCGCTGCTTTTGCTACTGGCCGCGCTCTGCGCCGCAGGTGGGGCCCTGGAG")
 >>> rna3 = SeqRecord(nuc3, id="rna3")
 >>> nuc3.translate() == aa3
 True
