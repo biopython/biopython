@@ -77,8 +77,8 @@ else:
 
 if not samtools_exe:
     raise MissingExternalDependencyError(
-        """Install samtools and correctly set the file path to the program
-        if you want to use it from Biopython"""
+        "Install samtools and correctly set the file path to "
+        "the program if you want to use it from Biopython"
     )
 
 
