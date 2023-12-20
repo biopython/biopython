@@ -473,7 +473,7 @@ class SummaryInfo:
 
         """
         warnings.warn(
-            "The `informatton_content` method and `ic_vector` attribute of the "
+            "The `information_content` method and `ic_vector` attribute of the "
             "`SummaryInfo` class are deprecated and will be removed in a "
             "future release of Biopython. As an alternative, you can convert "
             "the multiple sequence alignment object to a new-style Alignment "
