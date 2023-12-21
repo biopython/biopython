@@ -77,7 +77,7 @@ if "--offline" in sys.argv:
 original_path = os.path.abspath(".")
 
 if os.path.basename(sys.argv[0]) == "test_Tutorial.py":
-    # sys.argv[0] will be (relative) path to test_Turorial.py - use this to allow, e.g.
+    # sys.argv[0] will be (relative) path to test_Tutorial.py - use this to allow, e.g.
     # [base]$ python Tests/test_Tutorial.py
     # [Tests/]$ python test_Tutorial.py
     tutorial_base = os.path.abspath(
