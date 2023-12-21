@@ -490,10 +490,6 @@ Please use a generator function to modify the records returned by the parser.
 Function Tm_staluc in Bio.SeqUtils.MeltingTemp was deprecated in Release 1.78,
 and removed in Release 1.80.
 
-The method 'print_index' of the CodonAdaptationIndex class in
-Bio.SeqUtils.CodonUsage was deprecated in Release 1.80. Instead of
-self.print_index(), please use print(self).
-
 The modules Bio.SeqUtils.CodonUsage and Bio.SeqUtils.CodonUsageIndices were
 deprecated in Release 1.80, and removed in Release 1.82. Please use the new
 CodonAdaptationIndex class in Bio.SeqUtils instead. Note that this class has
