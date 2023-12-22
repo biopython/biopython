@@ -103,11 +103,7 @@ tree using the \verb|draw| function.
 >>> Phylo.draw(tree)
 \end{minted}
 
-\begin{htmlonly}
-\imgsrc[width=666, height=530]{images/phylo-simple-draw.png}
-\end{htmlonly}
 
-\begin{latexonly}
 \begin{figure}[htb]
 \centering
 \includegraphics[width=0.7\textwidth]{images/phylo-simple-draw.png}
@@ -116,7 +112,6 @@ tree using the \verb|draw| function.
 \end{figure}
 
 See Figure~\ref{fig:phylo-simple-draw}.
-\end{latexonly}
 
 
 \subsection{Coloring branches within a tree}
@@ -205,11 +200,7 @@ Finally, show our work:
 >>> Phylo.draw(tree)
 \end{minted}
 
-\begin{htmlonly}
-\imgsrc[width=666, height=530]{images/phylo-color-draw.png}
-\end{htmlonly}
 
-\begin{latexonly}
 \begin{figure}[htb]
 \centering
 \includegraphics[width=0.7\textwidth]{images/phylo-color-draw.png}
@@ -218,7 +209,6 @@ Finally, show our work:
 \end{figure}
 
 See Figure~\ref{fig:phylo-color-draw}.
-\end{latexonly}
 
 Note that a clade's color includes the branch leading to that clade, as well as its
 descendents. The common ancestor of E and F turns out to be just under the root, and with this
@@ -400,11 +390,7 @@ customize the output.
 >>> Phylo.draw(tree, branch_labels=lambda c: c.branch_length)
 \end{minted}
 
-\begin{htmlonly}
-\imgsrc[width=701, height=465]{images/phylo-draw-example.png}
-\end{htmlonly}
 
-\begin{latexonly}
 \begin{figure}[tbp]
 \centering
 \includegraphics[width=0.7\textwidth]{images/phylo-draw-example.png}
@@ -413,7 +399,6 @@ customize the output.
 \end{figure}
 
 See Figure~\ref{fig:phylo-draw-example} for example.
-\end{latexonly}
 
 See the Phylo page on the Biopython wiki (\url{http://biopython.org/wiki/Phylo}) for
 descriptions and examples of the more advanced functionality in \verb|draw_ascii|,

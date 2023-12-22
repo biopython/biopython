@@ -127,12 +127,6 @@ for example:
 gd_diagram.write("plasmid_linear.png", "PNG")
 \end{minted}
 
-\begin{htmlonly}
-%The blank line below is important to start a new paragraph
-\imgsrc[width=550, height=400]{images/plasmid_linear.png}
-
-\end{htmlonly}
-\begin{latexonly}
 The expected output is shown in Figure~\ref{fig:plasmid_linear}.
 \begin{figure}[htbp]
 \centering
@@ -140,7 +134,6 @@ The expected output is shown in Figure~\ref{fig:plasmid_linear}.
 \caption{Simple linear diagram for \textit{Yersinia pestis biovar Microtus} plasmid pPCP1.}
 \label{fig:plasmid_linear}
 \end{figure}
-\end{latexonly}
 Notice that the \verb|fragments| argument which we set to four controls how
 many pieces the genome gets broken up into.
 
@@ -158,12 +151,6 @@ gd_diagram.draw(
 gd_diagram.write("plasmid_circular.pdf", "PDF")
 \end{minted}
 
-\begin{htmlonly}
-%The blank line below is important to start a new paragraph
-\imgsrc[width=400, height=400]{images/plasmid_circular.png}
-
-\end{htmlonly}
-\begin{latexonly}
 The expected output is shown in Figure~\ref{fig:plasmid_circular}.
 \begin{figure}[htbp]
 \centering
@@ -171,7 +158,6 @@ The expected output is shown in Figure~\ref{fig:plasmid_circular}.
 \caption{Simple circular diagram for \textit{Yersinia pestis biovar Microtus} plasmid pPCP1.}
 \label{fig:plasmid_circular}
 \end{figure}
-\end{latexonly}
 These figures are not very exciting, but we've only just got started.
 
 \subsection{A bottom up example}
@@ -253,12 +239,7 @@ gdd.draw(format="linear", pagesize=(15 * cm, 4 * cm), fragments=1, start=0, end=
 gdd.write("GD_labels_default.pdf", "pdf")
 \end{minted}
 
-\begin{htmlonly}
-The top part of the image in the next subsection shows the output
-\end{htmlonly}
-\begin{latexonly}
 The output is shown at the top of Figure~\ref{fig:gd_sigil_labels}
-\end{latexonly}
 (in the default feature color, pale green).
 
 Notice that we have used the \texttt{name} argument here to specify the
@@ -318,14 +299,6 @@ gd_feature_set.add_feature(
 
 \noindent Combining each of these three fragments with the complete example
 in the previous section should give something like
-\begin{htmlonly}
-this:
-
-%The blank lines above and below are important to trigger paragraph breaks
-\imgsrc[width=600, height=700]{images/GD_sigil_labels.png}
-
-\end{htmlonly}
-\begin{latexonly}
 the tracks in Figure~\ref{fig:gd_sigil_labels}.
 \begin{figure}[htbp]
 \centering
@@ -338,7 +311,6 @@ Section~\ref{sec:gd_feature_captions}).
 }
 \label{fig:gd_sigil_labels}
 \end{figure}
-\end{latexonly}
 
 We've not shown it here, but you can also set \texttt{label\_color} to
 control the label's color (used in Section~\ref{sec:gd_nice_example}).
@@ -380,22 +352,13 @@ gd_feature_set.add_feature(feature, sigil="BIGARROW")
 \end{minted}
 
 These are shown
-\begin{htmlonly}
-below.
-\end{htmlonly}
-\begin{latexonly}
 in Figure~\ref{fig:gd_sigils}.
-\end{latexonly}
 Most sigils fit into a bounding box (as given by the default BOX sigil),
 either above or below the axis for the forward or reverse strand, or
 straddling it (double the height) for strand-less features.
 The BIGARROW sigil is different, always straddling the axis with the
 direction taken from the feature's stand.
 
-\begin{htmlonly}
-\imgsrc[width=425, height=600]{images/GD_sigils.png}
-\end{htmlonly}
-\begin{latexonly}
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.8\textwidth]{images/GD_sigils.png}
@@ -403,7 +366,6 @@ direction taken from the feature's stand.
 (see Section~\ref{sec:gd_sigils})}
 \label{fig:gd_sigils}
 \end{figure}
-\end{latexonly}
 
 \subsection{Arrow sigils}
 \label{sec:gd_arrow_sigils}
@@ -424,13 +386,6 @@ gd_feature_set.add_feature(
 )
 \end{minted}
 
-\begin{htmlonly}
-\noindent The results are shown below:
-
-\imgsrc[width=600, height=700]{images/GD_sigil_arrow_shafts.png}
-
-\end{htmlonly}
-\begin{latexonly}
 \noindent The results are shown in Figure~\ref{fig:gd_sigil_arrow_shafts}.
 \begin{figure}[htbp]
 \centering
@@ -439,7 +394,6 @@ gd_feature_set.add_feature(
 (see Section~\ref{sec:gd_arrow_sigils})}
 \label{fig:gd_sigil_arrow_shafts}
 \end{figure}
-\end{latexonly}
 
 Secondly, the length of the arrow head - given as a proportion of the height
 of the bounding box (defaulting to $0.5$, or $50\%$):
@@ -453,13 +407,6 @@ gd_feature_set.add_feature(feature, sigil="ARROW", color="orange", arrowhead_len
 gd_feature_set.add_feature(feature, sigil="ARROW", color="red", arrowhead_length=10000)
 \end{minted}
 
-\begin{htmlonly}
-\noindent The results are shown below:
-
-\imgsrc[width=600, height=700]{images/GD_sigil_arrow_heads.png}
-
-\end{htmlonly}
-\begin{latexonly}
 \noindent The results are shown in Figure~\ref{fig:gd_sigil_arrow_heads}.
 \begin{figure}[htbp]
 \centering
@@ -468,7 +415,6 @@ gd_feature_set.add_feature(feature, sigil="ARROW", color="red", arrowhead_length
 (see Section~\ref{sec:gd_arrow_sigils})}
 \label{fig:gd_sigil_arrow_heads}
 \end{figure}
-\end{latexonly}
 
 Biopython 1.61 adds a new \verb|BIGARROW| sigil which always straddles
 the axis, pointing left for the reverse strand or right otherwise:
@@ -558,15 +504,6 @@ gd_diagram.write("plasmid_circular_nice.eps", "EPS")
 gd_diagram.write("plasmid_circular_nice.svg", "SVG")
 \end{minted}
 
-\begin{htmlonly}
-\noindent And the output:
-
-\imgsrc[width=550, height=400]{images/plasmid_linear_nice.png}
-
-\imgsrc[width=591, height=591]{images/plasmid_circular_nice.png}
-
-\end{htmlonly}
-\begin{latexonly}
 \noindent The expected output is shown in Figures~\ref{fig:plasmid_linear_nice}
 and~\ref{fig:plasmid_circular_nice}.
 \begin{figure}[htbp]
@@ -585,7 +522,6 @@ pPCP1 showing selected restriction digest sites (see
 Section~\ref{sec:gd_nice_example}).}
 \label{fig:plasmid_circular_nice}
 \end{figure}
-\end{latexonly}
 
 \subsection{Multiple tracks}
 \label{sec:gd_multiple_tracks}
@@ -722,13 +658,6 @@ gd_diagram.write(name + ".eps", "EPS")
 gd_diagram.write(name + ".svg", "SVG")
 \end{minted}
 
-\begin{htmlonly}
-\noindent The result:
-
-\imgsrc[width=565, height=400]{images/three_track_simple.png}
-
-\end{htmlonly}
-\begin{latexonly}
 \noindent The expected output is shown in Figure~\ref{fig:three_track_simple}.
 \begin{figure}[htbp]
 \centering
@@ -739,7 +668,6 @@ gd_diagram.write(name + ".svg", "SVG")
 (see Section~\ref{sec:gd_multiple_tracks}).}
 \label{fig:three_track_simple}
 \end{figure}
-\end{latexonly}
 I did wonder why in the original manuscript there were no red or orange genes
 marked in the bottom phage. Another important point is here the phage are
 shown with different lengths - this is because they are all drawn to the same
@@ -884,13 +812,6 @@ is to use transparency in ReportLab, by using colors with their alpha channel se
 However, this kind of shaded color scheme combined with overlap transparency
 would be difficult to interpret.
 %Again, HTML and PDF versions for the figure
-\begin{htmlonly}
-\noindent The result:
-
-\imgsrc[width=565, height=400]{images/three_track_cl.png}
-
-\end{htmlonly}
-\begin{latexonly}
 \noindent The expected output is shown in Figure~\ref{fig:three_track_cl}.
 \begin{figure}[htbp]
 \centering
@@ -901,7 +822,6 @@ would be difficult to interpret.
 shaded by percentage identity (see Section~\ref{sec:gd_cross_links}).}
 \label{fig:three_track_cl}
 \end{figure}
-\end{latexonly}
 
 There is still a lot more that can be done within Biopython to help
 improve this figure. First of all, the cross links in this case are
@@ -917,13 +837,6 @@ are demonstrated in the example script
 \href{https://github.com/biopython/biopython/blob/master/Doc/examples/Proux_et_al_2002_Figure_6.py}{Proux\_et\_al\_2002\_Figure\_6.py}
 included in the \texttt{Doc/examples} folder of the Biopython source code.
 %TODO - Add a link get the file directly (for Windows users etc).
-\begin{htmlonly}
-\noindent The result:
-
-\imgsrc[width=565, height=400]{images/three_track_cl2a.png}
-
-\end{htmlonly}
-\begin{latexonly}
 \noindent The expected output is shown in Figure~\ref{fig:three_track_cl2}.
 \begin{figure}[htbp]
 \centering
@@ -934,7 +847,6 @@ included in the \texttt{Doc/examples} folder of the Biopython source code.
 shaded by percentage identity (see Section~\ref{sec:gd_cross_links}).}
 \label{fig:three_track_cl2}
 \end{figure}
-\end{latexonly}
 
 Beyond that, finishing touches you might want to do manually in a vector
 image editor include fine tuning the placement of gene labels, and adding
@@ -1015,7 +927,6 @@ There is an example in Jupe \textit{et al.} (2012) \cite{jupe2012}
 \subsection{Simple Chromosomes}
 Here is a very simple example - for which we'll use \textit{Arabidopsis thaliana}.
 
-\begin{latexonly}
 \begin{figure}[p]
 \centering
 \includegraphics[scale=0.45]{images/simple_chrom.pdf}
@@ -1028,7 +939,6 @@ Here is a very simple example - for which we'll use \textit{Arabidopsis thaliana
 \caption{Chromosome diagram for \textit{Arabidopsis thaliana} showing tRNA genes.}
 \label{fig:trnachromosome}
 \end{figure}
-\end{latexonly}
 
 You can skip this bit, but first I downloaded the five sequenced chromosomes
 as five individual FASTA files from the NCBI's FTP site
@@ -1103,16 +1013,7 @@ chr_diagram.draw("simple_chrom.pdf", "Arabidopsis thaliana")
 \end{minted}
 
 This should create a very simple PDF file, shown
-\begin{htmlonly}
-here:
-
-%The blank lines above and below are important to trigger paragraph breaks
-\imgsrc[width=650, height=460]{images/simple_chrom.png}
-
-\end{htmlonly}
-\begin{latexonly}
 in Figure~\ref{fig:simplechromosome}.
-\end{latexonly}
 This example is deliberately short and sweet. The next example shows the
 location of features of interest.
 
@@ -1183,13 +1084,4 @@ chr_diagram.draw("tRNA_chrom.pdf", "Arabidopsis thaliana")
 It might warn you about the labels being too close together - have a look
 at the forward strand (right hand side) of Chr I, but it should create a
 colorful PDF file, shown
-\begin{htmlonly}
-here:
-
-%The blank lines above and below are important to trigger paragraph breaks
-\imgsrc[width=650, height=460]{images/tRNA_chrom.png}
-
-\end{htmlonly}
-\begin{latexonly}
 in Figure~\ref{fig:simplechromosome}.
-\end{latexonly}
