@@ -1088,17 +1088,10 @@ pylab.show()
 %
 % Have a HTML version and a PDF version to display nicely...
 %
-\begin{htmlonly}
-\noindent That should pop up a new window containing the following graph:
-
-\imgsrc[width=600, height=450]{images/hist_plot.png}
-
-\end{htmlonly}
 %
 % Now the PDF equivalent where we cannot always expect the figure
 % to be positioned right next to the text, so will use a reference.
 %
-\begin{latexonly}
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.8\textwidth]{images/hist_plot.png}
@@ -1107,7 +1100,6 @@ pylab.show()
 \end{figure}
 \noindent That should pop up a new window containing the graph
 shown in Figure~\ref{fig:seq-len-hist}.
-\end{latexonly}
 %
 % The text now continues...
 %
@@ -1157,17 +1149,10 @@ pylab.show()
 %
 % Have an HTML version and a PDF version to display nicely...
 %
-\begin{htmlonly}
-\noindent As in the previous example, that should pop up a new window containing a graph:
-
-\imgsrc[width=600, height=450]{images/gc_plot.png}
-
-\end{htmlonly}
 %
 % Now the PDF equivalent where we cannot always expect the figure
 % to be positioned right next to the text, so we'll use a reference.
 %
-\begin{latexonly}
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.8\textwidth]{images/gc_plot.png}
@@ -1175,7 +1160,6 @@ pylab.show()
 \label{fig:seq-gc-plot}
 \end{figure}
 \noindent As in the previous example, that should pop up a new window with the graph shown in Figure~\ref{fig:seq-gc-plot}.
-\end{latexonly}
 %
 % The text now continues...
 %
@@ -1187,25 +1171,18 @@ A dot plot is a way of visually comparing two nucleotide sequences for similarit
 each other.  A sliding window is used to compare short sub-sequences to each other,
 often with a mismatch threshold.  Here for simplicity we'll only look for perfect
 matches (shown in black
-\begin{latexonly}
 in Figure~\ref{fig:nuc-dot-plot}).
-\end{latexonly}
-\begin{htmlonly}
-in the plot below).
-\end{htmlonly}
 
 %
 % Now the PDF equivalent where we cannot always expect the figure
 % to be positioned right next to the text, so we'll use a reference.
 %
-\begin{latexonly}
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.8\textwidth]{images/dot_plot.png}
 \caption{Nucleotide dot plot of two orchid sequence lengths (using pylab's imshow function).}
 \label{fig:nuc-dot-plot}
 \end{figure}
-\end{latexonly}
 
 To start off, we'll need two sequences.  For the sake of argument, we'll just take
 the first two from our orchid FASTA file \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/ls_orchid.fasta}{ls\_orchid.fasta}:
@@ -1259,15 +1236,7 @@ pylab.show()
 %
 % Have a HTML version and a PDF version to display nicely...
 %
-\begin{htmlonly}
-\noindent That should pop up a new window containing a graph like this:
-
-\imgsrc[width=600, height=450]{images/dot_plot.png}
-
-\end{htmlonly}
-\begin{latexonly}
 \noindent That should pop up a new window showing the graph in Figure~\ref{fig:nuc-dot-plot}.
-\end{latexonly}
 %
 % The text now continues...
 %
@@ -1335,13 +1304,6 @@ pylab.show()
 %
 % Have a HTML version and a PDF version to display nicely...
 %
-\begin{htmlonly}
-\noindent That should pop up a new window containing a graph like this:
-
-\imgsrc[width=600, height=450]{images/dot_plot_scatter.png}
-
-\end{htmlonly}
-\begin{latexonly}
 \noindent That should pop up a new window showing the graph in Figure~\ref{fig:nuc-dot-plot-scatter}.
 \begin{figure}[htbp]
 \centering
@@ -1349,7 +1311,6 @@ pylab.show()
 \caption{Nucleotide dot plot of two orchid sequence lengths (using pylab's scatter function).}
 \label{fig:nuc-dot-plot-scatter}
 \end{figure}
-\end{latexonly}
 Personally I find this second plot much easier to read!
 Again note that we have \emph{not} checked for reverse complement matches here
 -- you could extend this example to do this, and perhaps plot the forward
@@ -1397,7 +1358,6 @@ Solexa/Illumina FASTQ variant file formats instead.
 
 This example uses the \verb|pylab.savefig(...)| function instead of
 \verb|pylab.show(...)|, but as mentioned before both are useful.
-\begin{latexonly}
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.8\textwidth]{images/SRR001666.png}
@@ -1405,14 +1365,6 @@ This example uses the \verb|pylab.savefig(...)| function instead of
 \label{fig:paired-end-qual-plot}
 \end{figure}
 The result is shown in Figure~\ref{fig:paired-end-qual-plot}.
-\end{latexonly}
-\begin{htmlonly}
-Here is the result:
-
-%Blank lines here are important!
-\imgsrc[width=600, height=600]{images/SRR001666.png}
-
-\end{htmlonly}
 
 
 \section{BioSQL -- storing sequences in a relational database}
