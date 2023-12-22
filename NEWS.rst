@@ -10,8 +10,8 @@ https://www.open-bio.org/category/obf-projects/biopython/
 
 The latest news is at the top of this file.
 
-(In progress, not yet released): Biopython 1.82
-===============================================
+22 December 2023: Biopython 1.82
+================================
 
 This release of Biopython supports Python 3.8, 3.9, 3.10, 3.11 and 3.12. It
 has also been tested on PyPy3.8 v7.8.16.
