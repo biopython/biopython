@@ -1,7 +1,7 @@
 subdirs :=
 BP_VERSION := $(shell python -c "`grep ^__version__ ../Bio/__init__.py`; print('dev' if 'dev' in __version__ else __version__)")
 
-all:  Tutorial.html Tutorial.txt pdf $(subdirs)
+all:  pdf $(subdirs)
 pdf:  Tutorial.pdf biopdb_faq.pdf
 
 Tutorial.pdf: Tutorial.tex Tutorial/chapter_*.tex
@@ -13,12 +13,6 @@ biopdb_faq.pdf: biopdb_faq.tex
 	pdflatex biopdb_faq.tex
 	pdflatex biopdb_faq.tex
 	pdflatex biopdb_faq.tex
-
-Tutorial.html: Tutorial.tex Tutorial/chapter_*.tex version.sh
-	hevea -exec ./version.sh -exec xxdate.exe -fix Tutorial.tex
-
-Tutorial.txt: Tutorial.tex Tutorial/chapter_*.tex version.sh
-	hevea -exec ./version.sh -exec xxdate.exe -fix -text Tutorial.tex
 
 version.sh: version.in
 	sed "s/\@VERSION\@/${BP_VERSION}/g" version.in > version.sh
