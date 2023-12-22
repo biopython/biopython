@@ -1085,13 +1085,6 @@ pylab.ylabel("Count")
 pylab.show()
 \end{minted}
 
-%
-% Have a HTML version and a PDF version to display nicely...
-%
-%
-% Now the PDF equivalent where we cannot always expect the figure
-% to be positioned right next to the text, so will use a reference.
-%
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.8\textwidth]{images/hist_plot.png}
@@ -1100,9 +1093,6 @@ pylab.show()
 \end{figure}
 \noindent That should pop up a new window containing the graph
 shown in Figure~\ref{fig:seq-len-hist}.
-%
-% The text now continues...
-%
 Notice that most of these orchid sequences are about $740$ bp long, and there could be
 two distinct classes of sequence here with a subset of shorter sequences.
 
@@ -1146,13 +1136,6 @@ pylab.ylabel("GC%")
 pylab.show()
 \end{minted}
 
-%
-% Have an HTML version and a PDF version to display nicely...
-%
-%
-% Now the PDF equivalent where we cannot always expect the figure
-% to be positioned right next to the text, so we'll use a reference.
-%
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.8\textwidth]{images/gc_plot.png}
@@ -1160,9 +1143,6 @@ pylab.show()
 \label{fig:seq-gc-plot}
 \end{figure}
 \noindent As in the previous example, that should pop up a new window with the graph shown in Figure~\ref{fig:seq-gc-plot}.
-%
-% The text now continues...
-%
 If you tried this on the full set of genes from one organism, you'd probably get a much
 smoother plot than this.
 
@@ -1173,10 +1153,6 @@ often with a mismatch threshold.  Here for simplicity we'll only look for perfec
 matches (shown in black
 in Figure~\ref{fig:nuc-dot-plot}).
 
-%
-% Now the PDF equivalent where we cannot always expect the figure
-% to be positioned right next to the text, so we'll use a reference.
-%
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.8\textwidth]{images/dot_plot.png}
@@ -1233,13 +1209,7 @@ pylab.show()
 %pylab.savefig("dot_plot.png", dpi=75)
 %pylab.savefig("dot_plot.pdf")
 
-%
-% Have a HTML version and a PDF version to display nicely...
-%
 \noindent That should pop up a new window showing the graph in Figure~\ref{fig:nuc-dot-plot}.
-%
-% The text now continues...
-%
 As you might have expected, these two sequences are very similar with a
 partial line of window sized matches along the diagonal.  There are no off
 diagonal matches which would be indicative of inversions or other interesting
@@ -1301,9 +1271,7 @@ pylab.show()
 \end{minted}
 %pylab.savefig("dot_plot_scatter.png", dpi=75)
 %pylab.savefig("dot_plot_scatter.pdf")
-%
-% Have a HTML version and a PDF version to display nicely...
-%
+
 \noindent That should pop up a new window showing the graph in Figure~\ref{fig:nuc-dot-plot-scatter}.
 \begin{figure}[htbp]
 \centering
