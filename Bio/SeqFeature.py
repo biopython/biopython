@@ -286,6 +286,32 @@ class SeqFeature:
             qualifiers=self.qualifiers.copy(),
         )
 
+    @property
+    def start(self):
+        """Start location - left most (minimum) value, regardless of strand.
+
+        Read only, returns an integer like position object, possibly a fuzzy position.
+        `feature.start` is shorthand for `feature.location.start`.
+        """
+        return self.location.start
+
+    @property
+    def end(self):
+        """End location - right most (maximum) value, regardless of strand.
+
+        Read only, returns an integer like position object, possibly a fuzzy position.
+        `feature.end` is shorthand for `feature.location.end`.
+        """
+        return self.location.end
+
+    @property
+    def strand(self):
+        """Strand of the location (+1, -1, 0 or None).
+
+        `feature.strand` is shorthand for `feature.location.strand`.
+        """
+        return self.location.strand
+
     def extract(self, parent_sequence, references=None):
         """Extract the feature's sequence from supplied parent sequence.
 
