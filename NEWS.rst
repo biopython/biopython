@@ -14,8 +14,8 @@ The latest news is at the top of this file.
 ===============================================
 
 This release of Biopython supports Python 3.8, 3.9, 3.10, 3.11 and 3.12. It
-has also been tested on PyPy3.8 v7.3.11.
-Python 3.8 is approaching end-of-life, support for it is now deprecated.
+has also been tested on PyPy3.9 v7.3.13. Python 3.8 is approaching end of
+life, our support for it is now deprecated.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
