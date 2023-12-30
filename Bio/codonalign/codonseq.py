@@ -418,18 +418,18 @@ def _count_site_NG86(codon_lst, codon_table, k=1):
         this_codon_N_site = this_codon_S_site = 0
         for neighbor in neighbor_codon["transition"]:
             if neighbor in codon_table.stop_codons:
-                this_codon_N_site += 1
-            elif codon_table.forward_table[neighbor] == aa:
-                this_codon_S_site += 1
-            else:
-                this_codon_N_site += 1
-        for neighbor in neighbor_codon["transversion"]:
-            if neighbor in codon_table.stop_codons:
                 this_codon_N_site += k
             elif codon_table.forward_table[neighbor] == aa:
                 this_codon_S_site += k
             else:
                 this_codon_N_site += k
+        for neighbor in neighbor_codon["transversion"]:
+            if neighbor in codon_table.stop_codons:
+                this_codon_N_site += 1
+            elif codon_table.forward_table[neighbor] == aa:
+                this_codon_S_site += 1
+            else:
+                this_codon_N_site += 1
         norm_const = (this_codon_N_site + this_codon_S_site) / 3
         S_site += this_codon_S_site / norm_const
         N_site += this_codon_N_site / norm_const
