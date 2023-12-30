@@ -236,6 +236,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Maximilian Peters <maximili.peters at mail.huji.ac.il>
 - Melissa Gymrek <https://github.com/mgymrek>
 - Michael Hoffman <https://github.com/michaelmhoffman>
+- Michael M. <https://github.com/michaelfm1211>
 - Michael R. Crusoe <https://orcid.org/0000-0002-2961-9670>
 - Michal Kurowski <michal at domain genesilico.pl>
 - Michał J. Gajda <https://github.com/mgajda>
