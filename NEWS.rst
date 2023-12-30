@@ -14,7 +14,7 @@ The latest news is at the top of this file.
 ===============================================
 
 This release of Biopython supports Python 3.8, 3.9, 3.10, 3.11 and 3.12. It
-has also been tested on PyPy3.8 v7.8.16.
+has also been tested on PyPy3.8 v7.3.11.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
@@ -25,7 +25,7 @@ possible, especially the following contributors:
 ================================
 
 This release of Biopython supports Python 3.8, 3.9, 3.10, 3.11 and 3.12. It
-has also been tested on PyPy3.8 v7.8.16.
+has also been tested on PyPy3.8 v7.3.11.
 
 The ``inplace`` argument of ``complement`` and ``reverse_complement`` in
 ``Bio.Seq`` now always default to ``False`` both for ``Seq`` and ``MutableSeq``
