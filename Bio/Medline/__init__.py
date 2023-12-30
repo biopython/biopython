@@ -166,21 +166,20 @@ def parse(handle):
     key = ""
     record = Record()
     for line in handle:
-        orig_line = line
-        line = line.rstrip()
+        if line[:6] == "      ":  # continuation line
+            line = line.rstrip()
+            if line == "":
+                # All blank continuation lines should be considered a new line.
+                # See issue #4557
+                line = "      \n"
 
-        if line == "" and orig_line[:6] == "      ":
-            # All blank continuation lines should be considered a new line. See
-            # issue #4557
-            line = "      \n"
-
-        if orig_line[:6] == "      ":  # continuation line
             if key in ["MH", "AD"]:
                 # Multi-line MESH term, want to append to last entry in list
                 record[key][-1] += line[5:]  # including space using line[5:]
             else:
                 record[key].append(line[6:])
-        elif line:
+        elif line != "\n" and line != "\r\n":
+            line = line.rstrip()
             key = line[:4].rstrip()
             if key not in record:
                 record[key] = []
