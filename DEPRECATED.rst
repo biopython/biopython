@@ -12,7 +12,7 @@ First supported in release 1.79, although it was mostly working in 1.78.
 
 Python 3.8
 ----------
-First supported in release 1.75.
+First supported in release 1.75. Support deprecated as of Release 1.83.
 
 Python 3.7
 ----------
