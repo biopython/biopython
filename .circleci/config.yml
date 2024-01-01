@@ -36,7 +36,7 @@ jobs:
       - run:
           name: Sphinx
           command: |
-            make -C Doc/api/ html
+            make -C Doc/ html
       - deploy:
           name: Deploy Sphinx documentation
           command: |

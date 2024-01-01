@@ -364,7 +364,7 @@ jobs:
 
     - name: Make documentation
       run: |
-        make -C Doc/api html
+        make -C Doc html
       shell: bash
 
   cleanup_wheels:
