@@ -918,7 +918,7 @@ array([0., 5., 0., 0.])
 {'A': 0.0, 'C': 5.0, 'G': 0.0, 'T': 0.0}
 \end{minted}
 
-While the alphabet of an \verb+Array+ is usually a string, you may also use a tuple of (immutable) objects. This is used for example for a \hyperlink{codonmatrix}{codon substitution matrix}, where the keys are not individual nucleotides or amino acids but instead three-nucleotide codons.
+While the alphabet of an \verb+Array+ is usually a string, you may also use a tuple of (immutable) objects. This is used for example for a codon substitution matrix (as in the \verb+substitution_matrices.load("SCHNEIDER")+ example shown later), where the keys are not individual nucleotides or amino acids but instead three-nucleotide codons.
 
 While the \verb+alphabet+ property of an \verb+Array+ is immutable, you can create a new \verb+Array+ object by selecting the letters you are interested in from the alphabet. For example,
 %cont-doctest
@@ -1340,9 +1340,7 @@ To get a full list of available substitution matrices, use \verb+load+ without a
 ['BENNER22', 'BENNER6', 'BENNER74', 'BLASTN', 'BLASTP', 'BLOSUM45', 'BLOSUM50', ..., 'TRANS']
 \end{minted}
 
-\hypertarget{codonmatrix}{
 Note that the substitution matrix provided by Schneider \textit{et al.} \cite{schneider2005} uses an alphabet consisting of three-nucleotide codons:
-}
 
 %cont-doctest
 \begin{minted}{pycon}
