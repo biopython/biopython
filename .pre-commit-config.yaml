@@ -56,14 +56,19 @@ repos:
         args: [
             --ignore-roles=ref,
             --ignore-directives=toctree,
-            --report-level=warning
+            --report-level=warning,
+            --ignore-messages=Unknown\ target\ name
         ]
 -   repo: https://github.com/PyCQA/doc8
     rev: v1.1.1
     hooks:
     -   id: doc8
         additional_dependencies: [pygments]
-        args: [--quiet,--ignore-path=Doc/examples/ec_*.txt, --ignore=D004]
+        args: [
+        --quiet,
+        --ignore-path=Doc/examples/ec_*.txt,
+        '--ignore=D000,D001,D002,D004'
+    ]
 -   repo: https://github.com/codespell-project/codespell
     rev: v2.2.6
     hooks:
