@@ -54,7 +54,7 @@ repos:
     hooks:
     -   id: rstcheck
         args: [
-            --ignore-roles=ref,
+            '--ignore-roles=ref,numref',
             --ignore-directives=toctree,
             --report-level=warning,
             --ignore-messages=Unknown\ target\ name
