@@ -126,6 +126,7 @@ PACKAGES = [
     "Bio.Blast",
     "Bio.CAPS",
     "Bio.Cluster",
+    "Bio.codecs",
     "Bio.codonalign",
     "Bio.Compass",
     "Bio.Data",

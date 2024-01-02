@@ -20,6 +20,7 @@ Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - Peter Cock
+- Will Tyler (first contribution)
 
 22 December 2023: Biopython 1.82
 ================================
