@@ -47,7 +47,7 @@ repos:
     rev: 1.16.0
     hooks:
     -   id: blacken-docs
-        additional_dependencies: [black==23.9.1]
+        additional_dependencies: [black==23.12.1]
         exclude: ^.github/
 -   repo: https://github.com/rstcheck/rstcheck
     rev: v6.2.0
