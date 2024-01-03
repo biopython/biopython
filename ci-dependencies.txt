@@ -20,6 +20,7 @@ mmtf-python
 #mysqlclient
 #mysql-connector-python
 networkx
+igraph>=0.10.0
 rdflib
 reportlab
 scipy

@@ -41,9 +41,14 @@ function can therefore be passed directly to the BLAST parser. Also, this
 allows data to be downloaded in a binary format such as JSON2, which returns
 data in a zipped JSON format.
 
+A function called ``Bio.Phylo.to_igraph`` has been added to convert a
+``Bio.Phylo.Tree`` into an ``igraph.Graph`` graph, in parallel to the existing
+function to convert the same object into a ``networkx`` graph.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Fabio Zanini (first contribution)
 - Michiel de Hoon
 - Peter Cock
 
@@ -161,6 +166,7 @@ possible, especially the following contributors:
 - Vladislav Kuznetsov (first contribution)
 - Wibowo Arindrarto
 - Yiming Qu (first contribution)
+
 
 12 February 2023: Biopython 1.81
 ================================

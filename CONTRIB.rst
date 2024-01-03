@@ -122,6 +122,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Erik Whiting <https://github.com/erik-whiting>
 - Ernesto Rodriguez <https://github.com/netogallo>
 - Fabian Egli <https://github.com/fabianegli>
+- Fabio Zanini <https://github.com/iosonofabio>
 - Farhan Khan <https://github.com/BabaYaga1221>
 - Fei Qi <https://github.com/qifei9>
 - Foen Peng <https://github.com/foenpeng>
