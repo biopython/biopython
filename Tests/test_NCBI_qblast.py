@@ -26,13 +26,11 @@ correct position.
 """
 import unittest
 from unittest import mock
-import warnings
 
 from urllib.error import HTTPError
 from io import BytesIO
 
 from Bio import MissingExternalDependencyError
-from Bio import BiopythonWarning
 
 # We want to test these:
 from Bio.Blast import NCBIWWW

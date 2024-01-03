@@ -11,7 +11,7 @@ Now that that is all out of the way, let's get into what we can do with Biopytho
 
 As mentioned in the introduction, Biopython is a set of libraries to provide the ability to deal with ``things'' of interest to biologists working on the computer. In general this means that you will need to have at least some programming experience (in Python, of course!) or at least an interest in learning to program. Biopython's job is to make your job easier as a programmer by supplying reusable libraries so that you can focus on answering your specific question of interest, instead of focusing on the internals of parsing a particular file format (of course, if you want to help by writing a parser that doesn't exist and contributing it to Biopython, please go ahead!). So Biopython's job is to make you happy!
 
-One thing to note about Biopython is that it often provides multiple ways of ``doing the same thing.'' Things have improved in recent releases, but this can still be frustrating as in Python there should ideally be one right way to do something. However, this can also be a real benefit because it gives you lots of flexibility and control over the libraries. The tutorial helps to show you the common or easy ways to do things so that you can just make things work. To learn more about the alternative possibilities, look in the Cookbook (Chapter~\ref{chapter:cookbook}, this has some cools tricks and tips), the Advanced section (Chapter~\ref{chapter:advanced}), the built in ``docstrings'' (via the Python help command, or the \href{http://biopython.org/docs/\bpversion/api/}{API documentation}) or ultimately the code itself.
+One thing to note about Biopython is that it often provides multiple ways of ``doing the same thing.'' Things have improved in recent releases, but this can still be frustrating as in Python there should ideally be one right way to do something. However, this can also be a real benefit because it gives you lots of flexibility and control over the libraries. The tutorial helps to show you the common or easy ways to do things so that you can just make things work. To learn more about the alternative possibilities, look in the Cookbook (Chapter~\ref{chapter:cookbook}, this has some cools tricks and tips), and built in ``docstrings'' (via the Python help command, or the \href{http://biopython.org/docs/\bpversion/api/}{API documentation}) or ultimately the code itself.
 
 \section{Working with sequences}
 \label{sec:sequences}
@@ -62,7 +62,7 @@ Of course, orchids are not only beautiful to look at, they are also extremely in
 
 After a little bit of reading up we discover that the Lady Slipper Orchids are in the Orchidaceae family and the Cypripedioideae sub-family and are made up of 5 genera:  \emph{Cypripedium}, \emph{Paphiopedilum}, \emph{Phragmipedium}, \emph{Selenipedium} and \emph{Mexipedium}.
 
-That gives us enough to get started delving for more information. So, let's look at how the Biopython tools can help us.  We'll start with sequence parsing in Section~\ref{sec:sequence-parsing}, but the orchids will be back later on as well - for example we'll search PubMed for papers about orchids and extract sequence data from GenBank in Chapter~\ref{chapter:entrez}, extract data from Swiss-Prot from certain orchid proteins in Chapter~\ref{chapter:uniprot}, and work with ClustalW multiple sequence alignments of orchid proteins in Section~\ref{sec:align_clustal}.
+That gives us enough to get started delving for more information. So, let's look at how the Biopython tools can help us.  We'll start with sequence parsing in Section~\ref{sec:sequence-parsing}, but the orchids will be back later on as well - for example we'll search PubMed for papers about orchids and extract sequence data from GenBank in Chapter~\ref{chapter:entrez}, extract data from Swiss-Prot from certain orchid proteins in Chapter~\ref{chapter:uniprot}, and work with ClustalW multiple sequence alignments of orchid proteins in Section~\ref{subsec:align_clustal}.
 
 \section{Parsing sequence file formats}
 \label{sec:sequence-parsing}
@@ -142,7 +142,7 @@ You'll notice that a shorter string has been used as the \verb|seq_record.id| in
 
 \subsection{I love parsing -- please don't stop talking about it!}
 
-Biopython has a lot of parsers, and each has its own little special niches based on the sequence format it is parsing and all of that.  Chapter~\ref{chapter:seqio} covers \verb|Bio.SeqIO| in more detail, while Chapter~\ref{chapter:align} introduces \verb|Bio.AlignIO| for sequence alignments.
+Biopython has a lot of parsers, and each has its own little special niches based on the sequence format it is parsing and all of that.  Chapter~\ref{chapter:seqio} covers \verb|Bio.SeqIO| in more detail, while Chapter~\ref{chapter:align} introduces \verb|Bio.Align| for sequence alignments.
 
 While the most popular file formats have parsers integrated into \verb|Bio.SeqIO| and/or \verb|Bio.AlignIO|, for some of the rarer and unloved file formats there is either no parser at all, or an old parser which has not been linked in yet.
 Please also check the wiki pages \url{http://biopython.org/wiki/SeqIO} and \url{http://biopython.org/wiki/AlignIO} for the latest information, or ask on the mailing list. The wiki pages should include an up to date list of supported file types, and some additional  examples.

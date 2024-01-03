@@ -719,7 +719,7 @@ class WellRecord:
             time = np.arange(start, stop, time.step)
             return list(self._interpolate(time))
 
-        elif isinstance(time, int) or isinstance(time, float):
+        elif isinstance(time, (float, int)):
             return self._interpolate(time)
 
         raise ValueError("Invalid index")

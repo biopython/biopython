@@ -194,7 +194,7 @@ class StructureBuilder:
 
         Arguments:
          - name - string, atom name, e.g. CA, spaces should be stripped
-         - coord - Numeric array (Float0, size 3), atomic coordinates
+         - coord - NumPy array (Float0, length 3), atomic coordinates
          - b_factor - float, B factor
          - occupancy - float
          - altloc - string, alternative location specifier
@@ -310,4 +310,3 @@ class StructureBuilder:
 
     def set_symmetry(self, spacegroup, cell):
         """Set symmetry."""
-        pass

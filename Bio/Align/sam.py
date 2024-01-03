@@ -24,15 +24,7 @@ with Python and other alignment formats.
 from itertools import chain
 import copy
 
-try:
-    import numpy
-except ImportError:
-    from Bio import MissingPythonDependencyError
-
-    raise MissingPythonDependencyError(
-        "Please install numpy if you want to use Bio.Align. "
-        "See http://www.numpy.org/"
-    ) from None
+import numpy as np
 
 from Bio.Align import Alignment
 from Bio.Align import interfaces
@@ -57,7 +49,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         super().__init__(target)
         self.md = md
 
-    def write_header(self, alignments):
+    def write_header(self, stream, alignments):
         """Write the SAM header."""
         try:
             metadata = alignments.metadata
@@ -76,7 +68,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                     continue
                 fields.append("%s:%s" % (key, value))
             line = "\t".join(fields) + "\n"
-            self.stream.write(line)
+            stream.write(line)
         for record in targets:
             fields = ["@SQ"]
             fields.append("SN:%s" % record.id)
@@ -108,7 +100,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 if description != "<unknown description>":
                     fields.append("DS:%s" % description)
             line = "\t".join(fields) + "\n"
-            self.stream.write(line)
+            stream.write(line)
         for tag, rows in metadata.items():
             if tag == "HD":  # already written
                 continue
@@ -117,7 +109,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 for key, value in row.items():
                     fields.append("%s:%s" % (key, value))
                 line = "\t".join(fields) + "\n"
-                self.stream.write(line)
+                stream.write(line)
 
     def format_alignment(self, alignment, md=None):
         """Return a string with a single alignment formatted as one SAM line."""
@@ -142,25 +134,33 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             except (AttributeError, KeyError):
                 pass
             try:
-                qual = query.letter_annotations["phred_quality"]
+                phred = query.letter_annotations["phred_quality"]
             except (AttributeError, KeyError):
                 qual = "*"
+            else:
+                qual = "".join(chr(value + 33) for value in phred)
             query = query.seq
         qSize = len(query)
         try:
-            rName = target.id
+            rname = target.id
         except AttributeError:
-            rName = "target"
+            rname = "target"
         else:
             target = target.seq
+        if coordinates[0, 0] > coordinates[-1, 0]:
+            coordinates = coordinates[::-1, :]
         if coordinates[0, 1] < coordinates[-1, 1]:  # mapped to forward strand
             flag = 0
         else:  # mapped to reverse strand
             flag = 16
-            query = reverse_complement(query, inplace=False)
-            coordinates = numpy.array(coordinates)
+            query = reverse_complement(query)
+            coordinates = np.array(coordinates)
             coordinates[:, 1] = qSize - coordinates[:, 1]
             hard_clip_left, hard_clip_right = hard_clip_right, hard_clip_left
+        try:
+            flag |= alignment.flag
+        except AttributeError:
+            pass
         try:
             query = bytes(query)
         except TypeError:  # string
@@ -170,7 +170,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         else:
             query = str(query, "ASCII")
         tStart, qStart = coordinates[0, :]
-        pos = tStart
+        pos = tStart + 1  # 1-based coordinate
         cigar = ""
         if hard_clip_left is not None:
             cigar += "%dH" % hard_clip_left
@@ -226,18 +226,29 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             mapq = alignment.mapq
         except AttributeError:
             mapq = 255  # not available
-        rNext = "*"
-        pNext = 0
+        try:
+            rnext = alignment.rnext
+        except AttributeError:
+            rnext = "*"
+        else:
+            if rnext == rname:
+                rnext = "="
+        try:
+            pnext = alignment.pnext
+        except AttributeError:
+            pnext = 0
+        else:
+            pnext += 1  # 1-based coordinates
         tLen = 0
         fields = [
             qName,
             str(flag),
-            rName,
-            str(pos + 1),  # 1-based coordinates
+            rname,
+            str(pos),
             str(mapq),
             cigar,
-            rNext,
-            str(pNext),
+            rnext,
+            str(pnext),
             str(tLen),
             query,
             qual,
@@ -316,7 +327,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         except AttributeError:
             pass
         else:
-            field = "AS:i:%d" % int(round(score))
+            field = "AS:i:%.0f" % score
             fields.append(field)
         try:
             annotations = alignment.annotations
@@ -338,11 +349,11 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 elif isinstance(value, bytes):
                     datatype = "H"
                     value = "".join(map(str, value))
-                elif isinstance(value, numpy.array):
+                elif isinstance(value, np.array):
                     datatype = "B"
-                    if numpy.issubdtype(value.dtype, numpy.integer):
+                    if np.issubdtype(value.dtype, np.integer):
                         pass
-                    elif numpy.issubdtype(value.dtype, float):
+                    elif np.issubdtype(value.dtype, float):
                         pass
                     else:
                         raise ValueError(
@@ -501,7 +512,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                             raise ValueError(
                                 f"Unknown number type '{letter}' in tag '{field}'"
                             )
-                        value = numpy.array(value, dtype)
+                        value = np.array(value, dtype)
                     annotations[tag] = value
             if flag & 0x10:
                 strand = "-"
@@ -694,7 +705,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     index += size
                 target.seq = Seq(data, length=length)
             if coordinates is not None:
-                coordinates = numpy.array(coordinates).transpose()
+                coordinates = np.array(coordinates).transpose()
                 if strand == "-":
                     coordinates[1, :] = query_pos - coordinates[1, :]
             if query == "*":
@@ -714,7 +725,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             if hard_clip_right is not None:
                 query.annotations["hard_clip_right"] = hard_clip_right
             if qual != "*":
-                query.letter_annotations["phred_quality"] = qual
+                phred = [ord(c) - 33 for c in qual]
+                query.letter_annotations["phred_quality"] = phred
             records = [target, query]
             alignment = Alignment(records, coordinates)
             alignment.flag = flag

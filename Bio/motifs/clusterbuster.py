@@ -34,7 +34,6 @@ def read(handle):
         line = line.strip()
         if line:
             if line.startswith(">"):
-
                 if motif_nbr != 0:
                     motif = motifs.Motif(alphabet="GATC", counts=nucleotide_counts)
                     motif.name = motif_name

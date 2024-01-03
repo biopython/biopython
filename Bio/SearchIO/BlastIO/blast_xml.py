@@ -211,7 +211,7 @@ def _extract_ids_and_descs(raw_id, raw_desc):
     # create a list of lists, each list containing an ID and description
     # or just an ID, if description is not present
     id_desc_pairs = [
-        re.split(_RE_ID_DESC_PATTERN, x, 1)
+        re.split(_RE_ID_DESC_PATTERN, x, maxsplit=1)
         for x in re.split(_RE_ID_DESC_PAIRS_PATTERN, id_desc_line)
     ]
     # make sure empty descriptions are added as empty strings
@@ -290,7 +290,6 @@ class BlastXmlParser:
             # </Iteration> marks the end of a single query
             # which means we can process it
             if event == "end" and qresult_elem.tag == "Iteration":
-
                 # we'll use the following schema
                 # <!ELEMENT Iteration (
                 #        Iteration_iter-num,
@@ -319,7 +318,7 @@ class BlastXmlParser:
                 # 'Query_' marks the beginning of a BLAST+-generated ID,
                 # 'lcl|' marks the beginning of a BLAST legacy-generated ID
                 if not self._use_raw_query_ids and (
-                    query_id.startswith("Query_") or query_id.startswith("lcl|")
+                    query_id.startswith(("Query_", "lcl|"))
                 ):
                     # store the Blast-generated query ID
                     id_desc = query_desc.split(" ", 1)
@@ -417,7 +416,6 @@ class BlastXmlParser:
             root_hit_elem = []
 
         for hit_elem in root_hit_elem:
-
             # BLAST sometimes mangles the sequence IDs and descriptions, so we need
             # to extract the actual values.
             raw_hit_id = hit_elem.findtext("Hit_id")
@@ -500,7 +498,7 @@ class BlastXmlParser:
 
                 # adjust 'from' and 'to' coordinates to 0-based ones
                 if value is not None:
-                    if key.endswith("-from") or key.endswith("-to"):
+                    if key.endswith(("-from", "-to")):
                         # store coordinates for further processing
                         coords[val_info[0]] = caster(value)
                         continue

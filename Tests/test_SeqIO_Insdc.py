@@ -4,9 +4,11 @@
 # as part of this package.
 """Tests for SeqIO Insdc module."""
 import unittest
+import warnings
 
 from io import StringIO
 
+from Bio import BiopythonParserWarning
 from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqFeature import SimpleLocation
@@ -51,7 +53,8 @@ class TestEmbl(unittest.TestCase):
 
     def test_annotation4(self):
         """Check parsing of annotation from EMBL files (4)."""
-        record = SeqIO.read("EMBL/location_wrap.embl", "embl")
+        with self.assertWarns(BiopythonParserWarning):
+            record = SeqIO.read("EMBL/location_wrap.embl", "embl")
         self.assertEqual(len(record), 120)
         self.assertNotIn("keywords", record.annotations)
         # The ID line has the topology as unspecified:
@@ -90,15 +93,21 @@ class TestEmblRewrite(SeqRecordTestBaseClass):
 
     def test_annotation1(self):
         """Check writing-and-parsing EMBL file (1)."""
-        self.check_rewrite("EMBL/TRBG361.embl")
+        with warnings.catch_warnings():
+            warnings.simplefilter("error")
+            self.check_rewrite("EMBL/TRBG361.embl")
 
     def test_annotation2(self):
         """Check writing-and-parsing EMBL file (2)."""
-        self.check_rewrite("EMBL/DD231055_edited.embl")
+        with warnings.catch_warnings():
+            warnings.simplefilter("error")
+            self.check_rewrite("EMBL/DD231055_edited.embl")
 
     def test_annotation3(self):
         """Check writing-and-parsing EMBL file (3)."""
-        self.check_rewrite("EMBL/AE017046.embl")
+        with warnings.catch_warnings():
+            warnings.simplefilter("error")
+            self.check_rewrite("EMBL/AE017046.embl")
 
 
 class ConvertTestsInsdc(SeqIOConverterTestBaseClass):
@@ -111,7 +120,7 @@ class ConvertTestsInsdc(SeqIOConverterTestBaseClass):
             ("GenBank/cor6_6.gb", "genbank"),
         ]
         for filename, fmt in tests:
-            for (in_format, out_format) in self.formats:
+            for in_format, out_format in self.formats:
                 if in_format != fmt:
                     continue
                 self.check_conversion(filename, in_format, out_format)

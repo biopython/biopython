@@ -26,7 +26,7 @@ unparsable file.
 
 You are expected to use this module via the Bio.Align functions.
 """
-import numpy
+import numpy as np
 
 
 from Bio.Align import Alignment
@@ -62,7 +62,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 "argument fmt should be 'vulgar' or 'cigar' (received %s)" % fmt
             )
 
-    def write_header(self, alignments):
+    def write_header(self, stream, alignments):
         """Write the header."""
         try:
             metadata = alignments.metadata
@@ -72,12 +72,12 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         else:
             commandline = metadata.get("Command line", "")
             hostname = metadata.get("Hostname", "")
-        self.stream.write(f"Command line: [{commandline}]\n")
-        self.stream.write(f"Hostname: [{hostname}]\n")
+        stream.write(f"Command line: [{commandline}]\n")
+        stream.write(f"Hostname: [{hostname}]\n")
 
-    def write_footer(self):
+    def write_footer(self, stream):
         """Write the footer."""
-        self.stream.write("-- completed exonerate analysis\n")
+        stream.write("-- completed exonerate analysis\n")
 
     def _format_alignment_cigar(self, alignment):
         """Return a string with a single alignment formatted as a cigar line."""
@@ -88,7 +88,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         target_end = coordinates[0, -1]
         query_start = coordinates[1, 0]
         query_end = coordinates[1, -1]
-        steps = numpy.diff(coordinates)
+        steps = np.diff(coordinates)
         query = alignment.query
         target = alignment.target
         try:
@@ -280,7 +280,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         target_end = coordinates[0, -1]
         query_start = coordinates[1, 0]
         query_end = coordinates[1, -1]
-        steps = numpy.diff(coordinates)
+        steps = np.diff(coordinates)
         query = alignment.query
         target = alignment.target
         try:
@@ -456,14 +456,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         target_end = int(words[6])
         target_strand = words[7]
         score = float(words[8])
-        target_seq = Seq(None, length=target_end)
-        query_seq = Seq(None, length=query_end)
-        target = SeqRecord(target_seq, id=target_id, description="")
-        query = SeqRecord(query_seq, id=query_id, description="")
         qs = 0
         ts = 0
         n = (len(words) - 8) // 2
-        coordinates = numpy.empty((2, n + 1), int)
+        coordinates = np.empty((2, n + 1), int)
         coordinates[0, 0] = ts
         coordinates[1, 0] = qs
         for i, (operation, step) in enumerate(zip(words[9::2], words[10::2])):
@@ -487,24 +483,42 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             coordinates[1, i + 1] = qs
         if target_strand == "+":
             coordinates[0, :] += target_start
+            target_length = target_end
+            target_molecule_type = None
         elif target_strand == "-":
             coordinates[0, :] = target_start - coordinates[0, :]
+            target_length = target_start
+            target_molecule_type = None
         elif target_strand == ".":  # protein
             if query_strand != ".":
                 # dna to protein alignment; integer division, but round up:
                 coordinates[0, :] = (coordinates[0, :] + 2) // 3
             coordinates[0, :] += target_start
-            target.annotations["molecule_type"] = "protein"
+            target_molecule_type = "protein"
+            target_length = target_end
         if query_strand == "+":
             coordinates[1, :] += query_start
+            query_length = query_end
+            query_molecule_type = None
         elif query_strand == "-":
             coordinates[1, :] = query_start - coordinates[1, :]
+            query_length = query_start
+            query_molecule_type = None
         elif query_strand == ".":  # protein
             if target_strand != ".":
                 # protein to dna alignment; integer division, but round up:
                 coordinates[1, :] = -(coordinates[1, :] // -3)
             coordinates[1, :] += query_start
-            query.annotations["molecule_type"] = "protein"
+            query_molecule_type = "protein"
+            query_length = query_end
+        target_seq = Seq(None, length=target_length)
+        query_seq = Seq(None, length=query_length)
+        target = SeqRecord(target_seq, id=target_id, description="")
+        query = SeqRecord(query_seq, id=query_id, description="")
+        if target_molecule_type is not None:
+            target.annotations["molecule_type"] = target_molecule_type
+        if query_molecule_type is not None:
+            query.annotations["molecule_type"] = query_molecule_type
         alignment = Alignment([target, query], coordinates)
         alignment.score = score
         return alignment
@@ -520,22 +534,16 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         target_end = int(words[6])
         target_strand = words[7]
         score = float(words[8])
-        target_seq = Seq(None, length=target_end)
-        query_seq = Seq(None, length=query_end)
-        target = SeqRecord(target_seq, id=target_id, description="")
-        query = SeqRecord(query_seq, id=query_id, description="")
         ops = words[9::3]
         qs = 0
         ts = 0
         n = (len(words) - 8) // 3 + ops.count("N")
-        coordinates = numpy.empty((2, n + 1), int)
+        coordinates = np.empty((2, n + 1), int)
         coordinates[0, 0] = ts
         coordinates[1, 0] = qs
         operations = bytearray(n)
         i = 0
-        for (operation, query_step, target_step) in zip(
-            ops, words[10::3], words[11::3]
-        ):
+        for operation, query_step, target_step in zip(ops, words[10::3], words[11::3]):
             query_step = int(query_step)
             target_step = int(target_step)
             if operation == "M":  # Match
@@ -590,18 +598,36 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             i += 1
         if target_strand == "+":
             coordinates[0, :] += target_start
+            target_length = target_end
+            target_molecule_type = None
         elif target_strand == "-":
             coordinates[0, :] = target_start - coordinates[0, :]
+            target_length = target_start
+            target_molecule_type = None
         elif target_strand == ".":  # protein
             coordinates[0, :] += target_start
-            target.annotations["molecule_type"] = "protein"
+            target_molecule_type = "protein"
+            target_length = target_end
         if query_strand == "+":
             coordinates[1, :] += query_start
+            query_length = query_end
+            query_molecule_type = None
         elif query_strand == "-":
             coordinates[1, :] = query_start - coordinates[1, :]
+            query_length = query_start
+            query_molecule_type = None
         elif query_strand == ".":  # protein
             coordinates[1, :] += query_start
-            query.annotations["molecule_type"] = "protein"
+            query_molecule_type = "protein"
+            query_length = query_end
+        target_seq = Seq(None, length=target_length)
+        query_seq = Seq(None, length=query_length)
+        target = SeqRecord(target_seq, id=target_id, description="")
+        query = SeqRecord(query_seq, id=query_id, description="")
+        if target_molecule_type is not None:
+            target.annotations["molecule_type"] = target_molecule_type
+        if query_molecule_type is not None:
+            query.annotations["molecule_type"] = query_molecule_type
         alignment = Alignment([target, query], coordinates)
         alignment.operations = operations
         alignment.score = score

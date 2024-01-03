@@ -132,9 +132,7 @@ Sequence coordinate order
 -------------------------
 
 Some search output formats reverse the start and end coordinate sequences
-according to the sequence's strand. For example, in BLAST plain text
-format if the matching strand lies in the minus orientation, then the
-start coordinate will always be bigger than the end coordinate.
+according to the sequence's strand.
 
 In SearchIO, start coordinates are always smaller than the end
 coordinates, regardless of their originating strand. This ensures
@@ -187,7 +185,6 @@ Support for parsing and indexing:
 
 Support for parsing:
 
- - blast-text       - BLAST+ plain text output.
  - hhsuite2-text    - HHSUITE plain text output.
 
 Each of these formats have different keyword arguments available for use with
@@ -207,7 +204,6 @@ __all__ = ("read", "parse", "to_dict", "index", "index_db", "write", "convert")
 # dictionary of supported formats for parse() and read()
 _ITERATOR_MAP = {
     "blast-tab": ("BlastIO", "BlastTabParser"),
-    "blast-text": ("BlastIO", "BlastTextParser"),
     "blast-xml": ("BlastIO", "BlastXmlParser"),
     "blat-psl": ("BlatIO", "BlatPslParser"),
     "exonerate-cigar": ("ExonerateIO", "ExonerateCigarParser"),

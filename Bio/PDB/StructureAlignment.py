@@ -96,5 +96,5 @@ class StructureAlignment:
 
     def get_iterator(self):
         """Create an iterator over all residue pairs."""
-        for i in range(0, len(self.duos)):
+        for i in range(len(self.duos)):
             yield self.duos[i]

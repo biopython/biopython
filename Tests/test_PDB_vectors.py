@@ -285,7 +285,7 @@ class VectorTests(unittest.TestCase):
 
         # confirm coord_space puts points back to axis alignment
         mtxs = multi_coord_space(test_set, 8, True)
-        for m in range(0, 8):
+        for m in range(8):
             rslt = [1, 2, 3]
             for i in range(3):
                 rslt[i] = mtxs[0][m].dot(test_set[m][i])

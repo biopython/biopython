@@ -38,6 +38,10 @@ import time
 from urllib.request import urlopen
 from urllib.parse import quote
 
+from typing import Dict, List
+
+from Bio._utils import function_with_previous
+
 
 # Constant
 _BASE_URL = "http://togows.dbcls.jp"
@@ -45,9 +49,9 @@ _BASE_URL = "http://togows.dbcls.jp"
 # Caches:
 _search_db_names = None
 _entry_db_names = None
-_entry_db_fields = {}
-_entry_db_formats = {}
-_convert_formats = []
+_entry_db_fields: Dict[str, str] = {}
+_entry_db_formats: Dict[str, str] = {}
+_convert_formats: List[str] = []
 
 
 def _get_fields(url):
@@ -335,6 +339,7 @@ def convert(data, in_format, out_format):
     return _open(url, post=data)
 
 
+@function_with_previous
 def _open(url, post=None):
     """Build the URL and open a handle to it (PRIVATE).
 

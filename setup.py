@@ -25,6 +25,7 @@ http://biopython.org/wiki/Mailing_lists
 
 import sys
 import os
+import ast
 
 try:
     from setuptools import setup
@@ -47,7 +48,7 @@ if "bdist_wheel" in sys.argv:
 
 
 # Make sure we have the right Python version.
-MIN_PY_VER = (3, 7)
+MIN_PY_VER = (3, 8)
 if sys.version_info[:2] < MIN_PY_VER:
     sys.stderr.write(
         ("ERROR: Biopython requires Python %i.%i or later. " % MIN_PY_VER)
@@ -158,7 +159,6 @@ PACKAGES = [
     "Bio.Restriction",
     "Bio.SCOP",
     "Bio.SearchIO",
-    "Bio.SearchIO._legacy",
     "Bio.SearchIO._model",
     "Bio.SearchIO.BlastIO",
     "Bio.SearchIO.HHsuiteIO",
@@ -170,7 +170,6 @@ PACKAGES = [
     "Bio.Sequencing",
     "Bio.Sequencing.Applications",
     "Bio.SVDSuperimposer",
-    "Bio.PDB.QCPSuperimposer",
     "Bio.SwissProt",
     "Bio.TogoWS",
     "Bio.Phylo",
@@ -178,19 +177,15 @@ PACKAGES = [
     "Bio.Phylo.PAML",
     "Bio.UniGene",
     "Bio.UniProt",
-    "Bio.Wise",
     # Other top level packages,
     "BioSQL",
 ]
 
 EXTENSIONS = [
-    Extension("Bio.Align._aligners", ["Bio/Align/_aligners.c"]),
+    Extension("Bio.Align._codonaligner", ["Bio/Align/_codonaligner.c"]),
+    Extension("Bio.Align._pairwisealigner", ["Bio/Align/_pairwisealigner.c"]),
     Extension("Bio.cpairwise2", ["Bio/cpairwise2module.c"]),
     Extension("Bio.Nexus.cnexus", ["Bio/Nexus/cnexus.c"]),
-    Extension(
-        "Bio.PDB.QCPSuperimposer.qcprotmodule",
-        ["Bio/PDB/QCPSuperimposer/qcprotmodule.c"],
-    ),
     Extension("Bio.motifs._pwm", ["Bio/motifs/_pwm.c"]),
     Extension(
         "Bio.Cluster._cluster", ["Bio/Cluster/cluster.c", "Bio/Cluster/clustermodule.c"]
@@ -200,13 +195,16 @@ EXTENSIONS = [
     Extension("Bio.SeqIO._twoBitIO", ["Bio/SeqIO/_twoBitIO.c"]),
 ]
 
-# We now define the Biopython version number in Bio/__init__.py
-# Here we can't use "import Bio" then "Bio.__version__" as that would
-# tell us the version of Biopython already installed (if any).
-__version__ = "Undefined"
-for line in open("Bio/__init__.py"):
-    if line.startswith("__version__"):
-        exec(line.strip())
+
+def get_version():
+    """Get version number from __init__.py."""
+    for line in open("Bio/__init__.py"):
+        if line.startswith("__version__ = "):
+            return ast.literal_eval(line.split("=")[1].strip())
+    return "Undefined"
+
+
+__version__ = get_version()
 
 # We now load in our reStructuredText README.rst file to pass explicitly in the
 # metadata, since at time of writing PyPI did not do this for us.
@@ -243,10 +241,11 @@ setup(
         "Operating System :: OS Independent",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         "Topic :: Scientific/Engineering",
         "Topic :: Scientific/Engineering :: Bio-Informatics",
         "Topic :: Software Development :: Libraries :: Python Modules",

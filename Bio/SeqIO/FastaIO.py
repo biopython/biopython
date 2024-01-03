@@ -14,7 +14,8 @@ You are expected to use this module via the Bio.SeqIO functions.
 """
 import warnings
 
-from Bio import BiopythonDeprecationWarning
+from typing import Callable, Optional, Tuple
+
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
@@ -22,6 +23,7 @@ from .Interfaces import _clean
 from .Interfaces import _get_seq_string
 from .Interfaces import SequenceIterator
 from .Interfaces import SequenceWriter
+from .Interfaces import _TextIOSource
 
 
 def SimpleFastaParser(handle):
@@ -140,17 +142,16 @@ def FastaTwoLineParser(handle):
 class FastaIterator(SequenceIterator):
     """Parser for Fasta files."""
 
-    def __init__(self, source, alphabet=None, title2ids=None):
+    def __init__(
+        self,
+        source: _TextIOSource,
+        alphabet: None = None,
+    ) -> None:
         """Iterate over Fasta records as SeqRecord objects.
 
         Arguments:
          - source - input stream opened in text mode, or a path to a file
          - alphabet - optional alphabet, not used. Leave as None.
-         - title2ids (DEPRECATED) - A function that, when given the title of
-           the FASTA file (without the beginning >), will return the id, name
-           and description (in that order) for the record as a tuple of strings.
-           If this is not given, then the entire title line will be used
-           as the description, and the first word as the id and name.
 
         By default this will act like calling Bio.SeqIO.parse(handle, "fasta")
         with no custom handling of the title lines:
@@ -165,22 +166,8 @@ class FastaIterator(SequenceIterator):
         alpha
         delta
 
-        However, you can supply a title2ids function to alter this (DEPRECATED):
-
-        >>> def take_upper(title):
-        ...     return title.split(None, 1)[0].upper(), "", title
-        >>> with open("Fasta/dups.fasta") as handle:
-        ...     for record in FastaIterator(handle, title2ids=take_upper):
-        ...         print(record.id)
-        ...
-        ALPHA
-        BETA
-        GAMMA
-        ALPHA
-        DELTA
-
-        Instead of title2ids, please use a generator function to modify the
-        records:
+        If you want to modify the records before writing, for example to change
+        the ID of each record, you can use a generator function as follows:
 
         >>> def modify_records(records):
         ...     for record in records:
@@ -200,26 +187,6 @@ class FastaIterator(SequenceIterator):
         """
         if alphabet is not None:
             raise ValueError("The alphabet argument is no longer supported")
-        if title2ids is not None:
-            warnings.warn(
-                "The title2ids argument is deprecated. Instead, please use a "
-                "generator function to modify records returned by the parser. "
-                "For example, to change the record IDs to uppercase, and "
-                "delete the description attribute, use\n"
-                "\n"
-                ">>> def modify_records(records):\n"
-                "...     for record in records:\n"
-                "...         record.id = record.id.upper()\n"
-                "...         del record.description\n"
-                "...         yield record\n"
-                "...\n"
-                ">>> with open('Fasta/dups.fasta') as handle:\n"
-                "...     for record in modify_records(FastaIterator(handle)):\n"
-                "...         print(record)\n"
-                "\n",
-                BiopythonDeprecationWarning,
-            )
-        self.title2ids = title2ids
         super().__init__(source, mode="t", fmt="Fasta")
 
     def parse(self, handle):
@@ -229,22 +196,16 @@ class FastaIterator(SequenceIterator):
 
     def iterate(self, handle):
         """Parse the file and generate SeqRecord objects."""
-        title2ids = self.title2ids
-        if title2ids:
-            for title, sequence in SimpleFastaParser(handle):
-                id, name, descr = title2ids(title)
-                yield SeqRecord(Seq(sequence), id=id, name=name, description=descr)
-        else:
-            for title, sequence in SimpleFastaParser(handle):
-                try:
-                    first_word = title.split(None, 1)[0]
-                except IndexError:
-                    assert not title, repr(title)
-                    # Should we use SeqRecord default for no ID?
-                    first_word = ""
-                yield SeqRecord(
-                    Seq(sequence), id=first_word, name=first_word, description=title
-                )
+        for title, sequence in SimpleFastaParser(handle):
+            try:
+                first_word = title.split(None, 1)[0]
+            except IndexError:
+                assert not title, repr(title)
+                # Should we use SeqRecord default for no ID?
+                first_word = ""
+            yield SeqRecord(
+                Seq(sequence), id=first_word, name=first_word, description=title
+            )
 
 
 class FastaTwoLineIterator(SequenceIterator):

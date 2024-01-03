@@ -52,7 +52,6 @@ last residues) have been shown as M (methionine) by the get_sequence method.
 
 import warnings
 
-from Bio import BiopythonDeprecationWarning
 
 from Bio.Data.PDBData import nucleic_letters_3to1
 from Bio.Data.PDBData import nucleic_letters_3to1_extended
@@ -73,7 +72,7 @@ d3_to_index = {}
 dindex_to_3 = {}
 
 # Create some lookup tables
-for i in range(0, 20):
+for i in range(20):
     n1 = aa1[i]
     n3 = aa3[i]
     d1_to_index[n1] = i
@@ -124,47 +123,6 @@ def three_to_index(s):
     19
     """
     return d3_to_index[s]
-
-
-def three_to_one(s):
-    """Three letter code to one letter code.
-
-    >>> three_to_one('ALA')
-    'A'
-    >>> three_to_one('TYR')
-    'Y'
-
-    For non-standard amino acids, you get a KeyError:
-
-    >>> three_to_one('MSE')
-    Traceback (most recent call last):
-       ...
-    KeyError: 'MSE'
-    """
-    warnings.warn(
-        "'three_to_one' will be deprecated in a future release of Biopython "
-        "in favor of 'Bio.PDB.Polypeptide.protein_letters_3to1'.",
-        BiopythonDeprecationWarning,
-    )
-    i = d3_to_index[s]
-    return dindex_to_1[i]
-
-
-def one_to_three(s):
-    """One letter code to three letter code.
-
-    >>> one_to_three('A')
-    'ALA'
-    >>> one_to_three('Y')
-    'TYR'
-    """
-    warnings.warn(
-        "'one_to_three' will be deprecated in a future release of Biopython "
-        "in favor of 'Bio.PDB.Polypeptide.protein_letters_1to3'.",
-        BiopythonDeprecationWarning,
-    )
-    i = d1_to_index[s]
-    return dindex_to_3[i]
 
 
 def is_aa(residue, standard=False):
@@ -246,7 +204,7 @@ class Polypeptide(list):
         """Return the list of phi/psi dihedral angles."""
         ppl = []
         lng = len(self)
-        for i in range(0, lng):
+        for i in range(lng):
             res = self[i]
             try:
                 n = res["N"].get_vector()
@@ -291,7 +249,7 @@ class Polypeptide(list):
         """List of tau torsions angles for all 4 consecutive Calpha atoms."""
         ca_list = self.get_ca_list()
         tau_list = []
-        for i in range(0, len(ca_list) - 3):
+        for i in range(len(ca_list) - 3):
             atom_list = (ca_list[i], ca_list[i + 1], ca_list[i + 2], ca_list[i + 3])
             v1, v2, v3, v4 = (a.get_vector() for a in atom_list)
             tau = calc_dihedral(v1, v2, v3, v4)
@@ -305,7 +263,7 @@ class Polypeptide(list):
         """List of theta angles for all 3 consecutive Calpha atoms."""
         theta_list = []
         ca_list = self.get_ca_list()
-        for i in range(0, len(ca_list) - 2):
+        for i in range(len(ca_list) - 2):
             atom_list = (ca_list[i], ca_list[i + 1], ca_list[i + 2])
             v1, v2, v3 = (a.get_vector() for a in atom_list)
             theta = calc_angle(v1, v2, v3)

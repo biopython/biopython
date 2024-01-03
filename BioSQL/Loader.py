@@ -932,17 +932,20 @@ class DatabaseLoader:
         """
         # TODO - Record an ontology for the locations (using location.term_id)
         # which for now as in BioPerl we leave defaulting to NULL.
-        if feature.location_operator and feature.location_operator != "join":
-            # e.g. order locations... we don't record "order" so it
-            # will become a "join" on reloading. What does BioPerl do?
-            import warnings
-            from Bio import BiopythonWarning
+        try:
+            if feature.location.operator != "join":
+                # e.g. order locations... we don't record "order" so it
+                # will become a "join" on reloading. What does BioPerl do?
+                import warnings
+                from Bio import BiopythonWarning
 
-            warnings.warn(
-                "%s location operators are not fully supported"
-                % feature.location_operator,
-                BiopythonWarning,
-            )
+                warnings.warn(
+                    "%s location operators are not fully supported"
+                    % feature.location_operator,
+                    BiopythonWarning,
+                )
+        except AttributeError:
+            pass
         # This will be a list of length one for a SimpleLocation:
         parts = feature.location.parts
         if parts and {loc.strand for loc in parts} == {-1}:

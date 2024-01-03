@@ -31,8 +31,6 @@ from Bio.Phylo import BaseTree
 class PhyloXMLWarning(BiopythonWarning):
     """Warning for non-compliance with the phyloXML specification."""
 
-    pass
-
 
 def _check_str(text, testfunc):
     """Check a string using testfunc, and warn if there's no match (PRIVATE)."""

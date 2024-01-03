@@ -24,7 +24,6 @@ SITECLASSES = {0: None, 1: 2, 2: 3, 3: 3, 7: 10, 8: 11, 22: 3}
 
 
 class ModTest(unittest.TestCase):
-
     align_dir = os.path.join("PAML", "Alignments")
     tree_dir = os.path.join("PAML", "Trees")
     ctl_dir = os.path.join("PAML", "Control_files")

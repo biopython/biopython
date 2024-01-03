@@ -5,7 +5,7 @@
 #
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
+    rev: v4.5.0
     hooks:
     -   id: check-executables-have-shebangs
         files: \.(py|sh)$
@@ -14,12 +14,18 @@ repos:
         files: \.py$
     -   id: mixed-line-ending
 -   repo: https://github.com/psf/black
-    rev: 22.12.0
+    rev: 23.12.1
     hooks:
     -   id: black
-        args: [--check,--target-version,py37]
+        args: [--check,--target-version,py38]
+-   repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.1.9
+    hooks:
+    # Run the Ruff linter.
+    -   id: ruff
+        args: ['--extend-ignore=E501,F401,F841']
 -   repo: https://github.com/PyCQA/flake8
-    rev: 6.0.0
+    rev: 6.1.0
     hooks:
     -   id: flake8
         additional_dependencies: [
@@ -31,14 +37,20 @@ repos:
             'flake8-rst-docstrings>=0.2.3',
             'pydocstyle>=6.0.0',
         ]
+-   repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.8.0
+    hooks:
+    -   id: mypy
+        # equivalent to "files" in .mypy.ini
+        files: '^(Bio|BioSQL)/'
 -   repo: https://github.com/asottile/blacken-docs
-    rev: v1.12.1
+    rev: 1.16.0
     hooks:
     -   id: blacken-docs
-        additional_dependencies: [black==22.12.0]
+        additional_dependencies: [black==23.12.1]
         exclude: ^.github/
--   repo: https://github.com/myint/rstcheck
-    rev: v6.1.1
+-   repo: https://github.com/rstcheck/rstcheck
+    rev: v6.2.0
     hooks:
     -   id: rstcheck
         args: [
@@ -53,7 +65,7 @@ repos:
         additional_dependencies: [pygments]
         args: [--quiet,--ignore-path=Doc/examples/ec_*.txt, --ignore=D004]
 -   repo: https://github.com/codespell-project/codespell
-    rev: v2.2.2
+    rev: v2.2.6
     hooks:
     -   id: codespell
         files: \.(rst|md|tex)$
@@ -61,7 +73,7 @@ repos:
             --ignore-regex,
             '(^|\W)([A-Z]{2,3})(\W|$)',
             -L,
-            'ser,hsa,hist,fpr'
+            'ser,hsa,hist,fpr,blosum,ags,manuel'
         ]
 -   repo: local
     hooks:

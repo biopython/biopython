@@ -67,7 +67,6 @@ class StructureIO:
 
     def __init__(self):
         """Initialise."""
-        pass
 
     def set_structure(self, pdb_object):
         """Check what the user is providing and build a structure."""

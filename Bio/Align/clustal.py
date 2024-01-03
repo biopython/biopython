@@ -21,9 +21,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
 
     fmt = "Clustal"
 
-    def write_header(self, alignments):
+    def write_header(self, stream, alignments):
         """Use this to write the file header."""
-        stream = self.stream
         try:
             metadata = alignments.metadata
             program = metadata["Program"]
@@ -245,7 +244,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         coordinates = Alignment.infer_coordinates(aligned_seqs)
         alignment = Alignment(records, coordinates)
         if consensus:
-            rows, columns = alignment.shape
+            columns = alignment.length
             if len(consensus) != columns:
                 raise ValueError(
                     "Alignment has %i columns, consensus length is %i, '%s'"

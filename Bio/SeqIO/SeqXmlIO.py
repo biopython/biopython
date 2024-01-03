@@ -106,7 +106,7 @@ class ContentHandler(handler.ContentHandler):
             raise ValueError("Expected to find the start of an entry element")
         if qname is not None:
             raise RuntimeError("Unexpected qname for entry element")
-        record = SeqRecord("", id=None)
+        record = SeqRecord(None, id=None)
         if self.speciesName is not None:
             record.annotations["organism"] = self.speciesName
         if self.ncbiTaxID is not None:
@@ -561,7 +561,6 @@ class SeqXmlWriter(SequenceWriter):
 
             # The local species definition is only written if it differs from the global species definition
             if local_org != self.species or local_ncbi_taxid != self.ncbiTaxId:
-
                 attr = {"name": local_org, "ncbiTaxID": str(local_ncbi_taxid)}
                 self.xml_generator.startElement("species", AttributesImpl(attr))
                 self.xml_generator.endElement("species")
@@ -569,7 +568,6 @@ class SeqXmlWriter(SequenceWriter):
     def _write_description(self, record):
         """Write the description if given (PRIVATE)."""
         if record.description:
-
             if not isinstance(record.description, str):
                 raise TypeError("Description should be of type string")
 
@@ -612,9 +610,7 @@ class SeqXmlWriter(SequenceWriter):
     def _write_dbxrefs(self, record):
         """Write all database cross references (PRIVATE)."""
         if record.dbxrefs is not None:
-
             for dbxref in record.dbxrefs:
-
                 if not isinstance(dbxref, str):
                     raise TypeError("dbxrefs should be of type list of string")
                 if dbxref.find(":") < 1:
@@ -631,17 +627,13 @@ class SeqXmlWriter(SequenceWriter):
     def _write_properties(self, record):
         """Write all annotations that are key value pairs with values of a primitive type or list of primitive types (PRIVATE)."""
         for key, value in record.annotations.items():
-
             if key not in ("organism", "ncbi_taxid", "source"):
-
                 if value is None:
-
                     attr = {"name": key}
                     self.xml_generator.startElement("property", AttributesImpl(attr))
                     self.xml_generator.endElement("property")
 
                 elif isinstance(value, list):
-
                     for v in value:
                         if v is None:
                             attr = {"name": key}
@@ -653,7 +645,6 @@ class SeqXmlWriter(SequenceWriter):
                         self.xml_generator.endElement("property")
 
                 elif isinstance(value, (int, float, str)):
-
                     attr = {"name": key, "value": str(value)}
                     self.xml_generator.startElement("property", AttributesImpl(attr))
                     self.xml_generator.endElement("property")

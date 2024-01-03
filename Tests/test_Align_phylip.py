@@ -12,7 +12,7 @@ from Bio import Align
 
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
     from Bio import MissingPythonDependencyError
 
@@ -42,7 +42,7 @@ class TestPhylipReading(unittest.TestCase):
             self.assertEqual(sequence.seq, saved_sequence.seq)
             self.assertEqual(alignment[i], saved_alignment[i])
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, saved_alignment.coordinates)
+            np.array_equal(alignment.coordinates, saved_alignment.coordinates)
         )
 
     def test_one(self):
@@ -193,11 +193,10 @@ HISJ_E_CO       219 GLRKED--NELREALNKAFAEMRADGTYEKLAKKYFDFDVYGG--- 260
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array(
+                np.array(
                     [[  0,   0,   0,  13,  13,  16,  17,  17,  17,  17,  17,
                        17,  17,  17,  17,  18,  41,  41,  41,  90,  91, 109,
                       109, 121, 122, 146, 147, 148, 149, 150, 151, 160, 160,
@@ -317,9 +316,9 @@ HISJ_E_COLMKKLVLSLSLVLAFSSATAAF-------------------AAIPQNIRIGTDPTYAPFESKNS-QGELVG
             )
             self.check_reading_writing(path)
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
-                    numpy.array([[0, 60], [0, 60], [0, 60], [0, 60], [0, 60]]),
+                    np.array([[0, 60], [0, 60], [0, 60], [0, 60], [0, 60]]),
                 )
             )
             self.assertEqual(
@@ -361,30 +360,29 @@ Tax5      CCATCTCACGGTCGGTAAGATACACCTGCTTTTGGCGGGAAATGGTCAATATTAAAAGGT
             with self.assertRaises(StopIteration):
                 next(alignments)
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
-numpy.array([['A', 'A', 'G', 'C', 'T', 'N', 'G', 'G', 'G', 'C', 'A', 'T', 'T',
-              'T', 'C', 'A', 'G', 'G', 'G', 'T', 'G', 'A', 'G', 'C', 'C', 'C',
-              'G', 'G', 'G', 'C', 'A', 'A', 'T', 'A', 'C', 'A', 'G', 'G', 'G',
-              'T', 'A', 'T'],
-             ['A', 'A', 'G', 'C', 'C', 'T', 'T', 'G', 'G', 'C', 'A', 'G', 'T',
-              'G', 'C', 'A', 'G', 'G', 'G', 'T', 'G', 'A', 'G', 'C', 'C', 'G',
-              'T', 'G', 'G', 'C', 'C', 'G', 'G', 'G', 'C', 'A', 'C', 'G', 'G',
-              'T', 'A', 'T'],
-             ['A', 'C', 'C', 'G', 'G', 'T', 'T', 'G', 'G', 'C', 'C', 'G', 'T',
-              'T', 'C', 'A', 'G', 'G', 'G', 'T', 'A', 'C', 'A', 'G', 'G', 'T',
-              'T', 'G', 'G', 'C', 'C', 'G', 'T', 'T', 'C', 'A', 'G', 'G', 'G',
-              'T', 'A', 'A'],
-             ['A', 'A', 'A', 'C', 'C', 'C', 'T', 'T', 'G', 'C', 'C', 'G', 'T',
-              'T', 'A', 'C', 'G', 'C', 'T', 'T', 'A', 'A', 'A', 'C', 'C', 'G',
-              'A', 'G', 'G', 'C', 'C', 'G', 'G', 'G', 'A', 'C', 'A', 'C', 'T',
-              'C', 'A', 'T'],
-             ['A', 'A', 'A', 'C', 'C', 'C', 'T', 'T', 'G', 'C', 'C', 'G', 'G',
-              'T', 'A', 'C', 'G', 'C', 'T', 'T', 'A', 'A', 'A', 'C', 'C', 'A',
-              'T', 'T', 'G', 'C', 'C', 'G', 'G', 'T', 'A', 'C', 'G', 'C', 'T',
-              'T', 'A', 'A']], dtype='U')
+np.array([['A', 'A', 'G', 'C', 'T', 'N', 'G', 'G', 'G', 'C', 'A', 'T', 'T',
+           'T', 'C', 'A', 'G', 'G', 'G', 'T', 'G', 'A', 'G', 'C', 'C', 'C',
+           'G', 'G', 'G', 'C', 'A', 'A', 'T', 'A', 'C', 'A', 'G', 'G', 'G',
+           'T', 'A', 'T'],
+          ['A', 'A', 'G', 'C', 'C', 'T', 'T', 'G', 'G', 'C', 'A', 'G', 'T',
+           'G', 'C', 'A', 'G', 'G', 'G', 'T', 'G', 'A', 'G', 'C', 'C', 'G',
+           'T', 'G', 'G', 'C', 'C', 'G', 'G', 'G', 'C', 'A', 'C', 'G', 'G',
+           'T', 'A', 'T'],
+          ['A', 'C', 'C', 'G', 'G', 'T', 'T', 'G', 'G', 'C', 'C', 'G', 'T',
+           'T', 'C', 'A', 'G', 'G', 'G', 'T', 'A', 'C', 'A', 'G', 'G', 'T',
+           'T', 'G', 'G', 'C', 'C', 'G', 'T', 'T', 'C', 'A', 'G', 'G', 'G',
+           'T', 'A', 'A'],
+          ['A', 'A', 'A', 'C', 'C', 'C', 'T', 'T', 'G', 'C', 'C', 'G', 'T',
+           'T', 'A', 'C', 'G', 'C', 'T', 'T', 'A', 'A', 'A', 'C', 'C', 'G',
+           'A', 'G', 'G', 'C', 'C', 'G', 'G', 'G', 'A', 'C', 'A', 'C', 'T',
+           'C', 'A', 'T'],
+          ['A', 'A', 'A', 'C', 'C', 'C', 'T', 'T', 'G', 'C', 'C', 'G', 'G',
+           'T', 'A', 'C', 'G', 'C', 'T', 'T', 'A', 'A', 'A', 'C', 'C', 'A',
+           'T', 'T', 'G', 'C', 'C', 'G', 'G', 'T', 'A', 'C', 'G', 'C', 'T',
+           'T', 'A', 'A']], dtype='U')
                 # fmt: on
             )
         )
@@ -420,9 +418,9 @@ numpy.array([['A', 'A', 'G', 'C', 'T', 'N', 'G', 'G', 'G', 'C', 'A', 'T', 'T',
         self.assertEqual(alignment[4], "AAACCCTTGCCGGTACGCTTAAACCATTGCCGGTACGCTTAA")
         self.check_reading_writing(path)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array([[0, 42], [0, 42], [0, 42], [0, 42], [0, 42]]),
+                np.array([[0, 42], [0, 42], [0, 42], [0, 42], [0, 42]]),
             )
         )
         self.assertEqual(
@@ -497,9 +495,9 @@ Gorilla           0 AAACCCTTGCCGGTACGCTTAAACCATTGCCGGTACGCTTAA 42
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
-                    numpy.array([[0, 42], [0, 42], [0, 42], [0, 42], [0, 42]]),
+                    np.array([[0, 42], [0, 42], [0, 42], [0, 42], [0, 42]]),
                 )
             )
             self.assertEqual(
@@ -514,6 +512,255 @@ Gorilla   AAACCCTTGCCGGTACGCTTAAACCATTGCCGGTACGCTTAA
 """,
             )
             self.check_reading_writing(path)
+
+    def test_interlaced(self):
+        path = "Phylip/interlaced.phy"
+        with open(path) as stream:
+            alignments = Align.parse(stream, "phylip")
+            self.check_sequential_interlaced(alignments)
+            alignments.rewind()
+            self.check_sequential_interlaced(alignments)
+        with Align.parse(path, "phylip") as alignments:
+            self.check_sequential_interlaced(alignments)
+        with self.assertRaises(AttributeError):
+            alignments._stream
+        with Align.parse(path, "phylip") as alignments:
+            pass
+        with self.assertRaises(AttributeError):
+            alignments._stream
+        self.check_reading_writing(path)
+
+    def test_sequential(self):
+        path = "Phylip/sequential.phy"
+        with open(path) as stream:
+            alignments = Align.parse(stream, "phylip")
+            self.check_sequential_interlaced(alignments)
+            alignments.rewind()
+            self.check_sequential_interlaced(alignments)
+        with Align.parse(path, "phylip") as alignments:
+            self.check_sequential_interlaced(alignments)
+        with self.assertRaises(AttributeError):
+            alignments._stream
+        with Align.parse(path, "phylip") as alignments:
+            pass
+        with self.assertRaises(AttributeError):
+            alignments._stream
+        self.check_reading_writing(path)
+
+    def check_sequential_interlaced(self, alignments):
+        alignment = next(alignments)
+        with self.assertRaises(StopIteration):
+            next(alignments)
+        self.assertEqual(
+            repr(alignment),
+            "<Alignment object (3 rows x 384 columns) at 0x%x>" % id(alignment),
+        )
+        self.assertEqual(len(alignment), 3)
+        self.assertEqual(alignment.sequences[0].id, "CYS1_DICDI")
+        self.assertEqual(alignment.sequences[1].id, "ALEU_HORVU")
+        self.assertEqual(alignment.sequences[2].id, "CATH_HUMAN")
+        self.assertEqual(
+            alignment.sequences[0].seq,
+            "MKVILLFVLAVFTVFVSSRGIPPEEQSQFLEFQDKFNKKYSHEEYLERFEIFKSNLGKIEELNLIAINHKADTKFGVNKFADLSSDEFKNYYLNNKEAIFTDDLPVADYLDDEFINSIPTAFDWRTRGAVTPVKNQGQCGSCWSFSTTGNVEGQHFISQNKLVSLSEQNLVDCDHECMEYEGEEACDEGCNGGLQPNAYNYIIKNGGIQTESSYPYTAETGTQCNFNSANIGAKISNFTMIPKNETVMAGYIVSTGPLAIAADAVEWQFYIGGVFDIPCNPNSLDHGILIVGYSAKNTIFRKNMPYWIVKNSWGADWGEQGYIYLRRGKNTCGVSNFVSTSII",
+        )
+        self.assertEqual(
+            alignment.sequences[1].seq,
+            "MAHARVLLLALAVLATAAVAVASSSSFADSNPIRPVTDRAASTLESAVLGALGRTRHALRFARFAVRYGKSYESAAEVRRRFRIFSESLEEVRSTNRKGLPYRLGINRFSDMSWEEFQATRLGAAQTCSATLAGNHLMRDAAALPETKDWREDGIVSPVKNQAHCGSCWTFSTTGALEAAYTQATGKNISLSEQQLVDCAGGFNNFGCNGGLPSQAFEYIKYNGGIDTEESYPYKGVNGVCHYKAENAAVQVLDSVNITLNAEDELKNAVGLVRPVSVAFQVIDGFRQYKSGVYTSDHCGTTPDDVNHAVLAVGYGVENGVPYWLIKNSWGADWGDNGYFKMEMGKNMCAIATCASYPVVAA",
+        )
+        self.assertEqual(
+            alignment.sequences[2].seq,
+            "MWATLPLLCAGAWLLGVPVCGAAELSVNSLEKFHFKSWMSKHRKTYSTEEYHHRLQTFASNWRKINAHNNGNHTFKMALNQFSDMSFAEIKHKYLWSEPQNCSATKSNYLRGTGPYPPSVDWRKKGNFVSPVKNQGACGSCWTFSTTGALESAIAIATGKMLSLAEQQLVDCAQDFNNYGCQGGLPSQAFEYILYNKGIMGEDTYPYQGKDGYCKFQPGKAIGFVKDVANITIYDEEAMVEAVALYNPVSFAFEVTQDFMMYRTGIYSSTSCHKTPDKVNHAVLAVGYGEKNGIPYWIVKNSWGPQWGMNGYFLIERGKNMCGLAACASYPIPLV",
+        )
+        self.assertEqual(
+            alignment[0],
+            "-----MKVILLFVLAVFTVFVSS---------------RGIPPEEQ------------SQFLEFQDKFNKKY-SHEEYLERFEIFKSNLGKIEELNLIAINHKADTKFGVNKFADLSSDEFKNYYLNNKEAIFTDDLPVADYLDDEFINSIPTAFDWRTRG-AVTPVKNQGQCGSCWSFSTTGNVEGQHFISQNKLVSLSEQNLVDCDHECMEYEGEEACDEGCNGGLQPNAYNYIIKNGGIQTESSYPYTAETGTQCNFNSANIGAKISNFTMIP-KNETVMAGYIVSTGPLAIAADAVE-WQFYIGGVF-DIPCN--PNSLDHGILIVGYSAKNTIFRKNMPYWIVKNSWGADWGEQGYIYLRRGKNTCGVSNFVSTSII--",
+        )
+        self.assertEqual(
+            alignment[1],
+            "MAHARVLLLALAVLATAAVAVASSSSFADSNPIRPVTDRAASTLESAVLGALGRTRHALRFARFAVRYGKSYESAAEVRRRFRIFSESLEEVRSTN----RKGLPYRLGINRFSDMSWEEFQATRL-GAAQTCSATLAGNHLMRDA--AALPETKDWREDG-IVSPVKNQAHCGSCWTFSTTGALEAAYTQATGKNISLSEQQLVDCAGGFNNF--------GCNGGLPSQAFEYIKYNGGIDTEESYPYKGVNGV-CHYKAENAAVQVLDSVNITLNAEDELKNAVGLVRPVSVAFQVIDGFRQYKSGVYTSDHCGTTPDDVNHAVLAVGYGVENGV-----PYWLIKNSWGADWGDNGYFKMEMGKNMCAIATCASYPVVAA",
+        )
+        self.assertEqual(
+            alignment[2],
+            "------MWATLPLLCAGAWLLGV--------PVCGAAELSVNSLEK------------FHFKSWMSKHRKTY-STEEYHHRLQTFASNWRKINAHN----NGNHTFKMALNQFSDMSFAEIKHKYLWSEPQNCSAT--KSNYLRGT--GPYPPSVDWRKKGNFVSPVKNQGACGSCWTFSTTGALESAIAIATGKMLSLAEQQLVDCAQDFNNY--------GCQGGLPSQAFEYILYNKGIMGEDTYPYQGKDGY-CKFQPGKAIGFVKDVANITIYDEEAMVEAVALYNPVSFAFEVTQDFMMYRTGIYSSTSCHKTPDKVNHAVLAVGYGEKNGI-----PYWIVKNSWGPQWGMNGYFLIERGKNMCGLAACASYPIPLV",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+CYS1_DICD         0 -----MKVILLFVLAVFTVFVSS---------------RGIPPEEQ------------SQ
+ALEU_HORV         0 MAHARVLLLALAVLATAAVAVASSSSFADSNPIRPVTDRAASTLESAVLGALGRTRHALR
+CATH_HUMA         0 ------MWATLPLLCAGAWLLGV--------PVCGAAELSVNSLEK------------FH
+
+CYS1_DICD        28 FLEFQDKFNKKY-SHEEYLERFEIFKSNLGKIEELNLIAINHKADTKFGVNKFADLSSDE
+ALEU_HORV        60 FARFAVRYGKSYESAAEVRRRFRIFSESLEEVRSTN----RKGLPYRLGINRFSDMSWEE
+CATH_HUMA        34 FKSWMSKHRKTY-STEEYHHRLQTFASNWRKINAHN----NGNHTFKMALNQFSDMSFAE
+
+CYS1_DICD        87 FKNYYLNNKEAIFTDDLPVADYLDDEFINSIPTAFDWRTRG-AVTPVKNQGQCGSCWSFS
+ALEU_HORV       116 FQATRL-GAAQTCSATLAGNHLMRDA--AALPETKDWREDG-IVSPVKNQAHCGSCWTFS
+CATH_HUMA        89 IKHKYLWSEPQNCSAT--KSNYLRGT--GPYPPSVDWRKKGNFVSPVKNQGACGSCWTFS
+
+CYS1_DICD       146 TTGNVEGQHFISQNKLVSLSEQNLVDCDHECMEYEGEEACDEGCNGGLQPNAYNYIIKNG
+ALEU_HORV       172 TTGALEAAYTQATGKNISLSEQQLVDCAGGFNNF--------GCNGGLPSQAFEYIKYNG
+CATH_HUMA       145 TTGALESAIAIATGKMLSLAEQQLVDCAQDFNNY--------GCQGGLPSQAFEYILYNK
+
+CYS1_DICD       206 GIQTESSYPYTAETGTQCNFNSANIGAKISNFTMIP-KNETVMAGYIVSTGPLAIAADAV
+ALEU_HORV       224 GIDTEESYPYKGVNGV-CHYKAENAAVQVLDSVNITLNAEDELKNAVGLVRPVSVAFQVI
+CATH_HUMA       197 GIMGEDTYPYQGKDGY-CKFQPGKAIGFVKDVANITIYDEEAMVEAVALYNPVSFAFEVT
+
+CYS1_DICD       265 E-WQFYIGGVF-DIPCN--PNSLDHGILIVGYSAKNTIFRKNMPYWIVKNSWGADWGEQG
+ALEU_HORV       283 DGFRQYKSGVYTSDHCGTTPDDVNHAVLAVGYGVENGV-----PYWLIKNSWGADWGDNG
+CATH_HUMA       256 QDFMMYRTGIYSSTSCHKTPDKVNHAVLAVGYGEKNGI-----PYWIVKNSWGPQWGMNG
+
+CYS1_DICD       321 YIYLRRGKNTCGVSNFVSTSII-- 343
+ALEU_HORV       338 YFKMEMGKNMCAIATCASYPVVAA 362
+CATH_HUMA       311 YFLIERGKNMCGLAACASYPIPLV 335
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
+                np.array(
+       [[ 0,   0,   1,  18,  18,  18,  26,  26,  40,  40,  63,  67,  93,
+         94, 103, 105, 113, 115, 128, 128, 180, 188, 222, 223, 242, 242,
+        266, 266, 275, 275, 280, 280, 299, 304, 343, 343],
+       [  0,   5,   6,  23,  31,  38,  46,  58,  72,  73,  96,  96, 122,
+        122, 131, 133, 141, 141, 154, 154, 206, 206, 240, 240, 259, 260,
+        284, 285, 294, 295, 300, 302, 321, 321, 360, 362],
+       [  0,   0,   0,  17,  17,  24,  32,  32,  46,  46,  69,  69,  95,
+         96, 105, 105, 113, 113, 126, 127, 179, 179, 213, 213, 232, 233,
+        257, 258, 267, 268, 273, 275, 294, 294, 333, 335]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(
+            format(alignment, "phylip"),
+            """\
+3 384
+CYS1_DICDI-----MKVILLFVLAVFTVFVSS---------------RGIPPEEQ------------SQFLEFQDKFNKKY-SHEEYLERFEIFKSNLGKIEELNLIAINHKADTKFGVNKFADLSSDEFKNYYLNNKEAIFTDDLPVADYLDDEFINSIPTAFDWRTRG-AVTPVKNQGQCGSCWSFSTTGNVEGQHFISQNKLVSLSEQNLVDCDHECMEYEGEEACDEGCNGGLQPNAYNYIIKNGGIQTESSYPYTAETGTQCNFNSANIGAKISNFTMIP-KNETVMAGYIVSTGPLAIAADAVE-WQFYIGGVF-DIPCN--PNSLDHGILIVGYSAKNTIFRKNMPYWIVKNSWGADWGEQGYIYLRRGKNTCGVSNFVSTSII--
+ALEU_HORVUMAHARVLLLALAVLATAAVAVASSSSFADSNPIRPVTDRAASTLESAVLGALGRTRHALRFARFAVRYGKSYESAAEVRRRFRIFSESLEEVRSTN----RKGLPYRLGINRFSDMSWEEFQATRL-GAAQTCSATLAGNHLMRDA--AALPETKDWREDG-IVSPVKNQAHCGSCWTFSTTGALEAAYTQATGKNISLSEQQLVDCAGGFNNF--------GCNGGLPSQAFEYIKYNGGIDTEESYPYKGVNGV-CHYKAENAAVQVLDSVNITLNAEDELKNAVGLVRPVSVAFQVIDGFRQYKSGVYTSDHCGTTPDDVNHAVLAVGYGVENGV-----PYWLIKNSWGADWGDNGYFKMEMGKNMCAIATCASYPVVAA
+CATH_HUMAN------MWATLPLLCAGAWLLGV--------PVCGAAELSVNSLEK------------FHFKSWMSKHRKTY-STEEYHHRLQTFASNWRKINAHN----NGNHTFKMALNQFSDMSFAEIKHKYLWSEPQNCSAT--KSNYLRGT--GPYPPSVDWRKKGNFVSPVKNQGACGSCWTFSTTGALESAIAIATGKMLSLAEQQLVDCAQDFNNY--------GCQGGLPSQAFEYILYNKGIMGEDTYPYQGKDGY-CKFQPGKAIGFVKDVANITIYDEEAMVEAVALYNPVSFAFEVTQDFMMYRTGIYSSTSCHKTPDKVNHAVLAVGYGEKNGI-----PYWIVKNSWGPQWGMNGYFLIERGKNMCGLAACASYPIPLV
+""",
+        )
+
+    def test_interlaced2(self):
+        path = "Phylip/interlaced2.phy"
+        with open(path) as stream:
+            alignments = Align.parse(stream, "phylip")
+            self.check_sequential_interlaced2(alignments)
+            alignments.rewind()
+            self.check_sequential_interlaced2(alignments)
+        with Align.parse(path, "phylip") as alignments:
+            self.check_sequential_interlaced2(alignments)
+        with self.assertRaises(AttributeError):
+            alignments._stream
+        with Align.parse(path, "phylip") as alignments:
+            pass
+        with self.assertRaises(AttributeError):
+            alignments._stream
+        self.check_reading_writing(path)
+
+    def test_sequential2(self):
+        path = "Phylip/sequential2.phy"
+        with open(path) as stream:
+            alignments = Align.parse(stream, "phylip")
+            self.check_sequential_interlaced2(alignments)
+            alignments.rewind()
+            self.check_sequential_interlaced2(alignments)
+        with Align.parse(path, "phylip") as alignments:
+            self.check_sequential_interlaced2(alignments)
+        with self.assertRaises(AttributeError):
+            alignments._stream
+        with Align.parse(path, "phylip") as alignments:
+            pass
+        with self.assertRaises(AttributeError):
+            alignments._stream
+        self.check_reading_writing(path)
+
+    def check_sequential_interlaced2(self, alignments):
+        alignment = next(alignments)
+        with self.assertRaises(StopIteration):
+            next(alignments)
+        self.assertEqual(
+            repr(alignment),
+            "<Alignment object (4 rows x 131 columns) at 0x%x>" % id(alignment),
+        )
+        self.assertEqual(len(alignment), 4)
+        self.assertEqual(alignment.sequences[0].id, "IXI_234")
+        self.assertEqual(alignment.sequences[1].id, "IXI_235")
+        self.assertEqual(alignment.sequences[2].id, "IXI_236")
+        self.assertEqual(alignment.sequences[3].id, "IXI_237")
+        self.assertEqual(
+            alignment.sequences[0].seq,
+            "TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHE",
+        )
+        self.assertEqual(
+            alignment.sequences[1].seq,
+            "TSPASIRPPAGPSSRRPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGWRASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHE",
+        )
+        self.assertEqual(
+            alignment.sequences[2].seq,
+            "TSPASIRPPAGPSSRPAMVSSRRPSPPPPRRPPGRPCCSAAPPRPQATGGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSRGSRPPRFAPPLMSSCITSTTGPPPPAGDRSHE",
+        )
+        self.assertEqual(
+            alignment.sequences[3].seq,
+            "TSPASLRPPAGPSSRPAMVSSRRRPSPPGPRRPTCSAAPRRPQATGGYKTCSGTCTTSTSTRHRGRSGYSARTTTAACLRASRKSMRAACSRGSRPNRFAPTLMSSCLTSTTGPPAYAGDRSHE",
+        )
+        self.assertEqual(
+            alignment[0],
+            "TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHE",
+        )
+        self.assertEqual(
+            alignment[1],
+            "TSPASIRPPAGPSSR---------RPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGW----------RASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHE",
+        )
+        self.assertEqual(
+            alignment[2],
+            "TSPASIRPPAGPSSRPAMVSSR--RPSPPPPRRPPGRPCCSAAPPRPQATGGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSR--GSRPPRFAPPLMSSCITSTTGPPPPAGDRSHE",
+        )
+        self.assertEqual(
+            alignment[3],
+            "TSPASLRPPAGPSSRPAMVSSRR-RPSPPGPRRPT----CSAAPRRPQATGGYKTCSGTCTTSTSTRHRGRSGYSARTTTAACLRASRKSMRAACSR--GSRPNRFAPTLMSSCLTSTTGPPAYAGDRSHE",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+IXI_234           0 TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTC
+IXI_235           0 TSPASIRPPAGPSSR---------RPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTC
+IXI_236           0 TSPASIRPPAGPSSRPAMVSSR--RPSPPPPRRPPGRPCCSAAPPRPQATGGWKTCSGTC
+IXI_237           0 TSPASLRPPAGPSSRPAMVSSRR-RPSPPGPRRPT----CSAAPRRPQATGGYKTCSGTC
+
+IXI_234          60 TTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTG
+IXI_235          51 TTSTSTRHRGRSGW----------RASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTG
+IXI_236          58 TTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSR--GSRPPRFAPPLMSSCITSTTG
+IXI_237          55 TTSTSTRHRGRSGYSARTTTAACLRASRKSMRAACSR--GSRPNRFAPTLMSSCLTSTTG
+
+IXI_234         120 PPAWAGDRSHE 131
+IXI_235         101 PPAWAGDRSHE 112
+IXI_236         116 PPPPAGDRSHE 127
+IXI_237         113 PPAYAGDRSHE 124
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
+                np.array([[0, 15, 22, 23, 24, 35, 39, 74, 84, 97, 99, 131],
+                          [0, 15, 15, 15, 15, 26, 30, 65, 65, 78, 80, 112],
+                          [0, 15, 22, 22, 22, 33, 37, 72, 82, 95, 95, 127],
+                          [0, 15, 22, 23, 23, 34, 34, 69, 79, 92, 92, 124]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(
+            format(alignment, "phylip"),
+            """\
+4 131
+IXI_234   TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHE
+IXI_235   TSPASIRPPAGPSSR---------RPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGW----------RASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHE
+IXI_236   TSPASIRPPAGPSSRPAMVSSR--RPSPPPPRRPPGRPCCSAAPPRPQATGGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSR--GSRPPRFAPPLMSSCITSTTGPPPPAGDRSHE
+IXI_237   TSPASLRPPAGPSSRPAMVSSRR-RPSPPGPRRPT----CSAAPRRPQATGGYKTCSGTCTTSTSTRHRGRSGYSARTTTAACLRASRKSMRAACSR--GSRPNRFAPTLMSSCLTSTTGPPAYAGDRSHE
+""",
+        )
 
 
 if __name__ == "__main__":

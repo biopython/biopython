@@ -134,6 +134,7 @@ from urllib.error import URLError, HTTPError
 from urllib.parse import urlencode
 from urllib.request import urlopen, Request
 
+from Bio._utils import function_with_previous
 
 email = None
 max_tries = 3
@@ -210,7 +211,11 @@ def esearch(db, term, **keywds):
 
     >>> from Bio import Entrez
     >>> Entrez.email = "Your.Name.Here@example.org"
-    >>> handle = Entrez.esearch(db="nucleotide", retmax=10, term="opuntia[ORGN] accD", idtype="acc")
+    >>> handle = Entrez.esearch(
+    ...     db="nucleotide", retmax=10, idtype="acc",
+    ...     term="opuntia[ORGN] accD 2007[Publication Date]"
+    ... )
+    ...
     >>> record = Entrez.read(handle)
     >>> handle.close()
     >>> int(record["Count"]) >= 2
@@ -455,7 +460,7 @@ def ecitmatch(**keywds):
     return _open(request)
 
 
-def read(handle, validate=True, escape=False, ignore_errors=False):
+def read(source, validate=True, escape=False, ignore_errors=False):
     """Parse an XML file from the NCBI Entrez Utilities into python objects.
 
     This function parses an XML file created by NCBI's Entrez Utilities,
@@ -464,18 +469,28 @@ def read(handle, validate=True, escape=False, ignore_errors=False):
     this function, provided its DTD is available. Biopython includes the
     DTDs for most commonly used Entrez Utilities.
 
-    The handle must be in binary mode. This allows the parser to detect the
-    encoding from the XML file, and to use it to convert all text in the XML
-    to the correct Unicode string. The functions in Bio.Entrez to access NCBI
-    Entrez will automatically return XML data in binary mode. For files,
-    please use mode "rb" when opening the file, as in
+    The argument ``source`` must be a file or file-like object opened in binary
+    mode, or a filename. The parser detects the encoding from the XML file, and
+    uses it to convert all text in the XML to the correct Unicode string. The
+    functions in Bio.Entrez to access NCBI Entrez will automatically return XML
+    data in binary mode. For files, use mode "rb" when opening the file, as in
 
         >>> from Bio import Entrez
-        >>> handle = open("Entrez/esearch1.xml", "rb")  # opened in binary mode
-        >>> record = Entrez.read(handle)
+        >>> path = "Entrez/esearch1.xml"
+        >>> stream = open(path, "rb")  # opened in binary mode
+        >>> record = Entrez.read(stream)
         >>> print(record['QueryTranslation'])
         biopython[All Fields]
-        >>> handle.close()
+        >>> stream.close()
+
+    Alternatively, you can use the filename directly, as in
+
+        >>> record = Entrez.read(path)
+        >>> print(record['QueryTranslation'])
+        biopython[All Fields]
+
+    which is safer, as the file stream will automatically be closed after the
+    record has been read, or if an error occurs.
 
     If validate is True (default), the parser will validate the XML file
     against the DTD, and raise an error if the XML file contains tags that
@@ -500,11 +515,11 @@ def read(handle, validate=True, escape=False, ignore_errors=False):
     from .Parser import DataHandler
 
     handler = DataHandler(validate, escape, ignore_errors)
-    record = handler.read(handle)
+    record = handler.read(source)
     return record
 
 
-def parse(handle, validate=True, escape=False, ignore_errors=False):
+def parse(source, validate=True, escape=False, ignore_errors=False):
     """Parse an XML file from the NCBI Entrez Utilities into python objects.
 
     This function parses an XML file created by NCBI's Entrez Utilities,
@@ -519,21 +534,34 @@ def parse(handle, validate=True, escape=False, ignore_errors=False):
     this function, provided its DTD is available. Biopython includes the
     DTDs for most commonly used Entrez Utilities.
 
-    The handle must be in binary mode. This allows the parser to detect the
-    encoding from the XML file, and to use it to convert all text in the XML
-    to the correct Unicode string. The functions in Bio.Entrez to access NCBI
-    Entrez will automatically return XML data in binary mode. For files,
-    please use mode "rb" when opening the file, as in
+    The argument ``source`` must be a file or file-like object opened in binary
+    mode, or a filename. The parser detects the encoding from the XML file, and
+    uses it to convert all text in the XML to the correct Unicode string. The
+    functions in Bio.Entrez to access NCBI Entrez will automatically return XML
+    data in binary mode. For files, use mode "rb" when opening the file, as in
 
         >>> from Bio import Entrez
-        >>> handle = open("Entrez/pubmed1.xml", "rb")  # opened in binary mode
-        >>> records = Entrez.parse(handle)
+        >>> path = "Entrez/pubmed1.xml"
+        >>> stream = open(path, "rb")  # opened in binary mode
+        >>> records = Entrez.parse(stream)
         >>> for record in records:
         ...     print(record['MedlineCitation']['Article']['Journal']['Title'])
         ...
         Social justice (San Francisco, Calif.)
         Biochimica et biophysica acta
-        >>> handle.close()
+        >>> stream.close()
+
+    Alternatively, you can use the filename directly, as in
+
+        >>> records = Entrez.parse(path)
+        >>> for record in records:
+        ...     print(record['MedlineCitation']['Article']['Journal']['Title'])
+        ...
+        Social justice (San Francisco, Calif.)
+        Biochimica et biophysica acta
+
+    which is safer, as the file stream will automatically be closed after all
+    the records have been read, or if an error occurs.
 
     If validate is True (default), the parser will validate the XML file
     against the DTD, and raise an error if the XML file contains tags that
@@ -558,10 +586,11 @@ def parse(handle, validate=True, escape=False, ignore_errors=False):
     from .Parser import DataHandler
 
     handler = DataHandler(validate, escape, ignore_errors)
-    records = handler.parse(handle)
+    records = handler.parse(source)
     return records
 
 
+@function_with_previous
 def _open(request):
     """Make an HTTP request to Entrez, handling errors and enforcing rate limiting (PRIVATE).
 

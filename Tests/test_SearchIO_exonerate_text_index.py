@@ -12,7 +12,6 @@ from search_tests_common import CheckIndex
 
 
 class ExonerateTextIndexCases(CheckIndex):
-
     fmt = "exonerate-text"
 
     def test_exn_22_m_est2genome(self):

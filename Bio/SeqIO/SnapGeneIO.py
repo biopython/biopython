@@ -318,7 +318,7 @@ class SnapGeneIterator(SequenceIterator):
             raise ValueError("The file does not start with a SnapGene cookie packet")
         _parse_cookie_packet(length, data, record)
 
-        for (packet_type, length, data) in packets:
+        for packet_type, length, data in packets:
             handler = _packet_handlers.get(packet_type)
             if handler is not None:
                 handler(length, data, record)

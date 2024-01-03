@@ -11,7 +11,7 @@
 import struct
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
     from Bio import MissingPythonDependencyError
 
@@ -40,17 +40,17 @@ class Record:
     >>> print(c.ncols, c.nrows)
     5 5
     >>> print(c.intensities)
-    [[   234.    170.  22177.    164.  22104.]
-     [   188.    188.  21871.    168.  21883.]
-     [   188.    193.  21455.    198.  21300.]
-     [   188.    182.  21438.    188.  20945.]
-     [   193.  20370.    174.  20605.    168.]]
+    [[  234.   170. 22177.   164. 22104.]
+     [  188.   188. 21871.   168. 21883.]
+     [  188.   193. 21455.   198. 21300.]
+     [  188.   182. 21438.   188. 20945.]
+     [  193. 20370.   174. 20605.   168.]]
     >>> print(c.stdevs)
-    [[   24.     34.5  2669.     19.7  3661.2]
-     [   29.8    29.8  2795.9    67.9  2792.4]
-     [   29.8    88.7  2976.5    62.   2914.5]
-     [   29.8    76.2  2759.5    49.2  2762. ]
-     [   38.8  2611.8    26.6  2810.7    24.1]]
+    [[  24.    34.5 2669.    19.7 3661.2]
+     [  29.8   29.8 2795.9   67.9 2792.4]
+     [  29.8   88.7 2976.5   62.  2914.5]
+     [  29.8   76.2 2759.5   49.2 2762. ]
+     [  38.8 2611.8   26.6 2810.7   24.1]]
     >>> print(c.npix)
     [[25 25 25 25 25]
      [25 25 25 25 25]
@@ -251,9 +251,9 @@ def _read_v4(f):
     structSize = 10
 
     # We initialize the most important: intensities, stdevs and npixs.
-    record.intensities = numpy.empty(record.NumberCells, dtype=float)
-    record.stdevs = numpy.empty(record.NumberCells, dtype=float)
-    record.npix = numpy.empty(record.NumberCells, dtype=int)
+    record.intensities = np.empty(record.NumberCells, dtype=float)
+    record.stdevs = np.empty(record.NumberCells, dtype=float)
+    record.npix = np.empty(record.NumberCells, dtype=int)
 
     b = f.read(structSize * record.NumberCells)
     for i in range(record.NumberCells):
@@ -293,18 +293,18 @@ def _read_v3(handle):
             section = "HEADER"
         elif line.startswith("[INTENSITY]"):
             section = "INTENSITY"
-            record.intensities = numpy.zeros((record.nrows, record.ncols))
-            record.stdevs = numpy.zeros((record.nrows, record.ncols))
-            record.npix = numpy.zeros((record.nrows, record.ncols), int)
+            record.intensities = np.zeros((record.nrows, record.ncols))
+            record.stdevs = np.zeros((record.nrows, record.ncols))
+            record.npix = np.zeros((record.nrows, record.ncols), int)
         elif line.startswith("[MASKS]"):
             section = "MASKS"
-            record.mask = numpy.zeros((record.nrows, record.ncols), bool)
+            record.mask = np.zeros((record.nrows, record.ncols), bool)
         elif line.startswith("[OUTLIERS]"):
             section = "OUTLIERS"
-            record.outliers = numpy.zeros((record.nrows, record.ncols), bool)
+            record.outliers = np.zeros((record.nrows, record.ncols), bool)
         elif line.startswith("[MODIFIED]"):
             section = "MODIFIED"
-            record.modified = numpy.zeros((record.nrows, record.ncols))
+            record.modified = np.zeros((record.nrows, record.ncols))
         elif line.startswith("["):
             raise ParserError("Unknown section found in version 3 CEL file")
         else:  # read the data in a section

@@ -15,10 +15,15 @@ import sys
 import subprocess
 import unittest
 import re
+import warnings
 
-from Bio.Application import _escape_filename
 from Bio import MissingExternalDependencyError
-from Bio.Blast import Applications
+from Bio import BiopythonDeprecationWarning
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
+    from Bio.Application import _escape_filename
+    from Bio.Blast import Applications
 
 # TODO - On windows, can we use the ncbi.ini file?
 wanted = [

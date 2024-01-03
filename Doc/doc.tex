@@ -381,7 +381,7 @@ ATGATGATTATCAGCATGTGGATGAGCATATCGCGAGGATTGTGGGACAGCAGCTCC...GTG gi|24657088|ref|
 0.0193877676103 0.0217247139962
 \end{minted}
 
-If you are using maximum likelihood methdo to estimate dN and dS, you
+If you are using maximum likelihood method to estimate dN and dS, you
 are also able to specify equilibrium codon frequency to \texttt{cfreq}
 argument. Available options include \texttt{F1x4}, \texttt{F3x4} and
 \texttt{F61}.
@@ -433,7 +433,7 @@ the test.
 >>> from Bio.codonalign import build
 >>> from Bio.codonalign.codonalignment import mktest
 >>> pro_aln = AlignIO.read("adh.aln", "clustal")
->>> p = SeqIO.index("drosophilla.fasta", "fasta")
+>>> p = SeqIO.index("drosophila.fasta", "fasta")
 >>> codon_aln = build(pro_aln, p)
 >>> print(codon_aln)
 CodonAlignment with 27 rows and 768 columns (256 codons)

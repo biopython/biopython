@@ -21,9 +21,19 @@ This aims to estimate two parameters:
 """
 # standard modules
 import math
+import warnings
 
 # local stuff
 from .DynamicProgramming import ScaledDPAlgorithms
+
+from Bio import BiopythonDeprecationWarning
+
+warnings.warn(
+    "The 'Bio.HMM.Trainer' module is deprecated and will be removed "
+    "in a future release of Biopython. Consider using the hmmlearn "
+    "package instead.",
+    BiopythonDeprecationWarning,
+)
 
 
 class TrainingSequence:

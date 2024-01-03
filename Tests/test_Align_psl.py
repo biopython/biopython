@@ -16,7 +16,7 @@ from Bio import Align
 
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
     from Bio import MissingPythonDependencyError
 
@@ -26,9 +26,9 @@ except ImportError:
 
 
 class TestAlign_dna_rna(unittest.TestCase):
-
     # The PSL file dna_rna.psl was generated using this command:
-    # blat -mask=lower hg38.2bit rna.fa dna_rna.psl
+    # blat -mask=lower hg38.2bit rna.fa dna_rna.unsorted.psl
+    # pslSort dirs dna_rna.psl . dna_rna.unsorted.psl
 
     def setUp(self):
         data = {}
@@ -65,6 +65,364 @@ class TestAlign_dna_rna(unittest.TestCase):
     def check_alignments(self, alignments):
         self.assertEqual(alignments.metadata["psLayout version"], "3")
         alignment = next(alignments)
+        self.assertEqual(alignment.matches, 175)
+        self.assertEqual(alignment.misMatches, 0)
+        self.assertEqual(alignment.repMatches, 6)
+        self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 1711))
+        self.assertEqual(len(alignment), 2)
+        self.assertIs(alignment.sequences[0], alignment.target)
+        self.assertIs(alignment.sequences[1], alignment.query)
+        self.assertEqual(alignment.target.id, "chr3")
+        self.assertEqual(alignment.query.id, "NR_046654.1")
+        self.assertEqual(len(alignment.target.seq), 198295559)
+        self.assertEqual(len(alignment.query.seq), 181)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
+                np.array([[42530895, 42530958, 42532020, 42532095, 42532563, 42532606],
+                          [     181,      118,      118,       43,       43,        0]])
+                # fmt: on
+            )
+        )
+        dna = Seq(self.dna, length=len(alignment.target))
+        alignment.target.seq = dna
+        alignment.query.seq = self.rna[alignment.query.id]
+        self.assertTrue(
+            np.array_equal(
+                alignment.substitutions,
+                # fmt: off
+            np.array([[36.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                      [ 0., 40.,  0.,  0.,  0.,  0.,  0.,  0.],
+                      [ 0.,  0., 57.,  0.,  0.,  0.,  0.,  0.],
+                      [ 0.,  0.,  0., 42.,  0.,  0.,  0.,  0.],
+                      [ 2.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                      [ 0.,  1.,  0.,  0.,  0.,  0.,  0.,  0.],
+                      [ 0.,  0.,  3.,  0.,  0.,  0.,  0.,  0.],
+                      [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                     ])
+                # fmt: on
+            )
+        )
+        self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
+        matches = sum(
+            alignment.substitutions[c, c] for c in alignment.substitutions.alphabet
+        )
+        repMatches = sum(
+            alignment.substitutions[c, c.swapcase()]
+            for c in alignment.substitutions.alphabet
+        )
+        self.assertEqual(matches, alignment.matches)
+        self.assertEqual(repMatches, alignment.repMatches)
+        self.assertEqual(
+            str(alignment),
+            """\
+chr3       42530895 CGGAAGTACTTCTGGGGGTACATACTCATCGGCTGGGGTATGGTACCAGGGAGGGCTTCC
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+NR_046654       181 CGGAAGTACTTCTGGGGGTACATACTCATCGGCTGGGGTATGGTACCAGGGAGGGCTTCC
+
+chr3       42530955 AGGCTGGGGACAGAGGGGGCAAGGCCTGGAGAACTCCCTAGGGGGAGGGTGCCAACCCAG
+                 60 |||---------------------------------------------------------
+NR_046654       121 AGG---------------------------------------------------------
+
+chr3       42531015 CTTGCAGTCCTACGTCTTGCTTAGCTGCAGGTCCTGCCTGCAAGGATATCAGCCAAGGGT
+                120 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531075 CAAGAAAGTCCTCAAAATGTCTGATCCCAGGACAAGTCCCTCAGGTTGCAGCTGCACCTA
+                180 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531135 GGGCTGACCTGTGGGACAGATTTTGTGAACATCTTTCCATTTCCCTTTAGTTCCCGAAAT
+                240 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531195 ACAcagggccactgctaatctataaagggcctctgtcacaattagaaagagaatgtccgt
+                300 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531255 ctaggtagacacagcccttcaggcatacagcttCACCCCCTCAGTGGAGCATCCCTCCGT
+                360 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531315 GGTGAACAACCTATGCAACCAAAGACAGCAGACTGACAACCCACCCTTTtctctctccct
+                420 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531375 ccctctccctgcttttctccaaaatctctccctcatgccctctacccctgcttcctgtgc
+                480 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531435 cctctctgctctttcactctccctGGGCCTGACAGGGGTACCCAGCACATTCACCATGGT
+                540 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531495 GTGGACCATCGCCAGGATCCATTTTGAGGATTATGGGTGAGCTGCTGCCCCACACACTCC
+                600 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531555 CCCGGCCGCCATCACTTGGGCAGGCCCCCTGGGTGGGATGATAATGCCATCTGGCCTTGG
+                660 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531615 TGAGTGGACAAAAACCACAGCTCTCGGGCCAGAGGGGAGGCTGGAGGAGGACCTGGGGAG
+                720 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531675 CAACAGACTCTGGGCCCGGGGTTGCTAAAGTGCTCAGGAGCAGAGCTGGGGACAACTGGG
+                780 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531735 GGAGGTGCTGCTGAGTCTCTCTCTGGCTGAGGACAATCCCTCTCATTCCTCCCCACGGTC
+                840 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531795 TGCTCAGGTGCTGGGACACCATCAACTCCTCACTGTGGTGGATCATAAAGGGCCCCATCC
+                900 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531855 TCACCTCCATCTTGGTAAGATaccctcccaccacctagagatggggaaacaggcccaaag
+                960 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531915 ggcaggcaacttagcccaaggtcacatgggaaattagtatctaggtcagaactgaaacgt
+               1020 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531975 agcttcctaatgcccaatgcaggatcatccccacccctgtcctaccagTTCTTCCTTGAG
+               1080 ---------------------------------------------...||||||||||||
+NR_046654       118 ---------------------------------------------CAGTTCTTCCTTGAG
+
+chr3       42532035 CGTAAGCGGATTGGGAGCACAGTCCTTAGGGATTTGAAGGAGGTAGAGTTCCCGGATGAC
+               1140 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+NR_046654       103 CGTAAGCGGATTGGGAGCACAGTCCTTAGGGATTTGAAGGAGGTAGAGTTCCCGGATGAC
+
+chr3       42532095 CTGCCCAAAGGGGAAATGCCAGAGGAGAGGTAAGATAGAGAGAGGGGCAGCAGGACCCTG
+               1200 ------------------------------------------------------------
+NR_046654        43 ------------------------------------------------------------
+
+chr3       42532155 GGAAAGAAGACAGGCCAGCAGTCAAGGGGCCTGAACACCTCAGCCTTCCCGCTCTGACTG
+               1260 ------------------------------------------------------------
+NR_046654        43 ------------------------------------------------------------
+
+chr3       42532215 CCCGAACTCGGGTCCCCACCCACTAGGTAAACTTCATCCTGTTTATTTGCATCATCCGAA
+               1320 ------------------------------------------------------------
+NR_046654        43 ------------------------------------------------------------
+
+chr3       42532275 TCCTGCTTCAGAAACTGCGGCCCCCAGATATCAGGAAGAGTGACAGCAGTCCATACTCGT
+               1380 ------------------------------------------------------------
+NR_046654        43 ------------------------------------------------------------
+
+chr3       42532335 GAGTGTGGGCCTAGTGCCTCAGCCCCCAGTACCTCCATCCCCAGTCCTCAAATCATCCCA
+               1440 ------------------------------------------------------------
+NR_046654        43 ------------------------------------------------------------
+
+chr3       42532395 CATCTCCTTGAAGTCCTCCCACCCCAAACATCCAGAGTCACCAAAGAGCCACATTGTTCT
+               1500 ------------------------------------------------------------
+NR_046654        43 ------------------------------------------------------------
+
+chr3       42532455 TTCCCACCTCCACCATGGCCTGGCTcagcccaccaccatcccctgctccagccccaccct
+               1560 ------------------------------------------------------------
+NR_046654        43 ------------------------------------------------------------
+
+chr3       42532515 caCCAGGCTGCACTCAGAGCCCTGCATGCTTCTCCTGCCCACACTCACCTAGCATCCTTC
+               1620 ------------------------------------------------||||||||||||
+NR_046654        43 ------------------------------------------------CTAGCATCCTTC
+
+chr3       42532575 CCAGGTATGCATCTGCTGCCAAGCCAGGgag 42532606
+               1680 ||||||||||||||||||||||||||||...     1711
+NR_046654        31 CCAGGTATGCATCTGCTGCCAAGCCAGGGAG        0
+""",
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+175	0	6	0	0	0	2	1530	-	NR_046654.1	181	0	181	chr3	198295559	42530895	42532606	3	63,75,43,	0,63,138,	42530895,42532020,42532563,
+""",
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.matches, 172)
+        self.assertEqual(alignment.misMatches, 1)
+        self.assertEqual(alignment.repMatches, 6)
+        self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 1714))
+        self.assertEqual(len(alignment), 2)
+        self.assertIs(alignment.sequences[0], alignment.target)
+        self.assertIs(alignment.sequences[1], alignment.query)
+        self.assertEqual(alignment.target.id, "chr3")
+        self.assertEqual(alignment.query.id, "NR_046654.1_modified")
+        self.assertEqual(len(alignment.target.seq), 198295559)
+        self.assertEqual(len(alignment.query.seq), 190)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
+                np.array([[42530895, 42530922, 42530922, 42530958, 42532020,
+                           42532037, 42532039, 42532095, 42532563, 42532606],
+                          [     185,      158,      155,      119,      119,
+                                102,      102,       46,       46,        3],
+                         ])
+                # fmt: on
+            )
+        )
+        dna = Seq(self.dna, length=len(alignment.target))
+        alignment.target.seq = dna
+        alignment.query.seq = self.rna[alignment.query.id]
+        self.assertTrue(
+            np.array_equal(
+                alignment.substitutions,
+                # fmt: off
+            np.array([[34.,  0.,  0.,  1.,  0.,  0.,  0.,  0.],
+                      [ 0., 40.,  0.,  0.,  0.,  0.,  0.,  0.],
+                      [ 0.,  0., 57.,  0.,  0.,  0.,  0.,  0.],
+                      [ 0.,  0.,  0., 41.,  0.,  0.,  0.,  0.],
+                      [ 2.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                      [ 0.,  1.,  0.,  0.,  0.,  0.,  0.,  0.],
+                      [ 0.,  0.,  3.,  0.,  0.,  0.,  0.,  0.],
+                      [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                     ]),
+                # fmt: on
+            )
+        )
+        self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
+        matches = sum(
+            alignment.substitutions[c, c] for c in alignment.substitutions.alphabet
+        )
+        repMatches = sum(
+            alignment.substitutions[c, c.swapcase()]
+            for c in alignment.substitutions.alphabet
+            if c != "X"
+        )
+        self.assertEqual(matches, alignment.matches)
+        self.assertEqual(repMatches, alignment.repMatches)
+        self.assertEqual(
+            str(alignment),
+            """\
+chr3       42530895 CGGAAGTACTTCTGGGGGTACATACTC---ATCGGCTGGGGTATGGTACCAGGGAGGGCT
+                  0 |||||||||||||||||||||||||||---||||||||||||||||||||||||||||||
+NR_046654       185 CGGAAGTACTTCTGGGGGTACATACTCCCCATCGGCTGGGGTATGGTACCAGGGAGGGCT
+
+chr3       42530952 TCCAGGCTGGGGACAGAGGGGGCAAGGCCTGGAGAACTCCCTAGGGGGAGGGTGCCAACC
+                 60 ||||||------------------------------------------------------
+NR_046654       125 TCCAGG------------------------------------------------------
+
+chr3       42531012 CAGCTTGCAGTCCTACGTCTTGCTTAGCTGCAGGTCCTGCCTGCAAGGATATCAGCCAAG
+                120 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531072 GGTCAAGAAAGTCCTCAAAATGTCTGATCCCAGGACAAGTCCCTCAGGTTGCAGCTGCAC
+                180 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531132 CTAGGGCTGACCTGTGGGACAGATTTTGTGAACATCTTTCCATTTCCCTTTAGTTCCCGA
+                240 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531192 AATACAcagggccactgctaatctataaagggcctctgtcacaattagaaagagaatgtc
+                300 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531252 cgtctaggtagacacagcccttcaggcatacagcttCACCCCCTCAGTGGAGCATCCCTC
+                360 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531312 CGTGGTGAACAACCTATGCAACCAAAGACAGCAGACTGACAACCCACCCTTTtctctctc
+                420 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531372 cctccctctccctgcttttctccaaaatctctccctcatgccctctacccctgcttcctg
+                480 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531432 tgccctctctgctctttcactctccctGGGCCTGACAGGGGTACCCAGCACATTCACCAT
+                540 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531492 GGTGTGGACCATCGCCAGGATCCATTTTGAGGATTATGGGTGAGCTGCTGCCCCACACAC
+                600 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531552 TCCCCCGGCCGCCATCACTTGGGCAGGCCCCCTGGGTGGGATGATAATGCCATCTGGCCT
+                660 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531612 TGGTGAGTGGACAAAAACCACAGCTCTCGGGCCAGAGGGGAGGCTGGAGGAGGACCTGGG
+                720 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531672 GAGCAACAGACTCTGGGCCCGGGGTTGCTAAAGTGCTCAGGAGCAGAGCTGGGGACAACT
+                780 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531732 GGGGGAGGTGCTGCTGAGTCTCTCTCTGGCTGAGGACAATCCCTCTCATTCCTCCCCACG
+                840 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531792 GTCTGCTCAGGTGCTGGGACACCATCAACTCCTCACTGTGGTGGATCATAAAGGGCCCCA
+                900 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531852 TCCTCACCTCCATCTTGGTAAGATaccctcccaccacctagagatggggaaacaggccca
+                960 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531912 aagggcaggcaacttagcccaaggtcacatgggaaattagtatctaggtcagaactgaaa
+               1020 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531972 cgtagcttcctaatgcccaatgcaggatcatccccacccctgtcctaccagTTCTTCCTT
+               1080 ------------------------------------------------...|||||||||
+NR_046654       119 ------------------------------------------------CAGTTCTTCCTT
+
+chr3       42532032 GAGCGTAAGCGGATTGGGAGCACAGTCCTTAGGGATTTGAAGGAGGTAGAGTTCCCGGAT
+               1140 |||||--|||||||||||.|||||||||||||||||||||||||||||||||||||||||
+NR_046654       107 GAGCG--AGCGGATTGGGTGCACAGTCCTTAGGGATTTGAAGGAGGTAGAGTTCCCGGAT
+
+chr3       42532092 GACCTGCCCAAAGGGGAAATGCCAGAGGAGAGGTAAGATAGAGAGAGGGGCAGCAGGACC
+               1200 |||---------------------------------------------------------
+NR_046654        49 GAC---------------------------------------------------------
+
+chr3       42532152 CTGGGAAAGAAGACAGGCCAGCAGTCAAGGGGCCTGAACACCTCAGCCTTCCCGCTCTGA
+               1260 ------------------------------------------------------------
+NR_046654        46 ------------------------------------------------------------
+
+chr3       42532212 CTGCCCGAACTCGGGTCCCCACCCACTAGGTAAACTTCATCCTGTTTATTTGCATCATCC
+               1320 ------------------------------------------------------------
+NR_046654        46 ------------------------------------------------------------
+
+chr3       42532272 GAATCCTGCTTCAGAAACTGCGGCCCCCAGATATCAGGAAGAGTGACAGCAGTCCATACT
+               1380 ------------------------------------------------------------
+NR_046654        46 ------------------------------------------------------------
+
+chr3       42532332 CGTGAGTGTGGGCCTAGTGCCTCAGCCCCCAGTACCTCCATCCCCAGTCCTCAAATCATC
+               1440 ------------------------------------------------------------
+NR_046654        46 ------------------------------------------------------------
+
+chr3       42532392 CCACATCTCCTTGAAGTCCTCCCACCCCAAACATCCAGAGTCACCAAAGAGCCACATTGT
+               1500 ------------------------------------------------------------
+NR_046654        46 ------------------------------------------------------------
+
+chr3       42532452 TCTTTCCCACCTCCACCATGGCCTGGCTcagcccaccaccatcccctgctccagccccac
+               1560 ------------------------------------------------------------
+NR_046654        46 ------------------------------------------------------------
+
+chr3       42532512 cctcaCCAGGCTGCACTCAGAGCCCTGCATGCTTCTCCTGCCCACACTCACCTAGCATCC
+               1620 ---------------------------------------------------|||||||||
+NR_046654        46 ---------------------------------------------------CTAGCATCC
+
+chr3       42532572 TTCCCAGGTATGCATCTGCTGCCAAGCCAGGgag 42532606
+               1680 |||||||||||||||||||||||||||||||...     1714
+NR_046654        37 TTCCCAGGTATGCATCTGCTGCCAAGCCAGGGAG        3
+""",
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+172	1	6	0	1	3	3	1532	-	NR_046654.1_modified	190	3	185	chr3	198295559	42530895	42532606	5	27,36,17,56,43,	5,35,71,88,144,	42530895,42530922,42532020,42532039,42532563,
+""",
+        )
+        alignment = next(alignments)
         self.assertEqual(alignment.matches, 165)
         self.assertEqual(alignment.misMatches, 0)
         self.assertEqual(alignment.repMatches, 39)
@@ -78,11 +436,10 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertEqual(len(alignment.target.seq), 198295559)
         self.assertEqual(len(alignment.query.seq), 216)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array( [[48663767, 48663813, 48665640, 48665722, 48669098, 48669174],
+                np.array( [[48663767, 48663813, 48665640, 48665722, 48669098, 48669174],
                               [       0,        46,      46,      128,      128,      204]]),
                 # fmt: on
             )
@@ -91,19 +448,19 @@ class TestAlign_dna_rna(unittest.TestCase):
         alignment.target.seq = dna
         alignment.query.seq = self.rna[alignment.query.id]
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.substitutions,
                 # fmt: off
-# flake8: noqa
-            numpy.array([[53.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0., 35.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0., 50.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  0., 27.,  0.,  0.,  0.,  0.],
-                         [ 9.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  7.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0., 16.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  0.,  7.,  0.,  0.,  0.,  0.],
-                        ])
+            np.array([[53.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                      [ 0., 35.,  0.,  0.,  0.,  0.,  0.,  0.],
+                      [ 0.,  0., 50.,  0.,  0.,  0.,  0.,  0.],
+                      [ 0.,  0.,  0., 27.,  0.,  0.,  0.,  0.],
+                      [ 9.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                      [ 0.,  7.,  0.,  0.,  0.,  0.,  0.,  0.],
+                      [ 0.,  0., 16.,  0.,  0.,  0.,  0.,  0.],
+                      [ 0.,  0.,  0.,  7.,  0.,  0.,  0.,  0.],
+                     ])
+                # fmt: on
             )
         )
         self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
@@ -491,184 +848,6 @@ NR_111921       197 TAAAAAA      204
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 175)
-        self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 6)
-        self.assertEqual(alignment.nCount, 0)
-        self.assertEqual(alignment.shape, (2, 1711))
-        self.assertEqual(len(alignment), 2)
-        self.assertIs(alignment.sequences[0], alignment.target)
-        self.assertIs(alignment.sequences[1], alignment.query)
-        self.assertEqual(alignment.target.id, "chr3")
-        self.assertEqual(alignment.query.id, "NR_046654.1")
-        self.assertEqual(len(alignment.target.seq), 198295559)
-        self.assertEqual(len(alignment.query.seq), 181)
-        self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates,
-                # fmt: off
-# flake8: noqa
-                numpy.array([[42530895, 42530958, 42532020, 42532095, 42532563, 42532606],
-                             [     181,      118,      118,       43,       43,        0]])
-                # fmt: on
-            )
-        )
-        dna = Seq(self.dna, length=len(alignment.target))
-        alignment.target.seq = dna
-        alignment.query.seq = self.rna[alignment.query.id]
-        self.assertTrue(
-            numpy.array_equal(
-                alignment.substitutions,
-                # fmt: off
-# flake8: noqa
-            numpy.array([[36.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0., 40.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0., 57.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  0., 42.,  0.,  0.,  0.,  0.],
-                         [ 2.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  1.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  3.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-                        ])
-            )
-        )
-        self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
-        matches = sum(
-            alignment.substitutions[c, c] for c in alignment.substitutions.alphabet
-        )
-        repMatches = sum(
-            alignment.substitutions[c, c.swapcase()]
-            for c in alignment.substitutions.alphabet
-        )
-        self.assertEqual(matches, alignment.matches)
-        self.assertEqual(repMatches, alignment.repMatches)
-        self.assertEqual(
-            str(alignment),
-            """\
-chr3       42530895 CGGAAGTACTTCTGGGGGTACATACTCATCGGCTGGGGTATGGTACCAGGGAGGGCTTCC
-                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-NR_046654       181 CGGAAGTACTTCTGGGGGTACATACTCATCGGCTGGGGTATGGTACCAGGGAGGGCTTCC
-
-chr3       42530955 AGGCTGGGGACAGAGGGGGCAAGGCCTGGAGAACTCCCTAGGGGGAGGGTGCCAACCCAG
-                 60 |||---------------------------------------------------------
-NR_046654       121 AGG---------------------------------------------------------
-
-chr3       42531015 CTTGCAGTCCTACGTCTTGCTTAGCTGCAGGTCCTGCCTGCAAGGATATCAGCCAAGGGT
-                120 ------------------------------------------------------------
-NR_046654       118 ------------------------------------------------------------
-
-chr3       42531075 CAAGAAAGTCCTCAAAATGTCTGATCCCAGGACAAGTCCCTCAGGTTGCAGCTGCACCTA
-                180 ------------------------------------------------------------
-NR_046654       118 ------------------------------------------------------------
-
-chr3       42531135 GGGCTGACCTGTGGGACAGATTTTGTGAACATCTTTCCATTTCCCTTTAGTTCCCGAAAT
-                240 ------------------------------------------------------------
-NR_046654       118 ------------------------------------------------------------
-
-chr3       42531195 ACAcagggccactgctaatctataaagggcctctgtcacaattagaaagagaatgtccgt
-                300 ------------------------------------------------------------
-NR_046654       118 ------------------------------------------------------------
-
-chr3       42531255 ctaggtagacacagcccttcaggcatacagcttCACCCCCTCAGTGGAGCATCCCTCCGT
-                360 ------------------------------------------------------------
-NR_046654       118 ------------------------------------------------------------
-
-chr3       42531315 GGTGAACAACCTATGCAACCAAAGACAGCAGACTGACAACCCACCCTTTtctctctccct
-                420 ------------------------------------------------------------
-NR_046654       118 ------------------------------------------------------------
-
-chr3       42531375 ccctctccctgcttttctccaaaatctctccctcatgccctctacccctgcttcctgtgc
-                480 ------------------------------------------------------------
-NR_046654       118 ------------------------------------------------------------
-
-chr3       42531435 cctctctgctctttcactctccctGGGCCTGACAGGGGTACCCAGCACATTCACCATGGT
-                540 ------------------------------------------------------------
-NR_046654       118 ------------------------------------------------------------
-
-chr3       42531495 GTGGACCATCGCCAGGATCCATTTTGAGGATTATGGGTGAGCTGCTGCCCCACACACTCC
-                600 ------------------------------------------------------------
-NR_046654       118 ------------------------------------------------------------
-
-chr3       42531555 CCCGGCCGCCATCACTTGGGCAGGCCCCCTGGGTGGGATGATAATGCCATCTGGCCTTGG
-                660 ------------------------------------------------------------
-NR_046654       118 ------------------------------------------------------------
-
-chr3       42531615 TGAGTGGACAAAAACCACAGCTCTCGGGCCAGAGGGGAGGCTGGAGGAGGACCTGGGGAG
-                720 ------------------------------------------------------------
-NR_046654       118 ------------------------------------------------------------
-
-chr3       42531675 CAACAGACTCTGGGCCCGGGGTTGCTAAAGTGCTCAGGAGCAGAGCTGGGGACAACTGGG
-                780 ------------------------------------------------------------
-NR_046654       118 ------------------------------------------------------------
-
-chr3       42531735 GGAGGTGCTGCTGAGTCTCTCTCTGGCTGAGGACAATCCCTCTCATTCCTCCCCACGGTC
-                840 ------------------------------------------------------------
-NR_046654       118 ------------------------------------------------------------
-
-chr3       42531795 TGCTCAGGTGCTGGGACACCATCAACTCCTCACTGTGGTGGATCATAAAGGGCCCCATCC
-                900 ------------------------------------------------------------
-NR_046654       118 ------------------------------------------------------------
-
-chr3       42531855 TCACCTCCATCTTGGTAAGATaccctcccaccacctagagatggggaaacaggcccaaag
-                960 ------------------------------------------------------------
-NR_046654       118 ------------------------------------------------------------
-
-chr3       42531915 ggcaggcaacttagcccaaggtcacatgggaaattagtatctaggtcagaactgaaacgt
-               1020 ------------------------------------------------------------
-NR_046654       118 ------------------------------------------------------------
-
-chr3       42531975 agcttcctaatgcccaatgcaggatcatccccacccctgtcctaccagTTCTTCCTTGAG
-               1080 ---------------------------------------------...||||||||||||
-NR_046654       118 ---------------------------------------------CAGTTCTTCCTTGAG
-
-chr3       42532035 CGTAAGCGGATTGGGAGCACAGTCCTTAGGGATTTGAAGGAGGTAGAGTTCCCGGATGAC
-               1140 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-NR_046654       103 CGTAAGCGGATTGGGAGCACAGTCCTTAGGGATTTGAAGGAGGTAGAGTTCCCGGATGAC
-
-chr3       42532095 CTGCCCAAAGGGGAAATGCCAGAGGAGAGGTAAGATAGAGAGAGGGGCAGCAGGACCCTG
-               1200 ------------------------------------------------------------
-NR_046654        43 ------------------------------------------------------------
-
-chr3       42532155 GGAAAGAAGACAGGCCAGCAGTCAAGGGGCCTGAACACCTCAGCCTTCCCGCTCTGACTG
-               1260 ------------------------------------------------------------
-NR_046654        43 ------------------------------------------------------------
-
-chr3       42532215 CCCGAACTCGGGTCCCCACCCACTAGGTAAACTTCATCCTGTTTATTTGCATCATCCGAA
-               1320 ------------------------------------------------------------
-NR_046654        43 ------------------------------------------------------------
-
-chr3       42532275 TCCTGCTTCAGAAACTGCGGCCCCCAGATATCAGGAAGAGTGACAGCAGTCCATACTCGT
-               1380 ------------------------------------------------------------
-NR_046654        43 ------------------------------------------------------------
-
-chr3       42532335 GAGTGTGGGCCTAGTGCCTCAGCCCCCAGTACCTCCATCCCCAGTCCTCAAATCATCCCA
-               1440 ------------------------------------------------------------
-NR_046654        43 ------------------------------------------------------------
-
-chr3       42532395 CATCTCCTTGAAGTCCTCCCACCCCAAACATCCAGAGTCACCAAAGAGCCACATTGTTCT
-               1500 ------------------------------------------------------------
-NR_046654        43 ------------------------------------------------------------
-
-chr3       42532455 TTCCCACCTCCACCATGGCCTGGCTcagcccaccaccatcccctgctccagccccaccct
-               1560 ------------------------------------------------------------
-NR_046654        43 ------------------------------------------------------------
-
-chr3       42532515 caCCAGGCTGCACTCAGAGCCCTGCATGCTTCTCCTGCCCACACTCACCTAGCATCCTTC
-               1620 ------------------------------------------------||||||||||||
-NR_046654        43 ------------------------------------------------CTAGCATCCTTC
-
-chr3       42532575 CCAGGTATGCATCTGCTGCCAAGCCAGGgag 42532606
-               1680 ||||||||||||||||||||||||||||...     1711
-NR_046654        31 CCAGGTATGCATCTGCTGCCAAGCCAGGGAG        0
-""",
-        )
-        self.assertEqual(
-            format(alignment, "psl"),
-            """\
-175	0	6	0	0	0	2	1530	-	NR_046654.1	181	0	181	chr3	198295559	42530895	42532606	3	63,75,43,	0,63,138,	42530895,42532020,42532563,
-""",
-        )
-        alignment = next(alignments)
         self.assertEqual(alignment.matches, 162)
         self.assertEqual(alignment.misMatches, 2)
         self.assertEqual(alignment.repMatches, 39)
@@ -682,15 +861,14 @@ NR_046654        31 CCAGGTATGCATCTGCTGCCAAGCCAGGGAG        0
         self.assertEqual(len(alignment.target.seq), 198295559)
         self.assertEqual(len(alignment.query.seq), 220)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[48663767, 48663795, 48663796, 48663813, 48665640,
-                              48665716, 48665716, 48665722, 48669098, 48669174],
-                             [       3,       31,       31,       48,       48,
-                                   124,      126,      132,      132,      208]
-                            ])
+                np.array([[48663767, 48663795, 48663796, 48663813, 48665640,
+                           48665716, 48665716, 48665722, 48669098, 48669174],
+                          [       3,       31,       31,       48,       48,
+                                124,      126,      132,      132,      208]
+                         ])
                 # fmt: on
             )
         )
@@ -698,19 +876,19 @@ NR_046654        31 CCAGGTATGCATCTGCTGCCAAGCCAGGGAG        0
         alignment.target.seq = dna
         alignment.query.seq = self.rna[alignment.query.id]
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.substitutions,
                 # fmt: off
-# flake8: noqa
-            numpy.array([[53.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0., 34.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  2., 48.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  0., 27.,  0.,  0.,  0.,  0.],
-                         [ 9.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  7.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0., 16.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  0.,  7.,  0.,  0.,  0.,  0.],
-                        ]),
+            np.array([[53.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                      [ 0., 34.,  0.,  0.,  0.,  0.,  0.,  0.],
+                      [ 0.,  2., 48.,  0.,  0.,  0.,  0.,  0.],
+                      [ 0.,  0.,  0., 27.,  0.,  0.,  0.,  0.],
+                      [ 9.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                      [ 0.,  7.,  0.,  0.,  0.,  0.,  0.,  0.],
+                      [ 0.,  0., 16.,  0.,  0.,  0.,  0.,  0.],
+                      [ 0.,  0.,  0.,  7.,  0.,  0.,  0.,  0.],
+                     ]),
+                # fmt: on
             )
         )
         self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
@@ -1098,188 +1276,6 @@ NR_111921       199 ATTAAAAAA      208
 162	2	39	0	1	2	3	5204	+	NR_111921.1_modified	220	3	208	chr3	198295559	48663767	48669174	5	28,17,76,6,76,	3,31,48,126,132,	48663767,48663796,48665640,48665716,48669098,
 """,
         )
-        alignment = next(alignments)
-        self.assertEqual(alignment.matches, 172)
-        self.assertEqual(alignment.misMatches, 1)
-        self.assertEqual(alignment.repMatches, 6)
-        self.assertEqual(alignment.nCount, 0)
-        self.assertEqual(alignment.shape, (2, 1714))
-        self.assertEqual(len(alignment), 2)
-        self.assertIs(alignment.sequences[0], alignment.target)
-        self.assertIs(alignment.sequences[1], alignment.query)
-        self.assertEqual(alignment.target.id, "chr3")
-        self.assertEqual(alignment.query.id, "NR_046654.1_modified")
-        self.assertEqual(len(alignment.target.seq), 198295559)
-        self.assertEqual(len(alignment.query.seq), 190)
-        self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates,
-                # fmt: off
-# flake8: noqa
-                numpy.array([[42530895, 42530922, 42530922, 42530958, 42532020,
-                              42532037, 42532039, 42532095, 42532563, 42532606],
-                             [     185,      158,      155,      119,      119,
-                                   102,      102,       46,       46,        3],
-                            ])
-                # fmt: on
-            )
-        )
-        dna = Seq(self.dna, length=len(alignment.target))
-        alignment.target.seq = dna
-        alignment.query.seq = self.rna[alignment.query.id]
-        self.assertTrue(
-            numpy.array_equal(
-                alignment.substitutions,
-                # fmt: off
-# flake8: noqa
-            numpy.array([[34.,  0.,  0.,  1.,  0.,  0.,  0.,  0.],
-                         [ 0., 40.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0., 57.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  0., 41.,  0.,  0.,  0.,  0.],
-                         [ 2.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  1.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  3.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-                        ]),
-            )
-        )
-        self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
-        matches = sum(
-            alignment.substitutions[c, c] for c in alignment.substitutions.alphabet
-        )
-        repMatches = sum(
-            alignment.substitutions[c, c.swapcase()]
-            for c in alignment.substitutions.alphabet
-            if c != "X"
-        )
-        self.assertEqual(matches, alignment.matches)
-        self.assertEqual(repMatches, alignment.repMatches)
-        self.assertEqual(
-            str(alignment),
-            """\
-chr3       42530895 CGGAAGTACTTCTGGGGGTACATACTC---ATCGGCTGGGGTATGGTACCAGGGAGGGCT
-                  0 |||||||||||||||||||||||||||---||||||||||||||||||||||||||||||
-NR_046654       185 CGGAAGTACTTCTGGGGGTACATACTCCCCATCGGCTGGGGTATGGTACCAGGGAGGGCT
-
-chr3       42530952 TCCAGGCTGGGGACAGAGGGGGCAAGGCCTGGAGAACTCCCTAGGGGGAGGGTGCCAACC
-                 60 ||||||------------------------------------------------------
-NR_046654       125 TCCAGG------------------------------------------------------
-
-chr3       42531012 CAGCTTGCAGTCCTACGTCTTGCTTAGCTGCAGGTCCTGCCTGCAAGGATATCAGCCAAG
-                120 ------------------------------------------------------------
-NR_046654       119 ------------------------------------------------------------
-
-chr3       42531072 GGTCAAGAAAGTCCTCAAAATGTCTGATCCCAGGACAAGTCCCTCAGGTTGCAGCTGCAC
-                180 ------------------------------------------------------------
-NR_046654       119 ------------------------------------------------------------
-
-chr3       42531132 CTAGGGCTGACCTGTGGGACAGATTTTGTGAACATCTTTCCATTTCCCTTTAGTTCCCGA
-                240 ------------------------------------------------------------
-NR_046654       119 ------------------------------------------------------------
-
-chr3       42531192 AATACAcagggccactgctaatctataaagggcctctgtcacaattagaaagagaatgtc
-                300 ------------------------------------------------------------
-NR_046654       119 ------------------------------------------------------------
-
-chr3       42531252 cgtctaggtagacacagcccttcaggcatacagcttCACCCCCTCAGTGGAGCATCCCTC
-                360 ------------------------------------------------------------
-NR_046654       119 ------------------------------------------------------------
-
-chr3       42531312 CGTGGTGAACAACCTATGCAACCAAAGACAGCAGACTGACAACCCACCCTTTtctctctc
-                420 ------------------------------------------------------------
-NR_046654       119 ------------------------------------------------------------
-
-chr3       42531372 cctccctctccctgcttttctccaaaatctctccctcatgccctctacccctgcttcctg
-                480 ------------------------------------------------------------
-NR_046654       119 ------------------------------------------------------------
-
-chr3       42531432 tgccctctctgctctttcactctccctGGGCCTGACAGGGGTACCCAGCACATTCACCAT
-                540 ------------------------------------------------------------
-NR_046654       119 ------------------------------------------------------------
-
-chr3       42531492 GGTGTGGACCATCGCCAGGATCCATTTTGAGGATTATGGGTGAGCTGCTGCCCCACACAC
-                600 ------------------------------------------------------------
-NR_046654       119 ------------------------------------------------------------
-
-chr3       42531552 TCCCCCGGCCGCCATCACTTGGGCAGGCCCCCTGGGTGGGATGATAATGCCATCTGGCCT
-                660 ------------------------------------------------------------
-NR_046654       119 ------------------------------------------------------------
-
-chr3       42531612 TGGTGAGTGGACAAAAACCACAGCTCTCGGGCCAGAGGGGAGGCTGGAGGAGGACCTGGG
-                720 ------------------------------------------------------------
-NR_046654       119 ------------------------------------------------------------
-
-chr3       42531672 GAGCAACAGACTCTGGGCCCGGGGTTGCTAAAGTGCTCAGGAGCAGAGCTGGGGACAACT
-                780 ------------------------------------------------------------
-NR_046654       119 ------------------------------------------------------------
-
-chr3       42531732 GGGGGAGGTGCTGCTGAGTCTCTCTCTGGCTGAGGACAATCCCTCTCATTCCTCCCCACG
-                840 ------------------------------------------------------------
-NR_046654       119 ------------------------------------------------------------
-
-chr3       42531792 GTCTGCTCAGGTGCTGGGACACCATCAACTCCTCACTGTGGTGGATCATAAAGGGCCCCA
-                900 ------------------------------------------------------------
-NR_046654       119 ------------------------------------------------------------
-
-chr3       42531852 TCCTCACCTCCATCTTGGTAAGATaccctcccaccacctagagatggggaaacaggccca
-                960 ------------------------------------------------------------
-NR_046654       119 ------------------------------------------------------------
-
-chr3       42531912 aagggcaggcaacttagcccaaggtcacatgggaaattagtatctaggtcagaactgaaa
-               1020 ------------------------------------------------------------
-NR_046654       119 ------------------------------------------------------------
-
-chr3       42531972 cgtagcttcctaatgcccaatgcaggatcatccccacccctgtcctaccagTTCTTCCTT
-               1080 ------------------------------------------------...|||||||||
-NR_046654       119 ------------------------------------------------CAGTTCTTCCTT
-
-chr3       42532032 GAGCGTAAGCGGATTGGGAGCACAGTCCTTAGGGATTTGAAGGAGGTAGAGTTCCCGGAT
-               1140 |||||--|||||||||||.|||||||||||||||||||||||||||||||||||||||||
-NR_046654       107 GAGCG--AGCGGATTGGGTGCACAGTCCTTAGGGATTTGAAGGAGGTAGAGTTCCCGGAT
-
-chr3       42532092 GACCTGCCCAAAGGGGAAATGCCAGAGGAGAGGTAAGATAGAGAGAGGGGCAGCAGGACC
-               1200 |||---------------------------------------------------------
-NR_046654        49 GAC---------------------------------------------------------
-
-chr3       42532152 CTGGGAAAGAAGACAGGCCAGCAGTCAAGGGGCCTGAACACCTCAGCCTTCCCGCTCTGA
-               1260 ------------------------------------------------------------
-NR_046654        46 ------------------------------------------------------------
-
-chr3       42532212 CTGCCCGAACTCGGGTCCCCACCCACTAGGTAAACTTCATCCTGTTTATTTGCATCATCC
-               1320 ------------------------------------------------------------
-NR_046654        46 ------------------------------------------------------------
-
-chr3       42532272 GAATCCTGCTTCAGAAACTGCGGCCCCCAGATATCAGGAAGAGTGACAGCAGTCCATACT
-               1380 ------------------------------------------------------------
-NR_046654        46 ------------------------------------------------------------
-
-chr3       42532332 CGTGAGTGTGGGCCTAGTGCCTCAGCCCCCAGTACCTCCATCCCCAGTCCTCAAATCATC
-               1440 ------------------------------------------------------------
-NR_046654        46 ------------------------------------------------------------
-
-chr3       42532392 CCACATCTCCTTGAAGTCCTCCCACCCCAAACATCCAGAGTCACCAAAGAGCCACATTGT
-               1500 ------------------------------------------------------------
-NR_046654        46 ------------------------------------------------------------
-
-chr3       42532452 TCTTTCCCACCTCCACCATGGCCTGGCTcagcccaccaccatcccctgctccagccccac
-               1560 ------------------------------------------------------------
-NR_046654        46 ------------------------------------------------------------
-
-chr3       42532512 cctcaCCAGGCTGCACTCAGAGCCCTGCATGCTTCTCCTGCCCACACTCACCTAGCATCC
-               1620 ---------------------------------------------------|||||||||
-NR_046654        46 ---------------------------------------------------CTAGCATCC
-
-chr3       42532572 TTCCCAGGTATGCATCTGCTGCCAAGCCAGGgag 42532606
-               1680 |||||||||||||||||||||||||||||||...     1714
-NR_046654        37 TTCCCAGGTATGCATCTGCTGCCAAGCCAGGGAG        3
-""",
-        )
-        self.assertEqual(
-            format(alignment, "psl"),
-            """\
-172	1	6	0	1	3	3	1532	-	NR_046654.1_modified	190	3	185	chr3	198295559	42530895	42532606	5	27,36,17,56,43,	5,35,71,88,144,	42530895,42530922,42532020,42532039,42532563,
-""",
-        )
         self.assertRaises(StopIteration, next, alignments)
 
     def test_writing(self):
@@ -1321,7 +1317,6 @@ NR_046654        37 TTCCCAGGTATGCATCTGCTGCCAAGCCAGGGAG        3
 
 
 class TestAlign_dna(unittest.TestCase):
-
     queries = {
         record.id: str(record.seq)
         for record in SeqIO.parse("Blat/fasta_34.fa", "fasta")
@@ -1375,24 +1370,22 @@ hg18_dna         11 aggtaaactgccttca       27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['a', 'g', 'g', 't', 'a', 'a', 'a', 'c', 't', 'g', 'c', 'c', 't',
-              't', 'c', 'a'],
-             ['a', 'g', 'g', 't', 'a', 'a', 'a', 'c', 't', 'g', 'c', 'c', 't',
-              't', 'c', 'a']], dtype='U')
+np.array([['a', 'g', 'g', 't', 'a', 'a', 'a', 'c', 't', 'g', 'c', 'c', 't',
+           't', 'c', 'a'],
+          ['a', 'g', 'g', 't', 'a', 'a', 'a', 'c', 't', 'g', 'c', 'c', 't',
+           't', 'c', 'a']], dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[61646095, 61646111],
-                             [      11,       27]]),
+                np.array([[61646095, 61646111],
+                          [      11,       27]]),
                 # fmt: on
             )
         )
@@ -1439,26 +1432,24 @@ hg18_dna          0 atgagcttccaaggtaaactgccttcaagattc       33
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['a', 't', 'g', 'a', 'g', 'c', 't', 't', 'c', 'c', 'a', 'a', 'g',
-              'g', 't', 'a', 'a', 'a', 'c', 't', 'g', 'c', 'c', 't', 't', 'c',
-              'a', 'a', 'g', 'a', 't', 't', 'c'],
-             ['a', 't', 'g', 'a', 'g', 'c', 't', 't', 'c', 'c', 'a', 'a', 'g',
-              'g', 't', 'a', 'a', 'a', 'c', 't', 'g', 'c', 'c', 't', 't', 'c',
-              'a', 'a', 'g', 'a', 't', 't', 'c']], dtype='U')
+np.array([['a', 't', 'g', 'a', 'g', 'c', 't', 't', 'c', 'c', 'a', 'a', 'g',
+           'g', 't', 'a', 'a', 'a', 'c', 't', 'g', 'c', 'c', 't', 't', 'c',
+           'a', 'a', 'g', 'a', 't', 't', 'c'],
+          ['a', 't', 'g', 'a', 'g', 'c', 't', 't', 'c', 'c', 'a', 'a', 'g',
+           'g', 't', 'a', 'a', 'a', 'c', 't', 'g', 'c', 'c', 't', 't', 'c',
+           'a', 'a', 'g', 'a', 't', 't', 'c']], dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[10271783, 10271816],
-                             [       0,       33]]),
+                np.array([[10271783, 10271816],
+                          [       0,       33]]),
                 # fmt: on
             )
         )
@@ -1506,24 +1497,22 @@ hg18_dna         25 aaggcagtttaccttgg        8
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['a', 'a', 'g', 'g', 'c', 'a', 'g', 't', 't', 't', 'a', 'c', 'c',
-              't', 't', 'g', 'g'],
-             ['a', 'a', 'g', 'g', 'c', 'a', 'g', 't', 't', 't', 'a', 'c', 'c',
-              't', 't', 'g', 'g']], dtype='U')
+np.array([['a', 'a', 'g', 'g', 'c', 'a', 'g', 't', 't', 't', 'a', 'c', 'c',
+           't', 't', 'g', 'g'],
+          ['a', 'a', 'g', 'g', 'c', 'a', 'g', 't', 't', 't', 'a', 'c', 'c',
+           't', 't', 'g', 'g']], dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[53575980, 53575997],
-                             [      25,        8]]),
+                np.array([[53575980, 53575997],
+                          [      25,        8]]),
                 # fmt: on
             )
         )
@@ -1572,28 +1561,26 @@ hg19_dna          9 acaaaggggctgggcgtggtggctcacacctgtaatcccaa       50
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g',
-              'g', 'c', 'g', 'c', 'a', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a',
-              'c', 'g', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c', 'c',
-              'a', 'a'],
-             ['a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g',
-              'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a',
-              'c', 'a', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c', 'c',
-              'a', 'a']], dtype='U')
+np.array([['a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g',
+           'g', 'c', 'g', 'c', 'a', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a',
+           'c', 'g', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c', 'c',
+           'a', 'a'],
+          ['a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g',
+           'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a',
+           'c', 'a', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c', 'c',
+           'a', 'a']], dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[85737865, 85737906],
-                             [       9,       50]]),
+                np.array([[85737865, 85737906],
+                          [       9,       50]]),
                 # fmt: on
             )
         )
@@ -1642,28 +1629,26 @@ hg19_dna          8 cacaaaggggctgggcgtggtggctcacacctgtaatccca       49
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['c', 'a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g',
-              'g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
-              'a', 'c', 'a', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c',
-              'c', 'a'],
-             ['c', 'a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g',
-              'g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
-              'a', 'c', 'a', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c',
-              'c', 'a']], dtype='U')
+np.array([['c', 'a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g',
+           'g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
+           'a', 'c', 'a', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c',
+           'c', 'a'],
+          ['c', 'a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g',
+           'g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
+           'a', 'c', 'a', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c',
+           'c', 'a']], dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[95160479, 95160520],
-                             [       8,       49]]),
+                np.array([[95160479, 95160520],
+                          [       8,       49]]),
                 # fmt: on
             )
         )
@@ -1712,26 +1697,24 @@ hg19_dna         11 aaaggggctgggcgtggtggctcacacctgtaatcc       47
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c',
-              'g', 't', 'g', 'g', 't', 'a', 'g', 'c', 't', 'c', 'a', 't', 'g',
-              'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c'],
-             ['a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c',
-              'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a', 'c', 'a',
-              'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c']], dtype='U')
+np.array([['a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c',
+           'g', 't', 'g', 'g', 't', 'a', 'g', 'c', 't', 'c', 'a', 't', 'g',
+           'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c'],
+          ['a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c',
+           'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a', 'c', 'a',
+           'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c']], dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[42144400, 42144436],
-                             [      11,       47]]),
+                np.array([[42144400, 42144436],
+                          [      11,       47]]),
                 # fmt: on
             )
         )
@@ -1784,12 +1767,11 @@ hg19_dna          1 aaaaat????aaaggggctgggcgtggtggctcacacctgtaatccca        49
 """,
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[183925984, 183925990, 183925990, 183926028],
-                             [        1,         7,        11,        49]]),
+                np.array([[183925984, 183925990, 183925990, 183926028],
+                          [        1,         7,        11,        49]]),
                 # fmt: on
             )
         )
@@ -1854,12 +1836,11 @@ hg19_dna         35 ---------------------------------------cacctgtaatc       46
 """,
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[35483340, 35483365, 35483499, 35483510],
-                             [      10,       35,       35,       46]]),
+                np.array([[35483340, 35483365, 35483499, 35483510],
+                          [      10,       35,       35,       46]]),
                 # fmt: on
             )
         )
@@ -1908,27 +1889,25 @@ hg19_dna         10 caaaggggctgggcgtggtggctcacacctgtaatccca       49
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g',
-              'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a', 'c',
-              'a', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c', 'c', 'a'],
-             ['c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g',
-              'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a', 'c',
-              'a', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c', 'c', 'a']],
-            dtype='U')
+np.array([['c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g',
+           'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a', 'c',
+           'a', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c', 'c', 'a'],
+          ['c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g',
+           'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a', 'c',
+           'a', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c', 'c', 'a']],
+         dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[23891310, 23891349],
-                             [      10,       49]]),
+                np.array([[23891310, 23891349],
+                          [      10,       49]]),
                 # fmt: on
             )
         )
@@ -1976,26 +1955,24 @@ hg19_dna         21 ggcgtggtggctcacacctgtaatccca       49
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
-              'a', 'c', 'g', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c',
-              'c', 'a'],
-             ['g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
-              'a', 'c', 'a', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c',
-              'c', 'a']], dtype='U')
+np.array([['g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
+           'a', 'c', 'g', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c',
+           'c', 'a'],
+          ['g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
+           'a', 'c', 'a', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c',
+           'c', 'a']], dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[43252217, 43252245],
-                             [      21,       49]]),
+                np.array([[43252217, 43252245],
+                          [      21,       49]]),
                 # fmt: on
             )
         )
@@ -2056,12 +2033,11 @@ hg19_dna         49
 """,
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[52759147, 52759154, 52759160, 52759160, 52759198],
-                             [       1,        8,        8,       11,       49]]),
+                np.array([[52759147, 52759154, 52759160, 52759160, 52759198],
+                          [       1,        8,        8,       11,       49]]),
                 # fmt: on
             )
         )
@@ -2108,29 +2084,27 @@ hg19_dna          0 caaaaattcacaaaggggctgggcgtggtggctcacacctgtaatcccaa      50
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['c', 'a', 'a', 'a', 'a', 'a', 't', 't', 'c', 'a', 'c', 'a', 'a',
-              'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c', 'g', 't',
-              'g', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a', 'c', 'a', 'c', 'c',
-              't', 'g', 't', 'a', 'a', 't', 'c', 'c', 'c', 'a', 'a'],
-             ['c', 'a', 'a', 'a', 'a', 'a', 't', 't', 'c', 'a', 'c', 'a', 'a',
-              'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c', 'g', 't',
-              'g', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a', 'c', 'a', 'c', 'c',
-              't', 'g', 't', 'a', 'a', 't', 'c', 'c', 'c', 'a', 'a']],
-            dtype='U')
+np.array([['c', 'a', 'a', 'a', 'a', 'a', 't', 't', 'c', 'a', 'c', 'a', 'a',
+           'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c', 'g', 't',
+           'g', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a', 'c', 'a', 'c', 'c',
+           't', 'g', 't', 'a', 'a', 't', 'c', 'c', 'c', 'a', 'a'],
+          ['c', 'a', 'a', 'a', 'a', 'a', 't', 't', 'c', 'a', 'c', 'a', 'a',
+           'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c', 'g', 't',
+           'g', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a', 'c', 'a', 'c', 'c',
+           't', 'g', 't', 'a', 'a', 't', 'c', 'c', 'c', 'a', 'a']],
+         dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[1207056, 1207106],
-                             [      0,      50]]),
+                np.array([[1207056, 1207106],
+                          [      0,      50]]),
                 # fmt: on
             )
         )
@@ -2179,26 +2153,24 @@ hg19_dna          1 aaaaattcacaaaggggctgggcgtggtggctca       35
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['a', 'a', 'a', 'a', 'a', 't', 'g', 'a', 'a', 'c', 'a', 'a', 'a',
-              'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c', 'g', 'c', 'g',
-              'g', 't', 'g', 'g', 'c', 't', 'c', 'a'],
-             ['a', 'a', 'a', 'a', 'a', 't', 't', 'c', 'a', 'c', 'a', 'a', 'a',
-              'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c', 'g', 't', 'g',
-              'g', 't', 'g', 'g', 'c', 't', 'c', 'a']], dtype='U')
+np.array([['a', 'a', 'a', 'a', 'a', 't', 'g', 'a', 'a', 'c', 'a', 'a', 'a',
+           'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c', 'g', 'c', 'g',
+           'g', 't', 'g', 'g', 'c', 't', 'c', 'a'],
+          ['a', 'a', 'a', 'a', 'a', 't', 't', 'c', 'a', 'c', 'a', 'a', 'a',
+           'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c', 'g', 't', 'g',
+           'g', 't', 'g', 'g', 'c', 't', 'c', 'a']], dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[61700837, 61700871],
-                             [       1,       35]]),
+                np.array([[61700837, 61700871],
+                          [       1,       35]]),
                 # fmt: on
             )
         )
@@ -2250,12 +2222,11 @@ hg19_dna         49 tgggattaca------??????????accacgcccagccccttt       11
 """,
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[37558157, 37558167, 37558173, 37558173, 37558191],
-                             [      49,       39,       39,       29,       11]]),
+                np.array([[37558157, 37558167, 37558173, 37558173, 37558191],
+                          [      49,       39,       39,       29,       11]]),
                 # fmt: on
             )
         )
@@ -2304,27 +2275,25 @@ hg19_dna         49 tgggattacaggtgtgagccaccacgcccagcccctt       12
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
-              'g', 'g', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
-              'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't'],
-             ['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
-              'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
-              'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't']],
-            dtype='U')
+np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
+           'g', 'g', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
+           'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't'],
+          ['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
+           'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
+           'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't']],
+         dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[48997405, 48997442],
-                             [      49,       12]]),
+                np.array([[48997405, 48997442],
+                          [      49,       12]]),
                 # fmt: on
             )
         )
@@ -2373,26 +2342,24 @@ hg19_dna         49 tgggattacaggtgtgagccaccacgcccagcccct        13
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
-              'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
-              'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't'],
-             ['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
-              'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
-              'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't']], dtype='U')
+np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
+           'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
+           'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't'],
+          ['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
+           'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
+           'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't']], dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[120641740, 120641776],
-                             [       49,        13]]),
+                np.array([[120641740, 120641776],
+                          [       49,        13]]),
                 # fmt: on
             )
         )
@@ -2441,27 +2408,25 @@ hg19_dna         49 tgggattacaggtgtgagccaccacgcccagcccctttg       10
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
-              'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
-              'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't', 't', 'g'],
-             ['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
-              'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
-              'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't', 't', 'g']],
-            dtype='U')
+np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
+           'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
+           'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't', 't', 'g'],
+          ['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
+           'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
+           'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't', 't', 'g']],
+         dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[54017130, 54017169],
-                             [      49,       10]]),
+                np.array([[54017130, 54017169],
+                          [      49,       10]]),
                 # fmt: on
             )
         )
@@ -2510,27 +2475,25 @@ hg19_dna         49 tgggattacaggtgtgagccaccacgcccagcccctttg     10
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['t', 'g', 'g', 'g', 'a', 't', 'g', 'a', 'c', 'a', 'g', 'g', 'g',
-              'g', 't', 'g', 'a', 'g', 'g', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
-              'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't', 't', 'g'],
-             ['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
-              'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
-              'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't', 't', 'g']],
-            dtype='U')
+np.array([['t', 'g', 'g', 'g', 'a', 't', 'g', 'a', 'c', 'a', 'g', 'g', 'g',
+           'g', 't', 'g', 'a', 'g', 'g', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
+           'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't', 't', 'g'],
+          ['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
+           'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
+           'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't', 't', 'g']],
+         dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[553742, 553781],
-                             [    49,     10]]),
+                np.array([[553742, 553781],
+                          [    49,     10]]),
                 # fmt: on
             )
         )
@@ -2579,26 +2542,24 @@ hg19_dna         49 tgggattacaggtgtgagccaccacgcccagcccct       13
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 't', 'a', 'g', 'g', 'c',
-              'a', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
-              'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't'],
-             ['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
-              'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
-              'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't']], dtype='U')
+np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 't', 'a', 'g', 'g', 'c',
+           'a', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
+           'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't'],
+          ['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
+           'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
+           'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't']], dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[99388555, 99388591],
-                             [      49,       13]]),
+                np.array([[99388555, 99388591],
+                          [      49,       13]]),
                 # fmt: on
             )
         )
@@ -2646,25 +2607,23 @@ hg19_dna         35 tgagccaccacgcccagcccctttg        10
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['t', 'g', 'a', 'g', 't', 'c', 'a', 'c', 'c', 'a', 'c', 'g', 'c',
-              'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't', 't', 'g'],
-             ['t', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g', 'c',
-              'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't', 't', 'g']],
-            dtype='U')
+np.array([['t', 'g', 'a', 'g', 't', 'c', 'a', 'c', 'c', 'a', 'c', 'g', 'c',
+           'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't', 't', 'g'],
+          ['t', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g', 'c',
+           'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't', 't', 'g']],
+         dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[112178171, 112178196],
-                             [       35,        10]]),
+                np.array([[112178171, 112178196],
+                          [       35,        10]]),
                 # fmt: on
             )
         )
@@ -2713,26 +2672,24 @@ hg19_dna         49 tgggattacaggtgtgagccaccacgcccagcccct       13
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
-              'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
-              'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't'],
-             ['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
-              'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
-              'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't']], dtype='U')
+np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
+           'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
+           'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't'],
+          ['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
+           'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
+           'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't']], dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[39368490, 39368526],
-                             [      49,       13]]),
+                np.array([[39368490, 39368526],
+                          [      49,       13]]),
                 # fmt: on
             )
         )
@@ -2781,26 +2738,24 @@ hg19_dna         47 ggattacaggtgtgagccaccacgcccagcccct        13
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c', 'g', 't',
-              'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g', 'c', 'c',
-              'c', 'a', 'g', 'c', 'c', 'c', 'c', 't'],
-             ['g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't', 'g', 't',
-              'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g', 'c', 'c',
-              'c', 'a', 'g', 'c', 'c', 'c', 'c', 't']], dtype='U')
+np.array([['g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c', 'g', 't',
+           'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g', 'c', 'c',
+           'c', 'a', 'g', 'c', 'c', 'c', 'c', 't'],
+          ['g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't', 'g', 't',
+           'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g', 'c', 'c',
+           'c', 'a', 'g', 'c', 'c', 'c', 'c', 't']], dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[220325687, 220325721],
-                             [       47,        13]]),
+                np.array([[220325687, 220325721],
+                          [       47,        13]]),
                 # fmt: on
             )
         )
@@ -2901,24 +2856,22 @@ hg18_dna         11 aggtaaactgccttca       27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['a', 'g', 'g', 't', 'a', 'a', 'a', 'c', 't', 'g', 'c', 'c', 't',
-              't', 'c', 'a'],
-             ['a', 'g', 'g', 't', 'a', 'a', 'a', 'c', 't', 'g', 'c', 'c', 't',
-              't', 'c', 'a']], dtype='U')
+np.array([['a', 'g', 'g', 't', 'a', 'a', 'a', 'c', 't', 'g', 'c', 'c', 't',
+           't', 'c', 'a'],
+          ['a', 'g', 'g', 't', 'a', 'a', 'a', 'c', 't', 'g', 'c', 'c', 't',
+           't', 'c', 'a']], dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[61646095, 61646111],
-                             [      11,       27]]),
+                np.array([[61646095, 61646111],
+                          [      11,       27]]),
                 # fmt: on
             )
         )
@@ -2965,26 +2918,24 @@ hg18_dna          0 atgagcttccaaggtaaactgccttcaagattc       33
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['a', 't', 'g', 'a', 'g', 'c', 't', 't', 'c', 'c', 'a', 'a', 'g',
-              'g', 't', 'a', 'a', 'a', 'c', 't', 'g', 'c', 'c', 't', 't', 'c',
-              'a', 'a', 'g', 'a', 't', 't', 'c'],
-             ['a', 't', 'g', 'a', 'g', 'c', 't', 't', 'c', 'c', 'a', 'a', 'g',
-              'g', 't', 'a', 'a', 'a', 'c', 't', 'g', 'c', 'c', 't', 't', 'c',
-              'a', 'a', 'g', 'a', 't', 't', 'c']], dtype='U')
+np.array([['a', 't', 'g', 'a', 'g', 'c', 't', 't', 'c', 'c', 'a', 'a', 'g',
+           'g', 't', 'a', 'a', 'a', 'c', 't', 'g', 'c', 'c', 't', 't', 'c',
+           'a', 'a', 'g', 'a', 't', 't', 'c'],
+          ['a', 't', 'g', 'a', 'g', 'c', 't', 't', 'c', 'c', 'a', 'a', 'g',
+           'g', 't', 'a', 'a', 'a', 'c', 't', 'g', 'c', 'c', 't', 't', 'c',
+           'a', 'a', 'g', 'a', 't', 't', 'c']], dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[10271783, 10271816],
-                             [       0,       33]]),
+                np.array([[10271783, 10271816],
+                          [       0,       33]]),
                 # fmt: on
             )
         )
@@ -3032,24 +2983,22 @@ hg18_dna         25 aaggcagtttaccttgg        8
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['a', 'a', 'g', 'g', 'c', 'a', 'g', 't', 't', 't', 'a', 'c', 'c',
-              't', 't', 'g', 'g'],
-             ['a', 'a', 'g', 'g', 'c', 'a', 'g', 't', 't', 't', 'a', 'c', 'c',
-              't', 't', 'g', 'g']], dtype='U')
+np.array([['a', 'a', 'g', 'g', 'c', 'a', 'g', 't', 't', 't', 'a', 'c', 'c',
+           't', 't', 'g', 'g'],
+          ['a', 'a', 'g', 'g', 'c', 'a', 'g', 't', 't', 't', 'a', 'c', 'c',
+           't', 't', 'g', 'g']], dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[53575980, 53575997],
-                             [      25,        8]]),
+                np.array([[53575980, 53575997],
+                          [      25,        8]]),
                 # fmt: on
             )
         )
@@ -3124,28 +3073,26 @@ hg19_dna          9 acaaaggggctgggcgtggtggctcacacctgtaatcccaa       50
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g',
-              'g', 'c', 'g', 'c', 'a', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a',
-              'c', 'g', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c', 'c',
-              'a', 'a'],
-             ['a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g',
-              'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a',
-              'c', 'a', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c', 'c',
-              'a', 'a']], dtype='U')
+np.array([['a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g',
+           'g', 'c', 'g', 'c', 'a', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a',
+           'c', 'g', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c', 'c',
+           'a', 'a'],
+          ['a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g',
+           'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a',
+           'c', 'a', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c', 'c',
+           'a', 'a']], dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[85737865, 85737906],
-                             [       9,       50]]),
+                np.array([[85737865, 85737906],
+                          [       9,       50]]),
                 # fmt: on
             )
         )
@@ -3194,28 +3141,26 @@ hg19_dna          8 cacaaaggggctgggcgtggtggctcacacctgtaatccca       49
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['c', 'a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g',
-              'g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
-              'a', 'c', 'a', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c',
-              'c', 'a'],
-             ['c', 'a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g',
-              'g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
-              'a', 'c', 'a', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c',
-              'c', 'a']], dtype='U')
+np.array([['c', 'a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g',
+           'g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
+           'a', 'c', 'a', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c',
+           'c', 'a'],
+          ['c', 'a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g',
+           'g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
+           'a', 'c', 'a', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c',
+           'c', 'a']], dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[95160479, 95160520],
-                             [       8,       49]]),
+                np.array([[95160479, 95160520],
+                          [       8,       49]]),
                 # fmt: on
             )
         )
@@ -3264,26 +3209,24 @@ hg19_dna         11 aaaggggctgggcgtggtggctcacacctgtaatcc       47
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c',
-              'g', 't', 'g', 'g', 't', 'a', 'g', 'c', 't', 'c', 'a', 't', 'g',
-              'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c'],
-             ['a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c',
-              'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a', 'c', 'a',
-              'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c']], dtype='U')
+np.array([['a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c',
+           'g', 't', 'g', 'g', 't', 'a', 'g', 'c', 't', 'c', 'a', 't', 'g',
+           'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c'],
+          ['a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c',
+           'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a', 'c', 'a',
+           'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c']], dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[42144400, 42144436],
-                             [      11,       47]]),
+                np.array([[42144400, 42144436],
+                          [      11,       47]]),
                 # fmt: on
             )
         )
@@ -3336,12 +3279,11 @@ hg19_dna          1 aaaaat????aaaggggctgggcgtggtggctcacacctgtaatccca        49
                 alignment.query.seq[38:49], self.queries[alignment.query.id][38:49]
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[183925984, 183925990, 183925990, 183926028],
-                             [        1,         7,        11,        49]]),
+                np.array([[183925984, 183925990, 183925990, 183926028],
+                          [        1,         7,        11,        49]]),
                 # fmt: on
             )
         )
@@ -3406,12 +3348,11 @@ hg19_dna         35 ---------------------------------------cacctgtaatc       46
 """,
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[35483340, 35483365, 35483499, 35483510],
-                             [      10,       35,       35,       46]]),
+                np.array([[35483340, 35483365, 35483499, 35483510],
+                          [      10,       35,       35,       46]]),
                 # fmt: on
             )
         )
@@ -3460,27 +3401,25 @@ hg19_dna         10 caaaggggctgggcgtggtggctcacacctgtaatccca       49
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g',
-              'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a', 'c',
-              'a', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c', 'c', 'a'],
-             ['c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g',
-              'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a', 'c',
-              'a', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c', 'c', 'a']],
-            dtype='U')
+np.array([['c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g',
+           'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a', 'c',
+           'a', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c', 'c', 'a'],
+          ['c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g',
+           'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a', 'c',
+           'a', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c', 'c', 'a']],
+         dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[23891310, 23891349],
-                             [      10,       49]]),
+                np.array([[23891310, 23891349],
+                          [      10,       49]]),
                 # fmt: on
             )
         )
@@ -3528,26 +3467,24 @@ hg19_dna         21 ggcgtggtggctcacacctgtaatccca       49
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
-              'a', 'c', 'g', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c',
-              'c', 'a'],
-             ['g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
-              'a', 'c', 'a', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c',
-              'c', 'a']], dtype='U')
+np.array([['g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
+           'a', 'c', 'g', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c',
+           'c', 'a'],
+          ['g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
+           'a', 'c', 'a', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c',
+           'c', 'a']], dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[43252217, 43252245],
-                             [      21,       49]]),
+                np.array([[43252217, 43252245],
+                          [      21,       49]]),
                 # fmt: on
             )
         )
@@ -3608,12 +3545,11 @@ hg19_dna         49
 """,
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[52759147, 52759154, 52759160, 52759160, 52759198],
-                             [       1,        8,        8,       11,       49]]),
+                np.array([[52759147, 52759154, 52759160, 52759160, 52759198],
+                          [       1,        8,        8,       11,       49]]),
                 # fmt: on
             )
         )
@@ -3660,29 +3596,27 @@ hg19_dna          0 caaaaattcacaaaggggctgggcgtggtggctcacacctgtaatcccaa      50
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['c', 'a', 'a', 'a', 'a', 'a', 't', 't', 'c', 'a', 'c', 'a', 'a',
-              'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c', 'g', 't',
-              'g', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a', 'c', 'a', 'c', 'c',
-              't', 'g', 't', 'a', 'a', 't', 'c', 'c', 'c', 'a', 'a'],
-             ['c', 'a', 'a', 'a', 'a', 'a', 't', 't', 'c', 'a', 'c', 'a', 'a',
-              'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c', 'g', 't',
-              'g', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a', 'c', 'a', 'c', 'c',
-              't', 'g', 't', 'a', 'a', 't', 'c', 'c', 'c', 'a', 'a']],
-            dtype='U')
+np.array([['c', 'a', 'a', 'a', 'a', 'a', 't', 't', 'c', 'a', 'c', 'a', 'a',
+           'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c', 'g', 't',
+           'g', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a', 'c', 'a', 'c', 'c',
+           't', 'g', 't', 'a', 'a', 't', 'c', 'c', 'c', 'a', 'a'],
+          ['c', 'a', 'a', 'a', 'a', 'a', 't', 't', 'c', 'a', 'c', 'a', 'a',
+           'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c', 'g', 't',
+           'g', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a', 'c', 'a', 'c', 'c',
+           't', 'g', 't', 'a', 'a', 't', 'c', 'c', 'c', 'a', 'a']],
+         dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[1207056, 1207106],
-                             [      0,      50]]),
+                np.array([[1207056, 1207106],
+                          [      0,      50]]),
                 # fmt: on
             )
         )
@@ -3731,26 +3665,24 @@ hg19_dna          1 aaaaattcacaaaggggctgggcgtggtggctca       35
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['a', 'a', 'a', 'a', 'a', 't', 'g', 'a', 'a', 'c', 'a', 'a', 'a',
-              'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c', 'g', 'c', 'g',
-              'g', 't', 'g', 'g', 'c', 't', 'c', 'a'],
-             ['a', 'a', 'a', 'a', 'a', 't', 't', 'c', 'a', 'c', 'a', 'a', 'a',
-              'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c', 'g', 't', 'g',
-              'g', 't', 'g', 'g', 'c', 't', 'c', 'a']], dtype='U')
+np.array([['a', 'a', 'a', 'a', 'a', 't', 'g', 'a', 'a', 'c', 'a', 'a', 'a',
+           'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c', 'g', 'c', 'g',
+           'g', 't', 'g', 'g', 'c', 't', 'c', 'a'],
+          ['a', 'a', 'a', 'a', 'a', 't', 't', 'c', 'a', 'c', 'a', 'a', 'a',
+           'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c', 'g', 't', 'g',
+           'g', 't', 'g', 'g', 'c', 't', 'c', 'a']], dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[61700837, 61700871],
-                             [       1,       35]]),
+                np.array([[61700837, 61700871],
+                          [       1,       35]]),
                 # fmt: on
             )
         )
@@ -3802,12 +3734,11 @@ hg19_dna         49 tgggattaca------??????????accacgcccagccccttt       11
 """,
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[37558157, 37558167, 37558173, 37558173, 37558191],
-                             [      49,       39,       39,       29,       11]]),
+                np.array([[37558157, 37558167, 37558173, 37558173, 37558191],
+                          [      49,       39,       39,       29,       11]]),
                 # fmt: on
             )
         )
@@ -3856,27 +3787,25 @@ hg19_dna         49 tgggattacaggtgtgagccaccacgcccagcccctt       12
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
-              'g', 'g', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
-              'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't'],
-             ['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
-              'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
-              'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't']],
-            dtype='U')
+np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
+           'g', 'g', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
+           'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't'],
+          ['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
+           'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
+           'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't']],
+         dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[48997405, 48997442],
-                             [      49,       12]]),
+                np.array([[48997405, 48997442],
+                          [      49,       12]]),
                 # fmt: on
             )
         )
@@ -3925,26 +3854,24 @@ hg19_dna         49 tgggattacaggtgtgagccaccacgcccagcccct        13
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
-              'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
-              'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't'],
-             ['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
-              'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
-              'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't']], dtype='U')
+np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
+           'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
+           'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't'],
+          ['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
+           'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
+           'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't']], dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[120641740, 120641776],
-                             [       49,        13]]),
+                np.array([[120641740, 120641776],
+                          [       49,        13]]),
                 # fmt: on
             )
         )
@@ -3993,27 +3920,25 @@ hg19_dna         49 tgggattacaggtgtgagccaccacgcccagcccctttg       10
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
-              'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
-              'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't', 't', 'g'],
-             ['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
-              'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
-              'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't', 't', 'g']],
-            dtype='U')
+np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
+           'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
+           'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't', 't', 'g'],
+          ['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
+           'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
+           'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't', 't', 'g']],
+         dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[54017130, 54017169],
-                             [      49,       10]]),
+                np.array([[54017130, 54017169],
+                          [      49,       10]]),
                 # fmt: on
             )
         )
@@ -4062,27 +3987,25 @@ hg19_dna         49 tgggattacaggtgtgagccaccacgcccagcccctttg     10
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['t', 'g', 'g', 'g', 'a', 't', 'g', 'a', 'c', 'a', 'g', 'g', 'g',
-              'g', 't', 'g', 'a', 'g', 'g', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
-              'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't', 't', 'g'],
-             ['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
-              'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
-              'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't', 't', 'g']],
-            dtype='U')
+np.array([['t', 'g', 'g', 'g', 'a', 't', 'g', 'a', 'c', 'a', 'g', 'g', 'g',
+           'g', 't', 'g', 'a', 'g', 'g', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
+           'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't', 't', 'g'],
+          ['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
+           'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
+           'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't', 't', 'g']],
+         dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[553742, 553781],
-                             [    49,     10]]),
+                np.array([[553742, 553781],
+                          [    49,     10]]),
                 # fmt: on
             )
         )
@@ -4131,26 +4054,24 @@ hg19_dna         49 tgggattacaggtgtgagccaccacgcccagcccct       13
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 't', 'a', 'g', 'g', 'c',
-              'a', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
-              'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't'],
-             ['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
-              'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
-              'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't']], dtype='U')
+np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 't', 'a', 'g', 'g', 'c',
+           'a', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
+           'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't'],
+          ['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
+           'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
+           'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't']], dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[99388555, 99388591],
-                             [      49,       13]]),
+                np.array([[99388555, 99388591],
+                          [      49,       13]]),
                 # fmt: on
             )
         )
@@ -4198,25 +4119,23 @@ hg19_dna         35 tgagccaccacgcccagcccctttg        10
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['t', 'g', 'a', 'g', 't', 'c', 'a', 'c', 'c', 'a', 'c', 'g', 'c',
-              'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't', 't', 'g'],
-             ['t', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g', 'c',
-              'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't', 't', 'g']],
-            dtype='U')
+np.array([['t', 'g', 'a', 'g', 't', 'c', 'a', 'c', 'c', 'a', 'c', 'g', 'c',
+           'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't', 't', 'g'],
+          ['t', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g', 'c',
+           'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't', 't', 'g']],
+         dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[112178171, 112178196],
-                             [       35,        10]]),
+                np.array([[112178171, 112178196],
+                          [       35,        10]]),
                 # fmt: on
             )
         )
@@ -4265,26 +4184,24 @@ hg19_dna         49 tgggattacaggtgtgagccaccacgcccagcccct       13
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
-              'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
-              'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't'],
-             ['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
-              'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
-              'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't']], dtype='U')
+np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
+           'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
+           'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't'],
+          ['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
+           'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
+           'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't']], dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[39368490, 39368526],
-                             [      49,       13]]),
+                np.array([[39368490, 39368526],
+                          [      49,       13]]),
                 # fmt: on
             )
         )
@@ -4333,26 +4250,24 @@ hg19_dna         47 ggattacaggtgtgagccaccacgcccagcccct        13
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c', 'g', 't',
-              'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g', 'c', 'c',
-              'c', 'a', 'g', 'c', 'c', 'c', 'c', 't'],
-             ['g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't', 'g', 't',
-              'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g', 'c', 'c',
-              'c', 'a', 'g', 'c', 'c', 'c', 'c', 't']], dtype='U')
+np.array([['g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c', 'g', 't',
+           'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g', 'c', 'c',
+           'c', 'a', 'g', 'c', 'c', 'c', 'c', 't'],
+          ['g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't', 'g', 't',
+           'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g', 'c', 'c',
+           'c', 'a', 'g', 'c', 'c', 'c', 'c', 't']], dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[220325687, 220325721],
-                             [       47,        13]]),
+                np.array([[220325687, 220325721],
+                          [       47,        13]]),
                 # fmt: on
             )
         )
@@ -4425,24 +4340,22 @@ hg18_dna         11 aggtaaactgccttca       27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['a', 'g', 'g', 't', 'a', 'a', 'a', 'c', 't', 'g', 'c', 'c', 't',
-              't', 'c', 'a'],
-             ['a', 'g', 'g', 't', 'a', 'a', 'a', 'c', 't', 'g', 'c', 'c', 't',
-              't', 'c', 'a']], dtype='U')
+np.array([['a', 'g', 'g', 't', 'a', 'a', 'a', 'c', 't', 'g', 'c', 'c', 't',
+           't', 'c', 'a'],
+          ['a', 'g', 'g', 't', 'a', 'a', 'a', 'c', 't', 'g', 'c', 'c', 't',
+           't', 'c', 'a']], dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[61646095, 61646111],
-                             [      11,       27]]),
+                np.array([[61646095, 61646111],
+                          [      11,       27]]),
                 # fmt: on
             )
         )
@@ -4489,26 +4402,24 @@ hg18_dna          0 atgagcttccaaggtaaactgccttcaagattc       33
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['a', 't', 'g', 'a', 'g', 'c', 't', 't', 'c', 'c', 'a', 'a', 'g',
-              'g', 't', 'a', 'a', 'a', 'c', 't', 'g', 'c', 'c', 't', 't', 'c',
-              'a', 'a', 'g', 'a', 't', 't', 'c'],
-             ['a', 't', 'g', 'a', 'g', 'c', 't', 't', 'c', 'c', 'a', 'a', 'g',
-              'g', 't', 'a', 'a', 'a', 'c', 't', 'g', 'c', 'c', 't', 't', 'c',
-              'a', 'a', 'g', 'a', 't', 't', 'c']], dtype='U')
+np.array([['a', 't', 'g', 'a', 'g', 'c', 't', 't', 'c', 'c', 'a', 'a', 'g',
+           'g', 't', 'a', 'a', 'a', 'c', 't', 'g', 'c', 'c', 't', 't', 'c',
+           'a', 'a', 'g', 'a', 't', 't', 'c'],
+          ['a', 't', 'g', 'a', 'g', 'c', 't', 't', 'c', 'c', 'a', 'a', 'g',
+           'g', 't', 'a', 'a', 'a', 'c', 't', 'g', 'c', 'c', 't', 't', 'c',
+           'a', 'a', 'g', 'a', 't', 't', 'c']], dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[10271783, 10271816],
-                             [       0,       33]]),
+                np.array([[10271783, 10271816],
+                          [       0,       33]]),
                 # fmt: on
             )
         )
@@ -4556,24 +4467,22 @@ hg18_dna         25 aaggcagtttaccttgg        8
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['a', 'a', 'g', 'g', 'c', 'a', 'g', 't', 't', 't', 'a', 'c', 'c',
-              't', 't', 'g', 'g'],
-             ['a', 'a', 'g', 'g', 'c', 'a', 'g', 't', 't', 't', 'a', 'c', 'c',
-              't', 't', 'g', 'g']], dtype='U')
+np.array([['a', 'a', 'g', 'g', 'c', 'a', 'g', 't', 't', 't', 'a', 'c', 'c',
+           't', 't', 'g', 'g'],
+          ['a', 'a', 'g', 'g', 'c', 'a', 'g', 't', 't', 't', 'a', 'c', 'c',
+           't', 't', 'g', 'g']], dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[53575980, 53575997],
-                             [      25,        8]]),
+                np.array([[53575980, 53575997],
+                          [      25,        8]]),
                 # fmt: on
             )
         )
@@ -4622,28 +4531,26 @@ hg19_dna          9 acaaaggggctgggcgtggtggctcacacctgtaatcccaa       50
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g',
-              'g', 'c', 'g', 'c', 'a', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a',
-              'c', 'g', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c', 'c',
-              'a', 'a'],
-             ['a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g',
-              'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a',
-              'c', 'a', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c', 'c',
-              'a', 'a']], dtype='U')
+np.array([['a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g',
+           'g', 'c', 'g', 'c', 'a', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a',
+           'c', 'g', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c', 'c',
+           'a', 'a'],
+          ['a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g',
+           'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a',
+           'c', 'a', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c', 'c',
+           'a', 'a']], dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[85737865, 85737906],
-                             [       9,       50]]),
+                np.array([[85737865, 85737906],
+                          [       9,       50]]),
                 # fmt: on
             )
         )
@@ -4692,28 +4599,26 @@ hg19_dna          8 cacaaaggggctgggcgtggtggctcacacctgtaatccca       49
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['c', 'a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g',
-              'g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
-              'a', 'c', 'a', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c',
-              'c', 'a'],
-             ['c', 'a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g',
-              'g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
-              'a', 'c', 'a', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c',
-              'c', 'a']], dtype='U')
+np.array([['c', 'a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g',
+           'g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
+           'a', 'c', 'a', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c',
+           'c', 'a'],
+          ['c', 'a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g',
+           'g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
+           'a', 'c', 'a', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c',
+           'c', 'a']], dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[95160479, 95160520],
-                             [       8,       49]]),
+                np.array([[95160479, 95160520],
+                          [       8,       49]]),
                 # fmt: on
             )
         )
@@ -4762,26 +4667,24 @@ hg19_dna         11 aaaggggctgggcgtggtggctcacacctgtaatcc       47
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c',
-              'g', 't', 'g', 'g', 't', 'a', 'g', 'c', 't', 'c', 'a', 't', 'g',
-              'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c'],
-             ['a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c',
-              'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a', 'c', 'a',
-              'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c']], dtype='U')
+np.array([['a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c',
+           'g', 't', 'g', 'g', 't', 'a', 'g', 'c', 't', 'c', 'a', 't', 'g',
+           'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c'],
+          ['a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c',
+           'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a', 'c', 'a',
+           'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c']], dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[42144400, 42144436],
-                             [      11,       47]]),
+                np.array([[42144400, 42144436],
+                          [      11,       47]]),
                 # fmt: on
             )
         )
@@ -4834,12 +4737,11 @@ hg19_dna          1 aaaaat????aaaggggctgggcgtggtggctcacacctgtaatccca        49
 """,
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[183925984, 183925990, 183925990, 183926028],
-                             [        1,         7,        11,        49]]),
+                np.array([[183925984, 183925990, 183925990, 183926028],
+                          [        1,         7,        11,        49]]),
                 # fmt: on
             )
         )
@@ -4904,12 +4806,11 @@ hg19_dna         35 ---------------------------------------cacctgtaatc       46
 """,
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[35483340, 35483365, 35483499, 35483510],
-                             [      10,       35,       35,       46]]),
+                np.array([[35483340, 35483365, 35483499, 35483510],
+                          [      10,       35,       35,       46]]),
                 # fmt: on
             )
         )
@@ -4958,27 +4859,25 @@ hg19_dna         10 caaaggggctgggcgtggtggctcacacctgtaatccca       49
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g',
-              'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a', 'c',
-              'a', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c', 'c', 'a'],
-             ['c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g',
-              'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a', 'c',
-              'a', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c', 'c', 'a']],
-            dtype='U')
+np.array([['c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g',
+           'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a', 'c',
+           'a', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c', 'c', 'a'],
+          ['c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g',
+           'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a', 'c',
+           'a', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c', 'c', 'a']],
+         dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[23891310, 23891349],
-                             [      10,       49]]),
+                np.array([[23891310, 23891349],
+                          [      10,       49]]),
                 # fmt: on
             )
         )
@@ -5026,26 +4925,24 @@ hg19_dna         21 ggcgtggtggctcacacctgtaatccca       49
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
-              'a', 'c', 'g', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c',
-              'c', 'a'],
-             ['g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
-              'a', 'c', 'a', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c',
-              'c', 'a']], dtype='U')
+np.array([['g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
+           'a', 'c', 'g', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c',
+           'c', 'a'],
+          ['g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
+           'a', 'c', 'a', 'c', 'c', 't', 'g', 't', 'a', 'a', 't', 'c', 'c',
+           'c', 'a']], dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[43252217, 43252245],
-                             [      21,       49]]),
+                np.array([[43252217, 43252245],
+                          [      21,       49]]),
                 # fmt: on
             )
         )
@@ -5106,12 +5003,11 @@ hg19_dna         49
 """,
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[52759147, 52759154, 52759160, 52759160, 52759198],
-                             [       1,        8,        8,       11,       49]]),
+                np.array([[52759147, 52759154, 52759160, 52759160, 52759198],
+                          [       1,        8,        8,       11,       49]]),
                 # fmt: on
             )
         )
@@ -5158,29 +5054,27 @@ hg19_dna          0 caaaaattcacaaaggggctgggcgtggtggctcacacctgtaatcccaa      50
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['c', 'a', 'a', 'a', 'a', 'a', 't', 't', 'c', 'a', 'c', 'a', 'a',
-              'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c', 'g', 't',
-              'g', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a', 'c', 'a', 'c', 'c',
-              't', 'g', 't', 'a', 'a', 't', 'c', 'c', 'c', 'a', 'a'],
-             ['c', 'a', 'a', 'a', 'a', 'a', 't', 't', 'c', 'a', 'c', 'a', 'a',
-              'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c', 'g', 't',
-              'g', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a', 'c', 'a', 'c', 'c',
-              't', 'g', 't', 'a', 'a', 't', 'c', 'c', 'c', 'a', 'a']],
-            dtype='U')
+np.array([['c', 'a', 'a', 'a', 'a', 'a', 't', 't', 'c', 'a', 'c', 'a', 'a',
+           'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c', 'g', 't',
+           'g', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a', 'c', 'a', 'c', 'c',
+           't', 'g', 't', 'a', 'a', 't', 'c', 'c', 'c', 'a', 'a'],
+          ['c', 'a', 'a', 'a', 'a', 'a', 't', 't', 'c', 'a', 'c', 'a', 'a',
+           'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c', 'g', 't',
+           'g', 'g', 't', 'g', 'g', 'c', 't', 'c', 'a', 'c', 'a', 'c', 'c',
+           't', 'g', 't', 'a', 'a', 't', 'c', 'c', 'c', 'a', 'a']],
+         dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[1207056, 1207106],
-                             [      0,      50]]),
+                np.array([[1207056, 1207106],
+                          [      0,      50]]),
                 # fmt: on
             )
         )
@@ -5229,26 +5123,24 @@ hg19_dna          1 aaaaattcacaaaggggctgggcgtggtggctca       35
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['a', 'a', 'a', 'a', 'a', 't', 'g', 'a', 'a', 'c', 'a', 'a', 'a',
-              'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c', 'g', 'c', 'g',
-              'g', 't', 'g', 'g', 'c', 't', 'c', 'a'],
-             ['a', 'a', 'a', 'a', 'a', 't', 't', 'c', 'a', 'c', 'a', 'a', 'a',
-              'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c', 'g', 't', 'g',
-              'g', 't', 'g', 'g', 'c', 't', 'c', 'a']], dtype='U')
+np.array([['a', 'a', 'a', 'a', 'a', 't', 'g', 'a', 'a', 'c', 'a', 'a', 'a',
+           'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c', 'g', 'c', 'g',
+           'g', 't', 'g', 'g', 'c', 't', 'c', 'a'],
+          ['a', 'a', 'a', 'a', 'a', 't', 't', 'c', 'a', 'c', 'a', 'a', 'a',
+           'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c', 'g', 't', 'g',
+           'g', 't', 'g', 'g', 'c', 't', 'c', 'a']], dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[61700837, 61700871],
-                             [       1,       35]]),
+                np.array([[61700837, 61700871],
+                          [       1,       35]]),
                 # fmt: on
             )
         )
@@ -5300,12 +5192,11 @@ hg19_dna         49 tgggattaca------??????????accacgcccagccccttt       11
 """,
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[37558157, 37558167, 37558173, 37558173, 37558191],
-                             [      49,       39,       39,       29,       11]]),
+                np.array([[37558157, 37558167, 37558173, 37558173, 37558191],
+                          [      49,       39,       39,       29,       11]]),
                 # fmt: on
             )
         )
@@ -5354,27 +5245,25 @@ hg19_dna         49 tgggattacaggtgtgagccaccacgcccagcccctt       12
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
-              'g', 'g', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
-              'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't'],
-             ['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
-              'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
-              'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't']],
-            dtype='U')
+np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
+           'g', 'g', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
+           'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't'],
+          ['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
+           'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
+           'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't']],
+         dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[48997405, 48997442],
-                             [      49,       12]]),
+                np.array([[48997405, 48997442],
+                          [      49,       12]]),
                 # fmt: on
             )
         )
@@ -5423,26 +5312,24 @@ hg19_dna         49 tgggattacaggtgtgagccaccacgcccagcccct        13
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
-              'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
-              'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't'],
-             ['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
-              'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
-              'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't']], dtype='U')
+np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
+           'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
+           'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't'],
+          ['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
+           'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
+           'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't']], dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[120641740, 120641776],
-                             [       49,        13]]),
+                np.array([[120641740, 120641776],
+                          [       49,        13]]),
                 # fmt: on
             )
         )
@@ -5491,27 +5378,25 @@ hg19_dna         49 tgggattacaggtgtgagccaccacgcccagcccctttg       10
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
-              'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
-              'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't', 't', 'g'],
-             ['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
-              'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
-              'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't', 't', 'g']],
-            dtype='U')
+np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
+           'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
+           'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't', 't', 'g'],
+          ['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
+           'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
+           'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't', 't', 'g']],
+         dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[54017130, 54017169],
-                             [      49,       10]]),
+                np.array([[54017130, 54017169],
+                          [      49,       10]]),
                 # fmt: on
             )
         )
@@ -5560,27 +5445,25 @@ hg19_dna         49 tgggattacaggtgtgagccaccacgcccagcccctttg     10
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['t', 'g', 'g', 'g', 'a', 't', 'g', 'a', 'c', 'a', 'g', 'g', 'g',
-              'g', 't', 'g', 'a', 'g', 'g', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
-              'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't', 't', 'g'],
-             ['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
-              'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
-              'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't', 't', 'g']],
-            dtype='U')
+np.array([['t', 'g', 'g', 'g', 'a', 't', 'g', 'a', 'c', 'a', 'g', 'g', 'g',
+           'g', 't', 'g', 'a', 'g', 'g', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
+           'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't', 't', 'g'],
+          ['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
+           'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
+           'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't', 't', 'g']],
+         dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[553742, 553781],
-                             [    49,     10]]),
+                np.array([[553742, 553781],
+                          [    49,     10]]),
                 # fmt: on
             )
         )
@@ -5629,26 +5512,24 @@ hg19_dna         49 tgggattacaggtgtgagccaccacgcccagcccct       13
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 't', 'a', 'g', 'g', 'c',
-              'a', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
-              'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't'],
-             ['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
-              'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
-              'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't']], dtype='U')
+np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 't', 'a', 'g', 'g', 'c',
+           'a', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
+           'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't'],
+          ['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
+           'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
+           'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't']], dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[99388555, 99388591],
-                             [      49,       13]]),
+                np.array([[99388555, 99388591],
+                          [      49,       13]]),
                 # fmt: on
             )
         )
@@ -5696,25 +5577,23 @@ hg19_dna         35 tgagccaccacgcccagcccctttg        10
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['t', 'g', 'a', 'g', 't', 'c', 'a', 'c', 'c', 'a', 'c', 'g', 'c',
-              'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't', 't', 'g'],
-             ['t', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g', 'c',
-              'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't', 't', 'g']],
-            dtype='U')
+np.array([['t', 'g', 'a', 'g', 't', 'c', 'a', 'c', 'c', 'a', 'c', 'g', 'c',
+           'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't', 't', 'g'],
+          ['t', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g', 'c',
+           'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't', 't', 't', 'g']],
+         dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[112178171, 112178196],
-                             [       35,        10]]),
+                np.array([[112178171, 112178196],
+                          [       35,        10]]),
                 # fmt: on
             )
         )
@@ -5763,24 +5642,23 @@ hg19_dna         49 tgggattacaggtgtgagccaccacgcccagcccct       13
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
-              'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
-              'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't'],
-             ['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
-              'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
-              'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't']], dtype='U')
+np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
+           'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
+           'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't'],
+          ['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
+           'g', 't', 'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g',
+           'c', 'c', 'c', 'a', 'g', 'c', 'c', 'c', 'c', 't']], dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-                numpy.array([[39368490, 39368526],
+                np.array([[39368490, 39368526],
                              [      49,       13]]),
                 # fmt: on
             )
@@ -5830,26 +5708,24 @@ hg19_dna         47 ggattacaggtgtgagccaccacgcccagcccct        13
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
+                np.array_equal(
+                    np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
-numpy.array([['g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c', 'g', 't',
-              'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g', 'c', 'c',
-              'c', 'a', 'g', 'c', 'c', 'c', 'c', 't'],
-             ['g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't', 'g', 't',
-              'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g', 'c', 'c',
-              'c', 'a', 'g', 'c', 'c', 'c', 'c', 't']], dtype='U')
+np.array([['g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c', 'g', 't',
+           'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g', 'c', 'c',
+           'c', 'a', 'g', 'c', 'c', 'c', 'c', 't'],
+          ['g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't', 'g', 't',
+           'g', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c', 'g', 'c', 'c',
+           'c', 'a', 'g', 'c', 'c', 'c', 'c', 't']], dtype='U')
                     # fmt: on
                 )
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[220325687, 220325721],
-                             [       47,        13]]),
+                np.array([[220325687, 220325721],
+                          [       47,        13]]),
                 # fmt: on
             )
         )
@@ -5942,12 +5818,11 @@ class TestAlign_dnax_prot(unittest.TestCase):
                 "hg38", alignment.target
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[75566694, 75566850],
-                             [      61,      113]]),
+                np.array([[75566694, 75566850],
+                          [      61,      113]]),
                 # fmt: on
             )
         )
@@ -5991,12 +5866,11 @@ class TestAlign_dnax_prot(unittest.TestCase):
                 "QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEK",
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[75560749, 75560881],
-                             [      17,       61]]),
+                np.array([[75560749, 75560881],
+                          [      17,       61]]),
                 # fmt: on
             )
         )
@@ -6048,12 +5922,11 @@ class TestAlign_dnax_prot(unittest.TestCase):
                 "MEGQRWLPLEANPEVESGSTLKKFLEESVSMSPEERARYLENYD",
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[75549820, 75549865, 75567225, 75567225, 75567312],
-                             [       0,       15,       15,      113,      142]]),
+                np.array([[75549820, 75549865, 75567225, 75567225, 75567312],
+                          [       0,       15,       15,      113,      142]]),
                 # fmt: on
             )
         )
@@ -6105,12 +5978,11 @@ class TestAlign_dnax_prot(unittest.TestCase):
                 "DGRKPFPINHGETSDETLLEDAIEVCKKFMERDPDELRFNAIALSAA",
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[75604767, 75604827, 75605728, 75605809],
-                             [     183,      203,      203,      230]]),
+                np.array([[75604767, 75604827, 75605728, 75605809],
+                          [     183,      203,      203,      230]]),
                 # fmt: on
             )
         )
@@ -6150,12 +6022,11 @@ class TestAlign_dnax_prot(unittest.TestCase):
                 feature.qualifiers["translation"][0], "APSIDEKVDLHFIALVHVDGHLYEL"
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[75594914, 75594989],
-                             [     158,      183]]),
+                np.array([[75594914, 75594989],
+                          [     158,      183]]),
                 # fmt: on
             )
         )
@@ -6193,12 +6064,11 @@ class TestAlign_dnax_prot(unittest.TestCase):
             self.assertEqual(len(feature.qualifiers["translation"]), 1)
             self.assertEqual(feature.qualifiers["translation"][0], "AIRVTHETSAHEGQTE")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[75569459, 75569507],
-                             [     142,      158]]),
+                np.array([[75569459, 75569507],
+                          [     142,      158]]),
                 # fmt: on
             )
         )
@@ -6241,12 +6111,11 @@ class TestAlign_dnax_prot(unittest.TestCase):
                 "GQEVSPKVYFMKQTIGNSCGTIGLIHAVANNQDK",
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[41260685, 41260787],
-                             [      76,      110]]),
+                np.array([[41260685, 41260787],
+                          [      76,      110]]),
                 # fmt: on
             )
         )
@@ -6298,12 +6167,11 @@ class TestAlign_dnax_prot(unittest.TestCase):
                 "QVLSRLGVAGQWRFVDVLGLEEESLGSVPAPACALLLLFPLTDDKVNFHFILFNNVDGHLYEL",
             )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[41257605, 41257731, 41263227, 41263227, 41263290],
-                             [      17,       59,       59,      162,      183]]),
+                np.array([[41257605, 41257731, 41263227, 41263227, 41263290],
+                          [      17,       59,       59,      162,      183]]),
                 # fmt: on
             )
         )
@@ -6374,7 +6242,7 @@ class TestAlign_dnax_prot(unittest.TestCase):
                 SeqRecord(aligned_dna_translated, id=alignment.sequences[0].id),
                 SeqRecord(aligned_protein, id=alignment.sequences[1].id),
             ]
-            coordinates = numpy.array(
+            coordinates = np.array(
                 [[0, len(aligned_dna_translated)], [0, len(aligned_protein)]]
             )
             protein_alignment = Alignment(records, coordinates)
@@ -6553,14 +6421,13 @@ CAG33136.        60 YEL 63
             cds = feature.extract(self.dna[alignment.target.id]).translate()
             self.assertEqual(feature.qualifiers["translation"][0], cds)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[9712654, 9712786, 9715941, 9716097, 9716445, 9716532, 9718374,
-                              9718422, 9739264, 9739339, 9743706, 9743766, 9744511, 9744592],
-                             [     17,      61,      61,     113,     113,     142,     142,
-                                  158,     158,     183,     183,     203,     203,     230]]),
+                np.array([[9712654, 9712786, 9715941, 9716097, 9716445, 9716532, 9718374,
+                           9718422, 9739264, 9739339, 9743706, 9743766, 9744511, 9744592],
+                          [     17,      61,      61,     113,     113,     142,     142,
+                               158,     158,     183,     183,     203,     203,     230]]),
                 # fmt: on
             )
         )
@@ -6617,12 +6484,11 @@ CAG33136.        60 YEL 63
             cds = feature.extract(self.dna[alignment.target.id]).translate()
             self.assertEqual(feature.qualifiers["translation"][0], cds)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[2103463, 2103523, 2103522, 2103522, 2104149],
-                             [      0,      20,      20,      21,     230]]),
+                np.array([[2103463, 2103523, 2103522, 2103522, 2104149],
+                          [      0,      20,      20,      21,     230]]),
                 # fmt: on
             )
         )
@@ -6679,12 +6545,11 @@ CAG33136.        60 YEL 63
             cds = feature.extract(self.dna[alignment.target.id]).translate()
             self.assertEqual(feature.qualifiers["translation"][0], cds)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[20873021, 20872472, 20872471, 20872471, 20872390],
-                             [       0,      183,      183,      203,      230]]),
+                np.array([[20873021, 20872472, 20872471, 20872471, 20872390],
+                          [       0,      183,      183,      203,      230]]),
                 # fmt: on
             )
         )
@@ -6771,7 +6636,7 @@ CAG33136.        60 YEL 63
                 SeqRecord(aligned_dna_translated, id=alignment.sequences[0].id),
                 SeqRecord(aligned_protein, id=alignment.sequences[1].id),
             ]
-            coordinates = numpy.array(
+            coordinates = np.array(
                 [[0, len(aligned_dna_translated)], [0, len(aligned_protein)]]
             )
             protein_alignment = Alignment(records, coordinates)
@@ -6854,6 +6719,63 @@ CAG33136.       180 YELDAIEVCKKFMERDPDELRFNAIALSAA 210
             self.assertEqual(alignment.misMatches, protein_alignment.misMatches)
             self.assertEqual(alignment.repMatches, protein_alignment.repMatches)
             self.assertEqual(alignment.nCount, protein_alignment.nCount)
+
+
+class TestAlign_strand(unittest.TestCase):
+    def test_format(self):
+        """Test alignment with the target on the opposite strand."""
+        sequences = ["AACAGCAGCGTGTCG", "CAGCTAGCGAA"]
+        coordinates = np.array(
+            [[0, 2, 2, 3, 4, 6, 6, 9, 10, 12, 15], [11, 11, 9, 8, 8, 6, 5, 2, 2, 0, 0]]
+        )
+        alignment = Alignment(sequences, coordinates)
+        alignment.score = 8
+        line = """\
+8	0	0	0	1	1	2	2	-	query	11	0	9	target	15	2	12	4	1,2,3,2,	2,3,6,9,	2,4,6,10,
+"""
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 AA--CAGC-AGCGTGTCG 15
+                  0 ----|-||-|||-||--- 18
+query            11 --TTC-GCTAGC-TG---  0
+""",
+        )
+        self.assertEqual(format(alignment, "psl"), line)
+        alignment.coordinates = alignment.coordinates[:, ::-1]
+        self.assertEqual(
+            str(alignment),
+            """\
+target           15 CGACACGCT-GCTG--TT  0
+                  0 ---||-|||-||-|---- 18
+query             0 ---CA-GCTAGC-GAA-- 11
+""",
+        )
+        self.assertEqual(format(alignment, "psl"), line)
+        alignment.coordinates = alignment.coordinates[:, ::-1]
+        line = """\
+8	0	0	0	1	1	2	2	-	query	11	2	11	target	15	3	13	4	2,3,2,1,	0,2,6,8,	3,6,9,12,
+"""
+        alignment = alignment.reverse_complement()
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 CGACACGCT-GCTG--TT 15
+                  0 ---||-|||-||-|---- 18
+query            11 ---CA-GCTAGC-GAA--  0
+""",
+        )
+        self.assertEqual(format(alignment, "psl"), line)
+        alignment.coordinates = alignment.coordinates[:, ::-1]
+        self.assertEqual(
+            str(alignment),
+            """\
+target           15 AA--CAGC-AGCGTGTCG  0
+                  0 ----|-||-|||-||--- 18
+query             0 --TTC-GCTAGC-TG--- 11
+""",
+        )
+        self.assertEqual(format(alignment, "psl"), line)
 
 
 if __name__ == "__main__":

@@ -10,14 +10,7 @@ import re
 from datetime import date
 from io import StringIO
 
-try:
-    import numpy
-except ImportError:
-    from Bio import MissingPythonDependencyError
-
-    raise MissingPythonDependencyError(
-        "Install NumPy to build proteins from internal coordinates."
-    )
+import numpy as np
 
 from Bio.File import as_handle
 from Bio.PDB.StructureBuilder import StructureBuilder
@@ -181,7 +174,7 @@ def read_PIC(
         # akstr: full AtomKey string read from .pic file, includes residue info
         try:
             return akc[akstr]
-        except (KeyError):
+        except KeyError:
             ak = akc[akstr] = AtomKey(akstr)
             return ak
 
@@ -305,6 +298,9 @@ def read_PIC(
         accpt = IC_Residue.accept_atoms
         if not all(ek[i].akl[atmNdx] in accpt for i in range(4)):
             return
+        dangle = float(dangle)
+        dangle = dangle if (dangle <= 180.0) else dangle - 360.0
+        dangle = dangle if (dangle >= -180.0) else dangle + 360.0
         da[ek] = float(dangle)
         sbcic.dihedra[ek] = ric.dihedra[ek] = d = Dihedron(ek)
         d.cic = sbcic
@@ -376,7 +372,7 @@ def read_PIC(
                 prnum = pr.akl[0][resPos]
                 paKey = [
                     AtomKey(prnum, None, prname, primAngle[x], None, None)
-                    for x in range(0, 2)
+                    for x in range(2)
                 ]
                 paKey.add(
                     [
@@ -391,12 +387,13 @@ def read_PIC(
                 )
 
             if paKey in da:
+                angl = da[paKey] + dihedra_secondary_defaults[rdclass][1]
                 process_dihedron(
                     str(ek[0]),
                     str(ek[1]),
                     str(ek[2]),
                     str(ek[3]),
-                    da[paKey] + dihedra_secondary_defaults[rdclass][1],
+                    angl,
                     ric,
                 )
 
@@ -427,12 +424,13 @@ def read_PIC(
                     )
 
                 if paKey in da:
+                    angl = da[paKey] + offset
                     process_dihedron(
                         str(ek[0]),
                         str(ek[1]),
                         str(ek[2]),
                         str(ek[3]),
-                        da[paKey] + offset,
+                        angl,
                         ric,
                     )
 
@@ -452,6 +450,8 @@ def read_PIC(
 
     def dihedra_check(ric: IC_Residue) -> None:
         """Look for required dihedra in residue, generate defaults if set."""
+        # This method has some internal functions
+
         # rnext should be set
         def ake_recurse(akList: List) -> List:
             """Bulid combinatorics of AtomKey lists."""
@@ -520,7 +520,7 @@ def read_PIC(
         try:
             for edron in ic_data_sidechains[ric.lc]:
                 if len(edron) > 3:  # dihedra only
-                    if all(not atm[0] == "H" for atm in edron):
+                    if all(atm[0] != "H" for atm in edron):
                         akl = [AtomKey(ric, atm) for atm in edron[0:4]]
                         chkLst.append(akl)
         except KeyError:
@@ -588,7 +588,9 @@ def read_PIC(
             sha = {k: ha[k] for k in sorted(ha)}
             shl12 = {k: hl12[k] for k in sorted(hl12)}
             shl23 = {k: hl23[k] for k in sorted(hl23)}
-            sbcic._hedraDict2chain(shl12, sha, shl23, da, bfacs)
+            # da not in order if generated from seq
+            sda = {k: da[k] for k in sorted(da)}
+            sbcic._hedraDict2chain(shl12, sha, shl23, sda, bfacs)
 
     # read_PIC processing starts here:
     with as_handle(file, mode="r") as handle:
@@ -738,7 +740,7 @@ def read_PIC(
                                 line,
                             )
                         return None
-                    coord = numpy.array(
+                    coord = np.array(
                         (
                             float(m.group("x")),
                             float(m.group("y")),

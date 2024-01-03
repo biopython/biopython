@@ -607,7 +607,7 @@ class Graphics:
             "fgcolor": fghex,
             "bgcolor": bghex,
         }
-        for (n, attr) in [
+        for n, attr in [
             ("x", "_x"),
             ("y", "_y"),
             ("width", "_width"),
@@ -850,7 +850,7 @@ class Relation:
             "entry2": str(self._entry2),
             "type": self.type,
         }
-        for (name, value) in self.subtypes:
+        for name, value in self.subtypes:
             subtype = ET.Element("subtype")
             subtype.attrib = {"name": name, "value": str(value)}
             relation.append(subtype)

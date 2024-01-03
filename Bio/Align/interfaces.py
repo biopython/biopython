@@ -13,11 +13,13 @@ use this module.  It provides base classes to try and simplify things.
 """
 from abc import ABC
 from abc import abstractmethod
+from typing import Optional
 
 from Bio import StreamModeError
+from Bio.Align import Alignments, AlignmentsAbstractBaseClass
 
 
-class AlignmentIterator(ABC):
+class AlignmentIterator(AlignmentsAbstractBaseClass):
     """Base class for building Alignment iterators.
 
     You should write a parse method that returns an Alignment generator.  You
@@ -29,7 +31,7 @@ class AlignmentIterator(ABC):
     """
 
     mode = "t"  # assume text files by default
-    fmt = None  # to be defined in the subclass
+    fmt: Optional[str] = None  # to be defined in the subclass
 
     def __init__(self, source):
         """Create an AlignmentIterator object.
@@ -60,25 +62,43 @@ class AlignmentIterator(ABC):
             else:
                 raise ValueError(f"Unknown mode '{self.mode}'") from None
             self._stream = source
+        self._index = 0
         self._read_header(self._stream)
 
     def __next__(self):
-        """Return the next entry."""
+        """Return the next alignment."""
         try:
             stream = self._stream
         except AttributeError:
             raise StopIteration from None
         alignment = self._read_next_alignment(stream)
         if alignment is None:
+            self._len = self._index
             raise StopIteration
+        self._index += 1
         return alignment
 
-    def __iter__(self):
-        """Iterate over the entries as Alignment objects.
+    def __len__(self):
+        """Return the number of alignments.
 
-        This method SHOULD NOT be overridden by any subclass.
+        The number of alignments is cached. If not yet calculated, the iterator
+        is rewound to the beginning, and the number of alignments is calculated
+        by iterating over the alignments. The iterator is then returned to its
+        original position in the file.
         """
-        return self
+        try:
+            length = self._len
+        except AttributeError:
+            index = self._index
+            self.rewind()
+            length = 0
+            for alignment in self:
+                length += 1
+            self.rewind()
+            while self._index < index:
+                next(self)
+            self._len = length
+        return length
 
     def __enter__(self):
         return self
@@ -92,6 +112,72 @@ class AlignmentIterator(ABC):
             stream.close()
         del self._stream
 
+    def __getitem__(self, index):
+        """Return the alignments as an Alignments object (which inherits from list).
+
+        Only an index of the form [:] (i.e., a full slice) is supported.
+        The file stream is returned to its zero position, and the file header
+        is read and stored in an Alignments object. Next, we iterate over the
+        alignments and store them in the Alignments object.  The iterator
+        is then returned to its original position in the file, and the
+        Alignments object is returned. The Alignments object contains the exact
+        same information as the Alignment iterator self, but stores the
+        alignments in a list instead of as an iterator, allowing indexing.
+
+        Typical usage is
+
+        >>> from Bio import Align
+        >>> alignments = Align.parse("Blat/dna_rna.psl", "psl")
+        >>> alignments.metadata
+        {'psLayout version': '3'}
+
+        As `alignments` is an iterator and not a list, we cannot retrieve an
+        alignment by its index:
+
+        >>> alignment = alignments[2]  # doctest:+ELLIPSIS
+        Traceback (most recent call last):
+          ...
+        KeyError: 'only [:] (a full slice) can be used as the index'
+
+        So we use the iterator to create a list-like Alignments object:
+
+        >>> alignments = alignments[:]
+
+        While `alignments` is a list-like object, it has the same `metadata`
+        attribute representing the information stored in the file header:
+
+        >>> alignments.metadata
+        {'psLayout version': '3'}
+
+        Now we can index individual alignments:
+
+        >>> len(alignments)
+        4
+        >>> alignment = alignments[2]
+        >>> alignment.target.id, alignment.query.id
+        ('chr3', 'NR_111921.1')
+
+        """
+        if index != slice(None, None, None):
+            raise KeyError("only [:] (a full slice) can be used as the index")
+        read_header = type(self)._read_header
+        index = self._index
+        alignments = Alignments()
+        stream = self._stream
+        stream.seek(0)
+        # Read the header information and store it on the new alignments object:
+        read_header(alignments, stream)
+        # Rewind the iterator to initialize it correctly for iteration:
+        self.rewind()
+        alignments.extend(self)
+        # May as well store the number of alignments while we are at it:
+        self._len = self._index
+        # Return the alignments iterator to its original position:
+        self.rewind()
+        while self._index < index:
+            next(self)
+        return alignments
+
     def _read_header(self, stream):
         """Read the file header and store it in metadata."""
         return
@@ -100,10 +186,10 @@ class AlignmentIterator(ABC):
     def _read_next_alignment(self, stream):
         """Read one Alignment from the stream, and return it."""
 
-    def rewind(self):
-        """Rewind the file and loop over the alignments from the beginning."""
+    def rewind(self):  # noqa: D102
         self._stream.seek(0)
         self._read_header(self._stream)
+        self._index = 0
 
 
 class AlignmentWriter(ABC):
@@ -125,7 +211,7 @@ class AlignmentWriter(ABC):
     """
 
     mode = "w"  # assume text files by default
-    fmt = None  # to be defined in the subclass
+    fmt: Optional[str] = None  # to be defined in the subclass
 
     def __init__(self, target):
         """Create the writer object.
@@ -167,11 +253,11 @@ class AlignmentWriter(ABC):
                     stream = target
             else:
                 raise RuntimeError("Unknown mode '%s'" % self.mode)
-            self.stream = stream
+            self._stream = stream
 
         self._target = target
 
-    def write_header(self, alignments):
+    def write_header(self, stream, alignments):
         """Write the file header to the output file."""
         return
         ##################################################
@@ -179,7 +265,7 @@ class AlignmentWriter(ABC):
         # if the file format defines a file header.      #
         ##################################################
 
-    def write_footer(self):
+    def write_footer(self, stream):
         """Write the file footer to the output file."""
         return
         ##################################################
@@ -197,10 +283,11 @@ class AlignmentWriter(ABC):
         # You MUST implement this method in the subclass. #
         ###################################################
 
-    def write_single_alignment(self, alignments):
+    def write_single_alignment(self, stream, alignments):
         """Write a single alignment to the output file, and return 1.
 
         alignments - A list or iterator returning Alignment objects
+        stream     - Output file stream.
         """
         count = 0
         for alignment in alignments:
@@ -209,34 +296,51 @@ class AlignmentWriter(ABC):
                     f"Alignment files in the {self.fmt} format can contain a single alignment only."
                 )
             line = self.format_alignment(alignment)
-            self.stream.write(line)
+            stream.write(line)
             count += 1
         return count
 
-    def write_multiple_alignments(self, alignments):
+    def write_multiple_alignments(self, stream, alignments):
         """Write alignments to the output file, and return the number of alignments.
 
         alignments - A list or iterator returning Alignment objects
+        stream     - Output file stream.
         """
         count = 0
         for alignment in alignments:
             line = self.format_alignment(alignment)
-            self.stream.write(line)
+            stream.write(line)
             count += 1
         return count
 
     write_alignments = write_multiple_alignments
 
-    def write_file(self, alignments):
+    def write_file(self, stream, alignments):
+        """Write the alignments to the file strenm, and return the number of alignments.
+
+        alignments - A list or iterator returning Alignment objects
+        stream     - Output file stream.
+        """
+        self.write_header(stream, alignments)
+        count = self.write_alignments(stream, alignments)
+        self.write_footer(stream)
+        return count
+
+    def write(self, alignments):
         """Write a file with the alignments, and return the number of alignments.
 
         alignments - A list or iterator returning Alignment objects
         """
+        stream = self._stream
         try:
-            self.write_header(alignments)
-            count = self.write_alignments(alignments)
-            self.write_footer()
+            count = self.write_file(stream, alignments)
         finally:
-            if self.stream is not self._target:
-                self.stream.close()
+            if stream is not self._target:
+                stream.close()
         return count
+
+
+if __name__ == "__main__":
+    from Bio._utils import run_doctest
+
+    run_doctest()

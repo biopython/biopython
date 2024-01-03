@@ -5,7 +5,6 @@
 """Tests for SeqIO module."""
 import copy
 import gzip
-import sys
 import unittest
 import warnings
 
@@ -366,7 +365,7 @@ class TestSeqIO(SeqIOTestBaseClass):
                 # I want to see the output when called from the test harness,
                 # run_tests.py (which can be funny about new lines on Windows)
                 handle.seek(0)
-                message = f"{str(e)}\n\n{handle.read()!r}\n\n{records1!r}"
+                message = f"{e!s}\n\n{handle.read()!r}\n\n{records1!r}"
                 self.fail(message)
 
             self.assertEqual(len(records2), t_count)
@@ -2538,6 +2537,25 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+        )
+
+    def test_uniprot_xml_namespace(self):
+        uniref_file_name = (
+            "SwissProt/UniRef90_P99999.xml"  # non-uniprot file (related uniref format)
+        )
+        with self.assertRaises(ValueError) as context:
+            records = []
+            for record in SeqIO.parse(uniref_file_name, format="uniprot-xml"):
+                records.append(record)
+        self.assertRegex(
+            str(context.exception),
+            "http://uniprot.org/uniprot",
+            "Correct namespace in error",
+        )
+        self.assertRegex(
+            str(context.exception),
+            "http://uniprot.org/uniref",
+            "Unexpected namespace in error",
         )
 
     def test_swiss20(self):

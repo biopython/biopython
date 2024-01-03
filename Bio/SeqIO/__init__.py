@@ -371,6 +371,9 @@ making up each alignment as SeqRecords.
 # See also http://biopython.org/wiki/SeqIO_dev
 #
 # --Peter
+
+from typing import Callable, Dict, Iterable, Union
+
 from Bio.Align import MultipleSeqAlignment
 from Bio.File import as_handle
 from Bio.SeqIO import AbiIO
@@ -393,6 +396,7 @@ from Bio.SeqIO import TwoBitIO
 from Bio.SeqIO import UniprotIO
 from Bio.SeqIO import XdnaIO
 from Bio.SeqRecord import SeqRecord
+from .Interfaces import _TextIOSource
 
 # Convention for format names is "mainname-subtype" in lower case.
 # Please use the same names as BioPerl or EMBOSS where possible.
@@ -440,7 +444,7 @@ _FormatToIterator = {
     "xdna": XdnaIO.XdnaIterator,
 }
 
-_FormatToString = {
+_FormatToString: Dict[str, Callable[[SeqRecord], str]] = {
     "fasta": FastaIO.as_fasta,
     "fasta-2line": FastaIO.as_fasta_2line,
     "tab": TabIO.as_tab,
@@ -475,7 +479,11 @@ _FormatToWriter = {
 }
 
 
-def write(sequences, handle, format):
+def write(
+    sequences: Union[Iterable[SeqRecord], SeqRecord],
+    handle: _TextIOSource,
+    format: str,
+) -> int:
     """Write complete set of sequences to a file.
 
     Arguments:
@@ -844,8 +852,6 @@ def index(filename, format, alphabet=None, key_function=None):
 
     """
     # Try and give helpful error messages:
-    if not isinstance(filename, str):
-        raise TypeError("Need a filename (not a handle)")
     if not isinstance(format, str):
         raise TypeError("Need a string for the file format (lower case)")
     if not format:
@@ -869,9 +875,15 @@ def index(filename, format, alphabet=None, key_function=None):
         alphabet,
         key_function,
     )
-    return _IndexedSeqFileDict(
-        proxy_class(filename, format), key_function, repr, "SeqRecord"
-    )
+
+    try:
+        random_access_proxy = proxy_class(filename, format)
+    except TypeError:
+        raise TypeError(
+            "Need a string or path-like object for the filename (not a handle)"
+        ) from None
+
+    return _IndexedSeqFileDict(random_access_proxy, key_function, repr, "SeqRecord")
 
 
 def index_db(
@@ -923,15 +935,28 @@ def index_db(
     glob which is useful for building lists of files.
 
     """
+    from os import fspath
+
+    def is_pathlike(obj):
+        """Test if the given object can be accepted as a path."""
+        try:
+            fspath(obj)
+            return True
+        except TypeError:
+            return False
+
     # Try and give helpful error messages:
-    if not isinstance(index_filename, str):
-        raise TypeError("Need a string for the index filename")
-    if isinstance(filenames, str):
+    if not is_pathlike(index_filename):
+        raise TypeError("Need a string or path-like object for filename (not a handle)")
+    if is_pathlike(filenames):
         # Make the API a little more friendly, and more similar
         # to Bio.SeqIO.index(...) for indexing just one file.
         filenames = [filenames]
     if filenames is not None and not isinstance(filenames, list):
-        raise TypeError("Need a list of filenames (as strings), or one filename")
+        raise TypeError(
+            "Need a list of filenames (as strings or path-like "
+            "objects), or one filename"
+        )
     if format is not None and not isinstance(format, str):
         raise TypeError("Need a string for the file format (lower case)")
     if format and not format.islower():

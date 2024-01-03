@@ -93,7 +93,7 @@ Point_getradius(Point* self, void* closure)
 static PyGetSetDef Point_getset[] = {
     {"index", (getter)Point_getindex, NULL, Point_index__doc__, NULL},
     {"radius", (getter)Point_getradius, NULL, Point_radius__doc__, NULL},
-    {NULL}  /* Sentinel */
+    {NULL, NULL, NULL, NULL, NULL}  /* Sentinel */
 };
 
 static char Point_doc[] =
@@ -1318,7 +1318,7 @@ static PyMethodDef KDTree_methods[] = {
      (PyCFunction)PyKDTree_neighbor_simple_search,
       METH_VARARGS,
       PyKDTree_neighbor_simple_search__doc__},
-    {NULL}  /* Sentinel */
+    {NULL, NULL, 0, NULL}  /* Sentinel */
 };
 
 PyDoc_STRVAR(KDTree_doc,

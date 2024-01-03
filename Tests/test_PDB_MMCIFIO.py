@@ -18,11 +18,10 @@ import tempfile
 import unittest
 import warnings
 
-from Bio import BiopythonWarning
 from Bio.PDB import MMCIFParser, MMCIFIO, PDBParser, Select
 from Bio.PDB import Atom, Residue
 from Bio.PDB.MMCIF2Dict import MMCIF2Dict
-from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarning
+from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
 
 class WriteTest(unittest.TestCase):
@@ -148,6 +147,8 @@ class WriteTest(unittest.TestCase):
 
     def test_mmcifio_select(self):
         """Write a selection of the structure using a Select subclass."""
+        # This method has an internal class defined
+
         # Selection class to filter all alpha carbons
         class CAonly(Select):
             """Accepts only CA residues."""

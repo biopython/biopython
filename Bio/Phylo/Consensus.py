@@ -585,7 +585,7 @@ def bootstrap_trees(alignment, times, tree_constructor):
                     bootstrapped_alignment = alignment[:, col : col + 1]
                 else:
                     bootstrapped_alignment += alignment[:, col : col + 1]
-            tree = tree_constructor.build_tree(alignment)
+            tree = tree_constructor.build_tree(bootstrapped_alignment)
             yield tree
     else:
         n, m = alignment.shape

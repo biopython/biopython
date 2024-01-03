@@ -45,7 +45,15 @@ def UniprotIterator(source, alphabet=None, return_raw_comments=False):
     if alphabet is not None:
         raise ValueError("The alphabet argument is no longer supported")
     try:
-        for event, elem in ElementTree.iterparse(source, events=("start", "end")):
+        for event, elem in ElementTree.iterparse(
+            source, events=("start", "start-ns", "end")
+        ):
+            if event == "start-ns" and not (
+                elem[1].startswith("http://www.w3.org/") or NS == f"{{{elem[1]}}}"
+            ):
+                raise ValueError(
+                    f"SeqIO format 'uniprot-xml' only parses xml with namespace: {NS} but xml has namespace: {{{elem[1]}}}"
+                )
             if event == "end" and elem.tag == NS + "entry":
                 yield Parser(elem, return_raw_comments=return_raw_comments).parse()
                 elem.clear()
@@ -495,7 +503,7 @@ class Parser:
 
         # ============================================#
         # Initialize SeqRecord
-        self.ParsedSeqRecord = SeqRecord("", id="")
+        self.ParsedSeqRecord = SeqRecord(None, id="")
 
         # Entry attribs parsing
         # Unknown dataset should not happen!

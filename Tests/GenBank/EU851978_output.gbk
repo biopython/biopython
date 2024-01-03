@@ -18,6 +18,7 @@ COMMENT     ##FluData-START##
             LabID             :: 2008704957
             Antigen_Character :: A/Solomon Islands/03/2006-like (H1N1)
             Passage_Details   :: SPFCK3E1
+            Empty_structured  ::
             Drug Sensitivity  :: adamantane-sensitive, oseltamivir-sensitive
             LANL Accession    :: ISDN306605
             ##FluData-END##

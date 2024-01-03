@@ -15,7 +15,7 @@ import re
 import warnings
 from math import pi, sin, cos, log, exp
 
-from Bio.Seq import Seq, complement, complement_rna
+from Bio.Seq import Seq, complement, complement_rna, translate
 from Bio.Data import IUPACData
 from Bio.Data.CodonTable import standard_dna_table
 from Bio import BiopythonDeprecationWarning
@@ -136,23 +136,6 @@ def gc_fraction(seq, ambiguous="remove"):
     return gc / length
 
 
-def GC(seq):
-    """Calculate G+C content (DEPRECATED).
-
-    Use Bio.SeqUtils.gc_fraction instead.
-    """
-    warnings.warn(
-        "GC is deprecated; please use gc_fraction instead.",
-        BiopythonDeprecationWarning,
-    )
-
-    gc = sum(seq.count(x) for x in ["G", "C", "g", "c", "S", "s"])
-    try:
-        return gc * 100.0 / len(seq)
-    except ZeroDivisionError:
-        return 0.0
-
-
 def GC123(seq):
     """Calculate G+C content: total, for first, second and third positions.
 
@@ -174,14 +157,14 @@ def GC123(seq):
         codon = seq[i : i + 3]
         if len(codon) < 3:
             codon += "  "
-        for pos in range(0, 3):
+        for pos in range(3):
             for nt in ["A", "T", "G", "C"]:
                 if codon[pos] == nt or codon[pos] == nt.lower():
                     d[nt][pos] += 1
     gc = {}
     gcall = 0
     nall = 0
-    for i in range(0, 3):
+    for i in range(3):
         try:
             n = d["G"][i] + d["C"][i] + d["T"][i] + d["A"][i]
             gc[i] = (d["G"][i] + d["C"][i]) * 100.0 / n
@@ -244,7 +227,7 @@ def xGC_skew(seq, window=1000, zoom=100, r=300, px=100, py=100):
     ty = Y0
     canvas.create_text(X0, ty, text="%s...%s (%d nt)" % (seq[:7], seq[-7:], len(seq)))
     ty += 20
-    canvas.create_text(X0, ty, text=f"GC {GC(seq):3.2f}%")
+    canvas.create_text(X0, ty, text=f"GC {gc_fraction(seq):3.2f}%")
     ty += 20
     canvas.create_text(X0, ty, text="GC Skew", fill="blue")
     ty += 20
@@ -496,7 +479,7 @@ def molecular_weight(
         if seq_type == "protein":
             raise ValueError("protein sequences cannot be double-stranded")
         elif seq_type == "DNA":
-            seq = complement(seq, inplace=False)  # TODO: remove inplace=False
+            seq = complement(seq)
         elif seq_type == "RNA":
             seq = complement_rna(seq)
         weight += sum(weight_table[x] for x in seq) - (len(seq) - 1) * water
@@ -536,11 +519,11 @@ def six_frame_translations(seq, genetic_code=1):
     if "u" in seq.lower():
         anti = reverse_complement_rna(seq)
     else:
-        anti = reverse_complement(seq, inplace=False)  # TODO: remove inplace=False
+        anti = reverse_complement(seq)
     comp = anti[::-1]
     length = len(seq)
     frames = {}
-    for i in range(0, 3):
+    for i in range(3):
         fragment_length = 3 * ((length - i) // 3)
         frames[i + 1] = translate(seq[i : i + fragment_length], genetic_code)
         frames[-(i + 1)] = translate(anti[i : i + fragment_length], genetic_code)[::-1]
@@ -554,10 +537,11 @@ def six_frame_translations(seq, genetic_code=1):
     for nt in ["a", "t", "g", "c"]:
         header += " %s:%d" % (nt, seq.count(nt.upper()))
 
+    gc = 100 * gc_fraction(seq, ambiguous="ignore")
     header += "\nSequence: %s, %d nt, %0.2f %%GC\n\n\n" % (
         short.lower(),
         length,
-        GC(seq),
+        gc,
     )
     res = header
 
@@ -570,7 +554,7 @@ def six_frame_translations(seq, genetic_code=1):
         res += " " + "  ".join(frames[2][p : p + 20]) + "\n"
         res += "  ".join(frames[1][p : p + 20]) + "\n"
         # seq
-        res += subseq.lower() + "%5d %%\n" % int(GC(subseq))
+        res += subseq.lower() + "%5d %%\n" % int(gc)
         res += csubseq.lower() + "\n"
         # - frames
         res += "  ".join(frames[-2][p : p + 20]) + "\n"
@@ -601,6 +585,7 @@ class CodonAdaptationIndex(dict):
                       genetic code. By default, the standard genetic code is
                       used.
         """
+        self._table = table
         codons = {aminoacid: [] for aminoacid in table.protein_alphabet}
         for codon, aminoacid in table.forward_table.items():
             codons[aminoacid].append(codon)
@@ -666,6 +651,60 @@ class CodonAdaptationIndex(dict):
                 cai_length += 1
 
         return exp(cai_value / cai_length)
+
+    def optimize(self, sequence, seq_type="DNA", strict=True):
+        """Return a new DNA sequence with preferred codons only.
+
+        Uses the codon adaptiveness table defined by the CodonAdaptationIndex
+        object to generate DNA sequences with only preferred codons.
+        May be useful when designing DNA sequences for transgenic protein
+        expression or codon-optimized proteins like fluorophores.
+
+        Arguments:
+            - sequence: DNA, RNA, or protein sequence to codon-optimize.
+                        Supplied as a str, Seq, or SeqRecord object.
+            - seq_type: String specifying type of sequence provided.
+                        Options are "DNA", "RNA", and "protein". Default is "DNA".
+            - strict:   Determines whether an exception should be raised when
+                        two codons are equally prefered for a given amino acid.
+        Returns:
+            Seq object with DNA encoding the same protein as the sequence argument,
+            but using only preferred codons as defined by the codon adaptation index.
+            If multiple codons are equally preferred, a warning is issued
+            and one codon is chosen for use in the optimzed sequence.
+        """
+        try:  # If seq record is provided, convert to sequence
+            sequence = sequence.seq
+        except AttributeError:  # not a  SeqRecord object
+            pass
+        seq = sequence.upper()
+        # Make dict with amino acids referencing preferred codons
+        pref_codons = {}
+        for codon, aminoacid in self._table.forward_table.items():
+            if self[codon] == 1.0:
+                if aminoacid in pref_codons:
+                    msg = f"{pref_codons[aminoacid]} and {codon} are equally preferred."
+                    if strict:
+                        raise ValueError(msg)
+                pref_codons[aminoacid] = codon
+        for codon in self._table.stop_codons:
+            if self[codon] == 1.0:
+                pref_codons["*"] = codon
+        # Create amino acid sequence if DNA was provided
+        if seq_type == "DNA" or seq_type == "RNA":
+            aa_seq = translate(seq)
+        elif seq_type == "protein":
+            aa_seq = seq
+        else:
+            raise ValueError(
+                f"Allowed seq_types are DNA, RNA or protein, not {seq_type!r}"
+            )
+        # Un-translate in loop using only preferred codons
+        try:
+            optimized = "".join(pref_codons[aa] for aa in aa_seq)
+        except KeyError as ex:
+            raise KeyError(f"Unrecognized amino acid: {ex}") from None
+        return Seq(optimized)
 
     def __str__(self):
         lines = []

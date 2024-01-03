@@ -28,8 +28,6 @@ NODECOMMENT_END = "]"
 class TreeError(Exception):
     """Provision for the management of Tree exceptions."""
 
-    pass
-
 
 class NodeData:
     """Store tree-relevant data associated with nodes (e.g. branches or otus)."""
@@ -441,8 +439,8 @@ class Tree(Nodes.Chain):
             and tree2.node(n).data.support >= threshold
         ]
         conflict = []
-        for (st1, sup1) in t1:
-            for (st2, sup2) in t2:
+        for st1, sup1 in t1:
+            for st2, sup2 in t2:
                 if not st1.issubset(st2) and not st2.issubset(
                     st1
                 ):  # don't hiccup on upstream nodes
@@ -586,7 +584,7 @@ class Tree(Nodes.Chain):
             terminals.remove(newsplit)
         # distribute taxon labels randomly
         random.shuffle(taxon_list)
-        for (node, name) in zip(terminals, taxon_list):
+        for node, name in zip(terminals, taxon_list):
             self.node(node).data.taxon = name
 
     def display(self):
@@ -724,7 +722,7 @@ class Tree(Nodes.Chain):
             treeline.append("a_tree")
         treeline.append("=")
         if self.weight != 1:
-            treeline.append(f"[&W{str(round(float(self.weight), 3))}]")
+            treeline.append(f"[&W{round(float(self.weight), 3)!s}]")
         if self.rooted:
             treeline.append("[&R]")
         succnodes = ladderize_nodes(self.node(self.root).succ)

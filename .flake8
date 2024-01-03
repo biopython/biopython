@@ -41,6 +41,17 @@ ignore =
     # whitespace before ':'
     # gives false positives after running black, see
     # https://github.com/PyCQA/pycodestyle/issues/373
+    E122,E131,E124,E126,E127,E128,E201,E241,
+    # E112 continuation line missing indentation or outdented
+    # E131 continuation line unaligned for hanging indent
+    # E124 closing bracket does not match visual indentation
+    # E126 continuation line over-indented for hanging indent
+    # E127 continuation line over-indented for visual indent
+    # E128 continuation line under-indented for visual indent
+    # E201 whitespace after '['
+    # E241 multiple spaces after ','
+    # ignoring as using black for layout (if this is triggered,
+    # it would be in a snippet explicitly excluded from black)
     E501,
     # line too long
     # Maybe we find a sensible limit, e.g. 88 (black) and enforce it
@@ -69,33 +80,32 @@ ignore =
 # ========================
 per-file-ignores =
     Bio/*:F401,F841,D105,B009,B010
-    Tests/*:F401,F841,D101,D102,D103,W504,B009,B010,B015
+    Tests/*:F401,F841,D101,D102,D103,W291,B009,B010,B015
 
     # Due to a bug in flake8, we need the following lines for running the
     # pre-commit hook. If you made edits above, please change also here!
     /Bio/*:F401,F841,D105,B009,B010
-    /Tests/*:F401,F841,D101,D102,D103,W504,B009,B010,B015
+    /Tests/*:F401,F841,D101,D102,D103,W291,B009,B010,B015
 
 #Explanation of the codes being ignored in Bio/ and Tests/:
 #
-#Bio/*:F401 module imported but unused TODO? (107 occurrences)
-#      F841 local variable is assigned to but never used TODO? (55 occurrences)
-#      D105 missing docstring magic method (121 occurrences)
-#      B009 do not call getattr with a constant attribute value,
+#Bio/*:F401 module imported but unused TODO? (97 occurrences)
+#      F841 local variable is assigned to but never used TODO? (58 occurrences)
+#      B009 do not call getattr with a constant attribute value (5 occurrences),
 #           it is not any safer than normal property access
-#      B010 do not call setattr with a constant attribute value,
+#      B010 do not call setattr with a constant attribute value (11 occurrences),
 #           it is not any safer than normal property access
-#Tests/*:F401 module imported but unused TODO? (88 occurrences)
-#        F841 local variable is assigned to but never used TODO? (64 occurrences)
-#        D101 missing docstring in public class (207 occurrences)
-#        D102 missing docstring in public method (956 occurrences)
-#        D103 missing docstring in public functions (52 occurrences)
-#        W504 line break after binary operator (97 occurrences, may be removed by black)
-#        B009 do not call getattr with a constant attribute value,
+#Tests/*:F401 module imported but unused TODO? (115 occurrences)
+#        F841 local variable is assigned to but never used TODO? (93 occurrences)
+#        D101 missing docstring in public class (244 occurrences)
+#        D102 missing docstring in public method (1368 occurrences)
+#        D103 missing docstring in public functions (20 occurrences)
+#        W291 trailing whitespace (due to alignment tests)
+#        B009 do not call getattr with a constant attribute value (10 occurrences),
 #             it is not any safer than normal property access
-#        B010 do not call setattr with a constant attribute value,
+#        B010 do not call setattr with a constant attribute value (7 occurrences),
 #             it is not any safer than normal property access
-#        B015 Pointless comparison. This comparison does nothing ...
+#        B015 Pointless comparison. This comparison does nothing ... (108 occurrences)
 #             (Intended to trigger exceptions in our tests)
 
 # =======================

@@ -56,8 +56,9 @@ import os
 import sys
 import warnings
 
-
-from Bio import BiopythonExperimentalWarning, MissingExternalDependencyError
+from Bio import BiopythonDeprecationWarning
+from Bio import BiopythonExperimentalWarning
+from Bio import MissingExternalDependencyError
 
 # This is the same mechanism used for run_tests.py --offline
 # to skip tests requiring the network.
@@ -72,13 +73,11 @@ if "--offline" in sys.argv:
     # Allow manual override via "python test_Tutorial.py --offline"
     online = False
 
-warnings.simplefilter("ignore", BiopythonExperimentalWarning)
-
 # Cache this to restore the cwd at the end of the tests
 original_path = os.path.abspath(".")
 
 if os.path.basename(sys.argv[0]) == "test_Tutorial.py":
-    # sys.argv[0] will be (relative) path to test_Turorial.py - use this to allow, e.g.
+    # sys.argv[0] will be (relative) path to test_Tutorial.py - use this to allow, e.g.
     # [base]$ python Tests/test_Tutorial.py
     # [Tests/]$ python test_Tutorial.py
     tutorial_base = os.path.abspath(
@@ -174,8 +173,6 @@ def extract_doctests(latex_filename):
 class TutorialDocTestHolder:
     """Python doctests extracted from the Biopython Tutorial."""
 
-    pass
-
 
 def check_deps(dependencies):
     """Check 'lib:XXX' and 'internet' dependencies are met."""
@@ -233,13 +230,16 @@ class TutorialTestCase(unittest.TestCase):
         """Run tutorial doctests."""
         runner = doctest.DocTestRunner()
         failures = []
-        for test in doctest.DocTestFinder().find(TutorialDocTestHolder):
-            failed, success = runner.run(test)
-            if failed:
-                name = test.name
-                assert name.startswith("TutorialDocTestHolder.doctest_")
-                failures.append(name[30:])
-                # raise ValueError("Tutorial doctest %s failed" % test.name[30:])
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonDeprecationWarning)
+            warnings.simplefilter("ignore", BiopythonExperimentalWarning)
+            for test in doctest.DocTestFinder().find(TutorialDocTestHolder):
+                failed, success = runner.run(test)
+                if failed:
+                    name = test.name
+                    assert name.startswith("TutorialDocTestHolder.doctest_")
+                    failures.append(name[30:])
+                    # raise ValueError("Tutorial doctest %s failed" % test.name[30:])
         if failures:
             raise ValueError(
                 "%i Tutorial doctests failed: %s" % (len(failures), ", ".join(failures))
@@ -276,7 +276,10 @@ if __name__ == "__main__":
         for dep in sorted(missing_deps):
             print(f" - {dep}")
     print("Running Tutorial doctests...")
-    tests = doctest.testmod()
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", BiopythonDeprecationWarning)
+        warnings.simplefilter("ignore", BiopythonExperimentalWarning)
+        tests = doctest.testmod()
     if tests.failed:
         raise RuntimeError("%i/%i tests failed" % tests)
     print("Tests done")

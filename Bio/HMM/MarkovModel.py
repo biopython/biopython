@@ -11,8 +11,17 @@ import copy
 import math
 import random
 from collections import defaultdict
+import warnings
 
 from Bio.Seq import Seq
+from Bio import BiopythonDeprecationWarning
+
+warnings.warn(
+    "The 'Bio.HMM.MarkovModule' module is deprecated and will be "
+    "removed in a future release of Biopython. Consider using the "
+    "hmmlearn package instead.",
+    BiopythonDeprecationWarning,
+)
 
 
 def _gen_random_array(n):
@@ -580,7 +589,7 @@ class HiddenMarkovModel:
         # NOTE: My index numbers are one less than what is given in Durbin
         # et al, since we are indexing the sequence going from 0 to
         # (Length - 1) not 1 to Length, like in Durbin et al.
-        for i in range(0, len(sequence)):
+        for i in range(len(sequence)):
             # loop over all of the possible i-th states in the state path
             for cur_state in state_alphabet:
                 # e_{l}(x_{i})

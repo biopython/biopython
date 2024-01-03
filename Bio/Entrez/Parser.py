@@ -45,7 +45,10 @@ from io import BytesIO
 import xml.etree.ElementTree as ET
 from xml.sax.saxutils import escape
 
-from urllib.request import urlopen, urlparse
+from urllib.request import urlopen
+from urllib.parse import urlparse
+
+from Bio import StreamModeError
 
 
 # The following four classes are used to add a member .attributes to integers,
@@ -382,14 +385,22 @@ class DataHandler(metaclass=DataHandlerMeta):
         else:
             self.characterDataHandler = self.characterDataHandlerRaw
 
-    def read(self, handle):
-        """Set up the parser and let it parse the XML results."""
+    def read(self, source):
+        """Set up the parser and let it read the XML results."""
         # Expat's parser.ParseFile function only accepts binary data;
         # see also the comment below for Entrez.parse.
-        if handle.read(0) != b"":
+        try:
+            stream = open(source, "rb")
+        except TypeError:  # not a path, assume we received a stream
+            if source.read(0) != b"":
+                raise StreamModeError(
+                    "the XML file must be opened in binary mode."
+                ) from None
+            stream = source
+        if stream.read(0) != b"":
             raise TypeError("file should be opened in binary mode")
         try:
-            self.parser.ParseFile(handle)
+            self.parser.ParseFile(stream)
         except expat.ExpatError as e:
             if self.parser.StartElementHandler:
                 # We saw the initial <!xml declaration, so we can be sure that
@@ -400,6 +411,9 @@ class DataHandler(metaclass=DataHandlerMeta):
                 # We have not seen the initial <!xml declaration, so probably
                 # the input data is not in XML format.
                 raise NotXMLError(e) from None
+        finally:
+            if stream is not source:
+                stream.close()
         try:
             record = self.record
         except AttributeError:
@@ -420,71 +434,83 @@ class DataHandler(metaclass=DataHandlerMeta):
             del record.key
             return record
 
-    def parse(self, handle):
-        """Parse the XML in the given file handle."""
-        # The handle should have been opened in binary mode; data read from
-        # the handle are then bytes. Expat will pick up the encoding from the
-        # XML declaration (or assume UTF-8 if it is missing), and use this
-        # encoding to convert the binary data to a string before giving it to
-        # characterDataHandler.
+    def parse(self, source):
+        """Set up the parser and let it read the XML results."""
+        # The source must be a filename, or a file-like object opened in binary
+        # mode. Data read from the file or file-like object as bytes. Expat will
+        # pick up the encoding from the XML declaration (or assume UTF-8 if it
+        # is missing), and use this encoding to convert the binary data to a
+        # string before giving it to characterDataHandler.
         # While parser.ParseFile only accepts binary data, parser.Parse accepts
         # both binary data and strings. However, a file in text mode may have
         # been opened with an encoding different from the encoding specified in
         # the XML declaration at the top of the file. If so, the data in the
         # file will have been decoded with an incorrect encoding. To avoid
         # this, and to be consistent with parser.ParseFile (which is used in
-        # the Entrez.read function above), we require the handle to be in
+        # the Entrez.read function above), we require the source data to be in
         # binary mode here as well.
-        if handle.read(0) != b"":
+        try:
+            stream = open(source, "rb")
+        except TypeError:  # not a path, assume we received a stream
+            if source.read(0) != b"":
+                raise StreamModeError(
+                    "the XML file must be opened in binary mode."
+                ) from None
+            stream = source
+        if stream.read(0) != b"":
             raise TypeError("file should be opened in binary mode")
         BLOCK = 1024
-        while True:
-            # Read in another block of data from the file.
-            data = handle.read(BLOCK)
-            try:
+        try:
+            while True:
+                # Read in another block of data from the file.
+                data = stream.read(BLOCK)
                 self.parser.Parse(data, False)
-            except expat.ExpatError as e:
-                if self.parser.StartElementHandler:
-                    # We saw the initial <!xml declaration, so we can be sure
-                    # that we are parsing XML data. Most likely, the XML file
-                    # is corrupted.
-                    raise CorruptedXMLError(e) from None
-                else:
-                    # We have not seen the initial <!xml declaration, so
-                    # probably the input data is not in XML format.
-                    raise NotXMLError(e) from None
-            try:
-                records = self.record
-            except AttributeError:
-                if self.parser.StartElementHandler:
-                    # We saw the initial <!xml declaration, and expat
-                    # didn't notice any errors, so self.record should be
-                    # defined. If not, this is a bug.
+                try:
+                    records = self.record
+                except AttributeError:
+                    if self.parser.StartElementHandler:
+                        # We saw the initial <!xml declaration, and expat
+                        # didn't notice any errors, so self.record should be
+                        # defined. If not, this is a bug.
 
-                    raise RuntimeError(
-                        "Failed to parse the XML file correctly, possibly due to a "
-                        "bug in Bio.Entrez. Please contact the Biopython "
-                        "developers via the mailing list or GitHub for assistance."
-                    ) from None
-                else:
-                    # We did not see the initial <!xml declaration, so
-                    # probably the input data is not in XML format.
-                    raise NotXMLError("XML declaration not found") from None
+                        raise RuntimeError(
+                            "Failed to parse the XML file correctly, possibly due to a "
+                            "bug in Bio.Entrez. Please contact the Biopython "
+                            "developers via the mailing list or GitHub for assistance."
+                        ) from None
+                    else:
+                        # We did not see the initial <!xml declaration, so
+                        # probably the input data is not in XML format.
+                        raise NotXMLError("XML declaration not found") from None
 
-            if not isinstance(records, list):
-                raise ValueError(
-                    "The XML file does not represent a list. Please use Entrez.read "
-                    "instead of Entrez.parse"
-                )
+                if not isinstance(records, list):
+                    raise ValueError(
+                        "The XML file does not represent a list. Please use "
+                        "Entrez.read instead of Entrez.parse."
+                    )
 
-            if not data:
-                break
+                if not data:
+                    break
 
-            while len(records) >= 2:
-                # Then the first record is finished, while the second record
-                # is still a work in progress.
-                record = records.pop(0)
-                yield record
+                while len(records) >= 2:
+                    # Then the first record is finished, while the second record
+                    # is still a work in progress.
+                    record = records.pop(0)
+                    yield record
+
+        except expat.ExpatError as e:
+            if self.parser.StartElementHandler:
+                # We saw the initial <!xml declaration, so we can be sure
+                # that we are parsing XML data. Most likely, the XML file
+                # is corrupted.
+                raise CorruptedXMLError(e) from None
+            else:
+                # We have not seen the initial <!xml declaration, so
+                # probably the input data is not in XML format.
+                raise NotXMLError(e) from None
+        finally:
+            if stream is not source:
+                stream.close()
 
         # We have reached the end of the XML file
         self.parser = None

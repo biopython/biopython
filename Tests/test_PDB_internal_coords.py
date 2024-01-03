@@ -37,7 +37,8 @@ from Bio.File import as_handle
 from Bio.PDB.internal_coords import IC_Residue, IC_Chain, Dihedron, AtomKey
 
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
-from Bio import SeqIO
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
 
 
 class Rebuild(unittest.TestCase):
@@ -391,7 +392,7 @@ class Rebuild(unittest.TestCase):
                         r"\s+(-?\d+\.\d+)\s+\]", aline
                     )
                     if ms:
-                        for i in range(0, 3):
+                        for i in range(3):
                             self.assertAlmostEqual(float(ms[i]), target[i], places=0)
                     else:
                         self.fail("transform not found")
@@ -437,7 +438,7 @@ class Rebuild(unittest.TestCase):
                     target = [15.33630, 110.17513, 15.13861]
                     ms = re.findall(r"\s+(-?\d+\.\d+)", aline)
                     if ms:
-                        for i in range(0, 3):
+                        for i in range(3):
                             self.assertAlmostEqual(float(ms[i]), target[i], places=0)
                     else:
                         self.fail("Cbeta internal coords not found")
@@ -537,20 +538,66 @@ class Rebuild(unittest.TestCase):
         self.assertTrue(np.amax(dpdiff) < 0.000001)
 
     def test_seq_as_PIC(self):
-        """Read protein sequence, generate default PIC data, test various."""
-        seqIter = SeqIO.parse("Fasta/f001", "fasta")
-        for _record in seqIter:
-            break
-        pdb_structure = read_PIC_seq(_record)
-        pdb_structure.internal_to_atom_coordinates()
-        for _chn in pdb_structure.get_chains():
-            break
-        cic = _chn.internal_coord
-        self.assertEqual(
-            len(cic.atomArrayValid), 575, msg="wrong number atoms from Fasta/f001"
+        """Read seq as PIC data, extend chain, set each chi angle, check various."""
+        pdb_structure = read_PIC_seq(
+            SeqRecord(
+                Seq("GAVLIMFPSTCNQYWDEHKR"),
+                id="1RND",
+                description="my 20aa sequence",
+            )
         )
+        chn = next(pdb_structure.get_chains())
+        cic = chn.internal_coord
+        cic.make_extended()
+        for chi in range(1, 6):
+            for ric in chn.internal_coord.ordered_aa_ic_list:
+                targ = "chi" + str(chi)
+                rchi = ric.get_angle(targ)
+                if rchi is not None:
+                    nangl = rchi + 60.0
+                    # nangl = nangl if (nangl <= 180.0) else nangl - 360.0
+                    ric.set_angle(targ, nangl)
+                    # ric.bond_set("chi1", nangl)
+
+        pdb_structure.internal_to_atom_coordinates()
+
+        self.assertEqual(
+            len(cic.atomArrayValid), 168, msg="wrong number atoms from sequence"
+        )
+
+        # test make_extended and each sequential chi rotation places selected
+        # atom from each sidechain where expected.
+        posnDict = {
+            "1_G_CA": [0.000, 0.000, 0.000, 1.000],
+            "2_A_CB": [-0.411, 2.505, 4.035, 1.000],
+            "3_V_CG2": [-2.246, -2.942, 4.865, 1.000],
+            "4_L_CD2": [-4.673, 2.124, 6.060, 1.000],
+            "5_I_CD1": [-4.260, -4.000, 10.546, 1.000],
+            "6_M_CE": [-10.035, 4.220, 12.322, 1.000],
+            "7_F_CE2": [-5.835, -1.076, 15.391, 1.000],
+            "8_P_CD": [-15.060, -2.368, 17.751, 1.000],
+            "9_S_OG": [-12.733, 0.388, 24.504, 1.000],
+            "10_T_CG2": [-19.084, -0.423, 22.650, 1.000],
+            "11_C_SG": [-15.455, 2.166, 27.172, 1.000],
+            "12_N_ND2": [-20.734, -3.990, 27.233, 1.000],
+            "13_Q_NE2": [-19.362, 4.465, 30.847, 1.000],
+            "14_Y_CE2": [-20.685, -3.571, 32.854, 1.000],
+            "15_W_CH2": [-23.295, 1.706, 32.883, 1.000],
+            "16_D_OD2": [-24.285, -3.683, 40.620, 1.000],
+            "17_E_OE2": [-31.719, 2.385, 38.887, 1.000],
+            "18_H_NE2": [-25.763, -0.071, 46.356, 1.000],
+            "19_K_NZ": [-36.073, -0.926, 42.383, 1.000],
+            "20_R_NH2": [-28.792, 3.687, 51.738, 1.000],
+        }
+
+        for k, v in posnDict.items():
+            atm = AtomKey(k)
+            ndx = cic.atomArrayIndex[atm]
+            coord = np.round(cic.atomArray[ndx], 3)
+            self.assertTrue(np.array_equal(coord, v), msg=f"position error on atom {k}")
+
         cic.update_dCoordSpace()
-        rt = cic.ordered_aa_ic_list[10]  # pick a residue
+        rt = cic.ordered_aa_ic_list[5]  # pick a residue
         chi1 = rt.pick_angle("chi1")  # chi1 coord space puts CA at origin
         rt.applyMtx(chi1.cst)
         coord = rt.residue.child_dict["CA"].coord  # Biopython API Atom coords
@@ -558,13 +605,15 @@ class Rebuild(unittest.TestCase):
             np.allclose(coord, [0.0, 0.0, 0.0]), msg="dCoordSpace transform error"
         )
 
+        # test Dihedron repr and all that leads into it
         psi = rt.pick_angle("psi")
 
         self.assertEqual(
             psi.__repr__(),
-            "4-11_M_N:11_M_CA:11_M_C:12_A_N MNMCAMCAN 179.0 ('gi|3318709|pdb|1A91|', 0, 'A', (' ', 11, ' '))",
-            msg="dihedron __repr__ error for M11 psi",
+            "4-6_M_N:6_M_CA:6_M_C:7_F_N MNMCAMCFN 123.0 ('1RND', 0, 'A', (' ', 6, ' '))",
+            msg="dihedron __repr__ error for M6 psi",
         )
+
         m = "Edron rich comparison failed"
         self.assertTrue(chi1 != psi, msg=m)
         self.assertFalse(chi1 == psi, msg=m)
@@ -578,15 +627,20 @@ class Rebuild(unittest.TestCase):
             msg="covalent radii assignment error for chi1",
         )
 
+        # dihedron atomkeys are all in residue atomkeys as expected, including
+        # i+1 N for psi.
         self.assertTrue(all(ak in rt for ak in chi1.atomkeys))
         self.assertFalse(all(ak in rt for ak in psi.atomkeys))
+
+        # test Hedron repr and all that leads into it
         tau = rt.pick_angle("tau")
         self.assertEqual(
             tau.__repr__(),
-            "3-11_M_N:11_M_CA:11_M_C MNMCAMC 1.46091 110.97184 1.52499",
+            "3-6_M_N:6_M_CA:6_M_C MNMCAMC 1.46091 110.97184 1.52499",
             msg="hedron __repr__ error for M11 tau",
         )
-        # some specific AtomKey compsrisons missed in other tests
+
+        # some specific AtomKey comparisons missed in other tests
         a0, a1 = tau.atomkeys[0], tau.atomkeys[1]
         m = "AtomKey rich comparison failed"
         self.assertTrue(a1 > a0, msg=m)

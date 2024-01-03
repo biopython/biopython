@@ -92,8 +92,8 @@ _|                                                 |________________________ D
 <BLANKLINE>
 \end{minted}
 
-If you have \textbf{matplotlib} or \textbf{pylab} installed, you can create a graphic
-using the \verb|draw| function (see Fig. \ref{fig:phylo-simple-draw}):
+If you have \textbf{matplotlib} or \textbf{pylab} installed, you can create a graphical
+tree using the \verb|draw| function.
 
 %cont-doctest
 \begin{minted}{pycon}
@@ -103,19 +103,15 @@ using the \verb|draw| function (see Fig. \ref{fig:phylo-simple-draw}):
 >>> Phylo.draw(tree)
 \end{minted}
 
-\begin{htmlonly}
-\imgsrc[width=666, height=530]{images/phylo-simple-draw.png}
-\label{fig:phylo-simple-draw}
-\end{htmlonly}
 
-\begin{latexonly}
 \begin{figure}[htb]
 \centering
 \includegraphics[width=0.7\textwidth]{images/phylo-simple-draw.png}
 \caption{A rooted tree drawn with \texttt{Phylo.draw}.}
 \label{fig:phylo-simple-draw}
 \end{figure}
-\end{latexonly}
+
+See Figure~\ref{fig:phylo-simple-draw}.
 
 
 \subsection{Coloring branches within a tree}
@@ -198,25 +194,21 @@ entries, we can jump directly to that position in the tree by indexing it.  Here
 >>> tree.clade[0, 1].color = "blue"
 \end{minted}
 
-Finally, show our work (see Fig. \ref{fig:phylo-color-draw}):
+Finally, show our work:
 
 \begin{minted}{pycon}
 >>> Phylo.draw(tree)
 \end{minted}
 
-\begin{htmlonly}
-\imgsrc[width=666, height=530]{images/phylo-color-draw.png}
-\label{fig:phylo-color-draw}
-\end{htmlonly}
 
-\begin{latexonly}
 \begin{figure}[htb]
 \centering
 \includegraphics[width=0.7\textwidth]{images/phylo-color-draw.png}
 \caption{A colorized tree drawn with \texttt{Phylo.draw}.}
 \label{fig:phylo-color-draw}
 \end{figure}
-\end{latexonly}
+
+See Figure~\ref{fig:phylo-color-draw}.
 
 Note that a clade's color includes the branch leading to that clade, as well as its
 descendents. The common ancestor of E and F turns out to be just under the root, and with this
@@ -390,28 +382,23 @@ _|          |___________________________________________ B
 \end{minted}
 
 The \verb|draw| function draws a more attractive image using the matplotlib
-library. See the API documentation for details on the arguments it accepts to
+library.
+See the API documentation for details on the arguments it accepts to
 customize the output.
 
 \begin{minted}{pycon}
 >>> Phylo.draw(tree, branch_labels=lambda c: c.branch_length)
 \end{minted}
 
-\begin{htmlonly}
-\imgsrc[width=701, height=465]{images/phylo-draw-example.png}
-\label{fig:phylo-draw-example}
-\end{htmlonly}
 
-\begin{latexonly}
 \begin{figure}[tbp]
 \centering
 \includegraphics[width=0.7\textwidth]{images/phylo-draw-example.png}
 \caption{A simple rooted tree plotted with the \texttt{draw} function.}
 \label{fig:phylo-draw-example}
 \end{figure}
-\end{latexonly}
 
-
+See Figure~\ref{fig:phylo-draw-example} for example.
 
 See the Phylo page on the Biopython wiki (\url{http://biopython.org/wiki/Phylo}) for
 descriptions and examples of the more advanced functionality in \verb|draw_ascii|,

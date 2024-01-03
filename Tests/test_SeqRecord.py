@@ -12,9 +12,9 @@ import unittest
 try:
     import numpy
 except ImportError:
-    numpy = None
+    numpy = None  # type: ignore
 
-from Bio import SeqIO
+from Bio import BiopythonDeprecationWarning, SeqIO
 from Bio.Seq import MutableSeq
 from Bio.Seq import Seq
 from Bio.SeqFeature import AfterPosition
@@ -127,6 +127,11 @@ class SeqRecordCreation(unittest.TestCase):
     def test_valid_features(self):
         with self.assertRaises(TypeError):
             SeqRecord(Seq("ACGT"), features={})
+
+    def test_deprecated_string_seq(self):
+        with self.assertWarns(BiopythonDeprecationWarning):
+            record = SeqRecord("ACGT")
+            self.assertTrue(isinstance(record._seq, Seq))
 
 
 class SeqRecordMethods(unittest.TestCase):
@@ -509,31 +514,31 @@ class SeqRecordMethodsMore(unittest.TestCase):
 
     def test_le_exception(self):
         def le():
-            return SeqRecord(Seq("A")) <= SeqRecord(Seq("A"))
+            return SeqRecord(Seq("A")) <= SeqRecord(Seq("A"))  # type: ignore
 
         self.assertRaises(NotImplementedError, le)
 
     def test_eq_exception(self):
         def equality():
-            return SeqRecord(Seq("A")) == SeqRecord(Seq("A"))
+            return SeqRecord(Seq("A")) == SeqRecord(Seq("A"))  # type: ignore
 
         self.assertRaises(NotImplementedError, equality)
 
     def test_ne_exception(self):
         def notequality():
-            return SeqRecord(Seq("A")) != SeqRecord(Seq("A"))
+            return SeqRecord(Seq("A")) != SeqRecord(Seq("A"))  # type: ignore
 
         self.assertRaises(NotImplementedError, notequality)
 
     def test_gt_exception(self):
         def gt():
-            return SeqRecord(Seq("A")) > SeqRecord(Seq("A"))
+            return SeqRecord(Seq("A")) > SeqRecord(Seq("A"))  # type: ignore
 
         self.assertRaises(NotImplementedError, gt)
 
     def test_ge_exception(self):
         def ge():
-            return SeqRecord(Seq("A")) >= SeqRecord(Seq("A"))
+            return SeqRecord(Seq("A")) >= SeqRecord(Seq("A"))  # type: ignore
 
         self.assertRaises(NotImplementedError, ge)
 

@@ -38,7 +38,6 @@ class MMTFIO(StructureIO):
 
     def __init__(self):
         """Initialise."""
-        pass
 
     def save(self, filepath, select=_select):
         """Save the structure to a file.

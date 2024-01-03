@@ -5,7 +5,7 @@ build
 dist
 
 #Ignore backup files from some Unix editors,
-\#*.py\#
+\#*\#
 *~
 *.swp
 *.bak

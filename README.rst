@@ -73,7 +73,7 @@ with just one terminal command::
     pip uninstall biopython
 
 Since Biopython 1.70 we have provided pre-compiled binary wheel packages on
-PyPI for Linux, Mac OS X and Windows. This means pip install should be quick,
+PyPI for Linux, macOS and Windows. This means pip install should be quick,
 and not require a compiler.
 
 As a developer or potential contributor, you may wish to download, build and
@@ -83,14 +83,14 @@ install Biopython yourself. This is described below.
 Python Requirements
 ===================
 
-We currently recommend using Python 3.10 from http://www.python.org
+We currently recommend using Python 3.11 from http://www.python.org
 
 Biopython is currently supported and tested on the following Python
 implementations:
 
-- Python 3.7, 3.8, 3.9, 3.10 and 3.11 -- see http://www.python.org
+- Python 3.8, 3.9, 3.10, 3.11 and 3.12 -- see http://www.python.org
 
-- PyPy3.7 v7.3.5 -- or later, see http://www.pypy.org
+- PyPy3.8 v7.3.11 -- or later, see http://www.pypy.org
 
 
 Optional Dependencies

@@ -536,6 +536,7 @@ Length 394
 \end{minted}
 
 \section{Sequence files as Dictionaries}
+\label{sec:SeqIO_directionaries}
 
 Looping over the iterator returned by \verb|SeqIO.parse| once will exhaust the file. For self-indexed files, such as files in the twoBit format, the return value of \verb|SeqIO.parse| can also be used as a dictionary, allowing random access to the sequence contents. As in this case parsing is done on demand, the file must remain open as long as the sequence data is being accessed:
 

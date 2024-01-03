@@ -194,7 +194,7 @@ static struct PyMethodDef methods[] = {
     METH_VARARGS | METH_KEYWORDS,
     PyDoc_STR(calculate__doc__),
    },
-   {NULL, NULL, 0, NULL} // sentinel
+   {NULL, NULL, 0, NULL} /* sentinel */
 };
 
 static struct PyModuleDef moduledef = {

@@ -272,7 +272,7 @@ This is the way many structural biologists/bioinformaticians think
 about structure, and provides a simple but efficient way to deal with
 structure. Additional stuff is essentially added when needed. A UML
 diagram of the \texttt{Structure} object (forget about the \texttt{Disordered}
-classes for now) is shown in Fig. \ref{fig:smcra}. Such a data structure is not
+classes for now) is shown in Figure~\ref{fig:smcra}. Such a data structure is not
 necessarily best suited for the representation of the macromolecular content of
 a structure, but it is absolutely necessary for a good interpretation of the
 data present in a file that describes the structure (typically a PDB or MMCIF
@@ -284,13 +284,8 @@ detect likely problems. We will give several examples of this in section
 \ref{sec:problem_structures}.
 
 \begin{figure}[htbp]
-\begin{htmlonly}
-\imgsrc[width=650, height=750]{images/smcra.png}
-\end{htmlonly}
-\begin{latexonly}
 \centering
 \includegraphics[width=0.8\textwidth]{images/smcra.png}
-\end{latexonly}
 \caption{UML diagram of SMCRA architecture of the \texttt{Structure} class used to represent a macromolecular structure.
 Full lines with diamonds denote aggregation, full lines with
 arrows denote referencing, full lines with triangles denote inheritance
@@ -607,7 +602,7 @@ can be specified by the user.
 
 Disordered atoms are represented by ordinary \texttt{Atom} objects, but
 all \texttt{Atom} objects that represent the same physical atom are stored
-in a \texttt{Disordered\-Atom} object (see Fig. \ref{fig:smcra}).
+in a \texttt{Disordered\-Atom} object (see Figure~\ref{fig:smcra}).
 Each \texttt{Atom} object in a \texttt{Disordered\-Atom} object can
 be uniquely indexed using its altloc specifier. The \texttt{Disordered\-Atom}
 object forwards all uncaught method calls to the selected Atom object,
@@ -653,8 +648,8 @@ Since these residues belong to a different residue type (e.g. let's
 say Ser 60 and Cys 60) they should not be stored in a single \texttt{Residue}
 object as in the common case. In this case, each residue is represented
 by one \texttt{Residue} object, and both \texttt{Residue} objects
-are stored in a single \texttt{Disordered\-Residue} object (see Fig.
-\ref{fig:smcra}).
+are stored in a single \texttt{Disordered\-Residue} object (see
+Figure~\ref{fig:smcra}).
 
 The \texttt{Dis\-ordered\-Residue} object forwards all un\-caught methods to
 the selected \texttt{Residue} object (by default the last \texttt{Residue}
@@ -776,7 +771,7 @@ You can use this to go up in the hierarchy, e.g. to get a list of
 \end{minted}
 For more info, see the API documentation.
 
-\subsection*{Extract a hetero residue from a chain (e.g. a glucose (GLC) moiety with resseq 10)}
+\subsection*{Extract hetero residue from chain (e.g. glucose (GLC) moiety with resseq 10)}
 
 \begin{minted}{pycon}
 >>> residue_id = ("H_GLC", 10, " ")
@@ -794,7 +789,7 @@ For more info, see the API documentation.
 ...
 \end{minted}
 
-\subsection*{Print out the coordinates of all CA atoms in a structure with B factor greater than 50}
+\subsection*{Print out coordinates of all CA atoms in structure with B factor over 50}
 
 \begin{minted}{pycon}
 >>> for model in structure.get_list():
@@ -920,7 +915,7 @@ the \texttt{calc\_dihedral} function from the \texttt{Vector} module:
 >>> angle = calc_dihedral(vector1, vector2, vector3, vector4)
 \end{minted}
 
-\subsection{Internal coordinates module - distances, angles, torsion angles, distance plots and more}
+\subsection{Internal coordinates - distances, angles, torsion angles, distance plots, etc}
 \label{sec:internal_coordinates}
 
 Protein structures are normally supplied in 3D XYZ coordinates relative to a fixed origin, as in a PDB or mmCIF file.
@@ -1102,7 +1097,8 @@ what you want).
 1.49
 \end{minted}
 
-Rebuilding a structure from internal coordinates is a simple call to \texttt{internal\_to\_atom\_coordinates\(\)}:
+Rebuilding a structure from internal coordinates is a simple call to
+\verb|internal_to_atom_coordinates()|:
 
 %cont-doctest
 \begin{minted}{pycon}
@@ -1260,7 +1256,6 @@ as may be desired.  The \texttt{distance\_plot\(\)} method wraps the line above
 and accepts an optional selector like \texttt{CaSelect} defined in the previous
 section.  See Figure~\ref{fig:distanceplot}.
 
-\begin{figure}[h!]
 \begin{minted}{python}
 # create a C-alpha distance plot
 caDistances = myChain.internal_coord.distance_plot(CaSelect)
@@ -1271,12 +1266,8 @@ plt.imshow(caDistances, cmap="hot", interpolation="nearest")
 plt.show()
 \end{minted}
 
-\begin{htmlonly}
-\imgsrc[width=280, height=280]{images/1a8o-ca-plot.png}
-\end{htmlonly}
-\begin{latexonly}
+\begin{figure}[h!]
 \includegraphics[width=0.3\textwidth]{images/1a8o-ca-plot.png}
-\end{latexonly}
 \caption{C$\alpha$ distance plot for PDB file 1A8O (HIV capsid C-terminal domain)}
 \label{fig:distanceplot}
 \end{figure}
@@ -1384,12 +1375,7 @@ across multiple protein structures, e.g. Figure~\ref{fig:phepairs}.
 
 \begin{figure}[htbp]
 \centering
-\begin{htmlonly}
-\imgsrc[width=360, height=360]{images/phe-pairs-3pbl.png}
-\end{htmlonly}
-\begin{latexonly}
 \includegraphics[width=0.7\textwidth]{images/phe-pairs-3pbl.png}
-\end{latexonly}
 \caption{Neighboring phenylalanine sidechains in PDB file 3PBL (human dopamine D3 receptor)}
 \label{fig:phepairs}
 \end{figure}
@@ -1397,7 +1383,7 @@ across multiple protein structures, e.g. Figure~\ref{fig:phepairs}.
 This example superimposes each PHE residue in a chain on its N-C$\alpha$-C$\beta$ atoms,
 and presents all PHEs in the chain in the respective coordinate space as a simple demonstration.
 A more realistic exploration of pairwise sidechain interactions would examine a dataset of
-structures and filter for interaction classes as descussed in the relevant literature.
+structures and filter for interaction classes as discussed in the relevant literature.
 
 \begin{minted}{python}
 # superimpose all phe-phe pairs - quick hack just to demonstrate concept
@@ -1524,7 +1510,7 @@ Half Sphere Exposure (HSE) is a new, 2D measure of solvent exposure
 \cite{hamelryck2005}.
 Basically, it counts the number of C$\alpha$ atoms around a residue
 in the direction of its side chain, and in the opposite direction
-(within a radius of $13 \AA$). Despite its simplicity, it outperforms
+(within a radius of 13 \AA. Despite its simplicity, it outperforms
 many other measures of solvent exposure.
 
 HSE comes in two flavors: HSE$\alpha$ and HSE$\beta$. The former
