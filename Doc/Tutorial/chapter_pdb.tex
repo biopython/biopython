@@ -110,18 +110,18 @@ Example:
 >>> resolution = structure.header["resolution"]
 >>> keywords = structure.header["keywords"]
 \end{minted}
-The available keys are \verb+name+, \verb+head+, \verb+deposition_date+, 
-\verb+release_date+, \verb+structure_method+, \verb+resolution+, 
+The available keys are \verb+name+, \verb+head+, \verb+deposition_date+,
+\verb+release_date+, \verb+structure_method+, \verb+resolution+,
 \verb+structure_reference+ (which maps to a list of references),
 \verb+journal_reference+, \verb+author+, \verb+compound+ (which maps to
 a dictionary with various information about the crystallized compound),
-\verb+has_missing_residues+, \verb+missing_residues+, and \verb+astral+ 
+\verb+has_missing_residues+, \verb+missing_residues+, and \verb+astral+
 (which maps to dictionary with additional information about the domain if present).
 
 \verb+has_missing_residues+ maps to a bool that is True if at least
 one non-empty \verb+REMARK 465+ header line was found. In this case
-you should assume that the molecule used in the experiment has some 
-residues for which no ATOM coordinates could be determined. 
+you should assume that the molecule used in the experiment has some
+residues for which no ATOM coordinates could be determined.
 \verb+missing_residues+ maps to a list of dictionaries with information
 about the missing residues. \emph{The list of missing residues will be
 empty or incomplete if the PDB header does not follow the template from
@@ -149,7 +149,7 @@ Create a \texttt{PDBParser} object, using the \texttt{is\_pqr} flag:
 >>> pqr_parser = PDBParser(PERMISSIVE=1, is_pqr=True)
 \end{minted}
 
-The \texttt{is\_pqr} flag set to \texttt{True} indicates that the file to be parsed is a PQR file, 
+The \texttt{is\_pqr} flag set to \texttt{True} indicates that the file to be parsed is a PQR file,
 and that the parser should read the atomic charge and radius fields for each atom entry. Following the same procedure as for PQR files, a Structure object is then produced, and the PQR file is parsed.
 
 \begin{minted}{pycon}
@@ -227,7 +227,7 @@ a chain between a start and end residue.
 
 \subsection{Writing PQR files}
 
-Use the \texttt{PDBIO} class as you would for a PDB file, with the flag \texttt{is\_pqr=True}. 
+Use the \texttt{PDBIO} class as you would for a PDB file, with the flag \texttt{is\_pqr=True}.
 The PDBIO methods can be used in the case of PQR files as well.
 
 Example: writing a PQR file
@@ -986,7 +986,6 @@ distance by specifying the atom pair:
 >>> r2ic = r2.internal_coord
 >>> print(r2ic, ":", r2ic.pretty_str(), ":", r2ic.rbase, ":", r2ic.lc)
 ('1a8o', 0, 'A', (' ', 152, ' ')) : ASP  152  : (152, None, 'D') : D
-
 >>> r2chi1 = r2ic.get_angle("chi1")
 >>> print(round(r2chi1, 2))
 -144.86
@@ -1001,12 +1000,12 @@ True
 \end{minted}
 
 The \texttt{Chain.internal\_coord} object holds arrays and dictionaries of hedra (3
-bonded atoms) and dihedra (4 bonded atoms) objects.  The dictionaries are indexed 
+bonded atoms) and dihedra (4 bonded atoms) objects.  The dictionaries are indexed
 by tuples of \texttt{AtomKey} objects; \texttt{AtomKey} objects capture residue position, insertion
-code, 1 or 3-character residue name, atom name, altloc and occupancy.  
+code, 1 or 3-character residue name, atom name, altloc and occupancy.
 
 Below we obtain the same \textit{chi1} and \textit{tau} angles as above by indexing the \texttt{Chain}
-arrays directly, using \texttt{AtomKey}s to index the \texttt{Chain} arrays: 
+arrays directly, using \texttt{AtomKey}s to index the \texttt{Chain} arrays:
 
 %cont-doctest
 \begin{minted}{pycon}
@@ -1135,7 +1134,7 @@ filled in with default values if not specified and \texttt{read\_PIC\(\)} is cal
 cullpdb\_pc20\_res2.2\_R1.0.
 
 Here we write `myChain' as a \texttt{.pic} file of internal coordinate specifications and then
-read it back in as `myProtein2'.  
+read it back in as `myProtein2'.
 
 % no doctest to avoid writing files
 \begin{minted}{python}
@@ -1161,11 +1160,11 @@ myProtein3 = read_PIC_seq(
 myProtein3.internal_to_atom_coordinates()
 write_PDB(myProtein3, "myRandom.pdb")
 \end{minted}
-    
+
 It may be of interest to explore the accuracy required in e.g. \textit{omega} angles (180.0), hedra angles
 and/or bond lengths when generating structures from internal coordinates.  The picFlags
 option to \texttt{write\_PIC\(\)} enables this, allowing the selection of data to be written
-to the .pic file vs. left unspecified to get default values.  
+to the .pic file vs. left unspecified to get default values.
 
 Various combinations are possible and some presets are supplied, for example \texttt{classic}
 will write only \textit{psi, phi, tau}, proline \textit{omega} and sidechain \textit{chi}
@@ -1181,11 +1180,11 @@ myProtein2 = read_PIC("myChain.pic", defaults=True)
 All 3D XYZ coordinates in Biopython \texttt{Atom} objects are moved to a single large array
 in the \texttt{Chain} class and replaced by Numpy `views' into this array in an early step of
 \texttt{atom\_to\_internal\_coordinates\(\)}.  Software accessing Biopython \texttt{Atom} coordinates
-is not affected, but the new array may offer efficiencies for future work.  
+is not affected, but the new array may offer efficiencies for future work.
 
 Unlike the \texttt{Atom} XYZ coordinates, \texttt{AtomArray} coordinates are homogeneous, meaning
 they are arrays like \texttt{[ x y z 1.0]} with 1.0 as the fourth element.  This facilitates efficient transformation using combined
-translation and rotation matrices throughout the \texttt{internal\_coords} module.  There is a 
+translation and rotation matrices throughout the \texttt{internal\_coords} module.  There is a
 corresponding \texttt{AtomArrayIndex} dictionary, mapping \texttt{AtomKeys} to their coordinates.
 
 Here we demonstrate reading coordinates for a specific C$\beta$ atom from the array, then show
@@ -1278,10 +1277,10 @@ The all-atom distance plot is another representation of a protein structure, als
 invariant to translation and rotation but lacking in chirality information (a
 mirror-image structure will generate the same distance plot).  By combining the
 distance matrix with the signs of each dihedral angle, it is possible to regenerate
-the internal coordinates.  
+the internal coordinates.
 
 This work uses equations developed by Blue, the Hedronometer,
-discussed in \url{https://math.stackexchange.com/a/49340/409} and further in 
+discussed in \url{https://math.stackexchange.com/a/49340/409} and further in
 \url{http://daylateanddollarshort.com/mathdocs/Heron-like-Results-for-Tetrahedral-Volume.pdf}.
 
 To begin, we extract the distances and chirality values from `myChain':
@@ -1379,7 +1378,7 @@ across multiple protein structures, e.g. Figure~\ref{fig:phepairs}.
 \caption{Neighboring phenylalanine sidechains in PDB file 3PBL (human dopamine D3 receptor)}
 \label{fig:phepairs}
 \end{figure}
-	
+
 This example superimposes each PHE residue in a chain on its N-C$\alpha$-C$\beta$ atoms,
 and presents all PHEs in the chain in the respective coordinate space as a simple demonstration.
 A more realistic exploration of pairwise sidechain interactions would examine a dataset of
@@ -1413,7 +1412,7 @@ for ric in cic.ordered_aa_ic_list:  # internal_coords version of get_residues()
 
 \subsubsection{3D printing protein structures}
 
-OpenSCAD (\url{https://openscad.org}) is a language for creating solid 3D CAD objects.  
+OpenSCAD (\url{https://openscad.org}) is a language for creating solid 3D CAD objects.
 The algorithm to construct a protein structure from internal coordinates is supplied
 in OpenSCAD with data describing a structure, such that a model can be generated suitable
 for 3D printing.  While other software can generate STL data as a rendering option for
