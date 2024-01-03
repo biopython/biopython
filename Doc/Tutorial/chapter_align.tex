@@ -16,7 +16,7 @@ The \verb|Alignment| class is defined in \verb|Bio.Align|. Usually you would get
 \label{subsec:align_sequences_coordinates}
 
 Suppose you have three sequences:
-%doctest ../Tests/Blat lib:numpy
+%doctest ../Tests lib:numpy
 \begin{minted}{pycon}
 >>> seqA = "CCGGTTTTT"
 >>> seqB = "AGTTTAA"
@@ -693,7 +693,7 @@ The map method can also be used to lift over an alignment between different geno
 %cont-doctest
 \begin{minted}{pycon}
 >>> from Bio import Align
->>> chain = Align.read("panTro5ToPanTro6.over.chain", "chain")
+>>> chain = Align.read("Blat/panTro5ToPanTro6.over.chain", "chain")
 >>> chain.sequences[0].id
 'chr1'
 >>> len(chain.sequences[0].seq)
@@ -711,7 +711,7 @@ The map method can also be used to lift over an alignment between different geno
 showing that the range 122250000:122909835 of chr1 on chimpanzee genome assembly panTro5 aligns to range 111776384:112019978 of chr1 of chimpanzee genome assembly panTro6. See section \ref{subsec:align_chain} for more information about the chain file format.
 %cont-doctest
 \begin{minted}{pycon}
->>> transcript = Align.read("est.panTro5.psl", "psl")
+>>> transcript = Align.read("Blat/est.panTro5.psl", "psl")
 >>> transcript.sequences[0].id
 'chr1'
 >>> len(transcript.sequences[0].seq)
@@ -773,7 +773,7 @@ Consider a multiple alignment of genomic sequences of chimpanzee, human, macaque
 %cont-doctest
 \begin{minted}{pycon}
 >>> from Bio import Align
->>> path = "panTro5.maf"
+>>> path = "Blat/panTro5.maf"
 >>> genome_alignment = Align.read(path, "maf")
 >>> for record in genome_alignment.sequences:
 ...     print(record.id, len(record.seq))
@@ -825,12 +825,12 @@ To lift over the genome assembly for each species, we read in the corresponding 
 %cont-doctest
 \begin{minted}{pycon}
 >>> paths = [
-...     "panTro5ToPanTro6.chain",
-...     "hg19ToHg38.chain",
-...     "rheMac8ToRheMac10.chain",
-...     "calJac3ToCalJac4.chain",
-...     "mm10ToMm39.chain",
-...     "rn6ToRn7.chain",
+...     "Blat/panTro5ToPanTro6.chain",
+...     "Blat/hg19ToHg38.chain",
+...     "Blat/rheMac8ToRheMac10.chain",
+...     "Blat/calJac3ToCalJac4.chain",
+...     "Blat/mm10ToMm39.chain",
+...     "Blat/rn6ToRn7.chain",
 ... ]
 >>> liftover_alignments = [Align.read(path, "chain") for path in paths]
 >>> for liftover_alignment in liftover_alignments:
@@ -975,9 +975,122 @@ Output from sequence alignment software such as Clustal can be parsed into \verb
 \subsection{Reading alignments}
 \label{subsec:align_reading}
 
-The alignments iterator returned by \verb|Bio.Align.parse| inherits from the \verb|AlignmentsAbstractBaseClass| base class. This class defines a \verb|rewind| method that resets the iterator to let it loop over the alignments from the beginning. You can also call \verb|len| on the alignments to obtain the number of alignments. Depending on the file format, the number of alignments may be explicitly stored in the file (for example in the case of bigBed, bigPsl, and bigMaf files), or otherwise the number of alignments is counted by looping over them once (and returning the iterator to its original position). If the file is large, it may therefore take a considerable amount of time for \verb|len| to return. As the number of alignments is cached, subsequent calls to \verb|len| will return quickly.
+Use \verb|Bio.Align.parse| to parse a file of sequence alignments. For example, the file \verb|ucsc_mm9_chr10.maf| contains 48 multiple sequence alignments in the MAF (Multiple Alignment Format) format (see section \ref{subsec:align_maf}):
 
-Depending on the file format, the alignments object returned by \verb|Bio.Align.parse| may contain attributes that store metadata found in the file, such as the version number of the software that was used to create the alignments. The specific attributes stored for each file format are described in Section~\ref{sec:alignformats}.
+%cont-doctest
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> alignments = Align.parse("MAF/ucsc_mm9_chr10.maf", "maf")
+>>> alignments  # doctest: +ELLIPSIS
+<Bio.Align.maf.AlignmentIterator object at 0x...>
+\end{minted}
+where \verb|"maf"| is the file format.
+The alignments object returned by \verb|Bio.Align.parse| may contain attributes that store metadata found in the file, such as the version number of the software that was used to create the alignments. The specific attributes stored for each file format are described in Section~\ref{sec:alignformats}. For MAF files, we can obtain the file format version and the scoring scheme that was used:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignments.metadata
+{'MAF Version': '1', 'Scoring': 'autoMZ.v1'}
+\end{minted}
+
+As alignment files can be very large, \verb|Align.parse| returns an iterator over the alignments, so you won't have to store all alignments in memory at the same time. You can iterate over these alignments and print out, for example, the number of aligned sequences in each alignment:
+%cont-doctest
+\begin{minted}{pycon}
+>>> for a in alignments:
+...     print(len(a.sequences))  # doctest: +ELLIPSIS
+...
+2
+4
+5
+6
+...
+15
+14
+7
+6
+\end{minted}
+At this point, the iterator is exhausted, meaning that it has reached the end of the file and cannot retrieve any further alignments. Running the \verb|for|-loop again will therefore not print anything:
+%cont-doctest
+\begin{minted}{pycon}
+>>> for a in alignments:
+...     print(len(a.sequences))
+...
+>>>
+\end{minted}
+However, you can use the \verb|rewind| method to reset the iterator to the beginning of the file, letting you to loop over the alignments from the beginning:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignments.rewind()
+>>> for a in alignments:
+...     print(len(a.sequences))  # doctest: +ELLIPSIS
+...
+2
+4
+5
+6
+...
+15
+14
+7
+6
+\end{minted}
+You can also call \verb|len| on the alignments to obtain the number of alignments.
+%cont-doctest
+\begin{minted}{pycon}
+>>> len(alignments)
+48
+\end{minted}
+Depending on the file format, the number of alignments may be explicitly stored in the file (for example in the case of bigBed, bigPsl, and bigMaf files), or otherwise the number of alignments is counted by looping over them once (and returning the iterator to its original position).  If the file is large, it may therefore take a considerable amount of time for \verb|len| to return. However, as the number of alignments is cached, subsequent calls to \verb|len| will return quickly.
+
+If the number of alignments is not excessively large and will fit in memory, you can convert the alignments iterator to a list of alignments. To do so, you could call \verb|list| on the \verb|alignments| (after rewinding if needed):
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignments.rewind()
+>>> alignment_list = list(alignments)
+>>> len(alignment_list)
+48
+>>> alignment_list[27]  # doctest: +ELLIPSIS
+<Alignment object (3 rows x 91 columns) at 0x...>
+>>> print(alignment_list[27])
+mm9.chr10   3019377 CCCCAGCATTCTGGCAGACACAGTG-AAAAGAGACAGATGGTCACTAATAAAATCTGT-A
+felCat3.s     46845 CCCAAGTGTTCTGATAGCTAATGTGAAAAAGAAGCATGTGCCCACCAGTAAGCTTTGTGG
+canFam2.c  47545247 CCCAAGTGTTCTGATTGCCTCTGTGAAAAAGAAACATGGGCCCGCTAATAagatttgcaa
+<BLANKLINE>
+mm9.chr10   3019435 TAAATTAG-ATCTCAGAGGATGGATGGACCA  3019465
+felCat3.s     46785 TGAACTAGAATCTCAGAGGATG---GGACTC    46757
+canFam2.c  47545187 tgacctagaatctcagaggatg---ggactc 47545159
+<BLANKLINE>
+\end{minted}
+But this will lose the metadata information:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment_list.metadata  # doctest: +ELLIPSIS
+Traceback (most recent call last):
+  ...
+AttributeError: 'list' object has no attribute 'metadata'
+\end{minted}
+Instead, you can ask for a full slice of the alignments:
+%cont-doctest
+\begin{minted}{pycon}
+>>> type(alignments)
+<class 'Bio.Align.maf.AlignmentIterator'>
+>>> alignments = alignments[:]
+>>> type(alignments)
+<class 'Bio.Align.Alignments'>
+\end{minted}
+This returns a \verb|Bio.Align.Alignments| object, which can be used as a list, while keeping the metadata information:
+%cont-doctest
+\begin{minted}{pycon}
+>>> len(alignments)
+48
+>>> print(alignments[11])
+mm9.chr10   3014742 AAGTTCCCTCCATAATTCCTTCCTCCCACCCCCACA 3014778
+calJac1.C      6283 AAATGTA-----TGATCTCCCCATCCTGCCCTG---    6311
+otoGar1.s    175262 AGATTTC-----TGATGCCCTCACCCCCTCCGTGCA  175231
+loxAfr1.s      9317 AGGCTTA-----TG----CCACCCCCCACCCCCACA    9290
+<BLANKLINE>
+>>> alignments.metadata
+{'MAF Version': '1', 'Scoring': 'autoMZ.v1'}
+\end{minted}
 
 \subsection{Writing alignments}
 \label{subsec:align_writing}
@@ -988,7 +1101,7 @@ To write alignments to a file, use
 >>> target = "myfile.txt"
 >>> Align.write(alignments, target, "clustal")
 \end{minted}
-where \verb|alignments| is either a single alignment or a list of alignments, \verb|target| is a file name or an open file-like object, and \verb|"clustal"| is the file format to be used. As some file formats allow or require metadata to be stored with the alignments, you may want to use the \verb|Alignments| (plural) class instead of a plain list of alignments (see Section~\ref{sec:alignments}), alloing you to store a metadata dictionary as an attribute on the \verb|alignments| object:
+where \verb|alignments| is either a single alignment or a list of alignments, \verb|target| is a file name or an open file-like object, and \verb|"clustal"| is the file format to be used. As some file formats allow or require metadata to be stored with the alignments, you may want to use the \verb|Alignments| (plural) class instead of a plain list of alignments (see Section~\ref{sec:alignments}), allowing you to store a metadata dictionary as an attribute on the \verb|alignments| object:
 \begin{minted}{pycon}
 >>> from Bio import Align
 >>> alignments = Align.Alignments(alignments)

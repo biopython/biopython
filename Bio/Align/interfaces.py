@@ -165,11 +165,14 @@ class AlignmentIterator(AlignmentsAbstractBaseClass):
         alignments = Alignments()
         stream = self._stream
         stream.seek(0)
+        # Read the header information and store it on the new alignments object:
         read_header(alignments, stream)
-        self._index = 0
-        for alignment in self:
-            alignments.append(alignment)
+        # Rewind the iterator to initialize it correctly for iteration:
+        self.rewind()
+        alignments.extend(self)
+        # May as well store the number of alignments while we are at it:
         self._len = self._index
+        # Return the alignments iterator to its original position:
         self.rewind()
         while self._index < index:
             next(self)
