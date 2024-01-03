@@ -17,9 +17,34 @@ This release of Biopython supports Python 3.8, 3.9, 3.10, 3.11 and 3.12. It
 has also been tested on PyPy3.9 v7.3.13. Python 3.8 is approaching end of
 life, our support for it is now deprecated.
 
+Bio.Blast contains a new parser for BLAST XML output as a replacement for the
+old parser in Bio.Blast.NCBIXML. The main differences between the parsers is
+as follows:
+- The old parser stores information in a Bio.Blast.NCBIXML.Blast object, with
+attribute names based on plain-text Blast output. The new parser stores
+information in a Bio.Blast.Record object. This class follows the DTD that
+describes the XML in terms of attribute names and dictionary key names, class
+structure, and object types. This makes it easier to find the detailed
+description of each field in the NCBI Blast documentation.
+- The old parser stores alignment information directly as seen in the BLAST XML
+output, i.e. as strings with dashes to represent gaps. The new parser stores
+the alignment information as a Bio.Align.Alignment object, which can then be
+used to e.g. print the alignment in a different format.
+
+Bio.Blast also contains a new qblast function as a replacement for the old
+qblast function in Bio.Blast.NCBIWWW. The main difference is that the old
+qblast function in Bio.Blast.NCBIWWW returns the BLAST search results as Python
+strings, while the new qblast returns bytes objects. Note that in Python, to
+parse an XML file it should be opened in binary mode, as the string encoding is
+specified in the XML data itself. The object returned by the new qblast
+function can therefore be passed directly to the BLAST parser. Also, this
+allows data to be downloaded in a binary format such as JSON2, which returns
+data in a zipped JSON format.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Michiel de Hoon
 - Peter Cock
 
 22 December 2023: Biopython 1.82

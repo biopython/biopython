@@ -130,10 +130,7 @@ i oryCun1.scaffold_133159 N 0 N 0
 """,
         )
 
-    def test_reading_ucsc_mm9_chr10(self):
-        """Test parsing MAF file ucsc_mm9_chr10.maf."""
-        path = "MAF/ucsc_mm9_chr10.maf"
-        alignments = Align.parse(path, "maf")
+    def check_reading_ucsc_mm9_chr10(self, alignments):
         self.assertEqual(alignments.metadata["MAF Version"], "1")
         self.assertEqual(alignments.metadata["Scoring"], "autoMZ.v1")
         alignment = next(alignments)
@@ -10853,6 +10850,18 @@ np.array([['T', 'G', 'T', 'T', 'T', 'A', 'G', 'T', 'A', 'C', 'C', '-', '-',
             )
         )
         self.assertRaises(StopIteration, next, alignments)
+
+    def test_reading_ucsc_mm9_chr10(self):
+        """Test parsing MAF file ucsc_mm9_chr10.maf."""
+        path = "MAF/ucsc_mm9_chr10.maf"
+        alignments = Align.parse(path, "maf")
+        self.check_reading_ucsc_mm9_chr10(alignments)
+        self.assertRaises(StopIteration, next, alignments)
+        alignments.rewind()
+        self.check_reading_ucsc_mm9_chr10(alignments)
+        self.assertRaises(StopIteration, next, alignments)
+        alignments = alignments[:]
+        self.check_reading_ucsc_mm9_chr10(alignments)
 
     def test_reading_missing_signature(self):
         """Test parsing MAF file ucsc_mm9_chr10_big.maf with missing signature."""
