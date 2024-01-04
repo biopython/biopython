@@ -392,43 +392,42 @@ This Tutorial you are reading has a lot of code snippets, which are
 often formatted like a doctest. We have our own system in file
 ``test_Tutorial.py`` to allow tagging code snippets in the Tutorial
 source to be run as Python doctests. This works by adding special
-``%doctest`` comment lines before each Python block, e.g.
+``.. doctest`` comment lines before each Python Console (pycon) block,
+e.g.
 
-::
+.. code:: rst
 
+   .. doctest
 
+   .. code:: pycon
 
-   \pandocignoreme .. doctest
-   \begin{minted}{pycon}
-   >>> from Bio.Seq import Seq
-   >>> s = Seq("ACGT")
-   >>> len(s)
-   4
-   \end{minted}
+      >>> from Bio.Seq import Seq
+      >>> s = Seq("ACGT")
+      >>> len(s)
+      4
 
 Often code examples are not self-contained, but continue from the
-previous Python block. Here we use the magic comment ``%cont-doctest``
+previous Python block. Here we use the magic comment ``.. cont-doctest``
 as shown here:
 
-::
+.. code:: rst
 
+   .. cont-doctest
 
+   .. code:: pycon
 
-   \pandocignoreme .. cont-doctest
-   \begin{minted}{pycon}
-   >>> s == "ACGT"
-   True
-   \end{minted}
+      >>> s == "ACGT"
+      True
 
-The special ``%doctest`` comment line can take a working directory
+The special ``.. doctest`` comment line can take a working directory
 (relative to the ``Doc/`` folder) to use if you have any example data
-files, e.g. ``%doctest examples`` will use the ``Doc/examples`` folder,
-while ``%doctest ../Tests/GenBank`` will use the ``Tests/GenBank``
+files, e.g. ``.. doctest examples`` will use the ``Doc/examples`` folder,
+while ``.. doctest ../Tests/GenBank`` will use the ``Tests/GenBank``
 folder.
 
 After the directory argument, you can specify any Python dependencies
 which must be present in order to run the test by adding ``lib:XXX`` to
-indicate ``import XXX`` must work, e.g. ``%doctest examples lib:numpy``
+indicate ``import XXX`` must work, e.g. ``.. doctest examples lib:numpy``
 
 You can run the Tutorial doctests via:
 
