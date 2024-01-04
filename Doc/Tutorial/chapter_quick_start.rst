@@ -55,12 +55,11 @@ Working with sequences
 Disputably (of course!), the central object in bioinformatics is the
 sequence. Thus, we’ll start with a quick introduction to the Biopython
 mechanisms for dealing with sequences, the ``Seq`` object, which we’ll
-discuss in more detail in
-Chapter :ref:`chapter:seq_objects`.
+discuss in more detail in Chapter :ref:`chapter:seq_objects`.
 
 Most of the time when we think about sequences we have in my mind a
-string of letters like ‘``AGTACACTGGT``’. You can create such ``Seq``
-object with this sequence as follows - the “``>>>``” represents the
+string of letters like ``AGTACACTGGT``. You can create such ``Seq``
+object with this sequence as follows - the ``>>>`` represents the
 Python prompt followed by what you would type in:
 
 .. doctest
@@ -135,10 +134,9 @@ let’s look at how the Biopython tools can help us. We’ll start with
 sequence parsing in Section :ref:`sec:sequence-parsing`, but the
 orchids will be back later on as well - for example we’ll search PubMed
 for papers about orchids and extract sequence data from GenBank in
-Chapter :ref:`chapter:entrez`, extract data from
-Swiss-Prot from certain orchid proteins in
-Chapter :ref:`chapter:uniprot`, and work with ClustalW
-multiple sequence alignments of orchid proteins in
+Chapter :ref:`chapter:entrez`, extract data from Swiss-Prot from
+certain orchid proteins in Chapter :ref:`chapter:uniprot`, and work
+with ClustalW multiple sequence alignments of orchid proteins in
 Section :ref:`subsec:align_clustal`.
 
 .. _`sec:sequence-parsing`:
@@ -196,7 +194,7 @@ in your favorite text editor, you’ll see that the file starts like this:
    AATCCGGAGGACCGGTGTACTCAGCTCACCGGGGGCATTGCTCCCGTGGTGACCCTGATTTGTTGTTGGG
    ...
 
-It contains 94 records, each has a line starting with “``>``”
+It contains 94 records, each has a line starting with ``>``
 (greater-than symbol) followed by the sequence on one or more lines. Now
 try this in Python:
 
@@ -259,9 +257,9 @@ I love parsing – please don’t stop talking about it!
 
 Biopython has a lot of parsers, and each has its own little special
 niches based on the sequence format it is parsing and all of that.
-Chapter :ref:`chapter:seqio` covers ``Bio.SeqIO`` in
-more detail, while Chapter :ref:`chapter:align`
-introduces ``Bio.Align`` for sequence alignments.
+Chapter :ref:`chapter:seqio` covers ``Bio.SeqIO`` in more detail,
+while Chapter :ref:`chapter:align` introduces ``Bio.Align`` for
+sequence alignments.
 
 While the most popular file formats have parsers integrated into
 ``Bio.SeqIO`` and/or ``Bio.AlignIO``, for some of the rarer and unloved
