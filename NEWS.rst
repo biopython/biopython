@@ -17,6 +17,10 @@ This release of Biopython supports Python 3.8, 3.9, 3.10, 3.11 and 3.12. It
 has also been tested on PyPy3.9 v7.3.13. Python 3.8 is approaching end of
 life, our support for it is now deprecated.
 
+Our main documentation, the Biopython Tutorial and Cookbook, has been
+converted from LaTeX to reStructuredText, and combined with the existing API
+documentation, into a single more modern and navigable HTML output.
+
 Bio.Blast contains a new parser for BLAST XML output as a replacement for the
 old parser in Bio.Blast.NCBIXML. The main differences between the parsers is
 as follows:
@@ -48,6 +52,7 @@ function to convert the same object into a ``networkx`` graph.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Anil Tuncel (first contribution)
 - Fabio Zanini (first contribution)
 - Michiel de Hoon
 - Peter Cock
