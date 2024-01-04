@@ -337,9 +337,18 @@ def run_apidoc(_):
     os.remove(os.path.join(tmp_path, "index.rst"))  # Using our own
     for filename in os.listdir(tmp_path):
         if filename.endswith(".rst"):
-            shutil.move(
-                os.path.join(tmp_path, filename), os.path.join(cur_dir, "api", filename)
-            )
+            # Use to just move the files, but sometimes see dubplicated TOC
+            # entries from our non-private C extensions... so remove any:
+            with open(os.path.join(tmp_path, filename)) as in_h:
+                with open(os.path.join(cur_dir, "api", filename), "w") as out_h:
+                    prev = ""
+                    for line in in_h:
+                        if line != prev:
+                            out_h.write(line)
+                        prev = line
+            # shutil.move(
+            #    os.path.join(tmp_path, filename), os.path.join(cur_dir, "api", filename)
+            # )
     shutil.rmtree(tmp_path)
 
     for f in os.listdir(os.path.join(cur_dir, "api")):
