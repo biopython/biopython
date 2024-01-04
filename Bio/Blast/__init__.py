@@ -406,7 +406,7 @@ class Records(UserList):
 
     def __iter__(self):
         if self._loaded is True:
-            return iter(self.data)
+            return iter(self._records)
         return self
 
     def __next__(self):
