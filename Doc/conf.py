@@ -71,9 +71,9 @@ except ValueError:
 prev_minor_version = int(minor_version) - (2 if dev_version else 1)
 previous_version = f"{main_version}.{prev_minor_version}"
 versions = [
-    ("Previous", f"../../{previous_version}/"),
-    ("Latest", "../../latest/"),
-    ("Develop", "../../dev/"),
+    ("Previous", f"../{previous_version}/"),
+    ("Latest", "../latest/"),
+    ("Develop", "../dev/"),
 ]
 
 if version < "1.75":  # 1.74 is the earliest Sphinx-generated api documentation
