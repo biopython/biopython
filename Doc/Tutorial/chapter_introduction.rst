@@ -19,8 +19,8 @@ The Biopython web site (http://www.biopython.org) provides an online
 resource for modules, scripts, and web links for developers of
 Python-based software for bioinformatics use and research. Biopython
 includes parsers for various bioinformatics file formats (BLAST,
-Clustalw, FASTA, Genbank,...), access to online services (NCBI,
-Expasy,...), a standard sequence class, sequence alignment and motif
+Clustalw, FASTA, Genbank, ...), access to online services (NCBI,
+Expasy, ...), a standard sequence class, sequence alignment and motif
 analysis tools, clustering algorithms, a module for structural biology,
 and a module for phylogenetics analysis.
 
