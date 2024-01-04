@@ -28,14 +28,14 @@ BlatIO supports parsing, indexing, and writing for both PSL and PSLX output
 formats, with or without header. To parse, index, or write PSLX files, use the
 'pslx' keyword argument and set it to True.
 
-    # blat-psl defaults to PSL files
+    >>> # blat-psl defaults to PSL files
     >>> from Bio import SearchIO
     >>> psl = 'Blat/psl_34_004.psl'
     >>> qresult = SearchIO.read(psl, 'blat-psl')
     >>> qresult
     QueryResult(id='hg19_dna', 10 hits)
 
-    # set the pslx flag to parse PSLX files
+    >>> # set the pslx flag to parse PSLX files
     >>> pslx = 'Blat/pslx_34_004.pslx'
     >>> qresult = SearchIO.read(pslx, 'blat-psl', pslx=True)
     >>> qresult
@@ -46,9 +46,9 @@ header or not. For writing, if you want to write a header, you can set the
 'header' keyword argument to True. This will write a 'psLayout version 3' header
 to your output file.
 
-    from Bio import SearchIO
-    qresult = SearchIO.read(psl, 'blat-psl')
-    SearchIO.write(qresult, 'header.psl', header=True)
+    >>> from Bio import SearchIO
+    >>> qresult = SearchIO.read(psl, 'blat-psl')
+    >>> SearchIO.write(qresult, 'header.psl', header=True)
     <stdout> (1, 10, 19, 23)
 
 Note that the number of HSPFragments written may exceed the number of HSP
