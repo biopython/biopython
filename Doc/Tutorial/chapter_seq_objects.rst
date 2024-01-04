@@ -542,7 +542,7 @@ with a start codon, ends with a stop codon, and has no internal in-frame
 stop codons. In general, given a complete CDS, the default translate
 method will do what you want (perhaps with the ``to_stop`` option).
 However, what if your sequence uses a non-standard start codon? This
-happens a lot in bacteria – for example the gene yaaX in ``E. coli``
+happens a lot in bacteria – for example the gene yaaX in *E. coli*
 K12:
 
 .. code:: pycon
@@ -699,7 +699,7 @@ can track the molecule type, so comparing two ``Seq`` objects could mean
 considering this too.
 
 Should a DNA fragment “ACG” and an RNA fragment “ACG” be equal? What
-about the peptide “ACG“? Or the Python string “ACG“? In everyday use,
+about the peptide “ACG”? Or the Python string “ACG”? In everyday use,
 your sequences will generally all be the same type of (all DNA, all RNA,
 or all protein). Well, as of Biopython 1.65, sequence comparison only
 looks at the sequence and compares like the Python string.
@@ -916,10 +916,11 @@ You can also get a string from a ``MutableSeq`` object just like from a
 Finding subsequences
 --------------------
 
-Sequence objects have “find“, “rfind“, “index“, and “rindex“ methods
-that perform the same function as the corresponding methods on plain
-string objects. The only difference is that the subsequence can be a
-string, “bytes“, “bytearray“, “Seq“, or “MutableSeq“ object:
+Sequence objects have ``find``, ``rfind``, ``index``, and ``rindex``
+methods that perform the same function as the corresponding methods
+on plain string objects. The only difference is that the subsequence
+can be a string (``str``), ``bytes``, ``bytearray``, ``Seq``, or
+``MutableSeq`` object:
 
 .. doctest
 
@@ -938,7 +939,7 @@ string, “bytes“, “bytearray“, “Seq“, or “MutableSeq“ object:
    >>> seq.index(MutableSeq("ATGGGCCGC"))
    9
 
-A “ValueError“ is raised if the subsequence is not found:
+A ``ValueError`` is raised if the subsequence is not found:
 
 .. cont-doctest
 
@@ -949,7 +950,7 @@ A “ValueError“ is raised if the subsequence is not found:
    ...
    ValueError: ...
 
-while the “find“ method returns -1 if the subsequence is not found:
+while the ``find`` method returns -1 if the subsequence is not found:
 
 .. cont-doctest
 
@@ -958,7 +959,7 @@ while the “find“ method returns -1 if the subsequence is not found:
    >>> seq.find("ACTG")
    -1
 
-The methods “rfind“ and “rindex“ search for the subsequence starting
+The methods ``rfind`` and ``rindex`` search for the subsequence starting
 from the right hand side of the sequence:
 
 .. cont-doctest
@@ -970,7 +971,7 @@ from the right hand side of the sequence:
    >>> seq.rfind("CC")
    29
 
-Use the “search“ method to search for multiple subsequences at the same
+Use the ``search`` method to search for multiple subsequences at the same
 time. This method returns an iterator:
 
 .. cont-doctest
@@ -987,8 +988,8 @@ time. This method returns an iterator:
    28 CC
    29 CC
 
-The “search“ method also takes plain strings, ‘bytes‘, ‘bytearray‘,
-‘Seq‘, and ‘MutableSeq‘ objects as subsequences; identical subsequences
+The ``search`` method also takes plain strings, ``bytes``, ``bytearray``,
+``Seq``, and ``MutableSeq`` objects as subsequences; identical subsequences
 are reported only once, as in the example above.
 
 .. _`sec:seq-module-functions`:
