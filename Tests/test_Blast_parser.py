@@ -16,65 +16,86 @@ from Bio.SeqRecord import SeqRecord
 class TestBlastp(unittest.TestCase):
     """Test the Blast XML parser for blastp output."""
 
-    def test_xml_2218_blastp_002(self):
-        """Parsing BLASTP 2.2.18+ (xml_2218_blastp_002.xml)."""
+    def check_xml_2218_blastp_002_header(self, records):
+        self.assertEqual(records.program, "blastp")
+        self.assertEqual(records.version, "BLASTP 2.2.18+")
+        self.assertEqual(
+            records.reference,
+            'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+        )
+        self.assertEqual(records.db, "gpipe/9606/Previous/protein")
+        self.assertIsInstance(records.query, SeqRecord)
+        self.assertEqual(records.query.id, "gi|585505|sp|Q08386|MOPB_RHOCA")
+        self.assertEqual(
+            records.query.description,
+            "Molybdenum-pterin-binding protein mopB >gi|310278|gb|AAA71913.1| molybdenum-pterin-binding protein",
+        )
+        self.assertEqual(repr(records.query.seq), "Seq(None, length=270)")
+        self.assertEqual(len(records.param), 5)
+        self.assertEqual(records.param["matrix"], "BLOSUM62")
+        self.assertAlmostEqual(records.param["expect"], 0.01)
+        self.assertEqual(records.param["gap-open"], 11)
+        self.assertEqual(records.param["gap-extend"], 1)
+        self.assertEqual(records.param["filter"], "m L; R -d repeat/repeat_9606;")
+
+    def check_xml_2218_blastp_002_record_0(self, record):
+        self.assertIsInstance(record.query, SeqRecord)
+        self.assertEqual(record.query.id, "gi|585505|sp|Q08386|MOPB_RHOCA")
+        self.assertEqual(
+            record.query.description,
+            "Molybdenum-pterin-binding protein mopB >gi|310278|gb|AAA71913.1| molybdenum-pterin-binding protein",
+        )
+        self.assertEqual(repr(record.query.seq), "Seq(None, length=270)")
+        self.assertEqual(len(record.stat), 7)
+        self.assertEqual(record.stat["db-num"], 27252)
+        self.assertEqual(record.stat["db-len"], 13958303)
+        self.assertEqual(record.stat["hsp-len"], 0)
+        self.assertAlmostEqual(record.stat["eff-space"], 0.0)
+        self.assertAlmostEqual(record.stat["kappa"], 0.041)
+        self.assertAlmostEqual(record.stat["lambda"], 0.267)
+        self.assertAlmostEqual(record.stat["entropy"], 0.14)
+        self.assertEqual(len(record), 0)
+
+    def check_xml_2218_blastp_002_record_1(self, record):
+        self.assertIsInstance(record.query, SeqRecord)
+        self.assertEqual(record.query.id, "gi|129628|sp|P07175.1|PARA_AGRTU")
+        self.assertEqual(record.query.description, "Protein parA")
+        self.assertEqual(repr(record.query.seq), "Seq(None, length=222)")
+        self.assertEqual(len(record.stat), 7)
+        self.assertEqual(record.stat["db-num"], 27252)
+        self.assertEqual(record.stat["db-len"], 13958303)
+        self.assertEqual(record.stat["hsp-len"], 0)
+        self.assertAlmostEqual(record.stat["eff-space"], 0.0)
+        self.assertAlmostEqual(record.stat["kappa"], 0.041)
+        self.assertAlmostEqual(record.stat["lambda"], 0.267)
+        self.assertAlmostEqual(record.stat["entropy"], 0.14)
+        self.assertEqual(len(record), 0)
+
+    def test_xml_2218_blastp_002_iterator(self):
+        """Parsing BLASTP 2.2.18+ (xml_2218_blastp_002.xml) by iteration."""
         filename = "xml_2218_blastp_002.xml"
         datafile = os.path.join("Blast", filename)
         with open(datafile, "rb") as handle:
             records = Blast.parse(handle)
-            self.assertEqual(records.program, "blastp")
-            self.assertEqual(records.version, "BLASTP 2.2.18+")
-            self.assertEqual(
-                records.reference,
-                'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
-            )
-            self.assertEqual(records.db, "gpipe/9606/Previous/protein")
-            self.assertIsInstance(records.query, SeqRecord)
-            self.assertEqual(records.query.id, "gi|585505|sp|Q08386|MOPB_RHOCA")
-            self.assertEqual(
-                records.query.description,
-                "Molybdenum-pterin-binding protein mopB >gi|310278|gb|AAA71913.1| molybdenum-pterin-binding protein",
-            )
-            self.assertEqual(repr(records.query.seq), "Seq(None, length=270)")
-            self.assertEqual(len(records.param), 5)
-            self.assertEqual(records.param["matrix"], "BLOSUM62")
-            self.assertAlmostEqual(records.param["expect"], 0.01)
-            self.assertEqual(records.param["gap-open"], 11)
-            self.assertEqual(records.param["gap-extend"], 1)
-            self.assertEqual(records.param["filter"], "m L; R -d repeat/repeat_9606;")
+            self.check_xml_2218_blastp_002_header(records)
             record = next(records)
-            self.assertIsInstance(record.query, SeqRecord)
-            self.assertEqual(record.query.id, "gi|585505|sp|Q08386|MOPB_RHOCA")
-            self.assertEqual(
-                record.query.description,
-                "Molybdenum-pterin-binding protein mopB >gi|310278|gb|AAA71913.1| molybdenum-pterin-binding protein",
-            )
-            self.assertEqual(repr(record.query.seq), "Seq(None, length=270)")
-
-            self.assertEqual(len(record.stat), 7)
-            self.assertEqual(record.stat["db-num"], 27252)
-            self.assertEqual(record.stat["db-len"], 13958303)
-            self.assertEqual(record.stat["hsp-len"], 0)
-            self.assertAlmostEqual(record.stat["eff-space"], 0.0)
-            self.assertAlmostEqual(record.stat["kappa"], 0.041)
-            self.assertAlmostEqual(record.stat["lambda"], 0.267)
-            self.assertAlmostEqual(record.stat["entropy"], 0.14)
-            self.assertEqual(len(record), 0)
+            self.check_xml_2218_blastp_002_record_0(record)
             record = next(records)
-            self.assertIsInstance(record.query, SeqRecord)
-            self.assertEqual(record.query.id, "gi|129628|sp|P07175.1|PARA_AGRTU")
-            self.assertEqual(record.query.description, "Protein parA")
-            self.assertEqual(repr(record.query.seq), "Seq(None, length=222)")
+            self.check_xml_2218_blastp_002_record_1(record)
 
-            self.assertEqual(len(record.stat), 7)
-            self.assertEqual(record.stat["db-num"], 27252)
-            self.assertEqual(record.stat["db-len"], 13958303)
-            self.assertEqual(record.stat["hsp-len"], 0)
-            self.assertAlmostEqual(record.stat["eff-space"], 0.0)
-            self.assertAlmostEqual(record.stat["kappa"], 0.041)
-            self.assertAlmostEqual(record.stat["lambda"], 0.267)
-            self.assertAlmostEqual(record.stat["entropy"], 0.14)
-            self.assertEqual(len(record), 0)
+    def test_xml_2218_blastp_002_list(self):
+        """Parsing BLASTP 2.2.18+ (xml_2218_blastp_002.xml) as a list."""
+        filename = "xml_2218_blastp_002.xml"
+        datafile = os.path.join("Blast", filename)
+        with open(datafile, "rb") as handle:
+            records = Blast.parse(handle)
+            record = records[0]
+            self.check_xml_2218_blastp_002_record_0(record)
+            record = records[1]
+            self.check_xml_2218_blastp_002_record_1(record)
+            # header should still be OK
+            self.check_xml_2218_blastp_002_header(records)
+            self.assertEqual(len(records), 2)
 
     def test_xml_2218L_blastp_001(self):
         """Parsing blastp 2.2.18 [Mar-02-2008] (xml_2218L_blastp_001.xml)."""

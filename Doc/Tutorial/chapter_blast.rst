@@ -546,16 +546,29 @@ Or, you can use a ``for``-loop:
 
 Note though that you can step through the BLAST records only once.
 Usually, from each BLAST record you would save the information that you
-are interested in. If you want to save all returned BLAST records, you
-can convert the iterator into a list:
+are interested in.
+
+Alternatively, you can use ``blast_records`` as a list, for example by
+extracting one record by index, or by calling ``len`` or ``print`` on
+``blast_records``. The parser will then automatically iterate over the records
+and store them.
 
 .. code:: pycon
 
-   >>> blast_records = list(blast_records)
+   >>> from Bio import Blast
+   >>> blast_records = Blast.parse("my_blast.xml")
+   >>> len(blast_records)  # this causes the parser to iterate over all records
+   3
+   >>> blast_records[2].query.id
+   something
 
 Now you can access each BLAST record in the list with an index as usual.
 If your BLAST file is huge though, you may run into memory problems
 trying to save them all in a list.
+
+Be careful not to iterate over the records before using ``blast_records`` as a
+list, as any record already iterated over will be missing from the list (it is
+fine to iterate over the records afterwards).
 
 Instead of opening the file yourself, you can just provide the file
 name:
