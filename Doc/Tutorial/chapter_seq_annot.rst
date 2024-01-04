@@ -183,7 +183,7 @@ This example uses a fairly large FASTA file containing the whole
 sequence for *Yersinia pestis biovar Microtus* str. 91001 plasmid pPCP1,
 originally downloaded from the NCBI. This file is included with the
 Biopython unit tests under the GenBank folder, or online
-``NC_005816.fna`` <https://raw.githubusercontent.com/biopython/biopython/master/Tests/GenBank/NC_005816.fna>`__
+`NC_005816.fna <https://raw.githubusercontent.com/biopython/biopython/master/Tests/GenBank/NC_005816.fna>`__
 from our website.
 
 The file starts like this - and you can check there is only one record
@@ -278,7 +278,7 @@ for *Yersinia pestis biovar Microtus* str. 91001 plasmid pPCP1,
 originally downloaded from the NCBI, but this time as a GenBank file.
 Again, this file is included with the Biopython unit tests under the
 GenBank folder, or online
-``NC_005816.gb`` <https://raw.githubusercontent.com/biopython/biopython/master/Tests/GenBank/NC_005816.gb>`__
+`NC_005816.gb <https://raw.githubusercontent.com/biopython/biopython/master/Tests/GenBank/NC_005816.gb>`__
 from our website.
 
 This file contains a single record (i.e. only one LOCUS line) and
