@@ -135,10 +135,10 @@ html_theme_options = {
     "logo_only": True,
 }
 
-# Based on:
-# https://github.com/readthedocs/sphinx_rtd_theme/issues/231#issuecomment-126447493
 html_context = {
-    "display_github": True,  # Add 'Edit on Github' link instead of 'View page source'
+    # Add 'Edit on Github' link instead of 'View page source'
+    # see  https://docs.readthedocs.io/en/stable/guides/edit-source-links-sphinx.html
+    "display_github": True,
     "github_user": "biopython",
     "github_repo": "biopython",
     "github_version": "master",
@@ -155,7 +155,8 @@ html_context = {
 
 html_logo = "images/biopython_logo.svg"
 
-# The RST source is transient, don't need/want to include it
+# The API RST source is transient, don't need/want to include it
+# We have the context aware edit-on-github link instead
 html_show_sourcelink = False
 html_copy_source = False
 
@@ -270,19 +271,30 @@ numpydoc_show_class_members = False
 
 
 def insert_github_link(filename):
-    """Insert file specific :github_url: metadata for theme breadcrumbs."""
-    assert "/" not in filename and filename.endswith(".rst")
+    """Insert file specific :github_url: metadata for theme breadcrumbs.
+
+    See https://sphinx-rtd-theme.readthedocs.io/en/stable/configuring.html#confval-github_url
+
+    We use this for the API documentation pages which are generated from
+    our source code, rather than native RST files in the repository.
+    """
+    assert filename.startswith("api/Bio") and filename.endswith(".rst")
     with open(filename) as handle:
         text = handle.read()
     if ":github_url:" in text:
         return
 
-    python = filename[:-4].replace(".", "/") + "/__init__.py"
-    if not os.path.isfile(os.path.join("../../", python)):
-        python = filename[:-4].replace(".", "/") + ".py"
-    if not os.path.isfile(os.path.join("../../", python)):
+    source = filename[4:-4].replace(".", "/") + "/__init__.py"
+    # C is the rarest case, but doing it last would give more confusing error message
+    # Right now it doesn't work anyway...
+    # Handler <function update_defvalue at 0x...> for event 'autodoc-before-process-signature' threw an exception
+    # if not os.path.isfile(os.path.join("../", source)):
+    #     source = filename[4:-4].replace(".", "/") + ".c"
+    if not os.path.isfile(os.path.join("../", source)):
+        source = filename[4:-4].replace(".", "/") + ".py"
+    if not os.path.isfile(os.path.join("../", source)):
         sys.stderr.write(
-            "WARNING: Could not map %s to a Python file, e.g. %s\n" % (filename, python)
+            "WARNING: Could not map %s to a Python file, e.g. %s\n" % (filename, source)
         )
         return
 
@@ -290,7 +302,7 @@ def insert_github_link(filename):
         html_context["github_user"],
         html_context["github_repo"],
         html_context["github_version"],
-        python,
+        source,
         text,
     )
     with open(filename, "w") as handle:
@@ -330,9 +342,9 @@ def run_apidoc(_):
             )
     shutil.rmtree(tmp_path)
 
-    for f in os.listdir(cur_dir):
+    for f in os.listdir(os.path.join(cur_dir, "api")):
         if f.startswith("Bio") and f.endswith(".rst"):
-            insert_github_link(f)
+            insert_github_link("api/" + f)
 
 
 class BioPythonAPI(autodoc.ClassDocumenter):
