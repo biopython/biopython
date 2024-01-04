@@ -47,9 +47,11 @@ header or not. For writing, if you want to write a header, you can set the
 to your output file.
 
     >>> from Bio import SearchIO
-    >>> qresult = SearchIO.read(psl, 'blat-psl')
-    >>> SearchIO.write(qresult, 'header.psl', header=True)
-    <stdout> (1, 10, 19, 23)
+    >>> qresult = SearchIO.read(psl, "blat-psl")
+    >>> SearchIO.write(qresult, "example.psl", "blat-psl", header=True)
+    (1, 10, 19, 23)
+    >>> import os
+    >>> os.remove("example.psl")
 
 Note that the number of HSPFragments written may exceed the number of HSP
 objects. This is because in PSL files, it is possible to have single matches
