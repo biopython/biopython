@@ -134,7 +134,7 @@ hmmlearn (https://pypi.org/project/hmmlearn/) instead.
 
 Bio.Data.SCOPData
 -----------------
-Declared obsolete in release 1.80, and removed in release 1.82. Please use
+Deprecated in release 1.80, and removed in release 1.82. Please use
 Bio.Data.PDBData instead.
 
 Bio.Application and the command line wrappers using it
