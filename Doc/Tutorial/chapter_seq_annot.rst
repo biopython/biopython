@@ -45,24 +45,24 @@ The ``SeqRecord`` class itself is quite simple, and offers the following
 information as attributes:
 
 .seq
-   – The sequence itself, typically a ``Seq`` object.
+   The sequence itself, typically a ``Seq`` object.
 
 .id
-   – The primary ID used to identify the sequence – a string. In most
+   The primary ID used to identify the sequence – a string. In most
    cases this is something like an accession number.
 
 .name
-   – A “common” name/id for the sequence – a string. In some cases this
+   A “common” name/id for the sequence – a string. In some cases this
    will be the same as the accession number, but it could also be a
    clone name. I think of this as being analogous to the LOCUS id in a
    GenBank record.
 
 .description
-   – A human readable description or expressive name for the sequence –
+   A human readable description or expressive name for the sequence –
    a string.
 
 .letter_annotations
-   – Holds per-letter-annotations using a (restricted) dictionary of
+   Holds per-letter-annotations using a (restricted) dictionary of
    additional information about the letters in the sequence. The keys
    are the name of the information, and the information is contained in
    the value as a Python sequence (i.e. a list, tuple or string) with
@@ -73,19 +73,19 @@ information as attributes:
    alignment files).
 
 .annotations
-   – A dictionary of additional information about the sequence. The keys
+   A dictionary of additional information about the sequence. The keys
    are the name of the information, and the information is contained in
    the value. This allows the addition of more “unstructured”
    information to the sequence.
 
 .features
-   – A list of ``SeqFeature`` objects with more structured information
+   A list of ``SeqFeature`` objects with more structured information
    about the features on a sequence (e.g. position of genes on a genome,
    or domains on a protein sequence). The structure of sequence features
    is described below in Section :ref:`sec:seq_features`.
 
 .dbxrefs
-   - A list of database cross-references as strings.
+   A list of database cross-references as strings.
 
 Creating a SeqRecord
 --------------------
@@ -183,7 +183,7 @@ This example uses a fairly large FASTA file containing the whole
 sequence for *Yersinia pestis biovar Microtus* str. 91001 plasmid pPCP1,
 originally downloaded from the NCBI. This file is included with the
 Biopython unit tests under the GenBank folder, or online
-```NC_005816.fna`` <https://raw.githubusercontent.com/biopython/biopython/master/Tests/GenBank/NC_005816.fna>`__
+``NC_005816.fna`` <https://raw.githubusercontent.com/biopython/biopython/master/Tests/GenBank/NC_005816.fna>`__
 from our website.
 
 The file starts like this - and you can check there is only one record
@@ -278,7 +278,7 @@ for *Yersinia pestis biovar Microtus* str. 91001 plasmid pPCP1,
 originally downloaded from the NCBI, but this time as a GenBank file.
 Again, this file is included with the Biopython unit tests under the
 GenBank folder, or online
-```NC_005816.gb`` <https://raw.githubusercontent.com/biopython/biopython/master/Tests/GenBank/NC_005816.gb>`__
+``NC_005816.gb`` <https://raw.githubusercontent.com/biopython/biopython/master/Tests/GenBank/NC_005816.gb>`__
 from our website.
 
 This file contains a single record (i.e. only one LOCUS line) and
@@ -401,26 +401,26 @@ through examples to show how this applies to a real life example. The
 attributes of a SeqFeature are:
 
 .type
-   – This is a textual description of the type of feature (for instance,
+   This is a textual description of the type of feature (for instance,
    this will be something like ‘CDS’ or ‘gene’).
 
 .location
-   – The location of the ``SeqFeature`` on the sequence that you are
+   The location of the ``SeqFeature`` on the sequence that you are
    dealing with, see Section :ref:`sec:locations` below. The
    ``SeqFeature`` delegates much of its functionality to the location
    object, and includes a number of shortcut attributes for properties
    of the location:
 
    .ref
-      – shorthand for ``.location.ref`` – any (different) reference
+      shorthand for ``.location.ref`` – any (different) reference
       sequence the location is referring to. Usually just None.
 
    .ref_db
-      – shorthand for ``.location.ref_db`` – specifies the database any
+      shorthand for ``.location.ref_db`` – specifies the database any
       identifier in ``.ref`` refers to. Usually just None.
 
    .strand
-      – shorthand for ``.location.strand`` – the strand on the sequence
+      shorthand for ``.location.strand`` – the strand on the sequence
       that the feature is located on. For double stranded nucleotide
       sequence this may either be :math:`1` for the top strand,
       :math:`-1` for the bottom strand, :math:`0` if the strand is
@@ -428,7 +428,7 @@ attributes of a SeqFeature are:
       is None for proteins, or single stranded sequences.
 
 .qualifiers
-   – This is a Python dictionary of additional information about the
+   This is a Python dictionary of additional information about the
    feature. The key is some kind of terse one-word description of what
    the information contained in the value is about, and the value is the
    actual information. For example, a common key for a qualifier might
@@ -440,7 +440,7 @@ attributes of a SeqFeature are:
    reflection of the feature tables in GenBank/EMBL files.
 
 .sub_features
-   – This used to be used to represent features with complicated
+   This used to be used to represent features with complicated
    locations like ‘joins’ in GenBank/EMBL files. This has been
    deprecated with the introduction of the ``CompoundLocation`` object,
    and should now be ignored.
@@ -456,12 +456,12 @@ describing a range between two positions. Two try to clarify the
 terminology we’re using:
 
 position
-   – This refers to a single position on a sequence, which may be fuzzy
+   This refers to a single position on a sequence, which may be fuzzy
    or not. For instance, 5, 20, ``<100`` and ``>200`` are all positions.
 
 location
-   – A location is region of sequence bounded by some positions. For
-   instance 5..20 (i. e. 5 to 20) is a location.
+   A location is region of sequence bounded by some positions. For
+   instance ``5..20`` (i. e. 5 to 20) is a location.
 
 I just mention this because sometimes I get confused between the two.
 
@@ -499,40 +499,40 @@ Basically there are several types of fuzzy positions, so we have five
 classes do deal with them:
 
 ExactPosition
-   – As its name suggests, this class represents a position which is
+   As its name suggests, this class represents a position which is
    specified as exact along the sequence. This is represented as just a
    number, and you can get the position by looking at the ``position``
    attribute of the object.
 
 BeforePosition
-   – This class represents a fuzzy position that occurs prior to some
+   This class represents a fuzzy position that occurs prior to some
    specified site. In GenBank/EMBL notation, this is represented as
-   something like :literal:`\`<13'`, signifying that the real position
+   something like ``<13``, signifying that the real position
    is located somewhere less than 13. To get the specified upper
    boundary, look at the ``position`` attribute of the object.
 
 AfterPosition
-   – Contrary to ``BeforePosition``, this class represents a position
+   Contrary to ``BeforePosition``, this class represents a position
    that occurs after some specified site. This is represented in GenBank
-   as :literal:`\`>13'`, and like ``BeforePosition``, you get the
+   as ``>13``, and like ``BeforePosition``, you get the
    boundary number by looking at the ``position`` attribute of the
    object.
 
 WithinPosition
-   – Occasionally used for GenBank/EMBL locations, this class models a
+   Occasionally used for GenBank/EMBL locations, this class models a
    position which occurs somewhere between two specified nucleotides. In
-   GenBank/EMBL notation, this would be represented as ‘(1.5)’, to
+   GenBank/EMBL notation, this would be represented as ``(1.5)``, to
    represent that the position is somewhere within the range 1 to 5.
 
 OneOfPosition
-   – Occasionally used for GenBank/EMBL locations, this class deals with
+   Occasionally used for GenBank/EMBL locations, this class deals with
    a position where several possible values exist, for instance you
    could use this if the start codon was unclear and there where two
    candidates for the start of the gene. Alternatively, that might be
    handled explicitly as two related gene features.
 
 UnknownPosition
-   – This class deals with a position of unknown location. This is not
+   This class deals with a position of unknown location. This is not
    used in GenBank/EMBL, but corresponds to the ‘?’ feature coordinate
    used in UniProt.
 
@@ -649,7 +649,7 @@ Sequence described by a feature or location
 A ``SeqFeature`` or location object doesn’t directly contain a sequence,
 instead the location (see Section :ref:`sec:locations`) describes
 how to get this from the parent sequence. For example consider a (short)
-gene sequence with location 5:18 on the reverse strand, which in
+gene sequence with location ``5:18`` on the reverse strand, which in
 GenBank/EMBL notation using 1-based counting would be
 ``complement(6..18)``, like this:
 
@@ -662,7 +662,7 @@ GenBank/EMBL notation using 1-based counting would be
    >>> seq = Seq("ACCGAGACGGCAAAGGCTAGCATAGGTATGAGACTTCCTTCCTGCCAGTGCTGAGGAACTGGGAGCCTAC")
    >>> feature = SeqFeature(SimpleLocation(5, 18, strand=-1), type="gene")
 
-You could take the parent sequence, slice it to extract 5:18, and then
+You could take the parent sequence, slice it to extract ``5:18``, and then
 take the reverse complement. The feature location’s start and end are
 integer-like so this works:
 
@@ -1170,7 +1170,7 @@ of most annotation is problematical.
 For instance, if the record ID was an accession, that accession should
 not really apply to the reverse complemented sequence, and transferring
 the identifier by default could easily cause subtle data corruption in
-downstream analysis. Therefore by default, the ``SeqRecord``\ ’s id,
+downstream analysis. Therefore by default, the ``SeqRecord``’s id,
 name, description, annotations and database cross references are all
 *not* transferred by default.
 
