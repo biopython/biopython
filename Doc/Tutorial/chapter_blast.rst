@@ -551,39 +551,42 @@ are interested in.
 Alternatively, you can use ``blast_records`` as a list, for example by
 extracting one record by index, or by calling ``len`` or ``print`` on
 ``blast_records``. The parser will then automatically iterate over the records
-and store them.
+and store them:
+
+.. doctest ../Tests/Blast
 
 .. code:: pycon
 
    >>> from Bio import Blast
-   >>> blast_records = Blast.parse("my_blast.xml")
+   >>> blast_records = Blast.parse("xml_2222_blastx_001.xml")
    >>> len(blast_records)  # this causes the parser to iterate over all records
-   3
-   >>> blast_records[2].query.id
-   something
+   7
+   >>> blast_records[2].query.description
+   'gi|5690369|gb|AF158246.1|AF158246 Cricetulus griseus glucose phosphate isomerase (GPI) gene, partial intron sequence'
 
-Now you can access each BLAST record in the list with an index as usual.
 If your BLAST file is huge though, you may run into memory problems
 trying to save them all in a list.
 
-Be careful not to iterate over the records before using ``blast_records`` as a
-list, as any record already iterated over will be missing from the list (it is
+Be careful not to iterate over the records *before* using ``blast_records`` as
+a list, as any record already iterated over will be missing from the list (it is
 fine to iterate over the records afterwards).
 
 Instead of opening the file yourself, you can just provide the file
 name:
 
+.. doctest examples
+
 .. code:: pycon
 
    >>> from Bio import Blast
-   >>> with Blast.parse("my_blast_xml") as blast_records:
+   >>> with Blast.parse("my_blast.xml") as blast_records:
    ...     for blast_record in blast_records:
    ...         pass  # Do something with blast_record
    ...
 
 In this case, Biopython opens the file for you, and closes it as soon as
 the file is not needed any more (while it is possible to simply use
-``blast_records = Blast.parse("my_blast_xml")``, it has the disadvantage
+``blast_records = Blast.parse("my_blast.xml")``, it has the disadvantage
 that the file may stay open longer than strictly necessary, thereby
 wasting resources).
 
@@ -609,7 +612,7 @@ or, equivalently,
 .. code:: pycon
 
    >>> from Bio import Blast
-   >>> blast_record = Blast.read("my_blast_xml")
+   >>> blast_record = Blast.read("my_blast.xml")
 
 (here, you don’t need to use a ``with`` block as ``Blast.read`` will
 read the whole file and close it immediately afterwards).

@@ -445,6 +445,10 @@ class Records(UserList):
             # Read all records and store them
             for record in self:
                 self._records.append(record)
+            stream = self._stream
+            if stream is not self.source:
+                stream.close()
+            del self._stream
             self._loaded = True
         return self._records
 
