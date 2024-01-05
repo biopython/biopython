@@ -242,6 +242,10 @@ latex_documents = [
 ]
 latex_logo = "images/biopython_logo.pdf"
 
+# Part I = Tutorial & Cookbook, containing chapters
+# Part II = API docs (although might be nicer as an appendix if possible)
+latex_toplevel_sectioning = "part"
+
 # -- Options for manual page output ---------------------------------------
 
 # One entry per manual page. List of tuples
