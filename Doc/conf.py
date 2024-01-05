@@ -47,9 +47,11 @@ master_doc = "index"
 
 # General information about the project.
 project = "Biopython"
-copyright = "1999-2024, The Biopython Contributors"
+
+# No trailing full stop needed:
+copyright = "1999-2024, The Biopython Contributors. See the Biopython license terms"
 author = "The Biopython Contributors"
-document = "Biopython API Documentation"
+document = "Biopython Tutorial, Cookbook, and API Documentation"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -211,7 +213,7 @@ latex_elements = {
 latex_documents = [
     (master_doc, "Biopython_doc.tex", document, author, "manual"),
 ]
-
+latex_logo = "images/biopython_logo.pdf"
 
 # -- Options for manual page output ---------------------------------------
 
