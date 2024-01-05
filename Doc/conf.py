@@ -50,7 +50,14 @@ project = "Biopython"
 
 # No trailing full stop needed:
 copyright = "1999-2024, The Biopython Contributors. See the Biopython license terms"
-author = "The Biopython Contributors"
+
+# Appears not to be used in HTML output, but is for the LaTeX PDF
+# We currently have a duplicated author list in the index.html file :(
+author = (
+    "Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, "
+    "Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, "
+    "Bartek Wilczyński, and The Biopython Contributors"
+)
 document = "Biopython Tutorial, Cookbook, and API Documentation"
 
 # The version info for the project you're documenting, acts as replacement for
@@ -195,7 +202,7 @@ htmlhelp_basename = "Biopython_doc"
 latex_elements = {
     # The paper size ('letterpaper' or 'a4paper').
     #
-    # 'papersize': 'letterpaper',
+    "papersize": "letterpaper",
     # The font size ('10pt', '11pt' or '12pt').
     #
     # 'pointsize': '10pt',
@@ -205,13 +212,33 @@ latex_elements = {
     # Latex figure (float) alignment
     #
     # 'figure_align': 'htbp',
+    "extrapackages": r"\usepackage{isodate}"
+    #
+    # 'maketitle' : ... to control the title page fully?
 }
+
+
+def _insert_latex_author_line_breaks(author):
+    """Perform LaTeX magic to insert author line breaks."""
+    names = [x.strip() + "," for x in author.split(",")]
+    for i in range(2, len(names) - 1, 3):
+        # After every three names insert legacy LaTeX \and
+        # for a line break in the authors
+        names[i] += r" \and"
+    return (" ".join(names))[:-1]  # remove trailing comma
+
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, "Biopython_doc.tex", document, author, "manual"),
+    (
+        master_doc,
+        "Biopython_doc.tex",
+        document,
+        _insert_latex_author_line_breaks(author),
+        "manual",
+    ),
 ]
 latex_logo = "images/biopython_logo.pdf"
 
