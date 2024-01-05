@@ -58,7 +58,7 @@ It provides the following attributes for each SearchIO object:
 |                +-------------------------+-----------------------------+
 |                | reference               | BlastOutput_reference       |
 |                +-------------------------+-----------------------------+
-|                | version                 | BlastOutput_version [*]_    |
+|                | version                 | BlastOutput_version [#]_    |
 |                +-------------------------+-----------------------------+
 |                | description             | Iteration_query-def         |
 |                +-------------------------+-----------------------------+
@@ -276,7 +276,7 @@ blast-tab provides the following attributes for each SearchIO objects:
 |             +-------------------+--------------+
 |             | bitscore_raw      | score        |
 +-------------+-------------------+--------------+
-| HSPFragment | frames            | frames [*]_  |
+| HSPFragment | frames            | frames [#]_  |
 | (also via   +-------------------+--------------+
 | HSP)        | aln_span          | length       |
 |             +-------------------+--------------+
@@ -317,9 +317,9 @@ well:
 +--------------+---------------+----------------------------+
 
 
-.. [*] may be modified
+.. [#] may be modified
 
-.. [*] When 'frames' is present, both ``query_frame`` and ``hit_frame`` will be
+.. [#] When 'frames' is present, both ``query_frame`` and ``hit_frame`` will be
    present as well. It is recommended that you use these instead of 'frames' directly.
 
 """
