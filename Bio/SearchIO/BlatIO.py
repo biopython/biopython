@@ -139,7 +139,7 @@ BlatIO provides the following attribute-column mapping:
 |                | query_start_all         | qStarts, start coordinate of each |
 |                |                         | query fragment                    |
 |                +-------------------------+-----------------------------------+
-|                | len [*]_                | block count, the number of blocks |
+|                | len [#]_                | block count, the number of blocks |
 |                |                         | in the alignment                  |
 +----------------+-------------------------+-----------------------------------+
 | HSPFragment    | hit                     | hit sequence, if present          |
@@ -177,7 +177,7 @@ Finally, the default HSP and HSPFragment properties are also provided. See the
 HSP and HSPFragment documentation for more details on these properties.
 
 
-.. [*] You can obtain the number of blocks / fragments in the HSP by invoking
+.. [#] You can obtain the number of blocks / fragments in the HSP by invoking
    ``len`` on the HSP
 
 """
