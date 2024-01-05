@@ -2,6 +2,9 @@
 Biopython Tutorial & Cookbook
 =============================
 
+Named authors: Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck,
+Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczyński.
+
 .. toctree::
    :maxdepth: 1
    :caption: Table of contents:
