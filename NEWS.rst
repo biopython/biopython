@@ -17,16 +17,21 @@ This release of Biopython supports Python 3.8, 3.9, 3.10, 3.11 and 3.12. It
 has also been tested on PyPy3.9 v7.3.13. Python 3.8 is approaching end of
 life, our support for it is now deprecated.
 
-Many thanks to the Biopython developers and community for making this release
-possible, especially the following contributors:
-
-- Peter Cock
+This release reverts the removal of the ``.strand``, ``.ref``, and ``.ref_db``
+attributes of the ``SeqFeature`` which was done without a deprecation period.
+They are again aliases for ``.location.strand`` etc, but trigger deprecation
+warnings.
 
 22 December 2023: Biopython 1.82
 ================================
 
 This release of Biopython supports Python 3.8, 3.9, 3.10, 3.11 and 3.12. It
 has also been tested on PyPy3.8 v7.3.11.
+
+[NOTE: This release unfortunately removed the ``.strand``, ``.ref``, and
+``.ref_db`` attributes of the ``SeqFeature`` without a deprecation period.
+This has been addressed in Biopython 1.83, which restores them but starts
+the formal deprecation cycle.]
 
 The ``inplace`` argument of ``complement`` and ``reverse_complement`` in
 ``Bio.Seq`` now always default to ``False`` both for ``Seq`` and ``MutableSeq``

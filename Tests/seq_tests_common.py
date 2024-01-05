@@ -5,7 +5,9 @@
 """Common code for SeqRecord object tests."""
 
 import unittest
+import warnings
 
+from Bio import BiopythonDeprecationWarning
 from Bio.Seq import UndefinedSequenceError
 from Bio.SeqUtils.CheckSum import seguid
 from Bio.SeqFeature import ExactPosition, UnknownPosition
@@ -63,6 +65,12 @@ class SeqRecordTestBaseClass(unittest.TestCase):
         self.assertEqual(old_f.location.strand, new_f.location.strand)
         self.assertEqual(old_f.location.ref, new_f.location.ref)
         self.assertEqual(old_f.location.ref_db, new_f.location.ref_db)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
+            self.assertEqual(old_f.location.strand, new_f.strand)
+            self.assertEqual(old_f.location.ref, new_f.ref)
+            self.assertEqual(old_f.location.ref_db, new_f.ref_db)
+
         # TODO - BioSQL does not store/retrieve feature's id (Bug 2526)
         if new_f.id != "<unknown id>":
             self.assertEqual(old_f.id, new_f.id)
