@@ -27,6 +27,7 @@ import warnings
 
 import time
 
+from collections import UserList
 from urllib.parse import urlencode
 from urllib.request import build_opener, install_opener
 from urllib.request import urlopen
@@ -194,7 +195,7 @@ class Record(list):
         self.query = None
 
 
-class Records:
+class Records(UserList):
     """Stores the BLAST results of a single BLAST run.
 
     A ``Bio.Blast.Records`` object is an iterator. Iterating over it returns
@@ -290,6 +291,45 @@ class Records:
     ...
     StopIteration
 
+    You can also use the records as a list, for example by extracting a record
+    by index, or by calling ``len`` or ``print`` on the records. The parser
+    will then automatically iterate over the records and store them:
+
+    >>> records = Blast.parse("Blast/wnts.xml")
+    >>> record = records[3]  # this causes all records to be read in and stored
+    >>> record.query.id
+    'Query_4'
+    >>> len(records)
+    5
+
+    After the records have been read in, you can still iterate over them:
+
+    >>> for i, record in enumerate(records):
+    ...     print(i, record.query.id)
+    ...
+    0 Query_1
+    1 Query_2
+    2 Query_3
+    3 Query_4
+    4 Query_5
+
+    However, be careful not to iterate over the records *before* using them as
+    a list, as any records already iterated over will be missing:
+
+    >>> records = Blast.parse("Blast/wnts.xml")
+    >>> record = next(records)
+    >>> record.query.id
+    'Query_1'
+    >>> len(records)
+    4
+    >>> for i in range(4):
+    ...     print(i, records[i].query.id)
+    ...
+    0 Query_2
+    1 Query_3
+    2 Query_4
+    3 Query_5
+
     """  # noqa: RST201, RST203, RST301
 
     def __init__(self, source):
@@ -349,6 +389,8 @@ class Records:
             if stream is not source:
                 stream.close()
             raise
+        self._records = []  # for when we want to use Records as a list
+        self._loaded = False
 
     def __enter__(self):
         return self
@@ -363,6 +405,8 @@ class Records:
         del self._stream
 
     def __iter__(self):
+        if self._loaded is True:
+            return iter(self._records)
         return self
 
     def __next__(self):
@@ -393,6 +437,20 @@ class Records:
                 parser.Parse(data, False)
             except expat.ExpatError as e:
                 raise CorruptedXMLError(e) from None
+
+    @property
+    def data(self):
+        """Overrides the data attribute of UserList."""
+        if self._loaded is False:
+            # Read all records and store them
+            for record in self:
+                self._records.append(record)
+            stream = self._stream
+            if stream is not self.source:
+                stream.close()
+            del self._stream
+            self._loaded = True
+        return self._records
 
 
 def parse(source):
