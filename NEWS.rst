@@ -21,6 +21,11 @@ Our main documentation, the Biopython Tutorial and Cookbook, has been
 converted from LaTeX to reStructuredText, and combined with the existing API
 documentation, into a single more modern and navigable HTML output.
 
+This release reverts the removal of the ``.strand``, ``.ref``, and ``.ref_db``
+attributes of the ``SeqFeature`` which was done without a deprecation period.
+They are again aliases for ``.location.strand`` etc, but trigger deprecation
+warnings.
+
 Bio.Blast contains a new parser for BLAST XML output as a replacement for the
 old parser in Bio.Blast.NCBIXML. The main differences between the parsers is
 as follows:
@@ -62,6 +67,11 @@ possible, especially the following contributors:
 
 This release of Biopython supports Python 3.8, 3.9, 3.10, 3.11 and 3.12. It
 has also been tested on PyPy3.8 v7.3.11.
+
+[NOTE: This release unfortunately removed the ``.strand``, ``.ref``, and
+``.ref_db`` attributes of the ``SeqFeature`` without a deprecation period.
+This has been addressed in Biopython 1.83, which restores them but starts
+the formal deprecation cycle.]
 
 The ``inplace`` argument of ``complement`` and ``reverse_complement`` in
 ``Bio.Seq`` now always default to ``False`` both for ``Seq`` and ``MutableSeq``
