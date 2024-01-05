@@ -16,10 +16,3 @@ an interactive Python session using the ``help()`` command.
 
    Bio
    BioSQL
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
