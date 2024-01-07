@@ -14,7 +14,7 @@ The Biopython module ``Bio.Cluster`` provides commonly used clustering
 algorithms and was designed with the application to gene expression data
 in mind. However, this module can also be used for cluster analysis of
 other types of data. ``Bio.Cluster`` and the underlying C Clustering
-Library is described by De Hoon *et al.* [deHoon2004]_.
+Library is described by De Hoon *et al.* [DeHoon2004]_.
 
 The following four clustering approaches are implemented in
 ``Bio.Cluster``:

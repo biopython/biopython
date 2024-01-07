@@ -124,7 +124,7 @@ Frequently Asked Questions (FAQ)
       Hamelryck and Manderick, 2003 [Hamelryck2003A]_;
 
    -  For ``Bio.Cluster``:
-      de Hoon *et al.*, 2004 [deHoon2004]_;
+      De Hoon *et al.*, 2004 [DeHoon2004]_;
 
    -  For ``Bio.Graphics.GenomeDiagram``:
       Pritchard *et al.*, 2006 [Pritchard2006]_;
