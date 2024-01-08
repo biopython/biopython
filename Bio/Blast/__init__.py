@@ -25,6 +25,7 @@ Variables:
 
 import warnings
 
+import io
 import textwrap
 import time
 
@@ -197,15 +198,17 @@ class Record(list):
 
     def __str__(self):
         lines = [""]
-        lines.append("  Query: %s (length=%d)" % (self.query.id, len(self.query)))
-        indent = " " * 9
-        description_lines = textwrap.wrap(
-            self.query.description,
-            width=80,
-            initial_indent=indent,
-            subsequent_indent=indent,
-        )
-        lines.extend(description_lines)
+        # self.query may be None with legacy Blast if there are no hits
+        if self.query is not None:
+            lines.append("  Query: %s (length=%d)" % (self.query.id, len(self.query)))
+            indent = " " * 9
+            description_lines = textwrap.wrap(
+                self.query.description,
+                width=80,
+                initial_indent=indent,
+                subsequent_indent=indent,
+            )
+            lines.extend(description_lines)
         if len(self) == 0:
             lines.append("   Hits: 0")
         else:
@@ -348,32 +351,14 @@ class Records(UserList):
     3 Query_4
     4 Query_5
 
-    However, be careful not to iterate over the records *before* using them as
-    a list, as any records already iterated over will be missing:
-
-    >>> records = Blast.parse("Blast/wnts.xml")
-    >>> record = next(records)
-    >>> record.query.id
-    'Query_1'
-    >>> len(records)
-    4
-    >>> for i in range(4):
-    ...     print(i, records[i].query.id)
-    ...
-    0 Query_2
-    1 Query_3
-    2 Query_4
-    3 Query_5
-
     """  # noqa: RST201, RST203, RST301
 
     def __init__(self, source):
         """Initialize the Records object."""
-        from Bio.Blast._parser import XMLHandler
-
         if isinstance(source, list):  # UserList API requirement
             self._records = source
             self._loaded = True
+            self._index = 0
             return
 
         self.source = source
@@ -385,10 +370,17 @@ class Records(UserList):
                     "BLAST output files must be opened in binary mode."
                 ) from None
             stream = source
+        self._stream = stream
+        self._read_header()
+        self._records = []  # for when we want to use Records as a list
+        self._loaded = False
 
+    def _read_header(self):
+        from Bio.Blast._parser import XMLHandler
+
+        stream = self._stream
+        source = self.source
         try:  # context manager won't kick in until after parse returns
-            self._stream = stream
-
             parser = expat.ParserCreate()
             self._parser = parser
 
@@ -429,8 +421,7 @@ class Records(UserList):
             if stream is not source:
                 stream.close()
             raise
-        self._records = []  # for when we want to use Records as a list
-        self._loaded = False
+        self._index = 0
 
     def __enter__(self):
         return self
@@ -445,11 +436,16 @@ class Records(UserList):
         del self._stream
 
     def __iter__(self):
-        if self._loaded is True:
-            return iter(self._records)
         return self
 
     def __next__(self):
+        if self._loaded is True:
+            try:
+                record = self._records[self._index]
+            except IndexError:
+                raise StopIteration from None
+            self._index += 1
+            return record
         try:
             cache = self._cache
         except AttributeError:
@@ -462,6 +458,7 @@ class Records(UserList):
             except IndexError:  # no record ready to be returned
                 pass
             else:
+                self._index += 1
                 return record
             # Read in another block of data from the file.
             data = stream.read(BLOCK)
@@ -478,11 +475,29 @@ class Records(UserList):
             except expat.ExpatError as e:
                 raise CorruptedXMLError(e) from None
 
+    def __getitem__(self, index):
+        item = super().__getitem__(index)
+        if index == slice(None, None, None):
+            for key, value in self.__dict__.items():
+                if key not in ("_stream", "_parser", "_cache"):
+                    item.__dict__[key] = value
+        return item
+
     @property
     def data(self):
         """Overrides the data attribute of UserList."""
         if self._loaded is False:
             # Read all records and store them
+            index = self._index
+            if index > 0:
+                try:
+                    self._stream.seek(0)
+                except io.UnsupportedOperation:
+                    raise ValueError(
+                        "list-like access after iterating is supported only if the input data is seekable."
+                    )
+                self._read_header()
+                self._index = 0
             for record in self:
                 self._records.append(record)
             stream = self._stream
@@ -490,6 +505,7 @@ class Records(UserList):
                 stream.close()
             del self._stream
             self._loaded = True
+            self._index = index
         return self._records
 
     def __str__(self):
@@ -501,7 +517,7 @@ Program: %s
             self.db,
         )
         records = self[:]  # to ensure that the records are read in
-        for record in records:
+        for record in self._records:
             text += str(record)
         return text
 

@@ -567,9 +567,14 @@ and store them:
 If your BLAST file is huge though, you may run into memory problems
 trying to save them all in a list.
 
-Be careful not to iterate over the records *before* using ``blast_records`` as
-a list, as any record already iterated over will be missing from the list (it is
-fine to iterate over the records afterwards).
+If you start iterating over the records *before* using ``blast_records`` as
+a list, the parser will first reset the file stream to the beginning of the
+data to ensure that all records are neing read. Note that this will fail if the
+stream cannot be reset to the beginning, for example if the data are being
+read remotely (e.g. by qblast; see subsection :ref:`sec:running-www-blast`).
+In those cases, you can explicitly read the records into a list by calling
+``blast_records = blast_records[:]`` before iterating over them. After reading
+in the records, it is safe to iterate over them or use them as a list.
 
 Instead of opening the file yourself, you can just provide the file
 name:
@@ -681,13 +686,11 @@ The BLAST Records and Record classes
 The BLAST Records class
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-A single BLAST output file can contain output from multiple BLAST
-queries. In Biopython, the information in a BLAST output file is stored
-in an ``Bio.Blast.Records`` object. This is an iterator returning one
-``Bio.Blast.Record`` object (see subsection
-:ref:`subsec:blast-record`) for each query. The
-``Bio.Blast.Records`` object has the following attributes describing the
-BLAST run:
+A single BLAST output file can contain output from multiple BLAST queries. In
+Biopython, the information in a BLAST output file is stored in an
+``Bio.Blast.Records`` object. This is an iterator returning one
+``Bio.Blast.Record`` object (see subsection :ref:`subsec:blast-record`) for
+each query. The ``Bio.Blast.Records`` object has the following attributes describing the BLAST run:
 
 -  ``source``: The input data from which the ``Bio.Blast.Records``
    object was constructed (this could be a file name or path, or a
