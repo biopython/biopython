@@ -25,6 +25,7 @@ Variables:
 
 import warnings
 
+import textwrap
 import time
 
 from collections import UserList
@@ -194,6 +195,40 @@ class Record(list):
         """Initialize the Record object."""
         self.query = None
 
+    def __str__(self):
+        lines = [""]
+        lines.append("  Query: %s (length=%d)" % (self.query.id, len(self.query)))
+        indent = " " * 9
+        description_lines = textwrap.wrap(
+            self.query.description,
+            width=80,
+            initial_indent=indent,
+            subsequent_indent=indent,
+        )
+        lines.extend(description_lines)
+        if len(self) == 0:
+            lines.append("   Hits: 0")
+        else:
+            lines.append("   Hits: %s  %s  %s" % ("-" * 4, "-" * 5, "-" * 58))
+            pattern = "%13s  %5s  %s"
+            lines.append(pattern % ("#", "# HSP", "ID + description"))
+            lines.append(pattern % ("-" * 4, "-" * 5, "-" * 58))
+            for idx, hit in enumerate(self):
+                n = len(hit)  # Number of HSPs
+                if idx < 30:
+                    hid_line = "%s  %s" % (hit.target.id, hit.target.description)
+                    if len(hid_line) > 58:
+                        hid_line = hid_line[:55] + "..."
+                    lines.append(pattern % (idx, len(hit), hid_line))
+                elif idx > len(self) - 4:
+                    hid_line = "%s  %s" % (hit.target.id, hit.target.description)
+                    if len(hid_line) > 58:
+                        hid_line = hid_line[:55] + "..."
+                    lines.append(pattern % (idx, len(hit), hid_line))
+                elif idx == 30:
+                    lines.append("%14s" % "~~~")
+        return "\n".join(lines) + "\n"
+
 
 class Records(UserList):
     """Stores the BLAST results of a single BLAST run.
@@ -336,6 +371,11 @@ class Records(UserList):
         """Initialize the Records object."""
         from Bio.Blast._parser import XMLHandler
 
+        if isinstance(source, list):  # UserList API requirement
+            self._records = source
+            self._loaded = True
+            return
+
         self.source = source
         try:
             stream = open(source, "rb")
@@ -451,6 +491,19 @@ class Records(UserList):
             del self._stream
             self._loaded = True
         return self._records
+
+    def __str__(self):
+        text = """\
+Program: %s
+     db: %s
+""" % (
+            self.version,
+            self.db,
+        )
+        records = self[:]  # to ensure that the records are read in
+        for record in records:
+            text += str(record)
+        return text
 
 
 def parse(source):

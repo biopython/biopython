@@ -89,13 +89,40 @@ class TestBlastp(unittest.TestCase):
         datafile = os.path.join("Blast", filename)
         with open(datafile, "rb") as handle:
             records = Blast.parse(handle)
-            record = records[0]
-            self.check_xml_2218_blastp_002_record_0(record)
-            record = records[1]
-            self.check_xml_2218_blastp_002_record_1(record)
-            # header should still be OK
             self.check_xml_2218_blastp_002_header(records)
-            self.assertEqual(len(records), 2)
+            record = records[0]
+        # everything should have been read in by now
+        self.check_xml_2218_blastp_002_record_0(record)
+        record = records[1]
+        self.check_xml_2218_blastp_002_record_1(record)
+        # header should still be OK
+        self.check_xml_2218_blastp_002_header(records)
+        self.assertEqual(len(records), 2)
+        self.assertEqual(
+            str(records),
+            """\
+Program: BLASTP 2.2.18+
+     db: gpipe/9606/Previous/protein
+
+  Query: gi|585505|sp|Q08386|MOPB_RHOCA (length=270)
+         Molybdenum-pterin-binding protein mopB >gi|310278|gb|AAA71913.1|
+         molybdenum-pterin-binding protein
+   Hits: 0
+
+  Query: gi|129628|sp|P07175.1|PARA_AGRTU (length=222)
+         Protein parA
+   Hits: 0
+""",
+        )
+
+    def check_xml_2218L_blastp_001_str(self, records):
+        self.assertEqual(
+            str(records),
+            """\
+Program: blastp 2.2.18 [Mar-02-2008]
+     db: /Users/pjcock/Downloads/Software/blast-2.2.18/data/nr
+""",
+        )
 
     def test_xml_2218L_blastp_001(self):
         """Parsing blastp 2.2.18 [Mar-02-2008] (xml_2218L_blastp_001.xml)."""
@@ -104,9 +131,11 @@ class TestBlastp(unittest.TestCase):
         with open(datafile, "rb") as handle:
             records = Blast.parse(handle)
             self.check_xml_2218L_blastp_001_records(records)
+            self.check_xml_2218L_blastp_001_str(records)
 
         with Blast.parse(datafile) as records:
             self.check_xml_2218L_blastp_001_records(records)
+            self.check_xml_2218L_blastp_001_str(records)
 
         with open(datafile, "rb") as handle:
             record = Blast.read(handle)
@@ -161,6 +190,26 @@ class TestBlastp(unittest.TestCase):
             self.check_xml_2226_blastp_003(records)
         with Blast.parse(datafile) as records:
             self.check_xml_2226_blastp_003(records)
+        with Blast.parse(datafile) as records:
+            self.assertEqual(
+                str(records),
+                """\
+Program: BLASTP 2.2.26+
+     db: db/minirefseq_prot
+
+  Query: Query_1 (length=102)
+         gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus
+         subtilis subsp. subtilis str. 168]
+   Hits: ----  -----  ----------------------------------------------------------
+            #  # HSP  ID + description
+         ----  -----  ----------------------------------------------------------
+            0      1  gnl|BL_ORD_ID|1  gi|308175296|ref|YP_003922001.1| membr...
+            1      1  gnl|BL_ORD_ID|2  gi|375363999|ref|YP_005132038.1| lytA ...
+            2      1  gnl|BL_ORD_ID|3  gi|154687679|ref|YP_001422840.1| LytA ...
+            3      1  gnl|BL_ORD_ID|4  gi|311070071|ref|YP_003974994.1| unnam...
+            4      1  gnl|BL_ORD_ID|15  gi|332258565|ref|XP_003278367.1| PRED...
+""",
+            )
 
     def check_xml_2226_blastp_003(self, records):
         self.assertEqual(records.program, "blastp")
@@ -4006,6 +4055,30 @@ class TestBlastn(unittest.TestCase):
         self.check_xml_2900_blastn_001_record(record)
         record = Blast.read(datafile)
         self.check_xml_2900_blastn_001_record(record)
+        with Blast.parse(datafile) as records:
+            self.assertEqual(
+                str(records),
+                """\
+Program: BLASTN 2.9.0+
+     db: GPIPE/10090/current/all_top_level GPIPE/10090/current/rna
+
+  Query: G26684.1 (length=285)
+         human STS STS_D11570, sequence tagged site
+   Hits: ----  -----  ----------------------------------------------------------
+            #  # HSP  ID + description
+         ----  -----  ----------------------------------------------------------
+            0      1  gi|372099107|ref|NC_000069.6|  Mus musculus strain C57B...
+            1      1  gi|372099103|ref|NC_000073.6|  Mus musculus strain C57B...
+            2      2  gi|372099106|ref|NC_000070.6|  Mus musculus strain C57B...
+            3      2  gi|372099108|ref|NC_000068.7|  Mus musculus strain C57B...
+            4      2  gi|372099097|ref|NC_000079.6|  Mus musculus strain C57B...
+            5      2  gi|372099098|ref|NC_000078.6|  Mus musculus strain C57B...
+            6      1  gi|372099109|ref|NC_000067.6|  Mus musculus strain C57B...
+            7      1  gi|372099101|ref|NC_000075.6|  Mus musculus strain C57B...
+            8      1  gi|372099100|ref|NC_000076.6|  Mus musculus strain C57B...
+            9      1  gi|372099094|ref|NC_000082.6|  Mus musculus strain C57B...
+""",
+            )
 
     def check_xml_2900_blastn_001_records(self, records):
         self.assertEqual(records.program, "blastn")
@@ -9135,6 +9208,117 @@ gi|146197       480 STLQKLHRNRIWYLDILFSNDLVNNE 506
 7               480 STLQRLHRNRIWYLDILFSNDLVNHE 506
 """,
             )
+        with open(datafile, "rb") as handle:
+            records = Blast.parse(handle)
+            self.assertEqual(
+                str(records),
+                """\
+Program: BLASTX 2.2.22+
+     db: nr
+
+  Query: 1 (length=1002)
+         gi|4104054|gb|AH007193.1|SEG_CVIGS Centaurea vallesiaca 18S ribosomal
+         RNA gene, partial sequence
+   Hits: ----  -----  ----------------------------------------------------------
+            #  # HSP  ID + description
+         ----  -----  ----------------------------------------------------------
+            0      1  gi|149390769|gb|ABR25402.1|  unknown [Oryza sativa (ind...
+
+  Query: 2 (length=2050)
+         gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein
+         HLPf gene, partial cds
+   Hits: ----  -----  ----------------------------------------------------------
+            #  # HSP  ID + description
+         ----  -----  ----------------------------------------------------------
+            0      2  gi|4218936|gb|AAD12237.1|  hevein-like protein HLPf [Sa...
+            1      2  gi|4206074|gb|AAD11408.1|  hevein-like protein [Sambucu...
+            2      2  gi|4206070|gb|AAD11406.1|  hevein-like protein [Sambucu...
+            3      2  gi|4206072|gb|AAD11407.1|  hevein-like protein [Sambucu...
+            4      2  gi|16903131|gb|AAL30421.1|AF434174_1  hevein-like prote...
+            5      2  gi|16903133|gb|AAL30422.1|AF434175_1  hevein-like prote...
+            6      2  gi|30691147|gb|AAO17294.1|  chitinase [Ficus carica]
+            7      2  gi|222139388|gb|ACM45713.1|  class I chitinase [Pyrus p...
+            8      2  gi|23496435|dbj|BAB40817.2|  endochitinase MCHT-2 [Cucu...
+            9      2  gi|82621253|gb|ABB86300.1|  chitinase [Ficus awkeotsang]
+
+  Query: 3 (length=550)
+         gi|5690369|gb|AF158246.1|AF158246 Cricetulus griseus glucose phosphate
+         isomerase (GPI) gene, partial intron sequence
+   Hits: 0
+
+  Query: 4 (length=655)
+         gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber
+         Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN
+         gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636
+         (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence
+   Hits: ----  -----  ----------------------------------------------------------
+            #  # HSP  ID + description
+         ----  -----  ----------------------------------------------------------
+            0      1  gi|166343825|gb|ABY86655.1|  beta-tubulin 4 [Gossypium ...
+            1      1  gi|223549899|gb|EEF51386.1|  tubulin beta chain, putati...
+            2      1  gi|18420724|ref|NP_568437.1|  TUB8 (tubulin beta-8) [Ar...
+            3      1  gi|225426385|ref|XP_002271992.1|  PREDICTED: hypothetic...
+            4      1  gi|15451226|gb|AAK96884.1|  beta tubulin [Arabidopsis t...
+            5      1  gi|225470745|ref|XP_002267380.1|  PREDICTED: hypothetic...
+            6      1  gi|586076|sp|P37392.1|TBB1_LUPAL  RecName: Full=Tubulin...
+            7      1  gi|224104341|ref|XP_002313404.1|  tubulin, beta chain [...
+            8      1  gi|223549679|gb|EEF51167.1|  tubulin beta chain, putati...
+            9      1  gi|224058553|ref|XP_002299541.1|  tubulin, beta chain [...
+
+  Query: 5 (length=623)
+         gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed
+         spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2,
+         complete sequence
+   Hits: ----  -----  ----------------------------------------------------------
+            #  # HSP  ID + description
+         ----  -----  ----------------------------------------------------------
+            0      2  gi|110740644|dbj|BAE98425.1|  hypothetical protein [Ara...
+            1      1  gi|226453533|gb|EEH50844.1|  predicted protein [Micromo...
+            2      1  gi|168069582|ref|XP_001786502.1|  predicted protein [Ph...
+            3      1  gi|168068558|ref|XP_001786120.1|  predicted protein [Ph...
+            4      1  gi|168068926|ref|XP_001786259.1|  predicted protein [Ph...
+            5      1  gi|168070288|ref|XP_001786759.1|  predicted protein [Ph...
+            6      1  gi|168068591|ref|XP_001786133.1|  predicted protein [Ph...
+            7      1  gi|74622391|sp|Q8TGM5|ART3_YEAST  Uncharacterized prote...
+            8      1  gi|168069944|ref|XP_001786634.1|  predicted protein [Ph...
+            9      1  gi|50307717|ref|XP_453851.1|  unnamed protein product [...
+
+  Query: 6 (length=309)
+         gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA)
+         gene, partial cds
+   Hits: ----  -----  ----------------------------------------------------------
+            #  # HSP  ID + description
+         ----  -----  ----------------------------------------------------------
+            0      1  gi|3176603|gb|AAC18749.1|  phytochrome A [Lathyrus odor...
+            1      1  gi|130188|sp|P15001.1|PHYA_PEA  RecName: Full=Phytochro...
+            2      1  gi|2499555|sp|P93673.1|PHYA_LATSA  RecName: Full=Phytoc...
+            3      1  gi|3176595|gb|AAC18745.1|  phytochrome A [Lennea melano...
+            4      1  gi|1711106|gb|AAC18675.1|  phytochrome A [Sophora affinis]
+            5      1  gi|1711090|gb|AAC18670.1|  phytochrome A [Myrospermum s...
+            6      1  gi|3176605|gb|AAC18750.1|  phytochrome A [Hybosema robu...
+            7      1  gi|3176454|gb|AAC18668.1|  phytochrome A [Cyclolobium n...
+            8      1  gi|3176523|gb|AAC18709.1|  phytochrome A [Millettia ric...
+            9      1  gi|3176494|gb|AAC18693.1|  phytochrome A [Callerya atro...
+
+  Query: 7 (length=2551)
+         gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like
+         protein (matK) gene, complete cds; chloroplast gene for chloroplast
+         product
+   Hits: ----  -----  ----------------------------------------------------------
+            #  # HSP  ID + description
+         ----  -----  ----------------------------------------------------------
+            0      1  gi|27805603|sp|Q9TKP6.1|MATK_WISFR  RecName: Full=Matur...
+            1      1  gi|171909144|gb|ACB58148.1|  maturase K [Wisteria frute...
+            2      1  gi|171909146|gb|ACB58149.1|  maturase K [Wisteria frute...
+            3      1  gi|171909132|gb|ACB58142.1|  maturase K [Callerya megas...
+            4      1  gi|5817760|gb|AAD52903.1|AF142732_1  maturase-like prot...
+            5      1  gi|171909134|gb|ACB58143.1|  maturase K [Wisteria brach...
+            6      1  gi|5817761|gb|AAD52904.1|AF142733_1  maturase-like prot...
+            7      1  gi|5817762|gb|AAD52905.1|AF142734_1  maturase-like prot...
+            8      1  gi|152014012|gb|ABS20107.1|  maturase-like protein [Ast...
+            9      1  gi|146197442|dbj|BAF57483.1|  maturase [Glycyrrhiza ura...
+""",
+            )
 
     def test_xml_2900_blastx_001(self):
         """Parsing BLASTX 2.9.0+ (xml_2900_blastx_001.xml)."""
@@ -9150,6 +9334,32 @@ gi|146197       480 STLQKLHRNRIWYLDILFSNDLVNNE 506
         self.check_xml_2900_blastx_001_record(record)
         record = Blast.read(datafile)
         self.check_xml_2900_blastx_001_record(record)
+        with Blast.parse(datafile) as records:
+            self.assertEqual(
+                str(records),
+                """\
+Program: BLASTX 2.9.0+
+     db: nr
+
+  Query: AI021773.1 (length=365)
+         MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma
+         mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin
+         mRNA, complete cds, mRNA sequence
+   Hits: ----  -----  ----------------------------------------------------------
+            #  # HSP  ID + description
+         ----  -----  ----------------------------------------------------------
+            0      1  gi|1530504495|emb|VDM03167.1|  unnamed protein product,...
+            1      1  gi|510859078|gb|EPB74633.1|  hypothetical protein ANCCE...
+            2      1  gi|684409690|ref|XP_009175831.1|  hypothetical protein ...
+            3      1  gi|449710331|gb|EMD49430.1|  actin, putative, partial [...
+            4      1  gi|257215766|emb|CAX83035.1|  Actin-2, partial [Schisto...
+            5      1  gi|1535393712|emb|VDP83060.1|  unnamed protein product,...
+            6      1  gi|312773|emb|CAA50205.1|  actin, partial [Entamoeba hi...
+            7      1  gi|1530341495|emb|VDN44756.1|  unnamed protein product,...
+            8      1  gi|1524877828|ref|XP_027046469.1|  actin-1, partial [Po...
+            9      1  gi|1524877860|ref|XP_027046487.1|  actin-1-like [Pocill...
+""",
+            )
 
     def check_xml_2900_blastx_001_records(self, records):
         self.assertEqual(records.program, "blastx")
@@ -9928,6 +10138,30 @@ class TestTBlastn(unittest.TestCase):
         self.check_xml_2900_tblastn_001_record(record)
         record = Blast.read(datafile)
         self.check_xml_2900_tblastn_001_record(record)
+        with Blast.parse(datafile) as records:
+            self.assertEqual(
+                str(records),
+                """\
+Program: TBLASTN 2.9.0+
+     db: nr
+
+  Query: CAJ99216.1 (length=234)
+         tim [Helicobacter acinonychis str. Sheeba]
+   Hits: ----  -----  ----------------------------------------------------------
+            #  # HSP  ID + description
+         ----  -----  ----------------------------------------------------------
+            0      1  gi|109713861|emb|AM260522.1|  Helicobacter acinonychis ...
+            1      1  gi|1336928286|emb|LT900055.1|  Helicobacter acinonychis...
+            2      1  gi|1033012332|gb|CP011486.1|  Helicobacter pylori strai...
+            3      1  gi|1559948212|dbj|AP017633.1|  Helicobacter pylori DNA,...
+            4      1  gi|1143706535|gb|CP018823.1|  Helicobacter pylori strai...
+            5      1  gi|1149039824|gb|CP009259.1|  Helicobacter pylori SS1, ...
+            6      1  gi|1560269298|gb|CP035106.1|  Helicobacter pylori strai...
+            7      1  gi|1540258434|emb|LR134517.1|  Helicobacter pylori stra...
+            8      1  gi|1033005233|gb|CP011487.1|  Helicobacter pylori strai...
+            9      1  gi|1509197163|gb|CP025748.1|  Helicobacter pylori strai...
+""",
+            )
 
     def check_xml_2900_tblastn_001_records(self, records):
         self.assertEqual(records.program, "tblastn")
@@ -10797,6 +11031,30 @@ class TestTBlastx(unittest.TestCase):
             self.check_xml_2226_tblastx_004(records)
         with Blast.parse(datafile) as records:
             self.check_xml_2226_tblastx_004(records)
+        with Blast.parse(datafile) as records:
+            self.assertEqual(
+                str(records),
+                """\
+Program: TBLASTX 2.2.26+
+     db: refseq_rna
+
+  Query: Query_1 (length=128)
+         random_s00
+   Hits: 0
+
+  Query: Query_2 (length=350)
+         gi|296147483:1-350 Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA,
+         complete cds
+   Hits: ----  -----  ----------------------------------------------------------
+            #  # HSP  ID + description
+         ----  -----  ----------------------------------------------------------
+            0      7  gi|296147483|ref|NM_001183135.1|  Saccharomyces cerevis...
+            1      6  gi|365982352|ref|XM_003667962.1|  Naumovozyma dairenens...
+            2      4  gi|366988334|ref|XM_003673886.1|  Naumovozyma castellii...
+            3      2  gi|255710474|ref|XM_002551475.1|  Lachancea thermotoler...
+            4      4  gi|254579534|ref|XM_002495708.1|  Zygosaccharomyces rou...
+""",
+            )
 
     def check_xml_2226_tblastx_004(self, records):
         self.assertEqual(records.program, "tblastx")
