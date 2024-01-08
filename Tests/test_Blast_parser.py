@@ -114,15 +114,11 @@ Program: BLASTP 2.2.18+
    Hits: 0
 """,
         )
-
-    def check_xml_2218L_blastp_001_str(self, records):
-        self.assertEqual(
-            str(records),
-            """\
-Program: blastp 2.2.18 [Mar-02-2008]
-     db: /Users/pjcock/Downloads/Software/blast-2.2.18/data/nr
-""",
-        )
+        # check if converting the records to a list does not lose the header:
+        with open(datafile, "rb") as handle:
+            records = Blast.parse(handle)
+            records = records[:]
+        self.check_xml_2218_blastp_002_header(records)
 
     def test_xml_2218L_blastp_001(self):
         """Parsing blastp 2.2.18 [Mar-02-2008] (xml_2218L_blastp_001.xml)."""
@@ -143,6 +139,17 @@ Program: blastp 2.2.18 [Mar-02-2008]
 
         record = Blast.read(datafile)
         self.check_xml_2218L_blastp_001_record(record)
+
+    def check_xml_2218L_blastp_001_str(self, records):
+        self.assertEqual(
+            str(records),
+            """\
+Program: blastp 2.2.18 [Mar-02-2008]
+     db: /Users/pjcock/Downloads/Software/blast-2.2.18/data/nr
+
+   Hits: 0
+""",
+        )
 
     def check_xml_2218L_blastp_001_records(self, records):
         self.assertEqual(records.program, "blastp")
