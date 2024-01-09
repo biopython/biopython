@@ -13,6 +13,7 @@ import warnings
 
 from io import StringIO
 
+from Bio import BiopythonWarning
 from Bio import BiopythonDeprecationWarning
 from Bio import SeqIO
 from Bio.Data.CodonTable import TranslationError
@@ -1237,7 +1238,10 @@ class TestWriteRead(SeqIOFeatureTestBaseClass):
 
     def test_dbsource_wrap(self):
         """Write and read back dbsource_wrap.gb."""
-        self.write_read(os.path.join("GenBank", "dbsource_wrap.gb"), "gb", ["gb"])
+        with warnings.catch_warnings():
+            # Ignore warning about over long DBSOURCE line
+            warnings.simplefilter("ignore", category=BiopythonWarning)
+            self.write_read(os.path.join("GenBank", "dbsource_wrap.gb"), "gb", ["gb"])
         # Protein so can't convert this to EMBL format
 
     def test_blank_seq(self):
