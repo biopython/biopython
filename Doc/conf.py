@@ -69,7 +69,7 @@ version = __version__  # TODO: Shorten this
 # The full version, including alpha/beta/rc tags.
 release = __version__
 
-# Versions for versions.html:
+# Versions for _templates/versions.html:
 # (this will break if we have version gaps)
 try:
     main_version, minor_version, _ = version.split(".")  # e.g. 1.79.dev0
@@ -80,9 +80,9 @@ except ValueError:
 prev_minor_version = int(minor_version) - (2 if dev_version else 1)
 previous_version = f"{main_version}.{prev_minor_version}"
 versions = [
-    ("Previous", f"../{previous_version}/"),
-    ("Latest", "../latest/"),
-    ("Develop", "../dev/"),
+    ("Previous", f"/docs/{previous_version}/"),
+    ("Latest", "/docs/latest/"),
+    ("Develop", "/docs/dev/"),
 ]
 
 if version < "1.75":  # 1.74 is the earliest Sphinx-generated api documentation
