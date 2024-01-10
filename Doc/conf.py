@@ -77,7 +77,8 @@ try:
 except ValueError:
     main_version, minor_version = version.split(".")  # e.g. 1.78
     dev_version = False
-prev_minor_version = int(minor_version) - (2 if dev_version else 1)
+# e.g. if 1.79.dev0 then previous is 1.78 and next will be 1.79
+prev_minor_version = int(minor_version) - 1
 previous_version = f"{main_version}.{prev_minor_version}"
 versions = [
     ("Previous", f"/docs/{previous_version}/"),
