@@ -999,17 +999,11 @@ Simple Chromosomes
 Here is a very simple example - for which we’ll use *Arabidopsis
 thaliana*.
 
-.. figure:: ../images/simple_chrom.pdf
+.. figure:: ../images/simple_chrom.png
    :alt: Simple chromosome diagram for *Arabidopsis thaliana*.
    :name: fig:simplechromosome
 
    Simple chromosome diagram for *Arabidopsis thaliana*.
-
-.. figure:: ../images/tRNA_chrom.pdf
-   :alt: Chromosome diagram for *Arabidopsis thaliana* showing tRNA.
-   :name: fig:trnachromosome
-
-   Chromosome diagram for *Arabidopsis thaliana* showing tRNA genes.
 
 You can skip this bit, but first I downloaded the five sequenced
 chromosomes as five individual FASTA files from the NCBI’s FTP site
@@ -1091,6 +1085,12 @@ interest.
 Annotated Chromosomes
 ~~~~~~~~~~~~~~~~~~~~~
 
+.. figure:: ../images/tRNA_chrom.png
+   :alt: Chromosome diagram for *Arabidopsis thaliana* showing tRNA.
+   :name: fig:trnachromosome
+
+   Chromosome diagram for *Arabidopsis thaliana* showing tRNA genes.
+
 Continuing from the previous example, let’s also show the tRNA genes.
 We’ll get their locations by parsing the GenBank files for the five
 *Arabidopsis thaliana* chromosomes. You’ll need to download these files
@@ -1156,4 +1156,4 @@ and preserve the subdirectory names or edit the paths below:
 It might warn you about the labels being too close together - have a
 look at the forward strand (right hand side) of Chr I, but it should
 create a colorful PDF file, shown in
-:numref:`fig:simplechromosome`.
+:numref:`fig:trnachromosome`.
