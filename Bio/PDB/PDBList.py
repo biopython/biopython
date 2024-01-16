@@ -35,18 +35,19 @@
 
 """Access the PDB over the internet (e.g. to download structures)."""
 
-
 import contextlib
-import ftplib
 import gzip
+import json
 import os
 import re
 import shutil
 import sys
 
+from typing import List, Tuple
+from urllib.request import Request
+from urllib.request import urlcleanup
 from urllib.request import urlopen
 from urllib.request import urlretrieve
-from urllib.request import urlcleanup
 
 
 class PDBList:
@@ -85,13 +86,18 @@ class PDBList:
     """
 
     def __init__(
-        self, server="ftp://ftp.wwpdb.org", pdb=None, obsolete_pdb=None, verbose=True
+        self,
+        server="https://files.wwpdb.org",
+        pdb=None,
+        obsolete_pdb=None,
+        verbose=True,
     ):
         """Initialize the class with the default server or a custom one.
 
         Argument pdb is the local path to use, defaulting to the current
         directory at the moment of initialisation.
         """
+        self.assemblies = None
         self.pdb_server = server  # remote pdb server
         if pdb:
             self.local_pdb = pdb  # local pdb file tree
@@ -155,7 +161,6 @@ class PDBList:
             drwxrwxr-x   2 1002     sysadmin     512 Oct  6 18:28 20031006
             drwxrwxr-x   2 1002     sysadmin     512 Oct 14 02:14 20031013
             -rw-r--r--   1 1002     sysadmin    1327 Mar 12  2001 README
-
         """
         path = self.pdb_server + "/pub/pdb/data/status/latest/"
 
@@ -362,7 +367,7 @@ class PDBList:
             try:
                 self.retrieve_pdb_file(pdb_code, file_format=file_format)
                 if with_assemblies:
-                    assemblies = self.get_all_assemblies(file_format)
+                    assemblies = self.get_all_assemblies()
                     for a_pdb_code, assembly_num in assemblies:
                         if a_pdb_code == pdb_code:
                             pl.retrieve_assembly_file(
@@ -455,15 +460,14 @@ class PDBList:
                 overwrite=overwrite,
             )
 
-    def get_all_assemblies(self, file_format="mmCif"):
+    def get_all_assemblies(self, file_format: str = "") -> List[Tuple[str, str]]:
         """Retrieve the list of PDB entries with an associated bio assembly.
 
-        The requested list will be cached to avoid multiple calls to the FTP
-        server.
+        The requested list will be cached to avoid multiple calls to the server.
 
-        :type  file_format: str, optional
-        :param file_format: format in which to download the entries. Available
-            options are "mmCif" or "pdb". Defaults to mmCif.
+        :param str file_format: A legacy parameter that is left to avoid breaking changes
+        :return: the assemblies
+        :rtype: list
         """
         if hasattr(self, "assemblies") and self.assemblies:
             if self._verbose:
@@ -473,46 +477,30 @@ class PDBList:
         if self._verbose:
             print("Retrieving list of assemblies. This might take a while.")
 
-        # FTPLib is much faster than urlopen
-        idx = self.pdb_server.find("://")
-        if idx >= 0:
-            ftp = ftplib.FTP(self.pdb_server[idx + 3 :])
-        else:
-            ftp = ftplib.FTP(self.pdb_server)
-        ftp.login()  # anonymous
+        body = {
+            "request_options": {
+                "return_all_hits": True,
+            },
+            "return_type": "assembly",
+        }
+        data = json.dumps(body).encode("utf-8")
+        headers = {
+            "Content-Type": "application/json; charset=utf-8",
+            "Content-Length": len(data),
+        }
+        request = Request("https://search.rcsb.org/rcsbsearch/v2/query", data, headers)
+        with urlopen(request) as response:
+            assemblies = json.loads(response.read().decode("utf-8"))["result_set"]
 
-        if file_format.lower() == "mmcif":
-            ftp.cwd("/pub/pdb/data/assemblies/mmCIF/all/")
-            re_name = re.compile(r"(\d[0-9a-z]{3})-assembly(\d+).cif.gz")
-        elif file_format.lower() == "pdb":
-            ftp.cwd("/pub/pdb/data/biounit/PDB/all/")
-            re_name = re.compile(r"(\d[0-9a-z]{3}).pdb(\d+).gz")
-        else:
-            msg = "file_format for assemblies must be 'pdb' or 'mmCif'"
-            raise ValueError(msg)
+        # We transform the assemblies to match the format that they have historically been returned in.
+        def transform(assembly: dict) -> tuple[str, str]:
+            split = assembly["identifier"].split("-")
+            return split[0].lower(), split[-1]
 
-        response = []
-        ftp.retrlines("NLST", callback=response.append)
-        # PDB entries can have more than one assembly:
-        #  e.g.
-        #    104l-assembly1.cif.gz           2022-01-15 19:38   36K
-        #    104l-assembly2.cif.gz           2022-01-15 19:38   36K
-        #    ...
-        #    104l.pdb1.gz               2010-01-15 08:00   28K
-        #    104l.pdb2.gz               2010-01-15 08:00   28K
-        all_assemblies = []
-        for line in response:
-            if line.endswith(".gz"):
-                match = re_name.findall(line)
-                try:
-                    if len(match):
-                        entry, assembly = match[0]
-                except ValueError:
-                    pass
-                else:
-                    all_assemblies.append((entry, assembly))
-        self.assemblies = all_assemblies  # cache
-        return all_assemblies
+        assemblies = list(map(transform, assemblies))
+        self.assemblies = assemblies  # cache
+
+        return assemblies
 
     def retrieve_assembly_file(
         self, pdb_code, assembly_num, pdir=None, file_format=None, overwrite=False
@@ -521,7 +509,7 @@ class PDBList:
 
         Unless noted below, parameters are described in ``retrieve_pdb_file``.
 
-        :type  assembly_num: int
+        :type  assembly_num: str
         :param assembly_num: assembly number to download.
 
         :rtype : str
@@ -602,7 +590,7 @@ class PDBList:
         """
         # Deprecation warning
         file_format = self._print_default_format_warning(file_format)
-        assemblies = self.get_all_assemblies(file_format)
+        assemblies = self.get_all_assemblies()
         for pdb_code, assembly_num in assemblies:
             self.retrieve_assembly_file(pdb_code, assembly_num, file_format=file_format)
         # Write the list
@@ -753,7 +741,7 @@ if __name__ == "__main__":
             )
             if with_assemblies:
                 # PDB Code might have more than one assembly.
-                assemblies = pl.get_all_assemblies(file_format)
+                assemblies = pl.get_all_assemblies()
                 for a_pdb_code, assembly_num in assemblies:
                     if a_pdb_code == pdb_code:
                         pl.retrieve_assembly_file(
@@ -773,7 +761,7 @@ if __name__ == "__main__":
                 )
                 if with_assemblies:
                     # PDB Code might have more than one assembly.
-                    assemblies = pl.get_all_assemblies(file_format)
+                    assemblies = pl.get_all_assemblies()
                     for a_pdb_code, assembly_num in assemblies:
                         if a_pdb_code == pdb_id:
                             pl.retrieve_assembly_file(
