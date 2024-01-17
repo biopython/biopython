@@ -302,7 +302,8 @@ from typing import (
 
 if TYPE_CHECKING:
     from Bio.PDB.Residue import Residue
-    from Bio.PDB.Chain import Chain
+
+    # from Bio.PDB.Chain import Chain
 
 HKT = Tuple["AtomKey", "AtomKey", "AtomKey"]  # Hedron key tuple
 DKT = Tuple["AtomKey", "AtomKey", "AtomKey", "AtomKey"]  # Dihedron Key Tuple
@@ -481,7 +482,7 @@ class IC_Chain:
     _dihedraSelect = np.array([True, True, True, False])
     _dihedraOK = np.array([True, True, True, True])
 
-    def __init__(self, parent: "Chain", verbose: bool = False) -> None:
+    def __init__(self, parent, verbose: bool = False) -> None:
         """Initialize IC_Chain object, with or without residue/Atom data.
 
         :param Bio.PDB.Chain parent: Biopython Chain object
