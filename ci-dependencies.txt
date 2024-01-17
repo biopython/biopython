@@ -25,11 +25,5 @@ rdflib
 reportlab
 scipy
 
-## Documentation
-numpydoc==1.6.0
-pygments
-sphinx==7.2.6
-sphinx_rtd_theme==2.0.0
-
 # Static type checking
 mypy

@@ -352,7 +352,7 @@ jobs:
     - name: Install dependencies
       if: steps.cache-pip.outputs.cache-hit != 'true'
       run: |
-          python -m pip install --upgrade --upgrade-strategy eager -r ci-dependencies.txt
+        python -m pip install --upgrade --upgrade-strategy eager -r .circleci/requirements-sphinx.txt
 
     - name: Debug Info
       run: |
