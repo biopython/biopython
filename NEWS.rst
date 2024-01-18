@@ -75,9 +75,6 @@ attributes of the ``SeqFeature`` which was done without a deprecation period.
 They are again aliases for ``.location.strand`` etc, but trigger deprecation
 warnings.
 
-The unused ``version`` parameter to the ``weblogo`` method of
-``Bio.motifs.Motif`` is also now deprecated.
-
 22 December 2023: Biopython 1.82
 ================================
 
