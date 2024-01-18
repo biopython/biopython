@@ -135,6 +135,7 @@ class Record:
        (will be replaced by the dblink cross-references in 2009).
      - dblinks - The genome sequencing project number(s) and other links.
        (will replace the project information in 2009).
+     - name - An alias of the locus attribute
 
     """
 
@@ -241,6 +242,16 @@ class Record:
         output += self._contig_line()
         output += "//"
         return output
+
+    @property
+    def name(self):
+        """Make the name attribute is an alias for the locus attribute."""
+        return self.locus
+
+    @name.setter
+    def name(self, value):
+        """Make the name attribute is an alias for the locus attribute."""
+        self.locus = value
 
     def _locus_line(self):
         """Provide the output string for the LOCUS line (PRIVATE)."""
