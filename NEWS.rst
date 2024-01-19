@@ -63,6 +63,10 @@ The wwPDB organization announced that they plan to deprecate the FTP
 server by the end of the year. See the announcement
 `here <https://www.wwpdb.org/news/news?year=2023#65562f0ad78e004e766a96c1>`_.
 
+A parser has been added for parsing PDBML (PDB XML) files.
+`PDBML <https://pdbml.wwpdb.org/>`_ is a representation of PDB data in XML format.
+The PDB chapter of the tutorial is updated to show how to use the PDBML parser.
+
 ``Bio.SeqIO`` now supports reading sequences from the Graphical Fragment
 Assembly (GFA) files with the formats ``gfa1`` and ``gfa2`` (for GFA 1.x and
 GFA 2.0 files respectively). All data outside of segment lines are ignored, such
