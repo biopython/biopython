@@ -7759,7 +7759,8 @@ KEYWORDS    """,
             record = SeqIO.read(path, "genbank")
             self.assertNotIn("structured_comment", record.annotations)
             self.assertIn(
-                "Structured comment not parsed for AYW00820.", str(caught[0].message)
+                "Structured comment not parsed on malformed header line",
+                str(caught[0].message),
             )
 
     def test_locus_line_topogoly(self):

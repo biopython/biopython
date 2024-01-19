@@ -1798,8 +1798,7 @@ class GenBankScanner(InsdcScanner):
                                     not in structured_comment_dict
                                 ):
                                     warnings.warn(
-                                        "Structured comment not parsed for %s. Is it malformed?"
-                                        % consumer.data.name,
+                                        f"Structured comment not parsed on malformed header line: {line}",
                                         BiopythonParserWarning,
                                     )
                                     continue
