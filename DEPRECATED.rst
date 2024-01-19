@@ -164,6 +164,9 @@ The ``search`` method of the ``Instances`` class in ``Bio.motifs`` was
 deprecated in release 1.82. Instead of ``instances.search(sequence)``,
 ``sequence.search(instances)`` can be used, where sequence is a Seq object.
 This allows instances to have different lengths.
+The ``version`` parameter of the ``weblogo`` method of the ``Motif`` class in
+``Bio.motifs`` was deprecated in release 1.83. Using the parameter has no
+effect.
 
 The ``Instances`` class and the ``instances`` argument of the ``Motif`` class
 initializer in ``Bio.motifs`` were deprecated in release 1.82. Instead of

@@ -354,21 +354,24 @@ Before talking about transcription, I want to try to clarify the strand
 issue. Consider the following (made up) stretch of double stranded DNA
 which encodes a short peptide:
 
-== ========================================================== ==
-\  DNA coding strand (aka Crick strand, strand :math:`+1`)    
-5’ ``ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG``                3’
-\  ``|||||||||||||||||||||||||||||||||||||||``                
-3’ ``TACCGGTAACATTACCCGGCGACTTTCCCACGGGCTATC``                5’
-\  DNA template strand (aka Watson strand, strand :math:`-1`) 
-\                                                             
-\  :math:`|`                                                  
-\  Transcription                                              
-\  :math:`\downarrow`                                         
-\                                                             
-5’ ``AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG``                3’
-\  Single stranded messenger RNA                              
-\                                                             
-== ========================================================== ==
+.. math::
+
+   \begin{gathered}
+       \text{DNA coding strand (aka Crick strand, strand } +1 \text{)} \\
+       \text{5'} \qquad \texttt{ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG} \qquad \text{3'} \\
+       \texttt{|||||||||||||||||||||||||||||||||||||||} \\
+       \text{3'} \qquad \texttt{TACCGGTAACATTACCCGGCGACTTTCCCACGGGCTATC} \qquad \text{5'} \\
+       \text{DNA template strand (aka Watson strand, strand } -1 \text{)}
+   \end{gathered}
+
+Transcription of this DNA sequence produces the following RNA sequence:
+
+.. math::
+
+   \begin{gathered}
+       \text{5'} \qquad \texttt{AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG} \qquad \text{3'} \\
+       \text{Single-stranded messenger RNA}
+   \end{gathered}
 
 The actual biological transcription process works from the template
 strand, doing a reverse complement (TCAG :math:`\rightarrow` CUGA) to

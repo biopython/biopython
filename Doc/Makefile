@@ -21,5 +21,7 @@ help:
 
 clean:
 	-rm -f api/Bio*.rst
-	-rm -rf _build/html
 	-rm -rf _build/doctrees
+	-rm -rf _build/html
+	-rm -rf _build/latex
+
