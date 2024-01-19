@@ -54,6 +54,15 @@ A function called ``Bio.Phylo.to_igraph`` has been added to convert a
 ``Bio.Phylo.Tree`` into an ``igraph.Graph`` graph, in parallel to the existing
 function to convert the same object into a ``networkx`` graph.
 
+The PDB module no longer uses the PDB FTP server by default.
+Instead, the PDB module uses the HTTPS server in most cases.
+For ``get_all_assemblies``, the PDB module now uses the
+`RCSB PDB Search API <https://search.rcsb.org/#search-api>`_ to get all the
+assemblies.
+The wwPDB organization announced that they plan to deprecate the FTP
+server by the end of the year. See the announcement
+`here <https://www.wwpdb.org/news/news?year=2023#65562f0ad78e004e766a96c1>`_.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
