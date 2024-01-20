@@ -279,10 +279,11 @@ def qblast(
         elapsed = time.time() - start_time
         # Throw a warning if search takes longer than ten minutes
         if elapsed >= 600:
-            warnings.warn("Search is taking longer than 10 minutes, consider re-issuing it", 
-                          BiopythonWarning
-                         )
-        
+            warnings.warn(
+                "Search is taking longer than 10 minutes, consider re-issuing it",
+                BiopythonWarning,
+            )
+
         request = Request(url_base, message, {"User-Agent": "BiopythonClient"})
         handle = urlopen(request)
         results = handle.read().decode()
