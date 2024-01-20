@@ -226,6 +226,29 @@ class TestReadCorruptFiles(unittest.TestCase):
 
         self.assertRaises(ValueError, f, "SeqXML/corrupt_example1.xml")
         self.assertRaises(ValueError, f, "SeqXML/corrupt_example2.xml")
+        self.assertRaises(ValueError, f, "SeqXML/corrupt_example3.xml")
+
+
+class TestOldVersions(unittest.TestCase):
+    def test_version01(self):
+        """Test for version 0.1 specific features."""
+        records = list(SeqIO.parse("SeqXML/version_01_example.xml", "seqxml"))
+        self.assertEqual(records[0].seq, "AAAAAACGTAAA")
+        self.assertEqual(records[0].dbxrefs[0], "db:1")
+        self.assertEqual(records[1].seq, "AAAUUUUCTGAA")
+        self.assertEqual(records[2].seq, "GAKKVFIEDVSKEFVEEFIWPAVQSSALYE")
+
+    def test_wrong_version(self):
+        """Handling of wrong versions."""
+
+        def f(path):
+            records = SeqIO.parse(path, "seqxml")
+            for record in records:
+                pass
+
+        self.assertRaises(ValueError, f, "SeqXML/wrong_version1.xml")
+        self.assertRaises(ValueError, f, "SeqXML/wrong_version2.xml")
+        self.assertRaises(ValueError, f, "SeqXML/wrong_version3.xml")
 
 
 if __name__ == "__main__":
