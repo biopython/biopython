@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Should fail because speciesName in root is unsupported in v0.3 -->
+<seqXML seqXMLversion="0.3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.seqxml.org/0.3/seqxml.xsd" speciesName="fake">
+    <entry id="fakeDNA">
+        <DNAseq>AAAAAACGTAAA</DNAseq>
+        <DBRef source="test" id="test"/>
+    </entry>
+</seqXML>
