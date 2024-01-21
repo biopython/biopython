@@ -79,7 +79,7 @@ class ContentHandler(handler.ContentHandler):
                 )
         if self.seqXMLversion is None:
             raise ValueError("Failed to find seqXMLversion")
-        elif self.seqXMLversion not in ["0.1", "0.2", "0.3", "0.4"]:
+        elif self.seqXMLversion not in ("0.1", "0.2", "0.3", "0.4"):
             raise ValueError("Unsupported seqXMLversion")
         url = f"http://www.seqxml.org/{self.seqXMLversion}/seqxml.xsd"
         if schema is not None and schema != url:
@@ -144,7 +144,10 @@ class ContentHandler(handler.ContentHandler):
         if record.id is None:
             raise ValueError("Failed to find entry ID")
         self.records.append(record)
-        self.startElementNS = self.startEntryFieldElement
+        if self.seqXMLversion == "0.1":
+            self.startElementNS = self.startEntryFieldElementVersion01
+        else:
+            self.startElementNS = self.startEntryFieldElement
         self.endElementNS = self.endEntryElement
 
     def endEntryElement(self, name, qname):
@@ -158,8 +161,8 @@ class ContentHandler(handler.ContentHandler):
         self.startElementNS = self.startEntryElement
         self.endElementNS = self.endSeqXMLElement
 
-    def startEntryFieldElement(self, name, qname, attrs):
-        """Receive a field of an entry element and forward it."""
+    def startEntryFieldElementVersion01(self, name, qname, attrs):
+        """Receive a field of an entry element and forward it for version 0.1."""
         namespace, localname = name
         if namespace is not None:
             raise ValueError(
@@ -171,15 +174,30 @@ class ContentHandler(handler.ContentHandler):
             return self.startSpeciesElement(attrs)
         if localname == "description":
             return self.startDescriptionElement(attrs)
-        if (
-            localname in ("DNAseq", "RNAseq", "AAseq") and self.seqXMLversion != "0.1"
-        ) or (
-            localname in ["dnaSeq", "rnaSeq", "aaSeq"] and self.seqXMLversion == "0.1"
-        ):
+        if localname in ("dnaSeq", "rnaSeq", "aaSeq"):
             return self.startSequenceElement(attrs)
-        if (localname == "DBRef" and self.seqXMLversion != "0.1") or (
-            localname == "alternativeID" and self.seqXMLversion == "0.1"
-        ):
+        if localname == "alternativeID":
+            return self.startDBRefElement(attrs)
+        if localname == "property":
+            return self.startPropertyElement(attrs)
+        raise ValueError(f"Unexpected field {localname} in entry")
+
+    def startEntryFieldElement(self, name, qname, attrs):
+        """Receive a field of an entry element and forward it for versions >=0.2."""
+        namespace, localname = name
+        if namespace is not None:
+            raise ValueError(
+                f"Unexpected namespace '{namespace}' for {localname} element"
+            )
+        if qname is not None:
+            raise RuntimeError(f"Unexpected qname '{qname}' for {localname} element")
+        if localname == "species":
+            return self.startSpeciesElement(attrs)
+        if localname == "description":
+            return self.startDescriptionElement(attrs)
+        if localname in ("DNAseq", "RNAseq", "AAseq"):
+            return self.startSequenceElement(attrs)
+        if localname == "DBRef":
             return self.startDBRefElement(attrs)
         if localname == "property":
             return self.startPropertyElement(attrs)
