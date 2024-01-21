@@ -40,6 +40,7 @@ from xml.parsers import expat
 
 from Bio import BiopythonWarning
 from Bio import StreamModeError
+from Bio.Align import Alignments
 from Bio._utils import function_with_previous
 
 
@@ -82,11 +83,32 @@ class CorruptedXMLError(ValueError):
         )
 
 
+class Hit(Alignments):
+    """Stores a single BLAST hit of one single query against one target.
+
+    The ``Bio.Blast.Hit`` class inherits from the ``Bio.Align.Alignments``
+    class, which is a list storing ``Bio.Align.Alignment`` objects.
+    Most hits consist of only 1 or a few Alignment objects.
+
+    Each ``Bio.Blast.Hit`` object has a ``target`` attribute containing the
+    following information:
+
+     - target.id:          seqId of subject;
+     - target.description: definition line of subject;
+     - target.name:        accession of subject;
+     - len(target.seq):    sequence length of subject.
+
+    See the documentation of ``Bio.Blast.Record`` for a more detailed
+    explanation of the information stored in the alignments contained in the
+    ``Bio.Blast.Hit`` object.
+    """
+
+
 class Record(list):
     """Stores the BLAST results for a single query.
 
-    A ``Bio.Blast.Record`` object is a list of ``Bio.Align.Alignments`` objects,
-    each corresponding to one hit for the query in the BLAST output.
+    A ``Bio.Blast.Record`` object is a list of ``Bio.Blast.Hit`` objects, each
+    corresponding to one hit for the query in the BLAST output.
 
     The ``Bio.Blast.Record`` object may have the following attributes:
      - query:   A ``SeqRecord`` object which may contain some or all of the
@@ -105,24 +127,24 @@ class Record(list):
                  - 'entropy':   Karlin-Altschul parameter H (float).
      - message: Some (error?) information.
 
-    Each ``Bio.Align.Alignments`` object has a ``target`` attribute containing
-    the following information:
+    Each ``Bio.Blast.Hit`` object has a ``target`` attribute containing the
+    following information:
 
      - target.id:          seqId of subject;
      - target.description: definition line of subject;
      - target.name:        accession of subject;
      - len(target.seq):    sequence length of subject.
 
-    The ``Bio.Align.Alignments`` class inherits from a list storing
-    ``Bio.Align.Alignment`` objects.  The ``target`` and ``query`` attributes
-    of a ``Bio.Align.Alignment`` object point to a ``SeqRecord`` object
-    representing the target and query, respectively.  For translated BLAST
-    searches, The ``features`` attribute of the target or query may contain a
-    ``SeqFeature`` of type CDS that stores the amino acid sequence region.  The
-    ``qualifiers`` attribute of such a feature is a dictionary with  a single
-    key 'coded_by'; the corresponding value specifies the nucleotide sequence
-    region, in a GenBank-style string with 1-based coordinates, that encodes
-    the amino acid sequence.
+    The ``Bio.Blast.Hit`` class inherits from the ``Bio.Align.Alignments``
+    class, which is a list storing ``Bio.Align.Alignment`` objects.  The
+    ``target`` and ``query`` attributes of a ``Bio.Align.Alignment`` object
+    point to a ``SeqRecord`` object representing the target and query,
+    respectively.  For translated BLAST searches, The ``features`` attribute of
+    the target or query may contain a ``SeqFeature`` of type CDS that stores
+    the amino acid sequence region.  The ``qualifiers`` attribute of such a
+    feature is a dictionary with  a single key 'coded_by'; the corresponding
+    value specifies the nucleotide sequence region, in a GenBank-style string
+    with 1-based coordinates, that encodes the amino acid sequence.
 
     Each ``Bio.Align.Alignment`` object has the following additional attributes:
 
@@ -143,17 +165,20 @@ class Record(list):
     {'db-num': 2934173, 'db-len': 1011751523, 'hsp-len': 0, 'eff-space': 0.0, 'kappa': 0.041, 'lambda': 0.267, 'entropy': 0.14}
     >>> len(record)
     78
-    >>> alignments = record[0]
-    >>> type(alignments)
-    <class 'Bio.Align.Alignments'>
-    >>> alignments.target
+    >>> hit = record[0]
+    >>> type(hit)
+    <class 'Bio.Blast.Hit'>
+    >>> from Bio.Align import Alignments
+    >>> isinstance(hit, Alignments)
+    True
+    >>> hit.target
     SeqRecord(seq=Seq(None, length=319), id='gi|12654095|gb|AAH00859.1|', name='AAH00859', description='Unknown (protein for IMAGE:3459481) [Homo sapiens]', dbxrefs=[])
 
-    Most alignments consist of only 1 or a few Alignment objects:
+    Most hits consist of only 1 or a few Alignment objects:
 
-    >>> len(alignments)
+    >>> len(hit)
     1
-    >>> alignment = alignments[0]
+    >>> alignment = hit[0]
     >>> type(alignment)
     <class 'Bio.Align.Alignment'>
     >>> alignment.score

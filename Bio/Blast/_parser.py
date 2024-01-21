@@ -19,11 +19,11 @@ from collections import deque
 from xml.parsers import expat
 from typing import Dict, Callable
 
-from Bio.Blast import Record
+from Bio.Blast import Record, Hit
 from Bio.Seq import Seq, reverse_complement
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqFeature import SeqFeature, SimpleLocation
-from Bio.Align import Alignment, Alignments
+from Bio.Align import Alignment
 from Bio import Entrez
 
 
@@ -188,7 +188,7 @@ class XMLHandler:
     def _start_hit(self, name, attrs):
         assert self._characters.strip() == ""
         self._characters = ""
-        self._alignment = Alignments()
+        self._alignment = Hit()
 
     def _start_hit_num(self, name, attrs):
         assert self._characters.strip() == ""
