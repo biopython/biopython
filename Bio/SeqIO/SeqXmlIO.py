@@ -89,13 +89,13 @@ class ContentHandler(handler.ContentHandler):
             )
         # speciesName and ncbiTaxID attributes on the root are only supported
         # in 0.4
-        if self.speciesName and float(self.seqXMLversion) < 0.4:
+        if self.speciesName and self.seqXMLversion != "0.4":
             raise ValueError(
                 "Attribute 'speciesName' on root is only supported in version 0.4"
             )
-        if self.ncbiTaxID and float(self.seqXMLversion) < 0.4:
+        if self.ncbiTaxID and self.seqXMLversion != "0.4":
             raise ValueError(
-                "Attribute 'speciesName' on root is only supported in version 0.4"
+                "Attribute 'ncbiTaxID' on root is only supported in version 0.4"
             )
         self.endElementNS = self.endSeqXMLElement
         self.startElementNS = self.startEntryElement
@@ -129,7 +129,9 @@ class ContentHandler(handler.ContentHandler):
             if namespace is None:
                 if localname == "id":
                     record.id = value
-                elif localname == "source" and float(self.seqXMLversion) >= 0.3:
+                elif localname == "source" and (
+                    self.seqXMLversion == "0.3" or self.seqXMLversion == "0.4"
+                ):
                     record.annotations["source"] = value
                 else:
                     raise ValueError(
@@ -170,13 +172,12 @@ class ContentHandler(handler.ContentHandler):
         if localname == "description":
             return self.startDescriptionElement(attrs)
         if (
-            localname in ("DNAseq", "RNAseq", "AAseq")
-            and float(self.seqXMLversion) >= 0.2
+            localname in ("DNAseq", "RNAseq", "AAseq") and self.seqXMLversion != "0.1"
         ) or (
             localname in ["dnaSeq", "rnaSeq", "aaSeq"] and self.seqXMLversion == "0.1"
         ):
             return self.startSequenceElement(attrs)
-        if (localname == "DBRef" and float(self.seqXMLversion) >= 0.2) or (
+        if (localname == "DBRef" and self.seqXMLversion != "0.1") or (
             localname == "alternativeID" and self.seqXMLversion == "0.1"
         ):
             return self.startDBRefElement(attrs)
@@ -272,15 +273,15 @@ class ContentHandler(handler.ContentHandler):
         if qname is not None:
             raise RuntimeError(f"Unexpected qname '{qname}' for sequence end")
         record = self.records[-1]
-        if (localname == "DNAseq" and float(self.seqXMLversion) >= 0.2) or (
+        if (localname == "DNAseq" and self.seqXMLversion != "0.1") or (
             localname == "dnaSeq" and self.seqXMLversion == "0.1"
         ):
             record.annotations["molecule_type"] = "DNA"
-        elif (localname == "RNAseq" and float(self.seqXMLversion) >= 0.2) or (
+        elif (localname == "RNAseq" and self.seqXMLversion != "0.1") or (
             localname == "rnaSeq" and self.seqXMLversion == "0.1"
         ):
             record.annotations["molecule_type"] = "RNA"
-        elif (localname == "AAseq" and float(self.seqXMLversion) >= 0.2) or (
+        elif (localname == "AAseq" and self.seqXMLversion >= "0.1") or (
             localname == "aaSeq" and self.seqXMLversion == "0.1"
         ):
             record.annotations["molecule_type"] = "protein"
@@ -320,7 +321,9 @@ class ContentHandler(handler.ContentHandler):
             raise ValueError("Failed to find source for DBRef element")
         if ID is None:
             raise ValueError("Failed to find id for DBRef element")
-        if TYPE is None and 0.2 <= float(self.seqXMLversion) <= 0.3:
+        if TYPE is None and (
+            self.seqXMLversion == "0.2" or self.seqXMLversion == "0.3"
+        ):
             raise ValueError("Failed to find type for DBRef element")
         if self.data is not None:
             raise RuntimeError(f"Unexpected data found: '{self.data}'")
@@ -338,7 +341,7 @@ class ContentHandler(handler.ContentHandler):
             raise RuntimeError(f"Unexpected namespace '{namespace}' for DBRef element")
         if qname is not None:
             raise RuntimeError(f"Unexpected qname '{qname}' for DBRef element")
-        if (localname != "DBRef" and float(self.seqXMLversion) >= 0.2) or (
+        if (localname != "DBRef" and self.seqXMLversion != "0.1") or (
             localname != "alternativeID" and self.seqXMLversion == "0.1"
         ):
             raise RuntimeError(f"Unexpected localname '{localname}' for DBRef element")
