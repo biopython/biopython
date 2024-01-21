@@ -36,14 +36,15 @@
 """Access the PDB over the internet (e.g. to download structures)."""
 
 import contextlib
+import functools
 import gzip
 import json
 import os
 import re
 import shutil
 import sys
-
-from typing import List, Tuple
+from concurrent.futures import ThreadPoolExecutor
+from typing import List, Optional, Tuple
 from urllib.request import Request
 from urllib.request import urlcleanup
 from urllib.request import urlopen
@@ -412,52 +413,51 @@ class PDBList:
                     print(f"Obsolete file {old_file} is missing")
 
     def download_pdb_files(
-        self, pdb_codes, obsolete=False, pdir=None, file_format=None, overwrite=False
+        self,
+        pdb_codes: List[str],
+        obsolete: bool = False,
+        pdir: Optional[str] = None,
+        file_format: Optional[str] = None,
+        overwrite: bool = False,
+        max_num_threads: Optional[int] = None,
     ):
-        """Fetch set of PDB structure files from the PDB server and stores them locally.
+        """Fetch set of PDB structure files from the PDB server and store them locally.
 
-        The PDB structure's file name is returned as a single string.
-        If obsolete ``==`` True, the files will be saved in a special file tree.
+        :param pdb_codes: A list of 4-symbol PDB structure IDs
 
-        :param pdb_codes: a list of 4-symbols structure Ids from PDB
-        :type pdb_codes: list of strings
+        :param obsolete:
+            Has a meaning only for obsolete structures.
+            If True, download the obsolete structure to 'obsolete' folder.
+            Otherwise, the download won't be performed.
+            This option doesn't work for mmtf format as obsolete structures are not available as mmtf.
+            (default: ``False``)
 
-        :param file_format:
-            File format. Available options:
+        :param pdir: Put the file in this directory. By default, create a PDB-style directory tree.
+
+        :param file_format: File format. Available options:
 
             * "mmCif" (default, PDBx/mmCif file),
             * "pdb" (format PDB),
             * "xml" (PMDML/XML format),
             * "mmtf" (highly compressed),
-            * "bundle" (PDB formatted archive for large structure)
+            * "bundle" (PDB formatted archive for large structure).
 
-        :param overwrite: if set to True, existing structure files will be overwritten. Default: False
-        :type overwrite: bool
+        :param overwrite: If set to true, existing structure files will be overwritten. (default: ``False``)
 
-        :param obsolete:
-            Has a meaning only for obsolete structures.
-            If True, download the obsolete structure
-            to 'obsolete' folder, otherwise download won't be performed.
-            This option doesn't work for mmtf format as obsoleted structures are not available as mmtf.
-            (default: False)
-
-        :type obsolete: bool
-
-        :param pdir: put the file in this directory (default: create a PDB-style directory tree)
-        :type pdir: string
-
-        :return: filenames
-        :rtype: string
+        :param max_num_threads: The maximum number of threads to use when downloading files
         """
         # Deprecation warning
         file_format = self._print_default_format_warning(file_format)
-        for pdb_code in pdb_codes:
-            self.retrieve_pdb_file(
-                pdb_code,
-                obsolete=obsolete,
-                pdir=pdir,
-                file_format=file_format,
-                overwrite=overwrite,
+        with ThreadPoolExecutor(max_num_threads) as executor:
+            executor.map(
+                functools.partial(
+                    self.retrieve_pdb_file,
+                    obsolete=obsolete,
+                    pdir=pdir,
+                    file_format=file_format,
+                    overwrite=overwrite,
+                ),
+                pdb_codes,
             )
 
     def get_all_assemblies(self, file_format: str = "") -> List[Tuple[str, str]]:
@@ -578,33 +578,51 @@ class PDBList:
             os.remove(assembly_gz_file)
         return assembly_final_file
 
-    def download_all_assemblies(self, listfile=None, file_format=None):
+    def download_all_assemblies(
+        self,
+        listfile: Optional[str] = None,
+        file_format: Optional[str] = None,
+        max_num_threads: Optional[int] = None,
+    ):
         """Retrieve all biological assemblies not in the local PDB copy.
 
-        :type  listfile: str, optional
-        :param listfile: file name to which all assembly codes will be written
+        :param listfile: File name to which all assembly codes will be written
 
-        :type  file_format: str, optional
-        :param file_format: format in which to download the entries. Available
-            options are "mmCif" or "pdb". Defaults to mmCif.
+        :param file_format: Format in which to download the entries.
+            Available options are "mmCif" or "pdb". Defaults to "mmCif".
+
+        :param max_num_threads: The maximum number of threads to use while downloading the assemblies
         """
         # Deprecation warning
         file_format = self._print_default_format_warning(file_format)
         assemblies = self.get_all_assemblies()
-        for pdb_code, assembly_num in assemblies:
-            self.retrieve_assembly_file(pdb_code, assembly_num, file_format=file_format)
+        with ThreadPoolExecutor(max_num_threads) as executor:
+            for pdb_code, assembly_num in assemblies:
+                executor.submit(
+                    functools.partial(
+                        self.retrieve_assembly_file, file_format=file_format
+                    ),
+                    pdb_code,
+                    assembly_num,
+                )
         # Write the list
         if listfile:
             with open(listfile, "w") as outfile:
                 outfile.writelines(f"{pdb_code}.{assembly_num}\n" for x in assemblies)
 
-    def download_entire_pdb(self, listfile=None, file_format=None):
+    def download_entire_pdb(
+        self,
+        listfile: Optional[str] = None,
+        file_format: Optional[str] = None,
+        max_num_threads: Optional[int] = None,
+    ):
         """Retrieve all PDB entries not present in the local PDB copy.
 
-        :param listfile: filename to which all PDB codes will be written (optional)
+        NOTE: The default download format has changed from PDB to PDBx/mmCif.
 
-        :param file_format:
-            File format. Available options:
+        :param listfile: Filename to which all PDB codes will be written
+
+        :param file_format: File format. Available options:
 
             * "mmCif" (default, PDBx/mmCif file),
             * "pdb" (format PDB),
@@ -612,36 +630,51 @@ class PDBList:
             * "mmtf" (highly compressed),
             * "bundle" (PDB formatted archive for large structure)
 
-        NOTE. The default download format has changed from PDB to PDBx/mmCif
+        :param max_num_threads: The maximum number of threads to use while downloading PDB entries
         """
         # Deprecation warning
         file_format = self._print_default_format_warning(file_format)
         entries = self.get_all_entries()
-        for pdb_code in entries:
-            self.retrieve_pdb_file(pdb_code, file_format=file_format)
+        with ThreadPoolExecutor(max_num_threads) as executor:
+            executor.map(
+                functools.partial(self.retrieve_pdb_file, file_format=file_format),
+                entries,
+            )
         # Write the list
         if listfile:
             with open(listfile, "w") as outfile:
                 outfile.writelines(x + "\n" for x in entries)
 
-    def download_obsolete_entries(self, listfile=None, file_format=None):
+    def download_obsolete_entries(
+        self,
+        listfile: Optional[str] = None,
+        file_format: Optional[str] = None,
+        max_num_threads: Optional[int] = None,
+    ):
         """Retrieve all obsolete PDB entries not present in local obsolete PDB copy.
 
-        :param listfile: filename to which all PDB codes will be written (optional)
+        NOTE: The default download format has changed from PDB to PDBx/mmCif.
 
-        :param file_format: file format. Available options:
-            "mmCif" (default, PDBx/mmCif file),
-            "pdb" (format PDB),
-            "xml" (PMDML/XML format),
+        :param listfile: Filename to which all PDB codes will be written
 
-        NOTE. The default download format has changed from PDB to PDBx/mmCif
+        :param file_format: File format. Available options:
+
+            * "mmCif" (default, PDBx/mmCif file),
+            * "pdb" (PDB format),
+            * "xml" (PMDML/XML format).
+
+        :param max_num_threads: The maximum number of threads to use while downloading PDB entries
         """
         # Deprecation warning
         file_format = self._print_default_format_warning(file_format)
         entries = self.get_all_obsolete()
-        for pdb_code in entries:
-            self.retrieve_pdb_file(pdb_code, obsolete=True, file_format=file_format)
-
+        with ThreadPoolExecutor(max_num_threads) as executor:
+            executor.map(
+                functools.partial(
+                    self.retrieve_pdb_file, obsolete=True, file_format=file_format
+                ),
+                entries,
+            )
         # Write the list
         if listfile:
             with open(listfile, "w") as outfile:
