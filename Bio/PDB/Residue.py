@@ -37,6 +37,30 @@ class Residue(Entity):
         full_id = (resname, hetflag, resseq, icode)
         return "<Residue %s het=%s resseq=%s icode=%s>" % full_id
 
+    def strictly_equals(
+        self, other: "Residue", compare_coordinates: bool = False
+    ) -> bool:
+        """Compare this residue to the other residue using a strict definition of equality.
+
+        The residues are equal if they have the same name, identifier,
+        and their constituent atoms are strictly equal.
+
+        :param other: The residue to compare this residue to
+        :type other: Residue
+        :param compare_coordinates: Whether to compare the coordinates of the atoms
+        :type compare_coordinates: bool
+        :return: Whether the residues are strictly equal
+        :rtype: bool
+        """
+        if not isinstance(other, type(self)):
+            return False
+
+        return (
+            self.resname == other.resname
+            and self.id == other.id
+            and Entity.strictly_equals(self, other, compare_coordinates)
+        )
+
     def add(self, atom):
         """Add an Atom object.
 

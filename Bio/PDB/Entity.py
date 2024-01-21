@@ -183,6 +183,37 @@ class Entity:
         self._id = value
         self._reset_full_id()
 
+    def strictly_equals(
+        self, other: "Entity", compare_coordinates: bool = False
+    ) -> bool:
+        """Compare this entity to the other entity for equality.
+
+        Recursively compare the children of this entity to the other entity's children.
+        Compare most properties including names and IDs.
+
+        :param other: The entity to compare this entity with
+        :type other: Entity
+        :param compare_coordinates: Whether to compare atomic coordinates
+        :type compare_coordinates: bool
+        :return: Whether the two entities are strictly equal
+        :rtype: bool
+        """
+        if not isinstance(other, type(self)):
+            return False
+
+        if self.id != other.id:
+            return False
+
+        if len(self.child_list) != len(other.child_list):
+            return False
+
+        for left_child, right_child in zip(self.child_list, other.child_list):
+            assert hasattr(left_child, "strictly_equals")
+            if not left_child.strictly_equals(right_child, compare_coordinates):
+                return False
+
+        return True
+
     def get_level(self):
         """Return level in hierarchy.
 
@@ -434,6 +465,43 @@ class DisorderedEntityWrapper:
     def get_id(self):
         """Return the id."""
         return self.id
+
+    def strictly_equals(
+        self, other: "DisorderedEntityWrapper", compare_coordinates: bool = False
+    ) -> bool:
+        """Compare this entity to the other entity using a strict definition of equality.
+
+        Recursively compare the children of this entity to the other entity's children.
+        Compare most properties including the selected child, names, and IDs.
+
+        :param other: The entity to compare this entity with
+        :type other: DisorderedEntityWrapper
+        :param compare_coordinates: Whether to compare atomic coordinates
+        :type compare_coordinates: bool
+        :return: Whether the two entities are strictly equal
+        :rtype: bool
+        """
+        if not isinstance(other, type(self)):
+            return False
+
+        if self.id != other.id:
+            return False
+
+        if not self.selected_child.get_id() == other.selected_child.get_id():
+            return False
+
+        # Check that the children dictionaries have the same keys
+        if self.child_dict.keys() != other.child_dict.keys():
+            return False
+
+        # Compare the children using strictly_equals
+        for key in self.child_dict.keys():
+            if not self.child_dict[key].strictly_equals(
+                other.child_dict[key], compare_coordinates
+            ):
+                return False
+
+        return True
 
     def disordered_has_id(self, id):
         """Check if there is an object present associated with this id."""
