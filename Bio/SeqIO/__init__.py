@@ -291,6 +291,10 @@ names are also used in Bio.AlignIO and include the following:
     - gck     - Gene Construction Kit's format.
     - genbank - The GenBank or GenPept flat file format.
     - gb      - An alias for "genbank", for consistency with NCBI Entrez Utilities
+    - gfa     - Graphical Fragment Assembly. Only segment lines are parsed and
+      all linkage information is ignored.
+    - gfa2    - Graphical Fragement Assembly version 2.0. Only segment lines are
+      parsed and all linkage information is ignored.
     - ig      - The IntelliGenetics file format, apparently the same as the
       MASE alignment format.
     - imgt    - An EMBL like format from IMGT where the feature tables are more
@@ -380,6 +384,7 @@ from Bio.SeqIO import AbiIO
 from Bio.SeqIO import AceIO
 from Bio.SeqIO import FastaIO
 from Bio.SeqIO import GckIO
+from Bio.SeqIO import GfaIO
 from Bio.SeqIO import IgIO  # IntelliGenetics or MASE format
 from Bio.SeqIO import InsdcIO  # EMBL and GenBank
 from Bio.SeqIO import NibIO
@@ -420,6 +425,8 @@ _FormatToIterator = {
     "gck": GckIO.GckIterator,
     "genbank": InsdcIO.GenBankIterator,
     "genbank-cds": InsdcIO.GenBankCdsFeatureIterator,
+    "gfa": GfaIO.GfaIterator,
+    "gfa2": GfaIO.Gfa2Iterator,
     "imgt": InsdcIO.ImgtIterator,
     "nib": NibIO.NibIterator,
     "cif-seqres": PdbIO.CifSeqresIterator,
