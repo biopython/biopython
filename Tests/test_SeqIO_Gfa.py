@@ -14,8 +14,8 @@ class TestRead(unittest.TestCase):
             records[6].seq,
             "TTAGGTCTCCACCCCTGACTCCCCTCAGCCATAGAAGGCCCCACCCCAGTCTCAGCCCTACTCCACTCAAGCACTATAGTTGTAGCAGGAATCTTCTTACTCATCCGCTTCCACCCCCTAGCAGAAAATAGCCCACTAATCCAAACTCTAACACTATGCTTAGGCGCTATCACCACTCTGTTCGCAGCAGTCTGCGCCCTTACACAAAATGACATCAAAAAAATCGTAGCCTTCTCCACTTCAAGTCAACTAGGACTCATAATAGTTACAATCGGCATCAACCAACCACACCTAGCATTCCTGCACATCTGTACCCACGCCTTCTTCAAAGCCATACTATTTATGTGCTCCGGGTCCATCATCCACAACCTTAACAATGAACAAGATATTCGAAAAATAGGAGGACTACTCAAAACCATACCTCTCACTTCAACCTCCCTCACCATTGGCAGCCTAGCATTAGCAGGAATACCTTTCCTCACAGGTTTCTACTCCAAAGACC",
         )
-        self.assertEqual(records[0].annotations["SN"], "MT_human")
-        self.assertEqual(records[0].annotations["SO"], "0")
+        self.assertEqual(records[0].annotations["SN"], ("Z", "MT_human"))
+        self.assertEqual(records[0].annotations["SO"], ("i", "0"))
 
         records = list(SeqIO.parse("GFA/seq_with_len.gfa", "gfa1"))
         self.assertEqual(len(records), 9)
@@ -59,6 +59,11 @@ class TestCorrupt(unittest.TestCase):
         """Check a GFA file with an incorrect checksum."""
         with self.assertWarns(BiopythonWarning):
             list(SeqIO.parse("GFA/corrupt_checksum.gfa", "gfa1"))
+
+    def test_corrupt_tag_name(self):
+        """Check a GFA file with an invalid tag name."""
+        with self.assertWarns(BiopythonWarning):
+            list(SeqIO.parse("GFA/corrupt_tag_name.gfa", "gfa1"))
 
     def test_corrupt_tag_type(self):
         """Check a GFA file with an incorrect tag type."""

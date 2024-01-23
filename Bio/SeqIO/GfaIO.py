@@ -48,8 +48,13 @@ def _tags_to_annotations(tags):
     for tag in tags:
         parts = tag.split(":")
         if len(parts) < 3:
-            raise ValueError(f"Segment line has invalid tag: {tag}")
-        annotations[parts[0]] = parts[2]
+            raise ValueError(f"Segment line has invalid tag: {tag}.")
+        if re.fullmatch(r"[A-Za-z][A-Za-z0-9]", parts[0]) is None:
+            warnings.warn(
+                f"Tag has invalid name: {parts[0]}. Are they tab delimited?",
+                BiopythonWarning,
+            )
+        annotations[parts[0]] = (parts[1], parts[2])
 
         # Check type of the tag and raise warning on a mismatch. These RegExs
         # are part of the 1.0 standard.
