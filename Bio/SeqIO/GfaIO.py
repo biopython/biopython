@@ -54,6 +54,7 @@ def _tags_to_annotations(tags):
                 f"Tag has invalid name: {parts[0]}. Are they tab delimited?",
                 BiopythonWarning,
             )
+        parts[2] = ":".join(parts[2:])  # tag value may contain : characters
         annotations[parts[0]] = (parts[1], parts[2])
 
         # Check type of the tag and raise warning on a mismatch. These RegExs
