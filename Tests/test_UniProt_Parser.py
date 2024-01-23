@@ -14,7 +14,7 @@ from Bio.SeqRecord import SeqRecord
 from seq_tests_common import SeqRecordTestBaseClass
 
 
-class TestUniprot(SeqRecordTestBaseClass):
+class ParserTests(SeqRecordTestBaseClass):
     """Tests Uniprot XML parser."""
 
     def test_uni001(self):
