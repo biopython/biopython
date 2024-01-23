@@ -150,7 +150,7 @@ class IOTests(unittest.TestCase):
         trees = Phylo.parse("PhyloXML/phyloxml_examples.xml", "phyloxml")
         with tempfile.NamedTemporaryFile(mode="w") as out_handle:
             count = Phylo.write(trees, out_handle, "phyloxml")
-        self.assertEqual(13, count)
+        self.assertEqual(14, count)
 
     def test_convert_phyloxml_filename(self):
         """Write phyloxml to a given filename."""
@@ -162,7 +162,7 @@ class IOTests(unittest.TestCase):
             count = Phylo.write(trees, tmp_filename, "phyloxml")
         finally:
             os.remove(tmp_filename)
-        self.assertEqual(13, count)
+        self.assertEqual(14, count)
 
     def test_int_labels(self):
         """Read newick formatted tree with numeric labels."""
@@ -471,6 +471,7 @@ class MixinTests(unittest.TestCase):
         tree = self.phylogenies[1]
         parent = tree.prune(name="C")
         self.assertEqual(parent, tree.root)
+        self.assertEqual(tree.root.branch_length, 0.06)
         self.assertEqual(len(parent.clades), 2)
         for clade, name, blen in zip(parent, "AB", (0.102, 0.23)):
             self.assertTrue(clade.is_terminal())
@@ -478,6 +479,10 @@ class MixinTests(unittest.TestCase):
             self.assertAlmostEqual(clade.branch_length, blen)
         self.assertEqual(len(tree.get_terminals()), 2)
         self.assertEqual(len(tree.get_nonterminals()), 1)
+        # Taxon just below root
+        tree = self.phylogenies[13]
+        parent = tree.prune(name="C")
+        self.assertEqual(tree.root.branch_length, 0.1)
 
     def test_split(self):
         """TreeMixin: split() method."""
