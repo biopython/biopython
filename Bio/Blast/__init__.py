@@ -103,6 +103,17 @@ class Hit(Alignments):
     ``Bio.Blast.Hit`` object.
     """
 
+    def __repr__(self):
+        alignment = self[0]
+        query = alignment.query
+        target = self.target
+        nhsps = len(self)
+        if nhsps == 1:
+            unit = "HSP"
+        else:  # nhsps > 1
+            unit = "HSPs"
+        return f"Hit(target.id='{target.id}', query.id='{query.id}', {nhsps} {unit})"
+
 
 class Record(list):
     """Stores the BLAST results for a single query.
@@ -256,6 +267,48 @@ class Record(list):
                 elif idx == 30:
                     lines.append("%14s" % "~~~")
         return "\n".join(lines) + "\n"
+
+    def __getitem__(self, key):
+        try:
+            value = super().__getitem__(key)
+        except TypeError:
+            if not isinstance(key, str):
+                raise TypeError("key must be an integer, slice, or str") from None
+            for hit in self:
+                if hit.target.id == key:
+                    return hit
+            raise KeyError(key)
+        else:
+            if isinstance(key, slice):
+                record = Record()
+                record.extend(value)
+                # Only store the query attribute, as the other attributes
+                # pertain to the complete Blast record:
+                try:
+                    query = self.query
+                except AttributeError:
+                    pass
+                else:
+                    record.query = query
+                return record
+            return value
+
+    def keys(self):
+        """Return a list of the target.id of each hit."""
+        return [hit.target.id for hit in self]
+
+    def __contains__(self, key):
+        for hit in self:
+            if hit.target.id == key:
+                return True
+        return False
+
+    def index(self, key):
+        """Return the index of the hit for which the target.id is equal to the key."""
+        for i, hit in enumerate(self):
+            if hit.target.id == key:
+                return i
+        raise ValueError(f"'{key}' not found")
 
 
 class Records(UserList):
