@@ -291,8 +291,8 @@ names are also used in Bio.AlignIO and include the following:
     - gck     - Gene Construction Kit's format.
     - genbank - The GenBank or GenPept flat file format.
     - gb      - An alias for "genbank", for consistency with NCBI Entrez Utilities
-    - gfa     - Graphical Fragment Assembly. Only segment lines are parsed and
-      all linkage information is ignored.
+    - gfa1     - Graphical Fragment Assemblyv versions 1.x. Only segment lines
+      are parsed and all linkage information is ignored.
     - gfa2    - Graphical Fragement Assembly version 2.0. Only segment lines are
       parsed and all linkage information is ignored.
     - ig      - The IntelliGenetics file format, apparently the same as the
@@ -425,7 +425,7 @@ _FormatToIterator = {
     "gck": GckIO.GckIterator,
     "genbank": InsdcIO.GenBankIterator,
     "genbank-cds": InsdcIO.GenBankCdsFeatureIterator,
-    "gfa": GfaIO.GfaIterator,
+    "gfa1": GfaIO.Gfa1Iterator,
     "gfa2": GfaIO.Gfa2Iterator,
     "imgt": InsdcIO.ImgtIterator,
     "nib": NibIO.NibIterator,
