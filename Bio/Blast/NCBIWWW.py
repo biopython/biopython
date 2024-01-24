@@ -280,7 +280,7 @@ def qblast(
         # Throw a warning if search takes longer than ten minutes
         if elapsed >= 600:
             warnings.warn(
-                "Search is taking longer than 10 minutes, consider re-issuing it",
+                f"BLAST request {rid} is taking longer than 10 minutes, consider re-issuing it",
                 BiopythonWarning,
             )
 
