@@ -28,7 +28,7 @@ from Bio.SeqRecord import SeqRecord
 # warnings to stdout and verifying via the print-and-compare check. However,
 # there was some frustrating cross-platform inconsistency I couldn't resolve.
 
-possible_unknown_seq_formats = {"embl", "genbank", "gb", "imgt", "qual"}
+possible_unknown_seq_formats = {"embl", "genbank", "gb", "imgt", "qual", "gfa1", "gfa2"}
 
 # List of formats including alignment only file formats we can read AND write.
 # The list is initially hard coded to preserve the original order of the unit
@@ -1842,6 +1842,61 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+        )
+
+    def test_gfa1(self):
+        sequences = [
+            "GATCACAGGTCTATCACCCTATTAACCACTCACGGGAGCT...ACATTAT",
+            "TATAATAAACACCCTCACCACTACAATCTTCCTAGGAACA...CTACTCT",
+            "GGGGTAAATGATGGGTTGGGCCAAGGGGTTAATTAGTACG...TATTAAG",
+            "ACCATCTTTGCAGGCACACTCATCACAGCGCTAAGCTCGC...TCTGAGC",
+            "ATTCTACCACTCCAGCCTAGCCCCCACCCCTCAACTTGGA...TATAAAC",
+            "CTTTTACCACTCCAGCCTAGCCCCTACCCCCCAATTAGGA...AGCCCAA",
+            "TTAGGTCTCCACCCCTGACTCCCCTCAGCCATAGAAGGCC...AAAGACC",
+            "ACATCATCGAAACCGCAAACATATCATACACAAACGCCTG...CACGATG",
+        ]
+        ids = [
+            "MTh0",
+            "MTh4001",
+            "MTo3426",
+            "MTh4502",
+            "MTo8961",
+            "MTh9505",
+            "MTh13014",
+            "MTh13516",
+        ]
+        names = ids
+        lengths = [4001, 501, 501, 5003, 502, 3509, 502, 3053]
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "seqxml": "DNA",
+            "nexus": "DNA",
+        }
+        alignment = None
+        messages = {
+            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=MTh13516).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=MTh13516).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=MTh13516).",
+            "nib": "More than one sequence found",
+            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=MTh13516).",
+            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=MTh13516).",
+            "sff": "Missing SFF flow information",
+            "xdna": "More than one sequence found",
+        }
+        self.perform_test(
+            "gfa1",
+            False,
+            "GFA/seq.gfa",
+            8,
+            ids,
+            names,
+            sequences,
+            lengths,
+            alignment,
+            messages,
+            molecule_types=molecule_types,
         )
 
     def test_nexus1(self):

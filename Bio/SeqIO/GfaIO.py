@@ -5,8 +5,8 @@ how the different sequences fit together, however, we just care about the
 segment (sequence) information.
 
 Documentation:
-    Version 1.x: https://gfa-spec.github.io/GFA-spec/GFA1.html
-    Version 2.0: https://gfa-spec.github.io/GFA-spec/GFA2.html
+- Version 1.x: https://gfa-spec.github.io/GFA-spec/GFA1.html
+- Version 2.0: https://gfa-spec.github.io/GFA-spec/GFA2.html
 """
 
 import warnings
@@ -137,7 +137,7 @@ def Gfa1Iterator(source):
             _check_tags(seq, tags)
             annotations = _tags_to_annotations(tags)
 
-            yield SeqRecord(seq, name=fields[1], annotations=annotations)
+            yield SeqRecord(seq, id=fields[1], name=fields[1], annotations=annotations)
 
 
 def Gfa2Iterator(source):
@@ -174,4 +174,4 @@ def Gfa2Iterator(source):
             _check_tags(seq, tags)
             annotations = _tags_to_annotations(tags)
 
-            yield SeqRecord(seq, name=fields[1], annotations=annotations)
+            yield SeqRecord(seq, id=fields[1], name=fields[1], annotations=annotations)
