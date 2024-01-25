@@ -817,6 +817,7 @@ def qblast(
     # will take longer thus at least 70s with delay. Therefore,
     # start with 20s delay, thereafter once a minute.
     delay = 20  # seconds
+    start_time = time.time()
     while True:
         current = time.time()
         wait = qblast.previous + delay - current
@@ -829,7 +830,12 @@ def qblast(
         if delay < 60 and url_base == NCBI_BLAST_URL:
             # Wasn't a quick return, must wait at least a minute
             delay = 60
-
+        elapsed = time.time() - start_time
+        if elapsed >= 600:
+            warnings.warn(
+                f"BLAST request {rid} is taking longer than 10 minutes, consider re-issuing it",
+                BiopythonWarning,
+            )
         request = Request(url_base, message, {"User-Agent": "BiopythonClient"})
         stream = urlopen(request)
         data = stream.peek()
