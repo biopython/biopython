@@ -113,8 +113,6 @@ class PDBList:
             self.obsolete_pdb = obsolete_pdb
         else:
             self.obsolete_pdb = os.path.join(self.local_pdb, "obsolete")
-            if not os.access(self.obsolete_pdb, os.F_OK):
-                os.makedirs(self.obsolete_pdb)
 
         # variable for command-line option
         self.flat_tree = False
@@ -271,20 +269,21 @@ class PDBList:
 
         # Get the compressed PDB structure
         pdb_code = pdb_code.lower()
-        archive = {
+        archive_dict = {
             "pdb": f"pdb{pdb_code}.ent.gz",
             "mmCif": f"{pdb_code}.cif.gz",
             "xml": f"{pdb_code}.xml.gz",
             "mmtf": f"{pdb_code}",
             "bundle": f"{pdb_code}-pdb-bundle.tar.gz",
         }
-        archive_fn = archive[file_format]
 
-        if file_format not in archive.keys():
-            raise Exception(
-                f"Specified file_format {file_format} doesn't exists or is not supported. Maybe a "
-                "typo. Please, use one of the following: mmCif, pdb, xml, mmtf, bundle"
+        if file_format not in archive_dict:
+            raise ValueError(
+                f"Specified file_format {file_format} does not exist or is not supported. "
+                f"Please use one of the following: {', '.join(archive_dict)}."
             )
+
+        archive = archive_dict[file_format]
 
         if file_format in ("pdb", "mmCif", "xml"):
             pdb_dir = "divided" if not obsolete else "obsolete"
@@ -297,12 +296,12 @@ class PDBList:
             )
             url = (
                 self.pdb_server
-                + f"/pub/pdb/data/structures/{pdb_dir}/{file_type}/{pdb_code[1:3]}/{archive_fn}"
+                + f"/pub/pdb/data/structures/{pdb_dir}/{file_type}/{pdb_code[1:3]}/{archive}"
             )
         elif file_format == "bundle":
             url = (
                 self.pdb_server
-                + f"/pub/pdb/compatible/pdb_bundle/{pdb_code[1:3]}/{pdb_code}/{archive_fn}"
+                + f"/pub/pdb/compatible/pdb_bundle/{pdb_code[1:3]}/{pdb_code}/{archive}"
             )
         else:
             url = f"http://mmtf.rcsb.org/v1.0/full/{pdb_code}"
@@ -316,7 +315,7 @@ class PDBList:
             path = pdir
         if not os.access(path, os.F_OK):
             os.makedirs(path)
-        filename = os.path.join(path, archive_fn)
+        filename = os.path.join(path, archive)
         final = {
             "pdb": f"pdb{pdb_code}.ent",
             "mmCif": f"{pdb_code}.cif",
@@ -357,7 +356,8 @@ class PDBList:
         You can call this module as a weekly cron job.
         """
         assert os.path.isdir(self.local_pdb)
-        assert os.path.isdir(self.obsolete_pdb)
+        if os.path.exists(self.obsolete_pdb):
+            assert os.path.isdir(self.obsolete_pdb)
 
         # Deprecation warning
         file_format = self._print_default_format_warning(file_format)
@@ -377,7 +377,6 @@ class PDBList:
                                 file_format=file_format,
                                 overwrite=True,
                             )
-
             except Exception as err:
                 print(f"error {pdb_code}: {err}\n")
                 # you can insert here some more log notes that
@@ -399,8 +398,7 @@ class PDBList:
                 new_dir = os.path.join(self.obsolete_pdb, pdb_code[1:3])
             new_file = os.path.join(new_dir, f"pdb{pdb_code}.{file_format}")
             if os.path.isfile(old_file):
-                if not os.path.isdir(new_dir):
-                    os.mkdir(new_dir)
+                os.makedirs(new_dir, exist_ok=True)
                 try:
                     shutil.move(old_file, new_file)
                 except Exception:
