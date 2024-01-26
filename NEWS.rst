@@ -73,7 +73,7 @@ possible, especially the following contributors:
 
 - Anil Tuncel (first contribution)
 - Fabio Zanini (first contribution)
-- Michael M.
+- Michael M. (first contribution)
 - Michiel de Hoon
 - Peter Cock
 - Will Tyler (first contribution)

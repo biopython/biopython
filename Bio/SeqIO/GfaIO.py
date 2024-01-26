@@ -60,7 +60,7 @@ def _tags_to_annotations(tags):
         # Check type of the tag and raise warning on a mismatch. These RegExs
         # are part of the 1.0 standard.
         if parts[1] not in "AifZJHB":
-            warnings.warn(f"Tag has invalid type: {parts[2]}", BiopythonWarning)
+            warnings.warn(f"Tag has invalid type: {parts[1]}", BiopythonWarning)
         elif parts[1] == "A" and re.fullmatch(r"[!-~]", parts[2]) is None:
             warnings.warn(
                 f"Tag has incorrect type. Expected printable character, got {parts[2]}.",
