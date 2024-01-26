@@ -63,11 +63,17 @@ The wwPDB organization announced that they plan to deprecate the FTP
 server by the end of the year. See the announcement
 `here <https://www.wwpdb.org/news/news?year=2023#65562f0ad78e004e766a96c1>`_.
 
+``Bio.SeqIO`` now supports reading sequences from the Graphical Fragment
+Assembly (GFA) files with the formats ``gfa1`` and ``gfa2`` (for GFA 1.x and
+GFA 2.0 files respectively). All data outside of segment lines are ignored, such
+as linkage information.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - Anil Tuncel (first contribution)
 - Fabio Zanini (first contribution)
+- Michael M.
 - Michiel de Hoon
 - Peter Cock
 - Will Tyler (first contribution)
