@@ -148,6 +148,17 @@ class TestPDBListGetStructure(unittest.TestCase):
         self.check(structure, os.path.join("a", f"{structure}.cif"), "mmCif", pdir="a")
         self.check(structure, os.path.join("b", f"{structure}.cif"), "mmCif", pdir="b")
 
+    def test_invalid_file_format(self):
+        pdb_list = PDBList()
+        with self.assertRaises(ValueError) as context:
+            pdb_list.retrieve_pdb_file("127d", file_format="invalid")
+
+        self.assertEqual(
+            "Specified file_format invalid does not exist or is not supported. Please use one of the "
+            "following: pdb, mmCif, xml, mmtf, bundle.",
+            str(context.exception),
+        )
+
 
 class TestPDBListGetAssembly(unittest.TestCase):
     """Test methods responsible for getting assemblies."""
