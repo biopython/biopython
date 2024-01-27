@@ -18,7 +18,7 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
     def test_reading(self):
         alignments = Align.parse(self.path, "hhr")
         self.check_alignments(alignments)
-        alignments.rewind()
+        alignments = iter(alignments)
         self.check_alignments(alignments)
         with Align.parse(self.path, "hhr") as alignments:
             self.check_alignments(alignments)

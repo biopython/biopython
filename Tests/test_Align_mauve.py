@@ -41,7 +41,7 @@ class TestCombinedFile(unittest.TestCase):
         with open(path) as stream:
             alignments = Align.parse(stream, "mauve")
             self.check_alignments(alignments)
-            alignments.rewind()
+            alignments = iter(alignments)
             self.check_alignments(alignments)
         with Align.parse(path, "mauve") as alignments:
             self.check_alignments(alignments)

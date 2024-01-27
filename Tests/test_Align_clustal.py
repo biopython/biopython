@@ -40,7 +40,7 @@ class TestClustalReadingWriting(unittest.TestCase):
         with open(path) as stream:
             alignments = Align.parse(stream, "clustal")
             self.check_clustalw(alignments)
-            alignments.rewind()
+            alignments = iter(alignments)
             self.check_clustalw(alignments)
         with Align.parse(path, "clustal") as alignments:
             self.check_clustalw(alignments)

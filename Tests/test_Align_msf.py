@@ -27,7 +27,7 @@ class TestMSF(unittest.TestCase):
         path = "msf/W_prot.msf"
         alignments = Align.parse(path, "msf")
         self.check_alignments(alignments)
-        alignments.rewind()
+        alignments = iter(alignments)
         self.check_alignments(alignments)
         with Align.parse(path, "msf") as alignments:
             self.check_alignments(alignments)

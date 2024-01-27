@@ -3614,6 +3614,7 @@ class AlignmentsAbstractBaseClass(ABC):
 
         This method SHOULD NOT be overridden by any subclass.
         """
+        self.rewind()
         return self
 
     @abstractmethod
@@ -3684,10 +3685,6 @@ class PairwiseAlignments(AlignmentsAbstractBaseClass):
 
     def __len__(self):
         return len(self._paths)
-
-    def __iter__(self):
-        self.rewind()
-        return self
 
     def __getitem__(self, index):
         if not isinstance(index, int):

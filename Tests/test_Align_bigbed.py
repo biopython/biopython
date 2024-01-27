@@ -64,7 +64,7 @@ class TestAlign_dna_rna(unittest.TestCase):
         path = "Blat/dna_rna.bb"
         alignments = Align.parse(path, "bigbed")
         self.check_alignments(alignments)
-        alignments.rewind()
+        alignments = iter(alignments)
         self.check_alignments(alignments)
         with Align.parse(path, "bigbed") as alignments:
             self.check_alignments(alignments)
@@ -2769,7 +2769,7 @@ class BinaryTestBaseClass(unittest.TestCase):
                 return self.fail(f"unequal file sizes: >= {n1} bytes vs {n2} bytes")
             for i, (c1, c2) in enumerate(zip(data1, data2)):
                 if c1 != c2:
-                    return self.fail(f"bytes at position {n+i} differ: {c1} vs {c2}")
+                    return self.fail(f"bytes at position {n + i} differ: {c1} vs {c2}")
 
 
 @unittest.skipUnless(big is True, "big file; use --big to run")
@@ -2816,7 +2816,7 @@ class TestAlign_big(BinaryTestBaseClass):
     def test_b_uncompressed(self):
         # grep -E -v 'fix|alt' Blat/ucsc.bed > ucsc.clean.bed
         # sort -k1,1 -k2,2n ucsc.clean.bed -o ucsc.clean.bed
-        # bedToBigBed -as=Blat/bed12.as -unc ucsc.clean.bed hg38.chrom.sizes ucsc.unc.bb
+        # bedToBigBed -as=Blat/bed12.as -unc ucsc.clean.bed Align/hg38.chrom.sizes ucsc.unc.bb
         with open("Blat/bed12.as") as stream:
             data = stream.read()
         declaration = bigbed.AutoSQLTable.from_string(data)

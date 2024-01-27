@@ -50,7 +50,7 @@ class TestPhylipReading(unittest.TestCase):
         with open(path) as stream:
             alignments = Align.parse(stream, "phylip")
             self.check_one(alignments)
-            alignments.rewind()
+            alignments = iter(alignments)
             self.check_one(alignments)
         with Align.parse(path, "phylip") as alignments:
             self.check_one(alignments)
@@ -518,7 +518,7 @@ Gorilla   AAACCCTTGCCGGTACGCTTAAACCATTGCCGGTACGCTTAA
         with open(path) as stream:
             alignments = Align.parse(stream, "phylip")
             self.check_sequential_interlaced(alignments)
-            alignments.rewind()
+            alignments = iter(alignments)
             self.check_sequential_interlaced(alignments)
         with Align.parse(path, "phylip") as alignments:
             self.check_sequential_interlaced(alignments)
@@ -535,7 +535,7 @@ Gorilla   AAACCCTTGCCGGTACGCTTAAACCATTGCCGGTACGCTTAA
         with open(path) as stream:
             alignments = Align.parse(stream, "phylip")
             self.check_sequential_interlaced(alignments)
-            alignments.rewind()
+            alignments = iter(alignments)
             self.check_sequential_interlaced(alignments)
         with Align.parse(path, "phylip") as alignments:
             self.check_sequential_interlaced(alignments)
@@ -647,7 +647,7 @@ CATH_HUMAN------MWATLPLLCAGAWLLGV--------PVCGAAELSVNSLEK------------FHFKSWMSKHRK
         with open(path) as stream:
             alignments = Align.parse(stream, "phylip")
             self.check_sequential_interlaced2(alignments)
-            alignments.rewind()
+            alignments = iter(alignments)
             self.check_sequential_interlaced2(alignments)
         with Align.parse(path, "phylip") as alignments:
             self.check_sequential_interlaced2(alignments)
@@ -664,7 +664,7 @@ CATH_HUMAN------MWATLPLLCAGAWLLGV--------PVCGAAELSVNSLEK------------FHFKSWMSKHRK
         with open(path) as stream:
             alignments = Align.parse(stream, "phylip")
             self.check_sequential_interlaced2(alignments)
-            alignments.rewind()
+            alignments = iter(alignments)
             self.check_sequential_interlaced2(alignments)
         with Align.parse(path, "phylip") as alignments:
             self.check_sequential_interlaced2(alignments)

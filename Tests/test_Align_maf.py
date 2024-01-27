@@ -10857,7 +10857,7 @@ np.array([['T', 'G', 'T', 'T', 'T', 'A', 'G', 'T', 'A', 'C', 'C', '-', '-',
         alignments = Align.parse(path, "maf")
         self.check_reading_ucsc_mm9_chr10(alignments)
         self.assertRaises(StopIteration, next, alignments)
-        alignments.rewind()
+        alignments = iter(alignments)
         self.check_reading_ucsc_mm9_chr10(alignments)
         self.assertRaises(StopIteration, next, alignments)
         alignments = alignments[:]
@@ -10971,7 +10971,7 @@ i oryCun1.scaffold_133159 N 0 N 0
         alignments = Align.parse(path, "maf")
         self.check_header(alignments)
         self.check_alignments(alignments)
-        alignments.rewind()
+        alignments = iter(alignments)
         self.check_header(alignments)
         self.check_alignments(alignments)
         with Align.parse(path, "maf") as alignments:

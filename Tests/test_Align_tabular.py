@@ -38,7 +38,7 @@ class TestFastaProtein(unittest.TestCase):
         path = "Fasta/protein_m8CB.txt"
         alignments = Align.parse(path, "tabular")
         self.check_m8CB(alignments)
-        alignments.rewind()
+        alignments = iter(alignments)
         self.check_m8CB(alignments)
         with Align.parse(path, "tabular") as alignments:
             self.check_m8CB(alignments)

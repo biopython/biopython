@@ -29,6 +29,8 @@ import io
 import textwrap
 import time
 
+import numpy as np
+
 from collections import UserList
 from urllib.parse import urlencode
 from urllib.request import build_opener, install_opener
@@ -103,16 +105,84 @@ class Hit(Alignments):
     ``Bio.Blast.Hit`` object.
     """
 
+    def __getitem__(self, key):
+        value = super().__getitem__(key)
+        if isinstance(key, slice):
+            hit = Hit(value)
+            hit.target = self.target
+            return hit
+        else:
+            return value
+
     def __repr__(self):
-        alignment = self[0]
-        query = alignment.query
         target = self.target
+        try:
+            alignment = self[0]
+        except IndexError:
+            return f"Hit(target.id='{target.id}', no hits)"
+        query = alignment.query
         nhsps = len(self)
         if nhsps == 1:
             unit = "HSP"
         else:  # nhsps > 1
             unit = "HSPs"
         return f"Hit(target.id='{target.id}', query.id='{query.id}', {nhsps} {unit})"
+
+    def __str__(self):
+        """Return a human readable summary of the Hit object."""
+        lines = []
+
+        # set query id line
+        query = self[0].query
+        qid_line = "Query: %s" % query.id
+        lines.append(qid_line)
+        line = "       %s" % query.description
+        line = line[:77] + "..." if len(line) > 80 else line
+        lines.append(line)
+
+        # set hit id line
+        hid_line = "  Hit: %s (%i)" % (self.target.id, len(self.target))
+        lines.append(hid_line)
+        line = "       %s" % self.target.description
+        line = line[:77] + "..." if len(line) > 80 else line
+        lines.append(line)
+        # set hsp line and table
+        lines.append(
+            " HSPs: %s  %s  %s  %s  %s  %s"
+            % ("-" * 4, "-" * 8, "-" * 9, "-" * 6, "-" * 15, "-" * 21)
+        )
+        pattern = "%11s  %8s  %9s  %6s  %15s  %21s"
+        lines.append(
+            pattern % ("#", "E-value", "Bit score", "Span", "Query range", "Hit range")
+        )
+        lines.append(pattern % ("-" * 4, "-" * 8, "-" * 9, "-" * 6, "-" * 15, "-" * 21))
+        for idx, hsp in enumerate(self):
+            # evalue
+            evalue = format(hsp.annotations["evalue"], ".2g")
+            # bit score
+            bitscore = format(hsp.annotations["bit score"], ".2f")
+            # alignment length
+            steps = np.diff(hsp.coordinates, 1)
+            aln_span = sum(abs(steps).max(0))
+            # query region
+            query_start = hsp.coordinates[1, 0]
+            query_end = hsp.coordinates[1, -1]
+            query_range = f"[{query_start}:{query_end}]"
+            # max column length is 18
+            query_range = (
+                query_range[:13] + "~]" if len(query_range) > 15 else query_range
+            )
+            # hit region
+            hit_start = hsp.coordinates[0, 0]
+            hit_end = hsp.coordinates[0, -1]
+            hit_range = f"[{hit_start}:{hit_end}]"
+            hit_range = hit_range[:19] + "~]" if len(hit_range) > 21 else hit_range
+            # append the hsp row
+            lines.append(
+                pattern % (idx, evalue, bitscore, aln_span, query_range, hit_range)
+            )
+
+        return "\n".join(lines)
 
 
 class Record(list):

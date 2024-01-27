@@ -243,7 +243,7 @@ np.array([['G', 'P', 'P', 'P', 'Q', 'S', 'P', 'D', 'E', 'N', 'R', 'A', 'G',
         path = "Emboss/matcher_pair.txt"
         alignments = Align.parse(path, "emboss")
         self.check_matcher_pair(alignments)
-        alignments.rewind()
+        alignments = iter(alignments)
         self.check_matcher_pair(alignments)
         with Align.parse(path, "emboss") as alignments:
             self.check_matcher_pair(alignments)

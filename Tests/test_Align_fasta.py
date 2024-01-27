@@ -39,7 +39,7 @@ class TestFASTAReadingWriting(unittest.TestCase):
         with open(path) as stream:
             alignments = Align.parse(stream, "fasta")
             self.check_clustalw(alignments)
-            alignments.rewind()
+            alignments = iter(alignments)
             self.check_clustalw(alignments)
         with Align.parse(path, "fasta") as alignments:
             self.check_clustalw(alignments)

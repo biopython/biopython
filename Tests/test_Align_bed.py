@@ -1169,7 +1169,7 @@ chr3	48663767	48669174	NR_111921.1_modified	972	+	48663767	48669174	0	5	28,17,76
         path = "Blat/dna_rna.bed"
         alignments = Align.parse(path, "bed")
         self.check_alignments(alignments)
-        alignments.rewind()
+        alignments = iter(alignments)
         self.check_alignments(alignments)
         with Align.parse(path, "bed") as alignments:
             self.check_alignments(alignments)
