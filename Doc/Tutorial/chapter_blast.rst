@@ -895,7 +895,7 @@ alignment, especially for alignments of highly homologous sequences.
    1
    >>> alignment = hit[0]
    >>> type(alignment)
-   <class 'Bio.Align.Alignment'>
+   <class 'Bio.Blast.HSP'>
 
 .. _`subsec:blast-hsp`:
 
@@ -943,13 +943,22 @@ applied to the ``alignment``. For example, we can print the alignment:
    >>> alignment.query
    SeqRecord(seq=Seq('CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTT...GGG'), id='42291', name='<unknown name>', description='mystery_seq', dbxrefs=[])
    >>> print(alignment)
+   Query : 42291 Length: 61 Strand: Plus
+           mystery_seq
+   Target: gi|262205317|ref|NR_030195.1| Length: 61 Strand: Plus
+           Homo sapiens microRNA 520b (MIR520B), microRNA
+   <BLANKLINE> 
+   Score:111 bits(122), Expect:5e-23,
+   Identities:61/61(100%),  Positives:61/61(100%),  Gaps:0.61(0%)
+   <BLANKLINE> 
    gi|262205         0 CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTTTAGAGG
                      0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
    42291             0 CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTTTAGAGG
-   <BLANKLINE>
+   <BLANKLINE> 
    gi|262205        60 G 61
                     60 | 61
    42291            60 G 61
+   <BLANKLINE>
    <BLANKLINE>
    >>> alignment.coordinates
    array([[ 0, 61],

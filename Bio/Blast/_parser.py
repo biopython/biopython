@@ -19,7 +19,7 @@ from collections import deque
 from xml.parsers import expat
 from typing import Dict, Callable
 
-from Bio.Blast import Record, Hit
+from Bio.Blast import Record, Hit, HSP
 from Bio.Seq import Seq, reverse_complement
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqFeature import SeqFeature, SimpleLocation
@@ -717,7 +717,7 @@ class XMLHandler:
             target_seq_data = {target_start: target_seq_data}
         target.seq = Seq(target_seq_data, target_length)
         sequences = [target, query]
-        alignment = Alignment(sequences, coordinates)
+        alignment = HSP(sequences, coordinates)
         alignment.score = hsp["score"]
         annotations = {}
         annotations["bit score"] = hsp["bit-score"]

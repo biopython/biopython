@@ -42,7 +42,7 @@ from xml.parsers import expat
 
 from Bio import BiopythonWarning
 from Bio import StreamModeError
-from Bio.Align import Alignments
+from Bio.Align import Alignment, Alignments
 from Bio._utils import function_with_previous
 
 
@@ -85,12 +85,113 @@ class CorruptedXMLError(ValueError):
         )
 
 
+class HSP(Alignment):
+    """Stores an alignment of one query sequence against a target sequence.
+
+    An HSP (High-scoring Segment Pair) stores the alignment of one query
+    sequence segment against one target (hit) sequence segment. The
+    ``Bio.Blast.HSP`` class inherits from the ``Bio.Align.Alignment`` class.
+
+    In addition to the ``target`` and ``query`` attributes of a
+    ``Bio.Align.Alignment``, a ``Bio.Blast.HSP`` object has the following
+    attributes:
+
+     - score:       score of HSP;
+     - annotations: a dictionary that may contain the following keys:
+                     - 'bit score': score (in bits) of HSP (float);
+                     - 'evalue':    e-value of HSP (float);
+                     - 'identity':  number of identities in HSP (integer);
+                     - 'positive':  number of positives in HSP (integer);
+                     - 'gaps':      number of gaps in HSP (integer);
+                     - 'midline':   formating middle line.
+
+    A ``Bio.Blast.HSP`` object behaves the same as a `Bio.Align.Alignment``
+    object and can be used as such. However, when printing a ``Bio.Blast.HSP``
+    object, the BLAST e-value and bit score are included in the output (in
+    addition to the alignment itself).
+
+    See the documentation of ``Bio.Blast.Record`` for a more detailed
+    explanation of how the information in BLAST records is stored in
+    Biopython.
+    """
+
+    def __str__(self):
+        alignment_text = super().__str__()
+        query = self.query
+        target = self.target
+        query_strand = (
+            "Plus" if self.coordinates[1, 0] <= self.coordinates[1, -1] else "Minus"
+        )
+        target_strand = (
+            "Plus" if self.coordinates[0, 0] <= self.coordinates[0, -1] else "Minus"
+        )
+        evalue = self.annotations["evalue"]
+        bitscore = self.annotations["bit score"]
+        score = self.score
+        steps = np.diff(self.coordinates, 1)
+        aln_span = sum(abs(steps).max(0))
+        terms = []
+        identity = self.annotations["identity"]
+        identity_percentage = round(100.0 * identity / aln_span)
+        identity_text = "Identities:%d/%d(%d%%)" % (
+            identity,
+            aln_span,
+            identity_percentage,
+        )
+        terms.append(identity_text)
+        positive = self.annotations["positive"]
+        positive_percentage = round(100.0 * positive / aln_span)
+        positive_text = "Positives:%d/%d(%d%%)" % (
+            positive,
+            aln_span,
+            positive_percentage,
+        )
+        terms.append(positive_text)
+        try:
+            gaps = self.annotations["gaps"]
+        except KeyError:
+            pass
+        else:
+            gaps_percentage = round(100.0 * gaps / aln_span)
+            gaps_text = "Gaps:%d.%d(%d%%)" % (gaps, aln_span, gaps_percentage)
+            terms.append(gaps_text)
+        counts_line = ",  ".join(terms)
+        return """\
+Query : %s Length: %d Strand: %s
+        %s
+Target: %s Length: %d Strand: %s
+        %s
+
+Score:%d bits(%d), Expect:%.1g,
+%s
+
+%s
+""" % (
+            query.id,
+            len(query),
+            query_strand,
+            query.description,
+            target.id,
+            len(target),
+            target_strand,
+            target.description,
+            bitscore,
+            score,
+            evalue,
+            counts_line,
+            alignment_text,
+        )
+
+
 class Hit(Alignments):
     """Stores a single BLAST hit of one single query against one target.
 
     The ``Bio.Blast.Hit`` class inherits from the ``Bio.Align.Alignments``
-    class, which is a list storing ``Bio.Align.Alignment`` objects.
-    Most hits consist of only 1 or a few Alignment objects.
+    class, which is a subclass of a Python list. The ``Bio.Blast.Hit`` class
+    stores ``Bio.Blast.HSP`` objwcts, which inherit from
+    ``Bio.Align.Alignment``. A ``Bio.Blast.Hit`` object is therefore
+    effectively a list of ``Bio.Align.Alignment`` objects. Most hits consist of
+    only 1 or a few Alignment objects.
 
     Each ``Bio.Blast.Hit`` object has a ``target`` attribute containing the
     following information:
@@ -106,7 +207,10 @@ class Hit(Alignments):
     """
 
     def __getitem__(self, key):
-        value = super().__getitem__(key)
+        try:
+            value = super().__getitem__(key)
+        except IndexError:
+            raise IndexError("index out of range") from None
         if isinstance(key, slice):
             hit = Hit(value)
             hit.target = self.target
@@ -217,17 +321,23 @@ class Record(list):
      - len(target.seq):    sequence length of subject.
 
     The ``Bio.Blast.Hit`` class inherits from the ``Bio.Align.Alignments``
-    class, which is a list storing ``Bio.Align.Alignment`` objects.  The
-    ``target`` and ``query`` attributes of a ``Bio.Align.Alignment`` object
-    point to a ``SeqRecord`` object representing the target and query,
-    respectively.  For translated BLAST searches, The ``features`` attribute of
-    the target or query may contain a ``SeqFeature`` of type CDS that stores
-    the amino acid sequence region.  The ``qualifiers`` attribute of such a
-    feature is a dictionary with  a single key 'coded_by'; the corresponding
-    value specifies the nucleotide sequence region, in a GenBank-style string
-    with 1-based coordinates, that encodes the amino acid sequence.
+    class, which inherits from a Python list. In this list, the
+    ``Bio.Blast.Hit`` object stores ``Bio.Blast.HSP`` objects, which inherit
+    from the ``Bio.Align.Alignment`` class.  A ``Bio.Blast.Hit`` object is
+    therefore effectively a list of alignment objects.
 
-    Each ``Bio.Align.Alignment`` object has the following additional attributes:
+    Each HSP in a ``Bio.Blast.Hit`` object has the attributes ``target`` and
+    ``query`` attributes, as usual for of a ``Bio.Align.Alignment`` object
+    storing a pairwise alignment, pointing to a ``SeqRecord`` object
+    representing the target and query, respectively.  For translated BLAST
+    searches, the ``features`` attribute of the target or query may contain a
+    ``SeqFeature`` of type CDS that stores the amino acid sequence region.  The
+    ``qualifiers`` attribute of such a feature is a dictionary with  a single
+    key 'coded_by'; the corresponding value specifies the nucleotide sequence
+    region, in a GenBank-style string with 1-based coordinates, that encodes
+    the amino acid sequence.
+
+    Each ``Bio.Blast.HSP`` object has the following additional attributes:
 
      - score:       score of HSP;
      - annotations: a dictionary that may contain the following keys:
@@ -261,7 +371,7 @@ class Record(list):
     1
     >>> alignment = hit[0]
     >>> type(alignment)
-    <class 'Bio.Align.Alignment'>
+    <class 'Bio.Blast.HSP'>
     >>> alignment.score
     630.0
     >>> alignment.annotations

@@ -312,6 +312,14 @@ Program: BLASTP 2.2.26+
         self.assertEqual(
             str(hsp),
             """\
+Query : Query_1 Length: 102 Strand: Plus
+        gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]
+Target: gnl|BL_ORD_ID|1 Length: 100 Strand: Plus
+        gi|308175296|ref|YP_003922001.1| membrane bound lipoprotein [Bacillus amyloliquefaciens DSM 7]
+
+Score:139 bits(350), Expect:2e-46,
+Identities:69/102(68%),  Positives:81/102(79%),  Gaps:2.102(2%)
+
 gnl|BL_OR         0 MKKIFGCLFFILLLAGCGVTNEKSQGEDAG--EKLVTKEGTYVGLADTHTIEVTVDHEPV
                   0 |||....|||||||.||||...||||||..--....||||||||||||||||||||.|||
 Query_1           0 MKKFIALLFFILLLSGCGVNSQKSQGEDVSPDSNIETKEGTYVGLADTHTIEVTVDNEPV
@@ -319,6 +327,7 @@ Query_1           0 MKKFIALLFFILLLSGCGVNSQKSQGEDVSPDSNIETKEGTYVGLADTHTIEVTVDNEPV
 gnl|BL_OR        58 SFDITEESADDVKNLNNGEKVTVKYQKNSKGQLVLKDIEPAN 100
                  60 |.||||||..|....|.|.|||..|.||..|||.|||||.|| 102
 Query_1          60 SLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERAN 102
+
 """,
         )
         hit = record[1]
@@ -376,6 +385,14 @@ Query_1          60 SLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERAN 102
         self.assertEqual(
             str(hsp),
             """\
+Query : Query_1 Length: 102 Strand: Plus
+        gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]
+Target: gnl|BL_ORD_ID|2 Length: 105 Strand: Plus
+        gi|375363999|ref|YP_005132038.1| lytA gene product [Bacillus amyloliquefaciens subsp. plantarum CAU B946]
+
+Score:88 bits(219), Expect:7e-27,
+Identities:48/105(46%),  Positives:69/105(66%),  Gaps:5.105(5%)
+
 gnl|BL_OR         0 MKKTIAASFLILLFSVVLAACGTAEQSKKGSG-SSENQAQKETAYYVGMADTHTIEVKVD
                   0 |||.||..|.|||----|..||...|...|..-|...........|||.||||||||.||
 Query_1           0 MKKFIALLFFILL----LSGCGVNSQKSQGEDVSPDSNIETKEGTYVGLADTHTIEVTVD
@@ -383,6 +400,7 @@ Query_1           0 MKKFIALLFFILL----LSGCGVNSQKSQGEDVSPDSNIETKEGTYVGLADTHTIEVTVD
 gnl|BL_OR        59 DQPVSFEFSDDFSDVLNKFSENDKVSITYFTNDKGQKEIKEIEKA 104
                  60 ..|||..........|.||...|||.|||..||.||...|.||.| 105
 Query_1          56 NEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERA 101
+
 """,
         )
         hit = record[2]
@@ -440,6 +458,14 @@ Query_1          56 NEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERA 101
         self.assertEqual(
             str(hsp),
             """\
+Query : Query_1 Length: 102 Strand: Plus
+        gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]
+Target: gnl|BL_ORD_ID|3 Length: 105 Strand: Plus
+        gi|154687679|ref|YP_001422840.1| LytA [Bacillus amyloliquefaciens FZB42]
+
+Score:88 bits(219), Expect:8e-27,
+Identities:48/105(46%),  Positives:69/105(66%),  Gaps:5.105(5%)
+
 gnl|BL_OR         0 MKKTIAASFLILLFSVVLAACGTADQSKKGSG-SSENQAQKETAYYVGMADTHTIEVKVD
                   0 |||.||..|.|||----|..||...|...|..-|...........|||.||||||||.||
 Query_1           0 MKKFIALLFFILL----LSGCGVNSQKSQGEDVSPDSNIETKEGTYVGLADTHTIEVTVD
@@ -447,6 +473,7 @@ Query_1           0 MKKFIALLFFILL----LSGCGVNSQKSQGEDVSPDSNIETKEGTYVGLADTHTIEVTVD
 gnl|BL_OR        59 DQPVSFEFSDDFSDVLNKFSENDKVSITYFTNDKGQKEIKEIEKA 104
                  60 ..|||..........|.||...|||.|||..||.||...|.||.| 105
 Query_1          56 NEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERA 101
+
 """,
         )
         hit = record[3]
@@ -504,6 +531,14 @@ Query_1          56 NEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERA 101
         self.assertEqual(
             str(hsp),
             """\
+Query : Query_1 Length: 102 Strand: Plus
+        gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]
+Target: gnl|BL_ORD_ID|4 Length: 105 Strand: Plus
+        gi|311070071|ref|YP_003974994.1| unnamed protein product [Bacillus atrophaeus 1942]
+
+Score:83 bits(204), Expect:1e-24,
+Identities:45/104(43%),  Positives:66/104(63%),  Gaps:5.104(5%)
+
 gnl|BL_OR         0 MKKNVASSFLILLFSIILAACGTAEQSKEG-NGSSSSQVQNETAYYVGMADTHTIEVKID
                   0 |||..|..|.|||----|..||...|...|-..|..|........|||.||||||||..|
 Query_1           0 MKKFIALLFFILL----LSGCGVNSQKSQGEDVSPDSNIETKEGTYVGLADTHTIEVTVD
@@ -511,6 +546,7 @@ Query_1           0 MKKFIALLFFILL----LSGCGVNSQKSQGEDVSPDSNIETKEGTYVGLADTHTIEVTVD
 gnl|BL_OR        59 DQPVSFEFTDDFSEILNEFEENDKVNISYLTNDKGQKELTEIEK 103
                  60 ..|||...|......|..|...|||.|.|..||.||..|..||. 104
 Query_1          56 NEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIER 100
+
 """,
         )
         hit = record[4]
@@ -563,9 +599,18 @@ Query_1          56 NEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIER 100
         self.assertEqual(
             str(hsp),
             """\
+Query : Query_1 Length: 102 Strand: Plus
+        gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]
+Target: gnl|BL_ORD_ID|15 Length: 132 Strand: Plus
+        gi|332258565|ref|XP_003278367.1| PREDICTED: UPF0764 protein C16orf89-like [Nomascus leucogenys]
+
+Score:15 bits(29), Expect:7,
+Identities:7/25(28%),  Positives:11/25(44%),  Gaps:0.25(0%)
+
 gnl|BL_OR        79 VEMGFLHVGQAGLELVTSGDPPTLT 104
                   0 |...........|....|||..|.|  25
 Query_1          59 VSLDITEESTSDLDKFNSGDKVTIT  84
+
 """,
         )
 
@@ -660,6 +705,14 @@ Query_1          59 VSLDITEESTSDLDKFNSGDKVTIT  84
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|QUERY Length: 131 Strand: Plus
+        tr|Q3V4Q3|Q3V4Q3_9VIRU
+Target: gi|75750454|ref|YP_319893.1| Length: 131 Strand: Plus
+        hypothetical protein ATV_gp62 [Acidianus two-tailed virus] >gi|74474837|emb|CAI59911.1| hypothetical protein [Acidianus two-tailed virus]
+
+Score:266 bits(680), Expect:5e-70,
+Identities:131/131(100%),  Positives:131/131(100%)
+
 gi|757504         0 MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVK
                   0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 lcl|QUERY         0 MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVK
@@ -671,6 +724,7 @@ lcl|QUERY        60 MISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSK
 gi|757504       120 GAKKLAQAMAS 131
                 120 ||||||||||| 131
 lcl|QUERY       120 GAKKLAQAMAS 131
+
 """,
         )
         hit = record[1]
@@ -725,6 +779,14 @@ lcl|QUERY       120 GAKKLAQAMAS 131
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|QUERY Length: 131 Strand: Plus
+        tr|Q3V4Q3|Q3V4Q3_9VIRU
+Target: gi|51980166|ref|YP_077233.1| Length: 144 Strand: Plus
+        coat protein [Sulfolobus virus STSV1] >gi|51890299|emb|CAH04223.1| coat protein [Sulfolobus virus STSV1]
+
+Score:74 bits(181), Expect:3e-12,
+Identities:36/77(47%),  Positives:49/77(64%),  Gaps:1.77(1%)
+
 gi|519801         0 MAREEPYKGDYVGGVAKILQGYFANYYGFPNVSLRLAGEEANLSKTGHANAKAIVHEMIK
                   0 ||..||.||||.||..|||........|.|.|.|.|||||||....|....|...|...|
 lcl|QUERY         0 MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVK
@@ -732,6 +794,7 @@ lcl|QUERY         0 MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVK
 gi|519801        60 VIKEASKPLR-RGKGFK 76
                  60 .|..|.||.|-.|.||. 77
 lcl|QUERY        60 MISDAMKPYRNKGSGFQ 77
+
 """,
         )
         hit = record[2]
@@ -785,6 +848,14 @@ lcl|QUERY        60 MISDAMKPYRNKGSGFQ 77
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|QUERY Length: 131 Strand: Plus
+        tr|Q3V4Q3|Q3V4Q3_9VIRU
+Target: gi|70606448|ref|YP_255318.1| Length: 90 Strand: Plus
+        hypothetical protein Saci_0636 [Sulfolobus acidocaldarius DSM 639] >gi|68567096|gb|AAY80025.1| hypothetical protein Saci_0636 [Sulfolobus acidocaldarius DSM 639]
+
+Score:45 bits(106), Expect:0.002,
+Identities:22/65(34%),  Positives:37/65(57%)
+
 gi|706064         0 MMELKHKKEEYAKELINLLSRFMSGKISYPVLSLRLTGIEAKVHESGFEDLVRLIHELLK
                   0 |.....||..||......|..|..|...||...|.|.|.||.....|.|.....||...|
 lcl|QUERY         0 MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVK
@@ -792,6 +863,7 @@ lcl|QUERY         0 MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVK
 gi|706064        60 AIREA 65
                  60 .|..| 65
 lcl|QUERY        60 MISDA 65
+
 """,
         )
         hit = record[3]
@@ -846,6 +918,14 @@ lcl|QUERY        60 MISDA 65
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|QUERY Length: 131 Strand: Plus
+        tr|Q3V4Q3|Q3V4Q3_9VIRU
+Target: gi|75750440|ref|YP_319873.1| Length: 145 Strand: Plus
+        hypothetical protein ATV_gp42 [Acidianus two-tailed virus] >gi|74474823|emb|CAI59897.1| hypothetical protein [Acidianus two-tailed virus]
+
+Score:43 bits(102), Expect:0.005,
+Identities:30/77(39%),  Positives:42/77(55%),  Gaps:6.77(8%)
+
 gi|757504        20 FYEGVIGYPEIDLRLAGEEAWLKGVNPELA-EAVKKIIKTIRRYLEGSPYDGS---EKPI
                   0 |..|..||||..|.||||||.......|..-||...|.|.|..........||---..||
 lcl|QUERY        21 FENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQPI
@@ -853,6 +933,7 @@ lcl|QUERY        21 FENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQPI
 gi|757504        76 PRYIIAEIFSQIAPEVQ 93
                  60 |...||...|.--||.| 77
 lcl|QUERY        81 PGEVIAQVTSN--PEYQ 96
+
 """,
         )
         hit = record[4]
@@ -907,9 +988,18 @@ lcl|QUERY        81 PGEVIAQVTSN--PEYQ 96
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|QUERY Length: 131 Strand: Plus
+        tr|Q3V4Q3|Q3V4Q3_9VIRU
+Target: gi|149720683|ref|XP_001495622.1| Length: 595 Strand: Plus
+        PREDICTED: similar to P2X7 receptor [Equus caballus]
+
+Score:35 bits(79), Expect:2,
+Identities:17/47(36%),  Positives:30/47(64%),  Gaps:2.47(4%)
+
 gi|149720        40 VIFALVSDKRYQRKEPLISSVHTKVKGIAEVREEIIESGAKKVVQSV  87
                   0 ||....|...||.......|..|.|..|.--|||....||||..|..  47
 lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIE--REEVLSKGAKKLAQAM 129
+
 """,
         )
         hit = record[5]
@@ -964,6 +1054,14 @@ lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIE--REEVLSKGAKKLAQAM 129
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|QUERY Length: 131 Strand: Plus
+        tr|Q3V4Q3|Q3V4Q3_9VIRU
+Target: gi|229220336|ref|ZP_03838482.2| Length: 208 Strand: Plus
+        hypothetical protein CIT292_04594 [Citrobacter youngae ATCC 29220] >gi|228553887|gb|EEK18552.1| hypothetical protein CIT292_04594 [Citrobacter youngae ATCC 29220]
+
+Score:34 bits(78), Expect:3,
+Identities:23/84(27%),  Positives:42/84(50%),  Gaps:9.84(11%)
+
 gi|229220        59 GEVVGGAISTAL-----SIGGPQIAKGVSKTERNARRAVQEEAKNLSGESLNSFMKLNEK
                   0 |...|||.....-----..|.|.........|.|||||..|..|----|......|....
 lcl|QUERY         8 GDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTK----EAIHAIVKMISD
@@ -971,6 +1069,7 @@ lcl|QUERY         8 GDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTK----EAIHAIVKMISD
 gi|229220       114 KLTPHRNFEILGQCSPAIGQLVSQ 138
                  60 ...|.||.....|..|..|....|  84
 lcl|QUERY        64 AMKPYRNKGSGFQSQPIPGEVIAQ  88
+
 """,
         )
         hit = record[6]
@@ -1024,9 +1123,18 @@ lcl|QUERY        64 AMKPYRNKGSGFQSQPIPGEVIAQ  88
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|QUERY Length: 131 Strand: Plus
+        tr|Q3V4Q3|Q3V4Q3_9VIRU
+Target: gi|167646253|ref|YP_001683916.1| Length: 155 Strand: Plus
+        activator of Hsp90 ATPase 1 family protein [Caulobacter sp. K31] >gi|167348683|gb|ABZ71418.1| Activator of Hsp90 ATPase 1 family protein [Caulobacter sp. K31]
+
+Score:34 bits(78), Expect:3,
+Identities:16/48(33%),  Positives:24/48(50%)
+
 gi|167646        44 VKMLVKTTSDRRRKDSGRITQLVPGEAITFTTGNPMLKHTECYTLTPS  92
                   0 |||........|.|.||...|..|||.|...|.||...........|.  48
 lcl|QUERY        58 VKMISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKAFLASPA 106
+
 """,
         )
         hit = record[7]
@@ -1081,6 +1189,14 @@ lcl|QUERY        58 VKMISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKAFLASPA 106
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|QUERY Length: 131 Strand: Plus
+        tr|Q3V4Q3|Q3V4Q3_9VIRU
+Target: gi|46114422|ref|XP_383229.1| Length: 263 Strand: Plus
+        hypothetical protein FG03053.1 [Gibberella zeae PH-1]
+
+Score:34 bits(77), Expect:4,
+Identities:26/89(29%),  Positives:40/89(45%),  Gaps:5.89(6%)
+
 gi|461144        85 KLTTLKRRLRYEAKELRKEALRQIVSKLRSWMK-LRDFGCGVK--PLIESSLPEIATNPH
                   0 ||.......|....|..|||...||......||-.|..|.|..--|...........||.
 lcl|QUERY        34 KLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPE
@@ -1088,6 +1204,7 @@ lcl|QUERY        34 KLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPE
 gi|461144       142 YNQTSLYLT--MNHPRRIERVSRVIKGSR 169
                  60 |.|....|.--....|.|||.....||..  89
 lcl|QUERY        94 YQQAKAFLASPATQVRNIEREEVLSKGAK 123
+
 """,
         )
         hit = record[8]
@@ -1142,6 +1259,14 @@ lcl|QUERY        94 YQQAKAFLASPATQVRNIEREEVLSKGAK 123
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|QUERY Length: 131 Strand: Plus
+        tr|Q3V4Q3|Q3V4Q3_9VIRU
+Target: gi|16804655|ref|NP_466140.1| Length: 178 Strand: Plus
+        50S ribosomal protein L6 [Listeria monocytogenes EGD-e] >gi|47097188|ref|ZP_00234753.1| ribosomal protein L6 [Listeria monocytogenes str. 1/2a F6854] >gi|217966184|ref|YP_002351862.1| 50S ribosomal protein L6 (BL10) [Listeria monocytogenes HCC23] >gi|224499290|ref|ZP_03667639.1| 50S ribosomal protein L6 [Listeria monocytogenes Finland 1988] >gi|224503589|ref|ZP_03671896.1| 50S ribosomal protein L6 [Listeria monocytogenes FSL R2-561] >gi|81768735|sp|Q8Y444.1|RL6_LISMO RecName: Full=50S ribosomal protein L6 >gi|16412105|emb|CAD00695.1| ribosomal protein L6 [Listeria monocytogenes] >gi|47014447|gb|EAL05415.1| ribosomal protein L6 [Listeria monocytogenes str. 1/2a F6854] >gi|217335454|gb|ACK41248.1| 50S ribosomal protein L6 (BL10) [Listeria monocytogenes HCC23]
+
+Score:34 bits(77), Expect:4,
+Identities:26/104(25%),  Positives:44/104(42%),  Gaps:13.104(12%)
+
 gi|168046        38 PEITIKIEGNEINVSRPTDNKNHRALHGTTRAILNNMVVGVSEGYEKKLELIGVGYRAQK
                   0 ||.|.|..|.|.|..|..|.....|.|.....|...|-----..|..|----|.|...|.
 lcl|QUERY        29 PEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAM-----KPYRNK----GSGFQSQP
@@ -1149,6 +1274,7 @@ lcl|QUERY        29 PEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAM-----KPYRNK----GSGFQSQP
 gi|168046        98 QGDKLVLNVG----YSHPVEFVAPKGVDIEVPANTQVIVKGYNK 138
                  60 ........|.----|.....|.|.............|..||..| 104
 lcl|QUERY        80 IPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKK 124
+
 """,
         )
         hit = record[9]
@@ -1203,6 +1329,14 @@ lcl|QUERY        80 IPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKK 124
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|QUERY Length: 131 Strand: Plus
+        tr|Q3V4Q3|Q3V4Q3_9VIRU
+Target: gi|225106043|ref|YP_002674349.1| Length: 202 Strand: Plus
+        hypothetical protein OA307_717 [Octadecabacter antarcticus 307] >gi|198251380|gb|EDY75695.1| hypothetical protein OA307_717 [Octadecabacter antarcticus 307]
+
+Score:33 bits(76), Expect:5,
+Identities:23/84(27%),  Positives:38/84(45%),  Gaps:5.84(6%)
+
 gi|225106         8 MRKIEPKKMTATERKHWGFGVDAIRMMENELMGYLHEYRALPLEWDEIWKDEDRRDPKRT
                   0 |.|.||||-----....|..|....|.||...||......|..|........|.|.....
 lcl|QUERY         0 MAKYEPKK-----GDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAI
@@ -1210,6 +1344,7 @@ lcl|QUERY         0 MAKYEPKK-----GDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAI
 gi|225106        68 RVTIRLDADVVKYFRAMGAGYQAR 92
                  60 ........|..|..|..|.|.|.. 84
 lcl|QUERY        55 HAIVKMISDAMKPYRNKGSGFQSQ 79
+
 """,
         )
         hit = record[10]
@@ -1264,6 +1399,14 @@ lcl|QUERY        55 HAIVKMISDAMKPYRNKGSGFQSQ 79
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|QUERY Length: 131 Strand: Plus
+        tr|Q3V4Q3|Q3V4Q3_9VIRU
+Target: gi|16801827|ref|NP_472095.1| Length: 178 Strand: Plus
+        50S ribosomal protein L6 [Listeria innocua Clip11262] >gi|116873983|ref|YP_850764.1| 50S ribosomal protein L6 [Listeria welshimeri serovar 6b str. SLCC5334] >gi|81774192|sp|Q927M2.1|RL6_LISIN RecName: Full=50S ribosomal protein L6 >gi|123458730|sp|A0ALV3.1|RL6_LISW6 RecName: Full=50S ribosomal protein L6 >gi|16415302|emb|CAC97992.1| ribosomal protein L6 [Listeria innocua] >gi|116742861|emb|CAK21985.1| rplF [Listeria welshimeri serovar 6b str. SLCC5334]
+
+Score:33 bits(74), Expect:9,
+Identities:25/104(24%),  Positives:44/104(42%),  Gaps:13.104(12%)
+
 gi|168018        38 PEITINIEGNEINVSRPTDNKNHRALHGTTRAILNNMVVGVSEGYEKKLELIGVGYRAQK
                   0 ||.|....|.|.|..|..|.....|.|.....|...|-----..|..|----|.|...|.
 lcl|QUERY        29 PEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAM-----KPYRNK----GSGFQSQP
@@ -1271,6 +1414,7 @@ lcl|QUERY        29 PEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAM-----KPYRNK----GSGFQSQP
 gi|168018        98 QGDKLVLNVG----YSHPVEFVAPKGVEIEVPANTQVIVKGYNK 138
                  60 ........|.----|.....|.|.............|..||..| 104
 lcl|QUERY        80 IPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKK 124
+
 """,
         )
         record = next(records)
@@ -1335,6 +1479,14 @@ lcl|QUERY        80 IPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKK 124
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|QUERY Length: 131 Strand: Plus
+        tr|Q3V4Q3|Q3V4Q3_9VIRU
+Target: gi|75750454|ref|YP_319893.1| Length: 131 Strand: Plus
+        hypothetical protein ATV_gp62 [Acidianus two-tailed virus] >gi|74474837|emb|CAI59911.1| hypothetical protein [Acidianus two-tailed virus]
+
+Score:231 bits(590), Expect:1e-59,
+Identities:131/131(100%),  Positives:131/131(100%)
+
 gi|757504         0 MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVK
                   0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 lcl|QUERY         0 MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVK
@@ -1346,6 +1498,7 @@ lcl|QUERY        60 MISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSK
 gi|757504       120 GAKKLAQAMAS 131
                 120 ||||||||||| 131
 lcl|QUERY       120 GAKKLAQAMAS 131
+
 """,
         )
         hit = record[1]
@@ -1400,6 +1553,14 @@ lcl|QUERY       120 GAKKLAQAMAS 131
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|QUERY Length: 131 Strand: Plus
+        tr|Q3V4Q3|Q3V4Q3_9VIRU
+Target: gi|51980166|ref|YP_077233.1| Length: 144 Strand: Plus
+        coat protein [Sulfolobus virus STSV1] >gi|51890299|emb|CAH04223.1| coat protein [Sulfolobus virus STSV1]
+
+Score:137 bits(346), Expect:3e-31,
+Identities:36/77(47%),  Positives:49/77(64%),  Gaps:1.77(1%)
+
 gi|519801         0 MAREEPYKGDYVGGVAKILQGYFANYYGFPNVSLRLAGEEANLSKTGHANAKAIVHEMIK
                   0 ||..||.||||.||..|||........|.|.|.|.|||||||....|....|...|...|
 lcl|QUERY         0 MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVK
@@ -1407,6 +1568,7 @@ lcl|QUERY         0 MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVK
 gi|519801        60 VIKEASKPLR-RGKGFK 76
                  60 .|..|.||.|-.|.||. 77
 lcl|QUERY        60 MISDAMKPYRNKGSGFQ 77
+
 """,
         )
         hit = record[2]
@@ -1461,6 +1623,14 @@ lcl|QUERY        60 MISDAMKPYRNKGSGFQ 77
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|QUERY Length: 131 Strand: Plus
+        tr|Q3V4Q3|Q3V4Q3_9VIRU
+Target: gi|75750440|ref|YP_319873.1| Length: 145 Strand: Plus
+        hypothetical protein ATV_gp42 [Acidianus two-tailed virus] >gi|74474823|emb|CAI59897.1| hypothetical protein [Acidianus two-tailed virus]
+
+Score:50 bits(118), Expect:7e-05,
+Identities:34/93(37%),  Positives:48/93(52%),  Gaps:8.93(9%)
+
 gi|757504         6 PQK--YETHVLDDLMEFYEGVIGYPEIDLRLAGEEAWLKGVNPELA-EAVKKIIKTIRRY
                   0 |.|--|.......|..|..|..||||..|.||||||.......|..-||...|.|.|...
 lcl|QUERY         5 PKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDA
@@ -1468,6 +1638,7 @@ lcl|QUERY         5 PKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDA
 gi|757504        63 LEGSPYDGS---EKPIPRYIIAEIFSQIAPEVQ 93
                  60 .......||---..|||...||...|.--||.| 93
 lcl|QUERY        65 MKPYRNKGSGFQSQPIPGEVIAQVTSN--PEYQ 96
+
 """,
         )
         hit = record[3]
@@ -1521,6 +1692,14 @@ lcl|QUERY        65 MKPYRNKGSGFQSQPIPGEVIAQVTSN--PEYQ 96
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|QUERY Length: 131 Strand: Plus
+        tr|Q3V4Q3|Q3V4Q3_9VIRU
+Target: gi|70606448|ref|YP_255318.1| Length: 90 Strand: Plus
+        hypothetical protein Saci_0636 [Sulfolobus acidocaldarius DSM 639] >gi|68567096|gb|AAY80025.1| hypothetical protein Saci_0636 [Sulfolobus acidocaldarius DSM 639]
+
+Score:47 bits(112), Expect:0.0003,
+Identities:22/67(33%),  Positives:38/67(57%)
+
 gi|706064         0 MMELKHKKEEYAKELINLLSRFMSGKISYPVLSLRLTGIEAKVHESGFEDLVRLIHELLK
                   0 |.....||..||......|..|..|...||...|.|.|.||.....|.|.....||...|
 lcl|QUERY         0 MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVK
@@ -1528,6 +1707,7 @@ lcl|QUERY         0 MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVK
 gi|706064        60 AIREAER 67
                  60 .|..|.. 67
 lcl|QUERY        60 MISDAMK 67
+
 """,
         )
         hit = record[4]
@@ -1582,6 +1762,14 @@ lcl|QUERY        60 MISDAMK 67
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|QUERY Length: 131 Strand: Plus
+        tr|Q3V4Q3|Q3V4Q3_9VIRU
+Target: gi|56478923|ref|YP_160512.1| Length: 326 Strand: Plus
+        hypothetical protein ebA6101 [Aromatoleum aromaticum EbN1] >gi|56314966|emb|CAI09611.1| conserved hypothetical protein [Azoarcus sp. EbN1]
+
+Score:37 bits(85), Expect:0.5,
+Identities:21/81(26%),  Positives:33/81(41%),  Gaps:11.81(14%)
+
 gi|564789       141 GDHVGGL-----GDSAGQMVFPNATIHVAQTDNDFWLSPQMAAQAPAEIQPFFKMAVDAA
                   0 ||..||.-----....||...|..|...|.....--............|....||..||.
 lcl|QUERY         8 GDYAGGAVKILDMFENGQLGYPEVTLKLAGEEAN--ARRAGDERTKEAIHAIVKMISDAM
@@ -1589,6 +1777,7 @@ lcl|QUERY         8 GDYAGGAVKILDMFENGQLGYPEVTLKLAGEEAN--ARRAGDERTKEAIHAIVKMISDAM
 gi|564789       196 APYQARGQWKTFAEGSEVVPG 217
                  60 .||...|--..|.--|...||  81
 lcl|QUERY        66 KPYRNKG--SGFQ--SQPIPG  83
+
 """,
         )
         hit = record[5]
@@ -1643,6 +1832,14 @@ lcl|QUERY        66 KPYRNKG--SGFQ--SQPIPG  83
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|QUERY Length: 131 Strand: Plus
+        tr|Q3V4Q3|Q3V4Q3_9VIRU
+Target: gi|16082535|ref|NP_394071.1| Length: 166 Strand: Plus
+        deoxycytidine triphosphate deaminase [Thermoplasma acidophilum DSM 1728] >gi|20141306|sp|Q9HKK0.2|DCD_THEAC RecName: Full=Probable deoxycytidine triphosphate deaminase; Short=dCTP deaminase
+
+Score:36 bits(82), Expect:1,
+Identities:22/70(31%),  Positives:30/70(43%),  Gaps:10.70(14%)
+
 gi|160825        94 AGYHGNLTLSFFNAGSAVNLRRG--ERIAQIV--FVKMIGSAEKPYHIRSGNYQNSRGIV
                   0 .|..|........||...|.||.--||.....--.||||..|.|||.......|..----
 lcl|QUERY        23 NGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQ----
@@ -1650,6 +1847,7 @@ lcl|QUERY        23 NGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQ----
 gi|160825       150 KDPVAGSQIA 160
                  60 --|..|..||  70
 lcl|QUERY        79 --PIPGEVIA  87
+
 """,
         )
         hit = record[6]
@@ -1704,6 +1902,14 @@ lcl|QUERY        79 --PIPGEVIA  87
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|QUERY Length: 131 Strand: Plus
+        tr|Q3V4Q3|Q3V4Q3_9VIRU
+Target: gi|10639765|emb|CAC11737.1| Length: 183 Strand: Plus
+        dCTP deaminase related protein [Thermoplasma acidophilum]
+
+Score:36 bits(82), Expect:1,
+Identities:22/70(31%),  Positives:30/70(43%),  Gaps:10.70(14%)
+
 gi|106397       111 AGYHGNLTLSFFNAGSAVNLRRG--ERIAQIV--FVKMIGSAEKPYHIRSGNYQNSRGIV
                   0 .|..|........||...|.||.--||.....--.||||..|.|||.......|..----
 lcl|QUERY        23 NGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQ----
@@ -1711,6 +1917,7 @@ lcl|QUERY        23 NGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQ----
 gi|106397       167 KDPVAGSQIA 177
                  60 --|..|..||  70
 lcl|QUERY        79 --PIPGEVIA  87
+
 """,
         )
         hit = record[7]
@@ -1759,6 +1966,14 @@ lcl|QUERY        79 --PIPGEVIA  87
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|QUERY Length: 131 Strand: Plus
+        tr|Q3V4Q3|Q3V4Q3_9VIRU
+Target: gi|38511961|gb|AAH60735.1| Length: 1370 Strand: Plus
+        Ttc28 protein [Mus musculus]
+
+Score:36 bits(82), Expect:1,
+Identities:25/103(24%),  Positives:45/103(44%),  Gaps:5.103(5%)
+
 gi|385119       738 LGLPNPALQALCKLITASETGEQLISRAVKNMVGMLHQVLVQLQACEKEQDFASAPIPVS
                   0 ||.|...|........|...|......|....|.|.........--.|...|.|.|||..
 lcl|QUERY        26 LGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYR--NKGSGFQSQPIPGE
@@ -1766,6 +1981,7 @@ lcl|QUERY        26 LGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYR--NKGSGFQSQPIPGE
 gi|385119       798 LSVQLWRLPGCHE---FLAALGFDLCEVGQEEVILKTGKQASR 838
                  60 ...|....|....---|||...........|||..|..|.... 103
 lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQ 127
+
 """,
         )
         hit = record[8]
@@ -1820,6 +2036,14 @@ lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQ 127
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|QUERY Length: 131 Strand: Plus
+        tr|Q3V4Q3|Q3V4Q3_9VIRU
+Target: gi|71153789|sp|Q80XJ3.2|TTC28_MOUSE Length: 1691 Strand: Plus
+        RecName: Full=Tetratricopeptide repeat protein 28; Short=TPR repeat protein 28 >gi|55930902|gb|AAH46779.2| Tetratricopeptide repeat domain 28 [Mus musculus]
+
+Score:36 bits(82), Expect:1,
+Identities:25/103(24%),  Positives:45/103(44%),  Gaps:5.103(5%)
+
 gi|711537      1059 LGLPNPALQALCKLITASETGEQLISRAVKNMVGMLHQVLVQLQACEKEQDFASAPIPVS
                   0 ||.|...|........|...|......|....|.|.........--.|...|.|.|||..
 lcl|QUERY        26 LGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYR--NKGSGFQSQPIPGE
@@ -1827,6 +2051,7 @@ lcl|QUERY        26 LGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYR--NKGSGFQSQPIPGE
 gi|711537      1119 LSVQLWRLPGCHE---FLAALGFDLCEVGQEEVILKTGKQASR 1159
                  60 ...|....|....---|||...........|||..|..|....  103
 lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQ  127
+
 """,
         )
         hit = record[9]
@@ -1881,6 +2106,14 @@ lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQ  127
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|QUERY Length: 131 Strand: Plus
+        tr|Q3V4Q3|Q3V4Q3_9VIRU
+Target: gi|149254322|ref|XP_001476594.1| Length: 2481 Strand: Plus
+        PREDICTED: similar to OTTHUMP00000028696 [Mus musculus]
+
+Score:35 bits(81), Expect:1,
+Identities:25/103(24%),  Positives:45/103(44%),  Gaps:5.103(5%)
+
 gi|149254      1849 LGLPNPALQALCKLITASETGEQLISRAVKNMVGMLHQVLVQLQACEKEQDFASAPIPVS
                   0 ||.|...|........|...|......|....|.|.........--.|...|.|.|||..
 lcl|QUERY        26 LGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYR--NKGSGFQSQPIPGE
@@ -1888,6 +2121,7 @@ lcl|QUERY        26 LGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYR--NKGSGFQSQPIPGE
 gi|149254      1909 LSVQLWRLPGCHE---FLAALGFDLCEVGQEEVILKTGKQASR 1949
                  60 ...|....|....---|||...........|||..|..|....  103
 lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQ  127
+
 """,
         )
         hit = record[10]
@@ -1940,6 +2174,14 @@ lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQ  127
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|QUERY Length: 131 Strand: Plus
+        tr|Q3V4Q3|Q3V4Q3_9VIRU
+Target: gi|148688047|gb|EDL19994.1| Length: 2146 Strand: Plus
+        tetratricopeptide repeat domain 28 [Mus musculus]
+
+Score:35 bits(81), Expect:1,
+Identities:25/103(24%),  Positives:45/103(44%),  Gaps:5.103(5%)
+
 gi|148688      1514 LGLPNPALQALCKLITASETGEQLISRAVKNMVGMLHQVLVQLQACEKEQDFASAPIPVS
                   0 ||.|...|........|...|......|....|.|.........--.|...|.|.|||..
 lcl|QUERY        26 LGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYR--NKGSGFQSQPIPGE
@@ -1947,6 +2189,7 @@ lcl|QUERY        26 LGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYR--NKGSGFQSQPIPGE
 gi|148688      1574 LSVQLWRLPGCHE---FLAALGFDLCEVGQEEVILKTGKQASR 1614
                  60 ...|....|....---|||...........|||..|..|....  103
 lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQ  127
+
 """,
         )
         hit = record[11]
@@ -1995,6 +2238,14 @@ lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQ  127
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|QUERY Length: 131 Strand: Plus
+        tr|Q3V4Q3|Q3V4Q3_9VIRU
+Target: gi|149063697|gb|EDM14020.1| Length: 2098 Strand: Plus
+        rCG21379 [Rattus norvegicus]
+
+Score:35 bits(81), Expect:1,
+Identities:25/103(24%),  Positives:45/103(44%),  Gaps:5.103(5%)
+
 gi|149063      1465 LGLPNPALQALCKLITASETGEQLISRAVKNMVGMLHQVLVQLQACEKEQDFASAPIPVS
                   0 ||.|...|........|...|......|....|.|.........--.|...|.|.|||..
 lcl|QUERY        26 LGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYR--NKGSGFQSQPIPGE
@@ -2002,6 +2253,7 @@ lcl|QUERY        26 LGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYR--NKGSGFQSQPIPGE
 gi|149063      1525 LSVQLWRLPGCHE---FLAALGFDLCEVGQEEVILKTGKQASR 1565
                  60 ...|....|....---|||...........|||..|..|....  103
 lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQ  127
+
 """,
         )
         hit = record[12]
@@ -2056,6 +2308,14 @@ lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQ  127
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|QUERY Length: 131 Strand: Plus
+        tr|Q3V4Q3|Q3V4Q3_9VIRU
+Target: gi|163854616|ref|YP_001628914.1| Length: 333 Strand: Plus
+        metallo-beta-lactamase superfamily protein [Bordetella petrii DSM 12804] >gi|163258344|emb|CAP40643.1| metallo-beta-lactamase superfamily protein [Bordetella petrii]
+
+Score:35 bits(81), Expect:1,
+Identities:15/61(25%),  Positives:23/61(38%),  Gaps:6.61(10%)
+
 gi|163854       162 FPNADVYAARAEADFWLSTTVAAQAPADVQPMFKMSRDAAAPYQAAGKFLTYQPDDTLLP
                   0 .|......|..||.--.................||..||..||...|.....||----.|
 lcl|QUERY        28 YPEVTLKLAGEEAN--ARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQP----IP
@@ -2063,6 +2323,7 @@ lcl|QUERY        28 YPEVTLKLAGEEAN--ARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQP----IP
 gi|163854       222 G 223
                  60 |  61
 lcl|QUERY        82 G  83
+
 """,
         )
         hit = record[13]
@@ -2117,6 +2378,14 @@ lcl|QUERY        82 G  83
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|QUERY Length: 131 Strand: Plus
+        tr|Q3V4Q3|Q3V4Q3_9VIRU
+Target: gi|109496198|ref|XP_222260.4| Length: 2570 Strand: Plus
+        PREDICTED: similar to TPR repeat-containing protein KIAA1043 [Rattus norvegicus]
+
+Score:35 bits(81), Expect:1,
+Identities:25/103(24%),  Positives:45/103(44%),  Gaps:5.103(5%)
+
 gi|109496      1937 LGLPNPALQALCKLITASETGEQLISRAVKNMVGMLHQVLVQLQACEKEQDFASAPIPVS
                   0 ||.|...|........|...|......|....|.|.........--.|...|.|.|||..
 lcl|QUERY        26 LGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYR--NKGSGFQSQPIPGE
@@ -2124,6 +2393,7 @@ lcl|QUERY        26 LGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYR--NKGSGFQSQPIPGE
 gi|109496      1997 LSVQLWRLPGCHE---FLAALGFDLCEVGQEEVILKTGKQASR 2037
                  60 ...|....|....---|||...........|||..|..|....  103
 lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQ  127
+
 """,
         )
         hit = record[14]
@@ -2176,6 +2446,14 @@ lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQ  127
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|QUERY Length: 131 Strand: Plus
+        tr|Q3V4Q3|Q3V4Q3_9VIRU
+Target: gi|26327341|dbj|BAC27414.1| Length: 682 Strand: Plus
+        unnamed protein product [Mus musculus]
+
+Score:35 bits(80), Expect:2,
+Identities:25/103(24%),  Positives:45/103(44%),  Gaps:5.103(5%)
+
 gi|263273        50 LGLPNPALQALCKLITASETGEQLISRAVKNMVGMLHQVLVQLQACEKEQDFASAPIPVS
                   0 ||.|...|........|...|......|....|.|.........--.|...|.|.|||..
 lcl|QUERY        26 LGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYR--NKGSGFQSQPIPGE
@@ -2183,6 +2461,7 @@ lcl|QUERY        26 LGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYR--NKGSGFQSQPIPGE
 gi|263273       110 LSVQLWRLPGCHE---FLAALGFDLCEVGQEEVILKTGKQASR 150
                  60 ...|....|....---|||...........|||..|..|.... 103
 lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQ 127
+
 """,
         )
         hit = record[15]
@@ -2235,6 +2514,14 @@ lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQ 127
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|QUERY Length: 131 Strand: Plus
+        tr|Q3V4Q3|Q3V4Q3_9VIRU
+Target: gi|26349137|dbj|BAC38208.1| Length: 641 Strand: Plus
+        unnamed protein product [Mus musculus]
+
+Score:35 bits(80), Expect:2,
+Identities:25/103(24%),  Positives:45/103(44%),  Gaps:5.103(5%)
+
 gi|263491         9 LGLPNPALQALCKLITASETGEQLISRAVKNMVGMLHQVLVQLQACEKEQDFASAPIPVS
                   0 ||.|...|........|...|......|....|.|.........--.|...|.|.|||..
 lcl|QUERY        26 LGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYR--NKGSGFQSQPIPGE
@@ -2242,6 +2529,7 @@ lcl|QUERY        26 LGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYR--NKGSGFQSQPIPGE
 gi|263491        69 LSVQLWRLPGCHE---FLAALGFDLCEVGQEEVILKTGKQASR 109
                  60 ...|....|....---|||...........|||..|..|.... 103
 lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQ 127
+
 """,
         )
         hit = record[16]
@@ -2298,6 +2586,14 @@ lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQ 127
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|QUERY Length: 131 Strand: Plus
+        tr|Q3V4Q3|Q3V4Q3_9VIRU
+Target: gi|194291978|ref|YP_002007885.1| Length: 2596 Strand: Plus
+        non ribosomal peptide synthase, antibiotic synthesis; contains 3 condensation domains, 2 AMP-acid ligases II domains, 2 PP-binding, Phosphopantetheine attachment site [Cupriavidus taiwanensis] >gi|193225882|emb|CAQ71828.1| non ribosomal peptide synthase, antibiotic synthesis; contains 3 condensation domains, 2 AMP-acid ligases II domains, 2 PP-binding, Phosphopantetheine attachment site [Cupriavidus taiwanensis]
+
+Score:35 bits(80), Expect:2,
+Identities:28/95(29%),  Positives:40/95(42%),  Gaps:20.95(21%)
+
 gi|194291      2334 YVGGPA-----LARGYLGRAALTADRFVPDPLAGDGARLYRTGDRVRRRADGVFEYLGRV
                   0 |.||..-----...|.||....|..------|||..|...|.||.--|............
 lcl|QUERY        10 YAGGAVKILDMFENGQLGYPEVTLK------LAGEEANARRAGDE--RTKEAIHAIVKMI
@@ -2305,6 +2601,7 @@ lcl|QUERY        10 YAGGAVKILDMFENGQLGYPEVTLK------LAGEEANARRAGDE--RTKEAIHAIVKMI
 gi|194291      2389 DDQVKI-----RGFRVEP--GEVAAQVAALPQVRQ 2417
                  60 .|..|.-----.||...|--|||.|||...|...|   95
 lcl|QUERY        62 SDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQ   97
+
 """,
         )
         hit = record[17]
@@ -2352,9 +2649,18 @@ lcl|QUERY        62 SDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQ   97
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|QUERY Length: 131 Strand: Plus
+        tr|Q3V4Q3|Q3V4Q3_9VIRU
+Target: gi|164498981|gb|ABY59058.1| Length: 246 Strand: Plus
+        unknown [Mesorhizobium sp. F28]
+
+Score:34 bits(77), Expect:4,
+Identities:14/48(29%),  Positives:21/48(44%)
+
 gi|164498         7 RGILVGLVAGILAFAFARVYGEPQVDKAIAFEEQQAQAAGEAPEEEIV 55
                   0 .|...|....||........|.|.|....|.||..|..||.....|.. 48
 lcl|QUERY         7 KGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAI 55
+
 """,
         )
         hit = record[18]
@@ -2409,9 +2715,18 @@ lcl|QUERY         7 KGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAI 55
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|QUERY Length: 131 Strand: Plus
+        tr|Q3V4Q3|Q3V4Q3_9VIRU
+Target: gi|189198988|ref|XP_001935831.1| Length: 1026 Strand: Plus
+        predicted protein [Pyrenophora tritici-repentis Pt-1C-BFP] >gi|187982930|gb|EDU48418.1| predicted protein [Pyrenophora tritici-repentis Pt-1C-BFP]
+
+Score:33 bits(76), Expect:5,
+Identities:14/56(25%),  Positives:26/56(46%),  Gaps:4.56(7%)
+
 gi|189198       436 FPEVTMRGGGEESGLNLTQEGNTEDMVPPDYPESFPISSESSDYASEYGASFQSPP 492
                   0 .||||....|||..........|....----.......|.........|..|||.|  56
 lcl|QUERY        28 YPEVTLKLAGEEANARRAGDERTKEAI----HAIVKMISDAMKPYRNKGSGFQSQP  80
+
 """,
         )
         record = next(records)
@@ -2476,6 +2791,14 @@ lcl|QUERY        28 YPEVTLKLAGEEANARRAGDERTKEAI----HAIVKMISDAMKPYRNKGSGFQSQP  80
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|QUERY Length: 131 Strand: Plus
+        tr|Q3V4Q3|Q3V4Q3_9VIRU
+Target: gi|75750454|ref|YP_319893.1| Length: 131 Strand: Plus
+        hypothetical protein ATV_gp62 [Acidianus two-tailed virus] >gi|74474837|emb|CAI59911.1| hypothetical protein [Acidianus two-tailed virus]
+
+Score:210 bits(535), Expect:3e-53,
+Identities:131/131(100%),  Positives:131/131(100%)
+
 gi|757504         0 MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVK
                   0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 lcl|QUERY         0 MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVK
@@ -2487,6 +2810,7 @@ lcl|QUERY        60 MISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSK
 gi|757504       120 GAKKLAQAMAS 131
                 120 ||||||||||| 131
 lcl|QUERY       120 GAKKLAQAMAS 131
+
 """,
         )
         hit = record[1]
@@ -2541,6 +2865,14 @@ lcl|QUERY       120 GAKKLAQAMAS 131
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|QUERY Length: 131 Strand: Plus
+        tr|Q3V4Q3|Q3V4Q3_9VIRU
+Target: gi|75750440|ref|YP_319873.1| Length: 145 Strand: Plus
+        hypothetical protein ATV_gp42 [Acidianus two-tailed virus] >gi|74474823|emb|CAI59897.1| hypothetical protein [Acidianus two-tailed virus]
+
+Score:124 bits(312), Expect:3e-27,
+Identities:34/95(36%),  Positives:48/95(51%),  Gaps:8.95(8%)
+
 gi|757504         4 LHPQK--YETHVLDDLMEFYEGVIGYPEIDLRLAGEEAWLKGVNPELA-EAVKKIIKTIR
                   0 ..|.|--|.......|..|..|..||||..|.||||||.......|..-||...|.|.|.
 lcl|QUERY         3 YEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMIS
@@ -2548,6 +2880,7 @@ lcl|QUERY         3 YEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMIS
 gi|757504        61 RYLEGSPYDGS---EKPIPRYIIAEIFSQIAPEVQ 93
                  60 .........||---..|||...||...|.--||.| 95
 lcl|QUERY        63 DAMKPYRNKGSGFQSQPIPGEVIAQVTSN--PEYQ 96
+
 """,
         )
         hit = record[2]
@@ -2602,6 +2935,14 @@ lcl|QUERY        63 DAMKPYRNKGSGFQSQPIPGEVIAQVTSN--PEYQ 96
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|QUERY Length: 131 Strand: Plus
+        tr|Q3V4Q3|Q3V4Q3_9VIRU
+Target: gi|51980166|ref|YP_077233.1| Length: 144 Strand: Plus
+        coat protein [Sulfolobus virus STSV1] >gi|51890299|emb|CAH04223.1| coat protein [Sulfolobus virus STSV1]
+
+Score:119 bits(298), Expect:1e-25,
+Identities:36/78(46%),  Positives:49/78(63%),  Gaps:1.78(1%)
+
 gi|519801         0 MAREEPYKGDYVGGVAKILQGYFANYYGFPNVSLRLAGEEANLSKTGHANAKAIVHEMIK
                   0 ||..||.||||.||..|||........|.|.|.|.|||||||....|....|...|...|
 lcl|QUERY         0 MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVK
@@ -2609,6 +2950,7 @@ lcl|QUERY         0 MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVK
 gi|519801        60 VIKEASKPLR-RGKGFKE 77
                  60 .|..|.||.|-.|.||.. 78
 lcl|QUERY        60 MISDAMKPYRNKGSGFQS 78
+
 """,
         )
         hit = record[3]
@@ -2663,6 +3005,14 @@ lcl|QUERY        60 MISDAMKPYRNKGSGFQS 78
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|QUERY Length: 131 Strand: Plus
+        tr|Q3V4Q3|Q3V4Q3_9VIRU
+Target: gi|70606448|ref|YP_255318.1| Length: 90 Strand: Plus
+        hypothetical protein Saci_0636 [Sulfolobus acidocaldarius DSM 639] >gi|68567096|gb|AAY80025.1| hypothetical protein Saci_0636 [Sulfolobus acidocaldarius DSM 639]
+
+Score:97 bits(242), Expect:3e-19,
+Identities:26/85(31%),  Positives:45/85(53%),  Gaps:4.85(5%)
+
 gi|706064         0 MMELKHKKEEYAKELINLLSRFMSGKISYPVLSLRLTGIEAKVHESGFEDLVRLIHELLK
                   0 |.....||..||......|..|..|...||...|.|.|.||.....|.|.....||...|
 lcl|QUERY         0 MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVK
@@ -2670,6 +3020,7 @@ lcl|QUERY         0 MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVK
 gi|706064        60 AIREAER----KGSNEINKLVRPYV 81
                  60 .|..|..----|||..........| 85
 lcl|QUERY        60 MISDAMKPYRNKGSGFQSQPIPGEV 85
+
 """,
         )
         hit = record[4]
@@ -2724,6 +3075,14 @@ lcl|QUERY        60 MISDAMKPYRNKGSGFQSQPIPGEV 85
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|QUERY Length: 131 Strand: Plus
+        tr|Q3V4Q3|Q3V4Q3_9VIRU
+Target: gi|227518463|ref|ZP_03948512.1| Length: 516 Strand: Plus
+        possible histidine kinase [Enterococcus faecalis TX0104] >gi|227074141|gb|EEI12104.1| possible histidine kinase [Enterococcus faecalis TX0104]
+
+Score:36 bits(82), Expect:1,
+Identities:25/107(23%),  Positives:35/107(33%),  Gaps:5.107(5%)
+
 gi|227518       379 PILAGFLSGERIKFAEIKTQLAIEIYPEIPPNKRDEDTQNLIAIYRYIHRFLMEQPLPEE
                   0 |.....|.||.............|....|.....|....-----||........||.|.|
 lcl|QUERY        29 PEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKP-----YRNKGSGFQSQPIPGE
@@ -2731,6 +3090,7 @@ lcl|QUERY        29 PEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKP-----YRNKGSGFQSQPIPGE
 gi|227518       439 IIETIDYQPGSLTTTYSFAYPKEQLERFEQEFFTSYLARLLENAEAT 486
                  60 .|......|.........|.|..|....|.|...|..|..|..|.|. 107
 lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQAMAS 131
+
 """,
         )
         hit = record[5]
@@ -2785,6 +3145,14 @@ lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQAMAS 131
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|QUERY Length: 131 Strand: Plus
+        tr|Q3V4Q3|Q3V4Q3_9VIRU
+Target: gi|78044048|ref|YP_360886.1| Length: 302 Strand: Plus
+        UDP-N-acetylenolpyruvoylglucosamine reductase [Carboxydothermus hydrogenoformans Z-2901] >gi|90109774|sp|Q3AAE8.1|MURB_CARHZ RecName: Full=UDP-N-acetylenolpyruvoylglucosamine reductase; AltName: Full=UDP-N-acetylmuramate dehydrogenase >gi|77996163|gb|ABB15062.1| UDP-N-acetylenolpyruvoylglucosamine reductase [Carboxydothermus hydrogenoformans Z-2901]
+
+Score:34 bits(78), Expect:3,
+Identities:15/76(20%),  Positives:25/76(33%),  Gaps:6.76(8%)
+
 gi|780440       162 LKEFFANECGFKYRSSRFKEEKQWIVKAEFSLNPGDKKEILKKIRE------FREKRLAS
                   0 |..|.....|..........|......|...........|.|.|..------.......|
 lcl|QUERY        18 LDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQS
@@ -2792,6 +3160,7 @@ lcl|QUERY        18 LDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQS
 gi|780440       216 QPLEFPNAGSVFKNPE 232
                  60 ||........|..|||  76
 lcl|QUERY        78 QPIPGEVIAQVTSNPE  94
+
 """,
         )
         hit = record[6]
@@ -2846,6 +3215,14 @@ lcl|QUERY        78 QPIPGEVIAQVTSNPE  94
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|QUERY Length: 131 Strand: Plus
+        tr|Q3V4Q3|Q3V4Q3_9VIRU
+Target: gi|116750563|ref|YP_847250.1| Length: 645 Strand: Plus
+        NADH:flavin oxidoreductase/NADH oxidase [Syntrophobacter fumaroxidans MPOB] >gi|116699627|gb|ABK18815.1| NADH:flavin oxidoreductase/NADH oxidase [Syntrophobacter fumaroxidans MPOB]
+
+Score:34 bits(77), Expect:5,
+Identities:25/100(25%),  Positives:35/100(35%),  Gaps:20.100(20%)
+
 gi|116750       417 LAALPPKKGDFGK-----LVEFYAGELPRLGVDVRLG--------------TAATTELLK
                   0 .|...|||||...-----|..|..|.|....|...|.--------------..|.....|
 lcl|QUERY         0 MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVK
@@ -2853,6 +3230,7 @@ lcl|QUERY         0 MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVK
 gi|116750       458 SLK-ADVYVLATGSTSSRPPIPGADLPHVFMVPEVLWGQA 497
                  60 ...-|.......||.....||||.....|...||.....| 100
 lcl|QUERY        60 MISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKA 100
+
 """,
         )
         hit = record[7]
@@ -2906,6 +3284,14 @@ lcl|QUERY        60 MISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKA 100
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|QUERY Length: 131 Strand: Plus
+        tr|Q3V4Q3|Q3V4Q3_9VIRU
+Target: gi|184201116|ref|YP_001855323.1| Length: 507 Strand: Plus
+        histidinol dehydrogenase [Kocuria rhizophila DC2201] >gi|183581346|dbj|BAG29817.1| histidinol dehydrogenase [Kocuria rhizophila DC2201]
+
+Score:34 bits(77), Expect:5,
+Identities:12/59(20%),  Positives:24/59(41%)
+
 gi|184201        68 ELAHRFDGVEQQRLRVGPEQIERAVAELAPEVRRALETAIARTRAFAEAQRPRDVEVEV
                   0 |......|.|....|.|.|....|..........|..........|.....|..|...|
 lcl|QUERY        30 EVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQPIPGEVIAQV
@@ -2913,6 +3299,7 @@ lcl|QUERY        30 EVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQPIPGEVIAQV
 gi|184201       127
                  59
 lcl|QUERY        89
+
 """,
         )
         hit = record[8]
@@ -2967,6 +3354,14 @@ lcl|QUERY        89
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|QUERY Length: 131 Strand: Plus
+        tr|Q3V4Q3|Q3V4Q3_9VIRU
+Target: gi|46114422|ref|XP_383229.1| Length: 263 Strand: Plus
+        hypothetical protein FG03053.1 [Gibberella zeae PH-1]
+
+Score:33 bits(74), Expect:1e+01,
+Identities:26/89(29%),  Positives:40/89(45%),  Gaps:5.89(6%)
+
 gi|461144        85 KLTTLKRRLRYEAKELRKEALRQIVSKLRSWMK-LRDFGCGV--KPLIESSLPEIATNPH
                   0 ||.......|....|..|||...||......||-.|..|.|.--.|...........||.
 lcl|QUERY        34 KLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPE
@@ -2974,6 +3369,7 @@ lcl|QUERY        34 KLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPE
 gi|461144       142 YNQTSLYLT--MNHPRRIERVSRVIKGSR 169
                  60 |.|....|.--....|.|||.....||..  89
 lcl|QUERY        94 YQQAKAFLASPATQVRNIEREEVLSKGAK 123
+
 """,
         )
 
@@ -3085,6 +3481,14 @@ lcl|QUERY        94 YQQAKAFLASPATQVRNIEREEVLSKGAK 123
         self.assertEqual(
             str(hsp),
             """\
+Query : Query_74414 Length: 664 Strand: Plus
+        unnamed protein product
+Target: ref|NP_001075863.1| Length: 732 Strand: Plus
+        cyclic nucleotide-gated olfactory channel [Oryctolagus cuniculus] >emb|CAA42201.1| aorta CNG channel (rACNG) [Oryctolagus cuniculus] >prf||1919268A cyclic nucleotide-gated channel [Oryctolagus cuniculus]
+
+Score:1290 bits(3336), Expect:0,
+Identities:664/664(100%),  Positives:664/664(100%),  Gaps:0.664(0%)
+
 ref|NP_00        68 MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLAEMDAPQ
                   0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 Query_744         0 MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLAEMDAPQ
@@ -3132,6 +3536,7 @@ Query_744       600 LKQLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLEVKMKQNTEDDYLSDGMNSPEPAA
 ref|NP_00       728 AEQP 732
                 660 |||| 664
 Query_744       660 AEQP 664
+
 """,
         )
         hit = record[1]
@@ -3186,6 +3591,14 @@ Query_744       660 AEQP 664
         self.assertEqual(
             str(hsp),
             """\
+Query : Query_74414 Length: 664 Strand: Plus
+        unnamed protein product
+Target: ref|XP_051689802.1| Length: 664 Strand: Plus
+        cyclic nucleotide-gated olfactory channel isoform X3 [Oryctolagus cuniculus] >sp|Q28718.1| RecName: Full=Cyclic nucleotide-gated olfactory channel; AltName: Full=Aorta CNG channel; Short=RACNG; AltName: Full=Cyclic nucleotide-gated cation channel 2; AltName: Full=Cyclic nucleotide-gated channel alpha-2; Short=CNG channel alpha-2; Short=CNG-2; Short=CNG2 [Oryctolagus cuniculus]
+
+Score:1290 bits(3336), Expect:0,
+Identities:664/664(100%),  Positives:664/664(100%),  Gaps:0.664(0%)
+
 ref|XP_05         0 MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLAEMDAPQ
                   0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 Query_744         0 MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLAEMDAPQ
@@ -3233,6 +3646,7 @@ Query_744       600 LKQLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLEVKMKQNTEDDYLSDGMNSPEPAA
 ref|XP_05       660 AEQP 664
                 660 |||| 664
 Query_744       660 AEQP 664
+
 """,
         )
         hit = record[2]
@@ -3287,6 +3701,14 @@ Query_744       660 AEQP 664
         self.assertEqual(
             str(hsp),
             """\
+Query : Query_74414 Length: 664 Strand: Plus
+        unnamed protein product
+Target: ref|XP_017206345.1| Length: 677 Strand: Plus
+        cyclic nucleotide-gated olfactory channel isoform X2 [Oryctolagus cuniculus]
+
+Score:1290 bits(3336), Expect:0,
+Identities:664/664(100%),  Positives:664/664(100%),  Gaps:0.664(0%)
+
 ref|XP_01        13 MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLAEMDAPQ
                   0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 Query_744         0 MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLAEMDAPQ
@@ -3334,6 +3756,7 @@ Query_744       600 LKQLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLEVKMKQNTEDDYLSDGMNSPEPAA
 ref|XP_01       673 AEQP 677
                 660 |||| 664
 Query_744       660 AEQP 664
+
 """,
         )
         hit = record[3]
@@ -3388,6 +3811,14 @@ Query_744       660 AEQP 664
         self.assertEqual(
             str(hsp),
             """\
+Query : Query_74414 Length: 664 Strand: Plus
+        unnamed protein product
+Target: ref|XP_051689801.1| Length: 687 Strand: Plus
+        cyclic nucleotide-gated olfactory channel isoform X1 [Oryctolagus cuniculus]
+
+Score:1290 bits(3336), Expect:0,
+Identities:664/664(100%),  Positives:664/664(100%),  Gaps:0.664(0%)
+
 ref|XP_05        23 MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLAEMDAPQ
                   0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 Query_744         0 MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLAEMDAPQ
@@ -3435,6 +3866,7 @@ Query_744       600 LKQLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLEVKMKQNTEDDYLSDGMNSPEPAA
 ref|XP_05       683 AEQP 687
                 660 |||| 664
 Query_744       660 AEQP 664
+
 """,
         )
         hit = record[4]
@@ -3489,6 +3921,14 @@ Query_744       660 AEQP 664
         self.assertEqual(
             str(hsp),
             """\
+Query : Query_74414 Length: 664 Strand: Plus
+        unnamed protein product
+Target: ref|XP_004407164.1| Length: 664 Strand: Plus
+        PREDICTED: cyclic nucleotide-gated olfactory channel [Odobenus rosmarus divergens]
+
+Score:1249 bits(3231), Expect:0,
+Identities:639/664(96%),  Positives:652/664(98%),  Gaps:0.664(0%)
+
 ref|XP_00         0 MTEKSNGVKSSPANNHNHHTPPAIKANGKDDHRTNSRPQSAADDDTSSELQRLAEMDAPQ
                   0 |||||||||||||||||.|.|..|||||||..||.|||||||||||||||||||||||||
 Query_744         0 MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLAEMDAPQ
@@ -3536,6 +3976,7 @@ Query_744       600 LKQLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLEVKMKQNTEDDYLSDGMNSPEPAA
 ref|XP_00       660 ADEP 664
                 660 |..| 664
 Query_744       660 AEQP 664
+
 """,
         )
         hit = record[5]
@@ -3590,6 +4031,14 @@ Query_744       660 AEQP 664
         self.assertEqual(
             str(hsp),
             """\
+Query : Query_74414 Length: 664 Strand: Plus
+        unnamed protein product
+Target: ref|XP_008688471.1| Length: 664 Strand: Plus
+        cyclic nucleotide-gated olfactory channel [Ursus maritimus] >ref|XP_026343324.1| cyclic nucleotide-gated olfactory channel [Ursus arctos]
+
+Score:1248 bits(3228), Expect:0,
+Identities:638/664(96%),  Positives:652/664(98%),  Gaps:0.664(0%)
+
 ref|XP_00         0 MTEKSNGVKSSPANNHNHHAPPAIKANGKDDHRSSSRPQSAVDDDTSSELQRLAEMDAPQ
                   0 |||||||||||||||||.|.|..|||||||..|..||||||.||||||||||||||||||
 Query_744         0 MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLAEMDAPQ
@@ -3637,6 +4086,7 @@ Query_744       600 LKQLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLEVKMKQNTEDDYLSDGMNSPEPAA
 ref|XP_00       660 ADEP 664
                 660 |..| 664
 Query_744       660 AEQP 664
+
 """,
         )
         hit = record[6]
@@ -3691,6 +4141,14 @@ Query_744       660 AEQP 664
         self.assertEqual(
             str(hsp),
             """\
+Query : Query_74414 Length: 664 Strand: Plus
+        unnamed protein product
+Target: ref|XP_011229794.1| Length: 664 Strand: Plus
+        cyclic nucleotide-gated olfactory channel [Ailuropoda melanoleuca] >gb|EFB14215.1| hypothetical protein PANDA_013994, partial [Ailuropoda melanoleuca]
+
+Score:1248 bits(3227), Expect:0,
+Identities:638/664(96%),  Positives:652/664(98%),  Gaps:0.664(0%)
+
 ref|XP_01         0 MTEKSNGVKSSPANNHNHHAPPAIKANGKDDHRSSSRPQSAVDDDTSSELQRLAEMDAPQ
                   0 |||||||||||||||||.|.|..|||||||..|..||||||.||||||||||||||||||
 Query_744         0 MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLAEMDAPQ
@@ -3738,6 +4196,7 @@ Query_744       600 LKQLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLEVKMKQNTEDDYLSDGMNSPEPAA
 ref|XP_01       660 ADEP 664
                 660 |..| 664
 Query_744       660 AEQP 664
+
 """,
         )
         hit = record[7]
@@ -3792,6 +4251,14 @@ Query_744       660 AEQP 664
         self.assertEqual(
             str(hsp),
             """\
+Query : Query_74414 Length: 664 Strand: Plus
+        unnamed protein product
+Target: ref|XP_045646452.1| Length: 664 Strand: Plus
+        cyclic nucleotide-gated olfactory channel [Ursus americanus]
+
+Score:1246 bits(3223), Expect:0,
+Identities:637/664(96%),  Positives:651/664(98%),  Gaps:0.664(0%)
+
 ref|XP_04         0 MTEKSNGVKCSPANNHNHHAPPAIKANGKDDHRSSSRPQSAVDDDTSSELQRLAEMDAPQ
                   0 |||||||||.|||||||.|.|..|||||||..|..||||||.||||||||||||||||||
 Query_744         0 MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLAEMDAPQ
@@ -3839,6 +4306,7 @@ Query_744       600 LKQLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLEVKMKQNTEDDYLSDGMNSPEPAA
 ref|XP_04       660 ADEP 664
                 660 |..| 664
 Query_744       660 AEQP 664
+
 """,
         )
         hit = record[8]
@@ -3893,6 +4361,14 @@ Query_744       660 AEQP 664
         self.assertEqual(
             str(hsp),
             """\
+Query : Query_74414 Length: 664 Strand: Plus
+        unnamed protein product
+Target: ref|XP_035942617.1| Length: 664 Strand: Plus
+        cyclic nucleotide-gated olfactory channel [Halichoerus grypus]
+
+Score:1245 bits(3221), Expect:0,
+Identities:638/664(96%),  Positives:651/664(98%),  Gaps:0.664(0%)
+
 ref|XP_03         0 MTEKSNGVKSSPANNHNHHAPPVIKANGKDDHRTSSRPQSAADDDTSSELQRLAEMDVPQ
                   0 |||||||||||||||||.|.|..|||||||..||.||||||||||||||||||||||.||
 Query_744         0 MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLAEMDAPQ
@@ -3940,6 +4416,7 @@ Query_744       600 LKQLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLEVKMKQNTEDDYLSDGMNSPEPAA
 ref|XP_03       660 ADEP 664
                 660 |..| 664
 Query_744       660 AEQP 664
+
 """,
         )
         hit = record[9]
@@ -3994,6 +4471,14 @@ Query_744       660 AEQP 664
         self.assertEqual(
             str(hsp),
             """\
+Query : Query_74414 Length: 664 Strand: Plus
+        unnamed protein product
+Target: ref|XP_049729369.1| Length: 664 Strand: Plus
+        cyclic nucleotide-gated olfactory channel [Elephas maximus indicus]
+
+Score:1245 bits(3219), Expect:0,
+Identities:635/664(96%),  Positives:654/664(98%),  Gaps:0.664(0%)
+
 ref|XP_04         0 MTEKSNGVKSSPANNHNHHVPSTIKANGKDDRRTSSRPQSAADDDTSSELQRLAEMDAPQ
                   0 |||||||||||||||||.|||.||||||||..||.|||||||||||||||||||||||||
 Query_744         0 MTEKSNGVKSSPANNHNNHVPATIKANGKDESRTRSRPQSAADDDTSSELQRLAEMDAPQ
@@ -4041,6 +4526,7 @@ Query_744       600 LKQLETNMETLYTRFGRLLAEYTGAQQKLKQRITVLEVKMKQNTEDDYLSDGMNSPEPAA
 ref|XP_04       660 VEKP 664
                 660 .|.| 664
 Query_744       660 AEQP 664
+
 """,
         )
 
@@ -4187,9 +4673,18 @@ Program: BLASTN 2.9.0+
         self.assertEqual(
             str(hsp),
             """\
+Query : G26684.1 Length: 285 Strand: Plus
+        human STS STS_D11570, sequence tagged site
+Target: gi|372099107|ref|NC_000069.6| Length: 160039680 Strand: Minus
+        Mus musculus strain C57BL/6J chromosome 3, GRCm38.p4 C57BL/6J
+
+Score:40 bits(44), Expect:0.4,
+Identities:30/34(88%),  Positives:30/34(88%),  Gaps:1.34(3%)
+
 gi|372099 101449177 GAATCCTAGAGGCTGGACTGGCCCTGGCCTGCTG 101449143
                   0 ||||||||||||||.||.||||||.||-||||||        34
 G26684.1        133 GAATCCTAGAGGCTTGATTGGCCCAGG-CTGCTG       166
+
 """,
         )
         hit = record[1]
@@ -4243,9 +4738,18 @@ G26684.1        133 GAATCCTAGAGGCTTGATTGGCCCAGG-CTGCTG       166
         self.assertEqual(
             str(hsp),
             """\
+Query : G26684.1 Length: 285 Strand: Plus
+        human STS STS_D11570, sequence tagged site
+Target: gi|372099103|ref|NC_000073.6| Length: 145441459 Strand: Minus
+        Mus musculus strain C57BL/6J chromosome 7, GRCm38.p4 C57BL/6J
+
+Score:40 bits(44), Expect:0.4,
+Identities:26/29(90%),  Positives:26/29(90%),  Gaps:0.29(0%)
+
 gi|372099 131772185 GAAAGGAAAAAAAAATGGAAAGTTCTGGT 131772156
                   0 |||||||||..|||||||||||||||.||        29
 G26684.1        204 GAAAGGAAATNAAAATGGAAAGTTCTTGT       233
+
 """,
         )
         hit = record[2]
@@ -4298,9 +4802,18 @@ G26684.1        204 GAAAGGAAATNAAAATGGAAAGTTCTTGT       233
         self.assertEqual(
             str(hsp),
             """\
+Query : G26684.1 Length: 285 Strand: Plus
+        human STS STS_D11570, sequence tagged site
+Target: gi|372099106|ref|NC_000070.6| Length: 156508116 Strand: Minus
+        Mus musculus strain C57BL/6J chromosome 4, GRCm38.p4 C57BL/6J
+
+Score:40 bits(43), Expect:1,
+Identities:23/24(96%),  Positives:23/24(96%),  Gaps:0.24(0%)
+
 gi|372099   9607562 CCAACACAGGCCAGCGGCTTCTGG 9607538
                   0 ||||||||||||||||.|||||||      24
 G26684.1         61 CCAACACAGGCCAGCGACTTCTGG      85
+
 """,
         )
         hsp = hit[1]
@@ -4344,9 +4857,18 @@ G26684.1         61 CCAACACAGGCCAGCGACTTCTGG      85
         self.assertEqual(
             str(hsp),
             """\
+Query : G26684.1 Length: 285 Strand: Plus
+        human STS STS_D11570, sequence tagged site
+Target: gi|372099106|ref|NC_000070.6| Length: 156508116 Strand: Plus
+        Mus musculus strain C57BL/6J chromosome 4, GRCm38.p4 C57BL/6J
+
+Score:37 bits(40), Expect:5,
+Identities:28/32(88%),  Positives:28/32(88%),  Gaps:1.32(3%)
+
 gi|372099 142902531 GCCTGGCATGAAGTAACTGCTCAATAAATGCT 142902563
                   0 |||||.||||.-|||.||||||||||||||||        32
 G26684.1        241 GCCTGACATGG-GTAGCTGCTCAATAAATGCT       272
+
 """,
         )
         hit = record[3]
@@ -4400,9 +4922,18 @@ G26684.1        241 GCCTGACATGG-GTAGCTGCTCAATAAATGCT       272
         self.assertEqual(
             str(hsp),
             """\
+Query : G26684.1 Length: 285 Strand: Plus
+        human STS STS_D11570, sequence tagged site
+Target: gi|372099108|ref|NC_000068.7| Length: 182113224 Strand: Plus
+        Mus musculus strain C57BL/6J chromosome 2, GRCm38.p4 C57BL/6J
+
+Score:39 bits(42), Expect:1,
+Identities:27/31(87%),  Positives:27/31(87%),  Gaps:0.31(0%)
+
 gi|372099   3799646 AAGTCCTGGCATGAGTAGTTGCTCAATAAAT 3799677
                   0 |||.||||.||||.||||.||||||||||||      31
 G26684.1        238 AAGGCCTGACATGGGTAGCTGCTCAATAAAT     269
+
 """,
         )
         hsp = hit[1]
@@ -4445,9 +4976,18 @@ G26684.1        238 AAGGCCTGACATGGGTAGCTGCTCAATAAAT     269
         self.assertEqual(
             str(hsp),
             """\
+Query : G26684.1 Length: 285 Strand: Plus
+        human STS STS_D11570, sequence tagged site
+Target: gi|372099108|ref|NC_000068.7| Length: 182113224 Strand: Plus
+        Mus musculus strain C57BL/6J chromosome 2, GRCm38.p4 C57BL/6J
+
+Score:38 bits(41), Expect:5,
+Identities:23/25(92%),  Positives:23/25(92%),  Gaps:0.25(0%)
+
 gi|372099  70278959 AAATGAAAATGGAAAGTTCTTATAG 70278984
                   0 ||||.||||||||||||||||.|||       25
 G26684.1        210 AAATNAAAATGGAAAGTTCTTGTAG      235
+
 """,
         )
         hit = record[4]
@@ -4501,9 +5041,18 @@ G26684.1        210 AAATNAAAATGGAAAGTTCTTGTAG      235
         self.assertEqual(
             str(hsp),
             """\
+Query : G26684.1 Length: 285 Strand: Plus
+        human STS STS_D11570, sequence tagged site
+Target: gi|372099097|ref|NC_000079.6| Length: 120421639 Strand: Minus
+        Mus musculus strain C57BL/6J chromosome 13, GRCm38.p4 C57BL/6J
+
+Score:39 bits(42), Expect:1,
+Identities:25/28(89%),  Positives:25/28(89%),  Gaps:0.28(0%)
+
 gi|372099  26806584 AAGGACATCAAAATGGAAAGTTCTTCTA 26806556
                   0 |||||.||.||||||||||||||||.||       28
 G26684.1        206 AAGGAAATNAAAATGGAAAGTTCTTGTA      234
+
 """,
         )
         hsp = hit[1]
@@ -4549,9 +5098,18 @@ G26684.1        206 AAGGAAATNAAAATGGAAAGTTCTTGTA      234
         self.assertEqual(
             str(hsp),
             """\
+Query : G26684.1 Length: 285 Strand: Plus
+        human STS STS_D11570, sequence tagged site
+Target: gi|372099097|ref|NC_000079.6| Length: 120421639 Strand: Minus
+        Mus musculus strain C57BL/6J chromosome 13, GRCm38.p4 C57BL/6J
+
+Score:37 bits(40), Expect:5,
+Identities:32/40(80%),  Positives:32/40(80%),  Gaps:0.40(0%)
+
 gi|372099  56840340 AGCGCAAGGCCTGACATAGGAAAATGTTCAGTGAATACTA 56840300
                   0 |||||||||||||||||.||.|..||.|||.|.|||.|||       40
 G26684.1        233 AGCGCAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTA      273
+
 """,
         )
         hit = record[5]
@@ -4604,9 +5162,18 @@ G26684.1        233 AGCGCAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTA      273
         self.assertEqual(
             str(hsp),
             """\
+Query : G26684.1 Length: 285 Strand: Plus
+        human STS STS_D11570, sequence tagged site
+Target: gi|372099098|ref|NC_000078.6| Length: 120129022 Strand: Plus
+        Mus musculus strain C57BL/6J chromosome 12, GRCm38.p4 C57BL/6J
+
+Score:38 bits(41), Expect:5,
+Identities:22/23(96%),  Positives:22/23(96%),  Gaps:0.23(0%)
+
 gi|372099 113030662 CATCCATTCACACCCAGCACAGG 113030685
                   0 ||||||||||||||||.||||||        23
 G26684.1         48 CATCCATTCACACCCAACACAGG        71
+
 """,
         )
         hsp = hit[1]
@@ -4650,9 +5217,18 @@ G26684.1         48 CATCCATTCACACCCAACACAGG        71
         self.assertEqual(
             str(hsp),
             """\
+Query : G26684.1 Length: 285 Strand: Plus
+        human STS STS_D11570, sequence tagged site
+Target: gi|372099098|ref|NC_000078.6| Length: 120129022 Strand: Minus
+        Mus musculus strain C57BL/6J chromosome 12, GRCm38.p4 C57BL/6J
+
+Score:37 bits(40), Expect:5,
+Identities:28/32(88%),  Positives:28/32(88%),  Gaps:1.32(3%)
+
 gi|372099 108990272 TGTAGCTCTAGGCCTGACATGGGT-GCTGGTC 108990241
                   0 ||||||.|.|||||||||||||||-||||.||        32
 G26684.1        230 TGTAGCGCAAGGCCTGACATGGGTAGCTGCTC       262
+
 """,
         )
         hit = record[6]
@@ -4708,9 +5284,18 @@ G26684.1        230 TGTAGCGCAAGGCCTGACATGGGTAGCTGCTC       262
         self.assertEqual(
             str(hsp),
             """\
+Query : G26684.1 Length: 285 Strand: Plus
+        human STS STS_D11570, sequence tagged site
+Target: gi|372099109|ref|NC_000067.6| Length: 195471971 Strand: Plus
+        Mus musculus strain C57BL/6J chromosome 1, GRCm38.p4 C57BL/6J
+
+Score:37 bits(40), Expect:5,
+Identities:35/43(81%),  Positives:35/43(81%),  Gaps:2.43(5%)
+
 gi|372099  65190107 GCTCAGCCACATACATGGTTT-TAAGTGTTGAGGCTCT-TTCC 65190148
                   0 |||||||||||.|||||||||-|.|.|.|||||..|||-||||       43
 G26684.1         86 GCTCAGCCACAGACATGGTTTGTNACTNTTGAGCTTCTGTTCC      129
+
 """,
         )
         hit = record[7]
@@ -4767,9 +5352,18 @@ G26684.1         86 GCTCAGCCACAGACATGGTTTGTNACTNTTGAGCTTCTGTTCC      129
         self.assertEqual(
             str(hsp),
             """\
+Query : G26684.1 Length: 285 Strand: Plus
+        human STS STS_D11570, sequence tagged site
+Target: gi|372099101|ref|NC_000075.6| Length: 124595110 Strand: Minus
+        Mus musculus strain C57BL/6J chromosome 9, GRCm38.p4 C57BL/6J
+
+Score:37 bits(40), Expect:5,
+Identities:36/47(77%),  Positives:36/47(77%),  Gaps:0.47(0%)
+
 gi|372099  58227241 CAAAGCCTGACAGGTATGACTGCTCAATAAATACTATTTTTTTTTTT 58227194
                   0 |||.||||||||.|..|..|||||||||||||.|||.|.|.||.|||       47
 G26684.1        237 CAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTT      284
+
 """,
         )
         hit = record[8]
@@ -4822,9 +5416,18 @@ G26684.1        237 CAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTT      284
         self.assertEqual(
             str(hsp),
             """\
+Query : G26684.1 Length: 285 Strand: Plus
+        human STS STS_D11570, sequence tagged site
+Target: gi|372099100|ref|NC_000076.6| Length: 130694993 Strand: Plus
+        Mus musculus strain C57BL/6J chromosome 10, GRCm38.p4 C57BL/6J
+
+Score:37 bits(40), Expect:5,
+Identities:20/20(100%),  Positives:20/20(100%),  Gaps:0.20(0%)
+
 gi|372099 119337185 AGCTGCTCAATAAATGCTAG 119337205
                   0 ||||||||||||||||||||        20
 G26684.1        254 AGCTGCTCAATAAATGCTAG       274
+
 """,
         )
         hit = record[9]
@@ -4881,6 +5484,14 @@ G26684.1        254 AGCTGCTCAATAAATGCTAG       274
         self.assertEqual(
             str(hsp),
             """\
+Query : G26684.1 Length: 285 Strand: Plus
+        human STS STS_D11570, sequence tagged site
+Target: gi|372099094|ref|NC_000082.6| Length: 98207768 Strand: Plus
+        Mus musculus strain C57BL/6J chromosome 16, GRCm38.p4 C57BL/6J
+
+Score:37 bits(40), Expect:5,
+Identities:43/56(77%),  Positives:43/56(77%),  Gaps:2.56(4%)
+
 gi|372099  18854779 GGAGGCAAAGAATCCCTACATTGTGACAGCTGATAAAGAAGGTAAAATGGAAAATT
                   0 |||||||||||||||||||.|..|-|..|.|||-||.|||...||||||||||.||
 G26684.1        174 GGAGGCAAAGAATCCCTACCTCCT-AGGGGTGA-AAGGAAATNAAAATGGAAAGTT
@@ -4888,6 +5499,7 @@ G26684.1        174 GGAGGCAAAGAATCCCTACCTCCT-AGGGGTGA-AAGGAAATNAAAATGGAAAGTT
 gi|372099  18854835
                  56
 G26684.1        228
+
 """,
         )
 
@@ -5004,6 +5616,14 @@ G26684.1        228
         self.assertEqual(
             str(hsp),
             """\
+Query : lcl|1_ Length: 1111 Strand: Plus
+        gi|8332116|gb|BE037100.1|BE037100 MP14H09 MP Mesembryanthemum crystallinum cDNA 5' similar to cold acclimation protein, mRNA sequence
+Target: gnl|BL_ORD_ID|0 Length: 1111 Strand: Plus
+        gi|8332116|gb|BE037100.1|BE037100 MP14H09 MP Mesembryanthemum crystallinum cDNA 5' similar to cold acclimation protein, mRNA sequence
+
+Score:1562 bits(788), Expect:0,
+Identities:797/797(100%),  Positives:797/797(100%)
+
 gnl|BL_OR         0 CACTAGTACTCGAGCGTNCTGCACCAATTCGGCACGAGCAAGTGACTACGTTNTGTGAAC
                   0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 lcl|1_            0 CACTAGTACTCGAGCGTNCTGCACCAATTCGGCACGAGCAAGTGACTACGTTNTGTGAAC
@@ -5059,6 +5679,7 @@ lcl|1_          720 CTCTTTCGACGCTCTTGCTAAAGCCCATTCAATTCGCCCCATATTTCGCACACATTCATT
 gnl|BL_OR       780 TCACCACCCAATACGTG 797
                 780 ||||||||||||||||| 797
 lcl|1_          780 TCACCACCCAATACGTG 797
+
 """,
         )
 
@@ -5162,9 +5783,18 @@ class TestBlastx(unittest.TestCase):
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 1 Length: 26 Strand: Plus
+        gi|4104054|gb|AH007193.1|SEG_CVIGS Centaurea vallesiaca 18S ribosomal RNA gene, partial sequence
+Target: gi|149390769|gb|ABR25402.1| Length: 26 Strand: Plus
+        unknown [Oryza sativa (indica cultivar-group)]
+
+Score:54 bits(129), Expect:2e-05,
+Identities:24/26(92%),  Positives:25/26(96%),  Gaps:0.26(0%)
+
 gi|149390         0 HMLVSKIKPCMCKYELIRTVKLRMAH 26
                   0 |||||||||||||||.|.|||||||| 26
 1                 0 HMLVSKIKPCMCKYEQIQTVKLRMAH 26
+
 """,
             )
             record = next(records)
@@ -5253,6 +5883,14 @@ gi|149390         0 HMLVSKIKPCMCKYELIRTVKLRMAH 26
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 2 Length: 127 Strand: Plus
+        gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds
+Target: gi|4218936|gb|AAD12237.1| Length: 333 Strand: Plus
+        hevein-like protein HLPf [Sambucus nigra]
+
+Score:267 bits(683), Expect:3e-69,
+Identities:127/127(100%),  Positives:127/127(100%),  Gaps:0.127(0%)
+
 gi|421893       206 NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINANSEASD
                   0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 2                 0 NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINANSEASD
@@ -5264,6 +5902,7 @@ gi|421893       266 QVPSYGVISKIINSNFGHQSGLDTITTSIGYYKRYCDMLEVSYGDNLENWFDETPFTKVA
 gi|421893       326 HIKMSVV 333
                 120 ||||||| 127
 2               120 HIKMSVV 127
+
 """,
             )
             hit = record[1]
@@ -5334,6 +5973,14 @@ gi|421893       326 HIKMSVV 333
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 2 Length: 127 Strand: Plus
+        gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds
+Target: gi|4206074|gb|AAD11408.1| Length: 333 Strand: Plus
+        hevein-like protein [Sambucus nigra]
+
+Score:263 bits(672), Expect:5e-68,
+Identities:125/127(98%),  Positives:126/127(99%),  Gaps:0.127(0%)
+
 gi|420607       206 NYYYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINANSEASD
                   0 ||.|||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 2                 0 NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINANSEASD
@@ -5345,6 +5992,7 @@ gi|420607       266 QVPSYGVISKIINSNFGHQSGLDTITTSIGYYKRYCDMLEVSYGDNLENWFDETPFTKVA
 gi|420607       326 HIKMSLV 333
                 120 |||||.| 127
 2               120 HIKMSVV 127
+
 """,
             )
             hit = record[2]
@@ -5415,6 +6063,14 @@ gi|420607       326 HIKMSLV 333
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 2 Length: 127 Strand: Plus
+        gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds
+Target: gi|4206070|gb|AAD11406.1| Length: 333 Strand: Plus
+        hevein-like protein [Sambucus nigra]
+
+Score:266 bits(680), Expect:6e-69,
+Identities:126/127(99%),  Positives:127/127(100%),  Gaps:0.127(0%)
+
 gi|420607       206 NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINANSEASD
                   0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 2                 0 NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINANSEASD
@@ -5426,6 +6082,7 @@ gi|420607       266 QVPSYGVISKIINSNFGHQSGLDTITTSIGYYKRYCDMLEVSYGDNLENWFDETPFTKVA
 gi|420607       326 HIKMSLV 333
                 120 |||||.| 127
 2               120 HIKMSVV 127
+
 """,
             )
             hit = record[3]
@@ -5496,6 +6153,14 @@ gi|420607       326 HIKMSLV 333
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 2 Length: 127 Strand: Plus
+        gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds
+Target: gi|4206072|gb|AAD11407.1| Length: 333 Strand: Plus
+        hevein-like protein [Sambucus nigra]
+
+Score:253 bits(646), Expect:5e-65,
+Identities:120/127(94%),  Positives:124/127(98%),  Gaps:0.127(0%)
+
 gi|420607       206 NYYYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINANSEASD
                   0 ||.|||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 2                 0 NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINANSEASD
@@ -5507,6 +6172,7 @@ gi|420607       266 QVPSYGVISEIIDSNIGHQSSLDTITTSIGYYKRYCDMLEVSYGDNLKNWFDETPFSKVA
 gi|420607       326 HIKMSVV 333
                 120 ||||||| 127
 2               120 HIKMSVV 127
+
 """,
             )
             hit = record[4]
@@ -5577,6 +6243,14 @@ gi|420607       326 HIKMSVV 333
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 2 Length: 127 Strand: Plus
+        gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds
+Target: gi|16903131|gb|AAL30421.1|AF434174_1 Length: 330 Strand: Plus
+        hevein-like protein [Sambucus nigra]
+
+Score:266 bits(679), Expect:8e-69,
+Identities:126/127(99%),  Positives:126/127(99%),  Gaps:0.127(0%)
+
 gi|169031       203 NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINANSEASD
                   0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 2                 0 NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINANSEASD
@@ -5588,6 +6262,7 @@ gi|169031       263 QVPSYGVISKIINSNFGHQSGLDTITTSIGYYKRYCDMLEVSYGDNLENWFDETPFTKVV
 gi|169031       323 HIKMSVV 330
                 120 ||||||| 127
 2               120 HIKMSVV 127
+
 """,
             )
             hit = record[5]
@@ -5658,6 +6333,14 @@ gi|169031       323 HIKMSVV 330
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 2 Length: 127 Strand: Plus
+        gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds
+Target: gi|16903133|gb|AAL30422.1|AF434175_1 Length: 336 Strand: Plus
+        hevein-like protein [Sambucus nigra]
+
+Score:243 bits(620), Expect:6e-62,
+Identities:115/127(91%),  Positives:120/127(94%),  Gaps:0.127(0%)
+
 gi|169031       209 NYNYGLAGEAIGIDLVNDPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINANYEASD
                   0 ||||||||||.||||||.|||||||||||||||||||||||||||||||||||||.||||
 2                 0 NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINANSEASD
@@ -5669,6 +6352,7 @@ gi|169031       269 QVPSYGVLSNIINSNSGHKSGLDIITTSIGYYKRYCDMLEVSYGDNLKNWFDETPFSKVA
 gi|169031       329 RIKMHVV 336
                 120 .|||.|| 127
 2               120 HIKMSVV 127
+
 """,
             )
             hit = record[6]
@@ -5735,6 +6419,14 @@ gi|169031       329 RIKMHVV 336
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 2 Length: 126 Strand: Plus
+        gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds
+Target: gi|30691147|gb|AAO17294.1| Length: 321 Strand: Plus
+        chitinase [Ficus carica]
+
+Score:168 bits(426), Expect:2e-39,
+Identities:81/127(64%),  Positives:99/127(78%),  Gaps:10.127(8%)
+
 gi|306911       202 NHNYGLVGEALGIDLINNPDLVATDPVVSFKTAIWFWMTRHQNKPSFHGVIINANSEPS-
                   0 |.||||.||||||||.|.||||||||.||||||||||||.|.|.||.|...||||||.|-
 2                 0 NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINANSEASD
@@ -5746,6 +6438,7 @@ gi|306911       261 HIPNH--------SNFGQESVLDVVNRSIGYYKRYCDMLKVSFGDNLKYWYDGTPNFSDV
 gi|306911       313 SRIGMPV 320
                 120 ..|.|.| 127
 2               119 AHIKMSV 126
+
 """,
             )
             hit = record[7]
@@ -5816,6 +6509,14 @@ gi|306911       313 SRIGMPV 320
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 2 Length: 116 Strand: Plus
+        gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds
+Target: gi|222139388|gb|ACM45713.1| Length: 317 Strand: Plus
+        class I chitinase [Pyrus pyrifolia]
+
+Score:127 bits(318), Expect:6e-27,
+Identities:62/122(51%),  Positives:84/122(69%),  Gaps:7.122(6%)
+
 gi|222139       195 NYNYGQAGKAIGKDLINNPDLVATDPVVSFKTAIWFWMTPQGNKPSSHDVITGRWSPSTA
                   0 |||||.||.|.|.||.|.||||||||.||||||||||||...|.||.||...-----...
 2                 0 NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILI-----NAN
@@ -5827,6 +6528,7 @@ gi|222139       255 DRSAGRVPGYGVITNIINGGVECGKGQDARVASRIGFYRRYCQILGVNPGDNLD-CYNQR
 gi|222139       314 PF 316
                 120 || 122
 2               114 PF 116
+
 """,
             )
             hit = record[8]
@@ -5897,6 +6599,14 @@ gi|222139       314 PF 316
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 2 Length: 108 Strand: Plus
+        gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds
+Target: gi|23496435|dbj|BAB40817.2| Length: 311 Strand: Plus
+        endochitinase MCHT-2 [Cucumis melo]
+
+Score:114 bits(285), Expect:4e-23,
+Identities:56/114(49%),  Positives:75/114(66%),  Gaps:7.114(6%)
+
 gi|234964       191 NYNYGPAGKAIGAPLLTNPD-TATDPVTSFKTALWFWMTAQGNKPSCHNVITGNWQPSSA
                   0 |||||.||.|.|..|...||-.||||..|||||.|||||...|.||.|....-----...
 2                 0 NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILI-----NAN
@@ -5904,6 +6614,7 @@ gi|234964       191 NYNYGPAGKAIGAPLLTNPD-TATDPVTSFKTALWFWMTAQGNKPSCHNVITGNWQPSSA
 gi|234964       250 DNAAGRVPGYGVITNIINGGLECGRGPDDRVKDRIGFYKRYCDMLGIGYGNNLD 304
                  60 ..|...||.||||..|||.......|.-|.....||.||||||||...||.||. 114
 2                55 SEASDQVPSYGVISKIINSNFGHQSGL-DTITTSIGYYKRYCDMLEVSYGDNLE 108
+
 """,
             )
             hit = record[9]
@@ -5970,6 +6681,14 @@ gi|234964       250 DNAAGRVPGYGVITNIINGGLECGRGPDDRVKDRIGFYKRYCDMLGIGYGNNLD 304
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 2 Length: 107 Strand: Plus
+        gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds
+Target: gi|82621253|gb|ABB86300.1| Length: 301 Strand: Plus
+        chitinase [Ficus awkeotsang]
+
+Score:142 bits(359), Expect:1e-31,
+Identities:67/107(63%),  Positives:83/107(78%),  Gaps:9.107(8%)
+
 gi|826212       203 NHNYGLVGEALGIDLINNPELVATDPVISFKTAIWFWMARYEDKPSFHDVIINANFEASD
                   0 |.||||.||||||||.|.|.||||||..||||||||||......||.||..||||.||||
 2                 0 NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINANSEASD
@@ -5977,6 +6696,7 @@ gi|826212       203 NHNYGLVGEALGIDLINNPELVATDPVISFKTAIWFWMARYEDKPSFHDVIINANFEASD
 gi|826212       263 -IPYHG--------NSGQESSLDVVNRSIGYYKRYCDMLGVSCEDNL 301
                  60 -.|..|--------|.|..|.||....||||||||||||.||..||| 107
 2                60 QVPSYGVISKIINSNFGHQSGLDTITTSIGYYKRYCDMLEVSYGDNL 107
+
 """,
             )
             record = next(records)
@@ -6076,6 +6796,14 @@ gi|826212       263 -IPYHG--------NSGQESSLDVVNRSIGYYKRYCDMLGVSCEDNL 301
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 4 Length: 201 Strand: Plus
+        gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence
+Target: gi|166343825|gb|ABY86655.1| Length: 448 Strand: Plus
+        beta-tubulin 4 [Gossypium hirsutum]
+
+Score:408 bits(1048), Expect:2e-112,
+Identities:196/201(98%),  Positives:197/201(98%),  Gaps:0.201(0%)
+
 gi|166343         0 MREILHIQAGQCGNQIGAKFWEVVCAEHGIDSTGRYQGDNDLQLERVNVYYNEASCGRFV
                   0 ||||||||||||||||||.|||||||||||.|||||||||||||||||||||||||||||
 4                 0 MREILHIQAGQCGNQIGANFWEVVCAEHGINSTGRYQGDNDLQLERVNVYYNEASCGRFV
@@ -6091,6 +6819,7 @@ gi|166343       120 RKEAENCDCLQGFQVCHSLGGGTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVV
 gi|166343       180 EPYNATLSVHQLVENADECMV 201
                 180 ||||||||||.|||||||||| 201
 4               180 EPYNATLSVHXLVENADECMV 201
+
 """,
             )
             hit = record[1]
@@ -6156,6 +6885,14 @@ gi|166343       180 EPYNATLSVHQLVENADECMV 201
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 4 Length: 201 Strand: Plus
+        gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence
+Target: gi|223549899|gb|EEF51386.1| Length: 448 Strand: Plus
+        tubulin beta chain, putative [Ricinus communis]
+
+Score:406 bits(1044), Expect:7e-112,
+Identities:195/201(97%),  Positives:196/201(98%),  Gaps:0.201(0%)
+
 gi|223549         0 MREILHIQGGQCGNQIGAKFWEVVCAEHGIDSTGRYQGDNDLQLERVNVYYNEASCGRFV
                   0 ||||||||.|||||||||.|||||||||||.|||||||||||||||||||||||||||||
 4                 0 MREILHIQAGQCGNQIGANFWEVVCAEHGINSTGRYQGDNDLQLERVNVYYNEASCGRFV
@@ -6171,6 +6908,7 @@ gi|223549       120 RKEAENCDCLQGFQVCHSLGGGTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVV
 gi|223549       180 EPYNATLSVHQLVENADECMV 201
                 180 ||||||||||.|||||||||| 201
 4               180 EPYNATLSVHXLVENADECMV 201
+
 """,
             )
             hit = record[2]
@@ -6236,6 +6974,14 @@ gi|223549       180 EPYNATLSVHQLVENADECMV 201
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 4 Length: 201 Strand: Plus
+        gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence
+Target: gi|18420724|ref|NP_568437.1| Length: 449 Strand: Plus
+        TUB8 (tubulin beta-8) [Arabidopsis thaliana] >gi|27735261|sp|P29516.2|TBB8_ARATH RecName: Full=Tubulin beta-8 chain; AltName: Full=Beta-8-tubulin >gi|10176853|dbj|BAB10059.1| beta tubulin [Arabidopsis thaliana]
+
+Score:405 bits(1040), Expect:2e-111,
+Identities:194/201(97%),  Positives:196/201(98%),  Gaps:0.201(0%)
+
 gi|184207         0 MREILHIQGGQCGNQIGAKFWEVVCAEHGIDSTGRYQGENDLQLERVNVYYNEASCGRFV
                   0 ||||||||.|||||||||.|||||||||||.|||||||.|||||||||||||||||||||
 4                 0 MREILHIQAGQCGNQIGANFWEVVCAEHGINSTGRYQGDNDLQLERVNVYYNEASCGRFV
@@ -6251,6 +6997,7 @@ gi|184207       120 RKEAENCDCLQGFQVCHSLGGGTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVV
 gi|184207       180 EPYNATLSVHQLVENADECMV 201
                 180 ||||||||||.|||||||||| 201
 4               180 EPYNATLSVHXLVENADECMV 201
+
 """,
             )
             hit = record[3]
@@ -6316,6 +7063,14 @@ gi|184207       180 EPYNATLSVHQLVENADECMV 201
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 4 Length: 201 Strand: Plus
+        gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence
+Target: gi|225426385|ref|XP_002271992.1| Length: 447 Strand: Plus
+        PREDICTED: hypothetical protein [Vitis vinifera] >gi|157356601|emb|CAO62796.1| unnamed protein product [Vitis vinifera]
+
+Score:402 bits(1034), Expect:1e-110,
+Identities:193/201(96%),  Positives:195/201(97%),  Gaps:0.201(0%)
+
 gi|225426         0 MREILHIQGGQCGNQIGAKFWEVVCAEHGIDSTGRYHGDSDLQLERVNVYYNEASCGRFV
                   0 ||||||||.|||||||||.|||||||||||.|||||.||.||||||||||||||||||||
 4                 0 MREILHIQAGQCGNQIGANFWEVVCAEHGINSTGRYQGDNDLQLERVNVYYNEASCGRFV
@@ -6331,6 +7086,7 @@ gi|225426       120 RKEAENCDCLQGFQVCHSLGGGTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVV
 gi|225426       180 EPYNATLSVHQLVENADECMV 201
                 180 ||||||||||.|||||||||| 201
 4               180 EPYNATLSVHXLVENADECMV 201
+
 """,
             )
             hit = record[4]
@@ -6396,6 +7152,14 @@ gi|225426       180 EPYNATLSVHQLVENADECMV 201
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 4 Length: 201 Strand: Plus
+        gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence
+Target: gi|15451226|gb|AAK96884.1| Length: 449 Strand: Plus
+        beta tubulin [Arabidopsis thaliana] >gi|20148289|gb|AAM10035.1| beta tubulin [Arabidopsis thaliana]
+
+Score:402 bits(1034), Expect:1e-110,
+Identities:193/201(96%),  Positives:195/201(97%),  Gaps:0.201(0%)
+
 gi|154512         0 MREILHIQGGQCGNQIGAKFWEVVCAEHGIDSTGRYQGEKDLQLERVNVYYNEASCGRFV
                   0 ||||||||.|||||||||.|||||||||||.|||||||..||||||||||||||||||||
 4                 0 MREILHIQAGQCGNQIGANFWEVVCAEHGINSTGRYQGDNDLQLERVNVYYNEASCGRFV
@@ -6411,6 +7175,7 @@ gi|154512       120 RKEAENCDCLQGFQVCHSLGGGTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVV
 gi|154512       180 EPYNATLSVHQLVENADECMV 201
                 180 ||||||||||.|||||||||| 201
 4               180 EPYNATLSVHXLVENADECMV 201
+
 """,
             )
             hit = record[5]
@@ -6476,6 +7241,14 @@ gi|154512       180 EPYNATLSVHQLVENADECMV 201
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 4 Length: 201 Strand: Plus
+        gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence
+Target: gi|225470745|ref|XP_002267380.1| Length: 449 Strand: Plus
+        PREDICTED: hypothetical protein [Vitis vinifera] >gi|157327486|emb|CAO15467.1| unnamed protein product [Vitis vinifera]
+
+Score:402 bits(1033), Expect:1e-110,
+Identities:192/201(96%),  Positives:195/201(97%),  Gaps:0.201(0%)
+
 gi|225470         0 MREILHVQGGQCGNQIGAKFWEVVCAEHGIDSTGRYQGDTELQLERVNVYYNEASCGRFV
                   0 ||||||.|.|||||||||.|||||||||||.||||||||..|||||||||||||||||||
 4                 0 MREILHIQAGQCGNQIGANFWEVVCAEHGINSTGRYQGDNDLQLERVNVYYNEASCGRFV
@@ -6491,6 +7264,7 @@ gi|225470       120 RKEAENCDCLQGFQVCHSLGGGTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVV
 gi|225470       180 EPYNATLSVHQLVENADECMV 201
                 180 ||||||||||.|||||||||| 201
 4               180 EPYNATLSVHXLVENADECMV 201
+
 """,
             )
             hit = record[6]
@@ -6556,6 +7330,14 @@ gi|225470       180 EPYNATLSVHQLVENADECMV 201
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 4 Length: 201 Strand: Plus
+        gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence
+Target: gi|586076|sp|P37392.1|TBB1_LUPAL Length: 447 Strand: Plus
+        RecName: Full=Tubulin beta-1 chain; AltName: Full=Beta-1-tubulin >gi|402636|emb|CAA49736.1| Beta tubulin 1 [Lupinus albus]
+
+Score:402 bits(1033), Expect:1e-110,
+Identities:193/201(96%),  Positives:195/201(97%),  Gaps:0.201(0%)
+
 gi|586076         0 MREILHIQGGQCGNQIGAKFWEVVCAEHGIDSTGRYGGDNELQLERVNVYYNEASCGRFV
                   0 ||||||||.|||||||||.|||||||||||.|||||.|||.|||||||||||||||||||
 4                 0 MREILHIQAGQCGNQIGANFWEVVCAEHGINSTGRYQGDNDLQLERVNVYYNEASCGRFV
@@ -6571,6 +7353,7 @@ gi|586076       120 RKEAENCDCLQGFQVCHSLGGGTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVV
 gi|586076       180 EPYNATLSVHQLVENADECMV 201
                 180 ||||||||||.|||||||||| 201
 4               180 EPYNATLSVHXLVENADECMV 201
+
 """,
             )
             hit = record[7]
@@ -6636,6 +7419,14 @@ gi|586076       180 EPYNATLSVHQLVENADECMV 201
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 4 Length: 201 Strand: Plus
+        gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence
+Target: gi|224104341|ref|XP_002313404.1| Length: 451 Strand: Plus
+        tubulin, beta chain [Populus trichocarpa] >gi|222849812|gb|EEE87359.1| tubulin, beta chain [Populus trichocarpa]
+
+Score:401 bits(1031), Expect:2e-110,
+Identities:192/201(96%),  Positives:195/201(97%),  Gaps:0.201(0%)
+
 gi|224104         0 MREILHIQGGQCGNQIGAKFWEVVCAEHGIDSTGRYQGDSPLQLERINVYYNEASCGRFV
                   0 ||||||||.|||||||||.|||||||||||.||||||||..|||||.|||||||||||||
 4                 0 MREILHIQAGQCGNQIGANFWEVVCAEHGINSTGRYQGDNDLQLERVNVYYNEASCGRFV
@@ -6651,6 +7442,7 @@ gi|224104       120 RKEAENCDCLQGFQVCHSLGGGTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVV
 gi|224104       180 EPYNATLSVHQLVENADECMV 201
                 180 ||||||||||.|||||||||| 201
 4               180 EPYNATLSVHXLVENADECMV 201
+
 """,
             )
             hit = record[8]
@@ -6716,6 +7508,14 @@ gi|224104       180 EPYNATLSVHQLVENADECMV 201
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 4 Length: 201 Strand: Plus
+        gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence
+Target: gi|223549679|gb|EEF51167.1| Length: 446 Strand: Plus
+        tubulin beta chain, putative [Ricinus communis]
+
+Score:400 bits(1029), Expect:4e-110,
+Identities:191/201(95%),  Positives:194/201(97%),  Gaps:0.201(0%)
+
 gi|223549         0 MREILHVQGGQCGNQIGAKFWEVVCAEHGIDSTGRYHGDTDLQLERVNVYYNEASCGRFV
                   0 ||||||.|.|||||||||.|||||||||||.|||||.||.||||||||||||||||||||
 4                 0 MREILHIQAGQCGNQIGANFWEVVCAEHGINSTGRYQGDNDLQLERVNVYYNEASCGRFV
@@ -6731,6 +7531,7 @@ gi|223549       120 RKEAENCDCLQGFQVCHSLGGGTGSGMGTLLISKMREEYPDRMMLTFSVFPSPKVSDTVV
 gi|223549       180 EPYNATLSVHQLVENADECMV 201
                 180 ||||||||||.|||||||||| 201
 4               180 EPYNATLSVHXLVENADECMV 201
+
 """,
             )
             hit = record[9]
@@ -6796,6 +7597,14 @@ gi|223549       180 EPYNATLSVHQLVENADECMV 201
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 4 Length: 201 Strand: Plus
+        gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence
+Target: gi|224058553|ref|XP_002299541.1| Length: 447 Strand: Plus
+        tubulin, beta chain [Populus trichocarpa] >gi|222846799|gb|EEE84346.1| tubulin, beta chain [Populus trichocarpa]
+
+Score:400 bits(1029), Expect:4e-110,
+Identities:192/201(96%),  Positives:195/201(97%),  Gaps:0.201(0%)
+
 gi|224058         0 MREILHIQGGQCGNQIGAKFWEVVCAEHGIDSTGRYQGDSALQIERVNVYYNEASCGRFV
                   0 ||||||||.|||||||||.|||||||||||.||||||||..||.||||||||||||||||
 4                 0 MREILHIQAGQCGNQIGANFWEVVCAEHGINSTGRYQGDNDLQLERVNVYYNEASCGRFV
@@ -6811,6 +7620,7 @@ gi|224058       120 RKEAENCDCLQGFQVCHSLGGGTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVV
 gi|224058       180 EPYNATLSVHQLVENADECMV 201
                 180 ||||||||||.|||||||||| 201
 4               180 EPYNATLSVHXLVENADECMV 201
+
 """,
             )
             record = next(records)
@@ -6892,9 +7702,18 @@ gi|224058       180 EPYNATLSVHQLVENADECMV 201
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 5 Length: 17 Strand: Plus
+        gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence
+Target: gi|110740644|dbj|BAE98425.1| Length: 80 Strand: Plus
+        hypothetical protein [Arabidopsis thaliana]
+
+Score:25 bits(53), Expect:6e-19,
+Identities:13/17(76%),  Positives:13/17(76%),  Gaps:0.17(0%)
+
 gi|110740        53 RKLVSRVLPHAVGLNPS 70
                   0 ||||||.|..|||||.| 17
 5                 0 RKLVSRALRCAVGLNKS 17
+
 """,
             )
             hit = record[1]
@@ -6960,9 +7779,18 @@ gi|110740        53 RKLVSRVLPHAVGLNPS 70
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 5 Length: 49 Strand: Plus
+        gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence
+Target: gi|226453533|gb|EEH50844.1| Length: 81 Strand: Plus
+        predicted protein [Micromonas pusilla CCMP1545]
+
+Score:96 bits(238), Expect:2e-18,
+Identities:42/49(86%),  Positives:45/49(92%),  Gaps:0.49(0%)
+
 gi|226453         0 MKNVAKCDTWCELQNPVNHRVFERKLRPKPSGRGHVCLGVTNRRPPSSF 49
                   0 ||||||||||||||||||||||||||||||.|||||||||..|..|..| 49
 5                 0 MKNVAKCDTWCELQNPVNHRVFERKLRPKPLGRGHVCLGVSHRVAPNPF 49
+
 """,
             )
             hit = record[2]
@@ -7026,9 +7854,18 @@ gi|226453         0 MKNVAKCDTWCELQNPVNHRVFERKLRPKPSGRGHVCLGVTNRRPPSSF 49
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 5 Length: 42 Strand: Plus
+        gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence
+Target: gi|168069582|ref|XP_001786502.1| Length: 88 Strand: Plus
+        predicted protein [Physcomitrella patens subsp. patens] >gi|162661153|gb|EDQ48685.1| predicted protein [Physcomitrella patens subsp. patens]
+
+Score:75 bits(183), Expect:4e-12,
+Identities:37/42(88%),  Positives:39/42(93%),  Gaps:0.42(0%)
+
 gi|168069         2 ASGATCVQKLDDSRDSAIHTTYRISLRSSSLQEPRYPLLRVV 44
                   0 |||||||||||.||||||||.|||||||||..||||||.||| 42
 5                 0 ASGATCVQKLDGSRDSAIHTKYRISLRSSSMREPRYPLPRVV 42
+
 """,
             )
             hit = record[3]
@@ -7092,9 +7929,18 @@ gi|168069         2 ASGATCVQKLDDSRDSAIHTTYRISLRSSSLQEPRYPLLRVV 44
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 5 Length: 42 Strand: Plus
+        gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence
+Target: gi|168068558|ref|XP_001786120.1| Length: 130 Strand: Plus
+        predicted protein [Physcomitrella patens subsp. patens] >gi|162662102|gb|EDQ49068.1| predicted protein [Physcomitrella patens subsp. patens]
+
+Score:73 bits(178), Expect:2e-11,
+Identities:36/42(86%),  Positives:39/42(93%),  Gaps:0.42(0%)
+
 gi|168068         2 ASGATCVQKLDDSRNSAIHTTYRISLRSSSLQEPRYPLLRVV 44
                   0 |||||||||||.||.|||||.|||||||||..||||||.||| 42
 5                 0 ASGATCVQKLDGSRDSAIHTKYRISLRSSSMREPRYPLPRVV 42
+
 """,
             )
             hit = record[4]
@@ -7158,9 +8004,18 @@ gi|168068         2 ASGATCVQKLDDSRNSAIHTTYRISLRSSSLQEPRYPLLRVV 44
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 5 Length: 42 Strand: Plus
+        gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence
+Target: gi|168068926|ref|XP_001786259.1| Length: 148 Strand: Plus
+        predicted protein [Physcomitrella patens subsp. patens] >gi|168069965|ref|XP_001786641.1| predicted protein [Physcomitrella patens subsp. patens] >gi|162660807|gb|EDQ48545.1| predicted protein [Physcomitrella patens subsp. patens] >gi|162661808|gb|EDQ48929.1| predicted protein [Physcomitrella patens subsp. patens]
+
+Score:73 bits(178), Expect:2e-11,
+Identities:36/42(86%),  Positives:39/42(93%),  Gaps:0.42(0%)
+
 gi|168068         2 ASGATCVQKLDDSRNSAIHTTYRISLRSSSLQEPRYPLLRVV 44
                   0 |||||||||||.||.|||||.|||||||||..||||||.||| 42
 5                 0 ASGATCVQKLDGSRDSAIHTKYRISLRSSSMREPRYPLPRVV 42
+
 """,
             )
             hit = record[5]
@@ -7224,9 +8079,18 @@ gi|168068         2 ASGATCVQKLDDSRNSAIHTTYRISLRSSSLQEPRYPLLRVV 44
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 5 Length: 42 Strand: Plus
+        gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence
+Target: gi|168070288|ref|XP_001786759.1| Length: 148 Strand: Plus
+        predicted protein [Physcomitrella patens subsp. patens] >gi|162660550|gb|EDQ48427.1| predicted protein [Physcomitrella patens subsp. patens]
+
+Score:73 bits(178), Expect:2e-11,
+Identities:36/42(86%),  Positives:39/42(93%),  Gaps:0.42(0%)
+
 gi|168070         2 ASGATCVQKLDDSRNSAIHTTYRISLRSSSLQEPRYPLLRVV 44
                   0 |||||||||||.||.|||||.|||||||||..||||||.||| 42
 5                 0 ASGATCVQKLDGSRDSAIHTKYRISLRSSSMREPRYPLPRVV 42
+
 """,
             )
             hit = record[6]
@@ -7292,6 +8156,14 @@ gi|168070         2 ASGATCVQKLDDSRNSAIHTTYRISLRSSSLQEPRYPLLRVV 44
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 5 Length: 80 Strand: Plus
+        gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence
+Target: gi|168068591|ref|XP_001786133.1| Length: 220 Strand: Plus
+        predicted protein [Physcomitrella patens subsp. patens] >gi|162662081|gb|EDQ49057.1| predicted protein [Physcomitrella patens subsp. patens]
+
+Score:70 bits(172), Expect:8e-11,
+Identities:42/83(51%),  Positives:50/83(60%),  Gaps:8.83(10%)
+
 gi|168068       142 RGLCHHADSDGQFHSTLPIKDIKRIGGCRDDALAGMPSDEP-----RAQLAFKNSMIHGI
                   0 |...|.......|.|.......|..||---||......|.|-----||||||||||.|||
 5                 0 RPTAHRSARETNFRSQTVESRRKWVGG---DAM*DAQADVPSA*WLRAQLAFKNSMVHGI
@@ -7299,6 +8171,7 @@ gi|168068       142 RGLCHHADSDGQFHSTLPIKDIKRIGGCRDDALAGMPSDEP-----RAQLAFKNSMIHGI
 gi|168068       197 LQFTLRIAFRCVLHRCKSQDIRC 220
                  60 ||||..||||.|||||.|.||||  83
 5                57 LQFTPSIAFRYVLHRCESRDIRC  80
+
 """,
             )
             hit = record[7]
@@ -7362,9 +8235,18 @@ gi|168068       197 LQFTLRIAFRCVLHRCKSQDIRC 220
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 5 Length: 39 Strand: Plus
+        gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence
+Target: gi|74622391|sp|Q8TGM5|ART3_YEAST Length: 67 Strand: Plus
+        Uncharacterized protein ART3 (Antisense to ribosomal RNA transcript protein 3) >gi|18767126|gb|AAL79278.1| unknown [Saccharomyces cerevisiae]
+
+Score:58 bits(141), Expect:3e-07,
+Identities:29/39(74%),  Positives:32/39(82%),  Gaps:0.39(0%)
+
 gi|746223         7 GAMCVQRFDDSRNSAIHITYRISLRSSSMREPRDPLLKV 46
                   0 ||.|||..|.||.||||..||||||||||||||.||..| 39
 5                 0 GATCVQKLDGSRDSAIHTKYRISLRSSSMREPRYPLPRV 39
+
 """,
             )
             hit = record[8]
@@ -7428,9 +8310,18 @@ gi|746223         7 GAMCVQRFDDSRNSAIHITYRISLRSSSMREPRDPLLKV 46
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 5 Length: 34 Strand: Plus
+        gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence
+Target: gi|168069944|ref|XP_001786634.1| Length: 138 Strand: Plus
+        predicted protein [Physcomitrella patens subsp. patens] >gi|162660825|gb|EDQ48552.1| predicted protein [Physcomitrella patens subsp. patens]
+
+Score:57 bits(137), Expect:9e-07,
+Identities:28/34(82%),  Positives:31/34(91%),  Gaps:0.34(0%)
+
 gi|168069         0 KLDDSRNSAIHTTYRISLRSSSLQEPRYPLLRVV 34
                   0 |||.||.|||||.|||||||||..||||||.||| 34
 5                 0 KLDGSRDSAIHTKYRISLRSSSMREPRYPLPRVV 34
+
 """,
             )
             hit = record[9]
@@ -7492,9 +8383,18 @@ gi|168069         0 KLDDSRNSAIHTTYRISLRSSSLQEPRYPLLRVV 34
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 5 Length: 40 Strand: Plus
+        gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence
+Target: gi|50307717|ref|XP_453851.1| Length: 54 Strand: Plus
+        unnamed protein product [Kluyveromyces lactis]
+
+Score:56 bits(134), Expect:2e-06,
+Identities:28/40(70%),  Positives:31/40(78%),  Gaps:0.40(0%)
+
 gi|503077         7 GAMCVQRFDDSRKSAIHNTYRNSLRSSSMREPRDPLLKVL 47
                   0 ||.|||..|.||.||||..||.|||||||||||.||..|. 40
 5                 0 GATCVQKLDGSRDSAIHTKYRISLRSSSMREPRYPLPRVV 40
+
 """,
             )
             record = next(records)
@@ -7576,6 +8476,14 @@ gi|503077         7 GAMCVQRFDDSRKSAIHNTYRNSLRSSSMREPRDPLLKVL 47
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 6 Length: 103 Strand: Plus
+        gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds
+Target: gi|3176603|gb|AAC18749.1| Length: 103 Strand: Plus
+        phytochrome A [Lathyrus odoratus]
+
+Score:213 bits(543), Expect:4e-54,
+Identities:103/103(100%),  Positives:103/103(100%),  Gaps:0.103(0%)
+
 gi|317660         0 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
                   0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 6                 0 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
@@ -7583,6 +8491,7 @@ gi|317660         0 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
 gi|317660        60 SLVMAVVVNDSDEDGDSRDAVLPQKKKRLWGLVVCHNTTPRFV 103
                  60 ||||||||||||||||||||||||||||||||||||||||||| 103
 6                60 SLVMAVVVNDSDEDGDSRDAVLPQKKKRLWGLVVCHNTTPRFV 103
+
 """,
             )
             hit = record[1]
@@ -7648,6 +8557,14 @@ gi|317660        60 SLVMAVVVNDSDEDGDSRDAVLPQKKKRLWGLVVCHNTTPRFV 103
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 6 Length: 103 Strand: Plus
+        gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds
+Target: gi|130188|sp|P15001.1|PHYA_PEA Length: 1124 Strand: Plus
+        RecName: Full=Phytochrome A >gi|169132|gb|AAA33682.1| phytochrome [Pisum sativum] >gi|295830|emb|CAA32242.1| phytochrome apoprotein [Pisum sativum] >gi|51173514|gb|AAT97643.1| phytochrome A apoprotein [Pisum sativum] >gi|226757|prf||1604466A phytochrome
+
+Score:208 bits(530), Expect:1e-52,
+Identities:101/103(98%),  Positives:102/103(99%),  Gaps:0.103(0%)
+
 gi|130188       275 QAARFLFMKNKVRMIVDCNAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
                   0 ||||||||||||||||||.|||||||||||||||||||||||||||||||||||||||||
 6                 0 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
@@ -7655,6 +8572,7 @@ gi|130188       275 QAARFLFMKNKVRMIVDCNAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
 gi|130188       335 SLVMAVVVNDSDEDGDSADAVLPQKKKRLWGLVVCHNTTPRFV 378
                  60 |||||||||||||||||.||||||||||||||||||||||||| 103
 6                60 SLVMAVVVNDSDEDGDSRDAVLPQKKKRLWGLVVCHNTTPRFV 103
+
 """,
             )
             hit = record[2]
@@ -7720,6 +8638,14 @@ gi|130188       335 SLVMAVVVNDSDEDGDSADAVLPQKKKRLWGLVVCHNTTPRFV 378
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 6 Length: 103 Strand: Plus
+        gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds
+Target: gi|2499555|sp|P93673.1|PHYA_LATSA Length: 1124 Strand: Plus
+        RecName: Full=Phytochrome type A >gi|1848273|gb|AAB47994.1| phytochrome type A [Lathyrus sativus]
+
+Score:208 bits(530), Expect:1e-52,
+Identities:101/103(98%),  Positives:102/103(99%),  Gaps:0.103(0%)
+
 gi|249955       275 QAARFLFMKNKVRMIVDCNAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
                   0 ||||||||||||||||||.|||||||||||||||||||||||||||||||||||||||||
 6                 0 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
@@ -7727,6 +8653,7 @@ gi|249955       275 QAARFLFMKNKVRMIVDCNAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
 gi|249955       335 SLVMAVVVNDSDEDGDSADAVLPQKKKRLWGLVVCHNTTPRFV 378
                  60 |||||||||||||||||.||||||||||||||||||||||||| 103
 6                60 SLVMAVVVNDSDEDGDSRDAVLPQKKKRLWGLVVCHNTTPRFV 103
+
 """,
             )
             hit = record[3]
@@ -7792,6 +8719,14 @@ gi|249955       335 SLVMAVVVNDSDEDGDSADAVLPQKKKRLWGLVVCHNTTPRFV 378
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 6 Length: 103 Strand: Plus
+        gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds
+Target: gi|3176595|gb|AAC18745.1| Length: 103 Strand: Plus
+        phytochrome A [Lennea melanocarpa] >gi|3176597|gb|AAC18746.1| phytochrome A [Hebestigma cubense] >gi|3176609|gb|AAC18752.1| phytochrome A [Sesbania cochichinensis] >gi|3176611|gb|AAC18753.1| phytochrome A [Sesbania emerus]
+
+Score:207 bits(528), Expect:2e-52,
+Identities:100/103(97%),  Positives:101/103(98%),  Gaps:0.103(0%)
+
 gi|317659         0 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
                   0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 6                 0 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
@@ -7799,6 +8734,7 @@ gi|317659         0 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
 gi|317659        60 SLVMAVVVNDSDEDGDSSDAVQPQKRKRLWGLVVCHNTTPRFV 103
                  60 |||||||||||||||||.|||.|||.||||||||||||||||| 103
 6                60 SLVMAVVVNDSDEDGDSRDAVLPQKKKRLWGLVVCHNTTPRFV 103
+
 """,
             )
             hit = record[4]
@@ -7858,6 +8794,14 @@ gi|317659        60 SLVMAVVVNDSDEDGDSSDAVQPQKRKRLWGLVVCHNTTPRFV 103
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 6 Length: 103 Strand: Plus
+        gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds
+Target: gi|1711106|gb|AAC18675.1| Length: 210 Strand: Plus
+        phytochrome A [Sophora affinis]
+
+Score:207 bits(528), Expect:2e-52,
+Identities:100/103(97%),  Positives:101/103(98%),  Gaps:0.103(0%)
+
 gi|171110        40 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
                   0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 6                 0 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
@@ -7865,6 +8809,7 @@ gi|171110        40 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
 gi|171110       100 SLVMAVVVNDSDEDGDSSDAVQPQKRKRLWGLVVCHNTTPRFV 143
                  60 |||||||||||||||||.|||.|||.||||||||||||||||| 103
 6                60 SLVMAVVVNDSDEDGDSRDAVLPQKKKRLWGLVVCHNTTPRFV 103
+
 """,
             )
             hit = record[5]
@@ -7928,6 +8873,14 @@ gi|171110       100 SLVMAVVVNDSDEDGDSSDAVQPQKRKRLWGLVVCHNTTPRFV 143
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 6 Length: 103 Strand: Plus
+        gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds
+Target: gi|1711090|gb|AAC18670.1| Length: 210 Strand: Plus
+        phytochrome A [Myrospermum sousanum]
+
+Score:206 bits(525), Expect:5e-52,
+Identities:99/103(96%),  Positives:101/103(98%),  Gaps:0.103(0%)
+
 gi|171109        40 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
                   0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 6                 0 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
@@ -7935,6 +8888,7 @@ gi|171109        40 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
 gi|171109       100 SLVLAVVVNDSDEDGDSSDAVQPQKRKRLWGLVVCHNTTPRFV 143
                  60 |||.|||||||||||||.|||.|||.||||||||||||||||| 103
 6                60 SLVMAVVVNDSDEDGDSRDAVLPQKKKRLWGLVVCHNTTPRFV 103
+
 """,
             )
             hit = record[6]
@@ -7998,6 +8952,14 @@ gi|171109       100 SLVLAVVVNDSDEDGDSSDAVQPQKRKRLWGLVVCHNTTPRFV 143
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 6 Length: 103 Strand: Plus
+        gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds
+Target: gi|3176605|gb|AAC18750.1| Length: 103 Strand: Plus
+        phytochrome A [Hybosema robustum]
+
+Score:206 bits(524), Expect:6e-52,
+Identities:99/103(96%),  Positives:100/103(97%),  Gaps:0.103(0%)
+
 gi|317660         0 QATRFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
                   0 ||.|||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 6                 0 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
@@ -8005,6 +8967,7 @@ gi|317660         0 QATRFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
 gi|317660        60 SLVMAVVVNDSDEDGDSSDAVQPQKRKRLWGLVVCHNTTPRFV 103
                  60 |||||||||||||||||.|||.|||.||||||||||||||||| 103
 6                60 SLVMAVVVNDSDEDGDSRDAVLPQKKKRLWGLVVCHNTTPRFV 103
+
 """,
             )
             hit = record[7]
@@ -8068,6 +9031,14 @@ gi|317660        60 SLVMAVVVNDSDEDGDSSDAVQPQKRKRLWGLVVCHNTTPRFV 103
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 6 Length: 103 Strand: Plus
+        gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds
+Target: gi|3176454|gb|AAC18668.1| Length: 207 Strand: Plus
+        phytochrome A [Cyclolobium nutans]
+
+Score:206 bits(523), Expect:8e-52,
+Identities:99/103(96%),  Positives:101/103(98%),  Gaps:0.103(0%)
+
 gi|317645        37 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
                   0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 6                 0 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
@@ -8075,6 +9046,7 @@ gi|317645        37 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
 gi|317645        97 SLVMAVVVNDSDEDGNSSDAVQPQKRKRLWGLVVCHNTTPRFV 140
                  60 |||||||||||||||.|.|||.|||.||||||||||||||||| 103
 6                60 SLVMAVVVNDSDEDGDSRDAVLPQKKKRLWGLVVCHNTTPRFV 103
+
 """,
             )
             hit = record[8]
@@ -8138,6 +9110,14 @@ gi|317645        97 SLVMAVVVNDSDEDGNSSDAVQPQKRKRLWGLVVCHNTTPRFV 140
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 6 Length: 103 Strand: Plus
+        gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds
+Target: gi|3176523|gb|AAC18709.1| Length: 139 Strand: Plus
+        phytochrome A [Millettia richardiana]
+
+Score:205 bits(521), Expect:1e-51,
+Identities:98/103(95%),  Positives:101/103(98%),  Gaps:0.103(0%)
+
 gi|317652        36 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
                   0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 6                 0 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
@@ -8145,6 +9125,7 @@ gi|317652        36 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
 gi|317652        96 SLVMAVVVNDNEEDGDSSDAVQPQKRKRLWGLVVCHNTTPRFV 139
                  60 ||||||||||..|||||.|||.|||.||||||||||||||||| 103
 6                60 SLVMAVVVNDSDEDGDSRDAVLPQKKKRLWGLVVCHNTTPRFV 103
+
 """,
             )
             hit = record[9]
@@ -8208,6 +9189,14 @@ gi|317652        96 SLVMAVVVNDNEEDGDSSDAVQPQKRKRLWGLVVCHNTTPRFV 139
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 6 Length: 103 Strand: Plus
+        gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds
+Target: gi|3176494|gb|AAC18693.1| Length: 177 Strand: Plus
+        phytochrome A [Callerya atropurpurea]
+
+Score:204 bits(520), Expect:2e-51,
+Identities:98/103(95%),  Positives:101/103(98%),  Gaps:0.103(0%)
+
 gi|317649         7 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
                   0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 6                 0 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
@@ -8215,6 +9204,7 @@ gi|317649         7 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
 gi|317649        67 SLVMAVVVNDSEEDGDSSEAVQPQKRKRLWGLVVCHNTTPRFV 110
                  60 |||||||||||.|||||..||.|||.||||||||||||||||| 103
 6                60 SLVMAVVVNDSDEDGDSRDAVLPQKKKRLWGLVVCHNTTPRFV 103
+
 """,
             )
             record = next(records)
@@ -8298,6 +9288,14 @@ gi|317649        67 SLVMAVVVNDSEEDGDSSEAVQPQKRKRLWGLVVCHNTTPRFV 110
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 7 Length: 506 Strand: Plus
+        gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product
+Target: gi|27805603|sp|Q9TKP6.1|MATK_WISFR Length: 506 Strand: Plus
+        RecName: Full=Maturase K; AltName: Full=Intron maturase >gi|5817759|gb|AAD52902.1|AF142731_1 maturase-like protein [Wisteria frutescens]
+
+Score:948 bits(2451), Expect:0,
+Identities:506/506(100%),  Positives:506/506(100%),  Gaps:0.506(0%)
+
 gi|278056         0 MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSLLIVKRL
                   0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 7                 0 MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSLLIVKRL
@@ -8333,6 +9331,7 @@ gi|278056       420 KKKNLYRIKYILRLSCIKTLACKHKSTVRAFLKKSGSEELLEEFFTEEEEILSLIFPRTS
 gi|278056       480 STLQRLHRNRIWYLDILFSNDLVNHE 506
                 480 |||||||||||||||||||||||||| 506
 7               480 STLQRLHRNRIWYLDILFSNDLVNHE 506
+
 """,
             )
             hit = record[1]
@@ -8392,6 +9391,14 @@ gi|278056       480 STLQRLHRNRIWYLDILFSNDLVNHE 506
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 7 Length: 506 Strand: Plus
+        gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product
+Target: gi|171909144|gb|ACB58148.1| Length: 506 Strand: Plus
+        maturase K [Wisteria frutescens]
+
+Score:946 bits(2445), Expect:0,
+Identities:505/506(100%),  Positives:505/506(100%),  Gaps:0.506(0%)
+
 gi|171909         0 MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKYSLLIVKRL
                   0 |||||||||||||||||||||||||||||||||||||||||||||||||||.||||||||
 7                 0 MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSLLIVKRL
@@ -8427,6 +9434,7 @@ gi|171909       420 KKKNLYRIKYILRLSCIKTLACKHKSTVRAFLKKSGSEELLEEFFTEEEEILSLIFPRTS
 gi|171909       480 STLQRLHRNRIWYLDILFSNDLVNHE 506
                 480 |||||||||||||||||||||||||| 506
 7               480 STLQRLHRNRIWYLDILFSNDLVNHE 506
+
 """,
             )
             hit = record[2]
@@ -8492,6 +9500,14 @@ gi|171909       480 STLQRLHRNRIWYLDILFSNDLVNHE 506
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 7 Length: 506 Strand: Plus
+        gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product
+Target: gi|171909146|gb|ACB58149.1| Length: 506 Strand: Plus
+        maturase K [Wisteria frutescens] >gi|171909148|gb|ACB58150.1| maturase K [Wisteria frutescens var. macrostachya]
+
+Score:945 bits(2443), Expect:0,
+Identities:505/506(100%),  Positives:505/506(100%),  Gaps:0.506(0%)
+
 gi|171909         0 MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSLLIVKRL
                   0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 7                 0 MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSLLIVKRL
@@ -8527,6 +9543,7 @@ gi|171909       420 KKKNLYRIKYILRLSCIKTLACKHKSTVRAFLKKSGSEELLEEFFTEEEEILSLIFPRTS
 gi|171909       480 STLQRLHRNRIWYLDILFSNDLVNHE 506
                 480 |||||||||||||||||||||||||| 506
 7               480 STLQRLHRNRIWYLDILFSNDLVNHE 506
+
 """,
             )
             hit = record[3]
@@ -8586,6 +9603,14 @@ gi|171909       480 STLQRLHRNRIWYLDILFSNDLVNHE 506
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 7 Length: 506 Strand: Plus
+        gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product
+Target: gi|171909132|gb|ACB58142.1| Length: 506 Strand: Plus
+        maturase K [Callerya megasperma]
+
+Score:944 bits(2439), Expect:0,
+Identities:501/506(99%),  Positives:504/506(100%),  Gaps:0.506(0%)
+
 gi|171909         0 MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSLLIVKRL
                   0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 7                 0 MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSLLIVKRL
@@ -8621,6 +9646,7 @@ gi|171909       420 KKKNLYRIKYILRLSCIKTLACKHKSTVRAFLKKSGSEELLEEFFTEEEEILSLIFPRAS
 gi|171909       480 STLQRLHRNRIWYLDILFSNDLVNHE 506
                 480 |||||||||||||||||||||||||| 506
 7               480 STLQRLHRNRIWYLDILFSNDLVNHE 506
+
 """,
             )
             hit = record[4]
@@ -8686,6 +9712,14 @@ gi|171909       480 STLQRLHRNRIWYLDILFSNDLVNHE 506
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 7 Length: 506 Strand: Plus
+        gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product
+Target: gi|5817760|gb|AAD52903.1|AF142732_1 Length: 506 Strand: Plus
+        maturase-like protein [Wisteria sinensis] >gi|171909136|gb|ACB58144.1| maturase K [Wisteria brachybotrys] >gi|171909138|gb|ACB58145.1| maturase K [Wisteria floribunda] >gi|171909140|gb|ACB58146.1| maturase K [Wisteria floribunda] >gi|171909142|gb|ACB58147.1| maturase K [Wisteria floribunda] >gi|171909150|gb|ACB58151.1| maturase K [Wisteria sinensis] >gi|171909152|gb|ACB58152.1| maturase K [Wisteria sinensis] >gi|171909154|gb|ACB58153.1| maturase K [Wisteria sinensis] >gi|171909156|gb|ACB58154.1| maturase K [Wisteria villosa] >gi|171909158|gb|ACB58155.1| maturase K [Wisteria villosa] >gi|171909160|gb|ACB58156.1| maturase K [Wisteria villosa]
+
+Score:936 bits(2418), Expect:0,
+Identities:498/506(98%),  Positives:500/506(99%),  Gaps:0.506(0%)
+
 gi|581776         0 MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDKKSSLLIVKRL
                   0 |||||||||||||||||||||||||||||||||||||||||||||||||.||||||||||
 7                 0 MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSLLIVKRL
@@ -8721,6 +9755,7 @@ gi|581776       420 KKKNLYRIKYILRLSCIKTLACKHKSTVRAFLKKSGSEELLEEFFTEEEEILSLIFPRAS
 gi|581776       480 STLQRLHRNRIWYLDILFSNDLVNHE 506
                 480 |||||||||||||||||||||||||| 506
 7               480 STLQRLHRNRIWYLDILFSNDLVNHE 506
+
 """,
             )
             hit = record[5]
@@ -8784,6 +9819,14 @@ gi|581776       480 STLQRLHRNRIWYLDILFSNDLVNHE 506
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 7 Length: 506 Strand: Plus
+        gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product
+Target: gi|171909134|gb|ACB58143.1| Length: 506 Strand: Plus
+        maturase K [Wisteria brachybotrys]
+
+Score:928 bits(2398), Expect:0,
+Identities:496/506(98%),  Positives:498/506(98%),  Gaps:0.506(0%)
+
 gi|171909         0 MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDKKSSLLIVKRL
                   0 |||||||||||||||||||||||||||||||||||||||||||||||||.||||||||||
 7                 0 MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSLLIVKRL
@@ -8819,6 +9862,7 @@ gi|171909       420 KKKNLYRIKYILRLSCIKTLACKHKSTVRAFLKKSGSEELLEEFFTEEEEILSLIFPRAS
 gi|171909       480 STLQRLHRNRIWYLDILFSNDLVNHE 506
                 480 |||||||||||||||||||||||||| 506
 7               480 STLQRLHRNRIWYLDILFSNDLVNHE 506
+
 """,
             )
             hit = record[6]
@@ -8882,6 +9926,14 @@ gi|171909       480 STLQRLHRNRIWYLDILFSNDLVNHE 506
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 7 Length: 506 Strand: Plus
+        gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product
+Target: gi|5817761|gb|AAD52904.1|AF142733_1 Length: 506 Strand: Plus
+        maturase-like protein [Callerya reticulata]
+
+Score:925 bits(2390), Expect:0,
+Identities:493/506(97%),  Positives:498/506(98%),  Gaps:0.506(0%)
+
 gi|581776         0 MKEYQAYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSLLIVKRL
                   0 |||||.||||||||||||||||||||||||||||||||||||||||||||||||||||||
 7                 0 MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSLLIVKRL
@@ -8917,6 +9969,7 @@ gi|581776       420 KKKNLYRIKYILRLSCIKTLACKHKSTVRAFLKKSGSEELLEEFFTEEEEILSLIFPRAS
 gi|581776       480 STLKRLHRNRIWYLDILFSNDLVNHE 506
                 480 |||.|||||||||||||||||||||| 506
 7               480 STLQRLHRNRIWYLDILFSNDLVNHE 506
+
 """,
             )
             hit = record[7]
@@ -8980,6 +10033,14 @@ gi|581776       480 STLKRLHRNRIWYLDILFSNDLVNHE 506
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 7 Length: 506 Strand: Plus
+        gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product
+Target: gi|5817762|gb|AAD52905.1|AF142734_1 Length: 506 Strand: Plus
+        maturase-like protein [Callerya atropurpurea]
+
+Score:890 bits(2301), Expect:0,
+Identities:472/506(93%),  Positives:488/506(96%),  Gaps:0.506(0%)
+
 gi|581776         0 MKEYQVYLERDRSRQQDFLYPLIFREYTYGLAYSHDFNRSIFVENVGYDNKSSLLIVKRL
                   0 |||||||||||||||||||||||||||.||||||||||||||||||||||||||||||||
 7                 0 MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSLLIVKRL
@@ -9015,6 +10076,7 @@ gi|581776       420 KKKSLYRIKYILRLSCIKTLACKHKSTVRAFLKRLGSEELLEEFFTEEEEILSLIFPRAS
 gi|581776       480 STLQKLHRNRIWYLDILFTNDLVNHE 506
                 480 ||||.|||||||||||||.||||||| 506
 7               480 STLQRLHRNRIWYLDILFSNDLVNHE 506
+
 """,
             )
             hit = record[8]
@@ -9078,6 +10140,14 @@ gi|581776       480 STLQKLHRNRIWYLDILFTNDLVNHE 506
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 7 Length: 506 Strand: Plus
+        gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product
+Target: gi|152014012|gb|ABS20107.1| Length: 506 Strand: Plus
+        maturase-like protein [Astragalus uliginosus]
+
+Score:887 bits(2293), Expect:0,
+Identities:470/506(93%),  Positives:487/506(96%),  Gaps:0.506(0%)
+
 gi|152014         0 MKEYQVFLERDRSRQQDFLYPLIFREYVYGLAYSHDFNRSTFVENVGYDNKYSLLIVKRL
                   0 ||||||.||||||||||||||||||||.||||||||||||.||||||||||.||||||||
 7                 0 MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSLLIVKRL
@@ -9113,6 +10183,7 @@ gi|152014       420 KKKSLYRIKYILRLSCIKTLACKHKSTVRAFLKRSGSEELLEEFFTEEEEILSLIFPRAS
 gi|152014       480 STLQKLHGNRIWYLDILFSNDLVNHE 506
                 480 ||||.||.|||||||||||||||||| 506
 7               480 STLQRLHRNRIWYLDILFSNDLVNHE 506
+
 """,
             )
             hit = record[9]
@@ -9178,6 +10249,14 @@ gi|152014       480 STLQKLHGNRIWYLDILFSNDLVNHE 506
             self.assertEqual(
                 str(hsp),
                 """\
+Query : 7 Length: 506 Strand: Plus
+        gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product
+Target: gi|146197442|dbj|BAF57483.1| Length: 506 Strand: Plus
+        maturase [Glycyrrhiza uralensis] >gi|146197444|dbj|BAF57484.1| maturase [Glycyrrhiza glabra] >gi|152014018|gb|ABS20110.1| maturase-like protein [Glycyrrhiza pallidiflora]
+
+Score:887 bits(2292), Expect:0,
+Identities:471/506(93%),  Positives:489/506(97%),  Gaps:0.506(0%)
+
 gi|146197         0 MKEYQVYLERDRSRQQDFLYPLIFREYIYGIAYSHNLNRSIFVENVGYDNKFSLLIVKRL
                   0 ||||||||||||||||||||||||||||||.||||..||||||||||||||.||||||||
 7                 0 MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSLLIVKRL
@@ -9213,6 +10292,7 @@ gi|146197       420 KKKSLYRIKYILRLSCIKTLACKHKSTVRAFLKRLGSEELLEEFFTEEEEILSLIFPKAS
 gi|146197       480 STLQKLHRNRIWYLDILFSNDLVNNE 506
                 480 ||||.|||||||||||||||||||.| 506
 7               480 STLQRLHRNRIWYLDILFSNDLVNHE 506
+
 """,
             )
         with open(datafile, "rb") as handle:
@@ -9477,6 +10557,14 @@ Program: BLASTX 2.9.0+
         self.assertEqual(
             str(hsp),
             """\
+Query : AI021773.1 Length: 108 Strand: Plus
+        MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence
+Target: gi|1530504495|emb|VDM03167.1| Length: 132 Strand: Plus
+        unnamed protein product, partial [Schistocephalus solidus]
+
+Score:161 bits(408), Expect:8e-49,
+Identities:81/108(75%),  Positives:83/108(77%),  Gaps:0.108(0%)
+
 gi|153050         0 MADEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
                   0 |||||||||||||||||||||...........|...............|.||||||||||
 AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
@@ -9484,6 +10572,7 @@ AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
 gi|153050        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
                  60 |||||||||||||||||||||||||||||||||||||||||||||||| 108
 AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+
 """,
         )
         hit = record[1]
@@ -9549,6 +10638,14 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
         self.assertEqual(
             str(hsp),
             """\
+Query : AI021773.1 Length: 115 Strand: Plus
+        MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence
+Target: gi|510859078|gb|EPB74633.1| Length: 119 Strand: Plus
+        hypothetical protein ANCCEY_06263 [Ancylostoma ceylanicum]
+
+Score:160 bits(405), Expect:1e-48,
+Identities:81/115(70%),  Positives:85/115(74%),  Gaps:0.115(0%)
+
 gi|510859         0 MCDDDVAALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
                   0 |.|..|.||||||||||||||...........|...............|.||||||||||
 AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
@@ -9556,6 +10653,7 @@ AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
 gi|510859        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTEAHSILKP 115
                  60 ||||||||||||||||||||||||||||||||||||||||||||||||.|.|.|| 115
 AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTELHCIRKP 115
+
 """,
         )
         hit = record[2]
@@ -9621,6 +10719,14 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTELHCIRKP 115
         self.assertEqual(
             str(hsp),
             """\
+Query : AI021773.1 Length: 108 Strand: Plus
+        MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence
+Target: gi|684409690|ref|XP_009175831.1| Length: 246 Strand: Plus
+        hypothetical protein T265_11027 [Opisthorchis viverrini] >gi|663044098|gb|KER20427.1| hypothetical protein T265_11027 [Opisthorchis viverrini]
+
+Score:163 bits(413), Expect:4e-48,
+Identities:81/108(75%),  Positives:83/108(77%),  Gaps:0.108(0%)
+
 gi|684409         0 MADEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
                   0 |||||||||||||||||||||...........|...............|.||||||||||
 AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
@@ -9628,6 +10734,7 @@ AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
 gi|684409        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
                  60 |||||||||||||||||||||||||||||||||||||||||||||||| 108
 AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+
 """,
         )
         hit = record[3]
@@ -9693,6 +10800,14 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
         self.assertEqual(
             str(hsp),
             """\
+Query : AI021773.1 Length: 108 Strand: Plus
+        MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence
+Target: gi|449710331|gb|EMD49430.1| Length: 124 Strand: Plus
+        actin, putative, partial [Entamoeba histolytica KU27]
+
+Score:159 bits(401), Expect:9e-48,
+Identities:78/108(72%),  Positives:81/108(75%),  Gaps:0.108(0%)
+
 gi|449710         0 MGDEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHVSVMAGMGQKDAYVGDEAQ
                   0 |.|||||||||||||||||||...........|...............|.||.|||||||
 AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
@@ -9700,6 +10815,7 @@ AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
 gi|449710        60 SKRGILTLKYPIEHGIVNNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
                  60 |||||||||||||||||.|||||||||||||||||||||||||||||| 108
 AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+
 """,
         )
         hit = record[4]
@@ -9763,6 +10879,14 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
         self.assertEqual(
             str(hsp),
             """\
+Query : AI021773.1 Length: 108 Strand: Plus
+        MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence
+Target: gi|257215766|emb|CAX83035.1| Length: 252 Strand: Plus
+        Actin-2, partial [Schistosoma japonicum]
+
+Score:162 bits(411), Expect:1e-47,
+Identities:81/108(75%),  Positives:83/108(77%),  Gaps:0.108(0%)
+
 gi|257215         0 MADEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
                   0 |||||||||||||||||||||...........|...............|.||||||||||
 AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
@@ -9770,6 +10894,7 @@ AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
 gi|257215        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
                  60 |||||||||||||||||||||||||||||||||||||||||||||||| 108
 AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+
 """,
         )
         hit = record[5]
@@ -9835,6 +10960,14 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
         self.assertEqual(
             str(hsp),
             """\
+Query : AI021773.1 Length: 108 Strand: Plus
+        MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence
+Target: gi|1535393712|emb|VDP83060.1| Length: 209 Strand: Plus
+        unnamed protein product, partial [Echinostoma caproni]
+
+Score:161 bits(407), Expect:1e-47,
+Identities:80/108(74%),  Positives:83/108(77%),  Gaps:0.108(0%)
+
 gi|153539         0 MADDEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
                   0 |||.|||||||||||||||||...........|...............|.||||||||||
 AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
@@ -9842,6 +10975,7 @@ AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
 gi|153539        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
                  60 |||||||||||||||||||||||||||||||||||||||||||||||| 108
 AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+
 """,
         )
         hit = record[6]
@@ -9905,6 +11039,14 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
         self.assertEqual(
             str(hsp),
             """\
+Query : AI021773.1 Length: 108 Strand: Plus
+        MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence
+Target: gi|312773|emb|CAA50205.1| Length: 137 Strand: Plus
+        actin, partial [Entamoeba histolytica]
+
+Score:159 bits(401), Expect:1e-47,
+Identities:78/108(72%),  Positives:81/108(75%),  Gaps:0.108(0%)
+
 gi|312773         0 MGDEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHVSVMAGMGQKDAYVGDEAQ
                   0 |.|||||||||||||||||||...........|...............|.||.|||||||
 AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
@@ -9912,6 +11054,7 @@ AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
 gi|312773        60 SKRGILTLKYPIEHGIVNNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
                  60 |||||||||||||||||.|||||||||||||||||||||||||||||| 108
 AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+
 """,
         )
         hit = record[7]
@@ -9977,6 +11120,14 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
         self.assertEqual(
             str(hsp),
             """\
+Query : AI021773.1 Length: 108 Strand: Plus
+        MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence
+Target: gi|1530341495|emb|VDN44756.1| Length: 145 Strand: Plus
+        unnamed protein product, partial [Dibothriocephalus latus]
+
+Score:158 bits(400), Expect:2e-47,
+Identities:78/108(72%),  Positives:82/108(76%),  Gaps:0.108(0%)
+
 gi|153034         0 MGDEDVQALVIDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
                   0 |.||.|||||.||||||||||...........|...............|.||||||||||
 AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
@@ -9984,6 +11135,7 @@ AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
 gi|153034        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
                  60 |||||||||||||||||||||||||||||||||||||||||||||||| 108
 AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+
 """,
         )
         hit = record[8]
@@ -10047,6 +11199,14 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
         self.assertEqual(
             str(hsp),
             """\
+Query : AI021773.1 Length: 108 Strand: Plus
+        MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence
+Target: gi|1524877828|ref|XP_027046469.1| Length: 122 Strand: Plus
+        actin-1, partial [Pocillopora damicornis]
+
+Score:157 bits(398), Expect:2e-47,
+Identities:78/108(72%),  Positives:82/108(76%),  Gaps:0.108(0%)
+
 gi|152487         0 MADEEVAALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
                   0 ||||||.||||||||||||||...........|...............|.||||||||||
 AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
@@ -10054,6 +11214,7 @@ AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
 gi|152487        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRIAPEEHPILLTE 108
                  60 ||||||||||||||||||||||||||||||||||||.||||||.|||| 108
 AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+
 """,
         )
         hit = record[9]
@@ -10117,6 +11278,14 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
         self.assertEqual(
             str(hsp),
             """\
+Query : AI021773.1 Length: 108 Strand: Plus
+        MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence
+Target: gi|1524877860|ref|XP_027046487.1| Length: 134 Strand: Plus
+        actin-1-like [Pocillopora damicornis]
+
+Score:158 bits(399), Expect:2e-47,
+Identities:79/108(73%),  Positives:82/108(76%),  Gaps:0.108(0%)
+
 gi|152487         0 MADEDVAALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
                   0 ||||.|.||||||||||||||...........|...............|.||||||||||
 AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
@@ -10124,6 +11293,7 @@ AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
 gi|152487        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
                  60 |||||||||||||||||||||||||||||||||||||||||||||||| 108
 AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+
 """,
         )
 
@@ -10279,6 +11449,14 @@ Program: TBLASTN 2.9.0+
         self.assertEqual(
             str(hsp),
             """\
+Query : CAJ99216.1 Length: 234 Strand: Plus
+        tim [Helicobacter acinonychis str. Sheeba]
+Target: gi|109713861|emb|AM260522.1| Length: 234 Strand: Plus
+        Helicobacter acinonychis str. Sheeba complete genome, strain Sheeba
+
+Score:477 bits(1228), Expect:9e-152,
+Identities:234/234(100%),  Positives:234/234(100%),  Gaps:0.234(0%)
+
 gi|109713         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
                   0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
@@ -10294,6 +11472,7 @@ CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
 gi|109713       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
                 180 |||||||||||||||||||||||||||||||||||||||||||||||||||||| 234
 CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+
 """,
         )
         hit = record[1]
@@ -10361,6 +11540,14 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
         self.assertEqual(
             str(hsp),
             """\
+Query : CAJ99216.1 Length: 234 Strand: Plus
+        tim [Helicobacter acinonychis str. Sheeba]
+Target: gi|1336928286|emb|LT900055.1| Length: 234 Strand: Plus
+        Helicobacter acinonychis isolate 212_9 genome assembly, chromosome: I
+
+Score:474 bits(1219), Expect:1e-150,
+Identities:232/234(99%),  Positives:232/234(99%),  Gaps:0.234(0%)
+
 gi|133692         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
                   0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
@@ -10376,6 +11563,7 @@ CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
 gi|133692       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSASLELENFKTIISFL 234
                 180 |||||||||||||||||||||||||||||||||||||||.|||||||||||||| 234
 CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+
 """,
         )
         hit = record[2]
@@ -10441,6 +11629,14 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
         self.assertEqual(
             str(hsp),
             """\
+Query : CAJ99216.1 Length: 234 Strand: Plus
+        tim [Helicobacter acinonychis str. Sheeba]
+Target: gi|1033012332|gb|CP011486.1| Length: 234 Strand: Plus
+        Helicobacter pylori strain K26A1, complete genome
+
+Score:452 bits(1164), Expect:3e-143,
+Identities:221/234(94%),  Positives:224/234(96%),  Gaps:0.234(0%)
+
 gi|103301         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGAQN
                   0 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||.||
 CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
@@ -10456,6 +11652,7 @@ CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
 gi|103301       180 FLKQILNQKTPLLYGGSVNTQNAKEILGIDSVDGLLVGSASLELENFKTIISFL 234
                 180 ||||.||||.||||||||||||||||||||||||||.||.|||||||||||||| 234
 CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+
 """,
         )
         hit = record[3]
@@ -10523,6 +11720,14 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
         self.assertEqual(
             str(hsp),
             """\
+Query : CAJ99216.1 Length: 234 Strand: Plus
+        tim [Helicobacter acinonychis str. Sheeba]
+Target: gi|1559948212|dbj|AP017633.1| Length: 234 Strand: Plus
+        Helicobacter pylori DNA, complete genome, strain: PMSS1
+
+Score:442 bits(1136), Expect:2e-139,
+Identities:218/234(93%),  Positives:223/234(95%),  Gaps:0.234(0%)
+
 gi|155994         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHFDRVFVFPDFLGLLPNSFLHFTLGVQN
                   0 |||||||||||||||||||||||||||||||||.|||||||||||||||.||||||||||
 CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
@@ -10538,6 +11743,7 @@ CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
 gi|155994       180 FLKQILNQKTPLLYGGSVNTQNAKEILGIDSVDGLLIGSASWELENFKTIISFL 234
                 180 ||||.||||.|||||||||||||||||||||||||||||.|.|||||||||||| 234
 CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+
 """,
         )
         hit = record[4]
@@ -10603,6 +11809,14 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
         self.assertEqual(
             str(hsp),
             """\
+Query : CAJ99216.1 Length: 234 Strand: Plus
+        tim [Helicobacter acinonychis str. Sheeba]
+Target: gi|1143706535|gb|CP018823.1| Length: 234 Strand: Plus
+        Helicobacter pylori strain PMSS1 complete genome
+
+Score:442 bits(1136), Expect:2e-139,
+Identities:218/234(93%),  Positives:223/234(95%),  Gaps:0.234(0%)
+
 gi|114370         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHFDRVFVFPDFLGLLPNSFLHFTLGVQN
                   0 |||||||||||||||||||||||||||||||||.|||||||||||||||.||||||||||
 CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
@@ -10618,6 +11832,7 @@ CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
 gi|114370       180 FLKQILNQKTPLLYGGSVNTQNAKEILGIDSVDGLLIGSASWELENFKTIISFL 234
                 180 ||||.||||.|||||||||||||||||||||||||||||.|.|||||||||||| 234
 CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+
 """,
         )
         hit = record[5]
@@ -10683,6 +11898,14 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
         self.assertEqual(
             str(hsp),
             """\
+Query : CAJ99216.1 Length: 234 Strand: Plus
+        tim [Helicobacter acinonychis str. Sheeba]
+Target: gi|1149039824|gb|CP009259.1| Length: 234 Strand: Plus
+        Helicobacter pylori SS1, complete genome
+
+Score:442 bits(1136), Expect:2e-139,
+Identities:218/234(93%),  Positives:223/234(95%),  Gaps:0.234(0%)
+
 gi|114903         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHFDRVFVFPDFLGLLPNSFLHFTLGVQN
                   0 |||||||||||||||||||||||||||||||||.|||||||||||||||.||||||||||
 CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
@@ -10698,6 +11921,7 @@ CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
 gi|114903       180 FLKQILNQKTPLLYGGSVNTQNAKEILGIDSVDGLLIGSASWELENFKTIISFL 234
                 180 ||||.||||.|||||||||||||||||||||||||||||.|.|||||||||||| 234
 CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+
 """,
         )
         hit = record[6]
@@ -10765,6 +11989,14 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
         self.assertEqual(
             str(hsp),
             """\
+Query : CAJ99216.1 Length: 234 Strand: Plus
+        tim [Helicobacter acinonychis str. Sheeba]
+Target: gi|1560269298|gb|CP035106.1| Length: 234 Strand: Plus
+        Helicobacter pylori strain Hpbs3 chromosome, complete genome
+
+Score:441 bits(1133), Expect:6e-139,
+Identities:215/234(92%),  Positives:224/234(96%),  Gaps:0.234(0%)
+
 gi|156026         0 MTKIAMANFKSAMPIFKSHAYLEELEKTLKPQHSDRVFVFPDFLGLLPNSFLHFTLGVQN
                   0 ||||||||||||||||||||||.||||||||||.|||||||||||||||.||||||||||
 CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
@@ -10780,6 +12012,7 @@ CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
 gi|156026       180 FLKQVLNQKTPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
                 180 ||||.||||.|||||||||||||||||||||||||||||||||||||||||||| 234
 CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+
 """,
         )
         hit = record[7]
@@ -10847,6 +12080,14 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
         self.assertEqual(
             str(hsp),
             """\
+Query : CAJ99216.1 Length: 234 Strand: Plus
+        tim [Helicobacter acinonychis str. Sheeba]
+Target: gi|1540258434|emb|LR134517.1| Length: 234 Strand: Plus
+        Helicobacter pylori strain NCTC13345 genome assembly, chromosome: 1
+
+Score:440 bits(1131), Expect:1e-138,
+Identities:216/234(92%),  Positives:222/234(95%),  Gaps:0.234(0%)
+
 gi|154025         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHFDRVFVFPDFLGLLPNAFLHFTLGAQN
                   0 |||||||||||||||||||||||||||||||||.|||||||||||||||||||||||.||
 CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
@@ -10862,6 +12103,7 @@ CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
 gi|154025       180 FLKQILNQKTPLLYGGSVNTQNAKEILGIDSVDGLLIGSASLELENFKTIISFL 234
                 180 ||||.||||.|||||||||||||||||||||||||||||.|||||||||||||| 234
 CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+
 """,
         )
         hit = record[8]
@@ -10927,6 +12169,14 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
         self.assertEqual(
             str(hsp),
             """\
+Query : CAJ99216.1 Length: 234 Strand: Plus
+        tim [Helicobacter acinonychis str. Sheeba]
+Target: gi|1033005233|gb|CP011487.1| Length: 234 Strand: Plus
+        Helicobacter pylori strain PNG84A, complete genome
+
+Score:439 bits(1129), Expect:2e-138,
+Identities:215/234(92%),  Positives:221/234(94%),  Gaps:0.234(0%)
+
 gi|103300         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHFDRVFVFPDFLGLLPNAFLHFTLGVQN
                   0 |||||||||||||||||||||||||||||||||.||||||||||||||||||||||||||
 CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
@@ -10942,6 +12192,7 @@ CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
 gi|103300       180 FLKQILNQKTPLLYGGSVNTQNAKEILGIDSVDGLLIGSASLELENFKTIISFL 234
                 180 ||||.||||.|||||||||||||||||||||||||||||.|||||||||||||| 234
 CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+
 """,
         )
         hit = record[9]
@@ -11007,6 +12258,14 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
         self.assertEqual(
             str(hsp),
             """\
+Query : CAJ99216.1 Length: 234 Strand: Plus
+        tim [Helicobacter acinonychis str. Sheeba]
+Target: gi|1509197163|gb|CP025748.1| Length: 234 Strand: Plus
+        Helicobacter pylori strain Hp_TH2099 chromosome
+
+Score:439 bits(1128), Expect:2e-138,
+Identities:216/234(92%),  Positives:220/234(94%),  Gaps:0.234(0%)
+
 gi|150919         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHFDRVFVFPDFLGLLPNSFLHFTLGAQN
                   0 |||||||||||||||||||||||||||||||||.|||||||||||||||.|||||||.||
 CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
@@ -11022,6 +12281,7 @@ CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
 gi|150919       180 FLKQILNQKTPLLYGGSVNVQNAKEILGIDSVDGLLIGSASLELENFKTIISFL 234
                 180 ||||.||||.|||||||||.|||||||||||||||||||.|||||||||||||| 234
 CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+
 """,
         )
 
@@ -11220,9 +12480,18 @@ Program: TBLASTX 2.2.26+
         self.assertEqual(
             str(hsp),
             """\
+Query : Query_2 Length: 14 Strand: Plus
+        gi|296147483:1-350 Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds
+Target: gi|296147483|ref|NM_001183135.1| Length: 14 Strand: Plus
+        Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds >gi|116616412|gb|EF059095.1| Synthetic construct Saccharomyces cerevisiae clone FLH203015.01X MON2, complete sequence
+
+Score:36 bits(73), Expect:9e-54,
+Identities:14/14(100%),  Positives:14/14(100%),  Gaps:0.14(0%)
+
 gi|296147         0 MAMNTGGFDSMQRQ 14
                   0 |||||||||||||| 14
 Query_2           0 MAMNTGGFDSMQRQ 14
+
 """,
         )
         hit = record[1]
@@ -11334,6 +12603,14 @@ Query_2           0 MAMNTGGFDSMQRQ 14
         self.assertEqual(
             str(hsp),
             """\
+Query : Query_2 Length: 65 Strand: Plus
+        gi|296147483:1-350 Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds
+Target: gi|365982352|ref|XM_003667962.1| Length: 65 Strand: Plus
+        Naumovozyma dairenensis CBS 421 hypothetical protein (NDAI0A06120), mRNA
+
+Score:42 bits(87), Expect:0.02,
+Identities:28/65(43%),  Positives:36/65(55%),  Gaps:0.65(0%)
+
 gi|365982         0 GRQSL*ALHGN*S*FGISR*TGQDQRCNKIRVPYKFFYILNSL*NID*FVASMFNG*ISS
                   0 |.|||||||.....|.|.....|..|...||..........|......|..||.||||||
 Query_2           0 G*QSL*ALHCQGRHFSIP*LASQHERECEIRMSF*LLKTMYSFQYLNGFITSMANG*ISS
@@ -11341,6 +12618,7 @@ Query_2           0 G*QSL*ALHCQGRHFSIP*LASQHERECEIRMSF*LLKTMYSFQYLNGFITSMANG*ISS
 gi|365982        60 FRF*R 65
                  60 |||.| 65
 Query_2          60 FRFGR 65
+
 """,
         )
         hit = record[2]
@@ -11438,6 +12716,14 @@ Query_2          60 FRFGR 65
         self.assertEqual(
             str(hsp),
             """\
+Query : Query_2 Length: 115 Strand: Plus
+        gi|296147483:1-350 Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds
+Target: gi|366988334|ref|XM_003673886.1| Length: 115 Strand: Plus
+        Naumovozyma castellii CBS 4309 hypothetical protein (NCAS0A09950) mRNA, complete cds
+
+Score:54 bits(112), Expect:8e-06,
+Identities:38/115(33%),  Positives:58/115(50%),  Gaps:0.115(0%)
+
 gi|366988         0 *LYFNCKMCRFYKSIENSR*SAFRYGWCRC*AL*TLHSNRGQLSVP**T*FYQWSDKIRM
                   0 ||.....|......|.|.|..|.|..|.....||.||......|.||..........|||
 Query_2           0 *LNLHREMSSLNEGIQNFRQPASRNRWNG*QSL*ALHCQGRHFSIP*LASQHERECEIRM
@@ -11445,6 +12731,7 @@ Query_2           0 *LNLHREMSSLNEGIQNFRQPASRNRWNG*QSL*ALHCQGRHFSIP*LASQHERECEIRM
 gi|366988        60 ACQIFNVLDSF*DLDRLVTCMLDRSVPSFRFGRQ*MQF*VQLFLKGLKTCSLNSH 115
                  60 .........||..|....|.|......||||||...||...|.|.|.|..|...| 115
 Query_2          60 SF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLPLHGVKPSSVHGH 115
+
 """,
         )
         hit = record[3]
@@ -11528,9 +12815,18 @@ Query_2          60 SF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLPLHGVKPSSVHGH 115
         self.assertEqual(
             str(hsp),
             """\
+Query : Query_2 Length: 55 Strand: Plus
+        gi|296147483:1-350 Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds
+Target: gi|255710474|ref|XM_002551475.1| Length: 55 Strand: Plus
+        Lachancea thermotolerans CBS 6340 KLTH0A01342p (KLTH0A01342g) mRNA, complete cds
+
+Score:45 bits(92), Expect:0.005,
+Identities:25/55(45%),  Positives:29/55(53%),  Gaps:0.55(0%)
+
 gi|255710         0 TLSCISAARWVESMNASSTSSILSSGMQLTDDIFCRHCTETLVSLAFLEAHERTK 55
                   0 |...||.||.|.||.||..|.....|...|.|..||||....|.||||.....|| 55
 Query_2           0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTK 55
+
 """,
         )
         hit = record[4]
@@ -11627,6 +12923,14 @@ Query_2           0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTK 55
         self.assertEqual(
             str(hsp),
             """\
+Query : Query_2 Length: 99 Strand: Plus
+        gi|296147483:1-350 Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds
+Target: gi|254579534|ref|XM_002495708.1| Length: 99 Strand: Plus
+        Zygosaccharomyces rouxii hypothetical protein (ZYRO0C02266g) mRNA, complete cds
+
+Score:45 bits(92), Expect:0.005,
+Identities:31/99(31%),  Positives:53/99(54%),  Gaps:0.99(0%)
+
 gi|254579         0 RVAFTFIRVEEKEYCY*EC*R*IN*NFESSSQL*GIIKTSRFYSTASDVMCIQECQIDYY
                   0 |.||...|.|.|......||.||.|..|.|...||..|||.|.........|.||..|..
 Query_2           0 RIAFFIFRIEKKKFNHSPC***IH*DIEKST*F*GARKTSGFRTPFRVGLPIKEC*NDDP
@@ -11634,6 +12938,7 @@ Query_2           0 RIAFFIFRIEKKKFNHSPC***IH*DIEKST*F*GARKTSGFRTPFRVGLPIKEC*NDDP
 gi|254579        60 INAMFPKIGHSAMYTGR*TLRRT*CVYRGQPAGNGYKTK 99
                  60 .|||.........|..........|...|.....|...| 99
 Query_2          60 GNAMPTGTVNRSIYSSKPAV*NFGCLH*GYSSRDGDSIK 99
+
 """,
         )
 
