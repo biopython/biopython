@@ -55,6 +55,7 @@ ONLINE_DOCTEST_MODULES = [
     "Bio.ExPASy",
     "Bio.ExPASy.cellosaurus",
     "Bio.TogoWS",
+    "Bio.UniProt",
 ]
 
 # Silently ignore any doctests for modules requiring numpy!

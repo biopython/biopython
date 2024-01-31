@@ -514,14 +514,53 @@ numbers:
    ...     records.append(record)
    ...
 
-Searching Swiss-Prot
-~~~~~~~~~~~~~~~~~~~~
+Searching with UniProt
+~~~~~~~~~~~~~~~~~~~~~~
 
 Now, you may remark that I knew the records’ accession numbers
 beforehand. Indeed, ``get_sprot_raw()`` needs either the entry name or
-an accession number. When you don’t have them handy, right now you could
-use https://www.uniprot.org/ but we do not have a Python wrapper for
-searching this from a script. Perhaps you could contribute here?
+an accession number. When you don't have them handy, you can use
+`UniProt <https://www.uniprot.org/>`_ to search for them.
+You can also use the UniProt package to programmatically search for proteins.
+
+For example, let's search for proteins from a specific organism (organism ID: 2697049)
+that have been reviewed. We can do this with the following code:
+
+.. code:: pycon
+
+   >>> from Bio import UniProt
+
+   >>> query = "(organism_id:2697049) AND (reviewed:true)"
+   >>> results = list(UniProt.search(query))
+
+The ``UniProt.search`` method returns an iterator over the search results.
+The iterator returns one result at a time, fetching more results from UniProt as needed until all results are returned.
+We can efficiently create a list from this iterator for this specific query
+because this query only returns a few results (17 at the time of writing).
+
+Let's try a search that returns more results.
+At the time of writing, there are 5,147 results for the query "Insulin AND (reviewed:true)".
+We can use slicing to get a list of the first 50 results.
+
+.. code:: pycon
+
+   >>> from Bio import UniProt
+   >>> from itertools import islice
+
+   >>> query = "Insulin AND (reviewed:true)"
+   >>> results = UniProt.search(query, batch_size=50)[:50]
+
+You can get the total number of search results (regardless of the batch size)
+with the ``len`` method:
+
+.. code:: pycon
+
+   >>> from Bio import UniProt
+
+   >>> query = "Insulin AND (reviewed:true)"
+   >>> result_iterator = UniProt.search(query, batch_size=0)
+   >>> len(result_iterator)
+   5147
 
 Retrieving Prosite and Prosite documentation records
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

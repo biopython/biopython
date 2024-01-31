@@ -68,6 +68,10 @@ Assembly (GFA) files with the formats ``gfa1`` and ``gfa2`` (for GFA 1.x and
 GFA 2.0 files respectively). All data outside of segment lines are ignored, such
 as linkage information.
 
+The UniProt package now includes a method to search UniProt programmatically.
+The tutorial has been updated with examples of how to use the search method.
+See the chapter on Swiss-Prot and ExPASy in the tutorial for more information.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
