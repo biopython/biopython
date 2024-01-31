@@ -115,6 +115,22 @@ class MMTFIO(StructureIO):
             experimental_methods=header_dict["structure_method"],
         )
 
+        chain_ids = [chain.get_id() for chain in self.structure.get_chains()]
+        biomoltrans = header_dict["biomoltrans"]
+        for key, value in biomoltrans.items():
+            matrix_items = []  # list of 16 items of 4x4 matrix
+            for line in value[
+                1:
+            ]:  # 3 lines for 3x3 rotation and last column translations
+                matrix_items.extend([float(item) for item in line.split()])
+            matrix_items.extend([0.0, 0.0, 0.0, 1.0])
+
+            encoder.set_bio_assembly_trans(
+                bio_assembly_index=key,
+                input_chain_indices=[chain_ids.index(c) for c in value[0]],
+                input_transform=matrix_items,
+            )
+
         # Tracks values to replace them at the end
         chains_per_model = []
         groups_per_chain = []
@@ -174,9 +190,11 @@ class MMTFIO(StructureIO):
                         )
                         encoder.set_chain_info(
                             chain_id=next(chain_id_iterator),
-                            chain_name="\x00"
-                            if len(chain.get_id().strip()) == 0
-                            else chain.get_id(),
+                            chain_name=(
+                                "\x00"
+                                if len(chain.get_id().strip()) == 0
+                                else chain.get_id()
+                            ),
                             num_groups=0,  # Set to 0 here and changed later
                         )
                         if count_chains > 0:
@@ -198,9 +216,9 @@ class MMTFIO(StructureIO):
                     encoder.set_group_info(
                         group_name=resname,
                         group_number=residue.id[1],
-                        insertion_code="\x00"
-                        if residue.id[2] == " "
-                        else residue.id[2],
+                        insertion_code=(
+                            "\x00" if residue.id[2] == " " else residue.id[2]
+                        ),
                         group_type="",  # Value in the chemcomp dictionary, which is unknown here
                         atom_count=sum(
                             1
@@ -220,12 +238,14 @@ class MMTFIO(StructureIO):
                             count_atoms += 1
                             encoder.set_atom_info(
                                 atom_name=atom.name,
-                                serial_number=count_atoms
-                                if renumber_atoms
-                                else atom.serial_number,
-                                alternative_location_id="\x00"
-                                if atom.altloc == " "
-                                else atom.altloc,
+                                serial_number=(
+                                    count_atoms
+                                    if renumber_atoms
+                                    else atom.serial_number
+                                ),
+                                alternative_location_id=(
+                                    "\x00" if atom.altloc == " " else atom.altloc
+                                ),
                                 x=atom.coord[0],
                                 y=atom.coord[1],
                                 z=atom.coord[2],
