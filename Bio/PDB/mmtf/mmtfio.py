@@ -104,6 +104,8 @@ class MMTFIO(StructureIO):
             header_dict["structure_method"] = []
         else:
             header_dict["structure_method"] = [header_dict["structure_method"]]
+        if header_dict["biomoltrans"] == "":
+            header_dict["biomoltrans"] = None
 
         encoder.set_header_info(
             r_free=None,
@@ -117,19 +119,20 @@ class MMTFIO(StructureIO):
 
         chain_ids = [chain.get_id() for chain in self.structure.get_chains()]
         biomoltrans = header_dict["biomoltrans"]
-        for key, value in biomoltrans.items():
-            matrix_items = []  # list of 16 items of 4x4 matrix
-            for line in value[
-                1:
-            ]:  # 3 lines for 3x3 rotation and last column translations
-                matrix_items.extend([float(item) for item in line.split()])
-            matrix_items.extend([0.0, 0.0, 0.0, 1.0])
+        if biomoltrans is not None:
+            for key, value in biomoltrans.items():
+                matrix_items = []  # list of 16 items of 4x4 matrix
+                for line in value[
+                    1:
+                ]:  # 3 lines for 3x3 rotation and last column translations
+                    matrix_items.extend([float(item) for item in line.split()])
+                matrix_items.extend([0.0, 0.0, 0.0, 1.0])
 
-            encoder.set_bio_assembly_trans(
-                bio_assembly_index=key,
-                input_chain_indices=[chain_ids.index(c) for c in value[0]],
-                input_transform=matrix_items,
-            )
+                encoder.set_bio_assembly_trans(
+                    bio_assembly_index=key,
+                    input_chain_indices=[chain_ids.index(c) for c in value[0]],
+                    input_transform=matrix_items,
+                )
 
         # Tracks values to replace them at the end
         chains_per_model = []
