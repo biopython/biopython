@@ -77,6 +77,7 @@ possible, especially the following contributors:
 
 - Anil Tuncel (first contribution)
 - Fabio Zanini (first contribution)
+- Judith Bernett (first contribution)
 - Michael M. (first contribution)
 - Michiel de Hoon
 - Peter Cock
