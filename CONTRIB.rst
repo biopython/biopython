@@ -191,6 +191,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - João D Ferreira <https://github.com/jdferreira>
 - João Rodrigues <https://github.com/joaorodrigues>
 - João Vitor F Cavalcante <https://github.com/jvfe>
+- Judith Bernett <https://github.com/JudithBernett>
 - Jun Aruga <https://github.com/junaruga>
 - Juraj Szász <https:/github.com/sars1492>
 - Kai Blin <https://github.com/kblin>
