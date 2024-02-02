@@ -87,9 +87,9 @@ class Record(dict):
 
     Each record contains the following keys:
 
-     ---------  ---------------------------     ----------------------
+     ---------  ------------------------------  -----------------------
      Line code  Content                         Occurrence in an entry
-     ---------  ---------------------------     ----------------------
+     ---------  ------------------------------  -----------------------
      ID         Identifier (cell line name)     Once; starts an entry
      AC         Accession (CVCL_xxxx)           Once
      AS         Secondary accession number(s)   Optional; once
@@ -98,13 +98,15 @@ class Record(dict):
      RX         References identifiers          Optional: once or more
      WW         Web pages                       Optional; once or more
      CC         Comments                        Optional; once or more
-     ST         STR profile data                Optional; once or more
+     ST         STR profile data                Optional; twice or more
      DI         Diseases                        Optional; once or more
      OX         Species of origin               Once or more
      HI         Hierarchy                       Optional; once or more
      OI         Originate from same individual  Optional; once or more
-     SX         Sex (gender) of cell            Optional; once
+     SX         Sex of cell                     Optional; once
+     AG         Age of donor at sampling        Optional; once
      CA         Category                        Once
+     DT         Date (entry history)            Once
      //         Terminator                      Once; ends an entry
 
     """
@@ -126,7 +128,9 @@ class Record(dict):
         self["HI"] = []
         self["OI"] = []
         self["SX"] = ""
+        self["AG"] = ""
         self["CA"] = ""
+        self["DT"] = ""
 
     def __repr__(self):
         """Return the canonical string representation of the Record object."""
@@ -154,7 +158,9 @@ class Record(dict):
         output += " HI: " + repr(self["HI"])
         output += " OI: " + repr(self["OI"])
         output += " SX: " + self["SX"]
+        output += " AG: " + self["AG"]
         output += " CA: " + self["CA"]
+        output += " DT: " + self["DT"]
         return output
 
 
@@ -169,12 +175,10 @@ def __read(handle):
         if key == "ID":
             record = Record()
             record["ID"] = value
-        elif key in ["AC", "AS", "SY", "SX", "CA"]:
+        elif key in ["AC", "AS", "SY", "SX", "AG", "CA", "DT"]:
             record[key] += value
         elif key in [
-            "AC",
-            "AS",
-            "SY",
+            # just append to the fields defined as lists, not to strings
             "RX",
             "WW",
             "CC",
@@ -183,8 +187,6 @@ def __read(handle):
             "OX",
             "HI",
             "OI",
-            "SX",
-            "CA",
         ]:
             record[key].append(value)
         elif key == "DR":
