@@ -107,12 +107,11 @@ Program: BLASTP 2.2.18+
   Query: gi|585505|sp|Q08386|MOPB_RHOCA (length=270)
          Molybdenum-pterin-binding protein mopB >gi|310278|gb|AAA71913.1|
          molybdenum-pterin-binding protein
-   Hits: 0
+   Hits: No hits found
 
   Query: gi|129628|sp|P07175.1|PARA_AGRTU (length=222)
          Protein parA
-   Hits: 0
-""",
+   Hits: No hits found""",
         )
         # check if converting the records to a list does not lose the header:
         with open(datafile, "rb") as handle:
@@ -147,8 +146,7 @@ Program: BLASTP 2.2.18+
 Program: blastp 2.2.18 [Mar-02-2008]
      db: /Users/pjcock/Downloads/Software/blast-2.2.18/data/nr
 
-   Hits: 0
-""",
+   Hits: No hits found""",
         )
 
     def check_xml_2218L_blastp_001_records(self, records):
@@ -214,9 +212,26 @@ Program: BLASTP 2.2.26+
             1      1  gnl|BL_ORD_ID|2  gi|375363999|ref|YP_005132038.1| lytA ...
             2      1  gnl|BL_ORD_ID|3  gi|154687679|ref|YP_001422840.1| LytA ...
             3      1  gnl|BL_ORD_ID|4  gi|311070071|ref|YP_003974994.1| unnam...
-            4      1  gnl|BL_ORD_ID|15  gi|332258565|ref|XP_003278367.1| PRED...
-""",
+            4      1  gnl|BL_ORD_ID|15  gi|332258565|ref|XP_003278367.1| PRED...""",
             )
+        record = Blast.read(datafile)
+        self.assertEqual(
+            str(record),
+            """\
+Program: BLASTP 2.2.26+
+     db: db/minirefseq_prot
+  Query: Query_1 (length=102)
+         gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus
+         subtilis subsp. subtilis str. 168]
+   Hits: ----  -----  ----------------------------------------------------------
+            #  # HSP  ID + description
+         ----  -----  ----------------------------------------------------------
+            0      1  gnl|BL_ORD_ID|1  gi|308175296|ref|YP_003922001.1| membr...
+            1      1  gnl|BL_ORD_ID|2  gi|375363999|ref|YP_005132038.1| lytA ...
+            2      1  gnl|BL_ORD_ID|3  gi|154687679|ref|YP_001422840.1| LytA ...
+            3      1  gnl|BL_ORD_ID|4  gi|311070071|ref|YP_003974994.1| unnam...
+            4      1  gnl|BL_ORD_ID|15  gi|332258565|ref|XP_003278367.1| PRED...""",
+        )
 
     def check_xml_2226_blastp_003(self, records):
         self.assertEqual(records.program, "blastp")
@@ -313,9 +328,11 @@ Program: BLASTP 2.2.26+
             str(hsp),
             """\
 Query : Query_1 Length: 102 Strand: Plus
-        gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]
+        gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus
+        subtilis subsp. subtilis str. 168]
 Target: gnl|BL_ORD_ID|1 Length: 100 Strand: Plus
-        gi|308175296|ref|YP_003922001.1| membrane bound lipoprotein [Bacillus amyloliquefaciens DSM 7]
+        gi|308175296|ref|YP_003922001.1| membrane bound lipoprotein [Bacillus
+        amyloliquefaciens DSM 7]
 
 Score:139 bits(350), Expect:2e-46,
 Identities:69/102(68%),  Positives:81/102(79%),  Gaps:2.102(2%)
@@ -386,9 +403,11 @@ Query_1          60 SLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERAN 102
             str(hsp),
             """\
 Query : Query_1 Length: 102 Strand: Plus
-        gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]
+        gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus
+        subtilis subsp. subtilis str. 168]
 Target: gnl|BL_ORD_ID|2 Length: 105 Strand: Plus
-        gi|375363999|ref|YP_005132038.1| lytA gene product [Bacillus amyloliquefaciens subsp. plantarum CAU B946]
+        gi|375363999|ref|YP_005132038.1| lytA gene product [Bacillus
+        amyloliquefaciens subsp. plantarum CAU B946]
 
 Score:88 bits(219), Expect:7e-27,
 Identities:48/105(46%),  Positives:69/105(66%),  Gaps:5.105(5%)
@@ -459,7 +478,8 @@ Query_1          56 NEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERA 101
             str(hsp),
             """\
 Query : Query_1 Length: 102 Strand: Plus
-        gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]
+        gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus
+        subtilis subsp. subtilis str. 168]
 Target: gnl|BL_ORD_ID|3 Length: 105 Strand: Plus
         gi|154687679|ref|YP_001422840.1| LytA [Bacillus amyloliquefaciens FZB42]
 
@@ -532,9 +552,11 @@ Query_1          56 NEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERA 101
             str(hsp),
             """\
 Query : Query_1 Length: 102 Strand: Plus
-        gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]
+        gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus
+        subtilis subsp. subtilis str. 168]
 Target: gnl|BL_ORD_ID|4 Length: 105 Strand: Plus
-        gi|311070071|ref|YP_003974994.1| unnamed protein product [Bacillus atrophaeus 1942]
+        gi|311070071|ref|YP_003974994.1| unnamed protein product [Bacillus
+        atrophaeus 1942]
 
 Score:83 bits(204), Expect:1e-24,
 Identities:45/104(43%),  Positives:66/104(63%),  Gaps:5.104(5%)
@@ -600,9 +622,11 @@ Query_1          56 NEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIER 100
             str(hsp),
             """\
 Query : Query_1 Length: 102 Strand: Plus
-        gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]
+        gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus
+        subtilis subsp. subtilis str. 168]
 Target: gnl|BL_ORD_ID|15 Length: 132 Strand: Plus
-        gi|332258565|ref|XP_003278367.1| PREDICTED: UPF0764 protein C16orf89-like [Nomascus leucogenys]
+        gi|332258565|ref|XP_003278367.1| PREDICTED: UPF0764 protein
+        C16orf89-like [Nomascus leucogenys]
 
 Score:15 bits(29), Expect:7,
 Identities:7/25(28%),  Positives:11/25(44%),  Gaps:0.25(0%)
@@ -708,7 +732,9 @@ Query_1          59 VSLDITEESTSDLDKFNSGDKVTIT  84
 Query : lcl|QUERY Length: 131 Strand: Plus
         tr|Q3V4Q3|Q3V4Q3_9VIRU
 Target: gi|75750454|ref|YP_319893.1| Length: 131 Strand: Plus
-        hypothetical protein ATV_gp62 [Acidianus two-tailed virus] >gi|74474837|emb|CAI59911.1| hypothetical protein [Acidianus two-tailed virus]
+        hypothetical protein ATV_gp62 [Acidianus two-tailed virus]
+        >gi|74474837|emb|CAI59911.1| hypothetical protein [Acidianus two-tailed
+        virus]
 
 Score:266 bits(680), Expect:5e-70,
 Identities:131/131(100%),  Positives:131/131(100%)
@@ -782,7 +808,8 @@ lcl|QUERY       120 GAKKLAQAMAS 131
 Query : lcl|QUERY Length: 131 Strand: Plus
         tr|Q3V4Q3|Q3V4Q3_9VIRU
 Target: gi|51980166|ref|YP_077233.1| Length: 144 Strand: Plus
-        coat protein [Sulfolobus virus STSV1] >gi|51890299|emb|CAH04223.1| coat protein [Sulfolobus virus STSV1]
+        coat protein [Sulfolobus virus STSV1] >gi|51890299|emb|CAH04223.1| coat
+        protein [Sulfolobus virus STSV1]
 
 Score:74 bits(181), Expect:3e-12,
 Identities:36/77(47%),  Positives:49/77(64%),  Gaps:1.77(1%)
@@ -851,7 +878,9 @@ lcl|QUERY        60 MISDAMKPYRNKGSGFQ 77
 Query : lcl|QUERY Length: 131 Strand: Plus
         tr|Q3V4Q3|Q3V4Q3_9VIRU
 Target: gi|70606448|ref|YP_255318.1| Length: 90 Strand: Plus
-        hypothetical protein Saci_0636 [Sulfolobus acidocaldarius DSM 639] >gi|68567096|gb|AAY80025.1| hypothetical protein Saci_0636 [Sulfolobus acidocaldarius DSM 639]
+        hypothetical protein Saci_0636 [Sulfolobus acidocaldarius DSM 639]
+        >gi|68567096|gb|AAY80025.1| hypothetical protein Saci_0636 [Sulfolobus
+        acidocaldarius DSM 639]
 
 Score:45 bits(106), Expect:0.002,
 Identities:22/65(34%),  Positives:37/65(57%)
@@ -921,7 +950,9 @@ lcl|QUERY        60 MISDA 65
 Query : lcl|QUERY Length: 131 Strand: Plus
         tr|Q3V4Q3|Q3V4Q3_9VIRU
 Target: gi|75750440|ref|YP_319873.1| Length: 145 Strand: Plus
-        hypothetical protein ATV_gp42 [Acidianus two-tailed virus] >gi|74474823|emb|CAI59897.1| hypothetical protein [Acidianus two-tailed virus]
+        hypothetical protein ATV_gp42 [Acidianus two-tailed virus]
+        >gi|74474823|emb|CAI59897.1| hypothetical protein [Acidianus two-tailed
+        virus]
 
 Score:43 bits(102), Expect:0.005,
 Identities:30/77(39%),  Positives:42/77(55%),  Gaps:6.77(8%)
@@ -1057,7 +1088,9 @@ lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIE--REEVLSKGAKKLAQAM 129
 Query : lcl|QUERY Length: 131 Strand: Plus
         tr|Q3V4Q3|Q3V4Q3_9VIRU
 Target: gi|229220336|ref|ZP_03838482.2| Length: 208 Strand: Plus
-        hypothetical protein CIT292_04594 [Citrobacter youngae ATCC 29220] >gi|228553887|gb|EEK18552.1| hypothetical protein CIT292_04594 [Citrobacter youngae ATCC 29220]
+        hypothetical protein CIT292_04594 [Citrobacter youngae ATCC 29220]
+        >gi|228553887|gb|EEK18552.1| hypothetical protein CIT292_04594
+        [Citrobacter youngae ATCC 29220]
 
 Score:34 bits(78), Expect:3,
 Identities:23/84(27%),  Positives:42/84(50%),  Gaps:9.84(11%)
@@ -1126,7 +1159,9 @@ lcl|QUERY        64 AMKPYRNKGSGFQSQPIPGEVIAQ  88
 Query : lcl|QUERY Length: 131 Strand: Plus
         tr|Q3V4Q3|Q3V4Q3_9VIRU
 Target: gi|167646253|ref|YP_001683916.1| Length: 155 Strand: Plus
-        activator of Hsp90 ATPase 1 family protein [Caulobacter sp. K31] >gi|167348683|gb|ABZ71418.1| Activator of Hsp90 ATPase 1 family protein [Caulobacter sp. K31]
+        activator of Hsp90 ATPase 1 family protein [Caulobacter sp. K31]
+        >gi|167348683|gb|ABZ71418.1| Activator of Hsp90 ATPase 1 family protein
+        [Caulobacter sp. K31]
 
 Score:34 bits(78), Expect:3,
 Identities:16/48(33%),  Positives:24/48(50%)
@@ -1262,7 +1297,18 @@ lcl|QUERY        94 YQQAKAFLASPATQVRNIEREEVLSKGAK 123
 Query : lcl|QUERY Length: 131 Strand: Plus
         tr|Q3V4Q3|Q3V4Q3_9VIRU
 Target: gi|16804655|ref|NP_466140.1| Length: 178 Strand: Plus
-        50S ribosomal protein L6 [Listeria monocytogenes EGD-e] >gi|47097188|ref|ZP_00234753.1| ribosomal protein L6 [Listeria monocytogenes str. 1/2a F6854] >gi|217966184|ref|YP_002351862.1| 50S ribosomal protein L6 (BL10) [Listeria monocytogenes HCC23] >gi|224499290|ref|ZP_03667639.1| 50S ribosomal protein L6 [Listeria monocytogenes Finland 1988] >gi|224503589|ref|ZP_03671896.1| 50S ribosomal protein L6 [Listeria monocytogenes FSL R2-561] >gi|81768735|sp|Q8Y444.1|RL6_LISMO RecName: Full=50S ribosomal protein L6 >gi|16412105|emb|CAD00695.1| ribosomal protein L6 [Listeria monocytogenes] >gi|47014447|gb|EAL05415.1| ribosomal protein L6 [Listeria monocytogenes str. 1/2a F6854] >gi|217335454|gb|ACK41248.1| 50S ribosomal protein L6 (BL10) [Listeria monocytogenes HCC23]
+        50S ribosomal protein L6 [Listeria monocytogenes EGD-e]
+        >gi|47097188|ref|ZP_00234753.1| ribosomal protein L6 [Listeria
+        monocytogenes str. 1/2a F6854] >gi|217966184|ref|YP_002351862.1| 50S
+        ribosomal protein L6 (BL10) [Listeria monocytogenes HCC23]
+        >gi|224499290|ref|ZP_03667639.1| 50S ribosomal protein L6 [Listeria
+        monocytogenes Finland 1988] >gi|224503589|ref|ZP_03671896.1| 50S
+        ribosomal protein L6 [Listeria monocytogenes FSL R2-561]
+        >gi|81768735|sp|Q8Y444.1|RL6_LISMO RecName: Full=50S ribosomal protein
+        L6 >gi|16412105|emb|CAD00695.1| ribosomal protein L6 [Listeria
+        monocytogenes] >gi|47014447|gb|EAL05415.1| ribosomal protein L6
+        [Listeria monocytogenes str. 1/2a F6854] >gi|217335454|gb|ACK41248.1|
+        50S ribosomal protein L6 (BL10) [Listeria monocytogenes HCC23]
 
 Score:34 bits(77), Expect:4,
 Identities:26/104(25%),  Positives:44/104(42%),  Gaps:13.104(12%)
@@ -1332,7 +1378,9 @@ lcl|QUERY        80 IPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKK 124
 Query : lcl|QUERY Length: 131 Strand: Plus
         tr|Q3V4Q3|Q3V4Q3_9VIRU
 Target: gi|225106043|ref|YP_002674349.1| Length: 202 Strand: Plus
-        hypothetical protein OA307_717 [Octadecabacter antarcticus 307] >gi|198251380|gb|EDY75695.1| hypothetical protein OA307_717 [Octadecabacter antarcticus 307]
+        hypothetical protein OA307_717 [Octadecabacter antarcticus 307]
+        >gi|198251380|gb|EDY75695.1| hypothetical protein OA307_717
+        [Octadecabacter antarcticus 307]
 
 Score:33 bits(76), Expect:5,
 Identities:23/84(27%),  Positives:38/84(45%),  Gaps:5.84(6%)
@@ -1402,7 +1450,14 @@ lcl|QUERY        55 HAIVKMISDAMKPYRNKGSGFQSQ 79
 Query : lcl|QUERY Length: 131 Strand: Plus
         tr|Q3V4Q3|Q3V4Q3_9VIRU
 Target: gi|16801827|ref|NP_472095.1| Length: 178 Strand: Plus
-        50S ribosomal protein L6 [Listeria innocua Clip11262] >gi|116873983|ref|YP_850764.1| 50S ribosomal protein L6 [Listeria welshimeri serovar 6b str. SLCC5334] >gi|81774192|sp|Q927M2.1|RL6_LISIN RecName: Full=50S ribosomal protein L6 >gi|123458730|sp|A0ALV3.1|RL6_LISW6 RecName: Full=50S ribosomal protein L6 >gi|16415302|emb|CAC97992.1| ribosomal protein L6 [Listeria innocua] >gi|116742861|emb|CAK21985.1| rplF [Listeria welshimeri serovar 6b str. SLCC5334]
+        50S ribosomal protein L6 [Listeria innocua Clip11262]
+        >gi|116873983|ref|YP_850764.1| 50S ribosomal protein L6 [Listeria
+        welshimeri serovar 6b str. SLCC5334] >gi|81774192|sp|Q927M2.1|RL6_LISIN
+        RecName: Full=50S ribosomal protein L6
+        >gi|123458730|sp|A0ALV3.1|RL6_LISW6 RecName: Full=50S ribosomal protein
+        L6 >gi|16415302|emb|CAC97992.1| ribosomal protein L6 [Listeria innocua]
+        >gi|116742861|emb|CAK21985.1| rplF [Listeria welshimeri serovar 6b str.
+        SLCC5334]
 
 Score:33 bits(74), Expect:9,
 Identities:25/104(24%),  Positives:44/104(42%),  Gaps:13.104(12%)
@@ -1482,7 +1537,9 @@ lcl|QUERY        80 IPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKK 124
 Query : lcl|QUERY Length: 131 Strand: Plus
         tr|Q3V4Q3|Q3V4Q3_9VIRU
 Target: gi|75750454|ref|YP_319893.1| Length: 131 Strand: Plus
-        hypothetical protein ATV_gp62 [Acidianus two-tailed virus] >gi|74474837|emb|CAI59911.1| hypothetical protein [Acidianus two-tailed virus]
+        hypothetical protein ATV_gp62 [Acidianus two-tailed virus]
+        >gi|74474837|emb|CAI59911.1| hypothetical protein [Acidianus two-tailed
+        virus]
 
 Score:231 bits(590), Expect:1e-59,
 Identities:131/131(100%),  Positives:131/131(100%)
@@ -1556,7 +1613,8 @@ lcl|QUERY       120 GAKKLAQAMAS 131
 Query : lcl|QUERY Length: 131 Strand: Plus
         tr|Q3V4Q3|Q3V4Q3_9VIRU
 Target: gi|51980166|ref|YP_077233.1| Length: 144 Strand: Plus
-        coat protein [Sulfolobus virus STSV1] >gi|51890299|emb|CAH04223.1| coat protein [Sulfolobus virus STSV1]
+        coat protein [Sulfolobus virus STSV1] >gi|51890299|emb|CAH04223.1| coat
+        protein [Sulfolobus virus STSV1]
 
 Score:137 bits(346), Expect:3e-31,
 Identities:36/77(47%),  Positives:49/77(64%),  Gaps:1.77(1%)
@@ -1626,7 +1684,9 @@ lcl|QUERY        60 MISDAMKPYRNKGSGFQ 77
 Query : lcl|QUERY Length: 131 Strand: Plus
         tr|Q3V4Q3|Q3V4Q3_9VIRU
 Target: gi|75750440|ref|YP_319873.1| Length: 145 Strand: Plus
-        hypothetical protein ATV_gp42 [Acidianus two-tailed virus] >gi|74474823|emb|CAI59897.1| hypothetical protein [Acidianus two-tailed virus]
+        hypothetical protein ATV_gp42 [Acidianus two-tailed virus]
+        >gi|74474823|emb|CAI59897.1| hypothetical protein [Acidianus two-tailed
+        virus]
 
 Score:50 bits(118), Expect:7e-05,
 Identities:34/93(37%),  Positives:48/93(52%),  Gaps:8.93(9%)
@@ -1695,7 +1755,9 @@ lcl|QUERY        65 MKPYRNKGSGFQSQPIPGEVIAQVTSN--PEYQ 96
 Query : lcl|QUERY Length: 131 Strand: Plus
         tr|Q3V4Q3|Q3V4Q3_9VIRU
 Target: gi|70606448|ref|YP_255318.1| Length: 90 Strand: Plus
-        hypothetical protein Saci_0636 [Sulfolobus acidocaldarius DSM 639] >gi|68567096|gb|AAY80025.1| hypothetical protein Saci_0636 [Sulfolobus acidocaldarius DSM 639]
+        hypothetical protein Saci_0636 [Sulfolobus acidocaldarius DSM 639]
+        >gi|68567096|gb|AAY80025.1| hypothetical protein Saci_0636 [Sulfolobus
+        acidocaldarius DSM 639]
 
 Score:47 bits(112), Expect:0.0003,
 Identities:22/67(33%),  Positives:38/67(57%)
@@ -1765,7 +1827,9 @@ lcl|QUERY        60 MISDAMK 67
 Query : lcl|QUERY Length: 131 Strand: Plus
         tr|Q3V4Q3|Q3V4Q3_9VIRU
 Target: gi|56478923|ref|YP_160512.1| Length: 326 Strand: Plus
-        hypothetical protein ebA6101 [Aromatoleum aromaticum EbN1] >gi|56314966|emb|CAI09611.1| conserved hypothetical protein [Azoarcus sp. EbN1]
+        hypothetical protein ebA6101 [Aromatoleum aromaticum EbN1]
+        >gi|56314966|emb|CAI09611.1| conserved hypothetical protein [Azoarcus
+        sp. EbN1]
 
 Score:37 bits(85), Expect:0.5,
 Identities:21/81(26%),  Positives:33/81(41%),  Gaps:11.81(14%)
@@ -1835,7 +1899,9 @@ lcl|QUERY        66 KPYRNKG--SGFQ--SQPIPG  83
 Query : lcl|QUERY Length: 131 Strand: Plus
         tr|Q3V4Q3|Q3V4Q3_9VIRU
 Target: gi|16082535|ref|NP_394071.1| Length: 166 Strand: Plus
-        deoxycytidine triphosphate deaminase [Thermoplasma acidophilum DSM 1728] >gi|20141306|sp|Q9HKK0.2|DCD_THEAC RecName: Full=Probable deoxycytidine triphosphate deaminase; Short=dCTP deaminase
+        deoxycytidine triphosphate deaminase [Thermoplasma acidophilum DSM 1728]
+        >gi|20141306|sp|Q9HKK0.2|DCD_THEAC RecName: Full=Probable deoxycytidine
+        triphosphate deaminase; Short=dCTP deaminase
 
 Score:36 bits(82), Expect:1,
 Identities:22/70(31%),  Positives:30/70(43%),  Gaps:10.70(14%)
@@ -2039,7 +2105,9 @@ lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQ 127
 Query : lcl|QUERY Length: 131 Strand: Plus
         tr|Q3V4Q3|Q3V4Q3_9VIRU
 Target: gi|71153789|sp|Q80XJ3.2|TTC28_MOUSE Length: 1691 Strand: Plus
-        RecName: Full=Tetratricopeptide repeat protein 28; Short=TPR repeat protein 28 >gi|55930902|gb|AAH46779.2| Tetratricopeptide repeat domain 28 [Mus musculus]
+        RecName: Full=Tetratricopeptide repeat protein 28; Short=TPR repeat
+        protein 28 >gi|55930902|gb|AAH46779.2| Tetratricopeptide repeat domain
+        28 [Mus musculus]
 
 Score:36 bits(82), Expect:1,
 Identities:25/103(24%),  Positives:45/103(44%),  Gaps:5.103(5%)
@@ -2311,7 +2379,9 @@ lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQ  127
 Query : lcl|QUERY Length: 131 Strand: Plus
         tr|Q3V4Q3|Q3V4Q3_9VIRU
 Target: gi|163854616|ref|YP_001628914.1| Length: 333 Strand: Plus
-        metallo-beta-lactamase superfamily protein [Bordetella petrii DSM 12804] >gi|163258344|emb|CAP40643.1| metallo-beta-lactamase superfamily protein [Bordetella petrii]
+        metallo-beta-lactamase superfamily protein [Bordetella petrii DSM 12804]
+        >gi|163258344|emb|CAP40643.1| metallo-beta-lactamase superfamily protein
+        [Bordetella petrii]
 
 Score:35 bits(81), Expect:1,
 Identities:15/61(25%),  Positives:23/61(38%),  Gaps:6.61(10%)
@@ -2381,7 +2451,8 @@ lcl|QUERY        82 G  83
 Query : lcl|QUERY Length: 131 Strand: Plus
         tr|Q3V4Q3|Q3V4Q3_9VIRU
 Target: gi|109496198|ref|XP_222260.4| Length: 2570 Strand: Plus
-        PREDICTED: similar to TPR repeat-containing protein KIAA1043 [Rattus norvegicus]
+        PREDICTED: similar to TPR repeat-containing protein KIAA1043 [Rattus
+        norvegicus]
 
 Score:35 bits(81), Expect:1,
 Identities:25/103(24%),  Positives:45/103(44%),  Gaps:5.103(5%)
@@ -2589,7 +2660,13 @@ lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQ 127
 Query : lcl|QUERY Length: 131 Strand: Plus
         tr|Q3V4Q3|Q3V4Q3_9VIRU
 Target: gi|194291978|ref|YP_002007885.1| Length: 2596 Strand: Plus
-        non ribosomal peptide synthase, antibiotic synthesis; contains 3 condensation domains, 2 AMP-acid ligases II domains, 2 PP-binding, Phosphopantetheine attachment site [Cupriavidus taiwanensis] >gi|193225882|emb|CAQ71828.1| non ribosomal peptide synthase, antibiotic synthesis; contains 3 condensation domains, 2 AMP-acid ligases II domains, 2 PP-binding, Phosphopantetheine attachment site [Cupriavidus taiwanensis]
+        non ribosomal peptide synthase, antibiotic synthesis; contains 3
+        condensation domains, 2 AMP-acid ligases II domains, 2 PP-binding,
+        Phosphopantetheine attachment site [Cupriavidus taiwanensis]
+        >gi|193225882|emb|CAQ71828.1| non ribosomal peptide synthase, antibiotic
+        synthesis; contains 3 condensation domains, 2 AMP-acid ligases II
+        domains, 2 PP-binding, Phosphopantetheine attachment site [Cupriavidus
+        taiwanensis]
 
 Score:35 bits(80), Expect:2,
 Identities:28/95(29%),  Positives:40/95(42%),  Gaps:20.95(21%)
@@ -2718,7 +2795,9 @@ lcl|QUERY         7 KGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAI 55
 Query : lcl|QUERY Length: 131 Strand: Plus
         tr|Q3V4Q3|Q3V4Q3_9VIRU
 Target: gi|189198988|ref|XP_001935831.1| Length: 1026 Strand: Plus
-        predicted protein [Pyrenophora tritici-repentis Pt-1C-BFP] >gi|187982930|gb|EDU48418.1| predicted protein [Pyrenophora tritici-repentis Pt-1C-BFP]
+        predicted protein [Pyrenophora tritici-repentis Pt-1C-BFP]
+        >gi|187982930|gb|EDU48418.1| predicted protein [Pyrenophora tritici-
+        repentis Pt-1C-BFP]
 
 Score:33 bits(76), Expect:5,
 Identities:14/56(25%),  Positives:26/56(46%),  Gaps:4.56(7%)
@@ -2794,7 +2873,9 @@ lcl|QUERY        28 YPEVTLKLAGEEANARRAGDERTKEAI----HAIVKMISDAMKPYRNKGSGFQSQP  80
 Query : lcl|QUERY Length: 131 Strand: Plus
         tr|Q3V4Q3|Q3V4Q3_9VIRU
 Target: gi|75750454|ref|YP_319893.1| Length: 131 Strand: Plus
-        hypothetical protein ATV_gp62 [Acidianus two-tailed virus] >gi|74474837|emb|CAI59911.1| hypothetical protein [Acidianus two-tailed virus]
+        hypothetical protein ATV_gp62 [Acidianus two-tailed virus]
+        >gi|74474837|emb|CAI59911.1| hypothetical protein [Acidianus two-tailed
+        virus]
 
 Score:210 bits(535), Expect:3e-53,
 Identities:131/131(100%),  Positives:131/131(100%)
@@ -2868,7 +2949,9 @@ lcl|QUERY       120 GAKKLAQAMAS 131
 Query : lcl|QUERY Length: 131 Strand: Plus
         tr|Q3V4Q3|Q3V4Q3_9VIRU
 Target: gi|75750440|ref|YP_319873.1| Length: 145 Strand: Plus
-        hypothetical protein ATV_gp42 [Acidianus two-tailed virus] >gi|74474823|emb|CAI59897.1| hypothetical protein [Acidianus two-tailed virus]
+        hypothetical protein ATV_gp42 [Acidianus two-tailed virus]
+        >gi|74474823|emb|CAI59897.1| hypothetical protein [Acidianus two-tailed
+        virus]
 
 Score:124 bits(312), Expect:3e-27,
 Identities:34/95(36%),  Positives:48/95(51%),  Gaps:8.95(8%)
@@ -2938,7 +3021,8 @@ lcl|QUERY        63 DAMKPYRNKGSGFQSQPIPGEVIAQVTSN--PEYQ 96
 Query : lcl|QUERY Length: 131 Strand: Plus
         tr|Q3V4Q3|Q3V4Q3_9VIRU
 Target: gi|51980166|ref|YP_077233.1| Length: 144 Strand: Plus
-        coat protein [Sulfolobus virus STSV1] >gi|51890299|emb|CAH04223.1| coat protein [Sulfolobus virus STSV1]
+        coat protein [Sulfolobus virus STSV1] >gi|51890299|emb|CAH04223.1| coat
+        protein [Sulfolobus virus STSV1]
 
 Score:119 bits(298), Expect:1e-25,
 Identities:36/78(46%),  Positives:49/78(63%),  Gaps:1.78(1%)
@@ -3008,7 +3092,9 @@ lcl|QUERY        60 MISDAMKPYRNKGSGFQS 78
 Query : lcl|QUERY Length: 131 Strand: Plus
         tr|Q3V4Q3|Q3V4Q3_9VIRU
 Target: gi|70606448|ref|YP_255318.1| Length: 90 Strand: Plus
-        hypothetical protein Saci_0636 [Sulfolobus acidocaldarius DSM 639] >gi|68567096|gb|AAY80025.1| hypothetical protein Saci_0636 [Sulfolobus acidocaldarius DSM 639]
+        hypothetical protein Saci_0636 [Sulfolobus acidocaldarius DSM 639]
+        >gi|68567096|gb|AAY80025.1| hypothetical protein Saci_0636 [Sulfolobus
+        acidocaldarius DSM 639]
 
 Score:97 bits(242), Expect:3e-19,
 Identities:26/85(31%),  Positives:45/85(53%),  Gaps:4.85(5%)
@@ -3078,7 +3164,9 @@ lcl|QUERY        60 MISDAMKPYRNKGSGFQSQPIPGEV 85
 Query : lcl|QUERY Length: 131 Strand: Plus
         tr|Q3V4Q3|Q3V4Q3_9VIRU
 Target: gi|227518463|ref|ZP_03948512.1| Length: 516 Strand: Plus
-        possible histidine kinase [Enterococcus faecalis TX0104] >gi|227074141|gb|EEI12104.1| possible histidine kinase [Enterococcus faecalis TX0104]
+        possible histidine kinase [Enterococcus faecalis TX0104]
+        >gi|227074141|gb|EEI12104.1| possible histidine kinase [Enterococcus
+        faecalis TX0104]
 
 Score:36 bits(82), Expect:1,
 Identities:25/107(23%),  Positives:35/107(33%),  Gaps:5.107(5%)
@@ -3148,7 +3236,12 @@ lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQAMAS 131
 Query : lcl|QUERY Length: 131 Strand: Plus
         tr|Q3V4Q3|Q3V4Q3_9VIRU
 Target: gi|78044048|ref|YP_360886.1| Length: 302 Strand: Plus
-        UDP-N-acetylenolpyruvoylglucosamine reductase [Carboxydothermus hydrogenoformans Z-2901] >gi|90109774|sp|Q3AAE8.1|MURB_CARHZ RecName: Full=UDP-N-acetylenolpyruvoylglucosamine reductase; AltName: Full=UDP-N-acetylmuramate dehydrogenase >gi|77996163|gb|ABB15062.1| UDP-N-acetylenolpyruvoylglucosamine reductase [Carboxydothermus hydrogenoformans Z-2901]
+        UDP-N-acetylenolpyruvoylglucosamine reductase [Carboxydothermus
+        hydrogenoformans Z-2901] >gi|90109774|sp|Q3AAE8.1|MURB_CARHZ RecName:
+        Full=UDP-N-acetylenolpyruvoylglucosamine reductase; AltName: Full=UDP-N-
+        acetylmuramate dehydrogenase >gi|77996163|gb|ABB15062.1| UDP-N-
+        acetylenolpyruvoylglucosamine reductase [Carboxydothermus
+        hydrogenoformans Z-2901]
 
 Score:34 bits(78), Expect:3,
 Identities:15/76(20%),  Positives:25/76(33%),  Gaps:6.76(8%)
@@ -3218,7 +3311,9 @@ lcl|QUERY        78 QPIPGEVIAQVTSNPE  94
 Query : lcl|QUERY Length: 131 Strand: Plus
         tr|Q3V4Q3|Q3V4Q3_9VIRU
 Target: gi|116750563|ref|YP_847250.1| Length: 645 Strand: Plus
-        NADH:flavin oxidoreductase/NADH oxidase [Syntrophobacter fumaroxidans MPOB] >gi|116699627|gb|ABK18815.1| NADH:flavin oxidoreductase/NADH oxidase [Syntrophobacter fumaroxidans MPOB]
+        NADH:flavin oxidoreductase/NADH oxidase [Syntrophobacter fumaroxidans
+        MPOB] >gi|116699627|gb|ABK18815.1| NADH:flavin oxidoreductase/NADH
+        oxidase [Syntrophobacter fumaroxidans MPOB]
 
 Score:34 bits(77), Expect:5,
 Identities:25/100(25%),  Positives:35/100(35%),  Gaps:20.100(20%)
@@ -3287,7 +3382,9 @@ lcl|QUERY        60 MISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKA 100
 Query : lcl|QUERY Length: 131 Strand: Plus
         tr|Q3V4Q3|Q3V4Q3_9VIRU
 Target: gi|184201116|ref|YP_001855323.1| Length: 507 Strand: Plus
-        histidinol dehydrogenase [Kocuria rhizophila DC2201] >gi|183581346|dbj|BAG29817.1| histidinol dehydrogenase [Kocuria rhizophila DC2201]
+        histidinol dehydrogenase [Kocuria rhizophila DC2201]
+        >gi|183581346|dbj|BAG29817.1| histidinol dehydrogenase [Kocuria
+        rhizophila DC2201]
 
 Score:34 bits(77), Expect:5,
 Identities:12/59(20%),  Positives:24/59(41%)
@@ -3484,7 +3581,9 @@ lcl|QUERY        94 YQQAKAFLASPATQVRNIEREEVLSKGAK 123
 Query : Query_74414 Length: 664 Strand: Plus
         unnamed protein product
 Target: ref|NP_001075863.1| Length: 732 Strand: Plus
-        cyclic nucleotide-gated olfactory channel [Oryctolagus cuniculus] >emb|CAA42201.1| aorta CNG channel (rACNG) [Oryctolagus cuniculus] >prf||1919268A cyclic nucleotide-gated channel [Oryctolagus cuniculus]
+        cyclic nucleotide-gated olfactory channel [Oryctolagus cuniculus]
+        >emb|CAA42201.1| aorta CNG channel (rACNG) [Oryctolagus cuniculus]
+        >prf||1919268A cyclic nucleotide-gated channel [Oryctolagus cuniculus]
 
 Score:1290 bits(3336), Expect:0,
 Identities:664/664(100%),  Positives:664/664(100%),  Gaps:0.664(0%)
@@ -3594,7 +3693,12 @@ Query_744       660 AEQP 664
 Query : Query_74414 Length: 664 Strand: Plus
         unnamed protein product
 Target: ref|XP_051689802.1| Length: 664 Strand: Plus
-        cyclic nucleotide-gated olfactory channel isoform X3 [Oryctolagus cuniculus] >sp|Q28718.1| RecName: Full=Cyclic nucleotide-gated olfactory channel; AltName: Full=Aorta CNG channel; Short=RACNG; AltName: Full=Cyclic nucleotide-gated cation channel 2; AltName: Full=Cyclic nucleotide-gated channel alpha-2; Short=CNG channel alpha-2; Short=CNG-2; Short=CNG2 [Oryctolagus cuniculus]
+        cyclic nucleotide-gated olfactory channel isoform X3 [Oryctolagus
+        cuniculus] >sp|Q28718.1| RecName: Full=Cyclic nucleotide-gated olfactory
+        channel; AltName: Full=Aorta CNG channel; Short=RACNG; AltName:
+        Full=Cyclic nucleotide-gated cation channel 2; AltName: Full=Cyclic
+        nucleotide-gated channel alpha-2; Short=CNG channel alpha-2;
+        Short=CNG-2; Short=CNG2 [Oryctolagus cuniculus]
 
 Score:1290 bits(3336), Expect:0,
 Identities:664/664(100%),  Positives:664/664(100%),  Gaps:0.664(0%)
@@ -3704,7 +3808,8 @@ Query_744       660 AEQP 664
 Query : Query_74414 Length: 664 Strand: Plus
         unnamed protein product
 Target: ref|XP_017206345.1| Length: 677 Strand: Plus
-        cyclic nucleotide-gated olfactory channel isoform X2 [Oryctolagus cuniculus]
+        cyclic nucleotide-gated olfactory channel isoform X2 [Oryctolagus
+        cuniculus]
 
 Score:1290 bits(3336), Expect:0,
 Identities:664/664(100%),  Positives:664/664(100%),  Gaps:0.664(0%)
@@ -3814,7 +3919,8 @@ Query_744       660 AEQP 664
 Query : Query_74414 Length: 664 Strand: Plus
         unnamed protein product
 Target: ref|XP_051689801.1| Length: 687 Strand: Plus
-        cyclic nucleotide-gated olfactory channel isoform X1 [Oryctolagus cuniculus]
+        cyclic nucleotide-gated olfactory channel isoform X1 [Oryctolagus
+        cuniculus]
 
 Score:1290 bits(3336), Expect:0,
 Identities:664/664(100%),  Positives:664/664(100%),  Gaps:0.664(0%)
@@ -3924,7 +4030,8 @@ Query_744       660 AEQP 664
 Query : Query_74414 Length: 664 Strand: Plus
         unnamed protein product
 Target: ref|XP_004407164.1| Length: 664 Strand: Plus
-        PREDICTED: cyclic nucleotide-gated olfactory channel [Odobenus rosmarus divergens]
+        PREDICTED: cyclic nucleotide-gated olfactory channel [Odobenus rosmarus
+        divergens]
 
 Score:1249 bits(3231), Expect:0,
 Identities:639/664(96%),  Positives:652/664(98%),  Gaps:0.664(0%)
@@ -4034,7 +4141,9 @@ Query_744       660 AEQP 664
 Query : Query_74414 Length: 664 Strand: Plus
         unnamed protein product
 Target: ref|XP_008688471.1| Length: 664 Strand: Plus
-        cyclic nucleotide-gated olfactory channel [Ursus maritimus] >ref|XP_026343324.1| cyclic nucleotide-gated olfactory channel [Ursus arctos]
+        cyclic nucleotide-gated olfactory channel [Ursus maritimus]
+        >ref|XP_026343324.1| cyclic nucleotide-gated olfactory channel [Ursus
+        arctos]
 
 Score:1248 bits(3228), Expect:0,
 Identities:638/664(96%),  Positives:652/664(98%),  Gaps:0.664(0%)
@@ -4144,7 +4253,9 @@ Query_744       660 AEQP 664
 Query : Query_74414 Length: 664 Strand: Plus
         unnamed protein product
 Target: ref|XP_011229794.1| Length: 664 Strand: Plus
-        cyclic nucleotide-gated olfactory channel [Ailuropoda melanoleuca] >gb|EFB14215.1| hypothetical protein PANDA_013994, partial [Ailuropoda melanoleuca]
+        cyclic nucleotide-gated olfactory channel [Ailuropoda melanoleuca]
+        >gb|EFB14215.1| hypothetical protein PANDA_013994, partial [Ailuropoda
+        melanoleuca]
 
 Score:1248 bits(3227), Expect:0,
 Identities:638/664(96%),  Positives:652/664(98%),  Gaps:0.664(0%)
@@ -4569,8 +4680,7 @@ Program: BLASTN 2.9.0+
             6      1  gi|372099109|ref|NC_000067.6|  Mus musculus strain C57B...
             7      1  gi|372099101|ref|NC_000075.6|  Mus musculus strain C57B...
             8      1  gi|372099100|ref|NC_000076.6|  Mus musculus strain C57B...
-            9      1  gi|372099094|ref|NC_000082.6|  Mus musculus strain C57B...
-""",
+            9      1  gi|372099094|ref|NC_000082.6|  Mus musculus strain C57B...""",
             )
 
     def check_xml_2900_blastn_001_records(self, records):
@@ -5617,9 +5727,11 @@ G26684.1        228
             str(hsp),
             """\
 Query : lcl|1_ Length: 1111 Strand: Plus
-        gi|8332116|gb|BE037100.1|BE037100 MP14H09 MP Mesembryanthemum crystallinum cDNA 5' similar to cold acclimation protein, mRNA sequence
+        gi|8332116|gb|BE037100.1|BE037100 MP14H09 MP Mesembryanthemum
+        crystallinum cDNA 5' similar to cold acclimation protein, mRNA sequence
 Target: gnl|BL_ORD_ID|0 Length: 1111 Strand: Plus
-        gi|8332116|gb|BE037100.1|BE037100 MP14H09 MP Mesembryanthemum crystallinum cDNA 5' similar to cold acclimation protein, mRNA sequence
+        gi|8332116|gb|BE037100.1|BE037100 MP14H09 MP Mesembryanthemum
+        crystallinum cDNA 5' similar to cold acclimation protein, mRNA sequence
 
 Score:1562 bits(788), Expect:0,
 Identities:797/797(100%),  Positives:797/797(100%)
@@ -5784,7 +5896,8 @@ class TestBlastx(unittest.TestCase):
                 str(hsp),
                 """\
 Query : 1 Length: 26 Strand: Plus
-        gi|4104054|gb|AH007193.1|SEG_CVIGS Centaurea vallesiaca 18S ribosomal RNA gene, partial sequence
+        gi|4104054|gb|AH007193.1|SEG_CVIGS Centaurea vallesiaca 18S ribosomal
+        RNA gene, partial sequence
 Target: gi|149390769|gb|ABR25402.1| Length: 26 Strand: Plus
         unknown [Oryza sativa (indica cultivar-group)]
 
@@ -5884,7 +5997,8 @@ gi|149390         0 HMLVSKIKPCMCKYELIRTVKLRMAH 26
                 str(hsp),
                 """\
 Query : 2 Length: 127 Strand: Plus
-        gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds
+        gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein
+        HLPf gene, partial cds
 Target: gi|4218936|gb|AAD12237.1| Length: 333 Strand: Plus
         hevein-like protein HLPf [Sambucus nigra]
 
@@ -5974,7 +6088,8 @@ gi|421893       326 HIKMSVV 333
                 str(hsp),
                 """\
 Query : 2 Length: 127 Strand: Plus
-        gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds
+        gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein
+        HLPf gene, partial cds
 Target: gi|4206074|gb|AAD11408.1| Length: 333 Strand: Plus
         hevein-like protein [Sambucus nigra]
 
@@ -6064,7 +6179,8 @@ gi|420607       326 HIKMSLV 333
                 str(hsp),
                 """\
 Query : 2 Length: 127 Strand: Plus
-        gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds
+        gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein
+        HLPf gene, partial cds
 Target: gi|4206070|gb|AAD11406.1| Length: 333 Strand: Plus
         hevein-like protein [Sambucus nigra]
 
@@ -6154,7 +6270,8 @@ gi|420607       326 HIKMSLV 333
                 str(hsp),
                 """\
 Query : 2 Length: 127 Strand: Plus
-        gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds
+        gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein
+        HLPf gene, partial cds
 Target: gi|4206072|gb|AAD11407.1| Length: 333 Strand: Plus
         hevein-like protein [Sambucus nigra]
 
@@ -6244,7 +6361,8 @@ gi|420607       326 HIKMSVV 333
                 str(hsp),
                 """\
 Query : 2 Length: 127 Strand: Plus
-        gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds
+        gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein
+        HLPf gene, partial cds
 Target: gi|16903131|gb|AAL30421.1|AF434174_1 Length: 330 Strand: Plus
         hevein-like protein [Sambucus nigra]
 
@@ -6334,7 +6452,8 @@ gi|169031       323 HIKMSVV 330
                 str(hsp),
                 """\
 Query : 2 Length: 127 Strand: Plus
-        gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds
+        gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein
+        HLPf gene, partial cds
 Target: gi|16903133|gb|AAL30422.1|AF434175_1 Length: 336 Strand: Plus
         hevein-like protein [Sambucus nigra]
 
@@ -6420,7 +6539,8 @@ gi|169031       329 RIKMHVV 336
                 str(hsp),
                 """\
 Query : 2 Length: 126 Strand: Plus
-        gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds
+        gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein
+        HLPf gene, partial cds
 Target: gi|30691147|gb|AAO17294.1| Length: 321 Strand: Plus
         chitinase [Ficus carica]
 
@@ -6510,7 +6630,8 @@ gi|306911       313 SRIGMPV 320
                 str(hsp),
                 """\
 Query : 2 Length: 116 Strand: Plus
-        gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds
+        gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein
+        HLPf gene, partial cds
 Target: gi|222139388|gb|ACM45713.1| Length: 317 Strand: Plus
         class I chitinase [Pyrus pyrifolia]
 
@@ -6600,7 +6721,8 @@ gi|222139       314 PF 316
                 str(hsp),
                 """\
 Query : 2 Length: 108 Strand: Plus
-        gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds
+        gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein
+        HLPf gene, partial cds
 Target: gi|23496435|dbj|BAB40817.2| Length: 311 Strand: Plus
         endochitinase MCHT-2 [Cucumis melo]
 
@@ -6682,7 +6804,8 @@ gi|234964       250 DNAAGRVPGYGVITNIINGGLECGRGPDDRVKDRIGFYKRYCDMLGIGYGNNLD 304
                 str(hsp),
                 """\
 Query : 2 Length: 107 Strand: Plus
-        gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds
+        gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein
+        HLPf gene, partial cds
 Target: gi|82621253|gb|ABB86300.1| Length: 301 Strand: Plus
         chitinase [Ficus awkeotsang]
 
@@ -6797,7 +6920,10 @@ gi|826212       263 -IPYHG--------NSGQESSLDVVNRSIGYYKRYCDMLGVSCEDNL 301
                 str(hsp),
                 """\
 Query : 4 Length: 201 Strand: Plus
-        gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence
+        gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber
+        Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN
+        gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636
+        (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence
 Target: gi|166343825|gb|ABY86655.1| Length: 448 Strand: Plus
         beta-tubulin 4 [Gossypium hirsutum]
 
@@ -6886,7 +7012,10 @@ gi|166343       180 EPYNATLSVHQLVENADECMV 201
                 str(hsp),
                 """\
 Query : 4 Length: 201 Strand: Plus
-        gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence
+        gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber
+        Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN
+        gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636
+        (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence
 Target: gi|223549899|gb|EEF51386.1| Length: 448 Strand: Plus
         tubulin beta chain, putative [Ricinus communis]
 
@@ -6975,9 +7104,15 @@ gi|223549       180 EPYNATLSVHQLVENADECMV 201
                 str(hsp),
                 """\
 Query : 4 Length: 201 Strand: Plus
-        gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence
+        gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber
+        Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN
+        gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636
+        (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence
 Target: gi|18420724|ref|NP_568437.1| Length: 449 Strand: Plus
-        TUB8 (tubulin beta-8) [Arabidopsis thaliana] >gi|27735261|sp|P29516.2|TBB8_ARATH RecName: Full=Tubulin beta-8 chain; AltName: Full=Beta-8-tubulin >gi|10176853|dbj|BAB10059.1| beta tubulin [Arabidopsis thaliana]
+        TUB8 (tubulin beta-8) [Arabidopsis thaliana]
+        >gi|27735261|sp|P29516.2|TBB8_ARATH RecName: Full=Tubulin beta-8 chain;
+        AltName: Full=Beta-8-tubulin >gi|10176853|dbj|BAB10059.1| beta tubulin
+        [Arabidopsis thaliana]
 
 Score:405 bits(1040), Expect:2e-111,
 Identities:194/201(97%),  Positives:196/201(98%),  Gaps:0.201(0%)
@@ -7064,9 +7199,13 @@ gi|184207       180 EPYNATLSVHQLVENADECMV 201
                 str(hsp),
                 """\
 Query : 4 Length: 201 Strand: Plus
-        gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence
+        gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber
+        Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN
+        gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636
+        (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence
 Target: gi|225426385|ref|XP_002271992.1| Length: 447 Strand: Plus
-        PREDICTED: hypothetical protein [Vitis vinifera] >gi|157356601|emb|CAO62796.1| unnamed protein product [Vitis vinifera]
+        PREDICTED: hypothetical protein [Vitis vinifera]
+        >gi|157356601|emb|CAO62796.1| unnamed protein product [Vitis vinifera]
 
 Score:402 bits(1034), Expect:1e-110,
 Identities:193/201(96%),  Positives:195/201(97%),  Gaps:0.201(0%)
@@ -7153,9 +7292,13 @@ gi|225426       180 EPYNATLSVHQLVENADECMV 201
                 str(hsp),
                 """\
 Query : 4 Length: 201 Strand: Plus
-        gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence
+        gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber
+        Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN
+        gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636
+        (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence
 Target: gi|15451226|gb|AAK96884.1| Length: 449 Strand: Plus
-        beta tubulin [Arabidopsis thaliana] >gi|20148289|gb|AAM10035.1| beta tubulin [Arabidopsis thaliana]
+        beta tubulin [Arabidopsis thaliana] >gi|20148289|gb|AAM10035.1| beta
+        tubulin [Arabidopsis thaliana]
 
 Score:402 bits(1034), Expect:1e-110,
 Identities:193/201(96%),  Positives:195/201(97%),  Gaps:0.201(0%)
@@ -7242,9 +7385,13 @@ gi|154512       180 EPYNATLSVHQLVENADECMV 201
                 str(hsp),
                 """\
 Query : 4 Length: 201 Strand: Plus
-        gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence
+        gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber
+        Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN
+        gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636
+        (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence
 Target: gi|225470745|ref|XP_002267380.1| Length: 449 Strand: Plus
-        PREDICTED: hypothetical protein [Vitis vinifera] >gi|157327486|emb|CAO15467.1| unnamed protein product [Vitis vinifera]
+        PREDICTED: hypothetical protein [Vitis vinifera]
+        >gi|157327486|emb|CAO15467.1| unnamed protein product [Vitis vinifera]
 
 Score:402 bits(1033), Expect:1e-110,
 Identities:192/201(96%),  Positives:195/201(97%),  Gaps:0.201(0%)
@@ -7331,9 +7478,13 @@ gi|225470       180 EPYNATLSVHQLVENADECMV 201
                 str(hsp),
                 """\
 Query : 4 Length: 201 Strand: Plus
-        gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence
+        gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber
+        Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN
+        gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636
+        (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence
 Target: gi|586076|sp|P37392.1|TBB1_LUPAL Length: 447 Strand: Plus
-        RecName: Full=Tubulin beta-1 chain; AltName: Full=Beta-1-tubulin >gi|402636|emb|CAA49736.1| Beta tubulin 1 [Lupinus albus]
+        RecName: Full=Tubulin beta-1 chain; AltName: Full=Beta-1-tubulin
+        >gi|402636|emb|CAA49736.1| Beta tubulin 1 [Lupinus albus]
 
 Score:402 bits(1033), Expect:1e-110,
 Identities:193/201(96%),  Positives:195/201(97%),  Gaps:0.201(0%)
@@ -7420,9 +7571,13 @@ gi|586076       180 EPYNATLSVHQLVENADECMV 201
                 str(hsp),
                 """\
 Query : 4 Length: 201 Strand: Plus
-        gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence
+        gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber
+        Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN
+        gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636
+        (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence
 Target: gi|224104341|ref|XP_002313404.1| Length: 451 Strand: Plus
-        tubulin, beta chain [Populus trichocarpa] >gi|222849812|gb|EEE87359.1| tubulin, beta chain [Populus trichocarpa]
+        tubulin, beta chain [Populus trichocarpa] >gi|222849812|gb|EEE87359.1|
+        tubulin, beta chain [Populus trichocarpa]
 
 Score:401 bits(1031), Expect:2e-110,
 Identities:192/201(96%),  Positives:195/201(97%),  Gaps:0.201(0%)
@@ -7509,7 +7664,10 @@ gi|224104       180 EPYNATLSVHQLVENADECMV 201
                 str(hsp),
                 """\
 Query : 4 Length: 201 Strand: Plus
-        gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence
+        gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber
+        Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN
+        gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636
+        (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence
 Target: gi|223549679|gb|EEF51167.1| Length: 446 Strand: Plus
         tubulin beta chain, putative [Ricinus communis]
 
@@ -7598,9 +7756,13 @@ gi|223549       180 EPYNATLSVHQLVENADECMV 201
                 str(hsp),
                 """\
 Query : 4 Length: 201 Strand: Plus
-        gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence
+        gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber
+        Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN
+        gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636
+        (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence
 Target: gi|224058553|ref|XP_002299541.1| Length: 447 Strand: Plus
-        tubulin, beta chain [Populus trichocarpa] >gi|222846799|gb|EEE84346.1| tubulin, beta chain [Populus trichocarpa]
+        tubulin, beta chain [Populus trichocarpa] >gi|222846799|gb|EEE84346.1|
+        tubulin, beta chain [Populus trichocarpa]
 
 Score:400 bits(1029), Expect:4e-110,
 Identities:192/201(96%),  Positives:195/201(97%),  Gaps:0.201(0%)
@@ -7703,7 +7865,9 @@ gi|224058       180 EPYNATLSVHQLVENADECMV 201
                 str(hsp),
                 """\
 Query : 5 Length: 17 Strand: Plus
-        gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence
+        gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed
+        spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2,
+        complete sequence
 Target: gi|110740644|dbj|BAE98425.1| Length: 80 Strand: Plus
         hypothetical protein [Arabidopsis thaliana]
 
@@ -7780,7 +7944,9 @@ gi|110740        53 RKLVSRVLPHAVGLNPS 70
                 str(hsp),
                 """\
 Query : 5 Length: 49 Strand: Plus
-        gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence
+        gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed
+        spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2,
+        complete sequence
 Target: gi|226453533|gb|EEH50844.1| Length: 81 Strand: Plus
         predicted protein [Micromonas pusilla CCMP1545]
 
@@ -7855,9 +8021,13 @@ gi|226453         0 MKNVAKCDTWCELQNPVNHRVFERKLRPKPSGRGHVCLGVTNRRPPSSF 49
                 str(hsp),
                 """\
 Query : 5 Length: 42 Strand: Plus
-        gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence
+        gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed
+        spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2,
+        complete sequence
 Target: gi|168069582|ref|XP_001786502.1| Length: 88 Strand: Plus
-        predicted protein [Physcomitrella patens subsp. patens] >gi|162661153|gb|EDQ48685.1| predicted protein [Physcomitrella patens subsp. patens]
+        predicted protein [Physcomitrella patens subsp. patens]
+        >gi|162661153|gb|EDQ48685.1| predicted protein [Physcomitrella patens
+        subsp. patens]
 
 Score:75 bits(183), Expect:4e-12,
 Identities:37/42(88%),  Positives:39/42(93%),  Gaps:0.42(0%)
@@ -7930,9 +8100,13 @@ gi|168069         2 ASGATCVQKLDDSRDSAIHTTYRISLRSSSLQEPRYPLLRVV 44
                 str(hsp),
                 """\
 Query : 5 Length: 42 Strand: Plus
-        gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence
+        gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed
+        spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2,
+        complete sequence
 Target: gi|168068558|ref|XP_001786120.1| Length: 130 Strand: Plus
-        predicted protein [Physcomitrella patens subsp. patens] >gi|162662102|gb|EDQ49068.1| predicted protein [Physcomitrella patens subsp. patens]
+        predicted protein [Physcomitrella patens subsp. patens]
+        >gi|162662102|gb|EDQ49068.1| predicted protein [Physcomitrella patens
+        subsp. patens]
 
 Score:73 bits(178), Expect:2e-11,
 Identities:36/42(86%),  Positives:39/42(93%),  Gaps:0.42(0%)
@@ -8005,9 +8179,15 @@ gi|168068         2 ASGATCVQKLDDSRNSAIHTTYRISLRSSSLQEPRYPLLRVV 44
                 str(hsp),
                 """\
 Query : 5 Length: 42 Strand: Plus
-        gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence
+        gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed
+        spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2,
+        complete sequence
 Target: gi|168068926|ref|XP_001786259.1| Length: 148 Strand: Plus
-        predicted protein [Physcomitrella patens subsp. patens] >gi|168069965|ref|XP_001786641.1| predicted protein [Physcomitrella patens subsp. patens] >gi|162660807|gb|EDQ48545.1| predicted protein [Physcomitrella patens subsp. patens] >gi|162661808|gb|EDQ48929.1| predicted protein [Physcomitrella patens subsp. patens]
+        predicted protein [Physcomitrella patens subsp. patens]
+        >gi|168069965|ref|XP_001786641.1| predicted protein [Physcomitrella
+        patens subsp. patens] >gi|162660807|gb|EDQ48545.1| predicted protein
+        [Physcomitrella patens subsp. patens] >gi|162661808|gb|EDQ48929.1|
+        predicted protein [Physcomitrella patens subsp. patens]
 
 Score:73 bits(178), Expect:2e-11,
 Identities:36/42(86%),  Positives:39/42(93%),  Gaps:0.42(0%)
@@ -8080,9 +8260,13 @@ gi|168068         2 ASGATCVQKLDDSRNSAIHTTYRISLRSSSLQEPRYPLLRVV 44
                 str(hsp),
                 """\
 Query : 5 Length: 42 Strand: Plus
-        gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence
+        gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed
+        spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2,
+        complete sequence
 Target: gi|168070288|ref|XP_001786759.1| Length: 148 Strand: Plus
-        predicted protein [Physcomitrella patens subsp. patens] >gi|162660550|gb|EDQ48427.1| predicted protein [Physcomitrella patens subsp. patens]
+        predicted protein [Physcomitrella patens subsp. patens]
+        >gi|162660550|gb|EDQ48427.1| predicted protein [Physcomitrella patens
+        subsp. patens]
 
 Score:73 bits(178), Expect:2e-11,
 Identities:36/42(86%),  Positives:39/42(93%),  Gaps:0.42(0%)
@@ -8157,9 +8341,13 @@ gi|168070         2 ASGATCVQKLDDSRNSAIHTTYRISLRSSSLQEPRYPLLRVV 44
                 str(hsp),
                 """\
 Query : 5 Length: 80 Strand: Plus
-        gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence
+        gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed
+        spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2,
+        complete sequence
 Target: gi|168068591|ref|XP_001786133.1| Length: 220 Strand: Plus
-        predicted protein [Physcomitrella patens subsp. patens] >gi|162662081|gb|EDQ49057.1| predicted protein [Physcomitrella patens subsp. patens]
+        predicted protein [Physcomitrella patens subsp. patens]
+        >gi|162662081|gb|EDQ49057.1| predicted protein [Physcomitrella patens
+        subsp. patens]
 
 Score:70 bits(172), Expect:8e-11,
 Identities:42/83(51%),  Positives:50/83(60%),  Gaps:8.83(10%)
@@ -8236,9 +8424,13 @@ gi|168068       197 LQFTLRIAFRCVLHRCKSQDIRC 220
                 str(hsp),
                 """\
 Query : 5 Length: 39 Strand: Plus
-        gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence
+        gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed
+        spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2,
+        complete sequence
 Target: gi|74622391|sp|Q8TGM5|ART3_YEAST Length: 67 Strand: Plus
-        Uncharacterized protein ART3 (Antisense to ribosomal RNA transcript protein 3) >gi|18767126|gb|AAL79278.1| unknown [Saccharomyces cerevisiae]
+        Uncharacterized protein ART3 (Antisense to ribosomal RNA transcript
+        protein 3) >gi|18767126|gb|AAL79278.1| unknown [Saccharomyces
+        cerevisiae]
 
 Score:58 bits(141), Expect:3e-07,
 Identities:29/39(74%),  Positives:32/39(82%),  Gaps:0.39(0%)
@@ -8311,9 +8503,13 @@ gi|746223         7 GAMCVQRFDDSRNSAIHITYRISLRSSSMREPRDPLLKV 46
                 str(hsp),
                 """\
 Query : 5 Length: 34 Strand: Plus
-        gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence
+        gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed
+        spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2,
+        complete sequence
 Target: gi|168069944|ref|XP_001786634.1| Length: 138 Strand: Plus
-        predicted protein [Physcomitrella patens subsp. patens] >gi|162660825|gb|EDQ48552.1| predicted protein [Physcomitrella patens subsp. patens]
+        predicted protein [Physcomitrella patens subsp. patens]
+        >gi|162660825|gb|EDQ48552.1| predicted protein [Physcomitrella patens
+        subsp. patens]
 
 Score:57 bits(137), Expect:9e-07,
 Identities:28/34(82%),  Positives:31/34(91%),  Gaps:0.34(0%)
@@ -8384,7 +8580,9 @@ gi|168069         0 KLDDSRNSAIHTTYRISLRSSSLQEPRYPLLRVV 34
                 str(hsp),
                 """\
 Query : 5 Length: 40 Strand: Plus
-        gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence
+        gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed
+        spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2,
+        complete sequence
 Target: gi|50307717|ref|XP_453851.1| Length: 54 Strand: Plus
         unnamed protein product [Kluyveromyces lactis]
 
@@ -8477,7 +8675,8 @@ gi|503077         7 GAMCVQRFDDSRKSAIHNTYRNSLRSSSMREPRDPLLKVL 47
                 str(hsp),
                 """\
 Query : 6 Length: 103 Strand: Plus
-        gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds
+        gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA)
+        gene, partial cds
 Target: gi|3176603|gb|AAC18749.1| Length: 103 Strand: Plus
         phytochrome A [Lathyrus odoratus]
 
@@ -8558,9 +8757,13 @@ gi|317660        60 SLVMAVVVNDSDEDGDSRDAVLPQKKKRLWGLVVCHNTTPRFV 103
                 str(hsp),
                 """\
 Query : 6 Length: 103 Strand: Plus
-        gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds
+        gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA)
+        gene, partial cds
 Target: gi|130188|sp|P15001.1|PHYA_PEA Length: 1124 Strand: Plus
-        RecName: Full=Phytochrome A >gi|169132|gb|AAA33682.1| phytochrome [Pisum sativum] >gi|295830|emb|CAA32242.1| phytochrome apoprotein [Pisum sativum] >gi|51173514|gb|AAT97643.1| phytochrome A apoprotein [Pisum sativum] >gi|226757|prf||1604466A phytochrome
+        RecName: Full=Phytochrome A >gi|169132|gb|AAA33682.1| phytochrome [Pisum
+        sativum] >gi|295830|emb|CAA32242.1| phytochrome apoprotein [Pisum
+        sativum] >gi|51173514|gb|AAT97643.1| phytochrome A apoprotein [Pisum
+        sativum] >gi|226757|prf||1604466A phytochrome
 
 Score:208 bits(530), Expect:1e-52,
 Identities:101/103(98%),  Positives:102/103(99%),  Gaps:0.103(0%)
@@ -8639,9 +8842,11 @@ gi|130188       335 SLVMAVVVNDSDEDGDSADAVLPQKKKRLWGLVVCHNTTPRFV 378
                 str(hsp),
                 """\
 Query : 6 Length: 103 Strand: Plus
-        gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds
+        gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA)
+        gene, partial cds
 Target: gi|2499555|sp|P93673.1|PHYA_LATSA Length: 1124 Strand: Plus
-        RecName: Full=Phytochrome type A >gi|1848273|gb|AAB47994.1| phytochrome type A [Lathyrus sativus]
+        RecName: Full=Phytochrome type A >gi|1848273|gb|AAB47994.1| phytochrome
+        type A [Lathyrus sativus]
 
 Score:208 bits(530), Expect:1e-52,
 Identities:101/103(98%),  Positives:102/103(99%),  Gaps:0.103(0%)
@@ -8720,9 +8925,13 @@ gi|249955       335 SLVMAVVVNDSDEDGDSADAVLPQKKKRLWGLVVCHNTTPRFV 378
                 str(hsp),
                 """\
 Query : 6 Length: 103 Strand: Plus
-        gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds
+        gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA)
+        gene, partial cds
 Target: gi|3176595|gb|AAC18745.1| Length: 103 Strand: Plus
-        phytochrome A [Lennea melanocarpa] >gi|3176597|gb|AAC18746.1| phytochrome A [Hebestigma cubense] >gi|3176609|gb|AAC18752.1| phytochrome A [Sesbania cochichinensis] >gi|3176611|gb|AAC18753.1| phytochrome A [Sesbania emerus]
+        phytochrome A [Lennea melanocarpa] >gi|3176597|gb|AAC18746.1|
+        phytochrome A [Hebestigma cubense] >gi|3176609|gb|AAC18752.1|
+        phytochrome A [Sesbania cochichinensis] >gi|3176611|gb|AAC18753.1|
+        phytochrome A [Sesbania emerus]
 
 Score:207 bits(528), Expect:2e-52,
 Identities:100/103(97%),  Positives:101/103(98%),  Gaps:0.103(0%)
@@ -8795,7 +9004,8 @@ gi|317659        60 SLVMAVVVNDSDEDGDSSDAVQPQKRKRLWGLVVCHNTTPRFV 103
                 str(hsp),
                 """\
 Query : 6 Length: 103 Strand: Plus
-        gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds
+        gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA)
+        gene, partial cds
 Target: gi|1711106|gb|AAC18675.1| Length: 210 Strand: Plus
         phytochrome A [Sophora affinis]
 
@@ -8874,7 +9084,8 @@ gi|171110       100 SLVMAVVVNDSDEDGDSSDAVQPQKRKRLWGLVVCHNTTPRFV 143
                 str(hsp),
                 """\
 Query : 6 Length: 103 Strand: Plus
-        gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds
+        gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA)
+        gene, partial cds
 Target: gi|1711090|gb|AAC18670.1| Length: 210 Strand: Plus
         phytochrome A [Myrospermum sousanum]
 
@@ -8953,7 +9164,8 @@ gi|171109       100 SLVLAVVVNDSDEDGDSSDAVQPQKRKRLWGLVVCHNTTPRFV 143
                 str(hsp),
                 """\
 Query : 6 Length: 103 Strand: Plus
-        gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds
+        gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA)
+        gene, partial cds
 Target: gi|3176605|gb|AAC18750.1| Length: 103 Strand: Plus
         phytochrome A [Hybosema robustum]
 
@@ -9032,7 +9244,8 @@ gi|317660        60 SLVMAVVVNDSDEDGDSSDAVQPQKRKRLWGLVVCHNTTPRFV 103
                 str(hsp),
                 """\
 Query : 6 Length: 103 Strand: Plus
-        gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds
+        gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA)
+        gene, partial cds
 Target: gi|3176454|gb|AAC18668.1| Length: 207 Strand: Plus
         phytochrome A [Cyclolobium nutans]
 
@@ -9111,7 +9324,8 @@ gi|317645        97 SLVMAVVVNDSDEDGNSSDAVQPQKRKRLWGLVVCHNTTPRFV 140
                 str(hsp),
                 """\
 Query : 6 Length: 103 Strand: Plus
-        gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds
+        gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA)
+        gene, partial cds
 Target: gi|3176523|gb|AAC18709.1| Length: 139 Strand: Plus
         phytochrome A [Millettia richardiana]
 
@@ -9190,7 +9404,8 @@ gi|317652        96 SLVMAVVVNDNEEDGDSSDAVQPQKRKRLWGLVVCHNTTPRFV 139
                 str(hsp),
                 """\
 Query : 6 Length: 103 Strand: Plus
-        gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds
+        gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA)
+        gene, partial cds
 Target: gi|3176494|gb|AAC18693.1| Length: 177 Strand: Plus
         phytochrome A [Callerya atropurpurea]
 
@@ -9289,9 +9504,13 @@ gi|317649        67 SLVMAVVVNDSEEDGDSSEAVQPQKRKRLWGLVVCHNTTPRFV 110
                 str(hsp),
                 """\
 Query : 7 Length: 506 Strand: Plus
-        gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product
+        gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like
+        protein (matK) gene, complete cds; chloroplast gene for chloroplast
+        product
 Target: gi|27805603|sp|Q9TKP6.1|MATK_WISFR Length: 506 Strand: Plus
-        RecName: Full=Maturase K; AltName: Full=Intron maturase >gi|5817759|gb|AAD52902.1|AF142731_1 maturase-like protein [Wisteria frutescens]
+        RecName: Full=Maturase K; AltName: Full=Intron maturase
+        >gi|5817759|gb|AAD52902.1|AF142731_1 maturase-like protein [Wisteria
+        frutescens]
 
 Score:948 bits(2451), Expect:0,
 Identities:506/506(100%),  Positives:506/506(100%),  Gaps:0.506(0%)
@@ -9392,7 +9611,9 @@ gi|278056       480 STLQRLHRNRIWYLDILFSNDLVNHE 506
                 str(hsp),
                 """\
 Query : 7 Length: 506 Strand: Plus
-        gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product
+        gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like
+        protein (matK) gene, complete cds; chloroplast gene for chloroplast
+        product
 Target: gi|171909144|gb|ACB58148.1| Length: 506 Strand: Plus
         maturase K [Wisteria frutescens]
 
@@ -9501,9 +9722,12 @@ gi|171909       480 STLQRLHRNRIWYLDILFSNDLVNHE 506
                 str(hsp),
                 """\
 Query : 7 Length: 506 Strand: Plus
-        gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product
+        gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like
+        protein (matK) gene, complete cds; chloroplast gene for chloroplast
+        product
 Target: gi|171909146|gb|ACB58149.1| Length: 506 Strand: Plus
-        maturase K [Wisteria frutescens] >gi|171909148|gb|ACB58150.1| maturase K [Wisteria frutescens var. macrostachya]
+        maturase K [Wisteria frutescens] >gi|171909148|gb|ACB58150.1| maturase K
+        [Wisteria frutescens var. macrostachya]
 
 Score:945 bits(2443), Expect:0,
 Identities:505/506(100%),  Positives:505/506(100%),  Gaps:0.506(0%)
@@ -9604,7 +9828,9 @@ gi|171909       480 STLQRLHRNRIWYLDILFSNDLVNHE 506
                 str(hsp),
                 """\
 Query : 7 Length: 506 Strand: Plus
-        gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product
+        gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like
+        protein (matK) gene, complete cds; chloroplast gene for chloroplast
+        product
 Target: gi|171909132|gb|ACB58142.1| Length: 506 Strand: Plus
         maturase K [Callerya megasperma]
 
@@ -9713,9 +9939,20 @@ gi|171909       480 STLQRLHRNRIWYLDILFSNDLVNHE 506
                 str(hsp),
                 """\
 Query : 7 Length: 506 Strand: Plus
-        gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product
+        gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like
+        protein (matK) gene, complete cds; chloroplast gene for chloroplast
+        product
 Target: gi|5817760|gb|AAD52903.1|AF142732_1 Length: 506 Strand: Plus
-        maturase-like protein [Wisteria sinensis] >gi|171909136|gb|ACB58144.1| maturase K [Wisteria brachybotrys] >gi|171909138|gb|ACB58145.1| maturase K [Wisteria floribunda] >gi|171909140|gb|ACB58146.1| maturase K [Wisteria floribunda] >gi|171909142|gb|ACB58147.1| maturase K [Wisteria floribunda] >gi|171909150|gb|ACB58151.1| maturase K [Wisteria sinensis] >gi|171909152|gb|ACB58152.1| maturase K [Wisteria sinensis] >gi|171909154|gb|ACB58153.1| maturase K [Wisteria sinensis] >gi|171909156|gb|ACB58154.1| maturase K [Wisteria villosa] >gi|171909158|gb|ACB58155.1| maturase K [Wisteria villosa] >gi|171909160|gb|ACB58156.1| maturase K [Wisteria villosa]
+        maturase-like protein [Wisteria sinensis] >gi|171909136|gb|ACB58144.1|
+        maturase K [Wisteria brachybotrys] >gi|171909138|gb|ACB58145.1| maturase
+        K [Wisteria floribunda] >gi|171909140|gb|ACB58146.1| maturase K
+        [Wisteria floribunda] >gi|171909142|gb|ACB58147.1| maturase K [Wisteria
+        floribunda] >gi|171909150|gb|ACB58151.1| maturase K [Wisteria sinensis]
+        >gi|171909152|gb|ACB58152.1| maturase K [Wisteria sinensis]
+        >gi|171909154|gb|ACB58153.1| maturase K [Wisteria sinensis]
+        >gi|171909156|gb|ACB58154.1| maturase K [Wisteria villosa]
+        >gi|171909158|gb|ACB58155.1| maturase K [Wisteria villosa]
+        >gi|171909160|gb|ACB58156.1| maturase K [Wisteria villosa]
 
 Score:936 bits(2418), Expect:0,
 Identities:498/506(98%),  Positives:500/506(99%),  Gaps:0.506(0%)
@@ -9820,7 +10057,9 @@ gi|581776       480 STLQRLHRNRIWYLDILFSNDLVNHE 506
                 str(hsp),
                 """\
 Query : 7 Length: 506 Strand: Plus
-        gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product
+        gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like
+        protein (matK) gene, complete cds; chloroplast gene for chloroplast
+        product
 Target: gi|171909134|gb|ACB58143.1| Length: 506 Strand: Plus
         maturase K [Wisteria brachybotrys]
 
@@ -9927,7 +10166,9 @@ gi|171909       480 STLQRLHRNRIWYLDILFSNDLVNHE 506
                 str(hsp),
                 """\
 Query : 7 Length: 506 Strand: Plus
-        gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product
+        gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like
+        protein (matK) gene, complete cds; chloroplast gene for chloroplast
+        product
 Target: gi|5817761|gb|AAD52904.1|AF142733_1 Length: 506 Strand: Plus
         maturase-like protein [Callerya reticulata]
 
@@ -10034,7 +10275,9 @@ gi|581776       480 STLKRLHRNRIWYLDILFSNDLVNHE 506
                 str(hsp),
                 """\
 Query : 7 Length: 506 Strand: Plus
-        gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product
+        gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like
+        protein (matK) gene, complete cds; chloroplast gene for chloroplast
+        product
 Target: gi|5817762|gb|AAD52905.1|AF142734_1 Length: 506 Strand: Plus
         maturase-like protein [Callerya atropurpurea]
 
@@ -10141,7 +10384,9 @@ gi|581776       480 STLQKLHRNRIWYLDILFTNDLVNHE 506
                 str(hsp),
                 """\
 Query : 7 Length: 506 Strand: Plus
-        gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product
+        gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like
+        protein (matK) gene, complete cds; chloroplast gene for chloroplast
+        product
 Target: gi|152014012|gb|ABS20107.1| Length: 506 Strand: Plus
         maturase-like protein [Astragalus uliginosus]
 
@@ -10250,9 +10495,13 @@ gi|152014       480 STLQKLHGNRIWYLDILFSNDLVNHE 506
                 str(hsp),
                 """\
 Query : 7 Length: 506 Strand: Plus
-        gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product
+        gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like
+        protein (matK) gene, complete cds; chloroplast gene for chloroplast
+        product
 Target: gi|146197442|dbj|BAF57483.1| Length: 506 Strand: Plus
-        maturase [Glycyrrhiza uralensis] >gi|146197444|dbj|BAF57484.1| maturase [Glycyrrhiza glabra] >gi|152014018|gb|ABS20110.1| maturase-like protein [Glycyrrhiza pallidiflora]
+        maturase [Glycyrrhiza uralensis] >gi|146197444|dbj|BAF57484.1| maturase
+        [Glycyrrhiza glabra] >gi|152014018|gb|ABS20110.1| maturase-like protein
+        [Glycyrrhiza pallidiflora]
 
 Score:887 bits(2292), Expect:0,
 Identities:471/506(93%),  Positives:489/506(97%),  Gaps:0.506(0%)
@@ -10331,7 +10580,7 @@ Program: BLASTX 2.2.22+
   Query: 3 (length=550)
          gi|5690369|gb|AF158246.1|AF158246 Cricetulus griseus glucose phosphate
          isomerase (GPI) gene, partial intron sequence
-   Hits: 0
+   Hits: No hits found
 
   Query: 4 (length=655)
          gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber
@@ -10403,8 +10652,7 @@ Program: BLASTX 2.2.22+
             6      1  gi|5817761|gb|AAD52904.1|AF142733_1  maturase-like prot...
             7      1  gi|5817762|gb|AAD52905.1|AF142734_1  maturase-like prot...
             8      1  gi|152014012|gb|ABS20107.1|  maturase-like protein [Ast...
-            9      1  gi|146197442|dbj|BAF57483.1|  maturase [Glycyrrhiza ura...
-""",
+            9      1  gi|146197442|dbj|BAF57483.1|  maturase [Glycyrrhiza ura...""",
             )
 
     def test_xml_2900_blastx_001(self):
@@ -10444,8 +10692,7 @@ Program: BLASTX 2.9.0+
             6      1  gi|312773|emb|CAA50205.1|  actin, partial [Entamoeba hi...
             7      1  gi|1530341495|emb|VDN44756.1|  unnamed protein product,...
             8      1  gi|1524877828|ref|XP_027046469.1|  actin-1, partial [Po...
-            9      1  gi|1524877860|ref|XP_027046487.1|  actin-1-like [Pocill...
-""",
+            9      1  gi|1524877860|ref|XP_027046487.1|  actin-1-like [Pocill...""",
             )
 
     def check_xml_2900_blastx_001_records(self, records):
@@ -10558,7 +10805,9 @@ Program: BLASTX 2.9.0+
             str(hsp),
             """\
 Query : AI021773.1 Length: 108 Strand: Plus
-        MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence
+        MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma
+        mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA,
+        complete cds, mRNA sequence
 Target: gi|1530504495|emb|VDM03167.1| Length: 132 Strand: Plus
         unnamed protein product, partial [Schistocephalus solidus]
 
@@ -10639,7 +10888,9 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
             str(hsp),
             """\
 Query : AI021773.1 Length: 115 Strand: Plus
-        MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence
+        MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma
+        mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA,
+        complete cds, mRNA sequence
 Target: gi|510859078|gb|EPB74633.1| Length: 119 Strand: Plus
         hypothetical protein ANCCEY_06263 [Ancylostoma ceylanicum]
 
@@ -10720,9 +10971,13 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTELHCIRKP 115
             str(hsp),
             """\
 Query : AI021773.1 Length: 108 Strand: Plus
-        MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence
+        MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma
+        mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA,
+        complete cds, mRNA sequence
 Target: gi|684409690|ref|XP_009175831.1| Length: 246 Strand: Plus
-        hypothetical protein T265_11027 [Opisthorchis viverrini] >gi|663044098|gb|KER20427.1| hypothetical protein T265_11027 [Opisthorchis viverrini]
+        hypothetical protein T265_11027 [Opisthorchis viverrini]
+        >gi|663044098|gb|KER20427.1| hypothetical protein T265_11027
+        [Opisthorchis viverrini]
 
 Score:163 bits(413), Expect:4e-48,
 Identities:81/108(75%),  Positives:83/108(77%),  Gaps:0.108(0%)
@@ -10801,7 +11056,9 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
             str(hsp),
             """\
 Query : AI021773.1 Length: 108 Strand: Plus
-        MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence
+        MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma
+        mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA,
+        complete cds, mRNA sequence
 Target: gi|449710331|gb|EMD49430.1| Length: 124 Strand: Plus
         actin, putative, partial [Entamoeba histolytica KU27]
 
@@ -10880,7 +11137,9 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
             str(hsp),
             """\
 Query : AI021773.1 Length: 108 Strand: Plus
-        MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence
+        MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma
+        mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA,
+        complete cds, mRNA sequence
 Target: gi|257215766|emb|CAX83035.1| Length: 252 Strand: Plus
         Actin-2, partial [Schistosoma japonicum]
 
@@ -10961,7 +11220,9 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
             str(hsp),
             """\
 Query : AI021773.1 Length: 108 Strand: Plus
-        MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence
+        MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma
+        mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA,
+        complete cds, mRNA sequence
 Target: gi|1535393712|emb|VDP83060.1| Length: 209 Strand: Plus
         unnamed protein product, partial [Echinostoma caproni]
 
@@ -11040,7 +11301,9 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
             str(hsp),
             """\
 Query : AI021773.1 Length: 108 Strand: Plus
-        MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence
+        MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma
+        mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA,
+        complete cds, mRNA sequence
 Target: gi|312773|emb|CAA50205.1| Length: 137 Strand: Plus
         actin, partial [Entamoeba histolytica]
 
@@ -11121,7 +11384,9 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
             str(hsp),
             """\
 Query : AI021773.1 Length: 108 Strand: Plus
-        MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence
+        MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma
+        mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA,
+        complete cds, mRNA sequence
 Target: gi|1530341495|emb|VDN44756.1| Length: 145 Strand: Plus
         unnamed protein product, partial [Dibothriocephalus latus]
 
@@ -11200,7 +11465,9 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
             str(hsp),
             """\
 Query : AI021773.1 Length: 108 Strand: Plus
-        MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence
+        MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma
+        mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA,
+        complete cds, mRNA sequence
 Target: gi|1524877828|ref|XP_027046469.1| Length: 122 Strand: Plus
         actin-1, partial [Pocillopora damicornis]
 
@@ -11279,7 +11546,9 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
             str(hsp),
             """\
 Query : AI021773.1 Length: 108 Strand: Plus
-        MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence
+        MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma
+        mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA,
+        complete cds, mRNA sequence
 Target: gi|1524877860|ref|XP_027046487.1| Length: 134 Strand: Plus
         actin-1-like [Pocillopora damicornis]
 
@@ -11336,8 +11605,7 @@ Program: TBLASTN 2.9.0+
             6      1  gi|1560269298|gb|CP035106.1|  Helicobacter pylori strai...
             7      1  gi|1540258434|emb|LR134517.1|  Helicobacter pylori stra...
             8      1  gi|1033005233|gb|CP011487.1|  Helicobacter pylori strai...
-            9      1  gi|1509197163|gb|CP025748.1|  Helicobacter pylori strai...
-""",
+            9      1  gi|1509197163|gb|CP025748.1|  Helicobacter pylori strai...""",
             )
 
     def check_xml_2900_tblastn_001_records(self, records):
@@ -12307,7 +12575,7 @@ Program: TBLASTX 2.2.26+
 
   Query: Query_1 (length=128)
          random_s00
-   Hits: 0
+   Hits: No hits found
 
   Query: Query_2 (length=350)
          gi|296147483:1-350 Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA,
@@ -12319,8 +12587,7 @@ Program: TBLASTX 2.2.26+
             1      6  gi|365982352|ref|XM_003667962.1|  Naumovozyma dairenens...
             2      4  gi|366988334|ref|XM_003673886.1|  Naumovozyma castellii...
             3      2  gi|255710474|ref|XM_002551475.1|  Lachancea thermotoler...
-            4      4  gi|254579534|ref|XM_002495708.1|  Zygosaccharomyces rou...
-""",
+            4      4  gi|254579534|ref|XM_002495708.1|  Zygosaccharomyces rou...""",
             )
 
     def check_xml_2226_tblastx_004(self, records):
@@ -12481,9 +12748,12 @@ Program: TBLASTX 2.2.26+
             str(hsp),
             """\
 Query : Query_2 Length: 14 Strand: Plus
-        gi|296147483:1-350 Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds
+        gi|296147483:1-350 Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA,
+        complete cds
 Target: gi|296147483|ref|NM_001183135.1| Length: 14 Strand: Plus
-        Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds >gi|116616412|gb|EF059095.1| Synthetic construct Saccharomyces cerevisiae clone FLH203015.01X MON2, complete sequence
+        Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds
+        >gi|116616412|gb|EF059095.1| Synthetic construct Saccharomyces
+        cerevisiae clone FLH203015.01X MON2, complete sequence
 
 Score:36 bits(73), Expect:9e-54,
 Identities:14/14(100%),  Positives:14/14(100%),  Gaps:0.14(0%)
@@ -12604,7 +12874,8 @@ Query_2           0 MAMNTGGFDSMQRQ 14
             str(hsp),
             """\
 Query : Query_2 Length: 65 Strand: Plus
-        gi|296147483:1-350 Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds
+        gi|296147483:1-350 Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA,
+        complete cds
 Target: gi|365982352|ref|XM_003667962.1| Length: 65 Strand: Plus
         Naumovozyma dairenensis CBS 421 hypothetical protein (NDAI0A06120), mRNA
 
@@ -12717,9 +12988,11 @@ Query_2          60 FRFGR 65
             str(hsp),
             """\
 Query : Query_2 Length: 115 Strand: Plus
-        gi|296147483:1-350 Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds
+        gi|296147483:1-350 Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA,
+        complete cds
 Target: gi|366988334|ref|XM_003673886.1| Length: 115 Strand: Plus
-        Naumovozyma castellii CBS 4309 hypothetical protein (NCAS0A09950) mRNA, complete cds
+        Naumovozyma castellii CBS 4309 hypothetical protein (NCAS0A09950) mRNA,
+        complete cds
 
 Score:54 bits(112), Expect:8e-06,
 Identities:38/115(33%),  Positives:58/115(50%),  Gaps:0.115(0%)
@@ -12816,9 +13089,11 @@ Query_2          60 SF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLPLHGVKPSSVHGH 115
             str(hsp),
             """\
 Query : Query_2 Length: 55 Strand: Plus
-        gi|296147483:1-350 Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds
+        gi|296147483:1-350 Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA,
+        complete cds
 Target: gi|255710474|ref|XM_002551475.1| Length: 55 Strand: Plus
-        Lachancea thermotolerans CBS 6340 KLTH0A01342p (KLTH0A01342g) mRNA, complete cds
+        Lachancea thermotolerans CBS 6340 KLTH0A01342p (KLTH0A01342g) mRNA,
+        complete cds
 
 Score:45 bits(92), Expect:0.005,
 Identities:25/55(45%),  Positives:29/55(53%),  Gaps:0.55(0%)
@@ -12924,9 +13199,11 @@ Query_2           0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTK 55
             str(hsp),
             """\
 Query : Query_2 Length: 99 Strand: Plus
-        gi|296147483:1-350 Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds
+        gi|296147483:1-350 Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA,
+        complete cds
 Target: gi|254579534|ref|XM_002495708.1| Length: 99 Strand: Plus
-        Zygosaccharomyces rouxii hypothetical protein (ZYRO0C02266g) mRNA, complete cds
+        Zygosaccharomyces rouxii hypothetical protein (ZYRO0C02266g) mRNA,
+        complete cds
 
 Score:45 bits(92), Expect:0.005,
 Identities:31/99(31%),  Positives:53/99(54%),  Gaps:0.99(0%)

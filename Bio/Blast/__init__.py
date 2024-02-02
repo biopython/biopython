@@ -115,6 +115,12 @@ class HSP(Alignment):
     Biopython.
     """
 
+    def __repr__(self):
+        query = self.query
+        target = self.target
+        n, m = self.shape
+        return f"HSP(target.id='{target.id}', query.id='{query.id}; {n} rows x {m} columns)')"
+
     def __str__(self):
         alignment_text = super().__str__()
         query = self.query
@@ -124,6 +130,19 @@ class HSP(Alignment):
         )
         target_strand = (
             "Plus" if self.coordinates[0, 0] <= self.coordinates[0, -1] else "Minus"
+        )
+        indent = " " * 8
+        query_description = textwrap.fill(
+            query.description,
+            width=80,
+            initial_indent=indent,
+            subsequent_indent=indent,
+        )
+        target_description = textwrap.fill(
+            target.description,
+            width=80,
+            initial_indent=indent,
+            subsequent_indent=indent,
         )
         evalue = self.annotations["evalue"]
         bitscore = self.annotations["bit score"]
@@ -158,9 +177,9 @@ class HSP(Alignment):
         counts_line = ",  ".join(terms)
         return """\
 Query : %s Length: %d Strand: %s
-        %s
+%s
 Target: %s Length: %d Strand: %s
-        %s
+%s
 
 Score:%d bits(%d), Expect:%.1g,
 %s
@@ -170,11 +189,11 @@ Score:%d bits(%d), Expect:%.1g,
             query.id,
             len(query),
             query_strand,
-            query.description,
+            query_description,
             target.id,
             len(target),
             target_strand,
-            target.description,
+            target_description,
             bitscore,
             score,
             evalue,
@@ -240,16 +259,27 @@ class Hit(Alignments):
         query = self[0].query
         qid_line = "Query: %s" % query.id
         lines.append(qid_line)
-        line = "       %s" % query.description
-        line = line[:77] + "..." if len(line) > 80 else line
-        lines.append(line)
+        indent = " " * 7
+        description_lines = textwrap.wrap(
+            query.description,
+            width=80,
+            initial_indent=indent,
+            subsequent_indent=indent,
+        )
+        lines.extend(description_lines)
 
         # set hit id line
-        hid_line = "  Hit: %s (%i)" % (self.target.id, len(self.target))
+        target = self.target
+        hid_line = "  Hit: %s (length=%i)" % (target.id, len(target))
         lines.append(hid_line)
-        line = "       %s" % self.target.description
-        line = line[:77] + "..." if len(line) > 80 else line
-        lines.append(line)
+        description_lines = textwrap.wrap(
+            target.description,
+            width=80,
+            initial_indent=indent,
+            subsequent_indent=indent,
+        )
+        lines.extend(description_lines)
+
         # set hsp line and table
         lines.append(
             " HSPs: %s  %s  %s  %s  %s  %s"
@@ -412,10 +442,36 @@ class Record(list):
         """Initialize the Record object."""
         self.query = None
 
+    def __repr__(self):
+        query = self.query
+        try:
+            query_id = f"'{query.id}'"
+        except AttributeError:
+            query_id = "unknown"
+        nhits = len(self)
+        if nhits == 0:
+            return f"Record(query.id={query_id}, no hits)"
+        elif nhits == 1:
+            return f"Record(query.id={query_id}, 1 hit)"
+        else:
+            return f"Record(query.id={query_id}, {nhits} hits)"
+
     def __str__(self):
-        lines = [""]
-        # self.query may be None with legacy Blast if there are no hits
+        lines = []
+        try:
+            version = self.version
+        except AttributeError:
+            pass
+        else:
+            lines.append(f"Program: {version}")
+        try:
+            db = self.db
+        except AttributeError:
+            pass
+        else:
+            lines.append(f"     db: {db}")
         if self.query is not None:
+            # self.query may be None with legacy Blast if there are no hits
             lines.append("  Query: %s (length=%d)" % (self.query.id, len(self.query)))
             indent = " " * 9
             description_lines = textwrap.wrap(
@@ -426,7 +482,7 @@ class Record(list):
             )
             lines.extend(description_lines)
         if len(self) == 0:
-            lines.append("   Hits: 0")
+            lines.append("   Hits: No hits found")
         else:
             lines.append("   Hits: %s  %s  %s" % ("-" * 4, "-" * 5, "-" * 58))
             pattern = "%13s  %5s  %s"
@@ -446,11 +502,13 @@ class Record(list):
                     lines.append(pattern % (idx, len(hit), hid_line))
                 elif idx == 30:
                     lines.append("%14s" % "~~~")
-        return "\n".join(lines) + "\n"
+        return "\n".join(lines)
 
     def __getitem__(self, key):
         try:
             value = super().__getitem__(key)
+        except IndexError:
+            raise IndexError(key) from None
         except TypeError:
             if not isinstance(key, str):
                 raise TypeError("key must be an integer, slice, or str") from None
@@ -470,6 +528,24 @@ class Record(list):
                     pass
                 else:
                     record.query = query
+                # The following keys may be present if the record was created
+                # by Blast.read:
+                keys = (
+                    "source",
+                    "program",
+                    "version",
+                    "reference",
+                    "db",
+                    "param",
+                    "mbstat",
+                )
+                for key in keys:
+                    try:
+                        value = getattr(self, key)
+                    except AttributeError:
+                        pass
+                    else:
+                        setattr(record, key, value)
                 return record
             return value
 
@@ -769,14 +845,13 @@ class Records(UserList):
     def __str__(self):
         text = """\
 Program: %s
-     db: %s
-""" % (
+     db: %s""" % (
             self.version,
             self.db,
         )
         records = self[:]  # to ensure that the records are read in
         for record in self._records:
-            text += str(record)
+            text += "\n\n" + str(record)
         return text
 
 
@@ -850,6 +925,13 @@ def read(source):
             raise ValueError("BLAST output for more than one query found.")
         except StopIteration:
             pass
+    for key in ("source", "program", "version", "reference", "db", "param", "mbstat"):
+        try:
+            value = getattr(records, key)
+        except AttributeError:
+            pass
+        else:
+            setattr(record, key, value)
     return record
 
 

@@ -647,7 +647,6 @@ You can ``print`` the records to get a quick overview of their contents:
               97      1  gi|356517317|ref|XM_003527287.1|  PREDICTED: Glycine ma...
               98      1  gi|297814701|ref|XM_002875188.1|  Arabidopsis lyrata su...
               99      1  gi|397513516|ref|XM_003827011.1|  PREDICTED: Pan panisc...
-   <BLANKLINE>
 
 Usually, you’ll be running one BLAST search at a time. Then, all you
 need to do is to pick up the first (and only) BLAST record in
@@ -781,8 +780,6 @@ A ``Bio.Blast.Record`` object stores the information provided by BLAST for a
 single query. The ``Bio.Blast.Record`` class inherits from ``list``, and is
 essentially a list of ``Bio.Blast.Hit`` objects (see section
 :ref:`subsec:blast-hit`).
-The ``Bio.Blast.Record`` class provides list- and dictionary-like access to the
-hits it contains (see section :ref:`subsec:blast-hit-access`).
 A ``Bio.Blast.Record`` object has the following two attributes:
 
 -  ``query``: A ``SeqRecord`` object which may contain some or all of
@@ -824,6 +821,136 @@ Continuing with our example,
    >>> blast_record.stat
    {'db-num': 3056429, 'db-len': 673143725, 'hsp-len': 0, 'eff-space': 0.0, 'kappa': 0.41, 'lambda': 0.625, 'entropy': 0.78}
 
+As the ``Bio.Blast.Record`` class inherits from ``list``, you can use it as
+such. For example, you can iterate over the record:
+
+.. cont-doctest
+
+.. code:: pycon
+
+   >>> for hit in blast_record:  # doctest:+ELLIPSIS
+   ...     hit
+   ...
+   Hit(target.id='gi|262205317|ref|NR_030195.1|', query.id='42291', 1 HSP)
+   Hit(target.id='gi|301171311|ref|NR_035856.1|', query.id='42291', 1 HSP)
+   Hit(target.id='gi|270133242|ref|NR_032573.1|', query.id='42291', 1 HSP)
+   Hit(target.id='gi|301171322|ref|NR_035857.1|', query.id='42291', 2 HSPs)
+   Hit(target.id='gi|301171267|ref|NR_035851.1|', query.id='42291', 1 HSP)
+   ...
+
+To check how many hits the ``blast_record`` has, you can simply invoke Python’s
+``len`` function:
+
+.. cont-doctest
+
+.. code:: pycon
+
+   >>> len(blast_record)
+   100
+
+Like Python lists, you can retrieve hits from a ``Bio.Blast.Record`` using
+indices:
+
+.. cont-doctest
+
+.. code:: pycon
+
+   >>> blast_record[0]  # retrieves the top hit
+   Hit(target.id='gi|262205317|ref|NR_030195.1|', query.id='42291', 1 HSP)
+   >>> blast_record[-1]  # retrieves the last hit
+   Hit(target.id='gi|397513516|ref|XM_003827011.1|', query.id='42291', 1 HSP)
+
+To retrieve multiple hits from a ``Bio.Blast.Record``, you can use the slice
+notation. This will return a new ``Bio.Blast.Record`` object containing only
+the sliced hits:
+
+.. cont-doctest
+
+.. code:: pycon
+
+   >>> blast_slice = blast_record[:3]  # slices the first three hits
+   >>> print(blast_slice)
+     Query: 42291 (length=61)
+            mystery_seq
+      Hits: ----  -----  ----------------------------------------------------------
+               #  # HSP  ID + description
+            ----  -----  ----------------------------------------------------------
+               0      1  gi|262205317|ref|NR_030195.1|  Homo sapiens microRNA 52...
+               1      1  gi|301171311|ref|NR_035856.1|  Pan troglodytes microRNA...
+               2      1  gi|270133242|ref|NR_032573.1|  Macaca mulatta microRNA ...
+
+To create a copy of the ``Bio.Blast.Record``, take the full slice:
+
+.. cont-doctest
+
+.. code:: pycon
+
+   >>> blast_record_copy = blast_record[:]
+   >>> type(blast_record_copy)
+   <class 'Bio.Blast.Record'>
+   >>> blast_record_copy  # list of all hits
+   Record(query.id='42291', 100 hits)
+
+This is particularly useful if you want to sort or filter the BLAST record
+(see :ref:`subsec:blast-sorting-filtering`), but want to retain a copy of the original BLAST output.
+
+You can also access ``blast_record`` as a Python dictionary and retrieve hits
+using the hit’s ID as key:
+
+.. cont-doctest
+
+.. code:: pycon
+
+   >>> blast_record["gi|262205317|ref|NR_030195.1|"]
+   Hit(target.id='gi|262205317|ref|NR_030195.1|', query.id='42291', 1 HSP)
+
+If the ID is not found in the ``blast_record``, a ``KeyError`` is raised:
+
+.. cont-doctest
+
+.. code:: pycon
+
+   >>> blast_record["unicorn_gene"]
+   Traceback (most recent call last):
+   ...
+   KeyError: 'unicorn_gene'
+
+
+You can get the full list of keys by using ``.keys()`` as usual:
+
+.. cont-doctest
+
+.. code:: pycon
+
+   >>> blast_record.keys()  # doctest:+ELLIPSIS
+   ['gi|262205317|ref|NR_030195.1|', 'gi|301171311|ref|NR_035856.1|', 'gi|270133242|ref|NR_032573.1|', ...]
+
+What if you just want to check whether a particular hit is present in the query
+results? You can do a simple Python membership test using the ``in`` keyword:
+
+.. cont-doctest
+
+.. code:: pycon
+
+   >>> "gi|262205317|ref|NR_030195.1|" in blast_record
+   True
+   >>> "gi|262205317|ref|NR_030194.1|" in blast_record
+   False
+
+Sometimes, knowing whether a hit is present is not enough; you also want to
+know the rank of the hit. Here, the ``index`` method comes to the rescue:
+
+.. cont-doctest
+
+.. code:: pycon
+
+   >>> blast_record.index("gi|301171437|ref|NR_035870.1|")
+   22
+
+Remember that Python uses zero-based indexing, so the first hit will be at
+index 0.
+
+
 .. _`subsec:blast-hit`:
 
 The BLAST Hit class
@@ -849,7 +976,7 @@ We can get a summary of the ``hit`` by printing it:
    >>> print(blast_record[3])
    Query: 42291
           mystery_seq
-     Hit: gi|301171322|ref|NR_035857.1| (86)
+     Hit: gi|301171322|ref|NR_035857.1| (length=86)
           Pan troglodytes microRNA mir-520c (MIR520C), microRNA
     HSPs: ----  --------  ---------  ------  ---------------  ---------------------
              #   E-value  Bit score    Span      Query range              Hit range
@@ -1010,141 +1137,10 @@ greater than a particular threshold:
    42291             0 CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTC 50
    ...
 
-.. _`subsec:blast-hit-access`:
+.. _`subsec:blast-sorting-filtering`:
 
-List- and dictionary-like access to BLAST hits
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-As the ``Bio.Blast.Record`` class inherits from ``list``, you can use it as
-such. For example, you can iterate over the record:
-
-.. cont-doctest
-
-.. code:: pycon
-
-   >>> for hit in blast_record:  # doctest:+ELLIPSIS
-   ...     hit
-   ...
-   Hit(target.id='gi|262205317|ref|NR_030195.1|', query.id='42291', 1 HSP)
-   Hit(target.id='gi|301171311|ref|NR_035856.1|', query.id='42291', 1 HSP)
-   Hit(target.id='gi|270133242|ref|NR_032573.1|', query.id='42291', 1 HSP)
-   Hit(target.id='gi|301171322|ref|NR_035857.1|', query.id='42291', 2 HSPs)
-   Hit(target.id='gi|301171267|ref|NR_035851.1|', query.id='42291', 1 HSP)
-   ...
-
-To check how many hits the ``blast_record`` has, you can simply invoke Python’s
-``len`` function:
-
-.. cont-doctest
-
-.. code:: pycon
-
-   >>> len(blast_record)
-   100
-
-Like Python lists, you can retrieve hits from a ``Bio.Blast.Record`` using
-indices:
-
-.. cont-doctest
-
-.. code:: pycon
-
-   >>> blast_record[0]  # retrieves the top hit
-   Hit(target.id='gi|262205317|ref|NR_030195.1|', query.id='42291', 1 HSP)
-   >>> blast_record[-1]  # retrieves the last hit
-   Hit(target.id='gi|397513516|ref|XM_003827011.1|', query.id='42291', 1 HSP)
-
-To retrieve multiple hits from a ``Bio.Blast.Record``, you can use the slice
-notation. This will return a new ``Bio.Blast.Record`` object containing only
-the sliced hits:
-
-.. cont-doctest
-
-.. code:: pycon
-
-   >>> blast_slice = blast_record[:3]  # slices the first three hits
-   >>> print(blast_slice)
-   <BLANKLINE>
-     Query: 42291 (length=61)
-            mystery_seq
-      Hits: ----  -----  ----------------------------------------------------------
-               #  # HSP  ID + description
-            ----  -----  ----------------------------------------------------------
-               0      1  gi|262205317|ref|NR_030195.1|  Homo sapiens microRNA 52...
-               1      1  gi|301171311|ref|NR_035856.1|  Pan troglodytes microRNA...
-               2      1  gi|270133242|ref|NR_032573.1|  Macaca mulatta microRNA ...
-   <BLANKLINE>
-
-To create a copy of the ``Bio.Blast.Record``, take the full slice:
-
-.. cont-doctest
-
-.. code:: pycon
-
-   >>> blast_record_copy = blast_record[:]
-   >>> type(blast_record_copy)
-   <class 'Bio.Blast.Record'>
-   >>> blast_record_copy  # list of all hits  # doctest:+ELLIPSIS
-   [...]
-
-This is particularly useful if you want to sort or filter the BLAST record
-(see below), but want to retain a copy of the original BLAST output.
-
-You can also access ``blast_record`` as a Python dictionary and retrieve hits
-using the hit’s ID as key:
-
-.. cont-doctest
-
-.. code:: pycon
-
-   >>> blast_record["gi|262205317|ref|NR_030195.1|"]
-   Hit(target.id='gi|262205317|ref|NR_030195.1|', query.id='42291', 1 HSP)
-
-If the ID is not found in the ``blast_record``, a ``KeyError`` is raised:
-
-.. cont-doctest
-
-.. code:: pycon
-
-   >>> blast_record["unicorn_gene"]
-   Traceback (most recent call last):
-   ...
-   KeyError: 'unicorn_gene'
-
-
-You can get the full list of keys by using ``.keys()`` as usual:
-
-.. cont-doctest
-
-.. code:: pycon
-
-   >>> blast_record.keys()  # doctest:+ELLIPSIS
-   ['gi|262205317|ref|NR_030195.1|', 'gi|301171311|ref|NR_035856.1|', 'gi|270133242|ref|NR_032573.1|', ...]
-
-What if you just want to check whether a particular hit is present in the query
-results? You can do a simple Python membership test using the ``in`` keyword:
-
-.. cont-doctest
-
-.. code:: pycon
-
-   >>> "gi|262205317|ref|NR_030195.1|" in blast_record
-   True
-   >>> "gi|262205317|ref|NR_030194.1|" in blast_record
-   False
-
-Sometimes, knowing whether a hit is present is not enough; you also want to
-know the rank of the hit. Here, the ``index`` method comes to the rescue:
-
-.. cont-doctest
-
-.. code:: pycon
-
-   >>> blast_record.index("gi|301171437|ref|NR_035870.1|")
-   22
-
-Remember that Python uses zero-based indexing, so the first hit will be at
-index 0.
+Sorting and filtering BLAST output
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If the ordering of hits in the BLAST output file doesn’t suit your taste, you
 can use the ``sort`` method to resort the hits in the ``Bio.Blast.Record``
