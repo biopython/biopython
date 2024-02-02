@@ -9,6 +9,7 @@ import unittest
 
 import numpy as np
 
+from Bio import StreamModeError
 from Bio import Blast
 from Bio.SeqRecord import SeqRecord
 
@@ -39,6 +40,9 @@ class TestBlastp(unittest.TestCase):
         self.assertEqual(records.param["filter"], "m L; R -d repeat/repeat_9606;")
 
     def check_xml_2218_blastp_002_record_0(self, record):
+        self.assertEqual(
+            repr(record), "Record(query.id='gi|585505|sp|Q08386|MOPB_RHOCA', no hits)"
+        )
         self.assertIsInstance(record.query, SeqRecord)
         self.assertEqual(record.query.id, "gi|585505|sp|Q08386|MOPB_RHOCA")
         self.assertEqual(
@@ -82,6 +86,21 @@ class TestBlastp(unittest.TestCase):
             self.check_xml_2218_blastp_002_record_0(record)
             record = next(records)
             self.check_xml_2218_blastp_002_record_1(record)
+        with open(datafile, "rb") as handle:
+            records = Blast.parse(handle)
+            records = records[:]
+            self.check_xml_2218_blastp_002_header(records)
+            record = next(records)
+            self.check_xml_2218_blastp_002_record_0(record)
+            record = next(records)
+            self.check_xml_2218_blastp_002_record_1(record)
+            self.assertRaises(StopIteration, next, records)
+        with open(datafile) as stream:
+            with self.assertRaises(StreamModeError) as cm:
+                Blast.parse(stream)
+            self.assertEqual(
+                str(cm.exception), "BLAST output files must be opened in binary mode."
+            )
 
     def test_xml_2218_blastp_002_list(self):
         """Parsing BLASTP 2.2.18+ (xml_2218_blastp_002.xml) as a list."""
@@ -325,6 +344,10 @@ Program: BLASTP 2.2.26+
             "MKK    LFFILLL+GCGV ++KSQGED      + TKEGTYVGLADTHTIEVTVD+EPVS DITEES  D+   N+G+KVT+ Y+KN +GQL+LKDIE AN",
         )
         self.assertEqual(
+            repr(hsp),
+            "HSP(target.id='gnl|BL_ORD_ID|1', query.id='Query_1; 2 rows x 102 columns)')",
+        )
+        self.assertEqual(
             str(hsp),
             """\
 Query : Query_1 Length: 102 Strand: Plus
@@ -398,6 +421,10 @@ Query_1          60 SLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERAN 102
         self.assertEqual(
             hsp.annotations["midline"],
             "MKK IA  F ILL    L+ CG   Q  +G   S ++  + +   YVG+ADTHTIEV VD++PVS + +++ +  L+KF+  DKV+ITY  ND+GQ  +K+IE+A",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "HSP(target.id='gnl|BL_ORD_ID|2', query.id='Query_1; 2 rows x 105 columns)')",
         )
         self.assertEqual(
             str(hsp),
@@ -475,6 +502,10 @@ Query_1          56 NEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERA 101
             "MKK IA  F ILL    L+ CG   Q  +G   S ++  + +   YVG+ADTHTIEV VD++PVS + +++ +  L+KF+  DKV+ITY  ND+GQ  +K+IE+A",
         )
         self.assertEqual(
+            repr(hsp),
+            "HSP(target.id='gnl|BL_ORD_ID|3', query.id='Query_1; 2 rows x 105 columns)')",
+        )
+        self.assertEqual(
             str(hsp),
             """\
 Query : Query_1 Length: 102 Strand: Plus
@@ -549,6 +580,10 @@ Query_1          56 NEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERA 101
             "MKK +A  F ILL    L+ CG   Q  +G + S  S ++ +   YVG+ADTHTIEV +D++PVS + T++ +  L++F   DKV I+Y  ND+GQ  L +IE+",
         )
         self.assertEqual(
+            repr(hsp),
+            "HSP(target.id='gnl|BL_ORD_ID|4', query.id='Query_1; 2 rows x 104 columns)')",
+        )
+        self.assertEqual(
             str(hsp),
             """\
 Query : Query_1 Length: 102 Strand: Plus
@@ -619,6 +654,10 @@ Query_1          56 NEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIER 100
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(hsp.annotations["midline"], "V +       + L+   SGD  T+T")
         self.assertEqual(
+            repr(hsp),
+            "HSP(target.id='gnl|BL_ORD_ID|15', query.id='Query_1; 2 rows x 25 columns)')",
+        )
+        self.assertEqual(
             str(hsp),
             """\
 Query : Query_1 Length: 102 Strand: Plus
@@ -636,6 +675,37 @@ gnl|BL_OR        79 VEMGFLHVGQAGLELVTSGDPPTLT 104
 Query_1          59 VSLDITEESTSDLDKFNSGDKVTIT  84
 
 """,
+        )
+        with self.assertRaises(IndexError) as cm:
+            record[5]
+        self.assertEqual(str(cm.exception), "index out of range")
+        with self.assertRaises(TypeError) as cm:
+            record[None]
+        self.assertEqual(str(cm.exception), "key must be an integer, slice, or str")
+        with self.assertRaises(KeyError) as cm:
+            record["weird_key"]
+        self.assertEqual(str(cm.exception), "'weird_key'")
+        target_id = "gnl|BL_ORD_ID|4"
+        self.assertIn(target_id, record)
+        self.assertNotIn("weird_id", record)
+        self.assertEqual(record[target_id].target.id, target_id)
+        self.assertEqual(record.index(target_id), 3)
+        with self.assertRaises(ValueError) as cm:
+            record.index("weird_id")
+        self.assertEqual(str(cm.exception), "'weird_id' not found")
+        self.assertEqual(
+            repr(hit), "Hit(target.id='gnl|BL_ORD_ID|15', query.id='Query_1', 1 HSP)"
+        )
+        self.assertEqual(repr(hit[:0]), "Hit(target.id='gnl|BL_ORD_ID|15', no hits)")
+        self.assertEqual(
+            record.keys(),
+            [
+                "gnl|BL_ORD_ID|1",
+                "gnl|BL_ORD_ID|2",
+                "gnl|BL_ORD_ID|3",
+                "gnl|BL_ORD_ID|4",
+                "gnl|BL_ORD_ID|15",
+            ],
         )
 
     def test_xml_2218L_rpsblast_001(self):
@@ -677,6 +747,7 @@ Query_1          59 VSLDITEESTSDLDKFNSGDKVTIT  84
         self.assertAlmostEqual(record.stat["kappa"], 0.041)
         self.assertAlmostEqual(record.stat["lambda"], 0.267)
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
+        self.assertEqual(repr(record), "Record(query.id=unknown, 11 hits)")
         self.assertEqual(len(record), 11)
         hit = record[0]
         self.assertIsInstance(hit.target, SeqRecord)
@@ -5627,6 +5698,16 @@ G26684.1        228
         self.check_megablast_legacy_record(record)
         record = Blast.read(datafile)
         self.check_megablast_legacy_record(record)
+        self.assertEqual(
+            str(record[1::2]),
+            """\
+Program: megablast 2.2.26 [Sep-21-2011]
+     db: m_cold.fasta
+  Query: lcl|1_ (length=1111)
+         gi|8332116|gb|BE037100.1|BE037100 MP14H09 MP Mesembryanthemum
+         crystallinum cDNA 5' similar to cold acclimation protein, mRNA sequence
+   Hits: No hits found""",
+        )
 
     def check_megablast_legacy_records(self, records):
         self.assertEqual(records.program, "megablast")
@@ -5671,6 +5752,7 @@ G26684.1        228
             "gi|8332116|gb|BE037100.1|BE037100 MP14H09 MP Mesembryanthemum crystallinum cDNA 5' similar to cold acclimation protein, mRNA sequence",
         )
         self.assertEqual(repr(record.query.seq), "Seq(None, length=1111)")
+        self.assertEqual(repr(record), "Record(query.id='lcl|1_', 1 hit)")
         self.assertEqual(len(record), 1)
         hit = record[0]
         self.assertIsInstance(hit.target, SeqRecord)
@@ -12902,6 +12984,10 @@ Query_2          60 FRFGR 65
         )
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=4938)")
         self.assertEqual(len(hit), 4)
+        self.assertEqual(
+            repr(hit),
+            "Hit(target.id='gi|366988334|ref|XM_003673886.1|', query.id='Query_2', 4 HSPs)",
+        )
         hsp = hit[0]
         self.assertAlmostEqual(hsp.score, 306.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 143.112)
@@ -13217,6 +13303,25 @@ gi|254579        60 INAMFPKIGHSAMYTGR*TLRRT*CVYRGQPAGNGYKTK 99
 Query_2          60 GNAMPTGTVNRSIYSSKPAV*NFGCLH*GYSSRDGDSIK 99
 
 """,
+        )
+        hit = record[0]
+        hsps = hit[1:5:2]
+        self.maxDiff = None
+        self.assertEqual(
+            str(hsps),
+            """\
+Query: Query_2
+       gi|296147483:1-350 Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA,
+       complete cds
+  Hit: gi|296147483|ref|NM_001183135.1| (length=4911)
+       Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds
+       >gi|116616412|gb|EF059095.1| Synthetic construct Saccharomyces cerevisiae
+       clone FLH203015.01X MON2, complete sequence
+ HSPs: ----  --------  ---------  ------  ---------------  ---------------------
+          #   E-value  Bit score    Span      Query range              Hit range
+       ----  --------  ---------  ------  ---------------  ---------------------
+          0   2.2e-73     278.74     116          [0:116]                [0:116]
+          1     9e-71     270.04     116          [0:116]                [0:116]""",
         )
 
 

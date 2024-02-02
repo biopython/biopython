@@ -508,7 +508,7 @@ class Record(list):
         try:
             value = super().__getitem__(key)
         except IndexError:
-            raise IndexError(key) from None
+            raise IndexError("index out of range") from None
         except TypeError:
             if not isinstance(key, str):
                 raise TypeError("key must be an integer, slice, or str") from None
