@@ -17,7 +17,10 @@ class TestCellosaurus(unittest.TestCase):
             record = cellosaurus.read(handle)
         self.assertEqual(record["ID"], "#15310-LN")
         self.assertEqual(record["AC"], "CVCL_E548")
-        self.assertEqual(record["SY"], "15310-LN; TER461; TER-461; Ter 461; TER479; TER-479; Ter 479; Extract 519")
+        self.assertEqual(
+            record["SY"],
+            "15310-LN; TER461; TER-461; Ter 461; TER479; TER-479; Ter 479; Extract 519",
+        )
         self.assertEqual(record["DR"][0], ("dbMHC", "48439"))
         self.assertEqual(record["DR"][1], ("ECACC", "94050311"))
         self.assertEqual(record["DR"][2], ("IHW", "IHW09326"))
@@ -34,29 +37,28 @@ class TestCellosaurus(unittest.TestCase):
             "Part of: 12th International Histocompatibility Workshop (12IHW) "
             "cell line panel.",
         )
-        self.assertEqual(
-            record["CC"][1],
-            "Population: Caucasian; French Canadian."
-        )
+        self.assertEqual(record["CC"][1], "Population: Caucasian; French Canadian.")
         self.assertEqual(
             record["CC"][2],
             "HLA typing: A*03,25; B*37:01:01:01,47:01:01:03; C*06; DPA1*01; DPB1*04:01:01; DQA1*01:01:01:01,"
-            "01:03:01; DQB1*05:01:01;06:03:01:02; DRB1*01:01:01,14:17; DRB3*01:01 (IPD-IMGT/HLA=10074)."
+            "01:03:01; DQB1*05:01:01;06:03:01:02; DRB1*01:01:01,14:17; DRB3*01:01 (IPD-IMGT/HLA=10074).",
         )
-        self.assertEqual(record["CC"][3], "Transformant: NCBI_TaxID; 10376; Epstein-Barr virus (EBV).")
+        self.assertEqual(
+            record["CC"][3],
+            "Transformant: NCBI_TaxID; 10376; Epstein-Barr virus (EBV).",
+        )
         self.assertEqual(
             record["CC"][4],
-            "Derived from site: In situ; Peripheral blood; UBERON=UBERON_0000178."
+            "Derived from site: In situ; Peripheral blood; UBERON=UBERON_0000178.",
         )
-        self.assertEqual(
-            record["CC"][5],
-            "Cell type: B-cell; CL=CL_0000236."
-        )
+        self.assertEqual(record["CC"][5], "Cell type: B-cell; CL=CL_0000236.")
         self.assertEqual(record["OX"][0], "NCBI_TaxID=9606; ! Homo sapiens (Human)")
         self.assertEqual(record["SX"], "Female")
         self.assertEqual(record["AG"], "Age unspecified")
         self.assertEqual(record["CA"], "Transformed cell line")
-        self.assertEqual(record["DT"], "Created: 22-10-12; Last updated: 30-01-24; Version: 18")
+        self.assertEqual(
+            record["DT"], "Created: 22-10-12; Last updated: 30-01-24; Version: 18"
+        )
 
     def test_parse(self):
         """Test parsing function."""
@@ -66,7 +68,9 @@ class TestCellosaurus(unittest.TestCase):
             self.assertEqual(record["ID"], "XP3OS")
             self.assertEqual(record["AC"], "CVCL_3245")
             self.assertEqual(record["AS"], "CVCL_F511")
-            self.assertEqual(record["SY"], "Xeroderma Pigmentosum 3 OSaka; GM04314; GM04314B; GM4314")
+            self.assertEqual(
+                record["SY"], "Xeroderma Pigmentosum 3 OSaka; GM04314; GM04314B; GM4314"
+            )
             self.assertEqual(record["DR"][0], ("CLO", "CLO_0019557"))
             self.assertEqual(record["DR"][1], ("Coriell", "GM04314"))
             self.assertEqual(record["DR"][2], ("GEO", "GSM1338611"))
@@ -115,7 +119,9 @@ class TestCellosaurus(unittest.TestCase):
             self.assertEqual(record["SX"], "Female")
             self.assertEqual(record["AG"], "5Y")
             self.assertEqual(record["CA"], "Finite cell line")
-            self.assertEqual(record["DT"], "Created: 04-04-12; Last updated: 29-06-23; Version: 20")
+            self.assertEqual(
+                record["DT"], "Created: 04-04-12; Last updated: 29-06-23; Version: 20"
+            )
 
             record = next(records)
             self.assertEqual(record["ID"], "1-5c-4")
@@ -151,7 +157,10 @@ class TestCellosaurus(unittest.TestCase):
                 "Problematic cell line: Contaminated. Shown to be a HeLa derivative (PubMed=566722; PubMed=20143388). "
                 "Originally thought to originate from the conjunctiva of a child.",
             )
-            self.assertEqual(record["CC"][1], "Registration: International Cell Line Authentication Committee, Register of Misidentified Cell Lines; ICLAC-00298.")
+            self.assertEqual(
+                record["CC"][1],
+                "Registration: International Cell Line Authentication Committee, Register of Misidentified Cell Lines; ICLAC-00298.",
+            )
             self.assertEqual(record["ST"][0], "Source(s): ATCC; KCLB")
             self.assertEqual(record["ST"][1], "Amelogenin: X")
             self.assertEqual(record["ST"][2], "CSF1PO: 9,10")
@@ -164,13 +173,18 @@ class TestCellosaurus(unittest.TestCase):
             self.assertEqual(record["ST"][9], "TH01: 7")
             self.assertEqual(record["ST"][10], "TPOX: 8,12")
             self.assertEqual(record["ST"][11], "vWA: 16,18")
-            self.assertEqual(record["DI"][0], "NCIt; C27677; Human papillomavirus-related cervical adenocarcinoma")
+            self.assertEqual(
+                record["DI"][0],
+                "NCIt; C27677; Human papillomavirus-related cervical adenocarcinoma",
+            )
             self.assertEqual(record["OX"][0], "NCBI_TaxID=9606; ! Homo sapiens (Human)")
             self.assertEqual(record["HI"][0], "CVCL_0030 ! HeLa")
             self.assertEqual(record["SX"], "Female")
             self.assertEqual(record["AG"], "30Y6M")
             self.assertEqual(record["CA"], "Cancer cell line")
-            self.assertEqual(record["DT"], "Created: 04-04-12; Last updated: 05-10-23; Version: 25")
+            self.assertEqual(
+                record["DT"], "Created: 04-04-12; Last updated: 05-10-23; Version: 25"
+            )
             self.assertRaises(StopIteration, next, records)
 
     def test__str__(self):
