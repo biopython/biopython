@@ -758,6 +758,8 @@ For our example, we find:
 
 .. code:: pycon
 
+   >>> blast_records
+   <Bio.Blast.Records source='my_blast.xml' program='blastn' version='BLASTN 2.2.27+' db='refseq_rna'>
    >>> blast_records.source
    'my_blast.xml'
    >>> blast_records.program
@@ -770,6 +772,21 @@ For our example, we find:
    'refseq_rna'
    >>> blast_records.param
    {'expect': 10.0, 'sc-match': 2, 'sc-mismatch': -3, 'gap-open': 5, 'gap-extend': 2, 'filter': 'L;m;'}
+   >>> print(blast_records)  # doctest:+ELLIPSIS
+   Program: BLASTN 2.2.27+
+        db: refseq_rna
+   <BLANKLINE>
+     Query: 42291 (length=61)
+            mystery_seq
+      Hits: ----  -----  ----------------------------------------------------------
+               #  # HSP  ID + description
+            ----  -----  ----------------------------------------------------------
+               0      1  gi|262205317|ref|NR_030195.1|  Homo sapiens microRNA 52...
+               1      1  gi|301171311|ref|NR_035856.1|  Pan troglodytes microRNA...
+               2      1  gi|270133242|ref|NR_032573.1|  Macaca mulatta microRNA ...
+               3      2  gi|301171322|ref|NR_035857.1|  Pan troglodytes microRNA...
+   ...
+
 
 .. _`subsec:blast-record`:
 
@@ -822,6 +839,18 @@ Continuing with our example,
    SeqRecord(seq=Seq(None, length=61), id='42291', name='<unknown name>', description='mystery_seq', dbxrefs=[])
    >>> blast_record.stat
    {'db-num': 3056429, 'db-len': 673143725, 'hsp-len': 0, 'eff-space': 0.0, 'kappa': 0.41, 'lambda': 0.625, 'entropy': 0.78}
+   >>> print(blast_record)  # doctest:+ELLIPSIS
+     Query: 42291 (length=61)
+            mystery_seq
+      Hits: ----  -----  ----------------------------------------------------------
+               #  # HSP  ID + description
+            ----  -----  ----------------------------------------------------------
+               0      1  gi|262205317|ref|NR_030195.1|  Homo sapiens microRNA 52...
+               1      1  gi|301171311|ref|NR_035856.1|  Pan troglodytes microRNA...
+               2      1  gi|270133242|ref|NR_032573.1|  Macaca mulatta microRNA ...
+               3      2  gi|301171322|ref|NR_035857.1|  Pan troglodytes microRNA...
+   ...
+
 
 As the ``Bio.Blast.Record`` class inherits from ``list``, you can use it as
 such. For example, you can iterate over the record:
@@ -1024,14 +1053,6 @@ alignment, especially for alignments of highly homologous sequences.
    True
    >>> len(hit)
    1
-   >>> alignment = hit[0]
-   >>> alignment
-   <Bio.Blast.HSP target.id='gi|262205317|ref|NR_030195.1|' query.id='42291'; 2 rows x 61 columns>
-   >>> type(alignment)
-   <class 'Bio.Blast.HSP'>
-   >>> from Bio.Align import Alignment
-   >>> isinstance(alignment, Alignment)
-   True
 
 .. _`subsec:blast-hsp`:
 
@@ -1074,6 +1095,14 @@ applied to the ``alignment``. For example, we can print the alignment:
 
 .. code:: pycon
 
+   >>> alignment = hit[0]
+   >>> alignment
+   <Bio.Blast.HSP target.id='gi|262205317|ref|NR_030195.1|' query.id='42291'; 2 rows x 61 columns>
+   >>> type(alignment)
+   <class 'Bio.Blast.HSP'>
+   >>> from Bio.Align import Alignment
+   >>> isinstance(alignment, Alignment)
+   True
    >>> alignment.target
    SeqRecord(seq=Seq('CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTT...GGG'), id='gi|262205317|ref|NR_030195.1|', name='NR_030195', description='Homo sapiens microRNA 520b (MIR520B), microRNA', dbxrefs=[])
    >>> alignment.query
