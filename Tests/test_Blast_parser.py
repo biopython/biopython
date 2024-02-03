@@ -41,7 +41,8 @@ class TestBlastp(unittest.TestCase):
 
     def check_xml_2218_blastp_002_record_0(self, record):
         self.assertEqual(
-            repr(record), "Record(query.id='gi|585505|sp|Q08386|MOPB_RHOCA', no hits)"
+            repr(record),
+            "<Bio.Blast.Record query.id='gi|585505|sp|Q08386|MOPB_RHOCA'; no hits>",
         )
         self.assertIsInstance(record.query, SeqRecord)
         self.assertEqual(record.query.id, "gi|585505|sp|Q08386|MOPB_RHOCA")
@@ -345,7 +346,7 @@ Program: BLASTP 2.2.26+
         )
         self.assertEqual(
             repr(hsp),
-            "HSP(target.id='gnl|BL_ORD_ID|1', query.id='Query_1; 2 rows x 102 columns)')",
+            "<Bio.Blast.HSP target.id='gnl|BL_ORD_ID|1' query.id='Query_1'; 2 rows x 102 columns>",
         )
         self.assertEqual(
             str(hsp),
@@ -424,7 +425,7 @@ Query_1          60 SLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERAN 102
         )
         self.assertEqual(
             repr(hsp),
-            "HSP(target.id='gnl|BL_ORD_ID|2', query.id='Query_1; 2 rows x 105 columns)')",
+            "<Bio.Blast.HSP target.id='gnl|BL_ORD_ID|2' query.id='Query_1'; 2 rows x 105 columns>",
         )
         self.assertEqual(
             str(hsp),
@@ -503,7 +504,7 @@ Query_1          56 NEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERA 101
         )
         self.assertEqual(
             repr(hsp),
-            "HSP(target.id='gnl|BL_ORD_ID|3', query.id='Query_1; 2 rows x 105 columns)')",
+            "<Bio.Blast.HSP target.id='gnl|BL_ORD_ID|3' query.id='Query_1'; 2 rows x 105 columns>",
         )
         self.assertEqual(
             str(hsp),
@@ -581,7 +582,7 @@ Query_1          56 NEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERA 101
         )
         self.assertEqual(
             repr(hsp),
-            "HSP(target.id='gnl|BL_ORD_ID|4', query.id='Query_1; 2 rows x 104 columns)')",
+            "<Bio.Blast.HSP target.id='gnl|BL_ORD_ID|4' query.id='Query_1'; 2 rows x 104 columns>",
         )
         self.assertEqual(
             str(hsp),
@@ -655,7 +656,7 @@ Query_1          56 NEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIER 100
         self.assertEqual(hsp.annotations["midline"], "V +       + L+   SGD  T+T")
         self.assertEqual(
             repr(hsp),
-            "HSP(target.id='gnl|BL_ORD_ID|15', query.id='Query_1; 2 rows x 25 columns)')",
+            "<Bio.Blast.HSP target.id='gnl|BL_ORD_ID|15' query.id='Query_1'; 2 rows x 25 columns>",
         )
         self.assertEqual(
             str(hsp),
@@ -694,9 +695,12 @@ Query_1          59 VSLDITEESTSDLDKFNSGDKVTIT  84
             record.index("weird_id")
         self.assertEqual(str(cm.exception), "'weird_id' not found")
         self.assertEqual(
-            repr(hit), "Hit(target.id='gnl|BL_ORD_ID|15', query.id='Query_1', 1 HSP)"
+            repr(hit),
+            "<Bio.Blast.Hit target.id='gnl|BL_ORD_ID|15' query.id='Query_1'; 1 HSP>",
         )
-        self.assertEqual(repr(hit[:0]), "Hit(target.id='gnl|BL_ORD_ID|15', no hits)")
+        self.assertEqual(
+            repr(hit[:0]), "<Bio.Blast.Hit target.id='gnl|BL_ORD_ID|15'; no hits>"
+        )
         self.assertEqual(
             record.keys(),
             [
@@ -747,7 +751,7 @@ Query_1          59 VSLDITEESTSDLDKFNSGDKVTIT  84
         self.assertAlmostEqual(record.stat["kappa"], 0.041)
         self.assertAlmostEqual(record.stat["lambda"], 0.267)
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
-        self.assertEqual(repr(record), "Record(query.id=unknown, 11 hits)")
+        self.assertEqual(repr(record), "<Bio.Blast.Record query.id='unknown'; 11 hits>")
         self.assertEqual(len(record), 11)
         hit = record[0]
         self.assertIsInstance(hit.target, SeqRecord)
@@ -5752,7 +5756,7 @@ Program: megablast 2.2.26 [Sep-21-2011]
             "gi|8332116|gb|BE037100.1|BE037100 MP14H09 MP Mesembryanthemum crystallinum cDNA 5' similar to cold acclimation protein, mRNA sequence",
         )
         self.assertEqual(repr(record.query.seq), "Seq(None, length=1111)")
-        self.assertEqual(repr(record), "Record(query.id='lcl|1_', 1 hit)")
+        self.assertEqual(repr(record), "<Bio.Blast.Record query.id='lcl|1_'; 1 hit>")
         self.assertEqual(len(record), 1)
         hit = record[0]
         self.assertIsInstance(hit.target, SeqRecord)
@@ -12986,7 +12990,7 @@ Query_2          60 FRFGR 65
         self.assertEqual(len(hit), 4)
         self.assertEqual(
             repr(hit),
-            "Hit(target.id='gi|366988334|ref|XM_003673886.1|', query.id='Query_2', 4 HSPs)",
+            "<Bio.Blast.Hit target.id='gi|366988334|ref|XM_003673886.1|' query.id='Query_2'; 4 HSPs>",
         )
         hsp = hit[0]
         self.assertAlmostEqual(hsp.score, 306.0)

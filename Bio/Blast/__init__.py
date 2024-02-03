@@ -119,7 +119,7 @@ class HSP(Alignment):
         query = self.query
         target = self.target
         n, m = self.shape
-        return f"HSP(target.id='{target.id}', query.id='{query.id}; {n} rows x {m} columns)')"
+        return f"<Bio.Blast.HSP target.id={target.id!r} query.id={query.id!r}; {n} rows x {m} columns>"
 
     def __str__(self):
         alignment_text = super().__str__()
@@ -242,14 +242,14 @@ class Hit(Alignments):
         try:
             alignment = self[0]
         except IndexError:
-            return f"Hit(target.id='{target.id}', no hits)"
+            return f"<Bio.Blast.Hit target.id={target.id!r}; no hits>"
         query = alignment.query
         nhsps = len(self)
         if nhsps == 1:
             unit = "HSP"
         else:  # nhsps > 1
             unit = "HSPs"
-        return f"Hit(target.id='{target.id}', query.id='{query.id}', {nhsps} {unit})"
+        return f"<Bio.Blast.Hit target.id={target.id!r} query.id={query.id!r}; {nhsps} {unit}>"
 
     def __str__(self):
         """Return a human readable summary of the Hit object."""
@@ -445,16 +445,16 @@ class Record(list):
     def __repr__(self):
         query = self.query
         try:
-            query_id = f"'{query.id}'"
+            query_id = query.id
         except AttributeError:
             query_id = "unknown"
         nhits = len(self)
         if nhits == 0:
-            return f"Record(query.id={query_id}, no hits)"
+            return f"<Bio.Blast.Record query.id={query_id!r}; no hits>"
         elif nhits == 1:
-            return f"Record(query.id={query_id}, 1 hit)"
+            return f"<Bio.Blast.Record query.id={query_id!r}; 1 hit>"
         else:
-            return f"Record(query.id={query_id}, {nhits} hits)"
+            return f"<Bio.Blast.Record query.id={query_id!r}; {nhits} hits>"
 
     def __str__(self):
         lines = []
@@ -841,6 +841,9 @@ class Records(UserList):
             self._loaded = True
             self._index = index
         return self._records
+
+    def __repr__(self):
+        return f"<Bio.Blast.Records source={self.source!r} program={self.program!r} version={self.version!r} db={self.db!r}>"
 
     def __str__(self):
         text = """\

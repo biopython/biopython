@@ -816,6 +816,8 @@ Continuing with our example,
 
 .. code:: pycon
 
+   >>> blast_record
+   <Bio.Blast.Record query.id='42291'; 100 hits>
    >>> blast_record.query
    SeqRecord(seq=Seq(None, length=61), id='42291', name='<unknown name>', description='mystery_seq', dbxrefs=[])
    >>> blast_record.stat
@@ -831,11 +833,11 @@ such. For example, you can iterate over the record:
    >>> for hit in blast_record:  # doctest:+ELLIPSIS
    ...     hit
    ...
-   Hit(target.id='gi|262205317|ref|NR_030195.1|', query.id='42291', 1 HSP)
-   Hit(target.id='gi|301171311|ref|NR_035856.1|', query.id='42291', 1 HSP)
-   Hit(target.id='gi|270133242|ref|NR_032573.1|', query.id='42291', 1 HSP)
-   Hit(target.id='gi|301171322|ref|NR_035857.1|', query.id='42291', 2 HSPs)
-   Hit(target.id='gi|301171267|ref|NR_035851.1|', query.id='42291', 1 HSP)
+   <Bio.Blast.Hit target.id='gi|262205317|ref|NR_030195.1|' query.id='42291'; 1 HSP>
+   <Bio.Blast.Hit target.id='gi|301171311|ref|NR_035856.1|' query.id='42291'; 1 HSP>
+   <Bio.Blast.Hit target.id='gi|270133242|ref|NR_032573.1|' query.id='42291'; 1 HSP>
+   <Bio.Blast.Hit target.id='gi|301171322|ref|NR_035857.1|' query.id='42291'; 2 HSPs>
+   <Bio.Blast.Hit target.id='gi|301171267|ref|NR_035851.1|' query.id='42291'; 1 HSP>
    ...
 
 To check how many hits the ``blast_record`` has, you can simply invoke Python’s
@@ -856,9 +858,9 @@ indices:
 .. code:: pycon
 
    >>> blast_record[0]  # retrieves the top hit
-   Hit(target.id='gi|262205317|ref|NR_030195.1|', query.id='42291', 1 HSP)
+   <Bio.Blast.Hit target.id='gi|262205317|ref|NR_030195.1|' query.id='42291'; 1 HSP>
    >>> blast_record[-1]  # retrieves the last hit
-   Hit(target.id='gi|397513516|ref|XM_003827011.1|', query.id='42291', 1 HSP)
+   <Bio.Blast.Hit target.id='gi|397513516|ref|XM_003827011.1|' query.id='42291'; 1 HSP>
 
 To retrieve multiple hits from a ``Bio.Blast.Record``, you can use the slice
 notation. This will return a new ``Bio.Blast.Record`` object containing only
@@ -889,7 +891,7 @@ To create a copy of the ``Bio.Blast.Record``, take the full slice:
    >>> type(blast_record_copy)
    <class 'Bio.Blast.Record'>
    >>> blast_record_copy  # list of all hits
-   Record(query.id='42291', 100 hits)
+   <Bio.Blast.Record query.id='42291'; 100 hits>
 
 This is particularly useful if you want to sort or filter the BLAST record
 (see :ref:`subsec:blast-sorting-filtering`), but want to retain a copy of the original BLAST output.
@@ -902,7 +904,7 @@ using the hit’s ID as key:
 .. code:: pycon
 
    >>> blast_record["gi|262205317|ref|NR_030195.1|"]
-   Hit(target.id='gi|262205317|ref|NR_030195.1|', query.id='42291', 1 HSP)
+   <Bio.Blast.Hit target.id='gi|262205317|ref|NR_030195.1|' query.id='42291'; 1 HSP>
 
 If the ID is not found in the ``blast_record``, a ``KeyError`` is raised:
 
@@ -964,6 +966,8 @@ hit of the query against a target.
 .. code:: pycon
 
    >>> hit = blast_record[0]
+   >>> hit
+   <Bio.Blast.Hit target.id='gi|262205317|ref|NR_030195.1|' query.id='42291'; 1 HSP>
    >>> hit.target
    SeqRecord(seq=Seq(None, length=61), id='gi|262205317|ref|NR_030195.1|', name='NR_030195', description='Homo sapiens microRNA 520b (MIR520B), microRNA', dbxrefs=[])
 
@@ -1021,8 +1025,13 @@ alignment, especially for alignments of highly homologous sequences.
    >>> len(hit)
    1
    >>> alignment = hit[0]
+   >>> alignment
+   <Bio.Blast.HSP target.id='gi|262205317|ref|NR_030195.1|' query.id='42291'; 2 rows x 61 columns>
    >>> type(alignment)
    <class 'Bio.Blast.HSP'>
+   >>> from Bio.Align import Alignment
+   >>> isinstance(alignment, Alignment)
+   True
 
 .. _`subsec:blast-hsp`:
 
