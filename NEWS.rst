@@ -72,6 +72,11 @@ The UniProt package now includes a method to search UniProt programmatically.
 The tutorial has been updated with examples of how to use the search method.
 See the chapter on Swiss-Prot and ExPASy in the tutorial for more information.
 
+As in recent releases, more of our code is now explicitly available under
+either our original "Biopython License Agreement", or the very similar but
+more commonly used "3-Clause BSD License".  See the ``LICENSE.rst`` file for
+more details.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
