@@ -81,6 +81,7 @@ possible, especially the following contributors:
 - Michael M. (first contribution)
 - Michiel de Hoon
 - Peter Cock
+- Rudolf Koopmann (first contribution)
 - Will Tyler (first contribution)
 
 10 January 2024: Biopython 1.83
