@@ -1,7 +1,9 @@
 # Copyright 2013 by David Arenillas and Anthony Mathelier. All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license. Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Provides read access to a JASPAR5 formatted database.
 
 This modules requires MySQLdb to be installed.
