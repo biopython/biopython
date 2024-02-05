@@ -1270,6 +1270,7 @@ possible, especially the following contributors:
 - Owen Solberg
 - Peter Cock
 - Richard Neher (first contribution)
+- Rudolf Koopmann (first contribution)
 - Sebastian Bassi
 - Sourav Singh (first contribution)
 - Spencer Bliven (first contribution)
