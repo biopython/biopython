@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # Copyright 2004 Kristian Rother.
 # Revisions copyright 2004 Thomas Hamelryck.
+# Revisions copyright 2024 James Krieger.
 #
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
