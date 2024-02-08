@@ -172,18 +172,24 @@ class ParseReal(unittest.TestCase):
         self.assertEqual(header["astral"]["Region"], "a:")
         self.assertEqual(header["astral"]["ASTRAL-SPACI"], "0.72")
 
-
     def test_parse_pdb_with_remark_350_biomoltrans(self):
         """Tests that parse_pdb_header now can identify some REMARK 350 entries."""
         header = parse_pdb_header("PDB/2XHE.pdb")
-        self.assertEqual(header["biomoltrans"], 
-                         {'1': [['A', 'B'],
-                            '  1.000000  0.000000  0.000000        0.00000            \n',
-                            '  0.000000  1.000000  0.000000        0.00000            \n',
-                            '  0.000000  0.000000  1.000000        0.00000            \n']})
+        self.assertEqual(
+            header["biomoltrans"],
+            {
+                "1": [
+                    ["A", "B"],
+                    "  1.000000  0.000000  0.000000        0.00000            \n",
+                    "  0.000000  1.000000  0.000000        0.00000            \n",
+                    "  0.000000  0.000000  1.000000        0.00000            \n",
+                ]
+            },
+        )
 
         header = parse_pdb_header("PDB/1LCD.pdb")
         self.assertEqual(header["biomoltrans"], {})
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

@@ -122,9 +122,8 @@ class MMTFIO(StructureIO):
         if biomoltrans is not None:
             for key, value in biomoltrans.items():
                 matrix_items = []  # list of 16 items of 4x4 matrix
-                for line in value[
-                    1:
-                ]:  # 3 lines for 3x3 rotation and last column translations
+                for line in value[1:]:
+                    # 3 lines for 3x3 rotation and last column translations
                     matrix_items.extend([float(item) for item in line.split()])
                 matrix_items.extend([0.0, 0.0, 0.0, 1.0])
 
