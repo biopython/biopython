@@ -98,13 +98,13 @@ class MMTFIO(StructureIO):
 
         # The header information is missing for some structure objects
         header_dict = defaultdict(str, self.structure.header)
-        if header_dict["resolution"] == "":
+        if header_dict.get("resolution") in ["", None]:
             header_dict["resolution"] = None
-        if header_dict["structure_method"] == "":
+        if header_dict.get("structure_method") in ["", None]:
             header_dict["structure_method"] = []
         else:
             header_dict["structure_method"] = [header_dict["structure_method"]]
-        if header_dict["biomoltrans"] == "":
+        if header_dict.get("biomoltrans") in ["", None]:
             header_dict["biomoltrans"] = None
 
         encoder.set_header_info(
@@ -118,7 +118,7 @@ class MMTFIO(StructureIO):
         )
 
         chain_ids = [chain.get_id() for chain in self.structure.get_chains()]
-        biomoltrans = header_dict["biomoltrans"]
+        biomoltrans = header_dict.get("biomoltrans")
         if biomoltrans is not None:
             for key, value in biomoltrans.items():
                 matrix_items = []  # list of 16 items of 4x4 matrix
