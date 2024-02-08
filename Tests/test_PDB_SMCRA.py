@@ -325,11 +325,11 @@ class ChangingIdTests(unittest.TestCase):
     def test_change_model_id_raises(self):
         """Cannot change id to a value already in use by another child."""
         model = next(iter(self.structure))
-        with self.assertRaises(ValueError):
+        with self.assertWarns(Warning):
             model.id = 1
-        # Make sure nothing was changed
-        self.assertEqual(model.id, 0)
-        self.assertIn(0, self.structure)
+        # make sure children were not overwritten
+        self.assertEqual(model.id, 1)
+        self.assertEqual(len(self.structure.child_list), 2)
         self.assertIn(1, self.structure)
 
     def test_change_chain_id(self):

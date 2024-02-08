@@ -9,6 +9,8 @@
 It is a simple container class, with list and dictionary like properties.
 """
 
+import warnings
+
 from collections import deque
 from copy import copy
 
@@ -173,9 +175,11 @@ class Entity:
             return
         if self.parent:
             if value in self.parent.child_dict:
-                raise ValueError(
-                    f"Cannot change id from `{self._id}` to `{value}`."
-                    f" The id `{value}` is already used for a sibling of this entity."
+                # See issue 1551 for details on the downgrade.
+                warnings.warn(
+                    f"The id `{value}` is already used for a sibling of this entity. "
+                    f"Changing id from `{self._id}` to `{value}` might create access "
+                    "inconsistencies to children of the parent entity."
                 )
             del self.parent.child_dict[self._id]
             self.parent.child_dict[value] = self
