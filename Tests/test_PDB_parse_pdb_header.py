@@ -187,6 +187,7 @@ class ParseReal(unittest.TestCase):
             },
         )
 
+    def test_parse_pdb_without_remark_350_biomoltrans(self):
         header = parse_pdb_header("PDB/1LCD.pdb")
         self.assertEqual(header["biomoltrans"], {})
 
