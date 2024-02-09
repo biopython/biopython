@@ -37,7 +37,7 @@ def _get_biomoltrans(inl):
     # REMARK 350   BIOMT3   1  0.000000  0.000000  1.000000        0.00000
     biomolecule = defaultdict(list)
     for line in inl:
-        if re.search(r"\AREMARK 350", line):
+        if line.startswith("REMARK 350"):
             if line[11:23] == "BIOMOLECULE:":
                 currentBiomolecule = line.split()[-1]
                 applyToChains = []
