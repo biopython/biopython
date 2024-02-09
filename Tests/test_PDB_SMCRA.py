@@ -32,6 +32,7 @@ except ImportError:
         "Install NumPy if you want to use Bio.PDB."
     ) from None
 
+from Bio import BiopythonWarning
 from Bio.PDB import PDBParser
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 from Bio.PDB import rotmat, Vector
@@ -325,7 +326,7 @@ class ChangingIdTests(unittest.TestCase):
     def test_change_model_id_raises(self):
         """Cannot change id to a value already in use by another child."""
         model = next(iter(self.structure))
-        with self.assertWarns(Warning):
+        with self.assertWarns(BiopythonWarning):
             model.id = 1
         # make sure children were not overwritten
         self.assertEqual(model.id, 1)
