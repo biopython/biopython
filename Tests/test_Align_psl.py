@@ -51,7 +51,7 @@ class TestAlign_dna_rna(unittest.TestCase):
         path = "Blat/dna_rna.psl"
         alignments = Align.parse(path, "psl")
         self.check_alignments(alignments)
-        alignments.rewind()
+        alignments = iter(alignments)
         self.check_alignments(alignments)
         with Align.parse(path, "psl") as alignments:
             self.check_alignments(alignments)

@@ -29,6 +29,8 @@ import io
 import textwrap
 import time
 
+import numpy as np
+
 from collections import UserList
 from urllib.parse import urlencode
 from urllib.request import build_opener, install_opener
@@ -40,6 +42,7 @@ from xml.parsers import expat
 
 from Bio import BiopythonWarning
 from Bio import StreamModeError
+from Bio.Align import Alignment, Alignments
 from Bio._utils import function_with_previous
 
 
@@ -82,11 +85,245 @@ class CorruptedXMLError(ValueError):
         )
 
 
+class HSP(Alignment):
+    """Stores an alignment of one query sequence against a target sequence.
+
+    An HSP (High-scoring Segment Pair) stores the alignment of one query
+    sequence segment against one target (hit) sequence segment. The
+    ``Bio.Blast.HSP`` class inherits from the ``Bio.Align.Alignment`` class.
+
+    In addition to the ``target`` and ``query`` attributes of a
+    ``Bio.Align.Alignment``, a ``Bio.Blast.HSP`` object has the following
+    attributes:
+
+     - score:       score of HSP;
+     - annotations: a dictionary that may contain the following keys:
+                     - 'bit score': score (in bits) of HSP (float);
+                     - 'evalue':    e-value of HSP (float);
+                     - 'identity':  number of identities in HSP (integer);
+                     - 'positive':  number of positives in HSP (integer);
+                     - 'gaps':      number of gaps in HSP (integer);
+                     - 'midline':   formating middle line.
+
+    A ``Bio.Blast.HSP`` object behaves the same as a `Bio.Align.Alignment``
+    object and can be used as such. However, when printing a ``Bio.Blast.HSP``
+    object, the BLAST e-value and bit score are included in the output (in
+    addition to the alignment itself).
+
+    See the documentation of ``Bio.Blast.Record`` for a more detailed
+    explanation of how the information in BLAST records is stored in
+    Biopython.
+    """
+
+    def __repr__(self):
+        query = self.query
+        target = self.target
+        n, m = self.shape
+        return f"<Bio.Blast.HSP target.id={target.id!r} query.id={query.id!r}; {n} rows x {m} columns>"
+
+    def __str__(self):
+        alignment_text = super().__str__()
+        query = self.query
+        target = self.target
+        query_strand = (
+            "Plus" if self.coordinates[1, 0] <= self.coordinates[1, -1] else "Minus"
+        )
+        target_strand = (
+            "Plus" if self.coordinates[0, 0] <= self.coordinates[0, -1] else "Minus"
+        )
+        indent = " " * 8
+        query_description = textwrap.fill(
+            query.description,
+            width=80,
+            initial_indent=indent,
+            subsequent_indent=indent,
+        )
+        target_description = textwrap.fill(
+            target.description,
+            width=80,
+            initial_indent=indent,
+            subsequent_indent=indent,
+        )
+        evalue = self.annotations["evalue"]
+        bitscore = self.annotations["bit score"]
+        score = self.score
+        steps = np.diff(self.coordinates, 1)
+        aln_span = sum(abs(steps).max(0))
+        terms = []
+        identity = self.annotations["identity"]
+        identity_percentage = round(100.0 * identity / aln_span)
+        identity_text = "Identities:%d/%d(%d%%)" % (
+            identity,
+            aln_span,
+            identity_percentage,
+        )
+        terms.append(identity_text)
+        positive = self.annotations["positive"]
+        positive_percentage = round(100.0 * positive / aln_span)
+        positive_text = "Positives:%d/%d(%d%%)" % (
+            positive,
+            aln_span,
+            positive_percentage,
+        )
+        terms.append(positive_text)
+        try:
+            gaps = self.annotations["gaps"]
+        except KeyError:
+            pass
+        else:
+            gaps_percentage = round(100.0 * gaps / aln_span)
+            gaps_text = "Gaps:%d.%d(%d%%)" % (gaps, aln_span, gaps_percentage)
+            terms.append(gaps_text)
+        counts_line = ",  ".join(terms)
+        return """\
+Query : %s Length: %d Strand: %s
+%s
+Target: %s Length: %d Strand: %s
+%s
+
+Score:%d bits(%d), Expect:%.1g,
+%s
+
+%s
+""" % (
+            query.id,
+            len(query),
+            query_strand,
+            query_description,
+            target.id,
+            len(target),
+            target_strand,
+            target_description,
+            bitscore,
+            score,
+            evalue,
+            counts_line,
+            alignment_text,
+        )
+
+
+class Hit(Alignments):
+    """Stores a single BLAST hit of one single query against one target.
+
+    The ``Bio.Blast.Hit`` class inherits from the ``Bio.Align.Alignments``
+    class, which is a subclass of a Python list. The ``Bio.Blast.Hit`` class
+    stores ``Bio.Blast.HSP`` objwcts, which inherit from
+    ``Bio.Align.Alignment``. A ``Bio.Blast.Hit`` object is therefore
+    effectively a list of ``Bio.Align.Alignment`` objects. Most hits consist of
+    only 1 or a few Alignment objects.
+
+    Each ``Bio.Blast.Hit`` object has a ``target`` attribute containing the
+    following information:
+
+     - target.id:          seqId of subject;
+     - target.description: definition line of subject;
+     - target.name:        accession of subject;
+     - len(target.seq):    sequence length of subject.
+
+    See the documentation of ``Bio.Blast.Record`` for a more detailed
+    explanation of the information stored in the alignments contained in the
+    ``Bio.Blast.Hit`` object.
+    """
+
+    def __getitem__(self, key):
+        try:
+            value = super().__getitem__(key)
+        except IndexError:
+            raise IndexError("index out of range") from None
+        if isinstance(key, slice):
+            hit = Hit(value)
+            hit.target = self.target
+            return hit
+        else:
+            return value
+
+    def __repr__(self):
+        target = self.target
+        try:
+            alignment = self[0]
+        except IndexError:
+            return f"<Bio.Blast.Hit target.id={target.id!r}; no hits>"
+        query = alignment.query
+        nhsps = len(self)
+        if nhsps == 1:
+            unit = "HSP"
+        else:  # nhsps > 1
+            unit = "HSPs"
+        return f"<Bio.Blast.Hit target.id={target.id!r} query.id={query.id!r}; {nhsps} {unit}>"
+
+    def __str__(self):
+        """Return a human readable summary of the Hit object."""
+        lines = []
+
+        # set query id line
+        query = self[0].query
+        qid_line = "Query: %s" % query.id
+        lines.append(qid_line)
+        indent = " " * 7
+        description_lines = textwrap.wrap(
+            query.description,
+            width=80,
+            initial_indent=indent,
+            subsequent_indent=indent,
+        )
+        lines.extend(description_lines)
+
+        # set hit id line
+        target = self.target
+        hid_line = "  Hit: %s (length=%i)" % (target.id, len(target))
+        lines.append(hid_line)
+        description_lines = textwrap.wrap(
+            target.description,
+            width=80,
+            initial_indent=indent,
+            subsequent_indent=indent,
+        )
+        lines.extend(description_lines)
+
+        # set hsp line and table
+        lines.append(
+            " HSPs: %s  %s  %s  %s  %s  %s"
+            % ("-" * 4, "-" * 8, "-" * 9, "-" * 6, "-" * 15, "-" * 21)
+        )
+        pattern = "%11s  %8s  %9s  %6s  %15s  %21s"
+        lines.append(
+            pattern % ("#", "E-value", "Bit score", "Span", "Query range", "Hit range")
+        )
+        lines.append(pattern % ("-" * 4, "-" * 8, "-" * 9, "-" * 6, "-" * 15, "-" * 21))
+        for idx, hsp in enumerate(self):
+            # evalue
+            evalue = format(hsp.annotations["evalue"], ".2g")
+            # bit score
+            bitscore = format(hsp.annotations["bit score"], ".2f")
+            # alignment length
+            steps = np.diff(hsp.coordinates, 1)
+            aln_span = sum(abs(steps).max(0))
+            # query region
+            query_start = hsp.coordinates[1, 0]
+            query_end = hsp.coordinates[1, -1]
+            query_range = f"[{query_start}:{query_end}]"
+            # max column length is 18
+            query_range = (
+                query_range[:13] + "~]" if len(query_range) > 15 else query_range
+            )
+            # hit region
+            hit_start = hsp.coordinates[0, 0]
+            hit_end = hsp.coordinates[0, -1]
+            hit_range = f"[{hit_start}:{hit_end}]"
+            hit_range = hit_range[:19] + "~]" if len(hit_range) > 21 else hit_range
+            # append the hsp row
+            lines.append(
+                pattern % (idx, evalue, bitscore, aln_span, query_range, hit_range)
+            )
+
+        return "\n".join(lines)
+
+
 class Record(list):
     """Stores the BLAST results for a single query.
 
-    A ``Bio.Blast.Record`` object is a list of ``Bio.Align.Alignments`` objects,
-    each corresponding to one hit for the query in the BLAST output.
+    A ``Bio.Blast.Record`` object is a list of ``Bio.Blast.Hit`` objects, each
+    corresponding to one hit for the query in the BLAST output.
 
     The ``Bio.Blast.Record`` object may have the following attributes:
      - query:   A ``SeqRecord`` object which may contain some or all of the
@@ -105,26 +342,32 @@ class Record(list):
                  - 'entropy':   Karlin-Altschul parameter H (float).
      - message: Some (error?) information.
 
-    Each ``Bio.Align.Alignments`` object has a ``target`` attribute containing
-    the following information:
+    Each ``Bio.Blast.Hit`` object has a ``target`` attribute containing the
+    following information:
 
      - target.id:          seqId of subject;
      - target.description: definition line of subject;
      - target.name:        accession of subject;
      - len(target.seq):    sequence length of subject.
 
-    The ``Bio.Align.Alignments`` class inherits from a list storing
-    ``Bio.Align.Alignment`` objects.  The ``target`` and ``query`` attributes
-    of a ``Bio.Align.Alignment`` object point to a ``SeqRecord`` object
+    The ``Bio.Blast.Hit`` class inherits from the ``Bio.Align.Alignments``
+    class, which inherits from a Python list. In this list, the
+    ``Bio.Blast.Hit`` object stores ``Bio.Blast.HSP`` objects, which inherit
+    from the ``Bio.Align.Alignment`` class.  A ``Bio.Blast.Hit`` object is
+    therefore effectively a list of alignment objects.
+
+    Each HSP in a ``Bio.Blast.Hit`` object has the attributes ``target`` and
+    ``query`` attributes, as usual for of a ``Bio.Align.Alignment`` object
+    storing a pairwise alignment, pointing to a ``SeqRecord`` object
     representing the target and query, respectively.  For translated BLAST
-    searches, The ``features`` attribute of the target or query may contain a
+    searches, the ``features`` attribute of the target or query may contain a
     ``SeqFeature`` of type CDS that stores the amino acid sequence region.  The
     ``qualifiers`` attribute of such a feature is a dictionary with  a single
     key 'coded_by'; the corresponding value specifies the nucleotide sequence
     region, in a GenBank-style string with 1-based coordinates, that encodes
     the amino acid sequence.
 
-    Each ``Bio.Align.Alignment`` object has the following additional attributes:
+    Each ``Bio.Blast.HSP`` object has the following additional attributes:
 
      - score:       score of HSP;
      - annotations: a dictionary that may contain the following keys:
@@ -143,19 +386,22 @@ class Record(list):
     {'db-num': 2934173, 'db-len': 1011751523, 'hsp-len': 0, 'eff-space': 0.0, 'kappa': 0.041, 'lambda': 0.267, 'entropy': 0.14}
     >>> len(record)
     78
-    >>> alignments = record[0]
-    >>> type(alignments)
-    <class 'Bio.Align.Alignments'>
-    >>> alignments.target
+    >>> hit = record[0]
+    >>> type(hit)
+    <class 'Bio.Blast.Hit'>
+    >>> from Bio.Align import Alignments
+    >>> isinstance(hit, Alignments)
+    True
+    >>> hit.target
     SeqRecord(seq=Seq(None, length=319), id='gi|12654095|gb|AAH00859.1|', name='AAH00859', description='Unknown (protein for IMAGE:3459481) [Homo sapiens]', dbxrefs=[])
 
-    Most alignments consist of only 1 or a few Alignment objects:
+    Most hits consist of only 1 or a few Alignment objects:
 
-    >>> len(alignments)
+    >>> len(hit)
     1
-    >>> alignment = alignments[0]
+    >>> alignment = hit[0]
     >>> type(alignment)
-    <class 'Bio.Align.Alignment'>
+    <class 'Bio.Blast.HSP'>
     >>> alignment.score
     630.0
     >>> alignment.annotations
@@ -196,10 +442,36 @@ class Record(list):
         """Initialize the Record object."""
         self.query = None
 
+    def __repr__(self):
+        query = self.query
+        try:
+            query_id = query.id
+        except AttributeError:
+            query_id = "unknown"
+        nhits = len(self)
+        if nhits == 0:
+            return f"<Bio.Blast.Record query.id={query_id!r}; no hits>"
+        elif nhits == 1:
+            return f"<Bio.Blast.Record query.id={query_id!r}; 1 hit>"
+        else:
+            return f"<Bio.Blast.Record query.id={query_id!r}; {nhits} hits>"
+
     def __str__(self):
-        lines = [""]
-        # self.query may be None with legacy Blast if there are no hits
+        lines = []
+        try:
+            version = self.version
+        except AttributeError:
+            pass
+        else:
+            lines.append(f"Program: {version}")
+        try:
+            db = self.db
+        except AttributeError:
+            pass
+        else:
+            lines.append(f"     db: {db}")
         if self.query is not None:
+            # self.query may be None with legacy Blast if there are no hits
             lines.append("  Query: %s (length=%d)" % (self.query.id, len(self.query)))
             indent = " " * 9
             description_lines = textwrap.wrap(
@@ -210,7 +482,7 @@ class Record(list):
             )
             lines.extend(description_lines)
         if len(self) == 0:
-            lines.append("   Hits: 0")
+            lines.append("   Hits: No hits found")
         else:
             lines.append("   Hits: %s  %s  %s" % ("-" * 4, "-" * 5, "-" * 58))
             pattern = "%13s  %5s  %s"
@@ -230,7 +502,69 @@ class Record(list):
                     lines.append(pattern % (idx, len(hit), hid_line))
                 elif idx == 30:
                     lines.append("%14s" % "~~~")
-        return "\n".join(lines) + "\n"
+        return "\n".join(lines)
+
+    def __getitem__(self, key):
+        try:
+            value = super().__getitem__(key)
+        except IndexError:
+            raise IndexError("index out of range") from None
+        except TypeError:
+            if not isinstance(key, str):
+                raise TypeError("key must be an integer, slice, or str") from None
+            for hit in self:
+                if hit.target.id == key:
+                    return hit
+            raise KeyError(key)
+        else:
+            if isinstance(key, slice):
+                record = Record()
+                record.extend(value)
+                # Only store the query attribute, as the other attributes
+                # pertain to the complete Blast record:
+                try:
+                    query = self.query
+                except AttributeError:
+                    pass
+                else:
+                    record.query = query
+                # The following keys may be present if the record was created
+                # by Blast.read:
+                keys = (
+                    "source",
+                    "program",
+                    "version",
+                    "reference",
+                    "db",
+                    "param",
+                    "mbstat",
+                )
+                for key in keys:
+                    try:
+                        value = getattr(self, key)
+                    except AttributeError:
+                        pass
+                    else:
+                        setattr(record, key, value)
+                return record
+            return value
+
+    def keys(self):
+        """Return a list of the target.id of each hit."""
+        return [hit.target.id for hit in self]
+
+    def __contains__(self, key):
+        for hit in self:
+            if hit.target.id == key:
+                return True
+        return False
+
+    def index(self, key):
+        """Return the index of the hit for which the target.id is equal to the key."""
+        for i, hit in enumerate(self):
+            if hit.target.id == key:
+                return i
+        raise ValueError(f"'{key}' not found")
 
 
 class Records(UserList):
@@ -508,17 +842,19 @@ class Records(UserList):
             self._index = index
         return self._records
 
+    def __repr__(self):
+        return f"<Bio.Blast.Records source={self.source!r} program={self.program!r} version={self.version!r} db={self.db!r}>"
+
     def __str__(self):
         text = """\
 Program: %s
-     db: %s
-""" % (
+     db: %s""" % (
             self.version,
             self.db,
         )
         records = self[:]  # to ensure that the records are read in
         for record in self._records:
-            text += str(record)
+            text += "\n\n" + str(record)
         return text
 
 
@@ -592,6 +928,13 @@ def read(source):
             raise ValueError("BLAST output for more than one query found.")
         except StopIteration:
             pass
+    for key in ("source", "program", "version", "reference", "db", "param", "mbstat"):
+        try:
+            value = getattr(records, key)
+        except AttributeError:
+            pass
+        else:
+            setattr(record, key, value)
     return record
 
 

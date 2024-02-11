@@ -42,7 +42,7 @@ class TestA2MReadingWriting(unittest.TestCase):
             with self.assertRaises(StopIteration):
                 next(alignments)
             self.check_clustalw(alignment)
-            alignments.rewind()
+            alignments = iter(alignments)
             alignment = next(alignments)
             with self.assertRaises(StopIteration):
                 next(alignments)

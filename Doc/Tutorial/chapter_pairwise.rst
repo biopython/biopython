@@ -837,51 +837,7 @@ You can perform the following operations on ``alignments``:
       ...     print(alignment)
       ...
 
-   By calling ``alignments.rewind``, you can rewind the ``alignments``
-   iterator to the first alignment and iterate over the alignments from
-   the beginning:
-
-   .. doctest
-
-   .. code:: pycon
-
-      >>> from Bio import Align
-      >>> aligner = Align.PairwiseAligner()
-      >>> alignments = aligner.align("AAA", "AA")
-      >>> for alignment in alignments:
-      ...     print(alignment)
-      ...
-      target            0 AAA 3
-                        0 ||- 3
-      query             0 AA- 2
-      <BLANKLINE>
-      target            0 AAA 3
-                        0 |-| 3
-      query             0 A-A 2
-      <BLANKLINE>
-      target            0 AAA 3
-                        0 -|| 3
-      query             0 -AA 2
-      <BLANKLINE>
-      >>> alignments.rewind()
-      >>> for alignment in alignments:
-      ...     print(alignment)
-      ...
-      target            0 AAA 3
-                        0 ||- 3
-      query             0 AA- 2
-      <BLANKLINE>
-      target            0 AAA 3
-                        0 |-| 3
-      query             0 A-A 2
-      <BLANKLINE>
-      target            0 AAA 3
-                        0 -|| 3
-      query             0 -AA 2
-      <BLANKLINE>
-
-   You can also convert the ``alignments`` iterator into a ``list`` or
-   ``tuple``:
+   The ``alignments`` iterator can be converted into a ``list`` or ``tuple``:
 
    .. code:: pycon
 

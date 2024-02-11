@@ -19,11 +19,11 @@ from collections import deque
 from xml.parsers import expat
 from typing import Dict, Callable
 
-from Bio.Blast import Record
+from Bio.Blast import Record, Hit, HSP
 from Bio.Seq import Seq, reverse_complement
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqFeature import SeqFeature, SimpleLocation
-from Bio.Align import Alignment, Alignments
+from Bio.Align import Alignment
 from Bio import Entrez
 
 
@@ -188,7 +188,7 @@ class XMLHandler:
     def _start_hit(self, name, attrs):
         assert self._characters.strip() == ""
         self._characters = ""
-        self._alignment = Alignments()
+        self._alignment = Hit()
 
     def _start_hit_num(self, name, attrs):
         assert self._characters.strip() == ""
@@ -717,7 +717,7 @@ class XMLHandler:
             target_seq_data = {target_start: target_seq_data}
         target.seq = Seq(target_seq_data, target_length)
         sequences = [target, query]
-        alignment = Alignment(sequences, coordinates)
+        alignment = HSP(sequences, coordinates)
         alignment.score = hsp["score"]
         annotations = {}
         annotations["bit score"] = hsp["bit-score"]

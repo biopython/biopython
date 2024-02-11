@@ -17,7 +17,7 @@ You are expected to use this module via the Bio.Align functions.
 """
 
 # This parser was written based on the description of the bigBed file format in
-# W. J. Kent, A. S. Zweig,* G. Barber, A. S. Hinrichs, and D. Karolchik:
+# W. J. Kent, A. S. Zweig, G. Barber, A. S. Hinrichs, and D. Karolchik:
 # "BigWig and BigBed: enabling browsing of large distributed datasets."
 # Bioinformatics 26(17): 2204–2207 (2010)
 # in particular the tables in the supplemental materials listing the contents
@@ -617,7 +617,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
 
         done = False
         region = None
-        alignments.rewind()
+        alignments = iter(alignments)
         while True:
             try:
                 alignment = next(alignments)
@@ -1434,14 +1434,18 @@ class _RangeTree:
 
     @classmethod
     def generate(cls, chromUsageList, alignments):
-        alignments.rewind()
+        alignments = iter(alignments)
         alignment = None
         for chromName, chromId, chromSize in chromUsageList:
             chromName = chromName.decode()
             tree = _RangeTree(chromId, chromSize)
             if alignment is not None:
                 tree.addToCoverageDepth(alignment)
-            for alignment in alignments:
+            while True:
+                try:
+                    alignment = next(alignments)
+                except StopIteration:
+                    break
                 if alignment.target.id != chromName:
                     break
                 tree.addToCoverageDepth(alignment)
