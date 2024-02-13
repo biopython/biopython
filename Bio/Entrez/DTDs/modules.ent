@@ -125,12 +125,12 @@ Version  Reason/Occasion                   (who) vx.x (yyyy-mm-dd)
           easier and more consistent
 =============================================================
 
-  4. Formal Public Identifer changed from
+  4. Formal Public Identifier changed from
         "...XML Special Characters Module v1.0 20021201//EN"
      to the following
         "...XML Special Characters Module v2.0 20040830//EN"
 
-     Formal Public Identifer changed from
+     Formal Public Identifier changed from
         "...Custom Special Characters Module v1.1 20031101//EN"
      to the following
         "...Custom Special Characters Module v2.0 20040830//EN"
