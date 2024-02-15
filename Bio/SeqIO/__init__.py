@@ -1,4 +1,4 @@
-# Copyright 2006-2018 by Peter Cock.  All rights reserved.
+# Copyright 2006-2024 by Peter Cock.  All rights reserved.
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
@@ -378,7 +378,6 @@ making up each alignment as SeqRecords.
 
 from typing import Callable, Dict, Iterable, Union
 
-from Bio.Align import MultipleSeqAlignment
 from Bio.File import as_handle
 from Bio.SeqIO import AbiIO
 from Bio.SeqIO import AceIO
@@ -547,6 +546,9 @@ def write(
     if format in AlignIO._FormatToWriter:
         # Try and turn all the records into a single alignment,
         # and write that using Bio.AlignIO
+        # Using a lazy import as most users won't need this loaded:
+        from Bio.Align import MultipleSeqAlignment
+
         alignment = MultipleSeqAlignment(sequences)
         alignment_count = AlignIO.write([alignment], handle, format)
         if alignment_count != 1:
