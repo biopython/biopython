@@ -14,15 +14,19 @@ nodes).
 """
 
 import random
+import re
 import sys
 from . import Nodes
-import re
 
 
 PRECISION_BRANCHLENGTH = 6
 PRECISION_SUPPORT = 6
 NODECOMMENT_START = "[&"
 NODECOMMENT_END = "]"
+
+_re_block_delimiters = re.compile(
+    rf"({re.escape(NODECOMMENT_START)}|{re.escape(NODECOMMENT_END)}|[(),])"
+)
 
 
 class TreeError(Exception):
@@ -122,10 +126,7 @@ class Tree(Nodes.Chain):
             prev = 1
             incomment = False
 
-            sep = re.compile(
-                rf"({re.escape(NODECOMMENT_START)}|{re.escape(NODECOMMENT_END)}|[(),])"
-            )
-            blocks = sep.split(tree[1:closing])
+            blocks = _re_block_delimiters.split(tree[1:closing])
 
             for idx, blk in enumerate(blocks):
                 if not incomment:
