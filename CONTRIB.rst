@@ -72,6 +72,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Brad Chapman <https://github.com/chapmanb>
 - Brandon Carter  <https://github.com/b-carter>
 - Brandon Invergo <https://github.com/brandoninvergo>
+- Brandon Seah <https://github.com/kbseah/>
 - Brian Osborne <https://github.com/bosborne>
 - Bryan Lunt <https://github.com/bryan-lunt>
 - Caio Fontes <https://github.com/Caiofcas>
