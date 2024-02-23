@@ -497,6 +497,15 @@ class MixinTests(unittest.TestCase):
             self.assertEqual(clade.name, name)
             self.assertEqual(clade.branch_length, blen)
 
+    def test_resolve_polytomies(self):
+        """TreeMixin: resolve_polytomies() method."""
+        tree = list(Phylo.parse(EX_NEXUS, "nexus"))[2]
+        # tree1 = (1,(2,(4,(5,6,(7,(8,(9,3)))))));
+        #                   ^ ^ ^ multifurcation
+        self.assertFalse(tree.is_bifurcating())
+        tree.resolve_polytomies(shuffle=False, recursive=True)
+        self.assertTrue(tree.is_bifurcating())
+
 
 # ---------------------------------------------------------
 
