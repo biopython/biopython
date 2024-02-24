@@ -323,8 +323,8 @@ class ChangingIdTests(unittest.TestCase):
         self.assertIn(2, self.structure)
         self.assertNotIn(0, self.structure)
 
-    def test_change_model_id_raises(self):
-        """Cannot change id to a value already in use by another child."""
+    def test_change_model_id_warns(self):
+        """Warning when changing id to a value already in use by another child."""
         model = next(iter(self.structure))
         with self.assertWarns(BiopythonWarning):
             model.id = 1
