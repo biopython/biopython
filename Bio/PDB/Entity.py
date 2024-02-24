@@ -181,7 +181,7 @@ class Entity:
                     f"The id `{value}` is already used for a sibling of this entity. "
                     f"Changing id from `{self._id}` to `{value}` might create access "
                     "inconsistencies to children of the parent entity.",
-                    BiopythonWarning
+                    BiopythonWarning,
                 )
             del self.parent.child_dict[self._id]
             self.parent.child_dict[value] = self
