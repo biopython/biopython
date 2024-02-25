@@ -97,11 +97,11 @@ class MMTFIO(StructureIO):
         encoder.set_xtal_info(space_group="", unit_cell=None)
 
         # The header information is missing for some structure objects
-        header_dict = dict(self.structure.header)
-        if "resolution" not in header_dict:
+        header_dict = defaultdict(str, self.structure.header)
+        if header_dict["resolution"] == "":
             header_dict["resolution"] = None
 
-        if "structure_method" not in header_dict:
+        if header_dict["structure_method"] == "":
             header_dict["structure_method"] = []
         else:
             header_dict["structure_method"] = [header_dict["structure_method"]]
