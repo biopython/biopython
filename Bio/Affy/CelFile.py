@@ -329,118 +329,63 @@ def _read_v3(handle):
                     x, y = value.split()
                     record.GridCornerLL = (int(x), int(y))
                 elif key == "DatHeader":
-                    # not sure if all parameters here are interpreted correctly
+                    # Will parse known metadata fields, rest will be stored as 'fields'
                     record.DatHeader = {}
-                    i = value.find(":")
-                    if i >= 0:
-                        min_max_pixel_intensity, filename = value[:i].split()
-                        record.DatHeader["filename"] = filename
-                        assert min_max_pixel_intensity[0] == "["
-                        assert min_max_pixel_intensity[-1] == "]"
-                        (
-                            min_pixel_intensity,
-                            max_pixel_intensity,
-                        ) = min_max_pixel_intensity[1:-1].split("..")
-                        record.DatHeader["min-pixel_intensity"] = int(
-                            min_pixel_intensity
-                        )
-                        record.DatHeader["max-pixel_intensity"] = int(
-                            max_pixel_intensity
-                        )
-                        value = value[i + 1 :]
-                        index = 0
-                        field = value[index : index + 9]
-                        if field[:4] != "CLS=" or field[8] != " ":
-                            raise ValueError(
-                                "Field does not start with 'CLS=' or have a blank space at position 8"
-                            )
-                        record.DatHeader["CLS"] = int(field[4:8])
-                        index += 9
-                        field = value[index : index + 9]
-                        if field[:4] != "RWS=" or field[8] != " ":
-                            raise ValueError(
-                                "Field does not start with 'RWS=' or have a blank space at position 8"
-                            )
-                        record.DatHeader["RWS"] = int(field[4:8])
-                        index += 9
-                        field = value[index : index + 7]
-                        if field[:4] != "XIN=" or field[6] != " ":
-                            raise ValueError(
-                                "Field does not start with 'XIN=' or have a blank space at position 6"
-                            )
-                        record.DatHeader["XIN"] = int(field[4:6])
-                        index += 7
-                        field = value[index : index + 7]
-                        if field[:4] != "YIN=" or field[6] != " ":
-                            raise ValueError(
-                                "Field does not start with 'YIN=' or have a blank space at poition 6"
-                            )
-                        record.DatHeader["YIN"] = int(field[4:6])
-                        index += 7
-                        field = value[index : index + 6]
-                        if field[:3] != "VE=" or field[5] != " ":
-                            raise ValueError(
-                                "Field does not start with 'VE=' or have a blank space at position 5"
-                            )
-                        record.DatHeader["VE"] = int(field[3:5])
-                        index += 6
-                        field = value[index : index + 7]
-                        if field[6] != " ":
-                            raise ValueError(
-                                "Field value for position 6 isn't a blank space"
-                            )
-                        temperature = field[:6].strip()
-                        if temperature:
-                            record.DatHeader["temperature"] = int(temperature)
+
+                    # Extract filename from metadata (includes whitespace)
+                    def find_filename(s):
+                        start = s.find("]")
+                        end = s.find(":")
+
+                        if start != -1 and end != -1 and start < end:
+                            filename = s[start + 1 : end].strip()
+                            updated_s = s[: start + 1] + s[end:]
+                            return updated_s, filename
                         else:
-                            record.DatHeader["temperature"] = None
-                        index += 7
-                        field = value[index : index + 4]
-                        if not field.endswith(" "):
-                            raise ValueError("Field doesn't end with a blank space")
-                        record.DatHeader["laser-power"] = float(field)
-                        index += 4
-                        field = value[index : index + 18]
-                        if field[8] != " ":
-                            raise ValueError(
-                                "Field value for position 8 isn't a blank space"
-                            )
-                        record.DatHeader["scan-date"] = field[:8]
-                        if field[17] != " ":
-                            raise ValueError(
-                                "Field value for position 17 isn't a blank space"
-                            )
-                        record.DatHeader["scan-date"] = field[:8]
-                        record.DatHeader["scan-time"] = field[9:17]
-                        index += 18
-                        value = value[index:]
-                    subfields = value.split("\x14")
-                    if len(subfields) != 12:
-                        ValueError("Subfields length isn't 12")
-                    subfield = subfields[0]
-                    try:
-                        scanner_id, scanner_type = subfield.split()
-                    except ValueError:
-                        scanner_id = subfield.strip()
-                    else:
-                        record.DatHeader["scanner-type"] = scanner_type
-                    record.DatHeader["scanner-id"] = scanner_id
-                    record.DatHeader["array-type"] = subfields[2].strip()
-                    field = subfields[7].strip()
-                    if field:
-                        record.DatHeader["filter-wavelength"] = int(field)
-                    field = subfields[8].strip()
-                    if field:
-                        record.DatHeader["arc-radius"] = float(field)
-                    field = subfields[9].strip()
-                    if field:
-                        record.DatHeader["laser-spotsize"] = float(field)
-                    field = subfields[10].strip()
-                    if field:
-                        record.DatHeader["pixel-size"] = float(field)
-                    field = subfields[11].strip()
-                    if field:
-                        record.DatHeader["image-orientation"] = int(field)
+                            return s, None
+
+                    header, filename = find_filename(line)
+                    if filename:
+                        record.DatHeader["filename"] = filename
+
+                    # Parse the rest of the metadata
+                    parts = header.split("\x14 ")
+                    fields = parts[0]
+                    comment_fields = parts[1:]
+
+                    field_parts = fields.split()
+                    record.DatHeader["DatHeader"] = (
+                        field_parts[0].split(":")[0].split("=")[1]
+                    )
+                    field_parts.pop(0)
+
+                    new_field_parts = []
+                    for part in field_parts:
+                        # automatically split on the first '='
+                        if "=" in part:
+                            key, value = part.split("=")
+                            record.DatHeader[key] = value
+                        # Extract date
+                        elif "/" in part:
+                            record.DatHeader["scan-date"] = part
+                        # Extract time
+                        elif ":" in part:
+                            record.DatHeader["scan-time"] = part
+                        else:
+                            new_field_parts.append(part)
+
+                    field_parts = new_field_parts
+
+                    # Handle other field parts (not sure what these are)
+                    record.DatHeader["field_parts"] = field_parts
+
+                    # Handle comment fields
+                    comment_fields = [
+                        x.strip() for x in comment_fields if x.strip() != ""
+                    ]
+                    record.DatHeader["chip_type"] = comment_fields[0]
+                    record.DatHeader["comment_fields"] = comment_fields[1:]
+                #####
                 elif key == "Algorithm":
                     record.Algorithm = value
                 elif key == "AlgorithmParameters":
