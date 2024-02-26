@@ -98,10 +98,10 @@ class MMTFIO(StructureIO):
 
         # The header information is missing for some structure objects
         header_dict = defaultdict(str, self.structure.header)
-        if header_dict["resolution"] == "":
+        if header_dict.get("resolution") is None:
             header_dict["resolution"] = None
 
-        if header_dict["structure_method"] == "":
+        if header_dict.get("structure_method") is None:
             header_dict["structure_method"] = []
         else:
             header_dict["structure_method"] = [header_dict["structure_method"]]
@@ -128,7 +128,7 @@ class MMTFIO(StructureIO):
 
                 chain_id_to_idx = {
                     v: k
-                    for k, v in enumerate(c.id for c in self.structure.get_chains())
+                    for k, v in enumerate(chain_ids)
                 }
                 encoder.set_bio_assembly_trans(
                     bio_assembly_index=key,
