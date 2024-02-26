@@ -19,6 +19,7 @@ except ImportError:
     ) from None
 
 from Bio.PDB import PDBParser
+from Bio.PDB.PDBExceptions import BiopythonWarning
 from Bio.PDB.parse_pdb_header import parse_pdb_header, _parse_remark_465
 
 
@@ -145,6 +146,29 @@ class ParseReal(unittest.TestCase):
         self.assertEqual(header["head"], "structural genomics, unknown function")
         self.assertEqual(header["idcode"], "3EFG")
         self.assertEqual(header["deposition_date"], "2008-09-08")
+
+    def test_parse_header_line_non_english_date(self):
+        """Unit test for parsing and converting fields where date is not an english abbreviation."""
+        with self.assertWarns(BiopythonWarning) as bad_date_warning:
+            header = parse_pdb_header(
+                "PDB/unrecognized_month_header.pdb", permissive=True
+            )
+            self.assertEqual(header["head"], "structural genomics, unknown function")
+            self.assertEqual(header["idcode"], "3EFG")
+            self.assertEqual(header["deposition_date"], "2008-00-08")
+
+        self.assertEqual(
+            str(bad_date_warning.warning),
+            "Non-standard month in PDB header: Okt. Setting month to '00'.",
+        )
+
+    def test_parse_header_line_non_english_date_strict_mode(self):
+        """Unit test for parsing and converting fields where date is not an english abbreviation."""
+        with self.assertRaises(ValueError) as err:
+            header = parse_pdb_header(
+                "PDB/unrecognized_month_header.pdb", permissive=False
+            )
+        self.assertEqual(str(err.exception), "Non-standard month in PDB header: Okt.")
 
     def test_parse_title_line(self):
         """Unit test for correct parsing of multiline title records."""

@@ -15,8 +15,8 @@ Kristian Rother.
 
 
 import re
-
-from Bio import File
+import warnings
+from Bio import File, BiopythonParserWarning
 
 
 def _get_journal(inl):
@@ -53,8 +53,17 @@ def _get_references(inl):
 
 
 # bring dates to format: 1909-01-08
-def _format_date(pdb_date):
-    """Convert dates from DD-Mon-YY to YYYY-MM-DD format (PRIVATE)."""
+def _format_date(pdb_date, permissive: bool = False):
+    """Convert dates from DD-Mon-YY to YYYY-MM-DD format (PRIVATE).
+
+    Parameters
+    ----------
+    pdb_date: str
+        string for pdb date in form 12-JAN-04
+    permissive: bool
+        Default = False
+        permissive parsing of date
+    """
     date = ""
     year = int(pdb_date[7:])
     if year < 50:
@@ -62,6 +71,7 @@ def _format_date(pdb_date):
     else:
         century = 1900
     date = str(century + year) + "-"
+
     all_months = [
         "xxx",
         "Jan",
@@ -77,7 +87,22 @@ def _format_date(pdb_date):
         "Nov",
         "Dec",
     ]
-    month = str(all_months.index(pdb_date[3:6]))
+    month_name = pdb_date[3:6]
+
+    try:
+        month = "%02d" % all_months.index(month_name)
+    except ValueError:
+        if not permissive:
+            raise ValueError(
+                f"Non-standard month in PDB header: {month_name}."
+            ) from None
+
+        warnings.warn(
+            f"Non-standard month in PDB header: {month_name}. Setting month to '00'.",
+            BiopythonParserWarning,
+        )
+        month = "0"
+
     if len(month) == 1:
         month = "0" + month
     date = date + month + "-" + pdb_date[:2]
@@ -112,7 +137,7 @@ def _nice_case(line):
     return s
 
 
-def parse_pdb_header(infile):
+def parse_pdb_header(infile, permissive=False):
     """Return the header lines of a pdb file as a dictionary.
 
     Dictionary keys are: head, deposition_date, release_date, structure_method,
@@ -127,7 +152,7 @@ def parse_pdb_header(infile):
                 break
             else:
                 header.append(line)
-    return _parse_pdb_header_list(header)
+    return _parse_pdb_header_list(header, permissive=permissive)
 
 
 def _parse_remark_465(line):
@@ -177,7 +202,7 @@ def _parse_remark_465(line):
     return residue
 
 
-def _parse_pdb_header_list(header):
+def _parse_pdb_header_list(header, permissive=False):
     # database fields
     pdbh_dict = {
         "name": "",
@@ -217,7 +242,9 @@ def _parse_pdb_header_list(header):
         elif key == "HEADER":
             rr = re.search(r"\d\d-\w\w\w-\d\d", tail)
             if rr is not None:
-                pdbh_dict["deposition_date"] = _format_date(_nice_case(rr.group()))
+                pdbh_dict["deposition_date"] = _format_date(
+                    _nice_case(rr.group()), permissive=permissive
+                )
             rr = re.search(r"\s+([1-9][0-9A-Z]{3})\s*\Z", tail)
             if rr is not None:
                 pdbh_dict["idcode"] = rr.group(1)
@@ -278,7 +305,9 @@ def _parse_pdb_header_list(header):
         elif key == "REVDAT":
             rr = re.search(r"\d\d-\w\w\w-\d\d", tail)
             if rr is not None:
-                pdbh_dict["release_date"] = _format_date(_nice_case(rr.group()))
+                pdbh_dict["release_date"] = _format_date(
+                    _nice_case(rr.group()), permissive=permissive
+                )
         elif key == "JRNL":
             # print("%s:%s" % (key, tail))
             if "journal" in pdbh_dict:
