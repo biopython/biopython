@@ -126,10 +126,7 @@ class MMTFIO(StructureIO):
                     matrix_items.extend([float(item) for item in line.split()])
                 matrix_items.extend([0.0, 0.0, 0.0, 1.0])
 
-                chain_id_to_idx = {
-                    v: k
-                    for k, v in enumerate(chain_ids)
-                }
+                chain_id_to_idx = {v: k for k, v in enumerate(chain_ids)}
                 encoder.set_bio_assembly_trans(
                     bio_assembly_index=key,
                     input_chain_indices=[chain_id_to_idx[c] for c in value[0]],
