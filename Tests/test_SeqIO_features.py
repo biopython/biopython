@@ -591,6 +591,18 @@ class FeatureWriting(SeqIOFeatureTestBaseClass):
             self.assertEqual(_get_location_string(f._flip(200), 200), "101..200")
             self.assertEqual(f._flip(100).location.strand, f.location.strand)
 
+        # Test for compound locations (see https://github.com/biopython/biopython/issues/4611)
+
+        # flip with +1/-1 strands does not invert the order in compound locations
+        loc = SimpleLocation(4, 6, 1) + SimpleLocation(0, 1, 1)
+        self.assertEqual(str(loc._flip(6)), "join{[0:2](-), [5:6](-)}")
+        loc = SimpleLocation(4, 6, -1) + SimpleLocation(0, 1, -1)
+        self.assertEqual(str(loc._flip(6)), "join{[0:2](+), [5:6](+)}")
+
+        # flip with None strand inverts the order in compound locations
+        loc = SimpleLocation(4, 6, None) + SimpleLocation(0, 1, None)
+        self.assertEqual(str(loc._flip(6)), "join{[5:6], [0:2]}")
+
     def test_between(self):
         """GenBank/EMBL write/read simple between locations."""
         # Note we don't use the BetweenPosition any more!
