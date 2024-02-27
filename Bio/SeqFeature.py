@@ -1641,7 +1641,7 @@ class CompoundLocation(Location):
     def _flip(self, length):
         """Return a copy of the locations after the parent is reversed (PRIVATE).
 
-        Note that the order of the parts is NOT reversed too. Consider a CDS
+        Note that the order of the parts is NOT reversed if strand!= None. Consider a CDS
         on the forward strand with exons small, medium and large (in length).
         Once we change the frame of reference to the reverse complement strand,
         the start codon is still part of the small exon, and the stop codon
@@ -1709,7 +1709,16 @@ class CompoundLocation(Location):
         versions of Biopython which would have given join{[5:29](-), [37:52](-)}
         and the translation would have wrongly been "EXAMPLE*SILLY" instead.
 
+        When strand is None, the parts are reversed. In principle this does not
+        change the meaning of the location, but improves the representation of
+        locations spanning the origin in circular molecules. For more details,
+        see https://github.com/biopython/biopython/issues/4611
+
         """
+        if all(loc.strand is None for loc in self.parts):
+            return CompoundLocation(
+                [loc._flip(length) for loc in self.parts[::-1]], self.operator
+            )
         return CompoundLocation(
             [loc._flip(length) for loc in self.parts], self.operator
         )
