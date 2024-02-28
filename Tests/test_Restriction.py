@@ -30,6 +30,9 @@ from Bio.Restriction import RestrictionBatch
 from Bio.Restriction import SmaI
 from Bio.Restriction import SnaI
 from Bio.Restriction import SphI
+from Bio.Restriction import BsaI
+from Bio.Restriction import BsaXI
+from Bio.Restriction import BspCNI
 from Bio.Seq import MutableSeq
 from Bio.Seq import Seq
 
@@ -191,7 +194,11 @@ class SimpleEnzyme(unittest.TestCase):
     def test_cutting_border_positions(self):
         """Check if cutting after first and penultimate position works."""
         # Use EarI, cuts as follows: CTCTTCN^NNN_N
+        # Only when the cut produces double stranded DNA on both outputs
+        # it is returned.
         seq = Seq("CTCTTCA")
+        self.assertEqual(EarI.search(seq), [])
+        seq += "AAA"
         self.assertEqual(EarI.search(seq), [])
         seq += "A"
         self.assertEqual(EarI.search(seq), [8])
@@ -200,6 +207,16 @@ class SimpleEnzyme(unittest.TestCase):
         self.assertEqual(EarI.search(seq), [])
         seq = "A" + seq
         self.assertEqual(EarI.search(seq), [2])
+
+        # Examples from https://github.com/biopython/biopython/issues/4604
+        self.assertEqual(BsaI.search(Seq("GGTCTCATAAAA")), [8])
+        self.assertEqual(BsaI.search(Seq("GGTCTCATAAA")), [])
+
+        self.assertEqual(BsaXI.search(Seq("AAATAAAAAAAAAACAAAAACTCC")), [5])
+        self.assertEqual(BsaXI.search(Seq("AATAAAAAAAAAACAAAAACTCC")), [])
+
+        self.assertEqual(BspCNI.search(Seq("CTCAGAAAAAAAAAT")), [15])
+        self.assertEqual(BspCNI.search(Seq("CTCAGAAAAAAAAA")), [])
 
     def test_recognition_site_on_both_strands(self):
         """Check if recognition sites on both strands are properly handled."""
