@@ -13,6 +13,7 @@ import warnings
 
 from collections import deque
 from copy import copy
+from typing import Any, Dict, Generic, List, Optional, Protocol, TypeVar
 
 import numpy as np
 
@@ -20,12 +21,28 @@ from Bio import BiopythonWarning
 from Bio.PDB.PDBExceptions import PDBConstructionException
 
 
-class Entity:
+class _Entity(Protocol):
+    def get_id(self):
+        ...
+
+    def set_parent(self, parent) -> None:
+        ...
+
+
+Child = TypeVar("Child", bound=_Entity)
+Parent = TypeVar("Parent", bound=Optional[_Entity])
+
+
+class Entity(Generic[Parent, Child]):
     """Basic container object for PDB hierarchy.
 
     Structure, Model, Chain and Residue are subclasses of Entity.
     It deals with storage and lookup.
     """
+
+    parent: Optional[Parent]
+    child_list: List[Child]
+    child_dict: Dict[Any, Child]
 
     def __init__(self, id):
         """Initialize the class."""
@@ -200,7 +217,7 @@ class Entity:
         """
         return self.level
 
-    def set_parent(self, entity):
+    def set_parent(self, entity: Parent):
         """Set the parent Entity object."""
         self.parent = entity
         self._reset_full_id()
@@ -216,7 +233,7 @@ class Entity:
         del self.child_dict[id]
         self.child_list.remove(child)
 
-    def add(self, entity):
+    def add(self, entity: Child):
         """Add a child to the Entity."""
         entity_id = entity.get_id()
         if self.has_id(entity_id):
@@ -225,7 +242,7 @@ class Entity:
         self.child_list.append(entity)
         self.child_dict[entity_id] = entity
 
-    def insert(self, pos, entity):
+    def insert(self, pos: int, entity: Child):
         """Add a child to the Entity at a specified position."""
         entity_id = entity.get_id()
         if self.has_id(entity_id):

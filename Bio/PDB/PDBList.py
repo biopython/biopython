@@ -484,14 +484,14 @@ class PDBList:
         data = json.dumps(body).encode("utf-8")
         headers = {
             "Content-Type": "application/json; charset=utf-8",
-            "Content-Length": len(data),
+            "Content-Length": str(len(data)),
         }
         request = Request("https://search.rcsb.org/rcsbsearch/v2/query", data, headers)
         with urlopen(request) as response:
             assemblies = json.loads(response.read().decode("utf-8"))["result_set"]
 
         # We transform the assemblies to match the format that they have historically been returned in.
-        def transform(assembly: dict) -> tuple[str, str]:
+        def transform(assembly: dict) -> Tuple[str, str]:
             split = assembly["identifier"].split("-")
             return split[0].lower(), split[-1]
 
