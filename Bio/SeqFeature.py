@@ -1642,11 +1642,13 @@ class CompoundLocation(Location):
     def _flip(self, length):
         """Return a copy of the locations after the parent is reversed (PRIVATE).
 
-        Note that the order of the parts is NOT reversed if strand!= None. Consider a CDS
-        on the forward strand with exons small, medium and large (in length).
-        Once we change the frame of reference to the reverse complement strand,
-        the start codon is still part of the small exon, and the stop codon
-        still part of the large exon - so the part order remains the same!
+        Note that the order of the parts is NOT reversed unless all parts
+        have strand=None, since the order has meaning for stranded features.
+        Consider a CDS on the forward strand with exons small, medium
+        and large (in length). Once we change the frame of reference
+        to the reverse complement strand, the start codon is still part of
+        the small exon, and the stop codon still part of the large exon -
+        so the part order remains the same!
 
         Here is an artificial example, were the features map to the two upper
         case regions and the lower case runs of n are not used:
@@ -1710,19 +1712,27 @@ class CompoundLocation(Location):
         versions of Biopython which would have given join{[5:29](-), [37:52](-)}
         and the translation would have wrongly been "EXAMPLE*SILLY" instead.
 
-        When strand is None, the parts are reversed. In principle this does not
-        change the meaning of the location, but improves the representation of
-        locations spanning the origin in circular molecules. For more details,
-        see https://github.com/biopython/biopython/issues/4611
+        When all the parts have strand None, the order of the parts is reversed.
+        In principle this does not change the meaning of the location, but improves
+        the representation of feature locations spanning the origin in circular
+        molecules.
 
+        >>> loc = SimpleLocation(4, 6, None) + SimpleLocation(0, 1, None)
+        >>> print(loc)
+        join{[4:6], [0:1]}
+        >>> print(loc._flip(6))
+        join{[5:6], [0:2]}
+
+        join{[0:2], [5:6]} would not be properly represented in SnapGene, Benchling, etc.
         """
         if all(loc.strand is None for loc in self.parts):
             return CompoundLocation(
                 [loc._flip(length) for loc in self.parts[::-1]], self.operator
             )
-        return CompoundLocation(
-            [loc._flip(length) for loc in self.parts], self.operator
-        )
+        else:
+            return CompoundLocation(
+                [loc._flip(length) for loc in self.parts], self.operator
+            )
 
     @property
     def start(self):
