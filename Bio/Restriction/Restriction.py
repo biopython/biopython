@@ -546,11 +546,13 @@ class AbstractCut(RestrictionType):
         sequence. Modify the index for site in circular sequences.
         """
         length = len(cls.dna)
-        drop = itertools.dropwhile
-        take = itertools.takewhile
         if cls.dna.is_linear():
-            cls.results = list(drop(lambda x: x <= 1, cls.results))
-            cls.results = list(take(lambda x: x <= length, cls.results))
+
+            def filtering_function(cut_on_watson):
+                cut_on_crick = cut_on_watson - cls.ovhg
+                return all(1 < x <= length for x in (cut_on_watson, cut_on_crick))
+
+            cls.results = list(filter(filtering_function, cls.results))
         else:
             for index, location in enumerate(cls.results):
                 if location < 1:
