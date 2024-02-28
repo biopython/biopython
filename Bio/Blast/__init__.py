@@ -938,6 +938,22 @@ def read(source):
     return record
 
 
+def write(records, stream, fmt="XML"):
+    """Write BLAST records as an XML file, and return the number of records.
+
+    Arguments:
+     - records - A ``Bio.Blast.Records`` object.
+     - stream  - File object to write to, or filename as string. The File
+                 object must have been opened for writing in binary mode, and
+                 must be closed (or flushed) by the caller after ``write``
+                 returns to ensure that all records are written.
+     - fmt     - string describing the file format to write (case-insensitive).
+                 Currently, only "XML" is accepted.
+
+    Returns the number of records written (as an integer).
+    """
+
+
 @function_with_previous
 def qblast(
     program,
