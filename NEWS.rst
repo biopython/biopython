@@ -80,8 +80,8 @@ The UniProt package now includes a method to search UniProt programmatically.
 The tutorial has been updated with examples of how to use the search method.
 See the chapter on Swiss-Prot and ExPASy in the tutorial for more information.
 
-Now when "flipping" compound locations with ``_flip()`` in ``Bio.SeqFeature``,
-if the strand is ``None``, the order of the sublocations is reversed, to improve
+Now when reverse complementing a ``SeqRecord`` containing unstranded features
+with compound locations the order of the sublocations is reversed, to improve
 the representation of origin-spanning locations. See issue #4611.
 
 As in recent releases, more of our code is now explicitly available under
