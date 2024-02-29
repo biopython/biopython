@@ -550,9 +550,9 @@ class AbstractCut(RestrictionType):
 
             def filtering_function(cut_on_watson):
                 cut_on_crick = cut_on_watson - cls.ovhg
-                return all(1 < x <= length for x in (cut_on_watson, cut_on_crick))
+                return (1 < cut_on_watson <= length) and (1 < cut_on_crick <= length)
 
-            cls.results = list(filter(filtering_function, cls.results))
+            cls.results = [cut for cut in cls.results if filtering_function(cut)]
         else:
             for index, location in enumerate(cls.results):
                 if location < 1:
