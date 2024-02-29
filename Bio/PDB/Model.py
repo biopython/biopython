@@ -8,8 +8,14 @@
 from Bio.PDB.Entity import Entity
 from Bio.PDB.internal_coords import IC_Chain
 
+from typing import TYPE_CHECKING
 
-class Model(Entity):
+if TYPE_CHECKING:
+    from Bio.PDB.Chain import Chain
+    from Bio.PDB.Structure import Structure
+
+
+class Model(Entity["Structure", "Chain"]):
     """The object representing a model in a structure.
 
     In a structure derived from an X-ray crystallography experiment,

@@ -8,6 +8,7 @@
 This is used by the PDBParser and MMCIFparser classes.
 """
 
+from typing import Optional
 import numpy as np
 import warnings
 
@@ -75,7 +76,7 @@ class StructureBuilder:
         """
         self.structure = Structure(structure_id)
 
-    def init_model(self, model_id: int, serial_num: int = None):
+    def init_model(self, model_id: int, serial_num: Optional[int] = None):
         """Create a new Model object with given id.
 
         Arguments:
@@ -185,15 +186,15 @@ class StructureBuilder:
     def init_atom(
         self,
         name: str,
-        coord: np.array,
+        coord: np.ndarray,
         b_factor: float,
         occupancy: float,
         altloc: str,
         fullname: str,
         serial_number=None,
-        element: str = None,
-        pqr_charge: float = None,
-        radius: float = None,
+        element: Optional[str] = None,
+        pqr_charge: Optional[float] = None,
+        radius: Optional[float] = None,
         is_pqr: bool = False,
     ):
         """Create a new Atom object.

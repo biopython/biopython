@@ -10,6 +10,12 @@
 from Bio.PDB.PDBExceptions import PDBConstructionException
 from Bio.PDB.Entity import Entity, DisorderedEntityWrapper
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from Bio.PDB.Atom import Atom
+    from Bio.PDB.Chain import Chain
+
 
 _atom_name_dict = {}
 _atom_name_dict["N"] = 1
@@ -18,7 +24,7 @@ _atom_name_dict["C"] = 3
 _atom_name_dict["O"] = 4
 
 
-class Residue(Entity):
+class Residue(Entity["Chain", "Atom"]):
     """Represents a residue. A Residue object stores atoms."""
 
     def __init__(self, id, resname, segid):

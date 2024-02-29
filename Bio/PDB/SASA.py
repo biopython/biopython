@@ -18,6 +18,7 @@ Reference:
 
 import collections
 import math
+from typing import MutableMapping
 
 import numpy as np
 
@@ -41,7 +42,7 @@ _ENTITY_HIERARCHY = {
 # References:
 # A. Bondi (1964). "van der Waals Volumes and Radii".
 # M. Mantina, A.C. et al., J. Phys. Chem. 2009, 113, 5806.
-ATOMIC_RADII = collections.defaultdict(lambda: 2.0)
+ATOMIC_RADII: MutableMapping[str, float] = collections.defaultdict(lambda: 2.0)
 ATOMIC_RADII.update(
     {
         "H": 1.200,
