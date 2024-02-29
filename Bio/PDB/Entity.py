@@ -13,24 +13,18 @@ import warnings
 
 from collections import deque
 from copy import copy
-from typing import Any, Dict, Generic, List, Optional, Protocol, TypeVar
+from typing import TYPE_CHECKING, Any, Dict, Generic, List, Optional, TypeVar, Union
 
 import numpy as np
 
 from Bio import BiopythonWarning
 from Bio.PDB.PDBExceptions import PDBConstructionException
 
+if TYPE_CHECKING:
+    from Bio.PDB.Atom import Atom
 
-class _Entity(Protocol):
-    def get_id(self):
-        ...
-
-    def set_parent(self, parent) -> None:
-        ...
-
-
-Child = TypeVar("Child", bound=_Entity)
-Parent = TypeVar("Parent", bound=Optional[_Entity])
+Child = TypeVar("Child", bound=Union["Entity", "Atom"])
+Parent = TypeVar("Parent", bound=Optional["Entity"])
 
 
 class Entity(Generic[Parent, Child]):
@@ -43,6 +37,7 @@ class Entity(Generic[Parent, Child]):
     parent: Optional[Parent]
     child_list: List[Child]
     child_dict: Dict[Any, Child]
+    level: str
 
     def __init__(self, id):
         """Initialize the class."""
@@ -191,7 +186,7 @@ class Entity(Generic[Parent, Child]):
         """
         if value == self._id:
             return
-        if self.parent:
+        if self.parent is not None:
             if value in self.parent.child_dict:
                 # See issue 1551 for details on the downgrade.
                 warnings.warn(
