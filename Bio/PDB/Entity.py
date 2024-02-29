@@ -23,20 +23,20 @@ from Bio.PDB.PDBExceptions import PDBConstructionException
 if TYPE_CHECKING:
     from Bio.PDB.Atom import Atom
 
-Child = TypeVar("Child", bound=Union["Entity", "Atom"])
-Parent = TypeVar("Parent", bound=Optional["Entity"])
+_Child = TypeVar("_Child", bound=Union["Entity", "Atom"])
+_Parent = TypeVar("_Parent", bound=Optional["Entity"])
 
 
-class Entity(Generic[Parent, Child]):
+class Entity(Generic[_Parent, _Child]):
     """Basic container object for PDB hierarchy.
 
     Structure, Model, Chain and Residue are subclasses of Entity.
     It deals with storage and lookup.
     """
 
-    parent: Optional[Parent]
-    child_list: List[Child]
-    child_dict: Dict[Any, Child]
+    parent: Optional[_Parent]
+    child_list: List[_Child]
+    child_dict: Dict[Any, _Child]
     level: str
 
     def __init__(self, id):
@@ -212,7 +212,7 @@ class Entity(Generic[Parent, Child]):
         """
         return self.level
 
-    def set_parent(self, entity: Parent):
+    def set_parent(self, entity: _Parent):
         """Set the parent Entity object."""
         self.parent = entity
         self._reset_full_id()
@@ -228,7 +228,7 @@ class Entity(Generic[Parent, Child]):
         del self.child_dict[id]
         self.child_list.remove(child)
 
-    def add(self, entity: Child):
+    def add(self, entity: _Child):
         """Add a child to the Entity."""
         entity_id = entity.get_id()
         if self.has_id(entity_id):
@@ -237,7 +237,7 @@ class Entity(Generic[Parent, Child]):
         self.child_list.append(entity)
         self.child_dict[entity_id] = entity
 
-    def insert(self, pos: int, entity: Child):
+    def insert(self, pos: int, entity: _Child):
         """Add a child to the Entity at a specified position."""
         entity_id = entity.get_id()
         if self.has_id(entity_id):
