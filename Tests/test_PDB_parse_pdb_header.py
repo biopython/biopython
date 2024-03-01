@@ -1,4 +1,6 @@
 # Copyright 2017 by Bernhard Thiel.  All rights reserved.
+# Revisions copyright 2024 James Krieger.
+
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
@@ -169,6 +171,25 @@ class ParseReal(unittest.TestCase):
         self.assertEqual(header["astral"]["Source-PDB"], "256b")
         self.assertEqual(header["astral"]["Region"], "a:")
         self.assertEqual(header["astral"]["ASTRAL-SPACI"], "0.72")
+
+    def test_parse_pdb_with_remark_350_biomoltrans(self):
+        """Tests that parse_pdb_header now can identify some REMARK 350 entries."""
+        header = parse_pdb_header("PDB/2XHE.pdb")
+        self.assertEqual(
+            header["biomoltrans"],
+            {
+                "1": [
+                    ["A", "B"],
+                    "  1.000000  0.000000  0.000000        0.00000            \n",
+                    "  0.000000  1.000000  0.000000        0.00000            \n",
+                    "  0.000000  0.000000  1.000000        0.00000            \n",
+                ]
+            },
+        )
+
+    def test_parse_pdb_without_remark_350_biomoltrans(self):
+        header = parse_pdb_header("PDB/1LCD.pdb")
+        self.assertEqual(header["biomoltrans"], {})
 
 
 if __name__ == "__main__":
