@@ -202,6 +202,108 @@ Score:%d bits(%d), Expect:%.1g,
             alignment_text,
         )
 
+    def _format_xml(self, program, query_length, target_length):
+        query = self.query
+        target = self.target
+        coordinates = self.coordinates
+        hit_from, query_from = coordinates[:, 0]
+        hit_to, query_to = coordinates[:, -1]
+        if program in ("tblastn", "tblastx"):
+            feature = target.features[0]
+            coded_by = feature.qualifiers["coded_by"]
+            if coded_by.startswith("complement("):
+                assert coded_by.endswith(")")
+                coded_by = coded_by[11:-1]
+                strand = -1
+            else:
+                strand = +1
+            hit_id, hit_from_to = coded_by.split(":")
+            hit_from, hit_to = hit_from_to.split("..")
+            hit_from = int(hit_from)
+            hit_to = int(hit_to)
+            hit_start = hit_from - 1
+            hit_end = hit_to
+            if strand == +1:
+                hit_frame = hit_start % 3 + 1
+            else:
+                hit_frame = (hit_end - target_length) % -3 - 1
+        elif program == "blastx":
+            hit_from += 1
+            hit_frame = 0
+        else:
+            if hit_from <= hit_to:
+                hit_frame = 1
+                hit_from += 1
+            else:
+                hit_frame = -1
+                hit_to += 1
+        if program in ("blastx", "tblastx"):
+            feature = query.features[0]
+            coded_by = feature.qualifiers["coded_by"]
+            if coded_by.startswith("complement("):
+                assert coded_by.endswith(")")
+                coded_by = coded_by[11:-1]
+                strand = -1
+            else:
+                strand = +1
+            query_id, query_from_to = coded_by.split(":")
+            query_from, query_to = query_from_to.split("..")
+            query_from = int(query_from)
+            query_to = int(query_to)
+            query_start = query_from - 1
+            query_end = query_to
+            if strand == +1:
+                query_frame = query_start % 3 + 1
+            else:
+                query_frame = (query_end - query_length) % -3 - 1
+        elif program == "tblastn":
+            query_from += 1
+            query_frame = 0
+        else:
+            if query_from <= query_to:
+                query_from += 1
+                query_frame = 1
+            else:
+                query_to += 1
+                query_frame = -1
+        hseq = self[0]
+        qseq = self[1]
+        align_len = len(hseq)
+        annotations = self.annotations
+        bit_score = annotations["bit score"]
+        evalue = annotations["evalue"]
+        identity = annotations["identity"]
+        positive = annotations["positive"]
+        midline = annotations["midline"]
+        block = f"""\
+    <Hsp>
+      <Hsp_num>{self.num}</Hsp_num>
+      <Hsp_bit-score>{bit_score}</Hsp_bit-score>
+      <Hsp_score>{self.score}</Hsp_score>
+      <Hsp_evalue>{evalue}</Hsp_evalue>
+      <Hsp_query-from>{query_from}</Hsp_query-from>
+      <Hsp_query-to>{query_to}</Hsp_query-to>
+      <Hsp_hit-from>{hit_from}</Hsp_hit-from>
+      <Hsp_hit-to>{hit_to}</Hsp_hit-to>
+      <Hsp_query-frame>{query_frame}</Hsp_query-frame>
+      <Hsp_hit-frame>{hit_frame}</Hsp_hit-frame>
+      <Hsp_identity>{identity}</Hsp_identity>
+      <Hsp_positive>{positive}</Hsp_positive>
+"""
+        gaps = annotations.get("gaps")
+        if gaps is not None:
+            block += f"""\
+      <Hsp_gaps>{gaps}</Hsp_gaps>
+"""
+        block += f"""\
+      <Hsp_align-len>{align_len}</Hsp_align-len>
+      <Hsp_qseq>{qseq}</Hsp_qseq>
+      <Hsp_hseq>{hseq}</Hsp_hseq>
+      <Hsp_midline>{midline}</Hsp_midline>
+    </Hsp>
+"""
+        return block.encode("UTF-8")
+
 
 class Hit(Alignments):
     """Stores a single BLAST hit of one single query against one target.
@@ -1104,12 +1206,15 @@ def write(records, destination, fmt="XML"):
                 )
             )
             query = record.query
-            if query is not None:
+            if query is None:
+                query_length = None
+            else:
+                query_length = len(query.seq)
                 stream.write(
                     f"""\
-  <Iteration_query-ID>{record.query.id}</Iteration_query-ID>
-  <Iteration_query-def>{record.query.description}</Iteration_query-def>
-  <Iteration_query-len>{len(record.query.seq)}</Iteration_query-len>
+  <Iteration_query-ID>{query.id}</Iteration_query-ID>
+  <Iteration_query-def>{query.description}</Iteration_query-def>
+  <Iteration_query-len>{query_length}</Iteration_query-len>
 """.encode(
                         "UTF-8"
                     )
@@ -1136,111 +1241,7 @@ def write(records, destination, fmt="XML"):
                     )
                 )
                 for hsp in hit:
-                    query = hsp.query
-                    target = hsp.target
-                    coordinates = hsp.coordinates
-                    hit_from, query_from = coordinates[:, 0]
-                    hit_to, query_to = coordinates[:, -1]
-                    if program in ("tblastn", "tblastx"):
-                        feature = target.features[0]
-                        coded_by = feature.qualifiers["coded_by"]
-                        if coded_by.startswith("complement("):
-                            assert coded_by.endswith(")")
-                            coded_by = coded_by[11:-1]
-                            strand = -1
-                        else:
-                            strand = +1
-                        hit_id, hit_from_to = coded_by.split(":")
-                        hit_from, hit_to = hit_from_to.split("..")
-                        hit_from = int(hit_from)
-                        hit_to = int(hit_to)
-                        hit_start = hit_from - 1
-                        hit_end = hit_to
-                        if strand == +1:
-                            hit_frame = hit_start % 3 + 1
-                        else:
-                            hit_frame = (hit_end - target_length) % -3 - 1
-                    elif program == "blastx":
-                        hit_from += 1
-                        hit_frame = 0
-                    else:
-                        if hit_from <= hit_to:
-                            hit_frame = 1
-                            hit_from += 1
-                        else:
-                            hit_frame = -1
-                            hit_to += 1
-                    if program in ("blastx", "tblastx"):
-                        query_length = len(record.query.seq)
-                        feature = query.features[0]
-                        coded_by = feature.qualifiers["coded_by"]
-                        if coded_by.startswith("complement("):
-                            assert coded_by.endswith(")")
-                            coded_by = coded_by[11:-1]
-                            strand = -1
-                        else:
-                            strand = +1
-                        query_id, query_from_to = coded_by.split(":")
-                        query_from, query_to = query_from_to.split("..")
-                        query_from = int(query_from)
-                        query_to = int(query_to)
-                        query_start = query_from - 1
-                        query_end = query_to
-                        if strand == +1:
-                            query_frame = query_start % 3 + 1
-                        else:
-                            query_frame = (query_end - query_length) % -3 - 1
-                    elif program == "tblastn":
-                        query_from += 1
-                        query_frame = 0
-                    else:
-                        if query_from <= query_to:
-                            query_from += 1
-                            query_frame = 1
-                        else:
-                            query_to += 1
-                            query_frame = -1
-                    hseq = hsp[0]
-                    qseq = hsp[1]
-                    align_len = len(hseq)
-                    gaps = hsp.annotations.get("gaps")
-                    stream.write(
-                        f"""\
-    <Hsp>
-      <Hsp_num>{hsp.num}</Hsp_num>
-      <Hsp_bit-score>{hsp.annotations["bit score"]}</Hsp_bit-score>
-      <Hsp_score>{hsp.score}</Hsp_score>
-      <Hsp_evalue>{hsp.annotations["evalue"]}</Hsp_evalue>
-      <Hsp_query-from>{query_from}</Hsp_query-from>
-      <Hsp_query-to>{query_to}</Hsp_query-to>
-      <Hsp_hit-from>{hit_from}</Hsp_hit-from>
-      <Hsp_hit-to>{hit_to}</Hsp_hit-to>
-      <Hsp_query-frame>{query_frame}</Hsp_query-frame>
-      <Hsp_hit-frame>{hit_frame}</Hsp_hit-frame>
-      <Hsp_identity>{hsp.annotations["identity"]}</Hsp_identity>
-      <Hsp_positive>{hsp.annotations["positive"]}</Hsp_positive>
-""".encode(
-                            "UTF-8"
-                        )
-                    )
-                    if gaps is not None:
-                        stream.write(
-                            b"""\
-      <Hsp_gaps>%d</Hsp_gaps>
-"""
-                            % gaps
-                        )
-                    stream.write(
-                        f"""\
-      <Hsp_align-len>{align_len}</Hsp_align-len>
-      <Hsp_qseq>{qseq}</Hsp_qseq>
-      <Hsp_hseq>{hseq}</Hsp_hseq>
-      <Hsp_midline>{hsp.annotations["midline"]}</Hsp_midline>
-    </Hsp>
-""".encode(
-                            "UTF-8"
-                        )
-                    )
+                    stream.write(hsp._format_xml(program, query_length, target_length))
                 stream.write(
                     b"""\
   </Hit_hsps>
