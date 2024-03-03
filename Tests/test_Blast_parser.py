@@ -328,6 +328,7 @@ Program: BLASTP 2.2.26+
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
         self.assertEqual(len(record), 5)
         hit = record[0]
+        self.assertEqual(hit.num, 1)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gnl|BL_ORD_ID|1")
         self.assertEqual(hit.target.name, "1")
@@ -338,6 +339,7 @@ Program: BLASTP 2.2.26+
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=100)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 350.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 139.428)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.99275e-46)
@@ -407,6 +409,7 @@ Query_1          60 SLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERAN 102
 """,
         )
         hit = record[1]
+        self.assertEqual(hit.num, 2)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gnl|BL_ORD_ID|2")
         self.assertEqual(hit.target.name, "2")
@@ -417,6 +420,7 @@ Query_1          60 SLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERAN 102
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=105)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 219.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 88.9669)
         self.assertAlmostEqual(hsp.annotations["evalue"], 6.94052e-27)
@@ -486,6 +490,7 @@ Query_1          56 NEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERA 101
 """,
         )
         hit = record[2]
+        self.assertEqual(hit.num, 3)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gnl|BL_ORD_ID|3")
         self.assertEqual(hit.target.name, "3")
@@ -496,6 +501,7 @@ Query_1          56 NEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERA 101
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=105)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 219.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 88.9669)
         self.assertAlmostEqual(hsp.annotations["evalue"], 8.41012e-27)
@@ -564,6 +570,7 @@ Query_1          56 NEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERA 101
 """,
         )
         hit = record[3]
+        self.assertEqual(hit.num, 4)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gnl|BL_ORD_ID|4")
         self.assertEqual(hit.target.name, "4")
@@ -574,6 +581,7 @@ Query_1          56 NEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERA 101
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=105)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 204.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 83.1889)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.37847e-24)
@@ -643,6 +651,7 @@ Query_1          56 NEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIER 100
 """,
         )
         hit = record[4]
+        self.assertEqual(hit.num, 5)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gnl|BL_ORD_ID|15")
         self.assertEqual(hit.target.name, "15")
@@ -653,6 +662,7 @@ Query_1          56 NEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIER 100
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=132)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 29.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 15.779)
         self.assertAlmostEqual(hsp.annotations["evalue"], 7.12269)
@@ -802,6 +812,7 @@ Query_1          59 VSLDITEESTSDLDKFNSGDKVTIT  84
         self.assertEqual(repr(record), "<Bio.Blast.Record query.id='unknown'; 11 hits>")
         self.assertEqual(len(record), 11)
         hit = record[0]
+        self.assertEqual(hit.num, 1)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|75750454|ref|YP_319893.1|")
         self.assertEqual(hit.target.name, "YP_319893")
@@ -812,6 +823,7 @@ Query_1          59 VSLDITEESTSDLDKFNSGDKVTIT  84
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=131)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 680.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 266.544)
         self.assertAlmostEqual(hsp.annotations["evalue"], 4.72196e-70)
@@ -877,6 +889,7 @@ lcl|QUERY       120 GAKKLAQAMAS 131
 """,
         )
         hit = record[1]
+        self.assertEqual(hit.num, 2)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|51980166|ref|YP_077233.1|")
         self.assertEqual(hit.target.name, "YP_077233")
@@ -887,6 +900,7 @@ lcl|QUERY       120 GAKKLAQAMAS 131
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=144)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 181.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 74.3294)
         self.assertAlmostEqual(hsp.annotations["evalue"], 3.03476e-12)
@@ -948,6 +962,7 @@ lcl|QUERY        60 MISDAMKPYRNKGSGFQ 77
 """,
         )
         hit = record[2]
+        self.assertEqual(hit.num, 3)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|70606448|ref|YP_255318.1|")
         self.assertEqual(hit.target.name, "YP_255318")
@@ -958,6 +973,7 @@ lcl|QUERY        60 MISDAMKPYRNKGSGFQ 77
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=90)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 106.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 45.4394)
         self.assertAlmostEqual(hsp.annotations["evalue"], 0.00184433)
@@ -1019,6 +1035,7 @@ lcl|QUERY        60 MISDA 65
 """,
         )
         hit = record[3]
+        self.assertEqual(hit.num, 4)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|75750440|ref|YP_319873.1|")
         self.assertEqual(hit.target.name, "YP_319873")
@@ -1029,6 +1046,7 @@ lcl|QUERY        60 MISDA 65
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=145)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 102.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 43.8986)
         self.assertAlmostEqual(hsp.annotations["evalue"], 0.00527737)
@@ -1091,6 +1109,7 @@ lcl|QUERY        81 PGEVIAQVTSN--PEYQ 96
 """,
         )
         hit = record[4]
+        self.assertEqual(hit.num, 5)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|149720683|ref|XP_001495622.1|")
         self.assertEqual(hit.target.name, "XP_001495622")
@@ -1101,6 +1120,7 @@ lcl|QUERY        81 PGEVIAQVTSN--PEYQ 96
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=595)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 79.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 35.039)
         self.assertAlmostEqual(hsp.annotations["evalue"], 2.35127)
@@ -1157,6 +1177,7 @@ lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIE--REEVLSKGAKKLAQAM 129
 """,
         )
         hit = record[5]
+        self.assertEqual(hit.num, 6)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|229220336|ref|ZP_03838482.2|")
         self.assertEqual(hit.target.name, "ZP_03838482")
@@ -1167,6 +1188,7 @@ lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIE--REEVLSKGAKKLAQAM 129
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=208)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 78.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 34.6538)
         self.assertAlmostEqual(hsp.annotations["evalue"], 2.99494)
@@ -1229,6 +1251,7 @@ lcl|QUERY        64 AMKPYRNKGSGFQSQPIPGEVIAQ  88
 """,
         )
         hit = record[6]
+        self.assertEqual(hit.num, 7)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|167646253|ref|YP_001683916.1|")
         self.assertEqual(hit.target.name, "YP_001683916")
@@ -1239,6 +1262,7 @@ lcl|QUERY        64 AMKPYRNKGSGFQSQPIPGEVIAQ  88
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=155)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 78.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 34.6538)
         self.assertAlmostEqual(hsp.annotations["evalue"], 3.12253)
@@ -1296,6 +1320,7 @@ lcl|QUERY        58 VKMISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKAFLASPA 106
 """,
         )
         hit = record[7]
+        self.assertEqual(hit.num, 8)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|46114422|ref|XP_383229.1|")
         self.assertEqual(hit.target.name, "XP_383229")
@@ -1306,6 +1331,7 @@ lcl|QUERY        58 VKMISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKAFLASPA 106
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=263)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 77.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 34.2686)
         self.assertAlmostEqual(hsp.annotations["evalue"], 4.07814)
@@ -1366,6 +1392,7 @@ lcl|QUERY        94 YQQAKAFLASPATQVRNIEREEVLSKGAK 123
 """,
         )
         hit = record[8]
+        self.assertEqual(hit.num, 9)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|16804655|ref|NP_466140.1|")
         self.assertEqual(hit.target.name, "NP_466140")
@@ -1376,6 +1403,7 @@ lcl|QUERY        94 YQQAKAFLASPATQVRNIEREEVLSKGAK 123
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=178)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 77.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 34.2686)
         self.assertAlmostEqual(hsp.annotations["evalue"], 4.14677)
@@ -1447,6 +1475,7 @@ lcl|QUERY        80 IPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKK 124
 """,
         )
         hit = record[9]
+        self.assertEqual(hit.num, 10)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|225106043|ref|YP_002674349.1|")
         self.assertEqual(hit.target.name, "YP_002674349")
@@ -1457,6 +1486,7 @@ lcl|QUERY        80 IPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKK 124
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=202)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 76.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 33.8834)
         self.assertAlmostEqual(hsp.annotations["evalue"], 4.81876)
@@ -1519,6 +1549,7 @@ lcl|QUERY        55 HAIVKMISDAMKPYRNKGSGFQSQ 79
 """,
         )
         hit = record[10]
+        self.assertEqual(hit.num, 11)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|16801827|ref|NP_472095.1|")
         self.assertEqual(hit.target.name, "NP_472095")
@@ -1529,6 +1560,7 @@ lcl|QUERY        55 HAIVKMISDAMKPYRNKGSGFQSQ 79
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=178)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 74.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 33.113)
         self.assertAlmostEqual(hsp.annotations["evalue"], 9.08516)
@@ -1608,6 +1640,7 @@ lcl|QUERY        80 IPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKK 124
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
         self.assertEqual(len(record), 19)
         hit = record[0]
+        self.assertEqual(hit.num, 1)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|75750454|ref|YP_319893.1|")
         self.assertEqual(hit.target.name, "YP_319893")
@@ -1618,6 +1651,7 @@ lcl|QUERY        80 IPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKK 124
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=131)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 590.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 231.867)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.28615e-59)
@@ -1683,6 +1717,7 @@ lcl|QUERY       120 GAKKLAQAMAS 131
 """,
         )
         hit = record[1]
+        self.assertEqual(hit.num, 2)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|51980166|ref|YP_077233.1|")
         self.assertEqual(hit.target.name, "YP_077233")
@@ -1693,6 +1728,7 @@ lcl|QUERY       120 GAKKLAQAMAS 131
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=144)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 346.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 137.878)
         self.assertAlmostEqual(hsp.annotations["evalue"], 2.63528e-31)
@@ -1754,6 +1790,7 @@ lcl|QUERY        60 MISDAMKPYRNKGSGFQ 77
 """,
         )
         hit = record[2]
+        self.assertEqual(hit.num, 3)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|75750440|ref|YP_319873.1|")
         self.assertEqual(hit.target.name, "YP_319873")
@@ -1764,6 +1801,7 @@ lcl|QUERY        60 MISDAMKPYRNKGSGFQ 77
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=145)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 118.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 50.0528)
         self.assertAlmostEqual(hsp.annotations["evalue"], 7.16661e-05)
@@ -1826,6 +1864,7 @@ lcl|QUERY        65 MKPYRNKGSGFQSQPIPGEVIAQVTSN--PEYQ 96
 """,
         )
         hit = record[3]
+        self.assertEqual(hit.num, 4)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|70606448|ref|YP_255318.1|")
         self.assertEqual(hit.target.name, "YP_255318")
@@ -1836,6 +1875,7 @@ lcl|QUERY        65 MKPYRNKGSGFQSQPIPGEVIAQVTSN--PEYQ 96
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=90)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 112.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 47.7416)
         self.assertAlmostEqual(hsp.annotations["evalue"], 0.000338308)
@@ -1897,6 +1937,7 @@ lcl|QUERY        60 MISDAMK 67
 """,
         )
         hit = record[4]
+        self.assertEqual(hit.num, 5)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|56478923|ref|YP_160512.1|")
         self.assertEqual(hit.target.name, "YP_160512")
@@ -1907,6 +1948,7 @@ lcl|QUERY        60 MISDAMK 67
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=326)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 85.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 37.3412)
         self.assertAlmostEqual(hsp.annotations["evalue"], 0.461067)
@@ -1969,6 +2011,7 @@ lcl|QUERY        66 KPYRNKG--SGFQ--SQPIPG  83
 """,
         )
         hit = record[5]
+        self.assertEqual(hit.num, 6)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|16082535|ref|NP_394071.1|")
         self.assertEqual(hit.target.name, "NP_394071")
@@ -1979,6 +2022,7 @@ lcl|QUERY        66 KPYRNKG--SGFQ--SQPIPG  83
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=166)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 82.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 36.1856)
         self.assertAlmostEqual(hsp.annotations["evalue"], 0.960826)
@@ -2041,6 +2085,7 @@ lcl|QUERY        79 --PIPGEVIA  87
 """,
         )
         hit = record[6]
+        self.assertEqual(hit.num, 7)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|10639765|emb|CAC11737.1|")
         self.assertEqual(hit.target.name, "CAC11737")
@@ -2051,6 +2096,7 @@ lcl|QUERY        79 --PIPGEVIA  87
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=183)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 82.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 36.1856)
         self.assertAlmostEqual(hsp.annotations["evalue"], 0.960826)
@@ -2111,6 +2157,7 @@ lcl|QUERY        79 --PIPGEVIA  87
 """,
         )
         hit = record[7]
+        self.assertEqual(hit.num, 8)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|38511961|gb|AAH60735.1|")
         self.assertEqual(hit.target.name, "AAH60735")
@@ -2118,6 +2165,7 @@ lcl|QUERY        79 --PIPGEVIA  87
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=1370)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 82.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 36.1856)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.01015)
@@ -2175,6 +2223,7 @@ lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQ 127
 """,
         )
         hit = record[8]
+        self.assertEqual(hit.num, 9)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|71153789|sp|Q80XJ3.2|TTC28_MOUSE")
         self.assertEqual(hit.target.name, "Q80XJ3")
@@ -2185,6 +2234,7 @@ lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQ 127
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=1691)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 82.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 36.1856)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.12589)
@@ -2247,6 +2297,7 @@ lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQ  127
 """,
         )
         hit = record[9]
+        self.assertEqual(hit.num, 10)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|149254322|ref|XP_001476594.1|")
         self.assertEqual(hit.target.name, "XP_001476594")
@@ -2257,6 +2308,7 @@ lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQ  127
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=2481)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 81.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 35.8004)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.23411)
@@ -2317,6 +2369,7 @@ lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQ  127
 """,
         )
         hit = record[10]
+        self.assertEqual(hit.num, 11)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|148688047|gb|EDL19994.1|")
         self.assertEqual(hit.target.name, "EDL19994")
@@ -2326,6 +2379,7 @@ lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQ  127
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=2146)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 81.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 35.8004)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.24445)
@@ -2385,6 +2439,7 @@ lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQ  127
 """,
         )
         hit = record[11]
+        self.assertEqual(hit.num, 12)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|149063697|gb|EDM14020.1|")
         self.assertEqual(hit.target.name, "EDM14020")
@@ -2392,6 +2447,7 @@ lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQ  127
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=2098)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 81.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 35.8004)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.41037)
@@ -2449,6 +2505,7 @@ lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQ  127
 """,
         )
         hit = record[12]
+        self.assertEqual(hit.num, 13)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|163854616|ref|YP_001628914.1|")
         self.assertEqual(hit.target.name, "YP_001628914")
@@ -2459,6 +2516,7 @@ lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQ  127
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=333)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 81.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 35.8004)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.45823)
@@ -2521,6 +2579,7 @@ lcl|QUERY        82 G  83
 """,
         )
         hit = record[13]
+        self.assertEqual(hit.num, 14)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|109496198|ref|XP_222260.4|")
         self.assertEqual(hit.target.name, "XP_222260")
@@ -2531,6 +2590,7 @@ lcl|QUERY        82 G  83
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=2570)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 81.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 35.8004)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.47045)
@@ -2592,6 +2652,7 @@ lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQ  127
 """,
         )
         hit = record[14]
+        self.assertEqual(hit.num, 15)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|26327341|dbj|BAC27414.1|")
         self.assertEqual(hit.target.name, "BAC27414")
@@ -2601,6 +2662,7 @@ lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQ  127
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=682)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 80.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 35.4152)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.69454)
@@ -2660,6 +2722,7 @@ lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQ 127
 """,
         )
         hit = record[15]
+        self.assertEqual(hit.num, 16)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|26349137|dbj|BAC38208.1|")
         self.assertEqual(hit.target.name, "BAC38208")
@@ -2669,6 +2732,7 @@ lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQ 127
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=641)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 80.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 35.4152)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.842)
@@ -2728,6 +2792,7 @@ lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQ 127
 """,
         )
         hit = record[16]
+        self.assertEqual(hit.num, 17)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|194291978|ref|YP_002007885.1|")
         self.assertEqual(hit.target.name, "YP_002007885")
@@ -2738,6 +2803,7 @@ lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQ 127
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=2596)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 80.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 35.4152)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.95279)
@@ -2806,6 +2872,7 @@ lcl|QUERY        62 SDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQ   97
 """,
         )
         hit = record[17]
+        self.assertEqual(hit.num, 18)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|164498981|gb|ABY59058.1|")
         self.assertEqual(hit.target.name, "ABY59058")
@@ -2813,6 +2880,7 @@ lcl|QUERY        62 SDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQ   97
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=246)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 77.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 34.2596)
         self.assertAlmostEqual(hsp.annotations["evalue"], 3.90317)
@@ -2865,6 +2933,7 @@ lcl|QUERY         7 KGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAI 55
 """,
         )
         hit = record[18]
+        self.assertEqual(hit.num, 19)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|189198988|ref|XP_001935831.1|")
         self.assertEqual(hit.target.name, "XP_001935831")
@@ -2875,6 +2944,7 @@ lcl|QUERY         7 KGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAI 55
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=1026)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 76.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 33.8744)
         self.assertAlmostEqual(hsp.annotations["evalue"], 5.35939)
@@ -2945,6 +3015,7 @@ lcl|QUERY        28 YPEVTLKLAGEEANARRAGDERTKEAI----HAIVKMISDAMKPYRNKGSGFQSQP  80
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
         self.assertEqual(len(record), 9)
         hit = record[0]
+        self.assertEqual(hit.num, 1)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|75750454|ref|YP_319893.1|")
         self.assertEqual(hit.target.name, "YP_319893")
@@ -2955,6 +3026,7 @@ lcl|QUERY        28 YPEVTLKLAGEEANARRAGDERTKEAI----HAIVKMISDAMKPYRNKGSGFQSQP  80
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=131)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 535.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 210.59)
         self.assertAlmostEqual(hsp.annotations["evalue"], 3.43623e-53)
@@ -3020,6 +3092,7 @@ lcl|QUERY       120 GAKKLAQAMAS 131
 """,
         )
         hit = record[1]
+        self.assertEqual(hit.num, 2)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|75750440|ref|YP_319873.1|")
         self.assertEqual(hit.target.name, "YP_319873")
@@ -3030,6 +3103,7 @@ lcl|QUERY       120 GAKKLAQAMAS 131
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=145)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 312.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 124.69)
         self.assertAlmostEqual(hsp.annotations["evalue"], 2.62891e-27)
@@ -3092,6 +3166,7 @@ lcl|QUERY        63 DAMKPYRNKGSGFQSQPIPGEVIAQVTSN--PEYQ 96
 """,
         )
         hit = record[2]
+        self.assertEqual(hit.num, 3)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|51980166|ref|YP_077233.1|")
         self.assertEqual(hit.target.name, "YP_077233")
@@ -3102,6 +3177,7 @@ lcl|QUERY        63 DAMKPYRNKGSGFQSQPIPGEVIAQVTSN--PEYQ 96
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=144)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 298.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 119.298)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.0246e-25)
@@ -3163,6 +3239,7 @@ lcl|QUERY        60 MISDAMKPYRNKGSGFQS 78
 """,
         )
         hit = record[3]
+        self.assertEqual(hit.num, 4)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|70606448|ref|YP_255318.1|")
         self.assertEqual(hit.target.name, "YP_255318")
@@ -3173,6 +3250,7 @@ lcl|QUERY        60 MISDAMKPYRNKGSGFQS 78
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=90)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 242.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 97.7264)
         self.assertAlmostEqual(hsp.annotations["evalue"], 3.24619e-19)
@@ -3235,6 +3313,7 @@ lcl|QUERY        60 MISDAMKPYRNKGSGFQSQPIPGEV 85
 """,
         )
         hit = record[4]
+        self.assertEqual(hit.num, 5)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|227518463|ref|ZP_03948512.1|")
         self.assertEqual(hit.target.name, "ZP_03948512")
@@ -3245,6 +3324,7 @@ lcl|QUERY        60 MISDAMKPYRNKGSGFQSQPIPGEV 85
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=516)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 82.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 36.0945)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.01498)
@@ -3307,6 +3387,7 @@ lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQAMAS 131
 """,
         )
         hit = record[5]
+        self.assertEqual(hit.num, 6)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|78044048|ref|YP_360886.1|")
         self.assertEqual(hit.target.name, "YP_360886")
@@ -3317,6 +3398,7 @@ lcl|QUERY        84 VIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQAMAS 131
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=302)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 78.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 34.5537)
         self.assertAlmostEqual(hsp.annotations["evalue"], 3.29147)
@@ -3382,6 +3464,7 @@ lcl|QUERY        78 QPIPGEVIAQVTSNPE  94
 """,
         )
         hit = record[6]
+        self.assertEqual(hit.num, 7)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|116750563|ref|YP_847250.1|")
         self.assertEqual(hit.target.name, "YP_847250")
@@ -3392,6 +3475,7 @@ lcl|QUERY        78 QPIPGEVIAQVTSNPE  94
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=645)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 77.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 34.1685)
         self.assertAlmostEqual(hsp.annotations["evalue"], 4.67286)
@@ -3454,6 +3538,7 @@ lcl|QUERY        60 MISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKA 100
 """,
         )
         hit = record[7]
+        self.assertEqual(hit.num, 8)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|184201116|ref|YP_001855323.1|")
         self.assertEqual(hit.target.name, "YP_001855323")
@@ -3464,6 +3549,7 @@ lcl|QUERY        60 MISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKA 100
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=507)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 77.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 34.1685)
         self.assertAlmostEqual(hsp.annotations["evalue"], 4.67286)
@@ -3525,6 +3611,7 @@ lcl|QUERY        89
 """,
         )
         hit = record[8]
+        self.assertEqual(hit.num, 9)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|46114422|ref|XP_383229.1|")
         self.assertEqual(hit.target.name, "XP_383229")
@@ -3535,6 +3622,7 @@ lcl|QUERY        89
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=263)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 74.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 33.0129)
         self.assertAlmostEqual(hsp.annotations["evalue"], 9.81946)
@@ -3665,6 +3753,7 @@ lcl|QUERY        94 YQQAKAFLASPATQVRNIEREEVLSKGAK 123
         self.assertAlmostEqual(record.stat["entropy"], 1.0)
         self.assertEqual(len(record), 10)
         hit = record[0]
+        self.assertEqual(hit.num, 1)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "ref|NP_001075863.1|")
         self.assertEqual(hit.target.name, "NP_001075863")
@@ -3675,6 +3764,7 @@ lcl|QUERY        94 YQQAKAFLASPATQVRNIEREEVLSKGAK 123
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=732)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 3336.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 1290.65)
         self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
@@ -3777,6 +3867,7 @@ Query_744       660 AEQP 664
 """,
         )
         hit = record[1]
+        self.assertEqual(hit.num, 2)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "ref|XP_051689802.1|")
         self.assertEqual(hit.target.name, "XP_051689802")
@@ -3787,6 +3878,7 @@ Query_744       660 AEQP 664
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=664)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 3336.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 1290.65)
         self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
@@ -3892,6 +3984,7 @@ Query_744       660 AEQP 664
 """,
         )
         hit = record[2]
+        self.assertEqual(hit.num, 3)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "ref|XP_017206345.1|")
         self.assertEqual(hit.target.name, "XP_017206345")
@@ -3902,6 +3995,7 @@ Query_744       660 AEQP 664
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=677)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 3336.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 1290.65)
         self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
@@ -4003,6 +4097,7 @@ Query_744       660 AEQP 664
 """,
         )
         hit = record[3]
+        self.assertEqual(hit.num, 4)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "ref|XP_051689801.1|")
         self.assertEqual(hit.target.name, "XP_051689801")
@@ -4013,6 +4108,7 @@ Query_744       660 AEQP 664
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=687)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 3336.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 1290.65)
         self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
@@ -4114,6 +4210,7 @@ Query_744       660 AEQP 664
 """,
         )
         hit = record[4]
+        self.assertEqual(hit.num, 5)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "ref|XP_004407164.1|")
         self.assertEqual(hit.target.name, "XP_004407164")
@@ -4124,6 +4221,7 @@ Query_744       660 AEQP 664
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=664)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 3231.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 1249.79)
         self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
@@ -4225,6 +4323,7 @@ Query_744       660 AEQP 664
 """,
         )
         hit = record[5]
+        self.assertEqual(hit.num, 6)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "ref|XP_008688471.1|")
         self.assertEqual(hit.target.name, "XP_008688471")
@@ -4235,6 +4334,7 @@ Query_744       660 AEQP 664
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=664)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 3228.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 1248.63)
         self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
@@ -4337,6 +4437,7 @@ Query_744       660 AEQP 664
 """,
         )
         hit = record[6]
+        self.assertEqual(hit.num, 7)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "ref|XP_011229794.1|")
         self.assertEqual(hit.target.name, "XP_011229794")
@@ -4347,6 +4448,7 @@ Query_744       660 AEQP 664
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=664)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 3227.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 1248.24)
         self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
@@ -4449,6 +4551,7 @@ Query_744       660 AEQP 664
 """,
         )
         hit = record[7]
+        self.assertEqual(hit.num, 8)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "ref|XP_045646452.1|")
         self.assertEqual(hit.target.name, "XP_045646452")
@@ -4459,6 +4562,7 @@ Query_744       660 AEQP 664
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=664)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 3223.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 1246.68)
         self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
@@ -4559,6 +4663,7 @@ Query_744       660 AEQP 664
 """,
         )
         hit = record[8]
+        self.assertEqual(hit.num, 9)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "ref|XP_035942617.1|")
         self.assertEqual(hit.target.name, "XP_035942617")
@@ -4569,6 +4674,7 @@ Query_744       660 AEQP 664
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=664)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 3221.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 1245.9)
         self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
@@ -4669,6 +4775,7 @@ Query_744       660 AEQP 664
 """,
         )
         hit = record[9]
+        self.assertEqual(hit.num, 10)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "ref|XP_049729369.1|")
         self.assertEqual(hit.target.name, "XP_049729369")
@@ -4679,6 +4786,7 @@ Query_744       660 AEQP 664
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=664)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 3219.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 1245.12)
         self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
@@ -4878,8 +4986,8 @@ Program: BLASTN 2.9.0+
         self.assertAlmostEqual(record.stat["lambda"], 0.625)
         self.assertAlmostEqual(record.stat["entropy"], 0.78)
         self.assertEqual(len(record), 10)
-
         hit = record[0]
+        self.assertEqual(hit.num, 1)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|372099107|ref|NC_000069.6|")
         self.assertEqual(hit.target.name, "NC_000069")
@@ -4890,6 +4998,7 @@ Program: BLASTN 2.9.0+
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=160039680)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 44.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 40.9604)
         self.assertAlmostEqual(hsp.annotations["evalue"], 0.375311)
@@ -4947,6 +5056,7 @@ G26684.1        133 GAATCCTAGAGGCTTGATTGGCCCAGG-CTGCTG       166
 """,
         )
         hit = record[1]
+        self.assertEqual(hit.num, 2)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|372099103|ref|NC_000073.6|")
         self.assertEqual(hit.target.name, "NC_000073")
@@ -4957,6 +5067,7 @@ G26684.1        133 GAATCCTAGAGGCTTGATTGGCCCAGG-CTGCTG       166
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=145441459)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 44.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 40.9604)
         self.assertAlmostEqual(hsp.annotations["evalue"], 0.375311)
@@ -5012,6 +5123,7 @@ G26684.1        204 GAAAGGAAATNAAAATGGAAAGTTCTTGT       233
 """,
         )
         hit = record[2]
+        self.assertEqual(hit.num, 3)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|372099106|ref|NC_000070.6|")
         self.assertEqual(hit.target.name, "NC_000070")
@@ -5022,6 +5134,7 @@ G26684.1        204 GAAAGGAAATNAAAATGGAAAGTTCTTGT       233
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=156508116)")
         self.assertEqual(len(hit), 2)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 43.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 40.0587)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.30996)
@@ -5076,6 +5189,7 @@ G26684.1         61 CCAACACAGGCCAGCGACTTCTGG      85
 """,
         )
         hsp = hit[1]
+        self.assertEqual(hsp.num, 2)
         self.assertAlmostEqual(hsp.score, 40.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
         self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
@@ -5131,6 +5245,7 @@ G26684.1        241 GCCTGACATGG-GTAGCTGCTCAATAAATGCT       272
 """,
         )
         hit = record[3]
+        self.assertEqual(hit.num, 4)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|372099108|ref|NC_000068.7|")
         self.assertEqual(hit.target.name, "NC_000068")
@@ -5141,6 +5256,7 @@ G26684.1        241 GCCTGACATGG-GTAGCTGCTCAATAAATGCT       272
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=182113224)")
         self.assertEqual(len(hit), 2)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 42.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 39.157)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.30996)
@@ -5196,6 +5312,7 @@ G26684.1        238 AAGGCCTGACATGGGTAGCTGCTCAATAAAT     269
 """,
         )
         hsp = hit[1]
+        self.assertEqual(hsp.num, 2)
         self.assertAlmostEqual(hsp.score, 41.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 38.2554)
         self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
@@ -5250,6 +5367,7 @@ G26684.1        210 AAATNAAAATGGAAAGTTCTTGTAG      235
 """,
         )
         hit = record[4]
+        self.assertEqual(hit.num, 5)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|372099097|ref|NC_000079.6|")
         self.assertEqual(hit.target.name, "NC_000079")
@@ -5260,6 +5378,7 @@ G26684.1        210 AAATNAAAATGGAAAGTTCTTGTAG      235
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=120421639)")
         self.assertEqual(len(hit), 2)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 42.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 39.157)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.30996)
@@ -5315,6 +5434,7 @@ G26684.1        206 AAGGAAATNAAAATGGAAAGTTCTTGTA      234
 """,
         )
         hsp = hit[1]
+        self.assertEqual(hsp.num, 2)
         self.assertAlmostEqual(hsp.score, 40.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
         self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
@@ -5372,6 +5492,7 @@ G26684.1        233 AGCGCAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTA      273
 """,
         )
         hit = record[5]
+        self.assertEqual(hit.num, 6)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|372099098|ref|NC_000078.6|")
         self.assertEqual(hit.target.name, "NC_000078")
@@ -5382,6 +5503,7 @@ G26684.1        233 AGCGCAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTA      273
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=120129022)")
         self.assertEqual(len(hit), 2)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 41.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 38.2554)
         self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
@@ -5436,6 +5558,7 @@ G26684.1         48 CATCCATTCACACCCAACACAGG        71
 """,
         )
         hsp = hit[1]
+        self.assertEqual(hsp.num, 2)
         self.assertAlmostEqual(hsp.score, 40.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
         self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
@@ -5491,6 +5614,7 @@ G26684.1        230 TGTAGCGCAAGGCCTGACATGGGTAGCTGCTC       262
 """,
         )
         hit = record[6]
+        self.assertEqual(hit.num, 7)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|372099109|ref|NC_000067.6|")
         self.assertEqual(hit.target.name, "NC_000067")
@@ -5501,6 +5625,7 @@ G26684.1        230 TGTAGCGCAAGGCCTGACATGGGTAGCTGCTC       262
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=195471971)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 40.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
         self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
@@ -5558,6 +5683,7 @@ G26684.1         86 GCTCAGCCACAGACATGGTTTGTNACTNTTGAGCTTCTGTTCC      129
 """,
         )
         hit = record[7]
+        self.assertEqual(hit.num, 8)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|372099101|ref|NC_000075.6|")
         self.assertEqual(hit.target.name, "NC_000075")
@@ -5568,6 +5694,7 @@ G26684.1         86 GCTCAGCCACAGACATGGTTTGTNACTNTTGAGCTTCTGTTCC      129
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=124595110)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 40.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
         self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
@@ -5626,6 +5753,7 @@ G26684.1        237 CAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTT      284
 """,
         )
         hit = record[8]
+        self.assertEqual(hit.num, 9)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|372099100|ref|NC_000076.6|")
         self.assertEqual(hit.target.name, "NC_000076")
@@ -5636,6 +5764,7 @@ G26684.1        237 CAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTT      284
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=130694993)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 40.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
         self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
@@ -5690,6 +5819,7 @@ G26684.1        254 AGCTGCTCAATAAATGCTAG       274
 """,
         )
         hit = record[9]
+        self.assertEqual(hit.num, 10)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|372099094|ref|NC_000082.6|")
         self.assertEqual(hit.target.name, "NC_000082")
@@ -5700,6 +5830,7 @@ G26684.1        254 AGCTGCTCAATAAATGCTAG       274
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=98207768)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 40.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
         self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
@@ -5845,6 +5976,7 @@ Program: megablast 2.2.26 [Sep-21-2011]
         self.assertEqual(repr(record), "<Bio.Blast.Record query.id='lcl|1_'; 1 hit>")
         self.assertEqual(len(record), 1)
         hit = record[0]
+        self.assertEqual(hit.num, 1)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gnl|BL_ORD_ID|0")
         self.assertEqual(hit.target.name, "0")
@@ -5855,6 +5987,7 @@ Program: megablast 2.2.26 [Sep-21-2011]
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=1111)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 788.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 1562.59)
         self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
@@ -6142,6 +6275,7 @@ Program: BLASTX 2.2.22+
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
         self.assertEqual(len(record), 1)
         hit = record[0]
+        self.assertEqual(hit.num, 1)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|149390769|gb|ABR25402.1|")
         self.assertEqual(hit.target.name, "ABR25402")
@@ -6151,6 +6285,7 @@ Program: BLASTX 2.2.22+
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=26)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 129.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 54.2989775733826)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.83262460293058e-05)
@@ -6228,6 +6363,7 @@ gi|149390         0 HMLVSKIKPCMCKYELIRTVKLRMAH 26
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
         self.assertEqual(len(record), 10)
         hit = record[0]
+        self.assertEqual(hit.num, 1)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|4218936|gb|AAD12237.1|")
         self.assertEqual(hit.target.name, "AAD12237")
@@ -6237,6 +6373,7 @@ gi|149390         0 HMLVSKIKPCMCKYELIRTVKLRMAH 26
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=333)")
         self.assertEqual(len(hit), 2)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 1053.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 410.223385721017)
         self.assertAlmostEqual(hsp.annotations["evalue"], 3.48406066731465e-112)
@@ -6244,6 +6381,7 @@ gi|149390         0 HMLVSKIKPCMCKYELIRTVKLRMAH 26
         self.assertEqual(hsp.annotations["positive"], 200)
         self.assertEqual(hsp.annotations["gaps"], 33)
         hsp = hit[1]
+        self.assertEqual(hsp.num, 2)
         self.assertAlmostEqual(hsp.score, 683.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 267.699542631596)
         self.assertAlmostEqual(hsp.annotations["evalue"], 2.79278546744412e-69)
@@ -6319,6 +6457,7 @@ gi|421893       326 HIKMSVV 333
 """,
         )
         hit = record[1]
+        self.assertEqual(hit.num, 2)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|4206074|gb|AAD11408.1|")
         self.assertEqual(hit.target.name, "AAD11408")
@@ -6326,6 +6465,7 @@ gi|421893       326 HIKMSVV 333
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=333)")
         self.assertEqual(len(hit), 2)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 1043.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 406.371389961843)
         self.assertAlmostEqual(hsp.annotations["evalue"], 5.03097287018806e-111)
@@ -6333,6 +6473,7 @@ gi|421893       326 HIKMSVV 333
         self.assertEqual(hsp.annotations["positive"], 199)
         self.assertEqual(hsp.annotations["gaps"], 33)
         hsp = hit[1]
+        self.assertEqual(hsp.num, 2)
         self.assertAlmostEqual(hsp.score, 672.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 263.462347296505)
         self.assertAlmostEqual(hsp.annotations["evalue"], 5.26696544712228e-68)
@@ -6406,6 +6547,7 @@ gi|420607       326 HIKMSLV 333
 """,
         )
         hit = record[2]
+        self.assertEqual(hit.num, 3)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|4206070|gb|AAD11406.1|")
         self.assertEqual(hit.target.name, "AAD11406")
@@ -6413,6 +6555,7 @@ gi|420607       326 HIKMSLV 333
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=333)")
         self.assertEqual(len(hit), 2)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 1043.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 406.371389961843)
         self.assertAlmostEqual(hsp.annotations["evalue"], 5.03097287018806e-111)
@@ -6420,6 +6563,7 @@ gi|420607       326 HIKMSLV 333
         self.assertEqual(hsp.annotations["positive"], 199)
         self.assertEqual(hsp.annotations["gaps"], 33)
         hsp = hit[1]
+        self.assertEqual(hsp.num, 2)
         self.assertAlmostEqual(hsp.score, 680.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 266.543943903844)
         self.assertAlmostEqual(hsp.annotations["evalue"], 6.22167692942359e-69)
@@ -6493,6 +6637,7 @@ gi|420607       326 HIKMSLV 333
 """,
         )
         hit = record[3]
+        self.assertEqual(hit.num, 4)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|4206072|gb|AAD11407.1|")
         self.assertEqual(hit.target.name, "AAD11407")
@@ -6500,6 +6645,7 @@ gi|420607       326 HIKMSLV 333
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=333)")
         self.assertEqual(len(hit), 2)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 1016.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 395.971001412075)
         self.assertAlmostEqual(hsp.annotations["evalue"], 6.7995613312017e-108)
@@ -6507,6 +6653,7 @@ gi|420607       326 HIKMSLV 333
         self.assertEqual(hsp.annotations["positive"], 195)
         self.assertEqual(hsp.annotations["gaps"], 33)
         hsp = hit[1]
+        self.assertEqual(hsp.num, 2)
         self.assertAlmostEqual(hsp.score, 646.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 253.447158322654)
         self.assertAlmostEqual(hsp.annotations["evalue"], 5.45045505347399e-65)
@@ -6580,6 +6727,7 @@ gi|420607       326 HIKMSVV 333
 """,
         )
         hit = record[4]
+        self.assertEqual(hit.num, 5)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|16903131|gb|AAL30421.1|AF434174_1")
         self.assertEqual(hit.target.name, "AAL30421")
@@ -6587,6 +6735,7 @@ gi|420607       326 HIKMSVV 333
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=330)")
         self.assertEqual(len(hit), 2)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 986.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 384.415014134554)
         self.assertAlmostEqual(hsp.annotations["evalue"], 2.04729155722083e-104)
@@ -6594,6 +6743,7 @@ gi|420607       326 HIKMSVV 333
         self.assertEqual(hsp.annotations["positive"], 191)
         self.assertEqual(hsp.annotations["gaps"], 36)
         hsp = hit[1]
+        self.assertEqual(hsp.num, 2)
         self.assertAlmostEqual(hsp.score, 679.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 266.158744327927)
         self.assertAlmostEqual(hsp.annotations["evalue"], 8.12576171382949e-69)
@@ -6667,6 +6817,7 @@ gi|169031       323 HIKMSVV 330
 """,
         )
         hit = record[5]
+        self.assertEqual(hit.num, 6)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|16903133|gb|AAL30422.1|AF434175_1")
         self.assertEqual(hit.target.name, "AAL30422")
@@ -6674,6 +6825,7 @@ gi|169031       323 HIKMSVV 330
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=336)")
         self.assertEqual(len(hit), 2)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 713.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 279.255529909117)
         self.assertAlmostEqual(hsp.annotations["evalue"], 9.27553088557319e-73)
@@ -6681,6 +6833,7 @@ gi|169031       323 HIKMSVV 330
         self.assertEqual(hsp.annotations["positive"], 162)
         self.assertEqual(hsp.annotations["gaps"], 40)
         hsp = hit[1]
+        self.assertEqual(hsp.num, 2)
         self.assertAlmostEqual(hsp.score, 620.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 243.431969348803)
         self.assertAlmostEqual(hsp.annotations["evalue"], 5.64033703812707e-62)
@@ -6754,6 +6907,7 @@ gi|169031       329 RIKMHVV 336
 """,
         )
         hit = record[6]
+        self.assertEqual(hit.num, 7)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|30691147|gb|AAO17294.1|")
         self.assertEqual(hit.target.name, "AAO17294")
@@ -6761,6 +6915,7 @@ gi|169031       329 RIKMHVV 336
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=321)")
         self.assertEqual(len(hit), 2)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 481.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 189.889228296291)
         self.assertAlmostEqual(hsp.annotations["evalue"], 7.40075731140555e-46)
@@ -6768,6 +6923,7 @@ gi|169031       329 RIKMHVV 336
         self.assertEqual(hsp.annotations["positive"], 138)
         self.assertEqual(hsp.annotations["gaps"], 49)
         hsp = hit[1]
+        self.assertEqual(hsp.num, 2)
         self.assertAlmostEqual(hsp.score, 426.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 168.703251620836)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.76559312729927e-39)
@@ -6841,6 +6997,7 @@ gi|306911       313 SRIGMPV 320
 """,
         )
         hit = record[7]
+        self.assertEqual(hit.num, 8)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|222139388|gb|ACM45713.1|")
         self.assertEqual(hit.target.name, "ACM45713")
@@ -6848,6 +7005,7 @@ gi|306911       313 SRIGMPV 320
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=317)")
         self.assertEqual(len(hit), 2)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 469.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 185.266833385283)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.82286993845418e-44)
@@ -6855,6 +7013,7 @@ gi|306911       313 SRIGMPV 320
         self.assertEqual(hsp.annotations["positive"], 137)
         self.assertEqual(hsp.annotations["gaps"], 50)
         hsp = hit[1]
+        self.assertEqual(hsp.num, 2)
         self.assertAlmostEqual(hsp.score, 318.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 127.101697421762)
         self.assertAlmostEqual(hsp.annotations["evalue"], 5.89123449548921e-27)
@@ -6928,6 +7087,7 @@ gi|222139       314 PF 316
 """,
         )
         hit = record[8]
+        self.assertEqual(hit.num, 9)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|23496435|dbj|BAB40817.2|")
         self.assertEqual(hit.target.name, "BAB40817")
@@ -6935,6 +7095,7 @@ gi|222139       314 PF 316
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=311)")
         self.assertEqual(len(hit), 2)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 460.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 181.800037202027)
         self.assertAlmostEqual(hsp.annotations["evalue"], 2.01541888137674e-43)
@@ -6942,6 +7103,7 @@ gi|222139       314 PF 316
         self.assertEqual(hsp.annotations["positive"], 132)
         self.assertEqual(hsp.annotations["gaps"], 54)
         hsp = hit[1]
+        self.assertEqual(hsp.num, 2)
         self.assertAlmostEqual(hsp.score, 285.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 114.39011141649)
         self.assertAlmostEqual(hsp.annotations["evalue"], 3.95161831690075e-23)
@@ -7011,6 +7173,7 @@ gi|234964       250 DNAAGRVPGYGVITNIINGGLECGRGPDDRVKDRIGFYKRYCDMLGIGYGNNLD 304
 """,
         )
         hit = record[9]
+        self.assertEqual(hit.num, 10)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|82621253|gb|ABB86300.1|")
         self.assertEqual(hit.target.name, "ABB86300")
@@ -7018,6 +7181,7 @@ gi|234964       250 DNAAGRVPGYGVITNIINGGLECGRGPDDRVKDRIGFYKRYCDMLGIGYGNNLD 304
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=301)")
         self.assertEqual(len(hit), 2)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 459.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 181.414837626109)
         self.assertAlmostEqual(hsp.annotations["evalue"], 2.6322185753765e-43)
@@ -7025,6 +7189,7 @@ gi|234964       250 DNAAGRVPGYGVITNIINGGLECGRGPDDRVKDRIGFYKRYCDMLGIGYGNNLD 304
         self.assertEqual(hsp.annotations["positive"], 134)
         self.assertEqual(hsp.annotations["gaps"], 50)
         hsp = hit[1]
+        self.assertEqual(hsp.num, 2)
         self.assertAlmostEqual(hsp.score, 359.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 142.894880034374)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.03749166509001e-31)
@@ -7132,6 +7297,7 @@ gi|826212       263 -IPYHG--------NSGQESSLDVVNRSIGYYKRYCDMLGVSCEDNL 301
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
         self.assertEqual(len(record), 10)
         hit = record[0]
+        self.assertEqual(hit.num, 1)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|166343825|gb|ABY86655.1|")
         self.assertEqual(hit.target.name, "ABY86655")
@@ -7139,6 +7305,7 @@ gi|826212       263 -IPYHG--------NSGQESSLDVVNRSIGYYKRYCDMLGVSCEDNL 301
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=448)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 1048.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 408.29738784143)
         self.assertAlmostEqual(hsp.annotations["evalue"], 2.26145081918239e-112)
@@ -7218,6 +7385,7 @@ gi|166343       180 EPYNATLSVHQLVENADECMV 201
 """,
         )
         hit = record[1]
+        self.assertEqual(hit.num, 2)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|223549899|gb|EEF51386.1|")
         self.assertEqual(hit.target.name, "EEF51386")
@@ -7228,6 +7396,7 @@ gi|166343       180 EPYNATLSVHQLVENADECMV 201
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=448)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 1044.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 406.756589537761)
         self.assertAlmostEqual(hsp.annotations["evalue"], 6.57981456092236e-112)
@@ -7310,6 +7479,7 @@ gi|223549       180 EPYNATLSVHQLVENADECMV 201
 """,
         )
         hit = record[2]
+        self.assertEqual(hit.num, 3)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|18420724|ref|NP_568437.1|")
         self.assertEqual(hit.target.name, "NP_568437")
@@ -7320,6 +7490,7 @@ gi|223549       180 EPYNATLSVHQLVENADECMV 201
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=449)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 1040.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 405.215791234091)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.91443295113426e-111)
@@ -7405,6 +7576,7 @@ gi|184207       180 EPYNATLSVHQLVENADECMV 201
 """,
         )
         hit = record[3]
+        self.assertEqual(hit.num, 4)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|225426385|ref|XP_002271992.1|")
         self.assertEqual(hit.target.name, "XP_002271992")
@@ -7415,6 +7587,7 @@ gi|184207       180 EPYNATLSVHQLVENADECMV 201
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=447)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 1034.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 402.904593778587)
         self.assertAlmostEqual(hsp.annotations["evalue"], 9.50123195540709e-111)
@@ -7498,6 +7671,7 @@ gi|225426       180 EPYNATLSVHQLVENADECMV 201
 """,
         )
         hit = record[4]
+        self.assertEqual(hit.num, 5)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|15451226|gb|AAK96884.1|")
         self.assertEqual(hit.target.name, "AAK96884")
@@ -7508,6 +7682,7 @@ gi|225426       180 EPYNATLSVHQLVENADECMV 201
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=449)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 1034.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 402.904593778587)
         self.assertAlmostEqual(hsp.annotations["evalue"], 9.50123195540709e-111)
@@ -7591,6 +7766,7 @@ gi|154512       180 EPYNATLSVHQLVENADECMV 201
 """,
         )
         hit = record[5]
+        self.assertEqual(hit.num, 6)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|225470745|ref|XP_002267380.1|")
         self.assertEqual(hit.target.name, "XP_002267380")
@@ -7601,6 +7777,7 @@ gi|154512       180 EPYNATLSVHQLVENADECMV 201
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=449)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 1033.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 402.51939420267)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.24089932237309e-110)
@@ -7684,6 +7861,7 @@ gi|225470       180 EPYNATLSVHQLVENADECMV 201
 """,
         )
         hit = record[6]
+        self.assertEqual(hit.num, 7)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|586076|sp|P37392.1|TBB1_LUPAL")
         self.assertEqual(hit.target.name, "P37392")
@@ -7694,6 +7872,7 @@ gi|225470       180 EPYNATLSVHQLVENADECMV 201
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=447)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 1033.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 402.51939420267)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.24089932237309e-110)
@@ -7777,6 +7956,7 @@ gi|586076       180 EPYNATLSVHQLVENADECMV 201
 """,
         )
         hit = record[7]
+        self.assertEqual(hit.num, 8)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|224104341|ref|XP_002313404.1|")
         self.assertEqual(hit.target.name, "XP_002313404")
@@ -7787,6 +7967,7 @@ gi|586076       180 EPYNATLSVHQLVENADECMV 201
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=451)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 1031.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 401.748995050835)
         self.assertAlmostEqual(hsp.annotations["evalue"], 2.1166536544662e-110)
@@ -7870,6 +8051,7 @@ gi|224104       180 EPYNATLSVHQLVENADECMV 201
 """,
         )
         hit = record[8]
+        self.assertEqual(hit.num, 9)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|223549679|gb|EEF51167.1|")
         self.assertEqual(hit.target.name, "EEF51167")
@@ -7880,6 +8062,7 @@ gi|224104       180 EPYNATLSVHQLVENADECMV 201
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=446)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 1029.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 400.978595899)
         self.assertAlmostEqual(hsp.annotations["evalue"], 3.61046429165375e-110)
@@ -7962,6 +8145,7 @@ gi|223549       180 EPYNATLSVHQLVENADECMV 201
 """,
         )
         hit = record[9]
+        self.assertEqual(hit.num, 10)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|224058553|ref|XP_002299541.1|")
         self.assertEqual(hit.target.name, "XP_002299541")
@@ -7972,6 +8156,7 @@ gi|223549       180 EPYNATLSVHQLVENADECMV 201
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=447)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 1029.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 400.978595899)
         self.assertAlmostEqual(hsp.annotations["evalue"], 3.61046429165375e-110)
@@ -8074,6 +8259,7 @@ gi|224058       180 EPYNATLSVHQLVENADECMV 201
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
         self.assertEqual(len(record), 10)
         hit = record[0]
+        self.assertEqual(hit.num, 1)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|110740644|dbj|BAE98425.1|")
         self.assertEqual(hit.target.name, "BAE98425")
@@ -8083,6 +8269,7 @@ gi|224058       180 EPYNATLSVHQLVENADECMV 201
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=80)")
         self.assertEqual(len(hit), 2)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 231.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 93.5893343169526)
         self.assertAlmostEqual(hsp.annotations["evalue"], 5.57283114448317e-19)
@@ -8090,6 +8277,7 @@ gi|224058       180 EPYNATLSVHQLVENADECMV 201
         self.assertEqual(hsp.annotations["positive"], 45)
         self.assertEqual(hsp.annotations["gaps"], 1)
         hsp = hit[1]
+        self.assertEqual(hsp.num, 2)
         self.assertAlmostEqual(hsp.score, 53.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 25.0238098036637)
         self.assertAlmostEqual(hsp.annotations["evalue"], 5.57283114448317e-19)
@@ -8151,6 +8339,7 @@ gi|110740        53 RKLVSRVLPHAVGLNPS 70
 """,
         )
         hit = record[1]
+        self.assertEqual(hit.num, 2)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|226453533|gb|EEH50844.1|")
         self.assertEqual(hit.target.name, "EEH50844")
@@ -8161,6 +8350,7 @@ gi|110740        53 RKLVSRVLPHAVGLNPS 70
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=81)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 238.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 96.2857313483741)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.69151855577931e-18)
@@ -8230,6 +8420,7 @@ gi|226453         0 MKNVAKCDTWCELQNPVNHRVFERKLRPKPSGRGHVCLGVTNRRPPSSF 49
 """,
         )
         hit = record[2]
+        self.assertEqual(hit.num, 3)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|168069582|ref|XP_001786502.1|")
         self.assertEqual(hit.target.name, "XP_001786502")
@@ -8240,6 +8431,7 @@ gi|226453         0 MKNVAKCDTWCELQNPVNHRVFERKLRPKPSGRGHVCLGVTNRRPPSSF 49
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=88)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 183.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 75.0997546729196)
         self.assertAlmostEqual(hsp.annotations["evalue"], 4.03544314604194e-12)
@@ -8309,6 +8501,7 @@ gi|168069         2 ASGATCVQKLDDSRDSAIHTTYRISLRSSSLQEPRYPLLRVV 44
 """,
         )
         hit = record[3]
+        self.assertEqual(hit.num, 4)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|168068558|ref|XP_001786120.1|")
         self.assertEqual(hit.target.name, "XP_001786120")
@@ -8319,6 +8512,7 @@ gi|168069         2 ASGATCVQKLDDSRDSAIHTTYRISLRSSSLQEPRYPLLRVV 44
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=130)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 178.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 73.1737567933329)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.53346675969648e-11)
@@ -8388,6 +8582,7 @@ gi|168068         2 ASGATCVQKLDDSRNSAIHTTYRISLRSSSLQEPRYPLLRVV 44
 """,
         )
         hit = record[4]
+        self.assertEqual(hit.num, 5)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|168068926|ref|XP_001786259.1|")
         self.assertEqual(hit.target.name, "XP_001786259")
@@ -8398,6 +8593,7 @@ gi|168068         2 ASGATCVQKLDDSRNSAIHTTYRISLRSSSLQEPRYPLLRVV 44
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=148)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 178.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 73.1737567933329)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.53346675969648e-11)
@@ -8469,6 +8665,7 @@ gi|168068         2 ASGATCVQKLDDSRNSAIHTTYRISLRSSSLQEPRYPLLRVV 44
 """,
         )
         hit = record[5]
+        self.assertEqual(hit.num, 6)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|168070288|ref|XP_001786759.1|")
         self.assertEqual(hit.target.name, "XP_001786759")
@@ -8479,6 +8676,7 @@ gi|168068         2 ASGATCVQKLDDSRNSAIHTTYRISLRSSSLQEPRYPLLRVV 44
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=148)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 178.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 73.1737567933329)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.53346675969648e-11)
@@ -8548,6 +8746,7 @@ gi|168070         2 ASGATCVQKLDDSRNSAIHTTYRISLRSSSLQEPRYPLLRVV 44
 """,
         )
         hit = record[6]
+        self.assertEqual(hit.num, 7)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|168068591|ref|XP_001786133.1|")
         self.assertEqual(hit.target.name, "XP_001786133")
@@ -8558,6 +8757,7 @@ gi|168070         2 ASGATCVQKLDDSRNSAIHTTYRISLRSSSLQEPRYPLLRVV 44
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=220)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 172.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 70.8625593378288)
         self.assertAlmostEqual(hsp.annotations["evalue"], 7.61051640442713e-11)
@@ -8633,6 +8833,7 @@ gi|168068       197 LQFTLRIAFRCVLHRCKSQDIRC 220
 """,
         )
         hit = record[7]
+        self.assertEqual(hit.num, 8)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|74622391|sp|Q8TGM5|ART3_YEAST")
         self.assertEqual(hit.target.name, "Q8TGM5")
@@ -8643,6 +8844,7 @@ gi|168068       197 LQFTLRIAFRCVLHRCKSQDIRC 220
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=67)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 141.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 58.9213724843908)
         self.assertAlmostEqual(hsp.annotations["evalue"], 2.99274389212967e-07)
@@ -8712,6 +8914,7 @@ gi|746223         7 GAMCVQRFDDSRNSAIHITYRISLRSSSMREPRDPLLKV 46
 """,
         )
         hit = record[8]
+        self.assertEqual(hit.num, 9)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|168069944|ref|XP_001786634.1|")
         self.assertEqual(hit.target.name, "XP_001786634")
@@ -8722,6 +8925,7 @@ gi|746223         7 GAMCVQRFDDSRNSAIHITYRISLRSSSMREPRDPLLKV 46
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=138)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 137.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 57.3805741807214)
         self.assertAlmostEqual(hsp.annotations["evalue"], 8.70755166175354e-07)
@@ -8791,6 +8995,7 @@ gi|168069         0 KLDDSRNSAIHTTYRISLRSSSLQEPRYPLLRVV 34
 """,
         )
         hit = record[9]
+        self.assertEqual(hit.num, 10)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|50307717|ref|XP_453851.1|")
         self.assertEqual(hit.target.name, "XP_453851")
@@ -8800,6 +9005,7 @@ gi|168069         0 KLDDSRNSAIHTTYRISLRSSSLQEPRYPLLRVV 34
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=54)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 134.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 56.2249754529693)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.93984013155423e-06)
@@ -8885,6 +9091,7 @@ gi|503077         7 GAMCVQRFDDSRKSAIHNTYRNSLRSSSMREPRDPLLKVL 47
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
         self.assertEqual(len(record), 10)
         hit = record[0]
+        self.assertEqual(hit.num, 1)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|3176603|gb|AAC18749.1|")
         self.assertEqual(hit.target.name, "AAC18749")
@@ -8892,6 +9099,7 @@ gi|503077         7 GAMCVQRFDDSRKSAIHNTYRNSLRSSSMREPRDPLLKVL 47
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=103)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 543.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 213.771602003167)
         self.assertAlmostEqual(hsp.annotations["evalue"], 3.7262743863676e-54)
@@ -8961,6 +9169,7 @@ gi|317660        60 SLVMAVVVNDSDEDGDSRDAVLPQKKKRLWGLVVCHNTTPRFV 103
 """,
         )
         hit = record[1]
+        self.assertEqual(hit.num, 2)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|130188|sp|P15001.1|PHYA_PEA")
         self.assertEqual(hit.target.name, "P15001")
@@ -8971,6 +9180,7 @@ gi|317660        60 SLVMAVVVNDSDEDGDSRDAVLPQKKKRLWGLVVCHNTTPRFV 103
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=1124)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 530.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 208.764007516241)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.1987013044853e-52)
@@ -9046,6 +9256,7 @@ gi|130188       335 SLVMAVVVNDSDEDGDSADAVLPQKKKRLWGLVVCHNTTPRFV 378
 """,
         )
         hit = record[2]
+        self.assertEqual(hit.num, 3)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|2499555|sp|P93673.1|PHYA_LATSA")
         self.assertEqual(hit.target.name, "P93673")
@@ -9056,6 +9267,7 @@ gi|130188       335 SLVMAVVVNDSDEDGDSADAVLPQKKKRLWGLVVCHNTTPRFV 378
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=1124)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 530.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 208.764007516241)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.1987013044853e-52)
@@ -9129,6 +9341,7 @@ gi|249955       335 SLVMAVVVNDSDEDGDSADAVLPQKKKRLWGLVVCHNTTPRFV 378
 """,
         )
         hit = record[3]
+        self.assertEqual(hit.num, 4)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|3176595|gb|AAC18745.1|")
         self.assertEqual(hit.target.name, "AAC18745")
@@ -9139,6 +9352,7 @@ gi|249955       335 SLVMAVVVNDSDEDGDSADAVLPQKKKRLWGLVVCHNTTPRFV 378
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=103)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 528.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 207.993608364407)
         self.assertAlmostEqual(hsp.annotations["evalue"], 2.04467473791515e-52)
@@ -9214,6 +9428,7 @@ gi|317659        60 SLVMAVVVNDSDEDGDSSDAVQPQKRKRLWGLVVCHNTTPRFV 103
 """,
         )
         hit = record[4]
+        self.assertEqual(hit.num, 5)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|1711106|gb|AAC18675.1|")
         self.assertEqual(hit.target.name, "AAC18675")
@@ -9221,6 +9436,7 @@ gi|317659        60 SLVMAVVVNDSDEDGDSSDAVQPQKRKRLWGLVVCHNTTPRFV 103
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=210)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 528.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 207.993608364407)
         self.assertAlmostEqual(hsp.annotations["evalue"], 2.04467473791515e-52)
@@ -9290,6 +9506,7 @@ gi|171110       100 SLVMAVVVNDSDEDGDSSDAVQPQKRKRLWGLVVCHNTTPRFV 143
 """,
         )
         hit = record[5]
+        self.assertEqual(hit.num, 6)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|1711090|gb|AAC18670.1|")
         self.assertEqual(hit.target.name, "AAC18670")
@@ -9297,6 +9514,7 @@ gi|171110       100 SLVMAVVVNDSDEDGDSSDAVQPQKRKRLWGLVVCHNTTPRFV 143
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=210)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 525.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 206.838009636654)
         self.assertAlmostEqual(hsp.annotations["evalue"], 4.55506009801166e-52)
@@ -9366,6 +9584,7 @@ gi|171109       100 SLVLAVVVNDSDEDGDSSDAVQPQKRKRLWGLVVCHNTTPRFV 143
 """,
         )
         hit = record[6]
+        self.assertEqual(hit.num, 7)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|3176605|gb|AAC18750.1|")
         self.assertEqual(hit.target.name, "AAC18750")
@@ -9373,6 +9592,7 @@ gi|171109       100 SLVLAVVVNDSDEDGDSSDAVQPQKRKRLWGLVVCHNTTPRFV 143
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=103)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 524.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 206.452810060737)
         self.assertAlmostEqual(hsp.annotations["evalue"], 5.94909272347008e-52)
@@ -9442,6 +9662,7 @@ gi|317660        60 SLVMAVVVNDSDEDGDSSDAVQPQKRKRLWGLVVCHNTTPRFV 103
 """,
         )
         hit = record[7]
+        self.assertEqual(hit.num, 8)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|3176454|gb|AAC18668.1|")
         self.assertEqual(hit.target.name, "AAC18668")
@@ -9449,6 +9670,7 @@ gi|317660        60 SLVMAVVVNDSDEDGDSSDAVQPQKRKRLWGLVVCHNTTPRFV 103
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=207)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 523.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 206.06761048482)
         self.assertAlmostEqual(hsp.annotations["evalue"], 7.76975571582328e-52)
@@ -9518,6 +9740,7 @@ gi|317645        97 SLVMAVVVNDSDEDGNSSDAVQPQKRKRLWGLVVCHNTTPRFV 140
 """,
         )
         hit = record[8]
+        self.assertEqual(hit.num, 9)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|3176523|gb|AAC18709.1|")
         self.assertEqual(hit.target.name, "AAC18709")
@@ -9527,6 +9750,7 @@ gi|317645        97 SLVMAVVVNDSDEDGNSSDAVQPQKRKRLWGLVVCHNTTPRFV 140
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=139)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 521.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 205.297211332985)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.3253195915005e-51)
@@ -9598,6 +9822,7 @@ gi|317652        96 SLVMAVVVNDNEEDGDSSDAVQPQKRKRLWGLVVCHNTTPRFV 139
 """,
         )
         hit = record[9]
+        self.assertEqual(hit.num, 10)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|3176494|gb|AAC18693.1|")
         self.assertEqual(hit.target.name, "AAC18693")
@@ -9607,6 +9832,7 @@ gi|317652        96 SLVMAVVVNDNEEDGDSSDAVQPQKRKRLWGLVVCHNTTPRFV 139
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=177)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 520.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 204.912011757068)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.73092099081406e-51)
@@ -9697,6 +9923,7 @@ gi|317649        67 SLVMAVVVNDSEEDGDSSEAVQPQKRKRLWGLVVCHNTTPRFV 110
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
         self.assertEqual(len(record), 10)
         hit = record[0]
+        self.assertEqual(hit.num, 1)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|27805603|sp|Q9TKP6.1|MATK_WISFR")
         self.assertEqual(hit.target.name, "Q9TKP6")
@@ -9707,6 +9934,7 @@ gi|317649        67 SLVMAVVVNDSEEDGDSSEAVQPQKRKRLWGLVVCHNTTPRFV 110
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=506)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 2451.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 948.732392853477)
         self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
@@ -9810,6 +10038,7 @@ gi|278056       480 STLQRLHRNRIWYLDILFSNDLVNHE 506
 """,
         )
         hit = record[1]
+        self.assertEqual(hit.num, 2)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|171909144|gb|ACB58148.1|")
         self.assertEqual(hit.target.name, "ACB58148")
@@ -9817,6 +10046,7 @@ gi|278056       480 STLQRLHRNRIWYLDILFSNDLVNHE 506
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=506)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 2445.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 946.421195397973)
         self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
@@ -9915,6 +10145,7 @@ gi|171909       480 STLQRLHRNRIWYLDILFSNDLVNHE 506
 """,
         )
         hit = record[2]
+        self.assertEqual(hit.num, 3)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|171909146|gb|ACB58149.1|")
         self.assertEqual(hit.target.name, "ACB58149")
@@ -9925,6 +10156,7 @@ gi|171909       480 STLQRLHRNRIWYLDILFSNDLVNHE 506
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=506)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 2443.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 945.650796246138)
         self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
@@ -10027,6 +10259,7 @@ gi|171909       480 STLQRLHRNRIWYLDILFSNDLVNHE 506
 """,
         )
         hit = record[3]
+        self.assertEqual(hit.num, 4)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|171909132|gb|ACB58142.1|")
         self.assertEqual(hit.target.name, "ACB58142")
@@ -10034,6 +10267,7 @@ gi|171909       480 STLQRLHRNRIWYLDILFSNDLVNHE 506
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=506)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 2439.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 944.109997942469)
         self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
@@ -10132,6 +10366,7 @@ gi|171909       480 STLQRLHRNRIWYLDILFSNDLVNHE 506
 """,
         )
         hit = record[4]
+        self.assertEqual(hit.num, 5)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|5817760|gb|AAD52903.1|AF142732_1")
         self.assertEqual(hit.target.name, "AAD52903")
@@ -10142,6 +10377,7 @@ gi|171909       480 STLQRLHRNRIWYLDILFSNDLVNHE 506
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=506)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 2418.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 936.020806848204)
         self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
@@ -10252,6 +10488,7 @@ gi|581776       480 STLQRLHRNRIWYLDILFSNDLVNHE 506
 """,
         )
         hit = record[5]
+        self.assertEqual(hit.num, 6)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|171909134|gb|ACB58143.1|")
         self.assertEqual(hit.target.name, "ACB58143")
@@ -10259,6 +10496,7 @@ gi|581776       480 STLQRLHRNRIWYLDILFSNDLVNHE 506
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=506)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 2398.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 928.316815329857)
         self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
@@ -10357,6 +10595,7 @@ gi|171909       480 STLQRLHRNRIWYLDILFSNDLVNHE 506
 """,
         )
         hit = record[6]
+        self.assertEqual(hit.num, 7)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|5817761|gb|AAD52904.1|AF142733_1")
         self.assertEqual(hit.target.name, "AAD52904")
@@ -10366,6 +10605,7 @@ gi|171909       480 STLQRLHRNRIWYLDILFSNDLVNHE 506
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=506)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 2390.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 925.235218722518)
         self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
@@ -10466,6 +10706,7 @@ gi|581776       480 STLKRLHRNRIWYLDILFSNDLVNHE 506
 """,
         )
         hit = record[7]
+        self.assertEqual(hit.num, 8)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|5817762|gb|AAD52905.1|AF142734_1")
         self.assertEqual(hit.target.name, "AAD52905")
@@ -10475,6 +10716,7 @@ gi|581776       480 STLKRLHRNRIWYLDILFSNDLVNHE 506
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=506)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 2301.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 890.952456465874)
         self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
@@ -10575,6 +10817,7 @@ gi|581776       480 STLQKLHRNRIWYLDILFTNDLVNHE 506
 """,
         )
         hit = record[8]
+        self.assertEqual(hit.num, 9)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|152014012|gb|ABS20107.1|")
         self.assertEqual(hit.target.name, "ABS20107")
@@ -10584,6 +10827,7 @@ gi|581776       480 STLQKLHRNRIWYLDILFTNDLVNHE 506
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=506)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 2293.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 887.870859858535)
         self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
@@ -10684,6 +10928,7 @@ gi|152014       480 STLQKLHGNRIWYLDILFSNDLVNHE 506
 """,
         )
         hit = record[9]
+        self.assertEqual(hit.num, 10)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|146197442|dbj|BAF57483.1|")
         self.assertEqual(hit.target.name, "BAF57483")
@@ -10694,6 +10939,7 @@ gi|152014       480 STLQKLHGNRIWYLDILFSNDLVNHE 506
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=506)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 2292.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 887.485660282618)
         self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
@@ -10894,8 +11140,8 @@ Program: BLASTX 2.9.0+
         self.assertAlmostEqual(record.stat["lambda"], 0.267)
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
         self.assertEqual(len(record), 10)
-
         hit = record[0]
+        self.assertEqual(hit.num, 1)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|1530504495|emb|VDM03167.1|")
         self.assertEqual(hit.target.name, "VDM03167")
@@ -10906,6 +11152,7 @@ Program: BLASTX 2.9.0+
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=132)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 408.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 161.77)
         self.assertAlmostEqual(hsp.annotations["evalue"], 8.11609e-49)
@@ -10979,6 +11226,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
 """,
         )
         hit = record[1]
+        self.assertEqual(hit.num, 2)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|510859078|gb|EPB74633.1|")
         self.assertEqual(hit.target.name, "EPB74633")
@@ -10989,6 +11237,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=119)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 405.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 160.614)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.40046e-48)
@@ -11062,6 +11311,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTELHCIRKP 115
 """,
         )
         hit = record[2]
+        self.assertEqual(hit.num, 3)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|684409690|ref|XP_009175831.1|")
         self.assertEqual(hit.target.name, "XP_009175831")
@@ -11072,6 +11322,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTELHCIRKP 115
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=246)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 413.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 163.696)
         self.assertAlmostEqual(hsp.annotations["evalue"], 4.40404e-48)
@@ -11147,6 +11398,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
 """,
         )
         hit = record[3]
+        self.assertEqual(hit.num, 4)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|449710331|gb|EMD49430.1|")
         self.assertEqual(hit.target.name, "EMD49430")
@@ -11157,6 +11409,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=124)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 401.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 159.073)
         self.assertAlmostEqual(hsp.annotations["evalue"], 9.0486e-48)
@@ -11230,6 +11483,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
 """,
         )
         hit = record[4]
+        self.assertEqual(hit.num, 5)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|257215766|emb|CAX83035.1|")
         self.assertEqual(hit.target.name, "CAX83035")
@@ -11239,6 +11493,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=252)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 411.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 162.925)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.00219e-47)
@@ -11311,6 +11566,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
 """,
         )
         hit = record[5]
+        self.assertEqual(hit.num, 6)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|1535393712|emb|VDP83060.1|")
         self.assertEqual(hit.target.name, "VDP83060")
@@ -11321,6 +11577,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=209)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 407.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 161.384)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.16397e-47)
@@ -11394,6 +11651,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
 """,
         )
         hit = record[6]
+        self.assertEqual(hit.num, 7)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|312773|emb|CAA50205.1|")
         self.assertEqual(hit.target.name, "CAA50205")
@@ -11403,6 +11661,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=137)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 401.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 159.073)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.25869e-47)
@@ -11475,6 +11734,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
 """,
         )
         hit = record[7]
+        self.assertEqual(hit.num, 8)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|1530341495|emb|VDN44756.1|")
         self.assertEqual(hit.target.name, "VDN44756")
@@ -11485,6 +11745,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=145)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 400.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 158.688)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.78336e-47)
@@ -11558,6 +11819,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
 """,
         )
         hit = record[8]
+        self.assertEqual(hit.num, 9)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|1524877828|ref|XP_027046469.1|")
         self.assertEqual(hit.target.name, "XP_027046469")
@@ -11567,6 +11829,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=122)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 398.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 157.918)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.93331e-47)
@@ -11639,6 +11902,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
 """,
         )
         hit = record[9]
+        self.assertEqual(hit.num, 10)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|1524877860|ref|XP_027046487.1|")
         self.assertEqual(hit.target.name, "XP_027046487")
@@ -11648,6 +11912,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=134)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 399.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 158.303)
         self.assertAlmostEqual(hsp.annotations["evalue"], 2.36088e-47)
@@ -11818,6 +12083,7 @@ Program: TBLASTN 2.9.0+
         self.assertEqual(len(record), 10)
 
         hit = record[0]
+        self.assertEqual(hit.num, 1)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|109713861|emb|AM260522.1|")
         self.assertEqual(hit.target.name, "AM260522")
@@ -11828,6 +12094,7 @@ Program: TBLASTN 2.9.0+
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=1553927)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 1228.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 477.633)
         self.assertAlmostEqual(hsp.annotations["evalue"], 8.53508e-152)
@@ -11909,6 +12176,7 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
 """,
         )
         hit = record[1]
+        self.assertEqual(hit.num, 2)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|1336928286|emb|LT900055.1|")
         self.assertEqual(hit.target.name, "LT900055")
@@ -11919,6 +12187,7 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=1550239)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 1219.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 474.167)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.37046e-150)
@@ -12000,6 +12269,7 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
 """,
         )
         hit = record[2]
+        self.assertEqual(hit.num, 3)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|1033012332|gb|CP011486.1|")
         self.assertEqual(hit.target.name, "CP011486")
@@ -12009,6 +12279,7 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=1570310)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 1164.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 452.981)
         self.assertAlmostEqual(hsp.annotations["evalue"], 3.45778e-143)
@@ -12089,6 +12360,7 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
 """,
         )
         hit = record[3]
+        self.assertEqual(hit.num, 4)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|1559948212|dbj|AP017633.1|")
         self.assertEqual(hit.target.name, "AP017633")
@@ -12099,6 +12371,7 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=1603093)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 1136.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 442.195)
         self.assertAlmostEqual(hsp.annotations["evalue"], 2.08706e-139)
@@ -12180,6 +12453,7 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
 """,
         )
         hit = record[4]
+        self.assertEqual(hit.num, 5)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|1143706535|gb|CP018823.1|")
         self.assertEqual(hit.target.name, "CP018823")
@@ -12189,6 +12463,7 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=1618480)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 1136.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 442.195)
         self.assertAlmostEqual(hsp.annotations["evalue"], 2.08707e-139)
@@ -12269,6 +12544,7 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
 """,
         )
         hit = record[5]
+        self.assertEqual(hit.num, 6)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|1149039824|gb|CP009259.1|")
         self.assertEqual(hit.target.name, "CP009259")
@@ -12278,6 +12554,7 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=1619098)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 1136.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 442.195)
         self.assertAlmostEqual(hsp.annotations["evalue"], 2.08707e-139)
@@ -12358,6 +12635,7 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
 """,
         )
         hit = record[6]
+        self.assertEqual(hit.num, 7)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|1560269298|gb|CP035106.1|")
         self.assertEqual(hit.target.name, "CP035106")
@@ -12368,6 +12646,7 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=1514674)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 1133.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 441.039)
         self.assertAlmostEqual(hsp.annotations["evalue"], 5.81854e-139)
@@ -12449,6 +12728,7 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
 """,
         )
         hit = record[7]
+        self.assertEqual(hit.num, 8)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|1540258434|emb|LR134517.1|")
         self.assertEqual(hit.target.name, "LR134517")
@@ -12459,6 +12739,7 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=1644315)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 1131.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 440.269)
         self.assertAlmostEqual(hsp.annotations["evalue"], 9.62198e-139)
@@ -12540,6 +12821,7 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
 """,
         )
         hit = record[8]
+        self.assertEqual(hit.num, 9)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|1033005233|gb|CP011487.1|")
         self.assertEqual(hit.target.name, "CP011487")
@@ -12549,6 +12831,7 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=1531450)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 1129.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 439.499)
         self.assertAlmostEqual(hsp.annotations["evalue"], 2.21067e-138)
@@ -12629,6 +12912,7 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
 """,
         )
         hit = record[9]
+        self.assertEqual(hit.num, 10)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|1509197163|gb|CP025748.1|")
         self.assertEqual(hit.target.name, "CP025748")
@@ -12638,6 +12922,7 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=1667396)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 1128.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 439.113)
         self.assertAlmostEqual(hsp.annotations["evalue"], 2.2539e-138)
@@ -12821,6 +13106,7 @@ Program: TBLASTX 2.2.26+
         self.assertAlmostEqual(record.stat["entropy"], 0.0)
         self.assertEqual(len(record), 5)
         hit = record[0]
+        self.assertEqual(hit.num, 1)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|296147483|ref|NM_001183135.1|")
         self.assertEqual(hit.target.name, "NM_001183135")
@@ -12831,6 +13117,7 @@ Program: TBLASTX 2.2.26+
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=4911)")
         self.assertEqual(len(hit), 7)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 626.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 289.739)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.05874e-76)
@@ -12838,6 +13125,7 @@ Program: TBLASTX 2.2.26+
         self.assertEqual(hsp.annotations["positive"], 116)
         self.assertEqual(hsp.annotations["gaps"], 0)
         hsp = hit[1]
+        self.assertEqual(hsp.num, 2)
         self.assertAlmostEqual(hsp.score, 602.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 278.742)
         self.assertAlmostEqual(hsp.annotations["evalue"], 2.16381e-73)
@@ -12845,6 +13133,7 @@ Program: TBLASTX 2.2.26+
         self.assertEqual(hsp.annotations["positive"], 116)
         self.assertEqual(hsp.annotations["gaps"], 0)
         hsp = hit[2]
+        self.assertEqual(hsp.num, 3)
         self.assertAlmostEqual(hsp.score, 593.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 274.618)
         self.assertAlmostEqual(hsp.annotations["evalue"], 3.77251e-72)
@@ -12852,6 +13141,7 @@ Program: TBLASTX 2.2.26+
         self.assertEqual(hsp.annotations["positive"], 116)
         self.assertEqual(hsp.annotations["gaps"], 0)
         hsp = hit[3]
+        self.assertEqual(hsp.num, 4)
         self.assertAlmostEqual(hsp.score, 583.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 270.036)
         self.assertAlmostEqual(hsp.annotations["evalue"], 9.03598e-71)
@@ -12859,6 +13149,7 @@ Program: TBLASTX 2.2.26+
         self.assertEqual(hsp.annotations["positive"], 116)
         self.assertEqual(hsp.annotations["gaps"], 0)
         hsp = hit[4]
+        self.assertEqual(hsp.num, 5)
         self.assertAlmostEqual(hsp.score, 495.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 229.713)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.24226e-58)
@@ -12866,6 +13157,7 @@ Program: TBLASTX 2.2.26+
         self.assertEqual(hsp.annotations["positive"], 116)
         self.assertEqual(hsp.annotations["gaps"], 0)
         hsp = hit[5]
+        self.assertEqual(hsp.num, 6)
         self.assertAlmostEqual(hsp.score, 425.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 197.639)
         self.assertAlmostEqual(hsp.annotations["evalue"], 9.12288e-54)
@@ -12873,6 +13165,7 @@ Program: TBLASTX 2.2.26+
         self.assertEqual(hsp.annotations["positive"], 85)
         self.assertEqual(hsp.annotations["gaps"], 0)
         hsp = hit[6]
+        self.assertEqual(hsp.num, 7)
         self.assertAlmostEqual(hsp.score, 73.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 36.3494)
         self.assertAlmostEqual(hsp.annotations["evalue"], 9.12288e-54)
@@ -12944,6 +13237,7 @@ Query_2           0 MAMNTGGFDSMQRQ 14
 """,
         )
         hit = record[1]
+        self.assertEqual(hit.num, 2)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|365982352|ref|XM_003667962.1|")
         self.assertEqual(hit.target.name, "XM_003667962")
@@ -12954,6 +13248,7 @@ Query_2           0 MAMNTGGFDSMQRQ 14
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=4932)")
         self.assertEqual(len(hit), 6)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 327.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 152.734)
         self.assertAlmostEqual(hsp.annotations["evalue"], 2.38069e-37)
@@ -12961,6 +13256,7 @@ Query_2           0 MAMNTGGFDSMQRQ 14
         self.assertEqual(hsp.annotations["positive"], 73)
         self.assertEqual(hsp.annotations["gaps"], 0)
         hsp = hit[1]
+        self.assertEqual(hsp.num, 2)
         self.assertAlmostEqual(hsp.score, 51.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 26.2688)
         self.assertAlmostEqual(hsp.annotations["evalue"], 2.38069e-37)
@@ -12968,6 +13264,7 @@ Query_2           0 MAMNTGGFDSMQRQ 14
         self.assertEqual(hsp.annotations["positive"], 11)
         self.assertEqual(hsp.annotations["gaps"], 0)
         hsp = hit[2]
+        self.assertEqual(hsp.num, 3)
         self.assertAlmostEqual(hsp.score, 142.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 67.9658)
         self.assertAlmostEqual(hsp.annotations["evalue"], 4.80116e-20)
@@ -12975,6 +13272,7 @@ Query_2           0 MAMNTGGFDSMQRQ 14
         self.assertEqual(hsp.annotations["positive"], 38)
         self.assertEqual(hsp.annotations["gaps"], 0)
         hsp = hit[3]
+        self.assertEqual(hsp.num, 4)
         self.assertAlmostEqual(hsp.score, 109.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 52.8449)
         self.assertAlmostEqual(hsp.annotations["evalue"], 4.80116e-20)
@@ -12982,6 +13280,7 @@ Query_2           0 MAMNTGGFDSMQRQ 14
         self.assertEqual(hsp.annotations["positive"], 29)
         self.assertEqual(hsp.annotations["gaps"], 0)
         hsp = hit[4]
+        self.assertEqual(hsp.num, 5)
         self.assertAlmostEqual(hsp.score, 127.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 61.0927)
         self.assertAlmostEqual(hsp.annotations["evalue"], 7.14684e-08)
@@ -12989,6 +13288,7 @@ Query_2           0 MAMNTGGFDSMQRQ 14
         self.assertEqual(hsp.annotations["positive"], 52)
         self.assertEqual(hsp.annotations["gaps"], 0)
         hsp = hit[5]
+        self.assertEqual(hsp.num, 6)
         self.assertAlmostEqual(hsp.score, 87.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 42.7643)
         self.assertAlmostEqual(hsp.annotations["evalue"], 0.0235231)
@@ -13072,6 +13372,7 @@ Query_2          60 FRFGR 65
 """,
         )
         hit = record[2]
+        self.assertEqual(hit.num, 3)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|366988334|ref|XM_003673886.1|")
         self.assertEqual(hit.target.name, "XM_003673886")
@@ -13086,6 +13387,7 @@ Query_2          60 FRFGR 65
             "<Bio.Blast.Hit target.id='gi|366988334|ref|XM_003673886.1|' query.id='Query_2'; 4 HSPs>",
         )
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 306.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 143.112)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.45826e-32)
@@ -13093,6 +13395,7 @@ Query_2          60 FRFGR 65
         self.assertEqual(hsp.annotations["positive"], 71)
         self.assertEqual(hsp.annotations["gaps"], 0)
         hsp = hit[1]
+        self.assertEqual(hsp.num, 2)
         self.assertAlmostEqual(hsp.score, 130.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 62.4673)
         self.assertAlmostEqual(hsp.annotations["evalue"], 5.61057e-16)
@@ -13100,6 +13403,7 @@ Query_2          60 FRFGR 65
         self.assertEqual(hsp.annotations["positive"], 36)
         self.assertEqual(hsp.annotations["gaps"], 0)
         hsp = hit[2]
+        self.assertEqual(hsp.num, 3)
         self.assertAlmostEqual(hsp.score, 91.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 44.5971)
         self.assertAlmostEqual(hsp.annotations["evalue"], 5.61057e-16)
@@ -13107,6 +13411,7 @@ Query_2          60 FRFGR 65
         self.assertEqual(hsp.annotations["positive"], 24)
         self.assertEqual(hsp.annotations["gaps"], 0)
         hsp = hit[3]
+        self.assertEqual(hsp.num, 4)
         self.assertAlmostEqual(hsp.score, 112.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 54.2195)
         self.assertAlmostEqual(hsp.annotations["evalue"], 8.37784e-06)
@@ -13191,6 +13496,7 @@ Query_2          60 SF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLPLHGVKPSSVHGH 115
 """,
         )
         hit = record[3]
+        self.assertEqual(hit.num, 4)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|255710474|ref|XM_002551475.1|")
         self.assertEqual(hit.target.name, "XM_002551475")
@@ -13201,6 +13507,7 @@ Query_2          60 SF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLPLHGVKPSSVHGH 115
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=4845)")
         self.assertEqual(len(hit), 2)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 303.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 141.737)
         self.assertAlmostEqual(hsp.annotations["evalue"], 3.78129e-32)
@@ -13208,6 +13515,7 @@ Query_2          60 SF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLPLHGVKPSSVHGH 115
         self.assertEqual(hsp.annotations["positive"], 71)
         self.assertEqual(hsp.annotations["gaps"], 0)
         hsp = hit[1]
+        self.assertEqual(hsp.num, 2)
         self.assertAlmostEqual(hsp.score, 92.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 45.0554)
         self.assertAlmostEqual(hsp.annotations["evalue"], 0.00480643)
@@ -13288,6 +13596,7 @@ Query_2           0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTK 55
 """,
         )
         hit = record[4]
+        self.assertEqual(hit.num, 5)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|254579534|ref|XM_002495708.1|")
         self.assertEqual(hit.target.name, "XM_002495708")
@@ -13298,6 +13607,7 @@ Query_2           0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTK 55
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=4866)")
         self.assertEqual(len(hit), 4)
         hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 302.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 141.279)
         self.assertAlmostEqual(hsp.annotations["evalue"], 5.19486e-32)
@@ -13305,6 +13615,7 @@ Query_2           0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTK 55
         self.assertEqual(hsp.annotations["positive"], 72)
         self.assertEqual(hsp.annotations["gaps"], 0)
         hsp = hit[1]
+        self.assertEqual(hsp.num, 2)
         self.assertAlmostEqual(hsp.score, 105.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 51.0121)
         self.assertAlmostEqual(hsp.annotations["evalue"], 8.66978e-12)
@@ -13312,6 +13623,7 @@ Query_2           0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTK 55
         self.assertEqual(hsp.annotations["positive"], 33)
         self.assertEqual(hsp.annotations["gaps"], 0)
         hsp = hit[2]
+        self.assertEqual(hsp.num, 3)
         self.assertAlmostEqual(hsp.score, 85.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 41.8479)
         self.assertAlmostEqual(hsp.annotations["evalue"], 8.66978e-12)
@@ -13319,6 +13631,7 @@ Query_2           0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTK 55
         self.assertEqual(hsp.annotations["positive"], 25)
         self.assertEqual(hsp.annotations["gaps"], 0)
         hsp = hit[3]
+        self.assertEqual(hsp.num, 4)
         self.assertAlmostEqual(hsp.score, 92.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 45.0554)
         self.assertAlmostEqual(hsp.annotations["evalue"], 0.00480643)
@@ -13402,6 +13715,7 @@ Query_2          60 GNAMPTGTVNRSIYSSKPAV*NFGCLH*GYSSRDGDSIK 99
 """,
         )
         hit = record[0]
+        self.assertEqual(hit.num, 1)
         hsps = hit[1:5:2]
         self.maxDiff = None
         self.assertEqual(

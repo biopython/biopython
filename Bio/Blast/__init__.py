@@ -1119,13 +1119,13 @@ def write(records, destination, fmt="XML"):
 <Iteration_hits>
 """
             )
-            for hit_num, hit in enumerate(record):
+            for hit in record:
                 target = hit.target
                 target_length = len(target.seq)
                 stream.write(
                     f"""\
 <Hit>
-  <Hit_num>{hit_num + 1}</Hit_num>
+  <Hit_num>{hit.num}</Hit_num>
   <Hit_id>{target.id}</Hit_id>
   <Hit_def>{target.description}</Hit_def>
   <Hit_accession>{target.name}</Hit_accession>
@@ -1135,7 +1135,7 @@ def write(records, destination, fmt="XML"):
                         "UTF-8"
                     )
                 )
-                for hsp_num, hsp in enumerate(hit):
+                for hsp in hit:
                     query = hsp.query
                     target = hsp.target
                     coordinates = hsp.coordinates
@@ -1207,7 +1207,7 @@ def write(records, destination, fmt="XML"):
                     stream.write(
                         f"""\
     <Hsp>
-      <Hsp_num>{hsp_num + 1}</Hsp_num>
+      <Hsp_num>{hsp.num}</Hsp_num>
       <Hsp_bit-score>{hsp.annotations["bit score"]}</Hsp_bit-score>
       <Hsp_score>{hsp.score}</Hsp_score>
       <Hsp_evalue>{hsp.annotations["evalue"]}</Hsp_evalue>

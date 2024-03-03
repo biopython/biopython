@@ -484,11 +484,7 @@ class XMLHandler:
         self._record.append(hit)
 
     def _end_hit_num(self, name):
-        num = int(self._characters)
-        if num != len(self._record) + 1:
-            raise ValueError(
-                f"unexpected value in tag <Hit_num> (found {num}, expected {len(self._record) + 1})"
-            )
+        self._alignments.num = int(self._characters)
         self._characters = ""
 
     def _end_hit_id(self, name):
@@ -516,11 +512,7 @@ class XMLHandler:
         self._characters = ""
 
     def _end_hsp_num(self, name):
-        num = int(self._characters)
-        if num != len(self._alignments) + 1:
-            raise ValueError(
-                f"unexpected value in tag <Hsp_num> (found {num}, expected {len(self._alignments) + 1})"
-            )
+        self._hsp["num"] = int(self._characters)
         self._characters = ""
 
     def _end_hsp_bit_score(self, name):
@@ -718,6 +710,7 @@ class XMLHandler:
         target.seq = Seq(target_seq_data, target_length)
         sequences = [target, query]
         alignment = HSP(sequences, coordinates)
+        alignment.num = hsp["num"]
         alignment.score = hsp["score"]
         annotations = {}
         annotations["bit score"] = hsp["bit-score"]
