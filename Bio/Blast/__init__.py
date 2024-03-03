@@ -1280,6 +1280,7 @@ def write(records, destination, fmt="XML"):
 </Iteration>
 """
             )
+            count += 1
         stream.write(
             b"""\
 </BlastOutput_iterations>

@@ -151,7 +151,7 @@ Program: BLASTP 2.2.18+
             records = records[:]
         stream = io.BytesIO()
         n = Blast.write(records, stream)
-        self.assertEqual(n, 0)
+        self.assertEqual(n, 2)
         stream.seek(0)
         written_records = Blast.parse(stream)
         self.check_xml_2218_blastp_002_header(written_records)
@@ -235,7 +235,7 @@ Program: blastp 2.2.18 [Mar-02-2008]
         with Blast.parse(path) as records:
             stream = io.BytesIO()
             n = Blast.write(records, stream)
-            self.assertEqual(n, 0)
+            self.assertEqual(n, 1)
             stream.seek(0)
             written_records = Blast.parse(stream)
             self.check_xml_2218L_blastp_001_records(written_records)
@@ -754,7 +754,7 @@ Query_1          59 VSLDITEESTSDLDKFNSGDKVTIT  84
         with Blast.parse(path) as records:
             stream = io.BytesIO()
             n = Blast.write(records, stream)
-            self.assertEqual(n, 0)
+            self.assertEqual(n, 1)
             stream.seek(0)
             written_records = Blast.parse(stream)
             self.check_xml_2226_blastp_003(written_records)
@@ -3602,7 +3602,7 @@ lcl|QUERY        94 YQQAKAFLASPATQVRNIEREEVLSKGAK 123
         with Blast.parse(path) as records:
             stream = io.BytesIO()
             n = Blast.write(records, stream)
-            self.assertEqual(n, 0)
+            self.assertEqual(n, 3)
             stream.seek(0)
             written_records = Blast.parse(stream)
             self.check_xml_2218L_rpsblast_001(written_records)
@@ -4786,7 +4786,7 @@ Query_744       660 AEQP 664
         with Blast.parse(path) as records:
             stream = io.BytesIO()
             n = Blast.write(records, stream)
-            self.assertEqual(n, 0)
+            self.assertEqual(n, 1)
             stream.seek(0)
             written_records = Blast.parse(stream)
             self.check_phiblast_records(written_records)
@@ -5769,7 +5769,7 @@ G26684.1        228
         with Blast.parse(path) as records:
             stream = io.BytesIO()
             n = Blast.write(records, stream)
-            self.assertEqual(n, 0)
+            self.assertEqual(n, 1)
             stream.seek(0)
             written_records = Blast.parse(stream)
             self.check_xml_2900_blastn_001_records(written_records)
@@ -5974,7 +5974,7 @@ lcl|1_          780 TCACCACCCAATACGTG 797
         with Blast.parse(path) as records:
             stream = io.BytesIO()
             n = Blast.write(records, stream)
-            self.assertEqual(n, 0)
+            self.assertEqual(n, 1)
             stream.seek(0)
             written_records = Blast.parse(stream)
             self.check_megablast_legacy_records(written_records)
@@ -10804,7 +10804,7 @@ gi|146197       480 STLQKLHRNRIWYLDILFSNDLVNNE 506
         with Blast.parse(path) as records:
             stream = io.BytesIO()
             n = Blast.write(records, stream)
-            self.assertEqual(n, 0)
+            self.assertEqual(n, 7)
             stream.seek(0)
             written_records = Blast.parse(stream)
             self.check_xml_2222_blastx_001(written_records)
@@ -11727,7 +11727,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
         with Blast.parse(path) as records:
             stream = io.BytesIO()
             n = Blast.write(records, stream)
-            self.assertEqual(n, 0)
+            self.assertEqual(n, 1)
             stream.seek(0)
             written_records = Blast.parse(stream)
             self.check_xml_2900_blastx_001_records(written_records)
@@ -12725,7 +12725,7 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
         with Blast.parse(path) as records:
             stream = io.BytesIO()
             n = Blast.write(records, stream)
-            self.assertEqual(n, 0)
+            self.assertEqual(n, 1)
             stream.seek(0)
             written_records = Blast.parse(stream)
             self.check_xml_2900_tblastn_001_records(written_records)
@@ -13428,7 +13428,7 @@ Query: Query_2
         with Blast.parse(path) as records:
             stream = io.BytesIO()
             n = Blast.write(records, stream)
-            self.assertEqual(n, 0)
+            self.assertEqual(n, 2)
             stream.seek(0)
             written_records = Blast.parse(stream)
             self.check_xml_2226_tblastx_004(written_records)
