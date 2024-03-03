@@ -202,7 +202,7 @@ Score:%d bits(%d), Expect:%.1g,
             alignment_text,
         )
 
-    def _format_xml(self, program, query_length, target_length):
+    def _write(self, stream, program, query_length, target_length):
         query = self.query
         target = self.target
         coordinates = self.coordinates
@@ -275,7 +275,8 @@ Score:%d bits(%d), Expect:%.1g,
         identity = annotations["identity"]
         positive = annotations["positive"]
         midline = annotations["midline"]
-        block = f"""\
+        # fmt: off
+        stream.write(f"""\
     <Hsp>
       <Hsp_num>{self.num}</Hsp_num>
       <Hsp_bit-score>{bit_score}</Hsp_bit-score>
@@ -289,20 +290,20 @@ Score:%d bits(%d), Expect:%.1g,
       <Hsp_hit-frame>{hit_frame}</Hsp_hit-frame>
       <Hsp_identity>{identity}</Hsp_identity>
       <Hsp_positive>{positive}</Hsp_positive>
-"""
+""".encode("UTF-8"))
         gaps = annotations.get("gaps")
         if gaps is not None:
-            block += f"""\
-      <Hsp_gaps>{gaps}</Hsp_gaps>
-"""
-        block += f"""\
+            stream.write(b"""\
+      <Hsp_gaps>%d</Hsp_gaps>
+""" % gaps)
+        stream.write(f"""\
       <Hsp_align-len>{align_len}</Hsp_align-len>
       <Hsp_qseq>{qseq}</Hsp_qseq>
       <Hsp_hseq>{hseq}</Hsp_hseq>
       <Hsp_midline>{midline}</Hsp_midline>
     </Hsp>
-"""
-        return block.encode("UTF-8")
+""".encode("UTF-8"))
+        # fmt: on
 
 
 class Hit(Alignments):
@@ -420,6 +421,27 @@ class Hit(Alignments):
             )
 
         return "\n".join(lines)
+
+    def _write(self, stream, program, query_length):
+        target = self.target
+        target_length = len(target.seq)
+        # fmt: off
+        stream.write(f"""\
+<Hit>
+  <Hit_num>{self.num}</Hit_num>
+  <Hit_id>{target.id}</Hit_id>
+  <Hit_def>{target.description}</Hit_def>
+  <Hit_accession>{target.name}</Hit_accession>
+  <Hit_len>{target_length}</Hit_len>
+  <Hit_hsps>
+""".encode("UTF-8"))
+        for hsp in self:
+            hsp._write(stream, program, query_length, target_length)
+        stream.write(b"""\
+  </Hit_hsps>
+</Hit>
+""")
+        # fmt: on
 
 
 class Record(list):
@@ -1225,30 +1247,7 @@ def write(records, destination, fmt="XML"):
 """
             )
             for hit in record:
-                target = hit.target
-                target_length = len(target.seq)
-                stream.write(
-                    f"""\
-<Hit>
-  <Hit_num>{hit.num}</Hit_num>
-  <Hit_id>{target.id}</Hit_id>
-  <Hit_def>{target.description}</Hit_def>
-  <Hit_accession>{target.name}</Hit_accession>
-  <Hit_len>{target_length}</Hit_len>
-  <Hit_hsps>
-""".encode(
-                        "UTF-8"
-                    )
-                )
-                for hsp in hit:
-                    stream.write(hsp._format_xml(program, query_length, target_length))
-                stream.write(
-                    b"""\
-  </Hit_hsps>
-</Hit>
-"""
-                )
-
+                hit._write(stream, program, query_length)
             stream.write(
                 b"""\
 </Iteration_hits>
