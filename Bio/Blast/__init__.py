@@ -691,6 +691,63 @@ class Record(list):
                 return i
         raise ValueError(f"'{key}' not found")
 
+    def _write(self, stream, program):
+        # fmt: off
+        stream.write(f"""\
+<Iteration>
+  <Iteration_iter-num>{self.num}</Iteration_iter-num>
+""".encode("UTF-8"))
+        # fmt: on
+        query = self.query
+        if query is None:
+            query_length = None
+        else:
+            query_length = len(query.seq)
+            # fmt: off
+            stream.write(f"""\
+  <Iteration_query-ID>{query.id}</Iteration_query-ID>
+  <Iteration_query-def>{query.description}</Iteration_query-def>
+  <Iteration_query-len>{query_length}</Iteration_query-len>
+""".encode("UTF-8"))
+            # fmt: on
+        # fmt: off
+        stream.write(b"""\
+<Iteration_hits>
+""")
+        # fmt: on
+        for hit in self:
+            hit._write(stream, program, query_length)
+        # fmt: off
+        stream.write(b"""\
+</Iteration_hits>
+""")
+        # fmt: on
+        try:
+            stat = self.stat
+        except AttributeError:
+            pass
+        else:
+            # fmt: off
+            stream.write(f"""\
+  <Iteration_stat>
+    <Statistics>
+      <Statistics_db-num>{stat["db-num"]}</Statistics_db-num>
+      <Statistics_db-len>{stat["db-len"]}</Statistics_db-len>
+      <Statistics_hsp-len>{stat["hsp-len"]}</Statistics_hsp-len>
+      <Statistics_eff-space>{stat["eff-space"]}</Statistics_eff-space>
+      <Statistics_kappa>{stat["kappa"]}</Statistics_kappa>
+      <Statistics_lambda>{stat["lambda"]}</Statistics_lambda>
+      <Statistics_entropy>{stat["entropy"]}</Statistics_entropy>
+    </Statistics>
+  </Iteration_stat>
+""".encode("UTF-8"))
+            # fmt: on
+        # fmt: off
+        stream.write(b"""\
+</Iteration>
+""")
+        # fmt: on
+
 
 class Records(UserList):
     """Stores the BLAST results of a single BLAST run.
@@ -982,6 +1039,116 @@ Program: %s
             text += "\n\n" + str(record)
         return text
 
+    def _write(self, stream):
+        count = 0
+        program = self.program
+        # fmt: off
+        stream.write(b"""\
+<?xml version="1.0"?>
+<!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" "http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd">
+<BlastOutput>
+"""
+        )
+        stream.write(f"""\
+  <BlastOutput_program>{program}</BlastOutput_program>
+  <BlastOutput_version>{self.version}</BlastOutput_version>
+  <BlastOutput_reference>{html.escape(self.reference)}</BlastOutput_reference>
+  <BlastOutput_db>{self.db}</BlastOutput_db>
+  <BlastOutput_query-ID>{self.query.id}</BlastOutput_query-ID>
+  <BlastOutput_query-def>{self.query.description}</BlastOutput_query-def>
+  <BlastOutput_query-len>{len(self.query)}</BlastOutput_query-len>
+""".encode("UTF-8"))
+        stream.write(b"""\
+  <BlastOutput_param>
+    <Parameters>
+"""
+        )
+        param = self.param
+        value = param.get("matrix")
+        if value is not None:
+            stream.write(b"""\
+      <Parameters_matrix>%s</Parameters_matrix>
+""" % value.encode("UTF-8"))
+        value = param.get("expect")
+        if value is not None:
+            stream.write(b"""\
+      <Parameters_expect>%g</Parameters_expect>
+""" % value)
+        value = param.get("include")
+        if value is not None:
+            stream.write(b"""\
+      <Parameters_include>%g</Parameters_include>
+""" % value)
+        value = param.get("sc-match")
+        if value is not None:
+            stream.write(b"""\
+      <Parameters_sc-match>%d</Parameters_sc-match>
+""" % value)
+        value = param.get("sc-mismatch")
+        if value is not None:
+            stream.write(b"""\
+      <Parameters_sc-mismatch>%d</Parameters_sc-mismatch>
+""" % value)
+        value = param.get("gap-open")
+        if value is not None:
+            stream.write(b"""\
+      <Parameters_gap-open>%d</Parameters_gap-open>
+""" % value)
+        value = param.get("gap-extend")
+        if value is not None:
+            stream.write(b"""\
+      <Parameters_gap-extend>%d</Parameters_gap-extend>
+""" % value)
+        value = param.get("filter")
+        if value is not None:
+            stream.write(b"""\
+      <Parameters_filter>%s</Parameters_filter>
+""" % value.encode("UTF-8"))
+        value = param.get("pattern")
+        if value is not None:
+            stream.write(b"""\
+      <Parameters_pattern>%s</Parameters_pattern>
+""" % value.encode("UTF-8"))
+        value = param.get("entrez-query")
+        if value is not None:
+            stream.write(b"""\
+      <Parameters_entrez-query>{value}</Parameters_entrez-query>
+""" % value.encode("UTF-8"))
+        stream.write(b"""\
+    </Parameters>
+  </BlastOutput_param>
+<BlastOutput_iterations>
+""")
+        for record in self:
+            record._write(stream, program)
+            count += 1
+        stream.write(b"""\
+</BlastOutput_iterations>
+""")
+        try:
+            mbstat = self.mbstat
+        except AttributeError:
+            pass
+        else:
+            stream.write(f"""\
+  <BlastOutput_mbstat>
+    <Statistics>
+      <Statistics_db-num>{mbstat["db-num"]}</Statistics_db-num>
+      <Statistics_db-len>{mbstat["db-len"]}</Statistics_db-len>
+      <Statistics_hsp-len>{mbstat["hsp-len"]}</Statistics_hsp-len>
+      <Statistics_eff-space>{mbstat["eff-space"]}</Statistics_eff-space>
+      <Statistics_kappa>{mbstat["kappa"]}</Statistics_kappa>
+      <Statistics_lambda>{mbstat["lambda"]}</Statistics_lambda>
+      <Statistics_entropy>{mbstat["entropy"]}</Statistics_entropy>
+    </Statistics>
+  </BlastOutput_mbstat>
+""".encode("UTF-8"))
+        stream.write(b"""\
+</BlastOutput>
+""")
+        # fmt: on
+        return count
+
 
 def parse(source):
     """Parse an XML file containing BLAST output and return a Bio.Blast.Records object.
@@ -1092,227 +1259,7 @@ def write(records, destination, fmt="XML"):
             ) from None
         stream = destination
     try:
-        count = 0
-        program = records.program
-        stream.write(
-            b"""\
-<?xml version="1.0"?>
-<!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" "http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd">
-<BlastOutput>
-"""
-        )
-        stream.write(
-            f"""\
-  <BlastOutput_program>{program}</BlastOutput_program>
-  <BlastOutput_version>{records.version}</BlastOutput_version>
-  <BlastOutput_reference>{html.escape(records.reference)}</BlastOutput_reference>
-  <BlastOutput_db>{records.db}</BlastOutput_db>
-  <BlastOutput_query-ID>{records.query.id}</BlastOutput_query-ID>
-  <BlastOutput_query-def>{records.query.description}</BlastOutput_query-def>
-  <BlastOutput_query-len>{len(records.query)}</BlastOutput_query-len>
-""".encode(
-                "UTF-8"
-            )
-        )
-        stream.write(
-            b"""\
-  <BlastOutput_param>
-    <Parameters>
-"""
-        )
-        value = records.param.get("matrix")
-        if value is not None:
-            stream.write(
-                f"""\
-      <Parameters_matrix>{value}</Parameters_matrix>
-""".encode(
-                    "UTF-8"
-                )
-            )
-        value = records.param.get("expect")
-        if value is not None:
-            stream.write(
-                f"""\
-      <Parameters_expect>{value:g}</Parameters_expect>
-""".encode(
-                    "UTF-8"
-                )
-            )
-        value = records.param.get("include")
-        if value is not None:
-            stream.write(
-                f"""\
-      <Parameters_include>{value:g}</Parameters_include>
-""".encode(
-                    "UTF-8"
-                )
-            )
-        value = records.param.get("sc-match")
-        if value is not None:
-            stream.write(
-                f"""\
-      <Parameters_sc-match>{value}</Parameters_sc-match>
-""".encode(
-                    "UTF-8"
-                )
-            )
-        value = records.param.get("sc-mismatch")
-        if value is not None:
-            stream.write(
-                f"""\
-      <Parameters_sc-mismatch>{value}</Parameters_sc-mismatch>
-""".encode(
-                    "UTF-8"
-                )
-            )
-        value = records.param.get("gap-open")
-        if value is not None:
-            stream.write(
-                f"""\
-      <Parameters_gap-open>{value}</Parameters_gap-open>
-""".encode(
-                    "UTF-8"
-                )
-            )
-        value = records.param.get("gap-extend")
-        if value is not None:
-            stream.write(
-                f"""\
-      <Parameters_gap-extend>{value}</Parameters_gap-extend>
-""".encode(
-                    "UTF-8"
-                )
-            )
-        value = records.param.get("filter")
-        if value is not None:
-            stream.write(
-                f"""\
-      <Parameters_filter>{value}</Parameters_filter>
-""".encode(
-                    "UTF-8"
-                )
-            )
-        value = records.param.get("pattern")
-        if value is not None:
-            stream.write(
-                f"""\
-      <Parameters_pattern>{value}</Parameters_pattern>
-""".encode(
-                    "UTF-8"
-                )
-            )
-        value = records.param.get("entrez-query")
-        if value is not None:
-            stream.write(
-                f"""\
-      <Parameters_entrez-query>{value}</Parameters_entrez-query>
-""".encode(
-                    "UTF-8"
-                )
-            )
-
-        stream.write(
-            b"""\
-    </Parameters>
-  </BlastOutput_param>
-<BlastOutput_iterations>
-"""
-        )
-        for record in records:
-            stream.write(
-                f"""\
-<Iteration>
-  <Iteration_iter-num>{record.num}</Iteration_iter-num>
-""".encode(
-                    "UTF-8"
-                )
-            )
-            query = record.query
-            if query is None:
-                query_length = None
-            else:
-                query_length = len(query.seq)
-                stream.write(
-                    f"""\
-  <Iteration_query-ID>{query.id}</Iteration_query-ID>
-  <Iteration_query-def>{query.description}</Iteration_query-def>
-  <Iteration_query-len>{query_length}</Iteration_query-len>
-""".encode(
-                        "UTF-8"
-                    )
-                )
-            stream.write(
-                b"""\
-<Iteration_hits>
-"""
-            )
-            for hit in record:
-                hit._write(stream, program, query_length)
-            stream.write(
-                b"""\
-</Iteration_hits>
-"""
-            )
-            try:
-                stat = record.stat
-            except AttributeError:
-                pass
-            else:
-                stream.write(
-                    f"""\
-  <Iteration_stat>
-    <Statistics>
-      <Statistics_db-num>{stat["db-num"]}</Statistics_db-num>
-      <Statistics_db-len>{stat["db-len"]}</Statistics_db-len>
-      <Statistics_hsp-len>{stat["hsp-len"]}</Statistics_hsp-len>
-      <Statistics_eff-space>{stat["eff-space"]}</Statistics_eff-space>
-      <Statistics_kappa>{stat["kappa"]}</Statistics_kappa>
-      <Statistics_lambda>{stat["lambda"]}</Statistics_lambda>
-      <Statistics_entropy>{stat["entropy"]}</Statistics_entropy>
-    </Statistics>
-  </Iteration_stat>
-""".encode(
-                        "UTF-8"
-                    )
-                )
-            stream.write(
-                b"""\
-</Iteration>
-"""
-            )
-            count += 1
-        stream.write(
-            b"""\
-</BlastOutput_iterations>
-"""
-        )
-        try:
-            mbstat = records.mbstat
-        except AttributeError:
-            pass
-        else:
-            stream.write(
-                f"""\
-  <BlastOutput_mbstat>
-    <Statistics>
-      <Statistics_db-num>{mbstat["db-num"]}</Statistics_db-num>
-      <Statistics_db-len>{mbstat["db-len"]}</Statistics_db-len>
-      <Statistics_hsp-len>{mbstat["hsp-len"]}</Statistics_hsp-len>
-      <Statistics_eff-space>{mbstat["eff-space"]}</Statistics_eff-space>
-      <Statistics_kappa>{mbstat["kappa"]}</Statistics_kappa>
-      <Statistics_lambda>{mbstat["lambda"]}</Statistics_lambda>
-      <Statistics_entropy>{mbstat["entropy"]}</Statistics_entropy>
-    </Statistics>
-  </BlastOutput_mbstat>
-""".encode(
-                    "UTF-8"
-                )
-            )
-        stream.write(
-            b"""\
-</BlastOutput>
-"""
-        )
+        count = records._write(stream)
     finally:
         if stream is not destination:
             stream.close()
