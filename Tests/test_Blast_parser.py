@@ -41,6 +41,7 @@ class TestBlastp(unittest.TestCase):
         self.assertEqual(records.param["filter"], "m L; R -d repeat/repeat_9606;")
 
     def check_xml_2218_blastp_002_record_0(self, record):
+        self.assertEqual(record.num, 1)
         self.assertEqual(
             repr(record),
             "<Bio.Blast.Record query.id='gi|585505|sp|Q08386|MOPB_RHOCA'; no hits>",
@@ -63,6 +64,7 @@ class TestBlastp(unittest.TestCase):
         self.assertEqual(len(record), 0)
 
     def check_xml_2218_blastp_002_record_1(self, record):
+        self.assertEqual(record.num, 2)
         self.assertIsInstance(record.query, SeqRecord)
         self.assertEqual(record.query.id, "gi|129628|sp|P07175.1|PARA_AGRTU")
         self.assertEqual(record.query.description, "Protein parA")
@@ -148,8 +150,9 @@ Program: BLASTP 2.2.18+
             records = Blast.parse(stream)
             records = records[:]
         stream = io.BytesIO()
-        n = Blast.write(stream, records)
+        n = Blast.write(records, stream)
         self.assertEqual(n, 0)
+        stream.seek(0)
         written_records = Blast.parse(stream)
         self.check_xml_2218_blastp_002_header(written_records)
         record = next(written_records)
@@ -231,8 +234,9 @@ Program: blastp 2.2.18 [Mar-02-2008]
         path = os.path.join("Blast", filename)
         with Blast.parse(path) as records:
             stream = io.BytesIO()
-            n = Blast.write(stream, records)
+            n = Blast.write(records, stream)
             self.assertEqual(n, 0)
+            stream.seek(0)
             written_records = Blast.parse(stream)
             self.check_xml_2218L_blastp_001_records(written_records)
 
@@ -305,6 +309,7 @@ Program: BLASTP 2.2.26+
         self.assertEqual(records.param["gap-extend"], 1)
         self.assertEqual(records.param["filter"], "F")
         record = next(records)
+        self.assertEqual(record.num, 1)
         self.assertIsInstance(record.query, SeqRecord)
         self.assertEqual(record.query.id, "Query_1")
         self.assertEqual(
@@ -748,8 +753,9 @@ Query_1          59 VSLDITEESTSDLDKFNSGDKVTIT  84
         path = os.path.join("Blast", filename)
         with Blast.parse(path) as records:
             stream = io.BytesIO()
-            n = Blast.write(stream, records)
+            n = Blast.write(records, stream)
             self.assertEqual(n, 0)
+            stream.seek(0)
             written_records = Blast.parse(stream)
             self.check_xml_2226_blastp_003(written_records)
 
@@ -783,6 +789,7 @@ Query_1          59 VSLDITEESTSDLDKFNSGDKVTIT  84
         self.assertEqual(records.param["gap-extend"], 1)
         self.assertEqual(records.param["filter"], "S")
         record = next(records)
+        self.assertEqual(record.num, 1)
         self.assertIsNone(record.query)
         self.assertEqual(len(record.stat), 7)
         self.assertEqual(record.stat["db-num"], 2563094)
@@ -1589,6 +1596,7 @@ lcl|QUERY        80 IPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKK 124
 """,
         )
         record = next(records)
+        self.assertEqual(record.num, 2)
         self.assertIsNone(record.query)
         self.assertEqual(len(record.stat), 7)
         self.assertEqual(record.stat["db-num"], 2563094)
@@ -2925,6 +2933,7 @@ lcl|QUERY        28 YPEVTLKLAGEEANARRAGDERTKEAI----HAIVKMISDAMKPYRNKGSGFQSQP  80
 """,
         )
         record = next(records)
+        self.assertEqual(record.num, 3)
         self.assertIsNone(record.query)
         self.assertEqual(len(record.stat), 7)
         self.assertEqual(record.stat["db-num"], 2563094)
@@ -3592,10 +3601,11 @@ lcl|QUERY        94 YQQAKAFLASPATQVRNIEREEVLSKGAK 123
         path = os.path.join("Blast", filename)
         with Blast.parse(path) as records:
             stream = io.BytesIO()
-            n = Blast.write(stream, records)
+            n = Blast.write(records, stream)
             self.assertEqual(n, 0)
+            stream.seek(0)
             written_records = Blast.parse(stream)
-            self.check_xml_2226_blastp_003(written_records)
+            self.check_xml_2218L_rpsblast_001(written_records)
 
     def test_phiblast_parser(self):
         """Parsing BLASTP 2.14.1+ (phiblast.xml)."""
@@ -3635,6 +3645,7 @@ lcl|QUERY        94 YQQAKAFLASPATQVRNIEREEVLSKGAK 123
             "[LIVMF]-G-E-x-[GAS]-[LIVM]-x(5,11)-R-[STAQ]-A-x-[LIVMA]-x-[STACV]",
         )
         record = next(records)
+        self.assertEqual(record.num, 1)
         self.assertRaises(StopIteration, next, records)
         self.check_phiblast_record(record)
 
@@ -4774,8 +4785,9 @@ Query_744       660 AEQP 664
         path = os.path.join("Blast", filename)
         with Blast.parse(path) as records:
             stream = io.BytesIO()
-            n = Blast.write(stream, records)
+            n = Blast.write(records, stream)
             self.assertEqual(n, 0)
+            stream.seek(0)
             written_records = Blast.parse(stream)
             self.check_phiblast_records(written_records)
 
@@ -4850,7 +4862,6 @@ Program: BLASTN 2.9.0+
 
     def check_xml_2900_blastn_001_record(self, record):
         self.assertEqual(record.num, 1)
-
         self.assertIsInstance(record.query, SeqRecord)
         self.assertEqual(record.query.id, "G26684.1")
         self.assertEqual(
@@ -5757,8 +5768,9 @@ G26684.1        228
         path = os.path.join("Blast", filename)
         with Blast.parse(path) as records:
             stream = io.BytesIO()
-            n = Blast.write(stream, records)
+            n = Blast.write(records, stream)
             self.assertEqual(n, 0)
+            stream.seek(0)
             written_records = Blast.parse(stream)
             self.check_xml_2900_blastn_001_records(written_records)
 
@@ -5961,8 +5973,9 @@ lcl|1_          780 TCACCACCCAATACGTG 797
         path = os.path.join("Blast", filename)
         with Blast.parse(path) as records:
             stream = io.BytesIO()
-            n = Blast.write(stream, records)
+            n = Blast.write(records, stream)
             self.assertEqual(n, 0)
+            stream.seek(0)
             written_records = Blast.parse(stream)
             self.check_megablast_legacy_records(written_records)
 
@@ -6110,6 +6123,7 @@ Program: BLASTX 2.2.22+
         self.assertEqual(records.param["gap-extend"], 1)
         self.assertEqual(records.param["filter"], "L;")
         record = next(records)
+        self.assertEqual(record.num, 1)
         self.assertIsInstance(record.query, SeqRecord)
         self.assertEqual(record.query.id, "1")
         self.assertEqual(
@@ -6195,6 +6209,7 @@ gi|149390         0 HMLVSKIKPCMCKYELIRTVKLRMAH 26
 """,
         )
         record = next(records)
+        self.assertEqual(record.num, 2)
         self.assertIsInstance(record.query, SeqRecord)
         self.assertEqual(record.query.id, "2")
         self.assertEqual(
@@ -7079,6 +7094,7 @@ gi|826212       263 -IPYHG--------NSGQESSLDVVNRSIGYYKRYCDMLGVSCEDNL 301
 """,
         )
         record = next(records)
+        self.assertEqual(record.num, 3)
         self.assertIsInstance(record.query, SeqRecord)
         self.assertEqual(record.query.id, "3")
         self.assertEqual(
@@ -7097,6 +7113,7 @@ gi|826212       263 -IPYHG--------NSGQESSLDVVNRSIGYYKRYCDMLGVSCEDNL 301
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
         self.assertEqual(len(record), 0)
         record = next(records)
+        self.assertEqual(record.num, 4)
         self.assertIsInstance(record.query, SeqRecord)
         self.assertEqual(record.query.id, "4")
         self.assertEqual(
@@ -8038,6 +8055,7 @@ gi|224058       180 EPYNATLSVHQLVENADECMV 201
 """,
         )
         record = next(records)
+        self.assertEqual(record.num, 5)
         self.assertIsInstance(record.query, SeqRecord)
         self.assertEqual(record.query.id, "5")
         self.assertEqual(
@@ -8848,6 +8866,7 @@ gi|503077         7 GAMCVQRFDDSRKSAIHNTYRNSLRSSSMREPRDPLLKVL 47
 """,
         )
         record = next(records)
+        self.assertEqual(record.num, 6)
         self.assertIsInstance(record.query, SeqRecord)
         self.assertEqual(record.query.id, "6")
         self.assertEqual(
@@ -9659,6 +9678,7 @@ gi|317649        67 SLVMAVVVNDSEEDGDSSEAVQPQKRKRLWGLVVCHNTTPRFV 110
 """,
         )
         record = next(records)
+        self.assertEqual(record.num, 7)
         self.assertIsInstance(record.query, SeqRecord)
         self.assertEqual(record.query.id, "7")
         self.assertEqual(
@@ -10783,8 +10803,9 @@ gi|146197       480 STLQKLHRNRIWYLDILFSNDLVNNE 506
         path = os.path.join("Blast", filename)
         with Blast.parse(path) as records:
             stream = io.BytesIO()
-            n = Blast.write(stream, records)
+            n = Blast.write(records, stream)
             self.assertEqual(n, 0)
+            stream.seek(0)
             written_records = Blast.parse(stream)
             self.check_xml_2222_blastx_001(written_records)
 
@@ -10850,12 +10871,12 @@ Program: BLASTX 2.9.0+
         self.assertEqual(records.param["gap-extend"], 1)
         self.assertEqual(records.param["filter"], "F")
         record = next(records)
+        self.assertEqual(record.num, 1)
         self.assertRaises(StopIteration, next, records)
         self.check_xml_2900_blastx_001_record(record)
 
     def check_xml_2900_blastx_001_record(self, record):
         self.assertEqual(record.num, 1)
-
         self.assertIsInstance(record.query, SeqRecord)
         self.assertEqual(record.query.id, "AI021773.1")
         self.assertEqual(
@@ -11705,8 +11726,9 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
         path = os.path.join("Blast", filename)
         with Blast.parse(path) as records:
             stream = io.BytesIO()
-            n = Blast.write(stream, records)
+            n = Blast.write(records, stream)
             self.assertEqual(n, 0)
+            stream.seek(0)
             written_records = Blast.parse(stream)
             self.check_xml_2900_blastx_001_records(written_records)
 
@@ -11778,7 +11800,6 @@ Program: TBLASTN 2.9.0+
 
     def check_xml_2900_tblastn_001_record(self, record):
         self.assertEqual(record.num, 1)
-
         self.assertIsInstance(record.query, SeqRecord)
         self.assertEqual(record.query.id, "CAJ99216.1")
         self.assertEqual(
@@ -12703,8 +12724,9 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
         path = os.path.join("Blast", filename)
         with Blast.parse(path) as records:
             stream = io.BytesIO()
-            n = Blast.write(stream, records)
+            n = Blast.write(records, stream)
             self.assertEqual(n, 0)
+            stream.seek(0)
             written_records = Blast.parse(stream)
             self.check_xml_2900_tblastn_001_records(written_records)
 
@@ -12764,6 +12786,7 @@ Program: TBLASTX 2.2.26+
         self.assertEqual(records.param["gap-extend"], 1)
         self.assertEqual(records.param["filter"], "L;")
         record = next(records)
+        self.assertEqual(record.num, 1)
         self.assertIsInstance(record.query, SeqRecord)
         self.assertEqual(record.query.id, "Query_1")
         self.assertEqual(record.query.description, "random_s00")
@@ -12779,6 +12802,7 @@ Program: TBLASTX 2.2.26+
         self.assertAlmostEqual(record.stat["entropy"], 0.0)
         self.assertEqual(len(record), 0)
         record = next(records)
+        self.assertEqual(record.num, 2)
         self.assertIsInstance(record.query, SeqRecord)
         self.assertEqual(record.query.id, "Query_2")
         self.assertEqual(
@@ -13403,8 +13427,9 @@ Query: Query_2
         path = os.path.join("Blast", filename)
         with Blast.parse(path) as records:
             stream = io.BytesIO()
-            n = Blast.write(stream, records)
+            n = Blast.write(records, stream)
             self.assertEqual(n, 0)
+            stream.seek(0)
             written_records = Blast.parse(stream)
             self.check_xml_2226_tblastx_004(written_records)
 
