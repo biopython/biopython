@@ -198,8 +198,8 @@ class Atom:
         information in atom names, but some conventions seem to prevail:
 
             - C, N, O, S, H, P, F atom names start with a blank space (e.g. " CA ")
-              unless the name is 4 characters long (e.g. HE21 in glutamine). In both
-              these cases, the element is the first character.
+              unless the name is 4 characters long (e.g. HE21 in glutamine, HNZ1 in lysine).
+              In both these cases, the element is the first character.
 
             - Inorganic elements do not have a blank space (e.g. "CA  " for calcium)
               but one must check the full name to differentiate between e.g. helium
@@ -211,7 +211,9 @@ class Atom:
 
         """
         if not element or element.capitalize() not in IUPACData.atom_weights:
-            if self.fullname[0].isalpha() and not self.fullname[2:].isdigit():
+            if self.fullname[0].isalpha() and (
+                not self.fullname[2:].isdigit() or not self.fullname[3].isdigit()
+            ):
                 putative_element = self.name.strip()
             else:
                 # Hs may have digit in [0]
