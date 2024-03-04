@@ -18,21 +18,25 @@ import re
 
 from Bio import File
 
+
 # Added to parse SSBOND records from the PDB header and add them back to the header dict
 # Eric G. Suchanek, PhD 11/25/22
+
+
 def _get_ssbond(inl):
-	# SSBOND   1 CYS A   26    CYS A   84                          1555   1555  2.04
+    # SSBOND   1 CYS A   26    CYS A   84                          1555   1555  2.04
     # CYS A   26    CYS A   84                          1555   1555  2.0
     # print(inl)
     tok = inl.split()
-    
+
     chn = tok[1]
     prox = tok[2]
     chn2 = tok[4]
     dist = tok[5]
-    
+
     ssbond = tuple((prox, dist, chn, chn2))
     return ssbond
+
 
 def _get_journal(inl):
     # JRNL        AUTH   L.CHEN,M.DOI,F.S.MATHEWS,A.Y.CHISTOSERDOV,           2BBK   7
@@ -210,7 +214,7 @@ def _parse_pdb_header_list(header):
         "source": {"1": {"misc": ""}},
         "has_missing_residues": False,
         "missing_residues": [],
-        "ssbond":{},
+        "ssbond": {},
     }
 
     pdbh_dict["structure_reference"] = _get_references(header)
@@ -218,7 +222,7 @@ def _parse_pdb_header_list(header):
     comp_molid = "1"
     last_comp_key = "misc"
     last_src_key = "misc"
-    ssbond_numb = 0 # number of ssbonds
+    ssbond_numb = 0  # number of ssbonds
 
     for hh in header:
         h = re.sub(r"[\s\n\r]*\Z", "", hh)  # chop linebreaks off
@@ -314,8 +318,8 @@ def _parse_pdb_header_list(header):
             ssbond_numb += 1
             ssb = _get_ssbond(tail)
             ssbdict = {ssbond_numb: ssb}
-            pdbh_dict['ssbond'].update(ssbdict)
-        	#print(f'SSBOND: {tail}')            
+            pdbh_dict["ssbond"].update(ssbdict)
+        # print(f'SSBOND: {tail}')
         elif key == "REMARK":
             if re.search("REMARK   2 RESOLUTION.", hh):
                 r = _chop_end_codes(re.sub("REMARK   2 RESOLUTION.", "", hh))
