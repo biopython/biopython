@@ -1311,6 +1311,43 @@ record, consisting of pointers to the same ``Hit`` objects. Instead, we use
 ``copy.deepcopy`` to create a copy of the BLAST record in which each ``Hit``
 object is duplicated.
 
+Writing BLAST records
+---------------------
+
+Use the ``write`` function in ``Bio.Blast`` to save BLAST records as an XML
+file:
+
+.. code:: pycon
+
+   >>> from Bio import Blast
+   >>> stream = Blast.qblast("blastn", "nt", "8332116")
+   >>> records = Blast.parse(stream)
+   >>> Blast.write(records, "my_qblast_output.xml")
+
+In this example, we could have saved the data returned by ``Blast.qblast``
+directly to an XML file (see section :ref:`subsec:saving-blast-results`).
+However, by parsing the data returned by qblast into records, we can sort or
+filter the BLAST records before saving them. For example, we may be interested
+only in BLAST HSPs with a positive score of at least 400:
+
+.. code:: pycon
+
+   >>> filter_func = lambda hsp: hsp.annotations["positive"] >= 400
+   >>> for hit in records[0]:
+   ...     hit[:] = filter(filter_func, hit)
+   ...
+   >>> Blast.write(records, "my_qblast_output_selected.xml")
+
+Instead of a file name, the second argument to ``Blast.write`` can also be a
+file stream. In that case, the stream must be opened in binary format for
+writing:
+
+.. code:: pycon
+
+   >>> with open("my_qblast_output.xml", "wb") as stream:
+   ...     Blast.write(records, stream)
+   ...
+
 
 Dealing with PSI-BLAST
 ----------------------

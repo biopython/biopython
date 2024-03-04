@@ -188,7 +188,7 @@ class XMLHandler:
     def _start_hit(self, name, attrs):
         assert self._characters.strip() == ""
         self._characters = ""
-        self._alignment = Hit()
+        self._alignments = Hit()
 
     def _start_hit_num(self, name, attrs):
         assert self._characters.strip() == ""
@@ -479,36 +479,32 @@ class XMLHandler:
     def _end_hit(self, name):
         assert self._characters.strip() == ""
         self._characters = ""
-        alignment = self._alignment
-        del self._alignment
-        self._record.append(alignment)
+        hit = self._alignments
+        del self._alignments
+        self._record.append(hit)
 
     def _end_hit_num(self, name):
-        num = int(self._characters)
-        if num != len(self._record) + 1:
-            raise ValueError(
-                f"unexpected value in tag <Hit_num> (found {num}, expected {len(self._record) + 1})"
-            )
+        self._alignments.num = int(self._characters)
         self._characters = ""
 
     def _end_hit_id(self, name):
         hit_id = self._characters
-        self._alignment.target = SeqRecord(None, hit_id)
+        self._alignments.target = SeqRecord(None, hit_id)
         self._characters = ""
 
     def _end_hit_def(self, name):
         description = self._characters
-        self._alignment.target.description = description
+        self._alignments.target.description = description
         self._characters = ""
 
     def _end_hit_accession(self, name):
         accession = self._characters
-        self._alignment.target.name = accession
+        self._alignments.target.name = accession
         self._characters = ""
 
     def _end_hit_len(self, name):
         length = int(self._characters)
-        self._alignment.target.seq = Seq(None, length=length)
+        self._alignments.target.seq = Seq(None, length=length)
         self._characters = ""
 
     def _end_hit_hsps(self, name):
@@ -516,11 +512,7 @@ class XMLHandler:
         self._characters = ""
 
     def _end_hsp_num(self, name):
-        num = int(self._characters)
-        if num != len(self._alignment) + 1:
-            raise ValueError(
-                f"unexpected value in tag <Hsp_num> (found {num}, expected {len(self._alignment) + 1})"
-            )
+        self._hsp["num"] = int(self._characters)
         self._characters = ""
 
     def _end_hsp_bit_score(self, name):
@@ -680,7 +672,7 @@ class XMLHandler:
             assert query_end - query_start == len(query_seq_data)
             query_seq_data = {query_start: query_seq_data}
         query.seq = Seq(query_seq_data, query_length)
-        target = self._alignment.target
+        target = self._alignments.target
         target_id = target.id
         target_name = target.name
         target_description = target.description
@@ -718,6 +710,7 @@ class XMLHandler:
         target.seq = Seq(target_seq_data, target_length)
         sequences = [target, query]
         alignment = HSP(sequences, coordinates)
+        alignment.num = hsp["num"]
         alignment.score = hsp["score"]
         annotations = {}
         annotations["bit score"] = hsp["bit-score"]
@@ -730,7 +723,7 @@ class XMLHandler:
             pass
         annotations["midline"] = hsp["midline"]
         alignment.annotations = annotations
-        self._alignment.append(alignment)
+        self._alignments.append(alignment)
 
     def _end_iteration_stat(self, name):
         assert self._characters.strip() == ""
