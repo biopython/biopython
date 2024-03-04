@@ -9,6 +9,7 @@
 
 import copy
 import sys
+from typing import Optional, TYPE_CHECKING
 import warnings
 
 import numpy as np
@@ -17,6 +18,9 @@ from Bio.PDB.Entity import DisorderedEntityWrapper
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 from Bio.PDB.vectors import Vector
 from Bio.Data import IUPACData
+
+if TYPE_CHECKING:
+    from Bio.PDB.Residue import Residue
 
 
 class Atom:
@@ -33,16 +37,16 @@ class Atom:
 
     def __init__(
         self,
-        name,
-        coord,
-        bfactor,
-        occupancy,
-        altloc,
-        fullname,
+        name: str,
+        coord: np.ndarray,
+        bfactor: Optional[float],
+        occupancy: Optional[float],
+        altloc: str,
+        fullname: str,
         serial_number,
-        element=None,
-        pqr_charge=None,
-        radius=None,
+        element: Optional[str] = None,
+        pqr_charge: Optional[float] = None,
+        radius: Optional[float] = None,
     ):
         """Initialize Atom object.
 
@@ -76,7 +80,7 @@ class Atom:
         """
         self.level = "A"
         # Reference to the residue
-        self.parent = None
+        self.parent: Optional["Residue"] = None
         # the atomic data
         self.name = name  # eg. CA, spaces are removed from atom name
         self.fullname = fullname  # e.g. " CA ", spaces included
@@ -92,7 +96,7 @@ class Atom:
         self.sigatm_array = None
         self.serial_number = serial_number
         # Dictionary that keeps additional properties
-        self.xtra = {}
+        self.xtra: dict = {}
         assert not element or element == element.upper(), element
         self.element = self._assign_element(element)
         self.mass = self._assign_atom_mass()

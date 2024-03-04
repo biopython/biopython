@@ -37,6 +37,7 @@ from .PDBParser import PDBParser
 
 from .MMCIFParser import MMCIFParser
 from .MMCIFParser import FastMMCIFParser
+from .PDBMLParser import PDBMLParser
 
 # Download from the PDB
 from .PDBList import PDBList

@@ -192,12 +192,21 @@ parsed.
    >>> filename = "pdb1fat.ent"
    >>> structure = parser.get_structure(structure_id, filename, is_pqr=True)
 
-Reading files in the PDB XML format
+Reading a PDBML (PDB XML) file
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-That’s not yet supported, but we are definitely planning to support that
-in the future (it’s not a lot of work). Contact the Biopython developers
-via the mailing list if you need this.
+Create a ``PDBMLParser`` object:
+
+.. code:: pycon
+
+   >>> from Bio.PDB.PDBMLParser import PDBMLParser
+   >>> pdbml_parser = PDBMLParser()
+
+Call ``get_structure`` with a file path or file object containing the PDB structure in XML format:
+
+.. code:: pycon
+
+   >>> structure = pdbml_parser.get_structure("1GBT.xml")
 
 Writing mmCIF files
 ~~~~~~~~~~~~~~~~~~~

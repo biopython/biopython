@@ -9,20 +9,35 @@
 It is a simple container class, with list and dictionary like properties.
 """
 
+import warnings
+
 from collections import deque
 from copy import copy
+from typing import TYPE_CHECKING, Any, Dict, Generic, List, Optional, TypeVar, Union
 
 import numpy as np
 
+from Bio import BiopythonWarning
 from Bio.PDB.PDBExceptions import PDBConstructionException
 
+if TYPE_CHECKING:
+    from Bio.PDB.Atom import Atom
 
-class Entity:
+_Child = TypeVar("_Child", bound=Union["Entity", "Atom"])
+_Parent = TypeVar("_Parent", bound=Optional["Entity"])
+
+
+class Entity(Generic[_Parent, _Child]):
     """Basic container object for PDB hierarchy.
 
     Structure, Model, Chain and Residue are subclasses of Entity.
     It deals with storage and lookup.
     """
+
+    parent: Optional[_Parent]
+    child_list: List[_Child]
+    child_dict: Dict[Any, _Child]
+    level: str
 
     def __init__(self, id):
         """Initialize the class."""
@@ -171,11 +186,14 @@ class Entity:
         """
         if value == self._id:
             return
-        if self.parent:
+        if self.parent is not None:
             if value in self.parent.child_dict:
-                raise ValueError(
-                    f"Cannot change id from `{self._id}` to `{value}`."
-                    f" The id `{value}` is already used for a sibling of this entity."
+                # See issue 1551 for details on the downgrade.
+                warnings.warn(
+                    f"The id `{value}` is already used for a sibling of this entity. "
+                    f"Changing id from `{self._id}` to `{value}` might create access "
+                    "inconsistencies to children of the parent entity.",
+                    BiopythonWarning,
                 )
             del self.parent.child_dict[self._id]
             self.parent.child_dict[value] = self
@@ -194,7 +212,7 @@ class Entity:
         """
         return self.level
 
-    def set_parent(self, entity):
+    def set_parent(self, entity: _Parent):
         """Set the parent Entity object."""
         self.parent = entity
         self._reset_full_id()
@@ -210,7 +228,7 @@ class Entity:
         del self.child_dict[id]
         self.child_list.remove(child)
 
-    def add(self, entity):
+    def add(self, entity: _Child):
         """Add a child to the Entity."""
         entity_id = entity.get_id()
         if self.has_id(entity_id):
@@ -219,7 +237,7 @@ class Entity:
         self.child_list.append(entity)
         self.child_dict[entity_id] = entity
 
-    def insert(self, pos, entity):
+    def insert(self, pos: int, entity: _Child):
         """Add a child to the Entity at a specified position."""
         entity_id = entity.get_id()
         if self.has_id(entity_id):
