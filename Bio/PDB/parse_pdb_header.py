@@ -15,7 +15,7 @@ Kristian Rother.
 
 
 import re
-import defaultdict
+from collections import defaultdict
 
 from Bio import File
 
