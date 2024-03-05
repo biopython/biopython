@@ -201,16 +201,14 @@ class Entity(Generic[_Parent, _Child]):
         self._id = value
         self._reset_full_id()
 
-    def strictly_equals(
-        self, other: "Entity", compare_coordinates: bool = False
-    ) -> bool:
+    def strictly_equals(self, other, compare_coordinates: bool = False) -> bool:
         """Compare this entity to the other entity for equality.
 
         Recursively compare the children of this entity to the other entity's children.
         Compare most properties including names and IDs.
 
         :param other: The entity to compare this entity with
-        :type other: Entity
+        :type other: Entity or Atom
         :param compare_coordinates: Whether to compare atomic coordinates
         :type compare_coordinates: bool
         :return: Whether the two entities are strictly equal

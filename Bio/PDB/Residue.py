@@ -43,9 +43,7 @@ class Residue(Entity["Chain", "Atom"]):
         full_id = (resname, hetflag, resseq, icode)
         return "<Residue %s het=%s resseq=%s icode=%s>" % full_id
 
-    def strictly_equals(
-        self, other: "Residue", compare_coordinates: bool = False
-    ) -> bool:
+    def strictly_equals(self, other, compare_coordinates: bool = False) -> bool:
         """Compare this residue to the other residue using a strict definition of equality.
 
         The residues are equal if they have the same name, identifier,
