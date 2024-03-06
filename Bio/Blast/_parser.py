@@ -40,8 +40,10 @@ class DTDHandler:
 
     def _elementDeclHandler(self, name, model):
         method_name = name.lower().replace("-", "_")
-        XMLHandler._start_methods[name] = getattr(XMLHandler, "_start_" + method_name)
-        XMLHandler._end_methods[name] = getattr(XMLHandler, "_end_" + method_name)
+        start_method = "_start_" + method_name
+        end_method = "_end_" + method_name
+        XMLHandler._start_methods[name] = getattr(XMLHandler, start_method)
+        XMLHandler._end_methods[name] = getattr(XMLHandler, end_method)
 
     def _externalEntityRefHandler(self, context, base, systemId, publicId):
         assert context is None
@@ -55,6 +57,55 @@ class DTDHandler:
         return 1
 
 
+class SchemaHandler:
+    """XML Schema parser used to parse NCBI_BlastOutput2.xsd.
+
+    The XML Schema for Blast XML2 is available from
+    http://www.ncbi.nlm.nih.gov/data_specs/schema_alt/NCBI_BlastOutput2.xsd
+    """
+
+    def __init__(self, parser):
+        """Initialize the XML Schema parser."""
+        self.parser = parser
+        self.start_methods = {}
+        self.end_methods = {}
+
+    def _startElementHandler(self, name, attributes):
+        """Found XML start tag.
+
+        Arguments:
+         - name       -- name of the tag
+         - attributes -- tag attributes
+
+        """
+        namespace = "http://www.ncbi.nlm.nih.gov"
+        if name == "http://www.w3.org/2001/XMLSchema include":
+            filename = attributes["schemaLocation"]
+            directory = Entrez.__path__[0]
+            path = os.path.join(directory, "XSDs", filename)
+            stream = open(path, "rb")
+            parser = expat.ParserCreate(namespace_separator=" ")
+            parser.StartElementHandler = self._startElementHandler
+            parser.ParseFile(stream)
+        elif name == "http://www.w3.org/2001/XMLSchema element":
+            tag = attributes.get("name")
+            if tag is None:
+                return
+            key = f"{namespace} {tag}"
+            if tag == "BlastOutput2":
+                self.start_methods[key] = XMLHandler._start_blastoutput
+            elif tag == "error":
+                pass  # TBD
+            else:
+                method_name = tag.lower().replace("-", "_")
+                start_method = "_start_" + method_name
+                end_method = "_end_" + method_name
+                self.start_methods[key] = getattr(XMLHandler, start_method)
+                self.end_methods[key] = getattr(XMLHandler, end_method)
+        else:
+            print("In SchemaHandler._startElementHandler for", name, attributes)
+
+
 class XMLHandler:
     """Handler for BLAST XML data."""
 
@@ -66,6 +117,37 @@ class XMLHandler:
         parser.XmlDeclHandler = self._xmlDeclHandler
         parser.SetParamEntityParsing(expat.XML_PARAM_ENTITY_PARSING_ALWAYS)
         self._parser = parser
+
+    def _startNamespaceDeclHandler(self, prefix, uri):
+        if uri == "http://www.w3.org/2001/XMLSchema-instance":
+            # This is an xml schema
+            self.schema_namespace = uri
+            self._parser.StartElementHandler = self._start_blastxml2
+
+    def _endNamespaceDeclHandler(self, prefix):
+        return
+
+    def _start_blastxml2(self, name, attrs):
+        """Process the XML schema (before processing the element)."""
+        key = "%s schemaLocation" % self.schema_namespace
+        assert name == "http://www.ncbi.nlm.nih.gov BlastXML2"
+        domain, url = attrs[key].split()
+        assert domain == "http://www.ncbi.nlm.nih.gov"
+        filename = os.path.basename(url)
+        directory = Entrez.__path__[0]
+        path = os.path.join(directory, "XSDs", filename)
+        stream = open(path, "rb")
+        parser = expat.ParserCreate(namespace_separator=" ")
+        handler = SchemaHandler(parser)
+        parser.StartElementHandler = handler._startElementHandler
+        with open(path, "rb") as stream:
+            parser.ParseFile(stream)
+        XMLHandler._start_methods = handler.start_methods
+        parser = self._parser
+        parser.StartElementHandler = self._startElementHandler
+        parser.EndElementHandler = self._endElementHandler
+        parser.CharacterDataHandler = self._characterDataHandler
+        self._characters = ""
 
     def _start_blastoutput(self, name, attrs):
         assert self._characters.strip() == ""
@@ -340,6 +422,9 @@ class XMLHandler:
         assert self._characters.strip() == ""
         self._characters = ""
 
+    def _start_report(self, name, attrs):
+        return
+
     def _end_blastoutput(self, name):
         assert self._characters.strip() == ""
         parser = self._parser
@@ -349,6 +434,9 @@ class XMLHandler:
         del self._characters
         del self._records
         del self._parser
+
+    def _end_blastxml2(self, name):
+        return
 
     def _end_blastoutput_program(self, name):
         program = self._characters
@@ -767,9 +855,14 @@ class XMLHandler:
         self._stat["entropy"] = float(self._characters)
         self._characters = ""
 
+    def _end_report(self, name, attrs):
+        return
+
     def _xmlDeclHandler(self, version, encoding, standalone):
         parser = self._parser
         parser.ExternalEntityRefHandler = self._externalEntityRefHandler
+        parser.StartNamespaceDeclHandler = self._startNamespaceDeclHandler
+        parser.EndNamespaceDeclHandler = self._endNamespaceDeclHandler
         parser.StartElementHandler = self._startElementHandler
         parser.EndElementHandler = self._endElementHandler
         parser.CharacterDataHandler = self._characterDataHandler
@@ -789,20 +882,18 @@ class XMLHandler:
         self._parser.ExternalEntityRefHandler = None
         return 1
 
-    def _startElementHandler(self, name, attr):
+    def _startElementHandler(self, name, attributes):
         """Found XML start tag.
 
-        No real need of attr, BLAST DTD doesn't use them
-
         Arguments:
-         - name -- name of the tag
-         - attr -- tag attributes
+         - name       -- name of the tag
+         - attributes -- tag attributes
 
         """
         method = XMLHandler._start_methods.get(name)
         if method is None:
             raise ValueError("Failed to find method for %s" % name)
-        method(self, name, attr)
+        method(self, name, attributes)
 
     def _endElementHandler(self, name):
         """Found XML end tag.

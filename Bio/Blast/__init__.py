@@ -897,7 +897,7 @@ class Records(UserList):
         stream = self._stream
         source = self.source
         try:  # context manager won't kick in until after parse returns
-            parser = expat.ParserCreate()
+            parser = expat.ParserCreate(namespace_separator=" ")
             self._parser = parser
 
             handler = XMLHandler(parser)
