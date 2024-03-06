@@ -10,11 +10,13 @@
 from Bio.PDB.PDBExceptions import PDBConstructionException
 from Bio.PDB.Entity import Entity, DisorderedEntityWrapper
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, TypeVar
 
 if TYPE_CHECKING:
     from Bio.PDB.Atom import Atom
     from Bio.PDB.Chain import Chain
+
+_ResidueT = TypeVar("_ResidueT", bound="Residue")
 
 
 _atom_name_dict = {}
@@ -44,7 +46,7 @@ class Residue(Entity["Chain", "Atom"]):
         return "<Residue %s het=%s resseq=%s icode=%s>" % full_id
 
     def strictly_equals(
-        self, other: "Residue", compare_coordinates: bool = False
+        self: _ResidueT, other: _ResidueT, compare_coordinates: bool = False
     ) -> bool:
         """Compare this residue to the other residue using a strict definition of equality.
 
