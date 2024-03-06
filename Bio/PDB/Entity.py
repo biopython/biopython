@@ -25,7 +25,7 @@ if TYPE_CHECKING:
 
 _Child = TypeVar("_Child", bound=Union["Entity", "Atom"])
 _Parent = TypeVar("_Parent", bound=Optional["Entity"])
-_EntityT = TypeVar("_EntityT", bound="Entity[Any, Any]")
+_Self = TypeVar("_Self", bound="Entity[Any, Any]")
 
 
 class Entity(Generic[_Parent, _Child]):
@@ -203,7 +203,7 @@ class Entity(Generic[_Parent, _Child]):
         self._reset_full_id()
 
     def strictly_equals(
-        self: _EntityT, other: _EntityT, compare_coordinates: bool = False
+        self: _Self, other: _Self, compare_coordinates: bool = False
     ) -> bool:
         """Compare this entity to the other entity for equality.
 
