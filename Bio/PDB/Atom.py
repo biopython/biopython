@@ -9,7 +9,7 @@
 
 import copy
 import sys
-from typing import Optional, TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING, TypeVar
 import warnings
 
 import numpy as np
@@ -22,6 +22,8 @@ from Bio.Data import IUPACData
 
 if TYPE_CHECKING:
     from Bio.PDB.Residue import Residue
+
+_AtomT = TypeVar("_AtomT", bound="Atom")
 
 
 class Atom:
@@ -267,7 +269,9 @@ class Atom:
         diff = self.coord - other.coord
         return np.sqrt(np.dot(diff, diff))
 
-    def strictly_equals(self, other: "Atom", compare_coordinates: bool = False) -> bool:
+    def strictly_equals(
+        self: _AtomT, other: _AtomT, compare_coordinates: bool = False
+    ) -> bool:
         """Compare this atom to the other atom using a strict definition of equality.
 
         Indicates whether the atoms have the same name, B factor, occupancy,
