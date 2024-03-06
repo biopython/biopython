@@ -269,7 +269,9 @@ class Atom:
         diff = self.coord - other.coord
         return np.sqrt(np.dot(diff, diff))
 
-    def strictly_equals(self: _AtomT, other: _AtomT, compare_coordinates: bool = False) -> bool:
+    def strictly_equals(
+        self: _AtomT, other: _AtomT, compare_coordinates: bool = False
+    ) -> bool:
         """Compare this atom to the other atom using a strict definition of equality.
 
         Indicates whether the atoms have the same name, B factor, occupancy,
