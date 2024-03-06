@@ -4941,6 +4941,21 @@ Program: BLASTN 2.9.0+
             9      1  gi|372099094|ref|NC_000082.6|  Mus musculus strain C57B...""",
             )
 
+    def test_xml_2900_blastn_001_v2_parser(self):
+        """Parsing BLASTN 2.9.0+ (xml_2900_blastn_001_v2.xml)."""
+        filename = "xml_2900_blastn_001_v2.xml"
+        path = os.path.join("Blast", filename)
+        with open(path, "rb") as stream:
+            records = Blast.parse(stream)
+            self.check_xml_2900_blastn_001_records(records)
+        with Blast.parse(path) as records:
+            self.check_xml_2900_blastn_001_records(records)
+        with open(path, "rb") as stream:
+            record = Blast.read(stream)
+        self.check_xml_2900_blastn_001_record(record)
+        record = Blast.read(path)
+        self.check_xml_2900_blastn_001_record(record)
+
     def check_xml_2900_blastn_001_records(self, records):
         self.assertEqual(records.program, "blastn")
         self.assertEqual(records.version, "BLASTN 2.9.0+")
@@ -11055,7 +11070,7 @@ gi|146197       480 STLQKLHRNRIWYLDILFSNDLVNNE 506
             written_records = Blast.parse(stream)
             self.check_xml_2222_blastx_001(written_records)
 
-    def test_xml_2900_blastx_001(self):
+    def test_xml_2900_blastx_001_parser(self):
         """Parsing BLASTX 2.9.0+ (xml_2900_blastx_001.xml)."""
         filename = "xml_2900_blastx_001.xml"
         path = os.path.join("Blast", filename)
@@ -11985,6 +12000,21 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
 """,
         )
 
+    def test_xml_2900_blastx_001_v2_parser(self):
+        """Parsing BLASTX 2.9.0+ (xml_2900_blastx_001_v2.xml)."""
+        filename = "xml_2900_blastx_001_v2.xml"
+        path = os.path.join("Blast", filename)
+        with open(path, "rb") as stream:
+            records = Blast.parse(stream)
+            self.check_xml_2900_blastx_001_records(records)
+        with Blast.parse(path) as records:
+            self.check_xml_2900_blastx_001_records(records)
+        with open(path, "rb") as stream:
+            record = Blast.read(stream)
+        self.check_xml_2900_blastx_001_record(record)
+        record = Blast.read(path)
+        self.check_xml_2900_blastx_001_record(record)
+
     def test_xml_2900_blastx_001_writer(self):
         """Writing BLASTX 2.9.0+ (xml_2900_blastx_001.xml)."""
         filename = "xml_2900_blastx_001.xml"
@@ -12001,7 +12031,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
 class TestTBlastn(unittest.TestCase):
     """Test the Blast XML parser for tblastn output."""
 
-    def test_xml_2900_tblastn_001(self):
+    def test_xml_2900_tblastn_001_parser(self):
         """Parsing TBLASTN 2.9.0+ (xml_2900_tblastn_001.xml)."""
         filename = "xml_2900_tblastn_001.xml"
         path = os.path.join("Blast", filename)
@@ -12038,6 +12068,21 @@ Program: TBLASTN 2.9.0+
             8      1  gi|1033005233|gb|CP011487.1|  Helicobacter pylori strai...
             9      1  gi|1509197163|gb|CP025748.1|  Helicobacter pylori strai...""",
             )
+
+    def test_xml_2900_tblastn_001_v2_parser(self):
+        """Parsing TBLASTN 2.9.0+ (xml_2900_tblastn_001_v2.xml)."""
+        filename = "xml_2900_tblastn_001_v2.xml"
+        path = os.path.join("Blast", filename)
+        with open(path, "rb") as stream:
+            records = Blast.parse(stream)
+            self.check_xml_2900_tblastn_001_records(records)
+        with Blast.parse(path) as records:
+            self.check_xml_2900_tblastn_001_records(records)
+        with open(path, "rb") as stream:
+            record = Blast.read(stream)
+        self.check_xml_2900_tblastn_001_record(record)
+        record = Blast.read(path)
+        self.check_xml_2900_tblastn_001_record(record)
 
     def check_xml_2900_tblastn_001_records(self, records):
         self.assertEqual(records.program, "tblastn")
