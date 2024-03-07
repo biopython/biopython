@@ -290,9 +290,7 @@ class PDBList:
             file_type = (
                 "pdb"
                 if file_format == "pdb"
-                else "mmCIF"
-                if file_format == "mmCif"
-                else "XML"
+                else "mmCIF" if file_format == "mmCif" else "XML"
             )
             url = (
                 self.pdb_server

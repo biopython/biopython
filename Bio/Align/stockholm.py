@@ -272,9 +272,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 elif key == "DR":
                     record.dbxrefs = value
                 else:
-                    record.annotations[
-                        AlignmentIterator.gs_mapping.get(key, key)
-                    ] = value
+                    record.annotations[AlignmentIterator.gs_mapping.get(key, key)] = (
+                        value
+                    )
 
     @staticmethod
     def _store_per_sequence_and_per_column_annotations(alignment, gr):

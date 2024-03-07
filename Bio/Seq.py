@@ -495,12 +495,10 @@ class _SeqAbstractBaseClass(ABC):
         return self._data.decode("ASCII").__iter__()
 
     @overload
-    def __getitem__(self, index: int) -> str:
-        ...
+    def __getitem__(self, index: int) -> str: ...
 
     @overload
-    def __getitem__(self, index: slice) -> "Seq":
-        ...
+    def __getitem__(self, index: slice) -> "Seq": ...
 
     def __getitem__(self, index):
         """Return a subsequence as a single letter or as a sequence object.

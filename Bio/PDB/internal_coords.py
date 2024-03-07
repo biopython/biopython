@@ -3311,9 +3311,11 @@ class IC_Residue:
                 fmt = "{:6}{:5d} {:4}{:1}{:3} {:1}{:4}{:1}   {:10.5f}{:10.5f}{:10.5f}{:7.3f}{:6.2f}        {:>4}\n"
             s = (fmt).format(
                 "ATOM",
-                IC_Residue.atom_sernum
-                if IC_Residue.atom_sernum is not None
-                else atm.serial_number,
+                (
+                    IC_Residue.atom_sernum
+                    if IC_Residue.atom_sernum is not None
+                    else atm.serial_number
+                ),
                 atm.fullname,
                 atm.altloc,
                 res.resname,

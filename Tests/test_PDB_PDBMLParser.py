@@ -5,7 +5,6 @@ These tests rely on the principle that the structure returned by the PDBML parse
 returned by the mmCIF parser for any PDB structure.
 """
 
-
 import unittest
 
 from Bio.PDB import MMCIFParser

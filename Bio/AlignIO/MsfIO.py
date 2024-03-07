@@ -245,9 +245,11 @@ class MsfIterator(AlignmentIterator):
                                 "Expected GCG MSF coordinate line %i to %i, got: %r"
                                 % (
                                     completed_length + 1,
-                                    completed_length + 50
-                                    if completed_length + 50 < aln_length
-                                    else aln_length,
+                                    (
+                                        completed_length + 50
+                                        if completed_length + 50 < aln_length
+                                        else aln_length
+                                    ),
                                     line,
                                 )
                             )
