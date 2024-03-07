@@ -527,9 +527,9 @@ class _BaseExonerateParser(ABC):
 class _BaseExonerateIndexer(SearchIndexer):
     """Indexer class for Exonerate plain text."""
 
-    _parser: Optional[
-        Type[_BaseExonerateParser]
-    ] = None  # should be defined by subclass
+    _parser: Optional[Type[_BaseExonerateParser]] = (
+        None  # should be defined by subclass
+    )
     _query_mark: Optional[bytes] = None  # this one too
 
     def get_qresult_id(self, pos):

@@ -132,9 +132,9 @@ class Parser:
                         genename_element.attrib["type"],
                     )
                     if genename_element.attrib["type"] == "primary":
-                        self.ParsedSeqRecord.annotations[
-                            ann_key
-                        ] = genename_element.text
+                        self.ParsedSeqRecord.annotations[ann_key] = (
+                            genename_element.text
+                        )
                     else:
                         append_to_annotations(ann_key, genename_element.text)
 
@@ -477,9 +477,9 @@ class Parser:
                     )
                 else:
                     try:
-                        feature.qualifiers[
-                            feature_element.tag.replace(NS, "")
-                        ] = feature_element.text
+                        feature.qualifiers[feature_element.tag.replace(NS, "")] = (
+                            feature_element.text
+                        )
                     except Exception:  # TODO - Which exceptions?
                         pass  # skip unparsable tag
             self.ParsedSeqRecord.features.append(feature)

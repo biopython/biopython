@@ -213,7 +213,7 @@ latex_elements = {
     # Latex figure (float) alignment
     #
     # 'figure_align': 'htbp',
-    "extrapackages": r"\usepackage{isodate}"
+    "extrapackages": r"\usepackage{isodate}",
     #
     # 'maketitle' : ... to control the title page fully?
 }

@@ -494,11 +494,11 @@ def _get_azimuth(x: float, y: float) -> float:
     return (
         np.arctan2(y, x)
         if (0 != x and 0 != y)
-        else (np.pi / 2.0 * sign_y)  # +/-90 if X=0, Y!=0
-        if 0 != y
-        else np.pi
-        if sign_x < 0.0  # 180 if Y=0, X < 0
-        else 0.0  # 0 if Y=0, X >= 0
+        else (
+            (np.pi / 2.0 * sign_y)  # +/-90 if X=0, Y!=0
+            if 0 != y
+            else np.pi if sign_x < 0.0 else 0.0  # 180 if Y=0, X < 0
+        )  # 0 if Y=0, X >= 0
     )
 
 

@@ -383,12 +383,10 @@ class SeqRecord:
     )
 
     @overload
-    def __getitem__(self, index: int) -> str:
-        ...
+    def __getitem__(self, index: int) -> str: ...
 
     @overload
-    def __getitem__(self, index: slice) -> "SeqRecord":
-        ...
+    def __getitem__(self, index: slice) -> "SeqRecord": ...
 
     def __getitem__(self, index):
         """Return a sub-sequence or an individual letter.
