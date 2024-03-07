@@ -247,11 +247,20 @@ If your data is in UTF-8 or any other incompatible encoding, you must use
 binary mode, and decode the appropriate fragments yourself.
 """
 
+from __future__ import annotations
+
+import typing as tp
+
 import struct
 import sys
 import zlib
 
 from builtins import open as _open
+
+if tp.TYPE_CHECKING:
+    import io
+    import collections.abc as cx_abc
+
 
 _bgzf_magic = b"\x1f\x8b\x08\x04"
 _bgzf_header = b"\x1f\x8b\x08\x04\x00\x00\x00\x00\x00\xff\x06\x00\x42\x43\x02\x00"
@@ -277,7 +286,7 @@ def open(filename, mode="rb"):
         raise ValueError(f"Bad mode {mode!r}")
 
 
-def make_virtual_offset(block_start_offset, within_block_offset):
+def make_virtual_offset(block_start_offset: int, within_block_offset: int) -> int:
     """Compute a BGZF virtual offset from block start and within block offsets.
 
     The BAM indexing scheme records read positions using a 64 bit
@@ -332,7 +341,7 @@ def make_virtual_offset(block_start_offset, within_block_offset):
     return (block_start_offset << 16) | within_block_offset
 
 
-def split_virtual_offset(virtual_offset):
+def split_virtual_offset(virtual_offset: int) -> tuple[int, int]:
     """Divides a 64-bit BGZF virtual offset into block start & within block offsets.
 
     >>> (100000, 0) == split_virtual_offset(6553600000)
@@ -345,7 +354,7 @@ def split_virtual_offset(virtual_offset):
     return start, virtual_offset ^ (start << 16)
 
 
-def BgzfBlocks(handle):
+def BgzfBlocks(handle: io.BufferedReader) -> cx_abc.Iterator[tuple[int, int, int, int]]:
     """Low level debugging function to inspect BGZF blocks.
 
     Expects a BGZF compressed file opened in binary read mode using
@@ -616,7 +625,7 @@ class BgzfReader:
         self._block_raw_length = None
         self._load_block(handle.tell())
 
-    def _load_block(self, start_offset=None):
+    def _load_block(self, start_offset: int | None = None) -> None:
         if start_offset is None:
             # If the file is being read sequentially, then _handle.tell()
             # should be pointing at the start of the next block.
@@ -654,7 +663,7 @@ class BgzfReader:
         # Finally save the block in our cache,
         self._buffers[self._block_start_offset] = self._buffer, block_size
 
-    def tell(self):
+    def tell(self) -> int:
         """Return a 64-bit unsigned BGZF virtual offset."""
         if 0 < self._within_block_offset and self._within_block_offset == len(
             self._buffer
@@ -671,7 +680,7 @@ class BgzfReader:
             # TODO - Include bounds checking as in make_virtual_offset?
             return (self._block_start_offset << 16) | self._within_block_offset
 
-    def seek(self, virtual_offset):
+    def seek(self, virtual_offset: int) -> int:
         """Seek to a 64-bit unsigned BGZF virtual offset."""
         # Do this inline to avoid a function call,
         # start_offset, within_block = split_virtual_offset(virtual_offset)
@@ -753,41 +762,41 @@ class BgzfReader:
 
         return result
 
-    def __next__(self):
+    def __next__(self) -> _BufferT:
         """Return the next line."""
         line = self.readline()
         if not line:
             raise StopIteration
         return line
 
-    def __iter__(self):
+    def __iter__(self: _Self) -> _Self:
         """Iterate over the lines in the BGZF file."""
         return self
 
-    def close(self):
+    def close(self) -> None:
         """Close BGZF file."""
         self._handle.close()
         self._buffer = None
         self._block_start_offset = None
         self._buffers = None
 
-    def seekable(self):
+    def seekable(self) -> bool:
         """Return True indicating the BGZF supports random access."""
         return True
 
-    def isatty(self):
+    def isatty(self) -> bool:
         """Return True if connected to a TTY device."""
         return False
 
-    def fileno(self):
+    def fileno(self) -> int:
         """Return integer file descriptor."""
         return self._handle.fileno()
 
-    def __enter__(self):
+    def __enter__(self: _Self) -> _Self:
         """Open a file operable with WITH statement."""
         return self
 
-    def __exit__(self, type, value, traceback):
+    def __exit__(self, type: tp.Any, value: tp.Any, traceback: tp.Any) -> None:
         """Close a file with WITH statement."""
         self.close()
 
@@ -816,7 +825,7 @@ class BgzfWriter:
         self._buffer = b""
         self.compresslevel = compresslevel
 
-    def _write_block(self, block):
+    def _write_block(self, block: bytes) -> None:
         """Write provided data to file as a single BGZF compressed block (PRIVATE)."""
         # print("Saving %i bytes" % len(block))
         if len(block) > 65536:
@@ -852,7 +861,7 @@ class BgzfWriter:
         data = _bgzf_header + bsize + compressed + crc + uncompressed_length
         self._handle.write(data)
 
-    def write(self, data):
+    def write(self, data: str | bytes) -> None:
         """Write method for the class."""
         # TODO - Check bytes vs unicode
         if isinstance(data, str):
@@ -874,7 +883,7 @@ class BgzfWriter:
                 self._write_block(self._buffer[:65536])
                 self._buffer = self._buffer[65536:]
 
-    def flush(self):
+    def flush(self) -> None:
         """Flush data explicitally."""
         while len(self._buffer) >= 65536:
             self._write_block(self._buffer[:65535])
@@ -883,7 +892,7 @@ class BgzfWriter:
         self._buffer = b""
         self._handle.flush()
 
-    def close(self):
+    def close(self) -> None:
         """Flush data, write 28 bytes BGZF EOF marker, and close BGZF file.
 
         samtools will look for a magic EOF marker, just a 28 byte empty BGZF
@@ -897,28 +906,28 @@ class BgzfWriter:
         self._handle.flush()
         self._handle.close()
 
-    def tell(self):
+    def tell(self) -> int:
         """Return a BGZF 64-bit virtual offset."""
         return make_virtual_offset(self._handle.tell(), len(self._buffer))
 
-    def seekable(self):
+    def seekable(self) -> bool:
         """Return True indicating the BGZF supports random access."""
         # Not seekable, but we do support tell...
         return False
 
-    def isatty(self):
+    def isatty(self) -> bool:
         """Return True if connected to a TTY device."""
         return False
 
-    def fileno(self):
+    def fileno(self) -> int:
         """Return integer file descriptor."""
         return self._handle.fileno()
 
-    def __enter__(self):
+    def __enter__(self: _Self) -> _Self:
         """Open a file operable with WITH statement."""
         return self
 
-    def __exit__(self, type, value, traceback):
+    def __exit__(self, type: tp.Any, value: tp.Any, traceback: tp.Any, /) -> None:
         """Close a file with WITH statement."""
         self.close()
 
