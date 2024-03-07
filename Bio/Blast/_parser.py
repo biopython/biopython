@@ -49,7 +49,13 @@ class DTDHandler:
             # and Iteration_query-ID, while NCBI_BlastOutput2.xsd defines
             # query-id only, which corresponds to Iteration_query-ID.
             # Same for BlastOutput_query-def and BlastOutput_query-len.
-            for prefix in ("BlastOutput_", "Iteration_", "Parameters_", "Statistics_"):
+            for prefix in (
+                "BlastOutput_",
+                "Iteration_",
+                "Parameters_",
+                "Statistics_",
+                "Hit_",
+            ):
                 method_name = method_name.replace(prefix, "")
         method_name = method_name.lower().replace("-", "_")
         start_method = "_start_" + method_name
@@ -326,27 +332,33 @@ class XMLHandler:
         self._characters = ""
         self._alignments = Hit()
 
-    def _start_hit_num(self, name, attributes):
+    def _start_num(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hit_id(self, name, attributes):
+    def _start_description(self, name, attributes):
+        return
+
+    def _start_hitdescr(self, name, attributes):
+        return
+
+    def _start_id(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hit_def(self, name, attributes):
+    def _start_def(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hit_hsps(self, name, attributes):
+    def _start_hsps(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hit_len(self, name, attributes):
+    def _start_len(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hit_accession(self, name, attributes):
+    def _start_accession(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
@@ -659,31 +671,37 @@ class XMLHandler:
         del self._alignments
         self._record.append(hit)
 
-    def _end_hit_num(self, name):
+    def _end_num(self, name):
         self._alignments.num = int(self._characters)
         self._characters = ""
 
-    def _end_hit_id(self, name):
+    def _end_description(self, name):
+        return
+
+    def _end_hitdescr(self, name):
+        return
+
+    def _end_id(self, name):
         hit_id = self._characters
         self._alignments.target = SeqRecord(None, hit_id)
         self._characters = ""
 
-    def _end_hit_def(self, name):
+    def _end_def(self, name):
         description = self._characters
         self._alignments.target.description = description
         self._characters = ""
 
-    def _end_hit_accession(self, name):
+    def _end_accession(self, name):
         accession = self._characters
         self._alignments.target.name = accession
         self._characters = ""
 
-    def _end_hit_len(self, name):
+    def _end_len(self, name):
         length = int(self._characters)
         self._alignments.target.seq = Seq(None, length=length)
         self._characters = ""
 
-    def _end_hit_hsps(self, name):
+    def _end_hsps(self, name):
         assert self._characters.strip() == ""
         self._characters = ""
 
