@@ -23,7 +23,11 @@ repos:
     hooks:
     # Run the Ruff linter.
     -   id: ruff
-        args: ['--extend-ignore=E501,F401,F841']
+        args: [
+        '--extend-select=D',
+        '--extend-ignore=E501,F401,F841,D105,D2,D4',
+        '--extend-per-file-ignores=Tests/*.py:D101,Tests/*.py:D102,Tests/*.py:D103',
+    ]
 -   repo: https://github.com/PyCQA/flake8
     rev: 7.0.0
     hooks:
@@ -32,7 +36,6 @@ repos:
             'flake8-blind-except',
             'flake8-bugbear',
             'flake8-comprehensions',
-            'flake8-docstrings',
             'flake8-implicit-str-concat',
             'flake8-rst-docstrings>=0.2.3',
             'pydocstyle>=6.0.0',
