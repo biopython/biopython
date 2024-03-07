@@ -516,13 +516,13 @@ def _load_bgzf_block(handle, text_mode=False):
     if expected_size != len(data):
         raise RuntimeError("Decompressed to %i, not %i" % (len(data), expected_size))
     # Should cope with a mix of Python platforms...
-    crc = zlib.crc32(data)
-    if crc < 0:
-        crc = struct.pack("<i", crc)
+    checksum = zlib.crc32(data)
+    if checksum < 0:
+        crc = struct.pack("<i", checksum)
     else:
-        crc = struct.pack("<I", crc)
+        crc = struct.pack("<I", checksum)
     if expected_crc != crc:
-        raise RuntimeError(f"CRC is {crc}, not {expected_crc}")
+        raise RuntimeError(f"CRC is {crc!r}, not {expected_crc!r}")
     if text_mode:
         # Note ISO-8859-1 aka Latin-1 preserves first 256 chars
         # (i.e. ASCII), but critically is a single byte encoding
@@ -638,11 +638,12 @@ class BgzfReader(tp.Generic[_BufferT]):
                 "Must use a read mode like 'r' (default), 'rt', or 'rb' for binary"
             )
         # If an open file was passed, make sure it was opened in binary mode.
-        if fileobj:
+        if fileobj is not None:
             if fileobj.read(0) != b"":
                 raise ValueError("fileobj not opened in binary mode")
             handle = fileobj
         else:
+            assert filename is not None
             handle = _open(filename, "rb")
         self._text = "b" not in mode.lower()
         self._empty_buffer: _BufferT
@@ -842,11 +843,12 @@ class BgzfWriter:
         if filename and fileobj:
             raise ValueError("Supply either filename or fileobj, not both")
         # If an open file was passed, make sure it was opened in binary mode.
-        if fileobj:
+        if fileobj is not None:
             if fileobj.read(0) != b"":
                 raise ValueError("fileobj not opened in binary mode")
             handle = fileobj
         else:
+            assert filename is not None
             if not _is_writing_appending_mode(mode.lower()):
                 raise ValueError(f"Must use write or append mode, not {mode!r}")
             if "a" in mode.lower():
@@ -874,12 +876,6 @@ class BgzfWriter:
             raise RuntimeError(
                 "TODO - Didn't compress enough, try less data in this block"
             )
-        crc = zlib.crc32(block)
-        # Should cope with a mix of Python platforms...
-        if crc < 0:
-            crc = struct.pack("<i", crc)
-        else:
-            crc = struct.pack("<I", crc)
         bsize = struct.pack("<H", len(compressed) + 25)  # includes -1
         crc = struct.pack("<I", zlib.crc32(block) & 0xFFFFFFFF)
         uncompressed_length = struct.pack("<I", len(block))
