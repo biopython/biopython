@@ -49,7 +49,7 @@ class DTDHandler:
             # and Iteration_query-ID, while NCBI_BlastOutput2.xsd defines
             # query-id only, which corresponds to Iteration_query-ID.
             # Same for BlastOutput_query-def and BlastOutput_query-len.
-            for prefix in ("BlastOutput_", "Iteration_", "Parameters_"):
+            for prefix in ("BlastOutput_", "Iteration_", "Parameters_", "Statistics_"):
                 method_name = method_name.replace(prefix, "")
         method_name = method_name.lower().replace("-", "_")
         start_method = "_start_" + method_name
@@ -267,6 +267,15 @@ class XMLHandler:
         assert self._characters.strip() == ""
         self._characters = ""
 
+    def _start_range(self, name, attributes):
+        return
+
+    def _start_from(self, name, attributes):
+        return
+
+    def _start_to(self, name, attributes):
+        return
+
     def _start_pattern(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
@@ -439,31 +448,31 @@ class XMLHandler:
         self._characters = ""
         self._stat = {}
 
-    def _start_statistics_db_num(self, name, attributes):
+    def _start_db_num(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_statistics_db_len(self, name, attributes):
+    def _start_db_len(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_statistics_hsp_len(self, name, attributes):
+    def _start_hsp_len(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_statistics_eff_space(self, name, attributes):
+    def _start_eff_space(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_statistics_kappa(self, name, attributes):
+    def _start_kappa(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_statistics_lambda(self, name, attributes):
+    def _start_lambda(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_statistics_entropy(self, name, attributes):
+    def _start_entropy(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
@@ -588,6 +597,15 @@ class XMLHandler:
     def _end_bl2seq_mode(self, name):
         self._records.param["bl2seq-mode"] = int(self._characters)
         self._characters = ""
+
+    def _end_range(self, name, attributes):
+        return
+
+    def _end_from(self, name, attributes):
+        return
+
+    def _end_to(self, name, attributes):
+        return
 
     def _end_query_gencode(self, name):
         self._records.param["query-gencode"] = int(self._characters)
@@ -897,31 +915,31 @@ class XMLHandler:
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _end_statistics_db_num(self, name):
+    def _end_db_num(self, name):
         self._stat["db-num"] = int(self._characters)
         self._characters = ""
 
-    def _end_statistics_db_len(self, name):
+    def _end_db_len(self, name):
         self._stat["db-len"] = int(self._characters)
         self._characters = ""
 
-    def _end_statistics_hsp_len(self, name):
+    def _end_hsp_len(self, name):
         self._stat["hsp-len"] = int(self._characters)
         self._characters = ""
 
-    def _end_statistics_eff_space(self, name):
+    def _end_eff_space(self, name):
         self._stat["eff-space"] = float(self._characters)
         self._characters = ""
 
-    def _end_statistics_kappa(self, name):
+    def _end_kappa(self, name):
         self._stat["kappa"] = float(self._characters)
         self._characters = ""
 
-    def _end_statistics_lambda(self, name):
+    def _end_lambda(self, name):
         self._stat["lambda"] = float(self._characters)
         self._characters = ""
 
-    def _end_statistics_entropy(self, name):
+    def _end_entropy(self, name):
         self._stat["entropy"] = float(self._characters)
         self._characters = ""
 
