@@ -29,7 +29,6 @@ Parameters         Holds information from the parameters.
 """
 # XXX finish printable BLAST output
 
-
 import xml.sax
 from xml.sax.handler import ContentHandler
 

@@ -20,6 +20,7 @@ specifically requested, making the parser memory-efficient.
 The TwoBitIterator object implements the __getitem__, keys, and __len__
 methods that allow it to be used as a dictionary.
 """
+
 # The .2bit file format is defined by UCSC as follows
 # (see http://genome.ucsc.edu/FAQ/FAQformat.html#format7):
 #

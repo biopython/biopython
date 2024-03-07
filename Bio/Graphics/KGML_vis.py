@@ -12,7 +12,6 @@ The KGML definition is as of release KGML v0.7.1
 Classes:
 """
 
-
 import os
 import tempfile
 from io import BytesIO

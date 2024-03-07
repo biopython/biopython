@@ -10,6 +10,7 @@ You are expected to use this module via the Bio.SeqIO functions.
 See also the Bio.Sequencing.Ace module which offers more than just accessing
 the contig consensus sequences in an ACE file as SeqRecord objects.
 """
+
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Sequencing import Ace

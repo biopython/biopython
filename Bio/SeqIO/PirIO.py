@@ -86,6 +86,7 @@ Sequence codes and their meanings:
  - XX - Unknown
 
 """
+
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 

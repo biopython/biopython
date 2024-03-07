@@ -11,6 +11,7 @@
 Unless you are writing a new parser or writer for Bio.Align, you should not
 use this module.  It provides base classes to try and simplify things.
 """
+
 from abc import ABC
 from abc import abstractmethod
 from typing import Optional

@@ -7,7 +7,6 @@
 
 """Parsing TRANSFAC files."""
 
-
 from Bio import motifs
 
 

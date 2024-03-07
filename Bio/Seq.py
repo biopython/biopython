@@ -19,6 +19,7 @@ See also the Seq_ wiki and the chapter in our tutorial:
 .. _`PDF Tutorial`: http://biopython.org/DIST/docs/tutorial/Tutorial.pdf
 
 """
+
 import array
 import collections
 import numbers

@@ -9,6 +9,7 @@
 The SnapGene binary format is the native format used by the SnapGene program
 from GSL Biotech LLC.
 """
+
 from datetime import datetime
 from re import sub
 from struct import unpack

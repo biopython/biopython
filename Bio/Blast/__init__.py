@@ -22,7 +22,6 @@ Variables:
 
 """
 
-
 import warnings
 
 import io

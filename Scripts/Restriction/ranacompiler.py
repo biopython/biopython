@@ -40,7 +40,6 @@ This Python file is intended to be used via the scripts in
 `Scripts/Restriction/*.py` only.
 """
 
-
 import os
 import itertools
 import time

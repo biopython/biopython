@@ -76,6 +76,7 @@ the annotation attribute of each record::
       start: 9475, end: 10076, strand: -1
 
 """
+
 import re
 
 from typing import List

@@ -7,7 +7,6 @@
 
 """Reading information from Affymetrix CEL files version 3 and 4."""
 
-
 import struct
 
 try:

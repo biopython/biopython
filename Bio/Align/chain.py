@@ -18,6 +18,7 @@ You are expected to use this module via the Bio.Align functions.
 Coordinates in the chain file format are defined in terms of zero-based start
 positions (like Python) and aligning region sizes.
 """
+
 import numpy as np
 
 

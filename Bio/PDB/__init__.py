@@ -22,7 +22,6 @@ Contributions by:
 - and many others.
 """
 
-
 try:
     import numpy as np
 except ImportError:

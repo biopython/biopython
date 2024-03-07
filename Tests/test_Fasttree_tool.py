@@ -8,7 +8,6 @@
 
 """Tests for Fasttree tool."""
 
-
 from Bio import MissingExternalDependencyError
 
 import sys

@@ -7,7 +7,6 @@
 
 """Query PubMed and print MEDLINE format results."""
 
-
 import sys
 import getopt
 

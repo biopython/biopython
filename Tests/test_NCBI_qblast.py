@@ -24,6 +24,7 @@ tests are run in alphabetical order, so you must place your mock file at the
 correct position.
 
 """
+
 import unittest
 from unittest import mock
 

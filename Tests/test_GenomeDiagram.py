@@ -3,7 +3,6 @@
 # as part of this package.
 """Tests for GenomeDiagram general functionality."""
 
-
 import os
 import unittest
 import math

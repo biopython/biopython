@@ -11,7 +11,6 @@
 
 """BLAST code for graphical Xbbtools tool."""
 
-
 import os
 import tempfile
 import threading

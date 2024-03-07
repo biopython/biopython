@@ -7,7 +7,6 @@
 
 """Half-sphere exposure and coordination number calculation."""
 
-
 import warnings
 from math import pi
 

@@ -7,7 +7,6 @@
 # package.
 """Common utility functions for various Bio submodules."""
 
-
 import os
 from typing import Any, TypeVar, Callable, Optional, cast
 from typing import Protocol

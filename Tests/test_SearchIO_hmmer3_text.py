@@ -5,7 +5,6 @@
 
 """Tests for SearchIO HmmerIO parsers."""
 
-
 import os
 import unittest
 

@@ -7,7 +7,6 @@
 
 """Unit test for Scop."""
 
-
 import unittest
 from io import StringIO
 

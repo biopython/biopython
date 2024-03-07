@@ -13,6 +13,7 @@ See also the Bio.Nexus module (which this code calls internally),
 as this offers more than just accessing the alignment or its
 sequences as SeqRecord objects.
 """
+
 from io import StringIO
 
 from Bio.Align import Alignment

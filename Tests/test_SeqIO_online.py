@@ -13,6 +13,7 @@ Goals:
     - May catch some format changes early too.
 
 """
+
 import unittest
 
 import requires_internet

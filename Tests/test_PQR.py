@@ -8,6 +8,7 @@
 # as part of this package.
 
 """Unit tests for the PQR parser in Bio.PDB module."""
+
 from Bio.PDB.PDBParser import PDBParser
 import unittest
 import warnings

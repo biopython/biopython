@@ -5,6 +5,7 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 """Support for loading 3D structures stored in MMTF files."""
+
 try:
     from mmtf import fetch, parse
 except ImportError:

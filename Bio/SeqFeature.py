@@ -60,6 +60,7 @@ Exceptions:
    string.
 
 """
+
 import functools
 import re
 import warnings

@@ -4,7 +4,6 @@
 # as part of this package.
 """Test for graphics things that don't really deserve there own test module."""
 
-
 import os
 import random
 import unittest

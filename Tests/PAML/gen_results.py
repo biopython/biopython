@@ -5,7 +5,6 @@
 
 """Generate output for PAML tests."""
 
-
 import os.path
 import sys
 

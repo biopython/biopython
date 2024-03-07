@@ -19,6 +19,7 @@ This aims to estimate two parameters:
   in the training data.
 
 """
+
 # standard modules
 import math
 import warnings

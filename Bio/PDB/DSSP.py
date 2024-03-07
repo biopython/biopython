@@ -90,7 +90,6 @@ The dssp data returned for a single residue is a tuple in the form:
 
 """
 
-
 import re
 import os
 from io import StringIO

@@ -9,6 +9,7 @@
 Unless you are writing a new parser or writer for Bio.SeqIO, you should not
 use this module.  It provides base classes to try and simplify things.
 """
+
 from abc import ABC
 from abc import abstractmethod
 from os import PathLike

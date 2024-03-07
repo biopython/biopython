@@ -9,6 +9,7 @@
 This module contains a parser for the EMBOSS srspair/pair/simple file format,
 for example from the needle, water, and stretcher tools.
 """
+
 from Bio.Align import Alignment
 from Bio.Align import interfaces
 from Bio.Seq import Seq, reverse_complement

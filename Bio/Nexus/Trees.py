@@ -13,7 +13,6 @@ common ancestors,...) and to manipulate trees (re-root trees, split terminal
 nodes).
 """
 
-
 import random
 import sys
 from . import Nodes

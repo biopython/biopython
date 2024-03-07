@@ -51,6 +51,7 @@ Or,
 
 Note these examples only show the first 50 bases to keep the output short.
 """
+
 from typing import Iterator
 
 from Bio.SeqRecord import SeqRecord

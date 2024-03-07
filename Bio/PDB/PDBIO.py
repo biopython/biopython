@@ -5,7 +5,6 @@
 
 """Output of PDB files."""
 
-
 import warnings
 
 # Exceptions and Warnings

@@ -10,6 +10,7 @@ Aligned FASTA files are FASTA files in which alignment gaps in a sequence are
 represented by dashes. Each sequence line in an aligned FASTA should have the
 same length.
 """
+
 from Bio.Align import Alignment
 from Bio.Align import interfaces
 from Bio.Seq import Seq

@@ -5,7 +5,6 @@
 
 """Tests for SearchIO HhsuiteIO parsers."""
 
-
 import os
 import unittest
 

@@ -3,6 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Unittests for the Seq objects."""
+
 import unittest
 import warnings
 import array

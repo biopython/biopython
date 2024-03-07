@@ -11,7 +11,6 @@
 
 """Translation code for graphical Xbbtools tool."""
 
-
 import time
 
 from Bio.Seq import Seq, reverse_complement, translate

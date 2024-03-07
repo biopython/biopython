@@ -50,7 +50,6 @@ You are expected to use this module via the Bio.Align functions.
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 # ------------------------------------------------------------------------------
 
-
 import sys
 import io
 import copy

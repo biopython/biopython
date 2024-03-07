@@ -21,7 +21,6 @@ Acta Crystallogr A. 2005 Jul;61(Pt 4):478-80. doi: 10.1107/S0108767305015266.
 Epub 2005 Jun 23. PMID: 15973002.
 """
 
-
 import numpy as np
 
 from Bio.PDB.PDBExceptions import PDBException

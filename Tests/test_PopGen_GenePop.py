@@ -5,7 +5,6 @@
 
 """Test GenePop."""
 
-
 import os
 import unittest
 import warnings

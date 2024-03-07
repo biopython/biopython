@@ -15,7 +15,6 @@ URL: http://www.genome.ad.jp/kegg/
 
 """
 
-
 KEGG_ITEM_LENGTH = 12
 KEGG_LINE_LENGTH = 80
 KEGG_DATA_LENGTH = KEGG_LINE_LENGTH - KEGG_ITEM_LENGTH

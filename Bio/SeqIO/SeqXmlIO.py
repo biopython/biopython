@@ -13,6 +13,7 @@ SeqXML is a lightweight XML format which is supposed be an alternative for
 FASTA files. For more Information see http://www.seqXML.org and Schmitt et al
 (2011), https://doi.org/10.1093/bib/bbr025
 """
+
 from xml import sax
 from xml.sax import handler
 from xml.sax.saxutils import XMLGenerator

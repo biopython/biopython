@@ -8,7 +8,6 @@
 
 """Unit tests for PARTS of the parse_pdb_header module of Bio.PDB."""
 
-
 import unittest
 
 try:

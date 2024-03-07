@@ -5,7 +5,6 @@
 # package.
 """Bio.SearchIO object to model a single database hit."""
 
-
 from itertools import chain
 
 from Bio.SearchIO._utils import allitems, optionalcascade, getattr_str
