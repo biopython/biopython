@@ -55,6 +55,9 @@ ignore =
     E501,
     # line too long
     # Maybe we find a sensible limit, e.g. 88 (black) and enforce it
+    E704,
+    # multiple statements on one line (def)
+    # seeing some false positives with @overload ... for type annotation
     B007,
     # Loop control variable not used within the loop body.
     # If this is intended, start the name with an underscore
