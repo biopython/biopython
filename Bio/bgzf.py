@@ -261,6 +261,8 @@ if tp.TYPE_CHECKING:
     import io
     import collections.abc as cx_abc
 
+_BufferT = tp.TypeVar("_BufferT", str, bytes)
+
 
 _bgzf_magic = b"\x1f\x8b\x08\x04"
 _bgzf_header = b"\x1f\x8b\x08\x04\x00\x00\x00\x00\x00\xff\x06\x00\x42\x43\x02\x00"
@@ -500,7 +502,7 @@ def _load_bgzf_block(handle, text_mode=False):
         return block_size, data
 
 
-class BgzfReader:
+class BgzfReader(tp.Generic[_BufferT]):
     r"""BGZF reader, acts like a read only handle but seek/tell differ.
 
     Let's use the BgzfBlocks function to have a peek at the BGZF blocks
@@ -614,15 +616,20 @@ class BgzfReader:
         else:
             handle = _open(filename, "rb")
         self._text = "b" not in mode.lower()
+        self._empty_buffer: _BufferT
+        self._newline: _BufferT
         if self._text:
-            self._newline = "\n"
+            self._empty_buffer = ""  # type: ignore[assignment]
+            self._newline = "\n"  # type: ignore[assignment]
         else:
-            self._newline = b"\n"
+            self._empty_buffer = b""  # type: ignore[assignment]
+            self._newline = b"\n"  # type: ignore[assignment]
         self._handle = handle
         self.max_cache = max_cache
         self._buffers = {}
-        self._block_start_offset = None
-        self._block_raw_length = None
+        self._block_start_offset: int
+        self._block_raw_length: int
+        self._buffer: _BufferT
         self._load_block(handle.tell())
 
     def _load_block(self, start_offset: int | None = None) -> None:
@@ -654,10 +661,7 @@ class BgzfReader:
         except StopIteration:
             # EOF
             block_size = 0
-            if self._text:
-                self._buffer = ""
-            else:
-                self._buffer = b""
+            self._buffer = self._empty_buffer
         self._within_block_offset = 0
         self._block_raw_length = block_size
         # Finally save the block in our cache,
@@ -711,7 +715,7 @@ class BgzfReader:
         if size < 0:
             raise NotImplementedError("Don't be greedy, that could be massive!")
 
-        result = "" if self._text else b""
+        result = self._empty_buffer
         while size and self._block_raw_length:
             if self._within_block_offset + size <= len(self._buffer):
                 # This may leave us right at the end of a block
@@ -734,7 +738,7 @@ class BgzfReader:
 
     def readline(self):
         """Read a single line for the BGZF file."""
-        result = "" if self._text else b""
+        result = self._empty_buffer
         while self._block_raw_length:
             i = self._buffer.find(self._newline, self._within_block_offset)
             # Three cases to consider,
@@ -776,9 +780,9 @@ class BgzfReader:
     def close(self) -> None:
         """Close BGZF file."""
         self._handle.close()
-        self._buffer = None
-        self._block_start_offset = None
-        self._buffers = None
+        del self._buffer
+        del self._block_start_offset
+        del self._buffers
 
     def seekable(self) -> bool:
         """Return True indicating the BGZF supports random access."""
