@@ -699,7 +699,8 @@ class BgzfReader(tp.Generic[_BufferT]):
         self._handle = handle
         self.max_cache = max_cache
         self._buffers: dict[int, tuple[_BufferT, int]] = {}
-        self._block_start_offset: int
+        # Is there a safe default for a non-`None` integer?
+        self._block_start_offset: int = None  # type: ignore[assignment]
         self._block_raw_length: int
         self._buffer: _BufferT
         self._load_block(handle.tell())
