@@ -11110,7 +11110,7 @@ Program: BLASTX 2.9.0+
             9      1  gi|1524877860|ref|XP_027046487.1|  actin-1-like [Pocill...""",
             )
 
-    def check_xml_2900_blastx_001_records(self, records):
+    def check_xml_2900_blastx_001_records(self, records, xml2=False):
         self.assertEqual(records.program, "blastx")
         self.assertEqual(records.version, "BLASTX 2.9.0+")
         self.assertEqual(
@@ -11131,6 +11131,9 @@ Program: BLASTX 2.9.0+
         self.assertEqual(records.param["gap-open"], 11)
         self.assertEqual(records.param["gap-extend"], 1)
         self.assertEqual(records.param["filter"], "F")
+        if xml2 is True:
+            self.assertEqual(records.param["cbs"], 2)
+            self.assertEqual(records.param["query-gencode"], 1)
         record = next(records)
         self.assertEqual(record.num, 1)
         self.assertRaises(StopIteration, next, records)
@@ -12006,9 +12009,9 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
         path = os.path.join("Blast", filename)
         with open(path, "rb") as stream:
             records = Blast.parse(stream)
-            self.check_xml_2900_blastx_001_records(records)
+            self.check_xml_2900_blastx_001_records(records, xml2=True)
         with Blast.parse(path) as records:
-            self.check_xml_2900_blastx_001_records(records)
+            self.check_xml_2900_blastx_001_records(records, xml2=True)
         with open(path, "rb") as stream:
             record = Blast.read(stream)
         self.check_xml_2900_blastx_001_record(record)
@@ -12075,16 +12078,16 @@ Program: TBLASTN 2.9.0+
         path = os.path.join("Blast", filename)
         with open(path, "rb") as stream:
             records = Blast.parse(stream)
-            self.check_xml_2900_tblastn_001_records(records)
+            self.check_xml_2900_tblastn_001_records(records, xml2=True)
         with Blast.parse(path) as records:
-            self.check_xml_2900_tblastn_001_records(records)
+            self.check_xml_2900_tblastn_001_records(records, xml2=True)
         with open(path, "rb") as stream:
             record = Blast.read(stream)
         self.check_xml_2900_tblastn_001_record(record)
         record = Blast.read(path)
         self.check_xml_2900_tblastn_001_record(record)
 
-    def check_xml_2900_tblastn_001_records(self, records):
+    def check_xml_2900_tblastn_001_records(self, records, xml2=False):
         self.assertEqual(records.program, "tblastn")
         self.assertEqual(records.version, "TBLASTN 2.9.0+")
         self.assertEqual(
@@ -12104,6 +12107,10 @@ Program: TBLASTN 2.9.0+
         self.assertEqual(records.param["gap-open"], 11)
         self.assertEqual(records.param["gap-extend"], 1)
         self.assertEqual(records.param["filter"], "F")
+        if xml2 is True:
+            self.assertEqual(records.param["cbs"], 2)
+            self.assertEqual(records.param["query-gencode"], 1)
+            self.assertEqual(records.param["db-gencode"], 1)
         record = next(records)
         self.assertRaises(StopIteration, next, records)
         self.check_xml_2900_tblastn_001_record(record)

@@ -49,7 +49,7 @@ class DTDHandler:
             # and Iteration_query-ID, while NCBI_BlastOutput2.xsd defines
             # query-id only, which corresponds to Iteration_query-ID.
             # Same for BlastOutput_query-def and BlastOutput_query-len.
-            for prefix in ("BlastOutput_", "Iteration_"):
+            for prefix in ("BlastOutput_", "Iteration_", "Parameters_"):
                 method_name = method_name.replace(prefix, "")
         method_name = method_name.lower().replace("-", "_")
         start_method = "_start_" + method_name
@@ -219,43 +219,59 @@ class XMLHandler:
         self._characters = ""
         self._records.param = {}
 
-    def _start_parameters_matrix(self, name, attributes):
+    def _start_matrix(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_parameters_expect(self, name, attributes):
+    def _start_expect(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_parameters_sc_match(self, name, attributes):
+    def _start_sc_match(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_parameters_sc_mismatch(self, name, attributes):
+    def _start_sc_mismatch(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_parameters_include(self, name, attributes):
+    def _start_include(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_parameters_gap_open(self, name, attributes):
+    def _start_gap_open(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_parameters_gap_extend(self, name, attributes):
+    def _start_gap_extend(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_parameters_filter(self, name, attributes):
+    def _start_filter(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_parameters_pattern(self, name, attributes):
+    def _start_cbs(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_parameters_entrez_query(self, name, attributes):
+    def _start_db_gencode(self, name, attributes):
+        assert self._characters.strip() == ""
+        self._characters = ""
+
+    def _start_query_gencode(self, name, attributes):
+        assert self._characters.strip() == ""
+        self._characters = ""
+
+    def _start_bl2seq_mode(self, name, attributes):
+        assert self._characters.strip() == ""
+        self._characters = ""
+
+    def _start_pattern(self, name, attributes):
+        assert self._characters.strip() == ""
+        self._characters = ""
+
+    def _start_entrez_query(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
@@ -529,43 +545,59 @@ class XMLHandler:
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _end_parameters_matrix(self, name):
+    def _end_matrix(self, name):
         self._records.param["matrix"] = self._characters
         self._characters = ""
 
-    def _end_parameters_expect(self, name):
+    def _end_expect(self, name):
         self._records.param["expect"] = float(self._characters)
         self._characters = ""
 
-    def _end_parameters_sc_match(self, name):
+    def _end_sc_match(self, name):
         self._records.param["sc-match"] = int(self._characters)
         self._characters = ""
 
-    def _end_parameters_sc_mismatch(self, name):
+    def _end_sc_mismatch(self, name):
         self._records.param["sc-mismatch"] = int(self._characters)
         self._characters = ""
 
-    def _end_parameters_include(self, name):
+    def _end_include(self, name):
         self._records.param["include"] = float(self._characters)
         self._characters = ""
 
-    def _end_parameters_gap_open(self, name):
+    def _end_gap_open(self, name):
         self._records.param["gap-open"] = int(self._characters)
         self._characters = ""
 
-    def _end_parameters_gap_extend(self, name):
+    def _end_gap_extend(self, name):
         self._records.param["gap-extend"] = int(self._characters)
         self._characters = ""
 
-    def _end_parameters_filter(self, name):
+    def _end_filter(self, name):
         self._records.param["filter"] = self._characters
         self._characters = ""
 
-    def _end_parameters_pattern(self, name):
+    def _end_cbs(self, name):
+        self._records.param["cbs"] = int(self._characters)
+        self._characters = ""
+
+    def _end_db_gencode(self, name):
+        self._records.param["db-gencode"] = int(self._characters)
+        self._characters = ""
+
+    def _end_bl2seq_mode(self, name):
+        self._records.param["bl2seq-mode"] = int(self._characters)
+        self._characters = ""
+
+    def _end_query_gencode(self, name):
+        self._records.param["query-gencode"] = int(self._characters)
+        self._characters = ""
+
+    def _end_pattern(self, name):
         self._records.param["pattern"] = self._characters
         self._characters = ""
 
-    def _end_parameters_entrez_query(self, name):
+    def _end_entrez_query(self, name):
         self._records.param["entrez-query"] = self._characters
         self._characters = ""
 
