@@ -260,8 +260,20 @@ from builtins import open as _open
 if tp.TYPE_CHECKING:
     import io
     import collections.abc as cx_abc
+    from typing_extensions import TypeAlias, TypeGuard
 
 _BufferT = tp.TypeVar("_BufferT", str, bytes)
+# fmt: off
+# Writing and updating modes
+_ReadingBinaryMode: TypeAlias = tp.Literal["rb", "br"]
+_ReadingTextMode: TypeAlias = tp.Literal["r", "tr", "rt"]
+_WritingAppendingBinaryMode: TypeAlias = tp.Literal["wb", "bw", "ab", "ba", "wb+", "w+b", "+wb", "bw+", "b+w", "+bw", "ab+", "a+b", "+ab", "ba+", "b+a", "+ba"]
+_WritingAppendingTextMode: TypeAlias = tp.Literal["w", "wt", "tw", "a", "at", "ta", "w+", "+w", "wt+", "w+t", "+wt", "tw+", "t+w", "+tw", "a+", "+a", "at+", "a+t", "+at", "ta+", "t+a", "+ta"]
+_reading_binary_modes: tp.Final[tuple[_ReadingBinaryMode, ...]] = tp.get_args(_ReadingBinaryMode)
+_reading_text_modes: tp.Final[tuple[_ReadingTextMode, ...]] = tp.get_args(_ReadingTextMode)
+_writing_appending_binary_modes: tp.Final[tuple[_WritingAppendingBinaryMode, ...]] = tp.get_args(_WritingAppendingBinaryMode)
+_writing_appending_text_modes: tp.Final[tuple[_WritingAppendingTextMode, ...]] = tp.get_args(_WritingAppendingTextMode)
+# fmt: on
 
 
 _bgzf_magic = b"\x1f\x8b\x08\x04"
@@ -280,10 +292,11 @@ def open(filename, mode="rb"):
     If your data is in UTF-8 or any other incompatible encoding, you must use
     binary mode, and decode the appropriate fragments yourself.
     """
-    if "r" in mode.lower():
-        return BgzfReader(filename, mode)
-    elif "w" in mode.lower() or "a" in mode.lower():
-        return BgzfWriter(filename, mode)
+    mode_lower = mode.lower()
+    if _is_read_mode(mode_lower):
+        return BgzfReader(filename, mode_lower)
+    elif _is_writing_appending_mode(mode_lower):
+        return BgzfWriter(filename, mode_lower)
     else:
         raise ValueError(f"Bad mode {mode!r}")
 
@@ -438,6 +451,22 @@ def BgzfBlocks(handle: io.BufferedReader) -> cx_abc.Iterator[tuple[int, int, int
         data_len = len(data)
         yield start_offset, block_length, data_start, data_len
         data_start += data_len
+
+
+def _is_read_mode(mode: str, /) -> TypeGuard[_ReadingBinaryMode | _ReadingTextMode]:
+    """Gets whether a string represents a file-opening reading mode (PRIVATE)"""
+    return (mode in _reading_binary_modes) or (mode in _reading_text_modes)
+
+
+def _is_writing_appending_mode(
+    mode: str, /
+) -> TypeGuard[_WritingAppendingBinaryMode | _WritingAppendingTextMode]:
+    """
+    Gets whether a string represents a file-opening writing or appending mode (PRIVATE)
+    """
+    return (mode in _writing_appending_binary_modes) or (
+        mode in _writing_appending_text_modes
+    )
 
 
 def _load_bgzf_block(handle, text_mode=False):
@@ -604,7 +633,7 @@ class BgzfReader(tp.Generic[_BufferT]):
         if filename and fileobj:
             raise ValueError("Supply either filename or fileobj, not both")
         # Want to reject output modes like w, a, x, +
-        if mode.lower() not in ("r", "tr", "rt", "rb", "br"):
+        if not _is_read_mode(mode.lower()):
             raise ValueError(
                 "Must use a read mode like 'r' (default), 'rt', or 'rb' for binary"
             )
@@ -818,7 +847,7 @@ class BgzfWriter:
                 raise ValueError("fileobj not opened in binary mode")
             handle = fileobj
         else:
-            if "w" not in mode.lower() and "a" not in mode.lower():
+            if not _is_writing_appending_mode(mode.lower()):
                 raise ValueError(f"Must use write or append mode, not {mode!r}")
             if "a" in mode.lower():
                 handle = _open(filename, "ab")
