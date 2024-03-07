@@ -39,7 +39,19 @@ class DTDHandler:
         self._externalEntityRefHandler(None, None, "NCBI_BlastOutput.dtd", None)
 
     def _elementDeclHandler(self, name, model):
-        method_name = name.lower().replace("-", "_")
+        method_name = name
+        if name not in (
+            "BlastOutput_query-ID",
+            "BlastOutput_query-def",
+            "BlastOutput_query-len",
+        ):
+            # Note that NCBI_BlastOutput.dtd defines both BlastOutput_query-ID
+            # and Iteration_query-ID, while NCBI_BlastOutput2.xsd defines
+            # query-id only, which corresponds to Iteration_query-ID.
+            # Same for BlastOutput_query-def and BlastOutput_query-len.
+            for prefix in ("BlastOutput_", "Iteration_"):
+                method_name = method_name.replace(prefix, "")
+        method_name = method_name.lower().replace("-", "_")
         start_method = "_start_" + method_name
         end_method = "_end_" + method_name
         XMLHandler._start_methods[name] = getattr(XMLHandler, start_method)
@@ -94,9 +106,26 @@ class SchemaHandler:
             key = f"{namespace} {tag}"
             if tag == "BlastOutput2":
                 self.start_methods[key] = XMLHandler._start_blastoutput
-            elif tag == "error":
+            elif tag in (
+                "error",
+                "Err",
+                "code",
+                "message",
+                "subjects",
+                "bl2seq",
+                "iter-num",
+                "query-masking",
+            ):
                 pass  # TBD
             else:
+                if tag == "params":
+                    tag = "param"
+                elif tag == "search":
+                    tag = "iterations"
+                elif tag == "Search":
+                    tag = "Iteration"
+                elif tag == "query-title":
+                    tag = "query-def"
                 method_name = tag.lower().replace("-", "_")
                 start_method = "_start_" + method_name
                 end_method = "_end_" + method_name
@@ -127,11 +156,11 @@ class XMLHandler:
     def _endNamespaceDeclHandler(self, prefix):
         return
 
-    def _start_blastxml2(self, name, attrs):
+    def _start_blastxml2(self, name, attributes):
         """Process the XML schema (before processing the element)."""
         key = "%s schemaLocation" % self.schema_namespace
         assert name == "http://www.ncbi.nlm.nih.gov BlastXML2"
-        domain, url = attrs[key].split()
+        domain, url = attributes[key].split()
         assert domain == "http://www.ncbi.nlm.nih.gov"
         filename = os.path.basename(url)
         directory = Entrez.__path__[0]
@@ -149,280 +178,289 @@ class XMLHandler:
         parser.CharacterDataHandler = self._characterDataHandler
         self._characters = ""
 
-    def _start_blastoutput(self, name, attrs):
+    def _start_blastoutput(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_blastoutput_program(self, name, attrs):
+    def _start_program(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_blastoutput_version(self, name, attrs):
+    def _start_version(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_blastoutput_reference(self, name, attrs):
+    def _start_reference(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_blastoutput_db(self, name, attrs):
+    def _start_db(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_blastoutput_query_id(self, name, attrs):
+    def _start_blastoutput_query_id(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_blastoutput_query_def(self, name, attrs):
+    def _start_blastoutput_query_def(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_blastoutput_mbstat(self, name, attrs):
+    def _start_mbstat(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_blastoutput_param(self, name, attrs):
+    def _start_param(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_parameters(self, name, attrs):
+    def _start_parameters(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
         self._records.param = {}
 
-    def _start_parameters_matrix(self, name, attrs):
+    def _start_parameters_matrix(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_parameters_expect(self, name, attrs):
+    def _start_parameters_expect(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_parameters_sc_match(self, name, attrs):
+    def _start_parameters_sc_match(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_parameters_sc_mismatch(self, name, attrs):
+    def _start_parameters_sc_mismatch(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_parameters_include(self, name, attrs):
+    def _start_parameters_include(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_parameters_gap_open(self, name, attrs):
+    def _start_parameters_gap_open(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_parameters_gap_extend(self, name, attrs):
+    def _start_parameters_gap_extend(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_parameters_filter(self, name, attrs):
+    def _start_parameters_filter(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_parameters_pattern(self, name, attrs):
+    def _start_parameters_pattern(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_parameters_entrez_query(self, name, attrs):
+    def _start_parameters_entrez_query(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_blastoutput_iterations(self, name, attrs):
+    def _start_iterations(self, name, attributes):
         self._records._cache = deque()
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_blastoutput_query_len(self, name, attrs):
+    def _start_blastoutput_query_len(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_blastoutput_query_seq(self, name, attrs):
+    def _start_query_seq(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_iteration(self, name, attrs):
+    def _start_iteration(self, name, attributes):
         record = Record()
         self._record = record
 
-    def _start_iteration_iter_num(self, name, attrs):
+    def _start_iter_num(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_iteration_query_id(self, name, attrs):
+    def _start_query_id(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_iteration_query_def(self, name, attrs):
+    def _start_query_def(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_iteration_query_len(self, name, attrs):
+    def _start_query_len(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_iteration_hits(self, name, attrs):
+    def _start_hits(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hit(self, name, attrs):
+    def _start_hit(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
         self._alignments = Hit()
 
-    def _start_hit_num(self, name, attrs):
+    def _start_hit_num(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hit_id(self, name, attrs):
+    def _start_hit_id(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hit_def(self, name, attrs):
+    def _start_hit_def(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hit_hsps(self, name, attrs):
+    def _start_hit_hsps(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hit_len(self, name, attrs):
+    def _start_hit_len(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hit_accession(self, name, attrs):
+    def _start_hit_accession(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hsp(self, name, attrs):
+    def _start_hsp(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
         self._hsp = {}
 
-    def _start_hsp_num(self, name, attrs):
+    def _start_hsp_num(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hsp_bit_score(self, name, attrs):
+    def _start_hsp_bit_score(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hsp_score(self, name, attrs):
+    def _start_hsp_score(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hsp_evalue(self, name, attrs):
+    def _start_hsp_evalue(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hsp_query_from(self, name, attrs):
+    def _start_hsp_query_from(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hsp_query_to(self, name, attrs):
+    def _start_hsp_query_to(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hsp_hit_from(self, name, attrs):
+    def _start_hsp_hit_from(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hsp_hit_to(self, name, attrs):
+    def _start_hsp_hit_to(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hsp_pattern_from(self, name, attrs):
+    def _start_hsp_pattern_from(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hsp_pattern_to(self, name, attrs):
+    def _start_hsp_pattern_to(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hsp_query_frame(self, name, attrs):
+    def _start_hsp_query_frame(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hsp_hit_frame(self, name, attrs):
+    def _start_hsp_hit_frame(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hsp_identity(self, name, attrs):
+    def _start_hsp_identity(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hsp_positive(self, name, attrs):
+    def _start_hsp_positive(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hsp_gaps(self, name, attrs):
+    def _start_hsp_gaps(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hsp_align_len(self, name, attrs):
+    def _start_hsp_align_len(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hsp_density(self, name, attrs):
+    def _start_hsp_density(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hsp_qseq(self, name, attrs):
+    def _start_hsp_qseq(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hsp_hseq(self, name, attrs):
+    def _start_hsp_hseq(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hsp_midline(self, name, attrs):
+    def _start_hsp_midline(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_iteration_stat(self, name, attrs):
+    def _start_stat(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_iteration_message(self, name, attrs):
+    def _start_message(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_statistics(self, name, attrs):
+    def _start_statistics(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
         self._stat = {}
 
-    def _start_statistics_db_num(self, name, attrs):
+    def _start_statistics_db_num(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_statistics_db_len(self, name, attrs):
+    def _start_statistics_db_len(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_statistics_hsp_len(self, name, attrs):
+    def _start_statistics_hsp_len(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_statistics_eff_space(self, name, attrs):
+    def _start_statistics_eff_space(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_statistics_kappa(self, name, attrs):
+    def _start_statistics_kappa(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_statistics_lambda(self, name, attrs):
+    def _start_statistics_lambda(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_statistics_entropy(self, name, attrs):
+    def _start_statistics_entropy(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_report(self, name, attrs):
+    def _start_report(self, name, attributes):
+        return
+
+    def _start_search_target(self, name, attributes):
+        return
+
+    def _start_target(self, name, attributes):
+        return
+
+    def _start_results(self, name, attributes):
         return
 
     def _end_blastoutput(self, name):
@@ -438,21 +476,21 @@ class XMLHandler:
     def _end_blastxml2(self, name):
         return
 
-    def _end_blastoutput_program(self, name):
+    def _end_program(self, name):
         program = self._characters
         self._program = program
         self._records.program = program
         self._characters = ""
 
-    def _end_blastoutput_version(self, name):
+    def _end_version(self, name):
         self._records.version = self._characters
         self._characters = ""
 
-    def _end_blastoutput_reference(self, name):
+    def _end_reference(self, name):
         self._records.reference = self._characters
         self._characters = ""
 
-    def _end_blastoutput_db(self, name):
+    def _end_db(self, name):
         self._records.db = self._characters
         self._characters = ""
 
@@ -471,19 +509,19 @@ class XMLHandler:
         self._records.query.seq = Seq(None, length=length)
         self._characters = ""
 
-    def _end_blastoutput_query_seq(self, name):
+    def _end_query_seq(self, name):
         seq = Seq(self._characters)
         self._characters = ""
         assert len(seq) == len(self._records.query.seq)
         self._records.query.seq = seq
 
-    def _end_blastoutput_mbstat(self, name):
+    def _end_mbstat(self, name):
         assert self._characters.strip() == ""
         self._characters = ""
         self._records.mbstat = self._stat
         del self._stat
 
-    def _end_blastoutput_param(self, name):
+    def _end_param(self, name):
         assert self._characters.strip() == ""
         self._characters = ""
 
@@ -531,7 +569,7 @@ class XMLHandler:
         self._records.param["entrez-query"] = self._characters
         self._characters = ""
 
-    def _end_blastoutput_iterations(self, name):
+    def _end_iterations(self, name):
         assert self._characters.strip() == ""
         self._characters = ""
 
@@ -541,26 +579,26 @@ class XMLHandler:
         self._records._cache.append(self._record)
         del self._record
 
-    def _end_iteration_iter_num(self, name):
+    def _end_iter_num(self, name):
         self._record.num = int(self._characters)
         self._characters = ""
 
-    def _end_iteration_query_id(self, name):
+    def _end_query_id(self, name):
         query_id = self._characters
         self._record.query = SeqRecord(None, query_id)
         self._characters = ""
 
-    def _end_iteration_query_def(self, name):
+    def _end_query_def(self, name):
         query_def = self._characters
         self._record.query.description = query_def
         self._characters = ""
 
-    def _end_iteration_query_len(self, name):
+    def _end_query_len(self, name):
         length = int(self._characters)
         self._record.query.seq = Seq(None, length=length)
         self._characters = ""
 
-    def _end_iteration_hits(self, name):
+    def _end_hits(self, name):
         assert self._characters.strip() == ""
         self._characters = ""
 
@@ -813,13 +851,13 @@ class XMLHandler:
         alignment.annotations = annotations
         self._alignments.append(alignment)
 
-    def _end_iteration_stat(self, name):
+    def _end_stat(self, name):
         assert self._characters.strip() == ""
         self._characters = ""
         self._record.stat = self._stat
         del self._stat
 
-    def _end_iteration_message(self, name):
+    def _end_message(self, name):
         self._record.message = self._characters
         self._characters = ""
 
@@ -855,7 +893,16 @@ class XMLHandler:
         self._stat["entropy"] = float(self._characters)
         self._characters = ""
 
-    def _end_report(self, name, attrs):
+    def _end_report(self, name):
+        return
+
+    def _end_search_target(self, name):
+        return
+
+    def _end_target(self, name):
+        return
+
+    def _end_results(self, name):
         return
 
     def _xmlDeclHandler(self, version, encoding, standalone):
