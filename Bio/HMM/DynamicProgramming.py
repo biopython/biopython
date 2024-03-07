@@ -11,7 +11,6 @@ This module contains classes which implement Dynamic Programming
 algorithms that can be used generally.
 """
 
-
 import warnings
 
 from Bio import BiopythonDeprecationWarning

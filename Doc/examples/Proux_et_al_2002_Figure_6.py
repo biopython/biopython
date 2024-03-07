@@ -12,6 +12,7 @@ which produces a GenomeDiagram figure close to Proux et al 2002 Figure 6.
 
 See https://doi.org/10.1128/JB.184.21.6026-6036.2002
 """
+
 from reportlab.lib import colors
 from reportlab.lib.colors import red, grey, orange, green, brown
 from reportlab.lib.colors import blue, lightblue, purple

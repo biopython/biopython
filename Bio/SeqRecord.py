@@ -8,6 +8,7 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 """Represent a Sequence Record, a sequence with annotation."""
+
 # NEEDS TO BE SYNCH WITH THE REST OF BIOPYTHON AND BIOPERL
 # In particular, the SeqRecord and BioSQL.BioSeq.DBSeqRecord classes
 # need to be in sync (this is the BioSQL "Database SeqRecord").

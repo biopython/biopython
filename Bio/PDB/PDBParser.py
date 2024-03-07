@@ -5,7 +5,6 @@
 
 """Parser for PDB files."""
 
-
 import warnings
 
 import numpy as np

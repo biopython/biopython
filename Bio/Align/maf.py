@@ -28,6 +28,7 @@ As we can see on this example, ``start + size`` will give one more than the
 zero-based end position. We can therefore manipulate ``start`` and
 ``start + size`` as python list slice boundaries.
 """
+
 import shlex
 import itertools
 

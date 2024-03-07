@@ -15,6 +15,7 @@
 This provides interfaces for loading biological objects from a relational
 database, and is compatible with the BioSQL standards.
 """
+
 import os
 
 from . import BioSeq

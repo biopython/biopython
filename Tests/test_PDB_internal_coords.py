@@ -6,7 +6,6 @@
 
 """Unit tests for internal_coords module of Bio.PDB."""
 
-
 import unittest
 import re
 import warnings

@@ -9,7 +9,6 @@
 # and *.aln where we have not requested an explicit name?
 """Tests for Clustalw tool."""
 
-
 from Bio import MissingExternalDependencyError
 
 import sys

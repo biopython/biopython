@@ -18,7 +18,6 @@ loaded dice is .05 and the probability of switching from loaded to fair is
 .1.
 """
 
-
 # standard modules
 import random
 import unittest

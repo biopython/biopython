@@ -6,7 +6,6 @@
 # as part of this package.
 """Extract SCOP domain ATOM and HETATOM records from PDB."""
 
-
 import getopt
 import sys
 

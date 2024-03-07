@@ -14,7 +14,6 @@ Emerged from the Columba database project www.columba-db.de, original author
 Kristian Rother.
 """
 
-
 import re
 from collections import defaultdict
 

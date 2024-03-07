@@ -6,7 +6,6 @@
 # package.
 """Testing Bio.TogoWS online code."""
 
-
 import unittest
 from io import StringIO
 from urllib.error import HTTPError

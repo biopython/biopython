@@ -7,7 +7,6 @@
 # package.
 """Command line wrapper for the multiple alignment program Clustal Omega."""
 
-
 from Bio.Application import _Option, _Switch, AbstractCommandline
 
 

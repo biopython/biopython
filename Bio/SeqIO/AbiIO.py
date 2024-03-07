@@ -14,6 +14,7 @@ For more details on the format specification, visit:
 http://www6.appliedbiosystems.com/support/software_community/ABIF_File_Format.pdf
 
 """
+
 import datetime
 import struct
 import sys

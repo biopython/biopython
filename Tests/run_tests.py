@@ -21,7 +21,6 @@ Command line options::
 By default, all tests are run.
 """
 
-
 # standard modules
 import sys
 import os

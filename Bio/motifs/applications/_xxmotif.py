@@ -7,7 +7,6 @@
 
 """Command line wrapper for the motif finding program XXmotif."""
 
-
 import os
 from Bio.Application import AbstractCommandline, _Option, _Switch, _Argument
 

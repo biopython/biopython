@@ -55,7 +55,6 @@ appropriate::
             pass # do something with the motif
 """
 
-
 import warnings
 from Bio import BiopythonWarning
 from Bio import MissingPythonDependencyError

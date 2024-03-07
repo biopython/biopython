@@ -10,7 +10,6 @@
 # package.
 """Miscellaneous functions for dealing with sequences."""
 
-
 import re
 from math import pi, sin, cos, log, exp
 

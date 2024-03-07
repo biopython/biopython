@@ -9,7 +9,6 @@
 
 """Tests for the GenBank module."""
 
-
 import os
 import sys
 import unittest

@@ -152,6 +152,7 @@ You can also see this in the Stockholm output of this partial-alignment:
     <BLANKLINE>
 
 """
+
 from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord

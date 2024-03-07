@@ -8,7 +8,6 @@
 
 """Fast atom neighbor lookup using a KD tree (implemented in C)."""
 
-
 import numpy as np
 
 from Bio.PDB.PDBExceptions import PDBException

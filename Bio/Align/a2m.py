@@ -9,6 +9,7 @@
 A2M files are alignment files created by align2model or hmmscore in the SAM
 Sequence Alignment and Modeling Software System.
 """
+
 from Bio.Align import Alignment
 from Bio.Align import interfaces
 from Bio.Seq import Seq

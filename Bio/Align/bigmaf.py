@@ -12,6 +12,7 @@ indexed as a bigBed file.
 
 See https://genome.ucsc.edu/goldenPath/help/bigMaf.html
 """
+
 from io import StringIO
 
 

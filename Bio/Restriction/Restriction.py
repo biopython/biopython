@@ -82,7 +82,6 @@ Notes about the diverses class of the restriction enzyme implementation::
 
 """
 
-
 import warnings
 
 import re

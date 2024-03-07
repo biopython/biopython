@@ -17,6 +17,7 @@ from several codon tables which are implemented in Biopython.
 It runs as a standalone application.
 
 """
+
 import tkinter as tk
 import tkinter.ttk as ttk
 

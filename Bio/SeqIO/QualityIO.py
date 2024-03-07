@@ -358,6 +358,7 @@ the Illumina 1.3 to 1.7 format - high quality PHRED scores and Solexa scores
 are approximately equal.
 
 """
+
 import warnings
 
 from math import log

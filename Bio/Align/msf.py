@@ -12,6 +12,7 @@ tools such as T-COFFEE and MUSCLE support it as an optional output format.
 
 You are expected to use this module via the Bio.Align functions.
 """
+
 import warnings
 
 from Bio.Align import Alignment

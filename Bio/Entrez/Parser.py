@@ -37,6 +37,7 @@ written solution, since the number of DTDs is rather large and their
 contents may change over time. About half the code in this parser deals
 with parsing the DTD, and the other half with the XML itself.
 """
+
 import os
 import warnings
 from collections import Counter

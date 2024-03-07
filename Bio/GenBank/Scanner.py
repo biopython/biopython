@@ -27,7 +27,6 @@ Feature Table Documentation:
 # for more details of this format, and an example.
 # Added by Ying Huang & Iddo Friedberg
 
-
 import warnings
 import re
 import sys

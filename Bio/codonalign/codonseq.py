@@ -10,6 +10,7 @@ CodonSeq class is inherited from Seq class. This is the core class to
 deal with sequences in CodonAlignment in biopython.
 
 """
+
 from itertools import permutations
 from math import log
 

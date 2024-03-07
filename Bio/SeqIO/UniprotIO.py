@@ -15,6 +15,7 @@ The UniProt XML format essentially replaces the old plain text file format
 originally introduced by SwissProt ("swiss" format in Bio.SeqIO).
 
 """
+
 from xml.etree import ElementTree
 from xml.parsers.expat import errors
 

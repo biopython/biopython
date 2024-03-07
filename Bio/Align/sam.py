@@ -21,6 +21,7 @@ Coordinates in the SAM format are defined in terms of one-based start
 positions; the parser converts these to zero-based coordinates to be consistent
 with Python and other alignment formats.
 """
+
 from itertools import chain
 import copy
 

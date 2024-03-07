@@ -9,6 +9,7 @@
 You are expected to use this module via the Bio.Align functions (or the
 Bio.SeqIO functions if you are interested in the sequences only).
 """
+
 import Bio
 from Bio.Align import Alignment
 from Bio.Align import interfaces

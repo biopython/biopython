@@ -7,7 +7,6 @@
 
 """Turn an mmCIF file into a dictionary."""
 
-
 from Bio.File import as_handle
 
 

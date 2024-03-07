@@ -87,6 +87,7 @@ Slicing specific columns of an alignment will slice any per-column-annotations:
     >>> part_alignment.column_annotations["consensus secondary structure"]
     'HHHHHHS.--'
 """
+
 import textwrap
 from collections import defaultdict
 

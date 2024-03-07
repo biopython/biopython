@@ -49,7 +49,6 @@ Other public methods are:
 
 """
 
-
 import sys
 from Bio.SeqUtils import ProtParamData  # Local
 from Bio.SeqUtils import IsoelectricPoint  # Local

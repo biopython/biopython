@@ -14,7 +14,6 @@ These two sets of files are used by ``ranacompiler.py`` to build the updated
 
 """
 
-
 import os
 from datetime import date
 from urllib.request import urlretrieve, urlcleanup

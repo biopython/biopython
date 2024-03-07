@@ -5,7 +5,6 @@
 
 """Tests of the transcription and translation methods of Seq objects."""
 
-
 import unittest
 
 from Bio import Seq

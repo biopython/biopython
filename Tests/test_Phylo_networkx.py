@@ -5,7 +5,6 @@
 
 """Unit tests for Bio.Phylo functions with external dependencies."""
 
-
 import unittest
 
 from Bio import Phylo
