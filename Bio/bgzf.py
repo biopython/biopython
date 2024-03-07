@@ -258,11 +258,13 @@ import zlib
 from builtins import open as _open
 
 if tp.TYPE_CHECKING:
+    import _typeshed
     import io
     import collections.abc as cx_abc
     from typing_extensions import TypeAlias, TypeGuard
 
 _BufferT = tp.TypeVar("_BufferT", str, bytes)
+_Self = tp.TypeVar("_Self")
 # fmt: off
 # Writing and updating modes
 _ReadingBinaryMode: TypeAlias = tp.Literal["rb", "br"]
@@ -282,7 +284,19 @@ _bgzf_eof = b"\x1f\x8b\x08\x04\x00\x00\x00\x00\x00\xff\x06\x00BC\x02\x00\x1b\x00
 _bytes_BC = b"BC"
 
 
-def open(filename, mode="rb"):
+# fmt: off
+@tp.overload
+def open(filename: _typeshed.StrPath, mode: _ReadingBinaryMode = "rb") -> BgzfReader[bytes]: ...
+@tp.overload
+def open(filename: _typeshed.StrPath, mode: _WritingAppendingBinaryMode) -> BgzfWriter[bytes]: ...
+@tp.overload
+def open(filename: _typeshed.StrPath, mode: _ReadingTextMode) -> BgzfReader[str]: ...
+@tp.overload
+def open(filename: _typeshed.StrPath, mode: _WritingAppendingTextMode) -> BgzfWriter[str]: ...
+# fmt: on
+def open(
+    filename: _typeshed.StrPath, mode: str = "rb"
+) -> BgzfReader[str] | BgzfWriter[str] | BgzfReader[bytes] | BgzfWriter[bytes]:
     r"""Open a BGZF file for reading, writing or appending.
 
     If text mode is requested, in order to avoid multi-byte characters, this is
@@ -469,7 +483,17 @@ def _is_writing_appending_mode(
     )
 
 
-def _load_bgzf_block(handle, text_mode=False):
+# fmt: off
+@tp.overload
+def _load_bgzf_block(handle: tp.BinaryIO, text_mode: tp.Literal[False] = False) -> tuple[int, bytes]: ...
+@tp.overload
+def _load_bgzf_block(handle: tp.BinaryIO, text_mode: tp.Literal[True]) -> tuple[int, str]: ...
+@tp.overload
+def _load_bgzf_block(handle: tp.BinaryIO, text_mode: bool) -> tuple[int, bytes | str]: ...
+# fmt: on
+def _load_bgzf_block(
+    handle: tp.BinaryIO, text_mode: bool = False
+) -> tuple[int, bytes | str]:
     """Load the next BGZF block of compressed data (PRIVATE).
 
     Returns a tuple (block size and data), or at end of file
@@ -596,7 +620,25 @@ class BgzfReader(tp.Generic[_BufferT]):
     pass, but is important for improving performance of random access.
     """
 
-    def __init__(self, filename=None, mode="r", fileobj=None, max_cache=100):
+    max_cache: int
+
+    # fmt: off
+    @tp.overload
+    def __init__(self: BgzfReader[str], filename: _typeshed.StrPath, mode: _ReadingTextMode = "r", *, max_cache: int = 100) -> None: ...
+    @tp.overload
+    def __init__(self: BgzfReader[str], *, mode: _ReadingTextMode = "r", fileobj: tp.BinaryIO, max_cache: int = 100) -> None: ...
+    @tp.overload
+    def __init__(self: BgzfReader[bytes], filename: _typeshed.StrPath, mode: _ReadingBinaryMode, *, max_cache: int = 100) -> None: ...
+    @tp.overload
+    def __init__(self: BgzfReader[bytes], *, mode: _ReadingBinaryMode, fileobj: tp.BinaryIO, max_cache: int = 100) -> None: ...
+    # fmt: on
+    def __init__(
+        self,
+        filename: _typeshed.StrPath | None = None,
+        mode: _ReadingTextMode | _ReadingBinaryMode = "r",
+        fileobj: tp.BinaryIO | None = None,
+        max_cache: int = 100,
+    ) -> None:
         r"""Initialize the class for reading a BGZF file.
 
         You would typically use the top level ``bgzf.open(...)`` function
@@ -656,7 +698,7 @@ class BgzfReader(tp.Generic[_BufferT]):
             self._newline = b"\n"  # type: ignore[assignment]
         self._handle = handle
         self.max_cache = max_cache
-        self._buffers = {}
+        self._buffers: dict[int, tuple[_BufferT, int]] = {}
         self._block_start_offset: int
         self._block_raw_length: int
         self._buffer: _BufferT
@@ -687,7 +729,7 @@ class BgzfReader(tp.Generic[_BufferT]):
             handle.seek(start_offset)
         self._block_start_offset = handle.tell()
         try:
-            block_size, self._buffer = _load_bgzf_block(handle, self._text)
+            block_size, self._buffer = _load_bgzf_block(handle, self._text)  # type: ignore[assignment]
         except StopIteration:
             # EOF
             block_size = 0
@@ -740,7 +782,7 @@ class BgzfReader(tp.Generic[_BufferT]):
         #       self._within_block_offset)
         return virtual_offset
 
-    def read(self, size=-1):
+    def read(self, size: int = -1) -> _BufferT:
         """Read method for the BGZF module."""
         if size < 0:
             raise NotImplementedError("Don't be greedy, that could be massive!")
@@ -766,7 +808,7 @@ class BgzfReader(tp.Generic[_BufferT]):
 
         return result
 
-    def readline(self):
+    def readline(self) -> _BufferT:
         """Read a single line for the BGZF file."""
         result = self._empty_buffer
         while self._block_raw_length:
@@ -835,10 +877,26 @@ class BgzfReader(tp.Generic[_BufferT]):
         self.close()
 
 
-class BgzfWriter:
+class BgzfWriter(tp.Generic[_BufferT]):
     """Define a BGZFWriter object."""
 
-    def __init__(self, filename=None, mode="w", fileobj=None, compresslevel=6):
+    # fmt: off
+    @tp.overload
+    def __init__(self: BgzfWriter[str], filename: _typeshed.StrPath, mode: _WritingAppendingTextMode = "w", *, compresslevel: int = 6) -> None: ...
+    @tp.overload
+    def __init__(self: BgzfWriter[str], *, mode: _WritingAppendingTextMode = "w", fileobj: tp.BinaryIO, compresslevel: int = 6) -> None: ...
+    @tp.overload
+    def __init__(self: BgzfWriter[bytes], filename: _typeshed.StrPath, mode: _WritingAppendingBinaryMode, *, compresslevel: int = 6) -> None: ...
+    @tp.overload
+    def __init__(self: BgzfWriter[bytes], *, mode: _WritingAppendingBinaryMode, fileobj: tp.BinaryIO, compresslevel: int = 6) -> None: ...
+    # fmt: on
+    def __init__(
+        self,
+        filename: _typeshed.StrPath | None = None,
+        mode: _WritingAppendingTextMode | _WritingAppendingBinaryMode = "w",
+        fileobj: tp.BinaryIO | None = None,
+        compresslevel: int = 6,
+    ) -> None:
         """Initilize the class."""
         if filename and fileobj:
             raise ValueError("Supply either filename or fileobj, not both")
