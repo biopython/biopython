@@ -87,6 +87,9 @@ per-file-ignores =
     /Bio/*:F401,F841,D105,B009,B010
     /Tests/*:F401,F841,D101,D102,D103,W291,B009,B010,B015
 
+    # Disable style codes to allow compact `@overload`s for readability
+    /Bio/bgzf.py:D103,E704,E302,D401,W504,D200,D107,E301
+
 #Explanation of the codes being ignored in Bio/ and Tests/:
 #
 #Bio/*:F401 module imported but unused TODO? (97 occurrences)

@@ -468,7 +468,7 @@ def BgzfBlocks(handle: io.BufferedReader) -> cx_abc.Iterator[tuple[int, int, int
 
 
 def _is_read_mode(mode: str, /) -> TypeGuard[_ReadingBinaryMode | _ReadingTextMode]:
-    """Gets whether a string represents a file-opening reading mode (PRIVATE)"""
+    """Gets whether a string represents a file-opening reading mode (PRIVATE)."""
     return (mode in _reading_binary_modes) or (mode in _reading_text_modes)
 
 
@@ -476,7 +476,7 @@ def _is_writing_appending_mode(
     mode: str, /
 ) -> TypeGuard[_WritingAppendingBinaryMode | _WritingAppendingTextMode]:
     """
-    Gets whether a string represents a file-opening writing or appending mode (PRIVATE)
+    Gets whether a string represents a file-opening writing or appending mode (PRIVATE).
     """
     return (mode in _writing_appending_binary_modes) or (
         mode in _writing_appending_text_modes
