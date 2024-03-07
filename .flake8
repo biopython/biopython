@@ -81,6 +81,7 @@ ignore =
 per-file-ignores =
     Bio/*:F401,F841,D105,B009,B010
     Tests/*:F401,F841,D101,D102,D103,W291,B009,B010,B015
+    Bio/bgzf.py:D103,E704,E302,D401,W504,D200,D107,E301
 
     # Due to a bug in flake8, we need the following lines for running the
     # pre-commit hook. If you made edits above, please change also here!
