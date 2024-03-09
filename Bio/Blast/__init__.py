@@ -208,7 +208,17 @@ Score:%d bits(%d), Expect:%.1g,
         coordinates = self.coordinates
         hit_from, query_from = coordinates[:, 0]
         hit_to, query_to = coordinates[:, -1]
-        if program in ("tblastn", "tblastx"):
+        if program in ("blastn", "megablast"):
+            if hit_from <= hit_to:
+                hit_frame = 1
+                hit_from += 1
+            else:
+                hit_frame = -1
+                hit_to += 1
+        elif program in ("blastp", "blastx", "rpsblast"):
+            hit_from += 1
+            hit_frame = 0
+        elif program in ("tblastn", "tblastx"):
             feature = target.features[0]
             coded_by = feature.qualifiers["coded_by"]
             if coded_by.startswith("complement("):
@@ -227,17 +237,17 @@ Score:%d bits(%d), Expect:%.1g,
                 hit_frame = hit_start % 3 + 1
             else:
                 hit_frame = (hit_end - target_length) % -3 - 1
-        elif program == "blastx":
-            hit_from += 1
-            hit_frame = 0
-        else:
-            if hit_from <= hit_to:
-                hit_frame = 1
-                hit_from += 1
+        if program in ("blastn", "megablast"):
+            if query_from <= query_to:
+                query_from += 1
+                query_frame = 1
             else:
-                hit_frame = -1
-                hit_to += 1
-        if program in ("blastx", "tblastx"):
+                query_to += 1
+                query_frame = -1
+        elif program in ("blastp", "tblastn", "rpsblast"):
+            query_from += 1
+            query_frame = 0
+        elif program in ("blastx", "tblastx"):
             feature = query.features[0]
             coded_by = feature.qualifiers["coded_by"]
             if coded_by.startswith("complement("):
@@ -256,16 +266,6 @@ Score:%d bits(%d), Expect:%.1g,
                 query_frame = query_start % 3 + 1
             else:
                 query_frame = (query_end - query_length) % -3 - 1
-        elif program == "tblastn":
-            query_from += 1
-            query_frame = 0
-        else:
-            if query_from <= query_to:
-                query_from += 1
-                query_frame = 1
-            else:
-                query_to += 1
-                query_frame = -1
         hseq = self[0]
         qseq = self[1]
         align_len = len(hseq)

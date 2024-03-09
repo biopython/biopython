@@ -1,0 +1,602 @@
+<?xml version="1.0"?>
+<!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" "http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd">
+<BlastOutput>
+  <BlastOutput_program>rpsblast</BlastOutput_program>
+  <BlastOutput_version>RPSBLAST 2.9.0+</BlastOutput_version>
+  <BlastOutput_reference>Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&amp;auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), &quot;Gapped BLAST and PSI-BLAST: a new generation of protein database search programs&quot;, Nucleic Acids Res. 25:3389-3402.</BlastOutput_reference>
+  <BlastOutput_db>cdd_delta</BlastOutput_db>
+  <BlastOutput_query-ID>Query_1</BlastOutput_query-ID>
+  <BlastOutput_query-def>gi|269914405|pdb|3FAJ|A Chain A, Structure of the structural protein P131 of the archaeal virus Acidianus Two-tailed virus (ATV)</BlastOutput_query-def>
+  <BlastOutput_query-len>151</BlastOutput_query-len>
+  <BlastOutput_param>
+    <Parameters>
+      <Parameters_matrix>BLOSUM62</Parameters_matrix>
+      <Parameters_expect>10</Parameters_expect>
+      <Parameters_gap-open>11</Parameters_gap-open>
+      <Parameters_gap-extend>1</Parameters_gap-extend>
+      <Parameters_filter>F</Parameters_filter>
+    </Parameters>
+  </BlastOutput_param>
+<BlastOutput_iterations>
+<Iteration>
+  <Iteration_iter-num>1</Iteration_iter-num>
+  <Iteration_query-ID>Query_1</Iteration_query-ID>
+  <Iteration_query-def>gi|269914405|pdb|3FAJ|A Chain A, Structure of the structural protein P131 of the archaeal virus Acidianus Two-tailed virus (ATV)</Iteration_query-def>
+  <Iteration_query-len>151</Iteration_query-len>
+<Iteration_hits>
+<Hit>
+  <Hit_num>1</Hit_num>
+  <Hit_id>gnl|CDD|180983</Hit_id>
+  <Hit_def>PRK07453, PRK07453, protochlorophyllide oxidoreductase; Validated.</Hit_def>
+  <Hit_accession>180983</Hit_accession>
+  <Hit_len>322</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>31.8842</Hsp_bit-score>
+      <Hsp_score>73</Hsp_score>
+      <Hsp_evalue>0.058599</Hsp_evalue>
+      <Hsp_query-from>95</Hsp_query-from>
+      <Hsp_query-to>117</Hsp_query-to>
+      <Hsp_hit-from>254</Hsp_hit-from>
+      <Hsp_hit-to>276</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>11</Hsp_identity>
+      <Hsp_positive>17</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>23</Hsp_align-len>
+      <Hsp_qseq>GFQSQPIPGEVIAQVTSNPEYQQ</Hsp_qseq>
+      <Hsp_hseq>GYVSQELAGERVAQVVADPEFAQ</Hsp_hseq>
+      <Hsp_midline>G+ SQ + GE +AQV ++PE+ Q</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>2</Hit_num>
+  <Hit_id>gnl|CDD|338745</Hit_id>
+  <Hit_def>pfam13442, Cytochrome_CBB3, Cytochrome C oxidase, cbb3-type, subunit III.  </Hit_def>
+  <Hit_accession>338745</Hit_accession>
+  <Hit_len>67</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>27.7531</Hsp_bit-score>
+      <Hsp_score>62</Hsp_score>
+      <Hsp_evalue>0.388099</Hsp_evalue>
+      <Hsp_query-from>57</Hsp_query-from>
+      <Hsp_query-to>94</Hsp_query-to>
+      <Hsp_hit-from>19</Hsp_hit-from>
+      <Hsp_hit-to>56</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>9</Hsp_identity>
+      <Hsp_positive>13</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>38</Hsp_align-len>
+      <Hsp_qseq>AGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGS</Hsp_qseq>
+      <Hsp_hseq>GTGGAGPSLAGRAWAPEALVDIIRNGKGAMPAFGGDLS</Hsp_hseq>
+      <Hsp_midline>    A    AG     EA+  I++    AM  +    S</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>3</Hit_num>
+  <Hit_id>gnl|CDD|225783</Hit_id>
+  <Hit_def>COG3243, PhaC, Poly(3-hydroxyalkanoate) synthetase [Lipid metabolism].</Hit_def>
+  <Hit_accession>225783</Hit_accession>
+  <Hit_len>445</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>28.4935</Hsp_bit-score>
+      <Hsp_score>64</Hsp_score>
+      <Hsp_evalue>0.801858</Hsp_evalue>
+      <Hsp_query-from>62</Hsp_query-from>
+      <Hsp_query-to>151</Hsp_query-to>
+      <Hsp_hit-from>1</Hsp_hit-from>
+      <Hsp_hit-to>62</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>21</Hsp_identity>
+      <Hsp_positive>32</Hsp_positive>
+      <Hsp_gaps>28</Hsp_gaps>
+      <Hsp_align-len>90</Hsp_align-len>
+      <Hsp_qseq>NARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQAMAS</Hsp_qseq>
+      <Hsp_hseq>MIDEAEDEHTRERALFFVRQLTDAMSP-----SNFL------------ITNPEAL--RETLES---------QGKNLVAGLENLAEDLER</Hsp_hseq>
+      <Hsp_midline>    A DE T+E     V+ ++DAM P     S F              +NPE    +  L S         + + L  G + LA+ +  </Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>4</Hit_num>
+  <Hit_id>gnl|CDD|335873</Hit_id>
+  <Hit_def>pfam04718, ATP-synt_G, Mitochondrial ATP synthase g subunit.  The Fo sector of the ATP synthase is a membrane bound complex which mediates proton transport. It is composed of nine different polypeptide subunits (a, b, c, d, e, f, g F6, A6L). The function of subunit g is currently unknown. The conserved region covers all but the very N-terminus of the member sequences. No prokaryotic members have been identified thus far.</Hit_def>
+  <Hit_accession>335873</Hit_accession>
+  <Hit_len>93</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>26.6967</Hsp_bit-score>
+      <Hsp_score>60</Hsp_score>
+      <Hsp_evalue>1.40309</Hsp_evalue>
+      <Hsp_query-from>115</Hsp_query-from>
+      <Hsp_query-to>142</Hsp_query-to>
+      <Hsp_hit-from>42</Hsp_hit-from>
+      <Hsp_hit-to>70</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>12</Hsp_identity>
+      <Hsp_positive>18</Hsp_positive>
+      <Hsp_gaps>1</Hsp_gaps>
+      <Hsp_align-len>29</Hsp_align-len>
+      <Hsp_qseq>YQQA-KAFLASPATQVRNIEREEVLSKGA</Hsp_qseq>
+      <Hsp_hseq>YQQLFKTRLASPSGRVKNLTVKEAVLAGL</Hsp_hseq>
+      <Hsp_midline>YQQ  K  LASP+ +V+N+  +E +  G </Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>5</Hit_num>
+  <Hit_id>gnl|CDD|337674</Hit_id>
+  <Hit_def>pfam10232, Med8, Mediator of RNA polymerase II transcription complex subunit 8.  Arc32, or Med8, is one of the subunits of the Mediator complex of RNA polymerase II. The region conserved contains two alpha helices putatively necessary for binding to other subunits within the core of the Mediator complex. The N-terminus of Med8 binds to the essential core Head part of Mediator and the C-terminus hinges to Med18 on the non-essential part of the Head that also includes Med20.</Hit_def>
+  <Hit_accession>337674</Hit_accession>
+  <Hit_len>228</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>27.2839</Hsp_bit-score>
+      <Hsp_score>61</Hsp_score>
+      <Hsp_evalue>1.87171</Hsp_evalue>
+      <Hsp_query-from>50</Hsp_query-from>
+      <Hsp_query-to>83</Hsp_query-to>
+      <Hsp_hit-from>115</Hsp_hit-from>
+      <Hsp_hit-to>148</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>10</Hsp_identity>
+      <Hsp_positive>16</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>34</Hsp_align-len>
+      <Hsp_qseq>PEVTLKLAGEEANARRAGDERTKEAIHAIVKMIS</Hsp_qseq>
+      <Hsp_hseq>PRVEPKEAQLEARAANLGGEYAQKQEAGLNKVVT</Hsp_hseq>
+      <Hsp_midline>P V  K A  EA A   G E  ++    + K+++</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>6</Hit_num>
+  <Hit_id>gnl|CDD|239329</Hit_id>
+  <Hit_def>cd03031, GRX_GRX_like, Glutaredoxin (GRX) family, GRX-like domain containing protein subfamily; composed of uncharacterized eukaryotic proteins containing a GRX-like domain having only one conserved cysteine, aligning to the C-terminal cysteine of the CXXC motif of GRXs. This subfamily is predominantly composed of plant proteins. GRX is a glutathione (GSH) dependent reductase, catalyzing the disulfide reduction of target proteins via a redox active CXXC motif using a similar dithiol mechanism employed by TRXs. GRX has preference for mixed GSH disulfide substrates, in which it uses a monothiol mechanism where only the N-terminal cysteine is required. Proteins containing only the C-terminal cysteine are generally redox inactive.</Hit_def>
+  <Hit_accession>239329</Hit_accession>
+  <Hit_len>147</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>26.8152</Hsp_bit-score>
+      <Hsp_score>60</Hsp_score>
+      <Hsp_evalue>2.04446</Hsp_evalue>
+      <Hsp_query-from>28</Hsp_query-from>
+      <Hsp_query-to>48</Hsp_query-to>
+      <Hsp_hit-from>67</Hsp_hit-from>
+      <Hsp_hit-to>87</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>9</Hsp_identity>
+      <Hsp_positive>14</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>21</Hsp_align-len>
+      <Hsp_qseq>KGDYAGGAVKILDMFENGQLG</Hsp_qseq>
+      <Hsp_hseq>DGRYLGGAEEVLRLNESGELR</Hsp_hseq>
+      <Hsp_midline> G Y GGA ++L + E+G+L </Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>7</Hit_num>
+  <Hit_id>gnl|CDD|225907</Hit_id>
+  <Hit_def>COG3372, COG3372, Predicted nuclease of restriction endonuclease-like fold [General function prediction only].</Hit_def>
+  <Hit_accession>225907</Hit_accession>
+  <Hit_len>396</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>26.9493</Hsp_bit-score>
+      <Hsp_score>60</Hsp_score>
+      <Hsp_evalue>2.55467</Hsp_evalue>
+      <Hsp_query-from>108</Hsp_query-from>
+      <Hsp_query-to>147</Hsp_query-to>
+      <Hsp_hit-from>77</Hsp_hit-from>
+      <Hsp_hit-to>116</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>9</Hsp_identity>
+      <Hsp_positive>18</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>40</Hsp_align-len>
+      <Hsp_qseq>QVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQ</Hsp_qseq>
+      <Hsp_hseq>EVVSALDPREVRRFLFERGPALSEEERQRVLQEAADHFSV</Hsp_hseq>
+      <Hsp_midline>+V S  + ++ + FL      +   ER+ VL + A   + </Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>8</Hit_num>
+  <Hit_id>gnl|CDD|239326</Hit_id>
+  <Hit_def>cd03028, GRX_PICOT_like, Glutaredoxin (GRX) family, PKC-interacting cousin of TRX (PICOT)-like subfamily; composed of PICOT and GRX-PICOT-like proteins. The non-PICOT members of this family contain only the GRX-like domain, whereas PICOT contains an N-terminal TRX-like domain followed by one to three GRX-like domains. It is interesting to note that PICOT from plants contain three repeats of the GRX-like domain, metazoan proteins (except for insect) have two repeats, while fungal sequences contain only one copy of the domain. PICOT is a protein that interacts with protein kinase C (PKC) theta, a calcium independent PKC isoform selectively expressed in skeletal muscle and T lymphocytes. PICOT inhibits the activation of c-Jun N-terminal kinase and the transcription factors, AP-1 and NF-kB, induced by PKC theta or T-cell activating stimuli. Both GRX and TRX domains of PICOT are required for its activity. Characterized non-PICOT members of this family include CXIP1, a CAX-interacting protein in Arabidopsis thaliana, and PfGLP-1, a GRX-like protein from Plasmodium falciparum.</Hit_def>
+  <Hit_accession>239326</Hit_accession>
+  <Hit_len>90</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>25.9167</Hsp_bit-score>
+      <Hsp_score>58</Hsp_score>
+      <Hsp_evalue>2.86913</Hsp_evalue>
+      <Hsp_query-from>28</Hsp_query-from>
+      <Hsp_query-to>47</Hsp_query-to>
+      <Hsp_hit-from>70</Hsp_hit-from>
+      <Hsp_hit-to>89</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>7</Hsp_identity>
+      <Hsp_positive>12</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>20</Hsp_align-len>
+      <Hsp_qseq>KGDYAGGAVKILDMFENGQL</Hsp_qseq>
+      <Hsp_hseq>NGELVGGCDIVKEMHESGEL</Hsp_hseq>
+      <Hsp_midline> G+  GG   + +M E+G+L</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>9</Hit_num>
+  <Hit_id>gnl|CDD|179951</Hit_id>
+  <Hit_def>PRK05168, PRK05168, ribonuclease T; Provisional.</Hit_def>
+  <Hit_accession>179951</Hit_accession>
+  <Hit_len>211</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>26.3126</Hsp_bit-score>
+      <Hsp_score>59</Hsp_score>
+      <Hsp_evalue>3.86316</Hsp_evalue>
+      <Hsp_query-from>35</Hsp_query-from>
+      <Hsp_query-to>87</Hsp_query-to>
+      <Hsp_hit-from>40</Hsp_hit-from>
+      <Hsp_hit-to>108</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>24</Hsp_identity>
+      <Hsp_positive>28</Hsp_positive>
+      <Hsp_gaps>22</Hsp_gaps>
+      <Hsp_align-len>72</Hsp_align-len>
+      <Hsp_qseq>AVKILDMFENGQLGYPEVTLKL-------AGEEANA------------RRAGDERTKEAIHAIVKMISDAMK</Hsp_qseq>
+      <Hsp_hseq>AAVTLKMDEQGWL-YPDETLHFHVEPFEGANLEPEALAFNGIDPDNPLRGAVSE--KEALHEIFKMVRKGIK</Hsp_hseq>
+      <Hsp_midline>A   L M E G L YP+ TL         A  E  A            R A  E  KEA+H I KM+   +K</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>10</Hit_num>
+  <Hit_id>gnl|CDD|338697</Hit_id>
+  <Hit_def>pfam13356, Arm-DNA-bind_3, Arm DNA-binding domain.  This DNA-binding domain is found at the N-terminus of a wide variety of phage integrase proteins.</Hit_def>
+  <Hit_accession>338697</Hit_accession>
+  <Hit_len>78</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>25.3043</Hsp_bit-score>
+      <Hsp_score>56</Hsp_score>
+      <Hsp_evalue>3.94748</Hsp_evalue>
+      <Hsp_query-from>47</Hsp_query-from>
+      <Hsp_query-to>66</Hsp_query-to>
+      <Hsp_hit-from>51</Hsp_hit-from>
+      <Hsp_hit-to>71</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>12</Hsp_identity>
+      <Hsp_positive>15</Hsp_positive>
+      <Hsp_gaps>1</Hsp_gaps>
+      <Hsp_align-len>21</Hsp_align-len>
+      <Hsp_qseq>LG-YPEVTLKLAGEEANARRA</Hsp_qseq>
+      <Hsp_hseq>LGRYPEVSLAEAREKADEARA</Hsp_hseq>
+      <Hsp_midline>LG YPEV+L  A E+A+  RA</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>11</Hit_num>
+  <Hit_id>gnl|CDD|223294</Hit_id>
+  <Hit_def>COG0216, PrfA, Protein chain release factor A [Translation, ribosomal structure and biogenesis].</Hit_def>
+  <Hit_accession>223294</Hit_accession>
+  <Hit_len>363</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>26.4031</Hsp_bit-score>
+      <Hsp_score>59</Hsp_score>
+      <Hsp_evalue>4.62769</Hsp_evalue>
+      <Hsp_query-from>36</Hsp_query-from>
+      <Hsp_query-to>64</Hsp_query-to>
+      <Hsp_hit-from>149</Hsp_hit-from>
+      <Hsp_hit-to>177</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>9</Hsp_identity>
+      <Hsp_positive>16</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>29</Hsp_align-len>
+      <Hsp_qseq>VKILDMFENGQLGYPEVTLKLAGEEANAR</Hsp_qseq>
+      <Hsp_hseq>VEILSASESELGGYKEIIASISGKGVYSR</Hsp_hseq>
+      <Hsp_midline>V+IL   E+   GY E+   ++G+   +R</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>12</Hit_num>
+  <Hit_id>gnl|CDD|335707</Hit_id>
+  <Hit_def>pfam04295, GD_AH_C, D-galactarate dehydratase / Altronate hydrolase, C-terminus.  Family members include the C termini of D-galactarate dehydratase (EC:4.2.1.42) which is thought to catalyze the reaction D-galactarate = 5-keto-4-deoxy-D-glucarate + H2O, and altronate hydrolase (altronic acid hydratase, EC:4.2.1.7), which catalyzes D-altronate = 2-keto-2-deoxygluconate + H2O. As purified, both enzymes are catalytically inactive in the absence of added Fe2+, Mn2+, and beta-mercaptoethanol. Synergistic activation of altronate hydrolase activity is seen in the presence of both iron and manganese ions, suggesting that the enzyme may have two ion binding sites. Mn2+ appears to be part of the enzyme active centre, but the function of the single bound Fe2+ ion is unknown. The hydratase has no Fe-S core.</Hit_def>
+  <Hit_accession>335707</Hit_accession>
+  <Hit_len>393</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>25.8182</Hsp_bit-score>
+      <Hsp_score>58</Hsp_score>
+      <Hsp_evalue>5.92022</Hsp_evalue>
+      <Hsp_query-from>63</Hsp_query-from>
+      <Hsp_query-to>103</Hsp_query-to>
+      <Hsp_hit-from>206</Hsp_hit-from>
+      <Hsp_hit-to>243</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>11</Hsp_identity>
+      <Hsp_positive>15</Hsp_positive>
+      <Hsp_gaps>3</Hsp_gaps>
+      <Hsp_align-len>41</Hsp_align-len>
+      <Hsp_qseq>ARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQPIPG</Hsp_qseq>
+      <Hsp_hseq>AARAVNEEVAEKL---VALINWYEDYAARHGVDLYENPSPG</Hsp_hseq>
+      <Hsp_midline>A RA +E   E +   V +I+         G      P PG</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>13</Hit_num>
+  <Hit_id>gnl|CDD|236277</Hit_id>
+  <Hit_def>PRK08493, PRK08493, NADH dehydrogenase subunit G; Validated.</Hit_def>
+  <Hit_accession>236277</Hit_accession>
+  <Hit_len>819</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>25.8211</Hsp_bit-score>
+      <Hsp_score>57</Hsp_score>
+      <Hsp_evalue>6.90164</Hsp_evalue>
+      <Hsp_query-from>81</Hsp_query-from>
+      <Hsp_query-to>112</Hsp_query-to>
+      <Hsp_hit-from>391</Hsp_hit-from>
+      <Hsp_hit-to>420</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>13</Hsp_identity>
+      <Hsp_positive>18</Hsp_positive>
+      <Hsp_gaps>2</Hsp_gaps>
+      <Hsp_align-len>32</Hsp_align-len>
+      <Hsp_qseq>MISDAMKPYRNKGSGFQSQPIPGEVIAQVTSN</Hsp_qseq>
+      <Hsp_hseq>AINNALK--MNKASGLYFHPIKDNVIANLSKN</Hsp_hseq>
+      <Hsp_midline> I++A+K   NK SG    PI   VIA ++ N</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>14</Hit_num>
+  <Hit_id>gnl|CDD|224062</Hit_id>
+  <Hit_def>COG1139, COG1139, Uncharacterized conserved protein containing a ferredoxin-like domain [Energy production and conversion].</Hit_def>
+  <Hit_accession>224062</Hit_accession>
+  <Hit_len>459</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>25.7583</Hsp_bit-score>
+      <Hsp_score>57</Hsp_score>
+      <Hsp_evalue>6.94885</Hsp_evalue>
+      <Hsp_query-from>104</Hsp_query-from>
+      <Hsp_query-to>151</Hsp_query-to>
+      <Hsp_hit-from>65</Hsp_hit-from>
+      <Hsp_hit-to>114</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>14</Hsp_identity>
+      <Hsp_positive>20</Hsp_positive>
+      <Hsp_gaps>2</Hsp_gaps>
+      <Hsp_align-len>50</Hsp_align-len>
+      <Hsp_qseq>EVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQA--MAS</Hsp_qseq>
+      <Hsp_hseq>EYLEQLEENVTRNGGHVYFAKDAEDAREIIGEIVGEKNGKKVVKSKSMVS</Hsp_hseq>
+      <Hsp_midline>E + Q+  N        + A  A   R I  E V  K  KK+ ++  M S</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>15</Hit_num>
+  <Hit_id>gnl|CDD|339538</Hit_id>
+  <Hit_def>pfam15868, MBF2, Transcription activator MBF2.  MBF2 activates transcription via its interaction with TFIIA. In Bombyx mori, it has been found to form a complex with MBF1 and the DNA-binding regulator FTZ-F1.</Hit_def>
+  <Hit_accession>339538</Hit_accession>
+  <Hit_len>89</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>24.4769</Hsp_bit-score>
+      <Hsp_score>54</Hsp_score>
+      <Hsp_evalue>7.34638</Hsp_evalue>
+      <Hsp_query-from>35</Hsp_query-from>
+      <Hsp_query-to>53</Hsp_query-to>
+      <Hsp_hit-from>42</Hsp_hit-from>
+      <Hsp_hit-to>60</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>6</Hsp_identity>
+      <Hsp_positive>9</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>19</Hsp_align-len>
+      <Hsp_qseq>AVKILDMFENGQLGYPEVT</Hsp_qseq>
+      <Hsp_hseq>AIEIYDQVTNGNGATAYLT</Hsp_hseq>
+      <Hsp_midline>A++I D   NG      +T</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>16</Hit_num>
+  <Hit_id>gnl|CDD|185768</Hit_id>
+  <Hit_def>cd09245, BRO1_UmRIM23-like, Protein-interacting, Bro1-like domain of Ustilago maydis Rim23 (PalC), and related domains.  This family contains the Bro1-like domain of Ustilago maydis Rim23 (also known as PalC), and related proteins. It belongs to the BRO1_Alix_like superfamily which includes the Bro1-like domains of mammalian Alix (apoptosis-linked gene-2 interacting protein X), His-Domain type N23 protein tyrosine phosphatase (HD-PTP, also known as PTPN23), RhoA-binding proteins Rhophilin-1 and -2, Brox, Bro1 and Rim20 (also known as PalA) from Saccharomyces cerevisiae, and related domains. Alix, HD-PTP, Brox, Bro1, Rim20, and Rim23 interact with the ESCRT (Endosomal Sorting Complexes Required for Transport) system. Rim20 and Rim23 participate in the response to the external pH via the Rim101 pathway. Through its Bro1-like domain, Rim23 allows the interaction between the endosomal and plasma membrane complexes. Bro1-like domains are boomerang-shape, and part of the domain is a tetratricopeptide repeat (TPR)-like structure. Intermediates in the Rim101 pathway may play roles in the pathogenesis of fungal corneal infection during Candida albicans keratitis. This family lacks the V-shaped (V) domain found in many members of the BRO1_Alix_like superfamily.</Hit_def>
+  <Hit_accession>185768</Hit_accession>
+  <Hit_len>413</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>25.4438</Hsp_bit-score>
+      <Hsp_score>56</Hsp_score>
+      <Hsp_evalue>7.74984</Hsp_evalue>
+      <Hsp_query-from>59</Hsp_query-from>
+      <Hsp_query-to>121</Hsp_query-to>
+      <Hsp_hit-from>354</Hsp_hit-from>
+      <Hsp_hit-to>408</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>15</Hsp_identity>
+      <Hsp_positive>24</Hsp_positive>
+      <Hsp_gaps>8</Hsp_gaps>
+      <Hsp_align-len>63</Hsp_align-len>
+      <Hsp_qseq>EEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKAF</Hsp_qseq>
+      <Hsp_hseq>VEKGAGVEEELRTLEMLLKKYKKMNDTV--------SFQPVPPSSELQSSMPSGREAHTAKPY</Hsp_hseq>
+      <Hsp_midline> E  A    + RT E +    K ++D +         FQ  P   E+ + + S  E   AK +</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>17</Hit_num>
+  <Hit_id>gnl|CDD|185469</Hit_id>
+  <Hit_def>PTZ00134, PTZ00134, 40S ribosomal protein S18; Provisional.</Hit_def>
+  <Hit_accession>185469</Hit_accession>
+  <Hit_len>154</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>24.9893</Hsp_bit-score>
+      <Hsp_score>55</Hsp_score>
+      <Hsp_evalue>7.78482</Hsp_evalue>
+      <Hsp_query-from>52</Hsp_query-from>
+      <Hsp_query-to>84</Hsp_query-to>
+      <Hsp_hit-from>45</Hsp_hit-from>
+      <Hsp_hit-to>75</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>13</Hsp_identity>
+      <Hsp_positive>20</Hsp_positive>
+      <Hsp_gaps>2</Hsp_gaps>
+      <Hsp_align-len>33</Hsp_align-len>
+      <Hsp_qseq>VTLKLAGEEANARRAGDERTKEAIHAIVKMISD</Hsp_qseq>
+      <Hsp_hseq>LVCKKAGIDVT-KRAG-ELTAEEIEKIVEIIAN</Hsp_hseq>
+      <Hsp_midline>+  K AG +   +RAG E T E I  IV++I++</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>18</Hit_num>
+  <Hit_id>gnl|CDD|340005</Hit_id>
+  <Hit_def>pfam17289, Terminase_6C, Terminase RNaseH-like domain.  </Hit_def>
+  <Hit_accession>340005</Hit_accession>
+  <Hit_len>154</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>25.0183</Hsp_bit-score>
+      <Hsp_score>55</Hsp_score>
+      <Hsp_evalue>8.4645</Hsp_evalue>
+      <Hsp_query-from>23</Hsp_query-from>
+      <Hsp_query-to>51</Hsp_query-to>
+      <Hsp_hit-from>85</Hsp_hit-from>
+      <Hsp_hit-to>113</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>7</Hsp_identity>
+      <Hsp_positive>13</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>29</Hsp_align-len>
+      <Hsp_qseq>KYEPKKGDYAGGAVKILDMFENGQLGYPE</Hsp_qseq>
+      <Hsp_hseq>RPEPASKGKNTRVLKVKDLIESGRLKVDR</Hsp_hseq>
+      <Hsp_midline>+ EP         +K+ D+ E+G+L    </Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>19</Hit_num>
+  <Hit_id>gnl|CDD|188046</Hit_id>
+  <Hit_def>TIGR00365, TIGR00365, monothiol glutaredoxin, Grx4 family.  The gene for the member of this glutaredoxin family in E. coli, originally designated ydhD, is now designated grxD. Its protein, Grx4, is a monothiol glutaredoxin similar to Grx5 of yeast, which is involved in iron-sulfur cluster formation. [Energy metabolism, Electron transport].</Hit_def>
+  <Hit_accession>188046</Hit_accession>
+  <Hit_len>97</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>24.3473</Hsp_bit-score>
+      <Hsp_score>54</Hsp_score>
+      <Hsp_evalue>8.51575</Hsp_evalue>
+      <Hsp_query-from>28</Hsp_query-from>
+      <Hsp_query-to>47</Hsp_query-to>
+      <Hsp_hit-from>74</Hsp_hit-from>
+      <Hsp_hit-to>93</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>8</Hsp_identity>
+      <Hsp_positive>16</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>20</Hsp_align-len>
+      <Hsp_qseq>KGDYAGGAVKILDMFENGQL</Hsp_qseq>
+      <Hsp_hseq>KGEFVGGCDIIMEMYQSGEL</Hsp_hseq>
+      <Hsp_midline>KG++ GG   I++M+++G+L</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>20</Hit_num>
+  <Hit_id>gnl|CDD|316558</Hit_id>
+  <Hit_def>pfam14045, YIEGIA, YIEGIA protein.  This family includes the B. subtilis YphB protein, which is functionally uncharacterized. Its expression is regulated by the sporulation transcription factor sigma-F, however it is not essential for sporulation or germination. This is not a homolog of E. coli YphB, which belongs to pfam01263. This family of proteins is found in bacteria. Proteins in this family are typically between 276 and 300 amino acids in length and contain a conserved YIEGIA motif.</Hit_def>
+  <Hit_accession>316558</Hit_accession>
+  <Hit_len>282</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>25.2131</Hsp_bit-score>
+      <Hsp_score>56</Hsp_score>
+      <Hsp_evalue>8.69605</Hsp_evalue>
+      <Hsp_query-from>112</Hsp_query-from>
+      <Hsp_query-to>135</Hsp_query-to>
+      <Hsp_hit-from>54</Hsp_hit-from>
+      <Hsp_hit-to>79</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>13</Hsp_identity>
+      <Hsp_positive>15</Hsp_positive>
+      <Hsp_gaps>4</Hsp_gaps>
+      <Hsp_align-len>27</Hsp_align-len>
+      <Hsp_qseq>NPEYQQAKAFLASPATQ---VRNIERE</Hsp_qseq>
+      <Hsp_hseq>EKEFT-AVTFLALAAQQFRDVRNMERE</Hsp_hseq>
+      <Hsp_midline>  E+  A  FLA  A Q   VRN+ERE</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+</Iteration_hits>
+  <Iteration_stat>
+    <Statistics>
+      <Statistics_db-num>29480</Statistics_db-num>
+      <Statistics_db-len>6494941</Statistics_db-len>
+      <Statistics_hsp-len>85</Statistics_hsp-len>
+      <Statistics_eff-space>263283306</Statistics_eff-space>
+      <Statistics_kappa>0.0880128</Statistics_kappa>
+      <Statistics_lambda>0.267</Statistics_lambda>
+      <Statistics_entropy>0.14</Statistics_entropy>
+    </Statistics>
+  </Iteration_stat>
+</Iteration>
+</BlastOutput_iterations>
+</BlastOutput>
+

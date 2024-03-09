@@ -36,7 +36,10 @@ class DTDHandler:
         parser.SetParamEntityParsing(expat.XML_PARAM_ENTITY_PARSING_ALWAYS)
         parser.ExternalEntityRefHandler = self._externalEntityRefHandler
         self.parser = parser
+        self.start_methods = {}
+        self.end_methods = {}
         self._externalEntityRefHandler(None, None, "NCBI_BlastOutput.dtd", None)
+        XMLHandler._dtd_methods = self.start_methods, self.end_methods
 
     def _elementDeclHandler(self, name, model):
         method_name = name
@@ -55,13 +58,14 @@ class DTDHandler:
                 "Parameters_",
                 "Statistics_",
                 "Hit_",
+                "Hsp_",
             ):
                 method_name = method_name.replace(prefix, "")
         method_name = method_name.lower().replace("-", "_")
         start_method = "_start_" + method_name
         end_method = "_end_" + method_name
-        XMLHandler._start_methods[name] = getattr(XMLHandler, start_method)
-        XMLHandler._end_methods[name] = getattr(XMLHandler, end_method)
+        self.start_methods[name] = getattr(XMLHandler, start_method)
+        self.end_methods[name] = getattr(XMLHandler, end_method)
 
     def _externalEntityRefHandler(self, context, base, systemId, publicId):
         assert context is None
@@ -87,6 +91,7 @@ class SchemaHandler:
         self.parser = parser
         self.start_methods = {}
         self.end_methods = {}
+        XMLHandler._schema_methods = self.start_methods, self.end_methods
 
     def _startElementHandler(self, name, attributes):
         """Found XML start tag.
@@ -132,6 +137,8 @@ class SchemaHandler:
                     tag = "Iteration"
                 elif tag == "query-title":
                     tag = "query-def"
+                elif tag == "title":
+                    tag = "def"
                 method_name = tag.lower().replace("-", "_")
                 start_method = "_start_" + method_name
                 end_method = "_end_" + method_name
@@ -141,11 +148,33 @@ class SchemaHandler:
             print("In SchemaHandler._startElementHandler for", name, attributes)
 
 
+class _HSP_cache:
+    __slots__ = (
+        "num",
+        "bit_score",
+        "score",
+        "evalue",
+        "identity",
+        "positive",
+        "query_from",
+        "query_to",
+        "query_frame",
+        "query_strand",
+        "hit_from",
+        "hit_to",
+        "hit_frame",
+        "hit_strand",
+        "qseq",
+        "hseq",
+        "gaps",
+        "align_len",
+        "density",
+        "midline",
+    )
+
+
 class XMLHandler:
     """Handler for BLAST XML data."""
-
-    _start_methods: Dict[str, Callable] = {}
-    _end_methods: Dict[str, Callable] = {}
 
     def __init__(self, parser):
         """Initialize the expat parser."""
@@ -154,16 +183,22 @@ class XMLHandler:
         self._parser = parser
 
     def _startNamespaceDeclHandler(self, prefix, uri):
+        print("In _startNamespaceDeclHandler for", prefix, uri)
+        parser = self._parser
         if uri == "http://www.w3.org/2001/XMLSchema-instance":
             # This is an xml schema
-            self.schema_namespace = uri
-            self._parser.StartElementHandler = self._start_blastxml2
+            try:
+                self._start_methods, self._end_methods = XMLHandler._schema_methods
+            except AttributeError:
+                self.schema_namespace = uri
+                parser.StartElementHandler = self._start_blastxml2
 
     def _endNamespaceDeclHandler(self, prefix):
         return
 
     def _start_blastxml2(self, name, attributes):
         """Process the XML schema (before processing the element)."""
+        print("In _start_blastxml2")
         key = "%s schemaLocation" % self.schema_namespace
         assert name == "http://www.ncbi.nlm.nih.gov BlastXML2"
         domain, url = attributes[key].split()
@@ -177,7 +212,7 @@ class XMLHandler:
         parser.StartElementHandler = handler._startElementHandler
         with open(path, "rb") as stream:
             parser.ParseFile(stream)
-        XMLHandler._start_methods = handler.start_methods
+        self._start_methods, self._end_methods = XMLHandler._schema_methods
         parser = self._parser
         parser.StartElementHandler = self._startElementHandler
         parser.EndElementHandler = self._endElementHandler
@@ -350,6 +385,14 @@ class XMLHandler:
         assert self._characters.strip() == ""
         self._characters = ""
 
+    def _start_taxid(self, name, attributes):
+        assert self._characters.strip() == ""
+        self._characters = ""
+
+    def _start_sciname(self, name, attributes):
+        assert self._characters.strip() == ""
+        self._characters = ""
+
     def _start_hsps(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
@@ -365,85 +408,89 @@ class XMLHandler:
     def _start_hsp(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
-        self._hsp = {}
+        self._hsp = _HSP_cache()
 
-    def _start_hsp_num(self, name, attributes):
+    def _start_bit_score(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hsp_bit_score(self, name, attributes):
+    def _start_score(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hsp_score(self, name, attributes):
+    def _start_evalue(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hsp_evalue(self, name, attributes):
+    def _start_query_from(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hsp_query_from(self, name, attributes):
+    def _start_query_to(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hsp_query_to(self, name, attributes):
+    def _start_query_strand(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hsp_hit_from(self, name, attributes):
+    def _start_hit_from(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hsp_hit_to(self, name, attributes):
+    def _start_hit_to(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hsp_pattern_from(self, name, attributes):
+    def _start_hit_strand(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hsp_pattern_to(self, name, attributes):
+    def _start_pattern_from(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hsp_query_frame(self, name, attributes):
+    def _start_pattern_to(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hsp_hit_frame(self, name, attributes):
+    def _start_query_frame(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hsp_identity(self, name, attributes):
+    def _start_hit_frame(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hsp_positive(self, name, attributes):
+    def _start_identity(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hsp_gaps(self, name, attributes):
+    def _start_positive(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hsp_align_len(self, name, attributes):
+    def _start_gaps(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hsp_density(self, name, attributes):
+    def _start_align_len(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hsp_qseq(self, name, attributes):
+    def _start_density(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hsp_hseq(self, name, attributes):
+    def _start_qseq(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _start_hsp_midline(self, name, attributes):
+    def _start_hseq(self, name, attributes):
+        assert self._characters.strip() == ""
+        self._characters = ""
+
+    def _start_midline(self, name, attributes):
         assert self._characters.strip() == ""
         self._characters = ""
 
@@ -671,10 +718,6 @@ class XMLHandler:
         del self._alignments
         self._record.append(hit)
 
-    def _end_num(self, name):
-        self._alignments.num = int(self._characters)
-        self._characters = ""
-
     def _end_description(self, name):
         return
 
@@ -691,6 +734,16 @@ class XMLHandler:
         self._alignments.target.description = description
         self._characters = ""
 
+    def _end_taxid(self, name):
+        taxid = self._characters
+        self._alignments.target.annotations["taxid"] = int(taxid)
+        self._characters = ""
+
+    def _end_sciname(self, name):
+        sciname = self._characters
+        self._alignments.target.annotations["sciname"] = sciname
+        self._characters = ""
+
     def _end_accession(self, name):
         accession = self._characters
         self._alignments.target.name = accession
@@ -705,77 +758,86 @@ class XMLHandler:
         assert self._characters.strip() == ""
         self._characters = ""
 
-    def _end_hsp_num(self, name):
-        self._hsp["num"] = int(self._characters)
+    def _end_num(self, name):
+        try:
+            element = self._hsp
+        except AttributeError:
+            element = self._alignments
+        element.num = int(self._characters)
         self._characters = ""
 
-    def _end_hsp_bit_score(self, name):
-        self._hsp["bit-score"] = float(self._characters)
+    def _end_bit_score(self, name):
+        self._hsp.bit_score = float(self._characters)
         self._characters = ""
 
-    def _end_hsp_score(self, name):
-        self._hsp["score"] = float(self._characters)
+    def _end_score(self, name):
+        self._hsp.score = float(self._characters)
         self._characters = ""
 
-    def _end_hsp_evalue(self, name):
-        self._hsp["evalue"] = float(self._characters)
+    def _end_evalue(self, name):
+        self._hsp.evalue = float(self._characters)
         self._characters = ""
 
-    def _end_hsp_query_from(self, name):
-        self._hsp["query-from"] = int(self._characters)
+    def _end_query_from(self, name):
+        self._hsp.query_from = int(self._characters)
         self._characters = ""
 
-    def _end_hsp_query_to(self, name):
-        self._hsp["query-to"] = int(self._characters)
+    def _end_query_to(self, name):
+        self._hsp.query_to = int(self._characters)
         self._characters = ""
 
-    def _end_hsp_hit_from(self, name):
-        self._hsp["hit-from"] = int(self._characters)
+    def _end_query_strand(self, name):
+        query_strand = self._characters
+        assert query_strand == "Plus"
+        self._hsp.query_strand = query_strand
         self._characters = ""
 
-    def _end_hsp_hit_to(self, name):
-        self._hsp["hit-to"] = int(self._characters)
+    def _end_hit_from(self, name):
+        self._hsp.hit_from = int(self._characters)
         self._characters = ""
 
-    def _end_hsp_pattern_from(self, name):
-        self._hsp["pattern-from"] = int(self._characters)
+    def _end_hit_to(self, name):
+        self._hsp.hit_to = int(self._characters)
         self._characters = ""
 
-    def _end_hsp_pattern_to(self, name):
-        self._hsp["pattern-to"] = int(self._characters)
+    def _end_hit_strand(self, name):
+        hit_strand = self._characters
+        assert hit_strand in ("Plus", "Minus")
+        self._hsp.hit_strand = hit_strand
         self._characters = ""
 
-    def _end_hsp_query_frame(self, name):
+    def _end_pattern_from(self, name):
+        self._hsp.pattern_from = int(self._characters)
+        self._characters = ""
+
+    def _end_pattern_to(self, name):
+        self._hsp.pattern_to = int(self._characters)
+        self._characters = ""
+
+    def _end_query_frame(self, name):
         query_frame = int(self._characters)
-        if self._program in ("blastx", "tblastx") and query_frame in (
-            -3,
-            -2,
-            -1,
-            1,
-            2,
-            3,
-        ):
+        program = self._program
+        if program in ("blastn", "megablast") and query_frame == 1:
             pass
-        elif self._program == "blastp" and query_frame in (0, 1):
+        elif program in ("blastx", "tblastx") and query_frame in (-3, -2, -1, 1, 2, 3):
             pass
-        elif self._program == "tblastn" and query_frame == 0:
-            pass
-        elif self._program in ("blastn", "megablast") and query_frame == 1:
+        elif program in ("blastp", "tblastn", "rpsblast") and query_frame == 0:
             pass
         else:
             raise ValueError(
                 f"unexpected value {query_frame} in tag <Hsp_query-frame> for program {self._program}"
             )
-        self._hsp["query-frame"] = query_frame
+        self._hsp.query_frame = query_frame
         self._characters = ""
 
-    def _end_hsp_hit_frame(self, name):
+    def _end_hit_frame(self, name):
         hit_frame = int(self._characters)
-        if self._program in "blastp" and hit_frame in (0, 1):
+        program = self._program
+        if program in ("blastn", "megablast") and hit_frame in (-1, 1):
             pass
-        elif self._program == "blastx" and hit_frame == 0:
+        elif program in ("blastp", "blastx", "rpsblast") and hit_frame == 0:
             pass
-        elif self._program in ("tblastn", "tblastx") and hit_frame in (
+        elif program in ("tblastn", "tblastx") and hit_frame in (
             -3,
             -2,
             -1,
@@ -784,45 +846,43 @@ class XMLHandler:
             3,
         ):
             pass
-        elif self._program in ("blastn", "megablast") and hit_frame in (-1, 1):
-            pass
         else:
             raise ValueError(
                 f"unexpected value {hit_frame} in tag <Hsp_hit-frame> for program {self._program}"
             )
-        self._hsp["hit-frame"] = hit_frame
+        self._hsp.hit_frame = hit_frame
         self._characters = ""
 
-    def _end_hsp_identity(self, name):
-        self._hsp["identity"] = int(self._characters)
+    def _end_identity(self, name):
+        self._hsp.identity = int(self._characters)
         self._characters = ""
 
-    def _end_hsp_positive(self, name):
-        self._hsp["positive"] = int(self._characters)
+    def _end_positive(self, name):
+        self._hsp.positive = int(self._characters)
         self._characters = ""
 
-    def _end_hsp_gaps(self, name):
-        self._hsp["gaps"] = int(self._characters)
+    def _end_gaps(self, name):
+        self._hsp.gaps = int(self._characters)
         self._characters = ""
 
-    def _end_hsp_align_len(self, name):
-        self._hsp["align-len"] = int(self._characters)
+    def _end_align_len(self, name):
+        self._hsp.align_len = int(self._characters)
         self._characters = ""
 
-    def _end_hsp_density(self, name):
-        self._hsp["density"] = int(self._characters)
+    def _end_density(self, name):
+        self._hsp.density = int(self._characters)
         self._characters = ""
 
-    def _end_hsp_qseq(self, name):
-        self._hsp["qseq"] = self._characters
+    def _end_qseq(self, name):
+        self._hsp.qseq = self._characters
         self._characters = ""
 
-    def _end_hsp_hseq(self, name):
-        self._hsp["hseq"] = self._characters
+    def _end_hseq(self, name):
+        self._hsp.hseq = self._characters
         self._characters = ""
 
-    def _end_hsp_midline(self, name):
-        self._hsp["midline"] = self._characters
+    def _end_midline(self, name):
+        self._hsp.midline = self._characters
         self._characters = ""
 
     def _end_hsp(self, name):
@@ -830,29 +890,29 @@ class XMLHandler:
         self._characters = ""
         hsp = self._hsp
         del self._hsp
-        align_len = hsp["align-len"]
+        align_len = hsp.align_len
         query = self._record.query
         if query is None:
             query = self._records.query
         query_id = query.id
         query_description = query.description
         query_length = len(query.seq)
-        query_seq_aligned = hsp["qseq"]
+        query_seq_aligned = hsp.qseq
         assert len(query_seq_aligned) == align_len
-        target_seq_aligned = hsp["hseq"]
+        target_seq_aligned = hsp.hseq
         assert len(target_seq_aligned) == align_len
         coordinates = Alignment.infer_coordinates(
             [target_seq_aligned, query_seq_aligned]
         )
         query_seq_data = query_seq_aligned.replace("-", "")
-        query_frame = hsp["query-frame"]
         query = SeqRecord(None, query_id, description=query_description)
-        query_start = hsp["query-from"] - 1
-        query_end = hsp["query-to"]
+        query_start = hsp.query_from - 1
+        query_end = hsp.query_to
         if self._program in ("blastx", "tblastx"):
             assert query_end - query_start == 3 * len(query_seq_data)
             location = SimpleLocation(0, len(query_seq_data))
-            coded_by = f"{query_id}:{hsp['query-from']}..{hsp['query-to']}"
+            coded_by = f"{query_id}:{hsp.query_from}..{hsp.query_to}"
+            query_frame = hsp.query_frame
             if query_frame > 0:
                 assert query_start % 3 == query_frame - 1
             elif query_frame < 0:
@@ -865,6 +925,15 @@ class XMLHandler:
             coordinates[1, :] += query_start
             assert query_end - query_start == len(query_seq_data)
             query_seq_data = {query_start: query_seq_data}
+            if self._program == "blastn":
+                try:
+                    query_strand = hsp.query_strand
+                except AttributeError:
+                    # v1 XML
+                    pass
+                else:
+                    # v2 XML
+                    assert query_strand == "Plus"
         query.seq = Seq(query_seq_data, query_length)
         target = self._alignments.target
         target_id = target.id
@@ -872,50 +941,66 @@ class XMLHandler:
         target_description = target.description
         target_length = len(target.seq)
         target_seq_data = target_seq_aligned.replace("-", "")
-        target_frame = hsp["hit-frame"]
         target = SeqRecord(None, target_id, target_name, description=target_description)
-        if self._program in ("tblastn", "tblastx"):
-            target_start = hsp["hit-from"] - 1
-            target_end = hsp["hit-to"]
+        if self._program in ("blastn", "megablast"):
+            try:
+                target_strand = hsp.hit_strand
+            except AttributeError:
+                # v1 XML
+                target_frame = hsp.hit_frame
+                if target_frame == +1:
+                    target_strand = "Plus"
+                elif target_frame == -1:
+                    target_strand = "Minus"
+            if target_strand == "Plus":
+                target_start = hsp.hit_from - 1
+                target_end = hsp.hit_to
+                coordinates[0, :] += target_start
+            elif target_strand == "Minus":
+                target_start = hsp.hit_to - 1
+                target_end = hsp.hit_from
+                target_seq_data = reverse_complement(target_seq_data)
+                coordinates[0, :] = target_end - coordinates[0, :]
+            assert target_end - target_start == len(target_seq_data)
+            target_seq_data = {target_start: target_seq_data}
+        elif self._program in ("blastp", "blastx", "rpsblast"):
+            target_start = hsp.hit_from - 1
+            target_end = hsp.hit_to
+            coordinates[0, :] += target_start
+            assert target_end - target_start == len(target_seq_data)
+            target_seq_data = {target_start: target_seq_data}
+        elif self._program in ("tblastn", "tblastx"):
+            target_start = hsp.hit_from - 1
+            target_end = hsp.hit_to
             assert target_end - target_start == 3 * len(target_seq_data)
-            target_seq = Seq(target_seq_data, target_length)
             location = SimpleLocation(0, target_length)
-            coded_by = f"{target_id}:{hsp['hit-from']}..{hsp['hit-to']}"
-            if target_frame > 0:
+            coded_by = f"{target_id}:{hsp.hit_from}..{hsp.hit_to}"
+            target_frame = hsp.hit_frame
+            if target_frame >= 0:
                 assert target_start % 3 == target_frame - 1
-            elif query_frame < 0:
+            elif target_frame < 0:
                 assert (target_length - target_end) % 3 == -target_frame - 1
                 coded_by = f"complement({coded_by})"
             qualifiers = {"coded_by": coded_by}
             feature = SeqFeature(location, type="CDS", qualifiers=qualifiers)
             target.features.append(feature)
         else:
-            if target_frame == +1 or target_frame == 0:
-                target_start = hsp["hit-from"] - 1
-                target_end = hsp["hit-to"]
-                coordinates[0, :] += target_start
-            elif target_frame == -1:
-                target_start = hsp["hit-to"] - 1
-                target_end = hsp["hit-from"]
-                target_seq_data = reverse_complement(target_seq_data)
-                coordinates[0, :] = target_end - coordinates[0, :]
-            assert target_end - target_start == len(target_seq_data)
-            target_seq_data = {target_start: target_seq_data}
+            raise RuntimeError("Unexpected program name '%s'" % self._program)
         target.seq = Seq(target_seq_data, target_length)
         sequences = [target, query]
         alignment = HSP(sequences, coordinates)
-        alignment.num = hsp["num"]
-        alignment.score = hsp["score"]
+        alignment.num = hsp.num
+        alignment.score = hsp.score
         annotations = {}
-        annotations["bit score"] = hsp["bit-score"]
-        annotations["evalue"] = hsp["evalue"]
-        annotations["identity"] = hsp["identity"]
-        annotations["positive"] = hsp["positive"]
+        annotations["bit score"] = hsp.bit_score
+        annotations["evalue"] = hsp.evalue
+        annotations["identity"] = hsp.identity
+        annotations["positive"] = hsp.positive
         try:
-            annotations["gaps"] = hsp["gaps"]
-        except KeyError:  # missing in megablast
+            annotations["gaps"] = hsp.gaps
+        except AttributeError:  # missing in megablast
             pass
-        annotations["midline"] = hsp["midline"]
+        annotations["midline"] = hsp.midline
         alignment.annotations = annotations
         self._alignments.append(alignment)
 
@@ -974,6 +1059,7 @@ class XMLHandler:
         return
 
     def _xmlDeclHandler(self, version, encoding, standalone):
+        print("In _xmlDeclHandler")
         parser = self._parser
         parser.ExternalEntityRefHandler = self._externalEntityRefHandler
         parser.StartNamespaceDeclHandler = self._startNamespaceDeclHandler
@@ -986,6 +1072,7 @@ class XMLHandler:
 
     def _externalEntityRefHandler(self, context, base, systemId, publicId):
         """Handle the DTD declaration."""
+        print("In _externalEntityRefhandler")
         assert context is None
         assert base is None
         if systemId not in (
@@ -994,7 +1081,9 @@ class XMLHandler:
         ):
             raise ValueError("output from legacy BLAST program")
         assert publicId == "-//NCBI//NCBI BlastOutput/EN"
+        handler = DTDHandler()
         self._parser.ExternalEntityRefHandler = None
+        self._start_methods, self._end_methods = XMLHandler._dtd_methods
         return 1
 
     def _startElementHandler(self, name, attributes):
@@ -1005,9 +1094,12 @@ class XMLHandler:
          - attributes -- tag attributes
 
         """
-        method = XMLHandler._start_methods.get(name)
+        method = self._start_methods.get(name)
         if method is None:
-            raise ValueError("Failed to find method for %s" % name)
+            raise ValueError(
+                "Failed to find method for %s (%s)"
+                % (name, XMLHandler._start_methods.keys())
+            )
         method(self, name, attributes)
 
     def _endElementHandler(self, name):
@@ -1017,7 +1109,7 @@ class XMLHandler:
          - name -- tag name
 
         """
-        method = XMLHandler._end_methods.get(name)
+        method = self._end_methods.get(name)
         if method is None:
             raise ValueError("Failed to find method for %s" % name)
         method(self, name)
@@ -1052,7 +1144,3 @@ class XMLHandler:
             return f"<Bio.Blast._parser.XMLHandler object at {address} with stream {stream} and no parser>"
         else:
             return f"<Bio.Blast._parser.XMLHandler object at {address} with stream {stream} and parser {parser}>"
-
-
-# Initialize XMLHandler by parsing the DTD
-DTDHandler()
