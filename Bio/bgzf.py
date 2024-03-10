@@ -247,11 +247,36 @@ If your data is in UTF-8 or any other incompatible encoding, you must use
 binary mode, and decode the appropriate fragments yourself.
 """
 
+from __future__ import annotations
+
+import typing as tp
+
 import struct
 import sys
 import zlib
 
 from builtins import open as _open
+
+if tp.TYPE_CHECKING:
+    import _typeshed
+    import io
+    import collections.abc as cx_abc
+    from typing_extensions import TypeAlias, TypeGuard
+
+_BufferT = tp.TypeVar("_BufferT", str, bytes)
+_Self = tp.TypeVar("_Self")
+# fmt: off
+# Writing and updating modes
+_ReadingBinaryMode: TypeAlias = tp.Literal["rb", "br"]
+_ReadingTextMode: TypeAlias = tp.Literal["r", "tr", "rt"]
+_WritingAppendingBinaryMode: TypeAlias = tp.Literal["wb", "bw", "ab", "ba", "wb+", "w+b", "+wb", "bw+", "b+w", "+bw", "ab+", "a+b", "+ab", "ba+", "b+a", "+ba"]
+_WritingAppendingTextMode: TypeAlias = tp.Literal["w", "wt", "tw", "a", "at", "ta", "w+", "+w", "wt+", "w+t", "+wt", "tw+", "t+w", "+tw", "a+", "+a", "at+", "a+t", "+at", "ta+", "t+a", "+ta"]
+_reading_binary_modes: tp.Final[tuple[_ReadingBinaryMode, ...]] = tp.get_args(_ReadingBinaryMode)
+_reading_text_modes: tp.Final[tuple[_ReadingTextMode, ...]] = tp.get_args(_ReadingTextMode)
+_writing_appending_binary_modes: tp.Final[tuple[_WritingAppendingBinaryMode, ...]] = tp.get_args(_WritingAppendingBinaryMode)
+_writing_appending_text_modes: tp.Final[tuple[_WritingAppendingTextMode, ...]] = tp.get_args(_WritingAppendingTextMode)
+# fmt: on
+
 
 _bgzf_magic = b"\x1f\x8b\x08\x04"
 _bgzf_header = b"\x1f\x8b\x08\x04\x00\x00\x00\x00\x00\xff\x06\x00\x42\x43\x02\x00"
@@ -259,7 +284,19 @@ _bgzf_eof = b"\x1f\x8b\x08\x04\x00\x00\x00\x00\x00\xff\x06\x00BC\x02\x00\x1b\x00
 _bytes_BC = b"BC"
 
 
-def open(filename, mode="rb"):
+# fmt: off
+@tp.overload
+def open(filename: _typeshed.StrPath, mode: _ReadingBinaryMode = "rb") -> BgzfReader[bytes]: ...
+@tp.overload
+def open(filename: _typeshed.StrPath, mode: _WritingAppendingBinaryMode) -> BgzfWriter[bytes]: ...
+@tp.overload
+def open(filename: _typeshed.StrPath, mode: _ReadingTextMode) -> BgzfReader[str]: ...
+@tp.overload
+def open(filename: _typeshed.StrPath, mode: _WritingAppendingTextMode) -> BgzfWriter[str]: ...
+# fmt: on
+def open(
+    filename: _typeshed.StrPath, mode: str = "rb"
+) -> BgzfReader[str] | BgzfWriter[str] | BgzfReader[bytes] | BgzfWriter[bytes]:
     r"""Open a BGZF file for reading, writing or appending.
 
     If text mode is requested, in order to avoid multi-byte characters, this is
@@ -269,15 +306,16 @@ def open(filename, mode="rb"):
     If your data is in UTF-8 or any other incompatible encoding, you must use
     binary mode, and decode the appropriate fragments yourself.
     """
-    if "r" in mode.lower():
-        return BgzfReader(filename, mode)
-    elif "w" in mode.lower() or "a" in mode.lower():
-        return BgzfWriter(filename, mode)
+    mode_lower = mode.lower()
+    if _is_read_mode(mode_lower):
+        return BgzfReader(filename, mode_lower)
+    elif _is_writing_appending_mode(mode_lower):
+        return BgzfWriter(filename, mode_lower)
     else:
         raise ValueError(f"Bad mode {mode!r}")
 
 
-def make_virtual_offset(block_start_offset, within_block_offset):
+def make_virtual_offset(block_start_offset: int, within_block_offset: int) -> int:
     """Compute a BGZF virtual offset from block start and within block offsets.
 
     The BAM indexing scheme records read positions using a 64 bit
@@ -332,7 +370,7 @@ def make_virtual_offset(block_start_offset, within_block_offset):
     return (block_start_offset << 16) | within_block_offset
 
 
-def split_virtual_offset(virtual_offset):
+def split_virtual_offset(virtual_offset: int) -> tuple[int, int]:
     """Divides a 64-bit BGZF virtual offset into block start & within block offsets.
 
     >>> (100000, 0) == split_virtual_offset(6553600000)
@@ -345,7 +383,7 @@ def split_virtual_offset(virtual_offset):
     return start, virtual_offset ^ (start << 16)
 
 
-def BgzfBlocks(handle):
+def BgzfBlocks(handle: io.BufferedReader) -> cx_abc.Iterator[tuple[int, int, int, int]]:
     """Low level debugging function to inspect BGZF blocks.
 
     Expects a BGZF compressed file opened in binary read mode using
@@ -429,7 +467,33 @@ def BgzfBlocks(handle):
         data_start += data_len
 
 
-def _load_bgzf_block(handle, text_mode=False):
+def _is_read_mode(mode: str, /) -> TypeGuard[_ReadingBinaryMode | _ReadingTextMode]:
+    """Gets whether a string represents a file-opening reading mode (PRIVATE)."""
+    return (mode in _reading_binary_modes) or (mode in _reading_text_modes)
+
+
+def _is_writing_appending_mode(
+    mode: str, /
+) -> TypeGuard[_WritingAppendingBinaryMode | _WritingAppendingTextMode]:
+    """
+    Gets whether a string represents a file-opening writing or appending mode (PRIVATE).
+    """
+    return (mode in _writing_appending_binary_modes) or (
+        mode in _writing_appending_text_modes
+    )
+
+
+# fmt: off
+@tp.overload
+def _load_bgzf_block(handle: tp.BinaryIO, text_mode: tp.Literal[False] = False) -> tuple[int, bytes]: ...
+@tp.overload
+def _load_bgzf_block(handle: tp.BinaryIO, text_mode: tp.Literal[True]) -> tuple[int, str]: ...
+@tp.overload
+def _load_bgzf_block(handle: tp.BinaryIO, text_mode: bool) -> tuple[int, bytes | str]: ...
+# fmt: on
+def _load_bgzf_block(
+    handle: tp.BinaryIO, text_mode: bool = False
+) -> tuple[int, bytes | str]:
     """Load the next BGZF block of compressed data (PRIVATE).
 
     Returns a tuple (block size and data), or at end of file
@@ -476,13 +540,13 @@ def _load_bgzf_block(handle, text_mode=False):
     if expected_size != len(data):
         raise RuntimeError("Decompressed to %i, not %i" % (len(data), expected_size))
     # Should cope with a mix of Python platforms...
-    crc = zlib.crc32(data)
-    if crc < 0:
-        crc = struct.pack("<i", crc)
+    checksum = zlib.crc32(data)
+    if checksum < 0:
+        crc = struct.pack("<i", checksum)
     else:
-        crc = struct.pack("<I", crc)
+        crc = struct.pack("<I", checksum)
     if expected_crc != crc:
-        raise RuntimeError(f"CRC is {crc}, not {expected_crc}")
+        raise RuntimeError(f"CRC is {crc!r}, not {expected_crc!r}")
     if text_mode:
         # Note ISO-8859-1 aka Latin-1 preserves first 256 chars
         # (i.e. ASCII), but critically is a single byte encoding
@@ -491,7 +555,7 @@ def _load_bgzf_block(handle, text_mode=False):
         return block_size, data
 
 
-class BgzfReader:
+class BgzfReader(tp.Generic[_BufferT]):
     r"""BGZF reader, acts like a read only handle but seek/tell differ.
 
     Let's use the BgzfBlocks function to have a peek at the BGZF blocks
@@ -556,7 +620,25 @@ class BgzfReader:
     pass, but is important for improving performance of random access.
     """
 
-    def __init__(self, filename=None, mode="r", fileobj=None, max_cache=100):
+    max_cache: int
+
+    # fmt: off
+    @tp.overload
+    def __init__(self: BgzfReader[str], filename: _typeshed.StrPath, mode: _ReadingTextMode = "r", *, max_cache: int = 100) -> None: ...
+    @tp.overload
+    def __init__(self: BgzfReader[str], *, mode: _ReadingTextMode = "r", fileobj: tp.BinaryIO, max_cache: int = 100) -> None: ...
+    @tp.overload
+    def __init__(self: BgzfReader[bytes], filename: _typeshed.StrPath, mode: _ReadingBinaryMode, *, max_cache: int = 100) -> None: ...
+    @tp.overload
+    def __init__(self: BgzfReader[bytes], *, mode: _ReadingBinaryMode, fileobj: tp.BinaryIO, max_cache: int = 100) -> None: ...
+    # fmt: on
+    def __init__(
+        self,
+        filename: _typeshed.StrPath | None = None,
+        mode: _ReadingTextMode | _ReadingBinaryMode = "r",
+        fileobj: tp.BinaryIO | None = None,
+        max_cache: int = 100,
+    ) -> None:
         r"""Initialize the class for reading a BGZF file.
 
         You would typically use the top level ``bgzf.open(...)`` function
@@ -593,30 +675,37 @@ class BgzfReader:
         if filename and fileobj:
             raise ValueError("Supply either filename or fileobj, not both")
         # Want to reject output modes like w, a, x, +
-        if mode.lower() not in ("r", "tr", "rt", "rb", "br"):
+        if not _is_read_mode(mode.lower()):
             raise ValueError(
                 "Must use a read mode like 'r' (default), 'rt', or 'rb' for binary"
             )
         # If an open file was passed, make sure it was opened in binary mode.
-        if fileobj:
+        if fileobj is not None:
             if fileobj.read(0) != b"":
                 raise ValueError("fileobj not opened in binary mode")
             handle = fileobj
         else:
+            assert filename is not None
             handle = _open(filename, "rb")
         self._text = "b" not in mode.lower()
+        self._empty_buffer: _BufferT
+        self._newline: _BufferT
         if self._text:
-            self._newline = "\n"
+            self._empty_buffer = ""  # type: ignore[assignment]
+            self._newline = "\n"  # type: ignore[assignment]
         else:
-            self._newline = b"\n"
+            self._empty_buffer = b""  # type: ignore[assignment]
+            self._newline = b"\n"  # type: ignore[assignment]
         self._handle = handle
         self.max_cache = max_cache
-        self._buffers = {}
-        self._block_start_offset = None
-        self._block_raw_length = None
+        self._buffers: dict[int, tuple[_BufferT, int]] = {}
+        # Is there a safe default for a non-`None` integer?
+        self._block_start_offset: int = None  # type: ignore[assignment]
+        self._block_raw_length: int
+        self._buffer: _BufferT
         self._load_block(handle.tell())
 
-    def _load_block(self, start_offset=None):
+    def _load_block(self, start_offset: int | None = None) -> None:
         if start_offset is None:
             # If the file is being read sequentially, then _handle.tell()
             # should be pointing at the start of the next block.
@@ -641,20 +730,17 @@ class BgzfReader:
             handle.seek(start_offset)
         self._block_start_offset = handle.tell()
         try:
-            block_size, self._buffer = _load_bgzf_block(handle, self._text)
+            block_size, self._buffer = _load_bgzf_block(handle, self._text)  # type: ignore[assignment]
         except StopIteration:
             # EOF
             block_size = 0
-            if self._text:
-                self._buffer = ""
-            else:
-                self._buffer = b""
+            self._buffer = self._empty_buffer
         self._within_block_offset = 0
         self._block_raw_length = block_size
         # Finally save the block in our cache,
         self._buffers[self._block_start_offset] = self._buffer, block_size
 
-    def tell(self):
+    def tell(self) -> int:
         """Return a 64-bit unsigned BGZF virtual offset."""
         if 0 < self._within_block_offset and self._within_block_offset == len(
             self._buffer
@@ -671,7 +757,7 @@ class BgzfReader:
             # TODO - Include bounds checking as in make_virtual_offset?
             return (self._block_start_offset << 16) | self._within_block_offset
 
-    def seek(self, virtual_offset):
+    def seek(self, virtual_offset: int) -> int:
         """Seek to a 64-bit unsigned BGZF virtual offset."""
         # Do this inline to avoid a function call,
         # start_offset, within_block = split_virtual_offset(virtual_offset)
@@ -697,12 +783,12 @@ class BgzfReader:
         #       self._within_block_offset)
         return virtual_offset
 
-    def read(self, size=-1):
+    def read(self, size: int = -1) -> _BufferT:
         """Read method for the BGZF module."""
         if size < 0:
             raise NotImplementedError("Don't be greedy, that could be massive!")
 
-        result = "" if self._text else b""
+        result = self._empty_buffer
         while size and self._block_raw_length:
             if self._within_block_offset + size <= len(self._buffer):
                 # This may leave us right at the end of a block
@@ -723,9 +809,9 @@ class BgzfReader:
 
         return result
 
-    def readline(self):
+    def readline(self) -> _BufferT:
         """Read a single line for the BGZF file."""
-        result = "" if self._text else b""
+        result = self._empty_buffer
         while self._block_raw_length:
             i = self._buffer.find(self._newline, self._within_block_offset)
             # Three cases to consider,
@@ -753,59 +839,76 @@ class BgzfReader:
 
         return result
 
-    def __next__(self):
+    def __next__(self) -> _BufferT:
         """Return the next line."""
         line = self.readline()
         if not line:
             raise StopIteration
         return line
 
-    def __iter__(self):
+    def __iter__(self: _Self) -> _Self:
         """Iterate over the lines in the BGZF file."""
         return self
 
-    def close(self):
+    def close(self) -> None:
         """Close BGZF file."""
         self._handle.close()
-        self._buffer = None
-        self._block_start_offset = None
-        self._buffers = None
+        del self._buffer
+        del self._block_start_offset
+        del self._buffers
 
-    def seekable(self):
+    def seekable(self) -> bool:
         """Return True indicating the BGZF supports random access."""
         return True
 
-    def isatty(self):
+    def isatty(self) -> bool:
         """Return True if connected to a TTY device."""
         return False
 
-    def fileno(self):
+    def fileno(self) -> int:
         """Return integer file descriptor."""
         return self._handle.fileno()
 
-    def __enter__(self):
+    def __enter__(self: _Self) -> _Self:
         """Open a file operable with WITH statement."""
         return self
 
-    def __exit__(self, type, value, traceback):
+    def __exit__(self, type: tp.Any, value: tp.Any, traceback: tp.Any) -> None:
         """Close a file with WITH statement."""
         self.close()
 
 
-class BgzfWriter:
+class BgzfWriter(tp.Generic[_BufferT]):
     """Define a BGZFWriter object."""
 
-    def __init__(self, filename=None, mode="w", fileobj=None, compresslevel=6):
+    # fmt: off
+    @tp.overload
+    def __init__(self: BgzfWriter[str], filename: _typeshed.StrPath, mode: _WritingAppendingTextMode = "w", *, compresslevel: int = 6) -> None: ...
+    @tp.overload
+    def __init__(self: BgzfWriter[str], *, mode: _WritingAppendingTextMode = "w", fileobj: tp.BinaryIO, compresslevel: int = 6) -> None: ...
+    @tp.overload
+    def __init__(self: BgzfWriter[bytes], filename: _typeshed.StrPath, mode: _WritingAppendingBinaryMode, *, compresslevel: int = 6) -> None: ...
+    @tp.overload
+    def __init__(self: BgzfWriter[bytes], *, mode: _WritingAppendingBinaryMode, fileobj: tp.BinaryIO, compresslevel: int = 6) -> None: ...
+    # fmt: on
+    def __init__(
+        self,
+        filename: _typeshed.StrPath | None = None,
+        mode: _WritingAppendingTextMode | _WritingAppendingBinaryMode = "w",
+        fileobj: tp.BinaryIO | None = None,
+        compresslevel: int = 6,
+    ) -> None:
         """Initilize the class."""
         if filename and fileobj:
             raise ValueError("Supply either filename or fileobj, not both")
         # If an open file was passed, make sure it was opened in binary mode.
-        if fileobj:
+        if fileobj is not None:
             if fileobj.read(0) != b"":
                 raise ValueError("fileobj not opened in binary mode")
             handle = fileobj
         else:
-            if "w" not in mode.lower() and "a" not in mode.lower():
+            assert filename is not None
+            if not _is_writing_appending_mode(mode.lower()):
                 raise ValueError(f"Must use write or append mode, not {mode!r}")
             if "a" in mode.lower():
                 handle = _open(filename, "ab")
@@ -816,7 +919,7 @@ class BgzfWriter:
         self._buffer = b""
         self.compresslevel = compresslevel
 
-    def _write_block(self, block):
+    def _write_block(self, block: bytes) -> None:
         """Write provided data to file as a single BGZF compressed block (PRIVATE)."""
         # print("Saving %i bytes" % len(block))
         if len(block) > 65536:
@@ -832,12 +935,6 @@ class BgzfWriter:
             raise RuntimeError(
                 "TODO - Didn't compress enough, try less data in this block"
             )
-        crc = zlib.crc32(block)
-        # Should cope with a mix of Python platforms...
-        if crc < 0:
-            crc = struct.pack("<i", crc)
-        else:
-            crc = struct.pack("<I", crc)
         bsize = struct.pack("<H", len(compressed) + 25)  # includes -1
         crc = struct.pack("<I", zlib.crc32(block) & 0xFFFFFFFF)
         uncompressed_length = struct.pack("<I", len(block))
@@ -852,7 +949,7 @@ class BgzfWriter:
         data = _bgzf_header + bsize + compressed + crc + uncompressed_length
         self._handle.write(data)
 
-    def write(self, data):
+    def write(self, data: str | bytes) -> None:
         """Write method for the class."""
         # TODO - Check bytes vs unicode
         if isinstance(data, str):
@@ -874,7 +971,7 @@ class BgzfWriter:
                 self._write_block(self._buffer[:65536])
                 self._buffer = self._buffer[65536:]
 
-    def flush(self):
+    def flush(self) -> None:
         """Flush data explicitally."""
         while len(self._buffer) >= 65536:
             self._write_block(self._buffer[:65535])
@@ -883,7 +980,7 @@ class BgzfWriter:
         self._buffer = b""
         self._handle.flush()
 
-    def close(self):
+    def close(self) -> None:
         """Flush data, write 28 bytes BGZF EOF marker, and close BGZF file.
 
         samtools will look for a magic EOF marker, just a 28 byte empty BGZF
@@ -897,28 +994,28 @@ class BgzfWriter:
         self._handle.flush()
         self._handle.close()
 
-    def tell(self):
+    def tell(self) -> int:
         """Return a BGZF 64-bit virtual offset."""
         return make_virtual_offset(self._handle.tell(), len(self._buffer))
 
-    def seekable(self):
+    def seekable(self) -> bool:
         """Return True indicating the BGZF supports random access."""
         # Not seekable, but we do support tell...
         return False
 
-    def isatty(self):
+    def isatty(self) -> bool:
         """Return True if connected to a TTY device."""
         return False
 
-    def fileno(self):
+    def fileno(self) -> int:
         """Return integer file descriptor."""
         return self._handle.fileno()
 
-    def __enter__(self):
+    def __enter__(self: _Self) -> _Self:
         """Open a file operable with WITH statement."""
         return self
 
-    def __exit__(self, type, value, traceback):
+    def __exit__(self, type: tp.Any, value: tp.Any, traceback: tp.Any, /) -> None:
         """Close a file with WITH statement."""
         self.close()
 
