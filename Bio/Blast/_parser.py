@@ -38,7 +38,6 @@ class DTDHandler:
         self.parser = parser
         self.start_methods = {}
         self.end_methods = {}
-        self._externalEntityRefHandler(None, None, "NCBI_BlastOutput.dtd", None)
         XMLHandler._dtd_methods = self.start_methods, self.end_methods
 
     def _elementDeclHandler(self, name, model):
@@ -70,13 +69,17 @@ class DTDHandler:
     def _externalEntityRefHandler(self, context, base, systemId, publicId):
         assert context is None
         assert base is None
+        self.parseFile(systemId)
+        return 1
+
+    def parseFile(self, filename):
+        """Parse a DTD file."""
         directory = Entrez.__path__[0]
-        path = os.path.join(directory, "DTDs", systemId)
+        path = os.path.join(directory, "DTDs", filename)
         parser = self.parser.ExternalEntityParserCreate(None)
         parser.ElementDeclHandler = self._elementDeclHandler
         with open(path, "rb") as stream:
             parser.ParseFile(stream)
-        return 1
 
 
 class SchemaHandler:
@@ -147,8 +150,6 @@ class SchemaHandler:
                     end_method += "_xml2"
                 self.start_methods[key] = getattr(XMLHandler, start_method)
                 self.end_methods[key] = getattr(XMLHandler, end_method)
-        else:
-            print("In SchemaHandler._startElementHandler for", name, attributes)
 
 
 class _HSP_cache:
@@ -180,6 +181,8 @@ class XMLHandler:
     """Handler for BLAST XML data."""
 
     schema_namespace = "http://www.w3.org/2001/XMLSchema-instance"
+    _schema_methods = None
+    _dtd_methods = None
 
     def __init__(self, parser):
         """Initialize the expat parser."""
@@ -188,34 +191,30 @@ class XMLHandler:
         self._parser = parser
 
     def _startNamespaceDeclHandler(self, prefix, uri):
-        print("In _startNamespaceDeclHandler for", prefix, uri)
         parser = self._parser
         if uri == XMLHandler.schema_namespace:
             # This is an xml schema
-            try:
-                self._start_methods, self._end_methods = XMLHandler._schema_methods
-            except AttributeError:
-                parser.StartElementHandler = self._start_blastxml2
+            parser.StartElementHandler = self._start_blastxml2
 
     def _endNamespaceDeclHandler(self, prefix):
         return
 
     def _start_blastxml2(self, name, attributes):
         """Process the XML schema (before processing the element)."""
-        print("In _start_blastxml2")
         key = "%s schemaLocation" % XMLHandler.schema_namespace
         assert name == "http://www.ncbi.nlm.nih.gov BlastXML2"
         domain, url = attributes[key].split()
         assert domain == "http://www.ncbi.nlm.nih.gov"
-        filename = os.path.basename(url)
-        directory = Entrez.__path__[0]
-        path = os.path.join(directory, "XSDs", filename)
-        stream = open(path, "rb")
-        parser = expat.ParserCreate(namespace_separator=" ")
-        handler = SchemaHandler(parser)
-        parser.StartElementHandler = handler._startElementHandler
-        with open(path, "rb") as stream:
-            parser.ParseFile(stream)
+        if XMLHandler._schema_methods is None:
+            filename = os.path.basename(url)
+            directory = Entrez.__path__[0]
+            path = os.path.join(directory, "XSDs", filename)
+            stream = open(path, "rb")
+            parser = expat.ParserCreate(namespace_separator=" ")
+            handler = SchemaHandler(parser)
+            parser.StartElementHandler = handler._startElementHandler
+            with open(path, "rb") as stream:
+                parser.ParseFile(stream)
         self._start_methods, self._end_methods = XMLHandler._schema_methods
         parser = self._parser
         parser.StartElementHandler = self._startElementHandler
@@ -1083,7 +1082,6 @@ class XMLHandler:
         return
 
     def _xmlDeclHandler(self, version, encoding, standalone):
-        print("In _xmlDeclHandler")
         parser = self._parser
         parser.ExternalEntityRefHandler = self._externalEntityRefHandler
         parser.StartNamespaceDeclHandler = self._startNamespaceDeclHandler
@@ -1096,7 +1094,6 @@ class XMLHandler:
 
     def _externalEntityRefHandler(self, context, base, systemId, publicId):
         """Handle the DTD declaration."""
-        print("In _externalEntityRefhandler")
         assert context is None
         assert base is None
         if systemId not in (
@@ -1105,8 +1102,10 @@ class XMLHandler:
         ):
             raise ValueError("output from legacy BLAST program")
         assert publicId == "-//NCBI//NCBI BlastOutput/EN"
-        handler = DTDHandler()
-        self._parser.ExternalEntityRefHandler = None
+        if XMLHandler._dtd_methods is None:
+            handler = DTDHandler()
+            handler.parseFile("NCBI_BlastOutput.dtd")
+            self._parser.ExternalEntityRefHandler = None
         self._start_methods, self._end_methods = XMLHandler._dtd_methods
         return 1
 
