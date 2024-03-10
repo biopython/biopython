@@ -109,10 +109,10 @@ class SchemaHandler:
             filename = attributes["schemaLocation"]
             directory = Entrez.__path__[0]
             path = os.path.join(directory, "XSDs", filename)
-            stream = open(path, "rb")
             parser = expat.ParserCreate(namespace_separator=" ")
             parser.StartElementHandler = self._startElementHandler
-            parser.ParseFile(stream)
+            with open(path, "rb") as stream:
+                parser.ParseFile(stream)
         elif name == "http://www.w3.org/2001/XMLSchema element":
             tag = attributes.get("name")
             if tag is None:
@@ -120,7 +120,7 @@ class SchemaHandler:
             key = f"{namespace} {tag}"
             if tag == "BlastOutput2":
                 self.start_methods[key] = XMLHandler._start_blastoutput
-                self.end_methods[key] = XMLHandler._end_blastoutput
+                self.end_methods[key] = XMLHandler._end_blastoutput_xml2
             elif tag in (
                 "error",
                 "Err",
@@ -560,8 +560,11 @@ class XMLHandler:
         del self._records
         del self._parser
 
+    def _end_blastoutput_xml2(self, name):
+        assert self._characters.strip() == ""
+
     def _end_blastxml2(self, name):
-        return
+        self._end_blastoutput(name)
 
     def _end_program(self, name):
         program = self._characters
