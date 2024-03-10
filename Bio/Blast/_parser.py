@@ -117,6 +117,7 @@ class SchemaHandler:
             key = f"{namespace} {tag}"
             if tag == "BlastOutput2":
                 self.start_methods[key] = XMLHandler._start_blastoutput
+                self.end_methods[key] = XMLHandler._end_blastoutput
             elif tag in (
                 "error",
                 "Err",
@@ -142,6 +143,8 @@ class SchemaHandler:
                 method_name = tag.lower().replace("-", "_")
                 start_method = "_start_" + method_name
                 end_method = "_end_" + method_name
+                if tag == "eff-space":
+                    end_method += "_xml2"
                 self.start_methods[key] = getattr(XMLHandler, start_method)
                 self.end_methods[key] = getattr(XMLHandler, end_method)
         else:
@@ -176,6 +179,8 @@ class _HSP_cache:
 class XMLHandler:
     """Handler for BLAST XML data."""
 
+    schema_namespace = "http://www.w3.org/2001/XMLSchema-instance"
+
     def __init__(self, parser):
         """Initialize the expat parser."""
         parser.XmlDeclHandler = self._xmlDeclHandler
@@ -185,12 +190,11 @@ class XMLHandler:
     def _startNamespaceDeclHandler(self, prefix, uri):
         print("In _startNamespaceDeclHandler for", prefix, uri)
         parser = self._parser
-        if uri == "http://www.w3.org/2001/XMLSchema-instance":
+        if uri == XMLHandler.schema_namespace:
             # This is an xml schema
             try:
                 self._start_methods, self._end_methods = XMLHandler._schema_methods
             except AttributeError:
-                self.schema_namespace = uri
                 parser.StartElementHandler = self._start_blastxml2
 
     def _endNamespaceDeclHandler(self, prefix):
@@ -199,7 +203,7 @@ class XMLHandler:
     def _start_blastxml2(self, name, attributes):
         """Process the XML schema (before processing the element)."""
         print("In _start_blastxml2")
-        key = "%s schemaLocation" % self.schema_namespace
+        key = "%s schemaLocation" % XMLHandler.schema_namespace
         assert name == "http://www.ncbi.nlm.nih.gov BlastXML2"
         domain, url = attributes[key].split()
         assert domain == "http://www.ncbi.nlm.nih.gov"
@@ -372,7 +376,7 @@ class XMLHandler:
         self._characters = ""
 
     def _start_description(self, name, attributes):
-        return
+        self._alignments.targets = []
 
     def _start_hitdescr(self, name, attributes):
         return
@@ -719,10 +723,10 @@ class XMLHandler:
         self._record.append(hit)
 
     def _end_description(self, name):
-        return
+        self._alignments.target = self._alignments.targets[0]
 
     def _end_hitdescr(self, name):
-        return
+        self._alignments.targets.append(self._alignments.target)
 
     def _end_id(self, name):
         hit_id = self._characters
@@ -751,7 +755,17 @@ class XMLHandler:
 
     def _end_len(self, name):
         length = int(self._characters)
-        self._alignments.target.seq = Seq(None, length=length)
+        seq = Seq(None, length=length)
+        alignments = self._alignments
+        try:
+            targets = alignments.targets
+        except AttributeError:
+            # XML
+            alignments.target.seq = seq
+        else:
+            # XML2
+            for target in alignments.targets:
+                target.seq = seq
         self._characters = ""
 
     def _end_hsps(self, name):
@@ -890,6 +904,7 @@ class XMLHandler:
         self._characters = ""
         hsp = self._hsp
         del self._hsp
+        program = self._program
         align_len = hsp.align_len
         query = self._record.query
         if query is None:
@@ -908,7 +923,7 @@ class XMLHandler:
         query = SeqRecord(None, query_id, description=query_description)
         query_start = hsp.query_from - 1
         query_end = hsp.query_to
-        if self._program in ("blastx", "tblastx"):
+        if program in ("blastx", "tblastx"):
             assert query_end - query_start == 3 * len(query_seq_data)
             location = SimpleLocation(0, len(query_seq_data))
             coded_by = f"{query_id}:{hsp.query_from}..{hsp.query_to}"
@@ -925,7 +940,7 @@ class XMLHandler:
             coordinates[1, :] += query_start
             assert query_end - query_start == len(query_seq_data)
             query_seq_data = {query_start: query_seq_data}
-            if self._program == "blastn":
+            if program == "blastn":
                 try:
                     query_strand = hsp.query_strand
                 except AttributeError:
@@ -942,7 +957,7 @@ class XMLHandler:
         target_length = len(target.seq)
         target_seq_data = target_seq_aligned.replace("-", "")
         target = SeqRecord(None, target_id, target_name, description=target_description)
-        if self._program in ("blastn", "megablast"):
+        if program in ("blastn", "megablast"):
             try:
                 target_strand = hsp.hit_strand
             except AttributeError:
@@ -963,13 +978,13 @@ class XMLHandler:
                 coordinates[0, :] = target_end - coordinates[0, :]
             assert target_end - target_start == len(target_seq_data)
             target_seq_data = {target_start: target_seq_data}
-        elif self._program in ("blastp", "blastx", "rpsblast"):
+        elif program in ("blastp", "blastx", "rpsblast"):
             target_start = hsp.hit_from - 1
             target_end = hsp.hit_to
             coordinates[0, :] += target_start
             assert target_end - target_start == len(target_seq_data)
             target_seq_data = {target_start: target_seq_data}
-        elif self._program in ("tblastn", "tblastx"):
+        elif program in ("tblastn", "tblastx"):
             target_start = hsp.hit_from - 1
             target_end = hsp.hit_to
             assert target_end - target_start == 3 * len(target_seq_data)
@@ -985,7 +1000,7 @@ class XMLHandler:
             feature = SeqFeature(location, type="CDS", qualifiers=qualifiers)
             target.features.append(feature)
         else:
-            raise RuntimeError("Unexpected program name '%s'" % self._program)
+            raise RuntimeError("Unexpected program name '%s'" % program)
         target.seq = Seq(target_seq_data, target_length)
         sequences = [target, query]
         alignment = HSP(sequences, coordinates)
@@ -995,10 +1010,15 @@ class XMLHandler:
         annotations["bit score"] = hsp.bit_score
         annotations["evalue"] = hsp.evalue
         annotations["identity"] = hsp.identity
-        annotations["positive"] = hsp.positive
+        try:
+            annotations["positive"] = hsp.positive
+        except AttributeError:
+            # missing in blastn for XML1
+            pass
         try:
             annotations["gaps"] = hsp.gaps
-        except AttributeError:  # missing in megablast
+        except AttributeError:
+            # missing in legacy megablast
             pass
         annotations["midline"] = hsp.midline
         alignment.annotations = annotations
@@ -1032,6 +1052,10 @@ class XMLHandler:
 
     def _end_eff_space(self, name):
         self._stat["eff-space"] = float(self._characters)
+        self._characters = ""
+
+    def _end_eff_space_xml2(self, name):
+        self._stat["eff-space"] = int(self._characters)
         self._characters = ""
 
     def _end_kappa(self, name):

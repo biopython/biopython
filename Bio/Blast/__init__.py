@@ -159,14 +159,15 @@ class HSP(Alignment):
             identity_percentage,
         )
         terms.append(identity_text)
-        positive = self.annotations["positive"]
-        positive_percentage = round(100.0 * positive / aln_span)
-        positive_text = "Positives:%d/%d(%d%%)" % (
-            positive,
-            aln_span,
-            positive_percentage,
-        )
-        terms.append(positive_text)
+        positive = self.annotations.get("positive")
+        if positive is not None:
+            positive_percentage = round(100.0 * positive / aln_span)
+            positive_text = "Positives:%d/%d(%d%%)" % (
+                positive,
+                aln_span,
+                positive_percentage,
+            )
+            terms.append(positive_text)
         try:
             gaps = self.annotations["gaps"]
         except KeyError:

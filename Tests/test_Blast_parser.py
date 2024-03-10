@@ -2040,12 +2040,13 @@ Program: BLASTN 2.9.0+
         self.assertEqual(
             records.db, "GPIPE/10090/current/all_top_level GPIPE/10090/current/rna"
         )
-        self.assertIsInstance(records.query, SeqRecord)
-        self.assertEqual(records.query.id, "G26684.1")
-        self.assertEqual(
-            records.query.description, "human STS STS_D11570, sequence tagged site"
-        )
-        self.assertEqual(repr(records.query.seq), "Seq(None, length=285)")
+        if xml2 is False:
+            self.assertIsInstance(records.query, SeqRecord)
+            self.assertEqual(records.query.id, "G26684.1")
+            self.assertEqual(
+                records.query.description, "human STS STS_D11570, sequence tagged site"
+            )
+            self.assertEqual(repr(records.query.seq), "Seq(None, length=285)")
         self.assertEqual(len(records.param), 6)
         self.assertAlmostEqual(records.param["expect"], 10.0)
         self.assertEqual(records.param["sc-match"], 2)
@@ -2058,7 +2059,8 @@ Program: BLASTN 2.9.0+
         self.check_xml_2900_blastn_001_record(record, xml2=xml2)
 
     def check_xml_2900_blastn_001_record(self, record, xml2=False):
-        self.assertEqual(record.num, 1)
+        if xml2 is False:
+            self.assertEqual(record.num, 1)
         self.assertIsInstance(record.query, SeqRecord)
         self.assertEqual(record.query.id, "G26684.1")
         self.assertEqual(
@@ -2069,8 +2071,12 @@ Program: BLASTN 2.9.0+
         self.assertEqual(len(record.stat), 7)
         self.assertEqual(record.stat["db-num"], 107382)
         self.assertEqual(record.stat["db-len"], 3164670549)
-        self.assertEqual(record.stat["hsp-len"], 0)
-        self.assertAlmostEqual(record.stat["eff-space"], 0.0)
+        if xml2 is True:
+            self.assertEqual(record.stat["hsp-len"], 31)
+            self.assertEqual(record.stat["eff-space"], 802980793578)
+        else:
+            self.assertEqual(record.stat["hsp-len"], 0)
+            self.assertAlmostEqual(record.stat["eff-space"], 0.0)
         self.assertAlmostEqual(record.stat["kappa"], 0.41)
         self.assertAlmostEqual(record.stat["lambda"], 0.625)
         self.assertAlmostEqual(record.stat["entropy"], 0.78)
@@ -2095,7 +2101,8 @@ Program: BLASTN 2.9.0+
         self.assertAlmostEqual(hsp.annotations["bit score"], 40.9604)
         self.assertAlmostEqual(hsp.annotations["evalue"], 0.375311)
         self.assertEqual(hsp.annotations["identity"], 30)
-        self.assertEqual(hsp.annotations["positive"], 30)
+        if xml2 is False:
+            self.assertEqual(hsp.annotations["positive"], 30)
         self.assertEqual(hsp.annotations["gaps"], 1)
         self.assertTrue(
             np.array_equal(
@@ -2133,9 +2140,28 @@ Program: BLASTN 2.9.0+
         self.assertEqual(
             hsp.annotations["midline"], "|||||||||||||| || |||||| || ||||||"
         )
-        self.assertEqual(
-            str(hsp),
-            """\
+        if xml2 is True:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : G26684.1 Length: 285 Strand: Plus
+        human STS STS_D11570, sequence tagged site
+Target: gi|372099107|ref|NC_000069.6| Length: 160039680 Strand: Minus
+        Mus musculus strain C57BL/6J chromosome 3, GRCm38.p4 C57BL/6J
+
+Score:40 bits(44), Expect:0.4,
+Identities:30/34(88%),  Gaps:1.34(3%)
+
+gi|372099 101449177 GAATCCTAGAGGCTGGACTGGCCCTGGCCTGCTG 101449143
+                  0 ||||||||||||||.||.||||||.||-||||||        34
+G26684.1        133 GAATCCTAGAGGCTTGATTGGCCCAGG-CTGCTG       166
+
+""",
+            )
+        else:
+            self.assertEqual(
+                str(hsp),
+                """\
 Query : G26684.1 Length: 285 Strand: Plus
         human STS STS_D11570, sequence tagged site
 Target: gi|372099107|ref|NC_000069.6| Length: 160039680 Strand: Minus
@@ -2149,7 +2175,7 @@ gi|372099 101449177 GAATCCTAGAGGCTGGACTGGCCCTGGCCTGCTG 101449143
 G26684.1        133 GAATCCTAGAGGCTTGATTGGCCCAGG-CTGCTG       166
 
 """,
-        )
+            )
         hit = record[1]
         self.assertEqual(hit.num, 2)
         self.assertIsInstance(hit.target, SeqRecord)
@@ -2170,7 +2196,8 @@ G26684.1        133 GAATCCTAGAGGCTTGATTGGCCCAGG-CTGCTG       166
         self.assertAlmostEqual(hsp.annotations["bit score"], 40.9604)
         self.assertAlmostEqual(hsp.annotations["evalue"], 0.375311)
         self.assertEqual(hsp.annotations["identity"], 26)
-        self.assertEqual(hsp.annotations["positive"], 26)
+        if xml2 is False:
+            self.assertEqual(hsp.annotations["positive"], 26)
         self.assertEqual(hsp.annotations["gaps"], 0)
         self.assertTrue(
             np.array_equal(
@@ -2203,9 +2230,28 @@ G26684.1        133 GAATCCTAGAGGCTTGATTGGCCCAGG-CTGCTG       166
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(hsp.annotations["midline"], "|||||||||  ||||||||||||||| ||")
-        self.assertEqual(
-            str(hsp),
-            """\
+        if xml2 is True:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : G26684.1 Length: 285 Strand: Plus
+        human STS STS_D11570, sequence tagged site
+Target: gi|372099103|ref|NC_000073.6| Length: 145441459 Strand: Minus
+        Mus musculus strain C57BL/6J chromosome 7, GRCm38.p4 C57BL/6J
+
+Score:40 bits(44), Expect:0.4,
+Identities:26/29(90%),  Gaps:0.29(0%)
+
+gi|372099 131772185 GAAAGGAAAAAAAAATGGAAAGTTCTGGT 131772156
+                  0 |||||||||..|||||||||||||||.||        29
+G26684.1        204 GAAAGGAAATNAAAATGGAAAGTTCTTGT       233
+
+""",
+            )
+        else:
+            self.assertEqual(
+                str(hsp),
+                """\
 Query : G26684.1 Length: 285 Strand: Plus
         human STS STS_D11570, sequence tagged site
 Target: gi|372099103|ref|NC_000073.6| Length: 145441459 Strand: Minus
@@ -2219,7 +2265,7 @@ gi|372099 131772185 GAAAGGAAAAAAAAATGGAAAGTTCTGGT 131772156
 G26684.1        204 GAAAGGAAATNAAAATGGAAAGTTCTTGT       233
 
 """,
-        )
+            )
         hit = record[2]
         self.assertEqual(hit.num, 3)
         self.assertIsInstance(hit.target, SeqRecord)
@@ -2240,7 +2286,8 @@ G26684.1        204 GAAAGGAAATNAAAATGGAAAGTTCTTGT       233
         self.assertAlmostEqual(hsp.annotations["bit score"], 40.0587)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.30996)
         self.assertEqual(hsp.annotations["identity"], 23)
-        self.assertEqual(hsp.annotations["positive"], 23)
+        if xml2 is False:
+            self.assertEqual(hsp.annotations["positive"], 23)
         self.assertEqual(hsp.annotations["gaps"], 0)
         self.assertTrue(
             np.array_equal(
@@ -2272,9 +2319,28 @@ G26684.1        204 GAAAGGAAATNAAAATGGAAAGTTCTTGT       233
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(hsp.annotations["midline"], "|||||||||||||||| |||||||")
-        self.assertEqual(
-            str(hsp),
-            """\
+        if xml2 is True:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : G26684.1 Length: 285 Strand: Plus
+        human STS STS_D11570, sequence tagged site
+Target: gi|372099106|ref|NC_000070.6| Length: 156508116 Strand: Minus
+        Mus musculus strain C57BL/6J chromosome 4, GRCm38.p4 C57BL/6J
+
+Score:40 bits(43), Expect:1,
+Identities:23/24(96%),  Gaps:0.24(0%)
+
+gi|372099   9607562 CCAACACAGGCCAGCGGCTTCTGG 9607538
+                  0 ||||||||||||||||.|||||||      24
+G26684.1         61 CCAACACAGGCCAGCGACTTCTGG      85
+
+""",
+            )
+        else:
+            self.assertEqual(
+                str(hsp),
+                """\
 Query : G26684.1 Length: 285 Strand: Plus
         human STS STS_D11570, sequence tagged site
 Target: gi|372099106|ref|NC_000070.6| Length: 156508116 Strand: Minus
@@ -2288,14 +2354,15 @@ gi|372099   9607562 CCAACACAGGCCAGCGGCTTCTGG 9607538
 G26684.1         61 CCAACACAGGCCAGCGACTTCTGG      85
 
 """,
-        )
+            )
         hsp = hit[1]
         self.assertEqual(hsp.num, 2)
         self.assertAlmostEqual(hsp.score, 40.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
         self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
         self.assertEqual(hsp.annotations["identity"], 28)
-        self.assertEqual(hsp.annotations["positive"], 28)
+        if xml2 is False:
+            self.assertEqual(hsp.annotations["positive"], 28)
         self.assertEqual(hsp.annotations["gaps"], 1)
         self.assertTrue(
             np.array_equal(
@@ -2328,9 +2395,28 @@ G26684.1         61 CCAACACAGGCCAGCGACTTCTGG      85
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(hsp.annotations["midline"], "||||| ||||  ||| ||||||||||||||||")
-        self.assertEqual(
-            str(hsp),
-            """\
+        if xml2 is True:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : G26684.1 Length: 285 Strand: Plus
+        human STS STS_D11570, sequence tagged site
+Target: gi|372099106|ref|NC_000070.6| Length: 156508116 Strand: Plus
+        Mus musculus strain C57BL/6J chromosome 4, GRCm38.p4 C57BL/6J
+
+Score:37 bits(40), Expect:5,
+Identities:28/32(88%),  Gaps:1.32(3%)
+
+gi|372099 142902531 GCCTGGCATGAAGTAACTGCTCAATAAATGCT 142902563
+                  0 |||||.||||.-|||.||||||||||||||||        32
+G26684.1        241 GCCTGACATGG-GTAGCTGCTCAATAAATGCT       272
+
+""",
+            )
+        else:
+            self.assertEqual(
+                str(hsp),
+                """\
 Query : G26684.1 Length: 285 Strand: Plus
         human STS STS_D11570, sequence tagged site
 Target: gi|372099106|ref|NC_000070.6| Length: 156508116 Strand: Plus
@@ -2344,7 +2430,7 @@ gi|372099 142902531 GCCTGGCATGAAGTAACTGCTCAATAAATGCT 142902563
 G26684.1        241 GCCTGACATGG-GTAGCTGCTCAATAAATGCT       272
 
 """,
-        )
+            )
         hit = record[3]
         self.assertEqual(hit.num, 4)
         self.assertIsInstance(hit.target, SeqRecord)
@@ -2365,7 +2451,8 @@ G26684.1        241 GCCTGACATGG-GTAGCTGCTCAATAAATGCT       272
         self.assertAlmostEqual(hsp.annotations["bit score"], 39.157)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.30996)
         self.assertEqual(hsp.annotations["identity"], 27)
-        self.assertEqual(hsp.annotations["positive"], 27)
+        if xml2 is False:
+            self.assertEqual(hsp.annotations["positive"], 27)
         self.assertEqual(hsp.annotations["gaps"], 0)
         self.assertTrue(
             np.array_equal(
@@ -2398,9 +2485,28 @@ G26684.1        241 GCCTGACATGG-GTAGCTGCTCAATAAATGCT       272
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(hsp.annotations["midline"], "||| |||| |||| |||| ||||||||||||")
-        self.assertEqual(
-            str(hsp),
-            """\
+        if xml2 is True:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : G26684.1 Length: 285 Strand: Plus
+        human STS STS_D11570, sequence tagged site
+Target: gi|372099108|ref|NC_000068.7| Length: 182113224 Strand: Plus
+        Mus musculus strain C57BL/6J chromosome 2, GRCm38.p4 C57BL/6J
+
+Score:39 bits(42), Expect:1,
+Identities:27/31(87%),  Gaps:0.31(0%)
+
+gi|372099   3799646 AAGTCCTGGCATGAGTAGTTGCTCAATAAAT 3799677
+                  0 |||.||||.||||.||||.||||||||||||      31
+G26684.1        238 AAGGCCTGACATGGGTAGCTGCTCAATAAAT     269
+
+""",
+            )
+        else:
+            self.assertEqual(
+                str(hsp),
+                """\
 Query : G26684.1 Length: 285 Strand: Plus
         human STS STS_D11570, sequence tagged site
 Target: gi|372099108|ref|NC_000068.7| Length: 182113224 Strand: Plus
@@ -2414,14 +2520,15 @@ gi|372099   3799646 AAGTCCTGGCATGAGTAGTTGCTCAATAAAT 3799677
 G26684.1        238 AAGGCCTGACATGGGTAGCTGCTCAATAAAT     269
 
 """,
-        )
+            )
         hsp = hit[1]
         self.assertEqual(hsp.num, 2)
         self.assertAlmostEqual(hsp.score, 41.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 38.2554)
         self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
         self.assertEqual(hsp.annotations["identity"], 23)
-        self.assertEqual(hsp.annotations["positive"], 23)
+        if xml2 is False:
+            self.assertEqual(hsp.annotations["positive"], 23)
         self.assertEqual(hsp.annotations["gaps"], 0)
         self.assertTrue(
             np.array_equal(
@@ -2453,9 +2560,28 @@ G26684.1        238 AAGGCCTGACATGGGTAGCTGCTCAATAAAT     269
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(hsp.annotations["midline"], "|||| |||||||||||||||| |||")
-        self.assertEqual(
-            str(hsp),
-            """\
+        if xml2 is True:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : G26684.1 Length: 285 Strand: Plus
+        human STS STS_D11570, sequence tagged site
+Target: gi|372099108|ref|NC_000068.7| Length: 182113224 Strand: Plus
+        Mus musculus strain C57BL/6J chromosome 2, GRCm38.p4 C57BL/6J
+
+Score:38 bits(41), Expect:5,
+Identities:23/25(92%),  Gaps:0.25(0%)
+
+gi|372099  70278959 AAATGAAAATGGAAAGTTCTTATAG 70278984
+                  0 ||||.||||||||||||||||.|||       25
+G26684.1        210 AAATNAAAATGGAAAGTTCTTGTAG      235
+
+""",
+            )
+        else:
+            self.assertEqual(
+                str(hsp),
+                """\
 Query : G26684.1 Length: 285 Strand: Plus
         human STS STS_D11570, sequence tagged site
 Target: gi|372099108|ref|NC_000068.7| Length: 182113224 Strand: Plus
@@ -2469,7 +2595,7 @@ gi|372099  70278959 AAATGAAAATGGAAAGTTCTTATAG 70278984
 G26684.1        210 AAATNAAAATGGAAAGTTCTTGTAG      235
 
 """,
-        )
+            )
         hit = record[4]
         self.assertEqual(hit.num, 5)
         self.assertIsInstance(hit.target, SeqRecord)
@@ -2490,7 +2616,8 @@ G26684.1        210 AAATNAAAATGGAAAGTTCTTGTAG      235
         self.assertAlmostEqual(hsp.annotations["bit score"], 39.157)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.30996)
         self.assertEqual(hsp.annotations["identity"], 25)
-        self.assertEqual(hsp.annotations["positive"], 25)
+        if xml2 is False:
+            self.assertEqual(hsp.annotations["positive"], 25)
         self.assertEqual(hsp.annotations["gaps"], 0)
         self.assertTrue(
             np.array_equal(
@@ -2523,9 +2650,28 @@ G26684.1        210 AAATNAAAATGGAAAGTTCTTGTAG      235
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(hsp.annotations["midline"], "||||| || |||||||||||||||| ||")
-        self.assertEqual(
-            str(hsp),
-            """\
+        if xml2 is True:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : G26684.1 Length: 285 Strand: Plus
+        human STS STS_D11570, sequence tagged site
+Target: gi|372099097|ref|NC_000079.6| Length: 120421639 Strand: Minus
+        Mus musculus strain C57BL/6J chromosome 13, GRCm38.p4 C57BL/6J
+
+Score:39 bits(42), Expect:1,
+Identities:25/28(89%),  Gaps:0.28(0%)
+
+gi|372099  26806584 AAGGACATCAAAATGGAAAGTTCTTCTA 26806556
+                  0 |||||.||.||||||||||||||||.||       28
+G26684.1        206 AAGGAAATNAAAATGGAAAGTTCTTGTA      234
+
+""",
+            )
+        else:
+            self.assertEqual(
+                str(hsp),
+                """\
 Query : G26684.1 Length: 285 Strand: Plus
         human STS STS_D11570, sequence tagged site
 Target: gi|372099097|ref|NC_000079.6| Length: 120421639 Strand: Minus
@@ -2539,14 +2685,15 @@ gi|372099  26806584 AAGGACATCAAAATGGAAAGTTCTTCTA 26806556
 G26684.1        206 AAGGAAATNAAAATGGAAAGTTCTTGTA      234
 
 """,
-        )
+            )
         hsp = hit[1]
         self.assertEqual(hsp.num, 2)
         self.assertAlmostEqual(hsp.score, 40.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
         self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
         self.assertEqual(hsp.annotations["identity"], 32)
-        self.assertEqual(hsp.annotations["positive"], 32)
+        if xml2 is False:
+            self.assertEqual(hsp.annotations["positive"], 32)
         self.assertEqual(hsp.annotations["gaps"], 0)
         self.assertTrue(
             np.array_equal(
@@ -2581,9 +2728,28 @@ G26684.1        206 AAGGAAATNAAAATGGAAAGTTCTTGTA      234
         self.assertEqual(
             hsp.annotations["midline"], "||||||||||||||||| || |  || ||| | ||| |||"
         )
-        self.assertEqual(
-            str(hsp),
-            """\
+        if xml2 is True:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : G26684.1 Length: 285 Strand: Plus
+        human STS STS_D11570, sequence tagged site
+Target: gi|372099097|ref|NC_000079.6| Length: 120421639 Strand: Minus
+        Mus musculus strain C57BL/6J chromosome 13, GRCm38.p4 C57BL/6J
+
+Score:37 bits(40), Expect:5,
+Identities:32/40(80%),  Gaps:0.40(0%)
+
+gi|372099  56840340 AGCGCAAGGCCTGACATAGGAAAATGTTCAGTGAATACTA 56840300
+                  0 |||||||||||||||||.||.|..||.|||.|.|||.|||       40
+G26684.1        233 AGCGCAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTA      273
+
+""",
+            )
+        else:
+            self.assertEqual(
+                str(hsp),
+                """\
 Query : G26684.1 Length: 285 Strand: Plus
         human STS STS_D11570, sequence tagged site
 Target: gi|372099097|ref|NC_000079.6| Length: 120421639 Strand: Minus
@@ -2597,7 +2763,7 @@ gi|372099  56840340 AGCGCAAGGCCTGACATAGGAAAATGTTCAGTGAATACTA 56840300
 G26684.1        233 AGCGCAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTA      273
 
 """,
-        )
+            )
         hit = record[5]
         self.assertEqual(hit.num, 6)
         self.assertIsInstance(hit.target, SeqRecord)
@@ -2618,7 +2784,8 @@ G26684.1        233 AGCGCAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTA      273
         self.assertAlmostEqual(hsp.annotations["bit score"], 38.2554)
         self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
         self.assertEqual(hsp.annotations["identity"], 22)
-        self.assertEqual(hsp.annotations["positive"], 22)
+        if xml2 is False:
+            self.assertEqual(hsp.annotations["positive"], 22)
         self.assertEqual(hsp.annotations["gaps"], 0)
         self.assertTrue(
             np.array_equal(
@@ -2650,9 +2817,28 @@ G26684.1        233 AGCGCAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTA      273
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(hsp.annotations["midline"], "|||||||||||||||| ||||||")
-        self.assertEqual(
-            str(hsp),
-            """\
+        if xml2 is True:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : G26684.1 Length: 285 Strand: Plus
+        human STS STS_D11570, sequence tagged site
+Target: gi|372099098|ref|NC_000078.6| Length: 120129022 Strand: Plus
+        Mus musculus strain C57BL/6J chromosome 12, GRCm38.p4 C57BL/6J
+
+Score:38 bits(41), Expect:5,
+Identities:22/23(96%),  Gaps:0.23(0%)
+
+gi|372099 113030662 CATCCATTCACACCCAGCACAGG 113030685
+                  0 ||||||||||||||||.||||||        23
+G26684.1         48 CATCCATTCACACCCAACACAGG        71
+
+""",
+            )
+        else:
+            self.assertEqual(
+                str(hsp),
+                """\
 Query : G26684.1 Length: 285 Strand: Plus
         human STS STS_D11570, sequence tagged site
 Target: gi|372099098|ref|NC_000078.6| Length: 120129022 Strand: Plus
@@ -2666,14 +2852,15 @@ gi|372099 113030662 CATCCATTCACACCCAGCACAGG 113030685
 G26684.1         48 CATCCATTCACACCCAACACAGG        71
 
 """,
-        )
+            )
         hsp = hit[1]
         self.assertEqual(hsp.num, 2)
         self.assertAlmostEqual(hsp.score, 40.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
         self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
         self.assertEqual(hsp.annotations["identity"], 28)
-        self.assertEqual(hsp.annotations["positive"], 28)
+        if xml2 is False:
+            self.assertEqual(hsp.annotations["positive"], 28)
         self.assertEqual(hsp.annotations["gaps"], 1)
         self.assertTrue(
             np.array_equal(
@@ -2706,9 +2893,28 @@ G26684.1         48 CATCCATTCACACCCAACACAGG        71
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(hsp.annotations["midline"], "|||||| | ||||||||||||||| |||| ||")
-        self.assertEqual(
-            str(hsp),
-            """\
+        if xml2 is True:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : G26684.1 Length: 285 Strand: Plus
+        human STS STS_D11570, sequence tagged site
+Target: gi|372099098|ref|NC_000078.6| Length: 120129022 Strand: Minus
+        Mus musculus strain C57BL/6J chromosome 12, GRCm38.p4 C57BL/6J
+
+Score:37 bits(40), Expect:5,
+Identities:28/32(88%),  Gaps:1.32(3%)
+
+gi|372099 108990272 TGTAGCTCTAGGCCTGACATGGGT-GCTGGTC 108990241
+                  0 ||||||.|.|||||||||||||||-||||.||        32
+G26684.1        230 TGTAGCGCAAGGCCTGACATGGGTAGCTGCTC       262
+
+""",
+            )
+        else:
+            self.assertEqual(
+                str(hsp),
+                """\
 Query : G26684.1 Length: 285 Strand: Plus
         human STS STS_D11570, sequence tagged site
 Target: gi|372099098|ref|NC_000078.6| Length: 120129022 Strand: Minus
@@ -2722,7 +2928,7 @@ gi|372099 108990272 TGTAGCTCTAGGCCTGACATGGGT-GCTGGTC 108990241
 G26684.1        230 TGTAGCGCAAGGCCTGACATGGGTAGCTGCTC       262
 
 """,
-        )
+            )
         hit = record[6]
         self.assertEqual(hit.num, 7)
         self.assertIsInstance(hit.target, SeqRecord)
@@ -2743,7 +2949,8 @@ G26684.1        230 TGTAGCGCAAGGCCTGACATGGGTAGCTGCTC       262
         self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
         self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
         self.assertEqual(hsp.annotations["identity"], 35)
-        self.assertEqual(hsp.annotations["positive"], 35)
+        if xml2 is False:
+            self.assertEqual(hsp.annotations["positive"], 35)
         self.assertEqual(hsp.annotations["gaps"], 2)
         self.assertTrue(
             np.array_equal(
@@ -2778,9 +2985,28 @@ G26684.1        230 TGTAGCGCAAGGCCTGACATGGGTAGCTGCTC       262
         self.assertEqual(
             hsp.annotations["midline"], "||||||||||| ||||||||| | | | |||||  ||| ||||"
         )
-        self.assertEqual(
-            str(hsp),
-            """\
+        if xml2 is True:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : G26684.1 Length: 285 Strand: Plus
+        human STS STS_D11570, sequence tagged site
+Target: gi|372099109|ref|NC_000067.6| Length: 195471971 Strand: Plus
+        Mus musculus strain C57BL/6J chromosome 1, GRCm38.p4 C57BL/6J
+
+Score:37 bits(40), Expect:5,
+Identities:35/43(81%),  Gaps:2.43(5%)
+
+gi|372099  65190107 GCTCAGCCACATACATGGTTT-TAAGTGTTGAGGCTCT-TTCC 65190148
+                  0 |||||||||||.|||||||||-|.|.|.|||||..|||-||||       43
+G26684.1         86 GCTCAGCCACAGACATGGTTTGTNACTNTTGAGCTTCTGTTCC      129
+
+""",
+            )
+        else:
+            self.assertEqual(
+                str(hsp),
+                """\
 Query : G26684.1 Length: 285 Strand: Plus
         human STS STS_D11570, sequence tagged site
 Target: gi|372099109|ref|NC_000067.6| Length: 195471971 Strand: Plus
@@ -2794,7 +3020,7 @@ gi|372099  65190107 GCTCAGCCACATACATGGTTT-TAAGTGTTGAGGCTCT-TTCC 65190148
 G26684.1         86 GCTCAGCCACAGACATGGTTTGTNACTNTTGAGCTTCTGTTCC      129
 
 """,
-        )
+            )
         hit = record[7]
         self.assertEqual(hit.num, 8)
         self.assertIsInstance(hit.target, SeqRecord)
@@ -2815,7 +3041,8 @@ G26684.1         86 GCTCAGCCACAGACATGGTTTGTNACTNTTGAGCTTCTGTTCC      129
         self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
         self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
         self.assertEqual(hsp.annotations["identity"], 36)
-        self.assertEqual(hsp.annotations["positive"], 36)
+        if xml2 is False:
+            self.assertEqual(hsp.annotations["positive"], 36)
         self.assertEqual(hsp.annotations["gaps"], 0)
         self.assertTrue(
             np.array_equal(
@@ -2851,9 +3078,28 @@ G26684.1         86 GCTCAGCCACAGACATGGTTTGTNACTNTTGAGCTTCTGTTCC      129
             hsp.annotations["midline"],
             "||| |||||||| |  |  ||||||||||||| ||| | | || |||",
         )
-        self.assertEqual(
-            str(hsp),
-            """\
+        if xml2 is True:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : G26684.1 Length: 285 Strand: Plus
+        human STS STS_D11570, sequence tagged site
+Target: gi|372099101|ref|NC_000075.6| Length: 124595110 Strand: Minus
+        Mus musculus strain C57BL/6J chromosome 9, GRCm38.p4 C57BL/6J
+
+Score:37 bits(40), Expect:5,
+Identities:36/47(77%),  Gaps:0.47(0%)
+
+gi|372099  58227241 CAAAGCCTGACAGGTATGACTGCTCAATAAATACTATTTTTTTTTTT 58227194
+                  0 |||.||||||||.|..|..|||||||||||||.|||.|.|.||.|||       47
+G26684.1        237 CAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTT      284
+
+""",
+            )
+        else:
+            self.assertEqual(
+                str(hsp),
+                """\
 Query : G26684.1 Length: 285 Strand: Plus
         human STS STS_D11570, sequence tagged site
 Target: gi|372099101|ref|NC_000075.6| Length: 124595110 Strand: Minus
@@ -2867,7 +3113,7 @@ gi|372099  58227241 CAAAGCCTGACAGGTATGACTGCTCAATAAATACTATTTTTTTTTTT 58227194
 G26684.1        237 CAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTT      284
 
 """,
-        )
+            )
         hit = record[8]
         self.assertEqual(hit.num, 9)
         self.assertIsInstance(hit.target, SeqRecord)
@@ -2888,7 +3134,8 @@ G26684.1        237 CAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTT      284
         self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
         self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
         self.assertEqual(hsp.annotations["identity"], 20)
-        self.assertEqual(hsp.annotations["positive"], 20)
+        if xml2 is False:
+            self.assertEqual(hsp.annotations["positive"], 20)
         self.assertEqual(hsp.annotations["gaps"], 0)
         self.assertTrue(
             np.array_equal(
@@ -2920,9 +3167,28 @@ G26684.1        237 CAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTT      284
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(hsp.annotations["midline"], "||||||||||||||||||||")
-        self.assertEqual(
-            str(hsp),
-            """\
+        if xml2 is True:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : G26684.1 Length: 285 Strand: Plus
+        human STS STS_D11570, sequence tagged site
+Target: gi|372099100|ref|NC_000076.6| Length: 130694993 Strand: Plus
+        Mus musculus strain C57BL/6J chromosome 10, GRCm38.p4 C57BL/6J
+
+Score:37 bits(40), Expect:5,
+Identities:20/20(100%),  Gaps:0.20(0%)
+
+gi|372099 119337185 AGCTGCTCAATAAATGCTAG 119337205
+                  0 ||||||||||||||||||||        20
+G26684.1        254 AGCTGCTCAATAAATGCTAG       274
+
+""",
+            )
+        else:
+            self.assertEqual(
+                str(hsp),
+                """\
 Query : G26684.1 Length: 285 Strand: Plus
         human STS STS_D11570, sequence tagged site
 Target: gi|372099100|ref|NC_000076.6| Length: 130694993 Strand: Plus
@@ -2936,7 +3202,7 @@ gi|372099 119337185 AGCTGCTCAATAAATGCTAG 119337205
 G26684.1        254 AGCTGCTCAATAAATGCTAG       274
 
 """,
-        )
+            )
         hit = record[9]
         self.assertEqual(hit.num, 10)
         self.assertIsInstance(hit.target, SeqRecord)
@@ -2957,7 +3223,8 @@ G26684.1        254 AGCTGCTCAATAAATGCTAG       274
         self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
         self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
         self.assertEqual(hsp.annotations["identity"], 43)
-        self.assertEqual(hsp.annotations["positive"], 43)
+        if xml2 is False:
+            self.assertEqual(hsp.annotations["positive"], 43)
         self.assertEqual(hsp.annotations["gaps"], 2)
         self.assertTrue(
             np.array_equal(
@@ -2993,9 +3260,32 @@ G26684.1        254 AGCTGCTCAATAAATGCTAG       274
             hsp.annotations["midline"],
             "||||||||||||||||||| |  | |  | ||| || |||   |||||||||| ||",
         )
-        self.assertEqual(
-            str(hsp),
-            """\
+        if xml2 is True:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : G26684.1 Length: 285 Strand: Plus
+        human STS STS_D11570, sequence tagged site
+Target: gi|372099094|ref|NC_000082.6| Length: 98207768 Strand: Plus
+        Mus musculus strain C57BL/6J chromosome 16, GRCm38.p4 C57BL/6J
+
+Score:37 bits(40), Expect:5,
+Identities:43/56(77%),  Gaps:2.56(4%)
+
+gi|372099  18854779 GGAGGCAAAGAATCCCTACATTGTGACAGCTGATAAAGAAGGTAAAATGGAAAATT
+                  0 |||||||||||||||||||.|..|-|..|.|||-||.|||...||||||||||.||
+G26684.1        174 GGAGGCAAAGAATCCCTACCTCCT-AGGGGTGA-AAGGAAATNAAAATGGAAAGTT
+
+gi|372099  18854835
+                 56
+G26684.1        228
+
+""",
+            )
+        else:
+            self.assertEqual(
+                str(hsp),
+                """\
 Query : G26684.1 Length: 285 Strand: Plus
         human STS STS_D11570, sequence tagged site
 Target: gi|372099094|ref|NC_000082.6| Length: 98207768 Strand: Plus
@@ -3013,7 +3303,7 @@ gi|372099  18854835
 G26684.1        228
 
 """,
-        )
+            )
 
     def test_xml_2900_blastn_001_writer(self):
         """Writing BLASTN 2.9.0+ (xml_2900_blastn_001.xml)."""
@@ -8188,9 +8478,9 @@ gi|146197       480 STLQKLHRNRIWYLDILFSNDLVNNE 506
             self.check_xml_2900_blastx_001_records(records)
         with open(path, "rb") as stream:
             record = Blast.read(stream)
-        self.check_xml_2900_blastx_001_record(record)
+        self.check_xml_2900_blastx_001_record(record, xml2=False)
         record = Blast.read(path)
-        self.check_xml_2900_blastx_001_record(record)
+        self.check_xml_2900_blastx_001_record(record, xml2=False)
         with Blast.parse(path) as records:
             self.assertEqual(
                 str(records),
@@ -8225,14 +8515,18 @@ Program: BLASTX 2.9.0+
             'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
         )
         self.assertEqual(records.db, "nr")
-        self.assertIsInstance(records.query, SeqRecord)
-        self.assertEqual(records.query.id, "AI021773.1")
-        self.assertEqual(
-            records.query.description,
-            "MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence",
-        )
-        self.assertEqual(repr(records.query.seq), "Seq(None, length=365)")
-        self.assertEqual(len(records.param), 5)
+        if xml2 is False:
+            self.assertIsInstance(records.query, SeqRecord)
+            self.assertEqual(records.query.id, "AI021773.1")
+            self.assertEqual(
+                records.query.description,
+                "MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence",
+            )
+            self.assertEqual(repr(records.query.seq), "Seq(None, length=365)")
+        if xml2 is True:
+            self.assertEqual(len(records.param), 7)
+        else:
+            self.assertEqual(len(records.param), 5)
         self.assertEqual(records.param["matrix"], "BLOSUM62")
         self.assertAlmostEqual(records.param["expect"], 10.0)
         self.assertEqual(records.param["gap-open"], 11)
@@ -8242,12 +8536,12 @@ Program: BLASTX 2.9.0+
             self.assertEqual(records.param["cbs"], 2)
             self.assertEqual(records.param["query-gencode"], 1)
         record = next(records)
-        self.assertEqual(record.num, 1)
         self.assertRaises(StopIteration, next, records)
-        self.check_xml_2900_blastx_001_record(record)
+        self.check_xml_2900_blastx_001_record(record, xml2)
 
-    def check_xml_2900_blastx_001_record(self, record):
-        self.assertEqual(record.num, 1)
+    def check_xml_2900_blastx_001_record(self, record, xml2):
+        if xml2 is False:
+            self.assertEqual(record.num, 1)
         self.assertIsInstance(record.query, SeqRecord)
         self.assertEqual(record.query.id, "AI021773.1")
         self.assertEqual(
@@ -8257,10 +8551,17 @@ Program: BLASTX 2.9.0+
         self.assertEqual(repr(record.query.seq), "Seq(None, length=365)")
 
         self.assertEqual(len(record.stat), 7)
-        self.assertEqual(record.stat["db-num"], 197469652)
+        if xml2 is True:
+            self.assertEqual(record.stat["db-num"], 195483068)
+        else:
+            self.assertEqual(record.stat["db-num"], 197469652)
         self.assertEqual(record.stat["db-len"], 71133367251)
-        self.assertEqual(record.stat["hsp-len"], 0)
-        self.assertAlmostEqual(record.stat["eff-space"], 0.0)
+        if xml2 is True:
+            self.assertEqual(record.stat["hsp-len"], 88)
+            self.assertEqual(record.stat["eff-space"], 1797401858175)
+        else:
+            self.assertEqual(record.stat["hsp-len"], 0)
+            self.assertAlmostEqual(record.stat["eff-space"], 0.0)
         self.assertAlmostEqual(record.stat["kappa"], 0.041)
         self.assertAlmostEqual(record.stat["lambda"], 0.267)
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
@@ -8437,14 +8738,33 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTELHCIRKP 115
         )
         hit = record[2]
         self.assertEqual(hit.num, 3)
-        self.assertIsInstance(hit.target, SeqRecord)
-        self.assertEqual(hit.target.id, "gi|684409690|ref|XP_009175831.1|")
-        self.assertEqual(hit.target.name, "XP_009175831")
-        self.assertEqual(
-            hit.target.description,
-            "hypothetical protein T265_11027 [Opisthorchis viverrini] >gi|663044098|gb|KER20427.1| hypothetical protein T265_11027 [Opisthorchis viverrini]",
-        )
-        self.assertEqual(repr(hit.target.seq), "Seq(None, length=246)")
+        target = hit.target
+        self.assertIsInstance(target, SeqRecord)
+        self.assertEqual(target.id, "gi|684409690|ref|XP_009175831.1|")
+        self.assertEqual(target.name, "XP_009175831")
+        seq = target.seq
+        self.assertEqual(repr(seq), "Seq(None, length=246)")
+        if xml2 is True:
+            self.assertEqual(
+                target.description,
+                "hypothetical protein T265_11027 [Opisthorchis viverrini]",
+            )
+            self.assertIs(target, hit.targets[0])
+            self.assertEqual(len(hit.targets), 2)
+            target = hit.targets[1]
+            self.assertIsInstance(target, SeqRecord)
+            self.assertEqual(target.id, "gi|663044098|gb|KER20427.1|")
+            self.assertEqual(target.name, "KER20427")
+            self.assertIs(target.seq, seq)
+            self.assertEqual(
+                target.description,
+                "hypothetical protein T265_11027 [Opisthorchis viverrini]",
+            )
+        else:
+            self.assertEqual(
+                target.description,
+                "hypothetical protein T265_11027 [Opisthorchis viverrini] >gi|663044098|gb|KER20427.1| hypothetical protein T265_11027 [Opisthorchis viverrini]",
+            )
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
         self.assertEqual(hsp.num, 1)
@@ -8486,20 +8806,43 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTELHCIRKP 115
             repr(hsp.target.seq),
             "Seq({0: 'MADEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSY...LTE'}, length=246)",
         )
-        self.assertEqual(hsp.target.id, "gi|684409690|ref|XP_009175831.1|")
-        self.assertEqual(hsp.target.name, "XP_009175831")
-        self.assertEqual(
-            hsp.target.description,
-            "hypothetical protein T265_11027 [Opisthorchis viverrini] >gi|663044098|gb|KER20427.1| hypothetical protein T265_11027 [Opisthorchis viverrini]",
-        )
+        self.assertEqual(hsp.target.id, hit.target.id)
+        self.assertEqual(hsp.target.name, hit.target.name)
+        self.assertEqual(hsp.target.description, hit.target.description)
+        self.assertEqual(len(hit), 1)
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(
             hsp.annotations["midline"],
             "MADEEVQALVVDNGSGMCKAG       ++  P               G KDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE",
         )
-        self.assertEqual(
-            str(hsp),
-            """\
+        if xml2 is True:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : AI021773.1 Length: 108 Strand: Plus
+        MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma
+        mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA,
+        complete cds, mRNA sequence
+Target: gi|684409690|ref|XP_009175831.1| Length: 246 Strand: Plus
+        hypothetical protein T265_11027 [Opisthorchis viverrini]
+
+Score:163 bits(413), Expect:4e-48,
+Identities:81/108(75%),  Positives:83/108(77%),  Gaps:0.108(0%)
+
+gi|684409         0 MADEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
+                  0 |||||||||||||||||||||...........|...............|.||||||||||
+AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
+
+gi|684409        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+                 60 |||||||||||||||||||||||||||||||||||||||||||||||| 108
+AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+
+""",
+            )
+        else:
+            self.assertEqual(
+                str(hsp),
+                """\
 Query : AI021773.1 Length: 108 Strand: Plus
         MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma
         mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA,
@@ -8521,7 +8864,7 @@ gi|684409        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
 AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
 
 """,
-        )
+            )
         hit = record[3]
         self.assertEqual(hit.num, 4)
         self.assertIsInstance(hit.target, SeqRecord)
@@ -9121,9 +9464,9 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
             self.check_xml_2900_blastx_001_records(records, xml2=True)
         with open(path, "rb") as stream:
             record = Blast.read(stream)
-        self.check_xml_2900_blastx_001_record(record)
+        self.check_xml_2900_blastx_001_record(record, xml2=True)
         record = Blast.read(path)
-        self.check_xml_2900_blastx_001_record(record)
+        self.check_xml_2900_blastx_001_record(record, xml2=True)
 
     def test_xml_2900_blastx_001_writer(self):
         """Writing BLASTX 2.9.0+ (xml_2900_blastx_001.xml)."""
@@ -9135,7 +9478,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
             self.assertEqual(n, 1)
             stream.seek(0)
             written_records = Blast.parse(stream)
-            self.check_xml_2900_blastx_001_records(written_records)
+            self.check_xml_2900_blastx_001_records(written_records, xml2=False)
 
 
 class TestTBlastn(unittest.TestCase):
@@ -9152,9 +9495,9 @@ class TestTBlastn(unittest.TestCase):
             self.check_xml_2900_tblastn_001_records(records)
         with open(path, "rb") as stream:
             record = Blast.read(stream)
-        self.check_xml_2900_tblastn_001_record(record)
+        self.check_xml_2900_tblastn_001_record(record, xml2=False)
         record = Blast.read(path)
-        self.check_xml_2900_tblastn_001_record(record)
+        self.check_xml_2900_tblastn_001_record(record, xml2=False)
         with Blast.parse(path) as records:
             self.assertEqual(
                 str(records),
@@ -9190,9 +9533,9 @@ Program: TBLASTN 2.9.0+
             self.check_xml_2900_tblastn_001_records(records, xml2=True)
         with open(path, "rb") as stream:
             record = Blast.read(stream)
-        self.check_xml_2900_tblastn_001_record(record)
+        self.check_xml_2900_tblastn_001_record(record, xml2=True)
         record = Blast.read(path)
-        self.check_xml_2900_tblastn_001_record(record)
+        self.check_xml_2900_tblastn_001_record(record, xml2=True)
 
     def check_xml_2900_tblastn_001_records(self, records, xml2=False):
         self.assertEqual(records.program, "tblastn")
@@ -9202,13 +9545,16 @@ Program: TBLASTN 2.9.0+
             'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
         )
         self.assertEqual(records.db, "nr")
-        self.assertIsInstance(records.query, SeqRecord)
-        self.assertEqual(records.query.id, "CAJ99216.1")
-        self.assertEqual(
-            records.query.description, "tim [Helicobacter acinonychis str. Sheeba]"
-        )
-        self.assertEqual(repr(records.query.seq), "Seq(None, length=234)")
-        self.assertEqual(len(records.param), 5)
+        if xml2 is False:
+            self.assertIsInstance(records.query, SeqRecord)
+            self.assertEqual(records.query.id, "CAJ99216.1")
+            self.assertEqual(
+                records.query.description, "tim [Helicobacter acinonychis str. Sheeba]"
+            )
+            self.assertEqual(repr(records.query.seq), "Seq(None, length=234)")
+            self.assertEqual(len(records.param), 5)
+        else:
+            self.assertEqual(len(records.param), 7)
         self.assertEqual(records.param["matrix"], "BLOSUM62")
         self.assertAlmostEqual(records.param["expect"], 10.0)
         self.assertEqual(records.param["gap-open"], 11)
@@ -9216,14 +9562,14 @@ Program: TBLASTN 2.9.0+
         self.assertEqual(records.param["filter"], "F")
         if xml2 is True:
             self.assertEqual(records.param["cbs"], 2)
-            self.assertEqual(records.param["query-gencode"], 1)
             self.assertEqual(records.param["db-gencode"], 1)
         record = next(records)
         self.assertRaises(StopIteration, next, records)
-        self.check_xml_2900_tblastn_001_record(record)
+        self.check_xml_2900_tblastn_001_record(record, xml2)
 
-    def check_xml_2900_tblastn_001_record(self, record):
-        self.assertEqual(record.num, 1)
+    def check_xml_2900_tblastn_001_record(self, record, xml2):
+        if xml2 is False:
+            self.assertEqual(record.num, 1)
         self.assertIsInstance(record.query, SeqRecord)
         self.assertEqual(record.query.id, "CAJ99216.1")
         self.assertEqual(
@@ -9234,8 +9580,12 @@ Program: TBLASTN 2.9.0+
         self.assertEqual(len(record.stat), 7)
         self.assertEqual(record.stat["db-num"], 51302476)
         self.assertEqual(record.stat["db-len"], 204305995260)
-        self.assertEqual(record.stat["hsp-len"], 0)
-        self.assertAlmostEqual(record.stat["eff-space"], 0.0)
+        if xml2 is True:
+            self.assertEqual(record.stat["hsp-len"], 154)
+            self.assertEqual(record.stat["eff-space"], 4816113369280)
+        else:
+            self.assertEqual(record.stat["hsp-len"], 0)
+            self.assertAlmostEqual(record.stat["eff-space"], 0.0)
         self.assertAlmostEqual(record.stat["kappa"], 0.041)
         self.assertAlmostEqual(record.stat["lambda"], 0.267)
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
@@ -10941,7 +11291,7 @@ class TestRPSBlast(unittest.TestCase):
         with Blast.parse(path) as records:
             stream = io.BytesIO()
             n = Blast.write(records, stream)
-            self.assertEqual(n, 3)
+            self.assertEqual(n, 1)
             stream.seek(0)
             written_records = Blast.parse(stream)
             self.check_xml_2900_rpsblast_001(written_records)
