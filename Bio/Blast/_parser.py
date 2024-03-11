@@ -15,6 +15,7 @@ https://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd
 """
 
 import os.path
+import html
 from collections import deque
 from xml.parsers import expat
 from typing import Dict, Callable
@@ -577,7 +578,7 @@ class XMLHandler:
         self._characters = ""
 
     def _end_reference(self, name):
-        self._records.reference = self._characters
+        self._records.reference = html.unescape(self._characters)
         self._characters = ""
 
     def _end_db(self, name):

@@ -1,4 +1,17 @@
 import html
+import codecs
+
+
+def _html_entity_replace(error):
+    start = error.start
+    end = error.end
+    character = error.object[start:end]
+    codepoint = ord(character)
+    entity = f"&amp;{html.entities.codepoint2name[codepoint]};"
+    return entity, end
+
+
+codecs.register_error("htmlentityreplace", _html_entity_replace)
 
 
 class XMLWriter:
@@ -207,15 +220,18 @@ class XMLWriter:
 <BlastOutput>
 """
         )
-        stream.write(f"""\
+        reference = html.escape(records.reference).encode("ASCII", "htmlentityreplace")
+        reference = reference.decode()
+        block = f"""\
   <BlastOutput_program>{program}</BlastOutput_program>
   <BlastOutput_version>{records.version}</BlastOutput_version>
-  <BlastOutput_reference>{html.escape(records.reference)}</BlastOutput_reference>
+  <BlastOutput_reference>{reference}</BlastOutput_reference>
   <BlastOutput_db>{records.db}</BlastOutput_db>
   <BlastOutput_query-ID>{records.query.id}</BlastOutput_query-ID>
   <BlastOutput_query-def>{records.query.description}</BlastOutput_query-def>
   <BlastOutput_query-len>{len(records.query)}</BlastOutput_query-len>
-""".encode("UTF-8"))
+""".encode("UTF-8")
+        stream.write(block)
         stream.write(b"""\
   <BlastOutput_param>
     <Parameters>
