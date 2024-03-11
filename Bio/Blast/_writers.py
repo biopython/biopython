@@ -220,12 +220,17 @@ class XMLWriter:
 <BlastOutput>
 """
         )
-        reference = html.escape(records.reference).encode("ASCII", "htmlentityreplace")
-        reference = reference.decode()
         block = f"""\
   <BlastOutput_program>{program}</BlastOutput_program>
   <BlastOutput_version>{records.version}</BlastOutput_version>
-  <BlastOutput_reference>{reference}</BlastOutput_reference>
+""".encode("UTF-8")
+        stream.write(block)
+        reference = html.escape(records.reference).encode("ASCII", "htmlentityreplace")
+        block = b"""\
+  <BlastOutput_reference>%b</BlastOutput_reference>
+""" % reference
+        stream.write(block)
+        block = f"""\
   <BlastOutput_db>{records.db}</BlastOutput_db>
   <BlastOutput_query-ID>{records.query.id}</BlastOutput_query-ID>
   <BlastOutput_query-def>{records.query.description}</BlastOutput_query-def>
