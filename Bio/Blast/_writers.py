@@ -256,15 +256,42 @@ class BaseXMLWriter(ABC):
         self._end_iterations()
         return count
 
+    def _write_mbstat(self, mbstat):
+        self._start_mbstat()
+        self.stream.write(b"    <Statistics>\n")
+        self.stream.write(
+            b"      <Statistics_db-num>%d</Statistics_db-num>\n" % mbstat["db-num"]
+        )
+        self.stream.write(
+            b"      <Statistics_db-len>%d</Statistics_db-len>\n" % mbstat["db-len"]
+        )
+        self.stream.write(
+            b"      <Statistics_hsp-len>%d</Statistics_hsp-len>\n" % mbstat["hsp-len"]
+        )
+        self.stream.write(
+            b"      <Statistics_eff-space>%g</Statistics_eff-space>\n"
+            % mbstat["eff-space"]
+        )
+        self.stream.write(
+            b"      <Statistics_kappa>%g</Statistics_kappa>\n" % mbstat["kappa"]
+        )
+        self.stream.write(
+            b"      <Statistics_lambda>%g</Statistics_lambda>\n" % mbstat["lambda"]
+        )
+        self.stream.write(
+            b"      <Statistics_entropy>%g</Statistics_entropy>\n" % mbstat["entropy"]
+        )
+        self.stream.write(b"    </Statistics>\n")
+        self._end_mbstat()
+
     def write(self, records):
         """Write the records."""
         stream = self.stream
         program = records.program
         self._program = program
-        # fmt: off
         self._write_xml_declaration()
         self._write_definition()
-        self._write_blastoutput()
+        self._start_blastoutput()
         self._write_program(program.encode())
         self._write_version(records.version.encode())
         reference = html.escape(records.reference).encode("ASCII", "htmlentityreplace")
@@ -280,23 +307,8 @@ class BaseXMLWriter(ABC):
         except AttributeError:
             pass
         else:
-            stream.write(f"""\
-  <BlastOutput_mbstat>
-    <Statistics>
-      <Statistics_db-num>{mbstat["db-num"]}</Statistics_db-num>
-      <Statistics_db-len>{mbstat["db-len"]}</Statistics_db-len>
-      <Statistics_hsp-len>{mbstat["hsp-len"]}</Statistics_hsp-len>
-      <Statistics_eff-space>{mbstat["eff-space"]}</Statistics_eff-space>
-      <Statistics_kappa>{mbstat["kappa"]}</Statistics_kappa>
-      <Statistics_lambda>{mbstat["lambda"]}</Statistics_lambda>
-      <Statistics_entropy>{mbstat["entropy"]}</Statistics_entropy>
-    </Statistics>
-  </BlastOutput_mbstat>
-""".encode("UTF-8"))
-        stream.write(b"""\
-</BlastOutput>
-""")
-        # fmt: on
+            self._write_mbstat(mbstat)
+        self._end_blastoutput()
         return count
 
     @abstractmethod
@@ -304,7 +316,7 @@ class BaseXMLWriter(ABC):
         return
 
     @abstractmethod
-    def _write_blastoutput(self):
+    def _start_blastoutput(self):
         return
 
     @abstractmethod
@@ -402,8 +414,11 @@ class XMLWriter(BaseXMLWriter):
 """
         )
 
-    def _write_blastoutput(self):
+    def _start_blastoutput(self):
         self.stream.write(b"<BlastOutput>\n")
+
+    def _end_blastoutput(self):
+        self.stream.write(b"</BlastOutput>\n")
 
     def _write_program(self, program):
         self.stream.write(b"<BlastOutput_program>%b</BlastOutput_program>\n" % program)
@@ -489,3 +504,9 @@ class XMLWriter(BaseXMLWriter):
 
     def _end_iterations(self):
         self.stream.write(b"</BlastOutput_iterations>\n")
+
+    def _start_mbstat(self):
+        self.stream.write(b"  <BlastOutput_mbstat>\n")
+
+    def _end_mbstat(self):
+        self.stream.write(b"  </BlastOutput_mbstat>\n")
