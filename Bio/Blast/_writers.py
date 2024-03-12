@@ -152,12 +152,8 @@ class BaseXMLWriter(ABC):
 
     def _write_record(self, record):
         stream = self.stream
-        # fmt: off
-        stream.write(f"""\
-<Iteration>
-  <Iteration_iter-num>{record.num}</Iteration_iter-num>
-""".encode("UTF-8"))
-        # fmt: on
+        self._start_iteration()
+        self._write_iteration_num(record.num)
         query = record.query
         if query is None:
             query_length = None
@@ -187,26 +183,10 @@ class BaseXMLWriter(ABC):
         except AttributeError:
             pass
         else:
-            # fmt: off
-            stream.write(f"""\
-  <Iteration_stat>
-    <Statistics>
-      <Statistics_db-num>{stat["db-num"]}</Statistics_db-num>
-      <Statistics_db-len>{stat["db-len"]}</Statistics_db-len>
-      <Statistics_hsp-len>{stat["hsp-len"]}</Statistics_hsp-len>
-      <Statistics_eff-space>{stat["eff-space"]}</Statistics_eff-space>
-      <Statistics_kappa>{stat["kappa"]}</Statistics_kappa>
-      <Statistics_lambda>{stat["lambda"]}</Statistics_lambda>
-      <Statistics_entropy>{stat["entropy"]}</Statistics_entropy>
-    </Statistics>
-  </Iteration_stat>
-""".encode("UTF-8"))
-            # fmt: on
-        # fmt: off
-        stream.write(b"""\
-</Iteration>
-""")
-        # fmt: on
+            self._start_iteration_stat()
+            self._write_statistics(stat)
+            self._end_iteration_stat()
+        self._end_iteration()
 
     def _write_xml_declaration(self):
         self.stream.write(b'<?xml version="1.0"?>\n')
@@ -256,33 +236,31 @@ class BaseXMLWriter(ABC):
         self._end_iterations()
         return count
 
-    def _write_mbstat(self, mbstat):
-        self._start_mbstat()
+    def _write_statistics(self, stat):
         self.stream.write(b"    <Statistics>\n")
         self.stream.write(
-            b"      <Statistics_db-num>%d</Statistics_db-num>\n" % mbstat["db-num"]
+            b"      <Statistics_db-num>%d</Statistics_db-num>\n" % stat["db-num"]
         )
         self.stream.write(
-            b"      <Statistics_db-len>%d</Statistics_db-len>\n" % mbstat["db-len"]
+            b"      <Statistics_db-len>%d</Statistics_db-len>\n" % stat["db-len"]
         )
         self.stream.write(
-            b"      <Statistics_hsp-len>%d</Statistics_hsp-len>\n" % mbstat["hsp-len"]
+            b"      <Statistics_hsp-len>%d</Statistics_hsp-len>\n" % stat["hsp-len"]
         )
         self.stream.write(
-            b"      <Statistics_eff-space>%g</Statistics_eff-space>\n"
-            % mbstat["eff-space"]
+            b"      <Statistics_eff-space>%s</Statistics_eff-space>\n"
+            % str(stat["eff-space"]).encode()
         )
         self.stream.write(
-            b"      <Statistics_kappa>%g</Statistics_kappa>\n" % mbstat["kappa"]
+            b"      <Statistics_kappa>%g</Statistics_kappa>\n" % stat["kappa"]
         )
         self.stream.write(
-            b"      <Statistics_lambda>%g</Statistics_lambda>\n" % mbstat["lambda"]
+            b"      <Statistics_lambda>%g</Statistics_lambda>\n" % stat["lambda"]
         )
         self.stream.write(
-            b"      <Statistics_entropy>%g</Statistics_entropy>\n" % mbstat["entropy"]
+            b"      <Statistics_entropy>%g</Statistics_entropy>\n" % stat["entropy"]
         )
         self.stream.write(b"    </Statistics>\n")
-        self._end_mbstat()
 
     def write(self, records):
         """Write the records."""
@@ -307,7 +285,9 @@ class BaseXMLWriter(ABC):
         except AttributeError:
             pass
         else:
-            self._write_mbstat(mbstat)
+            self._start_mbstat()
+            self._write_statistics(mbstat)
+            self._end_mbstat()
         self._end_blastoutput()
         return count
 
@@ -510,3 +490,18 @@ class XMLWriter(BaseXMLWriter):
 
     def _end_mbstat(self):
         self.stream.write(b"  </BlastOutput_mbstat>\n")
+
+    def _start_iteration(self):
+        self.stream.write(b"<Iteration>\n")
+
+    def _end_iteration(self):
+        self.stream.write(b"</Iteration>\n")
+
+    def _write_iteration_num(self, num):
+        self.stream.write(b"  <Iteration_iter-num>%d</Iteration_iter-num>\n" % num)
+
+    def _start_iteration_stat(self):
+        self.stream.write(b"  <Iteration_stat>\n")
+
+    def _end_iteration_stat(self):
+        self.stream.write(b"  </Iteration_stat>\n")

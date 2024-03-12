@@ -1054,7 +1054,12 @@ class XMLHandler:
         self._characters = ""
 
     def _end_eff_space(self, name):
-        self._stat["eff-space"] = float(self._characters)
+        characters = self._characters
+        if characters.isdigit():
+            value = int(characters)
+        else:
+            value = float(characters)
+        self._stat["eff-space"] = value
         self._characters = ""
 
     def _end_eff_space_xml2(self, name):
