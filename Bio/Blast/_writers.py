@@ -1,5 +1,6 @@
 import html
 import codecs
+from abc import ABC, abstractmethod
 
 
 def _html_entity_replace(error):
@@ -14,8 +15,8 @@ def _html_entity_replace(error):
 codecs.register_error("htmlentityreplace", _html_entity_replace)
 
 
-class XMLWriter:
-    """XML Writer."""
+class BaseXMLWriter(ABC):
+    """XML Writer, abstract base class."""
 
     def __init__(self, stream):
         """Init the stuff."""
@@ -207,103 +208,73 @@ class XMLWriter:
 """)
         # fmt: on
 
-    def write(self, records):
-        """Write the records."""
-        stream = self.stream
-        count = 0
-        program = records.program
-        self._program = program
-        # fmt: off
-        stream.write(b"""\
-<?xml version="1.0"?>
-<!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" "http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd">
-<BlastOutput>
-"""
-        )
-        block = f"""\
-  <BlastOutput_program>{program}</BlastOutput_program>
-  <BlastOutput_version>{records.version}</BlastOutput_version>
-""".encode("UTF-8")
-        stream.write(block)
-        reference = html.escape(records.reference).encode("ASCII", "htmlentityreplace")
-        block = b"""\
-  <BlastOutput_reference>%b</BlastOutput_reference>
-""" % reference
-        stream.write(block)
-        block = f"""\
-  <BlastOutput_db>{records.db}</BlastOutput_db>
-  <BlastOutput_query-ID>{records.query.id}</BlastOutput_query-ID>
-  <BlastOutput_query-def>{records.query.description}</BlastOutput_query-def>
-  <BlastOutput_query-len>{len(records.query)}</BlastOutput_query-len>
-""".encode("UTF-8")
-        stream.write(block)
-        stream.write(b"""\
-  <BlastOutput_param>
-    <Parameters>
-"""
-        )
-        param = records.param
+    def _write_xml_declaration(self):
+        self.stream.write(b'<?xml version="1.0"?>\n')
+
+    def _write_params(self, param):
+        self._start_param()
+        self.stream.write(b"    <Parameters>\n")
         value = param.get("matrix")
         if value is not None:
-            stream.write(b"""\
-      <Parameters_matrix>%s</Parameters_matrix>
-""" % value.encode("UTF-8"))
+            self._write_parameters_matrix(value.encode())
         value = param.get("expect")
         if value is not None:
-            stream.write(b"""\
-      <Parameters_expect>%g</Parameters_expect>
-""" % value)
+            self._write_parameters_expect(value)
         value = param.get("include")
         if value is not None:
-            stream.write(b"""\
-      <Parameters_include>%g</Parameters_include>
-""" % value)
+            self._write_parameters_include(value)
         value = param.get("sc-match")
         if value is not None:
-            stream.write(b"""\
-      <Parameters_sc-match>%d</Parameters_sc-match>
-""" % value)
+            self._write_parameters_sc_match(value)
         value = param.get("sc-mismatch")
         if value is not None:
-            stream.write(b"""\
-      <Parameters_sc-mismatch>%d</Parameters_sc-mismatch>
-""" % value)
+            self._write_parameters_sc_mismatch(value)
         value = param.get("gap-open")
         if value is not None:
-            stream.write(b"""\
-      <Parameters_gap-open>%d</Parameters_gap-open>
-""" % value)
+            self._write_parameters_gap_open(value)
         value = param.get("gap-extend")
         if value is not None:
-            stream.write(b"""\
-      <Parameters_gap-extend>%d</Parameters_gap-extend>
-""" % value)
+            self._write_parameters_gap_extend(value)
         value = param.get("filter")
         if value is not None:
-            stream.write(b"""\
-      <Parameters_filter>%s</Parameters_filter>
-""" % value.encode("UTF-8"))
+            self._write_parameters_filter(value.encode())
         value = param.get("pattern")
         if value is not None:
-            stream.write(b"""\
-      <Parameters_pattern>%s</Parameters_pattern>
-""" % value.encode("UTF-8"))
+            self._write_parameters_pattern(value.encode())
         value = param.get("entrez-query")
         if value is not None:
-            stream.write(b"""\
-      <Parameters_entrez-query>{value}</Parameters_entrez-query>
-""" % value.encode("UTF-8"))
-        stream.write(b"""\
-    </Parameters>
-  </BlastOutput_param>
-<BlastOutput_iterations>
-""")
+            self._write_parameters_entrez_query(value.encode())
+        self.stream.write(b"    </Parameters>\n")
+        self._end_param()
+
+    def _write_records(self, records):
+        count = 0
+        self._start_iterations()
         for record in records:
             self._write_record(record)
             count += 1
-        stream.write(b"""\
-</BlastOutput_iterations>
-""")
+        self._end_iterations()
+        return count
+
+    def write(self, records):
+        """Write the records."""
+        stream = self.stream
+        program = records.program
+        self._program = program
+        # fmt: off
+        self._write_xml_declaration()
+        self._write_definition()
+        self._write_blastoutput()
+        self._write_program(program.encode())
+        self._write_version(records.version.encode())
+        reference = html.escape(records.reference).encode("ASCII", "htmlentityreplace")
+        self._write_reference(reference)
+        self._write_db(records.db.encode())
+        self._write_query_id(records.query.id.encode())
+        self._write_query_def(records.query.description.encode())
+        self._write_query_len(len(records.query))
+        self._write_params(records.param)
+        count = self._write_records(records)
         try:
             mbstat = records.mbstat
         except AttributeError:
@@ -327,3 +298,194 @@ class XMLWriter:
 """)
         # fmt: on
         return count
+
+    @abstractmethod
+    def _write_definition(self):
+        return
+
+    @abstractmethod
+    def _write_blastoutput(self):
+        return
+
+    @abstractmethod
+    def _write_program(self, program):
+        return
+
+    @abstractmethod
+    def _write_version(self, version):
+        return
+
+    @abstractmethod
+    def _write_reference(self, reference):
+        return
+
+    @abstractmethod
+    def _write_db(self, db):
+        return
+
+    @abstractmethod
+    def _write_query_id(self, query_id):
+        return
+
+    @abstractmethod
+    def _write_query_def(self, query_def):
+        return
+
+    @abstractmethod
+    def _write_query_len(self, query_len):
+        return
+
+    @abstractmethod
+    def _start_param(self):
+        return
+
+    @abstractmethod
+    def _write_parameters_matrix(self, value):
+        return
+
+    @abstractmethod
+    def _write_parameters_expect(self, value):
+        return
+
+    @abstractmethod
+    def _write_parameters_include(self, value):
+        return
+
+    @abstractmethod
+    def _write_parameters_sc_match(self, value):
+        return
+
+    @abstractmethod
+    def _write_parameters_sc_mismatch(self, value):
+        return
+
+    @abstractmethod
+    def _write_parameters_gap_open(self, value):
+        return
+
+    @abstractmethod
+    def _write_parameters_gap_extend(self, value):
+        return
+
+    @abstractmethod
+    def _write_parameters_filter(self, value):
+        return
+
+    @abstractmethod
+    def _write_parameters_pattern(self, value):
+        return
+
+    @abstractmethod
+    def _write_parameters_entrez_query(self, value):
+        return
+
+    @abstractmethod
+    def _end_param(self):
+        return
+
+    @abstractmethod
+    def _start_iterations(self):
+        return
+
+    @abstractmethod
+    def _end_iterations(self):
+        return
+
+
+class XMLWriter(BaseXMLWriter):
+    """XML Writer."""
+
+    def _write_definition(self):
+        self.stream.write(
+            b"""\
+<!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" "http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd">
+"""
+        )
+
+    def _write_blastoutput(self):
+        self.stream.write(b"<BlastOutput>\n")
+
+    def _write_program(self, program):
+        self.stream.write(b"<BlastOutput_program>%b</BlastOutput_program>\n" % program)
+
+    def _write_version(self, version):
+        self.stream.write(b"<BlastOutput_version>%b</BlastOutput_version>\n" % version)
+
+    def _write_reference(self, reference):
+        self.stream.write(
+            b"<BlastOutput_reference>%b</BlastOutput_reference>\n" % reference
+        )
+
+    def _write_db(self, db):
+        self.stream.write(b"<BlastOutput_db>%b</BlastOutput_db>\n" % db)
+
+    def _write_query_id(self, query_id):
+        self.stream.write(
+            b"<BlastOutput_query-ID>%b</BlastOutput_query-ID>\n" % query_id
+        )
+
+    def _write_query_def(self, query_def):
+        self.stream.write(
+            b"<BlastOutput_query-def>%b</BlastOutput_query-def>\n" % query_def
+        )
+
+    def _write_query_len(self, query_len):
+        self.stream.write(
+            b"<BlastOutput_query-len>%d</BlastOutput_query-len>\n" % query_len
+        )
+
+    def _start_param(self):
+        self.stream.write(b"  <BlastOutput_param>\n")
+
+    def _write_parameters_matrix(self, value):
+        self.stream.write(b"      <Parameters_matrix>%b</Parameters_matrix>\n" % value)
+
+    def _write_parameters_expect(self, value):
+        self.stream.write(b"      <Parameters_expect>%g</Parameters_expect>\n" % value)
+
+    def _write_parameters_include(self, value):
+        self.stream.write(
+            b"      <Parameters_include>%g</Parameters_include>\n" % value
+        )
+
+    def _write_parameters_sc_match(self, value):
+        self.stream.write(
+            b"       <Parameters_sc-match>%d</Parameters_sc-match>\n" % value
+        )
+
+    def _write_parameters_sc_mismatch(self, value):
+        self.stream.write(
+            b"       <Parameters_sc-mismatch>%d</Parameters_sc-mismatch>\n" % value
+        )
+
+    def _write_parameters_gap_open(self, value):
+        self.stream.write(
+            b"       <Parameters_gap-open>%d</Parameters_gap-open>\n" % value
+        )
+
+    def _write_parameters_gap_extend(self, value):
+        self.stream.write(
+            b"       <Parameters_gap-extend>%d</Parameters_gap-extend>\n" % value
+        )
+
+    def _write_parameters_filter(self, value):
+        self.stream.write(b"       <Parameters_filter>%b</Parameters_filter>\n" % value)
+
+    def _write_parameters_pattern(self, value):
+        self.stream.write(
+            b"       <Parameters_pattern>%b</Parameters_pattern>\n" % value
+        )
+
+    def _write_parameters_entrez_query(self, value):
+        self.stream.write(
+            b"       <Parameters_entrez-query>%b</Parameters_entrez-query>\n" % value
+        )
+
+    def _end_param(self):
+        self.stream.write(b"  </BlastOutput_param>\n")
+
+    def _start_iterations(self):
+        self.stream.write(b"<BlastOutput_iterations>\n")
+
+    def _end_iterations(self):
+        self.stream.write(b"</BlastOutput_iterations>\n")
