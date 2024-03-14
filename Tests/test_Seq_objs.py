@@ -4,9 +4,9 @@
 # as part of this package.
 """Unittests for the Seq objects."""
 
+import array
 import unittest
 import warnings
-import array
 
 from Bio import BiopythonWarning
 from Bio import SeqIO
@@ -14,10 +14,11 @@ from Bio.Data.CodonTable import CodonTable
 from Bio.Data.CodonTable import TranslationError
 from Bio.Data.IUPACData import ambiguous_dna_values
 from Bio.Data.IUPACData import ambiguous_rna_values
+from Bio.Seq import _UndefinedSequenceData
 from Bio.Seq import MutableSeq
 from Bio.Seq import Seq
 from Bio.Seq import translate
-from Bio.Seq import UndefinedSequenceError, _UndefinedSequenceData
+from Bio.Seq import UndefinedSequenceError
 from Bio.SeqRecord import SeqRecord
 
 try:

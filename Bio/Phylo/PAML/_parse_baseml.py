@@ -9,7 +9,6 @@
 
 import re
 
-
 line_floats_re = re.compile(r"-*\d+\.\d+")
 
 

@@ -12,7 +12,8 @@ for example from the needle, water, and stretcher tools.
 
 from Bio.Align import Alignment
 from Bio.Align import interfaces
-from Bio.Seq import Seq, reverse_complement
+from Bio.Seq import reverse_complement
+from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
 

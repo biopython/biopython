@@ -8,10 +8,12 @@
 import unittest
 
 from Bio import CAPS
-from Bio.Restriction import EcoRI, AluI
+from Bio.Align import Alignment
+from Bio.Align import MultipleSeqAlignment
+from Bio.Restriction import AluI
+from Bio.Restriction import EcoRI
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Align import Alignment, MultipleSeqAlignment
 
 
 def createAlignment(sequences):

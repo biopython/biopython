@@ -6,13 +6,12 @@
 """Tests for Bio.Align.mauve module."""
 import os
 import unittest
-
 from io import StringIO
 
-from Bio.Seq import Seq, MutableSeq
-from Bio import SeqIO
 from Bio import Align
-
+from Bio import SeqIO
+from Bio.Seq import MutableSeq
+from Bio.Seq import Seq
 
 try:
     import numpy as np

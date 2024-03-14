@@ -11,20 +11,20 @@ Also tests Training methods.
 """
 # standard modules
 
-import unittest
 import math
+import unittest
 import warnings
+
+from Bio import BiopythonDeprecationWarning
 
 # biopython
 from Bio.Seq import Seq
-from Bio import BiopythonDeprecationWarning
-
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
     # stuff we are testing
-    from Bio.HMM import MarkovModel
     from Bio.HMM import DynamicProgramming
+    from Bio.HMM import MarkovModel
     from Bio.HMM import Trainer
 
 

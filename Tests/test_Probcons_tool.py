@@ -4,14 +4,16 @@
 # as part of this package.
 """Unittests for Bio.Align.Applications interface for PROBCONS."""
 
-import sys
 import os
+import sys
 import unittest
 import warnings
 from io import StringIO
 
+from Bio import AlignIO
 from Bio import BiopythonDeprecationWarning
-from Bio import AlignIO, SeqIO, MissingExternalDependencyError
+from Bio import MissingExternalDependencyError
+from Bio import SeqIO
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)

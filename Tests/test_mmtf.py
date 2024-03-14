@@ -8,15 +8,19 @@
 
 """Tests for mmtf module."""
 
-import unittest
-import warnings
 import os
 import tempfile
-from Bio.PDB import PDBParser, Select
-from Bio.PDB.mmtf import MMTFParser, MMTFIO
-from Bio.PDB.MMCIFParser import MMCIFParser
-from Bio.PDB.PDBExceptions import PDBConstructionWarning
+import unittest
+import warnings
+
 import mmtf
+
+from Bio.PDB import PDBParser
+from Bio.PDB import Select
+from Bio.PDB.MMCIFParser import MMCIFParser
+from Bio.PDB.mmtf import MMTFIO
+from Bio.PDB.mmtf import MMTFParser
+from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
 
 class ParseMMTF(unittest.TestCase):

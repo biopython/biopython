@@ -8,7 +8,6 @@
 
 import datetime
 import unittest
-
 from io import BytesIO
 
 from Bio import SeqIO

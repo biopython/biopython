@@ -10,15 +10,15 @@
 """
 
 import unittest
-from unittest import mock
 import warnings
 from http.client import HTTPMessage
-from urllib.parse import urlparse, parse_qs
+from unittest import mock
+from urllib.parse import parse_qs
+from urllib.parse import urlparse
 from urllib.request import Request
 
 from Bio import Entrez
 from Bio.Entrez import Parser
-
 
 # This lets us set the email address to be sent to NCBI Entrez:
 Entrez.email = "biopython@biopython.org"
@@ -426,9 +426,9 @@ class CustomDirectoryTest(unittest.TestCase):
     """
 
     def test_custom_directory(self):
-        import tempfile
         import os
         import shutil
+        import tempfile
 
         handler = Parser.DataHandler(validate=False, escape=False, ignore_errors=False)
 

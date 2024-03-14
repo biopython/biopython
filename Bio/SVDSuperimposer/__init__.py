@@ -13,8 +13,11 @@ value decomposition, which is used in the algorithm.
 """
 
 try:
-    from numpy import dot, transpose, sqrt
-    from numpy.linalg import svd, det
+    from numpy import dot
+    from numpy import sqrt
+    from numpy import transpose
+    from numpy.linalg import det
+    from numpy.linalg import svd
 except ImportError:
     from Bio import MissingPythonDependencyError
 

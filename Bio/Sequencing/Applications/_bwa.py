@@ -6,8 +6,11 @@
 # package.
 """Command line wrapper for bwa."""
 
-from Bio.Application import _Option, _Argument, _Switch, AbstractCommandline
+from Bio.Application import _Argument
+from Bio.Application import _Option
 from Bio.Application import _StaticArgument
+from Bio.Application import _Switch
+from Bio.Application import AbstractCommandline
 
 
 class BwaIndexCommandline(AbstractCommandline):

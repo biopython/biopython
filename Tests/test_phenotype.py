@@ -20,12 +20,10 @@ except ImportError:
 
 import json
 import unittest
-
+import warnings
 from io import StringIO
 
 from Bio import BiopythonExperimentalWarning
-
-import warnings
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore", BiopythonExperimentalWarning)

@@ -32,9 +32,9 @@ Parameters         Holds information from the parameters.
 import xml.sax
 from xml.sax.handler import ContentHandler
 
+from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Align import MultipleSeqAlignment
 
 
 def fmt_(value, format_spec="%s", default_str="<unknown>"):

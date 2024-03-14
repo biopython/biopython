@@ -7,16 +7,16 @@
 import os
 import unittest
 
-from Bio import SeqIO
-from BioSQL import BioSeqDatabase
-
-from seq_tests_common import SeqRecordTestBaseClass
-
 # Really do want "import *" to get all the test classes:
 from common_BioSQL import *  # noqa: F403
 
 # Import these explicitly to avoid flake8 F405 below:
-from common_BioSQL import check_config, temp_db_filename
+from common_BioSQL import check_config
+from common_BioSQL import temp_db_filename
+from seq_tests_common import SeqRecordTestBaseClass
+
+from Bio import SeqIO
+from BioSQL import BioSeqDatabase
 
 # Constants for the database driver
 DBDRIVER = "sqlite3"

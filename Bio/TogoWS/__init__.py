@@ -33,14 +33,12 @@ http://soapy.sourceforge.net/
 
 import io
 import time
-
-from urllib.request import urlopen
+from typing import Dict
+from typing import List
 from urllib.parse import quote
-
-from typing import Dict, List
+from urllib.request import urlopen
 
 from Bio._utils import function_with_previous
-
 
 # Constant
 _BASE_URL = "http://togows.dbcls.jp"

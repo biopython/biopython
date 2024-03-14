@@ -15,13 +15,9 @@ Usage:
 ./check_output.py <GenBank file to parse>
 
 """
-# standard library
-
 import sys
 
-# GenBank stuff to test
 from Bio import GenBank
-
 
 if len(sys.argv) != 2:
     print("Usage ./check_output.py <GenBank file to parse>")

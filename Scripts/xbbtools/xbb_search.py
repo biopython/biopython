@@ -16,10 +16,10 @@ import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter import colorchooser
 
+import xbb_widget
+
 from Bio.Data.IUPACData import ambiguous_dna_values
 from Bio.Seq import reverse_complement
-
-import xbb_widget
 
 
 class DNAsearch:

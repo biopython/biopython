@@ -8,8 +8,8 @@
 
 import unittest
 
-from Bio.KEGG import Enzyme
 from Bio.KEGG import Compound
+from Bio.KEGG import Enzyme
 from Bio.KEGG import Map
 from Bio.Pathway import System
 

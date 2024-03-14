@@ -1,6 +1,7 @@
-import html
 import codecs
-from abc import ABC, abstractmethod
+import html
+from abc import ABC
+from abc import abstractmethod
 
 from Bio.Seq import UndefinedSequenceError
 

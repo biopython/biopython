@@ -7,18 +7,17 @@
 """Code for dealing with Codon Alignments."""
 
 import copy
-from collections.abc import Mapping, Iterable
-
-from Bio import BiopythonWarning
-from Bio import BiopythonExperimentalWarning
-
-from Bio.SeqRecord import SeqRecord
-from Bio.Data import CodonTable
-
-from Bio.codonalign.codonseq import CodonSeq
-from Bio.codonalign.codonalignment import CodonAlignment, mktest
-
 import warnings
+from collections.abc import Iterable
+from collections.abc import Mapping
+
+from Bio import BiopythonExperimentalWarning
+from Bio import BiopythonWarning
+from Bio.codonalign.codonalignment import CodonAlignment
+from Bio.codonalign.codonalignment import mktest
+from Bio.codonalign.codonseq import CodonSeq
+from Bio.Data import CodonTable
+from Bio.SeqRecord import SeqRecord
 
 warnings.warn(
     "Bio.codonalign is an experimental module which may undergo "
@@ -586,6 +585,7 @@ def _get_codon_rec(
 
     """
     import re
+
     from Bio.Seq import Seq
 
     nucl_seq = nucl.seq.replace(gap_char, "")

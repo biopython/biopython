@@ -18,14 +18,13 @@ classes in this module directly. Rather, call the load() method on
 a database object.
 """
 
-# standard modules
-from time import gmtime, strftime
+from time import gmtime
+from time import strftime
 
-# biopython
-from Bio.SeqUtils.CheckSum import crc64
 from Bio import Entrez
 from Bio.Seq import UndefinedSequenceError
 from Bio.SeqFeature import UnknownPosition
+from Bio.SeqUtils.CheckSum import crc64
 
 
 class DatabaseLoader:
@@ -938,6 +937,7 @@ class DatabaseLoader:
                 # e.g. order locations... we don't record "order" so it
                 # will become a "join" on reloading. What does BioPerl do?
                 import warnings
+
                 from Bio import BiopythonWarning
 
                 warnings.warn(

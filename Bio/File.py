@@ -11,12 +11,12 @@ Bio.File defines private classes used in Bio.SeqIO and Bio.SearchIO for
 indexing files. These are not intended for direct use.
 """
 
-import os
+import collections.abc
 import contextlib
 import itertools
-import collections.abc
-
-from abc import ABC, abstractmethod
+import os
+from abc import ABC
+from abc import abstractmethod
 
 try:
     import sqlite3

@@ -5,14 +5,17 @@
 
 """Example of using GenomeDiagram cross-links to mimic ACT."""
 
-import sys
 import os
+import sys
+
 from reportlab.lib import colors
 from reportlab.lib.units import cm
 
-from Bio.Graphics.GenomeDiagram import Diagram, CrossLink
-from Bio.SeqFeature import SeqFeature, SimpleLocation
 from Bio import SeqIO
+from Bio.Graphics.GenomeDiagram import CrossLink
+from Bio.Graphics.GenomeDiagram import Diagram
+from Bio.SeqFeature import SeqFeature
+from Bio.SeqFeature import SimpleLocation
 
 # Modify this line to point at the Artemis/ACT example data which is online at:
 # https://github.com/sanger-pathogens/Artemis/tree/master/etc

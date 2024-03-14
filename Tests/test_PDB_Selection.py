@@ -8,8 +8,8 @@ import unittest
 
 from Bio.PDB import PDBParser
 from Bio.PDB.PDBExceptions import PDBException
-from Bio.PDB.Selection import unfold_entities
 from Bio.PDB.Residue import Residue
+from Bio.PDB.Selection import unfold_entities
 
 
 def res_full_id(res: Residue):

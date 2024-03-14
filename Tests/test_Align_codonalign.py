@@ -9,14 +9,16 @@ import unittest
 
 import numpy as np
 
-from Bio import SeqIO
 from Bio import Align
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
-from Bio.Data import CodonTable
+from Bio import SeqIO
 from Bio.Align import Alignment
 from Bio.Align import CodonAligner
-from Bio.Align.analysis import calculate_dn_ds, calculate_dn_ds_matrix, mktest
+from Bio.Align.analysis import calculate_dn_ds
+from Bio.Align.analysis import calculate_dn_ds_matrix
+from Bio.Align.analysis import mktest
+from Bio.Data import CodonTable
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
 
 
 class TestBasic(unittest.TestCase):

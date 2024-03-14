@@ -6,14 +6,15 @@
 import unittest
 from io import StringIO
 
-
-from Bio.Align import Alignment
-from Bio.Seq import Seq, reverse_complement
-from Bio.SeqRecord import SeqRecord
-from Bio.SeqFeature import SimpleLocation, ExactPosition, CompoundLocation
-from Bio import SeqIO
 from Bio import Align
-
+from Bio import SeqIO
+from Bio.Align import Alignment
+from Bio.Seq import reverse_complement
+from Bio.Seq import Seq
+from Bio.SeqFeature import CompoundLocation
+from Bio.SeqFeature import ExactPosition
+from Bio.SeqFeature import SimpleLocation
+from Bio.SeqRecord import SeqRecord
 
 try:
     import numpy as np

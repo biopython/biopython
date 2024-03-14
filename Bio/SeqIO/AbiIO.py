@@ -18,16 +18,13 @@ http://www6.appliedbiosystems.com/support/software_community/ABIF_File_Format.pd
 import datetime
 import struct
 import sys
-
 from os.path import basename
-
 from typing import List
 
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
 from .Interfaces import SequenceIterator
-
 
 # dictionary for determining which tags goes into SeqRecord annotation
 # each key is tag_name + tag_number

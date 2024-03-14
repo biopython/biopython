@@ -8,10 +8,12 @@
 """Tests for Bio.SeqUtils.ProtParam and related code."""
 
 import unittest
+
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.SeqUtils import ProtParam, ProtParamData
 from Bio.SeqUtils import molecular_weight
+from Bio.SeqUtils import ProtParam
+from Bio.SeqUtils import ProtParamData
 
 
 class ProtParamTest(unittest.TestCase):

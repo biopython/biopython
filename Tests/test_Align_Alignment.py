@@ -18,8 +18,11 @@ except ImportError:
         "Install numpy if you want to use Bio.Align."
     ) from None
 
-from Bio import Align, SeqIO
-from Bio.Seq import Seq, reverse_complement, translate
+from Bio import Align
+from Bio import SeqIO
+from Bio.Seq import reverse_complement
+from Bio.Seq import Seq
+from Bio.Seq import translate
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqUtils import gc_fraction
 

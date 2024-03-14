@@ -3,14 +3,13 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Tests for Align.bigmaf module."""
-import unittest
 import tempfile
+import unittest
 from io import StringIO
 
+import numpy as np
 
 from Bio import Align
-
-import numpy as np
 
 
 class TestAlign_declaration(unittest.TestCase):

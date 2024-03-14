@@ -8,9 +8,9 @@
 import os
 import unittest
 
-from Bio import SearchIO
-
 from search_tests_common import SearchTestBaseClass
+
+from Bio import SearchIO
 
 
 class WriteCases(SearchTestBaseClass):

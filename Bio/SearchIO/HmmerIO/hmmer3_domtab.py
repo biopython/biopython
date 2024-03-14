@@ -7,9 +7,13 @@
 
 from itertools import chain
 
-from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
+from Bio.SearchIO._model import Hit
+from Bio.SearchIO._model import HSP
+from Bio.SearchIO._model import HSPFragment
+from Bio.SearchIO._model import QueryResult
 
-from .hmmer3_tab import Hmmer3TabParser, Hmmer3TabIndexer
+from .hmmer3_tab import Hmmer3TabIndexer
+from .hmmer3_tab import Hmmer3TabParser
 
 __all__ = (
     "Hmmer3DomtabHmmhitParser",

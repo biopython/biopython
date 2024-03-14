@@ -17,12 +17,14 @@ import struct
 import zlib
 from io import StringIO
 
-
-from Bio.Align import Alignment, Alignments
-from Bio.Align import interfaces, bigbed, maf
-from Bio.Align.bigbed import AutoSQLTable, Field
+from Bio.Align import Alignment
+from Bio.Align import Alignments
+from Bio.Align import bigbed
+from Bio.Align import interfaces
+from Bio.Align import maf
+from Bio.Align.bigbed import AutoSQLTable
+from Bio.Align.bigbed import Field
 from Bio.SeqRecord import SeqRecord
-
 
 declaration = AutoSQLTable(
     "bedMaf",

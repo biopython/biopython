@@ -3,18 +3,17 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Tests for Align.bigbed module."""
-import unittest
-import tempfile
 import os
 import sys
+import tempfile
+import unittest
 from io import StringIO
 
-
 from Bio import Align
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 from Bio import SeqIO
 from Bio.Align import bigbed
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
 
 try:
     import numpy as np

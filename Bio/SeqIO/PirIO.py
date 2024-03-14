@@ -94,7 +94,6 @@ from .Interfaces import _get_seq_string
 from .Interfaces import SequenceIterator
 from .Interfaces import SequenceWriter
 
-
 _pir_mol_type = {
     "P1": "protein",
     "F1": "protein",

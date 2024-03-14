@@ -3,14 +3,13 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Tests for AlignIO module."""
+import string
 import unittest
 import warnings
-import string
-
 from io import StringIO
 
-from Bio import BiopythonDeprecationWarning
 from Bio import AlignIO
+from Bio import BiopythonDeprecationWarning
 from Bio import SeqIO
 from Bio.Align import AlignInfo
 from Bio.Align import MultipleSeqAlignment

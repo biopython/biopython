@@ -11,8 +11,10 @@
 import re
 from xml.etree import ElementTree
 
-from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
-
+from Bio.SearchIO._model import Hit
+from Bio.SearchIO._model import HSP
+from Bio.SearchIO._model import HSPFragment
+from Bio.SearchIO._model import QueryResult
 
 # element - hit attribute name mapping
 _ELEM_HIT = {

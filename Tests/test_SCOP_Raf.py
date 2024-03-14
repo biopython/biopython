@@ -6,9 +6,9 @@
 """Unit test for Raf."""
 
 import unittest
+from io import StringIO
 
 from Bio.SCOP import Raf
-from io import StringIO
 
 
 class RafTests(unittest.TestCase):

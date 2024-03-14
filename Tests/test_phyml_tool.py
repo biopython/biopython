@@ -5,17 +5,15 @@
 
 """Unit tests for Bio.Phylo.Applications wrappers."""
 
-import sys
 import os
+import sys
 import unittest
 import warnings
-
 from subprocess import getoutput
 
-from Bio import Phylo
-from Bio import MissingExternalDependencyError
 from Bio import BiopythonDeprecationWarning
-
+from Bio import MissingExternalDependencyError
+from Bio import Phylo
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)

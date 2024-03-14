@@ -5,31 +5,32 @@
 
 import os
 import platform
-import unittest
 import tempfile
 import time
-
-from io import StringIO
+import unittest
 
 # Hide annoying warnings from things like bonds in GenBank features,
 # or PostgreSQL schema rules. TODO - test these warnings are raised!
 import warnings
+from io import StringIO
+
+import requires_internet
+from common_BioSQL import check_config
+from common_BioSQL import create_database
+from common_BioSQL import destroy_database
+
 from Bio import BiopythonWarning
+from Bio import Entrez
 
 # local stuff
 from Bio import MissingExternalDependencyError
-from Bio.Seq import Seq, MutableSeq
-from Bio.SeqFeature import SeqFeature
 from Bio import SeqIO
+from Bio.Seq import MutableSeq
+from Bio.Seq import Seq
+from Bio.SeqFeature import SeqFeature
 from Bio.SeqRecord import SeqRecord
-
-from BioSQL import BioSeqDatabase
 from BioSQL import BioSeq
-from Bio import Entrez
-
-from common_BioSQL import create_database, destroy_database, check_config
-
-import requires_internet
+from BioSQL import BioSeqDatabase
 
 if __name__ == "__main__":
     raise RuntimeError("Call this via test_BioSQL_*online.py not directly")

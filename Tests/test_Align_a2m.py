@@ -5,12 +5,11 @@
 # as part of this package.
 """Tests for Bio.Align.a2m module."""
 import unittest
-
 from io import StringIO
 
-from Bio import Align
-
 import numpy as np
+
+from Bio import Align
 
 
 class TestA2MReadingWriting(unittest.TestCase):

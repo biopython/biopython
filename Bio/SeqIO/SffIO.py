@@ -241,7 +241,6 @@ from Bio.SeqRecord import SeqRecord
 from .Interfaces import SequenceIterator
 from .Interfaces import SequenceWriter
 
-
 _null = b"\0"
 _sff = b".sff"
 _hsh = b".hsh"
@@ -337,6 +336,7 @@ def _sff_file_header(handle):
     assert 0 <= padding < 8, padding
     if handle.read(padding).count(_null) != padding:
         import warnings
+
         from Bio import BiopythonParserWarning
 
         warnings.warn(
@@ -415,6 +415,7 @@ def _sff_do_slow_index(handle):
         padding = read_header_length - read_header_size - name_length
         if handle.read(padding).count(_null) != padding:
             import warnings
+
             from Bio import BiopythonParserWarning
 
             warnings.warn(
@@ -432,6 +433,7 @@ def _sff_do_slow_index(handle):
             padding = 8 - padding
             if handle.read(padding).count(_null) != padding:
                 import warnings
+
                 from Bio import BiopythonParserWarning
 
                 warnings.warn(
@@ -682,6 +684,7 @@ def _sff_read_seq_record(
     padding = read_header_length - read_header_size - name_length
     if handle.read(padding).count(_null) != padding:
         import warnings
+
         from Bio import BiopythonParserWarning
 
         warnings.warn(
@@ -702,6 +705,7 @@ def _sff_read_seq_record(
         padding = 8 - padding
         if handle.read(padding).count(_null) != padding:
             import warnings
+
             from Bio import BiopythonParserWarning
 
             warnings.warn(
@@ -729,6 +733,7 @@ def _sff_read_seq_record(
         if clip_left >= clip_right:
             # Raise an error?
             import warnings
+
             from Bio import BiopythonParserWarning
 
             warnings.warn(
@@ -745,6 +750,7 @@ def _sff_read_seq_record(
     else:
         if clip_left >= clip_right:
             import warnings
+
             from Bio import BiopythonParserWarning
 
             warnings.warn(
@@ -858,6 +864,7 @@ def _sff_read_raw_record(handle, number_of_flows_per_read):
     pad = handle.read(padding)
     if pad.count(_null) != padding:
         import warnings
+
         from Bio import BiopythonParserWarning
 
         warnings.warn(
@@ -875,6 +882,7 @@ def _sff_read_raw_record(handle, number_of_flows_per_read):
         pad = handle.read(padding)
         if pad.count(_null) != padding:
             import warnings
+
             from Bio import BiopythonParserWarning
 
             warnings.warn(
@@ -1095,6 +1103,7 @@ def _check_eof(handle, index_offset, index_length):
     if padding and not extra:
         # TODO - Is this error harmless enough to just ignore?
         import warnings
+
         from Bio import BiopythonParserWarning
 
         warnings.warn(
@@ -1105,6 +1114,7 @@ def _check_eof(handle, index_offset, index_length):
         return
     if extra.count(_null) != padding:
         import warnings
+
         from Bio import BiopythonParserWarning
 
         warnings.warn(

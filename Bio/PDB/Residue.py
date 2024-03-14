@@ -7,10 +7,12 @@
 
 """Residue class, used by Structure objects."""
 
-from Bio.PDB.PDBExceptions import PDBConstructionException
-from Bio.PDB.Entity import Entity, DisorderedEntityWrapper
+from typing import TYPE_CHECKING
+from typing import TypeVar
 
-from typing import TYPE_CHECKING, TypeVar
+from Bio.PDB.Entity import DisorderedEntityWrapper
+from Bio.PDB.Entity import Entity
+from Bio.PDB.PDBExceptions import PDBConstructionException
 
 if TYPE_CHECKING:
     from Bio.PDB.Atom import Atom

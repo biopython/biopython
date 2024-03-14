@@ -6,14 +6,12 @@
 """Unit tests for the Bio.Phylo module."""
 
 import os
-import unittest
 import tempfile
-
+import unittest
 from io import StringIO
 
 from Bio import Phylo
 from Bio.Phylo import PhyloXML
-
 
 # Example Newick and Nexus files
 EX_NEWICK = "Nexus/int_node_labels.nwk"

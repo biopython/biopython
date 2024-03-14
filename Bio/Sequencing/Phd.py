@@ -18,7 +18,6 @@ internally.  This will give SeqRecord objects for each contig sequence.
 
 from Bio import Seq
 
-
 CKEYWORDS = [
     "CHROMAT_FILE",
     "ABI_THUMBPRINT",

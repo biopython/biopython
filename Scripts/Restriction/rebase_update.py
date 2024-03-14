@@ -16,8 +16,8 @@ These two sets of files are used by ``ranacompiler.py`` to build the updated
 
 import os
 from datetime import date
-from urllib.request import urlretrieve, urlcleanup
-
+from urllib.request import urlcleanup
+from urllib.request import urlretrieve
 
 # Rebase ftp location, do not modify these addresses:
 ftp_Rebase = "ftp://ftp.neb.com/"

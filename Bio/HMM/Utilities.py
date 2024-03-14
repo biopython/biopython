@@ -15,7 +15,6 @@ import warnings
 
 from Bio import BiopythonDeprecationWarning
 
-
 warnings.warn(
     "The 'Bio.HMM.Utilities' module is deprecated and will be "
     "removed in a future release of Biopython. Consider using the "

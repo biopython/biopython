@@ -14,18 +14,23 @@ The BLAST XML DTD file is available on the NCBI site at:
 https://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd
 """
 
-import os.path
 import html
+import os.path
 from collections import deque
+from typing import Callable
+from typing import Dict
 from xml.parsers import expat
-from typing import Dict, Callable
 
-from Bio.Blast import Record, Hit, HSP
-from Bio.Seq import Seq, reverse_complement
-from Bio.SeqRecord import SeqRecord
-from Bio.SeqFeature import SeqFeature, SimpleLocation
-from Bio.Align import Alignment
 from Bio import Entrez
+from Bio.Align import Alignment
+from Bio.Blast import Hit
+from Bio.Blast import HSP
+from Bio.Blast import Record
+from Bio.Seq import reverse_complement
+from Bio.Seq import Seq
+from Bio.SeqFeature import SeqFeature
+from Bio.SeqFeature import SimpleLocation
+from Bio.SeqRecord import SeqRecord
 
 
 class DTDHandler:

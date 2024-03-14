@@ -29,6 +29,7 @@ Functions:
 """
 
 import warnings
+
 from Bio import BiopythonDeprecationWarning
 
 warnings.warn(

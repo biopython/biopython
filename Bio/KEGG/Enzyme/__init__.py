@@ -13,8 +13,10 @@ Classes:
  - Record - Holds the information from a KEGG Enzyme record.
 """
 
-from Bio.KEGG import _default_wrap, _struct_wrap, _wrap_kegg, _write_kegg
-
+from Bio.KEGG import _default_wrap
+from Bio.KEGG import _struct_wrap
+from Bio.KEGG import _wrap_kegg
+from Bio.KEGG import _write_kegg
 
 # Set up line wrapping rules (see Bio.KEGG._wrap_kegg)
 rxn_wrap = [

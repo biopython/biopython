@@ -50,11 +50,12 @@ Other public methods are:
 """
 
 import sys
-from Bio.SeqUtils import ProtParamData  # Local
-from Bio.SeqUtils import IsoelectricPoint  # Local
-from Bio.Seq import Seq
+
 from Bio.Data import IUPACData
+from Bio.Seq import Seq
+from Bio.SeqUtils import IsoelectricPoint  # Local
 from Bio.SeqUtils import molecular_weight
+from Bio.SeqUtils import ProtParamData  # Local
 
 
 class ProteinAnalysis:

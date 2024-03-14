@@ -14,14 +14,20 @@ See https://doi.org/10.1128/JB.184.21.6026-6036.2002
 """
 
 from reportlab.lib import colors
-from reportlab.lib.colors import red, grey, orange, green, brown
-from reportlab.lib.colors import blue, lightblue, purple
-
-from Bio.Graphics import GenomeDiagram
-from Bio.Graphics.GenomeDiagram import CrossLink
+from reportlab.lib.colors import blue
+from reportlab.lib.colors import brown
+from reportlab.lib.colors import green
+from reportlab.lib.colors import grey
+from reportlab.lib.colors import lightblue
+from reportlab.lib.colors import orange
+from reportlab.lib.colors import purple
+from reportlab.lib.colors import red
 
 from Bio import SeqIO
-from Bio.SeqFeature import SeqFeature, SimpleLocation
+from Bio.Graphics import GenomeDiagram
+from Bio.Graphics.GenomeDiagram import CrossLink
+from Bio.SeqFeature import SeqFeature
+from Bio.SeqFeature import SimpleLocation
 
 name = "Proux Fig 6"
 

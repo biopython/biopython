@@ -6,17 +6,17 @@
 
 import unittest
 import warnings
-
 from io import StringIO
+
+from seq_tests_common import SeqRecordTestBaseClass
+from test_SeqIO import SeqIOConverterTestBaseClass
 
 from Bio import BiopythonParserWarning
 from Bio import SeqIO
 from Bio.Seq import Seq
-from Bio.SeqFeature import SimpleLocation
 from Bio.SeqFeature import SeqFeature
+from Bio.SeqFeature import SimpleLocation
 from Bio.SeqRecord import SeqRecord
-from seq_tests_common import SeqRecordTestBaseClass
-from test_SeqIO import SeqIOConverterTestBaseClass
 
 
 class TestEmbl(unittest.TestCase):

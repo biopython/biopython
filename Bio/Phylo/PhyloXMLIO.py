@@ -23,7 +23,6 @@ from xml.etree import ElementTree
 
 from Bio.Phylo import PhyloXML as PX
 
-
 # Recognize the phyloXML namespace when parsing
 # See http://effbot.org/zone/element-namespaces.htm
 NAMESPACES = {"phy": "http://www.phyloxml.org"}

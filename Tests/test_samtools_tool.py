@@ -9,19 +9,17 @@
 
 """Tests for samtools tool."""
 
-from Bio import MissingExternalDependencyError
-import sys
 import os
+import sys
 import unittest
 import warnings
 
-
 from Bio import BiopythonDeprecationWarning
+from Bio import MissingExternalDependencyError
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
     from Bio.Application import ApplicationError
-    from Bio.Sequencing.Applications import SamtoolsViewCommandline
     from Bio.Sequencing.Applications import SamtoolsCalmdCommandline
     from Bio.Sequencing.Applications import SamtoolsCatCommandline
     from Bio.Sequencing.Applications import SamtoolsFaidxCommandline
@@ -29,8 +27,9 @@ with warnings.catch_warnings():
     from Bio.Sequencing.Applications import SamtoolsIndexCommandline
     from Bio.Sequencing.Applications import SamtoolsMergeCommandline
     from Bio.Sequencing.Applications import SamtoolsMpileupCommandline
-    from Bio.Sequencing.Applications import SamtoolsVersion1xSortCommandline
     from Bio.Sequencing.Applications import SamtoolsSortCommandline
+    from Bio.Sequencing.Applications import SamtoolsVersion1xSortCommandline
+    from Bio.Sequencing.Applications import SamtoolsViewCommandline
 
 # TODO from Bio.Sequencing.Applications import SamtoolsPhaseCommandline
 # TODO from Bio.Sequencing.Applications import SamtoolsReheaderCommandline

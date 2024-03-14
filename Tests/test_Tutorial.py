@@ -53,19 +53,19 @@
 
 """Tests for Tutorial module."""
 
-import unittest
 import doctest
 import os
 import sys
+import unittest
 import warnings
-
-from Bio import BiopythonDeprecationWarning
-from Bio import BiopythonExperimentalWarning
-from Bio import MissingExternalDependencyError
 
 # This is the same mechanism used for run_tests.py --offline
 # to skip tests requiring the network.
 import requires_internet
+
+from Bio import BiopythonDeprecationWarning
+from Bio import BiopythonExperimentalWarning
+from Bio import MissingExternalDependencyError
 
 try:
     requires_internet.check()

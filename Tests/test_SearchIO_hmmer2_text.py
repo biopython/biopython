@@ -9,7 +9,8 @@
 import unittest
 from os import path
 
-from Bio.SearchIO import parse, read
+from Bio.SearchIO import parse
+from Bio.SearchIO import read
 
 
 class HmmpfamTests(unittest.TestCase):

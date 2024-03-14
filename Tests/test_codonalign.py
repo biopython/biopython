@@ -5,18 +5,18 @@
 
 """Unit tests for the Bio.codonalign modules."""
 
-import warnings
 import tempfile
 import unittest
+import warnings
 
-from Bio import BiopythonWarning, BiopythonExperimentalWarning
-from Bio import SeqIO
 from Bio import AlignIO
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
+from Bio import BiopythonExperimentalWarning
+from Bio import BiopythonWarning
+from Bio import SeqIO
 from Bio.Align import MultipleSeqAlignment
 from Bio.Data import CodonTable
-
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore", BiopythonExperimentalWarning)

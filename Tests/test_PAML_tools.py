@@ -5,11 +5,14 @@
 
 """Tests for PAML tools module."""
 
-import unittest
 import os
 import sys
-from Bio.Phylo.PAML import codeml, baseml, yn00
+import unittest
+
 from Bio import MissingExternalDependencyError
+from Bio.Phylo.PAML import baseml
+from Bio.Phylo.PAML import codeml
+from Bio.Phylo.PAML import yn00
 
 
 def is_exe(filepath):

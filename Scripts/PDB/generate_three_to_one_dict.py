@@ -15,7 +15,6 @@ import gzip
 import inspect
 import os
 import warnings
-
 from urllib.request import urlopen
 
 url = "ftp://ftp.wwpdb.org/pub/pdb/data/monomers/components.cif.gz"

@@ -22,14 +22,16 @@ positions; the parser converts these to zero-based coordinates to be consistent
 with Python and other alignment formats.
 """
 
-from itertools import chain
 import copy
+from itertools import chain
 
 import numpy as np
 
 from Bio.Align import Alignment
 from Bio.Align import interfaces
-from Bio.Seq import Seq, reverse_complement, UndefinedSequenceError
+from Bio.Seq import reverse_complement
+from Bio.Seq import Seq
+from Bio.Seq import UndefinedSequenceError
 from Bio.SeqRecord import SeqRecord
 
 

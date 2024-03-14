@@ -5,7 +5,6 @@
 # as part of this package.
 """Tests for Bio.AlignIO.PhylipIO module."""
 import unittest
-
 from io import StringIO
 
 from Bio.AlignIO.PhylipIO import PhylipIterator

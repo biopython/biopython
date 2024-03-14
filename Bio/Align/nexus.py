@@ -20,8 +20,8 @@ import numpy as np
 
 from Bio.Align import Alignment
 from Bio.Align import interfaces
-from Bio.SeqRecord import SeqRecord
 from Bio.Nexus import Nexus
+from Bio.SeqRecord import SeqRecord
 
 
 class AlignmentWriter(interfaces.AlignmentWriter):

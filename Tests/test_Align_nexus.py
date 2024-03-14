@@ -9,7 +9,6 @@ from io import StringIO
 
 from Bio import Align
 
-
 try:
     import numpy as np
 except ImportError:

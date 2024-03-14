@@ -10,15 +10,15 @@ We have decided to remove this module in future, and instead recommend
 building your command and invoking it via the subprocess module directly.
 """
 
-from ._Muscle import MuscleCommandline
-from ._Clustalw import ClustalwCommandline
 from ._ClustalOmega import ClustalOmegaCommandline
-from ._Prank import PrankCommandline
-from ._Mafft import MafftCommandline
+from ._Clustalw import ClustalwCommandline
 from ._Dialign import DialignCommandline
+from ._Mafft import MafftCommandline
+from ._MSAProbs import MSAProbsCommandline
+from ._Muscle import MuscleCommandline
+from ._Prank import PrankCommandline
 from ._Probcons import ProbconsCommandline
 from ._TCoffee import TCoffeeCommandline
-from ._MSAProbs import MSAProbsCommandline
 
 # Make this explicit, then they show up in the API docs
 __all__ = (

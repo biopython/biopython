@@ -9,7 +9,6 @@
 
 import xml.etree.ElementTree as ET
 
-
 cdao_namespaces = {
     "cdao": "http://purl.obolibrary.org/obo/cdao.owl#",
     "obo": "http://purl.obolibrary.org/obo/",

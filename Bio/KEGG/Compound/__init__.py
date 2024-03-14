@@ -15,8 +15,10 @@ Classes:
  - Record - A representation of a KEGG Ligand/Compound.
 """
 
-from Bio.KEGG import _default_wrap, _struct_wrap, _wrap_kegg, _write_kegg
-
+from Bio.KEGG import _default_wrap
+from Bio.KEGG import _struct_wrap
+from Bio.KEGG import _wrap_kegg
+from Bio.KEGG import _write_kegg
 
 # Set up line wrapping rules (see Bio.KEGG._wrap_kegg)
 name_wrap = [0, "", (" ", "$", 1, 1), ("-", "$", 1, 1)]

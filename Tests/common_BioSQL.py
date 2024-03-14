@@ -9,24 +9,22 @@ import platform
 import tempfile
 import time
 import unittest
-
+import warnings
 from io import StringIO
 
-# Hide annoying warnings from things like bonds in GenBank features,
-# or PostgreSQL schema rules. TODO - test these warnings are raised!
-import warnings
-from Bio import BiopythonWarning
-
-# local stuff
-from Bio import MissingExternalDependencyError
-from Bio.Seq import Seq, MutableSeq, UndefinedSequenceError
-from Bio.SeqFeature import SeqFeature, UnknownPosition, ExactPosition
-from Bio import SeqIO
-from Bio.SeqRecord import SeqRecord
-
-from BioSQL import BioSeqDatabase
-
 from seq_tests_common import SeqRecordTestBaseClass
+
+from Bio import BiopythonWarning
+from Bio import MissingExternalDependencyError
+from Bio import SeqIO
+from Bio.Seq import MutableSeq
+from Bio.Seq import Seq
+from Bio.Seq import UndefinedSequenceError
+from Bio.SeqFeature import ExactPosition
+from Bio.SeqFeature import SeqFeature
+from Bio.SeqFeature import UnknownPosition
+from Bio.SeqRecord import SeqRecord
+from BioSQL import BioSeqDatabase
 
 if __name__ == "__main__":
     raise RuntimeError("Call this via test_BioSQL_*.py not directly")

@@ -7,15 +7,14 @@
 """Tests for the SeqIO Xdna module."""
 
 import unittest
-
 from io import BytesIO
 
 from Bio import BiopythonWarning
 from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqFeature import BeforePosition
-from Bio.SeqFeature import SimpleLocation
 from Bio.SeqFeature import SeqFeature
+from Bio.SeqFeature import SimpleLocation
 from Bio.SeqRecord import SeqRecord
 
 

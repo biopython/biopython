@@ -11,10 +11,10 @@
 
 import unittest
 
-from Bio.PDB import StructureAlignment
-from Bio.PDB import PDBParser
 from Bio import Align
 from Bio import AlignIO
+from Bio.PDB import PDBParser
+from Bio.PDB import StructureAlignment
 
 
 class StructureAlignTests(unittest.TestCase):

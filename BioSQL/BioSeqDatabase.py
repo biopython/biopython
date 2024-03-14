@@ -19,9 +19,8 @@ database, and is compatible with the BioSQL standards.
 import os
 
 from . import BioSeq
-from . import Loader
 from . import DBUtils
-
+from . import Loader
 
 _POSTGRES_RULES_PRESENT = False  # Hack for BioSQL Bug 2839
 
@@ -127,6 +126,7 @@ def open_database(driver="MySQLdb", **kwargs):
         )
         if server.adaptor.execute_and_fetchall(sql):
             import warnings
+
             from Bio import BiopythonWarning
 
             warnings.warn(

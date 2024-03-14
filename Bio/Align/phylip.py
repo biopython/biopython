@@ -14,7 +14,6 @@ from Bio.Align import interfaces
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
-
 _PHYLIP_ID_WIDTH = 10
 
 

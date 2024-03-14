@@ -7,9 +7,11 @@
 import os
 import unittest
 import warnings
-
 from io import BytesIO
 from io import StringIO
+
+from test_SeqIO import SeqIOConverterTestBaseClass
+from test_SeqIO import SeqIOTestBaseClass
 
 from Bio import BiopythonParserWarning
 from Bio import BiopythonWarning
@@ -21,8 +23,6 @@ from Bio.Seq import Seq
 from Bio.Seq import UndefinedSequenceError
 from Bio.SeqIO import QualityIO
 from Bio.SeqRecord import SeqRecord
-from test_SeqIO import SeqIOConverterTestBaseClass
-from test_SeqIO import SeqIOTestBaseClass
 
 
 class QualityIOTestBaseClass(SeqIOTestBaseClass):

@@ -13,10 +13,9 @@ import sys
 import unittest
 import warnings
 
-from Bio import MissingExternalDependencyError
 from Bio import BiopythonDeprecationWarning
+from Bio import MissingExternalDependencyError
 from Bio import SeqIO
-
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)

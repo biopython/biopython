@@ -5,7 +5,6 @@
 # as part of this package.
 """Tests for Bio.AlignIO.EmbossIO module."""
 import unittest
-
 from io import StringIO
 
 from Bio.AlignIO.EmbossIO import EmbossIterator

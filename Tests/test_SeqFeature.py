@@ -8,24 +8,23 @@
 
 import unittest
 import warnings
-
 from copy import deepcopy
 from os import path
 
 from Bio import BiopythonDeprecationWarning
+from Bio import BiopythonParserWarning
 from Bio import Seq
 from Bio import SeqIO
 from Bio import SeqRecord
-from Bio import BiopythonParserWarning
 from Bio.Data.CodonTable import TranslationError
 from Bio.SeqFeature import AfterPosition
 from Bio.SeqFeature import BeforePosition
 from Bio.SeqFeature import BetweenPosition
 from Bio.SeqFeature import CompoundLocation
 from Bio.SeqFeature import ExactPosition
-from Bio.SeqFeature import SimpleLocation
 from Bio.SeqFeature import OneOfPosition
 from Bio.SeqFeature import SeqFeature
+from Bio.SeqFeature import SimpleLocation
 from Bio.SeqFeature import UnknownPosition
 from Bio.SeqFeature import WithinPosition
 

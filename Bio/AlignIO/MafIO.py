@@ -34,7 +34,6 @@ A 1-column wide alignment would have ``start == end``.
 """
 
 import os
-
 from itertools import islice
 
 try:

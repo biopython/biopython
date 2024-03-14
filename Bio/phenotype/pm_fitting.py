@@ -23,8 +23,8 @@ get_area           Calculate the area under the PM curve.
 import numpy as np
 
 try:
-    from scipy.optimize.minpack import curve_fit
     from scipy.integrate import trapz
+    from scipy.optimize.minpack import curve_fit
 except ImportError:
     from Bio import MissingPythonDependencyError
 

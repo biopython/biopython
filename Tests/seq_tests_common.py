@@ -7,14 +7,17 @@
 import unittest
 import warnings
 
+from test_SeqIO import SeqIOTestBaseClass
+
 from Bio import BiopythonDeprecationWarning
 from Bio.Seq import UndefinedSequenceError
-from Bio.SeqUtils.CheckSum import seguid
-from Bio.SeqFeature import ExactPosition, UnknownPosition
-from Bio.SeqFeature import SimpleLocation, CompoundLocation, SeqFeature
+from Bio.SeqFeature import CompoundLocation
+from Bio.SeqFeature import ExactPosition
+from Bio.SeqFeature import SeqFeature
+from Bio.SeqFeature import SimpleLocation
+from Bio.SeqFeature import UnknownPosition
 from Bio.SeqRecord import SeqRecord
-
-from test_SeqIO import SeqIOTestBaseClass
+from Bio.SeqUtils.CheckSum import seguid
 
 
 class SeqRecordTestBaseClass(unittest.TestCase):

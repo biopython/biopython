@@ -305,6 +305,7 @@ handle.name: {handle.name}
                 key, value = (s.strip() for s in line[2:].split(": ", 1))
             else:
                 import warnings
+
                 from Bio import BiopythonParserWarning
 
                 # Seen in lalign36, specifically version 36.3.4 Apr, 2011
