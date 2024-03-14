@@ -8,7 +8,7 @@ import os
 from os import PathLike
 
 from Bio.PDB import MMCIFParser
-from Bio.PDB.Structure import Structure as PDBStructure
+from Bio.PDB.Structure import Structure as StructuralModel
 from typing import Iterator, Union, Optional
 from urllib.request import urlopen
 
@@ -82,11 +82,11 @@ def download_cif_for(
     return file_path
 
 
-def get_pdb_structures_for(
+def get_structural_models_for(
     qualifier: str,
     mmcif_parser: Optional[MMCIFParser] = None,
     directory: Optional[Union[str, bytes, PathLike]] = None,
-) -> Iterator[PDBStructure]:
+) -> Iterator[StructuralModel]:
     """Get the PDB structures for a UniProt accession.
 
     Downloads the mmCIF files to the directory if they are not present.
