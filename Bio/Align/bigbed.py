@@ -834,11 +834,17 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 data = stream.read(node.dataSize)
                 if self._compressed > 0:
                     data = zlib.decompress(data)
-                while data:
+                i = 0
+                n = len(data)
+                while i < n:
+                    j = i + size
                     child_chromIx, child_chromStart, child_chromEnd = formatter.unpack(
-                        data[:size]
+                        data[i:j]
                     )
-                    rest, data = data[size:].split(b"\00", 1)
+                    i = j
+                    j = data.index(b"\00", i)
+                    rest = data[i:j]
+                    i = j + 1
                     if child_chromIx != chromIx:
                         continue
                     if end <= child_chromStart or child_chromEnd <= start:
