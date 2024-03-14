@@ -7,7 +7,7 @@ import json
 import os
 from os import PathLike
 
-from Bio.PDB import MMCIFParser
+from Bio.PDB.MMCIFParser import MMCIFParser
 from Bio.PDB.Structure import Structure as StructuralModel
 from typing import Iterator, Union, Optional
 from urllib.request import urlopen
@@ -45,7 +45,7 @@ def _get_mmcif_file_path_for(
     cif_url = prediction["cifUrl"]
     # Get the file name from the URL
     file_name = cif_url.split("/")[-1]
-    return os.path.join(directory, file_name)
+    return str(os.path.join(directory, file_name))
 
 
 def download_cif_for(
