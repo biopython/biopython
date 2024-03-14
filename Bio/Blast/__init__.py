@@ -385,7 +385,7 @@ class Record(list):
     >>> record.query
     SeqRecord(seq=Seq(None, length=556), id='gi|1347369|gb|G25137.1|G25137', name='<unknown name>', description='human STS EST48004, sequence tagged site', dbxrefs=[])
     >>> record.stat
-    {'db-num': 2934173, 'db-len': 1011751523, 'hsp-len': 0, 'eff-space': 0.0, 'kappa': 0.041, 'lambda': 0.267, 'entropy': 0.14}
+    {'db-num': 2934173, 'db-len': 1011751523, 'hsp-len': 0, 'eff-space': 0, 'kappa': 0.041, 'lambda': 0.267, 'entropy': 0.14}
     >>> len(record)
     78
     >>> hit = record[0]
