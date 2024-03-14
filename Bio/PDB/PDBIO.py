@@ -294,7 +294,7 @@ class PDBIO(StructureIO):
             return _PQR_ATOM_FORMAT_STRING % args
 
     # Public methods
-    def save(self, file, select=_select, write_end=True, preserve_atom_numbering=False):
+    def save(self, file, select=_select, write_end=True, write_ter = True, preserve_atom_numbering=False):
         """Save structure to a file.
 
         :param file: output file
@@ -395,7 +395,7 @@ class PDBIO(StructureIO):
                             # inconsequential if preserve_atom_numbering is True
                             atom_number += 1
 
-                if chain_residues_written:
+                if chain_residues_written and write_ter == True:
                     fhandle.write(
                         _TER_FORMAT_STRING
                         % (atom_number, resname, chain_id, resseq, icode)
