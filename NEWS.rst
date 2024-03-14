@@ -80,6 +80,10 @@ The UniProt package now includes a method to search UniProt programmatically.
 The tutorial has been updated with examples of how to use the search method.
 See the chapter on Swiss-Prot and ExPASy in the tutorial for more information.
 
+The restriction enzyme ``search`` function now has a consistent behaviour for
+cutting sites lying on the edges of the sequence for enzymes for which
+the recognition site is different from the cutsite. See issue #4604.
+
 As in recent releases, more of our code is now explicitly available under
 either our original "Biopython License Agreement", or the very similar but
 more commonly used "3-Clause BSD License".  See the ``LICENSE.rst`` file for
@@ -92,6 +96,7 @@ possible, especially the following contributors:
 - Fabio Zanini (first contribution)
 - Joao Rodrigues
 - Judith Bernett (first contribution)
+- Manuel Lera-Ramirez
 - Michael M. (first contribution)
 - Michiel de Hoon
 - Peter Cock
