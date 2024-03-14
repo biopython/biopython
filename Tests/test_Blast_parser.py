@@ -292,7 +292,7 @@ Program: BLASTP 2.2.26+
         self.assertEqual(records.version, "BLASTP 2.2.26+")
         self.assertEqual(
             records.reference,
-            'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+            'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
         )
         self.assertEqual(records.db, "db/minirefseq_prot")
         self.assertIsInstance(records.query, SeqRecord)
@@ -789,7 +789,7 @@ Query_1          59 VSLDITEESTSDLDKFNSGDKVTIT  84
         self.assertEqual(records.version, "BLASTP 2.14.1+")
         self.assertEqual(
             records.reference,
-            'Zheng Zhang, Alejandro A. Sch&auml;ffer, Webb Miller, Thomas L. Madden, David J. Lipman, Eugene V. Koonin, and Stephen F. Altschul (1998), "Protein sequence similarity searches using patterns as seeds", Nucleic Acids Res. 26:3986-3990.',
+            'Zheng Zhang, Alejandro A. Schäffer, Webb Miller, Thomas L. Madden, David J. Lipman, Eugene V. Koonin, and Stephen F. Altschul (1998), "Protein sequence similarity searches using patterns as seeds", Nucleic Acids Res. 26:3986-3990.',
         )
         self.assertEqual(records.db, "nr")
         self.assertIsInstance(records.query, SeqRecord)
@@ -2035,7 +2035,7 @@ Program: BLASTN 2.9.0+
         self.assertEqual(records.version, "BLASTN 2.9.0+")
         self.assertEqual(
             records.reference,
-            'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+            'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
         )
         self.assertEqual(
             records.db, "GPIPE/10090/current/all_top_level GPIPE/10090/current/rna"
@@ -3651,7 +3651,7 @@ Program: BLASTX 2.2.22+
         self.assertEqual(records.version, "BLASTX 2.2.22+")
         self.assertEqual(
             records.reference,
-            'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+            'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
         )
         self.assertEqual(records.db, "nr")
         self.assertIsInstance(records.query, SeqRecord)
@@ -8512,7 +8512,7 @@ Program: BLASTX 2.9.0+
         self.assertEqual(records.version, "BLASTX 2.9.0+")
         self.assertEqual(
             records.reference,
-            'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+            'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
         )
         self.assertEqual(records.db, "nr")
         if xml2 is False:
@@ -9542,7 +9542,7 @@ Program: TBLASTN 2.9.0+
         self.assertEqual(records.version, "TBLASTN 2.9.0+")
         self.assertEqual(
             records.reference,
-            'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+            'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
         )
         self.assertEqual(records.db, "nr")
         if xml2 is False:
@@ -10566,7 +10566,7 @@ Program: TBLASTX 2.2.26+
         self.assertEqual(records.version, "TBLASTX 2.2.26+")
         self.assertEqual(
             records.reference,
-            'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+            'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
         )
         self.assertEqual(records.db, "refseq_rna")
         self.assertIsInstance(records.query, SeqRecord)
@@ -11307,7 +11307,7 @@ class TestRPSBlast(unittest.TestCase):
         self.assertEqual(records.version, "RPSBLAST 2.9.0+")
         self.assertEqual(
             records.reference,
-            'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+            'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
         )
         self.assertEqual(records.db, "cdd_delta")
         if xml2 is False:

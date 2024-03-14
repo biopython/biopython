@@ -15,6 +15,7 @@ https://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd
 """
 
 import os.path
+import html
 from collections import deque
 from xml.parsers import expat
 from typing import Dict, Callable
@@ -577,7 +578,7 @@ class XMLHandler:
         self._characters = ""
 
     def _end_reference(self, name):
-        self._records.reference = self._characters
+        self._records.reference = html.unescape(self._characters)
         self._characters = ""
 
     def _end_db(self, name):
@@ -1053,7 +1054,12 @@ class XMLHandler:
         self._characters = ""
 
     def _end_eff_space(self, name):
-        self._stat["eff-space"] = float(self._characters)
+        characters = self._characters
+        if characters.isdigit():
+            value = int(characters)
+        else:
+            value = float(characters)
+        self._stat["eff-space"] = value
         self._characters = ""
 
     def _end_eff_space_xml2(self, name):
@@ -1123,8 +1129,7 @@ class XMLHandler:
         method = self._start_methods.get(name)
         if method is None:
             raise ValueError(
-                "Failed to find method for %s (%s)"
-                % (name, XMLHandler._start_methods.keys())
+                "Failed to find method for %s (%s)" % (name, self._start_methods.keys())
             )
         method(self, name, attributes)
 

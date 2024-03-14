@@ -762,7 +762,7 @@ For our example, we find:
    >>> blast_records.version
    'BLASTN 2.2.27+'
    >>> blast_records.reference
-   'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.'
+   'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.'
    >>> blast_records.db
    'refseq_rna'
    >>> blast_records.param
@@ -833,7 +833,7 @@ Continuing with our example,
    >>> blast_record.query
    SeqRecord(seq=Seq(None, length=61), id='42291', name='<unknown name>', description='mystery_seq', dbxrefs=[])
    >>> blast_record.stat
-   {'db-num': 3056429, 'db-len': 673143725, 'hsp-len': 0, 'eff-space': 0.0, 'kappa': 0.41, 'lambda': 0.625, 'entropy': 0.78}
+   {'db-num': 3056429, 'db-len': 673143725, 'hsp-len': 0, 'eff-space': 0, 'kappa': 0.41, 'lambda': 0.625, 'entropy': 0.78}
    >>> print(blast_record)  # doctest:+ELLIPSIS
      Query: 42291 (length=61)
             mystery_seq
