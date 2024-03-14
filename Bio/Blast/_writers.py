@@ -22,6 +22,82 @@ class BaseXMLWriter(ABC):
         """Init the stuff."""
         self.stream = stream
 
+    def _write_iteration_query_id(self, query_id):
+        self.stream.write(b"<Iteration_query-ID>%b</Iteration_query-ID>\n" % query_id)
+
+    def _write_iteration_query_def(self, query_def):
+        self.stream.write(
+            b"<Iteration_query-def>%b</Iteration_query-def>\n" % query_def
+        )
+
+    def _write_iteration_query_len(self, query_len):
+        self.stream.write(
+            b"<Iteration_query-len>%d</Iteration_query-len>\n" % query_len
+        )
+
+    def _start_iteration_hits(self):
+        self.stream.write(b"<Iteration_hits>\n")
+
+    def _end_iteration_hits(self):
+        self.stream.write(b"</Iteration_hits>\n")
+
+    def _start_hsp(self):
+        self.stream.write(b"    <Hsp>\n")
+
+    def _end_hsp(self):
+        self.stream.write(b"    </Hsp>\n")
+
+    def _write_hsp_num(self, num):
+        self.stream.write(b"    <Hsp_num>%d</Hsp_num>\n" % num)
+
+    def _write_hsp_bit_score(self, bit_score):
+        self.stream.write(b"    <Hsp_bit-score>%b</Hsp_bit-score>\n" % bit_score)
+
+    def _write_hsp_score(self, score):
+        self.stream.write(b"    <Hsp_score>%d</Hsp_score>\n" % score)
+
+    def _write_hsp_evalue(self, evalue):
+        self.stream.write(b"    <Hsp_evalue>%b</Hsp_evalue>\n" % evalue)
+
+    def _write_hsp_query_from(self, query_from):
+        self.stream.write(b"     <Hsp_query-from>%d</Hsp_query-from>\n" % query_from)
+
+    def _write_hsp_query_to(self, query_to):
+        self.stream.write(b"     <Hsp_query-to>%d</Hsp_query-to>\n" % query_to)
+
+    def _write_hsp_hit_from(self, hit_from):
+        self.stream.write(b"     <Hsp_hit-from>%d</Hsp_hit-from>\n" % hit_from)
+
+    def _write_hsp_hit_to(self, hit_to):
+        self.stream.write(b"     <Hsp_hit-to>%d</Hsp_hit-to>\n" % hit_to)
+
+    def _write_hsp_query_frame(self, query_frame):
+        self.stream.write(b"     <Hsp_query-frame>%d</Hsp_query-frame>\n" % query_frame)
+
+    def _write_hsp_hit_frame(self, hit_frame):
+        self.stream.write(b"     <Hsp_hit-frame>%d</Hsp_hit-frame>\n" % hit_frame)
+
+    def _write_hsp_positive(self, positive):
+        self.stream.write(b"     <Hsp_positive>%d</Hsp_positive>\n" % positive)
+
+    def _write_hsp_identity(self, identity):
+        self.stream.write(b"     <Hsp_identity>%d</Hsp_identity>\n" % identity)
+
+    def _write_hsp_gaps(self, gaps):
+        self.stream.write(b"     <Hsp_gaps>%d</Hsp_gaps>\n" % gaps)
+
+    def _write_hsp_align_len(self, align_len):
+        self.stream.write(b"     <Hsp_align-len>%d</Hsp_align-len>\n" % align_len)
+
+    def _write_hsp_qseq(self, qseq):
+        self.stream.write(b"      <Hsp_qseq>%b</Hsp_qseq>\n" % qseq)
+
+    def _write_hsp_hseq(self, hseq):
+        self.stream.write(b"      <Hsp_hseq>%b</Hsp_hseq>\n" % hseq)
+
+    def _write_hsp_midline(self, midline):
+        self.stream.write(b"      <Hsp_midline>%b</Hsp_midline>\n" % midline)
+
     def _write_hsp(self, hsp, query_length, target_length):
         stream = self.stream
         program = self._program
@@ -97,58 +173,71 @@ class BaseXMLWriter(ABC):
         identity = annotations["identity"]
         positive = annotations["positive"]
         midline = annotations["midline"]
-        # fmt: off
-        stream.write(f"""\
-    <Hsp>
-      <Hsp_num>{hsp.num}</Hsp_num>
-      <Hsp_bit-score>{bit_score}</Hsp_bit-score>
-      <Hsp_score>{hsp.score}</Hsp_score>
-      <Hsp_evalue>{evalue}</Hsp_evalue>
-      <Hsp_query-from>{query_from}</Hsp_query-from>
-      <Hsp_query-to>{query_to}</Hsp_query-to>
-      <Hsp_hit-from>{hit_from}</Hsp_hit-from>
-      <Hsp_hit-to>{hit_to}</Hsp_hit-to>
-      <Hsp_query-frame>{query_frame}</Hsp_query-frame>
-      <Hsp_hit-frame>{hit_frame}</Hsp_hit-frame>
-      <Hsp_identity>{identity}</Hsp_identity>
-      <Hsp_positive>{positive}</Hsp_positive>
-""".encode("UTF-8"))
+        self._start_hsp()
+        self._write_hsp_num(hsp.num)
+        self._write_hsp_bit_score(str(bit_score).encode())
+        self._write_hsp_score(hsp.score)
+        self._write_hsp_evalue(str(evalue).encode())
+        self._write_hsp_query_from(query_from)
+        self._write_hsp_query_to(query_to)
+        self._write_hsp_hit_from(hit_from)
+        self._write_hsp_hit_to(hit_to)
+        self._write_hsp_query_frame(query_frame)
+        self._write_hsp_hit_frame(hit_frame)
+        self._write_hsp_identity(identity)
+        self._write_hsp_positive(positive)
         gaps = annotations.get("gaps")
         if gaps is not None:
-            stream.write(b"""\
-      <Hsp_gaps>%d</Hsp_gaps>
-""" % gaps)
-        stream.write(f"""\
-      <Hsp_align-len>{align_len}</Hsp_align-len>
-      <Hsp_qseq>{qseq}</Hsp_qseq>
-      <Hsp_hseq>{hseq}</Hsp_hseq>
-      <Hsp_midline>{midline}</Hsp_midline>
-    </Hsp>
-""".encode("UTF-8"))
-        # fmt: on
+            self._write_hsp_gaps(gaps)
+        self._write_hsp_align_len(align_len)
+        self._write_hsp_qseq(qseq.encode())
+        self._write_hsp_hseq(hseq.encode())
+        self._write_hsp_midline(midline.encode())
+        self._end_hsp()
+
+    def _start_iteration_hit(self):
+        self.stream.write(b"<Hit>\n")
+
+    def _end_iteration_hit(self):
+        self.stream.write(b"</Hit>\n")
+
+    def _write_hit_num(self, num):
+        self.stream.write(b"  <Hit_num>%d</Hit_num>\n" % num)
+
+    def _write_hit_id(self, hit_id):
+        self.stream.write(b"  <Hit_id>%b</Hit_id>\n" % hit_id)
+
+    def _write_hit_def(self, hit_def):
+        self.stream.write(b"  <Hit_def>%b</Hit_def>\n" % hit_def)
+
+    def _write_hit_accession(self, hit_accession):
+        self.stream.write(b"  <Hit_accession>%b</Hit_accession>\n" % hit_accession)
+
+    def _write_hit_len(self, hit_length):
+        self.stream.write(b"  <Hit_len>%d</Hit_len>\n" % hit_length)
+
+    def _start_hit_hsps(self):
+        self.stream.write(b"  <Hit_hsps>\n")
+
+    def _end_hit_hsps(self):
+        self.stream.write(b"  </Hit_hsps>\n")
 
     def _write_hit(self, hit, query_length):
         stream = self.stream
         program = self._program
         target = hit.target
         target_length = len(target.seq)
-        # fmt: off
-        stream.write(f"""\
-<Hit>
-  <Hit_num>{hit.num}</Hit_num>
-  <Hit_id>{target.id}</Hit_id>
-  <Hit_def>{target.description}</Hit_def>
-  <Hit_accession>{target.name}</Hit_accession>
-  <Hit_len>{target_length}</Hit_len>
-  <Hit_hsps>
-""".encode("UTF-8"))
+        self._start_iteration_hit()
+        self._write_hit_num(hit.num)
+        self._write_hit_id(target.id.encode())
+        self._write_hit_def(target.description.encode())
+        self._write_hit_accession(target.name.encode())
+        self._write_hit_len(target_length)
+        self._start_hit_hsps()
         for hsp in hit:
             self._write_hsp(hsp, query_length, target_length)
-        stream.write(b"""\
-  </Hit_hsps>
-</Hit>
-""")
-        # fmt: on
+        self._end_hit_hsps()
+        self._end_iteration_hit()
 
     def _write_record(self, record):
         stream = self.stream
@@ -159,25 +248,13 @@ class BaseXMLWriter(ABC):
             query_length = None
         else:
             query_length = len(query.seq)
-            # fmt: off
-            stream.write(f"""\
-  <Iteration_query-ID>{query.id}</Iteration_query-ID>
-  <Iteration_query-def>{query.description}</Iteration_query-def>
-  <Iteration_query-len>{query_length}</Iteration_query-len>
-""".encode("UTF-8"))
-            # fmt: on
-        # fmt: off
-        stream.write(b"""\
-<Iteration_hits>
-""")
-        # fmt: on
+            self._write_iteration_query_id(query.id.encode())
+            self._write_iteration_query_def(query.description.encode())
+            self._write_iteration_query_len(query_length)
+        self._start_iteration_hits()
         for hit in record:
             self._write_hit(hit, query_length)
-        # fmt: off
-        stream.write(b"""\
-</Iteration_hits>
-""")
-        # fmt: on
+        self._end_iteration_hits()
         try:
             stat = record.stat
         except AttributeError:
