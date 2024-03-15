@@ -229,9 +229,7 @@ class MMCIFParser:
                 # Non-existing residue ID
                 try:
                     msg_resseq = mmcif_dict["_atom_site.auth_seq_id"][i]
-                    msg = "Non-existing residue ID in chain '{}', residue '{}'".format(
-                        chainid, msg_resseq
-                    )
+                    msg = f"Non-existing residue ID in chain '{chainid}', residue '{msg_resseq}'"
                 except (KeyError, IndexError):
                     msg = f"Non-existing residue ID in chain '{chainid}'"
                 warnings.warn(
@@ -517,9 +515,7 @@ class FastMMCIFParser:
                 # Non-existing residue ID
                 try:
                     msg_resseq = mmcif_dict["_atom_site.auth_seq_id"][i]
-                    msg = "Non-existing residue ID in chain '{}', residue '{}'".format(
-                        chainid, msg_resseq
-                    )
+                    msg = f"Non-existing residue ID in chain '{chainid}', residue '{msg_resseq}'"
                 except (KeyError, IndexError):
                     msg = f"Non-existing residue ID in chain '{chainid}'"
                 warnings.warn(
