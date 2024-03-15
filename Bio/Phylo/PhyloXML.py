@@ -652,7 +652,7 @@ class Confidence(float, PhyloElement):
 
     def __new__(cls, value, type="unknown"):
         """Create and return a Confidence object with the specified value and type."""
-        obj = super(Confidence, cls).__new__(cls, value)
+        obj = super().__new__(cls, value)
         obj.type = type
         return obj
 
