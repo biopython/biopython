@@ -13,6 +13,8 @@ indexed as a bigBed file.
 See https://genome.ucsc.edu/goldenPath/help/bigMaf.html
 """
 
+import struct
+import zlib
 from io import StringIO
 
 
@@ -92,7 +94,7 @@ class AlignmentWriter(bigbed.AlignmentWriter):
         for alignment in alignments:
             if not isinstance(alignment, Alignment):
                 raise TypeError("Expected an Alignment object")
-            mafBlock = format(alignment, "maf")
+            mafBlock = format(alignment, "maf")[:-1].replace("\n", ";")
             coordinates = alignment.coordinates
             if not coordinates.size:  # alignment consists of gaps only
                 continue
@@ -144,14 +146,48 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
         self.reference = None
         super().__init__(source)
 
+    def _read_reference(self, stream):
+        # Supplemental Table 12: Binary BED-data format
+        # chromId     4 bytes, unsigned
+        # chromStart  4 bytes, unsigned
+        # chromEnd    4 bytes, unsigned
+        # rest        zero-terminated string in tab-separated format
+        formatter = struct.Struct(self.byteorder + "III")
+        size = formatter.size
+        node = self.tree
+        while True:
+            try:
+                children = node.children
+            except AttributeError:
+                break
+            else:
+                node = children[0]
+        filepos = stream.tell()
+        stream.seek(node.dataOffset)
+        data = stream.read(node.dataSize)
+        stream.seek(filepos)
+        if self._compressed > 0:
+            data = zlib.decompress(data)
+        i = data.index(b";", size) + 1
+        while True:
+            if data[i] == ord(b"s"):
+                break
+            i = data.index(b";", i) + 1
+        n = 16
+        while True:
+            words = data[i : i + n].split()
+            if len(words) > 2:
+                break
+            n *= 2
+        reference, chromosome = words[1].split(b".", 1)
+        return reference.decode()
+
     def _read_header(self, stream):
         super()._read_header(stream)
         if self.reference is None:
-            alignment = next(self)
-            self.reference, chromosome = alignment.sequences[0].id.split(".", 1)
-            self.rewind()
-        else:
-            self.targets[0].id = "%s.%s" % (self.reference, self.targets[0].id)
+            self.reference = self._read_reference(stream)
+            self._index = 0
+        self.targets[0].id = "%s.%s" % (self.reference, self.targets[0].id)
 
     def _create_alignment(self, chunk):
         chromId, chromStart, chromEnd, rest = chunk
