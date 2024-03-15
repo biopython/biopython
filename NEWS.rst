@@ -80,6 +80,11 @@ The UniProt package now includes a method to search UniProt programmatically.
 The tutorial has been updated with examples of how to use the search method.
 See the chapter on Swiss-Prot and ExPASy in the tutorial for more information.
 
+The PDB package now includes a new module, ``alphafold_db``, for interacting
+with the AlphaFold DB of predicted protein structures. The module allows users
+to load AlphaFold-predicted structures in the same format as experimentally-predicted
+PDB structures.
+
 Now when reverse complementing a ``SeqRecord`` containing unstranded features
 with compound locations the order of the sublocations is reversed, to improve
 the representation of origin-spanning locations. See issue #4611.
