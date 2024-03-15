@@ -19,6 +19,7 @@ repos:
     # Run the Ruff linter.
     -   id: ruff
         args: [
+            '--fix',
             '--extend-select=B,C4,D,ISC,UP',
             '--extend-ignore=E501,F401,F841,D105,D2,D4',
             '--extend-ignore=B007,B009,B010,B018,B028,B904,UP031',
@@ -90,7 +91,7 @@ repos:
         files: \.(rst|tex)$
 ci:
     # Settings for the https://pre-commit.ci/ continuous integration service
-    autofix_prs: false
+    autofix_prs: true
     # Default message is more verbose
     autoupdate_commit_msg: '[pre-commit.ci] autoupdate'
     # Default is weekly
