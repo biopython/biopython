@@ -13,7 +13,14 @@ import tempfile
 import unittest
 import warnings
 
-import mmtf
+try:
+    import mmtf
+except ImportError:
+    from Bio import MissingPythonDependencyError
+
+    raise MissingPythonDependencyError(
+        "Install mmtf-python to use Bio.PDB.mmtf"
+    ) from None
 
 from Bio.PDB import PDBParser
 from Bio.PDB import Select
