@@ -164,22 +164,27 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
                 node = children[0]
         filepos = stream.tell()
         stream.seek(node.dataOffset)
-        data = stream.read(node.dataSize)
-        stream.seek(filepos)
-        if self._compressed > 0:
-            data = zlib.decompress(data)
-        i = data.index(b";", size) + 1
+        dataSize = 256
+        data = b""
+        compressed_data = b""
         while True:
-            if data[i] == ord(b"s"):
-                break
-            i = data.index(b";", i) + 1
-        n = 16
-        while True:
-            words = data[i : i + n].split()
+            chunk = stream.read(dataSize)
+            if self._compressed:
+                compressed_data += chunk
+                decompressor = zlib.decompressobj()
+                data = decompressor.decompress(compressed_data)
+            else:
+                data += chunk
+            try:
+                i = data.index(b";s", size)
+            except ValueError:
+                continue
+            words = data[i + 1 :].split()
             if len(words) > 2:
                 break
-            n *= 2
-        reference, chromosome = words[1].split(b".", 1)
+        name = words[1]
+        stream.seek(filepos)
+        reference, chromosome = name.split(b".", 1)
         return reference.decode()
 
     def _read_header(self, stream):
