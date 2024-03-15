@@ -6,11 +6,13 @@ See the `database website <https://alphafold.com/>`_ and the `API docs <https://
 import json
 import os
 from os import PathLike
+from typing import Iterator
+from typing import Optional
+from typing import Union
+from urllib.request import urlopen
 
 from Bio.PDB.MMCIFParser import MMCIFParser
 from Bio.PDB.Structure import Structure as StructuralModel
-from typing import Iterator, Union, Optional
-from urllib.request import urlopen
 
 
 def get_predictions(qualifier: str) -> Iterator[dict]:

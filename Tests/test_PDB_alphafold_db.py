@@ -1,7 +1,8 @@
 """Tests for the alphafold_db module."""
 
-import requires_internet
 import unittest
+
+import requires_internet
 
 from Bio.PDB import alphafold_db
 
