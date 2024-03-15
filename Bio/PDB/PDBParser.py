@@ -385,9 +385,7 @@ class PDBParser:
                 structure_builder.set_sigatm(sigatm_array)
             elif record_type not in allowed_records:
                 warnings.warn(
-                    "Ignoring unrecognized record '{}' at line {}".format(
-                        record_type, global_line_counter
-                    ),
+                    f"Ignoring unrecognized record '{record_type}' at line {global_line_counter}",
                     PDBConstructionWarning,
                 )
             local_line_counter += 1
