@@ -65,7 +65,6 @@ ignore =
     # by default... It is therefore recommended to use a stacklevel of
     # 2 or greater to provide more information to the user
     B902,
-    # blind except Exception: statement
     # =========================================
     # Optional ignores for local installations:
     # =========================================
