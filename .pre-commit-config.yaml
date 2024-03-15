@@ -24,21 +24,16 @@ repos:
     # Run the Ruff linter.
     -   id: ruff
         args: [
-        '--extend-select=D',
-        '--extend-ignore=E501,F401,F841,D105,D2,D4',
-        '--extend-per-file-ignores=Tests/*.py:D101,Tests/*.py:D102,Tests/*.py:D103',
+        '--extend-select=B,C4,D,ISC',
+        '--extend-ignore=E501,F401,F841,D105,D2,D4,B007,B009,B010,B018,B028,B904',
+        '--extend-per-file-ignores=Tests/*.py:D101,Tests/*.py:D102,Tests/*.py:D103,Tests/*.py:B015',
     ]
 -   repo: https://github.com/PyCQA/flake8
     rev: 7.0.0
     hooks:
     -   id: flake8
         additional_dependencies: [
-            'flake8-blind-except',
-            'flake8-bugbear',
-            'flake8-comprehensions',
-            'flake8-implicit-str-concat',
             'flake8-rst-docstrings>=0.2.3',
-            'pydocstyle>=6.0.0',
         ]
 -   repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.8.0
