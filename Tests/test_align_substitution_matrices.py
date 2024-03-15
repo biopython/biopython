@@ -2427,7 +2427,7 @@ class TestLoading(unittest.TestCase):
         self.assertEqual(len(fname_matrix), 24)
         self.assertEqual(len(fname_matrix[0]), 24)
 
-        with open(matrix_path, "r") as handle:
+        with open(matrix_path) as handle:
             handle_matrix = substitution_matrices.read(handle)
             self.assertFalse(handle.closed)
         self.assertTrue(handle.closed)
