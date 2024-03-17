@@ -91,6 +91,51 @@ repos:
         entry: '(?i)(doi:|dx\.doi\.org|http://doi\.org)'
         language: pygrep
         files: \.(rst|tex)$
+-   repo: https://github.com/PyCQA/bandit
+    rev: 1.7.4
+    hooks:
+    -   id: bandit
+        name: vulnerability check
+        # Limit check to the usage of assert in the code.
+        # https://bandit.readthedocs.io/en/latest/plugins/b101_assert_used.html
+        args: [-t, "B101"]
+        # Update the exclusion list when asserts are deleted from one of these files.
+        # See: https://github.com/biopython/biopython/issues/3600
+        exclude: |
+            (?x)(
+                ^Bio/Align|
+                ^Bio/AlignIO|
+                ^Bio/Application/__init__|
+                ^Bio/Blast|
+                ^Bio/Compass/__init__|
+                ^Bio/Data/CodonTable|
+                ^Bio/Emboss/Applications|
+                ^Bio/Entrez/Parser|
+                ^Bio/ExPASy|
+                ^Bio/File|
+                ^Bio/GenBank|
+                ^Bio/Geo|
+                ^Bio/Graphics|
+                ^Bio/HMM/MarkovModel|
+                ^Bio/MarkovModel|
+                ^Bio/MaxEntropy|
+                ^Bio/Nexus/Trees|
+                ^Bio/PDB|
+                ^Bio/Phylo|
+                ^Bio/SCOP/__init__|
+                ^Bio/SearchIO|
+                ^Bio/Seq|
+                ^Bio/SeqFeature|
+                ^Bio/SeqIO|
+                ^Bio/SwissProt/__init__|
+                ^Bio/TogoWS/__init__|
+                ^Bio/Wise/psw|
+                ^Bio/motifs|
+                ^Bio/pairwise2|
+                ^Doc/|
+                ^Scripts/|
+                ^Tests/
+            )
 ci:
     # Settings for the https://pre-commit.ci/ continuous integration service
     autofix_prs: false
