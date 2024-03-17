@@ -952,12 +952,17 @@ def write(records, destination, fmt="XML"):
                      written.
      - fmt         - string describing the file format to write
                      (case-insensitive).
-                     Currently, only "XML" is accepted.
+                     Currently, only "XML" and "XML2" are accepted.
 
     Returns the number of records written (as an integer).
     """
-    if fmt.upper() == "XML":
+    fmt = fmt.upper()
+    if fmt == "XML":
         Writer = _writers.XMLWriter
+    elif fmt == "XML2":
+        Writer = _writers.XML2Writer
+    else:
+        raise ValueError(f"Unknown format {fmt}; expected 'XML' or 'XML2'")
     try:
         stream = open(destination, "wb")
     except TypeError:  # not a path, assume we received a stream

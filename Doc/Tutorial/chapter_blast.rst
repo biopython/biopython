@@ -435,9 +435,11 @@ These parsers have now been removed from Biopython, as the BLAST output in
 these formats kept changing, each time breaking the Biopython parsers.
 Nowadays, Biopython can parse BLAST output in the XML format, the XML2 format,
 and tabular format. This chapter describes the parser for BLAST output in the
-XML format; parsing XML2 output is done in exactly the same way as parsing XML.
-BLAST output in tabular format can be parsed as alignments (see the section
-:ref:`subsec:align_tabular`).
+XML and XML2 formats using the ``Bio.Blast.parse`` function. This function
+automatically detects if the XML file is in the XML format or in the XML2
+format.
+BLAST output in tabular format can be parsed as alignments using the
+``Bio.Align.parse`` function (see the section :ref:`subsec:align_tabular`).
 
 You can get BLAST output in XML format in various ways. For the parser,
 it doesn’t matter how the output was generated, as long as it is in the
@@ -1389,7 +1391,9 @@ Writing BLAST records
 ---------------------
 
 Use the ``write`` function in ``Bio.Blast`` to save BLAST records as an XML
-file:
+file. By default, the (DTD-based) XML format is used; you can also save the
+BLAST records in the (schema-based) XML2 format by using the ``fmt="XML2"``
+argument to the ``write`` function.
 
 .. code:: pycon
 
@@ -1397,6 +1401,13 @@ file:
    >>> stream = Blast.qblast("blastn", "nt", "8332116")
    >>> records = Blast.parse(stream)
    >>> Blast.write(records, "my_qblast_output.xml")
+
+   or
+
+.. code:: pycon
+
+   >>> Blast.write(records, "my_qblast_output.xml", fmt="XML2")
+
 
 In this example, we could have saved the data returned by ``Blast.qblast``
 directly to an XML file (see section :ref:`subsec:saving-blast-results`).
