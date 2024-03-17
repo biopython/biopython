@@ -24,19 +24,165 @@ class BaseXMLWriter(ABC):
         """Init the stuff."""
         self.stream = stream
 
+    def write(self, records):
+        """Write the records."""
+        stream = self.stream
+        program = records.program
+        self._program = program
+        self._write_xml_declaration()
+        self._write_definition()
+        self._start_blastoutput()
+        self._write_program(program.encode())
+        self._write_version(records.version.encode())
+        reference = html.escape(records.reference).encode("ASCII", "htmlentityreplace")
+        self._write_reference(reference)
+        self._write_db(records.db.encode())
+        try:
+            query = records.query
+        except AttributeError:  # XML2
+            pass
+        else:
+            self._write_query_id(query.id.encode())
+            self._write_query_def(query.description.encode())
+            self._write_query_len(len(query))
+            try:
+                query_seq = bytes(query.seq)
+            except UndefinedSequenceError:
+                pass
+            else:
+                self._write_query_seq(query_seq)
+        self._write_params(records.param)
+        count = self._write_records(records)
+        try:
+            mbstat = records.mbstat
+        except AttributeError:
+            pass
+        else:
+            self._start_mbstat()
+            self._write_statistics(mbstat)
+            self._end_mbstat()
+        self._end_blastoutput()
+        return count
+
     def _write_xml_declaration(self):
         self.stream.write(b'<?xml version="1.0"?>\n')
 
-    def _write_statistics(self, stat):
-        self.stream.write(b"    <Statistics>\n")
-        self._write_statistics_db_num(stat["db-num"])
-        self._write_statistics_db_len(stat["db-len"])
-        self._write_statistics_hsp_len(stat["hsp-len"])
-        self._write_statistics_eff_space(str(stat["eff-space"]).encode())
-        self._write_statistics_kappa(stat["kappa"])
-        self._write_statistics_lambda(stat["lambda"])
-        self._write_statistics_entropy(stat["entropy"])
-        self.stream.write(b"    </Statistics>\n")
+    def _write_params(self, param):
+        self._start_param()
+        self.stream.write(b"    <Parameters>\n")
+        value = param.get("matrix")
+        if value is not None:
+            self._write_parameters_matrix(value.encode())
+        self._write_parameters_expect(param["expect"])
+        value = param.get("include")
+        if value is not None:
+            self._write_parameters_include(value)
+        value = param.get("sc-match")
+        if value is not None:
+            self._write_parameters_sc_match(value)
+        value = param.get("sc-mismatch")
+        if value is not None:
+            self._write_parameters_sc_mismatch(value)
+        self._write_parameters_gap_open(param.get("gap-open"))
+        self._write_parameters_gap_extend(param.get("gap-extend"))
+        value = param.get("filter")
+        if value is not None:
+            self._write_parameters_filter(value.encode())
+        value = param.get("pattern")
+        if value is not None:
+            self._write_parameters_pattern(value.encode())
+        value = param.get("entrez-query")
+        if value is not None:
+            self._write_parameters_entrez_query(value.encode())
+        value = param.get("cbs")
+        if value is not None:
+            self._write_parameters_cbs(value)
+        value = param.get("query-gencode")
+        if value is not None:
+            self._write_parameters_query_gencode(value)
+        value = param.get("db-gencode")
+        if value is not None:
+            self._write_parameters_db_gencode(value)
+        value = param.get("bl2seq-mode")
+        if value is not None:
+            self._write_parameters_bl2seq_mode(value.encode())
+        self.stream.write(b"    </Parameters>\n")
+        self._end_param()
+
+    def _write_records(self, records):
+        count = 0
+        self._start_iterations()
+        for record in records:
+            self._write_record(record)
+            count += 1
+        self._end_iterations()
+        return count
+
+    def _write_record(self, record):
+        stream = self.stream
+        self._start_iteration()
+        try:
+            num = record.num
+        except AttributeError:  # XML2
+            pass
+        else:
+            self._write_iteration_num(num)
+        query = record.query
+        if query is None:
+            query_length = None
+        else:
+            query_length = len(query.seq)
+            self._write_iteration_query_id(query.id.encode())
+            self._write_iteration_query_def(query.description.encode())
+            self._write_iteration_query_len(query_length)
+        self._start_iteration_hits()
+        for hit in record:
+            self._write_hit(hit, query_length)
+        self._end_iteration_hits()
+        try:
+            stat = record.stat
+        except AttributeError:
+            pass
+        else:
+            self._start_iteration_stat()
+            self._write_statistics(stat)
+            self._end_iteration_stat()
+        self._end_iteration()
+
+    def _write_hit(self, hit, query_length):
+        stream = self.stream
+        program = self._program
+        target = hit.target
+        target_length = len(target.seq)
+        self._start_iteration_hit()
+        self._write_hit_num(hit.num)
+        try:
+            targets = hit.targets
+        except AttributeError:  # XML
+            self._write_hit_id(target.id.encode())
+            self._write_hit_def(target.description.encode())
+            self._write_hit_accession(target.name.encode())
+        else:  # XML2
+            self._start_hit_targets()
+            for target in targets:
+                self._start_hitdescr()
+                self._write_hit_id(target.id.encode())
+                self._write_hit_accession(target.name.encode())
+                self._write_hit_def(target.description.encode())
+                taxid = target.annotations.get("taxid")
+                if taxid is not None:
+                    self._write_hit_taxid(taxid)
+                sciname = target.annotations.get("sciname")
+                if sciname is not None:
+                    self._write_hit_sciname(sciname.encode())
+                self._end_hitdescr()
+            self._end_hit_targets()
+        self._write_hit_len(target_length)
+        self._start_hit_hsps()
+        for hsp in hit:
+            self._write_hsp(hsp, query_length, target_length)
+        self._end_hit_hsps()
+        self._end_iteration_hit()
 
     def _write_hsp(self, hsp, query_length, target_length):
         stream = self.stream
@@ -136,162 +282,16 @@ class BaseXMLWriter(ABC):
         self._write_hsp_midline(midline.encode())
         self._end_hsp()
 
-    def _write_hit(self, hit, query_length):
-        stream = self.stream
-        program = self._program
-        target = hit.target
-        target_length = len(target.seq)
-        self._start_iteration_hit()
-        self._write_hit_num(hit.num)
-        try:
-            targets = hit.targets
-        except AttributeError:  # XML
-            self._write_hit_id(target.id.encode())
-            self._write_hit_def(target.description.encode())
-            self._write_hit_accession(target.name.encode())
-        else:  # XML2
-            self._start_hit_targets()
-            for target in targets:
-                self._start_hitdescr()
-                self._write_hit_id(target.id.encode())
-                self._write_hit_accession(target.name.encode())
-                self._write_hit_def(target.description.encode())
-                taxid = target.annotations.get("taxid")
-                if taxid is not None:
-                    self._write_hit_taxid(taxid)
-                sciname = target.annotations.get("sciname")
-                if sciname is not None:
-                    self._write_hit_sciname(sciname.encode())
-                self._end_hitdescr()
-            self._end_hit_targets()
-        self._write_hit_len(target_length)
-        self._start_hit_hsps()
-        for hsp in hit:
-            self._write_hsp(hsp, query_length, target_length)
-        self._end_hit_hsps()
-        self._end_iteration_hit()
-
-    def _write_record(self, record):
-        stream = self.stream
-        self._start_iteration()
-        try:
-            num = record.num
-        except AttributeError:  # XML2
-            pass
-        else:
-            self._write_iteration_num(num)
-        query = record.query
-        if query is None:
-            query_length = None
-        else:
-            query_length = len(query.seq)
-            self._write_iteration_query_id(query.id.encode())
-            self._write_iteration_query_def(query.description.encode())
-            self._write_iteration_query_len(query_length)
-        self._start_iteration_hits()
-        for hit in record:
-            self._write_hit(hit, query_length)
-        self._end_iteration_hits()
-        try:
-            stat = record.stat
-        except AttributeError:
-            pass
-        else:
-            self._start_iteration_stat()
-            self._write_statistics(stat)
-            self._end_iteration_stat()
-        self._end_iteration()
-
-    def _write_params(self, param):
-        self._start_param()
-        self.stream.write(b"    <Parameters>\n")
-        value = param.get("matrix")
-        if value is not None:
-            self._write_parameters_matrix(value.encode())
-        self._write_parameters_expect(param["expect"])
-        value = param.get("include")
-        if value is not None:
-            self._write_parameters_include(value)
-        value = param.get("sc-match")
-        if value is not None:
-            self._write_parameters_sc_match(value)
-        value = param.get("sc-mismatch")
-        if value is not None:
-            self._write_parameters_sc_mismatch(value)
-        self._write_parameters_gap_open(param.get("gap-open"))
-        self._write_parameters_gap_extend(param.get("gap-extend"))
-        value = param.get("filter")
-        if value is not None:
-            self._write_parameters_filter(value.encode())
-        value = param.get("pattern")
-        if value is not None:
-            self._write_parameters_pattern(value.encode())
-        value = param.get("entrez-query")
-        if value is not None:
-            self._write_parameters_entrez_query(value.encode())
-        value = param.get("cbs")
-        if value is not None:
-            self._write_parameters_cbs(value)
-        value = param.get("query-gencode")
-        if value is not None:
-            self._write_parameters_query_gencode(value)
-        value = param.get("db-gencode")
-        if value is not None:
-            self._write_parameters_db_gencode(value)
-        value = param.get("bl2seq-mode")
-        if value is not None:
-            self._write_parameters_bl2seq_mode(value.encode())
-        self.stream.write(b"    </Parameters>\n")
-        self._end_param()
-
-    def _write_records(self, records):
-        count = 0
-        self._start_iterations()
-        for record in records:
-            self._write_record(record)
-            count += 1
-        self._end_iterations()
-        return count
-
-    def write(self, records):
-        """Write the records."""
-        stream = self.stream
-        program = records.program
-        self._program = program
-        self._write_xml_declaration()
-        self._write_definition()
-        self._start_blastoutput()
-        self._write_program(program.encode())
-        self._write_version(records.version.encode())
-        reference = html.escape(records.reference).encode("ASCII", "htmlentityreplace")
-        self._write_reference(reference)
-        self._write_db(records.db.encode())
-        try:
-            query = records.query
-        except AttributeError:  # XML2
-            pass
-        else:
-            self._write_query_id(query.id.encode())
-            self._write_query_def(query.description.encode())
-            self._write_query_len(len(query))
-            try:
-                query_seq = bytes(query.seq)
-            except UndefinedSequenceError:
-                pass
-            else:
-                self._write_query_seq(query_seq)
-        self._write_params(records.param)
-        count = self._write_records(records)
-        try:
-            mbstat = records.mbstat
-        except AttributeError:
-            pass
-        else:
-            self._start_mbstat()
-            self._write_statistics(mbstat)
-            self._end_mbstat()
-        self._end_blastoutput()
-        return count
+    def _write_statistics(self, stat):
+        self.stream.write(b"    <Statistics>\n")
+        self._write_statistics_db_num(stat["db-num"])
+        self._write_statistics_db_len(stat["db-len"])
+        self._write_statistics_hsp_len(stat["hsp-len"])
+        self._write_statistics_eff_space(str(stat["eff-space"]).encode())
+        self._write_statistics_kappa(stat["kappa"])
+        self._write_statistics_lambda(stat["lambda"])
+        self._write_statistics_entropy(stat["entropy"])
+        self.stream.write(b"    </Statistics>\n")
 
     def _write_definition(self):
         return
@@ -321,15 +321,55 @@ class BaseXMLWriter(ABC):
         return
 
     @abstractmethod
-    def _start_hsp(self):
-        return
-
-    @abstractmethod
-    def _end_hsp(self):
-        return
-
-    @abstractmethod
     def _start_param(self):
+        return
+
+    @abstractmethod
+    def _end_param(self):
+        return
+
+    @abstractmethod
+    def _start_iterations(self):
+        return
+
+    @abstractmethod
+    def _end_iterations(self):
+        return
+
+    @abstractmethod
+    def _start_iteration(self):
+        return
+
+    @abstractmethod
+    def _end_iteration(self):
+        return
+
+    @abstractmethod
+    def _write_iteration_query_id(self, query_id):
+        return
+
+    @abstractmethod
+    def _write_iteration_query_def(self, query_def):
+        return
+
+    @abstractmethod
+    def _write_iteration_query_len(self, query_len):
+        return
+
+    @abstractmethod
+    def _start_iteration_hits(self):
+        return
+
+    @abstractmethod
+    def _end_iteration_hits(self):
+        return
+
+    @abstractmethod
+    def _start_iteration_stat(self):
+        return
+
+    @abstractmethod
+    def _end_iteration_stat(self):
         return
 
     @abstractmethod
@@ -372,8 +412,16 @@ class BaseXMLWriter(ABC):
     def _write_parameters_entrez_query(self, value):
         return
 
-    @abstractmethod
-    def _end_param(self):
+    def _write_parameters_cbs(self, value):
+        return
+
+    def _write_parameters_query_gencode(self, value):
+        return
+
+    def _write_parameters_db_gencode(self, value):
+        return
+
+    def _write_parameters_bl2seq_mode(self, value):
         return
 
     @abstractmethod
@@ -405,42 +453,6 @@ class BaseXMLWriter(ABC):
         return
 
     @abstractmethod
-    def _start_iterations(self):
-        return
-
-    @abstractmethod
-    def _end_iterations(self):
-        return
-
-    @abstractmethod
-    def _start_iteration(self):
-        return
-
-    @abstractmethod
-    def _end_iteration(self):
-        return
-
-    @abstractmethod
-    def _start_iteration_hits(self):
-        return
-
-    @abstractmethod
-    def _end_iteration_hits(self):
-        return
-
-    @abstractmethod
-    def _write_iteration_query_id(query_id):
-        return
-
-    @abstractmethod
-    def _write_iteration_query_def(query_def):
-        return
-
-    @abstractmethod
-    def _write_iteration_query_len(query_len):
-        return
-
-    @abstractmethod
     def _start_iteration_hit(self):
         return
 
@@ -464,6 +476,12 @@ class BaseXMLWriter(ABC):
     def _write_hit_accession(self, hit_accession):
         return
 
+    def _write_hit_taxid(self, taxid):
+        return
+
+    def _write_hit_sciname(self, sciname):
+        return
+
     @abstractmethod
     def _write_hit_len(self, hit_length):
         return
@@ -474,6 +492,14 @@ class BaseXMLWriter(ABC):
 
     @abstractmethod
     def _end_hit_hsps(self):
+        return
+
+    @abstractmethod
+    def _start_hsp(self):
+        return
+
+    @abstractmethod
+    def _end_hsp(self):
         return
 
     @abstractmethod
@@ -509,6 +535,14 @@ class BaseXMLWriter(ABC):
         return
 
     @abstractmethod
+    def _write_hsp_pattern_from(self, hit_from):
+        return
+
+    @abstractmethod
+    def _write_hsp_pattern_to(self, hit_to):
+        return
+
+    @abstractmethod
     def _write_hsp_query_frame(self, query_frame):
         return
 
@@ -517,11 +551,11 @@ class BaseXMLWriter(ABC):
         return
 
     @abstractmethod
-    def _write_hsp_positive(self, positive):
+    def _write_hsp_identity(self, identity):
         return
 
     @abstractmethod
-    def _write_hsp_identity(self, identity):
+    def _write_hsp_positive(self, positive):
         return
 
     @abstractmethod
@@ -530,6 +564,10 @@ class BaseXMLWriter(ABC):
 
     @abstractmethod
     def _write_hsp_align_len(self, align_len):
+        return
+
+    @abstractmethod
+    def _write_hsp_density(self, density):
         return
 
     @abstractmethod
@@ -542,32 +580,6 @@ class BaseXMLWriter(ABC):
 
     @abstractmethod
     def _write_hsp_midline(self, midline):
-        return
-
-    @abstractmethod
-    def _start_iteration_stat(self):
-        return
-
-    @abstractmethod
-    def _end_iteration_stat(self):
-        return
-
-    def _write_parameters_cbs(self, value):
-        return
-
-    def _write_parameters_query_gencode(self, value):
-        return
-
-    def _write_parameters_db_gencode(self, value):
-        return
-
-    def _write_parameters_bl2seq_mode(self, value):
-        return
-
-    def _write_hit_taxid(self, taxid):
-        return
-
-    def _write_hit_sciname(self, sciname):
         return
 
 
