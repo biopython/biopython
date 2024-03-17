@@ -301,6 +301,10 @@ class BaseXMLWriter(ABC):
         return
 
     @abstractmethod
+    def _end_blastoutput(self):
+        return
+
+    @abstractmethod
     def _write_program(self, program):
         return
 
@@ -314,6 +318,14 @@ class BaseXMLWriter(ABC):
 
     @abstractmethod
     def _write_db(self, db):
+        return
+
+    @abstractmethod
+    def _start_hsp(self):
+        return
+
+    @abstractmethod
+    def _end_hsp(self):
         return
 
     @abstractmethod
@@ -365,6 +377,34 @@ class BaseXMLWriter(ABC):
         return
 
     @abstractmethod
+    def _write_statistics_db_num(self, db_num):
+        return
+
+    @abstractmethod
+    def _write_statistics_db_len(self, db_len):
+        return
+
+    @abstractmethod
+    def _write_statistics_hsp_len(self, hsp_len):
+        return
+
+    @abstractmethod
+    def _write_statistics_eff_space(self, value):
+        return
+
+    @abstractmethod
+    def _write_statistics_kappa(self, value):
+        return
+
+    @abstractmethod
+    def _write_statistics_lambda(self, value):
+        return
+
+    @abstractmethod
+    def _write_statistics_entropy(self, value):
+        return
+
+    @abstractmethod
     def _start_iterations(self):
         return
 
@@ -386,6 +426,18 @@ class BaseXMLWriter(ABC):
 
     @abstractmethod
     def _end_iteration_hits(self):
+        return
+
+    @abstractmethod
+    def _write_iteration_query_id(query_id):
+        return
+
+    @abstractmethod
+    def _write_iteration_query_def(query_def):
+        return
+
+    @abstractmethod
+    def _write_iteration_query_len(query_len):
         return
 
     @abstractmethod
@@ -836,6 +888,22 @@ class XML2Writer(BaseXMLWriter):
             % db
         )
 
+    def _start_param(self):
+        self.stream.write(
+            b"""\
+      <params>
+        <Parameters>
+"""
+        )
+
+    def _end_param(self):
+        self.stream.write(
+            b"""\
+        </Parameters>
+      </params>
+"""
+        )
+
     def _start_iterations(self):
         self.stream.write(
             b"""\
@@ -866,102 +934,6 @@ class XML2Writer(BaseXMLWriter):
         </Search>
       </search>
 """
-        )
-
-    def _start_param(self):
-        self.stream.write(
-            b"""\
-      <params>
-        <Parameters>
-"""
-        )
-
-    def _end_param(self):
-        self.stream.write(
-            b"""\
-        </Parameters>
-      </params>
-"""
-        )
-
-    def _write_parameters_entrez_query(self, value):
-        self.stream.write(
-            b"""\
-          <entrez-query>%b</entrez-query>
-"""
-            % value
-        )
-
-    def _write_parameters_expect(self, value):
-        self.stream.write(
-            b"""\
-          <expect>%g</expect>
-"""
-            % value
-        )
-
-    def _write_parameters_filter(self, value):
-        self.stream.write(
-            b"""\
-          <filter>%b</filter>
-"""
-            % value
-        )
-
-    def _write_parameters_gap_open(self, value):
-        self.stream.write(
-            b"""\
-          <gap-open>%d</gap-open>
-"""
-            % value
-        )
-
-    def _write_parameters_gap_extend(self, value):
-        self.stream.write(
-            b"""\
-          <gap-extend>%d</gap-extend>
-"""
-            % value
-        )
-
-    def _write_parameters_matrix(self, value):
-        self.stream.write(
-            b"""\
-          <matrix>%b</matrix>
-"""
-            % value
-        )
-
-    def _write_parameters_include(self, value):
-        self.stream.write(
-            b"""\
-          <include>%g</include>
-"""
-            % value
-        )
-
-    def _write_parameters_pattern(self, value):
-        self.stream.write(
-            b"""\
-          <pattern>%b</pattern>
-"""
-            % value
-        )
-
-    def _write_parameters_sc_match(self, value):
-        self.stream.write(
-            b"""\
-          <sc-match>%d</sc-match>
-"""
-            % value
-        )
-
-    def _write_parameters_sc_mismatch(self, value):
-        self.stream.write(
-            b"""\
-          <sc-mismatch>%d</sc-mismatch>
-"""
-            % value
         )
 
     def _write_iteration_query_id(self, query_id):
@@ -1000,6 +972,188 @@ class XML2Writer(BaseXMLWriter):
             b"""\
               </hits>
 """
+        )
+
+    def _start_iteration_stat(self):
+        self.stream.write(
+            b"""\
+              <stat>
+"""
+        )
+
+    def _end_iteration_stat(self):
+        self.stream.write(
+            b"""\
+              </stat>
+"""
+        )
+
+    def _write_parameters_matrix(self, value):
+        self.stream.write(
+            b"""\
+          <matrix>%b</matrix>
+"""
+            % value
+        )
+
+    def _write_parameters_expect(self, value):
+        self.stream.write(
+            b"""\
+          <expect>%g</expect>
+"""
+            % value
+        )
+
+    def _write_parameters_include(self, value):
+        self.stream.write(
+            b"""\
+          <include>%g</include>
+"""
+            % value
+        )
+
+    def _write_parameters_sc_match(self, value):
+        self.stream.write(
+            b"""\
+          <sc-match>%d</sc-match>
+"""
+            % value
+        )
+
+    def _write_parameters_sc_mismatch(self, value):
+        self.stream.write(
+            b"""\
+          <sc-mismatch>%d</sc-mismatch>
+"""
+            % value
+        )
+
+    def _write_parameters_gap_open(self, value):
+        self.stream.write(
+            b"""\
+          <gap-open>%d</gap-open>
+"""
+            % value
+        )
+
+    def _write_parameters_gap_extend(self, value):
+        self.stream.write(
+            b"""\
+          <gap-extend>%d</gap-extend>
+"""
+            % value
+        )
+
+    def _write_parameters_filter(self, value):
+        self.stream.write(
+            b"""\
+          <filter>%b</filter>
+"""
+            % value
+        )
+
+    def _write_parameters_pattern(self, value):
+        self.stream.write(
+            b"""\
+          <pattern>%b</pattern>
+"""
+            % value
+        )
+
+    def _write_parameters_entrez_query(self, value):
+        self.stream.write(
+            b"""\
+          <entrez-query>%b</entrez-query>
+"""
+            % value
+        )
+
+    def _write_parameters_cbs(self, value):
+        self.stream.write(
+            b"""\
+          <cbs>%d</cbs>
+"""
+            % value
+        )
+
+    def _write_parameters_query_gencode(self, value):
+        self.stream.write(
+            b"""\
+          <query-gencode>%d</query-gencode>
+"""
+            % value
+        )
+
+    def _write_parameters_db_gencode(self, value):
+        self.stream.write(
+            b"""\
+          <db-gencode>%d</db-gencode>
+"""
+            % value
+        )
+
+    def _write_parameters_bl2seq_mode(self, value):
+        self.stream.write(
+            b"""\
+          <bl2seq-mode>%b</bl2seq-mode>
+"""
+            % value
+        )
+
+    def _write_statistics_db_num(self, db_num):
+        self.stream.write(
+            b"""\
+                  <db-num>%d</db-num>
+"""
+            % db_num
+        )
+
+    def _write_statistics_db_len(self, db_len):
+        self.stream.write(
+            b"""\
+                  <db-len>%d</db-len>
+"""
+            % db_len
+        )
+
+    def _write_statistics_hsp_len(self, hsp_len):
+        self.stream.write(
+            b"""\
+                  <hsp-len>%d</hsp-len>
+"""
+            % hsp_len
+        )
+
+    def _write_statistics_eff_space(self, value):
+        self.stream.write(
+            b"""\
+                  <eff-space>%s</eff-space>
+"""
+            % value
+        )
+
+    def _write_statistics_kappa(self, value):
+        self.stream.write(
+            b"""\
+                  <kappa>%g</kappa>
+"""
+            % value
+        )
+
+    def _write_statistics_lambda(self, value):
+        self.stream.write(
+            b"""\
+                  <lambda>%g</lambda>
+"""
+            % value
+        )
+
+    def _write_statistics_entropy(self, value):
+        self.stream.write(
+            b"""\
+                  <entropy>%g</entropy>
+"""
+            % value
         )
 
     def _start_iteration_hit(self):
@@ -1192,6 +1346,22 @@ class XML2Writer(BaseXMLWriter):
             % hit_to
         )
 
+    def _write_hsp_pattern_from(self, pattern_from):
+        self.stream.write(
+            b"""\
+                      <pattern-from>%d</pattern-from>
+"""
+            % pattern_from
+        )
+
+    def _write_hsp_pattern_to(self, pattern_to):
+        self.stream.write(
+            b"""\
+                      <pattern-to>%d</pattern-to>
+"""
+            % pattern_to
+        )
+
     def _write_hsp_query_frame(self, query_frame):
         self.stream.write(
             b"""\
@@ -1208,20 +1378,20 @@ class XML2Writer(BaseXMLWriter):
             % hit_frame
         )
 
-    def _write_hsp_positive(self, positive):
-        self.stream.write(
-            b"""\
-                      <positive>%d</positive>
-"""
-            % positive
-        )
-
     def _write_hsp_identity(self, identity):
         self.stream.write(
             b"""\
                       <identity>%d</identity>
 """
             % identity
+        )
+
+    def _write_hsp_positive(self, positive):
+        self.stream.write(
+            b"""\
+                      <positive>%d</positive>
+"""
+            % positive
         )
 
     def _write_hsp_gaps(self, gaps):
@@ -1238,6 +1408,14 @@ class XML2Writer(BaseXMLWriter):
                       <align-len>%d</align-len>
 """
             % align_len
+        )
+
+    def _write_hsp_density(self, density):
+        self.stream.write(
+            b"""\
+                      <density>%d</density>
+"""
+            % density
         )
 
     def _write_hsp_qseq(self, qseq):
@@ -1262,106 +1440,4 @@ class XML2Writer(BaseXMLWriter):
                       <midline>%b</midline>
 """
             % midline
-        )
-
-    def _start_iteration_stat(self):
-        self.stream.write(
-            b"""\
-              <stat>
-"""
-        )
-
-    def _end_iteration_stat(self):
-        self.stream.write(
-            b"""\
-              </stat>
-"""
-        )
-
-    def _write_statistics_db_num(self, db_num):
-        self.stream.write(
-            b"""\
-                  <db-num>%d</db-num>
-"""
-            % db_num
-        )
-
-    def _write_statistics_db_len(self, db_len):
-        self.stream.write(
-            b"""\
-                  <db-len>%d</db-len>
-"""
-            % db_len
-        )
-
-    def _write_statistics_hsp_len(self, hsp_len):
-        self.stream.write(
-            b"""\
-                  <hsp-len>%d</hsp-len>
-"""
-            % hsp_len
-        )
-
-    def _write_statistics_eff_space(self, value):
-        self.stream.write(
-            b"""\
-                  <eff-space>%s</eff-space>
-"""
-            % value
-        )
-
-    def _write_statistics_kappa(self, value):
-        self.stream.write(
-            b"""\
-                  <kappa>%g</kappa>
-"""
-            % value
-        )
-
-    def _write_statistics_lambda(self, value):
-        self.stream.write(
-            b"""\
-                  <lambda>%g</lambda>
-"""
-            % value
-        )
-
-    def _write_statistics_entropy(self, value):
-        self.stream.write(
-            b"""\
-                  <entropy>%g</entropy>
-"""
-            % value
-        )
-
-    def _write_parameters_cbs(self, value):
-        self.stream.write(
-            b"""\
-          <cbs>%d</cbs>
-"""
-            % value
-        )
-
-    def _write_parameters_query_gencode(self, value):
-        self.stream.write(
-            b"""\
-          <query-gencode>%d</query-gencode>
-"""
-            % value
-        )
-
-    def _write_parameters_db_gencode(self, value):
-        self.stream.write(
-            b"""\
-          <db-gencode>%d</db-gencode>
-"""
-            % value
-        )
-
-    def _write_parameters_bl2seq_mode(self, value):
-        self.stream.write(
-            b"""\
-          <bl2seq-mode>%b</bl2seq-mode>
-"""
-            % value
         )
