@@ -204,6 +204,7 @@ jobs:
     - name: Run test suite and get coverage
       run: |
         cd Tests
+        cp biosql.ini.sample biosql.ini
         rm -rf coverage.xml
         coverage run run_tests.py --offline
         coverage xml
@@ -243,6 +244,7 @@ jobs:
     - name: Run test suite
       run: |
         cd Tests
+        cp biosql.ini.sample biosql.ini
         python run_tests.py --offline
 
   test_windows:
@@ -281,6 +283,7 @@ jobs:
     - name: Run test suite
       run: |
         cd Tests
+        cp biosql.ini.sample biosql.ini
         python run_tests.py --offline
 
   test_pypy:
@@ -317,6 +320,7 @@ jobs:
     - name: Run test suite
       run: |
         cd Tests
+        cp biosql.ini.sample biosql.ini
         python run_tests.py --offline
 
   # Flag step

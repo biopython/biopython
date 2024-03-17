@@ -1,6 +1,6 @@
 # We provide biosql.ini.sample as an example
 # (preconfigured to work on the virtual machines
-# used for automated TravisCI testing)
+# used for automated testing under GitHub Actions)
 #
 # Please copy this to biosql.ini and edit it
 # match your local system if you want to run
@@ -14,7 +14,7 @@
 # Covers DBDRIVER="MySQLdb" and "mysql.connector" etc
 dbhost=localhost
 dbuser=root
-dbpasswd=
+dbpasswd=root
 testdb=biosql_test
 
 [pg]
