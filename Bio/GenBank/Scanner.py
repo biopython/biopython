@@ -59,6 +59,9 @@ class InsdcScanner:
     FEATURE_QUALIFIER_INDENT = 0
     FEATURE_QUALIFIER_SPACER = ""
     SEQUENCE_HEADERS = ["XXX"]  # with right hand side spaces removed
+    FEATURE_QUALIFIER_MAX_LINE_LEN = (
+        80 - 21
+    )  # _InsdcWriter.MAX_WIDTH - _InsdcWriter.QUALIFIER_INDENT
 
     def __init__(self, debug=0):
         """Initialize the class."""
@@ -226,7 +229,14 @@ class InsdcScanner:
                 ):  # cope with blank lines in the midst of a feature
                     # Use strip to remove any harmless trailing white space AND and leading
                     # white space (e.g. out of spec files with too much indentation)
-                    feature_lines.append(line[self.FEATURE_QUALIFIER_INDENT :].strip())
+
+                    # Always add the first character (handles the edge case that it's a line break)
+                    if len(line) >= self.FEATURE_QUALIFIER_INDENT:
+                        feature_lines.append(
+                            line[self.FEATURE_QUALIFIER_INDENT]
+                            + line[self.FEATURE_QUALIFIER_INDENT + 1 :].strip()
+                        )
+
                     line = self.handle.readline()
                 features.append(self.parse_feature(feature_key, feature_lines))
         self.line = line
@@ -345,8 +355,20 @@ class InsdcScanner:
                         # Quoted...
                         value_list = [value]
                         while value_list[-1][-1] != '"':
-                            value_list.append(next(iterator))
-                        value = "\n".join(value_list)
+                            prev_line = line
+                            line = next(iterator)
+                            if (
+                                prev_line != "\n"
+                                and line != "\n"
+                                and len(prev_line) < self.FEATURE_QUALIFIER_MAX_LINE_LEN
+                            ):
+                                # If the previous line spanned the max width, a line break was added to make the line
+                                # fit the max width. In the case that it didn't span the max width, add a space to
+                                # the previous line to continue the sentence
+                                # Skip adding the space if either the current or previous line is a line break
+                                value_list[-1] = value_list[-1] + " "
+                            value_list.append(line)
+                        value = "".join(value_list)
                         # DO NOT remove the quotes...
                         qualifiers.append((key, value))
                     else:
@@ -418,10 +440,7 @@ class InsdcScanner:
             consumer.feature_key(feature_key)
             consumer.location(location_string)
             for q_key, q_value in qualifiers:
-                if q_value is None:
-                    consumer.feature_qualifier(q_key, q_value)
-                else:
-                    consumer.feature_qualifier(q_key, q_value.replace("\n", " "))
+                consumer.feature_qualifier(q_key, q_value)
 
     def _feed_misc_lines(self, consumer, lines):
         """Handle any lines between features and sequence (list of strings), passing data to the consumer (PRIVATE).
