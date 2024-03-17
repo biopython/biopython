@@ -3317,6 +3317,18 @@ G26684.1        228
             written_records = Blast.parse(stream)
             self.check_xml_2900_blastn_001_records(written_records)
 
+    def test_xml_2900_blastn_001_v2_writer(self):
+        """Writing BLASTN 2.9.0+ XML2 (xml_2900_blastn_001_v2.xml)."""
+        filename = "xml_2900_blastn_001_v2.xml"
+        path = os.path.join("Blast", filename)
+        with Blast.parse(path) as records:
+            stream = io.BytesIO()
+            n = Blast.write(records, stream, fmt="XML2")
+            self.assertEqual(n, 1)
+            stream.seek(0)
+            written_records = Blast.parse(stream)
+            self.check_xml_2900_blastn_001_records(written_records, xml2=True)
+
     def test_megablast_legacy(self):
         """Parsing megablast 2.2.26 [Sep-21-2011] (megablast_legacy.xml)."""
         filename = "megablast_legacy.xml"
@@ -9480,6 +9492,18 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
             written_records = Blast.parse(stream)
             self.check_xml_2900_blastx_001_records(written_records, xml2=False)
 
+    def test_xml_2900_blastx_001_v2_writer(self):
+        """Writing BLASTX 2.9.0+ XML2 (xml_2900_blastx_001_v2.xml)."""
+        filename = "xml_2900_blastx_001_v2.xml"
+        path = os.path.join("Blast", filename)
+        with Blast.parse(path) as records:
+            stream = io.BytesIO()
+            n = Blast.write(records, stream, fmt="XML2")
+            self.assertEqual(n, 1)
+            stream.seek(0)
+            written_records = Blast.parse(stream)
+            self.check_xml_2900_blastx_001_records(written_records, xml2=True)
+
 
 class TestTBlastn(unittest.TestCase):
     """Test the Blast XML parser for tblastn output."""
@@ -10524,6 +10548,18 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
             written_records = Blast.parse(stream)
             self.check_xml_2900_tblastn_001_records(written_records)
 
+    def test_xml_2900_tblastn_001_v2_writer(self):
+        """Writing TBLASTN 2.9.0+ XML2 (xml_2900_tblastn_001_v2.xml)."""
+        filename = "xml_2900_tblastn_001_v2.xml"
+        path = os.path.join("Blast", filename)
+        with Blast.parse(path) as records:
+            stream = io.BytesIO()
+            n = Blast.write(records, stream, fmt="XML2")
+            self.assertEqual(n, 1)
+            stream.seek(0)
+            written_records = Blast.parse(stream)
+            self.check_xml_2900_tblastn_001_records(written_records, xml2=True)
+
 
 class TestTBlastx(unittest.TestCase):
     """Test the Blast XML parser for tblastx output."""
@@ -11266,9 +11302,9 @@ class TestRPSBlast(unittest.TestCase):
         path = os.path.join("Blast", filename)
         with open(path, "rb") as stream:
             records = Blast.parse(stream)
-            self.check_xml_2900_rpsblast_001(records)
+            self.check_xml_2900_rpsblast_001_records(records)
         with Blast.parse(path) as records:
-            self.check_xml_2900_rpsblast_001(records)
+            self.check_xml_2900_rpsblast_001_records(records)
         with open(path, "rb") as stream:
             record = Blast.read(stream)
         self.check_xml_2900_rpsblast_001_record(record)
@@ -11281,9 +11317,9 @@ class TestRPSBlast(unittest.TestCase):
         path = os.path.join("Blast", filename)
         with open(path, "rb") as stream:
             records = Blast.parse(stream)
-            self.check_xml_2900_rpsblast_001(records, xml2=True)
+            self.check_xml_2900_rpsblast_001_records(records, xml2=True)
         with Blast.parse(path) as records:
-            self.check_xml_2900_rpsblast_001(records, xml2=True)
+            self.check_xml_2900_rpsblast_001_records(records, xml2=True)
         with open(path, "rb") as stream:
             record = Blast.read(stream)
         self.check_xml_2900_rpsblast_001_record(record, xml2=True)
@@ -11300,9 +11336,21 @@ class TestRPSBlast(unittest.TestCase):
             self.assertEqual(n, 1)
             stream.seek(0)
             written_records = Blast.parse(stream)
-            self.check_xml_2900_rpsblast_001(written_records)
+            self.check_xml_2900_rpsblast_001_records(written_records)
 
-    def check_xml_2900_rpsblast_001(self, records, xml2=False):
+    def test_xml_2900_rpsblast_001_v2_writer(self):
+        """Writing rpsblast 2.9.0+ XML2 (xml_2900_rpsblast_001_v2.xml)."""
+        filename = "xml_2900_rpsblast_001_v2.xml"
+        path = os.path.join("Blast", filename)
+        with Blast.parse(path) as records:
+            stream = io.BytesIO()
+            n = Blast.write(records, stream, fmt="XML2")
+            self.assertEqual(n, 1)
+            stream.seek(0)
+            written_records = Blast.parse(stream)
+            self.check_xml_2900_rpsblast_001_records(written_records, xml2=True)
+
+    def check_xml_2900_rpsblast_001_records(self, records, xml2=False):
         self.assertEqual(records.program, "rpsblast")
         self.assertEqual(records.version, "RPSBLAST 2.9.0+")
         self.assertEqual(
