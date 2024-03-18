@@ -13,11 +13,6 @@ repos:
     -   id: end-of-file-fixer
         files: \.py$
     -   id: mixed-line-ending
--   repo: https://github.com/psf/black
-    rev: 24.2.0
-    hooks:
-    -   id: black
-        args: [--check,--target-version,py38]
 -   repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.3.1
     hooks:
@@ -30,6 +25,11 @@ repos:
             '--extend-per-file-ignores=Tests/*.py:D101,Tests/*.py:D102,Tests/*.py:D103',
             '--extend-per-file-ignores=Tests/*.py:B015',
         ]
+-   repo: https://github.com/psf/black
+    rev: 24.2.0
+    hooks:
+    -   id: black
+        args: [--check,--target-version,py38]
 -   repo: https://github.com/PyCQA/flake8
     rev: 7.0.0
     hooks:
