@@ -1,4 +1,4 @@
-/* Copyright 2018-2019 by Michiel de Hoon.  All rights reserved.
+/* Copyright 2024 by Michiel de Hoon.  All rights reserved.
  * This file is part of the Biopython distribution and governed by your
  * choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
  * Please see the LICENSE file that should have been included as part of this
@@ -27,12 +27,12 @@ sequences_converter(PyObject* argument, void* pointer)
     Sequences* sequences = pointer;
     PyObject* sequence;
     if (argument == NULL) {
-        if (!sequences->buffers) return 1;
         n = sequences->n;
         for (i = 0; i < n; i++) {
             view = &sequences->buffers[i];
             if (view->buf) PyBuffer_Release(view);
         }
+        PyMem_Free(sequences->buffers);
         return 1;
     }
     if (!PyTuple_Check(argument)) {
@@ -50,33 +50,48 @@ sequences_converter(PyObject* argument, void* pointer)
     for (i = 0; i < n; i++) {
         sequence = PyTuple_GET_ITEM(argument, i);
         view = &sequences->buffers[i];
-        if (PyObject_GetBuffer(sequence, view, PyBUF_FORMAT | PyBUF_C_CONTIGUOUS) == 0) {
+        if (PyObject_GetBuffer(sequence, view,
+                               PyBUF_FORMAT | PyBUF_C_CONTIGUOUS) == 0) {
             if (view->ndim != 1) {
                 PyErr_Format(PyExc_ValueError,
-                             "sequence %zi has incorrect rank %d (expected 1)", i, view->ndim);
-                return 0;
+                             "sequence %zi has incorrect rank %d (expected 1)",
+                             i, view->ndim);
+                goto error;
+            }
+            if (view->itemsize != 1) {
+                PyErr_Format(PyExc_ValueError,
+                    "sequence %zi has incorrect item size %d (expected 1)",
+                    i, view->itemsize);
+                goto error;
             }
             if (i == 0) {
-                m = view->len / view->itemsize;
+                m = view->len;
                 if (m == 0) {
                     PyErr_SetString(PyExc_ValueError,
                                     "sequence 0 has zero length");
-                    return 0;
+                    goto error;
                 }
             }
             else {
-                if (view->len / view->itemsize != m) {
+                if (view->len != m) {
                     PyErr_Format(PyExc_ValueError,
                         "sequence %zi has inconsistent length %zi "
-                        "(expected %zi)",
-                        i, view->len / view->itemsize, m);
-                    return 0;
+                        "(expected %zi)", i, view->len, m);
+                    goto error;
                 }
             }
         }
     }
     sequences->m = m;
     return Py_CLEANUP_SUPPORTED;
+
+error:
+    for (i = 0; i < n; i++) {
+        view = &sequences->buffers[i];
+        if (view->buf) PyBuffer_Release(view);
+    }
+    PyMem_Free(sequences->buffers);
+    return 0;
 }
 
 static int
@@ -84,33 +99,35 @@ directions_converter(PyObject* argument, void* pointer)
 {
     Py_buffer* view = pointer;
     if (!argument) {
-        if (view->buf) PyBuffer_Release(view);
-        return 0;
+        PyBuffer_Release(view);
+        return 1;
     }
-    if (PyObject_GetBuffer(argument,
-                           view,
+    if (PyObject_GetBuffer(argument, view,
                            PyBUF_FORMAT | PyBUF_C_CONTIGUOUS) != 0) return 0;
     if (view->ndim != 1) {
         PyErr_Format(PyExc_ValueError,
                      "directions has incorrect rank %d (expected 1)",
                      view->ndim);
+        PyBuffer_Release(view);
         return 0;
     }
     if (view->itemsize != sizeof(long)) {
         PyErr_Format(PyExc_ValueError,
             "directions has incorrect item size %zi (expected %zi)",
             view->itemsize, sizeof(long));
+        PyBuffer_Release(view);
         return 0;
     }
     return Py_CLEANUP_SUPPORTED;
 }
+
 static int
 coordinates_converter(PyObject* argument, void* pointer)
 {
     Py_buffer* view = pointer;
     if (argument == NULL) {
-        if (view->buf) PyBuffer_Release(view);
-        return 0;
+        PyBuffer_Release(view);
+        return 1;
     }
     if (PyObject_GetBuffer(argument,
                            view,
@@ -119,12 +136,14 @@ coordinates_converter(PyObject* argument, void* pointer)
         PyErr_Format(PyExc_ValueError,
             "coordinates has incorrect item size %zi (expected %zi)",
             view->itemsize, sizeof(long));
+        PyBuffer_Release(view);
         return 0;
     }
     if (view->ndim != 2) {
         PyErr_Format(PyExc_ValueError,
                      "coordinates array has incorrect rank %d (expected 2)",
                      view->ndim);
+        PyBuffer_Release(view);
         return 0;
     }
     return Py_CLEANUP_SUPPORTED;
@@ -138,9 +157,8 @@ static char _parser__doc__[] =
 static PyObject*
 calculate_alignment_coordinates_columns(PyObject* self, PyObject* args)
 {
-    PyObject* sequences;
     Py_ssize_t i, n, m;
-    Py_buffer* views;
+    Sequences sequences;
     Py_ssize_t k;
     char* s;
     Py_ssize_t p;
@@ -148,41 +166,12 @@ calculate_alignment_coordinates_columns(PyObject* self, PyObject* args)
     Py_ssize_t* positions;
     PyObject* result = NULL;
 
-    if (!PyArg_ParseTuple(args, "O", &sequences)) return NULL;
-    if (!PyTuple_Check(sequences)) {
-       PyErr_SetString(PyExc_ValueError, "expected a tuple");
-       return NULL;
-    }
-    n = PyTuple_GET_SIZE(sequences);
-    views = PyMem_Calloc(n, sizeof(Py_buffer));
-    if (!views) return PyErr_NoMemory();
-    for (i = 0; i < n; i++) {
-        PyObject* sequence = PyTuple_GET_ITEM(sequences, i);
-        if (PyObject_GetBuffer(sequence, &views[i], PyBUF_FORMAT | PyBUF_C_CONTIGUOUS) == 0) {
-            if (views[i].ndim != 1) {
-                PyErr_Format(PyExc_ValueError,
-                             "sequence %zi has incorrect rank %d (expected 1)", i, views[i].ndim);
-                goto exit;
-            }
-            if (i == 0) {
-                m = views[i].len / views[i].itemsize;
-                if (m == 0) {
-                    PyErr_SetString(PyExc_ValueError,
-                                    "sequence 0 has zero length");
-                    goto exit;
-                }
-            }
-            else {
-                if (views[i].len / views[i].itemsize != m) {
-                    PyErr_Format(PyExc_ValueError,
-                        "sequence %zi has inconsistent length %zi "
-                        "(expected %zi)",
-                        i, views[i].len / views[i].itemsize, m);
-                    goto exit;
-                }
-            }
-        }
-    }
+    if (!PyArg_ParseTuple(args, "O&", sequences_converter,  &sequences))
+        return NULL;
+
+    n = sequences.n;
+    m = sequences.m;
+
     positions = PyMem_Calloc(n, sizeof(Py_ssize_t));
     if (positions == NULL) goto exit;
     k = 0;
@@ -195,7 +184,7 @@ calculate_alignment_coordinates_columns(PyObject* self, PyObject* args)
         if (position == m) break;
         for (i = 0; i < n; i++) {
             if (positions[i] > position) continue;
-            s = views[i].buf + position;
+            s = sequences.buffers[i].buf + position;
             if (*s == '-') {
                 for (p = position + 1; p < m; p++) {
                     if (*(++s) != '-') break;
@@ -212,10 +201,7 @@ calculate_alignment_coordinates_columns(PyObject* self, PyObject* args)
     PyMem_Free(positions);
     result = PyLong_FromSsize_t(k);
 exit:
-    for (i = 0; i < n; i++) {
-        if (views[i].buf) PyBuffer_Release(&views[i]);
-    }
-    PyMem_Free(views);
+    sequences_converter(NULL, &sequences);
     return result;
 }
 
@@ -235,6 +221,7 @@ fill_alignment_coordinates(PyObject* self, PyObject* args)
     long* c;
     long* sign;
     Py_ssize_t q;
+    Py_ssize_t step;
 
     if (!PyArg_ParseTuple(args, "O&O&O&",
                                 sequences_converter,  &sequences,
@@ -258,18 +245,13 @@ fill_alignment_coordinates(PyObject* self, PyObject* args)
     if (positions == NULL) goto exit;
     k = 1;
     position = 0;
-    Py_ssize_t step;
     for (i = 0; i < n; i++) {
         s = sequences.buffers[i].buf;
         if (*s == '-') {
-            for (p = position + 1; p < m; p++) {
-                if (*(++s) != '-') break;
-            }
+            for (p = position + 1; p < m; p++) if (*(++s) != '-') break;
         }
         else {
-            for (p = position + 1; p < m; p++) {
-                if (*(++s) == '-') break;
-            }
+            for (p = position + 1; p < m; p++) if (*(++s) == '-') break;
         }
         positions[i] = p;
     }
@@ -358,8 +340,5 @@ static struct PyModuleDef moduledef = {
 PyObject *
 PyInit__parser(void)
 {
-    PyObject* module = PyModule_Create(&moduledef);
-    if (!module) return NULL;
-
-    return module;
+    return PyModule_Create(&moduledef);
 }
