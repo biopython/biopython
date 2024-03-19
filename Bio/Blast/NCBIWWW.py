@@ -23,6 +23,7 @@ Variables:
 import warnings
 
 from io import StringIO
+import re
 import time
 
 from urllib.parse import urlencode
@@ -39,6 +40,9 @@ tool = "biopython"
 
 
 NCBI_BLAST_URL = "https://blast.ncbi.nlm.nih.gov/Blast.cgi"
+
+
+ORGANISM_REGEX = re.compile(r".+\s+\(taxid:\d+\)\s*")
 
 
 @function_with_previous
@@ -93,6 +97,8 @@ def qblast(
     template_length=None,
     username="blast",
     password=None,
+    organisms=None,
+    max_num_seq=500,
 ):
     """BLAST search using NCBI's QBLAST server or a cloud service provider.
 
@@ -130,6 +136,12 @@ def qblast(
                       manually set parameters like word size and e value. Turns
                       off when sequence length is > 30 residues. Default: None.
      - service        plain, psi, phi, rpsblast, megablast (lower case)
+     - organisms      A dictionary that defines the organisms that will be
+                      included/excluded in the search. The key is the name
+                      of the organism, following the taxonomy convention
+                      ie. "Bacteria (taxid:2)" and the value is a boolean
+                      indicating wether the organism is to be excluded (True)
+                      or included (False).
 
     This function does no checking of the validity of the parameters
     and passes the values to the server as is.  More help is available at:
@@ -205,7 +217,33 @@ def qblast(
         "UNGAPPED_ALIGNMENT": ungapped_alignment,
         "WORD_SIZE": word_size,
         "CMD": "Put",
+        "MAX_NUM_SEQ": max_num_seq,
     }
+
+    organisms = {} if organisms is None else organisms
+    for i, (organism, exclude) in enumerate(organisms.items()):
+        if not isinstance(organism, str):
+            raise TypeError("The keys of the 'organisms' parameter must be strings.")
+
+        if ORGANISM_REGEX.match(organism) is None:
+            raise ValueError(
+                "Organisms must be specified following the taxonomy convention. ie. 'Bacteria (taxid:2)'"
+            )
+
+        if not isinstance(exclude, bool):
+            raise TypeError("The values of the 'organism' parameter must be bool.")
+
+        suffix = "" if i == 0 else f"{i}"
+        parameters[f"EQ_MENU{suffix}"] = organism
+
+        # It is not intiutitve that setting an organism to
+        # 'True' will exclude it while 'False' will include it.
+        # It is done that way because the NCIB web page follows that
+        # pattern as it has a 'exclude' checkbox that will exclude
+        # the organism when checked
+        if exclude:
+            parameters[f"ORG_EXCLUDE{suffix}"] = "on"
+        parameters["NUM_ORG"] = i + 1
 
     if password is not None:
         # handle authentication for BLAST cloud
