@@ -329,6 +329,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Tom Eulenfeld <https://github.com/trichter>
 - Tommy Carstensen <https://github.com/tommycarstensen>
 - Tyghe Vallard <https://github.com/necrolyte2>
+- Ueno M. <https://github.com/eunos-1128>
 - Uri Laserson <https://github.com/laserson>
 - Uwe Schmitt <https://github.com/uweschmitt>
 - Valentin Vareškić <https://github.com/valentin994>
