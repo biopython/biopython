@@ -749,7 +749,7 @@ order. For example, you can sort the sequences by increasing GC content:
 
    >>> from Bio.SeqUtils import gc_fraction
    >>> alignment.sort(key=gc_fraction)
-   >>> print(alignment)  # CHEEMPIE
+   >>> print(alignment)
                      0 AG-TTT-- 5
                      0 AGGTTT-- 6
                      1 CGGTTTTT 9
