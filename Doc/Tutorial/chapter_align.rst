@@ -706,11 +706,16 @@ string) characters by using ``dtype='U'``:
 .. code:: pycon
 
    >>> align_array = np.array(alignment, dtype="U")
+
+.. code:: pycon
+
    >>> align_array  # doctest: +NORMALIZE_WHITESPACE
    array([['C', 'G', 'G', 'T', 'T', 'T', 'T', 'T'],
           ['A', 'G', '-', 'T', 'T', 'T', '-', '-'],
           ['A', 'G', 'G', 'T', 'T', 'T', '-', '-']], dtype='<U1')
 
+(the printed ``dtype`` will be '<U1' or '>U1' depending on whether your system
+is little-endian or big-endian, respectively).
 Note that the ``alignment`` object and the NumPy array ``align_array``
 are separate objects in memory - editing one will not update the other!
 
