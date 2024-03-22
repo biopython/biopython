@@ -91,6 +91,8 @@ Slicing specific columns of an alignment will slice any per-column-annotations:
 import textwrap
 from collections import defaultdict
 
+import numpy as np
+
 from Bio.Align import Alignment
 from Bio.Align import interfaces
 from Bio.Seq import Seq
@@ -273,9 +275,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 elif key == "DR":
                     record.dbxrefs = value
                 else:
-                    record.annotations[AlignmentIterator.gs_mapping.get(key, key)] = (
-                        value
-                    )
+                    record.annotations[
+                        AlignmentIterator.gs_mapping.get(key, key)
+                    ] = value
 
     @staticmethod
     def _store_per_sequence_and_per_column_annotations(alignment, gr):
@@ -313,11 +315,15 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 length = None
             elif line == "//":
                 # Reached the end of the alignment.
-                skipped_columns = []
-                coordinates = Alignment.infer_coordinates(
-                    aligned_sequences, skipped_columns
+                aligned_sequences = np.array(
+                    [np.frombuffer(row.encode(), np.int8) for row in aligned_sequences]
                 )
-                skipped_columns = set(skipped_columns)
+                skipped_columns = np.nonzero((aligned_sequences == ord("-")).all(0))[0]
+                aligned_sequences = np.delete(aligned_sequences, skipped_columns, 1)
+                aligned_sequences = [
+                    row.tobytes().decode() for row in aligned_sequences
+                ]
+                coordinates = Alignment.infer_coordinates(aligned_sequences)
                 alignment = Alignment(records, coordinates)
                 for index in sorted(skipped_columns, reverse=True):
                     del operations[index]  # noqa: F821

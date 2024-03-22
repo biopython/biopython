@@ -15,12 +15,15 @@ See https://genome.ucsc.edu/goldenPath/help/bigMaf.html
 
 import struct
 import zlib
-from io import StringIO
+import time
 
+import numpy as np
 
 from Bio.Align import Alignment, Alignments
 from Bio.Align import interfaces, bigbed, maf
+from Bio.Align import _parser
 from Bio.Align.bigbed import AutoSQLTable, Field
+from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
 
@@ -195,11 +198,152 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
         self.targets[0].id = "%s.%s" % (self.reference, self.targets[0].id)
 
     def _create_alignment(self, chunk):
-        chromId, chromStart, chromEnd, rest = chunk
-        data = rest.decode().replace(";", "\n")
-        stream = StringIO()
-        stream.write(data)
-        stream.seek(0)
-        line = next(stream)
-        alignment = maf.AlignmentIterator._create_alignment(self, line, stream)
+        chromId, chromStart, chromEnd, data = chunk
+        records = []
+        strands = []
+        aligned_sequences = []
+        annotations = {}
+        j = -1
+        # Avoid copying data around, as sequences in bigMaf files can be large
+        duration1 = 0
+        duration2 = 0
+        duration3 = 0
+        while True:
+            i = j + 1
+            try:
+                j = data.index(b";", i)
+            except ValueError:
+                break
+            prefix = data[i : i + 2]
+            if prefix.startswith(b"#"):
+                continue
+            elif prefix == b"a ":
+                words = data[i + 2 : j].split()
+                for word in words:
+                    key, value = word.split(b"=")
+                    if key == b"score":
+                        score = float(value)
+                    elif key == b"pass":
+                        value = int(value)
+                        if value <= 0:
+                            raise ValueError(
+                                "pass value must be positive (found %d)" % value
+                            )
+                        annotations["pass"] = value
+                    else:
+                        raise ValueError(
+                            "Unknown annotation variable '%s'" % key.decode()
+                        )
+            elif prefix == b"s ":
+                words = data[i + 2 : j].split(None, 5)
+                if len(words) != 6:
+                    raise ValueError(
+                        "Error parsing alignment - 's' line must have 7 fields"
+                    )
+                src = words[0]
+                start = int(words[1])
+                size = int(words[2])
+                strand = words[3]
+                srcSize = int(words[4])
+                text = words[5]
+                for gap_char in (b".", b"=", b"_"):
+                    text = text.replace(gap_char, b"-")
+                aligned_sequences.append(text)
+                sequence = text.replace(b"-", b"")
+                if len(sequence) != size:
+                    raise ValueError(
+                        "sequence size is incorrect (found %d, expected %d)"
+                        % (len(sequence), size)
+                    )
+                seq = Seq({start: sequence}, length=srcSize)
+                if strand == b"-":
+                    seq = seq.reverse_complement()
+                record = SeqRecord(seq, id=src.decode(), name="", description="")
+                records.append(record)
+                strands.append(strand)
+            elif prefix == b"i ":
+                words = data[i + 2 : j].split(None, 4)
+                assert len(words) == 5
+                assert words[0] == src  # from the previous "s" line
+                leftStatus = words[1].decode()
+                leftCount = int(words[2])
+                rightStatus = words[3].decode()
+                rightCount = int(words[4])
+                assert leftStatus in AlignmentIterator.status_characters
+                assert rightStatus in AlignmentIterator.status_characters
+                record.annotations["leftStatus"] = leftStatus
+                record.annotations["leftCount"] = leftCount
+                record.annotations["rightStatus"] = rightStatus
+                record.annotations["rightCount"] = rightCount
+            elif prefix == b"e ":
+                words = data[i + 2 : j].split(None, 5)
+                assert len(words) == 6
+                src = words[0]
+                start = int(words[1])
+                size = int(words[2])
+                strand = words[3]
+                srcSize = int(words[4])
+                status = words[5].decode()
+                assert status in AlignmentIterator.empty_status_characters
+                sequence = Seq(None, length=srcSize)
+                record = SeqRecord(sequence, id=src.decode(), name="", description="")
+                end = start + size
+                if strand == b"+":
+                    segment = (start, end)
+                else:
+                    segment = (srcSize - start, srcSize - end)
+                empty = (record, segment, status)
+                annotation = annotations.get("empty")
+                if annotation is None:
+                    annotation = []
+                    annotations["empty"] = annotation
+                annotation.append(empty)
+            elif prefix == b"q ":
+                words = data[i + 2 : j].split(None, 1)
+                assert len(words) == 2
+                assert words[0] == src  # from the previous "s" line
+                value = words[1].replace(b"-", b"")
+                record.annotations["quality"] = value.decode()
+            else:
+                line = data[i:j]
+                if line.strip():
+                    raise ValueError(
+                        f"Error parsing alignment - unexpected line:\n{line}"
+                    )
+        aligned_sequences = tuple(aligned_sequences)
+        n = len(aligned_sequences)
+        sizes = np.zeros(n, int)
+        m = _parser.calculate_alignment_coordinates_columns(aligned_sequences, sizes)
+        directions = np.array([+1 if strand == b"+" else -1 for strand in strands])
+        coordinates = np.empty((n, m), int)
+        starts = []
+        for record, strand in zip(records, strands):
+            if strand == b"+":
+                start = record.seq.defined_ranges[0][0]
+            else:
+                start = record.seq.defined_ranges[-1][1]
+            starts.append(start)
+        starts = np.array(starts)
+        coordinates[:, 0] = starts
+        seqdata = _parser.fill_alignment_coordinates(
+            aligned_sequences, coordinates, directions, sizes
+        )
+        alignment = Alignment(records, coordinates)
+        for seqrow, record, strand in zip(seqdata, records, strands):
+            if strand == b"+":
+                start = record.seq.defined_ranges[0][0]
+            else:
+                start = record.seq.defined_ranges[-1][1]
+            mm = len(seqrow)
+            size = len(record.seq)
+            if strand == b"+":
+                seq = Seq({start: seqrow}, size)
+            else:
+                seq = Seq({size - start: seqrow}, size)
+                seq = seq.reverse_complement()
+            record.seq = seq
+        if annotations is not None:
+            alignment.annotations = annotations
+        if score is not None:
+            alignment.score = score
         return alignment

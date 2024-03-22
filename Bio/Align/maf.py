@@ -32,9 +32,12 @@ zero-based end position. We can therefore manipulate ``start`` and
 import shlex
 import itertools
 
+import numpy as np
+
 
 from Bio.Align import Alignment
 from Bio.Align import interfaces
+from Bio.Align import _parser
 from Bio.Seq import Seq, reverse_complement
 from Bio.SeqRecord import SeqRecord
 
@@ -444,12 +447,22 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 raise ValueError(f"Error parsing alignment - unexpected line:\n{line}")
         else:
             self._aline = None
-        coordinates = Alignment.infer_coordinates(aligned_sequences)
-        for record, strand, row in zip(records, strands, coordinates):
-            if strand == "-":
-                row[:] = row[-1] - row[0] - row
-            start = record.seq.defined_ranges[0][0]
-            row += start
+        aligned_sequences = tuple(a.encode() for a in aligned_sequences)
+        m = _parser.calculate_alignment_coordinates_columns(aligned_sequences)
+        n = len(aligned_sequences)
+        directions = np.array([+1 if strand == "+" else -1 for strand in strands])
+        coordinates1 = np.empty((n, m), int)
+        starts = []
+        for record, strand in zip(records, strands):
+            if strand == "+":
+                start = record.seq.defined_ranges[0][0]
+            else:
+                start = record.seq.defined_ranges[-1][1]
+            starts.append(start)
+        starts = np.array(starts)
+        coordinates1[:, 0] = starts
+        _parser.fill_alignment_coordinates(aligned_sequences, coordinates1, directions)
+        coordinates = coordinates1
         alignment = Alignment(records, coordinates)
         if annotations is not None:
             alignment.annotations = annotations
