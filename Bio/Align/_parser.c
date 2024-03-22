@@ -32,12 +32,12 @@ alignment_converter(PyObject* argument, void* pointer)
         PyMem_Free(alignment->buffers);
         return 1;
     }
-    if (!PyTuple_Check(argument)) {
-       PyErr_SetString(PyExc_ValueError, "expected a tuple");
+    if (!PyList_Check(argument)) {
+       PyErr_SetString(PyExc_ValueError, "expected a list");
        alignment->n = 0;
        return 0;
     }
-    n = PyTuple_GET_SIZE(argument);
+    n = PyList_GET_SIZE(argument);
     alignment->buffers = PyMem_Calloc(n+1, sizeof(Py_buffer));
     if (!alignment->buffers) {
         PyErr_SetNone(PyExc_MemoryError);
@@ -45,7 +45,7 @@ alignment_converter(PyObject* argument, void* pointer)
     }
     alignment->n = n;
     for (i = 0; i < n; i++) {
-        sequence = PyTuple_GET_ITEM(argument, i);
+        sequence = PyList_GET_ITEM(argument, i);
         view = &alignment->buffers[i];
         if (PyObject_GetBuffer(sequence, view,
                                PyBUF_FORMAT | PyBUF_C_CONTIGUOUS) == 0) {
@@ -120,7 +120,7 @@ sizes_converter(PyObject* argument, void* pointer)
 }
 
 static int
-directions_converter(PyObject* argument, void* pointer)
+strands_converter(PyObject* argument, void* pointer)
 {
     Py_buffer* view = pointer;
     if (!argument) {
@@ -131,14 +131,14 @@ directions_converter(PyObject* argument, void* pointer)
                            PyBUF_FORMAT | PyBUF_C_CONTIGUOUS) != 0) return 0;
     if (view->ndim != 1) {
         PyErr_Format(PyExc_ValueError,
-                     "directions has incorrect rank %d (expected 1)",
+                     "strands has incorrect rank %d (expected 1)",
                      view->ndim);
         PyBuffer_Release(view);
         return 0;
     }
     if (view->itemsize != sizeof(long)) {
         PyErr_Format(PyExc_ValueError,
-            "directions has incorrect item size %zi (expected %zi)",
+            "strands has incorrect item size %zi (expected %zi)",
             view->itemsize, sizeof(long));
         PyBuffer_Release(view);
         return 0;
@@ -189,24 +189,14 @@ calculate_alignment_coordinates_columns(PyObject* self, PyObject* args)
     Py_ssize_t p;
     Py_ssize_t position;
     Py_ssize_t* positions;
-    Py_ssize_t step;
     PyObject* result = NULL;
-    Py_buffer sizes;
 
-    if (!PyArg_ParseTuple(args, "O&O&",
-                                alignment_converter,  &alignment,
-                                sizes_converter, &sizes))
+    if (!PyArg_ParseTuple(args, "O&",
+                                alignment_converter,  &alignment))
         return NULL;
 
     n = alignment.n;
     m = alignment.m;
-
-    if (sizes.shape[0] != n) {
-        PyErr_Format(PyExc_ValueError,
-            "sizes has incorrect length %zi (expected %zi)",
-            sizes.shape[0], n);
-        goto exit;
-    }
 
     positions = PyMem_Calloc(n, sizeof(Py_ssize_t));
     if (positions == NULL) goto exit;
@@ -218,10 +208,8 @@ calculate_alignment_coordinates_columns(PyObject* self, PyObject* args)
         for (i = 0; i < n; i++) {
             if (positions[i] < position) position = positions[i];
         }
-        step = position - p;
         for (i = 0; i < n; i++) {
             s = alignment.buffers[i].buf + p;
-            if (*s != '-') ((long*)sizes.buf)[i] += step;
         }
         k++;
         if (position == m) break;
@@ -256,7 +244,7 @@ fill_alignment_coordinates(PyObject* self, PyObject* args)
 {
     Py_ssize_t i, n, m;
     Alignment alignment;
-    Py_buffer directions;
+    Py_buffer strands;
     Py_buffer coordinates;
     Py_ssize_t k;
     char* s;
@@ -276,7 +264,7 @@ fill_alignment_coordinates(PyObject* self, PyObject* args)
     if (!PyArg_ParseTuple(args, "O&O&O&O&",
                                 alignment_converter,  &alignment,
                                 coordinates_converter,  &coordinates,
-                                directions_converter,  &directions,
+                                strands_converter,  &strands,
                                 sizes_converter,  &sizes))
         return NULL;
 
@@ -290,7 +278,7 @@ fill_alignment_coordinates(PyObject* self, PyObject* args)
     }
     q = coordinates.shape[1];
     c = coordinates.buf;
-    sign = directions.buf;
+    sign = strands.buf;
 
     sequences = PyTuple_New(n);
     if (sequences == NULL) goto exit;
@@ -388,7 +376,7 @@ exit:
         PyBuffer_Release(&alignment.buffers[i]);
     }
     PyMem_Free(alignment.buffers);
-    directions_converter(NULL, &directions);
+    strands_converter(NULL, &strands);
     coordinates_converter(NULL, &coordinates);
     if (sequences == NULL) return NULL;
     if (k + 1 != q) {

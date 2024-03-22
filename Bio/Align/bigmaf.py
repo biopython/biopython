@@ -15,7 +15,6 @@ See https://genome.ucsc.edu/goldenPath/help/bigMaf.html
 
 import struct
 import zlib
-import time
 
 import numpy as np
 
@@ -205,9 +204,8 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
         annotations = {}
         j = -1
         # Avoid copying data around, as sequences in bigMaf files can be large
-        duration1 = 0
-        duration2 = 0
-        duration3 = 0
+        starts = []
+        sizes = []
         while True:
             i = j + 1
             try:
@@ -246,21 +244,17 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
                 strand = words[3]
                 srcSize = int(words[4])
                 text = words[5]
-                for gap_char in (b".", b"=", b"_"):
-                    text = text.replace(gap_char, b"-")
                 aligned_sequences.append(text)
-                sequence = text.replace(b"-", b"")
-                if len(sequence) != size:
-                    raise ValueError(
-                        "sequence size is incorrect (found %d, expected %d)"
-                        % (len(sequence), size)
-                    )
-                seq = Seq({start: sequence}, length=srcSize)
-                if strand == b"-":
-                    seq = seq.reverse_complement()
+                seq = Seq(None, length=srcSize)
+                sizes.append(size)
+                if strand == b"+":
+                    strands.append(+1)
+                    starts.append(start)
+                else:
+                    strands.append(-1)
+                    starts.append(srcSize - start)
                 record = SeqRecord(seq, id=src.decode(), name="", description="")
                 records.append(record)
-                strands.append(strand)
             elif prefix == b"i ":
                 words = data[i + 2 : j].split(None, 4)
                 assert len(words) == 5
@@ -310,38 +304,32 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
                     raise ValueError(
                         f"Error parsing alignment - unexpected line:\n{line}"
                     )
-        aligned_sequences = tuple(aligned_sequences)
+
         n = len(aligned_sequences)
-        sizes = np.zeros(n, int)
-        m = _parser.calculate_alignment_coordinates_columns(aligned_sequences, sizes)
-        directions = np.array([+1 if strand == b"+" else -1 for strand in strands])
+        m = _parser.calculate_alignment_coordinates_columns(aligned_sequences)
+        sizes = np.array(sizes)
+        strands = np.array(strands)
         coordinates = np.empty((n, m), int)
-        starts = []
-        for record, strand in zip(records, strands):
-            if strand == b"+":
-                start = record.seq.defined_ranges[0][0]
-            else:
-                start = record.seq.defined_ranges[-1][1]
-            starts.append(start)
         starts = np.array(starts)
         coordinates[:, 0] = starts
-        seqdata = _parser.fill_alignment_coordinates(
-            aligned_sequences, coordinates, directions, sizes
+        sequences = _parser.fill_alignment_coordinates(
+            aligned_sequences, coordinates, strands, sizes
         )
-        alignment = Alignment(records, coordinates)
-        for seqrow, record, strand in zip(seqdata, records, strands):
-            if strand == b"+":
-                start = record.seq.defined_ranges[0][0]
+
+        for sequence, record, strand, start, size in zip(sequences, records, strands, starts, sizes):
+            if len(sequence) != size:
+                raise ValueError(
+                    "sequence size is incorrect (found %d, expected %d)"
+                    % (len(sequence), size)
+                )
+            srcSize = len(record.seq)
+            if strand == +1:
+                seq = Seq({start: sequence}, srcSize)
             else:
-                start = record.seq.defined_ranges[-1][1]
-            mm = len(seqrow)
-            size = len(record.seq)
-            if strand == b"+":
-                seq = Seq({start: seqrow}, size)
-            else:
-                seq = Seq({size - start: seqrow}, size)
+                seq = Seq({srcSize - start: sequence}, srcSize)
                 seq = seq.reverse_complement()
             record.seq = seq
+        alignment = Alignment(records, coordinates)
         if annotations is not None:
             alignment.annotations = annotations
         if score is not None:
