@@ -308,10 +308,13 @@ class Test_dn_ds(unittest.TestCase):
         self.assertAlmostEqual(dS, 0.0164, places=4)
 
         try:
-            from scipy.linalg import expm
+            import scipy
         except ImportError:
             # Silently skip the rest of the test
             return
+
+        # This should be present:
+        from scipy.linalg import expm
 
         dN, dS = cal_dn_ds(codon_seq1, codon_seq2, method="YN00")
         self.assertAlmostEqual(dN, 0.0198, places=4)

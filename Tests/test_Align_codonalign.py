@@ -8231,12 +8231,13 @@ gi|6478867|gb|M37394.2|RATEGFR      AGAGTACCTGCGGGTGGCACCGCCAAGCAGTGAGTTTAGTGGAG
         self.assertAlmostEqual(dS, 0.0164, places=4)
 
         try:
-            from scipy.linalg import expm
+            import scipy
         except ImportError:
             # Silently skip the rest of the test
             return
 
         # This should be present:
+        from scipy.linalg import expm
 
         dN, dS = calculate_dn_ds(pairwise_alignment, method="YN00")
         self.assertAlmostEqual(dN, 0.0198, places=4)
