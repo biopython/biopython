@@ -161,6 +161,8 @@ class Array(np.ndarray):
         elif value.ndim == 1:
             if value.shape[0] != self.shape[0]:
                 value._alphabet = self.alphabet[key]
+        elif value.ndim == 0:
+            return value.item()
         return value.view(Array)
 
     def __setitem__(self, key, value):
