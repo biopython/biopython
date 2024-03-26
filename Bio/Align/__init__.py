@@ -2719,7 +2719,7 @@ class Alignment:
         (2, 7)
         """
         n = len(self.coordinates)
-        m = int(self.length)
+        m = self.length
         return (n, m)
 
     @property
