@@ -2666,7 +2666,7 @@ class Alignment:
         gaps = steps.max(0)
         if not ((steps == gaps) | (steps <= 0)).all():
             raise ValueError("Unequal step sizes in alignment")
-        return sum(gaps)
+        return int(sum(gaps))
 
     @property
     def shape(self):
