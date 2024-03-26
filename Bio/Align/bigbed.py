@@ -442,7 +442,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             regions = []
             rezoomedList = []
             trees = _RangeTree.generate(chromUsageList, alignments)
-            scale = initialReduction["scale"]
+            scale = int(initialReduction["scale"])
             doubleReductionSize = scale * _ZoomLevels.bbiResIncrement
             for tree in trees:
                 start = -sys.maxsize
@@ -1279,7 +1279,7 @@ class _ZoomLevels(list):
 
     def reduce(self, summaries, initialReduction, buffer, blockSize, itemsPerSlot):
         zoomCount = initialReduction["size"]
-        reduction = initialReduction["scale"] * _ZoomLevels.bbiResIncrement
+        reduction = int(initialReduction["scale"]) * _ZoomLevels.bbiResIncrement
         output = buffer.output
         formatter = _RTreeFormatter()
         for zoomLevels in range(1, _ZoomLevels.bbiMaxZoomLevels):
