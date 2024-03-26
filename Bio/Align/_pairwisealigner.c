@@ -9,7 +9,7 @@
 
 #define PY_SSIZE_T_CLEAN
 #include "Python.h"
-#include "float.h"
+#include <float.h>
 
 
 #define HORIZONTAL 0x1

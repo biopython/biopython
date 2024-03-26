@@ -16,6 +16,8 @@ sequences as SeqRecord objects.
 
 from io import StringIO
 
+import numpy as np
+
 from Bio.Align import Alignment
 from Bio.Align import interfaces
 from Bio.SeqRecord import SeqRecord
@@ -188,5 +190,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             for old_name, new_name in zip(n.unaltered_taxlabels, n.taxlabels)
         ]
         coordinates = Alignment.infer_coordinates(aligned_seqs)
+        # Remove columns consisting of gaps only
+        steps = (coordinates[:, 1:] - coordinates[:, :-1]).max(0)
+        indices = np.nonzero(steps == 0)[0] + 1
+        coordinates = np.delete(coordinates, indices, 1)
         alignment = Alignment(records, coordinates)
         return alignment
