@@ -223,11 +223,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 seq += "-" * (aln_length - len(seq))
             seqs[index] = seq
 
-        coordinates = Alignment.infer_coordinates(seqs)
-        seqs = (Seq(seq.replace("-", "")) for seq in seqs)
+        seqs = [seq.encode() for seq in seqs]
+        seqs, coordinates = Alignment.parse_alignment_block(seqs)
         records = [
             SeqRecord(
-                seq,
+                Seq(seq),
                 id=name,
                 name=name,
                 description=name,

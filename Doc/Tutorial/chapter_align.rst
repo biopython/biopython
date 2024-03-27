@@ -126,7 +126,7 @@ Print the ``Alignment`` object to show the alignment explicitly:
 with the starting and end coordinate for each sequence are shown to the
 left and right, respectively, of the alignment.
 
-.. _`subsec:align_infer_coordinates`:
+.. _`subsec:align_parse_alignment_block`:
 
 Creating an Alignment object from aligned sequences
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
