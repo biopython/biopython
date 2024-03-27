@@ -18,6 +18,7 @@ from Bio.PDB.Residue import Residue
 # Allowed Elements
 from Bio.Data.IUPACData import atom_weights
 
+from typing import Optional
 
 _ATOM_FORMAT_STRING = (
     "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%s%6.2f      %4s%2s%2s\n"
@@ -316,7 +317,9 @@ class PDBIO(StructureIO):
             pass
         return self.__ter_str
 
-    def pdb_residue_string(self, residue: Residue, chain_id: str = None) -> str:
+    def pdb_residue_string(
+        self, residue: Residue, chain_id: Optional[str] = None
+    ) -> Optional[str]:
         """Generate PDB ATOM records for supplied residue as string.
 
         :param residue: Biopython Reidue object
@@ -336,7 +339,7 @@ class PDBIO(StructureIO):
             self.select = _select
         if chain_id is None:
             chain_id = self.chain_id
-            if chain_id is None:
+            if chain_id is None and residue.parent is not None:
                 chain_id = residue.parent.get_id()
         hetfield, resseq, icode = residue.get_id()
         resname = residue.get_resname()
