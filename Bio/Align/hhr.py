@@ -84,13 +84,15 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             assert len(query_sequence) == n
             if n == 0:
                 return
-            coordinates = Alignment.infer_coordinates([target_sequence, query_sequence])
+            lines = [target_sequence.encode(), query_sequence.encode()]
+            seq_data, coordinates = Alignment.parse_alignment_block(lines)
+            target_seq_data, query_seq_data = seq_data
             coordinates[0, :] += target_start
             coordinates[1, :] += query_start
-            sequence = {query_start: query_sequence.replace("-", "")}
+            sequence = {query_start: query_seq_data}
             query_seq = Seq(sequence, length=query_length)
             query = SeqRecord(query_seq, id=self.query_name)
-            sequence = {target_start: target_sequence.replace("-", "")}
+            sequence = {target_start: target_seq_data}
             target_seq = Seq(sequence, length=target_length)
             target_annotations = {
                 "hmm_name": hmm_name,

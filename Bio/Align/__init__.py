@@ -968,14 +968,14 @@ class MultipleSeqAlignment:
         """
         records = [copy.copy(record) for record in self._records]
         if records:
-            lines = [str(record.seq) for record in records]
-            coordinates = Alignment.infer_coordinates(lines)
-            for record in records:
+            lines = [bytes(record.seq) for record in records]
+            seqdata, coordinates = Alignment.parse_alignment_block(lines)
+            for record, seqrow in zip(records, seqdata):
                 if record.letter_annotations:
                     indices = [i for i, c in enumerate(record.seq) if c != "-"]
                     letter_annotations = dict(record.letter_annotations)
                     record.letter_annotations.clear()
-                    record.seq = record.seq.replace("-", "")
+                    record.seq = Seq(seqrow)
                     for key, value in letter_annotations.items():
                         if isinstance(value, str):
                             value = "".join([value[i] for i in indices])
@@ -985,7 +985,7 @@ class MultipleSeqAlignment:
                         letter_annotations[key] = value
                     record.letter_annotations = letter_annotations
                 else:
-                    record.seq = record.seq.replace("-", "")
+                    record.seq = Seq(seqrow)
             alignment = Alignment(records, coordinates)
         else:
             alignment = Alignment([])
@@ -1041,16 +1041,24 @@ class Alignment:
                [ 0,  0,  3,  5, 10, 11]])
         >>> alignment = Alignment(sequences, coordinates)
         """
+        lines = [line.encode() for line in lines]
+        seqdata, coordinates = cls.parse_alignment_block(lines)
+        return coordinates
+
+    @classmethod
+    def parse_alignment_block(cls, lines):
+        """Parse an alignment block."""
         n = len(lines)
         m = len(lines[0])
         for line in lines:
             assert m == len(line)
         path = []
+        dash = ord(b"-")
         if m > 0:
             indices = [0] * n
             current_state = [None] * n
             for i in range(m):
-                next_state = [line[i] != "-" for line in lines]
+                next_state = [line[i] != dash for line in lines]
                 if next_state == current_state:
                     step += 1  # noqa: F821
                 else:
@@ -1067,7 +1075,8 @@ class Alignment:
             ]
             path.append(indices)
         coordinates = np.array(path).transpose()
-        return coordinates
+        seqdata = [line.replace(b"-", b"") for line in lines]
+        return seqdata, coordinates
 
     def __init__(self, sequences, coordinates=None):
         """Initialize a new Alignment object.
@@ -1890,18 +1899,22 @@ class Alignment:
                 raise TypeError(
                     "second index must be an integer, slice, or iterable of integers"
                 ) from None
+            line = line.encode()
             lines.append(line)
-            line = line.replace("-", "")
-            s = s.__class__(line)
+        seqdata, coordinates = self.parse_alignment_block(lines)
+        for i, sequence in enumerate(sequences):
+            line = seqdata[i]
             try:
-                sequence.seq  # stupid SeqRecord
+                s = sequence.seq
             except AttributeError:
-                sequence = s
-            else:
+                if isinstance(sequence, str):  # str
+                    sequence = line.decode()
+                else:
+                    sequence = sequence.__class__(line)  # Seq, MutableSeq
+            else:  # SeqRecord
                 sequence = copy.deepcopy(sequence)
-                sequence.seq = s
+                sequence.seq = s.__class__(line)
             sequences[i] = sequence
-        coordinates = self.infer_coordinates(lines)
         alignment = Alignment(sequences, coordinates)
         try:
             column_annotations = self.column_annotations
