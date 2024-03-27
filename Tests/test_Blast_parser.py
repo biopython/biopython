@@ -1977,29 +1977,29 @@ Query_744       660 AEQP 664
 class TestBlastn(unittest.TestCase):
     """Test the Blast XML parser for blastn output."""
 
-    def test_xml_2900_blastn_001_parser(self):
-        """Parsing BLASTN 2.9.0+ (xml_2900_blastn_001.xml)."""
-        filename = "xml_2900_blastn_001.xml"
+    def test_xml_21500_blastn_001_parser(self):
+        """Parsing BLASTN 2.15.0+ (xml_21500_blastn_001.xml)."""
+        filename = "xml_21500_blastn_001.xml"
         path = os.path.join("Blast", filename)
         with open(path, "rb") as stream:
             records = Blast.parse(stream)
-            self.check_xml_2900_blastn_001_records(records)
+            self.check_xml_21500_blastn_001_records(records)
         with Blast.parse(path) as records:
-            self.check_xml_2900_blastn_001_records(records)
+            self.check_xml_21500_blastn_001_records(records)
         with open(path, "rb") as stream:
             record = Blast.read(stream)
-        self.check_xml_2900_blastn_001_record(record)
+        self.check_xml_21500_blastn_001_record(record)
         record = Blast.read(path)
-        self.check_xml_2900_blastn_001_record(record)
+        self.check_xml_21500_blastn_001_record(record)
         with Blast.parse(path) as records:
             self.assertEqual(
                 str(records),
                 """\
-Program: BLASTN 2.9.0+
-     db: GPIPE/10090/current/all_top_level GPIPE/10090/current/rna
+Program: BLASTN 2.15.0+
+     db: genomic/10090/GCF_000001635.26
 
-  Query: G26684.1 (length=285)
-         human STS STS_D11570, sequence tagged site
+  Query: Query_78041 (length=285)
+         G26684.1 human STS STS_D11570, sequence tagged site
    Hits: ----  -----  ----------------------------------------------------------
             #  # HSP  ID + description
          ----  -----  ----------------------------------------------------------
@@ -2009,42 +2009,42 @@ Program: BLASTN 2.9.0+
             3      2  gi|372099108|ref|NC_000068.7|  Mus musculus strain C57B...
             4      2  gi|372099097|ref|NC_000079.6|  Mus musculus strain C57B...
             5      2  gi|372099098|ref|NC_000078.6|  Mus musculus strain C57B...
-            6      1  gi|372099109|ref|NC_000067.6|  Mus musculus strain C57B...
-            7      1  gi|372099101|ref|NC_000075.6|  Mus musculus strain C57B...
-            8      1  gi|372099100|ref|NC_000076.6|  Mus musculus strain C57B...
-            9      1  gi|372099094|ref|NC_000082.6|  Mus musculus strain C57B...""",
+            6      1  gi|372099049|ref|NT_187008.1|  Mus musculus strain 129S...
+            7      1  gi|372099109|ref|NC_000067.6|  Mus musculus strain C57B...
+            8      1  gi|372099101|ref|NC_000075.6|  Mus musculus strain C57B...
+            9      1  gi|372099100|ref|NC_000076.6|  Mus musculus strain C57B...
+           10      1  gi|372099094|ref|NC_000082.6|  Mus musculus strain C57B...""",
             )
 
-    def test_xml_2900_blastn_001_v2_parser(self):
-        """Parsing BLASTN 2.9.0+ (xml_2900_blastn_001_v2.xml)."""
-        filename = "xml_2900_blastn_001_v2.xml"
+    def test_xml2_21500_blastn_001_parser(self):
+        """Parsing BLASTN 2.15.0+ (xml2_21500_blastn_001.xml)."""
+        filename = "xml2_21500_blastn_001.xml"
         path = os.path.join("Blast", filename)
         with open(path, "rb") as stream:
             records = Blast.parse(stream)
-            self.check_xml_2900_blastn_001_records(records, xml2=True)
+            self.check_xml_21500_blastn_001_records(records, xml2=True)
         with Blast.parse(path) as records:
-            self.check_xml_2900_blastn_001_records(records, xml2=True)
+            self.check_xml_21500_blastn_001_records(records, xml2=True)
         with open(path, "rb") as stream:
             record = Blast.read(stream)
-        self.check_xml_2900_blastn_001_record(record, xml2=True)
+        self.check_xml_21500_blastn_001_record(record, xml2=True)
         record = Blast.read(path)
-        self.check_xml_2900_blastn_001_record(record, xml2=True)
+        self.check_xml_21500_blastn_001_record(record, xml2=True)
 
-    def check_xml_2900_blastn_001_records(self, records, xml2=False):
+    def check_xml_21500_blastn_001_records(self, records, xml2=False):
         self.assertEqual(records.program, "blastn")
-        self.assertEqual(records.version, "BLASTN 2.9.0+")
+        self.assertEqual(records.version, "BLASTN 2.15.0+")
         self.assertEqual(
             records.reference,
             'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
         )
-        self.assertEqual(
-            records.db, "GPIPE/10090/current/all_top_level GPIPE/10090/current/rna"
-        )
+        self.assertEqual(records.db, "genomic/10090/GCF_000001635.26")
         if xml2 is False:
             self.assertIsInstance(records.query, SeqRecord)
-            self.assertEqual(records.query.id, "G26684.1")
+            self.assertEqual(records.query.id, "Query_78041")
             self.assertEqual(
-                records.query.description, "human STS STS_D11570, sequence tagged site"
+                records.query.description,
+                "G26684.1 human STS STS_D11570, sequence tagged site",
             )
             self.assertEqual(repr(records.query.seq), "Seq(None, length=285)")
         self.assertEqual(len(records.param), 6)
@@ -2053,34 +2053,35 @@ Program: BLASTN 2.9.0+
         self.assertEqual(records.param["sc-mismatch"], -3)
         self.assertEqual(records.param["gap-open"], 5)
         self.assertEqual(records.param["gap-extend"], 2)
-        self.assertEqual(records.param["filter"], "R -d repeatmasker/repeat_9989;m;F;")
+        self.assertEqual(records.param["filter"], "L;m;")
         record = next(records)
         self.assertRaises(StopIteration, next, records)
-        self.check_xml_2900_blastn_001_record(record, xml2=xml2)
+        self.check_xml_21500_blastn_001_record(record, xml2=xml2)
 
-    def check_xml_2900_blastn_001_record(self, record, xml2=False):
+    def check_xml_21500_blastn_001_record(self, record, xml2=False):
         if xml2 is False:
             self.assertEqual(record.num, 1)
         self.assertIsInstance(record.query, SeqRecord)
-        self.assertEqual(record.query.id, "G26684.1")
+        self.assertEqual(record.query.id, "Query_78041")
         self.assertEqual(
-            record.query.description, "human STS STS_D11570, sequence tagged site"
+            record.query.description,
+            "G26684.1 human STS STS_D11570, sequence tagged site",
         )
         self.assertEqual(repr(record.query.seq), "Seq(None, length=285)")
 
         self.assertEqual(len(record.stat), 7)
-        self.assertEqual(record.stat["db-num"], 107382)
-        self.assertEqual(record.stat["db-len"], 3164670549)
+        self.assertEqual(record.stat["db-num"], 239)
+        self.assertEqual(record.stat["db-len"], 2818974565)
         if xml2 is True:
             self.assertEqual(record.stat["hsp-len"], 31)
-            self.assertEqual(record.stat["eff-space"], 802980793578)
+            self.assertEqual(record.stat["eff-space"], 716017657624)
         else:
             self.assertEqual(record.stat["hsp-len"], 0)
             self.assertAlmostEqual(record.stat["eff-space"], 0.0)
         self.assertAlmostEqual(record.stat["kappa"], 0.41)
         self.assertAlmostEqual(record.stat["lambda"], 0.625)
         self.assertAlmostEqual(record.stat["entropy"], 0.78)
-        self.assertEqual(len(record), 10)
+        self.assertEqual(len(record), 11)
         hit = record[0]
         self.assertEqual(hit.num, 1)
         self.assertIsInstance(hit.target, SeqRecord)
@@ -2088,7 +2089,7 @@ Program: BLASTN 2.9.0+
         self.assertEqual(hit.target.name, "NC_000069")
         self.assertEqual(
             hit.target.description,
-            "Mus musculus strain C57BL/6J chromosome 3, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 3, GRCm38.p6 C57BL/6J",
         )
         if xml2 is True:
             self.assertEqual(hit.target.annotations["taxid"], 10090)
@@ -2099,7 +2100,7 @@ Program: BLASTN 2.9.0+
         self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 44.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 40.9604)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 0.375311)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 0.334664)
         self.assertEqual(hsp.annotations["identity"], 30)
         if xml2 is False:
             self.assertEqual(hsp.annotations["positive"], 30)
@@ -2118,9 +2119,9 @@ Program: BLASTN 2.9.0+
             repr(hsp.query.seq),
             "Seq({133: 'GAATCCTAGAGGCTTGATTGGCCCAGGCTGCTG'}, length=285)",
         )
-        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(hsp.query.id, "Query_78041")
         self.assertEqual(
-            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+            hsp.query.description, "G26684.1 human STS STS_D11570, sequence tagged site"
         )
         self.assertEqual(len(hsp.query.features), 0)
         self.assertEqual(
@@ -2131,7 +2132,7 @@ Program: BLASTN 2.9.0+
         self.assertEqual(hsp.target.name, "NC_000069")
         self.assertEqual(
             hsp.target.description,
-            "Mus musculus strain C57BL/6J chromosome 3, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 3, GRCm38.p6 C57BL/6J",
         )
         if xml2 is True:
             self.assertEqual(hit.target.annotations["taxid"], 10090)
@@ -2144,17 +2145,17 @@ Program: BLASTN 2.9.0+
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099107|ref|NC_000069.6| Length: 160039680 Strand: Minus
-        Mus musculus strain C57BL/6J chromosome 3, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 3, GRCm38.p6 C57BL/6J
 
-Score:40 bits(44), Expect:0.4,
+Score:40 bits(44), Expect:0.3,
 Identities:30/34(88%),  Gaps:1.34(3%)
 
 gi|372099 101449177 GAATCCTAGAGGCTGGACTGGCCCTGGCCTGCTG 101449143
                   0 ||||||||||||||.||.||||||.||-||||||        34
-G26684.1        133 GAATCCTAGAGGCTTGATTGGCCCAGG-CTGCTG       166
+Query_780       133 GAATCCTAGAGGCTTGATTGGCCCAGG-CTGCTG       166
 
 """,
             )
@@ -2162,17 +2163,17 @@ G26684.1        133 GAATCCTAGAGGCTTGATTGGCCCAGG-CTGCTG       166
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099107|ref|NC_000069.6| Length: 160039680 Strand: Minus
-        Mus musculus strain C57BL/6J chromosome 3, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 3, GRCm38.p6 C57BL/6J
 
-Score:40 bits(44), Expect:0.4,
+Score:40 bits(44), Expect:0.3,
 Identities:30/34(88%),  Positives:30/34(88%),  Gaps:1.34(3%)
 
 gi|372099 101449177 GAATCCTAGAGGCTGGACTGGCCCTGGCCTGCTG 101449143
                   0 ||||||||||||||.||.||||||.||-||||||        34
-G26684.1        133 GAATCCTAGAGGCTTGATTGGCCCAGG-CTGCTG       166
+Query_780       133 GAATCCTAGAGGCTTGATTGGCCCAGG-CTGCTG       166
 
 """,
             )
@@ -2183,7 +2184,7 @@ G26684.1        133 GAATCCTAGAGGCTTGATTGGCCCAGG-CTGCTG       166
         self.assertEqual(hit.target.name, "NC_000073")
         self.assertEqual(
             hit.target.description,
-            "Mus musculus strain C57BL/6J chromosome 7, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 7, GRCm38.p6 C57BL/6J",
         )
         if xml2 is True:
             self.assertEqual(hit.target.annotations["taxid"], 10090)
@@ -2194,7 +2195,7 @@ G26684.1        133 GAATCCTAGAGGCTTGATTGGCCCAGG-CTGCTG       166
         self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 44.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 40.9604)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 0.375311)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 0.334664)
         self.assertEqual(hsp.annotations["identity"], 26)
         if xml2 is False:
             self.assertEqual(hsp.annotations["positive"], 26)
@@ -2213,9 +2214,9 @@ G26684.1        133 GAATCCTAGAGGCTTGATTGGCCCAGG-CTGCTG       166
             repr(hsp.query.seq),
             "Seq({204: 'GAAAGGAAATNAAAATGGAAAGTTCTTGT'}, length=285)",
         )
-        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(hsp.query.id, "Query_78041")
         self.assertEqual(
-            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+            hsp.query.description, "G26684.1 human STS STS_D11570, sequence tagged site"
         )
         self.assertEqual(len(hsp.query.features), 0)
         self.assertEqual(
@@ -2226,7 +2227,7 @@ G26684.1        133 GAATCCTAGAGGCTTGATTGGCCCAGG-CTGCTG       166
         self.assertEqual(hsp.target.name, "NC_000073")
         self.assertEqual(
             hsp.target.description,
-            "Mus musculus strain C57BL/6J chromosome 7, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 7, GRCm38.p6 C57BL/6J",
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(hsp.annotations["midline"], "|||||||||  ||||||||||||||| ||")
@@ -2234,17 +2235,17 @@ G26684.1        133 GAATCCTAGAGGCTTGATTGGCCCAGG-CTGCTG       166
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099103|ref|NC_000073.6| Length: 145441459 Strand: Minus
-        Mus musculus strain C57BL/6J chromosome 7, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 7, GRCm38.p6 C57BL/6J
 
-Score:40 bits(44), Expect:0.4,
+Score:40 bits(44), Expect:0.3,
 Identities:26/29(90%),  Gaps:0.29(0%)
 
 gi|372099 131772185 GAAAGGAAAAAAAAATGGAAAGTTCTGGT 131772156
                   0 |||||||||..|||||||||||||||.||        29
-G26684.1        204 GAAAGGAAATNAAAATGGAAAGTTCTTGT       233
+Query_780       204 GAAAGGAAATNAAAATGGAAAGTTCTTGT       233
 
 """,
             )
@@ -2252,17 +2253,17 @@ G26684.1        204 GAAAGGAAATNAAAATGGAAAGTTCTTGT       233
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099103|ref|NC_000073.6| Length: 145441459 Strand: Minus
-        Mus musculus strain C57BL/6J chromosome 7, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 7, GRCm38.p6 C57BL/6J
 
-Score:40 bits(44), Expect:0.4,
+Score:40 bits(44), Expect:0.3,
 Identities:26/29(90%),  Positives:26/29(90%),  Gaps:0.29(0%)
 
 gi|372099 131772185 GAAAGGAAAAAAAAATGGAAAGTTCTGGT 131772156
                   0 |||||||||..|||||||||||||||.||        29
-G26684.1        204 GAAAGGAAATNAAAATGGAAAGTTCTTGT       233
+Query_780       204 GAAAGGAAATNAAAATGGAAAGTTCTTGT       233
 
 """,
             )
@@ -2273,7 +2274,7 @@ G26684.1        204 GAAAGGAAATNAAAATGGAAAGTTCTTGT       233
         self.assertEqual(hit.target.name, "NC_000070")
         self.assertEqual(
             hit.target.description,
-            "Mus musculus strain C57BL/6J chromosome 4, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 4, GRCm38.p6 C57BL/6J",
         )
         if xml2 is True:
             self.assertEqual(hit.target.annotations["taxid"], 10090)
@@ -2284,7 +2285,7 @@ G26684.1        204 GAAAGGAAATNAAAATGGAAAGTTCTTGT       233
         self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 43.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 40.0587)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 1.30996)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 1.16809)
         self.assertEqual(hsp.annotations["identity"], 23)
         if xml2 is False:
             self.assertEqual(hsp.annotations["positive"], 23)
@@ -2302,9 +2303,9 @@ G26684.1        204 GAAAGGAAATNAAAATGGAAAGTTCTTGT       233
         self.assertEqual(
             repr(hsp.query.seq), "Seq({61: 'CCAACACAGGCCAGCGACTTCTGG'}, length=285)"
         )
-        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(hsp.query.id, "Query_78041")
         self.assertEqual(
-            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+            hsp.query.description, "G26684.1 human STS STS_D11570, sequence tagged site"
         )
         self.assertEqual(len(hsp.query.features), 0)
         self.assertEqual(
@@ -2315,7 +2316,7 @@ G26684.1        204 GAAAGGAAATNAAAATGGAAAGTTCTTGT       233
         self.assertEqual(hsp.target.name, "NC_000070")
         self.assertEqual(
             hsp.target.description,
-            "Mus musculus strain C57BL/6J chromosome 4, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 4, GRCm38.p6 C57BL/6J",
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(hsp.annotations["midline"], "|||||||||||||||| |||||||")
@@ -2323,17 +2324,17 @@ G26684.1        204 GAAAGGAAATNAAAATGGAAAGTTCTTGT       233
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099106|ref|NC_000070.6| Length: 156508116 Strand: Minus
-        Mus musculus strain C57BL/6J chromosome 4, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 4, GRCm38.p6 C57BL/6J
 
 Score:40 bits(43), Expect:1,
 Identities:23/24(96%),  Gaps:0.24(0%)
 
 gi|372099   9607562 CCAACACAGGCCAGCGGCTTCTGG 9607538
                   0 ||||||||||||||||.|||||||      24
-G26684.1         61 CCAACACAGGCCAGCGACTTCTGG      85
+Query_780        61 CCAACACAGGCCAGCGACTTCTGG      85
 
 """,
             )
@@ -2341,17 +2342,17 @@ G26684.1         61 CCAACACAGGCCAGCGACTTCTGG      85
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099106|ref|NC_000070.6| Length: 156508116 Strand: Minus
-        Mus musculus strain C57BL/6J chromosome 4, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 4, GRCm38.p6 C57BL/6J
 
 Score:40 bits(43), Expect:1,
 Identities:23/24(96%),  Positives:23/24(96%),  Gaps:0.24(0%)
 
 gi|372099   9607562 CCAACACAGGCCAGCGGCTTCTGG 9607538
                   0 ||||||||||||||||.|||||||      24
-G26684.1         61 CCAACACAGGCCAGCGACTTCTGG      85
+Query_780        61 CCAACACAGGCCAGCGACTTCTGG      85
 
 """,
             )
@@ -2359,7 +2360,7 @@ G26684.1         61 CCAACACAGGCCAGCGACTTCTGG      85
         self.assertEqual(hsp.num, 2)
         self.assertAlmostEqual(hsp.score, 40.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 4.07705)
         self.assertEqual(hsp.annotations["identity"], 28)
         if xml2 is False:
             self.assertEqual(hsp.annotations["positive"], 28)
@@ -2378,9 +2379,9 @@ G26684.1         61 CCAACACAGGCCAGCGACTTCTGG      85
             repr(hsp.query.seq),
             "Seq({241: 'GCCTGACATGGGTAGCTGCTCAATAAATGCT'}, length=285)",
         )
-        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(hsp.query.id, "Query_78041")
         self.assertEqual(
-            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+            hsp.query.description, "G26684.1 human STS STS_D11570, sequence tagged site"
         )
         self.assertEqual(len(hsp.query.features), 0)
         self.assertEqual(
@@ -2391,7 +2392,7 @@ G26684.1         61 CCAACACAGGCCAGCGACTTCTGG      85
         self.assertEqual(hsp.target.name, "NC_000070")
         self.assertEqual(
             hsp.target.description,
-            "Mus musculus strain C57BL/6J chromosome 4, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 4, GRCm38.p6 C57BL/6J",
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(hsp.annotations["midline"], "||||| ||||  ||| ||||||||||||||||")
@@ -2399,17 +2400,17 @@ G26684.1         61 CCAACACAGGCCAGCGACTTCTGG      85
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099106|ref|NC_000070.6| Length: 156508116 Strand: Plus
-        Mus musculus strain C57BL/6J chromosome 4, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 4, GRCm38.p6 C57BL/6J
 
-Score:37 bits(40), Expect:5,
+Score:37 bits(40), Expect:4,
 Identities:28/32(88%),  Gaps:1.32(3%)
 
 gi|372099 142902531 GCCTGGCATGAAGTAACTGCTCAATAAATGCT 142902563
                   0 |||||.||||.-|||.||||||||||||||||        32
-G26684.1        241 GCCTGACATGG-GTAGCTGCTCAATAAATGCT       272
+Query_780       241 GCCTGACATGG-GTAGCTGCTCAATAAATGCT       272
 
 """,
             )
@@ -2417,17 +2418,17 @@ G26684.1        241 GCCTGACATGG-GTAGCTGCTCAATAAATGCT       272
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099106|ref|NC_000070.6| Length: 156508116 Strand: Plus
-        Mus musculus strain C57BL/6J chromosome 4, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 4, GRCm38.p6 C57BL/6J
 
-Score:37 bits(40), Expect:5,
+Score:37 bits(40), Expect:4,
 Identities:28/32(88%),  Positives:28/32(88%),  Gaps:1.32(3%)
 
 gi|372099 142902531 GCCTGGCATGAAGTAACTGCTCAATAAATGCT 142902563
                   0 |||||.||||.-|||.||||||||||||||||        32
-G26684.1        241 GCCTGACATGG-GTAGCTGCTCAATAAATGCT       272
+Query_780       241 GCCTGACATGG-GTAGCTGCTCAATAAATGCT       272
 
 """,
             )
@@ -2438,7 +2439,7 @@ G26684.1        241 GCCTGACATGG-GTAGCTGCTCAATAAATGCT       272
         self.assertEqual(hit.target.name, "NC_000068")
         self.assertEqual(
             hit.target.description,
-            "Mus musculus strain C57BL/6J chromosome 2, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 2, GRCm38.p6 C57BL/6J",
         )
         if xml2 is True:
             self.assertEqual(hit.target.annotations["taxid"], 10090)
@@ -2449,7 +2450,7 @@ G26684.1        241 GCCTGACATGG-GTAGCTGCTCAATAAATGCT       272
         self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 42.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 39.157)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 1.30996)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 1.16809)
         self.assertEqual(hsp.annotations["identity"], 27)
         if xml2 is False:
             self.assertEqual(hsp.annotations["positive"], 27)
@@ -2468,9 +2469,9 @@ G26684.1        241 GCCTGACATGG-GTAGCTGCTCAATAAATGCT       272
             repr(hsp.query.seq),
             "Seq({238: 'AAGGCCTGACATGGGTAGCTGCTCAATAAAT'}, length=285)",
         )
-        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(hsp.query.id, "Query_78041")
         self.assertEqual(
-            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+            hsp.query.description, "G26684.1 human STS STS_D11570, sequence tagged site"
         )
         self.assertEqual(len(hsp.query.features), 0)
         self.assertEqual(
@@ -2481,7 +2482,7 @@ G26684.1        241 GCCTGACATGG-GTAGCTGCTCAATAAATGCT       272
         self.assertEqual(hsp.target.name, "NC_000068")
         self.assertEqual(
             hsp.target.description,
-            "Mus musculus strain C57BL/6J chromosome 2, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 2, GRCm38.p6 C57BL/6J",
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(hsp.annotations["midline"], "||| |||| |||| |||| ||||||||||||")
@@ -2489,17 +2490,17 @@ G26684.1        241 GCCTGACATGG-GTAGCTGCTCAATAAATGCT       272
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099108|ref|NC_000068.7| Length: 182113224 Strand: Plus
-        Mus musculus strain C57BL/6J chromosome 2, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 2, GRCm38.p6 C57BL/6J
 
 Score:39 bits(42), Expect:1,
 Identities:27/31(87%),  Gaps:0.31(0%)
 
 gi|372099   3799646 AAGTCCTGGCATGAGTAGTTGCTCAATAAAT 3799677
                   0 |||.||||.||||.||||.||||||||||||      31
-G26684.1        238 AAGGCCTGACATGGGTAGCTGCTCAATAAAT     269
+Query_780       238 AAGGCCTGACATGGGTAGCTGCTCAATAAAT     269
 
 """,
             )
@@ -2507,17 +2508,17 @@ G26684.1        238 AAGGCCTGACATGGGTAGCTGCTCAATAAAT     269
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099108|ref|NC_000068.7| Length: 182113224 Strand: Plus
-        Mus musculus strain C57BL/6J chromosome 2, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 2, GRCm38.p6 C57BL/6J
 
 Score:39 bits(42), Expect:1,
 Identities:27/31(87%),  Positives:27/31(87%),  Gaps:0.31(0%)
 
 gi|372099   3799646 AAGTCCTGGCATGAGTAGTTGCTCAATAAAT 3799677
                   0 |||.||||.||||.||||.||||||||||||      31
-G26684.1        238 AAGGCCTGACATGGGTAGCTGCTCAATAAAT     269
+Query_780       238 AAGGCCTGACATGGGTAGCTGCTCAATAAAT     269
 
 """,
             )
@@ -2525,7 +2526,7 @@ G26684.1        238 AAGGCCTGACATGGGTAGCTGCTCAATAAAT     269
         self.assertEqual(hsp.num, 2)
         self.assertAlmostEqual(hsp.score, 41.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 38.2554)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 4.07705)
         self.assertEqual(hsp.annotations["identity"], 23)
         if xml2 is False:
             self.assertEqual(hsp.annotations["positive"], 23)
@@ -2543,9 +2544,9 @@ G26684.1        238 AAGGCCTGACATGGGTAGCTGCTCAATAAAT     269
         self.assertEqual(
             repr(hsp.query.seq), "Seq({210: 'AAATNAAAATGGAAAGTTCTTGTAG'}, length=285)"
         )
-        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(hsp.query.id, "Query_78041")
         self.assertEqual(
-            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+            hsp.query.description, "G26684.1 human STS STS_D11570, sequence tagged site"
         )
         self.assertEqual(len(hsp.query.features), 0)
         self.assertEqual(
@@ -2556,7 +2557,7 @@ G26684.1        238 AAGGCCTGACATGGGTAGCTGCTCAATAAAT     269
         self.assertEqual(hsp.target.name, "NC_000068")
         self.assertEqual(
             hsp.target.description,
-            "Mus musculus strain C57BL/6J chromosome 2, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 2, GRCm38.p6 C57BL/6J",
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(hsp.annotations["midline"], "|||| |||||||||||||||| |||")
@@ -2564,17 +2565,17 @@ G26684.1        238 AAGGCCTGACATGGGTAGCTGCTCAATAAAT     269
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099108|ref|NC_000068.7| Length: 182113224 Strand: Plus
-        Mus musculus strain C57BL/6J chromosome 2, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 2, GRCm38.p6 C57BL/6J
 
-Score:38 bits(41), Expect:5,
+Score:38 bits(41), Expect:4,
 Identities:23/25(92%),  Gaps:0.25(0%)
 
 gi|372099  70278959 AAATGAAAATGGAAAGTTCTTATAG 70278984
                   0 ||||.||||||||||||||||.|||       25
-G26684.1        210 AAATNAAAATGGAAAGTTCTTGTAG      235
+Query_780       210 AAATNAAAATGGAAAGTTCTTGTAG      235
 
 """,
             )
@@ -2582,17 +2583,17 @@ G26684.1        210 AAATNAAAATGGAAAGTTCTTGTAG      235
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099108|ref|NC_000068.7| Length: 182113224 Strand: Plus
-        Mus musculus strain C57BL/6J chromosome 2, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 2, GRCm38.p6 C57BL/6J
 
-Score:38 bits(41), Expect:5,
+Score:38 bits(41), Expect:4,
 Identities:23/25(92%),  Positives:23/25(92%),  Gaps:0.25(0%)
 
 gi|372099  70278959 AAATGAAAATGGAAAGTTCTTATAG 70278984
                   0 ||||.||||||||||||||||.|||       25
-G26684.1        210 AAATNAAAATGGAAAGTTCTTGTAG      235
+Query_780       210 AAATNAAAATGGAAAGTTCTTGTAG      235
 
 """,
             )
@@ -2603,7 +2604,7 @@ G26684.1        210 AAATNAAAATGGAAAGTTCTTGTAG      235
         self.assertEqual(hit.target.name, "NC_000079")
         self.assertEqual(
             hit.target.description,
-            "Mus musculus strain C57BL/6J chromosome 13, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 13, GRCm38.p6 C57BL/6J",
         )
         if xml2 is True:
             self.assertEqual(hit.target.annotations["taxid"], 10090)
@@ -2614,7 +2615,7 @@ G26684.1        210 AAATNAAAATGGAAAGTTCTTGTAG      235
         self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 42.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 39.157)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 1.30996)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 1.16809)
         self.assertEqual(hsp.annotations["identity"], 25)
         if xml2 is False:
             self.assertEqual(hsp.annotations["positive"], 25)
@@ -2633,9 +2634,9 @@ G26684.1        210 AAATNAAAATGGAAAGTTCTTGTAG      235
             repr(hsp.query.seq),
             "Seq({206: 'AAGGAAATNAAAATGGAAAGTTCTTGTA'}, length=285)",
         )
-        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(hsp.query.id, "Query_78041")
         self.assertEqual(
-            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+            hsp.query.description, "G26684.1 human STS STS_D11570, sequence tagged site"
         )
         self.assertEqual(len(hsp.query.features), 0)
         self.assertEqual(
@@ -2646,7 +2647,7 @@ G26684.1        210 AAATNAAAATGGAAAGTTCTTGTAG      235
         self.assertEqual(hsp.target.name, "NC_000079")
         self.assertEqual(
             hsp.target.description,
-            "Mus musculus strain C57BL/6J chromosome 13, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 13, GRCm38.p6 C57BL/6J",
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(hsp.annotations["midline"], "||||| || |||||||||||||||| ||")
@@ -2654,17 +2655,17 @@ G26684.1        210 AAATNAAAATGGAAAGTTCTTGTAG      235
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099097|ref|NC_000079.6| Length: 120421639 Strand: Minus
-        Mus musculus strain C57BL/6J chromosome 13, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 13, GRCm38.p6 C57BL/6J
 
 Score:39 bits(42), Expect:1,
 Identities:25/28(89%),  Gaps:0.28(0%)
 
 gi|372099  26806584 AAGGACATCAAAATGGAAAGTTCTTCTA 26806556
                   0 |||||.||.||||||||||||||||.||       28
-G26684.1        206 AAGGAAATNAAAATGGAAAGTTCTTGTA      234
+Query_780       206 AAGGAAATNAAAATGGAAAGTTCTTGTA      234
 
 """,
             )
@@ -2672,17 +2673,17 @@ G26684.1        206 AAGGAAATNAAAATGGAAAGTTCTTGTA      234
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099097|ref|NC_000079.6| Length: 120421639 Strand: Minus
-        Mus musculus strain C57BL/6J chromosome 13, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 13, GRCm38.p6 C57BL/6J
 
 Score:39 bits(42), Expect:1,
 Identities:25/28(89%),  Positives:25/28(89%),  Gaps:0.28(0%)
 
 gi|372099  26806584 AAGGACATCAAAATGGAAAGTTCTTCTA 26806556
                   0 |||||.||.||||||||||||||||.||       28
-G26684.1        206 AAGGAAATNAAAATGGAAAGTTCTTGTA      234
+Query_780       206 AAGGAAATNAAAATGGAAAGTTCTTGTA      234
 
 """,
             )
@@ -2690,7 +2691,7 @@ G26684.1        206 AAGGAAATNAAAATGGAAAGTTCTTGTA      234
         self.assertEqual(hsp.num, 2)
         self.assertAlmostEqual(hsp.score, 40.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 4.07705)
         self.assertEqual(hsp.annotations["identity"], 32)
         if xml2 is False:
             self.assertEqual(hsp.annotations["positive"], 32)
@@ -2709,9 +2710,9 @@ G26684.1        206 AAGGAAATNAAAATGGAAAGTTCTTGTA      234
             repr(hsp.query.seq),
             "Seq({233: 'AGCGCAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTA'}, length=285)",
         )
-        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(hsp.query.id, "Query_78041")
         self.assertEqual(
-            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+            hsp.query.description, "G26684.1 human STS STS_D11570, sequence tagged site"
         )
         self.assertEqual(len(hsp.query.features), 0)
         self.assertEqual(
@@ -2722,7 +2723,7 @@ G26684.1        206 AAGGAAATNAAAATGGAAAGTTCTTGTA      234
         self.assertEqual(hsp.target.name, "NC_000079")
         self.assertEqual(
             hsp.target.description,
-            "Mus musculus strain C57BL/6J chromosome 13, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 13, GRCm38.p6 C57BL/6J",
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(
@@ -2732,17 +2733,17 @@ G26684.1        206 AAGGAAATNAAAATGGAAAGTTCTTGTA      234
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099097|ref|NC_000079.6| Length: 120421639 Strand: Minus
-        Mus musculus strain C57BL/6J chromosome 13, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 13, GRCm38.p6 C57BL/6J
 
-Score:37 bits(40), Expect:5,
+Score:37 bits(40), Expect:4,
 Identities:32/40(80%),  Gaps:0.40(0%)
 
 gi|372099  56840340 AGCGCAAGGCCTGACATAGGAAAATGTTCAGTGAATACTA 56840300
                   0 |||||||||||||||||.||.|..||.|||.|.|||.|||       40
-G26684.1        233 AGCGCAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTA      273
+Query_780       233 AGCGCAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTA      273
 
 """,
             )
@@ -2750,17 +2751,17 @@ G26684.1        233 AGCGCAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTA      273
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099097|ref|NC_000079.6| Length: 120421639 Strand: Minus
-        Mus musculus strain C57BL/6J chromosome 13, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 13, GRCm38.p6 C57BL/6J
 
-Score:37 bits(40), Expect:5,
+Score:37 bits(40), Expect:4,
 Identities:32/40(80%),  Positives:32/40(80%),  Gaps:0.40(0%)
 
 gi|372099  56840340 AGCGCAAGGCCTGACATAGGAAAATGTTCAGTGAATACTA 56840300
                   0 |||||||||||||||||.||.|..||.|||.|.|||.|||       40
-G26684.1        233 AGCGCAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTA      273
+Query_780       233 AGCGCAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTA      273
 
 """,
             )
@@ -2771,7 +2772,7 @@ G26684.1        233 AGCGCAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTA      273
         self.assertEqual(hit.target.name, "NC_000078")
         self.assertEqual(
             hit.target.description,
-            "Mus musculus strain C57BL/6J chromosome 12, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 12, GRCm38.p6 C57BL/6J",
         )
         if xml2 is True:
             self.assertEqual(hit.target.annotations["taxid"], 10090)
@@ -2782,7 +2783,7 @@ G26684.1        233 AGCGCAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTA      273
         self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 41.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 38.2554)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 4.07705)
         self.assertEqual(hsp.annotations["identity"], 22)
         if xml2 is False:
             self.assertEqual(hsp.annotations["positive"], 22)
@@ -2800,9 +2801,9 @@ G26684.1        233 AGCGCAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTA      273
         self.assertEqual(
             repr(hsp.query.seq), "Seq({48: 'CATCCATTCACACCCAACACAGG'}, length=285)"
         )
-        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(hsp.query.id, "Query_78041")
         self.assertEqual(
-            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+            hsp.query.description, "G26684.1 human STS STS_D11570, sequence tagged site"
         )
         self.assertEqual(len(hsp.query.features), 0)
         self.assertEqual(
@@ -2813,7 +2814,7 @@ G26684.1        233 AGCGCAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTA      273
         self.assertEqual(hsp.target.name, "NC_000078")
         self.assertEqual(
             hsp.target.description,
-            "Mus musculus strain C57BL/6J chromosome 12, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 12, GRCm38.p6 C57BL/6J",
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(hsp.annotations["midline"], "|||||||||||||||| ||||||")
@@ -2821,17 +2822,17 @@ G26684.1        233 AGCGCAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTA      273
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099098|ref|NC_000078.6| Length: 120129022 Strand: Plus
-        Mus musculus strain C57BL/6J chromosome 12, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 12, GRCm38.p6 C57BL/6J
 
-Score:38 bits(41), Expect:5,
+Score:38 bits(41), Expect:4,
 Identities:22/23(96%),  Gaps:0.23(0%)
 
 gi|372099 113030662 CATCCATTCACACCCAGCACAGG 113030685
                   0 ||||||||||||||||.||||||        23
-G26684.1         48 CATCCATTCACACCCAACACAGG        71
+Query_780        48 CATCCATTCACACCCAACACAGG        71
 
 """,
             )
@@ -2839,17 +2840,17 @@ G26684.1         48 CATCCATTCACACCCAACACAGG        71
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099098|ref|NC_000078.6| Length: 120129022 Strand: Plus
-        Mus musculus strain C57BL/6J chromosome 12, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 12, GRCm38.p6 C57BL/6J
 
-Score:38 bits(41), Expect:5,
+Score:38 bits(41), Expect:4,
 Identities:22/23(96%),  Positives:22/23(96%),  Gaps:0.23(0%)
 
 gi|372099 113030662 CATCCATTCACACCCAGCACAGG 113030685
                   0 ||||||||||||||||.||||||        23
-G26684.1         48 CATCCATTCACACCCAACACAGG        71
+Query_780        48 CATCCATTCACACCCAACACAGG        71
 
 """,
             )
@@ -2857,7 +2858,7 @@ G26684.1         48 CATCCATTCACACCCAACACAGG        71
         self.assertEqual(hsp.num, 2)
         self.assertAlmostEqual(hsp.score, 40.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 4.07705)
         self.assertEqual(hsp.annotations["identity"], 28)
         if xml2 is False:
             self.assertEqual(hsp.annotations["positive"], 28)
@@ -2876,9 +2877,9 @@ G26684.1         48 CATCCATTCACACCCAACACAGG        71
             repr(hsp.query.seq),
             "Seq({230: 'TGTAGCGCAAGGCCTGACATGGGTAGCTGCTC'}, length=285)",
         )
-        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(hsp.query.id, "Query_78041")
         self.assertEqual(
-            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+            hsp.query.description, "G26684.1 human STS STS_D11570, sequence tagged site"
         )
         self.assertEqual(len(hsp.query.features), 0)
         self.assertEqual(
@@ -2889,7 +2890,7 @@ G26684.1         48 CATCCATTCACACCCAACACAGG        71
         self.assertEqual(hsp.target.name, "NC_000078")
         self.assertEqual(
             hsp.target.description,
-            "Mus musculus strain C57BL/6J chromosome 12, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 12, GRCm38.p6 C57BL/6J",
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(hsp.annotations["midline"], "|||||| | ||||||||||||||| |||| ||")
@@ -2897,17 +2898,17 @@ G26684.1         48 CATCCATTCACACCCAACACAGG        71
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099098|ref|NC_000078.6| Length: 120129022 Strand: Minus
-        Mus musculus strain C57BL/6J chromosome 12, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 12, GRCm38.p6 C57BL/6J
 
-Score:37 bits(40), Expect:5,
+Score:37 bits(40), Expect:4,
 Identities:28/32(88%),  Gaps:1.32(3%)
 
 gi|372099 108990272 TGTAGCTCTAGGCCTGACATGGGT-GCTGGTC 108990241
                   0 ||||||.|.|||||||||||||||-||||.||        32
-G26684.1        230 TGTAGCGCAAGGCCTGACATGGGTAGCTGCTC       262
+Query_780       230 TGTAGCGCAAGGCCTGACATGGGTAGCTGCTC       262
 
 """,
             )
@@ -2915,28 +2916,131 @@ G26684.1        230 TGTAGCGCAAGGCCTGACATGGGTAGCTGCTC       262
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099098|ref|NC_000078.6| Length: 120129022 Strand: Minus
-        Mus musculus strain C57BL/6J chromosome 12, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 12, GRCm38.p6 C57BL/6J
 
-Score:37 bits(40), Expect:5,
+Score:37 bits(40), Expect:4,
 Identities:28/32(88%),  Positives:28/32(88%),  Gaps:1.32(3%)
 
 gi|372099 108990272 TGTAGCTCTAGGCCTGACATGGGT-GCTGGTC 108990241
                   0 ||||||.|.|||||||||||||||-||||.||        32
-G26684.1        230 TGTAGCGCAAGGCCTGACATGGGTAGCTGCTC       262
+Query_780       230 TGTAGCGCAAGGCCTGACATGGGTAGCTGCTC       262
 
 """,
             )
         hit = record[6]
         self.assertEqual(hit.num, 7)
         self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|372099049|ref|NT_187008.1|")
+        self.assertEqual(hit.target.name, "NT_187008")
+        self.assertEqual(
+            hit.target.description,
+            "Mus musculus strain 129S1/SvImJ chromosome 16 genomic scaffold, GRCm38.p6 alternate locus group 129S1/SvImJ 129S1/SVIMJ_MMCHR16_CTG2",
+        )
+        if xml2 is True:
+            self.assertEqual(hit.target.annotations["taxid"], 10090)
+            self.assertEqual(hit.target.annotations["sciname"], "Mus musculus")
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=250595)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 40.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 4.07705)
+        self.assertEqual(hsp.annotations["identity"], 43)
+        if xml2 is False:
+            self.assertEqual(hsp.annotations["positive"], 43)
+        self.assertEqual(hsp.annotations["gaps"], 2)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[158458, 158482, 158483, 158491, 158492, 158514],
+                          [   174,    198,    198,    206,    206,    228]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 56))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq({174: 'GGAGGCAAAGAATCCCTACCTCCTAGGGGTGAAAGGAAATNAAAATGGAAAGTT'}, length=285)",
+        )
+        self.assertEqual(hsp.query.id, "Query_78041")
+        self.assertEqual(
+            hsp.query.description, "G26684.1 human STS STS_D11570, sequence tagged site"
+        )
+        self.assertEqual(len(hsp.query.features), 0)
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({158458: 'GGAGGCAAAGAATCCCTACATTGTGACAGCTGATAAAGAAGGTAAAATGGAAAATT'}, length=250595)",
+        )
+        self.assertEqual(hsp.target.id, "gi|372099049|ref|NT_187008.1|")
+        self.assertEqual(hsp.target.name, "NT_187008")
+        self.assertEqual(
+            hsp.target.description,
+            "Mus musculus strain 129S1/SvImJ chromosome 16 genomic scaffold, GRCm38.p6 alternate locus group 129S1/SvImJ 129S1/SVIMJ_MMCHR16_CTG2",
+        )
+        self.assertEqual(len(hsp.target.features), 0)
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "||||||||||||||||||| |  | |  | ||| || |||   |||||||||| ||",
+        )
+        if xml2 is True:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
+Target: gi|372099049|ref|NT_187008.1| Length: 250595 Strand: Plus
+        Mus musculus strain 129S1/SvImJ chromosome 16 genomic scaffold,
+        GRCm38.p6 alternate locus group 129S1/SvImJ 129S1/SVIMJ_MMCHR16_CTG2
+
+Score:37 bits(40), Expect:4,
+Identities:43/56(77%),  Gaps:2.56(4%)
+
+gi|372099    158458 GGAGGCAAAGAATCCCTACATTGTGACAGCTGATAAAGAAGGTAAAATGGAAAATT
+                  0 |||||||||||||||||||.|..|-|..|.|||-||.|||...||||||||||.||
+Query_780       174 GGAGGCAAAGAATCCCTACCTCCT-AGGGGTGA-AAGGAAATNAAAATGGAAAGTT
+
+gi|372099    158514
+                 56
+Query_780       228
+
+""",
+            )
+        else:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
+Target: gi|372099049|ref|NT_187008.1| Length: 250595 Strand: Plus
+        Mus musculus strain 129S1/SvImJ chromosome 16 genomic scaffold,
+        GRCm38.p6 alternate locus group 129S1/SvImJ 129S1/SVIMJ_MMCHR16_CTG2
+
+Score:37 bits(40), Expect:4,
+Identities:43/56(77%),  Positives:43/56(77%),  Gaps:2.56(4%)
+
+gi|372099    158458 GGAGGCAAAGAATCCCTACATTGTGACAGCTGATAAAGAAGGTAAAATGGAAAATT
+                  0 |||||||||||||||||||.|..|-|..|.|||-||.|||...||||||||||.||
+Query_780       174 GGAGGCAAAGAATCCCTACCTCCT-AGGGGTGA-AAGGAAATNAAAATGGAAAGTT
+
+gi|372099    158514
+                 56
+Query_780       228
+
+""",
+            )
+        hit = record[7]
+        self.assertEqual(hit.num, 8)
+        self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|372099109|ref|NC_000067.6|")
         self.assertEqual(hit.target.name, "NC_000067")
         self.assertEqual(
             hit.target.description,
-            "Mus musculus strain C57BL/6J chromosome 1, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 1, GRCm38.p6 C57BL/6J",
         )
         if xml2 is True:
             self.assertEqual(hit.target.annotations["taxid"], 10090)
@@ -2947,7 +3051,7 @@ G26684.1        230 TGTAGCGCAAGGCCTGACATGGGTAGCTGCTC       262
         self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 40.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 4.07705)
         self.assertEqual(hsp.annotations["identity"], 35)
         if xml2 is False:
             self.assertEqual(hsp.annotations["positive"], 35)
@@ -2966,9 +3070,9 @@ G26684.1        230 TGTAGCGCAAGGCCTGACATGGGTAGCTGCTC       262
             repr(hsp.query.seq),
             "Seq({86: 'GCTCAGCCACAGACATGGTTTGTNACTNTTGAGCTTCTGTTCC'}, length=285)",
         )
-        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(hsp.query.id, "Query_78041")
         self.assertEqual(
-            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+            hsp.query.description, "G26684.1 human STS STS_D11570, sequence tagged site"
         )
         self.assertEqual(len(hsp.query.features), 0)
         self.assertEqual(
@@ -2979,7 +3083,7 @@ G26684.1        230 TGTAGCGCAAGGCCTGACATGGGTAGCTGCTC       262
         self.assertEqual(hsp.target.name, "NC_000067")
         self.assertEqual(
             hsp.target.description,
-            "Mus musculus strain C57BL/6J chromosome 1, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 1, GRCm38.p6 C57BL/6J",
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(
@@ -2989,17 +3093,17 @@ G26684.1        230 TGTAGCGCAAGGCCTGACATGGGTAGCTGCTC       262
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099109|ref|NC_000067.6| Length: 195471971 Strand: Plus
-        Mus musculus strain C57BL/6J chromosome 1, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 1, GRCm38.p6 C57BL/6J
 
-Score:37 bits(40), Expect:5,
+Score:37 bits(40), Expect:4,
 Identities:35/43(81%),  Gaps:2.43(5%)
 
 gi|372099  65190107 GCTCAGCCACATACATGGTTT-TAAGTGTTGAGGCTCT-TTCC 65190148
                   0 |||||||||||.|||||||||-|.|.|.|||||..|||-||||       43
-G26684.1         86 GCTCAGCCACAGACATGGTTTGTNACTNTTGAGCTTCTGTTCC      129
+Query_780        86 GCTCAGCCACAGACATGGTTTGTNACTNTTGAGCTTCTGTTCC      129
 
 """,
             )
@@ -3007,28 +3111,28 @@ G26684.1         86 GCTCAGCCACAGACATGGTTTGTNACTNTTGAGCTTCTGTTCC      129
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099109|ref|NC_000067.6| Length: 195471971 Strand: Plus
-        Mus musculus strain C57BL/6J chromosome 1, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 1, GRCm38.p6 C57BL/6J
 
-Score:37 bits(40), Expect:5,
+Score:37 bits(40), Expect:4,
 Identities:35/43(81%),  Positives:35/43(81%),  Gaps:2.43(5%)
 
 gi|372099  65190107 GCTCAGCCACATACATGGTTT-TAAGTGTTGAGGCTCT-TTCC 65190148
                   0 |||||||||||.|||||||||-|.|.|.|||||..|||-||||       43
-G26684.1         86 GCTCAGCCACAGACATGGTTTGTNACTNTTGAGCTTCTGTTCC      129
+Query_780        86 GCTCAGCCACAGACATGGTTTGTNACTNTTGAGCTTCTGTTCC      129
 
 """,
             )
-        hit = record[7]
-        self.assertEqual(hit.num, 8)
+        hit = record[8]
+        self.assertEqual(hit.num, 9)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|372099101|ref|NC_000075.6|")
         self.assertEqual(hit.target.name, "NC_000075")
         self.assertEqual(
             hit.target.description,
-            "Mus musculus strain C57BL/6J chromosome 9, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 9, GRCm38.p6 C57BL/6J",
         )
         if xml2 is True:
             self.assertEqual(hit.target.annotations["taxid"], 10090)
@@ -3039,7 +3143,7 @@ G26684.1         86 GCTCAGCCACAGACATGGTTTGTNACTNTTGAGCTTCTGTTCC      129
         self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 40.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 4.07705)
         self.assertEqual(hsp.annotations["identity"], 36)
         if xml2 is False:
             self.assertEqual(hsp.annotations["positive"], 36)
@@ -3058,9 +3162,9 @@ G26684.1         86 GCTCAGCCACAGACATGGTTTGTNACTNTTGAGCTTCTGTTCC      129
             repr(hsp.query.seq),
             "Seq({237: 'CAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTT'}, length=285)",
         )
-        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(hsp.query.id, "Query_78041")
         self.assertEqual(
-            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+            hsp.query.description, "G26684.1 human STS STS_D11570, sequence tagged site"
         )
         self.assertEqual(len(hsp.query.features), 0)
         self.assertEqual(
@@ -3071,7 +3175,7 @@ G26684.1         86 GCTCAGCCACAGACATGGTTTGTNACTNTTGAGCTTCTGTTCC      129
         self.assertEqual(hsp.target.name, "NC_000075")
         self.assertEqual(
             hsp.target.description,
-            "Mus musculus strain C57BL/6J chromosome 9, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 9, GRCm38.p6 C57BL/6J",
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(
@@ -3082,17 +3186,17 @@ G26684.1         86 GCTCAGCCACAGACATGGTTTGTNACTNTTGAGCTTCTGTTCC      129
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099101|ref|NC_000075.6| Length: 124595110 Strand: Minus
-        Mus musculus strain C57BL/6J chromosome 9, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 9, GRCm38.p6 C57BL/6J
 
-Score:37 bits(40), Expect:5,
+Score:37 bits(40), Expect:4,
 Identities:36/47(77%),  Gaps:0.47(0%)
 
 gi|372099  58227241 CAAAGCCTGACAGGTATGACTGCTCAATAAATACTATTTTTTTTTTT 58227194
                   0 |||.||||||||.|..|..|||||||||||||.|||.|.|.||.|||       47
-G26684.1        237 CAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTT      284
+Query_780       237 CAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTT      284
 
 """,
             )
@@ -3100,28 +3204,28 @@ G26684.1        237 CAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTT      284
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099101|ref|NC_000075.6| Length: 124595110 Strand: Minus
-        Mus musculus strain C57BL/6J chromosome 9, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 9, GRCm38.p6 C57BL/6J
 
-Score:37 bits(40), Expect:5,
+Score:37 bits(40), Expect:4,
 Identities:36/47(77%),  Positives:36/47(77%),  Gaps:0.47(0%)
 
 gi|372099  58227241 CAAAGCCTGACAGGTATGACTGCTCAATAAATACTATTTTTTTTTTT 58227194
                   0 |||.||||||||.|..|..|||||||||||||.|||.|.|.||.|||       47
-G26684.1        237 CAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTT      284
+Query_780       237 CAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTT      284
 
 """,
             )
-        hit = record[8]
-        self.assertEqual(hit.num, 9)
+        hit = record[9]
+        self.assertEqual(hit.num, 10)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|372099100|ref|NC_000076.6|")
         self.assertEqual(hit.target.name, "NC_000076")
         self.assertEqual(
             hit.target.description,
-            "Mus musculus strain C57BL/6J chromosome 10, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 10, GRCm38.p6 C57BL/6J",
         )
         if xml2 is True:
             self.assertEqual(hit.target.annotations["taxid"], 10090)
@@ -3132,7 +3236,7 @@ G26684.1        237 CAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTT      284
         self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 40.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 4.07705)
         self.assertEqual(hsp.annotations["identity"], 20)
         if xml2 is False:
             self.assertEqual(hsp.annotations["positive"], 20)
@@ -3150,9 +3254,9 @@ G26684.1        237 CAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTT      284
         self.assertEqual(
             repr(hsp.query.seq), "Seq({254: 'AGCTGCTCAATAAATGCTAG'}, length=285)"
         )
-        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(hsp.query.id, "Query_78041")
         self.assertEqual(
-            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+            hsp.query.description, "G26684.1 human STS STS_D11570, sequence tagged site"
         )
         self.assertEqual(len(hsp.query.features), 0)
         self.assertEqual(
@@ -3163,7 +3267,7 @@ G26684.1        237 CAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTT      284
         self.assertEqual(hsp.target.name, "NC_000076")
         self.assertEqual(
             hsp.target.description,
-            "Mus musculus strain C57BL/6J chromosome 10, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 10, GRCm38.p6 C57BL/6J",
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(hsp.annotations["midline"], "||||||||||||||||||||")
@@ -3171,17 +3275,17 @@ G26684.1        237 CAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTT      284
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099100|ref|NC_000076.6| Length: 130694993 Strand: Plus
-        Mus musculus strain C57BL/6J chromosome 10, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 10, GRCm38.p6 C57BL/6J
 
-Score:37 bits(40), Expect:5,
+Score:37 bits(40), Expect:4,
 Identities:20/20(100%),  Gaps:0.20(0%)
 
 gi|372099 119337185 AGCTGCTCAATAAATGCTAG 119337205
                   0 ||||||||||||||||||||        20
-G26684.1        254 AGCTGCTCAATAAATGCTAG       274
+Query_780       254 AGCTGCTCAATAAATGCTAG       274
 
 """,
             )
@@ -3189,28 +3293,28 @@ G26684.1        254 AGCTGCTCAATAAATGCTAG       274
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099100|ref|NC_000076.6| Length: 130694993 Strand: Plus
-        Mus musculus strain C57BL/6J chromosome 10, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 10, GRCm38.p6 C57BL/6J
 
-Score:37 bits(40), Expect:5,
+Score:37 bits(40), Expect:4,
 Identities:20/20(100%),  Positives:20/20(100%),  Gaps:0.20(0%)
 
 gi|372099 119337185 AGCTGCTCAATAAATGCTAG 119337205
                   0 ||||||||||||||||||||        20
-G26684.1        254 AGCTGCTCAATAAATGCTAG       274
+Query_780       254 AGCTGCTCAATAAATGCTAG       274
 
 """,
             )
-        hit = record[9]
-        self.assertEqual(hit.num, 10)
+        hit = record[10]
+        self.assertEqual(hit.num, 11)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|372099094|ref|NC_000082.6|")
         self.assertEqual(hit.target.name, "NC_000082")
         self.assertEqual(
             hit.target.description,
-            "Mus musculus strain C57BL/6J chromosome 16, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 16, GRCm38.p6 C57BL/6J",
         )
         if xml2 is True:
             self.assertEqual(hit.target.annotations["taxid"], 10090)
@@ -3221,7 +3325,7 @@ G26684.1        254 AGCTGCTCAATAAATGCTAG       274
         self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 40.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 4.07705)
         self.assertEqual(hsp.annotations["identity"], 43)
         if xml2 is False:
             self.assertEqual(hsp.annotations["positive"], 43)
@@ -3240,9 +3344,9 @@ G26684.1        254 AGCTGCTCAATAAATGCTAG       274
             repr(hsp.query.seq),
             "Seq({174: 'GGAGGCAAAGAATCCCTACCTCCTAGGGGTGAAAGGAAATNAAAATGGAAAGTT'}, length=285)",
         )
-        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(hsp.query.id, "Query_78041")
         self.assertEqual(
-            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+            hsp.query.description, "G26684.1 human STS STS_D11570, sequence tagged site"
         )
         self.assertEqual(len(hsp.query.features), 0)
         self.assertEqual(
@@ -3253,7 +3357,7 @@ G26684.1        254 AGCTGCTCAATAAATGCTAG       274
         self.assertEqual(hsp.target.name, "NC_000082")
         self.assertEqual(
             hsp.target.description,
-            "Mus musculus strain C57BL/6J chromosome 16, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 16, GRCm38.p6 C57BL/6J",
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(
@@ -3264,21 +3368,21 @@ G26684.1        254 AGCTGCTCAATAAATGCTAG       274
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099094|ref|NC_000082.6| Length: 98207768 Strand: Plus
-        Mus musculus strain C57BL/6J chromosome 16, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 16, GRCm38.p6 C57BL/6J
 
-Score:37 bits(40), Expect:5,
+Score:37 bits(40), Expect:4,
 Identities:43/56(77%),  Gaps:2.56(4%)
 
 gi|372099  18854779 GGAGGCAAAGAATCCCTACATTGTGACAGCTGATAAAGAAGGTAAAATGGAAAATT
                   0 |||||||||||||||||||.|..|-|..|.|||-||.|||...||||||||||.||
-G26684.1        174 GGAGGCAAAGAATCCCTACCTCCT-AGGGGTGA-AAGGAAATNAAAATGGAAAGTT
+Query_780       174 GGAGGCAAAGAATCCCTACCTCCT-AGGGGTGA-AAGGAAATNAAAATGGAAAGTT
 
 gi|372099  18854835
                  56
-G26684.1        228
+Query_780       228
 
 """,
             )
@@ -3286,28 +3390,28 @@ G26684.1        228
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099094|ref|NC_000082.6| Length: 98207768 Strand: Plus
-        Mus musculus strain C57BL/6J chromosome 16, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 16, GRCm38.p6 C57BL/6J
 
-Score:37 bits(40), Expect:5,
+Score:37 bits(40), Expect:4,
 Identities:43/56(77%),  Positives:43/56(77%),  Gaps:2.56(4%)
 
 gi|372099  18854779 GGAGGCAAAGAATCCCTACATTGTGACAGCTGATAAAGAAGGTAAAATGGAAAATT
                   0 |||||||||||||||||||.|..|-|..|.|||-||.|||...||||||||||.||
-G26684.1        174 GGAGGCAAAGAATCCCTACCTCCT-AGGGGTGA-AAGGAAATNAAAATGGAAAGTT
+Query_780       174 GGAGGCAAAGAATCCCTACCTCCT-AGGGGTGA-AAGGAAATNAAAATGGAAAGTT
 
 gi|372099  18854835
                  56
-G26684.1        228
+Query_780       228
 
 """,
             )
 
-    def test_xml_2900_blastn_001_writer(self):
-        """Writing BLASTN 2.9.0+ (xml_2900_blastn_001.xml)."""
-        filename = "xml_2900_blastn_001.xml"
+    def test_xml_21500_blastn_001_writer(self):
+        """Writing BLASTN 2.15.0+ (xml_21500_blastn_001.xml)."""
+        filename = "xml_21500_blastn_001.xml"
         path = os.path.join("Blast", filename)
         with Blast.parse(path) as records:
             stream = io.BytesIO()
@@ -3315,11 +3419,11 @@ G26684.1        228
             self.assertEqual(n, 1)
             stream.seek(0)
             written_records = Blast.parse(stream)
-            self.check_xml_2900_blastn_001_records(written_records)
+            self.check_xml_21500_blastn_001_records(written_records)
 
-    def test_xml_2900_blastn_001_v2_writer(self):
-        """Writing BLASTN 2.9.0+ XML2 (xml_2900_blastn_001_v2.xml)."""
-        filename = "xml_2900_blastn_001_v2.xml"
+    def test_xml2_21500_blastn_001_writer(self):
+        """Writing BLASTN 2.15.0+ XML2 (xml2_21500_blastn_001.xml)."""
+        filename = "xml2_21500_blastn_001.xml"
         path = os.path.join("Blast", filename)
         with Blast.parse(path) as records:
             stream = io.BytesIO()
@@ -3327,7 +3431,7 @@ G26684.1        228
             self.assertEqual(n, 1)
             stream.seek(0)
             written_records = Blast.parse(stream)
-            self.check_xml_2900_blastn_001_records(written_records, xml2=True)
+            self.check_xml_21500_blastn_001_records(written_records, xml2=True)
 
     def test_megablast_legacy(self):
         """Parsing megablast 2.2.26 [Sep-21-2011] (megablast_legacy.xml)."""
@@ -11262,7 +11366,6 @@ Query_2          60 GNAMPTGTVNRSIYSSKPAV*NFGCLH*GYSSRDGDSIK 99
         hit = record[0]
         self.assertEqual(hit.num, 1)
         hsps = hit[1:5:2]
-        self.maxDiff = None
         self.assertEqual(
             str(hsps),
             """\

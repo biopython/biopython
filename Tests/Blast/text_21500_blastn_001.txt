@@ -1,0 +1,230 @@
+Program: BLASTN 
+Database: Genome (GRCm38.p6) GRCm38.p6 RefSeq assembly [GCF_000001635.26]
+Query #1: G26684.1 human STS STS_D11570, sequence tagged site Query ID: lcl|Query_78041 Length: 285
+
+Sequences producing significant alignments:
+                                                                  Scientific      Common                     Max    Total Query   E   Per.   Acc.                        
+Description                                                       Name            Name            Taxid      Score  Score cover Value Ident  Len        Accession        
+Mus musculus strain C57BL/6J chromosome 3, GRCm38.p6 C57BL/6J     Mus musculus    house mouse     10090      41.0   41.0  11%   0.33  88.24  160039680  NC_000069.6      
+Mus musculus strain C57BL/6J chromosome 7, GRCm38.p6 C57BL/6J     Mus musculus    house mouse     10090      41.0   41.0  10%   0.33  89.66  145441459  NC_000073.6      
+Mus musculus strain C57BL/6J chromosome 4, GRCm38.p6 C57BL/6J     Mus musculus    house mouse     10090      40.1   77.4  19%   1.2   95.83  156508116  NC_000070.6      
+Mus musculus strain C57BL/6J chromosome 2, GRCm38.p6 C57BL/6J     Mus musculus    house mouse     10090      39.2   77.4  19%   1.2   87.10  182113224  NC_000068.7      
+Mus musculus strain C57BL/6J chromosome 13, GRCm38.p6 C57BL/6J    Mus musculus    house mouse     10090      39.2   76.5  23%   1.2   89.29  120421639  NC_000079.6      
+Mus musculus strain C57BL/6J chromosome 12, GRCm38.p6 C57BL/6J    Mus musculus    house mouse     10090      38.3   75.6  19%   4.1   95.65  120129022  NC_000078.6      
+Mus musculus strain 129S1/SvImJ chromosome 16 genomic scaffold... Mus musculus    house mouse     10090      37.4   37.4  18%   4.1   76.79  250595     NT_187008.1      
+Mus musculus strain C57BL/6J chromosome 1, GRCm38.p6 C57BL/6J     Mus musculus    house mouse     10090      37.4   37.4  15%   4.1   81.40  195471971  NC_000067.6      
+Mus musculus strain C57BL/6J chromosome 9, GRCm38.p6 C57BL/6J     Mus musculus    house mouse     10090      37.4   37.4  16%   4.1   76.60  124595110  NC_000075.6      
+Mus musculus strain C57BL/6J chromosome 10, GRCm38.p6 C57BL/6J    Mus musculus    house mouse     10090      37.4   37.4  7%    4.1   100.00 130694993  NC_000076.6      
+Mus musculus strain C57BL/6J chromosome 16, GRCm38.p6 C57BL/6J    Mus musculus    house mouse     10090      37.4   37.4  18%   4.1   76.79  98207768   NC_000082.6      
+
+
+Alignments:
+
+>Mus musculus strain C57BL/6J chromosome 3, GRCm38.p6 C57BL/6J
+Sequence ID: NC_000069.6 Length: 160039680
+Range 1: 101449144 to 101449177
+
+Score:41.0 bits(44), Expect:0.33, 
+Identities:30/34(88%),  Gaps:1/34(2%), Strand: Plus/Minus
+
+Query  134        GAATCCTAGAGGCTTGATTGGCCCAGG-CTGCTG  166
+                  |||||||||||||| || |||||| || ||||||
+Sbjct  101449177  GAATCCTAGAGGCTGGACTGGCCCTGGCCTGCTG  101449144
+
+
+
+
+>Mus musculus strain C57BL/6J chromosome 7, GRCm38.p6 C57BL/6J
+Sequence ID: NC_000073.6 Length: 145441459
+Range 1: 131772157 to 131772185
+
+Score:41.0 bits(44), Expect:0.33, 
+Identities:26/29(90%),  Gaps:0/29(0%), Strand: Plus/Minus
+
+Query  205        GAAAGGAAATNAAAATGGAAAGTTCTTGT  233
+                  |||||||||  ||||||||||||||| ||
+Sbjct  131772185  GAAAGGAAAAAAAAATGGAAAGTTCTGGT  131772157
+
+
+
+
+>Mus musculus strain C57BL/6J chromosome 4, GRCm38.p6 C57BL/6J
+Sequence ID: NC_000070.6 Length: 156508116
+Range 1: 9607539 to 9607562
+
+Score:40.1 bits(43), Expect:1.2, 
+Identities:23/24(96%),  Gaps:0/24(0%), Strand: Plus/Minus
+
+Query  62       CCAACACAGGCCAGCGACTTCTGG  85
+                |||||||||||||||| |||||||
+Sbjct  9607562  CCAACACAGGCCAGCGGCTTCTGG  9607539
+
+
+
+
+Range 2: 142902532 to 142902563
+
+Score:37.4 bits(40), Expect:4.1, 
+Identities:28/32(88%),  Gaps:1/32(3%), Strand: Plus/Plus
+
+Query  242        GCCTGACATGG-GTAGCTGCTCAATAAATGCT  272
+                  ||||| ||||  ||| ||||||||||||||||
+Sbjct  142902532  GCCTGGCATGAAGTAACTGCTCAATAAATGCT  142902563
+
+
+
+
+>Mus musculus strain C57BL/6J chromosome 2, GRCm38.p6 C57BL/6J
+Sequence ID: NC_000068.7 Length: 182113224
+Range 1: 3799647 to 3799677
+
+Score:39.2 bits(42), Expect:1.2, 
+Identities:27/31(87%),  Gaps:0/31(0%), Strand: Plus/Plus
+
+Query  239      AAGGCCTGACATGGGTAGCTGCTCAATAAAT  269
+                ||| |||| |||| |||| ||||||||||||
+Sbjct  3799647  AAGTCCTGGCATGAGTAGTTGCTCAATAAAT  3799677
+
+
+
+
+Range 2: 70278960 to 70278984
+
+Score:38.3 bits(41), Expect:4.1, 
+Identities:23/25(92%),  Gaps:0/25(0%), Strand: Plus/Plus
+
+Query  211       AAATNAAAATGGAAAGTTCTTGTAG  235
+                 |||| |||||||||||||||| |||
+Sbjct  70278960  AAATGAAAATGGAAAGTTCTTATAG  70278984
+
+
+
+
+>Mus musculus strain C57BL/6J chromosome 13, GRCm38.p6 C57BL/6J
+Sequence ID: NC_000079.6 Length: 120421639
+Range 1: 26806557 to 26806584
+
+Score:39.2 bits(42), Expect:1.2, 
+Identities:25/28(89%),  Gaps:0/28(0%), Strand: Plus/Minus
+
+Query  207       AAGGAAATNAAAATGGAAAGTTCTTGTA  234
+                 ||||| || |||||||||||||||| ||
+Sbjct  26806584  AAGGACATCAAAATGGAAAGTTCTTCTA  26806557
+
+
+
+
+Range 2: 56840301 to 56840340
+
+Score:37.4 bits(40), Expect:4.1, 
+Identities:32/40(80%),  Gaps:0/40(0%), Strand: Plus/Minus
+
+Query  234       AGCGCAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTA  273
+                 ||||||||||||||||| || |  || ||| | ||| |||
+Sbjct  56840340  AGCGCAAGGCCTGACATAGGAAAATGTTCAGTGAATACTA  56840301
+
+
+
+
+>Mus musculus strain C57BL/6J chromosome 12, GRCm38.p6 C57BL/6J
+Sequence ID: NC_000078.6 Length: 120129022
+Range 1: 113030663 to 113030685
+
+Score:38.3 bits(41), Expect:4.1, 
+Identities:22/23(96%),  Gaps:0/23(0%), Strand: Plus/Plus
+
+Query  49         CATCCATTCACACCCAACACAGG  71
+                  |||||||||||||||| ||||||
+Sbjct  113030663  CATCCATTCACACCCAGCACAGG  113030685
+
+
+
+
+Range 2: 108990242 to 108990272
+
+Score:37.4 bits(40), Expect:4.1, 
+Identities:28/32(88%),  Gaps:1/32(3%), Strand: Plus/Minus
+
+Query  231        TGTAGCGCAAGGCCTGACATGGGTAGCTGCTC  262
+                  |||||| | ||||||||||||||| |||| ||
+Sbjct  108990272  TGTAGCTCTAGGCCTGACATGGGT-GCTGGTC  108990242
+
+
+
+
+>Mus musculus strain 129S1/SvImJ chromosome 16 genomic scaffold, GRCm38.p6 alternate locus group 129S1/SvImJ 129S1/SVIMJ_MMCHR16_CTG2
+Sequence ID: NT_187008.1 Length: 250595
+Range 1: 158459 to 158514
+
+Score:37.4 bits(40), Expect:4.1, 
+Identities:43/56(77%),  Gaps:2/56(3%), Strand: Plus/Plus
+
+Query  175     GGAGGCAAAGAATCCCTACCTCCT-AGGGGTGA-AAGGAAATNAAAATGGAAAGTT  228
+               ||||||||||||||||||| |  | |  | ||| || |||   |||||||||| ||
+Sbjct  158459  GGAGGCAAAGAATCCCTACATTGTGACAGCTGATAAAGAAGGTAAAATGGAAAATT  158514
+
+
+
+
+>Mus musculus strain C57BL/6J chromosome 1, GRCm38.p6 C57BL/6J
+Sequence ID: NC_000067.6 Length: 195471971
+Range 1: 65190108 to 65190148
+
+Score:37.4 bits(40), Expect:4.1, 
+Identities:35/43(81%),  Gaps:2/43(4%), Strand: Plus/Plus
+
+Query  87        GCTCAGCCACAGACATGGTTTGTNACTNTTGAGCTTCTGTTCC  129
+                 ||||||||||| ||||||||| | | | |||||  ||| ||||
+Sbjct  65190108  GCTCAGCCACATACATGGTTT-TAAGTGTTGAGGCTCT-TTCC  65190148
+
+
+
+
+>Mus musculus strain C57BL/6J chromosome 9, GRCm38.p6 C57BL/6J
+Sequence ID: NC_000075.6 Length: 124595110
+Range 1: 58227195 to 58227241
+
+Score:37.4 bits(40), Expect:4.1, 
+Identities:36/47(77%),  Gaps:0/47(0%), Strand: Plus/Minus
+
+Query  238       CAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTT  284
+                 ||| |||||||| |  |  ||||||||||||| ||| | | || |||
+Sbjct  58227241  CAAAGCCTGACAGGTATGACTGCTCAATAAATACTATTTTTTTTTTT  58227195
+
+
+
+
+>Mus musculus strain C57BL/6J chromosome 10, GRCm38.p6 C57BL/6J
+Sequence ID: NC_000076.6 Length: 130694993
+Range 1: 119337186 to 119337205
+
+Score:37.4 bits(40), Expect:4.1, 
+Identities:20/20(100%),  Gaps:0/20(0%), Strand: Plus/Plus
+
+Query  255        AGCTGCTCAATAAATGCTAG  274
+                  ||||||||||||||||||||
+Sbjct  119337186  AGCTGCTCAATAAATGCTAG  119337205
+
+
+
+
+>Mus musculus strain C57BL/6J chromosome 16, GRCm38.p6 C57BL/6J
+Sequence ID: NC_000082.6 Length: 98207768
+Range 1: 18854780 to 18854835
+
+Score:37.4 bits(40), Expect:4.1, 
+Identities:43/56(77%),  Gaps:2/56(3%), Strand: Plus/Plus
+
+Query  175       GGAGGCAAAGAATCCCTACCTCCT-AGGGGTGA-AAGGAAATNAAAATGGAAAGTT  228
+                 ||||||||||||||||||| |  | |  | ||| || |||   |||||||||| ||
+Sbjct  18854780  GGAGGCAAAGAATCCCTACATTGTGACAGCTGATAAAGAAGGTAAAATGGAAAATT  18854835
+
+
+
+
+
+
+
+		
+
+
