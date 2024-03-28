@@ -1050,7 +1050,7 @@ class Alignment:
     def parse_alignment_block(cls, lines):
         """Parse an alignment block."""
         seqdata = [line.replace(b"-", b"") for line in lines]
-        coordinates = _parser.parse_alignment_block(lines)
+        sequences, coordinates = _parser.parse_alignment_block(lines)
         shape = coordinates.shape
         coordinates = np.frombuffer(coordinates, int)
         coordinates.shape = shape

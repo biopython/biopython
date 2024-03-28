@@ -147,7 +147,11 @@ parse_alignment_block(PyObject* module, PyObject* args)
     const char* s;
     Py_ssize_t index, previous, step;
     Py_ssize_t* indices = NULL;
+    Py_ssize_t length;
+    Py_ssize_t* lengths = NULL;
     Coordinates *coordinates = NULL;
+    PyObject* sequences = NULL;
+    PyObject* sequence;
 
     PyObject* result = NULL;
 
@@ -173,6 +177,8 @@ parse_alignment_block(PyObject* module, PyObject* args)
     }
     indices = PyMem_Calloc(n, sizeof(Py_ssize_t));
     if (!indices) goto exit;
+    lengths = PyMem_Calloc(n, sizeof(Py_ssize_t));
+    if (!lengths) goto exit;
     p = 0;
     while (1) {
         index = m;
@@ -187,10 +193,18 @@ parse_alignment_block(PyObject* module, PyObject* args)
                 }
                 else {
                     for (j = index+1; j < m; j++) if (*(++s) == '-') break;
+                    lengths[i] += j - index;
                 }
                 indices[i] = j;
             }
         }
+    }
+
+    sequences = PyTuple_New(n);
+    if (sequences == NULL) goto exit;
+    for (i = 0; i < n ; i++) {
+        sequence = PyBytes_FromStringAndSize(NULL, lengths[i]);
+        PyTuple_SET_ITEM(sequences, i, sequence);
     }
     coordinates = (Coordinates *)PyType_GenericAlloc(&CoordinatesType, 0);
     if (coordinates == NULL) goto exit;
@@ -201,20 +215,27 @@ parse_alignment_block(PyObject* module, PyObject* args)
     coordinates->shape[1] = p;
 
     bzero(indices, n * sizeof(Py_ssize_t));
+    bzero(lengths, n * sizeof(Py_ssize_t));
     k = 1;
     index = 0;
-    while (1) {
-        for (i = 0; i < n; i++) {
-            s = &lines[i].buf[index];
-            if (*s == '-') {
-                for (j = index+1; j < m; j++) if (*(++s) != '-') break;
-            }
-            else {
-                for (j = index+1; j < m; j++) if (*(++s) == '-') break;
-            }
-            indices[i] = j;
-        }
+    do {
         previous = index;
+        for (i = 0; i < n; i++) {
+            if (index == indices[i]) {
+                sequence = PyTuple_GET_ITEM(sequences, i);
+                length = lengths[i];
+                s = &lines[i].buf[index];
+                if (*s == '-') {
+                    for (j = index+1; j < m; j++) if (*(++s) != '-') break;
+                }
+                else {
+                    for (j = index+1; j < m; j++) if (*(++s) == '-') break;
+                    memcpy(PyBytes_AS_STRING(sequence)+length, &lines[i].buf[index], j - index);
+                    lengths[i] += j - index;
+                }
+                indices[i] = j;
+            }
+        }
         index = m;
         for (i = 0; i < n; i++) if (indices[i] < index) index = indices[i];
         step = index - previous;
@@ -228,11 +249,12 @@ parse_alignment_block(PyObject* module, PyObject* args)
             }
         }
         k++;
-        if (index == m) break;
     }
+    while (index < m);
 
-    result = Py_BuildValue("O", coordinates);
+    result = Py_BuildValue("OO", sequences, coordinates);
 exit:
+    Py_XDECREF(sequences);
     Py_XDECREF(coordinates);
     if (indices) PyMem_Free(indices);
     for (i = 0; i < n; i++) PyBuffer_Release(&lines[i]);
