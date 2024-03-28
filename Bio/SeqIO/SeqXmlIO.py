@@ -441,7 +441,8 @@ class SeqXmlIterator(SequenceIterator):
     method calls.
     """
 
-    BLOCK = 1024
+    # Small block size can be a problem with libexpat 2.6.0 onwards:
+    BLOCK = 2048
 
     def __init__(self, stream_or_path, namespace=None):
         """Create the object and initialize the XML parser."""
