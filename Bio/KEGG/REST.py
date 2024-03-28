@@ -30,8 +30,9 @@ Nucleic Acids Res. 28, 29-34 (2000).
 """
 
 import io
-from urllib.request import urlopen
 import time
+from urllib.request import urlopen
+
 from Bio._utils import function_with_previous
 
 

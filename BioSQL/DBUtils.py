@@ -13,8 +13,8 @@
 """Helper code for Biopython's BioSQL code (for internal use)."""
 
 import os
-from typing import Dict, Type
-
+from typing import Dict
+from typing import Type
 
 _dbutils: Dict[str, Type["Generic_dbutils"]] = {}
 

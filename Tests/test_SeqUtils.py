@@ -12,6 +12,7 @@ from Bio import SeqIO
 from Bio.Seq import MutableSeq
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+from Bio.SeqUtils import CodonAdaptationIndex
 from Bio.SeqUtils import gc_fraction
 from Bio.SeqUtils import GC_skew
 from Bio.SeqUtils import seq1
@@ -20,7 +21,6 @@ from Bio.SeqUtils.CheckSum import crc32
 from Bio.SeqUtils.CheckSum import crc64
 from Bio.SeqUtils.CheckSum import gcg
 from Bio.SeqUtils.CheckSum import seguid
-from Bio.SeqUtils import CodonAdaptationIndex
 from Bio.SeqUtils.lcc import lcc_mult
 from Bio.SeqUtils.lcc import lcc_simp
 

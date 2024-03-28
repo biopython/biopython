@@ -15,7 +15,8 @@ import warnings
 
 import numpy as np
 
-from Bio.PDB import PDBParser, PDBIO
+from Bio.PDB import PDBIO
+from Bio.PDB import PDBParser
 from Bio.PDB.Atom import DisorderedAtom
 
 

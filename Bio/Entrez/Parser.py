@@ -40,17 +40,15 @@ with parsing the DTD, and the other half with the XML itself.
 
 import os
 import warnings
-from collections import Counter
-from xml.parsers import expat
-from io import BytesIO
 import xml.etree.ElementTree as ET
+from collections import Counter
+from io import BytesIO
+from urllib.parse import urlparse
+from urllib.request import urlopen
+from xml.parsers import expat
 from xml.sax.saxutils import escape
 
-from urllib.request import urlopen
-from urllib.parse import urlparse
-
 from Bio import StreamModeError
-
 
 # The following four classes are used to add a member .attributes to integers,
 # strings, lists, and dictionaries, respectively.

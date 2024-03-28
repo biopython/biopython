@@ -18,7 +18,6 @@ import random
 import re
 import warnings
 
-
 # General tree-traversal algorithms
 
 
@@ -959,6 +958,7 @@ class Tree(TreeElement, TreeMixin):
         """
         if format_spec:
             from io import StringIO
+
             from Bio.Phylo import _io
 
             handle = StringIO()

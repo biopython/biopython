@@ -6,13 +6,11 @@
 import unittest
 from io import StringIO
 
-
+from Bio import Align
+from Bio import SeqIO
 from Bio.Align import Alignment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio import SeqIO
-from Bio import Align
-
 
 try:
     import numpy as np

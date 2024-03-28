@@ -8,12 +8,12 @@
 See also the doctests in bgzf.py which are called via run_tests.py
 """
 
-import unittest
 import gzip
+import io
 import os
 import tempfile
+import unittest
 from random import shuffle
-import io
 
 from Bio import bgzf
 

@@ -9,16 +9,18 @@
 
 import copy
 import sys
-from typing import Optional, TYPE_CHECKING, TypeVar
 import warnings
+from typing import Optional
+from typing import TYPE_CHECKING
+from typing import TypeVar
 
 import numpy as np
 
 import Bio.PDB.Atom
+from Bio.Data import IUPACData
 from Bio.PDB.Entity import DisorderedEntityWrapper
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 from Bio.PDB.vectors import Vector
-from Bio.Data import IUPACData
 
 if TYPE_CHECKING:
     from Bio.PDB.Residue import Residue

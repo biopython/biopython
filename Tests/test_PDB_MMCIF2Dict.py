@@ -21,10 +21,10 @@ except ImportError:
         "Install NumPy if you want to use Bio.PDB."
     ) from None
 
-from Bio.PDB.MMCIF2Dict import MMCIF2Dict
-
 import io
 import textwrap
+
+from Bio.PDB.MMCIF2Dict import MMCIF2Dict
 
 
 class MMCIF2dictTests(unittest.TestCase):

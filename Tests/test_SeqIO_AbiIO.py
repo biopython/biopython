@@ -5,7 +5,6 @@
 """Tests for SeqIO AbiIO module."""
 
 import unittest
-
 from os.path import basename
 from os.path import join
 

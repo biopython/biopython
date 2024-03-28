@@ -29,13 +29,13 @@ zero-based end position. We can therefore manipulate ``start`` and
 ``start + size`` as python list slice boundaries.
 """
 
-import shlex
 import itertools
-
+import shlex
 
 from Bio.Align import Alignment
 from Bio.Align import interfaces
-from Bio.Seq import Seq, reverse_complement
+from Bio.Seq import reverse_complement
+from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
 

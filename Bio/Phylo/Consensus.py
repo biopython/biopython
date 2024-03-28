@@ -12,12 +12,12 @@ searching and some common consensus algorithms such as strict, majority rule and
 adam consensus.
 """
 
-import random
 import itertools
-
+import random
 from ast import literal_eval
-from Bio.Phylo import BaseTree
+
 from Bio.Align import MultipleSeqAlignment
+from Bio.Phylo import BaseTree
 
 
 class _BitString(str):

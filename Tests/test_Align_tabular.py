@@ -4,13 +4,12 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Tests for Bio.Align.tabular module."""
-import unittest
 import os
+import unittest
 
-from Bio.Seq import Seq
-from Bio import SeqIO
 from Bio import Align
-
+from Bio import SeqIO
+from Bio.Seq import Seq
 
 try:
     import numpy as np

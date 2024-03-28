@@ -4,8 +4,9 @@
 
 """Tests for UniGene module."""
 
-from Bio import UniGene
 import unittest
+
+from Bio import UniGene
 
 
 class TestUniGene(unittest.TestCase):

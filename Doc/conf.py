@@ -13,7 +13,8 @@ import tempfile
 
 from sphinx.ext import autodoc
 
-from Bio import __version__, Application
+from Bio import __version__
+from Bio import Application
 
 # -- General configuration ------------------------------------------------
 

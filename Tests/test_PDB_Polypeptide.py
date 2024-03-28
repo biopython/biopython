@@ -13,7 +13,9 @@
 
 import unittest
 
-from Bio.PDB import PDBParser, PPBuilder, CaPPBuilder
+from Bio.PDB import CaPPBuilder
+from Bio.PDB import PDBParser
+from Bio.PDB import PPBuilder
 from Bio.Seq import Seq
 
 

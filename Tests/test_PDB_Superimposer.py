@@ -20,8 +20,9 @@ except ImportError:
         "Install NumPy if you want to use Bio.PDB."
     ) from None
 
-from Bio.PDB import Superimposer, Selection
 from Bio.PDB import PDBParser
+from Bio.PDB import Selection
+from Bio.PDB import Superimposer
 
 
 class SuperimposerTests(unittest.TestCase):

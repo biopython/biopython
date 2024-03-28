@@ -13,16 +13,17 @@
 
 """Generic unit tests for the SMCRA classes of the Bio.PDB module."""
 
-from copy import deepcopy
 import unittest
 import warnings
+from copy import deepcopy
 
 try:
     import numpy
     from numpy import dot  # Missing on old PyPy's micronumpy
 
     del dot
-    from numpy.linalg import svd, det  # Missing in PyPy 2.0 numpypy
+    from numpy.linalg import det  # Missing in PyPy 2.0 numpypy
+    from numpy.linalg import svd  # Missing in PyPy 2.0 numpypy
 
     del svd, det
 except ImportError:
@@ -33,10 +34,11 @@ except ImportError:
     ) from None
 
 from Bio import BiopythonWarning
-from Bio.PDB import PDBParser
-from Bio.PDB.PDBExceptions import PDBConstructionWarning
-from Bio.PDB import rotmat, Vector
 from Bio.PDB import Atom
+from Bio.PDB import PDBParser
+from Bio.PDB import rotmat
+from Bio.PDB import Vector
+from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
 
 class Atom_Element(unittest.TestCase):

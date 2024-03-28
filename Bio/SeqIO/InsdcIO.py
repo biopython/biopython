@@ -31,7 +31,6 @@ http://www.ebi.ac.uk/imgt/hla/docs/manual.html
 """
 
 import warnings
-
 from datetime import datetime
 
 from Bio import BiopythonWarning
@@ -45,7 +44,6 @@ from Bio.Seq import UndefinedSequenceError
 from .Interfaces import _get_seq_string
 from .Interfaces import SequenceIterator
 from .Interfaces import SequenceWriter
-
 
 # NOTE
 # ====

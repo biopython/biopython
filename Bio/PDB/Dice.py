@@ -13,8 +13,8 @@ This module is used internally by the Bio.PDB.extract() function.
 import re
 import warnings
 
-from Bio.PDB.PDBIO import PDBIO
 from Bio import BiopythonWarning
+from Bio.PDB.PDBIO import PDBIO
 
 _hydrogen = re.compile("[123 ]*H.*")
 

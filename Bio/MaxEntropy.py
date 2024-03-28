@@ -10,8 +10,8 @@ Uses Improved Iterative Scaling.
 """
 # TODO Define terminology
 
-from functools import reduce
 import warnings
+from functools import reduce
 
 try:
     import numpy as np

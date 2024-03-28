@@ -15,9 +15,10 @@ It also includes functionality for parsing output from the AlignACE, MEME,
 and MAST programs, as well as files in the TRANSFAC format.
 """
 
-from urllib.parse import urlencode
-from urllib.request import urlopen, Request
 import warnings
+from urllib.parse import urlencode
+from urllib.request import Request
+from urllib.request import urlopen
 
 try:
     import numpy as np
@@ -191,7 +192,8 @@ class Instances(list):
 
     def __init__(self, instances=None, alphabet="ACGT"):
         """Initialize the class."""
-        from Bio.Seq import Seq, MutableSeq
+        from Bio.Seq import MutableSeq
+        from Bio.Seq import Seq
 
         warnings.warn(
             "The Instances class has been deprecated; please use the\n"
@@ -271,7 +273,8 @@ class Instances(list):
 
     def reverse_complement(self):
         """Compute reverse complement of sequences."""
-        from Bio.Seq import Seq, MutableSeq
+        from Bio.Seq import MutableSeq
+        from Bio.Seq import Seq
         from Bio.SeqRecord import SeqRecord
 
         instances = Instances(alphabet=self.alphabet)

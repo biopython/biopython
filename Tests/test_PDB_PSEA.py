@@ -7,14 +7,16 @@
 
 import io
 import os
+import sys
 import unittest
 from subprocess import getoutput
-import sys
 
 from Bio import MissingExternalDependencyError
 from Bio.PDB import PDBParser
-from Bio.PDB.PSEA import run_psea, psea, psea2HEC, PSEA
-
+from Bio.PDB.PSEA import PSEA
+from Bio.PDB.PSEA import psea
+from Bio.PDB.PSEA import psea2HEC
+from Bio.PDB.PSEA import run_psea
 
 os.environ["LANG"] = "C"
 

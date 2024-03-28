@@ -16,7 +16,8 @@ try:
     from numpy import dot  # Missing on old PyPy's micronumpy
 
     del dot
-    from numpy.linalg import svd, det  # Missing in PyPy 2.0 numpypy
+    from numpy.linalg import det  # Missing in PyPy 2.0 numpypy
+    from numpy.linalg import svd  # Missing in PyPy 2.0 numpypy
 except ImportError:
     from Bio import MissingPythonDependencyError
 
@@ -24,8 +25,8 @@ except ImportError:
         "Install NumPy if you want to use Bio.PDB."
     ) from None
 
-from Bio.PDB.MMCIFParser import MMCIFParser
 from Bio.PDB import PDBParser
+from Bio.PDB.MMCIFParser import MMCIFParser
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
 

@@ -17,7 +17,6 @@ from Bio.SeqRecord import SeqRecord
 
 from .Interfaces import SequenceIterator
 
-
 _aa3to1_dict = {}
 _aa3to1_dict.update(protein_letters_3to1)
 _aa3to1_dict.update(protein_letters_3to1_extended)

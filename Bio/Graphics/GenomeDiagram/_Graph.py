@@ -23,9 +23,9 @@ the diagram: http://www.reportlab.com
 
 # ReportLab imports
 
-from reportlab.lib import colors
-
 from math import sqrt
+
+from reportlab.lib import colors
 
 
 class GraphData:

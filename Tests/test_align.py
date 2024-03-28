@@ -21,14 +21,17 @@ import unittest
 import warnings
 from io import StringIO
 
+from Bio import Align
+from Bio import AlignIO
+
 # biopython
 from Bio import BiopythonDeprecationWarning
+from Bio import motifs
+from Bio.Align import AlignInfo
+from Bio.Align import Alignment
+from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Align import AlignInfo
-from Bio import AlignIO, Align
-from Bio.Align import MultipleSeqAlignment, Alignment
-from Bio import motifs
 
 
 class TestBasics(unittest.TestCase):

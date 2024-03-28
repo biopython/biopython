@@ -16,8 +16,8 @@ Comput Appl Biosci 1997 , 13:291-295
 ftp://ftp.lmcp.jussieu.fr/pub/sincris/software/protein/p-sea/
 """
 
-import subprocess
 import os
+import subprocess
 
 from Bio.PDB.Polypeptide import is_aa
 

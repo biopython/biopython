@@ -5,9 +5,9 @@
 # package.
 """Unit tests for the Bio.PDB.Dice Module."""
 
-import unittest
-import tempfile
 import os
+import tempfile
+import unittest
 
 from Bio.PDB import Dice
 from Bio.PDB import PDBParser

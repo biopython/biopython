@@ -6,9 +6,8 @@
 """Code for calling and parsing ScanProsite from ExPASy."""
 
 # Importing these functions with leading underscore as not intended for reuse
-from urllib.request import urlopen
 from urllib.parse import urlencode
-
+from urllib.request import urlopen
 from xml.sax import handler
 from xml.sax.expatreader import ExpatParser
 

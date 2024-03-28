@@ -15,8 +15,8 @@ nodes).
 
 import random
 import sys
-from . import Nodes
 
+from . import Nodes
 
 PRECISION_BRANCHLENGTH = 6
 PRECISION_SUPPORT = 6

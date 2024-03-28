@@ -78,7 +78,6 @@ the annotation attribute of each record::
 """
 
 import re
-
 from typing import List
 
 from Bio.Align import MultipleSeqAlignment
@@ -87,7 +86,6 @@ from Bio.SeqRecord import SeqRecord
 
 from .Interfaces import AlignmentIterator
 from .Interfaces import SequentialAlignmentWriter
-
 
 XMFA_HEADER_REGEX = re.compile(
     r"> (?P<id>\d+):(?P<start>\d+)-(?P<end>\d+) (?P<strand>[+-]) (?P<name>.*)"

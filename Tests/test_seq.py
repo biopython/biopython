@@ -15,13 +15,12 @@ except ImportError:
 
 from Bio import BiopythonWarning
 from Bio import Seq
-from Bio.Data.IUPACData import (
-    ambiguous_dna_complement,
-    ambiguous_rna_complement,
-    ambiguous_dna_values,
-    ambiguous_rna_values,
-)
-from Bio.Data.CodonTable import TranslationError, standard_dna_table
+from Bio.Data.CodonTable import standard_dna_table
+from Bio.Data.CodonTable import TranslationError
+from Bio.Data.IUPACData import ambiguous_dna_complement
+from Bio.Data.IUPACData import ambiguous_dna_values
+from Bio.Data.IUPACData import ambiguous_rna_complement
+from Bio.Data.IUPACData import ambiguous_rna_values
 
 test_seqs = [
     Seq.Seq("TCAAAAGGATGCATCATG"),

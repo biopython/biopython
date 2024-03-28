@@ -324,8 +324,12 @@ well:
 
 """
 
-from .blast_tab import BlastTabParser, BlastTabIndexer, BlastTabWriter
-from .blast_xml import BlastXmlParser, BlastXmlIndexer, BlastXmlWriter
+from .blast_tab import BlastTabIndexer
+from .blast_tab import BlastTabParser
+from .blast_tab import BlastTabWriter
+from .blast_xml import BlastXmlIndexer
+from .blast_xml import BlastXmlParser
+from .blast_xml import BlastXmlWriter
 
 # if not used as a module, run the doctest
 if __name__ == "__main__":

@@ -9,8 +9,8 @@
 import xml.etree.ElementTree as ET
 
 from Bio import Align
-from Bio import Seq
 from Bio import motifs
+from Bio import Seq
 
 
 def read(handle):

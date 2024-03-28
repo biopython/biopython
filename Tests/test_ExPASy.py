@@ -7,14 +7,14 @@
 
 import unittest
 
+import requires_internet
+
 # We want to test these:
 from Bio import ExPASy
 
 # In order to check any records returned
 from Bio.ExPASy import Prodoc
 from Bio.ExPASy import Prosite
-
-import requires_internet
 
 requires_internet.check()
 

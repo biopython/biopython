@@ -49,8 +49,8 @@ This script generates a human readable standard output version of the
 NOE coordinates as well as an nmrview peaklist out_example.xpk.
 """
 
-from Bio.NMR import xpktools  # Contains data classes and functions for .xpk files
 from Bio.NMR import NOEtools  # A module specific for generate NOE predictions
+from Bio.NMR import xpktools  # Contains data classes and functions for .xpk files
 
 # * * * * * * * * * * MAIN * * * * * * * * * *
 

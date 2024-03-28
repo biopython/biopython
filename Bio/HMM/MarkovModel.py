@@ -11,11 +11,11 @@
 import copy
 import math
 import random
-from collections import defaultdict
 import warnings
+from collections import defaultdict
 
-from Bio.Seq import Seq
 from Bio import BiopythonDeprecationWarning
+from Bio.Seq import Seq
 
 warnings.warn(
     "The 'Bio.HMM.MarkovModule' module is deprecated and will be "

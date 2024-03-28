@@ -9,8 +9,8 @@ import unittest
 import warnings
 from os import path
 
-from Bio import SeqIO
 from Bio import BiopythonParserWarning
+from Bio import SeqIO
 
 
 class EMBLTests(unittest.TestCase):

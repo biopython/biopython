@@ -7,7 +7,6 @@
 """Tests for the SeqIO Gck module."""
 
 import unittest
-
 from io import BytesIO
 
 from Bio import SeqIO

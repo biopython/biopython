@@ -10,7 +10,10 @@ See https://pdbml.wwpdb.org/.
 """
 
 from os import PathLike
-from typing import Dict, Union, Tuple, TextIO
+from typing import Dict
+from typing import TextIO
+from typing import Tuple
+from typing import Union
 from xml.etree import ElementTree
 from xml.etree.ElementTree import Element
 

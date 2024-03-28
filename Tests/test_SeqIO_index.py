@@ -10,25 +10,23 @@ except ImportError:
     # Try to run what tests we can in case sqlite3 was not installed
     sqlite3 = None
 
+import gzip
 import os
-import unittest
 import tempfile
 import threading
-import gzip
+import unittest
 import warnings
 from io import BytesIO
 from io import StringIO
 from pathlib import Path
 
-from Bio.SeqRecord import SeqRecord
-from Bio import SeqIO
-from Bio.SeqIO._index import _FormatToRandomAccess
-
-from Bio import BiopythonParserWarning
-
 from seq_tests_common import SeqRecordTestBaseClass
 from test_SeqIO import SeqIOTestBaseClass
 
+from Bio import BiopythonParserWarning
+from Bio import SeqIO
+from Bio.SeqIO._index import _FormatToRandomAccess
+from Bio.SeqRecord import SeqRecord
 
 CUR_DIR = os.getcwd()
 

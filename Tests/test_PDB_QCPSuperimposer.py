@@ -17,7 +17,8 @@ except ImportError:
     ) from None
 
 
-from Bio.PDB import PDBParser, Selection
+from Bio.PDB import PDBParser
+from Bio.PDB import Selection
 from Bio.PDB.qcprot import QCPSuperimposer
 from Bio.SVDSuperimposer import SVDSuperimposer
 

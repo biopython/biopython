@@ -16,13 +16,11 @@ except ImportError:
 
 import os
 import pickle
-from collections import Counter
 import unittest
-
+from collections import Counter
 
 from Bio import SeqIO
 from Bio.Align import substitution_matrices
-
 from Bio.Data import IUPACData
 
 nucleotide_alphabet = IUPACData.unambiguous_dna_letters

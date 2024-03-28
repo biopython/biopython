@@ -5,12 +5,11 @@
 
 """Tests for Bio.Align Exonerate parsers."""
 
-import os
 import io
+import os
 import unittest
 
 from Bio import Align
-
 
 try:
     import numpy as np

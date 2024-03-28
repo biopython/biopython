@@ -9,13 +9,14 @@ Documentation:
 - Version 2.0: https://gfa-spec.github.io/GFA-spec/GFA2.html
 """
 
-import warnings
 import hashlib
 import re
+import warnings
 
 from Bio import BiopythonWarning
 from Bio.File import as_handle
-from Bio.Seq import Seq, _UndefinedSequenceData
+from Bio.Seq import _UndefinedSequenceData
+from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
 

@@ -250,7 +250,6 @@ binary mode, and decode the appropriate fragments yourself.
 import struct
 import sys
 import zlib
-
 from builtins import open as _open
 
 _bgzf_magic = b"\x1f\x8b\x08\x04"

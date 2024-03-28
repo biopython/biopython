@@ -19,7 +19,8 @@ try:
     from numpy import dot  # Missing on old PyPy's micronumpy
 
     del dot
-    from numpy.linalg import svd, det  # Missing in PyPy 2.0 numpypy
+    from numpy.linalg import det  # Missing in PyPy 2.0 numpypy
+    from numpy.linalg import svd  # Missing in PyPy 2.0 numpypy
 except ImportError:
     from Bio import MissingPythonDependencyError
 
@@ -28,15 +29,15 @@ except ImportError:
     ) from None
 
 
+from Bio.PDB import CaPPBuilder
+from Bio.PDB import PDBIO
+from Bio.PDB import PDBParser
+from Bio.PDB import PPBuilder
+from Bio.PDB.MMCIFParser import FastMMCIFParser
+from Bio.PDB.MMCIFParser import MMCIFParser
+from Bio.PDB.PDBExceptions import PDBConstructionWarning
+from Bio.PDB.PDBExceptions import PDBIOException
 from Bio.Seq import Seq
-from Bio.PDB.PDBExceptions import (
-    PDBConstructionWarning,
-    PDBIOException,
-)
-
-from Bio.PDB import PPBuilder, CaPPBuilder
-from Bio.PDB.MMCIFParser import MMCIFParser, FastMMCIFParser
-from Bio.PDB import PDBParser, PDBIO
 
 
 class ParseReal(unittest.TestCase):

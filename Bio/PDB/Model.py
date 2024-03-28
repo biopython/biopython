@@ -5,10 +5,10 @@
 
 """Model class, used in Structure objects."""
 
+from typing import TYPE_CHECKING
+
 from Bio.PDB.Entity import Entity
 from Bio.PDB.internal_coords import IC_Chain
-
-from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from Bio.PDB.Chain import Chain

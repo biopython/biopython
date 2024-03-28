@@ -40,26 +40,37 @@ This Python file is intended to be used via the scripts in
 `Scripts/Restriction/*.py` only.
 """
 
-import os
 import itertools
-import time
-import sys
-import shutil
 import optparse
+import os
+import shutil
+import sys
+import time
 
-from Bio.Seq import Seq
-from Bio.Data.IUPACData import ambiguous_dna_values as amb_dna
+from rebase_update import get_files
+from rebase_update import release_number
 
 import Bio.Restriction.Restriction
-from Bio.Restriction.Restriction import AbstractCut, RestrictionType, NoCut
-from Bio.Restriction.Restriction import OneCut, TwoCuts, Meth_Dep, Meth_Undep
-from Bio.Restriction.Restriction import Palindromic, NonPalindromic, Unknown
-from Bio.Restriction.Restriction import Blunt, Ov5, Ov3
-from Bio.Restriction.Restriction import NotDefined, Defined, Ambiguous
-from Bio.Restriction.Restriction import Commercially_available, Not_available
-
-from rebase_update import release_number, get_files
-
+from Bio.Data.IUPACData import ambiguous_dna_values as amb_dna
+from Bio.Restriction.Restriction import AbstractCut
+from Bio.Restriction.Restriction import Ambiguous
+from Bio.Restriction.Restriction import Blunt
+from Bio.Restriction.Restriction import Commercially_available
+from Bio.Restriction.Restriction import Defined
+from Bio.Restriction.Restriction import Meth_Dep
+from Bio.Restriction.Restriction import Meth_Undep
+from Bio.Restriction.Restriction import NoCut
+from Bio.Restriction.Restriction import NonPalindromic
+from Bio.Restriction.Restriction import Not_available
+from Bio.Restriction.Restriction import NotDefined
+from Bio.Restriction.Restriction import OneCut
+from Bio.Restriction.Restriction import Ov3
+from Bio.Restriction.Restriction import Ov5
+from Bio.Restriction.Restriction import Palindromic
+from Bio.Restriction.Restriction import RestrictionType
+from Bio.Restriction.Restriction import TwoCuts
+from Bio.Restriction.Restriction import Unknown
+from Bio.Seq import Seq
 
 enzymedict = {}
 suppliersdict = {}

@@ -6,7 +6,6 @@
 """Tests for Bio.SeqIO.FastaIO module."""
 
 import unittest
-
 from io import StringIO
 
 from Bio import SeqIO

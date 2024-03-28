@@ -11,11 +11,12 @@ and confirms they are consistent using our different parsers.
 import os
 import unittest
 import warnings
-
 from io import StringIO
 
-from Bio import BiopythonWarning
+from test_SeqIO import SeqIOTestBaseClass
+
 from Bio import BiopythonDeprecationWarning
+from Bio import BiopythonWarning
 from Bio import SeqIO
 from Bio.Data.CodonTable import TranslationError
 from Bio.Seq import MutableSeq
@@ -26,14 +27,13 @@ from Bio.SeqFeature import AfterPosition
 from Bio.SeqFeature import BeforePosition
 from Bio.SeqFeature import CompoundLocation
 from Bio.SeqFeature import ExactPosition
-from Bio.SeqFeature import SimpleLocation
 from Bio.SeqFeature import OneOfPosition
 from Bio.SeqFeature import SeqFeature
+from Bio.SeqFeature import SimpleLocation
 from Bio.SeqFeature import UnknownPosition
 from Bio.SeqFeature import WithinPosition
 from Bio.SeqIO.InsdcIO import _insdc_location_string
 from Bio.SeqRecord import SeqRecord
-from test_SeqIO import SeqIOTestBaseClass
 
 
 def _get_location_string(feature, record_length):

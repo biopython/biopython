@@ -22,17 +22,18 @@ By default, all tests are run.
 """
 
 # standard modules
-import sys
-import os
+import doctest
+import gc
 import getopt
+import os
+import sys
 import time
 import traceback
 import unittest
-import doctest
-import gc
-from pkgutil import iter_modules
-from setuptools import find_packages
 from io import StringIO
+from pkgutil import iter_modules
+
+from setuptools import find_packages
 
 try:
     import numpy as np
@@ -223,8 +224,8 @@ class TestRunner(unittest.TextTestRunner):
         unittest.TextTestRunner.__init__(self, stream, verbosity=verbosity)
 
     def runTest(self, name):
-        from Bio import MissingPythonDependencyError
         from Bio import MissingExternalDependencyError
+        from Bio import MissingPythonDependencyError
 
         result = self._makeResult()
         output = StringIO()

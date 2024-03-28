@@ -12,27 +12,27 @@
 # NEEDS TO BE SYNCH WITH THE REST OF BIOPYTHON AND BIOPERL
 # In particular, the SeqRecord and BioSQL.BioSeq.DBSeqRecord classes
 # need to be in sync (this is the BioSQL "Database SeqRecord").
-from io import StringIO
 import numbers
-
-from typing import (
-    cast,
-    overload,
-    Any,
-    Dict,
-    Iterable,
-    List,
-    Mapping,
-    NoReturn,
-    Optional,
-    Sequence,
-    Union,
-    TYPE_CHECKING,
-)
-
-from Bio import BiopythonDeprecationWarning, StreamModeError
-from Bio.Seq import Seq, MutableSeq, UndefinedSequenceError
 import warnings
+from io import StringIO
+from typing import Any
+from typing import cast
+from typing import Dict
+from typing import Iterable
+from typing import List
+from typing import Mapping
+from typing import NoReturn
+from typing import Optional
+from typing import overload
+from typing import Sequence
+from typing import TYPE_CHECKING
+from typing import Union
+
+from Bio import BiopythonDeprecationWarning
+from Bio import StreamModeError
+from Bio.Seq import MutableSeq
+from Bio.Seq import Seq
+from Bio.Seq import UndefinedSequenceError
 
 if TYPE_CHECKING:
     from Bio.SeqFeature import SeqFeature
@@ -1280,7 +1280,8 @@ class SeqRecord:
         >>> print("%s %s" % (rc.id, rc.seq))
         Test ACGA
         """
-        from Bio.Seq import Seq, MutableSeq  # Lazy to avoid circular imports
+        from Bio.Seq import MutableSeq  # Lazy to avoid circular imports
+        from Bio.Seq import Seq  # Lazy to avoid circular imports
 
         if "protein" in cast(str, self.annotations.get("molecule_type", "")):
             raise ValueError("Proteins do not have complements!")

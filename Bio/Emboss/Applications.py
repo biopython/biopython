@@ -16,7 +16,9 @@ We have decided to remove this module in future, and instead recommend
 building your command and invoking it via the subprocess module directly.
 """
 
-from Bio.Application import _Option, _Switch, AbstractCommandline
+from Bio.Application import _Option
+from Bio.Application import _Switch
+from Bio.Application import AbstractCommandline
 
 
 class _EmbossMinimalCommandLine(AbstractCommandline):

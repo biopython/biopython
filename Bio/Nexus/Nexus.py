@@ -12,22 +12,20 @@ Based upon 'NEXUS: An extensible file format for systematic information'
 Maddison, Swofford, Maddison. 1997. Syst. Biol. 46(4):590-621
 """
 
-from functools import reduce
 import copy
 import math
 import random
 import sys
 import warnings
+from functools import reduce
 
+from Bio import BiopythonDeprecationWarning
+from Bio import BiopythonWarning
 from Bio import File
 from Bio.Data import IUPACData
-from Bio.Seq import Seq
-from Bio import BiopythonDeprecationWarning, BiopythonWarning
-
-
 from Bio.Nexus.StandardData import StandardData
 from Bio.Nexus.Trees import Tree
-
+from Bio.Seq import Seq
 
 INTERLEAVE = 70
 SPECIAL_COMMANDS = [

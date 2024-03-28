@@ -10,7 +10,9 @@ Derived from the help page for RAxML version 7.3 by Alexandros Stamatakis, but
 should work for any version 7.X (and probably earlier for most options).
 """
 
-from Bio.Application import _Option, _Switch, AbstractCommandline
+from Bio.Application import _Option
+from Bio.Application import _Switch
+from Bio.Application import AbstractCommandline
 
 
 class RaxmlCommandline(AbstractCommandline):

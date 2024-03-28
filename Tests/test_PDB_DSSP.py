@@ -30,9 +30,10 @@ except ImportError:
     ) from None
 
 
-from Bio.PDB import PDBParser, MMCIFParser
-from Bio.PDB import DSSP, make_dssp_dict
-
+from Bio.PDB import DSSP
+from Bio.PDB import make_dssp_dict
+from Bio.PDB import MMCIFParser
+from Bio.PDB import PDBParser
 
 VERSION_2_2_0 = (2, 2, 0)
 

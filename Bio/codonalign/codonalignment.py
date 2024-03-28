@@ -10,16 +10,17 @@ CodonAlignment class is inherited from MultipleSeqAlignment class. This is
 the core class to deal with codon alignment in biopython.
 """
 
-from math import sqrt, erfc
 import warnings
+from math import erfc
+from math import sqrt
 
-from Bio.Align import MultipleSeqAlignment
-from Bio.SeqRecord import SeqRecord
-from Bio.Data import CodonTable
 from Bio import BiopythonWarning
-
-
-from Bio.codonalign.codonseq import _get_codon_list, CodonSeq, cal_dn_ds
+from Bio.Align import MultipleSeqAlignment
+from Bio.codonalign.codonseq import _get_codon_list
+from Bio.codonalign.codonseq import cal_dn_ds
+from Bio.codonalign.codonseq import CodonSeq
+from Bio.Data import CodonTable
+from Bio.SeqRecord import SeqRecord
 
 
 class CodonAlignment(MultipleSeqAlignment):
@@ -433,9 +434,11 @@ def _prim(G):
     Code is adapted from
     http://programmingpraxis.com/2010/04/09/minimum-spanning-tree-prims-algorithm/
     """
-    from math import floor
     from collections import defaultdict
-    from heapq import heapify, heappop, heappush
+    from heapq import heapify
+    from heapq import heappop
+    from heapq import heappush
+    from math import floor
 
     nodes = []
     edges = []

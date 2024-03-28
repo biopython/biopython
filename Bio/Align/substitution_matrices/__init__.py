@@ -9,6 +9,7 @@
 
 import os
 import string
+
 import numpy as np
 
 from Bio.File import as_handle

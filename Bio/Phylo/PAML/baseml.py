@@ -12,8 +12,9 @@ Maximum likelihood analysis of nucleotide sequences.
 
 import os
 import os.path
-from ._paml import Paml
+
 from . import _parse_baseml
+from ._paml import Paml
 
 
 class BasemlError(EnvironmentError):

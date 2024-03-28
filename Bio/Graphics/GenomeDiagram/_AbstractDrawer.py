@@ -32,14 +32,14 @@ For dealing with biological information, the package expects Biopython objects
 like SeqFeatures.
 """
 
-# ReportLab imports
-
-from reportlab.lib import pagesizes
-from reportlab.lib import colors
-from reportlab.graphics.shapes import Polygon
-
-from math import pi, sin, cos
 from itertools import islice
+from math import cos
+from math import pi
+from math import sin
+
+from reportlab.graphics.shapes import Polygon
+from reportlab.lib import colors
+from reportlab.lib import pagesizes
 
 ################################################################################
 # METHODS

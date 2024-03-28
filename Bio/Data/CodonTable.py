@@ -13,9 +13,11 @@ using Scripts/update_ncbi_codon_table.py
 Last updated at Version 4.4 (May 2019)
 """
 
-from Bio.Data import IUPACData
+from typing import Dict
+from typing import List
+from typing import Optional
 
-from typing import Dict, List, Optional
+from Bio.Data import IUPACData
 
 unambiguous_dna_by_name = {}
 unambiguous_dna_by_id = {}

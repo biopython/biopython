@@ -5,25 +5,28 @@
 """Runs a few EMBOSS tools to check our wrappers and parsers."""
 
 import os
+import subprocess
 import sys
 import unittest
-import subprocess
 import warnings
 from io import StringIO
+
 from Bio import BiopythonDeprecationWarning
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
-    from Bio.Emboss.Applications import WaterCommandline, NeedleCommandline
-    from Bio.Emboss.Applications import SeqretCommandline, SeqmatchallCommandline
     from Bio.Application import _escape_filename
+    from Bio.Emboss.Applications import NeedleCommandline
+    from Bio.Emboss.Applications import SeqmatchallCommandline
+    from Bio.Emboss.Applications import SeqretCommandline
+    from Bio.Emboss.Applications import WaterCommandline
 
-from Bio import SeqIO
 from Bio import AlignIO
 from Bio import MissingExternalDependencyError
-from Bio.Seq import Seq, translate
+from Bio import SeqIO
+from Bio.Seq import Seq
+from Bio.Seq import translate
 from Bio.SeqRecord import SeqRecord
-
 
 # ###############################################################
 
