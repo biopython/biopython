@@ -35,6 +35,7 @@ except ImportError:
         "See http://www.numpy.org/"
     ) from None
 
+from Bio.Align import _parser  # type: ignore
 from Bio.Align import _pairwisealigner  # type: ignore
 from Bio.Align import _codonaligner  # type: ignore
 from Bio.Align import substitution_matrices
@@ -1076,6 +1077,10 @@ class Alignment:
             path.append(indices)
         coordinates = np.array(path).transpose()
         seqdata = [line.replace(b"-", b"") for line in lines]
+        coordinates = _parser.parse_alignment_block(lines)
+        shape = coordinates.shape
+        coordinates = np.frombuffer(coordinates, int)
+        coordinates.shape = shape
         return seqdata, coordinates
 
     def __init__(self, sequences, coordinates=None):
