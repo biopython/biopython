@@ -1049,33 +1049,6 @@ class Alignment:
     @classmethod
     def parse_alignment_block(cls, lines):
         """Parse an alignment block."""
-        n = len(lines)
-        m = len(lines[0])
-        for line in lines:
-            assert m == len(line)
-        path = []
-        dash = ord(b"-")
-        if m > 0:
-            indices = [0] * n
-            current_state = [None] * n
-            for i in range(m):
-                next_state = [line[i] != dash for line in lines]
-                if next_state == current_state:
-                    step += 1  # noqa: F821
-                else:
-                    indices = [
-                        index + step if state else index
-                        for index, state in zip(indices, current_state)
-                    ]
-                    path.append(indices)
-                    step = 1
-                    current_state = next_state
-            indices = [
-                index + step if state else index
-                for index, state in zip(indices, current_state)
-            ]
-            path.append(indices)
-        coordinates = np.array(path).transpose()
         seqdata = [line.replace(b"-", b"") for line in lines]
         coordinates = _parser.parse_alignment_block(lines)
         shape = coordinates.shape
