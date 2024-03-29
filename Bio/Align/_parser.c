@@ -7,6 +7,7 @@
 
 
 #include <Python.h>
+#include <string.h>
 
 
 typedef struct {
@@ -147,7 +148,8 @@ parse_printed_alignment(PyObject* module, PyObject* args)
     Py_ssize_t i, j, k, n, m, p;
     const char* s;
     char** destination = NULL;
-    Py_ssize_t index, previous, step;
+    Py_ssize_t index, previous;
+    long step;
     Py_ssize_t* indices = NULL;
     Py_ssize_t length;
     Py_ssize_t* lengths = NULL;
