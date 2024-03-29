@@ -235,8 +235,8 @@ parse_printed_alignment(PyObject* module, PyObject* args)
     coordinates->shape[0] = n;
     coordinates->shape[1] = p;
 
-    bzero(indices, n * sizeof(Py_ssize_t));
-    bzero(lengths, n * sizeof(Py_ssize_t));
+    memset(indices, '\0', n * sizeof(Py_ssize_t));
+    memset(lengths, '\0', n * sizeof(Py_ssize_t));
     k = 1;
     index = 0;
     do {
@@ -250,7 +250,8 @@ parse_printed_alignment(PyObject* module, PyObject* args)
                 }
                 else {
                     for (j = index+1; j < m; j++) if (*(++s) == '-') break;
-                    memcpy(destination[i]+length, &lines[i].buf[index], j - index);
+                    s = &lines[i].buf[index];
+                    memcpy(destination[i]+length, s, j - index);
                     lengths[i] += j - index;
                 }
                 indices[i] = j;
