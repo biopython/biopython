@@ -199,7 +199,7 @@ parse_printed_alignment(PyObject* module, PyObject* args)
         if (index == m) break;
         for (i = 0; i < n; i++) {
             if (indices[i] == index) {
-                s = &lines[i].buf[index];
+                s = lines[i].buf + index;
                 if (*s == '-') {
                     for (j = index+1; j < m; j++) if (*(++s) != '-') break;
                 }
@@ -244,13 +244,13 @@ parse_printed_alignment(PyObject* module, PyObject* args)
         for (i = 0; i < n; i++) {
             if (index == indices[i]) {
                 length = lengths[i];
-                s = &lines[i].buf[index];
+                s = lines[i].buf + index;
                 if (*s == '-') {
                     for (j = index+1; j < m; j++) if (*(++s) != '-') break;
                 }
                 else {
                     for (j = index+1; j < m; j++) if (*(++s) == '-') break;
-                    s = &lines[i].buf[index];
+                    s = lines[i].buf + index;
                     memcpy(destination[i]+length, s, j - index);
                     lengths[i] += j - index;
                 }
