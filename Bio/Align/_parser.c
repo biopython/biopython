@@ -171,7 +171,9 @@ parse_printed_alignment(PyObject* module, PyObject* args)
         coordinates->shape[0] = 0;
         coordinates->shape[1] = 0;
         PyMem_Free(lines);
-        return Py_BuildValue("[]O", coordinates);
+        result = Py_BuildValue("[]O", coordinates);
+        Py_DECREF(coordinates);
+        return result;
     }
     m = lines[0].shape[0];
     n = 1;
@@ -227,8 +229,6 @@ parse_printed_alignment(PyObject* module, PyObject* args)
         }
         PyList_SET_ITEM(sequences, i, sequence);
     }
-    coordinates = (Coordinates *)PyType_GenericAlloc(&CoordinatesType, 0);
-    if (coordinates == NULL) goto exit;
     coordinates->data = PyMem_Malloc(n*p*sizeof(long));
     if (!coordinates->data) goto exit;
     for (i = 0; i < n; i++) coordinates->data[i*p] = 0;
