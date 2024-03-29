@@ -219,7 +219,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         aligned_sequences = [
             aligned_sequence.encode() for aligned_sequence in aligned_sequences
         ]
-        sequences, coordinates = Alignment.parse_alignment_block(aligned_sequences)
+        sequences, coordinates = Alignment.parse_printed_alignment(aligned_sequences)
         records = []
         n = len(sequences)
         for i in range(n):

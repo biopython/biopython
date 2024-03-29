@@ -182,7 +182,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         else:
             annotations = None
         aligned_seqs = [bytes(n.matrix[name]) for name in n.taxlabels]
-        seqs, coordinates = Alignment.parse_alignment_block(aligned_seqs)
+        seqs, coordinates = Alignment.parse_printed_alignment(aligned_seqs)
         records = [
             SeqRecord(Seq(seq), id=name, annotations=annotations)
             for seq, name in zip(seqs, n.unaltered_taxlabels)

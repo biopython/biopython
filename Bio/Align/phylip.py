@@ -176,7 +176,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 raise ValueError("PHYLIP format no longer allows dots in sequence")
 
         seqs = [seq.encode() for seq in seqs]
-        seqs, coordinates = Alignment.parse_alignment_block(seqs)
+        seqs, coordinates = Alignment.parse_printed_alignment(seqs)
         records = [
             SeqRecord(Seq(seq), id=name, description="")
             for (name, seq) in zip(names, seqs)

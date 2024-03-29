@@ -233,7 +233,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 if i == n:
                     i = 0
         aligned_seqs = [s.encode() for s in aligned_seqs]
-        seqs, coordinates = Alignment.parse_alignment_block(aligned_seqs)
+        seqs, coordinates = Alignment.parse_printed_alignment(aligned_seqs)
         records = [
             SeqRecord(Seq(seq), id=seqid, description="")
             for (seqid, seq) in zip(ids, seqs)

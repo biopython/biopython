@@ -85,7 +85,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             if n == 0:
                 return
             lines = [target_sequence.encode(), query_sequence.encode()]
-            seq_data, coordinates = Alignment.parse_alignment_block(lines)
+            seq_data, coordinates = Alignment.parse_printed_alignment(lines)
             target_seq_data, query_seq_data = seq_data
             coordinates[0, :] += target_start
             coordinates[1, :] += query_start

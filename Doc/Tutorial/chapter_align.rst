@@ -126,14 +126,14 @@ Print the ``Alignment`` object to show the alignment explicitly:
 with the starting and end coordinate for each sequence are shown to the
 left and right, respectively, of the alignment.
 
-.. _`subsec:align_parse_alignment_block`:
+.. _`subsec:align_parse_printed_alignment`:
 
 Creating an Alignment object from aligned sequences
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you start out with the aligned sequences, with dashes representing
 gaps, then you can calculate the coordinates using the
-``parse_alignment_block`` class method. This method is primarily employed in
+``parse_printed_alignment`` class method. This method is primarily employed in
 Biopython’s alignment parsers (see
 Section :ref:`sec:alignmentparsers`), but it may be useful for other
 purposes. For example, you can construct the ``Alignment`` object from
@@ -150,12 +150,9 @@ aligned sequences as follows:
    CGGTTTTT
    AG-TTT--
    AGGTTT--
-   >>> lines = [line.encode() for line in lines]  # convert to bytes
-   >>> lines
-   [b'CGGTTTTT', b'AG-TTT--', b'AGGTTT--']
-   >>> sequences, coordinates = Alignment.parse_alignment_block(lines)
+   >>> sequences, coordinates = Alignment.parse_printed_alignment(lines)
    >>> sequences
-   [b'CGGTTTTT', b'AGTTT', b'AGGTTT']
+   ['CGGTTTTT', 'AGTTT', 'AGGTTT']
    >>> coordinates
    array([[0, 2, 3, 6, 8],
           [0, 2, 2, 5, 5],
@@ -170,11 +167,8 @@ therefore missing here. But this is easy to fix:
 .. code:: pycon
 
    >>> from Bio.Seq import Seq
-   >>> sequences[0] = b"C" + sequences[0]
-   >>> sequences[1] = sequences[1] + b"AA"
-   >>> sequences
-   [b'CCGGTTTTT', b'AGTTTAA', b'AGGTTT']
-   >>> sequences = [sequence.decode() for sequence in sequences]
+   >>> sequences[0] = "C" + sequences[0]
+   >>> sequences[1] = sequences[1] + "AA"
    >>> sequences
    ['CCGGTTTTT', 'AGTTTAA', 'AGGTTT']
    >>> coordinates[0, :] += 1

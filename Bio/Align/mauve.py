@@ -217,7 +217,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 # There may be more data, but we've reached the end of this
                 # alignment
                 seqs = [seq.encode() for seq in seqs]
-                seqs, coordinates = Alignment.parse_alignment_block(seqs)
+                seqs, coordinates = Alignment.parse_printed_alignment(seqs)
                 records = []
                 for index, (description, seq) in enumerate(zip(descriptions, seqs)):
                     identifier, start, end, strand, comments = description

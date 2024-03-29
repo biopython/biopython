@@ -970,7 +970,7 @@ class MultipleSeqAlignment:
         records = [copy.copy(record) for record in self._records]
         if records:
             lines = [bytes(record.seq) for record in records]
-            seqdata, coordinates = Alignment.parse_alignment_block(lines)
+            seqdata, coordinates = Alignment.parse_printed_alignment(lines)
             for record, seqrow in zip(records, seqdata):
                 if record.letter_annotations:
                     indices = [i for i, c in enumerate(record.seq) if c != "-"]
@@ -1043,18 +1043,17 @@ class Alignment:
         >>> alignment = Alignment(sequences, coordinates)
         """
         lines = [line.encode() for line in lines]
-        seqdata, coordinates = cls.parse_alignment_block(lines)
+        seqdata, coordinates = cls.parse_printed_alignment(lines)
         return coordinates
 
     @classmethod
-    def parse_alignment_block(cls, lines):
+    def parse_printed_alignment(cls, lines):
         """Parse an alignment block."""
-        seqdata = [line.replace(b"-", b"") for line in lines]
-        sequences, coordinates = _parser.parse_alignment_block(lines)
+        sequences, coordinates = _parser.parse_printed_alignment(lines)
         shape = coordinates.shape
         coordinates = np.frombuffer(coordinates, int)
         coordinates.shape = shape
-        return seqdata, coordinates
+        return sequences, coordinates
 
     def __init__(self, sequences, coordinates=None):
         """Initialize a new Alignment object.
@@ -1879,7 +1878,7 @@ class Alignment:
                 ) from None
             line = line.encode()
             lines.append(line)
-        seqdata, coordinates = self.parse_alignment_block(lines)
+        seqdata, coordinates = self.parse_printed_alignment(lines)
         for i, sequence in enumerate(sequences):
             line = seqdata[i]
             try:

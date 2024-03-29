@@ -272,7 +272,7 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
             lines.append(bytes(record.seq))
             records.append(record)
         if lines:
-            sequences, coordinates = Alignment.parse_alignment_block(lines)
+            sequences, coordinates = Alignment.parse_printed_alignment(lines)
             for sequence, record in zip(sequences, records):
                 record.seq = Seq(sequence)
         else:

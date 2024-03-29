@@ -90,7 +90,6 @@ converter(PyObject* argument, void* pointer)
     Py_ssize_t i, n;
     PyObject* item;
     PyObject** items;
-    int status;
 
     argument = PySequence_Fast(argument,
                                "argument must be a tuple, list, or any other "
@@ -114,17 +113,19 @@ converter(PyObject* argument, void* pointer)
         }
         else {
             PyErr_Clear();
-            item = PyUnicode_AsASCIIString(item);
-            if (item) {
-                status = PyObject_GetBuffer(item, &lines[i], PyBUF_CONTIG_RO);
-                Py_DECREF(item);
-                if (status == 0) continue;
-                PyErr_Format(PyExc_RuntimeError,
-                             "failed to obtain a buffer after converting "
-                             "line [%zi] to a bytes-like object.", i);
+            if (PyUnicode_Check(item)
+             && PyUnicode_READY(item) == 0
+             && PyUnicode_IS_ASCII(item)) {
+                PyBuffer_FillInfo(&lines[i],
+                                  item,
+                                  PyUnicode_DATA(item),
+                                  PyUnicode_GET_LENGTH(item),
+                                  1,
+                                  PyBUF_CONTIG_RO);
+                continue;
             }
             else {
-                PyErr_Format(PyExc_ValueError,
+                PyErr_Format(PyExc_TypeError,
                              "line [%zi] is neither a bytes-like object "
                              "nor an ASCII string", i);
             }
@@ -140,11 +141,12 @@ converter(PyObject* argument, void* pointer)
 
 
 static PyObject*
-parse_alignment_block(PyObject* module, PyObject* args)
+parse_printed_alignment(PyObject* module, PyObject* args)
 {
     Py_buffer* lines;
     Py_ssize_t i, j, k, n, m, p;
     const char* s;
+    char** destination = NULL;
     Py_ssize_t index, previous, step;
     Py_ssize_t* indices = NULL;
     Py_ssize_t length;
@@ -155,22 +157,28 @@ parse_alignment_block(PyObject* module, PyObject* args)
 
     PyObject* result = NULL;
 
-    if (!PyArg_ParseTuple(args, "O&:parse_alignment_block", converter, &lines))
+    if (!PyArg_ParseTuple(args, "O&:parse_printed_alignment", converter, &lines))
         return NULL;
 
-    if (lines[0].buf == NULL) {
+    coordinates = (Coordinates *)PyType_GenericAlloc(&CoordinatesType, 0);
+    if (coordinates == NULL) {
         PyMem_Free(lines);
-        return Py_BuildValue("()()");
+        return NULL;
+    }
+    if (lines[0].buf == NULL) {
+        coordinates->shape[0] = 0;
+        coordinates->shape[1] = 0;
+        PyMem_Free(lines);
+        return Py_BuildValue("[]O", coordinates);
     }
     m = lines[0].shape[0];
     n = 1;
     for (i = 1; lines[i].buf; i++) {
         if (lines[i].shape[0] != m) {
             PyErr_Format(PyExc_ValueError,
-                         "all lines must have the same length "
-                         "(first line has length %zi, "
-                         "line [%zi] has length %zi).",
-                         m, i, lines[i].shape[0]);
+                "all lines must have the same length "
+                "(line [0] has length %zi, line [%zi] has length %zi).",
+                m, i, lines[i].shape[0]);
             goto exit;
         }
         n++;
@@ -179,6 +187,8 @@ parse_alignment_block(PyObject* module, PyObject* args)
     if (!indices) goto exit;
     lengths = PyMem_Calloc(n, sizeof(Py_ssize_t));
     if (!lengths) goto exit;
+    destination = PyMem_Malloc(n*sizeof(char*));
+    if (!destination) goto exit;
     p = 0;
     while (1) {
         index = m;
@@ -200,11 +210,20 @@ parse_alignment_block(PyObject* module, PyObject* args)
         }
     }
 
-    sequences = PyTuple_New(n);
+    sequences = PyList_New(n);
     if (sequences == NULL) goto exit;
     for (i = 0; i < n ; i++) {
-        sequence = PyBytes_FromStringAndSize(NULL, lengths[i]);
-        PyTuple_SET_ITEM(sequences, i, sequence);
+        if (PyUnicode_Check(lines[i].obj)) {
+            sequence = PyUnicode_New(lengths[i], 127);
+            if (!sequence) goto exit;
+            destination[i] = PyUnicode_DATA(sequence);
+        }
+        else {
+            sequence = PyBytes_FromStringAndSize(NULL, lengths[i]);
+            if (!sequence) goto exit;
+            destination[i] = PyBytes_AS_STRING(sequence);
+        }
+        PyList_SET_ITEM(sequences, i, sequence);
     }
     coordinates = (Coordinates *)PyType_GenericAlloc(&CoordinatesType, 0);
     if (coordinates == NULL) goto exit;
@@ -222,7 +241,6 @@ parse_alignment_block(PyObject* module, PyObject* args)
         previous = index;
         for (i = 0; i < n; i++) {
             if (index == indices[i]) {
-                sequence = PyTuple_GET_ITEM(sequences, i);
                 length = lengths[i];
                 s = &lines[i].buf[index];
                 if (*s == '-') {
@@ -230,7 +248,7 @@ parse_alignment_block(PyObject* module, PyObject* args)
                 }
                 else {
                     for (j = index+1; j < m; j++) if (*(++s) == '-') break;
-                    memcpy(PyBytes_AS_STRING(sequence)+length, &lines[i].buf[index], j - index);
+                    memcpy(destination[i]+length, &lines[i].buf[index], j - index);
                     lengths[i] += j - index;
                 }
                 indices[i] = j;
@@ -257,12 +275,14 @@ exit:
     Py_XDECREF(sequences);
     Py_XDECREF(coordinates);
     if (indices) PyMem_Free(indices);
+    if (lengths) PyMem_Free(lengths);
+    if (destination) PyMem_Free(destination);
     for (i = 0; i < n; i++) PyBuffer_Release(&lines[i]);
     PyMem_Free(lines);
     return result;
 }
 
-static char parse_alignment_block__doc__[] =
+static char parse_printed_alignment__doc__[] =
 "Infer the coordinates from a printed alignment."
 "\n"
 "This method is primarily employed by the alignment parsers in Bio.Align,\n"
@@ -279,10 +299,10 @@ static char parse_alignment_block__doc__[] =
 
 
 static struct PyMethodDef methods[] = {
-    {"parse_alignment_block",
-     (PyCFunction)parse_alignment_block,
+    {"parse_printed_alignment",
+     (PyCFunction)parse_printed_alignment,
      METH_VARARGS,
-     parse_alignment_block__doc__
+     parse_printed_alignment__doc__
     },                             
     {NULL, NULL, 0, NULL}  /* Sentinel */
 };

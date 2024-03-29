@@ -76,7 +76,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 raise ValueError("Empty file.")
             return
         lines = [line.encode() for line in lines]
-        seqs, coordinates = Alignment.parse_alignment_block(lines)
+        seqs, coordinates = Alignment.parse_printed_alignment(lines)
         records = []
         for name, description, seq in zip(names, descriptions, seqs):
             sequence = Seq(seq)

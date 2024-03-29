@@ -920,7 +920,7 @@ class XMLHandler:
         target_seq_aligned = hsp.hseq.encode()
         assert len(target_seq_aligned) == align_len
         (target_seq_data, query_seq_data), coordinates = (
-            Alignment.parse_alignment_block([target_seq_aligned, query_seq_aligned])
+            Alignment.parse_printed_alignment([target_seq_aligned, query_seq_aligned])
         )
         query = SeqRecord(None, query_id, description=query_description)
         query_start = hsp.query_from - 1

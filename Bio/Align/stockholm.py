@@ -321,7 +321,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 skipped_columns = np.nonzero((aligned_sequences == ord("-")).all(0))[0]
                 aligned_sequences = np.delete(aligned_sequences, skipped_columns, 1)
                 aligned_sequences = [row.tobytes() for row in aligned_sequences]
-                sequences, coordinates = Alignment.parse_alignment_block(
+                sequences, coordinates = Alignment.parse_printed_alignment(
                     aligned_sequences
                 )
                 for sequence, record in zip(sequences, records):

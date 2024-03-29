@@ -224,7 +224,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             seqs[index] = seq
 
         seqs = [seq.encode() for seq in seqs]
-        seqs, coordinates = Alignment.parse_alignment_block(seqs)
+        seqs, coordinates = Alignment.parse_printed_alignment(seqs)
         records = [
             SeqRecord(
                 Seq(seq),

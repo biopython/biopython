@@ -439,7 +439,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 raise ValueError(f"Error parsing alignment - unexpected line:\n{line}")
         else:
             self._aline = None
-        sequences, coordinates = Alignment.parse_alignment_block(aligned_sequences)
+        sequences, coordinates = Alignment.parse_printed_alignment(aligned_sequences)
         for start, size, sequence, record in zip(starts, sizes, sequences, records):
             srcSize = len(record.seq)
             if len(sequence) != size:

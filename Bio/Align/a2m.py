@@ -109,7 +109,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     raise Exception("Unexpected letter '%s' in alignment" % c)
         for i, line in enumerate(lines):
             lines[i] = line.upper().replace(".", "-").encode()
-        seqdata, coordinates = Alignment.parse_alignment_block(lines)
+        seqdata, coordinates = Alignment.parse_printed_alignment(lines)
         records = []
         for name, description, seqrow in zip(names, descriptions, seqdata):
             sequence = Seq(seqrow)
