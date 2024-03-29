@@ -35,6 +35,7 @@ except ImportError:
         "See http://www.numpy.org/"
     ) from None
 
+from Bio import BiopythonDeprecationWarning
 from Bio.Align import _parser  # type: ignore
 from Bio.Align import _pairwisealigner  # type: ignore
 from Bio.Align import _codonaligner  # type: ignore
@@ -1013,7 +1014,7 @@ class Alignment:
 
     @classmethod
     def infer_coordinates(cls, lines):
-        """Infer the coordinates from a printed alignment.
+        """Infer the coordinates from a printed alignment (DEPRECATED).
 
         This method is primarily employed in Biopython's alignment parsers,
         though it may be useful for other purposes.
@@ -1042,13 +1043,54 @@ class Alignment:
                [ 0,  0,  3,  5, 10, 11]])
         >>> alignment = Alignment(sequences, coordinates)
         """
+        warnings.warn(
+            "The method infer_coordinates is deprecated; please use the "
+            "method parse_printed_alignment instead. This method is much "
+            "faster than infer_coordinates, and returns both the sequences "
+            "after removal of the gaps and the coordinates.",
+            BiopythonDeprecationWarning,
+        )
         lines = [line.encode() for line in lines]
         seqdata, coordinates = cls.parse_printed_alignment(lines)
         return coordinates
 
     @classmethod
     def parse_printed_alignment(cls, lines):
-        """Parse an alignment block."""
+        """Infer the sequences and coordinates from a printed alignment.
+
+        This method is primarily employed in Biopython's alignment parsers,
+        though it may be useful for other purposes.
+
+        For an alignment consisting of N sequences, printed as N lines with
+        the same number of columns, where gaps are represented by dashes,
+        this method will calculate the sequence coordinates that define the
+        alignment. It returns the tuple (sequences, coordinates), where
+        sequences is the list of N sequences after removing the gaps, and
+        the coordinates is a 2D NumPy array of integers. Together, the
+        sequences and coordinates can be used to create an Alignment object.
+
+        This is an example for the alignment of three sequences TAGGCATACGTG,
+        AACGTACGT, and ACGCATACTTG, with gaps in the second and third sequence:
+
+        >>> from Bio.Align import Alignment
+        >>> lines = ["TAGGCATACGTG",
+        ...          "AACG--TACGT-",
+        ...          "-ACGCATACTTG",
+        ...         ]
+        >>> sequences, coordinates = Alignment.parse_printed_alignment(lines)
+        >>> sequences
+        ['TAGGCATACGTG', 'AACGTACGT', 'ACGCATACTTG']
+        >>> coordinates
+        array([[ 0,  1,  4,  6, 11, 12],
+               [ 0,  1,  4,  4,  9,  9],
+               [ 0,  0,  3,  5, 10, 11]])
+        >>> alignment = Alignment(sequences, coordinates)
+        >>> print(alignment)
+                          0 TAGGCATACGTG 12
+                          0 AACG--TACGT-  9
+                          0 -ACGCATACTTG 11
+        <BLANKLINE>
+        """
         sequences, coordinates = _parser.parse_printed_alignment(lines)
         shape = coordinates.shape
         coordinates = np.frombuffer(coordinates, int)

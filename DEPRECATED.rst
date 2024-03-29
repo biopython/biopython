@@ -535,6 +535,11 @@ The Bio.SubsMat module was deprecated in Release 1.78, and removed in Release
 
 Bio.Align
 ---------
+The ``infer_coordinates`` class method of the ``Alignment`` class in
+``Bio.Align`` was deprecated in Release 1.84.  Instead,please use the
+``parse_printed_alignment`` method, which is much faster, and returns both the
+sequences after removing the gaps and the coordinates.
+
 The ``get_column`` method of the MultipleSeqAlignment was deprecated in
 Release 1.57 and removed in Release 1.69.
 
