@@ -915,14 +915,13 @@ class XMLHandler:
         query_id = query.id
         query_description = query.description
         query_length = len(query.seq)
-        query_seq_aligned = hsp.qseq
+        query_seq_aligned = hsp.qseq.encode()
         assert len(query_seq_aligned) == align_len
-        target_seq_aligned = hsp.hseq
+        target_seq_aligned = hsp.hseq.encode()
         assert len(target_seq_aligned) == align_len
-        coordinates = Alignment.infer_coordinates(
-            [target_seq_aligned, query_seq_aligned]
+        (target_seq_data, query_seq_data), coordinates = (
+            Alignment.parse_printed_alignment([target_seq_aligned, query_seq_aligned])
         )
-        query_seq_data = query_seq_aligned.replace("-", "")
         query = SeqRecord(None, query_id, description=query_description)
         query_start = hsp.query_from - 1
         query_end = hsp.query_to
@@ -958,7 +957,6 @@ class XMLHandler:
         target_name = target.name
         target_description = target.description
         target_length = len(target.seq)
-        target_seq_data = target_seq_aligned.replace("-", "")
         target = SeqRecord(None, target_id, target_name, description=target_description)
         if program in ("blastn", "megablast"):
             try:
@@ -974,19 +972,24 @@ class XMLHandler:
                 target_start = hsp.hit_from - 1
                 target_end = hsp.hit_to
                 coordinates[0, :] += target_start
+                assert target_end - target_start == len(target_seq_data)
+                target_seq_data = {target_start: target_seq_data}
+                target.seq = Seq(target_seq_data, target_length)
             elif target_strand == "Minus":
                 target_start = hsp.hit_to - 1
                 target_end = hsp.hit_from
-                target_seq_data = reverse_complement(target_seq_data)
                 coordinates[0, :] = target_end - coordinates[0, :]
-            assert target_end - target_start == len(target_seq_data)
-            target_seq_data = {target_start: target_seq_data}
+                assert target_end - target_start == len(target_seq_data)
+                target_seq_data = {target_length - target_end: target_seq_data}
+                seq = Seq(target_seq_data, target_length)
+                target.seq = seq.reverse_complement()
         elif program in ("blastp", "blastx", "rpsblast"):
             target_start = hsp.hit_from - 1
             target_end = hsp.hit_to
             coordinates[0, :] += target_start
             assert target_end - target_start == len(target_seq_data)
             target_seq_data = {target_start: target_seq_data}
+            target.seq = Seq(target_seq_data, target_length)
         elif program in ("tblastn", "tblastx"):
             target_start = hsp.hit_from - 1
             target_end = hsp.hit_to
@@ -1002,9 +1005,9 @@ class XMLHandler:
             qualifiers = {"coded_by": coded_by}
             feature = SeqFeature(location, type="CDS", qualifiers=qualifiers)
             target.features.append(feature)
+            target.seq = Seq(target_seq_data, target_length)
         else:
             raise RuntimeError("Unexpected program name '%s'" % program)
-        target.seq = Seq(target_seq_data, target_length)
         sequences = [target, query]
         alignment = HSP(sequences, coordinates)
         alignment.num = hsp.num

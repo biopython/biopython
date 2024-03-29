@@ -135,7 +135,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         # identifier (not a good idea - but seems possible), then this
         # dictionary based parser will merge their sequences.  Fix this?
         ids = []
-        seqs = []
         aligned_seqs = []
         consensus = ""
         index = None  # Used to extract the consensus
@@ -161,8 +160,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 seqid, aligned_seq = fields[:2]
                 ids.append(seqid)
                 aligned_seqs.append(aligned_seq)
-                seq = aligned_seq.replace("-", "")
-                seqs.append(seq)
 
                 # Record the sequence position to get the consensus
                 if index is None:
@@ -171,15 +168,15 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 if len(fields) == 3:
                     # This MAY be an old style file with a letter count...
                     try:
-                        letters = int(fields[2])
+                        count = int(fields[2])
                     except ValueError:
                         raise ValueError(
-                            "Could not parse line, bad sequence number:\n%s" % line
+                            "Could not parse line, bad sequence count:\n%s" % line
                         ) from None
-                    if len(seq) != letters:
+                    if len(aligned_seq) - aligned_seq.count("-") != count:
                         raise ValueError(
-                            "Could not parse line, invalid sequence number:\n%s" % line
-                        )
+                            "Could not parse line, incorrect sequence count:\n%s" % line
+                        ) from None
             else:
                 # no consensus line
                 if index:
@@ -196,7 +193,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         if consensus:
             assert len(consensus) == length
 
-        n = len(seqs)
+        n = len(aligned_seqs)
         i = 0
         # Loop over any remaining blocks...
         for line in stream:
@@ -219,30 +216,28 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 assert seqid == fields[0]
                 aligned_seq = fields[1]
                 aligned_seqs[i] += aligned_seq
-                seq = aligned_seq.replace("-", "")
-                seqs[i] += seq
 
                 if len(fields) == 3:
                     # This MAY be an old style file with a letter count...
                     try:
-                        letters = int(fields[2])
+                        count = int(fields[2])
                     except ValueError:
                         raise ValueError(
                             "Could not parse line, bad sequence number:\n%s" % line
                         ) from None
-                    if len(seqs[i]) != letters:
+                    if len(aligned_seqs[i]) - aligned_seqs[i].count("-") != count:
                         raise ValueError(
-                            "Could not parse line, invalid sequence number:\n%s" % line
-                        )
+                            "Could not parse line, incorrect sequence count:\n%s" % line
+                        ) from None
                 i += 1
                 if i == n:
                     i = 0
-
+        aligned_seqs = [s.encode() for s in aligned_seqs]
+        seqs, coordinates = Alignment.parse_printed_alignment(aligned_seqs)
         records = [
             SeqRecord(Seq(seq), id=seqid, description="")
             for (seqid, seq) in zip(ids, seqs)
         ]
-        coordinates = Alignment.infer_coordinates(aligned_seqs)
         alignment = Alignment(records, coordinates)
         if consensus:
             columns = alignment.length

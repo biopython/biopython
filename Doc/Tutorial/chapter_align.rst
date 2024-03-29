@@ -126,14 +126,14 @@ Print the ``Alignment`` object to show the alignment explicitly:
 with the starting and end coordinate for each sequence are shown to the
 left and right, respectively, of the alignment.
 
-.. _`subsec:align_infer_coordinates`:
+.. _`subsec:align_parse_printed_alignment`:
 
 Creating an Alignment object from aligned sequences
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you start out with the aligned sequences, with dashes representing
 gaps, then you can calculate the coordinates using the
-``infer_coordinates`` class method. This method is primarily employed in
+``parse_printed_alignment`` class method. This method is primarily employed in
 Biopython’s alignment parsers (see
 Section :ref:`sec:alignmentparsers`), but it may be useful for other
 purposes. For example, you can construct the ``Alignment`` object from
@@ -143,13 +143,16 @@ aligned sequences as follows:
 
 .. code:: pycon
 
-   >>> aligned_sequences = ["CGGTTTTT", "AG-TTT--", "AGGTTT--"]
-   >>> sequences = [aligned_sequence.replace("-", "")
-   ...              for aligned_sequence in aligned_sequences]  # fmt: skip
+   >>> lines = ["CGGTTTTT", "AG-TTT--", "AGGTTT--"]
+   >>> for line in lines:
+   ...     print(line)
    ...
+   CGGTTTTT
+   AG-TTT--
+   AGGTTT--
+   >>> sequences, coordinates = Alignment.parse_printed_alignment(lines)
    >>> sequences
    ['CGGTTTTT', 'AGTTT', 'AGGTTT']
-   >>> coordinates = Alignment.infer_coordinates(aligned_sequences)
    >>> coordinates
    array([[0, 2, 3, 6, 8],
           [0, 2, 2, 5, 5],
@@ -163,6 +166,7 @@ therefore missing here. But this is easy to fix:
 
 .. code:: pycon
 
+   >>> from Bio.Seq import Seq
    >>> sequences[0] = "C" + sequences[0]
    >>> sequences[1] = sequences[1] + "AA"
    >>> sequences

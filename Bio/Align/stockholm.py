@@ -320,10 +320,12 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 )
                 skipped_columns = np.nonzero((aligned_sequences == ord("-")).all(0))[0]
                 aligned_sequences = np.delete(aligned_sequences, skipped_columns, 1)
-                aligned_sequences = [
-                    row.tobytes().decode() for row in aligned_sequences
-                ]
-                coordinates = Alignment.infer_coordinates(aligned_sequences)
+                aligned_sequences = [row.tobytes() for row in aligned_sequences]
+                sequences, coordinates = Alignment.parse_printed_alignment(
+                    aligned_sequences
+                )
+                for sequence, record in zip(sequences, records):
+                    record.seq = Seq(sequence)
                 alignment = Alignment(records, coordinates)
                 for index in sorted(skipped_columns, reverse=True):
                     del operations[index]  # noqa: F821
@@ -377,10 +379,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         assert operations[i] != ord("D")
                         operations[i] = ord("I")  # insertion
                 aligned_sequence = aligned_sequence.replace(".", "-")
-                sequence = aligned_sequence.replace("-", "")
                 aligned_sequences.append(aligned_sequence)
-                seq = Seq(sequence)
-                record = SeqRecord(seq, id=seqname, description="")
+                record = SeqRecord(None, id=seqname, description="")
                 records.append(record)
             elif line.startswith("#=GF "):
                 # Generic per-File annotation, free text

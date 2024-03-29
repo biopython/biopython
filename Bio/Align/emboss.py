@@ -12,7 +12,7 @@ for example from the needle, water, and stretcher tools.
 
 from Bio.Align import Alignment
 from Bio.Align import interfaces
-from Bio.Seq import Seq, reverse_complement
+from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
 
@@ -216,24 +216,27 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 else:
                     assert column == len(aligned_sequences[index])
                 index += 1
-        coordinates = Alignment.infer_coordinates(aligned_sequences)
+        aligned_sequences = [
+            aligned_sequence.encode() for aligned_sequence in aligned_sequences
+        ]
+        sequences, coordinates = Alignment.parse_printed_alignment(aligned_sequences)
         records = []
         n = len(sequences)
         for i in range(n):
             start = starts[i]
             end = ends[i]
-            if start < end:
+            data = sequences[i]
+            if start == 0:
+                sequence = Seq(data)
+            elif start < end:
                 coordinates[i, :] += start
-                data = sequences[i]
+                # create a partially defined sequence
+                sequence = Seq({start: data}, length=end)
             else:
                 start, end = end, start
                 coordinates[i, :] = end - coordinates[i, :]
-                data = reverse_complement(sequences[i])
-            if start == 0:
-                sequence = Seq(data)
-            else:
                 # create a partially defined sequence
-                sequence = Seq({start: data}, length=end)
+                sequence = Seq({0: data}, length=end).reverse_complement()
             record = SeqRecord(sequence, identifiers[i])
             records.append(record)
         alignment = Alignment(records, coordinates)

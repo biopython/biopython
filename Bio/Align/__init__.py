@@ -35,6 +35,8 @@ except ImportError:
         "See http://www.numpy.org/"
     ) from None
 
+from Bio import BiopythonDeprecationWarning
+from Bio.Align import _parser  # type: ignore
 from Bio.Align import _pairwisealigner  # type: ignore
 from Bio.Align import _codonaligner  # type: ignore
 from Bio.Align import substitution_matrices
@@ -968,14 +970,14 @@ class MultipleSeqAlignment:
         """
         records = [copy.copy(record) for record in self._records]
         if records:
-            lines = [str(record.seq) for record in records]
-            coordinates = Alignment.infer_coordinates(lines)
-            for record in records:
+            lines = [bytes(record.seq) for record in records]
+            seqdata, coordinates = Alignment.parse_printed_alignment(lines)
+            for record, seqrow in zip(records, seqdata):
                 if record.letter_annotations:
                     indices = [i for i, c in enumerate(record.seq) if c != "-"]
                     letter_annotations = dict(record.letter_annotations)
                     record.letter_annotations.clear()
-                    record.seq = record.seq.replace("-", "")
+                    record.seq = Seq(seqrow)
                     for key, value in letter_annotations.items():
                         if isinstance(value, str):
                             value = "".join([value[i] for i in indices])
@@ -985,7 +987,7 @@ class MultipleSeqAlignment:
                         letter_annotations[key] = value
                     record.letter_annotations = letter_annotations
                 else:
-                    record.seq = record.seq.replace("-", "")
+                    record.seq = Seq(seqrow)
             alignment = Alignment(records, coordinates)
         else:
             alignment = Alignment([])
@@ -1012,7 +1014,7 @@ class Alignment:
 
     @classmethod
     def infer_coordinates(cls, lines):
-        """Infer the coordinates from a printed alignment.
+        """Infer the coordinates from a printed alignment (DEPRECATED).
 
         This method is primarily employed in Biopython's alignment parsers,
         though it may be useful for other purposes.
@@ -1041,33 +1043,59 @@ class Alignment:
                [ 0,  0,  3,  5, 10, 11]])
         >>> alignment = Alignment(sequences, coordinates)
         """
-        n = len(lines)
-        m = len(lines[0])
-        for line in lines:
-            assert m == len(line)
-        path = []
-        if m > 0:
-            indices = [0] * n
-            current_state = [None] * n
-            for i in range(m):
-                next_state = [line[i] != "-" for line in lines]
-                if next_state == current_state:
-                    step += 1  # noqa: F821
-                else:
-                    indices = [
-                        index + step if state else index
-                        for index, state in zip(indices, current_state)
-                    ]
-                    path.append(indices)
-                    step = 1
-                    current_state = next_state
-            indices = [
-                index + step if state else index
-                for index, state in zip(indices, current_state)
-            ]
-            path.append(indices)
-        coordinates = np.array(path).transpose()
+        warnings.warn(
+            "The method infer_coordinates is deprecated; please use the "
+            "method parse_printed_alignment instead. This method is much "
+            "faster than infer_coordinates, and returns both the sequences "
+            "after removal of the gaps and the coordinates.",
+            BiopythonDeprecationWarning,
+        )
+        lines = [line.encode() for line in lines]
+        seqdata, coordinates = cls.parse_printed_alignment(lines)
         return coordinates
+
+    @classmethod
+    def parse_printed_alignment(cls, lines):
+        """Infer the sequences and coordinates from a printed alignment.
+
+        This method is primarily employed in Biopython's alignment parsers,
+        though it may be useful for other purposes.
+
+        For an alignment consisting of N sequences, printed as N lines with
+        the same number of columns, where gaps are represented by dashes,
+        this method will calculate the sequence coordinates that define the
+        alignment. It returns the tuple (sequences, coordinates), where
+        sequences is the list of N sequences after removing the gaps, and
+        the coordinates is a 2D NumPy array of integers. Together, the
+        sequences and coordinates can be used to create an Alignment object.
+
+        This is an example for the alignment of three sequences TAGGCATACGTG,
+        AACGTACGT, and ACGCATACTTG, with gaps in the second and third sequence:
+
+        >>> from Bio.Align import Alignment
+        >>> lines = ["TAGGCATACGTG",
+        ...          "AACG--TACGT-",
+        ...          "-ACGCATACTTG",
+        ...         ]
+        >>> sequences, coordinates = Alignment.parse_printed_alignment(lines)
+        >>> sequences
+        ['TAGGCATACGTG', 'AACGTACGT', 'ACGCATACTTG']
+        >>> coordinates
+        array([[ 0,  1,  4,  6, 11, 12],
+               [ 0,  1,  4,  4,  9,  9],
+               [ 0,  0,  3,  5, 10, 11]])
+        >>> alignment = Alignment(sequences, coordinates)
+        >>> print(alignment)
+                          0 TAGGCATACGTG 12
+                          0 AACG--TACGT-  9
+                          0 -ACGCATACTTG 11
+        <BLANKLINE>
+        """
+        sequences, coordinates = _parser.parse_printed_alignment(lines)
+        shape = coordinates.shape
+        coordinates = np.frombuffer(coordinates, int)
+        coordinates.shape = shape
+        return sequences, coordinates
 
     def __init__(self, sequences, coordinates=None):
         """Initialize a new Alignment object.
@@ -1890,18 +1918,22 @@ class Alignment:
                 raise TypeError(
                     "second index must be an integer, slice, or iterable of integers"
                 ) from None
+            line = line.encode()
             lines.append(line)
-            line = line.replace("-", "")
-            s = s.__class__(line)
+        seqdata, coordinates = self.parse_printed_alignment(lines)
+        for i, sequence in enumerate(sequences):
+            line = seqdata[i]
             try:
-                sequence.seq  # stupid SeqRecord
+                s = sequence.seq
             except AttributeError:
-                sequence = s
-            else:
+                if isinstance(sequence, str):  # str
+                    sequence = line.decode()
+                else:
+                    sequence = sequence.__class__(line)  # Seq, MutableSeq
+            else:  # SeqRecord
                 sequence = copy.deepcopy(sequence)
-                sequence.seq = s
+                sequence.seq = s.__class__(line)
             sequences[i] = sequence
-        coordinates = self.infer_coordinates(lines)
         alignment = Alignment(sequences, coordinates)
         try:
             column_annotations = self.column_annotations

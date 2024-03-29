@@ -269,11 +269,12 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
         lines = []
         for seq in seqs:
             record = seq.to_seqrecord()
-            lines.append(str(record.seq))
-            record.seq = record.seq.replace("-", "")
+            lines.append(bytes(record.seq))
             records.append(record)
         if lines:
-            coordinates = Alignment.infer_coordinates(lines)
+            sequences, coordinates = Alignment.parse_printed_alignment(lines)
+            for sequence, record in zip(sequences, records):
+                record.seq = Seq(sequence)
         else:
             coordinates = None
         return Alignment(records, coordinates)
