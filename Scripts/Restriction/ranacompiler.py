@@ -455,7 +455,9 @@ class DictionaryBuilder:
                 enzyme_id = enzyme_id_dict[name]
             except KeyError:
                 # be more specific, this is a warning it just omits the REBASE URL
-                print(f"WARNING : Could not find REBASE enzyme ID for {name}: omitting url")
+                print(
+                    f"WARNING : Could not find REBASE enzyme ID for {name}: omitting url"
+                )
                 enzyme_id = None
             cls = newenzyme(name, enzyme_id)
             #
@@ -513,13 +515,16 @@ class DictionaryBuilder:
         #
         print("\nThe new database contains %i enzymes.\n" % len(classdict))
         #
-        #   the dictionaries are done. Build the file
+        #   the dictionaries are done. Build the Python dict code file
         #
         # update = config.updatefolder
 
         update = os.getcwd()
         with open(os.path.join(update, "Restriction_Dictionary.py"), "w") as results:
-            print("Writing the dictionary containing the new Restriction classes ... ", end='')
+            print(
+                "Writing the dictionary containing the new Restriction classes ... ",
+                end="",
+            )
             results.write(start)
             results.write("rest_dict = {}\n")
             results.write("\n")
@@ -532,7 +537,7 @@ class DictionaryBuilder:
                     )
                 results.write("}\n\n")
             print("OK.")
-            print("Writing the dictionary containing the suppliers data ... ", end='')
+            print("Writing the dictionary containing the suppliers data ... ", end="")
             results.write("\n")
             results.write("# Turn black code style off\n# fmt: off\n")
             results.write("\n")
@@ -544,7 +549,9 @@ class DictionaryBuilder:
                     results.write("    %s,\n" % double_quote_repr(value))
                 results.write(")\n\n")
             print("OK.")
-            print("Writing the dictionary containing the Restriction types ... ", end='')
+            print(
+                "Writing the dictionary containing the Restriction types ... ", end=""
+            )
             results.write("\n")
             results.write("typedict = {}\n")
             results.write("\n")
@@ -558,7 +565,6 @@ class DictionaryBuilder:
 
     def install_dict(self):
         """Install the newly created dictionary in the site-packages folder.
-
         May need super user privilege on some architectures.
         """
         print("\n " + "*" * 78 + " \n")
@@ -992,13 +998,17 @@ class DictionaryBuilder:
                         # this error happens when line is an older format or without suppliers, append the two missing fields ..
                         line.append("")
                         line.append("")
-                        #raise TypeError
+                        # raise TypeError
                 oldblock = block
                 i2 += 1
                 try:
                     # check for ? in the enzyme line and omit entry as not defined
                     if "?" in line:
-                        print("ERROR   : Not defined cleavage for Enzyme: ",line[0]," omitting entry" )
+                        print(
+                            "ERROR   : Not defined cleavage for Enzyme: ",
+                            line[0],
+                            " omitting entry",
+                        )
                         continue
                     line = self.parseline(line)
                 except OverhangError:  # overhang error
