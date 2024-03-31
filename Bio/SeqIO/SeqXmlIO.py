@@ -470,6 +470,7 @@ class SeqXmlIterator(SequenceIterator):
                     raise ValueError("Empty file.")
                 else:
                     raise ValueError("XML file contains no data.")
+            print("**** (A) FEEDING", text)
             parser.feed(text)
             seqXMLversion = content_handler.seqXMLversion
             if seqXMLversion is not None:
@@ -497,6 +498,7 @@ class SeqXmlIterator(SequenceIterator):
             text = handle.read(BLOCK)
             if not text:
                 break
+            print("**** (B) FEEDING", text)
             parser.feed(text)
         # We have reached the end of the XML file;
         # send out the remaining records
