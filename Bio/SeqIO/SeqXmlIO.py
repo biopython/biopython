@@ -442,7 +442,7 @@ class SeqXmlIterator(SequenceIterator):
     """
 
     # Small block size can be a problem with libexpat 2.6.0 onwards:
-    BLOCK = 4096
+    BLOCK = 1024
 
     def __init__(self, stream_or_path, namespace=None):
         """Create the object and initialize the XML parser."""
@@ -498,11 +498,12 @@ class SeqXmlIterator(SequenceIterator):
             if not text:
                 break
             parser.feed(text)
+        # Closing the parser ensures that all XML data fed into it are processed
+        parser.close()
         # We have reached the end of the XML file;
         # send out the remaining records
         yield from records
         records.clear()
-        parser.close()
 
 
 class SeqXmlWriter(SequenceWriter):
