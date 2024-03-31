@@ -40,7 +40,7 @@ class ContentHandler(handler.ContentHandler):
         self.startElementNS = None
         self.data = None
         self.records = []
-        self.text_received = "NOTHING YET"
+        self.text_received = b"NOTHING YET"
 
     def startDocument(self):
         """Set XML handlers when an XML declaration is found."""
@@ -397,7 +397,7 @@ class ContentHandler(handler.ContentHandler):
         try:
             record = self.records[-1]
         except IndexError:
-            raise ValueError("*** TEXT RECEIVED: " + self.text_received)
+            raise ValueError("*** TEXT RECEIVED: " + str(self.text_received))
         if property_name == "molecule_type":
             # At this point, record.annotations["molecule_type"] is either
             # "DNA", "RNA", or "protein"; property_value may be a more detailed
