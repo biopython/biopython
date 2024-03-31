@@ -393,7 +393,10 @@ class ContentHandler(handler.ContentHandler):
         # The attribute "name" is required:
         if property_name is None:
             raise ValueError("Failed to find name for property element")
-        record = self.records[-1]
+        try:
+            record = self.records[-1]
+        except IndexError:
+            raise ValueError("*** TEXT RECEIVED: " + self.text_received)
         if property_name == "molecule_type":
             # At this point, record.annotations["molecule_type"] is either
             # "DNA", "RNA", or "protein"; property_value may be a more detailed
@@ -470,7 +473,7 @@ class SeqXmlIterator(SequenceIterator):
                     raise ValueError("Empty file.")
                 else:
                     raise ValueError("XML file contains no data.")
-            print("**** (A) FEEDING", text)
+            self.text_received = text
             parser.feed(text)
             seqXMLversion = content_handler.seqXMLversion
             if seqXMLversion is not None:
@@ -498,7 +501,7 @@ class SeqXmlIterator(SequenceIterator):
             text = handle.read(BLOCK)
             if not text:
                 break
-            print("**** (B) FEEDING", text)
+            self.text_received = text
             parser.feed(text)
         # We have reached the end of the XML file;
         # send out the remaining records
