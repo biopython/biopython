@@ -40,7 +40,6 @@ class ContentHandler(handler.ContentHandler):
         self.startElementNS = None
         self.data = None
         self.records = []
-        self.text_received = b"NOTHING YET"
 
     def startDocument(self):
         """Set XML handlers when an XML declaration is found."""
@@ -394,10 +393,7 @@ class ContentHandler(handler.ContentHandler):
         # The attribute "name" is required:
         if property_name is None:
             raise ValueError("Failed to find name for property element")
-        try:
-            record = self.records[-1]
-        except IndexError:
-            raise ValueError("*** TEXT RECEIVED: " + str(self.text_received))
+        record = self.records[-1]
         if property_name == "molecule_type":
             # At this point, record.annotations["molecule_type"] is either
             # "DNA", "RNA", or "protein"; property_value may be a more detailed
@@ -474,7 +470,6 @@ class SeqXmlIterator(SequenceIterator):
                     raise ValueError("Empty file.")
                 else:
                     raise ValueError("XML file contains no data.")
-            content_handler.text_received = text
             parser.feed(text)
             seqXMLversion = content_handler.seqXMLversion
             if seqXMLversion is not None:
@@ -502,13 +497,13 @@ class SeqXmlIterator(SequenceIterator):
             text = handle.read(BLOCK)
             if not text:
                 break
-            content_handler.text_received = text
             parser.feed(text)
+        # Closing the parser ensures that all XML data fed into it are processed
+        parser.close()
         # We have reached the end of the XML file;
         # send out the remaining records
         yield from records
         records.clear()
-        parser.close()
 
 
 class SeqXmlWriter(SequenceWriter):
