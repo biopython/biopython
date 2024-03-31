@@ -40,6 +40,7 @@ class ContentHandler(handler.ContentHandler):
         self.startElementNS = None
         self.data = None
         self.records = []
+        self.text_received = "NOTHING YET"
 
     def startDocument(self):
         """Set XML handlers when an XML declaration is found."""
@@ -473,7 +474,7 @@ class SeqXmlIterator(SequenceIterator):
                     raise ValueError("Empty file.")
                 else:
                     raise ValueError("XML file contains no data.")
-            self.text_received = text
+            content_handler.text_received = text
             parser.feed(text)
             seqXMLversion = content_handler.seqXMLversion
             if seqXMLversion is not None:
@@ -501,7 +502,7 @@ class SeqXmlIterator(SequenceIterator):
             text = handle.read(BLOCK)
             if not text:
                 break
-            self.text_received = text
+            content_handler.text_received = text
             parser.feed(text)
         # We have reached the end of the XML file;
         # send out the remaining records
