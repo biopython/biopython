@@ -8583,25 +8583,25 @@ gi|146197       480 STLQKLHRNRIWYLDILFSNDLVNNE 506
             written_records = Blast.parse(stream)
             self.check_xml_2222_blastx_001(written_records)
 
-    def test_xml_2900_blastx_001_parser(self):
-        """Parsing BLASTX 2.9.0+ (xml_2900_blastx_001.xml)."""
-        filename = "xml_2900_blastx_001.xml"
+    def test_xml_21500_blastx_001_parser(self):
+        """Parsing BLASTX 2.15.0+ (xml_21500_blastx_001.xml)."""
+        filename = "xml_21500_blastx_001.xml"
         path = os.path.join("Blast", filename)
         with open(path, "rb") as stream:
             records = Blast.parse(stream)
-            self.check_xml_2900_blastx_001_records(records)
+            self.check_xml_21500_blastx_001_records(records)
         with Blast.parse(path) as records:
-            self.check_xml_2900_blastx_001_records(records)
+            self.check_xml_21500_blastx_001_records(records)
         with open(path, "rb") as stream:
             record = Blast.read(stream)
-        self.check_xml_2900_blastx_001_record(record, xml2=False)
+        self.check_xml_21500_blastx_001_record(record, xml2=False)
         record = Blast.read(path)
-        self.check_xml_2900_blastx_001_record(record, xml2=False)
+        self.check_xml_21500_blastx_001_record(record, xml2=False)
         with Blast.parse(path) as records:
             self.assertEqual(
                 str(records),
                 """\
-Program: BLASTX 2.9.0+
+Program: BLASTX 2.15.0+
      db: nr
 
   Query: AI021773.1 (length=365)
@@ -8611,21 +8611,21 @@ Program: BLASTX 2.9.0+
    Hits: ----  -----  ----------------------------------------------------------
             #  # HSP  ID + description
          ----  -----  ----------------------------------------------------------
-            0      1  gi|1530504495|emb|VDM03167.1|  unnamed protein product,...
-            1      1  gi|510859078|gb|EPB74633.1|  hypothetical protein ANCCE...
-            2      1  gi|684409690|ref|XP_009175831.1|  hypothetical protein ...
-            3      1  gi|449710331|gb|EMD49430.1|  actin, putative, partial [...
-            4      1  gi|257215766|emb|CAX83035.1|  Actin-2, partial [Schisto...
-            5      1  gi|1535393712|emb|VDP83060.1|  unnamed protein product,...
-            6      1  gi|312773|emb|CAA50205.1|  actin, partial [Entamoeba hi...
-            7      1  gi|1530341495|emb|VDN44756.1|  unnamed protein product,...
-            8      1  gi|1524877828|ref|XP_027046469.1|  actin-1, partial [Po...
-            9      1  gi|1524877860|ref|XP_027046487.1|  actin-1-like [Pocill...""",
+            0      1  emb|VDM03167.1|  unnamed protein product, partial [Schi...
+            1      1  gb|EPB74633.1|  hypothetical protein ANCCEY_06263 [Ancy...
+            2      1  ref|XP_009175831.1|  hypothetical protein T265_11027 [O...
+            3      1  gb|EMD49430.1|  actin, putative, partial [Entamoeba his...
+            4      1  emb|CAX83035.1|  Actin-2, partial [Schistosoma japonicum]
+            5      1  emb|VDP83060.1|  unnamed protein product, partial [Echi...
+            6      1  emb|CAA50205.1|  actin, partial [Entamoeba histolytica]
+            7      1  emb|VDN44756.1|  unnamed protein product, partial [Dibo...
+            8      1  ref|XP_027046469.1|  actin-1, partial [Pocillopora dami...
+            9      1  ref|XP_027046487.1|  actin-1-like [Pocillopora damicornis]""",
             )
 
-    def check_xml_2900_blastx_001_records(self, records, xml2=False):
+    def check_xml_21500_blastx_001_records(self, records, xml2=False):
         self.assertEqual(records.program, "blastx")
-        self.assertEqual(records.version, "BLASTX 2.9.0+")
+        self.assertEqual(records.version, "BLASTX 2.15.0+")
         self.assertEqual(
             records.reference,
             'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
@@ -8653,9 +8653,9 @@ Program: BLASTX 2.9.0+
             self.assertEqual(records.param["query-gencode"], 1)
         record = next(records)
         self.assertRaises(StopIteration, next, records)
-        self.check_xml_2900_blastx_001_record(record, xml2)
+        self.check_xml_21500_blastx_001_record(record, xml2)
 
-    def check_xml_2900_blastx_001_record(self, record, xml2):
+    def check_xml_21500_blastx_001_record(self, record, xml2):
         if xml2 is False:
             self.assertEqual(record.num, 1)
         self.assertIsInstance(record.query, SeqRecord)
@@ -8667,14 +8667,11 @@ Program: BLASTX 2.9.0+
         self.assertEqual(repr(record.query.seq), "Seq(None, length=365)")
 
         self.assertEqual(len(record.stat), 7)
+        self.assertEqual(record.stat["db-num"], 718367499)
+        self.assertEqual(record.stat["db-len"], 277248733561)
         if xml2 is True:
-            self.assertEqual(record.stat["db-num"], 195483068)
-        else:
-            self.assertEqual(record.stat["db-num"], 197469652)
-        self.assertEqual(record.stat["db-len"], 71133367251)
-        if xml2 is True:
-            self.assertEqual(record.stat["hsp-len"], 88)
-            self.assertEqual(record.stat["eff-space"], 1797401858175)
+            self.assertEqual(record.stat["hsp-len"], 89)
+            self.assertEqual(record.stat["eff-space"], 6826048836800)
         else:
             self.assertEqual(record.stat["hsp-len"], 0)
             self.assertAlmostEqual(record.stat["eff-space"], 0.0)
@@ -8685,7 +8682,7 @@ Program: BLASTX 2.9.0+
         hit = record[0]
         self.assertEqual(hit.num, 1)
         self.assertIsInstance(hit.target, SeqRecord)
-        self.assertEqual(hit.target.id, "gi|1530504495|emb|VDM03167.1|")
+        self.assertEqual(hit.target.id, "emb|VDM03167.1|")
         self.assertEqual(hit.target.name, "VDM03167")
         self.assertEqual(
             hit.target.description,
@@ -8733,7 +8730,7 @@ Program: BLASTX 2.9.0+
             repr(hsp.target.seq),
             "Seq({0: 'MADEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSY...LTE'}, length=132)",
         )
-        self.assertEqual(hsp.target.id, "gi|1530504495|emb|VDM03167.1|")
+        self.assertEqual(hsp.target.id, "emb|VDM03167.1|")
         self.assertEqual(hsp.target.name, "VDM03167")
         self.assertEqual(
             hsp.target.description,
@@ -8744,6 +8741,7 @@ Program: BLASTX 2.9.0+
             hsp.annotations["midline"],
             "MADEEVQALVVDNGSGMCKAG       ++  P               G KDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE",
         )
+        self.maxDiff = None
         self.assertEqual(
             str(hsp),
             """\
@@ -8751,17 +8749,17 @@ Query : AI021773.1 Length: 108 Strand: Plus
         MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma
         mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA,
         complete cds, mRNA sequence
-Target: gi|1530504495|emb|VDM03167.1| Length: 132 Strand: Plus
+Target: emb|VDM03167.1| Length: 132 Strand: Plus
         unnamed protein product, partial [Schistocephalus solidus]
 
-Score:161 bits(408), Expect:8e-49,
+Score:161 bits(408), Expect:3e-48,
 Identities:81/108(75%),  Positives:83/108(77%),  Gaps:0.108(0%)
 
-gi|153050         0 MADEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
+emb|VDM03         0 MADEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
                   0 |||||||||||||||||||||...........|...............|.||||||||||
 AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
 
-gi|153050        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+emb|VDM03        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
                  60 |||||||||||||||||||||||||||||||||||||||||||||||| 108
 AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
 
@@ -8770,7 +8768,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
         hit = record[1]
         self.assertEqual(hit.num, 2)
         self.assertIsInstance(hit.target, SeqRecord)
-        self.assertEqual(hit.target.id, "gi|510859078|gb|EPB74633.1|")
+        self.assertEqual(hit.target.id, "gb|EPB74633.1|")
         self.assertEqual(hit.target.name, "EPB74633")
         self.assertEqual(
             hit.target.description,
@@ -8818,7 +8816,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
             repr(hsp.target.seq),
             "Seq({0: 'MCDDDVAALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSY...LKP'}, length=119)",
         )
-        self.assertEqual(hsp.target.id, "gi|510859078|gb|EPB74633.1|")
+        self.assertEqual(hsp.target.id, "gb|EPB74633.1|")
         self.assertEqual(hsp.target.name, "EPB74633")
         self.assertEqual(
             hsp.target.description,
@@ -8836,17 +8834,17 @@ Query : AI021773.1 Length: 115 Strand: Plus
         MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma
         mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA,
         complete cds, mRNA sequence
-Target: gi|510859078|gb|EPB74633.1| Length: 119 Strand: Plus
+Target: gb|EPB74633.1| Length: 119 Strand: Plus
         hypothetical protein ANCCEY_06263 [Ancylostoma ceylanicum]
 
-Score:160 bits(405), Expect:1e-48,
+Score:160 bits(405), Expect:5e-48,
 Identities:81/115(70%),  Positives:85/115(74%),  Gaps:0.115(0%)
 
-gi|510859         0 MCDDDVAALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
+gb|EPB746         0 MCDDDVAALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
                   0 |.|..|.||||||||||||||...........|...............|.||||||||||
 AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
 
-gi|510859        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTEAHSILKP 115
+gb|EPB746        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTEAHSILKP 115
                  60 ||||||||||||||||||||||||||||||||||||||||||||||||.|.|.|| 115
 AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTELHCIRKP 115
 
@@ -8856,7 +8854,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTELHCIRKP 115
         self.assertEqual(hit.num, 3)
         target = hit.target
         self.assertIsInstance(target, SeqRecord)
-        self.assertEqual(target.id, "gi|684409690|ref|XP_009175831.1|")
+        self.assertEqual(target.id, "ref|XP_009175831.1|")
         self.assertEqual(target.name, "XP_009175831")
         seq = target.seq
         self.assertEqual(repr(seq), "Seq(None, length=246)")
@@ -8869,7 +8867,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTELHCIRKP 115
             self.assertEqual(len(hit.targets), 2)
             target = hit.targets[1]
             self.assertIsInstance(target, SeqRecord)
-            self.assertEqual(target.id, "gi|663044098|gb|KER20427.1|")
+            self.assertEqual(target.id, "gb|KER20427.1|")
             self.assertEqual(target.name, "KER20427")
             self.assertIs(target.seq, seq)
             self.assertEqual(
@@ -8879,7 +8877,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTELHCIRKP 115
         else:
             self.assertEqual(
                 target.description,
-                "hypothetical protein T265_11027 [Opisthorchis viverrini] >gi|663044098|gb|KER20427.1| hypothetical protein T265_11027 [Opisthorchis viverrini]",
+                "hypothetical protein T265_11027 [Opisthorchis viverrini] >gb|KER20427.1| hypothetical protein T265_11027 [Opisthorchis viverrini]",
             )
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
@@ -8939,17 +8937,17 @@ Query : AI021773.1 Length: 108 Strand: Plus
         MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma
         mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA,
         complete cds, mRNA sequence
-Target: gi|684409690|ref|XP_009175831.1| Length: 246 Strand: Plus
+Target: ref|XP_009175831.1| Length: 246 Strand: Plus
         hypothetical protein T265_11027 [Opisthorchis viverrini]
 
-Score:163 bits(413), Expect:4e-48,
+Score:163 bits(413), Expect:2e-47,
 Identities:81/108(75%),  Positives:83/108(77%),  Gaps:0.108(0%)
 
-gi|684409         0 MADEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
+ref|XP_00         0 MADEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
                   0 |||||||||||||||||||||...........|...............|.||||||||||
 AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
 
-gi|684409        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+ref|XP_00        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
                  60 |||||||||||||||||||||||||||||||||||||||||||||||| 108
 AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
 
@@ -8963,19 +8961,18 @@ Query : AI021773.1 Length: 108 Strand: Plus
         MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma
         mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA,
         complete cds, mRNA sequence
-Target: gi|684409690|ref|XP_009175831.1| Length: 246 Strand: Plus
+Target: ref|XP_009175831.1| Length: 246 Strand: Plus
+        hypothetical protein T265_11027 [Opisthorchis viverrini] >gb|KER20427.1|
         hypothetical protein T265_11027 [Opisthorchis viverrini]
-        >gi|663044098|gb|KER20427.1| hypothetical protein T265_11027
-        [Opisthorchis viverrini]
 
-Score:163 bits(413), Expect:4e-48,
+Score:163 bits(413), Expect:2e-47,
 Identities:81/108(75%),  Positives:83/108(77%),  Gaps:0.108(0%)
 
-gi|684409         0 MADEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
+ref|XP_00         0 MADEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
                   0 |||||||||||||||||||||...........|...............|.||||||||||
 AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
 
-gi|684409        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+ref|XP_00        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
                  60 |||||||||||||||||||||||||||||||||||||||||||||||| 108
 AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
 
@@ -8984,7 +8981,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
         hit = record[3]
         self.assertEqual(hit.num, 4)
         self.assertIsInstance(hit.target, SeqRecord)
-        self.assertEqual(hit.target.id, "gi|449710331|gb|EMD49430.1|")
+        self.assertEqual(hit.target.id, "gb|EMD49430.1|")
         self.assertEqual(hit.target.name, "EMD49430")
         self.assertEqual(
             hit.target.description,
@@ -9032,7 +9029,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
             repr(hsp.target.seq),
             "Seq({0: 'MGDEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHVSVMAGMGQKDAY...LTE'}, length=124)",
         )
-        self.assertEqual(hsp.target.id, "gi|449710331|gb|EMD49430.1|")
+        self.assertEqual(hsp.target.id, "gb|EMD49430.1|")
         self.assertEqual(hsp.target.name, "EMD49430")
         self.assertEqual(
             hsp.target.description,
@@ -9050,17 +9047,17 @@ Query : AI021773.1 Length: 108 Strand: Plus
         MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma
         mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA,
         complete cds, mRNA sequence
-Target: gi|449710331|gb|EMD49430.1| Length: 124 Strand: Plus
+Target: gb|EMD49430.1| Length: 124 Strand: Plus
         actin, putative, partial [Entamoeba histolytica KU27]
 
-Score:159 bits(401), Expect:9e-48,
+Score:159 bits(401), Expect:3e-47,
 Identities:78/108(72%),  Positives:81/108(75%),  Gaps:0.108(0%)
 
-gi|449710         0 MGDEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHVSVMAGMGQKDAYVGDEAQ
+gb|EMD494         0 MGDEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHVSVMAGMGQKDAYVGDEAQ
                   0 |.|||||||||||||||||||...........|...............|.||.|||||||
 AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
 
-gi|449710        60 SKRGILTLKYPIEHGIVNNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+gb|EMD494        60 SKRGILTLKYPIEHGIVNNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
                  60 |||||||||||||||||.|||||||||||||||||||||||||||||| 108
 AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
 
@@ -9069,7 +9066,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
         hit = record[4]
         self.assertEqual(hit.num, 5)
         self.assertIsInstance(hit.target, SeqRecord)
-        self.assertEqual(hit.target.id, "gi|257215766|emb|CAX83035.1|")
+        self.assertEqual(hit.target.id, "emb|CAX83035.1|")
         self.assertEqual(hit.target.name, "CAX83035")
         self.assertEqual(
             hit.target.description, "Actin-2, partial [Schistosoma japonicum]"
@@ -9116,7 +9113,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
             repr(hsp.target.seq),
             "Seq({0: 'MADEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSY...LTE'}, length=252)",
         )
-        self.assertEqual(hsp.target.id, "gi|257215766|emb|CAX83035.1|")
+        self.assertEqual(hsp.target.id, "emb|CAX83035.1|")
         self.assertEqual(hsp.target.name, "CAX83035")
         self.assertEqual(
             hsp.target.description, "Actin-2, partial [Schistosoma japonicum]"
@@ -9133,17 +9130,17 @@ Query : AI021773.1 Length: 108 Strand: Plus
         MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma
         mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA,
         complete cds, mRNA sequence
-Target: gi|257215766|emb|CAX83035.1| Length: 252 Strand: Plus
+Target: emb|CAX83035.1| Length: 252 Strand: Plus
         Actin-2, partial [Schistosoma japonicum]
 
-Score:162 bits(411), Expect:1e-47,
+Score:162 bits(411), Expect:4e-47,
 Identities:81/108(75%),  Positives:83/108(77%),  Gaps:0.108(0%)
 
-gi|257215         0 MADEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
+emb|CAX83         0 MADEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
                   0 |||||||||||||||||||||...........|...............|.||||||||||
 AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
 
-gi|257215        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+emb|CAX83        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
                  60 |||||||||||||||||||||||||||||||||||||||||||||||| 108
 AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
 
@@ -9152,7 +9149,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
         hit = record[5]
         self.assertEqual(hit.num, 6)
         self.assertIsInstance(hit.target, SeqRecord)
-        self.assertEqual(hit.target.id, "gi|1535393712|emb|VDP83060.1|")
+        self.assertEqual(hit.target.id, "emb|VDP83060.1|")
         self.assertEqual(hit.target.name, "VDP83060")
         self.assertEqual(
             hit.target.description,
@@ -9200,7 +9197,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
             repr(hsp.target.seq),
             "Seq({0: 'MADDEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSY...LTE'}, length=209)",
         )
-        self.assertEqual(hsp.target.id, "gi|1535393712|emb|VDP83060.1|")
+        self.assertEqual(hsp.target.id, "emb|VDP83060.1|")
         self.assertEqual(hsp.target.name, "VDP83060")
         self.assertEqual(
             hsp.target.description,
@@ -9218,17 +9215,17 @@ Query : AI021773.1 Length: 108 Strand: Plus
         MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma
         mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA,
         complete cds, mRNA sequence
-Target: gi|1535393712|emb|VDP83060.1| Length: 209 Strand: Plus
+Target: emb|VDP83060.1| Length: 209 Strand: Plus
         unnamed protein product, partial [Echinostoma caproni]
 
-Score:161 bits(407), Expect:1e-47,
+Score:161 bits(407), Expect:4e-47,
 Identities:80/108(74%),  Positives:83/108(77%),  Gaps:0.108(0%)
 
-gi|153539         0 MADDEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
+emb|VDP83         0 MADDEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
                   0 |||.|||||||||||||||||...........|...............|.||||||||||
 AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
 
-gi|153539        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+emb|VDP83        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
                  60 |||||||||||||||||||||||||||||||||||||||||||||||| 108
 AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
 
@@ -9237,7 +9234,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
         hit = record[6]
         self.assertEqual(hit.num, 7)
         self.assertIsInstance(hit.target, SeqRecord)
-        self.assertEqual(hit.target.id, "gi|312773|emb|CAA50205.1|")
+        self.assertEqual(hit.target.id, "emb|CAA50205.1|")
         self.assertEqual(hit.target.name, "CAA50205")
         self.assertEqual(
             hit.target.description, "actin, partial [Entamoeba histolytica]"
@@ -9284,7 +9281,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
             repr(hsp.target.seq),
             "Seq({0: 'MGDEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHVSVMAGMGQKDAY...LTE'}, length=137)",
         )
-        self.assertEqual(hsp.target.id, "gi|312773|emb|CAA50205.1|")
+        self.assertEqual(hsp.target.id, "emb|CAA50205.1|")
         self.assertEqual(hsp.target.name, "CAA50205")
         self.assertEqual(
             hsp.target.description, "actin, partial [Entamoeba histolytica]"
@@ -9301,17 +9298,17 @@ Query : AI021773.1 Length: 108 Strand: Plus
         MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma
         mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA,
         complete cds, mRNA sequence
-Target: gi|312773|emb|CAA50205.1| Length: 137 Strand: Plus
+Target: emb|CAA50205.1| Length: 137 Strand: Plus
         actin, partial [Entamoeba histolytica]
 
-Score:159 bits(401), Expect:1e-47,
+Score:159 bits(401), Expect:5e-47,
 Identities:78/108(72%),  Positives:81/108(75%),  Gaps:0.108(0%)
 
-gi|312773         0 MGDEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHVSVMAGMGQKDAYVGDEAQ
+emb|CAA50         0 MGDEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHVSVMAGMGQKDAYVGDEAQ
                   0 |.|||||||||||||||||||...........|...............|.||.|||||||
 AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
 
-gi|312773        60 SKRGILTLKYPIEHGIVNNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+emb|CAA50        60 SKRGILTLKYPIEHGIVNNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
                  60 |||||||||||||||||.|||||||||||||||||||||||||||||| 108
 AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
 
@@ -9320,7 +9317,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
         hit = record[7]
         self.assertEqual(hit.num, 8)
         self.assertIsInstance(hit.target, SeqRecord)
-        self.assertEqual(hit.target.id, "gi|1530341495|emb|VDN44756.1|")
+        self.assertEqual(hit.target.id, "emb|VDN44756.1|")
         self.assertEqual(hit.target.name, "VDN44756")
         self.assertEqual(
             hit.target.description,
@@ -9368,7 +9365,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
             repr(hsp.target.seq),
             "Seq({0: 'MGDEDVQALVIDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSY...LTE'}, length=145)",
         )
-        self.assertEqual(hsp.target.id, "gi|1530341495|emb|VDN44756.1|")
+        self.assertEqual(hsp.target.id, "emb|VDN44756.1|")
         self.assertEqual(hsp.target.name, "VDN44756")
         self.assertEqual(
             hsp.target.description,
@@ -9386,17 +9383,17 @@ Query : AI021773.1 Length: 108 Strand: Plus
         MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma
         mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA,
         complete cds, mRNA sequence
-Target: gi|1530341495|emb|VDN44756.1| Length: 145 Strand: Plus
+Target: emb|VDN44756.1| Length: 145 Strand: Plus
         unnamed protein product, partial [Dibothriocephalus latus]
 
-Score:158 bits(400), Expect:2e-47,
+Score:158 bits(400), Expect:7e-47,
 Identities:78/108(72%),  Positives:82/108(76%),  Gaps:0.108(0%)
 
-gi|153034         0 MGDEDVQALVIDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
+emb|VDN44         0 MGDEDVQALVIDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
                   0 |.||.|||||.||||||||||...........|...............|.||||||||||
 AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
 
-gi|153034        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+emb|VDN44        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
                  60 |||||||||||||||||||||||||||||||||||||||||||||||| 108
 AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
 
@@ -9405,7 +9402,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
         hit = record[8]
         self.assertEqual(hit.num, 9)
         self.assertIsInstance(hit.target, SeqRecord)
-        self.assertEqual(hit.target.id, "gi|1524877828|ref|XP_027046469.1|")
+        self.assertEqual(hit.target.id, "ref|XP_027046469.1|")
         self.assertEqual(hit.target.name, "XP_027046469")
         self.assertEqual(
             hit.target.description, "actin-1, partial [Pocillopora damicornis]"
@@ -9452,7 +9449,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
             repr(hsp.target.seq),
             "Seq({0: 'MADEEVAALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSY...LTE'}, length=122)",
         )
-        self.assertEqual(hsp.target.id, "gi|1524877828|ref|XP_027046469.1|")
+        self.assertEqual(hsp.target.id, "ref|XP_027046469.1|")
         self.assertEqual(hsp.target.name, "XP_027046469")
         self.assertEqual(
             hsp.target.description, "actin-1, partial [Pocillopora damicornis]"
@@ -9469,17 +9466,17 @@ Query : AI021773.1 Length: 108 Strand: Plus
         MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma
         mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA,
         complete cds, mRNA sequence
-Target: gi|1524877828|ref|XP_027046469.1| Length: 122 Strand: Plus
+Target: ref|XP_027046469.1| Length: 122 Strand: Plus
         actin-1, partial [Pocillopora damicornis]
 
-Score:157 bits(398), Expect:2e-47,
+Score:157 bits(398), Expect:7e-47,
 Identities:78/108(72%),  Positives:82/108(76%),  Gaps:0.108(0%)
 
-gi|152487         0 MADEEVAALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
+ref|XP_02         0 MADEEVAALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
                   0 ||||||.||||||||||||||...........|...............|.||||||||||
 AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
 
-gi|152487        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRIAPEEHPILLTE 108
+ref|XP_02        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRIAPEEHPILLTE 108
                  60 ||||||||||||||||||||||||||||||||||||.||||||.|||| 108
 AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
 
@@ -9488,7 +9485,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
         hit = record[9]
         self.assertEqual(hit.num, 10)
         self.assertIsInstance(hit.target, SeqRecord)
-        self.assertEqual(hit.target.id, "gi|1524877860|ref|XP_027046487.1|")
+        self.assertEqual(hit.target.id, "ref|XP_027046487.1|")
         self.assertEqual(hit.target.name, "XP_027046487")
         self.assertEqual(
             hit.target.description, "actin-1-like [Pocillopora damicornis]"
@@ -9535,7 +9532,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
             repr(hsp.target.seq),
             "Seq({0: 'MADEDVAALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSY...LTE'}, length=134)",
         )
-        self.assertEqual(hsp.target.id, "gi|1524877860|ref|XP_027046487.1|")
+        self.assertEqual(hsp.target.id, "ref|XP_027046487.1|")
         self.assertEqual(hsp.target.name, "XP_027046487")
         self.assertEqual(
             hsp.target.description, "actin-1-like [Pocillopora damicornis]"
@@ -9552,41 +9549,41 @@ Query : AI021773.1 Length: 108 Strand: Plus
         MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma
         mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA,
         complete cds, mRNA sequence
-Target: gi|1524877860|ref|XP_027046487.1| Length: 134 Strand: Plus
+Target: ref|XP_027046487.1| Length: 134 Strand: Plus
         actin-1-like [Pocillopora damicornis]
 
-Score:158 bits(399), Expect:2e-47,
+Score:158 bits(399), Expect:9e-47,
 Identities:79/108(73%),  Positives:82/108(76%),  Gaps:0.108(0%)
 
-gi|152487         0 MADEDVAALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
+ref|XP_02         0 MADEDVAALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
                   0 ||||.|.||||||||||||||...........|...............|.||||||||||
 AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
 
-gi|152487        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+ref|XP_02        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
                  60 |||||||||||||||||||||||||||||||||||||||||||||||| 108
 AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
 
 """,
         )
 
-    def test_xml_2900_blastx_001_v2_parser(self):
-        """Parsing BLASTX 2.9.0+ (xml_2900_blastx_001_v2.xml)."""
-        filename = "xml_2900_blastx_001_v2.xml"
+    def test_xml2_21500_blastx_001_parser(self):
+        """Parsing BLASTX 2.15.0+ (xml2_21500_blastx_001.xml)."""
+        filename = "xml2_21500_blastx_001.xml"
         path = os.path.join("Blast", filename)
         with open(path, "rb") as stream:
             records = Blast.parse(stream)
-            self.check_xml_2900_blastx_001_records(records, xml2=True)
+            self.check_xml_21500_blastx_001_records(records, xml2=True)
         with Blast.parse(path) as records:
-            self.check_xml_2900_blastx_001_records(records, xml2=True)
+            self.check_xml_21500_blastx_001_records(records, xml2=True)
         with open(path, "rb") as stream:
             record = Blast.read(stream)
-        self.check_xml_2900_blastx_001_record(record, xml2=True)
+        self.check_xml_21500_blastx_001_record(record, xml2=True)
         record = Blast.read(path)
-        self.check_xml_2900_blastx_001_record(record, xml2=True)
+        self.check_xml_21500_blastx_001_record(record, xml2=True)
 
-    def test_xml_2900_blastx_001_writer(self):
-        """Writing BLASTX 2.9.0+ (xml_2900_blastx_001.xml)."""
-        filename = "xml_2900_blastx_001.xml"
+    def test_xml_21500_blastx_001_writer(self):
+        """Writing BLASTX 2.9.0+ (xml_21500_blastx_001.xml)."""
+        filename = "xml_21500_blastx_001.xml"
         path = os.path.join("Blast", filename)
         with Blast.parse(path) as records:
             stream = io.BytesIO()
@@ -9594,11 +9591,11 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
             self.assertEqual(n, 1)
             stream.seek(0)
             written_records = Blast.parse(stream)
-            self.check_xml_2900_blastx_001_records(written_records, xml2=False)
+            self.check_xml_21500_blastx_001_records(written_records, xml2=False)
 
-    def test_xml_2900_blastx_001_v2_writer(self):
-        """Writing BLASTX 2.9.0+ XML2 (xml_2900_blastx_001_v2.xml)."""
-        filename = "xml_2900_blastx_001_v2.xml"
+    def test_xml2_21500_blastx_001_writer(self):
+        """Writing BLASTX 2.15.0+ XML2 (xml2_21500_blastx_001.xml)."""
+        filename = "xml2_21500_blastx_001.xml"
         path = os.path.join("Blast", filename)
         with Blast.parse(path) as records:
             stream = io.BytesIO()
@@ -9606,7 +9603,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
             self.assertEqual(n, 1)
             stream.seek(0)
             written_records = Blast.parse(stream)
-            self.check_xml_2900_blastx_001_records(written_records, xml2=True)
+            self.check_xml_21500_blastx_001_records(written_records, xml2=True)
 
 
 class TestTBlastn(unittest.TestCase):
