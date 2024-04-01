@@ -240,12 +240,12 @@ class AlignmentIterator(bigbed.AlignmentIterator):
                 src = words[1].decode()
                 start = int(words[2])
                 size = int(words[3])
-                strand = words[4].decode()
+                strand = words[4]
                 srcSize = int(words[5])
-                text = words[6].decode()
-                for gap_char in ".=_":
-                    text = text.replace(gap_char, "-")
-                aligned_sequences.append(text.encode())
+                text = words[6]
+                for gap_char in (b".", b"=", b"_"):
+                    text = text.replace(gap_char, b"-")
+                aligned_sequences.append(text)
                 seq = Seq(None, length=srcSize)
                 record = SeqRecord(seq, id=src, name="", description="")
                 records.append(record)
@@ -253,13 +253,12 @@ class AlignmentIterator(bigbed.AlignmentIterator):
                 sizes.append(size)
                 strands.append(strand)
             elif line.startswith(b"i "):
-                line = line.decode()
                 words = line.strip().split()
                 assert len(words) == 6
-                assert words[1] == src  # from the previous "s" line
-                leftStatus = words[2]
+                assert words[1].decode() == src  # from the previous "s" line
+                leftStatus = words[2].decode()
                 leftCount = int(words[3])
-                rightStatus = words[4]
+                rightStatus = words[4].decode()
                 rightCount = int(words[5])
                 assert leftStatus in AlignmentIterator.status_characters
                 assert rightStatus in AlignmentIterator.status_characters
@@ -268,20 +267,19 @@ class AlignmentIterator(bigbed.AlignmentIterator):
                 record.annotations["rightStatus"] = rightStatus
                 record.annotations["rightCount"] = rightCount
             elif line.startswith(b"e"):
-                line = line.decode()
                 words = line[1:].split()
                 assert len(words) == 6
-                src = words[0]
+                src = words[0].decode()
                 start = int(words[1])
                 size = int(words[2])
                 strand = words[3]
                 srcSize = int(words[4])
-                status = words[5]
+                status = words[5].decode()
                 assert status in AlignmentIterator.empty_status_characters
                 sequence = Seq(None, length=srcSize)
                 record = SeqRecord(sequence, id=src, name="", description="")
                 end = start + size
-                if strand == "+":
+                if strand == b"+":
                     segment = (start, end)
                 else:
                     segment = (srcSize - start, srcSize - end)
@@ -292,12 +290,11 @@ class AlignmentIterator(bigbed.AlignmentIterator):
                     annotations["empty"] = annotation
                 annotation.append(empty)
             elif line.startswith(b"q "):
-                line = line.decode()
                 words = line.strip().split()
                 assert len(words) == 3
-                assert words[1] == src  # from the previous "s" line
-                value = words[2].replace("-", "")
-                record.annotations["quality"] = value
+                assert words[1].decode() == src  # from the previous "s" line
+                value = words[2].replace(b"-", b"")
+                record.annotations["quality"] = value.decode()
             elif not line.strip():
                 # reached the end of the alignment, but keep reading to be sure
                 continue
@@ -313,7 +310,7 @@ class AlignmentIterator(bigbed.AlignmentIterator):
                 )
             record.seq = Seq({start: sequence}, length=srcSize)
         for record, strand, row in zip(records, strands, coordinates):
-            if strand == "-":
+            if strand == b"-":
                 row[:] = row[-1] - row[0] - row
                 record.seq = record.seq.reverse_complement()
             start = record.seq.defined_ranges[0][0]
