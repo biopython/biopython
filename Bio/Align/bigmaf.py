@@ -18,7 +18,7 @@ import zlib
 
 
 from Bio.Align import Alignment, Alignments
-from Bio.Align import interfaces, bigbed
+from Bio.Align import bigbed, maf
 from Bio.Align.bigbed import AutoSQLTable, Field
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -118,7 +118,7 @@ class AlignmentWriter(bigbed.AlignmentWriter):
         ).write(fixed_alignments)
 
 
-class AlignmentIterator(bigbed.AlignmentIterator):
+class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
     """Alignment iterator for bigMaf files.
 
     The file may contain multiple alignments, which are loaded and returned
@@ -136,9 +136,6 @@ class AlignmentIterator(bigbed.AlignmentIterator):
 
     fmt = "bigMaf"
     mode = "b"
-
-    status_characters = ("C", "I", "N", "n", "M", "T")
-    empty_status_characters = ("C", "I", "M", "n")
 
     def __init__(self, source):
         """Create an AlignmentIterator object.
@@ -198,19 +195,18 @@ class AlignmentIterator(bigbed.AlignmentIterator):
         self.targets[0].id = "%s.%s" % (self.reference, self.targets[0].id)
 
     def _create_alignment(self, chunk):
-        chromId, chromStart, chromEnd, rest = chunk
-        data = rest.replace(b";", b"\n")
+        chromId, chromStart, chromEnd, data = chunk
         records = []
         starts = []
         sizes = []
         strands = []
         aligned_sequences = []
         annotations = {}
-        j = 0
+        j = -1
         while True:
-            i = j
+            i = j + 1
             try:
-                j = data.find(b"\n", i) + 1
+                j = data.find(b";", i)
             except ValueError:
                 line = data[i:]
                 j = i + len(line)
