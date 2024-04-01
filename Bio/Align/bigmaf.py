@@ -15,7 +15,7 @@ See https://genome.ucsc.edu/goldenPath/help/bigMaf.html
 
 import struct
 import zlib
-from io import StringIO
+from io import BytesIO
 
 
 from Bio.Align import Alignment, Alignments
@@ -200,11 +200,11 @@ class AlignmentIterator(bigbed.AlignmentIterator):
 
     def _create_alignment(self, chunk):
         chromId, chromStart, chromEnd, rest = chunk
-        data = rest.replace(b";", b"\n").decode()
-        stream = StringIO()
+        data = rest.replace(b";", b"\n")
+        stream = BytesIO()
         stream.write(data)
         stream.seek(0)
-        aline = next(stream)
+        aline = next(stream).decode()
         records = []
         starts = []
         sizes = []
@@ -225,6 +225,7 @@ class AlignmentIterator(bigbed.AlignmentIterator):
                 raise ValueError("Unknown annotation variable '%s'" % key)
 
         for line in stream:
+            line = line.decode()
             if line.startswith("#"):
                 continue
             elif line.startswith("a"):
