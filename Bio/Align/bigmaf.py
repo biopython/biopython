@@ -200,7 +200,7 @@ class AlignmentIterator(bigbed.AlignmentIterator):
 
     def _create_alignment(self, chunk):
         chromId, chromStart, chromEnd, rest = chunk
-        data = rest.decode().replace(";", "\n")
+        data = rest.replace(b";", b"\n").decode()
         stream = StringIO()
         stream.write(data)
         stream.seek(0)
