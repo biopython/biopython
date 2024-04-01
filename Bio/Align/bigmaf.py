@@ -211,9 +211,10 @@ class AlignmentIterator(bigbed.AlignmentIterator):
         aligned_sequences = []
         annotations = {}
         for line in stream:
-            if line.startswith(b"#"):
+            prefix = line[:1]
+            if prefix == b"#":
                 continue
-            elif line.startswith(b"a"):
+            elif prefix == b"a":
                 words = line[1:].split()
                 for word in words:
                     key, value = word.split(b"=")
@@ -231,7 +232,7 @@ class AlignmentIterator(bigbed.AlignmentIterator):
                             "Unknown annotation variable '%s'" % key.decode()
                         )
                 continue
-            elif line.startswith(b"s "):
+            elif prefix == b"s":
                 words = line.strip().split()
                 if len(words) != 7:
                     raise ValueError(
@@ -252,7 +253,7 @@ class AlignmentIterator(bigbed.AlignmentIterator):
                 starts.append(start)
                 sizes.append(size)
                 strands.append(strand)
-            elif line.startswith(b"i "):
+            elif prefix == b"i":
                 words = line.strip().split()
                 assert len(words) == 6
                 assert words[1].decode() == src  # from the previous "s" line
@@ -266,15 +267,15 @@ class AlignmentIterator(bigbed.AlignmentIterator):
                 record.annotations["leftCount"] = leftCount
                 record.annotations["rightStatus"] = rightStatus
                 record.annotations["rightCount"] = rightCount
-            elif line.startswith(b"e"):
-                words = line[1:].split()
-                assert len(words) == 6
-                src = words[0].decode()
-                start = int(words[1])
-                size = int(words[2])
-                strand = words[3]
-                srcSize = int(words[4])
-                status = words[5].decode()
+            elif prefix == b"e":
+                words = line.split()
+                assert len(words) == 7
+                src = words[1].decode()
+                start = int(words[2])
+                size = int(words[3])
+                strand = words[4]
+                srcSize = int(words[5])
+                status = words[6].decode()
                 assert status in AlignmentIterator.empty_status_characters
                 sequence = Seq(None, length=srcSize)
                 record = SeqRecord(sequence, id=src, name="", description="")
@@ -289,7 +290,7 @@ class AlignmentIterator(bigbed.AlignmentIterator):
                     annotation = []
                     annotations["empty"] = annotation
                 annotation.append(empty)
-            elif line.startswith(b"q "):
+            elif prefix == b"q":
                 words = line.strip().split()
                 assert len(words) == 3
                 assert words[1].decode() == src  # from the previous "s" line
