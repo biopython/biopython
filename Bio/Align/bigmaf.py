@@ -204,25 +204,25 @@ class AlignmentIterator(bigbed.AlignmentIterator):
         stream = BytesIO()
         stream.write(data)
         stream.seek(0)
-        aline = next(stream).decode()
         records = []
         starts = []
         sizes = []
         strands = []
         aligned_sequences = []
         annotations = {}
+        aline = next(stream)
         words = aline[1:].split()
         for word in words:
-            key, value = word.split("=")
-            if key == "score":
+            key, value = word.split(b"=")
+            if key == b"score":
                 score = float(value)
-            elif key == "pass":
+            elif key == b"pass":
                 value = int(value)
                 if value <= 0:
                     raise ValueError("pass value must be positive (found %d)" % value)
                 annotations["pass"] = value
             else:
-                raise ValueError("Unknown annotation variable '%s'" % key)
+                raise ValueError("Unknown annotation variable '%s'" % key.decode())
 
         for line in stream:
             line = line.decode()
