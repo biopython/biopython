@@ -210,39 +210,39 @@ class AlignmentIterator(bigbed.AlignmentIterator):
         strands = []
         aligned_sequences = []
         annotations = {}
-        aline = next(stream)
-        words = aline[1:].split()
-        for word in words:
-            key, value = word.split(b"=")
-            if key == b"score":
-                score = float(value)
-            elif key == b"pass":
-                value = int(value)
-                if value <= 0:
-                    raise ValueError("pass value must be positive (found %d)" % value)
-                annotations["pass"] = value
-            else:
-                raise ValueError("Unknown annotation variable '%s'" % key.decode())
-
         for line in stream:
-            line = line.decode()
-            if line.startswith("#"):
+            if line.startswith(b"#"):
                 continue
-            elif line.startswith("a"):
-                self._aline = line
-                break
-            elif line.startswith("s "):
+            elif line.startswith(b"a"):
+                words = line[1:].split()
+                for word in words:
+                    key, value = word.split(b"=")
+                    if key == b"score":
+                        score = float(value)
+                    elif key == b"pass":
+                        value = int(value)
+                        if value <= 0:
+                            raise ValueError(
+                                "pass value must be positive (found %d)" % value
+                            )
+                        annotations["pass"] = value
+                    else:
+                        raise ValueError(
+                            "Unknown annotation variable '%s'" % key.decode()
+                        )
+                continue
+            elif line.startswith(b"s "):
                 words = line.strip().split()
                 if len(words) != 7:
                     raise ValueError(
                         "Error parsing alignment - 's' line must have 7 fields"
                     )
-                src = words[1]
+                src = words[1].decode()
                 start = int(words[2])
                 size = int(words[3])
-                strand = words[4]
+                strand = words[4].decode()
                 srcSize = int(words[5])
-                text = words[6]
+                text = words[6].decode()
                 for gap_char in ".=_":
                     text = text.replace(gap_char, "-")
                 aligned_sequences.append(text.encode())
@@ -252,7 +252,8 @@ class AlignmentIterator(bigbed.AlignmentIterator):
                 starts.append(start)
                 sizes.append(size)
                 strands.append(strand)
-            elif line.startswith("i "):
+            elif line.startswith(b"i "):
+                line = line.decode()
                 words = line.strip().split()
                 assert len(words) == 6
                 assert words[1] == src  # from the previous "s" line
@@ -266,7 +267,8 @@ class AlignmentIterator(bigbed.AlignmentIterator):
                 record.annotations["leftCount"] = leftCount
                 record.annotations["rightStatus"] = rightStatus
                 record.annotations["rightCount"] = rightCount
-            elif line.startswith("e"):
+            elif line.startswith(b"e"):
+                line = line.decode()
                 words = line[1:].split()
                 assert len(words) == 6
                 src = words[0]
@@ -289,20 +291,18 @@ class AlignmentIterator(bigbed.AlignmentIterator):
                     annotation = []
                     annotations["empty"] = annotation
                 annotation.append(empty)
-            elif line.startswith("q "):
+            elif line.startswith(b"q "):
+                line = line.decode()
                 words = line.strip().split()
                 assert len(words) == 3
                 assert words[1] == src  # from the previous "s" line
                 value = words[2].replace("-", "")
                 record.annotations["quality"] = value
             elif not line.strip():
-                # reached the end of the alignment, but keep reading until we
-                # find the next alignment
+                # reached the end of the alignment, but keep reading to be sure
                 continue
             else:
                 raise ValueError(f"Error parsing alignment - unexpected line:\n{line}")
-        else:
-            self._aline = None
         sequences, coordinates = Alignment.parse_printed_alignment(aligned_sequences)
         for start, size, sequence, record in zip(starts, sizes, sequences, records):
             srcSize = len(record.seq)
