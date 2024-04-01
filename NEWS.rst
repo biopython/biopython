@@ -89,6 +89,8 @@ Now when reverse complementing a ``SeqRecord`` containing unstranded features
 with compound locations the order of the sublocations is reversed, to improve
 the representation of origin-spanning locations. See issue #4611.
 
+Updated ``Bio.Restriction`` to the April 2024 release of REBASE.
+
 As in recent releases, more of our code is now explicitly available under
 either our original "Biopython License Agreement", or the very similar but
 more commonly used "3-Clause BSD License".  See the ``LICENSE.rst`` file for
