@@ -14,7 +14,7 @@ repos:
         files: \.py$
     -   id: mixed-line-ending
 -   repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.3.1
+    rev: v0.3.5
     hooks:
     # Run the Ruff linter.
     -   id: ruff
@@ -27,7 +27,7 @@ repos:
             '--extend-per-file-ignores=Tests/*.py:B015',
         ]
 -   repo: https://github.com/psf/black
-    rev: 24.2.0
+    rev: 24.3.0
     hooks:
     -   id: black
         args: [--check,--target-version,py38]
@@ -39,7 +39,7 @@ repos:
             'flake8-rst-docstrings>=0.2.3',
         ]
 -   repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.8.0
+    rev: v1.9.0
     hooks:
     -   id: mypy
         # equivalent to "files" in .mypy.ini
