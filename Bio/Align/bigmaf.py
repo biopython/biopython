@@ -15,7 +15,6 @@ See https://genome.ucsc.edu/goldenPath/help/bigMaf.html
 
 import struct
 import zlib
-from io import BytesIO
 
 
 from Bio.Align import Alignment, Alignments
@@ -201,16 +200,22 @@ class AlignmentIterator(bigbed.AlignmentIterator):
     def _create_alignment(self, chunk):
         chromId, chromStart, chromEnd, rest = chunk
         data = rest.replace(b";", b"\n")
-        stream = BytesIO()
-        stream.write(data)
-        stream.seek(0)
         records = []
         starts = []
         sizes = []
         strands = []
         aligned_sequences = []
         annotations = {}
-        for line in stream:
+        j = 0
+        while True:
+            i = j
+            try:
+                j = data.find(b"\n", i) + 1
+            except ValueError:
+                line = data[i:]
+                j = i + len(line)
+            else:
+                line = data[i:j]
             prefix = line[:1]
             if prefix == b"#":
                 continue
@@ -296,6 +301,8 @@ class AlignmentIterator(bigbed.AlignmentIterator):
                 assert words[1].decode() == src  # from the previous "s" line
                 value = words[2].replace(b"-", b"")
                 record.annotations["quality"] = value.decode()
+            elif line == b"":
+                break
             elif not line.strip():
                 # reached the end of the alignment, but keep reading to be sure
                 continue
