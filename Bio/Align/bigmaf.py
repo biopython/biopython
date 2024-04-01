@@ -19,8 +19,9 @@ from io import StringIO
 
 
 from Bio.Align import Alignment, Alignments
-from Bio.Align import interfaces, bigbed, maf
+from Bio.Align import interfaces, bigbed
 from Bio.Align.bigbed import AutoSQLTable, Field
+from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
 
@@ -118,7 +119,7 @@ class AlignmentWriter(bigbed.AlignmentWriter):
         ).write(fixed_alignments)
 
 
-class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
+class AlignmentIterator(bigbed.AlignmentIterator):
     """Alignment iterator for bigMaf files.
 
     The file may contain multiple alignments, which are loaded and returned
@@ -136,6 +137,9 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
 
     fmt = "bigMaf"
     mode = "b"
+
+    status_characters = ("C", "I", "N", "n", "M", "T")
+    empty_status_characters = ("C", "I", "M", "n")
 
     def __init__(self, source):
         """Create an AlignmentIterator object.
@@ -200,6 +204,122 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
         stream = StringIO()
         stream.write(data)
         stream.seek(0)
-        line = next(stream)
-        alignment = maf.AlignmentIterator._create_alignment(self, line, stream)
+        aline = next(stream)
+        records = []
+        starts = []
+        sizes = []
+        strands = []
+        aligned_sequences = []
+        annotations = {}
+        words = aline[1:].split()
+        for word in words:
+            key, value = word.split("=")
+            if key == "score":
+                score = float(value)
+            elif key == "pass":
+                value = int(value)
+                if value <= 0:
+                    raise ValueError("pass value must be positive (found %d)" % value)
+                annotations["pass"] = value
+            else:
+                raise ValueError("Unknown annotation variable '%s'" % key)
+
+        for line in stream:
+            if line.startswith("#"):
+                continue
+            elif line.startswith("a"):
+                self._aline = line
+                break
+            elif line.startswith("s "):
+                words = line.strip().split()
+                if len(words) != 7:
+                    raise ValueError(
+                        "Error parsing alignment - 's' line must have 7 fields"
+                    )
+                src = words[1]
+                start = int(words[2])
+                size = int(words[3])
+                strand = words[4]
+                srcSize = int(words[5])
+                text = words[6]
+                for gap_char in ".=_":
+                    text = text.replace(gap_char, "-")
+                aligned_sequences.append(text.encode())
+                seq = Seq(None, length=srcSize)
+                record = SeqRecord(seq, id=src, name="", description="")
+                records.append(record)
+                starts.append(start)
+                sizes.append(size)
+                strands.append(strand)
+            elif line.startswith("i "):
+                words = line.strip().split()
+                assert len(words) == 6
+                assert words[1] == src  # from the previous "s" line
+                leftStatus = words[2]
+                leftCount = int(words[3])
+                rightStatus = words[4]
+                rightCount = int(words[5])
+                assert leftStatus in AlignmentIterator.status_characters
+                assert rightStatus in AlignmentIterator.status_characters
+                record.annotations["leftStatus"] = leftStatus
+                record.annotations["leftCount"] = leftCount
+                record.annotations["rightStatus"] = rightStatus
+                record.annotations["rightCount"] = rightCount
+            elif line.startswith("e"):
+                words = line[1:].split()
+                assert len(words) == 6
+                src = words[0]
+                start = int(words[1])
+                size = int(words[2])
+                strand = words[3]
+                srcSize = int(words[4])
+                status = words[5]
+                assert status in AlignmentIterator.empty_status_characters
+                sequence = Seq(None, length=srcSize)
+                record = SeqRecord(sequence, id=src, name="", description="")
+                end = start + size
+                if strand == "+":
+                    segment = (start, end)
+                else:
+                    segment = (srcSize - start, srcSize - end)
+                empty = (record, segment, status)
+                annotation = annotations.get("empty")
+                if annotation is None:
+                    annotation = []
+                    annotations["empty"] = annotation
+                annotation.append(empty)
+            elif line.startswith("q "):
+                words = line.strip().split()
+                assert len(words) == 3
+                assert words[1] == src  # from the previous "s" line
+                value = words[2].replace("-", "")
+                record.annotations["quality"] = value
+            elif not line.strip():
+                # reached the end of the alignment, but keep reading until we
+                # find the next alignment
+                continue
+            else:
+                raise ValueError(f"Error parsing alignment - unexpected line:\n{line}")
+        else:
+            self._aline = None
+        sequences, coordinates = Alignment.parse_printed_alignment(aligned_sequences)
+        for start, size, sequence, record in zip(starts, sizes, sequences, records):
+            srcSize = len(record.seq)
+            if len(sequence) != size:
+                raise ValueError(
+                    "sequence size is incorrect (found %d, expected %d)"
+                    % (len(sequence), size)
+                )
+            record.seq = Seq({start: sequence}, length=srcSize)
+        for record, strand, row in zip(records, strands, coordinates):
+            if strand == "-":
+                row[:] = row[-1] - row[0] - row
+                record.seq = record.seq.reverse_complement()
+            start = record.seq.defined_ranges[0][0]
+            row += start
+        alignment = Alignment(records, coordinates)
+        if annotations is not None:
+            alignment.annotations = annotations
+        if score is not None:
+            alignment.score = score
         return alignment
