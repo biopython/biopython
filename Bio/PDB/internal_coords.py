@@ -3716,7 +3716,7 @@ class IC_Residue:
         """
         edron = self.pick_angle(angle_key)
         if edron:
-            return edron.angle
+            return float(edron.angle)
         return None
 
     def set_angle(self, angle_key: Union[EKT, str], v: float, overlap=True):
