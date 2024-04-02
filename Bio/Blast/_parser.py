@@ -130,7 +130,6 @@ class SchemaHandler:
                 "subjects",
                 "bl2seq",
                 "iter-num",
-                "query-masking",
             ):
                 pass  # TBD
             else:
@@ -312,14 +311,21 @@ class XMLHandler:
         assert self._characters.strip() == ""
         self._characters = ""
 
+    def _start_query_masking(self, name, attributes):
+        assert self._characters.strip() == ""
+        self._characters = ""
+
     def _start_range(self, name, attributes):
-        return
+        assert self._characters.strip() == ""
+        self._characters = ""
 
     def _start_from(self, name, attributes):
-        return
+        assert self._characters.strip() == ""
+        self._characters = ""
 
     def _start_to(self, name, attributes):
-        return
+        assert self._characters.strip() == ""
+        self._characters = ""
 
     def _start_pattern(self, name, attributes):
         assert self._characters.strip() == ""
@@ -664,14 +670,28 @@ class XMLHandler:
         self._records.param["bl2seq-mode"] = int(self._characters)
         self._characters = ""
 
-    def _end_range(self, name, attributes):
-        return
+    def _end_query_masking(self, name):
+        assert self._characters.strip() == ""
+        self._characters = ""
+        location = self._location
+        del self._location
+        feature = SeqFeature(location, type="masking")
+        self._record.query.features.append(feature)
 
-    def _end_from(self, name, attributes):
-        return
+    def _end_range(self, name):
+        start = self._from - 1
+        del self._from
+        end = self._to
+        del self._to
+        self._location = SimpleLocation(start, end)
 
-    def _end_to(self, name, attributes):
-        return
+    def _end_from(self, name):
+        self._from = int(self._characters)
+        self._characters = ""
+
+    def _end_to(self, name):
+        self._to = int(self._characters)
+        self._characters = ""
 
     def _end_query_gencode(self, name):
         self._records.param["query-gencode"] = int(self._characters)

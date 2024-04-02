@@ -135,6 +135,9 @@ class BaseXMLWriter(ABC):
             self._write_iteration_query_id(query.id.encode())
             self._write_iteration_query_def(query.description.encode())
             self._write_iteration_query_len(query_length)
+            for feature in query.features:
+                if feature.type == "masking":
+                    self._write_iteration_query_masking(feature.location)
         self._start_iteration_hits()
         for hit in record:
             self._write_hit(hit, query_length)
@@ -354,6 +357,9 @@ class BaseXMLWriter(ABC):
 
     @abstractmethod
     def _write_iteration_query_len(self, query_len):
+        return
+
+    def _write_iteration_query_masking(self, location):
         return
 
     @abstractmethod
@@ -970,6 +976,19 @@ class XML2Writer(BaseXMLWriter):
               <query-len>%d</query-len>
 """
             % query_len
+        )
+
+    def _write_iteration_query_masking(self, location):
+        self.stream.write(
+            b"""\
+              <query-masking>
+                <Range>
+                  <from>%d</from>
+                  <to>%d</to>
+                </Range>
+              </query-masking>
+"""
+            % (location.start + 1, location.end)
         )
 
     def _start_iteration_hits(self):
