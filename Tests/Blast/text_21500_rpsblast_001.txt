@@ -1,0 +1,85 @@
+RPSBLAST 2.15.0+
+
+
+Reference: Stephen F. Altschul, Thomas L. Madden, Alejandro A.
+Schaffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J.
+Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of
+protein database search programs", Nucleic Acids Res. 25:3389-3402.
+
+
+
+Database: CDD.v3.20
+           59,693 sequences; 13,521,240 total letters
+
+
+
+Query= pdb|3FAJ|A Chain A, Structure of the structural protein P131 of the
+archaeal virus Acidianus Two-tailed virus (ATV)
+
+Length=151
+                                                                      Score     E
+Sequences producing significant alignments:                          (Bits)  Value
+
+CDD:165101 PHA02734, PHA02734, coat protein; Provisional              204     9e-69
+CDD:410801 cd20027, FH_FOXL1, Forkhead (FH) domain found in Forkh...  29.0    0.52 
+
+
+>CDD:165101 PHA02734, PHA02734, coat protein; Provisional.
+Length=149
+
+ Score = 204 bits (520),  Expect = 9e-69, Method: Composition-based stats.
+ Identities = 94/149 (63%), Positives = 103/149 (69%), Gaps = 18/149 (12%)
+
+Query  21   MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVK  80
+            MAK EPKKGDYAGGA KILD FE GQLG+PEV+LKLAGEEANAR+AGD   K AIHAI+K
+Sbjct  1    MAKEEPKKGDYAGGAAKILDGFEAGQLGFPEVSLKLAGEEANARKAGDANAKAAIHAIIK  60
+
+Query  81   MISDAMKPYRNKGSGFQ----------------SQPIPGEVIAQVTSNPE--YQQAKAFL  122
+            MI DAMKP RNKG GF+                SQ IPGE+ AQV +  E  YQQAKAFL
+Sbjct  61   MIKDAMKPLRNKGKGFKEAWVYFSQVPENAPPNSQAIPGEIAAQVKAKLEALYQQAKAFL  120
+
+Query  123  ASPATQVRNIEREEVLSKGAKKLAQAMAS  151
+            A+PA   R   + E LSKGAK LA A A 
+Sbjct  121  AAPAAAAREAAKAEALSKGAKGLAMAAAM  149
+
+
+>CDD:410801 cd20027, FH_FOXL1, Forkhead (FH) domain found in Forkhead box 
+protein L1 (FOXL1) and similar proteins.  FOXL1, also called 
+Forkhead-related protein FKHL11 or Forkhead-related transcription 
+factor 7 (FREAC-7), acts as a transcription factor required 
+for proper proliferation and differentiation in the 
+gastrointestinal epithelium. It may play a critical role in 
+suppressing tumorigenesis. The FH domain is a winged helix DNA-binding 
+domain. FOX transcription factors recognize the core 
+sequence 5'-(A/C)AA(C/T)A-3'.
+Length=98
+
+ Score = 29.0 bits (65),  Expect = 0.52, Method: Composition-based stats.
+ Identities = 13/31 (42%), Positives = 15/31 (48%), Gaps = 4/31 (13%)
+
+Query  15  VPRGSHMAKYEPKKGDYAGGAVKILDMFENG  45
+           VPR     K  P KG+Y        +MFENG
+Sbjct  64  VPR----EKGRPGKGNYWTLDPDCEEMFENG  90
+
+
+
+Lambda      K        H        a         alpha
+   0.311    0.127    0.357    0.792     4.96 
+
+Gapped
+Lambda      K        H        a         alpha    sigma
+   0.267   0.0410    0.140     1.90     42.6     43.6 
+
+Effective search space used: 508930906
+
+
+  Database: CDD.v3.20
+    Posted date:  Sep 21, 2022  6:10 PM
+  Number of letters in database: 13,521,240
+  Number of sequences in database:  59,693
+
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+Window for multiple hits: 40

@@ -11717,39 +11717,39 @@ Query: Query_2
 class TestRPSBlast(unittest.TestCase):
     """Test the Blast XML parser for rpsblast output."""
 
-    def test_xml_2900_rpsblast_001_parser(self):
-        """Parsing RPSBLAST 2.9.0+ (xml_2900_rpsblast_001.xml)."""
-        filename = "xml_2900_rpsblast_001.xml"
+    def test_xml_21500_rpsblast_001_parser(self):
+        """Parsing RPSBLAST 2.15.0+ (xml_21500_rpsblast_001.xml)."""
+        filename = "xml_21500_rpsblast_001.xml"
         path = os.path.join("Blast", filename)
         with open(path, "rb") as stream:
             records = Blast.parse(stream)
-            self.check_xml_2900_rpsblast_001_records(records)
+            self.check_xml_21500_rpsblast_001_records(records)
         with Blast.parse(path) as records:
-            self.check_xml_2900_rpsblast_001_records(records)
+            self.check_xml_21500_rpsblast_001_records(records)
         with open(path, "rb") as stream:
             record = Blast.read(stream)
-        self.check_xml_2900_rpsblast_001_record(record)
+        self.check_xml_21500_rpsblast_001_record(record)
         record = Blast.read(path)
-        self.check_xml_2900_rpsblast_001_record(record)
+        self.check_xml_21500_rpsblast_001_record(record)
 
-    def test_xml_2900_rpsblast_001_v2_parser(self):
-        """Parsing RPSBLAST 2.9.0+ (xml_2900_rpsblast_001_v2.xml)."""
-        filename = "xml_2900_rpsblast_001_v2.xml"
+    def test_xml2_21500_rpsblast_001_parser(self):
+        """Parsing RPSBLAST 2.15.0+ (xml2_21500_rpsblast_001.xml)."""
+        filename = "xml2_21500_rpsblast_001.xml"
         path = os.path.join("Blast", filename)
         with open(path, "rb") as stream:
             records = Blast.parse(stream)
-            self.check_xml_2900_rpsblast_001_records(records, xml2=True)
+            self.check_xml_21500_rpsblast_001_records(records, xml2=True)
         with Blast.parse(path) as records:
-            self.check_xml_2900_rpsblast_001_records(records, xml2=True)
+            self.check_xml_21500_rpsblast_001_records(records, xml2=True)
         with open(path, "rb") as stream:
             record = Blast.read(stream)
-        self.check_xml_2900_rpsblast_001_record(record, xml2=True)
+        self.check_xml_21500_rpsblast_001_record(record, xml2=True)
         record = Blast.read(path)
-        self.check_xml_2900_rpsblast_001_record(record, xml2=True)
+        self.check_xml_21500_rpsblast_001_record(record, xml2=True)
 
-    def test_xml_2900_rpsblast_001_writer(self):
-        """Writing rpsblast 2.9.0+ (xml_2900_rpsblast_001.xml)."""
-        filename = "xml_2900_rpsblast_001.xml"
+    def test_xml_21500_rpsblast_001_writer(self):
+        """Writing rpsblast 2.15.0+ (xml_21500_rpsblast_001.xml)."""
+        filename = "xml_21500_rpsblast_001.xml"
         path = os.path.join("Blast", filename)
         with Blast.parse(path) as records:
             stream = io.BytesIO()
@@ -11757,11 +11757,11 @@ class TestRPSBlast(unittest.TestCase):
             self.assertEqual(n, 1)
             stream.seek(0)
             written_records = Blast.parse(stream)
-            self.check_xml_2900_rpsblast_001_records(written_records)
+            self.check_xml_21500_rpsblast_001_records(written_records)
 
-    def test_xml_2900_rpsblast_001_v2_writer(self):
-        """Writing rpsblast 2.9.0+ XML2 (xml_2900_rpsblast_001_v2.xml)."""
-        filename = "xml_2900_rpsblast_001_v2.xml"
+    def test_xml2_21500_rpsblast_001_writer(self):
+        """Writing rpsblast 2.9.0+ XML2 (xml2_21500_rpsblast_001_v2.xml)."""
+        filename = "xml2_21500_rpsblast_001.xml"
         path = os.path.join("Blast", filename)
         with Blast.parse(path) as records:
             stream = io.BytesIO()
@@ -11769,28 +11769,29 @@ class TestRPSBlast(unittest.TestCase):
             self.assertEqual(n, 1)
             stream.seek(0)
             written_records = Blast.parse(stream)
-            self.check_xml_2900_rpsblast_001_records(written_records, xml2=True)
+            self.check_xml_21500_rpsblast_001_records(written_records, xml2=True)
 
-    def check_xml_2900_rpsblast_001_records(self, records, xml2=False):
+    def check_xml_21500_rpsblast_001_records(self, records, xml2=False):
         self.assertEqual(records.program, "rpsblast")
-        self.assertEqual(records.version, "RPSBLAST 2.9.0+")
+        self.assertEqual(records.version, "RPSBLAST 2.15.0+")
         self.assertEqual(
             records.reference,
             'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
         )
-        self.assertEqual(records.db, "cdd_delta")
+        self.assertEqual(records.db, "Cdd")
         if xml2 is False:
             self.assertIsInstance(records.query, SeqRecord)
             self.assertEqual(records.query.id, "Query_1")
             self.assertEqual(
                 records.query.description,
-                "gi|269914405|pdb|3FAJ|A Chain A, Structure of the structural protein P131 of the archaeal virus Acidianus Two-tailed virus (ATV)",
+                "pdb|3FAJ|A Chain A, Structure of the structural protein P131 of the archaeal virus Acidianus Two-tailed virus (ATV)",
             )
             self.assertEqual(repr(records.query.seq), "Seq(None, length=151)")
         self.assertEqual(records.param["matrix"], "BLOSUM62")
         self.assertAlmostEqual(records.param["expect"], 1)
         self.assertEqual(records.param["gap-open"], 11)
         self.assertEqual(records.param["gap-extend"], 1)
+        self.assertEqual(records.param["filter"], "F")
         if xml2 is True:
             self.assertEqual(records.param["cbs"], 1)
             self.assertEqual(len(records.param), 6)
@@ -11798,9 +11799,9 @@ class TestRPSBlast(unittest.TestCase):
             self.assertEqual(len(records.param), 5)
         record = next(records)
         self.assertRaises(StopIteration, next, records)
-        self.check_xml_2900_rpsblast_001_record(record, xml2)
+        self.check_xml_21500_rpsblast_001_record(record, xml2)
 
-    def check_xml_2900_rpsblast_001_record(self, record, xml2=False):
+    def check_xml_21500_rpsblast_001_record(self, record, xml2=False):
         if xml2 is False:
             self.assertEqual(record.num, 1)
         self.assertEqual(
@@ -11811,120 +11812,121 @@ class TestRPSBlast(unittest.TestCase):
         self.assertEqual(record.query.id, "Query_1")
         self.assertEqual(
             record.query.description,
-            "gi|269914405|pdb|3FAJ|A Chain A, Structure of the structural protein P131 of the archaeal virus Acidianus Two-tailed virus (ATV)",
+            "pdb|3FAJ|A Chain A, Structure of the structural protein P131 of the archaeal virus Acidianus Two-tailed virus (ATV)",
         )
         self.assertEqual(repr(record.query.seq), "Seq(None, length=151)")
         self.assertEqual(len(record.stat), 7)
-        self.assertEqual(record.stat["db-num"], 29480)
-        self.assertEqual(record.stat["db-len"], 6494941)
-        self.assertEqual(record.stat["hsp-len"], 85)
-        self.assertAlmostEqual(record.stat["eff-space"], 263283306.0)
-        self.assertAlmostEqual(record.stat["kappa"], 0.076772628)
+        self.assertEqual(record.stat["db-num"], 59693)
+        self.assertEqual(record.stat["db-len"], 13521240)
+        self.assertEqual(record.stat["hsp-len"], 89)
+        self.assertEqual(record.stat["eff-space"], 508930906)
+        self.assertAlmostEqual(record.stat["kappa"], 0.041)
         self.assertAlmostEqual(record.stat["lambda"], 0.267)
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
         self.assertEqual(len(record), 2)
         hit = record[0]
         self.assertEqual(hit.num, 1)
         self.assertIsInstance(hit.target, SeqRecord)
-        self.assertEqual(hit.target.id, "gnl|CDD|180983")
+        self.assertEqual(hit.target.id, "gnl|CDD|165101")
         self.assertEqual(
             hit.target.description,
-            "PRK07453, PRK07453, protochlorophyllide oxidoreductase; Validated.",
+            "PHA02734, PHA02734, coat protein; Provisional.",
         )
-        self.assertEqual(hit.target.name, "180983")
-        self.assertEqual(repr(hit.target.seq), "Seq(None, length=322)")
+        self.assertEqual(hit.target.name, "165101")
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=149)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
         self.assertEqual(hsp.num, 1)
-        self.assertAlmostEqual(hsp.score, 73.0)
-        self.assertAlmostEqual(hsp.annotations["bit score"], 31.8842)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 0.058599)
-        self.assertEqual(hsp.annotations["identity"], 11)
-        self.assertEqual(hsp.annotations["positive"], 17)
-        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertAlmostEqual(hsp.score, 520.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 204.685)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 9.29691e-69)
+        self.assertEqual(hsp.annotations["identity"], 94)
+        self.assertEqual(hsp.annotations["positive"], 103)
+        self.assertEqual(hsp.annotations["gaps"], 18)
         self.assertTrue(
             np.array_equal(
                 hsp.coordinates,
                 # fmt: off
-                np.array([[253, 276],
-                          [ 94, 117]])
+                np.array([[  0, 77, 93, 110, 112, 149],
+                          [ 20, 97, 97, 114, 114, 151]])
                 # fmt: on
             )
         )
-        self.assertEqual(hsp.shape, (2, 23))
+        self.assertEqual(hsp.shape, (2, 149))
         self.assertEqual(
             repr(hsp.query.seq),
-            "Seq({94: 'GFQSQPIPGEVIAQVTSNPEYQQ'}, length=151)",
+            "Seq({20: 'MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEA...MAS'}, length=151)",
         )
         self.assertEqual(hsp.query.id, "Query_1")
         self.assertEqual(
             hsp.query.description,
-            "gi|269914405|pdb|3FAJ|A Chain A, Structure of the structural protein P131 of the archaeal virus Acidianus Two-tailed virus (ATV)",
+            "pdb|3FAJ|A Chain A, Structure of the structural protein P131 of the archaeal virus Acidianus Two-tailed virus (ATV)",
         )
         self.assertEqual(len(hsp.query.features), 0)
         self.assertEqual(
             repr(hsp.target.seq),
-            "Seq({253: 'GYVSQELAGERVAQVVADPEFAQ'}, length=322)",
+            "Seq('MAKEEPKKGDYAGGAAKILDGFEAGQLGFPEVSLKLAGEEANARKAGDANAKAA...AAM')",
         )
-        self.assertEqual(hsp.target.id, "gnl|CDD|180983")
+        self.assertEqual(hsp.target.id, "gnl|CDD|165101")
         self.assertEqual(
             hsp.target.description,
-            "PRK07453, PRK07453, protochlorophyllide oxidoreductase; Validated.",
+            "PHA02734, PHA02734, coat protein; Provisional.",
         )
         self.assertEqual(len(hsp.target.features), 0)
-        self.assertEqual(hsp.annotations["midline"], "G+ SQ + GE +AQV ++PE+ Q")
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MAK EPKKGDYAGGA KILD FE GQLG+PEV+LKLAGEEANAR+AGD   K AIHAI+KMI DAMKP RNKG GF+                SQ IPGE+ AQV +  E  YQQAKAFLA+PA   R   + E LSKGAK LA A A ",
+        )
         hit = record[1]
         self.assertEqual(hit.num, 2)
         self.assertIsInstance(hit.target, SeqRecord)
-        self.assertEqual(hit.target.id, "gnl|CDD|338745")
+        self.assertEqual(hit.target.id, "gnl|CDD|410801")
         self.assertEqual(
             hit.target.description,
-            "pfam13442, Cytochrome_CBB3, Cytochrome C oxidase, cbb3-type, subunit III.  ",
+            "cd20027, FH_FOXL1, Forkhead (FH) domain found in Forkhead box protein L1 (FOXL1) and similar proteins.  FOXL1, also called Forkhead-related protein FKHL11 or Forkhead-related transcription factor 7 (FREAC-7), acts as a transcription factor required for proper proliferation and differentiation in the gastrointestinal epithelium. It may play a critical role in suppressing tumorigenesis. The FH domain is a winged helix DNA-binding domain. FOX transcription factors recognize the core sequence 5'-(A/C)AA(C/T)A-3'.",
         )
-        self.assertEqual(hit.target.name, "338745")
-        self.assertEqual(repr(hit.target.seq), "Seq(None, length=67)")
+        self.assertEqual(hit.target.name, "410801")
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=98)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
         self.assertEqual(hsp.num, 1)
-        self.assertAlmostEqual(hsp.score, 62.0)
-        self.assertAlmostEqual(hsp.annotations["bit score"], 27.7531)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 0.388099)
-        self.assertEqual(hsp.annotations["identity"], 9)
-        self.assertEqual(hsp.annotations["positive"], 13)
-        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertAlmostEqual(hsp.score, 65.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 29.0095)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 0.517343)
+        self.assertEqual(hsp.annotations["identity"], 13)
+        self.assertEqual(hsp.annotations["positive"], 15)
+        self.assertEqual(hsp.annotations["gaps"], 4)
         self.assertTrue(
             np.array_equal(
                 hsp.coordinates,
                 # fmt: off
-                np.array([[18, 56],
-                          [56, 94]])
+                np.array([[63, 66, 66, 90],
+                          [14, 17, 21, 45]])
                 # fmt: on
             )
         )
-        self.assertEqual(hsp.shape, (2, 38))
+        self.assertEqual(hsp.shape, (2, 31))
         self.assertEqual(
             repr(hsp.query.seq),
-            "Seq({56: 'AGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGS'}, length=151)",
+            "Seq({14: 'VPRGSHMAKYEPKKGDYAGGAVKILDMFENG'}, length=151)",
         )
         self.assertEqual(hsp.query.id, "Query_1")
         self.assertEqual(
             hsp.query.description,
-            "gi|269914405|pdb|3FAJ|A Chain A, Structure of the structural protein P131 of the archaeal virus Acidianus Two-tailed virus (ATV)",
+            "pdb|3FAJ|A Chain A, Structure of the structural protein P131 of the archaeal virus Acidianus Two-tailed virus (ATV)",
         )
         self.assertEqual(len(hsp.query.features), 0)
         self.assertEqual(
             repr(hsp.target.seq),
-            "Seq({18: 'GTGGAGPSLAGRAWAPEALVDIIRNGKGAMPAFGGDLS'}, length=67)",
+            "Seq({63: 'VPREKGRPGKGNYWTLDPDCEEMFENG'}, length=98)",
         )
-        self.assertEqual(hsp.target.id, "gnl|CDD|338745")
+        self.assertEqual(hsp.target.id, "gnl|CDD|410801")
         self.assertEqual(
             hsp.target.description,
-            "pfam13442, Cytochrome_CBB3, Cytochrome C oxidase, cbb3-type, subunit III.  ",
+            "cd20027, FH_FOXL1, Forkhead (FH) domain found in Forkhead box protein L1 (FOXL1) and similar proteins.  FOXL1, also called Forkhead-related protein FKHL11 or Forkhead-related transcription factor 7 (FREAC-7), acts as a transcription factor required for proper proliferation and differentiation in the gastrointestinal epithelium. It may play a critical role in suppressing tumorigenesis. The FH domain is a winged helix DNA-binding domain. FOX transcription factors recognize the core sequence 5'-(A/C)AA(C/T)A-3'.",
         )
         self.assertEqual(len(hsp.target.features), 0)
-        self.assertEqual(
-            hsp.annotations["midline"], "    A    AG     EA+  I++    AM  +    S"
-        )
+        self.assertEqual(hsp.annotations["midline"], "VPR     K  P KG+Y        +MFENG")
 
 
 class TestBlastErrors(unittest.TestCase):
