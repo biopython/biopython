@@ -57,7 +57,7 @@ class TestBlastp(unittest.TestCase):
         self.assertEqual(record.stat["db-num"], 27252)
         self.assertEqual(record.stat["db-len"], 13958303)
         self.assertEqual(record.stat["hsp-len"], 0)
-        self.assertAlmostEqual(record.stat["eff-space"], 0.0)
+        self.assertEqual(record.stat["eff-space"], 0)
         self.assertAlmostEqual(record.stat["kappa"], 0.041)
         self.assertAlmostEqual(record.stat["lambda"], 0.267)
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
@@ -73,7 +73,7 @@ class TestBlastp(unittest.TestCase):
         self.assertEqual(record.stat["db-num"], 27252)
         self.assertEqual(record.stat["db-len"], 13958303)
         self.assertEqual(record.stat["hsp-len"], 0)
-        self.assertAlmostEqual(record.stat["eff-space"], 0.0)
+        self.assertEqual(record.stat["eff-space"], 0)
         self.assertAlmostEqual(record.stat["kappa"], 0.041)
         self.assertAlmostEqual(record.stat["lambda"], 0.267)
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
@@ -222,7 +222,7 @@ Program: blastp 2.2.18 [Mar-02-2008]
         self.assertEqual(record.stat["db-num"], 6589360)
         self.assertEqual(record.stat["db-len"], 2253133281)
         self.assertEqual(record.stat["hsp-len"], 0)
-        self.assertAlmostEqual(record.stat["eff-space"], 20278200000.0)
+        self.assertAlmostEqual(record.stat["eff-space"], 2.02782e10)
         self.assertAlmostEqual(record.stat["kappa"], 0.041)
         self.assertAlmostEqual(record.stat["lambda"], 0.267)
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
@@ -322,7 +322,7 @@ Program: BLASTP 2.2.26+
         self.assertEqual(record.stat["db-num"], 20)
         self.assertEqual(record.stat["db-len"], 6406)
         self.assertEqual(record.stat["hsp-len"], 38)
-        self.assertAlmostEqual(record.stat["eff-space"], 361344.0)
+        self.assertEqual(record.stat["eff-space"], 361344)
         self.assertAlmostEqual(record.stat["kappa"], 0.041)
         self.assertAlmostEqual(record.stat["lambda"], 0.267)
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
@@ -821,7 +821,7 @@ Query_1          59 VSLDITEESTSDLDKFNSGDKVTIT  84
         self.assertEqual(record.stat["db-num"], 633473216)
         self.assertEqual(record.stat["db-len"], 248084082182)
         self.assertEqual(record.stat["hsp-len"], 0)
-        self.assertAlmostEqual(record.stat["eff-space"], 0.0)
+        self.assertEqual(record.stat["eff-space"], 0)
         self.assertAlmostEqual(record.stat["kappa"], 0.047)
         self.assertAlmostEqual(record.stat["lambda"], 0.27)
         self.assertAlmostEqual(record.stat["entropy"], 1.0)
@@ -1973,6 +1973,1519 @@ Query_744       660 AEQP 664
             written_records = Blast.parse(stream)
             self.check_phiblast_records(written_records)
 
+    def test_xml_21500_blastp_001_parser(self):
+        """Parsing BLASTP 2.15.0+ (xml_21500_blastp_001.xml)."""
+        filename = "xml_21500_blastp_001.xml"
+        path = os.path.join("Blast", filename)
+        with open(path, "rb") as stream:
+            records = Blast.parse(stream)
+            self.check_xml_21500_blastp_001_records(records)
+        with Blast.parse(path) as records:
+            self.check_xml_21500_blastp_001_records(records)
+        with open(path, "rb") as stream:
+            record = Blast.read(stream)
+        self.check_xml_21500_blastp_001_record(record)
+        record = Blast.read(path)
+        self.check_xml_21500_blastp_001_record(record)
+        with Blast.parse(path) as records:
+            self.assertEqual(
+                str(records),
+                """\
+Program: BLASTP 2.15.0+
+     db: nr
+
+  Query: WXX52402.1 (length=239)
+         RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+   Hits: ----  -----  ----------------------------------------------------------
+            #  # HSP  ID + description
+         ----  -----  ----------------------------------------------------------
+            0      1  ref|WP_003221446.1|  MULTISPECIES: RNA polymerase sporu...
+            1      1  dbj|BAI85158.2|  sporulation sigma factor SigE [Bacillu...
+            2      1  ref|WP_120028072.1|  RNA polymerase sporulation sigma f...
+            3      1  ref|WP_326121348.1|  RNA polymerase sporulation sigma f...
+            4      1  ref|WP_128473893.1|  RNA polymerase sporulation sigma f...
+            5      1  ref|WP_174228079.1|  RNA polymerase sporulation sigma f...
+            6      1  ref|WP_315947263.1|  RNA polymerase sporulation sigma f...
+            7      1  ref|WP_219912761.1|  RNA polymerase sporulation sigma f...
+            8      1  ref|WP_038828182.1|  RNA polymerase sporulation sigma f...
+            9      1  ref|WP_326211018.1|  RNA polymerase sporulation sigma f...""",
+            )
+        record = Blast.read(path)
+        self.assertEqual(
+            str(record),
+            """\
+Program: BLASTP 2.15.0+
+     db: nr
+  Query: WXX52402.1 (length=239)
+         RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+   Hits: ----  -----  ----------------------------------------------------------
+            #  # HSP  ID + description
+         ----  -----  ----------------------------------------------------------
+            0      1  ref|WP_003221446.1|  MULTISPECIES: RNA polymerase sporu...
+            1      1  dbj|BAI85158.2|  sporulation sigma factor SigE [Bacillu...
+            2      1  ref|WP_120028072.1|  RNA polymerase sporulation sigma f...
+            3      1  ref|WP_326121348.1|  RNA polymerase sporulation sigma f...
+            4      1  ref|WP_128473893.1|  RNA polymerase sporulation sigma f...
+            5      1  ref|WP_174228079.1|  RNA polymerase sporulation sigma f...
+            6      1  ref|WP_315947263.1|  RNA polymerase sporulation sigma f...
+            7      1  ref|WP_219912761.1|  RNA polymerase sporulation sigma f...
+            8      1  ref|WP_038828182.1|  RNA polymerase sporulation sigma f...
+            9      1  ref|WP_326211018.1|  RNA polymerase sporulation sigma f...""",
+        )
+
+    def test_xml2_21500_blastp_001_parser(self):
+        """Parsing BLASTP 2.15.0+ (xml2_21500_blastp_001.xml)."""
+        filename = "xml2_21500_blastp_001.xml"
+        path = os.path.join("Blast", filename)
+        with open(path, "rb") as stream:
+            records = Blast.parse(stream)
+            self.check_xml_21500_blastp_001_records(records, xml2=True)
+        with Blast.parse(path) as records:
+            self.check_xml_21500_blastp_001_records(records, xml2=True)
+        with open(path, "rb") as stream:
+            record = Blast.read(stream)
+        self.check_xml_21500_blastp_001_record(record, xml2=True)
+        record = Blast.read(path)
+        self.check_xml_21500_blastp_001_record(record, xml2=True)
+
+    def check_xml_21500_blastp_001_records(self, records, xml2=False):
+        self.assertEqual(records.program, "blastp")
+        self.assertEqual(records.version, "BLASTP 2.15.0+")
+        self.assertEqual(
+            records.reference,
+            'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+        )
+        self.assertEqual(records.db, "nr")
+        if xml2 is False:
+            self.assertIsInstance(records.query, SeqRecord)
+            self.assertEqual(records.query.id, "WXX52402.1")
+            self.assertEqual(
+                records.query.description,
+                "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+            )
+            self.assertEqual(repr(records.query.seq), "Seq(None, length=239)")
+        self.assertEqual(records.param["matrix"], "BLOSUM62")
+        self.assertAlmostEqual(records.param["expect"], 0.05)
+        self.assertEqual(records.param["gap-open"], 11)
+        self.assertEqual(records.param["gap-extend"], 1)
+        self.assertEqual(records.param["filter"], "F")
+        if xml2 is False:
+            self.assertEqual(len(records.param), 5)
+        else:
+            self.assertEqual(records.param["cbs"], 2)
+            self.assertEqual(len(records.param), 6)
+        record = next(records)
+        self.assertRaises(StopIteration, next, records)
+        self.check_xml_21500_blastp_001_record(record, xml2=xml2)
+
+    def check_xml_21500_blastp_001_record(self, record, xml2=False):
+        hit = record[0]
+        self.assertEqual(hit.num, 1)
+        target = hit.target
+        self.assertIsInstance(target, SeqRecord)
+        self.assertEqual(target.id, "ref|WP_003221446.1|")
+        self.assertEqual(target.name, "WP_003221446")
+        seq = target.seq
+        self.assertEqual(repr(seq), "Seq(None, length=239)")
+        if xml2 is True:
+            self.assertEqual(
+                target.description,
+                "MULTISPECIES: RNA polymerase sporulation sigma factor SigE [Bacillales]",
+            )
+            self.assertEqual(target.annotations["taxid"], 1385)
+            self.assertEqual(target.annotations["sciname"], "Bacillales")
+            self.assertIs(target, hit.targets[0])
+            self.assertEqual(len(hit.targets), 8)
+            target = hit.targets[1]
+            self.assertIsInstance(target, SeqRecord)
+            self.assertEqual(target.id, "ref|NP_389415.2|")
+            self.assertEqual(target.name, "NP_389415")
+            self.assertIs(target.seq, seq)
+            self.assertEqual(
+                target.description,
+                "RNA polymerase sporulation-specific sigma-29 factor (sigma-E) [Bacillus subtilis subsp. subtilis str. 168]",
+            )
+            self.assertEqual(target.annotations["taxid"], 224308)
+            self.assertEqual(
+                target.annotations["sciname"],
+                "Bacillus subtilis subsp. subtilis str. 168",
+            )
+            target = hit.targets[2]
+            self.assertIsInstance(target, SeqRecord)
+            self.assertEqual(target.id, "sp|P06222.1|")
+            self.assertEqual(target.name, "P06222")
+            self.assertIs(target.seq, seq)
+            self.assertEqual(
+                target.description,
+                "RecName: Full=RNA polymerase sigma-E factor; AltName: Full=P31; AltName: Full=Sigma-29; AltName: Full=Stage II sporulation protein GB; Flags: Precursor [Bacillus subtilis subsp. subtilis str. 168]",
+            )
+            self.assertEqual(target.annotations["taxid"], 224308)
+            self.assertEqual(
+                target.annotations["sciname"],
+                "Bacillus subtilis subsp. subtilis str. 168",
+            )
+            target = hit.targets[3]
+            self.assertIsInstance(target, SeqRecord)
+            self.assertEqual(target.id, "gb|KFI04694.1|")
+            self.assertEqual(target.name, "KFI04694")
+            self.assertIs(target.seq, seq)
+            self.assertEqual(
+                target.description,
+                "sporulation sigma factor SigE [Bacillus sp. BSC154]",
+            )
+            self.assertEqual(target.annotations["taxid"], 1549811)
+            self.assertEqual(target.annotations["sciname"], "Bacillus sp. BSC154")
+            target = hit.targets[4]
+            self.assertIsInstance(target, SeqRecord)
+            self.assertEqual(target.id, "gb|MDZ5720185.1|")
+            self.assertEqual(target.name, "MDZ5720185")
+            self.assertIs(target.seq, seq)
+            self.assertEqual(
+                target.description,
+                "RNA polymerase sporulation sigma factor SigE [Bacillus sp. X(2023)]",
+            )
+            self.assertEqual(target.annotations["taxid"], 3106047)
+            self.assertEqual(target.annotations["sciname"], "Bacillus sp. X(2023)")
+            target = hit.targets[5]
+            self.assertIsInstance(target, SeqRecord)
+            self.assertEqual(target.id, "gb|POO83984.1|")
+            self.assertEqual(target.name, "POO83984")
+            self.assertIs(target.seq, seq)
+            self.assertEqual(
+                target.description,
+                "RNA polymerase sporulation sigma factor SigE [Bacillus sp. MBGLi97]",
+            )
+            self.assertEqual(target.annotations["taxid"], 2070760)
+            self.assertEqual(target.annotations["sciname"], "Bacillus sp. MBGLi97")
+            target = hit.targets[6]
+            self.assertIsInstance(target, SeqRecord)
+            self.assertEqual(target.id, "dbj|BAM52179.1|")
+            self.assertEqual(target.name, "BAM52179")
+            self.assertIs(target.seq, seq)
+            self.assertEqual(
+                target.description,
+                "sporulation sigma factor SigE [Bacillus subtilis BEST7613]",
+            )
+            self.assertEqual(target.annotations["taxid"], 1204343)
+            self.assertEqual(
+                target.annotations["sciname"], "Bacillus subtilis BEST7613"
+            )
+            target = hit.targets[7]
+            self.assertIsInstance(target, SeqRecord)
+            self.assertEqual(target.id, "gb|ADM37626.1|")
+            self.assertEqual(target.name, "ADM37626")
+            self.assertIs(target.seq, seq)
+            self.assertEqual(
+                target.description,
+                "sporulation-specific sigma factor sigma-E [Bacillus spizizenii str. W23]",
+            )
+            self.assertEqual(target.annotations["taxid"], 655816)
+            self.assertEqual(
+                target.annotations["sciname"], "Bacillus spizizenii str. W23"
+            )
+        else:
+            self.assertEqual(
+                target.description,
+                "MULTISPECIES: RNA polymerase sporulation sigma factor SigE [Bacillales] >ref|NP_389415.2| RNA polymerase sporulation-specific sigma-29 factor (sigma-E) [Bacillus subtilis subsp. subtilis str. 168] >sp|P06222.1| RecName: Full=RNA polymerase sigma-E factor; AltName: Full=P31; AltName: Full=Sigma-29; AltName: Full=Stage II sporulation protein GB; Flags: Precursor [Bacillus subtilis subsp. subtilis str. 168] >gb|KFI04694.1| sporulation sigma factor SigE [Bacillus sp. BSC154] >gb|MDZ5720185.1| RNA polymerase sporulation sigma factor SigE [Bacillus sp. X(2023)] >gb|POO83984.1| RNA polymerase sporulation sigma factor SigE [Bacillus sp. MBGLi97] >dbj|BAM52179.1| sporulation sigma factor SigE [Bacillus subtilis BEST7613] >gb|ADM37626.1| sporulation-specific sigma factor sigma-E [Bacillus spizizenii str. W23]",
+            )
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 1227.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 477.248)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 2.44722e-169)
+        self.assertEqual(hsp.annotations["identity"], 239)
+        self.assertEqual(hsp.annotations["positive"], 239)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[0, 239],
+                          [0, 239]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 239))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNG...KMV')",
+        )
+        self.assertEqual(hsp.query.id, "WXX52402.1")
+        self.assertEqual(
+            hsp.query.description,
+            "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+        )
+        self.assertEqual(len(hsp.query.features), 0)
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNG...KMV')",
+        )
+        self.assertEqual(hsp.target.id, hit.target.id)
+        self.assertEqual(hsp.target.name, hit.target.name)
+        self.assertEqual(hsp.target.description, hit.target.description)
+        self.assertEqual(len(hsp.target.features), 0)
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='ref|WP_003221446.1|' query.id='WXX52402.1'; 2 rows x 239 columns>",
+        )
+        if xml2 is True:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : WXX52402.1 Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+Target: ref|WP_003221446.1| Length: 239 Strand: Plus
+        MULTISPECIES: RNA polymerase sporulation sigma factor SigE [Bacillales]
+
+Score:477 bits(1227), Expect:2e-169,
+Identities:239/239(100%),  Positives:239/239(100%),  Gaps:0.239(0%)
+
+ref|WP_00         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+
+ref|WP_00        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+
+ref|WP_00       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+
+ref|WP_00       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+                180 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+
+ref|WP_00       239
+                239
+WXX52402.       239
+
+""",
+            )
+        else:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : WXX52402.1 Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+Target: ref|WP_003221446.1| Length: 239 Strand: Plus
+        MULTISPECIES: RNA polymerase sporulation sigma factor SigE [Bacillales]
+        >ref|NP_389415.2| RNA polymerase sporulation-specific sigma-29 factor
+        (sigma-E) [Bacillus subtilis subsp. subtilis str. 168] >sp|P06222.1|
+        RecName: Full=RNA polymerase sigma-E factor; AltName: Full=P31; AltName:
+        Full=Sigma-29; AltName: Full=Stage II sporulation protein GB; Flags:
+        Precursor [Bacillus subtilis subsp. subtilis str. 168] >gb|KFI04694.1|
+        sporulation sigma factor SigE [Bacillus sp. BSC154] >gb|MDZ5720185.1|
+        RNA polymerase sporulation sigma factor SigE [Bacillus sp. X(2023)]
+        >gb|POO83984.1| RNA polymerase sporulation sigma factor SigE [Bacillus
+        sp. MBGLi97] >dbj|BAM52179.1| sporulation sigma factor SigE [Bacillus
+        subtilis BEST7613] >gb|ADM37626.1| sporulation-specific sigma factor
+        sigma-E [Bacillus spizizenii str. W23]
+
+Score:477 bits(1227), Expect:2e-169,
+Identities:239/239(100%),  Positives:239/239(100%),  Gaps:0.239(0%)
+
+ref|WP_00         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+
+ref|WP_00        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+
+ref|WP_00       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+
+ref|WP_00       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+                180 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+
+ref|WP_00       239
+                239
+WXX52402.       239
+
+""",
+            )
+        hit = record[1]
+        self.assertEqual(hit.num, 2)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "dbj|BAI85158.2|")
+        self.assertEqual(hit.target.name, "BAI85158")
+        self.assertEqual(
+            hit.target.description,
+            "sporulation sigma factor SigE [Bacillus subtilis subsp. natto BEST195]",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=260)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 1227.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 477.248)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 3.91488e-169)
+        self.assertEqual(hsp.annotations["identity"], 239)
+        self.assertEqual(hsp.annotations["positive"], 239)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[21, 260],
+                          [ 0, 239]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 239))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNG...KMV')",
+        )
+        self.assertEqual(hsp.query.id, "WXX52402.1")
+        self.assertEqual(
+            hsp.query.description,
+            "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+        )
+        self.assertEqual(len(hsp.query.features), 0)
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({21: 'MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNG...KMV'}, length=260)",
+        )
+        self.assertEqual(hsp.target.id, "dbj|BAI85158.2|")
+        self.assertEqual(hsp.target.name, "BAI85158")
+        self.assertEqual(
+            hsp.target.description,
+            "sporulation sigma factor SigE [Bacillus subtilis subsp. natto BEST195]",
+        )
+        self.assertEqual(len(hsp.target.features), 0)
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='dbj|BAI85158.2|' query.id='WXX52402.1'; 2 rows x 239 columns>",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+Query : WXX52402.1 Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+Target: dbj|BAI85158.2| Length: 260 Strand: Plus
+        sporulation sigma factor SigE [Bacillus subtilis subsp. natto BEST195]
+
+Score:477 bits(1227), Expect:4e-169,
+Identities:239/239(100%),  Positives:239/239(100%),  Gaps:0.239(0%)
+
+dbj|BAI85        21 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+
+dbj|BAI85        81 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+
+dbj|BAI85       141 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+
+dbj|BAI85       201 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+                180 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+
+dbj|BAI85       260
+                239
+WXX52402.       239
+
+""",
+        )
+        hit = record[2]
+        self.assertEqual(hit.num, 3)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "ref|WP_120028072.1|")
+        self.assertEqual(hit.target.name, "WP_120028072")
+        if xml2 is True:
+            self.assertEqual(
+                hit.target.description,
+                "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+            )
+        else:
+            self.assertEqual(
+                hit.target.description,
+                "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis] >gb|RJS52520.1| RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+            )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=239)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 1225.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 476.478)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 4.00949e-169)
+        self.assertEqual(hsp.annotations["identity"], 238)
+        self.assertEqual(hsp.annotations["positive"], 239)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[0, 239],
+                          [0, 239]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 239))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNG...KMV')",
+        )
+        self.assertEqual(hsp.query.id, "WXX52402.1")
+        self.assertEqual(
+            hsp.query.description,
+            "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+        )
+        self.assertEqual(len(hsp.query.features), 0)
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNG...KMV')",
+        )
+        self.assertEqual(hsp.target.id, hit.target.id)
+        self.assertEqual(hsp.target.name, hit.target.name)
+        self.assertEqual(hsp.target.description, hit.target.description)
+        self.assertEqual(len(hsp.target.features), 0)
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGL+GEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='ref|WP_120028072.1|' query.id='WXX52402.1'; 2 rows x 239 columns>",
+        )
+        if xml2 is True:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : WXX52402.1 Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+Target: ref|WP_120028072.1| Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+
+Score:476 bits(1225), Expect:4e-169,
+Identities:238/239(100%),  Positives:239/239(100%),  Gaps:0.239(0%)
+
+ref|WP_12         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+
+ref|WP_12        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+
+ref|WP_12       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+
+ref|WP_12       180 LEQLNEREKQIMELRFGLIGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+                180 ||||||||||||||||||.||||||||||||||||||||||||||||||||||||||||
+WXX52402.       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+
+ref|WP_12       239
+                239
+WXX52402.       239
+
+""",
+            )
+        else:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : WXX52402.1 Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+Target: ref|WP_120028072.1| Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+        >gb|RJS52520.1| RNA polymerase sporulation sigma factor SigE [Bacillus
+        subtilis]
+
+Score:476 bits(1225), Expect:4e-169,
+Identities:238/239(100%),  Positives:239/239(100%),  Gaps:0.239(0%)
+
+ref|WP_12         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+
+ref|WP_12        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+
+ref|WP_12       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+
+ref|WP_12       180 LEQLNEREKQIMELRFGLIGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+                180 ||||||||||||||||||.||||||||||||||||||||||||||||||||||||||||
+WXX52402.       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+
+ref|WP_12       239
+                239
+WXX52402.       239
+
+""",
+            )
+        hit = record[3]
+        self.assertEqual(hit.num, 4)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "ref|WP_326121348.1|")
+        self.assertEqual(hit.target.name, "WP_326121348")
+        if xml2 is True:
+            self.assertEqual(
+                hit.target.description,
+                "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+            )
+        else:
+            self.assertEqual(
+                hit.target.description,
+                "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis] >gb|MEC0320584.1| RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+            )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=239)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 1224.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 476.093)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 5.63375e-169)
+        self.assertEqual(hsp.annotations["identity"], 238)
+        self.assertEqual(hsp.annotations["positive"], 239)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[0, 239],
+                          [0, 239]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 239))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNG...KMV')",
+        )
+        self.assertEqual(hsp.query.id, "WXX52402.1")
+        self.assertEqual(
+            hsp.query.description,
+            "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+        )
+        self.assertEqual(len(hsp.query.features), 0)
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLIMKLPNG...KMV')",
+        )
+        self.assertEqual(hsp.target.id, hit.target.id)
+        self.assertEqual(hsp.target.name, hit.target.name)
+        self.assertEqual(hsp.target.description, hit.target.description)
+        self.assertEqual(len(hsp.target.features), 0)
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVL+MKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='ref|WP_326121348.1|' query.id='WXX52402.1'; 2 rows x 239 columns>",
+        )
+        if xml2 is True:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : WXX52402.1 Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+Target: ref|WP_326121348.1| Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+
+Score:476 bits(1224), Expect:6e-169,
+Identities:238/239(100%),  Positives:239/239(100%),  Gaps:0.239(0%)
+
+ref|WP_32         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLIMKLPNGDQAARA
+                  0 |||||||||||||||||||||||||||||||||||||||||||||||.||||||||||||
+WXX52402.         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+
+ref|WP_32        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+
+ref|WP_32       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+
+ref|WP_32       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+                180 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+
+ref|WP_32       239
+                239
+WXX52402.       239
+
+""",
+            )
+        else:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : WXX52402.1 Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+Target: ref|WP_326121348.1| Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+        >gb|MEC0320584.1| RNA polymerase sporulation sigma factor SigE [Bacillus
+        subtilis]
+
+Score:476 bits(1224), Expect:6e-169,
+Identities:238/239(100%),  Positives:239/239(100%),  Gaps:0.239(0%)
+
+ref|WP_32         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLIMKLPNGDQAARA
+                  0 |||||||||||||||||||||||||||||||||||||||||||||||.||||||||||||
+WXX52402.         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+
+ref|WP_32        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+
+ref|WP_32       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+
+ref|WP_32       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+                180 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+
+ref|WP_32       239
+                239
+WXX52402.       239
+
+""",
+            )
+        hit = record[4]
+        self.assertEqual(hit.num, 5)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "ref|WP_128473893.1|")
+        self.assertEqual(hit.target.name, "WP_128473893")
+        if xml2 is True:
+            self.assertEqual(
+                hit.target.description,
+                "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+            )
+        else:
+            self.assertEqual(
+                hit.target.description,
+                "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis] >gb|QAR61557.1| RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+            )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=239)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 1224.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 476.093)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 5.6959e-169)
+        self.assertEqual(hsp.annotations["identity"], 238)
+        self.assertEqual(hsp.annotations["positive"], 239)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[0, 239],
+                          [0, 239]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 239))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNG...KMV')",
+        )
+        self.assertEqual(hsp.query.id, "WXX52402.1")
+        self.assertEqual(
+            hsp.query.description,
+            "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+        )
+        self.assertEqual(len(hsp.query.features), 0)
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('MKKLKLRLTHLWYKLLMKLGMKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNG...KMV')",
+        )
+        self.assertEqual(hsp.target.id, hit.target.id)
+        self.assertEqual(hsp.target.name, hit.target.name)
+        self.assertEqual(hsp.target.description, hsp.target.description)
+        self.assertEqual(len(hsp.target.features), 0)
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MKKLKLRLTHLWYKLLMKLG+KSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='ref|WP_128473893.1|' query.id='WXX52402.1'; 2 rows x 239 columns>",
+        )
+        if xml2 is True:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : WXX52402.1 Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+Target: ref|WP_128473893.1| Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+
+Score:476 bits(1224), Expect:6e-169,
+Identities:238/239(100%),  Positives:239/239(100%),  Gaps:0.239(0%)
+
+ref|WP_12         0 MKKLKLRLTHLWYKLLMKLGMKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+                  0 ||||||||||||||||||||.|||||||||||||||||||||||||||||||||||||||
+WXX52402.         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+
+ref|WP_12        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+
+ref|WP_12       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+
+ref|WP_12       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+                180 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+
+ref|WP_12       239
+                239
+WXX52402.       239
+
+""",
+            )
+        else:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : WXX52402.1 Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+Target: ref|WP_128473893.1| Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+        >gb|QAR61557.1| RNA polymerase sporulation sigma factor SigE [Bacillus
+        subtilis]
+
+Score:476 bits(1224), Expect:6e-169,
+Identities:238/239(100%),  Positives:239/239(100%),  Gaps:0.239(0%)
+
+ref|WP_12         0 MKKLKLRLTHLWYKLLMKLGMKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+                  0 ||||||||||||||||||||.|||||||||||||||||||||||||||||||||||||||
+WXX52402.         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+
+ref|WP_12        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+
+ref|WP_12       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+
+ref|WP_12       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+                180 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+
+ref|WP_12       239
+                239
+WXX52402.       239
+
+""",
+            )
+        hit = record[5]
+        self.assertEqual(hit.num, 6)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "ref|WP_174228079.1|")
+        self.assertEqual(hit.target.name, "WP_174228079")
+        if xml2 is True:
+            self.assertEqual(
+                hit.target.description,
+                "RNA polymerase sporulation sigma factor SigE [Bacillus tequilensis]",
+            )
+        else:
+            self.assertEqual(
+                hit.target.description,
+                "RNA polymerase sporulation sigma factor SigE [Bacillus tequilensis] >gb|NTU26438.1| RNA polymerase sporulation sigma factor SigE [Bacillus tequilensis]",
+            )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=239)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 1224.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 476.093)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 7.17171e-169)
+        self.assertEqual(hsp.annotations["identity"], 238)
+        self.assertEqual(hsp.annotations["positive"], 239)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[0, 239],
+                          [0, 239]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 239))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNG...KMV')",
+        )
+        self.assertEqual(hsp.query.id, "WXX52402.1")
+        self.assertEqual(
+            hsp.query.description,
+            "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+        )
+        self.assertEqual(len(hsp.query.features), 0)
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('MKKLKLRLTHLWYRLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNG...KMV')",
+        )
+        self.assertEqual(hsp.target.id, hit.target.id)
+        self.assertEqual(hsp.target.name, hit.target.name)
+        self.assertEqual(hsp.target.description, hit.target.description)
+        self.assertEqual(len(hsp.target.features), 0)
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MKKLKLRLTHLWY+LLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='ref|WP_174228079.1|' query.id='WXX52402.1'; 2 rows x 239 columns>",
+        )
+        if xml2 is True:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : WXX52402.1 Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+Target: ref|WP_174228079.1| Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus tequilensis]
+
+Score:476 bits(1224), Expect:7e-169,
+Identities:238/239(100%),  Positives:239/239(100%),  Gaps:0.239(0%)
+
+ref|WP_17         0 MKKLKLRLTHLWYRLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+                  0 |||||||||||||.||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+
+ref|WP_17        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+
+ref|WP_17       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+
+ref|WP_17       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+                180 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+
+ref|WP_17       239
+                239
+WXX52402.       239
+
+""",
+            )
+        else:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : WXX52402.1 Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+Target: ref|WP_174228079.1| Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus tequilensis]
+        >gb|NTU26438.1| RNA polymerase sporulation sigma factor SigE [Bacillus
+        tequilensis]
+
+Score:476 bits(1224), Expect:7e-169,
+Identities:238/239(100%),  Positives:239/239(100%),  Gaps:0.239(0%)
+
+ref|WP_17         0 MKKLKLRLTHLWYRLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+                  0 |||||||||||||.||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+
+ref|WP_17        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+
+ref|WP_17       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+
+ref|WP_17       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+                180 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+
+ref|WP_17       239
+                239
+WXX52402.       239
+
+""",
+            )
+        hit = record[6]
+        self.assertEqual(hit.num, 7)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "ref|WP_315947263.1|")
+        self.assertEqual(hit.target.name, "WP_315947263")
+        if xml2 is True:
+            self.assertEqual(
+                hit.target.description,
+                "RNA polymerase sporulation sigma factor SigE [Bacillus cabrialesii]",
+            )
+        else:
+            self.assertEqual(
+                hit.target.description,
+                "RNA polymerase sporulation sigma factor SigE [Bacillus cabrialesii] >gb|MDU0153406.1| RNA polymerase sporulation sigma factor SigE [Bacillus cabrialesii]",
+            )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=239)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 1224.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 476.093)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 7.17171e-169)
+        self.assertEqual(hsp.annotations["identity"], 238)
+        self.assertEqual(hsp.annotations["positive"], 239)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[0, 239],
+                          [0, 239]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 239))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNG...KMV')",
+        )
+        self.assertEqual(hsp.query.id, "WXX52402.1")
+        self.assertEqual(
+            hsp.query.description,
+            "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+        )
+        self.assertEqual(len(hsp.query.features), 0)
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('MKKLKLRLTHLWYKLLMRLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNG...KMV')",
+        )
+        self.assertEqual(hsp.target.id, hit.target.id)
+        self.assertEqual(hsp.target.name, hit.target.name)
+        self.assertEqual(hsp.target.description, hit.target.description)
+        self.assertEqual(len(hsp.target.features), 0)
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MKKLKLRLTHLWYKLLM+LGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='ref|WP_315947263.1|' query.id='WXX52402.1'; 2 rows x 239 columns>",
+        )
+        if xml2 is True:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : WXX52402.1 Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+Target: ref|WP_315947263.1| Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus cabrialesii]
+
+Score:476 bits(1224), Expect:7e-169,
+Identities:238/239(100%),  Positives:239/239(100%),  Gaps:0.239(0%)
+
+ref|WP_31         0 MKKLKLRLTHLWYKLLMRLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+                  0 |||||||||||||||||.||||||||||||||||||||||||||||||||||||||||||
+WXX52402.         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+
+ref|WP_31        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+
+ref|WP_31       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+
+ref|WP_31       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+                180 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+
+ref|WP_31       239
+                239
+WXX52402.       239
+
+""",
+            )
+        else:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : WXX52402.1 Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+Target: ref|WP_315947263.1| Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus cabrialesii]
+        >gb|MDU0153406.1| RNA polymerase sporulation sigma factor SigE [Bacillus
+        cabrialesii]
+
+Score:476 bits(1224), Expect:7e-169,
+Identities:238/239(100%),  Positives:239/239(100%),  Gaps:0.239(0%)
+
+ref|WP_31         0 MKKLKLRLTHLWYKLLMRLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+                  0 |||||||||||||||||.||||||||||||||||||||||||||||||||||||||||||
+WXX52402.         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+
+ref|WP_31        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+
+ref|WP_31       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+
+ref|WP_31       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+                180 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+
+ref|WP_31       239
+                239
+WXX52402.       239
+
+""",
+            )
+        hit = record[7]
+        self.assertEqual(hit.num, 8)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "ref|WP_219912761.1|")
+        self.assertEqual(hit.target.name, "WP_219912761")
+        if xml2 is True:
+            self.assertEqual(
+                hit.target.description,
+                "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+            )
+        else:
+            self.assertEqual(
+                hit.target.description,
+                "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis] >emb|COM82207.1| RNA polymerase sigma factor RpoD [Bacillus subtilis]",
+            )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=239)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 1223.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 475.707)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 7.49345e-169)
+        self.assertEqual(hsp.annotations["identity"], 238)
+        self.assertEqual(hsp.annotations["positive"], 239)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[0, 239],
+                          [0, 239]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 239))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNG...KMV')",
+        )
+        self.assertEqual(hsp.query.id, "WXX52402.1")
+        self.assertEqual(
+            hsp.query.description,
+            "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+        )
+        self.assertEqual(len(hsp.query.features), 0)
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNG...KMV')",
+        )
+        self.assertEqual(hsp.target.id, hit.target.id)
+        self.assertEqual(hsp.target.name, hit.target.name)
+        self.assertEqual(hsp.target.description, hit.target.description)
+        self.assertEqual(len(hsp.target.features), 0)
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATY+SRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='ref|WP_219912761.1|' query.id='WXX52402.1'; 2 rows x 239 columns>",
+        )
+        if xml2 is True:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : WXX52402.1 Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+Target: ref|WP_219912761.1| Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+
+Score:475 bits(1223), Expect:7e-169,
+Identities:238/239(100%),  Positives:239/239(100%),  Gaps:0.239(0%)
+
+ref|WP_21         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+
+ref|WP_21        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYSSRCIEN
+                 60 |||||||||||||||||||||||||||||||||||||||||||||||||||||.||||||
+WXX52402.        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+
+ref|WP_21       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+
+ref|WP_21       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+                180 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+
+ref|WP_21       239
+                239
+WXX52402.       239
+
+""",
+            )
+        else:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : WXX52402.1 Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+Target: ref|WP_219912761.1| Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+        >emb|COM82207.1| RNA polymerase sigma factor RpoD [Bacillus subtilis]
+
+Score:475 bits(1223), Expect:7e-169,
+Identities:238/239(100%),  Positives:239/239(100%),  Gaps:0.239(0%)
+
+ref|WP_21         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+
+ref|WP_21        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYSSRCIEN
+                 60 |||||||||||||||||||||||||||||||||||||||||||||||||||||.||||||
+WXX52402.        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+
+ref|WP_21       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+
+ref|WP_21       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+                180 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+
+ref|WP_21       239
+                239
+WXX52402.       239
+
+""",
+            )
+        hit = record[8]
+        self.assertEqual(hit.num, 9)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "ref|WP_038828182.1|")
+        self.assertEqual(hit.target.name, "WP_038828182")
+        self.assertEqual(
+            hit.target.description,
+            "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=239)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 1223.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 475.707)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 7.49345e-169)
+        self.assertEqual(hsp.annotations["identity"], 238)
+        self.assertEqual(hsp.annotations["positive"], 239)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[0, 239],
+                          [0, 239]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 239))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNG...KMV')",
+        )
+        self.assertEqual(hsp.query.id, "WXX52402.1")
+        self.assertEqual(
+            hsp.query.description,
+            "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+        )
+        self.assertEqual(len(hsp.query.features), 0)
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNG...KMV')",
+        )
+        self.assertEqual(hsp.target.id, "ref|WP_038828182.1|")
+        self.assertEqual(hsp.target.name, "WP_038828182")
+        self.assertEqual(
+            hsp.target.description,
+            "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+        )
+        self.assertEqual(len(hsp.target.features), 0)
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAAR+ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='ref|WP_038828182.1|' query.id='WXX52402.1'; 2 rows x 239 columns>",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+Query : WXX52402.1 Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+Target: ref|WP_038828182.1| Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+
+Score:475 bits(1223), Expect:7e-169,
+Identities:238/239(100%),  Positives:239/239(100%),  Gaps:0.239(0%)
+
+ref|WP_03         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARS
+                  0 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||.
+WXX52402.         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+
+ref|WP_03        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+
+ref|WP_03       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+
+ref|WP_03       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+                180 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+
+ref|WP_03       239
+                239
+WXX52402.       239
+
+""",
+        )
+        hit = record[9]
+        self.assertEqual(hit.num, 10)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "ref|WP_326211018.1|")
+        self.assertEqual(hit.target.name, "WP_326211018")
+        if xml2 is True:
+            self.assertEqual(
+                hit.target.description,
+                "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+            )
+        else:
+            self.assertEqual(
+                hit.target.description,
+                "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis] >gb|MEC1541690.1| RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+            )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=239)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 1223.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 475.707)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 8.36237e-169)
+        self.assertEqual(hsp.annotations["identity"], 238)
+        self.assertEqual(hsp.annotations["positive"], 239)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[0, 239],
+                          [0, 239]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 239))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNG...KMV')",
+        )
+        self.assertEqual(hsp.query.id, "WXX52402.1")
+        self.assertEqual(
+            hsp.query.description,
+            "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+        )
+        self.assertEqual(len(hsp.query.features), 0)
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNG...KMM')",
+        )
+        self.assertEqual(hsp.target.id, hit.target.id)
+        self.assertEqual(hsp.target.name, hit.target.name)
+        self.assertEqual(hsp.target.description, hit.target.description)
+        self.assertEqual(len(hsp.target.features), 0)
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKM+",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='ref|WP_326211018.1|' query.id='WXX52402.1'; 2 rows x 239 columns>",
+        )
+        if xml2 is True:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : WXX52402.1 Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+Target: ref|WP_326211018.1| Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+
+Score:475 bits(1223), Expect:8e-169,
+Identities:238/239(100%),  Positives:239/239(100%),  Gaps:0.239(0%)
+
+ref|WP_32         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+
+ref|WP_32        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+
+ref|WP_32       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+
+ref|WP_32       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMM
+                180 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||.
+WXX52402.       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+
+ref|WP_32       239
+                239
+WXX52402.       239
+
+""",
+            )
+        else:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : WXX52402.1 Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+Target: ref|WP_326211018.1| Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+        >gb|MEC1541690.1| RNA polymerase sporulation sigma factor SigE [Bacillus
+        subtilis]
+
+Score:475 bits(1223), Expect:8e-169,
+Identities:238/239(100%),  Positives:239/239(100%),  Gaps:0.239(0%)
+
+ref|WP_32         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+
+ref|WP_32        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+
+ref|WP_32       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+
+ref|WP_32       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMM
+                180 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||.
+WXX52402.       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+
+ref|WP_32       239
+                239
+WXX52402.       239
+
+""",
+            )
+        with self.assertRaises(IndexError) as cm:
+            record[12]
+        self.assertEqual(str(cm.exception), "index out of range")
+        with self.assertRaises(TypeError) as cm:
+            record[None]
+        self.assertEqual(str(cm.exception), "key must be an integer, slice, or str")
+        with self.assertRaises(KeyError) as cm:
+            record["weird_key"]
+        self.assertEqual(str(cm.exception), "'weird_key'")
+        target_id = "ref|WP_326121348.1|"
+        self.assertIn(target_id, record)
+        self.assertNotIn("weird_id", record)
+        self.assertEqual(record[target_id].target.id, target_id)
+        self.assertEqual(record.index(target_id), 3)
+        with self.assertRaises(ValueError) as cm:
+            record.index("weird_id")
+        self.assertEqual(str(cm.exception), "'weird_id' not found")
+        self.assertEqual(
+            repr(hit),
+            "<Bio.Blast.Hit target.id='ref|WP_326211018.1|' query.id='WXX52402.1'; 1 HSP>",
+        )
+        self.assertEqual(
+            repr(hit[:0]), "<Bio.Blast.Hit target.id='ref|WP_326211018.1|'; no hits>"
+        )
+        self.assertEqual(
+            record.keys(),
+            [
+                "ref|WP_003221446.1|",
+                "dbj|BAI85158.2|",
+                "ref|WP_120028072.1|",
+                "ref|WP_326121348.1|",
+                "ref|WP_128473893.1|",
+                "ref|WP_174228079.1|",
+                "ref|WP_315947263.1|",
+                "ref|WP_219912761.1|",
+                "ref|WP_038828182.1|",
+                "ref|WP_326211018.1|",
+            ],
+        )
+        self.assertEqual(len(record.stat), 7)
+        self.assertEqual(record.stat["db-num"], 718658123)
+        self.assertEqual(record.stat["db-len"], 277418989154)
+        if xml2 is True:
+            self.assertEqual(record.stat["hsp-len"], 161)
+            self.assertEqual(record.stat["eff-space"], 12613772445378)
+        else:
+            self.assertEqual(record.stat["hsp-len"], 0)
+            self.assertEqual(record.stat["eff-space"], 0)
+        self.assertAlmostEqual(record.stat["kappa"], 0.041)
+        self.assertAlmostEqual(record.stat["lambda"], 0.267)
+        self.assertAlmostEqual(record.stat["entropy"], 0.14)
+
+    def test_xml_21500_blastp_001_writer(self):
+        """Writing BLASTP 2.15.0+ (xml_21500_blastp_001.xml)."""
+        filename = "xml_21500_blastp_001.xml"
+        path = os.path.join("Blast", filename)
+        with Blast.parse(path) as records:
+            stream = io.BytesIO()
+            n = Blast.write(records, stream)
+            self.assertEqual(n, 1)
+            stream.seek(0)
+            written_records = Blast.parse(stream)
+            self.check_xml_21500_blastp_001_records(written_records)
+
+    def test_xml2_21500_blastp_001_writer(self):
+        """Writing BLASTP 2.15.0+ (xml2_21500_blastp_001.xml)."""
+        filename = "xml2_21500_blastp_001.xml"
+        path = os.path.join("Blast", filename)
+        with Blast.parse(path) as records:
+            stream = io.BytesIO()
+            n = Blast.write(records, stream, fmt="XML2")
+            self.assertEqual(n, 1)
+            stream.seek(0)
+            written_records = Blast.parse(stream)
+            self.check_xml_21500_blastp_001_records(written_records, xml2=True)
+
 
 class TestBlastn(unittest.TestCase):
     """Test the Blast XML parser for blastn output."""
@@ -2077,7 +3590,7 @@ Program: BLASTN 2.15.0+
             self.assertEqual(record.stat["eff-space"], 716017657624)
         else:
             self.assertEqual(record.stat["hsp-len"], 0)
-            self.assertAlmostEqual(record.stat["eff-space"], 0.0)
+            self.assertEqual(record.stat["eff-space"], 0)
         self.assertAlmostEqual(record.stat["kappa"], 0.41)
         self.assertAlmostEqual(record.stat["lambda"], 0.625)
         self.assertAlmostEqual(record.stat["entropy"], 0.78)
@@ -3797,7 +5310,7 @@ Program: BLASTX 2.2.22+
         self.assertEqual(record.stat["db-num"], 8994603)
         self.assertEqual(record.stat["db-len"], -1216159329)
         self.assertEqual(record.stat["hsp-len"], 0)
-        self.assertAlmostEqual(record.stat["eff-space"], 367397307882.0)
+        self.assertEqual(record.stat["eff-space"], 367397307882)
         self.assertAlmostEqual(record.stat["kappa"], 0.041)
         self.assertAlmostEqual(record.stat["lambda"], 0.267)
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
@@ -3885,7 +5398,7 @@ gi|149390         0 HMLVSKIKPCMCKYELIRTVKLRMAH 26
         self.assertEqual(record.stat["db-num"], 8994603)
         self.assertEqual(record.stat["db-len"], -1216159329)
         self.assertEqual(record.stat["hsp-len"], 0)
-        self.assertAlmostEqual(record.stat["eff-space"], 967993058520.0)
+        self.assertEqual(record.stat["eff-space"], 967993058520)
         self.assertAlmostEqual(record.stat["kappa"], 0.041)
         self.assertAlmostEqual(record.stat["lambda"], 0.267)
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
@@ -4800,7 +6313,7 @@ gi|826212       263 -IPYHG--------NSGQESSLDVVNRSIGYYKRYCDMLGVSCEDNL 301
         self.assertEqual(record.stat["db-num"], 8994603)
         self.assertEqual(record.stat["db-len"], -1216159329)
         self.assertEqual(record.stat["hsp-len"], 0)
-        self.assertAlmostEqual(record.stat["eff-space"], 108443629616.0)
+        self.assertEqual(record.stat["eff-space"], 108443629616)
         self.assertAlmostEqual(record.stat["kappa"], 0.041)
         self.assertAlmostEqual(record.stat["lambda"], 0.267)
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
@@ -4819,7 +6332,7 @@ gi|826212       263 -IPYHG--------NSGQESSLDVVNRSIGYYKRYCDMLGVSCEDNL 301
         self.assertEqual(record.stat["db-num"], 8994603)
         self.assertEqual(record.stat["db-len"], -1216159329)
         self.assertEqual(record.stat["hsp-len"], 0)
-        self.assertAlmostEqual(record.stat["eff-space"], 165344802738.0)
+        self.assertAlmostEqual(record.stat["eff-space"], 165344802738)
         self.assertAlmostEqual(record.stat["kappa"], 0.041)
         self.assertAlmostEqual(record.stat["lambda"], 0.267)
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
@@ -5781,7 +7294,7 @@ gi|224058       180 EPYNATLSVHQLVENADECMV 201
         self.assertEqual(record.stat["db-num"], 8994603)
         self.assertEqual(record.stat["db-len"], -1216159329)
         self.assertEqual(record.stat["hsp-len"], 0)
-        self.assertAlmostEqual(record.stat["eff-space"], 147032237429.0)
+        self.assertEqual(record.stat["eff-space"], 147032237429)
         self.assertAlmostEqual(record.stat["kappa"], 0.041)
         self.assertAlmostEqual(record.stat["lambda"], 0.267)
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
@@ -6613,7 +8126,7 @@ gi|503077         7 GAMCVQRFDDSRKSAIHNTYRNSLRSSSMREPRDPLLKVL 47
         self.assertEqual(record.stat["db-num"], 8994603)
         self.assertEqual(record.stat["db-len"], -1216159329)
         self.assertEqual(record.stat["hsp-len"], 0)
-        self.assertAlmostEqual(record.stat["eff-space"], 75367093081.0)
+        self.assertEqual(record.stat["eff-space"], 75367093081)
         self.assertAlmostEqual(record.stat["kappa"], 0.041)
         self.assertAlmostEqual(record.stat["lambda"], 0.267)
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
@@ -7445,7 +8958,7 @@ gi|317649        67 SLVMAVVVNDSEEDGDSSEAVQPQKRKRLWGLVVCHNTTPRFV 110
         self.assertEqual(record.stat["db-num"], 8994603)
         self.assertEqual(record.stat["db-len"], -1216159329)
         self.assertEqual(record.stat["hsp-len"], 0)
-        self.assertAlmostEqual(record.stat["eff-space"], 1251086325060.0)
+        self.assertEqual(record.stat["eff-space"], 1251086325060)
         self.assertAlmostEqual(record.stat["kappa"], 0.041)
         self.assertAlmostEqual(record.stat["lambda"], 0.267)
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
@@ -8674,7 +10187,7 @@ Program: BLASTX 2.15.0+
             self.assertEqual(record.stat["eff-space"], 6826048836800)
         else:
             self.assertEqual(record.stat["hsp-len"], 0)
-            self.assertAlmostEqual(record.stat["eff-space"], 0.0)
+            self.assertEqual(record.stat["eff-space"], 0)
         self.assertAlmostEqual(record.stat["kappa"], 0.041)
         self.assertAlmostEqual(record.stat["lambda"], 0.267)
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
@@ -9717,7 +11230,7 @@ Program: TBLASTN 2.15.0+
             self.assertEqual(record.stat["eff-space"], 34567702523838)
         else:
             self.assertEqual(record.stat["hsp-len"], 0)
-            self.assertAlmostEqual(record.stat["eff-space"], 0.0)
+            self.assertEqual(record.stat["eff-space"], 0)
         self.assertAlmostEqual(record.stat["kappa"], 0.041)
         self.assertAlmostEqual(record.stat["lambda"], 0.267)
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
@@ -11048,7 +12561,7 @@ Program: TBLASTX 2.2.26+
         self.assertEqual(record.stat["db-num"], 2933984)
         self.assertEqual(record.stat["db-len"], 4726730735)
         self.assertEqual(record.stat["hsp-len"], 0)
-        self.assertAlmostEqual(record.stat["eff-space"], 0.0)
+        self.assertEqual(record.stat["eff-space"], 0)
         self.assertAlmostEqual(record.stat["kappa"], 0.0)
         self.assertAlmostEqual(record.stat["lambda"], 0.0)
         self.assertAlmostEqual(record.stat["entropy"], 0.0)
@@ -11067,7 +12580,7 @@ Program: TBLASTX 2.2.26+
         self.assertEqual(record.stat["db-num"], 2933984)
         self.assertEqual(record.stat["db-len"], 4726730735)
         self.assertEqual(record.stat["hsp-len"], 0)
-        self.assertAlmostEqual(record.stat["eff-space"], 0.0)
+        self.assertEqual(record.stat["eff-space"], 0)
         self.assertAlmostEqual(record.stat["kappa"], 0.0)
         self.assertAlmostEqual(record.stat["lambda"], 0.0)
         self.assertAlmostEqual(record.stat["entropy"], 0.0)
