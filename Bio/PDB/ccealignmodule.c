@@ -154,29 +154,21 @@ static double
 similarityII(
     double **dA,
     double **dB,
-    int iA,
-    int iB,
-    int jA,
-    int jB,
-    int fragmentSize)
+    const int iA,
+    const int iB,
+    const int fragmentSize)
 {
     double similarity = 0.0;
+    double termCount = (fragmentSize - 1) * (fragmentSize - 2) / 2.0;
 
-    if (iA == jA && iB == jB) {
-        double termCount = (fragmentSize - 1) * (fragmentSize - 2) / 2.0;
-
-        for (int k = 0; k < fragmentSize - 2; k++) {
-            for (int l = k + 2; l < fragmentSize; l++) {
-                similarity +=
-                    fabs(dA[iA + k][iA + l] - dB[iB + k][iB + l]);
-            }
+    for (int k = 0; k < fragmentSize - 2; k++) {
+        for (int l = k + 2; l < fragmentSize; l++) {
+            similarity +=
+                fabs(dA[iA + k][iA + l] - dB[iB + k][iB + l]);
         }
+    }
 
-        return similarity / termCount;
-    }
-    else {
-        // TODO
-    }
+    return similarity / termCount;
 }
 
 // Calculate similarity matrix
@@ -200,7 +192,7 @@ calcS(double **dA, double **dB, int lenA, int lenB, int wSize)
     //
     for (int iA = 0; iA < rowCount; iA++) {
         for (int iB = 0; iB < colCount; iB++) {
-            S[iA][iB] = similarityII(dA, dB, iA, iB, iA, iB, wSize);
+            S[iA][iB] = similarityII(dA, dB, iA, iB, wSize);
         }
     }
 
@@ -256,18 +248,17 @@ findPath(
 {
     const double D0 = 3.0;
     const double D1 = 4.0;
-    int i, j;
 
     // Score of the best Path
     double bestPathScore = 1e6;
     int bestPathLength = 0;
 
     // Length of longest possible alignment
-    int smaller = (lenA < lenB) ? lenA : lenB;
+    const int smaller = (lenA < lenB) ? lenA : lenB;
     int winSum = (winSize - 1) * (winSize - 2) / 2;
 
     path bestPath = (path)malloc(sizeof(afp) * smaller);
-    for (i = 0; i < smaller; i++) {
+    for (int i = 0; i < smaller; i++) {
         bestPath[i].first = -1;
         bestPath[i].second = -1;
     }
@@ -280,7 +271,7 @@ findPath(
     double scoreBuffer[MAX_PATHS];
     pathCache pathBuffer = (pathCache)malloc(sizeof(path *) * MAX_PATHS);
 
-    for (i = 0; i < MAX_PATHS; i++) {
+    for (int i = 0; i < MAX_PATHS; i++) {
         // initialize the paths
         scoreBuffer[i] = 1e6;
         lenBuffer[i] = 0;
@@ -291,17 +282,17 @@ findPath(
     // this array stores a list of residues seen.  We use it to calculate the
     // total score of a path from 1..M and then add it to M+1..N.
     int *winCache = (int *)malloc(sizeof(int) * smaller);
-    for (i = 0; i < smaller; i++)
+    for (int i = 0; i < smaller; i++)
         winCache[i] = (i + 1) * i * winSize / 2 + (i + 1) * winSum;
 
     // allScoreBuffer
     // this 2D array keeps track of all partial gapped scores
     double **allScoreBuffer = (double **)malloc(sizeof(double *) * smaller);
-    for (i = 0; i < smaller; i++) {
+    for (int i = 0; i < smaller; i++) {
         allScoreBuffer[i] =
             (double *)malloc((gapMax * 2 + 1) * sizeof(double));
         // initialize the ASB
-        for (j = 0; j < gapMax * 2 + 1; j++)
+        for (int j = 0; j < gapMax * 2 + 1; j++)
             allScoreBuffer[i][j] = 1e6;
     }
 
@@ -326,7 +317,7 @@ findPath(
             // Restart curPath here.
             //
             path curPath = (path)malloc(sizeof(afp) * smaller);
-            for (i = 0; i < smaller; i++) {
+            for (int i = 0; i < smaller; i++) {
                 curPath[i].first = -1;
                 curPath[i].second = -1;
             }
@@ -338,7 +329,7 @@ findPath(
             double curTotalScore = 0.0;
 
             //
-            // Check all possible paths starting from iA, iB
+            // Build the best path starting from iA, iB
             //
             int done = 0;
             while (!done) {
@@ -358,16 +349,15 @@ findPath(
                         jB += (g + 1) / 2;
                     }
 
-                    //
                     // Following are three heuristics to ensure high quality
                     // long paths and make sure we don't run over the end of
                     // the S, matrix.
 
-                    // 1st: If jA and jB are at the end of the similarity matrix
+                    // 1st: If jA or jB is at the end of the similarity matrix
                     if (jA > lenA - winSize || jB > lenB - winSize)
                         continue;
-                    // 2nd: If this gapped octapeptide is bad, ignore it.
-                    if (S[jA][jB] > D0)
+                    // 2nd: If this candidate AFP is bad, ignore it.
+                    if (S[jA][jB] >= D0)
                         continue;
                     // 3rd: if too close to end, ignore it.
                     if (S[jA][jB] == -1.0)
@@ -383,12 +373,8 @@ findPath(
 
                     curScore /= curPathLength;
 
-                    if (curScore >= D1) {
-                        continue;
-                    }
-
                     // store GAPPED best
-                    if (curScore < gapBestScore) {
+                    if (curScore < D1 && curScore < gapBestScore) {
                         curPath[curPathLength].first = jA;
                         curPath[curPathLength].second = jB;
                         gapBestScore = curScore;
@@ -487,21 +473,20 @@ findPath(
             if (bestPathLength > lenBuffer[bufferIndex] ||
                 (bestPathLength == lenBuffer[bufferIndex] &&
                  bestPathScore < scoreBuffer[bufferIndex])) {
-                // we're going to add an entry to the ring-buffer.
+                // We're going to add an entry to the ring-buffer.
                 // Adjust maxSize values and curIndex accordingly.
-                bufferIndex =
-                    (bufferIndex == MAX_PATHS - 1) ? 0 : bufferIndex + 1;
+                bufferIndex += 1;
+                bufferIndex %= MAX_PATHS;
                 bufferSize =
                     (bufferSize < MAX_PATHS) ? (bufferSize) + 1 : MAX_PATHS;
                 path pathCopy = (path)malloc(sizeof(afp) * smaller);
 
-                int i;
-                for (i = 0; i < smaller; i++) {
+                for (int i = 0; i < smaller; i++) {
                     pathCopy[i].first = bestPath[i].first;
                     pathCopy[i].second = bestPath[i].second;
                 }
 
-                if (bufferIndex == 0 && (bufferSize) == MAX_PATHS) {
+                if (bufferIndex == 0 && bufferSize == MAX_PATHS) {
                     if (pathBuffer[MAX_PATHS - 1])
                         free(pathBuffer[MAX_PATHS - 1]);
                     pathBuffer[MAX_PATHS - 1] = pathCopy;
@@ -541,12 +526,10 @@ findPath(
         Py_INCREF(pathAList);
         Py_INCREF(pathBList);
 
-        int j = 0;
-        // Grab the current path
-        while (j < smaller) {
+        for (int j = 0; j < smaller; j++) {
             if (pathBuffer[o][j].first != -1) {
-                int idxA = pathBuffer[o][j].first;
-                int idxB = pathBuffer[o][j].second;
+                const int idxA = pathBuffer[o][j].first;
+                const int idxB = pathBuffer[o][j].second;
 
                 for (int k = 0; k < winSize; k++) {
                     PyObject *v = Py_BuildValue("i", idxA + k);
@@ -556,18 +539,19 @@ findPath(
                     PyList_Append(pathBList, v);
                     Py_DECREF(v);
                 }
-                j++;
-            } else {
+            }
+            else {
                 break;
             }
         }
+
         PyObject *pairList = Py_BuildValue("[NN]", pathAList, pathBList);
         Py_INCREF(pairList);
         PyList_SET_ITEM(result, o, pairList);
     }
 
     // free memory
-    for (i = 0; i < smaller; i++)
+    for (int i = 0; i < smaller; i++)
         free(allScoreBuffer[i]);
     free(allScoreBuffer);
     free(tIndex);
