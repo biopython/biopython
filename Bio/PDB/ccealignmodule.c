@@ -123,6 +123,33 @@ calcDM(pcePoint coords, int len)
     return dm;
 }
 
+//
+// This similarity corresponds to distance measure (i) or equation (6) in the paper.
+//
+static double
+similarityI(
+    double **dA,
+    double **dB,
+    const int iA,
+    const int iB,
+    const int jA,
+    const int jB,
+    const int fragmentSize)
+{
+    const int m = fragmentSize;
+    double similarity = fabs(dA[iA][jA] - dB[iB][jB]) +
+        fabs(dA[iA + m-1][jA + m-1] - dB[iB + m-1][jB + m-1]);
+
+    for (int k = 1; k < m - 1; k++) {
+        similarity += fabs(dA[iA + k][jA + m-1 - k] - fabs(dB[iB + k][jB + m-1 - k]));
+    }
+
+    return similarity / m;
+}
+
+//
+// The similarity corresponds to distance measure (ii) or equation (7) in the paper.
+//
 static double
 similarityII(
     double **dA,
@@ -173,7 +200,7 @@ calcS(double **dA, double **dB, int lenA, int lenB, int wSize)
     //
     for (int iA = 0; iA < rowCount; iA++) {
         for (int iB = 0; iB < colCount; iB++) {
-            S[iA][iB] = similarityII(d1, d2, iA, iB, iA, iB, wSize);
+            S[iA][iB] = similarityII(dA, dB, iA, iB, iA, iB, wSize);
         }
     }
 
@@ -183,7 +210,7 @@ calcS(double **dA, double **dB, int lenA, int lenB, int wSize)
 static pcePoint
 getCoords(PyObject *L, int length)
 {
-    // make space for the current coords
+    // Make space for the current coords
     pcePoint coords = (pcePoint)malloc(sizeof(cePoint) * length);
 
     if (!coords)
@@ -218,8 +245,14 @@ getCoords(PyObject *L, int length)
 
 // Find the best N alignment paths
 static PyObject *
-findPath(double **S, double **dA, double **dB, int lenA, int lenB,
-                   int winSize, int gapMax)
+findPath(
+    double **S,
+    double **dA,
+    double **dB,
+    const int lenA,
+    const int lenB,
+    const int winSize,
+    const int gapMax)
 {
     const double D0 = 3.0;
     const double D1 = 4.0;
@@ -341,21 +374,14 @@ findPath(double **S, double **dA, double **dB, int lenA, int lenB,
                         continue;
 
                     double curScore = 0.0;
+
                     for (int s = 0; s < curPathLength; s++) {
-                        curScore += fabs(dA[curPath[s].first][jA] -
-                                         dB[curPath[s].second][jB]);
-                        curScore += fabs(dA[curPath[s].first + (winSize - 1)]
-                                           [jA + (winSize - 1)] -
-                                         dB[curPath[s].second + (winSize - 1)]
-                                           [jB + (winSize - 1)]);
-                        for (int k = 1; k < winSize - 1; k++)
-                            curScore += fabs(dA[curPath[s].first + k]
-                                               [jA + (winSize - 1) - k] -
-                                             dB[curPath[s].second + k]
-                                               [jB + (winSize - 1) - k]);
+                        const int iA = curPath[s].first;
+                        const int iB = curPath[s].second;
+                        curScore += similarityI(dA, dB, iA, iB, jA, jB, winSize);
                     }
 
-                    curScore /= (double)winSize * (double)curPathLength;
+                    curScore /= curPathLength;
 
                     if (curScore >= D1) {
                         continue;
