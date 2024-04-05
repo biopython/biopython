@@ -101,13 +101,13 @@ typedef struct {
 } afp, *path, **pathCache;
 
 // Calculate Distance Matrix
-double **
-calcDM(pcePoint coords, int len) {
-
+static double **
+calcDM(pcePoint coords, int len)
+{
     double **dm = (double **)malloc(sizeof(double *) * len);
+
     for (int i = 0; i < len; i++)
         dm[i] = (double *)malloc(sizeof(double) * len);
-
     for (int row = 0; row < len; row++) {
         for (int col = row; col < len; col++) {
             double xd = coords[row].x - coords[col].x;
@@ -117,12 +117,14 @@ calcDM(pcePoint coords, int len) {
             dm[row][col] = dm[col][row] = sqrt(distsq);
         }
     }
+
     return dm;
 }
 
 // Calculate Score Matrix
-double **
-calcS(double **d1, double **d2, int lenA, int lenB, int wSize) {
+static double **
+calcS(double **d1, double **d2, int lenA, int lenB, int wSize)
+{
     int i;
     double winSize = (double)wSize;
 
@@ -170,8 +172,9 @@ calcS(double **d1, double **d2, int lenA, int lenB, int wSize) {
     return S;
 }
 
-pcePoint
-getCoords(PyObject *L, int length) {
+static pcePoint
+getCoords(PyObject *L, int length)
+{
     // make space for the current coords
     pcePoint coords = (pcePoint)malloc(sizeof(cePoint) * length);
 
@@ -206,10 +209,10 @@ getCoords(PyObject *L, int length) {
 }
 
 // Find the best N alignment paths
-PyObject *
+static PyObject *
 findPath(double **S, double **dA, double **dB, int lenA, int lenB,
-                   int winSize, int gapMax) {
-
+                   int winSize, int gapMax)
+{
     const double D0 = 3.0;
     const double D1 = 4.0;
     int i, j;
@@ -505,7 +508,6 @@ findPath(double **S, double **dA, double **dB, int lenA, int lenB,
     Py_INCREF(result);
 
     for (int o = 0; o < bufferSize; o++) {
-
         // Make a new list to store this path
         PyObject *pathAList = PyList_New(0);
         PyObject *pathBList = PyList_New(0);
@@ -544,7 +546,6 @@ findPath(double **S, double **dA, double **dB, int lenA, int lenB,
     free(tIndex);
     free(winCache);
     free(bestPath);
-
     free(pathBuffer);
 
     return result;
@@ -552,7 +553,8 @@ findPath(double **S, double **dA, double **dB, int lenA, int lenB,
 
 // Main Function
 PyObject *
-PyCealign(PyObject *Py_UNUSED(self), PyObject *args) {
+PyCealign(PyObject *Py_UNUSED(self), PyObject *args)
+{
 
     int i = 0;
     int windowSize = 8;
@@ -628,7 +630,8 @@ PyDoc_STRVAR(module_doc,
 This module implements a single function: run_cealign. \
 Refer to its docstring for more documentation on usage and implementation.");
 
-PyObject *PyInit_ccealign(void) {
+PyObject *PyInit_ccealign(void)
+{
     static struct PyModuleDef moduledef = {PyModuleDef_HEAD_INIT,
                                            "ccealign",
                                            module_doc,
