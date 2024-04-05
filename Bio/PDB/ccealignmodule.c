@@ -157,10 +157,12 @@ static double **
 calcS(double **dA, double **dB, int lenA, int lenB, int wSize)
 {
     // Initialize the 2D similarity matrix
-    double **S = (double **)malloc(sizeof(double *) * lenA);
+    const int rowCount = lenA - wSize + 1;
+    const int colCount = lenB - wSize + 1;
+    double **S = (double **)malloc(sizeof(double *) * rowCount);
 
-    for (int i = 0; i < lenA; i++) {
-        S[i] = (double *)malloc(sizeof(double) * lenB);
+    for (int i = 0; i < rowCount; i++) {
+        S[i] = (double *)malloc(sizeof(double) * colCount);
     }
 
     //
@@ -171,7 +173,7 @@ calcS(double **dA, double **dB, int lenA, int lenB, int wSize)
     //
     for (int iA = 0; iA < rowCount; iA++) {
         for (int iB = 0; iB < colCount; iB++) {
-            S[iA][iB] = similarityII(dA, dB, iA, iB, iA, iB, wSize);
+            S[iA][iB] = similarityII(d1, d2, iA, iB, iA, iB, wSize);
         }
     }
 
@@ -277,17 +279,13 @@ findPath(double **S, double **dA, double **dB, int lenA, int lenB,
     // Start the search through the CE matrix.
     //
     int iA, iB;
-    for (iA = 0; iA < lenA; iA++) {
+    for (iA = 0; iA <= lenA - winSize; iA++) {
         if (iA > lenA - winSize * (bestPathLength - 1))
             break;
 
-        for (iB = 0; iB < lenB; iB++) {
+        for (iB = 0; iB <= lenB - winSize; iB++) {
             if (S[iA][iB] >= D0)
                 continue;
-
-            if (S[iA][iB] == -1.0)
-                continue;
-
             if (iB > lenB - winSize * (bestPathLength - 1))
                 break;
 
@@ -332,12 +330,9 @@ findPath(double **S, double **dA, double **dB, int lenA, int lenB,
                     // long paths and make sure we don't run over the end of
                     // the S, matrix.
 
-                    // 1st: If jA and jB are at the end of the matrix
-                    if (jA > lenA - winSize || jB > lenB - winSize) {
-                        // FIXME, was: jA > lenA-winSize-1 || jB >
-                        // lenB-winSize-1
+                    // 1st: If jA and jB are at the end of the similarity matrix
+                    if (jA > lenA - winSize || jB > lenB - winSize)
                         continue;
-                    }
                     // 2nd: If this gapped octapeptide is bad, ignore it.
                     if (S[jA][jB] > D0)
                         continue;
@@ -603,8 +598,8 @@ PyCealign(PyObject *Py_UNUSED(self), PyObject *args)
         free(dmB[i]);
     free(dmB);
 
-    /* similarity matrix */
-    for (i = 0; i < lenA; i++)
+    // Similarity matrix
+    for (i = 0; i <= lenA - windowSize; i++)
         free(S[i]);
     free(S);
 
