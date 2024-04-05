@@ -100,75 +100,81 @@ typedef struct {
     int second;
 } afp, *path, **pathCache;
 
-// Calculate Distance Matrix
+// Calculate distance matrix
 static double **
 calcDM(pcePoint coords, int len)
 {
     double **dm = (double **)malloc(sizeof(double *) * len);
 
-    for (int i = 0; i < len; i++)
+    for (int i = 0; i < len; i++) {
         dm[i] = (double *)malloc(sizeof(double) * len);
+    }
     for (int row = 0; row < len; row++) {
         for (int col = row; col < len; col++) {
             double xd = coords[row].x - coords[col].x;
             double yd = coords[row].y - coords[col].y;
             double zd = coords[row].z - coords[col].z;
-            double distsq = (xd * xd) + (yd * yd) + (zd * zd);
-            dm[row][col] = dm[col][row] = sqrt(distsq);
+            double distance = sqrt(xd * xd + yd * yd + zd * zd);
+
+            dm[row][col] = dm[col][row] = distance;
         }
     }
 
     return dm;
 }
 
-// Calculate Score Matrix
-static double **
-calcS(double **d1, double **d2, int lenA, int lenB, int wSize)
+static double
+similarityII(
+    double **dA,
+    double **dB,
+    int iA,
+    int iB,
+    int jA,
+    int jB,
+    int fragmentSize)
 {
-    int i;
-    double winSize = (double)wSize;
+    double similarity = 0.0;
 
-    // initialize the 2D similarity matrix
+    if (iA == jA && iB == jB) {
+        double termCount = (fragmentSize - 1) * (fragmentSize - 2) / 2.0;
+
+        for (int k = 0; k < fragmentSize - 2; k++) {
+            for (int l = k + 2; l < fragmentSize; l++) {
+                similarity +=
+                    fabs(dA[iA + k][iA + l] - dB[iB + k][iB + l]);
+            }
+        }
+
+        return similarity / termCount;
+    }
+    else {
+        // TODO
+    }
+}
+
+// Calculate similarity matrix
+static double **
+calcS(double **dA, double **dB, int lenA, int lenB, int wSize)
+{
+    // Initialize the 2D similarity matrix
     double **S = (double **)malloc(sizeof(double *) * lenA);
-    for (i = 0; i < lenA; i++) {
+
+    for (int i = 0; i < lenA; i++) {
         S[i] = (double *)malloc(sizeof(double) * lenB);
     }
 
-    double sumSize = (winSize - 1.0) * (winSize - 2.0) / 2.0;
     //
     // This is where the magic of CE comes out.  In the similarity matrix,
     // for each i and j, the value of ceSIM[i][j] is how well the residues
     // i - i+winSize in protein A, match to residues j - j+winSize in protein
     // B.  A value of 0 means absolute match; a value >> 1 means bad match.
     //
-    int lenA_m_wSize = lenA - wSize;
-    int lenB_m_wSize = lenB - wSize;
-    int iA, iB, row, col;
-    for (iA = 0; iA < lenA; iA++) {
-        for (iB = 0; iB < lenB; iB++) {
-            S[iA][iB] = -1.0;
-            if (iA > lenA_m_wSize || iB > lenB_m_wSize)
-                continue;
-
-            double score = 0.0;
-
-            //
-            // We always skip the calculation of the distance from THIS
-            // residue, to the next residue.  This is a time-saving heur-
-            // istic decision.  Almost all alpha carbon bonds of neighboring
-            // residues is 3.8 Angstroms.  Due to entropy, S = -k ln pi * pi,
-            // this tell us nothing, so it doesn't help so ignore it.
-            //
-            for (row = 0; row < wSize - 2; row++) {
-                for (col = row + 2; col < wSize; col++) {
-                    score +=
-                        fabs(d1[iA + row][iA + col] - d2[iB + row][iB + col]);
-                }
-            }
-
-            S[iA][iB] = score / sumSize;
+    for (int iA = 0; iA < rowCount; iA++) {
+        for (int iB = 0; iB < colCount; iB++) {
+            S[iA][iB] = similarityII(dA, dB, iA, iB, iA, iB, wSize);
         }
     }
+
     return S;
 }
 
