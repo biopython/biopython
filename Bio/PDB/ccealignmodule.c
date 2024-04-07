@@ -325,8 +325,7 @@ findPath(
             //
             // Build the best path starting from iA, iB
             //
-            int done = 0;
-            while (!done) {
+            while (1) {
                 double gapBestScore = 1e6;
                 int gapBestIndex = -1;
 
@@ -421,16 +420,13 @@ findPath(
                         curPathLength++;
                     }
                     else {
-                        // heuristic -- path is getting sloppy, stop looking
-                        done = 1;
-                        gapBestIndex = -1;
+                        // Heuristic -- path is getting sloppy, stop looking
                         break;
                     }
                 }
                 else {
                     // if here, then there was no good candidate AFP,
                     // so quit and restart from iA, iB+1
-                    done = 1;
                     curPathLength--;
                     break;
                 }
