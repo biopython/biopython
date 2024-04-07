@@ -267,23 +267,15 @@ findPath(
         pathBuffer[i] = 0;
     }
 
-    // The implementation uses this 2D array during
+    // The implementation uses this array during
     // the construction of the current path.
-    // This 2D array keeps track of similarities for
+    // This array keeps track of similarities for
     // all gap indices for all path lengths.
-    double **allSimilarityBuffer = (double **)malloc(sizeof(double *) * smaller);
+    double *allSimilarityBuffer = (double *)malloc(sizeof(double) * smaller);
 
     for (int i = 0; i < smaller; i++) {
-        allSimilarityBuffer[i] =
-            (double *)malloc((gapMax * 2 + 1) * sizeof(double));
-
-        // Initialize the ASB
-        for (int j = 0; j < gapMax * 2 + 1; j++) {
-            allSimilarityBuffer[i][j] = -1e6;
-        }
+        allSimilarityBuffer[i] = -1e6;
     }
-
-    int *tIndex = (int *)malloc(sizeof(int) * smaller);
 
     //======================================================================
     // Start the search through the similarity matrix.
@@ -299,9 +291,6 @@ findPath(
                 continue;
             if (iB > lenB - fragmentSize * (bestPathLength - 1))
                 break;
-
-            // Reset tIndex
-            tIndex[0] = 0;
 
             // Initialize current path
             path curPath = (path)malloc(sizeof(afp) * smaller);
@@ -346,10 +335,6 @@ findPath(
                     // 2nd: If this candidate AFP is bad, ignore it.
                     if (S[jA][jB] <= D0)
                         continue;
-                    // 3rd: if too close to end, ignore it.
-                    if (S[jA][jB] == -1.0)
-                        // TODO: Remove
-                        continue;
 
                     double curSimilarity = 0.0;
 
@@ -367,7 +352,6 @@ findPath(
                         curPath[curPathLength].second = jB;
                         gapBestSimilarity = curSimilarity;
                         gapBestIndex = g;
-                        allSimilarityBuffer[curPathLength - 1][g] = curSimilarity;
                     }
                 } /// ROF -- END GAP SEARCHING
 
@@ -397,8 +381,7 @@ findPath(
 
                     const double oldTermCount = n * w + m * n * (n - 1) / 2;
                     const double oldSimilarity = curPathLength > 1
-                              ? (allSimilarityBuffer[curPathLength - 2]
-                                               [tIndex[curPathLength - 1]])
+                              ? allSimilarityBuffer[curPathLength - 2]
                               : S[iA][iB];
                     const double addTermCount = w + m * n;
                     const double addSimilarity = (gapBestSimilarity * m * n + S[gA][gB] * w) / addTermCount;
@@ -408,9 +391,7 @@ findPath(
                     curPathSimilarity = newSimilarity;
 
                     if (curPathSimilarity > D1) {
-                        allSimilarityBuffer[curPathLength - 1][gapBestIndex] =
-                            curPathSimilarity;
-                        tIndex[curPathLength] = gapBestIndex;
+                        allSimilarityBuffer[curPathLength - 1] = curPathSimilarity;
                         curPathLength++;
                     }
                     else {
@@ -501,12 +482,7 @@ findPath(
     }
 
     // Free memory
-    for (int i = 0; i < smaller; i++) {
-        free(allSimilarityBuffer[i]);
-    }
-
     free(allSimilarityBuffer);
-    free(tIndex);
     free(pathBuffer);
 
     return result;
