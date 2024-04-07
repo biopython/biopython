@@ -130,18 +130,21 @@ static double
 similarityI(
     double **dA,
     double **dB,
-    const int iA,
-    const int iB,
-    const int jA,
-    const int jB,
+    const afp afpI,
+    const afp afpJ,
     const int fragmentSize)
 {
+    const int iA = afpI.first;
+    const int iB = afpI.second;
+    const int jA = afpJ.first;
+    const int jB = afpJ.second;
     const int m = fragmentSize;
     double similarity = fabs(dA[iA][jA] - dB[iB][jB]) +
         fabs(dA[iA + m-1][jA + m-1] - dB[iB + m-1][jB + m-1]);
 
     for (int k = 1; k < m - 1; k++) {
-        similarity += fabs(dA[iA + k][jA + m-1 - k] - fabs(dB[iB + k][jB + m-1 - k]));
+        similarity += fabs(dA[iA + k][jA + m-1 - k] -
+            fabs(dB[iB + k][jB + m-1 - k]));
     }
 
     return -similarity / m;
@@ -154,10 +157,11 @@ static double
 similarityII(
     double **dA,
     double **dB,
-    const int iA,
-    const int iB,
+    const afp afpI,
     const int fragmentSize)
 {
+    const int iA = afpI.first;
+    const int iB = afpI.second;
     double similarity = 0.0;
     // Term count is the closed form of the number of terms in the summation
     const int termCount = (fragmentSize - 1) * (fragmentSize - 2) / 2;
@@ -193,7 +197,7 @@ calcS(double **dA, double **dB, const int lenA, const int lenB, const int fragme
     //
     for (int iA = 0; iA < rowCount; iA++) {
         for (int iB = 0; iB < colCount; iB++) {
-            S[iA][iB] = similarityII(dA, dB, iA, iB, fragmentSize);
+            S[iA][iB] = similarityII(dA, dB, (afp) {iA, iB}, fragmentSize);
         }
     }
 
@@ -322,19 +326,18 @@ findPath(
                     if (S[jA][jB] <= D0)
                         continue;
 
+                    const afp afpJ = (afp) {jA, jB};
                     double curSimilarity = 0.0;
 
                     for (int s = 0; s < curPathLength; s++) {
-                        const int iA = curPath[s].first;
-                        const int iB = curPath[s].second;
-                        curSimilarity += similarityI(dA, dB, iA, iB, jA, jB, fragmentSize);
+                        curSimilarity += similarityI(dA, dB, curPath[s], afpJ, fragmentSize);
                     }
 
                     curSimilarity /= curPathLength;
 
                     // store GAPPED best
                     if (curSimilarity > D1 && curSimilarity > gapBestSimilarity) {
-                        curPath[curPathLength] = (afp) {jA, jB};
+                        curPath[curPathLength] = afpJ;
                         gapBestSimilarity = curSimilarity;
                         gapBestIndex = g;
                     }
