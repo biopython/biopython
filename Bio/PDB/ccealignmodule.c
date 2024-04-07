@@ -285,12 +285,10 @@ findPath(
             int curPathLength = 1;
             double curPathSimilarity = S[iA][iB];
 
-            curPath[0].first = iA;
-            curPath[0].second = iB;
+            curPath[0] = (afp) {iA, iB};
 
             for (int i = 1; i < smaller; i++) {
-                curPath[i].first = -1;
-                curPath[i].second = -1;
+                curPath[i] = (afp) {-1, -1};
             }
 
             //
@@ -336,8 +334,7 @@ findPath(
 
                     // store GAPPED best
                     if (curSimilarity > D1 && curSimilarity > gapBestSimilarity) {
-                        curPath[curPathLength].first = jA;
-                        curPath[curPathLength].second = jB;
+                        curPath[curPathLength] = (afp) {jA, jB};
                         gapBestSimilarity = curSimilarity;
                         gapBestIndex = g;
                     }
@@ -397,8 +394,7 @@ findPath(
                 path pathCopy = (path)malloc(sizeof(afp) * smaller);
 
                 for (int i = 0; i < smaller; i++) {
-                    pathCopy[i].first = curPath[i].first;
-                    pathCopy[i].second = curPath[i].second;
+                    pathCopy[i] = curPath[i];
                 }
                 if (pathBuffer[bufferIndex]) {
                     free(pathBuffer[bufferIndex]);
