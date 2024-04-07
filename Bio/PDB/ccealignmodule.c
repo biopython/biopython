@@ -336,7 +336,7 @@ findPath(
                         jB += (g + 1) / 2;
                     }
 
-                    // Following are three heuristics to ensure high quality
+                    // Following are two heuristics to ensure high quality
                     // long paths and make sure we don't run over the end of
                     // the S, matrix.
 
@@ -345,9 +345,6 @@ findPath(
                         continue;
                     // 2nd: If this candidate AFP is bad, ignore it.
                     if (S[jA][jB] >= D0)
-                        continue;
-                    // 3rd: if too close to end, ignore it.
-                    if (S[jA][jB] == -1.0)
                         continue;
 
                     double curSimilarity = 0.0;
