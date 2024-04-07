@@ -144,7 +144,7 @@ similarityI(
         similarity += fabs(dA[iA + k][jA + m-1 - k] - fabs(dB[iB + k][jB + m-1 - k]));
     }
 
-    return similarity / m;
+    return -similarity / m;
 }
 
 //
@@ -169,7 +169,7 @@ similarityII(
         }
     }
 
-    return similarity / termCount;
+    return -similarity / termCount;
 }
 
 // Calculate similarity matrix
@@ -247,8 +247,8 @@ findPath(
     const int fragmentSize,
     const int gapMax)
 {
-    const double D0 = 3.0;
-    const double D1 = 4.0;
+    const double D0 = -3.0;
+    const double D1 = -4.0;
 
     // Length of longest possible alignment
     const int smaller = (lenA < lenB) ? lenA : lenB;
@@ -262,7 +262,7 @@ findPath(
 
     for (int i = 0; i < MAX_PATHS; i++) {
         // Initialize the paths
-        similarityBuffer[i] = 1e6;
+        similarityBuffer[i] = -1e6;
         lenBuffer[i] = 0;
         pathBuffer[i] = 0;
     }
@@ -279,7 +279,7 @@ findPath(
 
         // Initialize the ASB
         for (int j = 0; j < gapMax * 2 + 1; j++) {
-            allSimilarityBuffer[i][j] = 1e6;
+            allSimilarityBuffer[i][j] = -1e6;
         }
     }
 
@@ -295,7 +295,7 @@ findPath(
             break;
 
         for (int iB = 0; iB <= lenB - fragmentSize; iB++) {
-            if (S[iA][iB] >= D0)
+            if (S[iA][iB] <= D0)
                 continue;
             if (iB > lenB - fragmentSize * (bestPathLength - 1))
                 break;
@@ -320,7 +320,7 @@ findPath(
             // Build the best path starting from iA, iB
             //
             while (1) {
-                double gapBestSimilarity = 1e6;
+                double gapBestSimilarity = -1e6;
                 int gapBestIndex = -1;
 
                 //
@@ -336,7 +336,7 @@ findPath(
                         jB += (g + 1) / 2;
                     }
 
-                    // Following are two heuristics to ensure high quality
+                    // Following are three heuristics to ensure high quality
                     // long paths and make sure we don't run over the end of
                     // the S, matrix.
 
@@ -344,7 +344,11 @@ findPath(
                     if (jA > lenA - fragmentSize || jB > lenB - fragmentSize)
                         continue;
                     // 2nd: If this candidate AFP is bad, ignore it.
-                    if (S[jA][jB] >= D0)
+                    if (S[jA][jB] <= D0)
+                        continue;
+                    // 3rd: if too close to end, ignore it.
+                    if (S[jA][jB] == -1.0)
+                        // TODO: Remove
                         continue;
 
                     double curSimilarity = 0.0;
@@ -358,7 +362,7 @@ findPath(
                     curSimilarity /= curPathLength;
 
                     // store GAPPED best
-                    if (curSimilarity < D1 && curSimilarity < gapBestSimilarity) {
+                    if (curSimilarity > D1 && curSimilarity > gapBestSimilarity) {
                         curPath[curPathLength].first = jA;
                         curPath[curPathLength].second = jB;
                         gapBestSimilarity = curSimilarity;
@@ -403,7 +407,7 @@ findPath(
 
                     curPathSimilarity = newSimilarity;
 
-                    if (curPathSimilarity < D1) {
+                    if (curPathSimilarity > D1) {
                         allSimilarityBuffer[curPathLength - 1][gapBestIndex] =
                             curPathSimilarity;
                         tIndex[curPathLength] = gapBestIndex;
@@ -426,7 +430,7 @@ findPath(
             //
             if (curPathLength > lenBuffer[bufferIndex] ||
                 (curPathLength == lenBuffer[bufferIndex] &&
-                 curPathSimilarity < similarityBuffer[bufferIndex])) {
+                 curPathSimilarity > similarityBuffer[bufferIndex])) {
                 bufferIndex += 1;
                 bufferIndex %= MAX_PATHS;
                 bufferSize =
