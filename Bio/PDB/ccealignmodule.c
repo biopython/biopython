@@ -257,27 +257,29 @@ findPath(
     int bufferIndex = MAX_PATHS - 1; // We want to insert the first item at 0
     int bufferSize = 0;
     int lenBuffer[MAX_PATHS];
-    double scoreBuffer[MAX_PATHS];
+    double similarityBuffer[MAX_PATHS];
     pathCache pathBuffer = (pathCache)malloc(sizeof(path *) * MAX_PATHS);
 
     for (int i = 0; i < MAX_PATHS; i++) {
         // Initialize the paths
-        scoreBuffer[i] = 1e6;
+        similarityBuffer[i] = 1e6;
         lenBuffer[i] = 0;
         pathBuffer[i] = 0;
     }
 
-    // allScoreBuffer
-    // this 2D array keeps track of all partial gapped scores
-    double **allScoreBuffer = (double **)malloc(sizeof(double *) * smaller);
+    // The implementation uses this 2D array during
+    // the construction of the current path.
+    // This 2D array keeps track of similarities for
+    // all gap indices for all path lengths.
+    double **allSimilarityBuffer = (double **)malloc(sizeof(double *) * smaller);
 
     for (int i = 0; i < smaller; i++) {
-        allScoreBuffer[i] =
+        allSimilarityBuffer[i] =
             (double *)malloc((gapMax * 2 + 1) * sizeof(double));
 
         // Initialize the ASB
         for (int j = 0; j < gapMax * 2 + 1; j++) {
-            allScoreBuffer[i][j] = 1e6;
+            allSimilarityBuffer[i][j] = 1e6;
         }
     }
 
@@ -304,7 +306,7 @@ findPath(
             // Initialize current path
             path curPath = (path)malloc(sizeof(afp) * smaller);
             int curPathLength = 1;
-            double curTotalScore = 0.0;
+            double curPathSimilarity = 0.0;
 
             curPath[0].first = iA;
             curPath[0].second = iB;
@@ -318,7 +320,7 @@ findPath(
             // Build the best path starting from iA, iB
             //
             while (1) {
-                double gapBestScore = 1e6;
+                double gapBestSimilarity = 1e6;
                 int gapBestIndex = -1;
 
                 //
@@ -348,23 +350,23 @@ findPath(
                     if (S[jA][jB] == -1.0)
                         continue;
 
-                    double curScore = 0.0;
+                    double curSimilarity = 0.0;
 
                     for (int s = 0; s < curPathLength; s++) {
                         const int iA = curPath[s].first;
                         const int iB = curPath[s].second;
-                        curScore += similarityI(dA, dB, iA, iB, jA, jB, fragmentSize);
+                        curSimilarity += similarityI(dA, dB, iA, iB, jA, jB, fragmentSize);
                     }
 
-                    curScore /= curPathLength;
+                    curSimilarity /= curPathLength;
 
                     // store GAPPED best
-                    if (curScore < D1 && curScore < gapBestScore) {
+                    if (curSimilarity < D1 && curSimilarity < gapBestSimilarity) {
                         curPath[curPathLength].first = jA;
                         curPath[curPathLength].second = jB;
-                        gapBestScore = curScore;
+                        gapBestSimilarity = curSimilarity;
                         gapBestIndex = g;
-                        allScoreBuffer[curPathLength - 1][g] = curScore;
+                        allSimilarityBuffer[curPathLength - 1][g] = curSimilarity;
                     }
                 } /// ROF -- END GAP SEARCHING
 
@@ -393,20 +395,20 @@ findPath(
                     const int w = (m - 1) * (m - 2) / 2; // w is the number of terms in the similarity summation
 
                     const double oldTermCount = n * w + m * n * (n - 1) / 2;
-                    const double oldScore = curPathLength > 1
-                              ? (allScoreBuffer[curPathLength - 2]
+                    const double oldSimilarity = curPathLength > 1
+                              ? (allSimilarityBuffer[curPathLength - 2]
                                                [tIndex[curPathLength - 1]])
                               : S[iA][iB];
                     const double addTermCount = w + m * n;
-                    const double addScore = (gapBestScore * m * n + S[gA][gB] * w) / addTermCount;
+                    const double addSimilarity = (gapBestSimilarity * m * n + S[gA][gB] * w) / addTermCount;
                     const double newTermCount = oldTermCount + addTermCount;
-                    const double newScore = (oldScore * oldTermCount + addScore * addTermCount) / newTermCount;
+                    const double newSimilarity = (oldSimilarity * oldTermCount + addSimilarity * addTermCount) / newTermCount;
 
-                    curTotalScore = newScore;
+                    curPathSimilarity = newSimilarity;
 
-                    if (curTotalScore < D1) {
-                        allScoreBuffer[curPathLength - 1][gapBestIndex] =
-                            curTotalScore;
+                    if (curPathSimilarity < D1) {
+                        allSimilarityBuffer[curPathLength - 1][gapBestIndex] =
+                            curPathSimilarity;
                         tIndex[curPathLength] = gapBestIndex;
                         curPathLength++;
                     }
@@ -427,7 +429,7 @@ findPath(
             //
             if (curPathLength > lenBuffer[bufferIndex] ||
                 (curPathLength == lenBuffer[bufferIndex] &&
-                 curTotalScore < scoreBuffer[bufferIndex])) {
+                 curPathSimilarity < similarityBuffer[bufferIndex])) {
                 bufferIndex += 1;
                 bufferIndex %= MAX_PATHS;
                 bufferSize =
@@ -443,7 +445,7 @@ findPath(
                 }
                 pathBuffer[bufferIndex] = pathCopy;
                 lenBuffer[bufferIndex] = curPathLength;
-                scoreBuffer[bufferIndex] = curTotalScore;
+                similarityBuffer[bufferIndex] = curPathSimilarity;
             }
 
             free(curPath);
@@ -499,10 +501,10 @@ findPath(
 
     // Free memory
     for (int i = 0; i < smaller; i++) {
-        free(allScoreBuffer[i]);
+        free(allSimilarityBuffer[i]);
     }
 
-    free(allScoreBuffer);
+    free(allSimilarityBuffer);
     free(tIndex);
     free(pathBuffer);
 
