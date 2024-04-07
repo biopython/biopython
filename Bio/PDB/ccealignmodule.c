@@ -271,15 +271,13 @@ findPath(
     // Start the search through the similarity matrix.
     //
     for (int iA = 0; iA <= lenA - fragmentSize; iA++) {
-        const int bestPathLength = lenBuffer[bufferIndex];
-
-        if (iA > lenA - fragmentSize * (bestPathLength - 1))
+        if (iA > lenA - fragmentSize * (lenBuffer[bufferIndex] - 1))
             break;
 
         for (int iB = 0; iB <= lenB - fragmentSize; iB++) {
             if (S[iA][iB] <= D0)
                 continue;
-            if (iB > lenB - fragmentSize * (bestPathLength - 1))
+            if (iB > lenB - fragmentSize * (lenBuffer[bufferIndex] - 1))
                 break;
 
             // Initialize current path
@@ -303,7 +301,7 @@ findPath(
                 int gapBestIndex = -1;
 
                 //
-                // Check all possible gaps [1..gapMax] from here
+                // Check all possible gaps from here
                 //
                 for (int g = 0; g < (gapMax * 2) + 1; g++) {
                     int jA = curPath[curPathLength - 1].first + fragmentSize;
@@ -345,48 +343,43 @@ findPath(
                     }
                 } /// ROF -- END GAP SEARCHING
 
-                //
-                // DONE GAPPING:
-                //
+                if (gapBestIndex == -1) {
+                    // if here, then there was no good candidate AFP,
+                    // so quit and restart from starting point
+                    break;
+                }
 
-                if (gapBestIndex != -1) {
-                    int gA, gB;
-                    int jGap = (gapBestIndex + 1) / 2;
+                int gA, gB;
+                int jGap = (gapBestIndex + 1) / 2;
 
-                    if ((gapBestIndex + 1) % 2 == 0) {
-                        gA = curPath[curPathLength - 1].first + fragmentSize + jGap;
-                        gB = curPath[curPathLength - 1].second + fragmentSize;
-                    }
-                    else {
-                        gA = curPath[curPathLength - 1].first + fragmentSize;
-                        gB =
-                            curPath[curPathLength - 1].second + fragmentSize + jGap;
-                    }
-
-                    // TODO: This implementation calculates the average inter-residue distance difference.
-                    // Instead, the implementation should calculate the average similarity as described in the paper.
-                    const double n = (double) curPathLength;
-                    const int m = fragmentSize;
-                    const int w = (m - 1) * (m - 2) / 2; // w is the number of terms in the similarity summation
-
-                    const double curTermCount = n * w + m * n * (n - 1) / 2;
-                    const double addTermCount = w + m * n;
-                    const double addSimilarity = (gapBestSimilarity * m * n + S[gA][gB] * w) / addTermCount;
-                    const double newTermCount = curTermCount + addTermCount;
-                    const double newSimilarity = (curPathSimilarity * curTermCount + addSimilarity * addTermCount) / newTermCount;
-
-                    if (newSimilarity > D1) {
-                        curPathSimilarity = newSimilarity;
-                        curPathLength++;
-                    }
-                    else {
-                        // Heuristic -- path is getting sloppy, stop looking
-                        break;
-                    }
+                if ((gapBestIndex + 1) % 2 == 0) {
+                    gA = curPath[curPathLength - 1].first + fragmentSize + jGap;
+                    gB = curPath[curPathLength - 1].second + fragmentSize;
                 }
                 else {
-                    // if here, then there was no good candidate AFP,
-                    // so quit and restart from iA, iB+1
+                    gA = curPath[curPathLength - 1].first + fragmentSize;
+                    gB =
+                        curPath[curPathLength - 1].second + fragmentSize + jGap;
+                }
+
+                // TODO: This implementation calculates the average inter-residue distance difference.
+                // Instead, the implementation should calculate the average similarity as described in the paper.
+                const double n = (double) curPathLength;
+                const int m = fragmentSize;
+                const int w = (m - 1) * (m - 2) / 2; // w is the number of terms in the similarity summation
+
+                const double curTermCount = n * w + m * n * (n - 1) / 2;
+                const double addTermCount = w + m * n;
+                const double addSimilarity = (gapBestSimilarity * m * n + S[gA][gB] * w) / addTermCount;
+                const double newTermCount = curTermCount + addTermCount;
+                const double newSimilarity = (curPathSimilarity * curTermCount + addSimilarity * addTermCount) / newTermCount;
+
+                if (newSimilarity > D1) {
+                    curPathSimilarity = newSimilarity;
+                    curPathLength++;
+                }
+                else {
+                    // Heuristic -- path is getting sloppy, stop looking
                     break;
                 }
             } /// END WHILE
