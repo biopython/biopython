@@ -160,7 +160,7 @@ similarityII(
 {
     double similarity = 0.0;
     // Term count is the closed form of the number of terms in the summation
-    int termCount = (fragmentSize - 1) * (fragmentSize - 2) / 2;
+    const int termCount = (fragmentSize - 1) * (fragmentSize - 2) / 2;
 
     for (int k = 0; k < fragmentSize - 2; k++) {
         for (int l = k + 2; l < fragmentSize; l++) {
@@ -174,11 +174,11 @@ similarityII(
 
 // Calculate similarity matrix
 static double **
-calcS(double **dA, double **dB, int lenA, int lenB, int wSize)
+calcS(double **dA, double **dB, const int lenA, const int lenB, const int fragmentSize)
 {
     // Initialize the 2D similarity matrix
-    const int rowCount = lenA - wSize + 1;
-    const int colCount = lenB - wSize + 1;
+    const int rowCount = lenA - fragmentSize + 1;
+    const int colCount = lenB - fragmentSize + 1;
     double **S = (double **)malloc(sizeof(double *) * rowCount);
 
     for (int i = 0; i < rowCount; i++) {
@@ -187,13 +187,13 @@ calcS(double **dA, double **dB, int lenA, int lenB, int wSize)
 
     //
     // This is where the magic of CE comes out.  In the similarity matrix,
-    // for each i and j, the value of ceSIM[i][j] is how well the residues
-    // i - i+winSize in protein A, match to residues j - j+winSize in protein
+    // for each i and j, the value of S[i][j] is how well the residues
+    // i - i+fragmentSize in protein A, match to residues j - j+fragmentSize in protein
     // B.  A value of 0 means absolute match; a value >> 1 means bad match.
     //
     for (int iA = 0; iA < rowCount; iA++) {
         for (int iB = 0; iB < colCount; iB++) {
-            S[iA][iB] = similarityII(dA, dB, iA, iB, wSize);
+            S[iA][iB] = similarityII(dA, dB, iA, iB, fragmentSize);
         }
     }
 
@@ -244,7 +244,7 @@ findPath(
     double **dB,
     const int lenA,
     const int lenB,
-    const int winSize,
+    const int fragmentSize,
     const int gapMax)
 {
     const double D0 = 3.0;
@@ -252,7 +252,6 @@ findPath(
 
     // Length of longest possible alignment
     const int smaller = (lenA < lenB) ? lenA : lenB;
-    const int winSum = (winSize - 1) * (winSize - 2) / 2;
 
     // For storing the best N paths
     int bufferIndex = MAX_PATHS - 1; // We want to insert the first item at 0
@@ -262,7 +261,7 @@ findPath(
     pathCache pathBuffer = (pathCache)malloc(sizeof(path *) * MAX_PATHS);
 
     for (int i = 0; i < MAX_PATHS; i++) {
-        // initialize the paths
+        // Initialize the paths
         scoreBuffer[i] = 1e6;
         lenBuffer[i] = 0;
         pathBuffer[i] = 0;
@@ -287,16 +286,16 @@ findPath(
     //======================================================================
     // Start the search through the similarity matrix.
     //
-    for (int iA = 0; iA <= lenA - winSize; iA++) {
+    for (int iA = 0; iA <= lenA - fragmentSize; iA++) {
         const int bestPathLength = lenBuffer[bufferIndex];
 
-        if (iA > lenA - winSize * (bestPathLength - 1))
+        if (iA > lenA - fragmentSize * (bestPathLength - 1))
             break;
 
-        for (int iB = 0; iB <= lenB - winSize; iB++) {
+        for (int iB = 0; iB <= lenB - fragmentSize; iB++) {
             if (S[iA][iB] >= D0)
                 continue;
-            if (iB > lenB - winSize * (bestPathLength - 1))
+            if (iB > lenB - fragmentSize * (bestPathLength - 1))
                 break;
 
             // Reset tIndex
@@ -326,8 +325,8 @@ findPath(
                 // Check all possible gaps [1..gapMax] from here
                 //
                 for (int g = 0; g < (gapMax * 2) + 1; g++) {
-                    int jA = curPath[curPathLength - 1].first + winSize;
-                    int jB = curPath[curPathLength - 1].second + winSize;
+                    int jA = curPath[curPathLength - 1].first + fragmentSize;
+                    int jB = curPath[curPathLength - 1].second + fragmentSize;
 
                     if ((g + 1) % 2 == 0) {
                         jA += (g + 1) / 2;
@@ -340,7 +339,7 @@ findPath(
                     // the S, matrix.
 
                     // 1st: If jA or jB is at the end of the similarity matrix
-                    if (jA > lenA - winSize || jB > lenB - winSize)
+                    if (jA > lenA - fragmentSize || jB > lenB - fragmentSize)
                         continue;
                     // 2nd: If this candidate AFP is bad, ignore it.
                     if (S[jA][jB] >= D0)
@@ -354,7 +353,7 @@ findPath(
                     for (int s = 0; s < curPathLength; s++) {
                         const int iA = curPath[s].first;
                         const int iB = curPath[s].second;
-                        curScore += similarityI(dA, dB, iA, iB, jA, jB, winSize);
+                        curScore += similarityI(dA, dB, iA, iB, jA, jB, fragmentSize);
                     }
 
                     curScore /= curPathLength;
@@ -378,26 +377,28 @@ findPath(
                     int jGap = (gapBestIndex + 1) / 2;
 
                     if ((gapBestIndex + 1) % 2 == 0) {
-                        gA = curPath[curPathLength - 1].first + winSize + jGap;
-                        gB = curPath[curPathLength - 1].second + winSize;
+                        gA = curPath[curPathLength - 1].first + fragmentSize + jGap;
+                        gB = curPath[curPathLength - 1].second + fragmentSize;
                     }
                     else {
-                        gA = curPath[curPathLength - 1].first + winSize;
+                        gA = curPath[curPathLength - 1].first + fragmentSize;
                         gB =
-                            curPath[curPathLength - 1].second + winSize + jGap;
+                            curPath[curPathLength - 1].second + fragmentSize + jGap;
                     }
 
                     // TODO: This implementation calculates the average inter-residue distance difference.
                     // Instead, the implementation should calculate the average similarity as described in the paper.
                     const double n = (double) curPathLength;
-                    const int m = winSize;
-                    const double oldTermCount = n * winSum + m * n * (n - 1) / 2;
+                    const int m = fragmentSize;
+                    const int w = (m - 1) * (m - 2) / 2; // w is the number of terms in the similarity summation
+
+                    const double oldTermCount = n * w + m * n * (n - 1) / 2;
                     const double oldScore = curPathLength > 1
                               ? (allScoreBuffer[curPathLength - 2]
                                                [tIndex[curPathLength - 1]])
                               : S[iA][iB];
-                    const double addTermCount = winSum + m * n;
-                    const double addScore = (gapBestScore * m * n + S[gA][gB] * winSum) / addTermCount;
+                    const double addTermCount = w + m * n;
+                    const double addScore = (gapBestScore * m * n + S[gA][gB] * w) / addTermCount;
                     const double newTermCount = oldTermCount + addTermCount;
                     const double newScore = (oldScore * oldTermCount + addScore * addTermCount) / newTermCount;
 
@@ -477,7 +478,7 @@ findPath(
                 const int idxA = pathBuffer[o][j].first;
                 const int idxB = pathBuffer[o][j].second;
 
-                for (int k = 0; k < winSize; k++) {
+                for (int k = 0; k < fragmentSize; k++) {
                     PyObject *v = Py_BuildValue("i", idxA + k);
                     PyList_Append(pathAList, v);
                     Py_DECREF(v);
@@ -512,14 +513,14 @@ findPath(
 PyObject *
 PyCealign(PyObject *Py_UNUSED(self), PyObject *args)
 {
-    int windowSize = 8;
+    int fragmentSize = 8;
     int gapMax = 30;
     double **dmA, **dmB, **S;
 
     PyObject *listA, *listB, *result;
 
     /* Unpack the arguments from Python */
-    PyArg_ParseTuple(args, "OO|ii", &listA, &listB, &windowSize, &gapMax);
+    PyArg_ParseTuple(args, "OO|ii", &listA, &listB, &fragmentSize, &gapMax);
 
     /* Get the list lengths */
     const int lenA = (int)PyList_Size(listA);
@@ -534,10 +535,10 @@ PyCealign(PyObject *Py_UNUSED(self), PyObject *args)
     dmB = (double **)calcDM(coordsB, lenB);
 
     /* calculate the CE Similarity matrix */
-    S = (double **)calcS(dmA, dmB, lenA, lenB, windowSize);
+    S = (double **)calcS(dmA, dmB, lenA, lenB, fragmentSize);
 
     // Calculate Top N Paths
-    result = (PyObject *)findPath(S, dmA, dmB, lenA, lenB, windowSize, gapMax);
+    result = (PyObject *)findPath(S, dmA, dmB, lenA, lenB, fragmentSize, gapMax);
 
     /* release memory */
     free(coordsA);
@@ -553,7 +554,7 @@ PyCealign(PyObject *Py_UNUSED(self), PyObject *args)
     free(dmB);
 
     // Similarity matrix
-    for (int i = 0; i <= lenA - windowSize; i++)
+    for (int i = 0; i <= lenA - fragmentSize; i++)
         free(S[i]);
     free(S);
 
@@ -564,14 +565,14 @@ PyCealign(PyObject *Py_UNUSED(self), PyObject *args)
 // Python Interface
 //
 PyDoc_STRVAR(method_doc,
-"run_cealign(coordsA, coordsB, windowSize, gapMax) -> list\
+"run_cealign(coordsA, coordsB, fragmentSize, gapMax) -> list\
 \n\n\
 Find the optimal alignments between two structures, using CEAlign.\
 \n\n\
 Arguments:\n\
 - listA: List of lists with coordinates for structure A.\n\
 - listB: List of lists with coordinates for structure B.\n\
-- windowSize: Length of fragments to be used in alignment.\n\
+- fragmentSize: Size of fragments to be used in alignment.\n\
 - gapMax: Maximum gap allowed between two aligned fragment pairs.");
 
 static PyMethodDef CEAlignMethods[] = {
