@@ -10,6 +10,14 @@
 from Bio.PDB.PDBExceptions import PDBConstructionException
 from Bio.PDB.Entity import Entity, DisorderedEntityWrapper
 
+from typing import TYPE_CHECKING, TypeVar
+
+if TYPE_CHECKING:
+    from Bio.PDB.Atom import Atom
+    from Bio.PDB.Chain import Chain
+
+_ResidueT = TypeVar("_ResidueT", bound="Residue")
+
 
 _atom_name_dict = {}
 _atom_name_dict["N"] = 1
@@ -18,7 +26,7 @@ _atom_name_dict["C"] = 3
 _atom_name_dict["O"] = 4
 
 
-class Residue(Entity):
+class Residue(Entity["Chain", "Atom"]):
     """Represents a residue. A Residue object stores atoms."""
 
     def __init__(self, id, resname, segid):
@@ -36,6 +44,30 @@ class Residue(Entity):
         hetflag, resseq, icode = self.get_id()
         full_id = (resname, hetflag, resseq, icode)
         return "<Residue %s het=%s resseq=%s icode=%s>" % full_id
+
+    def strictly_equals(
+        self: _ResidueT, other: _ResidueT, compare_coordinates: bool = False
+    ) -> bool:
+        """Compare this residue to the other residue using a strict definition of equality.
+
+        The residues are equal if they have the same name, identifier,
+        and their constituent atoms are strictly equal.
+
+        :param other: The residue to compare this residue to
+        :type other: Residue
+        :param compare_coordinates: Whether to compare the coordinates of the atoms
+        :type compare_coordinates: bool
+        :return: Whether the residues are strictly equal
+        :rtype: bool
+        """
+        if not isinstance(other, type(self)):
+            return False
+
+        return (
+            self.resname == other.resname
+            and self.id == other.id
+            and Entity.strictly_equals(self, other, compare_coordinates)
+        )
 
     def add(self, atom):
         """Add an Atom object.

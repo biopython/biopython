@@ -6,6 +6,7 @@
 # package.
 
 """Deal with representations of Markov Models."""
+
 # standard modules
 import copy
 import math

@@ -1739,12 +1739,7 @@ class IC_Chain:
         fp: TextIO, d: "Dihedron", hedraNdx: Dict, hedraSet: Set[EKT]
     ) -> None:
         fp.write(
-            "[ {:9.5f}, {}, {}, {}, ".format(
-                d.angle,
-                hedraNdx[d.h1key],
-                hedraNdx[d.h2key],
-                (1 if d.reverse else 0),
-            )
+            f"[ {d.angle:9.5f}, {hedraNdx[d.h1key]}, {hedraNdx[d.h2key]}, {1 if d.reverse else 0}, "
         )
         fp.write(
             f"{0 if d.h1key in hedraSet else 1}, "
@@ -1877,11 +1872,7 @@ class IC_Chain:
             hed = hedra[hk]
             fp.write("     [ ")
             fp.write(
-                "{:9.5f}, {:9.5f}, {:9.5f}".format(
-                    set_accuracy_95(hed.len12),
-                    set_accuracy_95(hed.angle),
-                    set_accuracy_95(hed.len23),
-                )
+                f"{set_accuracy_95(hed.len12):9.5f}, {set_accuracy_95(hed.angle):9.5f}, {set_accuracy_95(hed.len23):9.5f}"
             )
             atom_str = ""  # atom and bond state
             atom_done_str = ""  # create each only once
@@ -3311,9 +3302,11 @@ class IC_Residue:
                 fmt = "{:6}{:5d} {:4}{:1}{:3} {:1}{:4}{:1}   {:10.5f}{:10.5f}{:10.5f}{:7.3f}{:6.2f}        {:>4}\n"
             s = (fmt).format(
                 "ATOM",
-                IC_Residue.atom_sernum
-                if IC_Residue.atom_sernum is not None
-                else atm.serial_number,
+                (
+                    IC_Residue.atom_sernum
+                    if IC_Residue.atom_sernum is not None
+                    else atm.serial_number
+                ),
                 atm.fullname,
                 atm.altloc,
                 res.resname,

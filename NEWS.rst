@@ -63,6 +63,14 @@ The wwPDB organization announced that they plan to deprecate the FTP
 server by the end of the year. See the announcement
 `here <https://www.wwpdb.org/news/news?year=2023#65562f0ad78e004e766a96c1>`_.
 
+A parser has been added for parsing PDBML (PDB XML) files.
+`PDBML <https://pdbml.wwpdb.org/>`_ is a representation of PDB data in XML format.
+The PDB chapter of the tutorial is updated to show how to use the PDBML parser.
+
+Bio.PDB Structure objects will now issue a warning - instead of an exception - when
+two children (e.g. residues) have identical IDs. This can be useful in some
+cases, e.g. renumbering residues in a chain.
+
 ``Bio.SeqIO`` now supports reading sequences from the Graphical Fragment
 Assembly (GFA) files with the formats ``gfa1`` and ``gfa2`` (for GFA 1.x and
 GFA 2.0 files respectively). All data outside of segment lines are ignored, such
@@ -71,6 +79,17 @@ as linkage information.
 The UniProt package now includes a method to search UniProt programmatically.
 The tutorial has been updated with examples of how to use the search method.
 See the chapter on Swiss-Prot and ExPASy in the tutorial for more information.
+
+The PDB package now includes a new module, ``alphafold_db``, for interacting
+with the AlphaFold DB of predicted protein structures. The module allows users
+to load AlphaFold-predicted structures in the same format as experimentally-predicted
+PDB structures.
+
+Now when reverse complementing a ``SeqRecord`` containing unstranded features
+with compound locations the order of the sublocations is reversed, to improve
+the representation of origin-spanning locations. See issue #4611.
+
+Updated ``Bio.Restriction`` to the April 2024 release of REBASE.
 
 As in recent releases, more of our code is now explicitly available under
 either our original "Biopython License Agreement", or the very similar but
@@ -82,6 +101,7 @@ possible, especially the following contributors:
 
 - Anil Tuncel (first contribution)
 - Fabio Zanini (first contribution)
+- Joao Rodrigues
 - Judith Bernett (first contribution)
 - Michael M. (first contribution)
 - Michiel de Hoon

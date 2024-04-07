@@ -12,6 +12,7 @@ tools such as T-COFFEE and MUSCLE support it as an optional output format.
 
 You are expected to use this module via the Bio.Align functions.
 """
+
 import warnings
 
 from Bio.Align import Alignment
@@ -222,11 +223,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 seq += "-" * (aln_length - len(seq))
             seqs[index] = seq
 
-        coordinates = Alignment.infer_coordinates(seqs)
-        seqs = (Seq(seq.replace("-", "")) for seq in seqs)
+        seqs = [seq.encode() for seq in seqs]
+        seqs, coordinates = Alignment.parse_printed_alignment(seqs)
         records = [
             SeqRecord(
-                seq,
+                Seq(seq),
                 id=name,
                 name=name,
                 description=name,

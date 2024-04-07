@@ -30,7 +30,7 @@ class TestAlign_ucsc_test(unittest.TestCase):
         # bedToBigBed -type=bed3+1 -as=bigMaf.as -tab ucsc_test.txt hg16.chrom.sizes ucsc_test.bb
         alignments = Align.parse(self.path, "bigmaf")
         self.check_alignments(alignments)
-        alignments.rewind()
+        alignments = iter(alignments)
         self.check_alignments(alignments)
         with Align.parse(self.path, "bigmaf") as alignments:
             self.check_alignments(alignments)
@@ -298,7 +298,7 @@ class TestAlign_bundle_without_target(unittest.TestCase):
         # bedToBigBed -type=bed3+1 -as=bigMaf.as -tab bundle_without_target.txt mm8.chrom.sizes bundle_without_target.bb
         alignments = Align.parse(self.path, "bigmaf")
         self.check_alignments(alignments)
-        alignments.rewind()
+        alignments = iter(alignments)
         self.check_alignments(alignments)
         with Align.parse(self.path, "bigmaf") as alignments:
             self.check_alignments(alignments)

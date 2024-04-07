@@ -126,14 +126,14 @@ Print the ``Alignment`` object to show the alignment explicitly:
 with the starting and end coordinate for each sequence are shown to the
 left and right, respectively, of the alignment.
 
-.. _`subsec:align_infer_coordinates`:
+.. _`subsec:align_parse_printed_alignment`:
 
 Creating an Alignment object from aligned sequences
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you start out with the aligned sequences, with dashes representing
 gaps, then you can calculate the coordinates using the
-``infer_coordinates`` class method. This method is primarily employed in
+``parse_printed_alignment`` class method. This method is primarily employed in
 Biopython’s alignment parsers (see
 Section :ref:`sec:alignmentparsers`), but it may be useful for other
 purposes. For example, you can construct the ``Alignment`` object from
@@ -143,13 +143,16 @@ aligned sequences as follows:
 
 .. code:: pycon
 
-   >>> aligned_sequences = ["CGGTTTTT", "AG-TTT--", "AGGTTT--"]
-   >>> sequences = [aligned_sequence.replace("-", "")
-   ...              for aligned_sequence in aligned_sequences]  # fmt: skip
+   >>> lines = ["CGGTTTTT", "AG-TTT--", "AGGTTT--"]
+   >>> for line in lines:
+   ...     print(line)
    ...
+   CGGTTTTT
+   AG-TTT--
+   AGGTTT--
+   >>> sequences, coordinates = Alignment.parse_printed_alignment(lines)
    >>> sequences
    ['CGGTTTTT', 'AGTTT', 'AGGTTT']
-   >>> coordinates = Alignment.infer_coordinates(aligned_sequences)
    >>> coordinates
    array([[0, 2, 3, 6, 8],
           [0, 2, 2, 5, 5],
@@ -163,6 +166,7 @@ therefore missing here. But this is easy to fix:
 
 .. code:: pycon
 
+   >>> from Bio.Seq import Seq
    >>> sequences[0] = "C" + sequences[0]
    >>> sequences[1] = sequences[1] + "AA"
    >>> sequences
@@ -706,11 +710,16 @@ string) characters by using ``dtype='U'``:
 .. code:: pycon
 
    >>> align_array = np.array(alignment, dtype="U")
+
+.. code:: pycon
+
    >>> align_array  # doctest: +NORMALIZE_WHITESPACE
    array([['C', 'G', 'G', 'T', 'T', 'T', 'T', 'T'],
           ['A', 'G', '-', 'T', 'T', 'T', '-', '-'],
           ['A', 'G', 'G', 'T', 'T', 'T', '-', '-']], dtype='<U1')
 
+(the printed ``dtype`` will be '<U1' or '>U1' depending on whether your system
+is little-endian or big-endian, respectively).
 Note that the ``alignment`` object and the NumPy array ``align_array``
 are separate objects in memory - editing one will not update the other!
 
@@ -749,7 +758,7 @@ order. For example, you can sort the sequences by increasing GC content:
 
    >>> from Bio.SeqUtils import gc_fraction
    >>> alignment.sort(key=gc_fraction)
-   >>> print(alignment)  # CHEEMPIE
+   >>> print(alignment)
                      0 AG-TTT-- 5
                      0 AGGTTT-- 6
                      1 CGGTTTTT 9
@@ -1259,63 +1268,90 @@ The Alignments class
 The ``Alignments`` (plural) class inherits from
 ``AlignmentsAbstractBaseClass`` and from ``list``, and can be used as a
 list to store ``Alignment`` objects. The behavior of ``Alignments``
-objects is different from that of ``list`` objects in three important
+objects is different from that of ``list`` objects in two important
 ways:
 
--  An ``Alignments`` object is its own iterator, whereas calling
-   ``iter`` on a list object creates a new iterator each time. An
-   ``Alignments`` object iterator will therefore behave the same as an
-   iterator returned by ``Bio.Align.parse`` (see
-   section :ref:`subsec:align_reading`) or an iterator returned by
-   the pairwise aligner (see
-   Section :ref:`chapter:pairwise`).
+-  An ``Alignments`` object is its own iterator, consistent with iterators
+   returned by ``Bio.Align.parse`` (see section :ref:`subsec:align_reading`) or
+   iterators returned by the pairwise aligner (see Section
+   :ref:`chapter:pairwise`). Calling ``iter`` on the iterator will
+   always return the ``Alignments`` object itself. In contrast, calling
+   ``iter`` on a list object creates a new iterator each time, allowing you to
+   have multiple independent iterators for a given list.
+
+   In this example, ``alignment_iterator1`` and ``alignment_iterator2`` are
+   obtained from a list and act independently of each other:
+
+   .. cont-doctest
+
+   .. code:: pycon
+
+      >>> alignment_list = [alignment1, alignment2, alignment3]
+      >>> alignment_iterator1 = iter(alignment_list)
+      >>> alignment_iterator2 = iter(alignment_list)
+      >>> next(alignment_iterator1)  # doctest: +ELLIPSIS
+      <Alignment object (2 rows x 24 columns) at ...>
+      >>> next(alignment_iterator2)  # doctest: +ELLIPSIS
+      <Alignment object (2 rows x 24 columns) at ...>
+      >>> next(alignment_iterator1)  # doctest: +ELLIPSIS
+      <Alignment object (2 rows x 8 columns) at ...>
+      >>> next(alignment_iterator1)  # doctest: +ELLIPSIS
+      <Alignment object (2 rows x 19 columns) at ...>
+      >>> next(alignment_iterator2)  # doctest: +ELLIPSIS
+      <Alignment object (2 rows x 8 columns) at ...>
+      >>> next(alignment_iterator2)  # doctest: +ELLIPSIS
+      <Alignment object (2 rows x 19 columns) at ...>
+
+   In contrast, ``alignment_iterator1`` and ``alignment_iterator2`` obtained
+   by calling ``iter`` on an ``Alignments`` object are identical to each other:
 
    .. cont-doctest
 
    .. code:: pycon
 
       >>> from Bio.Align import Alignments
-      >>> alignment_list = [alignment1, alignment2, alignment3]
-      >>> for item in alignment_list:
-      ...     print(repr(item))  # doctest: +ELLIPSIS
-      ...
-      <Alignment object (2 rows x 24 columns) at ...>
-      <Alignment object (2 rows x 8 columns) at ...>
-      <Alignment object (2 rows x 19 columns) at ...>
-      >>> for item in alignment_list:
-      ...     print(repr(item))  # doctest: +ELLIPSIS
-      ...
-      <Alignment object (2 rows x 24 columns) at ...>
-      <Alignment object (2 rows x 8 columns) at ...>
-      <Alignment object (2 rows x 19 columns) at ...>
       >>> alignments = Alignments([alignment1, alignment2, alignment3])
-      >>> for item in alignments:
-      ...     print(repr(item))  # doctest: +ELLIPSIS
-      ...
+      >>> alignment_iterator1 = iter(alignments)
+      >>> alignment_iterator2 = iter(alignments)
+      >>> alignment_iterator1 is alignment_iterator2
+      True
+      >>> next(alignment_iterator1)  # doctest: +ELLIPSIS
       <Alignment object (2 rows x 24 columns) at ...>
+      >>> next(alignment_iterator2)  # doctest: +ELLIPSIS
       <Alignment object (2 rows x 8 columns) at ...>
+      >>> next(alignment_iterator1)  # doctest: +ELLIPSIS
       <Alignment object (2 rows x 19 columns) at ...>
-      >>> for item in alignments:
-      ...     print(repr(item))  # doctest: +ELLIPSIS
-      ...
+      >>> next(alignment_iterator2)
+      Traceback (most recent call last):
+        File "<stdin>", line 1, in <module>
+      StopIteration
 
-   The last loop does not print anything because the iterator is already
-   exhausted.
-
--  The ``Alignments`` class defines a ``rewind`` method that resets the
-   iterator to its first item, allowing us to loop over it again:
+   Calling ``iter`` on an ``Alignments`` object resets the iterator to its
+   first item, so you can loop over it again. You can also iterate over the
+   alignments multiple times using a ``for``-loop, which implicitly calls
+   ``iter`` on the iterator:
 
    .. cont-doctest
 
    .. code:: pycon
 
-      >>> alignments.rewind()
       >>> for item in alignments:
       ...     print(repr(item))  # doctest: +ELLIPSIS
       ...
       <Alignment object (2 rows x 24 columns) at ...>
       <Alignment object (2 rows x 8 columns) at ...>
       <Alignment object (2 rows x 19 columns) at ...>
+
+      >>> for item in alignments:
+      ...     print(repr(item))  # doctest: +ELLIPSIS
+      ...
+      <Alignment object (2 rows x 24 columns) at ...>
+      <Alignment object (2 rows x 8 columns) at ...>
+      <Alignment object (2 rows x 19 columns) at ...>
+
+   This behavior is consistent with regular Python lists, and with iterators
+   returned by ``Bio.Align.parse`` (see section :ref:`subsec:align_reading`) or
+   by the pairwise aligner (see Section :ref:`chapter:pairwise`).
 
 -  Metadata can be stored as attributes on an ``Alignments`` object,
    whereas a plain ``list`` does not accept attributes:
@@ -1407,41 +1443,6 @@ alignment:
    7
    6
 
-At this point, the iterator is exhausted, meaning that it has reached
-the end of the file and cannot retrieve any further alignments. Running
-the ``for``-loop again will therefore not print anything:
-
-.. cont-doctest
-
-.. code:: pycon
-
-   >>> for a in alignments:
-   ...     print(len(a.sequences))
-   ...
-   >>>
-
-However, you can use the ``rewind`` method to reset the iterator to the
-beginning of the file, letting you to loop over the alignments from the
-beginning:
-
-.. cont-doctest
-
-.. code:: pycon
-
-   >>> alignments.rewind()
-   >>> for a in alignments:
-   ...     print(len(a.sequences))  # doctest: +ELLIPSIS
-   ...
-   2
-   4
-   5
-   6
-   ...
-   15
-   14
-   7
-   6
-
 You can also call ``len`` on the alignments to obtain the number of
 alignments.
 
@@ -1462,14 +1463,12 @@ alignments is cached, subsequent calls to ``len`` will return quickly.
 
 If the number of alignments is not excessively large and will fit in
 memory, you can convert the alignments iterator to a list of alignments.
-To do so, you could call ``list`` on the ``alignments`` (after rewinding
-if needed):
+To do so, you could call ``list`` on the ``alignments``:
 
 .. cont-doctest
 
 .. code:: pycon
 
-   >>> alignments.rewind()
    >>> alignment_list = list(alignments)
    >>> len(alignment_list)
    48
@@ -2028,7 +2027,6 @@ metadata and the sequence alignment:
 
    >>> from io import StringIO
    >>> stream = StringIO()
-   >>> alignments.rewind()
    >>> Align.write(alignments, stream, "clustal")
    1
    >>> print(stream.getvalue())  # doctest: +ELLIPSIS
@@ -3336,7 +3334,7 @@ Let’s look at the first alignment in more detail:
 
 .. code:: pycon
 
-   >>> alignments.rewind()
+   >>> alignments = iter(alignments)
    >>> alignment = next(alignments)
    >>> alignment  # doctest: +ELLIPSIS
    <Alignment object (2 rows x 171 columns) at ...>
@@ -4346,13 +4344,10 @@ The same keyword argument can be used with ``Align.write``:
 
 .. code:: pycon
 
-   >>> alignments.rewind()
    >>> Align.write(alignments, "mybed3file.bed", "bed", bedN=3)
    2
-   >>> alignments.rewind()
    >>> Align.write(alignments, "mybed6file.bed", "bed", bedN=6)
    2
-   >>> alignments.rewind()
    >>> Align.write(alignments, "mybed12file.bed", "bed")
    2
 
@@ -4471,7 +4466,6 @@ sequences stored in the bigBed file, printed in BED format (see section
 
 .. code:: pycon
 
-   >>> alignments.rewind()
    >>> for alignment in alignments:
    ...     print(format(alignment, "bed"))  # doctest: +NORMALIZE_WHITESPACE
    ...
@@ -5453,14 +5447,13 @@ Iterate over alignments to get one ``Alignment`` object for each chain:
    ...
    chr1 hg19_dna
 
-Rewind the alignments, and iterate from the start until we reach the
-seventh alignment:
+Iterate from the start until we reach the seventh alignment:
 
 .. cont-doctest
 
 .. code:: pycon
 
-   >>> alignments.rewind()
+   >>> alignments = iter(alignments)
    >>> for i in range(7):
    ...     alignment = next(alignments)
    ...

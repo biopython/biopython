@@ -29,6 +29,7 @@ http://imgt.cines.fr/download/LIGM-DB/ftable_doc.html
 http://www.ebi.ac.uk/imgt/hla/docs/manual.html
 
 """
+
 import warnings
 
 from datetime import datetime

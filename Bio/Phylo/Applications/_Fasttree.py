@@ -8,7 +8,6 @@
 # package.
 """Command-line wrapper for tree inference program Fasttree."""
 
-
 from Bio.Application import _Option, _Switch, _Argument, AbstractCommandline
 
 

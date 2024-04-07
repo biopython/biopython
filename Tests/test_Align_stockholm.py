@@ -5904,7 +5904,7 @@ G4FEQ2/2-92                     VERYSLSPMKDLWTEEAKYRRWLEVELAVTRAYEELGMIPKGVTERIR
         alignment = next(alignments)
         self.assertRaises(StopIteration, next, alignments)
         self.check_alignment_globins45(alignment)
-        alignments.rewind()
+        alignments = iter(alignments)
         alignment = next(alignments)
         self.assertRaises(StopIteration, next, alignments)
         with Align.parse(path, "stockholm") as alignments:

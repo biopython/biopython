@@ -21,7 +21,6 @@ Command line options::
 By default, all tests are run.
 """
 
-
 # standard modules
 import sys
 import os
@@ -304,7 +303,7 @@ class TestRunner(unittest.TextTestRunner):
             # exception messages can be in loader.errors instead.
             sys.stderr.write(f"skipping. {msg}\n")
             return True
-        except Exception as msg:
+        except Exception as msg:  # noqa: BLE001
             # This happened during the import
             sys.stderr.write("ERROR\n")
             result.stream.write(result.separator1 + "\n")

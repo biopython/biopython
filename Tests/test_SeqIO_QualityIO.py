@@ -3,6 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Additional unit tests for Bio.SeqIO.QualityIO (covering FASTQ and QUAL)."""
+
 import os
 import unittest
 import warnings

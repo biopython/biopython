@@ -5,7 +5,6 @@
 
 """Example using Bio.SeqIO to parse a FASTA file."""
 
-
 from Bio import SeqIO
 
 

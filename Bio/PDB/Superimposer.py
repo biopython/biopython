@@ -7,7 +7,6 @@
 
 """Superimpose two structures."""
 
-
 import numpy as np
 
 from Bio.SVDSuperimposer import SVDSuperimposer

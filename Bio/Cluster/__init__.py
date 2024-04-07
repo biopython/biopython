@@ -599,7 +599,7 @@ def pca(data):
     Adding the column means to the dot product of the coordinates and the
     principal components recreates the data matrix:
 
-    >>> from numpy import array, dot, amax, amin
+    >>> from numpy import array, dot
     >>> from Bio.Cluster import pca
     >>> matrix = array([[ 0.,  0.,  0.],
     ...                 [ 1.,  0.,  0.],
@@ -607,8 +607,11 @@ def pca(data):
     ...                 [ 4.,  2.,  6.]])
     >>> columnmean, coordinates, pc, _ = pca(matrix)
     >>> m = matrix - (columnmean + dot(coordinates, pc))
-    >>> amax(m) < 1e-12 and amin(m) > -1e-12
-    True
+    >>> abs(m) < 1e-12
+    array([[ True,  True,  True],
+           [ True,  True,  True],
+           [ True,  True,  True],
+           [ True,  True,  True]])
 
     """
     data = __check_data(data)

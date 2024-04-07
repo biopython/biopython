@@ -9,14 +9,21 @@
 
 import copy
 import sys
+from typing import Optional, TYPE_CHECKING, TypeVar
 import warnings
 
 import numpy as np
 
+import Bio.PDB.Atom
 from Bio.PDB.Entity import DisorderedEntityWrapper
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 from Bio.PDB.vectors import Vector
 from Bio.Data import IUPACData
+
+if TYPE_CHECKING:
+    from Bio.PDB.Residue import Residue
+
+_AtomT = TypeVar("_AtomT", bound="Atom")
 
 
 class Atom:
@@ -33,16 +40,16 @@ class Atom:
 
     def __init__(
         self,
-        name,
-        coord,
-        bfactor,
-        occupancy,
-        altloc,
-        fullname,
+        name: str,
+        coord: np.ndarray,
+        bfactor: Optional[float],
+        occupancy: Optional[float],
+        altloc: str,
+        fullname: str,
         serial_number,
-        element=None,
-        pqr_charge=None,
-        radius=None,
+        element: Optional[str] = None,
+        pqr_charge: Optional[float] = None,
+        radius: Optional[float] = None,
     ):
         """Initialize Atom object.
 
@@ -76,7 +83,7 @@ class Atom:
         """
         self.level = "A"
         # Reference to the residue
-        self.parent = None
+        self.parent: Optional["Residue"] = None
         # the atomic data
         self.name = name  # eg. CA, spaces are removed from atom name
         self.fullname = fullname  # e.g. " CA ", spaces included
@@ -92,7 +99,7 @@ class Atom:
         self.sigatm_array = None
         self.serial_number = serial_number
         # Dictionary that keeps additional properties
-        self.xtra = {}
+        self.xtra: dict = {}
         assert not element or element == element.upper(), element
         self.element = self._assign_element(element)
         self.mass = self._assign_atom_mass()
@@ -261,6 +268,39 @@ class Atom:
         """
         diff = self.coord - other.coord
         return np.sqrt(np.dot(diff, diff))
+
+    def strictly_equals(
+        self: _AtomT, other: _AtomT, compare_coordinates: bool = False
+    ) -> bool:
+        """Compare this atom to the other atom using a strict definition of equality.
+
+        Indicates whether the atoms have the same name, B factor, occupancy,
+        alternate location indicator (altloc), fullname, element, charge, and radius.
+        If ``compare_coordinates`` is true, then the coordinates are also compared.
+
+        :param other: The atom to compare this atom with
+        :type other: Atom
+        :param compare_coordinates: Whether to compare the coordinates of the atoms
+        :type compare_coordinates: bool
+        :return: Whether the atoms are strictly equal
+        :rtype: bool
+        """
+        if not isinstance(other, type(self)):
+            return False
+
+        return (
+            self.name == other.name
+            and self.bfactor == other.bfactor
+            and self.occupancy == other.occupancy
+            and self.altloc == other.altloc
+            and self.fullname == other.fullname
+            and np.allclose(self.coord, other.coord)
+            if compare_coordinates
+            else True
+            and getattr(self, "element", None) == getattr(self, "element", None)
+            and getattr(self, "pqr_charge", None) == getattr(self, "pqr_charge", None)
+            and getattr(self, "radius", None) == getattr(self, "radius", None)
+        )
 
     # set methods
 

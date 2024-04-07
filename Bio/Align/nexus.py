@@ -13,10 +13,14 @@ See also the Bio.Nexus module (which this code calls internally),
 as this offers more than just accessing the alignment or its
 sequences as SeqRecord objects.
 """
+
 from io import StringIO
+
+import numpy as np
 
 from Bio.Align import Alignment
 from Bio.Align import interfaces
+from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Nexus import Nexus
 
@@ -177,15 +181,15 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             annotations = {"molecule_type": "protein"}
         else:
             annotations = None
-        aligned_seqs = [str(n.matrix[new_name]) for new_name in n.taxlabels]
+        aligned_seqs = [bytes(n.matrix[name]) for name in n.taxlabels]
+        seqs, coordinates = Alignment.parse_printed_alignment(aligned_seqs)
         records = [
-            SeqRecord(
-                n.matrix[new_name].replace("-", ""),
-                id=old_name,
-                annotations=annotations,
-            )
-            for old_name, new_name in zip(n.unaltered_taxlabels, n.taxlabels)
+            SeqRecord(Seq(seq), id=name, annotations=annotations)
+            for seq, name in zip(seqs, n.unaltered_taxlabels)
         ]
-        coordinates = Alignment.infer_coordinates(aligned_seqs)
+        # Remove columns consisting of gaps only
+        steps = np.diff(coordinates, 1).max(0)
+        indices = np.nonzero(steps == 0)[0] + 1
+        coordinates = np.delete(coordinates, indices, 1)
         alignment = Alignment(records, coordinates)
         return alignment

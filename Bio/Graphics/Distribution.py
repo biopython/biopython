@@ -13,6 +13,7 @@ or anything similar.
 
 Reportlab is used for producing the graphical output.
 """
+
 # standard library
 import math
 

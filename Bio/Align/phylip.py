@@ -8,6 +8,7 @@
 
 You are expected to use this module via the Bio.Align functions.
 """
+
 from Bio.Align import Alignment
 from Bio.Align import interfaces
 from Bio.Seq import Seq
@@ -174,8 +175,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             if "." in seq:
                 raise ValueError("PHYLIP format no longer allows dots in sequence")
 
-        coordinates = Alignment.infer_coordinates(seqs)
-        seqs = [seq.replace("-", "") for seq in seqs]
+        seqs = [seq.encode() for seq in seqs]
+        seqs, coordinates = Alignment.parse_printed_alignment(seqs)
         records = [
             SeqRecord(Seq(seq), id=name, description="")
             for (name, seq) in zip(names, seqs)

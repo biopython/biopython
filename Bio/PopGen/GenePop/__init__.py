@@ -19,6 +19,7 @@ read             Parses a GenePop record (file) into a Record object.
 Partially inspired by MedLine Code.
 
 """
+
 from copy import deepcopy
 
 

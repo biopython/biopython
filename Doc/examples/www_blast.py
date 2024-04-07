@@ -10,6 +10,7 @@
 This code is described in great detail in the BLAST section of the Biopython
 documentation.
 """
+
 # standard library
 from io import StringIO
 

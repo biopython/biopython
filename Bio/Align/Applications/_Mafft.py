@@ -6,7 +6,6 @@
 # package.
 """Command line wrapper for the multiple alignment programme MAFFT."""
 
-
 from Bio.Application import _Option, _Switch, _Argument, AbstractCommandline
 
 

@@ -10,7 +10,6 @@
 # crc32, crc64, gcg, and seguid
 # crc64 is adapted from BioPerl
 
-
 import binascii
 
 

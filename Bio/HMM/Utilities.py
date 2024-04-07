@@ -11,7 +11,6 @@ This just collects general functions which you might like to use in
 dealing with HMMs.
 """
 
-
 import warnings
 
 from Bio import BiopythonDeprecationWarning

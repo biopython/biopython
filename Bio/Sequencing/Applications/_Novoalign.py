@@ -7,7 +7,6 @@
 # package.
 """Command line wrapper for the short read aligner Novoalign by Novocraft."""
 
-
 from Bio.Application import _Option, AbstractCommandline
 
 

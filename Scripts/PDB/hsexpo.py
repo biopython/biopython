@@ -17,7 +17,6 @@ A PDB file can be written out with the exposure in the B factor field.
 See --help for all args.
 """
 
-
 import argparse
 import sys
 

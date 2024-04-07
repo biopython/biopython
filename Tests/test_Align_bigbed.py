@@ -64,7 +64,7 @@ class TestAlign_dna_rna(unittest.TestCase):
         path = "Blat/dna_rna.bb"
         alignments = Align.parse(path, "bigbed")
         self.check_alignments(alignments)
-        alignments.rewind()
+        alignments = iter(alignments)
         self.check_alignments(alignments)
         with Align.parse(path, "bigbed") as alignments:
             self.check_alignments(alignments)
@@ -2240,8 +2240,9 @@ table bed
 
 
 class TestAlign_extended_bed(unittest.TestCase):
-    # The bigBed file bigbed_extended.bb is a BED9+2 file, with nine predefined
-    # BED fields and 2 extra (custom) fields. It was created by running
+    # The bigBed files bigbed_extended.littleendian.bb and
+    # bigbed_extended.bigendian.bb are BED9+2 files, with nine predefined BED
+    # fields and 2 extra (custom) fields. It was created by running
     #
     # bedToBigBed -as=bedExample2.as -type=bed9+2 -extraIndex=name,geneSymbol bedExample2.bed hg18.chrom.sizes bigbed_extended.bb
     #
@@ -2251,12 +2252,23 @@ class TestAlign_extended_bed(unittest.TestCase):
     # and bedExample2.as the associated AutoSQL file, also downloaded from UCSC
     # (https://genome.ucsc.edu/goldenPath/help/examples/bedExample2.as)
     # declaring the nine predefined BED fields and the two extra fields
-
-    path = "Blat/bigbed_extended.bb"
+    #
+    # The bigBed file bigbed_extended.littleendian.bb was generated on a
+    # little-endian machine; the bigBed file bigbed_extended.bigendian.bb was
+    # generated on a big-endian machine.
 
     def test_reading(self):
         """Test parsing bigbed_extended.bb."""
-        alignments = Align.parse(self.path, "bigbed")
+        path = "Blat/bigbed_extended.littleendian.bb"
+        alignments = Align.parse(path, "bigbed")
+        self.assertEqual(alignments.byteorder, "<")
+        self.check_alignments(alignments)
+        path = "Blat/bigbed_extended.bigendian.bb"
+        alignments = Align.parse(path, "bigbed")
+        self.assertEqual(alignments.byteorder, ">")
+        self.check_alignments(alignments)
+
+    def check_alignments(self, alignments):
         self.assertEqual(
             str(alignments.declaration),
             """\
@@ -2482,9 +2494,11 @@ table hg18KGchr7
 
     def test_writing(self):
         """Test writing bigbed_extended.bb."""
-        with open(self.path, "rb") as stream:
+        byteorder = sys.byteorder  # "little" or "big"
+        path = f"Blat/bigbed_extended.{byteorder}endian.bb"
+        with open(path, "rb") as stream:
             correct = stream.read()
-        alignments = Align.parse(self.path, "bigbed")
+        alignments = Align.parse(path, "bigbed")
         with open("Blat/bedExample2.as") as stream:
             autosql_data = stream.read()
         declaration = bigbed.AutoSQLTable.from_string(autosql_data)
@@ -2501,7 +2515,7 @@ table hg18KGchr7
             output.seek(0)
             data = output.read()
         self.assertEqual(correct, data)
-        alignments = Align.parse(self.path, "bigbed")
+        alignments = Align.parse(path, "bigbed")
         targets = alignments.targets
         with tempfile.TemporaryFile() as output:
             Align.write(
@@ -2769,7 +2783,7 @@ class BinaryTestBaseClass(unittest.TestCase):
                 return self.fail(f"unequal file sizes: >= {n1} bytes vs {n2} bytes")
             for i, (c1, c2) in enumerate(zip(data1, data2)):
                 if c1 != c2:
-                    return self.fail(f"bytes at position {n+i} differ: {c1} vs {c2}")
+                    return self.fail(f"bytes at position {n + i} differ: {c1} vs {c2}")
 
 
 @unittest.skipUnless(big is True, "big file; use --big to run")
@@ -2816,7 +2830,7 @@ class TestAlign_big(BinaryTestBaseClass):
     def test_b_uncompressed(self):
         # grep -E -v 'fix|alt' Blat/ucsc.bed > ucsc.clean.bed
         # sort -k1,1 -k2,2n ucsc.clean.bed -o ucsc.clean.bed
-        # bedToBigBed -as=Blat/bed12.as -unc ucsc.clean.bed hg38.chrom.sizes ucsc.unc.bb
+        # bedToBigBed -as=Blat/bed12.as -unc ucsc.clean.bed Align/hg38.chrom.sizes ucsc.unc.bb
         with open("Blat/bed12.as") as stream:
             data = stream.read()
         declaration = bigbed.AutoSQLTable.from_string(data)

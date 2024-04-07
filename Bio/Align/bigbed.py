@@ -17,7 +17,7 @@ You are expected to use this module via the Bio.Align functions.
 """
 
 # This parser was written based on the description of the bigBed file format in
-# W. J. Kent, A. S. Zweig,* G. Barber, A. S. Hinrichs, and D. Karolchik:
+# W. J. Kent, A. S. Zweig, G. Barber, A. S. Hinrichs, and D. Karolchik:
 # "BigWig and BigBed: enabling browsing of large distributed datasets."
 # Bioinformatics 26(17): 2204–2207 (2010)
 # in particular the tables in the supplemental materials listing the contents
@@ -49,7 +49,6 @@ You are expected to use this module via the Bio.Align functions.
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 # ------------------------------------------------------------------------------
-
 
 import sys
 import io
@@ -443,7 +442,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             regions = []
             rezoomedList = []
             trees = _RangeTree.generate(chromUsageList, alignments)
-            scale = initialReduction["scale"]
+            scale = int(initialReduction["scale"])
             doubleReductionSize = scale * _ZoomLevels.bbiResIncrement
             for tree in trees:
                 start = -sys.maxsize
@@ -617,7 +616,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
 
         done = False
         region = None
-        alignments.rewind()
+        alignments = iter(alignments)
         while True:
             try:
                 alignment = next(alignments)
@@ -834,11 +833,17 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 data = stream.read(node.dataSize)
                 if self._compressed > 0:
                     data = zlib.decompress(data)
-                while data:
+                i = 0
+                n = len(data)
+                while i < n:
+                    j = i + size
                     child_chromIx, child_chromStart, child_chromEnd = formatter.unpack(
-                        data[:size]
+                        data[i:j]
                     )
-                    rest, data = data[size:].split(b"\00", 1)
+                    i = j
+                    j = data.index(b"\00", i)
+                    rest = data[i:j]
+                    i = j + 1
                     if child_chromIx != chromIx:
                         continue
                     if end <= child_chromStart or child_chromEnd <= start:
@@ -1274,7 +1279,7 @@ class _ZoomLevels(list):
 
     def reduce(self, summaries, initialReduction, buffer, blockSize, itemsPerSlot):
         zoomCount = initialReduction["size"]
-        reduction = initialReduction["scale"] * _ZoomLevels.bbiResIncrement
+        reduction = int(initialReduction["scale"]) * _ZoomLevels.bbiResIncrement
         output = buffer.output
         formatter = _RTreeFormatter()
         for zoomLevels in range(1, _ZoomLevels.bbiMaxZoomLevels):
@@ -1434,14 +1439,18 @@ class _RangeTree:
 
     @classmethod
     def generate(cls, chromUsageList, alignments):
-        alignments.rewind()
+        alignments = iter(alignments)
         alignment = None
         for chromName, chromId, chromSize in chromUsageList:
             chromName = chromName.decode()
             tree = _RangeTree(chromId, chromSize)
             if alignment is not None:
                 tree.addToCoverageDepth(alignment)
-            for alignment in alignments:
+            while True:
+                try:
+                    alignment = next(alignments)
+                except StopIteration:
+                    break
                 if alignment.target.id != chromName:
                     break
                 tree.addToCoverageDepth(alignment)

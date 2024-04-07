@@ -559,7 +559,9 @@ class TestMutableSeq(unittest.TestCase):
         self.assertRaises(
             UnicodeEncodeError, Seq.MutableSeq, "ÄþÇÐ"
         )  # All are Latin-1 characters
-        self.assertRaises(UnicodeEncodeError, Seq.MutableSeq, "あいうえお")  # These are not
+        self.assertRaises(
+            UnicodeEncodeError, Seq.MutableSeq, "あいうえお"
+        )  # These are not
 
     def test_repr(self):
         self.assertEqual("MutableSeq('TCAAAAGGATGCATCATG')", repr(self.mutable_s))

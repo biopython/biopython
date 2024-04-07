@@ -22,7 +22,6 @@ Contributions by:
 - and many others.
 """
 
-
 try:
     import numpy as np
 except ImportError:
@@ -37,6 +36,7 @@ from .PDBParser import PDBParser
 
 from .MMCIFParser import MMCIFParser
 from .MMCIFParser import FastMMCIFParser
+from .PDBMLParser import PDBMLParser
 
 # Download from the PDB
 from .PDBList import PDBList

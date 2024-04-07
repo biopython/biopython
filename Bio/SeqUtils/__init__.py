@@ -10,15 +10,12 @@
 # package.
 """Miscellaneous functions for dealing with sequences."""
 
-
 import re
-import warnings
 from math import pi, sin, cos, log, exp
 
 from Bio.Seq import Seq, complement, complement_rna, translate
 from Bio.Data import IUPACData
 from Bio.Data.CodonTable import standard_dna_table
-from Bio import BiopythonDeprecationWarning
 
 ######################################
 # DNA
@@ -514,7 +511,7 @@ def six_frame_translations(seq, genetic_code=1):
     <BLANKLINE>
 
     """  # noqa for pep8 W291 trailing whitespace
-    from Bio.Seq import reverse_complement, reverse_complement_rna, translate
+    from Bio.Seq import reverse_complement, reverse_complement_rna
 
     if "u" in seq.lower():
         anti = reverse_complement_rna(seq)

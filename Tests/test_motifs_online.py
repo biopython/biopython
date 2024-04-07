@@ -6,6 +6,7 @@
 # package.
 
 """Testing online code for Bio.motifs (weblogo etc)."""
+
 import os
 import unittest
 

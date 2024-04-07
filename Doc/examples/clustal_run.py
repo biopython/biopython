@@ -12,7 +12,6 @@ and parse the results into an object that can be dealt with easily.
 """
 # standard library
 
-
 import sys
 import subprocess
 

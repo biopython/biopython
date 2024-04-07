@@ -20,7 +20,6 @@ Variables:
 
 """
 
-
 import warnings
 
 from io import StringIO

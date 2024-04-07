@@ -50,7 +50,7 @@ class TestAlign_dna_rna(unittest.TestCase):
         path = "Blat/dna_rna.chain"
         alignments = Align.parse(path, "chain")
         self.check_alignments(alignments)
-        alignments.rewind()
+        alignments = iter(alignments)
         self.check_alignments(alignments)
         with Align.parse(path, "chain") as alignments:
             self.check_alignments(alignments)

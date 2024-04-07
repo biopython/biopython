@@ -32,6 +32,7 @@ except ImportError:
         "Install NumPy if you want to use Bio.PDB."
     ) from None
 
+from Bio import BiopythonWarning
 from Bio.PDB import PDBParser
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 from Bio.PDB import rotmat, Vector
@@ -148,6 +149,47 @@ class Atom_Element(unittest.TestCase):
 class SortingTests(unittest.TestCase):
     """Tests for sorting elements of the SMCRA representation."""
 
+    def test_strict_equality(self):
+        parser = PDBParser()
+        structure = parser.get_structure("example", "PDB/1A8O.pdb")
+        structure2 = parser.get_structure("example", "PDB/1A8O.pdb")
+
+        self.assertTrue(structure.strictly_equals(structure2))
+        self.assertTrue(
+            structure2.strictly_equals(structure)
+        )  # Strict equality should be symmetric
+
+        # Remove a chain from a model in the structure
+        structure2[0].detach_child("A")
+
+        self.assertFalse(structure.strictly_equals(structure2))
+        self.assertFalse(
+            structure2.strictly_equals(structure)
+        )  # Strict equality should be symmetric
+
+        # Reset structure2
+        structure2 = parser.get_structure("example", "PDB/1A8O.pdb")
+
+        self.assertTrue(structure.strictly_equals(structure2))
+        self.assertTrue(
+            structure2.strictly_equals(structure)
+        )  # Strict equality should be symmetric
+
+        # Change the coordinates of an atom in structure2
+        structure2[0]["A"][(" ", 180, " ")]["C"].set_coord((0, 0, 0))
+
+        self.assertTrue(structure.strictly_equals(structure2))
+        self.assertTrue(
+            structure2.strictly_equals(structure)
+        )  # Strict equality should be symmetric
+
+        self.assertFalse(
+            structure.strictly_equals(structure2, compare_coordinates=True)
+        )
+        self.assertFalse(
+            structure2.strictly_equals(structure, compare_coordinates=True)
+        )  # Strict equality should be symmetric
+
     def test_residue_sort(self):
         """Test atoms are sorted correctly in residues."""
         parser = PDBParser()
@@ -176,21 +218,21 @@ class SortingTests(unittest.TestCase):
     def test_comparison_entities(self):
         """Test comparing and sorting the several SMCRA objects."""
         parser = PDBParser(QUIET=True)
-        struct = parser.get_structure("example", "PDB/a_structure.pdb")
+        structure = parser.get_structure("example", "PDB/a_structure.pdb")
 
         # Test deepcopy of a structure with disordered atoms
-        struct2 = deepcopy(struct)
+        structure2 = deepcopy(structure)
 
         # Sorting (<, >, <=, <=)
         # Chains (same code as models)
-        model = struct[1]
+        model = structure[1]
         chains = [c.id for c in sorted(model)]
         self.assertEqual(chains, ["A", "B", "C", " "])
         # Residues
-        residues = [r.id[1] for r in sorted(struct[1]["C"])]
+        residues = [r.id[1] for r in sorted(structure[1]["C"])]
         self.assertEqual(residues, [1, 2, 3, 4, 0])
         # Atoms
-        for residue in struct.get_residues():
+        for residue in structure.get_residues():
             old = [a.name for a in residue]
             new = [a.name for a in sorted(residue)]
 
@@ -209,10 +251,10 @@ class SortingTests(unittest.TestCase):
                 f"After N, CA, C, O order Should be alphabetical: {new}",
             )
         # DisorderedResidue
-        residues = [r.id[1] for r in sorted(struct[1]["A"])][79:81]
+        residues = [r.id[1] for r in sorted(structure[1]["A"])][79:81]
         self.assertEqual(residues, [80, 81])
         # Insertion code + hetflag + chain
-        residues = list(struct[1]["B"]) + [struct[1]["A"][44]]
+        residues = list(structure[1]["B"]) + [structure[1]["A"][44]]
         self.assertEqual(
             [("{}" * 4).format(r.parent.id, *r.id) for r in sorted(residues)],
             [
@@ -231,31 +273,30 @@ class SortingTests(unittest.TestCase):
             ],
         )
         # DisorderedAtom
-        atoms = [a.altloc for a in sorted(struct[1]["A"][74]["OD1"])]
+        atoms = [a.altloc for a in sorted(structure[1]["A"][74]["OD1"])]
         self.assertEqual(atoms, ["A", "B"])
 
         # Comparisons
         # Structure
-        self.assertEqual(struct, struct2)
-        self.assertLessEqual(struct, struct2)
-        self.assertGreaterEqual(struct, struct2)
-        struct2.id = "new_id"
-        self.assertNotEqual(struct, struct2)
-        self.assertLess(struct, struct2)
-        self.assertLessEqual(struct, struct2)
-        self.assertGreater(struct2, struct)
-        self.assertGreaterEqual(struct2, struct)
+        self.assertEqual(structure, structure2)
+        self.assertLessEqual(structure, structure2)
+        self.assertGreaterEqual(structure, structure2)
+        structure2.id = "new_id"
+        self.assertNotEqual(structure, structure2)
+        self.assertLess(structure, structure2)
+        self.assertLessEqual(structure, structure2)
+        self.assertGreater(structure2, structure)
+        self.assertGreaterEqual(structure2, structure)
 
         # Model
-
         self.assertEqual(model, model)  # __eq__ same type
-        self.assertNotEqual(struct[0], struct[1])
+        self.assertNotEqual(structure[0], structure[1])
 
-        self.assertNotEqual(struct[0], [])  # __eq__ diff. types
-        self.assertNotEqual(struct, model)
+        self.assertNotEqual(structure[0], [])  # __eq__ diff. types
+        self.assertNotEqual(structure, model)
 
         # residues with same ID string should not be equal if the parent is not equal
-        res1, res2, res3 = residues[0], residues[-1], struct2[1]["A"][44]
+        res1, res2, res3 = residues[0], residues[-1], structure2[1]["A"][44]
         self.assertEqual(res1.id, res2.id)
         self.assertEqual(
             res2, res3
@@ -322,14 +363,14 @@ class ChangingIdTests(unittest.TestCase):
         self.assertIn(2, self.structure)
         self.assertNotIn(0, self.structure)
 
-    def test_change_model_id_raises(self):
-        """Cannot change id to a value already in use by another child."""
+    def test_change_model_id_warns(self):
+        """Warning when changing id to a value already in use by another child."""
         model = next(iter(self.structure))
-        with self.assertRaises(ValueError):
+        with self.assertWarns(BiopythonWarning):
             model.id = 1
-        # Make sure nothing was changed
-        self.assertEqual(model.id, 0)
-        self.assertIn(0, self.structure)
+        # make sure children were not overwritten
+        self.assertEqual(model.id, 1)
+        self.assertEqual(len(self.structure.child_list), 2)
         self.assertIn(1, self.structure)
 
     def test_change_chain_id(self):

@@ -5,7 +5,6 @@
 
 """Example of using GenomeDiagram cross-links to mimic ACT."""
 
-
 import sys
 import os
 from reportlab.lib import colors

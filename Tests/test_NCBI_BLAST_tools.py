@@ -8,7 +8,6 @@
 
 """Tests for NCBI BLAST tools module."""
 
-
 import os
 import os.path
 import sys

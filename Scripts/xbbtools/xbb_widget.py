@@ -11,7 +11,6 @@
 
 """Widget code for graphical Xbbtools tool."""
 
-
 import re
 import sys
 import time

@@ -1,4 +1,5 @@
 """Tests for SeqIO GFA module."""
+
 import unittest
 
 from Bio import BiopythonWarning

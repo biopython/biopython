@@ -49,7 +49,7 @@ class TestNexusReading(unittest.TestCase):
         path = "Nexus/test_Nexus_input.nex"
         alignments = Align.parse(path, "nexus")
         self.check_nexus1(alignments)
-        alignments.rewind()
+        alignments = iter(alignments)
         self.check_nexus1(alignments)
         with Align.parse(path, "nexus") as alignments:
             self.check_nexus1(alignments)

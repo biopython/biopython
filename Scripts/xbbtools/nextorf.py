@@ -12,7 +12,6 @@
 
 """Find next open reading frame in sequence data."""
 
-
 import re
 import sys
 import getopt

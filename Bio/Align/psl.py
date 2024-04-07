@@ -25,6 +25,7 @@ As we can see in this example, ``start + size`` will give one more than the
 zero-based end position. We can therefore manipulate ``start`` and
 ``start + size`` as python list slice boundaries.
 """
+
 from itertools import chain
 import numpy as np
 

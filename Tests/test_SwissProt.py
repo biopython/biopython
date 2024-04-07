@@ -4,6 +4,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Test for the SwissProt parser on SwissProt files."""
+
 import os
 import unittest
 

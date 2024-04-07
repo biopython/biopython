@@ -13,6 +13,7 @@ SeqXML is a lightweight XML format which is supposed be an alternative for
 FASTA files. For more Information see http://www.seqXML.org and Schmitt et al
 (2011), https://doi.org/10.1093/bib/bbr025
 """
+
 from xml import sax
 from xml.sax import handler
 from xml.sax.saxutils import XMLGenerator
@@ -440,6 +441,7 @@ class SeqXmlIterator(SequenceIterator):
     method calls.
     """
 
+    # Small block size can be a problem with libexpat 2.6.0 onwards:
     BLOCK = 1024
 
     def __init__(self, stream_or_path, namespace=None):
@@ -496,11 +498,12 @@ class SeqXmlIterator(SequenceIterator):
             if not text:
                 break
             parser.feed(text)
+        # Closing the parser ensures that all XML data fed into it are processed
+        parser.close()
         # We have reached the end of the XML file;
         # send out the remaining records
         yield from records
         records.clear()
-        parser.close()
 
 
 class SeqXmlWriter(SequenceWriter):

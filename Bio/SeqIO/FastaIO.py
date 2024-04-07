@@ -12,6 +12,7 @@
 
 You are expected to use this module via the Bio.SeqIO functions.
 """
+
 import warnings
 
 from typing import Callable, Optional, Tuple

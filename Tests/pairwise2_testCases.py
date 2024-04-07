@@ -11,6 +11,7 @@ as TestCases in ``test_pairwise2.py`` and ``test_pairwise2_no_C.py``
 with or without complementing C extensions.
 
 """
+
 import pickle
 import unittest
 import warnings

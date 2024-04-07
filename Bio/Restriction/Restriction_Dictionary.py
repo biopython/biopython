@@ -12,7 +12,7 @@
 
 """Restriction Analysis Libraries.
 
-Used REBASE emboss files version 309 (2023).
+Used REBASE emboss files version 404 (2024).
 """
 
 rest_dict = {}
@@ -8135,6 +8135,28 @@ rest_dict["Cbo67071IV"] = {
     "uri": "https://identifiers.org/rebase:165809",
 }
 
+rest_dict["CcaP7V"] = {
+    "charac": (None, None, None, None, "CRAAAAR"),
+    "compsite": "(?=(?P<CcaP7V>C[AG]AAAA[AG]))|(?=(?P<CcaP7V_as>[CT]TTTT[CT]G))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 116072,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CRAAAAR",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:116072",
+}
+
 rest_dict["Cch467III"] = {
     "charac": (None, None, None, None, "GNGAAAY"),
     "compsite": "(?=(?P<Cch467III>G.GAAA[CT]))|(?=(?P<Cch467III_as>[AG]TTTC.C))",
@@ -14381,6 +14403,28 @@ rest_dict["Lcr047II"] = {
     "substrat": "DNA",
     "suppl": (),
     "uri": "https://identifiers.org/rebase:382621",
+}
+
+rest_dict["LcrJM4II"] = {
+    "charac": (None, None, None, None, "GMAGG"),
+    "compsite": "(?=(?P<LcrJM4II>G[AC]AGG))|(?=(?P<LcrJM4II_as>CCT[GT]C))",
+    "dna": None,
+    "freq": 512.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 601088,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GMAGG",
+    "size": 5,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:601088",
 }
 
 rest_dict["Lde4408II"] = {
@@ -24020,7 +24064,7 @@ typedict["type144"] = (
 
 typedict["type146"] = (
     ("NonPalindromic", "NoCut", "Unknown", "NotDefined", "Meth_Dep", "Not_available", "AbstractCut", "RestrictionType"),
-    ["Aba6411II", "Aba13301I", "AbaB8342IV", "AbaCIII", "AbaPBA3II", "Abr4036II", "AccIX", "AccX", "Acc65V", "AchA6III", "Aco12261II", "AcoY31II", "Adh6U21I", "AhyRBAHI", "AhyYL17I", "Aod1I", "Asl11923II", "Asp103I", "Asp337I", "AspAMDIV", "AspDUT2V", "AspJHL3II", "AspNIH4III", "AspSLV7III", "Asp114pII", "Asu14238IV", "AteTI", "Avi249I", "Awo1030IV", "Bag18758I", "BanLI", "Bau1417V", "Bbr52II", "Bbr57III", "Bbr7017II", "Bbr7017III", "BbuB31I", "BbuB31II", "Bce3081I", "Bce10661III", "Bco11035III", "BfaSII", "Bga514I", "Bhe175II", "BkrAM31DI", "Ble402II", "BloAII", "Bps6700III", "BscGI", "Bsp460III", "Bsp3004IV", "BspNCI", "Bve1B23I", "Cal14237I", "CalB3II", "Cau10061II", "Cba13II", "Cba16038I", "Cbo67071IV", "Cch467III", "Cco11366VI", "Cco11437V", "Cco14983V", "Cco14983VI", "CcrNAIII", "Cdi11397I", "Cdi13746V", "Cdi13750III", "Cdu23823II", "Cfa8380I", "CfrMH13II", "CfrMH16VI", "Cfupf3II", "Cgl13032I", "Cgl13032II", "Cje265V", "Cje54107III", "CjeFIII", "CjeFV", "CjeNII", "CjeNV", "Cko11077IV", "Cla11845III", "Cly7489II", "Cpe2837III", "Cpe10578V", "Cpe13170II", "Cre7908I", "Csa9238II", "Csp2014I", "CspBP25III", "CspL61I", "CspX1II", "Dpi3069I", "Dpi3084I", "Dpi3090II", "DrdII", "DrdVI", "DrdVIII", "DspS02II", "DvuIII", "Ecl234I", "Ecl35734I", "Eco1836I", "Eco4174I", "Eco4465II", "Eco8164I", "Eco9009II", "Eco9020I", "Eco9035I", "Eco9699II", "Eco43896II", "EcoE1140I", "EcoHSI", "EcoMVII", "EcoNIH6II", "Ehi46392I", "Eli8509II", "ErhG4T10I", "EsaSSI", "Esp3007I", "Fba202Z8II", "Fco1691IV", "Fna13121I", "Fnu11326II", "Fnu11326IV", "FspPK15I", "FtnUV", "GauT27I", "Gba708II", "Gru56503II", "GsuPI", "HbaII", "Hca13221V", "HdeNY26I", "HdeZA17I", "Hpy99XIII", "Hpy99XIV", "Hpy99XIV_mut1", "Hpy99XXII", "Hpy300XI", "HpyAXIV", "HpyAXVI_mut1", "HpyAXVI_mut2", "HpyAXVIII", "HpyAS001VI", "HpyG272XV", "HpyLIM6XII", "HpyLIM9XVI", "HpyPU007XIX", "HpyUM032XIII_mut1", "HpyUM032XIV", "HpyUM037X", "Hso63373III", "HspMHR1II", "Jma19592I", "Jma19592II", "Jsp2502II", "Kas9737III", "Kor51II", "Kpn156V", "Kpn327I", "Kpn9178I", "Kpn9644II", "KpnNH25III", "KpnNIH30III", "KpnNIH50I", "Kro7512II", "Lba2029III", "Lbr124II", "Lcr047I", "Lcr047II", "Lde4408II", "LlaG50I", "Lme32I", "Lmo370I", "Lmo911II", "Lpl1004II", "Lpn11417II", "Lpn12272I", "Lra68I", "LsaDS4I", "Lsp48III", "Lsp6406VI", "Mba11I", "Mch946II", "Mch10819I", "MkaDII", "Mla10359I", "Mlu211III", "MspF392I", "MspI7II", "MspI7IV", "MspSC27II", "MtuHN878II", "Nal45188II", "Nan12227I", "Nbr128II", "NhaXI", "NpeUS61II", "NspES21II", "ObaBS10I", "OgrI", "OspHL35III", "PacIII", "Pac19842II", "Pae8506I", "Pae10662III", "PaePA99III", "Pal408I", "Pba2294I", "Pbu13063II", "PcaII", "Pcr308II", "Pdi8503III", "Pdu1735I", "Pfl3756II", "Pfl10783II", "PflPt14I", "PfrJS12IV", "PfrJS12V", "PfrJS15III", "PgaP73III", "Pin17FIII", "PinP23II", "PinP59III", "PliMI", "Pme10899I", "PpiP13II", "Pru8113I", "Pse18267I", "Psp0357II", "PspAT13III", "PspD7DII", "PspMR102II", "PspR84I", "Pst145I", "Pst273I", "Pst14472I", "Ran11014IV", "Rba2021I", "RdeGBI", "Rer8036II", "RflFIII", "Rgo13296IV", "Rho5650I", "Rkr11038I", "Rmu369III", "RpaTI", "Rsp008IV", "Rsp008V", "Rsp531II", "RspPBTS2III", "Rtr1953I", "Saf8902III", "Sag901I", "Sau1803III", "Sau5656II", "Sau64037IV", "SauMJ015III", "Sba460II", "Sbo46I", "ScoDS2II", "Sdy5370I", "Sdy7136I", "Sdy9603I", "Sen5794III", "Sen6480IV", "Sen17963III", "SenA1673III", "SenSARA26III", "SenTFIV", "Sep11964I", "Seq11824I", "Sfl13829III", "Sgr7807I", "SgrAII", "Sma325I", "Sma10259II", "SmaUMH5I", "SmaUMH8I", "Sna507VIII", "Sno506I", "Spe19205IV", "SpnRII", "SpoDI", "Ssp714II", "Ssp6803IV", "SspJOR1II", "Sth20745III", "SthSt3II", "SurP32aII", "Sxy1780I", "TpyTP2I", "TspARh3I", "Van9116I", "VchE4II", "Vdi96II", "VpaSKIII", "Vtu19109I", "Xca85IV", "Yps3606I", "Yru12986I"],
+    ["Aba6411II", "Aba13301I", "AbaB8342IV", "AbaCIII", "AbaPBA3II", "Abr4036II", "AccIX", "AccX", "Acc65V", "AchA6III", "Aco12261II", "AcoY31II", "Adh6U21I", "AhyRBAHI", "AhyYL17I", "Aod1I", "Asl11923II", "Asp103I", "Asp337I", "AspAMDIV", "AspDUT2V", "AspJHL3II", "AspNIH4III", "AspSLV7III", "Asp114pII", "Asu14238IV", "AteTI", "Avi249I", "Awo1030IV", "Bag18758I", "BanLI", "Bau1417V", "Bbr52II", "Bbr57III", "Bbr7017II", "Bbr7017III", "BbuB31I", "BbuB31II", "Bce3081I", "Bce10661III", "Bco11035III", "BfaSII", "Bga514I", "Bhe175II", "BkrAM31DI", "Ble402II", "BloAII", "Bps6700III", "BscGI", "Bsp460III", "Bsp3004IV", "BspNCI", "Bve1B23I", "Cal14237I", "CalB3II", "Cau10061II", "Cba13II", "Cba16038I", "Cbo67071IV", "CcaP7V", "Cch467III", "Cco11366VI", "Cco11437V", "Cco14983V", "Cco14983VI", "CcrNAIII", "Cdi11397I", "Cdi13746V", "Cdi13750III", "Cdu23823II", "Cfa8380I", "CfrMH13II", "CfrMH16VI", "Cfupf3II", "Cgl13032I", "Cgl13032II", "Cje265V", "Cje54107III", "CjeFIII", "CjeFV", "CjeNII", "CjeNV", "Cko11077IV", "Cla11845III", "Cly7489II", "Cpe2837III", "Cpe10578V", "Cpe13170II", "Cre7908I", "Csa9238II", "Csp2014I", "CspBP25III", "CspL61I", "CspX1II", "Dpi3069I", "Dpi3084I", "Dpi3090II", "DrdII", "DrdVI", "DrdVIII", "DspS02II", "DvuIII", "Ecl234I", "Ecl35734I", "Eco1836I", "Eco4174I", "Eco4465II", "Eco8164I", "Eco9009II", "Eco9020I", "Eco9035I", "Eco9699II", "Eco43896II", "EcoE1140I", "EcoHSI", "EcoMVII", "EcoNIH6II", "Ehi46392I", "Eli8509II", "ErhG4T10I", "EsaSSI", "Esp3007I", "Fba202Z8II", "Fco1691IV", "Fna13121I", "Fnu11326II", "Fnu11326IV", "FspPK15I", "FtnUV", "GauT27I", "Gba708II", "Gru56503II", "GsuPI", "HbaII", "Hca13221V", "HdeNY26I", "HdeZA17I", "Hpy99XIII", "Hpy99XIV", "Hpy99XIV_mut1", "Hpy99XXII", "Hpy300XI", "HpyAXIV", "HpyAXVI_mut1", "HpyAXVI_mut2", "HpyAXVIII", "HpyAS001VI", "HpyG272XV", "HpyLIM6XII", "HpyLIM9XVI", "HpyPU007XIX", "HpyUM032XIII_mut1", "HpyUM032XIV", "HpyUM037X", "Hso63373III", "HspMHR1II", "Jma19592I", "Jma19592II", "Jsp2502II", "Kas9737III", "Kor51II", "Kpn156V", "Kpn327I", "Kpn9178I", "Kpn9644II", "KpnNH25III", "KpnNIH30III", "KpnNIH50I", "Kro7512II", "Lba2029III", "Lbr124II", "Lcr047I", "Lcr047II", "LcrJM4II", "Lde4408II", "LlaG50I", "Lme32I", "Lmo370I", "Lmo911II", "Lpl1004II", "Lpn11417II", "Lpn12272I", "Lra68I", "LsaDS4I", "Lsp48III", "Lsp6406VI", "Mba11I", "Mch946II", "Mch10819I", "MkaDII", "Mla10359I", "Mlu211III", "MspF392I", "MspI7II", "MspI7IV", "MspSC27II", "MtuHN878II", "Nal45188II", "Nan12227I", "Nbr128II", "NhaXI", "NpeUS61II", "NspES21II", "ObaBS10I", "OgrI", "OspHL35III", "PacIII", "Pac19842II", "Pae8506I", "Pae10662III", "PaePA99III", "Pal408I", "Pba2294I", "Pbu13063II", "PcaII", "Pcr308II", "Pdi8503III", "Pdu1735I", "Pfl3756II", "Pfl10783II", "PflPt14I", "PfrJS12IV", "PfrJS12V", "PfrJS15III", "PgaP73III", "Pin17FIII", "PinP23II", "PinP59III", "PliMI", "Pme10899I", "PpiP13II", "Pru8113I", "Pse18267I", "Psp0357II", "PspAT13III", "PspD7DII", "PspMR102II", "PspR84I", "Pst145I", "Pst273I", "Pst14472I", "Ran11014IV", "Rba2021I", "RdeGBI", "Rer8036II", "RflFIII", "Rgo13296IV", "Rho5650I", "Rkr11038I", "Rmu369III", "RpaTI", "Rsp008IV", "Rsp008V", "Rsp531II", "RspPBTS2III", "Rtr1953I", "Saf8902III", "Sag901I", "Sau1803III", "Sau5656II", "Sau64037IV", "SauMJ015III", "Sba460II", "Sbo46I", "ScoDS2II", "Sdy5370I", "Sdy7136I", "Sdy9603I", "Sen5794III", "Sen6480IV", "Sen17963III", "SenA1673III", "SenSARA26III", "SenTFIV", "Sep11964I", "Seq11824I", "Sfl13829III", "Sgr7807I", "SgrAII", "Sma325I", "Sma10259II", "SmaUMH5I", "SmaUMH8I", "Sna507VIII", "Sno506I", "Spe19205IV", "SpnRII", "SpoDI", "Ssp714II", "Ssp6803IV", "SspJOR1II", "Sth20745III", "SthSt3II", "SurP32aII", "Sxy1780I", "TpyTP2I", "TspARh3I", "Van9116I", "VchE4II", "Vdi96II", "VpaSKIII", "Vtu19109I", "Xca85IV", "Yps3606I", "Yru12986I"],
 )
 
 typedict["type148"] = (

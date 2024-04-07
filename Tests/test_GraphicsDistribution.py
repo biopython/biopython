@@ -8,6 +8,7 @@ Provides tests for the Graphics.Distribution classes which provide the
 ability to create graphics to show the distribution of information about
 BACs/chromosomes/etc.
 """
+
 # standard library
 import os
 import random

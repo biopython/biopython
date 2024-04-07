@@ -11,7 +11,6 @@
 
 """Tests for Nexus module."""
 
-
 import os.path
 import unittest
 import tempfile

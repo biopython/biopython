@@ -38,6 +38,7 @@ the format name "nib":
 For detailed information on the file format, please see the UCSC
 description at https://genome.ucsc.edu/FAQ/FAQformat.html.
 """
+
 import binascii
 import struct
 import sys

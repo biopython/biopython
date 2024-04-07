@@ -230,7 +230,7 @@ class TestErrors(unittest.TestCase):
 
     def test_index_lengths(self):
         # Reduce the number of reads from 10 to 9 so index loading fails...
-        self.assertEqual(self.good[20:24], b"\x00\x00\x00\x0A")
+        self.assertEqual(self.good[20:24], b"\x00\x00\x00\x0a")
         self.check_sff_read_roche_index(
             self.good[:20] + b"\x00\x00\x00\x09" + self.good[24:],
             "Problem with index length? 17568 vs 17588",

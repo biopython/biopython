@@ -161,6 +161,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - James Baker <https://github.com/JamesABaker>
 - James Casbon <https://github.com/jamescasbon>
 - James Jeffryes <https://github.com/JamesJeffryes>
+- James Krieger <https://github.com/JamesMKrieger>
 - Jared Andrews <https://github.com/j-andrews7>
 - Jared Lumpe <https://github.com/jlumpe>
 - Jarrod Millman <https://github.com/jarrodmillman>

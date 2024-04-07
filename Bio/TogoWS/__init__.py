@@ -31,7 +31,6 @@ http://togows.dbcls.jp/site/en/soap.html
 http://soapy.sourceforge.net/
 """
 
-
 import io
 import time
 

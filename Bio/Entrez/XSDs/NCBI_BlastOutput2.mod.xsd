@@ -1,0 +1,360 @@
+<?xml version="1.0" ?>
+<!-- ============================================
+     ::DATATOOL:: Generated from "blastxml2.asn"
+     ::DATATOOL:: by application DATATOOL version 2.4.4
+     ::DATATOOL:: on 09/23/2015 23:04:21
+     ============================================ -->
+
+<xs:schema
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:ncbi="http://www.ncbi.nlm.nih.gov"
+  xmlns="http://www.ncbi.nlm.nih.gov"
+  targetNamespace="http://www.ncbi.nlm.nih.gov"
+  elementFormDefault="qualified"
+  attributeFormDefault="unqualified">
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-BlastOutput2"
+================================================= -->
+
+
+<xs:element name="BlastOutput2">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name="report" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="Report"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="error" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="Err"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="BlastXML2">
+  <xs:complexType>
+    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+      <xs:element ref="BlastOutput2"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="Report">
+  <xs:complexType>
+    <xs:sequence>
+<!-- BLAST program: blastp, tblastx etc. -->
+      <xs:element name="program" type="xs:string"/>
+<!-- Program version  -->
+      <xs:element name="version" type="xs:string"/>
+<!-- Steven, David, Tom and others -->
+      <xs:element name="reference" type="xs:string"/>
+      <xs:element name="search-target">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="Target"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- search parameters -->
+      <xs:element name="params">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="Parameters"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="results">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="Results"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="Err">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name="code" type="xs:integer"/>
+      <xs:element name="message" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="Target">
+  <xs:complexType>
+    <xs:choice>
+<!-- BLAST Database name -->
+      <xs:element name="db" type="xs:string"/>
+<!-- Subject IDs -->
+      <xs:element name="subjects" type="xs:string" maxOccurs="unbounded"/>
+    </xs:choice>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="Results">
+  <xs:complexType>
+    <xs:choice>
+      <xs:element name="iterations">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="Iteration"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!--
+  iterative search (psi and delta blast)
+  db search   
+-->
+      <xs:element name="search">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="Search"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!--  bl2seq -->
+      <xs:element name="bl2seq">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="Search"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="Iteration">
+  <xs:complexType>
+    <xs:sequence>
+<!-- iteration number (use with psiblast) -->
+      <xs:element name="iter-num" type="xs:integer"/>
+      <xs:element name="search">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="Search"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="Search">
+  <xs:complexType>
+    <xs:sequence>
+<!-- SeqId of query -->
+      <xs:element name="query-id" type="xs:string" minOccurs="0"/>
+<!-- Definition line of query -->
+      <xs:element name="query-title" type="xs:string" minOccurs="0"/>
+<!-- length of query sequence -->
+      <xs:element name="query-len" type="xs:integer" minOccurs="0"/>
+<!-- Masked offsets. -->
+      <xs:element name="query-masking" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="Range"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Hits one for every db sequence -->
+      <xs:element name="hits" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="Hit"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- search statistics             -->
+      <xs:element name="stat" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="Statistics"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- Some (error?) information -->
+      <xs:element name="message" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="Parameters">
+  <xs:complexType>
+    <xs:sequence>
+<!-- Matrix used (-M) -->
+      <xs:element name="matrix" type="xs:string" minOccurs="0"/>
+<!-- Expectation threshold (-e) -->
+      <xs:element name="expect" type="xs:double"/>
+<!-- Inclusion threshold (-h) -->
+      <xs:element name="include" type="xs:double" minOccurs="0"/>
+<!-- match score for NT (-r) -->
+      <xs:element name="sc-match" type="xs:integer" minOccurs="0"/>
+<!-- mismatch score for NT (-q) -->
+      <xs:element name="sc-mismatch" type="xs:integer" minOccurs="0"/>
+<!-- Gap opening cost (-G) -->
+      <xs:element name="gap-open" type="xs:integer" minOccurs="0"/>
+<!-- Gap extension cost (-E) -->
+      <xs:element name="gap-extend" type="xs:integer" minOccurs="0"/>
+<!-- Filtering options (-F) -->
+      <xs:element name="filter" type="xs:string" minOccurs="0"/>
+<!-- PHI-BLAST pattern -->
+      <xs:element name="pattern" type="xs:string" minOccurs="0"/>
+<!-- Limit of request to Entrez query -->
+      <xs:element name="entrez-query" type="xs:string" minOccurs="0"/>
+<!--
+ composition-based stats (numbers correspond to
+ numbering in stand-alone application parameter -comp_based_stats).
+-->
+      <xs:element name="cbs" type="xs:integer" minOccurs="0"/>
+<!-- genetic code for query (blastx or tblastx) -->
+      <xs:element name="query-gencode" type="xs:integer" minOccurs="0"/>
+<!-- genetic code for db or subjects (tblastn or tblastx) -->
+      <xs:element name="db-gencode" type="xs:integer" minOccurs="0"/>
+<!-- bl2seq mode  -->
+      <xs:element name="bl2seq-mode" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- Used to specify start/stop of masking on query. -->
+<xs:element name="Range">
+  <xs:complexType>
+    <xs:sequence>
+<!-- Beginning of masked range (one-offset) -->
+      <xs:element name="from" type="xs:integer"/>
+<!-- End of masked range (one-offset) -->
+      <xs:element name="to" type="xs:integer"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="Statistics">
+  <xs:complexType>
+    <xs:sequence>
+<!-- Number of sequences in BLAST db -->
+      <xs:element name="db-num" type="xs:long" minOccurs="0"/>
+<!-- Length of BLAST db -->
+      <xs:element name="db-len" type="xs:long" minOccurs="0"/>
+<!-- Effective HSP length -->
+      <xs:element name="hsp-len" type="xs:integer"/>
+<!-- Effective search space -->
+      <xs:element name="eff-space" type="xs:long"/>
+<!-- Karlin-Altschul parameter K -->
+      <xs:element name="kappa" type="xs:double"/>
+<!-- Karlin-Altschul parameter Lambda -->
+      <xs:element name="lambda" type="xs:double"/>
+<!-- Karlin-Altschul parameter H -->
+      <xs:element name="entropy" type="xs:double"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<!-- Description of entries for this (possibly non-redundant) sequence. -->
+<xs:element name="HitDescr">
+  <xs:complexType>
+    <xs:sequence>
+<!-- SeqId of subject -->
+      <xs:element name="id" type="xs:string"/>
+<!-- accession -->
+      <xs:element name="accession" type="xs:string" minOccurs="0"/>
+<!-- title (definition line) of subject -->
+      <xs:element name="title" type="xs:string" minOccurs="0"/>
+<!-- NCBI taxid (9606 for human) -->
+      <xs:element name="taxid" type="xs:integer" minOccurs="0"/>
+<!-- binomial scientific name ("Homo sapiens" for human).   -->
+      <xs:element name="sciname" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="Hit">
+  <xs:complexType>
+    <xs:sequence>
+<!-- hit number -->
+      <xs:element name="num" type="xs:integer"/>
+<!-- ID, title, and taxonomy for each entry in the PIG -->
+      <xs:element name="description">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="HitDescr"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+<!-- length of subject -->
+      <xs:element name="len" type="xs:integer"/>
+<!-- all HSP regions for the given subject -->
+      <xs:element name="hsps" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="Hsp"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="Hsp">
+  <xs:complexType>
+    <xs:sequence>
+<!-- HSP number -->
+      <xs:element name="num" type="xs:integer"/>
+<!-- score (in bits) of HSP -->
+      <xs:element name="bit-score" type="xs:double"/>
+<!-- score of HSP -->
+      <xs:element name="score" type="xs:double"/>
+<!-- e-value of HSP -->
+      <xs:element name="evalue" type="xs:double"/>
+<!-- number of identities in HSP -->
+      <xs:element name="identity" type="xs:integer" minOccurs="0"/>
+<!-- number of positives in HSP -->
+      <xs:element name="positive" type="xs:integer" minOccurs="0"/>
+<!-- score density -->
+      <xs:element name="density" type="xs:integer" minOccurs="0"/>
+<!-- start of PHI-BLAST pattern -->
+      <xs:element name="pattern-from" type="xs:integer" minOccurs="0"/>
+<!-- end of PHI-BLAST pattern -->
+      <xs:element name="pattern-to" type="xs:integer" minOccurs="0"/>
+<!-- start of HSP in query -->
+      <xs:element name="query-from" type="xs:integer"/>
+<!-- end of HSP -->
+      <xs:element name="query-to" type="xs:integer"/>
+<!-- Strand of query (blastn) -->
+      <xs:element name="query-strand" type="xs:string" minOccurs="0"/>
+<!-- translation frame of query (blastx, tblastx) -->
+      <xs:element name="query-frame" type="xs:integer" minOccurs="0"/>
+<!-- start of HSP in subject -->
+      <xs:element name="hit-from" type="xs:integer"/>
+<!-- end of HSP in subject -->
+      <xs:element name="hit-to" type="xs:integer"/>
+<!-- Strand of subject (blastn) -->
+      <xs:element name="hit-strand" type="xs:string" minOccurs="0"/>
+<!-- translation frame of subject (tblastn, tblastx) -->
+      <xs:element name="hit-frame" type="xs:integer" minOccurs="0"/>
+<!-- length of the alignment used -->
+      <xs:element name="align-len" type="xs:integer" minOccurs="0"/>
+<!-- number of gaps in HSP -->
+      <xs:element name="gaps" type="xs:integer" minOccurs="0"/>
+<!-- alignment string for the query (with gaps) -->
+      <xs:element name="qseq" type="xs:string"/>
+<!-- alignment string for subject (with gaps) -->
+      <xs:element name="hseq" type="xs:string"/>
+<!-- formating middle line -->
+      <xs:element name="midline" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+</xs:schema>

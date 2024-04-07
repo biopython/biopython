@@ -1502,7 +1502,7 @@ NR_111921.1_modified	0	chr3	48663768	0	3S28M1D17M1827N76M2I6M3376N76M12H	*	0	0	A
         path = "Blat/dna_rna.sam"
         alignments = Align.parse(path, "sam")
         self.check_alignments(alignments)
-        alignments.rewind()
+        alignments = iter(alignments)
         self.check_alignments(alignments)
         with Align.parse(path, "sam") as alignments:
             self.check_alignments(alignments)
