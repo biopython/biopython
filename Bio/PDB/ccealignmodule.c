@@ -148,7 +148,7 @@ similarityI(
 }
 
 //
-// The similarity corresponds to distance measure (ii) or equation (7) in the paper.
+// This similarity corresponds to distance measure (ii) or equation (7) in the paper.
 //
 static double
 similarityII(
@@ -159,7 +159,8 @@ similarityII(
     const int fragmentSize)
 {
     double similarity = 0.0;
-    double termCount = (fragmentSize - 1) * (fragmentSize - 2) / 2.0;
+    // Term count is the closed form of the number of terms in the summation
+    int termCount = (fragmentSize - 1) * (fragmentSize - 2) / 2;
 
     for (int k = 0; k < fragmentSize - 2; k++) {
         for (int l = k + 2; l < fragmentSize; l++) {
@@ -249,15 +250,15 @@ findPath(
     const double D0 = 3.0;
     const double D1 = 4.0;
 
-    // Score of the best Path
-    double bestPathScore = 1e6;
-    int bestPathLength = 0;
-
     // Length of longest possible alignment
     const int smaller = (lenA < lenB) ? lenA : lenB;
     int winSum = (winSize - 1) * (winSize - 2) / 2;
 
+    // Score of the best Path
+    double bestPathScore = 1e6;
+    int bestPathLength = 0;
     path bestPath = (path)malloc(sizeof(afp) * smaller);
+
     for (int i = 0; i < smaller; i++) {
         bestPath[i].first = -1;
         bestPath[i].second = -1;
@@ -278,36 +279,30 @@ findPath(
         pathBuffer[i] = 0;
     }
 
-    // winCache
-    // this array stores a list of residues seen.  We use it to calculate the
-    // total score of a path from 1..M and then add it to M+1..N.
-    int *winCache = (int *)malloc(sizeof(int) * smaller);
-    for (int i = 0; i < smaller; i++)
-        winCache[i] = (i + 1) * i * winSize / 2 + (i + 1) * winSum;
-
     // allScoreBuffer
     // this 2D array keeps track of all partial gapped scores
     double **allScoreBuffer = (double **)malloc(sizeof(double *) * smaller);
+
     for (int i = 0; i < smaller; i++) {
         allScoreBuffer[i] =
             (double *)malloc((gapMax * 2 + 1) * sizeof(double));
-        // initialize the ASB
-        for (int j = 0; j < gapMax * 2 + 1; j++)
+
+        // Initialize the ASB
+        for (int j = 0; j < gapMax * 2 + 1; j++) {
             allScoreBuffer[i][j] = 1e6;
+        }
     }
 
     int *tIndex = (int *)malloc(sizeof(int) * smaller);
-    int gapBestIndex = -1;
 
     //======================================================================
-    // Start the search through the CE matrix.
+    // Start the search through the similarity matrix.
     //
-    int iA, iB;
-    for (iA = 0; iA <= lenA - winSize; iA++) {
+    for (int iA = 0; iA <= lenA - winSize; iA++) {
         if (iA > lenA - winSize * (bestPathLength - 1))
             break;
 
-        for (iB = 0; iB <= lenB - winSize; iB++) {
+        for (int iB = 0; iB <= lenB - winSize; iB++) {
             if (S[iA][iB] >= D0)
                 continue;
             if (iB > lenB - winSize * (bestPathLength - 1))
@@ -326,7 +321,6 @@ findPath(
             curPath[0].second = iB;
             int curPathLength = 1;
             tIndex[curPathLength - 1] = 0;
-            double curTotalScore = 0.0;
 
             //
             // Build the best path starting from iA, iB
@@ -334,7 +328,7 @@ findPath(
             int done = 0;
             while (!done) {
                 double gapBestScore = 1e6;
-                gapBestIndex = -1;
+                int gapBestIndex = -1;
 
                 //
                 // Check all possible gaps [1..gapMax] from here
@@ -387,54 +381,54 @@ findPath(
                 // DONE GAPPING:
                 //
 
-                // calculate curTotalScore
-                curTotalScore = 0.0;
-                int jGap, gA, gB;
-                double score1 = 0.0, score2 = 0.0;
+                // Calculate curTotalScore
+                double curTotalScore = 0.0;
 
                 if (gapBestIndex != -1) {
-                    jGap = (gapBestIndex + 1) / 2;
+                    int gA, gB;
+                    int jGap = (gapBestIndex + 1) / 2;
+
                     if ((gapBestIndex + 1) % 2 == 0) {
                         gA = curPath[curPathLength - 1].first + winSize + jGap;
                         gB = curPath[curPathLength - 1].second + winSize;
-                    } else {
+                    }
+                    else {
                         gA = curPath[curPathLength - 1].first + winSize;
                         gB =
                             curPath[curPathLength - 1].second + winSize + jGap;
                     }
 
-                    // perfect
-                    score1 = (allScoreBuffer[curPathLength - 1][gapBestIndex] *
-                                  winSize * curPathLength +
-                              S[gA][gB] * winSum) /
-                             (winSize * curPathLength + winSum);
-
-                    // perfect
-                    score2 =
-                        ((curPathLength > 1
+                    // TODO: This implementation calculates the average inter-residue distance difference.
+                    // Instead, the implementation should calculate the average similarity as described in the paper.
+                    const double n = (double) curPathLength;
+                    const int m = winSize;
+                    const double oldTermCount = n * winSum + m * n * (n - 1) / 2;
+                    const double oldScore = curPathLength > 1
                               ? (allScoreBuffer[curPathLength - 2]
                                                [tIndex[curPathLength - 1]])
-                              : S[iA][iB]) *
-                             winCache[curPathLength - 1] +
-                         score1 * (winCache[curPathLength] -
-                                   winCache[curPathLength - 1])) /
-                        winCache[curPathLength];
+                              : S[iA][iB];
+                    const double addTermCount = winSum + m * n;
+                    const double addScore = (gapBestScore * m * n + S[gA][gB] * winSum) / addTermCount;
+                    const double newTermCount = oldTermCount + addTermCount;
+                    const double newScore = (oldScore * oldTermCount + addScore * addTermCount) / newTermCount;
 
-                    curTotalScore = score2;
+                    curTotalScore = newScore;
 
-                    // heuristic -- path is getting sloppy, stop looking
-                    if (curTotalScore > D1) {
-                        done = 1;
-                        gapBestIndex = -1;
-                        break;
-                    } else {
+                    if (curTotalScore < D1) {
                         allScoreBuffer[curPathLength - 1][gapBestIndex] =
                             curTotalScore;
                         tIndex[curPathLength] = gapBestIndex;
                         curPathLength++;
                     }
-                } else {
-                    // if here, then there was no good gapped path
+                    else {
+                        // heuristic -- path is getting sloppy, stop looking
+                        done = 1;
+                        gapBestIndex = -1;
+                        break;
+                    }
+                }
+                else {
+                    // if here, then there was no good candidate AFP,
                     // so quit and restart from iA, iB+1
                     done = 1;
                     curPathLength--;
@@ -555,7 +549,6 @@ findPath(
         free(allScoreBuffer[i]);
     free(allScoreBuffer);
     free(tIndex);
-    free(winCache);
     free(bestPath);
     free(pathBuffer);
 
@@ -566,8 +559,6 @@ findPath(
 PyObject *
 PyCealign(PyObject *Py_UNUSED(self), PyObject *args)
 {
-
-    int i = 0;
     int windowSize = 8;
     int gapMax = 30;
     double **dmA, **dmB, **S;
@@ -600,16 +591,16 @@ PyCealign(PyObject *Py_UNUSED(self), PyObject *args)
     free(coordsB);
 
     /* distance matrices	 */
-    for (i = 0; i < lenA; i++)
+    for (int i = 0; i < lenA; i++)
         free(dmA[i]);
     free(dmA);
 
-    for (i = 0; i < lenB; i++)
+    for (int i = 0; i < lenB; i++)
         free(dmB[i]);
     free(dmB);
 
     // Similarity matrix
-    for (i = 0; i <= lenA - windowSize; i++)
+    for (int i = 0; i <= lenA - windowSize; i++)
         free(S[i]);
     free(S);
 
