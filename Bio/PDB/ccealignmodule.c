@@ -267,16 +267,6 @@ findPath(
         pathBuffer[i] = 0;
     }
 
-    // The implementation uses this array during
-    // the construction of the current path.
-    // This array keeps track of similarities for
-    // all gap indices for all path lengths.
-    double *allSimilarityBuffer = (double *)malloc(sizeof(double) * smaller);
-
-    for (int i = 0; i < smaller; i++) {
-        allSimilarityBuffer[i] = -1e6;
-    }
-
     //======================================================================
     // Start the search through the similarity matrix.
     //
@@ -295,7 +285,7 @@ findPath(
             // Initialize current path
             path curPath = (path)malloc(sizeof(afp) * smaller);
             int curPathLength = 1;
-            double curPathSimilarity = 0.0;
+            double curPathSimilarity = S[iA][iB];
 
             curPath[0].first = iA;
             curPath[0].second = iB;
@@ -379,19 +369,14 @@ findPath(
                     const int m = fragmentSize;
                     const int w = (m - 1) * (m - 2) / 2; // w is the number of terms in the similarity summation
 
-                    const double oldTermCount = n * w + m * n * (n - 1) / 2;
-                    const double oldSimilarity = curPathLength > 1
-                              ? allSimilarityBuffer[curPathLength - 2]
-                              : S[iA][iB];
+                    const double curTermCount = n * w + m * n * (n - 1) / 2;
                     const double addTermCount = w + m * n;
                     const double addSimilarity = (gapBestSimilarity * m * n + S[gA][gB] * w) / addTermCount;
-                    const double newTermCount = oldTermCount + addTermCount;
-                    const double newSimilarity = (oldSimilarity * oldTermCount + addSimilarity * addTermCount) / newTermCount;
+                    const double newTermCount = curTermCount + addTermCount;
+                    const double newSimilarity = (curPathSimilarity * curTermCount + addSimilarity * addTermCount) / newTermCount;
 
-                    curPathSimilarity = newSimilarity;
-
-                    if (curPathSimilarity > D1) {
-                        allSimilarityBuffer[curPathLength - 1] = curPathSimilarity;
+                    if (newSimilarity > D1) {
+                        curPathSimilarity = newSimilarity;
                         curPathLength++;
                     }
                     else {
@@ -482,7 +467,6 @@ findPath(
     }
 
     // Free memory
-    free(allSimilarityBuffer);
     free(pathBuffer);
 
     return result;
