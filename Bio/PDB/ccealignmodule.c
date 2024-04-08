@@ -96,8 +96,8 @@ typedef struct {
 
 // An AFP (aligned fragment pair), and list/pointer
 typedef struct {
-    int first;
-    int second;
+    int pA;
+    int pB;
 } afp, *path, **pathCache;
 
 // Calculate distance matrix
@@ -134,10 +134,10 @@ similarityI(
     const afp afpJ,
     const int fragmentSize)
 {
-    const int iA = afpI.first;
-    const int iB = afpI.second;
-    const int jA = afpJ.first;
-    const int jB = afpJ.second;
+    const int iA = afpI.pA;
+    const int iB = afpI.pB;
+    const int jA = afpJ.pA;
+    const int jB = afpJ.pB;
     const int m = fragmentSize;
     double similarity = fabs(dA[iA][jA] - dB[iB][jB]) +
         fabs(dA[iA + m-1][jA + m-1] - dB[iB + m-1][jB + m-1]);
@@ -160,10 +160,10 @@ similarityII(
     const afp afpI,
     const int fragmentSize)
 {
-    const int iA = afpI.first;
-    const int iB = afpI.second;
+    const int iA = afpI.pA;
+    const int iB = afpI.pB;
     double similarity = 0.0;
-    // Term count is the closed form of the number of terms in the summation
+    // Term count is the number of terms in the summation
     const int termCount = (fragmentSize - 1) * (fragmentSize - 2) / 2;
 
     for (int k = 0; k < fragmentSize - 2; k++) {
@@ -306,8 +306,8 @@ findPath(
                 // Check all possible gaps from here
                 //
                 for (int g = 0; g < (gapMax * 2) + 1; g++) {
-                    int jA = curPath[curPathLength - 1].first + fragmentSize;
-                    int jB = curPath[curPathLength - 1].second + fragmentSize;
+                    int jA = curPath[curPathLength - 1].pA + fragmentSize;
+                    int jB = curPath[curPathLength - 1].pB + fragmentSize;
 
                     if ((g + 1) % 2 == 0) {
                         jA += (g + 1) / 2;
@@ -353,13 +353,13 @@ findPath(
                 int jGap = (gapBestIndex + 1) / 2;
 
                 if ((gapBestIndex + 1) % 2 == 0) {
-                    gA = curPath[curPathLength - 1].first + fragmentSize + jGap;
-                    gB = curPath[curPathLength - 1].second + fragmentSize;
+                    gA = curPath[curPathLength - 1].pA + fragmentSize + jGap;
+                    gB = curPath[curPathLength - 1].pB + fragmentSize;
                 }
                 else {
-                    gA = curPath[curPathLength - 1].first + fragmentSize;
+                    gA = curPath[curPathLength - 1].pA + fragmentSize;
                     gB =
-                        curPath[curPathLength - 1].second + fragmentSize + jGap;
+                        curPath[curPathLength - 1].pB + fragmentSize + jGap;
                 }
 
                 // TODO: This implementation calculates the average inter-residue distance difference.
@@ -434,16 +434,17 @@ findPath(
         Py_INCREF(pathAList);
         Py_INCREF(pathBList);
 
+        // TODO: Can we use the length buffer here?
         for (int j = 0; j < smaller; j++) {
-            if (pathBuffer[o][j].first != -1) {
-                const int idxA = pathBuffer[o][j].first;
-                const int idxB = pathBuffer[o][j].second;
+            if (pathBuffer[o][j].pA != -1) {
+                const int pA = pathBuffer[o][j].pA;
+                const int pB = pathBuffer[o][j].pB;
 
                 for (int k = 0; k < fragmentSize; k++) {
-                    PyObject *v = Py_BuildValue("i", idxA + k);
+                    PyObject *v = Py_BuildValue("i", pA + k);
                     PyList_Append(pathAList, v);
                     Py_DECREF(v);
-                    v = Py_BuildValue("i", idxB + k);
+                    v = Py_BuildValue("i", pB + k);
                     PyList_Append(pathBList, v);
                     Py_DECREF(v);
                 }
