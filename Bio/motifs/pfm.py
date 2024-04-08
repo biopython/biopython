@@ -327,12 +327,21 @@ def _read_pfm_four_rows(handle):
         94 75  4  3  1  2  5  2  3  3
         1  0  3  4  1  0  5  3 28 88
         2 19 11 50 29 47 22 81  1  6
+
+    # Cys2His2 Zinc Finger Proteins PWM Predictor
+    base       1       2       3       4       5       6       7       8       9
+       a   0.116   0.974   0.444   0.116   0.974   0.444   0.667   0.939   0.068  # noqa: RST301
+       c   0.718   0.006   0.214   0.718   0.006   0.214   0.143   0.006   0.107  # noqa: RST301
+       g   0.016   0.020   0.028   0.016   0.020   0.028   0.047   0.045   0.216  # noqa: RST301
+       t   0.150   0.001   0.314   0.150   0.001   0.314   0.143   0.009   0.609  # noqa: RST301
+
+    Ent=   1.210   0.202   1.665   1.210   0.202   1.665   1.399   0.396   1.521
     """
     record = Record()
 
     name_pattern = re.compile(r"^>\s*(.+)\s*")
     row_pattern_with_nucleotide_letter = re.compile(
-        r"\s*([ACGT])\s*[\[|]*\s*([0-9.\-eE\s]+)\s*\]*\s*"
+        r"\s*([ACGTacgt])\s*[\[|]*\s*([0-9.\-eE\s]+)\s*\]*\s*"
     )
     row_pattern_without_nucleotide_letter = re.compile(r"\s*([0-9.\-eE\s]+)\s*")
 
@@ -343,6 +352,9 @@ def _read_pfm_four_rows(handle):
 
     for line in handle:
         line = line.strip()
+
+        if line.startswith("Ent="):
+            continue
 
         name_match = name_pattern.match(line)
         row_match_with_nucleotide_letter = row_pattern_with_nucleotide_letter.match(
@@ -357,7 +369,7 @@ def _read_pfm_four_rows(handle):
         elif row_match_with_nucleotide_letter:
             (nucleotide, counts_str) = row_match_with_nucleotide_letter.group(1, 2)
             current_nucleotide_counts = counts_str.split()
-            nucleotide_counts[nucleotide] = [
+            nucleotide_counts[nucleotide.upper()] = [
                 float(current_nucleotide_count)
                 for current_nucleotide_count in current_nucleotide_counts
             ]
