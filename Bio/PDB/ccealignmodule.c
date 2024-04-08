@@ -434,23 +434,17 @@ findPath(
         Py_INCREF(pathAList);
         Py_INCREF(pathBList);
 
-        // TODO: Can we use the length buffer here?
-        for (int j = 0; j < smaller; j++) {
-            if (pathBuffer[o][j].pA != -1) {
-                const int pA = pathBuffer[o][j].pA;
-                const int pB = pathBuffer[o][j].pB;
+        for (int j = 0; j < lenBuffer[o]; j++) {
+            const int pA = pathBuffer[o][j].pA;
+            const int pB = pathBuffer[o][j].pB;
 
-                for (int k = 0; k < fragmentSize; k++) {
-                    PyObject *v = Py_BuildValue("i", pA + k);
-                    PyList_Append(pathAList, v);
-                    Py_DECREF(v);
-                    v = Py_BuildValue("i", pB + k);
-                    PyList_Append(pathBList, v);
-                    Py_DECREF(v);
-                }
-            }
-            else {
-                break;
+            for (int k = 0; k < fragmentSize; k++) {
+                PyObject *v = Py_BuildValue("i", pA + k);
+                PyList_Append(pathAList, v);
+                Py_DECREF(v);
+                v = Py_BuildValue("i", pB + k);
+                PyList_Append(pathBList, v);
+                Py_DECREF(v);
             }
         }
 
