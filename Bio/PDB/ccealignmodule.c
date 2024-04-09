@@ -349,30 +349,17 @@ findPath(
                     break;
                 }
 
-                int gA, gB;
-                int jGap = (gapBestIndex + 1) / 2;
-
-                if ((gapBestIndex + 1) % 2 == 0) {
-                    gA = curPath[curPathLength - 1].pA + fragmentSize + jGap;
-                    gB = curPath[curPathLength - 1].pB + fragmentSize;
-                }
-                else {
-                    gA = curPath[curPathLength - 1].pA + fragmentSize;
-                    gB =
-                        curPath[curPathLength - 1].pB + fragmentSize + jGap;
-                }
-
-                // TODO: This implementation calculates the average inter-residue distance difference.
-                // Instead, the implementation should calculate the average similarity as described in the paper.
+                // The current path has n AFPs, and we are considering adding the (n+1)-th AFP.
+                // Imagine a matrix where entry ij is D_ij of the i-th and j-th AFPs in the path.
+                // The path similarity is the average of the upper triangle of this matrix.
+                const afp afpJ = curPath[curPathLength];
                 const double n = (double) curPathLength;
-                const int m = fragmentSize;
-                const int w = (m - 1) * (m - 2) / 2; // w is the number of terms in the similarity summation
-
-                const double curTermCount = n * w + m * n * (n - 1) / 2;
-                const double addTermCount = w + m * n;
-                const double addSimilarity = (gapBestSimilarity * m * n + S[gA][gB] * w) / addTermCount;
-                const double newTermCount = curTermCount + addTermCount;
-                const double newSimilarity = (curPathSimilarity * curTermCount + addSimilarity * addTermCount) / newTermCount;
+                const double curTermCount = n + n * (n - 1) / 2;
+                const double newTermCount = n + 1 + n * (n + 1) / 2;
+                // Notice that the new term count is the current term count plus n + 1.
+                const double newSimilarity = (curTermCount * curPathSimilarity +
+                        n * gapBestSimilarity +
+                        S[afpJ.pA][afpJ.pB]) / newTermCount;
 
                 if (newSimilarity > D1) {
                     curPathSimilarity = newSimilarity;
