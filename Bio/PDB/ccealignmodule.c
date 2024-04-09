@@ -390,6 +390,7 @@ findPath(
             if (curPathLength > lenBuffer[bufferIndex] ||
                 (curPathLength == lenBuffer[bufferIndex] &&
                  curPathSimilarity > similarityBuffer[bufferIndex])) {
+                // TODO: We should use a heap, not a circular buffer
                 bufferIndex += 1;
                 bufferIndex %= MAX_PATHS;
                 bufferSize =
