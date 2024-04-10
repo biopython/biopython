@@ -124,7 +124,8 @@ calcDM(pcePoint coords, int len)
 }
 
 //
-// This similarity corresponds to distance measure (i) or equation (6) in the paper.
+// This similarity corresponds to distance measure (i) or
+// equation (6) in the paper.
 //
 static double
 similarityI(
@@ -151,7 +152,8 @@ similarityI(
 }
 
 //
-// This similarity corresponds to distance measure (ii) or equation (7) in the paper.
+// This similarity corresponds to distance measure (ii)
+// or equation (7) in the paper.
 //
 static double
 similarityII(
@@ -178,7 +180,12 @@ similarityII(
 
 // Calculate similarity matrix
 static double **
-calcS(double **dA, double **dB, const int lenA, const int lenB, const int fragmentSize)
+calcS(
+    double **dA,
+    double **dB,
+    const int lenA,
+    const int lenB,
+    const int fragmentSize)
 {
     // Initialize the 2D similarity matrix
     const int rowCount = lenA - fragmentSize + 1;
@@ -190,10 +197,10 @@ calcS(double **dA, double **dB, const int lenA, const int lenB, const int fragme
     }
 
     //
-    // This is where the magic of CE comes out.  In the similarity matrix,
-    // for each i and j, the value of S[i][j] is how well the residues
-    // i - i+fragmentSize in protein A, match to residues j - j+fragmentSize in protein
-    // B.  A value of 0 means absolute match; a value >> 1 means bad match.
+    // This is where the magic of CE comes out. In the similarity matrix,
+    // for each i and j, the value of S[i][j] is how well the fragment starting
+    // at i in protein A matches the fragment starting at j in protein
+    // B. A value of 0 means absolute match; a value << -3 means bad match.
     //
     for (int iA = 0; iA < rowCount; iA++) {
         for (int iB = 0; iB < colCount; iB++) {
@@ -330,13 +337,20 @@ findPath(
                     double curSimilarity = 0.0;
 
                     for (int s = 0; s < curPathLength; s++) {
-                        curSimilarity += similarityI(dA, dB, curPath[s], afpJ, fragmentSize);
+                        curSimilarity +=
+                            similarityI(
+                                dA,
+                                dB,
+                                curPath[s],
+                                afpJ,
+                                fragmentSize);
                     }
 
                     curSimilarity /= curPathLength;
 
                     // store GAPPED best
-                    if (curSimilarity > D1 && curSimilarity > gapBestSimilarity) {
+                    if (curSimilarity > D1 &&
+                        curSimilarity > gapBestSimilarity) {
                         curPath[curPathLength] = afpJ;
                         gapBestSimilarity = curSimilarity;
                         gapBestIndex = g;
@@ -349,15 +363,20 @@ findPath(
                     break;
                 }
 
-                // The current path has n AFPs, and we are considering adding the (n+1)-th AFP.
-                // Imagine a matrix where entry ij is D_ij of the i-th and j-th AFPs in the path.
-                // The path similarity is the average of the upper triangle of this matrix.
+                // The current path has n AFPs, and we are considering adding
+                // the (n+1)-th AFP.
+                // Imagine a matrix where entry ij is D_ij of the i-th and j-th
+                // AFPs in the path.
+                // The path similarity is the average of the upper triangle of
+                // this matrix.
                 const afp afpJ = curPath[curPathLength];
                 const double n = (double) curPathLength;
                 const double curTermCount = n + n * (n - 1) / 2;
                 const double newTermCount = n + 1 + n * (n + 1) / 2;
-                // Notice that the new term count is the current term count plus n + 1.
-                const double newSimilarity = (curTermCount * curPathSimilarity +
+                // Notice that the new term count is
+                // the current term count plus n + 1.
+                const double newSimilarity =
+                        (curTermCount * curPathSimilarity +
                         n * gapBestSimilarity +
                         S[afpJ.pA][afpJ.pB]) / newTermCount;
 
@@ -453,7 +472,6 @@ PyCealign(PyObject *Py_UNUSED(self), PyObject *args)
 {
     int fragmentSize = 8;
     int gapMax = 30;
-    double **dmA, **dmB, **S;
 
     PyObject *listA, *listB, *result;
 
@@ -469,14 +487,14 @@ PyCealign(PyObject *Py_UNUSED(self), PyObject *args)
     pcePoint coordsB = (pcePoint)getCoords(listB, lenB);
 
     /* calculate the distance matrix for each protein */
-    dmA = (double **)calcDM(coordsA, lenA);
-    dmB = (double **)calcDM(coordsB, lenB);
+    double **dA = (double **)calcDM(coordsA, lenA);
+    double **dB = (double **)calcDM(coordsB, lenB);
 
     /* calculate the CE Similarity matrix */
-    S = (double **)calcS(dmA, dmB, lenA, lenB, fragmentSize);
+    double **S = (double **)calcS(dA, dB, lenA, lenB, fragmentSize);
 
     // Calculate Top N Paths
-    result = (PyObject *)findPath(S, dmA, dmB, lenA, lenB, fragmentSize, gapMax);
+    result = (PyObject *)findPath(S, dA, dB, lenA, lenB, fragmentSize, gapMax);
 
     /* release memory */
     free(coordsA);
@@ -484,12 +502,12 @@ PyCealign(PyObject *Py_UNUSED(self), PyObject *args)
 
     /* distance matrices	 */
     for (int i = 0; i < lenA; i++)
-        free(dmA[i]);
-    free(dmA);
+        free(dA[i]);
+    free(dA);
 
     for (int i = 0; i < lenB; i++)
-        free(dmB[i]);
-    free(dmB);
+        free(dB[i]);
+    free(dB);
 
     // Similarity matrix
     for (int i = 0; i <= lenA - fragmentSize; i++)
