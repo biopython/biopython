@@ -13226,6 +13226,1158 @@ Query: Query_2
             written_records = Blast.parse(stream)
             self.check_xml_2226_tblastx_004(written_records)
 
+    def test_xml_21500_tblastx_001_parser(self):
+        """Parsing TBLASTX 2.15.0+ (xml_21500_tblastx_001.xml)."""
+        filename = "xml_21500_tblastx_001.xml"
+        path = os.path.join("Blast", filename)
+        with open(path, "rb") as stream:
+            records = Blast.parse(stream)
+            self.check_xml_21500_tblastx_001_records(records)
+        with Blast.parse(path) as records:
+            self.check_xml_21500_tblastx_001_records(records)
+        with open(path, "rb") as stream:
+            record = Blast.read(stream)
+        self.check_xml_21500_tblastx_001_record(record, xml2=False)
+        record = Blast.read(path)
+        self.check_xml_21500_tblastx_001_record(record, xml2=False)
+        with Blast.parse(path) as records:
+            self.assertEqual(
+                str(records),
+                """\
+Program: TBLASTX 2.15.0+
+     db: refseq_rna
+
+  Query: Query_949527 (length=804)
+         NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168
+         complete genome
+   Hits: ----  -----  ----------------------------------------------------------
+            #  # HSP  ID + description
+         ----  -----  ----------------------------------------------------------
+            0      1  gi|1048027041|ref|XM_017618728.1|  PREDICTED: Rhagoleti...
+            1      2  gi|2670929493|ref|XM_062937224.1|  Kwoniella shivajii u...
+            2      1  gi|2432161024|ref|XM_053088494.1|  Dioszegia hungarica ...
+            3      1  gi|799335188|ref|XM_012195534.1|  Cryptococcus neoforma...
+            4      1  gi|1799711371|ref|XM_032001855.1|  Kwoniella shandongen...
+            5      1  gi|1102541390|ref|XM_019193349.1|  Kwoniella bestiolae ...
+            6      1  gi|1799711369|ref|XM_032001854.1|  Kwoniella shandongen...
+            7      1  gi|2592096353|ref|XM_060229193.1|  PREDICTED: Ylistrum ...
+            8      1  gi|2044197324|ref|XM_041762518.1|  PREDICTED: Vulpes la...
+            9      1  gi|1101784196|ref|XM_019135081.1|  Cryptococcus amylole...""",
+            )
+
+    def test_xml2_21500_tblastx_001_parser(self):
+        """Parsing TBLASTX 2.15.0+ (xml2_21500_tblastx_001.xml)."""
+        filename = "xml2_21500_tblastx_001.xml"
+        path = os.path.join("Blast", filename)
+        with open(path, "rb") as stream:
+            records = Blast.parse(stream)
+            self.check_xml_21500_tblastx_001_records(records, xml2=True)
+        with Blast.parse(path) as records:
+            self.check_xml_21500_tblastx_001_records(records, xml2=True)
+        with open(path, "rb") as stream:
+            record = Blast.read(stream)
+        self.check_xml_21500_tblastx_001_record(record, xml2=True)
+        record = Blast.read(path)
+        self.check_xml_21500_tblastx_001_record(record, xml2=True)
+
+    def check_xml_21500_tblastx_001_records(self, records, xml2=False):
+        self.assertEqual(records.program, "tblastx")
+        self.assertEqual(records.version, "TBLASTX 2.15.0+")
+        self.assertEqual(
+            records.reference,
+            'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+        )
+        self.assertEqual(records.db, "refseq_rna")
+        if xml2 is False:
+            self.assertIsInstance(records.query, SeqRecord)
+            self.assertEqual(records.query.id, "Query_949527")
+            self.assertEqual(
+                records.query.description,
+                "NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168 complete genome",
+            )
+            self.assertEqual(repr(records.query.seq), "Seq(None, length=804)")
+        self.assertEqual(len(records.param), 5)
+        self.assertEqual(records.param["matrix"], "BLOSUM62")
+        self.assertAlmostEqual(records.param["expect"], 0.05)
+        self.assertEqual(records.param["filter"], "L;")
+        if xml2 is False:
+            self.assertEqual(records.param["gap-open"], 11)
+            self.assertEqual(records.param["gap-extend"], 1)
+        else:
+            self.assertEqual(records.param["query-gencode"], 1)
+            self.assertEqual(records.param["db-gencode"], 1)
+        record = next(records)
+        self.assertRaises(StopIteration, next, records)
+        self.check_xml_21500_tblastx_001_record(record, xml2)
+
+    def check_xml_21500_tblastx_001_record(self, record, xml2):
+        if xml2 is False:
+            self.assertEqual(record.num, 1)
+        self.assertIsInstance(record.query, SeqRecord)
+        self.assertEqual(record.query.id, "Query_949527")
+        self.assertEqual(
+            record.query.description,
+            "NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168 complete genome",
+        )
+        self.assertEqual(repr(record.query.seq), "Seq(None, length=804)")
+        if xml2 is True:
+            self.assertEqual(len(record.query.features), 1)
+            feature = record.query.features[0]
+            self.assertEqual(feature.type, "masking")
+            location = feature.location
+            self.assertEqual(
+                repr(location), "SimpleLocation(ExactPosition(259), ExactPosition(293))"
+            )
+        self.assertEqual(len(record.stat), 7)
+        self.assertEqual(record.stat["db-num"], 60837734)
+        self.assertEqual(record.stat["db-len"], 161330429008)
+        if xml2 is True:
+            self.assertEqual(record.stat["hsp-len"], 66)
+            self.assertEqual(record.stat["eff-space"], 10051826883450)
+            self.assertEqual(record.stat["kappa"], -1)
+            self.assertEqual(record.stat["lambda"], -1)
+            self.assertEqual(record.stat["entropy"], -1)
+        else:
+            self.assertEqual(record.stat["hsp-len"], 0)
+            self.assertEqual(record.stat["eff-space"], 0)
+            self.assertAlmostEqual(record.stat["kappa"], 0.133956144488482)
+            self.assertAlmostEqual(record.stat["lambda"], 0.317605957635731)
+            self.assertAlmostEqual(record.stat["entropy"], 0.401214524497119)
+        self.assertEqual(len(record), 10)
+        hit = record[0]
+        self.assertEqual(hit.num, 1)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|1048027041|ref|XM_017618728.1|")
+        self.assertEqual(hit.target.name, "XM_017618728")
+        self.assertEqual(
+            hit.target.description,
+            "PREDICTED: Rhagoletis zephyria response regulator PleD-like (LOC108364862), partial mRNA",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=917)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 150.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 71.6314)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 5.49617e-09)
+        self.assertEqual(hsp.annotations["identity"], 29)
+        self.assertEqual(hsp.annotations["positive"], 52)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[ 0, 89],
+                          [ 0, 89]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 89))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('AYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAF...QVS')",
+        )
+        self.assertEqual(hsp.query.id, "Query_949527")
+        self.assertEqual(
+            hsp.query.description,
+            "NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168 complete genome",
+        )
+        self.assertEqual(len(hsp.query.features), 1)
+        feature = hsp.query.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(89))"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('ACGGQEALNLVVEQQPDIVLLDVMMPGIDGFMVCKEMKDNPMTTHIPVVMVTAL...SLT')",
+        )
+        self.assertEqual(hsp.target.id, "gi|1048027041|ref|XM_017618728.1|")
+        self.assertEqual(hsp.target.name, "XM_017618728")
+        self.assertEqual(
+            hsp.target.description,
+            "PREDICTED: Rhagoletis zephyria response regulator PleD-like (LOC108364862), partial mRNA",
+        )
+        if xml2 is True:
+            self.assertEqual(len(record.query.features), 1)
+            feature = record.query.features[0]
+            self.assertEqual(feature.type, "masking")
+            location = feature.location
+            self.assertEqual(
+                repr(location), "SimpleLocation(ExactPosition(259), ExactPosition(293))"
+            )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "A  GQE L+L  E+ PD+++LD++MP +DG  V + ++++ +     V+M+TA    +   K ++ GA  F+ KP D   L   I+ ++",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='gi|1048027041|ref|XM_017618728.1|' query.id='Query_949527'; 2 rows x 89 columns>",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+Query : Query_949527 Length: 89 Strand: Plus
+        NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168
+        complete genome
+Target: gi|1048027041|ref|XM_017618728.1| Length: 89 Strand: Plus
+        PREDICTED: Rhagoletis zephyria response regulator PleD-like
+        (LOC108364862), partial mRNA
+
+Score:71 bits(150), Expect:5e-09,
+Identities:29/89(33%),  Positives:52/89(58%),  Gaps:0.89(0%)
+
+gi|104802         0 ACGGQEALNLVVEQQPDIVLLDVMMPGIDGFMVCKEMKDNPMTTHIPVVMVTALHDTEDR
+                  0 |..|||.|.|..|..||...||..||..||..|..............|.|.||.......
+Query_949         0 AYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAFGQEDVT
+
+gi|104802        60 VKGINAGADDFLTKPIDETALSARIKSLT 89
+                 60 .|....||..|..||.|...|...|.... 89
+Query_949        60 KKAVDLGASYFILKPFDMENLVGHIRQVS 89
+
+""",
+        )
+        hit = record[1]
+        self.assertEqual(hit.num, 2)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|2670929493|ref|XM_062937224.1|")
+        self.assertEqual(hit.target.name, "XM_062937224")
+        self.assertEqual(
+            hit.target.description,
+            "Kwoniella shivajii uncharacterized protein (IL334_005512), partial mRNA",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=9882)")
+        self.assertEqual(len(hit), 2)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 146.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 69.7986)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 1.95794e-08)
+        self.assertEqual(hsp.annotations["identity"], 32)
+        self.assertEqual(hsp.annotations["positive"], 51)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[ 0, 94],
+                          [ 0, 94]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 94))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('IEGQEDMEVIGVAYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDL...NLV')",
+        )
+        self.assertEqual(hsp.query.id, "Query_949527")
+        self.assertEqual(
+            hsp.query.description,
+            "NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168 complete genome",
+        )
+        self.assertEqual(len(hsp.query.features), 1)
+        feature = hsp.query.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(94))"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('VDDSYDMRKVIEAHDGQEALELCSRALPDLIISDIMMPRLDGFGLLQALKSSSN...ELL')",
+        )
+        self.assertEqual(hsp.target.id, "gi|2670929493|ref|XM_062937224.1|")
+        self.assertEqual(hsp.target.name, "XM_062937224")
+        self.assertEqual(
+            hsp.target.description,
+            "Kwoniella shivajii uncharacterized protein (IL334_005512), partial mRNA",
+        )
+        self.assertEqual(len(hsp.target.features), 1)
+        feature = hsp.target.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(9882))"
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "++   DM  +  A++GQE L L     PD+++ DI+MP LDG  +L+ L+ S       +I+LTA G +D     +  GA  ++ KPF    L+",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='gi|2670929493|ref|XM_062937224.1|' query.id='Query_949527'; 2 rows x 94 columns>",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+Query : Query_949527 Length: 94 Strand: Plus
+        NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168
+        complete genome
+Target: gi|2670929493|ref|XM_062937224.1| Length: 94 Strand: Plus
+        Kwoniella shivajii uncharacterized protein (IL334_005512), partial mRNA
+
+Score:69 bits(146), Expect:2e-08,
+Identities:32/94(34%),  Positives:51/94(54%),  Gaps:0.94(0%)
+
+gi|267092         0 VDDSYDMRKVIEAHDGQEALELCSRALPDLIISDIMMPRLDGFGLLQALKSSSNLISVPI
+                  0 .....||.....|..|||.|.|.....||....||.||.|||...|..|..|........
+Query_949         0 IEGQEDMEVIGVAYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNV
+
+gi|267092        60 ILLTARGDQDFKVGGLMSGAEDYLSKPFSTPELL 94
+                 60 |.|||.|..|........||.....|||....|. 94
+Query_949        60 IMLTAFGQEDVTKKAVDLGASYFILKPFDMENLV 94
+
+""",
+        )
+        hsp = hit[1]
+        self.assertEqual(hsp.num, 2)
+        self.assertAlmostEqual(hsp.score, 118.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 56.9688)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 0.000142549)
+        self.assertEqual(hsp.annotations["identity"], 25)
+        self.assertEqual(hsp.annotations["positive"], 42)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[ 0, 68],
+                          [ 0, 68]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 68))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('AYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAF...LGA')",
+        )
+        self.assertEqual(hsp.query.id, "Query_949527")
+        self.assertEqual(
+            hsp.query.description,
+            "NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168 complete genome",
+        )
+        self.assertEqual(len(hsp.query.features), 1)
+        feature = hsp.query.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(68))"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('ARDGQEALALCAQQAPDLIISDVMMPNLDGFGLLRALKQSKKLAIIPIIMLTAR...AGA')",
+        )
+        self.assertEqual(hsp.target.id, "gi|2670929493|ref|XM_062937224.1|")
+        self.assertEqual(hsp.target.name, "XM_062937224")
+        self.assertEqual(
+            hsp.target.description,
+            "Kwoniella shivajii uncharacterized protein (IL334_005512), partial mRNA",
+        )
+        self.assertEqual(len(hsp.target.features), 1)
+        feature = hsp.target.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(9882))"
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "A +GQE L+L  ++ PD+++ D++MP+LDG  +L  L++S       +IMLTA G ++     +  GA",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='gi|2670929493|ref|XM_062937224.1|' query.id='Query_949527'; 2 rows x 68 columns>",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+Query : Query_949527 Length: 68 Strand: Plus
+        NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168
+        complete genome
+Target: gi|2670929493|ref|XM_062937224.1| Length: 68 Strand: Plus
+        Kwoniella shivajii uncharacterized protein (IL334_005512), partial mRNA
+
+Score:56 bits(118), Expect:0.0001,
+Identities:25/68(37%),  Positives:42/68(62%),  Gaps:0.68(0%)
+
+gi|267092         0 ARDGQEALALCAQQAPDLIISDVMMPNLDGFGLLRALKQSKKLAIIPIIMLTARGGDEAR
+                  0 |..|||.|.|.....||....|..||.|||...|..|..|........|||||.|.....
+Query_949         0 AYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAFGQEDVT
+
+gi|267092        60 VDGILAGA 68
+                 60 ......|| 68
+Query_949        60 KKAVDLGA 68
+
+""",
+        )
+        hit = record[2]
+        self.assertEqual(hit.num, 3)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|2432161024|ref|XM_053088494.1|")
+        self.assertEqual(hit.target.name, "XM_053088494")
+        self.assertEqual(
+            hit.target.description,
+            "Dioszegia hungarica CnHHK4 (MKK02DRAFT_32386), partial mRNA",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=5601)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 146.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 69.7986)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 1.95794e-08)
+        self.assertEqual(hsp.annotations["identity"], 32)
+        self.assertEqual(hsp.annotations["positive"], 47)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[ 0, 82],
+                          [ 0, 82]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 82))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('AYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAF...NLV')",
+        )
+        self.assertEqual(hsp.query.id, "Query_949527")
+        self.assertEqual(
+            hsp.query.description,
+            "NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168 complete genome",
+        )
+        self.assertEqual(len(hsp.query.features), 1)
+        feature = hsp.query.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(82))"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('ARDGQEALEMCKKSLPHVVITDVMMPNLDGFGLLAALKEDPKLSMVPVIMLTAR...ELI')",
+        )
+        self.assertEqual(hsp.target.id, "gi|2432161024|ref|XM_053088494.1|")
+        self.assertEqual(hsp.target.name, "XM_053088494")
+        self.assertEqual(
+            hsp.target.description,
+            "Dioszegia hungarica CnHHK4 (MKK02DRAFT_32386), partial mRNA",
+        )
+        self.assertEqual(len(hsp.target.features), 1)
+        feature = hsp.target.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(5601))"
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "A +GQE L + K+  P V++ D++MP+LDG  +L  L+E        VIMLTA G E+     +  GA  +I KPF+   L+",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='gi|2432161024|ref|XM_053088494.1|' query.id='Query_949527'; 2 rows x 82 columns>",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+Query : Query_949527 Length: 82 Strand: Plus
+        NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168
+        complete genome
+Target: gi|2432161024|ref|XM_053088494.1| Length: 82 Strand: Plus
+        Dioszegia hungarica CnHHK4 (MKK02DRAFT_32386), partial mRNA
+
+Score:69 bits(146), Expect:2e-08,
+Identities:32/82(39%),  Positives:47/82(57%),  Gaps:0.82(0%)
+
+gi|243216         0 ARDGQEALEMCKKSLPHVVITDVMMPNLDGFGLLAALKEDPKLSMVPVIMLTARGGEEAK
+                  0 |..|||.|...|...|.|...|..||.|||...|..|.|........||||||.|.|...
+Query_949         0 AYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAFGQEDVT
+
+gi|243216        60 VDGLLAGADDYIAKPFNARELI 82
+                 60 ......||...|.|||....|. 82
+Query_949        60 KKAVDLGASYFILKPFDMENLV 82
+
+""",
+        )
+        hit = record[3]
+        self.assertEqual(hit.num, 4)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|799335188|ref|XM_012195534.1|")
+        self.assertEqual(hit.target.name, "XM_012195534")
+        self.assertEqual(
+            hit.target.description,
+            "Cryptococcus neoformans var. grubii H99 hypothetical protein (CNAG_03355), mRNA",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=5764)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 146.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 69.7986)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 1.95794e-08)
+        self.assertEqual(hsp.annotations["identity"], 31)
+        self.assertEqual(hsp.annotations["positive"], 48)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[ 0, 82],
+                          [ 0, 82]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 82))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('AYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAF...NLV')",
+        )
+        self.assertEqual(hsp.query.id, "Query_949527")
+        self.assertEqual(
+            hsp.query.description,
+            "NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168 complete genome",
+        )
+        self.assertEqual(len(hsp.query.features), 1)
+        feature = hsp.query.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(82))"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('ARDGQEALELCQKSVPDLIISDVMMPHLNGFELLVALKRSKDLKMVPVIMLTAR...EIV')",
+        )
+        self.assertEqual(hsp.target.id, "gi|799335188|ref|XM_012195534.1|")
+        self.assertEqual(hsp.target.name, "XM_012195534")
+        self.assertEqual(
+            hsp.target.description,
+            "Cryptococcus neoformans var. grubii H99 hypothetical protein (CNAG_03355), mRNA",
+        )
+        self.assertEqual(len(hsp.target.features), 1)
+        feature = hsp.target.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(5764))"
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "A +GQE L L ++  PD+++ D++MPHL+G  +L  L+ S   K   VIMLTA G ++     +  GA  ++ KPF    +V",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='gi|799335188|ref|XM_012195534.1|' query.id='Query_949527'; 2 rows x 82 columns>",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+Query : Query_949527 Length: 82 Strand: Plus
+        NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168
+        complete genome
+Target: gi|799335188|ref|XM_012195534.1| Length: 82 Strand: Plus
+        Cryptococcus neoformans var. grubii H99 hypothetical protein
+        (CNAG_03355), mRNA
+
+Score:69 bits(146), Expect:2e-08,
+Identities:31/82(38%),  Positives:48/82(59%),  Gaps:0.82(0%)
+
+gi|799335         0 ARDGQEALELCQKSVPDLIISDVMMPHLNGFELLVALKRSKDLKMVPVIMLTARGADESK
+                  0 |..|||.|.|.....||....|..||||.|...|..|..|...|...||||||.|.....
+Query_949         0 AYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAFGQEDVT
+
+gi|799335        60 VDGIMAGAEDYLAKPFSAREIV 82
+                 60 ......||.....|||.....| 82
+Query_949        60 KKAVDLGASYFILKPFDMENLV 82
+
+""",
+        )
+        hit = record[4]
+        self.assertEqual(hit.num, 5)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|1799711371|ref|XM_032001855.1|")
+        self.assertEqual(hit.target.name, "XM_032001855")
+        self.assertEqual(
+            hit.target.description,
+            "Kwoniella shandongensis uncharacterized protein (CI109_000662), partial mRNA",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=5538)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 145.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 69.3404)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 2.68988e-08)
+        self.assertEqual(hsp.annotations["identity"], 31)
+        self.assertEqual(hsp.annotations["positive"], 51)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[ 0, 82],
+                          [ 0, 82]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 82))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('AYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAF...NLV')",
+        )
+        self.assertEqual(hsp.query.id, "Query_949527")
+        self.assertEqual(
+            hsp.query.description,
+            "NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168 complete genome",
+        )
+        self.assertEqual(len(hsp.query.features), 1)
+        feature = hsp.query.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(82))"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('ARDGVEALQLCKKQLPNLIITDVMMPNLDGFGLLAALKESRAMKVIPVIMLTAR...EIV')",
+        )
+        self.assertEqual(hsp.target.id, "gi|1799711371|ref|XM_032001855.1|")
+        self.assertEqual(hsp.target.name, "XM_032001855")
+        self.assertEqual(
+            hsp.target.description,
+            "Kwoniella shandongensis uncharacterized protein (CI109_000662), partial mRNA",
+        )
+        self.assertEqual(len(hsp.target.features), 1)
+        feature = hsp.target.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(5538))"
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "A +G E L L K++ P++++ D++MP+LDG  +L  L+ES   K   VIMLTA G ++   + +  GA  ++ KPF+   +V",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='gi|1799711371|ref|XM_032001855.1|' query.id='Query_949527'; 2 rows x 82 columns>",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+Query : Query_949527 Length: 82 Strand: Plus
+        NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168
+        complete genome
+Target: gi|1799711371|ref|XM_032001855.1| Length: 82 Strand: Plus
+        Kwoniella shandongensis uncharacterized protein (CI109_000662), partial
+        mRNA
+
+Score:69 bits(145), Expect:3e-08,
+Identities:31/82(38%),  Positives:51/82(62%),  Gaps:0.82(0%)
+
+gi|179971         0 ARDGVEALQLCKKQLPNLIITDVMMPNLDGFGLLAALKESRAMKVIPVIMLTARGGDESK
+                  0 |..|.|.|.|.|...|.....|..||.|||...|..|.||...|...||||||.|.....
+Query_949         0 AYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAFGQEDVT
+
+gi|179971        60 VEGILAGADDYLAKPFNAREIV 82
+                 60 ......||.....|||.....| 82
+Query_949        60 KKAVDLGASYFILKPFDMENLV 82
+
+""",
+        )
+        hit = record[5]
+        self.assertEqual(hit.num, 6)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|1102541390|ref|XM_019193349.1|")
+        self.assertEqual(hit.target.name, "XM_019193349")
+        self.assertEqual(
+            hit.target.description,
+            "Kwoniella bestiolae CBS 10118 hypothetical protein partial mRNA",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=5319)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 144.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 68.8822)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 3.69545e-08)
+        self.assertEqual(hsp.annotations["identity"], 32)
+        self.assertEqual(hsp.annotations["positive"], 49)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[ 0, 82],
+                          [ 0, 82]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 82))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('AYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAF...NLV')",
+        )
+        self.assertEqual(hsp.query.id, "Query_949527")
+        self.assertEqual(
+            hsp.query.description,
+            "NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168 complete genome",
+        )
+        self.assertEqual(len(hsp.query.features), 1)
+        feature = hsp.query.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(82))"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('ARDGQEALEMCGKKMPDLIISDVMMPNLDGFGLLEALKASKELSIIPVIMLTAR...ELV')",
+        )
+        self.assertEqual(hsp.target.id, "gi|1102541390|ref|XM_019193349.1|")
+        self.assertEqual(hsp.target.name, "XM_019193349")
+        self.assertEqual(
+            hsp.target.description,
+            "Kwoniella bestiolae CBS 10118 hypothetical protein partial mRNA",
+        )
+        self.assertEqual(len(hsp.target.features), 1)
+        feature = hsp.target.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(5319))"
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "A +GQE L +  +K PD+++ D++MP+LDG  +LE L+ S       VIMLTA G ++     +  GA  ++ KPF+   LV",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='gi|1102541390|ref|XM_019193349.1|' query.id='Query_949527'; 2 rows x 82 columns>",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+Query : Query_949527 Length: 82 Strand: Plus
+        NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168
+        complete genome
+Target: gi|1102541390|ref|XM_019193349.1| Length: 82 Strand: Plus
+        Kwoniella bestiolae CBS 10118 hypothetical protein partial mRNA
+
+Score:68 bits(144), Expect:4e-08,
+Identities:32/82(39%),  Positives:49/82(60%),  Gaps:0.82(0%)
+
+gi|110254         0 ARDGQEALEMCGKKMPDLIISDVMMPNLDGFGLLEALKASKELSIIPVIMLTARGGDEAK
+                  0 |..|||.|.....|.||....|..||.|||...||.|..|.......||||||.|.....
+Query_949         0 AYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAFGQEDVT
+
+gi|110254        60 VDGLLAGADDYLAKPFNSRELV 82
+                 60 ......||.....|||....|| 82
+Query_949        60 KKAVDLGASYFILKPFDMENLV 82
+
+""",
+        )
+        hit = record[6]
+        self.assertEqual(hit.num, 7)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|1799711369|ref|XM_032001854.1|")
+        self.assertEqual(hit.target.name, "XM_032001854")
+        self.assertEqual(
+            hit.target.description,
+            "Kwoniella shandongensis uncharacterized protein (CI109_000661), partial mRNA",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=3591)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 143.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 68.424)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 5.07694e-08)
+        self.assertEqual(hsp.annotations["identity"], 31)
+        self.assertEqual(hsp.annotations["positive"], 53)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[ 0, 86],
+                          [ 0, 86]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 86))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('VIGVAYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIM...NLV')",
+        )
+        self.assertEqual(hsp.query.id, "Query_949527")
+        self.assertEqual(
+            hsp.query.description,
+            "NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168 complete genome",
+        )
+        self.assertEqual(len(hsp.query.features), 1)
+        feature = hsp.query.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(86))"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('VVVEARDGQEALDKCMQIRPDLIITDVMMPVLDGFGLLRALKQSDELKAIPVIM...ELI')",
+        )
+        self.assertEqual(hsp.target.id, "gi|1799711369|ref|XM_032001854.1|")
+        self.assertEqual(hsp.target.name, "XM_032001854")
+        self.assertEqual(
+            hsp.target.description,
+            "Kwoniella shandongensis uncharacterized protein (CI109_000661), partial mRNA",
+        )
+        self.assertEqual(len(hsp.target.features), 1)
+        feature = hsp.target.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(3591))"
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "V+  A +GQE L    +  PD+++ D++MP LDG  +L  L++SD  K   VIM+TA   ++   +A+  GA  +++KPF++  L+",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='gi|1799711369|ref|XM_032001854.1|' query.id='Query_949527'; 2 rows x 86 columns>",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+Query : Query_949527 Length: 86 Strand: Plus
+        NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168
+        complete genome
+Target: gi|1799711369|ref|XM_032001854.1| Length: 86 Strand: Plus
+        Kwoniella shandongensis uncharacterized protein (CI109_000661), partial
+        mRNA
+
+Score:68 bits(143), Expect:5e-08,
+Identities:31/86(36%),  Positives:53/86(62%),  Gaps:0.86(0%)
+
+gi|179971         0 VVVEARDGQEALDKCMQIRPDLIITDVMMPVLDGFGLLRALKQSDELKAIPVIMVTAHDG
+                  0 |...|..|||.|.......||....|..||.|||...|..|..||..|...|||.||...
+Query_949         0 VIGVAYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAFGQ
+
+gi|179971        60 DEAKVEALLGGADDYMVKPFNVRELI 86
+                 60 ......|...||.....|||....|. 86
+Query_949        60 EDVTKKAVDLGASYFILKPFDMENLV 86
+
+""",
+        )
+        hit = record[7]
+        self.assertEqual(hit.num, 8)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|2592096353|ref|XM_060229193.1|")
+        self.assertEqual(hit.target.name, "XM_060229193")
+        self.assertEqual(
+            hit.target.description,
+            "PREDICTED: Ylistrum balloti signal transduction histidine-protein kinase BarA-like (LOC132564539), mRNA",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=1374)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 142.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 67.9658)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 6.97488e-08)
+        self.assertEqual(hsp.annotations["identity"], 31)
+        self.assertEqual(hsp.annotations["positive"], 51)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[ 0, 84],
+                          [ 0, 84]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 84))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('IGVAYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIML...ENL')",
+        )
+        self.assertEqual(hsp.query.id, "Query_949527")
+        self.assertEqual(
+            hsp.query.description,
+            "NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168 complete genome",
+        )
+        self.assertEqual(len(hsp.query.features), 1)
+        feature = hsp.query.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(84))"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('IHLASNGQEAIQKTKVLDPDLIFLDLHMPDMSGLEVIEILRSITAYRDTPIIIL...DKL')",
+        )
+        self.assertEqual(hsp.target.id, "gi|2592096353|ref|XM_060229193.1|")
+        self.assertEqual(hsp.target.name, "XM_060229193")
+        self.assertEqual(
+            hsp.target.description,
+            "PREDICTED: Ylistrum balloti signal transduction histidine-protein kinase BarA-like (LOC132564539), mRNA",
+        )
+        self.assertEqual(len(hsp.target.features), 1)
+        feature = hsp.target.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(1374))"
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "I +A NGQE +   K  DPD++ LD+ MP + GL V+E LR     +   +I+L+A    +  +KA+ +GAS ++ KP +++ L",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='gi|2592096353|ref|XM_060229193.1|' query.id='Query_949527'; 2 rows x 84 columns>",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+Query : Query_949527 Length: 84 Strand: Plus
+        NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168
+        complete genome
+Target: gi|2592096353|ref|XM_060229193.1| Length: 84 Strand: Plus
+        PREDICTED: Ylistrum balloti signal transduction histidine-protein kinase
+        BarA-like (LOC132564539), mRNA
+
+Score:67 bits(142), Expect:7e-08,
+Identities:31/84(37%),  Positives:51/84(61%),  Gaps:0.84(0%)
+
+gi|259209         0 IHLASNGQEAIQKTKVLDPDLIFLDLHMPDMSGLEVIEILRSITAYRDTPIIILSADAII
+                  0 |..|.||||.....|..|||...||..||...||.|.|.||..........|.|.|....
+Query_949         0 IGVAYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAFGQE
+
+gi|259209        60 EQQEKALAVGASAYLTKPIEIDKL 84
+                 60 ....||...|||....||.....| 84
+Query_949        60 DVTKKAVDLGASYFILKPFDMENL 84
+
+""",
+        )
+        hit = record[8]
+        self.assertEqual(hit.num, 9)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|2044197324|ref|XM_041762518.1|")
+        self.assertEqual(hit.target.name, "XM_041762518")
+        self.assertEqual(
+            hit.target.description,
+            "PREDICTED: Vulpes lagopus sensory transduction protein RegX3-like (LOC121495284), mRNA",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=681)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 142.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 67.9658)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 6.97488e-08)
+        self.assertEqual(hsp.annotations["identity"], 30)
+        self.assertEqual(hsp.annotations["positive"], 45)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[ 0, 73],
+                          [ 0, 73]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 73))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('PDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAFGQEDVTKKAVDLGAS...RQV')",
+        )
+        self.assertEqual(hsp.query.id, "Query_949527")
+        self.assertEqual(
+            hsp.query.description,
+            "NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168 complete genome",
+        )
+        self.assertEqual(len(hsp.query.features), 1)
+        feature = hsp.query.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(73))"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('PDLILLDIMLPGSDGLSSLEELRAKKSSESIPVIMATAKGTEFDKVKGLDMGAD...KAV')",
+        )
+        self.assertEqual(hsp.target.id, "gi|2044197324|ref|XM_041762518.1|")
+        self.assertEqual(hsp.target.name, "XM_041762518")
+        self.assertEqual(
+            hsp.target.description,
+            "PREDICTED: Vulpes lagopus sensory transduction protein RegX3-like (LOC121495284), mRNA",
+        )
+        self.assertEqual(len(hsp.target.features), 1)
+        feature = hsp.target.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(681))"
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "PD+++LDI++P  DGL+ LE LR     +   VIM TA G E    K +D+GA  +++KPF M  ++  I+ V",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='gi|2044197324|ref|XM_041762518.1|' query.id='Query_949527'; 2 rows x 73 columns>",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+Query : Query_949527 Length: 73 Strand: Plus
+        NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168
+        complete genome
+Target: gi|2044197324|ref|XM_041762518.1| Length: 73 Strand: Plus
+        PREDICTED: Vulpes lagopus sensory transduction protein RegX3-like
+        (LOC121495284), mRNA
+
+Score:67 bits(142), Expect:7e-08,
+Identities:30/73(41%),  Positives:45/73(62%),  Gaps:0.73(0%)
+
+gi|204419         0 PDLILLDIMLPGSDGLSSLEELRAKKSSESIPVIMATAKGTEFDKVKGLDMGADDYLVKP
+                  0 ||...|||..|..|||..||.||.........|||.||.|.|....|..|.||.....||
+Query_949         0 PDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAFGQEDVTKKAVDLGASYFILKP
+
+gi|204419        60 FGMMEMISRIKAV 73
+                 60 |.|......|..| 73
+Query_949        60 FDMENLVGHIRQV 73
+
+""",
+        )
+        hit = record[9]
+        self.assertEqual(hit.num, 10)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|1101784196|ref|XM_019135081.1|")
+        self.assertEqual(hit.target.name, "XM_019135081")
+        self.assertEqual(
+            hit.target.description,
+            "Cryptococcus amylolentus CBS 6039 hypothetical protein (L202_01642), partial mRNA",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=5487)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 142.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 67.9658)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 6.97488e-08)
+        self.assertEqual(hsp.annotations["identity"], 28)
+        self.assertEqual(hsp.annotations["positive"], 50)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[ 0, 82],
+                          [ 0, 82]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 82))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('AYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAF...NLV')",
+        )
+        self.assertEqual(hsp.query.id, "Query_949527")
+        self.assertEqual(
+            hsp.query.description,
+            "NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168 complete genome",
+        )
+        self.assertEqual(len(hsp.query.features), 1)
+        feature = hsp.query.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(82))"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('ARDGREALELCAKQKPNLIISDVMMPHVDGFELLTTLKDSSEFRMIPVIMLTAR...EIV')",
+        )
+        self.assertEqual(hsp.target.id, "gi|1101784196|ref|XM_019135081.1|")
+        self.assertEqual(hsp.target.name, "XM_019135081")
+        self.assertEqual(
+            hsp.target.description,
+            "Cryptococcus amylolentus CBS 6039 hypothetical protein (L202_01642), partial mRNA",
+        )
+        self.assertEqual(len(hsp.target.features), 1)
+        feature = hsp.target.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(5487))"
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "A +G+E L L  ++ P++++ D++MPH+DG  +L  L++S   +   VIMLTA G ++     +  GA  ++ KPF+   +V",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='gi|1101784196|ref|XM_019135081.1|' query.id='Query_949527'; 2 rows x 82 columns>",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+Query : Query_949527 Length: 82 Strand: Plus
+        NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168
+        complete genome
+Target: gi|1101784196|ref|XM_019135081.1| Length: 82 Strand: Plus
+        Cryptococcus amylolentus CBS 6039 hypothetical protein (L202_01642),
+        partial mRNA
+
+Score:67 bits(142), Expect:7e-08,
+Identities:28/82(34%),  Positives:50/82(61%),  Gaps:0.82(0%)
+
+gi|110178         0 ARDGREALELCAKQKPNLIISDVMMPHVDGFELLTTLKDSSEFRMIPVIMLTARGADESK
+                  0 |..|.|.|.|.....|.....|..|||.||...|..|..|.......||||||.|.....
+Query_949         0 AYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAFGQEDVT
+
+gi|110178        60 VSGIMAGAEDYLAKPFNAREIV 82
+                 60 ......||.....|||.....| 82
+Query_949        60 KKAVDLGASYFILKPFDMENLV 82
+
+""",
+        )
+
+    def test_xml_21500_tblastx_001_writer(self):
+        """Writing TBLASTX 2.15.0+ (xml_21500_tblastx_001.xml)."""
+        filename = "xml_21500_tblastx_001.xml"
+        path = os.path.join("Blast", filename)
+        with Blast.parse(path) as records:
+            stream = io.BytesIO()
+            n = Blast.write(records, stream)
+            self.assertEqual(n, 1)
+            stream.seek(0)
+            written_records = Blast.parse(stream)
+            self.check_xml_21500_tblastx_001_records(written_records)
+
+    def test_xml2_21500_tblastx_001_writer(self):
+        """Writing TBLASTX 2.15.0+ XML2 (xml2_21500_tblastx_001.xml)."""
+        filename = "xml2_21500_tblastx_001.xml"
+        path = os.path.join("Blast", filename)
+        with Blast.parse(path) as records:
+            stream = io.BytesIO()
+            n = Blast.write(records, stream, fmt="XML2")
+            self.assertEqual(n, 1)
+            stream.seek(0)
+            written_records = Blast.parse(stream)
+            self.check_xml_21500_tblastx_001_records(written_records, xml2=True)
+
 
 class TestRPSBlast(unittest.TestCase):
     """Test the Blast XML parser for rpsblast output."""
