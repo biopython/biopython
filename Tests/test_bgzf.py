@@ -1,4 +1,4 @@
-# Copyright 2010-2016 by Peter Cock.
+# Copyright 2010-2016, 2024 by Peter Cock.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -48,11 +48,28 @@ class BgzfTests(unittest.TestCase):
         self.assertEqual(data, new_data)
 
     def check_blocks(self, old_file, new_file):
+        """Verify newly created BGZF file has similar blocks to original.
+
+        We originally assumed it would have the same blocks, since zlib
+        behaviour has been near static for years. However, there is scope
+        for changes in default compression level or the zlib implementation
+        (e.g. zlib-ng) which breaks that assumption.
+
+        Therefore, from (start, raw_len, data_start, data_len) for each
+        block we only confirm that the data values match (and allow for
+        the compressed representation to vary).
+        """
         with open(old_file, "rb") as h:
-            old = list(bgzf.BgzfBlocks(h))
+            old = [
+                (data_start, data_len)
+                for (start, raw_len, data_start, data_len) in bgzf.BgzfBlocks(h)
+            ]
 
         with open(new_file, "rb") as h:
-            new = list(bgzf.BgzfBlocks(h))
+            new = [
+                (data_start, data_len)
+                for (start, raw_len, data_start, data_len) in bgzf.BgzfBlocks(h)
+            ]
 
         self.assertEqual(len(old), len(new))
         self.assertEqual(old, new)
