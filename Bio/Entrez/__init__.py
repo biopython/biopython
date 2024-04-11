@@ -328,7 +328,7 @@ def esummary(**keywds):
     >>> print(record[0]["Id"])
     19923
     >>> print(record[0]["PdbDescr"])
-    Crystal Structure Of E. Coli Aconitase B
+    CRYSTAL STRUCTURE OF E. COLI ACONITASE B
 
 
     :returns: Handle to the results, by default in XML format.
