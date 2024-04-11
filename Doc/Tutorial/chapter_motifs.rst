@@ -381,8 +381,8 @@ by summing over the columns:
 
 .. code:: pycon
 
-   >>> sum(m.relative_entropy)  # doctest:+ELLIPSIS
-   6.003321...
+   >>> print(f"Relative entropy is {sum(m.relative_entropy):0.5f}")
+   Relative entropy is 6.00332
 
 Creating a sequence logo
 ~~~~~~~~~~~~~~~~~~~~~~~~
