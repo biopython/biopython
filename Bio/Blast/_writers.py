@@ -83,8 +83,12 @@ class BaseXMLWriter(ABC):
         value = param.get("sc-mismatch")
         if value is not None:
             self._write_parameters_sc_mismatch(value)
-        self._write_parameters_gap_open(param.get("gap-open"))
-        self._write_parameters_gap_extend(param.get("gap-extend"))
+        value = param.get("gap-open")
+        if value is not None:
+            self._write_parameters_gap_open(value)
+        value = param.get("gap-extend")
+        if value is not None:
+            self._write_parameters_gap_extend(value)
         value = param.get("filter")
         if value is not None:
             self._write_parameters_filter(value.encode())
@@ -135,6 +139,9 @@ class BaseXMLWriter(ABC):
             self._write_iteration_query_id(query.id.encode())
             self._write_iteration_query_def(query.description.encode())
             self._write_iteration_query_len(query_length)
+            for feature in query.features:
+                if feature.type == "masking":
+                    self._write_iteration_query_masking(feature.location)
         self._start_iteration_hits()
         for hit in record:
             self._write_hit(hit, query_length)
@@ -354,6 +361,9 @@ class BaseXMLWriter(ABC):
 
     @abstractmethod
     def _write_iteration_query_len(self, query_len):
+        return
+
+    def _write_iteration_query_masking(self, location):
         return
 
     @abstractmethod
@@ -746,14 +756,14 @@ class XMLWriter(BaseXMLWriter):
         )
 
     def _write_statistics_kappa(self, value):
-        self.stream.write(b"      <Statistics_kappa>%g</Statistics_kappa>\n" % value)
+        self.stream.write(b"      <Statistics_kappa>%r</Statistics_kappa>\n" % value)
 
     def _write_statistics_lambda(self, value):
-        self.stream.write(b"      <Statistics_lambda>%g</Statistics_lambda>\n" % value)
+        self.stream.write(b"      <Statistics_lambda>%r</Statistics_lambda>\n" % value)
 
     def _write_statistics_entropy(self, value):
         self.stream.write(
-            b"      <Statistics_entropy>%g</Statistics_entropy>\n" % value
+            b"      <Statistics_entropy>%r</Statistics_entropy>\n" % value
         )
 
     def _start_iteration_hit(self):
@@ -972,6 +982,19 @@ class XML2Writer(BaseXMLWriter):
             % query_len
         )
 
+    def _write_iteration_query_masking(self, location):
+        self.stream.write(
+            b"""\
+              <query-masking>
+                <Range>
+                  <from>%d</from>
+                  <to>%d</to>
+                </Range>
+              </query-masking>
+"""
+            % (location.start + 1, location.end)
+        )
+
     def _start_iteration_hits(self):
         self.stream.write(
             b"""\
@@ -1147,7 +1170,7 @@ class XML2Writer(BaseXMLWriter):
     def _write_statistics_kappa(self, value):
         self.stream.write(
             b"""\
-                  <kappa>%g</kappa>
+                  <kappa>%r</kappa>
 """
             % value
         )
@@ -1155,7 +1178,7 @@ class XML2Writer(BaseXMLWriter):
     def _write_statistics_lambda(self, value):
         self.stream.write(
             b"""\
-                  <lambda>%g</lambda>
+                  <lambda>%r</lambda>
 """
             % value
         )
@@ -1163,7 +1186,7 @@ class XML2Writer(BaseXMLWriter):
     def _write_statistics_entropy(self, value):
         self.stream.write(
             b"""\
-                  <entropy>%g</entropy>
+                  <entropy>%r</entropy>
 """
             % value
         )

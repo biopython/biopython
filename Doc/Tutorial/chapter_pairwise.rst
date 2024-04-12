@@ -1415,8 +1415,8 @@ of each residue:
    K 0.2569
    R 0.1697
    <BLANKLINE>
-   >>> background.sum()
-   1.0
+   >>> sum(background) == 1.0
+   True
 
 The expected frequency of residue pairs is then
 

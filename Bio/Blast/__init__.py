@@ -906,14 +906,14 @@ def read(source):
     "rb" when opening the file, as in
 
     >>> from Bio import Blast
-    >>> stream = open("Blast/xml_2900_blastn_001.xml", "rb")  # opened in binary mode
+    >>> stream = open("Blast/xml_21500_blastn_001.xml", "rb")  # opened in binary mode
     >>> record = Blast.read(stream)
     >>> record.query.id
-    'G26684.1'
+    'Query_78041'
     >>> record.query.description
-    'human STS STS_D11570, sequence tagged site'
+    'G26684.1 human STS STS_D11570, sequence tagged site'
     >>> len(record)
-    10
+    11
     >>> stream.close()
 
     Use the Bio.Blast.parse function if you want to read a file containing
