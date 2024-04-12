@@ -57,7 +57,7 @@ class TestBlastp(unittest.TestCase):
         self.assertEqual(record.stat["db-num"], 27252)
         self.assertEqual(record.stat["db-len"], 13958303)
         self.assertEqual(record.stat["hsp-len"], 0)
-        self.assertAlmostEqual(record.stat["eff-space"], 0.0)
+        self.assertEqual(record.stat["eff-space"], 0)
         self.assertAlmostEqual(record.stat["kappa"], 0.041)
         self.assertAlmostEqual(record.stat["lambda"], 0.267)
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
@@ -73,7 +73,7 @@ class TestBlastp(unittest.TestCase):
         self.assertEqual(record.stat["db-num"], 27252)
         self.assertEqual(record.stat["db-len"], 13958303)
         self.assertEqual(record.stat["hsp-len"], 0)
-        self.assertAlmostEqual(record.stat["eff-space"], 0.0)
+        self.assertEqual(record.stat["eff-space"], 0)
         self.assertAlmostEqual(record.stat["kappa"], 0.041)
         self.assertAlmostEqual(record.stat["lambda"], 0.267)
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
@@ -222,7 +222,7 @@ Program: blastp 2.2.18 [Mar-02-2008]
         self.assertEqual(record.stat["db-num"], 6589360)
         self.assertEqual(record.stat["db-len"], 2253133281)
         self.assertEqual(record.stat["hsp-len"], 0)
-        self.assertAlmostEqual(record.stat["eff-space"], 20278200000.0)
+        self.assertAlmostEqual(record.stat["eff-space"], 2.02782e10)
         self.assertAlmostEqual(record.stat["kappa"], 0.041)
         self.assertAlmostEqual(record.stat["lambda"], 0.267)
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
@@ -322,7 +322,7 @@ Program: BLASTP 2.2.26+
         self.assertEqual(record.stat["db-num"], 20)
         self.assertEqual(record.stat["db-len"], 6406)
         self.assertEqual(record.stat["hsp-len"], 38)
-        self.assertAlmostEqual(record.stat["eff-space"], 361344.0)
+        self.assertEqual(record.stat["eff-space"], 361344)
         self.assertAlmostEqual(record.stat["kappa"], 0.041)
         self.assertAlmostEqual(record.stat["lambda"], 0.267)
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
@@ -821,7 +821,7 @@ Query_1          59 VSLDITEESTSDLDKFNSGDKVTIT  84
         self.assertEqual(record.stat["db-num"], 633473216)
         self.assertEqual(record.stat["db-len"], 248084082182)
         self.assertEqual(record.stat["hsp-len"], 0)
-        self.assertAlmostEqual(record.stat["eff-space"], 0.0)
+        self.assertEqual(record.stat["eff-space"], 0)
         self.assertAlmostEqual(record.stat["kappa"], 0.047)
         self.assertAlmostEqual(record.stat["lambda"], 0.27)
         self.assertAlmostEqual(record.stat["entropy"], 1.0)
@@ -1973,33 +1973,1546 @@ Query_744       660 AEQP 664
             written_records = Blast.parse(stream)
             self.check_phiblast_records(written_records)
 
-
-class TestBlastn(unittest.TestCase):
-    """Test the Blast XML parser for blastn output."""
-
-    def test_xml_2900_blastn_001_parser(self):
-        """Parsing BLASTN 2.9.0+ (xml_2900_blastn_001.xml)."""
-        filename = "xml_2900_blastn_001.xml"
+    def test_xml_21500_blastp_001_parser(self):
+        """Parsing BLASTP 2.15.0+ (xml_21500_blastp_001.xml)."""
+        filename = "xml_21500_blastp_001.xml"
         path = os.path.join("Blast", filename)
         with open(path, "rb") as stream:
             records = Blast.parse(stream)
-            self.check_xml_2900_blastn_001_records(records)
+            self.check_xml_21500_blastp_001_records(records)
         with Blast.parse(path) as records:
-            self.check_xml_2900_blastn_001_records(records)
+            self.check_xml_21500_blastp_001_records(records)
         with open(path, "rb") as stream:
             record = Blast.read(stream)
-        self.check_xml_2900_blastn_001_record(record)
+        self.check_xml_21500_blastp_001_record(record)
         record = Blast.read(path)
-        self.check_xml_2900_blastn_001_record(record)
+        self.check_xml_21500_blastp_001_record(record)
         with Blast.parse(path) as records:
             self.assertEqual(
                 str(records),
                 """\
-Program: BLASTN 2.9.0+
-     db: GPIPE/10090/current/all_top_level GPIPE/10090/current/rna
+Program: BLASTP 2.15.0+
+     db: nr
 
-  Query: G26684.1 (length=285)
-         human STS STS_D11570, sequence tagged site
+  Query: WXX52402.1 (length=239)
+         RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+   Hits: ----  -----  ----------------------------------------------------------
+            #  # HSP  ID + description
+         ----  -----  ----------------------------------------------------------
+            0      1  ref|WP_003221446.1|  MULTISPECIES: RNA polymerase sporu...
+            1      1  dbj|BAI85158.2|  sporulation sigma factor SigE [Bacillu...
+            2      1  ref|WP_120028072.1|  RNA polymerase sporulation sigma f...
+            3      1  ref|WP_326121348.1|  RNA polymerase sporulation sigma f...
+            4      1  ref|WP_128473893.1|  RNA polymerase sporulation sigma f...
+            5      1  ref|WP_174228079.1|  RNA polymerase sporulation sigma f...
+            6      1  ref|WP_315947263.1|  RNA polymerase sporulation sigma f...
+            7      1  ref|WP_219912761.1|  RNA polymerase sporulation sigma f...
+            8      1  ref|WP_038828182.1|  RNA polymerase sporulation sigma f...
+            9      1  ref|WP_326211018.1|  RNA polymerase sporulation sigma f...""",
+            )
+        record = Blast.read(path)
+        self.assertEqual(
+            str(record),
+            """\
+Program: BLASTP 2.15.0+
+     db: nr
+  Query: WXX52402.1 (length=239)
+         RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+   Hits: ----  -----  ----------------------------------------------------------
+            #  # HSP  ID + description
+         ----  -----  ----------------------------------------------------------
+            0      1  ref|WP_003221446.1|  MULTISPECIES: RNA polymerase sporu...
+            1      1  dbj|BAI85158.2|  sporulation sigma factor SigE [Bacillu...
+            2      1  ref|WP_120028072.1|  RNA polymerase sporulation sigma f...
+            3      1  ref|WP_326121348.1|  RNA polymerase sporulation sigma f...
+            4      1  ref|WP_128473893.1|  RNA polymerase sporulation sigma f...
+            5      1  ref|WP_174228079.1|  RNA polymerase sporulation sigma f...
+            6      1  ref|WP_315947263.1|  RNA polymerase sporulation sigma f...
+            7      1  ref|WP_219912761.1|  RNA polymerase sporulation sigma f...
+            8      1  ref|WP_038828182.1|  RNA polymerase sporulation sigma f...
+            9      1  ref|WP_326211018.1|  RNA polymerase sporulation sigma f...""",
+        )
+
+    def test_xml2_21500_blastp_001_parser(self):
+        """Parsing BLASTP 2.15.0+ (xml2_21500_blastp_001.xml)."""
+        filename = "xml2_21500_blastp_001.xml"
+        path = os.path.join("Blast", filename)
+        with open(path, "rb") as stream:
+            records = Blast.parse(stream)
+            self.check_xml_21500_blastp_001_records(records, xml2=True)
+        with Blast.parse(path) as records:
+            self.check_xml_21500_blastp_001_records(records, xml2=True)
+        with open(path, "rb") as stream:
+            record = Blast.read(stream)
+        self.check_xml_21500_blastp_001_record(record, xml2=True)
+        record = Blast.read(path)
+        self.check_xml_21500_blastp_001_record(record, xml2=True)
+
+    def check_xml_21500_blastp_001_records(self, records, xml2=False):
+        self.assertEqual(records.program, "blastp")
+        self.assertEqual(records.version, "BLASTP 2.15.0+")
+        self.assertEqual(
+            records.reference,
+            'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+        )
+        self.assertEqual(records.db, "nr")
+        if xml2 is False:
+            self.assertIsInstance(records.query, SeqRecord)
+            self.assertEqual(records.query.id, "WXX52402.1")
+            self.assertEqual(
+                records.query.description,
+                "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+            )
+            self.assertEqual(repr(records.query.seq), "Seq(None, length=239)")
+        self.assertEqual(records.param["matrix"], "BLOSUM62")
+        self.assertAlmostEqual(records.param["expect"], 0.05)
+        self.assertEqual(records.param["gap-open"], 11)
+        self.assertEqual(records.param["gap-extend"], 1)
+        self.assertEqual(records.param["filter"], "F")
+        if xml2 is False:
+            self.assertEqual(len(records.param), 5)
+        else:
+            self.assertEqual(records.param["cbs"], 2)
+            self.assertEqual(len(records.param), 6)
+        record = next(records)
+        self.assertRaises(StopIteration, next, records)
+        self.check_xml_21500_blastp_001_record(record, xml2=xml2)
+
+    def check_xml_21500_blastp_001_record(self, record, xml2=False):
+        hit = record[0]
+        self.assertEqual(hit.num, 1)
+        target = hit.target
+        self.assertIsInstance(target, SeqRecord)
+        self.assertEqual(target.id, "ref|WP_003221446.1|")
+        self.assertEqual(target.name, "WP_003221446")
+        seq = target.seq
+        self.assertEqual(repr(seq), "Seq(None, length=239)")
+        if xml2 is True:
+            self.assertEqual(
+                target.description,
+                "MULTISPECIES: RNA polymerase sporulation sigma factor SigE [Bacillales]",
+            )
+            self.assertEqual(target.annotations["taxid"], 1385)
+            self.assertEqual(target.annotations["sciname"], "Bacillales")
+            self.assertIs(target, hit.targets[0])
+            self.assertEqual(len(hit.targets), 8)
+            target = hit.targets[1]
+            self.assertIsInstance(target, SeqRecord)
+            self.assertEqual(target.id, "ref|NP_389415.2|")
+            self.assertEqual(target.name, "NP_389415")
+            self.assertIs(target.seq, seq)
+            self.assertEqual(
+                target.description,
+                "RNA polymerase sporulation-specific sigma-29 factor (sigma-E) [Bacillus subtilis subsp. subtilis str. 168]",
+            )
+            self.assertEqual(target.annotations["taxid"], 224308)
+            self.assertEqual(
+                target.annotations["sciname"],
+                "Bacillus subtilis subsp. subtilis str. 168",
+            )
+            target = hit.targets[2]
+            self.assertIsInstance(target, SeqRecord)
+            self.assertEqual(target.id, "sp|P06222.1|")
+            self.assertEqual(target.name, "P06222")
+            self.assertIs(target.seq, seq)
+            self.assertEqual(
+                target.description,
+                "RecName: Full=RNA polymerase sigma-E factor; AltName: Full=P31; AltName: Full=Sigma-29; AltName: Full=Stage II sporulation protein GB; Flags: Precursor [Bacillus subtilis subsp. subtilis str. 168]",
+            )
+            self.assertEqual(target.annotations["taxid"], 224308)
+            self.assertEqual(
+                target.annotations["sciname"],
+                "Bacillus subtilis subsp. subtilis str. 168",
+            )
+            target = hit.targets[3]
+            self.assertIsInstance(target, SeqRecord)
+            self.assertEqual(target.id, "gb|KFI04694.1|")
+            self.assertEqual(target.name, "KFI04694")
+            self.assertIs(target.seq, seq)
+            self.assertEqual(
+                target.description,
+                "sporulation sigma factor SigE [Bacillus sp. BSC154]",
+            )
+            self.assertEqual(target.annotations["taxid"], 1549811)
+            self.assertEqual(target.annotations["sciname"], "Bacillus sp. BSC154")
+            target = hit.targets[4]
+            self.assertIsInstance(target, SeqRecord)
+            self.assertEqual(target.id, "gb|MDZ5720185.1|")
+            self.assertEqual(target.name, "MDZ5720185")
+            self.assertIs(target.seq, seq)
+            self.assertEqual(
+                target.description,
+                "RNA polymerase sporulation sigma factor SigE [Bacillus sp. X(2023)]",
+            )
+            self.assertEqual(target.annotations["taxid"], 3106047)
+            self.assertEqual(target.annotations["sciname"], "Bacillus sp. X(2023)")
+            target = hit.targets[5]
+            self.assertIsInstance(target, SeqRecord)
+            self.assertEqual(target.id, "gb|POO83984.1|")
+            self.assertEqual(target.name, "POO83984")
+            self.assertIs(target.seq, seq)
+            self.assertEqual(
+                target.description,
+                "RNA polymerase sporulation sigma factor SigE [Bacillus sp. MBGLi97]",
+            )
+            self.assertEqual(target.annotations["taxid"], 2070760)
+            self.assertEqual(target.annotations["sciname"], "Bacillus sp. MBGLi97")
+            target = hit.targets[6]
+            self.assertIsInstance(target, SeqRecord)
+            self.assertEqual(target.id, "dbj|BAM52179.1|")
+            self.assertEqual(target.name, "BAM52179")
+            self.assertIs(target.seq, seq)
+            self.assertEqual(
+                target.description,
+                "sporulation sigma factor SigE [Bacillus subtilis BEST7613]",
+            )
+            self.assertEqual(target.annotations["taxid"], 1204343)
+            self.assertEqual(
+                target.annotations["sciname"], "Bacillus subtilis BEST7613"
+            )
+            target = hit.targets[7]
+            self.assertIsInstance(target, SeqRecord)
+            self.assertEqual(target.id, "gb|ADM37626.1|")
+            self.assertEqual(target.name, "ADM37626")
+            self.assertIs(target.seq, seq)
+            self.assertEqual(
+                target.description,
+                "sporulation-specific sigma factor sigma-E [Bacillus spizizenii str. W23]",
+            )
+            self.assertEqual(target.annotations["taxid"], 655816)
+            self.assertEqual(
+                target.annotations["sciname"], "Bacillus spizizenii str. W23"
+            )
+        else:
+            self.assertEqual(
+                target.description,
+                "MULTISPECIES: RNA polymerase sporulation sigma factor SigE [Bacillales] >ref|NP_389415.2| RNA polymerase sporulation-specific sigma-29 factor (sigma-E) [Bacillus subtilis subsp. subtilis str. 168] >sp|P06222.1| RecName: Full=RNA polymerase sigma-E factor; AltName: Full=P31; AltName: Full=Sigma-29; AltName: Full=Stage II sporulation protein GB; Flags: Precursor [Bacillus subtilis subsp. subtilis str. 168] >gb|KFI04694.1| sporulation sigma factor SigE [Bacillus sp. BSC154] >gb|MDZ5720185.1| RNA polymerase sporulation sigma factor SigE [Bacillus sp. X(2023)] >gb|POO83984.1| RNA polymerase sporulation sigma factor SigE [Bacillus sp. MBGLi97] >dbj|BAM52179.1| sporulation sigma factor SigE [Bacillus subtilis BEST7613] >gb|ADM37626.1| sporulation-specific sigma factor sigma-E [Bacillus spizizenii str. W23]",
+            )
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 1227.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 477.248)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 2.44722e-169)
+        self.assertEqual(hsp.annotations["identity"], 239)
+        self.assertEqual(hsp.annotations["positive"], 239)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[0, 239],
+                          [0, 239]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 239))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNG...KMV')",
+        )
+        self.assertEqual(hsp.query.id, "WXX52402.1")
+        self.assertEqual(
+            hsp.query.description,
+            "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+        )
+        self.assertEqual(len(hsp.query.features), 0)
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNG...KMV')",
+        )
+        self.assertEqual(hsp.target.id, hit.target.id)
+        self.assertEqual(hsp.target.name, hit.target.name)
+        self.assertEqual(hsp.target.description, hit.target.description)
+        self.assertEqual(len(hsp.target.features), 0)
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='ref|WP_003221446.1|' query.id='WXX52402.1'; 2 rows x 239 columns>",
+        )
+        if xml2 is True:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : WXX52402.1 Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+Target: ref|WP_003221446.1| Length: 239 Strand: Plus
+        MULTISPECIES: RNA polymerase sporulation sigma factor SigE [Bacillales]
+
+Score:477 bits(1227), Expect:2e-169,
+Identities:239/239(100%),  Positives:239/239(100%),  Gaps:0.239(0%)
+
+ref|WP_00         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+
+ref|WP_00        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+
+ref|WP_00       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+
+ref|WP_00       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+                180 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+
+ref|WP_00       239
+                239
+WXX52402.       239
+
+""",
+            )
+        else:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : WXX52402.1 Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+Target: ref|WP_003221446.1| Length: 239 Strand: Plus
+        MULTISPECIES: RNA polymerase sporulation sigma factor SigE [Bacillales]
+        >ref|NP_389415.2| RNA polymerase sporulation-specific sigma-29 factor
+        (sigma-E) [Bacillus subtilis subsp. subtilis str. 168] >sp|P06222.1|
+        RecName: Full=RNA polymerase sigma-E factor; AltName: Full=P31; AltName:
+        Full=Sigma-29; AltName: Full=Stage II sporulation protein GB; Flags:
+        Precursor [Bacillus subtilis subsp. subtilis str. 168] >gb|KFI04694.1|
+        sporulation sigma factor SigE [Bacillus sp. BSC154] >gb|MDZ5720185.1|
+        RNA polymerase sporulation sigma factor SigE [Bacillus sp. X(2023)]
+        >gb|POO83984.1| RNA polymerase sporulation sigma factor SigE [Bacillus
+        sp. MBGLi97] >dbj|BAM52179.1| sporulation sigma factor SigE [Bacillus
+        subtilis BEST7613] >gb|ADM37626.1| sporulation-specific sigma factor
+        sigma-E [Bacillus spizizenii str. W23]
+
+Score:477 bits(1227), Expect:2e-169,
+Identities:239/239(100%),  Positives:239/239(100%),  Gaps:0.239(0%)
+
+ref|WP_00         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+
+ref|WP_00        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+
+ref|WP_00       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+
+ref|WP_00       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+                180 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+
+ref|WP_00       239
+                239
+WXX52402.       239
+
+""",
+            )
+        hit = record[1]
+        self.assertEqual(hit.num, 2)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "dbj|BAI85158.2|")
+        self.assertEqual(hit.target.name, "BAI85158")
+        self.assertEqual(
+            hit.target.description,
+            "sporulation sigma factor SigE [Bacillus subtilis subsp. natto BEST195]",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=260)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 1227.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 477.248)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 3.91488e-169)
+        self.assertEqual(hsp.annotations["identity"], 239)
+        self.assertEqual(hsp.annotations["positive"], 239)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[21, 260],
+                          [ 0, 239]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 239))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNG...KMV')",
+        )
+        self.assertEqual(hsp.query.id, "WXX52402.1")
+        self.assertEqual(
+            hsp.query.description,
+            "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+        )
+        self.assertEqual(len(hsp.query.features), 0)
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({21: 'MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNG...KMV'}, length=260)",
+        )
+        self.assertEqual(hsp.target.id, "dbj|BAI85158.2|")
+        self.assertEqual(hsp.target.name, "BAI85158")
+        self.assertEqual(
+            hsp.target.description,
+            "sporulation sigma factor SigE [Bacillus subtilis subsp. natto BEST195]",
+        )
+        self.assertEqual(len(hsp.target.features), 0)
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='dbj|BAI85158.2|' query.id='WXX52402.1'; 2 rows x 239 columns>",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+Query : WXX52402.1 Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+Target: dbj|BAI85158.2| Length: 260 Strand: Plus
+        sporulation sigma factor SigE [Bacillus subtilis subsp. natto BEST195]
+
+Score:477 bits(1227), Expect:4e-169,
+Identities:239/239(100%),  Positives:239/239(100%),  Gaps:0.239(0%)
+
+dbj|BAI85        21 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+
+dbj|BAI85        81 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+
+dbj|BAI85       141 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+
+dbj|BAI85       201 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+                180 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+
+dbj|BAI85       260
+                239
+WXX52402.       239
+
+""",
+        )
+        hit = record[2]
+        self.assertEqual(hit.num, 3)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "ref|WP_120028072.1|")
+        self.assertEqual(hit.target.name, "WP_120028072")
+        if xml2 is True:
+            self.assertEqual(
+                hit.target.description,
+                "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+            )
+        else:
+            self.assertEqual(
+                hit.target.description,
+                "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis] >gb|RJS52520.1| RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+            )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=239)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 1225.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 476.478)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 4.00949e-169)
+        self.assertEqual(hsp.annotations["identity"], 238)
+        self.assertEqual(hsp.annotations["positive"], 239)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[0, 239],
+                          [0, 239]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 239))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNG...KMV')",
+        )
+        self.assertEqual(hsp.query.id, "WXX52402.1")
+        self.assertEqual(
+            hsp.query.description,
+            "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+        )
+        self.assertEqual(len(hsp.query.features), 0)
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNG...KMV')",
+        )
+        self.assertEqual(hsp.target.id, hit.target.id)
+        self.assertEqual(hsp.target.name, hit.target.name)
+        self.assertEqual(hsp.target.description, hit.target.description)
+        self.assertEqual(len(hsp.target.features), 0)
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGL+GEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='ref|WP_120028072.1|' query.id='WXX52402.1'; 2 rows x 239 columns>",
+        )
+        if xml2 is True:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : WXX52402.1 Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+Target: ref|WP_120028072.1| Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+
+Score:476 bits(1225), Expect:4e-169,
+Identities:238/239(100%),  Positives:239/239(100%),  Gaps:0.239(0%)
+
+ref|WP_12         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+
+ref|WP_12        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+
+ref|WP_12       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+
+ref|WP_12       180 LEQLNEREKQIMELRFGLIGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+                180 ||||||||||||||||||.||||||||||||||||||||||||||||||||||||||||
+WXX52402.       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+
+ref|WP_12       239
+                239
+WXX52402.       239
+
+""",
+            )
+        else:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : WXX52402.1 Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+Target: ref|WP_120028072.1| Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+        >gb|RJS52520.1| RNA polymerase sporulation sigma factor SigE [Bacillus
+        subtilis]
+
+Score:476 bits(1225), Expect:4e-169,
+Identities:238/239(100%),  Positives:239/239(100%),  Gaps:0.239(0%)
+
+ref|WP_12         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+
+ref|WP_12        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+
+ref|WP_12       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+
+ref|WP_12       180 LEQLNEREKQIMELRFGLIGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+                180 ||||||||||||||||||.||||||||||||||||||||||||||||||||||||||||
+WXX52402.       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+
+ref|WP_12       239
+                239
+WXX52402.       239
+
+""",
+            )
+        hit = record[3]
+        self.assertEqual(hit.num, 4)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "ref|WP_326121348.1|")
+        self.assertEqual(hit.target.name, "WP_326121348")
+        if xml2 is True:
+            self.assertEqual(
+                hit.target.description,
+                "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+            )
+        else:
+            self.assertEqual(
+                hit.target.description,
+                "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis] >gb|MEC0320584.1| RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+            )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=239)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 1224.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 476.093)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 5.63375e-169)
+        self.assertEqual(hsp.annotations["identity"], 238)
+        self.assertEqual(hsp.annotations["positive"], 239)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[0, 239],
+                          [0, 239]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 239))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNG...KMV')",
+        )
+        self.assertEqual(hsp.query.id, "WXX52402.1")
+        self.assertEqual(
+            hsp.query.description,
+            "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+        )
+        self.assertEqual(len(hsp.query.features), 0)
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLIMKLPNG...KMV')",
+        )
+        self.assertEqual(hsp.target.id, hit.target.id)
+        self.assertEqual(hsp.target.name, hit.target.name)
+        self.assertEqual(hsp.target.description, hit.target.description)
+        self.assertEqual(len(hsp.target.features), 0)
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVL+MKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='ref|WP_326121348.1|' query.id='WXX52402.1'; 2 rows x 239 columns>",
+        )
+        if xml2 is True:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : WXX52402.1 Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+Target: ref|WP_326121348.1| Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+
+Score:476 bits(1224), Expect:6e-169,
+Identities:238/239(100%),  Positives:239/239(100%),  Gaps:0.239(0%)
+
+ref|WP_32         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLIMKLPNGDQAARA
+                  0 |||||||||||||||||||||||||||||||||||||||||||||||.||||||||||||
+WXX52402.         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+
+ref|WP_32        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+
+ref|WP_32       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+
+ref|WP_32       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+                180 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+
+ref|WP_32       239
+                239
+WXX52402.       239
+
+""",
+            )
+        else:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : WXX52402.1 Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+Target: ref|WP_326121348.1| Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+        >gb|MEC0320584.1| RNA polymerase sporulation sigma factor SigE [Bacillus
+        subtilis]
+
+Score:476 bits(1224), Expect:6e-169,
+Identities:238/239(100%),  Positives:239/239(100%),  Gaps:0.239(0%)
+
+ref|WP_32         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLIMKLPNGDQAARA
+                  0 |||||||||||||||||||||||||||||||||||||||||||||||.||||||||||||
+WXX52402.         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+
+ref|WP_32        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+
+ref|WP_32       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+
+ref|WP_32       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+                180 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+
+ref|WP_32       239
+                239
+WXX52402.       239
+
+""",
+            )
+        hit = record[4]
+        self.assertEqual(hit.num, 5)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "ref|WP_128473893.1|")
+        self.assertEqual(hit.target.name, "WP_128473893")
+        if xml2 is True:
+            self.assertEqual(
+                hit.target.description,
+                "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+            )
+        else:
+            self.assertEqual(
+                hit.target.description,
+                "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis] >gb|QAR61557.1| RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+            )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=239)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 1224.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 476.093)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 5.6959e-169)
+        self.assertEqual(hsp.annotations["identity"], 238)
+        self.assertEqual(hsp.annotations["positive"], 239)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[0, 239],
+                          [0, 239]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 239))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNG...KMV')",
+        )
+        self.assertEqual(hsp.query.id, "WXX52402.1")
+        self.assertEqual(
+            hsp.query.description,
+            "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+        )
+        self.assertEqual(len(hsp.query.features), 0)
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('MKKLKLRLTHLWYKLLMKLGMKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNG...KMV')",
+        )
+        self.assertEqual(hsp.target.id, hit.target.id)
+        self.assertEqual(hsp.target.name, hit.target.name)
+        self.assertEqual(hsp.target.description, hsp.target.description)
+        self.assertEqual(len(hsp.target.features), 0)
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MKKLKLRLTHLWYKLLMKLG+KSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='ref|WP_128473893.1|' query.id='WXX52402.1'; 2 rows x 239 columns>",
+        )
+        if xml2 is True:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : WXX52402.1 Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+Target: ref|WP_128473893.1| Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+
+Score:476 bits(1224), Expect:6e-169,
+Identities:238/239(100%),  Positives:239/239(100%),  Gaps:0.239(0%)
+
+ref|WP_12         0 MKKLKLRLTHLWYKLLMKLGMKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+                  0 ||||||||||||||||||||.|||||||||||||||||||||||||||||||||||||||
+WXX52402.         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+
+ref|WP_12        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+
+ref|WP_12       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+
+ref|WP_12       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+                180 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+
+ref|WP_12       239
+                239
+WXX52402.       239
+
+""",
+            )
+        else:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : WXX52402.1 Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+Target: ref|WP_128473893.1| Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+        >gb|QAR61557.1| RNA polymerase sporulation sigma factor SigE [Bacillus
+        subtilis]
+
+Score:476 bits(1224), Expect:6e-169,
+Identities:238/239(100%),  Positives:239/239(100%),  Gaps:0.239(0%)
+
+ref|WP_12         0 MKKLKLRLTHLWYKLLMKLGMKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+                  0 ||||||||||||||||||||.|||||||||||||||||||||||||||||||||||||||
+WXX52402.         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+
+ref|WP_12        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+
+ref|WP_12       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+
+ref|WP_12       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+                180 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+
+ref|WP_12       239
+                239
+WXX52402.       239
+
+""",
+            )
+        hit = record[5]
+        self.assertEqual(hit.num, 6)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "ref|WP_174228079.1|")
+        self.assertEqual(hit.target.name, "WP_174228079")
+        if xml2 is True:
+            self.assertEqual(
+                hit.target.description,
+                "RNA polymerase sporulation sigma factor SigE [Bacillus tequilensis]",
+            )
+        else:
+            self.assertEqual(
+                hit.target.description,
+                "RNA polymerase sporulation sigma factor SigE [Bacillus tequilensis] >gb|NTU26438.1| RNA polymerase sporulation sigma factor SigE [Bacillus tequilensis]",
+            )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=239)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 1224.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 476.093)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 7.17171e-169)
+        self.assertEqual(hsp.annotations["identity"], 238)
+        self.assertEqual(hsp.annotations["positive"], 239)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[0, 239],
+                          [0, 239]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 239))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNG...KMV')",
+        )
+        self.assertEqual(hsp.query.id, "WXX52402.1")
+        self.assertEqual(
+            hsp.query.description,
+            "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+        )
+        self.assertEqual(len(hsp.query.features), 0)
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('MKKLKLRLTHLWYRLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNG...KMV')",
+        )
+        self.assertEqual(hsp.target.id, hit.target.id)
+        self.assertEqual(hsp.target.name, hit.target.name)
+        self.assertEqual(hsp.target.description, hit.target.description)
+        self.assertEqual(len(hsp.target.features), 0)
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MKKLKLRLTHLWY+LLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='ref|WP_174228079.1|' query.id='WXX52402.1'; 2 rows x 239 columns>",
+        )
+        if xml2 is True:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : WXX52402.1 Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+Target: ref|WP_174228079.1| Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus tequilensis]
+
+Score:476 bits(1224), Expect:7e-169,
+Identities:238/239(100%),  Positives:239/239(100%),  Gaps:0.239(0%)
+
+ref|WP_17         0 MKKLKLRLTHLWYRLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+                  0 |||||||||||||.||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+
+ref|WP_17        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+
+ref|WP_17       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+
+ref|WP_17       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+                180 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+
+ref|WP_17       239
+                239
+WXX52402.       239
+
+""",
+            )
+        else:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : WXX52402.1 Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+Target: ref|WP_174228079.1| Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus tequilensis]
+        >gb|NTU26438.1| RNA polymerase sporulation sigma factor SigE [Bacillus
+        tequilensis]
+
+Score:476 bits(1224), Expect:7e-169,
+Identities:238/239(100%),  Positives:239/239(100%),  Gaps:0.239(0%)
+
+ref|WP_17         0 MKKLKLRLTHLWYRLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+                  0 |||||||||||||.||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+
+ref|WP_17        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+
+ref|WP_17       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+
+ref|WP_17       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+                180 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+
+ref|WP_17       239
+                239
+WXX52402.       239
+
+""",
+            )
+        hit = record[6]
+        self.assertEqual(hit.num, 7)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "ref|WP_315947263.1|")
+        self.assertEqual(hit.target.name, "WP_315947263")
+        if xml2 is True:
+            self.assertEqual(
+                hit.target.description,
+                "RNA polymerase sporulation sigma factor SigE [Bacillus cabrialesii]",
+            )
+        else:
+            self.assertEqual(
+                hit.target.description,
+                "RNA polymerase sporulation sigma factor SigE [Bacillus cabrialesii] >gb|MDU0153406.1| RNA polymerase sporulation sigma factor SigE [Bacillus cabrialesii]",
+            )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=239)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 1224.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 476.093)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 7.17171e-169)
+        self.assertEqual(hsp.annotations["identity"], 238)
+        self.assertEqual(hsp.annotations["positive"], 239)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[0, 239],
+                          [0, 239]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 239))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNG...KMV')",
+        )
+        self.assertEqual(hsp.query.id, "WXX52402.1")
+        self.assertEqual(
+            hsp.query.description,
+            "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+        )
+        self.assertEqual(len(hsp.query.features), 0)
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('MKKLKLRLTHLWYKLLMRLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNG...KMV')",
+        )
+        self.assertEqual(hsp.target.id, hit.target.id)
+        self.assertEqual(hsp.target.name, hit.target.name)
+        self.assertEqual(hsp.target.description, hit.target.description)
+        self.assertEqual(len(hsp.target.features), 0)
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MKKLKLRLTHLWYKLLM+LGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='ref|WP_315947263.1|' query.id='WXX52402.1'; 2 rows x 239 columns>",
+        )
+        if xml2 is True:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : WXX52402.1 Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+Target: ref|WP_315947263.1| Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus cabrialesii]
+
+Score:476 bits(1224), Expect:7e-169,
+Identities:238/239(100%),  Positives:239/239(100%),  Gaps:0.239(0%)
+
+ref|WP_31         0 MKKLKLRLTHLWYKLLMRLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+                  0 |||||||||||||||||.||||||||||||||||||||||||||||||||||||||||||
+WXX52402.         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+
+ref|WP_31        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+
+ref|WP_31       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+
+ref|WP_31       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+                180 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+
+ref|WP_31       239
+                239
+WXX52402.       239
+
+""",
+            )
+        else:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : WXX52402.1 Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+Target: ref|WP_315947263.1| Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus cabrialesii]
+        >gb|MDU0153406.1| RNA polymerase sporulation sigma factor SigE [Bacillus
+        cabrialesii]
+
+Score:476 bits(1224), Expect:7e-169,
+Identities:238/239(100%),  Positives:239/239(100%),  Gaps:0.239(0%)
+
+ref|WP_31         0 MKKLKLRLTHLWYKLLMRLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+                  0 |||||||||||||||||.||||||||||||||||||||||||||||||||||||||||||
+WXX52402.         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+
+ref|WP_31        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+
+ref|WP_31       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+
+ref|WP_31       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+                180 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+
+ref|WP_31       239
+                239
+WXX52402.       239
+
+""",
+            )
+        hit = record[7]
+        self.assertEqual(hit.num, 8)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "ref|WP_219912761.1|")
+        self.assertEqual(hit.target.name, "WP_219912761")
+        if xml2 is True:
+            self.assertEqual(
+                hit.target.description,
+                "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+            )
+        else:
+            self.assertEqual(
+                hit.target.description,
+                "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis] >emb|COM82207.1| RNA polymerase sigma factor RpoD [Bacillus subtilis]",
+            )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=239)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 1223.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 475.707)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 7.49345e-169)
+        self.assertEqual(hsp.annotations["identity"], 238)
+        self.assertEqual(hsp.annotations["positive"], 239)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[0, 239],
+                          [0, 239]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 239))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNG...KMV')",
+        )
+        self.assertEqual(hsp.query.id, "WXX52402.1")
+        self.assertEqual(
+            hsp.query.description,
+            "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+        )
+        self.assertEqual(len(hsp.query.features), 0)
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNG...KMV')",
+        )
+        self.assertEqual(hsp.target.id, hit.target.id)
+        self.assertEqual(hsp.target.name, hit.target.name)
+        self.assertEqual(hsp.target.description, hit.target.description)
+        self.assertEqual(len(hsp.target.features), 0)
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATY+SRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='ref|WP_219912761.1|' query.id='WXX52402.1'; 2 rows x 239 columns>",
+        )
+        if xml2 is True:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : WXX52402.1 Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+Target: ref|WP_219912761.1| Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+
+Score:475 bits(1223), Expect:7e-169,
+Identities:238/239(100%),  Positives:239/239(100%),  Gaps:0.239(0%)
+
+ref|WP_21         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+
+ref|WP_21        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYSSRCIEN
+                 60 |||||||||||||||||||||||||||||||||||||||||||||||||||||.||||||
+WXX52402.        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+
+ref|WP_21       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+
+ref|WP_21       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+                180 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+
+ref|WP_21       239
+                239
+WXX52402.       239
+
+""",
+            )
+        else:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : WXX52402.1 Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+Target: ref|WP_219912761.1| Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+        >emb|COM82207.1| RNA polymerase sigma factor RpoD [Bacillus subtilis]
+
+Score:475 bits(1223), Expect:7e-169,
+Identities:238/239(100%),  Positives:239/239(100%),  Gaps:0.239(0%)
+
+ref|WP_21         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+
+ref|WP_21        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYSSRCIEN
+                 60 |||||||||||||||||||||||||||||||||||||||||||||||||||||.||||||
+WXX52402.        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+
+ref|WP_21       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+
+ref|WP_21       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+                180 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+
+ref|WP_21       239
+                239
+WXX52402.       239
+
+""",
+            )
+        hit = record[8]
+        self.assertEqual(hit.num, 9)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "ref|WP_038828182.1|")
+        self.assertEqual(hit.target.name, "WP_038828182")
+        self.assertEqual(
+            hit.target.description,
+            "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=239)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 1223.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 475.707)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 7.49345e-169)
+        self.assertEqual(hsp.annotations["identity"], 238)
+        self.assertEqual(hsp.annotations["positive"], 239)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[0, 239],
+                          [0, 239]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 239))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNG...KMV')",
+        )
+        self.assertEqual(hsp.query.id, "WXX52402.1")
+        self.assertEqual(
+            hsp.query.description,
+            "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+        )
+        self.assertEqual(len(hsp.query.features), 0)
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNG...KMV')",
+        )
+        self.assertEqual(hsp.target.id, "ref|WP_038828182.1|")
+        self.assertEqual(hsp.target.name, "WP_038828182")
+        self.assertEqual(
+            hsp.target.description,
+            "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+        )
+        self.assertEqual(len(hsp.target.features), 0)
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAAR+ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='ref|WP_038828182.1|' query.id='WXX52402.1'; 2 rows x 239 columns>",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+Query : WXX52402.1 Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+Target: ref|WP_038828182.1| Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+
+Score:475 bits(1223), Expect:7e-169,
+Identities:238/239(100%),  Positives:239/239(100%),  Gaps:0.239(0%)
+
+ref|WP_03         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARS
+                  0 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||.
+WXX52402.         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+
+ref|WP_03        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+
+ref|WP_03       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+
+ref|WP_03       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+                180 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+
+ref|WP_03       239
+                239
+WXX52402.       239
+
+""",
+        )
+        hit = record[9]
+        self.assertEqual(hit.num, 10)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "ref|WP_326211018.1|")
+        self.assertEqual(hit.target.name, "WP_326211018")
+        if xml2 is True:
+            self.assertEqual(
+                hit.target.description,
+                "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+            )
+        else:
+            self.assertEqual(
+                hit.target.description,
+                "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis] >gb|MEC1541690.1| RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+            )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=239)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 1223.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 475.707)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 8.36237e-169)
+        self.assertEqual(hsp.annotations["identity"], 238)
+        self.assertEqual(hsp.annotations["positive"], 239)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[0, 239],
+                          [0, 239]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 239))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNG...KMV')",
+        )
+        self.assertEqual(hsp.query.id, "WXX52402.1")
+        self.assertEqual(
+            hsp.query.description,
+            "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
+        )
+        self.assertEqual(len(hsp.query.features), 0)
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNG...KMM')",
+        )
+        self.assertEqual(hsp.target.id, hit.target.id)
+        self.assertEqual(hsp.target.name, hit.target.name)
+        self.assertEqual(hsp.target.description, hit.target.description)
+        self.assertEqual(len(hsp.target.features), 0)
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKM+",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='ref|WP_326211018.1|' query.id='WXX52402.1'; 2 rows x 239 columns>",
+        )
+        if xml2 is True:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : WXX52402.1 Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+Target: ref|WP_326211018.1| Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+
+Score:475 bits(1223), Expect:8e-169,
+Identities:238/239(100%),  Positives:239/239(100%),  Gaps:0.239(0%)
+
+ref|WP_32         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+
+ref|WP_32        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+
+ref|WP_32       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+
+ref|WP_32       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMM
+                180 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||.
+WXX52402.       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+
+ref|WP_32       239
+                239
+WXX52402.       239
+
+""",
+            )
+        else:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : WXX52402.1 Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+Target: ref|WP_326211018.1| Length: 239 Strand: Plus
+        RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]
+        >gb|MEC1541690.1| RNA polymerase sporulation sigma factor SigE [Bacillus
+        subtilis]
+
+Score:475 bits(1223), Expect:8e-169,
+Identities:238/239(100%),  Positives:239/239(100%),  Gaps:0.239(0%)
+
+ref|WP_32         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.         0 MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARA
+
+ref|WP_32        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.        60 ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIEN
+
+ref|WP_32       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+WXX52402.       120 EILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKA
+
+ref|WP_32       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMM
+                180 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||.
+WXX52402.       180 LEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV
+
+ref|WP_32       239
+                239
+WXX52402.       239
+
+""",
+            )
+        with self.assertRaises(IndexError) as cm:
+            record[12]
+        self.assertEqual(str(cm.exception), "index out of range")
+        with self.assertRaises(TypeError) as cm:
+            record[None]
+        self.assertEqual(str(cm.exception), "key must be an integer, slice, or str")
+        with self.assertRaises(KeyError) as cm:
+            record["weird_key"]
+        self.assertEqual(str(cm.exception), "'weird_key'")
+        target_id = "ref|WP_326121348.1|"
+        self.assertIn(target_id, record)
+        self.assertNotIn("weird_id", record)
+        self.assertEqual(record[target_id].target.id, target_id)
+        self.assertEqual(record.index(target_id), 3)
+        with self.assertRaises(ValueError) as cm:
+            record.index("weird_id")
+        self.assertEqual(str(cm.exception), "'weird_id' not found")
+        self.assertEqual(
+            repr(hit),
+            "<Bio.Blast.Hit target.id='ref|WP_326211018.1|' query.id='WXX52402.1'; 1 HSP>",
+        )
+        self.assertEqual(
+            repr(hit[:0]), "<Bio.Blast.Hit target.id='ref|WP_326211018.1|'; no hits>"
+        )
+        self.assertEqual(
+            record.keys(),
+            [
+                "ref|WP_003221446.1|",
+                "dbj|BAI85158.2|",
+                "ref|WP_120028072.1|",
+                "ref|WP_326121348.1|",
+                "ref|WP_128473893.1|",
+                "ref|WP_174228079.1|",
+                "ref|WP_315947263.1|",
+                "ref|WP_219912761.1|",
+                "ref|WP_038828182.1|",
+                "ref|WP_326211018.1|",
+            ],
+        )
+        self.assertEqual(len(record.stat), 7)
+        self.assertEqual(record.stat["db-num"], 718658123)
+        self.assertEqual(record.stat["db-len"], 277418989154)
+        if xml2 is True:
+            self.assertEqual(record.stat["hsp-len"], 161)
+            self.assertEqual(record.stat["eff-space"], 12613772445378)
+        else:
+            self.assertEqual(record.stat["hsp-len"], 0)
+            self.assertEqual(record.stat["eff-space"], 0)
+        self.assertAlmostEqual(record.stat["kappa"], 0.041)
+        self.assertAlmostEqual(record.stat["lambda"], 0.267)
+        self.assertAlmostEqual(record.stat["entropy"], 0.14)
+
+    def test_xml_21500_blastp_001_writer(self):
+        """Writing BLASTP 2.15.0+ (xml_21500_blastp_001.xml)."""
+        filename = "xml_21500_blastp_001.xml"
+        path = os.path.join("Blast", filename)
+        with Blast.parse(path) as records:
+            stream = io.BytesIO()
+            n = Blast.write(records, stream)
+            self.assertEqual(n, 1)
+            stream.seek(0)
+            written_records = Blast.parse(stream)
+            self.check_xml_21500_blastp_001_records(written_records)
+
+    def test_xml2_21500_blastp_001_writer(self):
+        """Writing BLASTP 2.15.0+ (xml2_21500_blastp_001.xml)."""
+        filename = "xml2_21500_blastp_001.xml"
+        path = os.path.join("Blast", filename)
+        with Blast.parse(path) as records:
+            stream = io.BytesIO()
+            n = Blast.write(records, stream, fmt="XML2")
+            self.assertEqual(n, 1)
+            stream.seek(0)
+            written_records = Blast.parse(stream)
+            self.check_xml_21500_blastp_001_records(written_records, xml2=True)
+
+
+class TestBlastn(unittest.TestCase):
+    """Test the Blast XML parser for blastn output."""
+
+    def test_xml_21500_blastn_001_parser(self):
+        """Parsing BLASTN 2.15.0+ (xml_21500_blastn_001.xml)."""
+        filename = "xml_21500_blastn_001.xml"
+        path = os.path.join("Blast", filename)
+        with open(path, "rb") as stream:
+            records = Blast.parse(stream)
+            self.check_xml_21500_blastn_001_records(records)
+        with Blast.parse(path) as records:
+            self.check_xml_21500_blastn_001_records(records)
+        with open(path, "rb") as stream:
+            record = Blast.read(stream)
+        self.check_xml_21500_blastn_001_record(record)
+        record = Blast.read(path)
+        self.check_xml_21500_blastn_001_record(record)
+        with Blast.parse(path) as records:
+            self.assertEqual(
+                str(records),
+                """\
+Program: BLASTN 2.15.0+
+     db: genomic/10090/GCF_000001635.26
+
+  Query: Query_78041 (length=285)
+         G26684.1 human STS STS_D11570, sequence tagged site
    Hits: ----  -----  ----------------------------------------------------------
             #  # HSP  ID + description
          ----  -----  ----------------------------------------------------------
@@ -2009,42 +3522,42 @@ Program: BLASTN 2.9.0+
             3      2  gi|372099108|ref|NC_000068.7|  Mus musculus strain C57B...
             4      2  gi|372099097|ref|NC_000079.6|  Mus musculus strain C57B...
             5      2  gi|372099098|ref|NC_000078.6|  Mus musculus strain C57B...
-            6      1  gi|372099109|ref|NC_000067.6|  Mus musculus strain C57B...
-            7      1  gi|372099101|ref|NC_000075.6|  Mus musculus strain C57B...
-            8      1  gi|372099100|ref|NC_000076.6|  Mus musculus strain C57B...
-            9      1  gi|372099094|ref|NC_000082.6|  Mus musculus strain C57B...""",
+            6      1  gi|372099049|ref|NT_187008.1|  Mus musculus strain 129S...
+            7      1  gi|372099109|ref|NC_000067.6|  Mus musculus strain C57B...
+            8      1  gi|372099101|ref|NC_000075.6|  Mus musculus strain C57B...
+            9      1  gi|372099100|ref|NC_000076.6|  Mus musculus strain C57B...
+           10      1  gi|372099094|ref|NC_000082.6|  Mus musculus strain C57B...""",
             )
 
-    def test_xml_2900_blastn_001_v2_parser(self):
-        """Parsing BLASTN 2.9.0+ (xml_2900_blastn_001_v2.xml)."""
-        filename = "xml_2900_blastn_001_v2.xml"
+    def test_xml2_21500_blastn_001_parser(self):
+        """Parsing BLASTN 2.15.0+ (xml2_21500_blastn_001.xml)."""
+        filename = "xml2_21500_blastn_001.xml"
         path = os.path.join("Blast", filename)
         with open(path, "rb") as stream:
             records = Blast.parse(stream)
-            self.check_xml_2900_blastn_001_records(records, xml2=True)
+            self.check_xml_21500_blastn_001_records(records, xml2=True)
         with Blast.parse(path) as records:
-            self.check_xml_2900_blastn_001_records(records, xml2=True)
+            self.check_xml_21500_blastn_001_records(records, xml2=True)
         with open(path, "rb") as stream:
             record = Blast.read(stream)
-        self.check_xml_2900_blastn_001_record(record, xml2=True)
+        self.check_xml_21500_blastn_001_record(record, xml2=True)
         record = Blast.read(path)
-        self.check_xml_2900_blastn_001_record(record, xml2=True)
+        self.check_xml_21500_blastn_001_record(record, xml2=True)
 
-    def check_xml_2900_blastn_001_records(self, records, xml2=False):
+    def check_xml_21500_blastn_001_records(self, records, xml2=False):
         self.assertEqual(records.program, "blastn")
-        self.assertEqual(records.version, "BLASTN 2.9.0+")
+        self.assertEqual(records.version, "BLASTN 2.15.0+")
         self.assertEqual(
             records.reference,
             'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
         )
-        self.assertEqual(
-            records.db, "GPIPE/10090/current/all_top_level GPIPE/10090/current/rna"
-        )
+        self.assertEqual(records.db, "genomic/10090/GCF_000001635.26")
         if xml2 is False:
             self.assertIsInstance(records.query, SeqRecord)
-            self.assertEqual(records.query.id, "G26684.1")
+            self.assertEqual(records.query.id, "Query_78041")
             self.assertEqual(
-                records.query.description, "human STS STS_D11570, sequence tagged site"
+                records.query.description,
+                "G26684.1 human STS STS_D11570, sequence tagged site",
             )
             self.assertEqual(repr(records.query.seq), "Seq(None, length=285)")
         self.assertEqual(len(records.param), 6)
@@ -2053,34 +3566,35 @@ Program: BLASTN 2.9.0+
         self.assertEqual(records.param["sc-mismatch"], -3)
         self.assertEqual(records.param["gap-open"], 5)
         self.assertEqual(records.param["gap-extend"], 2)
-        self.assertEqual(records.param["filter"], "R -d repeatmasker/repeat_9989;m;F;")
+        self.assertEqual(records.param["filter"], "L;m;")
         record = next(records)
         self.assertRaises(StopIteration, next, records)
-        self.check_xml_2900_blastn_001_record(record, xml2=xml2)
+        self.check_xml_21500_blastn_001_record(record, xml2=xml2)
 
-    def check_xml_2900_blastn_001_record(self, record, xml2=False):
+    def check_xml_21500_blastn_001_record(self, record, xml2=False):
         if xml2 is False:
             self.assertEqual(record.num, 1)
         self.assertIsInstance(record.query, SeqRecord)
-        self.assertEqual(record.query.id, "G26684.1")
+        self.assertEqual(record.query.id, "Query_78041")
         self.assertEqual(
-            record.query.description, "human STS STS_D11570, sequence tagged site"
+            record.query.description,
+            "G26684.1 human STS STS_D11570, sequence tagged site",
         )
         self.assertEqual(repr(record.query.seq), "Seq(None, length=285)")
 
         self.assertEqual(len(record.stat), 7)
-        self.assertEqual(record.stat["db-num"], 107382)
-        self.assertEqual(record.stat["db-len"], 3164670549)
+        self.assertEqual(record.stat["db-num"], 239)
+        self.assertEqual(record.stat["db-len"], 2818974565)
         if xml2 is True:
             self.assertEqual(record.stat["hsp-len"], 31)
-            self.assertEqual(record.stat["eff-space"], 802980793578)
+            self.assertEqual(record.stat["eff-space"], 716017657624)
         else:
             self.assertEqual(record.stat["hsp-len"], 0)
-            self.assertAlmostEqual(record.stat["eff-space"], 0.0)
+            self.assertEqual(record.stat["eff-space"], 0)
         self.assertAlmostEqual(record.stat["kappa"], 0.41)
         self.assertAlmostEqual(record.stat["lambda"], 0.625)
         self.assertAlmostEqual(record.stat["entropy"], 0.78)
-        self.assertEqual(len(record), 10)
+        self.assertEqual(len(record), 11)
         hit = record[0]
         self.assertEqual(hit.num, 1)
         self.assertIsInstance(hit.target, SeqRecord)
@@ -2088,7 +3602,7 @@ Program: BLASTN 2.9.0+
         self.assertEqual(hit.target.name, "NC_000069")
         self.assertEqual(
             hit.target.description,
-            "Mus musculus strain C57BL/6J chromosome 3, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 3, GRCm38.p6 C57BL/6J",
         )
         if xml2 is True:
             self.assertEqual(hit.target.annotations["taxid"], 10090)
@@ -2099,7 +3613,7 @@ Program: BLASTN 2.9.0+
         self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 44.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 40.9604)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 0.375311)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 0.334664)
         self.assertEqual(hsp.annotations["identity"], 30)
         if xml2 is False:
             self.assertEqual(hsp.annotations["positive"], 30)
@@ -2118,9 +3632,9 @@ Program: BLASTN 2.9.0+
             repr(hsp.query.seq),
             "Seq({133: 'GAATCCTAGAGGCTTGATTGGCCCAGGCTGCTG'}, length=285)",
         )
-        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(hsp.query.id, "Query_78041")
         self.assertEqual(
-            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+            hsp.query.description, "G26684.1 human STS STS_D11570, sequence tagged site"
         )
         self.assertEqual(len(hsp.query.features), 0)
         self.assertEqual(
@@ -2131,7 +3645,7 @@ Program: BLASTN 2.9.0+
         self.assertEqual(hsp.target.name, "NC_000069")
         self.assertEqual(
             hsp.target.description,
-            "Mus musculus strain C57BL/6J chromosome 3, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 3, GRCm38.p6 C57BL/6J",
         )
         if xml2 is True:
             self.assertEqual(hit.target.annotations["taxid"], 10090)
@@ -2144,17 +3658,17 @@ Program: BLASTN 2.9.0+
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099107|ref|NC_000069.6| Length: 160039680 Strand: Minus
-        Mus musculus strain C57BL/6J chromosome 3, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 3, GRCm38.p6 C57BL/6J
 
-Score:40 bits(44), Expect:0.4,
+Score:40 bits(44), Expect:0.3,
 Identities:30/34(88%),  Gaps:1.34(3%)
 
 gi|372099 101449177 GAATCCTAGAGGCTGGACTGGCCCTGGCCTGCTG 101449143
                   0 ||||||||||||||.||.||||||.||-||||||        34
-G26684.1        133 GAATCCTAGAGGCTTGATTGGCCCAGG-CTGCTG       166
+Query_780       133 GAATCCTAGAGGCTTGATTGGCCCAGG-CTGCTG       166
 
 """,
             )
@@ -2162,17 +3676,17 @@ G26684.1        133 GAATCCTAGAGGCTTGATTGGCCCAGG-CTGCTG       166
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099107|ref|NC_000069.6| Length: 160039680 Strand: Minus
-        Mus musculus strain C57BL/6J chromosome 3, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 3, GRCm38.p6 C57BL/6J
 
-Score:40 bits(44), Expect:0.4,
+Score:40 bits(44), Expect:0.3,
 Identities:30/34(88%),  Positives:30/34(88%),  Gaps:1.34(3%)
 
 gi|372099 101449177 GAATCCTAGAGGCTGGACTGGCCCTGGCCTGCTG 101449143
                   0 ||||||||||||||.||.||||||.||-||||||        34
-G26684.1        133 GAATCCTAGAGGCTTGATTGGCCCAGG-CTGCTG       166
+Query_780       133 GAATCCTAGAGGCTTGATTGGCCCAGG-CTGCTG       166
 
 """,
             )
@@ -2183,7 +3697,7 @@ G26684.1        133 GAATCCTAGAGGCTTGATTGGCCCAGG-CTGCTG       166
         self.assertEqual(hit.target.name, "NC_000073")
         self.assertEqual(
             hit.target.description,
-            "Mus musculus strain C57BL/6J chromosome 7, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 7, GRCm38.p6 C57BL/6J",
         )
         if xml2 is True:
             self.assertEqual(hit.target.annotations["taxid"], 10090)
@@ -2194,7 +3708,7 @@ G26684.1        133 GAATCCTAGAGGCTTGATTGGCCCAGG-CTGCTG       166
         self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 44.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 40.9604)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 0.375311)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 0.334664)
         self.assertEqual(hsp.annotations["identity"], 26)
         if xml2 is False:
             self.assertEqual(hsp.annotations["positive"], 26)
@@ -2213,9 +3727,9 @@ G26684.1        133 GAATCCTAGAGGCTTGATTGGCCCAGG-CTGCTG       166
             repr(hsp.query.seq),
             "Seq({204: 'GAAAGGAAATNAAAATGGAAAGTTCTTGT'}, length=285)",
         )
-        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(hsp.query.id, "Query_78041")
         self.assertEqual(
-            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+            hsp.query.description, "G26684.1 human STS STS_D11570, sequence tagged site"
         )
         self.assertEqual(len(hsp.query.features), 0)
         self.assertEqual(
@@ -2226,7 +3740,7 @@ G26684.1        133 GAATCCTAGAGGCTTGATTGGCCCAGG-CTGCTG       166
         self.assertEqual(hsp.target.name, "NC_000073")
         self.assertEqual(
             hsp.target.description,
-            "Mus musculus strain C57BL/6J chromosome 7, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 7, GRCm38.p6 C57BL/6J",
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(hsp.annotations["midline"], "|||||||||  ||||||||||||||| ||")
@@ -2234,17 +3748,17 @@ G26684.1        133 GAATCCTAGAGGCTTGATTGGCCCAGG-CTGCTG       166
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099103|ref|NC_000073.6| Length: 145441459 Strand: Minus
-        Mus musculus strain C57BL/6J chromosome 7, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 7, GRCm38.p6 C57BL/6J
 
-Score:40 bits(44), Expect:0.4,
+Score:40 bits(44), Expect:0.3,
 Identities:26/29(90%),  Gaps:0.29(0%)
 
 gi|372099 131772185 GAAAGGAAAAAAAAATGGAAAGTTCTGGT 131772156
                   0 |||||||||..|||||||||||||||.||        29
-G26684.1        204 GAAAGGAAATNAAAATGGAAAGTTCTTGT       233
+Query_780       204 GAAAGGAAATNAAAATGGAAAGTTCTTGT       233
 
 """,
             )
@@ -2252,17 +3766,17 @@ G26684.1        204 GAAAGGAAATNAAAATGGAAAGTTCTTGT       233
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099103|ref|NC_000073.6| Length: 145441459 Strand: Minus
-        Mus musculus strain C57BL/6J chromosome 7, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 7, GRCm38.p6 C57BL/6J
 
-Score:40 bits(44), Expect:0.4,
+Score:40 bits(44), Expect:0.3,
 Identities:26/29(90%),  Positives:26/29(90%),  Gaps:0.29(0%)
 
 gi|372099 131772185 GAAAGGAAAAAAAAATGGAAAGTTCTGGT 131772156
                   0 |||||||||..|||||||||||||||.||        29
-G26684.1        204 GAAAGGAAATNAAAATGGAAAGTTCTTGT       233
+Query_780       204 GAAAGGAAATNAAAATGGAAAGTTCTTGT       233
 
 """,
             )
@@ -2273,7 +3787,7 @@ G26684.1        204 GAAAGGAAATNAAAATGGAAAGTTCTTGT       233
         self.assertEqual(hit.target.name, "NC_000070")
         self.assertEqual(
             hit.target.description,
-            "Mus musculus strain C57BL/6J chromosome 4, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 4, GRCm38.p6 C57BL/6J",
         )
         if xml2 is True:
             self.assertEqual(hit.target.annotations["taxid"], 10090)
@@ -2284,7 +3798,7 @@ G26684.1        204 GAAAGGAAATNAAAATGGAAAGTTCTTGT       233
         self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 43.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 40.0587)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 1.30996)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 1.16809)
         self.assertEqual(hsp.annotations["identity"], 23)
         if xml2 is False:
             self.assertEqual(hsp.annotations["positive"], 23)
@@ -2302,9 +3816,9 @@ G26684.1        204 GAAAGGAAATNAAAATGGAAAGTTCTTGT       233
         self.assertEqual(
             repr(hsp.query.seq), "Seq({61: 'CCAACACAGGCCAGCGACTTCTGG'}, length=285)"
         )
-        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(hsp.query.id, "Query_78041")
         self.assertEqual(
-            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+            hsp.query.description, "G26684.1 human STS STS_D11570, sequence tagged site"
         )
         self.assertEqual(len(hsp.query.features), 0)
         self.assertEqual(
@@ -2315,7 +3829,7 @@ G26684.1        204 GAAAGGAAATNAAAATGGAAAGTTCTTGT       233
         self.assertEqual(hsp.target.name, "NC_000070")
         self.assertEqual(
             hsp.target.description,
-            "Mus musculus strain C57BL/6J chromosome 4, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 4, GRCm38.p6 C57BL/6J",
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(hsp.annotations["midline"], "|||||||||||||||| |||||||")
@@ -2323,17 +3837,17 @@ G26684.1        204 GAAAGGAAATNAAAATGGAAAGTTCTTGT       233
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099106|ref|NC_000070.6| Length: 156508116 Strand: Minus
-        Mus musculus strain C57BL/6J chromosome 4, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 4, GRCm38.p6 C57BL/6J
 
 Score:40 bits(43), Expect:1,
 Identities:23/24(96%),  Gaps:0.24(0%)
 
 gi|372099   9607562 CCAACACAGGCCAGCGGCTTCTGG 9607538
                   0 ||||||||||||||||.|||||||      24
-G26684.1         61 CCAACACAGGCCAGCGACTTCTGG      85
+Query_780        61 CCAACACAGGCCAGCGACTTCTGG      85
 
 """,
             )
@@ -2341,17 +3855,17 @@ G26684.1         61 CCAACACAGGCCAGCGACTTCTGG      85
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099106|ref|NC_000070.6| Length: 156508116 Strand: Minus
-        Mus musculus strain C57BL/6J chromosome 4, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 4, GRCm38.p6 C57BL/6J
 
 Score:40 bits(43), Expect:1,
 Identities:23/24(96%),  Positives:23/24(96%),  Gaps:0.24(0%)
 
 gi|372099   9607562 CCAACACAGGCCAGCGGCTTCTGG 9607538
                   0 ||||||||||||||||.|||||||      24
-G26684.1         61 CCAACACAGGCCAGCGACTTCTGG      85
+Query_780        61 CCAACACAGGCCAGCGACTTCTGG      85
 
 """,
             )
@@ -2359,7 +3873,7 @@ G26684.1         61 CCAACACAGGCCAGCGACTTCTGG      85
         self.assertEqual(hsp.num, 2)
         self.assertAlmostEqual(hsp.score, 40.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 4.07705)
         self.assertEqual(hsp.annotations["identity"], 28)
         if xml2 is False:
             self.assertEqual(hsp.annotations["positive"], 28)
@@ -2378,9 +3892,9 @@ G26684.1         61 CCAACACAGGCCAGCGACTTCTGG      85
             repr(hsp.query.seq),
             "Seq({241: 'GCCTGACATGGGTAGCTGCTCAATAAATGCT'}, length=285)",
         )
-        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(hsp.query.id, "Query_78041")
         self.assertEqual(
-            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+            hsp.query.description, "G26684.1 human STS STS_D11570, sequence tagged site"
         )
         self.assertEqual(len(hsp.query.features), 0)
         self.assertEqual(
@@ -2391,7 +3905,7 @@ G26684.1         61 CCAACACAGGCCAGCGACTTCTGG      85
         self.assertEqual(hsp.target.name, "NC_000070")
         self.assertEqual(
             hsp.target.description,
-            "Mus musculus strain C57BL/6J chromosome 4, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 4, GRCm38.p6 C57BL/6J",
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(hsp.annotations["midline"], "||||| ||||  ||| ||||||||||||||||")
@@ -2399,17 +3913,17 @@ G26684.1         61 CCAACACAGGCCAGCGACTTCTGG      85
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099106|ref|NC_000070.6| Length: 156508116 Strand: Plus
-        Mus musculus strain C57BL/6J chromosome 4, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 4, GRCm38.p6 C57BL/6J
 
-Score:37 bits(40), Expect:5,
+Score:37 bits(40), Expect:4,
 Identities:28/32(88%),  Gaps:1.32(3%)
 
 gi|372099 142902531 GCCTGGCATGAAGTAACTGCTCAATAAATGCT 142902563
                   0 |||||.||||.-|||.||||||||||||||||        32
-G26684.1        241 GCCTGACATGG-GTAGCTGCTCAATAAATGCT       272
+Query_780       241 GCCTGACATGG-GTAGCTGCTCAATAAATGCT       272
 
 """,
             )
@@ -2417,17 +3931,17 @@ G26684.1        241 GCCTGACATGG-GTAGCTGCTCAATAAATGCT       272
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099106|ref|NC_000070.6| Length: 156508116 Strand: Plus
-        Mus musculus strain C57BL/6J chromosome 4, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 4, GRCm38.p6 C57BL/6J
 
-Score:37 bits(40), Expect:5,
+Score:37 bits(40), Expect:4,
 Identities:28/32(88%),  Positives:28/32(88%),  Gaps:1.32(3%)
 
 gi|372099 142902531 GCCTGGCATGAAGTAACTGCTCAATAAATGCT 142902563
                   0 |||||.||||.-|||.||||||||||||||||        32
-G26684.1        241 GCCTGACATGG-GTAGCTGCTCAATAAATGCT       272
+Query_780       241 GCCTGACATGG-GTAGCTGCTCAATAAATGCT       272
 
 """,
             )
@@ -2438,7 +3952,7 @@ G26684.1        241 GCCTGACATGG-GTAGCTGCTCAATAAATGCT       272
         self.assertEqual(hit.target.name, "NC_000068")
         self.assertEqual(
             hit.target.description,
-            "Mus musculus strain C57BL/6J chromosome 2, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 2, GRCm38.p6 C57BL/6J",
         )
         if xml2 is True:
             self.assertEqual(hit.target.annotations["taxid"], 10090)
@@ -2449,7 +3963,7 @@ G26684.1        241 GCCTGACATGG-GTAGCTGCTCAATAAATGCT       272
         self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 42.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 39.157)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 1.30996)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 1.16809)
         self.assertEqual(hsp.annotations["identity"], 27)
         if xml2 is False:
             self.assertEqual(hsp.annotations["positive"], 27)
@@ -2468,9 +3982,9 @@ G26684.1        241 GCCTGACATGG-GTAGCTGCTCAATAAATGCT       272
             repr(hsp.query.seq),
             "Seq({238: 'AAGGCCTGACATGGGTAGCTGCTCAATAAAT'}, length=285)",
         )
-        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(hsp.query.id, "Query_78041")
         self.assertEqual(
-            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+            hsp.query.description, "G26684.1 human STS STS_D11570, sequence tagged site"
         )
         self.assertEqual(len(hsp.query.features), 0)
         self.assertEqual(
@@ -2481,7 +3995,7 @@ G26684.1        241 GCCTGACATGG-GTAGCTGCTCAATAAATGCT       272
         self.assertEqual(hsp.target.name, "NC_000068")
         self.assertEqual(
             hsp.target.description,
-            "Mus musculus strain C57BL/6J chromosome 2, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 2, GRCm38.p6 C57BL/6J",
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(hsp.annotations["midline"], "||| |||| |||| |||| ||||||||||||")
@@ -2489,17 +4003,17 @@ G26684.1        241 GCCTGACATGG-GTAGCTGCTCAATAAATGCT       272
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099108|ref|NC_000068.7| Length: 182113224 Strand: Plus
-        Mus musculus strain C57BL/6J chromosome 2, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 2, GRCm38.p6 C57BL/6J
 
 Score:39 bits(42), Expect:1,
 Identities:27/31(87%),  Gaps:0.31(0%)
 
 gi|372099   3799646 AAGTCCTGGCATGAGTAGTTGCTCAATAAAT 3799677
                   0 |||.||||.||||.||||.||||||||||||      31
-G26684.1        238 AAGGCCTGACATGGGTAGCTGCTCAATAAAT     269
+Query_780       238 AAGGCCTGACATGGGTAGCTGCTCAATAAAT     269
 
 """,
             )
@@ -2507,17 +4021,17 @@ G26684.1        238 AAGGCCTGACATGGGTAGCTGCTCAATAAAT     269
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099108|ref|NC_000068.7| Length: 182113224 Strand: Plus
-        Mus musculus strain C57BL/6J chromosome 2, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 2, GRCm38.p6 C57BL/6J
 
 Score:39 bits(42), Expect:1,
 Identities:27/31(87%),  Positives:27/31(87%),  Gaps:0.31(0%)
 
 gi|372099   3799646 AAGTCCTGGCATGAGTAGTTGCTCAATAAAT 3799677
                   0 |||.||||.||||.||||.||||||||||||      31
-G26684.1        238 AAGGCCTGACATGGGTAGCTGCTCAATAAAT     269
+Query_780       238 AAGGCCTGACATGGGTAGCTGCTCAATAAAT     269
 
 """,
             )
@@ -2525,7 +4039,7 @@ G26684.1        238 AAGGCCTGACATGGGTAGCTGCTCAATAAAT     269
         self.assertEqual(hsp.num, 2)
         self.assertAlmostEqual(hsp.score, 41.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 38.2554)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 4.07705)
         self.assertEqual(hsp.annotations["identity"], 23)
         if xml2 is False:
             self.assertEqual(hsp.annotations["positive"], 23)
@@ -2543,9 +4057,9 @@ G26684.1        238 AAGGCCTGACATGGGTAGCTGCTCAATAAAT     269
         self.assertEqual(
             repr(hsp.query.seq), "Seq({210: 'AAATNAAAATGGAAAGTTCTTGTAG'}, length=285)"
         )
-        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(hsp.query.id, "Query_78041")
         self.assertEqual(
-            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+            hsp.query.description, "G26684.1 human STS STS_D11570, sequence tagged site"
         )
         self.assertEqual(len(hsp.query.features), 0)
         self.assertEqual(
@@ -2556,7 +4070,7 @@ G26684.1        238 AAGGCCTGACATGGGTAGCTGCTCAATAAAT     269
         self.assertEqual(hsp.target.name, "NC_000068")
         self.assertEqual(
             hsp.target.description,
-            "Mus musculus strain C57BL/6J chromosome 2, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 2, GRCm38.p6 C57BL/6J",
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(hsp.annotations["midline"], "|||| |||||||||||||||| |||")
@@ -2564,17 +4078,17 @@ G26684.1        238 AAGGCCTGACATGGGTAGCTGCTCAATAAAT     269
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099108|ref|NC_000068.7| Length: 182113224 Strand: Plus
-        Mus musculus strain C57BL/6J chromosome 2, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 2, GRCm38.p6 C57BL/6J
 
-Score:38 bits(41), Expect:5,
+Score:38 bits(41), Expect:4,
 Identities:23/25(92%),  Gaps:0.25(0%)
 
 gi|372099  70278959 AAATGAAAATGGAAAGTTCTTATAG 70278984
                   0 ||||.||||||||||||||||.|||       25
-G26684.1        210 AAATNAAAATGGAAAGTTCTTGTAG      235
+Query_780       210 AAATNAAAATGGAAAGTTCTTGTAG      235
 
 """,
             )
@@ -2582,17 +4096,17 @@ G26684.1        210 AAATNAAAATGGAAAGTTCTTGTAG      235
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099108|ref|NC_000068.7| Length: 182113224 Strand: Plus
-        Mus musculus strain C57BL/6J chromosome 2, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 2, GRCm38.p6 C57BL/6J
 
-Score:38 bits(41), Expect:5,
+Score:38 bits(41), Expect:4,
 Identities:23/25(92%),  Positives:23/25(92%),  Gaps:0.25(0%)
 
 gi|372099  70278959 AAATGAAAATGGAAAGTTCTTATAG 70278984
                   0 ||||.||||||||||||||||.|||       25
-G26684.1        210 AAATNAAAATGGAAAGTTCTTGTAG      235
+Query_780       210 AAATNAAAATGGAAAGTTCTTGTAG      235
 
 """,
             )
@@ -2603,7 +4117,7 @@ G26684.1        210 AAATNAAAATGGAAAGTTCTTGTAG      235
         self.assertEqual(hit.target.name, "NC_000079")
         self.assertEqual(
             hit.target.description,
-            "Mus musculus strain C57BL/6J chromosome 13, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 13, GRCm38.p6 C57BL/6J",
         )
         if xml2 is True:
             self.assertEqual(hit.target.annotations["taxid"], 10090)
@@ -2614,7 +4128,7 @@ G26684.1        210 AAATNAAAATGGAAAGTTCTTGTAG      235
         self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 42.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 39.157)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 1.30996)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 1.16809)
         self.assertEqual(hsp.annotations["identity"], 25)
         if xml2 is False:
             self.assertEqual(hsp.annotations["positive"], 25)
@@ -2633,9 +4147,9 @@ G26684.1        210 AAATNAAAATGGAAAGTTCTTGTAG      235
             repr(hsp.query.seq),
             "Seq({206: 'AAGGAAATNAAAATGGAAAGTTCTTGTA'}, length=285)",
         )
-        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(hsp.query.id, "Query_78041")
         self.assertEqual(
-            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+            hsp.query.description, "G26684.1 human STS STS_D11570, sequence tagged site"
         )
         self.assertEqual(len(hsp.query.features), 0)
         self.assertEqual(
@@ -2646,7 +4160,7 @@ G26684.1        210 AAATNAAAATGGAAAGTTCTTGTAG      235
         self.assertEqual(hsp.target.name, "NC_000079")
         self.assertEqual(
             hsp.target.description,
-            "Mus musculus strain C57BL/6J chromosome 13, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 13, GRCm38.p6 C57BL/6J",
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(hsp.annotations["midline"], "||||| || |||||||||||||||| ||")
@@ -2654,17 +4168,17 @@ G26684.1        210 AAATNAAAATGGAAAGTTCTTGTAG      235
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099097|ref|NC_000079.6| Length: 120421639 Strand: Minus
-        Mus musculus strain C57BL/6J chromosome 13, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 13, GRCm38.p6 C57BL/6J
 
 Score:39 bits(42), Expect:1,
 Identities:25/28(89%),  Gaps:0.28(0%)
 
 gi|372099  26806584 AAGGACATCAAAATGGAAAGTTCTTCTA 26806556
                   0 |||||.||.||||||||||||||||.||       28
-G26684.1        206 AAGGAAATNAAAATGGAAAGTTCTTGTA      234
+Query_780       206 AAGGAAATNAAAATGGAAAGTTCTTGTA      234
 
 """,
             )
@@ -2672,17 +4186,17 @@ G26684.1        206 AAGGAAATNAAAATGGAAAGTTCTTGTA      234
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099097|ref|NC_000079.6| Length: 120421639 Strand: Minus
-        Mus musculus strain C57BL/6J chromosome 13, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 13, GRCm38.p6 C57BL/6J
 
 Score:39 bits(42), Expect:1,
 Identities:25/28(89%),  Positives:25/28(89%),  Gaps:0.28(0%)
 
 gi|372099  26806584 AAGGACATCAAAATGGAAAGTTCTTCTA 26806556
                   0 |||||.||.||||||||||||||||.||       28
-G26684.1        206 AAGGAAATNAAAATGGAAAGTTCTTGTA      234
+Query_780       206 AAGGAAATNAAAATGGAAAGTTCTTGTA      234
 
 """,
             )
@@ -2690,7 +4204,7 @@ G26684.1        206 AAGGAAATNAAAATGGAAAGTTCTTGTA      234
         self.assertEqual(hsp.num, 2)
         self.assertAlmostEqual(hsp.score, 40.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 4.07705)
         self.assertEqual(hsp.annotations["identity"], 32)
         if xml2 is False:
             self.assertEqual(hsp.annotations["positive"], 32)
@@ -2709,9 +4223,9 @@ G26684.1        206 AAGGAAATNAAAATGGAAAGTTCTTGTA      234
             repr(hsp.query.seq),
             "Seq({233: 'AGCGCAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTA'}, length=285)",
         )
-        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(hsp.query.id, "Query_78041")
         self.assertEqual(
-            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+            hsp.query.description, "G26684.1 human STS STS_D11570, sequence tagged site"
         )
         self.assertEqual(len(hsp.query.features), 0)
         self.assertEqual(
@@ -2722,7 +4236,7 @@ G26684.1        206 AAGGAAATNAAAATGGAAAGTTCTTGTA      234
         self.assertEqual(hsp.target.name, "NC_000079")
         self.assertEqual(
             hsp.target.description,
-            "Mus musculus strain C57BL/6J chromosome 13, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 13, GRCm38.p6 C57BL/6J",
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(
@@ -2732,17 +4246,17 @@ G26684.1        206 AAGGAAATNAAAATGGAAAGTTCTTGTA      234
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099097|ref|NC_000079.6| Length: 120421639 Strand: Minus
-        Mus musculus strain C57BL/6J chromosome 13, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 13, GRCm38.p6 C57BL/6J
 
-Score:37 bits(40), Expect:5,
+Score:37 bits(40), Expect:4,
 Identities:32/40(80%),  Gaps:0.40(0%)
 
 gi|372099  56840340 AGCGCAAGGCCTGACATAGGAAAATGTTCAGTGAATACTA 56840300
                   0 |||||||||||||||||.||.|..||.|||.|.|||.|||       40
-G26684.1        233 AGCGCAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTA      273
+Query_780       233 AGCGCAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTA      273
 
 """,
             )
@@ -2750,17 +4264,17 @@ G26684.1        233 AGCGCAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTA      273
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099097|ref|NC_000079.6| Length: 120421639 Strand: Minus
-        Mus musculus strain C57BL/6J chromosome 13, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 13, GRCm38.p6 C57BL/6J
 
-Score:37 bits(40), Expect:5,
+Score:37 bits(40), Expect:4,
 Identities:32/40(80%),  Positives:32/40(80%),  Gaps:0.40(0%)
 
 gi|372099  56840340 AGCGCAAGGCCTGACATAGGAAAATGTTCAGTGAATACTA 56840300
                   0 |||||||||||||||||.||.|..||.|||.|.|||.|||       40
-G26684.1        233 AGCGCAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTA      273
+Query_780       233 AGCGCAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTA      273
 
 """,
             )
@@ -2771,7 +4285,7 @@ G26684.1        233 AGCGCAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTA      273
         self.assertEqual(hit.target.name, "NC_000078")
         self.assertEqual(
             hit.target.description,
-            "Mus musculus strain C57BL/6J chromosome 12, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 12, GRCm38.p6 C57BL/6J",
         )
         if xml2 is True:
             self.assertEqual(hit.target.annotations["taxid"], 10090)
@@ -2782,7 +4296,7 @@ G26684.1        233 AGCGCAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTA      273
         self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 41.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 38.2554)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 4.07705)
         self.assertEqual(hsp.annotations["identity"], 22)
         if xml2 is False:
             self.assertEqual(hsp.annotations["positive"], 22)
@@ -2800,9 +4314,9 @@ G26684.1        233 AGCGCAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTA      273
         self.assertEqual(
             repr(hsp.query.seq), "Seq({48: 'CATCCATTCACACCCAACACAGG'}, length=285)"
         )
-        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(hsp.query.id, "Query_78041")
         self.assertEqual(
-            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+            hsp.query.description, "G26684.1 human STS STS_D11570, sequence tagged site"
         )
         self.assertEqual(len(hsp.query.features), 0)
         self.assertEqual(
@@ -2813,7 +4327,7 @@ G26684.1        233 AGCGCAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTA      273
         self.assertEqual(hsp.target.name, "NC_000078")
         self.assertEqual(
             hsp.target.description,
-            "Mus musculus strain C57BL/6J chromosome 12, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 12, GRCm38.p6 C57BL/6J",
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(hsp.annotations["midline"], "|||||||||||||||| ||||||")
@@ -2821,17 +4335,17 @@ G26684.1        233 AGCGCAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTA      273
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099098|ref|NC_000078.6| Length: 120129022 Strand: Plus
-        Mus musculus strain C57BL/6J chromosome 12, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 12, GRCm38.p6 C57BL/6J
 
-Score:38 bits(41), Expect:5,
+Score:38 bits(41), Expect:4,
 Identities:22/23(96%),  Gaps:0.23(0%)
 
 gi|372099 113030662 CATCCATTCACACCCAGCACAGG 113030685
                   0 ||||||||||||||||.||||||        23
-G26684.1         48 CATCCATTCACACCCAACACAGG        71
+Query_780        48 CATCCATTCACACCCAACACAGG        71
 
 """,
             )
@@ -2839,17 +4353,17 @@ G26684.1         48 CATCCATTCACACCCAACACAGG        71
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099098|ref|NC_000078.6| Length: 120129022 Strand: Plus
-        Mus musculus strain C57BL/6J chromosome 12, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 12, GRCm38.p6 C57BL/6J
 
-Score:38 bits(41), Expect:5,
+Score:38 bits(41), Expect:4,
 Identities:22/23(96%),  Positives:22/23(96%),  Gaps:0.23(0%)
 
 gi|372099 113030662 CATCCATTCACACCCAGCACAGG 113030685
                   0 ||||||||||||||||.||||||        23
-G26684.1         48 CATCCATTCACACCCAACACAGG        71
+Query_780        48 CATCCATTCACACCCAACACAGG        71
 
 """,
             )
@@ -2857,7 +4371,7 @@ G26684.1         48 CATCCATTCACACCCAACACAGG        71
         self.assertEqual(hsp.num, 2)
         self.assertAlmostEqual(hsp.score, 40.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 4.07705)
         self.assertEqual(hsp.annotations["identity"], 28)
         if xml2 is False:
             self.assertEqual(hsp.annotations["positive"], 28)
@@ -2876,9 +4390,9 @@ G26684.1         48 CATCCATTCACACCCAACACAGG        71
             repr(hsp.query.seq),
             "Seq({230: 'TGTAGCGCAAGGCCTGACATGGGTAGCTGCTC'}, length=285)",
         )
-        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(hsp.query.id, "Query_78041")
         self.assertEqual(
-            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+            hsp.query.description, "G26684.1 human STS STS_D11570, sequence tagged site"
         )
         self.assertEqual(len(hsp.query.features), 0)
         self.assertEqual(
@@ -2889,7 +4403,7 @@ G26684.1         48 CATCCATTCACACCCAACACAGG        71
         self.assertEqual(hsp.target.name, "NC_000078")
         self.assertEqual(
             hsp.target.description,
-            "Mus musculus strain C57BL/6J chromosome 12, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 12, GRCm38.p6 C57BL/6J",
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(hsp.annotations["midline"], "|||||| | ||||||||||||||| |||| ||")
@@ -2897,17 +4411,17 @@ G26684.1         48 CATCCATTCACACCCAACACAGG        71
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099098|ref|NC_000078.6| Length: 120129022 Strand: Minus
-        Mus musculus strain C57BL/6J chromosome 12, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 12, GRCm38.p6 C57BL/6J
 
-Score:37 bits(40), Expect:5,
+Score:37 bits(40), Expect:4,
 Identities:28/32(88%),  Gaps:1.32(3%)
 
 gi|372099 108990272 TGTAGCTCTAGGCCTGACATGGGT-GCTGGTC 108990241
                   0 ||||||.|.|||||||||||||||-||||.||        32
-G26684.1        230 TGTAGCGCAAGGCCTGACATGGGTAGCTGCTC       262
+Query_780       230 TGTAGCGCAAGGCCTGACATGGGTAGCTGCTC       262
 
 """,
             )
@@ -2915,28 +4429,131 @@ G26684.1        230 TGTAGCGCAAGGCCTGACATGGGTAGCTGCTC       262
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099098|ref|NC_000078.6| Length: 120129022 Strand: Minus
-        Mus musculus strain C57BL/6J chromosome 12, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 12, GRCm38.p6 C57BL/6J
 
-Score:37 bits(40), Expect:5,
+Score:37 bits(40), Expect:4,
 Identities:28/32(88%),  Positives:28/32(88%),  Gaps:1.32(3%)
 
 gi|372099 108990272 TGTAGCTCTAGGCCTGACATGGGT-GCTGGTC 108990241
                   0 ||||||.|.|||||||||||||||-||||.||        32
-G26684.1        230 TGTAGCGCAAGGCCTGACATGGGTAGCTGCTC       262
+Query_780       230 TGTAGCGCAAGGCCTGACATGGGTAGCTGCTC       262
 
 """,
             )
         hit = record[6]
         self.assertEqual(hit.num, 7)
         self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|372099049|ref|NT_187008.1|")
+        self.assertEqual(hit.target.name, "NT_187008")
+        self.assertEqual(
+            hit.target.description,
+            "Mus musculus strain 129S1/SvImJ chromosome 16 genomic scaffold, GRCm38.p6 alternate locus group 129S1/SvImJ 129S1/SVIMJ_MMCHR16_CTG2",
+        )
+        if xml2 is True:
+            self.assertEqual(hit.target.annotations["taxid"], 10090)
+            self.assertEqual(hit.target.annotations["sciname"], "Mus musculus")
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=250595)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 40.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 4.07705)
+        self.assertEqual(hsp.annotations["identity"], 43)
+        if xml2 is False:
+            self.assertEqual(hsp.annotations["positive"], 43)
+        self.assertEqual(hsp.annotations["gaps"], 2)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[158458, 158482, 158483, 158491, 158492, 158514],
+                          [   174,    198,    198,    206,    206,    228]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 56))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq({174: 'GGAGGCAAAGAATCCCTACCTCCTAGGGGTGAAAGGAAATNAAAATGGAAAGTT'}, length=285)",
+        )
+        self.assertEqual(hsp.query.id, "Query_78041")
+        self.assertEqual(
+            hsp.query.description, "G26684.1 human STS STS_D11570, sequence tagged site"
+        )
+        self.assertEqual(len(hsp.query.features), 0)
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({158458: 'GGAGGCAAAGAATCCCTACATTGTGACAGCTGATAAAGAAGGTAAAATGGAAAATT'}, length=250595)",
+        )
+        self.assertEqual(hsp.target.id, "gi|372099049|ref|NT_187008.1|")
+        self.assertEqual(hsp.target.name, "NT_187008")
+        self.assertEqual(
+            hsp.target.description,
+            "Mus musculus strain 129S1/SvImJ chromosome 16 genomic scaffold, GRCm38.p6 alternate locus group 129S1/SvImJ 129S1/SVIMJ_MMCHR16_CTG2",
+        )
+        self.assertEqual(len(hsp.target.features), 0)
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "||||||||||||||||||| |  | |  | ||| || |||   |||||||||| ||",
+        )
+        if xml2 is True:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
+Target: gi|372099049|ref|NT_187008.1| Length: 250595 Strand: Plus
+        Mus musculus strain 129S1/SvImJ chromosome 16 genomic scaffold,
+        GRCm38.p6 alternate locus group 129S1/SvImJ 129S1/SVIMJ_MMCHR16_CTG2
+
+Score:37 bits(40), Expect:4,
+Identities:43/56(77%),  Gaps:2.56(4%)
+
+gi|372099    158458 GGAGGCAAAGAATCCCTACATTGTGACAGCTGATAAAGAAGGTAAAATGGAAAATT
+                  0 |||||||||||||||||||.|..|-|..|.|||-||.|||...||||||||||.||
+Query_780       174 GGAGGCAAAGAATCCCTACCTCCT-AGGGGTGA-AAGGAAATNAAAATGGAAAGTT
+
+gi|372099    158514
+                 56
+Query_780       228
+
+""",
+            )
+        else:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
+Target: gi|372099049|ref|NT_187008.1| Length: 250595 Strand: Plus
+        Mus musculus strain 129S1/SvImJ chromosome 16 genomic scaffold,
+        GRCm38.p6 alternate locus group 129S1/SvImJ 129S1/SVIMJ_MMCHR16_CTG2
+
+Score:37 bits(40), Expect:4,
+Identities:43/56(77%),  Positives:43/56(77%),  Gaps:2.56(4%)
+
+gi|372099    158458 GGAGGCAAAGAATCCCTACATTGTGACAGCTGATAAAGAAGGTAAAATGGAAAATT
+                  0 |||||||||||||||||||.|..|-|..|.|||-||.|||...||||||||||.||
+Query_780       174 GGAGGCAAAGAATCCCTACCTCCT-AGGGGTGA-AAGGAAATNAAAATGGAAAGTT
+
+gi|372099    158514
+                 56
+Query_780       228
+
+""",
+            )
+        hit = record[7]
+        self.assertEqual(hit.num, 8)
+        self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|372099109|ref|NC_000067.6|")
         self.assertEqual(hit.target.name, "NC_000067")
         self.assertEqual(
             hit.target.description,
-            "Mus musculus strain C57BL/6J chromosome 1, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 1, GRCm38.p6 C57BL/6J",
         )
         if xml2 is True:
             self.assertEqual(hit.target.annotations["taxid"], 10090)
@@ -2947,7 +4564,7 @@ G26684.1        230 TGTAGCGCAAGGCCTGACATGGGTAGCTGCTC       262
         self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 40.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 4.07705)
         self.assertEqual(hsp.annotations["identity"], 35)
         if xml2 is False:
             self.assertEqual(hsp.annotations["positive"], 35)
@@ -2966,9 +4583,9 @@ G26684.1        230 TGTAGCGCAAGGCCTGACATGGGTAGCTGCTC       262
             repr(hsp.query.seq),
             "Seq({86: 'GCTCAGCCACAGACATGGTTTGTNACTNTTGAGCTTCTGTTCC'}, length=285)",
         )
-        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(hsp.query.id, "Query_78041")
         self.assertEqual(
-            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+            hsp.query.description, "G26684.1 human STS STS_D11570, sequence tagged site"
         )
         self.assertEqual(len(hsp.query.features), 0)
         self.assertEqual(
@@ -2979,7 +4596,7 @@ G26684.1        230 TGTAGCGCAAGGCCTGACATGGGTAGCTGCTC       262
         self.assertEqual(hsp.target.name, "NC_000067")
         self.assertEqual(
             hsp.target.description,
-            "Mus musculus strain C57BL/6J chromosome 1, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 1, GRCm38.p6 C57BL/6J",
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(
@@ -2989,17 +4606,17 @@ G26684.1        230 TGTAGCGCAAGGCCTGACATGGGTAGCTGCTC       262
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099109|ref|NC_000067.6| Length: 195471971 Strand: Plus
-        Mus musculus strain C57BL/6J chromosome 1, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 1, GRCm38.p6 C57BL/6J
 
-Score:37 bits(40), Expect:5,
+Score:37 bits(40), Expect:4,
 Identities:35/43(81%),  Gaps:2.43(5%)
 
 gi|372099  65190107 GCTCAGCCACATACATGGTTT-TAAGTGTTGAGGCTCT-TTCC 65190148
                   0 |||||||||||.|||||||||-|.|.|.|||||..|||-||||       43
-G26684.1         86 GCTCAGCCACAGACATGGTTTGTNACTNTTGAGCTTCTGTTCC      129
+Query_780        86 GCTCAGCCACAGACATGGTTTGTNACTNTTGAGCTTCTGTTCC      129
 
 """,
             )
@@ -3007,28 +4624,28 @@ G26684.1         86 GCTCAGCCACAGACATGGTTTGTNACTNTTGAGCTTCTGTTCC      129
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099109|ref|NC_000067.6| Length: 195471971 Strand: Plus
-        Mus musculus strain C57BL/6J chromosome 1, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 1, GRCm38.p6 C57BL/6J
 
-Score:37 bits(40), Expect:5,
+Score:37 bits(40), Expect:4,
 Identities:35/43(81%),  Positives:35/43(81%),  Gaps:2.43(5%)
 
 gi|372099  65190107 GCTCAGCCACATACATGGTTT-TAAGTGTTGAGGCTCT-TTCC 65190148
                   0 |||||||||||.|||||||||-|.|.|.|||||..|||-||||       43
-G26684.1         86 GCTCAGCCACAGACATGGTTTGTNACTNTTGAGCTTCTGTTCC      129
+Query_780        86 GCTCAGCCACAGACATGGTTTGTNACTNTTGAGCTTCTGTTCC      129
 
 """,
             )
-        hit = record[7]
-        self.assertEqual(hit.num, 8)
+        hit = record[8]
+        self.assertEqual(hit.num, 9)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|372099101|ref|NC_000075.6|")
         self.assertEqual(hit.target.name, "NC_000075")
         self.assertEqual(
             hit.target.description,
-            "Mus musculus strain C57BL/6J chromosome 9, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 9, GRCm38.p6 C57BL/6J",
         )
         if xml2 is True:
             self.assertEqual(hit.target.annotations["taxid"], 10090)
@@ -3039,7 +4656,7 @@ G26684.1         86 GCTCAGCCACAGACATGGTTTGTNACTNTTGAGCTTCTGTTCC      129
         self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 40.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 4.07705)
         self.assertEqual(hsp.annotations["identity"], 36)
         if xml2 is False:
             self.assertEqual(hsp.annotations["positive"], 36)
@@ -3058,9 +4675,9 @@ G26684.1         86 GCTCAGCCACAGACATGGTTTGTNACTNTTGAGCTTCTGTTCC      129
             repr(hsp.query.seq),
             "Seq({237: 'CAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTT'}, length=285)",
         )
-        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(hsp.query.id, "Query_78041")
         self.assertEqual(
-            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+            hsp.query.description, "G26684.1 human STS STS_D11570, sequence tagged site"
         )
         self.assertEqual(len(hsp.query.features), 0)
         self.assertEqual(
@@ -3071,7 +4688,7 @@ G26684.1         86 GCTCAGCCACAGACATGGTTTGTNACTNTTGAGCTTCTGTTCC      129
         self.assertEqual(hsp.target.name, "NC_000075")
         self.assertEqual(
             hsp.target.description,
-            "Mus musculus strain C57BL/6J chromosome 9, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 9, GRCm38.p6 C57BL/6J",
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(
@@ -3082,17 +4699,17 @@ G26684.1         86 GCTCAGCCACAGACATGGTTTGTNACTNTTGAGCTTCTGTTCC      129
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099101|ref|NC_000075.6| Length: 124595110 Strand: Minus
-        Mus musculus strain C57BL/6J chromosome 9, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 9, GRCm38.p6 C57BL/6J
 
-Score:37 bits(40), Expect:5,
+Score:37 bits(40), Expect:4,
 Identities:36/47(77%),  Gaps:0.47(0%)
 
 gi|372099  58227241 CAAAGCCTGACAGGTATGACTGCTCAATAAATACTATTTTTTTTTTT 58227194
                   0 |||.||||||||.|..|..|||||||||||||.|||.|.|.||.|||       47
-G26684.1        237 CAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTT      284
+Query_780       237 CAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTT      284
 
 """,
             )
@@ -3100,28 +4717,28 @@ G26684.1        237 CAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTT      284
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099101|ref|NC_000075.6| Length: 124595110 Strand: Minus
-        Mus musculus strain C57BL/6J chromosome 9, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 9, GRCm38.p6 C57BL/6J
 
-Score:37 bits(40), Expect:5,
+Score:37 bits(40), Expect:4,
 Identities:36/47(77%),  Positives:36/47(77%),  Gaps:0.47(0%)
 
 gi|372099  58227241 CAAAGCCTGACAGGTATGACTGCTCAATAAATACTATTTTTTTTTTT 58227194
                   0 |||.||||||||.|..|..|||||||||||||.|||.|.|.||.|||       47
-G26684.1        237 CAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTT      284
+Query_780       237 CAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTT      284
 
 """,
             )
-        hit = record[8]
-        self.assertEqual(hit.num, 9)
+        hit = record[9]
+        self.assertEqual(hit.num, 10)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|372099100|ref|NC_000076.6|")
         self.assertEqual(hit.target.name, "NC_000076")
         self.assertEqual(
             hit.target.description,
-            "Mus musculus strain C57BL/6J chromosome 10, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 10, GRCm38.p6 C57BL/6J",
         )
         if xml2 is True:
             self.assertEqual(hit.target.annotations["taxid"], 10090)
@@ -3132,7 +4749,7 @@ G26684.1        237 CAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTT      284
         self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 40.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 4.07705)
         self.assertEqual(hsp.annotations["identity"], 20)
         if xml2 is False:
             self.assertEqual(hsp.annotations["positive"], 20)
@@ -3150,9 +4767,9 @@ G26684.1        237 CAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTT      284
         self.assertEqual(
             repr(hsp.query.seq), "Seq({254: 'AGCTGCTCAATAAATGCTAG'}, length=285)"
         )
-        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(hsp.query.id, "Query_78041")
         self.assertEqual(
-            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+            hsp.query.description, "G26684.1 human STS STS_D11570, sequence tagged site"
         )
         self.assertEqual(len(hsp.query.features), 0)
         self.assertEqual(
@@ -3163,7 +4780,7 @@ G26684.1        237 CAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTT      284
         self.assertEqual(hsp.target.name, "NC_000076")
         self.assertEqual(
             hsp.target.description,
-            "Mus musculus strain C57BL/6J chromosome 10, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 10, GRCm38.p6 C57BL/6J",
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(hsp.annotations["midline"], "||||||||||||||||||||")
@@ -3171,17 +4788,17 @@ G26684.1        237 CAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTT      284
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099100|ref|NC_000076.6| Length: 130694993 Strand: Plus
-        Mus musculus strain C57BL/6J chromosome 10, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 10, GRCm38.p6 C57BL/6J
 
-Score:37 bits(40), Expect:5,
+Score:37 bits(40), Expect:4,
 Identities:20/20(100%),  Gaps:0.20(0%)
 
 gi|372099 119337185 AGCTGCTCAATAAATGCTAG 119337205
                   0 ||||||||||||||||||||        20
-G26684.1        254 AGCTGCTCAATAAATGCTAG       274
+Query_780       254 AGCTGCTCAATAAATGCTAG       274
 
 """,
             )
@@ -3189,28 +4806,28 @@ G26684.1        254 AGCTGCTCAATAAATGCTAG       274
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099100|ref|NC_000076.6| Length: 130694993 Strand: Plus
-        Mus musculus strain C57BL/6J chromosome 10, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 10, GRCm38.p6 C57BL/6J
 
-Score:37 bits(40), Expect:5,
+Score:37 bits(40), Expect:4,
 Identities:20/20(100%),  Positives:20/20(100%),  Gaps:0.20(0%)
 
 gi|372099 119337185 AGCTGCTCAATAAATGCTAG 119337205
                   0 ||||||||||||||||||||        20
-G26684.1        254 AGCTGCTCAATAAATGCTAG       274
+Query_780       254 AGCTGCTCAATAAATGCTAG       274
 
 """,
             )
-        hit = record[9]
-        self.assertEqual(hit.num, 10)
+        hit = record[10]
+        self.assertEqual(hit.num, 11)
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "gi|372099094|ref|NC_000082.6|")
         self.assertEqual(hit.target.name, "NC_000082")
         self.assertEqual(
             hit.target.description,
-            "Mus musculus strain C57BL/6J chromosome 16, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 16, GRCm38.p6 C57BL/6J",
         )
         if xml2 is True:
             self.assertEqual(hit.target.annotations["taxid"], 10090)
@@ -3221,7 +4838,7 @@ G26684.1        254 AGCTGCTCAATAAATGCTAG       274
         self.assertEqual(hsp.num, 1)
         self.assertAlmostEqual(hsp.score, 40.0)
         self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 4.07705)
         self.assertEqual(hsp.annotations["identity"], 43)
         if xml2 is False:
             self.assertEqual(hsp.annotations["positive"], 43)
@@ -3240,9 +4857,9 @@ G26684.1        254 AGCTGCTCAATAAATGCTAG       274
             repr(hsp.query.seq),
             "Seq({174: 'GGAGGCAAAGAATCCCTACCTCCTAGGGGTGAAAGGAAATNAAAATGGAAAGTT'}, length=285)",
         )
-        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(hsp.query.id, "Query_78041")
         self.assertEqual(
-            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+            hsp.query.description, "G26684.1 human STS STS_D11570, sequence tagged site"
         )
         self.assertEqual(len(hsp.query.features), 0)
         self.assertEqual(
@@ -3253,7 +4870,7 @@ G26684.1        254 AGCTGCTCAATAAATGCTAG       274
         self.assertEqual(hsp.target.name, "NC_000082")
         self.assertEqual(
             hsp.target.description,
-            "Mus musculus strain C57BL/6J chromosome 16, GRCm38.p4 C57BL/6J",
+            "Mus musculus strain C57BL/6J chromosome 16, GRCm38.p6 C57BL/6J",
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(
@@ -3264,21 +4881,21 @@ G26684.1        254 AGCTGCTCAATAAATGCTAG       274
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099094|ref|NC_000082.6| Length: 98207768 Strand: Plus
-        Mus musculus strain C57BL/6J chromosome 16, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 16, GRCm38.p6 C57BL/6J
 
-Score:37 bits(40), Expect:5,
+Score:37 bits(40), Expect:4,
 Identities:43/56(77%),  Gaps:2.56(4%)
 
 gi|372099  18854779 GGAGGCAAAGAATCCCTACATTGTGACAGCTGATAAAGAAGGTAAAATGGAAAATT
                   0 |||||||||||||||||||.|..|-|..|.|||-||.|||...||||||||||.||
-G26684.1        174 GGAGGCAAAGAATCCCTACCTCCT-AGGGGTGA-AAGGAAATNAAAATGGAAAGTT
+Query_780       174 GGAGGCAAAGAATCCCTACCTCCT-AGGGGTGA-AAGGAAATNAAAATGGAAAGTT
 
 gi|372099  18854835
                  56
-G26684.1        228
+Query_780       228
 
 """,
             )
@@ -3286,28 +4903,28 @@ G26684.1        228
             self.assertEqual(
                 str(hsp),
                 """\
-Query : G26684.1 Length: 285 Strand: Plus
-        human STS STS_D11570, sequence tagged site
+Query : Query_78041 Length: 285 Strand: Plus
+        G26684.1 human STS STS_D11570, sequence tagged site
 Target: gi|372099094|ref|NC_000082.6| Length: 98207768 Strand: Plus
-        Mus musculus strain C57BL/6J chromosome 16, GRCm38.p4 C57BL/6J
+        Mus musculus strain C57BL/6J chromosome 16, GRCm38.p6 C57BL/6J
 
-Score:37 bits(40), Expect:5,
+Score:37 bits(40), Expect:4,
 Identities:43/56(77%),  Positives:43/56(77%),  Gaps:2.56(4%)
 
 gi|372099  18854779 GGAGGCAAAGAATCCCTACATTGTGACAGCTGATAAAGAAGGTAAAATGGAAAATT
                   0 |||||||||||||||||||.|..|-|..|.|||-||.|||...||||||||||.||
-G26684.1        174 GGAGGCAAAGAATCCCTACCTCCT-AGGGGTGA-AAGGAAATNAAAATGGAAAGTT
+Query_780       174 GGAGGCAAAGAATCCCTACCTCCT-AGGGGTGA-AAGGAAATNAAAATGGAAAGTT
 
 gi|372099  18854835
                  56
-G26684.1        228
+Query_780       228
 
 """,
             )
 
-    def test_xml_2900_blastn_001_writer(self):
-        """Writing BLASTN 2.9.0+ (xml_2900_blastn_001.xml)."""
-        filename = "xml_2900_blastn_001.xml"
+    def test_xml_21500_blastn_001_writer(self):
+        """Writing BLASTN 2.15.0+ (xml_21500_blastn_001.xml)."""
+        filename = "xml_21500_blastn_001.xml"
         path = os.path.join("Blast", filename)
         with Blast.parse(path) as records:
             stream = io.BytesIO()
@@ -3315,11 +4932,11 @@ G26684.1        228
             self.assertEqual(n, 1)
             stream.seek(0)
             written_records = Blast.parse(stream)
-            self.check_xml_2900_blastn_001_records(written_records)
+            self.check_xml_21500_blastn_001_records(written_records)
 
-    def test_xml_2900_blastn_001_v2_writer(self):
-        """Writing BLASTN 2.9.0+ XML2 (xml_2900_blastn_001_v2.xml)."""
-        filename = "xml_2900_blastn_001_v2.xml"
+    def test_xml2_21500_blastn_001_writer(self):
+        """Writing BLASTN 2.15.0+ XML2 (xml2_21500_blastn_001.xml)."""
+        filename = "xml2_21500_blastn_001.xml"
         path = os.path.join("Blast", filename)
         with Blast.parse(path) as records:
             stream = io.BytesIO()
@@ -3327,7 +4944,7 @@ G26684.1        228
             self.assertEqual(n, 1)
             stream.seek(0)
             written_records = Blast.parse(stream)
-            self.check_xml_2900_blastn_001_records(written_records, xml2=True)
+            self.check_xml_21500_blastn_001_records(written_records, xml2=True)
 
     def test_megablast_legacy(self):
         """Parsing megablast 2.2.26 [Sep-21-2011] (megablast_legacy.xml)."""
@@ -3693,7 +5310,7 @@ Program: BLASTX 2.2.22+
         self.assertEqual(record.stat["db-num"], 8994603)
         self.assertEqual(record.stat["db-len"], -1216159329)
         self.assertEqual(record.stat["hsp-len"], 0)
-        self.assertAlmostEqual(record.stat["eff-space"], 367397307882.0)
+        self.assertEqual(record.stat["eff-space"], 367397307882)
         self.assertAlmostEqual(record.stat["kappa"], 0.041)
         self.assertAlmostEqual(record.stat["lambda"], 0.267)
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
@@ -3781,7 +5398,7 @@ gi|149390         0 HMLVSKIKPCMCKYELIRTVKLRMAH 26
         self.assertEqual(record.stat["db-num"], 8994603)
         self.assertEqual(record.stat["db-len"], -1216159329)
         self.assertEqual(record.stat["hsp-len"], 0)
-        self.assertAlmostEqual(record.stat["eff-space"], 967993058520.0)
+        self.assertEqual(record.stat["eff-space"], 967993058520)
         self.assertAlmostEqual(record.stat["kappa"], 0.041)
         self.assertAlmostEqual(record.stat["lambda"], 0.267)
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
@@ -4696,7 +6313,7 @@ gi|826212       263 -IPYHG--------NSGQESSLDVVNRSIGYYKRYCDMLGVSCEDNL 301
         self.assertEqual(record.stat["db-num"], 8994603)
         self.assertEqual(record.stat["db-len"], -1216159329)
         self.assertEqual(record.stat["hsp-len"], 0)
-        self.assertAlmostEqual(record.stat["eff-space"], 108443629616.0)
+        self.assertEqual(record.stat["eff-space"], 108443629616)
         self.assertAlmostEqual(record.stat["kappa"], 0.041)
         self.assertAlmostEqual(record.stat["lambda"], 0.267)
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
@@ -4715,7 +6332,7 @@ gi|826212       263 -IPYHG--------NSGQESSLDVVNRSIGYYKRYCDMLGVSCEDNL 301
         self.assertEqual(record.stat["db-num"], 8994603)
         self.assertEqual(record.stat["db-len"], -1216159329)
         self.assertEqual(record.stat["hsp-len"], 0)
-        self.assertAlmostEqual(record.stat["eff-space"], 165344802738.0)
+        self.assertAlmostEqual(record.stat["eff-space"], 165344802738)
         self.assertAlmostEqual(record.stat["kappa"], 0.041)
         self.assertAlmostEqual(record.stat["lambda"], 0.267)
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
@@ -5677,7 +7294,7 @@ gi|224058       180 EPYNATLSVHQLVENADECMV 201
         self.assertEqual(record.stat["db-num"], 8994603)
         self.assertEqual(record.stat["db-len"], -1216159329)
         self.assertEqual(record.stat["hsp-len"], 0)
-        self.assertAlmostEqual(record.stat["eff-space"], 147032237429.0)
+        self.assertEqual(record.stat["eff-space"], 147032237429)
         self.assertAlmostEqual(record.stat["kappa"], 0.041)
         self.assertAlmostEqual(record.stat["lambda"], 0.267)
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
@@ -6509,7 +8126,7 @@ gi|503077         7 GAMCVQRFDDSRKSAIHNTYRNSLRSSSMREPRDPLLKVL 47
         self.assertEqual(record.stat["db-num"], 8994603)
         self.assertEqual(record.stat["db-len"], -1216159329)
         self.assertEqual(record.stat["hsp-len"], 0)
-        self.assertAlmostEqual(record.stat["eff-space"], 75367093081.0)
+        self.assertEqual(record.stat["eff-space"], 75367093081)
         self.assertAlmostEqual(record.stat["kappa"], 0.041)
         self.assertAlmostEqual(record.stat["lambda"], 0.267)
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
@@ -7341,7 +8958,7 @@ gi|317649        67 SLVMAVVVNDSEEDGDSSEAVQPQKRKRLWGLVVCHNTTPRFV 110
         self.assertEqual(record.stat["db-num"], 8994603)
         self.assertEqual(record.stat["db-len"], -1216159329)
         self.assertEqual(record.stat["hsp-len"], 0)
-        self.assertAlmostEqual(record.stat["eff-space"], 1251086325060.0)
+        self.assertEqual(record.stat["eff-space"], 1251086325060)
         self.assertAlmostEqual(record.stat["kappa"], 0.041)
         self.assertAlmostEqual(record.stat["lambda"], 0.267)
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
@@ -8479,25 +10096,25 @@ gi|146197       480 STLQKLHRNRIWYLDILFSNDLVNNE 506
             written_records = Blast.parse(stream)
             self.check_xml_2222_blastx_001(written_records)
 
-    def test_xml_2900_blastx_001_parser(self):
-        """Parsing BLASTX 2.9.0+ (xml_2900_blastx_001.xml)."""
-        filename = "xml_2900_blastx_001.xml"
+    def test_xml_21500_blastx_001_parser(self):
+        """Parsing BLASTX 2.15.0+ (xml_21500_blastx_001.xml)."""
+        filename = "xml_21500_blastx_001.xml"
         path = os.path.join("Blast", filename)
         with open(path, "rb") as stream:
             records = Blast.parse(stream)
-            self.check_xml_2900_blastx_001_records(records)
+            self.check_xml_21500_blastx_001_records(records)
         with Blast.parse(path) as records:
-            self.check_xml_2900_blastx_001_records(records)
+            self.check_xml_21500_blastx_001_records(records)
         with open(path, "rb") as stream:
             record = Blast.read(stream)
-        self.check_xml_2900_blastx_001_record(record, xml2=False)
+        self.check_xml_21500_blastx_001_record(record, xml2=False)
         record = Blast.read(path)
-        self.check_xml_2900_blastx_001_record(record, xml2=False)
+        self.check_xml_21500_blastx_001_record(record, xml2=False)
         with Blast.parse(path) as records:
             self.assertEqual(
                 str(records),
                 """\
-Program: BLASTX 2.9.0+
+Program: BLASTX 2.15.0+
      db: nr
 
   Query: AI021773.1 (length=365)
@@ -8507,21 +10124,21 @@ Program: BLASTX 2.9.0+
    Hits: ----  -----  ----------------------------------------------------------
             #  # HSP  ID + description
          ----  -----  ----------------------------------------------------------
-            0      1  gi|1530504495|emb|VDM03167.1|  unnamed protein product,...
-            1      1  gi|510859078|gb|EPB74633.1|  hypothetical protein ANCCE...
-            2      1  gi|684409690|ref|XP_009175831.1|  hypothetical protein ...
-            3      1  gi|449710331|gb|EMD49430.1|  actin, putative, partial [...
-            4      1  gi|257215766|emb|CAX83035.1|  Actin-2, partial [Schisto...
-            5      1  gi|1535393712|emb|VDP83060.1|  unnamed protein product,...
-            6      1  gi|312773|emb|CAA50205.1|  actin, partial [Entamoeba hi...
-            7      1  gi|1530341495|emb|VDN44756.1|  unnamed protein product,...
-            8      1  gi|1524877828|ref|XP_027046469.1|  actin-1, partial [Po...
-            9      1  gi|1524877860|ref|XP_027046487.1|  actin-1-like [Pocill...""",
+            0      1  emb|VDM03167.1|  unnamed protein product, partial [Schi...
+            1      1  gb|EPB74633.1|  hypothetical protein ANCCEY_06263 [Ancy...
+            2      1  ref|XP_009175831.1|  hypothetical protein T265_11027 [O...
+            3      1  gb|EMD49430.1|  actin, putative, partial [Entamoeba his...
+            4      1  emb|CAX83035.1|  Actin-2, partial [Schistosoma japonicum]
+            5      1  emb|VDP83060.1|  unnamed protein product, partial [Echi...
+            6      1  emb|CAA50205.1|  actin, partial [Entamoeba histolytica]
+            7      1  emb|VDN44756.1|  unnamed protein product, partial [Dibo...
+            8      1  ref|XP_027046469.1|  actin-1, partial [Pocillopora dami...
+            9      1  ref|XP_027046487.1|  actin-1-like [Pocillopora damicornis]""",
             )
 
-    def check_xml_2900_blastx_001_records(self, records, xml2=False):
+    def check_xml_21500_blastx_001_records(self, records, xml2=False):
         self.assertEqual(records.program, "blastx")
-        self.assertEqual(records.version, "BLASTX 2.9.0+")
+        self.assertEqual(records.version, "BLASTX 2.15.0+")
         self.assertEqual(
             records.reference,
             'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
@@ -8549,9 +10166,9 @@ Program: BLASTX 2.9.0+
             self.assertEqual(records.param["query-gencode"], 1)
         record = next(records)
         self.assertRaises(StopIteration, next, records)
-        self.check_xml_2900_blastx_001_record(record, xml2)
+        self.check_xml_21500_blastx_001_record(record, xml2)
 
-    def check_xml_2900_blastx_001_record(self, record, xml2):
+    def check_xml_21500_blastx_001_record(self, record, xml2):
         if xml2 is False:
             self.assertEqual(record.num, 1)
         self.assertIsInstance(record.query, SeqRecord)
@@ -8563,17 +10180,14 @@ Program: BLASTX 2.9.0+
         self.assertEqual(repr(record.query.seq), "Seq(None, length=365)")
 
         self.assertEqual(len(record.stat), 7)
+        self.assertEqual(record.stat["db-num"], 718367499)
+        self.assertEqual(record.stat["db-len"], 277248733561)
         if xml2 is True:
-            self.assertEqual(record.stat["db-num"], 195483068)
-        else:
-            self.assertEqual(record.stat["db-num"], 197469652)
-        self.assertEqual(record.stat["db-len"], 71133367251)
-        if xml2 is True:
-            self.assertEqual(record.stat["hsp-len"], 88)
-            self.assertEqual(record.stat["eff-space"], 1797401858175)
+            self.assertEqual(record.stat["hsp-len"], 89)
+            self.assertEqual(record.stat["eff-space"], 6826048836800)
         else:
             self.assertEqual(record.stat["hsp-len"], 0)
-            self.assertAlmostEqual(record.stat["eff-space"], 0.0)
+            self.assertEqual(record.stat["eff-space"], 0)
         self.assertAlmostEqual(record.stat["kappa"], 0.041)
         self.assertAlmostEqual(record.stat["lambda"], 0.267)
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
@@ -8581,7 +10195,7 @@ Program: BLASTX 2.9.0+
         hit = record[0]
         self.assertEqual(hit.num, 1)
         self.assertIsInstance(hit.target, SeqRecord)
-        self.assertEqual(hit.target.id, "gi|1530504495|emb|VDM03167.1|")
+        self.assertEqual(hit.target.id, "emb|VDM03167.1|")
         self.assertEqual(hit.target.name, "VDM03167")
         self.assertEqual(
             hit.target.description,
@@ -8629,7 +10243,7 @@ Program: BLASTX 2.9.0+
             repr(hsp.target.seq),
             "Seq({0: 'MADEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSY...LTE'}, length=132)",
         )
-        self.assertEqual(hsp.target.id, "gi|1530504495|emb|VDM03167.1|")
+        self.assertEqual(hsp.target.id, "emb|VDM03167.1|")
         self.assertEqual(hsp.target.name, "VDM03167")
         self.assertEqual(
             hsp.target.description,
@@ -8640,6 +10254,7 @@ Program: BLASTX 2.9.0+
             hsp.annotations["midline"],
             "MADEEVQALVVDNGSGMCKAG       ++  P               G KDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE",
         )
+        self.maxDiff = None
         self.assertEqual(
             str(hsp),
             """\
@@ -8647,17 +10262,17 @@ Query : AI021773.1 Length: 108 Strand: Plus
         MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma
         mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA,
         complete cds, mRNA sequence
-Target: gi|1530504495|emb|VDM03167.1| Length: 132 Strand: Plus
+Target: emb|VDM03167.1| Length: 132 Strand: Plus
         unnamed protein product, partial [Schistocephalus solidus]
 
-Score:161 bits(408), Expect:8e-49,
+Score:161 bits(408), Expect:3e-48,
 Identities:81/108(75%),  Positives:83/108(77%),  Gaps:0.108(0%)
 
-gi|153050         0 MADEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
+emb|VDM03         0 MADEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
                   0 |||||||||||||||||||||...........|...............|.||||||||||
 AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
 
-gi|153050        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+emb|VDM03        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
                  60 |||||||||||||||||||||||||||||||||||||||||||||||| 108
 AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
 
@@ -8666,7 +10281,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
         hit = record[1]
         self.assertEqual(hit.num, 2)
         self.assertIsInstance(hit.target, SeqRecord)
-        self.assertEqual(hit.target.id, "gi|510859078|gb|EPB74633.1|")
+        self.assertEqual(hit.target.id, "gb|EPB74633.1|")
         self.assertEqual(hit.target.name, "EPB74633")
         self.assertEqual(
             hit.target.description,
@@ -8714,7 +10329,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
             repr(hsp.target.seq),
             "Seq({0: 'MCDDDVAALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSY...LKP'}, length=119)",
         )
-        self.assertEqual(hsp.target.id, "gi|510859078|gb|EPB74633.1|")
+        self.assertEqual(hsp.target.id, "gb|EPB74633.1|")
         self.assertEqual(hsp.target.name, "EPB74633")
         self.assertEqual(
             hsp.target.description,
@@ -8732,17 +10347,17 @@ Query : AI021773.1 Length: 115 Strand: Plus
         MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma
         mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA,
         complete cds, mRNA sequence
-Target: gi|510859078|gb|EPB74633.1| Length: 119 Strand: Plus
+Target: gb|EPB74633.1| Length: 119 Strand: Plus
         hypothetical protein ANCCEY_06263 [Ancylostoma ceylanicum]
 
-Score:160 bits(405), Expect:1e-48,
+Score:160 bits(405), Expect:5e-48,
 Identities:81/115(70%),  Positives:85/115(74%),  Gaps:0.115(0%)
 
-gi|510859         0 MCDDDVAALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
+gb|EPB746         0 MCDDDVAALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
                   0 |.|..|.||||||||||||||...........|...............|.||||||||||
 AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
 
-gi|510859        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTEAHSILKP 115
+gb|EPB746        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTEAHSILKP 115
                  60 ||||||||||||||||||||||||||||||||||||||||||||||||.|.|.|| 115
 AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTELHCIRKP 115
 
@@ -8752,7 +10367,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTELHCIRKP 115
         self.assertEqual(hit.num, 3)
         target = hit.target
         self.assertIsInstance(target, SeqRecord)
-        self.assertEqual(target.id, "gi|684409690|ref|XP_009175831.1|")
+        self.assertEqual(target.id, "ref|XP_009175831.1|")
         self.assertEqual(target.name, "XP_009175831")
         seq = target.seq
         self.assertEqual(repr(seq), "Seq(None, length=246)")
@@ -8765,7 +10380,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTELHCIRKP 115
             self.assertEqual(len(hit.targets), 2)
             target = hit.targets[1]
             self.assertIsInstance(target, SeqRecord)
-            self.assertEqual(target.id, "gi|663044098|gb|KER20427.1|")
+            self.assertEqual(target.id, "gb|KER20427.1|")
             self.assertEqual(target.name, "KER20427")
             self.assertIs(target.seq, seq)
             self.assertEqual(
@@ -8775,7 +10390,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTELHCIRKP 115
         else:
             self.assertEqual(
                 target.description,
-                "hypothetical protein T265_11027 [Opisthorchis viverrini] >gi|663044098|gb|KER20427.1| hypothetical protein T265_11027 [Opisthorchis viverrini]",
+                "hypothetical protein T265_11027 [Opisthorchis viverrini] >gb|KER20427.1| hypothetical protein T265_11027 [Opisthorchis viverrini]",
             )
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
@@ -8835,17 +10450,17 @@ Query : AI021773.1 Length: 108 Strand: Plus
         MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma
         mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA,
         complete cds, mRNA sequence
-Target: gi|684409690|ref|XP_009175831.1| Length: 246 Strand: Plus
+Target: ref|XP_009175831.1| Length: 246 Strand: Plus
         hypothetical protein T265_11027 [Opisthorchis viverrini]
 
-Score:163 bits(413), Expect:4e-48,
+Score:163 bits(413), Expect:2e-47,
 Identities:81/108(75%),  Positives:83/108(77%),  Gaps:0.108(0%)
 
-gi|684409         0 MADEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
+ref|XP_00         0 MADEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
                   0 |||||||||||||||||||||...........|...............|.||||||||||
 AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
 
-gi|684409        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+ref|XP_00        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
                  60 |||||||||||||||||||||||||||||||||||||||||||||||| 108
 AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
 
@@ -8859,19 +10474,18 @@ Query : AI021773.1 Length: 108 Strand: Plus
         MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma
         mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA,
         complete cds, mRNA sequence
-Target: gi|684409690|ref|XP_009175831.1| Length: 246 Strand: Plus
+Target: ref|XP_009175831.1| Length: 246 Strand: Plus
+        hypothetical protein T265_11027 [Opisthorchis viverrini] >gb|KER20427.1|
         hypothetical protein T265_11027 [Opisthorchis viverrini]
-        >gi|663044098|gb|KER20427.1| hypothetical protein T265_11027
-        [Opisthorchis viverrini]
 
-Score:163 bits(413), Expect:4e-48,
+Score:163 bits(413), Expect:2e-47,
 Identities:81/108(75%),  Positives:83/108(77%),  Gaps:0.108(0%)
 
-gi|684409         0 MADEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
+ref|XP_00         0 MADEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
                   0 |||||||||||||||||||||...........|...............|.||||||||||
 AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
 
-gi|684409        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+ref|XP_00        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
                  60 |||||||||||||||||||||||||||||||||||||||||||||||| 108
 AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
 
@@ -8880,7 +10494,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
         hit = record[3]
         self.assertEqual(hit.num, 4)
         self.assertIsInstance(hit.target, SeqRecord)
-        self.assertEqual(hit.target.id, "gi|449710331|gb|EMD49430.1|")
+        self.assertEqual(hit.target.id, "gb|EMD49430.1|")
         self.assertEqual(hit.target.name, "EMD49430")
         self.assertEqual(
             hit.target.description,
@@ -8928,7 +10542,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
             repr(hsp.target.seq),
             "Seq({0: 'MGDEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHVSVMAGMGQKDAY...LTE'}, length=124)",
         )
-        self.assertEqual(hsp.target.id, "gi|449710331|gb|EMD49430.1|")
+        self.assertEqual(hsp.target.id, "gb|EMD49430.1|")
         self.assertEqual(hsp.target.name, "EMD49430")
         self.assertEqual(
             hsp.target.description,
@@ -8946,17 +10560,17 @@ Query : AI021773.1 Length: 108 Strand: Plus
         MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma
         mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA,
         complete cds, mRNA sequence
-Target: gi|449710331|gb|EMD49430.1| Length: 124 Strand: Plus
+Target: gb|EMD49430.1| Length: 124 Strand: Plus
         actin, putative, partial [Entamoeba histolytica KU27]
 
-Score:159 bits(401), Expect:9e-48,
+Score:159 bits(401), Expect:3e-47,
 Identities:78/108(72%),  Positives:81/108(75%),  Gaps:0.108(0%)
 
-gi|449710         0 MGDEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHVSVMAGMGQKDAYVGDEAQ
+gb|EMD494         0 MGDEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHVSVMAGMGQKDAYVGDEAQ
                   0 |.|||||||||||||||||||...........|...............|.||.|||||||
 AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
 
-gi|449710        60 SKRGILTLKYPIEHGIVNNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+gb|EMD494        60 SKRGILTLKYPIEHGIVNNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
                  60 |||||||||||||||||.|||||||||||||||||||||||||||||| 108
 AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
 
@@ -8965,7 +10579,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
         hit = record[4]
         self.assertEqual(hit.num, 5)
         self.assertIsInstance(hit.target, SeqRecord)
-        self.assertEqual(hit.target.id, "gi|257215766|emb|CAX83035.1|")
+        self.assertEqual(hit.target.id, "emb|CAX83035.1|")
         self.assertEqual(hit.target.name, "CAX83035")
         self.assertEqual(
             hit.target.description, "Actin-2, partial [Schistosoma japonicum]"
@@ -9012,7 +10626,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
             repr(hsp.target.seq),
             "Seq({0: 'MADEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSY...LTE'}, length=252)",
         )
-        self.assertEqual(hsp.target.id, "gi|257215766|emb|CAX83035.1|")
+        self.assertEqual(hsp.target.id, "emb|CAX83035.1|")
         self.assertEqual(hsp.target.name, "CAX83035")
         self.assertEqual(
             hsp.target.description, "Actin-2, partial [Schistosoma japonicum]"
@@ -9029,17 +10643,17 @@ Query : AI021773.1 Length: 108 Strand: Plus
         MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma
         mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA,
         complete cds, mRNA sequence
-Target: gi|257215766|emb|CAX83035.1| Length: 252 Strand: Plus
+Target: emb|CAX83035.1| Length: 252 Strand: Plus
         Actin-2, partial [Schistosoma japonicum]
 
-Score:162 bits(411), Expect:1e-47,
+Score:162 bits(411), Expect:4e-47,
 Identities:81/108(75%),  Positives:83/108(77%),  Gaps:0.108(0%)
 
-gi|257215         0 MADEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
+emb|CAX83         0 MADEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
                   0 |||||||||||||||||||||...........|...............|.||||||||||
 AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
 
-gi|257215        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+emb|CAX83        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
                  60 |||||||||||||||||||||||||||||||||||||||||||||||| 108
 AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
 
@@ -9048,7 +10662,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
         hit = record[5]
         self.assertEqual(hit.num, 6)
         self.assertIsInstance(hit.target, SeqRecord)
-        self.assertEqual(hit.target.id, "gi|1535393712|emb|VDP83060.1|")
+        self.assertEqual(hit.target.id, "emb|VDP83060.1|")
         self.assertEqual(hit.target.name, "VDP83060")
         self.assertEqual(
             hit.target.description,
@@ -9096,7 +10710,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
             repr(hsp.target.seq),
             "Seq({0: 'MADDEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSY...LTE'}, length=209)",
         )
-        self.assertEqual(hsp.target.id, "gi|1535393712|emb|VDP83060.1|")
+        self.assertEqual(hsp.target.id, "emb|VDP83060.1|")
         self.assertEqual(hsp.target.name, "VDP83060")
         self.assertEqual(
             hsp.target.description,
@@ -9114,17 +10728,17 @@ Query : AI021773.1 Length: 108 Strand: Plus
         MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma
         mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA,
         complete cds, mRNA sequence
-Target: gi|1535393712|emb|VDP83060.1| Length: 209 Strand: Plus
+Target: emb|VDP83060.1| Length: 209 Strand: Plus
         unnamed protein product, partial [Echinostoma caproni]
 
-Score:161 bits(407), Expect:1e-47,
+Score:161 bits(407), Expect:4e-47,
 Identities:80/108(74%),  Positives:83/108(77%),  Gaps:0.108(0%)
 
-gi|153539         0 MADDEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
+emb|VDP83         0 MADDEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
                   0 |||.|||||||||||||||||...........|...............|.||||||||||
 AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
 
-gi|153539        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+emb|VDP83        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
                  60 |||||||||||||||||||||||||||||||||||||||||||||||| 108
 AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
 
@@ -9133,7 +10747,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
         hit = record[6]
         self.assertEqual(hit.num, 7)
         self.assertIsInstance(hit.target, SeqRecord)
-        self.assertEqual(hit.target.id, "gi|312773|emb|CAA50205.1|")
+        self.assertEqual(hit.target.id, "emb|CAA50205.1|")
         self.assertEqual(hit.target.name, "CAA50205")
         self.assertEqual(
             hit.target.description, "actin, partial [Entamoeba histolytica]"
@@ -9180,7 +10794,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
             repr(hsp.target.seq),
             "Seq({0: 'MGDEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHVSVMAGMGQKDAY...LTE'}, length=137)",
         )
-        self.assertEqual(hsp.target.id, "gi|312773|emb|CAA50205.1|")
+        self.assertEqual(hsp.target.id, "emb|CAA50205.1|")
         self.assertEqual(hsp.target.name, "CAA50205")
         self.assertEqual(
             hsp.target.description, "actin, partial [Entamoeba histolytica]"
@@ -9197,17 +10811,17 @@ Query : AI021773.1 Length: 108 Strand: Plus
         MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma
         mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA,
         complete cds, mRNA sequence
-Target: gi|312773|emb|CAA50205.1| Length: 137 Strand: Plus
+Target: emb|CAA50205.1| Length: 137 Strand: Plus
         actin, partial [Entamoeba histolytica]
 
-Score:159 bits(401), Expect:1e-47,
+Score:159 bits(401), Expect:5e-47,
 Identities:78/108(72%),  Positives:81/108(75%),  Gaps:0.108(0%)
 
-gi|312773         0 MGDEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHVSVMAGMGQKDAYVGDEAQ
+emb|CAA50         0 MGDEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHVSVMAGMGQKDAYVGDEAQ
                   0 |.|||||||||||||||||||...........|...............|.||.|||||||
 AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
 
-gi|312773        60 SKRGILTLKYPIEHGIVNNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+emb|CAA50        60 SKRGILTLKYPIEHGIVNNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
                  60 |||||||||||||||||.|||||||||||||||||||||||||||||| 108
 AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
 
@@ -9216,7 +10830,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
         hit = record[7]
         self.assertEqual(hit.num, 8)
         self.assertIsInstance(hit.target, SeqRecord)
-        self.assertEqual(hit.target.id, "gi|1530341495|emb|VDN44756.1|")
+        self.assertEqual(hit.target.id, "emb|VDN44756.1|")
         self.assertEqual(hit.target.name, "VDN44756")
         self.assertEqual(
             hit.target.description,
@@ -9264,7 +10878,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
             repr(hsp.target.seq),
             "Seq({0: 'MGDEDVQALVIDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSY...LTE'}, length=145)",
         )
-        self.assertEqual(hsp.target.id, "gi|1530341495|emb|VDN44756.1|")
+        self.assertEqual(hsp.target.id, "emb|VDN44756.1|")
         self.assertEqual(hsp.target.name, "VDN44756")
         self.assertEqual(
             hsp.target.description,
@@ -9282,17 +10896,17 @@ Query : AI021773.1 Length: 108 Strand: Plus
         MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma
         mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA,
         complete cds, mRNA sequence
-Target: gi|1530341495|emb|VDN44756.1| Length: 145 Strand: Plus
+Target: emb|VDN44756.1| Length: 145 Strand: Plus
         unnamed protein product, partial [Dibothriocephalus latus]
 
-Score:158 bits(400), Expect:2e-47,
+Score:158 bits(400), Expect:7e-47,
 Identities:78/108(72%),  Positives:82/108(76%),  Gaps:0.108(0%)
 
-gi|153034         0 MGDEDVQALVIDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
+emb|VDN44         0 MGDEDVQALVIDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
                   0 |.||.|||||.||||||||||...........|...............|.||||||||||
 AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
 
-gi|153034        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+emb|VDN44        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
                  60 |||||||||||||||||||||||||||||||||||||||||||||||| 108
 AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
 
@@ -9301,7 +10915,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
         hit = record[8]
         self.assertEqual(hit.num, 9)
         self.assertIsInstance(hit.target, SeqRecord)
-        self.assertEqual(hit.target.id, "gi|1524877828|ref|XP_027046469.1|")
+        self.assertEqual(hit.target.id, "ref|XP_027046469.1|")
         self.assertEqual(hit.target.name, "XP_027046469")
         self.assertEqual(
             hit.target.description, "actin-1, partial [Pocillopora damicornis]"
@@ -9348,7 +10962,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
             repr(hsp.target.seq),
             "Seq({0: 'MADEEVAALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSY...LTE'}, length=122)",
         )
-        self.assertEqual(hsp.target.id, "gi|1524877828|ref|XP_027046469.1|")
+        self.assertEqual(hsp.target.id, "ref|XP_027046469.1|")
         self.assertEqual(hsp.target.name, "XP_027046469")
         self.assertEqual(
             hsp.target.description, "actin-1, partial [Pocillopora damicornis]"
@@ -9365,17 +10979,17 @@ Query : AI021773.1 Length: 108 Strand: Plus
         MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma
         mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA,
         complete cds, mRNA sequence
-Target: gi|1524877828|ref|XP_027046469.1| Length: 122 Strand: Plus
+Target: ref|XP_027046469.1| Length: 122 Strand: Plus
         actin-1, partial [Pocillopora damicornis]
 
-Score:157 bits(398), Expect:2e-47,
+Score:157 bits(398), Expect:7e-47,
 Identities:78/108(72%),  Positives:82/108(76%),  Gaps:0.108(0%)
 
-gi|152487         0 MADEEVAALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
+ref|XP_02         0 MADEEVAALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
                   0 ||||||.||||||||||||||...........|...............|.||||||||||
 AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
 
-gi|152487        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRIAPEEHPILLTE 108
+ref|XP_02        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRIAPEEHPILLTE 108
                  60 ||||||||||||||||||||||||||||||||||||.||||||.|||| 108
 AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
 
@@ -9384,7 +10998,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
         hit = record[9]
         self.assertEqual(hit.num, 10)
         self.assertIsInstance(hit.target, SeqRecord)
-        self.assertEqual(hit.target.id, "gi|1524877860|ref|XP_027046487.1|")
+        self.assertEqual(hit.target.id, "ref|XP_027046487.1|")
         self.assertEqual(hit.target.name, "XP_027046487")
         self.assertEqual(
             hit.target.description, "actin-1-like [Pocillopora damicornis]"
@@ -9431,7 +11045,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
             repr(hsp.target.seq),
             "Seq({0: 'MADEDVAALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSY...LTE'}, length=134)",
         )
-        self.assertEqual(hsp.target.id, "gi|1524877860|ref|XP_027046487.1|")
+        self.assertEqual(hsp.target.id, "ref|XP_027046487.1|")
         self.assertEqual(hsp.target.name, "XP_027046487")
         self.assertEqual(
             hsp.target.description, "actin-1-like [Pocillopora damicornis]"
@@ -9448,41 +11062,41 @@ Query : AI021773.1 Length: 108 Strand: Plus
         MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma
         mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA,
         complete cds, mRNA sequence
-Target: gi|1524877860|ref|XP_027046487.1| Length: 134 Strand: Plus
+Target: ref|XP_027046487.1| Length: 134 Strand: Plus
         actin-1-like [Pocillopora damicornis]
 
-Score:158 bits(399), Expect:2e-47,
+Score:158 bits(399), Expect:9e-47,
 Identities:79/108(73%),  Positives:82/108(76%),  Gaps:0.108(0%)
 
-gi|152487         0 MADEDVAALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
+ref|XP_02         0 MADEDVAALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
                   0 ||||.|.||||||||||||||...........|...............|.||||||||||
 AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
 
-gi|152487        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+ref|XP_02        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
                  60 |||||||||||||||||||||||||||||||||||||||||||||||| 108
 AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
 
 """,
         )
 
-    def test_xml_2900_blastx_001_v2_parser(self):
-        """Parsing BLASTX 2.9.0+ (xml_2900_blastx_001_v2.xml)."""
-        filename = "xml_2900_blastx_001_v2.xml"
+    def test_xml2_21500_blastx_001_parser(self):
+        """Parsing BLASTX 2.15.0+ (xml2_21500_blastx_001.xml)."""
+        filename = "xml2_21500_blastx_001.xml"
         path = os.path.join("Blast", filename)
         with open(path, "rb") as stream:
             records = Blast.parse(stream)
-            self.check_xml_2900_blastx_001_records(records, xml2=True)
+            self.check_xml_21500_blastx_001_records(records, xml2=True)
         with Blast.parse(path) as records:
-            self.check_xml_2900_blastx_001_records(records, xml2=True)
+            self.check_xml_21500_blastx_001_records(records, xml2=True)
         with open(path, "rb") as stream:
             record = Blast.read(stream)
-        self.check_xml_2900_blastx_001_record(record, xml2=True)
+        self.check_xml_21500_blastx_001_record(record, xml2=True)
         record = Blast.read(path)
-        self.check_xml_2900_blastx_001_record(record, xml2=True)
+        self.check_xml_21500_blastx_001_record(record, xml2=True)
 
-    def test_xml_2900_blastx_001_writer(self):
-        """Writing BLASTX 2.9.0+ (xml_2900_blastx_001.xml)."""
-        filename = "xml_2900_blastx_001.xml"
+    def test_xml_21500_blastx_001_writer(self):
+        """Writing BLASTX 2.15.0+ (xml_21500_blastx_001.xml)."""
+        filename = "xml_21500_blastx_001.xml"
         path = os.path.join("Blast", filename)
         with Blast.parse(path) as records:
             stream = io.BytesIO()
@@ -9490,11 +11104,11 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
             self.assertEqual(n, 1)
             stream.seek(0)
             written_records = Blast.parse(stream)
-            self.check_xml_2900_blastx_001_records(written_records, xml2=False)
+            self.check_xml_21500_blastx_001_records(written_records, xml2=False)
 
-    def test_xml_2900_blastx_001_v2_writer(self):
-        """Writing BLASTX 2.9.0+ XML2 (xml_2900_blastx_001_v2.xml)."""
-        filename = "xml_2900_blastx_001_v2.xml"
+    def test_xml2_21500_blastx_001_writer(self):
+        """Writing BLASTX 2.15.0+ XML2 (xml2_21500_blastx_001.xml)."""
+        filename = "xml2_21500_blastx_001.xml"
         path = os.path.join("Blast", filename)
         with Blast.parse(path) as records:
             stream = io.BytesIO()
@@ -9502,32 +11116,32 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
             self.assertEqual(n, 1)
             stream.seek(0)
             written_records = Blast.parse(stream)
-            self.check_xml_2900_blastx_001_records(written_records, xml2=True)
+            self.check_xml_21500_blastx_001_records(written_records, xml2=True)
 
 
 class TestTBlastn(unittest.TestCase):
     """Test the Blast XML parser for tblastn output."""
 
-    def test_xml_2900_tblastn_001_parser(self):
-        """Parsing TBLASTN 2.9.0+ (xml_2900_tblastn_001.xml)."""
-        filename = "xml_2900_tblastn_001.xml"
+    def test_xml_21500_tblastn_001_parser(self):
+        """Parsing TBLASTN 2.15.0+ (xml_21500_tblastn_001.xml)."""
+        filename = "xml_21500_tblastn_001.xml"
         path = os.path.join("Blast", filename)
         with open(path, "rb") as stream:
             records = Blast.parse(stream)
-            self.check_xml_2900_tblastn_001_records(records)
+            self.check_xml_21500_tblastn_001_records(records)
         with Blast.parse(path) as records:
-            self.check_xml_2900_tblastn_001_records(records)
+            self.check_xml_21500_tblastn_001_records(records)
         with open(path, "rb") as stream:
             record = Blast.read(stream)
-        self.check_xml_2900_tblastn_001_record(record, xml2=False)
+        self.check_xml_21500_tblastn_001_record(record, xml2=False)
         record = Blast.read(path)
-        self.check_xml_2900_tblastn_001_record(record, xml2=False)
+        self.check_xml_21500_tblastn_001_record(record, xml2=False)
         with Blast.parse(path) as records:
             self.assertEqual(
                 str(records),
                 """\
-Program: TBLASTN 2.9.0+
-     db: nr
+Program: TBLASTN 2.15.0+
+     db: nt
 
   Query: CAJ99216.1 (length=234)
          tim [Helicobacter acinonychis str. Sheeba]
@@ -9537,38 +11151,38 @@ Program: TBLASTN 2.9.0+
             0      1  gi|109713861|emb|AM260522.1|  Helicobacter acinonychis ...
             1      1  gi|1336928286|emb|LT900055.1|  Helicobacter acinonychis...
             2      1  gi|1033012332|gb|CP011486.1|  Helicobacter pylori strai...
-            3      1  gi|1559948212|dbj|AP017633.1|  Helicobacter pylori DNA,...
-            4      1  gi|1143706535|gb|CP018823.1|  Helicobacter pylori strai...
-            5      1  gi|1149039824|gb|CP009259.1|  Helicobacter pylori SS1, ...
-            6      1  gi|1560269298|gb|CP035106.1|  Helicobacter pylori strai...
-            7      1  gi|1540258434|emb|LR134517.1|  Helicobacter pylori stra...
-            8      1  gi|1033005233|gb|CP011487.1|  Helicobacter pylori strai...
-            9      1  gi|1509197163|gb|CP025748.1|  Helicobacter pylori strai...""",
+            3      1  gi|2641533851|gb|CP078169.1|  Helicobacter pylori strai...
+            4      1  gi|2641529532|gb|CP078166.1|  Helicobacter pylori strai...
+            5      1  gi|1033009499|gb|CP011484.1|  Helicobacter pylori strai...
+            6      1  gi|317010283|gb|CP002336.1|  Helicobacter pylori SouthA...
+            7      1  gi|2641538240|gb|CP078172.1|  Helicobacter pylori strai...
+            8      1  gi|2640367186|gb|CP079077.1|  Helicobacter pylori strai...
+            9      1  gi|532105813|gb|CP006691.1|  Helicobacter pylori SouthA...""",
             )
 
-    def test_xml_2900_tblastn_001_v2_parser(self):
-        """Parsing TBLASTN 2.9.0+ (xml_2900_tblastn_001_v2.xml)."""
-        filename = "xml_2900_tblastn_001_v2.xml"
+    def test_xml2_21500_tblastn_001_parser(self):
+        """Parsing TBLASTN 2.15.0+ (xml2_21500_tblastn_001.xml)."""
+        filename = "xml2_21500_tblastn_001.xml"
         path = os.path.join("Blast", filename)
         with open(path, "rb") as stream:
             records = Blast.parse(stream)
-            self.check_xml_2900_tblastn_001_records(records, xml2=True)
+            self.check_xml_21500_tblastn_001_records(records, xml2=True)
         with Blast.parse(path) as records:
-            self.check_xml_2900_tblastn_001_records(records, xml2=True)
+            self.check_xml_21500_tblastn_001_records(records, xml2=True)
         with open(path, "rb") as stream:
             record = Blast.read(stream)
-        self.check_xml_2900_tblastn_001_record(record, xml2=True)
+        self.check_xml_21500_tblastn_001_record(record, xml2=True)
         record = Blast.read(path)
-        self.check_xml_2900_tblastn_001_record(record, xml2=True)
+        self.check_xml_21500_tblastn_001_record(record, xml2=True)
 
-    def check_xml_2900_tblastn_001_records(self, records, xml2=False):
+    def check_xml_21500_tblastn_001_records(self, records, xml2=False):
         self.assertEqual(records.program, "tblastn")
-        self.assertEqual(records.version, "TBLASTN 2.9.0+")
+        self.assertEqual(records.version, "TBLASTN 2.15.0+")
         self.assertEqual(
             records.reference,
             'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
         )
-        self.assertEqual(records.db, "nr")
+        self.assertEqual(records.db, "nt")
         if xml2 is False:
             self.assertIsInstance(records.query, SeqRecord)
             self.assertEqual(records.query.id, "CAJ99216.1")
@@ -9583,15 +11197,15 @@ Program: TBLASTN 2.9.0+
         self.assertAlmostEqual(records.param["expect"], 10.0)
         self.assertEqual(records.param["gap-open"], 11)
         self.assertEqual(records.param["gap-extend"], 1)
-        self.assertEqual(records.param["filter"], "F")
+        self.assertEqual(records.param["filter"], "L;")
         if xml2 is True:
             self.assertEqual(records.param["cbs"], 2)
             self.assertEqual(records.param["db-gencode"], 1)
         record = next(records)
         self.assertRaises(StopIteration, next, records)
-        self.check_xml_2900_tblastn_001_record(record, xml2)
+        self.check_xml_21500_tblastn_001_record(record, xml2)
 
-    def check_xml_2900_tblastn_001_record(self, record, xml2):
+    def check_xml_21500_tblastn_001_record(self, record, xml2):
         if xml2 is False:
             self.assertEqual(record.num, 1)
         self.assertIsInstance(record.query, SeqRecord)
@@ -9600,16 +11214,23 @@ Program: TBLASTN 2.9.0+
             record.query.description, "tim [Helicobacter acinonychis str. Sheeba]"
         )
         self.assertEqual(repr(record.query.seq), "Seq(None, length=234)")
-
-        self.assertEqual(len(record.stat), 7)
-        self.assertEqual(record.stat["db-num"], 51302476)
-        self.assertEqual(record.stat["db-len"], 204305995260)
         if xml2 is True:
-            self.assertEqual(record.stat["hsp-len"], 154)
-            self.assertEqual(record.stat["eff-space"], 4816113369280)
+            self.assertEqual(len(record.query.features), 1)
+            feature = record.query.features[0]
+            self.assertEqual(feature.type, "masking")
+            location = feature.location
+            self.assertEqual(
+                repr(location), "SimpleLocation(ExactPosition(101), ExactPosition(116))"
+            )
+        self.assertEqual(len(record.stat), 7)
+        self.assertEqual(record.stat["db-num"], 104338276)
+        self.assertEqual(record.stat["db-len"], 348058846)
+        if xml2 is True:
+            self.assertEqual(record.stat["hsp-len"], 168)
+            self.assertEqual(record.stat["eff-space"], 34567702523838)
         else:
             self.assertEqual(record.stat["hsp-len"], 0)
-            self.assertAlmostEqual(record.stat["eff-space"], 0.0)
+            self.assertEqual(record.stat["eff-space"], 0)
         self.assertAlmostEqual(record.stat["kappa"], 0.041)
         self.assertAlmostEqual(record.stat["lambda"], 0.267)
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
@@ -9628,9 +11249,9 @@ Program: TBLASTN 2.9.0+
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
         self.assertEqual(hsp.num, 1)
-        self.assertAlmostEqual(hsp.score, 1228.0)
-        self.assertAlmostEqual(hsp.annotations["bit score"], 477.633)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 8.53508e-152)
+        self.assertAlmostEqual(hsp.score, 1137.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 442.58)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 1.28996e-138)
         self.assertEqual(hsp.annotations["identity"], 234)
         self.assertEqual(hsp.annotations["positive"], 234)
         self.assertEqual(hsp.annotations["gaps"], 0)
@@ -9679,15 +11300,16 @@ Program: TBLASTN 2.9.0+
             hsp.annotations["midline"],
             "MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQNAYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNFLKEKFDFFKDKKFKIVYCIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHGFLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL",
         )
-        self.assertEqual(
-            str(hsp),
-            """\
+        if xml2 is False:
+            self.assertEqual(
+                str(hsp),
+                """\
 Query : CAJ99216.1 Length: 234 Strand: Plus
         tim [Helicobacter acinonychis str. Sheeba]
 Target: gi|109713861|emb|AM260522.1| Length: 234 Strand: Plus
         Helicobacter acinonychis str. Sheeba complete genome, strain Sheeba
 
-Score:477 bits(1228), Expect:9e-152,
+Score:442 bits(1137), Expect:1e-138,
 Identities:234/234(100%),  Positives:234/234(100%),  Gaps:0.234(0%)
 
 gi|109713         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
@@ -9695,8 +11317,8 @@ gi|109713         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
 CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
 
 gi|109713        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNFLKEKFDFFKDKKFKIVY
-                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNFLKEKFDFFKDKKFKIVY
+                 60 ||||||||||||||||||||||||||||||||||||||||||...............|||
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVY
 
 gi|109713       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
                 120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
@@ -9707,7 +11329,37 @@ gi|109713       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
 CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
 
 """,
-        )
+            )
+        else:  # XML2 is True
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : CAJ99216.1 Length: 234 Strand: Plus
+        tim [Helicobacter acinonychis str. Sheeba]
+Target: gi|109713861|emb|AM260522.1| Length: 234 Strand: Plus
+        Helicobacter acinonychis str. Sheeba complete genome, strain Sheeba
+
+Score:442 bits(1137), Expect:1e-138,
+Identities:234/234(100%),  Positives:234/234(100%),  Gaps:0.234(0%)
+
+gi|109713         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+
+gi|109713        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNFLKEKFDFFKDKKFKIVY
+                 60 ||||||||||||||||||||||||||||||||||||||||||...............|||
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNflkekfdffkdkkfkIVY
+
+gi|109713       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+
+gi|109713       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+                180 |||||||||||||||||||||||||||||||||||||||||||||||||||||| 234
+CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+
+""",
+            )
         hit = record[1]
         self.assertEqual(hit.num, 2)
         self.assertIsInstance(hit.target, SeqRecord)
@@ -9721,9 +11373,9 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
         self.assertEqual(hsp.num, 1)
-        self.assertAlmostEqual(hsp.score, 1219.0)
-        self.assertAlmostEqual(hsp.annotations["bit score"], 474.167)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 1.37046e-150)
+        self.assertAlmostEqual(hsp.score, 1128.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 439.113)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 2.05117e-137)
         self.assertEqual(hsp.annotations["identity"], 232)
         self.assertEqual(hsp.annotations["positive"], 232)
         self.assertEqual(hsp.annotations["gaps"], 0)
@@ -9772,15 +11424,16 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
             hsp.annotations["midline"],
             "MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQNAYPKDCGAFTGEITSKHLEELKINTLLIGHSERR LLKESPNFLKEKFDFFKDKKFKIVYCIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHGFLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGS SLELENFKTIISFL",
         )
-        self.assertEqual(
-            str(hsp),
-            """\
+        if xml2 is False:
+            self.assertEqual(
+                str(hsp),
+                """\
 Query : CAJ99216.1 Length: 234 Strand: Plus
         tim [Helicobacter acinonychis str. Sheeba]
 Target: gi|1336928286|emb|LT900055.1| Length: 234 Strand: Plus
         Helicobacter acinonychis isolate 212_9 genome assembly, chromosome: I
 
-Score:474 bits(1219), Expect:1e-150,
+Score:439 bits(1128), Expect:2e-137,
 Identities:232/234(99%),  Positives:232/234(99%),  Gaps:0.234(0%)
 
 gi|133692         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
@@ -9788,8 +11441,8 @@ gi|133692         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
 CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
 
 gi|133692        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRALLKESPNFLKEKFDFFKDKKFKIVY
-                 60 ||||||||||||||||||||||||||||||||||.|||||||||||||||||||||||||
-CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNFLKEKFDFFKDKKFKIVY
+                 60 ||||||||||||||||||||||||||||||||||.|||||||...............|||
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVY
 
 gi|133692       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
                 120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
@@ -9800,7 +11453,37 @@ gi|133692       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSASLELENFKTIISFL 234
 CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
 
 """,
-        )
+            )
+        else:  # XML2 is True
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : CAJ99216.1 Length: 234 Strand: Plus
+        tim [Helicobacter acinonychis str. Sheeba]
+Target: gi|1336928286|emb|LT900055.1| Length: 234 Strand: Plus
+        Helicobacter acinonychis isolate 212_9 genome assembly, chromosome: I
+
+Score:439 bits(1128), Expect:2e-137,
+Identities:232/234(99%),  Positives:232/234(99%),  Gaps:0.234(0%)
+
+gi|133692         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+
+gi|133692        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRALLKESPNFLKEKFDFFKDKKFKIVY
+                 60 ||||||||||||||||||||||||||||||||||.|||||||...............|||
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNflkekfdffkdkkfkIVY
+
+gi|133692       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+
+gi|133692       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSASLELENFKTIISFL 234
+                180 |||||||||||||||||||||||||||||||||||||||.|||||||||||||| 234
+CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+
+""",
+            )
         hit = record[2]
         self.assertEqual(hit.num, 3)
         self.assertIsInstance(hit.target, SeqRecord)
@@ -9813,9 +11496,9 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
         self.assertEqual(hsp.num, 1)
-        self.assertAlmostEqual(hsp.score, 1164.0)
-        self.assertAlmostEqual(hsp.annotations["bit score"], 452.981)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 3.45778e-143)
+        self.assertAlmostEqual(hsp.score, 1076.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 419.083)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 2.02413e-130)
         self.assertEqual(hsp.annotations["identity"], 221)
         self.assertEqual(hsp.annotations["positive"], 224)
         self.assertEqual(hsp.annotations["gaps"], 0)
@@ -9863,15 +11546,16 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
             hsp.annotations["midline"],
             "MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLG QNAYPKDCGAFTGEITSKHLEELKINTLLIGHSERR LLKESP+FLKEKFDFFKDK FKI+YCIGEDLKTREKGL AVKEFLNEQLENIDL Y NLIVAYEPIWAIGT KSASLEDIYLTHGFLKQ LNQK PLLYGGSVNTQNAKEILGIDSVDGLL+GS SLELENFKTIISFL",
         )
-        self.assertEqual(
-            str(hsp),
-            """\
+        if xml2 is False:
+            self.assertEqual(
+                str(hsp),
+                """\
 Query : CAJ99216.1 Length: 234 Strand: Plus
         tim [Helicobacter acinonychis str. Sheeba]
 Target: gi|1033012332|gb|CP011486.1| Length: 234 Strand: Plus
         Helicobacter pylori strain K26A1, complete genome
 
-Score:452 bits(1164), Expect:3e-143,
+Score:419 bits(1076), Expect:2e-130,
 Identities:221/234(94%),  Positives:224/234(96%),  Gaps:0.234(0%)
 
 gi|103301         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGAQN
@@ -9879,8 +11563,8 @@ gi|103301         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGAQN
 CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
 
 gi|103301        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRTLLKESPSFLKEKFDFFKDKNFKIIY
-                 60 ||||||||||||||||||||||||||||||||||.||||||.||||||||||||.|||.|
-CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNFLKEKFDFFKDKKFKIVY
+                 60 ||||||||||||||||||||||||||||||||||.||||||................|.|
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVY
 
 gi|103301       120 CIGEDLKTREKGLAAVKEFLNEQLENIDLSYHNLIVAYEPIWAIGTKKSASLEDIYLTHG
                 120 |||||||||||||.|||||||||||||||.|.||||||||||||||.|||||||||||||
@@ -9891,299 +11575,54 @@ gi|103301       180 FLKQILNQKTPLLYGGSVNTQNAKEILGIDSVDGLLVGSASLELENFKTIISFL 234
 CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
 
 """,
-        )
+            )
+        else:  # xml2 is True
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : CAJ99216.1 Length: 234 Strand: Plus
+        tim [Helicobacter acinonychis str. Sheeba]
+Target: gi|1033012332|gb|CP011486.1| Length: 234 Strand: Plus
+        Helicobacter pylori strain K26A1, complete genome
+
+Score:419 bits(1076), Expect:2e-130,
+Identities:221/234(94%),  Positives:224/234(96%),  Gaps:0.234(0%)
+
+gi|103301         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGAQN
+                  0 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||.||
+CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+
+gi|103301        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRTLLKESPSFLKEKFDFFKDKNFKIIY
+                 60 ||||||||||||||||||||||||||||||||||.||||||................|.|
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNflkekfdffkdkkfkIVY
+
+gi|103301       120 CIGEDLKTREKGLAAVKEFLNEQLENIDLSYHNLIVAYEPIWAIGTKKSASLEDIYLTHG
+                120 |||||||||||||.|||||||||||||||.|.||||||||||||||.|||||||||||||
+CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+
+gi|103301       180 FLKQILNQKTPLLYGGSVNTQNAKEILGIDSVDGLLVGSASLELENFKTIISFL 234
+                180 ||||.||||.||||||||||||||||||||||||||.||.|||||||||||||| 234
+CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+
+""",
+            )
         hit = record[3]
         self.assertEqual(hit.num, 4)
         self.assertIsInstance(hit.target, SeqRecord)
-        self.assertEqual(hit.target.id, "gi|1559948212|dbj|AP017633.1|")
-        self.assertEqual(hit.target.name, "AP017633")
+        self.assertEqual(hit.target.id, "gi|2641533851|gb|CP078169.1|")
+        self.assertEqual(hit.target.name, "CP078169")
         self.assertEqual(
             hit.target.description,
-            "Helicobacter pylori DNA, complete genome, strain: PMSS1",
+            "Helicobacter pylori strain HpGP-ZAF-006 chromosome, complete genome",
         )
-        self.assertEqual(repr(hit.target.seq), "Seq(None, length=1603093)")
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=1641225)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
         self.assertEqual(hsp.num, 1)
-        self.assertAlmostEqual(hsp.score, 1136.0)
-        self.assertAlmostEqual(hsp.annotations["bit score"], 442.195)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 2.08706e-139)
-        self.assertEqual(hsp.annotations["identity"], 218)
-        self.assertEqual(hsp.annotations["positive"], 223)
-        self.assertEqual(hsp.annotations["gaps"], 0)
-        self.assertTrue(
-            np.array_equal(
-                hsp.coordinates,
-                # fmt: off
-                np.array([[  0, 234],
-                          [  0, 234]])
-                # fmt: on
-            )
-        )
-        self.assertEqual(hsp.shape, (2, 234))
-        self.assertEqual(
-            repr(hsp.query.seq),
-            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHF...SFL')",
-        )
-        self.assertEqual(hsp.query.id, "CAJ99216.1")
-        self.assertEqual(
-            hsp.query.description, "tim [Helicobacter acinonychis str. Sheeba]"
-        )
-        self.assertEqual(len(hsp.query.features), 0)
-        self.assertEqual(
-            repr(hsp.target.seq),
-            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHFDRVFVFPDFLGLLPNSFLHF...SFL')",
-        )
-        self.assertEqual(hsp.target.id, "gi|1559948212|dbj|AP017633.1|")
-        self.assertEqual(hsp.target.name, "AP017633")
-        self.assertEqual(
-            hsp.target.description,
-            "Helicobacter pylori DNA, complete genome, strain: PMSS1",
-        )
-        self.assertEqual(len(hsp.target.features), 1)
-        feature = hsp.target.features[0]
-        self.assertEqual(
-            repr(feature.location),
-            "SimpleLocation(ExactPosition(0), ExactPosition(1603093))",
-        )
-        self.assertEqual(feature.type, "CDS")
-        self.assertEqual(len(feature.qualifiers), 1)
-        self.assertEqual(
-            feature.qualifiers["coded_by"],
-            "complement(gi|1559948212|dbj|AP017633.1|:1330168..1330869)",
-        )
-        self.assertEqual(
-            hsp.annotations["midline"],
-            "MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQH DRVFVFPDFLGLLPN+FLHFTLGVQNAYP+DCGAFTGEITSKHLEELKI+TLLIGHSERRVLLKESP+FLKEKFDFFKDK FKIVYCIGEDL TREKG  AVKEFLNEQLENIDL+Y NLIVAYEPIWAIGT KSASLEDIYLTHGFLKQ LNQK PLLYGGSVNTQNAKEILGIDSVDGLLIGS S ELENFKTIISFL",
-        )
-        self.assertEqual(
-            str(hsp),
-            """\
-Query : CAJ99216.1 Length: 234 Strand: Plus
-        tim [Helicobacter acinonychis str. Sheeba]
-Target: gi|1559948212|dbj|AP017633.1| Length: 234 Strand: Plus
-        Helicobacter pylori DNA, complete genome, strain: PMSS1
-
-Score:442 bits(1136), Expect:2e-139,
-Identities:218/234(93%),  Positives:223/234(95%),  Gaps:0.234(0%)
-
-gi|155994         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHFDRVFVFPDFLGLLPNSFLHFTLGVQN
-                  0 |||||||||||||||||||||||||||||||||.|||||||||||||||.||||||||||
-CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
-
-gi|155994        60 AYPRDCGAFTGEITSKHLEELKIHTLLIGHSERRVLLKESPSFLKEKFDFFKDKNFKIVY
-                 60 |||.|||||||||||||||||||.|||||||||||||||||.||||||||||||.|||||
-CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNFLKEKFDFFKDKKFKIVY
-
-gi|155994       120 CIGEDLTTREKGFKAVKEFLNEQLENIDLNYSNLIVAYEPIWAIGTKKSASLEDIYLTHG
-                120 ||||||.|||||..|||||||||||||||.|.||||||||||||||.|||||||||||||
-CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
-
-gi|155994       180 FLKQILNQKTPLLYGGSVNTQNAKEILGIDSVDGLLIGSASWELENFKTIISFL 234
-                180 ||||.||||.|||||||||||||||||||||||||||||.|.|||||||||||| 234
-CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
-
-""",
-        )
-        hit = record[4]
-        self.assertEqual(hit.num, 5)
-        self.assertIsInstance(hit.target, SeqRecord)
-        self.assertEqual(hit.target.id, "gi|1143706535|gb|CP018823.1|")
-        self.assertEqual(hit.target.name, "CP018823")
-        self.assertEqual(
-            hit.target.description, "Helicobacter pylori strain PMSS1 complete genome"
-        )
-        self.assertEqual(repr(hit.target.seq), "Seq(None, length=1618480)")
-        self.assertEqual(len(hit), 1)
-        hsp = hit[0]
-        self.assertEqual(hsp.num, 1)
-        self.assertAlmostEqual(hsp.score, 1136.0)
-        self.assertAlmostEqual(hsp.annotations["bit score"], 442.195)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 2.08707e-139)
-        self.assertEqual(hsp.annotations["identity"], 218)
-        self.assertEqual(hsp.annotations["positive"], 223)
-        self.assertEqual(hsp.annotations["gaps"], 0)
-        self.assertTrue(
-            np.array_equal(
-                hsp.coordinates,
-                # fmt: off
-                np.array([[  0, 234],
-                          [  0, 234]])
-                # fmt: on
-            )
-        )
-        self.assertEqual(hsp.shape, (2, 234))
-        self.assertEqual(
-            repr(hsp.query.seq),
-            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHF...SFL')",
-        )
-        self.assertEqual(hsp.query.id, "CAJ99216.1")
-        self.assertEqual(
-            hsp.query.description, "tim [Helicobacter acinonychis str. Sheeba]"
-        )
-        self.assertEqual(len(hsp.query.features), 0)
-        self.assertEqual(
-            repr(hsp.target.seq),
-            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHFDRVFVFPDFLGLLPNSFLHF...SFL')",
-        )
-        self.assertEqual(hsp.target.id, "gi|1143706535|gb|CP018823.1|")
-        self.assertEqual(hsp.target.name, "CP018823")
-        self.assertEqual(
-            hsp.target.description, "Helicobacter pylori strain PMSS1 complete genome"
-        )
-        self.assertEqual(len(hsp.target.features), 1)
-        feature = hsp.target.features[0]
-        self.assertEqual(
-            repr(feature.location),
-            "SimpleLocation(ExactPosition(0), ExactPosition(1618480))",
-        )
-        self.assertEqual(feature.type, "CDS")
-        self.assertEqual(len(feature.qualifiers), 1)
-        self.assertEqual(
-            feature.qualifiers["coded_by"],
-            "gi|1143706535|gb|CP018823.1|:190464..191165",
-        )
-        self.assertEqual(
-            hsp.annotations["midline"],
-            "MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQH DRVFVFPDFLGLLPN+FLHFTLGVQNAYP+DCGAFTGEITSKHLEELKI+TLLIGHSERRVLLKESP+FLKEKFDFFKDK FKIVYCIGEDL TREKG  AVKEFLNEQLENIDL+Y NLIVAYEPIWAIGT KSASLEDIYLTHGFLKQ LNQK PLLYGGSVNTQNAKEILGIDSVDGLLIGS S ELENFKTIISFL",
-        )
-        self.assertEqual(
-            str(hsp),
-            """\
-Query : CAJ99216.1 Length: 234 Strand: Plus
-        tim [Helicobacter acinonychis str. Sheeba]
-Target: gi|1143706535|gb|CP018823.1| Length: 234 Strand: Plus
-        Helicobacter pylori strain PMSS1 complete genome
-
-Score:442 bits(1136), Expect:2e-139,
-Identities:218/234(93%),  Positives:223/234(95%),  Gaps:0.234(0%)
-
-gi|114370         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHFDRVFVFPDFLGLLPNSFLHFTLGVQN
-                  0 |||||||||||||||||||||||||||||||||.|||||||||||||||.||||||||||
-CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
-
-gi|114370        60 AYPRDCGAFTGEITSKHLEELKIHTLLIGHSERRVLLKESPSFLKEKFDFFKDKNFKIVY
-                 60 |||.|||||||||||||||||||.|||||||||||||||||.||||||||||||.|||||
-CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNFLKEKFDFFKDKKFKIVY
-
-gi|114370       120 CIGEDLTTREKGFKAVKEFLNEQLENIDLNYSNLIVAYEPIWAIGTKKSASLEDIYLTHG
-                120 ||||||.|||||..|||||||||||||||.|.||||||||||||||.|||||||||||||
-CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
-
-gi|114370       180 FLKQILNQKTPLLYGGSVNTQNAKEILGIDSVDGLLIGSASWELENFKTIISFL 234
-                180 ||||.||||.|||||||||||||||||||||||||||||.|.|||||||||||| 234
-CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
-
-""",
-        )
-        hit = record[5]
-        self.assertEqual(hit.num, 6)
-        self.assertIsInstance(hit.target, SeqRecord)
-        self.assertEqual(hit.target.id, "gi|1149039824|gb|CP009259.1|")
-        self.assertEqual(hit.target.name, "CP009259")
-        self.assertEqual(
-            hit.target.description, "Helicobacter pylori SS1, complete genome"
-        )
-        self.assertEqual(repr(hit.target.seq), "Seq(None, length=1619098)")
-        self.assertEqual(len(hit), 1)
-        hsp = hit[0]
-        self.assertEqual(hsp.num, 1)
-        self.assertAlmostEqual(hsp.score, 1136.0)
-        self.assertAlmostEqual(hsp.annotations["bit score"], 442.195)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 2.08707e-139)
-        self.assertEqual(hsp.annotations["identity"], 218)
-        self.assertEqual(hsp.annotations["positive"], 223)
-        self.assertEqual(hsp.annotations["gaps"], 0)
-        self.assertTrue(
-            np.array_equal(
-                hsp.coordinates,
-                # fmt: off
-                np.array([[  0, 234],
-                          [  0, 234]])
-                # fmt: on
-            )
-        )
-        self.assertEqual(hsp.shape, (2, 234))
-        self.assertEqual(
-            repr(hsp.query.seq),
-            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHF...SFL')",
-        )
-        self.assertEqual(hsp.query.id, "CAJ99216.1")
-        self.assertEqual(
-            hsp.query.description, "tim [Helicobacter acinonychis str. Sheeba]"
-        )
-        self.assertEqual(len(hsp.query.features), 0)
-        self.assertEqual(
-            repr(hsp.target.seq),
-            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHFDRVFVFPDFLGLLPNSFLHF...SFL')",
-        )
-        self.assertEqual(hsp.target.id, "gi|1149039824|gb|CP009259.1|")
-        self.assertEqual(hsp.target.name, "CP009259")
-        self.assertEqual(
-            hsp.target.description, "Helicobacter pylori SS1, complete genome"
-        )
-        self.assertEqual(len(hsp.target.features), 1)
-        feature = hsp.target.features[0]
-        self.assertEqual(
-            repr(feature.location),
-            "SimpleLocation(ExactPosition(0), ExactPosition(1619098))",
-        )
-        self.assertEqual(feature.type, "CDS")
-        self.assertEqual(len(feature.qualifiers), 1)
-        self.assertEqual(
-            feature.qualifiers["coded_by"],
-            "gi|1149039824|gb|CP009259.1|:190465..191166",
-        )
-        self.assertEqual(
-            hsp.annotations["midline"],
-            "MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQH DRVFVFPDFLGLLPN+FLHFTLGVQNAYP+DCGAFTGEITSKHLEELKI+TLLIGHSERRVLLKESP+FLKEKFDFFKDK FKIVYCIGEDL TREKG  AVKEFLNEQLENIDL+Y NLIVAYEPIWAIGT KSASLEDIYLTHGFLKQ LNQK PLLYGGSVNTQNAKEILGIDSVDGLLIGS S ELENFKTIISFL",
-        )
-        self.assertEqual(
-            str(hsp),
-            """\
-Query : CAJ99216.1 Length: 234 Strand: Plus
-        tim [Helicobacter acinonychis str. Sheeba]
-Target: gi|1149039824|gb|CP009259.1| Length: 234 Strand: Plus
-        Helicobacter pylori SS1, complete genome
-
-Score:442 bits(1136), Expect:2e-139,
-Identities:218/234(93%),  Positives:223/234(95%),  Gaps:0.234(0%)
-
-gi|114903         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHFDRVFVFPDFLGLLPNSFLHFTLGVQN
-                  0 |||||||||||||||||||||||||||||||||.|||||||||||||||.||||||||||
-CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
-
-gi|114903        60 AYPRDCGAFTGEITSKHLEELKIHTLLIGHSERRVLLKESPSFLKEKFDFFKDKNFKIVY
-                 60 |||.|||||||||||||||||||.|||||||||||||||||.||||||||||||.|||||
-CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNFLKEKFDFFKDKKFKIVY
-
-gi|114903       120 CIGEDLTTREKGFKAVKEFLNEQLENIDLNYSNLIVAYEPIWAIGTKKSASLEDIYLTHG
-                120 ||||||.|||||..|||||||||||||||.|.||||||||||||||.|||||||||||||
-CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
-
-gi|114903       180 FLKQILNQKTPLLYGGSVNTQNAKEILGIDSVDGLLIGSASWELENFKTIISFL 234
-                180 ||||.||||.|||||||||||||||||||||||||||||.|.|||||||||||| 234
-CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
-
-""",
-        )
-        hit = record[6]
-        self.assertEqual(hit.num, 7)
-        self.assertIsInstance(hit.target, SeqRecord)
-        self.assertEqual(hit.target.id, "gi|1560269298|gb|CP035106.1|")
-        self.assertEqual(hit.target.name, "CP035106")
-        self.assertEqual(
-            hit.target.description,
-            "Helicobacter pylori strain Hpbs3 chromosome, complete genome",
-        )
-        self.assertEqual(repr(hit.target.seq), "Seq(None, length=1514674)")
-        self.assertEqual(len(hit), 1)
-        hsp = hit[0]
-        self.assertEqual(hsp.num, 1)
-        self.assertAlmostEqual(hsp.score, 1133.0)
-        self.assertAlmostEqual(hsp.annotations["bit score"], 441.039)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 5.81854e-139)
-        self.assertEqual(hsp.annotations["identity"], 215)
+        self.assertAlmostEqual(hsp.score, 1069.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 416.387)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 1.58851e-129)
+        self.assertEqual(hsp.annotations["identity"], 221)
         self.assertEqual(hsp.annotations["positive"], 224)
         self.assertEqual(hsp.annotations["gaps"], 0)
         self.assertTrue(
@@ -10207,338 +11646,834 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
         self.assertEqual(len(hsp.query.features), 0)
         self.assertEqual(
             repr(hsp.target.seq),
-            "Seq('MTKIAMANFKSAMPIFKSHAYLEELEKTLKPQHSDRVFVFPDFLGLLPNSFLHF...SFL')",
+            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDKVFVFPDFLGLLPNAFLHF...SFL')",
         )
-        self.assertEqual(hsp.target.id, "gi|1560269298|gb|CP035106.1|")
-        self.assertEqual(hsp.target.name, "CP035106")
+        self.assertEqual(hsp.target.id, "gi|2641533851|gb|CP078169.1|")
+        self.assertEqual(hsp.target.name, "CP078169")
         self.assertEqual(
             hsp.target.description,
-            "Helicobacter pylori strain Hpbs3 chromosome, complete genome",
+            "Helicobacter pylori strain HpGP-ZAF-006 chromosome, complete genome",
         )
         self.assertEqual(len(hsp.target.features), 1)
         feature = hsp.target.features[0]
         self.assertEqual(
             repr(feature.location),
-            "SimpleLocation(ExactPosition(0), ExactPosition(1514674))",
+            "SimpleLocation(ExactPosition(0), ExactPosition(1641225))",
         )
         self.assertEqual(feature.type, "CDS")
         self.assertEqual(len(feature.qualifiers), 1)
         self.assertEqual(
             feature.qualifiers["coded_by"],
-            "complement(gi|1560269298|gb|CP035106.1|:1231590..1232291)",
+            "gi|2641533851|gb|CP078169.1|:260420..261121",
         )
         self.assertEqual(
             hsp.annotations["midline"],
-            "MTKIAMANFKSAMPIFKSHAYL+ELEKTLKPQH DRVFVFPDFLGLLPN+FLHFTLGVQNAYP+DCGAFTGEITS+HLEELKINTLLIGHSERR+LLKESP+FLKEKFDFFK K FKIVYCIGE+L TREKG  AVKEFLNEQLENIDL+Y NL+VAYEPIWAIGT KSASLEDIYLTHGFLKQ LNQK PLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL",
+            "MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCD+VFVFPDFLGLLPNAFLHFTLG QNAYPKDCGAFTGEITSKHLEELKI+TLLIGHSERR LLKESP+FLKEKFDFFKDK FKIVYCIGEDLKTREKGLGAVKEFLNEQLENIDL Y NLIVAYEPIWAIGT KSASLEDIYLTHGFLKQ LNQK PLLYGGSVN QNAKEILGIDSVDGLLIGS SLELENFKTIISFL",
         )
-        self.assertEqual(
-            str(hsp),
-            """\
+        if xml2 is False:
+            self.assertEqual(
+                str(hsp),
+                """\
 Query : CAJ99216.1 Length: 234 Strand: Plus
         tim [Helicobacter acinonychis str. Sheeba]
-Target: gi|1560269298|gb|CP035106.1| Length: 234 Strand: Plus
-        Helicobacter pylori strain Hpbs3 chromosome, complete genome
+Target: gi|2641533851|gb|CP078169.1| Length: 234 Strand: Plus
+        Helicobacter pylori strain HpGP-ZAF-006 chromosome, complete genome
 
-Score:441 bits(1133), Expect:6e-139,
-Identities:215/234(92%),  Positives:224/234(96%),  Gaps:0.234(0%)
+Score:416 bits(1069), Expect:2e-129,
+Identities:221/234(94%),  Positives:224/234(96%),  Gaps:0.234(0%)
 
-gi|156026         0 MTKIAMANFKSAMPIFKSHAYLEELEKTLKPQHSDRVFVFPDFLGLLPNSFLHFTLGVQN
-                  0 ||||||||||||||||||||||.||||||||||.|||||||||||||||.||||||||||
+gi|264153         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDKVFVFPDFLGLLPNAFLHFTLGAQN
+                  0 |||||||||||||||||||||||||||||||||||.|||||||||||||||||||||.||
 CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
 
-gi|156026        60 AYPRDCGAFTGEITSQHLEELKINTLLIGHSERRLLLKESPSFLKEKFDFFKSKNFKIVY
-                 60 |||.|||||||||||.||||||||||||||||||.||||||.||||||||||.|.|||||
-CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNFLKEKFDFFKDKKFKIVY
+gi|264153        60 AYPKDCGAFTGEITSKHLEELKIHTLLIGHSERRALLKESPSFLKEKFDFFKDKNFKIVY
+                 60 |||||||||||||||||||||||.||||||||||.||||||................|||
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVY
 
-gi|156026       120 CIGEELTTREKGFKAVKEFLNEQLENIDLNYPNLVVAYEPIWAIGTKKSASLEDIYLTHG
-                120 ||||.|.|||||..|||||||||||||||.|.||.|||||||||||.|||||||||||||
+gi|264153       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLSYHNLIVAYEPIWAIGTKKSASLEDIYLTHG
+                120 |||||||||||||||||||||||||||||.|.||||||||||||||.|||||||||||||
 CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
 
-gi|156026       180 FLKQVLNQKTPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
-                180 ||||.||||.|||||||||||||||||||||||||||||||||||||||||||| 234
-CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
-
-""",
-        )
-        hit = record[7]
-        self.assertEqual(hit.num, 8)
-        self.assertIsInstance(hit.target, SeqRecord)
-        self.assertEqual(hit.target.id, "gi|1540258434|emb|LR134517.1|")
-        self.assertEqual(hit.target.name, "LR134517")
-        self.assertEqual(
-            hit.target.description,
-            "Helicobacter pylori strain NCTC13345 genome assembly, chromosome: 1",
-        )
-        self.assertEqual(repr(hit.target.seq), "Seq(None, length=1644315)")
-        self.assertEqual(len(hit), 1)
-        hsp = hit[0]
-        self.assertEqual(hsp.num, 1)
-        self.assertAlmostEqual(hsp.score, 1131.0)
-        self.assertAlmostEqual(hsp.annotations["bit score"], 440.269)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 9.62198e-139)
-        self.assertEqual(hsp.annotations["identity"], 216)
-        self.assertEqual(hsp.annotations["positive"], 222)
-        self.assertEqual(hsp.annotations["gaps"], 0)
-        self.assertTrue(
-            np.array_equal(
-                hsp.coordinates,
-                # fmt: off
-                np.array([[  0, 234],
-                          [  0, 234]])
-                # fmt: on
-            )
-        )
-        self.assertEqual(hsp.shape, (2, 234))
-        self.assertEqual(
-            repr(hsp.query.seq),
-            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHF...SFL')",
-        )
-        self.assertEqual(hsp.query.id, "CAJ99216.1")
-        self.assertEqual(
-            hsp.query.description, "tim [Helicobacter acinonychis str. Sheeba]"
-        )
-        self.assertEqual(len(hsp.query.features), 0)
-        self.assertEqual(
-            repr(hsp.target.seq),
-            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHFDRVFVFPDFLGLLPNAFLHF...SFL')",
-        )
-        self.assertEqual(hsp.target.id, "gi|1540258434|emb|LR134517.1|")
-        self.assertEqual(hsp.target.name, "LR134517")
-        self.assertEqual(
-            hsp.target.description,
-            "Helicobacter pylori strain NCTC13345 genome assembly, chromosome: 1",
-        )
-        self.assertEqual(len(hsp.target.features), 1)
-        feature = hsp.target.features[0]
-        self.assertEqual(
-            repr(feature.location),
-            "SimpleLocation(ExactPosition(0), ExactPosition(1644315))",
-        )
-        self.assertEqual(feature.type, "CDS")
-        self.assertEqual(len(feature.qualifiers), 1)
-        self.assertEqual(
-            feature.qualifiers["coded_by"],
-            "gi|1540258434|emb|LR134517.1|:363062..363763",
-        )
-        self.assertEqual(
-            hsp.annotations["midline"],
-            "MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQH DRVFVFPDFLGLLPNAFLHFTLG QNAYP+DCGAFTGEITSKHLEELKI+TLLIGHSERR LLKESP+FLKEKFDFFKDK FKIVYC+GEDL TREKG  AVKEFL+EQLENIDL+Y NLIVAYEPIWAIGT KSASLEDIYLTHGFLKQ LNQK PLLYGGSVNTQNAKEILGIDSVDGLLIGS SLELENFKTIISFL",
-        )
-        self.assertEqual(
-            str(hsp),
-            """\
-Query : CAJ99216.1 Length: 234 Strand: Plus
-        tim [Helicobacter acinonychis str. Sheeba]
-Target: gi|1540258434|emb|LR134517.1| Length: 234 Strand: Plus
-        Helicobacter pylori strain NCTC13345 genome assembly, chromosome: 1
-
-Score:440 bits(1131), Expect:1e-138,
-Identities:216/234(92%),  Positives:222/234(95%),  Gaps:0.234(0%)
-
-gi|154025         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHFDRVFVFPDFLGLLPNAFLHFTLGAQN
-                  0 |||||||||||||||||||||||||||||||||.|||||||||||||||||||||||.||
-CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
-
-gi|154025        60 AYPRDCGAFTGEITSKHLEELKIHTLLIGHSERRALLKESPSFLKEKFDFFKDKNFKIVY
-                 60 |||.|||||||||||||||||||.||||||||||.||||||.||||||||||||.|||||
-CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNFLKEKFDFFKDKKFKIVY
-
-gi|154025       120 CVGEDLTTREKGFRAVKEFLSEQLENIDLNYSNLIVAYEPIWAIGTKKSASLEDIYLTHG
-                120 |.||||.|||||..||||||.||||||||.|.||||||||||||||.|||||||||||||
-CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
-
-gi|154025       180 FLKQILNQKTPLLYGGSVNTQNAKEILGIDSVDGLLIGSASLELENFKTIISFL 234
-                180 ||||.||||.|||||||||||||||||||||||||||||.|||||||||||||| 234
-CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
-
-""",
-        )
-        hit = record[8]
-        self.assertEqual(hit.num, 9)
-        self.assertIsInstance(hit.target, SeqRecord)
-        self.assertEqual(hit.target.id, "gi|1033005233|gb|CP011487.1|")
-        self.assertEqual(hit.target.name, "CP011487")
-        self.assertEqual(
-            hit.target.description, "Helicobacter pylori strain PNG84A, complete genome"
-        )
-        self.assertEqual(repr(hit.target.seq), "Seq(None, length=1531450)")
-        self.assertEqual(len(hit), 1)
-        hsp = hit[0]
-        self.assertEqual(hsp.num, 1)
-        self.assertAlmostEqual(hsp.score, 1129.0)
-        self.assertAlmostEqual(hsp.annotations["bit score"], 439.499)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 2.21067e-138)
-        self.assertEqual(hsp.annotations["identity"], 215)
-        self.assertEqual(hsp.annotations["positive"], 221)
-        self.assertEqual(hsp.annotations["gaps"], 0)
-        self.assertTrue(
-            np.array_equal(
-                hsp.coordinates,
-                # fmt: off
-                np.array([[  0, 234],
-                          [  0, 234]])
-                # fmt: on
-            )
-        )
-        self.assertEqual(hsp.shape, (2, 234))
-        self.assertEqual(
-            repr(hsp.query.seq),
-            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHF...SFL')",
-        )
-        self.assertEqual(hsp.query.id, "CAJ99216.1")
-        self.assertEqual(
-            hsp.query.description, "tim [Helicobacter acinonychis str. Sheeba]"
-        )
-        self.assertEqual(len(hsp.query.features), 0)
-        self.assertEqual(
-            repr(hsp.target.seq),
-            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHFDRVFVFPDFLGLLPNAFLHF...SFL')",
-        )
-        self.assertEqual(hsp.target.id, "gi|1033005233|gb|CP011487.1|")
-        self.assertEqual(hsp.target.name, "CP011487")
-        self.assertEqual(
-            hsp.target.description, "Helicobacter pylori strain PNG84A, complete genome"
-        )
-        self.assertEqual(len(hsp.target.features), 1)
-        feature = hsp.target.features[0]
-        self.assertEqual(
-            repr(feature.location),
-            "SimpleLocation(ExactPosition(0), ExactPosition(1531450))",
-        )
-        self.assertEqual(feature.type, "CDS")
-        self.assertEqual(len(feature.qualifiers), 1)
-        self.assertEqual(
-            feature.qualifiers["coded_by"],
-            "gi|1033005233|gb|CP011487.1|:161806..162507",
-        )
-        self.assertEqual(
-            hsp.annotations["midline"],
-            "MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQH DRVFVFPDFLGLLPNAFLHFTLGVQNAYP+DCGAFTGEITSKHLEELKINTLLIGHSERR+LLKESP+FLKEKFDFFK K FKI+YCIGE+L TREK   AVKEFLNEQLENIDLDY NL+VAYEPIWAIG  KSASLEDIYLTHGFLKQ LNQK PLLYGGSVNTQNAKEILGIDSVDGLLIGS SLELENFKTIISFL",
-        )
-        self.assertEqual(
-            str(hsp),
-            """\
-Query : CAJ99216.1 Length: 234 Strand: Plus
-        tim [Helicobacter acinonychis str. Sheeba]
-Target: gi|1033005233|gb|CP011487.1| Length: 234 Strand: Plus
-        Helicobacter pylori strain PNG84A, complete genome
-
-Score:439 bits(1129), Expect:2e-138,
-Identities:215/234(92%),  Positives:221/234(94%),  Gaps:0.234(0%)
-
-gi|103300         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHFDRVFVFPDFLGLLPNAFLHFTLGVQN
-                  0 |||||||||||||||||||||||||||||||||.||||||||||||||||||||||||||
-CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
-
-gi|103300        60 AYPRDCGAFTGEITSKHLEELKINTLLIGHSERRMLLKESPSFLKEKFDFFKSKNFKIIY
-                 60 |||.||||||||||||||||||||||||||||||.||||||.||||||||||.|.|||.|
-CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNFLKEKFDFFKDKKFKIVY
-
-gi|103300       120 CIGEELTTREKSFKAVKEFLNEQLENIDLDYPNLVVAYEPIWAIGAKKSASLEDIYLTHG
-                120 ||||.|.||||...|||||||||||||||||.||.||||||||||..|||||||||||||
-CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
-
-gi|103300       180 FLKQILNQKTPLLYGGSVNTQNAKEILGIDSVDGLLIGSASLELENFKTIISFL 234
-                180 ||||.||||.|||||||||||||||||||||||||||||.|||||||||||||| 234
-CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
-
-""",
-        )
-        hit = record[9]
-        self.assertEqual(hit.num, 10)
-        self.assertIsInstance(hit.target, SeqRecord)
-        self.assertEqual(hit.target.id, "gi|1509197163|gb|CP025748.1|")
-        self.assertEqual(hit.target.name, "CP025748")
-        self.assertEqual(
-            hit.target.description, "Helicobacter pylori strain Hp_TH2099 chromosome"
-        )
-        self.assertEqual(repr(hit.target.seq), "Seq(None, length=1667396)")
-        self.assertEqual(len(hit), 1)
-        hsp = hit[0]
-        self.assertEqual(hsp.num, 1)
-        self.assertAlmostEqual(hsp.score, 1128.0)
-        self.assertAlmostEqual(hsp.annotations["bit score"], 439.113)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 2.2539e-138)
-        self.assertEqual(hsp.annotations["identity"], 216)
-        self.assertEqual(hsp.annotations["positive"], 220)
-        self.assertEqual(hsp.annotations["gaps"], 0)
-        self.assertTrue(
-            np.array_equal(
-                hsp.coordinates,
-                # fmt: off
-                np.array([[  0, 234],
-                          [  0, 234]])
-                # fmt: on
-            )
-        )
-        self.assertEqual(hsp.shape, (2, 234))
-        self.assertEqual(
-            repr(hsp.query.seq),
-            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHF...SFL')",
-        )
-        self.assertEqual(hsp.query.id, "CAJ99216.1")
-        self.assertEqual(
-            hsp.query.description, "tim [Helicobacter acinonychis str. Sheeba]"
-        )
-        self.assertEqual(len(hsp.query.features), 0)
-        self.assertEqual(
-            repr(hsp.target.seq),
-            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHFDRVFVFPDFLGLLPNSFLHF...SFL')",
-        )
-        self.assertEqual(hsp.target.id, "gi|1509197163|gb|CP025748.1|")
-        self.assertEqual(hsp.target.name, "CP025748")
-        self.assertEqual(
-            hsp.target.description, "Helicobacter pylori strain Hp_TH2099 chromosome"
-        )
-        self.assertEqual(len(hsp.target.features), 1)
-        feature = hsp.target.features[0]
-        self.assertEqual(
-            repr(feature.location),
-            "SimpleLocation(ExactPosition(0), ExactPosition(1667396))",
-        )
-        self.assertEqual(feature.type, "CDS")
-        self.assertEqual(len(feature.qualifiers), 1)
-        self.assertEqual(
-            feature.qualifiers["coded_by"],
-            "gi|1509197163|gb|CP025748.1|:200718..201419",
-        )
-        self.assertEqual(
-            hsp.annotations["midline"],
-            "MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQH DRVFVFPDFLGLLPN+FLHFTLG QNAYPKDCGAFTGEITSKHLEELKINTLLIGHSERR LLKESPNFLKEKFDFFK K FKIVYCIGE+L TREKG  AVKEFLNEQLENIDL+Y NL+VAYEPIWAIGT KSASLEDIYLTHGFLKQ LNQK PLLYGGSVN QNAKEILGIDSVDGLLIGS SLELENFKTIISFL",
-        )
-        self.assertEqual(
-            str(hsp),
-            """\
-Query : CAJ99216.1 Length: 234 Strand: Plus
-        tim [Helicobacter acinonychis str. Sheeba]
-Target: gi|1509197163|gb|CP025748.1| Length: 234 Strand: Plus
-        Helicobacter pylori strain Hp_TH2099 chromosome
-
-Score:439 bits(1128), Expect:2e-138,
-Identities:216/234(92%),  Positives:220/234(94%),  Gaps:0.234(0%)
-
-gi|150919         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHFDRVFVFPDFLGLLPNSFLHFTLGAQN
-                  0 |||||||||||||||||||||||||||||||||.|||||||||||||||.|||||||.||
-CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
-
-gi|150919        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRALLKESPNFLKEKFDFFKSKNFKIVY
-                 60 ||||||||||||||||||||||||||||||||||.|||||||||||||||||.|.|||||
-CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNFLKEKFDFFKDKKFKIVY
-
-gi|150919       120 CIGEELTTREKGFKAVKEFLNEQLENIDLNYPNLVVAYEPIWAIGTKKSASLEDIYLTHG
-                120 ||||.|.|||||..|||||||||||||||.|.||.|||||||||||.|||||||||||||
-CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
-
-gi|150919       180 FLKQILNQKTPLLYGGSVNVQNAKEILGIDSVDGLLIGSASLELENFKTIISFL 234
+gi|264153       180 FLKQILNQKTPLLYGGSVNAQNAKEILGIDSVDGLLIGSASLELENFKTIISFL 234
                 180 ||||.||||.|||||||||.|||||||||||||||||||.|||||||||||||| 234
 CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
 
 """,
-        )
+            )
+        else:  # xml2 is True
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : CAJ99216.1 Length: 234 Strand: Plus
+        tim [Helicobacter acinonychis str. Sheeba]
+Target: gi|2641533851|gb|CP078169.1| Length: 234 Strand: Plus
+        Helicobacter pylori strain HpGP-ZAF-006 chromosome, complete genome
 
-    def test_xml_2900_tblastn_001_writer(self):
-        """Writing TBLASTN 2.9.0+ (xml_2900_tblastn_001.xml)."""
-        filename = "xml_2900_tblastn_001.xml"
+Score:416 bits(1069), Expect:2e-129,
+Identities:221/234(94%),  Positives:224/234(96%),  Gaps:0.234(0%)
+
+gi|264153         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDKVFVFPDFLGLLPNAFLHFTLGAQN
+                  0 |||||||||||||||||||||||||||||||||||.|||||||||||||||||||||.||
+CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+
+gi|264153        60 AYPKDCGAFTGEITSKHLEELKIHTLLIGHSERRALLKESPSFLKEKFDFFKDKNFKIVY
+                 60 |||||||||||||||||||||||.||||||||||.||||||................|||
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNflkekfdffkdkkfkIVY
+
+gi|264153       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLSYHNLIVAYEPIWAIGTKKSASLEDIYLTHG
+                120 |||||||||||||||||||||||||||||.|.||||||||||||||.|||||||||||||
+CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+
+gi|264153       180 FLKQILNQKTPLLYGGSVNAQNAKEILGIDSVDGLLIGSASLELENFKTIISFL 234
+                180 ||||.||||.|||||||||.|||||||||||||||||||.|||||||||||||| 234
+CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+
+""",
+            )
+        hit = record[4]
+        self.assertEqual(hit.num, 5)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|2641529532|gb|CP078166.1|")
+        self.assertEqual(hit.target.name, "CP078166")
+        self.assertEqual(
+            hit.target.description,
+            "Helicobacter pylori strain HpGP-ZAF-009 chromosome, complete genome",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=1681930)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 1067.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 415.616)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 3.21842e-129)
+        self.assertEqual(hsp.annotations["identity"], 220)
+        self.assertEqual(hsp.annotations["positive"], 226)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[  0, 234],
+                          [  0, 234]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 234))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHF...SFL')",
+        )
+        self.assertEqual(hsp.query.id, "CAJ99216.1")
+        self.assertEqual(
+            hsp.query.description, "tim [Helicobacter acinonychis str. Sheeba]"
+        )
+        self.assertEqual(len(hsp.query.features), 0)
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDKVFVFPDFLGLLPNAFLHF...SFL')",
+        )
+        self.assertEqual(hsp.target.id, "gi|2641529532|gb|CP078166.1|")
+        self.assertEqual(hsp.target.name, "CP078166")
+        self.assertEqual(
+            hsp.target.description,
+            "Helicobacter pylori strain HpGP-ZAF-009 chromosome, complete genome",
+        )
+        self.assertEqual(len(hsp.target.features), 1)
+        feature = hsp.target.features[0]
+        self.assertEqual(
+            repr(feature.location),
+            "SimpleLocation(ExactPosition(0), ExactPosition(1681930))",
+        )
+        self.assertEqual(feature.type, "CDS")
+        self.assertEqual(len(feature.qualifiers), 1)
+        self.assertEqual(
+            feature.qualifiers["coded_by"],
+            "gi|2641529532|gb|CP078166.1|:198327..199028",
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCD+VFVFPDFLGLLPNAFLHFTLG QNAYPKDCGAFTGEITSKHLEELKI+TLLIGHSERR LLKESP+FLKEKFDFFKDKKFKI+YCIGEDLKTREKGLGAVKEFLNEQLENIDL Y +LIVAYEPIWAIGT KSASLEDIYLTHGFLKQ LNQK PLLYGGSVNTQNAKEILGIDSVDGLL+GS SLELENFKTIISFL",
+        )
+        if xml2 is False:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : CAJ99216.1 Length: 234 Strand: Plus
+        tim [Helicobacter acinonychis str. Sheeba]
+Target: gi|2641529532|gb|CP078166.1| Length: 234 Strand: Plus
+        Helicobacter pylori strain HpGP-ZAF-009 chromosome, complete genome
+
+Score:415 bits(1067), Expect:3e-129,
+Identities:220/234(94%),  Positives:226/234(97%),  Gaps:0.234(0%)
+
+gi|264152         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDKVFVFPDFLGLLPNAFLHFTLGAQN
+                  0 |||||||||||||||||||||||||||||||||||.|||||||||||||||||||||.||
+CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+
+gi|264152        60 AYPKDCGAFTGEITSKHLEELKIHTLLIGHSERRTLLKESPSFLKEKFDFFKDKKFKIIY
+                 60 |||||||||||||||||||||||.||||||||||.||||||................|.|
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVY
+
+gi|264152       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLSYHHLIVAYEPIWAIGTKKSASLEDIYLTHG
+                120 |||||||||||||||||||||||||||||.|..|||||||||||||.|||||||||||||
+CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+
+gi|264152       180 FLKQILNQKTPLLYGGSVNTQNAKEILGIDSVDGLLVGSASLELENFKTIISFL 234
+                180 ||||.||||.||||||||||||||||||||||||||.||.|||||||||||||| 234
+CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+
+""",
+            )
+        else:  # xml2 is True
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : CAJ99216.1 Length: 234 Strand: Plus
+        tim [Helicobacter acinonychis str. Sheeba]
+Target: gi|2641529532|gb|CP078166.1| Length: 234 Strand: Plus
+        Helicobacter pylori strain HpGP-ZAF-009 chromosome, complete genome
+
+Score:415 bits(1067), Expect:3e-129,
+Identities:220/234(94%),  Positives:226/234(97%),  Gaps:0.234(0%)
+
+gi|264152         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDKVFVFPDFLGLLPNAFLHFTLGAQN
+                  0 |||||||||||||||||||||||||||||||||||.|||||||||||||||||||||.||
+CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+
+gi|264152        60 AYPKDCGAFTGEITSKHLEELKIHTLLIGHSERRTLLKESPSFLKEKFDFFKDKKFKIIY
+                 60 |||||||||||||||||||||||.||||||||||.||||||................|.|
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNflkekfdffkdkkfkIVY
+
+gi|264152       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLSYHHLIVAYEPIWAIGTKKSASLEDIYLTHG
+                120 |||||||||||||||||||||||||||||.|..|||||||||||||.|||||||||||||
+CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+
+gi|264152       180 FLKQILNQKTPLLYGGSVNTQNAKEILGIDSVDGLLVGSASLELENFKTIISFL 234
+                180 ||||.||||.||||||||||||||||||||||||||.||.|||||||||||||| 234
+CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+
+""",
+            )
+        hit = record[5]
+        self.assertEqual(hit.num, 6)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|1033009499|gb|CP011484.1|")
+        self.assertEqual(hit.target.name, "CP011484")
+        self.assertEqual(
+            hit.target.description, "Helicobacter pylori strain CC33C, complete genome"
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=1659899)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 1066.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 415.231)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 4.05935e-129)
+        self.assertEqual(hsp.annotations["identity"], 220)
+        self.assertEqual(hsp.annotations["positive"], 227)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[  0, 234],
+                          [  0, 234]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 234))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHF...SFL')",
+        )
+        self.assertEqual(hsp.query.id, "CAJ99216.1")
+        self.assertEqual(
+            hsp.query.description, "tim [Helicobacter acinonychis str. Sheeba]"
+        )
+        self.assertEqual(len(hsp.query.features), 0)
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('MTKIAMANFKSSMPIFKSHAYLKELEKTLKPQHCDKVFVFPDFLGLLPNAFLHF...SFL')",
+        )
+        self.assertEqual(hsp.target.id, "gi|1033009499|gb|CP011484.1|")
+        self.assertEqual(hsp.target.name, "CP011484")
+        self.assertEqual(
+            hsp.target.description, "Helicobacter pylori strain CC33C, complete genome"
+        )
+        self.assertEqual(len(hsp.target.features), 1)
+        feature = hsp.target.features[0]
+        self.assertEqual(
+            repr(feature.location),
+            "SimpleLocation(ExactPosition(0), ExactPosition(1659899))",
+        )
+        self.assertEqual(feature.type, "CDS")
+        self.assertEqual(len(feature.qualifiers), 1)
+        self.assertEqual(
+            feature.qualifiers["coded_by"],
+            "gi|1033009499|gb|CP011484.1|:248047..248748",
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MTKIAMANFKS+MPIFKSHAYLKELEKTLKPQHCD+VFVFPDFLGLLPNAFLHFTLG QNAYPKDCGAFTGEITSKHLEELKI+TLLIGHSERRVLLKESP+FLKEKFDFFKDKKFKIVYCIGEDLKTREKGLGAVKEFLNEQLENIDL+Y +LIVAYEPIWAIGT KSASLEDIYLTHGFLKQ LNQK PLLYGGSVN QNAKEILGIDSVDGLL+GS SLELENFKTIISFL",
+        )
+        if xml2 is False:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : CAJ99216.1 Length: 234 Strand: Plus
+        tim [Helicobacter acinonychis str. Sheeba]
+Target: gi|1033009499|gb|CP011484.1| Length: 234 Strand: Plus
+        Helicobacter pylori strain CC33C, complete genome
+
+Score:415 bits(1066), Expect:4e-129,
+Identities:220/234(94%),  Positives:227/234(97%),  Gaps:0.234(0%)
+
+gi|103300         0 MTKIAMANFKSSMPIFKSHAYLKELEKTLKPQHCDKVFVFPDFLGLLPNAFLHFTLGAQN
+                  0 |||||||||||.|||||||||||||||||||||||.|||||||||||||||||||||.||
+CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+
+gi|103300        60 AYPKDCGAFTGEITSKHLEELKIHTLLIGHSERRVLLKESPSFLKEKFDFFKDKKFKIVY
+                 60 |||||||||||||||||||||||.|||||||||||||||||................|||
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVY
+
+gi|103300       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLNYHHLIVAYEPIWAIGTKKSASLEDIYLTHG
+                120 |||||||||||||||||||||||||||||.|..|||||||||||||.|||||||||||||
+CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+
+gi|103300       180 FLKQILNQKTPLLYGGSVNAQNAKEILGIDSVDGLLVGSASLELENFKTIISFL 234
+                180 ||||.||||.|||||||||.||||||||||||||||.||.|||||||||||||| 234
+CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+
+""",
+            )
+        else:  # xml2 is True
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : CAJ99216.1 Length: 234 Strand: Plus
+        tim [Helicobacter acinonychis str. Sheeba]
+Target: gi|1033009499|gb|CP011484.1| Length: 234 Strand: Plus
+        Helicobacter pylori strain CC33C, complete genome
+
+Score:415 bits(1066), Expect:4e-129,
+Identities:220/234(94%),  Positives:227/234(97%),  Gaps:0.234(0%)
+
+gi|103300         0 MTKIAMANFKSSMPIFKSHAYLKELEKTLKPQHCDKVFVFPDFLGLLPNAFLHFTLGAQN
+                  0 |||||||||||.|||||||||||||||||||||||.|||||||||||||||||||||.||
+CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+
+gi|103300        60 AYPKDCGAFTGEITSKHLEELKIHTLLIGHSERRVLLKESPSFLKEKFDFFKDKKFKIVY
+                 60 |||||||||||||||||||||||.|||||||||||||||||................|||
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNflkekfdffkdkkfkIVY
+
+gi|103300       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLNYHHLIVAYEPIWAIGTKKSASLEDIYLTHG
+                120 |||||||||||||||||||||||||||||.|..|||||||||||||.|||||||||||||
+CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+
+gi|103300       180 FLKQILNQKTPLLYGGSVNAQNAKEILGIDSVDGLLVGSASLELENFKTIISFL 234
+                180 ||||.||||.|||||||||.||||||||||||||||.||.|||||||||||||| 234
+CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+
+""",
+            )
+        hit = record[6]
+        self.assertEqual(hit.num, 7)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|317010283|gb|CP002336.1|")
+        self.assertEqual(hit.target.name, "CP002336")
+        self.assertEqual(
+            hit.target.description,
+            "Helicobacter pylori SouthAfrica7, complete genome",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=1653913)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 1066.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 415.231)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 4.73879e-129)
+        self.assertEqual(hsp.annotations["identity"], 221)
+        self.assertEqual(hsp.annotations["positive"], 226)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[  0, 234],
+                          [  0, 234]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 234))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHF...SFL')",
+        )
+        self.assertEqual(hsp.query.id, "CAJ99216.1")
+        self.assertEqual(
+            hsp.query.description, "tim [Helicobacter acinonychis str. Sheeba]"
+        )
+        self.assertEqual(len(hsp.query.features), 0)
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDKVFVFPDFLGLLPNAFLHF...SFL')",
+        )
+        self.assertEqual(hsp.target.id, "gi|317010283|gb|CP002336.1|")
+        self.assertEqual(hsp.target.name, "CP002336")
+        self.assertEqual(
+            hsp.target.description,
+            "Helicobacter pylori SouthAfrica7, complete genome",
+        )
+        self.assertEqual(len(hsp.target.features), 1)
+        feature = hsp.target.features[0]
+        self.assertEqual(
+            repr(feature.location),
+            "SimpleLocation(ExactPosition(0), ExactPosition(1653913))",
+        )
+        self.assertEqual(feature.type, "CDS")
+        self.assertEqual(len(feature.qualifiers), 1)
+        self.assertEqual(
+            feature.qualifiers["coded_by"],
+            "gi|317010283|gb|CP002336.1|:194539..195240",
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCD+VFVFPDFLGLLPNAFLHFTLG QNAYPKD GAFTGEITSKHLEELKINTLLIGHSERRVLLKESP+FLKEKFDFFKDKKFKI+YCIGEDLKTREKGLGAVKEFLNEQLENIDL Y +LIVAYEPIWAIGT KSASLEDIYLTHGFLKQ LNQK PLLYGGSVNTQNAKEILGIDSVDGLL+GS SLELENFKTIISFL",
+        )
+        if xml2 is False:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : CAJ99216.1 Length: 234 Strand: Plus
+        tim [Helicobacter acinonychis str. Sheeba]
+Target: gi|317010283|gb|CP002336.1| Length: 234 Strand: Plus
+        Helicobacter pylori SouthAfrica7, complete genome
+
+Score:415 bits(1066), Expect:5e-129,
+Identities:221/234(94%),  Positives:226/234(97%),  Gaps:0.234(0%)
+
+gi|317010         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDKVFVFPDFLGLLPNAFLHFTLGAQN
+                  0 |||||||||||||||||||||||||||||||||||.|||||||||||||||||||||.||
+CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+
+gi|317010        60 AYPKDYGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPSFLKEKFDFFKDKKFKIIY
+                 60 |||||.|||||||||||||||||||||||||||||||||||................|.|
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVY
+
+gi|317010       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLSYHHLIVAYEPIWAIGTKKSASLEDIYLTHG
+                120 |||||||||||||||||||||||||||||.|..|||||||||||||.|||||||||||||
+CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+
+gi|317010       180 FLKQILNQKTPLLYGGSVNTQNAKEILGIDSVDGLLVGSASLELENFKTIISFL 234
+                180 ||||.||||.||||||||||||||||||||||||||.||.|||||||||||||| 234
+CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+
+""",
+            )
+        else:  # xml2 is True
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : CAJ99216.1 Length: 234 Strand: Plus
+        tim [Helicobacter acinonychis str. Sheeba]
+Target: gi|317010283|gb|CP002336.1| Length: 234 Strand: Plus
+        Helicobacter pylori SouthAfrica7, complete genome
+
+Score:415 bits(1066), Expect:5e-129,
+Identities:221/234(94%),  Positives:226/234(97%),  Gaps:0.234(0%)
+
+gi|317010         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDKVFVFPDFLGLLPNAFLHFTLGAQN
+                  0 |||||||||||||||||||||||||||||||||||.|||||||||||||||||||||.||
+CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+
+gi|317010        60 AYPKDYGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPSFLKEKFDFFKDKKFKIIY
+                 60 |||||.|||||||||||||||||||||||||||||||||||................|.|
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNflkekfdffkdkkfkIVY
+
+gi|317010       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLSYHHLIVAYEPIWAIGTKKSASLEDIYLTHG
+                120 |||||||||||||||||||||||||||||.|..|||||||||||||.|||||||||||||
+CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+
+gi|317010       180 FLKQILNQKTPLLYGGSVNTQNAKEILGIDSVDGLLVGSASLELENFKTIISFL 234
+                180 ||||.||||.||||||||||||||||||||||||||.||.|||||||||||||| 234
+CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+
+""",
+            )
+        hit = record[7]
+        self.assertEqual(hit.num, 8)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|2641538240|gb|CP078172.1|")
+        self.assertEqual(hit.target.name, "CP078172")
+        self.assertEqual(
+            hit.target.description,
+            "Helicobacter pylori strain HpGP-ZAF-001 chromosome, complete genome",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=1714499)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 1062.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 413.69)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 1.37323e-128)
+        self.assertEqual(hsp.annotations["identity"], 219)
+        self.assertEqual(hsp.annotations["positive"], 225)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[  0, 234],
+                          [  0, 234]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 234))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHF...SFL')",
+        )
+        self.assertEqual(hsp.query.id, "CAJ99216.1")
+        self.assertEqual(
+            hsp.query.description, "tim [Helicobacter acinonychis str. Sheeba]"
+        )
+        self.assertEqual(len(hsp.query.features), 0)
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDKVFVFPDFLGLLPNAFLHF...SFL')",
+        )
+        self.assertEqual(hsp.target.id, "gi|2641538240|gb|CP078172.1|")
+        self.assertEqual(hsp.target.name, "CP078172")
+        self.assertEqual(
+            hsp.target.description,
+            "Helicobacter pylori strain HpGP-ZAF-001 chromosome, complete genome",
+        )
+        self.assertEqual(len(hsp.target.features), 1)
+        feature = hsp.target.features[0]
+        self.assertEqual(
+            repr(feature.location),
+            "SimpleLocation(ExactPosition(0), ExactPosition(1714499))",
+        )
+        self.assertEqual(feature.type, "CDS")
+        self.assertEqual(len(feature.qualifiers), 1)
+        self.assertEqual(
+            feature.qualifiers["coded_by"],
+            "complement(gi|2641538240|gb|CP078172.1|:1021670..1022371)",
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCD+VFVFPDFLGLLPNAFLHFTLG QNAYPKDCGAFTGEITSKHLEELKI+TLLIGHSERR LLKESP+FLKEKFDFFKDKKFKI+YCIGEDLKTREKGLGAVKEFLNEQLENIDL Y +LIVAYEPIWAIGT KSASLEDIYLTHGFLKQ LNQK PLLYGGSVN QNAKEILGIDSVDGLL+GS SLELENFKTIISFL",
+        )
+        if xml2 is False:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : CAJ99216.1 Length: 234 Strand: Plus
+        tim [Helicobacter acinonychis str. Sheeba]
+Target: gi|2641538240|gb|CP078172.1| Length: 234 Strand: Plus
+        Helicobacter pylori strain HpGP-ZAF-001 chromosome, complete genome
+
+Score:413 bits(1062), Expect:1e-128,
+Identities:219/234(94%),  Positives:225/234(96%),  Gaps:0.234(0%)
+
+gi|264153         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDKVFVFPDFLGLLPNAFLHFTLGAQN
+                  0 |||||||||||||||||||||||||||||||||||.|||||||||||||||||||||.||
+CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+
+gi|264153        60 AYPKDCGAFTGEITSKHLEELKIHTLLIGHSERRTLLKESPSFLKEKFDFFKDKKFKIIY
+                 60 |||||||||||||||||||||||.||||||||||.||||||................|.|
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVY
+
+gi|264153       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLSYHHLIVAYEPIWAIGTKKSASLEDIYLTHG
+                120 |||||||||||||||||||||||||||||.|..|||||||||||||.|||||||||||||
+CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+
+gi|264153       180 FLKQILNQKTPLLYGGSVNAQNAKEILGIDSVDGLLVGSASLELENFKTIISFL 234
+                180 ||||.||||.|||||||||.||||||||||||||||.||.|||||||||||||| 234
+CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+
+""",
+            )
+        else:  # xml2 is True
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : CAJ99216.1 Length: 234 Strand: Plus
+        tim [Helicobacter acinonychis str. Sheeba]
+Target: gi|2641538240|gb|CP078172.1| Length: 234 Strand: Plus
+        Helicobacter pylori strain HpGP-ZAF-001 chromosome, complete genome
+
+Score:413 bits(1062), Expect:1e-128,
+Identities:219/234(94%),  Positives:225/234(96%),  Gaps:0.234(0%)
+
+gi|264153         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDKVFVFPDFLGLLPNAFLHFTLGAQN
+                  0 |||||||||||||||||||||||||||||||||||.|||||||||||||||||||||.||
+CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+
+gi|264153        60 AYPKDCGAFTGEITSKHLEELKIHTLLIGHSERRTLLKESPSFLKEKFDFFKDKKFKIIY
+                 60 |||||||||||||||||||||||.||||||||||.||||||................|.|
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNflkekfdffkdkkfkIVY
+
+gi|264153       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLSYHHLIVAYEPIWAIGTKKSASLEDIYLTHG
+                120 |||||||||||||||||||||||||||||.|..|||||||||||||.|||||||||||||
+CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+
+gi|264153       180 FLKQILNQKTPLLYGGSVNAQNAKEILGIDSVDGLLVGSASLELENFKTIISFL 234
+                180 ||||.||||.|||||||||.||||||||||||||||.||.|||||||||||||| 234
+CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+
+""",
+            )
+        hit = record[8]
+        self.assertEqual(hit.num, 9)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|2640367186|gb|CP079077.1|")
+        self.assertEqual(hit.target.name, "CP079077")
+        self.assertEqual(
+            hit.target.description,
+            "Helicobacter pylori strain HpGP-ARG-001 chromosome, complete genome",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=1624657)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 1059.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 412.535)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 3.5777e-128)
+        self.assertEqual(hsp.annotations["identity"], 220)
+        self.assertEqual(hsp.annotations["positive"], 225)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[  0, 234],
+                          [  0, 234]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 234))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHF...SFL')",
+        )
+        self.assertEqual(hsp.query.id, "CAJ99216.1")
+        self.assertEqual(
+            hsp.query.description, "tim [Helicobacter acinonychis str. Sheeba]"
+        )
+        self.assertEqual(len(hsp.query.features), 0)
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHFDRVFVFPDFLGLLPNAFLHF...SFL')",
+        )
+        self.assertEqual(hsp.target.id, "gi|2640367186|gb|CP079077.1|")
+        self.assertEqual(hsp.target.name, "CP079077")
+        self.assertEqual(
+            hsp.target.description,
+            "Helicobacter pylori strain HpGP-ARG-001 chromosome, complete genome",
+        )
+        self.assertEqual(len(hsp.target.features), 1)
+        feature = hsp.target.features[0]
+        self.assertEqual(
+            repr(feature.location),
+            "SimpleLocation(ExactPosition(0), ExactPosition(1624657))",
+        )
+        self.assertEqual(feature.type, "CDS")
+        self.assertEqual(len(feature.qualifiers), 1)
+        self.assertEqual(
+            feature.qualifiers["coded_by"],
+            "gi|2640367186|gb|CP079077.1|:197481..198182",
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQH DRVFVFPDFLGLLPNAFLHFTLGVQNAYP+DCGAFTGEITSKHLEELKI+TLLIGHSERRVLLKESP+FLKEKFDFFKDK FKIVYCIGEDLKTREKG  AVKEFL+EQLENIDL+Y NLIVAYEPIWAIGT KSASLEDIYLTHGFLKQ LNQK PLLYGGSVNTQNAKEILGIDSVDGLLIGS SLELENFKTIISFL",
+        )
+        if xml2 is False:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : CAJ99216.1 Length: 234 Strand: Plus
+        tim [Helicobacter acinonychis str. Sheeba]
+Target: gi|2640367186|gb|CP079077.1| Length: 234 Strand: Plus
+        Helicobacter pylori strain HpGP-ARG-001 chromosome, complete genome
+
+Score:412 bits(1059), Expect:4e-128,
+Identities:220/234(94%),  Positives:225/234(96%),  Gaps:0.234(0%)
+
+gi|264036         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHFDRVFVFPDFLGLLPNAFLHFTLGVQN
+                  0 |||||||||||||||||||||||||||||||||.||||||||||||||||||||||||||
+CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+
+gi|264036        60 AYPRDCGAFTGEITSKHLEELKIHTLLIGHSERRVLLKESPSFLKEKFDFFKDKNFKIVY
+                 60 |||.|||||||||||||||||||.|||||||||||||||||................|||
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVY
+
+gi|264036       120 CIGEDLKTREKGFKAVKEFLSEQLENIDLNYSNLIVAYEPIWAIGTKKSASLEDIYLTHG
+                120 ||||||||||||..||||||.||||||||.|.||||||||||||||.|||||||||||||
+CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+
+gi|264036       180 FLKQILNQKTPLLYGGSVNTQNAKEILGIDSVDGLLIGSASLELENFKTIISFL 234
+                180 ||||.||||.|||||||||||||||||||||||||||||.|||||||||||||| 234
+CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+
+""",
+            )
+        else:  # xml2 is True
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : CAJ99216.1 Length: 234 Strand: Plus
+        tim [Helicobacter acinonychis str. Sheeba]
+Target: gi|2640367186|gb|CP079077.1| Length: 234 Strand: Plus
+        Helicobacter pylori strain HpGP-ARG-001 chromosome, complete genome
+
+Score:412 bits(1059), Expect:4e-128,
+Identities:220/234(94%),  Positives:225/234(96%),  Gaps:0.234(0%)
+
+gi|264036         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHFDRVFVFPDFLGLLPNAFLHFTLGVQN
+                  0 |||||||||||||||||||||||||||||||||.||||||||||||||||||||||||||
+CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+
+gi|264036        60 AYPRDCGAFTGEITSKHLEELKIHTLLIGHSERRVLLKESPSFLKEKFDFFKDKNFKIVY
+                 60 |||.|||||||||||||||||||.|||||||||||||||||................|||
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNflkekfdffkdkkfkIVY
+
+gi|264036       120 CIGEDLKTREKGFKAVKEFLSEQLENIDLNYSNLIVAYEPIWAIGTKKSASLEDIYLTHG
+                120 ||||||||||||..||||||.||||||||.|.||||||||||||||.|||||||||||||
+CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+
+gi|264036       180 FLKQILNQKTPLLYGGSVNTQNAKEILGIDSVDGLLIGSASLELENFKTIISFL 234
+                180 ||||.||||.|||||||||||||||||||||||||||||.|||||||||||||| 234
+CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+
+""",
+            )
+        hit = record[9]
+        self.assertEqual(hit.num, 10)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|532105813|gb|CP006691.1|")
+        self.assertEqual(hit.target.name, "CP006691")
+        self.assertEqual(
+            hit.target.description, "Helicobacter pylori SouthAfrica20, complete genome"
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=1622903)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 1057.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 411.764)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 7.68167e-128)
+        self.assertEqual(hsp.annotations["identity"], 218)
+        self.assertEqual(hsp.annotations["positive"], 225)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[  0, 234],
+                          [  0, 234]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 234))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHF...SFL')",
+        )
+        self.assertEqual(hsp.query.id, "CAJ99216.1")
+        self.assertEqual(
+            hsp.query.description, "tim [Helicobacter acinonychis str. Sheeba]"
+        )
+        self.assertEqual(len(hsp.query.features), 0)
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDKVFVFPDFLGLLPNAFLHF...SFL')",
+        )
+        self.assertEqual(hsp.target.id, "gi|532105813|gb|CP006691.1|")
+        self.assertEqual(hsp.target.name, "CP006691")
+        self.assertEqual(
+            hsp.target.description, "Helicobacter pylori SouthAfrica20, complete genome"
+        )
+        self.assertEqual(len(hsp.target.features), 1)
+        feature = hsp.target.features[0]
+        self.assertEqual(
+            repr(feature.location),
+            "SimpleLocation(ExactPosition(0), ExactPosition(1622903))",
+        )
+        self.assertEqual(feature.type, "CDS")
+        self.assertEqual(len(feature.qualifiers), 1)
+        self.assertEqual(
+            feature.qualifiers["coded_by"],
+            "gi|532105813|gb|CP006691.1|:197836..198537",
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCD+VFVFPDFLGLLPNAFLHFTLG QNAYPKDCGAFTGEITSKHLEELKI+TLLIGHSERRVLLKESP+FLKEKFDFFKDKKFKI+YCIGEDLKTREKG  AVKEFLNEQLENIDL+Y +LIVAYEPIWAIGT KSASLEDIYLTHGFLKQ LNQK PLLYGGSVN QNAKEILGIDSVDGLL+GS SLELENFKTIISFL",
+        )
+        if xml2 is False:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : CAJ99216.1 Length: 234 Strand: Plus
+        tim [Helicobacter acinonychis str. Sheeba]
+Target: gi|532105813|gb|CP006691.1| Length: 234 Strand: Plus
+        Helicobacter pylori SouthAfrica20, complete genome
+
+Score:411 bits(1057), Expect:8e-128,
+Identities:218/234(93%),  Positives:225/234(96%),  Gaps:0.234(0%)
+
+gi|532105         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDKVFVFPDFLGLLPNAFLHFTLGAQN
+                  0 |||||||||||||||||||||||||||||||||||.|||||||||||||||||||||.||
+CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+
+gi|532105        60 AYPKDCGAFTGEITSKHLEELKIHTLLIGHSERRVLLKESPSFLKEKFDFFKDKKFKIIY
+                 60 |||||||||||||||||||||||.|||||||||||||||||................|.|
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVY
+
+gi|532105       120 CIGEDLKTREKGFNAVKEFLNEQLENIDLNYHHLIVAYEPIWAIGTKKSASLEDIYLTHG
+                120 ||||||||||||..|||||||||||||||.|..|||||||||||||.|||||||||||||
+CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+
+gi|532105       180 FLKQILNQKTPLLYGGSVNAQNAKEILGIDSVDGLLVGSASLELENFKTIISFL 234
+                180 ||||.||||.|||||||||.||||||||||||||||.||.|||||||||||||| 234
+CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+
+""",
+            )
+        else:  # xml2 is True
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : CAJ99216.1 Length: 234 Strand: Plus
+        tim [Helicobacter acinonychis str. Sheeba]
+Target: gi|532105813|gb|CP006691.1| Length: 234 Strand: Plus
+        Helicobacter pylori SouthAfrica20, complete genome
+
+Score:411 bits(1057), Expect:8e-128,
+Identities:218/234(93%),  Positives:225/234(96%),  Gaps:0.234(0%)
+
+gi|532105         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDKVFVFPDFLGLLPNAFLHFTLGAQN
+                  0 |||||||||||||||||||||||||||||||||||.|||||||||||||||||||||.||
+CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+
+gi|532105        60 AYPKDCGAFTGEITSKHLEELKIHTLLIGHSERRVLLKESPSFLKEKFDFFKDKKFKIIY
+                 60 |||||||||||||||||||||||.|||||||||||||||||................|.|
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNflkekfdffkdkkfkIVY
+
+gi|532105       120 CIGEDLKTREKGFNAVKEFLNEQLENIDLNYHHLIVAYEPIWAIGTKKSASLEDIYLTHG
+                120 ||||||||||||..|||||||||||||||.|..|||||||||||||.|||||||||||||
+CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+
+gi|532105       180 FLKQILNQKTPLLYGGSVNAQNAKEILGIDSVDGLLVGSASLELENFKTIISFL 234
+                180 ||||.||||.|||||||||.||||||||||||||||.||.|||||||||||||| 234
+CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+
+""",
+            )
+
+    def test_xml_21500_tblastn_001_writer(self):
+        """Writing TBLASTN 2.15.0+ (xml_21500_tblastn_001.xml)."""
+        filename = "xml_21500_tblastn_001.xml"
         path = os.path.join("Blast", filename)
         with Blast.parse(path) as records:
             stream = io.BytesIO()
@@ -10546,11 +12481,11 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
             self.assertEqual(n, 1)
             stream.seek(0)
             written_records = Blast.parse(stream)
-            self.check_xml_2900_tblastn_001_records(written_records)
+            self.check_xml_21500_tblastn_001_records(written_records)
 
-    def test_xml_2900_tblastn_001_v2_writer(self):
-        """Writing TBLASTN 2.9.0+ XML2 (xml_2900_tblastn_001_v2.xml)."""
-        filename = "xml_2900_tblastn_001_v2.xml"
+    def test_xml2_21500_tblastn_001_writer(self):
+        """Writing TBLASTN 2.15.0+ XML2 (xml2_21500_tblastn_001.xml)."""
+        filename = "xml2_21500_tblastn_001.xml"
         path = os.path.join("Blast", filename)
         with Blast.parse(path) as records:
             stream = io.BytesIO()
@@ -10558,7 +12493,7 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
             self.assertEqual(n, 1)
             stream.seek(0)
             written_records = Blast.parse(stream)
-            self.check_xml_2900_tblastn_001_records(written_records, xml2=True)
+            self.check_xml_21500_tblastn_001_records(written_records, xml2=True)
 
 
 class TestTBlastx(unittest.TestCase):
@@ -10626,7 +12561,7 @@ Program: TBLASTX 2.2.26+
         self.assertEqual(record.stat["db-num"], 2933984)
         self.assertEqual(record.stat["db-len"], 4726730735)
         self.assertEqual(record.stat["hsp-len"], 0)
-        self.assertAlmostEqual(record.stat["eff-space"], 0.0)
+        self.assertEqual(record.stat["eff-space"], 0)
         self.assertAlmostEqual(record.stat["kappa"], 0.0)
         self.assertAlmostEqual(record.stat["lambda"], 0.0)
         self.assertAlmostEqual(record.stat["entropy"], 0.0)
@@ -10645,7 +12580,7 @@ Program: TBLASTX 2.2.26+
         self.assertEqual(record.stat["db-num"], 2933984)
         self.assertEqual(record.stat["db-len"], 4726730735)
         self.assertEqual(record.stat["hsp-len"], 0)
-        self.assertAlmostEqual(record.stat["eff-space"], 0.0)
+        self.assertEqual(record.stat["eff-space"], 0)
         self.assertAlmostEqual(record.stat["kappa"], 0.0)
         self.assertAlmostEqual(record.stat["lambda"], 0.0)
         self.assertAlmostEqual(record.stat["entropy"], 0.0)
@@ -11262,7 +13197,6 @@ Query_2          60 GNAMPTGTVNRSIYSSKPAV*NFGCLH*GYSSRDGDSIK 99
         hit = record[0]
         self.assertEqual(hit.num, 1)
         hsps = hit[1:5:2]
-        self.maxDiff = None
         self.assertEqual(
             str(hsps),
             """\
@@ -11292,43 +13226,1137 @@ Query: Query_2
             written_records = Blast.parse(stream)
             self.check_xml_2226_tblastx_004(written_records)
 
-
-class TestRPSBlast(unittest.TestCase):
-    """Test the Blast XML parser for rpsblast output."""
-
-    def test_xml_2900_rpsblast_001_parser(self):
-        """Parsing RPSBLAST 2.9.0+ (xml_2900_rpsblast_001.xml)."""
-        filename = "xml_2900_rpsblast_001.xml"
+    def test_xml_21500_tblastx_001_parser(self):
+        """Parsing TBLASTX 2.15.0+ (xml_21500_tblastx_001.xml)."""
+        filename = "xml_21500_tblastx_001.xml"
         path = os.path.join("Blast", filename)
         with open(path, "rb") as stream:
             records = Blast.parse(stream)
-            self.check_xml_2900_rpsblast_001_records(records)
+            self.check_xml_21500_tblastx_001_records(records)
         with Blast.parse(path) as records:
-            self.check_xml_2900_rpsblast_001_records(records)
+            self.check_xml_21500_tblastx_001_records(records)
         with open(path, "rb") as stream:
             record = Blast.read(stream)
-        self.check_xml_2900_rpsblast_001_record(record)
+        self.check_xml_21500_tblastx_001_record(record, xml2=False)
         record = Blast.read(path)
-        self.check_xml_2900_rpsblast_001_record(record)
+        self.check_xml_21500_tblastx_001_record(record, xml2=False)
+        with Blast.parse(path) as records:
+            self.assertEqual(
+                str(records),
+                """\
+Program: TBLASTX 2.15.0+
+     db: refseq_rna
 
-    def test_xml_2900_rpsblast_001_v2_parser(self):
-        """Parsing RPSBLAST 2.9.0+ (xml_2900_rpsblast_001_v2.xml)."""
-        filename = "xml_2900_rpsblast_001_v2.xml"
+  Query: Query_949527 (length=804)
+         NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168
+         complete genome
+   Hits: ----  -----  ----------------------------------------------------------
+            #  # HSP  ID + description
+         ----  -----  ----------------------------------------------------------
+            0      1  gi|1048027041|ref|XM_017618728.1|  PREDICTED: Rhagoleti...
+            1      2  gi|2670929493|ref|XM_062937224.1|  Kwoniella shivajii u...
+            2      1  gi|2432161024|ref|XM_053088494.1|  Dioszegia hungarica ...
+            3      1  gi|799335188|ref|XM_012195534.1|  Cryptococcus neoforma...
+            4      1  gi|1799711371|ref|XM_032001855.1|  Kwoniella shandongen...
+            5      1  gi|1102541390|ref|XM_019193349.1|  Kwoniella bestiolae ...
+            6      1  gi|1799711369|ref|XM_032001854.1|  Kwoniella shandongen...
+            7      1  gi|2592096353|ref|XM_060229193.1|  PREDICTED: Ylistrum ...
+            8      1  gi|2044197324|ref|XM_041762518.1|  PREDICTED: Vulpes la...
+            9      1  gi|1101784196|ref|XM_019135081.1|  Cryptococcus amylole...""",
+            )
+
+    def test_xml2_21500_tblastx_001_parser(self):
+        """Parsing TBLASTX 2.15.0+ (xml2_21500_tblastx_001.xml)."""
+        filename = "xml2_21500_tblastx_001.xml"
         path = os.path.join("Blast", filename)
         with open(path, "rb") as stream:
             records = Blast.parse(stream)
-            self.check_xml_2900_rpsblast_001_records(records, xml2=True)
+            self.check_xml_21500_tblastx_001_records(records, xml2=True)
         with Blast.parse(path) as records:
-            self.check_xml_2900_rpsblast_001_records(records, xml2=True)
+            self.check_xml_21500_tblastx_001_records(records, xml2=True)
         with open(path, "rb") as stream:
             record = Blast.read(stream)
-        self.check_xml_2900_rpsblast_001_record(record, xml2=True)
+        self.check_xml_21500_tblastx_001_record(record, xml2=True)
         record = Blast.read(path)
-        self.check_xml_2900_rpsblast_001_record(record, xml2=True)
+        self.check_xml_21500_tblastx_001_record(record, xml2=True)
 
-    def test_xml_2900_rpsblast_001_writer(self):
-        """Writing rpsblast 2.9.0+ (xml_2900_rpsblast_001.xml)."""
-        filename = "xml_2900_rpsblast_001.xml"
+    def check_xml_21500_tblastx_001_records(self, records, xml2=False):
+        self.assertEqual(records.program, "tblastx")
+        self.assertEqual(records.version, "TBLASTX 2.15.0+")
+        self.assertEqual(
+            records.reference,
+            'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+        )
+        self.assertEqual(records.db, "refseq_rna")
+        if xml2 is False:
+            self.assertIsInstance(records.query, SeqRecord)
+            self.assertEqual(records.query.id, "Query_949527")
+            self.assertEqual(
+                records.query.description,
+                "NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168 complete genome",
+            )
+            self.assertEqual(repr(records.query.seq), "Seq(None, length=804)")
+        self.assertEqual(len(records.param), 5)
+        self.assertEqual(records.param["matrix"], "BLOSUM62")
+        self.assertAlmostEqual(records.param["expect"], 0.05)
+        self.assertEqual(records.param["filter"], "L;")
+        if xml2 is False:
+            self.assertEqual(records.param["gap-open"], 11)
+            self.assertEqual(records.param["gap-extend"], 1)
+        else:
+            self.assertEqual(records.param["query-gencode"], 1)
+            self.assertEqual(records.param["db-gencode"], 1)
+        record = next(records)
+        self.assertRaises(StopIteration, next, records)
+        self.check_xml_21500_tblastx_001_record(record, xml2)
+
+    def check_xml_21500_tblastx_001_record(self, record, xml2):
+        if xml2 is False:
+            self.assertEqual(record.num, 1)
+        self.assertIsInstance(record.query, SeqRecord)
+        self.assertEqual(record.query.id, "Query_949527")
+        self.assertEqual(
+            record.query.description,
+            "NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168 complete genome",
+        )
+        self.assertEqual(repr(record.query.seq), "Seq(None, length=804)")
+        if xml2 is True:
+            self.assertEqual(len(record.query.features), 1)
+            feature = record.query.features[0]
+            self.assertEqual(feature.type, "masking")
+            location = feature.location
+            self.assertEqual(
+                repr(location), "SimpleLocation(ExactPosition(259), ExactPosition(293))"
+            )
+        self.assertEqual(len(record.stat), 7)
+        self.assertEqual(record.stat["db-num"], 60837734)
+        self.assertEqual(record.stat["db-len"], 161330429008)
+        if xml2 is True:
+            self.assertEqual(record.stat["hsp-len"], 66)
+            self.assertEqual(record.stat["eff-space"], 10051826883450)
+            self.assertEqual(record.stat["kappa"], -1)
+            self.assertEqual(record.stat["lambda"], -1)
+            self.assertEqual(record.stat["entropy"], -1)
+        else:
+            self.assertEqual(record.stat["hsp-len"], 0)
+            self.assertEqual(record.stat["eff-space"], 0)
+            self.assertAlmostEqual(record.stat["kappa"], 0.133956144488482)
+            self.assertAlmostEqual(record.stat["lambda"], 0.317605957635731)
+            self.assertAlmostEqual(record.stat["entropy"], 0.401214524497119)
+        self.assertEqual(len(record), 10)
+        hit = record[0]
+        self.assertEqual(hit.num, 1)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|1048027041|ref|XM_017618728.1|")
+        self.assertEqual(hit.target.name, "XM_017618728")
+        self.assertEqual(
+            hit.target.description,
+            "PREDICTED: Rhagoletis zephyria response regulator PleD-like (LOC108364862), partial mRNA",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=917)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 150.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 71.6314)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 5.49617e-09)
+        self.assertEqual(hsp.annotations["identity"], 29)
+        self.assertEqual(hsp.annotations["positive"], 52)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[ 0, 89],
+                          [ 0, 89]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 89))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('AYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAF...QVS')",
+        )
+        self.assertEqual(hsp.query.id, "Query_949527")
+        self.assertEqual(
+            hsp.query.description,
+            "NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168 complete genome",
+        )
+        self.assertEqual(len(hsp.query.features), 1)
+        feature = hsp.query.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(89))"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('ACGGQEALNLVVEQQPDIVLLDVMMPGIDGFMVCKEMKDNPMTTHIPVVMVTAL...SLT')",
+        )
+        self.assertEqual(hsp.target.id, "gi|1048027041|ref|XM_017618728.1|")
+        self.assertEqual(hsp.target.name, "XM_017618728")
+        self.assertEqual(
+            hsp.target.description,
+            "PREDICTED: Rhagoletis zephyria response regulator PleD-like (LOC108364862), partial mRNA",
+        )
+        if xml2 is True:
+            self.assertEqual(len(record.query.features), 1)
+            feature = record.query.features[0]
+            self.assertEqual(feature.type, "masking")
+            location = feature.location
+            self.assertEqual(
+                repr(location), "SimpleLocation(ExactPosition(259), ExactPosition(293))"
+            )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "A  GQE L+L  E+ PD+++LD++MP +DG  V + ++++ +     V+M+TA    +   K ++ GA  F+ KP D   L   I+ ++",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='gi|1048027041|ref|XM_017618728.1|' query.id='Query_949527'; 2 rows x 89 columns>",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+Query : Query_949527 Length: 89 Strand: Plus
+        NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168
+        complete genome
+Target: gi|1048027041|ref|XM_017618728.1| Length: 89 Strand: Plus
+        PREDICTED: Rhagoletis zephyria response regulator PleD-like
+        (LOC108364862), partial mRNA
+
+Score:71 bits(150), Expect:5e-09,
+Identities:29/89(33%),  Positives:52/89(58%),  Gaps:0.89(0%)
+
+gi|104802         0 ACGGQEALNLVVEQQPDIVLLDVMMPGIDGFMVCKEMKDNPMTTHIPVVMVTALHDTEDR
+                  0 |..|||.|.|..|..||...||..||..||..|..............|.|.||.......
+Query_949         0 AYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAFGQEDVT
+
+gi|104802        60 VKGINAGADDFLTKPIDETALSARIKSLT 89
+                 60 .|....||..|..||.|...|...|.... 89
+Query_949        60 KKAVDLGASYFILKPFDMENLVGHIRQVS 89
+
+""",
+        )
+        hit = record[1]
+        self.assertEqual(hit.num, 2)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|2670929493|ref|XM_062937224.1|")
+        self.assertEqual(hit.target.name, "XM_062937224")
+        self.assertEqual(
+            hit.target.description,
+            "Kwoniella shivajii uncharacterized protein (IL334_005512), partial mRNA",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=9882)")
+        self.assertEqual(len(hit), 2)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 146.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 69.7986)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 1.95794e-08)
+        self.assertEqual(hsp.annotations["identity"], 32)
+        self.assertEqual(hsp.annotations["positive"], 51)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[ 0, 94],
+                          [ 0, 94]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 94))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('IEGQEDMEVIGVAYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDL...NLV')",
+        )
+        self.assertEqual(hsp.query.id, "Query_949527")
+        self.assertEqual(
+            hsp.query.description,
+            "NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168 complete genome",
+        )
+        self.assertEqual(len(hsp.query.features), 1)
+        feature = hsp.query.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(94))"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('VDDSYDMRKVIEAHDGQEALELCSRALPDLIISDIMMPRLDGFGLLQALKSSSN...ELL')",
+        )
+        self.assertEqual(hsp.target.id, "gi|2670929493|ref|XM_062937224.1|")
+        self.assertEqual(hsp.target.name, "XM_062937224")
+        self.assertEqual(
+            hsp.target.description,
+            "Kwoniella shivajii uncharacterized protein (IL334_005512), partial mRNA",
+        )
+        self.assertEqual(len(hsp.target.features), 1)
+        feature = hsp.target.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(9882))"
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "++   DM  +  A++GQE L L     PD+++ DI+MP LDG  +L+ L+ S       +I+LTA G +D     +  GA  ++ KPF    L+",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='gi|2670929493|ref|XM_062937224.1|' query.id='Query_949527'; 2 rows x 94 columns>",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+Query : Query_949527 Length: 94 Strand: Plus
+        NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168
+        complete genome
+Target: gi|2670929493|ref|XM_062937224.1| Length: 94 Strand: Plus
+        Kwoniella shivajii uncharacterized protein (IL334_005512), partial mRNA
+
+Score:69 bits(146), Expect:2e-08,
+Identities:32/94(34%),  Positives:51/94(54%),  Gaps:0.94(0%)
+
+gi|267092         0 VDDSYDMRKVIEAHDGQEALELCSRALPDLIISDIMMPRLDGFGLLQALKSSSNLISVPI
+                  0 .....||.....|..|||.|.|.....||....||.||.|||...|..|..|........
+Query_949         0 IEGQEDMEVIGVAYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNV
+
+gi|267092        60 ILLTARGDQDFKVGGLMSGAEDYLSKPFSTPELL 94
+                 60 |.|||.|..|........||.....|||....|. 94
+Query_949        60 IMLTAFGQEDVTKKAVDLGASYFILKPFDMENLV 94
+
+""",
+        )
+        hsp = hit[1]
+        self.assertEqual(hsp.num, 2)
+        self.assertAlmostEqual(hsp.score, 118.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 56.9688)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 0.000142549)
+        self.assertEqual(hsp.annotations["identity"], 25)
+        self.assertEqual(hsp.annotations["positive"], 42)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[ 0, 68],
+                          [ 0, 68]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 68))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('AYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAF...LGA')",
+        )
+        self.assertEqual(hsp.query.id, "Query_949527")
+        self.assertEqual(
+            hsp.query.description,
+            "NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168 complete genome",
+        )
+        self.assertEqual(len(hsp.query.features), 1)
+        feature = hsp.query.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(68))"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('ARDGQEALALCAQQAPDLIISDVMMPNLDGFGLLRALKQSKKLAIIPIIMLTAR...AGA')",
+        )
+        self.assertEqual(hsp.target.id, "gi|2670929493|ref|XM_062937224.1|")
+        self.assertEqual(hsp.target.name, "XM_062937224")
+        self.assertEqual(
+            hsp.target.description,
+            "Kwoniella shivajii uncharacterized protein (IL334_005512), partial mRNA",
+        )
+        self.assertEqual(len(hsp.target.features), 1)
+        feature = hsp.target.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(9882))"
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "A +GQE L+L  ++ PD+++ D++MP+LDG  +L  L++S       +IMLTA G ++     +  GA",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='gi|2670929493|ref|XM_062937224.1|' query.id='Query_949527'; 2 rows x 68 columns>",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+Query : Query_949527 Length: 68 Strand: Plus
+        NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168
+        complete genome
+Target: gi|2670929493|ref|XM_062937224.1| Length: 68 Strand: Plus
+        Kwoniella shivajii uncharacterized protein (IL334_005512), partial mRNA
+
+Score:56 bits(118), Expect:0.0001,
+Identities:25/68(37%),  Positives:42/68(62%),  Gaps:0.68(0%)
+
+gi|267092         0 ARDGQEALALCAQQAPDLIISDVMMPNLDGFGLLRALKQSKKLAIIPIIMLTARGGDEAR
+                  0 |..|||.|.|.....||....|..||.|||...|..|..|........|||||.|.....
+Query_949         0 AYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAFGQEDVT
+
+gi|267092        60 VDGILAGA 68
+                 60 ......|| 68
+Query_949        60 KKAVDLGA 68
+
+""",
+        )
+        hit = record[2]
+        self.assertEqual(hit.num, 3)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|2432161024|ref|XM_053088494.1|")
+        self.assertEqual(hit.target.name, "XM_053088494")
+        self.assertEqual(
+            hit.target.description,
+            "Dioszegia hungarica CnHHK4 (MKK02DRAFT_32386), partial mRNA",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=5601)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 146.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 69.7986)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 1.95794e-08)
+        self.assertEqual(hsp.annotations["identity"], 32)
+        self.assertEqual(hsp.annotations["positive"], 47)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[ 0, 82],
+                          [ 0, 82]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 82))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('AYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAF...NLV')",
+        )
+        self.assertEqual(hsp.query.id, "Query_949527")
+        self.assertEqual(
+            hsp.query.description,
+            "NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168 complete genome",
+        )
+        self.assertEqual(len(hsp.query.features), 1)
+        feature = hsp.query.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(82))"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('ARDGQEALEMCKKSLPHVVITDVMMPNLDGFGLLAALKEDPKLSMVPVIMLTAR...ELI')",
+        )
+        self.assertEqual(hsp.target.id, "gi|2432161024|ref|XM_053088494.1|")
+        self.assertEqual(hsp.target.name, "XM_053088494")
+        self.assertEqual(
+            hsp.target.description,
+            "Dioszegia hungarica CnHHK4 (MKK02DRAFT_32386), partial mRNA",
+        )
+        self.assertEqual(len(hsp.target.features), 1)
+        feature = hsp.target.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(5601))"
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "A +GQE L + K+  P V++ D++MP+LDG  +L  L+E        VIMLTA G E+     +  GA  +I KPF+   L+",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='gi|2432161024|ref|XM_053088494.1|' query.id='Query_949527'; 2 rows x 82 columns>",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+Query : Query_949527 Length: 82 Strand: Plus
+        NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168
+        complete genome
+Target: gi|2432161024|ref|XM_053088494.1| Length: 82 Strand: Plus
+        Dioszegia hungarica CnHHK4 (MKK02DRAFT_32386), partial mRNA
+
+Score:69 bits(146), Expect:2e-08,
+Identities:32/82(39%),  Positives:47/82(57%),  Gaps:0.82(0%)
+
+gi|243216         0 ARDGQEALEMCKKSLPHVVITDVMMPNLDGFGLLAALKEDPKLSMVPVIMLTARGGEEAK
+                  0 |..|||.|...|...|.|...|..||.|||...|..|.|........||||||.|.|...
+Query_949         0 AYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAFGQEDVT
+
+gi|243216        60 VDGLLAGADDYIAKPFNARELI 82
+                 60 ......||...|.|||....|. 82
+Query_949        60 KKAVDLGASYFILKPFDMENLV 82
+
+""",
+        )
+        hit = record[3]
+        self.assertEqual(hit.num, 4)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|799335188|ref|XM_012195534.1|")
+        self.assertEqual(hit.target.name, "XM_012195534")
+        self.assertEqual(
+            hit.target.description,
+            "Cryptococcus neoformans var. grubii H99 hypothetical protein (CNAG_03355), mRNA",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=5764)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 146.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 69.7986)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 1.95794e-08)
+        self.assertEqual(hsp.annotations["identity"], 31)
+        self.assertEqual(hsp.annotations["positive"], 48)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[ 0, 82],
+                          [ 0, 82]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 82))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('AYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAF...NLV')",
+        )
+        self.assertEqual(hsp.query.id, "Query_949527")
+        self.assertEqual(
+            hsp.query.description,
+            "NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168 complete genome",
+        )
+        self.assertEqual(len(hsp.query.features), 1)
+        feature = hsp.query.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(82))"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('ARDGQEALELCQKSVPDLIISDVMMPHLNGFELLVALKRSKDLKMVPVIMLTAR...EIV')",
+        )
+        self.assertEqual(hsp.target.id, "gi|799335188|ref|XM_012195534.1|")
+        self.assertEqual(hsp.target.name, "XM_012195534")
+        self.assertEqual(
+            hsp.target.description,
+            "Cryptococcus neoformans var. grubii H99 hypothetical protein (CNAG_03355), mRNA",
+        )
+        self.assertEqual(len(hsp.target.features), 1)
+        feature = hsp.target.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(5764))"
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "A +GQE L L ++  PD+++ D++MPHL+G  +L  L+ S   K   VIMLTA G ++     +  GA  ++ KPF    +V",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='gi|799335188|ref|XM_012195534.1|' query.id='Query_949527'; 2 rows x 82 columns>",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+Query : Query_949527 Length: 82 Strand: Plus
+        NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168
+        complete genome
+Target: gi|799335188|ref|XM_012195534.1| Length: 82 Strand: Plus
+        Cryptococcus neoformans var. grubii H99 hypothetical protein
+        (CNAG_03355), mRNA
+
+Score:69 bits(146), Expect:2e-08,
+Identities:31/82(38%),  Positives:48/82(59%),  Gaps:0.82(0%)
+
+gi|799335         0 ARDGQEALELCQKSVPDLIISDVMMPHLNGFELLVALKRSKDLKMVPVIMLTARGADESK
+                  0 |..|||.|.|.....||....|..||||.|...|..|..|...|...||||||.|.....
+Query_949         0 AYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAFGQEDVT
+
+gi|799335        60 VDGIMAGAEDYLAKPFSAREIV 82
+                 60 ......||.....|||.....| 82
+Query_949        60 KKAVDLGASYFILKPFDMENLV 82
+
+""",
+        )
+        hit = record[4]
+        self.assertEqual(hit.num, 5)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|1799711371|ref|XM_032001855.1|")
+        self.assertEqual(hit.target.name, "XM_032001855")
+        self.assertEqual(
+            hit.target.description,
+            "Kwoniella shandongensis uncharacterized protein (CI109_000662), partial mRNA",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=5538)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 145.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 69.3404)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 2.68988e-08)
+        self.assertEqual(hsp.annotations["identity"], 31)
+        self.assertEqual(hsp.annotations["positive"], 51)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[ 0, 82],
+                          [ 0, 82]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 82))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('AYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAF...NLV')",
+        )
+        self.assertEqual(hsp.query.id, "Query_949527")
+        self.assertEqual(
+            hsp.query.description,
+            "NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168 complete genome",
+        )
+        self.assertEqual(len(hsp.query.features), 1)
+        feature = hsp.query.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(82))"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('ARDGVEALQLCKKQLPNLIITDVMMPNLDGFGLLAALKESRAMKVIPVIMLTAR...EIV')",
+        )
+        self.assertEqual(hsp.target.id, "gi|1799711371|ref|XM_032001855.1|")
+        self.assertEqual(hsp.target.name, "XM_032001855")
+        self.assertEqual(
+            hsp.target.description,
+            "Kwoniella shandongensis uncharacterized protein (CI109_000662), partial mRNA",
+        )
+        self.assertEqual(len(hsp.target.features), 1)
+        feature = hsp.target.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(5538))"
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "A +G E L L K++ P++++ D++MP+LDG  +L  L+ES   K   VIMLTA G ++   + +  GA  ++ KPF+   +V",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='gi|1799711371|ref|XM_032001855.1|' query.id='Query_949527'; 2 rows x 82 columns>",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+Query : Query_949527 Length: 82 Strand: Plus
+        NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168
+        complete genome
+Target: gi|1799711371|ref|XM_032001855.1| Length: 82 Strand: Plus
+        Kwoniella shandongensis uncharacterized protein (CI109_000662), partial
+        mRNA
+
+Score:69 bits(145), Expect:3e-08,
+Identities:31/82(38%),  Positives:51/82(62%),  Gaps:0.82(0%)
+
+gi|179971         0 ARDGVEALQLCKKQLPNLIITDVMMPNLDGFGLLAALKESRAMKVIPVIMLTARGGDESK
+                  0 |..|.|.|.|.|...|.....|..||.|||...|..|.||...|...||||||.|.....
+Query_949         0 AYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAFGQEDVT
+
+gi|179971        60 VEGILAGADDYLAKPFNAREIV 82
+                 60 ......||.....|||.....| 82
+Query_949        60 KKAVDLGASYFILKPFDMENLV 82
+
+""",
+        )
+        hit = record[5]
+        self.assertEqual(hit.num, 6)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|1102541390|ref|XM_019193349.1|")
+        self.assertEqual(hit.target.name, "XM_019193349")
+        self.assertEqual(
+            hit.target.description,
+            "Kwoniella bestiolae CBS 10118 hypothetical protein partial mRNA",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=5319)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 144.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 68.8822)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 3.69545e-08)
+        self.assertEqual(hsp.annotations["identity"], 32)
+        self.assertEqual(hsp.annotations["positive"], 49)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[ 0, 82],
+                          [ 0, 82]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 82))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('AYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAF...NLV')",
+        )
+        self.assertEqual(hsp.query.id, "Query_949527")
+        self.assertEqual(
+            hsp.query.description,
+            "NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168 complete genome",
+        )
+        self.assertEqual(len(hsp.query.features), 1)
+        feature = hsp.query.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(82))"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('ARDGQEALEMCGKKMPDLIISDVMMPNLDGFGLLEALKASKELSIIPVIMLTAR...ELV')",
+        )
+        self.assertEqual(hsp.target.id, "gi|1102541390|ref|XM_019193349.1|")
+        self.assertEqual(hsp.target.name, "XM_019193349")
+        self.assertEqual(
+            hsp.target.description,
+            "Kwoniella bestiolae CBS 10118 hypothetical protein partial mRNA",
+        )
+        self.assertEqual(len(hsp.target.features), 1)
+        feature = hsp.target.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(5319))"
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "A +GQE L +  +K PD+++ D++MP+LDG  +LE L+ S       VIMLTA G ++     +  GA  ++ KPF+   LV",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='gi|1102541390|ref|XM_019193349.1|' query.id='Query_949527'; 2 rows x 82 columns>",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+Query : Query_949527 Length: 82 Strand: Plus
+        NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168
+        complete genome
+Target: gi|1102541390|ref|XM_019193349.1| Length: 82 Strand: Plus
+        Kwoniella bestiolae CBS 10118 hypothetical protein partial mRNA
+
+Score:68 bits(144), Expect:4e-08,
+Identities:32/82(39%),  Positives:49/82(60%),  Gaps:0.82(0%)
+
+gi|110254         0 ARDGQEALEMCGKKMPDLIISDVMMPNLDGFGLLEALKASKELSIIPVIMLTARGGDEAK
+                  0 |..|||.|.....|.||....|..||.|||...||.|..|.......||||||.|.....
+Query_949         0 AYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAFGQEDVT
+
+gi|110254        60 VDGLLAGADDYLAKPFNSRELV 82
+                 60 ......||.....|||....|| 82
+Query_949        60 KKAVDLGASYFILKPFDMENLV 82
+
+""",
+        )
+        hit = record[6]
+        self.assertEqual(hit.num, 7)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|1799711369|ref|XM_032001854.1|")
+        self.assertEqual(hit.target.name, "XM_032001854")
+        self.assertEqual(
+            hit.target.description,
+            "Kwoniella shandongensis uncharacterized protein (CI109_000661), partial mRNA",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=3591)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 143.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 68.424)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 5.07694e-08)
+        self.assertEqual(hsp.annotations["identity"], 31)
+        self.assertEqual(hsp.annotations["positive"], 53)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[ 0, 86],
+                          [ 0, 86]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 86))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('VIGVAYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIM...NLV')",
+        )
+        self.assertEqual(hsp.query.id, "Query_949527")
+        self.assertEqual(
+            hsp.query.description,
+            "NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168 complete genome",
+        )
+        self.assertEqual(len(hsp.query.features), 1)
+        feature = hsp.query.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(86))"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('VVVEARDGQEALDKCMQIRPDLIITDVMMPVLDGFGLLRALKQSDELKAIPVIM...ELI')",
+        )
+        self.assertEqual(hsp.target.id, "gi|1799711369|ref|XM_032001854.1|")
+        self.assertEqual(hsp.target.name, "XM_032001854")
+        self.assertEqual(
+            hsp.target.description,
+            "Kwoniella shandongensis uncharacterized protein (CI109_000661), partial mRNA",
+        )
+        self.assertEqual(len(hsp.target.features), 1)
+        feature = hsp.target.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(3591))"
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "V+  A +GQE L    +  PD+++ D++MP LDG  +L  L++SD  K   VIM+TA   ++   +A+  GA  +++KPF++  L+",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='gi|1799711369|ref|XM_032001854.1|' query.id='Query_949527'; 2 rows x 86 columns>",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+Query : Query_949527 Length: 86 Strand: Plus
+        NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168
+        complete genome
+Target: gi|1799711369|ref|XM_032001854.1| Length: 86 Strand: Plus
+        Kwoniella shandongensis uncharacterized protein (CI109_000661), partial
+        mRNA
+
+Score:68 bits(143), Expect:5e-08,
+Identities:31/86(36%),  Positives:53/86(62%),  Gaps:0.86(0%)
+
+gi|179971         0 VVVEARDGQEALDKCMQIRPDLIITDVMMPVLDGFGLLRALKQSDELKAIPVIMVTAHDG
+                  0 |...|..|||.|.......||....|..||.|||...|..|..||..|...|||.||...
+Query_949         0 VIGVAYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAFGQ
+
+gi|179971        60 DEAKVEALLGGADDYMVKPFNVRELI 86
+                 60 ......|...||.....|||....|. 86
+Query_949        60 EDVTKKAVDLGASYFILKPFDMENLV 86
+
+""",
+        )
+        hit = record[7]
+        self.assertEqual(hit.num, 8)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|2592096353|ref|XM_060229193.1|")
+        self.assertEqual(hit.target.name, "XM_060229193")
+        self.assertEqual(
+            hit.target.description,
+            "PREDICTED: Ylistrum balloti signal transduction histidine-protein kinase BarA-like (LOC132564539), mRNA",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=1374)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 142.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 67.9658)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 6.97488e-08)
+        self.assertEqual(hsp.annotations["identity"], 31)
+        self.assertEqual(hsp.annotations["positive"], 51)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[ 0, 84],
+                          [ 0, 84]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 84))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('IGVAYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIML...ENL')",
+        )
+        self.assertEqual(hsp.query.id, "Query_949527")
+        self.assertEqual(
+            hsp.query.description,
+            "NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168 complete genome",
+        )
+        self.assertEqual(len(hsp.query.features), 1)
+        feature = hsp.query.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(84))"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('IHLASNGQEAIQKTKVLDPDLIFLDLHMPDMSGLEVIEILRSITAYRDTPIIIL...DKL')",
+        )
+        self.assertEqual(hsp.target.id, "gi|2592096353|ref|XM_060229193.1|")
+        self.assertEqual(hsp.target.name, "XM_060229193")
+        self.assertEqual(
+            hsp.target.description,
+            "PREDICTED: Ylistrum balloti signal transduction histidine-protein kinase BarA-like (LOC132564539), mRNA",
+        )
+        self.assertEqual(len(hsp.target.features), 1)
+        feature = hsp.target.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(1374))"
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "I +A NGQE +   K  DPD++ LD+ MP + GL V+E LR     +   +I+L+A    +  +KA+ +GAS ++ KP +++ L",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='gi|2592096353|ref|XM_060229193.1|' query.id='Query_949527'; 2 rows x 84 columns>",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+Query : Query_949527 Length: 84 Strand: Plus
+        NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168
+        complete genome
+Target: gi|2592096353|ref|XM_060229193.1| Length: 84 Strand: Plus
+        PREDICTED: Ylistrum balloti signal transduction histidine-protein kinase
+        BarA-like (LOC132564539), mRNA
+
+Score:67 bits(142), Expect:7e-08,
+Identities:31/84(37%),  Positives:51/84(61%),  Gaps:0.84(0%)
+
+gi|259209         0 IHLASNGQEAIQKTKVLDPDLIFLDLHMPDMSGLEVIEILRSITAYRDTPIIILSADAII
+                  0 |..|.||||.....|..|||...||..||...||.|.|.||..........|.|.|....
+Query_949         0 IGVAYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAFGQE
+
+gi|259209        60 EQQEKALAVGASAYLTKPIEIDKL 84
+                 60 ....||...|||....||.....| 84
+Query_949        60 DVTKKAVDLGASYFILKPFDMENL 84
+
+""",
+        )
+        hit = record[8]
+        self.assertEqual(hit.num, 9)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|2044197324|ref|XM_041762518.1|")
+        self.assertEqual(hit.target.name, "XM_041762518")
+        self.assertEqual(
+            hit.target.description,
+            "PREDICTED: Vulpes lagopus sensory transduction protein RegX3-like (LOC121495284), mRNA",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=681)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 142.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 67.9658)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 6.97488e-08)
+        self.assertEqual(hsp.annotations["identity"], 30)
+        self.assertEqual(hsp.annotations["positive"], 45)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[ 0, 73],
+                          [ 0, 73]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 73))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('PDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAFGQEDVTKKAVDLGAS...RQV')",
+        )
+        self.assertEqual(hsp.query.id, "Query_949527")
+        self.assertEqual(
+            hsp.query.description,
+            "NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168 complete genome",
+        )
+        self.assertEqual(len(hsp.query.features), 1)
+        feature = hsp.query.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(73))"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('PDLILLDIMLPGSDGLSSLEELRAKKSSESIPVIMATAKGTEFDKVKGLDMGAD...KAV')",
+        )
+        self.assertEqual(hsp.target.id, "gi|2044197324|ref|XM_041762518.1|")
+        self.assertEqual(hsp.target.name, "XM_041762518")
+        self.assertEqual(
+            hsp.target.description,
+            "PREDICTED: Vulpes lagopus sensory transduction protein RegX3-like (LOC121495284), mRNA",
+        )
+        self.assertEqual(len(hsp.target.features), 1)
+        feature = hsp.target.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(681))"
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "PD+++LDI++P  DGL+ LE LR     +   VIM TA G E    K +D+GA  +++KPF M  ++  I+ V",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='gi|2044197324|ref|XM_041762518.1|' query.id='Query_949527'; 2 rows x 73 columns>",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+Query : Query_949527 Length: 73 Strand: Plus
+        NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168
+        complete genome
+Target: gi|2044197324|ref|XM_041762518.1| Length: 73 Strand: Plus
+        PREDICTED: Vulpes lagopus sensory transduction protein RegX3-like
+        (LOC121495284), mRNA
+
+Score:67 bits(142), Expect:7e-08,
+Identities:30/73(41%),  Positives:45/73(62%),  Gaps:0.73(0%)
+
+gi|204419         0 PDLILLDIMLPGSDGLSSLEELRAKKSSESIPVIMATAKGTEFDKVKGLDMGADDYLVKP
+                  0 ||...|||..|..|||..||.||.........|||.||.|.|....|..|.||.....||
+Query_949         0 PDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAFGQEDVTKKAVDLGASYFILKP
+
+gi|204419        60 FGMMEMISRIKAV 73
+                 60 |.|......|..| 73
+Query_949        60 FDMENLVGHIRQV 73
+
+""",
+        )
+        hit = record[9]
+        self.assertEqual(hit.num, 10)
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|1101784196|ref|XM_019135081.1|")
+        self.assertEqual(hit.target.name, "XM_019135081")
+        self.assertEqual(
+            hit.target.description,
+            "Cryptococcus amylolentus CBS 6039 hypothetical protein (L202_01642), partial mRNA",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=5487)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 142.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 67.9658)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 6.97488e-08)
+        self.assertEqual(hsp.annotations["identity"], 28)
+        self.assertEqual(hsp.annotations["positive"], 50)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[ 0, 82],
+                          [ 0, 82]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.shape, (2, 82))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('AYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAF...NLV')",
+        )
+        self.assertEqual(hsp.query.id, "Query_949527")
+        self.assertEqual(
+            hsp.query.description,
+            "NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168 complete genome",
+        )
+        self.assertEqual(len(hsp.query.features), 1)
+        feature = hsp.query.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(82))"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('ARDGREALELCAKQKPNLIISDVMMPHVDGFELLTTLKDSSEFRMIPVIMLTAR...EIV')",
+        )
+        self.assertEqual(hsp.target.id, "gi|1101784196|ref|XM_019135081.1|")
+        self.assertEqual(hsp.target.name, "XM_019135081")
+        self.assertEqual(
+            hsp.target.description,
+            "Cryptococcus amylolentus CBS 6039 hypothetical protein (L202_01642), partial mRNA",
+        )
+        self.assertEqual(len(hsp.target.features), 1)
+        feature = hsp.target.features[0]
+        self.assertEqual(feature.type, "CDS")
+        location = feature.location
+        self.assertEqual(
+            repr(location), "SimpleLocation(ExactPosition(0), ExactPosition(5487))"
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "A +G+E L L  ++ P++++ D++MPH+DG  +L  L++S   +   VIMLTA G ++     +  GA  ++ KPF+   +V",
+        )
+        self.assertEqual(
+            repr(hsp),
+            "<Bio.Blast.HSP target.id='gi|1101784196|ref|XM_019135081.1|' query.id='Query_949527'; 2 rows x 82 columns>",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+Query : Query_949527 Length: 82 Strand: Plus
+        NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168
+        complete genome
+Target: gi|1101784196|ref|XM_019135081.1| Length: 82 Strand: Plus
+        Cryptococcus amylolentus CBS 6039 hypothetical protein (L202_01642),
+        partial mRNA
+
+Score:67 bits(142), Expect:7e-08,
+Identities:28/82(34%),  Positives:50/82(61%),  Gaps:0.82(0%)
+
+gi|110178         0 ARDGREALELCAKQKPNLIISDVMMPHVDGFELLTTLKDSSEFRMIPVIMLTARGADESK
+                  0 |..|.|.|.|.....|.....|..|||.||...|..|..|.......||||||.|.....
+Query_949         0 AYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAFGQEDVT
+
+gi|110178        60 VSGIMAGAEDYLAKPFNAREIV 82
+                 60 ......||.....|||.....| 82
+Query_949        60 KKAVDLGASYFILKPFDMENLV 82
+
+""",
+        )
+
+    def test_xml_21500_tblastx_001_writer(self):
+        """Writing TBLASTX 2.15.0+ (xml_21500_tblastx_001.xml)."""
+        filename = "xml_21500_tblastx_001.xml"
         path = os.path.join("Blast", filename)
         with Blast.parse(path) as records:
             stream = io.BytesIO()
@@ -11336,11 +14364,11 @@ class TestRPSBlast(unittest.TestCase):
             self.assertEqual(n, 1)
             stream.seek(0)
             written_records = Blast.parse(stream)
-            self.check_xml_2900_rpsblast_001_records(written_records)
+            self.check_xml_21500_tblastx_001_records(written_records)
 
-    def test_xml_2900_rpsblast_001_v2_writer(self):
-        """Writing rpsblast 2.9.0+ XML2 (xml_2900_rpsblast_001_v2.xml)."""
-        filename = "xml_2900_rpsblast_001_v2.xml"
+    def test_xml2_21500_tblastx_001_writer(self):
+        """Writing TBLASTX 2.15.0+ XML2 (xml2_21500_tblastx_001.xml)."""
+        filename = "xml2_21500_tblastx_001.xml"
         path = os.path.join("Blast", filename)
         with Blast.parse(path) as records:
             stream = io.BytesIO()
@@ -11348,28 +14376,87 @@ class TestRPSBlast(unittest.TestCase):
             self.assertEqual(n, 1)
             stream.seek(0)
             written_records = Blast.parse(stream)
-            self.check_xml_2900_rpsblast_001_records(written_records, xml2=True)
+            self.check_xml_21500_tblastx_001_records(written_records, xml2=True)
 
-    def check_xml_2900_rpsblast_001_records(self, records, xml2=False):
+
+class TestRPSBlast(unittest.TestCase):
+    """Test the Blast XML parser for rpsblast output."""
+
+    def test_xml_21500_rpsblast_001_parser(self):
+        """Parsing RPSBLAST 2.15.0+ (xml_21500_rpsblast_001.xml)."""
+        filename = "xml_21500_rpsblast_001.xml"
+        path = os.path.join("Blast", filename)
+        with open(path, "rb") as stream:
+            records = Blast.parse(stream)
+            self.check_xml_21500_rpsblast_001_records(records)
+        with Blast.parse(path) as records:
+            self.check_xml_21500_rpsblast_001_records(records)
+        with open(path, "rb") as stream:
+            record = Blast.read(stream)
+        self.check_xml_21500_rpsblast_001_record(record)
+        record = Blast.read(path)
+        self.check_xml_21500_rpsblast_001_record(record)
+
+    def test_xml2_21500_rpsblast_001_parser(self):
+        """Parsing RPSBLAST 2.15.0+ (xml2_21500_rpsblast_001.xml)."""
+        filename = "xml2_21500_rpsblast_001.xml"
+        path = os.path.join("Blast", filename)
+        with open(path, "rb") as stream:
+            records = Blast.parse(stream)
+            self.check_xml_21500_rpsblast_001_records(records, xml2=True)
+        with Blast.parse(path) as records:
+            self.check_xml_21500_rpsblast_001_records(records, xml2=True)
+        with open(path, "rb") as stream:
+            record = Blast.read(stream)
+        self.check_xml_21500_rpsblast_001_record(record, xml2=True)
+        record = Blast.read(path)
+        self.check_xml_21500_rpsblast_001_record(record, xml2=True)
+
+    def test_xml_21500_rpsblast_001_writer(self):
+        """Writing rpsblast 2.15.0+ (xml_21500_rpsblast_001.xml)."""
+        filename = "xml_21500_rpsblast_001.xml"
+        path = os.path.join("Blast", filename)
+        with Blast.parse(path) as records:
+            stream = io.BytesIO()
+            n = Blast.write(records, stream)
+            self.assertEqual(n, 1)
+            stream.seek(0)
+            written_records = Blast.parse(stream)
+            self.check_xml_21500_rpsblast_001_records(written_records)
+
+    def test_xml2_21500_rpsblast_001_writer(self):
+        """Writing rpsblast 2.9.0+ XML2 (xml2_21500_rpsblast_001_v2.xml)."""
+        filename = "xml2_21500_rpsblast_001.xml"
+        path = os.path.join("Blast", filename)
+        with Blast.parse(path) as records:
+            stream = io.BytesIO()
+            n = Blast.write(records, stream, fmt="XML2")
+            self.assertEqual(n, 1)
+            stream.seek(0)
+            written_records = Blast.parse(stream)
+            self.check_xml_21500_rpsblast_001_records(written_records, xml2=True)
+
+    def check_xml_21500_rpsblast_001_records(self, records, xml2=False):
         self.assertEqual(records.program, "rpsblast")
-        self.assertEqual(records.version, "RPSBLAST 2.9.0+")
+        self.assertEqual(records.version, "RPSBLAST 2.15.0+")
         self.assertEqual(
             records.reference,
             'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
         )
-        self.assertEqual(records.db, "cdd_delta")
+        self.assertEqual(records.db, "Cdd")
         if xml2 is False:
             self.assertIsInstance(records.query, SeqRecord)
             self.assertEqual(records.query.id, "Query_1")
             self.assertEqual(
                 records.query.description,
-                "gi|269914405|pdb|3FAJ|A Chain A, Structure of the structural protein P131 of the archaeal virus Acidianus Two-tailed virus (ATV)",
+                "pdb|3FAJ|A Chain A, Structure of the structural protein P131 of the archaeal virus Acidianus Two-tailed virus (ATV)",
             )
             self.assertEqual(repr(records.query.seq), "Seq(None, length=151)")
         self.assertEqual(records.param["matrix"], "BLOSUM62")
         self.assertAlmostEqual(records.param["expect"], 1)
         self.assertEqual(records.param["gap-open"], 11)
         self.assertEqual(records.param["gap-extend"], 1)
+        self.assertEqual(records.param["filter"], "F")
         if xml2 is True:
             self.assertEqual(records.param["cbs"], 1)
             self.assertEqual(len(records.param), 6)
@@ -11377,9 +14464,9 @@ class TestRPSBlast(unittest.TestCase):
             self.assertEqual(len(records.param), 5)
         record = next(records)
         self.assertRaises(StopIteration, next, records)
-        self.check_xml_2900_rpsblast_001_record(record, xml2)
+        self.check_xml_21500_rpsblast_001_record(record, xml2)
 
-    def check_xml_2900_rpsblast_001_record(self, record, xml2=False):
+    def check_xml_21500_rpsblast_001_record(self, record, xml2=False):
         if xml2 is False:
             self.assertEqual(record.num, 1)
         self.assertEqual(
@@ -11390,120 +14477,121 @@ class TestRPSBlast(unittest.TestCase):
         self.assertEqual(record.query.id, "Query_1")
         self.assertEqual(
             record.query.description,
-            "gi|269914405|pdb|3FAJ|A Chain A, Structure of the structural protein P131 of the archaeal virus Acidianus Two-tailed virus (ATV)",
+            "pdb|3FAJ|A Chain A, Structure of the structural protein P131 of the archaeal virus Acidianus Two-tailed virus (ATV)",
         )
         self.assertEqual(repr(record.query.seq), "Seq(None, length=151)")
         self.assertEqual(len(record.stat), 7)
-        self.assertEqual(record.stat["db-num"], 29480)
-        self.assertEqual(record.stat["db-len"], 6494941)
-        self.assertEqual(record.stat["hsp-len"], 85)
-        self.assertAlmostEqual(record.stat["eff-space"], 263283306.0)
-        self.assertAlmostEqual(record.stat["kappa"], 0.076772628)
+        self.assertEqual(record.stat["db-num"], 59693)
+        self.assertEqual(record.stat["db-len"], 13521240)
+        self.assertEqual(record.stat["hsp-len"], 89)
+        self.assertEqual(record.stat["eff-space"], 508930906)
+        self.assertAlmostEqual(record.stat["kappa"], 0.041)
         self.assertAlmostEqual(record.stat["lambda"], 0.267)
         self.assertAlmostEqual(record.stat["entropy"], 0.14)
         self.assertEqual(len(record), 2)
         hit = record[0]
         self.assertEqual(hit.num, 1)
         self.assertIsInstance(hit.target, SeqRecord)
-        self.assertEqual(hit.target.id, "gnl|CDD|180983")
+        self.assertEqual(hit.target.id, "gnl|CDD|165101")
         self.assertEqual(
             hit.target.description,
-            "PRK07453, PRK07453, protochlorophyllide oxidoreductase; Validated.",
+            "PHA02734, PHA02734, coat protein; Provisional.",
         )
-        self.assertEqual(hit.target.name, "180983")
-        self.assertEqual(repr(hit.target.seq), "Seq(None, length=322)")
+        self.assertEqual(hit.target.name, "165101")
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=149)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
         self.assertEqual(hsp.num, 1)
-        self.assertAlmostEqual(hsp.score, 73.0)
-        self.assertAlmostEqual(hsp.annotations["bit score"], 31.8842)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 0.058599)
-        self.assertEqual(hsp.annotations["identity"], 11)
-        self.assertEqual(hsp.annotations["positive"], 17)
-        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertAlmostEqual(hsp.score, 520.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 204.685)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 9.29691e-69)
+        self.assertEqual(hsp.annotations["identity"], 94)
+        self.assertEqual(hsp.annotations["positive"], 103)
+        self.assertEqual(hsp.annotations["gaps"], 18)
         self.assertTrue(
             np.array_equal(
                 hsp.coordinates,
                 # fmt: off
-                np.array([[253, 276],
-                          [ 94, 117]])
+                np.array([[  0, 77, 93, 110, 112, 149],
+                          [ 20, 97, 97, 114, 114, 151]])
                 # fmt: on
             )
         )
-        self.assertEqual(hsp.shape, (2, 23))
+        self.assertEqual(hsp.shape, (2, 149))
         self.assertEqual(
             repr(hsp.query.seq),
-            "Seq({94: 'GFQSQPIPGEVIAQVTSNPEYQQ'}, length=151)",
+            "Seq({20: 'MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEA...MAS'}, length=151)",
         )
         self.assertEqual(hsp.query.id, "Query_1")
         self.assertEqual(
             hsp.query.description,
-            "gi|269914405|pdb|3FAJ|A Chain A, Structure of the structural protein P131 of the archaeal virus Acidianus Two-tailed virus (ATV)",
+            "pdb|3FAJ|A Chain A, Structure of the structural protein P131 of the archaeal virus Acidianus Two-tailed virus (ATV)",
         )
         self.assertEqual(len(hsp.query.features), 0)
         self.assertEqual(
             repr(hsp.target.seq),
-            "Seq({253: 'GYVSQELAGERVAQVVADPEFAQ'}, length=322)",
+            "Seq('MAKEEPKKGDYAGGAAKILDGFEAGQLGFPEVSLKLAGEEANARKAGDANAKAA...AAM')",
         )
-        self.assertEqual(hsp.target.id, "gnl|CDD|180983")
+        self.assertEqual(hsp.target.id, "gnl|CDD|165101")
         self.assertEqual(
             hsp.target.description,
-            "PRK07453, PRK07453, protochlorophyllide oxidoreductase; Validated.",
+            "PHA02734, PHA02734, coat protein; Provisional.",
         )
         self.assertEqual(len(hsp.target.features), 0)
-        self.assertEqual(hsp.annotations["midline"], "G+ SQ + GE +AQV ++PE+ Q")
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MAK EPKKGDYAGGA KILD FE GQLG+PEV+LKLAGEEANAR+AGD   K AIHAI+KMI DAMKP RNKG GF+                SQ IPGE+ AQV +  E  YQQAKAFLA+PA   R   + E LSKGAK LA A A ",
+        )
         hit = record[1]
         self.assertEqual(hit.num, 2)
         self.assertIsInstance(hit.target, SeqRecord)
-        self.assertEqual(hit.target.id, "gnl|CDD|338745")
+        self.assertEqual(hit.target.id, "gnl|CDD|410801")
         self.assertEqual(
             hit.target.description,
-            "pfam13442, Cytochrome_CBB3, Cytochrome C oxidase, cbb3-type, subunit III.  ",
+            "cd20027, FH_FOXL1, Forkhead (FH) domain found in Forkhead box protein L1 (FOXL1) and similar proteins.  FOXL1, also called Forkhead-related protein FKHL11 or Forkhead-related transcription factor 7 (FREAC-7), acts as a transcription factor required for proper proliferation and differentiation in the gastrointestinal epithelium. It may play a critical role in suppressing tumorigenesis. The FH domain is a winged helix DNA-binding domain. FOX transcription factors recognize the core sequence 5'-(A/C)AA(C/T)A-3'.",
         )
-        self.assertEqual(hit.target.name, "338745")
-        self.assertEqual(repr(hit.target.seq), "Seq(None, length=67)")
+        self.assertEqual(hit.target.name, "410801")
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=98)")
         self.assertEqual(len(hit), 1)
         hsp = hit[0]
         self.assertEqual(hsp.num, 1)
-        self.assertAlmostEqual(hsp.score, 62.0)
-        self.assertAlmostEqual(hsp.annotations["bit score"], 27.7531)
-        self.assertAlmostEqual(hsp.annotations["evalue"], 0.388099)
-        self.assertEqual(hsp.annotations["identity"], 9)
-        self.assertEqual(hsp.annotations["positive"], 13)
-        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertAlmostEqual(hsp.score, 65.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 29.0095)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 0.517343)
+        self.assertEqual(hsp.annotations["identity"], 13)
+        self.assertEqual(hsp.annotations["positive"], 15)
+        self.assertEqual(hsp.annotations["gaps"], 4)
         self.assertTrue(
             np.array_equal(
                 hsp.coordinates,
                 # fmt: off
-                np.array([[18, 56],
-                          [56, 94]])
+                np.array([[63, 66, 66, 90],
+                          [14, 17, 21, 45]])
                 # fmt: on
             )
         )
-        self.assertEqual(hsp.shape, (2, 38))
+        self.assertEqual(hsp.shape, (2, 31))
         self.assertEqual(
             repr(hsp.query.seq),
-            "Seq({56: 'AGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGS'}, length=151)",
+            "Seq({14: 'VPRGSHMAKYEPKKGDYAGGAVKILDMFENG'}, length=151)",
         )
         self.assertEqual(hsp.query.id, "Query_1")
         self.assertEqual(
             hsp.query.description,
-            "gi|269914405|pdb|3FAJ|A Chain A, Structure of the structural protein P131 of the archaeal virus Acidianus Two-tailed virus (ATV)",
+            "pdb|3FAJ|A Chain A, Structure of the structural protein P131 of the archaeal virus Acidianus Two-tailed virus (ATV)",
         )
         self.assertEqual(len(hsp.query.features), 0)
         self.assertEqual(
             repr(hsp.target.seq),
-            "Seq({18: 'GTGGAGPSLAGRAWAPEALVDIIRNGKGAMPAFGGDLS'}, length=67)",
+            "Seq({63: 'VPREKGRPGKGNYWTLDPDCEEMFENG'}, length=98)",
         )
-        self.assertEqual(hsp.target.id, "gnl|CDD|338745")
+        self.assertEqual(hsp.target.id, "gnl|CDD|410801")
         self.assertEqual(
             hsp.target.description,
-            "pfam13442, Cytochrome_CBB3, Cytochrome C oxidase, cbb3-type, subunit III.  ",
+            "cd20027, FH_FOXL1, Forkhead (FH) domain found in Forkhead box protein L1 (FOXL1) and similar proteins.  FOXL1, also called Forkhead-related protein FKHL11 or Forkhead-related transcription factor 7 (FREAC-7), acts as a transcription factor required for proper proliferation and differentiation in the gastrointestinal epithelium. It may play a critical role in suppressing tumorigenesis. The FH domain is a winged helix DNA-binding domain. FOX transcription factors recognize the core sequence 5'-(A/C)AA(C/T)A-3'.",
         )
         self.assertEqual(len(hsp.target.features), 0)
-        self.assertEqual(
-            hsp.annotations["midline"], "    A    AG     EA+  I++    AM  +    S"
-        )
+        self.assertEqual(hsp.annotations["midline"], "VPR     K  P KG+Y        +MFENG")
 
 
 class TestBlastErrors(unittest.TestCase):
