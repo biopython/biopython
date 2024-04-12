@@ -205,17 +205,20 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
         j = -1
         while True:
             i = j + 1
-            try:
-                j = data.find(b";", i)
-            except ValueError:
-                line = data[i:]
-                j = i + len(line)
-            else:
-                line = data[i:j]
-            prefix = line[:1]
+            prefix = data[i : i + 1]
             if prefix == b"#":
-                continue
+                try:
+                    j = data.find(b";", i)
+                except ValueError:
+                    break
             elif prefix == b"a":
+                try:
+                    j = data.find(b";", i)
+                except ValueError:
+                    line = data[i:]
+                    j = i + len(line)
+                else:
+                    line = data[i:j]
                 words = line[1:].split()
                 for word in words:
                     key, value = word.split(b"=")
@@ -232,9 +235,15 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
                         raise ValueError(
                             "Unknown annotation variable '%s'" % key.decode()
                         )
-                continue
             elif prefix == b"s":
-                words = line.strip().split()
+                try:
+                    j = data.find(b";", i)
+                except ValueError:
+                    line = data[i:]
+                    j = i + len(line)
+                else:
+                    line = data[i:j]
+                words = line.split()
                 if len(words) != 7:
                     raise ValueError(
                         "Error parsing alignment - 's' line must have 7 fields"
@@ -255,7 +264,14 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
                 sizes.append(size)
                 strands.append(strand)
             elif prefix == b"i":
-                words = line.strip().split()
+                try:
+                    j = data.find(b";", i)
+                except ValueError:
+                    line = data[i:]
+                    j = i + len(line)
+                else:
+                    line = data[i:j]
+                words = line.split()
                 assert len(words) == 6
                 assert words[1].decode() == src  # from the previous "s" line
                 leftStatus = words[2].decode()
@@ -269,6 +285,13 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
                 record.annotations["rightStatus"] = rightStatus
                 record.annotations["rightCount"] = rightCount
             elif prefix == b"e":
+                try:
+                    j = data.find(b";", i)
+                except ValueError:
+                    line = data[i:]
+                    j = i + len(line)
+                else:
+                    line = data[i:j]
                 words = line.split()
                 assert len(words) == 7
                 src = words[1].decode()
@@ -292,16 +315,25 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
                     annotations["empty"] = annotation
                 annotation.append(empty)
             elif prefix == b"q":
-                words = line.strip().split()
+                try:
+                    j = data.find(b";", i)
+                except ValueError:
+                    line = data[i:]
+                    j = i + len(line)
+                else:
+                    line = data[i:j]
+                words = line.split()
                 assert len(words) == 3
                 assert words[1].decode() == src  # from the previous "s" line
                 value = words[2].replace(b"-", b"")
                 record.annotations["quality"] = value.decode()
-            elif line == b"":
+            elif prefix == b"":
+                # reached the end of the alignment
+                if i != len(data):
+                    raise ValueError(
+                        "Error parsing alignment - unexpected end of alignment block"
+                    )
                 break
-            elif not line.strip():
-                # reached the end of the alignment, but keep reading to be sure
-                continue
             else:
                 raise ValueError(f"Error parsing alignment - unexpected line:\n{line}")
         sequences, coordinates = Alignment.parse_printed_alignment(aligned_sequences)
