@@ -47,6 +47,9 @@ from .Interfaces import _get_seq_string
 from .Interfaces import SequenceIterator
 from .Interfaces import SequenceWriter
 
+# Set containing all characters allowed in feature qualifier keys. See
+# https://www.insdc.org/submitting-standards/feature-table/#3.1
+_allowed_table_component_name_chars = set(ascii_letters + digits + "_-'*")
 
 # NOTE
 # ====
@@ -377,15 +380,15 @@ class _InsdcWriter(SequenceWriter):
     )
 
     def _write_feature_qualifier(self, key, value=None, quote=None):
-        allowed_chars = ascii_letters + digits + "_-'*"
-        if not all(ch in allowed_chars for ch in key):
+        if not all(ch in _allowed_table_component_name_chars for ch in key):
             warnings.warn(
-                "Feature qualifier key contains characters not allowed by standard.",
+                f"Feature qualifier key '{key}' contains characters not"
+                " allowed by standard.",
                 BiopythonWarning,
             )
         if len(key) > 20:
             warnings.warn(
-                "Feature qualifier key is longer than maximum length"
+                f"Feature qualifier key '{key}' is longer than maximum length"
                 " specified by standard (20 characters).",
                 BiopythonWarning,
             )
@@ -455,16 +458,16 @@ class _InsdcWriter(SequenceWriter):
         assert feature.type, feature
 
         f_type = feature.type.replace(" ", "_")
-        allowed_chars = ascii_letters + digits + "_-'*"
-        if not all(ch in allowed_chars for ch in f_type):
+        if not all(ch in _allowed_table_component_name_chars for ch in f_type):
             warnings.warn(
-                "Feature key contains characters not allowed by standard.",
+                f"Feature key '{f_type}' contains characters not allowed by"
+                " standard.",
                 BiopythonWarning,
             )
         if len(f_type) > 15:
             warnings.warn(
-                "Feature key is longer than maximum length specified"
-                " by standard (15 characters).",
+                f"Feature key '{f_type}' is longer than maximum length"
+                " specified by standard (15 characters).",
                 BiopythonWarning,
             )
 
