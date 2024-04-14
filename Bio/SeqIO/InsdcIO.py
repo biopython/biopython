@@ -380,7 +380,7 @@ class _InsdcWriter(SequenceWriter):
     )
 
     def _write_feature_qualifier(self, key, value=None, quote=None):
-        if not all(ch in _allowed_table_component_name_chars for ch in key):
+        if not _allowed_table_component_name_chars.issuperset(key):
             warnings.warn(
                 f"Feature qualifier key '{key}' contains characters not"
                 " allowed by standard.",
@@ -458,7 +458,7 @@ class _InsdcWriter(SequenceWriter):
         assert feature.type, feature
 
         f_type = feature.type.replace(" ", "_")
-        if not all(ch in _allowed_table_component_name_chars for ch in f_type):
+        if not _allowed_table_component_name_chars.issuperset(f_type):
             warnings.warn(
                 f"Feature key '{f_type}' contains characters not allowed by"
                 " standard.",
