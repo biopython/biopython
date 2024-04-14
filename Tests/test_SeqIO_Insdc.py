@@ -9,7 +9,7 @@ import warnings
 
 from io import StringIO
 
-from Bio import BiopythonParserWarning
+from Bio import BiopythonWarning, BiopythonParserWarning
 from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqFeature import SimpleLocation
@@ -74,6 +74,28 @@ class TestEmbl(unittest.TestCase):
         self.assertIn(" /zero=0\n", gbk)
         self.assertIn(" /one=1\n", gbk)
         self.assertIn(' /text="blah"\n', gbk)
+
+    def test_warn_on_writing_nonstandard_feature_key(self):
+        f = SeqFeature(
+            SimpleLocation(5, 20, strand=+1),
+            type="a" * 16,
+            qualifiers={"empty": None, "zero": 0, "one": 1, "text": "blah"},
+        )
+        record = SeqRecord(Seq("A" * 100), "dummy", features=[f])
+        record.annotations["molecule_type"] = "DNA"
+        with self.assertWarns(BiopythonWarning):
+            record.format("gb")
+
+    def test_warn_on_writing_nonstandard_qualifier_key(self):
+        f = SeqFeature(
+            SimpleLocation(5, 20, strand=+1),
+            type="region",
+            qualifiers={"a" * 21: "test"},
+        )
+        record = SeqRecord(Seq("A" * 100), "dummy", features=[f])
+        record.annotations["molecule_type"] = "DNA"
+        with self.assertWarns(BiopythonWarning):
+            record.format("gb")
 
 
 class TestEmblRewrite(SeqRecordTestBaseClass):

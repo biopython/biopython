@@ -33,6 +33,7 @@ http://www.ebi.ac.uk/imgt/hla/docs/manual.html
 import warnings
 
 from datetime import datetime
+from string import ascii_letters, digits
 
 from Bio import BiopythonWarning
 from Bio import SeqFeature
@@ -376,6 +377,19 @@ class _InsdcWriter(SequenceWriter):
     )
 
     def _write_feature_qualifier(self, key, value=None, quote=None):
+        allowed_chars = ascii_letters + digits + "_-'*"
+        if not all(ch in allowed_chars for ch in key):
+            warnings.warn(
+                "Feature qualifier key contains characters not allowed by standard.",
+                BiopythonWarning,
+            )
+        if len(key) > 20:
+            warnings.warn(
+                "Feature qualifier key is longer than maximum length"
+                " specified by standard (20 characters).",
+                BiopythonWarning,
+            )
+
         if value is None:
             # Value-less entry like /pseudo
             self.handle.write(f"{self.QUALIFIER_INDENT_STR}/{key}\n")
@@ -439,8 +453,22 @@ class _InsdcWriter(SequenceWriter):
     def _write_feature(self, feature, record_length):
         """Write a single SeqFeature object to features table (PRIVATE)."""
         assert feature.type, feature
-        location = _insdc_location_string(feature.location, record_length)
+
         f_type = feature.type.replace(" ", "_")
+        allowed_chars = ascii_letters + digits + "_-'*"
+        if not all(ch in allowed_chars for ch in f_type):
+            warnings.warn(
+                "Feature key contains characters not allowed by standard.",
+                BiopythonWarning,
+            )
+        if len(f_type) > 15:
+            warnings.warn(
+                "Feature key is longer than maximum length specified"
+                " by standard (15 characters).",
+                BiopythonWarning,
+            )
+
+        location = _insdc_location_string(feature.location, record_length)
         line = (
             (self.QUALIFIER_INDENT_TMP % f_type)[: self.QUALIFIER_INDENT]
             + self._wrap_location(location)
