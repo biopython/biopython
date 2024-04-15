@@ -33,6 +33,7 @@ http://www.ebi.ac.uk/imgt/hla/docs/manual.html
 import warnings
 
 from datetime import datetime
+from string import ascii_letters, digits
 
 from Bio import BiopythonWarning
 from Bio import SeqFeature
@@ -46,6 +47,9 @@ from .Interfaces import _get_seq_string
 from .Interfaces import SequenceIterator
 from .Interfaces import SequenceWriter
 
+# Set containing all characters allowed in feature qualifier keys. See
+# https://www.insdc.org/submitting-standards/feature-table/#3.1
+_allowed_table_component_name_chars = set(ascii_letters + digits + "_-'*")
 
 # NOTE
 # ====
@@ -376,6 +380,19 @@ class _InsdcWriter(SequenceWriter):
     )
 
     def _write_feature_qualifier(self, key, value=None, quote=None):
+        if not _allowed_table_component_name_chars.issuperset(key):
+            warnings.warn(
+                f"Feature qualifier key '{key}' contains characters not"
+                " allowed by standard.",
+                BiopythonWarning,
+            )
+        if len(key) > 20:
+            warnings.warn(
+                f"Feature qualifier key '{key}' is longer than maximum length"
+                " specified by standard (20 characters).",
+                BiopythonWarning,
+            )
+
         if value is None:
             # Value-less entry like /pseudo
             self.handle.write(f"{self.QUALIFIER_INDENT_STR}/{key}\n")
@@ -439,8 +456,22 @@ class _InsdcWriter(SequenceWriter):
     def _write_feature(self, feature, record_length):
         """Write a single SeqFeature object to features table (PRIVATE)."""
         assert feature.type, feature
-        location = _insdc_location_string(feature.location, record_length)
+
         f_type = feature.type.replace(" ", "_")
+        if not _allowed_table_component_name_chars.issuperset(f_type):
+            warnings.warn(
+                f"Feature key '{f_type}' contains characters not allowed by"
+                " standard.",
+                BiopythonWarning,
+            )
+        if len(f_type) > 15:
+            warnings.warn(
+                f"Feature key '{f_type}' is longer than maximum length"
+                " specified by standard (15 characters).",
+                BiopythonWarning,
+            )
+
+        location = _insdc_location_string(feature.location, record_length)
         line = (
             (self.QUALIFIER_INDENT_TMP % f_type)[: self.QUALIFIER_INDENT]
             + self._wrap_location(location)
