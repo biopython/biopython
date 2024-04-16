@@ -243,7 +243,7 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
                     j = i + len(line)
                 else:
                     line = data[i:j]
-                words = line.split()
+                words = line.split(None, 6)
                 if len(words) != 7:
                     raise ValueError(
                         "Error parsing alignment - 's' line must have 7 fields"
@@ -271,7 +271,7 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
                     j = i + len(line)
                 else:
                     line = data[i:j]
-                words = line.split()
+                words = line.split(None, 5)
                 assert len(words) == 6
                 assert words[1].decode() == src  # from the previous "s" line
                 leftStatus = words[2].decode()
@@ -292,7 +292,7 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
                     j = i + len(line)
                 else:
                     line = data[i:j]
-                words = line.split()
+                words = line.split(None, 6)
                 assert len(words) == 7
                 src = words[1].decode()
                 start = int(words[2])
@@ -322,7 +322,7 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
                     j = i + len(line)
                 else:
                     line = data[i:j]
-                words = line.split()
+                words = line.split(None, 2)
                 assert len(words) == 3
                 assert words[1].decode() == src  # from the previous "s" line
                 value = words[2].replace(b"-", b"")
