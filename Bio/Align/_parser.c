@@ -10,53 +10,99 @@
 #include <string.h>
 
 
+static PyTypeObject CoordinatesType;
+
 typedef struct {
     PyObject_HEAD
-    long *data;
     Py_ssize_t shape[2];
+    long** positions;
+    size_t kmax;
 } Coordinates;
 
 /* Destructor function */
 static void
 Coordinates_dealloc(Coordinates *self)
 {
-    if (self->data != NULL) {
-        PyMem_Free(self->data);
+    long** positions = self->positions;
+    ssize_t k;
+    const ssize_t kmax = self->kmax;
+    for (k = 0; k < kmax; k++) {
+        if (positions[k] == NULL) break;
+        PyMem_Free(positions[k]);
     }
+    PyMem_Free(self->positions);
     Py_TYPE(self)->tp_free((PyObject *)self);
 }
 
-/* Buffer protocol getbuffer function */
 static int
-Coordinates_getbuffer(PyObject *obj, Py_buffer *view, int flags)
+array_converter(PyObject* argument, void* pointer)
 {
-    Coordinates *self = (Coordinates *)obj;
+    Py_buffer* view = pointer;
+    Coordinates* self;
 
-    if (view == NULL) {
-        PyErr_SetString(PyExc_BufferError, "NULL view in getbuffer");
-        return -1;
+    if (!PyObject_TypeCheck(view->obj, &CoordinatesType)) {
+        PyErr_SetString(PyExc_RuntimeError,
+                        "expected an object of the Coordinates class");
+        return 0;
     }
 
-    view->obj = obj;
-    view->buf = self->data;
-    view->len = self->shape[0] * self->shape[1] * sizeof(long);
-    view->readonly = 0;
-    view->itemsize = sizeof(long);
-    view->format = "l";
-    view->ndim = 2;
-    view->shape = self->shape;
-    view->strides = NULL;
-    view->suboffsets = NULL;
-    view->internal = NULL;
+    self = (Coordinates*) view->obj;
 
-    Py_INCREF(obj);
+    if (PyObject_GetBuffer(argument, view, PyBUF_CONTIG) != 0) {
+        PyErr_SetString(PyExc_RuntimeError,
+                        "argument does not implement the buffer protocol");
+        return 0;
+    }
+    if (view->ndim != 2) {
+        PyErr_Format(PyExc_RuntimeError,
+                     "buffer has incorrect rank %d (expected 2)",
+                      view->ndim);
+    }
+    else if (view->shape[0] != self->shape[0]) {
+        PyErr_Format(PyExc_RuntimeError,
+                     "buffer has incorrect number of rows %zd (expected %zd)",
+                      view->shape[0], self->shape[0]);
+    }
+    else if (view->shape[1] != self->shape[1]) {
+        PyErr_Format(PyExc_RuntimeError,
+                     "buffer has incorrect number of columns %zd (expected %zd)",
+                      view->shape[1], self->shape[1]);
+    }
+    else if (view->itemsize != sizeof(long)) {
+        PyErr_Format(PyExc_RuntimeError,
+                    "buffer has unexpected item byte size "
+                    "(%ld, expected %ld)", view->itemsize, sizeof(long));
+    }
+    else return Py_CLEANUP_SUPPORTED;
 
-    return 0;
+    PyBuffer_Release(view);
+    return 1;
 }
 
-static PyBufferProcs Coordinates_as_buffer = {
-    .bf_getbuffer = Coordinates_getbuffer,
-};
+static PyObject*
+Coordinates_fill(Coordinates* self, PyObject* args)
+{
+    Py_buffer view;
+    ssize_t n = self->shape[0];
+    ssize_t m = self->shape[1];
+    ssize_t i, j;
+    long** positions = self->positions;
+    long* data;
+
+    view.obj = (PyObject*) self;
+
+    if (!PyArg_ParseTuple(args, "O&:fill", array_converter, &view))
+        return NULL;
+
+    data  = view.buf;
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < m; j++) {
+            data[i*m+j] = positions[j][i];
+        }
+    }
+    Py_INCREF(Py_None);
+    return Py_None;
+}
 
 static PyObject*
 Coordinates_get_shape(Coordinates* self, void* closure)
@@ -71,6 +117,10 @@ static PyGetSetDef Coordinates_getset[] = {
     {NULL, NULL, 0, NULL}  /* Sentinel */
 };
 
+static PyMethodDef Coordinates_methods[] = {
+    {"fill", (PyCFunction)Coordinates_fill, METH_VARARGS, "Fill a buffer object with the calculated indices"},
+    {NULL, NULL, 0, NULL}  /* Sentinel */
+};
 
 static PyTypeObject CoordinatesType = {
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -80,7 +130,7 @@ static PyTypeObject CoordinatesType = {
     .tp_itemsize = 0,
     .tp_flags = Py_TPFLAGS_DEFAULT,
     .tp_dealloc = (destructor)Coordinates_dealloc,
-    .tp_as_buffer = &Coordinates_as_buffer,
+    .tp_methods = Coordinates_methods,
     .tp_getset = Coordinates_getset,
 };
 
@@ -106,35 +156,16 @@ converter(PyObject* argument, void* pointer)
     *((Py_buffer**)pointer) = lines;
     for (i = 0; i < n; i++) {
         item = items[i];
-        if (PyObject_GetBuffer(item, &lines[i], PyBUF_CONTIG_RO) == 0) {
-            if (lines[i].itemsize == 1 && lines[i].ndim == 1) continue;
+        if (PyObject_GetBuffer(item, &lines[i], PyBUF_CONTIG_RO) == -1
+          || lines[i].itemsize != 1 || lines[i].ndim != 1) {
             PyErr_Format(PyExc_ValueError,
                          "line [%zi] does not contain a one-dimensional array "
                          "of single bytes.", i);
+            n = i;
+            for (i = 0; i < n; i++) PyBuffer_Release(&lines[i]);
+            Py_DECREF(argument);
+            return 0;
         }
-        else {
-            PyErr_Clear();
-            if (PyUnicode_Check(item)
-             && PyUnicode_READY(item) == 0
-             && PyUnicode_IS_ASCII(item)) {
-                PyBuffer_FillInfo(&lines[i],
-                                  item,
-                                  PyUnicode_DATA(item),
-                                  PyUnicode_GET_LENGTH(item),
-                                  1,
-                                  PyBUF_CONTIG_RO);
-                continue;
-            }
-            else {
-                PyErr_Format(PyExc_TypeError,
-                             "line [%zi] is neither a bytes-like object "
-                             "nor an ASCII string", i);
-            }
-        }
-        n = i;
-        for (i = 0; i < n; i++) PyBuffer_Release(&lines[i]);
-        Py_DECREF(argument);
-        return 0;
     }
     Py_DECREF(argument);
     return 1;
@@ -145,17 +176,19 @@ static PyObject*
 parse_printed_alignment(PyObject* module, PyObject* args)
 {
     Py_buffer* lines;
-    Py_ssize_t i, j, k, n, m, p;
+    Py_ssize_t i, j, k, n, m;
     const char* s;
-    char** destination = NULL;
     Py_ssize_t index, previous;
     long step;
     Py_ssize_t* indices = NULL;
-    Py_ssize_t length;
     Py_ssize_t* lengths = NULL;
     Coordinates *coordinates = NULL;
     PyObject* sequences = NULL;
     PyObject* sequence;
+    char** destinations = NULL;
+    long** positions;
+    long* steps = NULL;
+    Py_ssize_t kmax = 2;
 
     PyObject* result = NULL;
 
@@ -189,52 +222,22 @@ parse_printed_alignment(PyObject* module, PyObject* args)
     }
     indices = PyMem_Calloc(n, sizeof(Py_ssize_t));
     if (!indices) goto exit;
+
+    positions = PyMem_Calloc(kmax, sizeof(long*));
+    if (!positions) goto exit;
+    positions[0] = PyMem_Calloc(n, sizeof(long));
+    if (!positions[0]) {
+        PyMem_Free(positions);
+        goto exit;
+    }
+    coordinates->positions = positions;
+    coordinates->kmax = kmax;
+
+    steps = PyMem_Calloc(kmax, sizeof(long));
+    if (!steps) goto exit;
+
     lengths = PyMem_Calloc(n, sizeof(Py_ssize_t));
     if (!lengths) goto exit;
-    destination = PyMem_Malloc(n*sizeof(char*));
-    if (!destination) goto exit;
-    p = 0;
-    while (1) {
-        index = m;
-        for (i = 0; i < n; i++) if (indices[i] < index) index = indices[i];
-        p++;
-        if (index == m) break;
-        for (i = 0; i < n; i++) {
-            if (indices[i] == index) {
-                s = ((const char*)(lines[i].buf)) + index;
-                if (*s == '-') {
-                    for (j = index+1; j < m; j++) if (*(++s) != '-') break;
-                }
-                else {
-                    for (j = index+1; j < m; j++) if (*(++s) == '-') break;
-                    lengths[i] += j - index;
-                }
-                indices[i] = j;
-            }
-        }
-    }
-
-    sequences = PyList_New(n);
-    if (sequences == NULL) goto exit;
-    for (i = 0; i < n ; i++) {
-        if (PyUnicode_Check(lines[i].obj)) {
-            sequence = PyUnicode_New(lengths[i], 127);
-            if (!sequence) goto exit;
-            destination[i] = PyUnicode_DATA(sequence);
-        }
-        else {
-            sequence = PyBytes_FromStringAndSize(NULL, lengths[i]);
-            if (!sequence) goto exit;
-            destination[i] = PyBytes_AS_STRING(sequence);
-        }
-        PyList_SET_ITEM(sequences, i, sequence);
-    }
-    coordinates->data = PyMem_Malloc(n*p*sizeof(long));
-    if (!coordinates->data) goto exit;
-    for (i = 0; i < n; i++) coordinates->data[i*p] = 0;
-    coordinates->shape[0] = n;
-    coordinates->shape[1] = p;
-
     memset(indices, '\0', n * sizeof(Py_ssize_t));
     memset(lengths, '\0', n * sizeof(Py_ssize_t));
     k = 1;
@@ -243,15 +246,12 @@ parse_printed_alignment(PyObject* module, PyObject* args)
         previous = index;
         for (i = 0; i < n; i++) {
             if (index == indices[i]) {
-                length = lengths[i];
                 s = ((const char*)(lines[i].buf)) + index;
                 if (*s == '-') {
                     for (j = index+1; j < m; j++) if (*(++s) != '-') break;
                 }
                 else {
                     for (j = index+1; j < m; j++) if (*(++s) == '-') break;
-                    s = ((const char*)(lines[i].buf)) + index;
-                    memcpy(destination[i]+length, s, j - index);
                     lengths[i] += j - index;
                 }
                 indices[i] = j;
@@ -260,18 +260,63 @@ parse_printed_alignment(PyObject* module, PyObject* args)
         index = m;
         for (i = 0; i < n; i++) if (indices[i] < index) index = indices[i];
         step = index - previous;
+        if (k == kmax) {
+            long* new_steps;
+            kmax *= 2;
+            new_steps = PyMem_Realloc(steps, kmax*sizeof(long));
+            if (new_steps == NULL) goto exit;
+            steps = new_steps;
+            positions = PyMem_Realloc(positions, kmax*sizeof(long*));
+            if (positions == NULL) {
+                positions = coordinates->positions;
+                goto exit;
+            }
+            coordinates->positions = positions;
+            coordinates->kmax = kmax;
+            memset(positions + k, '\0', k * sizeof(long*));
+        }
+        positions[k] = PyMem_Malloc(n*sizeof(long));
         for (i = 0; i < n; i++) {
             s = lines[i].buf;
             if (s[previous] == '-') {
-                coordinates->data[i*p+k] = coordinates->data[i*p+k-1];
+                positions[k][i] = positions[k-1][i];
             }
             else {
-                coordinates->data[i*p+k] = coordinates->data[i*p+k-1] + step;
+                positions[k][i] = positions[k-1][i] + step;
             }
         }
+        steps[k] = step;
         k++;
     }
     while (index < m);
+
+    sequences = PyList_New(n);
+    if (sequences == NULL) goto exit;
+    destinations = PyMem_Calloc(n, sizeof(char*));
+    if (destinations == NULL) goto exit;
+
+    for (i = 0; i < n; i++) {
+        sequence = PyBytes_FromStringAndSize(NULL, lengths[i]);
+        if (!sequence) goto exit;
+        PyList_SET_ITEM(sequences, i, sequence);
+        destinations[i] = PyBytes_AS_STRING(sequence);
+    }
+
+    memset(indices, '\0', n * sizeof(Py_ssize_t));
+    m = 0;
+    for (j = 1; j < k; j++) {
+        step = steps[j];
+        for (i = 0; i < n; i++) {
+            if (positions[j][i] == indices[i]) continue;
+            s = ((const char*)(lines[i].buf)) + m;
+            memcpy(destinations[i] + indices[i], s, step);
+            indices[i] = positions[j][i];
+        }
+        m += step;
+    }
+
+    coordinates->shape[0] = n;
+    coordinates->shape[1] = k;
 
     result = Py_BuildValue("OO", sequences, coordinates);
 exit:
@@ -279,7 +324,8 @@ exit:
     Py_XDECREF(coordinates);
     if (indices) PyMem_Free(indices);
     if (lengths) PyMem_Free(lengths);
-    if (destination) PyMem_Free(destination);
+    if (steps) PyMem_Free(steps);
+    if (destinations) PyMem_Free(destinations);
     for (i = 0; i < n; i++) PyBuffer_Release(&lines[i]);
     PyMem_Free(lines);
     return result;

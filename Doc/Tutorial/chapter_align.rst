@@ -150,7 +150,13 @@ aligned sequences as follows:
    CGGTTTTT
    AG-TTT--
    AGGTTT--
+   >>> lines = [line.encode() for line in lines]  # convert to bytes
+   >>> lines
+   [b'CGGTTTTT', b'AG-TTT--', b'AGGTTT--']
    >>> sequences, coordinates = Alignment.parse_printed_alignment(lines)
+   >>> sequences
+   [b'CGGTTTTT', b'AGTTT', b'AGGTTT']
+   >>> sequences = [sequence.decode() for sequence in sequences]
    >>> sequences
    ['CGGTTTTT', 'AGTTT', 'AGGTTT']
    >>> coordinates
