@@ -178,10 +178,9 @@ parse_printed_alignment(PyObject* module, PyObject* args)
     Py_buffer* lines;
     Py_ssize_t i, j, k, n, m;
     const char* s;
-    Py_ssize_t index, previous;
+    Py_ssize_t index;
     long step;
     Py_ssize_t* indices = NULL;
-    Py_ssize_t* lengths = NULL;
     Coordinates *coordinates = NULL;
     PyObject* sequences = NULL;
     PyObject* sequence;
@@ -236,14 +235,10 @@ parse_printed_alignment(PyObject* module, PyObject* args)
     steps = PyMem_Calloc(kmax, sizeof(long));
     if (!steps) goto exit;
 
-    lengths = PyMem_Calloc(n, sizeof(Py_ssize_t));
-    if (!lengths) goto exit;
-    memset(indices, '\0', n * sizeof(Py_ssize_t));
-    memset(lengths, '\0', n * sizeof(Py_ssize_t));
-    k = 1;
+    k = 0;
     index = 0;
     do {
-        previous = index;
+        k++;
         for (i = 0; i < n; i++) {
             if (index == indices[i]) {
                 s = ((const char*)(lines[i].buf)) + index;
@@ -252,14 +247,10 @@ parse_printed_alignment(PyObject* module, PyObject* args)
                 }
                 else {
                     for (j = index+1; j < m; j++) if (*(++s) == '-') break;
-                    lengths[i] += j - index;
                 }
                 indices[i] = j;
             }
         }
-        index = m;
-        for (i = 0; i < n; i++) if (indices[i] < index) index = indices[i];
-        step = index - previous;
         if (k == kmax) {
             long* new_steps;
             kmax *= 2;
@@ -275,18 +266,22 @@ parse_printed_alignment(PyObject* module, PyObject* args)
             coordinates->kmax = kmax;
             memset(positions + k, '\0', k * sizeof(long*));
         }
+        step = m;
+        for (i = 0; i < n; i++) if (indices[i] < step) step = indices[i];
+        step -= index;
         positions[k] = PyMem_Malloc(n*sizeof(long));
+        if (!positions[k]) goto exit;
         for (i = 0; i < n; i++) {
             s = lines[i].buf;
-            if (s[previous] == '-') {
+            if (s[index] == '-') {
                 positions[k][i] = positions[k-1][i];
             }
             else {
                 positions[k][i] = positions[k-1][i] + step;
             }
         }
+        index += step;
         steps[k] = step;
-        k++;
     }
     while (index < m);
 
@@ -296,34 +291,32 @@ parse_printed_alignment(PyObject* module, PyObject* args)
     if (destinations == NULL) goto exit;
 
     for (i = 0; i < n; i++) {
-        sequence = PyBytes_FromStringAndSize(NULL, lengths[i]);
+        sequence = PyBytes_FromStringAndSize(NULL, positions[k][i]);
         if (!sequence) goto exit;
         PyList_SET_ITEM(sequences, i, sequence);
         destinations[i] = PyBytes_AS_STRING(sequence);
     }
 
-    memset(indices, '\0', n * sizeof(Py_ssize_t));
-    m = 0;
-    for (j = 1; j < k; j++) {
+    index = 0;
+    for (j = 1; j <= k; j++) {
         step = steps[j];
         for (i = 0; i < n; i++) {
-            if (positions[j][i] == indices[i]) continue;
-            s = ((const char*)(lines[i].buf)) + m;
-            memcpy(destinations[i] + indices[i], s, step);
-            indices[i] = positions[j][i];
+            if (positions[j][i] == positions[j-1][i]) continue;
+            s = ((const char*)(lines[i].buf)) + index;
+            memcpy(destinations[i], s, step);
+            destinations[i] += step;
         }
-        m += step;
+        index += step;
     }
 
     coordinates->shape[0] = n;
-    coordinates->shape[1] = k;
+    coordinates->shape[1] = k + 1;
 
     result = Py_BuildValue("OO", sequences, coordinates);
 exit:
     Py_XDECREF(sequences);
     Py_XDECREF(coordinates);
     if (indices) PyMem_Free(indices);
-    if (lengths) PyMem_Free(lengths);
     if (steps) PyMem_Free(steps);
     if (destinations) PyMem_Free(destinations);
     for (i = 0; i < n; i++) PyBuffer_Release(&lines[i]);
