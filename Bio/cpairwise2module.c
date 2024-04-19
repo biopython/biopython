@@ -57,7 +57,7 @@ static double _get_match_score(PyObject *py_sequenceA, PyObject *py_sequenceB,
     if(!(py_arglist = Py_BuildValue("(OO)", py_A, py_B)))
         goto _get_match_score_cleanup;
 
-    if(!(py_result = PyEval_CallObject(py_match_fn, py_arglist)))
+    if(!(py_result = PyObject_CallObject(py_match_fn, py_arglist)))
         goto _get_match_score_cleanup;
     score = PyFloat_AsDouble(py_result);
 
