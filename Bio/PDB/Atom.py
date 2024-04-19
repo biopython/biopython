@@ -290,13 +290,11 @@ class Atom:
 
         return (
             self.name == other.name
-            and self.bfactor == other.bfactor
+            and np.isclose(self.bfactor, other.bfactor)
             and self.occupancy == other.occupancy
             and self.altloc == other.altloc
             and self.fullname == other.fullname
-            and np.allclose(self.coord, other.coord)
-            if compare_coordinates
-            else True
+            and (np.allclose(self.coord, other.coord) if compare_coordinates else True)
             and getattr(self, "element", None) == getattr(self, "element", None)
             and getattr(self, "pqr_charge", None) == getattr(self, "pqr_charge", None)
             and getattr(self, "radius", None) == getattr(self, "radius", None)
