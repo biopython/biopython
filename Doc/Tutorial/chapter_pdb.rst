@@ -62,6 +62,23 @@ Example: get the list of the :math:`y` coordinates of all atoms
 
    >>> y_list = mmcif_dict["_atom_site.Cartn_y"]
 
+Reading a BinaryCIF file
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Create a ``BinaryCIFParser`` object:
+
+.. code:: pycon
+
+   >>> from Bio.PDB.binary_cif import BinaryCIFParser
+   >>> parser = BinaryCIFParser()
+
+Call ``get_structure`` with the path to the BinaryCIF file:
+
+.. code:: pycon
+
+   >>> structure = parser.get_structure("1GBT.bcif")
+
 Reading files in the MMTF format
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
