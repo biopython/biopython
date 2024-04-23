@@ -67,6 +67,10 @@ A parser has been added for parsing PDBML (PDB XML) files.
 `PDBML <https://pdbml.wwpdb.org/>`_ is a representation of PDB data in XML format.
 The PDB chapter of the tutorial is updated to show how to use the PDBML parser.
 
+Additionally, a parser has been added for BinaryCIF files.
+BinaryCIF is a compact, binary representation of CIF data.
+The PDB tutorial is updated to show how to use the BinaryCIF parser.
+
 Bio.PDB Structure objects will now issue a warning - instead of an exception - when
 two children (e.g. residues) have identical IDs. This can be useful in some
 cases, e.g. renumbering residues in a chain.
