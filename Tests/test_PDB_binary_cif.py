@@ -1,3 +1,7 @@
+"""
+Tests for BinaryCIF code in the PDB package.
+"""
+
 import unittest
 
 from Bio.PDB import MMCIFParser
@@ -12,4 +16,8 @@ class TestBinaryCIFParser(unittest.TestCase):
         for entry in ["1GBT", "6WG6", "3JQH"]:
             mmcif_structure = mmcif_parser.get_structure(entry, f"PDB/{entry}.cif")
             bcif_structure = bcif_parser.get_structure(f"PDB/{entry.lower()}.bcif.gz")
-            self.assertTrue(mmcif_structure.strictly_equals(bcif_structure, compare_coordinates=True))
+            self.assertTrue(
+                mmcif_structure.strictly_equals(
+                    bcif_structure, compare_coordinates=True
+                )
+            )
