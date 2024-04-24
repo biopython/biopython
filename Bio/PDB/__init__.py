@@ -21,6 +21,7 @@ Contributions by:
 - Eric Talevich
 - and many others.
 """
+import importlib.util
 
 try:
     import numpy as np
@@ -34,7 +35,8 @@ except ImportError:
 # Get a Structure object from a PDB file
 from .PDBParser import PDBParser
 
-from .binary_cif import BinaryCIFParser
+if importlib.util.find_spec("msgpack"):
+    from .binary_cif import BinaryCIFParser
 from .MMCIFParser import MMCIFParser
 from .MMCIFParser import FastMMCIFParser
 from .PDBMLParser import PDBMLParser
