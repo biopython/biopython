@@ -68,6 +68,8 @@ Reading a BinaryCIF file
 
 Create a ``BinaryCIFParser`` object:
 
+.. doctest ../Tests/PDB lib:numpy lib:msgpack
+
 .. code:: pycon
 
    >>> from Bio.PDB.binary_cif import BinaryCIFParser
@@ -75,9 +77,12 @@ Create a ``BinaryCIFParser`` object:
 
 Call ``get_structure`` with the path to the BinaryCIF file:
 
+.. cont-doctest ../Tests/PDB lib:numpy lib:msgpack
+
 .. code:: pycon
 
-   >>> structure = parser.get_structure("1GBT.bcif")
+   >>> parser.get_structure("1gbt.bcif.gz")
+   <Structure id=1GBT>
 
 Reading files in the MMTF format
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -3,13 +3,8 @@ A module to interact with BinaryCIF-formatted files.
 """
 
 import gzip
-from collections import deque
-
 import numpy as np
-import Bio.PDB._bcif_helper as _bcif_helper
-
-from Bio.PDB.Structure import Structure
-from Bio.PDB.StructureBuilder import StructureBuilder
+from collections import deque
 
 try:
     import msgpack
@@ -19,6 +14,10 @@ except ImportError:
     raise MissingPythonDependencyError(
         "Install msgpack to use Bio.PDB.binaryCIF (e.g. pip install msgpack)"
     ) from None
+
+import Bio.PDB._bcif_helper as _bcif_helper
+from Bio.PDB.Structure import Structure
+from Bio.PDB.StructureBuilder import StructureBuilder
 
 
 # https://github.com/ihmwg/python-ihm/blob/main/ihm/format_bcif.py
