@@ -61,7 +61,7 @@ class FlawedPDB_tests(unittest.TestCase):
                     "Atom N defined twice in residue <Residue ARG het=  resseq=2 icode= > at line 22.",
                     "disordered atom found with blank altloc before line 34.",
                     "Residue (' ', 4, ' ') redefined at line 44.",
-                    "Blank altlocs in duplicate residue SER (' ', 4, ' ') at line 44.",
+                    "Blank altlocs in duplicate residue SER (' ', 4, ' ') of chain 'A' at line 44.",
                     "Residue (' ', 10, ' ') redefined at line 76.",
                     "Residue (' ', 14, ' ') redefined at line 107.",
                     "Residue (' ', 16, ' ') redefined at line 136.",
