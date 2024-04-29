@@ -169,8 +169,8 @@ class StructureBuilder:
                         # if this exception is ignored, a residue will be missing
                         self.residue = None
                         raise PDBConstructionException(
-                            "Blank altlocs in duplicate residue %s ('%s', %i, '%s')"
-                            % (resname, field, resseq, icode)
+                            "Blank altlocs in duplicate residue %s ('%s', %i, '%s') of chain '%s'"
+                            % (resname, field, resseq, icode, self.chain.id)
                         )
                     self.chain.detach_child(res_id)
                     new_residue = Residue(res_id, resname, self.segid)
