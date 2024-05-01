@@ -70,7 +70,7 @@ methods that allow it to be used as a dictionary.
 # reserved - always zero for now
 # packedDna - the DNA packed to two bits per base, represented as so:
 #             T - 00, C - 01, A - 10, G - 11. The first base is in the most
-#             significant 2-bit byte; the last base is in the least significan
+#             significant 2-bit byte; the last base is in the least significant
 #             2 bits. For example, the sequence TCAG is represented as 00011011.
 try:
     import numpy as np

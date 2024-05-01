@@ -546,7 +546,7 @@ class DatabaseLoader:
             # we could verify that the Scientific Name etc in the database
             # is the same and update it or print a warning if not...
             if len(rows) != 1:
-                raise ValueError(f"Expected 1 reponse, got {len(rows)}")
+                raise ValueError(f"Expected 1 response, got {len(rows)}")
             return rows[0]
 
         # We have to record this.

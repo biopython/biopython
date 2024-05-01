@@ -124,7 +124,7 @@ def check_request_ids(testcase, params, expected):
     :type testcase: unittest.TestCase
     :param params: Parsed parameter dictionary returned by `deconstruct_request`.
     :type params: dict
-    :param expected: Expected set of IDs, as colleciton of strings.
+    :param expected: Expected set of IDs, as collection of strings.
     """
     testcase.assertEqual(len(params["id"]), 1)
     ids_str = params["id"][0]

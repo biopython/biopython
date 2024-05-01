@@ -16,7 +16,7 @@ Functions:
  - classify     Classify an observation into a class.
 
 This module has been deprecated, please consider an alternative like scikit-learn
-insead.
+instead.
 """
 
 import warnings

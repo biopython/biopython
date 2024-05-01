@@ -80,13 +80,13 @@ class AbstractTrainer:
         return total_likelihood
 
     def estimate_params(self, transition_counts, emission_counts):
-        """Get a maximum likelihood estimation of transition and emmission.
+        """Get a maximum likelihood estimation of transition and emission.
 
         Arguments:
          - transition_counts -- A dictionary with the total number of counts
            of transitions between two states.
          - emissions_counts -- A dictionary with the total number of counts
-           of emmissions of a particular emission letter by a state letter.
+           of emissions of a particular emission letter by a state letter.
 
         This then returns the maximum likelihood estimators for the
         transitions and emissions, estimated by formulas 3.18 in

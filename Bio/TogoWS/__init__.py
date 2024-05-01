@@ -82,7 +82,7 @@ def entry(db, id, format=None, field=None):
 
     Arguments:
      - db - database (string), see list below.
-     - id - identier (string) or a list of identifiers (either as a list of
+     - id - identifier (string) or a list of identifiers (either as a list of
        strings or a single string with comma separators).
      - format - return data file format (string), options depend on the database
        e.g. "xml", "json", "gff", "fasta", "ttl" (RDF Turtle)

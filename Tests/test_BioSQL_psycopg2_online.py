@@ -6,7 +6,7 @@
 
 import unittest
 
-# Really do want "import *" to get all the test clases:
+# Really do want "import *" to get all the test classes:
 from common_BioSQL import *  # noqa: F403
 from common_BioSQL_online import *  # noqa: F403
 

@@ -24,7 +24,7 @@ General parameters for most Tm methods:
    True). In general, whitespaces and non-base characters are removed and
    characters are converted to uppercase. RNA will be backtranscribed.
  - strict -- Do not allow base characters or neighbor duplex keys (e.g.
-   'AT/NA') that could not or not unambigiously be evaluated for the respective
+   'AT/NA') that could not or not unambiguously be evaluated for the respective
    method (default=True). Note that W (= A or T) and S (= C or G) are not
    ambiguous for Tm_Wallace and Tm_GC. If 'False', average values (if
    applicable) will be used.

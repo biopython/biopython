@@ -74,7 +74,7 @@ repos:
     rev: v2.2.6
     hooks:
     -   id: codespell
-        files: \.(rst|md|tex)$
+        files: \.(rst|md)$
         args: [
             --ignore-regex,
             '(^|\W)([A-Z]{2,3})(\W|$)',

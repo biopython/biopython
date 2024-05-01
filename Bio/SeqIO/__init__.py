@@ -293,7 +293,7 @@ names are also used in Bio.AlignIO and include the following:
     - gb      - An alias for "genbank", for consistency with NCBI Entrez Utilities
     - gfa1     - Graphical Fragment Assemblyv versions 1.x. Only segment lines
       are parsed and all linkage information is ignored.
-    - gfa2    - Graphical Fragement Assembly version 2.0. Only segment lines are
+    - gfa2    - Graphical Fragment Assembly version 2.0. Only segment lines are
       parsed and all linkage information is ignored.
     - ig      - The IntelliGenetics file format, apparently the same as the
       MASE alignment format.

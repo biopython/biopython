@@ -110,7 +110,7 @@ class RaxmlCommandline(AbstractCommandline):
                         e: Optimize model+branch lengths for given input tree under
                         GAMMA/GAMMAI only.
 
-                        g: Compute per site log Likelihoods for one ore more trees
+                        g: Compute per site log Likelihoods for one or more trees
                         passed via '-z' and write them to a file that can be read
                         by CONSEL.
 

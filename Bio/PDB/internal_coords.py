@@ -1347,7 +1347,7 @@ class IC_Chain:
         """
 
         if np.any(self.hAtoms_needs_update):
-            # hedra inital coords
+            # hedra initial coords
 
             # sar = supplementary angle radian: angles which add to 180
             sar = np.deg2rad(180.0 - self.hedraAngle[self.hAtoms_needs_update])  # angle
@@ -2058,7 +2058,7 @@ class IC_Chain:
     def distplot_to_dh_arrays(
         self, distplot: np.ndarray, dihedra_signs: np.ndarray
     ) -> None:
-        """Load di/hedra distance arays from distplot.
+        """Load di/hedra distance arrays from distplot.
 
         Fill :class:`IC_Chain` arrays hedraL12, L23, L13 and dihedraL14
         distance value arrays from input distplot, dihedra_signs array from
@@ -2069,7 +2069,7 @@ class IC_Chain:
         Call :meth:`atom_to_internal_coordinates` (or at least :meth:`init_edra`)
         to generate a2ha_map and d2a_map before running this.
 
-        Explcitly removed from :meth:`.distance_to_internal_coordinates` so
+        Explicitly removed from :meth:`.distance_to_internal_coordinates` so
         user may populate these chain di/hedra arrays by other
         methods.
         """
@@ -2116,7 +2116,7 @@ class IC_Chain:
 
         :param bool resetAtoms: default True.
             Mark all atoms in di/hedra and atomArray for updating by
-            :meth:`.internal_to_atom_coordinates`.  Alternatvely set this to
+            :meth:`.internal_to_atom_coordinates`.  Alternatively set this to
             False and manipulate `atomArrayValid`, `dAtoms_needs_update` and
             `hAtoms_needs_update` directly to reduce computation.
         """  # noqa
@@ -3727,12 +3727,12 @@ class IC_Residue:
         protein chain definitions in :mod:`.ic_data` and :meth:`_create_edra`
         (e.g. psi overlaps N-CA-C-O).
 
-        Te default overlap=True is probably what you want for:
+        The default overlap=True is probably what you want for:
         `set_angle("chi1", val)`
 
         The default is probably NOT what you want when processing all dihedrals
         in a chain or residue (such as copying from another structure), as the
-        overlaping dihedra will likely be in the set as well.
+        overlapping dihedra will likely be in the set as well.
 
         N.B. setting e.g. PRO chi2 is permitted without error or warning!
 
@@ -3775,7 +3775,7 @@ class IC_Residue:
 
         Changes a dihedral angle by a given delta, i.e.
         new_angle = current_angle + delta
-        Values are adjusted so new_angle iwll be within +/-180.
+        Values are adjusted so new_angle will be within +/-180.
 
         Changes overlapping dihedra as in :meth:`.set_angle`
 
@@ -3911,7 +3911,7 @@ class Edron:
     re_class: str
         sequence of residue, atoms comprising di/hedron for statistics
     cre_class: str
-        sequence of covalent radii classses comprising di/hedron for statistics
+        sequence of covalent radii classes comprising di/hedron for statistics
     edron_re: compiled regex (Class Attribute)
         A compiled regular expression matching string IDs for Hedron
         and Dihedron objects
