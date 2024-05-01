@@ -103,7 +103,7 @@ class HSP(Alignment):
                      - 'identity':  number of identities in HSP (integer);
                      - 'positive':  number of positives in HSP (integer);
                      - 'gaps':      number of gaps in HSP (integer);
-                     - 'midline':   formating middle line.
+                     - 'midline':   formatting middle line.
 
     A ``Bio.Blast.HSP`` object behaves the same as a `Bio.Align.Alignment``
     object and can be used as such. However, when printing a ``Bio.Blast.HSP``
@@ -377,7 +377,7 @@ class Record(list):
                      - 'identity':  number of identities in HSP (integer);
                      - 'positive':  number of positives in HSP (integer);
                      - 'gaps':      number of gaps in HSP (integer);
-                     - 'midline':   formating middle line.
+                     - 'midline':   formatting middle line.
 
     >>> from Bio import Blast
     >>> record = Blast.read("Blast/xml_2212L_blastx_001.xml")
