@@ -358,9 +358,7 @@ class FDNADistCommandline(_EmbossCommandLine):
             ),
             _Option(["-method", "method"], "sub. model [f,k,j,l,s]", is_required=True),
             _Option(["-gamma", "gamma"], "gamma [g, i,n]"),
-            _Option(
-                ["-ncategories", "ncategories"], "number of rate categories (1-9)"
-            ),
+            _Option(["-ncategories", "ncategories"], "number of rate categories (1-9)"),
             _Option(["-rate", "rate"], "rate for each category"),
             _Option(
                 ["-categories", "categories"], "File of substitution rate categories"
@@ -579,9 +577,7 @@ class FProtDistCommandline(_EmbossCommandLine):
                 filename=True,
                 is_required=True,
             ),
-            _Option(
-                ["-ncategories", "ncategories"], "number of rate categories (1-9)"
-            ),
+            _Option(["-ncategories", "ncategories"], "number of rate categories (1-9)"),
             _Option(["-rate", "rate"], "rate for each category"),
             _Option(["-catergories", "catergories"], "file of rates"),
             _Option(["-weights", "weights"], "weights file"),
