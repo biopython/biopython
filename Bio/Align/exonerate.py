@@ -571,7 +571,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         % (query_step, target_step)
                     )
             elif operation == "N":  # Non-equivalenced (unaligned) region
-                operation = "U"  # 'N' is alread used for introns in SAM/BAM
+                operation = "U"  # 'N' is already used for introns in SAM/BAM
                 if target_step > 0:
                     ts += target_step
                     coordinates[0, i + 1] = ts

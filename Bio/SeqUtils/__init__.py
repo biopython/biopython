@@ -663,12 +663,12 @@ class CodonAdaptationIndex(dict):
             - seq_type: String specifying type of sequence provided.
                         Options are "DNA", "RNA", and "protein". Default is "DNA".
             - strict:   Determines whether an exception should be raised when
-                        two codons are equally prefered for a given amino acid.
+                        two codons are equally preferred for a given amino acid.
         Returns:
             Seq object with DNA encoding the same protein as the sequence argument,
             but using only preferred codons as defined by the codon adaptation index.
             If multiple codons are equally preferred, a warning is issued
-            and one codon is chosen for use in the optimzed sequence.
+            and one codon is chosen for use in the optimized sequence.
         """
         try:  # If seq record is provided, convert to sequence
             sequence = sequence.seq

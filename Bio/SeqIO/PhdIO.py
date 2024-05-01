@@ -82,7 +82,7 @@ def PhdIterator(source: _TextIOSource) -> Iterator[SeqRecord]:
         seq_record = SeqRecord(
             phd_record.seq, id=name, name=name, description=phd_record.file_name
         )
-        # Just re-use the comments dictionary as the SeqRecord's annotations
+        # Just reuse the comments dictionary as the SeqRecord's annotations
         seq_record.annotations = phd_record.comments
         seq_record.annotations["molecule_type"] = "DNA"
         # And store the qualities and peak locations as per-letter-annotation

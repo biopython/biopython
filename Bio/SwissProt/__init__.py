@@ -544,7 +544,7 @@ def _read_dt(record, line):
             version = 0
         date = cols[0].rstrip(",")
 
-        # Re-use the historical property names, even though
+        # Reuse the historical property names, even though
         # the meaning has changed slightly:
         if "INTEGRATED" in uprline:
             record.created = date, version

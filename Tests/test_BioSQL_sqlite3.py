@@ -53,7 +53,7 @@ if False:
 
 class BackwardsCompatibilityTest(SeqRecordTestBaseClass):
     def test_backwards_compatibility(self):
-        """Check can re-use an old BioSQL SQLite3 database."""
+        """Check can reuse an old BioSQL SQLite3 database."""
         original_records = []
         for record in SeqIO.parse("GenBank/cor6_6.gb", "gb"):
             if record.annotations["molecule_type"] == "mRNA":

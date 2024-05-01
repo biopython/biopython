@@ -949,7 +949,7 @@ class Palindromic(AbstractCut):
 
     @classmethod
     def is_palindromic(cls):
-        """Return if the enzyme has a palindromic recoginition site."""
+        """Return if the enzyme has a palindromic recognition site."""
         return True
 
 
@@ -991,7 +991,7 @@ class NonPalindromic(AbstractCut):
 
     @classmethod
     def is_palindromic(cls):
-        """Return if the enzyme has a palindromic recoginition site."""
+        """Return if the enzyme has a palindromic recognition site."""
         return False
 
 

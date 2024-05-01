@@ -101,7 +101,7 @@ class JASPAR5:
         self.dbh = mdb.connect(host, user, password, name)
 
     def __str__(self):
-        """Return a string represention of the JASPAR5 DB connection."""
+        """Return a string representation of the JASPAR5 DB connection."""
         return rf"{self.user}\@{self.host}:{self.name}"
 
     def fetch_motif_by_id(self, id):
@@ -427,7 +427,7 @@ class JASPAR5:
             elif attr == "comment":
                 motif.comment = val
             else:
-                # TODO If we were to implement additional abitrary tags
+                # TODO If we were to implement additional arbitrary tags
                 # motif.tag(attr, val)
                 pass
 

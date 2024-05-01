@@ -2410,7 +2410,7 @@ class TestLoading(unittest.TestCase):
             try:
                 m = substitution_matrices.load(name)
             except Exception:
-                self.fail(f"Failed to load subsitution matrix '{name}'")
+                self.fail(f"Failed to load substitution matrix '{name}'")
 
     def test_reading(self):
         """Confirm matrix reading works with filename or handle."""

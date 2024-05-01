@@ -8,7 +8,7 @@
 # package.
 """Alphabets were previously used to declare sequence type and letters (OBSOLETE).
 
-The design of Bio.Aphabet included a number of historic design choices
+The design of Bio.Alphabet included a number of historic design choices
 which, with the benefit of hindsight, were regretable. Bio.Alphabet was
 therefore removed from Biopython in release 1.78. Instead, the molecule type is
 included as an annotation on SeqRecords where appropriate.

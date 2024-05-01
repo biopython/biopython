@@ -27,7 +27,7 @@ Weighting Functions:
  - equal_weight    Every example is given a weight of 1.
 
 This module has been deprecated, please consider an alternative like scikit-learn
-insead.
+instead.
 """
 
 import warnings

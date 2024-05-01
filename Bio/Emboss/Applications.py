@@ -359,7 +359,7 @@ class FDNADistCommandline(_EmbossCommandLine):
             _Option(["-method", "method"], "sub. model [f,k,j,l,s]", is_required=True),
             _Option(["-gamma", "gamma"], "gamma [g, i,n]"),
             _Option(
-                ["-ncategories", "ncategories"], "number of rate catergories (1-9)"
+                ["-ncategories", "ncategories"], "number of rate categories (1-9)"
             ),
             _Option(["-rate", "rate"], "rate for each category"),
             _Option(
@@ -371,7 +371,7 @@ class FDNADistCommandline(_EmbossCommandLine):
             ),
             _Option(["-invarfrac", "invarfrac"], "proportoin of invariant sites"),
             _Option(["-ttratio", "ttratio"], "ts/tv ratio"),
-            _Option(["-freqsfrom", "freqsfrom"], "use emprical base freqs"),
+            _Option(["-freqsfrom", "freqsfrom"], "use empirical base freqs"),
             _Option(["-basefreq", "basefreq"], "specify basefreqs"),
             _Option(["-lower", "lower"], "lower triangle matrix (y/N)"),
         ]
@@ -580,7 +580,7 @@ class FProtDistCommandline(_EmbossCommandLine):
                 is_required=True,
             ),
             _Option(
-                ["-ncategories", "ncategories"], "number of rate catergories (1-9)"
+                ["-ncategories", "ncategories"], "number of rate categories (1-9)"
             ),
             _Option(["-rate", "rate"], "rate for each category"),
             _Option(["-catergories", "catergories"], "file of rates"),
@@ -596,7 +596,7 @@ class FProtDistCommandline(_EmbossCommandLine):
             ),
             _Option(["-aacateg", "aacateg"], "Choose the category to use [G,C,H]"),
             _Option(["-whichcode", "whichcode"], "genetic code [c,m,v,f,y]"),
-            _Option(["-ease", "ease"], "Pob change catergory (float between -0 and 1)"),
+            _Option(["-ease", "ease"], "Pob change category (float between -0 and 1)"),
             _Option(["-ttratio", "ttratio"], "Transition/transversion ratio (0-1)"),
             _Option(
                 ["-basefreq", "basefreq"], "DNA base frequencies (space separated list)"

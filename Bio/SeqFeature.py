@@ -1392,7 +1392,7 @@ class SimpleLocation(Location):
         return f_seq
 
 
-FeatureLocation = SimpleLocation  # OBSOLETE; for backward compatability only.
+FeatureLocation = SimpleLocation  # OBSOLETE; for backward compatibility only.
 
 
 class CompoundLocation(Location):

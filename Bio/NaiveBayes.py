@@ -50,7 +50,7 @@ except ImportError:
 
 
 def _contents(items):
-    """Return a dictionary where the key is the item and the value is the probablity associated (PRIVATE)."""
+    """Return a dictionary where the key is the item and the value is the probability associated (PRIVATE)."""
     term = 1.0 / len(items)
     counts = {}
     for item in items:

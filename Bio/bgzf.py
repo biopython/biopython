@@ -796,7 +796,7 @@ class BgzfWriter:
     """Define a BGZFWriter object."""
 
     def __init__(self, filename=None, mode="w", fileobj=None, compresslevel=6):
-        """Initilize the class."""
+        """Initialize the class."""
         if filename and fileobj:
             raise ValueError("Supply either filename or fileobj, not both")
         # If an open file was passed, make sure it was opened in binary mode.

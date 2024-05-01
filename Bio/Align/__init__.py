@@ -4290,7 +4290,7 @@ def parse(source, fmt):
      - source - File or file-like object to read from, or filename as string.
      - fmt    - String describing the file format (case-insensitive).
 
-    Typical usage, opening a file to read in, and looping over the aligments:
+    Typical usage, opening a file to read in, and looping over the alignments:
 
     >>> from Bio import Align
     >>> filename = "Exonerate/exn_22_m_ner_cigar.exn"
