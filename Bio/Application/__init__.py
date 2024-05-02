@@ -6,7 +6,7 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-"""General mechanisms to access applications in Biopython (OBSOLETE).
+"""General mechanisms to access applications in Biopython (DEPRECATED).
 
 This module is not intended for direct use. It provides the basic objects which
 are subclassed by our command line wrappers, such as:
