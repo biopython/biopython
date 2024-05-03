@@ -496,7 +496,7 @@ transcript starts at one of two sites. This is very useful information,
 but the complication comes in how to represent this as a position. To
 help us deal with this, we have the concept of fuzzy positions.
 Basically there are several types of fuzzy positions, so we have five
-classes do deal with them:
+classes to deal with them:
 
 ExactPosition
    As its name suggests, this class represents a position which is
