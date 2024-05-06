@@ -81,7 +81,7 @@ Call ``get_structure`` with the path to the BinaryCIF file:
 
 .. code:: pycon
 
-   >>> parser.get_structure("1gbt.bcif.gz")
+   >>> parser.get_structure("1GBT", "1gbt.bcif.gz")
    <Structure id=1GBT>
 
 Reading files in the MMTF format

@@ -1,136 +1,123 @@
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
-#include "numpy/ndarraytypes.h"
-#include "numpy/ufuncobject.h"
 #include <math.h>
+#include <stdint.h>
 
 void
-integer_unpack_u8(PyObject *in, PyObject *out)
+integer_unpack_u8(Py_buffer *in_view, Py_buffer *out_view)
 {
-    npy_intp in_size = PyArray_SIZE(in);
-    npy_intp in_index = 0;
-    npy_intp out_index = 0;
+    Py_ssize_t in_size = in_view->shape[0];
+    Py_ssize_t in_index = 0;
+    Py_ssize_t out_index = 0;
 
-    const npy_uint32 max_value = (npy_uint32) NPY_MAX_UINT8;
+    uint8_t *in_data = in_view->buf;
+    uint32_t *out_data = out_view->buf;
 
     while (in_index < in_size) {
-        npy_uint8 *in_p = PyArray_GETPTR1(in, in_index);
-        npy_uint32 sum = (npy_uint32) *in_p;
+        uint32_t sum = in_data[in_index];
 
-        if (sum == max_value) {
+        if (sum == UINT8_MAX) {
             while (in_index + 1 < in_size) {
                 in_index += 1;
-                in_p = PyArray_GETPTR1(in, in_index);
-                sum += (npy_uint32) *in_p;
+                sum += in_data[in_index];
 
-                if ((npy_uint32) *in_p != max_value) {
+                if (in_data[in_index] != UINT8_MAX) {
                     break;
                 }
             }
         }
 
-        npy_uint32 *out_p = PyArray_GETPTR1(out, out_index);
-        *out_p = sum;
+        out_data[out_index] = sum;
         in_index += 1;
         out_index += 1;
     }
 }
 
 void
-integer_unpack_u16(PyObject *in, PyObject *out)
+integer_unpack_u16(Py_buffer *in_view, Py_buffer *out_view)
 {
-    npy_intp in_size = PyArray_SIZE(in);
-    npy_intp in_index = 0;
-    npy_intp out_index = 0;
+    Py_ssize_t in_size = in_view->shape[0];
+    Py_ssize_t in_index = 0;
+    Py_ssize_t out_index = 0;
 
-    const npy_uint32 max_value = (npy_uint32) NPY_MAX_UINT16;
+    uint16_t *in_data = in_view->buf;
+    uint32_t *out_data = out_view->buf;
 
     while (in_index < in_size) {
-        npy_uint16 *in_p = PyArray_GETPTR1(in, in_index);
-        npy_uint32 sum = (npy_uint32) *in_p;
+        uint32_t sum = in_data[in_index];
 
-        if (sum == max_value) {
+        if (sum == UINT16_MAX) {
             while (in_index + 1 < in_size) {
                 in_index += 1;
-                in_p = PyArray_GETPTR1(in, in_index);
-                sum += (npy_uint32) *in_p;
+                sum += in_data[in_index];
 
-                if ((npy_uint32) *in_p != max_value) {
+                if (in_data[in_index] != UINT16_MAX) {
                     break;
                 }
             }
         }
 
-        npy_uint32 *out_p = PyArray_GETPTR1(out, out_index);
-        *out_p = sum;
+        out_data[out_index] = sum;
         in_index += 1;
         out_index += 1;
     }
 }
 
 void
-integer_unpack_i8(PyObject *in, PyObject *out)
+integer_unpack_i8(Py_buffer *in_view, Py_buffer *out_view)
 {
-    npy_intp in_size = PyArray_SIZE(in);
-    npy_intp in_index = 0;
-    npy_intp out_index = 0;
+    Py_ssize_t in_size = in_view->shape[0];
+    Py_ssize_t in_index = 0;
+    Py_ssize_t out_index = 0;
 
-    const npy_int8 min_value = (npy_int8) NPY_MIN_INT8;
-    const npy_int32 max_value = (npy_int32) NPY_MAX_INT8;
+    int8_t *in_data = in_view->buf;
+    int32_t *out_data = out_view->buf;
 
     while (in_index < in_size) {
-        npy_int8 *in_p = PyArray_GETPTR1(in, in_index);
-        npy_int32 sum = (npy_int32) *in_p;
+        int32_t sum = in_data[in_index];
 
-        if (sum == max_value || sum == min_value) {
+        if (sum == INT8_MAX || sum == INT8_MIN) {
             while (in_index + 1 < in_size) {
                 in_index += 1;
-                in_p = PyArray_GETPTR1(in, in_index);
-                sum += (npy_int32) *in_p;
-                npy_int32 value = (npy_int32) *in_p;
+                sum += in_data[in_index];
 
-                if (value != max_value && value != min_value) {
+                if (in_data[in_index] != INT8_MAX && in_data[in_index] != INT8_MIN) {
                     break;
                 }
             }
         }
 
-        npy_int32 *out_p = PyArray_GETPTR1(out, out_index);
-        *out_p = sum;
+        out_data[out_index] = sum;
         in_index += 1;
         out_index += 1;
     }
 }
 
 void
-integer_unpack_i16(PyObject *in, PyObject *out)
+integer_unpack_i16(Py_buffer *in_view, Py_buffer *out_view)
 {
-    npy_intp in_size = PyArray_SIZE(in);
-    npy_intp in_index = 0;
-    npy_intp out_index = 0;
+    Py_ssize_t in_size = in_view->shape[0];
+    Py_ssize_t in_index = 0;
+    Py_ssize_t out_index = 0;
 
-    const npy_int32 min_value = (npy_int32) NPY_MIN_INT16;
-    const npy_int32 max_value = (npy_int32) NPY_MAX_INT16;
+    int16_t *in_data = in_view->buf;
+    int32_t *out_data = out_view->buf;
 
     while (in_index < in_size) {
-        npy_int16 *in_p = PyArray_GETPTR1(in, in_index);
-        npy_int32 sum = (npy_int32) *in_p;
+        int32_t sum = in_data[in_index];
 
-        if (sum == max_value || sum == min_value) {
+        if (sum == INT16_MAX || sum == INT16_MIN) {
             while (in_index + 1 < in_size) {
                 in_index += 1;
-                in_p = PyArray_GETPTR1(in, in_index);
-                sum += (npy_int32) *in_p;
-                npy_int32 value = (npy_int32) *in_p;
+                sum += in_data[in_index];
 
-                if (value != max_value && value != min_value) {
+                if (in_data[in_index] != INT16_MAX && in_data[in_index] != INT16_MIN) {
                     break;
                 }
             }
         }
 
-        npy_int32 *out_p = PyArray_GETPTR1(out, out_index);
-        *out_p = sum;
+        out_data[out_index] = sum;
         in_index += 1;
         out_index += 1;
     }
@@ -142,30 +129,53 @@ integer_unpack(PyObject *self, PyObject *args)
     PyObject *in = NULL;
     PyObject *out = NULL;
 
-    if (!PyArg_ParseTuple(args, "O!O!", &PyArray_Type,
-                          &in, &PyArray_Type, &out)) {
+    if (!PyArg_ParseTuple(args, "OO", &in, &out)) {
         return NULL;
     }
 
-    npy_intp itemsize = PyArray_ITEMSIZE(in);
+    Py_buffer in_view, out_view;
+    const int flags = PyBUF_ND | PyBUF_FORMAT;
 
-    if (PyArray_ISUNSIGNED(in)) {
-        if (itemsize == 1) {
-            integer_unpack_u8(in, out);
-        }
-        else {
-            integer_unpack_u16(in, out);
-        }
+    if (PyObject_GetBuffer(in, &in_view, flags) != 0) {
+        return NULL;
+    }
+    if (PyObject_GetBuffer(out, &out_view, flags | PyBUF_WRITABLE) != 0) {
+        PyBuffer_Release(&in_view);
+        return NULL;
+    }
+
+    if (in_view.ndim != 1) {
+        PyErr_SetString(PyExc_ValueError, "First argument should be one-dimensional.");
+        goto exit;
+    }
+    if (out_view.ndim != 1) {
+        PyErr_SetString(PyExc_ValueError, "Second argument should be one-dimensional.");
+        goto exit;
+    }
+
+    const char format = in_view.format[0];
+
+    if (format == 'B') {
+        integer_unpack_u8(&in_view, &out_view);
+    }
+    else if (format == 'H') {
+        integer_unpack_u16(&in_view, &out_view);
+    }
+    else if (format == 'b') {
+        integer_unpack_i8(&in_view, &out_view);
+    }
+    else if (format == 'h') {
+        integer_unpack_i16(&in_view, &out_view);
     }
     else {
-        if (itemsize == 1) {
-            integer_unpack_i8(in, out);
-        }
-        else {
-            integer_unpack_i16(in, out);
-        }
+        PyErr_Format(PyExc_ValueError,
+            "Unexpected buffer format: %s",
+            in_view.format);
     }
 
+exit:
+    PyBuffer_Release(&in_view);
+    PyBuffer_Release(&out_view);
     Py_INCREF(Py_None);
     return Py_None;
 }
@@ -187,9 +197,6 @@ PyMODINIT_FUNC
 PyInit__bcif_helper(void)
 {
     PyObject *m;
-
-    import_array();
-    import_umath();
 
     m = PyModule_Create(&moduledef);
     if (!m) {

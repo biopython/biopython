@@ -3,6 +3,8 @@ A module to interact with BinaryCIF-formatted files.
 """
 
 import gzip
+from typing import Optional
+
 import numpy as np
 from collections import deque
 
@@ -22,6 +24,8 @@ from Bio.PDB.StructureBuilder import StructureBuilder
 
 # https://github.com/ihmwg/python-ihm/blob/main/ihm/format_bcif.py
 # https://numpy.org/doc/stable/reference/arrays.dtypes.html#
+# The "<" tells NumPy to use little endian representation.
+# BinaryCIF always uses little endian.
 _dtypes = {
     1: np.dtype("<i1"),  # Int8
     2: np.dtype("<i2"),  # Int16
@@ -92,7 +96,7 @@ def _delta_decoder(column):
 
     dtype = _dtypes[encoding["srcType"]]
     data = column["data"]["data"]
-    decoded_data = data if dtype == data.dtype else data.astype(dtype)
+    decoded_data = data.astype(dtype, copy=False)
     decoded_data[0] += encoding["origin"]
     decoded_data.cumsum(out=decoded_data)
 
@@ -236,9 +240,10 @@ class BinaryCIFParser:
             for index in range(len(serial_numbers))
         ]
 
-    def get_structure(self, source: str) -> Structure:
+    def get_structure(self, id: Optional[str], source: str) -> Structure:
         """Parse and return the PDB structure from a BinaryCIF file.
 
+        :param str id: the PDB code for this structure
         :param str source: the path to the BinaryCIF file
         :return: the PDB structure
         :rtype: Bio.PDB.Structure.Structure
@@ -268,7 +273,7 @@ class BinaryCIFParser:
         atoms = self._get_atoms(columns)
 
         entry_id = _decode(columns["_entry.id"])[0]
-        self._structure_builder.init_structure(entry_id)
+        self._structure_builder.init_structure(id or entry_id)
         builder_model_count = 0
         builder_model_number = None
         builder_chain_id = None
