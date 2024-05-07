@@ -21,7 +21,6 @@ Contributions by:
 - Eric Talevich
 - and many others.
 """
-import importlib.util
 
 try:
     import numpy as np
