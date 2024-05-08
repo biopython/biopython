@@ -97,11 +97,9 @@ optional dependencies included), plus also style checks using ``pre-commit``
 **The continuous integration checks must pass before your pull request will be
 merged.**
 
-The continuous integration tests collect test coverage information via
-CodeCov: https://codecov.io/github/biopython/biopython/
-
-Ideally the CodeCov checks will also pass, but we currently do not insist on
-this when reviewing pull requests.
+We have previously used CodeCov to track test coverage information, and would
+like to restore this - but historically did not insist their test coverage
+checks passed when reviewing  pull requests.
 
 Contributing to the Biopython Tutorial
 --------------------------------------

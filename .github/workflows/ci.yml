@@ -201,12 +201,10 @@ jobs:
       run: |
         python -m pip install .
 
-    - name: Run test suite and get coverage
+    - name: Run test suite
       run: |
         cd Tests
-        rm -rf coverage.xml
-        coverage run run_tests.py --offline
-        coverage xml
+        python run_tests.py --offline
       shell: bash
 
   test_macos:
