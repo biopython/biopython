@@ -247,6 +247,7 @@ If your data is in UTF-8 or any other incompatible encoding, you must use
 binary mode, and decode the appropriate fragments yourself.
 """
 
+import io
 import struct
 import sys
 import zlib
@@ -799,9 +800,13 @@ class BgzfWriter:
         """Initialize the class."""
         if filename and fileobj:
             raise ValueError("Supply either filename or fileobj, not both")
-        # If an open file was passed, make sure it was opened in binary mode.
         if fileobj:
-            if fileobj.read(0) != b"":
+            # If an open file was passed, make sure it was opened in binary mode.
+            # This is a courtesy -- we can't detect mode for all file-like objects.
+            # Notably, `StringIO` does not have a `mode` attribute but plain files *do*.
+            if isinstance(fileobj, io.StringIO) or "b" not in getattr(
+                fileobj, "mode", "wb"
+            ):
                 raise ValueError("fileobj not opened in binary mode")
             handle = fileobj
         else:

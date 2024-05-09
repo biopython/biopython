@@ -8,12 +8,12 @@
 See also the doctests in bgzf.py which are called via run_tests.py
 """
 
-import unittest
 import gzip
+import io
 import os
 import tempfile
+import unittest
 from random import shuffle
-import io
 
 from Bio import bgzf
 
@@ -503,6 +503,18 @@ class BgzfTests(unittest.TestCase):
         error = "^fileobj not opened in binary mode$"
         with self.assertRaisesRegex(ValueError, error):
             bgzf.BgzfWriter(fileobj=io.StringIO())
+
+    def test_writer_with_non_binary_file(self):
+        """A BgzfWriter must raise ValueError on a non-binary file handle."""
+        error = "^fileobj not opened in binary mode$"
+        with open(self.temp_file, "w") as handle:
+            with self.assertRaisesRegex(ValueError, error):
+                bgzf.BgzfWriter(fileobj=handle)
+
+    def test_writer_passes_on_plain_file_handle(self):
+        """A BgzfWriter must be able to work with plain file handles."""
+        with open(self.temp_file, "wb") as handle:
+            bgzf.BgzfWriter(fileobj=handle)
 
 
 if __name__ == "__main__":
