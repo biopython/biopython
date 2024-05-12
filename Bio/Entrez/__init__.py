@@ -19,7 +19,7 @@ http://www.ncbi.nlm.nih.gov/books/NBK25501/
 
 This module provides a number of functions like ``efetch`` (short for
 Entrez Fetch) which will return the data as a handle object. This is
-a standard interface used in Python for reading data from a file, or
+a standad interface used in Python for reading data from a file, or
 in this case a remote network connection, and provides methods like
 ``.read()`` or offers iteration over the contents line by line. See
 also "What the heck is a handle?" in the Biopython Tutorial and
@@ -134,6 +134,7 @@ from urllib.error import URLError, HTTPError
 from urllib.parse import urlencode
 from urllib.request import urlopen, Request
 
+from Bio import BiopythonDeprecationWarning
 from Bio._utils import function_with_previous
 
 email = None
@@ -342,10 +343,11 @@ def esummary(**keywds):
 
 
 def egquery(**keywds):
-    """Provide Entrez database counts for a global search.
+    """Provide Entrez database counts for a global search (DEPRECATED).
 
-    EGQuery provides Entrez database counts in XML for a single search
-    using Global Query.
+    EGQuery provided Entrez database counts in XML for a single search
+    using Global Query. However, the NCBI are no longer maintaining this
+    function and suggest using esearch on each database of interest.
 
     See the online documentation for an explanation of the parameters:
     http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EGQuery
@@ -367,6 +369,12 @@ def egquery(**keywds):
     :returns: Handle to the results, by default in XML format.
     :raises urllib.error.URLError: If there's a network error.
     """
+    warnings.warn(
+        "The Bio.Entrez.egquery function is deprecated and will be removed "
+        "in a future release of Biopython because the underlying NCBI EGQuery "
+        "API is no longer maintained.",
+        BiopythonDeprecationWarning,
+    )
     cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/egquery.fcgi"
     variables = {}
     variables.update(keywds)

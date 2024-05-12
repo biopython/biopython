@@ -58,6 +58,12 @@ was deprecated as of Release 1.70.
 Biopython modules, methods, functions
 =====================================
 
+Bio.Entrez
+----------
+The ``egquery`` function wrapping the NCBI EGQuery (Entrez Global Query)
+API was deprecated in Release 1.84. The API has stopped working and the
+NCBI said this API was no longer being maintained.
+
 Bio.AlignInfo
 -------------
 The ``pos_specific_score_matrix`` method of the ``SummaryInfo`` class and the
