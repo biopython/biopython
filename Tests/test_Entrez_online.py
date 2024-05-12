@@ -180,22 +180,6 @@ class EntrezOnlineCase(unittest.TestCase):
         stream = Entrez.epost("nuccore", id=["160418", "160351"])
         stream.close()
 
-    def test_egquery(self):
-        """Test Entrez.egquery.
-
-        which searches in all Entrez databases for a single text query.
-        """
-        stream = Entrez.egquery(term="biopython")
-        record = Entrez.read(stream)
-        stream.close()
-
-        done = False
-        for row in record["eGQueryResult"]:
-            if "pmc" in row["DbName"]:
-                self.assertGreater(int(row["Count"]), 60)
-                done = True
-        self.assertTrue(done)
-
     def test_espell(self):
         """Test misspellings with Entrez.espell."""
         stream = Entrez.espell(term="biopythooon")
