@@ -219,6 +219,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Leonhard Heizinger <https://github.com/he-leon>
 - Leszek Pryszcz <https://github.com/lpryszcz>
 - Lewis A. Marshall <https://github.com/lewisamarshall>
+- Luca Monari <https://github.com/Lucandia>
 - Lucas Sinclair <https://github.com/xapple>
 - Lukasz Walejko <https://github.com/lwalejko>
 - Manuel Lera Ramirez <https://github.com/manulera>
