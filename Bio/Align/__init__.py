@@ -1096,10 +1096,14 @@ class Alignment:
                           0 -ACGCATACTTG 11
         <BLANKLINE>
         """
-        sequences, coordinate_parser = _parser.parse_printed_alignment(lines)
-        shape = coordinate_parser.shape
+        parser = _parser.Coordinates(b"\0")
+        sequences = []
+        for line in lines:
+            nbytes, sequence = parser.feed(line)
+            sequences.append(sequence)
+        shape = parser.shape
         coordinates = np.empty(shape, int)
-        coordinate_parser.fill(coordinates)
+        parser.fill(coordinates)
         return sequences, coordinates
 
     def __init__(self, sequences, coordinates=None):

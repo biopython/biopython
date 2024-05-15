@@ -13,15 +13,20 @@ indexed as a bigBed file.
 See https://genome.ucsc.edu/goldenPath/help/bigMaf.html
 """
 
+import re
 import struct
 import zlib
 
 
 from Bio.Align import Alignment, Alignments
 from Bio.Align import bigbed, maf
+from Bio.Align import _parser  # type: ignore
 from Bio.Align.bigbed import AutoSQLTable, Field
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+
+
+import numpy as np
 
 
 declaration = AutoSQLTable(
@@ -196,29 +201,23 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
 
     def _create_alignment(self, chunk):
         chromId, chromStart, chromEnd, data = chunk
+        buffer = memoryview(data)
         records = []
-        starts = []
-        sizes = []
         strands = []
-        aligned_sequences = []
         annotations = {}
+        printed_alignment_parser = _parser.Coordinates(b";")
         j = -1
+        sequences = []
         while True:
             i = j + 1
-            prefix = data[i : i + 1]
+            prefix = buffer[i : i + 1]
             if prefix == b"#":
-                try:
-                    j = data.find(b";", i)
-                except ValueError:
-                    break
+                match = re.match(b"^[^;]*", buffer[i:])
+                j = i + match.span()[1]
             elif prefix == b"a":
-                try:
-                    j = data.find(b";", i)
-                except ValueError:
-                    line = data[i:]
-                    j = i + len(line)
-                else:
-                    line = data[i:j]
+                match = re.match(b"^[^;]*", buffer[i:])
+                j = i + match.span()[1]
+                line = buffer[i:j].tobytes()
                 words = line[1:].split()
                 for word in words:
                     key, value = word.split(b"=")
@@ -236,15 +235,13 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
                             "Unknown annotation variable '%s'" % key.decode()
                         )
             elif prefix == b"s":
-                try:
-                    j = data.find(b";", i)
-                except ValueError:
-                    line = data[i:]
-                    j = i + len(line)
-                else:
-                    line = data[i:j]
-                words = line.split(None, 6)
-                if len(words) != 7:
+                match = re.match(
+                    b"^s\s*\S*\s*\d*\s*\d*\s*[+-]\s*\d*\s*", buffer[i:]  # noqa: W605
+                )
+                j = i + match.span()[1]
+                line = buffer[i:j].tobytes()
+                words = line.split(None, 5)
+                if len(words) != 6:
                     raise ValueError(
                         "Error parsing alignment - 's' line must have 7 fields"
                     )
@@ -253,24 +250,23 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
                 size = int(words[3])
                 strand = words[4]
                 srcSize = int(words[5])
-                text = words[6]
-                for gap_char in (b".", b"=", b"_"):
-                    text = text.replace(gap_char, b"-")
-                aligned_sequences.append(text)
-                seq = Seq(None, length=srcSize)
+                i = j
+                n, sequence = printed_alignment_parser.feed(buffer[i:])
+                if len(sequence) != size:
+                    raise ValueError(
+                        "sequence size is incorrect (found %d, expected %d)"
+                        % (len(sequence), size)
+                    )
+                seq = Seq({start: sequence}, length=srcSize)
                 record = SeqRecord(seq, id=src, name="", description="")
                 records.append(record)
-                starts.append(start)
-                sizes.append(size)
+                j = i + n
+                i = j + 1
                 strands.append(strand)
             elif prefix == b"i":
-                try:
-                    j = data.find(b";", i)
-                except ValueError:
-                    line = data[i:]
-                    j = i + len(line)
-                else:
-                    line = data[i:j]
+                match = re.match(b"^[^;]*", buffer[i:])
+                j = i + match.span()[1]
+                line = buffer[i:j].tobytes()
                 words = line.split(None, 5)
                 assert len(words) == 6
                 assert words[1].decode() == src  # from the previous "s" line
@@ -285,13 +281,9 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
                 record.annotations["rightStatus"] = rightStatus
                 record.annotations["rightCount"] = rightCount
             elif prefix == b"e":
-                try:
-                    j = data.find(b";", i)
-                except ValueError:
-                    line = data[i:]
-                    j = i + len(line)
-                else:
-                    line = data[i:j]
+                match = re.match(b"^[^;]*", buffer[i:])
+                j = i + match.span()[1]
+                line = buffer[i:j].tobytes()
                 words = line.split(None, 6)
                 assert len(words) == 7
                 src = words[1].decode()
@@ -315,13 +307,9 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
                     annotations["empty"] = annotation
                 annotation.append(empty)
             elif prefix == b"q":
-                try:
-                    j = data.find(b";", i)
-                except ValueError:
-                    line = data[i:]
-                    j = i + len(line)
-                else:
-                    line = data[i:j]
+                match = re.match(b"^[^;]*", buffer[i:])
+                j = i + match.span()[1]
+                line = buffer[i:j].tobytes()
                 words = line.split(None, 2)
                 assert len(words) == 3
                 assert words[1].decode() == src  # from the previous "s" line
@@ -329,22 +317,12 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
                 record.annotations["quality"] = value.decode()
             elif prefix == b"":
                 # reached the end of the alignment
-                if i != len(data):
-                    raise ValueError(
-                        "Error parsing alignment - unexpected end of alignment block"
-                    )
                 break
             else:
                 raise ValueError(f"Error parsing alignment - unexpected line:\n{line}")
-        sequences, coordinates = Alignment.parse_printed_alignment(aligned_sequences)
-        for start, size, sequence, record in zip(starts, sizes, sequences, records):
-            srcSize = len(record.seq)
-            if len(sequence) != size:
-                raise ValueError(
-                    "sequence size is incorrect (found %d, expected %d)"
-                    % (len(sequence), size)
-                )
-            record.seq = Seq({start: sequence}, length=srcSize)
+        shape = printed_alignment_parser.shape
+        coordinates = np.empty(shape, int)
+        printed_alignment_parser.fill(coordinates)
         for record, strand, row in zip(records, strands, coordinates):
             if strand == b"-":
                 row[:] = row[-1] - row[0] - row

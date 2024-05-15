@@ -8,34 +8,38 @@
 
 #include <Python.h>
 #include <string.h>
-
+#include <stdbool.h>
 
 static PyTypeObject CoordinatesType;
 
 typedef struct {
     PyObject_HEAD
-    Py_ssize_t shape[2];
-    long** positions;
-    size_t kmax;
+    long** data;
+    Py_ssize_t n;
+    Py_ssize_t m;
+    Py_ssize_t k;
+    char eol;
 } Coordinates;
 
 /* Destructor function */
 static void
 Coordinates_dealloc(Coordinates *self)
 {
-    long** positions = self->positions;
+    long** data = self->data;
     ssize_t k;
-    const ssize_t kmax = self->kmax;
-    for (k = 0; k < kmax; k++) {
-        if (positions[k] == NULL) break;
-        PyMem_Free(positions[k]);
+    const ssize_t n = self->n;
+    if (data) {
+        for (k = 0; k < n; k++) {
+            if (data[k] == NULL) break;
+            PyMem_Free(data[k]);
+        }
+        PyMem_Free(data);
     }
-    PyMem_Free(self->positions);
     Py_TYPE(self)->tp_free((PyObject *)self);
 }
 
 static int
-converter(PyObject* argument, void* pointer)
+array_converter(PyObject* argument, void* pointer)
 {
     Py_buffer* view = pointer;
     Coordinates* self;
@@ -58,15 +62,15 @@ converter(PyObject* argument, void* pointer)
                      "buffer has incorrect rank %d (expected 2)",
                       view->ndim);
     }
-    else if (view->shape[0] != self->shape[0]) {
+    else if (view->shape[0] != self->n) {
         PyErr_Format(PyExc_RuntimeError,
                      "buffer has incorrect number of rows %zd (expected %zd)",
-                      view->shape[0], self->shape[0]);
+                      view->shape[0], self->n);
     }
-    else if (view->shape[1] != self->shape[1]) {
+    else if (view->shape[1] != self->k) {
         PyErr_Format(PyExc_RuntimeError,
                      "buffer has incorrect number of columns %zd (expected %zd)",
-                      view->shape[1], self->shape[1]);
+                      view->shape[1], self->k);
     }
     else if (view->itemsize != sizeof(long)) {
         PyErr_Format(PyExc_RuntimeError,
@@ -76,38 +80,253 @@ converter(PyObject* argument, void* pointer)
     else return Py_CLEANUP_SUPPORTED;
 
     PyBuffer_Release(view);
+    return 0;
+}
+
+static int line_converter(PyObject* argument, void* pointer)
+{
+    Py_buffer* line = pointer;
+    if (PyObject_GetBuffer(argument, line, PyBUF_CONTIG_RO) == -1) return 0;
+    if (line->itemsize != 1 || line->ndim != 1) {
+        PyErr_SetString(PyExc_ValueError,
+                        "expected a one-dimensional buffer of single bytes.");
+        return 0;
+    }
     return 1;
+}
+
+static PyObject*
+Coordinates_feed(Coordinates* self, PyObject* args)
+{
+    Py_buffer line;
+    Py_ssize_t length;
+    const char* buffer;
+    const char* s;
+    const char eol = self->eol;
+    Py_ssize_t n = self->n;
+    Py_ssize_t m = self->m;
+    Py_ssize_t size = 2;
+    Py_ssize_t i = 0;
+    Py_ssize_t p = 0;
+    long** data;
+    long* row;
+
+    if (!PyArg_ParseTuple(args, "O&:feed", line_converter, &line)) return NULL;
+
+    buffer = line.buf;
+    length = line.shape[0];
+
+    s = buffer;
+    row = PyMem_Malloc(size*sizeof(long));
+    if (!row) {
+        PyBuffer_Release(&line);
+        return NULL;
+    }
+    if (length > 0 && *s == '-') row[i++] = 0;
+
+    data = PyMem_Realloc(self->data, (n+1)*size*sizeof(long*));
+    if (!data) {
+        PyBuffer_Release(&line);
+        PyMem_Free(row);
+        return NULL;
+    }
+    self->data = data;
+    data[n] = row;
+
+    while (s - buffer < length && *s != eol) {
+        if (*s == '-') {
+            do s++; while (s - buffer < length && *s == '-');
+        }
+        else {
+            p -= (s - buffer);
+            do s++; while (s - buffer < length && *s != '-' && *s != eol);
+            p += (s - buffer);
+        }
+
+        if (i == size) {
+            size *= 2;
+            row = PyMem_Realloc(row, size*sizeof(long));
+            if (!row) {
+                PyBuffer_Release(&line);
+                PyMem_Free(data[n]);
+                return NULL;
+            }
+            data[n] = row;
+        }
+        row[i++] = s - buffer;
+    }
+    PyBuffer_Release(&line);
+    row = PyMem_Realloc(row, i*sizeof(long));
+    if (!row) {
+        PyMem_Free(data[n]);
+        return NULL;
+    }
+    data[n] = row;
+    m = s - buffer;
+    if (n == 0) self->m = m;
+    else if (buffer + m != s) {
+        PyBuffer_Release(&line);
+        PyErr_Format(PyExc_ValueError,
+                     "line has length %zi (expected %zi)", m, self->m);
+        return NULL;
+    }
+
+    n++;
+    self->n = n;
+
+    PyObject* sequence = PyBytes_FromStringAndSize(NULL, p);
+    if (!sequence) return NULL;
+    char* d;
+    d = PyBytes_AS_STRING(sequence);
+    int ii;
+    Py_ssize_t end = 0;
+    Py_ssize_t start;
+    Py_ssize_t step;
+    s = buffer;
+    bool gap = false;
+    ii = 0;
+    if (row[ii] == 0) {
+        gap = true;
+        ii++;
+    }
+    for ( ; ii < i; ii++) {
+        start = end;
+        end = row[ii];
+        step = end - start;
+        gap = !gap;
+        if (gap) {
+            s = buffer + start;
+            memcpy(d, s, step);
+            d += step;
+        }
+    }
+    *d = '\0';
+
+    PyObject* result = Py_BuildValue("lO", m, sequence);
+    Py_DECREF(sequence);
+    return result;
 }
 
 static PyObject*
 Coordinates_fill(Coordinates* self, PyObject* args)
 {
     Py_buffer view;
-    ssize_t n = self->shape[0];
-    ssize_t m = self->shape[1];
-    ssize_t i, j;
-    long** positions = self->positions;
+    Py_ssize_t i, j, k, n, m;
+    Py_ssize_t index;
+    long step;
+    Py_ssize_t* indices = NULL;
+    Py_ssize_t** pointer = NULL;
+    bool* gaps = NULL;
     long* data;
+
+    n = self->n;
+    if (n == 0) Py_RETURN_NONE;
 
     view.obj = (PyObject*) self;
 
-    if (!PyArg_ParseTuple(args, "O&:fill", converter, &view))
+    if (!PyArg_ParseTuple(args, "O&:fill", array_converter, &view))
         return NULL;
 
-    data  = view.buf;
+    data = view.buf;
+    k = view.shape[1];
+    if (n != view.shape[0]) {
+        PyErr_Format(PyExc_ValueError,
+                     "expected an array with %zd rows (found %zd rows)",
+                     n, view.shape[0]);
+        return 0;
+    }
+    for (i = 0; i < n; i++) data[i*k] = 0;
+
+    m = self->m;
+
+    indices = PyMem_Calloc(n, sizeof(Py_ssize_t));
+    if (!indices) goto exit;
+
+    gaps = PyMem_Malloc(n * sizeof(bool));
+    if (!gaps) goto exit;
+
+    pointer = PyMem_Calloc(n, sizeof(Py_ssize_t*));
+    if (!pointer) goto exit;
+
     for (i = 0; i < n; i++) {
-        for (j = 0; j < m; j++) {
-            data[i*m+j] = positions[j][i];
+        pointer[i] = self->data[i];
+        if (pointer[i][0] == 0) {
+            gaps[i] = true;
+            pointer[i]++;
+        }
+        else {
+            gaps[i] = false;
         }
     }
-    Py_INCREF(Py_None);
-    return Py_None;
+
+    j = 0;
+    index = 0;
+    do {
+        j++;
+        for (i = 0; i < n; i++) {
+            if (index == indices[i]) indices[i] = *pointer[i];
+        }
+        step = m;
+	for (i = 0; i < n; i++) if (indices[i] < step) step = indices[i];
+        step -= index;
+        for (i = 0; i < n; i++) {
+            if (gaps[i] == true) data[i*k+j] = data[i*k+j-1];
+            else data[i*k+j] = data[i*k+j-1] + step;
+            if (step + index == indices[i]) {
+                pointer[i]++;
+                gaps[i] = !gaps[i];
+            }
+        }
+        index += step;
+    }
+    while (index < m);
+
+exit:
+    if (indices) PyMem_Free(indices);
+    if (pointer) PyMem_Free(pointer);
+    if (gaps) PyMem_Free(gaps);
+    Py_RETURN_NONE;
 }
 
 static PyObject*
 Coordinates_get_shape(Coordinates* self, void* closure)
 {
-    return Py_BuildValue("ll", self->shape[0], self->shape[1]);
+    Py_ssize_t i;
+    Py_ssize_t index;
+    Py_ssize_t min_index;
+    long** data = self->data;
+    const Py_ssize_t n = self->n;
+    const Py_ssize_t m = self->m;
+    Py_ssize_t k = 1;
+
+    if (n > 0) {
+        data = PyMem_Calloc(n, sizeof(long*));
+        if (!data) return NULL;
+        memcpy(data, self->data, n*sizeof(long*));
+        for (i = 0; i < n; i++) {
+            index = *(data[i]);
+            if (index == 0) {
+                k = 0;
+                break;
+            }
+        }
+        while (1) {
+            k++;
+            min_index = m;
+            for (i = 0; i < n; i++) {
+                index = *(data[i]);
+                if (index < min_index) min_index = index;
+            }
+            if (min_index == m) break;
+            for (i = 0; i < n; i++) {
+                index = *(data[i]);
+	        if (index == min_index) data[i]++;
+            }
+        }
+    }
+
+    self->k = k;
+    return Py_BuildValue("ll", n, k);
 }
 
 static PyGetSetDef Coordinates_getset[] = {
@@ -118,9 +337,32 @@ static PyGetSetDef Coordinates_getset[] = {
 };
 
 static PyMethodDef Coordinates_methods[] = {
-    {"fill", (PyCFunction)Coordinates_fill, METH_VARARGS, "Fill a buffer object with the calculated indices"},
+    {"feed", (PyCFunction)Coordinates_feed, METH_VARARGS, "Feed a buffer object of data to the parser. The parser will read from the buffer until it finds the end-of-line character, and return the number of bytes read."},
+    {"fill",
+     (PyCFunction)Coordinates_fill,
+     METH_VARARGS,
+    "Fill in the coordinates array based on the alignment lines fed to the parser so far.",
+    },
     {NULL, NULL, 0, NULL}  /* Sentinel */
 };
+
+static PyObject*
+Coordinates_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
+{
+    char eol = '\n';  /* end-of-line character */
+    static char *kwlist[] = {"eol", NULL};
+
+    Coordinates *self;
+
+    if (!PyArg_ParseTupleAndKeywords(args, kwds, "|c", kwlist, &eol))
+        return NULL;
+
+    self= (Coordinates *)type->tp_alloc(type, 0);
+    if (!self) return NULL;
+    self->eol = eol;
+    self->n = 0;
+    return (PyObject *)self;
+}
 
 static PyTypeObject CoordinatesType = {
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -132,194 +374,7 @@ static PyTypeObject CoordinatesType = {
     .tp_dealloc = (destructor)Coordinates_dealloc,
     .tp_methods = Coordinates_methods,
     .tp_getset = Coordinates_getset,
-};
-
-static PyObject*
-parse_printed_alignment(PyObject* module, PyObject* args)
-{
-    PyObject* lines;
-    PyObject* line;
-    Py_ssize_t i, k, n, m;
-    const char* s;
-    Py_ssize_t index;
-    long step;
-    Py_ssize_t* indices = NULL;
-    Coordinates *coordinates = NULL;
-    PyObject* sequences = NULL;
-    PyObject* sequence;
-    char** destinations = NULL;
-    long** positions;
-    long* steps = NULL;
-    Py_ssize_t kmax = 2;
-
-    PyObject* result = NULL;
-
-    if (!PyArg_ParseTuple(args, "O!:parse_printed_alignment",
-                                &PyList_Type, &lines))
-        return NULL;
-
-    n = PyList_GET_SIZE(lines);
-    for (i = 0; i < n; i++) {
-        line = PyList_GET_ITEM(lines, i);
-        if (!PyBytes_Check(line)) {
-            PyErr_Format(PyExc_ValueError,
-                         "line [%zi] is not a bytes object", i);
-            return 0;
-        }
-        if (i == 0) m = PyBytes_GET_SIZE(line);
-        else if (PyBytes_GET_SIZE(line) != m) {
-            PyErr_Format(PyExc_ValueError,
-                "all lines must have the same length "
-                "(line [0] has length %zi, line [%zi] has length %zi).",
-                m, i, PyBytes_GET_SIZE(line));
-            return 0;
-        }
-    }
-
-    coordinates = (Coordinates *)PyType_GenericAlloc(&CoordinatesType, 0);
-    if (coordinates == NULL) return NULL;
-    if (n == 0) {
-        coordinates->shape[0] = 0;
-        coordinates->shape[1] = 0;
-        result = Py_BuildValue("[]O", coordinates);
-        Py_DECREF(coordinates);
-        return result;
-    }
-
-    indices = PyMem_Calloc(n, sizeof(Py_ssize_t));
-    if (!indices) goto exit;
-
-    positions = PyMem_Calloc(kmax, sizeof(long*));
-    if (!positions) goto exit;
-    positions[0] = PyMem_Calloc(n, sizeof(long));
-    if (!positions[0]) {
-        PyMem_Free(positions);
-        goto exit;
-    }
-    coordinates->positions = positions;
-    coordinates->kmax = kmax;
-
-    steps = PyMem_Calloc(kmax, sizeof(long));
-    if (!steps) goto exit;
-
-    k = 0;
-    index = 0;
-    do {
-        k++;
-        for (i = 0; i < n; i++) {
-            if (index == indices[i]) {
-                line = PyList_GET_ITEM(lines, i);
-                s = PyBytes_AS_STRING(line) + index;
-                if (*s == '-') {
-                    do s++; while (*s == '-');
-                }
-                else {
-                    do {
-                        s++;
-                        if (*s == '\0') {
-                            if (s - PyBytes_AS_STRING(line) != m) break;
-                            /* otherwise, it is an internal null character */
-                        }
-                        else if (*s == '-') break;
-                    } while (1);
-                }
-                indices[i] = s - PyBytes_AS_STRING(line);
-            }
-        }
-        if (k == kmax) {
-            long* new_steps;
-            kmax *= 2;
-            new_steps = PyMem_Realloc(steps, kmax*sizeof(long));
-            if (new_steps == NULL) goto exit;
-            steps = new_steps;
-            positions = PyMem_Realloc(positions, kmax*sizeof(long*));
-            if (positions == NULL) {
-                positions = coordinates->positions;
-                goto exit;
-            }
-            coordinates->positions = positions;
-            coordinates->kmax = kmax;
-            memset(positions + k, '\0', k * sizeof(long*));
-        }
-        step = m;
-        for (i = 0; i < n; i++) if (indices[i] < step) step = indices[i];
-        step -= index;
-        positions[k] = PyMem_Malloc(n*sizeof(long));
-        if (!positions[k]) goto exit;
-        for (i = 0; i < n; i++) {
-            s = PyBytes_AS_STRING(PyList_GET_ITEM(lines, i));
-            if (s[index] == '-') {
-                positions[k][i] = positions[k-1][i];
-            }
-            else {
-                positions[k][i] = positions[k-1][i] + step;
-            }
-        }
-        index += step;
-        steps[k] = step;
-    }
-    while (index < m);
-
-    sequences = PyList_New(n);
-    if (sequences == NULL) goto exit;
-    destinations = PyMem_Calloc(n, sizeof(char*));
-    if (destinations == NULL) goto exit;
-
-    for (i = 0; i < n; i++) {
-        sequence = PyBytes_FromStringAndSize(NULL, positions[k][i]);
-        if (!sequence) goto exit;
-        PyList_SET_ITEM(sequences, i, sequence);
-        destinations[i] = PyBytes_AS_STRING(sequence);
-    }
-
-    index = 0;
-    for (m = 1; m <= k; m++) {
-        step = steps[m];
-        for (i = 0; i < n; i++) {
-            if (positions[m][i] == positions[m-1][i]) continue;
-            s = PyBytes_AS_STRING(PyList_GET_ITEM(lines, i)) + index;
-            memcpy(destinations[i], s, step);
-            destinations[i] += step;
-        }
-        index += step;
-    }
-
-    coordinates->shape[0] = n;
-    coordinates->shape[1] = m;
-
-    result = Py_BuildValue("OO", sequences, coordinates);
-exit:
-    Py_XDECREF(sequences);
-    Py_XDECREF(coordinates);
-    if (indices) PyMem_Free(indices);
-    if (steps) PyMem_Free(steps);
-    if (destinations) PyMem_Free(destinations);
-    return result;
-}
-
-static char parse_printed_alignment__doc__[] =
-"Infer the coordinates from a printed alignment."
-"\n"
-"This method is primarily employed by the alignment parsers in Bio.Align,\n"
-"though it may be useful for other purposes.\n"
-"\n"
-"For an alignment consisting of N sequences, printed as N lines with the same\n"
-"number of columns, where gaps are represented by dashes, this method\n"
-"calculates the sequence coordinates that define the alignment.\n"
-"This function returns a tuple of the sequences and the coordinates.\n"
-"The sequences object is a tuple of bytes objects containing the sequence\n"
-"data after removing the dashes. The coordinates object returned supports\n"
-"the buffer protocol, allowing the coordinates to be converted into a NumPy\n"
-"array of integers without copying.\n";
-
-
-static struct PyMethodDef methods[] = {
-    {"parse_printed_alignment",
-     (PyCFunction)parse_printed_alignment,
-     METH_VARARGS,
-     parse_printed_alignment__doc__
-    },                             
-    {NULL, NULL, 0, NULL}  /* Sentinel */
+    .tp_new = (newfunc)Coordinates_new,
 };
 
 /* Module initialization function */
@@ -328,7 +383,6 @@ static PyModuleDef moduledef = {
     .m_name = "_parser",
     .m_doc = "fast C implementation of utility functions for alignment parsing",
     .m_size = -1,
-    .m_methods = methods,
 };
 
 PyMODINIT_FUNC
