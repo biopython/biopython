@@ -267,7 +267,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         self.blockSize = 256
 
     def write_file(self, stream, alignments):
-        """Write the alignments to the file strenm, and return the number of alignments.
+        """Write the alignments to the file stream, and return the number of alignments.
 
         alignments - A list or iterator returning Alignment objects
         stream     - Output file stream.
@@ -458,7 +458,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                         rezoomed += summary
             buffer.flush()
             assert len(regions) == initialReduction["size"]
-            zoomList[0].amount = initialReduction["scale"]
+            zoomList[0].reductionLevel = initialReduction["scale"]
             indexOffset = output.tell()
             zoomList[0].indexOffset = indexOffset
             _RTreeFormatter().write(
@@ -696,6 +696,25 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         fieldCount = header.fieldCount
         definedFieldCount = header.definedFieldCount
         fullDataOffset = header.fullDataOffset
+        zoomList = _ZoomLevels(byteorder)
+        zoomList.read(stream)
+        formatter = _RTreeFormatter(byteorder).formatter_header
+        for zoomLevel in zoomList:
+            indexOffset = zoomLevel.indexOffset
+            stream.seek(indexOffset)
+            data = stream.read(formatter.size)
+            (
+                signature,
+                blockSize,
+                nItems,
+                startChromId,
+                startBase,
+                endChromId,
+                endBase,
+                endFileOffset,
+                self.itemsPerSlot,
+            ) = formatter.unpack(data)
+            assert signature == _RTreeFormatter.signature
         self.declaration = self._read_autosql(stream, header)
         stream.seek(fullDataOffset)
         (dataCount,) = struct.unpack(byteorder + "Q", stream.read(8))
@@ -711,7 +730,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
         stream.seek(header.fullIndexOffset)
         self.tree = _RTreeFormatter(byteorder).read(stream)
-
         self._data = self._iterate_index(stream)
 
     def _read_autosql(self, stream, header):
@@ -833,25 +851,42 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 data = stream.read(node.dataSize)
                 if self._compressed > 0:
                     data = zlib.decompress(data)
-                i = 0
-                n = len(data)
-                while i < n:
-                    j = i + size
-                    child_chromIx, child_chromStart, child_chromEnd = formatter.unpack(
-                        data[i:j]
-                    )
-                    i = j
-                    j = data.index(b"\00", i)
-                    rest = data[i:j]
-                    i = j + 1
-                    if child_chromIx != chromIx:
-                        continue
-                    if end <= child_chromStart or child_chromEnd <= start:
-                        if child_chromStart != child_chromEnd:
+                if self.itemsPerSlot == 1:
+                    while True:
+                        data = memoryview(data)
+                        child_chromIx, child_chromStart, child_chromEnd = (
+                            formatter.unpack(data[:size])
+                        )
+                        rest = data[size:-1]
+                        if child_chromIx != chromIx:
+                            break
+                        if end <= child_chromStart or child_chromEnd <= start:
+                            if child_chromStart != child_chromEnd:
+                                break
+                            if child_chromStart != end and child_chromEnd != start:
+                                break
+                        yield (child_chromIx, child_chromStart, child_chromEnd, rest)
+                        break
+                else:
+                    i = 0
+                    n = len(data)
+                    while i < n:
+                        j = i + size
+                        child_chromIx, child_chromStart, child_chromEnd = (
+                            formatter.unpack(data[i:j])
+                        )
+                        i = j
+                        j = data.index(b"\00", i)
+                        rest = data[i:j]
+                        i = j + 1
+                        if child_chromIx != chromIx:
                             continue
-                        if child_chromStart != end and child_chromEnd != start:
-                            continue
-                    yield (child_chromIx, child_chromStart, child_chromEnd, rest)
+                        if end <= child_chromStart or child_chromEnd <= start:
+                            if child_chromStart != child_chromEnd:
+                                continue
+                            if child_chromStart != end and child_chromEnd != start:
+                                continue
+                        yield (child_chromIx, child_chromStart, child_chromEnd, rest)
             else:
                 visit_child = False
                 for child in children:
@@ -1233,32 +1268,51 @@ class _ExtraIndices(list):
 
 
 class _ZoomLevel:
-    __slots__ = ["amount", "dataOffset", "indexOffset"]
+    __slots__ = ["reductionLevel", "dataOffset", "indexOffset", "formatter"]
 
-    # Supplemental Table 6: The zoom header
-    # reductionLevel   4 bytes, unsigned
-    # reserved         4 bytes, unsigned
-    # dataOffset       8 bytes, unsigned
-    # indexOffset      8 bytes, unsigned
-
-    formatter = struct.Struct("=IxxxxQQ")
+    def __init__(self, byteorder="="):
+        # Supplemental Table 6: The zoom header
+        # reductionLevel   4 bytes, unsigned
+        # reserved         4 bytes, unsigned
+        # dataOffset       8 bytes, unsigned
+        # indexOffset      8 bytes, unsigned
+        self.formatter = struct.Struct(byteorder + "IxxxxQQ")
 
     def __bytes__(self):
-        return self.formatter.pack(self.amount, self.dataOffset, self.indexOffset)
+        return self.formatter.pack(
+            self.reductionLevel, self.dataOffset, self.indexOffset
+        )
+
+    def read(self, stream):
+        data = stream.read(self.formatter.size)
+        reductionLevel, dataOffset, indexOffset = self.formatter.unpack(data)
+        if reductionLevel == 0:
+            raise StopIteration
+        self.reductionLevel = reductionLevel
+        self.dataOffset = dataOffset
+        self.indexOffset = indexOffset
 
 
 class _ZoomLevels(list):
     bbiResIncrement = 4
     bbiMaxZoomLevels = 10
-    size = _ZoomLevel.formatter.size * bbiMaxZoomLevels
+    size = _ZoomLevel("=").formatter.size * bbiMaxZoomLevels
 
-    def __init__(self):
-        self[:] = [_ZoomLevel() for i in range(_ZoomLevels.bbiMaxZoomLevels)]
+    def __init__(self, byteorder="="):
+        self[:] = [_ZoomLevel(byteorder) for i in range(_ZoomLevels.bbiMaxZoomLevels)]
 
     def __bytes__(self):
         data = b"".join(bytes(item) for item in self)
         data += bytes(_ZoomLevels.size - len(data))
         return data
+
+    def read(self, stream):
+        for zoomLevels in range(_ZoomLevels.bbiMaxZoomLevels):
+            try:
+                self[zoomLevels].read(stream)
+            except StopIteration:
+                del self[zoomLevels:]
+                break
 
     @classmethod
     def calculate_reductions(cls, aveSize):
@@ -1296,7 +1350,7 @@ class _ZoomLevels(list):
             indexOffset = output.tell()
             formatter.write(summaries, blockSize, itemsPerSlot, indexOffset, output)
             self[zoomLevels].indexOffset = indexOffset
-            self[zoomLevels].amount = reduction
+            self[zoomLevels].reductionLevel = reduction
             reduction *= _ZoomLevels.bbiResIncrement
             i = 0
             chromId = None
@@ -1993,7 +2047,6 @@ class _RTreeFormatter:
         root, levelCount = self.rTreeFromChromRangeArray(
             blockSize, items, endFileOffset
         )
-
         data = self.formatter_header.pack(
             _RTreeFormatter.signature,
             blockSize,

@@ -342,6 +342,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         starts = []
         sizes = []
         strands = []
+        score = None
         aligned_sequences = []
         annotations = {}
         words = aline[1:].split()
