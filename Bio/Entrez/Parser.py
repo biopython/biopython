@@ -317,10 +317,13 @@ class DataHandlerMeta(type):
 
     def __init__(cls, *args, **kwargs):
         """Initialize the class."""
+        from Bio import Entrez
+
         try:
-            cls.directory = None  # use default directory for local cache
+            cls.directory = Entrez.local_cache  # use default directory for local cache
         except PermissionError:
-            cls._directory = None  # no local cache
+            cls._directory = Entrez.local_cache  # no local cache
+        del Entrez
 
     @property
     def directory(cls):

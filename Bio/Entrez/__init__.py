@@ -142,6 +142,7 @@ max_tries = 3
 sleep_between_tries = 15
 tool = "biopython"
 api_key = None
+local_cache = None
 
 
 # XXX retmode?

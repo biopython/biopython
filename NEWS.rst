@@ -94,6 +94,9 @@ Updated ``Bio.Restriction`` to the April 2024 release of REBASE.
 A bug in ``bgzf`` was resolved, restoring the ability to pass a file handle
 directly to ``BgzfWriter``.
 
+A bug in ``Entrez`` was resolved, allowing users to specify the path of their
+local cache.
+
 As in recent releases, more of our code is now explicitly available under
 either our original "Biopython License Agreement", or the very similar but
 more commonly used "3-Clause BSD License".  See the ``LICENSE.rst`` file for
@@ -107,6 +110,7 @@ possible, especially the following contributors:
 - Fabio Zanini (first contribution)
 - Joao Rodrigues
 - Judith Bernett (first contribution)
+- Meridia Jane Bryant (first contribution)
 - Michael M. (first contribution)
 - Michiel de Hoon
 - Peter Cock
