@@ -169,6 +169,7 @@ PACKAGES = [
     "Bio.SearchIO.InterproscanIO",
     "Bio.SeqIO",
     "Bio.SeqUtils",
+    "Bio.SeqUtils.Mapper",
     "Bio.Sequencing",
     "Bio.Sequencing.Applications",
     "Bio.SVDSuperimposer",
