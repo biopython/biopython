@@ -29,16 +29,17 @@ warnings.
 Bio.Blast contains a new parser for BLAST XML output as a replacement for the
 old parser in Bio.Blast.NCBIXML. The main differences between the parsers is
 as follows:
-- The old parser stores information in a Bio.Blast.NCBIXML.Blast object, with
-attribute names based on plain-text Blast output. The new parser stores
-information in a Bio.Blast.Record object. This class follows the DTD that
-describes the XML in terms of attribute names and dictionary key names, class
-structure, and object types. This makes it easier to find the detailed
-description of each field in the NCBI Blast documentation.
-- The old parser stores alignment information directly as seen in the BLAST XML
-output, i.e. as strings with dashes to represent gaps. The new parser stores
-the alignment information as a Bio.Align.Alignment object, which can then be
-used to e.g. print the alignment in a different format.
+
+* The old parser stores information in a Bio.Blast.NCBIXML.Blast object, with
+  attribute names based on plain-text Blast output. The new parser stores
+  information in a Bio.Blast.Record object. This class follows the DTD that
+  describes the XML in terms of attribute names and dictionary key names,
+  class structure, and object types. This makes it easier to find the detailed
+  description of each field in the NCBI Blast documentation.
+* The old parser stores alignment information directly as seen in the BLAST XML
+  output, i.e. as strings with dashes to represent gaps. The new parser stores
+  the alignment information as a Bio.Align.Alignment object, which can then be
+  used to e.g. print the alignment in a different format.
 
 Bio.Blast also contains a new qblast function as a replacement for the old
 qblast function in Bio.Blast.NCBIWWW. The main difference is that the old
