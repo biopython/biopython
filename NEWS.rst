@@ -94,8 +94,7 @@ Updated ``Bio.Restriction`` to the April 2024 release of REBASE.
 A bug in ``bgzf`` was resolved, restoring the ability to pass a file handle
 directly to ``BgzfWriter``.
 
-A bug in ``Entrez`` was resolved, allowing users to specify the path of their
-local cache.
+``Bio.Entrez.local_cache`` can be set to a directory for caching downloaded DTD/XSD files.
 
 As in recent releases, more of our code is now explicitly available under
 either our original "Biopython License Agreement", or the very similar but
