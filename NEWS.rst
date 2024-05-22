@@ -13,8 +13,8 @@ The latest news is at the top of this file.
 (In progress, not yet released): Biopython 1.84
 ===============================================
 
-This release of Biopython supports Python 3.8, 3.9, 3.10, 3.11 and 3.12. It
-has also been tested on PyPy3.9 v7.3.13. Python 3.8 is approaching end of
+This release of Biopython supports Python 3.9, 3.10, 3.11 and 3.12. It
+has also been tested on PyPy3.9 v7.3.13. Python 3.9 is approaching end of
 life, our support for it is now deprecated.
 
 Our main documentation, the Biopython Tutorial and Cookbook, has been
