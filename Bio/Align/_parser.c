@@ -83,23 +83,10 @@ array_converter(PyObject* argument, void* pointer)
     return 0;
 }
 
-static int line_converter(PyObject* argument, void* pointer)
-{
-    Py_buffer* line = pointer;
-    if (PyObject_GetBuffer(argument, line, PyBUF_CONTIG_RO) == -1) return 0;
-    if (line->itemsize != 1 || line->ndim != 1) {
-        PyErr_SetString(PyExc_ValueError,
-                        "expected a one-dimensional buffer of single bytes.");
-        return 0;
-    }
-    return 1;
-}
-
 static PyObject*
 Coordinates_feed(Coordinates* self, PyObject* args)
 {
-    Py_buffer line;
-    Py_ssize_t length;
+    PyObject* line;
     const char* buffer;
     const char* s;
     const char eol = self->eol;
@@ -108,38 +95,35 @@ Coordinates_feed(Coordinates* self, PyObject* args)
     Py_ssize_t size = 2;
     Py_ssize_t i = 0;
     Py_ssize_t p = 0;
+    Py_ssize_t offset = 0;
     long** data;
     long* row;
+    char c;
 
-    if (!PyArg_ParseTuple(args, "O&:feed", line_converter, &line)) return NULL;
+    if (!PyArg_ParseTuple(args, "S|n:feed", &line, &offset)) return NULL;
 
-    buffer = line.buf;
-    length = line.shape[0];
+    buffer = PyBytes_AS_STRING(line) + offset;
 
     s = buffer;
     row = PyMem_Malloc(size*sizeof(long));
-    if (!row) {
-        PyBuffer_Release(&line);
-        return NULL;
-    }
-    if (length > 0 && *s == '-') row[i++] = 0;
+    if (!row) return NULL;
+    if (*s == '-') row[i++] = 0;
 
     data = PyMem_Realloc(self->data, (n+1)*size*sizeof(long*));
     if (!data) {
-        PyBuffer_Release(&line);
         PyMem_Free(row);
         return NULL;
     }
     self->data = data;
     data[n] = row;
 
-    while (s - buffer < length && *s != eol) {
+    while (*s != '\0' && *s != eol) {
         if (*s == '-') {
-            do s++; while (s - buffer < length && *s == '-');
+            do s++; while (*s == '-');
         }
         else {
             p -= (s - buffer);
-            do s++; while (s - buffer < length && *s != '-' && *s != eol);
+            do c = *(++s); while (c != '-' && c != eol && c != '\0');
             p += (s - buffer);
         }
 
@@ -147,7 +131,6 @@ Coordinates_feed(Coordinates* self, PyObject* args)
             size *= 2;
             row = PyMem_Realloc(row, size*sizeof(long));
             if (!row) {
-                PyBuffer_Release(&line);
                 PyMem_Free(data[n]);
                 return NULL;
             }
@@ -155,7 +138,6 @@ Coordinates_feed(Coordinates* self, PyObject* args)
         }
         row[i++] = s - buffer;
     }
-    PyBuffer_Release(&line);
     row = PyMem_Realloc(row, i*sizeof(long));
     if (!row) {
         PyMem_Free(data[n]);
@@ -165,7 +147,6 @@ Coordinates_feed(Coordinates* self, PyObject* args)
     m = s - buffer;
     if (n == 0) self->m = m;
     else if (buffer + m != s) {
-        PyBuffer_Release(&line);
         PyErr_Format(PyExc_ValueError,
                      "line has length %zi (expected %zi)", m, self->m);
         return NULL;
@@ -337,7 +318,7 @@ static PyGetSetDef Coordinates_getset[] = {
 };
 
 static PyMethodDef Coordinates_methods[] = {
-    {"feed", (PyCFunction)Coordinates_feed, METH_VARARGS, "Feed a buffer object of data to the parser. The parser will read from the buffer until it finds the end-of-line character, and return the number of bytes read."},
+    {"feed", (PyCFunction)Coordinates_feed, METH_VARARGS, "Feed a bytes object to the parser. The parser will read from the buffer until it finds the end-of-line character, and return the number of bytes read."},
     {"fill",
      (PyCFunction)Coordinates_fill,
      METH_VARARGS,

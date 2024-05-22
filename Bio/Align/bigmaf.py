@@ -201,6 +201,7 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
 
     def _create_alignment(self, chunk):
         chromId, chromStart, chromEnd, data = chunk
+        data = bytes(data)
         buffer = memoryview(data)
         records = []
         strands = []
@@ -252,7 +253,7 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
                 strand = words[4]
                 srcSize = int(words[5])
                 i = j
-                n, sequence = printed_alignment_parser.feed(buffer[i:])
+                n, sequence = printed_alignment_parser.feed(data, i)
                 if len(sequence) != size:
                     raise ValueError(
                         "sequence size is incorrect (found %d, expected %d)"
