@@ -87,8 +87,11 @@ static PyObject*
 Coordinates_feed(Coordinates* self, PyObject* args)
 {
     PyObject* line;
+    PyObject* sequence;
+    PyObject* result;
     const char* buffer;
     const char* s;
+    char* d;
     const char eol = self->eol;
     Py_ssize_t n = self->n;
     Py_ssize_t m = self->m;
@@ -96,9 +99,11 @@ Coordinates_feed(Coordinates* self, PyObject* args)
     Py_ssize_t i = 0;
     Py_ssize_t p = 0;
     Py_ssize_t offset = 0;
+    Py_ssize_t start, end, step;
     long** data;
     long* row;
     char c;
+    bool gap = false;
 
     if (!PyArg_ParseTuple(args, "S|n:feed", &line, &offset)) return NULL;
 
@@ -122,9 +127,11 @@ Coordinates_feed(Coordinates* self, PyObject* args)
             do s++; while (*s == '-');
         }
         else {
-            p -= (s - buffer);
+            start = s - buffer;
             do c = *(++s); while (c != '-' && c != eol && c != '\0');
-            p += (s - buffer);
+            end = s - buffer;
+            step = end - start;
+            p += step;
         }
 
         if (i == size) {
@@ -155,24 +162,19 @@ Coordinates_feed(Coordinates* self, PyObject* args)
     n++;
     self->n = n;
 
-    PyObject* sequence = PyBytes_FromStringAndSize(NULL, p);
+    sequence = PyBytes_FromStringAndSize(NULL, p);
     if (!sequence) return NULL;
-    char* d;
     d = PyBytes_AS_STRING(sequence);
-    int ii;
-    Py_ssize_t end = 0;
-    Py_ssize_t start;
-    Py_ssize_t step;
+    end = 0;
     s = buffer;
-    bool gap = false;
-    ii = 0;
-    if (row[ii] == 0) {
+    p = 0;
+    if (row[p] == 0) {
         gap = true;
-        ii++;
+        p++;
     }
-    for ( ; ii < i; ii++) {
+    for ( ; p < i; p++) {
         start = end;
-        end = row[ii];
+        end = row[p];
         step = end - start;
         gap = !gap;
         if (gap) {
@@ -183,8 +185,8 @@ Coordinates_feed(Coordinates* self, PyObject* args)
     }
     *d = '\0';
 
-    PyObject* result = Py_BuildValue("lO", m, sequence);
-    Py_DECREF(sequence);
+    result = Py_BuildValue("lN", m, sequence);
+    if (result == NULL) Py_DECREF(sequence);
     return result;
 }
 
@@ -192,13 +194,14 @@ static PyObject*
 Coordinates_fill(Coordinates* self, PyObject* args)
 {
     Py_buffer view;
-    Py_ssize_t i, j, k, n, m;
-    Py_ssize_t index;
+    Py_ssize_t i, j, k, n, m, p;
+    Py_ssize_t start;
     long step;
-    Py_ssize_t* indices = NULL;
-    Py_ssize_t** pointer = NULL;
+    long end;
+    Py_ssize_t* starts = NULL;
+    Py_ssize_t** data = NULL;
     bool* gaps = NULL;
-    long* data;
+    long* buffer;
 
     n = self->n;
     if (n == 0) Py_RETURN_NONE;
@@ -208,7 +211,7 @@ Coordinates_fill(Coordinates* self, PyObject* args)
     if (!PyArg_ParseTuple(args, "O&:fill", array_converter, &view))
         return NULL;
 
-    data = view.buf;
+    buffer = view.buf;
     k = view.shape[1];
     if (n != view.shape[0]) {
         PyErr_Format(PyExc_ValueError,
@@ -216,24 +219,24 @@ Coordinates_fill(Coordinates* self, PyObject* args)
                      n, view.shape[0]);
         return 0;
     }
-    for (i = 0; i < n; i++) data[i*k] = 0;
+    for (i = 0; i < n; i++) buffer[i*k] = 0;
 
     m = self->m;
 
-    indices = PyMem_Calloc(n, sizeof(Py_ssize_t));
-    if (!indices) goto exit;
+    starts = PyMem_Calloc(n, sizeof(Py_ssize_t));
+    if (!starts) goto exit;
 
     gaps = PyMem_Malloc(n * sizeof(bool));
     if (!gaps) goto exit;
 
-    pointer = PyMem_Calloc(n, sizeof(Py_ssize_t*));
-    if (!pointer) goto exit;
+    data = PyMem_Calloc(n, sizeof(Py_ssize_t*));
+    if (!data) goto exit;
 
     for (i = 0; i < n; i++) {
-        pointer[i] = self->data[i];
-        if (pointer[i][0] == 0) {
+        data[i] = self->data[i];
+        if (data[i][0] == 0) {
             gaps[i] = true;
-            pointer[i]++;
+            data[i]++;
         }
         else {
             gaps[i] = false;
@@ -241,30 +244,31 @@ Coordinates_fill(Coordinates* self, PyObject* args)
     }
 
     j = 0;
-    index = 0;
+    start = 0;
     do {
         j++;
         for (i = 0; i < n; i++) {
-            if (index == indices[i]) indices[i] = *pointer[i];
+            if (start == starts[i]) starts[i] = *data[i];
         }
-        step = m;
-	for (i = 0; i < n; i++) if (indices[i] < step) step = indices[i];
-        step -= index;
+        end = m;
+	for (i = 0; i < n; i++) if (starts[i] < end) end = starts[i];
+        step = end - start;
         for (i = 0; i < n; i++) {
-            if (gaps[i] == true) data[i*k+j] = data[i*k+j-1];
-            else data[i*k+j] = data[i*k+j-1] + step;
-            if (step + index == indices[i]) {
-                pointer[i]++;
+            p = i*k+j;
+            if (gaps[i] == true) buffer[p] = buffer[p-1];
+            else buffer[i*k+j] = buffer[p-1] + step;
+            if (end == starts[i]) {
+                data[i]++;
                 gaps[i] = !gaps[i];
             }
         }
-        index += step;
+        start = end;
     }
-    while (index < m);
+    while (start < m);
 
 exit:
-    if (indices) PyMem_Free(indices);
-    if (pointer) PyMem_Free(pointer);
+    if (starts) PyMem_Free(starts);
+    if (data) PyMem_Free(data);
     if (gaps) PyMem_Free(gaps);
     Py_RETURN_NONE;
 }
