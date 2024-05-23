@@ -813,7 +813,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 while data:
                     chromId, chromStart, chromEnd = formatter.unpack(data[:size])
                     rest, data = data[size:].split(b"\00", 1)
-                    yield (chromId, chromStart, chromEnd, rest)
+                    yield (chromId, chromStart, chromEnd, rest, 0, len(rest))
                 while True:
                     parent = node.parent
                     if parent is None:
@@ -865,7 +865,14 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                             if child_chromStart != end and child_chromEnd != start:
                                 break
                         rest = data[size:-1]
-                        yield (child_chromIx, child_chromStart, child_chromEnd, rest)
+                        yield (
+                            child_chromIx,
+                            child_chromStart,
+                            child_chromEnd,
+                            rest,
+                            0,
+                            len(rest),
+                        )
                         break
                 else:
                     i = 0
@@ -886,7 +893,14 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                                 continue
                             if child_chromStart != end and child_chromEnd != start:
                                 continue
-                        yield (child_chromIx, child_chromStart, child_chromEnd, rest)
+                        yield (
+                            child_chromIx,
+                            child_chromStart,
+                            child_chromEnd,
+                            rest,
+                            0,
+                            len(rest),
+                        )
             else:
                 visit_child = False
                 for child in children:
@@ -920,10 +934,14 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             row = next(self._data)
         except StopIteration:
             return
-        chromId, chromStart, chromEnd, rest = row
-        return self._create_alignment(chromId, chromStart, chromEnd, rest)
+        chromId, chromStart, chromEnd, rest, dataStart, dataEnd = row
+        return self._create_alignment(
+            chromId, chromStart, chromEnd, rest, dataStart, dataEnd
+        )
 
-    def _create_alignment(self, chromId, chromStart, chromEnd, rest):
+    def _create_alignment(
+        self, chromId, chromStart, chromEnd, rest, dataStart, dataEnd
+    ):
         if rest:
             words = rest.decode().split("\t")
         else:
@@ -1052,8 +1070,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 end = start + 1
         data = self._search_index(stream, chromIx, start, end)
         for row in data:
-            chromIx, chromStart, chromEnd, rest = row
-            alignment = self._create_alignment(chromIx, chromStart, chromEnd, rest)
+            chromIx, chromStart, chromEnd, rest, dataStart, dataEnd = row
+            alignment = self._create_alignment(
+                chromIx, chromStart, chromEnd, rest, dataStart, dataEnd
+            )
             yield alignment
 
 
