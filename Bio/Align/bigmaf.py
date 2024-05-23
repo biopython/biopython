@@ -202,8 +202,10 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
     def _create_alignment(
         self, chromId, chromStart, chromEnd, data, dataStart, dataEnd
     ):
-        data = bytes(data[dataStart:dataEnd])
+        assert data[dataEnd - 1] == 0
         buffer = memoryview(data)
+        buffer = buffer[dataStart:dataEnd]
+        data = bytes(data[dataStart:dataEnd])
         records = []
         strands = []
         annotations = {}
@@ -318,7 +320,7 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
                 assert words[1].decode() == src  # from the previous "s" line
                 value = words[2].replace(b"-", b"")
                 record.annotations["quality"] = value.decode()
-            elif prefix == b"":
+            elif prefix == b"\00":
                 # reached the end of the alignment
                 break
             else:

@@ -812,7 +812,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     data = zlib.decompress(data)
                 while data:
                     chromId, chromStart, chromEnd = formatter.unpack(data[:size])
-                    rest, data = data[size:].split(b"\00", 1)
+                    i = data.index(0, size) + 1
+                    rest = data[size:i]
+                    data = data[i:]
                     yield (chromId, chromStart, chromEnd, rest, 0, len(rest))
                 while True:
                     parent = node.parent
@@ -853,7 +855,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     data = zlib.decompress(data)
                 if self.itemsPerSlot == 1:
                     while True:
-                        data = memoryview(data)
                         child_chromIx, child_chromStart, child_chromEnd = (
                             formatter.unpack(data[:size])
                         )
@@ -870,7 +871,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                             child_chromEnd,
                             data,
                             size,
-                            len(data) - size - 1,
+                            len(data),
                         )
                         break
                 else:
@@ -882,9 +883,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                             formatter.unpack(data[i:j])
                         )
                         i = j
-                        j = data.index(b"\00", i)
+                        j = data.index(b"\00", i) + 1
                         rest = data[i:j]
-                        i = j + 1
+                        i = j
                         if child_chromIx != chromIx:
                             continue
                         if end <= child_chromStart or child_chromEnd <= start:
@@ -941,8 +942,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     def _create_alignment(
         self, chromId, chromStart, chromEnd, rest, dataStart, dataEnd
     ):
+        assert rest[dataEnd - 1] == 0
+        rest = rest[dataStart : dataEnd - 1]
         if rest:
-            words = rest[dataStart:dataEnd].decode().split("\t")
+            words = rest.decode().split("\t")
         else:
             words = []
         target_record = self.targets[chromId]
