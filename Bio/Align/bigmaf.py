@@ -202,7 +202,7 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
     def _create_alignment(
         self, chromId, chromStart, chromEnd, data, dataStart, dataEnd
     ):
-        data = bytes(data)
+        data = bytes(data[dataStart:dataEnd])
         buffer = memoryview(data)
         records = []
         strands = []

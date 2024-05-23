@@ -864,14 +864,13 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                                 break
                             if child_chromStart != end and child_chromEnd != start:
                                 break
-                        rest = data[size:-1]
                         yield (
                             child_chromIx,
                             child_chromStart,
                             child_chromEnd,
-                            rest,
-                            0,
-                            len(rest),
+                            data,
+                            size,
+                            len(data) - size - 1,
                         )
                         break
                 else:
@@ -943,7 +942,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         self, chromId, chromStart, chromEnd, rest, dataStart, dataEnd
     ):
         if rest:
-            words = rest.decode().split("\t")
+            words = rest[dataStart:dataEnd].decode().split("\t")
         else:
             words = []
         target_record = self.targets[chromId]
