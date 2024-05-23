@@ -205,7 +205,6 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
         assert data[dataEnd - 1] == 0
         buffer = memoryview(data)
         buffer = buffer[dataStart:dataEnd]
-        data = bytes(data[dataStart:dataEnd])
         records = []
         strands = []
         annotations = {}
@@ -256,7 +255,7 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
                 strand = words[4]
                 srcSize = int(words[5])
                 i = j
-                n, sequence = printed_alignment_parser.feed(data, i)
+                n, sequence = printed_alignment_parser.feed(data, dataStart + i)
                 if len(sequence) != size:
                     raise ValueError(
                         "sequence size is incorrect (found %d, expected %d)"
