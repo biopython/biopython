@@ -199,8 +199,7 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
             self._index = 0
         self.targets[0].id = "%s.%s" % (self.reference, self.targets[0].id)
 
-    def _create_alignment(self, chunk):
-        chromId, chromStart, chromEnd, data = chunk
+    def _create_alignment(self, chromId, chromStart, chromEnd, data):
         data = bytes(data)
         buffer = memoryview(data)
         records = []
