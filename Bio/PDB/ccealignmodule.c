@@ -98,7 +98,7 @@ typedef struct {
 typedef struct {
     int pA;
     int pB;
-} afp, *path, **pathCache;
+} afp, *path;
 
 // Calculate distance matrix
 static double **
@@ -265,11 +265,10 @@ findPath(
     const int smaller = (lenA < lenB) ? lenA : lenB;
 
     // For storing the best N paths
-    int bufferIndex = MAX_PATHS - 1; // We want to insert the first item at 0
     int bufferSize = 0;
     int lenBuffer[MAX_PATHS];
     double similarityBuffer[MAX_PATHS];
-    pathCache pathBuffer = (pathCache)malloc(sizeof(path *) * MAX_PATHS);
+    path pathBuffer[MAX_PATHS];
 
     for (int i = 0; i < MAX_PATHS; i++) {
         // Initialize the paths
@@ -282,13 +281,15 @@ findPath(
     // Start the search through the similarity matrix.
     //
     for (int iA = 0; iA <= lenA - fragmentSize; iA++) {
-        if (iA > lenA - fragmentSize * (lenBuffer[bufferIndex] - 1))
+        if (bufferSize > 0 &&
+            iA > lenA - fragmentSize * (lenBuffer[bufferSize - 1] - 1))
             break;
 
         for (int iB = 0; iB <= lenB - fragmentSize; iB++) {
             if (S[iA][iB] <= D0)
                 continue;
-            if (iB > lenB - fragmentSize * (lenBuffer[bufferIndex] - 1))
+            if (bufferSize > 0 &&
+                iB > lenB - fragmentSize * (lenBuffer[bufferSize - 1] - 1))
                 break;
 
             // Initialize current path
@@ -393,29 +394,34 @@ findPath(
             //
             // At this point, we've found the best path starting at iA, iB.
             //
-            if (curPathLength > lenBuffer[bufferIndex] ||
-                (curPathLength == lenBuffer[bufferIndex] &&
-                 curPathSimilarity > similarityBuffer[bufferIndex])) {
-                // TODO: We should use a heap, not a circular buffer
-                bufferIndex += 1;
-                bufferIndex %= MAX_PATHS;
-                bufferSize =
-                    (bufferSize < MAX_PATHS) ? bufferSize + 1 : MAX_PATHS;
-                path pathCopy = (path)malloc(sizeof(afp) * smaller);
+            for (int i = 0; i < bufferSize; i++) {
+                if (curPathLength > lenBuffer[i] ||
+                    (curPathLength == lenBuffer[i] &&
+                     curPathSimilarity > similarityBuffer[i])) {
+                     // Swap the current path with the path in the buffer
+                     int tempLength = lenBuffer[i];
+                     double tempSimilarity = similarityBuffer[i];
+                     path tempPath = pathBuffer[i];
 
-                for (int i = 0; i < smaller; i++) {
-                    pathCopy[i] = curPath[i];
+                     lenBuffer[i] = curPathLength;
+                     similarityBuffer[i] = curPathSimilarity;
+                     pathBuffer[i] = curPath;
+
+                     curPathLength = tempLength;
+                     curPathSimilarity = tempSimilarity;
+                     curPath = tempPath;
                 }
-                if (pathBuffer[bufferIndex]) {
-                    free(pathBuffer[bufferIndex]);
-                }
-                pathBuffer[bufferIndex] = pathCopy;
-                lenBuffer[bufferIndex] = curPathLength;
-                similarityBuffer[bufferIndex] = curPathSimilarity;
             }
 
-            free(curPath);
-            curPath = 0;
+            if (bufferSize < MAX_PATHS) {
+                lenBuffer[bufferSize] = curPathLength;
+                similarityBuffer[bufferSize] = curPathSimilarity;
+                pathBuffer[bufferSize] = curPath;
+                bufferSize += 1;
+            }
+            else {
+                free(curPath);
+            }
         } // ROF -- end for iB
     }     // ROF -- end for iA
 
@@ -459,9 +465,6 @@ findPath(
         Py_INCREF(pairList);
         PyList_SET_ITEM(result, o, pairList);
     }
-
-    // Free memory
-    free(pathBuffer);
 
     return result;
 }
