@@ -328,11 +328,11 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
         coordinates = np.empty(shape, int)
         printed_alignment_parser.fill(coordinates)
         for record, strand, row in zip(records, strands, coordinates):
-            if strand == b"-":
-                row[:] = row[-1] - row[0] - row
+            if strand == b"+":
+                row += record.seq.defined_ranges[0][0]
+            else:  # strand == b"-"
                 record.seq = record.seq.reverse_complement()
-            start = record.seq.defined_ranges[0][0]
-            row += start
+                row[:] = record.seq.defined_ranges[0][1] - row
         alignment = Alignment(records, coordinates)
         if annotations is not None:
             alignment.annotations = annotations
