@@ -404,7 +404,7 @@ created.
 
 As you may recall from earlier examples in the tutorial, the
 ``opuntia.fasta`` contains seven sequences, so the BLAST XML output
-should contain multiple results. Therefore use ``Bio.Blast.parse()`` to
+should contain multiple results. Therefore use ``Bio.Blast.NCBIXML.parse()`` to
 parse it as described below in Section :ref:`sec:parsing-blast`.
 
 .. _`subsec:other-blast-versions`:
@@ -493,15 +493,15 @@ result (i.e., you used a single query):
 
 .. code:: pycon
 
-   >>> from Bio import Blast
-   >>> blast_record = Blast.read(result_stream)
+   >>> from Bio.Blast import NCBIXML
+   >>> blast_record = NCBIXML.read(result_stream)
 
 or, if you have lots of results (i.e., multiple query sequences):
 
 .. code:: pycon
 
-   >>> from Bio import Blast
-   >>> blast_records = Blast.parse(result_stream)
+   >>> from Bio.Blast import NCBIXML
+   >>> blast_records = NCBIXML.parse(result_stream)
 
 Just like ``Bio.SeqIO`` and ``Bio.Align`` (see
 Chapters :ref:`chapter:seqio`
@@ -512,15 +512,15 @@ lots of objects – but instead of getting ``SeqRecord`` or ``Alignment``
 objects, we get BLAST record objects.
 
 To be able to handle the situation where the BLAST file may be huge,
-containing thousands of results, ``Blast.parse()`` returns an iterator.
+containing thousands of results, ``NCBIXML.parse()`` returns an iterator.
 In plain English, an iterator allows you to step through the BLAST
 output, retrieving BLAST records one by one for each BLAST search
 result:
 
 .. code:: pycon
 
-   >>> from Bio import Blast
-   >>> blast_records = Blast.parse(result_stream)
+   >>> from Bio.Blast import NCBIXML
+   >>> blast_records = NCBIXML.parse(result_stream)
    >>> blast_record = next(blast_records)
    # ... do something with blast_record
    >>> blast_record = next(blast_records)
@@ -554,8 +554,8 @@ and store them:
 
 .. code:: pycon
 
-   >>> from Bio import Blast
-   >>> blast_records = Blast.parse("xml_2222_blastx_001.xml")
+   >>> from Bio.Blast import NCBIXML
+   >>> blast_records = NCBIXML.parse("xml_2222_blastx_001.xml")
    >>> len(blast_records)  # this causes the parser to iterate over all records
    7
    >>> blast_records[2].query.description
@@ -580,15 +580,15 @@ name:
 
 .. code:: pycon
 
-   >>> from Bio import Blast
-   >>> with Blast.parse("my_blast.xml") as blast_records:
+   >>> from Bio.Blast import NCBIXML
+   >>> with NCBIXML.parse("my_blast.xml") as blast_records:
    ...     for blast_record in blast_records:
    ...         pass  # Do something with blast_record
    ...
 
 In this case, Biopython opens the file for you, and closes it as soon as
 the file is not needed any more (while it is possible to simply use
-``blast_records = Blast.parse("my_blast.xml")``, it has the disadvantage
+``blast_records = NCBIXML.parse("my_blast.xml")``, it has the disadvantage
 that the file may stay open longer than strictly necessary, thereby
 wasting resources).
 
@@ -598,8 +598,8 @@ You can ``print`` the records to get a quick overview of their contents:
 
 .. code:: pycon
 
-   >>> from Bio import Blast
-   >>> with Blast.parse("my_blast.xml") as blast_records:
+   >>> from Bio.Blast import NCBIXML
+   >>> with NCBIXML.parse("my_blast.xml") as blast_records:
    ...     print(blast_records)
    ...
    Program: BLASTN 2.2.27+
@@ -653,25 +653,25 @@ need to do is to pick up the first (and only) BLAST record in
 
 .. code:: pycon
 
-   >>> from Bio import Blast
-   >>> blast_records = Blast.parse("my_blast.xml")
+   >>> from Bio.Blast import NCBIXML
+   >>> blast_records = NCBIXML.parse("my_blast.xml")
    >>> blast_record = next(blast_records)
 
 or more elegantly:
 
 .. code:: pycon
 
-   >>> from Bio import Blast
-   >>> blast_record = Blast.read(result_stream)
+   >>> from Bio.Blast import NCBIXML
+   >>> blast_record = Blast.NCBIXML(result_stream)
 
 or, equivalently,
 
 .. code:: pycon
 
-   >>> from Bio import Blast
-   >>> blast_record = Blast.read("my_blast.xml")
+   >>> from Bio.Blast import NCBIXML
+   >>> blast_record = Blast.NCBIXML("my_blast.xml")
 
-(here, you don’t need to use a ``with`` block as ``Blast.read`` will
+(here, you don’t need to use a ``with`` block as ``NCBIXML.read`` will
 read the whole file and close it immediately afterwards).
 
 I guess by now you’re wondering what is in a BLAST record.
@@ -1060,8 +1060,8 @@ has length 1 and only contains ``hit.target``:
 
 .. code:: pycon
 
-   >>> from Bio import Blast
-   >>> blast_record = Blast.read("xml_2900_blastx_001_v2.xml")
+   >>> ffrom Bio.Blast import NCBIXML
+   >>> blast_record = NCBIXML.read("xml_2900_blastx_001_v2.xml")
    >>> for hit in blast_record:
    ...     print(len(hit.targets))
    ...
@@ -1120,8 +1120,8 @@ which is a subclass of the ``Alignment`` class in ``Bio.Align``:
 
 .. code:: pycon
 
-   >>> from Bio import Blast
-   >>> blast_record = Blast.read("my_blast.xml")
+   >>> from Bio.Blast import NCBIXML
+   >>> blast_record = Blast.NCBIXML("my_blast.xml")
    >>> hit = blast_record[0]
    >>> len(hit)
    1
@@ -1398,8 +1398,9 @@ argument to the ``write`` function.
 .. code:: pycon
 
    >>> from Bio import Blast
+   >>> from Bio.Blast import NCBIXML
    >>> stream = Blast.qblast("blastn", "nt", "8332116")
-   >>> records = Blast.parse(stream)
+   >>> records = NCBIXML.parse(stream)
    >>> Blast.write(records, "my_qblast_output.xml")
 
    or
@@ -1443,7 +1444,7 @@ from the command line or using python’s ``subprocess`` module.
 At the time of writing, the NCBI do not appear to support tools running
 a PSI-BLAST search via the internet.
 
-Note that the ``Bio.Blast`` parser can read the XML output from current
+Note that the ``Bio.Blas.tNCBIXML`` parser can read the XML output from current
 versions of PSI-BLAST, but information like which sequences in each
 iteration is new or reused isn’t present in the XML file.
 
