@@ -1096,7 +1096,7 @@ class Alignment:
                           0 -ACGCATACTTG 11
         <BLANKLINE>
         """
-        parser = _parser.Coordinates(b"\0")
+        parser = _parser.PrintedAlignmentParser(b"\0")
         sequences = []
         for line in lines:
             nbytes, sequence = parser.feed(line)

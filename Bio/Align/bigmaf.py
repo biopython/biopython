@@ -209,7 +209,7 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
         strands = []
         annotations = {}
         score = None
-        printed_alignment_parser = _parser.Coordinates(b";")
+        printed_alignment_parser = _parser.PrintedAlignmentParser(b";")
         j = -1
         sequences = []
         while True:

@@ -7,31 +7,35 @@
 
 
 #include <Python.h>
-#include <string.h>
 #include <stdbool.h>
 
-static PyTypeObject CoordinatesType;
+static PyTypeObject ParserType;
 
 typedef struct {
     PyObject_HEAD
     long** data;
-    Py_ssize_t n;
-    Py_ssize_t m;
-    Py_ssize_t k;
-    char eol;
-} Coordinates;
+    /* Array of n long* pointers; each pointer points to an array of long of
+       variable length.  This array contains, for each sequence, the positions
+       in the printed alignment at which a letter is followed by a gap, or
+       vice-versa.  If the first character is a gap, then the first column in
+       data is 0.
+     */
+    Py_ssize_t n;  /* number of sequences in the alignment */
+    Py_ssize_t m;  /* number of columns in the printed alignment */
+    Py_ssize_t k;  /* number of columns of the coordinates array */
+    char eol;      /* optional end-of-line character (set to '\n' by default) */
+} Parser;
 
-/* Destructor function */
 static void
-Coordinates_dealloc(Coordinates *self)
+Parser_dealloc(Parser *self)
 {
     long** data = self->data;
-    ssize_t k;
+    ssize_t i;
     const ssize_t n = self->n;
     if (data) {
-        for (k = 0; k < n; k++) {
-            if (data[k] == NULL) break;
-            PyMem_Free(data[k]);
+        for (i = 0; i < n; i++) {
+            if (data[i] == NULL) break;
+            PyMem_Free(data[i]);
         }
         PyMem_Free(data);
     }
@@ -40,17 +44,20 @@ Coordinates_dealloc(Coordinates *self)
 
 static int
 array_converter(PyObject* argument, void* pointer)
+/* Check if the NumPy array received in argument has the correct shape and
+ * data type, and fill the Py_buffer structure referred to by pointer.
+ */
 {
     Py_buffer* view = pointer;
-    Coordinates* self;
+    Parser* self;
 
-    if (!PyObject_TypeCheck(view->obj, &CoordinatesType)) {
+    if (!PyObject_TypeCheck(view->obj, &ParserType)) {
         PyErr_SetString(PyExc_RuntimeError,
-                        "expected an object of the Coordinates class");
+                        "expected an object of the PrintedAlignmentParser class");
         return 0;
     }
 
-    self = (Coordinates*) view->obj;
+    self = (Parser*) view->obj;
 
     if (PyObject_GetBuffer(argument, view, PyBUF_CONTIG) != 0) {
         PyErr_SetString(PyExc_RuntimeError,
@@ -77,16 +84,41 @@ array_converter(PyObject* argument, void* pointer)
                     "buffer has unexpected item byte size "
                     "(%ld, expected %ld)", view->itemsize, sizeof(long));
     }
-    else return Py_CLEANUP_SUPPORTED;
+    else return 1;  /* return status 1 to indicate a successful converstion */
 
     PyBuffer_Release(view);
-    return 0;
+    return 0;  /* return status 0 to indicate that converstion failed */
 }
 
+PyDoc_STRVAR(
+    Parser_feed__doc__,
+    "feed(self, line, offset=0)\n"
+    "--\n"
+    "\n"
+    "Feed one line of the printed alignment into the parser.\n"
+    "\n"
+    "The line must be a bytes object. The parser will read from line\n"
+    "until it finds the end-of-line character (defined by self->eol)\n"
+    "or a null character.\n"
+    "\n"
+    "The parser skips the first offset bytes.\n"
+    "\n"
+    "Any dashes in line are interpreted as gaps.\n"
+    "This method finds the gap locations and stores them in self.\n"
+    "\n"
+    "The return value is the tuple (nbytes, sequence), in which\n"
+    " - nbytes is the number of bytes read from line (not counting\n"
+    "   the end-of-line character); this is equal to the number of\n"
+    "   columns in the printed alignment.\n"
+    " - sequence is a bytes object with the contents of line after\n"
+    "   removal of the dashes; sequence can be used to create the\n"
+    "   ungapped sequence object stored in the sequences attribute\n"
+    "   of the Alignment object.");
+
 static PyObject*
-Coordinates_feed(Coordinates* self, PyObject* args)
+Parser_feed(Parser* self, PyObject* args, PyObject *kwds)
 {
-    PyObject* line;
+    PyObject* line = NULL;
     PyObject* sequence;
     PyObject* result;
     const char* buffer;
@@ -190,8 +222,27 @@ Coordinates_feed(Coordinates* self, PyObject* args)
     return result;
 }
 
+PyDoc_STRVAR(
+    Parser_fill__doc__,
+    "fill(self, arr)\n"
+    "--\n"
+    "\n"
+    "Fill in the coordinates array based on the alignment lines fed\n"
+    "to the parser so far.\n"
+    "\n"
+    "The argument arr must be a 2D numpy array of data type int,\n"
+    "with the number of rows equal to the number of lines fed into\n"
+    "the parser so far, and the number of columns equal to the number\n"
+    "of columns needed to store the coordinates array.\n"
+    "The appropriate number of rows and columns can be obtained in\n"
+    "advance using the self.shape attribute.\n"
+    "\n"
+    "This method stores the alignment coordinates in arr, and returns\n"
+    "None.\n"
+);
+
 static PyObject*
-Coordinates_fill(Coordinates* self, PyObject* args)
+Parser_fill(Parser* self, PyObject* args)
 {
     Py_buffer view;
     Py_ssize_t i, j, k, n, m, p;
@@ -217,7 +268,7 @@ Coordinates_fill(Coordinates* self, PyObject* args)
         PyErr_Format(PyExc_ValueError,
                      "expected an array with %zd rows (found %zd rows)",
                      n, view.shape[0]);
-        return 0;
+        goto exit;
     }
     for (i = 0; i < n; i++) buffer[i*k] = 0;
 
@@ -267,14 +318,21 @@ Coordinates_fill(Coordinates* self, PyObject* args)
     while (start < m);
 
 exit:
+    PyBuffer_Release(&view);
     if (starts) PyMem_Free(starts);
     if (data) PyMem_Free(data);
     if (gaps) PyMem_Free(gaps);
     Py_RETURN_NONE;
 }
 
+PyDoc_STRVAR(
+    Parser_shape__doc__,
+    "Return the required shape of the coordinates array.\n"
+    "Typically, this attribute is used before calling the fill method.\n"
+);
+
 static PyObject*
-Coordinates_get_shape(Coordinates* self, void* closure)
+Parser_get_shape(Parser* self, void* closure)
 {
     Py_ssize_t i;
     Py_ssize_t index;
@@ -314,59 +372,119 @@ Coordinates_get_shape(Coordinates* self, void* closure)
     return Py_BuildValue("ll", n, k);
 }
 
-static PyGetSetDef Coordinates_getset[] = {
-    {"shape", (getter)Coordinates_get_shape,
-     NULL, "return the shape of the coordinates matrix", NULL,
+static PyGetSetDef Parser_getset[] = {
+    {"shape", (getter)Parser_get_shape,
+     NULL,
+     Parser_shape__doc__,
+     NULL,
     },
     {NULL, NULL, 0, NULL}  /* Sentinel */
 };
 
-static PyMethodDef Coordinates_methods[] = {
-    {"feed", (PyCFunction)Coordinates_feed, METH_VARARGS, "Feed a bytes object to the parser. The parser will read from the buffer until it finds the end-of-line character, and return the number of bytes read."},
-    {"fill",
-     (PyCFunction)Coordinates_fill,
+static PyMethodDef Parser_methods[] = {
+    {"feed",
+     (PyCFunction)Parser_feed,
      METH_VARARGS,
-    "Fill in the coordinates array based on the alignment lines fed to the parser so far.",
+     Parser_feed__doc__,
+    },
+    {"fill",
+     (PyCFunction)Parser_fill,
+     METH_VARARGS,
+     Parser_fill__doc__,
     },
     {NULL, NULL, 0, NULL}  /* Sentinel */
 };
 
 static PyObject*
-Coordinates_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
+Parser_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 {
     char eol = '\n';  /* end-of-line character */
     static char *kwlist[] = {"eol", NULL};
 
-    Coordinates *self;
+    Parser *self;
 
     if (!PyArg_ParseTupleAndKeywords(args, kwds, "|c", kwlist, &eol))
         return NULL;
 
-    self= (Coordinates *)type->tp_alloc(type, 0);
+    self = (Parser *)type->tp_alloc(type, 0);
     if (!self) return NULL;
     self->eol = eol;
     self->n = 0;
     return (PyObject *)self;
 }
 
-static PyTypeObject CoordinatesType = {
+PyDoc_STRVAR(
+    Parser__doc__,
+    "PrintedAlignmentParser(eol=b'\n')\n"
+    "--\n"
+    "\n"
+    "Create a fast parser for printed alignments.\n"
+    "\n"
+    "The argument eol must be a bytes object of length 1, and specifies\n"
+    "the end-of-line character, defaulting to '\\n'"
+    "\n"
+    "As an example, to parse this printed alignment:\n"
+    "\n"
+    "ACCGGGTTTT\n"
+    "AC-GAG--TT\n"
+    "AC--AG--TT\n"
+    "\n"
+    "use\n"
+    "\n"
+    ">>> parser = PrintedAlignmentParser()\n"
+    ">>> nbytes1, seq1 = parser.feed(b'ACCGGGTTTT')\n"
+    ">>> nbytes2, seq2 = parser.feed(b'AC-GAG--TT')\n"
+    ">>> nbytes3, seq3 = parser.feed(b'AC--AG--TT')\n"
+    ">>> nbytes1\n"
+    "10\n"
+    ">>> nbytes2\n"
+    "10\n"
+    ">>> nbytes3\n"
+    "10\n"
+    ">>> seq1\n"
+    "b'ACCGGGTTTT'\n"
+    ">>> seq2\n"
+    "b'ACGAGTT'\n"
+    ">>> seq3\n"
+    "b'ACAGTT'\n"
+    ">>> parser.shape\n"
+    "(3, 7)\n"
+    ">>> import numpy\n"
+    ">>> coordinates = numpy.zeros((3, 7), int)\n"
+    ">>> parser.fill(coordinates)\n"
+    ">>> coordinates\n"
+    "array([[ 0,  2,  3,  4,  6,  8, 10],\n"
+    "       [ 0,  2,  2,  3,  5,  5,  7],\n"
+    "       [ 0,  2,  2,  2,  4,  4,  6]])\n"
+    ">>> from Bio.Align import Alignment\n"
+    ">>> from Bio.Seq import Seq\n"
+    ">>> sequences = (Seq(seq1), Seq(seq2), Seq(seq3))\n"
+    ">>> alignment = Alignment(sequences, coordinates)\n"
+    ">>> print(alignment)\n"
+    "                  0 ACCGGGTTTT 10\n"
+    "                  0 AC-GAG--TT  7\n"
+    "                  0 AC--AG--TT  6\n"
+    "\n"
+);
+
+static PyTypeObject ParserType = {
     PyVarObject_HEAD_INIT(NULL, 0)
-    .tp_name = "_parser.Coordinates",
-    .tp_doc = "Coordinates objects",
-    .tp_basicsize = sizeof(Coordinates),
+    .tp_name = "_parser.PrintedAlignmentParser",
+    .tp_doc = Parser__doc__,
+    .tp_basicsize = sizeof(Parser),
     .tp_itemsize = 0,
     .tp_flags = Py_TPFLAGS_DEFAULT,
-    .tp_dealloc = (destructor)Coordinates_dealloc,
-    .tp_methods = Coordinates_methods,
-    .tp_getset = Coordinates_getset,
-    .tp_new = (newfunc)Coordinates_new,
+    .tp_dealloc = (destructor)Parser_dealloc,
+    .tp_methods = Parser_methods,
+    .tp_getset = Parser_getset,
+    .tp_new = (newfunc)Parser_new,
 };
 
 /* Module initialization function */
 static PyModuleDef moduledef = {
     PyModuleDef_HEAD_INIT,
     .m_name = "_parser",
-    .m_doc = "fast C implementation of utility functions for alignment parsing",
+    .m_doc = "fast C implementation of a parser for printed alignments; for internal use.",
     .m_size = -1,
 };
 
@@ -375,14 +493,14 @@ PyInit__parser(void)
 {
     PyObject *module;
 
-    if (PyType_Ready(&CoordinatesType) < 0)
+    if (PyType_Ready(&ParserType) < 0)
         return NULL;
 
     module = PyModule_Create(&moduledef);
     if (module == NULL)
         return NULL;
 
-    Py_INCREF(&CoordinatesType);
-    PyModule_AddObject(module, "Coordinates", (PyObject *)&CoordinatesType);
+    Py_INCREF(&ParserType);
+    PyModule_AddObject(module, "PrintedAlignmentParser", (PyObject *)&ParserType);
     return module;
 }
