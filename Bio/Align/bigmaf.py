@@ -216,11 +216,11 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
             i = j + 1
             prefix = buffer[i : i + 1]
             if prefix == b"#":
-                match = re.match(b"^[^;]*", buffer[i:])
-                j = i + match.span()[1]
+                m = re.match(b"^[^;]*", buffer[i:])
+                j = i + m.span()[1]
             elif prefix == b"a":
-                match = re.match(b"^[^;]*", buffer[i:])
-                j = i + match.span()[1]
+                m = re.match(b"^[^;]*", buffer[i:])
+                j = i + m.span()[1]
                 line = buffer[i:j].tobytes()
                 words = line[1:].split()
                 for word in words:
@@ -239,10 +239,8 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
                             "Unknown annotation variable '%s'" % key.decode()
                         )
             elif prefix == b"s":
-                match = re.match(
-                    b"^s\s*\S*\s*\d*\s*\d*\s*[+-]\s*\d*\s*", buffer[i:]  # noqa: W605
-                )
-                j = i + match.span()[1]
+                m = re.match(rb"^s\s*\S*\s*\d*\s*\d*\s*[+-]\s*\d*\s*", buffer[i:])
+                j = i + m.span()[1]
                 line = buffer[i:j].tobytes()
                 words = line.split(None, 5)
                 if len(words) != 6:
@@ -268,8 +266,8 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
                 i = j + 1
                 strands.append(strand)
             elif prefix == b"i":
-                match = re.match(b"^[^;]*", buffer[i:])
-                j = i + match.span()[1]
+                m = re.match(b"^[^;]*", buffer[i:])
+                j = i + m.span()[1]
                 line = buffer[i:j].tobytes()
                 words = line.split(None, 5)
                 assert len(words) == 6
@@ -285,8 +283,8 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
                 record.annotations["rightStatus"] = rightStatus
                 record.annotations["rightCount"] = rightCount
             elif prefix == b"e":
-                match = re.match(b"^[^;]*", buffer[i:])
-                j = i + match.span()[1]
+                m = re.match(b"^[^;]*", buffer[i:])
+                j = i + m.span()[1]
                 line = buffer[i:j].tobytes()
                 words = line.split(None, 6)
                 assert len(words) == 7
@@ -311,8 +309,8 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
                     annotations["empty"] = annotation
                 annotation.append(empty)
             elif prefix == b"q":
-                match = re.match(b"^[^;]*", buffer[i:])
-                j = i + match.span()[1]
+                m = re.match(b"^[^;]*", buffer[i:])
+                j = i + m.span()[1]
                 line = buffer[i:j].tobytes()
                 words = line.split(None, 2)
                 assert len(words) == 3
