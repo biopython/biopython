@@ -29,9 +29,9 @@ typedef struct {
 static void
 Parser_dealloc(Parser *self)
 {
+    Py_ssize_t i;
+    const Py_ssize_t n = self->n;
     long** data = self->data;
-    ssize_t i;
-    const ssize_t n = self->n;
     if (data) {
         for (i = 0; i < n; i++) {
             if (data[i] == NULL) break;
