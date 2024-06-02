@@ -217,7 +217,7 @@ Parser_feed(Parser* self, PyObject* args, PyObject *kwds)
     }
     *d = '\0';
 
-    result = Py_BuildValue("lN", m, sequence);
+    result = Py_BuildValue("nN", m, sequence);
     if (result == NULL) Py_DECREF(sequence);
     return result;
 }
@@ -369,7 +369,7 @@ Parser_get_shape(Parser* self, void* closure)
     }
 
     self->k = k;
-    return Py_BuildValue("ll", n, k);
+    return Py_BuildValue("nn", n, k);
 }
 
 static PyGetSetDef Parser_getset[] = {
