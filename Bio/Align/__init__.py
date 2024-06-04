@@ -51,6 +51,8 @@ from Bio.SeqRecord import SeqRecord, _RestrictedDict
 # importing from within the Biopython source tree, see PR #2007:
 # https://github.com/biopython/biopython/pull/2007
 
+print("numpy int_ is", np.int_)
+
 
 AlignmentCounts = collections.namedtuple(
     "AlignmentCounts", ["gaps", "identities", "mismatches"]
