@@ -1037,7 +1037,7 @@ class Alignment:
         >>> sequences
         ['TAGGCATACGTG', 'AACGTACGT', 'ACGCATACTTG']
         >>> coordinates = Alignment.infer_coordinates(lines)
-        >>> coordinates
+        >>> print(coordinates)
         [[ 0  1  4  6 11 12]
          [ 0  1  4  4  9  9]
          [ 0  0  3  5 10 11]]
