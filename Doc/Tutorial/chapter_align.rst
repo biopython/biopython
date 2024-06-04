@@ -102,8 +102,6 @@ sequences included in this alignment:
 
 and an attribute ``coordinates`` with the alignment coordinates:
 
-.. cont-doctest
-
 .. code:: pycon
 
    >>> alignment.coordinates

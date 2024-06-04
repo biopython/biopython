@@ -51,8 +51,6 @@ from Bio.SeqRecord import SeqRecord, _RestrictedDict
 # importing from within the Biopython source tree, see PR #2007:
 # https://github.com/biopython/biopython/pull/2007
 
-print("numpy int_ is", np.int_)
-
 
 AlignmentCounts = collections.namedtuple(
     "AlignmentCounts", ["gaps", "identities", "mismatches"]
@@ -1040,9 +1038,9 @@ class Alignment:
         ['TAGGCATACGTG', 'AACGTACGT', 'ACGCATACTTG']
         >>> coordinates = Alignment.infer_coordinates(lines)
         >>> coordinates
-        array([[ 0,  1,  4,  6, 11, 12],
-               [ 0,  1,  4,  4,  9,  9],
-               [ 0,  0,  3,  5, 10, 11]])
+        [[ 0  1  4  6 11 12]
+         [ 0  1  4  4  9  9]
+         [ 0  0  3  5 10 11]]
         >>> alignment = Alignment(sequences, coordinates)
         """
         warnings.warn(
@@ -1082,12 +1080,12 @@ class Alignment:
         ...          b"-ACGCATACTTG",
         ...         ]
         >>> sequences, coordinates = Alignment.parse_printed_alignment(lines)
-        >>> sequences
+        >>> print(sequences)
         [b'TAGGCATACGTG', b'AACGTACGT', b'ACGCATACTTG']
-        >>> coordinates
-        array([[ 0,  1,  4,  6, 11, 12],
-               [ 0,  1,  4,  4,  9,  9],
-               [ 0,  0,  3,  5, 10, 11]])
+        >>> print(coordinates)
+        [[ 0  1  4  6 11 12]
+         [ 0  1  4  4  9  9]
+         [ 0  0  3  5 10 11]]
         >>> sequences = [Seq(sequence) for sequence in sequences]
         >>> sequences
         [Seq('TAGGCATACGTG'), Seq('AACGTACGT'), Seq('ACGCATACTTG')]
