@@ -13,12 +13,12 @@ static PyTypeObject ParserType;
 
 typedef struct {
     PyObject_HEAD
-    long** data;
-    /* Array of n long* pointers; each pointer points to an array of long of
-       variable length.  This array contains, for each sequence, the positions
-       in the printed alignment at which a letter is followed by a gap, or
-       vice-versa.  If the first character is a gap, then the first column in
-       data is 0.
+    int64_t** data;
+    /* Array of n int64_t* pointers; each pointer points to an array of
+       int64_t of variable length.  This array contains, for each sequence,
+       the positions in the printed alignment at which a letter is followed by
+       a gap, or vice-versa.  If the first character is a gap, then the first
+       column in data is 0.
      */
     Py_ssize_t n;  /* number of sequences in the alignment */
     Py_ssize_t m;  /* number of columns in the printed alignment */
@@ -31,7 +31,7 @@ Parser_dealloc(Parser *self)
 {
     Py_ssize_t i;
     const Py_ssize_t n = self->n;
-    long** data = self->data;
+    int64_t** data = self->data;
     if (data) {
         for (i = 0; i < n; i++) {
             if (data[i] == NULL) break;
@@ -79,10 +79,10 @@ array_converter(PyObject* argument, void* pointer)
                      "buffer has incorrect number of columns %zd (expected %zd)",
                       view->shape[1], self->k);
     }
-    else if (view->itemsize != sizeof(long)) {
+    else if (view->itemsize != sizeof(int64_t)) {
         PyErr_Format(PyExc_RuntimeError,
                     "buffer has unexpected item byte size "
-                    "(%ld, expected %ld)", view->itemsize, sizeof(long));
+                    "(%ld, expected %ld)", view->itemsize, sizeof(int64_t));
     }
     else return 1;  /* return status 1 to indicate a successful converstion */
 
@@ -132,8 +132,8 @@ Parser_feed(Parser* self, PyObject* args, PyObject *kwds)
     Py_ssize_t p = 0;
     Py_ssize_t offset = 0;
     Py_ssize_t start, end, step;
-    long** data;
-    long* row;
+    int64_t** data;
+    int64_t* row;
     char c;
     bool gap = false;
 
@@ -142,11 +142,11 @@ Parser_feed(Parser* self, PyObject* args, PyObject *kwds)
     buffer = PyBytes_AS_STRING(line) + offset;
 
     s = buffer;
-    row = PyMem_Malloc(size*sizeof(long));
+    row = PyMem_Malloc(size*sizeof(int64_t));
     if (!row) return NULL;
     if (*s == '-') row[i++] = 0;
 
-    data = PyMem_Realloc(self->data, (n+1)*size*sizeof(long*));
+    data = PyMem_Realloc(self->data, (n+1)*size*sizeof(int64_t*));
     if (!data) {
         PyMem_Free(row);
         return NULL;
@@ -168,7 +168,7 @@ Parser_feed(Parser* self, PyObject* args, PyObject *kwds)
 
         if (i == size) {
             size *= 2;
-            row = PyMem_Realloc(row, size*sizeof(long));
+            row = PyMem_Realloc(row, size*sizeof(int64_t));
             if (!row) {
                 PyMem_Free(data[n]);
                 return NULL;
@@ -177,7 +177,7 @@ Parser_feed(Parser* self, PyObject* args, PyObject *kwds)
         }
         row[i++] = s - buffer;
     }
-    row = PyMem_Realloc(row, i*sizeof(long));
+    row = PyMem_Realloc(row, i*sizeof(int64_t));
     if (!row) {
         PyMem_Free(data[n]);
         return NULL;
@@ -247,12 +247,12 @@ Parser_fill(Parser* self, PyObject* args)
     Py_buffer view;
     Py_ssize_t i, j, k, n, m, p;
     Py_ssize_t start;
-    long step;
-    long end;
+    int64_t step;
+    int64_t end;
     Py_ssize_t* starts = NULL;
-    Py_ssize_t** data = NULL;
+    int64_t** data = NULL;
     bool* gaps = NULL;
-    long* buffer;
+    int64_t* buffer;
 
     n = self->n;
     if (n == 0) Py_RETURN_NONE;
@@ -337,15 +337,15 @@ Parser_get_shape(Parser* self, void* closure)
     Py_ssize_t i;
     Py_ssize_t index;
     Py_ssize_t min_index;
-    long** data = self->data;
+    int64_t** data = self->data;
     const Py_ssize_t n = self->n;
     const Py_ssize_t m = self->m;
     Py_ssize_t k = 1;
 
     if (n > 0) {
-        data = PyMem_Calloc(n, sizeof(long*));
+        data = PyMem_Calloc(n, sizeof(int64_t*));
         if (!data) return NULL;
-        memcpy(data, self->data, n*sizeof(long*));
+        memcpy(data, self->data, n*sizeof(int64_t*));
         for (i = 0; i < n; i++) {
             index = *(data[i]);
             if (index == 0) {
@@ -492,7 +492,6 @@ PyMODINIT_FUNC
 PyInit__parser(void)
 {
     PyObject *module;
-printf("C long is %ld bytes; C long long is %ld bytes; int64_t is %ld bytes\n", sizeof(long), sizeof(long long), sizeof(int64_t));
 
     if (PyType_Ready(&ParserType) < 0)
         return NULL;
