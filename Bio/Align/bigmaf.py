@@ -323,7 +323,7 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
             else:
                 raise ValueError(f"Error parsing alignment - unexpected line:\n{line}")
         shape = printed_alignment_parser.shape
-        coordinates = np.empty(shape, np.int64)
+        coordinates = np.empty(shape)
         printed_alignment_parser.fill(coordinates)
         for record, strand, row in zip(records, strands, coordinates):
             if strand == b"+":
