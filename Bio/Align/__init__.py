@@ -1102,7 +1102,8 @@ class Alignment:
             nbytes, sequence = parser.feed(line)
             sequences.append(sequence)
         shape = parser.shape
-        coordinates = np.empty(shape, dtype=np.int_)
+        # coordinates = np.empty(shape, dtype=np.int_)
+        coordinates = np.empty(shape, int)
         parser.fill(coordinates)
         return sequences, coordinates
 
