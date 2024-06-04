@@ -492,7 +492,7 @@ PyMODINIT_FUNC
 PyInit__parser(void)
 {
     PyObject *module;
-printf("C long is %ld bytes\n", sizeof(long));
+printf("C long is %ld bytes; C long long is %ld bytes\n", sizeof(long), sizeof(long long));
 
     if (PyType_Ready(&ParserType) < 0)
         return NULL;
