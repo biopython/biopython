@@ -1080,12 +1080,12 @@ class Alignment:
         ...          b"-ACGCATACTTG",
         ...         ]
         >>> sequences, coordinates = Alignment.parse_printed_alignment(lines)
-        >>> print(sequences)
+        >>> sequences
         [b'TAGGCATACGTG', b'AACGTACGT', b'ACGCATACTTG']
-        >>> print(coordinates)
-        [[ 0  1  4  6 11 12]
-         [ 0  1  4  4  9  9]
-         [ 0  0  3  5 10 11]]
+        >>> coordinates
+        array([[ 0,  1,  4,  6, 11, 12],
+               [ 0,  1,  4,  4,  9,  9],
+               [ 0,  0,  3,  5, 10, 11]])
         >>> sequences = [Seq(sequence) for sequence in sequences]
         >>> sequences
         [Seq('TAGGCATACGTG'), Seq('AACGTACGT'), Seq('ACGCATACTTG')]
