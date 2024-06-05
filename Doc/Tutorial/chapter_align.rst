@@ -5191,8 +5191,8 @@ bigMaf
 
 A bigMaf file is a bigBed file with a BED3+1 format consisting of the 3
 required BED fields plus a custom field that stores a MAF alignment
-block as a string, crearing an indexed binary version of a MAF file (see
-section :ref:`subsec:align_bigmaf`). The associated AutoSql file
+block as a string, creating an indexed binary version of a MAF file (see
+section :ref:`subsec:align_maf`). The associated AutoSql file
 `bigMaf.as <https://genome.ucsc.edu/goldenPath/help/examples/bigMaf.as>`__
 is provided by UCSC. To create a bigMaf file, you can either use the
 ``mafToBigMaf`` and ``bedToBigBed`` programs from UCSC. or you can use
