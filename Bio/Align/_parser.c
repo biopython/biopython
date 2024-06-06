@@ -177,6 +177,14 @@ Parser_feed(Parser* self, PyObject* args, PyObject *kwds)
         }
         row[i++] = s - buffer;
     }
+    if (p > LONG_MAX) {
+        PyErr_Format(PyExc_ValueError,
+                     "sequence is too long "
+                     "(length is %zd, maximum allowable value is %ld)",
+                     m, LONG_MAX);
+        PyMem_Free(data[n]);
+        return NULL;
+    }
     row = PyMem_Realloc(row, i*sizeof(Py_uintptr_t));
     if (!row) {
         PyMem_Free(data[n]);
@@ -307,7 +315,9 @@ Parser_fill(Parser* self, PyObject* args)
         for (i = 0; i < n; i++) {
             p = i*k+j;
             if (gaps[i] == true) buffer[p] = buffer[p-1];
-            else buffer[i*k+j] = buffer[p-1] + step;
+            else buffer[i*k+j] = (long) (buffer[p-1] + step);
+            /* casting to long is safe here, as we already checked that the
+             * sequence length is not greater than LONG_MAX */
             if (end == starts[i]) {
                 data[i]++;
                 gaps[i] = !gaps[i];
