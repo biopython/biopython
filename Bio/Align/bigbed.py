@@ -854,10 +854,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 if self._compressed > 0:
                     data = zlib.decompress(data)
                 if self.itemsPerSlot == 1:
+                    child_chromIx, child_chromStart, child_chromEnd = formatter.unpack(
+                        data[:size]
+                    )
                     while True:
-                        child_chromIx, child_chromStart, child_chromEnd = (
-                            formatter.unpack(data[:size])
-                        )
                         if child_chromIx != chromIx:
                             break
                         if end <= child_chromStart or child_chromEnd <= start:

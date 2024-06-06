@@ -20,9 +20,9 @@ typedef struct {
        a gap, or vice-versa.  If the first character is a gap, then the first
        column in data is 0.
      */
-    Py_ssize_t n;  /* number of sequences in the alignment */
-    Py_ssize_t m;  /* number of columns in the printed alignment */
-    Py_ssize_t k;  /* number of columns of the coordinates array */
+    Py_ssize_t nnnn;  /* number of sequences in the alignment */
+    Py_ssize_t mmmm;  /* number of columns in the printed alignment */
+    Py_ssize_t kkkk;  /* number of columns of the coordinates array */
     char eol;      /* optional end-of-line character (set to '\n' by default) */
 } Parser;
 
@@ -30,7 +30,7 @@ static void
 Parser_dealloc(Parser *self)
 {
     Py_ssize_t i;
-    const Py_ssize_t n = self->n;
+    const Py_ssize_t n = self->nnnn;
     long** data = self->data;
     if (data) {
         for (i = 0; i < n; i++) {
@@ -69,15 +69,15 @@ array_converter(PyObject* argument, void* pointer)
                      "buffer has incorrect rank %d (expected 2)",
                       view->ndim);
     }
-    else if (view->shape[0] != self->n) {
+    else if (view->shape[0] != self->nnnn) {
         PyErr_Format(PyExc_RuntimeError,
                      "buffer has incorrect number of rows %zd (expected %zd)",
-                      view->shape[0], self->n);
+                      view->shape[0], self->nnnn);
     }
-    else if (view->shape[1] != self->k) {
+    else if (view->shape[1] != self->kkkk) {
         PyErr_Format(PyExc_RuntimeError,
                      "buffer has incorrect number of columns %zd (expected %zd)",
-                      view->shape[1], self->k);
+                      view->shape[1], self->kkkk);
     }
     else if (view->itemsize != sizeof(long)) {
         PyErr_Format(PyExc_RuntimeError,
@@ -125,8 +125,8 @@ Parser_feed(Parser* self, PyObject* args, PyObject *kwds)
     const char* s;
     char* d;
     const char eol = self->eol;
-    Py_ssize_t n = self->n;
-    Py_ssize_t m = self->m;
+    Py_ssize_t n = self->nnnn;
+    Py_ssize_t m = self->mmmm;
     Py_ssize_t size = 2;
     Py_ssize_t i = 0;
     Py_ssize_t p = 0;
@@ -184,15 +184,15 @@ Parser_feed(Parser* self, PyObject* args, PyObject *kwds)
     }
     data[n] = row;
     m = s - buffer;
-    if (n == 0) self->m = m;
+    if (n == 0) self->mmmm = m;
     else if (buffer + m != s) {
         PyErr_Format(PyExc_ValueError,
-                     "line has length %zi (expected %zi)", m, self->m);
+                     "line has length %zd (expected %zd)", m, self->mmmm);
         return NULL;
     }
 
     n++;
-    self->n = n;
+    self->nnnn = n;
 
     sequence = PyBytes_FromStringAndSize(NULL, p);
     if (!sequence) return NULL;
@@ -254,7 +254,7 @@ Parser_fill(Parser* self, PyObject* args)
     bool* gaps = NULL;
     long* buffer;
 
-    n = self->n;
+    n = self->nnnn;
     if (n == 0) Py_RETURN_NONE;
 
     view.obj = (PyObject*) self;
@@ -272,7 +272,7 @@ Parser_fill(Parser* self, PyObject* args)
     }
     for (i = 0; i < n; i++) buffer[i*k] = 0;
 
-    m = self->m;
+    m = self->mmmm;
 
     starts = PyMem_Calloc(n, sizeof(Py_ssize_t));
     if (!starts) goto exit;
@@ -338,8 +338,8 @@ Parser_get_shape(Parser* self, void* closure)
     Py_ssize_t index;
     Py_ssize_t min_index;
     long** data = self->data;
-    const Py_ssize_t n = self->n;
-    const Py_ssize_t m = self->m;
+    const Py_ssize_t n = self->nnnn;
+    const Py_ssize_t m = self->mmmm;
     Py_ssize_t k = 1;
 
     if (n > 0) {
@@ -368,7 +368,7 @@ Parser_get_shape(Parser* self, void* closure)
         }
     }
 
-    self->k = k;
+    self->kkkk = k;
     return Py_BuildValue("nn", n, k);
 }
 
@@ -409,7 +409,7 @@ Parser_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
     self = (Parser *)type->tp_alloc(type, 0);
     if (!self) return NULL;
     self->eol = eol;
-    self->n = 0;
+    self->nnnn = 0;
     return (PyObject *)self;
 }
 
