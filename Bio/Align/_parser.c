@@ -13,9 +13,9 @@ static PyTypeObject ParserType;
 
 typedef struct {
     PyObject_HEAD
-    long** data;
-    /* Array of n long* pointers; each pointer points to an array of
-       long of variable length.  This array contains, for each sequence,
+    Py_uintptr_t** data;
+    /* Array of n Py_uintptr_t* pointers; each pointer points to an array of
+       Py_uintptr_t of variable length.  This array contains, for each sequence,
        the positions in the printed alignment at which a letter is followed by
        a gap, or vice-versa.  If the first character is a gap, then the first
        column in data is 0.
@@ -31,7 +31,7 @@ Parser_dealloc(Parser *self)
 {
     Py_ssize_t i;
     const Py_ssize_t n = self->nnnn;
-    long** data = self->data;
+    Py_uintptr_t** data = self->data;
     if (data) {
         for (i = 0; i < n; i++) {
             if (data[i] == NULL) break;
@@ -132,8 +132,8 @@ Parser_feed(Parser* self, PyObject* args, PyObject *kwds)
     Py_ssize_t p = 0;
     Py_ssize_t offset = 0;
     Py_ssize_t start, end, step;
-    long** data;
-    long* row;
+    Py_uintptr_t** data;
+    Py_uintptr_t* row;
     char c;
     bool gap = false;
 
@@ -142,11 +142,11 @@ Parser_feed(Parser* self, PyObject* args, PyObject *kwds)
     buffer = PyBytes_AS_STRING(line) + offset;
 
     s = buffer;
-    row = PyMem_Malloc(size*sizeof(long));
+    row = PyMem_Malloc(size*sizeof(Py_uintptr_t));
     if (!row) return NULL;
     if (*s == '-') row[i++] = 0;
 
-    data = PyMem_Realloc(self->data, (n+1)*size*sizeof(long*));
+    data = PyMem_Realloc(self->data, (n+1)*size*sizeof(Py_uintptr_t*));
     if (!data) {
         PyMem_Free(row);
         return NULL;
@@ -168,7 +168,7 @@ Parser_feed(Parser* self, PyObject* args, PyObject *kwds)
 
         if (i == size) {
             size *= 2;
-            row = PyMem_Realloc(row, size*sizeof(long));
+            row = PyMem_Realloc(row, size*sizeof(Py_uintptr_t));
             if (!row) {
                 PyMem_Free(data[n]);
                 return NULL;
@@ -177,7 +177,7 @@ Parser_feed(Parser* self, PyObject* args, PyObject *kwds)
         }
         row[i++] = s - buffer;
     }
-    row = PyMem_Realloc(row, i*sizeof(long));
+    row = PyMem_Realloc(row, i*sizeof(Py_uintptr_t));
     if (!row) {
         PyMem_Free(data[n]);
         return NULL;
@@ -250,7 +250,7 @@ Parser_fill(Parser* self, PyObject* args)
     long step;
     long end;
     Py_ssize_t* starts = NULL;
-    long** data = NULL;
+    Py_uintptr_t** data = NULL;
     bool* gaps = NULL;
     long* buffer;
 
@@ -337,15 +337,15 @@ Parser_get_shape(Parser* self, void* closure)
     Py_ssize_t i;
     Py_ssize_t index;
     Py_ssize_t min_index;
-    long** data = self->data;
+    Py_uintptr_t** data = self->data;
     const Py_ssize_t n = self->nnnn;
     const Py_ssize_t m = self->mmmm;
     Py_ssize_t k = 1;
 
     if (n > 0) {
-        data = PyMem_Calloc(n, sizeof(long*));
+        data = PyMem_Calloc(n, sizeof(Py_uintptr_t*));
         if (!data) return NULL;
-        memcpy(data, self->data, n*sizeof(long*));
+        memcpy(data, self->data, n*sizeof(Py_uintptr_t*));
         for (i = 0; i < n; i++) {
             index = *(data[i]);
             if (index == 0) {
