@@ -247,8 +247,8 @@ Parser_fill(Parser* self, PyObject* args)
     Py_buffer view;
     Py_ssize_t i, j, k, n, m, p;
     Py_ssize_t start;
-    long step;
-    long end;
+    Py_ssize_t step;
+    Py_ssize_t end;
     Py_ssize_t* starts = NULL;
     Py_uintptr_t** data = NULL;
     bool* gaps = NULL;
