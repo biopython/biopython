@@ -36,7 +36,7 @@ except ImportError:
     ) from None
 
 from Bio import BiopythonDeprecationWarning
-from Bio.Align import _parser  # type: ignore
+from Bio.Align import _aligncore  # type: ignore
 from Bio.Align import _pairwisealigner  # type: ignore
 from Bio.Align import _codonaligner  # type: ignore
 from Bio.Align import substitution_matrices
@@ -1070,20 +1070,25 @@ class Alignment:
         sequences and coordinates can be used to create an Alignment object.
 
         This is an example for the alignment of three sequences TAGGCATACGTG,
-        AACGTACGT, and ACGCATACTTG, with gaps in the second and third sequence:
+        AACGTACGT, and ACGCATACTTG, with gaps in the second and third sequence.
+        Note that the input sequences are bytes objects.
 
         >>> from Bio.Align import Alignment
-        >>> lines = ["TAGGCATACGTG",
-        ...          "AACG--TACGT-",
-        ...          "-ACGCATACTTG",
+        >>> from Bio.Seq import Seq
+        >>> lines = [b"TAGGCATACGTG",
+        ...          b"AACG--TACGT-",
+        ...          b"-ACGCATACTTG",
         ...         ]
         >>> sequences, coordinates = Alignment.parse_printed_alignment(lines)
         >>> sequences
-        ['TAGGCATACGTG', 'AACGTACGT', 'ACGCATACTTG']
+        [b'TAGGCATACGTG', b'AACGTACGT', b'ACGCATACTTG']
         >>> coordinates
         array([[ 0,  1,  4,  6, 11, 12],
                [ 0,  1,  4,  4,  9,  9],
                [ 0,  0,  3,  5, 10, 11]])
+        >>> sequences = [Seq(sequence) for sequence in sequences]
+        >>> sequences
+        [Seq('TAGGCATACGTG'), Seq('AACGTACGT'), Seq('ACGCATACTTG')]
         >>> alignment = Alignment(sequences, coordinates)
         >>> print(alignment)
                           0 TAGGCATACGTG 12
@@ -1091,10 +1096,14 @@ class Alignment:
                           0 -ACGCATACTTG 11
         <BLANKLINE>
         """
-        sequences, coordinates = _parser.parse_printed_alignment(lines)
-        shape = coordinates.shape
-        coordinates = np.frombuffer(coordinates, int)
-        coordinates.shape = shape
+        parser = _aligncore.PrintedAlignmentParser(b"\0")
+        sequences = []
+        for line in lines:
+            nbytes, sequence = parser.feed(line)
+            sequences.append(sequence)
+        shape = parser.shape
+        coordinates = np.empty(shape, int)
+        parser.fill(coordinates)
         return sequences, coordinates
 
     def __init__(self, sequences, coordinates=None):

@@ -338,14 +338,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         aline = self._aline
         if aline is None:
             return
-        alignment = self._create_alignment(aline, stream)
-        return alignment
-
-    def _create_alignment(self, aline, stream):
         records = []
         starts = []
         sizes = []
         strands = []
+        score = None
         aligned_sequences = []
         annotations = {}
         words = aline[1:].split()

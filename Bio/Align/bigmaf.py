@@ -13,15 +13,20 @@ indexed as a bigBed file.
 See https://genome.ucsc.edu/goldenPath/help/bigMaf.html
 """
 
+import re
 import struct
 import zlib
-from io import StringIO
 
 
 from Bio.Align import Alignment, Alignments
-from Bio.Align import interfaces, bigbed, maf
+from Bio.Align import bigbed, maf
+from Bio.Align import _aligncore  # type: ignore
 from Bio.Align.bigbed import AutoSQLTable, Field
+from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+
+
+import numpy as np
 
 
 declaration = AutoSQLTable(
@@ -62,23 +67,35 @@ class AlignmentWriter(bigbed.AlignmentWriter):
         target,
         targets=None,
         compress=True,
+        blockSize=256,
+        itemsPerSlot=512,
     ):
         """Create an AlignmentWriter object.
 
         Arguments:
-         - target      - output stream or file name.
-         - targets     - A list of SeqRecord objects with the chromosomes in the
-                         order as they appear in the alignments. The sequence
-                         contents in each SeqRecord may be undefined, but the
-                         sequence length must be defined, as in this example:
+         - target       - output stream or file name.
+         - targets      - A list of SeqRecord objects with the chromosomes in
+                          the order as they appear in the alignments. The
+                          sequence contents in each SeqRecord may be undefined,
+                          but the sequence length must be defined, as in this
+                          example:
 
-                         SeqRecord(Seq(None, length=248956422), id="chr1")
+                          SeqRecord(Seq(None, length=248956422), id="chr1")
 
-                         If targets is None (the default value), the alignments
-                         must have an attribute .targets providing the list of
-                         SeqRecord objects.
-         - compress    - If True (default), compress data using zlib.
-                         If False, do not compress data.
+                          If targets is None (the default value), the alignments
+                          must have an attribute .targets providing the list of
+                          SeqRecord objects.
+         - compress     - If True (default), compress data using zlib.
+                          If False, do not compress data.
+                          Use compress=False for faster searching.
+         - blockSize    - Number of items to bundle in r-tree.
+                          See UCSC's bedToBigBed program for more information.
+                          Default value is 256.
+         - itemsPerSlot - Number of data points bundled at lowest level.
+                          See UCSC's bedToBigBed program for more information.
+                          Use itemsPerSlot=1 for faster searching.
+                          Default value is 512.
+
         """
         super().__init__(
             target,
@@ -86,6 +103,8 @@ class AlignmentWriter(bigbed.AlignmentWriter):
             declaration=declaration,
             targets=targets,
             compress=compress,
+            blockSize=blockSize,
+            itemsPerSlot=itemsPerSlot,
         )
 
     def write_file(self, stream, alignments):
@@ -194,12 +213,141 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
             self._index = 0
         self.targets[0].id = "%s.%s" % (self.reference, self.targets[0].id)
 
-    def _create_alignment(self, chunk):
-        chromId, chromStart, chromEnd, rest = chunk
-        data = rest.decode().replace(";", "\n")
-        stream = StringIO()
-        stream.write(data)
-        stream.seek(0)
-        line = next(stream)
-        alignment = maf.AlignmentIterator._create_alignment(self, line, stream)
+    def _create_alignment(
+        self, chromId, chromStart, chromEnd, data, dataStart, dataEnd
+    ):
+        assert data[dataEnd - 1] == 0
+        buffer = memoryview(data)
+        buffer = buffer[dataStart:dataEnd]
+        records = []
+        strands = []
+        annotations = {}
+        score = None
+        printed_alignment_parser = _aligncore.PrintedAlignmentParser(b";")
+        j = -1
+        sequences = []
+        while True:
+            i = j + 1
+            prefix = buffer[i : i + 1]
+            if prefix == b"#":
+                m = re.match(b"^[^;]*", buffer[i:])
+                j = i + m.span()[1]
+            elif prefix == b"a":
+                m = re.match(b"^[^;]*", buffer[i:])
+                j = i + m.span()[1]
+                line = buffer[i:j].tobytes()
+                words = line[1:].split()
+                for word in words:
+                    key, value = word.split(b"=")
+                    if key == b"score":
+                        score = float(value)
+                    elif key == b"pass":
+                        value = int(value)
+                        if value <= 0:
+                            raise ValueError(
+                                "pass value must be positive (found %d)" % value
+                            )
+                        annotations["pass"] = value
+                    else:
+                        raise ValueError(
+                            "Unknown annotation variable '%s'" % key.decode()
+                        )
+            elif prefix == b"s":
+                m = re.match(rb"^s\s*\S*\s*\d*\s*\d*\s*[+-]\s*\d*\s*", buffer[i:])
+                j = i + m.span()[1]
+                line = buffer[i:j].tobytes()
+                words = line.split(None, 5)
+                if len(words) != 6:
+                    raise ValueError(
+                        "Error parsing alignment - 's' line must have 7 fields"
+                    )
+                src = words[1].decode()
+                start = int(words[2])
+                size = int(words[3])
+                strand = words[4]
+                srcSize = int(words[5])
+                i = j
+                n, sequence = printed_alignment_parser.feed(data, dataStart + i)
+                if len(sequence) != size:
+                    raise ValueError(
+                        "sequence size is incorrect (found %d, expected %d)"
+                        % (len(sequence), size)
+                    )
+                seq = Seq({start: sequence}, length=srcSize)
+                record = SeqRecord(seq, id=src, name="", description="")
+                records.append(record)
+                j = i + n
+                i = j + 1
+                strands.append(strand)
+            elif prefix == b"i":
+                m = re.match(b"^[^;]*", buffer[i:])
+                j = i + m.span()[1]
+                line = buffer[i:j].tobytes()
+                words = line.split(None, 5)
+                assert len(words) == 6
+                assert words[1].decode() == src  # from the previous "s" line
+                leftStatus = words[2].decode()
+                leftCount = int(words[3])
+                rightStatus = words[4].decode()
+                rightCount = int(words[5])
+                assert leftStatus in AlignmentIterator.status_characters
+                assert rightStatus in AlignmentIterator.status_characters
+                record.annotations["leftStatus"] = leftStatus
+                record.annotations["leftCount"] = leftCount
+                record.annotations["rightStatus"] = rightStatus
+                record.annotations["rightCount"] = rightCount
+            elif prefix == b"e":
+                m = re.match(b"^[^;]*", buffer[i:])
+                j = i + m.span()[1]
+                line = buffer[i:j].tobytes()
+                words = line.split(None, 6)
+                assert len(words) == 7
+                src = words[1].decode()
+                start = int(words[2])
+                size = int(words[3])
+                strand = words[4]
+                srcSize = int(words[5])
+                status = words[6].decode()
+                assert status in AlignmentIterator.empty_status_characters
+                sequence = Seq(None, length=srcSize)
+                record = SeqRecord(sequence, id=src, name="", description="")
+                end = start + size
+                if strand == b"+":
+                    segment = (start, end)
+                else:
+                    segment = (srcSize - start, srcSize - end)
+                empty = (record, segment, status)
+                annotation = annotations.get("empty")
+                if annotation is None:
+                    annotation = []
+                    annotations["empty"] = annotation
+                annotation.append(empty)
+            elif prefix == b"q":
+                m = re.match(b"^[^;]*", buffer[i:])
+                j = i + m.span()[1]
+                line = buffer[i:j].tobytes()
+                words = line.split(None, 2)
+                assert len(words) == 3
+                assert words[1].decode() == src  # from the previous "s" line
+                value = words[2].replace(b"-", b"")
+                record.annotations["quality"] = value.decode()
+            elif prefix == b"\00":
+                # reached the end of the alignment
+                break
+            else:
+                raise ValueError(f"Error parsing alignment - unexpected line:\n{line}")
+        shape = printed_alignment_parser.shape
+        coordinates = np.empty(shape, int)
+        printed_alignment_parser.fill(coordinates)
+        for record, strand, row in zip(records, strands, coordinates):
+            if strand == b"+":
+                row += record.seq.defined_ranges[0][0]
+            else:  # strand == b"-"
+                record.seq = record.seq.reverse_complement()
+                row[:] = record.seq.defined_ranges[0][1] - row
+        alignment = Alignment(records, coordinates)
+        if annotations is not None:
+            alignment.annotations = annotations
+        if score is not None:
+            alignment.score = score
         return alignment
