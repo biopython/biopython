@@ -35,7 +35,7 @@ static int compare(const void* self, const void* other)
     return 0;
 }
 
-static void DataPoint_sort(DataPoint* list, int n, int i)
+static void DataPoint_sort(DataPoint* list, Py_ssize_t n, int i)
 {
     /* set sort dimension */
     DataPoint_current_dim = i;
@@ -78,7 +78,7 @@ static char Point_index__doc__[] =
 static PyObject*
 Point_getindex(Point* self, void* closure)
 {
-    return PyLong_FromLong(self->index);
+    return PyLong_FromSsize_t(self->index);
 }
 
 static char Point_radius__doc__[] = "the radius";
@@ -177,7 +177,7 @@ static char Neighbor_index1__doc__[] =
 static PyObject*
 Neighbor_getindex1(Neighbor* self, void* closure)
 {
-    return PyLong_FromLong(self->index1);
+    return PyLong_FromSsize_t(self->index1);
 }
 
 static char Neighbor_index2__doc__[] =
@@ -186,7 +186,7 @@ static char Neighbor_index2__doc__[] =
 static PyObject*
 Neighbor_getindex2(Neighbor* self, void* closure)
 {
-    return PyLong_FromLong(self->index2);
+    return PyLong_FromSsize_t(self->index2);
 }
 
 static char Neighbor_radius__doc__[] = "the radius";
@@ -259,7 +259,7 @@ typedef struct Node
 } Node;
 
 static Node*
-Node_create(double cut_value, int cut_dim, long int start, long int end)
+Node_create(double cut_value, int cut_dim, Py_ssize_t start, Py_ssize_t end)
 {
     Node* node = PyMem_Malloc(sizeof(Node));
     if (node == NULL) return NULL;
@@ -818,8 +818,8 @@ KDTree_build_tree(KDTree* self, Py_ssize_t offset_begin, Py_ssize_t offset_end, 
     else
     {
         long int offset_split;
-        long int left_offset_begin, left_offset_end;
-        long int right_offset_begin, right_offset_end;
+        Py_ssize_t left_offset_begin, left_offset_end;
+        Py_ssize_t right_offset_begin, right_offset_end;
         long int d;
         double cut_value;
         DataPoint data_point;
