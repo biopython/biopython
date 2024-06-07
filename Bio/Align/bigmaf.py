@@ -20,7 +20,7 @@ import zlib
 
 from Bio.Align import Alignment, Alignments
 from Bio.Align import bigbed, maf
-from Bio.Align import _parser  # type: ignore
+from Bio.Align import _aligncore  # type: ignore
 from Bio.Align.bigbed import AutoSQLTable, Field
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -223,7 +223,7 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
         strands = []
         annotations = {}
         score = None
-        printed_alignment_parser = _parser.PrintedAlignmentParser(b";")
+        printed_alignment_parser = _aligncore.PrintedAlignmentParser(b";")
         j = -1
         sequences = []
         while True:

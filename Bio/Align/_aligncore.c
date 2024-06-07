@@ -480,7 +480,7 @@ PyDoc_STRVAR(
 
 static PyTypeObject ParserType = {
     PyVarObject_HEAD_INIT(NULL, 0)
-    .tp_name = "_parser.PrintedAlignmentParser",
+    .tp_name = "_aligncore.PrintedAlignmentParser",
     .tp_doc = Parser__doc__,
     .tp_basicsize = sizeof(Parser),
     .tp_itemsize = 0,
@@ -494,13 +494,13 @@ static PyTypeObject ParserType = {
 /* Module initialization function */
 static PyModuleDef moduledef = {
     PyModuleDef_HEAD_INIT,
-    .m_name = "_parser",
+    .m_name = "_aligncore",
     .m_doc = "fast C implementation of a parser for printed alignments; for internal use.",
     .m_size = -1,
 };
 
 PyMODINIT_FUNC
-PyInit__parser(void)
+PyInit__aligncore(void)
 {
     PyObject *module;
 

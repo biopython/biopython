@@ -36,7 +36,7 @@ except ImportError:
     ) from None
 
 from Bio import BiopythonDeprecationWarning
-from Bio.Align import _parser  # type: ignore
+from Bio.Align import _aligncore  # type: ignore
 from Bio.Align import _pairwisealigner  # type: ignore
 from Bio.Align import _codonaligner  # type: ignore
 from Bio.Align import substitution_matrices
@@ -1096,7 +1096,7 @@ class Alignment:
                           0 -ACGCATACTTG 11
         <BLANKLINE>
         """
-        parser = _parser.PrintedAlignmentParser(b"\0")
+        parser = _aligncore.PrintedAlignmentParser(b"\0")
         sequences = []
         for line in lines:
             nbytes, sequence = parser.feed(line)
