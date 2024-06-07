@@ -255,7 +255,7 @@ typedef struct Node
     struct Node *_right;
     double _cut_value;
     int _cut_dim;
-    long int _start, _end;
+    Py_ssize_t _start, _end;
 } Node;
 
 static Node*
@@ -820,7 +820,7 @@ KDTree_build_tree(KDTree* self, Py_ssize_t offset_begin, Py_ssize_t offset_end, 
         long int offset_split;
         Py_ssize_t left_offset_begin, left_offset_end;
         Py_ssize_t right_offset_begin, right_offset_end;
-        long int d;
+        Py_ssize_t d;
         double cut_value;
         DataPoint data_point;
         Node *left_node, *right_node, *new_node;
