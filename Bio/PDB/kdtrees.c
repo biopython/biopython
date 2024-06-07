@@ -46,7 +46,7 @@ static void DataPoint_sort(DataPoint* list, int n, int i)
 
 typedef struct {
     PyObject_HEAD
-    long int index;
+    Py_ssize_t index;
     double radius;
 } Point;
 
@@ -142,8 +142,8 @@ static PyTypeObject PointType = {
 
 typedef struct {
     PyObject_HEAD
-    long int index1;
-    long int index2;
+    Py_ssize_t index1;
+    Py_ssize_t index2;
     double radius;
 } Neighbor;
 
@@ -794,7 +794,7 @@ static int KDTree_neighbor_search(KDTree* self, Node *node, Region *region, int 
 }
 
 static Node *
-KDTree_build_tree(KDTree* self, long int offset_begin, long int offset_end, int depth)
+KDTree_build_tree(KDTree* self, Py_ssize_t offset_begin, Py_ssize_t offset_end, int depth)
 {
     int localdim;
 
