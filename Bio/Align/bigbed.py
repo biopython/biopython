@@ -858,12 +858,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         data[:size]
                     )
                     if child_chromIx == chromIx:
-                        while True:
-                            if end <= child_chromStart or child_chromEnd <= start:
-                                if child_chromStart != child_chromEnd:
-                                    break
-                                if child_chromStart != end and child_chromEnd != start:
-                                    break
+                        if (child_chromStart < end and start < child_chromEnd) or (
+                            child_chromStart == child_chromEnd
+                            and (child_chromStart == end or start == child_chromEnd)
+                        ):
                             yield (
                                 child_chromIx,
                                 child_chromStart,
@@ -872,7 +870,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                                 size,
                                 len(data),
                             )
-                            break
                 else:
                     i = 0
                     n = len(data)
