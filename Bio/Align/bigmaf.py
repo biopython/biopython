@@ -67,23 +67,35 @@ class AlignmentWriter(bigbed.AlignmentWriter):
         target,
         targets=None,
         compress=True,
+        blockSize=256,
+        itemsPerSlot=512,
     ):
         """Create an AlignmentWriter object.
 
         Arguments:
-         - target      - output stream or file name.
-         - targets     - A list of SeqRecord objects with the chromosomes in the
-                         order as they appear in the alignments. The sequence
-                         contents in each SeqRecord may be undefined, but the
-                         sequence length must be defined, as in this example:
+         - target       - output stream or file name.
+         - targets      - A list of SeqRecord objects with the chromosomes in
+                          the order as they appear in the alignments. The
+                          sequence contents in each SeqRecord may be undefined,
+                          but the sequence length must be defined, as in this
+                          example:
 
-                         SeqRecord(Seq(None, length=248956422), id="chr1")
+                          SeqRecord(Seq(None, length=248956422), id="chr1")
 
-                         If targets is None (the default value), the alignments
-                         must have an attribute .targets providing the list of
-                         SeqRecord objects.
-         - compress    - If True (default), compress data using zlib.
-                         If False, do not compress data.
+                          If targets is None (the default value), the alignments
+                          must have an attribute .targets providing the list of
+                          SeqRecord objects.
+         - compress     - If True (default), compress data using zlib.
+                          If False, do not compress data.
+                          Use compress=False for faster searching.
+         - blockSize    - Number of items to bundle in r-tree.
+                          See UCSC's bedToBigBed program for more information.
+                          Default value is 256.
+         - itemsPerSlot - Number of data points bundled at lowest level.
+                          See UCSC's bedToBigBed program for more information.
+                          Use itemsPerSlot=1 for faster searching.
+                          Default value is 512.
+
         """
         super().__init__(
             target,
@@ -91,6 +103,8 @@ class AlignmentWriter(bigbed.AlignmentWriter):
             declaration=declaration,
             targets=targets,
             compress=compress,
+            blockSize=blockSize,
+            itemsPerSlot=itemsPerSlot,
         )
 
     def write_file(self, stream, alignments):

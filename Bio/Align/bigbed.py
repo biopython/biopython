@@ -228,32 +228,45 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         declaration=None,
         targets=None,
         compress=True,
+        itemsPerSlot=512,
+        blockSize=256,
         extraIndex=(),
     ):
         """Create an AlignmentWriter object.
 
         Arguments:
-         - target      - output stream or file name.
-         - bedN        - number of columns in the BED file.
-                         This must be between 3 and 12; default value is 12.
-         - declaration - an AutoSQLTable object declaring the fields in the BED file.
-                         Required only if the BED file contains extra (custom) fields.
-                         Default value is None.
-         - targets     - A list of SeqRecord objects with the chromosomes in the
-                         order as they appear in the alignments. The sequence
-                         contents in each SeqRecord may be undefined, but the
-                         sequence length must be defined, as in this example:
+         - target       - output stream or file name.
+         - bedN         - number of columns in the BED file.
+                          This must be between 3 and 12; default value is 12.
+         - declaration  - an AutoSQLTable object declaring the fields in the
+                          BED file.
+                          Required only if the BED file contains extra (custom)
+                          fields.
+                          Default value is None.
+         - targets      - A list of SeqRecord objects with the chromosomes in
+                          the order as they appear in the alignments. The
+                          sequence contents in each SeqRecord may be undefined,
+                          but the sequence length must be defined, as in this
+                          example:
 
-                         SeqRecord(Seq(None, length=248956422), id="chr1")
+                          SeqRecord(Seq(None, length=248956422), id="chr1")
 
-                         If targets is None (the default value), the alignments
-                         must have an attribute .targets providing the list of
-                         SeqRecord objects.
-         - compress    - If True (default), compress data using zlib.
-                         If False, do not compress data.
-         - extraIndex  - List of strings with the names of extra columns to be
-                         indexed.
-                         Default value is an empty list.
+                          If targets is None (the default value), the alignments
+                          must have an attribute .targets providing the list of
+                          SeqRecord objects.
+         - compress     - If True (default), compress data using zlib.
+                          If False, do not compress data.
+                          Use compress=False for faster searching.
+         - blockSize    - Number of items to bundle in r-tree.
+                          See UCSC's bedToBigBed program for more information.
+                          Default value is 256.
+         - itemsPerSlot - Number of data points bundled at lowest level.
+                          See UCSC's bedToBigBed program for more information.
+                          Use itemsPerSlot=1 for faster searching.
+                          Default value is 512.
+         - extraIndex   - List of strings with the names of extra columns to be
+                          indexed.
+                          Default value is an empty list.
         """
         if bedN < 3 or bedN > 12:
             raise ValueError("bedN must be between 3 and 12")
@@ -263,8 +276,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         self.targets = targets
         self.compress = compress
         self.extraIndexNames = extraIndex
-        self.itemsPerSlot = 512
-        self.blockSize = 256
+        self.itemsPerSlot = itemsPerSlot
+        self.blockSize = blockSize
 
     def write_file(self, stream, alignments):
         """Write the alignments to the file stream, and return the number of alignments.

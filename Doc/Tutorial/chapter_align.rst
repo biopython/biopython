@@ -4574,6 +4574,12 @@ dictionary. Please refer to the test script ``test_Align_bigbed.py`` in
 the ``Tests`` subdirectory in the Biopython distribution for more
 examples of writing alignment files in the bigBed format.
 
+Optional arguments are ``compress`` (default value is ``True``), ``blockSize``
+(default value is 256), and ``itemsPerSlot`` (default value is 512). See the
+documentation of UCSC's ``bedToBigBed`` program for a description of these
+arguments.  Searching a ``bigBed`` file can be faster by using
+``compress=False`` and ``itemsPerSlot=1`` when creating the bigBed file.
+
 .. _`subsec:align_psl`:
 
 Pattern Space Layout (PSL)
@@ -4934,6 +4940,12 @@ you can use a (binary) stream for output. Additional options are
 See section :ref:`subsec:align_psl` for an explanation on how the
 number of matches, mismatches, repeat region matches, and matches to
 unknown nucleotides are obtained.
+
+Further optional arguments are ``blockSize`` (default value is 256), and
+``itemsPerSlot`` (default value is 512). See the documentation of UCSC's
+``bedToBigBed`` program for a description of these arguments.  Searching a
+``bigPsl`` file can be faster by using ``compress=False`` and
+``itemsPerSlot=1`` when creating the bigPsl file.
 
 .. _`subsec:align_maf`:
 
@@ -5350,6 +5362,9 @@ be of the form ``reference.chromosome``, where ``reference`` refers to
 the reference species. ``Bio.Align.write`` has the additional keyword
 argument ``compress`` (``True`` by default) specifying whether the data
 should be compressed using zlib.
+Further optional arguments are ``blockSize`` (default value is 256), and
+``itemsPerSlot`` (default value is 512). See the documentation of UCSC's
+``bedToBigBed`` program for a description of these arguments.
 
 As a bigMaf file is a special case of a bigBed file, you can use the
 ``search`` method on the ``alignments`` object to find alignments to
@@ -5379,6 +5394,9 @@ start and end positions may be ``None`` to start searching from position
 0 or to continue searching until the end of the chromosome,
 respectively. Note that we can search on genomic position for the
 reference species only.
+
+Searching a ``bigMaf`` file can be faster by using ``compress=False`` and
+``itemsPerSlot=1`` when creating the bigMaf file.
 
 .. _`subsec:align_chain`:
 
