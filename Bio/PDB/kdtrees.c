@@ -508,7 +508,7 @@ KDTree_test_neighbors(KDTree* self, DataPoint* p1, DataPoint* p2, PyObject* neig
 static int
 KDTree_search_neighbors_in_bucket(KDTree* self, Node *node, PyObject* neighbors)
 {
-    long int i;
+    Py_ssize_t i;
     int ok;
 
     for (i = node->_start; i < node->_end; i++)
@@ -529,13 +529,13 @@ KDTree_search_neighbors_in_bucket(KDTree* self, Node *node, PyObject* neighbors)
 
 static int KDTree_search_neighbors_between_buckets(KDTree* self, Node *node1, Node *node2, PyObject* neighbors)
 {
-    long int i;
+    Py_ssize_t i;
     int ok;
 
     for (i = node1->_start; i < node1->_end; i++)
     {
         DataPoint p1;
-        long int j;
+        Py_ssize_t j;
 
         p1 = self->_data_point_list[i];
 
@@ -817,7 +817,7 @@ KDTree_build_tree(KDTree* self, Py_ssize_t offset_begin, Py_ssize_t offset_end, 
     }
     else
     {
-        long int offset_split;
+        Py_ssize_t offset_split;
         Py_ssize_t left_offset_begin, left_offset_end;
         Py_ssize_t right_offset_begin, right_offset_end;
         Py_ssize_t d;
@@ -866,7 +866,7 @@ static int KDTree_report_subtree(KDTree* self, Node *node, PyObject* points)
     int ok;
     if (Node_is_leaf(node)) {
         /* report point(s) */
-        long int i;
+        Py_ssize_t i;
         for (i = node->_start; i < node->_end; i++) {
             ok = KDTree_report_point(self, &self->_data_point_list[i], points);
             if (!ok) return 0;
@@ -936,7 +936,7 @@ KDTree_search(KDTree* self, Region *region, Node *node, int depth, Region* query
     current_dim = depth % DIM;
 
     if (Node_is_leaf(node)) {
-        long int i;
+        Py_ssize_t i;
         DataPoint* data_point;
         for (i = node->_start; i < node->_end; i++) {
             data_point = &self->_data_point_list[i];
