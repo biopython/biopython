@@ -20,7 +20,7 @@ static int DataPoint_current_dim = 0;
 
 typedef struct
 {
-    long int _index;
+    Py_ssize_t _index;
     double _coord[DIM];
 } DataPoint;
 
