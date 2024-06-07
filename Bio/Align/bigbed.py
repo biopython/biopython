@@ -857,23 +857,22 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     child_chromIx, child_chromStart, child_chromEnd = formatter.unpack(
                         data[:size]
                     )
-                    while True:
-                        if child_chromIx != chromIx:
+                    if child_chromIx == chromIx:
+                        while True:
+                            if end <= child_chromStart or child_chromEnd <= start:
+                                if child_chromStart != child_chromEnd:
+                                    break
+                                if child_chromStart != end and child_chromEnd != start:
+                                    break
+                            yield (
+                                child_chromIx,
+                                child_chromStart,
+                                child_chromEnd,
+                                data,
+                                size,
+                                len(data),
+                            )
                             break
-                        if end <= child_chromStart or child_chromEnd <= start:
-                            if child_chromStart != child_chromEnd:
-                                break
-                            if child_chromStart != end and child_chromEnd != start:
-                                break
-                        yield (
-                            child_chromIx,
-                            child_chromStart,
-                            child_chromEnd,
-                            data,
-                            size,
-                            len(data),
-                        )
-                        break
                 else:
                     i = 0
                     n = len(data)
