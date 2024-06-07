@@ -429,7 +429,7 @@ typedef struct
 typedef struct {
     PyObject_HEAD
     DataPoint* _data_point_list;
-    int _data_point_list_size;
+    Py_ssize_t _data_point_list_size;
     Node *_root;
     int _bucket_size;
     /* The following are temporary variables used during a search only. */
@@ -457,7 +457,7 @@ static int
 KDTree_report_point(KDTree* self, DataPoint* data_point, PyObject* points)
 {
     int ok;
-    long int index = data_point->_index;
+    Py_ssize_t index = data_point->_index;
     double *coord = data_point->_coord;
     const double r = KDTree_dist(self->_center_coord, coord);
     if (r <= self->_radius_sq)
@@ -483,7 +483,7 @@ KDTree_test_neighbors(KDTree* self, DataPoint* p1, DataPoint* p2, PyObject* neig
     {
         /* we found a neighbor pair! */
         Neighbor* neighbor;
-        long int index1, index2;
+        Py_ssize_t index1, index2;
         neighbor = (Neighbor*) NeighborType.tp_alloc(&NeighborType, 0);
         if (!neighbor) return 0;
         index1 = p1->_index;
@@ -1282,7 +1282,7 @@ PyKDTree_neighbor_simple_search(KDTree* self, PyObject* args)
 
     for (i = 0; i < self->_data_point_list_size; i++) {
         double x1;
-        long int j;
+        Py_ssize_t j;
         DataPoint p1;
 
         p1 = self->_data_point_list[i];
