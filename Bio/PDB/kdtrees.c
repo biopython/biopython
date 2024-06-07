@@ -514,7 +514,7 @@ KDTree_search_neighbors_in_bucket(KDTree* self, Node *node, PyObject* neighbors)
     for (i = node->_start; i < node->_end; i++)
     {
         DataPoint p1;
-        long int j;
+        Py_ssize_t j;
 
         p1 = self->_data_point_list[i];
 
