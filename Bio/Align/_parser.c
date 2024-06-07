@@ -196,6 +196,7 @@ Parser_feed(Parser* self, PyObject* args, PyObject *kwds)
     else if (buffer + m != s) {
         PyErr_Format(PyExc_ValueError,
                      "line has length %zd (expected %zd)", m, self->mmmm);
+        PyMem_Free(row);
         return NULL;
     }
 
@@ -288,7 +289,7 @@ Parser_fill(Parser* self, PyObject* args)
     gaps = PyMem_Malloc(n * sizeof(bool));
     if (!gaps) goto exit;
 
-    data = PyMem_Calloc(n, sizeof(Py_ssize_t*));
+    data = PyMem_Malloc(n * sizeof(Py_ssize_t*));
     if (!data) goto exit;
 
     for (i = 0; i < n; i++) {
@@ -353,7 +354,7 @@ Parser_get_shape(Parser* self, void* closure)
     Py_ssize_t k = 1;
 
     if (n > 0) {
-        data = PyMem_Calloc(n, sizeof(Py_uintptr_t*));
+        data = PyMem_Malloc(n * sizeof(Py_uintptr_t*));
         if (!data) return NULL;
         memcpy(data, self->data, n*sizeof(Py_uintptr_t*));
         for (i = 0; i < n; i++) {
