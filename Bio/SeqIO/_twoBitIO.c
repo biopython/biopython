@@ -428,21 +428,21 @@ TwoBit_convert(PyObject* self, PyObject* args, PyObject* keywords)
             object = NULL;
             goto exit;
         }
-        applyNs(sequence, start, end, &nBlocks);
-        applyMask(sequence, start, end, &maskBlocks);
+        applyNs(sequence, (uint32_t)start, (uint32_t)end, &nBlocks);
+        applyMask(sequence, (uint32_t)start, (uint32_t)end, &maskBlocks);
     }
     else {
         Py_ssize_t current, i;
         uint32_t full_start, full_end;
         char* full_sequence;
         if (start <= end) {
-            full_start = start;
-            full_end = end;
+            full_start = (uint32_t)start;
+            full_end = (uint32_t)end;
             current = 0; /* first position in sequence */
         }
         else {
-            full_start = end + 1;
-            full_end = start + 1;
+            full_start = (uint32_t)end + 1;
+            full_end = (uint32_t)start + 1;
             current = start - end - 1; /* last position in sequence */
         }
         full_sequence = PyMem_Malloc((full_end-full_start+1)*sizeof(char));
