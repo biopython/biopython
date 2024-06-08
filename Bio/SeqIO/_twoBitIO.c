@@ -396,6 +396,25 @@ TwoBit_convert(PyObject* self, PyObject* args, PyObject* keywords)
                                      &blocks_converter, &maskBlocks))
         return NULL;
 
+    if (length > UINT32_MAX) {
+        PyErr_Format(PyExc_ValueError,
+                     "data is too long (%zd bytes, maximum is %u).",
+                     length, UINT32_MAX);
+        return 0;
+    }
+    if (start > UINT32_MAX) {
+        PyErr_Format(PyExc_ValueError,
+                     "start is too high (%zd, maximum is %u).",
+                     start, UINT32_MAX);
+        return 0;
+    }
+    if (end > UINT32_MAX) {
+        PyErr_Format(PyExc_ValueError,
+                     "end is too high (%zd, maximum is %u).",
+                     end, UINT32_MAX);
+        return 0;
+    }
+
     size = (end - start) / step;
     object = PyBytes_FromStringAndSize(NULL, size);
     if (!object) goto exit;
@@ -403,7 +422,8 @@ TwoBit_convert(PyObject* self, PyObject* args, PyObject* keywords)
     sequence = PyBytes_AS_STRING(object);
 
     if (step == 1) {
-        if (extract(data, length, start, end, sequence) < 0) {
+        if (extract(data, (uint32_t)length, (uint32_t)start, (uint32_t)end,
+                    sequence) < 0) {
             Py_DECREF(object);
             object = NULL;
             goto exit;
@@ -413,7 +433,7 @@ TwoBit_convert(PyObject* self, PyObject* args, PyObject* keywords)
     }
     else {
         Py_ssize_t current, i;
-        Py_ssize_t full_start, full_end;
+        uint32_t full_start, full_end;
         char* full_sequence;
         if (start <= end) {
             full_start = start;
@@ -432,7 +452,8 @@ TwoBit_convert(PyObject* self, PyObject* args, PyObject* keywords)
             object = NULL;
             goto exit;
         }
-        if (extract(data, length, full_start, full_end, full_sequence) < 0) {
+        if (extract(data, (uint32_t)length, full_start, full_end,
+                    full_sequence) < 0) {
             PyMem_Free(full_sequence);
             Py_DECREF(object);
             object = NULL;
