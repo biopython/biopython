@@ -254,10 +254,8 @@ attributes that you can access using the same method.
    10.0
 
 For a complete list of accessible attributes, you can check each
-format-specific documentation. Here are the ones `for
-BLAST <http://biopython.org/docs/\bpversion/api/Bio.SearchIO.BlastIO.html>`__
-and for
-`BLAT <http://biopython.org/docs/\bpversion/api/Bio.SearchIO.BlatIO.html>`__.
+format-specific documentation. e.g. :py:mod:`Bio.SearchIO.BlastIO`
+and :py:mod:`Bio.SearchIO.BlatIO`.
 
 Having looked at using ``print`` on ``QueryResult`` objects, let’s drill
 down deeper. What exactly is a ``QueryResult``? In terms of Python
@@ -426,9 +424,9 @@ that could make it even easier to work with ``QueryResult`` objects: the
 ``filter`` and ``map`` methods.
 
 If you’re familiar with Python’s list comprehensions, generator
-expressions or the built in ``filter`` and ``map`` functions, you’ll
+expressions or the built-in ``filter`` and ``map`` functions, you’ll
 know how useful they are for working with list-like objects (if you’re
-not, check them out!). You can use these built in methods to manipulate
+not, check them out!). You can use these built-in methods to manipulate
 ``QueryResult`` objects, but you’ll end up with regular Python lists and
 lose the ability to do more interesting manipulations.
 
@@ -749,8 +747,7 @@ various details. Here are some examples:
    >>> blast_hsp.aln_span  # how long the alignment is
    61
 
-Check out the ``HSP``
-`documentation <http://biopython.org/docs/\bpversion/api/Bio.SearchIO.html#module-Bio.SearchIO#module-Bio.SearchIO>`__
+Check out the ``HSP`` documentation under :py:mod:`Bio.SearchIO`
 for a full list of these predefined properties.
 
 Furthermore, each sequence search tool usually computes its own
@@ -953,9 +950,8 @@ objects. However, you can use their ``*_all`` counterparts:
 return a list containing ``SeqRecord`` or ``MultipleSeqAlignment``
 objects from each of the HSP fragment. There are other attributes that
 behave similarly, i.e. they only work for HSPs with one fragment. Check
-out the ``HSP``
-`documentation <http://biopython.org/docs/\bpversion/api/Bio.SearchIO.html#module-Bio.SearchIO>`__
-for a full list.
+out the ``HSP`` documentation under :py:mod:`Bio.SearchIO` for a full
+list.
 
 Finally, to check whether you have multiple fragments or not, you can
 use the ``is_fragmented`` property like so:

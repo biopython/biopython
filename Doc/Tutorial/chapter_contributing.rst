@@ -34,7 +34,7 @@ Contributing Documentation
 We’re happy to take feedback or contributions - either via a bug-report
 or on the Mailing List. While reading this tutorial, perhaps you noticed
 some topics you were interested in which were missing, or not clearly
-explained. There is also Biopython’s built in documentation (the
+explained. There is also Biopython’s built-in documentation (the
 docstrings, these are also
 `online <http://biopython.org/DIST/docs/api>`__), where again, you may
 be able to help fill in any blanks.

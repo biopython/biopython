@@ -40,11 +40,9 @@ one right way to do something. However, this can also be a real benefit
 because it gives you lots of flexibility and control over the libraries.
 The tutorial helps to show you the common or easy ways to do things so
 that you can just make things work. To learn more about the alternative
-possibilities, look in the Cookbook
-(Chapter :ref:`chapter:cookbook`, this has some cools
-tricks and tips), and built in “docstrings” (via the Python help
-command, or the `API
-documentation <http://biopython.org/docs/\bpversion/api/>`__) or
+possibilities, look in the Cookbook (Chapter :ref:`chapter:cookbook`,
+this has some cools tricks and tips), and built-in “docstrings” (via
+the Python help command or :py:mod:`Bio` and :py:mod:`BioSQL`), or
 ultimately the code itself.
 
 .. _`sec:sequences`:

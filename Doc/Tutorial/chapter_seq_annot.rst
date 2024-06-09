@@ -19,10 +19,8 @@ EMBL files, this information is quite important.
 While this chapter should cover most things to do with the ``SeqRecord``
 and ``SeqFeature`` objects in this chapter, you may also want to read
 the ``SeqRecord`` wiki page (http://biopython.org/wiki/SeqRecord), and
-the built in documentation (also online –
-`SeqRecord <http://biopython.org/docs/\bpversion/api/Bio.SeqRecord.html>`__
-and
-`SeqFeature <http://biopython.org/docs/\bpversion/api/Bio.SeqFeature.html>`__):
+the built-in documentation (:py:mod:`Bio.SeqRecord` and
+:py:mod:`Bio.SeqFeature`):
 
 .. code:: pycon
 

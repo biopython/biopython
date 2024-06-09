@@ -9,8 +9,8 @@ Chapter :ref:`chapter:quick_start` and also used
 in Chapter :ref:`chapter:seq_annot`. This aims to
 provide a simple interface for working with assorted sequence file
 formats in a uniform way. See also the ``Bio.SeqIO`` wiki page
-(http://biopython.org/wiki/SeqIO), and the built in documentation (also
-`online <http://biopython.org/docs/\bpversion/api/Bio.SeqIO.html>`__):
+(http://biopython.org/wiki/SeqIO), and the built-in documentation
+:py:mod:`Bio.Seq`:
 
 .. code:: pycon
 
@@ -94,9 +94,8 @@ Similarly, if you wanted to read in a file in another file format, then
 assuming ``Bio.SeqIO.parse()`` supports it you would just need to change
 the format string as appropriate, for example “swiss” for SwissProt
 files or “embl” for EMBL text files. There is a full listing on the wiki
-page (http://biopython.org/wiki/SeqIO) and in the built in documentation
-(also
-`online <http://biopython.org/docs/\bpversion/api/Bio.SeqIO.html>`__).
+page (http://biopython.org/wiki/SeqIO) and in the built-in documentation
+:py:mod:`Bio.SeqIO`:
 
 Another very common way to use a Python iterator is within a list
 comprehension (or a generator expression). For example, if all you
@@ -1440,7 +1439,7 @@ with just:
 
 The ``Bio.SeqIO.convert()`` function will take handles *or* filenames.
 Watch out though – if the output file already exists, it will overwrite
-it! To find out more, see the built in help:
+it! To find out more, see the built-in help:
 
 .. code:: pycon
 
@@ -1476,7 +1475,7 @@ output file.
 
 To start with, we’ll use ``Bio.SeqIO.parse()`` to load some nucleotide
 sequences from a file, then print out their reverse complements using
-the ``Seq`` object’s built in ``.reverse_complement()`` method (see
+the ``Seq`` object’s built-in ``.reverse_complement()`` method (see
 Section :ref:`sec:seq-reverse-complement`):
 
 .. code:: pycon
@@ -1489,7 +1488,7 @@ Section :ref:`sec:seq-reverse-complement`):
 
 Now, if we want to save these reverse complements to a file, we’ll need
 to make ``SeqRecord`` objects. We can use the ``SeqRecord`` object’s
-built in ``.reverse_complement()`` method (see
+built-in ``.reverse_complement()`` method (see
 Section :ref:`sec:SeqRecord-reverse-complement`)
 but we must decide how to name our new records.
 
@@ -1563,7 +1562,7 @@ Getting your SeqRecord objects as formatted strings
 Suppose that you don’t really want to write your records to a file or
 handle – instead you want a string containing the records in a
 particular file format. The ``Bio.SeqIO`` interface is based on handles,
-but Python has a useful built in module which provides a string based
+but Python has a useful built-in module which provides a string based
 handle.
 
 For an example of how you might use this, let’s load in a bunch of
