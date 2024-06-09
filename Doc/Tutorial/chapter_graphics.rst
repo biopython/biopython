@@ -80,7 +80,7 @@ from a GenBank file (see Chapter :ref:`chapter:seqio`).
 This example uses the pPCP1 plasmid from *Yersinia pestis biovar
 Microtus*, the file is included with the Biopython unit tests under the
 GenBank folder, or online
-```NC_005816.gb`` <https://raw.githubusercontent.com/biopython/biopython/master/Tests/GenBank/NC_005816.gb>`__
+`NC_005816.gb <https://raw.githubusercontent.com/biopython/biopython/master/Tests/GenBank/NC_005816.gb>`__
 from our website.
 
 .. code:: python

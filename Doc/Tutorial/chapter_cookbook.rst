@@ -105,7 +105,7 @@ For this discussion, we’ll use the GenBank file for the pPCP1 plasmid
 from *Yersinia pestis biovar Microtus*. The file is included with the
 Biopython unit tests under the GenBank folder, or you can get it from
 our website,
-```NC_005816.gb`` <https://raw.githubusercontent.com/biopython/biopython/master/Tests/GenBank/NC_005816.gb>`__.
+`NC_005816.gb <https://raw.githubusercontent.com/biopython/biopython/master/Tests/GenBank/NC_005816.gb>`__.
 This file contains one and only one record, so we can read it in as a
 ``SeqRecord`` using the ``Bio.SeqIO.read()`` function:
 
@@ -949,7 +949,7 @@ To show how you might approach this with Biopython, we’ll need a
 sequence to search, and as an example we’ll again use the bacterial
 plasmid – although this time we’ll start with a plain FASTA file with no
 pre-marked genes:
-```NC_005816.fna`` <https://raw.githubusercontent.com/biopython/biopython/master/Tests/GenBank/NC_005816.fna>`__.
+`NC_005816.fna <https://raw.githubusercontent.com/biopython/biopython/master/Tests/GenBank/NC_005816.fna>`__.
 This is a bacterial sequence, so we’ll want to use NCBI codon table 11
 (see Section :ref:`sec:translation` about
 translation).
