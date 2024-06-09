@@ -239,6 +239,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Maximilian Greil <https://github.com/MaxGreil>
 - Maximilian Peters <maximili.peters at mail.huji.ac.il>
 - Melissa Gymrek <https://github.com/mgymrek>
+- Meridia Jane Bryant <https://github.com/meridiajane>
 - Michael Hoffman <https://github.com/michaelmhoffman>
 - Michael M. <https://github.com/michaelfm1211>
 - Michael R. Crusoe <https://orcid.org/0000-0002-2961-9670>
