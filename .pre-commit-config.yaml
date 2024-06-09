@@ -57,6 +57,7 @@ repos:
         args: [
             '--ignore-roles=ref,numref',
             --ignore-directives=toctree,
+            --ignore-substitutions=version,
             --report-level=warning,
             --ignore-messages=Unknown\ target\ name
         ]
