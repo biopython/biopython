@@ -261,11 +261,12 @@ static const char bases[][4] = {"TTTT",  /* 00 00 00 00 */
                                };
 
 static int
-extract(const unsigned char* bytes, uint32_t byteSize, uint32_t start, uint32_t end, char sequence[]) {
-    uint32_t i;
-    const uint32_t size = end - start;
-    const uint32_t byteStart = start / 4;
-    const uint32_t byteEnd = (end + 3) / 4;
+extract(const unsigned char* bytes, Py_ssize_t byteSize,
+        Py_ssize_t start, Py_ssize_t end, char sequence[]) {
+    Py_ssize_t i;
+    const Py_ssize_t size = end - start;
+    const Py_ssize_t byteStart = start / 4;
+    const Py_ssize_t byteEnd = (end + 3) / 4;
 
     if (byteSize != byteEnd - byteStart) {
         PyErr_Format(PyExc_RuntimeError,
@@ -295,7 +296,7 @@ extract(const unsigned char* bytes, uint32_t byteSize, uint32_t start, uint32_t 
 }
 
 static void
-applyNs(char sequence[], uint32_t start, uint32_t end, Py_buffer *nBlocks)
+applyNs(char sequence[], Py_ssize_t start, Py_ssize_t end, Py_buffer *nBlocks)
 {
     const Py_ssize_t nBlockCount = nBlocks->shape[0];
     const uint32_t* const nBlockPositions = nBlocks->buf;
@@ -313,7 +314,8 @@ applyNs(char sequence[], uint32_t start, uint32_t end, Py_buffer *nBlocks)
 }
 
 static void
-applyMask(char sequence[], uint32_t start, uint32_t end, Py_buffer* maskBlocks)
+applyMask(char sequence[], Py_ssize_t start, Py_ssize_t end,
+          Py_buffer* maskBlocks)
 {
     const Py_ssize_t maskBlockCount = maskBlocks->shape[0];
     const uint32_t* const maskBlockPositions = maskBlocks->buf;
@@ -396,25 +398,6 @@ TwoBit_convert(PyObject* self, PyObject* args, PyObject* keywords)
                                      &blocks_converter, &maskBlocks))
         return NULL;
 
-    if (length > UINT32_MAX) {
-        PyErr_Format(PyExc_ValueError,
-                     "data is too long (%zd bytes, maximum is %u).",
-                     length, UINT32_MAX);
-        return 0;
-    }
-    if (start > UINT32_MAX) {
-        PyErr_Format(PyExc_ValueError,
-                     "start is too high (%zd, maximum is %u).",
-                     start, UINT32_MAX);
-        return 0;
-    }
-    if (end > UINT32_MAX) {
-        PyErr_Format(PyExc_ValueError,
-                     "end is too high (%zd, maximum is %u).",
-                     end, UINT32_MAX);
-        return 0;
-    }
-
     size = (end - start) / step;
     object = PyBytes_FromStringAndSize(NULL, size);
     if (!object) goto exit;
@@ -422,27 +405,26 @@ TwoBit_convert(PyObject* self, PyObject* args, PyObject* keywords)
     sequence = PyBytes_AS_STRING(object);
 
     if (step == 1) {
-        if (extract(data, (uint32_t)length, (uint32_t)start, (uint32_t)end,
-                    sequence) < 0) {
+        if (extract(data, length, start, end, sequence) < 0) {
             Py_DECREF(object);
             object = NULL;
             goto exit;
         }
-        applyNs(sequence, (uint32_t)start, (uint32_t)end, &nBlocks);
-        applyMask(sequence, (uint32_t)start, (uint32_t)end, &maskBlocks);
+        applyNs(sequence, start, end, &nBlocks);
+        applyMask(sequence, start, end, &maskBlocks);
     }
     else {
         Py_ssize_t current, i;
-        uint32_t full_start, full_end;
+        Py_ssize_t full_start, full_end;
         char* full_sequence;
         if (start <= end) {
-            full_start = (uint32_t)start;
-            full_end = (uint32_t)end;
+            full_start = start;
+            full_end = end;
             current = 0; /* first position in sequence */
         }
         else {
-            full_start = (uint32_t)end + 1;
-            full_end = (uint32_t)start + 1;
+            full_start = end + 1;
+            full_end = start + 1;
             current = start - end - 1; /* last position in sequence */
         }
         full_sequence = PyMem_Malloc((full_end-full_start+1)*sizeof(char));
@@ -452,8 +434,7 @@ TwoBit_convert(PyObject* self, PyObject* args, PyObject* keywords)
             object = NULL;
             goto exit;
         }
-        if (extract(data, (uint32_t)length, full_start, full_end,
-                    full_sequence) < 0) {
+        if (extract(data, length, full_start, full_end, full_sequence) < 0) {
             PyMem_Free(full_sequence);
             Py_DECREF(object);
             object = NULL;
