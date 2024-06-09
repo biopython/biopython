@@ -37,8 +37,7 @@ tricky part are the last two letters of the function name (here:
 matches (and mismatches) and gaps. The first letter decodes the match
 score, e.g. ``x`` means that a match counts 1 while mismatches have no
 costs. With ``m`` general values for either matches or mismatches can be
-defined (for more options see `Biopython’s
-API <http://biopython.org/docs/1.77/api/Bio.pairwise2.html>`__). The
+defined (for full details see :py:mod:`Bio.pairwise2`). The
 second letter decodes the cost for gaps; ``x`` means no gap costs at
 all, with ``s`` different penalties for opening and extending a gap can
 be assigned. So, ``globalxx`` means that only matches between both
@@ -207,5 +206,4 @@ penalties and end gaps penalties can be different for both sequences,
 sequences can be supplied as lists (useful if you have residues that are
 encoded by more than one character), etc. These features are hard (if at
 all) to realize with other alignment tools. For more details see the
-modules documentation in `Biopython’s
-API <http://biopython.org/docs/\bpversion/api/Bio.pairwise2.html>`__.
+module's API documentation :py:mod:`Bio.pairwise2`.

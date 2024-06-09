@@ -218,7 +218,7 @@ Frequently Asked Questions (FAQ)
 
 #. | *What file formats do* ``Bio.SeqIO`` *and* ``Bio.AlignIO`` *read
      and write?*
-   | Check the built in docstrings (``from Bio import SeqIO``, then
+   | Check the built-in docstrings (``from Bio import SeqIO``, then
      ``help(SeqIO)``), or see http://biopython.org/wiki/SeqIO and
      http://biopython.org/wiki/AlignIO on the wiki for the latest
      listing.
