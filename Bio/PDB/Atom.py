@@ -291,7 +291,7 @@ class Atom:
         return (
             self.name == other.name
             and np.isclose(self.bfactor, other.bfactor)
-            and self.occupancy == other.occupancy
+            and np.isclose(self.occupancy, other.occupancy)
             and self.altloc == other.altloc
             and self.fullname == other.fullname
             and (np.allclose(self.coord, other.coord) if compare_coordinates else True)
