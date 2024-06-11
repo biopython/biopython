@@ -193,8 +193,9 @@ EXTENSIONS = [
     Extension(
         "Bio.Cluster._cluster", ["Bio/Cluster/cluster.c", "Bio/Cluster/clustermodule.c"]
     ),
-    Extension("Bio.PDB.kdtrees", ["Bio/PDB/kdtrees.c"]),
     Extension("Bio.PDB.ccealign", ["Bio/PDB/ccealignmodule.c"]),
+    Extension("Bio.PDB.kdtrees", ["Bio/PDB/kdtrees.c"]),
+    Extension("Bio.PDB._bcif_helper", ["Bio/PDB/bcifhelpermodule.c"]),
     Extension("Bio.SeqIO._twoBitIO", ["Bio/SeqIO/_twoBitIO.c"]),
 ]
 
