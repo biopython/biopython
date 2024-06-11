@@ -111,18 +111,18 @@ class CEAligner:
 
         # Run CEAlign
         # CEAlign returns the best N paths, where each path is a pair of lists
-        # with aligned atom indices. Paths are not guaranteed to be unique.
+        # with aligned atom indices.
         paths = run_cealign(self.refcoord, coord, self.window_size, self.max_gap)
         longest_length = len(paths[0][0])
-        unique_paths = [
+        longest_paths = [
             (tuple(pA), tuple(pB)) for pA, pB in paths if len(pA) == longest_length
         ]
 
-        # Iterate over unique paths and find the one that gives the lowest
+        # Iterate over paths and find the one that gives the lowest
         # corresponding RMSD. Use QCP to align the molecules.
         best_rmsd, best_u = 1e6, None
-        for u_path in unique_paths:
-            idxA, idxB = u_path
+        for path in longest_paths:
+            idxA, idxB = path
 
             coordsA = np.array([self.refcoord[i] for i in idxA])
             coordsB = np.array([coord[i] for i in idxB])
