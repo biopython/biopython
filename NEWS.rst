@@ -55,6 +55,11 @@ A function called ``Bio.Phylo.to_igraph`` has been added to convert a
 ``Bio.Phylo.Tree`` into an ``igraph.Graph`` graph, in parallel to the existing
 function to convert the same object into a ``networkx`` graph.
 
+The PDB module's CE Align code for pairwise structure alignment was cleaned up,
+and the improved CE align code now considers more alignments and selects one of
+the longer alignments with the smallest RMSD. As a result, users may find
+alignments with slightly smaller RMSDs when using CE Align.
+
 The PDB module no longer uses the PDB FTP server by default.
 Instead, the PDB module uses the HTTPS server in most cases.
 For ``get_all_assemblies``, the PDB module now uses the
