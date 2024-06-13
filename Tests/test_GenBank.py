@@ -7639,6 +7639,29 @@ KEYWORDS    """,
         embl = record.format("embl")
         self.assertIn("XX\nPR   Project:PRJNA57779;\nXX\n", embl)
 
+    def test_dblink_multiline(self):
+        """Parse GenBank record with multiline DBLINK entries."""
+        path = "GenBank/EZ116220.gb"
+        record = SeqIO.read(path, "gb")
+        self.assertEqual(
+            record.dbxrefs,
+            [
+                "BioProject:PRJNA39555",
+                "Sequence Read Archive:SRX001885, SRX001121, SRX001531, SRX001530, SRX001529",
+            ],
+        )
+        gb = record.format("gb")
+        self.assertTrue(
+            """
+DBLINK      BioProject: PRJNA39555
+            Sequence Read Archive: SRX001885, SRX001121, SRX001531, SRX001530, SRX001529
+KEYWORDS    """
+            in gb,
+            gb,
+        )
+        embl = record.format("embl")
+        self.assertIn("XX\nPR   Project:PRJNA39555;\nXX\n", embl)
+
     def test_dbline_gb_embl(self):
         """Parse GenBank/EMBL paired records with PR project entry: GenBank."""
         record = SeqIO.read("GenBank/DS830848.gb", "gb")
