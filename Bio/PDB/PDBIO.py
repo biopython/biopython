@@ -13,10 +13,12 @@ from Bio.PDB.PDBExceptions import PDBIOException
 
 # To allow saving of chains, residues, etc..
 from Bio.PDB.StructureBuilder import StructureBuilder
+from Bio.PDB.Residue import Residue
 
 # Allowed Elements
 from Bio.Data.IUPACData import atom_weights
 
+from typing import Optional
 
 _ATOM_FORMAT_STRING = (
     "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%s%6.2f      %4s%2s%2s\n"
@@ -146,6 +148,9 @@ class PDBIO(StructureIO):
         """
         self.use_model_flag = use_model_flag
         self.is_pqr = is_pqr
+        self.chain_id = None
+        self.atom_number = None
+        self.__ter_str = None
 
     # private methods
 
@@ -167,6 +172,10 @@ class PDBIO(StructureIO):
         else:
             record_type = "ATOM  "
 
+        # Ensure chain id isn't longer than 1 character
+        if len(chain_id) > 1:
+            e = f"Chain ID ('{chain_id!r} exceeds PDB format limit"
+            raise PDBIOException(e)
         # Atom properties
 
         # Check if the atom serial number is an integer
@@ -177,11 +186,11 @@ class PDBIO(StructureIO):
         except ValueError:
             raise ValueError(
                 f"{atom_number!r} is not a number."
-                "Atom serial numbers must be numerical"
+                " PDB Atom serial numbers must be numerical"
                 " If you are converting from an mmCIF"
                 " structure, try using"
                 " preserve_atom_numbering=False"
-            )
+            ) from None
 
         if atom_number > 99999:
             raise ValueError(
@@ -294,6 +303,91 @@ class PDBIO(StructureIO):
             return _PQR_ATOM_FORMAT_STRING % args
 
     # Public methods
+    def get_ter_str(self) -> str:
+        """Return current PDB TER string.
+
+        Increments self.atom_number unless user overrides in
+        PDBIO.save() with preserve_atom_numbering
+        """
+        try:
+            # if need TER string then need atom_number incremented
+            self.atom_number += 1
+        except TypeError:
+            # preserve_atom_numbering, assume user accounts for TER as needed
+            pass
+        return self.__ter_str
+
+    def pdb_residue_string(
+        self, residue: Residue, chain_id: Optional[str] = None
+    ) -> Optional[str]:
+        """Generate PDB ATOM records for supplied residue as string.
+
+        :param residue: Biopython Reidue object
+        :param chain_id: Optional string
+            If set, this will be chain ID for output lines
+            else use self.chain_id if set
+            else get residue.parent.id
+
+        self.atom_number (if set) will override Atom.serial_number and be
+            incremented for each atom in residue
+        private PDB TER string generated after each residue as can't know when
+            TER will be needed.  Access with self.get_ter_str()
+        """
+        res_str = ""
+        get_atom_line = self._get_atom_line
+        if not hasattr(self, "select"):
+            self.select = _select
+        if chain_id is None:
+            chain_id = self.chain_id
+            if chain_id is None and residue.parent is not None:
+                chain_id = residue.parent.get_id()
+        hetfield, resseq, icode = residue.get_id()
+        resname = residue.get_resname()
+        segid = residue.get_segid()
+        if resseq > 9999:
+            e = f"Residue number ('{resseq}') exceeds PDB format limit."
+            raise PDBIOException(e)
+
+        atom_number = None
+        for atom in residue.get_unpacked_list():
+            if self.select.accept_atom(atom):
+                if self.atom_number is None:  # preserve_atom_numbering == True
+                    atom_number = atom.get_serial_number()
+                else:
+                    atom_number = self.atom_number
+                    self.atom_number += 1
+
+                try:
+                    s = get_atom_line(
+                        atom,
+                        hetfield,
+                        segid,
+                        atom_number,
+                        resname,
+                        resseq,
+                        icode,
+                        chain_id,
+                    )
+                except Exception as err:
+                    # catch and re-raise with more information
+                    raise PDBIOException(
+                        f"Error when writing atom {atom.full_id}"
+                    ) from err
+                else:
+                    res_str += s
+
+        if atom_number is not None:  # did find atom to write
+            # atom_number is either self.atom_number
+            # or atom.get_serial_number() if preserve_atom_numbering
+            # must save string now in case we need
+            self.__ter_str = (
+                "TER   %5i      %3s %c%4i%c                                                      \n"
+                % (atom_number + 1, resname, chain_id, resseq, icode)
+            )
+            return res_str
+        else:
+            return None
+
     def save(self, file, select=_select, write_end=True, preserve_atom_numbering=False):
         """Save structure to a file.
 
@@ -314,8 +408,11 @@ class PDBIO(StructureIO):
         These methods should return 1 if the entity is to be
         written out, 0 otherwise.
 
-        Typically select is a subclass of L{Select}.
+        :param preserve_atom_numbering: bool default False
+            use number stored in Biopython Atom if True; default behaviour is
+            to number atoms starting from 1, regardless of original input data.
         """
+        self.select = select
         if isinstance(file, str):
             fhandle = open(file, "w")
         else:
@@ -337,18 +434,15 @@ class PDBIO(StructureIO):
             # do not write ENDMDL if no residues were written
             # for this model
             model_residues_written = 0
-            if not preserve_atom_numbering:
-                atom_number = 1
+            self.atom_number = None if preserve_atom_numbering else 1
+
             if model_flag:
                 fhandle.write(f"MODEL      {model.serial_num}\n")
 
             for chain in model.get_list():
                 if not select.accept_chain(chain):
                     continue
-                chain_id = chain.id
-                if len(chain_id) > 1:
-                    e = f"Chain id ('{chain_id}') exceeds PDB format limit."
-                    raise PDBIOException(e)
+                self.chain_id = chain.id
 
                 # necessary for TER
                 # do not write TER if no residues were written
@@ -358,53 +452,18 @@ class PDBIO(StructureIO):
                 for residue in chain.get_unpacked_list():
                     if not select.accept_residue(residue):
                         continue
-                    hetfield, resseq, icode = residue.id
-                    resname = residue.resname
-                    segid = residue.segid
-                    resid = residue.id[1]
-                    if resid > 9999:
-                        e = f"Residue number ('{resid}') exceeds PDB format limit."
-                        raise PDBIOException(e)
-
-                    for atom in residue.get_unpacked_list():
-                        if not select.accept_atom(atom):
-                            continue
+                    res_str = self.pdb_residue_string(residue)
+                    if res_str is not None:
                         chain_residues_written = 1
                         model_residues_written = 1
-                        if preserve_atom_numbering:
-                            atom_number = atom.serial_number
-
-                        try:
-                            s = get_atom_line(
-                                atom,
-                                hetfield,
-                                segid,
-                                atom_number,
-                                resname,
-                                resseq,
-                                icode,
-                                chain_id,
-                            )
-                        except Exception as err:
-                            # catch and re-raise with more information
-                            raise PDBIOException(
-                                f"Error when writing atom {atom.full_id}"
-                            ) from err
-                        else:
-                            fhandle.write(s)
-                            # inconsequential if preserve_atom_numbering is True
-                            atom_number += 1
+                        fhandle.write(res_str)
 
                 if chain_residues_written:
-                    fhandle.write(
-                        _TER_FORMAT_STRING
-                        % (atom_number, resname, chain_id, resseq, icode)
-                    )
+                    fhandle.write(self.get_ter_str())
 
             if model_flag and model_residues_written:
                 fhandle.write("ENDMDL\n")
         if write_end:
             fhandle.write("END   \n")
-
         if isinstance(file, str):
             fhandle.close()
