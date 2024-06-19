@@ -211,6 +211,149 @@ calcS(
     return S;
 }
 
+static const double tableZtoP[] = {
+    1.0, 9.20e-01, 8.41e-01, 7.64e-01, 6.89e-01, 6.17e-01, 5.49e-01, 4.84e-01, 4.24e-01, 3.68e-01,
+    3.17e-01, 2.71e-01, 2.30e-01, 1.94e-01, 1.62e-01, 1.34e-01, 1.10e-01, 8.91e-02, 7.19e-02, 5.74e-02,
+    4.55e-02, 3.57e-02, 2.78e-02, 2.14e-02, 1.64e-02, 1.24e-02, 9.32e-03, 6.93e-03, 5.11e-03, 3.73e-03,
+    2.70e-03, 1.94e-03, 1.37e-03, 9.67e-04, 6.74e-04, 4.65e-04, 3.18e-04, 2.16e-04, 1.45e-04, 9.62e-05,
+    6.33e-05, 4.13e-05, 2.67e-05, 1.71e-05, 1.08e-05, 6.80e-06, 4.22e-06, 2.60e-06, 1.59e-06, 9.58e-07,
+    5.73e-07, 3.40e-07, 1.99e-07, 1.16e-07, 6.66e-08, 3.80e-08, 2.14e-08, 1.20e-08, 6.63e-09, 3.64e-09,
+    1.97e-09, 1.06e-09, 5.65e-10, 2.98e-10, 1.55e-10, 8.03e-11, 4.11e-11, 2.08e-11, 1.05e-11, 5.20e-12,
+    2.56e-12, 1.25e-12, 6.02e-13, 2.88e-13, 1.36e-13, 6.38e-14, 2.96e-14, 1.36e-14, 6.19e-15, 2.79e-15,
+    1.24e-15, 5.50e-16, 2.40e-16, 1.04e-16, 4.46e-17, 1.90e-17, 7.97e-18, 3.32e-18, 1.37e-18, 5.58e-19,
+    2.26e-19, 9.03e-20, 3.58e-20, 1.40e-20, 5.46e-21, 2.10e-21, 7.99e-22, 3.02e-22, 1.13e-22, 4.16e-23,
+    1.52e-23, 5.52e-24, 1.98e-24, 7.05e-25, 2.48e-25, 8.64e-26, 2.98e-26, 1.02e-26, 3.44e-27, 1.15e-27,
+    3.82e-28, 1.25e-28, 4.08e-29, 1.31e-29, 4.18e-30, 1.32e-30, 4.12e-31, 1.27e-31, 3.90e-32, 1.18e-32,
+    3.55e-33, 1.06e-33, 3.11e-34, 9.06e-35, 2.61e-35, 7.47e-36, 2.11e-36, 5.91e-37, 1.64e-37, 4.50e-38,
+    1.22e-38, 3.29e-39, 8.77e-40, 2.31e-40, 6.05e-41, 1.56e-41, 4.00e-42, 1.02e-42, 2.55e-43, 6.33e-44,
+    1.56e-44, 3.80e-45, 9.16e-46, 2.19e-46, 5.17e-47, 1.21e-47, 2.81e-48, 6.45e-49, 1.46e-49, 3.30e-50};
+
+static const double tablePtoZ[] = {
+    0.00, 0.73, 1.24, 1.64, 1.99, 2.30, 2.58, 2.83, 3.07, 3.29,
+    3.50, 3.70, 3.89, 4.07, 4.25, 4.42, 4.58, 4.74, 4.89, 5.04,
+    5.19, 5.33, 5.46, 5.60, 5.73, 5.86, 5.99, 6.11, 6.23, 6.35,
+    6.47, 6.58, 6.70, 6.81, 6.92, 7.02, 7.13, 7.24, 7.34, 7.44,
+    7.54, 7.64, 7.74, 7.84, 7.93, 8.03, 8.12, 8.21, 8.30, 8.40,
+    8.49, 8.57, 8.66, 8.75, 8.84, 8.92, 9.01, 9.09, 9.17, 9.25,
+    9.34, 9.42, 9.50, 9.58, 9.66, 9.73, 9.81, 9.89, 9.97, 10.04,
+    10.12, 10.19, 10.27, 10.34, 10.41, 10.49, 10.56, 10.63, 10.70, 10.77,
+    10.84, 10.91, 10.98, 11.05, 11.12, 11.19, 11.26, 11.32, 11.39, 11.46,
+    11.52, 11.59, 11.66, 11.72, 11.79, 11.85, 11.91, 11.98, 12.04, 12.10,
+    12.17, 12.23, 12.29, 12.35, 12.42, 12.48, 12.54, 12.60, 12.66, 12.72,
+    12.78, 12.84, 12.90, 12.96, 13.02, 13.07, 13.13, 13.19, 13.25, 13.31,
+    13.36, 13.42, 13.48, 13.53, 13.59, 13.65, 13.70, 13.76, 13.81, 13.87,
+    13.92, 13.98, 14.03, 14.09, 14.14, 14.19, 14.25, 14.30, 14.35, 14.41,
+    14.46, 14.51, 14.57, 14.62, 14.67, 14.72, 14.77, 14.83, 14.88, 14.93};
+
+static double zToP(const double z)
+{
+    int index = (int)(z / 0.1);
+
+    if (index < 0) {
+        index = 0;
+    }
+    if (index > 149) {
+        index = 149;
+    }
+
+    return tableZtoP[index];
+}
+
+static double pToZ(const double p)
+{
+    int index = (int)(-log10(p) * 3.0);
+
+    if (index < 0) {
+        index = 0;
+    }
+    if (index > 149) {
+        index = 149;
+    }
+
+    return tablePtoZ[index];
+}
+
+static const double similarityAvgs[] =
+    {2.54, 2.51, 2.72, 3.01, 3.31, 3.61, 3.90, 4.19, 4.47, 4.74,
+        4.99, 5.22, 5.46, 5.70, 5.94, 6.13, 6.36, 6.52, 6.68, 6.91};
+static const double similaritySDs[] =
+    {1.33, 0.88, 0.73, 0.71, 0.74, 0.80, 0.86, 0.92, 0.98, 1.04,
+        1.08, 1.10, 1.15, 1.19, 1.23, 1.25, 1.32, 1.34, 1.36, 1.45};
+
+static double zScoreSimilarity(
+    const int fragmentSize,
+    const int pathLength,
+    const double similarity)
+{
+    if (fragmentSize != 8 || pathLength < 1) {
+        return 0.0;
+    }
+
+    double similarityAvg, similaritySD;
+
+    if (pathLength < 21) {
+        similarityAvg = similarityAvgs[pathLength - 1];
+        similaritySD = similaritySDs[pathLength - 1];
+    }
+    else {
+        similarityAvg = 0.209874 * pathLength + 2.944714;
+        similaritySD = 0.039487 * pathLength + 0.675735;
+    }
+    if (similarity > similarityAvg) {
+        return 0.0;
+    }
+
+    return (similarityAvg - similarity) / similaritySD;
+}
+
+static const double gapCountAvgs[] =
+    {0.00, 11.50, 23.32, 35.95, 49.02, 62.44, 76.28, 90.26,
+        104.86, 119.97, 134.86, 150.54, 164.86, 179.57, 194.39,
+        209.38, 224.74, 238.96, 253.72, 270.79};
+static const double gapCountSDs[] =
+    {0.00, 9.88, 14.34, 17.99, 21.10, 23.89, 26.55, 29.00, 31.11,
+        33.10, 35.02, 36.03, 37.19, 38.82, 41.04, 43.35, 45.45,
+        48.41, 50.87, 52.27};
+
+static double zScoreGapCount(
+    const int fragmentSize,
+    const int pathLength,
+    const int gapCount)
+{
+    if (fragmentSize != 8 || pathLength < 2) {
+        return 0.0;
+    }
+
+    double gapCountAvg, gapCountSD;
+
+    if (pathLength < 21) {
+        gapCountAvg = gapCountAvgs[pathLength - 1];
+        gapCountSD = gapCountSDs[pathLength - 1];
+    }
+    else {
+        gapCountAvg = 14.949173 * pathLength - 14.581193;
+        gapCountSD = 2.045067 * pathLength + 13.191095;
+    }
+    if (gapCount > gapCountAvg) {
+        return 0.0;
+    }
+
+    return (gapCountAvg - gapCount) / gapCountSD;
+}
+
+static double calcZScore(
+    const int fragmentSize,
+    const int pathLength,
+    const double pathSimilarity,
+    const int gapCount)
+{
+    const double z1 = zScoreSimilarity(
+        fragmentSize, pathLength, pathSimilarity);
+    const double z2 = zScoreGapCount(fragmentSize, pathLength, gapCount);
+
+    return pToZ(zToP(z1) * zToP(z2));
+}
+
 static pcePoint
 getCoords(PyObject *L, int length)
 {
@@ -425,6 +568,21 @@ findPath(
         } // ROF -- end for iB
     }     // ROF -- end for iA
 
+    double zScoreBuffer[MAX_PATHS];
+
+    for (int i = 0; i < bufferSize; i++) {
+        const int pathLength = lenBuffer[i];
+        const double pathSimilarity = similarityBuffer[i];
+        int gapCount = 0;
+
+        for (int j = 1; j < pathLength; j++) {
+            gapCount += pathBuffer[i][j].pA - pathBuffer[i][j - 1].pA - 1;
+            gapCount += pathBuffer[i][j].pB - pathBuffer[i][j - 1].pB - 1;
+        }
+
+        zScoreBuffer[i] = calcZScore(fragmentSize, pathLength, pathSimilarity, gapCount);
+    }
+
     // To make it simpler to use this code and more portable, we are decoupling
     // the path finding (the actual CEAlign innovation) from the RMSD
     // calculation.
@@ -461,9 +619,11 @@ findPath(
             }
         }
 
+        const double zScore = zScoreBuffer[o];
         PyObject *pairList = Py_BuildValue("[NN]", pathAList, pathBList);
         Py_INCREF(pairList);
-        PyList_SET_ITEM(result, o, pairList);
+        PyObject *pathAndScore = Py_BuildValue("[Nd]", pairList, zScore);
+        PyList_SET_ITEM(result, o, pathAndScore);
     }
 
     return result;
