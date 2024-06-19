@@ -33,7 +33,7 @@ class MMCIF2Dict(dict):
             self[token[0:5]] = token[5:]
             if not token[0:5].startswith("data_"):
                 raise ValueError(
-                    f"The mmCIF file {filename} does not start with 'data_'"
+                    "The input mmCIF file must begin with a 'data_' directive."
                 )
             i = 0
             n = 0
