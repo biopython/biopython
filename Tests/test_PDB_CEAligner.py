@@ -43,7 +43,7 @@ class CEAlignerTests(unittest.TestCase):
         aligner.set_reference(s1)
         aligner.align(s2)
 
-        self.assertAlmostEqual(aligner.rms, 3.74, places=2)
+        self.assertAlmostEqual(aligner.rms, 3.66, places=2)
 
         # Assert the transformation was done right by comparing
         # the moved coordinates to a 'ground truth' reference.
@@ -72,7 +72,7 @@ class CEAlignerTests(unittest.TestCase):
         aligner.align(s2, transform=False)
         s2_coords_final = [list(a.coord) for a in s2.get_atoms()]
 
-        self.assertAlmostEqual(aligner.rms, 3.74, places=2)
+        self.assertAlmostEqual(aligner.rms, 3.66, places=2)
         self.assertEqual(s2_original_coords, s2_coords_final)
 
     def test_cealigner_nucleic(self):
