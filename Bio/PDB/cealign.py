@@ -110,36 +110,67 @@ class CEAligner:
             raise PDBException(msg)
 
         # Run CEAlign
-        # CEAlign returns the best N paths, where each path is a pair of lists
-        # with aligned atom indices.
+        # CEAlign returns the best N paths, sorted descending by length,
+        # where each path is a pair of lists with aligned atom indices.
         paths = run_cealign(self.refcoord, coord, self.window_size, self.max_gap)
-        longest_length = len(paths[0][0])
-        longest_paths = [
-            (tuple(pA), tuple(pB)) for pA, pB in paths if len(pA) == longest_length
-        ]
+        longest_paths = [path for path in paths if len(path[0]) == len(paths[0][0])]
 
         # Iterate over paths and find the one that gives the lowest
         # corresponding RMSD. Use QCP to align the molecules.
-        best_rmsd, best_u = 1e6, None
+        aln = QCPSuperimposer()
+        best_rmsd, best_rigid_motion = 1e6, None
+        best_path = None
         for path in longest_paths:
             idxA, idxB = path
 
             coordsA = np.array([self.refcoord[i] for i in idxA])
             coordsB = np.array([coord[i] for i in idxB])
 
-            aln = QCPSuperimposer()
             aln.set(coordsA, coordsB)
             aln.run()
             if aln.rms < best_rmsd:
                 best_rmsd = aln.rms
-                best_u = (aln.rot, aln.tran)
+                best_rigid_motion = (aln.rot, aln.tran)
+                best_path = path
 
-        if best_u is None:
+        # Gap optimization
+        for ab_index in [0, 1]:
+            gaps = [
+                (index, gap)
+                for index, gap in enumerate(
+                    right - left - 1
+                    for left, right in zip(best_path[ab_index], best_path[ab_index][1:])
+                )
+                if gap
+            ]
+
+            for index, gap in gaps:
+                best_shift = 0
+
+                for shift in range(min(self.window_size // 2 + 1, gap + 1)):
+                    best_path[ab_index][index] += shift
+                    idxA, idxB = best_path
+
+                    coordsA = np.array([self.refcoord[i] for i in idxA])
+                    coordsB = np.array([coord[i] for i in idxB])
+
+                    aln.set(coordsA, coordsB)
+                    aln.run()
+                    best_path[ab_index][index] -= shift
+
+                    if aln.rms < best_rmsd:
+                        best_shift = shift
+                        best_rmsd = aln.rms
+                        best_rigid_motion = (aln.rot, aln.tran)
+
+                best_path[ab_index][index] += best_shift
+
+        if best_rigid_motion is None:
             raise RuntimeError("Failed to find a suitable alignment.")
 
         if transform:
             # Transform all atoms
-            rotmtx, trvec = best_u
+            rotmtx, trvec = best_rigid_motion
             for chain in structure.get_chains():
                 for resid in chain.get_unpacked_list():
                     for atom in resid.get_unpacked_list():
