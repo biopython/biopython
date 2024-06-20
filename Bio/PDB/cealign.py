@@ -144,21 +144,16 @@ class CEAligner:
         # Gap optimization
         if best_z_score and best_z_score >= 3.5:
             for ab_index in [0, 1]:
-                gaps = [
-                    (index, gap)
-                    for index, gap in enumerate(
-                        right - left - 1
-                        for left, right in zip(
-                            best_path[ab_index], best_path[ab_index][1:]
-                        )
-                    )
-                    if gap
-                ]
-
-                for index, gap in gaps:
+                for index in range(1, len(best_path[ab_index]) - 1):
                     best_shift = 0
+                    left = best_path[ab_index][index - 1]
+                    center = best_path[ab_index][index]
+                    right = best_path[ab_index][index + 1]
 
-                    for shift in range(min(self.window_size // 2 + 1, gap + 1)):
+                    for shift in range(
+                        max(-self.window_size // 2, left - center + 1),
+                        min(self.window_size // 2 + 1, right - center),
+                    ):
                         best_path[ab_index][index] += shift
                         idxA, idxB = best_path
 
