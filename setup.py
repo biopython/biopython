@@ -31,11 +31,28 @@ try:
     from setuptools import setup
     from setuptools import Command
     from setuptools import Extension
+    from setuptools import __version__ as setuptools_version
 except ImportError:
     sys.exit(
         "We need the Python library setuptools to be installed. "
         "Try running: python -m ensurepip"
     )
+
+
+setuptools_version_tuple = tuple(int(x) for x in setuptools_version.split("."))
+if setuptools_version_tuple < (70, 1) and "bdist_wheel" in sys.argv:
+    # Check for presence of wheel in setuptools < 70.1
+    # Before setuptools 70.1, wheel is needed to make a bdist_wheel.
+    # Since 70.1 was released including
+    # https://github.com/pypa/setuptools/pull/4369,
+    # it is not needed.
+    try:
+        import wheel  # noqa: F401
+    except ImportError:
+        sys.exit(
+            "We need both setuptools AND wheel packages installed "
+            "for bdist_wheel to work. Try running: pip install wheel"
+        )
 
 
 # Make sure we have the right Python version.
