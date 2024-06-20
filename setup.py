@@ -37,15 +37,6 @@ except ImportError:
         "Try running: python -m ensurepip"
     )
 
-if "bdist_wheel" in sys.argv:
-    try:
-        import wheel  # noqa: F401
-    except ImportError:
-        sys.exit(
-            "We need both setuptools AND wheel packages installed "
-            "for bdist_wheel to work. Try running: pip install wheel"
-        )
-
 
 # Make sure we have the right Python version.
 MIN_PY_VER = (3, 9)
