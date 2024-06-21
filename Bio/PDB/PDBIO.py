@@ -409,7 +409,7 @@ class PDBIO(StructureIO):
                             # catch and re-raise with more information
                             raise PDBIOException(
                                 f"Error when writing atom {atom.full_id}: {err}"
-                            ) from None
+                            ) from err
                         else:
                             fhandle.write(s)
                             # inconsequential if preserve_atom_numbering is True
