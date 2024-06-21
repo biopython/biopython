@@ -35,18 +35,6 @@ except ImportError:
         "See http://www.numpy.org/"
     ) from None
 
-try:
-    _long_dtype = np.long  # numpy version >= 2.0, corresponds to C long
-except AttributeError:
-    _long_dtype = int  # numpy version < 2.0, corresponds to C long
-    _long_dtype_doc = ""
-else:
-    if np.long == np.int64:
-        _long_dtype_doc = ""
-    elif np.long == np.int32:
-        _long_dtype_doc = ", dtype=int32"
-
-
 from Bio import BiopythonDeprecationWarning
 from Bio.Align import _aligncore  # type: ignore
 from Bio.Align import _pairwisealigner  # type: ignore
@@ -1025,7 +1013,7 @@ class Alignment:
     """
 
     @classmethod
-    def infer_coordinates(cls, lines):  # noqa: D102
+    def infer_coordinates(cls, lines):
         """Infer the coordinates from a printed alignment (DEPRECATED).
 
         This method is primarily employed in Biopython's alignment parsers,
@@ -1052,9 +1040,9 @@ class Alignment:
         >>> coordinates
         array([[ 0,  1,  4,  6, 11, 12],
                [ 0,  1,  4,  4,  9,  9],
-               [ 0,  0,  3,  5, 10, 11]]%s)
+               [ 0,  0,  3,  5, 10, 11]])
         >>> alignment = Alignment(sequences, coordinates)
-        """ % _long_dtype_doc
+        """
         warnings.warn(
             "The method infer_coordinates is deprecated; please use the "
             "method parse_printed_alignment instead. This method is much "
@@ -1067,7 +1055,7 @@ class Alignment:
         return coordinates
 
     @classmethod
-    def parse_printed_alignment(cls, lines):  # noqa: D102
+    def parse_printed_alignment(cls, lines):
         """Infer the sequences and coordinates from a printed alignment.
 
         This method is primarily employed in Biopython's alignment parsers,
@@ -1097,7 +1085,7 @@ class Alignment:
         >>> coordinates
         array([[ 0,  1,  4,  6, 11, 12],
                [ 0,  1,  4,  4,  9,  9],
-               [ 0,  0,  3,  5, 10, 11]]%s)
+               [ 0,  0,  3,  5, 10, 11]])
         >>> sequences = [Seq(sequence) for sequence in sequences]
         >>> sequences
         [Seq('TAGGCATACGTG'), Seq('AACGTACGT'), Seq('ACGCATACTTG')]
@@ -1107,14 +1095,14 @@ class Alignment:
                           0 AACG--TACGT-  9
                           0 -ACGCATACTTG 11
         <BLANKLINE>
-        """ % _long_dtype_doc
+        """
         parser = _aligncore.PrintedAlignmentParser(b"\0")
         sequences = []
         for line in lines:
             nbytes, sequence = parser.feed(line)
             sequences.append(sequence)
         shape = parser.shape
-        coordinates = np.empty(shape, _long_dtype)
+        coordinates = np.empty(shape, int)
         parser.fill(coordinates)
         return sequences, coordinates
 
