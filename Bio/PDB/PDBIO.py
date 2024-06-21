@@ -5,6 +5,7 @@
 
 """Output of PDB files."""
 
+import os
 import warnings
 
 # Exceptions and Warnings
@@ -320,6 +321,7 @@ class PDBIO(StructureIO):
             fhandle = open(file, "w")
         else:
             # filehandle, I hope :-)
+            _initial_position = file.tell()
             fhandle = file
 
         get_atom_line = self._get_atom_line
@@ -386,10 +388,28 @@ class PDBIO(StructureIO):
                                 chain_id,
                             )
                         except Exception as err:
+                            # If writing fails, remove or truncate the file
+                            if isinstance(file, str):
+                                try:
+                                    fhandle.close()
+                                    os.remove(fhandle.name)
+                                except Exception as err:
+                                    # Windows can be finnicky with closing
+                                    # file and deleting them, raising PermissionError
+                                    pass
+                            else:
+                                # If the user gave a file handle, seek back to the
+                                # starting position and truncate the file from there
+                                # on. Note that the truncation depends on how we
+                                # opened the file, but we assume the file was opened
+                                # for writing/appending anyway.
+                                fhandle.seek(_initial_position)
+                                fhandle.truncate()
+
                             # catch and re-raise with more information
                             raise PDBIOException(
-                                f"Error when writing atom {atom.full_id}"
-                            ) from err
+                                f"Error when writing atom {atom.full_id}: {err}"
+                            ) from None
                         else:
                             fhandle.write(s)
                             # inconsequential if preserve_atom_numbering is True
