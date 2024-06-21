@@ -93,7 +93,8 @@ class WriteTest(unittest.TestCase):
         with self.assertRaises(PDBIOException):
             self.io.save(filename)
         structure[0]["AA"].id = "A"
-        os.remove(filename)
+        # Assert structure was removed along with exception
+        self.assertFalse(os.path.exists(filename))
 
         # Residue id
         het, ori, ins = structure[0]["A"][152].id
@@ -104,7 +105,7 @@ class WriteTest(unittest.TestCase):
         with self.assertRaises(PDBIOException):
             self.io.save(filename)
         structure[0]["A"][10000].id = (het, ori, ins)
-        os.remove(filename)
+        self.assertFalse(os.path.exists(filename))
 
         # Atom id
         structure[0]["A"][152]["CA"].serial_number = 1e6
@@ -114,7 +115,7 @@ class WriteTest(unittest.TestCase):
         with self.assertRaises(PDBIOException):
             # perserve_... must be True for exception to trigger
             self.io.save(filename, preserve_atom_numbering=True)
-        os.remove(filename)
+        self.assertFalse(os.path.exists(filename))
 
     def test_pdbio_write_auto_numbering(self):
         """Test writing PDB and do not preserve atom numbering."""
@@ -377,7 +378,7 @@ class WriteTest(unittest.TestCase):
 
         with self.assertRaises(PDBIOException):
             self.io.save(filename)
-        os.remove(filename)
+        self.assertFalse(os.path.exists(filename))
 
 
 if __name__ == "__main__":
