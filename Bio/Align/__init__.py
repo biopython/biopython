@@ -35,6 +35,12 @@ except ImportError:
         "See http://www.numpy.org/"
     ) from None
 
+try:
+    _long_dtype = np.long  # numpy version >= 2.0, corresponds to C long
+except AttributeError:
+    _long_dtype = int  # numpy version < 2.0, corresponds to C long
+
+
 from Bio import BiopythonDeprecationWarning
 from Bio.Align import _aligncore  # type: ignore
 from Bio.Align import _pairwisealigner  # type: ignore
@@ -1102,7 +1108,7 @@ class Alignment:
             nbytes, sequence = parser.feed(line)
             sequences.append(sequence)
         shape = parser.shape
-        coordinates = np.empty(shape, int)
+        coordinates = np.empty(shape, _long_dtype)
         parser.fill(coordinates)
         return sequences, coordinates
 
