@@ -18,7 +18,7 @@ import struct
 import zlib
 
 
-from Bio.Align import Alignment, Alignments
+from Bio.Align import Alignment, Alignments, _long_dtype
 from Bio.Align import bigbed, maf
 from Bio.Align import _aligncore  # type: ignore
 from Bio.Align.bigbed import AutoSQLTable, Field
@@ -337,7 +337,7 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
             else:
                 raise ValueError(f"Error parsing alignment - unexpected line:\n{line}")
         shape = printed_alignment_parser.shape
-        coordinates = np.empty(shape, int)
+        coordinates = np.empty(shape, _long_dtype)
         printed_alignment_parser.fill(coordinates)
         for record, strand, row in zip(records, strands, coordinates):
             if strand == b"+":
