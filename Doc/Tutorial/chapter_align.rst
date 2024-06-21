@@ -4619,7 +4619,7 @@ To parse this file, use
 Iterate over the alignments to get one ``Alignment`` object for each
 line:
 
-.. cont-doctest
+# .. cont-doctest
 
 .. code:: pycon
 
@@ -4637,7 +4637,7 @@ the number of nucleotides aligned to repeat regions, and the number of
 nucleotides aligned to N (unknown) characters. These values are stored
 as attributes to the ``Alignment`` object:
 
-.. cont-doctest
+# .. cont-doctest
 
 .. code:: pycon
 
@@ -4655,7 +4655,7 @@ in the PSL file, the sequence content of ``alignment.target`` and
 ``alignment.query`` is undefined. However, their sequence lengths are
 known:
 
-.. cont-doctest
+# .. cont-doctest
 
 .. code:: pycon
 
@@ -4666,7 +4666,7 @@ known:
 
 We can print the alignment in BED or PSL format:
 
-.. cont-doctest
+# .. cont-doctest
 
 .. code:: pycon
 
