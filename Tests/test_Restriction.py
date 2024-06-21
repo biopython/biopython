@@ -211,6 +211,8 @@ class SimpleEnzyme(unittest.TestCase):
         # Examples from https://github.com/biopython/biopython/issues/4604
         self.assertEqual(BsaI.search(Seq("GGTCTCATAAAA")), [8])
         self.assertEqual(BsaI.search(Seq("GGTCTCATAAA")), [])
+        self.assertEqual(BsaI.search(Seq("GGTCTCGT")), [])
+        self.assertEqual(BsaI.search(Seq("GGTCTCGT").reverse_complement()), [])
 
         self.assertEqual(BsaXI.search(Seq("AAATAAAAAAAAAACAAAAACTCC")), [5])
         self.assertEqual(BsaXI.search(Seq("AATAAAAAAAAAACAAAAACTCC")), [])
