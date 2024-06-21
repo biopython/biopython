@@ -9,6 +9,7 @@
 #include <Python.h>
 #include <stdbool.h>
 
+
 static PyTypeObject ParserType;
 
 typedef struct {
