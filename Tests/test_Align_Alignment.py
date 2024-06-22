@@ -29,6 +29,10 @@ class TestNumpy(unittest.TestCase):
         a = np.zeros(5, np.int64)
         self.assertEqual(repr(a), "array([0, 0, 0, 0, 0])")
 
+    def test_array_dtype(self):
+        a = np.zeros(5, int)
+        self.assertEqual(repr(a.dtype), "dtype('int64')")
+
 
 class TestAlignment(unittest.TestCase):
     def test_empty_alignment(self):
