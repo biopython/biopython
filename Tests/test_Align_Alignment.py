@@ -24,6 +24,12 @@ from Bio.SeqRecord import SeqRecord
 from Bio.SeqUtils import gc_fraction
 
 
+class TestNumpy(unittest.TestCase):
+    def test_array_repr(self):
+        a = np.zeros(5, np.int64)
+        self.assertEqual(repr(a), "array([0, 0, 0, 0, 0])")
+
+
 class TestAlignment(unittest.TestCase):
     def test_empty_alignment(self):
         alignment = Align.Alignment([])
