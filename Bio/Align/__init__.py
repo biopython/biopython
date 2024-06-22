@@ -1037,10 +1037,10 @@ class Alignment:
         >>> sequences
         ['TAGGCATACGTG', 'AACGTACGT', 'ACGCATACTTG']
         >>> coordinates = Alignment.infer_coordinates(lines)
-        >>> coordinates
-        array([[ 0,  1,  4,  6, 11, 12],
-               [ 0,  1,  4,  4,  9,  9],
-               [ 0,  0,  3,  5, 10, 11]])
+        >>> print(coordinates)
+        [[ 0  1  4  6 11 12]
+         [ 0  1  4  4  9  9]
+         [ 0  0  3  5 10 11]]
         >>> alignment = Alignment(sequences, coordinates)
         """
         warnings.warn(
@@ -1082,10 +1082,10 @@ class Alignment:
         >>> sequences, coordinates = Alignment.parse_printed_alignment(lines)
         >>> sequences
         [b'TAGGCATACGTG', b'AACGTACGT', b'ACGCATACTTG']
-        >>> coordinates
-        array([[ 0,  1,  4,  6, 11, 12],
-               [ 0,  1,  4,  4,  9,  9],
-               [ 0,  0,  3,  5, 10, 11]])
+        >>> print(coordinates)
+        [[ 0  1  4  6 11 12]
+         [ 0  1  4  4  9  9]
+         [ 0  0  3  5 10 11]]
         >>> sequences = [Seq(sequence) for sequence in sequences]
         >>> sequences
         [Seq('TAGGCATACGTG'), Seq('AACGTACGT'), Seq('ACGCATACTTG')]
