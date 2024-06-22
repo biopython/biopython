@@ -380,6 +380,67 @@ class WriteTest(unittest.TestCase):
             self.io.save(filename)
         self.assertFalse(os.path.exists(filename))
 
+    # Test revert_write
+    def test_pdbio_revert_write_on_filename(self):
+        """Test removing file when exception is caught (string)."""
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", PDBConstructionWarning)
+            structure = self.parser.get_structure("example", "PDB/1A8O.pdb")
+
+        structure[0]["A"].id = "AA"
+        self.io.set_structure(structure)
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
+        with self.assertRaises(PDBIOException):
+            self.io.save(filename)
+
+        # Assert structure was removed along with exception
+        self.assertFalse(os.path.exists(filename))
+
+    def test_pdbio_revert_write_on_file_handle_1(self):
+        """Test removing file when exception is caught (handle)."""
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", PDBConstructionWarning)
+            structure = self.parser.get_structure("example", "PDB/1A8O.pdb")
+
+        structure[0]["A"].id = "AA"
+        self.io.set_structure(structure)
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
+        with open(filename, "w") as handle:
+            with self.assertRaises(PDBIOException):
+                self.io.save(handle)
+
+        # File should not be removed as we did not create it;
+        # the user did.
+        self.assertTrue(os.path.exists(filename))
+
+    def test_pdbio_revert_write_on_file_handle_2(self):
+        """Test removing file when exception is caught (handle + data)."""
+        blurb = "This is not an empty file\n"
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", PDBConstructionWarning)
+            structure = self.parser.get_structure("example", "PDB/1A8O.pdb")
+
+        structure[0]["A"].id = "AA"
+        self.io.set_structure(structure)
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
+        with open(filename, "w") as handle:
+            handle.write(blurb)
+            with self.assertRaises(PDBIOException):
+                self.io.save(handle)
+
+        # File should not be removed as we did not create it;
+        # the user did.
+        self.assertTrue(os.path.exists(filename))
+
+        # File should contain the data we wrote previous to saving
+        with open(filename) as handle:
+            data = handle.read()
+            self.assertEqual(data, blurb)
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

@@ -294,6 +294,32 @@ class PDBIO(StructureIO):
 
             return _PQR_ATOM_FORMAT_STRING % args
 
+    @staticmethod
+    def _revert_write(handle, truncate_to=None, delete_file=False):
+        """Revert data written to file by removing the file or truncating it.
+
+        This method is used when the writer throws an exception, to avoid
+        writing incomplete files that might confuse users or workflows.
+        """
+        if delete_file:
+            try:
+                handle.close()
+                os.remove(handle.name)
+            except OSError as err:
+                # Windows can be finnicky with closing
+                # file and deleting them, raising PermissionError
+                pass
+        elif truncate_to is not None:
+            # If the user gave a file handle, seek back to the
+            # starting position and truncate the file from there
+            # on. Note that the truncation depends on how we
+            # opened the file, but we assume the file was opened
+            # for writing/appending anyway.
+            handle.seek(truncate_to)
+            handle.truncate()
+        else:
+            raise Exception("One of 'truncate_to' or 'delete_file' must be provided")
+
     # Public methods
     def save(self, file, select=_select, write_end=True, preserve_atom_numbering=False):
         """Save structure to a file.
@@ -321,7 +347,7 @@ class PDBIO(StructureIO):
             fhandle = open(file, "w")
         else:
             # filehandle, I hope :-)
-            _initial_position = file.tell()
+            fd_position = file.tell()
             fhandle = file
 
         get_atom_line = self._get_atom_line
@@ -349,8 +375,13 @@ class PDBIO(StructureIO):
                     continue
                 chain_id = chain.id
                 if len(chain_id) > 1:
-                    e = f"Chain id ('{chain_id}') exceeds PDB format limit."
-                    raise PDBIOException(e)
+                    if isinstance(file, str):
+                        self._revert_write(fhandle, delete_file=True)
+                    else:
+                        self._revert_write(fhandle, truncate_to=fd_position)
+                    raise PDBIOException(
+                        f"Chain id ('{chain_id}') exceeds PDB format limit."
+                    )
 
                 # necessary for TER
                 # do not write TER if no residues were written
@@ -365,8 +396,14 @@ class PDBIO(StructureIO):
                     segid = residue.segid
                     resid = residue.id[1]
                     if resid > 9999:
-                        e = f"Residue number ('{resid}') exceeds PDB format limit."
-                        raise PDBIOException(e)
+                        if isinstance(file, str):
+                            self._revert_write(fhandle, delete_file=True)
+                        else:
+                            self._revert_write(fhandle, truncate_to=fd_position)
+
+                        raise PDBIOException(
+                            f"Residue number ('{resid}') exceeds PDB format limit."
+                        )
 
                     for atom in residue.get_unpacked_list():
                         if not select.accept_atom(atom):
@@ -388,23 +425,10 @@ class PDBIO(StructureIO):
                                 chain_id,
                             )
                         except Exception as err:
-                            # If writing fails, remove or truncate the file
                             if isinstance(file, str):
-                                try:
-                                    fhandle.close()
-                                    os.remove(fhandle.name)
-                                except Exception as err:
-                                    # Windows can be finnicky with closing
-                                    # file and deleting them, raising PermissionError
-                                    pass
+                                self._revert_write(fhandle, delete_file=True)
                             else:
-                                # If the user gave a file handle, seek back to the
-                                # starting position and truncate the file from there
-                                # on. Note that the truncation depends on how we
-                                # opened the file, but we assume the file was opened
-                                # for writing/appending anyway.
-                                fhandle.seek(_initial_position)
-                                fhandle.truncate()
+                                self._revert_write(fhandle, truncate_to=fd_position)
 
                             # catch and re-raise with more information
                             raise PDBIOException(
