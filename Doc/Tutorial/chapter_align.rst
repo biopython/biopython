@@ -159,10 +159,10 @@ aligned sequences as follows:
    >>> sequences = [sequence.decode() for sequence in sequences]
    >>> sequences
    ['CGGTTTTT', 'AGTTT', 'AGGTTT']
-   >>> coordinates
-   array([[0, 2, 3, 6, 8],
-          [0, 2, 2, 5, 5],
-          [0, 2, 3, 6, 6]])
+   >>> print(coordinates)
+   [[0 2 3 6 8]
+    [0 2 2 5 5]
+    [0 2 3 6 6]]
 
 The initial ``G`` nucleotide of ``seqA`` and the final ``CC``
 nucleotides of ``seqB`` were not included in the alignment and is
@@ -178,10 +178,10 @@ therefore missing here. But this is easy to fix:
    >>> sequences
    ['CCGGTTTTT', 'AGTTTAA', 'AGGTTT']
    >>> coordinates[0, :] += 1
-   >>> coordinates
-   array([[1, 3, 4, 7, 9],
-          [0, 2, 2, 5, 5],
-          [0, 2, 3, 6, 6]])
+   >>> print(coordinates)
+   [[1 3 4 7 9]
+    [0 2 2 5 5]
+    [0 2 3 6 6]]
 
 Now we can create the ``Alignment`` object:
 
