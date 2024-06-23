@@ -213,10 +213,10 @@ initializer will fill in the ``coordinates`` attribute of the
    >>> ungapped_alignment = Alignment(["ACGTACGT", "AAGTACGT", "ACGTACCT"])
    >>> ungapped_alignment  # doctest: +ELLIPSIS
    <Alignment object (3 rows x 8 columns) at ...>
-   >>> ungapped_alignment.coordinates
-   array([[0, 8],
-          [0, 8],
-          [0, 8]])
+   >>> print(ungapped_alignment.coordinates)
+   [[0 8]
+    [0 8]
+    [0 8]]
    >>> print(ungapped_alignment)
                      0 ACGTACGT 8
                      0 AAGTACGT 8
@@ -1887,12 +1887,12 @@ instead:
 
 .. code:: pycon
 
-   >>> alignment.coordinates
-   array([[ 0,  1,  1, 33, 34, 42, 44, 48, 48, 50, 50, 51, 58, 73, 73, 95],
-          [ 0,  0,  0, 32, 33, 41, 43, 47, 47, 49, 49, 50, 57, 72, 72, 94],
-          [ 0,  0,  0, 32, 33, 41, 43, 47, 48, 50, 51, 52, 59, 74, 77, 99],
-          [ 0,  1,  2, 34, 35, 43, 43, 47, 47, 49, 49, 50, 57, 72, 72, 94],
-          [ 0,  1,  2, 34, 34, 42, 44, 48, 48, 50, 50, 51, 51, 66, 66, 88]])
+   >>> print(alignment.coordinates)
+   [[ 0  1  1 33 34 42 44 48 48 50 50 51 58 73 73 95]
+    [ 0  0  0 32 33 41 43 47 47 49 49 50 57 72 72 94]
+    [ 0  0  0 32 33 41 43 47 48 50 51 52 59 74 77 99]
+    [ 0  1  2 34 35 43 43 47 47 49 49 50 57 72 72 94]
+    [ 0  1  2 34 34 42 44 48 48 50 50 51 51 66 66 88]]
 
 Use ``Align.write`` to write this alignment to a file (here, we’ll use a
 ``StringIO`` object instead of a file):
@@ -2541,9 +2541,9 @@ To pull out the alignment, we use
                    120 ||||||||||| 131
    IXI_235         101 PPAWAGDRSHE 112
    <BLANKLINE>
-   >>> alignment.coordinates
-   array([[  0,  15,  24,  74,  84, 131],
-          [  0,  15,  15,  65,  65, 112]])
+   >>> print(alignment.coordinates)
+   [[  0  15  24  74  84 131]
+    [  0  15  15  65  65 112]]
 
 We can use indices to extract specific parts of the alignment:
 
@@ -2744,18 +2744,18 @@ attribute:
 
 .. code:: pycon
 
-   >>> alignment.coordinates
-   array([[ 0, 93, 99],
-          [ 0, 93, 99],
-          [ 0, 93, 99],
-          [ 0, 93, 99],
-          [ 0, 93, 99],
-          [ 0, 93, 99],
-          [ 0, 93, 93],
-          [ 0, 93, 93],
-          [ 0, 93, 93],
-          [ 0, 93, 93],
-          [ 0, 93, 99]])
+   >>> print(alignment.coordinates)
+   [[ 0 93 99]
+    [ 0 93 99]
+    [ 0 93 99]
+    [ 0 93 99]
+    [ 0 93 99]
+    [ 0 93 99]
+    [ 0 93 93]
+    [ 0 93 93]
+    [ 0 93 93]
+    [ 0 93 93]
+    [ 0 93 99]]
 
 Currently, Biopython does not support writing sequence alignments in the
 MSF format.
@@ -2819,9 +2819,9 @@ alignment score 6146.0, has no gaps:
    >>> alignment = next(alignments)
    >>> alignment.score
    6146.0
-   >>> alignment.coordinates
-   array([[1319275, 1319274, 1319271, 1318045],
-          [      0,       1,       4,    1230]])
+   >>> print(alignment.coordinates)
+   [[1319275 1319274 1319271 1318045]
+    [      0       1       4    1230]]
    >>> print(alignment)  # doctest: +ELLIPSIS
    gi|330443   1319275 ????????????????????????????????????????????????????????????
                      0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
@@ -3133,9 +3133,9 @@ example, let’s go to the fourth alignment:
                    120 ||||||-|||||||| 135
    pGT875          274 ??????????????? 289
    <BLANKLINE>
-   >>> alignment.coordinates  # doctest: +NORMALIZE_WHITESPACE
-   array([[156, 171, 173, 190, 190, 201, 202, 260, 261, 272, 272, 279, 279, 287],
-          [158, 173, 173, 190, 192, 203, 203, 261, 261, 272, 273, 280, 281, 289]])
+   >>> print(alignment.coordinates)
+   [[156 171 173 190 190 201 202 260 261 272 272 279 279 287]
+    [158 173 173 190 192 203 203 261 261 272 273 280 281 289]]
    >>> alignment.aligned
    array([[[156, 171],
            [173, 190],
@@ -4166,9 +4166,9 @@ example:
    >>> print(format(alignment, "SAM"))  # doctest: +NORMALIZE_WHITESPACE
    NR_111921.1 0   chr3    48663768    0   46M1827N82M3376N76M12H  *   0   0   CACGAGAGGAGCGGAGGCGAGGGGTGAACGCGGAGCACTCCAATCGCTCCCAACTAGAGGTCCACCCAGGACCCAGAGACCTGGATTTGAGGCTGCTGGGCGGCAGATGGAGCGATCAGAAGACCAGGAGACGGGAGCTGGAGTGCAGTGGCTGTTCACAAGCGTGAAAGCAAAGATTAAAAAATTTGTTTTTATATTAAAAAA    *   AS:i:1000   NM:i:0
    <BLANKLINE>
-   >>> alignment.coordinates
-   array([[48663767, 48663813, 48665640, 48665722, 48669098, 48669174],
-          [       0,       46,       46,      128,      128,      204]])
+   >>> print(alignment.coordinates)
+   [[48663767 48663813 48665640 48665722 48669098 48669174]
+    [       0       46       46      128      128      204]]
    >>> alignment.operations
    bytearray(b'MNMNM')
    >>> alignment.query.annotations["hard_clip_right"]
