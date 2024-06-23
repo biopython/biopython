@@ -1150,9 +1150,9 @@ alignment.
    SeqRecord(seq=Seq('CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTT...GGG'), id='gi|262205317|ref|NR_030195.1|', name='NR_030195', description='Homo sapiens microRNA 520b (MIR520B), microRNA', dbxrefs=[])
    >>> alignment.query
    SeqRecord(seq=Seq('CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTT...GGG'), id='42291', name='<unknown name>', description='mystery_seq', dbxrefs=[])
-   >>> alignment.coordinates
-   array([[ 0, 61],
-          [ 0, 61]])
+   >>> print(alignment.coordinates)
+   [[ 0 61]
+    [ 0 61]]
 
 For translated BLAST searches, the ``features`` attribute of the target or
 query may contain a ``SeqFeature`` of type CDS that stores the amino acid
