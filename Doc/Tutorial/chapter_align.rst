@@ -106,10 +106,10 @@ and an attribute ``coordinates`` with the alignment coordinates:
 
 .. code:: pycon
 
-   >>> alignment.coordinates
-   array([[1, 3, 4, 7, 9],
-          [0, 2, 2, 5, 5],
-          [0, 2, 3, 6, 6]])
+   >>> print(alignment.coordinates)
+   [[1 3 4 7 9]
+    [0 2 2 5 5]
+    [0 2 3 6 6]]
 
 Print the ``Alignment`` object to show the alignment explicitly:
 
