@@ -546,7 +546,9 @@ other in terms of their gap placement only:
 The property ``indices`` returns a 2D NumPy array with the sequence
 index of each letter in the alignment, with gaps indicated by -1:
 
-.. cont-doctest
+FIXME .. cont-doctest
+
+.. doctest ../Tests lib:numpy
 
 .. code:: pycon
 
@@ -565,9 +567,7 @@ for each of the aligned sequences, with the column index in the
 alignment for each letter in the sequence. Letters not included in the
 alignment are indicated by -1:
 
-FIXME .. cont-doctest
-
-.. doctest ../Tests lib:numpy
+.. cont-doctest
 
 .. code:: pycon
 
