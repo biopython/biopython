@@ -489,7 +489,9 @@ tuples of length :math:`N`:
 
 For example,
 
-.. cont-doctest
+FIXME .. cont-doctest
+
+.. doctest ../Tests lib:numpy
 
 .. code:: pycon
 
@@ -510,9 +512,7 @@ Note that different alignments may have the same subsequences aligned to
 each other. In particular, this may occur if alignments differ from each
 other in terms of their gap placement only:
 
-FIXME .. cont-doctest
-
-.. doctest ../Tests lib:numpy
+.. cont-doctest
 
 .. code:: pycon
 
