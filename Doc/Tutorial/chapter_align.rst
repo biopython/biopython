@@ -589,7 +589,9 @@ This method currently takes no arguments, but in the future will likely
 be modified to accept optional arguments allowing its behavior to be
 customized.
 
-.. cont-doctest
+FIXME .. cont-doctest
+
+.. doctest ../Tests lib:numpy
 
 .. code:: pycon
 
@@ -711,9 +713,7 @@ By default, this will give you an array of ``bytes`` characters (with
 data type ``dtype='|S1'``). You can create an array of Unicode (Python
 string) characters by using ``dtype='U'``:
 
-FIXME .. cont-doctest
-
-.. doctest ../Tests lib:numpy
+.. cont-doctest
 
 .. code:: pycon
 
