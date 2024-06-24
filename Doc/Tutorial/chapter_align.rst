@@ -932,7 +932,9 @@ Mapping a pairwise sequence alignment
 
 Suppose you have a pairwise alignment of a transcript to a chromosome:
 
-.. cont-doctest
+FIXME .. cont-doctest
+
+.. doctest ../Tests lib:numpy
 
 .. code:: pycon
 
@@ -950,9 +952,7 @@ Suppose you have a pairwise alignment of a transcript to a chromosome:
 and a pairwise alignment between the transcript and a sequence (e.g.,
 obtained by RNA-seq):
 
-FIXME .. cont-doctest
-
-.. doctest ../Tests lib:numpy
+.. cont-doctest
 
 .. code:: pycon
 
