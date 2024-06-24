@@ -95,6 +95,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Christian Balbin <christian at domain balbin.com>
 - Christian Brueffer <christian at domain brueffer.de>
 - Christian Zmasek <https://github.com/cmzmasek>
+- Christopher Covington <https://github.com/covracer>
 - Chunlei Wu <https://github.com/newgene>
 - Claude Paroz <claude at two (as digit) xlibre dot net>
 - Connor McCoy <cmccoy at the dot org domain fhcrc>

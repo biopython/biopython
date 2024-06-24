@@ -117,6 +117,7 @@ Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - Anil Tuncel (first contribution)
+- Christopher Covington (first contribution)
 - David Cain
 - Fabio Zanini (first contribution)
 - Joao Rodrigues

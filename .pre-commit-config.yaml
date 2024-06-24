@@ -44,6 +44,10 @@ repos:
     -   id: mypy
         # equivalent to "files" in .mypy.ini
         files: '^(Bio|BioSQL)/'
+-   repo: https://github.com/abravalheri/validate-pyproject
+    rev: v0.18
+    hooks:
+    -   id: validate-pyproject
 -   repo: https://github.com/asottile/blacken-docs
     rev: 1.16.0
     hooks:
