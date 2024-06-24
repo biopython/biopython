@@ -510,7 +510,9 @@ Note that different alignments may have the same subsequences aligned to
 each other. In particular, this may occur if alignments differ from each
 other in terms of their gap placement only:
 
-.. cont-doctest
+FIXME .. cont-doctest
+
+.. doctest ../Tests lib:numpy
 
 .. code:: pycon
 
@@ -546,9 +548,7 @@ other in terms of their gap placement only:
 The property ``indices`` returns a 2D NumPy array with the sequence
 index of each letter in the alignment, with gaps indicated by -1:
 
-FIXME .. cont-doctest
-
-.. doctest ../Tests lib:numpy
+.. cont-doctest
 
 .. code:: pycon
 
