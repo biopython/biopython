@@ -489,9 +489,9 @@ tuples of length :math:`N`:
 
 For example,
 
-FIXME .. cont-doctest
+FIXME
 
-.. doctest ../Tests lib:numpy
+.. cont-doctest
 
 .. code:: pycon
 
@@ -501,12 +501,12 @@ FIXME .. cont-doctest
                      0 .|-|||-- 8
    query             0 AG-TTT-- 5
    <BLANKLINE>
-   >>> pairwise_alignment.aligned
-   array([[[1, 3],
-           [4, 7]],
+   >>> print(pairwise_alignment.aligned)
+   [[[1 3]
+     [4 7]]
    <BLANKLINE>
-          [[0, 2],
-           [2, 5]]])
+    [[0 2]
+     [2 5]]]
 
 Note that different alignments may have the same subsequences aligned to
 each other. In particular, this may occur if alignments differ from each
