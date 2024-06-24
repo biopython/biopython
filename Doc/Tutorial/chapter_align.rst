@@ -950,7 +950,9 @@ Suppose you have a pairwise alignment of a transcript to a chromosome:
 and a pairwise alignment between the transcript and a sequence (e.g.,
 obtained by RNA-seq):
 
-.. cont-doctest
+FIXME .. cont-doctest
+
+.. doctest ../Tests lib:numpy
 
 .. code:: pycon
 
@@ -967,9 +969,7 @@ obtained by RNA-seq):
 Use the ``map`` method on ``alignment1``, with ``alignment2`` as
 argument, to find the alignment of the RNA-sequence to the genome:
 
-FIXME .. cont-doctest
-
-.. doctest ../Tests lib:numpy
+.. cont-doctest
 
 .. code:: pycon
 
