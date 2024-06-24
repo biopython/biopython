@@ -565,7 +565,9 @@ for each of the aligned sequences, with the column index in the
 alignment for each letter in the sequence. Letters not included in the
 alignment are indicated by -1:
 
-.. cont-doctest
+FIXME .. cont-doctest
+
+.. doctest ../Tests lib:numpy
 
 .. code:: pycon
 
@@ -589,9 +591,7 @@ This method currently takes no arguments, but in the future will likely
 be modified to accept optional arguments allowing its behavior to be
 customized.
 
-FIXME .. cont-doctest
-
-.. doctest ../Tests lib:numpy
+.. cont-doctest
 
 .. code:: pycon
 
