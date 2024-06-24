@@ -9,6 +9,7 @@
 #include <Python.h>
 #include <stdbool.h>
 
+
 static PyTypeObject ParserType;
 
 typedef struct {
@@ -79,10 +80,10 @@ array_converter(PyObject* argument, void* pointer)
                      "buffer has incorrect number of columns %zd (expected %zd)",
                       view->shape[1], self->k);
     }
-    else if (view->itemsize != sizeof(long)) {
+    else if (view->itemsize != sizeof(int64_t)) {
         PyErr_Format(PyExc_RuntimeError,
                     "buffer has unexpected item byte size "
-                    "(%ld, expected %ld)", view->itemsize, sizeof(long));
+                    "(%ld, expected %ld)", view->itemsize, sizeof(int64_t));
     }
     else return 1;  /* return status 1 to indicate a successful converstion */
 
@@ -177,14 +178,6 @@ Parser_feed(Parser* self, PyObject* args, PyObject *kwds)
         }
         row[i++] = s - buffer;
     }
-    if (p > LONG_MAX) {
-        PyErr_Format(PyExc_ValueError,
-                     "sequence is too long "
-                     "(length is %zd, maximum allowable value is %ld)",
-                     m, LONG_MAX);
-        PyMem_Free(data[n]);
-        return NULL;
-    }
     row = PyMem_Realloc(row, i*sizeof(Py_uintptr_t));
     if (!row) {
         PyMem_Free(data[n]);
@@ -261,7 +254,7 @@ Parser_fill(Parser* self, PyObject* args)
     Py_ssize_t* starts = NULL;
     Py_uintptr_t** data = NULL;
     bool* gaps = NULL;
-    long* buffer;
+    int64_t* buffer;
 
     n = self->n;
     if (n == 0) Py_RETURN_NONE;
@@ -316,9 +309,7 @@ Parser_fill(Parser* self, PyObject* args)
         for (i = 0; i < n; i++) {
             p = i*k+j;
             if (gaps[i] == true) buffer[p] = buffer[p-1];
-            else buffer[i*k+j] = (long) (buffer[p-1] + step);
-            /* casting to long is safe here, as we already checked that the
-             * sequence length is not greater than LONG_MAX */
+            else buffer[i*k+j] = (int64_t) (buffer[p-1] + step);
             if (end == starts[i]) {
                 data[i]++;
                 gaps[i] = !gaps[i];
