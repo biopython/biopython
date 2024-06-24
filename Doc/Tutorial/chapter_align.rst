@@ -994,7 +994,8 @@ different genome assemblies. In this case, self is a DNA alignment
 between two genome assemblies, and the argument is an alignment of a
 transcript against one of the genome assemblies:
 
-.. cont-doctest
+FIXME .. cont-doctest
+.. doctest ../Tests lib:numpy
 
 .. code:: pycon
 
