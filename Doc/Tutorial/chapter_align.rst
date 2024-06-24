@@ -859,7 +859,9 @@ alignments:
 
 Now, let’s look at these two alignments:
 
-.. cont-doctest
+FIXME .. cont-doctest
+
+.. doctest ../Tests lib:numpy
 
 .. code:: pycon
 
@@ -932,9 +934,7 @@ Mapping a pairwise sequence alignment
 
 Suppose you have a pairwise alignment of a transcript to a chromosome:
 
-FIXME .. cont-doctest
-
-.. doctest ../Tests lib:numpy
+.. cont-doctest
 
 .. code:: pycon
 
