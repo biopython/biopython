@@ -777,7 +777,9 @@ not just to the aligned part.
 The ``reverse`` argument lets you reverse the sort order to obtain the
 sequences in decreasing GC content:
 
-.. cont-doctest
+FIXME .. cont-doctest
+
+.. doctest ../Tests lib:numpy
 
 .. code:: pycon
 
@@ -859,9 +861,7 @@ alignments:
 
 Now, let’s look at these two alignments:
 
-FIXME .. cont-doctest
-
-.. doctest ../Tests lib:numpy
+.. cont-doctest
 
 .. code:: pycon
 
