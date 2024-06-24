@@ -967,7 +967,9 @@ obtained by RNA-seq):
 Use the ``map`` method on ``alignment1``, with ``alignment2`` as
 argument, to find the alignment of the RNA-sequence to the genome:
 
-.. cont-doctest
+FIXME .. cont-doctest
+
+.. doctest ../Tests lib:numpy
 
 .. code:: pycon
 
@@ -994,8 +996,7 @@ different genome assemblies. In this case, self is a DNA alignment
 between two genome assemblies, and the argument is an alignment of a
 transcript against one of the genome assemblies:
 
-FIXME .. cont-doctest
-.. doctest ../Tests lib:numpy
+.. cont-doctest
 
 .. code:: pycon
 
