@@ -159,10 +159,10 @@ aligned sequences as follows:
    >>> sequences = [sequence.decode() for sequence in sequences]
    >>> sequences
    ['CGGTTTTT', 'AGTTT', 'AGGTTT']
-   >>> coordinates
-   array([[0, 2, 3, 6, 8],
-          [0, 2, 2, 5, 5],
-          [0, 2, 3, 6, 6]])
+   >>> print(coordinates)
+   [[0 2 3 6 8]
+    [0 2 2 5 5]
+    [0 2 3 6 6]]
 
 The initial ``G`` nucleotide of ``seqA`` and the final ``CC``
 nucleotides of ``seqB`` were not included in the alignment and is
@@ -178,10 +178,10 @@ therefore missing here. But this is easy to fix:
    >>> sequences
    ['CCGGTTTTT', 'AGTTTAA', 'AGGTTT']
    >>> coordinates[0, :] += 1
-   >>> coordinates
-   array([[1, 3, 4, 7, 9],
-          [0, 2, 2, 5, 5],
-          [0, 2, 3, 6, 6]])
+   >>> print(coordinates)
+   [[1 3 4 7 9]
+    [0 2 2 5 5]
+    [0 2 3 6 6]]
 
 Now we can create the ``Alignment`` object:
 
@@ -213,10 +213,10 @@ initializer will fill in the ``coordinates`` attribute of the
    >>> ungapped_alignment = Alignment(["ACGTACGT", "AAGTACGT", "ACGTACCT"])
    >>> ungapped_alignment  # doctest: +ELLIPSIS
    <Alignment object (3 rows x 8 columns) at ...>
-   >>> ungapped_alignment.coordinates
-   array([[0, 8],
-          [0, 8],
-          [0, 8]])
+   >>> print(ungapped_alignment.coordinates)
+   [[0 8]
+    [0 8]
+    [0 8]]
    >>> print(ungapped_alignment)
                      0 ACGTACGT 8
                      0 AAGTACGT 8
@@ -499,12 +499,12 @@ For example,
                      0 .|-|||-- 8
    query             0 AG-TTT-- 5
    <BLANKLINE>
-   >>> pairwise_alignment.aligned
-   array([[[1, 3],
-           [4, 7]],
+   >>> print(pairwise_alignment.aligned)
+   [[[1 3]
+     [4 7]]
    <BLANKLINE>
-          [[0, 2],
-           [2, 5]]])
+    [[0 2]
+     [2 5]]]
 
 Note that different alignments may have the same subsequences aligned to
 each other. In particular, this may occur if alignments differ from each
@@ -977,9 +977,9 @@ argument, to find the alignment of the RNA-sequence to the genome:
                      0 ||||-----------|||| 19
    query             0 CCCC-----------GGGG  8
    <BLANKLINE>
-   >>> alignment3.coordinates
-   array([[11, 15, 26, 30],
-          [ 0,  4,  4,  8]])
+   >>> print(alignment3.coordinates)
+   [[11 15 26 30]
+    [ 0  4  4  8]]
    >>> format(alignment3, "psl")
    '8\t0\t0\t0\t0\t0\t1\t11\t+\tquery\t8\t0\t8\ttarget\t40\t11\t30\t2\t4,4,\t0,4,\t11,26,\n'
 
@@ -1120,19 +1120,19 @@ macaque, marmoset, mouse, and rat:
    calJac3.chr18 47448759
    mm10.chr3 160039680
    rn6.chr2 266435125
-   >>> genome_alignment.coordinates
-   array([[133922962, 133922962, 133922970, 133922970, 133922972, 133922972,
-           133922995, 133922998, 133923010],
-          [155784573, 155784573, 155784581, 155784581, 155784583, 155784583,
-           155784606, 155784609, 155784621],
-          [130383910, 130383910, 130383918, 130383918, 130383920, 130383920,
-           130383943, 130383946, 130383958],
-          [  9790455,   9790455,   9790463,   9790463,   9790465,   9790465,
-             9790488,   9790491,   9790503],
-          [ 88858039,  88858036,  88858028,  88858026,  88858024,  88858020,
-            88857997,  88857997,  88857985],
-          [188162970, 188162967, 188162959, 188162959, 188162957, 188162953,
-           188162930, 188162930, 188162918]])
+   >>> print(genome_alignment.coordinates)
+   [[133922962 133922962 133922970 133922970 133922972 133922972 133922995
+     133922998 133923010]
+    [155784573 155784573 155784581 155784581 155784583 155784583 155784606
+     155784609 155784621]
+    [130383910 130383910 130383918 130383918 130383920 130383920 130383943
+     130383946 130383958]
+    [  9790455   9790455   9790463   9790463   9790465   9790465   9790488
+       9790491   9790503]
+    [ 88858039  88858036  88858028  88858026  88858024  88858020  88857997
+      88857997  88857985]
+    [188162970 188162967 188162959 188162959 188162957 188162953 188162930
+     188162930 188162918]]
    >>> print(genome_alignment)
    panTro5.c 133922962 ---ACTAGTTA--CA----GTAACAGAAAATAAAATTTAAATAGAAACTTAAAggcc
    hg19.chr1 155784573 ---ACTAGTTA--CA----GTAACAGAAAATAAAATTTAAATAGAAACTTAAAggcc
@@ -1213,19 +1213,19 @@ sequence alignment to the new genome assembly versions:
    chr18 47031477
    chr3 159745316
    chr2 249053267
-   >>> genome_alignment.coordinates
-   array([[130611000, 130611000, 130611008, 130611008, 130611010, 130611010,
-           130611033, 130611036, 130611048],
-          [155814782, 155814782, 155814790, 155814790, 155814792, 155814792,
-           155814815, 155814818, 155814830],
-          [ 95186253,  95186253,  95186245,  95186245,  95186243,  95186243,
-            95186220,  95186217,  95186205],
-          [  9758318,   9758318,   9758326,   9758326,   9758328,   9758328,
-             9758351,   9758354,   9758366],
-          [ 88765346,  88765343,  88765335,  88765333,  88765331,  88765327,
-            88765304,  88765304,  88765292],
-          [174256702, 174256699, 174256691, 174256691, 174256689, 174256685,
-           174256662, 174256662, 174256650]])
+   >>> print(genome_alignment.coordinates)
+   [[130611000 130611000 130611008 130611008 130611010 130611010 130611033
+     130611036 130611048]
+    [155814782 155814782 155814790 155814790 155814792 155814792 155814815
+     155814818 155814830]
+    [ 95186253  95186253  95186245  95186245  95186243  95186243  95186220
+      95186217  95186205]
+    [  9758318   9758318   9758326   9758326   9758328   9758328   9758351
+       9758354   9758366]
+    [ 88765346  88765343  88765335  88765333  88765331  88765327  88765304
+      88765304  88765292]
+    [174256702 174256699 174256691 174256691 174256689 174256685 174256662
+     174256662 174256650]]
 
 As the ``.chain`` files do not include the sequence contents, we cannot
 print the sequence alignment directly. Instead, we read in the genomic
@@ -1887,12 +1887,12 @@ instead:
 
 .. code:: pycon
 
-   >>> alignment.coordinates
-   array([[ 0,  1,  1, 33, 34, 42, 44, 48, 48, 50, 50, 51, 58, 73, 73, 95],
-          [ 0,  0,  0, 32, 33, 41, 43, 47, 47, 49, 49, 50, 57, 72, 72, 94],
-          [ 0,  0,  0, 32, 33, 41, 43, 47, 48, 50, 51, 52, 59, 74, 77, 99],
-          [ 0,  1,  2, 34, 35, 43, 43, 47, 47, 49, 49, 50, 57, 72, 72, 94],
-          [ 0,  1,  2, 34, 34, 42, 44, 48, 48, 50, 50, 51, 51, 66, 66, 88]])
+   >>> print(alignment.coordinates)
+   [[ 0  1  1 33 34 42 44 48 48 50 50 51 58 73 73 95]
+    [ 0  0  0 32 33 41 43 47 47 49 49 50 57 72 72 94]
+    [ 0  0  0 32 33 41 43 47 48 50 51 52 59 74 77 99]
+    [ 0  1  2 34 35 43 43 47 47 49 49 50 57 72 72 94]
+    [ 0  1  2 34 34 42 44 48 48 50 50 51 51 66 66 88]]
 
 Use ``Align.write`` to write this alignment to a file (here, we’ll use a
 ``StringIO`` object instead of a file):
@@ -2541,9 +2541,9 @@ To pull out the alignment, we use
                    120 ||||||||||| 131
    IXI_235         101 PPAWAGDRSHE 112
    <BLANKLINE>
-   >>> alignment.coordinates
-   array([[  0,  15,  24,  74,  84, 131],
-          [  0,  15,  15,  65,  65, 112]])
+   >>> print(alignment.coordinates)
+   [[  0  15  24  74  84 131]
+    [  0  15  15  65  65 112]]
 
 We can use indices to extract specific parts of the alignment:
 
@@ -2744,18 +2744,18 @@ attribute:
 
 .. code:: pycon
 
-   >>> alignment.coordinates
-   array([[ 0, 93, 99],
-          [ 0, 93, 99],
-          [ 0, 93, 99],
-          [ 0, 93, 99],
-          [ 0, 93, 99],
-          [ 0, 93, 99],
-          [ 0, 93, 93],
-          [ 0, 93, 93],
-          [ 0, 93, 93],
-          [ 0, 93, 93],
-          [ 0, 93, 99]])
+   >>> print(alignment.coordinates)
+   [[ 0 93 99]
+    [ 0 93 99]
+    [ 0 93 99]
+    [ 0 93 99]
+    [ 0 93 99]
+    [ 0 93 99]
+    [ 0 93 93]
+    [ 0 93 93]
+    [ 0 93 93]
+    [ 0 93 93]
+    [ 0 93 99]]
 
 Currently, Biopython does not support writing sequence alignments in the
 MSF format.
@@ -2819,9 +2819,9 @@ alignment score 6146.0, has no gaps:
    >>> alignment = next(alignments)
    >>> alignment.score
    6146.0
-   >>> alignment.coordinates
-   array([[1319275, 1319274, 1319271, 1318045],
-          [      0,       1,       4,    1230]])
+   >>> print(alignment.coordinates)
+   [[1319275 1319274 1319271 1318045]
+    [      0       1       4    1230]]
    >>> print(alignment)  # doctest: +ELLIPSIS
    gi|330443   1319275 ????????????????????????????????????????????????????????????
                      0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
@@ -3133,9 +3133,9 @@ example, let’s go to the fourth alignment:
                    120 ||||||-|||||||| 135
    pGT875          274 ??????????????? 289
    <BLANKLINE>
-   >>> alignment.coordinates  # doctest: +NORMALIZE_WHITESPACE
-   array([[156, 171, 173, 190, 190, 201, 202, 260, 261, 272, 272, 279, 279, 287],
-          [158, 173, 173, 190, 192, 203, 203, 261, 261, 272, 273, 280, 281, 289]])
+   >>> print(alignment.coordinates)
+   [[156 171 173 190 190 201 202 260 261 272 272 279 279 287]
+    [158 173 173 190 192 203 203 261 261 272 273 280 281 289]]
    >>> alignment.aligned
    array([[[156, 171],
            [173, 190],
@@ -4166,9 +4166,9 @@ example:
    >>> print(format(alignment, "SAM"))  # doctest: +NORMALIZE_WHITESPACE
    NR_111921.1 0   chr3    48663768    0   46M1827N82M3376N76M12H  *   0   0   CACGAGAGGAGCGGAGGCGAGGGGTGAACGCGGAGCACTCCAATCGCTCCCAACTAGAGGTCCACCCAGGACCCAGAGACCTGGATTTGAGGCTGCTGGGCGGCAGATGGAGCGATCAGAAGACCAGGAGACGGGAGCTGGAGTGCAGTGGCTGTTCACAAGCGTGAAAGCAAAGATTAAAAAATTTGTTTTTATATTAAAAAA    *   AS:i:1000   NM:i:0
    <BLANKLINE>
-   >>> alignment.coordinates
-   array([[48663767, 48663813, 48665640, 48665722, 48669098, 48669174],
-          [       0,       46,       46,      128,      128,      204]])
+   >>> print(alignment.coordinates)
+   [[48663767 48663813 48665640 48665722 48669098 48669174]
+    [       0       46       46      128      128      204]]
    >>> alignment.operations
    bytearray(b'MNMNM')
    >>> alignment.query.annotations["hard_clip_right"]
@@ -5034,12 +5034,12 @@ for each alignment block in the MAF file:
     'baboon': 4622798,
     'mm4.chr6': 151104725,
     'rn3.chr4': 187371129}
-   >>> alignment.coordinates  # doctest: +NORMALIZE_WHITESPACE
-   array([[27578828, 27578829, 27578831, 27578831, 27578850, 27578850, 27578866],
-          [28741140, 28741141, 28741143, 28741143, 28741162, 28741162, 28741178],
-          [  116834,   116835,   116837,   116837,   116856,   116856, 116872],
-          [53215344, 53215344, 53215346, 53215347, 53215366, 53215366, 53215382],
-          [81344243, 81344243, 81344245, 81344245, 81344264, 81344267, 81344283]])
+   >>> print(alignment.coordinates)
+   [[27578828 27578829 27578831 27578831 27578850 27578850 27578866]
+    [28741140 28741141 28741143 28741143 28741162 28741162 28741178]
+    [  116834   116835   116837   116837   116856   116856   116872]
+    [53215344 53215344 53215346 53215347 53215366 53215366 53215382]
+    [81344243 81344243 81344245 81344245 81344264 81344267 81344283]]
    >>> print(alignment)
    hg16.chr7  27578828 AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG 27578866
    panTro1.c  28741140 AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG 28741178
@@ -5272,12 +5272,12 @@ for each alignment block in the bigMaf file:
     'baboon': 4622798,
     'mm4.chr6': 151104725,
     'rn3.chr4': 187371129}
-   >>> alignment.coordinates  # doctest: +NORMALIZE_WHITESPACE
-   array([[27578828, 27578829, 27578831, 27578831, 27578850, 27578850, 27578866],
-          [28741140, 28741141, 28741143, 28741143, 28741162, 28741162, 28741178],
-          [  116834,   116835,   116837,   116837,   116856,   116856, 116872],
-          [53215344, 53215344, 53215346, 53215347, 53215366, 53215366, 53215382],
-          [81344243, 81344243, 81344245, 81344245, 81344264, 81344267, 81344283]])
+   >>> print(alignment.coordinates)
+   [[27578828 27578829 27578831 27578831 27578850 27578850 27578866]
+    [28741140 28741141 28741143 28741143 28741162 28741162 28741178]
+    [  116834   116835   116837   116837   116856   116856   116872]
+    [53215344 53215344 53215346 53215347 53215366 53215366 53215382]
+    [81344243 81344243 81344245 81344245 81344264 81344267 81344283]]
    >>> print(alignment)
    hg16.chr7  27578828 AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG 27578866
    panTro1.c  28741140 AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG 28741178
