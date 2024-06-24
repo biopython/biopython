@@ -711,7 +711,9 @@ By default, this will give you an array of ``bytes`` characters (with
 data type ``dtype='|S1'``). You can create an array of Unicode (Python
 string) characters by using ``dtype='U'``:
 
-.. cont-doctest
+FIXME .. cont-doctest
+
+.. doctest ../Tests lib:numpy
 
 .. code:: pycon
 
@@ -777,9 +779,7 @@ not just to the aligned part.
 The ``reverse`` argument lets you reverse the sort order to obtain the
 sequences in decreasing GC content:
 
-FIXME .. cont-doctest
-
-.. doctest ../Tests lib:numpy
+.. cont-doctest
 
 .. code:: pycon
 
