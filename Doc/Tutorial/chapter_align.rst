@@ -489,8 +489,6 @@ tuples of length :math:`N`:
 
 For example,
 
-FIXME
-
 .. cont-doctest
 
 .. code:: pycon
