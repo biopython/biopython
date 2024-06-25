@@ -1078,6 +1078,10 @@ def qblast(
     and passes the values to the server as is.  More help is available at:
     https://ncbi.github.io/blast-cloud/dev/api.html
 
+    The http.client.HTTPResponse object returned by this function has the
+    additional attributes rid and rtoe with the Request ID and Request Time Of
+    Execution for this BLAST search.
+
     """
     programs = ["blastn", "blastp", "blastx", "tblastn", "tblastx"]
     if program not in programs:
@@ -1241,6 +1245,8 @@ def qblast(
         assert data.startswith(b"<p><!--\nQBlastInfoBegin")
     elif format_type in ("XML2", "JSON2"):
         assert data.startswith(b"PK\x03\x04")  # zipped file
+    stream.rid = rid
+    stream.rtoe = rtoe
     return stream
 
 
