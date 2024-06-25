@@ -245,6 +245,7 @@ static const double tablePtoZ[] = {
     13.92, 13.98, 14.03, 14.09, 14.14, 14.19, 14.25, 14.30, 14.35, 14.41,
     14.46, 14.51, 14.57, 14.62, 14.67, 14.72, 14.77, 14.83, 14.88, 14.93};
 
+// Convert a z-score into a probability
 static double zToP(const double z)
 {
     int index = (int)(z / 0.1);
@@ -259,6 +260,7 @@ static double zToP(const double z)
     return tableZtoP[index];
 }
 
+// Convert a probability into a z-score
 static double pToZ(const double p)
 {
     int index = (int)(-log10(p) * 3.0);
@@ -273,6 +275,7 @@ static double pToZ(const double p)
     return tablePtoZ[index];
 }
 
+// These empirical data are reproduced from the original CE source code.
 static const double similarityAvgs[] =
     {2.54, 2.51, 2.72, 3.01, 3.31, 3.61, 3.90, 4.19, 4.47, 4.74,
         4.99, 5.22, 5.46, 5.70, 5.94, 6.13, 6.36, 6.52, 6.68, 6.91};
@@ -281,17 +284,19 @@ static const double similaritySDs[] =
         1.08, 1.10, 1.15, 1.19, 1.23, 1.25, 1.32, 1.34, 1.36, 1.45};
 
 static double zScoreSimilarity(
-    const int fragmentSize,
     const int pathLength,
     const double similarity)
 {
-    if (fragmentSize != 8 || pathLength < 1) {
+    // This method only works for the default fragment size
+    if (pathLength < 1) {
         return 0.0;
     }
 
     double similarityAvg, similaritySD;
 
-    if (pathLength < 21) {
+    // 20 is the number of stored statistics (averages and standard deviations)
+    // in the arrays above.
+    if (pathLength <= 20) {
         similarityAvg = similarityAvgs[pathLength - 1];
         similaritySD = similaritySDs[pathLength - 1];
     }
@@ -316,17 +321,18 @@ static const double gapCountSDs[] =
         48.41, 50.87, 52.27};
 
 static double zScoreGapCount(
-    const int fragmentSize,
     const int pathLength,
     const int gapCount)
 {
-    if (fragmentSize != 8 || pathLength < 2) {
+    if (pathLength < 1) {
         return 0.0;
     }
 
     double gapCountAvg, gapCountSD;
 
-    if (pathLength < 21) {
+    // 20 is the number of stored statistics (averages and standard deviations)
+    // in the arrays above.
+    if (pathLength <= 20) {
         gapCountAvg = gapCountAvgs[pathLength - 1];
         gapCountSD = gapCountSDs[pathLength - 1];
     }
@@ -341,15 +347,21 @@ static double zScoreGapCount(
     return (gapCountAvg - gapCount) / gapCountSD;
 }
 
+// The z-score calculation is adapted from the code in
+// https://github.com/kad-ecoli/CE.
 static double calcZScore(
     const int fragmentSize,
     const int pathLength,
     const double pathSimilarity,
     const int gapCount)
 {
-    const double z1 = zScoreSimilarity(
-        fragmentSize, pathLength, pathSimilarity);
-    const double z2 = zScoreGapCount(fragmentSize, pathLength, gapCount);
+    if (fragmentSize != 8) {
+        // Z-score calculation is only supported for the default fragment size.
+        return 0.0;
+    }
+
+    const double z1 = zScoreSimilarity(pathLength, pathSimilarity);
+    const double z2 = zScoreGapCount(pathLength, gapCount);
 
     return pToZ(zToP(z1) * zToP(z2));
 }
@@ -620,10 +632,41 @@ findPath(
         }
 
         const double zScore = zScoreBuffer[o];
+        const int length = lenBuffer[o];
         PyObject *pairList = Py_BuildValue("[NN]", pathAList, pathBList);
         Py_INCREF(pairList);
-        PyObject *pathAndScore = Py_BuildValue("[Nd]", pairList, zScore);
-        PyList_SET_ITEM(result, o, pathAndScore);
+
+        PyStructSequence_Field namedtupleFields[] = {
+            (PyStructSequence_Field) {
+                "path",
+                NULL,
+            },
+            (PyStructSequence_Field) {
+                "z_score",
+                NULL,
+            },
+            (PyStructSequence_Field) {
+                "length",
+                NULL,
+            },
+            {NULL},
+        };
+        PyStructSequence_Desc namedtupleDesc = (PyStructSequence_Desc) {
+            "ccealign.CEAlignment",
+            NULL,
+            namedtupleFields,
+            3,
+        };
+        PyTypeObject *namedtupleType =
+            PyStructSequence_NewType(&namedtupleDesc);
+        PyObject *namedtuple = PyStructSequence_New(namedtupleType);
+
+        PyStructSequence_SetItem(namedtuple, 0, pairList);
+        PyStructSequence_SetItem(namedtuple, 1, PyFloat_FromDouble(zScore));
+        PyStructSequence_SetItem(namedtuple, 2, PyLong_FromLong(length * fragmentSize));
+
+        PyList_SET_ITEM(result, o, namedtuple);
+        Py_DECREF(namedtupleType);
     }
 
     return result;
