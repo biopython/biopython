@@ -66,6 +66,13 @@ The ``egquery`` function wrapping the NCBI EGQuery (Entrez Global Query)
 API was deprecated in Release 1.84. The API has stopped working and the
 NCBI said this API was no longer being maintained.
 
+Bio.Seq: Functions and methods ``complement`` and ``reverse_complement``
+------------------------------------------------------------------------
+Starting from release 1.82, the ``inplace`` argument of ``complement`` and
+``reverse_complement`` in ``Bio.Seq`` always default to ``False`` both for
+``Seq`` and ``MutableSeq`` objects.
+To modify a ``MutableSeq`` in-place, use ``inplace=True``.
+
 Bio.AlignInfo
 -------------
 The ``pos_specific_score_matrix`` method of the ``SummaryInfo`` class and the
