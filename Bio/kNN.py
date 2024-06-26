@@ -27,12 +27,19 @@ Weighting Functions:
  - equal_weight    Every example is given a weight of 1.
 
 This module has been deprecated, please consider an alternative like scikit-learn
-insead.
+instead.
 """
 
 import warnings
 
-import numpy as np
+try:
+    import numpy as np
+except ImportError:
+    from Bio import MissingPythonDependencyError
+
+    raise MissingPythonDependencyError(
+        "Please install NumPy if you want to use Bio.kNN. See http://www.numpy.org/"
+    ) from None
 
 from Bio import BiopythonDeprecationWarning
 

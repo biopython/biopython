@@ -9,23 +9,37 @@
 Unless you are writing a new parser or writer for Bio.SeqIO, you should not
 use this module.  It provides base classes to try and simplify things.
 """
+
 from abc import ABC
 from abc import abstractmethod
+from os import PathLike
+from typing import Iterator, IO, Optional, Union, Generic, AnyStr
 
 from Bio import StreamModeError
 from Bio.Seq import MutableSeq
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
+# https://docs.python.org/3/glossary.html#term-path-like-object
+_PathLikeTypes = (PathLike, str, bytes)
+_IOSource = Union[IO[AnyStr], PathLike, str, bytes]
+_TextIOSource = _IOSource[str]
 
-class SequenceIterator(ABC):
+
+class SequenceIterator(ABC, Generic[AnyStr]):
     """Base class for building SeqRecord iterators.
 
     You should write a parse method that returns a SeqRecord generator.  You
     may wish to redefine the __init__ method as well.
     """
 
-    def __init__(self, source, alphabet=None, mode="t", fmt=None):
+    def __init__(
+        self,
+        source: _IOSource,
+        alphabet: None = None,
+        mode: str = "t",
+        fmt: Optional[str] = None,
+    ) -> None:
         """Create a SequenceIterator object.
 
         Arguments:
@@ -41,10 +55,10 @@ class SequenceIterator(ABC):
         """
         if alphabet is not None:
             raise ValueError("The alphabet argument is no longer supported")
-        try:
+        if isinstance(source, _PathLikeTypes):
             self.stream = open(source, "r" + mode)
             self.should_close_stream = True
-        except TypeError:  # not a path, assume we received a stream
+        else:
             if mode == "t":
                 if source.read(0) != "":
                     raise StreamModeError(
@@ -93,11 +107,11 @@ class SequenceIterator(ABC):
         return self
 
     @abstractmethod
-    def parse(self, handle):
+    def parse(self, handle: IO[AnyStr]) -> Iterator[SeqRecord]:
         """Start parsing the file, and return a SeqRecord iterator."""
 
 
-def _get_seq_string(record):
+def _get_seq_string(record: SeqRecord) -> str:
     """Use this to catch errors like the sequence being None (PRIVATE)."""
     if not isinstance(record, SeqRecord):
         raise TypeError("Expected a SeqRecord object")
@@ -109,7 +123,7 @@ def _get_seq_string(record):
 
 
 # Function variant of the SequenceWriter method.
-def _clean(text):
+def _clean(text: str) -> str:
     """Use this to avoid getting newlines in the output (PRIVATE)."""
     return text.replace("\n", " ").replace("\r", " ")
 
@@ -132,43 +146,44 @@ class SequenceWriter:
     the number of records.
     """
 
-    def __init__(self, target, mode="w"):
+    def __init__(self, target: _IOSource, mode: str = "w") -> None:
         """Create the writer object."""
         if mode == "w":
-            try:
-                target.write("")
-            except TypeError:
-                # target was opened in binary mode
-                raise StreamModeError("File must be opened in text mode.") from None
-            except AttributeError:
+            if isinstance(target, _PathLikeTypes):
                 # target is a path
                 handle = open(target, mode)
             else:
-                handle = target
+                try:
+                    handle = target
+                    target.write("")
+                except TypeError:
+                    # target was opened in binary mode
+                    raise StreamModeError("File must be opened in text mode.") from None
         elif mode == "wb":
-            try:
-                target.write(b"")
-            except TypeError:
-                # target was opened in text mode
-                raise StreamModeError("File must be opened in binary mode.") from None
-            except AttributeError:
+            if isinstance(target, _PathLikeTypes):
                 # target is a path
                 handle = open(target, mode)
             else:
                 handle = target
+                try:
+                    target.write(b"")
+                except TypeError:
+                    # target was opened in text mode
+                    raise StreamModeError(
+                        "File must be opened in binary mode."
+                    ) from None
         else:
             raise RuntimeError(f"Unknown mode '{mode}'")
 
         self._target = target
         self.handle = handle
 
-    def clean(self, text):
+    def clean(self, text: str) -> str:
         """Use this to avoid getting newlines in the output."""
         return text.replace("\n", " ").replace("\r", " ")
 
     def write_header(self):
         """Write the file header to the output file."""
-        pass
         ##################################################
         # You MUST implement this method in the subclass #
         # if the file format defines a file header.      #
@@ -176,7 +191,6 @@ class SequenceWriter:
 
     def write_footer(self):
         """Write the file footer to the output file."""
-        pass
         ##################################################
         # You MUST implement this method in the subclass #
         # if the file format defines a file footer.      #

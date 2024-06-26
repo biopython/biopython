@@ -6,12 +6,12 @@
 
 import unittest
 
-# Really do want "import *" to get all the test clases:
+# Really do want "import *" to get all the test classes:
 from common_BioSQL import *  # noqa: F403
 from common_BioSQL_online import *  # noqa: F403
 
 # Import these explicitly to avoid flake8 F405 below
-from common_BioSQL import load_biosql_ini, check_config, temp_db_filename
+from common_BioSQL import check_config, temp_db_filename
 from common_BioSQL_online import share_config
 
 import requires_internet

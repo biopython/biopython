@@ -7,7 +7,6 @@
 
 """Vector class, including rotation-related functions."""
 
-
 import numpy as np  # type: ignore
 from typing import Tuple, Optional
 
@@ -110,7 +109,7 @@ def rotaxis2m(theta, vector):
     :type vector: L{Vector}
     :param vector: the rotation axis
 
-    :return: The rotation matrix, a 3x3 Numeric array.
+    :return: The rotation matrix, a 3x3 NumPy array.
 
     Examples
     --------
@@ -150,7 +149,7 @@ def refmat(p, q):
     """Return a (left multiplying) matrix that mirrors p onto q.
 
     :type p,q: L{Vector}
-    :return: The mirror operation, a 3x3 Numeric array.
+    :return: The mirror operation, a 3x3 NumPy array.
 
     Examples
     --------
@@ -187,7 +186,7 @@ def rotmat(p, q):
     :type q: L{Vector}
 
     :return: rotation matrix that rotates p onto q
-    :rtype: 3x3 Numeric array
+    :rtype: 3x3 NumPy array
 
     Examples
     --------
@@ -388,7 +387,7 @@ Robert T. Miller 2019
 """
 
 
-def homog_rot_mtx(angle_rads: float, axis: str) -> np.array:
+def homog_rot_mtx(angle_rads: float, axis: str) -> np.ndarray:
     """Generate a 4x4 single-axis NumPy rotation matrix.
 
     :param float angle_rads: the desired rotation angle in radians
@@ -459,7 +458,7 @@ def set_X_homog_rot_mtx(angle_rads: float, mtx: np.ndarray):
     mtx[1][2] = -sinang
 
 
-def homog_trans_mtx(x: float, y: float, z: float) -> np.array:
+def homog_trans_mtx(x: float, y: float, z: float) -> np.ndarray:
     """Generate a 4x4 NumPy translation matrix.
 
     :param x, y, z: translation in each axis
@@ -477,7 +476,7 @@ def set_homog_trans_mtx(x: float, y: float, z: float, mtx: np.ndarray):
     mtx[2][3] = z
 
 
-def homog_scale_mtx(scale: float) -> np.array:
+def homog_scale_mtx(scale: float) -> np.ndarray:
     """Generate a 4x4 NumPy scaling matrix.
 
     :param float scale: scale multiplier
@@ -494,25 +493,25 @@ def _get_azimuth(x: float, y: float) -> float:
     return (
         np.arctan2(y, x)
         if (0 != x and 0 != y)
-        else (np.pi / 2.0 * sign_y)  # +/-90 if X=0, Y!=0
-        if 0 != y
-        else np.pi
-        if sign_x < 0.0  # 180 if Y=0, X < 0
-        else 0.0  # 0 if Y=0, X >= 0
+        else (
+            (np.pi / 2.0 * sign_y)  # +/-90 if X=0, Y!=0
+            if 0 != y
+            else np.pi if sign_x < 0.0 else 0.0  # 180 if Y=0, X < 0
+        )  # 0 if Y=0, X >= 0
     )
 
 
-def get_spherical_coordinates(xyz: np.array) -> Tuple[float, float, float]:
+def get_spherical_coordinates(xyz: np.ndarray) -> Tuple[float, float, float]:
     """Compute spherical coordinates (r, azimuth, polar_angle) for X,Y,Z point.
 
     :param array xyz: column vector (3 row x 1 column NumPy array)
     :return: tuple of r, azimuth, polar_angle for input coordinate
     """
-    r = np.linalg.norm(xyz)
+    r = float(np.linalg.norm(xyz))
     if 0 == r:
         return (0, 0, 0)
     azimuth = _get_azimuth(xyz[0], xyz[1])
-    polar_angle = np.arccos(xyz[2] / r)
+    polar_angle: float = np.arccos(xyz[2] / r)
 
     return (r, azimuth, polar_angle)
 

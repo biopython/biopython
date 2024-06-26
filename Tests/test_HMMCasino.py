@@ -18,16 +18,19 @@ loaded dice is .05 and the probability of switching from loaded to fair is
 .1.
 """
 
-
 # standard modules
-import os
 import random
 import unittest
+import warnings
 
-# HMM stuff we are testing
-from Bio.HMM import MarkovModel
-from Bio.HMM import Trainer
-from Bio.HMM import Utilities
+from Bio import BiopythonDeprecationWarning
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
+    # HMM stuff we are testing
+    from Bio.HMM import MarkovModel
+    from Bio.HMM import Trainer
+    from Bio.HMM import Utilities
 
 
 # whether we should print everything out. Set this to zero for

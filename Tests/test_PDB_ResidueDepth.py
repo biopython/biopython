@@ -16,7 +16,6 @@ import unittest
 import warnings
 
 from Bio.PDB import MMCIFParser, PDBParser, ResidueDepth
-from Bio import MissingExternalDependencyError
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 from Bio.PDB.ResidueDepth import _get_atom_radius
 

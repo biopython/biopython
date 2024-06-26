@@ -5,14 +5,18 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Tests Bio.SeqFeature."""
+
 import unittest
+import warnings
 
 from copy import deepcopy
 from os import path
 
+from Bio import BiopythonDeprecationWarning
 from Bio import Seq
 from Bio import SeqIO
 from Bio import SeqRecord
+from Bio import BiopythonParserWarning
 from Bio.Data.CodonTable import TranslationError
 from Bio.SeqFeature import AfterPosition
 from Bio.SeqFeature import BeforePosition
@@ -201,6 +205,19 @@ class TestSeqFeature(unittest.TestCase):
         with self.assertRaises(TranslationError):
             f.translate(seq)
 
+    def test_location_aliases(self):
+        f = SeqFeature(None, type="CDS")
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("ignore", BiopythonDeprecationWarning)
+            with self.assertRaisesRegex(
+                AttributeError,
+                # "The .strand alias is only available when .location is defined.",
+                "'NoneType' object has no attribute 'strand'",
+            ):
+                f.strand
+            self.assertEqual(None, f.ref)
+            self.assertEqual(None, f.ref_db)
+
 
 class TestLocations(unittest.TestCase):
     def test_fuzzy(self):
@@ -336,6 +353,28 @@ class TestExtract(unittest.TestCase):
         )
         self.assertEqual(type(sequence), Seq.Seq)
         self.assertEqual(sequence, "ccaatgg")
+
+    def test_origin_spanning_location(self):
+        """Test location spanning origin."""
+        # Regular origin-spanning sequence
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", category=BiopythonParserWarning)
+            self.assertEqual(
+                str(SimpleLocation.fromstring("4..2", 4, True)), "join{[3:4], [0:2]}"
+            )
+            self.assertEqual(
+                str(SimpleLocation.fromstring("complement(4..2)", 4, True)),
+                "join{[0:2](-), [3:4](-)}",
+            )
+
+            # Origin-spanning location containing the entire sequence
+            self.assertEqual(
+                str(SimpleLocation.fromstring("3..2", 4, True)), "join{[2:4], [0:2]}"
+            )
+            self.assertEqual(
+                str(SimpleLocation.fromstring("complement(3..2)", 4, True)),
+                "join{[0:2](-), [2:4](-)}",
+            )
 
 
 if __name__ == "__main__":

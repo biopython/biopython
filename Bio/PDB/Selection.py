@@ -7,7 +7,6 @@
 
 """Selection of atoms, residues, etc."""
 
-
 import itertools
 
 from Bio.PDB.Atom import Atom

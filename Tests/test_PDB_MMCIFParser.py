@@ -30,7 +30,6 @@ except ImportError:
 
 from Bio.Seq import Seq
 from Bio.PDB.PDBExceptions import (
-    PDBConstructionException,
     PDBConstructionWarning,
     PDBIOException,
 )
@@ -350,9 +349,10 @@ class ParseReal(unittest.TestCase):
         self.assertEqual("X-RAY DIFFRACTION", structure.header["structure_method"])
         self.assertEqual(1.7, structure.header["resolution"])
 
-        # test not confused by '.'
+        # test not confused by '.' or '?'
         structure = parser.get_structure("example", "PDB/1SSU_mod.cif")
-        self.assertIsNone(structure.header["resolution"])
+        # self.assertIsNone(structure.header["resolution"])
+        self.assertEqual(4.1, structure.header["resolution"])
 
 
 class CIFtoPDB(unittest.TestCase):

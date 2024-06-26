@@ -10,6 +10,7 @@ This module contains a parser for tabular output from BLAST run with the
 '-outfmt 7' argument, as well as tabular output from William Pearson's
 FASTA alignment tools using the '-m 8CB' or '-m 8CC' arguments.
 """
+
 import re
 import enum
 import numpy as np

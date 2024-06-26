@@ -5,7 +5,7 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 
-"""General Naive Bayes learner.
+"""General Naive Bayes learner (DEPRECATED).
 
 Naive Bayes is a supervised classification algorithm that uses Bayes
 rule to compute the fit between a new observation and some previously
@@ -28,6 +28,15 @@ Functions:
 
 """
 
+import warnings
+from Bio import BiopythonDeprecationWarning
+
+warnings.warn(
+    "The 'Bio.NaiveBayes' module is deprecated and will be removed in a future "
+    "release of Biopython. Consider using scikit-learn instead.",
+    BiopythonDeprecationWarning,
+)
+
 
 try:
     import numpy as np
@@ -35,12 +44,13 @@ except ImportError:
     from Bio import MissingPythonDependencyError
 
     raise MissingPythonDependencyError(
-        "Install NumPy if you want to use Bio.MaxEntropy."
-    )
+        "Please install NumPy if you want to use Bio.NaiveBayes. "
+        "See http://www.numpy.org/"
+    ) from None
 
 
 def _contents(items):
-    """Return a dictionary where the key is the item and the value is the probablity associated (PRIVATE)."""
+    """Return a dictionary where the key is the item and the value is the probability associated (PRIVATE)."""
     term = 1.0 / len(items)
     counts = {}
     for item in items:

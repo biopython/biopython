@@ -3,6 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Additional unit tests for Bio.SeqIO.QualityIO (covering FASTQ and QUAL)."""
+
 import os
 import unittest
 import warnings
@@ -867,10 +868,10 @@ class MappingTests(unittest.TestCase):
         # solexa_quality_from_phred function directly. For speed it uses a
         # cached dictionary of the mappings.
         seq = "N" * 94
-        qual = "".join(chr(33 + q) for q in range(0, 94))
+        qual = "".join(chr(33 + q) for q in range(94))
         expected_sol = [
             min(62, int(round(QualityIO.solexa_quality_from_phred(q))))
-            for q in range(0, 94)
+            for q in range(94)
         ]
         in_handle = StringIO(f"@Test\n{seq}\n+\n{qual}")
         out_handle = StringIO()
@@ -906,8 +907,8 @@ class MappingTests(unittest.TestCase):
     def test_sanger_to_illumina(self):
         """Mapping check for FASTQ Sanger (0 to 93) to Illumina (0 to 62)."""
         seq = "N" * 94
-        qual = "".join(chr(33 + q) for q in range(0, 94))
-        expected_phred = [min(62, q) for q in range(0, 94)]
+        qual = "".join(chr(33 + q) for q in range(94))
+        expected_phred = [min(62, q) for q in range(94)]
         in_handle = StringIO(f"@Test\n{seq}\n+\n{qual}")
         out_handle = StringIO()
         with warnings.catch_warnings(record=True) as w:
@@ -924,7 +925,7 @@ class MappingTests(unittest.TestCase):
     def test_illumina_to_sanger(self):
         """Mapping check for FASTQ Illumina (0 to 62) to Sanger (0 to 62)."""
         seq = "N" * 63
-        qual = "".join(chr(64 + q) for q in range(0, 63))
+        qual = "".join(chr(64 + q) for q in range(63))
         expected_phred = list(range(63))
         in_handle = StringIO(f"@Test\n{seq}\n+\n{qual}")
         out_handle = StringIO()
@@ -1069,7 +1070,7 @@ class TestsConverter(SeqIOConverterTestBaseClass, QualityIOTestBaseClass):
             ("Quality/illumina_faked.fastq", "fastq-illumina"),
         ]
         for filename, fmt in tests:
-            for (in_format, out_format) in self.formats:
+            for in_format, out_format in self.formats:
                 if in_format != fmt:
                     continue
                 self.check_conversion(filename, in_format, out_format)
@@ -1100,7 +1101,7 @@ class TestsConverter(SeqIOConverterTestBaseClass, QualityIOTestBaseClass):
             ("Quality/error_double_qual.fastq", "fastq"),
         ]
         for filename, fmt in tests:
-            for (in_format, out_format) in self.formats:
+            for in_format, out_format in self.formats:
                 if in_format != fmt:
                     continue
                 if (

@@ -22,7 +22,7 @@ try:
     import sqlite3
 except ImportError:
     # May be missing if Python was compiled from source without its dependencies
-    sqlite3 = None
+    sqlite3 = None  # type: ignore
 
 
 @contextlib.contextmanager
@@ -325,7 +325,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
             self._build_index()
 
     def _load_index(self):
-        """Call from __init__ to re-use an existing index (PRIVATE)."""
+        """Call from __init__ to reuse an existing index (PRIVATE)."""
         index_filename = self._index_filename
         relative_path = self._relative_path
         filenames = self._filenames

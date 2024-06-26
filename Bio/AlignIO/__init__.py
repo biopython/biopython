@@ -124,6 +124,7 @@ You can also use any file format supported by Bio.SeqIO, such as "fasta" or
 "ig" (which are listed above), PROVIDED the sequences in your file are all the
 same length.
 """
+
 # TODO
 # - define policy on reading aligned sequences with gaps in
 #   (e.g. - and . characters)

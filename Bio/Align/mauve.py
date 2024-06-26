@@ -216,24 +216,29 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             if line.startswith("="):
                 # There may be more data, but we've reached the end of this
                 # alignment
-                coordinates = Alignment.infer_coordinates(seqs)
+                seqs = [seq.encode() for seq in seqs]
+                seqs, coordinates = Alignment.parse_printed_alignment(seqs)
                 records = []
                 for index, (description, seq) in enumerate(zip(descriptions, seqs)):
                     identifier, start, end, strand, comments = description
-                    seq = seq.replace("-", "")
                     assert len(seq) == end - start
                     if strand == "+":
                         pass
                     elif strand == "-":
-                        seq = reverse_complement(seq, inplace=False)
                         coordinates[index, :] = len(seq) - coordinates[index, :]
                     else:
                         raise ValueError("Unexpected strand '%s'" % strand)
                     coordinates[index] += start
                     if start == 0:
                         seq = Seq(seq)
+                        if strand == "-":
+                            seq = seq.reverse_complement()
                     else:
-                        seq = Seq({start: seq}, length=end)
+                        if strand == "+":
+                            seq = Seq({start: seq}, length=end)
+                        else:  # strand == "-"
+                            seq = Seq({0: seq}, length=end)
+                            seq = seq.reverse_complement()
                     record = SeqRecord(seq, id=identifier, description=comments)
                     records.append(record)
 

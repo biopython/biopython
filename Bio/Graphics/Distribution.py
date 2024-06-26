@@ -13,6 +13,7 @@ or anything similar.
 
 Reportlab is used for producing the graphical output.
 """
+
 # standard library
 import math
 
@@ -134,7 +135,6 @@ class DistributionPage:
 
         Subclasses can implement to provide a specialized legend.
         """
-        pass
 
 
 class BarChartDistribution:
@@ -249,8 +249,6 @@ class LineDistribution:
 
     def __init__(self):
         """Initialize the class."""
-        pass
 
     def draw(self, cur_drawing, start_x, start_y, end_x, end_y):
         """Draw a line distribution into the current drawing."""
-        pass

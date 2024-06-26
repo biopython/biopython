@@ -291,7 +291,7 @@ nucleic_letters_3to1_extended = {
     "8MG": "G", "8OG": "G", "8PY": "G", "8AA": "G", "85Y": "U", "8OS": "G",
 }
 
-# Solvent accesibility scales
+# Solvent accessibility scales
 residue_sasa_scales = {
     # Ahmad: Ahmad et al. 2003 https://doi.org/10.1002/prot.10328
     "Ahmad": {

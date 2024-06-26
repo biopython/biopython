@@ -17,7 +17,7 @@ You are expected to use this module via the Bio.Align functions.
 """
 
 # This parser was written based on the description of the bigBed file format in
-# W. J. Kent, A. S. Zweig,* G. Barber, A. S. Hinrichs, and D. Karolchik:
+# W. J. Kent, A. S. Zweig, G. Barber, A. S. Hinrichs, and D. Karolchik:
 # "BigWig and BigBed: enabling browsing of large distributed datasets."
 # Bioinformatics 26(17): 2204–2207 (2010)
 # in particular the tables in the supplemental materials listing the contents
@@ -50,7 +50,6 @@ You are expected to use this module via the Bio.Align functions.
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 # ------------------------------------------------------------------------------
 
-
 import sys
 import io
 import copy
@@ -74,6 +73,8 @@ Field = namedtuple("Field", ("as_type", "name", "comment"))
 
 class AutoSQLTable(list):
     """AutoSQL table describing the columns of an (possibly extended) BED format."""
+
+    default: "AutoSQLTable"
 
     def __init__(self, name, comment, fields):
         """Create an AutoSQL table describing the columns of an (extended) BED format."""
@@ -227,32 +228,45 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         declaration=None,
         targets=None,
         compress=True,
+        itemsPerSlot=512,
+        blockSize=256,
         extraIndex=(),
     ):
         """Create an AlignmentWriter object.
 
         Arguments:
-         - target      - output stream or file name.
-         - bedN        - number of columns in the BED file.
-                         This must be between 3 and 12; default value is 12.
-         - declaration - an AutoSQLTable object declaring the fields in the BED file.
-                         Required only if the BED file contains extra (custom) fields.
-                         Default value is None.
-         - targets     - A list of SeqRecord objects with the chromosomes in the
-                         order as they appear in the alignments. The sequence
-                         contents in each SeqRecord may be undefined, but the
-                         sequence length must be defined, as in this example:
+         - target       - output stream or file name.
+         - bedN         - number of columns in the BED file.
+                          This must be between 3 and 12; default value is 12.
+         - declaration  - an AutoSQLTable object declaring the fields in the
+                          BED file.
+                          Required only if the BED file contains extra (custom)
+                          fields.
+                          Default value is None.
+         - targets      - A list of SeqRecord objects with the chromosomes in
+                          the order as they appear in the alignments. The
+                          sequence contents in each SeqRecord may be undefined,
+                          but the sequence length must be defined, as in this
+                          example:
 
-                         SeqRecord(Seq(None, length=248956422), id="chr1")
+                          SeqRecord(Seq(None, length=248956422), id="chr1")
 
-                         If targets is None (the default value), the alignments
-                         must have an attribute .targets providing the list of
-                         SeqRecord objects.
-         - compress    - If True (default), compress data using zlib.
-                         If False, do not compress data.
-         - extraIndex  - List of strings with the names of extra columns to be
-                         indexed.
-                         Default value is an empty list.
+                          If targets is None (the default value), the alignments
+                          must have an attribute .targets providing the list of
+                          SeqRecord objects.
+         - compress     - If True (default), compress data using zlib.
+                          If False, do not compress data.
+                          Use compress=False for faster searching.
+         - blockSize    - Number of items to bundle in r-tree.
+                          See UCSC's bedToBigBed program for more information.
+                          Default value is 256.
+         - itemsPerSlot - Number of data points bundled at lowest level.
+                          See UCSC's bedToBigBed program for more information.
+                          Use itemsPerSlot=1 for faster searching.
+                          Default value is 512.
+         - extraIndex   - List of strings with the names of extra columns to be
+                          indexed.
+                          Default value is an empty list.
         """
         if bedN < 3 or bedN > 12:
             raise ValueError("bedN must be between 3 and 12")
@@ -262,11 +276,11 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         self.targets = targets
         self.compress = compress
         self.extraIndexNames = extraIndex
-        self.itemsPerSlot = 512
-        self.blockSize = 256
+        self.itemsPerSlot = itemsPerSlot
+        self.blockSize = blockSize
 
     def write_file(self, stream, alignments):
-        """Write the alignments to the file strenm, and return the number of alignments.
+        """Write the alignments to the file stream, and return the number of alignments.
 
         alignments - A list or iterator returning Alignment objects
         stream     - Output file stream.
@@ -441,7 +455,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             regions = []
             rezoomedList = []
             trees = _RangeTree.generate(chromUsageList, alignments)
-            scale = initialReduction["scale"]
+            scale = int(initialReduction["scale"])
             doubleReductionSize = scale * _ZoomLevels.bbiResIncrement
             for tree in trees:
                 start = -sys.maxsize
@@ -457,7 +471,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                         rezoomed += summary
             buffer.flush()
             assert len(regions) == initialReduction["size"]
-            zoomList[0].amount = initialReduction["scale"]
+            zoomList[0].reductionLevel = initialReduction["scale"]
             indexOffset = output.tell()
             zoomList[0].indexOffset = indexOffset
             _RTreeFormatter().write(
@@ -615,7 +629,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
 
         done = False
         region = None
-        alignments.rewind()
+        alignments = iter(alignments)
         while True:
             try:
                 alignment = next(alignments)
@@ -695,6 +709,25 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         fieldCount = header.fieldCount
         definedFieldCount = header.definedFieldCount
         fullDataOffset = header.fullDataOffset
+        zoomList = _ZoomLevels(byteorder)
+        zoomList.read(stream)
+        formatter = _RTreeFormatter(byteorder).formatter_header
+        for zoomLevel in zoomList:
+            indexOffset = zoomLevel.indexOffset
+            stream.seek(indexOffset)
+            data = stream.read(formatter.size)
+            (
+                signature,
+                blockSize,
+                nItems,
+                startChromId,
+                startBase,
+                endChromId,
+                endBase,
+                endFileOffset,
+                self.itemsPerSlot,
+            ) = formatter.unpack(data)
+            assert signature == _RTreeFormatter.signature
         self.declaration = self._read_autosql(stream, header)
         stream.seek(fullDataOffset)
         (dataCount,) = struct.unpack(byteorder + "Q", stream.read(8))
@@ -710,7 +743,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
         stream.seek(header.fullIndexOffset)
         self.tree = _RTreeFormatter(byteorder).read(stream)
-
         self._data = self._iterate_index(stream)
 
     def _read_autosql(self, stream, header):
@@ -793,8 +825,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     data = zlib.decompress(data)
                 while data:
                     chromId, chromStart, chromEnd = formatter.unpack(data[:size])
-                    rest, data = data[size:].split(b"\00", 1)
-                    yield (chromId, chromStart, chromEnd, rest)
+                    i = data.index(0, size) + 1
+                    rest = data[size:i]
+                    data = data[i:]
+                    yield (chromId, chromStart, chromEnd, rest, 0, len(rest))
                 while True:
                     parent = node.parent
                     if parent is None:
@@ -832,19 +866,50 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 data = stream.read(node.dataSize)
                 if self._compressed > 0:
                     data = zlib.decompress(data)
-                while data:
+                if self.itemsPerSlot == 1:
                     child_chromIx, child_chromStart, child_chromEnd = formatter.unpack(
                         data[:size]
                     )
-                    rest, data = data[size:].split(b"\00", 1)
-                    if child_chromIx != chromIx:
-                        continue
-                    if end <= child_chromStart or child_chromEnd <= start:
-                        if child_chromStart != child_chromEnd:
+                    if child_chromIx == chromIx:
+                        if (child_chromStart < end and start < child_chromEnd) or (
+                            child_chromStart == child_chromEnd
+                            and (child_chromStart == end or start == child_chromEnd)
+                        ):
+                            yield (
+                                child_chromIx,
+                                child_chromStart,
+                                child_chromEnd,
+                                data,
+                                size,
+                                len(data),
+                            )
+                else:
+                    i = 0
+                    n = len(data)
+                    while i < n:
+                        j = i + size
+                        child_chromIx, child_chromStart, child_chromEnd = (
+                            formatter.unpack(data[i:j])
+                        )
+                        i = j
+                        j = data.index(b"\00", i) + 1
+                        rest = data[i:j]
+                        i = j
+                        if child_chromIx != chromIx:
                             continue
-                        if child_chromStart != end and child_chromEnd != start:
-                            continue
-                    yield (child_chromIx, child_chromStart, child_chromEnd, rest)
+                        if end <= child_chromStart or child_chromEnd <= start:
+                            if child_chromStart != child_chromEnd:
+                                continue
+                            if child_chromStart != end and child_chromEnd != start:
+                                continue
+                        yield (
+                            child_chromIx,
+                            child_chromStart,
+                            child_chromEnd,
+                            rest,
+                            0,
+                            len(rest),
+                        )
             else:
                 visit_child = False
                 for child in children:
@@ -878,10 +943,16 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             row = next(self._data)
         except StopIteration:
             return
-        return self._create_alignment(row)
+        chromId, chromStart, chromEnd, rest, dataStart, dataEnd = row
+        return self._create_alignment(
+            chromId, chromStart, chromEnd, rest, dataStart, dataEnd
+        )
 
-    def _create_alignment(self, row):
-        chromId, chromStart, chromEnd, rest = row
+    def _create_alignment(
+        self, chromId, chromStart, chromEnd, rest, dataStart, dataEnd
+    ):
+        assert rest[dataEnd - 1] == 0
+        rest = rest[dataStart : dataEnd - 1]
         if rest:
             words = rest.decode().split("\t")
         else:
@@ -1010,7 +1081,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 end = start + 1
         data = self._search_index(stream, chromIx, start, end)
         for row in data:
-            alignment = self._create_alignment(row)
+            chromIx, chromStart, chromEnd, rest, dataStart, dataEnd = row
+            alignment = self._create_alignment(
+                chromIx, chromStart, chromEnd, rest, dataStart, dataEnd
+            )
             yield alignment
 
 
@@ -1189,7 +1263,6 @@ class _ExtraIndex:
 
 
 class _ExtraIndices(list):
-
     formatter = struct.Struct("=HHQ52x")
 
     def __init__(self, names, declaration):
@@ -1227,33 +1300,51 @@ class _ExtraIndices(list):
 
 
 class _ZoomLevel:
-    __slots__ = ["amount", "dataOffset", "indexOffset"]
+    __slots__ = ["reductionLevel", "dataOffset", "indexOffset", "formatter"]
 
-    # Supplemental Table 6: The zoom header
-    # reductionLevel   4 bytes, unsigned
-    # reserved         4 bytes, unsigned
-    # dataOffset       8 bytes, unsigned
-    # indexOffset      8 bytes, unsigned
-
-    formatter = struct.Struct("=IxxxxQQ")
+    def __init__(self, byteorder="="):
+        # Supplemental Table 6: The zoom header
+        # reductionLevel   4 bytes, unsigned
+        # reserved         4 bytes, unsigned
+        # dataOffset       8 bytes, unsigned
+        # indexOffset      8 bytes, unsigned
+        self.formatter = struct.Struct(byteorder + "IxxxxQQ")
 
     def __bytes__(self):
-        return self.formatter.pack(self.amount, self.dataOffset, self.indexOffset)
+        return self.formatter.pack(
+            self.reductionLevel, self.dataOffset, self.indexOffset
+        )
+
+    def read(self, stream):
+        data = stream.read(self.formatter.size)
+        reductionLevel, dataOffset, indexOffset = self.formatter.unpack(data)
+        if reductionLevel == 0:
+            raise StopIteration
+        self.reductionLevel = reductionLevel
+        self.dataOffset = dataOffset
+        self.indexOffset = indexOffset
 
 
 class _ZoomLevels(list):
-
     bbiResIncrement = 4
     bbiMaxZoomLevels = 10
-    size = _ZoomLevel.formatter.size * bbiMaxZoomLevels
+    size = _ZoomLevel("=").formatter.size * bbiMaxZoomLevels
 
-    def __init__(self):
-        self[:] = [_ZoomLevel() for i in range(_ZoomLevels.bbiMaxZoomLevels)]
+    def __init__(self, byteorder="="):
+        self[:] = [_ZoomLevel(byteorder) for i in range(_ZoomLevels.bbiMaxZoomLevels)]
 
     def __bytes__(self):
         data = b"".join(bytes(item) for item in self)
         data += bytes(_ZoomLevels.size - len(data))
         return data
+
+    def read(self, stream):
+        for zoomLevels in range(_ZoomLevels.bbiMaxZoomLevels):
+            try:
+                self[zoomLevels].read(stream)
+            except StopIteration:
+                del self[zoomLevels:]
+                break
 
     @classmethod
     def calculate_reductions(cls, aveSize):
@@ -1274,7 +1365,7 @@ class _ZoomLevels(list):
 
     def reduce(self, summaries, initialReduction, buffer, blockSize, itemsPerSlot):
         zoomCount = initialReduction["size"]
-        reduction = initialReduction["scale"] * _ZoomLevels.bbiResIncrement
+        reduction = int(initialReduction["scale"]) * _ZoomLevels.bbiResIncrement
         output = buffer.output
         formatter = _RTreeFormatter()
         for zoomLevels in range(1, _ZoomLevels.bbiMaxZoomLevels):
@@ -1291,7 +1382,7 @@ class _ZoomLevels(list):
             indexOffset = output.tell()
             formatter.write(summaries, blockSize, itemsPerSlot, indexOffset, output)
             self[zoomLevels].indexOffset = indexOffset
-            self[zoomLevels].amount = reduction
+            self[zoomLevels].reductionLevel = reduction
             reduction *= _ZoomLevels.bbiResIncrement
             i = 0
             chromId = None
@@ -1350,7 +1441,6 @@ class _Region:
 
 
 class _RegionSummary(_Summary):
-
     __slots__ = _Region.__slots__ + _Summary.__slots__
 
     formatter = struct.Struct("=IIIIffff")
@@ -1435,14 +1525,18 @@ class _RangeTree:
 
     @classmethod
     def generate(cls, chromUsageList, alignments):
-        alignments.rewind()
+        alignments = iter(alignments)
         alignment = None
         for chromName, chromId, chromSize in chromUsageList:
             chromName = chromName.decode()
             tree = _RangeTree(chromId, chromSize)
             if alignment is not None:
                 tree.addToCoverageDepth(alignment)
-            for alignment in alignments:
+            while True:
+                try:
+                    alignment = next(alignments)
+                except StopIteration:
+                    break
                 if alignment.target.id != chromName:
                     break
                 tree.addToCoverageDepth(alignment)
@@ -1676,7 +1770,6 @@ class _RedBlackTreeNode:
 
 
 class _RTreeFormatter:
-
     signature = 0x2468ACE0
 
     def __init__(self, byteorder="="):
@@ -1986,7 +2079,6 @@ class _RTreeFormatter:
         root, levelCount = self.rTreeFromChromRangeArray(
             blockSize, items, endFileOffset
         )
-
         data = self.formatter_header.pack(
             _RTreeFormatter.signature,
             blockSize,
@@ -2017,11 +2109,9 @@ class _RTreeFormatter:
 
 
 class _BPlusTreeFormatter:
-
     signature = 0x78CA8C91
 
     def __init__(self, byteorder="="):
-
         # Supplemental Table 8: Chromosome B+ tree header
         # magic     4 bytes, unsigned
         # blockSize 4 bytes, unsigned

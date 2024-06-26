@@ -92,7 +92,7 @@ class AbstractPropertyMap:
         entity_2 property_2
 
         """
-        for i in range(0, len(self.property_list)):
+        for i in range(len(self.property_list)):
             yield self.property_list[i]
 
 

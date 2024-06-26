@@ -5,6 +5,7 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 """Tests for the SeqIO SnapGene module."""
+
 import datetime
 import unittest
 
@@ -15,7 +16,6 @@ from Bio.SeqFeature import CompoundLocation
 
 
 class TestSnapGene(unittest.TestCase):
-
     sample_data = {
         "sample-d": {
             "file": "SnapGene/sample-d.dna",

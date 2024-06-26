@@ -8,14 +8,19 @@ import os
 import sys
 import unittest
 import subprocess
+import warnings
 from io import StringIO
+from Bio import BiopythonDeprecationWarning
 
-from Bio.Emboss.Applications import WaterCommandline, NeedleCommandline
-from Bio.Emboss.Applications import SeqretCommandline, SeqmatchallCommandline
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
+    from Bio.Emboss.Applications import WaterCommandline, NeedleCommandline
+    from Bio.Emboss.Applications import SeqretCommandline, SeqmatchallCommandline
+    from Bio.Application import _escape_filename
+
 from Bio import SeqIO
 from Bio import AlignIO
 from Bio import MissingExternalDependencyError
-from Bio.Application import _escape_filename
 from Bio.Seq import Seq, translate
 from Bio.SeqRecord import SeqRecord
 
@@ -869,9 +874,9 @@ class TranslationTests(unittest.TestCase):
         cline += " -auto"  # no prompting
         cline += " -filter"  # use stdout
         if table is not None:
-            cline += f" -table {str(table)}"
+            cline += f" -table {table!s}"
         if frame is not None:
-            cline += f" -frame {str(frame)}"
+            cline += f" -frame {frame!s}"
         # Run the tool,
         child = subprocess.Popen(
             str(cline),

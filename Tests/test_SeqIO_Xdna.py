@@ -5,6 +5,7 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 """Tests for the SeqIO Xdna module."""
+
 import unittest
 
 from io import BytesIO
@@ -19,7 +20,6 @@ from Bio.SeqRecord import SeqRecord
 
 
 class TestXdna(unittest.TestCase):
-
     sample_data = {
         "sample-a": {
             "file": "Xdna/sample-a.xdna",

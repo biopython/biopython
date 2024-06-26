@@ -16,15 +16,10 @@ Functions:
  - classify     Classify an observation into a class.
 
 This module has been deprecated, please consider an alternative like scikit-learn
-insead.
+instead.
 """
 
 import warnings
-
-import numpy as np
-
-import numpy.linalg
-
 from Bio import BiopythonDeprecationWarning
 
 warnings.warn(
@@ -32,6 +27,17 @@ warnings.warn(
     "release of Biopython. Consider using scikit-learn instead.",
     BiopythonDeprecationWarning,
 )
+
+try:
+    import numpy as np
+    import numpy.linalg
+except ImportError:
+    from Bio import MissingPythonDependencyError
+
+    raise MissingPythonDependencyError(
+        "Please install NumPy if you want to use Bio.LogisticRegression. "
+        "See http://www.numpy.org/"
+    ) from None
 
 
 class LogisticRegression:

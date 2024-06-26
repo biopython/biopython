@@ -28,6 +28,7 @@ As we can see on this example, ``start + size`` will give one more than the
 zero-based end position. We can therefore manipulate ``start`` and
 ``start + size`` as python list slice boundaries.
 """
+
 import shlex
 import itertools
 
@@ -312,7 +313,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             elif key == "scoring":
                 key = "Scoring"
             elif key == "program":
-                key = "Porgram"
+                key = "Program"
             else:
                 raise ValueError("Unexpected variable '%s' in header line" % key)
             metadata[key] = value
@@ -322,7 +323,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         for line in stream:
             if line.strip():
                 if not line.startswith("#"):
-                    self._line = line
+                    assert line.startswith("a")
+                    self._aline = line
                     break
                 comment = line[1:].strip()
                 comments.append(comment)
@@ -333,22 +335,17 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         self.metadata = metadata
 
     def _read_next_alignment(self, stream):
-        line = self._line
-        if line is None:
+        aline = self._aline
+        if aline is None:
             return
-        lines = itertools.chain([line], stream)
-        alignment = self._create_alignment(lines)
-        return alignment
-
-    def _create_alignment(self, lines):
         records = []
+        starts = []
+        sizes = []
         strands = []
-        column_annotations = {}
+        score = None
         aligned_sequences = []
         annotations = {}
-        line = next(lines)
-        assert line.startswith("a")
-        words = line[1:].split()
+        words = aline[1:].split()
         for word in words:
             key, value = word.split("=")
             if key == "score":
@@ -361,9 +358,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             else:
                 raise ValueError("Unknown annotation variable '%s'" % key)
 
-        for line in lines:
-            if line.startswith("a"):
-                self._line = line
+        for line in stream:
+            if line.startswith("#"):
+                continue
+            elif line.startswith("a"):
+                self._aline = line
                 break
             elif line.startswith("s "):
                 words = line.strip().split()
@@ -379,19 +378,12 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 text = words[6]
                 for gap_char in ".=_":
                     text = text.replace(gap_char, "-")
-                aligned_sequences.append(text)
-                sequence = text.replace("-", "")
-                if len(sequence) != size:
-                    raise ValueError(
-                        "sequence size is incorrect (found %d, expected %d)"
-                        % (len(sequence), size)
-                    )
-                if strand == "-":
-                    sequence = reverse_complement(sequence)
-                    start = srcSize - start - size
-                seq = Seq({start: sequence}, length=srcSize)
+                aligned_sequences.append(text.encode())
+                seq = Seq(None, length=srcSize)
                 record = SeqRecord(seq, id=src, name="", description="")
                 records.append(record)
+                starts.append(start)
+                sizes.append(size)
                 strands.append(strand)
             elif line.startswith("i "):
                 words = line.strip().split()
@@ -443,18 +435,25 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             else:
                 raise ValueError(f"Error parsing alignment - unexpected line:\n{line}")
         else:
-            self._line = None
-        coordinates = Alignment.infer_coordinates(aligned_sequences)
+            self._aline = None
+        sequences, coordinates = Alignment.parse_printed_alignment(aligned_sequences)
+        for start, size, sequence, record in zip(starts, sizes, sequences, records):
+            srcSize = len(record.seq)
+            if len(sequence) != size:
+                raise ValueError(
+                    "sequence size is incorrect (found %d, expected %d)"
+                    % (len(sequence), size)
+                )
+            record.seq = Seq({start: sequence}, length=srcSize)
         for record, strand, row in zip(records, strands, coordinates):
             if strand == "-":
                 row[:] = row[-1] - row[0] - row
+                record.seq = record.seq.reverse_complement()
             start = record.seq.defined_ranges[0][0]
             row += start
         alignment = Alignment(records, coordinates)
         if annotations is not None:
             alignment.annotations = annotations
-        if column_annotations is not None:
-            alignment.column_annotations = column_annotations
         if score is not None:
             alignment.score = score
         return alignment

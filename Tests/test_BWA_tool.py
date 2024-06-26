@@ -12,12 +12,18 @@ import sys
 import os
 import unittest
 
-# TODO from Bio.Sequencing.Applications import BwaBwaswCommandline
-from Bio.Sequencing.Applications import BwaIndexCommandline
-from Bio.Sequencing.Applications import BwaAlignCommandline
-from Bio.Sequencing.Applications import BwaSamseCommandline
-from Bio.Sequencing.Applications import BwaSampeCommandline
-from Bio.Sequencing.Applications import BwaMemCommandline
+import warnings
+
+from Bio import BiopythonDeprecationWarning
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
+    # TODO from Bio.Sequencing.Applications import BwaBwaswCommandline
+    from Bio.Sequencing.Applications import BwaIndexCommandline
+    from Bio.Sequencing.Applications import BwaAlignCommandline
+    from Bio.Sequencing.Applications import BwaSamseCommandline
+    from Bio.Sequencing.Applications import BwaSampeCommandline
+    from Bio.Sequencing.Applications import BwaMemCommandline
 
 
 #################################################################

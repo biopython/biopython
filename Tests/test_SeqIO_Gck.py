@@ -5,14 +5,11 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 """Tests for the SeqIO Gck module."""
-import os.path
-import shutil
+
 import unittest
 
 from io import BytesIO
-from zipfile import ZipFile
 
-from Bio import MissingExternalDependencyError
 from Bio import SeqIO
 
 

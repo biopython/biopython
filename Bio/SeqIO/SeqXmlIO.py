@@ -13,6 +13,7 @@ SeqXML is a lightweight XML format which is supposed be an alternative for
 FASTA files. For more Information see http://www.seqXML.org and Schmitt et al
 (2011), https://doi.org/10.1093/bib/bbr025
 """
+
 from xml import sax
 from xml.sax import handler
 from xml.sax.saxutils import XMLGenerator
@@ -79,11 +80,23 @@ class ContentHandler(handler.ContentHandler):
                 )
         if self.seqXMLversion is None:
             raise ValueError("Failed to find seqXMLversion")
+        elif self.seqXMLversion not in ("0.1", "0.2", "0.3", "0.4"):
+            raise ValueError("Unsupported seqXMLversion")
         url = f"http://www.seqxml.org/{self.seqXMLversion}/seqxml.xsd"
-        if schema != url:
+        if schema is not None and schema != url:
             raise ValueError(
                 "XML Schema '%s' found not consistent with reported seqXML version %s"
                 % (schema, self.seqXMLversion)
+            )
+        # speciesName and ncbiTaxID attributes on the root are only supported
+        # in 0.4
+        if self.speciesName and self.seqXMLversion != "0.4":
+            raise ValueError(
+                "Attribute 'speciesName' on root is only supported in version 0.4"
+            )
+        if self.ncbiTaxID and self.seqXMLversion != "0.4":
+            raise ValueError(
+                "Attribute 'ncbiTaxID' on root is only supported in version 0.4"
             )
         self.endElementNS = self.endSeqXMLElement
         self.startElementNS = self.startEntryElement
@@ -106,7 +119,7 @@ class ContentHandler(handler.ContentHandler):
             raise ValueError("Expected to find the start of an entry element")
         if qname is not None:
             raise RuntimeError("Unexpected qname for entry element")
-        record = SeqRecord("", id=None)
+        record = SeqRecord(None, id=None)
         if self.speciesName is not None:
             record.annotations["organism"] = self.speciesName
         if self.ncbiTaxID is not None:
@@ -117,7 +130,9 @@ class ContentHandler(handler.ContentHandler):
             if namespace is None:
                 if localname == "id":
                     record.id = value
-                elif localname == "source":
+                elif localname == "source" and (
+                    self.seqXMLversion == "0.3" or self.seqXMLversion == "0.4"
+                ):
                     record.annotations["source"] = value
                 else:
                     raise ValueError(
@@ -130,7 +145,10 @@ class ContentHandler(handler.ContentHandler):
         if record.id is None:
             raise ValueError("Failed to find entry ID")
         self.records.append(record)
-        self.startElementNS = self.startEntryFieldElement
+        if self.seqXMLversion == "0.1":
+            self.startElementNS = self.startEntryFieldElementVersion01
+        else:
+            self.startElementNS = self.startEntryFieldElement
         self.endElementNS = self.endEntryElement
 
     def endEntryElement(self, name, qname):
@@ -139,11 +157,34 @@ class ContentHandler(handler.ContentHandler):
             raise ValueError("Expected to find the end of an entry element")
         if qname is not None:
             raise RuntimeError("Unexpected qname for entry element")
+        if self.records[-1].seq is None:
+            raise ValueError("Failed to find a sequence for entry element")
         self.startElementNS = self.startEntryElement
         self.endElementNS = self.endSeqXMLElement
 
+    def startEntryFieldElementVersion01(self, name, qname, attrs):
+        """Receive a field of an entry element and forward it for version 0.1."""
+        namespace, localname = name
+        if namespace is not None:
+            raise ValueError(
+                f"Unexpected namespace '{namespace}' for {localname} element"
+            )
+        if qname is not None:
+            raise RuntimeError(f"Unexpected qname '{qname}' for {localname} element")
+        if localname == "species":
+            return self.startSpeciesElement(attrs)
+        if localname == "description":
+            return self.startDescriptionElement(attrs)
+        if localname in ("dnaSeq", "rnaSeq", "aaSeq"):
+            return self.startSequenceElement(attrs)
+        if localname == "alternativeID":
+            return self.startDBRefElement(attrs)
+        if localname == "property":
+            return self.startPropertyElement(attrs)
+        raise ValueError(f"Unexpected field {localname} in entry")
+
     def startEntryFieldElement(self, name, qname, attrs):
-        """Receive a field of an entry element and forward it."""
+        """Receive a field of an entry element and forward it for versions >=0.2."""
         namespace, localname = name
         if namespace is not None:
             raise ValueError(
@@ -251,11 +292,17 @@ class ContentHandler(handler.ContentHandler):
         if qname is not None:
             raise RuntimeError(f"Unexpected qname '{qname}' for sequence end")
         record = self.records[-1]
-        if localname == "DNAseq":
+        if (localname == "DNAseq" and self.seqXMLversion != "0.1") or (
+            localname == "dnaSeq" and self.seqXMLversion == "0.1"
+        ):
             record.annotations["molecule_type"] = "DNA"
-        elif localname == "RNAseq":
+        elif (localname == "RNAseq" and self.seqXMLversion != "0.1") or (
+            localname == "rnaSeq" and self.seqXMLversion == "0.1"
+        ):
             record.annotations["molecule_type"] = "RNA"
-        elif localname == "AAseq":
+        elif (localname == "AAseq" and self.seqXMLversion >= "0.1") or (
+            localname == "aaSeq" and self.seqXMLversion == "0.1"
+        ):
             record.annotations["molecule_type"] = "protein"
         else:
             raise RuntimeError(
@@ -267,12 +314,15 @@ class ContentHandler(handler.ContentHandler):
 
     def startDBRefElement(self, attrs):
         """Parse a database cross reference."""
+        TYPE = None
         source = None
         ID = None
         for key, value in attrs.items():
             namespace, localname = key
             if namespace is None:
-                if localname == "source":
+                if localname == "type":
+                    TYPE = value
+                elif localname == "source":
                     source = value
                 elif localname == "id":
                     ID = value
@@ -284,11 +334,16 @@ class ContentHandler(handler.ContentHandler):
                 raise ValueError(
                     f"Unexpected namespace '{namespace}' for DBRef attribute"
                 )
-        # The attributes "source" and "id" are required:
+        # The attributes "source" and "id" are required, and "type" in versions
+        # 0.2-0.3:
         if source is None:
             raise ValueError("Failed to find source for DBRef element")
         if ID is None:
             raise ValueError("Failed to find id for DBRef element")
+        if TYPE is None and (
+            self.seqXMLversion == "0.2" or self.seqXMLversion == "0.3"
+        ):
+            raise ValueError("Failed to find type for DBRef element")
         if self.data is not None:
             raise RuntimeError(f"Unexpected data found: '{self.data}'")
         self.data = ""
@@ -305,7 +360,9 @@ class ContentHandler(handler.ContentHandler):
             raise RuntimeError(f"Unexpected namespace '{namespace}' for DBRef element")
         if qname is not None:
             raise RuntimeError(f"Unexpected qname '{qname}' for DBRef element")
-        if localname != "DBRef":
+        if (localname != "DBRef" and self.seqXMLversion != "0.1") or (
+            localname != "alternativeID" and self.seqXMLversion == "0.1"
+        ):
             raise RuntimeError(f"Unexpected localname '{localname}' for DBRef element")
         if self.data:
             raise RuntimeError(
@@ -384,6 +441,7 @@ class SeqXmlIterator(SequenceIterator):
     method calls.
     """
 
+    # Small block size can be a problem with libexpat 2.6.0 onwards:
     BLOCK = 1024
 
     def __init__(self, stream_or_path, namespace=None):
@@ -440,11 +498,12 @@ class SeqXmlIterator(SequenceIterator):
             if not text:
                 break
             parser.feed(text)
+        # Closing the parser ensures that all XML data fed into it are processed
+        parser.close()
         # We have reached the end of the XML file;
         # send out the remaining records
         yield from records
         records.clear()
-        parser.close()
 
 
 class SeqXmlWriter(SequenceWriter):
@@ -561,7 +620,6 @@ class SeqXmlWriter(SequenceWriter):
 
             # The local species definition is only written if it differs from the global species definition
             if local_org != self.species or local_ncbi_taxid != self.ncbiTaxId:
-
                 attr = {"name": local_org, "ncbiTaxID": str(local_ncbi_taxid)}
                 self.xml_generator.startElement("species", AttributesImpl(attr))
                 self.xml_generator.endElement("species")
@@ -569,7 +627,6 @@ class SeqXmlWriter(SequenceWriter):
     def _write_description(self, record):
         """Write the description if given (PRIVATE)."""
         if record.description:
-
             if not isinstance(record.description, str):
                 raise TypeError("Description should be of type string")
 
@@ -612,9 +669,7 @@ class SeqXmlWriter(SequenceWriter):
     def _write_dbxrefs(self, record):
         """Write all database cross references (PRIVATE)."""
         if record.dbxrefs is not None:
-
             for dbxref in record.dbxrefs:
-
                 if not isinstance(dbxref, str):
                     raise TypeError("dbxrefs should be of type list of string")
                 if dbxref.find(":") < 1:
@@ -631,17 +686,13 @@ class SeqXmlWriter(SequenceWriter):
     def _write_properties(self, record):
         """Write all annotations that are key value pairs with values of a primitive type or list of primitive types (PRIVATE)."""
         for key, value in record.annotations.items():
-
             if key not in ("organism", "ncbi_taxid", "source"):
-
                 if value is None:
-
                     attr = {"name": key}
                     self.xml_generator.startElement("property", AttributesImpl(attr))
                     self.xml_generator.endElement("property")
 
                 elif isinstance(value, list):
-
                     for v in value:
                         if v is None:
                             attr = {"name": key}
@@ -653,7 +704,6 @@ class SeqXmlWriter(SequenceWriter):
                         self.xml_generator.endElement("property")
 
                 elif isinstance(value, (int, float, str)):
-
                     attr = {"name": key, "value": str(value)}
                     self.xml_generator.startElement("property", AttributesImpl(attr))
                     self.xml_generator.endElement("property")

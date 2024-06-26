@@ -18,6 +18,8 @@ Note: Currently we do not support recording per-letter-annotations
 (like quality scores) in BioSQL.
 """
 
+from typing import List, Optional
+
 from Bio.Seq import Seq, SequenceDataAbstractBaseClass
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
 from Bio import SeqFeature
@@ -276,9 +278,9 @@ def _retrieve_features(adaptor, primary_id):
             )
             dbname, version = lookup.get(location_id, (None, None))
             feature.location = SeqFeature.SimpleLocation(start, end)
-            feature.strand = strand
-            feature.ref_db = dbname
-            feature.ref = version
+            feature.location.strand = strand
+            feature.location.ref_db = dbname
+            feature.location.ref = version
         else:
             locs = []
             for location in locations:
@@ -536,20 +538,20 @@ class DBSeqRecord(SeqRecord):
 
     seq = property(__get_seq, __set_seq, __del_seq, "Seq object")
 
-    def __get_dbxrefs(self):
+    @property
+    def dbxrefs(self) -> List[str]:
+        """Database cross references."""
         if not hasattr(self, "_dbxrefs"):
             self._dbxrefs = _retrieve_dbxrefs(self._adaptor, self._primary_id)
         return self._dbxrefs
 
-    def __set_dbxrefs(self, dbxrefs):
-        self._dbxrefs = dbxrefs
+    @dbxrefs.setter
+    def dbxrefs(self, value: List[str]) -> None:
+        self._dbxrefs = value
 
-    def __del_dbxrefs(self):
+    @dbxrefs.deleter
+    def dbxrefs(self) -> None:
         del self._dbxrefs
-
-    dbxrefs = property(
-        __get_dbxrefs, __set_dbxrefs, __del_dbxrefs, "Database cross references"
-    )
 
     def __get_features(self):
         if not hasattr(self, "_features"):
@@ -564,7 +566,9 @@ class DBSeqRecord(SeqRecord):
 
     features = property(__get_features, __set_features, __del_features, "Features")
 
-    def __get_annotations(self):
+    @property
+    def annotations(self) -> SeqRecord._AnnotationsDict:
+        """Annotations."""
         if not hasattr(self, "_annotations"):
             self._annotations = _retrieve_annotations(
                 self._adaptor, self._primary_id, self._taxon_id
@@ -575,12 +579,13 @@ class DBSeqRecord(SeqRecord):
                 self._annotations["data_file_division"] = self._division
         return self._annotations
 
-    def __set_annotations(self, annotations):
-        self._annotations = annotations
+    @annotations.setter
+    def annotations(self, value: Optional[SeqRecord._AnnotationsDict]) -> None:
+        if value:
+            self._annotations = value
+        else:
+            self._annotations = {}
 
-    def __del_annotations(self):
+    @annotations.deleter
+    def annotations(self) -> None:
         del self._annotations
-
-    annotations = property(
-        __get_annotations, __set_annotations, __del_annotations, "Annotations"
-    )

@@ -20,7 +20,6 @@ Variables:
 
 """
 
-
 import warnings
 
 from io import StringIO
@@ -28,11 +27,12 @@ import time
 
 from urllib.parse import urlencode
 from urllib.request import build_opener, install_opener
-from urllib.request import urlopen, urlretrieve, urlparse, urlcleanup
+from urllib.request import urlopen
 from urllib.request import HTTPPasswordMgrWithDefaultRealm, HTTPBasicAuthHandler
 from urllib.request import Request
 
 from Bio import BiopythonWarning
+from Bio._utils import function_with_previous
 
 email = None
 tool = "biopython"
@@ -41,6 +41,7 @@ tool = "biopython"
 NCBI_BLAST_URL = "https://blast.ncbi.nlm.nih.gov/Blast.cgi"
 
 
+@function_with_previous
 def qblast(
     program,
     database,
@@ -261,18 +262,26 @@ def qblast(
     # will take longer thus at least 70s with delay. Therefore,
     # start with 20s delay, thereafter once a minute.
     delay = 20  # seconds
+    start_time = time.time()
     while True:
         current = time.time()
-        wait = qblast._previous + delay - current
+        wait = qblast.previous + delay - current
         if wait > 0:
             time.sleep(wait)
-            qblast._previous = current + wait
+            qblast.previous = current + wait
         else:
-            qblast._previous = current
+            qblast.previous = current
         # delay by at least 60 seconds only if running the request against the public NCBI API
         if delay < 60 and url_base == NCBI_BLAST_URL:
             # Wasn't a quick return, must wait at least a minute
             delay = 60
+        elapsed = time.time() - start_time
+        # Throw a warning if search takes longer than ten minutes
+        if elapsed >= 600:
+            warnings.warn(
+                f"BLAST request {rid} is taking longer than 10 minutes, consider re-issuing it",
+                BiopythonWarning,
+            )
 
         request = Request(url_base, message, {"User-Agent": "BiopythonClient"})
         handle = urlopen(request)
@@ -293,7 +302,7 @@ def qblast(
     return StringIO(results)
 
 
-qblast._previous = 0
+qblast.previous = 0
 
 
 def _parse_qblast_ref_page(handle):

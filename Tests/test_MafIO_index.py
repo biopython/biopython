@@ -575,7 +575,7 @@ if sqlite3:
         def test_correct_spliced_sequences_2(self):
             """Checking that spliced sequences are correct.
 
-            We get spliced alignements from following MAF blocks
+            We get spliced alignments from following MAF blocks
             and check that the sequences are correct:
 
             a score=19159.000000

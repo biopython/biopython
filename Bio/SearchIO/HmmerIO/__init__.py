@@ -15,8 +15,8 @@ Bio.SearchIO.HmmerIO was tested on the following HMMER versions and flavors:
     - HMMER2 flavors: hmmpfam, hmmsearch
 
 More information on HMMER are available through these links:
-  - Web page: http://hmmer.janelia.org/
-  - User guide: ftp://selab.janelia.org/pub/software/hmmer3/3.0/Userguide.pdf
+  - Web page: http://hmmer.org
+  - User guide: http://eddylab.org/software/hmmer/Userguide.pdf
 
 
 Supported formats

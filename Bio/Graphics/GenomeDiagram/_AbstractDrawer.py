@@ -203,7 +203,7 @@ def draw_polygon(
     strokecolor, color = _stroke_and_fill_colors(color, border)
 
     xy_list = []
-    for (x, y) in list_of_points:
+    for x, y in list_of_points:
         xy_list.append(x)
         xy_list.append(y)
 

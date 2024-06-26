@@ -10,14 +10,7 @@ import re
 
 from itertools import zip_longest
 
-try:
-    import numpy as np
-except ImportError:
-    from Bio import MissingPythonDependencyError
-
-    raise MissingPythonDependencyError(
-        "Install NumPy to build proteins from internal coordinates."
-    )
+import numpy as np
 
 from Bio.PDB.PDBExceptions import PDBException
 from io import StringIO
@@ -112,9 +105,7 @@ def report_IC(
     try:
         if "A" == entity.level:
             raise PDBException("No IC output at Atom level")
-        elif isinstance(entity, Residue) or isinstance(
-            entity, DisorderedResidue
-        ):  # "R" == entity.level:
+        elif isinstance(entity, (DisorderedResidue, Residue)):  # "R" == entity.level:
             if entity.internal_coord:
                 reportDict["res"] += 1
                 dlen = len(entity.internal_coord.dihedra)
@@ -143,8 +134,8 @@ def report_IC(
                 hdr = entity.header.get("head", None)
                 if hdr:
                     reportDict["hdr"] += 1
-                nam = entity.header.get("name", None)
-                if nam:
+                name = entity.header.get("name", None)
+                if name:
                     reportDict["hdr"] += 1
             for mdl in entity:
                 reportDict = report_IC(mdl, reportDict)
@@ -501,9 +492,9 @@ def write_PDB(
                             hdr.upper(), (dd or ""), (pdbid or "")
                         )
                     )
-                nam = entity.header.get("name", None)
-                if nam:
-                    fp.write("TITLE     " + nam.upper() + "\n")
+                name = entity.header.get("name", None)
+                if name:
+                    fp.write("TITLE     " + name.upper() + "\n")
             io = PDBIO()
             io.set_structure(entity)
             io.save(fp, preserve_atom_numbering=True)

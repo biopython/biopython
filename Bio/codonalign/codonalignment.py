@@ -1,8 +1,9 @@
-# Copyright 2013 by Zheng Ruan (zruan1991@gmail.com).
-# All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# Copyright 2013 by Zheng Ruan (zruan1991@gmail.com). All rights reserved.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Code for dealing with Codon Alignment.
 
 CodonAlignment class is inherited from MultipleSeqAlignment class. This is
@@ -300,6 +301,8 @@ def _get_codon2codon_matrix(codon_table):
     Elements in the matrix are number of synonymous and nonsynonymous
     substitutions required for the substitution.
     """
+    import copy
+
     base_tuple = ("A", "T", "C", "G")
     codons = [
         i
@@ -307,7 +310,7 @@ def _get_codon2codon_matrix(codon_table):
         if "U" not in i
     ]
     # set up codon_dict considering stop codons
-    codon_dict = codon_table.forward_table
+    codon_dict = copy.deepcopy(codon_table.forward_table)
     for stop in codon_table.stop_codons:
         codon_dict[stop] = "stop"
     # count site
@@ -398,7 +401,7 @@ def _dijkstra(graph, start, end):
     node = end
     distance = 0
     # While we are not arrived at the beginning
-    while not (node == start):
+    while node != start:
         if path.count(node) == 0:
             path.insert(0, node)  # Insert the predecessor of the current node
             node = P[node]  # The current node becomes its predecessor

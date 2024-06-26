@@ -46,7 +46,3 @@ test_script:
   - coverage run run_tests.py --offline
   - coverage xml
   - cd ..
-
-after_test:
-  - conda install -c conda-forge codecov
-  - codecov --file Tests/coverage.xml -X pycov -X gcov

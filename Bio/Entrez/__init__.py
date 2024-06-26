@@ -19,7 +19,7 @@ http://www.ncbi.nlm.nih.gov/books/NBK25501/
 
 This module provides a number of functions like ``efetch`` (short for
 Entrez Fetch) which will return the data as a handle object. This is
-a standard interface used in Python for reading data from a file, or
+a standad interface used in Python for reading data from a file, or
 in this case a remote network connection, and provides methods like
 ``.read()`` or offers iteration over the contents line by line. See
 also "What the heck is a handle?" in the Biopython Tutorial and
@@ -134,12 +134,15 @@ from urllib.error import URLError, HTTPError
 from urllib.parse import urlencode
 from urllib.request import urlopen, Request
 
+from Bio import BiopythonDeprecationWarning
+from Bio._utils import function_with_previous
 
 email = None
 max_tries = 3
 sleep_between_tries = 15
 tool = "biopython"
 api_key = None
+local_cache = None
 
 
 # XXX retmode?
@@ -210,7 +213,11 @@ def esearch(db, term, **keywds):
 
     >>> from Bio import Entrez
     >>> Entrez.email = "Your.Name.Here@example.org"
-    >>> handle = Entrez.esearch(db="nucleotide", retmax=10, term="opuntia[ORGN] accD", idtype="acc")
+    >>> handle = Entrez.esearch(
+    ...     db="nucleotide", retmax=10, idtype="acc",
+    ...     term="opuntia[ORGN] accD 2007[Publication Date]"
+    ... )
+    ...
     >>> record = Entrez.read(handle)
     >>> handle.close()
     >>> int(record["Count"]) >= 2
@@ -323,7 +330,7 @@ def esummary(**keywds):
     >>> print(record[0]["Id"])
     19923
     >>> print(record[0]["PdbDescr"])
-    Crystal Structure Of E. Coli Aconitase B
+    CRYSTAL STRUCTURE OF E. COLI ACONITASE B
 
 
     :returns: Handle to the results, by default in XML format.
@@ -337,10 +344,11 @@ def esummary(**keywds):
 
 
 def egquery(**keywds):
-    """Provide Entrez database counts for a global search.
+    """Provide Entrez database counts for a global search (DEPRECATED).
 
-    EGQuery provides Entrez database counts in XML for a single search
-    using Global Query.
+    EGQuery provided Entrez database counts in XML for a single search
+    using Global Query. However, the NCBI are no longer maintaining this
+    function and suggest using esearch on each database of interest.
 
     See the online documentation for an explanation of the parameters:
     http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EGQuery
@@ -351,17 +359,23 @@ def egquery(**keywds):
 
     >>> from Bio import Entrez
     >>> Entrez.email = "Your.Name.Here@example.org"
-    >>> handle = Entrez.egquery(term="biopython")
-    >>> record = Entrez.read(handle)
-    >>> handle.close()
-    >>> for row in record["eGQueryResult"]:
-    ...     if "pmc" in row["DbName"]:
-    ...         print(int(row["Count"]) > 60)
+    >>> handle = Entrez.egquery(term="biopython")  # doctest: +SKIP
+    >>> record = Entrez.read(handle)  # doctest: +SKIP
+    >>> handle.close()  # doctest: +SKIP
+    >>> for row in record["eGQueryResult"]:  # doctest: +SKIP
+    ...     if "pmc" in row["DbName"]:  # doctest: +SKIP
+    ...         print(int(row["Count"]) > 60)  # doctest: +SKIP
     True
 
     :returns: Handle to the results, by default in XML format.
     :raises urllib.error.URLError: If there's a network error.
     """
+    warnings.warn(
+        "The Bio.Entrez.egquery function is deprecated and will be removed "
+        "in a future release of Biopython because the underlying NCBI EGQuery "
+        "API is no longer maintained.",
+        BiopythonDeprecationWarning,
+    )
     cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/egquery.fcgi"
     variables = {}
     variables.update(keywds)
@@ -455,7 +469,7 @@ def ecitmatch(**keywds):
     return _open(request)
 
 
-def read(handle, validate=True, escape=False, ignore_errors=False):
+def read(source, validate=True, escape=False, ignore_errors=False):
     """Parse an XML file from the NCBI Entrez Utilities into python objects.
 
     This function parses an XML file created by NCBI's Entrez Utilities,
@@ -464,18 +478,28 @@ def read(handle, validate=True, escape=False, ignore_errors=False):
     this function, provided its DTD is available. Biopython includes the
     DTDs for most commonly used Entrez Utilities.
 
-    The handle must be in binary mode. This allows the parser to detect the
-    encoding from the XML file, and to use it to convert all text in the XML
-    to the correct Unicode string. The functions in Bio.Entrez to access NCBI
-    Entrez will automatically return XML data in binary mode. For files,
-    please use mode "rb" when opening the file, as in
+    The argument ``source`` must be a file or file-like object opened in binary
+    mode, or a filename. The parser detects the encoding from the XML file, and
+    uses it to convert all text in the XML to the correct Unicode string. The
+    functions in Bio.Entrez to access NCBI Entrez will automatically return XML
+    data in binary mode. For files, use mode "rb" when opening the file, as in
 
         >>> from Bio import Entrez
-        >>> handle = open("Entrez/esearch1.xml", "rb")  # opened in binary mode
-        >>> record = Entrez.read(handle)
+        >>> path = "Entrez/esearch1.xml"
+        >>> stream = open(path, "rb")  # opened in binary mode
+        >>> record = Entrez.read(stream)
         >>> print(record['QueryTranslation'])
         biopython[All Fields]
-        >>> handle.close()
+        >>> stream.close()
+
+    Alternatively, you can use the filename directly, as in
+
+        >>> record = Entrez.read(path)
+        >>> print(record['QueryTranslation'])
+        biopython[All Fields]
+
+    which is safer, as the file stream will automatically be closed after the
+    record has been read, or if an error occurs.
 
     If validate is True (default), the parser will validate the XML file
     against the DTD, and raise an error if the XML file contains tags that
@@ -500,11 +524,11 @@ def read(handle, validate=True, escape=False, ignore_errors=False):
     from .Parser import DataHandler
 
     handler = DataHandler(validate, escape, ignore_errors)
-    record = handler.read(handle)
+    record = handler.read(source)
     return record
 
 
-def parse(handle, validate=True, escape=False, ignore_errors=False):
+def parse(source, validate=True, escape=False, ignore_errors=False):
     """Parse an XML file from the NCBI Entrez Utilities into python objects.
 
     This function parses an XML file created by NCBI's Entrez Utilities,
@@ -519,21 +543,34 @@ def parse(handle, validate=True, escape=False, ignore_errors=False):
     this function, provided its DTD is available. Biopython includes the
     DTDs for most commonly used Entrez Utilities.
 
-    The handle must be in binary mode. This allows the parser to detect the
-    encoding from the XML file, and to use it to convert all text in the XML
-    to the correct Unicode string. The functions in Bio.Entrez to access NCBI
-    Entrez will automatically return XML data in binary mode. For files,
-    please use mode "rb" when opening the file, as in
+    The argument ``source`` must be a file or file-like object opened in binary
+    mode, or a filename. The parser detects the encoding from the XML file, and
+    uses it to convert all text in the XML to the correct Unicode string. The
+    functions in Bio.Entrez to access NCBI Entrez will automatically return XML
+    data in binary mode. For files, use mode "rb" when opening the file, as in
 
         >>> from Bio import Entrez
-        >>> handle = open("Entrez/pubmed1.xml", "rb")  # opened in binary mode
-        >>> records = Entrez.parse(handle)
+        >>> path = "Entrez/pubmed1.xml"
+        >>> stream = open(path, "rb")  # opened in binary mode
+        >>> records = Entrez.parse(stream)
         >>> for record in records:
         ...     print(record['MedlineCitation']['Article']['Journal']['Title'])
         ...
         Social justice (San Francisco, Calif.)
         Biochimica et biophysica acta
-        >>> handle.close()
+        >>> stream.close()
+
+    Alternatively, you can use the filename directly, as in
+
+        >>> records = Entrez.parse(path)
+        >>> for record in records:
+        ...     print(record['MedlineCitation']['Article']['Journal']['Title'])
+        ...
+        Social justice (San Francisco, Calif.)
+        Biochimica et biophysica acta
+
+    which is safer, as the file stream will automatically be closed after all
+    the records have been read, or if an error occurs.
 
     If validate is True (default), the parser will validate the XML file
     against the DTD, and raise an error if the XML file contains tags that
@@ -558,10 +595,11 @@ def parse(handle, validate=True, escape=False, ignore_errors=False):
     from .Parser import DataHandler
 
     handler = DataHandler(validate, escape, ignore_errors)
-    records = handler.parse(handle)
+    records = handler.parse(source)
     return records
 
 
+@function_with_previous
 def _open(request):
     """Make an HTTP request to Entrez, handling errors and enforcing rate limiting (PRIVATE).
 

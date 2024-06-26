@@ -6,12 +6,20 @@
 import sys
 import os
 import unittest
-from Bio.Application import _escape_filename
+import warnings
+
 from Bio import AlignIO
 from Bio import SeqIO
 from Bio import MissingExternalDependencyError
-from Bio.Align.Applications import PrankCommandline
+from Bio import BiopythonDeprecationWarning
 from Bio.Nexus.Nexus import NexusError
+
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
+    from Bio.Application import _escape_filename
+    from Bio.Align.Applications import PrankCommandline
+
 
 # Try to avoid problems when the OS is in another language
 os.environ["LANG"] = "C"

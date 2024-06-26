@@ -112,8 +112,6 @@ class Iterator:
 class ParserFailureError(ValueError):
     """Failure caused by some kind of problem in the parser."""
 
-    pass
-
 
 _cleaner = FeatureValueCleaner()
 

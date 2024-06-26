@@ -1,7 +1,9 @@
 # Copyright 2013 by David Arenillas and Anthony Mathelier. All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license. Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Provides read access to a JASPAR5 formatted database.
 
 This modules requires MySQLdb to be installed.
@@ -53,7 +55,6 @@ appropriate::
             pass # do something with the motif
 """
 
-
 import warnings
 from Bio import BiopythonWarning
 from Bio import MissingPythonDependencyError
@@ -100,7 +101,7 @@ class JASPAR5:
         self.dbh = mdb.connect(host, user, password, name)
 
     def __str__(self):
-        """Return a string represention of the JASPAR5 DB connection."""
+        """Return a string representation of the JASPAR5 DB connection."""
         return rf"{self.user}\@{self.host}:{self.name}"
 
     def fetch_motif_by_id(self, id):
@@ -426,7 +427,7 @@ class JASPAR5:
             elif attr == "comment":
                 motif.comment = val
             else:
-                # TODO If we were to implement additional abitrary tags
+                # TODO If we were to implement additional arbitrary tags
                 # motif.tag(attr, val)
                 pass
 

@@ -7,7 +7,6 @@
 
 """Base class for the support of PAML, Phylogenetic Analysis by Maximum Likelihood."""
 
-
 import os
 import subprocess
 
@@ -37,11 +36,9 @@ class Paml:
 
     def write_ctl_file(self):
         """Write control file."""
-        pass
 
     def read_ctl_file(self):
         """Read control file."""
-        pass
 
     def print_options(self):
         """Print out all of the options and their current settings."""

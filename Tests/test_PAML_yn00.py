@@ -9,12 +9,10 @@ import unittest
 import os
 import os.path
 from Bio.Phylo.PAML import yn00
-from Bio.Phylo.PAML._paml import PamlError
 import glob
 
 
 class ModTest(unittest.TestCase):
-
     align_dir = os.path.join("PAML", "Alignments")
     tree_dir = os.path.join("PAML", "Trees")
     ctl_dir = os.path.join("PAML", "Control_files")

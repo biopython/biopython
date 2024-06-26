@@ -11,6 +11,8 @@ import os
 import string
 import numpy as np
 
+from Bio.File import as_handle
+
 
 class Array(np.ndarray):
     """numpy array subclass indexed by integers and by letters."""
@@ -23,6 +25,7 @@ class Array(np.ndarray):
             if dims is not None:
                 raise ValueError("dims should be None if data is a dict")
             alphabet = []
+            single_letters = True
             for key in data:
                 if isinstance(key, str):
                     if dims is None:
@@ -31,7 +34,6 @@ class Array(np.ndarray):
                         raise ValueError("inconsistent dimensions in data")
                     alphabet.append(key)
                 elif isinstance(key, tuple):
-                    single_letters = True
                     if dims is None:
                         dims = len(key)
                     elif dims != len(key):
@@ -80,7 +82,7 @@ class Array(np.ndarray):
             return obj
         if alphabet is None:
             alphabet = string.ascii_uppercase
-        elif not (isinstance(alphabet, str) or isinstance(alphabet, tuple)):
+        elif not (isinstance(alphabet, (str, tuple))):
             raise ValueError("alphabet should be a string or a tuple")
         n = len(alphabet)
         if data is None:
@@ -159,6 +161,8 @@ class Array(np.ndarray):
         elif value.ndim == 1:
             if value.shape[0] != self.shape[0]:
                 value._alphabet = self.alphabet[key]
+        elif value.ndim == 0:
+            return value.item()
         return value.view(Array)
 
     def __setitem__(self, key, value):
@@ -389,8 +393,9 @@ class Array(np.ndarray):
             for line in header:
                 line = "#  %s\n" % line
                 lines.append(line)
-        width = max(len(c) for c in alphabet)
-        line = " " * width
+        keywidth = max(len(c) for c in alphabet)
+        keyfmt = "%" + str(keywidth) + "s"
+        line = " " * keywidth
         for j, c2 in enumerate(alphabet):
             maxwidth = 0
             for i, c1 in enumerate(alphabet):
@@ -410,7 +415,8 @@ class Array(np.ndarray):
         line = line.rstrip() + "\n"
         lines.append(line)
         for letter, row in zip(alphabet, words):
-            line = letter + "".join(row) + "\n"
+            key = keyfmt % letter
+            line = key + "".join(row) + "\n"
             lines.append(line)
         text = "".join(lines)
         return text
@@ -453,17 +459,9 @@ class Array(np.ndarray):
 
 def read(handle, dtype=float):
     """Parse the file and return an Array object."""
-    try:
-        fp = open(handle)
+    with as_handle(handle) as fp:
         lines = fp.readlines()
-    except TypeError:
-        fp = handle
-        try:
-            lines = fp.readlines()
-        except Exception as e:
-            raise e from None
-        finally:
-            fp.close()
+
     header = []
     for i, line in enumerate(lines):
         if not line.startswith("#"):

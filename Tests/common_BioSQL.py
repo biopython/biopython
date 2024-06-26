@@ -204,7 +204,6 @@ def create_database():
                     # Seen this with PyPy 2.1 (and older) on Windows -
                     # which suggests an open handle still exists?
                     print(f"Could not remove {TESTDB!r}")
-                    pass
         # Now pick a new filename - just in case there is a stale handle
         # (which might be happening under Windows...)
         TESTDB = temp_db_filename()
@@ -1337,14 +1336,14 @@ class InDepthLoadTest(unittest.TestCase):
         # XXX We should be testing complement as well
         test_record = self.db.lookup(accession="AJ237582")
         test_feature = test_record.features[4]  # DNA, no complement
-        self.assertEqual(test_feature.strand, 1)
+        self.assertEqual(test_feature.location.strand, 1)
         for loc in test_feature.location.parts:
             self.assertEqual(loc.strand, 1)
 
         test_record = self.db.lookup(accession="X55053")
         test_feature = test_record.features[0]
         # mRNA, so really cDNA, so the strand should be 1 (not complemented)
-        self.assertEqual(test_feature.strand, 1)
+        self.assertEqual(test_feature.location.strand, 1)
 
 
 #####################################################################

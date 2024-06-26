@@ -175,7 +175,6 @@ def _compute_gapopen_num(hsp):
 def _augment_blast_hsp(hsp, attr):
     """Calculate the given HSP attribute, for writing (PRIVATE)."""
     if not hasattr(hsp, attr) and not attr.endswith("_pct"):
-
         # aln_span is number of identical matches + mismatches + gaps
         if attr == "aln_span":
             hsp.aln_span = hsp.ident_num + hsp.mismatch_num + hsp.gap_num

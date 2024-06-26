@@ -117,7 +117,7 @@ class ds:
             if -1 in tagpos:
                 del tagpos[-1]
             ps = sorted(tagpos)  # the keys
-            for (p1, p2) in zip(ps, ps[1:] + [len(line) + 1]):
+            for p1, p2 in zip(ps, ps[1:] + [len(line) + 1]):
                 setattr(
                     self,
                     tagpos[p1].lower(),
@@ -376,7 +376,6 @@ def parse(source):
             # encountered at the end of file, to any previous read or contig.
             # The sort() method deals with that later.
             while True:
-
                 # each read must have a rd and qa
                 try:
                     while True:

@@ -5,7 +5,6 @@
 
 """mmCIF parsers."""
 
-
 import numpy as np
 import warnings
 
@@ -93,7 +92,7 @@ class MMCIFParser:
                 item = val[0]
             except (TypeError, IndexError):
                 continue
-            if item != "?":
+            if item != "?" and item != ".":
                 self.header[target_key] = item
                 break
 
@@ -135,7 +134,6 @@ class MMCIFParser:
         return self.header
 
     def _build_structure(self, structure_id):
-
         # two special chars as placeholders in the mmCIF format
         # for item values that cannot be explicitly assigned
         # see: pdbx/mmcif syntax web page
@@ -202,8 +200,7 @@ class MMCIFParser:
         # so serial_id means the Model ID specified in the file
         current_model_id = -1
         current_serial_id = -1
-        for i in range(0, len(atom_id_list)):
-
+        for i in range(len(atom_id_list)):
             # set the line_counter for 'ATOM' lines only and not
             # as a global line counter found in the PDBParser()
             structure_builder.set_line_counter(i)
@@ -232,9 +229,7 @@ class MMCIFParser:
                 # Non-existing residue ID
                 try:
                     msg_resseq = mmcif_dict["_atom_site.auth_seq_id"][i]
-                    msg = "Non-existing residue ID in chain '{}', residue '{}'".format(
-                        chainid, msg_resseq
-                    )
+                    msg = f"Non-existing residue ID in chain '{chainid}', residue '{msg_resseq}'"
                 except (KeyError, IndexError):
                     msg = f"Non-existing residue ID in chain '{chainid}'"
                 warnings.warn(
@@ -399,7 +394,6 @@ class FastMMCIFParser:
     # Private methods
 
     def _build_structure(self, structure_id, filehandle):
-
         # two special chars as placeholders in the mmCIF format
         # for item values that cannot be explicitly assigned
         # see: pdbx/mmcif syntax web page
@@ -501,8 +495,7 @@ class FastMMCIFParser:
         # so serial_id means the Model ID specified in the file
         current_model_id = -1
         current_serial_id = -1
-        for i in range(0, len(atom_id_list)):
-
+        for i in range(len(atom_id_list)):
             # set the line_counter for 'ATOM' lines only and not
             # as a global line counter found in the PDBParser()
             structure_builder.set_line_counter(i)
@@ -522,9 +515,7 @@ class FastMMCIFParser:
                 # Non-existing residue ID
                 try:
                     msg_resseq = mmcif_dict["_atom_site.auth_seq_id"][i]
-                    msg = "Non-existing residue ID in chain '{}', residue '{}'".format(
-                        chainid, msg_resseq
-                    )
+                    msg = f"Non-existing residue ID in chain '{chainid}', residue '{msg_resseq}'"
                 except (KeyError, IndexError):
                     msg = f"Non-existing residue ID in chain '{chainid}'"
                 warnings.warn(

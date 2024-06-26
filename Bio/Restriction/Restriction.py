@@ -82,7 +82,6 @@ Notes about the diverses class of the restriction enzyme implementation::
 
 """
 
-
 import warnings
 
 import re
@@ -118,6 +117,15 @@ matching = {
 DNA = Seq
 
 
+def _make_FormattedSeq_table() -> bytes:
+    table = bytearray(256)
+    upper_to_lower = ord("A") - ord("a")
+    for c in b"ABCDGHKMNRSTVWY":  # Only allow IUPAC letters
+        table[c] = c  # map uppercase to uppercase
+        table[c - upper_to_lower] = c  # map lowercase to uppercase
+    return bytes(table)
+
+
 class FormattedSeq:
     """A linear or circular sequence object for restriction analysis.
 
@@ -132,13 +140,7 @@ class FormattedSeq:
     """
 
     _remove_chars = string.whitespace.encode() + string.digits.encode()
-    _table = bytearray(256)
-    upper_to_lower = ord("A") - ord("a")
-    for c in b"ABCDGHKMNRSTVWY":  # Only allow IUPAC letters
-        _table[c] = c  # map uppercase to uppercase
-        _table[c - upper_to_lower] = c  # map lowercase to uppercase
-    del upper_to_lower
-    _table = bytes(_table)
+    _table = _make_FormattedSeq_table()
 
     def __init__(self, seq, linear=True):
         """Initialize ``FormattedSeq`` with sequence and topology (optional).
@@ -947,7 +949,7 @@ class Palindromic(AbstractCut):
 
     @classmethod
     def is_palindromic(cls):
-        """Return if the enzyme has a palindromic recoginition site."""
+        """Return if the enzyme has a palindromic recognition site."""
         return True
 
 
@@ -989,7 +991,7 @@ class NonPalindromic(AbstractCut):
 
     @classmethod
     def is_palindromic(cls):
-        """Return if the enzyme has a palindromic recoginition site."""
+        """Return if the enzyme has a palindromic recognition site."""
         return False
 
 
@@ -2635,19 +2637,19 @@ for TYPE, (bases, enzymes) in typedict.items():
     #
     #   First eval the bases.
     #
-    bases = tuple(eval(x) for x in bases)
+    bases2 = tuple(eval(x) for x in bases)
     #
     #   now create the particular value of RestrictionType for the classes
     #   in enzymes.
     #
-    T = type.__new__(RestrictionType, "RestrictionType", bases, {})
+    T = type.__new__(RestrictionType, "RestrictionType", bases2, {})
     for k in enzymes:
         #
         #   Now, we go through all the enzymes and assign them their type.
         #   enzymedict[k] contains the values of the attributes for this
         #   particular class (self.site, self.ovhg,....).
         #
-        newenz = T(k, bases, enzymedict[k])
+        newenz = T(k, bases2, enzymedict[k])
         #
         #   we add the enzymes to the corresponding batch.
         #
@@ -2675,4 +2677,4 @@ __all__ = (
     "CommOnly",
     "NonComm",
 ) + tuple(names)
-del k, enzymes, TYPE, bases, names
+del k, enzymes, TYPE, bases, bases2, names

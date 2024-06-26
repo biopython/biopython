@@ -401,7 +401,6 @@ class ExonerateTextParser(_BaseExonerateParser):
 
         # compute start and end coords for each block
         for seq_type in ("query", "hit"):
-
             # ner blocks and intron blocks require different adjustments
             if not has_ner:
                 opp_type = "hit" if seq_type == "query" else "query"
@@ -449,7 +448,6 @@ class ExonerateTextParser(_BaseExonerateParser):
         # flag for vulgar line, if present, we can parse coordinates from it
         vulgar_comp = None
         while True:
-
             match = re.search(_RE_ALN_ROW, self.line.strip())
             # if we have a match, set flags and values
             if match and not in_aln_row:

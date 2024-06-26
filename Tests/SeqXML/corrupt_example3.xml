@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seqXML seqXMLversion="0.4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.seqxml.org/0.3/seqxml.xsd" speciesName="fake">
+    <entry id="fake">
+        <description>entry has no sequence data</description>
+    </entry>
+</seqXML>

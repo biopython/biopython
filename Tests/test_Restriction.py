@@ -4,6 +4,7 @@
 #
 
 """Testing code for Restriction enzyme classes of Biopython."""
+
 import unittest
 
 from Bio.Restriction import Analysis, Restriction, RestrictionBatch

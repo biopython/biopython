@@ -10,6 +10,7 @@ This file contains high level plots which are designed to be used to
 compare different types of information. The most basic example is comparing
 two variables in a traditional scatter plot.
 """
+
 # reportlab
 from reportlab.lib import colors
 from reportlab.graphics.charts.lineplots import LinePlot

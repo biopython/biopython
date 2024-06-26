@@ -29,7 +29,7 @@ Direct MSMS interface, typical use::
     from Bio.PDB.ResidueDepth import get_surface
     surface = get_surface(model)
 
-The surface is a Numeric array with all the surface vertices.
+The surface is a NumPy array with all the surface vertices.
 
 Distance to surface::
 
@@ -292,7 +292,7 @@ def _get_atom_radius(atom, rtype="united"):
         return _atomic_radii[2][typekey]
     elif resname == "VAL" and at_name in {"CG1", "CG2"}:
         return _atomic_radii[9][typekey]
-    elif at_name in {"CD", "CD"}:
+    elif at_name == "CD":
         return _atomic_radii[8][typekey]
     # Co-factors, and other weirdos
     elif (
@@ -493,7 +493,7 @@ def _get_atom_radius(atom, rtype="united"):
 
 
 def _read_vertex_array(filename):
-    """Read the vertex list into a Numeric array (PRIVATE)."""
+    """Read the vertex list into a NumPy array (PRIVATE)."""
     with open(filename) as fp:
         vertex_list = []
         for line in fp:

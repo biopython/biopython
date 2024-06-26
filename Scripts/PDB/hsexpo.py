@@ -17,7 +17,6 @@ A PDB file can be written out with the exposure in the B factor field.
 See --help for all args.
 """
 
-
 import argparse
 import sys
 
@@ -123,9 +122,7 @@ else:
 residue_list = Selection.unfold_entities(m, "R")
 
 for r in residue_list:
-
     if k in r.xtra:
-
         exposure = r.xtra[k]
 
         if args.exp == "DSSPR":

@@ -198,22 +198,21 @@ class AlignmentWriter(bigbed.AlignmentWriter):
          - extraIndex  - List of strings with the names of extra columns to be
                          indexed.
                          Default value is an empty list.
-         - target      - output stream or file name
          - cds         - If True, look for a query feature of type CDS and write
                          it in NCBI style in the PSL file (default: False).
          - fa          - If True, include the query sequence in the PSL file
                          (default: False).
          - mask        - Specify if repeat regions in the target sequence are
                          masked and should be reported in the `repMatches` field
-                         of the PSL file instead of in the `matches` field.
+                         instead of in the `matches` field.
                          Acceptable values are
                          None   : no masking (default);
                          "lower": masking by lower-case characters;
                          "upper": masking by upper-case characters.
          - wildcard    - Report alignments to the wildcard character in the
-                         target or query sequence in the `nCount` field of the
-                         PSL file instead of in the `matches`, `misMatches`, or
-                         `repMatches` fields.
+                         target or query sequence in the `nCount` field instead
+                         of in the `matches`, `misMatches`, or `repMatches`
+                         fields.
                          Default value is 'N'.
         """
         super().__init__(
@@ -258,13 +257,13 @@ class AlignmentWriter(bigbed.AlignmentWriter):
             if coordinates[1, 0] > coordinates[1, -1]:
                 # DNA/RNA mapped to reverse strand of DNA/RNA
                 strand = "-"
-                query = reverse_complement(query, inplace=False)
+                query = reverse_complement(query)
                 coordinates = coordinates.copy()
                 coordinates[1, :] = qSize - coordinates[1, :]
             elif coordinates[0, 0] > coordinates[0, -1]:
                 # protein mapped to reverse strand of DNA
                 strand = "-"
-                target = reverse_complement(target, inplace=False)
+                target = reverse_complement(target)
                 coordinates = coordinates.copy()
                 coordinates[0, :] = tSize - coordinates[0, :]
                 dnax = True
@@ -473,9 +472,9 @@ class AlignmentIterator(bigbed.AlignmentIterator):
                     "Expected field name '%s'; found '%s'" % (name, fields[i].name)
                 )
 
-    def _create_alignment(self, chunk):
-        chromId, tStart, tEnd, rest = chunk
-        words = rest.decode().split("\t")
+    def _create_alignment(self, chromId, tStart, tEnd, rest, dataStart, dataEnd):
+        assert rest[dataEnd - 1] == 0
+        words = rest[dataStart : dataEnd - 1].decode().split("\t")
         if len(words) != 22:
             raise ValueError(
                 "Unexpected number of fields (%d, expected 22)" % len(words)

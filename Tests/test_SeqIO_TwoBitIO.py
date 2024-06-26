@@ -1,6 +1,5 @@
 """Tests for SeqIO TwoBitIO module."""
-import os
-import random
+
 import unittest
 
 from Bio import SeqIO

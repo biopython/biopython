@@ -5,7 +5,6 @@
 
 """Tests for SearchIO HmmerIO hmmer3-tab parser."""
 
-
 import os
 import unittest
 

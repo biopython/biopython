@@ -5,12 +5,16 @@
 
 """Test GenePop."""
 
-
 import os
 import unittest
+import warnings
 
+from Bio import BiopythonDeprecationWarning
 from Bio import MissingExternalDependencyError
-from Bio.PopGen.GenePop.Controller import GenePopController
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
+    from Bio.PopGen.GenePop.Controller import GenePopController
 
 # Tests genepop related code. Note: this case requires genepop
 # test_PopGen_GenePop_nodepend tests code that does not require genepop
@@ -21,7 +25,7 @@ for path in os.environ["PATH"].split(os.pathsep):
         for filename in os.listdir(path):
             if filename.startswith("Genepop"):
                 found = True
-    except os.error:
+    except OSError:
         pass  # Path doesn't exist - correct to pass
 if not found:
     raise MissingExternalDependencyError(

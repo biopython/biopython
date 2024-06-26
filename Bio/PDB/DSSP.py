@@ -90,7 +90,6 @@ The dssp data returned for a single residue is a tuple in the form:
 
 """
 
-
 import re
 import os
 from io import StringIO
@@ -144,7 +143,7 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp", dssp_version="3.9.9"):
         DSSP executable (argument to subprocess)
 
     dssp_version : string
-        Version of DSSP excutable
+        Version of DSSP executable
 
     Returns
     -------

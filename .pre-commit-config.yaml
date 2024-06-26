@@ -5,7 +5,7 @@
 #
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
+    rev: v4.5.0
     hooks:
     -   id: check-executables-have-shebangs
         files: \.(py|sh)$
@@ -13,55 +13,74 @@ repos:
     -   id: end-of-file-fixer
         files: \.py$
     -   id: mixed-line-ending
+-   repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.3.5
+    hooks:
+    # Run the Ruff linter.
+    -   id: ruff
+        args: [
+            '--fix',
+            '--extend-select=B,C4,D,ISC,UP',
+            '--extend-ignore=E501,F401,F841,D105,D2,D4',
+            '--extend-ignore=B007,B009,B010,B018,B028,B904,UP031',
+            '--extend-per-file-ignores=Tests/*.py:D101,Tests/*.py:D102,Tests/*.py:D103',
+            '--extend-per-file-ignores=Tests/*.py:B015',
+        ]
 -   repo: https://github.com/psf/black
-    rev: 22.12.0
+    rev: 24.3.0
     hooks:
     -   id: black
         args: [--check,--target-version,py38]
 -   repo: https://github.com/PyCQA/flake8
-    rev: 6.0.0
+    rev: 7.0.0
     hooks:
     -   id: flake8
         additional_dependencies: [
-            'flake8-blind-except',
-            'flake8-bugbear',
-            'flake8-comprehensions',
-            'flake8-docstrings',
-            'flake8-implicit-str-concat',
             'flake8-rst-docstrings>=0.2.3',
-            'pydocstyle>=6.0.0',
         ]
+-   repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.9.0
+    hooks:
+    -   id: mypy
+        # equivalent to "files" in .mypy.ini
+        files: '^(Bio|BioSQL)/'
 -   repo: https://github.com/asottile/blacken-docs
-    rev: 1.14.0
+    rev: 1.16.0
     hooks:
     -   id: blacken-docs
-        additional_dependencies: [black==22.12.0]
+        additional_dependencies: [black==24.2.0]
         exclude: ^.github/
 -   repo: https://github.com/rstcheck/rstcheck
-    rev: v6.1.2
+    rev: v6.2.0
     hooks:
     -   id: rstcheck
         args: [
-            --ignore-roles=ref,
+            '--ignore-roles=ref,numref,py:mod',
             --ignore-directives=toctree,
-            --report-level=warning
+            --ignore-substitutions=version,
+            --report-level=warning,
+            --ignore-messages=Unknown\ target\ name
         ]
 -   repo: https://github.com/PyCQA/doc8
     rev: v1.1.1
     hooks:
     -   id: doc8
         additional_dependencies: [pygments]
-        args: [--quiet,--ignore-path=Doc/examples/ec_*.txt, --ignore=D004]
+        args: [
+        --quiet,
+        --ignore-path=Doc/examples/ec_*.txt,
+        '--ignore=D000,D001,D002,D004'
+    ]
 -   repo: https://github.com/codespell-project/codespell
-    rev: v2.2.5
+    rev: v2.2.6
     hooks:
     -   id: codespell
-        files: \.(rst|md|tex)$
+        files: \.(rst|md)$
         args: [
             --ignore-regex,
             '(^|\W)([A-Z]{2,3})(\W|$)',
             -L,
-            'ser,hsa,hist,fpr,blosum,ags'
+            'ser,hsa,hist,fpr,blosum,ags,manuel'
         ]
 -   repo: local
     hooks:
@@ -73,7 +92,7 @@ repos:
         files: \.(rst|tex)$
 ci:
     # Settings for the https://pre-commit.ci/ continuous integration service
-    autofix_prs: false
+    autofix_prs: true
     # Default message is more verbose
     autoupdate_commit_msg: '[pre-commit.ci] autoupdate'
     # Default is weekly

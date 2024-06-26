@@ -1,14 +1,16 @@
-# Copyright 2013 by Zheng Ruan (zruan1991@gmail.com).
-# All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# Copyright 2013 by Zheng Ruan (zruan1991@gmail.com). All rights reserved.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Code for dealing with coding sequence.
 
 CodonSeq class is inherited from Seq class. This is the core class to
 deal with sequences in CodonAlignment in biopython.
 
 """
+
 from itertools import permutations
 from math import log
 
@@ -236,7 +238,7 @@ class CodonSeq(Seq):
     def ungap(self, gap="-"):
         """Return a copy of the sequence without the gap character(s)."""
         if len(gap) != 1 or not isinstance(gap, str):
-            raise ValueError(f"Unexpected gap character, {repr(gap)}")
+            raise ValueError(f"Unexpected gap character, {gap!r}")
         return CodonSeq(str(self).replace(gap, ""), rf_table=self.rf_table)
 
     @classmethod
@@ -418,18 +420,18 @@ def _count_site_NG86(codon_lst, codon_table, k=1):
         this_codon_N_site = this_codon_S_site = 0
         for neighbor in neighbor_codon["transition"]:
             if neighbor in codon_table.stop_codons:
-                this_codon_N_site += 1
-            elif codon_table.forward_table[neighbor] == aa:
-                this_codon_S_site += 1
-            else:
-                this_codon_N_site += 1
-        for neighbor in neighbor_codon["transversion"]:
-            if neighbor in codon_table.stop_codons:
                 this_codon_N_site += k
             elif codon_table.forward_table[neighbor] == aa:
                 this_codon_S_site += k
             else:
                 this_codon_N_site += k
+        for neighbor in neighbor_codon["transversion"]:
+            if neighbor in codon_table.stop_codons:
+                this_codon_N_site += 1
+            elif codon_table.forward_table[neighbor] == aa:
+                this_codon_S_site += 1
+            else:
+                this_codon_N_site += 1
         norm_const = (this_codon_N_site + this_codon_S_site) / 3
         S_site += this_codon_S_site / norm_const
         N_site += this_codon_N_site / norm_const

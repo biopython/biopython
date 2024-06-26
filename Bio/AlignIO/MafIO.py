@@ -32,6 +32,7 @@ zero-based end position. We can therefore manipulate ``start`` and
 For an inclusive end coordinate, we need to use ``end = start + size - 1``.
 A 1-column wide alignment would have ``start == end``.
 """
+
 import os
 
 from itertools import islice
@@ -39,7 +40,7 @@ from itertools import islice
 try:
     from sqlite3 import dbapi2
 except ImportError:
-    dbapi2 = None
+    dbapi2 = None  # type: ignore
 
 from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
@@ -184,7 +185,7 @@ def MafIterator(handle, seq_count=None):
                     ref = records[0].seq
                     new = []
 
-                    for (letter, ref_letter) in zip(sequence, ref):
+                    for letter, ref_letter in zip(sequence, ref):
                         new.append(ref_letter if letter == "." else letter)
 
                     sequence = "".join(new)
@@ -756,7 +757,7 @@ class MafIndex:
             real_pos = rec_start
 
             # loop over the alignment to fill split_by_position
-            for gapped_pos in range(0, rec_length):
+            for gapped_pos in range(rec_length):
                 for seqrec in multiseq:
                     # keep track of this position's value for the target seqname
                     if seqrec.id == self._target_seqname:
@@ -845,11 +846,7 @@ class MafIndex:
         for seqid, seq in subseq.items():
             seq = Seq(seq)
 
-            seq = (
-                seq
-                if strand == ref_first_strand
-                else seq.reverse_complement(inplace=False)
-            )  # TODO: remove inplace=False
+            seq = seq if strand == ref_first_strand else seq.reverse_complement()
 
             result_multiseq.append(SeqRecord(seq, id=seqid, name=seqid, description=""))
 

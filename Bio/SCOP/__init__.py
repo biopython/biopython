@@ -46,7 +46,6 @@ Functions:
 
 """
 
-
 import os
 import re
 
@@ -258,7 +257,6 @@ class Scop:
                     n = sunidDict[record.sunid]
 
                     if record.parent != "":  # Not root node
-
                         if record.parent not in sunidDict:
                             raise ValueError("Incomplete data?")
 

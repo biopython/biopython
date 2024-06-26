@@ -13,7 +13,7 @@ from Bio import Align
 
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
     from Bio import MissingPythonDependencyError
 
@@ -27,7 +27,7 @@ class TestMSF(unittest.TestCase):
         path = "msf/W_prot.msf"
         alignments = Align.parse(path, "msf")
         self.check_alignments(alignments)
-        alignments.rewind()
+        alignments = iter(alignments)
         self.check_alignments(alignments)
         with Align.parse(path, "msf") as alignments:
             self.check_alignments(alignments)
@@ -126,9 +126,9 @@ W*05:01          60 SKPTCREGGRSGSAKSLRMGRRGCSAQNPKDSHDPPPHL 99
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     [
                         [0, 93, 99],
                         [0, 93, 99],
@@ -335,9 +335,9 @@ DOA*01:04        62 ----------  62
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     [
                         [0, 28, 62, 250],
                         [0, 28, 62, 250],

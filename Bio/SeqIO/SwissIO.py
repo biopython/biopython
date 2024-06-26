@@ -14,6 +14,7 @@ the sequences as SeqRecord objects.
 
 See also Bio.SeqIO.UniprotIO.py which supports the "uniprot-xml" format.
 """
+
 from Bio import SeqFeature
 from Bio import SwissProt
 from Bio.Seq import Seq

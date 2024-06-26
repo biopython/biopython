@@ -19,7 +19,14 @@ from urllib.parse import urlencode
 from urllib.request import urlopen, Request
 import warnings
 
-import numpy as np
+try:
+    import numpy as np
+except ImportError:
+    from Bio import MissingPythonDependencyError
+
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use Bio.motifs."
+    ) from None
 
 from Bio import BiopythonDeprecationWarning
 from Bio.Align import Alignment
@@ -256,7 +263,7 @@ class Instances(list):
             """instances.search(sequence) has been deprecated. Please use sequence.search(instances) instead, where sequence is a Seq object.""",
             BiopythonDeprecationWarning,
         )
-        for pos in range(0, len(sequence) - self.length + 1):
+        for pos in range(len(sequence) - self.length + 1):
             for instance in self:
                 if instance == sequence[pos : pos + self.length]:
                     yield (pos, instance)
@@ -270,10 +277,7 @@ class Instances(list):
         instances = Instances(alphabet=self.alphabet)
         instances.length = self.length
         for instance in self:
-            # TODO: remove inplace=False
-            if isinstance(instance, (Seq, MutableSeq)):
-                instance = instance.reverse_complement(inplace=False)
-            elif isinstance(instance, SeqRecord):
+            if isinstance(instance, (Seq, MutableSeq, SeqRecord)):
                 instance = instance.reverse_complement()
             elif isinstance(instance, str):
                 instance = reverse_complement(instance)
@@ -578,18 +582,22 @@ class Motif:
                 frequencies = frequencies[mask] / total[mask]
                 values[mask] += frequencies * np.log2(frequencies / background[letter])
         else:
-            total = len(self.alignment) + sum(pseudocounts.values())
+            total = np.zeros(length)
+            for letter, frequencies in counts.items():
+                total += np.array(frequencies) + pseudocounts[letter]
             for letter, frequencies in counts.items():
                 frequencies = np.array(frequencies) + pseudocounts[letter]
                 mask = frequencies > 0
-                frequencies = frequencies[mask] / total
+                frequencies = frequencies[mask] / total[mask]
                 values[mask] += frequencies * np.log2(frequencies / background[letter])
         return values
 
-    def weblogo(self, fname, fmt="PNG", version="2.8.2", **kwds):
+    def weblogo(self, fname, fmt="PNG", version=None, **kwds):
         """Download and save a weblogo using the Berkeley weblogo service.
 
         Requires an internet connection.
+
+        The version parameter is deprecated and has no effect.
 
         The parameters from ``**kwds`` are passed directly to the weblogo server.
 
@@ -633,6 +641,12 @@ class Motif:
             'color4': '',
 
         """
+        if version is not None:
+            warnings.warn(
+                "The version parameter is deprecated and has no effect.",
+                BiopythonDeprecationWarning,
+            )
+
         if set(self.alphabet) == set("ACDEFGHIKLMNPQRSTVWY"):
             alpha = "alphabet_protein"
         elif set(self.alphabet) == set("ACGU"):
@@ -715,6 +729,9 @@ class Motif:
 
             motifs = [self]
             return clusterbuster.write(motifs)
+        elif not format_spec:
+            # Follow python convention and default to using __str__
+            return str(self)
         else:
             raise ValueError("Unknown format type %s" % format_spec)
 

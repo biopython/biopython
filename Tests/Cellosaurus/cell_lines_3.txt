@@ -2,8 +2,18 @@ ID   ZZ-R 127
 AC   CVCL_5418
 SY   ZZ-R
 DR   CCLV; CCLV-RIE 0127
+DR   Wikidata; Q54996143
 RX   PubMed=19656987;
 RX   PubMed=19941903;
-OX   NCBI_TaxID=9925; ! Capra hircus
+RX   PubMed=26082457;
+RX   PubMed=27795464;
+RX   PubMed=32851014;
+RX   PubMed=34737324;
+CC   Virology: Susceptible to infection by foot-and-mouth disease virus.
+CC   Derived from site: In situ; Fetal oral cavity, tongue; UBERON=UBERON_0010056.
+OX   NCBI_TaxID=9925; ! Capra hircus (Goat)
+SX   Sex unspecified
+AG   Fetus
 CA   Spontaneously immortalized cell line
+DT   Created: 04-04-12; Last updated: 29-06-23; Version: 15
 //

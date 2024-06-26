@@ -11,11 +11,13 @@
 Unless you are writing a new parser or writer for Bio.Align, you should not
 use this module.  It provides base classes to try and simplify things.
 """
+
 from abc import ABC
 from abc import abstractmethod
+from typing import Optional
 
 from Bio import StreamModeError
-from Bio.Align import AlignmentsAbstractBaseClass
+from Bio.Align import Alignments, AlignmentsAbstractBaseClass
 
 
 class AlignmentIterator(AlignmentsAbstractBaseClass):
@@ -30,7 +32,7 @@ class AlignmentIterator(AlignmentsAbstractBaseClass):
     """
 
     mode = "t"  # assume text files by default
-    fmt = None  # to be defined in the subclass
+    fmt: Optional[str] = None  # to be defined in the subclass
 
     def __init__(self, source):
         """Create an AlignmentIterator object.
@@ -61,6 +63,7 @@ class AlignmentIterator(AlignmentsAbstractBaseClass):
             else:
                 raise ValueError(f"Unknown mode '{self.mode}'") from None
             self._stream = source
+        self._index = 0
         self._read_header(self._stream)
 
     def __next__(self):
@@ -71,7 +74,9 @@ class AlignmentIterator(AlignmentsAbstractBaseClass):
             raise StopIteration from None
         alignment = self._read_next_alignment(stream)
         if alignment is None:
+            self._len = self._index
             raise StopIteration
+        self._index += 1
         return alignment
 
     def __len__(self):
@@ -85,15 +90,13 @@ class AlignmentIterator(AlignmentsAbstractBaseClass):
         try:
             length = self._len
         except AttributeError:
-            counter = 0
-            for alignment in self:
-                counter += 1
+            index = self._index
             self.rewind()
             length = 0
             for alignment in self:
                 length += 1
             self.rewind()
-            for i in range(length - counter):
+            while self._index < index:
                 next(self)
             self._len = length
         return length
@@ -110,6 +113,72 @@ class AlignmentIterator(AlignmentsAbstractBaseClass):
             stream.close()
         del self._stream
 
+    def __getitem__(self, index):
+        """Return the alignments as an Alignments object (which inherits from list).
+
+        Only an index of the form [:] (i.e., a full slice) is supported.
+        The file stream is returned to its zero position, and the file header
+        is read and stored in an Alignments object. Next, we iterate over the
+        alignments and store them in the Alignments object.  The iterator
+        is then returned to its original position in the file, and the
+        Alignments object is returned. The Alignments object contains the exact
+        same information as the Alignment iterator self, but stores the
+        alignments in a list instead of as an iterator, allowing indexing.
+
+        Typical usage is
+
+        >>> from Bio import Align
+        >>> alignments = Align.parse("Blat/dna_rna.psl", "psl")
+        >>> alignments.metadata
+        {'psLayout version': '3'}
+
+        As `alignments` is an iterator and not a list, we cannot retrieve an
+        alignment by its index:
+
+        >>> alignment = alignments[2]  # doctest:+ELLIPSIS
+        Traceback (most recent call last):
+          ...
+        KeyError: 'only [:] (a full slice) can be used as the index'
+
+        So we use the iterator to create a list-like Alignments object:
+
+        >>> alignments = alignments[:]
+
+        While `alignments` is a list-like object, it has the same `metadata`
+        attribute representing the information stored in the file header:
+
+        >>> alignments.metadata
+        {'psLayout version': '3'}
+
+        Now we can index individual alignments:
+
+        >>> len(alignments)
+        4
+        >>> alignment = alignments[2]
+        >>> alignment.target.id, alignment.query.id
+        ('chr3', 'NR_111921.1')
+
+        """
+        if index != slice(None, None, None):
+            raise KeyError("only [:] (a full slice) can be used as the index")
+        read_header = type(self)._read_header
+        index = self._index
+        alignments = Alignments()
+        stream = self._stream
+        stream.seek(0)
+        # Read the header information and store it on the new alignments object:
+        read_header(alignments, stream)
+        # Rewind the iterator to initialize it correctly for iteration:
+        self.rewind()
+        alignments.extend(self)
+        # May as well store the number of alignments while we are at it:
+        self._len = self._index
+        # Return the alignments iterator to its original position:
+        self.rewind()
+        while self._index < index:
+            next(self)
+        return alignments
+
     def _read_header(self, stream):
         """Read the file header and store it in metadata."""
         return
@@ -121,6 +190,7 @@ class AlignmentIterator(AlignmentsAbstractBaseClass):
     def rewind(self):  # noqa: D102
         self._stream.seek(0)
         self._read_header(self._stream)
+        self._index = 0
 
 
 class AlignmentWriter(ABC):
@@ -142,7 +212,7 @@ class AlignmentWriter(ABC):
     """
 
     mode = "w"  # assume text files by default
-    fmt = None  # to be defined in the subclass
+    fmt: Optional[str] = None  # to be defined in the subclass
 
     def __init__(self, target):
         """Create the writer object.
@@ -269,3 +339,9 @@ class AlignmentWriter(ABC):
             if stream is not self._target:
                 stream.close()
         return count
+
+
+if __name__ == "__main__":
+    from Bio._utils import run_doctest
+
+    run_doctest()

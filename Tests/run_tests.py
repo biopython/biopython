@@ -21,7 +21,6 @@ Command line options::
 By default, all tests are run.
 """
 
-
 # standard modules
 import sys
 import os
@@ -30,26 +29,15 @@ import time
 import traceback
 import unittest
 import doctest
-import distutils.util
 import gc
-from io import BytesIO
 from pkgutil import iter_modules
 from setuptools import find_packages
 from io import StringIO
 
 try:
-    import numpy
-
-    try:
-        # NumPy 1.14 changed repr output breaking our doctests,
-        # request the legacy 1.13 style
-        numpy.set_printoptions(legacy="1.13")
-    except TypeError:
-        # Old Numpy, output should be fine as it is :)
-        # TypeError: set_printoptions() got an unexpected keyword argument 'legacy'
-        pass
+    import numpy as np
 except ImportError:
-    numpy = None
+    np = None
 
 
 # The default verbosity (not verbose)
@@ -66,10 +54,11 @@ ONLINE_DOCTEST_MODULES = [
     "Bio.ExPASy",
     "Bio.ExPASy.cellosaurus",
     "Bio.TogoWS",
+    "Bio.UniProt",
 ]
 
 # Silently ignore any doctests for modules requiring numpy!
-if numpy is None:
+if np is None:
     EXCLUDE_DOCTEST_MODULES.extend(
         [
             "Bio.Affy.CelFile",
@@ -97,7 +86,6 @@ if numpy is None:
             "Bio.PDB.PDBParser",
             "Bio.PDB.Polypeptide",
             "Bio.PDB.PSEA",
-            "Bio.PDB.QCPSuperimposer",
             "Bio.PDB.Residue",
             "Bio.PDB.Selection",
             "Bio.PDB.StructureAlignment",
@@ -200,7 +188,6 @@ def main(argv):
 
 
 class TestRunner(unittest.TextTestRunner):
-
     if __name__ == "__main__":
         file = sys.argv[0]
     else:
@@ -316,7 +303,7 @@ class TestRunner(unittest.TextTestRunner):
             # exception messages can be in loader.errors instead.
             sys.stderr.write(f"skipping. {msg}\n")
             return True
-        except Exception as msg:
+        except Exception as msg:  # noqa: BLE001
             # This happened during the import
             sys.stderr.write("ERROR\n")
             result.stream.write(result.separator1 + "\n")

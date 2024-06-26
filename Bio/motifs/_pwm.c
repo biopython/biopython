@@ -12,8 +12,8 @@
 
 
 static void
-calculate(const char sequence[], int s, Py_ssize_t m, double* matrix,
-          Py_ssize_t n, float* scores)
+calculate(const char sequence[], Py_ssize_t m, double* matrix, Py_ssize_t n,
+          float* scores)
 {
     Py_ssize_t i, j;
     char c;
@@ -172,7 +172,7 @@ py_calculate(PyObject* self, PyObject* args, PyObject* keywords)
     m = matrix.shape[0];
     n = scores.shape[0];
     if (n == s - m + 1) {
-        calculate(sequence, s, m, matrix.buf, n, scores.buf);
+        calculate(sequence, m, matrix.buf, n, scores.buf);
         Py_INCREF(Py_None);
         result = Py_None;
     }
@@ -194,7 +194,7 @@ static struct PyMethodDef methods[] = {
     METH_VARARGS | METH_KEYWORDS,
     PyDoc_STR(calculate__doc__),
    },
-   {NULL, NULL, 0, NULL} // sentinel
+   {NULL, NULL, 0, NULL} /* sentinel */
 };
 
 static struct PyModuleDef moduledef = {

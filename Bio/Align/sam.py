@@ -21,18 +21,11 @@ Coordinates in the SAM format are defined in terms of one-based start
 positions; the parser converts these to zero-based coordinates to be consistent
 with Python and other alignment formats.
 """
+
 from itertools import chain
 import copy
 
-try:
-    import numpy as np
-except ImportError:
-    from Bio import MissingPythonDependencyError
-
-    raise MissingPythonDependencyError(
-        "Please install NumPy if you want to use Bio.Align. "
-        "See http://www.numpy.org/"
-    ) from None
+import numpy as np
 
 from Bio.Align import Alignment
 from Bio.Align import interfaces
@@ -142,25 +135,33 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             except (AttributeError, KeyError):
                 pass
             try:
-                qual = query.letter_annotations["phred_quality"]
+                phred = query.letter_annotations["phred_quality"]
             except (AttributeError, KeyError):
                 qual = "*"
+            else:
+                qual = "".join(chr(value + 33) for value in phred)
             query = query.seq
         qSize = len(query)
         try:
-            rName = target.id
+            rname = target.id
         except AttributeError:
-            rName = "target"
+            rname = "target"
         else:
             target = target.seq
+        if coordinates[0, 0] > coordinates[-1, 0]:
+            coordinates = coordinates[::-1, :]
         if coordinates[0, 1] < coordinates[-1, 1]:  # mapped to forward strand
             flag = 0
         else:  # mapped to reverse strand
             flag = 16
-            query = reverse_complement(query, inplace=False)
+            query = reverse_complement(query)
             coordinates = np.array(coordinates)
             coordinates[:, 1] = qSize - coordinates[:, 1]
             hard_clip_left, hard_clip_right = hard_clip_right, hard_clip_left
+        try:
+            flag |= alignment.flag
+        except AttributeError:
+            pass
         try:
             query = bytes(query)
         except TypeError:  # string
@@ -170,7 +171,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         else:
             query = str(query, "ASCII")
         tStart, qStart = coordinates[0, :]
-        pos = tStart
+        pos = tStart + 1  # 1-based coordinate
         cigar = ""
         if hard_clip_left is not None:
             cigar += "%dH" % hard_clip_left
@@ -226,18 +227,29 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             mapq = alignment.mapq
         except AttributeError:
             mapq = 255  # not available
-        rNext = "*"
-        pNext = 0
+        try:
+            rnext = alignment.rnext
+        except AttributeError:
+            rnext = "*"
+        else:
+            if rnext == rname:
+                rnext = "="
+        try:
+            pnext = alignment.pnext
+        except AttributeError:
+            pnext = 0
+        else:
+            pnext += 1  # 1-based coordinates
         tLen = 0
         fields = [
             qName,
             str(flag),
-            rName,
-            str(pos + 1),  # 1-based coordinates
+            rname,
+            str(pos),
             str(mapq),
             cigar,
-            rNext,
-            str(pNext),
+            rnext,
+            str(pnext),
             str(tLen),
             query,
             qual,
@@ -316,7 +328,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         except AttributeError:
             pass
         else:
-            field = "AS:i:%d" % int(round(score))
+            field = "AS:i:%.0f" % score
             fields.append(field)
         try:
             annotations = alignment.annotations
@@ -714,7 +726,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             if hard_clip_right is not None:
                 query.annotations["hard_clip_right"] = hard_clip_right
             if qual != "*":
-                query.letter_annotations["phred_quality"] = qual
+                phred = [ord(c) - 33 for c in qual]
+                query.letter_annotations["phred_quality"] = phred
             records = [target, query]
             alignment = Alignment(records, coordinates)
             alignment.flag = flag

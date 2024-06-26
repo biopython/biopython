@@ -5,7 +5,9 @@
 """Common code for SeqRecord object tests."""
 
 import unittest
+import warnings
 
+from Bio import BiopythonDeprecationWarning
 from Bio.Seq import UndefinedSequenceError
 from Bio.SeqUtils.CheckSum import seguid
 from Bio.SeqFeature import ExactPosition, UnknownPosition
@@ -60,9 +62,15 @@ class SeqRecordTestBaseClass(unittest.TestCase):
         self.assertIsInstance(old_f, SeqFeature)
         self.assertIsInstance(new_f, SeqFeature)
         self.assertEqual(old_f.type, new_f.type)
-        self.assertEqual(old_f.strand, new_f.strand)
-        self.assertEqual(old_f.ref, new_f.ref)
-        self.assertEqual(old_f.ref_db, new_f.ref_db)
+        self.assertEqual(old_f.location.strand, new_f.location.strand)
+        self.assertEqual(old_f.location.ref, new_f.location.ref)
+        self.assertEqual(old_f.location.ref_db, new_f.location.ref_db)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
+            self.assertEqual(old_f.location.strand, new_f.strand)
+            self.assertEqual(old_f.location.ref, new_f.ref)
+            self.assertEqual(old_f.location.ref_db, new_f.ref_db)
+
         # TODO - BioSQL does not store/retrieve feature's id (Bug 2526)
         if new_f.id != "<unknown id>":
             self.assertEqual(old_f.id, new_f.id)
@@ -259,10 +267,7 @@ class SeqRecordTestBaseClass(unittest.TestCase):
                 # If there is a taxon id recorded, these fields get overwritten
                 # by data from the taxon/taxon_name tables.  There is no
                 # guarantee that they will be identical after a load/retrieve.
-                self.assertTrue(
-                    isinstance(new.annotations[key], str)
-                    or isinstance(new.annotations[key], list)
-                )
+                self.assertTrue(isinstance(new.annotations[key], (list, str)))
             elif isinstance(old.annotations[key], type(new.annotations[key])):
                 self.assertEqual(
                     old.annotations[key],

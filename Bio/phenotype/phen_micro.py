@@ -717,10 +717,10 @@ class WellRecord:
                 stop = time.stop
 
             time = np.arange(start, stop, time.step)
-            return list(self._interpolate(time))
+            return [float(value) for value in self._interpolate(time)]
 
-        elif isinstance(time, int) or isinstance(time, float):
-            return self._interpolate(time)
+        elif isinstance(time, (float, int)):
+            return float(self._interpolate(time))
 
         raise ValueError("Invalid index")
 

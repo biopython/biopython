@@ -3,6 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Tests for SeqIO PdbIO module."""
+
 import unittest
 import warnings
 
@@ -89,13 +90,9 @@ def SeqresTestGenerator(extension, parser):
 class TestPdbSeqres(SeqresTestGenerator("pdb", "pdb-seqres")):
     """Test pdb-seqres SeqIO driver."""
 
-    pass
-
 
 class TestCifSeqres(SeqresTestGenerator("cif", "cif-seqres")):
     """Test cif-seqres SeqIO driver."""
-
-    pass
 
 
 def AtomTestGenerator(extension, parser):

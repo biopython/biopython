@@ -87,8 +87,11 @@ Slicing specific columns of an alignment will slice any per-column-annotations:
     >>> part_alignment.column_annotations["consensus secondary structure"]
     'HHHHHHS.--'
 """
+
 import textwrap
 from collections import defaultdict
+
+import numpy as np
 
 from Bio.Align import Alignment
 from Bio.Align import interfaces
@@ -234,7 +237,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             else:
                 assert len(value) == 1, (key, value)
                 value = value.pop()
-            alignment.annotations[AlignmentIterator.gf_mapping[key]] = value
+            try:
+                alignment.annotations[AlignmentIterator.gf_mapping[key]] = value
+            except KeyError:
+                pass
 
     @staticmethod
     def _store_per_column_annotations(alignment, gc, columns, skipped_columns):
@@ -251,7 +257,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     raise ValueError(
                         f"{key} length is {len(value)}, expected {columns}"
                     )
-                alignment.column_annotations[AlignmentIterator.gc_mapping[key]] = value
+                alignment.column_annotations[
+                    AlignmentIterator.gc_mapping.get(key, key)
+                ] = value
 
     @staticmethod
     def _store_per_sequence_annotations(alignment, gs):
@@ -267,7 +275,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 elif key == "DR":
                     record.dbxrefs = value
                 else:
-                    record.annotations[AlignmentIterator.gs_mapping[key]] = value
+                    record.annotations[AlignmentIterator.gs_mapping.get(key, key)] = (
+                        value
+                    )
 
     @staticmethod
     def _store_per_sequence_and_per_column_annotations(alignment, gr):
@@ -277,9 +287,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     break
             else:
                 raise ValueError(f"Failed to find seqname {seqname}")
-            for keyword, letter_annotation in letter_annotations.items():
-                feature = AlignmentIterator.gr_mapping[keyword]
-                if keyword == "CSA":
+            for key, letter_annotation in letter_annotations.items():
+                feature = AlignmentIterator.gr_mapping.get(key, key)
+                if key == "CSA":
                     letter_annotation = letter_annotation.replace("-", "")
                 else:
                     letter_annotation = letter_annotation.replace(".", "")
@@ -305,11 +315,17 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 length = None
             elif line == "//":
                 # Reached the end of the alignment.
-                skipped_columns = []
-                coordinates = Alignment.infer_coordinates(
-                    aligned_sequences, skipped_columns
+                aligned_sequences = np.array(
+                    [np.frombuffer(row.encode(), np.int8) for row in aligned_sequences]
                 )
-                skipped_columns = set(skipped_columns)
+                skipped_columns = np.nonzero((aligned_sequences == ord("-")).all(0))[0]
+                aligned_sequences = np.delete(aligned_sequences, skipped_columns, 1)
+                aligned_sequences = [row.tobytes() for row in aligned_sequences]
+                sequences, coordinates = Alignment.parse_printed_alignment(
+                    aligned_sequences
+                )
+                for sequence, record in zip(sequences, records):
+                    record.seq = Seq(sequence)
                 alignment = Alignment(records, coordinates)
                 for index in sorted(skipped_columns, reverse=True):
                     del operations[index]  # noqa: F821
@@ -363,10 +379,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         assert operations[i] != ord("D")
                         operations[i] = ord("I")  # insertion
                 aligned_sequence = aligned_sequence.replace(".", "-")
-                sequence = aligned_sequence.replace("-", "")
                 aligned_sequences.append(aligned_sequence)
-                seq = Seq(sequence)
-                record = SeqRecord(seq, id=seqname, description="")
+                record = SeqRecord(None, id=seqname, description="")
                 records.append(record)
             elif line.startswith("#=GF "):
                 # Generic per-File annotation, free text
@@ -533,7 +547,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         for record in alignment.sequences:
             name = record.id.ljust(width)
             for key, value in record.annotations.items():
-                feature = self.gs_mapping[key]
+                feature = self.gs_mapping.get(key, key)
                 lines.append(f"#=GS {name}  {feature} {value}\n")
             if record.description:
                 lines.append(f"#=GS {name}  DE {record.description}\n")
@@ -558,8 +572,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         #    alignment.column_annotations
         if alignment.column_annotations:
             for key, value in alignment.column_annotations.items():
-                feature = self.gc_mapping[key]
-                line = f"#=GC {feature}".ljust(start) + value + "\n"
+                feature = self.gc_mapping.get(key, key)
+                line = f"#=GC {feature} ".ljust(start) + value + "\n"
                 lines.append(line)
         lines.append("//\n")
         return "".join(lines)
@@ -592,7 +606,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         indices.reverse()
         name = record.id.ljust(width)
         for key, value in record.letter_annotations.items():
-            feature = AlignmentWriter.gr_mapping[key]
+            feature = AlignmentWriter.gr_mapping.get(key, key)
             j = 0
             values = bytearray(b"." * len(aligned_sequence))
             for i, letter in enumerate(aligned_sequence):
@@ -600,7 +614,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                     values[i] = ord(value[j])
                     j += 1
             value = values.decode()
-            line = f"#=GR {name}  {feature}".ljust(start) + value + "\n"
+            line = f"#=GR {name}  {feature} ".ljust(start) + value + "\n"
             yield line
 
 

@@ -9,8 +9,13 @@
 
 from Bio.PDB.Entity import Entity
 
+from typing import TYPE_CHECKING
 
-class Structure(Entity):
+if TYPE_CHECKING:
+    from Bio.PDB.Model import Model
+
+
+class Structure(Entity[None, "Model"]):
     """The Structure class contains a collection of Model instances."""
 
     def __init__(self, id):

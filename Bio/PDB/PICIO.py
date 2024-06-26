@@ -10,14 +10,7 @@ import re
 from datetime import date
 from io import StringIO
 
-try:
-    import numpy as np
-except ImportError:
-    from Bio import MissingPythonDependencyError
-
-    raise MissingPythonDependencyError(
-        "Install NumPy to build proteins from internal coordinates."
-    )
+import numpy as np
 
 from Bio.File import as_handle
 from Bio.PDB.StructureBuilder import StructureBuilder
@@ -210,8 +203,8 @@ def read_PIC(
         """Create Hedron on current (sbcic) Chain.internal_coord."""
         ek = (akcache(a1), akcache(a2), akcache(a3))
         atmNdx = AtomKey.fields.atm
-        accpt = IC_Residue.accept_atoms
-        if not all(ek[i].akl[atmNdx] in accpt for i in range(3)):
+        accept = IC_Residue.accept_atoms
+        if not all(ek[i].akl[atmNdx] in accept for i in range(3)):
             return
         hl12[ek] = float(l12)
         ha[ek] = float(ang)
@@ -302,8 +295,8 @@ def read_PIC(
             akcache(a4),
         )
         atmNdx = AtomKey.fields.atm
-        accpt = IC_Residue.accept_atoms
-        if not all(ek[i].akl[atmNdx] in accpt for i in range(4)):
+        accept = IC_Residue.accept_atoms
+        if not all(ek[i].akl[atmNdx] in accept for i in range(4)):
             return
         dangle = float(dangle)
         dangle = dangle if (dangle <= 180.0) else dangle - 360.0
@@ -379,7 +372,7 @@ def read_PIC(
                 prnum = pr.akl[0][resPos]
                 paKey = [
                     AtomKey(prnum, None, prname, primAngle[x], None, None)
-                    for x in range(0, 2)
+                    for x in range(2)
                 ]
                 paKey.add(
                     [
@@ -457,9 +450,11 @@ def read_PIC(
 
     def dihedra_check(ric: IC_Residue) -> None:
         """Look for required dihedra in residue, generate defaults if set."""
+        # This method has some internal functions
+
         # rnext should be set
         def ake_recurse(akList: List) -> List:
-            """Bulid combinatorics of AtomKey lists."""
+            """Build combinatorics of AtomKey lists."""
             car = akList[0]
             if len(akList) > 1:
                 retList = []
@@ -525,7 +520,7 @@ def read_PIC(
         try:
             for edron in ic_data_sidechains[ric.lc]:
                 if len(edron) > 3:  # dihedra only
-                    if all(not atm[0] == "H" for atm in edron):
+                    if all(atm[0] != "H" for atm in edron):
                         akl = [AtomKey(ric, atm) for atm in edron[0:4]]
                         chkLst.append(akl)
         except KeyError:
@@ -1109,9 +1104,9 @@ def write_PIC(
                             hdr.upper(), (dd or ""), (pdbid or "")
                         )
                     )
-                nam = entity.header.get("name", None)
-                if nam:
-                    fp.write("TITLE     " + nam.upper() + "\n")
+                name = entity.header.get("name", None)
+                if name:
+                    fp.write("TITLE     " + name.upper() + "\n")
                 for mdl in entity:
                     write_PIC(
                         mdl,

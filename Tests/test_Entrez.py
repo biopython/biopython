@@ -124,7 +124,7 @@ def check_request_ids(testcase, params, expected):
     :type testcase: unittest.TestCase
     :param params: Parsed parameter dictionary returned by `deconstruct_request`.
     :type params: dict
-    :param expected: Expected set of IDs, as colleciton of strings.
+    :param expected: Expected set of IDs, as collection of strings.
     """
     testcase.assertEqual(len(params["id"]), 1)
     ids_str = params["id"][0]
@@ -342,16 +342,18 @@ class TestURLConstruction(unittest.TestCase):
             for alt_value in [alt_values[param], None]:
                 # Try both altering global variable and also passing parameter directly
                 for set_global in [False, True]:
-
                     variables = dict(vars_base)
 
-                    with patch_urlopen() as patched:
-                        if set_global:
-                            with mock.patch("Bio.Entrez." + param, alt_value):
+                    with warnings.catch_warnings():
+                        # Ignore no email address warning:
+                        warnings.simplefilter("ignore", category=UserWarning)
+                        with patch_urlopen() as patched:
+                            if set_global:
+                                with mock.patch("Bio.Entrez." + param, alt_value):
+                                    Entrez.efetch(**variables)
+                            else:
+                                variables[param] = alt_value
                                 Entrez.efetch(**variables)
-                        else:
-                            variables[param] = alt_value
-                            Entrez.efetch(**variables)
 
                     request = get_patched_request(patched, self)
                     base_url, query = deconstruct_request(request, self)
@@ -376,7 +378,6 @@ class TestURLConstruction(unittest.TestCase):
         }
 
         for etool in [Entrez.efetch, Entrez.epost]:  # Make both GET and POST requests
-
             with patch_urlopen() as patched:
                 etool(**variables)
             assert Entrez._has_api_key(get_patched_request(patched, self))

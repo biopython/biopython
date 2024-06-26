@@ -14,13 +14,8 @@
 
 """Unit tests for the Bio.PDB exposure classes."""
 
-from copy import deepcopy
-import os
-import sys
-import tempfile
 import unittest
 import warnings
-from io import StringIO
 
 try:
     import numpy
@@ -31,9 +26,9 @@ except ImportError:
         "Install NumPy if you want to use Bio.PDB."
     ) from None
 
-from Bio.PDB import PDBParser, MMCIFParser
+from Bio.PDB import PDBParser
 from Bio.PDB import HSExposureCA, HSExposureCB, ExposureCN
-from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarning
+from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
 
 class Exposure(unittest.TestCase):

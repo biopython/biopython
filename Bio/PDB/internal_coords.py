@@ -274,14 +274,7 @@ import copy
 # from numpy import floor, ndarray
 from numbers import Integral
 
-try:
-    import numpy as np  # type: ignore
-except ImportError:
-    from Bio import MissingPythonDependencyError
-
-    raise MissingPythonDependencyError(
-        "Install numpy to build proteins from internal coordinates."
-    )
+import numpy as np  # type: ignore
 
 from Bio.PDB.Atom import Atom, DisorderedAtom
 from Bio.Data.PDBData import protein_letters_3to1
@@ -309,7 +302,8 @@ from typing import (
 
 if TYPE_CHECKING:
     from Bio.PDB.Residue import Residue
-    from Bio.PDB.Chain import Chain
+
+    # from Bio.PDB.Chain import Chain
 
 HKT = Tuple["AtomKey", "AtomKey", "AtomKey"]  # Hedron key tuple
 DKT = Tuple["AtomKey", "AtomKey", "AtomKey", "AtomKey"]  # Dihedron Key Tuple
@@ -488,7 +482,7 @@ class IC_Chain:
     _dihedraSelect = np.array([True, True, True, False])
     _dihedraOK = np.array([True, True, True, True])
 
-    def __init__(self, parent: "Chain", verbose: bool = False) -> None:
+    def __init__(self, parent, verbose: bool = False) -> None:
         """Initialize IC_Chain object, with or without residue/Atom data.
 
         :param Bio.PDB.Chain parent: Biopython Chain object
@@ -1353,7 +1347,7 @@ class IC_Chain:
         """
 
         if np.any(self.hAtoms_needs_update):
-            # hedra inital coords
+            # hedra initial coords
 
             # sar = supplementary angle radian: angles which add to 180
             sar = np.deg2rad(180.0 - self.hedraAngle[self.hAtoms_needs_update])  # angle
@@ -1745,12 +1739,7 @@ class IC_Chain:
         fp: TextIO, d: "Dihedron", hedraNdx: Dict, hedraSet: Set[EKT]
     ) -> None:
         fp.write(
-            "[ {:9.5f}, {}, {}, {}, ".format(
-                d.angle,
-                hedraNdx[d.h1key],
-                hedraNdx[d.h2key],
-                (1 if d.reverse else 0),
-            )
+            f"[ {d.angle:9.5f}, {hedraNdx[d.h1key]}, {hedraNdx[d.h2key]}, {1 if d.reverse else 0}, "
         )
         fp.write(
             f"{0 if d.h1key in hedraSet else 1}, "
@@ -1850,8 +1839,7 @@ class IC_Chain:
                 if i == 1:
                     cma = "," if started else ""
                     fp.write(
-                        f"{cma}\n       // {str(ric.residue.id)} {ric.lc}"
-                        " sidechain\n"
+                        f"{cma}\n       // {ric.residue.id!s} {ric.lc} sidechain\n"
                     )
                 started = False
                 for dk, d in sorted(ric.dihedra.items()):
@@ -1884,11 +1872,7 @@ class IC_Chain:
             hed = hedra[hk]
             fp.write("     [ ")
             fp.write(
-                "{:9.5f}, {:9.5f}, {:9.5f}".format(
-                    set_accuracy_95(hed.len12),
-                    set_accuracy_95(hed.angle),
-                    set_accuracy_95(hed.len23),
-                )
+                f"{set_accuracy_95(hed.len12):9.5f}, {set_accuracy_95(hed.angle):9.5f}, {set_accuracy_95(hed.len23):9.5f}"
             )
             atom_str = ""  # atom and bond state
             atom_done_str = ""  # create each only once
@@ -2074,7 +2058,7 @@ class IC_Chain:
     def distplot_to_dh_arrays(
         self, distplot: np.ndarray, dihedra_signs: np.ndarray
     ) -> None:
-        """Load di/hedra distance arays from distplot.
+        """Load di/hedra distance arrays from distplot.
 
         Fill :class:`IC_Chain` arrays hedraL12, L23, L13 and dihedraL14
         distance value arrays from input distplot, dihedra_signs array from
@@ -2085,7 +2069,7 @@ class IC_Chain:
         Call :meth:`atom_to_internal_coordinates` (or at least :meth:`init_edra`)
         to generate a2ha_map and d2a_map before running this.
 
-        Explcitly removed from :meth:`.distance_to_internal_coordinates` so
+        Explicitly removed from :meth:`.distance_to_internal_coordinates` so
         user may populate these chain di/hedra arrays by other
         methods.
         """
@@ -2132,7 +2116,7 @@ class IC_Chain:
 
         :param bool resetAtoms: default True.
             Mark all atoms in di/hedra and atomArray for updating by
-            :meth:`.internal_to_atom_coordinates`.  Alternatvely set this to
+            :meth:`.internal_to_atom_coordinates`.  Alternatively set this to
             False and manipulate `atomArrayValid`, `dAtoms_needs_update` and
             `hAtoms_needs_update` directly to reduce computation.
         """  # noqa
@@ -2710,7 +2694,7 @@ class IC_Residue:
     def pretty_str(self) -> str:
         """Nice string for residue ID."""
         id = self.residue.id
-        return f"{self.residue.resname} {id[0]}{str(id[1])}{id[2]}"
+        return f"{self.residue.resname} {id[0]}{id[1]!s}{id[2]}"
 
     def _link_dihedra(self, verbose: bool = False) -> None:
         """Housekeeping after loading all residues and dihedra.
@@ -3318,9 +3302,11 @@ class IC_Residue:
                 fmt = "{:6}{:5d} {:4}{:1}{:3} {:1}{:4}{:1}   {:10.5f}{:10.5f}{:10.5f}{:7.3f}{:6.2f}        {:>4}\n"
             s = (fmt).format(
                 "ATOM",
-                IC_Residue.atom_sernum
-                if IC_Residue.atom_sernum is not None
-                else atm.serial_number,
+                (
+                    IC_Residue.atom_sernum
+                    if IC_Residue.atom_sernum is not None
+                    else atm.serial_number
+                ),
                 atm.fullname,
                 atm.altloc,
                 res.resname,
@@ -3730,7 +3716,7 @@ class IC_Residue:
         """
         edron = self.pick_angle(angle_key)
         if edron:
-            return edron.angle
+            return float(edron.angle)
         return None
 
     def set_angle(self, angle_key: Union[EKT, str], v: float, overlap=True):
@@ -3741,12 +3727,12 @@ class IC_Residue:
         protein chain definitions in :mod:`.ic_data` and :meth:`_create_edra`
         (e.g. psi overlaps N-CA-C-O).
 
-        Te default overlap=True is probably what you want for:
+        The default overlap=True is probably what you want for:
         `set_angle("chi1", val)`
 
         The default is probably NOT what you want when processing all dihedrals
         in a chain or residue (such as copying from another structure), as the
-        overlaping dihedra will likely be in the set as well.
+        overlapping dihedra will likely be in the set as well.
 
         N.B. setting e.g. PRO chi2 is permitted without error or warning!
 
@@ -3789,7 +3775,7 @@ class IC_Residue:
 
         Changes a dihedral angle by a given delta, i.e.
         new_angle = current_angle + delta
-        Values are adjusted so new_angle iwll be within +/-180.
+        Values are adjusted so new_angle will be within +/-180.
 
         Changes overlapping dihedra as in :meth:`.set_angle`
 
@@ -3925,7 +3911,7 @@ class Edron:
     re_class: str
         sequence of residue, atoms comprising di/hedron for statistics
     cre_class: str
-        sequence of covalent radii classses comprising di/hedron for statistics
+        sequence of covalent radii classes comprising di/hedron for statistics
     edron_re: compiled regex (Class Attribute)
         A compiled regular expression matching string IDs for Hedron
         and Dihedron objects
@@ -4194,8 +4180,8 @@ class Hedron(Edron):
     def __repr__(self) -> str:
         """Print string for Hedron object."""
         return (
-            f"3-{self.id} {self.re_class} {str(self.len12)} "
-            f"{str(self.angle)} {str(self.len23)}"
+            f"3-{self.id} {self.re_class} {self.len12!s} "
+            f"{self.angle!s} {self.len23!s}"
         )
 
     @property
@@ -4270,7 +4256,7 @@ class Hedron(Edron):
             Pair of atoms in this Hedron
         """
         if 2 > len(ak_tpl):
-            raise TypeError(f"Require exactly 2 AtomKeys: {str(ak_tpl)}")
+            raise TypeError(f"Require exactly 2 AtomKeys: {ak_tpl!s}")
         elif all(ak in self.atomkeys[:2] for ak in ak_tpl):
             self.cic.hedraL12[self.ndx] = newLength
         elif all(ak in self.atomkeys[1:] for ak in ak_tpl):
@@ -4348,7 +4334,7 @@ class Dihedron(Edron):
 
     def __repr__(self) -> str:
         """Print string for Dihedron object."""
-        return f"4-{str(self.id)} {self.re_class} {str(self.angle)} {str(self.ric)}"
+        return f"4-{self.id!s} {self.re_class} {self.angle!s} {self.ric!s}"
 
     @staticmethod
     def _get_hedron(ic_res: IC_Residue, id3: HKT) -> Optional[Hedron]:
@@ -4683,7 +4669,7 @@ class AtomKey:
                     akl.append(str(occ) if occ != 1.00 else None)
                 else:
                     akl += [None, None]
-            elif isinstance(arg, list) or isinstance(arg, tuple):
+            elif isinstance(arg, (list, tuple)):
                 akl += arg
             elif isinstance(arg, dict):
                 for k in AtomKey.fieldNames:
@@ -4970,10 +4956,6 @@ def set_accuracy_95(num: float) -> float:
 class HedronMatchError(Exception):
     """Cannot find hedron in residue for given key."""
 
-    pass
-
 
 class MissingAtomError(Exception):
     """Missing atom coordinates for hedron or dihedron."""
-
-    pass

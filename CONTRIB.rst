@@ -22,6 +22,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Alan Medlar <https://github.com/ajm>
 - Alessio Papini <first dot last at unifi dot it>
 - Alessio Quercia <https://github.com/AlessioQuercia>
+- Alex Crocker <alex.w.crocker at gmail>
 - Alex Morehead <https://github.com/amorehead>
 - Alexander Decurnou <https://github.com/adcrn>
 - Allis Tauri <https://github.com/allista>
@@ -37,11 +38,12 @@ please open an issue on GitHub or mention it on the mailing list.
 - Andrew Sczesnak <https://github.com/polyatail>
 - Andrey Raspopov <https://github.com/Andrey-Raspopov>
 - Andrius Merkys <https://github.com/merkys>
+- Anil Tuncel <https://github.com/anilbey>
 - Anne Pajon <ap one two at sanger ac uk>
-- Antonio Jesús Gálvez Muñoz <https://github.com/PyCreatine>
 - Anthony Bradley <https://github.com/abradle>
-- Antony Lee <https://github.com/anntzer>
+- Antonio Jesús Gálvez Muñoz <https://github.com/PyCreatine>
 - Antonio Trande <https://github.com/sagitter>
+- Antony Lee <https://github.com/anntzer>
 - Anuj Sharma <https://github.com/xulesc>
 - Ariel Aptekmann <https://github.com/aralap>
 - Arpan Sahoo <https://github.com/arpansahoo>
@@ -82,7 +84,6 @@ please open an issue on GitHub or mention it on the mailing list.
 - Chaitanya Gupta <https://github.com/iCHAIT>
 - Cheng Soon Ong <chengsoon.ong at tuebingen.mpg.de>
 - Chenghao Zhu <zhuchcn@gmail.com>
-- Christian Balbin <christian at domain balbin.com>
 - Chris Daley <https://github.com/chebizarro>
 - Chris Jackson <https://github.com/chrisjackson-pellicle>
 - Chris Lasher <chris.lasher at gmail.com>
@@ -91,6 +92,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Chris Rands <https://github.com/chris-rands>
 - Chris Warth <https://github.com/cswarth>
 - Christiam Camacho <https://github.com/christiam>
+- Christian Balbin <christian at domain balbin.com>
 - Christian Brueffer <christian at domain brueffer.de>
 - Christian Zmasek <https://github.com/cmzmasek>
 - Chunlei Wu <https://github.com/newgene>
@@ -119,7 +121,10 @@ please open an issue on GitHub or mention it on the mailing list.
 - Erik Cederstrand <https://github.com/ecederstrand>
 - Erik Weßels <https://github.com/BioNij>
 - Erik Whiting <https://github.com/erik-whiting>
+- Ernesto Rodriguez <https://github.com/netogallo>
 - Fabian Egli <https://github.com/fabianegli>
+- Fabio Zanini <https://github.com/iosonofabio>
+- Farhan Khan <https://github.com/BabaYaga1221>
 - Fei Qi <https://github.com/qifei9>
 - Foen Peng <https://github.com/foenpeng>
 - Francesco Gastaldello <https://github.com/Gasta88>
@@ -151,10 +156,12 @@ please open an issue on GitHub or mention it on the mailing list.
 - Jacek Śmietański <https://github.com/dadoskawina>
 - Jack Twilley <https://github.com/mathuin>
 - Jacob Beal <https://github.com/jakebeal>
+- Jacob Byerly <https://github.com/byerlyj>
 - Jakub Lipinski <https://github.com/jakublipinski>
 - James Baker <https://github.com/JamesABaker>
 - James Casbon <https://github.com/jamescasbon>
 - James Jeffryes <https://github.com/JamesJeffryes>
+- James Krieger <https://github.com/JamesMKrieger>
 - Jared Andrews <https://github.com/j-andrews7>
 - Jared Lumpe <https://github.com/jlumpe>
 - Jarrod Millman <https://github.com/jarrodmillman>
@@ -169,9 +176,6 @@ please open an issue on GitHub or mention it on the mailing list.
 - Jian-Long Huang <https://github.com/jlhg>
 - Jimmy O'Donnell <https://github.com/jimmyodonnell>
 - Joanna & Dominik Kasprzak
-- João D Ferreira <https://github.com/jdferreira>
-- João Rodrigues <https://github.com/joaorodrigues>
-- João Vitor F Cavalcante <https://github.com/jvfe>
 - Joe Cora <https://github.com/JoeCora>
 - Joe Greener <https://github.com/jgreener64>
 - Joel Ibaceta <https://github.com/joelibaceta>
@@ -185,6 +189,10 @@ please open an issue on GitHub or mention it on the mailing list.
 - Jose Blanca <https://github.com/JoseBlanca>
 - Josha Inglis <https://github.com/joshainglis>
 - Joshua Meyers <https://github.com/JoshuaMeyers>
+- João D Ferreira <https://github.com/jdferreira>
+- João Rodrigues <https://github.com/joaorodrigues>
+- João Vitor F Cavalcante <https://github.com/jvfe>
+- Judith Bernett <https://github.com/JudithBernett>
 - Jun Aruga <https://github.com/junaruga>
 - Juraj Szász <https:/github.com/sars1492>
 - Kai Blin <https://github.com/kblin>
@@ -231,7 +239,9 @@ please open an issue on GitHub or mention it on the mailing list.
 - Maximilian Greil <https://github.com/MaxGreil>
 - Maximilian Peters <maximili.peters at mail.huji.ac.il>
 - Melissa Gymrek <https://github.com/mgymrek>
+- Meridia Jane Bryant <https://github.com/meridiajane>
 - Michael Hoffman <https://github.com/michaelmhoffman>
+- Michael M. <https://github.com/michaelfm1211>
 - Michael R. Crusoe <https://orcid.org/0000-0002-2961-9670>
 - Michal Kurowski <michal at domain genesilico.pl>
 - Michał J. Gajda <https://github.com/mgajda>
@@ -276,6 +286,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Robert Sawicki <https://github.com/Battlesheepu>
 - Rodrigo Dorantes-Gilardi <https://github.com/rodogi>
 - Rona Costello <https://github.com/RonaCostello>
+- Rudolf Koopmann <https://github.com/koopmann>
 - Ryan Stecher <https://github.com/rystecher>
 - Sacha Laurent <https://github.com/Cashalow>
 - Saket Choudhary <https://github.com/saketkc>
@@ -316,6 +327,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Tiago Antao <https://github.com/tiagoantao>
 - Tianyi Shi <https://github.com/TianyiShi2001>
 - Tim Burke <https://github.com/tipabu>
+- Tom Eulenfeld <https://github.com/trichter>
 - Tommy Carstensen <https://github.com/tommycarstensen>
 - Tyghe Vallard <https://github.com/necrolyte2>
 - Uri Laserson <https://github.com/laserson>
@@ -329,6 +341,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Walter Gillett <https://github.com/wgillett>
 - Wayne Decatur <https://github.com/fomightez>
 - Wibowo Arindrarto <https://github.com/bow>
+- Will Tyler <https://github.com/Will-Tyler>
 - Wolfgang Schueler <wolfgang at domain proceryon.at>
 - Xiaoyu Zhuo <https://github.com/xzhuo>
 - Yair Benita <Y.Benita at domain pharm.uu.nl>
@@ -342,4 +355,3 @@ please open an issue on GitHub or mention it on the mailing list.
 - Zachary Sailer <https://github.com/Zsailer>
 - Zaid Ur-Rehman <https://github.com/zaidurrehman>
 - Zheng Ruan <https://github.com/zruan>
-- Farhan Khan <https://github.com/BabaYaga1221>

@@ -18,9 +18,11 @@ Right now we've got tests for:
 # standard library
 import os
 import unittest
+import warnings
 from io import StringIO
 
 # biopython
+from Bio import BiopythonDeprecationWarning
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import AlignInfo
@@ -56,7 +58,7 @@ class TestBasics(unittest.TestCase):
         self.assertEqual(msa[0].id, "mixed")
         self.assertEqual(msa[1].id, "lower")
         self.assertEqual(msa[2].id, "upper")
-        for (col, letter) in enumerate(letters):
+        for col, letter in enumerate(letters):
             self.assertEqual(msa[:, col], letter + letter.lower() + letter.upper())
         # Check row extractions:
         self.assertEqual(msa[0].id, "mixed")
@@ -75,7 +77,7 @@ class TestBasics(unittest.TestCase):
         self.assertEqual(alignment.sequences[0].id, "mixed")
         self.assertEqual(alignment.sequences[1].id, "lower")
         self.assertEqual(alignment.sequences[2].id, "upper")
-        for (col, letter) in enumerate(letters):
+        for col, letter in enumerate(letters):
             self.assertEqual(
                 alignment[:, col], letter + letter.lower() + letter.upper()
             )
@@ -337,13 +339,17 @@ gi|671626|emb|CAA85685.1|           -
         )
         self.assertEqual(msa.get_alignment_length(), 156)
         align_info = AlignInfo.SummaryInfo(msa)
-        consensus = align_info.dumb_consensus()
+        with self.assertWarns(BiopythonDeprecationWarning):
+            consensus = align_info.dumb_consensus(ambiguous="N")
         self.assertIsInstance(consensus, Seq)
         self.assertEqual(
             consensus,
-            "TATACATTAAAGXAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATATATATAATATATTTCAAATTXCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA",
+            "TATACATTAAAGNAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATATATATAATATATTTCAAATTNCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA",
         )
-        dictionary = align_info.replacement_dictionary(skip_chars=None, letters="ACGT")
+        with self.assertWarns(BiopythonDeprecationWarning):
+            dictionary = align_info.replacement_dictionary(
+                skip_chars=None, letters="ACGT"
+            )
         self.assertEqual(len(dictionary), 16)
         self.assertAlmostEqual(dictionary[("A", "A")], 1395.0, places=1)
         self.assertAlmostEqual(dictionary[("A", "C")], 3.0, places=1)
@@ -361,7 +367,36 @@ gi|671626|emb|CAA85685.1|           -
         self.assertAlmostEqual(dictionary[("T", "C")], 12.0, places=1)
         self.assertAlmostEqual(dictionary[("T", "G")], 0, places=1)
         self.assertAlmostEqual(dictionary[("T", "T")], 874.0, places=1)
-        matrix = align_info.pos_specific_score_matrix(consensus, ["N", "-"])
+        alignment = msa.alignment
+        dictionary = alignment.substitutions
+        self.assertEqual(len(dictionary), 4)
+        self.assertEqual(dictionary.shape, (4, 4))
+        self.assertEqual(len(dictionary.keys()), 16)
+        self.assertAlmostEqual(dictionary[("A", "A")], 1395)
+        self.assertAlmostEqual(dictionary[("A", "C")], 3)
+        self.assertAlmostEqual(dictionary[("A", "G")], 13)
+        self.assertAlmostEqual(dictionary[("A", "T")], 6)
+        self.assertAlmostEqual(dictionary[("C", "A")], 3)
+        self.assertAlmostEqual(dictionary[("C", "C")], 271)
+        self.assertAlmostEqual(dictionary[("C", "G")], 0)
+        self.assertAlmostEqual(dictionary[("C", "T")], 16)
+        self.assertAlmostEqual(dictionary[("G", "A")], 5)
+        self.assertAlmostEqual(dictionary[("G", "C")], 0)
+        self.assertAlmostEqual(dictionary[("G", "G")], 480)
+        self.assertAlmostEqual(dictionary[("G", "T")], 0)
+        self.assertAlmostEqual(dictionary[("T", "A")], 6)
+        self.assertAlmostEqual(dictionary[("T", "C")], 12)
+        self.assertAlmostEqual(dictionary[("T", "G")], 0)
+        self.assertAlmostEqual(dictionary[("T", "T")], 874)
+        with self.assertWarns(BiopythonDeprecationWarning):
+            matrix = align_info.pos_specific_score_matrix(consensus, ["N", "-"])
+
+        motif = motifs.Motif("ACGT", alignment)
+        counts = motif.counts
+        for i in range(alignment.length):
+            for letter in "ACGT":
+                self.assertAlmostEqual(counts[letter][i], matrix[i][letter])
+        self.assertEqual(counts.calculate_consensus(identity=0.7), consensus)
         self.assertEqual(
             str(matrix),
             """\
@@ -378,7 +413,7 @@ A  7.0 0.0 0.0 0.0
 A  7.0 0.0 0.0 0.0
 A  7.0 0.0 0.0 0.0
 G  0.0 0.0 7.0 0.0
-X  4.0 0.0 3.0 0.0
+N  4.0 0.0 3.0 0.0
 A  7.0 0.0 0.0 0.0
 G  0.0 0.0 7.0 0.0
 G  0.0 0.0 7.0 0.0
@@ -446,7 +481,7 @@ A  7.0 0.0 0.0 0.0
 A  7.0 0.0 0.0 0.0
 T  0.0 0.0 0.0 7.0
 T  0.0 0.0 0.0 7.0
-X  0.0 3.0 0.0 4.0
+N  0.0 3.0 0.0 4.0
 C  0.0 7.0 0.0 0.0
 C  0.0 7.0 0.0 0.0
 T  0.0 0.0 0.0 7.0
@@ -525,7 +560,16 @@ A  7.0 0.0 0.0 0.0
 """,
         )
 
-        matrix = align_info.pos_specific_score_matrix(chars_to_ignore=["N", "-"])
+        with self.assertWarns(BiopythonDeprecationWarning):
+            matrix = align_info.pos_specific_score_matrix(chars_to_ignore=["N", "-"])
+
+        alignment = msa.alignment
+        motif = motifs.Motif("ACGT", alignment)
+        counts = motif.counts
+        for i in range(alignment.length):
+            for letter in "ACGT":
+                self.assertAlmostEqual(counts[letter][i], matrix[i][letter])
+
         self.assertEqual(
             str(matrix),
             """\
@@ -690,7 +734,16 @@ A  7.0 0.0 0.0 0.0
         )
 
         second_seq = msa[1].seq
-        matrix = align_info.pos_specific_score_matrix(second_seq, ["N", "-"])
+        with self.assertWarns(BiopythonDeprecationWarning):
+            matrix = align_info.pos_specific_score_matrix(second_seq, ["N", "-"])
+
+        alignment = msa.alignment
+        motif = motifs.Motif("ACGT", alignment)
+        counts = motif.counts
+        for i in range(alignment.length):
+            for letter in "ACGT":
+                self.assertAlmostEqual(counts[letter][i], matrix[i][letter])
+
         self.assertEqual(
             str(matrix),
             """\
@@ -854,20 +907,184 @@ A  7.0 0.0 0.0 0.0
 """,
         )
         e_freq_table = {"G": 0.25, "C": 0.25, "A": 0.25, "T": 0.25}
-        value = align_info.information_content(
-            5, 50, chars_to_ignore=["N"], e_freq_table=e_freq_table
-        )
-        self.assertAlmostEqual(value, 88.42309908538343)
-        value = align_info.information_content(
-            e_freq_table=e_freq_table, chars_to_ignore=["N"]
-        )
-        self.assertAlmostEqual(value, 287.55, places=2)
+        with self.assertWarns(BiopythonDeprecationWarning):
+            value = align_info.information_content(
+                5, 50, chars_to_ignore=["N"], e_freq_table=e_freq_table
+            )
+        self.assertAlmostEqual(value, 88.42309908538343)  # MultipleSeqAlignment
+        value = sum(motif[5:50].relative_entropy)
+        self.assertAlmostEqual(value, 88.42309908538343)  # Alignment
+        with self.assertWarns(BiopythonDeprecationWarning):
+            value = align_info.information_content(
+                e_freq_table=e_freq_table, chars_to_ignore=["N", "-"]
+            )
+        self.assertAlmostEqual(value, 306.2080592664532)  # MultipleSeqAlignment
+        relative_entropy = motif.relative_entropy
+        value = sum(relative_entropy)
+        self.assertAlmostEqual(value, 306.2080592664532)  # Alignment
         self.assertEqual(align_info.get_column(1), "AAAAAAA")
-        self.assertAlmostEqual(align_info.ic_vector[1], 2.00, places=2)
+        self.assertAlmostEqual(align_info.ic_vector[1], 2.00)
         self.assertEqual(align_info.get_column(7), "TTTATTT")
-        self.assertAlmostEqual(align_info.ic_vector[7], 1.41, places=2)
+        self.assertAlmostEqual(align_info.ic_vector[7], 1.4083272214176725)
+        self.assertAlmostEqual(relative_entropy[0], 2.0)
+        self.assertAlmostEqual(relative_entropy[1], 2.0)
+        self.assertAlmostEqual(relative_entropy[2], 2.0)
+        self.assertAlmostEqual(relative_entropy[3], 2.0)
+        self.assertAlmostEqual(relative_entropy[4], 2.0)
+        self.assertAlmostEqual(relative_entropy[5], 2.0)
+        self.assertAlmostEqual(relative_entropy[6], 2.0)
+        self.assertAlmostEqual(relative_entropy[7], 1.4083272214176723)
+        self.assertAlmostEqual(relative_entropy[8], 2.0)
+        self.assertAlmostEqual(relative_entropy[9], 2.0)
+        self.assertAlmostEqual(relative_entropy[10], 2.0)
+        self.assertAlmostEqual(relative_entropy[11], 2.0)
+        self.assertAlmostEqual(relative_entropy[12], 1.0147718639657484)
+        self.assertAlmostEqual(relative_entropy[13], 2.0)
+        self.assertAlmostEqual(relative_entropy[14], 2.0)
+        self.assertAlmostEqual(relative_entropy[15], 2.0)
+        self.assertAlmostEqual(relative_entropy[16], 2.0)
+        self.assertAlmostEqual(relative_entropy[17], 2.0)
+        self.assertAlmostEqual(relative_entropy[18], 2.0)
+        self.assertAlmostEqual(relative_entropy[19], 2.0)
+        self.assertAlmostEqual(relative_entropy[20], 2.0)
+        self.assertAlmostEqual(relative_entropy[21], 2.0)
+        self.assertAlmostEqual(relative_entropy[22], 2.0)
+        self.assertAlmostEqual(relative_entropy[23], 2.0)
+        self.assertAlmostEqual(relative_entropy[24], 2.0)
+        self.assertAlmostEqual(relative_entropy[25], 2.0)
+        self.assertAlmostEqual(relative_entropy[26], 2.0)
+        self.assertAlmostEqual(relative_entropy[27], 2.0)
+        self.assertAlmostEqual(relative_entropy[28], 2.0)
+        self.assertAlmostEqual(relative_entropy[29], 2.0)
+        self.assertAlmostEqual(relative_entropy[30], 2.0)
+        self.assertAlmostEqual(relative_entropy[31], 2.0)
+        self.assertAlmostEqual(relative_entropy[32], 2.0)
+        self.assertAlmostEqual(relative_entropy[33], 2.0)
+        self.assertAlmostEqual(relative_entropy[34], 2.0)
+        self.assertAlmostEqual(relative_entropy[35], 2.0)
+        self.assertAlmostEqual(relative_entropy[36], 2.0)
+        self.assertAlmostEqual(relative_entropy[37], 2.0)
+        self.assertAlmostEqual(relative_entropy[38], 2.0)
+        self.assertAlmostEqual(relative_entropy[39], 2.0)
+        self.assertAlmostEqual(relative_entropy[40], 2.0)
+        self.assertAlmostEqual(relative_entropy[41], 2.0)
+        self.assertAlmostEqual(relative_entropy[42], 2.0)
+        self.assertAlmostEqual(relative_entropy[43], 2.0)
+        self.assertAlmostEqual(relative_entropy[44], 2.0)
+        self.assertAlmostEqual(relative_entropy[45], 2.0)
+        self.assertAlmostEqual(relative_entropy[46], 2.0)
+        self.assertAlmostEqual(relative_entropy[47], 2.0)
+        self.assertAlmostEqual(relative_entropy[48], 2.0)
+        self.assertAlmostEqual(relative_entropy[49], 2.0)
+        self.assertAlmostEqual(relative_entropy[50], 2.0)
+        self.assertAlmostEqual(relative_entropy[51], 2.0)
+        self.assertAlmostEqual(relative_entropy[52], 2.0)
+        self.assertAlmostEqual(relative_entropy[53], 2.0)
+        self.assertAlmostEqual(relative_entropy[54], 2.0)
+        self.assertAlmostEqual(relative_entropy[55], 2.0)
+        self.assertAlmostEqual(relative_entropy[56], 2.0)
+        self.assertAlmostEqual(relative_entropy[57], 2.0)
+        self.assertAlmostEqual(relative_entropy[58], 2.0)
+        self.assertAlmostEqual(relative_entropy[59], 2.0)
+        self.assertAlmostEqual(relative_entropy[60], 2.0)
+        self.assertAlmostEqual(relative_entropy[61], 2.0)
+        self.assertAlmostEqual(relative_entropy[62], 2.0)
+        self.assertAlmostEqual(relative_entropy[63], 2.0)
+        self.assertAlmostEqual(relative_entropy[64], 2.0)
+        self.assertAlmostEqual(relative_entropy[65], 2.0)
+        self.assertAlmostEqual(relative_entropy[66], 2.0)
+        self.assertAlmostEqual(relative_entropy[67], 2.0)
+        self.assertAlmostEqual(relative_entropy[68], 2.0)
+        self.assertAlmostEqual(relative_entropy[69], 2.0)
+        self.assertAlmostEqual(relative_entropy[70], 2.0)
+        self.assertAlmostEqual(relative_entropy[71], 2.0)
+        self.assertAlmostEqual(relative_entropy[72], 2.0)
+        self.assertAlmostEqual(relative_entropy[73], 2.0)
+        self.assertAlmostEqual(relative_entropy[74], 1.4083272214176723)
+        self.assertAlmostEqual(relative_entropy[75], 1.4083272214176723)
+        self.assertAlmostEqual(relative_entropy[76], 2.0)
+        self.assertAlmostEqual(relative_entropy[77], 2.0)
+        self.assertAlmostEqual(relative_entropy[78], 2.0)
+        self.assertAlmostEqual(relative_entropy[79], 2.0)
+        self.assertAlmostEqual(relative_entropy[80], 1.0147718639657484)
+        self.assertAlmostEqual(relative_entropy[81], 2.0)
+        self.assertAlmostEqual(relative_entropy[82], 2.0)
+        self.assertAlmostEqual(relative_entropy[83], 2.0)
+        self.assertAlmostEqual(relative_entropy[84], 2.0)
+        self.assertAlmostEqual(relative_entropy[85], 2.0)
+        self.assertAlmostEqual(relative_entropy[86], 2.0)
+        self.assertAlmostEqual(relative_entropy[87], 2.0)
+        self.assertAlmostEqual(relative_entropy[88], 2.0)
+        self.assertAlmostEqual(relative_entropy[89], 2.0)
+        self.assertAlmostEqual(relative_entropy[90], 1.136879431433369)
+        self.assertAlmostEqual(relative_entropy[91], 2.0)
+        self.assertAlmostEqual(relative_entropy[92], 2.0)
+        self.assertAlmostEqual(relative_entropy[93], 2.0)
+        self.assertAlmostEqual(relative_entropy[94], 2.0)
+        self.assertAlmostEqual(relative_entropy[95], 2.0)
+        self.assertAlmostEqual(relative_entropy[96], 2.0)
+        self.assertAlmostEqual(relative_entropy[97], 2.0)
+        self.assertAlmostEqual(relative_entropy[98], 2.0)
+        self.assertAlmostEqual(relative_entropy[99], 2.0)
+        self.assertAlmostEqual(relative_entropy[100], 2.0)
+        self.assertAlmostEqual(relative_entropy[101], 2.0)
+        self.assertAlmostEqual(relative_entropy[102], 2.0)
+        self.assertAlmostEqual(relative_entropy[103], 2.0)
+        self.assertAlmostEqual(relative_entropy[104], 2.0)
+        self.assertAlmostEqual(relative_entropy[105], 2.0)
+        self.assertAlmostEqual(relative_entropy[106], 2.0)
+        self.assertAlmostEqual(relative_entropy[107], 2.0)
+        self.assertAlmostEqual(relative_entropy[108], 2.0)
+        self.assertAlmostEqual(relative_entropy[109], 2.0)
+        self.assertAlmostEqual(relative_entropy[110], 2.0)
+        self.assertAlmostEqual(relative_entropy[111], 2.0)
+        self.assertAlmostEqual(relative_entropy[112], 2.0)
+        self.assertAlmostEqual(relative_entropy[113], 2.0)
+        self.assertAlmostEqual(relative_entropy[114], 2.0)
+        self.assertAlmostEqual(relative_entropy[115], 2.0)
+        self.assertAlmostEqual(relative_entropy[116], 2.0)
+        self.assertAlmostEqual(relative_entropy[117], 2.0)
+        self.assertAlmostEqual(relative_entropy[118], 2.0)
+        self.assertAlmostEqual(relative_entropy[119], 2.0)
+        self.assertAlmostEqual(relative_entropy[120], 2.0)
+        self.assertAlmostEqual(relative_entropy[121], 2.0)
+        self.assertAlmostEqual(relative_entropy[122], 2.0)
+        self.assertAlmostEqual(relative_entropy[123], 2.0)
+        self.assertAlmostEqual(relative_entropy[124], 2.0)
+        self.assertAlmostEqual(relative_entropy[125], 2.0)
+        self.assertAlmostEqual(relative_entropy[126], 2.0)
+        self.assertAlmostEqual(relative_entropy[127], 2.0)
+        self.assertAlmostEqual(relative_entropy[128], 2.0)
+        self.assertAlmostEqual(relative_entropy[129], 2.0)
+        self.assertAlmostEqual(relative_entropy[130], 2.0)
+        self.assertAlmostEqual(relative_entropy[131], 2.0)
+        self.assertAlmostEqual(relative_entropy[132], 2.0)
+        self.assertAlmostEqual(relative_entropy[133], 2.0)
+        self.assertAlmostEqual(relative_entropy[134], 2.0)
+        self.assertAlmostEqual(relative_entropy[135], 2.0)
+        self.assertAlmostEqual(relative_entropy[136], 1.4083272214176723)
+        self.assertAlmostEqual(relative_entropy[137], 2.0)
+        self.assertAlmostEqual(relative_entropy[138], 2.0)
+        self.assertAlmostEqual(relative_entropy[139], 2.0)
+        self.assertAlmostEqual(relative_entropy[140], 2.0)
+        self.assertAlmostEqual(relative_entropy[141], 2.0)
+        self.assertAlmostEqual(relative_entropy[142], 2.0)
+        self.assertAlmostEqual(relative_entropy[143], 2.0)
+        self.assertAlmostEqual(relative_entropy[144], 2.0)
+        self.assertAlmostEqual(relative_entropy[145], 2.0)
+        self.assertAlmostEqual(relative_entropy[146], 2.0)
+        self.assertAlmostEqual(relative_entropy[147], 2.0)
+        self.assertAlmostEqual(relative_entropy[148], 1.4083272214176723)
+        self.assertAlmostEqual(relative_entropy[149], 2.0)
+        self.assertAlmostEqual(relative_entropy[150], 2.0)
+        self.assertAlmostEqual(relative_entropy[151], 2.0)
+        self.assertAlmostEqual(relative_entropy[152], 2.0)
+        self.assertAlmostEqual(relative_entropy[153], 2.0)
+        self.assertAlmostEqual(relative_entropy[154], 2.0)
+        self.assertAlmostEqual(relative_entropy[155], 2.0)
         handle = StringIO()
-        AlignInfo.print_info_content(align_info, fout=handle)
+        with self.assertWarns(BiopythonDeprecationWarning):
+            AlignInfo.print_info_content(align_info, fout=handle)
         self.assertEqual(
             handle.getvalue(),
             """\
@@ -927,16 +1144,16 @@ A  7.0 0.0 0.0 0.0
 53 A 2.000
 54 T 2.000
 55 A 2.000
-56 - 0.682
-57 - 0.682
-58 - 0.333
-59 - 0.333
-60 - -0.115
-61 - -0.115
-62 - -0.115
-63 - -0.115
-64 - -0.115
-65 - -0.115
+56 - 2.000
+57 - 2.000
+58 - 2.000
+59 - 2.000
+60 - 2.000
+61 - 2.000
+62 - 2.000
+63 - 2.000
+64 - 2.000
+65 - 2.000
 66 A 2.000
 67 T 2.000
 68 A 2.000
@@ -1319,7 +1536,8 @@ XX
         )
         self.assertAlmostEqual(sum(motif[5:50].relative_entropy), 88.42309908538343)
         relative_entropy = motif.relative_entropy
-        self.assertAlmostEqual(sum(relative_entropy), 287.54558448976394)
+        self.assertAlmostEqual(sum(relative_entropy[5:50]), 88.42309908538343)
+        self.assertAlmostEqual(sum(relative_entropy), 306.20805926645323)
         self.assertEqual(alignment[:, 1], "AAAAAAA")
         self.assertAlmostEqual(motif.relative_entropy[1], 2.0)
         self.assertEqual(alignment[:, 7], "TTTATTT")
@@ -1340,7 +1558,8 @@ XX
         self.assertEqual(seq_record.seq, "GTTGCTTCTGGCGTGGGTGGGGGGG")
         self.assertEqual(msa.get_alignment_length(), 25)
         align_info = AlignInfo.SummaryInfo(msa)
-        consensus = align_info.dumb_consensus(ambiguous="N", threshold=0.6)
+        with self.assertWarns(BiopythonDeprecationWarning):
+            consensus = align_info.dumb_consensus(ambiguous="N", threshold=0.6)
         self.assertIsInstance(consensus, Seq)
         self.assertEqual(consensus, "NTNGCNTNNNNNGNNGGNTGGNTCN")
         self.assertEqual(
@@ -1374,6 +1593,7 @@ EAS54_6_R         0 TTGGCAGGCCAAGGCCGATGGATCA 25
 EAS54_6_R         0 GTTGCTTCTGGCGTGGGTGGGGGGG 25
 """,
         )
+        self.assertEqual(motif.counts.calculate_consensus(identity=0.6), consensus)
 
 
 if __name__ == "__main__":

@@ -9,12 +9,17 @@
 import os
 import sys
 import unittest
-from Bio import AlignIO
-from Bio import MissingExternalDependencyError
-from Bio import SeqIO
-from Bio.Align.Applications import MSAProbsCommandline
-from Bio.Application import ApplicationError
+import warnings
 from subprocess import getoutput
+
+from Bio import MissingExternalDependencyError
+from Bio import BiopythonDeprecationWarning
+from Bio import SeqIO
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
+    from Bio.Align.Applications import MSAProbsCommandline
+    from Bio.Application import ApplicationError
 
 #################################################################
 

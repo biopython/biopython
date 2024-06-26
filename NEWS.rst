@@ -10,8 +10,179 @@ https://www.open-bio.org/category/obf-projects/biopython/
 
 The latest news is at the top of this file.
 
-(In progress, not yet released): Biopython 1.82
+(In progress, not yet released): Biopython 1.84
 ===============================================
+
+This release of Biopython supports Python 3.9, 3.10, 3.11 and 3.12. It
+has also been tested on PyPy3.9 v7.3.13. Python 3.9 is approaching end of
+life, our support for it is now deprecated.
+
+Our main documentation, the Biopython Tutorial and Cookbook, has been
+converted from LaTeX to reStructuredText, and combined with the existing API
+documentation, into a single more modern and navigable HTML output.
+
+This release reverts the removal of the ``.strand``, ``.ref``, and ``.ref_db``
+attributes of the ``SeqFeature`` which was done without a deprecation period.
+They are again aliases for ``.location.strand`` etc, but trigger deprecation
+warnings.
+
+Bio.Blast contains a new parser for BLAST XML output as a replacement for the
+old parser in Bio.Blast.NCBIXML. The main differences between the parsers is
+as follows:
+
+* The old parser stores information in a Bio.Blast.NCBIXML.Blast object, with
+  attribute names based on plain-text Blast output. The new parser stores
+  information in a Bio.Blast.Record object. This class follows the DTD that
+  describes the XML in terms of attribute names and dictionary key names,
+  class structure, and object types. This makes it easier to find the detailed
+  description of each field in the NCBI Blast documentation.
+* The old parser stores alignment information directly as seen in the BLAST XML
+  output, i.e. as strings with dashes to represent gaps. The new parser stores
+  the alignment information as a Bio.Align.Alignment object, which can then be
+  used to e.g. print the alignment in a different format.
+
+Bio.Blast also contains a new qblast function as a replacement for the old
+qblast function in Bio.Blast.NCBIWWW. The main difference is that the old
+qblast function in Bio.Blast.NCBIWWW returns the BLAST search results as Python
+strings, while the new qblast returns bytes objects. Note that in Python, to
+parse an XML file it should be opened in binary mode, as the string encoding is
+specified in the XML data itself. The object returned by the new qblast
+function can therefore be passed directly to the BLAST parser. Also, this
+allows data to be downloaded in a binary format such as JSON2, which returns
+data in a zipped JSON format.
+
+A function called ``Bio.Phylo.to_igraph`` has been added to convert a
+``Bio.Phylo.Tree`` into an ``igraph.Graph`` graph, in parallel to the existing
+function to convert the same object into a ``networkx`` graph.
+
+The PDB module's CE Align code for pairwise structure alignment was cleaned up,
+and the improved CE align code now considers more alignments and selects one of
+the longer alignments with the smallest RMSD. As a result, users may find
+alignments with slightly smaller RMSDs when using CE Align.
+
+The PDB module no longer uses the PDB FTP server by default.
+Instead, the PDB module uses the HTTPS server in most cases.
+For ``get_all_assemblies``, the PDB module now uses the
+`RCSB PDB Search API <https://search.rcsb.org/#search-api>`_ to get all the
+assemblies.
+The wwPDB organization announced that they plan to deprecate the FTP
+server by the end of the year. See the announcement
+`here <https://www.wwpdb.org/news/news?year=2023#65562f0ad78e004e766a96c1>`_.
+
+A parser has been added for parsing PDBML (PDB XML) files.
+`PDBML <https://pdbml.wwpdb.org/>`_ is a representation of PDB data in XML format.
+The PDB chapter of the tutorial is updated to show how to use the PDBML parser.
+
+Additionally, a parser has been added for BinaryCIF files.
+BinaryCIF is a compact, binary representation of CIF data.
+The PDB tutorial is updated to show how to use the BinaryCIF parser.
+The RCSB PDB recommends that users switch from MMTF to BinaryCIF.
+See the `announcement <https://www.rcsb.org/news/feature/65a1af31c76ca3abcc925d0c>`_.
+
+Bio.PDB Structure objects will now issue a warning - instead of an exception - when
+two children (e.g. residues) have identical IDs. This can be useful in some
+cases, e.g. renumbering residues in a chain.
+
+``Bio.SeqIO`` now supports reading sequences from the Graphical Fragment
+Assembly (GFA) files with the formats ``gfa1`` and ``gfa2`` (for GFA 1.x and
+GFA 2.0 files respectively). All data outside of segment lines are ignored, such
+as linkage information.
+
+The UniProt package now includes a method to search UniProt programmatically.
+The tutorial has been updated with examples of how to use the search method.
+See the chapter on Swiss-Prot and ExPASy in the tutorial for more information.
+
+The PDB package now includes a new module, ``alphafold_db``, for interacting
+with the AlphaFold DB of predicted protein structures. The module allows users
+to load AlphaFold-predicted structures in the same format as experimentally-predicted
+PDB structures.
+
+Now when reverse complementing a ``SeqRecord`` containing unstranded features
+with compound locations the order of the sublocations is reversed, to improve
+the representation of origin-spanning locations. See issue #4611.
+
+Updated ``Bio.Restriction`` to the April 2024 release of REBASE.
+
+A bug in ``bgzf`` was resolved, restoring the ability to pass a file handle
+directly to ``BgzfWriter``.
+
+``Bio.Entrez.local_cache`` can be set to a directory for caching downloaded DTD/XSD files.
+
+As in recent releases, more of our code is now explicitly available under
+either our original "Biopython License Agreement", or the very similar but
+more commonly used "3-Clause BSD License".  See the ``LICENSE.rst`` file for
+more details.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+- Anil Tuncel (first contribution)
+- David Cain
+- Fabio Zanini (first contribution)
+- Joao Rodrigues
+- Judith Bernett (first contribution)
+- Meridia Jane Bryant (first contribution)
+- Michael M. (first contribution)
+- Michiel de Hoon
+- Peter Cock
+- Rudolf Koopmann (first contribution)
+- Will Tyler (first contribution)
+
+10 January 2024: Biopython 1.83
+===============================
+
+This release of Biopython supports Python 3.8, 3.9, 3.10, 3.11 and 3.12. It
+has also been tested on PyPy3.9 v7.3.13. Python 3.8 is approaching end of
+life, our support for it is now deprecated.
+
+This release reverts the removal of the ``.strand``, ``.ref``, and ``.ref_db``
+attributes of the ``SeqFeature`` which was done without a deprecation period.
+They are again aliases for ``.location.strand`` etc, but trigger deprecation
+warnings.
+
+22 December 2023: Biopython 1.82
+================================
+
+This release of Biopython supports Python 3.8, 3.9, 3.10, 3.11 and 3.12. It
+has also been tested on PyPy3.8 v7.3.11.
+
+[NOTE: This release unfortunately removed the ``.strand``, ``.ref``, and
+``.ref_db`` attributes of the ``SeqFeature`` without a deprecation period.
+This has been addressed in Biopython 1.83, which restores them but starts
+the formal deprecation cycle.]
+
+The ``inplace`` argument of ``complement`` and ``reverse_complement`` in
+``Bio.Seq`` now always default to ``False`` both for ``Seq`` and ``MutableSeq``
+objects. To modify a ``MutableSeq`` in-place, use ``inplace=True``.
+
+A new class ``CodonAligner`` was added to ``Bio.Align``. A ``CodonAligner``
+object can align a nucleotide sequence to the amino acid sequence it encodes,
+using a dynamic programming algorithm modeled on ``PairwiseAligner`` to take
+frame shifts into account. The ``CodonAligner`` returns ``Alignment`` objects.
+By calling the new ``mapall`` method on an ``Alignment`` object storing a
+multiple sequence alignment of amino acid sequences, with nucleotide-to-amino
+acid alignments generated by ``CodonAligner`` as the argument, a codon-by-codon
+multiple sequence alignment of nucleotide sequences can be obtained. The new
+submodule ``Bio.Align.analysis`` provides functions to estimate synonymous and
+nonsynonymous mutations and to perform the McDonald-Kreitman test on the codon
+multiple sequence alignments. Together, this provides the same functionality as
+the ``Bio.codonalign`` module, but uses the standard ``Alignment`` class, and
+does not rely on regular expression searching to align a nucleotide sequence to
+an amino acid sequence.
+
+The ``hmmer3-text`` SearchIO format now also extracts the similarity string of
+the parsed alignments. This value is available under the 'similarity' key of
+the ``aln_annotation`` attribute of each HSP, the same as how it is done in
+other SearchIO formats.
+
+HMMER results with the full path to the hmmer executable in the banner are
+now parsed correctly. This should help Windows users and users with python
+installations in non-default locations.
+
+We now have basic type hint annotations in various modules including ``Seq``,
+``SeqRecord``, and ``SeqIO``. This should help anyone using an editor or IDE
+with type-aware autocomplete, or in conjunction with mypy as a pre-commit
+check this can catch passing the wrong types to Biopython functions/methods.
 
 Calling ``iter`` on a ``PairwiseAlignments`` object returned by a
 ``PairwiseAigner`` previously reset the iterator such that it will start from
@@ -26,12 +197,16 @@ object historically returned (sheet, turn, helix) while claiming to return
 Additionally, the amino acids considered were revised as per recent literature.
 
 The sequence objects now have ``.removeprefix()`` and ``.removesuffix()``
-methods matching that added to strings in Python 3.9.
+methods matching those added to strings in Python 3.9. They also now have a
+``search`` method to ``Seq`` and ``MutableSeq`` object to search for
+multiple subsequences at the same time.
+
+The MMCIFParser now ignores '.' header values.
 
 Calling ``set_angle()`` on a residue dihedral angle previously set only
 the specified angle, now the default behavior is to update overlapping
 angles as well.  For example, setting Psi (N-CA-CN) now updates the
-overlapping angle N-CA-C-O. as most users would probably expect.
+overlapping angle N-CA-C-O, as most users would probably expect.
 
 Generating a structure with default internal coordinates, e.g. from a
 sequence with ``read_PIC_seq()``,  previously selected wrong default
@@ -40,9 +215,6 @@ values in many cases.  This has been fixed.
 Added ``make_extended()`` to set a chain to an extended beta strand
 conformation, as the default backbone values reflect the more popular
 alpha helix in most cases.
-
-Added a ``search`` method to ``Seq`` and ``MultipleSeq`` object to search for
-multiple subsequences at the same time.
 
 The ``Instances`` class and the ``instances`` argument of the ``Motif`` class
 initializer in ``Bio.motifs`` were deprecated in release 1.82. Instead of
@@ -61,25 +233,33 @@ The ``instances`` attribute of the ``Motif`` class  in ``Bio.motifs`` was
 deprecated in release 1.82. Instead of ``mymotif.instances``, please use
 ``mymotif.alignment.sequences``.
 
-
 Additionally, a number of small bugs and typos have been fixed with additions
 to the test suite.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Alex Crocker (first contribution)
 - Antonio Trande (first contribution)
 - Arpan Sahoo (first contribution)
 - Benedict Carling (first contribution)
 - Cam McMenamie (first contribution)
+- Ernesto Rodriguez (first contribution)
+- Jacob Byerly (first contribution)
 - João Rodrigues
 - Joe Greener
+- Manuel Lera Ramirez
+- Michael R. Crusoe
 - Michiel de Hoon
 - Peter Cock
 - Ricardas Ralys (first contribution)
 - Rob Miller
+- Thomas Holder
+- Tom Eulenfeld (first contribution)
 - Vladislav Kuznetsov (first contribution)
+- Wibowo Arindrarto
 - Yiming Qu (first contribution)
+
 
 12 February 2023: Biopython 1.81
 ================================

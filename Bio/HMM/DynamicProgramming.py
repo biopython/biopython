@@ -11,6 +11,17 @@ This module contains classes which implement Dynamic Programming
 algorithms that can be used generally.
 """
 
+import warnings
+
+from Bio import BiopythonDeprecationWarning
+
+warnings.warn(
+    "The 'Bio.HMM.DynamicProgramming' module is deprecated and will "
+    "be removed in a future release of Biopython. Consider using the "
+    "hmmlearn package instead.",
+    BiopythonDeprecationWarning,
+)
+
 
 class AbstractDPAlgorithms:
     """An abstract class to calculate forward and backward probabilities.
@@ -132,9 +143,9 @@ class AbstractDPAlgorithms:
         first_letter = state_letters[0]
         # b_{k}(L) = a_{k0} for all k
         for state in state_letters:
-            backward_var[
-                (state, len(self._seq.emissions) - 1)
-            ] = self._mm.transition_prob[(state, state_letters[0])]
+            backward_var[(state, len(self._seq.emissions) - 1)] = (
+                self._mm.transition_prob[(state, state_letters[0])]
+            )
 
         # -- recursion
         # first loop over the training sequence backwards

@@ -178,7 +178,6 @@ class Organism(_ChromosomeComponent):
         Subclasses should implement this (see also self._legend_height) to
         provide specialized legends.
         """
-        pass
 
 
 class Chromosome(_ChromosomeComponent):
@@ -350,7 +349,7 @@ class Chromosome(_ChromosomeComponent):
                 "start",
             ),
         ]:
-            for (y1, y2, color, back_color, name) in labels:
+            for y1, y2, color, back_color, name in labels:
                 cur_drawing.add(
                     Line(x1, y1, x2, y2, strokeColor=color, strokeWidth=0.25)
                 )
@@ -445,7 +444,6 @@ class ChromosomeSegment(_ChromosomeComponent):
         This should be overridden in derived classes if there are
         subcomponents to be drawn.
         """
-        pass
 
     def _draw_segment(self, cur_drawing):
         """Draw the current chromosome segment (PRIVATE)."""
@@ -484,7 +482,6 @@ class ChromosomeSegment(_ChromosomeComponent):
         This should be overridden in derived classes if there are
         subcomponents to be drawn.
         """
-        pass
 
     def _draw_label(self, cur_drawing):
         """Add a label to the chromosome segment (PRIVATE).
@@ -494,7 +491,6 @@ class ChromosomeSegment(_ChromosomeComponent):
         This may be overlapped by any sub-feature labels on other segments!
         """
         if self.label is not None:
-
             label_x = 0.5 * (self.start_x_position + self.end_x_position) + (
                 self.chr_percent + 0.05
             ) * (self.end_x_position - self.start_x_position)
@@ -691,7 +687,7 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
                 # Assume SeqFeature objects
                 start = f.location.start
                 end = f.location.end
-                strand = f.strand
+                strand = f.location.strand
                 try:
                     # Handles Artemis colour integers, HTML colors, etc
                     color = _color_trans.translate(f.qualifiers["color"][0])
@@ -818,4 +814,3 @@ class SpacerSegment(ChromosomeSegment):
         so this method therefore does nothing, but is defined
         to match the expected API of the other segment objects.
         """
-        pass

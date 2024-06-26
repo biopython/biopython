@@ -6,7 +6,6 @@
 
 """Common code for SearchIO tests."""
 
-
 import os
 import gzip
 import unittest

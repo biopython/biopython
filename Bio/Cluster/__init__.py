@@ -24,7 +24,7 @@ except ImportError:
         "See http://www.numpy.org/"
     ) from None
 
-from . import _cluster
+from . import _cluster  # type: ignore
 
 __all__ = (
     "Node",
@@ -553,15 +553,16 @@ def distancematrix(data, mask=None, weight=None, transpose=False, dist="e"):
     ...               [1, 2,  3,  4]])
     >>> distances = distancematrix(data, dist='e')
     >>> distances
-    [array([], dtype=float64), array([ 16.]), array([ 64.,  16.]), array([  1.,   9.,  49.])]
+    [array([], dtype=float64), array([16.]), array([64., 16.]), array([ 1.,  9., 49.])]
 
-    which can be rewritten as
-       distances = [array([], dtype=float64),
-                    array([ 16.]),
-                    array([ 64.,  16.]),
-                    array([  1.,   9.,  49.])]
+    which can be rewritten as::
 
-    This corresponds to the distance matrix:
+        distances = [array([], dtype=float64),
+                     array([ 16.]),
+                     array([ 64.,  16.]),
+                     array([  1.,   9.,  49.])]
+
+    This corresponds to the distance matrix::
 
         [ 0., 16., 64.,  1.]
         [16.,  0., 16.,  9.]
@@ -598,7 +599,7 @@ def pca(data):
     Adding the column means to the dot product of the coordinates and the
     principal components recreates the data matrix:
 
-    >>> from numpy import array, dot, amax, amin
+    >>> from numpy import array, dot
     >>> from Bio.Cluster import pca
     >>> matrix = array([[ 0.,  0.,  0.],
     ...                 [ 1.,  0.,  0.],
@@ -606,8 +607,11 @@ def pca(data):
     ...                 [ 4.,  2.,  6.]])
     >>> columnmean, coordinates, pc, _ = pca(matrix)
     >>> m = matrix - (columnmean + dot(coordinates, pc))
-    >>> amax(m) < 1e-12 and amin(m) > -1e-12
-    True
+    >>> abs(m) < 1e-12
+    array([[ True,  True,  True],
+           [ True,  True,  True],
+           [ True,  True,  True],
+           [ True,  True,  True]])
 
     """
     data = __check_data(data)
@@ -1037,7 +1041,7 @@ class Record:
         if (
             geneclusters is not None
             and expclusters is not None
-            and type(geneclusters) != type(expclusters)
+            and type(geneclusters) != type(expclusters)  # noqa: E721
         ):
             raise ValueError(
                 "found one k-means and one hierarchical "

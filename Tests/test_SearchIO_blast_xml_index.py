@@ -727,7 +727,6 @@ class BlastXmlRawCases(CheckRaw):
 
 
 class BlastXmlIndexCases(CheckIndex):
-
     fmt = "blast-xml"
 
     def test_blastxml_2212L_blastp_001(self):

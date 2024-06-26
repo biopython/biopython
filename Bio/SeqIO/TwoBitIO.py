@@ -20,6 +20,7 @@ specifically requested, making the parser memory-efficient.
 The TwoBitIterator object implements the __getitem__, keys, and __len__
 methods that allow it to be used as a dictionary.
 """
+
 # The .2bit file format is defined by UCSC as follows
 # (see http://genome.ucsc.edu/FAQ/FAQformat.html#format7):
 #
@@ -69,15 +70,23 @@ methods that allow it to be used as a dictionary.
 # reserved - always zero for now
 # packedDna - the DNA packed to two bits per base, represented as so:
 #             T - 00, C - 01, A - 10, G - 11. The first base is in the most
-#             significant 2-bit byte; the last base is in the least significan
+#             significant 2-bit byte; the last base is in the least significant
 #             2 bits. For example, the sequence TCAG is represented as 00011011.
-import numpy as np
+try:
+    import numpy as np
+except ImportError:
+    from Bio import MissingPythonDependencyError
+
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use Bio.SeqIO with TwoBit files."
+        "See http://www.numpy.org/"
+    ) from None
 
 from Bio.Seq import Seq
 from Bio.Seq import SequenceDataAbstractBaseClass
 from Bio.SeqRecord import SeqRecord
 
-from . import _twoBitIO
+from . import _twoBitIO  # type: ignore
 from .Interfaces import SequenceIterator
 
 

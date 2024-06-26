@@ -10,6 +10,7 @@ Aligned FASTA files are FASTA files in which alignment gaps in a sequence are
 represented by dashes. Each sequence line in an aligned FASTA should have the
 same length.
 """
+
 from Bio.Align import Alignment
 from Bio.Align import interfaces
 from Bio.Seq import Seq
@@ -74,11 +75,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             if self._stream.tell() == 0:
                 raise ValueError("Empty file.")
             return
-        coordinates = Alignment.infer_coordinates(lines)
+        lines = [line.encode() for line in lines]
+        seqs, coordinates = Alignment.parse_printed_alignment(lines)
         records = []
-        for name, description, line in zip(names, descriptions, lines):
-            line = line.replace("-", "")
-            sequence = Seq(line)
+        for name, description, seq in zip(names, descriptions, seqs):
+            sequence = Seq(seq)
             record = SeqRecord(sequence, id=name, description=description)
             records.append(record)
         alignment = Alignment(records, coordinates)

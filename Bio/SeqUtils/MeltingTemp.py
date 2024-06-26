@@ -24,7 +24,7 @@ General parameters for most Tm methods:
    True). In general, whitespaces and non-base characters are removed and
    characters are converted to uppercase. RNA will be backtranscribed.
  - strict -- Do not allow base characters or neighbor duplex keys (e.g.
-   'AT/NA') that could not or not unambigiously be evaluated for the respective
+   'AT/NA') that could not or not unambiguously be evaluated for the respective
    method (default=True). Note that W (= A or T) and S (= C or G) are not
    ambiguous for Tm_Wallace and Tm_GC. If 'False', average values (if
    applicable) will be used.
@@ -150,7 +150,6 @@ by '1':
     62.53
 
 """
-
 
 import math
 import warnings
@@ -532,7 +531,7 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
     Mon = Na + K + Tris / 2.0  # Note: all these values are millimolar
     mg = Mg * 1e-3  # Lowercase ions (mg, mon, dntps) are molar
     # Na equivalent according to von Ahsen et al. (2001):
-    if sum((K, Mg, Tris, dNTPs)) > 0 and not method == 7 and dNTPs < Mg:
+    if sum((K, Mg, Tris, dNTPs)) > 0 and method != 7 and dNTPs < Mg:
         # dNTPs bind Mg2+ strongly. If [dNTPs] is larger or equal than
         # [Mg2+], free Mg2+ is considered not to be relevant.
         Mon += 120 * math.sqrt(Mg - dNTPs)

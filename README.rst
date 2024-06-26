@@ -16,9 +16,6 @@
 .. image:: https://img.shields.io/github/actions/workflow/status/biopython/biopython/ci.yml?logo=github-actions
    :alt: GitHub workflow status
    :target: https://github.com/biopython/biopython/actions
-.. image:: https://img.shields.io/codecov/c/github/biopython/biopython/master.svg?logo=codecov
-   :alt: Test coverage on CodeCov
-   :target: https://codecov.io/github/biopython/biopython/
 .. image:: http://depsy.org/api/package/pypi/biopython/badge.svg
    :alt: Research software impact on Depsy
    :target: http://depsy.org/package/python/biopython
@@ -33,19 +30,20 @@ Biopython README file
 The Biopython Project is an international association of developers of freely
 available Python tools for computational molecular biology.
 
-Our user-centric documentation is hosted on https://biopython.org including
-our `API Documentation <https://biopython.org/docs/latest/api/>`_ and the main
-`Biopython Tutorial and Cookbook
-<http://biopython.org/DIST/docs/tutorial/Tutorial.html>`_
-(`PDF <http://biopython.org/DIST/docs/tutorial/Tutorial.pdf>`_).
-
 This README file is intended primarily for people interested in working
 with the Biopython source code, either one of the releases from the
 http://biopython.org website, or from our repository on GitHub
 https://github.com/biopython/biopython
 
+Our user-centric documentation, `The Biopython Tutorial and Cookbook, and API
+documentation <https://biopython.org/docs/latest/>`_, is generated from our
+repository using Sphinx.
+
 The `NEWS <https://github.com/biopython/biopython/blob/master/NEWS.rst>`_
-file summarises the changes in each release of Biopython.
+file summarises the changes in each release of Biopython, alongside the
+`DEPRECATED
+<https://github.com/biopython/biopython/blob/master/DEPRECATED.rst>`_
+file which notes API breakages.
 
 The Biopython package is open source software made available under generous
 terms. Please see the `LICENSE
@@ -88,9 +86,9 @@ We currently recommend using Python 3.11 from http://www.python.org
 Biopython is currently supported and tested on the following Python
 implementations:
 
-- Python 3.8, 3.9, 3.10 and 3.11 -- see http://www.python.org
+- Python 3.9, 3.10, 3.11 and 3.12 -- see http://www.python.org
 
-- PyPy3.8 v7.3.11 -- or later, see http://www.pypy.org
+- PyPy3.9 v7.3.13 -- or later, see http://www.pypy.org
 
 
 Optional Dependencies

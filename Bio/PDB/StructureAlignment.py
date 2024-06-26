@@ -7,7 +7,6 @@
 
 """Map residues of two structures to each other based on a FASTA alignment."""
 
-
 from Bio.Data import PDBData
 
 from Bio.PDB import Selection
@@ -96,5 +95,5 @@ class StructureAlignment:
 
     def get_iterator(self):
         """Create an iterator over all residue pairs."""
-        for i in range(0, len(self.duos)):
+        for i in range(len(self.duos)):
             yield self.duos[i]

@@ -15,6 +15,7 @@
 This provides interfaces for loading biological objects from a relational
 database, and is compatible with the BioSQL standards.
 """
+
 import os
 
 from . import BioSeq
@@ -312,7 +313,7 @@ class _CursorWrapper:
         """Decode any bytestrings present in the row (PRIVATE)."""
         tuple_list = list(tuple_)
         for i, elem in enumerate(tuple_list):
-            if type(elem) is bytes:
+            if isinstance(elem, bytes):
                 tuple_list[i] = elem.decode("utf-8")
         return tuple(tuple_list)
 

@@ -11,7 +11,6 @@
 
 """Translation code for graphical Xbbtools tool."""
 
-
 import time
 
 from Bio.Seq import Seq, reverse_complement, translate
@@ -23,7 +22,6 @@ class xbb_translations:
 
     def __init__(self):
         """Initialize the class."""
-        pass
 
     def frame1(self, seq, translation_table=1):
         """Translate first reading frame."""
@@ -102,7 +100,7 @@ class xbb_translations:
         anti = self.reverse(comp)
         length = len(seq)
         frames = {}
-        for i in range(0, 3):
+        for i in range(3):
             frames[i + 1] = self.frame1(seq[i:], translation_table)
             frames[-(i + 1)] = self.reverse(self.frame1(anti[i:], translation_table))
 

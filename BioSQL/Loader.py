@@ -17,6 +17,7 @@ database and then retrieve them back. You shouldn't use any of the
 classes in this module directly. Rather, call the load() method on
 a database object.
 """
+
 # standard modules
 from time import gmtime, strftime
 
@@ -545,7 +546,7 @@ class DatabaseLoader:
             # we could verify that the Scientific Name etc in the database
             # is the same and update it or print a warning if not...
             if len(rows) != 1:
-                raise ValueError(f"Expected 1 reponse, got {len(rows)}")
+                raise ValueError(f"Expected 1 response, got {len(rows)}")
             return rows[0]
 
         # We have to record this.
@@ -932,17 +933,20 @@ class DatabaseLoader:
         """
         # TODO - Record an ontology for the locations (using location.term_id)
         # which for now as in BioPerl we leave defaulting to NULL.
-        if feature.location_operator and feature.location_operator != "join":
-            # e.g. order locations... we don't record "order" so it
-            # will become a "join" on reloading. What does BioPerl do?
-            import warnings
-            from Bio import BiopythonWarning
+        try:
+            if feature.location.operator != "join":
+                # e.g. order locations... we don't record "order" so it
+                # will become a "join" on reloading. What does BioPerl do?
+                import warnings
+                from Bio import BiopythonWarning
 
-            warnings.warn(
-                "%s location operators are not fully supported"
-                % feature.location_operator,
-                BiopythonWarning,
-            )
+                warnings.warn(
+                    "%s location operators are not fully supported"
+                    % feature.location_operator,
+                    BiopythonWarning,
+                )
+        except AttributeError:
+            pass
         # This will be a list of length one for a SimpleLocation:
         parts = feature.location.parts
         if parts and {loc.strand for loc in parts} == {-1}:

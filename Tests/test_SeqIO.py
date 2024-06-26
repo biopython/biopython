@@ -3,9 +3,9 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Tests for SeqIO module."""
+
 import copy
 import gzip
-import sys
 import unittest
 import warnings
 
@@ -29,7 +29,7 @@ from Bio.SeqRecord import SeqRecord
 # warnings to stdout and verifying via the print-and-compare check. However,
 # there was some frustrating cross-platform inconsistency I couldn't resolve.
 
-possible_unknown_seq_formats = {"embl", "genbank", "gb", "imgt", "qual"}
+possible_unknown_seq_formats = {"embl", "genbank", "gb", "imgt", "qual", "gfa1", "gfa2"}
 
 # List of formats including alignment only file formats we can read AND write.
 # The list is initially hard coded to preserve the original order of the unit
@@ -366,7 +366,7 @@ class TestSeqIO(SeqIOTestBaseClass):
                 # I want to see the output when called from the test harness,
                 # run_tests.py (which can be funny about new lines on Windows)
                 handle.seek(0)
-                message = f"{str(e)}\n\n{handle.read()!r}\n\n{records1!r}"
+                message = f"{e!s}\n\n{handle.read()!r}\n\n{records1!r}"
                 self.fail(message)
 
             self.assertEqual(len(records2), t_count)
@@ -1845,6 +1845,61 @@ class TestSeqIO(SeqIOTestBaseClass):
             messages,
         )
 
+    def test_gfa1(self):
+        sequences = [
+            "GATCACAGGTCTATCACCCTATTAACCACTCACGGGAGCT...ACATTAT",
+            "TATAATAAACACCCTCACCACTACAATCTTCCTAGGAACA...CTACTCT",
+            "GGGGTAAATGATGGGTTGGGCCAAGGGGTTAATTAGTACG...TATTAAG",
+            "ACCATCTTTGCAGGCACACTCATCACAGCGCTAAGCTCGC...TCTGAGC",
+            "ATTCTACCACTCCAGCCTAGCCCCCACCCCTCAACTTGGA...TATAAAC",
+            "CTTTTACCACTCCAGCCTAGCCCCTACCCCCCAATTAGGA...AGCCCAA",
+            "TTAGGTCTCCACCCCTGACTCCCCTCAGCCATAGAAGGCC...AAAGACC",
+            "ACATCATCGAAACCGCAAACATATCATACACAAACGCCTG...CACGATG",
+        ]
+        ids = [
+            "MTh0",
+            "MTh4001",
+            "MTo3426",
+            "MTh4502",
+            "MTo8961",
+            "MTh9505",
+            "MTh13014",
+            "MTh13516",
+        ]
+        names = ids
+        lengths = [4001, 501, 501, 5003, 502, 3509, 502, 3053]
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "seqxml": "DNA",
+            "nexus": "DNA",
+        }
+        alignment = None
+        messages = {
+            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=MTh13516).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=MTh13516).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=MTh13516).",
+            "nib": "More than one sequence found",
+            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=MTh13516).",
+            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=MTh13516).",
+            "sff": "Missing SFF flow information",
+            "xdna": "More than one sequence found",
+        }
+        self.perform_test(
+            "gfa1",
+            False,
+            "GFA/seq.gfa",
+            8,
+            ids,
+            names,
+            sequences,
+            lengths,
+            alignment,
+            messages,
+            molecule_types=molecule_types,
+        )
+
     def test_nexus1(self):
         sequences = [
             "A-C-G-Tc-gtgtgtgctct-t-t------ac-gtgtgtgctct-t-t",
@@ -2538,6 +2593,25 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+        )
+
+    def test_uniprot_xml_namespace(self):
+        uniref_file_name = (
+            "SwissProt/UniRef90_P99999.xml"  # non-uniprot file (related uniref format)
+        )
+        with self.assertRaises(ValueError) as context:
+            records = []
+            for record in SeqIO.parse(uniref_file_name, format="uniprot-xml"):
+                records.append(record)
+        self.assertRegex(
+            str(context.exception),
+            "http://uniprot.org/uniprot",
+            "Correct namespace in error",
+        )
+        self.assertRegex(
+            str(context.exception),
+            "http://uniprot.org/uniref",
+            "Unexpected namespace in error",
         )
 
     def test_swiss20(self):
