@@ -27,6 +27,7 @@ _gc_values = {
     "C": 1.000,
     "A": 0.000,
     "T": 0.000,
+    "U": 0.000,
     "S": 1.000,  # Strong interaction (3 H bonds) (G or C)
     "W": 0.000,  # Weak interaction (2 H bonds) (A or T)
     "M": 0.500,  # Amino (A or C)
@@ -46,10 +47,10 @@ def gc_fraction(seq, ambiguous="remove"):
     """Calculate G+C percentage in seq (float between 0 and 1).
 
     Copes with mixed case sequences. Ambiguous Nucleotides in this context are
-    those different from ATCGSW (S is G or C, and W is A or T).
+    those different from ATCGSWU (S is G or C, and W is A or T).
 
     If ambiguous equals "remove" (default), will only count GCS and will only
-    include ACTGSW when calculating the sequence length. Equivalent to removing
+    include ACTGSWU when calculating the sequence length. Equivalent to removing
     all characters in the set BDHKMNRVXY before calculating the GC content, as
     each of these ambiguous nucleotides can either be in (A,T) or in (C,G).
 
@@ -69,6 +70,12 @@ def gc_fraction(seq, ambiguous="remove"):
     >>> seq = "ACTG"
     >>> print(f"GC content of {seq} : {gc_fraction(seq):.2f}")
     GC content of ACTG : 0.50
+
+    Example with an RNA sequence:
+
+    >>> seq = "GGAUCUUCGGAUCU"
+    >>> print(f"GC content of {seq} : {gc_fraction(seq):.2f}")
+    GC content of GGAUCUUCGGAUCU : 0.50
 
     S and W are ambiguous for the purposes of calculating the GC content.
 
@@ -118,7 +125,7 @@ def gc_fraction(seq, ambiguous="remove"):
     gc = sum(seq.count(x) for x in "CGScgs")
 
     if ambiguous == "remove":
-        length = gc + sum(seq.count(x) for x in "ATWatw")
+        length = gc + sum(seq.count(x) for x in "ATWUatwu")
     else:
         length = len(seq)
 

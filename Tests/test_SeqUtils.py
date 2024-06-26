@@ -367,6 +367,13 @@ TTT	0.886
         self.assertAlmostEqual(gc_fraction(seq, "weighted"), 0.75, places=3)
         self.assertAlmostEqual(gc_fraction(seq, "remove"), 0.75, places=3)
 
+        # Test RNA sequence
+
+        seq = "GGAUCUUCGGAUCU"
+        self.assertAlmostEqual(gc_fraction(seq, "ignore"), 0.5, places=3)
+        self.assertAlmostEqual(gc_fraction(seq, "weighted"), 0.5, places=3)
+        self.assertAlmostEqual(gc_fraction(seq, "remove"), 0.5, places=3)
+
         # Test ambiguous nucleotide behaviour
 
         seq = "CCTGNN"

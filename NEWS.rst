@@ -121,6 +121,7 @@ possible, especially the following contributors:
 - Fabio Zanini (first contribution)
 - Joao Rodrigues
 - Judith Bernett (first contribution)
+- Luca Monari (first contribution)
 - Meridia Jane Bryant (first contribution)
 - Michael M. (first contribution)
 - Michiel de Hoon
