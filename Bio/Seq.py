@@ -20,7 +20,6 @@ See also the Seq_ wiki and the chapter in our tutorial:
 
 """
 
-import array
 import collections
 import numbers
 import warnings

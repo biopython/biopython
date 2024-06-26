@@ -6,7 +6,6 @@
 # package.
 """Code for dealing with Codon Alignments."""
 
-import copy
 import warnings
 from collections.abc import Iterable
 from collections.abc import Mapping

@@ -23,7 +23,6 @@ import numpy as np
 from Bio.Align import Alignment
 from Bio.Align import Alignments
 from Bio.Align import bigbed
-from Bio.Align import psl
 from Bio.Align.bigbed import AutoSQLTable
 from Bio.Align.bigbed import Field
 from Bio.Seq import reverse_complement
