@@ -13,9 +13,9 @@
 
 """Unit tests for the Bio.PDB PDBParser module."""
 
-from io import StringIO
 import unittest
 import warnings
+from io import StringIO
 
 try:
     import numpy
@@ -27,7 +27,8 @@ except ImportError:
     ) from None
 
 from Bio.PDB import PDBParser
-from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarning
+from Bio.PDB.PDBExceptions import PDBConstructionException
+from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
 
 class FlawedPDB_tests(unittest.TestCase):

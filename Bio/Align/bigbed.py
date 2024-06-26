@@ -50,23 +50,22 @@ You are expected to use this module via the Bio.Align functions.
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 # ------------------------------------------------------------------------------
 
-import sys
-import io
-import copy
 import array
+import copy
+import io
 import itertools
 import struct
+import sys
 import zlib
 from collections import namedtuple
 from io import BytesIO
-import numpy as np
 
+import numpy as np
 
 from Bio.Align import Alignment
 from Bio.Align import interfaces
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-
 
 Field = namedtuple("Field", ("as_type", "name", "comment"))
 

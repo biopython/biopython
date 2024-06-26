@@ -9,9 +9,10 @@
 GOA files can be found here ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/
 """
 
-import unittest
-import tempfile
 import os
+import tempfile
+import unittest
+
 from Bio.UniProt import GOA
 
 

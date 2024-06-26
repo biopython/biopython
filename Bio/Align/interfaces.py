@@ -17,7 +17,8 @@ from abc import abstractmethod
 from typing import Optional
 
 from Bio import StreamModeError
-from Bio.Align import Alignments, AlignmentsAbstractBaseClass
+from Bio.Align import Alignments
+from Bio.Align import AlignmentsAbstractBaseClass
 
 
 class AlignmentIterator(AlignmentsAbstractBaseClass):

@@ -22,29 +22,28 @@ Variables:
 
 """
 
-import warnings
-
 import io
 import textwrap
 import time
+import warnings
+from collections import UserList
+from urllib.parse import urlencode
+from urllib.request import build_opener
+from urllib.request import HTTPBasicAuthHandler
+from urllib.request import HTTPPasswordMgrWithDefaultRealm
+from urllib.request import install_opener
+from urllib.request import Request
+from urllib.request import urlopen
+from xml.parsers import expat
 
 import numpy as np
 
-from collections import UserList
-from urllib.parse import urlencode
-from urllib.request import build_opener, install_opener
-from urllib.request import urlopen
-from urllib.request import HTTPPasswordMgrWithDefaultRealm, HTTPBasicAuthHandler
-from urllib.request import Request
-from xml.parsers import expat
-
-
 from Bio import BiopythonWarning
 from Bio import StreamModeError
-from Bio.Align import Alignment, Alignments
-from Bio.Blast import _writers
 from Bio._utils import function_with_previous
-
+from Bio.Align import Alignment
+from Bio.Align import Alignments
+from Bio.Blast import _writers
 
 email = None
 tool = "biopython"

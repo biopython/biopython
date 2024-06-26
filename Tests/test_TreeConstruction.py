@@ -6,24 +6,23 @@
 """Unit tests for the Bio.Phylo.TreeConstruction module."""
 
 import os
-import unittest
 import tempfile
-
+import unittest
 from io import StringIO
+
 from Bio import Align
 from Bio import AlignIO
 from Bio import Phylo
 from Bio.Phylo import BaseTree
-from Bio.Phylo import TreeConstruction
 from Bio.Phylo import Consensus
+from Bio.Phylo import TreeConstruction
 from Bio.Phylo.TreeConstruction import _Matrix
-from Bio.Phylo.TreeConstruction import DistanceMatrix
 from Bio.Phylo.TreeConstruction import DistanceCalculator
+from Bio.Phylo.TreeConstruction import DistanceMatrix
 from Bio.Phylo.TreeConstruction import DistanceTreeConstructor
-from Bio.Phylo.TreeConstruction import ParsimonyScorer
 from Bio.Phylo.TreeConstruction import NNITreeSearcher
+from Bio.Phylo.TreeConstruction import ParsimonyScorer
 from Bio.Phylo.TreeConstruction import ParsimonyTreeConstructor
-
 
 temp_dir = tempfile.mkdtemp()
 

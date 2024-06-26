@@ -7,7 +7,8 @@
 
 import unittest
 
-from search_tests_common import CheckRaw, CheckIndex
+from search_tests_common import CheckIndex
+from search_tests_common import CheckRaw
 
 
 class BlastXmlRawCases(CheckRaw):

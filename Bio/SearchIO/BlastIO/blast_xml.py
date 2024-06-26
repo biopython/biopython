@@ -12,11 +12,15 @@ import re
 import warnings
 from itertools import chain
 from xml.etree import ElementTree
-from xml.sax.saxutils import XMLGenerator, escape
+from xml.sax.saxutils import escape
+from xml.sax.saxutils import XMLGenerator
 
 from Bio import BiopythonParserWarning
 from Bio.SearchIO._index import SearchIndexer
-from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
+from Bio.SearchIO._model import Hit
+from Bio.SearchIO._model import HSP
+from Bio.SearchIO._model import HSPFragment
+from Bio.SearchIO._model import QueryResult
 
 __all__ = ("BlastXmlParser", "BlastXmlIndexer", "BlastXmlWriter")
 

@@ -17,8 +17,8 @@ Functions:
 """
 
 import io
-from urllib.request import urlopen
 from urllib.error import HTTPError
+from urllib.request import urlopen
 
 
 def get_prodoc_entry(

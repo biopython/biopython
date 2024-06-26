@@ -18,11 +18,14 @@ Note: Currently we do not support recording per-letter-annotations
 (like quality scores) in BioSQL.
 """
 
-from typing import List, Optional
+from typing import List
+from typing import Optional
 
-from Bio.Seq import Seq, SequenceDataAbstractBaseClass
-from Bio.SeqRecord import SeqRecord, _RestrictedDict
 from Bio import SeqFeature
+from Bio.Seq import Seq
+from Bio.Seq import SequenceDataAbstractBaseClass
+from Bio.SeqRecord import _RestrictedDict
+from Bio.SeqRecord import SeqRecord
 
 
 class _BioSQLSequenceData(SequenceDataAbstractBaseClass):
@@ -229,6 +232,7 @@ def _retrieve_features(adaptor, primary_id):
                 )
             if start is not None and end is not None and end < start:
                 import warnings
+
                 from Bio import BiopythonWarning
 
                 warnings.warn(

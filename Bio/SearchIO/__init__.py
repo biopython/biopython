@@ -194,9 +194,11 @@ of the format's documentation.
 """
 
 from Bio.File import as_handle
-from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
+from Bio.SearchIO._model import Hit
+from Bio.SearchIO._model import HSP
+from Bio.SearchIO._model import HSPFragment
+from Bio.SearchIO._model import QueryResult
 from Bio.SearchIO._utils import get_processor
-
 
 __all__ = ("read", "parse", "to_dict", "index", "index_db", "write", "convert")
 

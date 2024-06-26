@@ -14,18 +14,17 @@ import sys
 import unittest
 import warnings
 from datetime import datetime
-
 from io import StringIO
 
-from Bio import BiopythonWarning
 from Bio import BiopythonParserWarning
-
-from Bio import SeqIO
-from Bio.SeqRecord import SeqRecord
-from Bio.Seq import Seq, UndefinedSequenceError
+from Bio import BiopythonWarning
 
 # GenBank stuff to test:
 from Bio import GenBank
+from Bio import SeqIO
+from Bio.Seq import Seq
+from Bio.Seq import UndefinedSequenceError
+from Bio.SeqRecord import SeqRecord
 
 
 class TestBasics(unittest.TestCase):

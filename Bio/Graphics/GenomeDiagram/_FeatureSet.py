@@ -25,10 +25,10 @@ the diagram: http://www.reportlab.com
 """
 
 # GenomeDiagram
-from ._Feature import Feature
-
 # Builtins
 import re
+
+from ._Feature import Feature
 
 
 class FeatureSet:

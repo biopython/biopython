@@ -7,8 +7,10 @@
 
 """Vector class, including rotation-related functions."""
 
+from typing import Optional
+from typing import Tuple
+
 import numpy as np  # type: ignore
-from typing import Tuple, Optional
 
 
 def m2rotaxis(m):

@@ -267,38 +267,40 @@ Custom exception classes: :class:`HedronMatchError` and
 :class:`MissingAtomError`
 """  # noqa
 
-import re
-from collections import deque, namedtuple
 import copy
+import re
+from collections import deque
+from collections import namedtuple
 
 # from numpy import floor, ndarray
 from numbers import Integral
+from typing import cast
+from typing import Dict
+
+# for type checking only
+from typing import List
+from typing import Optional
+from typing import Set
+from typing import TextIO
+from typing import Tuple
+from typing import TYPE_CHECKING
+from typing import Union
 
 import numpy as np  # type: ignore
 
-from Bio.PDB.Atom import Atom, DisorderedAtom
 from Bio.Data.PDBData import protein_letters_3to1
-
-from Bio.PDB.vectors import multi_coord_space, multi_rot_Z
-from Bio.PDB.vectors import coord_space
-
-from Bio.PDB.ic_data import ic_data_backbone, ic_data_sidechains
+from Bio.PDB.Atom import Atom
+from Bio.PDB.Atom import DisorderedAtom
+from Bio.PDB.ic_data import dihedra_primary_defaults
+from Bio.PDB.ic_data import hedra_defaults
+from Bio.PDB.ic_data import ic_data_backbone
+from Bio.PDB.ic_data import ic_data_sidechain_extras
+from Bio.PDB.ic_data import ic_data_sidechains
 from Bio.PDB.ic_data import primary_angles
-from Bio.PDB.ic_data import ic_data_sidechain_extras, residue_atom_bond_state
-from Bio.PDB.ic_data import dihedra_primary_defaults, hedra_defaults
-
-# for type checking only
-from typing import (
-    List,
-    Dict,
-    Set,
-    TextIO,
-    Union,
-    Tuple,
-    cast,
-    TYPE_CHECKING,
-    Optional,
-)
+from Bio.PDB.ic_data import residue_atom_bond_state
+from Bio.PDB.vectors import coord_space
+from Bio.PDB.vectors import multi_coord_space
+from Bio.PDB.vectors import multi_rot_Z
 
 if TYPE_CHECKING:
     from Bio.PDB.Residue import Residue

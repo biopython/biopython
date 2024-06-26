@@ -19,8 +19,9 @@ from xml.etree import ElementTree
 
 from Bio.Phylo import NeXML
 
-from ._cdao_owl import cdao_elements, cdao_namespaces, resolve_uri
-
+from ._cdao_owl import cdao_elements
+from ._cdao_owl import cdao_namespaces
+from ._cdao_owl import resolve_uri
 
 NAMESPACES = {
     "xsi": "http://www.w3.org/2001/XMLSchema-instance",

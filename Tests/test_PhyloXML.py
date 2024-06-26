@@ -12,10 +12,12 @@ import tempfile
 import unittest
 from itertools import chain
 
+from Bio.Align import Alignment
+from Bio.Align import MultipleSeqAlignment
+from Bio.Phylo import PhyloXML as PX
+from Bio.Phylo import PhyloXMLIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Align import Alignment, MultipleSeqAlignment
-from Bio.Phylo import PhyloXML as PX, PhyloXMLIO
 
 # Example PhyloXML files
 EX_APAF = "PhyloXML/apaf.xml"

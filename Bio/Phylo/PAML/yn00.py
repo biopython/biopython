@@ -12,8 +12,9 @@ rates in pairwise comparison of protein-coding DNA sequences.
 """
 
 import os.path
-from ._paml import Paml
+
 from . import _parse_yn00
+from ._paml import Paml
 
 
 class Yn00Error(EnvironmentError):

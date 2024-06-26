@@ -5,15 +5,15 @@
 
 """mmCIF parsers."""
 
-import numpy as np
 import warnings
 
-from Bio.File import as_handle
+import numpy as np
 
+from Bio.File import as_handle
 from Bio.PDB.MMCIF2Dict import MMCIF2Dict
-from Bio.PDB.StructureBuilder import StructureBuilder
 from Bio.PDB.PDBExceptions import PDBConstructionException
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
+from Bio.PDB.StructureBuilder import StructureBuilder
 
 
 class MMCIFParser:

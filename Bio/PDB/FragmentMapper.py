@@ -44,11 +44,9 @@ The library files can be found in directory 'fragment_data'.
 
 import numpy as np
 
-from Bio.SVDSuperimposer import SVDSuperimposer
-
 from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.Polypeptide import PPBuilder
-
+from Bio.SVDSuperimposer import SVDSuperimposer
 
 # fragment file (lib_SIZE_z_LENGTH.txt)
 # SIZE=number of fragments

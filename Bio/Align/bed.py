@@ -27,8 +27,8 @@ zero-based end position. We can therefore manipulate ``start`` and
 """
 
 import sys
-import numpy as np
 
+import numpy as np
 
 from Bio.Align import Alignment
 from Bio.Align import interfaces

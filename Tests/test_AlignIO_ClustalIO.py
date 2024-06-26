@@ -4,7 +4,6 @@
 # as part of this package.
 """Tests for Bio.AlignIO.ClustalIO module."""
 import unittest
-
 from io import StringIO
 
 from Bio.AlignIO.ClustalIO import ClustalIterator

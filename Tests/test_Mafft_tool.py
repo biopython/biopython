@@ -3,13 +3,14 @@
 # as part of this package.
 """Unittests for Bio.Align.Applications interface for MAFFT."""
 
-import sys
 import os
-import unittest
 import subprocess
+import sys
+import unittest
 import warnings
-from Bio import MissingExternalDependencyError
+
 from Bio import BiopythonDeprecationWarning
+from Bio import MissingExternalDependencyError
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)

@@ -7,17 +7,16 @@
 import os
 import unittest
 import warnings
-
 from io import BytesIO
 from io import StringIO
+
+from test_SeqIO import SeqIOTestBaseClass
 
 from Bio import AlignIO
 from Bio import BiopythonWarning
 from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from test_SeqIO import SeqIOTestBaseClass
-
 
 # List of formats including alignment only file formats we can read AND write.
 # We don't care about the order

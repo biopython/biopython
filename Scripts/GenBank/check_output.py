@@ -15,9 +15,9 @@ python check_output.py <name of file to parse>
 """
 
 # standard modules
-import sys
-import os
 import gzip
+import os
+import sys
 from io import StringIO
 
 # biopython

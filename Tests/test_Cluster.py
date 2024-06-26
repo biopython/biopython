@@ -368,9 +368,11 @@ class TestCluster(unittest.TestCase):
     def test_kcluster_arguments(self):
         # Test if incorrect arguments are caught by the C code
         if TestCluster.module == "Bio.Cluster":
-            from Bio.Cluster._cluster import kcluster, clustercentroids
+            from Bio.Cluster._cluster import clustercentroids
+            from Bio.Cluster._cluster import kcluster
         elif TestCluster.module == "Pycluster":
-            from Pycluster._cluster import kcluster, clustercentroids
+            from Pycluster._cluster import clustercentroids
+            from Pycluster._cluster import kcluster
 
         nclusters = 3
         weight = np.array([1.0, 1.0, 1.0, 1.0, 1.0])
@@ -541,9 +543,11 @@ class TestCluster(unittest.TestCase):
 
     def test_kcluster(self):
         if TestCluster.module == "Bio.Cluster":
-            from Bio.Cluster import kcluster, clustercentroids
+            from Bio.Cluster import clustercentroids
+            from Bio.Cluster import kcluster
         elif TestCluster.module == "Pycluster":
-            from Pycluster import kcluster, clustercentroids
+            from Pycluster import clustercentroids
+            from Pycluster import kcluster
 
         nclusters = 3
 
@@ -1169,9 +1173,11 @@ class TestCluster(unittest.TestCase):
     def test_treecluster_arguments(self):
         # Test if incorrect arguments are caught by the C code
         if TestCluster.module == "Bio.Cluster":
-            from Bio.Cluster._cluster import treecluster, Tree
+            from Bio.Cluster._cluster import Tree
+            from Bio.Cluster._cluster import treecluster
         elif TestCluster.module == "Pycluster":
-            from Pycluster._cluster import treecluster, Tree
+            from Pycluster._cluster import Tree
+            from Pycluster._cluster import treecluster
         weight = np.array([1.0, 1.0, 1.0, 1.0, 1.0])
         data = np.array(
             [
@@ -1258,9 +1264,11 @@ class TestCluster(unittest.TestCase):
     def test_tree_arguments(self):
         # Test if incorrect arguments are caught by the C code
         if TestCluster.module == "Bio.Cluster":
-            from Bio.Cluster._cluster import Node, Tree
+            from Bio.Cluster._cluster import Node
+            from Bio.Cluster._cluster import Tree
         elif TestCluster.module == "Pycluster":
-            from Pycluster._cluster import Node, Tree
+            from Pycluster._cluster import Node
+            from Pycluster._cluster import Tree
 
         nodes = [Node(1, 2, 0.2), Node(0, -1, 0.5), Node(3, -2, 0.6)]
         indices = np.zeros(4, np.int32)
@@ -1286,9 +1294,11 @@ class TestCluster(unittest.TestCase):
 
     def test_tree(self):
         if TestCluster.module == "Bio.Cluster":
-            from Bio.Cluster import Node, Tree
+            from Bio.Cluster import Node
+            from Bio.Cluster import Tree
         elif TestCluster.module == "Pycluster":
-            from Pycluster import Node, Tree
+            from Pycluster import Node
+            from Pycluster import Tree
 
         node = Node(2, 3)
         self.assertEqual(node.left, 2)
@@ -2718,9 +2728,11 @@ class TestCluster(unittest.TestCase):
     def test_kmedoids_arguments(self):
         # Test if incorrect arguments are caught by the C code
         if TestCluster.module == "Bio.Cluster":
-            from Bio.Cluster._cluster import distancematrix, kmedoids
+            from Bio.Cluster._cluster import distancematrix
+            from Bio.Cluster._cluster import kmedoids
         elif TestCluster.module == "Pycluster":
-            from Pycluster._cluster import distancematrix, kmedoids
+            from Pycluster._cluster import distancematrix
+            from Pycluster._cluster import kmedoids
 
         clusterid = np.zeros(10, np.int32)
         message = "^failed to parse row 0.$"
@@ -2738,9 +2750,11 @@ class TestCluster(unittest.TestCase):
 
     def test_distancematrix_kmedoids(self):
         if TestCluster.module == "Bio.Cluster":
-            from Bio.Cluster import distancematrix, kmedoids
+            from Bio.Cluster import distancematrix
+            from Bio.Cluster import kmedoids
         elif TestCluster.module == "Pycluster":
-            from Pycluster import distancematrix, kmedoids
+            from Pycluster import distancematrix
+            from Pycluster import kmedoids
 
         # transpose=False
         data = np.array(

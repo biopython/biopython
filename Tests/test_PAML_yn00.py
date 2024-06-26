@@ -5,11 +5,12 @@
 
 """Tests for PAML yn00 module."""
 
-import unittest
+import glob
 import os
 import os.path
+import unittest
+
 from Bio.Phylo.PAML import yn00
-import glob
 
 
 class ModTest(unittest.TestCase):

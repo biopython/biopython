@@ -4,14 +4,13 @@
 
 """Tests for Affy module."""
 
+import os
+import struct
 import unittest
 
-import struct
-import os
-
 try:
-    from numpy import array
     import numpy.testing
+    from numpy import array
 except ImportError:
     from Bio import MissingPythonDependencyError
 

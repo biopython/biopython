@@ -8,8 +8,12 @@
 """Common utility functions for various Bio submodules."""
 
 import os
-from typing import Any, TypeVar, Callable, Optional, cast
+from typing import Any
+from typing import Callable
+from typing import cast
+from typing import Optional
 from typing import Protocol
+from typing import TypeVar
 
 # workaround type checking method attributes from https://github.com/python/mypy/issues/2087#issuecomment-587741762
 

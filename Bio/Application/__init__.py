@@ -29,14 +29,12 @@ with the subprocess module.
 
 import os
 import platform
-import sys
-import subprocess
 import re
+import subprocess
+import sys
 import warnings
 
-
 from Bio import BiopythonDeprecationWarning
-
 
 warnings.warn(
     """\

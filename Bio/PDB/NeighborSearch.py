@@ -11,7 +11,9 @@
 import numpy as np
 
 from Bio.PDB.PDBExceptions import PDBException
-from Bio.PDB.Selection import unfold_entities, entity_levels, uniqueify
+from Bio.PDB.Selection import entity_levels
+from Bio.PDB.Selection import unfold_entities
+from Bio.PDB.Selection import uniqueify
 
 
 class NeighborSearch:

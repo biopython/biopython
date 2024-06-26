@@ -44,10 +44,10 @@ The SearchIO object model consists of a hierarchy of four nested objects:
 
 """
 
-from .query import QueryResult
 from .hit import Hit
-from .hsp import HSP, HSPFragment
-
+from .hsp import HSP
+from .hsp import HSPFragment
+from .query import QueryResult
 
 __all__ = ("QueryResult", "Hit", "HSP", "HSPFragment")
 

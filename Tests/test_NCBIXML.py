@@ -6,6 +6,7 @@
 
 import os
 import unittest
+
 from Bio.Blast import NCBIXML
 
 

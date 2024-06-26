@@ -15,17 +15,27 @@
 
 # ReportLab imports
 
-from reportlab.graphics.shapes import Drawing, String, Group, Line, Circle, Polygon
-from reportlab.lib import colors
+from math import cos
+from math import pi
+from math import sin
+
 from reportlab.graphics.shapes import ArcPath
+from reportlab.graphics.shapes import Circle
+from reportlab.graphics.shapes import Drawing
+from reportlab.graphics.shapes import Group
+from reportlab.graphics.shapes import Line
+from reportlab.graphics.shapes import Polygon
+from reportlab.graphics.shapes import String
+from reportlab.lib import colors
+
+from ._AbstractDrawer import _stroke_and_fill_colors
 
 # GenomeDiagram imports
-from ._AbstractDrawer import AbstractDrawer, draw_polygon, intermediate_points
-from ._AbstractDrawer import _stroke_and_fill_colors
+from ._AbstractDrawer import AbstractDrawer
+from ._AbstractDrawer import draw_polygon
+from ._AbstractDrawer import intermediate_points
 from ._FeatureSet import FeatureSet
 from ._GraphSet import GraphSet
-
-from math import pi, cos, sin
 
 
 class CircularDrawer(AbstractDrawer):

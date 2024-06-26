@@ -13,7 +13,12 @@ use this module.  It provides base classes to try and simplify things.
 from abc import ABC
 from abc import abstractmethod
 from os import PathLike
-from typing import Iterator, IO, Optional, Union, Generic, AnyStr
+from typing import AnyStr
+from typing import Generic
+from typing import IO
+from typing import Iterator
+from typing import Optional
+from typing import Union
 
 from Bio import StreamModeError
 from Bio.Seq import MutableSeq

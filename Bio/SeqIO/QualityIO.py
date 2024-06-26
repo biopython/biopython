@@ -360,8 +360,17 @@ are approximately equal.
 """
 
 import warnings
-
 from math import log
+from typing import Any
+from typing import Callable
+from typing import IO
+from typing import Iterator
+from typing import List
+from typing import Mapping
+from typing import Optional
+from typing import Sequence
+from typing import Tuple
+from typing import Union
 
 from Bio import BiopythonParserWarning
 from Bio import BiopythonWarning
@@ -372,22 +381,9 @@ from Bio.SeqRecord import SeqRecord
 
 from .Interfaces import _clean
 from .Interfaces import _get_seq_string
+from .Interfaces import _TextIOSource
 from .Interfaces import SequenceIterator
 from .Interfaces import SequenceWriter
-from .Interfaces import _TextIOSource
-
-from typing import (
-    Any,
-    Callable,
-    Iterator,
-    IO,
-    List,
-    Mapping,
-    Optional,
-    Sequence,
-    Tuple,
-    Union,
-)
 
 # define score offsets. See discussion for differences between Sanger and
 # Solexa offsets.

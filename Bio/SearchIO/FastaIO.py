@@ -108,8 +108,10 @@ The following object attributes are provided:
 import re
 
 from Bio.SearchIO._index import SearchIndexer
-from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
-
+from Bio.SearchIO._model import Hit
+from Bio.SearchIO._model import HSP
+from Bio.SearchIO._model import HSPFragment
+from Bio.SearchIO._model import QueryResult
 
 __all__ = ("FastaM10Parser", "FastaM10Indexer")
 

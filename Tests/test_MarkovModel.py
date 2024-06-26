@@ -11,17 +11,16 @@
 
 """Tests for MarkovModel module."""
 
-import warnings
 import unittest
-
+import warnings
 from io import StringIO
 
 try:
-    from numpy import array
-    from numpy import random  # missing in PyPy's micronumpy
-    from numpy import array_equal
     from numpy import around
+    from numpy import array
+    from numpy import array_equal
     from numpy import log
+    from numpy import random  # missing in PyPy's micronumpy
 except ImportError:
     from Bio import MissingPythonDependencyError
 

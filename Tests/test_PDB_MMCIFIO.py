@@ -18,8 +18,12 @@ import tempfile
 import unittest
 import warnings
 
-from Bio.PDB import MMCIFParser, MMCIFIO, PDBParser, Select
-from Bio.PDB import Atom, Residue
+from Bio.PDB import Atom
+from Bio.PDB import MMCIFIO
+from Bio.PDB import MMCIFParser
+from Bio.PDB import PDBParser
+from Bio.PDB import Residue
+from Bio.PDB import Select
 from Bio.PDB.MMCIF2Dict import MMCIF2Dict
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 

@@ -9,10 +9,9 @@ import os
 import unittest
 import warnings
 
-from Bio import Phylo
-from Bio import MissingExternalDependencyError
 from Bio import BiopythonDeprecationWarning
-
+from Bio import MissingExternalDependencyError
+from Bio import Phylo
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)

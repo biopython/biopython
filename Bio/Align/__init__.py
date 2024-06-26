@@ -13,17 +13,17 @@ class, used in the Bio.AlignIO module.
 
 """
 
-import sys
 import collections
 import copy
 import importlib
+import numbers
+import sys
 import types
 import warnings
-import numbers
+from abc import ABC
+from abc import abstractmethod
 from itertools import zip_longest
-from abc import ABC, abstractmethod
 from typing import Dict
-
 
 try:
     import numpy as np
@@ -37,13 +37,17 @@ except ImportError:
 
 from Bio import BiopythonDeprecationWarning
 from Bio.Align import _aligncore  # type: ignore
-from Bio.Align import _pairwisealigner  # type: ignore
 from Bio.Align import _codonaligner  # type: ignore
+from Bio.Align import _pairwisealigner  # type: ignore
 from Bio.Align import substitution_matrices
 from Bio.Data import CodonTable
-from Bio.Seq import Seq, MutableSeq, reverse_complement, UndefinedSequenceError
+from Bio.Seq import MutableSeq
+from Bio.Seq import reverse_complement
+from Bio.Seq import Seq
 from Bio.Seq import translate
-from Bio.SeqRecord import SeqRecord, _RestrictedDict
+from Bio.Seq import UndefinedSequenceError
+from Bio.SeqRecord import _RestrictedDict
+from Bio.SeqRecord import SeqRecord
 
 # Import errors may occur here if a compiled _pairwisealigner.c file or
 # compiled _codonaligner.c file (_pairwisealigner.pyd or _pairwisealigner.so,
@@ -357,6 +361,7 @@ class MultipleSeqAlignment:
         """
         if format_spec:
             from io import StringIO
+
             from Bio import AlignIO
 
             handle = StringIO()

@@ -10,8 +10,8 @@ import unittest
 
 import numpy as np
 
-from Bio import StreamModeError
 from Bio import Blast
+from Bio import StreamModeError
 from Bio.SeqRecord import SeqRecord
 
 

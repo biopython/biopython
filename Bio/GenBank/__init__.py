@@ -43,15 +43,15 @@ import warnings
 from Bio import BiopythonParserWarning
 from Bio.Seq import Seq
 from Bio.SeqFeature import Location
+from Bio.SeqFeature import LocationParserError
 from Bio.SeqFeature import Reference
 from Bio.SeqFeature import SeqFeature
 from Bio.SeqFeature import SimpleLocation
-from Bio.SeqFeature import LocationParserError
+
+from .Scanner import GenBankScanner
 
 # other Bio.GenBank stuff
 from .utils import FeatureValueCleaner
-from .Scanner import GenBankScanner
-
 
 # Constants used to parse GenBank header lines
 GENBANK_INDENT = 12

@@ -6,12 +6,12 @@
 # package.
 """JASPAR2014 module."""
 
-from Bio.Seq import Seq
-import re
 import math
+import re
 
-from Bio import motifs
 from Bio import Align
+from Bio import motifs
+from Bio.Seq import Seq
 
 
 class Motif(motifs.Motif):

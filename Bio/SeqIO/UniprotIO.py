@@ -23,7 +23,6 @@ from Bio import SeqFeature
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
-
 NS = "{http://uniprot.org/uniprot}"
 REFERENCE_JOURNAL = "%(name)s %(volume)s:%(first)s-%(last)s(%(pub_date)s)"
 

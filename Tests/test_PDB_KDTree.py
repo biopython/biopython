@@ -14,7 +14,10 @@
 import unittest
 
 try:
-    from numpy import array, dot, sqrt, argsort
+    from numpy import argsort
+    from numpy import array
+    from numpy import dot
+    from numpy import sqrt
     from numpy.random import random
 except ImportError:
     from Bio import MissingExternalDependencyError

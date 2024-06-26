@@ -20,10 +20,9 @@ import json
 import re
 import urllib.parse
 from http.client import HTTPResponse
-
-from typing import Optional, List
+from typing import List
+from typing import Optional
 from urllib.request import urlopen
-
 
 _re_next_link = re.compile(r'<(.+)>; rel="next"')
 

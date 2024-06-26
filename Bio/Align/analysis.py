@@ -7,10 +7,16 @@
 """Code for performing calculations on codon alignments."""
 
 import sys
-from math import sqrt, erfc, log, floor
-from heapq import heapify, heappop, heappush
+from collections import Counter
+from collections import defaultdict
+from heapq import heapify
+from heapq import heappop
+from heapq import heappush
 from itertools import permutations
-from collections import defaultdict, Counter
+from math import erfc
+from math import floor
+from math import log
+from math import sqrt
 
 import numpy as np
 

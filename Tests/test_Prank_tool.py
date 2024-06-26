@@ -3,22 +3,21 @@
 # as part of this package.
 """Unittests for Bio.Align.Applications interface for PRANK."""
 
-import sys
 import os
+import sys
 import unittest
 import warnings
 
 from Bio import AlignIO
-from Bio import SeqIO
-from Bio import MissingExternalDependencyError
 from Bio import BiopythonDeprecationWarning
+from Bio import MissingExternalDependencyError
+from Bio import SeqIO
 from Bio.Nexus.Nexus import NexusError
-
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
-    from Bio.Application import _escape_filename
     from Bio.Align.Applications import PrankCommandline
+    from Bio.Application import _escape_filename
 
 
 # Try to avoid problems when the OS is in another language

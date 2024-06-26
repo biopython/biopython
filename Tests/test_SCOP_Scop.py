@@ -10,7 +10,9 @@
 import unittest
 from io import StringIO
 
-from Bio.SCOP import Scop, cmp_sccs, parse_domain
+from Bio.SCOP import cmp_sccs
+from Bio.SCOP import parse_domain
+from Bio.SCOP import Scop
 
 
 class ScopTests(unittest.TestCase):

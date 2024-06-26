@@ -6,7 +6,6 @@
 """Tests for Bio.AlignIO.MauveIO module."""
 import os
 import unittest
-
 from io import StringIO
 
 from Bio import SeqIO

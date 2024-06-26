@@ -6,15 +6,18 @@
 """Bio.SearchIO abstract base parser for Exonerate standard output format."""
 
 import re
+from abc import ABC
+from abc import abstractmethod
 from functools import reduce
-from abc import ABC, abstractmethod
-
-from typing import Optional, Type
+from typing import Optional
+from typing import Type
 
 from Bio.SearchIO._index import SearchIndexer
-from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
+from Bio.SearchIO._model import Hit
+from Bio.SearchIO._model import HSP
+from Bio.SearchIO._model import HSPFragment
+from Bio.SearchIO._model import QueryResult
 from Bio.SeqUtils import seq1
-
 
 # strand char-value mapping
 _STRAND_MAP = {"+": 1, "-": -1, ".": 0}

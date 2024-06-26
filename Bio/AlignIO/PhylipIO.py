@@ -44,7 +44,6 @@ from Bio.SeqRecord import SeqRecord
 from .Interfaces import AlignmentIterator
 from .Interfaces import SequentialAlignmentWriter
 
-
 _PHYLIP_ID_WIDTH = 10
 _NO_DOTS = "PHYLIP format no longer allows dots in sequence"
 

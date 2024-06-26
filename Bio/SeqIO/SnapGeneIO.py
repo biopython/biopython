@@ -16,8 +16,8 @@ from struct import unpack
 from xml.dom.minidom import parseString
 
 from Bio.Seq import Seq
-from Bio.SeqFeature import SimpleLocation
 from Bio.SeqFeature import SeqFeature
+from Bio.SeqFeature import SimpleLocation
 from Bio.SeqRecord import SeqRecord
 
 from .Interfaces import SequenceIterator

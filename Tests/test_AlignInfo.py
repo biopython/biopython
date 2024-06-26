@@ -4,17 +4,17 @@
 # as part of this package.
 
 """Bio.Align.AlignInfo related tests."""
+import math
 import unittest
 
+from Bio import AlignIO
 from Bio import BiopythonDeprecationWarning
 from Bio.Align import MultipleSeqAlignment
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
-from Bio import AlignIO
 from Bio.Align.AlignInfo import SummaryInfo
 from Bio.Data import IUPACData
 from Bio.motifs import Motif
-import math
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
 
 
 class AlignInfoTests(unittest.TestCase):

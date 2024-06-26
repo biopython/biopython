@@ -8,7 +8,6 @@
 """Map residues of two structures to each other based on a FASTA alignment."""
 
 from Bio.Data import PDBData
-
 from Bio.PDB import Selection
 from Bio.PDB.Polypeptide import is_aa
 

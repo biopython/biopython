@@ -12,17 +12,22 @@
 """Tests for Nexus module."""
 
 import os.path
-import unittest
-import tempfile
 import sys
+import tempfile
+import unittest
 from io import StringIO
-from Bio.Align import Alignment, MultipleSeqAlignment
-from Bio.Align.nexus import AlignmentIterator, AlignmentWriter
-from Bio.AlignIO.NexusIO import NexusIterator, NexusWriter
-from Bio.SeqRecord import SeqRecord
-from Bio.Nexus import Nexus, Trees
-from Bio.Seq import Seq
+
 from Bio import SeqIO
+from Bio.Align import Alignment
+from Bio.Align import MultipleSeqAlignment
+from Bio.Align.nexus import AlignmentIterator
+from Bio.Align.nexus import AlignmentWriter
+from Bio.AlignIO.NexusIO import NexusIterator
+from Bio.AlignIO.NexusIO import NexusWriter
+from Bio.Nexus import Nexus
+from Bio.Nexus import Trees
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
 
 
 class OldSelfTests(unittest.TestCase):

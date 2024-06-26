@@ -7,9 +7,9 @@
 
 """The structure class, representing a macromolecular structure."""
 
-from Bio.PDB.Entity import Entity
-
 from typing import TYPE_CHECKING
+
+from Bio.PDB.Entity import Entity
 
 if TYPE_CHECKING:
     from Bio.PDB.Model import Model

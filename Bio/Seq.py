@@ -24,10 +24,12 @@ import array
 import collections
 import numbers
 import warnings
-
 from abc import ABC
 from abc import abstractmethod
-from typing import overload, Optional, Union, Dict
+from typing import Dict
+from typing import Optional
+from typing import overload
+from typing import Union
 
 from Bio import BiopythonWarning
 from Bio.Data import CodonTable

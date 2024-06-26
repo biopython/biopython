@@ -5,14 +5,13 @@
 
 """Tests for PAML codeml module."""
 
-import unittest
+import itertools
 import os
 import os.path
-import itertools
+import unittest
 
 from Bio.Phylo.PAML import codeml
 from Bio.Phylo.PAML._paml import PamlError
-
 
 # Some constants to assist with testing:
 # This is the number of parameters that should be parsed for each

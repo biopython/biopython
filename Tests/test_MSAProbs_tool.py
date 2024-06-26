@@ -12,8 +12,8 @@ import unittest
 import warnings
 from subprocess import getoutput
 
-from Bio import MissingExternalDependencyError
 from Bio import BiopythonDeprecationWarning
+from Bio import MissingExternalDependencyError
 from Bio import SeqIO
 
 with warnings.catch_warnings():

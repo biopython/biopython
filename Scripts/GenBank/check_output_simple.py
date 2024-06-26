@@ -22,7 +22,6 @@ import sys
 # GenBank stuff to test
 from Bio import GenBank
 
-
 if len(sys.argv) != 2:
     print("Usage ./check_output.py <GenBank file to parse>")
     sys.exit()

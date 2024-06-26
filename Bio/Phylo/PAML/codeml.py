@@ -11,8 +11,9 @@ Maximum likelihood analysis using codon substitution models.
 """
 
 import os.path
-from ._paml import Paml
+
 from . import _parse_codeml
+from ._paml import Paml
 
 
 class CodemlError(EnvironmentError):
