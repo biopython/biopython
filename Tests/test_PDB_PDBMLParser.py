@@ -32,9 +32,10 @@ class TestPDBMLParser(unittest.TestCase):
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", PDBConstructionWarning)
             for entry in ["1GBT"]:
-                with open(f"PDB/{entry}.cif") as mmcif_file, open(
-                    f"PDB/{entry}.xml"
-                ) as pdbml_file:
+                with (
+                    open(f"PDB/{entry}.cif") as mmcif_file,
+                    open(f"PDB/{entry}.xml") as pdbml_file,
+                ):
                     mmcif_structure = mmcif_parser.get_structure(entry, mmcif_file)
                     pdbml_structure = pdbml_parser.get_structure(pdbml_file)
                 self.assertEqual(mmcif_structure, pdbml_structure)
