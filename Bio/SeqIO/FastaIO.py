@@ -14,17 +14,18 @@ You are expected to use this module via the Bio.SeqIO functions.
 """
 
 import warnings
-
-from typing import Callable, Optional, Tuple
+from typing import Callable
+from typing import Optional
+from typing import Tuple
 
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
 from .Interfaces import _clean
 from .Interfaces import _get_seq_string
+from .Interfaces import _TextIOSource
 from .Interfaces import SequenceIterator
 from .Interfaces import SequenceWriter
-from .Interfaces import _TextIOSource
 
 
 def SimpleFastaParser(handle):

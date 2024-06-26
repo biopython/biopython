@@ -34,17 +34,20 @@ reportlab's renderPM module installed you can also use PNG etc.
 """
 
 # reportlab
+from reportlab.graphics.shapes import ArcPath
+from reportlab.graphics.shapes import Drawing
+from reportlab.graphics.shapes import Line
+from reportlab.graphics.shapes import Rect
+from reportlab.graphics.shapes import String
+from reportlab.graphics.shapes import Wedge
+from reportlab.graphics.widgetbase import Widget
+from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
-from reportlab.lib import colors
 from reportlab.pdfbase.pdfmetrics import stringWidth
-
-from reportlab.graphics.shapes import Drawing, String, Line, Rect, Wedge, ArcPath
-from reportlab.graphics.widgetbase import Widget
 
 from Bio.Graphics import _write
 from Bio.Graphics.GenomeDiagram import _Colors
-
 
 _color_trans = _Colors.ColorTranslator()
 
@@ -538,6 +541,7 @@ def _spring_layout(desired, minimum, maximum, gap=0):
 
     if equal_step < gap:
         import warnings
+
         from Bio import BiopythonWarning
 
         warnings.warn("Too many labels to avoid overlap", BiopythonWarning)

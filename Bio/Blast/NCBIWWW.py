@@ -20,16 +20,16 @@ Variables:
 
 """
 
-import warnings
-
-from io import StringIO
 import time
-
+import warnings
+from io import StringIO
 from urllib.parse import urlencode
-from urllib.request import build_opener, install_opener
-from urllib.request import urlopen
-from urllib.request import HTTPPasswordMgrWithDefaultRealm, HTTPBasicAuthHandler
+from urllib.request import build_opener
+from urllib.request import HTTPBasicAuthHandler
+from urllib.request import HTTPPasswordMgrWithDefaultRealm
+from urllib.request import install_opener
 from urllib.request import Request
+from urllib.request import urlopen
 
 from Bio import BiopythonWarning
 from Bio._utils import function_with_previous

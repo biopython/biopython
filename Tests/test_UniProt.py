@@ -1,10 +1,11 @@
 """Tests for the UniProt module."""
 
-import requires_internet
 import unittest
+from itertools import islice
+
+import requires_internet
 
 from Bio import UniProt
-from itertools import islice
 
 requires_internet.check()
 

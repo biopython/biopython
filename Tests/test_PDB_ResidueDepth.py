@@ -15,7 +15,9 @@ import subprocess
 import unittest
 import warnings
 
-from Bio.PDB import MMCIFParser, PDBParser, ResidueDepth
+from Bio.PDB import MMCIFParser
+from Bio.PDB import PDBParser
+from Bio.PDB import ResidueDepth
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 from Bio.PDB.ResidueDepth import _get_atom_radius
 

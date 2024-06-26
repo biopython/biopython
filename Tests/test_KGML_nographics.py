@@ -7,8 +7,8 @@
 
 # Builtins
 import os
-import unittest
 import tempfile
+import unittest
 
 # Biopython Bio.KEGG.KGML (?)
 from Bio.KEGG.KGML.KGML_parser import read

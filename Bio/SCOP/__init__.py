@@ -49,17 +49,17 @@ Functions:
 import os
 import re
 import warnings
-
 from urllib.parse import urlencode
 from urllib.request import urlopen
 
-from . import Des
-from . import Cla
-from . import Hie
-from . import Residues
 from Bio import BiopythonDeprecationWarning
 from Bio import SeqIO
 from Bio.Seq import Seq
+
+from . import Cla
+from . import Des
+from . import Hie
+from . import Residues
 
 # Turn black code style off
 # fmt: off

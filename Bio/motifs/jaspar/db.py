@@ -56,6 +56,7 @@ appropriate::
 """
 
 import warnings
+
 from Bio import BiopythonWarning
 from Bio import MissingPythonDependencyError
 
@@ -66,8 +67,8 @@ except ImportError:
         "Install MySQLdb if you want to use Bio.motifs.jaspar.db"
     )
 
-from Bio.motifs import jaspar, matrix
-
+from Bio.motifs import jaspar
+from Bio.motifs import matrix
 
 JASPAR_DFLT_COLLECTION = "CORE"
 

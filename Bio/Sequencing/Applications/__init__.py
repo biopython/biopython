@@ -11,22 +11,29 @@ We have decided to remove this module in future, and instead recommend
 building your command and invoking it via the subprocess module directly.
 """
 
+from ._bwa import BwaAlignCommandline
+from ._bwa import BwaBwaswCommandline
+from ._bwa import BwaIndexCommandline
+from ._bwa import BwaMemCommandline
+from ._bwa import BwaSampeCommandline
+from ._bwa import BwaSamseCommandline
 from ._Novoalign import NovoalignCommandline
-from ._bwa import BwaIndexCommandline, BwaAlignCommandline, BwaSamseCommandline
-from ._bwa import BwaSampeCommandline, BwaBwaswCommandline, BwaMemCommandline
-from ._samtools import SamtoolsViewCommandline, SamtoolsCalmdCommandline
-from ._samtools import SamtoolsCatCommandline, SamtoolsFaidxCommandline
-from ._samtools import SamtoolsFixmateCommandline, SamtoolsIdxstatsCommandline
-from ._samtools import SamtoolsIndexCommandline, SamtoolsMergeCommandline
-from ._samtools import SamtoolsMpileupCommandline, SamtoolsPhaseCommandline
-from ._samtools import SamtoolsReheaderCommandline, SamtoolsRmdupCommandline
-from ._samtools import (
-    SamtoolsVersion0xSortCommandline,
-    SamtoolsVersion1xSortCommandline,
-    SamtoolsTargetcutCommandline,
-)
+from ._samtools import SamtoolsCalmdCommandline
+from ._samtools import SamtoolsCatCommandline
+from ._samtools import SamtoolsFaidxCommandline
+from ._samtools import SamtoolsFixmateCommandline
+from ._samtools import SamtoolsIdxstatsCommandline
+from ._samtools import SamtoolsIndexCommandline
+from ._samtools import SamtoolsMergeCommandline
+from ._samtools import SamtoolsMpileupCommandline
+from ._samtools import SamtoolsPhaseCommandline
+from ._samtools import SamtoolsReheaderCommandline
+from ._samtools import SamtoolsRmdupCommandline
+from ._samtools import SamtoolsTargetcutCommandline
+from ._samtools import SamtoolsVersion0xSortCommandline
 from ._samtools import SamtoolsVersion0xSortCommandline as SamtoolsSortCommandline
-
+from ._samtools import SamtoolsVersion1xSortCommandline
+from ._samtools import SamtoolsViewCommandline
 
 # Make this explicit, then they show up in the API docs
 __all__ = (

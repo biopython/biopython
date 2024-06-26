@@ -5,14 +5,13 @@
 # as part of this package.
 """Testing code for Bio.Entrez parsers."""
 
-import unittest
 import os
 import pickle
-
+import unittest
 from io import BytesIO
 
-from Bio import StreamModeError
 from Bio import Entrez
+from Bio import StreamModeError
 
 
 class GeneralTests(unittest.TestCase):
@@ -12333,8 +12332,9 @@ We designed and generated pulmonary imaging biomarker pipelines to facilitate hi
 
     def test_truncated_xml(self):
         """Test error handling for a truncated XML declaration."""
-        from Bio.Entrez.Parser import CorruptedXMLError
         from io import BytesIO
+
+        from Bio.Entrez.Parser import CorruptedXMLError
 
         truncated_xml = b"""<?xml version="1.0"?>
         <!DOCTYPE GBSet PUBLIC "-//NCBI//NCBI GBSeq/EN" "http://www.ncbi.nlm.nih.gov/dtd/NCBI_GBSeq.dtd">

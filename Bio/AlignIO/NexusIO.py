@@ -14,13 +14,14 @@ as this offers more than just accessing the alignment or its
 sequences as SeqRecord objects.
 """
 
-from typing import IO, Iterator, Optional
+from typing import IO
+from typing import Iterator
+from typing import Optional
 
 from Bio.Align import MultipleSeqAlignment
 from Bio.AlignIO.Interfaces import AlignmentWriter
 from Bio.Nexus import Nexus
 from Bio.SeqRecord import SeqRecord
-
 
 # You can get a couple of example files here:
 # http://www.molecularevolution.org/resources/fileformats/

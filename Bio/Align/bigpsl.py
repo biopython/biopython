@@ -20,15 +20,19 @@ You are expected to use this module via the Bio.Align functions.
 
 import numpy as np
 
-
-from Bio.Align import Alignment, Alignments
-from Bio.Align import bigbed, psl
-from Bio.Align.bigbed import AutoSQLTable, Field
-from Bio.Seq import Seq, reverse_complement, UndefinedSequenceError
-from Bio.SeqRecord import SeqRecord
-from Bio.SeqFeature import SeqFeature, Location
+from Bio.Align import Alignment
+from Bio.Align import Alignments
+from Bio.Align import bigbed
+from Bio.Align import psl
+from Bio.Align.bigbed import AutoSQLTable
+from Bio.Align.bigbed import Field
+from Bio.Seq import reverse_complement
+from Bio.Seq import Seq
+from Bio.Seq import UndefinedSequenceError
+from Bio.SeqFeature import Location
+from Bio.SeqFeature import SeqFeature
 from Bio.SeqIO.InsdcIO import _insdc_location_string
-
+from Bio.SeqRecord import SeqRecord
 
 declaration = AutoSQLTable(
     "bigPsl",

@@ -6,10 +6,10 @@
 
 """Unit tests for internal_coords module of Bio.PDB."""
 
-import unittest
-import re
-import warnings
 import copy
+import re
+import unittest
+import warnings
 
 try:
     import numpy as np  # noqa F401
@@ -20,24 +20,22 @@ except ImportError:
         "Install NumPy if you want to use Bio.PDB."
     ) from None
 
-from Bio.PDB.ic_rebuild import (
-    structure_rebuild_test,
-    IC_duplicate,
-    compare_residues,
-)
-from Bio.PDB.PDBParser import PDBParser
-from Bio.PDB.MMCIFParser import MMCIFParser
-from Bio.PDB.mmtf import MMTFParser
-
 from io import StringIO
-from Bio.PDB.SCADIO import write_SCAD
-from Bio.PDB.PICIO import read_PIC_seq
 
 from Bio.File import as_handle
-
-from Bio.PDB.internal_coords import IC_Residue, IC_Chain, Dihedron, AtomKey
-
+from Bio.PDB.ic_rebuild import compare_residues
+from Bio.PDB.ic_rebuild import IC_duplicate
+from Bio.PDB.ic_rebuild import structure_rebuild_test
+from Bio.PDB.internal_coords import AtomKey
+from Bio.PDB.internal_coords import Dihedron
+from Bio.PDB.internal_coords import IC_Chain
+from Bio.PDB.internal_coords import IC_Residue
+from Bio.PDB.MMCIFParser import MMCIFParser
+from Bio.PDB.mmtf import MMTFParser
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
+from Bio.PDB.PDBParser import PDBParser
+from Bio.PDB.PICIO import read_PIC_seq
+from Bio.PDB.SCADIO import write_SCAD
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 

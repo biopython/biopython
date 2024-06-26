@@ -26,8 +26,10 @@ except ImportError:
         "Install NumPy if you want to use Bio.PDB."
     ) from None
 
+from Bio.PDB import ExposureCN
+from Bio.PDB import HSExposureCA
+from Bio.PDB import HSExposureCB
 from Bio.PDB import PDBParser
-from Bio.PDB import HSExposureCA, HSExposureCB, ExposureCN
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
 

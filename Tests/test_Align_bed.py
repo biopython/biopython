@@ -3,20 +3,18 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Tests for Align.bed module."""
-import unittest
-import tempfile
 import os
+import tempfile
+import unittest
 from io import StringIO
 
+import numpy as np
 
 from Bio import Align
+from Bio import SeqIO
 from Bio.Align import Alignment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio import SeqIO
-
-
-import numpy as np
 
 
 class TestAlign_dna_rna(unittest.TestCase):

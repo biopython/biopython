@@ -8,19 +8,22 @@
 This is used by the PDBParser and MMCIFparser classes.
 """
 
-from typing import Optional
-import numpy as np
 import warnings
+from typing import Optional
+
+import numpy as np
+
+from Bio.PDB.Atom import Atom
+from Bio.PDB.Atom import DisorderedAtom
+from Bio.PDB.Chain import Chain
+from Bio.PDB.Model import Model
+from Bio.PDB.PDBExceptions import PDBConstructionException
+from Bio.PDB.PDBExceptions import PDBConstructionWarning
+from Bio.PDB.Residue import DisorderedResidue
+from Bio.PDB.Residue import Residue
 
 # SMCRA hierarchy
 from Bio.PDB.Structure import Structure
-from Bio.PDB.Model import Model
-from Bio.PDB.Chain import Chain
-from Bio.PDB.Residue import Residue, DisorderedResidue
-from Bio.PDB.Atom import Atom, DisorderedAtom
-
-from Bio.PDB.PDBExceptions import PDBConstructionException
-from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
 
 def _is_completely_disordered(residue: Residue) -> bool:

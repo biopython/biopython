@@ -14,9 +14,9 @@ deal with sequences in CodonAlignment in biopython.
 from itertools import permutations
 from math import log
 
+from Bio.Data import CodonTable
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Data import CodonTable
 
 
 class CodonSeq(Seq):
@@ -683,6 +683,7 @@ def _yn00(seq1, seq2, k, codon_table):
     Nomenclature is according to Yang and Nielsen (2000), PMID 10666704.
     """
     from collections import defaultdict
+
     from scipy.linalg import expm
 
     fcodon = [
@@ -1068,6 +1069,7 @@ def _count_diff_YN00(codon1, codon2, P, codon_lst, codon_table):
 def _ml(seq1, seq2, cmethod, codon_table):
     """ML method main function (PRIVATE)."""
     from collections import Counter
+
     from scipy.optimize import minimize
 
     codon_cnt = Counter()

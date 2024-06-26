@@ -26,19 +26,17 @@ correct position.
 """
 
 import unittest
-from unittest import mock
-
-from urllib.error import HTTPError
 from io import BytesIO
+from unittest import mock
+from urllib.error import HTTPError
+
+import requires_internet
 
 from Bio import MissingExternalDependencyError
 
 # We want to test these:
 from Bio.Blast import NCBIWWW
 from Bio.Blast import NCBIXML
-
-import requires_internet
-
 
 NCBIWWW.email = "biopython@biopython.org"
 

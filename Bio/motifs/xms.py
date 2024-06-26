@@ -6,11 +6,11 @@
 
 """Parse XMS motif files."""
 
-from Bio import motifs
-
-
-from xml.dom import minidom, Node
 import re
+from xml.dom import minidom
+from xml.dom import Node
+
+from Bio import motifs
 
 
 class XMSScanner:

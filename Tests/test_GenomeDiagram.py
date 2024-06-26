@@ -3,19 +3,18 @@
 # as part of this package.
 """Tests for GenomeDiagram general functionality."""
 
+import math
 import os
 import unittest
-import math
-
 
 # Do we have ReportLab?  Raise error if not present.
 from Bio import MissingPythonDependencyError
 
 try:
     from reportlab.lib import colors
+    from reportlab.lib.units import cm
     from reportlab.pdfbase import pdfmetrics
     from reportlab.pdfbase.ttfonts import TTFont
-    from reportlab.lib.units import cm
 except ImportError:
     raise MissingPythonDependencyError(
         "Install reportlab if you want to use Bio.Graphics."
@@ -34,15 +33,18 @@ except ImportError:
     # bitmap format is attempted.
     renderPM = None
 
-from Bio import SeqIO
-from Bio.SeqFeature import SeqFeature, SimpleLocation
-
-from Bio.Graphics.GenomeDiagram import FeatureSet, GraphSet, Track, Diagram
-from Bio.Graphics.GenomeDiagram import CrossLink
-from Bio.Graphics.GenomeDiagram._Graph import GraphData
-from Bio.Graphics.GenomeDiagram._Colors import ColorTranslator
-
 from reportlab import rl_config
+
+from Bio import SeqIO
+from Bio.Graphics.GenomeDiagram import CrossLink
+from Bio.Graphics.GenomeDiagram import Diagram
+from Bio.Graphics.GenomeDiagram import FeatureSet
+from Bio.Graphics.GenomeDiagram import GraphSet
+from Bio.Graphics.GenomeDiagram import Track
+from Bio.Graphics.GenomeDiagram._Colors import ColorTranslator
+from Bio.Graphics.GenomeDiagram._Graph import GraphData
+from Bio.SeqFeature import SeqFeature
+from Bio.SeqFeature import SimpleLocation
 
 rl_config.invariant = True
 

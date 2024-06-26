@@ -11,8 +11,9 @@ This interface is less efficient than the standard GenePopControler
 
 """
 
-from .Controller import GenePopController
 from Bio.PopGen import GenePop
+
+from .Controller import GenePopController
 
 
 class EasyController:

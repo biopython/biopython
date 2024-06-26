@@ -13,8 +13,9 @@ See https://www.iucr.org/resources/cif/spec/version1.1/cifsyntax for syntax.
 import re
 from collections import defaultdict
 
+from Bio.PDB.PDBIO import Select
+from Bio.PDB.PDBIO import StructureIO
 from Bio.PDB.StructureBuilder import StructureBuilder
-from Bio.PDB.PDBIO import Select, StructureIO
 
 # If certain entries should have a certain order of keys, that is specified here
 mmcif_order = {

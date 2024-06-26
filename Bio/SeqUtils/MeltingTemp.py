@@ -154,9 +154,9 @@ by '1':
 import math
 import warnings
 
-from Bio import SeqUtils, Seq
 from Bio import BiopythonWarning
-
+from Bio import Seq
+from Bio import SeqUtils
 
 # Thermodynamic lookup tables (dictionaries):
 # Enthalpy (dH) and entropy (dS) values for nearest neighbors and initiation

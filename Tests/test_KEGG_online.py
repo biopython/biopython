@@ -11,13 +11,16 @@
 import io
 import unittest
 
-from Bio.KEGG.KGML import KGML_parser
-from Bio.KEGG.REST import kegg_conv, kegg_find, kegg_get
-from Bio.KEGG.REST import kegg_info, kegg_link, kegg_list
+import requires_internet
 
 from Bio import SeqIO
-
-import requires_internet
+from Bio.KEGG.KGML import KGML_parser
+from Bio.KEGG.REST import kegg_conv
+from Bio.KEGG.REST import kegg_find
+from Bio.KEGG.REST import kegg_get
+from Bio.KEGG.REST import kegg_info
+from Bio.KEGG.REST import kegg_link
+from Bio.KEGG.REST import kegg_list
 
 requires_internet.check()
 

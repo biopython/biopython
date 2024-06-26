@@ -5,7 +5,6 @@
 """Tests for SeqIO SeqXML module."""
 
 import unittest
-
 from io import BytesIO
 
 from Bio import SeqIO

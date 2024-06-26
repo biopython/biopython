@@ -17,17 +17,17 @@ import re
 import struct
 import zlib
 
-
-from Bio.Align import Alignment, Alignments
-from Bio.Align import bigbed, maf
-from Bio.Align import _aligncore  # type: ignore
-from Bio.Align.bigbed import AutoSQLTable, Field
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
-
-
 import numpy as np
 
+from Bio.Align import _aligncore  # type: ignore
+from Bio.Align import Alignment
+from Bio.Align import Alignments
+from Bio.Align import bigbed
+from Bio.Align import maf
+from Bio.Align.bigbed import AutoSQLTable
+from Bio.Align.bigbed import Field
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
 
 declaration = AutoSQLTable(
     "bedMaf",

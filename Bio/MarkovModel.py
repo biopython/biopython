@@ -23,6 +23,7 @@ MarkovModel     Holds the description of a markov model
 """
 
 import warnings
+
 from Bio import BiopythonDeprecationWarning
 
 warnings.warn(

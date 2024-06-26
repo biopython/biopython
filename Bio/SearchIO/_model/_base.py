@@ -5,7 +5,8 @@
 # package.
 """Abstract base classes for the SearchIO object model."""
 
-from typing import Tuple, Union
+from typing import Tuple
+from typing import Union
 
 from Bio.SearchIO._utils import getattr_str
 

@@ -8,9 +8,9 @@
 
 """Tests for motifs module."""
 
+import math
 import tempfile
 import unittest
-import math
 
 try:
     import numpy as np

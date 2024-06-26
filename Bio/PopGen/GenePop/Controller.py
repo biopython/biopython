@@ -12,7 +12,8 @@ import re
 import shutil
 import tempfile
 
-from Bio.Application import AbstractCommandline, _Argument
+from Bio.Application import _Argument
+from Bio.Application import AbstractCommandline
 
 
 def _gp_float(tok):

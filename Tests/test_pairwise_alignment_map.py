@@ -18,11 +18,12 @@ except ImportError:
         "Install numpy if you want to use Bio.Align.Alignment.map."
     ) from None
 
+from Bio import Align
+from Bio import SeqIO
+from Bio.Align import Alignment
+from Bio.Align import PairwiseAligner
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio import SeqIO
-from Bio import Align
-from Bio.Align import PairwiseAligner, Alignment
 
 
 class TestSimple(unittest.TestCase):

@@ -19,12 +19,13 @@ import unittest
 import warnings
 
 from Bio import BiopythonWarning
-from Bio.PDB import PDBParser, PDBIO, Select
-from Bio.PDB import Atom, Residue
-from Bio.PDB.PDBExceptions import (
-    PDBConstructionWarning,
-    PDBIOException,
-)
+from Bio.PDB import Atom
+from Bio.PDB import PDBIO
+from Bio.PDB import PDBParser
+from Bio.PDB import Residue
+from Bio.PDB import Select
+from Bio.PDB.PDBExceptions import PDBConstructionWarning
+from Bio.PDB.PDBExceptions import PDBIOException
 
 
 class WriteTest(unittest.TestCase):

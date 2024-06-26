@@ -12,16 +12,16 @@ scope of this file as they are already covered in test_Entrez.py.
 
 """
 
-from Bio import Entrez
-from Bio import Medline
-from Bio import SeqIO
-from Bio.SeqRecord import SeqRecord
-
 import doctest
 import sys
 import unittest
 
 import requires_internet
+
+from Bio import Entrez
+from Bio import Medline
+from Bio import SeqIO
+from Bio.SeqRecord import SeqRecord
 
 requires_internet.check()
 

@@ -16,7 +16,6 @@ from pairwise2_testCases import *  # noqa: F401, F403
 
 from Bio import pairwise2
 
-
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     # Explicitly using pure Python fallback functions:

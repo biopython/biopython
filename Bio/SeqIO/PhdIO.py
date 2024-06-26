@@ -57,10 +57,10 @@ from typing import Iterator
 from Bio.SeqRecord import SeqRecord
 from Bio.Sequencing import Phd
 
-from .QualityIO import _get_phred_quality
-from .Interfaces import SequenceWriter
-from .Interfaces import _TextIOSource
 from .Interfaces import _IOSource
+from .Interfaces import _TextIOSource
+from .Interfaces import SequenceWriter
+from .QualityIO import _get_phred_quality
 
 
 def PhdIterator(source: _TextIOSource) -> Iterator[SeqRecord]:

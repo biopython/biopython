@@ -123,8 +123,8 @@ def seguid(seq):
     http://bioinformatics.anl.gov/seguid/
     https://doi.org/10.1002/pmic.200600032
     """
-    import hashlib
     import base64
+    import hashlib
 
     m = hashlib.sha1()
     try:

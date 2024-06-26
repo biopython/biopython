@@ -271,8 +271,8 @@ type ``help(pairwise2.align.localds)`` at the Python prompt.
 import warnings
 from collections import namedtuple
 
-from Bio import BiopythonWarning
 from Bio import BiopythonDeprecationWarning
+from Bio import BiopythonWarning
 from Bio.Align import substitution_matrices
 
 warnings.warn(

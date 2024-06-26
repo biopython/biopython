@@ -9,8 +9,8 @@
 
 import numpy as np
 
-from Bio.SVDSuperimposer import SVDSuperimposer
 from Bio.PDB.PDBExceptions import PDBException
+from Bio.SVDSuperimposer import SVDSuperimposer
 
 
 class Superimposer:

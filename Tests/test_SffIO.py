@@ -10,10 +10,13 @@ import re
 import unittest
 from io import BytesIO
 
-from Bio.SeqIO.SffIO import _sff_find_roche_index, _sff_read_roche_index
-from Bio.SeqIO.SffIO import _sff_do_slow_index
-from Bio.SeqIO.SffIO import SffIterator, SffWriter, ReadRocheXmlManifest
 from Bio import SeqIO
+from Bio.SeqIO.SffIO import _sff_do_slow_index
+from Bio.SeqIO.SffIO import _sff_find_roche_index
+from Bio.SeqIO.SffIO import _sff_read_roche_index
+from Bio.SeqIO.SffIO import ReadRocheXmlManifest
+from Bio.SeqIO.SffIO import SffIterator
+from Bio.SeqIO.SffIO import SffWriter
 
 # sffinfo E3MFGYR02_random_10_reads.sff | sed -n '/>\|Run Prefix\|Region\|XY/p'
 test_data = """

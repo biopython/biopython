@@ -22,17 +22,27 @@ the diagram: http://www.reportlab.com
 
 # ReportLab imports
 
-from reportlab.graphics.shapes import Drawing, Line, String, Group, Polygon
+from math import ceil
+
+from reportlab.graphics.shapes import Drawing
+from reportlab.graphics.shapes import Group
+from reportlab.graphics.shapes import Line
+from reportlab.graphics.shapes import Polygon
+from reportlab.graphics.shapes import String
 from reportlab.lib import colors
 
+from ._AbstractDrawer import _stroke_and_fill_colors
+
 # GenomeDiagram imports
-from ._AbstractDrawer import AbstractDrawer, draw_box, draw_arrow
-from ._AbstractDrawer import draw_cut_corner_box, _stroke_and_fill_colors
-from ._AbstractDrawer import intermediate_points, angle2trig, deduplicate
+from ._AbstractDrawer import AbstractDrawer
+from ._AbstractDrawer import angle2trig
+from ._AbstractDrawer import deduplicate
+from ._AbstractDrawer import draw_arrow
+from ._AbstractDrawer import draw_box
+from ._AbstractDrawer import draw_cut_corner_box
+from ._AbstractDrawer import intermediate_points
 from ._FeatureSet import FeatureSet
 from ._GraphSet import GraphSet
-
-from math import ceil
 
 
 class LinearDrawer(AbstractDrawer):

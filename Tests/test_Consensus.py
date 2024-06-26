@@ -6,19 +6,18 @@
 """Unit tests for the Bio.Phylo.Consensus module."""
 
 import os
-import unittest
 import tempfile
+import unittest
 
 # from io import StringIO
 from Bio import Align
 from Bio import AlignIO
 from Bio import Phylo
 from Bio.Phylo import BaseTree
-from Bio.Phylo.TreeConstruction import DistanceCalculator
-from Bio.Phylo.TreeConstruction import DistanceTreeConstructor
 from Bio.Phylo import Consensus
 from Bio.Phylo.Consensus import _BitString
-
+from Bio.Phylo.TreeConstruction import DistanceCalculator
+from Bio.Phylo.TreeConstruction import DistanceTreeConstructor
 
 temp_dir = tempfile.mkdtemp()
 

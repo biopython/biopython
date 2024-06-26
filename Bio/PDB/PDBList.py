@@ -44,7 +44,9 @@ import re
 import shutil
 import sys
 from concurrent.futures import ThreadPoolExecutor
-from typing import List, Optional, Tuple
+from typing import List
+from typing import Optional
+from typing import Tuple
 from urllib.request import Request
 from urllib.request import urlcleanup
 from urllib.request import urlopen

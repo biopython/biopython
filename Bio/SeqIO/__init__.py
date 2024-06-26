@@ -376,7 +376,10 @@ making up each alignment as SeqRecords.
 #
 # --Peter
 
-from typing import Callable, Dict, Iterable, Union
+from typing import Callable
+from typing import Dict
+from typing import Iterable
+from typing import Union
 
 from Bio.File import as_handle
 from Bio.SeqIO import AbiIO
@@ -400,6 +403,7 @@ from Bio.SeqIO import TwoBitIO
 from Bio.SeqIO import UniprotIO
 from Bio.SeqIO import XdnaIO
 from Bio.SeqRecord import SeqRecord
+
 from .Interfaces import _TextIOSource
 
 # Convention for format names is "mainname-subtype" in lower case.
@@ -871,8 +875,9 @@ def index(filename, format, alphabet=None, key_function=None):
         raise ValueError("The alphabet argument is no longer supported")
 
     # Map the file format to a sequence iterator:
-    from ._index import _FormatToRandomAccess  # Lazy import
     from Bio.File import _IndexedSeqFileDict
+
+    from ._index import _FormatToRandomAccess  # Lazy import
 
     try:
         proxy_class = _FormatToRandomAccess[format]
@@ -974,8 +979,9 @@ def index_db(
         raise ValueError("The alphabet argument is no longer supported")
 
     # Map the file format to a sequence iterator:
-    from ._index import _FormatToRandomAccess  # Lazy import
     from Bio.File import _SQLiteManySeqFilesDict
+
+    from ._index import _FormatToRandomAccess  # Lazy import
 
     repr = "SeqIO.index_db(%r, filenames=%r, format=%r, key_function=%r)" % (
         index_filename,

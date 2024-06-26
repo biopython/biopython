@@ -8,10 +8,10 @@
 import os
 import unittest
 
+from seq_tests_common import SeqRecordTestBaseClass
+
 from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
-
-from seq_tests_common import SeqRecordTestBaseClass
 
 
 class ParserTests(SeqRecordTestBaseClass):

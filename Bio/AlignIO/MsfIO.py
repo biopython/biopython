@@ -309,6 +309,7 @@ class MsfIterator(AlignmentIterator):
                 seqs[idx] = s + "-" * (aln_length - len(s))
         if padded:
             import warnings
+
             from Bio import BiopythonParserWarning
 
             warnings.warn(

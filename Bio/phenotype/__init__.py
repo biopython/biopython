@@ -97,7 +97,6 @@ except ImportError:
 from Bio.File import as_handle
 from Bio.phenotype import phen_micro
 
-
 # Convention for format names is "mainname-format" in lower case.
 
 _FormatToIterator = {

@@ -23,15 +23,15 @@ mailing list and ask for help.  See:
 http://biopython.org/wiki/Mailing_lists
 """
 
-import sys
-import os
 import ast
+import os
+import sys
 
 try:
-    from setuptools import setup
+    from setuptools import __version__ as setuptools_version
     from setuptools import Command
     from setuptools import Extension
-    from setuptools import __version__ as setuptools_version
+    from setuptools import setup
 except ImportError:
     sys.exit(
         "We need the Python library setuptools to be installed. "

@@ -15,15 +15,16 @@ try:
 except ImportError:
     numpy = None  # type: ignore
 
-from Bio import BiopythonDeprecationWarning, SeqIO
+from Bio import BiopythonDeprecationWarning
+from Bio import SeqIO
 from Bio.Seq import MutableSeq
 from Bio.Seq import Seq
 from Bio.SeqFeature import AfterPosition
 from Bio.SeqFeature import BeforePosition
 from Bio.SeqFeature import ExactPosition
-from Bio.SeqFeature import SimpleLocation
 from Bio.SeqFeature import OneOfPosition
 from Bio.SeqFeature import SeqFeature
+from Bio.SeqFeature import SimpleLocation
 from Bio.SeqFeature import WithinPosition
 from Bio.SeqRecord import SeqRecord
 

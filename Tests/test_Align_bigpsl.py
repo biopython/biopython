@@ -6,14 +6,14 @@
 import tempfile
 import unittest
 
-
 from Bio import Align
-from Bio.Seq import Seq
 from Bio import SeqIO
-from Bio.SeqFeature import ExactPosition, BeforePosition
-from Bio.SeqFeature import SimpleLocation, CompoundLocation
+from Bio.Seq import Seq
+from Bio.SeqFeature import BeforePosition
+from Bio.SeqFeature import CompoundLocation
+from Bio.SeqFeature import ExactPosition
 from Bio.SeqFeature import SeqFeature
-
+from Bio.SeqFeature import SimpleLocation
 
 try:
     import numpy as np

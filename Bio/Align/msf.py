@@ -15,12 +15,11 @@ You are expected to use this module via the Bio.Align functions.
 
 import warnings
 
+from Bio import BiopythonParserWarning
 from Bio.Align import Alignment
 from Bio.Align import interfaces
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-
-from Bio import BiopythonParserWarning
 
 
 class AlignmentIterator(interfaces.AlignmentIterator):

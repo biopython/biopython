@@ -127,12 +127,14 @@ Functions:
 
 """
 
+import io
 import time
 import warnings
-import io
-from urllib.error import URLError, HTTPError
+from urllib.error import HTTPError
+from urllib.error import URLError
 from urllib.parse import urlencode
-from urllib.request import urlopen, Request
+from urllib.request import Request
+from urllib.request import urlopen
 
 from Bio import BiopythonDeprecationWarning
 from Bio._utils import function_with_previous

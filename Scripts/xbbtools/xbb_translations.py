@@ -13,7 +13,9 @@
 
 import time
 
-from Bio.Seq import Seq, reverse_complement, translate
+from Bio.Seq import reverse_complement
+from Bio.Seq import Seq
+from Bio.Seq import translate
 from Bio.SeqUtils import gc_fraction
 
 

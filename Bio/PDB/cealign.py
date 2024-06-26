@@ -24,7 +24,6 @@ from Bio.PDB.ccealign import run_cealign
 from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.qcprot import QCPSuperimposer
 
-
 _RESID_SORTER = lambda r: r.id[1]  # noqa: E731
 
 

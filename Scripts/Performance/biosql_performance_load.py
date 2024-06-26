@@ -13,7 +13,6 @@ import time
 from Bio import GenBank
 from BioSQL import BioSeqDatabase
 
-
 server = BioSeqDatabase.open_database(
     host="192.168.0.192", user="root", passwd="", db="pythonloadtest"
 )

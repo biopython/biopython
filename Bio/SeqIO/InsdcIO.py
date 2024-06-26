@@ -31,9 +31,9 @@ http://www.ebi.ac.uk/imgt/hla/docs/manual.html
 """
 
 import warnings
-
 from datetime import datetime
-from string import ascii_letters, digits
+from string import ascii_letters
+from string import digits
 
 from Bio import BiopythonWarning
 from Bio import SeqFeature

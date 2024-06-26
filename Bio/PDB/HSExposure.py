@@ -11,7 +11,8 @@ import warnings
 from math import pi
 
 from Bio.PDB.AbstractPropertyMap import AbstractPropertyMap
-from Bio.PDB.Polypeptide import CaPPBuilder, is_aa
+from Bio.PDB.Polypeptide import CaPPBuilder
+from Bio.PDB.Polypeptide import is_aa
 from Bio.PDB.vectors import rotaxis
 
 

@@ -27,7 +27,6 @@ re-indexing the file for use another time.
 """
 
 import re
-
 from io import BytesIO
 from io import StringIO
 
@@ -106,6 +105,7 @@ class SffRandomAccess(SeqFileRandomAccess):
                 # If that worked, call _check_eof ...
             except ValueError as err:
                 import warnings
+
                 from Bio import BiopythonParserWarning
 
                 warnings.warn(

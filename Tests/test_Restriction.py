@@ -7,28 +7,31 @@
 
 import unittest
 
-from Bio.Restriction import Analysis, Restriction, RestrictionBatch
-from Bio.Restriction import CommOnly, NonComm, AllEnzymes
-from Bio.Restriction import (
-    Acc65I,
-    Asp718I,
-    BamHI,
-    EcoRI,
-    EcoRV,
-    KpnI,
-    SmaI,
-    MluCI,
-    McrI,
-    NdeI,
-    BsmBI,
-    AanI,
-    EarI,
-    SnaI,
-    SphI,
-)
-from Bio.Restriction import FormattedSeq
-from Bio.Seq import Seq, MutableSeq
 from Bio import BiopythonWarning
+from Bio.Restriction import AanI
+from Bio.Restriction import Acc65I
+from Bio.Restriction import AllEnzymes
+from Bio.Restriction import Analysis
+from Bio.Restriction import Asp718I
+from Bio.Restriction import BamHI
+from Bio.Restriction import BsmBI
+from Bio.Restriction import CommOnly
+from Bio.Restriction import EarI
+from Bio.Restriction import EcoRI
+from Bio.Restriction import EcoRV
+from Bio.Restriction import FormattedSeq
+from Bio.Restriction import KpnI
+from Bio.Restriction import McrI
+from Bio.Restriction import MluCI
+from Bio.Restriction import NdeI
+from Bio.Restriction import NonComm
+from Bio.Restriction import Restriction
+from Bio.Restriction import RestrictionBatch
+from Bio.Restriction import SmaI
+from Bio.Restriction import SnaI
+from Bio.Restriction import SphI
+from Bio.Seq import MutableSeq
+from Bio.Seq import Seq
 
 
 class SequenceTesting(unittest.TestCase):

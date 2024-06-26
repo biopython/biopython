@@ -24,10 +24,10 @@ This aims to estimate two parameters:
 import math
 import warnings
 
+from Bio import BiopythonDeprecationWarning
+
 # local stuff
 from .DynamicProgramming import ScaledDPAlgorithms
-
-from Bio import BiopythonDeprecationWarning
 
 warnings.warn(
     "The 'Bio.HMM.Trainer' module is deprecated and will be removed "

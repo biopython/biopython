@@ -82,19 +82,18 @@ Notes about the diverses class of the restriction enzyme implementation::
 
 """
 
-import warnings
-
+import itertools
 import re
 import string
-import itertools
+import warnings
 
-from Bio.Seq import Seq, MutableSeq
-from Bio.Restriction.Restriction_Dictionary import rest_dict as enzymedict
-from Bio.Restriction.Restriction_Dictionary import typedict
-from Bio.Restriction.Restriction_Dictionary import suppliers as suppliers_dict
-from Bio.Restriction.PrintFormat import PrintFormat
 from Bio import BiopythonWarning
-
+from Bio.Restriction.PrintFormat import PrintFormat
+from Bio.Restriction.Restriction_Dictionary import rest_dict as enzymedict
+from Bio.Restriction.Restriction_Dictionary import suppliers as suppliers_dict
+from Bio.Restriction.Restriction_Dictionary import typedict
+from Bio.Seq import MutableSeq
+from Bio.Seq import Seq
 
 matching = {
     "A": "ARWMHVDN",

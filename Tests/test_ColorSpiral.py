@@ -7,17 +7,17 @@
 
 # Builtins
 import colorsys
-from math import pi
 import os
 import unittest
 from cmath import rect
+from math import pi
 
 # Do we have ReportLab?  Raise error if not present.
 from Bio import MissingPythonDependencyError
 
 try:
-    from reportlab.pdfgen.canvas import Canvas
     from reportlab.lib.pagesizes import A4
+    from reportlab.pdfgen.canvas import Canvas
 except ImportError:
     raise MissingPythonDependencyError(
         "Install reportlab if you want to use Bio.Graphics."
@@ -25,7 +25,9 @@ except ImportError:
 
 
 # Biopython Bio.Graphics.ColorSpiral
-from Bio.Graphics.ColorSpiral import ColorSpiral, get_colors, get_color_dict
+from Bio.Graphics.ColorSpiral import ColorSpiral
+from Bio.Graphics.ColorSpiral import get_color_dict
+from Bio.Graphics.ColorSpiral import get_colors
 
 
 class SpiralTest(unittest.TestCase):

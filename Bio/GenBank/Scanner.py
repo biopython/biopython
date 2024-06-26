@@ -27,17 +27,16 @@ Feature Table Documentation:
 # for more details of this format, and an example.
 # Added by Ying Huang & Iddo Friedberg
 
-import warnings
 import re
 import sys
+import warnings
 from collections import defaultdict
+from typing import List
 
+from Bio import BiopythonParserWarning
 from Bio.File import as_handle
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio import BiopythonParserWarning
-
-from typing import List
 
 
 class InsdcScanner:

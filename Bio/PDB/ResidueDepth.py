@@ -57,12 +57,11 @@ import warnings
 
 import numpy as np
 
+from Bio import BiopythonWarning
 from Bio.PDB import PDBParser
 from Bio.PDB import Selection
 from Bio.PDB.AbstractPropertyMap import AbstractPropertyMap
 from Bio.PDB.Polypeptide import is_aa
-
-from Bio import BiopythonWarning
 
 # Table 1: Atom Type to radius
 _atomic_radii = {
