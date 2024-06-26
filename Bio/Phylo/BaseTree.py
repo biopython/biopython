@@ -16,7 +16,6 @@ import copy
 import itertools
 import random
 import re
-import warnings
 
 # General tree-traversal algorithms
 

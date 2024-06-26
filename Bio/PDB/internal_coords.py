@@ -273,12 +273,8 @@ from collections import deque
 from collections import namedtuple
 from numbers import Integral
 from typing import cast
-from typing import Dict
-from typing import List
 from typing import Optional
-from typing import Set
 from typing import TextIO
-from typing import Tuple
 from typing import TYPE_CHECKING
 from typing import Union
 

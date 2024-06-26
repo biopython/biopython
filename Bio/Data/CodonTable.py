@@ -13,8 +13,6 @@ using Scripts/update_ncbi_codon_table.py
 Last updated at Version 4.4 (May 2019)
 """
 
-from typing import Dict
-from typing import List
 from typing import Optional
 
 from Bio.Data import IUPACData

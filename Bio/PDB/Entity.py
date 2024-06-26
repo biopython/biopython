@@ -13,9 +13,7 @@ import warnings
 from collections import deque
 from copy import copy
 from typing import Any
-from typing import Dict
 from typing import Generic
-from typing import List
 from typing import Optional
 from typing import TYPE_CHECKING
 from typing import TypeVar

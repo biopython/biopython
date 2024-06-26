@@ -19,7 +19,6 @@ import datetime
 import struct
 import sys
 from os.path import basename
-from typing import List
 
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord

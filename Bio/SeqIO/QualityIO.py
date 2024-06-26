@@ -361,15 +361,12 @@ are approximately equal.
 
 import warnings
 from math import log
-from typing import Any
 from typing import Callable
 from typing import IO
 from collections.abc import Iterator
-from typing import List
 from collections.abc import Mapping
 from typing import Optional
 from collections.abc import Sequence
-from typing import Tuple
 from typing import Union
 
 from Bio import BiopythonParserWarning

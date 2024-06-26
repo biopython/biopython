@@ -9,11 +9,8 @@
 import re
 from datetime import date
 from io import StringIO
-from typing import List
 from typing import Optional
-from typing import Set
 from typing import TextIO
-from typing import Tuple
 from typing import Union
 
 import numpy as np

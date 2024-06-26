@@ -31,7 +31,6 @@ import re
 import sys
 import warnings
 from collections import defaultdict
-from typing import List
 
 from Bio import BiopythonParserWarning
 from Bio.File import as_handle

@@ -78,7 +78,6 @@ the annotation attribute of each record::
 """
 
 import re
-from typing import List
 
 from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq

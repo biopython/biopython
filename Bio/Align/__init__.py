@@ -23,7 +23,6 @@ import warnings
 from abc import ABC
 from abc import abstractmethod
 from itertools import zip_longest
-from typing import Dict
 
 try:
     import numpy as np
