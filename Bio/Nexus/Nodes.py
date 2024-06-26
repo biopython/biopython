@@ -16,8 +16,6 @@ Subclassed by Nexus.Trees to store phylogenetic trees.
 Bug reports to Frank Kauff (fkauff@biologie.uni-kl.de)
 """
 
-from typing import Dict
-from typing import List
 from typing import Optional
 
 

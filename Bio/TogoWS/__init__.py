@@ -33,8 +33,6 @@ http://soapy.sourceforge.net/
 
 import io
 import time
-from typing import Dict
-from typing import List
 from urllib.parse import quote
 from urllib.request import urlopen
 

@@ -17,9 +17,7 @@ import warnings
 from io import StringIO
 from typing import Any
 from typing import cast
-from typing import Dict
 from collections.abc import Iterable
-from typing import List
 from collections.abc import Mapping
 from typing import NoReturn
 from typing import Optional

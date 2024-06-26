@@ -17,8 +17,6 @@ https://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd
 import html
 import os.path
 from collections import deque
-from typing import Callable
-from typing import Dict
 from xml.parsers import expat
 
 from Bio import Entrez

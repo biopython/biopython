@@ -8,7 +8,6 @@
 """Vector class, including rotation-related functions."""
 
 from typing import Optional
-from typing import Tuple
 
 import numpy as np  # type: ignore
 

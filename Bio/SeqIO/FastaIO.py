@@ -14,9 +14,6 @@ You are expected to use this module via the Bio.SeqIO functions.
 """
 
 import warnings
-from typing import Callable
-from typing import Optional
-from typing import Tuple
 
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord

@@ -377,7 +377,6 @@ making up each alignment as SeqRecords.
 # --Peter
 
 from typing import Callable
-from typing import Dict
 from collections.abc import Iterable
 from typing import Union
 
