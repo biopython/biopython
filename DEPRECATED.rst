@@ -66,6 +66,11 @@ The ``egquery`` function wrapping the NCBI EGQuery (Entrez Global Query)
 API was deprecated in Release 1.84. The API has stopped working and the
 NCBI said this API was no longer being maintained.
 
+Bio.SCOP
+--------
+The ``search`` function was deprecated in Release 1.84. The CGI API this
+wrapped is no longer available since SCOP moved to the EBI website.
+
 Bio.AlignInfo
 -------------
 The ``pos_specific_score_matrix`` method of the ``SummaryInfo`` class and the
