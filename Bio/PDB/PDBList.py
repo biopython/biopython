@@ -412,7 +412,7 @@ class PDBList:
 
     def download_pdb_files(
         self,
-        pdb_codes: List[str],
+        pdb_codes: list[str],
         obsolete: bool = False,
         pdir: Optional[str] = None,
         file_format: Optional[str] = None,
@@ -458,7 +458,7 @@ class PDBList:
                 pdb_codes,
             )
 
-    def get_all_assemblies(self, file_format: str = "") -> List[Tuple[str, str]]:
+    def get_all_assemblies(self, file_format: str = "") -> list[tuple[str, str]]:
         """Retrieve the list of PDB entries with an associated bio assembly.
 
         The requested list will be cached to avoid multiple calls to the server.
@@ -491,7 +491,7 @@ class PDBList:
             assemblies = json.loads(response.read().decode("utf-8"))["result_set"]
 
         # We transform the assemblies to match the format that they have historically been returned in.
-        def transform(assembly: dict) -> Tuple[str, str]:
+        def transform(assembly: dict) -> tuple[str, str]:
             split = assembly["identifier"].split("-")
             return split[0].lower(), split[-1]
 

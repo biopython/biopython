@@ -1168,7 +1168,7 @@ class GenBankScanner(InsdcScanner):
     RECORD_START = "LOCUS       "
     HEADER_WIDTH = 12
     FEATURE_START_MARKERS = ["FEATURES             Location/Qualifiers", "FEATURES"]
-    FEATURE_END_MARKERS: List[str] = []
+    FEATURE_END_MARKERS: list[str] = []
     FEATURE_QUALIFIER_INDENT = 21
     FEATURE_QUALIFIER_SPACER = " " * FEATURE_QUALIFIER_INDENT
     SEQUENCE_HEADERS = [

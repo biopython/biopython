@@ -382,9 +382,7 @@ class DSSP(AbstractResiduePropertyMap):
             # calling 'dssp' will not work in some operating systems
             # (Debian distribution of DSSP includes a symlink for 'dssp' argument)
             try:
-                version_string = subprocess.check_output(
-                    [dssp, "--version"], universal_newlines=True
-                )
+                version_string = subprocess.check_output([dssp, "--version"], text=True)
                 dssp_version = re.search(r"\s*([\d.]+)", version_string).group(1)
                 dssp_dict, dssp_keys = dssp_dict_from_pdb_file(
                     in_file, dssp, dssp_version
@@ -396,9 +394,7 @@ class DSSP(AbstractResiduePropertyMap):
                     dssp = "dssp"
                 else:
                     raise
-                version_string = subprocess.check_output(
-                    [dssp, "--version"], universal_newlines=True
-                )
+                version_string = subprocess.check_output([dssp, "--version"], text=True)
                 dssp_version = re.search(r"\s*([\d.]+)", version_string).group(1)
                 dssp_dict, dssp_keys = dssp_dict_from_pdb_file(
                     in_file, dssp, dssp_version

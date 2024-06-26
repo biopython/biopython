@@ -34,7 +34,7 @@ class Chain:
 
     def __init__(self) -> None:
         """Initialize a node chain."""
-        self.chain: Dict[int, "Node"] = {}
+        self.chain: dict[int, "Node"] = {}
         self.id = -1
 
     def _get_id(self) -> int:
@@ -42,7 +42,7 @@ class Chain:
         self.id += 1
         return self.id
 
-    def all_ids(self) -> List[int]:
+    def all_ids(self) -> list[int]:
         """Return a list of all node ids."""
         return list(self.chain.keys())
 

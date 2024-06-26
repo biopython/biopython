@@ -18,13 +18,13 @@ from io import StringIO
 from typing import Any
 from typing import cast
 from typing import Dict
-from typing import Iterable
+from collections.abc import Iterable
 from typing import List
-from typing import Mapping
+from collections.abc import Mapping
 from typing import NoReturn
 from typing import Optional
 from typing import overload
-from typing import Sequence
+from collections.abc import Sequence
 from typing import TYPE_CHECKING
 from typing import Union
 
@@ -40,7 +40,7 @@ if TYPE_CHECKING:
 _NO_SEQRECORD_COMPARISON = "SeqRecord comparison is deliberately not implemented. Explicitly compare the attributes of interest."
 
 
-class _RestrictedDict(Dict[str, Sequence[Any]]):
+class _RestrictedDict(dict[str, Sequence[Any]]):
     """Dict which only allows sequences of given length as values (PRIVATE).
 
     This simple subclass of the Python dictionary is used in the SeqRecord
@@ -177,10 +177,10 @@ class SeqRecord:
     """
 
     _AnnotationsDictValue = Union[str, int]
-    _AnnotationsDict = Dict[str, _AnnotationsDictValue]
+    _AnnotationsDict = dict[str, _AnnotationsDictValue]
 
     annotations: _AnnotationsDict
-    dbxrefs: List[str]
+    dbxrefs: list[str]
 
     def __init__(
         self,
@@ -188,10 +188,10 @@ class SeqRecord:
         id: Optional[str] = "<unknown id>",
         name: str = "<unknown name>",
         description: str = "<unknown description>",
-        dbxrefs: Optional[List[str]] = None,
-        features: Optional[List["SeqFeature"]] = None,
+        dbxrefs: Optional[list[str]] = None,
+        features: Optional[list["SeqFeature"]] = None,
         annotations: Optional[_AnnotationsDict] = None,
-        letter_annotations: Optional[Dict[str, Sequence[Any]]] = None,
+        letter_annotations: Optional[dict[str, Sequence[Any]]] = None,
     ) -> None:
         """Create a SeqRecord.
 
@@ -689,7 +689,7 @@ class SeqRecord:
 
         Note that long sequences are shown truncated.
         """
-        lines: List[str] = []
+        lines: list[str] = []
         if self.id:
             lines.append(f"ID: {self.id}")
         if self.name:

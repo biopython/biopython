@@ -175,7 +175,7 @@ def read_PIC(
             ak = akc[akstr] = AtomKey(akstr)
             return ak
 
-    def link_residues(ppr: List[Residue], pr: List[Residue]) -> None:
+    def link_residues(ppr: list[Residue], pr: list[Residue]) -> None:
         """Set next and prev links between i-1 and i-2 residues."""
         for p_r in pr:
             pric = p_r.internal_coord
@@ -196,7 +196,7 @@ def read_PIC(
         ang: str,
         l23: str,
         ric: IC_Residue,
-    ) -> Tuple:
+    ) -> tuple:
         """Create Hedron on current (sbcic) Chain.internal_coord."""
         ek = (akcache(a1), akcache(a2), akcache(a3))
         atmNdx = AtomKey.fields.atm
@@ -211,7 +211,7 @@ def read_PIC(
         ak_add(ek, ric)
         return ek
 
-    def default_hedron(ek: Tuple, ric: IC_Residue) -> None:
+    def default_hedron(ek: tuple, ric: IC_Residue) -> None:
         """Create Hedron based on same re_class hedra in ref database.
 
         Adds Hedron to current Chain.internal_coord, see ic_data for default
@@ -268,7 +268,7 @@ def read_PIC(
         if verbose:
             print(f" default for {ek}")
 
-    def hedra_check(dk: Tuple, ric: IC_Residue) -> None:
+    def hedra_check(dk: tuple, ric: IC_Residue) -> None:
         """Confirm both hedra present for dihedron key, use default if set."""
         if dk[0:3] not in sbcic.hedra and dk[2::-1] not in sbcic.hedra:
             if defaults:
@@ -283,7 +283,7 @@ def read_PIC(
 
     def process_dihedron(
         a1: str, a2: str, a3: str, a4: str, dangle: str, ric: IC_Residue
-    ) -> Set:
+    ) -> set:
         """Create Dihedron on current Chain.internal_coord."""
         ek = (
             akcache(a1),
@@ -306,7 +306,7 @@ def read_PIC(
         ak_add(ek, ric)
         return ek
 
-    def default_dihedron(ek: List, ric: IC_Residue) -> None:
+    def default_dihedron(ek: list, ric: IC_Residue) -> None:
         """Create Dihedron based on same residue class dihedra in ref database.
 
         Adds Dihedron to current Chain.internal_coord, see ic_data for default
@@ -450,7 +450,7 @@ def read_PIC(
         # This method has some internal functions
 
         # rnext should be set
-        def ake_recurse(akList: List) -> List:
+        def ake_recurse(akList: list) -> list:
             """Build combinatorics of AtomKey lists."""
             car = akList[0]
             if len(akList) > 1:
@@ -469,7 +469,7 @@ def read_PIC(
                     retList = [[ak] for ak in car]
                     return retList
 
-        def ak_expand(eLst: List) -> List:
+        def ak_expand(eLst: list) -> list:
             """Expand AtomKey list with altlocs, all combinatorics."""
             retList = []
             for edron in eLst:
@@ -546,7 +546,7 @@ def read_PIC(
                 pass  # ignore missing combinatoric of altloc atoms
                 # need more here?
 
-    def ak_add(ek: Tuple, ric: IC_Residue) -> None:
+    def ak_add(ek: tuple, ric: IC_Residue) -> None:
         """Allocate edron key AtomKeys to current residue as appropriate.
 
         A hedron or dihedron may span a backbone amide bond, this routine

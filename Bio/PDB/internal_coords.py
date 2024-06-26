@@ -303,14 +303,14 @@ if TYPE_CHECKING:
 
     # from Bio.PDB.Chain import Chain
 
-HKT = Tuple["AtomKey", "AtomKey", "AtomKey"]  # Hedron key tuple
-DKT = Tuple["AtomKey", "AtomKey", "AtomKey", "AtomKey"]  # Dihedron Key Tuple
+HKT = tuple["AtomKey", "AtomKey", "AtomKey"]  # Hedron key tuple
+DKT = tuple["AtomKey", "AtomKey", "AtomKey", "AtomKey"]  # Dihedron Key Tuple
 EKT = Union[HKT, DKT]  # Edron Key Tuple
-BKT = Tuple["AtomKey", "AtomKey"]  # Bond Key Tuple
+BKT = tuple["AtomKey", "AtomKey"]  # Bond Key Tuple
 
 # HACS = Tuple[np.array, np.array, np.array]  # Hedron Atom Coord Set
 HACS = np.array  # Hedron Atom Coord Set
-DACS = Tuple[np.array, np.array, np.array, np.array]  # Dihedron Atom Coord Set
+DACS = tuple[np.array, np.array, np.array, np.array]  # Dihedron Atom Coord Set
 
 
 class IC_Chain:
@@ -488,7 +488,7 @@ class IC_Chain:
         """
         # type hinting parent as Chain leads to import cycle
         self.chain = parent
-        self.ordered_aa_ic_list: List[IC_Residue] = []
+        self.ordered_aa_ic_list: list[IC_Residue] = []
         # self.initNCaC: Dict[Tuple[str], Dict["AtomKey", np.array]] = {}
         self.initNCaCs = []
 
@@ -502,9 +502,9 @@ class IC_Chain:
         # cache of AtomKey results for cak()
         # self.akc: Dict[Tuple(IC_Residue, str), AtomKey] = {}
 
-        self.atomArrayIndex: Dict["AtomKey", int] = {}
+        self.atomArrayIndex: dict["AtomKey", int] = {}
 
-        self.bpAtomArray: List["Atom"] = []  # rtm
+        self.bpAtomArray: list["Atom"] = []  # rtm
 
         self._set_residues(verbose)  # no effect if no residues loaded
 
@@ -657,8 +657,8 @@ class IC_Chain:
 
         # drop through for else Natom or pCatom is disordered:
 
-        Nlist: List[Atom] = []
-        pClist: List[Atom] = []
+        Nlist: list[Atom] = []
+        pClist: list[Atom] = []
         if Natom.is_disordered():
             Nlist.extend(Natom.child_dict.values())
         else:
@@ -684,8 +684,8 @@ class IC_Chain:
     def _add_residue(
         self,
         res: "Residue",
-        last_res: List,
-        last_ord_res: List,
+        last_res: list,
+        last_ord_res: list,
         verbose: bool = False,
     ) -> bool:
         """Set rprev, rnext, manage chain break.
@@ -743,15 +743,15 @@ class IC_Chain:
             self.akset : set of :class:`.AtomKey` s in this chain
         """
         # ndx = 0
-        last_res: List["IC_Residue"] = []
-        last_ord_res: List["IC_Residue"] = []
+        last_res: list["IC_Residue"] = []
+        last_ord_res: list["IC_Residue"] = []
 
         # atomCoordDict = {}
         akset = set()
         for res in self.chain.get_residues():
             # select only not hetero or accepted hetero
             if res.id[0] == " " or res.id[0] in IC_Residue.accept_resnames:
-                this_res: List["IC_Residue"] = []
+                this_res: list["IC_Residue"] = []
                 if 2 == res.is_disordered() and not IC_Residue.no_altloc:
                     # print('disordered res:', res.is_disordered(), res)
                     for r in res.child_dict.values():
@@ -1003,11 +1003,11 @@ class IC_Chain:
 
     def _hedraDict2chain(
         self,
-        hl12: Dict[str, float],
-        ha: Dict[str, float],
-        hl23: Dict[str, float],
-        da: Dict[str, float],
-        bfacs: Dict[str, float],
+        hl12: dict[str, float],
+        ha: dict[str, float],
+        hl23: dict[str, float],
+        da: dict[str, float],
+        bfacs: dict[str, float],
     ) -> None:
         """Generate chain numpy arrays from :func:`.read_PIC` dicts.
 
@@ -1734,7 +1734,7 @@ class IC_Chain:
 
     @staticmethod
     def _writeSCAD_dihed(
-        fp: TextIO, d: "Dihedron", hedraNdx: Dict, hedraSet: Set[EKT]
+        fp: TextIO, d: "Dihedron", hedraNdx: dict, hedraSet: set[EKT]
     ) -> None:
         fp.write(
             f"[ {d.angle:9.5f}, {hedraNdx[d.h1key]}, {hedraNdx[d.h2key]}, {1 if d.reverse else 0}, "
@@ -1775,9 +1775,9 @@ class IC_Chain:
             for k, h in ric.hedra.items():
                 hedra[k] = h
 
-        atomSet: Set[AtomKey] = set()
-        bondDict: Dict = {}  # set()
-        hedraSet: Set[EKT] = set()
+        atomSet: set[AtomKey] = set()
+        bondDict: dict = {}  # set()
+        hedraSet: set[EKT] = set()
         ndx = 0
         hedraNdx = {}
 
@@ -2574,21 +2574,21 @@ class IC_Residue:
         self.residue = parent
         self.cic: IC_Chain
         # dict of hedron objects indexed by hedron keys
-        self.hedra: Dict[HKT, Hedron] = {}
+        self.hedra: dict[HKT, Hedron] = {}
         # dict of dihedron objects indexed by dihedron keys
-        self.dihedra: Dict[DKT, Dihedron] = {}
+        self.dihedra: dict[DKT, Dihedron] = {}
         # cache of AtomKey results for rak()
-        self.akc: Dict[Union[str, Atom], AtomKey] = {}
+        self.akc: dict[Union[str, Atom], AtomKey] = {}
         # set of AtomKeys involved in dihedra, used by split_akl,
         # build_rak_cache.  Built by __init__ for XYZ (PDB coord) input,
         # _link_dihedra for PIC input
-        self.ak_set: Set[AtomKey] = set()
+        self.ak_set: set[AtomKey] = set()
         # reference to adjacent residues in chain
-        self.rprev: List[IC_Residue] = []
-        self.rnext: List[IC_Residue] = []
+        self.rprev: list[IC_Residue] = []
+        self.rnext: list[IC_Residue] = []
         # bfactors copied from PDB file
-        self.bfactors: Dict[str, float] = {}
-        self.alt_ids: Union[List[str], None] = None if IC_Residue.no_altloc else []
+        self.bfactors: dict[str, float] = {}
+        self.alt_ids: Union[list[str], None] = None if IC_Residue.no_altloc else []
         self.is20AA = True
         self.isAccept = True
         # self.NCaCKey Set by _link_dihedra()
@@ -2751,7 +2751,7 @@ class IC_Residue:
             elif h.e_class == "CACO":
                 h.hbond_2 = True
 
-    def _default_startpos(self) -> Dict["AtomKey", np.array]:
+    def _default_startpos(self) -> dict["AtomKey", np.array]:
         """Generate default N-Ca-C coordinates to build this residue from."""
         atomCoords = {}
         cic = self.cic
@@ -2768,7 +2768,7 @@ class IC_Residue:
                 # cic.atomArrayValid[cic.atomArrayIndex[a]] = True
         return atomCoords
 
-    def _get_startpos(self) -> Dict["AtomKey", np.array]:
+    def _get_startpos(self) -> dict["AtomKey", np.array]:
         """Find N-Ca-C coordinates to build this residue from."""
         # only used by assemble()
         startPos = {}
@@ -2794,7 +2794,7 @@ class IC_Residue:
         self,
         resetLocation: bool = False,
         verbose: bool = False,
-    ) -> Union[Dict["AtomKey", np.array], Dict[HKT, np.array], None]:
+    ) -> Union[dict["AtomKey", np.array], dict[HKT, np.array], None]:
         """Compute atom coordinates for this residue from internal coordinates.
 
         This is the IC_Residue part of the :meth:`.assemble_residues_ser` serial
@@ -2998,9 +2998,9 @@ class IC_Residue:
 
     def split_akl(
         self,
-        lst: Union[Tuple["AtomKey", ...], List["AtomKey"]],
+        lst: Union[tuple["AtomKey", ...], list["AtomKey"]],
         missingOK: bool = False,
-    ) -> List[Tuple["AtomKey", ...]]:
+    ) -> list[tuple["AtomKey", ...]]:
         """Get AtomKeys for this residue (ak_set) for generic list of AtomKeys.
 
         Changes and/or expands a list of 'generic' AtomKeys (e.g. 'N, C, C') to
@@ -3029,9 +3029,9 @@ class IC_Residue:
         # given a list of AtomKeys
         #  form a new list of same atomkeys with coords or diheds in this residue
         #      plus lists of matching altloc atomkeys in coords or diheds
-        edraLst: List[Tuple[AtomKey, ...]] = []
+        edraLst: list[tuple[AtomKey, ...]] = []
         altlocs = set()
-        posnAltlocs: Dict["AtomKey", Set[str]] = {}
+        posnAltlocs: dict["AtomKey", set[str]] = {}
         akMap = {}
         for ak in lst:
             posnAltlocs[ak] = set()
@@ -3100,7 +3100,7 @@ class IC_Residue:
             # print(new_edraLst)
             return new_edraLst
 
-    def _gen_edra(self, lst: Union[Tuple["AtomKey", ...], List["AtomKey"]]) -> None:
+    def _gen_edra(self, lst: Union[tuple["AtomKey", ...], list["AtomKey"]]) -> None:
         """Populate hedra/dihedra given edron ID tuple.
 
         Given list of AtomKeys defining hedron or dihedron
@@ -3120,7 +3120,7 @@ class IC_Residue:
         else:
             cdct, dct, obj = self.cic.dihedra, self.dihedra, Dihedron  # type: ignore # noqa
 
-        if isinstance(lst, List):
+        if isinstance(lst, list):
             tlst = tuple(lst)
         else:
             tlst = lst
@@ -3425,7 +3425,7 @@ class IC_Residue:
     picFlagsDict = pic_flags._asdict()
     """Dictionary of pic_flags values to use as needed."""
 
-    def _write_pic_bfac(self, atm: Atom, s: str, col: int) -> Tuple[str, int]:
+    def _write_pic_bfac(self, atm: Atom, s: str, col: int) -> tuple[str, int]:
         ak = self.rak(atm)
         if 0 == col % 5:
             s += "BFAC:"
@@ -3550,7 +3550,7 @@ class IC_Residue:
 
         return s
 
-    def _get_ak_tuple(self, ak_str: str) -> Optional[Tuple["AtomKey", ...]]:
+    def _get_ak_tuple(self, ak_str: str) -> Optional[tuple["AtomKey", ...]]:
         """Convert atom pair string to AtomKey tuple.
 
         :param str ak_str:
@@ -3799,7 +3799,7 @@ class IC_Residue:
 
     def pick_length(
         self, ak_spec: Union[str, BKT]
-    ) -> Tuple[Optional[List["Hedron"]], Optional[BKT]]:
+    ) -> tuple[Optional[list["Hedron"]], Optional[BKT]]:
         """Get list of hedra containing specified atom pair.
 
         :param ak_spec:
@@ -3829,7 +3829,7 @@ class IC_Residue:
         :return: list of hedra containing specified atom pair as tuples of
                 AtomKeys
         """
-        rlst: List[Hedron] = []
+        rlst: list[Hedron] = []
         # if ":" in ak_spec:
         if isinstance(ak_spec, str):
             ak_spec = cast(BKT, self._get_ak_tuple(ak_spec))
@@ -3949,7 +3949,7 @@ class Edron:
     Dihedron objects"""
 
     @staticmethod
-    def gen_key(lst: List["AtomKey"]) -> str:
+    def gen_key(lst: list["AtomKey"]) -> str:
         """Generate string of ':'-joined AtomKey strings from input.
 
         Generate '2_A_C:3_P_N:3_P_CA' from (2_A_C, 3_P_N, 3_P_CA)
@@ -3961,7 +3961,7 @@ class Edron:
             return f"{lst[0].id}:{lst[1].id}:{lst[2].id}"
 
     @staticmethod
-    def gen_tuple(akstr: str) -> Tuple:
+    def gen_tuple(akstr: str) -> tuple:
         """Generate AtomKey tuple for ':'-joined AtomKey string.
 
         Generate (2_A_C, 3_P_N, 3_P_CA) from '2_A_C:3_P_N:3_P_CA'
@@ -3970,7 +3970,7 @@ class Edron:
         return tuple([AtomKey(i) for i in akstr.split(":")])
 
     # @profile
-    def __init__(self, *args: Union[List["AtomKey"], EKT], **kwargs: str) -> None:
+    def __init__(self, *args: Union[list["AtomKey"], EKT], **kwargs: str) -> None:
         """Initialize Edron with sequence of AtomKeys.
 
         Acceptable input:
@@ -3979,7 +3979,7 @@ class Edron:
             AtomKey, ...      : sequence of AtomKeys as args
             {'a1': str, 'a2': str, ... }  : dict of AtomKeys as 'a1', 'a2' ...
         """
-        atomkeys: List[AtomKey] = []
+        atomkeys: list[AtomKey] = []
         for arg in args:
             if isinstance(arg, list):
                 atomkeys = arg
@@ -4057,7 +4057,7 @@ class Edron:
         """Hash calculated at init from atomkeys tuple."""
         return self._hash
 
-    def _cmp(self, other: "Edron") -> Union[Tuple["AtomKey", "AtomKey"], bool]:
+    def _cmp(self, other: "Edron") -> Union[tuple["AtomKey", "AtomKey"], bool]:
         """Comparison function ranking self vs. other; False on equal.
 
         Priority is lowest value for sort: psi < chi1.
@@ -4085,7 +4085,7 @@ class Edron:
             return NotImplemented
         rslt = self._cmp(other)
         if rslt:
-            rslt = cast(Tuple[AtomKey, AtomKey], rslt)
+            rslt = cast(tuple[AtomKey, AtomKey], rslt)
             return rslt[0] > rslt[1]
         return False
 
@@ -4095,7 +4095,7 @@ class Edron:
             return NotImplemented
         rslt = self._cmp(other)
         if rslt:
-            rslt = cast(Tuple[AtomKey, AtomKey], rslt)
+            rslt = cast(tuple[AtomKey, AtomKey], rslt)
             return rslt[0] >= rslt[1]
         return True
 
@@ -4105,7 +4105,7 @@ class Edron:
             return NotImplemented
         rslt = self._cmp(other)
         if rslt:
-            rslt = cast(Tuple[AtomKey, AtomKey], rslt)
+            rslt = cast(tuple[AtomKey, AtomKey], rslt)
             return rslt[0] < rslt[1]
         return False
 
@@ -4115,7 +4115,7 @@ class Edron:
             return NotImplemented
         rslt = self._cmp(other)
         if rslt:
-            rslt = cast(Tuple[AtomKey, AtomKey], rslt)
+            rslt = cast(tuple[AtomKey, AtomKey], rslt)
             return rslt[0] <= rslt[1]
         return True
 
@@ -4151,7 +4151,7 @@ class Hedron(Edron):
         setters for relevant attributes (angle in degrees)
     """
 
-    def __init__(self, *args: Union[List["AtomKey"], HKT], **kwargs: str) -> None:
+    def __init__(self, *args: Union[list["AtomKey"], HKT], **kwargs: str) -> None:
         """Initialize Hedron with sequence of AtomKeys, kwargs.
 
         Acceptable input:
@@ -4302,7 +4302,7 @@ class Dihedron(Edron):
         return :data:`IC_Residue.pic_flags` bitmask for dihedron psi, omega, etc
     """
 
-    def __init__(self, *args: Union[List["AtomKey"], DKT], **kwargs: str) -> None:
+    def __init__(self, *args: Union[list["AtomKey"], DKT], **kwargs: str) -> None:
         """Init Dihedron with sequence of AtomKeys and optional dihedral angle.
 
         Acceptable input:
@@ -4372,7 +4372,7 @@ class Dihedron(Edron):
         else:
             self.primary = False
 
-    def _set_hedra(self) -> Tuple[bool, Hedron, Hedron]:
+    def _set_hedra(self) -> tuple[bool, Hedron, Hedron]:
         """Work out hedra keys and set rev flag."""
         try:
             return self.rev, self.hedron1, self.hedron2
@@ -4470,7 +4470,7 @@ class Dihedron(Edron):
         return 180.0 - ((180.0 - a2) + a1) % 360.0
 
     @staticmethod
-    def angle_avg(alst: List, in_rads: bool = False, out_rads: bool = False):
+    def angle_avg(alst: list, in_rads: bool = False, out_rads: bool = False):
         """Get average of list of +/-180 angles.
 
         :param List alst: list of angles to average
@@ -4482,7 +4482,7 @@ class Dihedron(Edron):
         return ravg if out_rads else np.rad2deg(ravg)
 
     @staticmethod
-    def angle_pop_sd(alst: List, avg: float):
+    def angle_pop_sd(alst: list, avg: float):
         """Get population standard deviation for list of +/-180 angles.
 
         should be sample std dev but avoid len(alst)=1 -> div by 0
@@ -4619,7 +4619,7 @@ class AtomKey:
     """Set True to convert D Deuterium to H Hydrogen on input."""
 
     def __init__(
-        self, *args: Union[IC_Residue, Atom, List, Dict, str], **kwargs: str
+        self, *args: Union[IC_Residue, Atom, list, dict, str], **kwargs: str
     ) -> None:
         """Initialize AtomKey with residue and atom data.
 
@@ -4633,7 +4633,7 @@ class AtomKey:
             (respos: 52, icode: None, atm: 'CA', ...) : kwargs with fieldNames
             52_G_CA, 52B_G_CA, 52_G_CA_0.33, 52_G_CA_B_0.33  : id strings
         """
-        akl: List[Optional[str]] = []
+        akl: list[Optional[str]] = []
         self.ric = None
 
         for arg in args:
@@ -4797,7 +4797,7 @@ class AtomKey:
                 return "Hsb" if akl[atmNdx][0] == "H" else None
 
     # @profile
-    def _cmp(self, other: "AtomKey") -> Tuple[int, int]:
+    def _cmp(self, other: "AtomKey") -> tuple[int, int]:
         """Comparison function ranking self vs. other.
 
         Priority is lower value, i.e. (CA, CB) gives (0, 1) for sorting.
