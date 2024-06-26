@@ -6,10 +6,22 @@ releases go first, then code (modules, methods, functions). Newest first.
 Python
 ======
 
+Python 3.12
+-----------
+First supported in release 1.81 (wheels added to PyPI after the release).
+
+Python 3.11
+-----------
+First supported in release 1.79 (wheels added to PyPI after the release).
+
+Python 3.10
+-----------
+First supported in release 1.79 (wheels added to PyPI after the release).
+
 Python 3.9
 ----------
-First supported in release 1.79, although it was mostly working in 1.78.
-Support deprecated as of Release 1.84.
+First supported in release 1.79, although it was mostly working in 1.78 and
+wheels for that were released on PyPI. Support deprecated as of Release 1.84.
 
 Python 3.8
 ----------
