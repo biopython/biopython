@@ -32,8 +32,6 @@ For dealing with biological information, the package expects Biopython objects
 like SeqFeatures.
 """
 
-# ReportLab imports
-
 from itertools import islice
 from math import cos
 from math import pi

@@ -33,7 +33,6 @@ This provides nice output in PDF, SVG and postscript.  If you have
 reportlab's renderPM module installed you can also use PNG etc.
 """
 
-# reportlab
 from reportlab.graphics.shapes import ArcPath
 from reportlab.graphics.shapes import Drawing
 from reportlab.graphics.shapes import Line

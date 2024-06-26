@@ -10,8 +10,6 @@ import re
 from io import StringIO
 from itertools import zip_longest
 from typing import Any
-
-# for typing
 from typing import Dict
 from typing import Tuple
 from typing import Union

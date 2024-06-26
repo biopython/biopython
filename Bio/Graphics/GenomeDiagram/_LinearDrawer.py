@@ -20,8 +20,6 @@ For drawing capabilities, this module uses reportlab to draw and write
 the diagram: http://www.reportlab.com
 """
 
-# ReportLab imports
-
 from math import ceil
 
 from reportlab.graphics.shapes import Drawing
@@ -32,8 +30,6 @@ from reportlab.graphics.shapes import String
 from reportlab.lib import colors
 
 from ._AbstractDrawer import _stroke_and_fill_colors
-
-# GenomeDiagram imports
 from ._AbstractDrawer import AbstractDrawer
 from ._AbstractDrawer import angle2trig
 from ._AbstractDrawer import deduplicate
