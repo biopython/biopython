@@ -8,14 +8,9 @@
 import os
 import warnings
 
-# Exceptions and Warnings
 from Bio import BiopythonWarning
-
-# Allowed Elements
 from Bio.Data.IUPACData import atom_weights
 from Bio.PDB.PDBExceptions import PDBIOException
-
-# To allow saving of chains, residues, etc..
 from Bio.PDB.StructureBuilder import StructureBuilder
 
 _ATOM_FORMAT_STRING = (

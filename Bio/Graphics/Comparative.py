@@ -11,7 +11,6 @@ compare different types of information. The most basic example is comparing
 two variables in a traditional scatter plot.
 """
 
-# reportlab
 from reportlab.graphics.charts.lineplots import LinePlot
 from reportlab.graphics.charts.markers import makeEmptyCircle
 from reportlab.graphics.charts.markers import makeEmptySquare

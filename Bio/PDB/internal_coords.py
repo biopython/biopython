@@ -271,13 +271,9 @@ import copy
 import re
 from collections import deque
 from collections import namedtuple
-
-# from numpy import floor, ndarray
 from numbers import Integral
 from typing import cast
 from typing import Dict
-
-# for type checking only
 from typing import List
 from typing import Optional
 from typing import Set

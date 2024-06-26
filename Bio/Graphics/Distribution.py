@@ -14,7 +14,6 @@ or anything similar.
 Reportlab is used for producing the graphical output.
 """
 
-# standard library
 import math
 
 from reportlab.graphics.charts.barcharts import BarChartProperties
@@ -23,8 +22,6 @@ from reportlab.graphics.shapes import Drawing
 from reportlab.graphics.shapes import String
 from reportlab.graphics.widgetbase import TypedPropertyCollection
 from reportlab.lib import colors
-
-# reportlab
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
 

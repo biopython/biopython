@@ -21,8 +21,6 @@ For drawing capabilities, this module uses reportlab to draw and write
 the diagram: http://www.reportlab.com
 """
 
-# ReportLab imports
-
 from math import sqrt
 
 from reportlab.lib import colors

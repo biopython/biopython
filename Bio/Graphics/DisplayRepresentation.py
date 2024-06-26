@@ -10,10 +10,8 @@ Classes in this module are designed to hold information in a way that
 makes it easy to draw graphical figures.
 """
 
-# reportlab
 from reportlab.lib import colors
 
-# local stuff
 from Bio.Graphics.BasicChromosome import ChromosomeSegment
 from Bio.Graphics.BasicChromosome import TelomereSegment
 

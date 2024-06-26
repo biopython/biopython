@@ -13,8 +13,6 @@
 
 """CircularDrawer module for GenomeDiagram."""
 
-# ReportLab imports
-
 from math import cos
 from math import pi
 from math import sin
@@ -29,8 +27,6 @@ from reportlab.graphics.shapes import String
 from reportlab.lib import colors
 
 from ._AbstractDrawer import _stroke_and_fill_colors
-
-# GenomeDiagram imports
 from ._AbstractDrawer import AbstractDrawer
 from ._AbstractDrawer import draw_polygon
 from ._AbstractDrawer import intermediate_points

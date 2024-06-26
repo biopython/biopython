@@ -49,8 +49,6 @@ from Bio.SeqFeature import SeqFeature
 from Bio.SeqFeature import SimpleLocation
 
 from .Scanner import GenBankScanner
-
-# other Bio.GenBank stuff
 from .utils import FeatureValueCleaner
 
 # Constants used to parse GenBank header lines
