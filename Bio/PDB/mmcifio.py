@@ -148,6 +148,8 @@ class MMCIFIO(StructureIO):
         # Write out top data_ line
         if data_val:
             out_file.write("data_" + data_val + "\n#\n")
+        else:
+            out_file.write("data_" + "\n#\n")
 
         for key, key_list in key_lists.items():
             # Pick a sample mmCIF value, which can be a list or a single value

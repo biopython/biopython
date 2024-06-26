@@ -400,7 +400,7 @@ sequences are normally read from the 5’ to 3’ direction, while in the
 figure the template strand is shown reversed.
 
 Now let’s transcribe the coding strand into the corresponding mRNA,
-using the ``Seq`` object’s built in ``transcribe`` method:
+using the ``Seq`` object’s built-in ``transcribe`` method:
 
 .. cont-doctest
 

@@ -105,7 +105,7 @@ For this discussion, we’ll use the GenBank file for the pPCP1 plasmid
 from *Yersinia pestis biovar Microtus*. The file is included with the
 Biopython unit tests under the GenBank folder, or you can get it from
 our website,
-```NC_005816.gb`` <https://raw.githubusercontent.com/biopython/biopython/master/Tests/GenBank/NC_005816.gb>`__.
+`NC_005816.gb <https://raw.githubusercontent.com/biopython/biopython/master/Tests/GenBank/NC_005816.gb>`__.
 This file contains one and only one record, so we can read it in as a
 ``SeqRecord`` using the ``Bio.SeqIO.read()`` function:
 
@@ -117,7 +117,7 @@ This file contains one and only one record, so we can read it in as a
    >>> original_rec = SeqIO.read("NC_005816.gb", "genbank")
 
 So, how can we generate a shuffled versions of the original sequence? I
-would use the built in Python ``random`` module for this, in particular
+would use the built-in Python ``random`` module for this, in particular
 the function ``random.shuffle`` – but this works on a Python list. Our
 sequence is a ``Seq`` object, so in order to shuffle it we need to turn
 it into a list:
@@ -761,8 +761,7 @@ variants are very different from the original FASTQ standard as used by
 Sanger, the NCBI, and elsewhere (format name ``fastq`` or
 ``fastq-sanger``).
 
-For more details, see the built in help (also
-`online <http://www.biopython.org/docs/\bpversion/api/Bio.SeqIO.QualityIO.html>`__):
+For more details, see the built-in help (also at :py:mod:`Bio.SeqIO.QualityIO`):
 
 .. code:: pycon
 
@@ -924,7 +923,7 @@ line (but currently FASTQ output is not supported), e.g.
 The way Biopython uses mixed case sequence strings to represent the
 trimming points deliberately mimics what the Roche tools do.
 
-For more information on the Biopython SFF support, consult the built in
+For more information on the Biopython SFF support, consult the built-in
 help:
 
 .. code:: pycon
@@ -949,7 +948,7 @@ To show how you might approach this with Biopython, we’ll need a
 sequence to search, and as an example we’ll again use the bacterial
 plasmid – although this time we’ll start with a plain FASTA file with no
 pre-marked genes:
-```NC_005816.fna`` <https://raw.githubusercontent.com/biopython/biopython/master/Tests/GenBank/NC_005816.fna>`__.
+`NC_005816.fna <https://raw.githubusercontent.com/biopython/biopython/master/Tests/GenBank/NC_005816.fna>`__.
 This is a bacterial sequence, so we’ll want to use NCBI codon table 11
 (see Section :ref:`sec:translation` about
 translation).

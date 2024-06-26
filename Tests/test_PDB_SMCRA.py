@@ -159,6 +159,14 @@ class SortingTests(unittest.TestCase):
             structure2.strictly_equals(structure)
         )  # Strict equality should be symmetric
 
+        # Modify an atom
+        structure2[0]["A"][(" ", 200, " ")]["CA"].name = "AC"
+
+        self.assertFalse(structure.strictly_equals(structure2))
+        self.assertFalse(
+            structure2.strictly_equals(structure)
+        )  # Strict equality should be symmetric
+
         # Remove a chain from a model in the structure
         structure2[0].detach_child("A")
 

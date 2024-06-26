@@ -323,6 +323,29 @@ class MMCIF2dictTests(unittest.TestCase):
         )
         self.assertNotEqual(mmcif_dict, mmcif_dict2)
 
+    def test_file_not_starting_with_data_raises_error(self):
+        test_data = """\
+            error_test
+            _test_key_value foo # Ignore this comment
+            loop_
+            _test_loop
+            a b c d # Ignore this comment
+            e f g
+
+        """
+        test_data2 = """\
+            data error_test_data_
+            _test_key_value foo # Ignore this comment
+            loop_
+            _test_loop
+            a b c d # Ignore this comment
+            e f g
+        """
+        file = io.StringIO(textwrap.dedent(test_data))
+        file2 = io.StringIO(textwrap.dedent(test_data2))
+        self.assertRaises(ValueError, MMCIF2Dict, file)
+        self.assertRaises(ValueError, MMCIF2Dict, file2)
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

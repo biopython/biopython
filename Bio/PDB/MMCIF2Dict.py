@@ -31,6 +31,10 @@ class MMCIF2Dict(dict):
             except StopIteration:
                 return  # for Python 3.7 and PEP 479
             self[token[0:5]] = token[5:]
+            if not token[0:5].startswith("data_"):
+                raise ValueError(
+                    "The input mmCIF file must begin with a 'data_' directive."
+                )
             i = 0
             n = 0
             for token in tokens:

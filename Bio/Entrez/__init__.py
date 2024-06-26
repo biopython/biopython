@@ -142,6 +142,7 @@ max_tries = 3
 sleep_between_tries = 15
 tool = "biopython"
 api_key = None
+local_cache = None
 
 
 # XXX retmode?
@@ -358,12 +359,12 @@ def egquery(**keywds):
 
     >>> from Bio import Entrez
     >>> Entrez.email = "Your.Name.Here@example.org"
-    >>> handle = Entrez.egquery(term="biopython")
-    >>> record = Entrez.read(handle)
-    >>> handle.close()
-    >>> for row in record["eGQueryResult"]:
-    ...     if "pmc" in row["DbName"]:
-    ...         print(int(row["Count"]) > 60)
+    >>> handle = Entrez.egquery(term="biopython")  # doctest: +SKIP
+    >>> record = Entrez.read(handle)  # doctest: +SKIP
+    >>> handle.close()  # doctest: +SKIP
+    >>> for row in record["eGQueryResult"]:  # doctest: +SKIP
+    ...     if "pmc" in row["DbName"]:  # doctest: +SKIP
+    ...         print(int(row["Count"]) > 60)  # doctest: +SKIP
     True
 
     :returns: Handle to the results, by default in XML format.

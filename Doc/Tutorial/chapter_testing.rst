@@ -320,7 +320,7 @@ In general instead include the docstring tests by adding them to the
 Writing doctests
 ----------------
 
-Python modules, classes and functions support built in documentation
+Python modules, classes and functions support built-in documentation
 using docstrings. The `doctest
 framework <https://docs.python.org/3/library/doctest.html>`__ (included
 with Python) allows the developer to embed working examples in the

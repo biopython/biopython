@@ -42,7 +42,7 @@ or `DuctApe <https://combogenomics.github.io/DuctApe/>`__. The parser
 will return one or a generator of PlateRecord objects, depending on
 whether the read or parse method is being used. You can test the parse
 function by using the
-```Plates.csv`` <https://github.com/biopython/biopython/blob/master/Doc/examples/Plates.csv>`__
+`Plates.csv <https://github.com/biopython/biopython/blob/master/Doc/examples/Plates.csv>`__
 file provided with the Biopython source code.
 
 .. doctest examples lib:numpy

@@ -22,7 +22,7 @@ save it.
 
 Create a simple Newick file named ``simple.dnd`` using your favorite
 text editor, or use
-```simple.dnd`` <https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/simple.dnd>`__
+`simple.dnd <https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/simple.dnd>`__
 provided with the Biopython source code:
 
 .. code:: text

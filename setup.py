@@ -31,13 +31,21 @@ try:
     from setuptools import setup
     from setuptools import Command
     from setuptools import Extension
+    from setuptools import __version__ as setuptools_version
 except ImportError:
     sys.exit(
         "We need the Python library setuptools to be installed. "
         "Try running: python -m ensurepip"
     )
 
-if "bdist_wheel" in sys.argv:
+
+setuptools_version_tuple = tuple(int(x) for x in setuptools_version.split("."))
+if setuptools_version_tuple < (70, 1) and "bdist_wheel" in sys.argv:
+    # Check for presence of wheel in setuptools < 70.1
+    # Before setuptools 70.1, wheel is needed to make a bdist_wheel.
+    # Since 70.1 was released including
+    # https://github.com/pypa/setuptools/pull/4369,
+    # it is not needed.
     try:
         import wheel  # noqa: F401
     except ImportError:
@@ -186,15 +194,16 @@ PACKAGES = [
 EXTENSIONS = [
     Extension("Bio.Align._codonaligner", ["Bio/Align/_codonaligner.c"]),
     Extension("Bio.Align._pairwisealigner", ["Bio/Align/_pairwisealigner.c"]),
-    Extension("Bio.Align._parser", ["Bio/Align/_parser.c"]),
+    Extension("Bio.Align._aligncore", ["Bio/Align/_aligncore.c"]),
     Extension("Bio.cpairwise2", ["Bio/cpairwise2module.c"]),
     Extension("Bio.Nexus.cnexus", ["Bio/Nexus/cnexus.c"]),
     Extension("Bio.motifs._pwm", ["Bio/motifs/_pwm.c"]),
     Extension(
         "Bio.Cluster._cluster", ["Bio/Cluster/cluster.c", "Bio/Cluster/clustermodule.c"]
     ),
-    Extension("Bio.PDB.kdtrees", ["Bio/PDB/kdtrees.c"]),
     Extension("Bio.PDB.ccealign", ["Bio/PDB/ccealignmodule.c"]),
+    Extension("Bio.PDB.kdtrees", ["Bio/PDB/kdtrees.c"]),
+    Extension("Bio.PDB._bcif_helper", ["Bio/PDB/bcifhelpermodule.c"]),
     Extension("Bio.SeqIO._twoBitIO", ["Bio/SeqIO/_twoBitIO.c"]),
 ]
 

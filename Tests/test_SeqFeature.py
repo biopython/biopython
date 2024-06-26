@@ -367,14 +367,14 @@ class TestExtract(unittest.TestCase):
                 "join{[0:2](-), [3:4](-)}",
             )
 
-        # Origin-spanning location containing the entire sequence
-        self.assertEqual(
-            str(SimpleLocation.fromstring("3..2", 4, True)), "join{[2:4], [0:2]}"
-        )
-        self.assertEqual(
-            str(SimpleLocation.fromstring("complement(3..2)", 4, True)),
-            "join{[0:2](-), [2:4](-)}",
-        )
+            # Origin-spanning location containing the entire sequence
+            self.assertEqual(
+                str(SimpleLocation.fromstring("3..2", 4, True)), "join{[2:4], [0:2]}"
+            )
+            self.assertEqual(
+                str(SimpleLocation.fromstring("complement(3..2)", 4, True)),
+                "join{[0:2](-), [2:4](-)}",
+            )
 
 
 if __name__ == "__main__":

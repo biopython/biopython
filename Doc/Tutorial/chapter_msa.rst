@@ -224,9 +224,8 @@ With any supported file format, you can load an alignment in exactly the
 same way just by changing the format string. For example, use “phylip”
 for PHYLIP files, “nexus” for NEXUS files or “emboss” for the alignments
 output by the EMBOSS tools. There is a full listing on the wiki page
-(http://biopython.org/wiki/AlignIO) and in the built-in documentation
-(also
-`online <http://biopython.org/docs/\bpversion/api/Bio.AlignIO.html>`__):
+(http://biopython.org/wiki/AlignIO) and in the built-in documentation,
+:py:mod:`Bio.AlignIO`:
 
 .. code:: pycon
 

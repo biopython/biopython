@@ -33,7 +33,6 @@ except ImportError:
 
 # Get a Structure object from a PDB file
 from .PDBParser import PDBParser
-
 from .MMCIFParser import MMCIFParser
 from .MMCIFParser import FastMMCIFParser
 from .PDBMLParser import PDBMLParser

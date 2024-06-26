@@ -13,8 +13,8 @@ The latest news is at the top of this file.
 (In progress, not yet released): Biopython 1.84
 ===============================================
 
-This release of Biopython supports Python 3.8, 3.9, 3.10, 3.11 and 3.12. It
-has also been tested on PyPy3.9 v7.3.13. Python 3.8 is approaching end of
+This release of Biopython supports Python 3.9, 3.10, 3.11 and 3.12. It
+has also been tested on PyPy3.9 v7.3.13. Python 3.9 is approaching end of
 life, our support for it is now deprecated.
 
 Our main documentation, the Biopython Tutorial and Cookbook, has been
@@ -29,16 +29,17 @@ warnings.
 Bio.Blast contains a new parser for BLAST XML output as a replacement for the
 old parser in Bio.Blast.NCBIXML. The main differences between the parsers is
 as follows:
-- The old parser stores information in a Bio.Blast.NCBIXML.Blast object, with
-attribute names based on plain-text Blast output. The new parser stores
-information in a Bio.Blast.Record object. This class follows the DTD that
-describes the XML in terms of attribute names and dictionary key names, class
-structure, and object types. This makes it easier to find the detailed
-description of each field in the NCBI Blast documentation.
-- The old parser stores alignment information directly as seen in the BLAST XML
-output, i.e. as strings with dashes to represent gaps. The new parser stores
-the alignment information as a Bio.Align.Alignment object, which can then be
-used to e.g. print the alignment in a different format.
+
+* The old parser stores information in a Bio.Blast.NCBIXML.Blast object, with
+  attribute names based on plain-text Blast output. The new parser stores
+  information in a Bio.Blast.Record object. This class follows the DTD that
+  describes the XML in terms of attribute names and dictionary key names,
+  class structure, and object types. This makes it easier to find the detailed
+  description of each field in the NCBI Blast documentation.
+* The old parser stores alignment information directly as seen in the BLAST XML
+  output, i.e. as strings with dashes to represent gaps. The new parser stores
+  the alignment information as a Bio.Align.Alignment object, which can then be
+  used to e.g. print the alignment in a different format.
 
 Bio.Blast also contains a new qblast function as a replacement for the old
 qblast function in Bio.Blast.NCBIWWW. The main difference is that the old
@@ -54,6 +55,11 @@ A function called ``Bio.Phylo.to_igraph`` has been added to convert a
 ``Bio.Phylo.Tree`` into an ``igraph.Graph`` graph, in parallel to the existing
 function to convert the same object into a ``networkx`` graph.
 
+The PDB module's CE Align code for pairwise structure alignment was cleaned up,
+and the improved CE align code now considers more alignments and selects one of
+the longer alignments with the smallest RMSD. As a result, users may find
+alignments with slightly smaller RMSDs when using CE Align.
+
 The PDB module no longer uses the PDB FTP server by default.
 Instead, the PDB module uses the HTTPS server in most cases.
 For ``get_all_assemblies``, the PDB module now uses the
@@ -66,6 +72,12 @@ server by the end of the year. See the announcement
 A parser has been added for parsing PDBML (PDB XML) files.
 `PDBML <https://pdbml.wwpdb.org/>`_ is a representation of PDB data in XML format.
 The PDB chapter of the tutorial is updated to show how to use the PDBML parser.
+
+Additionally, a parser has been added for BinaryCIF files.
+BinaryCIF is a compact, binary representation of CIF data.
+The PDB tutorial is updated to show how to use the BinaryCIF parser.
+The RCSB PDB recommends that users switch from MMTF to BinaryCIF.
+See the `announcement <https://www.rcsb.org/news/feature/65a1af31c76ca3abcc925d0c>`_.
 
 Bio.PDB Structure objects will now issue a warning - instead of an exception - when
 two children (e.g. residues) have identical IDs. This can be useful in some
@@ -94,6 +106,8 @@ Updated ``Bio.Restriction`` to the April 2024 release of REBASE.
 A bug in ``bgzf`` was resolved, restoring the ability to pass a file handle
 directly to ``BgzfWriter``.
 
+``Bio.Entrez.local_cache`` can be set to a directory for caching downloaded DTD/XSD files.
+
 As in recent releases, more of our code is now explicitly available under
 either our original "Biopython License Agreement", or the very similar but
 more commonly used "3-Clause BSD License".  See the ``LICENSE.rst`` file for
@@ -108,6 +122,7 @@ possible, especially the following contributors:
 - Joao Rodrigues
 - Judith Bernett (first contribution)
 - Luca Monari (first contribution)
+- Meridia Jane Bryant (first contribution)
 - Michael M. (first contribution)
 - Michiel de Hoon
 - Peter Cock
