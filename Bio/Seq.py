@@ -2133,7 +2133,7 @@ class Seq(_SeqAbstractBaseClass):
                 current = 0  # not needed here, but it keeps mypy happy
                 end = -1
                 starts = sorted(data.keys())
-                _data: Dict[int, bytes] = {}
+                _data: dict[int, bytes] = {}
                 for start in starts:
                     seq = data[start]
                     if isinstance(seq, str):

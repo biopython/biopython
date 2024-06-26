@@ -38,7 +38,7 @@ def _get_next_link(response: HTTPResponse) -> Optional[str]:
     return None
 
 
-def _get_results(response: HTTPResponse) -> List[dict]:
+def _get_results(response: HTTPResponse) -> list[dict]:
     return json.loads(response.read().decode())["results"]
 
 
@@ -66,7 +66,7 @@ class _UniProtSearchResults:
 
     def __init__(self, first_url: str):
         self.next_url = first_url
-        self.results_cache: List[dict] = []
+        self.results_cache: list[dict] = []
         self.next_result_index = 0
         response = self._fetch_next_batch()
         self.search_result_count = _get_search_result_count(response)
@@ -116,7 +116,7 @@ class _UniProtSearchResults:
 
 
 def search(
-    query: str, fields: Optional[List[str]] = None, batch_size: int = 500
+    query: str, fields: Optional[list[str]] = None, batch_size: int = 500
 ) -> _UniProtSearchResults:
     """Search the UniProt database.
 

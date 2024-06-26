@@ -24,7 +24,7 @@ from Bio.PDB.StructureBuilder import StructureBuilder
 
 
 def _parse_resolution_from(
-    tree: ElementTree, namespaces: Dict[str, str]
+    tree: ElementTree, namespaces: dict[str, str]
 ) -> Union[float, None]:
     for candidate in [
         "PDBx:refineCategory/PDBx:refine/PDBx:ls_d_res_high",
@@ -40,8 +40,8 @@ def _parse_resolution_from(
 
 
 def _parse_header_from(
-    tree: ElementTree, namespaces: Dict[str, str]
-) -> Dict[str, Union[str, float]]:
+    tree: ElementTree, namespaces: dict[str, str]
+) -> dict[str, Union[str, float]]:
     return {
         "name": tree.find(
             "PDBx:structCategory/PDBx:struct/PDBx:title", namespaces
@@ -64,7 +64,7 @@ def _parse_header_from(
     }
 
 
-def _parse_atom_from(element: Element, namespaces: Dict[str, str]):
+def _parse_atom_from(element: Element, namespaces: dict[str, str]):
     name = element.find("PDBx:label_atom_id", namespaces).text
     x = float(element.find("PDBx:Cartn_x", namespaces).text)
     y = float(element.find("PDBx:Cartn_y", namespaces).text)
@@ -83,8 +83,8 @@ def _parse_atom_from(element: Element, namespaces: Dict[str, str]):
 
 
 def _parse_residue_id_from(
-    element: Element, namespaces: Dict[str, str]
-) -> Tuple[str, int, str]:
+    element: Element, namespaces: dict[str, str]
+) -> tuple[str, int, str]:
     assert element.tag == f"{{{namespaces['PDBx']}}}atom_site"
     atom_group = element.find("PDBx:group_PDB", namespaces).text
     component_id = element.find("PDBx:label_comp_id", namespaces).text

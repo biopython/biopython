@@ -46,9 +46,9 @@ _BASE_URL = "http://togows.dbcls.jp"
 # Caches:
 _search_db_names = None
 _entry_db_names = None
-_entry_db_fields: Dict[str, str] = {}
-_entry_db_formats: Dict[str, str] = {}
-_convert_formats: List[str] = []
+_entry_db_fields: dict[str, str] = {}
+_entry_db_formats: dict[str, str] = {}
+_convert_formats: list[str] = []
 
 
 def _get_fields(url):

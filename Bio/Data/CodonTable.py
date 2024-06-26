@@ -50,20 +50,20 @@ class TranslationError(Exception):
 class CodonTable:
     """A codon-table, or genetic code."""
 
-    forward_table: Dict[str, str] = {}  # only includes codons which actually code
-    back_table: Dict[str, str] = {}  # for back translations
-    start_codons: List[str] = []
-    stop_codons: List[str] = []
+    forward_table: dict[str, str] = {}  # only includes codons which actually code
+    back_table: dict[str, str] = {}  # for back translations
+    start_codons: list[str] = []
+    stop_codons: list[str] = []
 
     # Not always called from derived classes!
     def __init__(
         self,
         nucleotide_alphabet: Optional[str] = None,
         protein_alphabet: Optional[str] = None,
-        forward_table: Dict[str, str] = forward_table,
-        back_table: Dict[str, str] = back_table,
-        start_codons: List[str] = start_codons,
-        stop_codons: List[str] = stop_codons,
+        forward_table: dict[str, str] = forward_table,
+        back_table: dict[str, str] = back_table,
+        start_codons: list[str] = start_codons,
+        stop_codons: list[str] = stop_codons,
     ) -> None:
         """Initialize the class."""
         self.nucleotide_alphabet = nucleotide_alphabet

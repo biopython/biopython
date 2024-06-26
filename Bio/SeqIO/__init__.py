@@ -378,7 +378,7 @@ making up each alignment as SeqRecords.
 
 from typing import Callable
 from typing import Dict
-from typing import Iterable
+from collections.abc import Iterable
 from typing import Union
 
 from Bio.File import as_handle
@@ -454,7 +454,7 @@ _FormatToIterator = {
     "xdna": XdnaIO.XdnaIterator,
 }
 
-_FormatToString: Dict[str, Callable[[SeqRecord], str]] = {
+_FormatToString: dict[str, Callable[[SeqRecord], str]] = {
     "fasta": FastaIO.as_fasta,
     "fasta-2line": FastaIO.as_fasta_2line,
     "tab": TabIO.as_tab,

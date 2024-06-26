@@ -42,8 +42,8 @@ class Entity(Generic[_Parent, _Child]):
     """
 
     parent: Optional[_Parent]
-    child_list: List[_Child]
-    child_dict: Dict[Any, _Child]
+    child_list: list[_Child]
+    child_dict: dict[Any, _Child]
     level: str
 
     def __init__(self, id):

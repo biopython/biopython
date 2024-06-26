@@ -364,11 +364,11 @@ from math import log
 from typing import Any
 from typing import Callable
 from typing import IO
-from typing import Iterator
+from collections.abc import Iterator
 from typing import List
-from typing import Mapping
+from collections.abc import Mapping
 from typing import Optional
-from typing import Sequence
+from collections.abc import Sequence
 from typing import Tuple
 from typing import Union
 
@@ -533,7 +533,7 @@ def phred_quality_from_solexa(solexa_quality: float) -> float:
     return 10 * log(10 ** (solexa_quality / 10.0) + 1, 10)
 
 
-def _get_phred_quality(record: SeqRecord) -> Union[List[float], List[int]]:
+def _get_phred_quality(record: SeqRecord) -> Union[list[float], list[int]]:
     """Extract PHRED qualities from a SeqRecord's letter_annotations (PRIVATE).
 
     If there are no PHRED qualities, but there are Solexa qualities, those are
@@ -831,7 +831,7 @@ def _get_solexa_quality_str(record: SeqRecord) -> str:
 
 
 # TODO - Default to nucleotide or even DNA?
-def FastqGeneralIterator(source: _TextIOSource) -> Iterator[Tuple[str, str, str]]:
+def FastqGeneralIterator(source: _TextIOSource) -> Iterator[tuple[str, str, str]]:
     """Iterate over Fastq records as string tuples (not as SeqRecord objects).
 
     Arguments:
@@ -1421,7 +1421,7 @@ class QualPhredIterator(SequenceIterator):
             id = descr.split()[0]
             name = id
 
-            qualities: List[int] = []
+            qualities: list[int] = []
             for line in handle:
                 if line[0] == ">":
                     break

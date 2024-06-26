@@ -32,7 +32,7 @@ from Bio.PDB.Residue import Residue
 from Bio.PDB.Structure import Structure
 
 
-def structure_rebuild_test(entity, verbose: bool = False, quick: bool = False) -> Dict:
+def structure_rebuild_test(entity, verbose: bool = False, quick: bool = False) -> dict:
     """Test rebuild PDB structure from internal coordinates.
 
     Generates internal coordinates for entity and writes to a .pic file in
@@ -73,9 +73,9 @@ def structure_rebuild_test(entity, verbose: bool = False, quick: bool = False) -
 
 def report_IC(
     entity: Union[Structure, Model, Chain, Residue],
-    reportDict: Dict[str, Any] = None,
+    reportDict: dict[str, Any] = None,
     verbose: bool = False,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Generate dict with counts of ic data elements for each entity level.
 
     reportDict entries are:
@@ -198,7 +198,7 @@ def IC_duplicate(entity) -> Structure:
     return read_PIC(sp)
 
 
-def _atmfid_d2h(atm: Atom) -> Tuple:
+def _atmfid_d2h(atm: Atom) -> tuple:
     afid = list(atm.get_full_id())
     afid4 = list(afid[4])
     afid40 = re.sub("D", "H", afid4[0], count=1)
@@ -212,7 +212,7 @@ def _cmp_atm(
     a0: Atom,
     a1: Atom,
     verbose: bool,
-    cmpdict: Dict,
+    cmpdict: dict,
     rtol: float = None,
     atol: float = None,
 ) -> None:
@@ -272,7 +272,7 @@ def _cmp_res(
     r0: Residue,
     r1: Residue,
     verbose: bool,
-    cmpdict: Dict,
+    cmpdict: dict,
     rtol: float = None,
     atol: float = None,
 ) -> None:
@@ -348,7 +348,7 @@ def compare_residues(
     quick: bool = False,
     rtol: float = None,
     atol: float = None,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Compare full IDs and atom coordinates for 2 Biopython PDB entities.
 
     Skip DNA and HETATMs.
@@ -368,7 +368,7 @@ def compare_residues(
         Full ID match atoms, and Coordinate match atoms; report string;
         error status (bool)
     """
-    cmpdict: Dict[str, Any] = {}
+    cmpdict: dict[str, Any] = {}
     cmpdict["chains"] = []  # list of chain IDs (union over both structures)
     cmpdict["residues"] = 0  # count of not HETATM residues in longest chain
     cmpdict["rCount"] = 0  # Biopython Residues (includes HETATMs, waters)

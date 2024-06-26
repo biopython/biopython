@@ -16,7 +16,7 @@ from os import PathLike
 from typing import AnyStr
 from typing import Generic
 from typing import IO
-from typing import Iterator
+from collections.abc import Iterator
 from typing import Optional
 from typing import Union
 

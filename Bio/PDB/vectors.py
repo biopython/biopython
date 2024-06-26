@@ -503,7 +503,7 @@ def _get_azimuth(x: float, y: float) -> float:
     )
 
 
-def get_spherical_coordinates(xyz: np.ndarray) -> Tuple[float, float, float]:
+def get_spherical_coordinates(xyz: np.ndarray) -> tuple[float, float, float]:
     """Compute spherical coordinates (r, azimuth, polar_angle) for X,Y,Z point.
 
     :param array xyz: column vector (3 row x 1 column NumPy array)
@@ -526,7 +526,7 @@ gmrz2 = np.identity(4, dtype=np.float64)
 
 def coord_space(
     a0: np.ndarray, a1: np.ndarray, a2: np.ndarray, rev: bool = False
-) -> Tuple[np.ndarray, Optional[np.ndarray]]:
+) -> tuple[np.ndarray, Optional[np.ndarray]]:
     """Generate transformation matrix to coordinate space defined by 3 points.
 
     New coordinate space will have:

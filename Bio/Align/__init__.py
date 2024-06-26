@@ -4253,7 +4253,7 @@ formats = (
 )
 # fmt: on
 
-_modules: Dict[str, types.ModuleType] = {}
+_modules: dict[str, types.ModuleType] = {}
 
 
 def _load(fmt: str) -> types.ModuleType:

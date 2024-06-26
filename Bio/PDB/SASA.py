@@ -18,7 +18,7 @@ Reference:
 
 import collections
 import math
-from typing import MutableMapping
+from collections.abc import MutableMapping
 
 import numpy as np
 

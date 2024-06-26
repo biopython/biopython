@@ -18,7 +18,6 @@ Note: Currently we do not support recording per-letter-annotations
 (like quality scores) in BioSQL.
 """
 
-from typing import List
 from typing import Optional
 
 from Bio import SeqFeature
@@ -543,14 +542,14 @@ class DBSeqRecord(SeqRecord):
     seq = property(__get_seq, __set_seq, __del_seq, "Seq object")
 
     @property
-    def dbxrefs(self) -> List[str]:
+    def dbxrefs(self) -> list[str]:
         """Database cross references."""
         if not hasattr(self, "_dbxrefs"):
             self._dbxrefs = _retrieve_dbxrefs(self._adaptor, self._primary_id)
         return self._dbxrefs
 
     @dbxrefs.setter
-    def dbxrefs(self, value: List[str]) -> None:
+    def dbxrefs(self, value: list[str]) -> None:
         self._dbxrefs = value
 
     @dbxrefs.deleter
