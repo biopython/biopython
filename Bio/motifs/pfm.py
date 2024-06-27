@@ -179,7 +179,7 @@ def _read_pfm_four_columns(handle):
                 if motif_nbr != 0 and motif_nbr_added != motif_nbr:
                     # Add the previous motif to the record.
                     motif = motifs.Motif(alphabet="GATC", counts=nucleotide_counts)
-                    motif.name = motif_name
+                    motif.name = motif_name if motif_name else ""
                     record.append(motif)
                     motif_nbr_added = motif_nbr
 
@@ -191,7 +191,7 @@ def _read_pfm_four_columns(handle):
                 if motif_nbr != 0 and motif_nbr_added != motif_nbr:
                     # Add the previous motif to the record.
                     motif = motifs.Motif(alphabet="GATC", counts=nucleotide_counts)
-                    motif.name = motif_name
+                    motif.name = motif_name if motif_name else ""
                     record.append(motif)
                     motif_nbr_added = motif_nbr
 
@@ -203,7 +203,7 @@ def _read_pfm_four_columns(handle):
                 if motif_nbr != 0 and motif_nbr_added != motif_nbr:
                     # Add the previous motif to the record.
                     motif = motifs.Motif(alphabet="GATC", counts=nucleotide_counts)
-                    motif.name = motif_name
+                    motif.name = motif_name if motif_name else ""
                     record.append(motif)
                     motif_nbr_added = motif_nbr
 
@@ -217,7 +217,7 @@ def _read_pfm_four_columns(handle):
                     if motif_nbr != 0 and motif_nbr_added != motif_nbr:
                         # Add the previous motif to the record.
                         motif = motifs.Motif(alphabet="GATC", counts=nucleotide_counts)
-                        motif.name = motif_name
+                        motif.name = motif_name if motif_name else ""
                         record.append(motif)
                         motif_nbr_added = motif_nbr
 
@@ -256,7 +256,7 @@ def _read_pfm_four_columns(handle):
             if motif_nbr != 0 and motif_nbr_added != motif_nbr:
                 # Add the previous motif to the record.
                 motif = motifs.Motif(alphabet="GATC", counts=nucleotide_counts)
-                motif.name = motif_name
+                motif.name = motif_name if motif_name else ""
                 record.append(motif)
                 motif_nbr_added = motif_nbr
 
@@ -266,7 +266,7 @@ def _read_pfm_four_columns(handle):
 
     if motif_nbr != 0 and motif_nbr_added != motif_nbr:
         motif = motifs.Motif(alphabet="GATC", counts=nucleotide_counts)
-        motif.name = motif_name
+        motif.name = motif_name if motif_name else ""
         record.append(motif)
 
     return record
@@ -376,8 +376,7 @@ def _read_pfm_four_rows(handle):
             if row_count == 4:
                 motif = motifs.Motif(alphabet="GATC", counts=nucleotide_counts)
 
-                if motif_name:
-                    motif.name = motif_name
+                motif.name = motif_name if motif_name else ""
 
                 record.append(motif)
 
@@ -396,8 +395,7 @@ def _read_pfm_four_rows(handle):
             if row_count == 4:
                 motif = motifs.Motif(alphabet="GATC", counts=nucleotide_counts)
 
-                if motif_name:
-                    motif.name = motif_name
+                motif.name = motif_name if motif_name else ""
 
                 record.append(motif)
 

@@ -1867,7 +1867,7 @@ class TestJASPAR(unittest.TestCase):
             record = motifs.parse(stream, "pfm-four-columns")
         self.assertEqual(len(record), 8)
         motif = record[0]
-        self.assertIsNone(motif.name)
+        self.assertEqual(motif.name, "")
         self.assertEqual(motif.length, 8)
         self.assertEqual(motif.alphabet, "GATC")
         self.assertAlmostEqual(motif.counts["G", 0], 0.009615385)
@@ -2291,7 +2291,7 @@ class TestJASPAR(unittest.TestCase):
         )
         self.assertEqual(motif[1:-2].consensus, "TTGCGT")
         motif = record[6]
-        self.assertIsNone(motif.name)
+        self.assertEqual(motif.name, "")
         self.assertEqual(motif.length, 8)
         self.assertEqual(motif.alphabet, "GATC")
         self.assertAlmostEqual(motif.counts["G", 0], 0.098612000)
@@ -2347,7 +2347,7 @@ class TestJASPAR(unittest.TestCase):
         )
         self.assertEqual(motif[1:-2].consensus, "TGACT")
         motif = record[7]
-        self.assertIsNone(motif.name)
+        self.assertEqual(motif.name, "")
         self.assertEqual(motif.length, 11)
         self.assertEqual(motif.alphabet, "GATC")
         self.assertAlmostEqual(motif.counts["G", 0], 28.0)

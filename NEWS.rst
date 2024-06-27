@@ -113,7 +113,8 @@ directly to ``BgzfWriter``.
 ``Bio.Entrez.local_cache`` can be set to a directory for caching downloaded DTD/XSD files.
 
 ``Bio.motifs`` now supports reading PFM from Cys2His2 Zinc Finger Proteins PWM
-Predictor.
+Predictor and reading motifs in ``pfm-four-columns`` format will set motif name
+to "" instead of None, when no motif name was found.
 
 As in recent releases, more of our code is now explicitly available under
 either our original "Biopython License Agreement", or the very similar but
