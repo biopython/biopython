@@ -96,13 +96,13 @@ class ParseTests(unittest.TestCase):
     test_read_apaf = _test_read_factory(EX_APAF, (1, 0))
     test_read_bcl2 = _test_read_factory(EX_BCL2, (1, 0))
     test_read_made = _test_read_factory(EX_MADE, (6, 0))
-    test_read_phylo = _test_read_factory(EX_PHYLO, (13, 1))
+    test_read_phylo = _test_read_factory(EX_PHYLO, (14, 1))
     test_read_dollo = _test_read_factory(EX_DOLLO, (1, 0))
 
     test_parse_apaf = _test_parse_factory(EX_APAF, 1)
     test_parse_bcl2 = _test_parse_factory(EX_BCL2, 1)
     test_parse_made = _test_parse_factory(EX_MADE, 6)
-    test_parse_phylo = _test_parse_factory(EX_PHYLO, 13)
+    test_parse_phylo = _test_parse_factory(EX_PHYLO, 14)
     test_parse_dollo = _test_parse_factory(EX_DOLLO, 1)
 
     # lvl-2 clades, sub-clade counts, lvl-3 clades
