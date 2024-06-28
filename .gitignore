@@ -89,11 +89,13 @@ Doc/*/*/*.toc
 Doc/*/*/*.haux
 Doc/*/*/*.htoc
 Doc/_minted-Tutorial/
+Doc/_build/
 Doc/Tutorial.txt
 Doc/Tutorial.pdf
 Doc/Tutorial.html
 Doc/Tutorial.pyg
 Doc/biopdb_faq.pdf
+Doc/Biopython_doc.pdf
 Doc/version.sh
 Doc/install/Installation.txt
 Doc/install/Installation.pdf
