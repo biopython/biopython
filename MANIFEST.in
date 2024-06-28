@@ -37,6 +37,7 @@ recursive-include Doc/images *.svg # e.g. the new logo for the Tutorial
 include Doc/examples/ls_orchid.gbk.gz
 include Doc/examples/ls_orchid.gbk.bz2
 include Doc/examples/ec_5.4.2.2.txt 
+exclude Doc/_build/
 
 # Include Bio.Cluster, Bio.Affy, Bio.phenotype
 # Note setup.py will only install these if Numpy is installed.
