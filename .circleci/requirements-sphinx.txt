@@ -4,7 +4,7 @@ numpy
 rdflib
 reportlab<4.0
 scipy
-numpydoc==1.6.0
+numpydoc==1.7.0
 pygments
-sphinx==7.2.6
+sphinx==7.3.7
 sphinx_rtd_theme==2.0.0
