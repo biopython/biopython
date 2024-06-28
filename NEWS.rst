@@ -28,11 +28,6 @@ Our main documentation, the Biopython Tutorial and Cookbook, has been
 converted from LaTeX to reStructuredText, and combined with the existing API
 documentation, into a single more modern and navigable HTML output.
 
-This release reverts the removal of the ``.strand``, ``.ref``, and ``.ref_db``
-attributes of the ``SeqFeature`` which was done without a deprecation period.
-They are again aliases for ``.location.strand`` etc, but trigger deprecation
-warnings.
-
 Bio.Blast contains a new parser for BLAST XML output as a replacement for the
 old parser in Bio.Blast.NCBIXML. The main differences between the parsers is
 as follows:
