@@ -43,7 +43,7 @@ def read(handle, pfm_format):
 def _read_pfm_four_columns(handle):
     """Read motifs in position frequency matrix format (4 columns) from a file handle.
 
-    # cisbp
+    # CIS-BP
     Pos A   C   G   T
     1   0.00961538461538462 0.00961538461538462 0.00961538461538462 0.971153846153846
     2   0.00961538461538462 0.00961538461538462 0.00961538461538462 0.971153846153846
@@ -54,7 +54,7 @@ def _read_pfm_four_columns(handle):
     7   0.00961538461538462 0.971153846153846   0.00961538461538462 0.00961538461538462
     8   0.00961538461538462 0.00961538461538462 0.00961538461538462 0.971153846153846
 
-    # c2h2 zfs
+    # C2H2-ZFs
     Gene    ENSG00000197372
     Pos A   C   G   T
     1   0.341303    0.132427    0.117054    0.409215
@@ -78,7 +78,7 @@ def _read_pfm_four_columns(handle):
     19  0.000000    1.000000    0.000000    0.000000
     20  1.000000    0.000000    0.000000    0.000000
 
-    # c2h2 zfs
+    # C2H2-ZFs
     Gene    FBgn0000210
     Motif   M1734_0.90
     Pos A   C   G   T
@@ -94,7 +94,7 @@ def _read_pfm_four_columns(handle):
     10  0.333333    0.25    0.166667    0.25
     11  0.166667    0.25    0.416667    0.166667
 
-    # flyfactorsurvey (cluster buster)
+    # FlyFactorSurvey (Cluster Buster)
     >AbdA_Cell_FBgn0000014
     1   3   0   14
     0   0   0   18
@@ -104,7 +104,7 @@ def _read_pfm_four_columns(handle):
     0   0   6   12
     15  1   2   0
 
-    # homer
+    # HOMER
     >ATGACTCATC AP-1(bZIP)/ThioMac-PU.1-ChIP-Seq(GSE21512)/Homer    6.049537    -1.782996e+03   0   9805.3,5781.0,3085.1,2715.0,0.00e+00
     0.419   0.275   0.277   0.028
     0.001   0.001   0.001   0.997
@@ -117,7 +117,7 @@ def _read_pfm_four_columns(handle):
     0.050   0.172   0.307   0.471
     0.149   0.444   0.211   0.195
 
-    # hocomoco
+    # HOCOMOCO
     > AHR_si
     40.51343240527031  18.259112547756697  56.41253757072521  38.77363485291994
     10.877470982533044  11.870876719950774  34.66312982331297  96.54723985087516
@@ -129,7 +129,7 @@ def _read_pfm_four_columns(handle):
     0.0  0.0  153.95871737667187  0.0
     43.07922333291745  66.87558226865211  16.159862546986584  27.844049228115868
 
-    # neph
+    # Neph
     UW.Motif.0001   atgactca
     0.772949    0.089579    0.098612    0.038860
     0.026652    0.004653    0.025056    0.943639
@@ -140,7 +140,7 @@ def _read_pfm_four_columns(handle):
     0.047316    0.899024    0.026928    0.026732
     0.948639    0.019497    0.005737    0.026128
 
-    # tiffin
+    # Tiffin
     T   A   G   C
     30  0   28  40
     0   0   0   99
@@ -179,7 +179,7 @@ def _read_pfm_four_columns(handle):
                 if motif_nbr != 0 and motif_nbr_added != motif_nbr:
                     # Add the previous motif to the record.
                     motif = motifs.Motif(alphabet="GATC", counts=nucleotide_counts)
-                    motif.name = motif_name
+                    motif.name = motif_name if motif_name else ""
                     record.append(motif)
                     motif_nbr_added = motif_nbr
 
@@ -191,7 +191,7 @@ def _read_pfm_four_columns(handle):
                 if motif_nbr != 0 and motif_nbr_added != motif_nbr:
                     # Add the previous motif to the record.
                     motif = motifs.Motif(alphabet="GATC", counts=nucleotide_counts)
-                    motif.name = motif_name
+                    motif.name = motif_name if motif_name else ""
                     record.append(motif)
                     motif_nbr_added = motif_nbr
 
@@ -203,7 +203,7 @@ def _read_pfm_four_columns(handle):
                 if motif_nbr != 0 and motif_nbr_added != motif_nbr:
                     # Add the previous motif to the record.
                     motif = motifs.Motif(alphabet="GATC", counts=nucleotide_counts)
-                    motif.name = motif_name
+                    motif.name = motif_name if motif_name else ""
                     record.append(motif)
                     motif_nbr_added = motif_nbr
 
@@ -217,7 +217,7 @@ def _read_pfm_four_columns(handle):
                     if motif_nbr != 0 and motif_nbr_added != motif_nbr:
                         # Add the previous motif to the record.
                         motif = motifs.Motif(alphabet="GATC", counts=nucleotide_counts)
-                        motif.name = motif_name
+                        motif.name = motif_name if motif_name else ""
                         record.append(motif)
                         motif_nbr_added = motif_nbr
 
@@ -256,18 +256,17 @@ def _read_pfm_four_columns(handle):
             if motif_nbr != 0 and motif_nbr_added != motif_nbr:
                 # Add the previous motif to the record.
                 motif = motifs.Motif(alphabet="GATC", counts=nucleotide_counts)
-                motif.name = motif_name
+                motif.name = motif_name if motif_name else ""
                 record.append(motif)
                 motif_nbr_added = motif_nbr
 
             # Reinitialize variables for the new motif.
             motif_name = None
             nucleotide_order = default_nucleotide_order
-            # nucleotide_counts = {'A': [], 'C': [], 'G': [], 'T': []}
 
     if motif_nbr != 0 and motif_nbr_added != motif_nbr:
         motif = motifs.Motif(alphabet="GATC", counts=nucleotide_counts)
-        motif.name = motif_name
+        motif.name = motif_name if motif_name else ""
         record.append(motif)
 
     return record
@@ -276,37 +275,37 @@ def _read_pfm_four_columns(handle):
 def _read_pfm_four_rows(handle):
     """Read motifs in position frequency matrix format (4 rows) from a file handle.
 
-    # hdpi
+    # hDPI
     A   0   5   6   5   1   0
     C   1   1   0   0   0   4
     G   5   0   0   0   3   0
     T   0   0   0   1   2   2
 
-    # yetfasco
+    # YeTFaSCo
     A   0.5 0.0 0.0 0.25    0.25    0.25    0.25    0.25    0.25    0.25    0.25    0.25    0.5 0.0 0.0833333334583333
     T   0.0 0.0 0.0 0.25    0.25    0.25    0.25    0.25    0.25    0.25    0.25    0.25    0.0 0.0 0.0833333334583333
     G   0.0 1.0 0.0 0.25    0.25    0.25    0.25    0.25    0.25    0.25    0.25    0.25    0.0 1.0 0.249999999875
     C   0.5 0.0 1.0 0.25    0.25    0.25    0.25    0.25    0.25    0.25    0.25    0.25    0.5 0.0 0.583333333208333
 
-    # flyfactorsurvey ZFP finger
+    # FlyFactorSurvey ZFP finger
     A |     92    106    231    135      0      1    780     28      0    700    739     94     60    127    130
     C |    138     82    129     81    774      1      3      1      0      6     17     49    193    122    148
     G |    270    398     54    164      7    659      1    750    755     65      1     41    202    234    205
     T |    290    204    375    411      9    127      6     11     36     20     31    605    335    307    308
 
-    # scertf pcm
+    # ScerTF pcm
     A | 9 1 1 97 1 94
     T | 80 1 97 1 1 2
     C | 9 97 1 1 1 2
     G | 2 1 1 1 97 2
 
-    # scertf pfm
+    # ScerTF pfm
     A | 0.090 0.010 0.010 0.970 0.010 0.940
     C | 0.090 0.970 0.010 0.010 0.010 0.020
     G | 0.020 0.010 0.010 0.010 0.970 0.020
     T | 0.800 0.010 0.970 0.010 0.010 0.020
 
-    # idmmpmm
+    # iDMMPMM
     > abd-A
     0.218451749734889 0.0230646871686108 0.656680805938494 0.898197242841994 0.040694591728526 0.132953340402969 0.74907211028632 0.628313891834571
     0.0896076352067868 0.317338282078473 0.321580063626723 0.0461293743372216 0.0502386002120891 0.040694591728526 0.0284994697773065 0.0339342523860021
@@ -327,12 +326,21 @@ def _read_pfm_four_rows(handle):
         94 75  4  3  1  2  5  2  3  3
         1  0  3  4  1  0  5  3 28 88
         2 19 11 50 29 47 22 81  1  6
+
+    # Cys2His2 Zinc Finger Proteins PWM Predictor
+    base       1       2       3       4       5       6       7       8       9
+       a   0.116   0.974   0.444   0.116   0.974   0.444   0.667   0.939   0.068  # noqa: RST301
+       c   0.718   0.006   0.214   0.718   0.006   0.214   0.143   0.006   0.107  # noqa: RST301
+       g   0.016   0.020   0.028   0.016   0.020   0.028   0.047   0.045   0.216  # noqa: RST301
+       t   0.150   0.001   0.314   0.150   0.001   0.314   0.143   0.009   0.609  # noqa: RST301
+
+    Ent=   1.210   0.202   1.665   1.210   0.202   1.665   1.399   0.396   1.521
     """
     record = Record()
 
     name_pattern = re.compile(r"^>\s*(.+)\s*")
     row_pattern_with_nucleotide_letter = re.compile(
-        r"\s*([ACGT])\s*[\[|]*\s*([0-9.\-eE\s]+)\s*\]*\s*"
+        r"\s*([ACGTacgt])\s*[\[|]*\s*([0-9.\-eE\s]+)\s*\]*\s*"
     )
     row_pattern_without_nucleotide_letter = re.compile(r"\s*([0-9.\-eE\s]+)\s*")
 
@@ -343,6 +351,9 @@ def _read_pfm_four_rows(handle):
 
     for line in handle:
         line = line.strip()
+
+        if line.startswith("Ent="):
+            continue
 
         name_match = name_pattern.match(line)
         row_match_with_nucleotide_letter = row_pattern_with_nucleotide_letter.match(
@@ -357,7 +368,7 @@ def _read_pfm_four_rows(handle):
         elif row_match_with_nucleotide_letter:
             (nucleotide, counts_str) = row_match_with_nucleotide_letter.group(1, 2)
             current_nucleotide_counts = counts_str.split()
-            nucleotide_counts[nucleotide] = [
+            nucleotide_counts[nucleotide.upper()] = [
                 float(current_nucleotide_count)
                 for current_nucleotide_count in current_nucleotide_counts
             ]
@@ -365,8 +376,7 @@ def _read_pfm_four_rows(handle):
             if row_count == 4:
                 motif = motifs.Motif(alphabet="GATC", counts=nucleotide_counts)
 
-                if motif_name:
-                    motif.name = motif_name
+                motif.name = motif_name if motif_name else ""
 
                 record.append(motif)
 
@@ -385,8 +395,7 @@ def _read_pfm_four_rows(handle):
             if row_count == 4:
                 motif = motifs.Motif(alphabet="GATC", counts=nucleotide_counts)
 
-                if motif_name:
-                    motif.name = motif_name
+                motif.name = motif_name if motif_name else ""
 
                 record.append(motif)
 

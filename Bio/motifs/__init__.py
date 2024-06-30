@@ -51,8 +51,8 @@ def parse(handle, fmt, strict=True):
      - MINIMAL:          MINIMAL MEME output file motif
      - MAST:             MAST output file motif
      - TRANSFAC:         TRANSFAC database file format
-     - pfm-four-columns: Generic position-frequency matrix format with four columns. (cisbp, homer, hocomoco, neph, tiffin)
-     - pfm-four-rows:    Generic position-frequency matrix format with four row. (scertf, yetfasco, hdpi, idmmpmm, flyfactor survey)
+     - pfm-four-columns: Generic position-frequency matrix format with four columns. (CIS-BP, HOMER, HOCOMOCO, Neph, Tiffin)
+     - pfm-four-rows:    Generic position-frequency matrix format with four row. (ScerTF, YeTFaSCo, hDPI, iDMMPMM, FlyFactorSurvey, Cys2His2 Zinc Finger Proteins PWM Predictor)
      - pfm:              JASPAR-style position-frequency matrix
      - jaspar:           JASPAR-style multiple PFM format
      - sites:            JASPAR-style sites file

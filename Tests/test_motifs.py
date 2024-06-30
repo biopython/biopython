@@ -1867,7 +1867,7 @@ class TestJASPAR(unittest.TestCase):
             record = motifs.parse(stream, "pfm-four-columns")
         self.assertEqual(len(record), 8)
         motif = record[0]
-        self.assertIsNone(motif.name)
+        self.assertEqual(motif.name, "")
         self.assertEqual(motif.length, 8)
         self.assertEqual(motif.alphabet, "GATC")
         self.assertAlmostEqual(motif.counts["G", 0], 0.009615385)
@@ -2291,7 +2291,7 @@ class TestJASPAR(unittest.TestCase):
         )
         self.assertEqual(motif[1:-2].consensus, "TTGCGT")
         motif = record[6]
-        self.assertIsNone(motif.name)
+        self.assertEqual(motif.name, "")
         self.assertEqual(motif.length, 8)
         self.assertEqual(motif.alphabet, "GATC")
         self.assertAlmostEqual(motif.counts["G", 0], 0.098612000)
@@ -2347,7 +2347,7 @@ class TestJASPAR(unittest.TestCase):
         )
         self.assertEqual(motif[1:-2].consensus, "TGACT")
         motif = record[7]
-        self.assertIsNone(motif.name)
+        self.assertEqual(motif.name, "")
         self.assertEqual(motif.length, 11)
         self.assertEqual(motif.alphabet, "GATC")
         self.assertAlmostEqual(motif.counts["G", 0], 28.0)
@@ -2422,7 +2422,7 @@ class TestJASPAR(unittest.TestCase):
         """Test if Bio.motifs.pfm can parse motifs in position frequency matrix format (4 rows)."""
         with open("motifs/fourrows.pfm") as stream:
             record = motifs.parse(stream, "pfm-four-rows")
-        self.assertEqual(len(record), 8)
+        self.assertEqual(len(record), 9)
         motif = record[0]
         self.assertEqual(motif.name, "")
         self.assertEqual(motif.length, 6)
@@ -2931,6 +2931,67 @@ class TestJASPAR(unittest.TestCase):
             )
         )
         self.assertEqual(motif[:-2].consensus, "CCATAAAT")
+        motif = record[8]
+        self.assertEqual(motif.name, "")
+        self.assertEqual(motif.length, 9)
+        self.assertEqual(motif.alphabet, "GATC")
+        self.assertAlmostEqual(motif.counts["G", 0], 0.016)
+        self.assertAlmostEqual(motif.counts["G", 1], 0.020)
+        self.assertAlmostEqual(motif.counts["G", 2], 0.028)
+        self.assertAlmostEqual(motif.counts["G", 3], 0.016)
+        self.assertAlmostEqual(motif.counts["G", 4], 0.020)
+        self.assertAlmostEqual(motif.counts["G", 5], 0.028)
+        self.assertAlmostEqual(motif.counts["G", 6], 0.047)
+        self.assertAlmostEqual(motif.counts["G", 7], 0.045)
+        self.assertAlmostEqual(motif.counts["G", 8], 0.216)
+        self.assertAlmostEqual(motif.counts["A", 0], 0.116)
+        self.assertAlmostEqual(motif.counts["A", 1], 0.974)
+        self.assertAlmostEqual(motif.counts["A", 2], 0.444)
+        self.assertAlmostEqual(motif.counts["A", 3], 0.116)
+        self.assertAlmostEqual(motif.counts["A", 4], 0.974)
+        self.assertAlmostEqual(motif.counts["A", 5], 0.444)
+        self.assertAlmostEqual(motif.counts["A", 6], 0.667)
+        self.assertAlmostEqual(motif.counts["A", 7], 0.939)
+        self.assertAlmostEqual(motif.counts["A", 8], 0.068)
+        self.assertAlmostEqual(motif.counts["T", 0], 0.150)
+        self.assertAlmostEqual(motif.counts["T", 1], 0.001)
+        self.assertAlmostEqual(motif.counts["T", 2], 0.314)
+        self.assertAlmostEqual(motif.counts["T", 3], 0.150)
+        self.assertAlmostEqual(motif.counts["T", 4], 0.001)
+        self.assertAlmostEqual(motif.counts["T", 5], 0.314)
+        self.assertAlmostEqual(motif.counts["T", 6], 0.143)
+        self.assertAlmostEqual(motif.counts["T", 7], 0.009)
+        self.assertAlmostEqual(motif.counts["T", 8], 0.609)
+        self.assertAlmostEqual(motif.counts["C", 0], 0.718)
+        self.assertAlmostEqual(motif.counts["C", 1], 0.006)
+        self.assertAlmostEqual(motif.counts["C", 2], 0.214)
+        self.assertAlmostEqual(motif.counts["C", 3], 0.718)
+        self.assertAlmostEqual(motif.counts["C", 4], 0.006)
+        self.assertAlmostEqual(motif.counts["C", 5], 0.214)
+        self.assertAlmostEqual(motif.counts["C", 6], 0.143)
+        self.assertAlmostEqual(motif.counts["C", 7], 0.006)
+        self.assertAlmostEqual(motif.counts["C", 8], 0.107)
+        self.assertEqual(motif.consensus, "CAACAAAAT")
+        self.assertEqual(motif.degenerate_consensus, "CAWCAWAAT")
+        self.assertTrue(
+            np.allclose(
+                motif.relative_entropy,
+                np.array(
+                    [
+                        0.79033346,
+                        1.79461597,
+                        0.33472715,
+                        0.79033346,
+                        1.79461597,
+                        0.33472715,
+                        0.60049374,
+                        1.60901246,
+                        0.47798759,
+                    ]
+                ),
+            )
+        )
+        self.assertEqual(motif[:-2].consensus, "CAACAAA")
 
     def test_sites_parsing(self):
         """Test if Bio.motifs can parse JASPAR-style sites files."""
