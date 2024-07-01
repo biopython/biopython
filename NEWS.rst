@@ -17,6 +17,16 @@ This release of Biopython supports Python 3.9, 3.10, 3.11 and 3.12. It
 has also been tested on PyPy3.9 v7.3.13. Python 3.9 is approaching end of
 life, our support for it is now deprecated.
 
+``Bio.motifs`` now supports reading PFM from Cys2His2 Zinc Finger Proteins PWM
+Predictor and reading motifs in ``pfm-four-columns`` format will set motif name
+to "" instead of None, when no motif name was found.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+- Gert Hulselmans
+- Peter Cock
+
 28 June 2024: Biopython 1.84
 ============================
 
@@ -114,10 +124,6 @@ directly to ``BgzfWriter``.
 
 ``Bio.Entrez.local_cache`` can be set to a directory for caching downloaded DTD/XSD files.
 
-``Bio.motifs`` now supports reading PFM from Cys2His2 Zinc Finger Proteins PWM
-Predictor and reading motifs in ``pfm-four-columns`` format will set motif name
-to "" instead of None, when no motif name was found.
-
 As in recent releases, more of our code is now explicitly available under
 either our original "Biopython License Agreement", or the very similar but
 more commonly used "3-Clause BSD License".  See the ``LICENSE.rst`` file for
@@ -129,7 +135,6 @@ possible, especially the following contributors:
 - Anil Tuncel (first contribution)
 - David Cain
 - Fabio Zanini (first contribution)
-- Gert Hulselmans
 - Joao Rodrigues
 - Judith Bernett (first contribution)
 - Luca Monari (first contribution)
