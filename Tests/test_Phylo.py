@@ -171,6 +171,22 @@ class IOTests(unittest.TestCase):
         )
         self.assertEqual({leaf.name for leaf in tree.get_terminals()}, {"0", "1", "2"})
 
+    def test_newick_escaped_quote_parse(self):
+        """Parse a newick tree with an escaped quote in a label."""
+        newick_str = "('Node''Name':0.00000)Root:0.00000;"
+        tree = Phylo.read(StringIO(newick_str), "newick")
+        self.assertEqual(tree.get_terminals()[0].name, "Node'Name")
+
+    def test_newick_escaped_quote_write(self):
+        """Write a newick tree with an escaped quote in a label."""
+        tree = Phylo.BaseTree.Tree(root=Phylo.BaseTree.Clade(name="Root"))
+        clade_with_quote = Phylo.BaseTree.Clade(name="Node'Name")
+        tree.root.clades.append(clade_with_quote)
+        mem_file = StringIO()
+        Phylo.write(tree, mem_file, "newick")
+        mem_file.seek(0)
+        self.assertEqual(mem_file.read(), "('Node''Name':0.00000)Root:0.00000;\n")
+
 
 class TreeTests(unittest.TestCase):
     """Tests for methods on BaseTree.Tree objects."""
