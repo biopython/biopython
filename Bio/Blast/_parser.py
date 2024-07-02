@@ -212,7 +212,6 @@ class XMLHandler:
             filename = os.path.basename(url)
             directory = Entrez.__path__[0]
             path = os.path.join(directory, "XSDs", filename)
-            stream = open(path, "rb")
             parser = expat.ParserCreate(namespace_separator=" ")
             handler = SchemaHandler(parser)
             parser.StartElementHandler = handler._startElementHandler

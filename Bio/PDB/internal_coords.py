@@ -498,9 +498,9 @@ class IC_Chain:
         # cache of AtomKey results for cak()
         # self.akc: Dict[Tuple(IC_Residue, str), AtomKey] = {}
 
-        self.atomArrayIndex: dict["AtomKey", int] = {}
+        self.atomArrayIndex: dict[AtomKey, int] = {}
 
-        self.bpAtomArray: list["Atom"] = []  # rtm
+        self.bpAtomArray: list[Atom] = []  # rtm
 
         self._set_residues(verbose)  # no effect if no residues loaded
 
@@ -739,15 +739,15 @@ class IC_Chain:
             self.akset : set of :class:`.AtomKey` s in this chain
         """
         # ndx = 0
-        last_res: list["IC_Residue"] = []
-        last_ord_res: list["IC_Residue"] = []
+        last_res: list[IC_Residue] = []
+        last_ord_res: list[IC_Residue] = []
 
         # atomCoordDict = {}
         akset = set()
         for res in self.chain.get_residues():
             # select only not hetero or accepted hetero
             if res.id[0] == " " or res.id[0] in IC_Residue.accept_resnames:
-                this_res: list["IC_Residue"] = []
+                this_res: list[IC_Residue] = []
                 if 2 == res.is_disordered() and not IC_Residue.no_altloc:
                     # print('disordered res:', res.is_disordered(), res)
                     for r in res.child_dict.values():
@@ -3027,7 +3027,7 @@ class IC_Residue:
         #      plus lists of matching altloc atomkeys in coords or diheds
         edraLst: list[tuple[AtomKey, ...]] = []
         altlocs = set()
-        posnAltlocs: dict["AtomKey", set[str]] = {}
+        posnAltlocs: dict[AtomKey, set[str]] = {}
         akMap = {}
         for ak in lst:
             posnAltlocs[ak] = set()
@@ -3582,7 +3582,7 @@ class IC_Residue:
         self, angle_key: EKT
     ) -> Optional[Union["Hedron", "Dihedron"]]:
         len_mkey = len(angle_key)
-        rval: Optional[Union["Hedron", "Dihedron"]]
+        rval: Optional[Union[Hedron, Dihedron]]
         if 4 == len_mkey:
             rval = self.dihedra.get(cast(DKT, angle_key), None)
         elif 3 == len_mkey:
@@ -3646,7 +3646,7 @@ class IC_Residue:
 
         :return: Matching Hedron, Dihedron, or None.
         """
-        rval: Optional[Union["Hedron", "Dihedron"]] = None
+        rval: Optional[Union[Hedron, Dihedron]] = None
         if isinstance(angle_key, tuple):
             rval = self._get_angle_for_tuple(angle_key)
             if rval is None and self.rprev:

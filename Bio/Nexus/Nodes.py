@@ -32,7 +32,7 @@ class Chain:
 
     def __init__(self) -> None:
         """Initialize a node chain."""
-        self.chain: dict[int, "Node"] = {}
+        self.chain: dict[int, Node] = {}
         self.id = -1
 
     def _get_id(self) -> int:

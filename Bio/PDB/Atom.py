@@ -85,7 +85,7 @@ class Atom:
         """
         self.level = "A"
         # Reference to the residue
-        self.parent: Optional["Residue"] = None
+        self.parent: Optional[Residue] = None
         # the atomic data
         self.name = name  # eg. CA, spaces are removed from atom name
         self.fullname = fullname  # e.g. " CA ", spaces included

@@ -14709,7 +14709,7 @@ class TestBlastErrors(unittest.TestCase):
                 records = Blast.parse(stream)
             self.assertEqual(str(cm.exception), message)
         with self.assertRaises(Blast.CorruptedXMLError) as cm:
-            with Blast.parse(path) as records:
+            with Blast.parse(path):
                 pass
             self.assertEqual(str(cm.exception), message)
         with open(path, "rb") as stream:
