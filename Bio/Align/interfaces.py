@@ -194,7 +194,7 @@ class AlignmentIterator(AlignmentsAbstractBaseClass):
         self._index = 0
 
 
-class AlignmentWriter(ABC):
+class AlignmentWriter(ABC):  # noqa: B024
     """Base class for alignment writers. This class should be subclassed.
 
     It is intended for alignment file formats with an (optional)
