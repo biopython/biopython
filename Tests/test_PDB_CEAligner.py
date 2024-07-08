@@ -41,7 +41,7 @@ class CEAlignerTests(unittest.TestCase):
 
         aligner = CEAligner()
         aligner.set_reference(s1)
-        aligner.align(s2)
+        aligner.align(s2, final_optimization=False)
 
         self.assertAlmostEqual(aligner.rms, 3.74, places=2)
 
@@ -69,11 +69,26 @@ class CEAlignerTests(unittest.TestCase):
 
         aligner = CEAligner()
         aligner.set_reference(s1)
-        aligner.align(s2, transform=False)
+        aligner.align(s2, transform=False, final_optimization=False)
         s2_coords_final = [list(a.coord) for a in s2.get_atoms()]
 
         self.assertAlmostEqual(aligner.rms, 3.74, places=2)
         self.assertEqual(s2_original_coords, s2_coords_final)
+
+    def test_ce_aligner_final_optimization(self):
+        """Test aligning 7CFN on 6WQA with the final optimization."""
+        ref = "PDB/6WQA.cif"
+        mob = "PDB/7CFN.cif"
+
+        parser = MMCIFParser(QUIET=1)
+        s1 = parser.get_structure("6wqa", ref)
+        s2 = parser.get_structure("7cfn", mob)
+
+        aligner = CEAligner()
+        aligner.set_reference(s1)
+        aligner.align(s2)
+
+        self.assertAlmostEqual(aligner.rms, 3.66, places=2)
 
     def test_cealigner_nucleic(self):
         """Test aligning 1LCD on 1LCD."""
