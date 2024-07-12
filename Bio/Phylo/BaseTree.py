@@ -657,12 +657,14 @@ class TreeMixin:
         for subclade in self.root.clades:
             subclade.ladderize(reverse=reverse)
 
-    def prune(self, target=None, **kwargs):
+    def prune(self, target=None, keep_root_length=False, **kwargs):
         """Prunes a terminal clade from the tree.
 
-        If taxon is from a bifurcation, the connecting node will be collapsed
+        If the taxon is from a bifurcation, the connecting node will be collapsed
         and its branch length added to remaining terminal node. This might be no
-        longer be a meaningful value.
+        longer be a meaningful value. However, if that connecting node is the
+        tree's root, then the length of the remaining node is set to None unless
+        the ``keep_root_length=True`` keyword argument is passed.
 
         :returns: parent clade of the pruned target
 
@@ -681,9 +683,13 @@ class TreeMixin:
             # We deleted a branch from a bifurcation
             if parent == self.root:
                 # If we're at the root, move the root upwards
-                # NB: This loses the length of the original branch
+                # NB: This loses the length of the original branch, unless
+                # keep_root_length=True
                 newroot = parent.clades[0]
-                newroot.branch_length = None
+                if keep_root_length:
+                    newroot.branch_length += parent.branch_length or 0.0
+                else:
+                    newroot.branch_length = None
                 parent = self.root = newroot
             else:
                 # If we're not at the root, collapse this parent

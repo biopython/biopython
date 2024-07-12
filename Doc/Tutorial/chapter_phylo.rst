@@ -352,7 +352,7 @@ function:
    >>> Phylo.write(tree1, "tree1.nwk", "newick")
    1
    >>> Phylo.write(trees, "other_trees.xml", "phyloxml")  # write the remaining trees
-   12
+   13
 
 Convert files between any of the supported formats with the ``convert``
 function:
@@ -364,7 +364,7 @@ function:
    >>> Phylo.convert("tree1.nwk", "newick", "tree1.xml", "nexml")
    1
    >>> Phylo.convert("other_trees.xml", "phyloxml", "other_trees.nex", "nexus")
-   12
+   13
 
 To use strings as input or output instead of actual files, use
 ``StringIO`` as you would with SeqIO and AlignIO:
@@ -681,10 +681,11 @@ tree intact, make a complete copy of the tree first, using Python’s
    sort clades deepest-to-shallowest.
 
 ``prune``
-   Prunes a terminal clade from the tree. If taxon is from a
-   bifurcation, the connecting node will be collapsed and its branch
-   length added to remaining terminal node. This might no longer be a
-   meaningful value.
+   If the taxon is from a bifurcation, the connecting node will be collapsed
+   and its branch length added to remaining terminal node. This might be no
+   longer be a meaningful value. However, if that connecting node is the
+   tree's root, then the length of the remaining node is set to None unless
+   the ``keep_root_length=True`` keyword argument is passed.
 
 ``root_with_outgroup``
    Reroot this tree with the outgroup clade containing the given
