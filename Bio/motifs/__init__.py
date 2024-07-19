@@ -31,7 +31,7 @@ except ImportError:
 
 from Bio import BiopythonDeprecationWarning
 from Bio.Align import Alignment
-from Bio.Seq import reverse_complement
+from Bio.Seq import reverse_complement, reverse_complement_rna
 
 
 def create(instances, alphabet="ACGT"):
@@ -279,14 +279,32 @@ class Instances(list):
 
         instances = Instances(alphabet=self.alphabet)
         instances.length = self.length
-        for instance in self:
-            if isinstance(instance, (Seq, MutableSeq, SeqRecord)):
-                instance = instance.reverse_complement()
-            elif isinstance(instance, str):
-                instance = reverse_complement(instance)
-            else:
-                raise RuntimeError("instance has unexpected type %s" % type(instance))
-            instances.append(instance)
+        if sorted(self.alphabet) == ["A", "C", "G", "T"]:
+            for instance in self:
+                if isinstance(instance, (Seq, MutableSeq, SeqRecord)):
+                    instance = instance.reverse_complement()
+                elif isinstance(instance, str):
+                    instance = reverse_complement(instance)
+                else:
+                    raise RuntimeError(
+                        "instance has unexpected type %s" % type(instance)
+                    )
+                instances.append(instance)
+        elif sorted(self.alphabet) == ["A", "C", "G", "U"]:
+            for instance in self:
+                if isinstance(instance, (Seq, MutableSeq, SeqRecord)):
+                    instance = instance.reverse_complement_rna()
+                elif isinstance(instance, str):
+                    instance = reverse_complement_rna(instance)
+                else:
+                    raise RuntimeError(
+                        "instance has unexpected type %s" % type(instance)
+                    )
+                instances.append(instance)
+        else:
+            raise ValueError(
+                "Calculating reverse complement only works for DNA and RNA instances"
+            )
         return instances
 
 
@@ -409,15 +427,16 @@ class Motif:
         elif value is None:
             self._background = dict.fromkeys(self.alphabet, 1.0)
         else:
-            if sorted(self.alphabet) != ["A", "C", "G", "T"]:
+            if not self._has_dna_alphabet() and not self._has_rna_alphabet():
                 raise ValueError(
-                    "Setting the background to a single value only works for DNA motifs"
-                    " (in which case the value is interpreted as the GC content)"
+                    "Setting the background to a single value only works for DNA and RNA"
+                    "motifs (in which case the value is interpreted as the GC content)"
                 )
+            T_or_U = "T" if self._has_dna_alphabet() else "U"
             self._background["A"] = (1.0 - value) / 2.0
             self._background["C"] = value / 2.0
             self._background["G"] = value / 2.0
-            self._background["T"] = (1.0 - value) / 2.0
+            self._background[T_or_U] = (1.0 - value) / 2.0
         total = sum(self._background.values())
         for letter in self.alphabet:
             self._background[letter] /= total
@@ -511,32 +530,45 @@ class Motif:
         else:
             return self.length
 
+    def _has_dna_alphabet(self):
+        return sorted(self.alphabet) == ["A", "C", "G", "T"]
+
+    def _has_rna_alphabet(self):
+        return sorted(self.alphabet) == ["A", "C", "G", "U"]
+
     def reverse_complement(self):
         """Return the reverse complement of the motif as a new motif."""
         alphabet = self.alphabet
+        if not self._has_dna_alphabet() and not self._has_rna_alphabet():
+            raise ValueError(
+                "Calculating reverse complement only works for DNA and RNA motifs"
+            )
+        T_or_U = "T" if self._has_dna_alphabet() else "U"
         if self.alignment is not None:
             alignment = self.alignment.reverse_complement()
+            if T_or_U == "U":
+                alignment.sequences = [s.replace("T", "U") for s in alignment.sequences]
             res = Motif(alphabet=alphabet, alignment=alignment)
         else:  # has counts
             counts = {
-                "A": self.counts["T"][::-1],
+                "A": self.counts[T_or_U][::-1],
                 "C": self.counts["G"][::-1],
                 "G": self.counts["C"][::-1],
-                "T": self.counts["A"][::-1],
+                T_or_U: self.counts["A"][::-1],
             }
             res = Motif(alphabet=alphabet, counts=counts)
         res.__mask = self.__mask[::-1]
         res.background = {
-            "A": self.background["T"],
+            "A": self.background[T_or_U],
             "C": self.background["G"],
             "G": self.background["C"],
-            "T": self.background["A"],
+            T_or_U: self.background["A"],
         }
         res.pseudocounts = {
-            "A": self.pseudocounts["T"],
+            "A": self.pseudocounts[T_or_U],
             "C": self.pseudocounts["G"],
             "G": self.pseudocounts["C"],
-            "T": self.pseudocounts["A"],
+            T_or_U: self.pseudocounts["A"],
         }
         return res
 
