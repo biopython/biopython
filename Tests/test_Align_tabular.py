@@ -68,7 +68,7 @@ class TestFastaProtein(unittest.TestCase):
         self.assertEqual(alignment.sequences[0].id, "sp|P09488|GSTM1_HUMAN")
         self.assertEqual(alignment.sequences[1].id, "sp|P10649|GSTM1_MOUSE")
         self.assertEqual(alignment.annotations["mismatches"], 48)
-        self.assertAlmostEqual(alignment.annotations["evalue"], 6.1e-78)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 6.1e-78, places=79)
         self.assertAlmostEqual(alignment.annotations["bit score"], 275.6)
         self.assertEqual(
             str(alignment),
@@ -163,7 +163,7 @@ np.array([['M', 'P', 'M', 'I', 'L', 'G', 'Y', 'W', 'D', 'I', 'R', 'G', 'L',
         self.assertEqual(alignment.sequences[0].id, "sp|P00502|GSTA1_RAT")
         self.assertEqual(alignment.sequences[1].id, "sp|P10649|GSTM1_MOUSE")
         self.assertEqual(alignment.annotations["mismatches"], 144)
-        self.assertAlmostEqual(alignment.annotations["evalue"], 3.1e-13)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 3.1e-13, places=14)
         self.assertAlmostEqual(alignment.annotations["bit score"], 60.7)
         self.assertEqual(
             str(alignment),
@@ -848,7 +848,7 @@ np.array([['P', 'S', 'D', 'E', 'Q', 'L', 'K', 'S', 'G', 'T', 'A', 'S', 'V',
         self.assertEqual(alignment.sequences[0].id, "sp|P09488|GSTM1_HUMAN")
         self.assertEqual(alignment.sequences[1].id, "sp|P10649|GSTM1_MOUSE")
         self.assertEqual(alignment.annotations["mismatches"], 48)
-        self.assertAlmostEqual(alignment.annotations["evalue"], 7.6e-83)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 7.6e-83, places=84)
         self.assertAlmostEqual(alignment.annotations["bit score"], 291.9)
         self.assertEqual(
             str(alignment),
@@ -943,7 +943,7 @@ np.array([['M', 'P', 'M', 'I', 'L', 'G', 'Y', 'W', 'D', 'I', 'R', 'G', 'L',
         self.assertEqual(alignment.sequences[0].id, "sp|P00502|GSTA1_RAT")
         self.assertEqual(alignment.sequences[1].id, "sp|P10649|GSTM1_MOUSE")
         self.assertEqual(alignment.annotations["mismatches"], 144)
-        self.assertAlmostEqual(alignment.annotations["evalue"], 4.4e-14)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 4.4e-14, places=15)
         self.assertAlmostEqual(alignment.annotations["bit score"], 63.5)
         self.assertEqual(
             str(alignment),
@@ -1640,7 +1640,7 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(alignment.sequences[0].id, "pGT875")
         self.assertEqual(alignment.sequences[1].id, "pGT875")
         self.assertEqual(alignment.annotations["mismatches"], 0)
-        self.assertAlmostEqual(alignment.annotations["evalue"], 3.6e-194)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 3.6e-194, places=195)
         self.assertAlmostEqual(alignment.annotations["bit score"], 666.0)
         self.assertEqual(
             str(alignment),
@@ -1722,7 +1722,7 @@ pGT875          600 ????????????????????????????????????????????????????????? 65
         self.assertEqual(alignment.sequences[0].id, "RABGLTR")
         self.assertEqual(alignment.sequences[1].id, "pGT875")
         self.assertEqual(alignment.annotations["mismatches"], 135)
-        self.assertAlmostEqual(alignment.annotations["evalue"], 1.9e-118)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 1.9e-118, places=119)
         self.assertAlmostEqual(alignment.annotations["bit score"], 414.4)
         self.assertEqual(
             str(alignment),
@@ -1804,7 +1804,7 @@ pGT875          600 ?????????????????????????????????????????????? 646
         self.assertEqual(alignment.sequences[0].id, "BTGST")
         self.assertEqual(alignment.sequences[1].id, "pGT875")
         self.assertEqual(alignment.annotations["mismatches"], 167)
-        self.assertAlmostEqual(alignment.annotations["evalue"], 1.2e-07)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 1.2e-07, places=8)
         self.assertAlmostEqual(alignment.annotations["bit score"], 46.4)
         self.assertEqual(
             str(alignment),
@@ -1954,7 +1954,7 @@ np.array([['A', 'G', 'C', 'T', 'C', 'C', 'C', 'C', 'A', 'A', 'G', 'T', 'T',
         self.assertEqual(alignment.sequences[0].id, "RABGSTB")
         self.assertEqual(alignment.sequences[1].id, "pGT875")
         self.assertEqual(alignment.annotations["mismatches"], 42)
-        self.assertAlmostEqual(alignment.annotations["evalue"], 2.1e-07)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 2.1e-07, places=8)
         self.assertAlmostEqual(alignment.annotations["bit score"], 45.6)
         self.assertEqual(
             str(alignment),
@@ -2478,7 +2478,7 @@ np.array([['C', 'T', 'G', 'C', 'G', 'G', 'C', 'A', 'C', 'C', 'T', 'G', 'G',
         self.assertEqual(alignment.sequences[0].id, "pGT875")
         self.assertEqual(alignment.sequences[1].id, "pGT875")
         self.assertEqual(alignment.annotations["mismatches"], 0)
-        self.assertAlmostEqual(alignment.annotations["evalue"], 3.6e-194)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 4.6e-191, places=192)
         self.assertAlmostEqual(alignment.annotations["bit score"], 655.6)
         self.assertEqual(
             str(alignment),
@@ -2560,7 +2560,7 @@ pGT875          600 ????????????????????????????????????????????????????????? 65
         self.assertEqual(alignment.sequences[0].id, "RABGLTR")
         self.assertEqual(alignment.sequences[1].id, "pGT875")
         self.assertEqual(alignment.annotations["mismatches"], 135)
-        self.assertAlmostEqual(alignment.annotations["evalue"], 1.9e-118)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 1.6e-116, places=117)
         self.assertAlmostEqual(alignment.annotations["bit score"], 408.0)
         self.assertEqual(
             str(alignment),
@@ -2642,7 +2642,7 @@ pGT875          600 ?????????????????????????????????????????????? 646
         self.assertEqual(alignment.sequences[0].id, "BTGST")
         self.assertEqual(alignment.sequences[1].id, "pGT875")
         self.assertEqual(alignment.annotations["mismatches"], 167)
-        self.assertAlmostEqual(alignment.annotations["evalue"], 1.9e-07)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 1.9e-07, places=8)
         self.assertAlmostEqual(alignment.annotations["bit score"], 45.7)
         self.assertEqual(
             str(alignment),
@@ -2792,7 +2792,7 @@ np.array([['A', 'G', 'C', 'T', 'C', 'C', 'C', 'C', 'A', 'A', 'G', 'T', 'T',
         self.assertEqual(alignment.sequences[0].id, "RABGSTB")
         self.assertEqual(alignment.sequences[1].id, "pGT875")
         self.assertEqual(alignment.annotations["mismatches"], 42)
-        self.assertAlmostEqual(alignment.annotations["evalue"], 3.2e-07)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 3.2e-07, places=8)
         self.assertAlmostEqual(alignment.annotations["bit score"], 45.0)
         self.assertEqual(
             str(alignment),
@@ -3380,7 +3380,7 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 98)
             self.assertEqual(alignment.target.annotations["start"], 94)
             self.assertEqual(alignment.target.annotations["end"], 388)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-67)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-67, places=67)
             self.assertAlmostEqual(alignment.annotations["bit score"], 199)
             self.assertAlmostEqual(alignment.annotations["% identity"], 95.92)
             self.assertEqual(alignment.annotations["alignment length"], 98)
@@ -3408,7 +3408,7 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 98)
             self.assertEqual(alignment.target.annotations["start"], 77)
             self.assertEqual(alignment.target.annotations["end"], 371)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-67)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-67, places=67)
             self.assertAlmostEqual(alignment.annotations["bit score"], 202)
             self.assertAlmostEqual(alignment.annotations["% identity"], 97.96)
             self.assertEqual(alignment.annotations["alignment length"], 98)
@@ -3422,7 +3422,7 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 96)
             self.assertEqual(alignment.target.annotations["start"], 803)
             self.assertEqual(alignment.target.annotations["end"], 1103)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 3e-09)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 3e-09, places=9)
             self.assertAlmostEqual(alignment.annotations["bit score"], 45.1)
             self.assertAlmostEqual(alignment.annotations["% identity"], 30.00)
             self.assertEqual(alignment.annotations["alignment length"], 100)
@@ -3436,7 +3436,7 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 98)
             self.assertEqual(alignment.target.annotations["start"], 160)
             self.assertEqual(alignment.target.annotations["end"], 454)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 4e-67)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 4e-67, places=67)
             self.assertAlmostEqual(alignment.annotations["bit score"], 202)
             self.assertAlmostEqual(alignment.annotations["% identity"], 97.96)
             self.assertEqual(alignment.annotations["alignment length"], 98)
@@ -3450,7 +3450,7 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 96)
             self.assertEqual(alignment.target.annotations["start"], 865)
             self.assertEqual(alignment.target.annotations["end"], 1165)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 3e-09)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 3e-09, places=9)
             self.assertAlmostEqual(alignment.annotations["bit score"], 45.1)
             self.assertAlmostEqual(alignment.annotations["% identity"], 30.00)
             self.assertEqual(alignment.annotations["alignment length"], 100)
@@ -3464,7 +3464,7 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 98)
             self.assertEqual(alignment.target.annotations["start"], 172)
             self.assertEqual(alignment.target.annotations["end"], 466)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-66)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-66, places=66)
             self.assertAlmostEqual(alignment.annotations["bit score"], 202)
             self.assertAlmostEqual(alignment.annotations["% identity"], 97.96)
             self.assertEqual(alignment.annotations["alignment length"], 98)
@@ -3478,7 +3478,7 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 96)
             self.assertEqual(alignment.target.annotations["start"], 898)
             self.assertEqual(alignment.target.annotations["end"], 1198)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-09)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-09, places=9)
             self.assertAlmostEqual(alignment.annotations["bit score"], 46.6)
             self.assertAlmostEqual(alignment.annotations["% identity"], 31.00)
             self.assertEqual(alignment.annotations["alignment length"], 100)
@@ -3578,7 +3578,7 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 98)
             self.assertEqual(alignment.target.annotations["start"], 94)
             self.assertEqual(alignment.target.annotations["end"], 388)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-67)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-67, places=67)
             self.assertAlmostEqual(alignment.annotations["bit score"], 199)
             self.assertAlmostEqual(alignment.annotations["% identity"], 95.92)
             self.assertEqual(alignment.annotations["alignment length"], 98)
@@ -3606,7 +3606,7 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 98)
             self.assertEqual(alignment.target.annotations["start"], 77)
             self.assertEqual(alignment.target.annotations["end"], 371)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-67)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-67, places=67)
             self.assertAlmostEqual(alignment.annotations["bit score"], 202)
             self.assertAlmostEqual(alignment.annotations["% identity"], 97.96)
             self.assertEqual(alignment.annotations["alignment length"], 98)
@@ -3620,7 +3620,7 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 96)
             self.assertEqual(alignment.target.annotations["start"], 803)
             self.assertEqual(alignment.target.annotations["end"], 1103)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 3e-09)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 3e-09, places=9)
             self.assertAlmostEqual(alignment.annotations["bit score"], 45.1)
             self.assertAlmostEqual(alignment.annotations["% identity"], 30.00)
             self.assertEqual(alignment.annotations["alignment length"], 100)
@@ -3634,7 +3634,7 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 98)
             self.assertEqual(alignment.target.annotations["start"], 160)
             self.assertEqual(alignment.target.annotations["end"], 454)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 4e-67)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 4e-67, places=67)
             self.assertAlmostEqual(alignment.annotations["bit score"], 202)
             self.assertAlmostEqual(alignment.annotations["% identity"], 97.96)
             self.assertEqual(alignment.annotations["alignment length"], 98)
@@ -3648,7 +3648,7 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 96)
             self.assertEqual(alignment.target.annotations["start"], 865)
             self.assertEqual(alignment.target.annotations["end"], 1165)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 3e-09)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 3e-09, places=9)
             self.assertAlmostEqual(alignment.annotations["bit score"], 45.1)
             self.assertAlmostEqual(alignment.annotations["% identity"], 30.00)
             self.assertEqual(alignment.annotations["alignment length"], 100)
@@ -3662,7 +3662,7 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 98)
             self.assertEqual(alignment.target.annotations["start"], 172)
             self.assertEqual(alignment.target.annotations["end"], 466)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-66)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-66, places=66)
             self.assertAlmostEqual(alignment.annotations["bit score"], 202)
             self.assertAlmostEqual(alignment.annotations["% identity"], 97.96)
             self.assertEqual(alignment.annotations["alignment length"], 98)
@@ -3676,7 +3676,7 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.query.annotations["end"], 96)
             self.assertEqual(alignment.target.annotations["start"], 898)
             self.assertEqual(alignment.target.annotations["end"], 1198)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-09)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-09, places=9)
             self.assertAlmostEqual(alignment.annotations["bit score"], 46.6)
             self.assertAlmostEqual(alignment.annotations["% identity"], 31.00)
             self.assertEqual(alignment.annotations["alignment length"], 100)
@@ -3731,7 +3731,7 @@ class TestBlast(unittest.TestCase):
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|350596019|ref|XM_003360601.2|")
-            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-67)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-67, places=67)
             self.assertAlmostEqual(alignment.annotations["bit score"], 199)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
@@ -3741,32 +3741,32 @@ class TestBlast(unittest.TestCase):
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|301779869|ref|XM_002925302.1|")
-            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-67)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-67, places=67)
             self.assertAlmostEqual(alignment.annotations["bit score"], 202)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|301779869|ref|XM_002925302.1|")
-            self.assertAlmostEqual(alignment.annotations["evalue"], 3e-09)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 3e-09, places=9)
             self.assertAlmostEqual(alignment.annotations["bit score"], 45.1)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|296223671|ref|XM_002757683.1|")
-            self.assertAlmostEqual(alignment.annotations["evalue"], 4e-67)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 4e-67, places=67)
             self.assertAlmostEqual(alignment.annotations["bit score"], 202)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|296223671|ref|XM_002757683.1|")
-            self.assertAlmostEqual(alignment.annotations["evalue"], 3e-09)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 3e-09, places=9)
             self.assertAlmostEqual(alignment.annotations["bit score"], 45.1)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|338714227|ref|XM_001492113.3|")
-            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-66)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-66, places=66)
             self.assertAlmostEqual(alignment.annotations["bit score"], 202)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|338714227|ref|XM_001492113.3|")
-            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-09)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-09, places=9)
             self.assertAlmostEqual(alignment.annotations["bit score"], 46.6)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
@@ -4041,7 +4041,7 @@ gi|114649        60 KRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK 98
                 alignment.query.seq[0:98],
                 "KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-67)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-67, places=67)
             self.assertAlmostEqual(alignment.annotations["bit score"], 199)
             self.assertAlmostEqual(alignment.score, 506)
             self.assertEqual(alignment.shape, (2, 98))
@@ -4174,7 +4174,7 @@ gi|114649        60 KRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK 98
                 alignment.query.seq[0:98],
                 "KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-67)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-67, places=67)
             self.assertAlmostEqual(alignment.annotations["bit score"], 202)
             self.assertAlmostEqual(alignment.score, 515)
             self.assertEqual(alignment.shape, (2, 98))
@@ -4242,7 +4242,7 @@ gi|114649        56 QDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA  96
                 alignment.query.seq[2:96],
                 "IREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 3e-09)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 3e-09, places=9)
             self.assertAlmostEqual(alignment.annotations["bit score"], 45.1)
             self.assertAlmostEqual(alignment.score, 105)
             self.assertEqual(alignment.shape, (2, 100))
@@ -4307,7 +4307,7 @@ gi|114649        60 KRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK 98
                 alignment.query.seq[0:98],
                 "KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 4e-67)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 4e-67, places=67)
             self.assertAlmostEqual(alignment.annotations["bit score"], 202)
             self.assertAlmostEqual(alignment.score, 515)
             self.assertEqual(alignment.shape, (2, 98))
@@ -4375,7 +4375,7 @@ gi|114649        60 KRMF----VLKITTTKQQDHFFQAAFLEERDAWVRDIKKA  96
                 alignment.query.seq[2:96],
                 "IREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 3e-09)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 3e-09, places=9)
             self.assertAlmostEqual(alignment.annotations["bit score"], 45.1)
             self.assertAlmostEqual(alignment.score, 105)
             self.assertEqual(alignment.shape, (2, 100))
@@ -4440,7 +4440,7 @@ gi|114649        60 KRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK 98
                 alignment.query.seq[0:98],
                 "KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-66)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-66, places=66)
             self.assertAlmostEqual(alignment.annotations["bit score"], 202)
             self.assertAlmostEqual(alignment.score, 515)
             self.assertEqual(alignment.shape, (2, 98))
@@ -4508,7 +4508,7 @@ gi|114649        56 QDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA  96
                 alignment.query.seq[2:96],
                 "IREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-09)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-09, places=9)
             self.assertAlmostEqual(alignment.annotations["bit score"], 46.6)
             self.assertAlmostEqual(alignment.score, 109)
             self.assertEqual(alignment.shape, (2, 100))
@@ -4645,7 +4645,7 @@ gi|114649        11 GSVFNTWKPMWVVLL---------EDGIEFYKKKSDNSPKGMIPLKGSTLTS 54
             self.assertEqual(alignment.query.annotations["end"], 98)
             self.assertEqual(alignment.target.annotations["start"], 75)
             self.assertEqual(alignment.target.annotations["end"], 369)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-63)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-63, places=63)
             self.assertAlmostEqual(alignment.annotations["bit score"], 205)
             self.assertAlmostEqual(alignment.annotations["% identity"], 100.00)
             self.assertEqual(alignment.annotations["alignment length"], 98)
@@ -4673,7 +4673,7 @@ gi|114649        11 GSVFNTWKPMWVVLL---------EDGIEFYKKKSDNSPKGMIPLKGSTLTS 54
             self.assertEqual(alignment.query.annotations["end"], 98)
             self.assertEqual(alignment.target.annotations["start"], 94)
             self.assertEqual(alignment.target.annotations["end"], 388)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-62)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-62, places=62)
             self.assertAlmostEqual(alignment.annotations["bit score"], 199)
             self.assertAlmostEqual(alignment.annotations["% identity"], 95.92)
             self.assertEqual(alignment.annotations["alignment length"], 98)
@@ -4701,7 +4701,7 @@ gi|114649        11 GSVFNTWKPMWVVLL---------EDGIEFYKKKSDNSPKGMIPLKGSTLTS 54
             self.assertEqual(alignment.query.annotations["end"], 98)
             self.assertEqual(alignment.target.annotations["start"], 77)
             self.assertEqual(alignment.target.annotations["end"], 371)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-62)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-62, places=62)
             self.assertAlmostEqual(alignment.annotations["bit score"], 202)
             self.assertAlmostEqual(alignment.annotations["% identity"], 97.96)
             self.assertEqual(alignment.annotations["alignment length"], 98)
@@ -4729,7 +4729,7 @@ gi|114649        11 GSVFNTWKPMWVVLL---------EDGIEFYKKKSDNSPKGMIPLKGSTLTS 54
             self.assertEqual(alignment.query.annotations["end"], 98)
             self.assertEqual(alignment.target.annotations["start"], 172)
             self.assertEqual(alignment.target.annotations["end"], 466)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-61)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-61, places=61)
             self.assertAlmostEqual(alignment.annotations["bit score"], 202)
             self.assertAlmostEqual(alignment.annotations["% identity"], 97.96)
             self.assertEqual(alignment.annotations["alignment length"], 98)
@@ -4757,7 +4757,7 @@ gi|114649        11 GSVFNTWKPMWVVLL---------EDGIEFYKKKSDNSPKGMIPLKGSTLTS 54
             self.assertEqual(alignment.query.annotations["end"], 98)
             self.assertEqual(alignment.target.annotations["start"], 160)
             self.assertEqual(alignment.target.annotations["end"], 454)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-61)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-61, places=61)
             self.assertAlmostEqual(alignment.annotations["bit score"], 202)
             self.assertAlmostEqual(alignment.annotations["% identity"], 97.96)
             self.assertEqual(alignment.annotations["alignment length"], 98)
@@ -4824,28 +4824,28 @@ gi|114649        11 GSVFNTWKPMWVVLL---------EDGIEFYKKKSDNSPKGMIPLKGSTLTS 54
             self.assertEqual(
                 alignment.target.annotations["ids"], "gi|591387858|ref|XM_007068281.1|"
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-180)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-180, places=180)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|148227874|ref|NP_001088636.1|")
             self.assertEqual(alignment.query.description, "sirtuin 2 [Xenopus laevis]")
             self.assertEqual(
                 alignment.target.annotations["ids"], "gi|558185265|ref|XM_006128143.1|"
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 8e-180)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 8e-180, places=180)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|148227874|ref|NP_001088636.1|")
             self.assertEqual(alignment.query.description, "sirtuin 2 [Xenopus laevis]")
             self.assertEqual(
                 alignment.target.annotations["ids"], "gi|573878747|ref|XM_006627536.1|"
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 5e-173)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 5e-173, places=173)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|148227874|ref|NP_001088636.1|")
             self.assertEqual(alignment.query.description, "sirtuin 2 [Xenopus laevis]")
             self.assertEqual(
                 alignment.target.annotations["ids"], "gi|410910671|ref|XM_003968765.1|"
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 8e-173)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 8e-173, places=173)
             with self.assertRaises(StopIteration):
                 next(alignments)
 
@@ -4914,7 +4914,7 @@ gi|296147        60 SLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K 116
                 alignment.query.seq,
                 "WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-76)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-76, places=76)
             self.assertAlmostEqual(alignment.annotations["bit score"], 289)
             self.assertAlmostEqual(alignment.score, 626)
             self.assertEqual(alignment.shape, (2, 116))
@@ -5001,7 +5001,7 @@ gi|296147        60 DVFLAPQNYVLFSISQWIYH*HGEWLNFFFSIRKIKNAILLQVAFAWSQTLQCSWP 116
                 alignment.query.seq,
                 "LLIESPSRDE*PQ*RHPKFQTAGFEE*MERLTVPVGIALPGSSF*HSLIGKPTRKGVRNPDVFLAPQNYVLFSISQWIYH*HGEWLNFFFSIRKIKNAILLQVAFAWSQTLQCSWP",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 3e-73)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 3e-73, places=73)
             self.assertAlmostEqual(alignment.annotations["bit score"], 278)
             self.assertAlmostEqual(alignment.score, 602)
             self.assertEqual(alignment.shape, (2, 116))
@@ -5088,7 +5088,7 @@ gi|296147        60 MSF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLPLHGVKPSSVHGH 116
                 alignment.query.seq,
                 "F*LNLHREMSSLNEGIQNFRQPASRNRWNG*QSL*ALHCQGRHFSIP*LASQHERECEIRMSF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLPLHGVKPSSVHGH",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 5e-72)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 5e-72, places=72)
             self.assertAlmostEqual(alignment.annotations["bit score"], 274)
             self.assertAlmostEqual(alignment.score, 593)
             self.assertEqual(alignment.shape, (2, 116))
@@ -5175,7 +5175,7 @@ gi|296147        60 PFRVGLPIKEC*NDDPGNAMPTGTVNRSIYSSKPAV*NFGCLH*GYSSRDGDSIKS 116
                 alignment.query.seq,
                 "GHEHWRV*LHAKAT*SRIAFFIFRIEKKKFNHSPC***IH*DIEKST*F*GARKTSGFRTPFRVGLPIKEC*NDDPGNAMPTGTVNRSIYSSKPAV*NFGCLH*GYSSRDGDSIKS",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-70)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-70, places=70)
             self.assertAlmostEqual(alignment.annotations["bit score"], 270)
             self.assertAlmostEqual(alignment.score, 583)
             self.assertEqual(alignment.shape, (2, 116))
@@ -5262,7 +5262,7 @@ gi|296147        60 GCLSSSSKLCTLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESNPPVFMA 116
                 alignment.query.seq,
                 "TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTKGSAKSGCLSSSSKLCTLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESNPPVFMA",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-58)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-58, places=58)
             self.assertAlmostEqual(alignment.annotations["bit score"], 229)
             self.assertAlmostEqual(alignment.score, 495)
             self.assertEqual(alignment.shape, (2, 116))
@@ -5349,7 +5349,7 @@ gi|296147        60 PRSRLSEILDAFIEATHLAMEIQLK 85
                 alignment.query.seq,
                 "TIRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-53)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-53, places=53)
             self.assertAlmostEqual(alignment.annotations["bit score"], 197)
             self.assertAlmostEqual(alignment.score, 425)
             self.assertEqual(alignment.shape, (2, 85))
@@ -5426,7 +5426,7 @@ gi|296147         0 MAMNTGGFDSMQRQ 14
             self.assertEqual(alignment.target.annotations["end"], 42)
             self.assertEqual(alignment.target.seq, "MAMNTGGFDSMQRQ")
             self.assertEqual(alignment.query.seq, "MAMNTGGFDSMQRQ")
-            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-53)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-53, places=53)
             self.assertAlmostEqual(alignment.annotations["bit score"], 36.3)
             self.assertAlmostEqual(alignment.score, 73)
             self.assertEqual(alignment.shape, (2, 14))
@@ -5510,7 +5510,7 @@ gi|296147        60 PRSRLSEILDAFIEATHLAMEIQLK 85
                 alignment.query.seq,
                 "TIRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 3e-37)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 3e-37, places=37)
             self.assertAlmostEqual(alignment.annotations["bit score"], 152)
             self.assertAlmostEqual(alignment.score, 327)
             self.assertEqual(alignment.shape, (2, 85))
@@ -5584,7 +5584,7 @@ gi|296147         0 FRIEKKKFNHSPC* 14
             self.assertEqual(alignment.target.annotations["end"], 104)
             self.assertEqual(alignment.target.seq, "FRI*KKKFNH*TC*")
             self.assertEqual(alignment.query.seq, "FRIEKKKFNHSPC*")
-            self.assertAlmostEqual(alignment.annotations["evalue"], 3e-37)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 3e-37, places=37)
             self.assertAlmostEqual(alignment.annotations["bit score"], 26.3)
             self.assertAlmostEqual(alignment.score, 51)
             self.assertEqual(alignment.shape, (2, 14))
@@ -5664,7 +5664,7 @@ gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTK 55
                 alignment.query.seq,
                 "TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 6e-20)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 6e-20, places=20)
             self.assertAlmostEqual(alignment.annotations["bit score"], 68.0)
             self.assertAlmostEqual(alignment.score, 142)
             self.assertEqual(alignment.shape, (2, 55))
@@ -5742,7 +5742,7 @@ gi|296147         0 LFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESN 39
             self.assertEqual(
                 alignment.query.seq, "LFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESN"
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 6e-20)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 6e-20, places=20)
             self.assertAlmostEqual(alignment.annotations["bit score"], 52.8)
             self.assertAlmostEqual(alignment.score, 109)
             self.assertEqual(alignment.shape, (2, 39))
@@ -5826,7 +5826,7 @@ gi|296147        60 *RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K 103
                 alignment.query.seq,
                 "NLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 9e-08)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 9e-08, places=8)
             self.assertAlmostEqual(alignment.annotations["bit score"], 61.1)
             self.assertAlmostEqual(alignment.score, 127)
             self.assertEqual(alignment.shape, (2, 103))
@@ -5994,7 +5994,7 @@ gi|296147        60 PRSRLSEILDAFIEATHLAMEIQLK 85
                 alignment.query.seq,
                 "TIRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-32)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-32, places=32)
             self.assertAlmostEqual(alignment.annotations["bit score"], 143)
             self.assertAlmostEqual(alignment.score, 306)
             self.assertEqual(alignment.shape, (2, 85))
@@ -6074,7 +6074,7 @@ gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANT 54
                 alignment.query.seq,
                 "TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANT",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 7e-16)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 7e-16, places=16)
             self.assertAlmostEqual(alignment.annotations["bit score"], 62.5)
             self.assertAlmostEqual(alignment.score, 130)
             self.assertEqual(alignment.shape, (2, 54))
@@ -6148,7 +6148,7 @@ gi|296147         0 LFNISMDLSLAWRMVEFLLFDSEDKERNSASSC 33
             self.assertEqual(alignment.target.annotations["end"], 38)
             self.assertEqual(alignment.target.seq, "VFKISIDLSLACLIEVFLLLDSEDNECNSRSNC")
             self.assertEqual(alignment.query.seq, "LFNISMDLSLAWRMVEFLLFDSEDKERNSASSC")
-            self.assertAlmostEqual(alignment.annotations["evalue"], 7e-16)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 7e-16, places=16)
             self.assertAlmostEqual(alignment.annotations["bit score"], 44.6)
             self.assertAlmostEqual(alignment.score, 91)
             self.assertEqual(alignment.shape, (2, 33))
@@ -6316,7 +6316,7 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
                 alignment.query.seq,
                 "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 5e-32)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 5e-32, places=32)
             self.assertAlmostEqual(alignment.annotations["bit score"], 141)
             self.assertAlmostEqual(alignment.score, 303)
             self.assertEqual(alignment.shape, (2, 84))
@@ -6480,7 +6480,7 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
                 alignment.query.seq,
                 "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 6e-32)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 6e-32, places=32)
             self.assertAlmostEqual(alignment.annotations["bit score"], 141)
             self.assertAlmostEqual(alignment.score, 302)
             self.assertEqual(alignment.shape, (2, 84))
@@ -6559,7 +6559,7 @@ gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLD 49
             self.assertEqual(
                 alignment.query.seq, "TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLD"
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-11)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-11, places=11)
             self.assertAlmostEqual(alignment.annotations["bit score"], 51.0)
             self.assertAlmostEqual(alignment.score, 105)
             self.assertEqual(alignment.shape, (2, 49))
@@ -6637,7 +6637,7 @@ gi|296147         0 TLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESNPP 42
             self.assertEqual(
                 alignment.query.seq, "TLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESNPP"
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-11)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-11, places=11)
             self.assertAlmostEqual(alignment.annotations["bit score"], 41.8)
             self.assertAlmostEqual(alignment.score, 85)
             self.assertEqual(alignment.shape, (2, 42))
@@ -6805,7 +6805,7 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
                 alignment.query.seq,
                 "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-31)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-31, places=31)
             self.assertAlmostEqual(alignment.annotations["bit score"], 139)
             self.assertAlmostEqual(alignment.score, 299)
             self.assertEqual(alignment.shape, (2, 84))
@@ -6889,7 +6889,7 @@ gi|296147        60 SLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K 116
                 alignment.query.seq,
                 "WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 7e-14)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 7e-14, places=14)
             self.assertAlmostEqual(alignment.annotations["bit score"], 81.3)
             self.assertAlmostEqual(alignment.score, 171)
             self.assertEqual(alignment.shape, (2, 116))
@@ -6973,7 +6973,7 @@ gi|296147        60 MSF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLPLHGVKPSSVHGH 116
                 alignment.query.seq,
                 "F*LNLHREMSSLNEGIQNFRQPASRNRWNG*QSL*ALHCQGRHFSIP*LASQHERECEIRMSF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLPLHGVKPSSVHGH",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 4e-11)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 4e-11, places=11)
             self.assertAlmostEqual(alignment.annotations["bit score"], 72.1)
             self.assertAlmostEqual(alignment.score, 151)
             self.assertEqual(alignment.shape, (2, 116))
@@ -7051,7 +7051,7 @@ gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAF 47
             self.assertEqual(
                 alignment.query.seq, "TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAF"
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 3e-10)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 3e-10, places=10)
             self.assertAlmostEqual(alignment.annotations["bit score"], 47.3)
             self.assertAlmostEqual(alignment.score, 97)
             self.assertEqual(alignment.shape, (2, 47))
@@ -7135,7 +7135,7 @@ gi|296147        60
                 alignment.query.seq,
                 "HSLIGKPTRKGVRNPDVFLAPQNYVLFSISQWIYH*HGEWLNFFFSIRKIKNAILLQVAF",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 3e-10)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 3e-10, places=10)
             self.assertAlmostEqual(alignment.annotations["bit score"], 40.5)
             self.assertAlmostEqual(alignment.score, 82)
             self.assertEqual(alignment.shape, (2, 60))
@@ -7219,7 +7219,7 @@ gi|296147        60 *NDDPGNAMPTGTVNRSIYSSKPAV*NFGCLH*GYSSRDGDSIKS 105
                 alignment.query.seq,
                 "KAT*SRIAFFIFRIEKKKFNHSPC***IH*DIEKST*F*GARKTSGFRTPFRVGLPIKEC*NDDPGNAMPTGTVNRSIYSSKPAV*NFGCLH*GYSSRDGDSIKS",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 3e-08)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 3e-08, places=8)
             self.assertAlmostEqual(alignment.annotations["bit score"], 62.5)
             self.assertAlmostEqual(alignment.score, 130)
             self.assertEqual(alignment.shape, (2, 105))
@@ -7377,7 +7377,7 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
                 alignment.query.seq,
                 "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-28)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-28, places=28)
             self.assertAlmostEqual(alignment.annotations["bit score"], 129)
             self.assertAlmostEqual(alignment.score, 276)
             self.assertEqual(alignment.shape, (2, 84))
@@ -7461,7 +7461,7 @@ gi|296147        60 GCLSSSSKLCTLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCL 105
                 alignment.query.seq,
                 "TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTKGSAKSGCLSSSSKLCTLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCL",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-09)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-09, places=9)
             self.assertAlmostEqual(alignment.annotations["bit score"], 67.5)
             self.assertAlmostEqual(alignment.score, 141)
             self.assertEqual(alignment.shape, (2, 105))
@@ -7545,7 +7545,7 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
                 alignment.query.seq,
                 "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-28)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-28, places=28)
             self.assertAlmostEqual(alignment.annotations["bit score"], 129)
             self.assertAlmostEqual(alignment.score, 276)
             self.assertEqual(alignment.shape, (2, 84))
@@ -7797,7 +7797,7 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
                 alignment.query.seq,
                 "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 5e-28)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 5e-28, places=28)
             self.assertAlmostEqual(alignment.annotations["bit score"], 128)
             self.assertAlmostEqual(alignment.score, 274)
             self.assertEqual(alignment.shape, (2, 84))
@@ -8033,7 +8033,7 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
                 alignment.query.seq,
                 "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-27)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-27, places=27)
             self.assertAlmostEqual(alignment.annotations["bit score"], 127)
             self.assertAlmostEqual(alignment.score, 271)
             self.assertEqual(alignment.shape, (2, 84))
@@ -8355,7 +8355,7 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
                 alignment.query.seq,
                 "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-27)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-27, places=27)
             self.assertAlmostEqual(alignment.annotations["bit score"], 127)
             self.assertAlmostEqual(alignment.score, 271)
             self.assertEqual(alignment.shape, (2, 84))
@@ -8435,7 +8435,7 @@ gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTK 55
                 alignment.query.seq,
                 "TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 8e-08)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 8e-08, places=8)
             self.assertAlmostEqual(alignment.annotations["bit score"], 52.4)
             self.assertAlmostEqual(alignment.score, 108)
             self.assertEqual(alignment.shape, (2, 55))
@@ -8509,7 +8509,7 @@ gi|296147         0 TLFNISMDLSLAWRMVEFLLFDSED 25
             self.assertEqual(alignment.target.annotations["end"], 62)
             self.assertEqual(alignment.target.seq, "TILKI*SDLSDACLTSEFLLLDSED")
             self.assertEqual(alignment.query.seq, "TLFNISMDLSLAWRMVEFLLFDSED")
-            self.assertAlmostEqual(alignment.annotations["evalue"], 8e-08)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 8e-08, places=8)
             self.assertAlmostEqual(alignment.annotations["bit score"], 27.2)
             self.assertAlmostEqual(alignment.score, 53)
             self.assertEqual(alignment.shape, (2, 25))
@@ -8841,7 +8841,7 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
                 alignment.query.seq,
                 "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-26)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-26, places=26)
             self.assertAlmostEqual(alignment.annotations["bit score"], 123)
             self.assertAlmostEqual(alignment.score, 263)
             self.assertEqual(alignment.shape, (2, 84))
@@ -9245,7 +9245,7 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
                 alignment.query.seq,
                 "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 3e-24)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 3e-24, places=24)
             self.assertAlmostEqual(alignment.annotations["bit score"], 115)
             self.assertAlmostEqual(alignment.score, 246)
             self.assertEqual(alignment.shape, (2, 84))
@@ -9325,7 +9325,7 @@ gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQ 51
                 alignment.query.seq,
                 "TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQ",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-11)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-11, places=11)
             self.assertAlmostEqual(alignment.annotations["bit score"], 48.3)
             self.assertAlmostEqual(alignment.score, 99)
             self.assertEqual(alignment.shape, (2, 51))
@@ -9401,7 +9401,7 @@ gi|296147         0 TLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCL 35
                 alignment.target.seq, "TVLRISIDLSLACLMAELLFFASEDKSCNSEFNCL"
             )
             self.assertEqual(alignment.query.seq, "TLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCL")
-            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-11)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-11, places=11)
             self.assertAlmostEqual(alignment.annotations["bit score"], 43.7)
             self.assertAlmostEqual(alignment.score, 89)
             self.assertEqual(alignment.shape, (2, 35))
@@ -9485,7 +9485,7 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
                 alignment.query.seq,
                 "IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-20)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-20, places=20)
             self.assertAlmostEqual(alignment.annotations["bit score"], 103)
             self.assertAlmostEqual(alignment.score, 219)
             self.assertEqual(alignment.shape, (2, 84))
@@ -9569,7 +9569,7 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
                 alignment.query.seq,
                 "KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-13)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-13, places=13)
             self.assertAlmostEqual(alignment.annotations["bit score"], 79.9)
             self.assertAlmostEqual(alignment.score, 168)
             self.assertEqual(alignment.shape, (2, 78))
@@ -9653,7 +9653,7 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
                 alignment.query.seq,
                 "KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 5e-13)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 5e-13, places=13)
             self.assertAlmostEqual(alignment.annotations["bit score"], 78.5)
             self.assertAlmostEqual(alignment.score, 165)
             self.assertEqual(alignment.shape, (2, 78))
@@ -9737,7 +9737,7 @@ gi|296147        60 MEIQLK 66
                 alignment.query.seq,
                 "EELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-12)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-12, places=12)
             self.assertAlmostEqual(alignment.annotations["bit score"], 77.1)
             self.assertAlmostEqual(alignment.score, 162)
             self.assertEqual(alignment.shape, (2, 66))
@@ -9821,7 +9821,7 @@ gi|296147        60 EIQLK 65
                 alignment.query.seq,
                 "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-12)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-12, places=12)
             self.assertAlmostEqual(alignment.annotations["bit score"], 76.7)
             self.assertAlmostEqual(alignment.score, 161)
             self.assertEqual(alignment.shape, (2, 65))
@@ -9905,7 +9905,7 @@ gi|296147        60 EIQLK 65
                 alignment.query.seq,
                 "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 5e-12)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 5e-12, places=12)
             self.assertAlmostEqual(alignment.annotations["bit score"], 75.3)
             self.assertAlmostEqual(alignment.score, 158)
             self.assertEqual(alignment.shape, (2, 65))
@@ -9989,7 +9989,7 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
                 alignment.query.seq,
                 "KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-11)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-11, places=11)
             self.assertAlmostEqual(alignment.annotations["bit score"], 73.5)
             self.assertAlmostEqual(alignment.score, 154)
             self.assertEqual(alignment.shape, (2, 78))
@@ -10073,7 +10073,7 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
                 alignment.query.seq,
                 "KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 3e-11)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 3e-11, places=11)
             self.assertAlmostEqual(alignment.annotations["bit score"], 72.5)
             self.assertAlmostEqual(alignment.score, 152)
             self.assertEqual(alignment.shape, (2, 78))
@@ -10157,7 +10157,7 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
                 alignment.query.seq,
                 "KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 3e-11)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 3e-11, places=11)
             self.assertAlmostEqual(alignment.annotations["bit score"], 72.5)
             self.assertAlmostEqual(alignment.score, 152)
             self.assertEqual(alignment.shape, (2, 78))
@@ -10241,7 +10241,7 @@ gi|296147        60 EIQLK 65
                 alignment.query.seq,
                 "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 6e-11)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 6e-11, places=11)
             self.assertAlmostEqual(alignment.annotations["bit score"], 71.6)
             self.assertAlmostEqual(alignment.score, 150)
             self.assertEqual(alignment.shape, (2, 65))
@@ -10325,7 +10325,7 @@ gi|296147        60 EIQLK 65
                 alignment.query.seq,
                 "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 8e-11)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 8e-11, places=11)
             self.assertAlmostEqual(alignment.annotations["bit score"], 71.2)
             self.assertAlmostEqual(alignment.score, 149)
             self.assertEqual(alignment.shape, (2, 65))
@@ -10409,7 +10409,7 @@ gi|296147        60 EIQLK 65
                 alignment.query.seq,
                 "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 8e-11)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 8e-11, places=11)
             self.assertAlmostEqual(alignment.annotations["bit score"], 71.2)
             self.assertAlmostEqual(alignment.score, 149)
             self.assertEqual(alignment.shape, (2, 65))
@@ -10493,7 +10493,7 @@ gi|296147        60 EIQLK 65
                 alignment.query.seq,
                 "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 8e-11)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 8e-11, places=11)
             self.assertAlmostEqual(alignment.annotations["bit score"], 71.2)
             self.assertAlmostEqual(alignment.score, 149)
             self.assertEqual(alignment.shape, (2, 65))
@@ -10577,7 +10577,7 @@ gi|296147        60 EIQLK 65
                 alignment.query.seq,
                 "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-10)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-10, places=10)
             self.assertAlmostEqual(alignment.annotations["bit score"], 70.3)
             self.assertAlmostEqual(alignment.score, 147)
             self.assertEqual(alignment.shape, (2, 65))
@@ -10661,7 +10661,7 @@ gi|296147        60 EIQLK 65
                 alignment.query.seq,
                 "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-10)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-10, places=10)
             self.assertAlmostEqual(alignment.annotations["bit score"], 69.8)
             self.assertAlmostEqual(alignment.score, 146)
             self.assertEqual(alignment.shape, (2, 65))
@@ -10745,7 +10745,7 @@ gi|296147        60 EIQLK 65
                 alignment.query.seq,
                 "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-10)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-10, places=10)
             self.assertAlmostEqual(alignment.annotations["bit score"], 69.8)
             self.assertAlmostEqual(alignment.score, 146)
             self.assertEqual(alignment.shape, (2, 65))
@@ -10829,7 +10829,7 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
                 alignment.query.seq,
                 "KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 3e-10)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 3e-10, places=10)
             self.assertAlmostEqual(alignment.annotations["bit score"], 69.3)
             self.assertAlmostEqual(alignment.score, 145)
             self.assertEqual(alignment.shape, (2, 78))
@@ -10913,7 +10913,7 @@ gi|296147        60 EIQLK 65
                 alignment.query.seq,
                 "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 3e-10)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 3e-10, places=10)
             self.assertAlmostEqual(alignment.annotations["bit score"], 69.3)
             self.assertAlmostEqual(alignment.score, 145)
             self.assertEqual(alignment.shape, (2, 65))
@@ -10997,7 +10997,7 @@ gi|296147        60 EIQLK 65
                 alignment.query.seq,
                 "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 4e-10)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 4e-10, places=10)
             self.assertAlmostEqual(alignment.annotations["bit score"], 68.9)
             self.assertAlmostEqual(alignment.score, 144)
             self.assertEqual(alignment.shape, (2, 65))
@@ -11081,7 +11081,7 @@ gi|296147        60 EIQLK 65
                 alignment.query.seq,
                 "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 4e-10)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 4e-10, places=10)
             self.assertAlmostEqual(alignment.annotations["bit score"], 68.9)
             self.assertAlmostEqual(alignment.score, 144)
             self.assertEqual(alignment.shape, (2, 65))
@@ -11165,7 +11165,7 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
                 alignment.query.seq,
                 "KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 4e-10)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 4e-10, places=10)
             self.assertAlmostEqual(alignment.annotations["bit score"], 68.9)
             self.assertAlmostEqual(alignment.score, 144)
             self.assertEqual(alignment.shape, (2, 78))
@@ -11249,7 +11249,7 @@ gi|296147        60 EIQLK 65
                 alignment.query.seq,
                 "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 7e-10)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 7e-10, places=10)
             self.assertAlmostEqual(alignment.annotations["bit score"], 68.0)
             self.assertAlmostEqual(alignment.score, 142)
             self.assertEqual(alignment.shape, (2, 65))
@@ -11333,7 +11333,7 @@ gi|296147        60 MEIQLK 66
                 alignment.query.seq,
                 "EELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-09)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 1e-09, places=9)
             self.assertAlmostEqual(alignment.annotations["bit score"], 67.0)
             self.assertAlmostEqual(alignment.score, 140)
             self.assertEqual(alignment.shape, (2, 66))
@@ -11417,7 +11417,7 @@ gi|296147        60 EIQLK 65
                 alignment.query.seq,
                 "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-09)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-09, places=9)
             self.assertAlmostEqual(alignment.annotations["bit score"], 66.6)
             self.assertAlmostEqual(alignment.score, 139)
             self.assertEqual(alignment.shape, (2, 65))
@@ -11501,7 +11501,7 @@ gi|296147        60 EIQLK 65
                 alignment.query.seq,
                 "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-09)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-09, places=9)
             self.assertAlmostEqual(alignment.annotations["bit score"], 66.6)
             self.assertAlmostEqual(alignment.score, 139)
             self.assertEqual(alignment.shape, (2, 65))
@@ -11585,7 +11585,7 @@ gi|296147        60 EIQLK 65
                 alignment.query.seq,
                 "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 5e-09)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 5e-09, places=9)
             self.assertAlmostEqual(alignment.annotations["bit score"], 65.2)
             self.assertAlmostEqual(alignment.score, 136)
             self.assertEqual(alignment.shape, (2, 65))
@@ -11669,7 +11669,7 @@ gi|296147        60 EIQLK 65
                 alignment.query.seq,
                 "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 9e-09)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 9e-09, places=9)
             self.assertAlmostEqual(alignment.annotations["bit score"], 64.3)
             self.assertAlmostEqual(alignment.score, 134)
             self.assertEqual(alignment.shape, (2, 65))
@@ -11753,7 +11753,7 @@ gi|296147        60 EIQLK 65
                 alignment.query.seq,
                 "ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK",
             )
-            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-08)
+            self.assertAlmostEqual(alignment.annotations["evalue"], 2e-08, places=8)
             self.assertAlmostEqual(alignment.annotations["bit score"], 63.4)
             self.assertAlmostEqual(alignment.score, 132)
             self.assertEqual(alignment.shape, (2, 65))

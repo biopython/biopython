@@ -21,6 +21,9 @@ life, our support for it is now deprecated.
 Predictor and reading motifs in ``pfm-four-columns`` format will set motif name
 to "" instead of None, when no motif name was found.
 
+Tests that use assertAlmostEqual calls now use ``places`` parameter with enough
+presision when comparing very small numbers in scientific notation.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
