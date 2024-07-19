@@ -169,6 +169,46 @@ G:   0.17   0.17   0.17   0.17   0.17
 T:   0.50   0.17   0.50   0.17   0.50
 """
         self.assertEqual(str(m.pwm), expected_reverse_pwm)
+        # Same but for RNA motif.
+        background_rna = {"A": 0.3, "C": 0.2, "G": 0.2, "U": 0.3}
+        pseudocounts = 0.5
+        m_rna = motifs.create([Seq("AUAUA")], alphabet="ACGU")
+        m_rna.background = background_rna
+        m_rna.pseudocounts = pseudocounts
+        expected_forward_rna_counts = """\
+        0      1      2      3      4
+A:   1.00   0.00   1.00   0.00   1.00
+C:   0.00   0.00   0.00   0.00   0.00
+G:   0.00   0.00   0.00   0.00   0.00
+U:   0.00   1.00   0.00   1.00   0.00
+"""
+        self.assertEqual(str(m_rna.counts), expected_forward_rna_counts)
+        expected_forward_rna_pwm = """\
+        0      1      2      3      4
+A:   0.50   0.17   0.50   0.17   0.50
+C:   0.17   0.17   0.17   0.17   0.17
+G:   0.17   0.17   0.17   0.17   0.17
+U:   0.17   0.50   0.17   0.50   0.17
+"""
+        self.assertEqual(str(m_rna.pwm), expected_forward_rna_pwm)
+        expected_reverse_rna_counts = """\
+        0      1      2      3      4
+A:   0.00   1.00   0.00   1.00   0.00
+C:   0.00   0.00   0.00   0.00   0.00
+G:   0.00   0.00   0.00   0.00   0.00
+U:   1.00   0.00   1.00   0.00   1.00
+"""
+        self.assertEqual(
+            str(m_rna.reverse_complement().counts), expected_reverse_rna_counts
+        )
+        expected_reverse_rna_pwm = """\
+        0      1      2      3      4
+A:   0.17   0.50   0.17   0.50   0.17
+C:   0.17   0.17   0.17   0.17   0.17
+G:   0.17   0.17   0.17   0.17   0.17
+U:   0.50   0.17   0.50   0.17   0.50
+"""
+        self.assertEqual(str(m_rna.reverse_complement().pwm), expected_reverse_rna_pwm)
         # Same thing, but now start with a motif calculated from a count matrix
         m = motifs.create([Seq("ATATA")])
         counts = m.counts
@@ -182,6 +222,18 @@ T:   0.50   0.17   0.50   0.17   0.50
         received_reverse = format(m, "transfac")
         self.assertEqual(received_reverse, expected_reverse)
         self.assertEqual(str(m.pwm), expected_reverse_pwm)
+        # Same, but for RNA count matrix
+        m_rna = motifs.create([Seq("AUAUA")], alphabet="ACGU")
+        counts = m_rna.counts
+        m_rna = motifs.Motif(counts=counts, alphabet="ACGU")
+        m_rna.background = background_rna
+        m_rna.pseudocounts = pseudocounts
+        self.assertEqual(str(m_rna.counts), expected_forward_rna_counts)
+        self.assertEqual(str(m_rna.pwm), expected_forward_rna_pwm)
+        self.assertEqual(
+            str(m_rna.reverse_complement().counts), expected_reverse_rna_counts
+        )
+        self.assertEqual(str(m_rna.reverse_complement().pwm), expected_reverse_rna_pwm)
 
 
 class TestAlignAce(unittest.TestCase):
