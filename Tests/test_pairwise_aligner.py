@@ -32,7 +32,7 @@ class TestAlignerProperties(unittest.TestCase):
         aligner.epsilon = 1.0e-4
         self.assertAlmostEqual(aligner.epsilon, 1.0e-4)
         aligner.epsilon = 1.0e-8
-        self.assertAlmostEqual(aligner.epsilon, 1.0e-8)
+        self.assertAlmostEqual(aligner.epsilon, 1.0e-8, places=8)
         with self.assertRaises(TypeError):
             aligner.epsilon = "not a number"
         with self.assertRaises(TypeError):
