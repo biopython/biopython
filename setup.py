@@ -205,6 +205,8 @@ EXTENSIONS = [
     Extension("Bio.PDB.kdtrees", ["Bio/PDB/kdtrees.c"]),
     Extension("Bio.PDB._bcif_helper", ["Bio/PDB/bcifhelpermodule.c"]),
     Extension("Bio.SeqIO._twoBitIO", ["Bio/SeqIO/_twoBitIO.c"]),
+    Extension("Bio.lookAhead", ["Bio/lookAhead.c"]),
+    Extension("Bio.permutedLookAhead", ["Bio/permutedLookAhead.c"]),
 ]
 
 
