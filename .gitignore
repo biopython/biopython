@@ -134,3 +134,4 @@ ENV/
 
 # Testing
 **/.coverage
+biopython.code-workspace
