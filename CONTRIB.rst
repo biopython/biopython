@@ -214,7 +214,6 @@ please open an issue on GitHub or mention it on the mailing list.
 - Kuan-Yi Li <https://github.com/kuanyili>
 - Kurt Graff <https://github.com/graph1994>
 - Kyle Ellrott <https://github.com/kellrott>
-- Laia Rubio Castro <https://github.com/laiarubiio>
 - Leighton Pritchard <https://github.com/widdowquinn>
 - Lenna Peterson <ark first-name at gmail dot com>
 - Leonhard Heizinger <https://github.com/he-leon>
