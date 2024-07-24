@@ -23,6 +23,21 @@ from Bio import File
 
 def _get_ssbond(inl):
     # SSBOND   1 CYS A   26    CYS A   84                          1555   1555  2.04
+    # CYS A   26    CYS A   84                          1555   1555  2.0
+    # print(inl)
+    tok = inl.split()
+
+    chn = tok[1]
+    prox = tok[2]
+    chn2 = tok[4]
+    dist = tok[5]
+
+    ssbond = (prox, dist, chn, chn2)
+    return ssbond
+
+
+def _nget_ssbond(inl):
+    # SSBOND   1 CYS A   26    CYS A   84                          1555   1555  2.04
 
     ssbond = {
         "chain1": inl[11:12].strip(),
