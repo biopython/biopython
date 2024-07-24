@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # Copyright 2004 Kristian Rother.
 # Revisions copyright 2004 Thomas Hamelryck.
+# Revisions copyright 2024 James Krieger.
 #
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
@@ -20,20 +21,16 @@ from collections import defaultdict
 from Bio import File
 
 
-# Added to parse SSBOND records from the PDB header and add them back to the header dict
-# Eric G. Suchanek, PhD 11/25/22
 def _get_ssbond(inl):
     # SSBOND   1 CYS A   26    CYS A   84                          1555   1555  2.04
-    # CYS A   26    CYS A   84                          1555   1555  2.0
-    # print(inl)
-    tok = inl.split()
 
-    chn = tok[1]
-    prox = tok[2]
-    chn2 = tok[4]
-    dist = tok[5]
+    ssbond = {
+        "chain1": inl[11:12].strip(),
+        "proximal": inl[14:17].strip(),
+        "chain2": inl[31:32].strip(),
+        "distal": inl[34:37].strip(),
+    }
 
-    ssbond = (prox, dist, chn, chn2)
     return ssbond
 
 
@@ -236,7 +233,6 @@ def _parse_remark_465(line):
 
 def _parse_pdb_header_list(header):
     # database fields
-    # added ssbond 11/20/22 Eric G. Suchanek
     pdbh_dict = {
         "name": "",
         "head": "",
@@ -354,13 +350,11 @@ def _parse_pdb_header_list(header):
                 pdbh_dict["author"] += auth
             else:
                 pdbh_dict["author"] = auth
-        # parse SSBOND records and add them to the Header dict
         elif key == "SSBOND":
             ssbond_numb += 1
             ssb = _get_ssbond(tail)
             ssbdict = {ssbond_numb: ssb}
             pdbh_dict["ssbond"].update(ssbdict)
-        # print(f'SSBOND: {tail}')
         elif key == "REMARK":
             if re.search("REMARK   2 RESOLUTION.", hh):
                 r = _chop_end_codes(re.sub("REMARK   2 RESOLUTION.", "", hh))

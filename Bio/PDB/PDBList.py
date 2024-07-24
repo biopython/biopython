@@ -290,9 +290,7 @@ class PDBList:
             file_type = (
                 "pdb"
                 if file_format == "pdb"
-                else "mmCIF"
-                if file_format == "mmCif"
-                else "XML"
+                else "mmCIF" if file_format == "mmCif" else "XML"
             )
             url = (
                 self.pdb_server
@@ -340,6 +338,7 @@ class PDBList:
             urlretrieve(url, filename)
         except OSError:
             print("Desired structure doesn't exist")
+            return ""
         else:
             with gzip.open(filename, "rb") as gz:
                 with open(final_file, "wb") as out:
