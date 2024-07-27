@@ -3469,6 +3469,114 @@ qualifiers:
             dbxrefs,
         )
 
+    def test_feature_parser_date_warning(self):
+        path = "GenBank/noref_date_warning.gb"
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            with open(path) as handle:
+                records = GenBank.Iterator(handle, self.feat_parser)
+                record = next(records)
+            self.assertEqual(len(caught), 2)
+            self.assertEqual(caught[0].category, BiopythonParserWarning)
+            self.assertEqual(caught[1].category, BiopythonParserWarning)
+            self.assertEqual(
+                str(caught[0].message),
+                "LOCUS line does not contain - at position 65 in date:\n"
+                "LOCUS       NM_006141    1622 bp    mRNA            PRI       yyyy/mon/dd\n",
+            )
+            self.assertEqual(
+                str(caught[1].message),
+                "LOCUS line does not contain - at position 69 in date:\n"
+                "LOCUS       NM_006141    1622 bp    mRNA            PRI       yyyy/mon/dd\n",
+            )
+        seq = "GGCAAGATGGCGCCGGTGGGGGTGGAGAAGAAGCTGCTGCTAGGTCCCAACGGG...AAA"
+        id = "NM_006141.1"
+        name = "NM_006141"
+        description = (
+            "Homo sapiens dynein, cytoplasmic, light intermediate polypeptide 2"
+            " (DNCLI2), mRNA"
+        )
+        annotations = {
+            "accessions": ["NM_006141"],
+            "comment": """\
+PROVISIONAL REFSEQ: This record has not yet been subject to final
+NCBI review. The reference sequence was derived from AF035812.1.""",
+            "data_file_division": "PRI",
+            # "date": "01-NOV-2000", NB: no date
+            "gi": "5453633",
+            "keywords": [""],
+            "molecule_type": "mRNA",
+            "organism": "Homo sapiens",
+            "sequence_version": 1,
+            "source": "human",
+            "taxonomy": [
+                "Eukaryota",
+                "Metazoa",
+                "Chordata",
+                "Craniata",
+                "Vertebrata",
+                "Euteleostomi",
+                "Mammalia",
+                "Eutheria",
+                "Primates",
+                "Catarrhini",
+                "Hominidae",
+                "Homo",
+            ],
+        }
+        references = []
+        features = (
+            (
+                """\
+type: source
+location: [0:1622](+)
+qualifiers:
+    Key: db_xref, Value: ['taxon:9606']
+    Key: map, Value: ['16']
+    Key: organism, Value: ['Homo sapiens']
+""",
+                1,
+            ),
+            (
+                """\
+type: gene
+location: [0:1622](+)
+qualifiers:
+    Key: db_xref, Value: ['LocusID:1783']
+    Key: gene, Value: ['DNCLI2']
+    Key: note, Value: ['LIC2']
+""",
+                1,
+            ),
+            (
+                """\
+type: CDS
+location: [6:1485](+)
+qualifiers:
+    Key: codon_start, Value: ['1']
+    Key: db_xref, Value: ['LocusID:1783', 'GI:5453634']
+    Key: gene, Value: ['DNCLI2']
+    Key: note, Value: ['similar to R. norvegicus and G. gallus dynein light intermediate chain 2, Swiss-Prot Accession Numbers Q62698 and Q90828, respectively']
+    Key: product, Value: ['dynein, cytoplasmic, light intermediate polypeptide 2']
+    Key: protein_id, Value: ['NP_006132.1']
+    Key: translation, Value: ['MAPVGVEKKLLLGPNGPAVAAAGDLTSEEEEGQSLWSSILSEVSTRARSKLPSGKNILVFGEDGSGKTTLMTKLQGAEHGKKGRGLEYLYLSVHDEDRDDHTRCNVWILDGDLYHKGLLKFAVSAESLPETLVIFVADMSRPWTVMESLQKWASVLREHIDKMKIPPEKMRELERKFVKDFQDYMEPEEGCQGSPQRRGPLTSGSDEENVALPLGDNVLTHNLGIPVLVVCTKCDAVSVLEKEHDYRDEHLDFIQSHLRRFCLQYGAALIYTSVKEEKNLDLLYKYIVHKTYGFHFTTPALVVEKDAVFIPAGWDNEKKIAILHENFTTVKPEDAYEDFIVKPPVRKLVHDKELAAEDEQVFLMKQQSLLAKQPATPTRASESPARGPSGSPRTQGRGGPASVPSSSPGTSVKKPDPNIKNNAASEGVLASFFNSLLSKKTGSPGSPGAGGVQSTAKKSGQKTVLSNVQEELDRMTRKPDSMVTNSSTENEA']
+""",
+                1,
+            ),
+        )
+        dbxrefs = []
+        self.perform_feature_parser_test(
+            record,
+            seq,
+            id,
+            name,
+            description,
+            annotations,
+            references,
+            features,
+            dbxrefs,
+        )
+
     def test_feature_parser_02(self):
         path = "GenBank/cor6_6.gb"
         with open(path) as handle:
@@ -8125,6 +8233,14 @@ class LineOneTests(unittest.TestCase):
                 None,
             ),
             (
+                "LOCUS       AB070938                6497 bp    DNA     linear   BCT"
+                " 1-Oct-2001\n",
+                "linear",
+                "DNA",
+                "BCT",
+                [BiopythonParserWarning, BiopythonParserWarning],
+            ),
+            (
                 "LOCUS       NC_005816               9609 bp    DNA     circular BCT"
                 " 21-JUL-2008",
                 "circular",
@@ -8509,5 +8625,6 @@ class GenBankScannerTests(unittest.TestCase):
 
 
 if __name__ == "__main__":
+    os.chdir(os.path.dirname(__file__))
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
