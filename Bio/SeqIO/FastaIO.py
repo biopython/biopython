@@ -45,14 +45,13 @@ def SimpleFastaParser(handle):
     ('delta', 'CGCGC')
 
     """
-    # Skip any text before the first record (e.g. blank lines, comments)
-    for line in handle:
-        if line[0] == ">":
-            title = line[1:].rstrip()
-            break
-    else:
-        # no break encountered - probably an empty file
+    try:
+        line = next(handle)
+    except StopIteration:
         return
+    if not line.startswith(">"):
+        raise ValueError("FASTA files must start with '>'")
+    title = line[1:].rstrip()
 
     # Main logic
     # Note, remove trailing whitespace, and any internal spaces
