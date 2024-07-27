@@ -1311,12 +1311,18 @@ class GenBankScanner(InsdcScanner):
                 parse_date = True
                 if line[64:65] != "-":
                     parse_date = False
-                    warnings.warn("LOCUS line does not contain - at position 65 in date:\n" + line,
-                                  BiopythonParserWarning)    
+                    warnings.warn(
+                        "LOCUS line does not contain - "
+                        "at position 65 in date:\n" + line,
+                        BiopythonParserWarning,
+                    )
                 if line[68:69] != "-":
                     parse_date = False
-                    warnings.warn("LOCUS line does not contain - at position 69 in date:\n" + line,
-                                  BiopythonParserWarning)
+                    warnings.warn(
+                        "LOCUS line does not contain - "
+                        "at position 69 in date:\n" + line,
+                        BiopythonParserWarning,
+                    )
 
             name_and_length_str = line[self.GENBANK_INDENT : 29]
             while "  " in name_and_length_str:
@@ -1434,12 +1440,18 @@ class GenBankScanner(InsdcScanner):
                 parse_date = True
                 if line[70:71] != "-":
                     parse_date = False
-                    warnings.warn("LOCUS line does not contain - at position 71 in date:\n" + line,
-                                  BiopythonParserWarning)    
+                    warnings.warn(
+                        "LOCUS line does not contain - "
+                        "at position 71 in date:\n" + line,
+                        BiopythonParserWarning,
+                    )
                 if line[74:75] != "-":
                     parse_date = False
-                    warnings.warn("LOCUS line does not contain - at position 75 in date:\n" + line,
-                                  BiopythonParserWarning)
+                    warnings.warn(
+                        "LOCUS line does not contain - "
+                        "at position 75 in date:\n" + line,
+                        BiopythonParserWarning,
+                    )
 
             name_and_length_str = line[self.GENBANK_INDENT : 40]
             while "  " in name_and_length_str:
