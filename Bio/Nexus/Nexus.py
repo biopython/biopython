@@ -19,7 +19,6 @@ import sys
 import warnings
 from functools import reduce
 
-from Bio import BiopythonDeprecationWarning
 from Bio import BiopythonWarning
 from Bio import File
 from Bio.Data import IUPACData
@@ -663,28 +662,6 @@ class Nexus:
             self.read(input)
         else:
             self.read(DEFAULTNEXUS)
-
-    def get_original_taxon_order(self):
-        """Included for backwards compatibility (DEPRECATED)."""
-        warnings.warn(
-            "The get_original_taxon_order method has been deprecated "
-            "and will likely be removed from Biopython in the near "
-            "future. Please use the taxlabels attribute instead.",
-            BiopythonDeprecationWarning,
-        )
-        return self.taxlabels
-
-    def set_original_taxon_order(self, value):
-        """Included for backwards compatibility (DEPRECATED)."""
-        warnings.warn(
-            "The set_original_taxon_order method has been deprecated "
-            "and will likely be removed from Biopython in the near "
-            "future. Please use the taxlabels attribute instead.",
-            BiopythonDeprecationWarning,
-        )
-        self.taxlabels = value
-
-    original_taxon_order = property(get_original_taxon_order, set_original_taxon_order)
 
     def read(self, input):
         """Read and parse NEXUS input (a filename, file-handle, or string)."""

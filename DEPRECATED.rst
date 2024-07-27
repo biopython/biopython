@@ -623,6 +623,12 @@ Bio.Wise
 The ``Bio.Wise`` module was deprecated in Release 1.80, and removed in Release
 1.82.
 
+Bio.Nexus
+---------
+The ``original_taxon_order`` attribute of the ``Nexus`` class in
+``Bio.Nexus.Nexus`` was deprecated in Release 1.80, and removed in
+Release 1.85.  Please use the ``taxlabels`` attribute instead.
+
 Scripts/Restriction/ranacompiler.py
 -----------------------------------
 The ``is_palindrom`` function was removed in Release 1.79.
