@@ -17,9 +17,9 @@ Examples
 >>> print(X.count_amino_acids()['E'])
 12
 >>> print("%0.2f" % X.get_amino_acids_percent()['A'])
-0.04
+3.95
 >>> print("%0.2f" % X.get_amino_acids_percent()['L'])
-0.12
+11.84
 >>> print("%0.2f" % X.molecular_weight())
 17103.16
 >>> print("%0.2f" % X.aromaticity())
