@@ -113,7 +113,9 @@ class ProteinAnalysis:
         if self.amino_acids_percent is None:
             aa_counts = self.count_amino_acids()
 
-            percentages = {aa: count / self.length for aa, count in aa_counts.items()}
+            percentages = {
+                aa: (count * 100 / self.length) for aa, count in aa_counts.items()
+            }
 
             self.amino_acids_percent = percentages
 
@@ -134,7 +136,7 @@ class ProteinAnalysis:
         aromatic_aas = "YWF"
         aa_percentages = self.get_amino_acids_percent()
 
-        aromaticity = sum(aa_percentages[aa] for aa in aromatic_aas)
+        aromaticity = sum(aa_percentages[aa] / 100 for aa in aromatic_aas)
 
         return aromaticity
 
@@ -331,9 +333,9 @@ class ProteinAnalysis:
         """
         aa_percentages = self.get_amino_acids_percent()
 
-        helix = sum(aa_percentages[r] for r in "EMALK")
-        turn = sum(aa_percentages[r] for r in "NPGSD")
-        sheet = sum(aa_percentages[r] for r in "VIYFWLT")
+        helix = sum(aa_percentages[r] / 100 for r in "EMALK")
+        turn = sum(aa_percentages[r] / 100 for r in "NPGSD")
+        sheet = sum(aa_percentages[r] / 100 for r in "VIYFWLT")
 
         return helix, turn, sheet
 
