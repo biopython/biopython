@@ -9,6 +9,7 @@
 
 import unittest
 
+from Bio import BiopythonDeprecationWarning
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqUtils import molecular_weight
@@ -39,13 +40,24 @@ class ProtParamTest(unittest.TestCase):
                 self.assertEqual(count_dict[i], self.text.count(i))
 
     def test_get_amino_acids_percent(self):
+        """Calculate amino acid percentages (DEPRECATED)."""
+        with self.assertWarns(BiopythonDeprecationWarning):
+            for analysis in self.analyses:
+                percent_dict = analysis.get_amino_acids_percent()
+                seq_len = len(self.text)
+                for i in percent_dict:
+                    self.assertAlmostEqual(
+                        percent_dict[i], self.text.count(i) / seq_len
+                    )
+
+    def test_amino_acids_percent(self):
         """Calculate amino acid percentages."""
         for analysis in self.analyses:
-            percent_dict = analysis.get_amino_acids_percent()
             seq_len = len(self.text)
-            for i in percent_dict:
+            for i in analysis.amino_acids_percent:
                 self.assertAlmostEqual(
-                    percent_dict[i], (self.text.count(i) * 100 / seq_len)
+                    analysis.amino_acids_percent[i],
+                    (self.text.count(i) * 100 / seq_len),
                 )
 
     def test_get_molecular_weight(self):

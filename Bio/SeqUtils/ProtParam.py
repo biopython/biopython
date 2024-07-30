@@ -16,9 +16,9 @@ Examples
 6
 >>> print(X.count_amino_acids()['E'])
 12
->>> print("%0.2f" % X.get_amino_acids_percent()['A'])
+>>> print("%0.2f" % X.amino_acids_percent['A'])
 3.95
->>> print("%0.2f" % X.get_amino_acids_percent()['L'])
+>>> print("%0.2f" % X.amino_acids_percent['L'])
 11.84
 >>> print("%0.2f" % X.molecular_weight())
 17103.16
@@ -49,8 +49,11 @@ Other public methods are:
 
 """
 
+import functools
 import sys
+import warnings
 
+from Bio import BiopythonDeprecationWarning
 from Bio.Data import IUPACData
 from Bio.Seq import Seq
 from Bio.SeqUtils import IsoelectricPoint  # Local
@@ -77,7 +80,6 @@ class ProteinAnalysis:
         """Initialize the class."""
         self.sequence = prot_sequence.upper()
         self.amino_acids_content = None
-        self.amino_acids_percent = None
         self.length = len(self.sequence)
         self.monoisotopic = monoisotopic
 
@@ -100,26 +102,32 @@ class ProteinAnalysis:
         return self.amino_acids_content
 
     def get_amino_acids_percent(self):
-        """Calculate the amino acid content in percentages.
+        """Included for backwards compatibility (DEPRECATED)."""
+        warnings.warn(
+            "The get_amino_acids_percent method has been deprecated "
+            "and will likely be removed from Biopython in the near "
+            "future. Please use the amino_acids_percent attribute instead.",
+            BiopythonDeprecationWarning,
+        )
+
+        return {aa: percent / 100 for aa, percent in self.amino_acids_percent.items()}
+
+    @functools.cached_property
+    def amino_acids_percent(self):
+        """Get the amino acid content in percentages.
 
         The same as count_amino_acids only returns the Number in percentage of
         entire sequence. Returns a dictionary of {AminoAcid:percentage}.
 
-        The return value is cached in self.amino_acids_percent.
-
-        input is the dictionary self.amino_acids_content.
-        output is a dictionary with amino acids as keys.
+        Unlike the deprecated get_amino_acids_percent method, this attribute
+        returns percentages in the range 0-100.
         """
-        if self.amino_acids_percent is None:
-            aa_counts = self.count_amino_acids()
+        aa_counts = self.count_amino_acids()
+        percentages = {
+            aa: (count * 100 / self.length) for aa, count in aa_counts.items()
+        }
 
-            percentages = {
-                aa: (count * 100 / self.length) for aa, count in aa_counts.items()
-            }
-
-            self.amino_acids_percent = percentages
-
-        return self.amino_acids_percent
+        return percentages
 
     def molecular_weight(self):
         """Calculate MW from Protein sequence."""
@@ -134,7 +142,7 @@ class ProteinAnalysis:
         It is simply the relative frequency of Phe+Trp+Tyr.
         """
         aromatic_aas = "YWF"
-        aa_percentages = self.get_amino_acids_percent()
+        aa_percentages = self.amino_acids_percent
 
         aromaticity = sum(aa_percentages[aa] / 100 for aa in aromatic_aas)
 
@@ -331,7 +339,7 @@ class ProteinAnalysis:
 
         Returns a tuple of three floats (Helix, Turn, Sheet).
         """
-        aa_percentages = self.get_amino_acids_percent()
+        aa_percentages = self.amino_acids_percent
 
         helix = sum(aa_percentages[r] / 100 for r in "EMALK")
         turn = sum(aa_percentages[r] / 100 for r in "NPGSD")
