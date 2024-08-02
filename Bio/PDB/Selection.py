@@ -178,10 +178,9 @@ class _SelectEvaluator:
                 residue.get_resname() == id_value for residue in atom_residues
             ]
         elif id_type == "resi":
-            # TODO: Residues have weird IDs
             atom_residues = [atom.get_parent() for atom in self._atoms]
             match_indicators = [
-                residue.get_id() == id_value for residue in atom_residues
+                str(residue.get_id()[1]) == id_value for residue in atom_residues
             ]
         elif id_type == "name":
             match_indicators = [atom.get_name() == id_value for atom in self._atoms]
