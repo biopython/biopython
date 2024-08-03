@@ -344,6 +344,19 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, -7.0)
 
+    def test_fogsaa_simple1(self):
+        seq1 = "GAACT"
+        seq2 = "GAT"
+        aligner = Align.PairwiseAligner()
+        aligner.algorithm = "FOGSAA"
+        self.assertEqual(
+            aligner.algorithm, "Fast Optimal Global Sequence Alignment Algorithm"
+        )
+        score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, 3.0)
+        # score = aligner.score(seq1, reverse_complement(seq2), "-")
+        # self.assertAlmostEqual(score, 3.0)
+
 
 class TestPairwiseLocal(unittest.TestCase):
     def test_smithwaterman(self):
