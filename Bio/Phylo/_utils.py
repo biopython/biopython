@@ -475,6 +475,8 @@ def draw(
         y_top=0,
         color="black",
         lw=".1",
+        capstyle="round",
+        joinstyle="round",
     ):
         """Create a line with or without a line collection object.
 
@@ -482,19 +484,34 @@ def draw(
         customized by altering this function.
         """
         if not use_linecollection and orientation == "horizontal":
-            axes.hlines(y_here, x_start, x_here, color=color, lw=lw)
+            line = axes.hlines(y_here, x_start, x_here, color=color, lw=lw)
+            line.set_solid_capstyle(capstyle)
+            line.set_solid_joinstyle(joinstyle)
+
         elif use_linecollection and orientation == "horizontal":
             horizontal_linecollections.append(
                 mpcollections.LineCollection(
-                    [[(x_start, y_here), (x_here, y_here)]], color=color, lw=lw
+                    [[(x_start, y_here), (x_here, y_here)]],
+                    color=color,
+                    lw=lw,
+                    linestyle="solid",
+                    capstyle=capstyle,
+                    joinstyle=joinstyle,
                 )
             )
         elif not use_linecollection and orientation == "vertical":
-            axes.vlines(x_here, y_bot, y_top, color=color)
+            line = axes.vlines(x_here, y_bot, y_top, color=color, lw=lw)
+            line.set_solid_capstyle(capstyle)
+            line.set_solid_joinstyle(joinstyle)
         elif use_linecollection and orientation == "vertical":
             vertical_linecollections.append(
                 mpcollections.LineCollection(
-                    [[(x_here, y_bot), (x_here, y_top)]], color=color, lw=lw
+                    [[(x_here, y_bot), (x_here, y_top)]],
+                    color=color,
+                    lw=lw,
+                    linestyle="solid",
+                    capstyle=capstyle,
+                    joinstyle=joinstyle,
                 )
             )
 
