@@ -16,6 +16,7 @@ from Bio.Phylo import PhyloXML
 # Example Newick and Nexus files
 EX_NEWICK = "Nexus/int_node_labels.nwk"
 EX_NEWICK2 = "Nexus/test.new"
+EX_NEWICK3 = "Nexus/invalid_test.new"
 EX_NEXUS = "Nexus/test_Nexus_input.nex"
 EX_NEXUS2 = "Nexus/bats.nex"
 EX_NEWICK_BOM = "Nexus/ByteOrderMarkFile.nwk"
@@ -47,6 +48,10 @@ class IOTests(unittest.TestCase):
         self.assertEqual(tree.root.confidence, 80)
         tree = Phylo.read(EX_NEWICK2, "newick", comments_are_confidence=True)
         self.assertEqual(tree.root.confidence, 100)
+
+    def test_newick_read_exception(self):
+        """Read third Newick file with one error."""
+        self.assertRaises(Phylo.NewickIO.NewickError, Phylo.read, EX_NEWICK3, "newick")
 
     def test_newick_read_single3(self):
         """Read Nexus file with one tree."""
@@ -89,31 +94,45 @@ class IOTests(unittest.TestCase):
 
     def test_phylo_read_extra(self):
         """Additional tests to check correct parsing."""
-        tree = Phylo.read(StringIO("(A:1, B:-2, (C:3, D:4):-2)"), "newick")
+        tree = Phylo.read(StringIO("(A:1,B:-2,(C:3,D:4):-2)"), "newick")
         self.assertEqual(tree.distance("A"), 1)
         self.assertEqual(tree.distance("B"), -2)
         self.assertEqual(tree.distance("C"), 1)
         self.assertEqual(tree.distance("D"), 2)
 
-        tree = Phylo.read(StringIO("((A:1, B:-2):-5, (C:3, D:4):-2)"), "newick")
+        tree = Phylo.read(StringIO("((A:1,B:-2):-5,(C:3,D:4):-2)"), "newick")
         self.assertEqual(tree.distance("A"), -4)
         self.assertEqual(tree.distance("B"), -7)
         self.assertEqual(tree.distance("C"), 1)
         self.assertEqual(tree.distance("D"), 2)
 
-        tree = Phylo.read(StringIO("((:1, B:-2):-5, (C:3, D:4):-2)"), "newick")
+        tree = Phylo.read(StringIO("((:1,B:-2):-5,(C:3,D:4):-2)"), "newick")
         distances = {-4.0: 1, -7.0: 1, 1: 1, 2: 1}
         for x in tree.get_terminals():
             entry = int(tree.distance(x))
             distances[entry] -= distances[entry]
             self.assertEqual(distances[entry], 0)
 
-        tree = Phylo.read(StringIO("((:\n1\n,\n B:-2):-5, (C:3, D:4):-2);"), "newick")
+        tree = Phylo.read(StringIO("((:\n1\n,\nB:-2):-5,(C:3,D:4):-2);"), "newick")
         distances = {-4.0: 1, -7.0: 1, 1: 1, 2: 1}
         for x in tree.get_terminals():
             entry = int(tree.distance(x))
             distances[entry] -= distances[entry]
             self.assertEqual(distances[entry], 0)
+
+    def test_newick_whitespace_after_continuation_line(self):
+        self.assertRaises(
+            Phylo.NewickIO.NewickError,
+            Phylo.read,
+            StringIO("((:\n1\n,\n B:-2):-5,(C:3,D:4):-2);"),
+            "newick",
+        )
+        self.assertRaises(
+            Phylo.NewickIO.NewickError,
+            Phylo.read,
+            StringIO("((:\n1\n ,\nB:-2):-5,(C:3,D:4):-2);"),
+            "newick",
+        )
 
     def test_format_branch_length(self):
         """Custom format string for Newick branch length serialization."""
