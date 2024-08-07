@@ -1,13 +1,13 @@
 MEME version 4
 
-ALPHABET= ACGT
+ALPHABET= ACGU
 
 strands: + -
 
 Background letter frequencies
-A 0.303 C 0.183 G 0.209 T 0.306 
+A 0.303 C 0.183 G 0.209 U 0.306 
 
-MOTIF KRP
+MOTIF KRP_fake_RNA
 letter-probability matrix: alength= 4 w= 19 nsites= 17 E= 4.1e-009 
  0.000000  0.176471  0.000000  0.823529 
  0.000000  0.058824  0.647059  0.294118 
@@ -29,7 +29,7 @@ letter-probability matrix: alength= 4 w= 19 nsites= 17 E= 4.1e-009
  0.411765  0.000000  0.000000  0.588235 
  0.352941  0.058824  0.000000  0.588235 
 
-MOTIF IFXA
+MOTIF IFXA_fake_RNA
 letter-probability matrix: alength= 4 w= 18 nsites= 14 E= 3.2e-035 
  0.214286  0.000000  0.000000  0.785714 
  0.857143  0.000000  0.071429  0.071429 
@@ -50,7 +50,7 @@ letter-probability matrix: alength= 4 w= 18 nsites= 14 E= 3.2e-035
  1.000000  0.000000  0.000000  0.000000 
  0.000000  0.000000  0.785714  0.214286 
 
-MOTIF IFXA_no_nsites_no_evalue
+MOTIF IFXA_no_nsites_no_evalue_fake_RNA
 letter-probability matrix:
  0.214286  0.000000  0.000000  0.785714 
  0.857143  0.000000  0.071429  0.071429 
