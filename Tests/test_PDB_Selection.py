@@ -9,7 +9,7 @@ import unittest
 from Bio.PDB import PDBParser
 from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.Residue import Residue
-from Bio.PDB.Selection import unfold_entities
+from Bio.PDB.Selection import unfold_entities, _SelectParser
 
 
 def res_full_id(res: Residue):
@@ -147,6 +147,108 @@ class UnfoldEntitiesTests(unittest.TestCase):
 
         with self.assertRaises(PDBException):
             unfold_entities([structure_atom, structure_chain], "A")
+
+
+def convert(*, parse_results):
+    """
+    The select parser tests convert the parse results to a tree of tuples
+    so that the expected result objects can be general Python objects
+    instead of pyparsing ParseResults objects.
+    """
+    if str(type(parse_results)) != "<class 'pyparsing.results.ParseResults'>":
+        return parse_results
+
+    return tuple(
+        convert(parse_results=parse_results[index])
+        for index in range(len(parse_results))
+    )
+
+
+class SelectParserTests(unittest.TestCase):
+    def setUp(self):
+        self.parser = _SelectParser()
+
+    def test_identifiers(self):
+        comparators = ("==", "!=", "<=", "<", ">=", ">")
+        tests = [
+            ("model 0", ("model", "0")),
+            *(
+                (f"model {comparator} 0", ("model", comparator, "0"))
+                for comparator in comparators
+            ),
+            ("chain A", ("chain", "A")),
+            *(
+                (f"chain {comparator} A", ("chain", comparator, "A"))
+                for comparator in comparators
+            ),
+            ("resn ALA", ("resn", "ALA")),
+            *(
+                (f"resn {comparator} ALA", ("resn", comparator, "ALA"))
+                for comparator in ("==", "!=")
+            ),
+            ("resi 10", ("resi", "10")),
+            *(
+                (f"resi {comparator} 10", ("resi", comparator, "10"))
+                for comparator in comparators
+            ),
+            ("name C", ("name", "C")),
+            *(
+                (f"name {comparator} C", ("name", comparator, "C"))
+                for comparator in ("==", "!=")
+            ),
+        ]
+
+        for query, expected_result in tests:
+            result = tuple(self.parser(query)[0])
+            self.assertEqual(result, expected_result)
+
+    def test_boolean_operators(self):
+        tests = (
+            ("model 0 and chain B", ((("model", "0"), "and", ("chain", "B")),)),
+            (
+                "model 0 and (chain B or chain E)",
+                (
+                    (
+                        ("model", "0"),
+                        "and",
+                        ("(", (("chain", "B"), "or", ("chain", "E")), ")"),
+                    ),
+                ),
+            ),
+            (
+                "model 0 or chain B and not resn ALA",
+                (
+                    (
+                        ("model", "0"),
+                        "or",
+                        (("chain", "B"), "and", ("not", ("resn", "ALA"))),
+                    ),
+                ),
+            ),
+            (
+                "(model 0 or chain B) and resn ALA",
+                (
+                    (
+                        ("(", (("model", "0"), "or", ("chain", "B")), ")"),
+                        "and",
+                        ("resn", "ALA"),
+                    ),
+                ),
+            ),
+            (
+                "not chain A and chain B",
+                ((("not", ("chain", "A")), "and", ("chain", "B")),),
+            ),
+            (
+                "not (chain A and chain B)",
+                (("not", ("(", (("chain", "A"), "and", ("chain", "B")), ")")),),
+            ),
+        )
+
+        for query, expected_result in tests:
+            result = self.parser(query)
+            result = convert(parse_results=result)
+            self.assertEqual(result, expected_result)
 
 
 if __name__ == "__main__":
