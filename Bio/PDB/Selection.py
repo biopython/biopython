@@ -8,6 +8,7 @@
 """Selection of atoms, residues, etc."""
 
 import itertools
+import operator
 from copy import copy
 
 import numpy as np
@@ -97,11 +98,28 @@ def unfold_entities(entity_list, target_level):
 
 class _SelectParser:
     def __init__(self):
-        model_pattern = pp.Keyword("model") + pp.Word(pp.alphanums)
-        chain_pattern = pp.Keyword("chain") + pp.Word(pp.alphanums)
-        resn_pattern = pp.Keyword("resn") + pp.Word(pp.alphanums)
-        resi_pattern = pp.Keyword("resi") + pp.Word(pp.alphanums)
-        name_pattern = pp.Keyword("name") + pp.Word(pp.alphanums)
+        equality_pattern = pp.Keyword("==") | pp.Keyword("!=")
+        subordinate_pattern = pp.Keyword("<=") | pp.Keyword("<")
+        superordinate_pattern = pp.Keyword(">=") | pp.Keyword(">")
+        comparator_pattern = (
+            equality_pattern | subordinate_pattern | superordinate_pattern
+        )
+
+        model_pattern = (
+            pp.Keyword("model") + pp.Opt(comparator_pattern) + pp.Word(pp.alphanums)
+        )
+        chain_pattern = (
+            pp.Keyword("chain") + pp.Opt(comparator_pattern) + pp.Word(pp.alphanums)
+        )
+        resn_pattern = (
+            pp.Keyword("resn") + pp.Opt(equality_pattern) + pp.Word(pp.alphanums)
+        )
+        resi_pattern = (
+            pp.Keyword("resi") + pp.Opt(comparator_pattern) + pp.Word(pp.alphanums)
+        )
+        name_pattern = (
+            pp.Keyword("name") + pp.Opt(equality_pattern) + pp.Word(pp.alphanums)
+        )
         identifier_pattern = pp.Group(
             model_pattern | chain_pattern | resn_pattern | resi_pattern | name_pattern
         ).set_results_name("identifier")
@@ -152,6 +170,14 @@ class _SelectEvaluator:
             "and": self._evaluate_and,
             "or": self._evaluate_or,
         }
+        self._comparators = {
+            "==": operator.eq,
+            "!=": operator.ne,
+            "<=": operator.le,
+            "<": operator.lt,
+            ">=": operator.ge,
+            ">": operator.gt,
+        }
 
     def __call__(self, *args, **kwargs):
         assert len(args) == 1
@@ -159,31 +185,35 @@ class _SelectEvaluator:
         return self.evaluate(args[0])
 
     def _evaluate_identifier(self, parse_result: pp.ParseResults) -> np.ndarray:
-        assert len(parse_result) == 2
+        assert len(parse_result) in {2, 3}
 
         id_type = parse_result[0]
-        id_value = parse_result[1]
+        id_value = parse_result[-1]
+        comparator = parse_result[1] if len(parse_result) == 3 else "=="
+        comparator = self._comparators[comparator]
 
         if id_type == "model":
             atom_models = [
                 atom.get_parent().get_parent().get_parent() for atom in self._atoms
             ]
-            match_indicators = [str(model.id) == id_value for model in atom_models]
+            match_indicators = [
+                comparator(model.id, int(id_value)) for model in atom_models
+            ]
         elif id_type == "chain":
             atom_chains = [atom.get_parent().get_parent() for atom in self._atoms]
-            match_indicators = [chain.id == id_value for chain in atom_chains]
+            match_indicators = [comparator(chain.id, id_value) for chain in atom_chains]
         elif id_type == "resn":
             atom_residues = [atom.get_parent() for atom in self._atoms]
             match_indicators = [
-                residue.get_resname() == id_value for residue in atom_residues
+                comparator(residue.resname, id_value) for residue in atom_residues
             ]
         elif id_type == "resi":
             atom_residues = [atom.get_parent() for atom in self._atoms]
             match_indicators = [
-                str(residue.get_id()[1]) == id_value for residue in atom_residues
+                comparator(residue.id[1], int(id_value)) for residue in atom_residues
             ]
         elif id_type == "name":
-            match_indicators = [atom.get_name() == id_value for atom in self._atoms]
+            match_indicators = [comparator(atom.name, id_value) for atom in self._atoms]
         else:
             raise ValueError(f"Unexpected identifier type: {id_type}")
 
