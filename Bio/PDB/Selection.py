@@ -258,6 +258,123 @@ class _SelectEvaluator:
         return evaluator(parse_result)
 
 
+class _AtomIndicator:
+    def __init__(self, *, parse_results: pp.ParseResults):
+        self._indicator_composers = {
+            "identifier": self._compose_identifier_indicator,
+            "parentheses": self._compose_parentheses_indicator,
+            "not": self._compose_not_indicator,
+            "and": self._compose_and_indicator,
+            "or": self._compose_or_indicator,
+        }
+        self._comparators = {
+            "==": operator.eq,
+            "!=": operator.ne,
+            "<=": operator.le,
+            "<": operator.lt,
+            ">=": operator.ge,
+            ">": operator.gt,
+        }
+        self._indicator = self._compose_indicator(parse_results)
+
+    def _compose_identifier_indicator(self, parse_results: pp.ParseResults):
+        assert len(parse_results) in {2, 3}
+
+        id_type = parse_results[0]
+        id_value = parse_results[-1]
+        comparator = parse_results[1] if len(parse_results) == 3 else "=="
+        comparator = self._comparators[comparator]
+
+        if id_type == "model":
+
+            def indicator(atom: Atom) -> bool:
+                model = atom.get_parent().get_parent().get_parent()
+                return comparator(model.id, int(id_value))
+
+        elif id_type == "chain":
+
+            def indicator(atom: Atom) -> bool:
+                chain = atom.get_parent().get_parent()
+                return comparator(chain.id, id_value)
+
+        elif id_type == "resn":
+
+            def indicator(atom: Atom) -> bool:
+                residue = atom.get_parent()
+                return comparator(residue.resname, id_value)
+
+        elif id_type == "resi":
+
+            def indicator(atom: Atom) -> bool:
+                residue = atom.get_parent()
+                return comparator(residue.id[1], int(id_value))
+
+        elif id_type == "name":
+
+            def indicator(atom: Atom) -> bool:
+                return comparator(atom.name, id_value)
+
+        else:
+            raise ValueError(f"Unexpected identifier type: {id_type}")
+
+        return indicator
+
+    def _compose_parentheses_indicator(self, parse_results: pp.ParseResults):
+        assert len(parse_results) == 3
+        assert parse_results[0] == "("
+        assert parse_results[2] == ")"
+
+        return self._compose_indicator(parse_results[1])
+
+    def _compose_not_indicator(self, parse_results: pp.ParseResults):
+        assert len(parse_results) == 2
+        assert parse_results[0] == "not"
+
+        operand_indicator = self._compose_indicator(parse_results[1])
+
+        def indicator(atom: Atom) -> bool:
+            return not operand_indicator(atom)
+
+        return indicator
+
+    def _compose_and_indicator(self, parse_results: pp.ParseResults):
+        assert len(parse_results) == 3
+        assert parse_results[1] == "and"
+
+        left_indicator = self._compose_indicator(parse_results[0])
+        right_indicator = self._compose_indicator(parse_results[2])
+
+        def indicator(atom: Atom) -> bool:
+            return left_indicator(atom) and right_indicator(atom)
+
+        return indicator
+
+    def _compose_or_indicator(self, parse_results: pp.ParseResults):
+        assert len(parse_results) == 3
+        assert parse_results[1] == "or"
+
+        left_indicator = self._compose_indicator(parse_results[0])
+        right_indicator = self._compose_indicator(parse_results[2])
+
+        def indicator(atom: Atom) -> bool:
+            return left_indicator(atom) or right_indicator(atom)
+
+        return indicator
+
+    def _compose_indicator(self, parse_results: pp.ParseResults):
+        operation_name = parse_results.get_name()
+        composer = self._indicator_composers[operation_name]
+        return composer(parse_results)
+
+    def __call__(self, *args, **kwargs):
+        assert len(args) == 1
+        assert not kwargs
+
+        atom = args[0]
+
+        return self._indicator(atom)
+
+
 def select(structure: Structure, statement: str) -> Structure:
     """
     TODO: Fill out docstring
