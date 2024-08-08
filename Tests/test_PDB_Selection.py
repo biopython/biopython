@@ -4,12 +4,13 @@ Run Bio.PDB.Selection tests.
 Currently only tests unfold_entities.
 """
 
+import itertools
 import unittest
 
-from Bio.PDB import PDBParser
+from Bio.PDB import PDBParser, MMCIFParser
 from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.Residue import Residue
-from Bio.PDB.Selection import unfold_entities, _SelectParser
+from Bio.PDB.Selection import unfold_entities, _SelectParser, _AtomIndicator
 
 
 def res_full_id(res: Residue):
@@ -249,6 +250,48 @@ class SelectParserTests(unittest.TestCase):
             result = self.parser(query)
             result = convert(parse_results=result)
             self.assertEqual(result, expected_result)
+
+
+class AtomIndicatorTests(unittest.TestCase):
+    def setUp(self):
+        parser = _SelectParser()
+
+        def create_indicator(query: str):
+            return _AtomIndicator(parse_results=parser(query)[0])
+
+        self.create_indicator = create_indicator
+        structure_parser = MMCIFParser(QUIET=True)
+        self.structure = structure_parser.get_structure("7CFN", "PDB/7CFN.cif")
+
+    def test_query(self):
+        structure = self.structure
+        model = structure[0]
+        indicator = self.create_indicator("not (chain A or chain B) and resn != CYS")
+
+        for residue in itertools.chain(model["A"], model["B"]):
+            for atom in residue:
+                self.assertFalse(indicator(atom))
+
+        for residue in itertools.chain(model["G"], model["N"], model["R"]):
+            for atom in residue:
+                self.assertEqual(indicator(atom), residue.resname != "CYS")
+
+    def test_query2(self):
+        structure = self.structure
+        model = structure[0]
+        indicator = self.create_indicator(
+            "model 0 and not chain B and resi >= 10 and resi < 100 and name != C"
+        )
+
+        for chain in model:
+            for residue in chain:
+                for atom in residue:
+                    self.assertEqual(
+                        indicator(atom),
+                        chain.id != "B"
+                        and residue.id[1] in range(10, 100)
+                        and atom.name != "C",
+                    )
 
 
 if __name__ == "__main__":
