@@ -18,6 +18,7 @@ except ImportError:
         "Install numpy if you want to use Bio.Align."
     ) from None
 
+from Bio import BiopythonWarning
 from Bio import Align
 from Bio import SeqIO
 from Bio.Seq import reverse_complement
@@ -356,6 +357,27 @@ Pairwise sequence aligner with parameters
         self.assertAlmostEqual(score, 3.0)
         # score = aligner.score(seq1, reverse_complement(seq2), "-")
         # self.assertAlmostEqual(score, 3.0)
+
+    def test_fogsaa_affine1(self):
+        seq1 = "CC"
+        seq2 = "ACCT"
+        aligner = Align.PairwiseAligner()
+        aligner.match_score = 0
+        aligner.mismatch_score = -1
+        aligner.open_gap_score = -5
+        aligner.extend_gap_score = -1
+        aligner.algorithm = "FOGSAA"
+        self.assertEqual(
+            aligner.algorithm, "Fast Optimal Global Sequence Alignment Algorithm"
+        )
+        with self.assertWarns(BiopythonWarning):
+            score = aligner.score(seq1, seq2)
+        # Yes, I know this is different from what Gotoh says the optimal
+        # alignment is, but the original Chakraborty code returns this value
+        # too.
+        self.assertAlmostEqual(score, -8.0)
+        # score = aligner.score(seq1, reverse_complement(seq2), strand="-")
+        # self.assertAlmostEqual(score, -7.0)
 
 
 class TestPairwiseLocal(unittest.TestCase):
@@ -4994,6 +5016,21 @@ target	6	23	query	13	-	6	23	0	1	17,	0,
 query	16	target	1	255	6D17M5I	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
 """,
         )
+
+
+class TestAlgorithmRestrictions(unittest.TestCase):
+    def test_nwsw_restrictions(self):
+        aligner = Align.PairwiseAligner()
+        aligner.open_gap_score = 1.0
+        aligner.extend_gap_score = 2.0
+        with self.assertRaises(ValueError):
+            aligner.algorithm = "NWSW"
+
+    def test_fogsaa_restrictions(self):
+        aligner = Align.PairwiseAligner()
+        aligner.match_score = 1.1
+        with self.assertRaises(ValueError):
+            aligner.algorithm = "FOGSAA"
 
 
 if __name__ == "__main__":
