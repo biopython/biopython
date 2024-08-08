@@ -9,16 +9,13 @@
 
 import itertools
 import operator
-from copy import copy
+from collections.abc import Callable
+from typing import Union
 
-import numpy as np
-
-from Bio.PDB.Atom import Atom
-from Bio.PDB.Chain import Chain
-from Bio.PDB.Entity import Entity
-from Bio.PDB.Model import Model
+from Bio.PDB.Atom import Atom, DisorderedAtom
+from Bio.PDB.Entity import Entity, DisorderedEntityWrapper
 from Bio.PDB.PDBExceptions import PDBException
-from Bio.PDB.Residue import Residue
+from Bio.PDB.Residue import Residue, DisorderedResidue
 from Bio.PDB.Structure import Structure
 
 try:
@@ -159,105 +156,6 @@ class _SelectParser:
         return self._parser(statement)
 
 
-class _SelectEvaluator:
-    def __init__(self, *, structure: Structure):
-        self._structure = structure
-        self._atoms = list(structure.get_atoms())
-        self._evaluators = {
-            "identifier": self._evaluate_identifier,
-            "parentheses": self._evaluate_parentheses,
-            "not": self._evaluate_not,
-            "and": self._evaluate_and,
-            "or": self._evaluate_or,
-        }
-        self._comparators = {
-            "==": operator.eq,
-            "!=": operator.ne,
-            "<=": operator.le,
-            "<": operator.lt,
-            ">=": operator.ge,
-            ">": operator.gt,
-        }
-
-    def __call__(self, *args, **kwargs):
-        assert len(args) == 1
-        assert not kwargs
-        return self.evaluate(args[0])
-
-    def _evaluate_identifier(self, parse_result: pp.ParseResults) -> np.ndarray:
-        assert len(parse_result) in {2, 3}
-
-        id_type = parse_result[0]
-        id_value = parse_result[-1]
-        comparator = parse_result[1] if len(parse_result) == 3 else "=="
-        comparator = self._comparators[comparator]
-
-        if id_type == "model":
-            atom_models = [
-                atom.get_parent().get_parent().get_parent() for atom in self._atoms
-            ]
-            match_indicators = [
-                comparator(model.id, int(id_value)) for model in atom_models
-            ]
-        elif id_type == "chain":
-            atom_chains = [atom.get_parent().get_parent() for atom in self._atoms]
-            match_indicators = [comparator(chain.id, id_value) for chain in atom_chains]
-        elif id_type == "resn":
-            atom_residues = [atom.get_parent() for atom in self._atoms]
-            match_indicators = [
-                comparator(residue.resname, id_value) for residue in atom_residues
-            ]
-        elif id_type == "resi":
-            atom_residues = [atom.get_parent() for atom in self._atoms]
-            match_indicators = [
-                comparator(residue.id[1], int(id_value)) for residue in atom_residues
-            ]
-        elif id_type == "name":
-            match_indicators = [comparator(atom.name, id_value) for atom in self._atoms]
-        else:
-            raise ValueError(f"Unexpected identifier type: {id_type}")
-
-        return np.array(match_indicators)
-
-    def _evaluate_parentheses(self, parse_result: pp.ParseResults) -> np.ndarray:
-        assert len(parse_result) == 3
-        assert parse_result[0] == "("
-        assert parse_result[2] == ")"
-
-        return self.evaluate(parse_result[1])
-
-    def _evaluate_not(self, parse_result: pp.ParseResults) -> np.ndarray:
-        assert len(parse_result) == 2
-        assert parse_result[0] == "not"
-
-        operand = self.evaluate(parse_result[1])
-
-        return np.logical_not(operand)
-
-    def _evaluate_and(self, parse_result: pp.ParseResults) -> np.ndarray:
-        assert len(parse_result) == 3
-        assert parse_result[1] == "and"
-
-        left_operand = self.evaluate(parse_result[0])
-        right_operaand = self.evaluate(parse_result[2])
-
-        return np.logical_and(left_operand, right_operaand)
-
-    def _evaluate_or(self, parse_result: pp.ParseResults) -> np.ndarray:
-        assert len(parse_result) == 3
-        assert parse_result[1] == "or"
-
-        left_operand = self.evaluate(parse_result[0])
-        right_operaand = self.evaluate(parse_result[2])
-
-        return np.logical_or(left_operand, right_operaand)
-
-    def evaluate(self, parse_result: pp.ParseResults) -> np.ndarray:
-        operation_name = parse_result.get_name()
-        evaluator = self._evaluators[operation_name]
-        return evaluator(parse_result)
-
-
 class _AtomIndicator:
     def __init__(self, *, parse_results: pp.ParseResults):
         self._indicator_composers = {
@@ -277,7 +175,9 @@ class _AtomIndicator:
         }
         self._indicator = self._compose_indicator(parse_results)
 
-    def _compose_identifier_indicator(self, parse_results: pp.ParseResults):
+    def _compose_identifier_indicator(
+        self, parse_results: pp.ParseResults
+    ) -> Callable[[Atom], bool]:
         assert len(parse_results) in {2, 3}
 
         id_type = parse_results[0]
@@ -319,14 +219,18 @@ class _AtomIndicator:
 
         return indicator
 
-    def _compose_parentheses_indicator(self, parse_results: pp.ParseResults):
+    def _compose_parentheses_indicator(
+        self, parse_results: pp.ParseResults
+    ) -> Callable[[Atom], bool]:
         assert len(parse_results) == 3
         assert parse_results[0] == "("
         assert parse_results[2] == ")"
 
         return self._compose_indicator(parse_results[1])
 
-    def _compose_not_indicator(self, parse_results: pp.ParseResults):
+    def _compose_not_indicator(
+        self, parse_results: pp.ParseResults
+    ) -> Callable[[Atom], bool]:
         assert len(parse_results) == 2
         assert parse_results[0] == "not"
 
@@ -337,7 +241,9 @@ class _AtomIndicator:
 
         return indicator
 
-    def _compose_and_indicator(self, parse_results: pp.ParseResults):
+    def _compose_and_indicator(
+        self, parse_results: pp.ParseResults
+    ) -> Callable[[Atom], bool]:
         assert len(parse_results) == 3
         assert parse_results[1] == "and"
 
@@ -349,7 +255,9 @@ class _AtomIndicator:
 
         return indicator
 
-    def _compose_or_indicator(self, parse_results: pp.ParseResults):
+    def _compose_or_indicator(
+        self, parse_results: pp.ParseResults
+    ) -> Callable[[Atom], bool]:
         assert len(parse_results) == 3
         assert parse_results[1] == "or"
 
@@ -361,7 +269,9 @@ class _AtomIndicator:
 
         return indicator
 
-    def _compose_indicator(self, parse_results: pp.ParseResults):
+    def _compose_indicator(
+        self, parse_results: pp.ParseResults
+    ) -> Callable[[Atom], bool]:
         operation_name = parse_results.get_name()
         composer = self._indicator_composers[operation_name]
         return composer(parse_results)
@@ -375,56 +285,52 @@ class _AtomIndicator:
         return self._indicator(atom)
 
 
-def select(structure: Structure, statement: str) -> Structure:
+class _StructurePruner:
+    def __init__(self, indicator: Callable[[Atom], bool]):
+        self._atom_indicator = indicator
+
+    def __call__(self, *args, **kwargs):
+        assert len(args) == 1
+        assert not kwargs
+
+        self.prune(args[0])
+
+    def prune(self, entity: Union[Entity, DisorderedEntityWrapper]) -> bool:
+        indicator = self._atom_indicator
+
+        if isinstance(entity, Atom):
+            return not indicator(entity)
+
+        pruned_all_children = True
+        children = tuple(entity.child_dict.items())
+
+        for child_id, child in children:
+            if self.prune(child):
+                if isinstance(entity, DisorderedResidue):
+                    assert isinstance(child, Residue)
+                    entity.disordered_remove(child.resname)
+                elif isinstance(entity, DisorderedAtom):
+                    assert isinstance(child, Atom)
+                    entity.disordered_remove(child.altloc)
+                else:
+                    entity.detach_child(child_id)
+            else:
+                pruned_all_children = False
+
+        return pruned_all_children
+
+
+def select(structure: Structure, query: str) -> Structure:
     """
     TODO: Fill out docstring
     """
     parser = _SelectParser()
-    evaluator = _SelectEvaluator(structure=structure)
-    parse_result = parser(statement)[0]
-    evaluate_result = evaluator(parse_result)
+    parse_results = parser(query)[0]
+    indicator = _AtomIndicator(parse_results=parse_results)
+    pruner = _StructurePruner(indicator)
+    result_structure = structure.copy()
 
-    result_structure = Structure(structure.id)
-    result_model = None
-    result_chain = None
-    result_residue = None
-
-    for match_indicator, atom in zip(evaluate_result, structure.get_atoms()):
-        if not match_indicator:
-            continue
-
-        residue = atom.get_parent()
-        chain = residue.get_parent()
-        model = chain.get_parent()
-
-        assert isinstance(residue, Residue)
-        assert isinstance(chain, Chain)
-        assert isinstance(model, Model)
-        # TODO: Handle disordered entities
-
-        if not result_model or result_model.id != model.id:
-            result_model = Model(model.id, model.serial_num)
-            result_structure.add(result_model)
-            result_chain = None
-            result_residue = None
-        if not result_chain or result_chain.id != chain.id:
-            if result_model.has_id(chain.id):
-                result_chain = result_model[chain.id]
-            else:
-                result_chain = Chain(chain.id)
-                result_model.add(result_chain)
-            result_residue = None
-        if not result_residue or result_residue.id != residue.id:
-            if result_chain.has_id(residue.id):
-                result_residue = result_chain[residue.id]
-            else:
-                result_residue = Residue(residue.id, residue.resname, residue.segid)
-                result_chain.add(result_residue)
-
-        atom_copy = copy(atom)
-        assert atom_copy is not atom
-        atom_copy.set_parent(result_residue)
-        result_residue.add(atom_copy)
+    pruner(result_structure)
 
     return result_structure
 
