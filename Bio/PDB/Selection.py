@@ -18,15 +18,6 @@ from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.Residue import Residue, DisorderedResidue
 from Bio.PDB.Structure import Structure
 
-try:
-    import pyparsing as pp
-except ImportError:
-    from Bio import MissingPythonDependencyError
-
-    raise MissingPythonDependencyError(
-        "Install pyparsing to use Bio.PDB.Selection (e.g. pip install pyparsing)"
-    ) from None
-
 entity_levels = ["A", "R", "C", "M", "S"]
 
 
@@ -102,6 +93,15 @@ class _SelectParser:
     """
 
     def __init__(self):
+        try:
+            import pyparsing as pp
+        except ImportError:
+            from Bio import MissingPythonDependencyError
+
+            raise MissingPythonDependencyError(
+                "Install pyparsing to use Bio.PDB.Selection (e.g. pip install pyparsing)"
+            ) from None
+
         equality_pattern = pp.Keyword("==") | pp.Keyword("!=")
         subordinate_pattern = pp.Keyword("<=") | pp.Keyword("<")
         superordinate_pattern = pp.Keyword(">=") | pp.Keyword(">")
@@ -171,7 +171,7 @@ class _AtomIndicator:
     The atom indicator initializer accepts a parse tree representing the query.
     """
 
-    def __init__(self, *, parse_results: pp.ParseResults):
+    def __init__(self, *, parse_results):
         self._indicator_composers = {
             "identifier": self._compose_identifier_indicator,
             "parentheses": self._compose_parentheses_indicator,
@@ -189,9 +189,7 @@ class _AtomIndicator:
         }
         self._indicator = self._compose_indicator(parse_results)
 
-    def _compose_identifier_indicator(
-        self, parse_results: pp.ParseResults
-    ) -> Callable[[Atom], bool]:
+    def _compose_identifier_indicator(self, parse_results) -> Callable[[Atom], bool]:
         assert len(parse_results) in {2, 3}
 
         id_type = parse_results[0]
@@ -233,18 +231,14 @@ class _AtomIndicator:
 
         return indicator
 
-    def _compose_parentheses_indicator(
-        self, parse_results: pp.ParseResults
-    ) -> Callable[[Atom], bool]:
+    def _compose_parentheses_indicator(self, parse_results) -> Callable[[Atom], bool]:
         assert len(parse_results) == 3
         assert parse_results[0] == "("
         assert parse_results[2] == ")"
 
         return self._compose_indicator(parse_results[1])
 
-    def _compose_not_indicator(
-        self, parse_results: pp.ParseResults
-    ) -> Callable[[Atom], bool]:
+    def _compose_not_indicator(self, parse_results) -> Callable[[Atom], bool]:
         assert len(parse_results) == 2
         assert parse_results[0] == "not"
 
@@ -255,9 +249,7 @@ class _AtomIndicator:
 
         return indicator
 
-    def _compose_and_indicator(
-        self, parse_results: pp.ParseResults
-    ) -> Callable[[Atom], bool]:
+    def _compose_and_indicator(self, parse_results) -> Callable[[Atom], bool]:
         assert len(parse_results) == 3
         assert parse_results[1] == "and"
 
@@ -269,9 +261,7 @@ class _AtomIndicator:
 
         return indicator
 
-    def _compose_or_indicator(
-        self, parse_results: pp.ParseResults
-    ) -> Callable[[Atom], bool]:
+    def _compose_or_indicator(self, parse_results) -> Callable[[Atom], bool]:
         assert len(parse_results) == 3
         assert parse_results[1] == "or"
 
@@ -283,9 +273,7 @@ class _AtomIndicator:
 
         return indicator
 
-    def _compose_indicator(
-        self, parse_results: pp.ParseResults
-    ) -> Callable[[Atom], bool]:
+    def _compose_indicator(self, parse_results) -> Callable[[Atom], bool]:
         operation_name = parse_results.get_name()
         composer = self._indicator_composers[operation_name]
         return composer(parse_results)
