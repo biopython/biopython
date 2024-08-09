@@ -3770,8 +3770,9 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
     and gap scores are negative or zero.  By default, the match score is 1,
     and the mismatch and gap scores are zero.  Based on the values of the gap
     scores, a PairwiseAligner object automatically chooses the appropriate
-    alignment algorithm (the Needleman-Wunsch, Smith-Waterman, Gotoh, or
-    Waterman-Smith-Beyer global or local alignment algorithm).
+    alignment algorithm (the Needleman-Wunsch, Smith-Waterman, Gotoh,
+    Waterman-Smith-Beyer, or Fast Optimal Global Sequence Alignment Algorithm
+    global or local alignment algorithm).
 
     Calling the "score" method on the aligner with two sequences as arguments
     will calculate the alignment score between the two sequences.
