@@ -1659,6 +1659,8 @@ class TestClusterBuster(unittest.TestCase):
             )
             self.assertEqual(motif[1:-2].consensus, "ACG")
             self.assertEqual(motif.length, 6)
+            self.assertIsNone(motif.weight)
+            self.assertIsNone(motif.gap)
             self.assertAlmostEqual(motif.counts["G", 0], 0.0)
             self.assertAlmostEqual(motif.counts["G", 1], 1.0)
             self.assertAlmostEqual(motif.counts["G", 2], 0.0)
@@ -1705,6 +1707,8 @@ class TestClusterBuster(unittest.TestCase):
             )
             self.assertEqual(motif[1:-2].consensus, "GCG")
             self.assertEqual(motif.length, 6)
+            self.assertIsNone(motif.weight)
+            self.assertIsNone(motif.gap)
             self.assertAlmostEqual(motif.counts["G", 0], 2.0)
             self.assertAlmostEqual(motif.counts["G", 1], 23.0)
             self.assertAlmostEqual(motif.counts["G", 2], 0.0)
@@ -1753,6 +1757,8 @@ class TestClusterBuster(unittest.TestCase):
             )
             self.assertEqual(motif[1:-2].consensus, "AATTA")
             self.assertEqual(motif.length, 8)
+            self.assertEqual(motif.weight, 3.0)
+            self.assertEqual(motif.gap, 10.0)
             self.assertAlmostEqual(motif.counts["G", 0], 4.0)
             self.assertAlmostEqual(motif.counts["G", 1], 0.0)
             self.assertAlmostEqual(motif.counts["G", 2], 0.0)
@@ -1789,6 +1795,18 @@ class TestClusterBuster(unittest.TestCase):
             self.assertEqual(
                 motifs.write(record, "clusterbuster").split(),
                 stream.read().split(),
+            )
+            stream.seek(0)
+            self.assertEqual(
+                motifs.write(record, "clusterbuster", precision=2).split("\n"),
+                [
+                    (
+                        line
+                        if (line.startswith(">") or line.startswith("#"))
+                        else "\t".join([f"{x}.00" for x in line.split()])
+                    )
+                    for line in stream.read().split("\n")
+                ],
             )
 
 
