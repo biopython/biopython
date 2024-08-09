@@ -24,6 +24,12 @@ to "" instead of None, when no motif name was found.
 Tests that use assertAlmostEqual calls now use ``places`` parameter with enough
 presision when comparing very small numbers in scientific notation.
 
+``Bio.motifs`` now supports reverse complementing RNA motifs and correctly
+generating degenerate consensus sequences for RNA motifs.
+
+``Bio.motifs.minimal`` now supports parsing RNA motifs and parsing motifs
+for which not all statistics are provided (e.g. missing E-values or nsites).
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
