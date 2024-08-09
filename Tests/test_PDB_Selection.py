@@ -6,11 +6,14 @@ Currently only tests unfold_entities.
 
 import itertools
 import unittest
+from typing import Union
 
 from Bio.PDB import PDBParser, MMCIFParser
+from Bio.PDB.Atom import Atom
+from Bio.PDB.Entity import Entity, DisorderedEntityWrapper
 from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.Residue import Residue
-from Bio.PDB.Selection import unfold_entities, _SelectParser, _AtomIndicator
+from Bio.PDB.Selection import unfold_entities, _SelectParser, _AtomIndicator, select
 
 
 def res_full_id(res: Residue):
@@ -292,6 +295,34 @@ class AtomIndicatorTests(unittest.TestCase):
                         and residue.id[1] in range(10, 100)
                         and atom.name != "C",
                     )
+
+
+def get_atoms(entity: Union[Entity, DisorderedEntityWrapper]):
+    """
+    This helper is necessary because structure.get_atoms() does not yield
+    all of the entities in a disordered entity.
+    """
+    if isinstance(entity, Atom):
+        yield entity
+    else:
+        for child in entity.child_dict.values():
+            yield from get_atoms(child)
+
+
+class End2EndSelectTests(unittest.TestCase):
+    def setUp(self):
+        structure_parser = MMCIFParser(QUIET=True)
+        # Note that this structure contains disordered residues and atoms.
+        self.structure = structure_parser.get_structure("3JQH", "PDB/3JQH.cif")
+
+    def test_query(self):
+        structure = self.structure
+        selection = select(structure, "resn PRO or resn GLU and name CA")
+        atoms = get_atoms(selection)
+        serial_numbers = {atom.serial_number for atom in atoms}
+        expected = {1, 2, 3, 4, 5, 6, 7, 15, 71, 111, 155, 202}
+
+        self.assertEqual(serial_numbers, expected)
 
 
 if __name__ == "__main__":
