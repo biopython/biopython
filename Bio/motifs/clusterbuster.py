@@ -77,8 +77,14 @@ def read(handle):
     return record
 
 
-def write(motifs):
-    """Return the representation of motifs in Cluster Buster position frequency matrix format."""
+def write(motifs, precision=0):
+    """Return the representation of motifs in Cluster Buster position frequency matrix format.
+
+    By default (`precision=0`) Cluster Buster position frequency matrices will be written
+    with integer values.
+    If a higher precision value is set, Cluster Buster position frequency matrices will be
+    written as floats with `x` decimal places.
+    """
     lines = []
     for m in motifs:
         lines.append(f">{m.name}\n")
@@ -89,7 +95,11 @@ def write(motifs):
         for ACGT_counts in zip(
             m.counts["A"], m.counts["C"], m.counts["G"], m.counts["T"]
         ):
-            lines.append("{:0.0f}\t{:0.0f}\t{:0.0f}\t{:0.0f}\n".format(*ACGT_counts))
+            lines.append(
+                "{:0.0f}\t{:0.0f}\t{:0.0f}\t{:0.0f}\n".replace(
+                    "0f", str(int(precision)) + "f"
+                ).format(*ACGT_counts)
+            )
 
     # Finished; glue the lines together.
     text = "".join(lines)
