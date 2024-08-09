@@ -30,6 +30,11 @@ generating degenerate consensus sequences for RNA motifs.
 ``Bio.motifs.minimal`` now supports parsing RNA motifs and parsing motifs
 for which not all statistics are provided (e.g. missing E-values or nsites).
 
+``Bio.motifs.clusterbuster`` now supports parsing GAP and WEIGHT parameters
+and can optionally write Cluster Buster motif files with floats instead of
+integers, by specifying the ``precision=<int>`` parameter when writing:
+e.g. motifs.write(motifs, "clusterbuster", precision=2)
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 

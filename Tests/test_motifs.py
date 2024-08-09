@@ -1796,6 +1796,18 @@ class TestClusterBuster(unittest.TestCase):
                 motifs.write(record, "clusterbuster").split(),
                 stream.read().split(),
             )
+            stream.seek(0)
+            self.assertEqual(
+                motifs.write(record, "clusterbuster", precision=2).split("\n"),
+                [
+                    (
+                        line
+                        if (line.startswith(">") or line.startswith("#"))
+                        else "\t".join([f"{x}.00" for x in line.split()])
+                    )
+                    for line in stream.read().split("\n")
+                ],
+            )
 
 
 class TestXMS(unittest.TestCase):
