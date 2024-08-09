@@ -94,6 +94,13 @@ def unfold_entities(entity_list, target_level):
 
 
 class _SelectParser:
+    """
+    A parser for atom selection statements.
+
+    The parser accepts a query string as input
+    and returns a parse tree that represents the query.
+    """
+
     def __init__(self):
         equality_pattern = pp.Keyword("==") | pp.Keyword("!=")
         subordinate_pattern = pp.Keyword("<=") | pp.Keyword("<")
@@ -157,6 +164,13 @@ class _SelectParser:
 
 
 class _AtomIndicator:
+    """
+    An atom indicator is a function that accepts an atom argument
+    and returns a boolean result, indicating whether the query selects the atom.
+
+    The atom indicator initializer accepts a parse tree representing the query.
+    """
+
     def __init__(self, *, parse_results: pp.ParseResults):
         self._indicator_composers = {
             "identifier": self._compose_identifier_indicator,
@@ -286,6 +300,11 @@ class _AtomIndicator:
 
 
 class _StructurePruner:
+    """
+    A structure pruner uses an atom indicator to recursively remove
+    entities that are not selected by the query from the structure.
+    """
+
     def __init__(self, indicator: Callable[[Atom], bool]):
         self._atom_indicator = indicator
 
@@ -322,7 +341,13 @@ class _StructurePruner:
 
 def select(structure: Structure, query: str) -> Structure:
     """
-    TODO: Fill out docstring
+    Select atoms in a structure with a query,
+    returning a new structure with only the selected atoms.
+
+    :param Structure structure: the PDB structure
+    :param str query: the query
+    :return: the new PDB structure
+    :rtype: Structure
     """
     parser = _SelectParser()
     parse_results = parser(query)[0]
