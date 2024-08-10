@@ -26,7 +26,6 @@
  *
  */
 
-#include <Python.h>
 #include <time.h>
 #include <stdlib.h>
 #include <math.h>
@@ -389,11 +388,11 @@ getrank(int n, const double data[], const double weight[])
     double current;
     double value;
 
-    rank = PyMem_RawMalloc(n*sizeof(double));
+    rank = malloc(n*sizeof(double));
     if (!rank) return NULL;
-    index = PyMem_RawMalloc(n*sizeof(int));
+    index = malloc(n*sizeof(int));
     if (!index) {
-        PyMem_RawFree(rank);
+        free(rank);
         return NULL;
     }
     /* Call sort to get an index table */
@@ -418,7 +417,7 @@ getrank(int n, const double data[], const double weight[])
     }
     value = total + (subtotal + 1.0) / 2.0;
     for (l = k; l < i; l++) rank[index[l]] = value;
-    PyMem_RawFree(index);
+    free(index);
     return rank;
 }
 
@@ -431,19 +430,19 @@ makedatamask(int nrows, int ncols, double*** pdata, int*** pmask)
     double** data;
     int** mask;
 
-    data = PyMem_RawMalloc(nrows*sizeof(double*));
+    data = malloc(nrows*sizeof(double*));
     if (!data) return 0;
-    mask = PyMem_RawMalloc(nrows*sizeof(int*));
+    mask = malloc(nrows*sizeof(int*));
     if (!mask) {
-        PyMem_RawFree(data);
+        free(data);
         return 0;
     }
     for (i = 0; i < nrows; i++) {
-        data[i] = PyMem_RawMalloc(ncols*sizeof(double));
+        data[i] = malloc(ncols*sizeof(double));
         if (!data[i]) break;
-        mask[i] = PyMem_RawMalloc(ncols*sizeof(int));
+        mask[i] = malloc(ncols*sizeof(int));
         if (!mask[i]) {
-            PyMem_RawFree(data[i]);
+            free(data[i]);
             break;
         }
     }
@@ -456,11 +455,11 @@ makedatamask(int nrows, int ncols, double*** pdata, int*** pmask)
     *pmask = NULL;
     nrows = i;
     for (i = 0; i < nrows; i++) {
-        PyMem_RawFree(data[i]);
-        PyMem_RawFree(mask[i]);
+        free(data[i]);
+        free(mask[i]);
     }
-    PyMem_RawFree(data);
-    PyMem_RawFree(mask);
+    free(data);
+    free(mask);
     return 0;
 }
 
@@ -472,11 +471,11 @@ freedatamask(int n, double** data, int** mask)
     int i;
 
     for (i = 0; i < n; i++) {
-        PyMem_RawFree(mask[i]);
-        PyMem_RawFree(data[i]);
+        free(mask[i]);
+        free(data[i]);
     }
-    PyMem_RawFree(mask);
-    PyMem_RawFree(data);
+    free(mask);
+    free(data);
 }
 
 /* ---------------------------------------------------------------------- */
@@ -598,7 +597,7 @@ svd(int m, int n, double** u, double w[], double** vt)
     double anorm = 0.0;
     double* rv1;
 
-    rv1 = PyMem_RawMalloc(n*sizeof(double));
+    rv1 = malloc(n*sizeof(double));
     if (!rv1) return -1;
     if (m >= n) {
         /* Householder reduction to bidiagonal form */
@@ -1005,7 +1004,7 @@ svd(int m, int n, double** u, double w[], double** vt)
             }
         }
     }
-    PyMem_RawFree(rv1);
+    free(rv1);
     return ierr;
 }
 
@@ -1074,12 +1073,12 @@ positive integer if the singular value decomposition fails to converge.
     int i;
     int j;
     int error;
-    int* index = PyMem_RawMalloc(ncolumns*sizeof(int));
-    double* temp = PyMem_RawMalloc(ncolumns*sizeof(double));
+    int* index = malloc(ncolumns*sizeof(int));
+    double* temp = malloc(ncolumns*sizeof(double));
 
     if (!index || !temp) {
-        if (index) PyMem_RawFree(index);
-        if (temp) PyMem_RawFree(temp);
+        if (index) free(index);
+        if (temp) free(temp);
         return -1;
     }
     error = svd(nrows, ncolumns, u, w, v);
@@ -1129,8 +1128,8 @@ positive integer if the singular value decomposition fails to converge.
             for (i = 0; i < nrows; i++) w[i] = temp[i];
         }
     }
-    PyMem_RawFree(index);
-    PyMem_RawFree(temp);
+    free(index);
+    free(temp);
     return error;
 }
 
@@ -1769,11 +1768,11 @@ Otherwise, the distance between two columns in the matrix is calculated.
     double* tdata1;
     double* tdata2;
 
-    tdata1 = PyMem_RawMalloc(n*sizeof(double));
+    tdata1 = malloc(n*sizeof(double));
     if (!tdata1) return 0.0; /* Memory allocation error */
-    tdata2 = PyMem_RawMalloc(n*sizeof(double));
+    tdata2 = malloc(n*sizeof(double));
     if (!tdata2) /* Memory allocation error */ {
-        PyMem_RawFree(tdata1);
+        free(tdata1);
         return 0.0;
     }
     if (transpose == 0) {
@@ -1795,20 +1794,20 @@ Otherwise, the distance between two columns in the matrix is calculated.
         }
     }
     if (m == 0) {
-        PyMem_RawFree(tdata1);
-        PyMem_RawFree(tdata2);
+        free(tdata1);
+        free(tdata2);
         return 0;
     }
     rank1 = getrank(m, tdata1, weight);
-    PyMem_RawFree(tdata1);
+    free(tdata1);
     if (!rank1) {
-        PyMem_RawFree(tdata2);
+        free(tdata2);
         return 0.0; /* Memory allocation error */
     }
     rank2 = getrank(m, tdata2, weight);
-    PyMem_RawFree(tdata2);
+    free(tdata2);
     if (!rank2) /* Memory allocation error */ {
-        PyMem_RawFree(rank1);
+        free(rank1);
         return 0.0;
     }
     for (i = 0; i < m; i++) {
@@ -1826,8 +1825,8 @@ Otherwise, the distance between two columns in the matrix is calculated.
      * of elements. If two elements have the same rank, the squared sum of
      * their ranks will change.
      */
-    PyMem_RawFree(rank1);
-    PyMem_RawFree(rank2);
+    free(rank1);
+    free(rank2);
     if (!totalweight) return 0; /* usually due to empty clusters */
     result -= sum1 * sum2 / totalweight;
     denom1 -= sum1 * sum1 / totalweight;
@@ -2539,11 +2538,11 @@ returns 0. If successful, getclustercentroids returns 1.
     switch(method) {
         case 'm': {
             const int nelements = (transpose == 0) ? nrows : ncolumns;
-            double* cache = PyMem_RawMalloc(nelements*sizeof(double));
+            double* cache = malloc(nelements*sizeof(double));
             if (!cache) return 0;
             getclustermedians(nclusters, nrows, ncolumns, data, mask,
                               clusterid, cdata, cmask, transpose, cache);
-            PyMem_RawFree(cache);
+            free(cache);
             return 1;
         }
         case 'a': {
@@ -2632,7 +2631,7 @@ kmeans(int nclusters, int nrows, int ncolumns, double** data, int** mask,
                       const double[], int, int, int) = setmetric(dist);
 
     /* Save the clustering solution periodically and check if it reappears */
-    int* saved = PyMem_RawMalloc(nelements*sizeof(int));
+    int* saved = malloc(nelements*sizeof(int));
     if (saved == NULL) return -1;
 
     *error = DBL_MAX;
@@ -2720,7 +2719,7 @@ kmeans(int nclusters, int nrows, int ncolumns, double** data, int** mask,
         if (i == nelements) ifound++; /* break statement not encountered */
     } while (++ipass < npass);
 
-    PyMem_RawFree(saved);
+    free(saved);
     return ifound;
 }
 
@@ -2743,7 +2742,7 @@ kmedians(int nclusters, int nrows, int ncolumns, double** data, int** mask,
                       const double[], int, int, int) = setmetric(dist);
 
     /* Save the clustering solution periodically and check if it reappears */
-    saved = PyMem_RawMalloc(nelements*sizeof(int));
+    saved = malloc(nelements*sizeof(int));
     if (saved == NULL) return -1;
 
     *error = DBL_MAX;
@@ -2831,7 +2830,7 @@ kmedians(int nclusters, int nrows, int ncolumns, double** data, int** mask,
         if (i == nelements) ifound++; /* break statement not encountered */
     } while (++ipass < npass);
 
-    PyMem_RawFree(saved);
+    free(saved);
     return ifound;
 }
 
@@ -2947,21 +2946,21 @@ number of clusters is larger than the number of elements being clustered,
 
     /* This will contain the number of elements in each cluster, which is
      * needed to check for empty clusters. */
-    counts = PyMem_RawMalloc(nclusters*sizeof(int));
+    counts = malloc(nclusters*sizeof(int));
     if (!counts) return;
 
     /* Find out if the user specified an initial clustering */
     if (npass <= 1) tclusterid = clusterid;
     else {
-        tclusterid = PyMem_RawMalloc(nelements*sizeof(int));
+        tclusterid = malloc(nelements*sizeof(int));
         if (!tclusterid) {
-            PyMem_RawFree(counts);
+            free(counts);
             return;
         }
-        mapping = PyMem_RawMalloc(nclusters*sizeof(int));
+        mapping = malloc(nclusters*sizeof(int));
         if (!mapping) {
-            PyMem_RawFree(counts);
-            PyMem_RawFree(tclusterid);
+            free(counts);
+            free(tclusterid);
             return;
         }
         for (i = 0; i < nelements; i++) clusterid[i] = 0;
@@ -2971,21 +2970,21 @@ number of clusters is larger than the number of elements being clustered,
     if (transpose == 0) ok = makedatamask(nclusters, ndata, &cdata, &cmask);
     else ok = makedatamask(ndata, nclusters, &cdata, &cmask);
     if (!ok) {
-        PyMem_RawFree(counts);
+        free(counts);
         if (npass>1) {
-            PyMem_RawFree(tclusterid);
-            PyMem_RawFree(mapping);
+            free(tclusterid);
+            free(mapping);
         }
         return;
     }
 
     if (method == 'm') {
-        double* cache = PyMem_RawMalloc(nelements*sizeof(double));
+        double* cache = malloc(nelements*sizeof(double));
         if (cache) {
             *ifound = kmedians(nclusters, nrows, ncolumns, data, mask, weight,
                                transpose, npass, dist, cdata, cmask, clusterid,
                                error, tclusterid, counts, mapping, cache);
-            PyMem_RawFree(cache);
+            free(cache);
         }
     }
     else
@@ -2995,14 +2994,14 @@ number of clusters is larger than the number of elements being clustered,
 
     /* Deallocate temporarily used space */
     if (npass > 1) {
-        PyMem_RawFree(mapping);
-        PyMem_RawFree(tclusterid);
+        free(mapping);
+        free(tclusterid);
     }
 
     if (transpose == 0) freedatamask(nclusters, cdata, cmask);
     else freedatamask(ndata, cdata, cmask);
 
-    PyMem_RawFree(counts);
+    free(counts);
 }
 
 /* *********************************************************************** */
@@ -3081,30 +3080,30 @@ to 0. If kmedoids fails due to a memory allocation error, ifound is set to -1.
     *ifound = -1;
 
     /* Save the clustering solution periodically and check if it reappears */
-    saved = PyMem_RawMalloc(nelements*sizeof(int));
+    saved = malloc(nelements*sizeof(int));
     if (saved == NULL) return;
 
-    centroids = PyMem_RawMalloc(nclusters*sizeof(int));
+    centroids = malloc(nclusters*sizeof(int));
     if (!centroids) {
-        PyMem_RawFree(saved);
+        free(saved);
         return;
     }
 
-    errors = PyMem_RawMalloc(nclusters*sizeof(double));
+    errors = malloc(nclusters*sizeof(double));
     if (!errors) {
-        PyMem_RawFree(saved);
-        PyMem_RawFree(centroids);
+        free(saved);
+        free(centroids);
         return;
     }
 
     /* Find out if the user specified an initial clustering */
     if (npass <= 1) tclusterid = clusterid;
     else {
-        tclusterid = PyMem_RawMalloc(nelements*sizeof(int));
+        tclusterid = malloc(nelements*sizeof(int));
         if (!tclusterid) {
-            PyMem_RawFree(saved);
-            PyMem_RawFree(centroids);
-            PyMem_RawFree(errors);
+            free(saved);
+            free(centroids);
+            free(errors);
             return;
         }
         for (i = 0; i < nelements; i++) clusterid[i] = -1;
@@ -3187,11 +3186,11 @@ to 0. If kmedoids fails due to a memory allocation error, ifound is set to -1.
     } while (++ipass < npass);
 
     /* Deallocate temporarily used space */
-    if (npass > 1) PyMem_RawFree(tclusterid);
+    if (npass > 1) free(tclusterid);
 
-    PyMem_RawFree(saved);
-    PyMem_RawFree(centroids);
-    PyMem_RawFree(errors);
+    free(saved);
+    free(centroids);
+    free(errors);
 }
 
 /* ******************************************************************** */
@@ -3363,7 +3362,7 @@ weights array, the function returns NULL.
                       const double[], int, int, int) = setmetric(dist);
     double* result;
 
-    result = PyMem_RawCalloc(nelements, sizeof(double));
+    result = calloc(nelements, sizeof(double));
     if (!result) return NULL;
 
     for (i = 0; i < nelements; i++) {
@@ -3437,7 +3436,7 @@ If a memory error occurs, cuttree returns 0.
         for (i = 0; i < nelements; i++) clusterid[i] = 0;
         return 1;
     }
-    parents = PyMem_RawMalloc((nelements-1)*sizeof(int));
+    parents = malloc((nelements-1)*sizeof(int));
     if (!parents) return 0;
     while (1) {
         if (i >= 0) {
@@ -3466,7 +3465,7 @@ If a memory error occurs, cuttree returns 0.
             }
         }
     }
-    PyMem_RawFree(parents);
+    free(parents);
     return 1;
 }
 
@@ -3555,16 +3554,16 @@ If a memory error occurs, pclcluster returns NULL.
     double (*metric) (int, double**, double**, int**, int**,
                       const double[], int, int, int) = setmetric(dist);
 
-    distid = PyMem_RawMalloc(nelements*sizeof(int));
+    distid = malloc(nelements*sizeof(int));
     if (!distid) return NULL;
-    result = PyMem_Malloc(nnodes*sizeof(Node));
+    result = malloc(nnodes*sizeof(Node));
     if (!result) {
-        PyMem_RawFree(distid);
+        free(distid);
         return NULL;
     }
     if (!makedatamask(nelements, ndata, &newdata, &newmask)) {
-        PyMem_Free(result);
-        PyMem_RawFree(distid);
+        free(result);
+        free(distid);
         return NULL;
     }
 
@@ -3606,8 +3605,8 @@ If a memory error occurs, pclcluster returns NULL.
             mask[js][i] += mask[is][i];
             if (mask[js][i]) data[js][i] /= mask[js][i];
         }
-        PyMem_RawFree(data[is]);
-        PyMem_RawFree(mask[is]);
+        free(data[is]);
+        free(mask[is]);
         data[is] = data[nnodes-inode];
         mask[is] = mask[nnodes-inode];
 
@@ -3628,11 +3627,11 @@ If a memory error occurs, pclcluster returns NULL.
     }
 
     /* Free temporarily allocated space */
-    PyMem_RawFree(data[0]);
-    PyMem_RawFree(mask[0]);
-    PyMem_RawFree(data);
-    PyMem_RawFree(mask);
-    PyMem_RawFree(distid);
+    free(data[0]);
+    free(mask[0]);
+    free(data);
+    free(mask);
+    free(distid);
 
     return result;
 }
@@ -3748,24 +3747,24 @@ If a memory error occurs, pslcluster returns NULL.
     int* index;
     Node* result;
 
-    temp = PyMem_RawMalloc(nnodes*sizeof(double));
+    temp = malloc(nnodes*sizeof(double));
     if (!temp) return NULL;
-    index = PyMem_RawMalloc(nelements*sizeof(int));
+    index = malloc(nelements*sizeof(int));
     if (!index) {
-        PyMem_RawFree(temp);
+        free(temp);
         return NULL;
     }
-    vector = PyMem_RawMalloc(nnodes*sizeof(int));
+    vector = malloc(nnodes*sizeof(int));
     if (!vector) {
-        PyMem_RawFree(index);
-        PyMem_RawFree(temp);
+        free(index);
+        free(temp);
         return NULL;
     }
-    result = PyMem_Malloc(nelements*sizeof(Node));
+    result = malloc(nelements*sizeof(Node));
     if (!result) {
-        PyMem_RawFree(vector);
-        PyMem_RawFree(index);
-        PyMem_RawFree(temp);
+        free(vector);
+        free(index);
+        free(temp);
         return NULL;
     }
 
@@ -3816,7 +3815,7 @@ If a memory error occurs, pslcluster returns NULL.
                     vector[j] = i;
         }
     }
-    PyMem_RawFree(temp);
+    free(temp);
 
     for (i = 0; i < nnodes; i++) result[i].left = i;
     qsort(result, nnodes, sizeof(Node), nodecompare);
@@ -3829,10 +3828,10 @@ If a memory error occurs, pslcluster returns NULL.
         result[i].right = index[k];
         index[k] = -i-1;
     }
-    PyMem_RawFree(vector);
-    PyMem_RawFree(index);
+    free(vector);
+    free(index);
 
-    result = PyMem_Realloc(result, nnodes*sizeof(Node));
+    result = realloc(result, nnodes*sizeof(Node));
 
     return result;
 }
@@ -3876,11 +3875,11 @@ If a memory error occurs, pmlcluster returns NULL.
     int* clusterid;
     Node* result;
 
-    clusterid = PyMem_RawMalloc(nelements*sizeof(int));
+    clusterid = malloc(nelements*sizeof(int));
     if (!clusterid) return NULL;
-    result = PyMem_Malloc((nelements-1)*sizeof(Node));
+    result = malloc((nelements-1)*sizeof(Node));
     if (!result) {
-        PyMem_RawFree(clusterid);
+        free(clusterid);
         return NULL;
     }
 
@@ -3911,7 +3910,7 @@ If a memory error occurs, pmlcluster returns NULL.
         clusterid[js] = n-nelements-1;
         clusterid[is] = clusterid[n-1];
     }
-    PyMem_RawFree(clusterid);
+    free(clusterid);
 
     return result;
 }
@@ -3956,17 +3955,17 @@ If a memory error occurs, palcluster returns NULL.
     int* number;
     Node* result;
 
-    clusterid = PyMem_RawMalloc(nelements*sizeof(int));
+    clusterid = malloc(nelements*sizeof(int));
     if (!clusterid) return NULL;
-    number = PyMem_RawMalloc(nelements*sizeof(int));
+    number = malloc(nelements*sizeof(int));
     if (!number) {
-        PyMem_RawFree(clusterid);
+        free(clusterid);
         return NULL;
     }
-    result = PyMem_Malloc((nelements-1)*sizeof(Node));
+    result = malloc((nelements-1)*sizeof(Node));
     if (!result) {
-        PyMem_RawFree(clusterid);
-        PyMem_RawFree(number);
+        free(clusterid);
+        free(number);
         return NULL;
     }
 
@@ -4018,8 +4017,8 @@ If a memory error occurs, palcluster returns NULL.
         clusterid[js] = n-nelements-1;
         clusterid[is] = clusterid[n-1];
     }
-    PyMem_RawFree(clusterid);
-    PyMem_RawFree(number);
+    free(clusterid);
+    free(number);
 
     return result;
 }
@@ -4123,14 +4122,14 @@ If a memory error occurs, treecluster returns NULL.
     if (ldistmatrix) {
         /* Set up the ragged array */
         int i;
-        distmatrix = PyMem_RawMalloc(nelements*sizeof(double*));
+        distmatrix = malloc(nelements*sizeof(double*));
         if (distmatrix == NULL) return NULL; /* Not enough memory available */
         distmatrix[0] = NULL;
         for (i = 1; i < nelements; i++) {
-            distmatrix[i] = PyMem_RawMalloc(i*sizeof(double));
+            distmatrix[i] = malloc(i*sizeof(double));
             if (distmatrix[i] == NULL) /* Not enough memory available */ {
-                while (--i > 0) PyMem_RawFree(distmatrix[i]);
-                PyMem_RawFree(distmatrix);
+                while (--i > 0) free(distmatrix[i]);
+                free(distmatrix);
                 return NULL;
             }
         }
@@ -4158,8 +4157,8 @@ If a memory error occurs, treecluster returns NULL.
     /* Deallocate space for distance matrix if allocated by treecluster */
     if (ldistmatrix) {
         int i;
-        for (i = 1; i < nelements; i++) PyMem_RawFree(distmatrix[i]);
-        PyMem_RawFree(distmatrix);
+        for (i = 1; i < nelements; i++) free(distmatrix[i]);
+        free(distmatrix);
     }
 
     return result;
@@ -4210,12 +4209,12 @@ If a memory error occurs, sorttree returns 0.
     int counts1, counts2;
     int* nodecounts;
 
-    nodecounts = PyMem_RawMalloc(nnodes*sizeof(int));
+    nodecounts = malloc(nnodes*sizeof(int));
     if (!nodecounts) return 0;
     if (order) {
-        double* nodeorder = PyMem_RawMalloc(nnodes*sizeof(double));
+        double* nodeorder = malloc(nnodes*sizeof(double));
         if (!nodeorder) {
-            PyMem_RawFree(nodecounts);
+            free(nodecounts);
             return 0;
         }
         for (i = 0; i < nnodes; i++) {
@@ -4247,7 +4246,7 @@ If a memory error occurs, sorttree returns 0.
             nodecounts[i] = counts1 + counts2;
             nodeorder[i] = (counts1*order1+counts2*order2) / (counts1+counts2);
         }
-        PyMem_RawFree(nodeorder);
+        free(nodeorder);
     }
     else {
         for (i = 0; i < nnodes; i++) {
@@ -4272,7 +4271,7 @@ If a memory error occurs, sorttree returns 0.
         if (i2 >= 0) indices[index] = i2;
         else nodecounts[-i2-1] = index;
     }
-    PyMem_RawFree(nodecounts);
+    free(nodecounts);
     return 1;
 }
 
@@ -4293,7 +4292,7 @@ somworker(int nrows, int ncolumns, double** data, int** mask,
     int iter;
     /* Maximum radius in which nodes are adjusted */
     double maxradius = sqrt(nxgrid*nxgrid+nygrid*nygrid);
-    double* stddata = PyMem_RawCalloc(nelements, sizeof(double));
+    double* stddata = calloc(nelements, sizeof(double));
 
     /* Set the metric function as indicated by dist */
     double (*metric) (int, double**, double**, int**, int**,
@@ -4332,16 +4331,16 @@ somworker(int nrows, int ncolumns, double** data, int** mask,
     }
 
     if (transpose == 0) {
-        dummymask = PyMem_RawMalloc(nygrid*sizeof(int*));
+        dummymask = malloc(nygrid*sizeof(int*));
         for (i = 0; i < nygrid; i++) {
-            dummymask[i] = PyMem_RawMalloc(ndata*sizeof(int));
+            dummymask[i] = malloc(ndata*sizeof(int));
             for (j = 0; j < ndata; j++) dummymask[i][j] = 1;
         }
     }
     else {
-        dummymask = PyMem_RawMalloc(ndata*sizeof(int*));
+        dummymask = malloc(ndata*sizeof(int*));
         for (i = 0; i < ndata; i++) {
-            dummymask[i] = PyMem_RawMalloc(sizeof(int));
+            dummymask[i] = malloc(sizeof(int));
             dummymask[i][0] = 1;
         }
     }
@@ -4361,7 +4360,7 @@ somworker(int nrows, int ncolumns, double** data, int** mask,
     }
 
     /* Randomize the order in which genes or arrays will be used */
-    index = PyMem_RawMalloc(nelements*sizeof(int));
+    index = malloc(nelements*sizeof(int));
     for (i = 0; i < nelements; i++) index[i] = i;
     for (i = 0; i < nelements; i++) {
         j = (int) (i + (nelements-i)*uniform());
@@ -4422,7 +4421,7 @@ somworker(int nrows, int ncolumns, double** data, int** mask,
         }
         else {
             double closest;
-            double** celldatavector = PyMem_RawMalloc(ndata*sizeof(double*));
+            double** celldatavector = malloc(ndata*sizeof(double*));
             double radius = maxradius * (1. - ((double)iter)/((double)niter));
             double tau = inittau * (1. - ((double)iter)/((double)niter));
 
@@ -4445,7 +4444,7 @@ somworker(int nrows, int ncolumns, double** data, int** mask,
                     }
                 }
             }
-            PyMem_RawFree(celldatavector);
+            free(celldatavector);
             for (ix = 0; ix < nxgrid; ix++) {
                 for (iy = 0; iy < nygrid; iy++) {
                     if (sqrt((ix-ixbest)*(ix-ixbest)+(iy-iybest)*(iy-iybest)) <
@@ -4473,12 +4472,12 @@ somworker(int nrows, int ncolumns, double** data, int** mask,
         }
     }
     if (transpose == 0)
-        for (i = 0; i < nygrid; i++) PyMem_RawFree(dummymask[i]);
+        for (i = 0; i < nygrid; i++) free(dummymask[i]);
     else
-        for (i = 0; i < ndata; i++) PyMem_RawFree(dummymask[i]);
-    PyMem_RawFree(dummymask);
-    PyMem_RawFree(stddata);
-    PyMem_RawFree(index);
+        for (i = 0; i < ndata; i++) free(dummymask[i]);
+    free(dummymask);
+    free(stddata);
+    free(index);
 }
 
 /* ******************************************************************* */
@@ -4497,9 +4496,9 @@ somassign(int nrows, int ncolumns, double** data, int** mask,
                       const double[], int, int, int) = setmetric(dist);
 
     if (transpose == 0) {
-        int** dummymask = PyMem_RawMalloc(nygrid*sizeof(int*));
+        int** dummymask = malloc(nygrid*sizeof(int*));
         for (i = 0; i < nygrid; i++) {
-            dummymask[i] = PyMem_RawMalloc(ncolumns*sizeof(int));
+            dummymask[i] = malloc(ncolumns*sizeof(int));
             for (j = 0; j < ncolumns; j++) dummymask[i][j] = 1;
         }
         for (i = 0; i < nrows; i++) {
@@ -4523,16 +4522,16 @@ somassign(int nrows, int ncolumns, double** data, int** mask,
             clusterid[i][0] = ixbest;
             clusterid[i][1] = iybest;
         }
-        for (i = 0; i < nygrid; i++) PyMem_RawFree(dummymask[i]);
-        PyMem_RawFree(dummymask);
+        for (i = 0; i < nygrid; i++) free(dummymask[i]);
+        free(dummymask);
     }
     else {
-        double** celldatavector = PyMem_RawMalloc(ndata*sizeof(double*));
-        int** dummymask = PyMem_RawMalloc(nrows*sizeof(int*));
+        double** celldatavector = malloc(ndata*sizeof(double*));
+        int** dummymask = malloc(nrows*sizeof(int*));
         int ixbest = 0;
         int iybest = 0;
         for (i = 0; i < nrows; i++) {
-            dummymask[i] = PyMem_RawMalloc(sizeof(int));
+            dummymask[i] = malloc(sizeof(int));
             dummymask[i][0] = 1;
         }
         for (i = 0; i < ncolumns; i++) {
@@ -4559,9 +4558,9 @@ somassign(int nrows, int ncolumns, double** data, int** mask,
             clusterid[i][0] = ixbest;
             clusterid[i][1] = iybest;
         }
-        PyMem_RawFree(celldatavector);
-        for (i = 0; i < nrows; i++) PyMem_RawFree(dummymask[i]);
-        PyMem_RawFree(dummymask);
+        free(celldatavector);
+        for (i = 0; i < nrows; i++) free(dummymask[i]);
+        free(dummymask);
     }
 }
 
@@ -4658,11 +4657,11 @@ somcluster.
     if (nobjects < 2) return;
 
     if (lcelldata == 0) {
-        celldata = PyMem_RawMalloc(nxgrid*nygrid*ndata*sizeof(double**));
+        celldata = malloc(nxgrid*nygrid*ndata*sizeof(double**));
         for (i = 0; i < nxgrid; i++) {
-            celldata[i] = PyMem_RawMalloc(nygrid*ndata*sizeof(double*));
+            celldata[i] = malloc(nygrid*ndata*sizeof(double*));
             for (j = 0; j < nygrid; j++)
-                celldata[i][j] = PyMem_RawMalloc(ndata*sizeof(double));
+                celldata[i][j] = malloc(ndata*sizeof(double));
         }
     }
 
@@ -4674,10 +4673,10 @@ somcluster.
     if (lcelldata == 0) {
         for (i = 0; i < nxgrid; i++)
             for (j = 0; j < nygrid; j++)
-                PyMem_RawFree(celldata[i][j]);
+                free(celldata[i][j]);
         for (i = 0; i < nxgrid; i++)
-            PyMem_RawFree(celldata[i]);
-        PyMem_RawFree(celldata);
+            free(celldata[i]);
+        free(celldata);
     }
 }
 
@@ -4809,12 +4808,12 @@ when samples are being clustered.
                 double* cdata[2];
                 int* cmask[2];
                 int* count[2];
-                count[0] = PyMem_RawCalloc(ncolumns, sizeof(int));
-                count[1] = PyMem_RawCalloc(ncolumns, sizeof(int));
-                cdata[0] = PyMem_RawCalloc(ncolumns, sizeof(double));
-                cdata[1] = PyMem_RawCalloc(ncolumns, sizeof(double));
-                cmask[0] = PyMem_RawMalloc(ncolumns*sizeof(int));
-                cmask[1] = PyMem_RawMalloc(ncolumns*sizeof(int));
+                count[0] = calloc(ncolumns, sizeof(int));
+                count[1] = calloc(ncolumns, sizeof(int));
+                cdata[0] = calloc(ncolumns, sizeof(double));
+                cdata[1] = calloc(ncolumns, sizeof(double));
+                cmask[0] = malloc(ncolumns*sizeof(int));
+                cmask[1] = malloc(ncolumns*sizeof(int));
                 for (i = 0; i < n1; i++) {
                     k = index1[i];
                     for (j = 0; j < ncolumns; j++)
@@ -4843,21 +4842,21 @@ when samples are being clustered.
                 distance = metric(ncolumns, cdata, cdata, cmask, cmask, weight,
                                   0, 1, 0);
                 for (i = 0; i < 2; i++) {
-                    PyMem_RawFree(cdata[i]);
-                    PyMem_RawFree(cmask[i]);
-                    PyMem_RawFree(count[i]);
+                    free(cdata[i]);
+                    free(cmask[i]);
+                    free(count[i]);
                 }
                 return distance;
             }
             else {
                 double distance;
-                int** count = PyMem_RawMalloc(nrows*sizeof(int*));
-                double** cdata = PyMem_RawMalloc(nrows*sizeof(double*));
-                int** cmask = PyMem_RawMalloc(nrows*sizeof(int*));
+                int** count = malloc(nrows*sizeof(int*));
+                double** cdata = malloc(nrows*sizeof(double*));
+                int** cmask = malloc(nrows*sizeof(int*));
                 for (i = 0; i < nrows; i++) {
-                    count[i] = PyMem_RawCalloc(2, sizeof(int));
-                    cdata[i] = PyMem_RawCalloc(2, sizeof(double));
-                    cmask[i] = PyMem_RawMalloc(2*sizeof(int));
+                    count[i] = calloc(2, sizeof(int));
+                    cdata[i] = calloc(2, sizeof(double));
+                    cmask[i] = malloc(2*sizeof(int));
                 }
                 for (i = 0; i < n1; i++) {
                     k = index1[i];
@@ -4888,13 +4887,13 @@ when samples are being clustered.
                 distance = metric(nrows, cdata, cdata, cmask, cmask, weight,
                                   0, 1, 1);
                 for (i = 0; i < nrows; i++) {
-                    PyMem_RawFree(count[i]);
-                    PyMem_RawFree(cdata[i]);
-                    PyMem_RawFree(cmask[i]);
+                    free(count[i]);
+                    free(cdata[i]);
+                    free(cmask[i]);
                 }
-                PyMem_RawFree(count);
-                PyMem_RawFree(cdata);
-                PyMem_RawFree(cmask);
+                free(count);
+                free(cdata);
+                free(cmask);
                 return distance;
             }
         }
@@ -4902,12 +4901,12 @@ when samples are being clustered.
             int i, j, k;
             if (transpose == 0) {
                 double distance;
-                double* temp = PyMem_RawMalloc(nrows*sizeof(double));
+                double* temp = malloc(nrows*sizeof(double));
                 double* cdata[2];
                 int* cmask[2];
                 for (i = 0; i < 2; i++) {
-                    cdata[i] = PyMem_RawMalloc(ncolumns*sizeof(double));
-                    cmask[i] = PyMem_RawMalloc(ncolumns*sizeof(int));
+                    cdata[i] = malloc(ncolumns*sizeof(double));
+                    cmask[i] = malloc(ncolumns*sizeof(int));
                 }
                 for (j = 0; j < ncolumns; j++) {
                     int count = 0;
@@ -4948,20 +4947,20 @@ when samples are being clustered.
                 distance = metric(ncolumns, cdata, cdata, cmask, cmask, weight,
                                   0, 1, 0);
                 for (i = 0; i < 2; i++) {
-                    PyMem_RawFree(cdata[i]);
-                    PyMem_RawFree(cmask[i]);
+                    free(cdata[i]);
+                    free(cmask[i]);
                 }
-                PyMem_RawFree(temp);
+                free(temp);
                 return distance;
             }
             else {
                 double distance;
-                double* temp = PyMem_RawMalloc(ncolumns*sizeof(double));
-                double** cdata = PyMem_RawMalloc(nrows*sizeof(double*));
-                int** cmask = PyMem_RawMalloc(nrows*sizeof(int*));
+                double* temp = malloc(ncolumns*sizeof(double));
+                double** cdata = malloc(nrows*sizeof(double*));
+                int** cmask = malloc(nrows*sizeof(int*));
                 for (i = 0; i < nrows; i++) {
-                    cdata[i] = PyMem_RawMalloc(2*sizeof(double));
-                    cmask[i] = PyMem_RawMalloc(2*sizeof(int));
+                    cdata[i] = malloc(2*sizeof(double));
+                    cmask[i] = malloc(2*sizeof(int));
                 }
                 for (j = 0; j < nrows; j++) {
                     int count = 0;
@@ -5002,12 +5001,12 @@ when samples are being clustered.
                 distance = metric(nrows, cdata, cdata, cmask, cmask, weight,
                                   0, 1, 1);
                 for (i = 0; i < nrows; i++) {
-                    PyMem_RawFree(cdata[i]);
-                    PyMem_RawFree(cmask[i]);
+                    free(cdata[i]);
+                    free(cmask[i]);
                 }
-                PyMem_RawFree(cdata);
-                PyMem_RawFree(cmask);
-                PyMem_RawFree(temp);
+                free(cdata);
+                free(cmask);
+                free(temp);
                 return distance;
             }
         }
