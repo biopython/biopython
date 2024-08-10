@@ -254,6 +254,25 @@ class SelectParserTests(unittest.TestCase):
             result = convert(parse_results=result)
             self.assertEqual(result, expected_result)
 
+    def test_bad_input(self):
+        try:
+            import pyparsing as pp
+        except ImportError:
+            from Bio import MissingPythonDependencyError
+
+            raise MissingPythonDependencyError(
+                "Install pyparsing to use Bio.PDB.Selection (e.g. pip install pyparsing)"
+            ) from None
+
+        parser = self.parser
+
+        with self.assertRaises(pp.ParseException):
+            parser("bad input")
+        with self.assertRaises(pp.ParseException):
+            parser("model <=")
+        with self.assertRaises(pp.ParseException):
+            parser("chain chain A")
+
 
 class AtomIndicatorTests(unittest.TestCase):
     def setUp(self):

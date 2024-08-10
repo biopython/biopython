@@ -6,7 +6,7 @@
 # package.
 
 """Selection of atoms, residues, etc."""
-
+import functools
 import itertools
 import operator
 from collections.abc import Callable
@@ -152,7 +152,7 @@ class _SelectParser:
             | and_pattern
         )
 
-        self._parser = or_pattern.parse_string
+        self._parser = functools.partial(or_pattern.parse_string, parse_all=True)
 
     def __call__(self, *args, **kwargs):
         assert len(args) == 1
