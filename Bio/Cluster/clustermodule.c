@@ -293,7 +293,7 @@ check_clusterid(Py_buffer clusterid, int nitems) {
     }
     nclusters++;
     /* -- Count the number of items in each cluster --------------------- */
-    number = calloc(nclusters, sizeof(int));
+    number = PyMem_Calloc(nclusters, sizeof(int)); //
     if (!number) {
         PyErr_NoMemory();
         return 0;
