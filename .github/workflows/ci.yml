@@ -204,7 +204,7 @@ jobs:
     - name: Run test suite
       run: |
         cd Tests
-        PYTHONMALLOC=debug LD_PRELOAD=$(gcc -print-file-name=libasan.so) ASAN_OPTIONS="detect_leaks=0" python run_tests.py --offline
+        PYTHONMALLOC=debug LD_PRELOAD="$(realpath "$(gcc -print-file-name=libasan.so)") $(realpath "$(gcc -print-file-name=libstdc++.so)")" ASAN_OPTIONS="detect_leaks=0" python run_tests.py --offline
       shell: bash
 
   test_macos:
