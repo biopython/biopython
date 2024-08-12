@@ -1681,9 +1681,7 @@ py_treecluster(PyObject* self, PyObject* args, PyObject* keywords)
         goto exit;
     }
     tree->n = nitems-1;
-    tree->nodes = PyMem_Malloc(tree->n * sizeof(Node));
-    memcpy(tree->nodes, nodes, tree->n * sizeof(Node));
-    free(nodes);
+    tree->nodes = nodes;
 
 exit:
     data_converter(NULL, &data);
