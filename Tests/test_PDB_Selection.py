@@ -155,6 +155,11 @@ class UnfoldEntitiesTests(unittest.TestCase):
 
 class SelectParserTests(unittest.TestCase):
     def setUp(self):
+        try:
+            import pyparsing as pp
+        except ImportError:
+            self.skipTest("pyparsing is required to test the parser")
+
         self.parser = _SelectParser()
 
     def test_identifiers(self):
@@ -236,14 +241,7 @@ class SelectParserTests(unittest.TestCase):
             self.assertEqual(result, expected_result)
 
     def test_bad_input(self):
-        try:
-            import pyparsing as pp
-        except ImportError:
-            from Bio import MissingPythonDependencyError
-
-            raise MissingPythonDependencyError(
-                "Install pyparsing to use Bio.PDB.Selection (e.g. pip install pyparsing)"
-            ) from None
+        import pyparsing as pp
 
         parser = self.parser
 
@@ -257,6 +255,11 @@ class SelectParserTests(unittest.TestCase):
 
 class AtomIndicatorTests(unittest.TestCase):
     def setUp(self):
+        try:
+            import pyparsing as pp
+        except ImportError:
+            self.skipTest("pyparsing is required to test the parser")
+
         parser = _SelectParser()
 
         def create_indicator(query: str):
@@ -311,6 +314,11 @@ def get_atoms(entity: Union[Entity, DisorderedEntityWrapper]):
 
 class End2EndSelectTests(unittest.TestCase):
     def setUp(self):
+        try:
+            import pyparsing as pp
+        except ImportError:
+            self.skipTest("pyparsing is required to test the parser")
+
         structure_parser = MMCIFParser(QUIET=True)
         # Note that this structure contains disordered residues and atoms.
         self.structure = structure_parser.get_structure("3JQH", "PDB/3JQH.cif")
