@@ -134,9 +134,8 @@ class _SelectParser:
         or_pattern = pp.Forward()
 
         parentheses_pattern <<= (
-            pp.Group("(" + or_pattern + ")").set_results_name("parentheses")
-            | identifier_pattern
-        )
+            pp.Suppress("(") + or_pattern + pp.Suppress(")")
+        ).set_results_name("parentheses") | identifier_pattern
         not_pattern <<= (
             pp.Group(pp.Keyword("not") + not_pattern).set_results_name("not")
             | parentheses_pattern

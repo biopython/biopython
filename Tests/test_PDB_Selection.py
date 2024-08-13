@@ -215,7 +215,7 @@ class SelectParserTests(unittest.TestCase):
                     (
                         ("model", "0"),
                         "and",
-                        ("(", (("chain", "B"), "or", ("chain", "E")), ")"),
+                        (("chain", "B"), "or", ("chain", "E")),
                     ),
                 ),
             ),
@@ -233,7 +233,7 @@ class SelectParserTests(unittest.TestCase):
                 "(model 0 or chain B) and resn ALA",
                 (
                     (
-                        ("(", (("model", "0"), "or", ("chain", "B")), ")"),
+                        (("model", "0"), "or", ("chain", "B")),
                         "and",
                         ("resn", "ALA"),
                     ),
@@ -245,7 +245,7 @@ class SelectParserTests(unittest.TestCase):
             ),
             (
                 "not (chain A and chain B)",
-                (("not", ("(", (("chain", "A"), "and", ("chain", "B")), ")")),),
+                (("not", (("chain", "A"), "and", ("chain", "B"))),),
             ),
         )
 
