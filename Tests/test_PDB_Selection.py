@@ -153,21 +153,6 @@ class UnfoldEntitiesTests(unittest.TestCase):
             unfold_entities([structure_atom, structure_chain], "A")
 
 
-def convert(*, parse_results):
-    """
-    The select parser tests convert the parse results to a tree of tuples
-    so that the expected result objects can be general Python objects
-    instead of pyparsing ParseResults objects.
-    """
-    if str(type(parse_results)) != "<class 'pyparsing.results.ParseResults'>":
-        return parse_results
-
-    return tuple(
-        convert(parse_results=parse_results[index])
-        for index in range(len(parse_results))
-    )
-
-
 class SelectParserTests(unittest.TestCase):
     def setUp(self):
         self.parser = _SelectParser()
@@ -208,50 +193,46 @@ class SelectParserTests(unittest.TestCase):
 
     def test_boolean_operators(self):
         tests = (
-            ("model 0 and chain B", ((("model", "0"), "and", ("chain", "B")),)),
+            (
+                "model 0 and chain B",
+                [["model", "0"], "and", ["chain", "B"]],
+            ),
             (
                 "model 0 and (chain B or chain E)",
-                (
-                    (
-                        ("model", "0"),
-                        "and",
-                        (("chain", "B"), "or", ("chain", "E")),
-                    ),
-                ),
+                [
+                    ["model", "0"],
+                    "and",
+                    [["chain", "B"], "or", ["chain", "E"]],
+                ],
             ),
             (
                 "model 0 or chain B and not resn ALA",
-                (
-                    (
-                        ("model", "0"),
-                        "or",
-                        (("chain", "B"), "and", ("not", ("resn", "ALA"))),
-                    ),
-                ),
+                [
+                    ["model", "0"],
+                    "or",
+                    [["chain", "B"], "and", ["not", ["resn", "ALA"]]],
+                ],
             ),
             (
                 "(model 0 or chain B) and resn ALA",
-                (
-                    (
-                        (("model", "0"), "or", ("chain", "B")),
-                        "and",
-                        ("resn", "ALA"),
-                    ),
-                ),
+                [
+                    [["model", "0"], "or", ["chain", "B"]],
+                    "and",
+                    ["resn", "ALA"],
+                ],
             ),
             (
                 "not chain A and chain B",
-                ((("not", ("chain", "A")), "and", ("chain", "B")),),
+                [["not", ["chain", "A"]], "and", ["chain", "B"]],
             ),
             (
                 "not (chain A and chain B)",
-                (("not", (("chain", "A"), "and", ("chain", "B"))),),
+                ["not", [["chain", "A"], "and", ["chain", "B"]]],
             ),
         )
 
         for query, expected_result in tests:
-            result = self.parser(query)
-            result = convert(parse_results=result)
+            result = self.parser(query)[0].as_list()
             self.assertEqual(result, expected_result)
 
     def test_bad_input(self):
