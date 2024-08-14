@@ -48,7 +48,10 @@ typedef enum {NeedlemanWunschSmithWaterman,
               FOGSAA,
               Unknown} Algorithm;
 
-typedef enum {Global, Local} Mode;
+typedef enum {Global, Local, FOGSAA_Mode} Mode;
+
+#define ERR_UNEXPECTED_MODE \
+    PyErr_Format(PyExc_RuntimeError, "mode has unexpected value (in "__FILE__" on line %d)", __LINE__);
 
 typedef struct {
     unsigned char trace : 5;
@@ -618,6 +621,14 @@ exit:
     return count;
 }
 
+
+static Py_ssize_t
+PathGenerator_fogsaa_length(PathGenerator* self)
+{
+    PyErr_SetString(PyExc_NotImplementedError, "TODO: FOGSAA PathGenerator length");
+    return -1;
+}
+
 static Py_ssize_t PathGenerator_length(PathGenerator* self) {
     Py_ssize_t length = self->length;
     if (length == 0) {
@@ -634,7 +645,7 @@ static Py_ssize_t PathGenerator_length(PathGenerator* self) {
                         /* should not happen, but some compilers complain that
                          * that length can be used uninitialized.
                          */
-                        PyErr_SetString(PyExc_RuntimeError, "Unknown mode");
+                        ERR_UNEXPECTED_MODE
                         return -1;
                 }
                 break;
@@ -650,7 +661,7 @@ static Py_ssize_t PathGenerator_length(PathGenerator* self) {
                         /* should not happen, but some compilers complain that
                          * that length can be used uninitialized.
                          */
-                        PyErr_SetString(PyExc_RuntimeError, "Unknown mode");
+                        ERR_UNEXPECTED_MODE
                         return -1;
                 }
                 break;
@@ -666,10 +677,16 @@ static Py_ssize_t PathGenerator_length(PathGenerator* self) {
                         /* should not happen, but some compilers complain that
                          * that length can be used uninitialized.
                          */
-                        PyErr_SetString(PyExc_RuntimeError, "Unknown mode");
+                        ERR_UNEXPECTED_MODE
                         return -1;
                 }
                 break;
+            case FOGSAA:
+                if (self->mode != FOGSAA_Mode) {
+                    ERR_UNEXPECTED_MODE
+                    return -1;
+                }
+                length = PathGenerator_fogsaa_length(self);
             case Unknown:
             default:
                 PyErr_SetString(PyExc_RuntimeError, "Unknown algorithm");
@@ -744,6 +761,8 @@ PathGenerator_dealloc(PathGenerator* self)
             }
             break;
         }
+        case FOGSAA:
+            printf("TODO: FOGSAA PathGenerator dealloc");
         case Unknown:
         default:
             PyErr_WriteUnraisable((PyObject*)self);
@@ -1591,6 +1610,13 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
     }
 }
 
+static PyObject*
+PathGenerator_next_FOGSAA(PathGenerator* self)
+{
+    PyErr_SetString(PyExc_NotImplementedError, "TODO: FOGSAA PathGenerator next");
+    return NULL;
+}
+
 static PyObject *
 PathGenerator_next(PathGenerator* self)
 {
@@ -1603,6 +1629,9 @@ PathGenerator_next(PathGenerator* self)
                     return PathGenerator_next_needlemanwunsch(self);
                 case Local:
                     return PathGenerator_next_smithwaterman(self);
+                default:
+                    ERR_UNEXPECTED_MODE
+                    return NULL;
             }
         case Gotoh:
             switch (mode) {
@@ -1610,6 +1639,9 @@ PathGenerator_next(PathGenerator* self)
                     return PathGenerator_next_gotoh_global(self);
                 case Local:
                     return PathGenerator_next_gotoh_local(self);
+                default:
+                    ERR_UNEXPECTED_MODE
+                    return NULL;
             }
         case WatermanSmithBeyer:
             switch (mode) {
@@ -1617,7 +1649,12 @@ PathGenerator_next(PathGenerator* self)
                     return PathGenerator_next_waterman_smith_beyer_global(self);
                 case Local:
                     return PathGenerator_next_waterman_smith_beyer_local(self);
+                default:
+                    ERR_UNEXPECTED_MODE
+                    return NULL;
             }
+        case FOGSAA:
+            return PathGenerator_next_FOGSAA(self);
         case Unknown:
         default:
             PyErr_SetString(PyExc_RuntimeError, "Unknown algorithm");
@@ -1650,7 +1687,11 @@ PathGenerator_reset(PathGenerator* self)
                 default:
                     break;
             }
+            break;
         }
+        case FOGSAA_Mode:
+            PyErr_SetString(PyExc_NotImplementedError, "TODO: FOGSAA PathGenerator reset");
+            return NULL;
     }
     Py_INCREF(Py_None);
     return Py_None;
@@ -1836,7 +1877,9 @@ static Algorithm _get_algorithm(Aligner* self)
         const double target_right_extend = self->target_right_extend_gap_score;
         const double query_left_extend = self->query_left_extend_gap_score;
         const double query_right_extend = self->query_right_extend_gap_score;
-        if (self->target_gap_function || self->query_gap_function)
+        if (self->mode == FOGSAA_Mode)
+            algorithm = FOGSAA;
+        else if (self->target_gap_function || self->query_gap_function)
             algorithm = WatermanSmithBeyer;
         else if (target_gap_open == target_gap_extend
               && query_gap_open == query_gap_extend
@@ -1970,13 +2013,17 @@ Aligner_str(Aligner* self)
     switch (self->mode) {
         case Global: sprintf(p, "  mode: global\n"); break;
         case Local: sprintf(p, "  mode: local\n"); break;
+        case FOGSAA_Mode: sprintf(p, "  mode: fogsaa\n"); break;
+        default:
+            ERR_UNEXPECTED_MODE
+            return NULL;
     }
     s = PyUnicode_FromFormat(text, args[0], args[1], args[2]);
     Py_XDECREF(wildcard);
     return s;
 }
 
-static char Aligner_mode__doc__[] = "alignment mode ('global' or 'local')";
+static char Aligner_mode__doc__[] = "alignment mode ('global', 'local', 'fogsaa')";
 
 static PyObject*
 Aligner_get_mode(Aligner* self, void* closure)
@@ -1984,6 +2031,7 @@ Aligner_get_mode(Aligner* self, void* closure)
     switch (self->mode) {
         case Global: message = "global"; break;
         case Local: message = "local"; break;
+        case FOGSAA_Mode: message = "fogsaa"; break;
     }
     return PyUnicode_FromString(message);
 }
@@ -1991,7 +2039,6 @@ Aligner_get_mode(Aligner* self, void* closure)
 static int
 Aligner_set_mode(Aligner* self, PyObject* value, void* closure)
 {
-    self->algorithm = Unknown;
     if (PyUnicode_Check(value)) {
         if (PyUnicode_CompareWithASCIIString(value, "global") == 0) {
             self->mode = Global;
@@ -2001,9 +2048,13 @@ Aligner_set_mode(Aligner* self, PyObject* value, void* closure)
             self->mode = Local;
             return 0;
         }
+        if (PyUnicode_CompareWithASCIIString(value, "fogsaa") == 0) {
+            self->mode = FOGSAA_Mode;
+            return 0;
+        }
     }
     PyErr_SetString(PyExc_ValueError,
-                    "invalid mode (expected 'global' or 'local'");
+                    "invalid mode (expected 'global', 'local', or 'fogsaa'");
     return -1;
 }
 
@@ -2031,7 +2082,6 @@ Aligner_set_match_score(Aligner* self, PyObject* value, void* closure)
         PyBuffer_Release(&self->substitution_matrix);
     }
     self->match = match;
-    self->algorithm = Unknown;
     return 0;
 }
 
@@ -2059,7 +2109,6 @@ Aligner_set_mismatch_score(Aligner* self, PyObject* value, void* closure)
         PyBuffer_Release(&self->substitution_matrix);
     }
     self->mismatch = mismatch;
-    self->algorithm = Unknown;
     return 0;
 }
 
@@ -2138,7 +2187,6 @@ Aligner_set_substitution_matrix(Aligner* self, PyObject* values, void* closure)
     }
     if (self->substitution_matrix.obj) PyBuffer_Release(&self->substitution_matrix);
     self->substitution_matrix = view;
-    self->algorithm = Unknown;
     return 0;
 }
 
@@ -3785,6 +3833,9 @@ Aligner_get_algorithm(Aligner* self, void* closure)
                 case Local:
                     s = "Smith-Waterman";
                     break;
+                default:
+                    ERR_UNEXPECTED_MODE
+                    return NULL;
             }
             break;
         case Gotoh:
@@ -3795,6 +3846,9 @@ Aligner_get_algorithm(Aligner* self, void* closure)
                 case Local:
                     s = "Gotoh local alignment algorithm";
                     break;
+                default:
+                    ERR_UNEXPECTED_MODE
+                    return NULL;
             }
             break;
         case WatermanSmithBeyer:
@@ -3805,123 +3859,20 @@ Aligner_get_algorithm(Aligner* self, void* closure)
                 case Local:
                     s = "Waterman-Smith-Beyer local alignment algorithm";
                     break;
+                default:
+                    ERR_UNEXPECTED_MODE
+                    return NULL;
             }
             break;
         case FOGSAA:
-            switch (mode) {
-                case Global:
-                    s = "Fast Optimal Global Sequence Alignment Algorithm";
-                    break;
-                case Local:
-                    PyErr_SetString(PyExc_RuntimeError,
-                            "algorithm does not support local mode");
-                    return NULL;
-            }
+            // self->mode must be FOGSAA_Mode
+            s = "Fast Optimal Global Sequence Alignment Algorithm";
+            break;
         case Unknown:
         default:
             break;
     }
     return PyUnicode_FromString(s);
-}
-
-static int
-Aligner_set_algorithm(Aligner* self, PyObject* value, void* closure)
-{
-    int i;
-    if (value == Py_None) {
-        self->algorithm = Unknown;
-        return 0;
-    }
-    if (PyUnicode_Check(value)) {
-        if (PyUnicode_CompareWithASCIIString(value, "NWSW") == 0 ||
-                PyUnicode_CompareWithASCIIString(value, "Needleman-Wunsch-Smith-Waterman") == 0) {
-            self->algorithm = NeedlemanWunschSmithWaterman;
-        } else if (PyUnicode_CompareWithASCIIString(value, "Needleman-Wunsch") == 0) {
-            self->algorithm = NeedlemanWunschSmithWaterman;
-            self->mode = Global;
-        } else if (PyUnicode_CompareWithASCIIString(value, "Smith-Waterman") == 0) {
-            self->algorithm = NeedlemanWunschSmithWaterman;
-            self->mode = Global;
-        } else if (PyUnicode_CompareWithASCIIString(value, "Gotoh") == 0) {
-            self->algorithm = Gotoh;
-        } else if (PyUnicode_CompareWithASCIIString(value, "Gotoh global") == 0 ||
-                PyUnicode_CompareWithASCIIString(value, "Gotoh global alignment algorithm") == 0) {
-            self->algorithm = Gotoh;
-            self->mode = Global;
-        } else if (PyUnicode_CompareWithASCIIString(value, "Gotoh local") == 0 ||
-                PyUnicode_CompareWithASCIIString(value, "Gotoh local alignment algorithm") == 0) {
-            self->algorithm = Gotoh;
-            self->mode = Local;
-        } else if (PyUnicode_CompareWithASCIIString(value, "WSB") == 0 || 
-                PyUnicode_CompareWithASCIIString(value, "Waterman-Smith-Beyer") == 0) {
-            self->algorithm = WatermanSmithBeyer;
-        } else if (PyUnicode_CompareWithASCIIString(value, "WSB global") == 0 ||
-                PyUnicode_CompareWithASCIIString(value, "Waterman-Smith-Beyer global alignment algorithm") == 0) {
-            self->algorithm = WatermanSmithBeyer;
-            self->mode = Global;
-        } else if (PyUnicode_CompareWithASCIIString(value, "WSB local") == 0 ||
-                PyUnicode_CompareWithASCIIString(value, "Waterman-Smith-Beyer local alignment algorithm") == 0) {
-            self->algorithm = WatermanSmithBeyer;
-            self->mode = Local;
-        } else if (PyUnicode_CompareWithASCIIString(value, "FOGSAA") == 0 ||
-                PyUnicode_CompareWithASCIIString(value, "Fast Optimal Global Sequence Alignment Algorithm") == 0) {
-            self->algorithm = FOGSAA;
-            self->mode = Global;
-        } else {
-            PyErr_SetString(PyExc_ValueError, "invalid algorithm");
-            return -1;
-        }
-    }
-
-    switch (self->algorithm) {
-    case WatermanSmithBeyer:
-        if (self->target_gap_function || self->query_gap_function) {
-            PyErr_SetString(PyExc_ValueError, "algorithm requires gap function");
-            return -1;
-        }
-        break;
-    case NeedlemanWunschSmithWaterman:
-        if (self->target_internal_open_gap_score != self->target_internal_extend_gap_score ||
-                self->query_internal_open_gap_score != self->query_internal_extend_gap_score ||
-                self->target_left_open_gap_score != self->target_left_extend_gap_score ||
-                self->target_right_open_gap_score != self->target_right_extend_gap_score ||
-                self->query_left_open_gap_score != self->query_left_extend_gap_score ||
-                self->query_right_open_gap_score != self->query_right_extend_gap_score) {
-            PyErr_SetString(PyExc_ValueError, "algorithm requires equal gap scores");
-            return -1;
-        }
-        break;
-    case FOGSAA:
-        if (floor(self->match) != self->match || floor(self->mismatch) != self->mismatch ||
-                floor(self->target_internal_open_gap_score) != self->target_internal_open_gap_score || 
-                floor(self->query_internal_open_gap_score) != self->query_internal_open_gap_score ||
-                floor(self->target_internal_extend_gap_score) != self->target_internal_extend_gap_score ||
-                floor(self->query_internal_extend_gap_score) != self->query_internal_extend_gap_score ||
-                floor(self->target_left_open_gap_score) != self->target_left_open_gap_score ||
-                floor(self->query_left_open_gap_score) != self->query_left_open_gap_score ||
-                floor(self->target_left_extend_gap_score) != self->target_left_extend_gap_score ||
-                floor(self->query_left_extend_gap_score) != self->query_left_extend_gap_score ||
-                floor(self->target_right_open_gap_score) != self->target_right_open_gap_score ||
-                floor(self->query_right_open_gap_score) != self->query_right_open_gap_score ||
-                floor(self->target_right_extend_gap_score) != self->target_right_extend_gap_score ||
-                floor(self->query_right_extend_gap_score) != self->query_right_extend_gap_score) {
-            PyErr_SetString(PyExc_ValueError, "algorithm requires integer scores");
-            return -1;
-        }
-        if (self->substitution_matrix.obj) {
-            for (i = 0; i < self->substitution_matrix.shape[0] * self->substitution_matrix.shape[1]; i++) {
-                if (floor(((double*)(self->substitution_matrix.buf))[i]) != ((double*)(self->substitution_matrix.buf))[i]) {
-                    PyErr_SetString(PyExc_ValueError,
-                            "algorithm requires substitution matrix with integer scores");
-                    return -1;
-                }
-            }
-        }
-        break;
-    default:
-        break;
-    }
-    return 0;
 }
 
 static PyGetSetDef Aligner_getset[] = {
@@ -4143,7 +4094,7 @@ static PyGetSetDef Aligner_getset[] = {
         Aligner_wildcard__doc__, NULL},
     {"algorithm",
         (getter)Aligner_get_algorithm,
-        (setter)Aligner_set_algorithm,
+        (setter)NULL,
         Aligner_algorithm__doc__, NULL},
     {NULL, NULL, 0, NULL}  /* Sentinel */
 };
@@ -6335,6 +6286,9 @@ PathGenerator_create_NWSW(int nA, int nB, Mode mode, unsigned char strand)
     switch (mode) {
         case Global: trace = VERTICAL; break;
         case Local: trace = STARTPOINT; break;
+        default:
+            ERR_UNEXPECTED_MODE
+            return NULL;
     }
     for (i = 0; i <= nA; i++) {
         M[i] = PyMem_Malloc((nB+1)*sizeof(Trace));
@@ -6367,13 +6321,7 @@ PathGenerator_create_Gotoh(int nA, int nB, Mode mode, unsigned char strand)
         case Global: trace = 0; break;
         case Local: trace = STARTPOINT; break;
         default:
-            /* Should not happen, but the compiler has no way of knowing that,
-             * as the enum Mode does not restrict the value of mode, which can
-             * be any integer. Include default: here to prevent compiler
-             * warnings.
-             */
-            PyErr_Format(PyExc_RuntimeError,
-                         "mode has unexpected value %d", mode);
+            ERR_UNEXPECTED_MODE
             return NULL;
     }
 
@@ -6502,6 +6450,9 @@ PathGenerator_create_WSB(int nA, int nB, Mode mode, unsigned char strand)
             case Local:
                 M[i][0].trace = STARTPOINT;
                 break;
+            default:
+                ERR_UNEXPECTED_MODE
+                return NULL;
         }
     }
     for (i = 1; i <= nB; i++) {
@@ -6521,6 +6472,9 @@ PathGenerator_create_WSB(int nA, int nB, Mode mode, unsigned char strand)
             case Local:
                 M[0][i].trace = STARTPOINT;
                 break;
+            default:
+                ERR_UNEXPECTED_MODE
+                return NULL;
         }
     }
     M[0][0].path = 0;
@@ -6530,6 +6484,7 @@ exit:
     PyErr_SetNone(PyExc_MemoryError);
     return NULL;
 }
+
 
 /* ----------------- alignment algorithms ----------------- */
 
@@ -6954,6 +6909,23 @@ Aligner_fogsaa_score_compare(Aligner* self,
     const int mismatch = (int)self->mismatch;
     const int wildcard = self->wildcard;
     FOGSAA_SCORE_ENTER
+
+    if (floor(self->match) != self->match || floor(self->mismatch) != self->mismatch ||
+            floor(self->target_internal_open_gap_score) != self->target_internal_open_gap_score || 
+            floor(self->query_internal_open_gap_score) != self->query_internal_open_gap_score ||
+            floor(self->target_internal_extend_gap_score) != self->target_internal_extend_gap_score ||
+            floor(self->query_internal_extend_gap_score) != self->query_internal_extend_gap_score ||
+            floor(self->target_left_open_gap_score) != self->target_left_open_gap_score ||
+            floor(self->query_left_open_gap_score) != self->query_left_open_gap_score ||
+            floor(self->target_left_extend_gap_score) != self->target_left_extend_gap_score ||
+            floor(self->query_left_extend_gap_score) != self->query_left_extend_gap_score ||
+            floor(self->target_right_open_gap_score) != self->target_right_open_gap_score ||
+            floor(self->query_right_open_gap_score) != self->query_right_open_gap_score ||
+            floor(self->target_right_extend_gap_score) != self->target_right_extend_gap_score ||
+            floor(self->query_right_extend_gap_score) != self->query_right_extend_gap_score) {
+        PyErr_SetString(PyExc_ValueError, "algorithm requires integer scores");
+        return NULL;
+    }
     FOGSAA_SCORE(COMPARE_SCORE)
 }
 
@@ -6965,10 +6937,17 @@ Aligner_fogsaa_score_matrix(Aligner* self,
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
     const double* scores = self->substitution_matrix.buf;
-    int match, mismatch;
+    int match = scores[0], mismatch = scores[0];
     FOGSAA_SCORE_ENTER
+
     // for prediction purposes, maximum score is match and minimum score is mismatch
     for (i = 0; i < n*n; i++) {
+        if (floor(scores[i]) != scores[i]) {
+            PyErr_SetString(PyExc_ValueError,
+                    "algorithm requires substitution matrix with integer scores");
+            return NULL;
+        }
+
         if (scores[i] > match)
             match = scores[i];
         else if (scores[i] < mismatch)
@@ -6986,7 +6965,7 @@ Aligner_fogsaa_align_compare(Aligner* self,
     /* const double match = self->match; */
     /* const double mismatch = self->mismatch; */
     /* const int wildcard = self->wildcard; */
-    PyErr_SetString(PyExc_NotImplementedError, "TODO");
+    PyErr_SetString(PyExc_NotImplementedError, "TODO: FOGSAA align_compare");
     return NULL;
 }
 
@@ -6998,7 +6977,7 @@ Aligner_fogsaa_align_matrix(Aligner* self,
 {
     /* const Py_ssize_t n = self->substitution_matrix.shape[0]; */
     /* const double* scores = self->substitution_matrix.buf; */
-    PyErr_SetString(PyExc_NotImplementedError, "TODO");
+    PyErr_SetString(PyExc_NotImplementedError, "TODO: FOGSAA align_matrix");
     return NULL;
 }
 
@@ -7360,6 +7339,9 @@ Aligner_score(Aligner* self, PyObject* args, PyObject* keywords)
                     else
                         result = Aligner_smithwaterman_score_compare(self, sA, nA, sB, nB);
                     break;
+                default:
+                    ERR_UNEXPECTED_MODE
+                    return NULL;
             }
             break;
         case Gotoh:
@@ -7376,6 +7358,9 @@ Aligner_score(Aligner* self, PyObject* args, PyObject* keywords)
                     else
                         result = Aligner_gotoh_local_score_compare(self, sA, nA, sB, nB);
                     break;
+                default:
+                    ERR_UNEXPECTED_MODE
+                    return NULL;
             }
             break;
         case WatermanSmithBeyer:
@@ -7392,21 +7377,20 @@ Aligner_score(Aligner* self, PyObject* args, PyObject* keywords)
                     else
                         result = Aligner_watermansmithbeyer_local_score_compare(self, sA, nA, sB, nB, strand);
                     break;
+                default:
+                    ERR_UNEXPECTED_MODE
+                    return NULL;
             }
             break;
         case FOGSAA:
-            switch (mode) {
-                case Global:
-                    if (substitution_matrix)
-                        result = Aligner_fogsaa_score_matrix(self, sA, nA, sB, nB, strand);
-                    else
-                        result = Aligner_fogsaa_score_compare(self, sA, nA, sB, nB, strand);
-                    break;
-                case Local:
-                    PyErr_SetString(PyExc_RuntimeError,
-                            "algorithm does not support local mode");
-                    break;
+            if (mode != FOGSAA_Mode) {
+                ERR_UNEXPECTED_MODE
+                return NULL;
             }
+            if (substitution_matrix)
+                result = Aligner_fogsaa_score_matrix(self, sA, nA, sB, nB, strand);
+            else
+                result = Aligner_fogsaa_score_compare(self, sA, nA, sB, nB, strand);
             break;
         case Unknown:
         default:
@@ -7473,6 +7457,9 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
                     else
                         result = Aligner_smithwaterman_align_compare(self, sA, nA, sB, nB, strand);
                     break;
+                default:
+                    ERR_UNEXPECTED_MODE
+                    return NULL;
             }
             break;
         case Gotoh:
@@ -7489,6 +7476,9 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
                     else
                         result = Aligner_gotoh_local_align_compare(self, sA, nA, sB, nB, strand);
                     break;
+                default:
+                    ERR_UNEXPECTED_MODE
+                    return NULL;
             }
             break;
         case WatermanSmithBeyer:
@@ -7505,21 +7495,20 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
                     else
                         result = Aligner_watermansmithbeyer_local_align_compare(self, sA, nA, sB, nB, strand);
                     break;
+                default:
+                    ERR_UNEXPECTED_MODE
+                    return NULL;
             }
             break;
         case FOGSAA:
-            switch (mode) {
-                case Global:
-                    if (substitution_matrix)
-                        result = Aligner_fogsaa_align_matrix(self, sA, nA, sB, nB, strand);
-                    else
-                        result = Aligner_fogsaa_align_compare(self, sA, nA, sB, nB, strand);
-                    break;
-                case Local:
-                    PyErr_SetString(PyExc_RuntimeError,
-                            "algorithm does not support local mode");
-                    break;
+            if (mode != FOGSAA_Mode) {
+                ERR_UNEXPECTED_MODE
+                return NULL;
             }
+            if (substitution_matrix)
+                result = Aligner_fogsaa_align_matrix(self, sA, nA, sB, nB, strand);
+            else
+                result = Aligner_fogsaa_align_compare(self, sA, nA, sB, nB, strand);
             break;
         case Unknown:
         default:

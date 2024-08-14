@@ -3774,6 +3774,12 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
     Waterman-Smith-Beyer, or Fast Optimal Global Sequence Alignment Algorithm
     global or local alignment algorithm).
 
+    The Fast Optimal Global Sequence Alignment Algorithm (FOGSAA) will never be
+    automatically selected. If you wish to use FOGSAA, you must set the "mode"
+    attribute to "fogsaa". As its name suggests, it only finds global
+    alignments and cannot be used for local alignment. A warning will be raised
+    if it is run on sequences that are less than 30% globally similar.
+
     Calling the "score" method on the aligner with two sequences as arguments
     will calculate the alignment score between the two sequences.
     Calling the "align" method on the aligner with two sequences as arguments

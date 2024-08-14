@@ -348,8 +348,7 @@ Pairwise sequence aligner with parameters
     def test_fogsaa_simple1(self):
         seq1 = "GAACT"
         seq2 = "GAT"
-        aligner = Align.PairwiseAligner()
-        aligner.algorithm = "FOGSAA"
+        aligner = Align.PairwiseAligner(mode="fogsaa")
         self.assertEqual(
             aligner.algorithm, "Fast Optimal Global Sequence Alignment Algorithm"
         )
@@ -361,12 +360,11 @@ Pairwise sequence aligner with parameters
     def test_fogsaa_affine1(self):
         seq1 = "CC"
         seq2 = "ACCT"
-        aligner = Align.PairwiseAligner()
+        aligner = Align.PairwiseAligner(mode="fogsaa")
         aligner.match_score = 0
         aligner.mismatch_score = -1
         aligner.open_gap_score = -5
         aligner.extend_gap_score = -1
-        aligner.algorithm = "FOGSAA"
         self.assertEqual(
             aligner.algorithm, "Fast Optimal Global Sequence Alignment Algorithm"
         )
@@ -382,8 +380,7 @@ Pairwise sequence aligner with parameters
     def test_fogsaa_matrix_scoring(self):
         seq1 = "AAAAAAAAAAA"
         seq2 = "AAAAAAATAAA"
-        aligner = Align.PairwiseAligner(scoring="blastn")
-        aligner.algorithm = "FOGSAA"
+        aligner = Align.PairwiseAligner(mode="fogsaa", scoring="blastn")
         self.assertEqual(
             aligner.algorithm, "Fast Optimal Global Sequence Alignment Algorithm"
         )
@@ -5030,18 +5027,11 @@ query	16	target	1	255	6D17M5I	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
 
 
 class TestAlgorithmRestrictions(unittest.TestCase):
-    def test_nwsw_restrictions(self):
-        aligner = Align.PairwiseAligner()
-        aligner.open_gap_score = 1.0
-        aligner.extend_gap_score = 2.0
-        with self.assertRaises(ValueError):
-            aligner.algorithm = "NWSW"
-
     def test_fogsaa_restrictions(self):
-        aligner = Align.PairwiseAligner()
+        aligner = Align.PairwiseAligner(mode="fogsaa")
         aligner.match_score = 1.1
         with self.assertRaises(ValueError):
-            aligner.algorithm = "FOGSAA"
+            aligner.score("AAAAAAAAAAAA", "AAAAATAAAAAA")
 
 
 if __name__ == "__main__":
