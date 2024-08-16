@@ -116,7 +116,7 @@ def qblast(
      - matrix_name    Specify an alt. matrix (PAM30, PAM70, BLOSUM80, BLOSUM45).
      - filter         "none" turns off filtering.  Default no filtering
      - format_type    "HTML", "Text", "ASN.1", or "XML".  Def. "XML".
-     - entrez_query   Entrez query to limit Blast search - NO LONGER SUPPORTED
+     - entrez_query   Entrez query to limit Blast search - only applies when searching nucleotide BLASTDBs
      - hitlist_size   Number of hits to return. Default 50
      - megablast      TRUE/FALSE whether to use MEga BLAST algorithm (blastn only)
      - short_query    TRUE/FALSE whether to adjust the search parameters for a
