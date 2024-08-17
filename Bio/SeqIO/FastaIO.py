@@ -15,12 +15,16 @@ You are expected to use this module via the Bio.SeqIO functions.
 
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+from Bio import BiopythonDeprecationWarning
+
 
 from .Interfaces import _clean
 from .Interfaces import _get_seq_string
 from .Interfaces import _TextIOSource
 from .Interfaces import SequenceIterator
 from .Interfaces import SequenceWriter
+
+import warnings
 
 
 def SimpleFastaParser(handle):
@@ -50,7 +54,22 @@ def SimpleFastaParser(handle):
     except StopIteration:
         return
     if not line.startswith(">"):
-        raise ValueError("FASTA files must start with '>'")
+        warnings.warn(
+            "Previously, the FASTA parser silently ignored comments at the\n"
+            "beginning of the FASTA file (before the first sequence).\n"
+            "\n"
+            "As the FASTA file format specification does not allow such\n"
+            "comments, this is now deprecated.\n"
+            "\n"
+            "In a future Biopython release, this deprecation warning will be\n"
+            "replaced by a ValueError. We encourage you to modify your FASTA\n"
+            "file to make it compliant with the FASTA file format\n"
+            "specification.",
+            BiopythonDeprecationWarning,
+        )
+        for line in handle:
+            if line.startswith(">"):
+                break
     title = line[1:].rstrip()
 
     # Main logic
