@@ -1541,10 +1541,7 @@ which are basically analogous to the different parameters you can set on
 the BLAST web page. We’ll just highlight a few of them here:
 
 -  The argument ``url_base`` sets the base URL for running BLAST over
-   the internet. By default it connects to the NCBI, but one can use
-   this to connect to an instance of NCBI BLAST running in the cloud.
-   Please refer to the documentation for the ``qblast`` function for
-   further details.
+   the internet. By default it connects to the NCBI.
 
 -  The ``qblast`` function can return the BLAST results in various
    formats, which you can choose with the optional ``format_type``
