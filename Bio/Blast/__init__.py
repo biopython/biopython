@@ -1035,21 +1035,15 @@ def qblast(
     username="blast",
     password=None,
 ):
-    """BLAST search using NCBI's QBLAST server or a cloud service provider.
+    """BLAST search using NCBI's QBLAST server.
 
     Supports all parameters of the old qblast API for Put and Get.
 
-    Please note that NCBI uses the new Common URL API for BLAST searches
-    on the internet (http://ncbi.github.io/blast-cloud/dev/api.html). Thus,
-    some of the parameters used by this function are not (or are no longer)
-    officially supported by NCBI. Although they are still functioning, this
-    may change in the future.
-
-    The Common URL API (http://ncbi.github.io/blast-cloud/dev/api.html) allows
-    doing BLAST searches on cloud servers. To use this feature, please set
-    ``url_base='http://host.my.cloud.service.provider.com/cgi-bin/blast.cgi'``
-    and ``format_object='Alignment'``. For more details, please see
-    https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=CloudBlast
+    Please note that NCBI uses the new Common URL API for BLAST searches on
+    the internet (https://blast.ncbi.nlm.nih.gov/doc/blast-help/urlapi.html).
+    Thus, some of the parameters used by this function are not (or are no
+    longer) officially supported by NCBI. Although they are still functioning,
+    this may change in the future.
 
     Some useful parameters:
 
@@ -1064,7 +1058,7 @@ def qblast(
      - filter         "none" turns off filtering.  Default no filtering
      - format_type    "XML" (default), "HTML", "Text", "XML2", "JSON2",
                       or "Tabular".
-     - entrez_query   Entrez query to limit Blast search
+     - entrez_query   Entrez query to limit Blast search - only applies when searching nucleotide BLASTDBs
      - hitlist_size   Number of hits to return. Default 50
      - megablast      TRUE/FALSE whether to use MEga BLAST algorithm (blastn only)
      - short_query    TRUE/FALSE whether to adjust the search parameters for a
@@ -1075,7 +1069,7 @@ def qblast(
 
     This function does no checking of the validity of the parameters
     and passes the values to the server as is.  More help is available at:
-    https://ncbi.github.io/blast-cloud/dev/api.html
+    https://blast.ncbi.nlm.nih.gov/doc/blast-help/urlapi.html
 
     The http.client.HTTPResponse object returned by this function has the
     additional attributes rid and rtoe with the Request ID and Request Time Of
