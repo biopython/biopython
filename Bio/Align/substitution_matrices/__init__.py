@@ -489,8 +489,7 @@ def read(handle, dtype=float):
             alphabet = "".join(alphabet)
         matrix = Array(alphabet=alphabet, dims=2, dtype=dtype)
         for letter1, row in zip(alphabet, rows):
-            _ = row.pop(0)
-            assert letter1 == _
+            assert letter1 == row.pop(0)
             for letter2, word in zip(alphabet, row):
                 matrix[letter1, letter2] = float(word)
     matrix.header = header
