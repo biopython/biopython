@@ -30,6 +30,7 @@
 
 #define OVERFLOW_ERROR -1
 #define MEMORY_ERROR -2
+#define OTHER_ERROR -3
 
 #define MISSING_LETTER -1
 
@@ -52,6 +53,9 @@ typedef enum {Global, Local, FOGSAA_Mode} Mode;
 
 #define ERR_UNEXPECTED_MODE \
     PyErr_Format(PyExc_RuntimeError, "mode has unexpected value (in "__FILE__" on line %d)", __LINE__);
+
+#define ERR_UNEXPECTED_ALGORITHM \
+    PyErr_Format(PyExc_RuntimeError, "algorithm has unexpected value (in "__FILE__" on line %d)", __LINE__);
 
 typedef struct {
     unsigned char trace : 5;
@@ -625,8 +629,7 @@ exit:
 static Py_ssize_t
 PathGenerator_fogsaa_length(PathGenerator* self)
 {
-    PyErr_SetString(PyExc_NotImplementedError, "TODO: FOGSAA PathGenerator length");
-    return -1;
+    return 1;
 }
 
 static Py_ssize_t PathGenerator_length(PathGenerator* self) {
@@ -646,7 +649,7 @@ static Py_ssize_t PathGenerator_length(PathGenerator* self) {
                          * that length can be used uninitialized.
                          */
                         ERR_UNEXPECTED_MODE
-                        return -1;
+                        return OTHER_ERROR;
                 }
                 break;
             case Gotoh:
@@ -662,7 +665,7 @@ static Py_ssize_t PathGenerator_length(PathGenerator* self) {
                          * that length can be used uninitialized.
                          */
                         ERR_UNEXPECTED_MODE
-                        return -1;
+                        return OTHER_ERROR;
                 }
                 break;
             case WatermanSmithBeyer:
@@ -678,19 +681,20 @@ static Py_ssize_t PathGenerator_length(PathGenerator* self) {
                          * that length can be used uninitialized.
                          */
                         ERR_UNEXPECTED_MODE
-                        return -1;
+                        return OTHER_ERROR;
                 }
                 break;
             case FOGSAA:
                 if (self->mode != FOGSAA_Mode) {
                     ERR_UNEXPECTED_MODE
-                    return -1;
+                    return OTHER_ERROR;
                 }
                 length = PathGenerator_fogsaa_length(self);
+                break;
             case Unknown:
             default:
-                PyErr_SetString(PyExc_RuntimeError, "Unknown algorithm");
-                return -1;
+                ERR_UNEXPECTED_ALGORITHM
+                return OTHER_ERROR;
         }
         self->length = length;
     }
@@ -703,6 +707,7 @@ static Py_ssize_t PathGenerator_length(PathGenerator* self) {
         case MEMORY_ERROR:
             PyErr_SetNone(PyExc_MemoryError);
             break;
+        case OTHER_ERROR:
         default:
             break;
     }
@@ -725,6 +730,7 @@ PathGenerator_dealloc(PathGenerator* self)
     }
     switch (algorithm) {
         case NeedlemanWunschSmithWaterman:
+        case FOGSAA:
             break;
         case Gotoh: {
             TraceGapsGotoh** gaps = self->gaps.gotoh;
@@ -761,8 +767,6 @@ PathGenerator_dealloc(PathGenerator* self)
             }
             break;
         }
-        case FOGSAA:
-            printf("TODO: FOGSAA PathGenerator dealloc");
         case Unknown:
         default:
             PyErr_WriteUnraisable((PyObject*)self);
@@ -1613,8 +1617,20 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
 static PyObject*
 PathGenerator_next_FOGSAA(PathGenerator* self)
 {
-    PyErr_SetString(PyExc_NotImplementedError, "TODO: FOGSAA PathGenerator next");
-    return NULL;
+    int i = self->nA;
+    int j = self->nB;
+    Trace** M = self->M;
+    int trace = 0;
+
+    /* Follow the traceback until we reach the origin. */
+    while (1) {
+        trace = M[i][j].trace;
+        if (trace & HORIZONTAL) M[i][--j].path = HORIZONTAL;
+        else if (trace & VERTICAL) M[--i][j].path = VERTICAL;
+        else if (trace & DIAGONAL) M[--i][--j].path = DIAGONAL;
+        else break;
+    }
+    return PathGenerator_create_path(self, 0, 0);
 }
 
 static PyObject *
@@ -1655,9 +1671,10 @@ PathGenerator_next(PathGenerator* self)
             }
         case FOGSAA:
             return PathGenerator_next_FOGSAA(self);
+            break;
         case Unknown:
         default:
-            PyErr_SetString(PyExc_RuntimeError, "Unknown algorithm");
+            ERR_UNEXPECTED_ALGORITHM
             return NULL;
     }
 }
@@ -5921,7 +5938,7 @@ exit: \
     return NULL; \
 
 
-#define FOGSAA_SCORE_ENTER \
+#define FOGSAA_ENTER \
     int i, j, t; \
     int kA, kB; \
     int optpA, optpB, curpA = 0, curpB = 0; /* optimal and current pointers */ \
@@ -5974,13 +5991,13 @@ exit: \
     /*         return NULL; */ \
     /* } */
 
-#define FOGSAA_SCORE(align_score) \
+#define FOGSAA_DO(align_score) \
     /* allocate and initialize matrix */ \
     matrix = PyMem_Malloc((nA+1) * sizeof(struct fogsaa_cell*)); \
     if (!matrix) \
         return PyErr_NoMemory(); \
     for (i = 0; i <= nA; i++) { \
-        matrix[i] = PyMem_Malloc((nB+1) * sizeof(struct fogsaa_cell)); \
+        matrix[i] = PyMem_Calloc(nB+1, sizeof(struct fogsaa_cell)); \
         if (!matrix[i]) \
             return PyErr_NoMemory(); \
     } \
@@ -6246,13 +6263,25 @@ exit: \
     for (i = 0; i < v; i++) { \
         PyMem_Free(queue[i]); \
     } \
-    PyMem_Free(queue); \
+    PyMem_Free(queue);
+
+
+#define FOGSAA_EXIT_SCORE \
     t = matrix[optpA][optpB].present_score; \
     for (i = 0; i <= nA; i++) { \
         PyMem_Free(matrix[i]); \
     } \
     PyMem_Free(matrix); \
     return PyFloat_FromDouble((double)t);
+
+
+#define FOGSAA_EXIT_ALIGN \
+    t = matrix[optpA][optpB].present_score; \
+    for (i = 0; i <= nA; i++) { \
+        PyMem_Free(matrix[i]); \
+    } \
+    PyMem_Free(matrix); \
+    return Py_BuildValue("fN", (double)t, paths);
 
 
 /* -------------- allocation & deallocation ------------- */
@@ -6476,6 +6505,43 @@ PathGenerator_create_WSB(int nA, int nB, Mode mode, unsigned char strand)
                 ERR_UNEXPECTED_MODE
                 return NULL;
         }
+    }
+    M[0][0].path = 0;
+    return paths;
+exit:
+    Py_DECREF(paths);
+    PyErr_SetNone(PyExc_MemoryError);
+    return NULL;
+}
+
+static PathGenerator*
+PathGenerator_create_FOGSAA(int nA, int nB, unsigned char strand)
+{
+    int i;
+    Trace** M;
+    PathGenerator* paths;
+
+    paths = (PathGenerator*)PyType_GenericAlloc(&PathGenerator_Type, 0);
+    if (!paths) return NULL;
+
+    paths->iA = 0;
+    paths->iB = 0;
+    paths->nA = nA;
+    paths->nB = nB;
+    paths->M = NULL;
+    paths->gaps.gotoh = NULL;
+    paths->gaps.waterman_smith_beyer = NULL;
+    paths->algorithm = FOGSAA;
+    paths->mode = FOGSAA_Mode;
+    paths->length = 0;
+    paths->strand = strand;
+
+    M = PyMem_Malloc((nA+1)*sizeof(Trace*));
+    paths->M = M;
+    if (!M) goto exit;
+    for (i = 0; i <= nA; i++) {
+        M[i] = PyMem_Malloc((nB+1)*sizeof(Trace));
+        if (!M[i]) goto exit;
     }
     M[0][0].path = 0;
     return paths;
@@ -6908,7 +6974,7 @@ Aligner_fogsaa_score_compare(Aligner* self,
     const int match = (int)self->match;
     const int mismatch = (int)self->mismatch;
     const int wildcard = self->wildcard;
-    FOGSAA_SCORE_ENTER
+    FOGSAA_ENTER
 
     if (floor(self->match) != self->match || floor(self->mismatch) != self->mismatch ||
             floor(self->target_internal_open_gap_score) != self->target_internal_open_gap_score || 
@@ -6926,7 +6992,8 @@ Aligner_fogsaa_score_compare(Aligner* self,
         PyErr_SetString(PyExc_ValueError, "algorithm requires integer scores");
         return NULL;
     }
-    FOGSAA_SCORE(COMPARE_SCORE)
+    FOGSAA_DO(COMPARE_SCORE)
+    FOGSAA_EXIT_SCORE
 }
 
 static PyObject*
@@ -6938,7 +7005,7 @@ Aligner_fogsaa_score_matrix(Aligner* self,
     const Py_ssize_t n = self->substitution_matrix.shape[0];
     const double* scores = self->substitution_matrix.buf;
     int match = scores[0], mismatch = scores[0];
-    FOGSAA_SCORE_ENTER
+    FOGSAA_ENTER
 
     // for prediction purposes, maximum score is match and minimum score is mismatch
     for (i = 0; i < n*n; i++) {
@@ -6953,7 +7020,8 @@ Aligner_fogsaa_score_matrix(Aligner* self,
         else if (scores[i] < mismatch)
             mismatch = scores[i];
     }
-    FOGSAA_SCORE(MATRIX_SCORE)
+    FOGSAA_DO(MATRIX_SCORE)
+    FOGSAA_EXIT_SCORE
 }
 
 static PyObject*
@@ -6962,11 +7030,57 @@ Aligner_fogsaa_align_compare(Aligner* self,
                                  const int* sB, int nB,
                                  unsigned char strand)
 {
-    /* const double match = self->match; */
-    /* const double mismatch = self->mismatch; */
-    /* const int wildcard = self->wildcard; */
-    PyErr_SetString(PyExc_NotImplementedError, "TODO: FOGSAA align_compare");
-    return NULL;
+    const double match = self->match;
+    const double mismatch = self->mismatch;
+    const int wildcard = self->wildcard;
+    FOGSAA_ENTER
+    PathGenerator* paths;
+    Trace** M;
+
+    if (floor(self->match) != self->match || floor(self->mismatch) != self->mismatch ||
+            floor(self->target_internal_open_gap_score) != self->target_internal_open_gap_score || 
+            floor(self->query_internal_open_gap_score) != self->query_internal_open_gap_score ||
+            floor(self->target_internal_extend_gap_score) != self->target_internal_extend_gap_score ||
+            floor(self->query_internal_extend_gap_score) != self->query_internal_extend_gap_score ||
+            floor(self->target_left_open_gap_score) != self->target_left_open_gap_score ||
+            floor(self->query_left_open_gap_score) != self->query_left_open_gap_score ||
+            floor(self->target_left_extend_gap_score) != self->target_left_extend_gap_score ||
+            floor(self->query_left_extend_gap_score) != self->query_left_extend_gap_score ||
+            floor(self->target_right_open_gap_score) != self->target_right_open_gap_score ||
+            floor(self->query_right_open_gap_score) != self->query_right_open_gap_score ||
+            floor(self->target_right_extend_gap_score) != self->target_right_extend_gap_score ||
+            floor(self->query_right_extend_gap_score) != self->query_right_extend_gap_score) {
+        PyErr_SetString(PyExc_ValueError, "algorithm requires integer scores");
+        return NULL;
+    }
+    FOGSAA_DO(COMPARE_SCORE)
+
+    paths = PathGenerator_create_FOGSAA(nA, nB, strand);
+    M = paths->M;
+    if (!paths) return NULL;
+    // copy matrix cells to traces
+    for (i = 0; i <= nA; i++) {
+        for (j = 0; j <= nB; j++) {
+            switch (matrix[i][j].type) {
+            case 0:
+            case FOGSAA_CELL_UNDEF:
+                M[i][j].trace = 0;
+                break;
+            case FOGSAA_CELL_MATCH_MISMATCH:
+                M[i][j].trace = DIAGONAL;
+                break;
+            case FOGSAA_CELL_GAP_A:
+                M[i][j].trace = HORIZONTAL;
+                break;
+            case FOGSAA_CELL_GAP_B:
+                M[i][j].trace = VERTICAL;
+                break;
+            }
+        }
+    }
+    M[nA][nB].path = 0;
+
+    FOGSAA_EXIT_ALIGN
 }
 
 static PyObject*
@@ -7394,7 +7508,7 @@ Aligner_score(Aligner* self, PyObject* args, PyObject* keywords)
             break;
         case Unknown:
         default:
-            PyErr_SetString(PyExc_RuntimeError, "unknown algorithm");
+            ERR_UNEXPECTED_ALGORITHM
             break;
     }
 
@@ -7512,7 +7626,7 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
             break;
         case Unknown:
         default:
-            PyErr_SetString(PyExc_RuntimeError, "unknown algorithm");
+            ERR_UNEXPECTED_ALGORITHM
             break;
     }
 

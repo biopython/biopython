@@ -356,6 +356,78 @@ Pairwise sequence aligner with parameters
         self.assertAlmostEqual(score, 3.0)
         # score = aligner.score(seq1, reverse_complement(seq2), "-")
         # self.assertAlmostEqual(score, 3.0)
+        alignments = aligner.align(seq1, seq2)
+        # self.assertEqual(len(alignments), 2)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 3.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 GAACT 5
+                  0 ||--| 5
+query             0 GA--T 3
+""",
+        )
+        self.assertEqual(alignment.shape, (2, 5))
+        self.assertTrue(
+            np.array_equal(
+                alignment.aligned, np.array([[[0, 2], [4, 5]], [[0, 2], [2, 3]]])
+            )
+        )
+        # alignment = alignments[1]
+        # self.assertAlmostEqual(alignment.score, 3.0)
+        # self.assertEqual(
+        #     str(alignment),
+        #     """\
+
+    # target            0 GAACT 5
+    #           0 |-|-| 5
+    # query             0 G-A-T 3
+    # """,
+    # )
+    # self.assertEqual(alignment.shape, (2, 5))
+    # self.assertTrue(
+    #     np.array_equal(
+    #         alignment.aligned,
+    #         np.array([[[0, 1], [2, 3], [4, 5]], [[0, 1], [1, 2], [2, 3]]]),
+    #     )
+    # )
+    # alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+    # self.assertEqual(len(alignments), 2)
+    # alignment = alignments[0]
+    # self.assertAlmostEqual(alignment.score, 3.0)
+    # self.assertEqual(
+    #     str(alignment),
+    #     """\
+    # target            0 GAACT 5
+    #           0 ||--| 5
+    # query             3 GA--T 0
+    # """,
+    # )
+    # self.assertEqual(alignment.shape, (2, 5))
+    # self.assertTrue(
+    #     np.array_equal(
+    #         alignment.aligned, np.array([[[0, 2], [4, 5]], [[3, 1], [1, 0]]])
+    #     )
+    # )
+    # alignment = alignments[1]
+    # self.assertAlmostEqual(alignment.score, 3.0)
+    # self.assertEqual(
+    #     str(alignment),
+    #     """\
+    # target            0 GAACT 5
+    #           0 |-|-| 5
+    # query             3 G-A-T 0
+    # """,
+    # )
+    # self.assertEqual(alignment.shape, (2, 5))
+    # self.assertTrue(
+    #     np.array_equal(
+    #         alignment.aligned,
+    #         np.array([[[0, 1], [2, 3], [4, 5]], [[3, 2], [2, 1], [1, 0]]]),
+    #     )
+    # )
 
     def test_fogsaa_affine1(self):
         seq1 = "CC"
