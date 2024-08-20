@@ -31,8 +31,8 @@ build_script:
         https://ci.appveyor.com/api/projects/$env:APPVEYOR_ACCOUNT_NAME/$env:APPVEYOR_PROJECT_SLUG/history?recordsNumber=50).builds | `
         Where-Object pullRequestId -eq $env:APPVEYOR_PULL_REQUEST_NUMBER)[0].buildNumber) { `
         throw "There are newer queued builds for this pull request, failing early." }
-  - ps: Start-FileDownload "https://repo.continuum.io/miniconda/Miniconda$env:PY_MAJOR_VER-latest-Windows-$env:PYTHON_ARCH.exe" C:\Miniconda.exe; echo "Finished downloading miniconda"
-  - cmd: C:\Miniconda.exe /S /D=C:\Py
+  - ps: Start-FileDownload "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Windows-$env:PYTHON_ARCH.exe" C:\Miniforge.exe; echo "Finished downloading miniforge"
+  - ps: start -Wait -FilePath C:\Miniforge.exe -ArgumentList "/S /D=C:\Py"
   - SET PATH=C:\Py;C:\Py\Scripts;C:\Py\Library\bin;%PATH%
   - conda config --set always_yes yes
   - conda update conda
