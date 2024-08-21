@@ -205,7 +205,7 @@ class FastaIterator(SequenceIterator):
         """
         if alphabet is not None:
             raise ValueError("The alphabet argument is no longer supported")
-        super().__init__(source, mode="t", fmt="FASTA")
+        super().__init__(source, mode="t", fmt="Fasta")
 
     def parse(self, handle):
         """Start parsing the file, and return a SeqRecord generator."""
@@ -354,6 +354,8 @@ class FastaBlastIterator(SequenceIterator):
         for line in handle:
             if line[0] not in "#!;":
                 break
+        else:
+            return
         if not line.startswith(">"):
             raise ValueError(
                 "Expected FASTA record starting with '>' character.\n"
@@ -458,6 +460,8 @@ class FastaPearsonIterator(SequenceIterator):
         for line in handle:
             if line.startswith(">"):
                 break
+        else:
+            return
         title = line[1:].rstrip()
         lines = []
         for line in handle:
