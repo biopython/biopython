@@ -155,7 +155,7 @@ def FastaTwoLineParser(handle):
 
 
 class FastaIterator(SequenceIterator):
-    """Parser for Fasta files."""
+    """Parser for plain Fasta files without comments."""
 
     def __init__(
         self,
@@ -168,7 +168,251 @@ class FastaIterator(SequenceIterator):
          - source - input stream opened in text mode, or a path to a file
          - alphabet - optional alphabet, not used. Leave as None.
 
+        This parser expects a plain Fasta format without comments or header
+        lines.
+
         By default this will act like calling Bio.SeqIO.parse(handle, "fasta")
+        with no custom handling of the title lines:
+
+        >>> with open("Fasta/dups.fasta") as handle:
+        ...     for record in FastaIterator(handle):
+        ...         print(record.id)
+        ...
+        alpha
+        beta
+        gamma
+        alpha
+        delta
+
+        If you want to modify the records before writing, for example to change
+        the ID of each record, you can use a generator function as follows:
+
+        >>> def modify_records(records):
+        ...     for record in records:
+        ...         record.id = record.id.upper()
+        ...         yield record
+        ...
+        >>> with open('Fasta/dups.fasta') as handle:
+        ...     for record in modify_records(FastaIterator(handle)):
+        ...         print(record.id)
+        ...
+        ALPHA
+        BETA
+        GAMMA
+        ALPHA
+        DELTA
+
+        """
+        if alphabet is not None:
+            raise ValueError("The alphabet argument is no longer supported")
+        super().__init__(source, mode="t", fmt="FASTA")
+
+    def parse(self, handle):
+        """Start parsing the file, and return a SeqRecord generator."""
+        records = self.iterate(handle)
+        return records
+
+    def iterate(self, handle):
+        """Parse the file and generate SeqRecord objects."""
+        try:
+            line = next(handle)
+        except StopIteration:
+            return
+        if not line.startswith(">"):
+            raise ValueError(
+                "Expected FASTA record starting with '>' character.\n"
+                "If your FASTA file has a header, please use the 'fasta-blast' "
+                "or the 'fasta-pearson' format for parsing.\n"
+                f"Got: '{line}'"
+            )
+        title = line[1:].rstrip()
+        lines = []
+        for line in handle:
+            # Main logic
+            # Note, remove trailing whitespace, and any internal spaces
+            # (and any embedded \r which are possible in mangled files
+            # when not opened in universal read lines mode)
+            if line[0] == ">":
+                try:
+                    first_word = title.split(None, 1)[0]
+                except IndexError:
+                    first_word = ""
+                sequence = "".join(lines).replace(" ", "").replace("\r", "")
+                yield SeqRecord(
+                    Seq(sequence), id=first_word, name=first_word, description=title
+                )
+                lines = []
+                title = line[1:].rstrip()
+            else:
+                lines.append(line.rstrip())
+        try:
+            first_word = title.split(None, 1)[0]
+        except IndexError:
+            first_word = ""
+        sequence = "".join(lines).replace(" ", "").replace("\r", "")
+        yield SeqRecord(
+            Seq(sequence), id=first_word, name=first_word, description=title
+        )
+
+
+class FastaTwoLineIterator(SequenceIterator):
+    """Parser for Fasta files with exactly two lines per record."""
+
+    def __init__(self, source):
+        """Iterate over two-line Fasta records (as SeqRecord objects).
+
+        Arguments:
+         - source - input stream opened in text mode, or a path to a file
+
+        This uses a strict interpretation of the FASTA as requiring
+        exactly two lines per record (no line wrapping).
+
+        Only the default title to ID/name/description parsing offered
+        by the relaxed FASTA parser is offered.
+        """
+        super().__init__(source, mode="t", fmt="FASTA")
+
+    def parse(self, handle):
+        """Start parsing the file, and return a SeqRecord generator."""
+        records = self.iterate(handle)
+        return records
+
+    def iterate(self, handle):
+        """Parse the file and generate SeqRecord objects."""
+        for title, sequence in FastaTwoLineParser(handle):
+            try:
+                first_word = title.split(None, 1)[0]
+            except IndexError:
+                assert not title, repr(title)
+                # Should we use SeqRecord default for no ID?
+                first_word = ""
+            yield SeqRecord(
+                Seq(sequence), id=first_word, name=first_word, description=title
+            )
+
+
+class FastaBlastIterator(SequenceIterator):
+    """Parser for Fasta files, allowing for comments as in BLAST."""
+
+    def __init__(
+        self,
+        source: _TextIOSource,
+        alphabet: None = None,
+    ) -> None:
+        """Iterate over Fasta records as SeqRecord objects.
+
+        Arguments:
+         - source - input stream opened in text mode, or a path to a file
+         - alphabet - optional alphabet, not used. Leave as None.
+
+        This parser expects the data to be in FASTA format. As in BLAST, lines
+        starting with '#', '!', or ';' are interpreted as comments and ignored.
+
+        This iterator acts like calling Bio.SeqIO.parse(handle, "fasta-blast")
+        with no custom handling of the title lines:
+
+        >>> with open("Fasta/dups.fasta") as handle:
+        ...     for record in FastaIterator(handle):
+        ...         print(record.id)
+        ...
+        alpha
+        beta
+        gamma
+        alpha
+        delta
+
+        If you want to modify the records before writing, for example to change
+        the ID of each record, you can use a generator function as follows:
+
+        >>> def modify_records(records):
+        ...     for record in records:
+        ...         record.id = record.id.upper()
+        ...         yield record
+        ...
+        >>> with open('Fasta/dups.fasta') as handle:
+        ...     for record in modify_records(FastaIterator(handle)):
+        ...         print(record.id)
+        ...
+        ALPHA
+        BETA
+        GAMMA
+        ALPHA
+        DELTA
+
+        """
+        if alphabet is not None:
+            raise ValueError("The alphabet argument is no longer supported")
+        super().__init__(source, mode="t", fmt="FASTA")
+
+    def parse(self, handle):
+        """Start parsing the file, and return a SeqRecord generator."""
+        records = self.iterate(handle)
+        return records
+
+    def iterate(self, handle):
+        """Parse the file and generate SeqRecord objects."""
+        for line in handle:
+            if line[0] not in "#!;":
+                break
+        if not line.startswith(">"):
+            raise ValueError(
+                "Expected FASTA record starting with '>' character.\n"
+                "If this line is a comment, please use '#', '!', or ';' as "
+                "the first character, or use the 'fasta-pearson' format for "
+                "parsing.\n"
+                f"Got: '{line}'"
+            )
+        title = line[1:].rstrip()
+        lines = []
+        for line in handle:
+            # Main logic
+            # Note, remove trailing whitespace, and any internal spaces
+            # (and any embedded \r which are possible in mangled files
+            # when not opened in universal read lines mode)
+            if line[0] in "#!;":
+                pass
+            elif line[0] == ">":
+                try:
+                    first_word = title.split(None, 1)[0]
+                except IndexError:
+                    first_word = ""
+                sequence = "".join(lines).replace(" ", "").replace("\r", "")
+                yield SeqRecord(
+                    Seq(sequence), id=first_word, name=first_word, description=title
+                )
+                lines = []
+                title = line[1:].rstrip()
+            else:
+                lines.append(line.rstrip())
+        try:
+            first_word = title.split(None, 1)[0]
+        except IndexError:
+            first_word = ""
+        sequence = "".join(lines).replace(" ", "").replace("\r", "")
+        yield SeqRecord(
+            Seq(sequence), id=first_word, name=first_word, description=title
+        )
+
+
+class FastaPearsonIterator(SequenceIterator):
+    """Parser for Fasta files, allowing for comments as in the FASTA aligner."""
+
+    def __init__(
+        self,
+        source: _TextIOSource,
+        alphabet: None = None,
+    ) -> None:
+        """Iterate over Fasta records as SeqRecord objects.
+
+        Arguments:
+         - source - input stream opened in text mode, or a path to a file
+         - alphabet - optional alphabet, not used. Leave as None.
+
+        This parser expects a Fasta format allowing for a header (before the
+        first sequence record) and comments (lines starting with ';') as in
+        William Pearson's FASTA aligner software.
+
+        This iterator acts as calling Bio.SeqIO.parse(handle, "fasta-pearson")
         with no custom handling of the title lines:
 
         >>> with open("Fasta/dups.fasta") as handle:
@@ -211,52 +455,39 @@ class FastaIterator(SequenceIterator):
 
     def iterate(self, handle):
         """Parse the file and generate SeqRecord objects."""
-        for title, sequence in SimpleFastaParser(handle):
-            try:
-                first_word = title.split(None, 1)[0]
-            except IndexError:
-                assert not title, repr(title)
-                # Should we use SeqRecord default for no ID?
-                first_word = ""
-            yield SeqRecord(
-                Seq(sequence), id=first_word, name=first_word, description=title
-            )
-
-
-class FastaTwoLineIterator(SequenceIterator):
-    """Parser for Fasta files with exactly two lines per record."""
-
-    def __init__(self, source):
-        """Iterate over two-line Fasta records (as SeqRecord objects).
-
-        Arguments:
-         - source - input stream opened in text mode, or a path to a file
-
-        This uses a strict interpretation of the FASTA as requiring
-        exactly two lines per record (no line wrapping).
-
-        Only the default title to ID/name/description parsing offered
-        by the relaxed FASTA parser is offered.
-        """
-        super().__init__(source, mode="t", fmt="FASTA")
-
-    def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
-        records = self.iterate(handle)
-        return records
-
-    def iterate(self, handle):
-        """Parse the file and generate SeqRecord objects."""
-        for title, sequence in FastaTwoLineParser(handle):
-            try:
-                first_word = title.split(None, 1)[0]
-            except IndexError:
-                assert not title, repr(title)
-                # Should we use SeqRecord default for no ID?
-                first_word = ""
-            yield SeqRecord(
-                Seq(sequence), id=first_word, name=first_word, description=title
-            )
+        for line in handle:
+            if line.startswith(">"):
+                break
+        title = line[1:].rstrip()
+        lines = []
+        for line in handle:
+            # Main logic
+            # Note, remove trailing whitespace, and any internal spaces
+            # (and any embedded \r which are possible in mangled files
+            # when not opened in universal read lines mode)
+            if line[0] == ";":
+                pass
+            elif line[0] == ">":
+                try:
+                    first_word = title.split(None, 1)[0]
+                except IndexError:
+                    first_word = ""
+                sequence = "".join(lines).replace(" ", "").replace("\r", "")
+                yield SeqRecord(
+                    Seq(sequence), id=first_word, name=first_word, description=title
+                )
+                lines = []
+                title = line[1:].rstrip()
+            else:
+                lines.append(line.rstrip())
+        try:
+            first_word = title.split(None, 1)[0]
+        except IndexError:
+            first_word = ""
+        sequence = "".join(lines).replace(" ", "").replace("\r", "")
+        yield SeqRecord(
+            Seq(sequence), id=first_word, name=first_word, description=title
+        )
 
 
 class FastaWriter(SequenceWriter):
