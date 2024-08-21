@@ -36,7 +36,7 @@ build_script:
   - SET PATH=C:\Py;C:\Py\Scripts;C:\Py\Library\bin;%PATH%
   - conda config --set always_yes yes
   - conda update conda
-  - python -m pip install --upgrade coverage setuptools numpy
+  - python -m pip install --upgrade coverage setuptools "numpy!=2.1.0"
   - python -m pip install .
 
 test_script:
