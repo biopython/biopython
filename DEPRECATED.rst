@@ -198,6 +198,9 @@ The ``instances`` attribute of the ``Motif`` class  in ``Bio.motifs`` was
 deprecated in release 1.82. Instead of ``mymotif.instances``, please use
 ``mymotif.alignment.sequences``.
 
+The ``Instance`` class in ``Bio.motifs.meme`` was deprecated in release 1.85.
+This class is a subclass from ``Seq``, but does not provide any additional
+capabilities. Please use a ``Seq`` object instead.
 
 Bio.Restriction.RanaConfig
 --------------------------

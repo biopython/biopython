@@ -1032,7 +1032,7 @@ sequences:
    >>> len(motif.alignment)
    7
    >>> motif.alignment.sequences[0]
-   Instance('GCGGCATGTGAAA')
+   Seq('GCGGCATGTGAAA')
    >>> motif.alignment.sequences[0].motif_name
    'GSKGCATGTGAAA'
    >>> motif.alignment.sequences[0].sequence_name
