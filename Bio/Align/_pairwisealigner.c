@@ -6276,6 +6276,33 @@ exit: \
 
 
 #define FOGSAA_EXIT_ALIGN \
+    paths = PathGenerator_create_FOGSAA(nA, nB, strand); \
+    M = paths->M; \
+    if (!paths) return NULL; \
+    /* copy matrix cells to traces */ \
+    for (i = 0; i <= nA; i++) { \
+        for (j = 0; j <= nB; j++) { \
+            switch (matrix[i][j].type) { \
+            case 0: \
+            case FOGSAA_CELL_UNDEF: \
+                M[i][j].trace = 0; \
+                break; \
+            case FOGSAA_CELL_MATCH_MISMATCH: \
+                M[i][j].trace = DIAGONAL; \
+                break; \
+            case FOGSAA_CELL_GAP_A: \
+                M[i][j].trace = HORIZONTAL; \
+                break; \
+            case FOGSAA_CELL_GAP_B: \
+                M[i][j].trace = VERTICAL; \
+                break; \
+            default: \
+                PyErr_SetString(PyExc_RuntimeError, "Unexpected FOGSAA cell type"); \
+                return NULL;\
+            } \
+        } \
+    } \
+    M[nA][nB].path = 0; \
     t = matrix[optpA][optpB].present_score; \
     for (i = 0; i <= nA; i++) { \
         PyMem_Free(matrix[i]); \
@@ -7033,9 +7060,9 @@ Aligner_fogsaa_align_compare(Aligner* self,
     const double match = self->match;
     const double mismatch = self->mismatch;
     const int wildcard = self->wildcard;
-    FOGSAA_ENTER
     PathGenerator* paths;
     Trace** M;
+    FOGSAA_ENTER
 
     if (floor(self->match) != self->match || floor(self->mismatch) != self->mismatch ||
             floor(self->target_internal_open_gap_score) != self->target_internal_open_gap_score || 
@@ -7054,32 +7081,6 @@ Aligner_fogsaa_align_compare(Aligner* self,
         return NULL;
     }
     FOGSAA_DO(COMPARE_SCORE)
-
-    paths = PathGenerator_create_FOGSAA(nA, nB, strand);
-    M = paths->M;
-    if (!paths) return NULL;
-    // copy matrix cells to traces
-    for (i = 0; i <= nA; i++) {
-        for (j = 0; j <= nB; j++) {
-            switch (matrix[i][j].type) {
-            case 0:
-            case FOGSAA_CELL_UNDEF:
-                M[i][j].trace = 0;
-                break;
-            case FOGSAA_CELL_MATCH_MISMATCH:
-                M[i][j].trace = DIAGONAL;
-                break;
-            case FOGSAA_CELL_GAP_A:
-                M[i][j].trace = HORIZONTAL;
-                break;
-            case FOGSAA_CELL_GAP_B:
-                M[i][j].trace = VERTICAL;
-                break;
-            }
-        }
-    }
-    M[nA][nB].path = 0;
-
     FOGSAA_EXIT_ALIGN
 }
 
@@ -7089,10 +7090,28 @@ Aligner_fogsaa_align_matrix(Aligner* self,
                                  const int* sB, int nB,
                                  unsigned char strand)
 {
-    /* const Py_ssize_t n = self->substitution_matrix.shape[0]; */
-    /* const double* scores = self->substitution_matrix.buf; */
-    PyErr_SetString(PyExc_NotImplementedError, "TODO: FOGSAA align_matrix");
-    return NULL;
+    const Py_ssize_t n = self->substitution_matrix.shape[0];
+    const double* scores = self->substitution_matrix.buf;
+    int match = scores[0], mismatch = scores[0];
+    PathGenerator* paths;
+    Trace** M;
+    FOGSAA_ENTER
+
+    // for prediction purposes, maximum score is match and minimum score is mismatch
+    for (i = 0; i < n*n; i++) {
+        if (floor(scores[i]) != scores[i]) {
+            PyErr_SetString(PyExc_ValueError,
+                    "algorithm requires substitution matrix with integer scores");
+            return NULL;
+        }
+
+        if (scores[i] > match)
+            match = scores[i];
+        else if (scores[i] < mismatch)
+            mismatch = scores[i];
+    }
+    FOGSAA_DO(MATRIX_SCORE)
+    FOGSAA_EXIT_ALIGN
 }
 
 static int*
