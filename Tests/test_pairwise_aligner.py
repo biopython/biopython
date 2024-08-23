@@ -5104,6 +5104,15 @@ class TestAlgorithmRestrictions(unittest.TestCase):
         aligner.match_score = 1.1
         with self.assertRaises(ValueError):
             aligner.score("AAAAAAAAAAAA", "AAAAATAAAAAA")
+        aligner.match_score = -1
+        with self.assertRaises(ValueError):
+            aligner.score("AAAAAAAAAAAA", "AAAAATAAAAAA")
+        aligner.mismatch_score = 1
+        with self.assertRaises(ValueError):
+            aligner.score("AAAAAAAAAAAA", "AAAAATAAAAAA")
+        aligner.gap_score = 1
+        with self.assertRaises(ValueError):
+            aligner.score("AAAAAAAAAAAA", "AAAAATAAAAAA")
 
 
 if __name__ == "__main__":

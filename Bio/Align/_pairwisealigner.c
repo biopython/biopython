@@ -6991,6 +6991,32 @@ Aligner_watermansmithbeyer_local_align_matrix(Aligner* self,
     WATERMANSMITHBEYER_EXIT_ALIGN;
 }
 
+#define FOGSAA_REQUIRE_NONPOSITIVE_INTEGER_GAPS \
+    if (floor(self->target_internal_open_gap_score) != self->target_internal_open_gap_score || \
+            floor(self->query_internal_open_gap_score) != self->query_internal_open_gap_score || \
+            floor(self->target_internal_extend_gap_score) != self->target_internal_extend_gap_score || \
+            floor(self->query_internal_extend_gap_score) != self->query_internal_extend_gap_score || \
+            floor(self->target_left_open_gap_score) != self->target_left_open_gap_score || \
+            floor(self->query_left_open_gap_score) != self->query_left_open_gap_score || \
+            floor(self->target_left_extend_gap_score) != self->target_left_extend_gap_score || \
+            floor(self->query_left_extend_gap_score) != self->query_left_extend_gap_score || \
+            floor(self->target_right_open_gap_score) != self->target_right_open_gap_score || \
+            floor(self->query_right_open_gap_score) != self->query_right_open_gap_score || \
+            floor(self->target_right_extend_gap_score) != self->target_right_extend_gap_score || \
+            floor(self->query_right_extend_gap_score) != self->query_right_extend_gap_score) { \
+        PyErr_SetString(PyExc_ValueError, "algorithm requires integer gap scores"); \
+        return NULL; \
+    } \
+    if (self->target_internal_open_gap_score > 0 || self->query_internal_open_gap_score > 0|| \
+            self->target_internal_extend_gap_score > 0 || self->query_internal_extend_gap_score > 0 || \
+            self->target_left_open_gap_score > 0 || self->query_left_open_gap_score > 0 || \
+            self->target_left_extend_gap_score > 0 || self->query_left_extend_gap_score > 0 || \
+            self->target_right_open_gap_score > 0|| self->query_right_open_gap_score > 0 || \
+            self->target_right_extend_gap_score > 0 || self->query_right_extend_gap_score > 0) { \
+        PyErr_SetString(PyExc_ValueError, "algorithm requires non-positive gap scores"); \
+        return NULL; \
+    }
+
 static PyObject*
 Aligner_fogsaa_score_compare(Aligner* self,
                                  const int* sA, int nA,
@@ -7003,22 +7029,21 @@ Aligner_fogsaa_score_compare(Aligner* self,
     const int wildcard = self->wildcard;
     FOGSAA_ENTER
 
-    if (floor(self->match) != self->match || floor(self->mismatch) != self->mismatch ||
-            floor(self->target_internal_open_gap_score) != self->target_internal_open_gap_score || 
-            floor(self->query_internal_open_gap_score) != self->query_internal_open_gap_score ||
-            floor(self->target_internal_extend_gap_score) != self->target_internal_extend_gap_score ||
-            floor(self->query_internal_extend_gap_score) != self->query_internal_extend_gap_score ||
-            floor(self->target_left_open_gap_score) != self->target_left_open_gap_score ||
-            floor(self->query_left_open_gap_score) != self->query_left_open_gap_score ||
-            floor(self->target_left_extend_gap_score) != self->target_left_extend_gap_score ||
-            floor(self->query_left_extend_gap_score) != self->query_left_extend_gap_score ||
-            floor(self->target_right_open_gap_score) != self->target_right_open_gap_score ||
-            floor(self->query_right_open_gap_score) != self->query_right_open_gap_score ||
-            floor(self->target_right_extend_gap_score) != self->target_right_extend_gap_score ||
-            floor(self->query_right_extend_gap_score) != self->query_right_extend_gap_score) {
+    FOGSAA_REQUIRE_NONPOSITIVE_INTEGER_GAPS
+    if (floor(self->match) != self->match || floor(self->mismatch) != self->mismatch) {
         PyErr_SetString(PyExc_ValueError, "algorithm requires integer scores");
         return NULL;
     }
+    if (self->match < 0) {
+        PyErr_SetString(PyExc_ValueError, "algorithm requires non-negative match score");
+        return NULL;
+    }
+    if (self->mismatch > 0) {
+        PyErr_SetString(PyExc_ValueError, "algorithm requires non-positive mismatch and gap scores");
+        return NULL;
+    }
+
+
     FOGSAA_DO(COMPARE_SCORE)
     FOGSAA_EXIT_SCORE
 }
@@ -7034,6 +7059,7 @@ Aligner_fogsaa_score_matrix(Aligner* self,
     int match = scores[0], mismatch = scores[0];
     FOGSAA_ENTER
 
+    FOGSAA_REQUIRE_NONPOSITIVE_INTEGER_GAPS
     // for prediction purposes, maximum score is match and minimum score is mismatch
     for (i = 0; i < n*n; i++) {
         if (floor(scores[i]) != scores[i]) {
@@ -7047,6 +7073,7 @@ Aligner_fogsaa_score_matrix(Aligner* self,
         else if (scores[i] < mismatch)
             mismatch = scores[i];
     }
+
     FOGSAA_DO(MATRIX_SCORE)
     FOGSAA_EXIT_SCORE
 }
@@ -7064,22 +7091,20 @@ Aligner_fogsaa_align_compare(Aligner* self,
     Trace** M;
     FOGSAA_ENTER
 
-    if (floor(self->match) != self->match || floor(self->mismatch) != self->mismatch ||
-            floor(self->target_internal_open_gap_score) != self->target_internal_open_gap_score || 
-            floor(self->query_internal_open_gap_score) != self->query_internal_open_gap_score ||
-            floor(self->target_internal_extend_gap_score) != self->target_internal_extend_gap_score ||
-            floor(self->query_internal_extend_gap_score) != self->query_internal_extend_gap_score ||
-            floor(self->target_left_open_gap_score) != self->target_left_open_gap_score ||
-            floor(self->query_left_open_gap_score) != self->query_left_open_gap_score ||
-            floor(self->target_left_extend_gap_score) != self->target_left_extend_gap_score ||
-            floor(self->query_left_extend_gap_score) != self->query_left_extend_gap_score ||
-            floor(self->target_right_open_gap_score) != self->target_right_open_gap_score ||
-            floor(self->query_right_open_gap_score) != self->query_right_open_gap_score ||
-            floor(self->target_right_extend_gap_score) != self->target_right_extend_gap_score ||
-            floor(self->query_right_extend_gap_score) != self->query_right_extend_gap_score) {
+    FOGSAA_REQUIRE_NONPOSITIVE_INTEGER_GAPS
+    if (floor(self->match) != self->match || floor(self->mismatch) != self->mismatch) {
         PyErr_SetString(PyExc_ValueError, "algorithm requires integer scores");
         return NULL;
     }
+    if (self->match < 0) {
+        PyErr_SetString(PyExc_ValueError, "algorithm requires non-negative match score");
+        return NULL;
+    }
+    if (self->mismatch > 0) {
+        PyErr_SetString(PyExc_ValueError, "algorithm requires non-positive mismatch and gap scores");
+        return NULL;
+    }
+
     FOGSAA_DO(COMPARE_SCORE)
     FOGSAA_EXIT_ALIGN
 }
@@ -7087,6 +7112,7 @@ Aligner_fogsaa_align_compare(Aligner* self,
 static PyObject*
 Aligner_fogsaa_align_matrix(Aligner* self,
                                  const int* sA, int nA,
+
                                  const int* sB, int nB,
                                  unsigned char strand)
 {
@@ -7097,6 +7123,7 @@ Aligner_fogsaa_align_matrix(Aligner* self,
     Trace** M;
     FOGSAA_ENTER
 
+    FOGSAA_REQUIRE_NONPOSITIVE_INTEGER_GAPS
     // for prediction purposes, maximum score is match and minimum score is mismatch
     for (i = 0; i < n*n; i++) {
         if (floor(scores[i]) != scores[i]) {
