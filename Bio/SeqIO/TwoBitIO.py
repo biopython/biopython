@@ -236,14 +236,24 @@ class TwoBitIterator(SequenceIterator):
             if reserved != 0:
                 raise ValueError("Found non-zero reserved field %u" % reserved)
             sequence.offset = stream.tell()
+            sequence = Seq(sequence)
             sequences[name] = sequence
+        self._names = iter(self.sequences)
 
     def parse(self, stream):
         """Iterate over the sequences in the file."""
-        for name, sequence in self.sequences.items():
-            sequence = Seq(sequence)
-            record = SeqRecord(sequence, id=name)
-            yield record
+        return
+
+    def __next__(self):
+        """Return the next entry."""
+        try:
+            name = next(self._names)
+            sequence = self.sequences[name]
+            return SeqRecord(sequence, id=name)
+        except Exception:
+            if self.should_close_stream:
+                self.stream.close()
+            raise
 
     def __getitem__(self, name):
         """Return sequence associated with given name as a SeqRecord object."""
@@ -251,7 +261,6 @@ class TwoBitIterator(SequenceIterator):
             sequence = self.sequences[name]
         except ValueError:
             raise KeyError(name) from None
-        sequence = Seq(sequence)
         return SeqRecord(sequence, id=name)
 
     def keys(self):
