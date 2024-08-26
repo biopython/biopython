@@ -20,11 +20,21 @@ from Bio.SeqRecord import SeqRecord
 from .Interfaces import SequenceIterator
 
 
-def _read(handle, length):
-    """Read the specified number of bytes from the given handle."""
-    data = handle.read(length)
+class PrematureEndOfFileError(ValueError):
+    """Failed to read the expected number of bytes; file may be truncated."""
+
+    def __init__(self, bytes_expected, bytes_read):
+        """Initialize with the expected and received number of bytes."""
+        super().__init__(f"Failed to read {bytes_expected} bytes from stream")
+        self.bytes_expected = bytes_expected
+        self.bytes_read = bytes_read
+
+
+def _read(stream, length):
+    """Read the specified number of bytes from the given stream."""
+    data = stream.read(length)
     if len(data) < length:
-        raise ValueError(f"Cannot read {length} bytes from handle")
+        raise PrematureEndOfFileError(length, len(data))
     return data
 
 
@@ -66,166 +76,172 @@ def _read_p4string(handle):
     return data
 
 
-def _parse(handle):
-    # Skip file header
-    # GCK files start with a 24-bytes header. Bytes 4 and 8 seem to
-    # always be 12, maybe this could act as a magic cookie. Bytes
-    # 17-20 and 21-24 contain variable values of unknown meaning.
-    # check if file is empty
-    data = handle.read(24)
-    if not data:
-        raise ValueError("Empty file.")
-    if len(data) < 24:
-        raise ValueError("Improper header, cannot read 24 bytes from handle")
-    # Read the actual sequence data
-    packet, length = _read_packet(handle)
-    # The body of the sequence packet starts with a 32-bit integer
-    # representing the length of the sequence.
-    seq_length = unpack(">I", packet[:4])[0]
-    # This length should not be larger than the length of the
-    # sequence packet.
-    if seq_length > length - 4:
-        raise ValueError("Conflicting sequence length values")
-    sequence = packet[4:].decode("ASCII")
-    record = SeqRecord(Seq(sequence))
-
-    # Skip unknown packet
-    _read_packet(handle)
-
-    # Read features packet
-    packet, length = _read_packet(handle)
-    (seq_length, num_features) = unpack(">IH", packet[:6])
-    # Check that length in the features packet matches the actual
-    # length of the sequence
-    if seq_length != len(sequence):
-        raise ValueError("Conflicting sequence length values")
-    # Each feature is stored in a 92-bytes structure.
-    if length - 6 != num_features * 92:
-        raise ValueError("Features packet size inconsistent with number of features")
-    for i in range(num_features):
-        offset = 6 + i * 92
-        feature_data = packet[offset : offset + 92]
-
-        # There's probably more stuff to unpack in that structure,
-        # but those values are the only ones I understand.
-        (start, end, type, strand, has_name, has_comment, version) = unpack(
-            ">II6xH14xB17xII35xB", feature_data
-        )
-
-        if strand == 1:  # Reverse strand
-            strand = -1
-        else:
-            # Other possible values are 0 (no strand specified),
-            # 2 (forward strand), and 3 (both strands). All are
-            # treated as a forward strand.
-            strand = 1
-        location = SimpleLocation(start, end, strand=strand)
-
-        # It looks like any value > 0 indicates a CDS...
-        if type > 0:
-            type = "CDS"
-        else:
-            type = "misc_feature"
-
-        # Each feature may have a name and a comment, which are then
-        # stored immediately after the features packet. Names are
-        # stored as Pascal strings (1 length byte followed by the
-        # string itself), comments are stored as "32-bit Pascal strings"
-        # (4 length bytes followed by the string).
-        qualifiers = {}
-        if has_name > 0:
-            name = _read_pstring(handle)
-            qualifiers["label"] = [name]
-        if has_comment > 0:
-            comment = _read_p4string(handle)
-            qualifiers["note"] = [comment]
-
-        # Each feature may exist in several "versions". We keep only
-        # the most recent version.
-        if version > 0:
-            continue
-
-        feature = SeqFeature(location, type=type, qualifiers=qualifiers)
-        record.features.append(feature)
-
-    # Read restriction sites packet
-    # We are not interested in restriction sites, but we must still read
-    # that packet so that we can skip the names and comments for each
-    # site, which are stored after that packet in a similar way as for
-    # the features above.
-    packet, length = _read_packet(handle)
-    (seq_length, num_sites) = unpack(">IH", packet[:6])
-    # Each site is stored in a 88-bytes structure
-    if length - 6 != num_sites * 88:
-        raise ValueError("Sites packet size inconsistent with number of sites")
-    for i in range(num_sites):
-        offset = 6 + i * 88
-        site_data = packet[offset : offset + 88]
-
-        (start, end, has_name, has_comment) = unpack(">II24xII48x", site_data)
-
-        # Skip names and comments
-        if has_name:
-            _read_pstring(handle)
-        if has_comment:
-            _read_p4string(handle)
-
-    # Skip unknown packet
-    _read_packet(handle)
-
-    # Next in the file are "version packets".
-    # However they are not properly formatted "packets" as they are not
-    # preceded by an integer giving their size. Instead we have a
-    # short integer indicating how many versions are there, and then
-    # as many 260-bytes block as we have versions.
-    num_versions = _read(handle, 2)
-    num_versions = unpack(">H", num_versions)[0]
-    versions = _read(handle, num_versions * 260)
-    for i in range(num_versions):
-        offset = i * 260
-        version_data = versions[offset : offset + 260]
-
-        # Each version may have a comment, which is then stored
-        # after all the "version packets".
-        has_comment = unpack(">I", version_data[-4:])[0]
-        if has_comment > 0:
-            _read_p4string(handle)
-
-    # Skip unknown fixed-size block
-    # Whatever this block contains, it is not preceded by any length
-    # indicator, so I hope its size is indeed constant in all files...
-    _read(handle, 706)
-
-    # Read the construct's name
-    name = _read_pstring(handle)
-    record.name = record.id = name.split(" ")[0]
-    record.description = name
-
-    # Circularity byte
-    # There may be other flags in that block, but their meaning
-    # is unknown to me.
-    flags = _read(handle, 17)
-    circularity = unpack(">16xB", flags)[0]
-    if circularity > 0:
-        record.annotations["topology"] = "circular"
-    else:
-        record.annotations["topology"] = "linear"
-
-    yield record
-
-
 class GckIterator(SequenceIterator):
     """Parser for GCK files."""
 
     def __init__(self, source):
-        """Break up a GCK file into SeqRecord objects."""
-        super().__init__(source, mode="b", fmt="GCK")
-
-    def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator.
+        """Break up a GCK file into SeqRecord objects.
 
         Note that a GCK file can only contain one sequence, so this
         iterator will always return a single record.
         """
-        records = _parse(handle)
-        return records
+        super().__init__(source, mode="b", fmt="GCK")
+        # Skip file header
+        # GCK files start with a 24-bytes header. Bytes 4 and 8 seem to
+        # always be 12, maybe this could act as a magic cookie. Bytes
+        # 17-20 and 21-24 contain variable values of unknown meaning.
+        # check if file is empty
+        data = self.stream.read(24)
+        if not data:
+            raise ValueError("Empty file.")
+        if len(data) < 24:
+            raise ValueError("Improper header, cannot read 24 bytes from stream")
+
+    def parse(self, stream):
+        """To be removed."""
+        return
+
+    def __next__(self):
+        stream = self.stream
+        # Read the actual sequence data
+        try:
+            packet, length = _read_packet(stream)
+        except PrematureEndOfFileError as exception:
+            if exception.bytes_read == 0:
+                raise StopIteration from None
+            raise
+        # The body of the sequence packet starts with a 32-bit integer
+        # representing the length of the sequence.
+        seq_length = unpack(">I", packet[:4])[0]
+        # This length should not be larger than the length of the
+        # sequence packet.
+        if seq_length > length - 4:
+            raise ValueError("Conflicting sequence length values")
+        sequence = packet[4:].decode("ASCII")
+        record = SeqRecord(Seq(sequence))
+
+        # Skip unknown packet
+        _read_packet(stream)
+
+        # Read features packet
+        packet, length = _read_packet(stream)
+        (seq_length, num_features) = unpack(">IH", packet[:6])
+        # Check that length in the features packet matches the actual
+        # length of the sequence
+        if seq_length != len(sequence):
+            raise ValueError("Conflicting sequence length values")
+        # Each feature is stored in a 92-bytes structure.
+        if length - 6 != num_features * 92:
+            raise ValueError(
+                "Features packet size inconsistent with number of features"
+            )
+        for i in range(num_features):
+            offset = 6 + i * 92
+            feature_data = packet[offset : offset + 92]
+
+            # There's probably more stuff to unpack in that structure,
+            # but those values are the only ones I understand.
+            (start, end, type, strand, has_name, has_comment, version) = unpack(
+                ">II6xH14xB17xII35xB", feature_data
+            )
+
+            if strand == 1:  # Reverse strand
+                strand = -1
+            else:
+                # Other possible values are 0 (no strand specified),
+                # 2 (forward strand), and 3 (both strands). All are
+                # treated as a forward strand.
+                strand = 1
+            location = SimpleLocation(start, end, strand=strand)
+
+            # It looks like any value > 0 indicates a CDS...
+            if type > 0:
+                type = "CDS"
+            else:
+                type = "misc_feature"
+
+            # Each feature may have a name and a comment, which are then
+            # stored immediately after the features packet. Names are
+            # stored as Pascal strings (1 length byte followed by the
+            # string itself), comments are stored as "32-bit Pascal strings"
+            # (4 length bytes followed by the string).
+            qualifiers = {}
+            if has_name > 0:
+                name = _read_pstring(stream)
+                qualifiers["label"] = [name]
+            if has_comment > 0:
+                comment = _read_p4string(stream)
+                qualifiers["note"] = [comment]
+
+            # Each feature may exist in several "versions". We keep only
+            # the most recent version.
+            if version > 0:
+                continue
+
+            feature = SeqFeature(location, type=type, qualifiers=qualifiers)
+            record.features.append(feature)
+
+        # Read restriction sites packet
+        # We are not interested in restriction sites, but we must still read
+        # that packet so that we can skip the names and comments for each
+        # site, which are stored after that packet in a similar way as for
+        # the features above.
+        packet, length = _read_packet(stream)
+        (seq_length, num_sites) = unpack(">IH", packet[:6])
+        # Each site is stored in a 88-bytes structure
+        if length - 6 != num_sites * 88:
+            raise ValueError("Sites packet size inconsistent with number of sites")
+        for i in range(num_sites):
+            offset = 6 + i * 88
+            site_data = packet[offset : offset + 88]
+
+            (start, end, has_name, has_comment) = unpack(">II24xII48x", site_data)
+
+            # Skip names and comments
+            if has_name:
+                _read_pstring(stream)
+            if has_comment:
+                _read_p4string(stream)
+
+        # Skip unknown packet
+        _read_packet(stream)
+
+        # Next in the file are "version packets".
+        # However they are not properly formatted "packets" as they are not
+        # preceded by an integer giving their size. Instead we have a
+        # short integer indicating how many versions are there, and then
+        # as many 260-bytes block as we have versions.
+        num_versions = _read(stream, 2)
+        num_versions = unpack(">H", num_versions)[0]
+        versions = _read(stream, num_versions * 260)
+        for i in range(num_versions):
+            offset = i * 260
+            version_data = versions[offset : offset + 260]
+
+            # Each version may have a comment, which is then stored
+            # after all the "version packets".
+            has_comment = unpack(">I", version_data[-4:])[0]
+            if has_comment > 0:
+                _read_p4string(stream)
+
+        # Skip unknown fixed-size block
+        # Whatever this block contains, it is not preceded by any length
+        # indicator, so I hope its size is indeed constant in all files...
+        _read(stream, 706)
+
+        # Read the construct's name
+        name = _read_pstring(stream)
+        record.name = record.id = name.split(" ")[0]
+        record.description = name
+
+        # Circularity byte
+        # There may be other flags in that block, but their meaning
+        # is unknown to me.
+        flags = _read(stream, 17)
+        circularity = unpack(">16xB", flags)[0]
+        if circularity > 0:
+            record.annotations["topology"] = "circular"
+        else:
+            record.annotations["topology"] = "linear"
+
+        return record
