@@ -151,118 +151,129 @@ class PdbSeqresIterator(SequenceIterator):
         lines are recorded in the database cross-references list.
         """
         super().__init__(source, mode="t", fmt="PDB")
+        self.cache = None
 
     def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
-        records = self.iterate(handle)
-        return records
+        """To be removed."""
+        return
 
-    def iterate(self, handle):
+    def __next__(self):
         """Iterate over the records in the PDB file."""
-        chains = collections.defaultdict(list)
-        metadata = collections.defaultdict(list)
+        if self.cache is None:
+            chains = collections.defaultdict(list)
+            metadata = collections.defaultdict(list)
 
-        rec_name = None
-        for line in handle:
-            rec_name = line[0:6].strip()
-            if rec_name == "SEQRES":
-                # NB: We only actually need chain ID and the residues here;
-                # commented bits are placeholders from the wwPDB spec.
-                # Serial number of the SEQRES record for the current chain.
-                # Starts at 1 and increments by one each line.
-                # Reset to 1 for each chain.
-                # ser_num = int(line[8:10])
-                # Chain identifier. This may be any single legal character,
-                # including a blank which is used if there is only one chain.
-                chn_id = line[11]
-                # Number of residues in the chain (repeated on every record)
-                # num_res = int(line[13:17])
-                residues = [_res2aacode(res) for res in line[19:].split()]
-                chains[chn_id].extend(residues)
-            elif rec_name == "DBREF":
-                #  ID code of this entry (PDB ID)
-                pdb_id = line[7:11]
-                # Chain identifier.
-                chn_id = line[12]
-                # Initial sequence number of the PDB sequence segment.
-                # seq_begin = int(line[14:18])
-                # Initial insertion code of the PDB sequence segment.
-                # icode_begin = line[18]
-                # Ending sequence number of the PDB sequence segment.
-                # seq_end = int(line[20:24])
-                # Ending insertion code of the PDB sequence segment.
-                # icode_end = line[24]
-                # Sequence database name.
-                database = line[26:32].strip()
-                # Sequence database accession code.
-                db_acc = line[33:41].strip()
-                # Sequence database identification code.
-                db_id_code = line[42:54].strip()
-                # Initial sequence number of the database seqment.
-                # db_seq_begin = int(line[55:60])
-                # Insertion code of initial residue of the segment, if PDB is the
-                # reference.
-                # db_icode_begin = line[60]
-                # Ending sequence number of the database segment.
-                # db_seq_end = int(line[62:67])
-                # Insertion code of the ending residue of the segment, if PDB is the
-                # reference.
-                # db_icode_end = line[67]
-                metadata[chn_id].append(
-                    {
-                        "pdb_id": pdb_id,
-                        "database": database,
-                        "db_acc": db_acc,
-                        "db_id_code": db_id_code,
-                    }
-                )
-            elif rec_name == "DBREF1":
-                # ID code of this entry (PDB ID)
-                pdb_id = line[7:11]
-                # Chain identifier.
-                chn_id = line[12]
-                # Sequence database name.
-                database = line[26:32].strip()
-                # Sequence database identification code.
-                db_id_code = line[47:67].strip()
-            elif rec_name == "DBREF2":
-                # Ensure ID code and chain are consistent:
-                if pdb_id != line[7:11] or chn_id != line[12]:
-                    raise ValueError("DBREF2 identifiers do not match")
-                # Sequence database accession code.
-                db_acc = line[18:40].strip()
-                metadata[chn_id].append(
-                    {
-                        "pdb_id": pdb_id,
-                        "database": database,
-                        "db_acc": db_acc,
-                        "db_id_code": db_id_code,
-                    }
-                )
-            # ENH: 'SEQADV' 'MODRES'
-
-        if rec_name is None:
-            raise ValueError("Empty file.")
-
-        for chn_id, residues in sorted(chains.items()):
-            record = SeqRecord(Seq("".join(residues)))
-            record.annotations = {"chain": chn_id}
-            # TODO: Test PDB files with DNA and RNA too:
-            record.annotations["molecule_type"] = "protein"
-            if chn_id in metadata:
-                m = metadata[chn_id][0]
-                record.id = record.name = f"{m['pdb_id']}:{chn_id}"
-                record.description = f"{m['database']}:{m['db_acc']} {m['db_id_code']}"
-                for melem in metadata[chn_id]:
-                    record.dbxrefs.extend(
-                        [
-                            f"{melem['database']}:{melem['db_acc']}",
-                            f"{melem['database']}:{melem['db_id_code']}",
-                        ]
+            rec_name = None
+            for line in self.stream:
+                rec_name = line[0:6].strip()
+                if rec_name == "SEQRES":
+                    # NB: We only actually need chain ID and the residues here;
+                    # commented bits are placeholders from the wwPDB spec.
+                    # Serial number of the SEQRES record for the current chain.
+                    # Starts at 1 and increments by one each line.
+                    # Reset to 1 for each chain.
+                    # ser_num = int(line[8:10])
+                    # Chain identifier. This may be any single legal character,
+                    # including a blank which is used if there is only one
+                    # chain.
+                    chn_id = line[11]
+                    # Number of residues in the chain (repeated on every record)
+                    # num_res = int(line[13:17])
+                    residues = [_res2aacode(res) for res in line[19:].split()]
+                    chains[chn_id].extend(residues)
+                elif rec_name == "DBREF":
+                    #  ID code of this entry (PDB ID)
+                    pdb_id = line[7:11]
+                    # Chain identifier.
+                    chn_id = line[12]
+                    # Initial sequence number of the PDB sequence segment.
+                    # seq_begin = int(line[14:18])
+                    # Initial insertion code of the PDB sequence segment.
+                    # icode_begin = line[18]
+                    # Ending sequence number of the PDB sequence segment.
+                    # seq_end = int(line[20:24])
+                    # Ending insertion code of the PDB sequence segment.
+                    # icode_end = line[24]
+                    # Sequence database name.
+                    database = line[26:32].strip()
+                    # Sequence database accession code.
+                    db_acc = line[33:41].strip()
+                    # Sequence database identification code.
+                    db_id_code = line[42:54].strip()
+                    # Initial sequence number of the database seqment.
+                    # db_seq_begin = int(line[55:60])
+                    # Insertion code of initial residue of the segment, if PDB
+                    # is the reference.
+                    # db_icode_begin = line[60]
+                    # Ending sequence number of the database segment.
+                    # db_seq_end = int(line[62:67])
+                    # Insertion code of the ending residue of the segment, if
+                    # PDB is the reference.
+                    # db_icode_end = line[67]
+                    metadata[chn_id].append(
+                        {
+                            "pdb_id": pdb_id,
+                            "database": database,
+                            "db_acc": db_acc,
+                            "db_id_code": db_id_code,
+                        }
                     )
-            else:
-                record.id = chn_id
-            yield record
+                elif rec_name == "DBREF1":
+                    # ID code of this entry (PDB ID)
+                    pdb_id = line[7:11]
+                    # Chain identifier.
+                    chn_id = line[12]
+                    # Sequence database name.
+                    database = line[26:32].strip()
+                    # Sequence database identification code.
+                    db_id_code = line[47:67].strip()
+                elif rec_name == "DBREF2":
+                    # Ensure ID code and chain are consistent:
+                    if pdb_id != line[7:11] or chn_id != line[12]:
+                        raise ValueError("DBREF2 identifiers do not match")
+                    # Sequence database accession code.
+                    db_acc = line[18:40].strip()
+                    metadata[chn_id].append(
+                        {
+                            "pdb_id": pdb_id,
+                            "database": database,
+                            "db_acc": db_acc,
+                            "db_id_code": db_id_code,
+                        }
+                    )
+                # ENH: 'SEQADV' 'MODRES'
+
+            if rec_name is None:
+                raise ValueError("Empty file.")
+
+            self.cache = []
+            for chn_id, residues in sorted(chains.items()):
+                record = SeqRecord(Seq("".join(residues)))
+                record.annotations = {"chain": chn_id}
+                # TODO: Test PDB files with DNA and RNA too:
+                record.annotations["molecule_type"] = "protein"
+                if chn_id in metadata:
+                    m = metadata[chn_id][0]
+                    record.id = record.name = f"{m['pdb_id']}:{chn_id}"
+                    record.description = (
+                        f"{m['database']}:{m['db_acc']} {m['db_id_code']}"
+                    )
+                    for melem in metadata[chn_id]:
+                        record.dbxrefs.extend(
+                            [
+                                f"{melem['database']}:{melem['db_acc']}",
+                                f"{melem['database']}:{melem['db_id_code']}",
+                            ]
+                        )
+                else:
+                    record.id = chn_id
+                self.cache.append(record)
+        try:
+            record = self.cache.pop(0)
+        except IndexError:
+            raise StopIteration
+        else:
+            return record
 
 
 def PdbAtomIterator(source):
