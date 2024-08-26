@@ -534,7 +534,7 @@ class TestAbiFake(unittest.TestCase):
         """Test if error is raised if filetype is not ABIF."""
         for trace in test_data_fake:
             self.assertRaises(
-                IOError, SeqIO.read, test_data_fake[trace]["handle"], "abi"
+                ValueError, SeqIO.read, test_data_fake[trace]["handle"], "abi"
             )
 
 
