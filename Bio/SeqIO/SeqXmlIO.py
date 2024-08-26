@@ -451,20 +451,17 @@ class SeqXmlIterator(SequenceIterator):
         # if the text handle was opened with a different encoding than the
         # one specified in the XML file. With a binary handle, the correct
         # encoding is picked up by the parser from the XML file.
-        self.parser = sax.make_parser()
-        content_handler = ContentHandler()
-        self.parser.setContentHandler(content_handler)
-        self.parser.setFeature(handler.feature_namespaces, True)
         super().__init__(stream_or_path, mode="b", fmt="SeqXML")
-
-    def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
-        parser = self.parser
-        content_handler = parser.getContentHandler()
+        stream = self.stream
+        parser = sax.make_parser()
+        content_handler = ContentHandler()
+        parser.setContentHandler(content_handler)
+        parser.setFeature(handler.feature_namespaces, True)
+        self.parser = parser
         BLOCK = self.BLOCK
         while True:
             # Read in another block of the file...
-            text = handle.read(BLOCK)
+            text = stream.read(BLOCK)
             if not text:
                 if content_handler.startElementNS is None:
                     raise ValueError("Empty file.")
@@ -479,31 +476,47 @@ class SeqXmlIterator(SequenceIterator):
         self.sourceVersion = content_handler.sourceVersion
         self.ncbiTaxID = content_handler.ncbiTaxID
         self.speciesName = content_handler.speciesName
-        records = self.iterate(handle)
-        return records
 
-    def iterate(self, handle):
-        """Iterate over the records in the XML file."""
+    def parse(self, handle):
+        """Start parsing the file, and return a SeqRecord generator."""
+        return
+
+    def __next__(self):
+        """Return the next entry."""
         parser = self.parser
         content_handler = parser.getContentHandler()
         records = content_handler.records
-        BLOCK = self.BLOCK
-        while True:
-            if len(records) > 1:
-                # Then at least the first record is finished
+        try:
+            if records is None:
+                raise StopIteration
+            stream = self.stream
+            BLOCK = self.BLOCK
+            while True:
+                if len(records) > 1:
+                    # Then at least the first record is finished
+                    record = records.pop(0)
+                    return record
+                # Read in another block of the file...
+                text = stream.read(BLOCK)
+                if not text:
+                    # Closing the parser ensures that all XML data fed
+                    # into it are processed
+                    parser.close()
+                    break
+                parser.feed(text)
+            # We have reached the end of the XML file;
+            # send out the remaining records
+            try:
                 record = records.pop(0)
-                yield record
-            # Read in another block of the file...
-            text = handle.read(BLOCK)
-            if not text:
-                break
-            parser.feed(text)
-        # Closing the parser ensures that all XML data fed into it are processed
-        parser.close()
-        # We have reached the end of the XML file;
-        # send out the remaining records
-        yield from records
-        records.clear()
+            except IndexError:
+                self.records = None
+                raise StopIteration
+            else:
+                return record
+        except Exception:
+            if self.should_close_stream:
+                self.stream.close()
+            raise
 
 
 class SeqXmlWriter(SequenceWriter):
