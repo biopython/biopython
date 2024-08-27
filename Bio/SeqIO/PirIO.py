@@ -129,58 +129,53 @@ class PirIterator(SequenceIterator):
 
         """
         super().__init__(source, mode="t", fmt="Pir")
-
-    def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
-        records = self.iterate(handle)
-        return records
-
-    def iterate(self, handle):
-        """Iterate over the records in the PIR file."""
         # Skip any text before the first record (e.g. blank lines, comments)
-        for line in handle:
+        for line in self.stream:
             if line[0] == ">":
+                self._line = line
                 break
         else:
-            return  # Premature end of file, or just empty?
+            self._line = None  # Premature end of file, or just empty?
 
-        while True:
-            pir_type = line[1:3]
-            if pir_type not in _pir_mol_type or line[3] != ";":
-                raise ValueError(
-                    "Records should start with '>XX;' where XX is a valid sequence type"
-                )
-            identifier = line[4:].strip()
-            description = handle.readline().strip()
+    def parse(self, handle):
+        """To be removed."""
 
-            lines = []
-            for line in handle:
-                if line[0] == ">":
-                    break
-                # Remove trailing whitespace, and any internal spaces
-                lines.append(line.rstrip().replace(" ", ""))
-            else:
-                line = None
-            seq = "".join(lines)
-            if seq[-1] != "*":
-                # Note the * terminator is present on nucleotide sequences too,
-                # it is not a stop codon!
-                raise ValueError(
-                    "Sequences in PIR files should include a * terminator!"
-                )
-
-            # Return the record and then continue...
-            record = SeqRecord(
-                Seq(seq[:-1]), id=identifier, name=identifier, description=description
+    def __next__(self):
+        """Iterate over the records in the PIR file."""
+        line = self._line
+        if line is None:
+            raise StopIteration
+        stream = self.stream
+        pir_type = line[1:3]
+        if pir_type not in _pir_mol_type or line[3] != ";":
+            raise ValueError(
+                "Records should start with '>XX;' where XX is a valid sequence type"
             )
-            record.annotations["PIR-type"] = pir_type
-            if _pir_mol_type[pir_type]:
-                record.annotations["molecule_type"] = _pir_mol_type[pir_type]
-            yield record
+        identifier = line[4:].strip()
+        description = next(stream).strip()
+        lines = []
+        for line in stream:
+            if line[0] == ">":
+                self._line = line
+                break
+            # Remove trailing whitespace, and any internal spaces
+            lines.append(line.rstrip().replace(" ", ""))
+        else:
+            self._line = None
+        seq = "".join(lines)
+        if seq[-1] != "*":
+            # Note the * terminator is present on nucleotide sequences too,
+            # it is not a stop codon!
+            raise ValueError("Sequences in PIR files should include a * terminator!")
 
-            if line is None:
-                return  # StopIteration
-        raise ValueError("Unrecognised PIR record format.")
+        # Return the record and then continue...
+        record = SeqRecord(
+            Seq(seq[:-1]), id=identifier, name=identifier, description=description
+        )
+        record.annotations["PIR-type"] = pir_type
+        if _pir_mol_type[pir_type]:
+            record.annotations["molecule_type"] = _pir_mol_type[pir_type]
+        return record
 
 
 class PirWriter(SequenceWriter):
