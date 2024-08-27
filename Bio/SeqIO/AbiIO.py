@@ -418,7 +418,7 @@ class AbiIterator(SequenceIterator):
         # fsa check
         is_fsa_file = all(tn not in raw for tn in ("PBAS1", "PBAS2"))
 
-        if is_fsa_file is True:
+        if is_fsa_file:
             try:
                 file_name = basename(stream.name).replace(".fsa", "")
             except AttributeError:
@@ -450,13 +450,13 @@ class AbiIterator(SequenceIterator):
         if qual:
             # Expect this to be missing for FSA files.
             record.letter_annotations["phred_quality"] = qual
-        elif is_fsa_file is False and not qual and self.trim is True:
+        elif not is_fsa_file and not qual and self.trim:
             raise ValueError(
                 "The 'abi-trim' format can not be used for files without"
                 " quality values."
             )
 
-        if self.trim is True and not is_fsa_file:
+        if self.trim and not is_fsa_file:
             record = _abi_trim(record)
 
         record.annotations["molecule_type"] = "DNA"
