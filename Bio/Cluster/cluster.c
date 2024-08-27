@@ -390,7 +390,7 @@ getrank(int n, const double data[], const double weight[])
 /* Calculates the ranks of the elements in the array data. Two elements with
  * the same value get the same rank, equal to the average of the ranks had the
  * elements different values. The ranks are returned as a newly allocated
- * array that should be FREEd by the calling routine. If getrank fails due to
+ * array that should be freed by the calling routine. If getrank fails due to
  * a memory allocation error, it returns NULL.
  */
 {
@@ -480,7 +480,7 @@ makedatamask(int nrows, int ncols, double*** pdata, int*** pmask)
 /* ---------------------------------------------------------------------- */
 
 static void
-FREEdatamask(int n, double** data, int** mask)
+freedatamask(int n, double** data, int** mask)
 {
     int i;
 
@@ -3012,8 +3012,8 @@ number of clusters is larger than the number of elements being clustered,
         FREE(tclusterid);
     }
 
-    if (transpose == 0) FREEdatamask(nclusters, cdata, cmask);
-    else FREEdatamask(ndata, cdata, cmask);
+    if (transpose == 0) freedatamask(nclusters, cdata, cmask);
+    else freedatamask(ndata, cdata, cmask);
 
     FREE(counts);
 }
@@ -4052,7 +4052,7 @@ single-, maximum-, centroid-, or average-linkage, as defined by method, on a
 given set of gene expression data, using the distance metric given by dist.
 If successful, the function returns a pointer to a newly allocated Tree struct
 containing the hierarchical clustering solution, and NULL if a memory error
-occurs. The pointer should be FREEd by the calling routine to prevent memory
+occurs. The pointer should be freed by the calling routine to prevent memory
 leaks.
 
 Arguments
