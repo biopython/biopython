@@ -39,7 +39,7 @@ class IgIterator(SequenceIterator):
         --------
         >>> with open("IntelliGenetics/TAT_mase_nuc.txt") as stream:
         ...     for record in IgIterator(stream):
-        ...         print("%s length %i" % (record.id, len(record)))
+        ...         print(f"{record.id} length {len(record)}")
         ...
         A_U455 length 303
         B_HXB2R length 306
