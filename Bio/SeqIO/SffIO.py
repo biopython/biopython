@@ -643,155 +643,6 @@ def _sff_read_roche_index(handle):
 _valid_UAN_read_name = re.compile(r"^[a-zA-Z0-9]{14}$")
 
 
-def _sff_read_seq_record(
-    handle, number_of_flows_per_read, flow_chars, key_sequence, trim=False
-):
-    """Parse the next read in the file, return data as a SeqRecord (PRIVATE)."""
-    # Now on to the reads...
-    # the read header format (fixed part):
-    # read_header_length     H
-    # name_length            H
-    # seq_len                I
-    # clip_qual_left         H
-    # clip_qual_right        H
-    # clip_adapter_left      H
-    # clip_adapter_right     H
-    # [rest of read header depends on the name length etc]
-    read_header_fmt = ">2HI4H"
-    read_header_size = struct.calcsize(read_header_fmt)
-    read_flow_fmt = ">%iH" % number_of_flows_per_read
-    read_flow_size = struct.calcsize(read_flow_fmt)
-
-    (
-        read_header_length,
-        name_length,
-        seq_len,
-        clip_qual_left,
-        clip_qual_right,
-        clip_adapter_left,
-        clip_adapter_right,
-    ) = struct.unpack(read_header_fmt, handle.read(read_header_size))
-    if clip_qual_left:
-        clip_qual_left -= 1  # python counting
-    if clip_adapter_left:
-        clip_adapter_left -= 1  # python counting
-    if read_header_length < 10 or read_header_length % 8 != 0:
-        raise ValueError(
-            "Malformed read header, says length is %i" % read_header_length
-        )
-    # now the name and any padding (remainder of header)
-    name = handle.read(name_length).decode()
-    padding = read_header_length - read_header_size - name_length
-    if handle.read(padding).count(_null) != padding:
-        import warnings
-
-        from Bio import BiopythonParserWarning
-
-        warnings.warn(
-            "Your SFF file is invalid, post name %i "
-            "byte padding region contained data" % padding,
-            BiopythonParserWarning,
-        )
-    # now the flowgram values, flowgram index, bases and qualities
-    # NOTE - assuming flowgram_format==1, which means struct type H
-    flow_values = handle.read(read_flow_size)  # unpack later if needed
-    temp_fmt = ">%iB" % seq_len  # used for flow index and quals
-    flow_index = handle.read(seq_len)  # unpack later if needed
-    seq = handle.read(seq_len)  # Leave as bytes for Seq object
-    quals = list(struct.unpack(temp_fmt, handle.read(seq_len)))
-    # now any padding...
-    padding = (read_flow_size + seq_len * 3) % 8
-    if padding:
-        padding = 8 - padding
-        if handle.read(padding).count(_null) != padding:
-            import warnings
-
-            from Bio import BiopythonParserWarning
-
-            warnings.warn(
-                "Your SFF file is invalid, post quality %i "
-                "byte padding region contained data" % padding,
-                BiopythonParserWarning,
-            )
-    # Follow Roche and apply most aggressive of qual and adapter clipping.
-    # Note Roche seems to ignore adapter clip fields when writing SFF,
-    # and uses just the quality clipping values for any clipping.
-    clip_left = max(clip_qual_left, clip_adapter_left)
-    # Right clipping of zero means no clipping
-    if clip_qual_right:
-        if clip_adapter_right:
-            clip_right = min(clip_qual_right, clip_adapter_right)
-        else:
-            # Typical case with Roche SFF files
-            clip_right = clip_qual_right
-    elif clip_adapter_right:
-        clip_right = clip_adapter_right
-    else:
-        clip_right = seq_len
-    # Now build a SeqRecord
-    if trim:
-        if clip_left >= clip_right:
-            # Raise an error?
-            import warnings
-
-            from Bio import BiopythonParserWarning
-
-            warnings.warn(
-                "Overlapping clip values in SFF record, trimmed to nothing",
-                BiopythonParserWarning,
-            )
-            seq = ""
-            quals = []
-        else:
-            seq = seq[clip_left:clip_right].upper()
-            quals = quals[clip_left:clip_right]
-        # Don't record the clipping values, flow etc, they make no sense now:
-        annotations = {}
-    else:
-        if clip_left >= clip_right:
-            import warnings
-
-            from Bio import BiopythonParserWarning
-
-            warnings.warn(
-                "Overlapping clip values in SFF record", BiopythonParserWarning
-            )
-            seq = seq.lower()
-        else:
-            # This use of mixed case mimics the Roche SFF tool's FASTA output
-            seq = (
-                seq[:clip_left].lower()
-                + seq[clip_left:clip_right].upper()
-                + seq[clip_right:].lower()
-            )
-        annotations = {
-            "flow_values": struct.unpack(read_flow_fmt, flow_values),
-            "flow_index": struct.unpack(temp_fmt, flow_index),
-            "flow_chars": flow_chars,
-            "flow_key": key_sequence,
-            "clip_qual_left": clip_qual_left,
-            "clip_qual_right": clip_qual_right,
-            "clip_adapter_left": clip_adapter_left,
-            "clip_adapter_right": clip_adapter_right,
-        }
-    if re.match(_valid_UAN_read_name, name):
-        annotations["time"] = _get_read_time(name)
-        annotations["region"] = _get_read_region(name)
-        annotations["coords"] = _get_read_xy(name)
-    annotations["molecule_type"] = "DNA"
-    record = SeqRecord(
-        Seq(seq), id=name, name=name, description="", annotations=annotations
-    )
-    # Dirty trick to speed up this line:
-    # record.letter_annotations["phred_quality"] = quals
-    dict.__setitem__(record._per_letter_annotations, "phred_quality", quals)
-    # Return the record and then continue...
-    return record
-
-
-_powers_of_36 = [36**i for i in range(6)]
-
-
 def _string_as_base_36(string):
     """Interpret a string as a base-36 number as per 454 manual (PRIVATE)."""
     total = 0
@@ -927,6 +778,19 @@ class _AddTellHandle:
 class SffIterator(SequenceIterator):
     """Parser for Standard Flowgram Format (SFF) files."""
 
+    # the read header format (fixed part):
+    # read_header_length     H
+    # name_length            H
+    # seq_len                I
+    # clip_qual_left         H
+    # clip_qual_right        H
+    # clip_adapter_left      H
+    # clip_adapter_right     H
+    # [rest of read header depends on the name length etc]
+    read_header_fmt = ">2HI4H"
+    read_header_size = struct.calcsize(read_header_fmt)
+    assert read_header_size % 8 == 0  # Important for padding calc later!
+
     def __init__(self, source, alphabet=None, trim=False):
         """Iterate over Standard Flowgram Format (SFF) reads (as SeqRecord objects).
 
@@ -1010,34 +874,21 @@ class SffIterator(SequenceIterator):
 
     def iterate(self, handle):
         """Parse the file and generate SeqRecord objects."""
-        trim = self.trim
         (
             header_length,
             index_offset,
             index_length,
             number_of_reads,
             number_of_flows_per_read,
-            flow_chars,
-            key_sequence,
+            self.flow_chars,
+            self.key_sequence,
         ) = _sff_file_header(handle)
         # Now on to the reads...
-        # the read header format (fixed part):
-        # read_header_length     H
-        # name_length            H
-        # seq_len                I
-        # clip_qual_left         H
-        # clip_qual_right        H
-        # clip_adapter_left      H
-        # clip_adapter_right     H
-        # [rest of read header depends on the name length etc]
-        read_header_fmt = ">2HI4H"
-        read_header_size = struct.calcsize(read_header_fmt)
-        read_flow_fmt = ">%iH" % number_of_flows_per_read
-        read_flow_size = struct.calcsize(read_flow_fmt)
+        self.read_flow_fmt = ">%iH" % number_of_flows_per_read
+        self.read_flow_size = struct.calcsize(self.read_flow_fmt)
         assert 1 == struct.calcsize(">B")
         assert 1 == struct.calcsize(">s")
         assert 1 == struct.calcsize(">c")
-        assert read_header_size % 8 == 0  # Important for padding calc later!
         # The spec allows for the index block to be before or even in the middle
         # of the reads. We can check that if we keep track of our position
         # in the file...
@@ -1051,10 +902,149 @@ class SffIterator(SequenceIterator):
                 # Now that we've done this, we don't need to do it again. Clear
                 # the index_offset so we can skip extra handle.tell() calls:
                 index_offset = 0
-            yield _sff_read_seq_record(
-                handle, number_of_flows_per_read, flow_chars, key_sequence, trim
-            )
+            yield self._sff_read_seq_record(handle)
         _check_eof(handle, index_offset, index_length)
+
+    def _sff_read_seq_record(self, handle):
+        """Parse the next read in the file, return data as a SeqRecord (PRIVATE)."""
+        # Now on to the reads...
+        # the read header format (fixed part):
+        # read_header_length     H
+        # name_length            H
+        # seq_len                I
+        # clip_qual_left         H
+        # clip_qual_right        H
+        # clip_adapter_left      H
+        # clip_adapter_right     H
+        # [rest of read header depends on the name length etc]
+        (
+            read_header_length,
+            name_length,
+            seq_len,
+            clip_qual_left,
+            clip_qual_right,
+            clip_adapter_left,
+            clip_adapter_right,
+        ) = struct.unpack(self.read_header_fmt, handle.read(self.read_header_size))
+        if clip_qual_left:
+            clip_qual_left -= 1  # python counting
+        if clip_adapter_left:
+            clip_adapter_left -= 1  # python counting
+        if read_header_length < 10 or read_header_length % 8 != 0:
+            raise ValueError(
+                "Malformed read header, says length is %i" % read_header_length
+            )
+        # now the name and any padding (remainder of header)
+        name = handle.read(name_length).decode()
+        padding = read_header_length - self.read_header_size - name_length
+        if handle.read(padding).count(_null) != padding:
+            import warnings
+
+            from Bio import BiopythonParserWarning
+
+            warnings.warn(
+                "Your SFF file is invalid, post name %i "
+                "byte padding region contained data" % padding,
+                BiopythonParserWarning,
+            )
+        # now the flowgram values, flowgram index, bases and qualities
+        # NOTE - assuming flowgram_format==1, which means struct type H
+        flow_values = handle.read(self.read_flow_size)  # unpack later if needed
+        temp_fmt = ">%iB" % seq_len  # used for flow index and quals
+        flow_index = handle.read(seq_len)  # unpack later if needed
+        seq = handle.read(seq_len)  # Leave as bytes for Seq object
+        quals = list(struct.unpack(temp_fmt, handle.read(seq_len)))
+        # now any padding...
+        padding = (self.read_flow_size + seq_len * 3) % 8
+        if padding:
+            padding = 8 - padding
+            if handle.read(padding).count(_null) != padding:
+                import warnings
+
+                from Bio import BiopythonParserWarning
+
+                warnings.warn(
+                    "Your SFF file is invalid, post quality %i "
+                    "byte padding region contained data" % padding,
+                    BiopythonParserWarning,
+                )
+        # Follow Roche and apply most aggressive of qual and adapter clipping.
+        # Note Roche seems to ignore adapter clip fields when writing SFF,
+        # and uses just the quality clipping values for any clipping.
+        clip_left = max(clip_qual_left, clip_adapter_left)
+        # Right clipping of zero means no clipping
+        if clip_qual_right:
+            if clip_adapter_right:
+                clip_right = min(clip_qual_right, clip_adapter_right)
+            else:
+                # Typical case with Roche SFF files
+                clip_right = clip_qual_right
+        elif clip_adapter_right:
+            clip_right = clip_adapter_right
+        else:
+            clip_right = seq_len
+        # Now build a SeqRecord
+        if self.trim:
+            if clip_left >= clip_right:
+                # Raise an error?
+                import warnings
+
+                from Bio import BiopythonParserWarning
+
+                warnings.warn(
+                    "Overlapping clip values in SFF record, trimmed to nothing",
+                    BiopythonParserWarning,
+                )
+                seq = ""
+                quals = []
+            else:
+                seq = seq[clip_left:clip_right].upper()
+                quals = quals[clip_left:clip_right]
+            # Don't record the clipping values, flow etc, they make no sense now:
+            annotations = {}
+        else:
+            if clip_left >= clip_right:
+                import warnings
+
+                from Bio import BiopythonParserWarning
+
+                warnings.warn(
+                    "Overlapping clip values in SFF record", BiopythonParserWarning
+                )
+                seq = seq.lower()
+            else:
+                # This use of mixed case mimics the Roche SFF tool's FASTA output
+                seq = (
+                    seq[:clip_left].lower()
+                    + seq[clip_left:clip_right].upper()
+                    + seq[clip_right:].lower()
+                )
+            annotations = {
+                "flow_values": struct.unpack(self.read_flow_fmt, flow_values),
+                "flow_index": struct.unpack(temp_fmt, flow_index),
+                "flow_chars": self.flow_chars,
+                "flow_key": self.key_sequence,
+                "clip_qual_left": clip_qual_left,
+                "clip_qual_right": clip_qual_right,
+                "clip_adapter_left": clip_adapter_left,
+                "clip_adapter_right": clip_adapter_right,
+            }
+        if re.match(_valid_UAN_read_name, name):
+            annotations["time"] = _get_read_time(name)
+            annotations["region"] = _get_read_region(name)
+            annotations["coords"] = _get_read_xy(name)
+        annotations["molecule_type"] = "DNA"
+        record = SeqRecord(
+            Seq(seq), id=name, name=name, description="", annotations=annotations
+        )
+        # Dirty trick to speed up this line:
+        # record.letter_annotations["phred_quality"] = quals
+        dict.__setitem__(record._per_letter_annotations, "phred_quality", quals)
+        # Return the record and then continue...
+        return record
+
+
+_powers_of_36 = [36**i for i in range(6)]
 
 
 def _check_eof(handle, index_offset, index_length):
