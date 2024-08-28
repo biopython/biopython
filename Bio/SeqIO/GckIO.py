@@ -20,25 +20,15 @@ from Bio.SeqRecord import SeqRecord
 from .Interfaces import SequenceIterator
 
 
-class PrematureEndOfFileError(ValueError):
-    """Failed to read the expected number of bytes; file may be truncated."""
-
-    def __init__(self, bytes_expected, bytes_read):
-        """Initialize with the expected and received number of bytes."""
-        super().__init__(f"Failed to read {bytes_expected} bytes from stream")
-        self.bytes_expected = bytes_expected
-        self.bytes_read = bytes_read
-
-
 def _read(stream, length):
     """Read the specified number of bytes from the given stream."""
     data = stream.read(length)
     if len(data) < length:
-        raise PrematureEndOfFileError(length, len(data))
+        raise ValueError(f"Cannot read {length} bytes from stream")
     return data
 
 
-def _read_packet(handle):
+def _read_packet(stream):
     """Read a length-prefixed packet.
 
     Parts of a GCK file are made of "packets" comprising of 4 bytes
@@ -48,31 +38,35 @@ def _read_packet(handle):
     it contains, is solely indicated by the position of the packet within
     the GCK file.
     """
-    length = _read(handle, 4)
+    length = stream.read(4)
+    if len(length) == 0:
+        return
+    if len(length) < 4:
+        raise ValueError("Cannot read packet size from stream")
     length = unpack(">I", length)[0]
-    data = _read(handle, length)
-    return (data, length)
+    data = _read(stream, length)
+    return data
 
 
-def _read_pstring(handle):
+def _read_pstring(stream):
     """Read a Pascal string.
 
     A Pascal string is one byte for length followed by the actual string.
     """
-    length = _read(handle, 1)
+    length = _read(stream, 1)
     length = unpack(">B", length)[0]
-    data = _read(handle, length).decode("ASCII")
+    data = _read(stream, length).decode("ASCII")
     return data
 
 
-def _read_p4string(handle):
+def _read_p4string(stream):
     """Read a 32-bit Pascal string.
 
     Similar to a Pascal string but length is encoded on 4 bytes.
     """
-    length = _read(handle, 4)
+    length = _read(stream, 4)
     length = unpack(">I", length)[0]
-    data = _read(handle, length).decode("ASCII")
+    data = _read(stream, length).decode("ASCII")
     return data
 
 
@@ -104,34 +98,35 @@ class GckIterator(SequenceIterator):
     def __next__(self):
         stream = self.stream
         # Read the actual sequence data
-        try:
-            packet, length = _read_packet(stream)
-        except PrematureEndOfFileError as exception:
-            if exception.bytes_read == 0:
-                raise StopIteration from None
-            raise
+        packet = _read_packet(stream)
+        if packet is None:
+            raise StopIteration
         # The body of the sequence packet starts with a 32-bit integer
         # representing the length of the sequence.
         seq_length = unpack(">I", packet[:4])[0]
         # This length should not be larger than the length of the
         # sequence packet.
-        if seq_length > length - 4:
+        if seq_length > len(packet) - 4:
             raise ValueError("Conflicting sequence length values")
         sequence = packet[4:].decode("ASCII")
         record = SeqRecord(Seq(sequence))
 
         # Skip unknown packet
-        _read_packet(stream)
+        packet = _read_packet(stream)
+        if packet is None:
+            raise ValueError("Premature end of file")
 
         # Read features packet
-        packet, length = _read_packet(stream)
+        packet = _read_packet(stream)
+        if packet is None:
+            raise ValueError("Premature end of file")
         (seq_length, num_features) = unpack(">IH", packet[:6])
         # Check that length in the features packet matches the actual
         # length of the sequence
         if seq_length != len(sequence):
             raise ValueError("Conflicting sequence length values")
         # Each feature is stored in a 92-bytes structure.
-        if length - 6 != num_features * 92:
+        if len(packet) - 6 != num_features * 92:
             raise ValueError(
                 "Features packet size inconsistent with number of features"
             )
@@ -186,10 +181,12 @@ class GckIterator(SequenceIterator):
         # that packet so that we can skip the names and comments for each
         # site, which are stored after that packet in a similar way as for
         # the features above.
-        packet, length = _read_packet(stream)
+        packet = _read_packet(stream)
+        if packet is None:
+            raise ValueError("Premature end of file")
         (seq_length, num_sites) = unpack(">IH", packet[:6])
         # Each site is stored in a 88-bytes structure
-        if length - 6 != num_sites * 88:
+        if len(packet) - 6 != num_sites * 88:
             raise ValueError("Sites packet size inconsistent with number of sites")
         for i in range(num_sites):
             offset = 6 + i * 88
@@ -204,7 +201,9 @@ class GckIterator(SequenceIterator):
                 _read_p4string(stream)
 
         # Skip unknown packet
-        _read_packet(stream)
+        packet = _read_packet(stream)
+        if packet is None:
+            raise ValueError("Premature end of file")
 
         # Next in the file are "version packets".
         # However they are not properly formatted "packets" as they are not
