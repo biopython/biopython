@@ -80,27 +80,30 @@ class NibIterator(SequenceIterator):
 
         """
         super().__init__(source, mode="b", fmt="Nib")
-
-    def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
-        word = handle.read(4)
+        word = self.stream.read(4)
         if not word:
             raise ValueError("Empty file.")
         signature = word.hex()
         if signature == "3a3de96b":
-            byteorder = "little"  # little-endian
+            self.byteorder = "little"  # little-endian
         elif signature == "6be93d3a":
-            byteorder = "big"  # big-endian
+            self.byteorder = "big"  # big-endian
         else:
             raise ValueError("unexpected signature in nib header")
-        records = self.iterate(handle, byteorder)
-        return records
 
-    def iterate(self, handle, byteorder):
+    def parse(self, stream):
+        """To be removed."""
+        return
+
+    def __next__(self):
         """Iterate over the records in the nib file."""
-        number = handle.read(4)
+        stream = self.stream
+        byteorder = self.byteorder
+        number = stream.read(4)
+        if not number:
+            raise StopIteration
         length = int.from_bytes(number, byteorder)
-        data = handle.read()
+        data = stream.read()
         indices = binascii.hexlify(data)
         if length % 2 == 0:
             if len(indices) != length:
@@ -115,7 +118,7 @@ class NibIterator(SequenceIterator):
         nucleotides = indices.translate(table)
         sequence = Seq(nucleotides)
         record = SeqRecord(sequence)
-        yield record
+        return record
 
 
 class NibWriter(SequenceWriter):
