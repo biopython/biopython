@@ -449,6 +449,26 @@ query             0 GA--T 3
         # score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         # self.assertAlmostEqual(score, -7.0)
 
+    def test_fogsaa_confirms_needleman_wunsch(self):
+        seq1 = "CCCCC"
+        seq2 = "ACCCCCT"
+
+        aligner_fogsaa = Align.PairwiseAligner(mode="fogsaa")
+        aligner_fogsaa.match_score = 1.1
+        aligner_fogsaa.mismatch_score = -1.83
+        self.assertEqual(
+            aligner_fogsaa.algorithm, "Fast Optimal Global Sequence Alignment Algorithm"
+        )
+
+        aligner_nw = Align.PairwiseAligner(mode="global")
+        aligner_nw.match_score = 1.1
+        aligner_nw.mismatch_score = -1.83
+        self.assertEqual(aligner_nw.algorithm, "Needleman-Wunsch")
+
+        score_fogsaa = aligner_fogsaa.score(seq1, seq2)
+        score_nw = aligner_nw.score(seq1, seq2)
+        self.assertAlmostEqual(score_fogsaa, score_nw)
+
     def test_fogsaa_matrix_scoring(self):
         seq1 = "AAAAAAAAAAA"
         seq2 = "AAAAAAATAAA"
@@ -5101,9 +5121,6 @@ query	16	target	1	255	6D17M5I	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
 class TestAlgorithmRestrictions(unittest.TestCase):
     def test_fogsaa_restrictions(self):
         aligner = Align.PairwiseAligner(mode="fogsaa")
-        aligner.match_score = 1.1
-        with self.assertRaises(ValueError):
-            aligner.score("AAAAAAAAAAAA", "AAAAATAAAAAA")
         aligner.match_score = -1
         with self.assertRaises(ValueError):
             aligner.score("AAAAAAAAAAAA", "AAAAATAAAAAA")

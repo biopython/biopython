@@ -4386,12 +4386,18 @@ static PyGetSetDef Aligner_getset[] = {
     M[i][j].trace = trace;
 
 struct fogsaa_cell {
-    int present_score, lower, upper, type, filled;
+    double present_score, lower, upper;
+    int type, filled;
 };
 
-struct fogsaa_qtype {
-    int pA, pB, type_upto_next, next_type, next_lower;
-    struct fogsaa_qtype *next;
+struct fogsaa_queue {
+    struct fogsaa_queue_node *array;
+    int size, capacity;
+};
+
+struct fogsaa_queue_node {
+    int pA, pB, type_upto_next, next_type;
+    double next_lower, next_upper;
 };
 
 #define FOGSAA_SORT() \
@@ -4425,61 +4431,72 @@ struct fogsaa_qtype {
         upper = curr_score + (nB - (pB)) * match + (gap_open_B + gap_extend_B) * ((nA - (pA)) - (nB - (pB))); \
     }
 
-#define FOGSAA_QUEUE_INSERT(_pA, _pB, _type_total, _next_type, _next_lower, _next_upper) \
-    if ((_next_upper - matrix[0][0].lower) >= 0) { \
-        int inserted = 0; \
-        struct fogsaa_qtype *p, *prev, *new; \
-        new = PyMem_Malloc(sizeof(struct fogsaa_qtype)); \
-        if (!new) return PyErr_NoMemory(); \
-        new->pA = _pA; \
-        new->pB = _pB; \
-        new->next_type = _next_type; \
-        new->next_lower = _next_lower; \
-        new->type_upto_next = _type_total; \
-        \
-        if (max_ptr == -1) { \
-            queue[(_next_upper) - matrix[0][0].lower] = new; \
-            new->next = NULL; \
-            max_ptr = (_next_upper) - matrix[0][0].lower; \
-        } else { \
-            if (queue[(_next_upper) - matrix[0][0].lower] == NULL) { \
-                /* first memeber in this row */ \
-                queue[(_next_upper) - matrix[0][0].lower] = new; \
-                new->next = NULL; \
-                if (((_next_upper) - matrix[0][0].lower) > max_ptr) { \
-                    max_ptr = (_next_upper) - matrix[0][0].lower; \
-                } \
-            } else { \
-                /* search the appropriate position in the row comparing the lower value */ \
-                p = queue[(_next_upper) - matrix[0][0].lower]; \
-                prev = NULL; \
-                while (p != NULL) { \
-                    if (p->next_lower <= (_next_lower)) { \
-                        /* insert here(before p) */ \
-                        if (prev == NULL) { \
-                            /* insert as the first row in the list */ \
-                            queue[(_next_upper) - matrix[0][0].lower] = new; \
-                            new->next = p; \
-                        } else { \
-                            /* insert in the middle of the row */ \
-                            prev->next = new; \
-                            new->next = p; \
-                        } \
-                        inserted = 1; \
-                        break; \
-                    } else { \
-                        prev = p; \
-                        p = p->next; \
-                    } \
-                } \
-                if (inserted == 0) { \
-                    /* insert at the end */ \
-                    prev->next = new; \
-                    new->next = NULL; \
-                } \
-            } \
-        } \
+// checks if node a has priority over node b
+#define FOGSAA_QUEUE_HEAP_COND(a, b) \
+    (queue->array[a].next_upper > queue->array[b].next_upper || \
+     (queue->array[a].next_upper == queue->array[b].next_upper && \
+      queue->array[a].next_lower > queue->array[b].next_lower))
+
+int fogsaa_queue_insert(struct fogsaa_queue *queue, int pA, int pB,
+        int type_total, int next_type, int next_lower, int next_upper) {
+    // max heap implementation for the priority queue by next_upper
+    struct fogsaa_queue_node temp;
+    int i;
+    if (queue->size + 1 >= queue->capacity) {
+        struct fogsaa_queue_node *old_array = queue->array;
+        queue->array = PyMem_Realloc(queue->array,
+                sizeof(struct fogsaa_queue_node) * (queue->capacity + 1) * 2);
+        if (queue->array == NULL) {
+            PyMem_Free(old_array);
+            return 0; // caller should return PyErr_NoMemory();
+        }
+        queue->capacity = (queue->capacity + 1) * 2;
     }
+
+    i = queue->size;
+    queue->array[i].pA = pA;
+    queue->array[i].pB = pB;
+    queue->array[i].next_type = next_type;
+    queue->array[i].next_lower = next_lower;
+    queue->array[i].type_upto_next = type_total;
+    queue->array[i].next_upper = next_upper;
+
+    // node has higher priority if upper bound is higher, or if upper bounds
+    // equal, if lower bound is higher
+    while (i != 0 && FOGSAA_QUEUE_HEAP_COND(i, (i-1)/2)) {
+        // swap the child and the smaller parent
+        temp = queue->array[i];
+        queue->array[i] = queue->array[(i-1)/2];
+        queue->array[(i-1)/2] = temp;
+        i = (i-1)/2;
+    }
+    queue->size += 1;
+    return 1;
+}
+
+struct fogsaa_queue_node fogsaa_queue_pop(struct fogsaa_queue *queue) {
+    // caller code must check queue is not empty
+    struct fogsaa_queue_node temp, root = queue->array[0];
+    int largest, i = 0;
+    queue->size -= 1;
+    queue->array[i] = queue->array[queue->size];
+    while (1) {
+        largest = i;
+        if (2*i+1 < queue->size && FOGSAA_QUEUE_HEAP_COND(2*i+1, i))
+            largest = 2*i+1;
+        if (2*i+2 < queue->size && FOGSAA_QUEUE_HEAP_COND(2*i+2, largest))
+            largest = 2*i+2;
+        if (largest != i) {
+            // swap the parent and the larger child
+            temp = queue->array[i];
+            queue->array[i] = queue->array[largest];
+            queue->array[largest] = temp;
+        } else {
+            break;
+        }
+    }
+    return root;
+}
 
 /* ----------------- alignment algorithms ----------------- */
 
@@ -5939,24 +5956,25 @@ exit: \
 
 
 #define FOGSAA_ENTER \
-    int i, j, t; \
+    int i, j; \
+    double t; \
     int kA, kB; \
     int optpA, optpB, curpA = 0, curpB = 0; /* optimal and current pointers */ \
-    int pathend = 1, lower_bound, child_lbounds[3], child_ubounds[3], child_types[3]; \
+    int pathend = 1, child_types[3]; \
+    double lower_bound, child_lbounds[3], child_ubounds[3]; \
     /* pathend denotes if the current path is active, expanded is the number of \
      * expanded nodes, lower_bound contains the global lower_bound, a and b \
      * contain the lower bounds for the current cell. ch contains the types of \
      * the potential children */ \
-    int type_total = 1, new_type, new_score, npA, npB, new_lower, new_upper, \
-        next_lower, next_upper; \
-    int threshold, th; /* used to calculate threshold */ \
-    const int gap_open_A = (int)self->target_internal_open_gap_score; \
-    const int gap_open_B = (int)self->query_internal_open_gap_score; \
-    const int gap_extend_A = (int)self->target_internal_extend_gap_score; \
-    const int gap_extend_B = (int)self->query_internal_extend_gap_score; \
+    int type_total = 1, new_type, npA, npB; \
+    double new_score, new_lower, new_upper, next_lower, next_upper; \
+    double threshold, th; /* used to calculate threshold */ \
+    const double gap_open_A = self->target_internal_open_gap_score; \
+    const double gap_open_B = self->query_internal_open_gap_score; \
+    const double gap_extend_A = self->target_internal_extend_gap_score; \
+    const double gap_extend_B = self->query_internal_extend_gap_score; \
     struct fogsaa_cell** matrix = NULL; \
-    struct fogsaa_qtype** queue = NULL; \
-    int v, max_ptr = -1; /* queue capacity and maximum pointer */ \
+    struct fogsaa_queue queue;
     /* double left_gap_open_A; */ \
     /* double left_gap_open_B; */ \
     /* double left_gap_extend_A; */ \
@@ -6015,12 +6033,10 @@ exit: \
         threshold = th * match + (nA - th) * mismatch + gap_extend_B * (nB - nA) + gap_open_B; \
     } \
     \
-    /* allocate queue */ \
-    v = matrix[0][0].upper - matrix[0][0].lower + 1; \
-    queue = PyMem_Calloc(v, sizeof(struct fogsaa_qtype*)); \
-    if (!queue) \
-        return PyErr_NoMemory(); \
-    \
+    /* initialize queue */ \
+    queue.array = NULL; \
+    queue.size = 0; \
+    queue.capacity = 0; \
     /* main loop */ \
     do { \
         pathend = 1; \
@@ -6032,7 +6048,7 @@ exit: \
                 /* current is a 1st child */ \
                 if (curpA <= nA - 1 && curpB <= nB - 1) { \
                     /* neither sequence is at the end, so we can advance in both sequences */ \
-                    int p = align_score; \
+                    double p = align_score; \
                     /* score the match/mismatch */ \
                     FOGSAA_CALCULATE_SCORE(curr->present_score + p, child_lbounds[0], child_ubounds[0], curpA + 1, curpB + 1); \
                     /* score the gaps */ \
@@ -6080,7 +6096,8 @@ exit: \
                         } \
                     } \
                     /* insert 2nd best new child to the queue */ \
-                    FOGSAA_QUEUE_INSERT(curpA, curpB, new_type + child_types[1], child_types[1], child_lbounds[1], child_ubounds[1]) \
+                    if (!fogsaa_queue_insert(&queue, curpA, curpB, new_type + child_types[1], child_types[1], child_lbounds[1], child_ubounds[1])) \
+                        return PyErr_NoMemory(); \
                 } else if (curpA <= nA - 1) { \
                     /* we're at the end of B, so must put a gap in B */ \
                     new_type = FOGSAA_CELL_GAP_B; \
@@ -6168,7 +6185,8 @@ exit: \
                         } \
                     } \
                 } \
-                FOGSAA_QUEUE_INSERT(curpA, curpB, 7, 7 - type_total, next_lower, next_upper) \
+                if (!fogsaa_queue_insert(&queue, curpA, curpB, 7, 7 - type_total, next_lower, next_upper)) \
+                    return PyErr_NoMemory(); \
             } else if (type_total == FOGSAA_CELL_MATCH_MISMATCH + FOGSAA_CELL_GAP_A + FOGSAA_CELL_GAP_B) { \
                 /* current is a 3rd child */ \
                 if (new_type == FOGSAA_CELL_MATCH_MISMATCH) { \
@@ -6227,20 +6245,14 @@ exit: \
         } \
         \
         /* If possible, pop the next best from the queue */ \
-        if (max_ptr != -1) { \
-            struct fogsaa_qtype* temp; \
-            curpA = queue[max_ptr]->pA; \
-            curpB = queue[max_ptr]->pB; \
-            type_total = queue[max_ptr]->type_upto_next; \
-            new_lower = queue[max_ptr]->next_lower; \
-            new_upper = max_ptr + matrix[0][0].lower; \
-            new_type = queue[max_ptr]->next_type; \
-            \
-            temp = queue[max_ptr]; \
-            queue[max_ptr] = temp->next; \
-            PyMem_Free(temp); \
-            while (queue[max_ptr] == NULL) \
-                max_ptr -= 1; \
+        if (queue.size > 0) { \
+            struct fogsaa_queue_node root = fogsaa_queue_pop(&queue); \
+            curpA = root.pA; \
+            curpB = root.pB; \
+            type_total = root.type_upto_next; \
+            new_lower = root.next_lower; \
+            new_upper = root.next_upper; \
+            new_type = root.next_type; \
         } \
         \
         t = curpA > curpB ? curpA : curpB; \
@@ -6260,10 +6272,7 @@ exit: \
     } while (lower_bound < new_upper); \
     \
     /* cleanup and return */ \
-    for (i = 0; i < v; i++) { \
-        PyMem_Free(queue[i]); \
-    } \
-    PyMem_Free(queue);
+    PyMem_Free(queue.array);
 
 
 #define FOGSAA_EXIT_SCORE \
@@ -6991,32 +7000,6 @@ Aligner_watermansmithbeyer_local_align_matrix(Aligner* self,
     WATERMANSMITHBEYER_EXIT_ALIGN;
 }
 
-#define FOGSAA_REQUIRE_NONPOSITIVE_INTEGER_GAPS \
-    if (floor(self->target_internal_open_gap_score) != self->target_internal_open_gap_score || \
-            floor(self->query_internal_open_gap_score) != self->query_internal_open_gap_score || \
-            floor(self->target_internal_extend_gap_score) != self->target_internal_extend_gap_score || \
-            floor(self->query_internal_extend_gap_score) != self->query_internal_extend_gap_score || \
-            floor(self->target_left_open_gap_score) != self->target_left_open_gap_score || \
-            floor(self->query_left_open_gap_score) != self->query_left_open_gap_score || \
-            floor(self->target_left_extend_gap_score) != self->target_left_extend_gap_score || \
-            floor(self->query_left_extend_gap_score) != self->query_left_extend_gap_score || \
-            floor(self->target_right_open_gap_score) != self->target_right_open_gap_score || \
-            floor(self->query_right_open_gap_score) != self->query_right_open_gap_score || \
-            floor(self->target_right_extend_gap_score) != self->target_right_extend_gap_score || \
-            floor(self->query_right_extend_gap_score) != self->query_right_extend_gap_score) { \
-        PyErr_SetString(PyExc_ValueError, "algorithm requires integer gap scores"); \
-        return NULL; \
-    } \
-    if (self->target_internal_open_gap_score > 0 || self->query_internal_open_gap_score > 0|| \
-            self->target_internal_extend_gap_score > 0 || self->query_internal_extend_gap_score > 0 || \
-            self->target_left_open_gap_score > 0 || self->query_left_open_gap_score > 0 || \
-            self->target_left_extend_gap_score > 0 || self->query_left_extend_gap_score > 0 || \
-            self->target_right_open_gap_score > 0|| self->query_right_open_gap_score > 0 || \
-            self->target_right_extend_gap_score > 0 || self->query_right_extend_gap_score > 0) { \
-        PyErr_SetString(PyExc_ValueError, "algorithm requires non-positive gap scores"); \
-        return NULL; \
-    }
-
 static PyObject*
 Aligner_fogsaa_score_compare(Aligner* self,
                                  const int* sA, int nA,
@@ -7024,16 +7007,11 @@ Aligner_fogsaa_score_compare(Aligner* self,
                                  unsigned char strand)
 {
     // DNA with affine gap
-    const int match = (int)self->match;
-    const int mismatch = (int)self->mismatch;
+    const double match = self->match;
+    const double mismatch = self->mismatch;
     const int wildcard = self->wildcard;
     FOGSAA_ENTER
 
-    FOGSAA_REQUIRE_NONPOSITIVE_INTEGER_GAPS
-    if (floor(self->match) != self->match || floor(self->mismatch) != self->mismatch) {
-        PyErr_SetString(PyExc_ValueError, "algorithm requires integer scores");
-        return NULL;
-    }
     if (self->match < 0) {
         PyErr_SetString(PyExc_ValueError, "algorithm requires non-negative match score");
         return NULL;
@@ -7056,18 +7034,11 @@ Aligner_fogsaa_score_matrix(Aligner* self,
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
     const double* scores = self->substitution_matrix.buf;
-    int match = scores[0], mismatch = scores[0];
+    double match = scores[0], mismatch = scores[0];
     FOGSAA_ENTER
 
-    FOGSAA_REQUIRE_NONPOSITIVE_INTEGER_GAPS
     // for prediction purposes, maximum score is match and minimum score is mismatch
     for (i = 0; i < n*n; i++) {
-        if (floor(scores[i]) != scores[i]) {
-            PyErr_SetString(PyExc_ValueError,
-                    "algorithm requires substitution matrix with integer scores");
-            return NULL;
-        }
-
         if (scores[i] > match)
             match = scores[i];
         else if (scores[i] < mismatch)
@@ -7091,11 +7062,6 @@ Aligner_fogsaa_align_compare(Aligner* self,
     Trace** M;
     FOGSAA_ENTER
 
-    FOGSAA_REQUIRE_NONPOSITIVE_INTEGER_GAPS
-    if (floor(self->match) != self->match || floor(self->mismatch) != self->mismatch) {
-        PyErr_SetString(PyExc_ValueError, "algorithm requires integer scores");
-        return NULL;
-    }
     if (self->match < 0) {
         PyErr_SetString(PyExc_ValueError, "algorithm requires non-negative match score");
         return NULL;
@@ -7118,20 +7084,13 @@ Aligner_fogsaa_align_matrix(Aligner* self,
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
     const double* scores = self->substitution_matrix.buf;
-    int match = scores[0], mismatch = scores[0];
+    double match = scores[0], mismatch = scores[0];
     PathGenerator* paths;
     Trace** M;
     FOGSAA_ENTER
 
-    FOGSAA_REQUIRE_NONPOSITIVE_INTEGER_GAPS
     // for prediction purposes, maximum score is match and minimum score is mismatch
     for (i = 0; i < n*n; i++) {
-        if (floor(scores[i]) != scores[i]) {
-            PyErr_SetString(PyExc_ValueError,
-                    "algorithm requires substitution matrix with integer scores");
-            return NULL;
-        }
-
         if (scores[i] > match)
             match = scores[i];
         else if (scores[i] < mismatch)
