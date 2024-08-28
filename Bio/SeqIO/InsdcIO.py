@@ -100,11 +100,11 @@ class GenBankIterator(SequenceIterator):
 
         """
         super().__init__(source, mode="t", fmt="GenBank")
+        self.records = GenBankScanner(debug=0).parse_records(self.stream)
 
     def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
-        records = GenBankScanner(debug=0).parse_records(handle)
-        return records
+        """To be removed."""
+        return
 
 
 class EmblIterator(SequenceIterator):
@@ -154,11 +154,11 @@ class EmblIterator(SequenceIterator):
 
         """
         super().__init__(source, mode="t", fmt="EMBL")
+        self.records = EmblScanner(debug=0).parse_records(self.stream)
 
     def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
-        records = EmblScanner(debug=0).parse_records(handle)
-        return records
+        """To be removed."""
+        return
 
 
 class ImgtIterator(SequenceIterator):
@@ -175,11 +175,11 @@ class ImgtIterator(SequenceIterator):
         one record.
         """
         super().__init__(source, mode="t", fmt="IMGT")
+        self.records = _ImgtScanner(debug=0).parse_records(self.stream)
 
     def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
-        records = _ImgtScanner(debug=0).parse_records(handle)
-        return records
+        """To be removed."""
+        return
 
 
 class GenBankCdsFeatureIterator(SequenceIterator):
@@ -195,10 +195,11 @@ class GenBankCdsFeatureIterator(SequenceIterator):
         translation sequence (if given).
         """
         super().__init__(source, mode="t", fmt="GenBank")
+        self.records = GenBankScanner(debug=0).parse_cds_features(self.stream)
 
     def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
-        return GenBankScanner(debug=0).parse_cds_features(handle)
+        """To be removed."""
+        return
 
 
 class EmblCdsFeatureIterator(SequenceIterator):
@@ -214,10 +215,11 @@ class EmblCdsFeatureIterator(SequenceIterator):
         translation sequence (if given).
         """
         super().__init__(source, mode="t", fmt="EMBL")
+        self.records = EmblScanner(debug=0).parse_cds_features(self.stream)
 
     def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
-        return EmblScanner(debug=0).parse_cds_features(handle)
+        """To be removed."""
+        return
 
 
 def _insdc_feature_position_string(pos, offset=0):
