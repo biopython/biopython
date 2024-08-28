@@ -100,7 +100,7 @@ class NibIterator(SequenceIterator):
         stream = self.stream
         byteorder = self.byteorder
         number = stream.read(4)
-        if len(number) == 0:
+        if not number:
             raise StopIteration
         length = int.from_bytes(number, byteorder)
         data = stream.read()
