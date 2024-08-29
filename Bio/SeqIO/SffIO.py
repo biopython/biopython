@@ -863,7 +863,7 @@ class SffIterator(SequenceIterator):
         # in the file...
         index_offset = self.index_offset
         for read in range(self.number_of_reads):
-            if index_offset and self._offset == index_offset:
+            if self._offset == index_offset:
                 index_length = self.index_length
                 offset = index_offset + index_length
                 if offset % 8:
@@ -871,9 +871,6 @@ class SffIterator(SequenceIterator):
                 assert offset % 8 == 0
                 handle.seek(offset)
                 self._offset = offset
-                # Now that we've done this, we don't need to do it again. Clear
-                # the index_offset so we can skip extra handle.tell() calls:
-                self.index_offset = 0
             yield self._sff_read_seq_record(handle)
         self._check_eof(handle)
 
