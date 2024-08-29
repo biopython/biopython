@@ -897,7 +897,6 @@ class SffIterator(SequenceIterator):
             clip_adapter_left,
             clip_adapter_right,
         ) = struct.unpack(read_header_fmt, handle.read(read_header_size))
-        self._offset += read_header_size
         if clip_qual_left:
             clip_qual_left -= 1  # python counting
         if clip_adapter_left:
@@ -907,7 +906,6 @@ class SffIterator(SequenceIterator):
                 "Malformed read header, says length is %i" % read_header_length
             )
         # now the name and any padding (remainder of header)
-        self._offset += name_length
         name = handle.read(name_length).decode()
         padding = read_header_length - read_header_size - name_length
         if handle.read(padding).count(_null) != padding:
@@ -920,18 +918,15 @@ class SffIterator(SequenceIterator):
                 "byte padding region contained data" % padding,
                 BiopythonParserWarning,
             )
-        self._offset += padding
+        self._offset += read_header_length
         # now the flowgram values, flowgram index, bases and qualities
         # NOTE - assuming flowgram_format==1, which means struct type H
         flow_values = handle.read(self.read_flow_size)  # unpack later if needed
-        self._offset += self.read_flow_size
         temp_fmt = ">%iB" % seq_len  # used for flow index and quals
         flow_index = handle.read(seq_len)  # unpack later if needed
-        self._offset += seq_len
         seq = handle.read(seq_len)  # Leave as bytes for Seq object
-        self._offset += seq_len
         quals = list(struct.unpack(temp_fmt, handle.read(seq_len)))
-        self._offset += seq_len
+        self._offset += self.read_flow_size + seq_len * 3
         # now any padding...
         padding = (self.read_flow_size + seq_len * 3) % 8
         if padding:
@@ -946,7 +941,7 @@ class SffIterator(SequenceIterator):
                     "byte padding region contained data" % padding,
                     BiopythonParserWarning,
                 )
-        self._offset += padding
+            self._offset += padding
         # Follow Roche and apply most aggressive of qual and adapter clipping.
         # Note Roche seems to ignore adapter clip fields when writing SFF,
         # and uses just the quality clipping values for any clipping.
