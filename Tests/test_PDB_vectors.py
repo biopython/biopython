@@ -55,20 +55,14 @@ class VectorTests(unittest.TestCase):
             np.array_equal((v1 - 1).get_array(), np.array([-1.0, -1.0, 0.0]))
         )
         self.assertTrue(
-            np.array_equal(
-                (v1 - (1, 2, 3)).get_array(), np.array([-1.0, -2.0, -2.0])
-            )
+            np.array_equal((v1 - (1, 2, 3)).get_array(), np.array([-1.0, -2.0, -2.0]))
         )
         self.assertTrue(
             np.array_equal((v1 + v2).get_array(), np.array([0.0, 0.0, 1.0]))
         )
+        self.assertTrue(np.array_equal((v1 + 3).get_array(), np.array([3.0, 3.0, 4.0])))
         self.assertTrue(
-            np.array_equal((v1 + 3).get_array(), np.array([3.0, 3.0, 4.0]))
-        )
-        self.assertTrue(
-            np.array_equal(
-                (v1 + (1, 2, 3)).get_array(), np.array([1.0, 2.0, 4.0])
-            )
+            np.array_equal((v1 + (1, 2, 3)).get_array(), np.array([1.0, 2.0, 4.0]))
         )
         self.assertTrue(np.array_equal(v1.get_array() / 2, np.array([0, 0, 0.5])))
         self.assertTrue(np.array_equal(v1.get_array() / 2, np.array([0, 0, 0.5])))
@@ -76,13 +70,9 @@ class VectorTests(unittest.TestCase):
         self.assertTrue(
             np.array_equal((v1**v2).get_array(), np.array([0.0, -0.0, 0.0]))
         )
+        self.assertTrue(np.array_equal((v1**2).get_array(), np.array([0.0, 0.0, 2.0])))
         self.assertTrue(
-            np.array_equal((v1**2).get_array(), np.array([0.0, 0.0, 2.0]))
-        )
-        self.assertTrue(
-            np.array_equal(
-                (v1 ** (1, 2, 3)).get_array(), np.array([0.0, 0.0, 3.0])
-            )
+            np.array_equal((v1 ** (1, 2, 3)).get_array(), np.array([0.0, 0.0, 3.0]))
         )
         self.assertEqual(v1.norm(), 1.0)
         self.assertEqual(v1.normsq(), 1.0)
@@ -109,9 +99,7 @@ class VectorTests(unittest.TestCase):
         self.assertTrue(np.allclose(ref[0], [1.0, 0.0, 0.0]))
         self.assertTrue(np.allclose(ref[1], [0.0, 0.0, 1.0]))
         self.assertTrue(np.allclose(ref[2], [0.0, 1.0, 0.0]))
-        self.assertTrue(
-            np.allclose(v1.left_multiply(ref).get_array(), [0.0, 1.0, 0.0])
-        )
+        self.assertTrue(np.allclose(v1.left_multiply(ref).get_array(), [0.0, 1.0, 0.0]))
 
     def test_rotmat_90(self):
         """Test regular 90 deg rotation."""
@@ -121,9 +109,7 @@ class VectorTests(unittest.TestCase):
         self.assertTrue(np.allclose(rot[0], np.array([1.0, 0.0, 0.0])))
         self.assertTrue(np.allclose(rot[1], np.array([0.0, 0.0, 1.0])))
         self.assertTrue(np.allclose(rot[2], np.array([0.0, -1.0, 0.0])))
-        self.assertTrue(
-            np.allclose(v1.left_multiply(rot).get_array(), [0.0, 1.0, 0.0])
-        )
+        self.assertTrue(np.allclose(v1.left_multiply(rot).get_array(), [0.0, 1.0, 0.0]))
         self.assertTrue(
             np.allclose(
                 v1.right_multiply(np.transpose(rot)).get_array(),
