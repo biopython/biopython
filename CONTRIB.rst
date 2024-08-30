@@ -184,6 +184,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - John Bradley <https://github.com/johnbradley>
 - John Kern <https://github.com/kern3020>
 - John Ma <https://github.com/JohnMCMa>
+- John Stilley <https://github.com/john-science>
 - Jonathan Taylor <jonathan dot taylor at utoronto dot ca>
 - Jordan Willis <https://github.com/jwillis0720>
 - Jose Blanca <https://github.com/JoseBlanca>
