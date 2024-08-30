@@ -440,12 +440,8 @@ query             0 GA--T 3
         self.assertEqual(
             aligner.algorithm, "Fast Optimal Global Sequence Alignment Algorithm"
         )
-        with self.assertWarns(BiopythonWarning):
-            score = aligner.score(seq1, seq2)
-        # Yes, I know this is different from what Gotoh says the optimal
-        # alignment is, but the original Chakraborty code returns this value
-        # too.
-        self.assertAlmostEqual(score, -8.0)
+        score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, -7.0)
         # score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         # self.assertAlmostEqual(score, -7.0)
 
