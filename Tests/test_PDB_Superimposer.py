@@ -12,7 +12,7 @@
 import unittest
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
     from Bio import MissingPythonDependencyError
 
@@ -36,14 +36,14 @@ class SuperimposerTests(unittest.TestCase):
         fixed = Selection.unfold_entities(s1, "A")
         s2 = p.get_structure("MOVING", pdb1)
         moving = Selection.unfold_entities(s2, "A")
-        rot = numpy.identity(3).astype("f")
-        tran = numpy.array((1.0, 2.0, 3.0), "f")
+        rot = np.identity(3).astype("f")
+        tran = np.array((1.0, 2.0, 3.0), "f")
         for atom in moving:
             atom.transform(rot, tran)
         sup = Superimposer()
         sup.set_atoms(fixed, moving)
-        self.assertTrue(numpy.allclose(sup.rotran[0], numpy.identity(3)))
-        self.assertTrue(numpy.allclose(sup.rotran[1], numpy.array([-1.0, -2.0, -3.0])))
+        self.assertTrue(np.allclose(sup.rotran[0], np.identity(3)))
+        self.assertTrue(np.allclose(sup.rotran[1], np.array([-1.0, -2.0, -3.0])))
         self.assertAlmostEqual(sup.rms, 0.0, places=3)
         # Turn black code style off
         # fmt: off

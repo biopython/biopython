@@ -12,9 +12,9 @@ import unittest
 import warnings
 
 try:
-    import numpy
+    import numpy as np
 
-    del numpy
+    del np
     from numpy import asarray
 
     del asarray
