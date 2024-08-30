@@ -858,6 +858,9 @@ class SffIterator(SequenceIterator):
             raise StopIteration
         elif self._read_counter is None:
             raise StopIteration
+        # The spec allows for the index block to be before or even in the middle
+        # of the reads. We can check that if we keep track of our position
+        # in the file...
         index_offset = self.index_offset
         if self._offset == index_offset:
             index_length = self.index_length
