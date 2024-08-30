@@ -9,9 +9,9 @@ import unittest
 import warnings
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
-    numpy = None
+    np = None
 
 from Bio import BiopythonWarning
 from Bio import Seq
@@ -469,8 +469,8 @@ class TestSeqMultiplication(unittest.TestCase):
         """Test mul method; relies on addition method."""
         for seq in test_seqs + protein_seqs:
             self.assertEqual(seq * 3, seq + seq + seq)
-        if numpy is not None:
-            factor = numpy.intc(3)  # numpy integer
+        if np is not None:
+            factor = np.intc(3)  # numpy integer
             for seq in test_seqs + protein_seqs:
                 self.assertEqual(seq * factor, seq + seq + seq)
 
@@ -486,8 +486,8 @@ class TestSeqMultiplication(unittest.TestCase):
         """Test rmul method; relies on addition method."""
         for seq in test_seqs + protein_seqs:
             self.assertEqual(3 * seq, seq + seq + seq)
-        if numpy is not None:
-            factor = numpy.intc(3)  # numpy integer
+        if np is not None:
+            factor = np.intc(3)  # numpy integer
             for seq in test_seqs + protein_seqs:
                 self.assertEqual(factor * seq, seq + seq + seq)
 
@@ -505,8 +505,8 @@ class TestSeqMultiplication(unittest.TestCase):
             original_seq = seq * 1  # make a copy
             seq *= 3
             self.assertEqual(seq, original_seq + original_seq + original_seq)
-        if numpy is not None:
-            factor = numpy.intc(3)  # numpy integer
+        if np is not None:
+            factor = np.intc(3)  # numpy integer
             for seq in test_seqs + protein_seqs:
                 original_seq = seq * 1  # make a copy
                 seq *= factor
@@ -673,8 +673,8 @@ class TestMutableSeq(unittest.TestCase):
             self.mutable_s,
             "Set slice with MutableSeq",
         )
-        if numpy is not None:
-            one, three, five, seven = numpy.array([1, 3, 5, 7])  # numpy integers
+        if np is not None:
+            one, three, five, seven = np.array([1, 3, 5, 7])  # numpy integers
             self.assertEqual(
                 Seq.MutableSeq("AATA"), self.mutable_s[one:five], "Slice mutable seq"
             )
@@ -696,8 +696,8 @@ class TestMutableSeq(unittest.TestCase):
     def test_setting_item(self):
         self.mutable_s[3] = "G"
         self.assertEqual(Seq.MutableSeq("TCAGAAGGATGCATCATG"), self.mutable_s)
-        if numpy is not None:
-            i = numpy.intc(3)
+        if np is not None:
+            i = np.intc(3)
             self.mutable_s[i] = "X"
             self.assertEqual(Seq.MutableSeq("TCAXAAGGATGCATCATG"), self.mutable_s)
 
@@ -828,8 +828,8 @@ class TestMutableSeq(unittest.TestCase):
         """Test setting wobble codon to N (set slice with stride 3)."""
         self.mutable_s[2::3] = "N" * len(self.mutable_s[2::3])
         self.assertEqual(Seq.MutableSeq("TCNAANGGNTGNATNATN"), self.mutable_s)
-        if numpy is not None:
-            start, step = numpy.array([2, 3])  # numpy integers
+        if np is not None:
+            start, step = np.array([2, 3])  # numpy integers
             self.mutable_s[start::step] = "X" * len(self.mutable_s[2::3])
             self.assertEqual(Seq.MutableSeq("TCXAAXGGXTGXATXATX"), self.mutable_s)
 

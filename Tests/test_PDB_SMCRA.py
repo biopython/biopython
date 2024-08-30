@@ -18,7 +18,7 @@ import warnings
 from copy import deepcopy
 
 try:
-    import numpy
+    import numpy as np
     from numpy import dot  # Missing on old PyPy's micronumpy
 
     del dot
@@ -467,7 +467,7 @@ class TransformTests(unittest.TestCase):
         """Sum of positions of atoms in an entity along with the number of atoms."""
         if hasattr(o, "get_coord"):
             return o.get_coord(), 1
-        total_pos = numpy.array((0.0, 0.0, 0.0))
+        total_pos = np.array((0.0, 0.0, 0.0))
         total_count = 0
         for p in o.get_list():
             pos, count = self.get_total_pos(p)
@@ -484,11 +484,11 @@ class TransformTests(unittest.TestCase):
         """Transform entities (rotation and translation)."""
         for o in (self.s, self.m, self.c, self.r, self.a):
             rotation = rotmat(Vector(1, 3, 5), Vector(1, 0, 0))
-            translation = numpy.array((2.4, 0, 1), "f")
+            translation = np.array((2.4, 0, 1), "f")
             oldpos = self.get_pos(o)
             o.transform(rotation, translation)
             newpos = self.get_pos(o)
-            newpos_check = numpy.dot(oldpos, rotation) + translation
+            newpos_check = np.dot(oldpos, rotation) + translation
             for i in range(3):
                 self.assertAlmostEqual(newpos[i], newpos_check[i])
 
@@ -534,13 +534,13 @@ class CenterOfMassTests(unittest.TestCase):
         """Calculate Structure center of mass."""
         com = self.structure.center_of_mass()
 
-        self.assertTrue(numpy.allclose(com, [19.870, 25.455, 28.753], atol=1e-3))
+        self.assertTrue(np.allclose(com, [19.870, 25.455, 28.753], atol=1e-3))
 
     def test_structure_cog(self):
         """Calculate Structure center of geometry."""
         cog = self.structure.center_of_mass(geometric=True)
 
-        self.assertTrue(numpy.allclose(cog, [19.882, 25.842, 28.333], atol=1e-3))
+        self.assertTrue(np.allclose(cog, [19.882, 25.842, 28.333], atol=1e-3))
 
     def test_chain_cog(self):
         """Calculate center of geometry of individual chains."""
@@ -552,7 +552,7 @@ class CenterOfMassTests(unittest.TestCase):
 
         for chain in self.structure[0].get_chains():  # one model only
             cog = chain.center_of_mass(geometric=True)
-            self.assertTrue(numpy.allclose(cog, expected[chain.id], atol=1e-3))
+            self.assertTrue(np.allclose(cog, expected[chain.id], atol=1e-3))
 
     def test_com_empty_structure(self):
         """Center of mass of empty structure raises ValueError."""

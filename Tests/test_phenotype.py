@@ -8,9 +8,9 @@
 """Tests for the Bio.phenotype module."""
 
 try:
-    import numpy
+    import numpy as np
 
-    del numpy
+    del np
 except ImportError:
     from Bio import MissingExternalDependencyError
 
