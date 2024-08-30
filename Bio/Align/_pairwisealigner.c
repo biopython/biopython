@@ -4427,23 +4427,25 @@ struct fogsaa_queue_node {
 #define FOGSAA_CALCULATE_SCORE(curr_score, lower, upper, pA, pB) \
     if (nA - (pA) <= nB - (pB)) { \
         lower = curr_score + (nA - (pA)) * mismatch + (gap_open_A + gap_extend_A) * ((nB - (pB)) - (nA - (pA))); \
-        upper = curr_score + (nA - (pA)) * match + (gap_open_A + gap_extend_A) * ((nB - (pB)) - (nA - (pA))); \
+        upper = curr_score + (nA - (pA)) * match + gap_open_A + gap_extend_A * ((nB - (pB)) - (nA - (pA)) - 1); \
     } else { \
-        lower = curr_score + (nB - (pB)) * mismatch + (gap_open_B + gap_extend_B) * ((nA - (pA)) - (nB - (pB))); \
-        upper = curr_score + (nB - (pB)) * match + (gap_open_B + gap_extend_B) * ((nA - (pA)) - (nB - (pB))); \
+        lower = curr_score + (nB - (pB)) * mismatch + (gap_open_B ) * ((nA - (pA)) - (nB - (pB))); \
+        upper = curr_score + (nB - (pB)) * match + gap_open_B + gap_extend_B * ((nA - (pA)) - (nB - (pB)) - 1); \
     }
 
-// checks if node a has priority over node b
+// node has higher priority if upper bound is higher, or if upper bounds are
+// equal, if lower bound is higher
 #define FOGSAA_QUEUE_HEAP_COND(a, b) \
     (queue->array[a].next_upper > queue->array[b].next_upper || \
      (queue->array[a].next_upper == queue->array[b].next_upper && \
       queue->array[a].next_lower > queue->array[b].next_lower))
 
 int fogsaa_queue_insert(struct fogsaa_queue *queue, int pA, int pB,
-        int type_total, int next_type, int next_lower, int next_upper) {
+        int type_total, int next_type, double next_lower, double next_upper) {
     // max heap implementation for the priority queue by next_upper
     struct fogsaa_queue_node temp;
     int i;
+
     if (queue->size + 1 >= queue->capacity) {
         struct fogsaa_queue_node *old_array = queue->array;
         queue->array = PyMem_Realloc(queue->array,
@@ -4463,9 +4465,7 @@ int fogsaa_queue_insert(struct fogsaa_queue *queue, int pA, int pB,
     queue->array[i].type_upto_next = type_total;
     queue->array[i].next_upper = next_upper;
 
-    // node has higher priority if upper bound is higher, or if upper bounds
-    // equal, if lower bound is higher
-    while (i != 0 && FOGSAA_QUEUE_HEAP_COND(i, (i-1)/2)) {
+    while (i != 0 && !FOGSAA_QUEUE_HEAP_COND((i-1)/2, i)) {
         // swap the child and the smaller parent
         temp = queue->array[i];
         queue->array[i] = queue->array[(i-1)/2];
@@ -4479,20 +4479,21 @@ int fogsaa_queue_insert(struct fogsaa_queue *queue, int pA, int pB,
 struct fogsaa_queue_node fogsaa_queue_pop(struct fogsaa_queue *queue) {
     // caller code must check queue is not empty
     struct fogsaa_queue_node temp, root = queue->array[0];
-    int largest, i = 0;
+    int largest_child, i = 0;
     queue->size -= 1;
     queue->array[i] = queue->array[queue->size];
     while (1) {
-        largest = i;
-        if (2*i+1 < queue->size && FOGSAA_QUEUE_HEAP_COND(2*i+1, i))
-            largest = 2*i+1;
-        if (2*i+2 < queue->size && FOGSAA_QUEUE_HEAP_COND(2*i+2, largest))
-            largest = 2*i+2;
-        if (largest != i) {
+        largest_child = i;
+        if (2*i+1 < queue->size && !FOGSAA_QUEUE_HEAP_COND(i, 2*i+1))
+            largest_child = 2*i+1;
+        if (2*i+2 < queue->size && !FOGSAA_QUEUE_HEAP_COND(largest_child, 2*i+2))
+            largest_child = 2*i+2;
+        if (largest_child != i) {
             // swap the parent and the larger child
             temp = queue->array[i];
-            queue->array[i] = queue->array[largest];
-            queue->array[largest] = temp;
+            queue->array[i] = queue->array[largest_child];
+            queue->array[largest_child] = temp;
+            i = largest_child;
         } else {
             break;
         }
@@ -6029,12 +6030,12 @@ exit: \
         pathend = 1; \
         while (curpA < nA || curpB < nB) { \
             struct fogsaa_cell* curr = &(MATRIX(curpA, curpB)); \
-            kA = sA[curpA]; \
-            kB = sB[curpB]; \
             if (type_total == FOGSAA_CELL_MATCH_MISMATCH || type_total == FOGSAA_CELL_GAP_A || type_total == FOGSAA_CELL_GAP_B) { \
                 /* current is a 1st child */ \
                 if (curpA <= nA - 1 && curpB <= nB - 1) { \
                     /* neither sequence is at the end, so we can advance in both sequences */ \
+                    kA = sA[curpA]; \
+                    kB = sB[curpB]; \
                     double p = align_score; \
                     /* score the match/mismatch */ \
                     FOGSAA_CALCULATE_SCORE(curr->present_score + p, child_lbounds[0], child_ubounds[0], curpA + 1, curpB + 1); \
@@ -6070,9 +6071,11 @@ exit: \
                         npB = curpB; \
                         new_score = curr->present_score + (curr->type == FOGSAA_CELL_GAP_B ? gap_extend_B : gap_open_B); \
                     } \
-                    /* insert 2nd best new child to the queue */ \
-                    if (!fogsaa_queue_insert(&queue, curpA, curpB, new_type + child_types[1], child_types[1], child_lbounds[1], child_ubounds[1])) \
-                        return PyErr_NoMemory(); \
+                    if (child_ubounds[1] >= lower_bound) { \
+                        /* insert 2nd best new child to the queue */ \
+                        if (!fogsaa_queue_insert(&queue, curpA, curpB, new_type + child_types[1], child_types[1], child_lbounds[1], child_ubounds[1])) \
+                            return PyErr_NoMemory(); \
+                    } \
                 } else if (curpA <= nA - 1) { \
                     /* we're at the end of B, so must put a gap in B */ \
                     new_type = FOGSAA_CELL_GAP_B; \
@@ -6116,6 +6119,8 @@ exit: \
                     new_score = curr->present_score + (curr->type == FOGSAA_CELL_GAP_A ? gap_extend_A : gap_open_A); \
                     /* again, find what 3rd child was */ \
                     if (7 - type_total == FOGSAA_CELL_MATCH_MISMATCH) { \
+                        kA = sA[curpA]; \
+                        kB = sB[curpB]; \
                         FOGSAA_CALCULATE_SCORE(curr->present_score + (align_score), next_lower, next_upper, curpA + 1, curpB + 1); \
                     } else { \
                         /* 3rd child was FOGSAA_CELL_GAP_B */ \
@@ -6132,6 +6137,8 @@ exit: \
                     new_score = curr->present_score + (curr->type == FOGSAA_CELL_GAP_B ? gap_extend_B : gap_open_B); \
                     /* again, find what 3rd child was */ \
                     if (7 - type_total == FOGSAA_CELL_MATCH_MISMATCH) { \
+                        kA = sA[curpA]; \
+                        kB = sB[curpB]; \
                         FOGSAA_CALCULATE_SCORE(curr->present_score + (align_score), next_lower, next_upper, curpA + 1, curpB + 1); \
                     } else { \
                         /* 3rd child was FOGSAA_CELL_GAP_A */ \
@@ -6142,11 +6149,15 @@ exit: \
                         } \
                     } \
                 } \
-                if (!fogsaa_queue_insert(&queue, curpA, curpB, 7, 7 - type_total, next_lower, next_upper)) \
-                    return PyErr_NoMemory(); \
+                if (next_upper >= lower_bound) { \
+                    if (!fogsaa_queue_insert(&queue, curpA, curpB, 7, 7 - type_total, next_lower, next_upper)) \
+                        return PyErr_NoMemory(); \
+                } \
             } else if (type_total == FOGSAA_CELL_MATCH_MISMATCH + FOGSAA_CELL_GAP_A + FOGSAA_CELL_GAP_B) { \
                 /* current is a 3rd child */ \
                 if (new_type == FOGSAA_CELL_MATCH_MISMATCH) { \
+                    kA = sA[curpA]; \
+                    kB = sB[curpB]; \
                     npA = curpA + 1; \
                     npB = curpB + 1; \
                     new_score = curr->present_score + (align_score); \
