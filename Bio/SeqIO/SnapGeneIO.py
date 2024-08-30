@@ -300,34 +300,31 @@ class SnapGeneIterator(SequenceIterator):
         iterator will always return a single record.
         """
         super().__init__(source, mode="b", fmt="SnapGene")
-        self.records = self.iterate(self.stream)
+        self.packets = _iterate(self.stream)
+        try:
+            packet_type, length, data = next(self.packets)
+        except StopIteration:
+            raise ValueError("Empty file.") from None
+        if packet_type != 0x09:
+            raise ValueError("The file does not start with a SnapGene cookie packet")
+        _parse_cookie_packet(length, data)
+        self._counter = 0
 
     def parse(self, handle):
         """To be removed."""
         return
 
     def __next__(self):
-        return next(self.records)
-
-    def iterate(self, handle):
-        """Iterate over the records in the SnapGene file."""
-        packets = _iterate(handle)
-        try:
-            packet_type, length, data = next(packets)
-        except StopIteration:
-            raise ValueError("Empty file.") from None
-
-        if packet_type != 0x09:
-            raise ValueError("The file does not start with a SnapGene cookie packet")
-        _parse_cookie_packet(length, data)
-
+        if self._counter == 1:
+            raise StopIteration
+        packets = self.packets
         record = SeqRecord(None)
-        for packet_type, length, data in packets:
+        for packet in packets:
+            packet_type, length, data = packet
             handler = _packet_handlers.get(packet_type)
             if handler is not None:
                 handler(length, data, record)
-
         if not record.seq:
             raise ValueError("No DNA packet in file")
-
-        yield record
+        self._counter += 1
+        return record
