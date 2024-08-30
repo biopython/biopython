@@ -832,12 +832,6 @@ class SffIterator(SequenceIterator):
         super().__init__(source, mode="b", fmt="SFF")
         self.trim = trim
         stream = self.stream
-        try:
-            if 0 != stream.tell():
-                raise ValueError("Not at start of file, offset %i" % stream.tell())
-        except AttributeError:
-            # Probably a network handle or something like that
-            pass
         (
             self._offset,
             self.index_offset,
@@ -850,31 +844,34 @@ class SffIterator(SequenceIterator):
         # Now on to the reads...
         self.read_flow_fmt = ">%iH" % number_of_flows_per_read
         self.read_flow_size = struct.calcsize(self.read_flow_fmt)
+        self._read_counter = 0
 
     def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
-        records = self.iterate(handle)
-        return records
+        """To be removed."""
+        return
 
-    def iterate(self, handle):
-        """Parse the file and generate SeqRecord objects."""
-        # The spec allows for the index block to be before or even in the middle
-        # of the reads. We can check that if we keep track of our position
-        # in the file...
+    def __next__(self):
+        stream = self.stream
+        if self._read_counter == self.number_of_reads:
+            self._read_counter = None  # check EOF only once
+            self._check_eof(stream)
+            raise StopIteration
+        elif self._read_counter is None:
+            raise StopIteration
         index_offset = self.index_offset
-        for read in range(self.number_of_reads):
-            if self._offset == index_offset:
-                index_length = self.index_length
-                offset = index_offset + index_length
-                if offset % 8:
-                    offset += 8 - (offset % 8)
-                assert offset % 8 == 0
-                handle.seek(offset)
-                self._offset = offset
-            yield self._sff_read_seq_record(handle)
-        self._check_eof(handle)
+        if self._offset == index_offset:
+            index_length = self.index_length
+            offset = index_offset + index_length
+            if offset % 8:
+                offset += 8 - (offset % 8)
+            assert offset % 8 == 0
+            stream.seek(offset)
+            self._offset = offset
+        record = self._sff_read_seq_record(self.stream)
+        self._read_counter += 1
+        return record
 
-    def _sff_read_seq_record(self, handle):
+    def _sff_read_seq_record(self, stream):
         """Parse the next read in the file, return data as a SeqRecord (PRIVATE)."""
         # Now on to the reads...
         # the read header format (fixed part):
@@ -896,7 +893,7 @@ class SffIterator(SequenceIterator):
             clip_qual_right,
             clip_adapter_left,
             clip_adapter_right,
-        ) = struct.unpack(read_header_fmt, handle.read(read_header_size))
+        ) = struct.unpack(read_header_fmt, stream.read(read_header_size))
         if clip_qual_left:
             clip_qual_left -= 1  # python counting
         if clip_adapter_left:
@@ -906,9 +903,9 @@ class SffIterator(SequenceIterator):
                 "Malformed read header, says length is %i" % read_header_length
             )
         # now the name and any padding (remainder of header)
-        name = handle.read(name_length).decode()
+        name = stream.read(name_length).decode()
         padding = read_header_length - read_header_size - name_length
-        if handle.read(padding).count(_null) != padding:
+        if stream.read(padding).count(_null) != padding:
             import warnings
 
             from Bio import BiopythonParserWarning
@@ -921,17 +918,17 @@ class SffIterator(SequenceIterator):
         self._offset += read_header_length
         # now the flowgram values, flowgram index, bases and qualities
         # NOTE - assuming flowgram_format==1, which means struct type H
-        flow_values = handle.read(self.read_flow_size)  # unpack later if needed
+        flow_values = stream.read(self.read_flow_size)  # unpack later if needed
         temp_fmt = ">%iB" % seq_len  # used for flow index and quals
-        flow_index = handle.read(seq_len)  # unpack later if needed
-        seq = handle.read(seq_len)  # Leave as bytes for Seq object
-        quals = list(struct.unpack(temp_fmt, handle.read(seq_len)))
+        flow_index = stream.read(seq_len)  # unpack later if needed
+        seq = stream.read(seq_len)  # Leave as bytes for Seq object
+        quals = list(struct.unpack(temp_fmt, stream.read(seq_len)))
         self._offset += self.read_flow_size + seq_len * 3
         # now any padding...
         padding = (self.read_flow_size + seq_len * 3) % 8
         if padding:
             padding = 8 - padding
-            if handle.read(padding).count(_null) != padding:
+            if stream.read(padding).count(_null) != padding:
                 import warnings
 
                 from Bio import BiopythonParserWarning
@@ -1017,12 +1014,12 @@ class SffIterator(SequenceIterator):
         # Return the record and then continue...
         return record
 
-    def _check_eof(self, handle):
+    def _check_eof(self, stream):
         """Check final padding is OK (8 byte alignment) and file ends (PRIVATE).
 
         Will attempt to spot apparent SFF file concatenation and give an error.
 
-        Will not attempt to seek, only moves the handle forward.
+        Will not attempt to seek, only moves the stream forward.
         """
         offset = self._offset
         extra = b""
@@ -1040,18 +1037,18 @@ class SffIterator(SequenceIterator):
                 )
             # Doing read to jump the index rather than a seek
             # in case this is a network handle or similar
-            handle.read(index_length)
+            stream.read(index_length)
             self._offset += index_length
             offset = index_offset + index_length
             if offset != self._offset:
                 raise ValueError(
                     "Wanted %i, got %i, index is %i to %i"
-                    % (offset, handle.tell(), index_offset, index_offset + index_length)
+                    % (offset, stream.tell(), index_offset, index_offset + index_length)
                 )
 
         if offset % 8:
             padding = 8 - (offset % 8)
-            extra = handle.read(padding)
+            extra = stream.read(padding)
             self._offset += padding
 
         if padding >= 4 and extra[-4:] == _sff:
@@ -1093,7 +1090,7 @@ class SffIterator(SequenceIterator):
                 "Wanted offset %i %% 8 = %i to be zero" % (offset, offset % 8)
             )
         # Should now be at the end of the file...
-        extra = handle.read(4)
+        extra = stream.read(4)
         self._offset += 4
         if extra == _sff:
             raise ValueError(

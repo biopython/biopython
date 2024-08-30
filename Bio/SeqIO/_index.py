@@ -157,6 +157,7 @@ class SffRandomAccess(SeqFileRandomAccess):
         """Return the raw record from the file as a bytes string."""
         handle = self._handle
         handle.seek(offset)
+        self.stream = handle
         return SeqIO.SffIO._sff_read_raw_record(handle, self.number_of_flows_per_read)
 
 
