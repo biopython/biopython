@@ -308,16 +308,15 @@ class SnapGeneIterator(SequenceIterator):
         if packet_type != 0x09:
             raise ValueError("The file does not start with a SnapGene cookie packet")
         _parse_cookie_packet(length, data)
-        self._counter = 0
 
     def parse(self, handle):
         """To be removed."""
         return
 
     def __next__(self):
-        if self._counter == 1:
-            raise StopIteration
         packets = self.packets
+        if packets is None:
+            raise StopIteration
         record = SeqRecord(None)
         for packet in packets:
             packet_type, length, data = packet
@@ -326,5 +325,5 @@ class SnapGeneIterator(SequenceIterator):
                 handler(length, data, record)
         if not record.seq:
             raise ValueError("No DNA packet in file")
-        self._counter += 1
+        self.packets = None  # A SnapGene file contains only one sequence
         return record
