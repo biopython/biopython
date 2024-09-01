@@ -995,6 +995,17 @@ def FastqGeneralIterator(source: _TextIOSource) -> Iterator[tuple[str, str, str]
 class FastqPhredIterator(SequenceIterator[str]):
     """Parser for FASTQ files."""
 
+    assert SANGER_SCORE_OFFSET == ord("!")
+    # Originally, I used a list expression for each record:
+    #
+    # qualities = [ord(letter)-SANGER_SCORE_OFFSET for letter in quality_string]
+    #
+    # Precomputing is faster, perhaps partly by avoiding the subtractions.
+    q_mapping = {
+        chr(letter): letter - SANGER_SCORE_OFFSET
+        for letter in range(SANGER_SCORE_OFFSET, 94 + SANGER_SCORE_OFFSET)
+    }
+
     def __init__(
         self,
         source: _TextIOSource,
@@ -1077,41 +1088,35 @@ class FastqPhredIterator(SequenceIterator[str]):
         if alphabet is not None:
             raise ValueError("The alphabet argument is no longer supported")
         super().__init__(source, mode="t", fmt="Fastq")
+        self._data = FastqGeneralIterator(self.stream)
 
     def parse(self, handle: IO[str]) -> Iterator[SeqRecord]:
-        """Start parsing the file, and return a SeqRecord iterator."""
-        records = self.iterate(handle)
-        return records
+        """To be removed."""
+        raise
 
-    def iterate(self, handle: IO[str]) -> Iterator[SeqRecord]:
+    def __next__(self) -> SeqRecord:
         """Parse the file and generate SeqRecord objects."""
-        assert SANGER_SCORE_OFFSET == ord("!")
-        # Originally, I used a list expression for each record:
-        #
-        # qualities = [ord(letter)-SANGER_SCORE_OFFSET for letter in quality_string]
-        #
-        # Precomputing is faster, perhaps partly by avoiding the subtractions.
-        q_mapping = {
-            chr(letter): letter - SANGER_SCORE_OFFSET
-            for letter in range(SANGER_SCORE_OFFSET, 94 + SANGER_SCORE_OFFSET)
-        }
 
-        for title_line, seq_string, quality_string in FastqGeneralIterator(handle):
-            descr = title_line
-            id = descr.split()[0]
-            name = id
-            record = SeqRecord(Seq(seq_string), id=id, name=name, description=descr)
-            try:
-                qualities = [q_mapping[letter2] for letter2 in quality_string]
-            except KeyError:
-                raise ValueError("Invalid character in quality string") from None
-            # For speed, will now use a dirty trick to speed up assigning the
-            # qualities. We do this to bypass the length check imposed by the
-            # per-letter-annotations restricted dict (as this has already been
-            # checked by FastqGeneralIterator). This is equivalent to:
-            # record.letter_annotations["phred_quality"] = qualities
-            dict.__setitem__(record._per_letter_annotations, "phred_quality", qualities)
-            yield record
+        q_mapping = FastqPhredIterator.q_mapping
+        try:
+            title_line, seq_string, quality_string = next(self._data)
+        except StopIteration:
+            raise StopIteration from None
+        descr = title_line
+        id = descr.split()[0]
+        name = id
+        record = SeqRecord(Seq(seq_string), id=id, name=name, description=descr)
+        try:
+            qualities = [q_mapping[letter2] for letter2 in quality_string]
+        except KeyError:
+            raise ValueError("Invalid character in quality string") from None
+        # For speed, will now use a dirty trick to speed up assigning the
+        # qualities. We do this to bypass the length check imposed by the
+        # per-letter-annotations restricted dict (as this has already been
+        # checked by FastqGeneralIterator). This is equivalent to:
+        # record.letter_annotations["phred_quality"] = qualities
+        dict.__setitem__(record._per_letter_annotations, "phred_quality", qualities)
+        return record
 
 
 def FastqSolexaIterator(
@@ -1394,37 +1399,37 @@ class QualPhredIterator(SequenceIterator):
         if alphabet is not None:
             raise ValueError("The alphabet argument is no longer supported")
         super().__init__(source, mode="t", fmt="QUAL")
-
-    def parse(self, handle: IO) -> Iterator[SeqRecord]:
-        """Start parsing the file, and return a SeqRecord iterator."""
-        records = self.iterate(handle)
-        return records
-
-    def iterate(self, handle: IO) -> Iterator[SeqRecord]:
-        """Parse the file and generate SeqRecord objects."""
         # Skip any text before the first record (e.g. blank lines, comments)
-        for line in handle:
+        for line in self.stream:
             if line[0] == ">":
                 break
         else:
-            return
+            line = None
+        self._line = line
 
+    def parse(self, handle: IO) -> Iterator[SeqRecord]:
+        """To be removed."""
+        raise
+
+    def __next__(self) -> SeqRecord:
+        """Parse the file and generate SeqRecord objects."""
+
+        line = self._line
+        if line is None:
+            raise StopIteration
         while True:
-            if line[0] != ">":
-                raise ValueError(
-                    "Records in Fasta files should start with '>' character"
-                )
             descr = line[1:].rstrip()
             id = descr.split()[0]
             name = id
 
             qualities: list[int] = []
-            for line in handle:
+            for line in self.stream:
                 if line[0] == ">":
                     break
                 qualities.extend(int(word) for word in line.split())
             else:
                 line = None
+            self._line = line
 
             if qualities and min(qualities) < 0:
                 warnings.warn(
@@ -1440,11 +1445,7 @@ class QualPhredIterator(SequenceIterator):
             # Dirty trick to speed up this line:
             # record.letter_annotations["phred_quality"] = qualities
             dict.__setitem__(record._per_letter_annotations, "phred_quality", qualities)
-            yield record
-
-            if line is None:
-                return  # StopIteration
-        raise ValueError("Unrecognised QUAL record format.")
+            return record
 
 
 assert SANGER_SCORE_OFFSET == ord("!")
