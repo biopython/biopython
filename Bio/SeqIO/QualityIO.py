@@ -1090,9 +1090,9 @@ class FastqPhredIterator(SequenceIterator[str]):
         super().__init__(source, mode="t", fmt="Fastq")
         self._data = FastqGeneralIterator(self.stream)
 
-    def parse(self, handle: IO[str]) -> Iterator[SeqRecord]:
+    def parse(self, handle):
         """To be removed."""
-        raise
+        return
 
     def __next__(self) -> SeqRecord:
         """Parse the file and generate SeqRecord objects."""
@@ -1407,9 +1407,9 @@ class QualPhredIterator(SequenceIterator):
             line = None
         self._line = line
 
-    def parse(self, handle: IO) -> Iterator[SeqRecord]:
+    def parse(self, handle):
         """To be removed."""
-        raise
+        return
 
     def __next__(self) -> SeqRecord:
         """Parse the file and generate SeqRecord objects."""
