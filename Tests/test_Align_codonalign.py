@@ -7,7 +7,15 @@
 
 import unittest
 
-import numpy as np
+try:
+    import numpy as np
+except ImportError:
+    from Bio import MissingPythonDependencyError
+
+    raise MissingPythonDependencyError(
+        "Install numpy if you want to use Bio.Align."
+    ) from None
+
 
 from Bio import Align
 from Bio import SeqIO
@@ -8375,33 +8383,26 @@ gi|6478867|gb|M37394.2|RATEGFR      AGAGTACCTGCGGGTGGCACCGCCAAGCAGTGAGTTTAGTGGAG
             self.assertAlmostEqual(ds_cal, ds_corr, places=4)
 
 
-try:
-    import numpy
-except ImportError:
-    numpy = None
-
-if numpy:
-
-    class Test_MK(unittest.TestCase):
-        def test_mk(self):
-            aligner = CodonAligner()
-            nucleotide_records = SeqIO.index("codonalign/drosophila.fasta", "fasta")
-            protein_alignment = Align.read("codonalign/adh.aln", "clustal")
-            self.assertEqual(len(protein_alignment.sequences), 27)
-            codon_alignments = []
-            protein_record = protein_alignment.sequences[0]
-            nucleotide_record = nucleotide_records[protein_record.id]
-            self.assertEqual(nucleotide_record.id, protein_record.id)
-            alignments = aligner.align(protein_record, nucleotide_record)
-            self.assertEqual(len(alignments), 1)
-            alignment = next(alignments)
-            codon_alignments.append(alignment)
-            self.assertTrue(
-                np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+class Test_MK(unittest.TestCase):
+    def test_mk(self):
+        aligner = CodonAligner()
+        nucleotide_records = SeqIO.index("codonalign/drosophila.fasta", "fasta")
+        protein_alignment = Align.read("codonalign/adh.aln", "clustal")
+        self.assertEqual(len(protein_alignment.sequences), 27)
+        codon_alignments = []
+        protein_record = protein_alignment.sequences[0]
+        nucleotide_record = nucleotide_records[protein_record.id]
+        self.assertEqual(nucleotide_record.id, protein_record.id)
+        alignments = aligner.align(protein_record, nucleotide_record)
+        self.assertEqual(len(alignments), 1)
+        alignment = next(alignments)
+        codon_alignments.append(alignment)
+        self.assertTrue(
+            np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|9217|e         0 M  A  F  T  L  T  N  K  N  V  V  F  V  A  G  L  G  G  I  G  
 gi|9217|e         0 ATGGCGTTTACCTTGACCAACAAGAACGTGGTTTTCGTGGCCGGTCTGGGAGGCATTGGT
 
@@ -8441,20 +8442,20 @@ gi|9217|e       660 CAGAACTTTGTGAAGGCCATCGAGCTGAACCAGAACGGTGCCATCTGGAAACTGGACTTG
 gi|9217|e       240 G  T  L  E  A  I  Q  W  S  K  H  W  D  S  G  I   256
 gi|9217|e       720 GGCACCCTGGAGGCCATCCAGTGGTCCAAGCACTGGGACTCCGGCATC 768
 """,
-            )
-            protein_record = protein_alignment.sequences[1]
-            nucleotide_record = nucleotide_records[protein_record.id]
-            self.assertEqual(nucleotide_record.id, protein_record.id)
-            alignments = aligner.align(protein_record, nucleotide_record)
-            self.assertEqual(len(alignments), 1)
-            alignment = next(alignments)
-            codon_alignments.append(alignment)
-            self.assertTrue(
-                np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        protein_record = protein_alignment.sequences[1]
+        nucleotide_record = nucleotide_records[protein_record.id]
+        self.assertEqual(nucleotide_record.id, protein_record.id)
+        alignments = aligner.align(protein_record, nucleotide_record)
+        self.assertEqual(len(alignments), 1)
+        alignment = next(alignments)
+        codon_alignments.append(alignment)
+        self.assertTrue(
+            np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|9219|e         0 M  A  F  T  L  T  N  K  N  V  V  F  V  A  G  L  G  G  I  G  
 gi|9219|e         0 ATGGCGTTTACCTTGACCAACAAGAACGTGGTTTTCGTGGCCGGTCTGGGAGGCATTGGT
 
@@ -8494,20 +8495,20 @@ gi|9219|e       660 CAGAACTTTGTGAAGGCCATCGAGCTGAACCAGAACGGTGCCATCTGGAAACTGGACTTG
 gi|9219|e       240 G  T  L  E  A  I  Q  W  S  K  H  W  D  S  G  I   256
 gi|9219|e       720 GGCACCCTGGAGGCCATCCAGTGGTCCAAGCACTGGGACTCCGGCATC 768
 """,
-            )
-            protein_record = protein_alignment.sequences[2]
-            nucleotide_record = nucleotide_records[protein_record.id]
-            self.assertEqual(nucleotide_record.id, protein_record.id)
-            alignments = aligner.align(protein_record, nucleotide_record)
-            self.assertEqual(len(alignments), 1)
-            alignment = next(alignments)
-            codon_alignments.append(alignment)
-            self.assertTrue(
-                np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        protein_record = protein_alignment.sequences[2]
+        nucleotide_record = nucleotide_records[protein_record.id]
+        self.assertEqual(nucleotide_record.id, protein_record.id)
+        alignments = aligner.align(protein_record, nucleotide_record)
+        self.assertEqual(len(alignments), 1)
+        alignment = next(alignments)
+        codon_alignments.append(alignment)
+        self.assertTrue(
+            np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|9221|e         0 M  A  F  T  L  T  N  K  N  V  V  F  V  A  G  L  G  G  I  G  
 gi|9221|e         0 ATGGCGTTTACCTTGACCAACAAGAACGTGGTTTTCGTGGCCGGTCTGGGAGGCATTGGT
 
@@ -8547,20 +8548,20 @@ gi|9221|e       660 CAGAACTTTGTCAAGGCCATCGAGCTGAACCAGAACGGTGCCATCTGGAAACTGGACTTG
 gi|9221|e       240 G  T  L  E  A  I  Q  W  S  K  H  W  D  S  G  I   256
 gi|9221|e       720 GGTACCCTGGAGGCCATCCAGTGGTCCAAGCACTGGGACTCCGGCATC 768
 """,
-            )
-            protein_record = protein_alignment.sequences[3]
-            nucleotide_record = nucleotide_records[protein_record.id]
-            self.assertEqual(nucleotide_record.id, protein_record.id)
-            alignments = aligner.align(protein_record, nucleotide_record)
-            self.assertEqual(len(alignments), 1)
-            alignment = next(alignments)
-            codon_alignments.append(alignment)
-            self.assertTrue(
-                np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        protein_record = protein_alignment.sequences[3]
+        nucleotide_record = nucleotide_records[protein_record.id]
+        self.assertEqual(nucleotide_record.id, protein_record.id)
+        alignments = aligner.align(protein_record, nucleotide_record)
+        self.assertEqual(len(alignments), 1)
+        alignment = next(alignments)
+        codon_alignments.append(alignment)
+        self.assertTrue(
+            np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|9223|e         0 M  A  F  T  L  T  N  K  N  V  V  F  V  A  G  L  G  G  I  G  
 gi|9223|e         0 ATGGCGTTTACCTTGACCAACAAGAACGTGGTTTTCGTGGCCGGTCTGGGAGGCATTGGT
 
@@ -8600,20 +8601,20 @@ gi|9223|e       660 CAGAACTTTGTGAAGGCCATCGAGCTGAACCAGAACGGTGCCATCTGGAAACTGGACTTG
 gi|9223|e       240 G  T  L  E  A  I  Q  W  S  K  H  W  D  S  G  I   256
 gi|9223|e       720 GGCACCCTGGAGGCCATCCAGTGGTCCAAGCACTGGGACTCCGGCATC 768
 """,
-            )
-            protein_record = protein_alignment.sequences[4]
-            nucleotide_record = nucleotide_records[protein_record.id]
-            self.assertEqual(nucleotide_record.id, protein_record.id)
-            alignments = aligner.align(protein_record, nucleotide_record)
-            self.assertEqual(len(alignments), 1)
-            alignment = next(alignments)
-            codon_alignments.append(alignment)
-            self.assertTrue(
-                np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        protein_record = protein_alignment.sequences[4]
+        nucleotide_record = nucleotide_records[protein_record.id]
+        self.assertEqual(nucleotide_record.id, protein_record.id)
+        alignments = aligner.align(protein_record, nucleotide_record)
+        self.assertEqual(len(alignments), 1)
+        alignment = next(alignments)
+        codon_alignments.append(alignment)
+        self.assertTrue(
+            np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|9225|e         0 M  A  F  T  L  T  N  K  N  V  V  F  V  A  G  L  G  G  I  G  
 gi|9225|e         0 ATGGCGTTTACCTTGACCAACAAGAACGTGGTTTTCGTGGCCGGTCTGGGAGGCATTGGT
 
@@ -8653,20 +8654,20 @@ gi|9225|e       660 CAGAACTTTGTCAAGGCCATCGAGCTGAACCAGAACGGTGCCATCTGGAAACTGGACTTG
 gi|9225|e       240 G  T  L  E  A  I  Q  W  S  K  H  W  D  S  G  I   256
 gi|9225|e       720 GGTACCCTGGAGGCCATCCAGTGGTCCAAGCACTGGGACTCCGGCATC 768
 """,
-            )
-            protein_record = protein_alignment.sequences[5]
-            nucleotide_record = nucleotide_records[protein_record.id]
-            self.assertEqual(nucleotide_record.id, protein_record.id)
-            alignments = aligner.align(protein_record, nucleotide_record)
-            self.assertEqual(len(alignments), 1)
-            alignment = next(alignments)
-            codon_alignments.append(alignment)
-            self.assertTrue(
-                np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        protein_record = protein_alignment.sequences[5]
+        nucleotide_record = nucleotide_records[protein_record.id]
+        self.assertEqual(nucleotide_record.id, protein_record.id)
+        alignments = aligner.align(protein_record, nucleotide_record)
+        self.assertEqual(len(alignments), 1)
+        alignment = next(alignments)
+        codon_alignments.append(alignment)
+        self.assertTrue(
+            np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|9227|e         0 M  A  F  T  L  T  N  K  N  V  V  F  V  A  G  L  G  G  I  G  
 gi|9227|e         0 ATGGCGTTTACCTTGACCAACAAGAACGTGGTTTTCGTGGCCGGTCTGGGAGGCATTGGT
 
@@ -8706,20 +8707,20 @@ gi|9227|e       660 CAGAACTTTGTGAAGGCCATCGAGCTGAACCAGAACGGTGCCATCTGGAAACTGGACTTG
 gi|9227|e       240 G  T  L  E  A  I  Q  W  S  K  H  W  D  S  G  I   256
 gi|9227|e       720 GGCACCCTGGAGGCCATCCAGTGGTCCAAGCACTGGGACTCCGGCATC 768
 """,
-            )
-            protein_record = protein_alignment.sequences[6]
-            nucleotide_record = nucleotide_records[protein_record.id]
-            self.assertEqual(nucleotide_record.id, protein_record.id)
-            alignments = aligner.align(protein_record, nucleotide_record)
-            self.assertEqual(len(alignments), 1)
-            alignment = next(alignments)
-            codon_alignments.append(alignment)
-            self.assertTrue(
-                np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        protein_record = protein_alignment.sequences[6]
+        nucleotide_record = nucleotide_records[protein_record.id]
+        self.assertEqual(nucleotide_record.id, protein_record.id)
+        alignments = aligner.align(protein_record, nucleotide_record)
+        self.assertEqual(len(alignments), 1)
+        alignment = next(alignments)
+        codon_alignments.append(alignment)
+        self.assertTrue(
+            np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|9229|e         0 M  A  F  T  L  T  N  K  N  V  V  F  V  A  G  L  G  G  I  G  
 gi|9229|e         0 ATGGCGTTTACCTTGACCAACAAGAACGTGGTTTTCGTGGCCGGTCTGGGAGGCATTGGT
 
@@ -8759,20 +8760,20 @@ gi|9229|e       660 CAGAACTTTGTGAAGGCCATCGAGCTGAACCAGAACGGTGCCATCTGGAAACTGGACTTG
 gi|9229|e       240 G  T  L  E  A  I  Q  W  S  K  H  W  D  S  G  I   256
 gi|9229|e       720 GGCACCCTGGAGGCCATCCAGTGGTCCAAGCACTGGGACTCCGGCATC 768
 """,
-            )
-            protein_record = protein_alignment.sequences[7]
-            nucleotide_record = nucleotide_records[protein_record.id]
-            self.assertEqual(nucleotide_record.id, protein_record.id)
-            alignments = aligner.align(protein_record, nucleotide_record)
-            self.assertEqual(len(alignments), 1)
-            alignment = next(alignments)
-            codon_alignments.append(alignment)
-            self.assertTrue(
-                np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        protein_record = protein_alignment.sequences[7]
+        nucleotide_record = nucleotide_records[protein_record.id]
+        self.assertEqual(nucleotide_record.id, protein_record.id)
+        alignments = aligner.align(protein_record, nucleotide_record)
+        self.assertEqual(len(alignments), 1)
+        alignment = next(alignments)
+        codon_alignments.append(alignment)
+        self.assertTrue(
+            np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|9231|e         0 M  A  F  T  L  T  N  K  N  V  V  F  V  A  G  L  G  G  I  G  
 gi|9231|e         0 ATGGCGTTTACCTTGACCAACAAGAACGTGGTTTTCGTGGCCGGTCTGGGAGGCATTGGT
 
@@ -8812,20 +8813,20 @@ gi|9231|e       660 CAGAACTTTGTGAAGGCCATCGAGCTGAACCAGAACGGTGCTATCTGGAAACTGGACTTG
 gi|9231|e       240 G  T  L  E  A  I  Q  W  S  K  H  W  D  S  G  I   256
 gi|9231|e       720 GGCACCCTGGAGGCCATCCAGTGGTCCAAGCACTGGGACTCCGGCATC 768
 """,
-            )
-            protein_record = protein_alignment.sequences[8]
-            nucleotide_record = nucleotide_records[protein_record.id]
-            self.assertEqual(nucleotide_record.id, protein_record.id)
-            alignments = aligner.align(protein_record, nucleotide_record)
-            self.assertEqual(len(alignments), 1)
-            alignment = next(alignments)
-            codon_alignments.append(alignment)
-            self.assertTrue(
-                np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        protein_record = protein_alignment.sequences[8]
+        nucleotide_record = nucleotide_records[protein_record.id]
+        self.assertEqual(nucleotide_record.id, protein_record.id)
+        alignments = aligner.align(protein_record, nucleotide_record)
+        self.assertEqual(len(alignments), 1)
+        alignment = next(alignments)
+        codon_alignments.append(alignment)
+        self.assertTrue(
+            np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|9233|e         0 M  A  F  T  L  T  N  K  N  V  V  F  V  A  G  L  G  G  I  G  
 gi|9233|e         0 ATGGCGTTTACCTTGACCAACAAGAACGTGGTTTTCGTGGCCGGTCTGGGAGGCATTGGT
 
@@ -8865,20 +8866,20 @@ gi|9233|e       660 CAGAACTTTGTGAAGGCCATCGAGCTGAACCAGAACGGTGCCATCTGGAAACTGGACTTG
 gi|9233|e       240 G  T  L  E  A  I  Q  W  S  K  H  W  D  S  G  I   256
 gi|9233|e       720 GGCACCCTGGAGGCCATCCAGTGGTCCAAGCACTGGGACTCCGGCATC 768
 """,
-            )
-            protein_record = protein_alignment.sequences[9]
-            nucleotide_record = nucleotide_records[protein_record.id]
-            self.assertEqual(nucleotide_record.id, protein_record.id)
-            alignments = aligner.align(protein_record, nucleotide_record)
-            self.assertEqual(len(alignments), 1)
-            alignment = next(alignments)
-            codon_alignments.append(alignment)
-            self.assertTrue(
-                np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        protein_record = protein_alignment.sequences[9]
+        nucleotide_record = nucleotide_records[protein_record.id]
+        self.assertEqual(nucleotide_record.id, protein_record.id)
+        alignments = aligner.align(protein_record, nucleotide_record)
+        self.assertEqual(len(alignments), 1)
+        alignment = next(alignments)
+        codon_alignments.append(alignment)
+        self.assertTrue(
+            np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|9235|e         0 M  A  F  T  L  T  N  K  N  V  V  F  V  A  G  L  G  G  I  G  
 gi|9235|e         0 ATGGCGTTTACCTTGACCAACAAGAACGTGGTTTTCGTGGCCGGTCTGGGAGGCATTGGT
 
@@ -8918,20 +8919,20 @@ gi|9235|e       660 CAGAACTTTGTGAAGGCCATCGAGCTGAACCAGAACGGTGCCATCTGGAAACTGGACTTG
 gi|9235|e       240 G  T  L  E  A  I  Q  W  S  K  H  W  D  S  G  I   256
 gi|9235|e       720 GGCACCCTGGAGGCCATCCAGTGGTCCAAGCATTGGGACTCCGGCATC 768
 """,
-            )
-            protein_record = protein_alignment.sequences[10]
-            nucleotide_record = nucleotide_records[protein_record.id]
-            self.assertEqual(nucleotide_record.id, protein_record.id)
-            alignments = aligner.align(protein_record, nucleotide_record)
-            self.assertEqual(len(alignments), 1)
-            alignment = next(alignments)
-            codon_alignments.append(alignment)
-            self.assertTrue(
-                np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        protein_record = protein_alignment.sequences[10]
+        nucleotide_record = nucleotide_records[protein_record.id]
+        self.assertEqual(nucleotide_record.id, protein_record.id)
+        alignments = aligner.align(protein_record, nucleotide_record)
+        self.assertEqual(len(alignments), 1)
+        alignment = next(alignments)
+        codon_alignments.append(alignment)
+        self.assertTrue(
+            np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|9237|e         0 M  A  F  T  L  T  N  K  N  V  V  F  V  A  G  L  G  G  I  G  
 gi|9237|e         0 ATGGCGTTTACCTTGACCAACAAGAACGTGGTTTTCGTGGCCGGTCTGGGAGGCATTGGT
 
@@ -8971,20 +8972,20 @@ gi|9237|e       660 CAGAACTTTGTGAAGGCCATCGAGCTGAACCAGAACGGTGCCATCTGGAAACTGGACTTG
 gi|9237|e       240 G  T  L  E  A  I  Q  W  S  K  H  W  D  S  G  I   256
 gi|9237|e       720 GGCACCCTGGAGGCCATCCAGTGGTCCAAGCACTGGGACTCCGGCATC 768
 """,
-            )
-            protein_record = protein_alignment.sequences[11]
-            nucleotide_record = nucleotide_records[protein_record.id]
-            self.assertEqual(nucleotide_record.id, protein_record.id)
-            alignments = aligner.align(protein_record, nucleotide_record)
-            self.assertEqual(len(alignments), 1)
-            alignment = next(alignments)
-            codon_alignments.append(alignment)
-            self.assertTrue(
-                np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        protein_record = protein_alignment.sequences[11]
+        nucleotide_record = nucleotide_records[protein_record.id]
+        self.assertEqual(nucleotide_record.id, protein_record.id)
+        alignments = aligner.align(protein_record, nucleotide_record)
+        self.assertEqual(len(alignments), 1)
+        alignment = next(alignments)
+        codon_alignments.append(alignment)
+        self.assertTrue(
+            np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|9239|e         0 M  A  F  T  L  T  N  K  N  V  V  F  V  A  G  L  G  G  I  G  
 gi|9239|e         0 ATGGCGTTTACCTTGACCAACAAGAACGTGGTTTTCGTGGCCGGTCTGGGAGGCATTGGT
 
@@ -9024,20 +9025,20 @@ gi|9239|e       660 CAGAACTTTGTCAAGGCCATCGAGCTGAACCAGAACGGTGCCATCTGGAAACTGGACTTG
 gi|9239|e       240 G  T  L  E  A  I  Q  W  S  K  H  W  D  S  G  I   256
 gi|9239|e       720 GGCACCCTGGAGGCCATCCAGTGGTCCAAGCACTGGGACTCCGGCATC 768
 """,
-            )
-            protein_record = protein_alignment.sequences[12]
-            nucleotide_record = nucleotide_records[protein_record.id]
-            self.assertEqual(nucleotide_record.id, protein_record.id)
-            alignments = aligner.align(protein_record, nucleotide_record)
-            self.assertEqual(len(alignments), 1)
-            alignment = next(alignments)
-            codon_alignments.append(alignment)
-            self.assertTrue(
-                np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        protein_record = protein_alignment.sequences[12]
+        nucleotide_record = nucleotide_records[protein_record.id]
+        self.assertEqual(nucleotide_record.id, protein_record.id)
+        alignments = aligner.align(protein_record, nucleotide_record)
+        self.assertEqual(len(alignments), 1)
+        alignment = next(alignments)
+        codon_alignments.append(alignment)
+        self.assertTrue(
+            np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|9097|e         0 M  A  F  T  L  T  N  K  N  V  I  F  V  A  G  L  G  G  I  G  
 gi|9097|e         0 ATGGCGTTTACTTTGACCAACAAGAACGTGATTTTCGTTGCCGGTCTGGGAGGCATTGGT
 
@@ -9077,20 +9078,20 @@ gi|9097|e       660 GAGAACTTCGTCAAGGCTATCGAGCTGAACCAGAACGGAGCCATCTGGAAACTGGACTTG
 gi|9097|e       240 G  T  L  E  A  I  Q  W  T  K  H  W  D  S  G  I   256
 gi|9097|e       720 GGCACCCTGGAGGCCATCCAGTGGACCAAGCACTGGGACTCCGGCATC 768
 """,
-            )
-            protein_record = protein_alignment.sequences[13]
-            nucleotide_record = nucleotide_records[protein_record.id]
-            self.assertEqual(nucleotide_record.id, protein_record.id)
-            alignments = aligner.align(protein_record, nucleotide_record)
-            self.assertEqual(len(alignments), 1)
-            alignment = next(alignments)
-            codon_alignments.append(alignment)
-            self.assertTrue(
-                np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        protein_record = protein_alignment.sequences[13]
+        nucleotide_record = nucleotide_records[protein_record.id]
+        self.assertEqual(nucleotide_record.id, protein_record.id)
+        alignments = aligner.align(protein_record, nucleotide_record)
+        self.assertEqual(len(alignments), 1)
+        alignment = next(alignments)
+        codon_alignments.append(alignment)
+        self.assertTrue(
+            np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|9099|e         0 M  A  F  T  L  T  N  K  N  V  I  F  V  A  G  L  G  G  I  G  
 gi|9099|e         0 ATGGCGTTTACTTTGACCAACAAGAACGTGATTTTCGTTGCCGGTCTGGGAGGCATTGGT
 
@@ -9130,20 +9131,20 @@ gi|9099|e       660 GAGAACTTCGTCAAGGCCATCGAGCTGAACCAGAACGGAGCCATCTGGAAACTGGACTTG
 gi|9099|e       240 G  T  L  E  A  I  Q  W  T  K  H  W  D  S  G  I   256
 gi|9099|e       720 GGCACCCTGGAGGCCATCCAGTGGACCAAGCACTGGGACTCCGGCATC 768
 """,
-            )
-            protein_record = protein_alignment.sequences[14]
-            nucleotide_record = nucleotide_records[protein_record.id]
-            self.assertEqual(nucleotide_record.id, protein_record.id)
-            alignments = aligner.align(protein_record, nucleotide_record)
-            self.assertEqual(len(alignments), 1)
-            alignment = next(alignments)
-            codon_alignments.append(alignment)
-            self.assertTrue(
-                np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        protein_record = protein_alignment.sequences[14]
+        nucleotide_record = nucleotide_records[protein_record.id]
+        self.assertEqual(nucleotide_record.id, protein_record.id)
+        alignments = aligner.align(protein_record, nucleotide_record)
+        self.assertEqual(len(alignments), 1)
+        alignment = next(alignments)
+        codon_alignments.append(alignment)
+        self.assertTrue(
+            np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|9101|e         0 M  A  F  T  L  T  N  K  N  V  I  F  V  A  G  L  G  G  I  G  
 gi|9101|e         0 ATGGCGTTTACTTTGACCAACAAGAACGTGATTTTCGTTGCCGGTCTGGGAGGCATTGGT
 
@@ -9183,20 +9184,20 @@ gi|9101|e       660 GAGAACTTCGTCAAGGCCATCGAGCTGAACCAGAACGGAGCCATCTGGAAACTGGACTTG
 gi|9101|e       240 G  T  L  E  A  I  Q  W  T  K  H  W  D  S  G  I   256
 gi|9101|e       720 GGCACCCTGGAGGCCATCCAGTGGACCAAGCACTGGGACTCCGGCATC 768
 """,
-            )
-            protein_record = protein_alignment.sequences[15]
-            nucleotide_record = nucleotide_records[protein_record.id]
-            self.assertEqual(nucleotide_record.id, protein_record.id)
-            alignments = aligner.align(protein_record, nucleotide_record)
-            self.assertEqual(len(alignments), 1)
-            alignment = next(alignments)
-            codon_alignments.append(alignment)
-            self.assertTrue(
-                np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        protein_record = protein_alignment.sequences[15]
+        nucleotide_record = nucleotide_records[protein_record.id]
+        self.assertEqual(nucleotide_record.id, protein_record.id)
+        alignments = aligner.align(protein_record, nucleotide_record)
+        self.assertEqual(len(alignments), 1)
+        alignment = next(alignments)
+        codon_alignments.append(alignment)
+        self.assertTrue(
+            np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|9103|e         0 M  A  F  T  L  T  N  K  N  V  I  F  V  A  G  L  G  G  I  G  
 gi|9103|e         0 ATGGCGTTTACTTTGACCAACAAGAACGTGATTTTCGTTGCCGGTCTGGGAGGCATCGGT
 
@@ -9236,20 +9237,20 @@ gi|9103|e       660 GAGAACTTCGTCAAGGCCATCGAGCTGAACCAGAACGGAGCCATCTGGAAACTGGACTTG
 gi|9103|e       240 G  T  L  E  A  I  Q  W  T  K  H  W  D  S  G  I   256
 gi|9103|e       720 GGCACCCTGGAGGCCATCCAGTGGACCAAGCACTGGGACTCCGGCATC 768
 """,
-            )
-            protein_record = protein_alignment.sequences[16]
-            nucleotide_record = nucleotide_records[protein_record.id]
-            self.assertEqual(nucleotide_record.id, protein_record.id)
-            alignments = aligner.align(protein_record, nucleotide_record)
-            self.assertEqual(len(alignments), 1)
-            alignment = next(alignments)
-            codon_alignments.append(alignment)
-            self.assertTrue(
-                np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        protein_record = protein_alignment.sequences[16]
+        nucleotide_record = nucleotide_records[protein_record.id]
+        self.assertEqual(nucleotide_record.id, protein_record.id)
+        alignments = aligner.align(protein_record, nucleotide_record)
+        self.assertEqual(len(alignments), 1)
+        alignment = next(alignments)
+        codon_alignments.append(alignment)
+        self.assertTrue(
+            np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|156879         0 M  S  F  T  L  T  N  K  N  V  I  F  V  A  G  L  G  G  I  G  
 gi|156879         0 ATGTCGTTTACTTTGACCAACAAGAACGTGATTTTCGTGGCCGGTCTGGGAGGCATTGGT
 
@@ -9289,20 +9290,20 @@ gi|156879       660 GAGAACTTCGTCAAGGCTATCGAGCTGAACCAGAACGGAGCCATCTGGAAACTGGACTTG
 gi|156879       240 G  T  L  E  A  I  Q  W  T  K  H  W  D  S  G  I   256
 gi|156879       720 GGCACCCTGGAGGCCATCCAGTGGACCAAGCACTGGGACTCCGGCATC 768
 """,
-            )
-            protein_record = protein_alignment.sequences[17]
-            nucleotide_record = nucleotide_records[protein_record.id]
-            self.assertEqual(nucleotide_record.id, protein_record.id)
-            alignments = aligner.align(protein_record, nucleotide_record)
-            self.assertEqual(len(alignments), 1)
-            alignment = next(alignments)
-            codon_alignments.append(alignment)
-            self.assertTrue(
-                np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        protein_record = protein_alignment.sequences[17]
+        nucleotide_record = nucleotide_records[protein_record.id]
+        self.assertEqual(nucleotide_record.id, protein_record.id)
+        alignments = aligner.align(protein_record, nucleotide_record)
+        self.assertEqual(len(alignments), 1)
+        alignment = next(alignments)
+        codon_alignments.append(alignment)
+        self.assertTrue(
+            np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|156877         0 M  S  F  T  L  T  N  K  N  V  I  F  V  A  G  L  G  G  I  G  
 gi|156877         0 ATGTCGTTTACTTTGACCAACAAGAACGTGATTTTCGTGGCCGGTCTGGGAGGCATTGGT
 
@@ -9342,20 +9343,20 @@ gi|156877       660 GAGAACTTCGTCAAGGCTATCGAGCTGAACCAGAACGGAGCCATCTGGAAACTGGACTTG
 gi|156877       240 G  T  L  E  A  I  Q  W  T  K  H  W  D  S  G  I   256
 gi|156877       720 GGCACCCTGGAGGCCATCCAGTGGACCAAGCACTGGGACTCCGGCATC 768
 """,
-            )
-            protein_record = protein_alignment.sequences[18]
-            nucleotide_record = nucleotide_records[protein_record.id]
-            self.assertEqual(nucleotide_record.id, protein_record.id)
-            alignments = aligner.align(protein_record, nucleotide_record)
-            self.assertEqual(len(alignments), 1)
-            alignment = next(alignments)
-            codon_alignments.append(alignment)
-            self.assertTrue(
-                np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        protein_record = protein_alignment.sequences[18]
+        nucleotide_record = nucleotide_records[protein_record.id]
+        self.assertEqual(nucleotide_record.id, protein_record.id)
+        alignments = aligner.align(protein_record, nucleotide_record)
+        self.assertEqual(len(alignments), 1)
+        alignment = next(alignments)
+        codon_alignments.append(alignment)
+        self.assertTrue(
+            np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|156875         0 M  S  F  T  L  T  N  K  N  V  I  F  V  A  G  L  G  G  I  G  
 gi|156875         0 ATGTCGTTTACTTTGACCAACAAGAACGTGATTTTCGTGGCCGGTCTGGGAGGCATTGGT
 
@@ -9395,20 +9396,20 @@ gi|156875       660 GAGAACTTCGTCAAGGCTATCGAGCTGAACCAGAACGGAGCCATCTGGAAACTGGACTTG
 gi|156875       240 G  T  L  E  A  I  Q  W  T  K  H  W  D  S  G  I   256
 gi|156875       720 GGCACCCTGGAGGCCATCCAGTGGACCAAGCACTGGGACTCCGGCATC 768
 """,
-            )
-            protein_record = protein_alignment.sequences[19]
-            nucleotide_record = nucleotide_records[protein_record.id]
-            self.assertEqual(nucleotide_record.id, protein_record.id)
-            alignments = aligner.align(protein_record, nucleotide_record)
-            self.assertEqual(len(alignments), 1)
-            alignment = next(alignments)
-            codon_alignments.append(alignment)
-            self.assertTrue(
-                np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        protein_record = protein_alignment.sequences[19]
+        nucleotide_record = nucleotide_records[protein_record.id]
+        self.assertEqual(nucleotide_record.id, protein_record.id)
+        alignments = aligner.align(protein_record, nucleotide_record)
+        self.assertEqual(len(alignments), 1)
+        alignment = next(alignments)
+        codon_alignments.append(alignment)
+        self.assertTrue(
+            np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|156873         0 M  S  F  T  L  T  N  K  N  V  I  F  V  A  G  L  G  G  I  G  
 gi|156873         0 ATGTCGTTTACTTTGACCAACAAGAACGTGATTTTCGTGGCCGGTCTGGGAGGCATTGGT
 
@@ -9448,20 +9449,20 @@ gi|156873       660 GAGAACTTCGTCAAGGCTATCGAGCTGAACCAGAACGGAGCCATCTGGAAACTGGACTTG
 gi|156873       240 G  T  L  E  A  I  Q  W  T  K  H  W  D  S  G  I   256
 gi|156873       720 GGCACCCTGGAGGCCATCCAGTGGACCAAGCACTGGGACTCCGGCATC 768
 """,
-            )
-            protein_record = protein_alignment.sequences[20]
-            nucleotide_record = nucleotide_records[protein_record.id]
-            self.assertEqual(nucleotide_record.id, protein_record.id)
-            alignments = aligner.align(protein_record, nucleotide_record)
-            self.assertEqual(len(alignments), 1)
-            alignment = next(alignments)
-            codon_alignments.append(alignment)
-            self.assertTrue(
-                np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        protein_record = protein_alignment.sequences[20]
+        nucleotide_record = nucleotide_records[protein_record.id]
+        self.assertEqual(nucleotide_record.id, protein_record.id)
+        alignments = aligner.align(protein_record, nucleotide_record)
+        self.assertEqual(len(alignments), 1)
+        alignment = next(alignments)
+        codon_alignments.append(alignment)
+        self.assertTrue(
+            np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|156871         0 M  S  F  T  L  T  N  K  N  V  I  F  V  A  G  L  G  G  I  G  
 gi|156871         0 ATGTCGTTTACTTTGACCAACAAGAACGTGATTTTCGTGGCCGGTCTGGGAGGCATTGGT
 
@@ -9501,20 +9502,20 @@ gi|156871       660 GAGAACTTCGTCAAGGCTATCGAGCTGAACCAGAACGGAGCCATCTGGAAACTGGACTTG
 gi|156871       240 G  T  L  E  A  I  Q  W  T  K  H  W  D  S  G  I   256
 gi|156871       720 GGCACCCTGGAGGCCATCCAGTGGACCAAGCACTGGGACTCCGGCATC 768
 """,
-            )
-            protein_record = protein_alignment.sequences[21]
-            nucleotide_record = nucleotide_records[protein_record.id]
-            self.assertEqual(nucleotide_record.id, protein_record.id)
-            alignments = aligner.align(protein_record, nucleotide_record)
-            self.assertEqual(len(alignments), 1)
-            alignment = next(alignments)
-            codon_alignments.append(alignment)
-            self.assertTrue(
-                np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        protein_record = protein_alignment.sequences[21]
+        nucleotide_record = nucleotide_records[protein_record.id]
+        self.assertEqual(nucleotide_record.id, protein_record.id)
+        alignments = aligner.align(protein_record, nucleotide_record)
+        self.assertEqual(len(alignments), 1)
+        alignment = next(alignments)
+        codon_alignments.append(alignment)
+        self.assertTrue(
+            np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|156863         0 M  S  F  T  L  T  N  K  N  V  I  F  V  A  G  L  G  G  I  G  
 gi|156863         0 ATGTCGTTTACTTTGACCAACAAGAACGTGATTTTCGTTGCCGGTCTGGGAGGCATTGGT
 
@@ -9554,20 +9555,20 @@ gi|156863       660 GAGAACTTCGTCAAGGCTATCGAACTGAACCAGAACGGAGCCATCTGGAAACTGGACTTG
 gi|156863       240 G  T  L  E  A  I  Q  W  T  K  H  W  D  S  G  I   256
 gi|156863       720 GGCACCCTGGAGGCCATCCAGTGGACCAAGCACTGGGACTCCGGCATC 768
 """,
-            )
-            protein_record = protein_alignment.sequences[22]
-            nucleotide_record = nucleotide_records[protein_record.id]
-            self.assertEqual(nucleotide_record.id, protein_record.id)
-            alignments = aligner.align(protein_record, nucleotide_record)
-            self.assertEqual(len(alignments), 1)
-            alignment = next(alignments)
-            codon_alignments.append(alignment)
-            self.assertTrue(
-                np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        protein_record = protein_alignment.sequences[22]
+        nucleotide_record = nucleotide_records[protein_record.id]
+        self.assertEqual(nucleotide_record.id, protein_record.id)
+        alignments = aligner.align(protein_record, nucleotide_record)
+        self.assertEqual(len(alignments), 1)
+        alignment = next(alignments)
+        codon_alignments.append(alignment)
+        self.assertTrue(
+            np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|156869         0 M  S  F  T  L  T  N  K  N  V  I  F  V  A  G  L  G  G  I  G  
 gi|156869         0 ATGTCGTTTACTTTGACCAACAAGAACGTGATTTTCGTGGCCGGTCTGGGAGGCATTGGT
 
@@ -9607,20 +9608,20 @@ gi|156869       660 GAGAACTTCGTCAAGGCTATCGAACTGAACCAGAACGGAGCCATCTGGAAACTGGACTTG
 gi|156869       240 G  T  L  E  A  I  Q  W  T  K  H  W  D  S  G  I   256
 gi|156869       720 GGCACCCTGGAGGCCATCCAGTGGACCAAGCACTGGGACTCCGGCATC 768
 """,
-            )
-            protein_record = protein_alignment.sequences[23]
-            nucleotide_record = nucleotide_records[protein_record.id]
-            self.assertEqual(nucleotide_record.id, protein_record.id)
-            alignments = aligner.align(protein_record, nucleotide_record)
-            self.assertEqual(len(alignments), 1)
-            alignment = next(alignments)
-            codon_alignments.append(alignment)
-            self.assertTrue(
-                np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        protein_record = protein_alignment.sequences[23]
+        nucleotide_record = nucleotide_records[protein_record.id]
+        self.assertEqual(nucleotide_record.id, protein_record.id)
+        alignments = aligner.align(protein_record, nucleotide_record)
+        self.assertEqual(len(alignments), 1)
+        alignment = next(alignments)
+        codon_alignments.append(alignment)
+        self.assertTrue(
+            np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|156867         0 M  S  F  T  L  T  N  K  N  V  I  F  V  A  G  L  G  G  I  G  
 gi|156867         0 ATGTCGTTTACTTTGACCAACAAGAACGTGATTTTCGTGGCCGGTCTGGGAGGCATTGGT
 
@@ -9660,20 +9661,20 @@ gi|156867       660 GAGAACTTCGTCAAGGCTATCGAGCTGAACCAGAACGGAGCCATCTGGAAACTGGACTTG
 gi|156867       240 G  T  L  E  A  I  Q  W  T  K  H  W  D  S  G  I   256
 gi|156867       720 GGCACCCTGGAGGCCATCCAGTGGACCAAGCACTGGGACTCCGGCATC 768
 """,
-            )
-            protein_record = protein_alignment.sequences[24]
-            nucleotide_record = nucleotide_records[protein_record.id]
-            self.assertEqual(nucleotide_record.id, protein_record.id)
-            alignments = aligner.align(protein_record, nucleotide_record)
-            self.assertEqual(len(alignments), 1)
-            alignment = next(alignments)
-            codon_alignments.append(alignment)
-            self.assertTrue(
-                np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        protein_record = protein_alignment.sequences[24]
+        nucleotide_record = nucleotide_records[protein_record.id]
+        self.assertEqual(nucleotide_record.id, protein_record.id)
+        alignments = aligner.align(protein_record, nucleotide_record)
+        self.assertEqual(len(alignments), 1)
+        alignment = next(alignments)
+        codon_alignments.append(alignment)
+        self.assertTrue(
+            np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|156865         0 M  S  F  T  L  T  N  K  N  V  I  F  V  A  G  L  G  G  I  G  
 gi|156865         0 ATGTCGTTTACTTTGACCAACAAGAACGTGATTTTCGTTGCCGGTCTGGGAGGCATTGGT
 
@@ -9713,20 +9714,20 @@ gi|156865       660 GAGAACTTCGTCAAGGCTATCGAACTGAACCAGAACGGAGCCATCTGGAAACTGGACTTG
 gi|156865       240 G  T  L  E  A  I  Q  W  T  K  H  W  D  S  G  I   256
 gi|156865       720 GGCACCCTGGAGGCCATCCAGTGGACCAAGCACTGGGACTCCGGCATC 768
 """,
-            )
-            protein_record = protein_alignment.sequences[25]
-            nucleotide_record = nucleotide_records[protein_record.id]
-            self.assertEqual(nucleotide_record.id, protein_record.id)
-            alignments = aligner.align(protein_record, nucleotide_record)
-            self.assertEqual(len(alignments), 1)
-            alignment = next(alignments)
-            codon_alignments.append(alignment)
-            self.assertTrue(
-                np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        protein_record = protein_alignment.sequences[25]
+        nucleotide_record = nucleotide_records[protein_record.id]
+        self.assertEqual(nucleotide_record.id, protein_record.id)
+        alignments = aligner.align(protein_record, nucleotide_record)
+        self.assertEqual(len(alignments), 1)
+        alignment = next(alignments)
+        codon_alignments.append(alignment)
+        self.assertTrue(
+            np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|156861         0 M  S  F  T  L  T  N  K  N  V  I  F  V  A  G  L  G  G  I  G  
 gi|156861         0 ATGTCGTTTACTTTGACCAACAAGAACGTGATTTTCGTTGCCGGTCTGGGAGGCATTGGT
 
@@ -9766,20 +9767,20 @@ gi|156861       660 GAGAACTTCGTCAAGGCTATCGAGCTGAACCAGAACGGAGCCATCTGGAAACTGGACTTG
 gi|156861       240 G  T  L  E  A  I  Q  W  T  K  H  W  D  S  G  I   256
 gi|156861       720 GGCACCCTGGAGGCCATCCAGTGGACCAAGCACTGGGACTCCGGCATC 768
 """,
-            )
-            protein_record = protein_alignment.sequences[26]
-            nucleotide_record = nucleotide_records[protein_record.id]
-            self.assertEqual(nucleotide_record.id, protein_record.id)
-            alignments = aligner.align(protein_record, nucleotide_record)
-            self.assertEqual(len(alignments), 1)
-            alignment = next(alignments)
-            codon_alignments.append(alignment)
-            self.assertTrue(
-                np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        protein_record = protein_alignment.sequences[26]
+        nucleotide_record = nucleotide_records[protein_record.id]
+        self.assertEqual(nucleotide_record.id, protein_record.id)
+        alignments = aligner.align(protein_record, nucleotide_record)
+        self.assertEqual(len(alignments), 1)
+        alignment = next(alignments)
+        codon_alignments.append(alignment)
+        self.assertTrue(
+            np.array_equal(alignment.coordinates, np.array([[0, 256], [0, 768]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|156859         0 M  S  F  T  L  T  N  K  N  V  I  F  V  A  G  L  G  G  I  G  
 gi|156859         0 ATGTCGTTTACTTTGACCAACAAGAACGTGATTTTCGTTGCCGGTCTGGGAGGCATTGGT
 
@@ -9819,25 +9820,25 @@ gi|156859       660 GAGAACTTCGTCAAGGCTATCGAGCTGAACCAGAACGGAGCCATCTGGAAACTGGACTTG
 gi|156859       240 G  T  L  E  A  I  Q  W  T  K  H  W  D  S  G  I   256
 gi|156859       720 GGCACCCTGGAGGCCATCCAGTGGACCAAGCACTGGGACTCCGGCATC 768
 """,
-            )
-            nucleotide_records.close()  # Close indexed FASTA file
-            alignment = protein_alignment.mapall(codon_alignments)
-            unique_species = [
-                "Drosophila simulans",
-                "Drosophila yakuba",
-                "D.melanogaster",
-            ]
-            species = []
-            for record in alignment.sequences:
-                description = record.description
-                for s in unique_species:
-                    if s in description:
-                        break
-                else:
-                    raise Exception(f"Failed to find species for {description}")
-                species.append(s)
-            pvalue = mktest(alignment, species)
-            self.assertAlmostEqual(pvalue, 0.0020645725725430097)
+        )
+        nucleotide_records.close()  # Close indexed FASTA file
+        alignment = protein_alignment.mapall(codon_alignments)
+        unique_species = [
+            "Drosophila simulans",
+            "Drosophila yakuba",
+            "D.melanogaster",
+        ]
+        species = []
+        for record in alignment.sequences:
+            description = record.description
+            for s in unique_species:
+                if s in description:
+                    break
+            else:
+                raise Exception(f"Failed to find species for {description}")
+            species.append(s)
+        pvalue = mktest(alignment, species)
+        self.assertAlmostEqual(pvalue, 0.0020645725725430097)
 
 
 if __name__ == "__main__":
