@@ -4426,11 +4426,21 @@ struct fogsaa_queue_node {
 
 #define FOGSAA_CALCULATE_SCORE(curr_score, lower, upper, pA, pB) \
     if (nA - (pA) <= nB - (pB)) { \
-        lower = curr_score + (nA - (pA)) * mismatch + (gap_open_A + gap_extend_A) * ((nB - (pB)) - (nA - (pA))); \
+        lower = curr_score + (nA - (pA)) * mismatch + gap_open_A + gap_extend_A * ((nB - (pB)) - (nA - (pA)) - 1); \
         upper = curr_score + (nA - (pA)) * match + gap_open_A + gap_extend_A * ((nB - (pB)) - (nA - (pA)) - 1); \
+        if (pA == nA) { \
+            /* If we're already at the end, a gap is already open */ \
+            lower -= gap_open_A; \
+            upper -= gap_open_A; \
+        } \
     } else { \
-        lower = curr_score + (nB - (pB)) * mismatch + (gap_open_B ) * ((nA - (pA)) - (nB - (pB))); \
+        lower = curr_score + (nB - (pB)) * mismatch + gap_open_B + gap_extend_B * ((nA - (pA)) - (nB - (pB)) - 1); \
         upper = curr_score + (nB - (pB)) * match + gap_open_B + gap_extend_B * ((nA - (pA)) - (nB - (pB)) - 1); \
+        if (pB == nB) { \
+            /* If we're already at the end, a gap is already open */ \
+            lower -= gap_open_B; \
+            upper -= gap_open_B; \
+        } \
     }
 
 // node has higher priority if upper bound is higher, or if upper bounds are
@@ -5976,7 +5986,7 @@ exit: \
     const double gap_extend_A = self->target_internal_extend_gap_score; \
     const double gap_extend_B = self->query_internal_extend_gap_score; \
     struct fogsaa_cell* matrix = NULL; \
-    struct fogsaa_queue queue;
+    struct fogsaa_queue queue; \
     /* double left_gap_open_A; */ \
     /* double left_gap_open_B; */ \
     /* double left_gap_extend_A; */ \
@@ -6961,6 +6971,48 @@ Aligner_fogsaa_score_compare(Aligner* self,
 
 
     FOGSAA_DO(COMPARE_SCORE)
+    /* printf("BOUNDS\n\t"); */
+    /* for (j = 0; j <= nB; j++) { */
+    /*     printf("%c\t", sB[j]); */
+    /* } */
+    /* printf("\n"); */
+    /* for (i = 0; i <= nA; i++) { */
+    /*     printf("%c\t", sA[i]); */
+    /*     for (j = 0; j <= nB; j++) { */
+    /*         printf("%.2g:%.2g\t", MATRIX(i, j).lower, MATRIX(i, j).upper); */
+    /*     } */
+    /*     printf("\n"); */
+    /* } */
+
+    /* printf("SCORES\n\t"); */
+    /* for (j = 0; j <= nB; j++) { */
+    /*     printf("%c\t", sB[j]); */
+    /* } */
+    /* printf("\n"); */
+    /* for (i = 0; i <= nA; i++) { */
+    /*     printf("%c\t", sA[i]); */
+    /*     for (j = 0; j <= nB; j++) { */
+    /*         printf("%.2g\t", MATRIX(i, j).present_score); */
+    /*     } */
+    /*     printf("\n"); */
+    /* } */
+
+    /* printf("TYPES\n\t"); */
+    /* for (j = 0; j <= nB; j++) { */
+    /*     printf("%c\t", sB[j]); */
+    /* } */
+    /* printf("\n"); */
+    /* for (i = 0; i <= nA; i++) { */
+    /*     printf("%c\t", sA[i]); */
+    /*     for (j = 0; j <= nB; j++) { */
+    /*         printf("%d\t", MATRIX(i, j).type); */
+    /*     } */
+    /*     printf("\n"); */
+    /* } */
+    if (MATRIX(nA, nB).type == 0) {
+        PyErr_SetString(PyExc_RuntimeError, "Could not complete algorithm. Report this as a bug.");
+        return NULL;
+    }
     FOGSAA_EXIT_SCORE
 }
 
@@ -6984,6 +7036,10 @@ Aligner_fogsaa_score_matrix(Aligner* self,
     }
 
     FOGSAA_DO(MATRIX_SCORE)
+    if (MATRIX(nA, nB).type == 0) {
+        PyErr_SetString(PyExc_RuntimeError, "Could not complete algorithm. Report this as a bug.");
+        return NULL;
+    }
     FOGSAA_EXIT_SCORE
 }
 
@@ -7010,6 +7066,10 @@ Aligner_fogsaa_align_compare(Aligner* self,
     }
 
     FOGSAA_DO(COMPARE_SCORE)
+    if (MATRIX(nA, nB).type == 0) {
+        PyErr_SetString(PyExc_RuntimeError, "Could not complete algorithm. Report this as a bug.");
+        return NULL;
+    }
     FOGSAA_EXIT_ALIGN
 }
 
@@ -7035,6 +7095,10 @@ Aligner_fogsaa_align_matrix(Aligner* self,
             mismatch = scores[i];
     }
     FOGSAA_DO(MATRIX_SCORE)
+    if (MATRIX(nA, nB).type == 0) {
+        PyErr_SetString(PyExc_RuntimeError, "Could not complete algorithm. Report this as a bug.");
+        return NULL;
+    }
     FOGSAA_EXIT_ALIGN
 }
 
