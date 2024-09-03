@@ -78,13 +78,15 @@ class TabIterator(SequenceIterator):
         super().__init__(source, mode="t", fmt="Tab-separated plain-text")
 
     def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
-        records = self.iterate(handle)
-        return records
+        """To be removed."""
+        return
 
-    def iterate(self, handle):
-        """Parse the file and generate SeqRecord objects."""
-        for line in handle:
+    def __next__(self):
+        while True:
+            try:
+                line = next(self.stream)
+            except StopIteration:
+                raise StopIteration from None
             try:
                 title, seq = line.split("\t")  # will fail if more than one tab!
             except ValueError:
@@ -98,7 +100,7 @@ class TabIterator(SequenceIterator):
                 ) from None
             title = title.strip()
             seq = seq.strip()  # removes the trailing new line
-            yield SeqRecord(Seq(seq), id=title, name=title, description="")
+            return SeqRecord(Seq(seq), id=title, name=title, description="")
 
 
 class TabWriter(SequenceWriter):
