@@ -58,13 +58,29 @@ def SimpleFastaParser(handle):
             "Previously, the FASTA parser silently ignored comments at the\n"
             "beginning of the FASTA file (before the first sequence).\n"
             "\n"
-            "As the FASTA file format specification does not allow such\n"
-            "comments, this is now deprecated.\n"
+            "Nowadays, the FASTA file format is usually understood not to\n"
+            "have any such comments, and most sotware packages do not allow\n"
+            "such comments. Therefore, the use of comments at the beginning\n"
+            "of a FASTA file is now deprecated in Biopython.\n"
             "\n"
             "In a future Biopython release, this deprecation warning will be\n"
-            "replaced by a ValueError. We encourage you to modify your FASTA\n"
-            "file to make it compliant with the FASTA file format\n"
-            "specification.",
+            "replaced by a ValueError. To avoid this, there are three\n"
+            "options:\n"
+            "\n"
+            "(1) Modify your FASTA file to remove such comments at the\n"
+            "beginning of the file;\n"
+            "\n"
+            "(2) Use SeqIO.parse with the 'fasta-pearson' format instead of\n"
+            "'fasta'. This format is consistent with the FASTA format defined\n"
+            "by William Pearson's FASTA aligner software. Thie format allows\n"
+            "for comments before the first sequence; lines starting with the\n"
+            "';' character anywhere in the file are also regarded as comment\n"
+            "lines and are ignored.\n"
+            "\n"
+            "(3) Use the 'fasta-blast' format. This format regards any lines\n"
+            "starting with '!', '#', or ';' as comment lines. The\n"
+            "'fasta-blast' format may be safer than the 'fasta-pearson'\n"
+            "format, as it explicitly indicates which lines are comments.\n",
             BiopythonDeprecationWarning,
         )
         for line in handle:
@@ -214,45 +230,16 @@ class FastaIterator(SequenceIterator):
 
     def iterate(self, handle):
         """Parse the file and generate SeqRecord objects."""
-        try:
-            line = next(handle)
-        except StopIteration:
-            return
-        if not line.startswith(">"):
-            raise ValueError(
-                "Expected FASTA record starting with '>' character.\n"
-                "If your FASTA file has a header, please use the 'fasta-blast' "
-                "or the 'fasta-pearson' format for parsing.\n"
-                f"Got: '{line}'"
+        for title, sequence in SimpleFastaParser(handle):
+            try:
+                first_word = title.split(None, 1)[0]
+            except IndexError:
+                assert not title, repr(title)
+                # Should we use SeqRecord default for no ID?
+                first_word = ""
+            yield SeqRecord(
+                Seq(sequence), id=first_word, name=first_word, description=title
             )
-        title = line[1:].rstrip()
-        lines = []
-        for line in handle:
-            # Main logic
-            # Note, remove trailing whitespace, and any internal spaces
-            # (and any embedded \r which are possible in mangled files
-            # when not opened in universal read lines mode)
-            if line[0] == ">":
-                try:
-                    first_word = title.split(None, 1)[0]
-                except IndexError:
-                    first_word = ""
-                sequence = "".join(lines).replace(" ", "").replace("\r", "")
-                yield SeqRecord(
-                    Seq(sequence), id=first_word, name=first_word, description=title
-                )
-                lines = []
-                title = line[1:].rstrip()
-            else:
-                lines.append(line.rstrip())
-        try:
-            first_word = title.split(None, 1)[0]
-        except IndexError:
-            first_word = ""
-        sequence = "".join(lines).replace(" ", "").replace("\r", "")
-        yield SeqRecord(
-            Seq(sequence), id=first_word, name=first_word, description=title
-        )
 
 
 class FastaTwoLineIterator(SequenceIterator):
