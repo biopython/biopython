@@ -9,9 +9,10 @@ import unittest
 from io import StringIO
 
 from Bio import SeqIO
-from Bio.SeqIO.FastaIO import FastaIterator
 from Bio.SeqIO.FastaIO import FastaTwoLineParser
 from Bio.SeqIO.FastaIO import SimpleFastaParser
+
+from Bio import BiopythonDeprecationWarning
 
 
 def title_to_ids(title):
@@ -190,6 +191,45 @@ class TestSimpleFastaParsers(unittest.TestCase):
             handle = StringIO(inp)
             with self.assertRaises(ValueError):
                 list(FastaTwoLineParser(handle))
+
+
+class TestFastaWithComments(unittest.TestCase):
+    """Test FastaBlastIterator and FastaPearsonIterator."""
+
+    expected = SeqIO.read("Fasta/aster.pro", "fasta")
+
+    def test_fasta_blast(self):
+        """Test FastaBlastIterator."""
+
+        expected = self.expected
+
+        record = SeqIO.read("Fasta/aster_blast.pro", "fasta-blast")
+        self.assertEqual(expected.id, record.id)
+        self.assertEqual(expected.name, record.name)
+        self.assertEqual(expected.description, record.description)
+        self.assertEqual(expected.seq, record.seq)
+
+    def test_fasta_pearson(self):
+        """Test FastaPearsonIterator."""
+
+        expected = self.expected
+
+        record = SeqIO.read("Fasta/aster_pearson.pro", "fasta-pearson")
+        self.assertEqual(expected.id, record.id)
+        self.assertEqual(expected.name, record.name)
+        self.assertEqual(expected.description, record.description)
+        self.assertEqual(expected.seq, record.seq)
+
+    def test_valueerrors(self):
+        """Test if ValueErrors are raised if comments are found unexpectedly."""
+
+        self.assertRaises(
+            ValueError, SeqIO.read, "Fasta/aster_pearson.pro", "fasta-blast"
+        )
+        with self.assertWarns(BiopythonDeprecationWarning):
+            record = SeqIO.read("Fasta/aster_pearson.pro", "fasta")
+        with self.assertWarns(BiopythonDeprecationWarning):
+            record = SeqIO.read("Fasta/aster_blast.pro", "fasta")
 
 
 if __name__ == "__main__":

@@ -965,7 +965,7 @@ class StringMethodTests(unittest.TestCase):
 
     def test_join_Seq_with_file(self):
         """Checks if Seq join correctly concatenates sequence from a file with the spacer."""
-        filename = "Fasta/f003"
+        filename = "Fasta/f003.fa"
         seqlist = [record.seq for record in SeqIO.parse(filename, "fasta")]
         seqlist_as_strings = [str(_) for _ in seqlist]
 
@@ -1005,7 +1005,7 @@ class StringMethodTests(unittest.TestCase):
 
     def test_join_MutableSeq_with_file(self):
         """Checks if MutableSeq join correctly concatenates sequence from a file with the spacer."""
-        filename = "Fasta/f003"
+        filename = "Fasta/f003.fa"
         seqlist = [record.seq for record in SeqIO.parse(filename, "fasta")]
         seqlist_as_strings = [str(_) for _ in seqlist]
 

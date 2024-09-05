@@ -60,6 +60,22 @@ was deprecated as of Release 1.70.
 Biopython modules, methods, functions
 =====================================
 
+Bio.SeqIO.FastaIO
+-----------------
+The ``SimpleFastaParser`` (which is used by Bio.SeqIO.parse if
+``format='fasta'`` or ``format='fasta-2line'``) interprets lines before the
+first line starting with '>' as comments and skips them. To be consistent with
+the most common interpretation of the FASTA file format, the use of such
+comment lines at the beginning of the FASTA file was deprecated in Biopython
+Release 1.85.
+As an alternative, you can use ``format='fasta-pearson'`` to specify the FASTA
+file format as defined by William Pearson's FASTA aligner program, allowing for
+comment lines at the top of the FASTA file (lines anywhere in the file starting
+by ';' are also regarded as comment lines and skipped).
+Another option is to use ``format='fasta-blast'``; this follows the FASTA file
+format accepted by BLAST, treating any lines starting with '#', ';', or '!' as
+comment lines and ignoring them.
+
 Bio.Entrez
 ----------
 The ``egquery`` function wrapping the NCBI EGQuery (Entrez Global Query)
