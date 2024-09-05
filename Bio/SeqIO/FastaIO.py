@@ -222,24 +222,26 @@ class FastaIterator(SequenceIterator):
         if alphabet is not None:
             raise ValueError("The alphabet argument is no longer supported")
         super().__init__(source, mode="t", fmt="Fasta")
+        self._data = SimpleFastaParser(self.stream)
 
     def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
-        records = self.iterate(handle)
-        return records
+        """To be removed."""
+        return
 
-    def iterate(self, handle):
-        """Parse the file and generate SeqRecord objects."""
-        for title, sequence in SimpleFastaParser(handle):
-            try:
-                first_word = title.split(None, 1)[0]
-            except IndexError:
-                assert not title, repr(title)
-                # Should we use SeqRecord default for no ID?
-                first_word = ""
-            yield SeqRecord(
-                Seq(sequence), id=first_word, name=first_word, description=title
-            )
+    def __next__(self):
+        try:
+            title, sequence = next(self._data)
+        except StopIteration:
+            raise StopIteration from None
+        try:
+            first_word = title.split(None, 1)[0]
+        except IndexError:
+            assert not title, repr(title)
+            # Should we use SeqRecord default for no ID?
+            first_word = ""
+        return SeqRecord(
+            Seq(sequence), id=first_word, name=first_word, description=title
+        )
 
 
 class FastaTwoLineIterator(SequenceIterator):
