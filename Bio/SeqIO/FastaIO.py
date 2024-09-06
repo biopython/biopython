@@ -260,24 +260,26 @@ class FastaTwoLineIterator(SequenceIterator):
         by the relaxed FASTA parser is offered.
         """
         super().__init__(source, mode="t", fmt="FASTA")
+        self._data = FastaTwoLineParser(self.stream)
 
     def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
-        records = self.iterate(handle)
-        return records
+        """To be removed."""
+        return
 
-    def iterate(self, handle):
-        """Parse the file and generate SeqRecord objects."""
-        for title, sequence in FastaTwoLineParser(handle):
-            try:
-                first_word = title.split(None, 1)[0]
-            except IndexError:
-                assert not title, repr(title)
-                # Should we use SeqRecord default for no ID?
-                first_word = ""
-            yield SeqRecord(
-                Seq(sequence), id=first_word, name=first_word, description=title
-            )
+    def __next__(self):
+        try:
+            title, sequence = next(self._data)
+        except StopIteration:
+            raise StopIteration from None
+        try:
+            first_word = title.split(None, 1)[0]
+        except IndexError:
+            assert not title, repr(title)
+            # Should we use SeqRecord default for no ID?
+            first_word = ""
+        return SeqRecord(
+            Seq(sequence), id=first_word, name=first_word, description=title
+        )
 
 
 class FastaBlastIterator(SequenceIterator):
@@ -332,30 +334,32 @@ class FastaBlastIterator(SequenceIterator):
         if alphabet is not None:
             raise ValueError("The alphabet argument is no longer supported")
         super().__init__(source, mode="t", fmt="FASTA")
-
-    def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
-        records = self.iterate(handle)
-        return records
-
-    def iterate(self, handle):
-        """Parse the file and generate SeqRecord objects."""
-        for line in handle:
+        for line in self.stream:
             if line[0] not in "#!;":
+                if not line.startswith(">"):
+                    raise ValueError(
+                        "Expected FASTA record starting with '>' character.\n"
+                        "If this line is a comment, please use '#', '!', or ';' as "
+                        "the first character, or use the 'fasta-pearson' "
+                        "format for parsing.\n"
+                        f"Got: '{line}'"
+                    )
+                self._line = line
                 break
         else:
-            return
-        if not line.startswith(">"):
-            raise ValueError(
-                "Expected FASTA record starting with '>' character.\n"
-                "If this line is a comment, please use '#', '!', or ';' as "
-                "the first character, or use the 'fasta-pearson' format for "
-                "parsing.\n"
-                f"Got: '{line}'"
-            )
+            self._line = None
+
+    def parse(self, handle):
+        """To be removed."""
+        return
+
+    def __next__(self):
+        line = self._line
+        if line is None:
+            raise StopIteration
         title = line[1:].rstrip()
         lines = []
-        for line in handle:
+        for line in self.stream:
             # Main logic
             # Note, remove trailing whitespace, and any internal spaces
             # (and any embedded \r which are possible in mangled files
@@ -363,24 +367,18 @@ class FastaBlastIterator(SequenceIterator):
             if line[0] in "#!;":
                 pass
             elif line[0] == ">":
-                try:
-                    first_word = title.split(None, 1)[0]
-                except IndexError:
-                    first_word = ""
-                sequence = "".join(lines).replace(" ", "").replace("\r", "")
-                yield SeqRecord(
-                    Seq(sequence), id=first_word, name=first_word, description=title
-                )
-                lines = []
-                title = line[1:].rstrip()
+                self_line = line
+                break
             else:
                 lines.append(line.rstrip())
+        else:
+            self._line = None
         try:
             first_word = title.split(None, 1)[0]
         except IndexError:
             first_word = ""
         sequence = "".join(lines).replace(" ", "").replace("\r", "")
-        yield SeqRecord(
+        return SeqRecord(
             Seq(sequence), id=first_word, name=first_word, description=title
         )
 
@@ -438,22 +436,24 @@ class FastaPearsonIterator(SequenceIterator):
         if alphabet is not None:
             raise ValueError("The alphabet argument is no longer supported")
         super().__init__(source, mode="t", fmt="Fasta")
-
-    def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
-        records = self.iterate(handle)
-        return records
-
-    def iterate(self, handle):
-        """Parse the file and generate SeqRecord objects."""
-        for line in handle:
+        for line in self.stream:
             if line.startswith(">"):
+                self._line = line
                 break
         else:
-            return
+            self._line = None
+
+    def parse(self, handle):
+        """To be removed."""
+        return
+
+    def __next__(self):
+        line = self._line
+        if line is None:
+            raise StopIteration
         title = line[1:].rstrip()
         lines = []
-        for line in handle:
+        for line in self.stream:
             # Main logic
             # Note, remove trailing whitespace, and any internal spaces
             # (and any embedded \r which are possible in mangled files
@@ -461,24 +461,18 @@ class FastaPearsonIterator(SequenceIterator):
             if line[0] == ";":
                 pass
             elif line[0] == ">":
-                try:
-                    first_word = title.split(None, 1)[0]
-                except IndexError:
-                    first_word = ""
-                sequence = "".join(lines).replace(" ", "").replace("\r", "")
-                yield SeqRecord(
-                    Seq(sequence), id=first_word, name=first_word, description=title
-                )
-                lines = []
-                title = line[1:].rstrip()
+                self._line = line
+                break
             else:
                 lines.append(line.rstrip())
+        else:
+            self._line = None
         try:
             first_word = title.split(None, 1)[0]
         except IndexError:
             first_word = ""
         sequence = "".join(lines).replace(" ", "").replace("\r", "")
-        yield SeqRecord(
+        return SeqRecord(
             Seq(sequence), id=first_word, name=first_word, description=title
         )
 
