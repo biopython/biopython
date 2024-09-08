@@ -240,10 +240,6 @@ class TwoBitIterator(SequenceIterator):
             sequences[name] = sequence
         self._names = iter(self.sequences)
 
-    def parse(self, stream):
-        """Iterate over the sequences in the file."""
-        return
-
     def __next__(self):
         """Return the next entry."""
         try:

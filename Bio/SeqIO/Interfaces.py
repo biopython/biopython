@@ -34,7 +34,7 @@ _TextIOSource = _IOSource[str]
 class SequenceIterator(ABC, Generic[AnyStr]):
     """Base class for building SeqRecord iterators.
 
-    You should write a parse method that returns a SeqRecord generator.  You
+    You should write a __next__ method that returns the next SeqRecord.  You
     may wish to redefine the __init__ method as well.
     """
 
@@ -78,21 +78,13 @@ class SequenceIterator(ABC, Generic[AnyStr]):
                 raise ValueError(f"Unknown mode '{mode}'") from None
             self.stream = source
             self.should_close_stream = False
-        try:
-            self.records = self.parse(self.stream)
-        except Exception:
-            if self.should_close_stream:
-                self.stream.close()
-            raise
 
+    @abstractmethod
     def __next__(self):
-        """Return the next entry."""
-        try:
-            return next(self.records)
-        except Exception:
-            if self.should_close_stream:
-                self.stream.close()
-            raise
+        """Return the next SeqRecord.
+
+        This method must be implemented by the subclass.
+        """
 
     def __iter__(self):
         """Iterate over the entries as a SeqRecord objects.
@@ -105,15 +97,9 @@ class SequenceIterator(ABC, Generic[AnyStr]):
                     print(record.id)
                     print(record.seq)
 
-        This method SHOULD NOT be overridden by any subclass. It should be
-        left as is, which will call the subclass implementation of __next__
-        to actually parse the file.
+        This method SHOULD NOT be overridden by any subclass.
         """
         return self
-
-    @abstractmethod
-    def parse(self, handle: IO[AnyStr]) -> Iterator[SeqRecord]:
-        """Start parsing the file, and return a SeqRecord iterator."""
 
 
 def _get_seq_string(record: SeqRecord) -> str:

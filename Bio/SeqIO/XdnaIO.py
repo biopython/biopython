@@ -162,10 +162,6 @@ class XdnaIterator(SequenceIterator):
             raise ValueError("Improper header, cannot read 112 bytes from stream")
         self._header = header
 
-    def parse(self, handle):
-        """To be removed."""
-        return
-
     def __next__(self):
         if self._header is None:
             raise StopIteration

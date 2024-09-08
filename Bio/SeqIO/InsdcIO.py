@@ -102,9 +102,14 @@ class GenBankIterator(SequenceIterator):
         super().__init__(source, mode="t", fmt="GenBank")
         self.records = GenBankScanner(debug=0).parse_records(self.stream)
 
-    def parse(self, handle):
-        """To be removed."""
-        return
+    def __next__(self):
+        """Return the next SeqRecord."""
+        try:
+            return next(self.records)
+        except Exception:
+            if self.should_close_stream:
+                self.stream.close()
+            raise
 
 
 class EmblIterator(SequenceIterator):
@@ -156,9 +161,14 @@ class EmblIterator(SequenceIterator):
         super().__init__(source, mode="t", fmt="EMBL")
         self.records = EmblScanner(debug=0).parse_records(self.stream)
 
-    def parse(self, handle):
-        """To be removed."""
-        return
+    def __next__(self):
+        """Return the next SeqRecord."""
+        try:
+            return next(self.records)
+        except Exception:
+            if self.should_close_stream:
+                self.stream.close()
+            raise
 
 
 class ImgtIterator(SequenceIterator):
@@ -177,9 +187,14 @@ class ImgtIterator(SequenceIterator):
         super().__init__(source, mode="t", fmt="IMGT")
         self.records = _ImgtScanner(debug=0).parse_records(self.stream)
 
-    def parse(self, handle):
-        """To be removed."""
-        return
+    def __next__(self):
+        """Return the next SeqRecord."""
+        try:
+            return next(self.records)
+        except Exception:
+            if self.should_close_stream:
+                self.stream.close()
+            raise
 
 
 class GenBankCdsFeatureIterator(SequenceIterator):
@@ -197,9 +212,14 @@ class GenBankCdsFeatureIterator(SequenceIterator):
         super().__init__(source, mode="t", fmt="GenBank")
         self.records = GenBankScanner(debug=0).parse_cds_features(self.stream)
 
-    def parse(self, handle):
-        """To be removed."""
-        return
+    def __next__(self):
+        """Return the next SeqRecord."""
+        try:
+            return next(self.records)
+        except Exception:
+            if self.should_close_stream:
+                self.stream.close()
+            raise
 
 
 class EmblCdsFeatureIterator(SequenceIterator):
@@ -217,9 +237,14 @@ class EmblCdsFeatureIterator(SequenceIterator):
         super().__init__(source, mode="t", fmt="EMBL")
         self.records = EmblScanner(debug=0).parse_cds_features(self.stream)
 
-    def parse(self, handle):
-        """To be removed."""
-        return
+    def __next__(self):
+        """Return the next SeqRecord."""
+        try:
+            return next(self.records)
+        except Exception:
+            if self.should_close_stream:
+                self.stream.close()
+            raise
 
 
 def _insdc_feature_position_string(pos, offset=0):

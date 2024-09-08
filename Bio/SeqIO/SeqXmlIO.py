@@ -477,10 +477,6 @@ class SeqXmlIterator(SequenceIterator):
         self.ncbiTaxID = content_handler.ncbiTaxID
         self.speciesName = content_handler.speciesName
 
-    def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
-        return
-
     def __next__(self):
         """Return the next entry."""
         parser = self.parser

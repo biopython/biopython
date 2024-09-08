@@ -359,10 +359,6 @@ class AbiIterator(SequenceIterator):
             raise ValueError(f"File should start with ABIF, not {marker!r}")
         self.trim = trim
 
-    def parse(self, handle):
-        """To be removed."""
-        return
-
     def __next__(self):
         """Parse the file and generate SeqRecord objects."""
         stream = self.stream

@@ -91,10 +91,6 @@ class GckIterator(SequenceIterator):
         if len(data) < 24:
             raise ValueError("Improper header, cannot read 24 bytes from stream")
 
-    def parse(self, stream):
-        """To be removed."""
-        return
-
     def __next__(self):
         stream = self.stream
         # Read the actual sequence data

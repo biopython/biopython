@@ -91,10 +91,6 @@ class NibIterator(SequenceIterator):
         else:
             raise ValueError("unexpected signature in nib header")
 
-    def parse(self, stream):
-        """To be removed."""
-        return
-
     def __next__(self):
         """Iterate over the records in the nib file."""
         stream = self.stream

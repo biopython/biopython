@@ -77,16 +77,8 @@ class TabIterator(SequenceIterator):
         """
         super().__init__(source, mode="t", fmt="Tab-separated plain-text")
 
-    def parse(self, handle):
-        """To be removed."""
-        return
-
     def __next__(self):
-        while True:
-            try:
-                line = next(self.stream)
-            except StopIteration:
-                raise StopIteration from None
+        for line in self.stream:
             try:
                 title, seq = line.split("\t")  # will fail if more than one tab!
             except ValueError:
@@ -101,6 +93,7 @@ class TabIterator(SequenceIterator):
             title = title.strip()
             seq = seq.strip()  # removes the trailing new line
             return SeqRecord(Seq(seq), id=title, name=title, description="")
+        raise StopIteration
 
 
 class TabWriter(SequenceWriter):
