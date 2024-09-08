@@ -153,10 +153,6 @@ class PdbSeqresIterator(SequenceIterator):
         super().__init__(source, mode="t", fmt="PDB")
         self.cache = None
 
-    def parse(self, handle):
-        """To be removed."""
-        return
-
     def __next__(self):
         """Iterate over the records in the PDB file."""
         if self.cache is None:

@@ -137,9 +137,6 @@ class PirIterator(SequenceIterator):
         else:
             self._line = None  # Premature end of file, or just empty?
 
-    def parse(self, handle):
-        """To be removed."""
-
     def __next__(self):
         """Iterate over the records in the PIR file."""
         line = self._line

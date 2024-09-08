@@ -69,10 +69,6 @@ class IgIterator(SequenceIterator):
             line = None
         self._line = line
 
-    def parse(self, handle):
-        """To be removed."""
-        return
-
     def __next__(self):
         """Iterate over the records in the IntelliGenetics file."""
         line = self._line

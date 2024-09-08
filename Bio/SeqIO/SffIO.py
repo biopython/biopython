@@ -846,10 +846,6 @@ class SffIterator(SequenceIterator):
         self.read_flow_size = struct.calcsize(self.read_flow_fmt)
         self._read_counter = 0
 
-    def parse(self, handle):
-        """To be removed."""
-        return
-
     def __next__(self):
         stream = self.stream
         if self._read_counter == self.number_of_reads:

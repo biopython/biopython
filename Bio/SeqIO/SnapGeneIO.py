@@ -309,10 +309,6 @@ class SnapGeneIterator(SequenceIterator):
             raise ValueError("The file does not start with a SnapGene cookie packet")
         _parse_cookie_packet(length, data)
 
-    def parse(self, handle):
-        """To be removed."""
-        return
-
     def __next__(self):
         packets = self.packets
         if packets is None:

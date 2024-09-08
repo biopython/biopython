@@ -224,10 +224,6 @@ class FastaIterator(SequenceIterator):
         super().__init__(source, mode="t", fmt="Fasta")
         self._data = SimpleFastaParser(self.stream)
 
-    def parse(self, handle):
-        """To be removed."""
-        return
-
     def __next__(self):
         try:
             title, sequence = next(self._data)
@@ -261,10 +257,6 @@ class FastaTwoLineIterator(SequenceIterator):
         """
         super().__init__(source, mode="t", fmt="FASTA")
         self._data = FastaTwoLineParser(self.stream)
-
-    def parse(self, handle):
-        """To be removed."""
-        return
 
     def __next__(self):
         try:
@@ -348,10 +340,6 @@ class FastaBlastIterator(SequenceIterator):
                 break
         else:
             self._line = None
-
-    def parse(self, handle):
-        """To be removed."""
-        return
 
     def __next__(self):
         line = self._line
@@ -442,10 +430,6 @@ class FastaPearsonIterator(SequenceIterator):
                 break
         else:
             self._line = None
-
-    def parse(self, handle):
-        """To be removed."""
-        return
 
     def __next__(self):
         line = self._line
