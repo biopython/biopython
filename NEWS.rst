@@ -40,6 +40,7 @@ possible, especially the following contributors:
 
 - Gert Hulselmans
 - Peter Cock
+- Michiel de Hoon
 
 28 June 2024: Biopython 1.84
 ============================
