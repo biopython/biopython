@@ -4366,16 +4366,16 @@ def read(handle, fmt):
     Use the Bio.Align.parse function if you want to read a file containing
     more than one alignment.
     """
-    alignments = parse(handle, fmt)
-    try:
-        alignment = next(alignments)
-    except StopIteration:
-        raise ValueError("No alignments found in file") from None
-    try:
-        next(alignments)
-        raise ValueError("More than one alignment found in file")
-    except StopIteration:
-        pass
+    with parse(handle, fmt) as alignments:
+        try:
+            alignment = next(alignments)
+        except StopIteration:
+            raise ValueError("No alignments found in file") from None
+        try:
+            next(alignments)
+            raise ValueError("More than one alignment found in file")
+        except StopIteration:
+            pass
     return alignment
 
 
