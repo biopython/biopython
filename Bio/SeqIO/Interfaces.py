@@ -50,6 +50,8 @@ class SequenceIterator(ABC, Generic[AnyStr]):
         Arguments:
         - source - input file stream, or path to input file
         - alphabet - no longer used, should be None
+        - mode - string, either "t" for text mode or "b" for binary
+        - fmt - string, mixed case format name for in error messages
 
         This method MAY be overridden by any subclass.
 
