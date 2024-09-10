@@ -468,7 +468,7 @@ class CifSeqresIterator(SequenceIterator):
             metadata[chain_id].append({"pdb_id": pdb_id})
             metadata[chain_id][-1].update(struct_ref)
 
-        self.records = []
+        records = []  # type: ignore
         for chn_id, residues in sorted(chains.items()):
             record = SeqRecord(Seq("".join(residues)))
             record.annotations = {"chain": chn_id}
@@ -487,9 +487,9 @@ class CifSeqresIterator(SequenceIterator):
                     )
             else:
                 record.id = chn_id
-            self.records.append(record)
+            records.append(record)  # type: ignore
 
-        self.records = iter(self.records)  # type: ignore
+        self.records = iter(records)
 
     def __next__(self):
         return next(self.records)
