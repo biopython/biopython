@@ -8,164 +8,20 @@
 """Bio.SearchIO parser for Infernal tabular output format."""
 
 from Bio.SearchIO._index import SearchIndexer
+from Bio.SearchIO._model import Hit
 from Bio.SearchIO._model import HSP
 from Bio.SearchIO._model import HSPFragment
-from Bio.SearchIO._model import QueryResult
+from Bio.SearchIO._model import QueryResult 
+from Bio.SearchIO.HmmerIO import Hmmer3TabParser
 
-from ._base import _BaseInfernalParser
-
-__all__ = ("InfernalTabParser", "InfernalTabIndexer")
+__all__ = ("InfernalTabParser")
 
 # tabular format column names
 _TAB_FORMAT = {
-    1: (
-        "target_name",
-        "target_acc",
-        "query_name",
-        "query_acc",
-        "mdl",
-        "mdl_from",
-        "mdl_to",
-        "seq_from",
-        "seq_to",
-        "strand",
-        "trunc",
-        "pass",
-        "gc",
-        "bias",
-        "score",
-        "evalue",
-        "inc",
-        "description",
-    ),
-    2: (
-        "idx",
-        "target_name",
-        "target_acc",
-        "query_name",
-        "query_acc",
-        "clan",
-        "mdl",
-        "mdl_from",
-        "mdl_to",
-        "seq_from",
-        "seq_to",
-        "strand",
-        "trunc",
-        "pass",
-        "gc",
-        "bias",
-        "score",
-        "evalue",
-        "inc",
-        "olp",
-        "anyidx",
-        "afrct1",
-        "afrct2",
-        "winidx",
-        "wfrct1",
-        "wfrct2",
-        "mdl_len",
-        "seq_len",
-        "description",
-    ),
-    3: (
-        "target_name",
-        "target_acc",
-        "query_name",
-        "query_acc",
-        "mdl",
-        "mdl_from",
-        "mdl_to",
-        "seq_from",
-        "seq_to",
-        "strand",
-        "trunc",
-        "pass",
-        "gc",
-        "bias",
-        "score",
-        "evalue",
-        "inc",
-        "mdl_len",
-        "seq_len",
-        "description",
-    ),
+    1: ("target_name", "target_acc", "query_name", "query_acc", "mdl", "mdl_from", "mdl_to", "seq_from", "seq_to", "strand", "trunc", "pass", "gc", "bias", "score", "evalue", "inc", "description"),
+    2: ("idx", "target_name", "target_acc", "query_name", "query_acc", "clan", "mdl", "mdl_from", "mdl_to", "seq_from", "seq_to", "strand", "trunc", "pass", "gc", "bias", "score", "evalue", "inc", "olp", "anyidx", "afrct1", "afrct2", "winidx", "wfrct1", "wfrct2", "mdl_len", "seq_len", "description"),
+    3: ("target_name", "target_acc", "query_name", "query_acc", "mdl", "mdl_from", "mdl_to", "seq_from", "seq_to", "strand", "trunc", "pass", "gc", "bias", "score", "evalue", "inc", "mdl_len", "seq_len", "description")
 }
-
-_TABULAR_FMT_1_HEADER_FIELDS = [
-    "target name",
-    "accession",
-    "query name",
-    "accession",
-    "mdl",
-    "mdl from",
-    "mdl to",
-    "seq from",
-    "seq to",
-    "strand",
-    "trunc",
-    "pass",
-    "gc",
-    "bias",
-    "score",
-    "E-value",
-    "inc",
-    "description of target",
-]
-_TABULAR_FMT_2_HEADER_FIELDS = [
-    "idx",
-    "target name",
-    "accession",
-    "query name",
-    "accession",
-    "clan name",
-    "mdl",
-    "mdl from",
-    "mdl to",
-    "seq from",
-    "seq to",
-    "strand",
-    "trunc",
-    "pass",
-    "gc",
-    "bias",
-    "score",
-    "E-value",
-    "inc",
-    "olp",
-    "anyidx",
-    "afrct1",
-    "afrct2",
-    "winidx",
-    "wfrct1",
-    "wfrct2",
-    "mdl len",
-    "seq len",
-    "description of target",
-]
-_TABULAR_FMT_3_HEADER_FIELDS = [
-    "target name",
-    "accession",
-    "query name",
-    "accession",
-    "mdl",
-    "mdl from",
-    "mdl to",
-    "seq from",
-    "seq to",
-    "strand",
-    "trunc",
-    "pass",
-    "gc",
-    "bias",
-    "score",
-    "E-value",
-    "inc",
-    "mdl len",
-    "seq len",
-    "description of target",
-]
 
 # column to class attribute map
 _COLUMN_QRESULT = {
@@ -173,11 +29,11 @@ _COLUMN_QRESULT = {
     "query_acc": ("accession", str),
     "seq_len": ("seq_len", int),
     "clan": ("clan", str),
+    "mdl": ("model", str)
 }
 _COLUMN_HIT = {
     "target_name": ("id", str),
     "target_acc": ("accession", str),
-    "query_name": ("query_id", str),
     "description": ("description", str),
     "mdl_len": ("seq_len", int),
 }
@@ -186,7 +42,6 @@ _COLUMN_HSP = {
     "evalue": ("evalue", float),
     "bias": ("bias", float),
     "gc": ("gc", float),
-    "mdl": ("model", str),
     "trunc": ("truncated", str),
     "pass": ("pipeline_pass", int),
     "inc": ("is_included", str),
@@ -207,96 +62,60 @@ _COLUMN_FRAG = {
 }
 
 
-def tabular_format_from_header(header_label, header_delim):
-    """Determine the tabular format based on the header (PRIVATE)."""
-    # infernal tabular output columns are space separated files with spaces in
-    # column names, ex:
-    # #target name         accession
-    # #------------------- ---------
-    # so we use the second line of the header where the is not spaces to
-    # determine the position of the headers labels. Then we can get the label names
-    # and compare the the different tabular format names. This label comparison is done
-    # (instead of counting fields) to avoid issues if future tabular format have the
-    # same number of fields, but with different signification
-
-    # get the indices of the spaces fields delimiter from the second header line
-    # the end of the file is added to the indices to process the last field
-    indices = [idx for idx, char in enumerate(header_delim) if char == " "] + [
-        len(header_delim)
-    ]
-    prev_idx = 1
-    fields = []
-    for idx in indices:
-        fields.append(header_label[prev_idx:idx].strip())
-        prev_idx = idx
-
-    # compare the headers fields to the possible fields to determine the format
-    if fields == _TABULAR_FMT_1_HEADER_FIELDS:
-        return 1
-    elif fields == _TABULAR_FMT_2_HEADER_FIELDS:
-        return 2
-    elif fields == _TABULAR_FMT_3_HEADER_FIELDS:
-        return 3
-    else:
-        raise ValueError(
-            "Cannot determine the tabular format from the header. \
-                         The tabular file is likely incorrect or its format is unsupported. \
-                         Tabular format 1, 2 and 3 are currently supported)."
-        )
-
-
-class InfernalTabParser(_BaseInfernalParser):
+class InfernalTabParser(Hmmer3TabParser):
     """Parser for the Infernal tabular format."""
 
-    def __init__(self, handle, fmt=None):
+
+    def __init__(self, handle):
         """Initialize the class."""
         self.handle = handle
-        # if a tabular fmt is specified, set its value
-        if isinstance(fmt, int):
-            if not 1 <= fmt <= 3:
-                raise ValueError(
-                    "Unsupported tabular format. Format 1, 2 and 3 are currently supported."
-                )
-            self.fmt = fmt
-        # if the format is not provided by the user, guess the format
-        else:
-            self.line = self.handle.readline().strip()
-            header_label = self.line
-            self.line = self.handle.readline().strip()
-            header_delim = self.line
-            if header_label == "" or header_delim == "":
-                raise ValueError(
-                    "Unexpected empty line in the header of Infernal tabular output."
-                )
+        self.line = self.handle.readline().strip()
+        self.fmt = self._find_tabular_format()
 
-            self.fmt = tabular_format_from_header(header_label, header_delim)
+
+    def _find_tabular_format(self):
+        """Identify the tabular file format from the header (PRIVATE)."""
+        # skip the first line as some column names contain spaces
+        self.line = self.handle.readline()
+
+        # the second line should always be a header
+        if not self.line.startswith("#"):
+            raise ValueError("Expected the first two lines of an Infernal tabular file to be a the header.")
+
+        # identify tabular format 1 (default; 18 columns), 2 (29 columns) or 3 (19 columns)
+        # from the the second header line which does not contain spaces
+        if len(self.line.split(' ')) == len(_TAB_FORMAT[1]):
+            fmt = 1
+        elif len(self.line.split(' ')) == len(_TAB_FORMAT[2]):
+            fmt = 2 
+        elif len(self.line.split(' ')) == len(_TAB_FORMAT[3]):
+            fmt = 3
+        else:
+            raise ValueError("Unknown Infernal tabular output format. Format 1 (default), 2 and 3 are supported.")
+
+        return fmt 
+
 
     def __iter__(self):
         """Iterate over InfernalTabParser, yields query results."""
-        # read through the header (and footer if there is no results)
-        self.line = self.handle.readline()
+        # read through the footer
         while self.line.startswith("#"):
             self.line = self.handle.readline()
-        # if we have result rows, parse them
+        # if we have result rows, parse it
         if self.line:
             yield from self._parse_qresult()
+
 
     def _parse_row(self):
         """Return a dictionary of parsed row values (PRIVATE)."""
         cols = [x for x in self.line.strip().split(" ") if x]
         if len(cols) < len(_TAB_FORMAT[self.fmt]):
-            raise ValueError(
-                f"Less columns than expected for format {self.fmt}, only {len(cols)}"
-            )
+            raise ValueError("Less columns than expected for format {}, only {}".format(self.fmt, len(cols)))
         # combine extra description columns into one string
-        cols[len(_TAB_FORMAT[self.fmt]) - 1] = " ".join(
-            cols[len(_TAB_FORMAT[self.fmt]) - 1 :]
-        )
+        cols[len(_TAB_FORMAT[self.fmt])-1] = " ".join(cols[len(_TAB_FORMAT[self.fmt])-1:])
 
         qresult, hit, hsp, frag = {}, {}, {}, {}
-        for sname, value in zip(
-            _TAB_FORMAT[self.fmt], cols[: len(_TAB_FORMAT[self.fmt])]
-        ):
+        for sname, value in zip(_TAB_FORMAT[self.fmt],cols[:len(_TAB_FORMAT[self.fmt])]):
             # iterate over each dict, mapping pair to determine
             # attribute name and value of each column
             for parsed_dict, mapping in (
@@ -315,16 +134,17 @@ class InfernalTabParser(_BaseInfernalParser):
         # adjust start and end coordinates according to strand
         self._adjust_coords(frag)
         # convert inclusion string to a bool
-        self._inclusion_str_to_bool(hsp)
-
+        self._convert_inclusion(hsp)
+        
         return {"qresult": qresult, "hit": hit, "hsp": hsp, "frag": frag}
 
+    
     def _adjust_coords(self, frag):
         """Adjust start and end coordinates according to strand (PRIVATE)."""
         strand = frag["hit_strand"]
-        assert strand is not None
+        assert strand is not None 
         # switch start <--> end coordinates if strand is -1 and the strand to an integer (0 or -1)
-        if strand == "-":
+        if strand ==  '-':
             hit_start = frag["hit_start"]
             hit_end = frag["hit_end"]
             frag["hit_start"] = hit_end
@@ -333,10 +153,12 @@ class InfernalTabParser(_BaseInfernalParser):
         else:
             frag["hit_strand"] = 0
 
-    def _inclusion_str_to_bool(self, hsp):
+
+    def _convert_inclusion(self, hsp):
         """Convert inclusion string to a bool (PRIVATE)."""
         is_included = hsp["is_included"]
-        hsp["is_included"] = True if is_included == "!" else False
+        hsp["is_included"] = True if is_included == '!' else False
+
 
     def _parse_qresult(self):
         """Yield QueryResult objects (PRIVATE)."""
@@ -344,8 +166,11 @@ class InfernalTabParser(_BaseInfernalParser):
         state_EOF = 0
         state_QRES_NEW = 1
         state_QRES_SAME = 3
+        state_HIT_NEW = 2
+        state_HIT_SAME = 4
         # dummies for initial states
         qres_state = None
+        hit_state = None
         file_state = None
         cur_qid = None
         cur_hid = None
@@ -354,7 +179,7 @@ class InfernalTabParser(_BaseInfernalParser):
         prev_hid = None
         # dummies for initial parsed value containers
         cur, prev = None, None
-        hit_dict = {}
+        hit_list, hsp_list = [], []
 
         while True:
             # store previous line's parsed values for all lines after the first
@@ -377,145 +202,50 @@ class InfernalTabParser(_BaseInfernalParser):
                 qres_state = state_QRES_NEW
             else:
                 qres_state = state_QRES_SAME
+            # new hits are hits with different id or hits in a new qresult
+            if prev_hid != cur_hid or qres_state == state_QRES_NEW:
+                hit_state = state_HIT_NEW
+            else:
+                hit_state = state_HIT_SAME
 
-            # creating objects for the previously parsed line(s), so nothing is done
+            # creating objects for the previously parsed line(s), so nothing is done 
             # in the first parsed line (prev == None)
             if prev is not None:
                 # create fragment and HSP and set their attributes
-                # and append to hit container
                 frag = HSPFragment(prev_hid, prev_qid)
                 for attr, value in prev["frag"].items():
                     setattr(frag, attr, value)
                 hsp = HSP([frag])
                 for attr, value in prev["hsp"].items():
                     setattr(hsp, attr, value)
-                self._add_hit_to_dict(prev["hit"], hsp, hit_dict)
+                hsp_list.append(hsp)
+
+                # create hit and append to temp hit container if hit_state
+                # says we're not at the same hit or at a new query
+                if hit_state == state_HIT_NEW:
+                    hit = Hit(hsp_list)
+                    for attr, value in prev["hit"].items():
+                        setattr(hit, attr, value)
+                    hit_list.append(hit)
+                    hsp_list = []
+                # create Hit and set its attributes
+                #hit = Hit([hsp])
+                #for attr, value in prev["hit"].items():
+                #    setattr(hit, attr, value)
+                #hit_list.append(hit)
 
                 # create qresult and yield if we're at a new qresult or at EOF
                 if qres_state == state_QRES_NEW or file_state == state_EOF:
-                    # create the hit list from the temporary container
-                    qresult = QueryResult(self._hit_to_list(hit_dict), prev_qid)
+                    qresult = QueryResult(hit_list, prev_qid)
                     for attr, value in prev["qresult"].items():
                         setattr(qresult, attr, value)
                     yield qresult
                     # if we're at EOF, break
                     if file_state == state_EOF:
                         break
-                    hit_dict = {}
+                    hit_list = []
 
             self.line = self.handle.readline()
-
-
-class InfernalTabIndexer(SearchIndexer, _BaseInfernalParser):
-    """Indexer class for Infernal tabular output."""
-
-    _parser = InfernalTabParser
-    # tabular format is guessed from the header, so we need to keep it while iterating
-    # over the file handle, and add it to the raw bytes string
-    _header = b""
-
-    def __init__(self, filename, fmt=None):
-        """Initialize the class."""
-        SearchIndexer.__init__(self, filename, fmt=fmt)
-        self._parse_header()
-
-        # the index of the query id column in the tabular file varies depending on the fmt
-        # we need to use the format set by the user, or infer the format to parse the records
-        if isinstance(fmt, int):
-            if not 1 <= fmt <= 3:
-                raise ValueError(
-                    "Unsupported tabular format. Format 1, 2 and 3 are currently supported."
-                )
-            self._query_id_idx = 3 if fmt == 2 else 2
-        # if the format is not provided by the user, infer the format
-        else:
-            header = self._header.strip().split(b"\n")
-            if len(header) < 2:
-                print(header)
-                raise ValueError(
-                    "Unexpected header format. Cannot infer Infernal tabular format for this file, \
-                                 please set the format manually."
-                )
-            self._query_id_idx = (
-                3
-                if tabular_format_from_header(header[0].decode(), header[1].decode())
-                == 2
-                else 2
-            )
-
-    def _parse_header(self):
-        """Save the content of the header of the tabular file for downstream processing (PRIVATE)."""
-        handle = self._handle
-        handle.seek(0)
-        while True:
-            line = handle.readline()
-            if not line or not line.startswith(b"#"):
-                break
-            self._header += line
-
-    def __iter__(self):
-        """Iterate over the file handle; yields key, start offset, and length."""
-        handle = self._handle
-        handle.seek(0)
-        qresult_key = None
-        start_offset = handle.tell()
-
-        # set line with mock value
-        line = b"#"
-
-        # read through header
-        while line.startswith(b"#"):
-            start_offset = handle.tell()
-            line = handle.readline()
-
-        # index the qresults
-        while True:
-            # get end offset here since we only know a qresult ends after
-            # encountering the next one
-            end_offset = handle.tell()
-
-            if not line:
-                break
-
-            cols = [x for x in line.strip().split(b" ") if x]
-
-            if qresult_key is None:
-                qresult_key = cols[self._query_id_idx]
-            else:
-                curr_key = cols[self._query_id_idx]
-                if curr_key != qresult_key:
-                    adj_end = end_offset - len(line)
-                    yield (qresult_key.decode(), start_offset, adj_end - start_offset)
-                    qresult_key = curr_key
-                    start_offset = adj_end
-
-            line = handle.readline()
-            if not line or line.startswith(b"#"):
-                yield (qresult_key.decode(), start_offset, end_offset - start_offset)
-                break
-
-    def get_raw(self, offset):
-        """Return the raw bytes string of a QueryResult object from the given offset."""
-        handle = self._handle
-        qresult_key = None
-        qresult_raw = self._header
-
-        # read the qresult raw string
-        handle.seek(offset)
-        while True:
-            line = handle.readline()
-            if not line or line.startswith(b"#"):
-                break
-            cols = [x for x in line.strip().split(b" ") if x]
-            if qresult_key is None:
-                qresult_key = cols[self._query_id_idx]
-            else:
-                curr_key = cols[self._query_id_idx]
-                if curr_key != qresult_key:
-                    break
-            qresult_raw += line
-
-        return qresult_raw
 
 
 # if not used as a module, run the doctest
