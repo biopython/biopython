@@ -55,7 +55,7 @@ class UniprotIterator(SequenceIterator):
         """
         if alphabet is not None:
             raise ValueError("The alphabet argument is no longer supported")
-        super().__init__(source, mode="b", fmt="UniProt")
+        super().__init__(source, mode="b", fmt="UniProt XML")
         self.return_raw_comments = return_raw_comments
         self._data = ElementTree.iterparse(
             self.stream, events=("start", "start-ns", "end")
