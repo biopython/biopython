@@ -23,46 +23,66 @@ from Bio import SeqFeature
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
+from .Interfaces import _BytesIOSource
+from .Interfaces import SequenceIterator
+
+
 NS = "{http://uniprot.org/uniprot}"
 REFERENCE_JOURNAL = "%(name)s %(volume)s:%(first)s-%(last)s(%(pub_date)s)"
 
 
-def UniprotIterator(source, alphabet=None, return_raw_comments=False):
-    """Iterate over UniProt XML as SeqRecord objects.
+class UniprotIterator(SequenceIterator):
+    """Parser for UniProt XML files, returning SeqRecord objects."""
 
-    parses an XML entry at a time from any UniProt XML file
-    returns a SeqRecord for each iteration
+    def __init__(
+        self,
+        source: _BytesIOSource,
+        alphabet: None = None,
+        return_raw_comments: bool = False,
+    ) -> None:
+        """Iterate over UniProt XML as SeqRecord objects.
 
-    This generator can be used in Bio.SeqIO
+        parses an XML entry at a time from any UniProt XML file
+        returns a SeqRecord for each iteration
 
-    Argument source is a file-like object or a path to a file.
+        Arguments:
+         - source   - input stream opened in binary mode, or a path to a file
+         - alphabet - optional alphabet, not used. Leave as None.
+         - return_raw_comments - if True, return comment fields as complete XML
+           to allow further processing.
 
-    Optional argument alphabet should not be used anymore.
+        This generator can be used in Bio.SeqIO.
+        """
+        if alphabet is not None:
+            raise ValueError("The alphabet argument is no longer supported")
+        super().__init__(source, mode="b", fmt="UniProt")
+        self.return_raw_comments = return_raw_comments
+        self._data = ElementTree.iterparse(
+            self.stream, events=("start", "start-ns", "end")
+        )
 
-    return_raw_comments = True --> comment fields are returned as complete XML to allow further processing
-    skip_parsing_errors = True --> if parsing errors are found, skip to next entry
-    """
-    if alphabet is not None:
-        raise ValueError("The alphabet argument is no longer supported")
-    try:
-        for event, elem in ElementTree.iterparse(
-            source, events=("start", "start-ns", "end")
-        ):
-            if event == "start-ns" and not (
-                elem[1].startswith("http://www.w3.org/") or NS == f"{{{elem[1]}}}"
-            ):
-                raise ValueError(
-                    f"SeqIO format 'uniprot-xml' only parses xml with namespace: {NS} but xml has namespace: {{{elem[1]}}}"
-                )
-            if event == "end" and elem.tag == NS + "entry":
-                yield Parser(elem, return_raw_comments=return_raw_comments).parse()
-                elem.clear()
-    except ElementTree.ParseError as exception:
-        if errors.messages[exception.code] == errors.XML_ERROR_NO_ELEMENTS:
-            assert exception.position == (1, 0)  # line 1, column 0
-            raise ValueError("Empty file.") from None
-        else:
-            raise
+    def __next__(self):
+        try:
+            for event, elem in self._data:
+                if event == "start-ns" and not (
+                    elem[1].startswith("http://www.w3.org/") or NS == f"{{{elem[1]}}}"
+                ):
+                    raise ValueError(
+                        f"SeqIO format 'uniprot-xml' only parses xml with namespace: {NS} but xml has namespace: {{{elem[1]}}}"
+                    )
+                if event == "end" and elem.tag == NS + "entry":
+                    record = Parser(
+                        elem, return_raw_comments=self.return_raw_comments
+                    ).parse()
+                    elem.clear()
+                    return record
+            raise StopIteration
+        except ElementTree.ParseError as exception:
+            if errors.messages[exception.code] == errors.XML_ERROR_NO_ELEMENTS:
+                assert exception.position == (1, 0)  # line 1, column 0
+                raise ValueError("Empty file.") from None
+            else:
+                raise
 
 
 class Parser:

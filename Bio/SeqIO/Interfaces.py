@@ -29,6 +29,7 @@ from Bio.SeqRecord import SeqRecord
 _PathLikeTypes = (PathLike, str, bytes)
 _IOSource = Union[IO[AnyStr], PathLike, str, bytes]
 _TextIOSource = _IOSource[str]
+_BytesIOSource = _IOSource[bytes]
 
 
 class SequenceIterator(ABC, Generic[AnyStr]):
