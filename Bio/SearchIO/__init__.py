@@ -182,6 +182,7 @@ Support for parsing and indexing:
                       subprograms are hmmscan, hmmsearch, and phmmer.
  - hmmer2-text      - HMMER2 regular text output format. Supported HMMER2
                       subprograms are hmmpfam, hmmsearch.
+ - infernal-tab     - Infernal tabular output.
 
 Support for parsing:
 
@@ -221,6 +222,7 @@ _ITERATOR_MAP = {
     # as we need it distinguish hit / target coordinates
     "hmmscan3-domtab": ("HmmerIO", "Hmmer3DomtabHmmhitParser"),
     "hmmsearch3-domtab": ("HmmerIO", "Hmmer3DomtabHmmqueryParser"),
+    "infernal-tab": ("InfernalIO", "InfernalTabParser"),
     "interproscan-xml": ("InterproscanIO", "InterproscanXmlParser"),
     "phmmer3-domtab": ("HmmerIO", "Hmmer3DomtabHmmqueryParser"),
 }

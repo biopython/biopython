@@ -136,6 +136,7 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual(1, hit.domain_reported_num)
         self.assertEqual(1, hit.domain_included_num)
         self.assertEqual("Immunoglobulin domain", hit.description)
+        # first hsp
         hsp = hit.hsps[0]
         self.assertEqual(2.1e-09, hsp.evalue)
         self.assertEqual(37.6, hsp.bitscore)
