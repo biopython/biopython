@@ -652,7 +652,7 @@ class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
                 # Currently the __getitem__ method uses this
                 # trick too, but we hope to fix that later
                 raw = (
-                    """<?xml version='1.0' encoding='UTF-8'?>
+                    b"""<?xml version='1.0' encoding='UTF-8'?>
                 <uniprot xmlns="http://uniprot.org/uniprot"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xsi:schemaLocation="http://uniprot.org/uniprot
@@ -660,9 +660,9 @@ class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
                 %s
                 </uniprot>
                 """
-                    % raw.decode()
+                    % raw
                 )
-                handle = StringIO(raw)
+                handle = BytesIO(raw)
                 rec2 = SeqIO.read(handle, fmt)
             else:
                 rec2 = SeqIO.read(handle, fmt)
