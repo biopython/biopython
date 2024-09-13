@@ -260,7 +260,7 @@ class FastaIterator(SequenceIterator):
             assert not title, repr(title)
             # Should we use SeqRecord default for no ID?
             first_word = ""
-        return SeqRecord(
+        return SeqRecord._from_validated(
             Seq(sequence), id=first_word, name=first_word, description=title
         )
 
