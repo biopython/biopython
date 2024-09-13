@@ -49,44 +49,14 @@ def SimpleFastaParser(handle):
     ('delta', 'CGCGC')
 
     """
-    try:
-        line = next(handle)
-    except StopIteration:
+    # Skip any text before the first record (e.g. blank lines, comments)
+    for line in handle:
+        if line[0] == ">":
+            title = line[1:].rstrip()
+            break
+    else:
+        # no break encountered - probably an empty file
         return
-    if not line.startswith(">"):
-        warnings.warn(
-            "Previously, the FASTA parser silently ignored comments at the "
-            "beginning of the FASTA file (before the first sequence).\n"
-            "\n"
-            "Nowadays, the FASTA file format is usually understood not to "
-            "have any such comments, and most software packages do not allow "
-            "them. Therefore, the use of comments at the beginning of a FASTA "
-            "file is now deprecated in Biopython.\n"
-            "\n"
-            "In a future Biopython release, this deprecation warning will be "
-            "replaced by a ValueError. To avoid this, there are three "
-            "options:\n"
-            "\n"
-            "(1) Modify your FASTA file to remove such comments at the "
-            "beginning of the file.\n"
-            "\n"
-            "(2) Use SeqIO.parse with the 'fasta-pearson' format instead of "
-            "'fasta'. This format is consistent with the FASTA format defined "
-            "by William Pearson's FASTA aligner software. Thie format allows "
-            "for comments before the first sequence; lines starting with the "
-            "';' character anywhere in the file are also regarded as comment "
-            "lines and are ignored.\n"
-            "\n"
-            "(3) Use the 'fasta-blast' format. This format regards any lines "
-            "starting with '!', '#', or ';' as comment lines. The "
-            "'fasta-blast' format may be safer than the 'fasta-pearson' "
-            "format, as it explicitly indicates which lines are comments. ",
-            BiopythonDeprecationWarning,
-        )
-        for line in handle:
-            if line.startswith(">"):
-                break
-    title = line[1:].rstrip()
 
     # Main logic
     # Note, remove trailing whitespace, and any internal spaces
