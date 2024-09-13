@@ -1006,12 +1006,15 @@ class SffIterator(SequenceIterator):
             annotations["region"] = _get_read_region(name)
             annotations["coords"] = _get_read_xy(name)
         annotations["molecule_type"] = "DNA"
-        record = SeqRecord(
-            Seq(seq), id=name, name=name, description="", annotations=annotations
+        # Avoids type and length checks
+        record = SeqRecord._from_validated(
+            Seq(seq),
+            id=name,
+            name=name,
+            description="",
+            annotations=annotations,
+            letter_annotations={"phred_quality": quals},
         )
-        # Dirty trick to speed up this line:
-        # record.letter_annotations["phred_quality"] = quals
-        dict.__setitem__(record._per_letter_annotations, "phred_quality", quals)
         # Return the record and then continue...
         return record
 

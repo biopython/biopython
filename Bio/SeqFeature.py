@@ -123,7 +123,6 @@ assert _split(
     "181647..181905",
 ]
 
-
 _pair_location = r"[<>]?-?\d+\.\.[<>]?-?\d+"
 
 _between_location = r"\d+\^\d+"

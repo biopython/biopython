@@ -363,7 +363,6 @@ import warnings
 from math import log
 from abc import abstractmethod
 from typing import Callable
-from typing import IO
 from collections.abc import Iterator
 from collections.abc import Mapping
 from typing import Optional
@@ -531,14 +530,14 @@ def phred_quality_from_solexa(solexa_quality: float) -> float:
     return 10 * log(10 ** (solexa_quality / 10.0) + 1, 10)
 
 
-def _get_phred_quality(record: SeqRecord) -> Union[list[float], list[int]]:
+def _get_phred_quality(record: SeqRecord) -> Union[list[int], list[float]]:
     """Extract PHRED qualities from a SeqRecord's letter_annotations (PRIVATE).
 
     If there are no PHRED qualities, but there are Solexa qualities, those are
     used instead after conversion.
     """
     try:
-        return record.letter_annotations["phred_quality"]
+        return record.letter_annotations["phred_quality"]  # type: ignore
     except KeyError:
         pass
     try:
@@ -1091,18 +1090,20 @@ class FastqIteratorAbstractBaseClass(SequenceIterator[str]):
         descr = title_line
         id = descr.split()[0]
         name = id
-        record = SeqRecord(Seq(seq_string), id=id, name=name, description=descr)
         q_mapping = self.q_mapping
         try:
             qualities = [q_mapping[letter2] for letter2 in quality_string]
         except KeyError:
             raise ValueError("Invalid character in quality string") from None
-        # For speed, will now use a dirty trick to speed up assigning the
-        # qualities. We do this to bypass the length check imposed by the
-        # per-letter-annotations restricted dict (as this has already been
-        # checked by FastqGeneralIterator). This is equivalent to:
-        # record.letter_annotations["phred_quality"] = qualities
-        dict.__setitem__(record._per_letter_annotations, self.q_key, qualities)
+
+        # # Avoid length/type checking
+        record = SeqRecord._from_validated(
+            Seq(seq_string),
+            id=id,
+            name=name,
+            description=descr,
+            letter_annotations={self.q_key: qualities},
+        )
         return record
 
 
@@ -1526,10 +1527,15 @@ class QualPhredIterator(SequenceIterator):
 
             # Return the record and then continue...
             sequence = Seq(None, length=len(qualities))
-            record = SeqRecord(sequence, id=id, name=name, description=descr)
-            # Dirty trick to speed up this line:
-            # record.letter_annotations["phred_quality"] = qualities
-            dict.__setitem__(record._per_letter_annotations, "phred_quality", qualities)
+
+            # Avoid unnecessary length/type checks
+            record = SeqRecord._from_validated(
+                sequence,
+                id=id,
+                name=name,
+                description=descr,
+                letter_annotations={"phred_quality": qualities},
+            )
             return record
 
 

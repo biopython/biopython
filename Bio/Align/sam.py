@@ -698,15 +698,24 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     number = int(number)
                     target += seq[:number]
                 seq = target
-                index = self._target_indices[rname]
-                target = copy.deepcopy(self.targets[index])
-                length = len(target.seq)
+                rname_target = self.targets[self._target_indices[rname]]
+                length = len(rname_target.seq)
                 data = {}
                 index = 0
                 for start, size in zip(starts, sizes):
                     data[start] = seq[index : index + size]
                     index += size
-                target.seq = Seq(data, length=length)
+
+                target = SeqRecord._from_validated(
+                    Seq(data, length=length),
+                    rname_target.id,
+                    rname_target.name,
+                    rname_target.description,
+                    annotations={
+                        key: copy.copy(val)
+                        for key, val in rname_target.annotations.items()
+                    },
+                )
             if coordinates is not None:
                 coordinates = np.array(coordinates).transpose()
                 if strand == "-":
