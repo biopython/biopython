@@ -361,6 +361,7 @@ are approximately equal.
 
 import warnings
 from math import log
+from abc import abstractproperty
 from typing import Callable
 from typing import IO
 from collections.abc import Iterator
@@ -996,7 +997,60 @@ def FastqGeneralIterator(source: _TextIOSource) -> Iterator[tuple[str, str, str]
         yield from _parse_blocks(handle, line)
 
 
-class FastqPhredIterator(SequenceIterator[str]):
+class FastqIteratorAbstractBaseClass(SequenceIterator[str]):
+    """Abstract base class for FASTQ file parsers."""
+
+    @abstractproperty
+    def q_mapping(self):
+        """Dictionary that maps letters in the quality string to quality values."""
+        pass
+
+    @abstractproperty
+    def q_key(self):
+        """Key name (string) of the quality values in record.letter_annotations."""
+        pass
+
+    def __init__(self, source):
+        """Iterate over FASTQ records as SeqRecord objects.
+
+        Arguments:
+         - source - input stream opened in text mode, or a path to a file
+
+        The quality values are stored in the `letter_annotations` dictionary
+        attribute under the key `q_key`.
+        """
+        super().__init__(source, mode="t", fmt="Fastq")
+        try:
+            line = next(self.stream)
+        except StopIteration:  # empty file?
+            self._data: Iterator[tuple] = iter([])
+        else:
+            self._data = _parse_blocks(self.stream, line)
+
+    def __next__(self) -> SeqRecord:
+        """Parse the file and generate SeqRecord objects."""
+        try:
+            title_line, seq_string, quality_string = next(self._data)
+        except StopIteration:
+            raise StopIteration from None
+        descr = title_line
+        id = descr.split()[0]
+        name = id
+        record = SeqRecord(Seq(seq_string), id=id, name=name, description=descr)
+        try:
+            qualities = [self.q_mapping[letter2] for letter2 in quality_string]
+        except KeyError:
+            raise ValueError("Invalid character in quality string") from None
+        # For speed, will now use a dirty trick to speed up assigning the
+        # qualities. We do this to bypass the length check imposed by the
+        # per-letter-annotations restricted dict (as this has already been
+        # checked by FastqGeneralIterator). This is equivalent to:
+        # record.letter_annotations["phred_quality"] = qualities
+        dict.__setitem__(record._per_letter_annotations, self.q_key, qualities)
+        return record
+
+
+class FastqPhredIterator(FastqIteratorAbstractBaseClass):
     """Parser for FASTQ files."""
 
     assert SANGER_SCORE_OFFSET == ord("!")
@@ -1009,6 +1063,8 @@ class FastqPhredIterator(SequenceIterator[str]):
         chr(letter): letter - SANGER_SCORE_OFFSET
         for letter in range(SANGER_SCORE_OFFSET, 94 + SANGER_SCORE_OFFSET)
     }
+
+    q_key = "phred_quality"
 
     def __init__(
         self,
@@ -1091,40 +1147,10 @@ class FastqPhredIterator(SequenceIterator[str]):
         """
         if alphabet is not None:
             raise ValueError("The alphabet argument is no longer supported")
-        super().__init__(source, mode="t", fmt="Fastq")
-        try:
-            line = next(self.stream)
-        except StopIteration:  # empty file?
-            self._data: Iterator[tuple] = iter([])
-        else:
-            self._data = _parse_blocks(self.stream, line)
-
-    def __next__(self) -> SeqRecord:
-        """Parse the file and generate SeqRecord objects."""
-
-        q_mapping = FastqPhredIterator.q_mapping
-        try:
-            title_line, seq_string, quality_string = next(self._data)
-        except StopIteration:
-            raise StopIteration from None
-        descr = title_line
-        id = descr.split()[0]
-        name = id
-        record = SeqRecord(Seq(seq_string), id=id, name=name, description=descr)
-        try:
-            qualities = [q_mapping[letter2] for letter2 in quality_string]
-        except KeyError:
-            raise ValueError("Invalid character in quality string") from None
-        # For speed, will now use a dirty trick to speed up assigning the
-        # qualities. We do this to bypass the length check imposed by the
-        # per-letter-annotations restricted dict (as this has already been
-        # checked by FastqGeneralIterator). This is equivalent to:
-        # record.letter_annotations["phred_quality"] = qualities
-        dict.__setitem__(record._per_letter_annotations, "phred_quality", qualities)
-        return record
+        super().__init__(source)
 
 
-class FastqSolexaIterator(SequenceIterator):
+class FastqSolexaIterator(FastqIteratorAbstractBaseClass):
     """Parser for old Solexa/Illumina FASTQ like files.
 
     These files differ in the quality mapping.
@@ -1134,6 +1160,8 @@ class FastqSolexaIterator(SequenceIterator):
         chr(letter): letter - SOLEXA_SCORE_OFFSET
         for letter in range(SOLEXA_SCORE_OFFSET - 5, 63 + SOLEXA_SCORE_OFFSET)
     }
+
+    q_key = "solexa_quality"
 
     def __init__(
         self,
@@ -1279,34 +1307,10 @@ class FastqSolexaIterator(SequenceIterator):
         """
         if alphabet is not None:
             raise ValueError("The alphabet argument is no longer supported")
-        super().__init__(source, mode="t", fmt="Fastq")
-        try:
-            line = next(self.stream)
-        except StopIteration:  # empty file?
-            self._data: Iterator[tuple] = iter([])
-        else:
-            self._data = _parse_blocks(self.stream, line)
-
-    def __next__(self):
-        title_line, seq_string, quality_string = next(self._data)
-        descr = title_line
-        id = descr.split()[0]
-        name = id
-        record = SeqRecord(Seq(seq_string), id=id, name=name, description=descr)
-        try:
-            qualities = [
-                FastqSolexaIterator.q_mapping[letter2] for letter2 in quality_string
-            ]
-        # DO NOT convert these into PHRED qualities automatically!
-        except KeyError:
-            raise ValueError("Invalid character in quality string") from None
-        # Dirty trick to speed up this line:
-        # record.letter_annotations["solexa_quality"] = qualities
-        dict.__setitem__(record._per_letter_annotations, "solexa_quality", qualities)
-        return record
+        super().__init__(source)
 
 
-class FastqIlluminaIterator(SequenceIterator):
+class FastqIlluminaIterator(FastqIteratorAbstractBaseClass):
     """Parser for Illumina 1.3 to 1.7 FASTQ like files.
 
     These files differ in the quality mapping.
@@ -1316,6 +1320,8 @@ class FastqIlluminaIterator(SequenceIterator):
         chr(letter): letter - SOLEXA_SCORE_OFFSET
         for letter in range(SOLEXA_SCORE_OFFSET, 63 + SOLEXA_SCORE_OFFSET)
     }
+
+    q_key = "phred_quality"
 
     def __init__(
         self,
@@ -1357,30 +1363,7 @@ class FastqIlluminaIterator(SequenceIterator):
         """
         if alphabet is not None:
             raise ValueError("The alphabet argument is no longer supported")
-        super().__init__(source, mode="t", fmt="Fastq")
-        try:
-            line = next(self.stream)
-        except StopIteration:  # empty file?
-            self._data: Iterator[tuple] = iter([])
-        else:
-            self._data = _parse_blocks(self.stream, line)
-
-    def __next__(self):
-        title_line, seq_string, quality_string = next(self._data)
-        descr = title_line
-        id = descr.split()[0]
-        name = id
-        record = SeqRecord(Seq(seq_string), id=id, name=name, description=descr)
-        try:
-            qualities = [
-                FastqIlluminaIterator.q_mapping[letter2] for letter2 in quality_string
-            ]
-        except KeyError:
-            raise ValueError("Invalid character in quality string") from None
-        # Dirty trick to speed up this line:
-        # record.letter_annotations["phred_quality"] = qualities
-        dict.__setitem__(record._per_letter_annotations, "phred_quality", qualities)
-        return record
+        super().__init__(source)
 
 
 class QualPhredIterator(SequenceIterator):
