@@ -7,6 +7,7 @@
 
 
 from .infernal_tab import InfernalTabParser
+from .infernal_text import InfernalTextParser
 
 
 # if not used as a module, run the doctest
