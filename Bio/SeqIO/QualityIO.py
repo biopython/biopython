@@ -1016,16 +1016,18 @@ class FastqIteratorAbstractBaseClass(SequenceIterator[str]):
         attribute under the key `q_key`.
         """
         super().__init__(source, mode="t", fmt="Fastq")
-        try:
-            line = next(self.stream)
-        except StopIteration:  # empty file?
-            self.line = None
-        else:
-            self.line = line
+        self.line = None
 
     def __next__(self) -> SeqRecord:
         """Parse the file and generate SeqRecord objects."""
         line = self.line
+        if line is None:
+            try:
+                line = next(self.stream)
+            except StopIteration:  # empty file?
+                self.line = None
+            else:
+                self.line = line
         if line is None:
             raise StopIteration
         if line[0] != "@":

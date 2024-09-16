@@ -1000,7 +1000,8 @@ class NonFastqTests(unittest.TestCase):
 
     def test_sff_as_fastq(self):
         for f in ("fastq", "fastq-sanger", "fastq-solexa", "fastq-illumina"):
-            self.assertRaises(ValueError, SeqIO.parse, "Roche/greek.sff", f)
+            generator = SeqIO.parse("Roche/greek.sff", f)
+            self.assertRaises(ValueError, next, generator)
 
 
 class TestsConverter(SeqIOConverterTestBaseClass, QualityIOTestBaseClass):
