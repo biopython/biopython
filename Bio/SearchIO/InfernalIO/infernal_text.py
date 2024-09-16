@@ -42,7 +42,8 @@ _DIV_HEADER_OPT = "# - - -"
 _DIV_QUERY_END = "//"
 _DIV_QUERY_START = "Query:"
 # hits 
-_DIV_HITS_END = "Internal CM pipeline statistics summary:"
+_DIV_HITS_END_CM = "Internal CM pipeline statistics summary:"
+_DIV_HITS_END_HMM = "Internal HMM-only pipeline statistics summary:"
 _DIV_HIT_SCORE = "Hit scores:"
 _DIV_HIT_ALIGNMENT = "Hit alignments:"
 _DIV_NO_HIT = "   [No hits detected that satisfy reporting thresholds]"
@@ -157,7 +158,7 @@ class InfernalTextParser:
             while self.line and not self.line.startswith(_DIV_QUERY_END):
                 hit_list = self._parse_hit(qid, qdesc)
                 # read through the statistics summary
-                if self.line.startswith(_DIV_HITS_END):
+                if self.line.startswith(_DIV_HITS_END_CM) or self.line.startswith(_DIV_HITS_END_HMM):
                     while self.line and not self.line.startswith(_DIV_QUERY_END):
                         self.line = read_forward(self.handle)
             # create qresult, set its attributes and yield   
@@ -195,7 +196,7 @@ class InfernalTextParser:
                 elif self.line.startswith(_DIV_NO_HIT):
                     while True:
                         self.line = read_forward(self.handle)
-                        if self.line.startswith(_DIV_HITS_END):
+                        if self.line.startswith(_DIV_HITS_END_CM) or self.line.startswith(_DIV_HITS_END_HMM):
                             return []
                 elif self.line.startswith(_DIV_HIT_SCORE):
                     # read through the header 
@@ -205,7 +206,7 @@ class InfernalTextParser:
                     # parse the hit score table
                     while True:
                         # we've reached the end of the hit score table
-                        if self.line.startswith(_DIV_HITS_END):
+                        if self.line.startswith(_DIV_HITS_END_CM) or self.line.startswith(_DIV_HITS_END_HMM):
                             # create the last hit 
                             hit = Hit(hsp_list)
                             for attr, value in hit_attrs.items():
@@ -278,10 +279,10 @@ class InfernalTextParser:
                 elif self.line.startswith(_DIV_NO_HIT):
                     while True:
                         self.line = read_forward(self.handle)
-                        if self.line.startswith(_DIV_HITS_END):
+                        if self.line.startswith(_DIV_HITS_END_CM) or self.line.startswith(_DIV_HITS_END_HMM):
                             return []
                 # we've reached the end of the hit section
-                elif self.line.startswith(_DIV_HITS_END):
+                elif self.line.startswith(_DIV_HITS_END_CM) or self.line.startswith(_DIV_HITS_END_HMM):
                     # create the last hit 
                     hit = Hit(hsp_list)
                     for attr, value in hit_attrs.items():
@@ -359,10 +360,17 @@ class InfernalTextParser:
         frag_list = []
         model_seq = ""
         hit_seq = ""
-        annot = {"NC": "", "CS": "", "similarity": "", "PP": ""}
+        if model == "cm":
+            annot = {"NC": "", "CS": "", "similarity": "", "PP": ""}
+        else:
+            annot = {"CS": "", "similarity": "", "PP": ""}
         while True:
             # we've reached the end of the alignment section
-            if self.line.startswith(_DIV_ALIGNMENT_START) or self.line.startswith(_DIV_HITS_END):
+            if (
+                self.line.startswith(_DIV_ALIGNMENT_START) or 
+                self.line.startswith(_DIV_HITS_END_CM) or
+                self.line.startswith(_DIV_HITS_END_HMM)
+            ):
                 # Process local end in infernal hit alignment. Local end are
                 # large insertion or deletion indicated by *[NN]* where N is 
                 # the number of model positions are deleted or the number of
@@ -422,21 +430,24 @@ class InfernalTextParser:
             # parse the alignment blocks in the hsp
             # each block have 4 (hmmonly) or 5 (cm) lines followed by an empty line
             block_size = 6 if model == "cm" else 5
+            offset = 1 if model == "cm" else 0 # offset for the annotation line indexes
             lines = [None] * block_size
             for i in range(block_size):
                 lines[i] = self.line
                 self.line = read_forward(self.handle)
-                                    
-            # get the position of the alignment in the string using the pp line
-            blklen = len(lines[5].strip().split()[0])
-            blkstart = len(lines[5]) - blklen - 4
-            blkend = len(lines[5]) - 4
-            model_seq += lines[2][blkstart:blkend]
-            hit_seq += lines[4][blkstart:blkend]
-            annot["NC"] += lines[0][blkstart:blkend]
-            annot["CS"] += lines[1][blkstart:blkend]
-            annot["similarity"] += lines[3][blkstart:blkend]
-            annot["PP"] += lines[5][blkstart:blkend]
+                                                
+            # get the position of the alignment in the string using the PP line
+            blklen = len(lines[4+offset].strip().split()[0])
+            blkstart = len(lines[4+offset]) - blklen - 4
+            blkend = len(lines[4+offset]) - 4
+            model_seq += lines[1+offset][blkstart:blkend]
+            hit_seq += lines[3+offset][blkstart:blkend]
+            # NC line is specific to cm model searches
+            if model == "cm":
+                annot["NC"] += lines[0][blkstart:blkend]
+            annot["CS"] += lines[0+offset][blkstart:blkend]
+            annot["similarity"] += lines[2+offset][blkstart:blkend]
+            annot["PP"] += lines[4+offset][blkstart:blkend]
 
         return frag_list
 
