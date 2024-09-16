@@ -5,21 +5,18 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 
-
 """Bio.SearchIO parser for Infernal plain text output format."""
 
-import operator
 import re
+import operator
 
-from Bio.SearchIO._index import SearchIndexer
+from Bio.SearchIO._model import Hit
 from Bio.SearchIO._model import HSP
 from Bio.SearchIO._model import HSPFragment
 from Bio.SearchIO._model import QueryResult
 from Bio.SearchIO._utils import read_forward
 
-from ._base import _BaseInfernalParser
-
-__all__ = ("InfernalTextParser", "InfernalTextIndexer")
+__all__ = ("InfernalTextParser")
 
 # precompile regex patterns for faster processing
 # program name
@@ -36,7 +33,7 @@ _RE_LETTERS = re.compile(r"[^A-Za-z]")
 # missing segments in the alignment block
 _RE_SPLIT_ALN = re.compile(r"(\*\[[ 0-9]+\]\*)+")
 
-# divider for Infernal plain text output, these divider are
+# divider for Infernal plain text output, these divider are 
 # always taken from the beginning of the line to be usable in
 # self.line.startswith() method
 # header options
@@ -44,21 +41,16 @@ _DIV_HEADER_OPT = "# - - -"
 # query
 _DIV_QUERY_END = "//"
 _DIV_QUERY_START = "Query:"
-# hits
-_DIV_HITS_END_CM = "Internal CM pipeline statistics summary:"
-_DIV_HITS_END_HMM = "Internal HMM-only pipeline statistics summary:"
-_DIV_HIT_SCORE_TABLE = "Hit scores:"
+# hits 
+_DIV_HITS_END = "Internal CM pipeline statistics summary:"
+_DIV_HIT_SCORE = "Hit scores:"
 _DIV_HIT_ALIGNMENT = "Hit alignments:"
 _DIV_NO_HIT = "   [No hits detected that satisfy reporting thresholds]"
 _DIV_TABLE_START = " ----   --------- ------"
-_DIV_INC_THRESHOLD = " ------ inclusion threshold ------"
 # hit alignment
 _DIV_ALIGNMENT_START = ">> "
 
-
-class InfernalTextParser(_BaseInfernalParser):
-    """Parser for the Infernal text output."""
-
+class InfernalTextParser:
     def __init__(self, handle):
         """Initialize the class."""
         self.handle = handle
@@ -77,10 +69,11 @@ class InfernalTextParser(_BaseInfernalParser):
             else:
                 self.line = read_forward(self.handle)
 
+    
     def _parse_header(self):
         """Parse Infernal header (PRIVATE)."""
         meta = {}
-        # set the default value for the presence of alignment
+        # set the default value for the presence of alignment 
         # as this information is important for the hit section parsing
         meta["show alignments in output"] = "yes"
         # bool flag for storing state ~ whether we are parsing the option
@@ -145,7 +138,7 @@ class InfernalTextParser(_BaseInfernalParser):
 
             # get description and accession, if they exist
             qdesc = "<unknown description>"  # placeholder
-            while not self.line.startswith(_DIV_HIT_SCORE_TABLE):
+            while not self.line.startswith(_DIV_HIT_SCORE):
                 self.line = read_forward(self.handle)
 
                 if self.line.startswith("Accession:"):
@@ -161,12 +154,11 @@ class InfernalTextParser(_BaseInfernalParser):
             while self.line and not self.line.startswith(_DIV_QUERY_END):
                 hit_list = self._parse_hit(qid, qdesc)
                 # read through the statistics summary
-                if self.line.startswith(_DIV_HITS_END_CM) or self.line.startswith(
-                    _DIV_HITS_END_HMM
-                ):
+                if self.line.startswith(_DIV_HITS_END):
                     while self.line and not self.line.startswith(_DIV_QUERY_END):
                         self.line = read_forward(self.handle)
-            # create qresult, set its attributes and yield
+            # create qresult, set its attributes and yield   
+            #print(hit_list)
             qresult = QueryResult(id=qid, hits=hit_list)
             for attr, value in qresult_attrs.items():
                 setattr(qresult, attr, value)
@@ -178,230 +170,222 @@ class InfernalTextParser(_BaseInfernalParser):
             if "[ok]" in self.line:
                 break
 
+
     def _parse_hit(self, qid, qdesc):
-        """Parse an Infernal hit (PRIVATE)."""
-        # state values, determines what to do for each block
-        hit_end = False
-        in_score_table = False
-        parsing_hits = False
-        prev_line = None
-        # hits are not guaranteed to be in order, and duplicate hit
-        # IDs will raise a ValueError. to avoid this, hits are stored in
-        # a temporary dictionary and the hit list required to create
-        # the QueryResult is generated at the end of the query block
-        hit_dict = {}
+        """Parse an Infernal hit section (PRIVATE)."""
+        # empty container
+        hit_list, hsp_list = [], []
+        # dummie for hit informations
+        hit_attrs = None
+        prev_hid = None
+        cur_hid = None
 
-        # set the divider based on the output type (with or without alignment)
+        # the hit score and alignments tables are redundant, if the output 
+        # does not include the alignment, we must parse the hit score table
+        # otherwise we can skip it and parse the hit alignment only
         if self._meta["show alignments in output"] == "no":
-            div_hit_start = _DIV_HIT_SCORE_TABLE
-        else:
-            div_hit_start = _DIV_ALIGNMENT_START
-
-        while True:
-            if not self.line:
-                raise ValueError("Unexpected end of file")
-            # if there are no hits, forward-read to the end of the query
-            elif self.line.startswith(_DIV_NO_HIT):
-                while True:
-                    self.line = read_forward(self.handle)
-                    if self.line.startswith(_DIV_HITS_END_CM) or self.line.startswith(
-                        _DIV_HITS_END_HMM
-                    ):
-                        hit_end = True
-                        return []
-            # entering hit alignment block
-            elif self.line.startswith(div_hit_start):
-                # for --noali output, move to the beginning of the hit score table
-                if self._meta["show alignments in output"] == "no":
-                    assert not in_score_table
+            # parse the hit table
+            while True:
+                if not self.line:
+                    return []
+                # if there are no hits, forward-read to the end of the query
+                elif self.line.startswith(_DIV_NO_HIT):
+                    while True:
+                        self.line = read_forward(self.handle)
+                        if self.line.startswith(_DIV_HITS_END):
+                            return []
+                elif self.line.startswith(_DIV_HIT_SCORE):
+                    # read through the header 
                     self._read_until(lambda line: line.startswith(_DIV_TABLE_START))
                     self.line = read_forward(self.handle)
-                    parsing_hits = in_score_table = True
-                else:
-                    self._parse_hit_from_alignment(qid, hit_dict)
-                    parsing_hits = True
-            # we've reached the end of the hit section
-            elif self.line.startswith(_DIV_HITS_END_CM) or self.line.startswith(
-                _DIV_HITS_END_HMM
-            ):
-                hit_end = True
-                parsing_hits = False
-            # Read through the scores table. For regular output this information
-            # is not needed, so we can skip it. For --noali output, this table
-            # contains the HSP information
-            else:
-                # for --noali output, keep the line
-                if in_score_table:
-                    if self.line.strip():
-                        prev_line = self.line
-                    else:
-                        parsing_hits = in_score_table = False
 
-                # read one line at the time
-                self.line = self.handle.readline()
+                    # parse the hit score table
+                    while True:
+                        # we've reached the end of the hit score table
+                        if self.line.startswith(_DIV_HITS_END):
+                            # create the last hit 
+                            hit = Hit(hsp_list)
+                            for attr, value in hit_attrs.items():
+                                setattr(hit, attr, value)
+                            hit_list.append(hit)
+                            return hit_list
 
-            # for --noali output, parse the scores table row
-            if in_score_table and prev_line is not None:
-                if not prev_line.startswith(_DIV_INC_THRESHOLD):
-                    self._parse_scores_table_row(prev_line, qid, hit_dict)
+                        # parse the columns into a list
+                        row = [x for x in self.line.strip().split(" ") if x]
+                        # join the description words if it's >1 word
+                        if len(row) > 12:
+                            row[12] = " ".join(row[12:])
+                        # if there's no description, set it to an empty string
+                        elif len(row) < 12:
+                            row.append("")
+                            assert len(row) == 12
+                        
+                        # create hit and append to hit container
+                        cur_hid = row[5]
+                        if prev_hid is not None and cur_hid != prev_hid:
+                            hit = Hit(hsp_list)
+                            for attr, value in hit_attrs.items():
+                                setattr(hit, attr, value)
+                            hit_list.append(hit)
+                            hsp_list = []
+                        
+                        # parse the attributes
+                        hit_attrs = {
+                            "id": cur_hid,
+                            "query_id": qid,
+                            "description": row[12]
+                        }
+                        hsp_attrs = {
+                            "evalue": float(row[2]),
+                            "bitscore": float(row[3]),
+                            "bias": float(row[4]),
+                            "model": row[9],
+                            "truncated": row[10],
+                            "gc": float(row[11]),
+                            "is_included": True if row[1] == "!" else False,                            
+                        }
+                        hsp_frag_attrs = {
+                            "hit_start": int(row[6]) if row[8] == "+" else int(row[7]),
+                            "hit_end": int(row[7]) if row[8] == "+" else int(row[6]),
+                            "hit_strand": 0 if row[8] == "+" else -1
+                        }
 
-            # we've reached the end of the query block hits
-            # creating the Hit objects for this query
-            if hit_end:
-                return self._hit_to_list(hit_dict)
+                        # create the hsp fragment and set it's attributes
+                        hsp_frag = HSPFragment(row[5], qid)
+                        for attr, value in hsp_frag_attrs.items():
+                            setattr(hsp_frag, attr, value)
+                        
+                        # create the hsp and set it's attributes
+                        hsp = HSP([hsp_frag])
+                        for attr, value in hsp_attrs.items():
+                            setattr(hsp, attr, value)
+                        hsp_list.append(hsp)
 
-    def _parse_hit_from_alignment(self, qid, hit_dict):
-        """Parse an Infernal hit alignment (PRIVATE)."""
-        hid, hdesc = self.line[len(_DIV_ALIGNMENT_START) :].split("  ", 1)
-        hdesc = hdesc.strip()
+                        prev_hid = hit_attrs["id"]
+                        self.line = read_forward(self.handle)
+        else:
+            # skip the hit score table 
+            self._read_until(lambda line: line.startswith(_DIV_HIT_ALIGNMENT))
+            self.line = read_forward(self.handle)
 
-        # read through the hit table header and move one more line
-        self._read_until(lambda line: line.startswith(_DIV_TABLE_START))
-        self.line = read_forward(self.handle)
+            while True:
+                if not self.line:
+                    return []
+                # if there are no hits, forward-read to the end of the query
+                elif self.line.startswith(_DIV_NO_HIT):
+                    while True:
+                        self.line = read_forward(self.handle)
+                        if self.line.startswith(_DIV_HITS_END):
+                            return []
+                # we've reached the end of the hit section
+                elif self.line.startswith(_DIV_HITS_END):
+                    # create the last hit 
+                    hit = Hit(hsp_list)
+                    for attr, value in hit_attrs.items():
+                        setattr(hit, attr, value)
+                    hit_list.append(hit)
+                    return hit_list
+                # entering hit alignment table
+                elif self.line.startswith(_DIV_ALIGNMENT_START):
+                    hid, hdesc = self.line[len(_DIV_ALIGNMENT_START) :].split("  ", 1)
+                    hdesc = hdesc.strip()
 
-        # parse the hit table
-        row = [x for x in self.line.strip().split() if x]
-        assert len(row) == 16
+                    # read through the hit table header and move one more line
+                    self._read_until(lambda line: line.startswith(_DIV_TABLE_START))
+                    self.line = read_forward(self.handle)
 
-        # create hit and append to hit container
-        hit_attrs = {"id": hid, "query_id": qid, "description": hdesc}
-        hsp_attrs = {
-            "evalue": float(row[2]),
-            "bitscore": float(row[3]),
-            "bias": float(row[4]),
-            "model": row[5],
-            "truncated": row[14],
-            "gc": float(row[15]),
-            "avg_acc": float(row[13]),
-            "query_endtype": row[8],
-            "hit_endtype": row[12],
-            "is_included": True if row[1] == "!" else False,
-        }
-        query_start = int(row[6])
-        query_end = int(row[7])
-        hit_start = int(row[9]) if row[11] == "+" else int(row[10])
-        hit_end = int(row[10]) if row[11] == "+" else int(row[9])
-        hit_strand = 0 if row[11] == "+" else -1
+                    # parse the hit table
+                    row = [x for x in self.line.strip().split() if x]
+                    assert len(row) == 16
 
-        # move to the HSP alignment block
-        self.line = read_forward(self.handle)
+                    # create hit and append to hit container
+                    cur_hid = hid
+                    if prev_hid is not None and cur_hid != prev_hid:
+                        hit = Hit(hsp_list)
+                        for attr, value in hit_attrs.items():
+                            setattr(hit, attr, value)
+                        hit_list.append(hit)
+                        hsp_list = []
 
-        # create the hsp
-        frag_list = self._parse_aln_block(
-            hit_attrs["id"],
-            hit_attrs["query_id"],
-            hsp_attrs["model"],
-            query_start,
-            query_end,
-            hit_start,
-            hit_end,
-            hit_strand,
-        )
-        hsp = HSP(frag_list)
-        for attr, value in hsp_attrs.items():
-            setattr(hsp, attr, value)
+                    hit_attrs = {
+                        "id": hid,
+                        "query_id": qid,
+                        "description": hdesc
+                    }
+                    hsp_attrs = {
+                        "evalue": float(row[2]),
+                        "bitscore": float(row[3]),
+                        "bias": float(row[4]),
+                        "model": row[5],
+                        "truncated": row[14],
+                        "gc": float(row[15]),
+                        "avg_acc": float(row[13]),
+                        "query_endtype": row[8],
+                        "hit_endtype": row[12],
+                        "is_included": True if row[1] == "!" else False
+                    }
+                    query_start = int(row[6])
+                    query_end = int(row[7])
+                    hit_start = int(row[9]) if row[11] == "+" else int(row[10])
+                    hit_end = int(row[10]) if row[11] == "+" else int(row[9])
+                    hit_strand = 0 if row[11] == "+" else -1
 
-        # add the hit to the container
-        self._add_hit_to_dict(hit_attrs, hsp, hit_dict)
+                    # move to the HSP alignment block
+                    self.line = read_forward(self.handle)
 
-    def _parse_scores_table_row(self, row, qid, hit_dict):
-        """Parse an Infernal hit scores table (when used with --noali) (PRIVATE)."""
+                    # create the hsp
+                    frag_list = self._parse_aln_block(hit_attrs["id"], hit_attrs["query_id"], \
+                        hsp_attrs["model"], query_start, query_end, hit_start, hit_end, hit_strand)
+                    hsp = HSP(frag_list)
+                    for attr, value in hsp_attrs.items():
+                        setattr(hsp, attr, value)
+                    hsp_list.append(hsp)
 
-        # parse the columns into a list
-        row = [x for x in row.strip().split(" ") if x]
-        # join the description words if it's >1 word
-        if len(row) > 12:
-            row[12] = " ".join(row[12:])
-        # if there's no description, set it to an empty string
-        elif len(row) < 12:
-            row.append("")
-            assert len(row) == 12
+                    prev_hid = hit_attrs["id"]
+                    # create hit and append to hit container
+                    #hit = Hit([hsp])
+                    #for attr, value in hit_attrs.items():
+                    #    setattr(hit, attr, value)
+                    #hit_list.append(hit)
+        
+        return hit_list
 
-        # parse the attributes
-        hit_attrs = {"id": row[5], "query_id": qid, "description": row[12]}
-        hsp_attrs = {
-            "evalue": float(row[2]),
-            "bitscore": float(row[3]),
-            "bias": float(row[4]),
-            "model": row[9],
-            "truncated": row[10],
-            "gc": float(row[11]),
-            "is_included": True if row[1] == "!" else False,
-        }
-        hsp_frag_attrs = {
-            "hit_start": int(row[6]) if row[8] == "+" else int(row[7]),
-            "hit_end": int(row[7]) if row[8] == "+" else int(row[6]),
-            "hit_strand": 0 if row[8] == "+" else -1,
-        }
 
-        # create the hsp fragment and set it's attributes
-        hsp_frag = HSPFragment(row[5], qid)
-        for attr, value in hsp_frag_attrs.items():
-            setattr(hsp_frag, attr, value)
-
-        # create the hsp and set it's attributes
-        hsp = HSP([hsp_frag])
-        for attr, value in hsp_attrs.items():
-            setattr(hsp, attr, value)
-
-        # add the hit to the container
-        self._add_hit_to_dict(hit_attrs, hsp, hit_dict)
-
-    def _parse_aln_block(
-        self, hid, qid, model, query_start, query_end, hit_start, hit_end, hit_strand
-    ):
+    def _parse_aln_block(self, hid, qid, model, query_start, query_end, hit_start, hit_end, hit_strand):
         """Parse a Infernal HSP alignment block (PRIVATE)."""
         frag_list = []
         model_seq = ""
         hit_seq = ""
-        if model == "cm":
-            annot = {"NC": "", "CS": "", "similarity": "", "PP": ""}
-        else:
-            annot = {"CS": "", "similarity": "", "PP": ""}
+        annot = {"NC": "", "CS": "", "similarity": "", "PP": ""}
         while True:
             # we've reached the end of the alignment section
-            if (
-                self.line.startswith(_DIV_ALIGNMENT_START)
-                or self.line.startswith(_DIV_HITS_END_CM)
-                or self.line.startswith(_DIV_HITS_END_HMM)
-            ):
+            if self.line.startswith(_DIV_ALIGNMENT_START) or self.line.startswith(_DIV_HITS_END):
                 # Process local end in infernal hit alignment. Local end are
-                # large insertion or deletion indicated by *[NN]* where N is
+                # large insertion or deletion indicated by *[NN]* where N is 
                 # the number of model positions are deleted or the number of
                 # residues are inserted in the sequence. We split the
-                # alignment block in HSPs on these local ends.
+                # alignment block in HSPs on these local ends. 
 
                 # get local ends string (*[NN]*) indexes in the model sequence
                 # there can be more than one local ends back-to-back
-                local_aln_idx = [
-                    (0, 0)
-                ]  # there is always at least one local alignment starting at 0
-                local_aln_idx += [
-                    (m.start(0), m.end(0))
-                    for m in re.finditer(_RE_SPLIT_ALN, model_seq)
-                ]
-
+                local_aln_idx = [(0,0)] # there is always at least one local alignment starting at 0
+                local_aln_idx += [(m.start(0), m.end(0)) for m in re.finditer(_RE_SPLIT_ALN, model_seq)]
+                                
                 prev_hit_start = hit_start if hit_strand == 0 else hit_end
                 prev_model_start = query_start
                 hsps = []
-
+                
                 for i in range(len(local_aln_idx)):
                     local_start = local_aln_idx[i][1]
-                    local_end = (
-                        local_aln_idx[i + 1][0] if i + 1 < len(local_aln_idx) else None
-                    )
+                    local_end = local_aln_idx[i+1][0] if i+1 < len(local_aln_idx) else None
 
                     # hsp hit position. forward strand moves up, reverse strand moves down
                     op = operator.add if hit_strand == 0 else operator.sub
                     cur_hit_seq = hit_seq[local_start:local_end]
-                    cur_hit_gap_size = self._local_aln_gap_size(
-                        local_aln_idx[i], hit_seq
-                    )
+                    cur_hit_gap_size = self._local_aln_gap_size(local_aln_idx[i], hit_seq)
                     cur_hit_start = op(prev_hit_start, cur_hit_gap_size)
-                    cur_hit_end = op(
-                        cur_hit_start, len(re.sub(_RE_LETTERS, "", cur_hit_seq))
-                    )
-                    # adjust start and end elements positon
+                    cur_hit_end = op(cur_hit_start, len(re.sub(_RE_LETTERS, "", cur_hit_seq)))
+                    # adjust start and end elements positon 
                     if hit_strand == 0 and i == 0:
                         cur_hit_end -= 1
                     if hit_strand == -1 and i == 0:
@@ -409,13 +393,9 @@ class InfernalTextParser(_BaseInfernalParser):
                     prev_hit_start = cur_hit_end
                     # hsp model position
                     cur_model_seq = model_seq[local_start:local_end].replace(".", "-")
-                    cur_model_gap_size = self._local_aln_gap_size(
-                        local_aln_idx[i], model_seq
-                    )
+                    cur_model_gap_size = self._local_aln_gap_size(local_aln_idx[i], model_seq)
                     cur_model_start = prev_model_start + cur_model_gap_size
-                    cur_model_end = cur_model_start + len(
-                        re.sub(_RE_LETTERS, "", cur_model_seq)
-                    )
+                    cur_model_end = cur_model_start + len(re.sub(_RE_LETTERS, "", cur_model_seq))
                     if i == 0:
                         cur_model_end -= 1
                     prev_model_start = cur_model_end
@@ -434,107 +414,39 @@ class InfernalTextParser(_BaseInfernalParser):
                     frag.aln_annotation = cur_annot
 
                     frag_list.append(frag)
-
-                return frag_list
-
+                break
+            
             # parse the alignment blocks in the hsp
             # each block have 4 (hmmonly) or 5 (cm) lines followed by an empty line
             block_size = 6 if model == "cm" else 5
-            offset = 1 if model == "cm" else 0  # offset for the annotation line indexes
             lines = [None] * block_size
             for i in range(block_size):
                 lines[i] = self.line
                 self.line = read_forward(self.handle)
+                                    
+            # get the position of the alignment in the string using the pp line
+            blklen = len(lines[5].strip().split()[0])
+            blkstart = len(lines[5]) - blklen - 4
+            blkend = len(lines[5]) - 4
+            model_seq += lines[2][blkstart:blkend]
+            hit_seq += lines[4][blkstart:blkend]
+            annot["NC"] += lines[0][blkstart:blkend]
+            annot["CS"] += lines[1][blkstart:blkend]
+            annot["similarity"] += lines[3][blkstart:blkend]
+            annot["PP"] += lines[5][blkstart:blkend]
 
-            # get the position of the alignment in the string using the PP line
-            blklen = len(lines[4 + offset].strip().split()[0])
-            blkstart = len(lines[4 + offset]) - blklen - 4
-            blkend = len(lines[4 + offset]) - 4
-            model_seq += lines[1 + offset][blkstart:blkend]
-            hit_seq += lines[3 + offset][blkstart:blkend]
-            # NC line is specific to cm model searches
-            if model == "cm":
-                annot["NC"] += lines[0][blkstart:blkend]
-            annot["CS"] += lines[0 + offset][blkstart:blkend]
-            annot["similarity"] += lines[2 + offset][blkstart:blkend]
-            annot["PP"] += lines[4 + offset][blkstart:blkend]
+        return frag_list
+
 
     def _local_aln_gap_size(self, cur_aln_idx, seq):
         """Calculate the gap size between the local alignments (PRIVATE)."""
         gap_len = 0
         if cur_aln_idx[1] > 0:
-            gap_len = sum(
-                [
-                    int(n)
-                    for n in re.findall(
-                        _RE_NUMERIC, seq[cur_aln_idx[0] : cur_aln_idx[1]]
-                    )
-                ]
-            )
+            gap_len = sum([int(n) for n in re.findall(_RE_NUMERIC, seq[cur_aln_idx[0]:cur_aln_idx[1]])])
             assert gap_len > 0
         return gap_len
 
-
-class InfernalTextIndexer(SearchIndexer):
-    """Indexer class for Infernal plain text output."""
-
-    _parser = InfernalTextParser
-
-    def __init__(self, *args, **kwargs):
-        """Initialize the class."""
-        super().__init__(*args, **kwargs)
-        self._preamble = b""
-
-    def __iter__(self):
-        """Iterate over InfernalTextIndexer; yields query results' key, offsets, 0."""
-        handle = self._handle
-        handle.seek(0)
-        start_offset = handle.tell()
-
-        while True:
-            line = read_forward(handle)
-            end_offset = handle.tell()
-
-            if line.startswith(_DIV_QUERY_START.encode()):
-                qresult_key = line.strip().split()[1]
-                # qresult start offset is the offset of this line
-                # (starts with the start mark)
-                start_offset = end_offset - len(line)
-            elif line.startswith(_DIV_QUERY_END.encode()):
-                yield qresult_key.decode(), start_offset, 0
-                start_offset = end_offset
-            elif not line:
-                break
-
-    def get_raw(self, offset):
-        """Return the raw record from the file as a bytes string."""
-        handle = self._handle
-        qresult_raw = b""
-
-        # read header
-        if not self._preamble:
-            handle.seek(0)
-            while True:
-                line = handle.readline()
-                if line.startswith(_DIV_QUERY_START.encode()):
-                    break
-                self._preamble += line
-
-        qresult_raw += self._preamble
-
-        # read the qresult raw string
-        handle.seek(offset)
-        while True:
-            # preserve whitespace, don't use read_forward
-            line = handle.readline()
-            qresult_raw += line
-
-            # break when we've reached qresult end
-            if line.startswith(_DIV_QUERY_END.encode()) or not line:
-                break
-
-        return qresult_raw
-
+            
 
 # if not used as a module, run the doctest
 if __name__ == "__main__":
