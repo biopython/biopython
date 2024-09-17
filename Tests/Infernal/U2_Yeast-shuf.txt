@@ -1,0 +1,182 @@
+# cmsearch :: search CM(s) against a sequence database
+# INFERNAL 1.1.5 (Sep 2023)
+# Copyright (C) 2023 Howard Hughes Medical Institute.
+# Freely distributed under the BSD open source license.
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# query CM file:                         RF00004.cm
+# target sequence database:              BK006936_7-8.fasta
+# number of worker threads:              4
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Query:       U2  [CLEN=193]
+Accession:   RF00004
+Description: U2 spliceosomal RNA
+Hit scores:
+ rank     E-value  score  bias  sequence                  start     end   mdl trunc   gc  description
+ ----   --------- ------ -----  ----------------------- ------- -------   --- ----- ----  -----------
+  (1) !   1.3e-20   98.7   0.1  ENA|BK006936|BK006936.2  681858  681747 -  cm    no 0.33  -
+ ------ inclusion threshold ------
+  (2) ?      0.11   19.8   0.0  ENA|BK006948|BK006948.2  737498  737324 -  cm    no 0.39  -
+  (3) ?       1.1   15.6   0.1  ENA|BK006936|BK006936.2 1370418 1370563 +  cm    no 0.34  -
+  (4) ?       1.3   15.3   0.0  ENA|BK006936|BK006936.2 1079243 1079392 +  cm    no 0.39  -
+  (5) ?       3.1   13.7   0.9  ENA|BK006948|BK006948.2  425490  425693 +  cm    no 0.34  -
+  (6) ?       8.3   11.9   0.5  ENA|BK006948|BK006948.2 1073786 1073950 +  cm    no 0.33  -
+
+
+Hit alignments:
+>> ENA|BK006936|BK006936.2  
+ rank     E-value  score  bias mdl mdl from   mdl to       seq from      seq to       acc trunc   gc
+ ----   --------- ------ ----- --- -------- --------    ----------- -----------      ---- ----- ----
+  (1) !   1.3e-20   98.7   0.1  cm        1      193 []      681858      681747 - .. 0.91    no 0.33
+
+                                                                                                      v           NC
+                                 ::::::<<<-<<<<____>>>>->>>,,,,,,,,,,,,,,,,,,,,<<<<<<________>>>>>>,<<<<<<<___>>> CS
+                       U2      1 AUacCUUCucgGCcUUUUgGCuaaGAUCAAGUGUAGUAUCUGUUCUUauCAGUuUAAuAuCUGauAuggcccccAuuggg 80    
+                                 AU+   UCU+:GCCUUUUGGC:+AGAUCAAGUGUAGUAUCUGUUCUU:UCAGU+UAA+A+CUGA:AUG: CC:CA+UG:G
+  ENA|BK006936|BK006936.2 681858 AUC---UCUUUGCCUUUUGGCUUAGAUCAAGUGUAGUAUCUGUUCUUUUCAGUGUAACAACUGAAAUGA-CCUCAAUGAG 681783
+                                 ***...************************************************************999.********** PP
+
+                                  v                                                   NC
+                                 >>>>,,,.,,,,,,,,,,,,,,,,,,,,,,,,,~~~~~~~~~~~~::::::: CS
+                       U2     81 ggccaau.uauaUUAaauuaAUUUUUggaacua*[34]**[40]*Acccuuu 193   
+                                 G+:CA+U   U+UUAA+UU                          AC +UUU
+  ENA|BK006936|BK006936.2 681782 GCUCAUUaCCUUUUAAUUUG-------------*[ 6]**[ 3]*ACAUUUU 681747
+                                 ******86555555555443................7.....9..******* PP
+
+>> ENA|BK006948|BK006948.2  
+ rank     E-value  score  bias mdl mdl from   mdl to       seq from      seq to       acc trunc   gc
+ ----   --------- ------ ----- --- -------- --------    ----------- -----------      ---- ----- ----
+  (2) ?      0.11   19.8   0.0  cm        1      193 []      737498      737324 - .. 0.96    no 0.39
+
+                                                                                                                  NC
+                                 ::::::<<<-<<<<____>>>>->>>,,,,,,,,,,,,,,,,,,,,<<<<<<~~~~~~>>>>>>,<<<<<<<___>>>>> CS
+                       U2      1 AUacCUUCucgGCcUUUUgGCuaaGAUCAAGUGUAGUAUCUGUUCUUauCAG*[ 8]*CUGauAuggcccccAuuggggg 82    
+                                 AU+CC U U+ GCC U  GGC +A AU AAGU UA UA C GUUCU:A::A        U::U:  ::::::A U:::::
+  ENA|BK006948|BK006948.2 737498 AUCCCAUAUUUGCCAUC-GGCAUAUAUUAAGUAUAUUAGCAGUUCUAAUUAC*[88]*GUAGUUGGAAGGAUACUAUCCU 737338
+                                 **************999.*******************************996...*..6999999999999999999999 PP
+
+                                                                                   NC
+                                 >>,,,,,,,,,,,,,,,,,,,,,,,,,,,,~~~~~~~~~~~~::::::: CS
+                       U2     83 ccaauuauaUUAaauuaAUUUUUggaacua*[34]**[40]*Acccuuu 193   
+                                 : A+                                      A CC++U
+  ENA|BK006948|BK006948.2 737337 UUAU--------------------------*[ 2]**[ 1]*AUCCCCU 737324
+                                 9987.............................6.....9..******* PP
+
+>> ENA|BK006936|BK006936.2  
+ rank     E-value  score  bias mdl mdl from   mdl to       seq from      seq to       acc trunc   gc
+ ----   --------- ------ ----- --- -------- --------    ----------- -----------      ---- ----- ----
+  (3) ?       1.1   15.6   0.1  cm        1      193 []     1370418     1370563 + .. 0.77    no 0.34
+
+                                              vv    vv                                                  v        NC
+                                  ::::::<<<-<<<<____>>>>->>>,,,,,~~~~~~,,,,,,,,,,,,,,,,,,,,,,,,,,,,<<<<<<<<----. CS
+                       U2       1 AUacCUUCucgGCcUUUUgGCuaaGAUCAAG*[53]*aauuauaUUAaauuaAUUUUUggaacuaGugggggcauuu. 124    
+                                   U   UUCU :G   UUU  C:AAGAUCAAG      AA  AUAUUAA+  AA UUUUG+A ++A::::: ::   + 
+  ENA|BK006936|BK006936.2 1370418 UUUUGUUCUAUGUAAUUUGCCUAAGAUCAAG*[ 8]*AA-CAUAUUAAUAGAACUUUUGAAGUGACAAUCGCGCGAAg 1370496
+                                  ******************99*********98...7..44.99**********************99999988877666 PP
+
+                                       v       v     v        v     vvvvv             vvvvv      v         NC
+                                  .....<<~~~~~>>-.->>>>>>>>,,<<<<<<-<<<<<<___________>>>>>>-->>>>>>::::::: CS
+                       U2     125 .....ug*[8]*cau.ugcccccaCacggguugaccuggcaUUGCAcUaccgccagguucagcccAcccuuu 193    
+                                                U +:: ::::: +: ::U A  U+ :AUU    UAC+:      U A:: :ACC+  U
+  ENA|BK006936|BK006936.2 1370497 uuuccAG*[8]*UAUaAUGGGAUUGUUUGCCUUAGGUACAAUUA---UACUU-----GUGAGGGGACCUAGU 1370563
+                                  6644433..4..44467899999999988888754444444433...22222.....46888899******* PP
+
+>> ENA|BK006936|BK006936.2  
+ rank     E-value  score  bias mdl mdl from   mdl to       seq from      seq to       acc trunc   gc
+ ----   --------- ------ ----- --- -------- --------    ----------- -----------      ---- ----- ----
+  (4) ?       1.3   15.3   0.0  cm        1      193 []     1079243     1079392 + .. 0.91    no 0.39
+
+                                              v          v                                                     v NC
+                                  ::::::.<<<.-<<<<____>>>>->>>,,,,.,,,,,,~~~~~~,,,,,,,,,,,,,,,,,,,,,,,,,,,,<<<<< CS
+                       U2       1 AUacCU.UCu.cgGCcUUUUgGCuaaGAUCAA.GUGUAG*[48]*aauuauaUUAaauuaAUUUUUggaacuaGuggg 117    
+                                  AU     UCU + G C  UUG C  AGAU A  GUGUAG        UUAUAU   +UU AU UUU G   +A:: : 
+  ENA|BK006936|BK006936.2 1079243 AUGUUGaUCUaUCGUCAAUUGACCCAGAUGAUaGUGUAG*[ 1]*-GUUAUAUAGUUUUGAUAUUUUGGCGAAAAGUU 1079314
+                                  *****9****999****************9988999987...5...33777788888888888888888888888888 PP
+
+                                                             v      v  v     v v             v v      v  v       NC
+                                  <<<----.<<<<<__>>>>>-..->>>>>>>>,,<<<<<<-<<<<<<___________>>>>>>-->>>>>>:::::: CS
+                       U2     118 ggcauuu.uggGCUUGCccau..ugcccccaCacggguugaccuggcaUUGCAcUaccgccagguucagcccAcccuu 192    
+                                  G::A+U+ U :GCUUGC: AU  +::C : ::   G:  :AC: G   U GCA UA+   C :GU+:  :C    +U 
+  ENA|BK006936|BK006936.2 1079315 GAGAAUAuUGCGCUUGCGUAUauAUUCCAUUUGAGGUGGCACUAGAGCUCGCAUUAU-UACCAGUAGUGGCAGGAUUG 1079391
+                                  88888888**************99999******************************.99****************** PP
+
+                                    NC
+                                  : CS
+                       U2     193 u 193    
+                                  +
+  ENA|BK006936|BK006936.2 1079392 C 1079392
+                                  * PP
+
+>> ENA|BK006948|BK006948.2  
+ rank     E-value  score  bias mdl mdl from   mdl to       seq from      seq to       acc trunc   gc
+ ----   --------- ------ ----- --- -------- --------    ----------- -----------      ---- ----- ----
+  (5) ?       3.1   13.7   0.9  cm        1      193 []      425490      425693 + .. 0.72    no 0.34
+
+                                                                             v          v       v                 NC
+                                 ::::::<<<-~~~~~~->>>,,,,,,,,,,,,,,,,,,,,<<<<<<________>>>>>>,<<<<<<<__~~~~~~>>>> CS
+                       U2      1 AUacCUUCuc*[12]*aaGAUCAAGUGUAGUAUCUGUUCUUauCAGUuUAAuAuCUGauAuggcccccAu*[ 1]*gggg 81    
+                                 A  +CUUCU+      AAGAUCAAGU U  UAUC  U   U:UC : U  A AU: GA:AU:: ::CCA+      GG::
+  ENA|BK006948|BK006948.2 425490 AAUGCUUCUU*[21]*AAGAUCAAGUUUUUUAUCCUUCGAUUUCAAAUGGAGAUUGGAAAUAUAUUCCAA*[11]*GGAA 425589
+                                 *********7...*..5*****************877778888888888899989999999999999986...5..4444 PP
+
+                                 v                                  vvvvvvv           vvvvvvv   v      vvvvv      NC
+                                 >>>,,,.,,,,,,,,,,,,,,,,,,,,,,,,,..<<<<<<<<----~~~~~~->>>>>>>>,,<<<<<<-<<<<<<____ CS
+                       U2     82 gccaau.uauaUUAaauuaAUUUUUggaacua..Gugggggcauuu*[13]*ugcccccaCacggguugaccuggcaUUG 165   
+                                  ::+AU U+U  UAAA  +A UUUU GAA+U+  G                 + C+++++C   ::UU       :AU G
+  ENA|BK006948|BK006948.2 425590 AAUUAUcUUUGCUAAAACUAGUUUUAGAAAUUggG-----------*[19]*ACCUAAUUCGACUCUUUC-----GAUAG 425666
+                                 44444474444444444444444444444444233..............5..344555555555555555.....89*** PP
+
+                                         vvvvv       v        NC
+                                 _______>>>>>>-->>>>>>::::::: CS
+                       U2    166 CAcUaccgccagguucagcccAcccuuu 193   
+                                 CACU++ :++A+++U AG:: AC ++UU
+  ENA|BK006948|BK006948.2 425667 CACUUU-CAAAAAAUGAGGAUACAUCUU 425693
+                                 ******.56666679************* PP
+
+>> ENA|BK006948|BK006948.2  
+ rank     E-value  score  bias mdl mdl from   mdl to       seq from      seq to       acc trunc   gc
+ ----   --------- ------ ----- --- -------- --------    ----------- -----------      ---- ----- ----
+  (6) ?       8.3   11.9   0.5  cm        1      193 []     1073786     1073950 + .. 0.87    no 0.33
+
+                                                                                                              v  NC
+                                  ::::::~~~~~~,,,,,,,,,,,,,,,,,,,,~~~~~~~~~~~~,,,.,,,,,,,,,,,,,,,,,,,,,,,,,<<<<< CS
+                       U2       1 AUacCU*[20]*UCAAGUGUAGUAUCUGUUCU*[20]**[18]*aau.uauaUUAaauuaAUUUUUggaacuaGuggg 117    
+                                  AUA CU                                       AU  AUAUUA    AAUUUUU GA ++A  : :
+  ENA|BK006948|BK006948.2 1073786 AUAUCU*[25]*--------------------*[10]**[10]*-AUgCAUAUUAUCGAAAUUUUUAGAGAAAGGUUC 1073869
+                                  ***777...9.........................8.....8...336*************************99999 PP
+
+                                   vv          v      v     vv  v     v    v vv v                 v vv  v    v   NC
+                                  <<<----....<<<<<__>>>>>-.->>>>>>>>,,<<<<<<-<<<<<<__________.._>>>>>>-->>>>>>:: CS
+                       U2     118 ggcauuu....uggGCUUGCccau.ugcccccaCacggguugaccuggcaUUGCAcUac..cgccagguucagcccAc 188    
+                                  :  AUU     U: G:UU:C :AU U  :: :  AC G::U  ++: :: UUGCA U    +:: :  UU A::C AC
+  ENA|BK006948|BK006948.2 1073870 ACGAUUCaagcUUUGUUUACCAAUgUGAUGUAUUACAGUGUUCAUGUCACUUGCAUUGAcaUUGUC--UUUACACCAC 1073945
+                                  988888899***************888899999*********988888889****98774334433..4699****** PP
+
+                                        NC
+                                  ::::: CS
+                       U2     189 ccuuu 193    
+                                   +U+ 
+  ENA|BK006948|BK006948.2 1073946 AUUAA 1073950
+                                  ***** PP
+
+
+
+Internal CM pipeline statistics summary:
+----------------------------------------
+Query model(s):                                                  1  (193 consensus positions)
+Target sequences:                                                2  (5377616 residues searched)
+Target sequences re-searched for truncated hits:                 2  (1928 residues re-searched)
+Windows   passing  local HMM SSV           filter:           16114  (0.7946); expected (0.35)
+Windows   passing  local HMM Viterbi       filter:                  (off)
+Windows   passing  local HMM Viterbi  bias filter:                  (off)
+Windows   passing  local HMM Forward       filter:            6428  (0.38); expected (0.005)
+Windows   passing  local HMM Forward  bias filter:             943  (0.06533); expected (0.005)
+Windows   passing glocal HMM Forward       filter:             489  (0.04832); expected (0.005)
+Windows   passing glocal HMM Forward  bias filter:             276  (0.02619); expected (0.005)
+Envelopes passing glocal HMM envelope defn filter:             298  (0.01273); expected (0.005)
+Envelopes passing  local CM  CYK           filter:              19  (0.0004309); expected (0.0001)
+Total CM hits reported:                                          6  (0.000177); includes 0 truncated hit(s)
+
+# CPU time: 30.84u 0.50s 00:00:31.34 Elapsed: 00:00:08.41
+//
+[ok]

@@ -7,14 +7,18 @@
 
 """Bio.SearchIO parser for Infernal tabular output format."""
 
+
 from Bio.SearchIO._index import SearchIndexer
-from Bio.SearchIO._model import Hit
 from Bio.SearchIO._model import HSP
 from Bio.SearchIO._model import HSPFragment
 from Bio.SearchIO._model import QueryResult 
 from Bio.SearchIO.HmmerIO import Hmmer3TabParser
 
+from ._base import _BaseInfernalParser
+
+
 __all__ = ("InfernalTabParser")
+
 
 # tabular format column names
 _TAB_FORMAT = {
@@ -22,6 +26,7 @@ _TAB_FORMAT = {
     2: ("idx", "target_name", "target_acc", "query_name", "query_acc", "clan", "mdl", "mdl_from", "mdl_to", "seq_from", "seq_to", "strand", "trunc", "pass", "gc", "bias", "score", "evalue", "inc", "olp", "anyidx", "afrct1", "afrct2", "winidx", "wfrct1", "wfrct2", "mdl_len", "seq_len", "description"),
     3: ("target_name", "target_acc", "query_name", "query_acc", "mdl", "mdl_from", "mdl_to", "seq_from", "seq_to", "strand", "trunc", "pass", "gc", "bias", "score", "evalue", "inc", "mdl_len", "seq_len", "description")
 }
+
 
 # column to class attribute map
 _COLUMN_QRESULT = {
@@ -34,6 +39,7 @@ _COLUMN_QRESULT = {
 _COLUMN_HIT = {
     "target_name": ("id", str),
     "target_acc": ("accession", str),
+    "query_name": ("query_id", str),
     "description": ("description", str),
     "mdl_len": ("seq_len", int),
 }
@@ -62,7 +68,7 @@ _COLUMN_FRAG = {
 }
 
 
-class InfernalTabParser(Hmmer3TabParser):
+class InfernalTabParser(_BaseInfernalParser):
     """Parser for the Infernal tabular format."""
 
 
@@ -180,6 +186,7 @@ class InfernalTabParser(Hmmer3TabParser):
         # dummies for initial parsed value containers
         cur, prev = None, None
         hit_list, hsp_list = [], []
+        hit_dict = dict()
 
         while True:
             # store previous line's parsed values for all lines after the first
@@ -212,31 +219,19 @@ class InfernalTabParser(Hmmer3TabParser):
             # in the first parsed line (prev == None)
             if prev is not None:
                 # create fragment and HSP and set their attributes
+                # and append to hit container 
                 frag = HSPFragment(prev_hid, prev_qid)
                 for attr, value in prev["frag"].items():
                     setattr(frag, attr, value)
                 hsp = HSP([frag])
                 for attr, value in prev["hsp"].items():
                     setattr(hsp, attr, value)
-                hsp_list.append(hsp)
-
-                # create hit and append to temp hit container if hit_state
-                # says we're not at the same hit or at a new query
-                if hit_state == state_HIT_NEW:
-                    hit = Hit(hsp_list)
-                    for attr, value in prev["hit"].items():
-                        setattr(hit, attr, value)
-                    hit_list.append(hit)
-                    hsp_list = []
-                # create Hit and set its attributes
-                #hit = Hit([hsp])
-                #for attr, value in prev["hit"].items():
-                #    setattr(hit, attr, value)
-                #hit_list.append(hit)
+                self._add_hit_to_dict(prev["hit"], hsp, hit_dict)
 
                 # create qresult and yield if we're at a new qresult or at EOF
                 if qres_state == state_QRES_NEW or file_state == state_EOF:
-                    qresult = QueryResult(hit_list, prev_qid)
+                    # create the hit list from the temporary container
+                    qresult = QueryResult(self._hit_to_list(hit_dict), prev_qid)
                     for attr, value in prev["qresult"].items():
                         setattr(qresult, attr, value)
                     yield qresult
