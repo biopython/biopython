@@ -44,12 +44,14 @@ _DIV_QUERY_START = "Query:"
 # hits 
 _DIV_HITS_END_CM = "Internal CM pipeline statistics summary:"
 _DIV_HITS_END_HMM = "Internal HMM-only pipeline statistics summary:"
-_DIV_HIT_SCORE = "Hit scores:"
+_DIV_HIT_SCORE_TABLE = "Hit scores:"
 _DIV_HIT_ALIGNMENT = "Hit alignments:"
 _DIV_NO_HIT = "   [No hits detected that satisfy reporting thresholds]"
 _DIV_TABLE_START = " ----   --------- ------"
+_DIV_INC_THRESHOLD = " ------ inclusion threshold ------"
 # hit alignment
 _DIV_ALIGNMENT_START = ">> "
+
 
 class InfernalTextParser:
     def __init__(self, handle):
@@ -142,7 +144,7 @@ class InfernalTextParser:
 
             # get description and accession, if they exist
             qdesc = "<unknown description>"  # placeholder
-            while not self.line.startswith(_DIV_HIT_SCORE):
+            while not self.line.startswith(_DIV_HIT_SCORE_TABLE):
                 self.line = read_forward(self.handle)
 
                 if self.line.startswith("Accession:"):
@@ -161,8 +163,7 @@ class InfernalTextParser:
                 if self.line.startswith(_DIV_HITS_END_CM) or self.line.startswith(_DIV_HITS_END_HMM):
                     while self.line and not self.line.startswith(_DIV_QUERY_END):
                         self.line = read_forward(self.handle)
-            # create qresult, set its attributes and yield   
-            #print(hit_list)
+            # create qresult, set its attributes and yield 
             qresult = QueryResult(id=qid, hits=hit_list)
             for attr, value in qresult_attrs.items():
                 setattr(qresult, attr, value)
@@ -176,183 +177,170 @@ class InfernalTextParser:
 
 
     def _parse_hit(self, qid, qdesc):
-        """Parse an Infernal hit section (PRIVATE)."""
-        # empty container
-        hit_list, hsp_list = [], []
-        # dummie for hit informations
-        hit_attrs = None
-        prev_hid = None
-        cur_hid = None
-
-        # the hit score and alignments tables are redundant, if the output 
-        # does not include the alignment, we must parse the hit score table
-        # otherwise we can skip it and parse the hit alignment only
-        if self._meta["show alignments in output"] == "no":
-            # parse the hit table
-            while True:
-                if not self.line:
-                    return []
-                # if there are no hits, forward-read to the end of the query
-                elif self.line.startswith(_DIV_NO_HIT):
-                    while True:
-                        self.line = read_forward(self.handle)
-                        if self.line.startswith(_DIV_HITS_END_CM) or self.line.startswith(_DIV_HITS_END_HMM):
-                            return []
-                elif self.line.startswith(_DIV_HIT_SCORE):
-                    # read through the header 
-                    self._read_until(lambda line: line.startswith(_DIV_TABLE_START))
-                    self.line = read_forward(self.handle)
-
-                    # parse the hit score table
-                    while True:
-                        # we've reached the end of the hit score table
-                        if self.line.startswith(_DIV_HITS_END_CM) or self.line.startswith(_DIV_HITS_END_HMM):
-                            # create the last hit 
-                            hit = Hit(hsp_list)
-                            for attr, value in hit_attrs.items():
-                                setattr(hit, attr, value)
-                            hit_list.append(hit)
-                            return hit_list
-
-                        # parse the columns into a list
-                        row = [x for x in self.line.strip().split(" ") if x]
-                        # join the description words if it's >1 word
-                        if len(row) > 12:
-                            row[12] = " ".join(row[12:])
-                        # if there's no description, set it to an empty string
-                        elif len(row) < 12:
-                            row.append("")
-                            assert len(row) == 12
-                        
-                        # create hit and append to hit container
-                        cur_hid = row[5]
-                        if prev_hid is not None and cur_hid != prev_hid:
-                            hit = Hit(hsp_list)
-                            for attr, value in hit_attrs.items():
-                                setattr(hit, attr, value)
-                            hit_list.append(hit)
-                            hsp_list = []
-                        
-                        # parse the attributes
-                        hit_attrs = {
-                            "id": cur_hid,
-                            "query_id": qid,
-                            "description": row[12]
-                        }
-                        hsp_attrs = {
-                            "evalue": float(row[2]),
-                            "bitscore": float(row[3]),
-                            "bias": float(row[4]),
-                            "model": row[9],
-                            "truncated": row[10],
-                            "gc": float(row[11]),
-                            "is_included": True if row[1] == "!" else False,                            
-                        }
-                        hsp_frag_attrs = {
-                            "hit_start": int(row[6]) if row[8] == "+" else int(row[7]),
-                            "hit_end": int(row[7]) if row[8] == "+" else int(row[6]),
-                            "hit_strand": 0 if row[8] == "+" else -1
-                        }
-
-                        # create the hsp fragment and set it's attributes
-                        hsp_frag = HSPFragment(row[5], qid)
-                        for attr, value in hsp_frag_attrs.items():
-                            setattr(hsp_frag, attr, value)
-                        
-                        # create the hsp and set it's attributes
-                        hsp = HSP([hsp_frag])
-                        for attr, value in hsp_attrs.items():
-                            setattr(hsp, attr, value)
-                        hsp_list.append(hsp)
-
-                        prev_hid = hit_attrs["id"]
-                        self.line = read_forward(self.handle)
-        else:
-            # skip the hit score table 
-            self._read_until(lambda line: line.startswith(_DIV_HIT_ALIGNMENT))
-            self.line = read_forward(self.handle)
-
-            while True:
-                if not self.line:
-                    return []
-                # if there are no hits, forward-read to the end of the query
-                elif self.line.startswith(_DIV_NO_HIT):
-                    while True:
-                        self.line = read_forward(self.handle)
-                        if self.line.startswith(_DIV_HITS_END_CM) or self.line.startswith(_DIV_HITS_END_HMM):
-                            return []
-                # we've reached the end of the hit section
-                elif self.line.startswith(_DIV_HITS_END_CM) or self.line.startswith(_DIV_HITS_END_HMM):
-                    # create the last hit 
-                    hit = Hit(hsp_list)
-                    for attr, value in hit_attrs.items():
-                        setattr(hit, attr, value)
-                    hit_list.append(hit)
-                    return hit_list
-                # entering hit alignment table
-                elif self.line.startswith(_DIV_ALIGNMENT_START):
-                    hid, hdesc = self.line[len(_DIV_ALIGNMENT_START) :].split("  ", 1)
-                    hdesc = hdesc.strip()
-
-                    # read through the hit table header and move one more line
-                    self._read_until(lambda line: line.startswith(_DIV_TABLE_START))
-                    self.line = read_forward(self.handle)
-
-                    # parse the hit table
-                    row = [x for x in self.line.strip().split() if x]
-                    assert len(row) == 16
-
-                    # create hit and append to hit container
-                    cur_hid = hid
-                    if prev_hid is not None and cur_hid != prev_hid:
-                        hit = Hit(hsp_list)
-                        for attr, value in hit_attrs.items():
-                            setattr(hit, attr, value)
-                        hit_list.append(hit)
-                        hsp_list = []
-
-                    hit_attrs = {
-                        "id": hid,
-                        "query_id": qid,
-                        "description": hdesc
-                    }
-                    hsp_attrs = {
-                        "evalue": float(row[2]),
-                        "bitscore": float(row[3]),
-                        "bias": float(row[4]),
-                        "model": row[5],
-                        "truncated": row[14],
-                        "gc": float(row[15]),
-                        "avg_acc": float(row[13]),
-                        "query_endtype": row[8],
-                        "hit_endtype": row[12],
-                        "is_included": True if row[1] == "!" else False
-                    }
-                    query_start = int(row[6])
-                    query_end = int(row[7])
-                    hit_start = int(row[9]) if row[11] == "+" else int(row[10])
-                    hit_end = int(row[10]) if row[11] == "+" else int(row[9])
-                    hit_strand = 0 if row[11] == "+" else -1
-
-                    # move to the HSP alignment block
-                    self.line = read_forward(self.handle)
-
-                    # create the hsp
-                    frag_list = self._parse_aln_block(hit_attrs["id"], hit_attrs["query_id"], \
-                        hsp_attrs["model"], query_start, query_end, hit_start, hit_end, hit_strand)
-                    hsp = HSP(frag_list)
-                    for attr, value in hsp_attrs.items():
-                        setattr(hsp, attr, value)
-                    hsp_list.append(hsp)
-
-                    prev_hid = hit_attrs["id"]
-                    # create hit and append to hit container
-                    #hit = Hit([hsp])
-                    #for attr, value in hit_attrs.items():
-                    #    setattr(hit, attr, value)
-                    #hit_list.append(hit)
+        """Parse an Infernal hit (PRIVATE)."""
+        # state values, determines what to do for each block
+        hit_end = False
+        in_score_table = False
+        # dummies for initial parsed value
+        cur_hit_attrs = prev_hit_attrs = cur_hsp = prev_line = None
+        # empty containers
+        hit_list = []
+        hsp_list = []
         
-        return hit_list
+        # set the divider based on the output type (with or without alignment)
+        if self._meta["show alignments in output"] == "no":
+            div_hit_start = _DIV_HIT_SCORE_TABLE
+        else:
+            div_hit_start = _DIV_ALIGNMENT_START
+
+        while True:
+            # store previous line's parsed values for all lines after the first
+            if cur_hit_attrs is not None:
+                prev_hit_attrs = cur_hit_attrs
+                hsp_list.append(cur_hsp)
+            
+            if not self.line:
+                raise ValueError("Unexpected end of file")
+            # if there are no hits, forward-read to the end of the query
+            elif self.line.startswith(_DIV_NO_HIT):
+                while True:
+                    self.line = read_forward(self.handle)
+                    if self.line.startswith(_DIV_HITS_END_CM) or self.line.startswith(_DIV_HITS_END_HMM):
+                        hit_end = True
+                        return hit_list
+            # entering hit alignment block
+            elif self.line.startswith(div_hit_start):
+                # for --noali output, move to the beginning of the hit score table
+                if self._meta["show alignments in output"] == "no":
+                    assert in_score_table == False
+                    self._read_until(lambda line: line.startswith(_DIV_TABLE_START))
+                    self.line = read_forward(self.handle)
+                    #prev_line = self.line
+                    in_score_table = True
+                else:
+                    cur_hit_attrs, cur_hsp = self._parse_hit_from_alignment(qid)
+            # we've reached the end of the hit section
+            elif self.line.startswith(_DIV_HITS_END_CM) or self.line.startswith(_DIV_HITS_END_HMM):
+                hit_end = True
+            # with regular output, skip ignored lines
+            # in --noali output, this also iterate over the rows
+            else: 
+                prev_line = self.line
+                self.line = read_forward(self.handle)
+
+            # for --noali output, parse the scores table row
+            if in_score_table and prev_line is not None and not hit_end:
+                if prev_line.strip() and not prev_line.startswith(_DIV_INC_THRESHOLD):
+                    cur_hit_attrs, cur_hsp = self._parse_scores_table_row(prev_line, qid)
+
+            # create hit and append to hit container
+            if (prev_hit_attrs is not None and cur_hit_attrs["id"] != prev_hit_attrs["id"]) or hit_end:
+                hit = Hit(hsp_list)
+                for attr, value in prev_hit_attrs.items():
+                    setattr(hit, attr, value)
+                hit_list.append(hit)
+                hsp_list = []
+
+            # read throught the statistics summary
+            if hit_end:
+                return hit_list
+
+
+    def _parse_hit_from_alignment(self, qid):
+        """Parse an Infernal hit alignment (PRIVATE)."""
+        hid, hdesc = self.line[len(_DIV_ALIGNMENT_START) :].split("  ", 1)
+        hdesc = hdesc.strip()
+
+        # read through the hit table header and move one more line
+        self._read_until(lambda line: line.startswith(_DIV_TABLE_START))
+        self.line = read_forward(self.handle)
+
+        # parse the hit table
+        row = [x for x in self.line.strip().split() if x]
+        assert len(row) == 16
+
+        # create hit and append to hit container                
+        hit_attrs = {
+            "id": hid,
+            "query_id": qid,
+            "description": hdesc
+        }
+        hsp_attrs = {
+            "evalue": float(row[2]),
+            "bitscore": float(row[3]),
+            "bias": float(row[4]),
+            "model": row[5],
+            "truncated": row[14],
+            "gc": float(row[15]),
+            "avg_acc": float(row[13]),
+            "query_endtype": row[8],
+            "hit_endtype": row[12],
+            "is_included": True if row[1] == "!" else False
+        }
+        query_start = int(row[6])
+        query_end = int(row[7])
+        hit_start = int(row[9]) if row[11] == "+" else int(row[10])
+        hit_end = int(row[10]) if row[11] == "+" else int(row[9])
+        hit_strand = 0 if row[11] == "+" else -1
+
+        # move to the HSP alignment block
+        self.line = read_forward(self.handle)
+
+        # create the hsp
+        frag_list = self._parse_aln_block(hit_attrs["id"], hit_attrs["query_id"], \
+            hsp_attrs["model"], query_start, query_end, hit_start, hit_end, hit_strand)
+        hsp = HSP(frag_list)
+        for attr, value in hsp_attrs.items():
+            setattr(hsp, attr, value)
+
+        return hit_attrs, hsp
+
+
+    def _parse_scores_table_row(self, row, qid):
+        """Parse an Infernal hit scores table (when used with --noali) (PRIVATE)."""
+
+        # parse the columns into a list
+        row = [x for x in row.strip().split(" ") if x]
+        # join the description words if it's >1 word
+        if len(row) > 12:
+            row[12] = " ".join(row[12:])
+        # if there's no description, set it to an empty string
+        elif len(row) < 12:
+            row.append("")
+            assert len(row) == 12
+                        
+        # parse the attributes
+        hit_attrs = {
+            "id": row[5],
+            "query_id": qid,
+            "description": row[12]
+        }
+        hsp_attrs = {
+            "evalue": float(row[2]),
+            "bitscore": float(row[3]),
+            "bias": float(row[4]),
+            "model": row[9],
+            "truncated": row[10],
+            "gc": float(row[11]),
+            "is_included": True if row[1] == "!" else False,                            
+        }
+        hsp_frag_attrs = {
+            "hit_start": int(row[6]) if row[8] == "+" else int(row[7]),
+            "hit_end": int(row[7]) if row[8] == "+" else int(row[6]),
+            "hit_strand": 0 if row[8] == "+" else -1
+        }
+
+        # create the hsp fragment and set it's attributes
+        hsp_frag = HSPFragment(row[5], qid)
+        for attr, value in hsp_frag_attrs.items():
+            setattr(hsp_frag, attr, value)
+                        
+        # create the hsp and set it's attributes
+        hsp = HSP([hsp_frag])
+        for attr, value in hsp_attrs.items():
+            setattr(hsp, attr, value)
+
+        return hit_attrs, hsp
 
 
     def _parse_aln_block(self, hid, qid, model, query_start, query_end, hit_start, hit_end, hit_strand):
@@ -425,7 +413,8 @@ class InfernalTextParser:
                     frag.aln_annotation = cur_annot
 
                     frag_list.append(frag)
-                break
+
+                return frag_list
             
             # parse the alignment blocks in the hsp
             # each block have 4 (hmmonly) or 5 (cm) lines followed by an empty line
@@ -448,8 +437,6 @@ class InfernalTextParser:
             annot["CS"] += lines[0+offset][blkstart:blkend]
             annot["similarity"] += lines[2+offset][blkstart:blkend]
             annot["PP"] += lines[4+offset][blkstart:blkend]
-
-        return frag_list
 
 
     def _local_aln_gap_size(self, cur_aln_idx, seq):
