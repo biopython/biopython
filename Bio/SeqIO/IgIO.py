@@ -22,6 +22,8 @@ from .Interfaces import SequenceIterator
 class IgIterator(SequenceIterator):
     """Parser for IntelliGenetics files."""
 
+    modes = "t"
+
     def __init__(self, source):
         """Iterate over IntelliGenetics records (as SeqRecord objects).
 
@@ -60,7 +62,7 @@ class IgIterator(SequenceIterator):
         SYK_SYK length 330
 
         """
-        super().__init__(source, mode="t", fmt="IntelliGenetics")
+        super().__init__(source, fmt="IntelliGenetics")
         for line in self.stream:
             if not line.startswith(";;"):
                 break

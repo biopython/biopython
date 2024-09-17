@@ -110,6 +110,8 @@ _pir_mol_type = {
 class PirIterator(SequenceIterator):
     """Parser for PIR files."""
 
+    modes = "t"
+
     def __init__(self, source):
         """Iterate over a PIR file and yield SeqRecord objects.
 
@@ -128,7 +130,7 @@ class PirIterator(SequenceIterator):
         HLA:HLA01083 length 188
 
         """
-        super().__init__(source, mode="t", fmt="Pir")
+        super().__init__(source, fmt="Pir")
         # Skip any text before the first record (e.g. blank lines, comments)
         for line in self.stream:
             if line[0] == ">":

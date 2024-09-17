@@ -34,6 +34,8 @@ REFERENCE_JOURNAL = "%(name)s %(volume)s:%(first)s-%(last)s(%(pub_date)s)"
 class UniprotIterator(SequenceIterator):
     """Parser for UniProt XML files, returning SeqRecord objects."""
 
+    modes = "b"
+
     def __init__(
         self,
         source: _BytesIOSource,
@@ -55,7 +57,7 @@ class UniprotIterator(SequenceIterator):
         """
         if alphabet is not None:
             raise ValueError("The alphabet argument is no longer supported")
-        super().__init__(source, mode="b", fmt="UniProt XML")
+        super().__init__(source, fmt="UniProt XML")
         self.return_raw_comments = return_raw_comments
         self._data = ElementTree.iterparse(
             self.stream, events=("start", "start-ns", "end")

@@ -143,6 +143,8 @@ def FastaTwoLineParser(handle):
 class FastaIterator(SequenceIterator):
     """Parser for plain Fasta files without comments."""
 
+    modes = "t"
+
     def __init__(
         self,
         source: _TextIOSource,
@@ -191,7 +193,7 @@ class FastaIterator(SequenceIterator):
         """
         if alphabet is not None:
             raise ValueError("The alphabet argument is no longer supported")
-        super().__init__(source, mode="t", fmt="Fasta")
+        super().__init__(source, fmt="Fasta")
         try:
             line = next(self.stream)
         except StopIteration:
@@ -266,6 +268,8 @@ class FastaIterator(SequenceIterator):
 class FastaTwoLineIterator(SequenceIterator):
     """Parser for Fasta files with exactly two lines per record."""
 
+    modes = "t"
+
     def __init__(self, source):
         """Iterate over two-line Fasta records (as SeqRecord objects).
 
@@ -278,7 +282,7 @@ class FastaTwoLineIterator(SequenceIterator):
         Only the default title to ID/name/description parsing offered
         by the relaxed FASTA parser is offered.
         """
-        super().__init__(source, mode="t", fmt="FASTA")
+        super().__init__(source, fmt="FASTA")
         self._data = FastaTwoLineParser(self.stream)
 
     def __next__(self):
@@ -299,6 +303,8 @@ class FastaTwoLineIterator(SequenceIterator):
 
 class FastaBlastIterator(SequenceIterator):
     """Parser for Fasta files, allowing for comments as in BLAST."""
+
+    modes = "t"
 
     def __init__(
         self,
@@ -348,7 +354,7 @@ class FastaBlastIterator(SequenceIterator):
         """
         if alphabet is not None:
             raise ValueError("The alphabet argument is no longer supported")
-        super().__init__(source, mode="t", fmt="FASTA")
+        super().__init__(source, fmt="FASTA")
         for line in self.stream:
             if line[0] not in "#!;":
                 if not line.startswith(">"):
@@ -396,6 +402,8 @@ class FastaBlastIterator(SequenceIterator):
 
 class FastaPearsonIterator(SequenceIterator):
     """Parser for Fasta files, allowing for comments as in the FASTA aligner."""
+
+    modes = "t"
 
     def __init__(
         self,
@@ -446,7 +454,7 @@ class FastaPearsonIterator(SequenceIterator):
         """
         if alphabet is not None:
             raise ValueError("The alphabet argument is no longer supported")
-        super().__init__(source, mode="t", fmt="Fasta")
+        super().__init__(source, fmt="Fasta")
         for line in self.stream:
             if line.startswith(">"):
                 self._line = line

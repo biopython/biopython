@@ -114,6 +114,8 @@ def AtomIterator(pdb_id, structure):
 class PdbSeqresIterator(SequenceIterator):
     """Parser for PDB files."""
 
+    modes = "t"
+
     def __init__(self, source: _TextIOSource) -> None:
         """Iterate over chains in a PDB file as SeqRecord objects.
 
@@ -151,7 +153,7 @@ class PdbSeqresIterator(SequenceIterator):
         Note the chain is recorded in the annotations dictionary, and any PDB DBREF
         lines are recorded in the database cross-references list.
         """
-        super().__init__(source, mode="t", fmt="PDB")
+        super().__init__(source, fmt="PDB")
         self.cache = None
 
     def __next__(self):
@@ -276,6 +278,8 @@ class PdbSeqresIterator(SequenceIterator):
 class PdbAtomIterator(SequenceIterator):
     """Parser for structures in a PDB files."""
 
+    modes = "t"
+
     def __init__(self, source: _TextIOSource) -> None:
         """Iterate over structures in a PDB file as SeqRecord objects.
 
@@ -372,6 +376,8 @@ STRUCT_REF_SEQ_FIELDS = (
 
 class CifSeqresIterator(SequenceIterator):
     """Parser for chains in an mmCIF files."""
+
+    modes = "t"
 
     def __init__(self, source: _TextIOSource) -> None:
         """Iterate over chains in an mmCIF file as SeqRecord objects.
@@ -497,6 +503,8 @@ class CifSeqresIterator(SequenceIterator):
 
 class CifAtomIterator(SequenceIterator):
     """Parser for structures in an mmCIF files."""
+
+    modes = "t"
 
     def __init__(self, source: _TextIOSource) -> None:
         """Iterate over structures in an mmCIF file as SeqRecord objects.

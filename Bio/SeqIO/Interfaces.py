@@ -12,6 +12,7 @@ use this module.  It provides base classes to try and simplify things.
 
 from abc import ABC
 from abc import abstractmethod
+from abc import abstractproperty
 from os import PathLike
 from typing import AnyStr
 from typing import Generic
@@ -37,13 +38,25 @@ class SequenceIterator(ABC, Generic[AnyStr]):
 
     You should write a __next__ method that returns the next SeqRecord.  You
     may wish to redefine the __init__ method as well.
+    You must also create a class property `modes` specifying the allowable
+    file stream modes.
     """
+
+    @abstractproperty
+    def modes(self):
+        """File modes (binary or text) that the parser can handle.
+
+        This property must be "t" (for text mode only), "b" (for binary mode
+        only), "tb" (if both text and binary mode are accepted, but text mode
+        is preferred), or "bt" (if both text and binary mode are accepted, but
+        binary mode is preferred).
+        """
+        pass
 
     def __init__(
         self,
         source: _IOSource,
         alphabet: None = None,
-        mode: str = "t",
         fmt: Optional[str] = None,
     ) -> None:
         """Create a SequenceIterator object.
@@ -51,7 +64,6 @@ class SequenceIterator(ABC, Generic[AnyStr]):
         Arguments:
         - source - input file stream, or path to input file
         - alphabet - no longer used, should be None
-        - mode - string, either "t" for text mode or "b" for binary
         - fmt - string, mixed case format name for in error messages
 
         This method MAY be overridden by any subclass.
@@ -63,24 +75,30 @@ class SequenceIterator(ABC, Generic[AnyStr]):
         """
         if alphabet is not None:
             raise ValueError("The alphabet argument is no longer supported")
+        modes = self.modes
         if isinstance(source, _PathLikeTypes):
+            mode = modes[0]
             self.stream = open(source, "r" + mode)
             self.should_close_stream = True
         else:
-            if mode == "t":
-                if source.read(0) != "":
-                    raise StreamModeError(
-                        f"{fmt} files must be opened in text mode."
-                    ) from None
-            elif mode == "b":
-                if source.read(0) != b"":
+            value = source.read(0)
+            if value == "":
+                if modes == "b":
                     raise StreamModeError(
                         f"{fmt} files must be opened in binary mode."
                     ) from None
+                mode = "t"
+            elif value == b"":
+                if modes == "t":
+                    raise StreamModeError(
+                        f"{fmt} files must be opened in text mode."
+                    ) from None
+                mode = "b"
             else:
-                raise ValueError(f"Unknown mode '{mode}'") from None
+                raise RuntimeError("Failed to read from input data") from None
             self.stream = source
             self.should_close_stream = False
+        self.mode = mode
 
     @abstractmethod
     def __next__(self):
