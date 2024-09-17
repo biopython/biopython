@@ -28,7 +28,7 @@ class _BaseInfernalParser:
             }
         else:
             assert hit_dict[hid]["attrs"]["query_id"] == hit_attrs["query_id"]
-            #assert hit_dict[hid]["attrs"]["description"] == hit_attrs["description"]
+            assert hit_dict[hid]["attrs"]["description"] == hit_attrs["description"]
         
         hit_dict[hid]["hsps"].append(hsp)
 
