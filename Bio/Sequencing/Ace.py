@@ -286,7 +286,16 @@ class Contig:
             self.uorc = header[5]
 
 
-def _parse(handle):
+def _parse(stream):
+    """Iterate of ACE file contig by contig by reading from a file-like object.
+
+    Argument stream is a file-like object.
+
+    This is a private function for internal purposes only. The public function
+    ``parse`` (without a leading underscore) takes care of opening the file,
+    calling ``_parse`` to read from it, and closing the file if appropriate.
+    """
+
     line = ""
     while True:
         # at beginning, skip the AS and look for first CO command
@@ -294,30 +303,30 @@ def _parse(handle):
             while True:
                 if line.startswith("CO"):
                     break
-                line = next(handle)
+                line = next(stream)
         except StopIteration:
             return
 
         record = Contig(line)
 
-        for line in handle:
+        for line in stream:
             line = line.strip()
             if not line:
                 break
             record.sequence += line
 
-        for line in handle:
+        for line in stream:
             if line.strip():
                 break
         if not line.startswith("BQ"):
             raise ValueError("Failed to find BQ line")
 
-        for line in handle:
+        for line in stream:
             if not line.strip():
                 break
             record.quality.extend(int(x) for x in line.split())
 
-        for line in handle:
+        for line in stream:
             if line.strip():
                 break
 
@@ -326,7 +335,7 @@ def _parse(handle):
                 break
             record.af.append(af(line))
             try:
-                line = next(handle)
+                line = next(stream)
             except StopIteration:
                 raise ValueError("Unexpected end of AF block") from None
 
@@ -334,7 +343,7 @@ def _parse(handle):
             if line.strip():
                 break
             try:
-                line = next(handle)
+                line = next(stream)
             except StopIteration:
                 raise ValueError("Unexpected end of file") from None
 
@@ -343,7 +352,7 @@ def _parse(handle):
                 break
             record.bs.append(bs(line))
             try:
-                line = next(handle)
+                line = next(stream)
             except StopIteration:
                 raise ValueError("Failed to find end of BS block") from None
 
@@ -361,19 +370,19 @@ def _parse(handle):
                     # If I've met the condition, then stop reading the line.
                     if line.startswith("RD "):
                         break
-                    line = next(handle)
+                    line = next(stream)
             except StopIteration:
                 raise ValueError("Failed to find RD line") from None
 
             record.reads.append(Reads(line))
 
-            for line in handle:
+            for line in stream:
                 line = line.strip()
                 if not line:
                     break
                 record.reads[-1].rd.sequence += line
 
-            for line in handle:
+            for line in stream:
                 if line.strip():
                     break
             if not line.startswith("QA "):
@@ -381,7 +390,7 @@ def _parse(handle):
             record.reads[-1].qa = qa(line)
 
             # now one ds can follow
-            for line in handle:
+            for line in stream:
                 if line.strip():
                     break
             else:
@@ -399,7 +408,7 @@ def _parse(handle):
                     while True:
                         if line.strip():
                             break
-                        line = next(handle)
+                        line = next(stream)
                 except StopIteration:
                     # file ends here
                     break
@@ -409,14 +418,14 @@ def _parse(handle):
                     # we store it here were it appears, the user can sort later.
                     if record.reads[-1].rt is None:
                         record.reads[-1].rt = []
-                    for line in handle:
+                    for line in stream:
                         line = line.strip()
                         # if line=="COMMENT{":
                         if line.startswith("COMMENT{"):
                             if line[8:].strip():
                                 # MIRA 3.0.5 would miss the new line out :(
                                 record.reads[-1].rt[-1].comment.append(line[8:])
-                            for line in handle:
+                            for line in stream:
                                 line = line.strip()
                                 if line.endswith("C}"):
                                     break
@@ -429,7 +438,7 @@ def _parse(handle):
                 elif line.startswith("WR{"):
                     if record.reads[-1].wr is None:
                         record.reads[-1].wr = []
-                    for line in handle:
+                    for line in stream:
                         line = line.strip()
                         if line == "}":
                             break
@@ -439,11 +448,11 @@ def _parse(handle):
                     if record.wa is None:
                         record.wa = []
                     try:
-                        line = next(handle)
+                        line = next(stream)
                     except StopIteration:
                         raise ValueError("Failed to read WA block") from None
                     record.wa.append(wa(line))
-                    for line in handle:
+                    for line in stream:
                         line = line.strip()
                         if line == "}":
                             break
@@ -453,14 +462,14 @@ def _parse(handle):
                     if record.ct is None:
                         record.ct = []
                     try:
-                        line = next(handle)
+                        line = next(stream)
                     except StopIteration:
                         raise ValueError("Failed to read CT block") from None
                     record.ct.append(ct(line))
-                    for line in handle:
+                    for line in stream:
                         line = line.strip()
                         if line == "COMMENT{":
-                            for line in handle:
+                            for line in stream:
                                 line = line.strip()
                                 if line.endswith("C}"):
                                     break
