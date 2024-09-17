@@ -24,7 +24,7 @@ class ParserTests(SeqRecordTestBaseClass):
 
         datafile = os.path.join("SwissProt", filename)
 
-        with open(datafile) as handle:
+        with open(datafile, "rb") as handle:
             seq_record = SeqIO.read(handle, "uniprot-xml")
 
         self.assertIsInstance(seq_record, SeqRecord)
@@ -140,7 +140,7 @@ class ParserTests(SeqRecordTestBaseClass):
 
         datafile = os.path.join("SwissProt", filename)
 
-        with open(datafile) as handle:
+        with open(datafile, "rb") as handle:
             seq_record = SeqIO.read(handle, "uniprot-xml")
 
         self.assertIsInstance(seq_record, SeqRecord)
@@ -621,7 +621,7 @@ class ParserTests(SeqRecordTestBaseClass):
 
     def test_submittedName_allowed(self):
         """Checks if parser supports new XML Element (submittedName)."""
-        with open("SwissProt/R5HY77.xml") as handle:
+        with open("SwissProt/R5HY77.xml", "rb") as handle:
             for entry in SeqIO.parse(handle, "uniprot-xml"):
                 self.assertEqual(entry.id, "R5HY77")
                 self.assertEqual(entry.description, "Elongation factor Ts")
