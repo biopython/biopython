@@ -75,6 +75,14 @@ Another option is to use ``format='fasta-blast'``; this follows the FASTA file
 format accepted by BLAST, treating any lines starting with '#', ';', or '!' as
 comment lines and ignoring them.
 
+Bio.SeqIO.UniprotIO
+-------------------
+Parsing a UniProt XML file opened in text mode (if the file was opened using
+``open("myuniprotfile.xml")``) was deprecated in Release 1.85, as this may lead
+to garbled characters.  Please open the file in binary mode (as in
+``open("myuniprotfile.xml", "rb")``), or let ``Bio.SeqIO.parse`` take care of
+opening and closing files by passing the file name instead of a file handle.
+
 Bio.Entrez
 ----------
 The ``egquery`` function wrapping the NCBI EGQuery (Entrez Global Query)
