@@ -38,7 +38,7 @@ class CmsearchCases(unittest.TestCase):
         qresults = parse(text_file, FMT)
         counter = itertools.count(start=1)
 
-        qresult, counter  = next_result(qresults, counter)
+        qresult, count  = next_result(qresults, counter)
         self.assertEqual(0, len(qresult))
         self.assertEqual(qresult.id, "IRES_HCV")
         self.assertEqual(qresult.seq_len, 352)
@@ -50,7 +50,7 @@ class CmsearchCases(unittest.TestCase):
 
         # test if we've properly finished iteration
         self.assertRaises(StopIteration, next, qresults)
-        self.assertEqual(1, counter)
+        self.assertEqual(1, count)
 
 
     def test_cmsearch_1q_1m_1h_1f(self):
@@ -59,7 +59,7 @@ class CmsearchCases(unittest.TestCase):
         qresults = parse(tab_file, FMT)
         counter = itertools.count(start=1)
 
-        qresult, counter  = next_result(qresults, counter)
+        qresult, count  = next_result(qresults, counter)
         self.assertEqual(1, len(qresult))
         self.assertEqual(qresult.id, "U2")
         self.assertEqual(qresult.seq_len, 193)
@@ -130,7 +130,7 @@ class CmsearchCases(unittest.TestCase):
 
         # test if we've properly finished iteration
         self.assertRaises(StopIteration, next, qresults)
-        self.assertEqual(1, counter)
+        self.assertEqual(1, count)
 
 
     def test_cmsearch_1q_mm_1h_mf(self):
@@ -139,7 +139,7 @@ class CmsearchCases(unittest.TestCase):
         qresults = parse(tab_file, FMT)
         counter = itertools.count(start=1)
 
-        qresult, counter  = next_result(qresults, counter)
+        qresult, count  = next_result(qresults, counter)
         self.assertEqual(5, len(qresult))
         self.assertEqual(qresult.id, "U2")
         self.assertEqual(qresult.seq_len, 193)
@@ -261,7 +261,7 @@ class CmsearchCases(unittest.TestCase):
 
         # test if we've properly finished iteration
         self.assertRaises(StopIteration, next, qresults)
-        self.assertEqual(1, counter)
+        self.assertEqual(1, count)
 
 
     def test_cmsearch_1q_mm_mh_1f(self):
@@ -270,7 +270,7 @@ class CmsearchCases(unittest.TestCase):
         qresults = parse(tab_file, FMT)
         counter = itertools.count(start=1)
 
-        qresult, counter  = next_result(qresults, counter)
+        qresult, count  = next_result(qresults, counter)
         self.assertEqual(1, len(qresult))
         self.assertEqual(qresult.id, "5S_rRNA")
         self.assertEqual(qresult.seq_len, 119)
@@ -316,16 +316,16 @@ class CmsearchCases(unittest.TestCase):
 
         # test if we've properly finished iteration
         self.assertRaises(StopIteration, next, qresults)
-        self.assertEqual(1, counter)
+        self.assertEqual(1, count)
 
 
     def test_cmsearch_1q_1m_1h_noali(self):
         """Test parsing infernal-text, cmsearch, one queries, one hit, one hsp, noali"""
-        tab_file = get_file("U2_Yeast-noali.txt")
+        tab_file = get_file("U2_Yeast-threshold-noali.txt")
         qresults = parse(tab_file, FMT)
         counter = itertools.count(start=1)
 
-        qresult, counter  = next_result(qresults, counter)
+        qresult, count  = next_result(qresults, counter)
         self.assertEqual(1, len(qresult))
         self.assertEqual(qresult.id, "U2")
         self.assertEqual(qresult.seq_len, 193)
@@ -356,6 +356,10 @@ class CmsearchCases(unittest.TestCase):
         self.assertEqual(frag.hit_end, 681858)
         self.assertEqual(frag.hit_strand, -1)
 
+        # test if we've properly finished iteration
+        self.assertRaises(StopIteration, next, qresults)
+        self.assertEqual(1, count)
+
 
     def test_cmsearch_1q_1m_mh_noali(self):
         """Test parsing infernal-text, cmsearch, one queries, one hit, multiple hsp, noali"""
@@ -363,7 +367,7 @@ class CmsearchCases(unittest.TestCase):
         qresults = parse(tab_file, FMT)
         counter = itertools.count(start=1)
         
-        qresult, counter  = next_result(qresults, counter)
+        qresult, count  = next_result(qresults, counter)
         self.assertEqual(1, len(qresult))
         self.assertEqual(qresult.id, "5S_rRNA")
         self.assertEqual(qresult.seq_len, 119)
@@ -410,6 +414,10 @@ class CmsearchCases(unittest.TestCase):
         self.assertEqual(frag.hit_end, 485817)
         self.assertEqual(frag.hit_strand, 0)
 
+        # test if we've properly finished iteration
+        self.assertRaises(StopIteration, next, qresults)
+        self.assertEqual(1, count)
+
 
     def test_cmsearch_1q_1m_1h_1f_hmmonly(self):
         """Test parsing infernal-text, cmsearch, one queries, one hit, one hsp, one fragments, hmmonly"""
@@ -417,7 +425,7 @@ class CmsearchCases(unittest.TestCase):
         qresults = parse(tab_file, FMT)
         counter = itertools.count(start=1)
 
-        qresult, counter  = next_result(qresults, counter)
+        qresult, count  = next_result(qresults, counter)
         self.assertEqual(1, len(qresult))
         self.assertEqual(qresult.id, "U2")
         self.assertEqual(qresult.seq_len, 193)
@@ -462,10 +470,104 @@ class CmsearchCases(unittest.TestCase):
 
         # test if we've properly finished iteration
         self.assertRaises(StopIteration, next, qresults)
-        self.assertEqual(1, counter)
+        self.assertEqual(1, count)
 
 
+    def test_cmsearch_mq(self):
+            """Test parsing infernal-text, cmsearch, multiple queries"""
+            tab_file = get_file("IRES_5S_U2_Yeast.txt")
+            qresults = parse(tab_file, FMT)
+            counter = itertools.count(start=1)
 
+            # First qresult (empty)
+            qresult, count  = next_result(qresults, counter)
+            self.assertEqual(0, len(qresult))
+            # Second qresult (5S, multiple hits)
+            qresult, count  = next_result(qresults, counter)
+            self.assertEqual(3, len(qresult))
+            self.assertEqual(qresult.id, "5S_rRNA")
+            self.assertEqual(qresult.seq_len, 119)
+            self.assertEqual(qresult.accession, "RF00001")
+            self.assertEqual(qresult.description, "5S ribosomal RNA")
+            self.assertEqual(qresult.program, "cmsearch")
+            self.assertEqual(qresult.version, "1.1.4")
+            self.assertEqual(qresult.target, "GCA_000146045.2.fasta")
+            # first hit 
+            hit = qresult[0]
+            self.assertEqual(6, len(hit))
+            self.assertEqual(hit.id, "ENA|BK006945|BK006945.2")
+            self.assertEqual(hit.description, "TPA_inf: Saccharomyces cerevisiae S288C chromosome XII, complete sequence.")
+            self.assertEqual(hit.query_id, "5S_rRNA")
+            hsp = hit[0]
+            self.assertEqual(1, len(hsp))
+            self.assertEqual(hsp.model, "cm")
+            self.assertEqual(hsp.truncated, "no")
+            self.assertEqual(hsp.gc, 0.52)
+            self.assertEqual(hsp.evalue, 1.6e-18)
+            self.assertEqual(hsp.bitscore, 88.8)
+            self.assertEqual(hsp.bias, 0.0)
+            self.assertEqual(hsp.is_included, True)
+            self.assertEqual(hsp.query_start, 1)
+            self.assertEqual(hsp.query_end, 119)
+            self.assertEqual(hsp.query_endtype, "[]")
+            self.assertEqual(hsp.hit_start, 459676)
+            self.assertEqual(hsp.hit_end, 459796)
+            self.assertEqual(hsp.hit_endtype, "..")
+            self.assertEqual(hsp.avg_acc, 0.99)
+            frag = hsp[0]
+            self.assertEqual(frag.query_start, 1)
+            self.assertEqual(frag.query_end, 119)
+            self.assertEqual(frag.hit_start, 459676)
+            self.assertEqual(frag.hit_end, 459796)
+            self.assertEqual(frag.hit_strand, 0)
+            self.assertEqual(frag.query.seq, 'gccuGcggcCAUAccagcgcgaAagcACcgGauCCCAUCcGaACuCc-gAAguUAAGcgcgcUugggCcagggUA-GUAcuagGaUGgGuGAcCuCcUGggAAgaccagGugccgCaggcc')
+            self.assertEqual(frag.hit.seq, 'GGUUGCGGCCAUAUCUACCAGAAAGCACCGUUUCCCGUCCGAUCAACuGUAGUUAAGCUGGUAAGAGCCUGACCGaGUAGUGUAGUGGGUGACCAUACGCGAAACUCAGGUGCUGCAAUCU')
+            self.assertEqual(frag.aln_annotation['PP'], '***********************************************99***********************8756***************************9*****************')
+            self.assertEqual(frag.aln_annotation['NC'], '                                                                               vv                  vv                    ')
+            self.assertEqual(frag.aln_annotation['CS'], '(((((((((,,,,<<-<<<<<---<<--<<<<<<______>>-->>>.>-->>---->>>>>-->><<<-<<---.-<-<<-----<<____>>----->>->-->>->>>))))))))):')
+            self.assertEqual(frag.aln_annotation['similarity'], 'G::UGC:GCCAUA:C :C::GAAAGCACCG :UCCC+UCCGA C: C G AGUUAAGC::G: +G:GCC G:    GUA  +  +UGGGUGACC+   G  AA  :CAGGUGC:GCA::C+')
+            # last hit 
+            hsp = hit[-1]
+            hit = qresult[-1]
+            self.assertEqual(1, len(hit))
+            self.assertEqual(hit.id, "ENA|BK006947|BK006947.3")
+            self.assertEqual(hit.description, "TPA_inf: Saccharomyces cerevisiae S288C chromosome XIV, complete sequence.")
+            self.assertEqual(hit.query_id, "5S_rRNA")
+            hsp = hit[0]
+            self.assertEqual(1, len(hsp))
+            self.assertEqual(hsp.model, "cm")
+            self.assertEqual(hsp.truncated, "no")
+            self.assertEqual(hsp.gc, 0.41)
+            self.assertEqual(hsp.evalue, 6.6)
+            self.assertEqual(hsp.bitscore, 16.7)
+            self.assertEqual(hsp.bias, 0.3)
+            self.assertEqual(hsp.is_included, False)
+            self.assertEqual(hsp.query_start, 1)
+            self.assertEqual(hsp.query_end, 119)
+            self.assertEqual(hsp.query_endtype, "[]")
+            self.assertEqual(hsp.hit_start, 6968)
+            self.assertEqual(hsp.hit_end, 7085)
+            self.assertEqual(hsp.hit_endtype, "..")
+            self.assertEqual(hsp.avg_acc, 0.91)
+            frag = hsp[0]
+            self.assertEqual(frag.query_start, 1)
+            self.assertEqual(frag.query_end, 119)
+            self.assertEqual(frag.hit_start, 6968)
+            self.assertEqual(frag.hit_end, 7085)
+            self.assertEqual(frag.hit_strand, -1)
+            self.assertEqual(frag.query.seq, 'gccuGcggcCAUAccagc-gcg-aAagcACcgGa-uCCCAUCcGaACuCcgAAguUAAGcgcgcUugggCcagggUAGUAcuagGaUGgGuGAcCuCcUGggAAgaccagGu-gccgCaggcc')
+            self.assertEqual(frag.hit.seq, 'GAGAUGGUAUAUACUGUAgCAUcCGUGUACGUAUgACCGAUCAGA--AUACAAGUGAAGGUGAGUAUGGCAUGUG--GUAGUGGGAUUAGAG-UGGUAGGGUAAGUAUAUGUgUAUUAUUUAC')
+            self.assertEqual(frag.aln_annotation['PP'], '**************976325541459999****989999999999..89**********9999999*********..**********99988.689999************************')
+            self.assertEqual(frag.aln_annotation['NC'], 'v             v  v                 v        v                 v   v                                                      v ')
+            self.assertEqual(frag.aln_annotation['CS'], '(((((((((,,,,<<-<<.<<<.---<<--<<<<.<<______>>-->>>>-->>---->>>>>-->><<<-<<----<-<<-----<<____>>----->>->-->>->>>.))))))))):')
+            self.assertEqual(frag.aln_annotation['similarity'], ' : :: ::: AUAC +   ::     G:AC::::  CC AUC+G   ::::AA:U AAG ::  U+ GGC:  :G  GUA U+GGAU :G G :     GG AAG+: A:GU ::: :: : C')
+            # third qresult (U2, multiple hits)
+            qresult, count  = next_result(qresults, counter)
+            self.assertEqual(5, len(qresult))
+
+            # test if we've properly finished iteration
+            self.assertRaises(StopIteration, next, qresults)
+            self.assertEqual(3, count)
 
 
 if __name__ == "__main__":
