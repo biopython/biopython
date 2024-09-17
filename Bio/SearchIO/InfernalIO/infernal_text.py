@@ -5,18 +5,23 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 
+
 """Bio.SearchIO parser for Infernal plain text output format."""
+
 
 import re
 import operator
 
-from Bio.SearchIO._model import Hit
 from Bio.SearchIO._model import HSP
 from Bio.SearchIO._model import HSPFragment
 from Bio.SearchIO._model import QueryResult
 from Bio.SearchIO._utils import read_forward
 
+from ._base import _BaseInfernalParser
+
+
 __all__ = ("InfernalTextParser")
+
 
 # precompile regex patterns for faster processing
 # program name
@@ -53,7 +58,9 @@ _DIV_INC_THRESHOLD = " ------ inclusion threshold ------"
 _DIV_ALIGNMENT_START = ">> "
 
 
-class InfernalTextParser:
+class InfernalTextParser(_BaseInfernalParser):
+
+
     def __init__(self, handle):
         """Initialize the class."""
         self.handle = handle
@@ -178,11 +185,13 @@ class InfernalTextParser:
         # state values, determines what to do for each block
         hit_end = False
         in_score_table = False
-        # dummies for initial parsed value
-        cur_hit_attrs = prev_hit_attrs = cur_hsp = prev_line = None
-        # empty containers
-        hit_list = []
-        hsp_list = []
+        parsing_hits = False
+        prev_line = None
+        # hits are not guaranteed to be in order, and duplicate hit
+        # IDs will raise a ValueError. to avoid this, hits are stored in
+        # a temporary dictionary and the hit list required to create
+        # the QueryResult is generated at the end of the query block 
+        hit_dict = dict()
         
         # set the divider based on the output type (with or without alignment)
         if self._meta["show alignments in output"] == "no":
@@ -191,11 +200,6 @@ class InfernalTextParser:
             div_hit_start = _DIV_ALIGNMENT_START
 
         while True:
-            # store previous line's parsed values for all lines after the first
-            if cur_hit_attrs is not None:
-                prev_hit_attrs = cur_hit_attrs
-                hsp_list.append(cur_hsp)
-            
             if not self.line:
                 raise ValueError("Unexpected end of file")
             # if there are no hits, forward-read to the end of the query
@@ -204,7 +208,7 @@ class InfernalTextParser:
                     self.line = read_forward(self.handle)
                     if self.line.startswith(_DIV_HITS_END_CM) or self.line.startswith(_DIV_HITS_END_HMM):
                         hit_end = True
-                        return hit_list
+                        return []
             # entering hit alignment block
             elif self.line.startswith(div_hit_start):
                 # for --noali output, move to the beginning of the hit score table
@@ -212,38 +216,40 @@ class InfernalTextParser:
                     assert in_score_table == False
                     self._read_until(lambda line: line.startswith(_DIV_TABLE_START))
                     self.line = read_forward(self.handle)
-                    #prev_line = self.line
-                    in_score_table = True
+                    parsing_hits = in_score_table = True
                 else:
-                    cur_hit_attrs, cur_hsp = self._parse_hit_from_alignment(qid)
+                    self._parse_hit_from_alignment(qid, hit_dict)
+                    parsing_hits = True
             # we've reached the end of the hit section
             elif self.line.startswith(_DIV_HITS_END_CM) or self.line.startswith(_DIV_HITS_END_HMM):
                 hit_end = True
-            # with regular output, skip ignored lines
-            # in --noali output, this also iterate over the rows
-            else: 
-                prev_line = self.line
-                self.line = read_forward(self.handle)
+                parsing_hits = False
+            # Read through the scores table. For regular output this information
+            # is not needed, so we can skip it. For --noali output, this table 
+            # contains the HSP information
+            else:
+                # for --noali output, keep the line
+                if in_score_table:
+                    if self.line.strip():
+                        prev_line = self.line
+                    else:
+                        parsing_hits = in_score_table = False
+                
+                # read one line at the time 
+                self.line = self.handle.readline()
 
             # for --noali output, parse the scores table row
-            if in_score_table and prev_line is not None and not hit_end:
-                if prev_line.strip() and not prev_line.startswith(_DIV_INC_THRESHOLD):
-                    cur_hit_attrs, cur_hsp = self._parse_scores_table_row(prev_line, qid)
-
-            # create hit and append to hit container
-            if (prev_hit_attrs is not None and cur_hit_attrs["id"] != prev_hit_attrs["id"]) or hit_end:
-                hit = Hit(hsp_list)
-                for attr, value in prev_hit_attrs.items():
-                    setattr(hit, attr, value)
-                hit_list.append(hit)
-                hsp_list = []
-
-            # read throught the statistics summary
+            if in_score_table and prev_line is not None:
+                if not prev_line.startswith(_DIV_INC_THRESHOLD): 
+                    self._parse_scores_table_row(prev_line, qid, hit_dict)
+            
+            # we've reached the end of the query block hits
+            # creating the Hit objects for this query
             if hit_end:
-                return hit_list
+                return self._hit_to_list(hit_dict)
 
 
-    def _parse_hit_from_alignment(self, qid):
+    def _parse_hit_from_alignment(self, qid, hit_dict):
         """Parse an Infernal hit alignment (PRIVATE)."""
         hid, hdesc = self.line[len(_DIV_ALIGNMENT_START) :].split("  ", 1)
         hdesc = hdesc.strip()
@@ -289,11 +295,12 @@ class InfernalTextParser:
         hsp = HSP(frag_list)
         for attr, value in hsp_attrs.items():
             setattr(hsp, attr, value)
+        
+        # add the hit to the container
+        self._add_hit_to_dict(hit_attrs, hsp, hit_dict)
 
-        return hit_attrs, hsp
 
-
-    def _parse_scores_table_row(self, row, qid):
+    def _parse_scores_table_row(self, row, qid, hit_dict):
         """Parse an Infernal hit scores table (when used with --noali) (PRIVATE)."""
 
         # parse the columns into a list
@@ -337,7 +344,8 @@ class InfernalTextParser:
         for attr, value in hsp_attrs.items():
             setattr(hsp, attr, value)
 
-        return hit_attrs, hsp
+        # add the hit to the container
+        self._add_hit_to_dict(hit_attrs, hsp, hit_dict)
 
 
     def _parse_aln_block(self, hid, qid, model, query_start, query_end, hit_start, hit_end, hit_strand):
@@ -443,8 +451,7 @@ class InfernalTextParser:
             gap_len = sum([int(n) for n in re.findall(_RE_NUMERIC, seq[cur_aln_idx[0]:cur_aln_idx[1]])])
             assert gap_len > 0
         return gap_len
-
-            
+    
 
 # if not used as a module, run the doctest
 if __name__ == "__main__":

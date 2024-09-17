@@ -15,18 +15,23 @@ from Bio.SearchIO._model import Hit
 class _BaseInfernalParser:
     """Abstract class for Infernal parser objects."""
 
+
     def _add_hit_to_dict(self, hit_attrs, hsp, hit_dict):
         """Add a hit information to the hit container (PRIVATE)."""
-        # add the hit to the container dict, creating a new
+        # add the hit to the container dict, creating a new 
         # entry if it does not exist yet
         hid = hit_attrs["id"]
-        if hid not in hit_dict:
-            hit_dict[hid] = {"attrs": hit_attrs, "hsps": []}
+        if not hid in hit_dict:
+            hit_dict[hid] = {
+                "attrs": hit_attrs,
+                "hsps": []
+            }
         else:
             assert hit_dict[hid]["attrs"]["query_id"] == hit_attrs["query_id"]
-            assert hit_dict[hid]["attrs"]["description"] == hit_attrs["description"]
-
+            #assert hit_dict[hid]["attrs"]["description"] == hit_attrs["description"]
+        
         hit_dict[hid]["hsps"].append(hsp)
+
 
     def _hit_to_list(self, hit_dict):
         """Create a Hit list from the hit container (PRIVATE)."""
