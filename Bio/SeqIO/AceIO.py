@@ -70,7 +70,7 @@ class AceIterator(SequenceIterator):
 
         """
         super().__init__(source, mode="t", fmt="ACE")
-        self.ace_contigs = Ace.parse(self.stream)
+        self.ace_contigs = Ace._parse(self.stream)
 
     def __next__(self):
         try:
