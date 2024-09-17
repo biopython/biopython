@@ -269,15 +269,17 @@ class CmsearchCases(unittest.TestCase):
         self.assertEqual("ENA|BK006936|BK006936.2", hit.id)
         self.assertEqual("-", hit.accession)
         self.assertEqual("TPA_inf: Saccharomyces cerevisiae S288C chromosome II, complete sequence.", hit.description)
+        
         hsp = hit[0]
         self.assertEqual(1, len(hsp))
         self.assertEqual(5.9e-20, hsp.evalue)
         self.assertEqual(98.7, hsp.bitscore)
         self.assertEqual(0.1, hsp.bias)
+        self.assertEqual(True, hsp.is_included)
+
         self.assertEqual(0.33, hsp.gc)
         self.assertEqual("no", hsp.truncated)
         self.assertEqual(1, hsp.pipeline_pass)
-        self.assertEqual(True, hsp.is_included)
         frag = hsp[0]
         self.assertEqual(1, frag.query_start)
         self.assertEqual(193, frag.query_end)
@@ -339,6 +341,72 @@ class CmsearchCases(unittest.TestCase):
         self.assertEqual(485697, frag.hit_start)
         self.assertEqual(485817, frag.hit_end)
         self.assertEqual(0, frag.hit_strand)
+
+        # test if we've properly finished iteration
+        self.assertRaises(StopIteration, next, qresults)
+        self.assertEqual(1, counter)
+
+
+    def test_cmsearch_1q_mm(self):
+        """Test parsing infernal-tab, cmsearch, one queries, multiple non-consecutive hits, one hsp"""
+        tab_file = get_file("U2_Yeast-shuf.tbl")
+        qresults = parse(tab_file, FMT)
+        counter = 0
+
+        qresult = next(qresults)
+        counter += 1
+        self.assertEqual(2, len(qresult))
+        self.assertEqual(qresult.id, "U2")
+        self.assertEqual(qresult.accession, "RF00004")
+        # first hit
+        # first hit (3 hsps at rank 1,3 and 4)
+        hit = qresult[0]
+        self.assertEqual(3, len(hit))
+        self.assertEqual(hit.id, "ENA|BK006936|BK006936.2")
+        self.assertEqual(hit.description, "-")
+        self.assertEqual(hit.query_id, "U2")
+        # first hsp (rank 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.query_start, 1)
+        self.assertEqual(hsp.query_end, 193)
+        self.assertEqual(hsp.hit_start, 681747)
+        self.assertEqual(hsp.hit_end, 681858)
+        # second hsp (rank 3)
+        hsp = hit[1]
+        self.assertEqual(hsp.query_start, 1)
+        self.assertEqual(hsp.query_end, 193)
+        self.assertEqual(hsp.hit_start, 1370418)
+        self.assertEqual(hsp.hit_end, 1370563)
+        # last hsp (rank 4)
+        hsp = hit[2]
+        self.assertEqual(hsp.query_start, 1)
+        self.assertEqual(hsp.query_end, 193)
+        self.assertEqual(hsp.hit_start, 1079243)
+        self.assertEqual(hsp.hit_end, 1079392)
+        # second hit 
+        hit = qresult[1]
+        self.assertEqual(3, len(hit))
+        self.assertEqual(hit.id, "ENA|BK006948|BK006948.2")
+        self.assertEqual(hit.description, "-")
+        self.assertEqual(hit.query_id, "U2")
+        # first hsp (rank 2)
+        hsp = hit[0]
+        self.assertEqual(hsp.query_start, 1)
+        self.assertEqual(hsp.query_end, 193)
+        self.assertEqual(hsp.hit_start, 737324)
+        self.assertEqual(hsp.hit_end, 737498)
+        # second hsp (rank 5)
+        hsp = hit[1]
+        self.assertEqual(hsp.query_start, 1)
+        self.assertEqual(hsp.query_end, 193)
+        self.assertEqual(hsp.hit_start, 425490)
+        self.assertEqual(hsp.hit_end, 425693)
+        # last hsp (rank 6)
+        hsp = hit[2]
+        self.assertEqual(hsp.query_start, 1)
+        self.assertEqual(hsp.query_end, 193)
+        self.assertEqual(hsp.hit_start, 1073786)
+        self.assertEqual(hsp.hit_end, 1073950)
 
         # test if we've properly finished iteration
         self.assertRaises(StopIteration, next, qresults)

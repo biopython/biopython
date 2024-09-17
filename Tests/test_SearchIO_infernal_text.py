@@ -264,6 +264,75 @@ class CmsearchCases(unittest.TestCase):
         self.assertEqual(1, count)
 
 
+    def test_cmsearch_1q_mm_1h_mf_shuf(self):
+        """Test parsing infernal-text, cmsearch, one queries, multiple non-consecutive hits, one hsp, multiple fragments"""
+        tab_file = get_file("U2_Yeast-shuf.txt")
+        qresults = parse(tab_file, FMT)
+        counter = itertools.count(start=1)
+
+        qresult, count  = next_result(qresults, counter)
+        self.assertEqual(2, len(qresult))
+        self.assertEqual(qresult.id, "U2")
+        self.assertEqual(qresult.seq_len, 193)
+        self.assertEqual(qresult.accession, "RF00004")
+        self.assertEqual(qresult.description, "U2 spliceosomal RNA")
+        self.assertEqual(qresult.program, "cmsearch")
+        self.assertEqual(qresult.version, "1.1.5")
+        self.assertEqual(qresult.target, "BK006936_7-8.fasta")
+        # first hit (3 hsps at rank 1,3 and 4)
+        hit = qresult[0]
+        self.assertEqual(3, len(hit))
+        self.assertEqual(hit.id, "ENA|BK006936|BK006936.2")
+        self.assertEqual(hit.description, "")
+        self.assertEqual(hit.query_id, "U2")
+        # first hsp (rank 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.query_start, 1)
+        self.assertEqual(hsp.query_end, 193)
+        self.assertEqual(hsp.hit_start, 681747)
+        self.assertEqual(hsp.hit_end, 681858)
+        # second hsp (rank 3)
+        hsp = hit[1]
+        self.assertEqual(hsp.query_start, 1)
+        self.assertEqual(hsp.query_end, 193)
+        self.assertEqual(hsp.hit_start, 1370418)
+        self.assertEqual(hsp.hit_end, 1370563)
+        # last hsp (rank 4)
+        hsp = hit[2]
+        self.assertEqual(hsp.query_start, 1)
+        self.assertEqual(hsp.query_end, 193)
+        self.assertEqual(hsp.hit_start, 1079243)
+        self.assertEqual(hsp.hit_end, 1079392)
+        # second hit 
+        hit = qresult[1]
+        self.assertEqual(3, len(hit))
+        self.assertEqual(hit.id, "ENA|BK006948|BK006948.2")
+        self.assertEqual(hit.description, "")
+        self.assertEqual(hit.query_id, "U2")
+        # first hsp (rank 2)
+        hsp = hit[0]
+        self.assertEqual(hsp.query_start, 1)
+        self.assertEqual(hsp.query_end, 193)
+        self.assertEqual(hsp.hit_start, 737324)
+        self.assertEqual(hsp.hit_end, 737498)
+        # second hsp (rank 5)
+        hsp = hit[1]
+        self.assertEqual(hsp.query_start, 1)
+        self.assertEqual(hsp.query_end, 193)
+        self.assertEqual(hsp.hit_start, 425490)
+        self.assertEqual(hsp.hit_end, 425693)
+        # last hsp (rank 6)
+        hsp = hit[2]
+        self.assertEqual(hsp.query_start, 1)
+        self.assertEqual(hsp.query_end, 193)
+        self.assertEqual(hsp.hit_start, 1073786)
+        self.assertEqual(hsp.hit_end, 1073950)
+
+        # test if we've properly finished iteration
+        self.assertRaises(StopIteration, next, qresults)
+        self.assertEqual(1, count)
+
+
     def test_cmsearch_1q_mm_mh_1f(self):
         """Test parsing infernal-text, cmsearch, one queries, one hit, multiple hsp, one fragment"""
         tab_file = get_file("5S_Yeast.txt")
@@ -412,6 +481,90 @@ class CmsearchCases(unittest.TestCase):
         frag = hsp[0]
         self.assertEqual(frag.hit_start, 485697)
         self.assertEqual(frag.hit_end, 485817)
+        self.assertEqual(frag.hit_strand, 0)
+
+        # test if we've properly finished iteration
+        self.assertRaises(StopIteration, next, qresults)
+        self.assertEqual(1, count)
+
+
+    def test_cmsearch_1q_1m_mh_noali_inc(self):
+        """Test parsing infernal-text, cmsearch, one queries, one hit, multiple hsp, noali, inclusion threshold"""
+        tab_file = get_file("U2_Yeast-noali.txt")
+        qresults = parse(tab_file, FMT)
+        counter = itertools.count(start=1)
+        
+        qresult, count  = next_result(qresults, counter)
+        self.assertEqual(5, len(qresult))
+        self.assertEqual(qresult.id, "U2")
+        self.assertEqual(qresult.seq_len, 193)
+        self.assertEqual(qresult.accession, "RF00004")
+        self.assertEqual(qresult.description, "U2 spliceosomal RNA")
+        self.assertEqual(qresult.program, "cmsearch")
+        self.assertEqual(qresult.version, "1.1.5")
+        self.assertEqual(qresult.target, "GCA_000146045.2.fasta")
+        # first hit
+        hit = qresult[0]
+        self.assertEqual(1, len(hit))
+        self.assertEqual(hit.id, "ENA|BK006936|BK006936.2")
+        self.assertEqual(hit.description, "TPA_inf: Saccharomyces cerevisiae S288C chromosome II,")
+        self.assertEqual(hit.query_id, "U2")
+        hsp = hit[0]
+        self.assertEqual(1, len(hsp))
+        self.assertEqual(hsp.model, "cm")
+        self.assertEqual(hsp.truncated, "no")
+        self.assertEqual(hsp.gc, 0.33)
+        self.assertEqual(hsp.evalue, 5.9e-20)
+        self.assertEqual(hsp.bitscore, 98.7)
+        self.assertEqual(hsp.bias, 0.1)
+        self.assertEqual(hsp.is_included, True)
+        self.assertEqual(hsp.hit_start, 681747)
+        self.assertEqual(hsp.hit_end, 681858)
+        frag = hsp[0]
+        self.assertEqual(frag.hit_start, 681747)
+        self.assertEqual(frag.hit_end, 681858)
+        self.assertEqual(frag.hit_strand, -1)
+        # second hit
+        hit = qresult[1]
+        self.assertEqual(1, len(hit))
+        self.assertEqual(hit.id, "ENA|BK006948|BK006948.2")
+        self.assertEqual(hit.description, "TPA_inf: Saccharomyces cerevisiae S288C chromosome XV,")
+        self.assertEqual(hit.query_id, "U2")
+        hsp = hit[0]
+        self.assertEqual(1, len(hsp))
+        self.assertEqual(hsp.model, "cm")
+        self.assertEqual(hsp.truncated, "no")
+        self.assertEqual(hsp.gc, 0.39)
+        self.assertEqual(hsp.evalue, 0.49)
+        self.assertEqual(hsp.bitscore, 19.8)
+        self.assertEqual(hsp.bias, 0.0)
+        self.assertEqual(hsp.is_included, False)
+        self.assertEqual(hsp.hit_start, 737324)
+        self.assertEqual(hsp.hit_end, 737498)
+        frag = hsp[0]
+        self.assertEqual(frag.hit_start, 737324)
+        self.assertEqual(frag.hit_end, 737498)
+        self.assertEqual(frag.hit_strand, -1)
+        # last hit
+        hit = qresult[-1]
+        self.assertEqual(1, len(hit))
+        self.assertEqual(hit.id, "ENA|BK006939|BK006939.2")
+        self.assertEqual(hit.description, "TPA_inf: Saccharomyces cerevisiae S288C chromosome V,")
+        self.assertEqual(hit.query_id, "U2")
+        hsp = hit[0]
+        self.assertEqual(1, len(hsp))
+        self.assertEqual(hsp.model, "cm")
+        self.assertEqual(hsp.truncated, "no")
+        self.assertEqual(hsp.gc, 0.41)
+        self.assertEqual(hsp.evalue, 7.1)
+        self.assertEqual(hsp.bitscore, 14.9)
+        self.assertEqual(hsp.bias, 0.0)
+        self.assertEqual(hsp.is_included, False)
+        self.assertEqual(hsp.hit_start, 190882)
+        self.assertEqual(hsp.hit_end, 191043)
+        frag = hsp[0]
+        self.assertEqual(frag.hit_start, 190882)
+        self.assertEqual(frag.hit_end, 191043)
         self.assertEqual(frag.hit_strand, 0)
 
         # test if we've properly finished iteration
