@@ -32,7 +32,7 @@ def next_result(qresults, counter):
 class CmscanCases(unittest.TestCase):
     """Test parsing cmscan output."""
 
-    @unittest.skip
+    
     def test_cmscan_mq_mm(self):
         """Test parsing infernal-tab, cmscan, multiple queries, multiple match, one hsp, default format"""
         tab_file = get_file("IRES_5S_U2_Yeast-cmscan.tbl")
@@ -159,7 +159,7 @@ class CmscanCases(unittest.TestCase):
         self.assertEqual(229986, frag.hit_end)
         self.assertEqual(-1, frag.hit_strand)
 
-    @unittest.skip
+    
     def test_cmscan_mq_mm_fmt2(self):
         """Test parsing infernal-tab, cmscan, multiple queries, multiple match, one hsp, fmt 2"""
         tab_file = get_file("IRES_5S_U2_Yeast-cmscan-fmt_2.tbl")
@@ -204,7 +204,7 @@ class CmscanCases(unittest.TestCase):
         self.assertEqual(681858, frag.hit_end)
         self.assertEqual(-1, frag.hit_strand)
 
-    @unittest.skip
+    
     def test_cmscan_mq_mm_fmt3(self):
         """Test parsing infernal-tab, cmscan, multiple queries, multiple match, one hsp, fmt 3"""
         tab_file = get_file("IRES_5S_U2_Yeast-cmscan-fmt_3.tbl")
@@ -410,7 +410,6 @@ class CmsearchCases(unittest.TestCase):
         # test if we've properly finished iteration
         self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, count)
-
 
 
 if __name__ == "__main__":

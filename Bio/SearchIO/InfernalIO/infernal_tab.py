@@ -140,7 +140,7 @@ class InfernalTabParser(_BaseInfernalParser):
         # adjust start and end coordinates according to strand
         self._adjust_coords(frag)
         # convert inclusion string to a bool
-        self._convert_inclusion(hsp)
+        self._inclusion_str_to_bool(hsp)
         
         return {"qresult": qresult, "hit": hit, "hsp": hsp, "frag": frag}
 
@@ -160,7 +160,7 @@ class InfernalTabParser(_BaseInfernalParser):
             frag["hit_strand"] = 0
 
 
-    def _convert_inclusion(self, hsp):
+    def _inclusion_str_to_bool(self, hsp):
         """Convert inclusion string to a bool (PRIVATE)."""
         is_included = hsp["is_included"]
         hsp["is_included"] = True if is_included == '!' else False
@@ -185,7 +185,6 @@ class InfernalTabParser(_BaseInfernalParser):
         prev_hid = None
         # dummies for initial parsed value containers
         cur, prev = None, None
-        hit_list, hsp_list = [], []
         hit_dict = dict()
 
         while True:
@@ -238,7 +237,7 @@ class InfernalTabParser(_BaseInfernalParser):
                     # if we're at EOF, break
                     if file_state == state_EOF:
                         break
-                    hit_list = []
+                    hit_dict = dict()
 
             self.line = self.handle.readline()
 
