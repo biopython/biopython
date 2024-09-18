@@ -76,35 +76,12 @@ class InfernalTabParser(_BaseInfernalParser):
         """Initialize the class."""
         self.handle = handle
         self.line = self.handle.readline().strip()
-        self.fmt = self._find_tabular_format()
-
-
-    def _find_tabular_format(self):
-        """Identify the tabular file format from the header (PRIVATE)."""
-        # skip the first line as some column names contain spaces
-        self.line = self.handle.readline()
-
-        # the second line should always be a header
-        if not self.line.startswith("#"):
-            raise ValueError("Expected the first two lines of an Infernal tabular file to be a the header.")
-
-        # identify tabular format 1 (default; 18 columns), 2 (29 columns) or 3 (19 columns)
-        # from the the second header line which does not contain spaces
-        if len(self.line.split(' ')) == len(_TAB_FORMAT[1]):
-            fmt = 1
-        elif len(self.line.split(' ')) == len(_TAB_FORMAT[2]):
-            fmt = 2 
-        elif len(self.line.split(' ')) == len(_TAB_FORMAT[3]):
-            fmt = 3
-        else:
-            raise ValueError("Unknown Infernal tabular output format. Format 1 (default), 2 and 3 are supported.")
-
-        return fmt 
+        self.fmt = None
 
 
     def __iter__(self):
         """Iterate over InfernalTabParser, yields query results."""
-        # read through the footer
+        # read through the header and footer
         while self.line.startswith("#"):
             self.line = self.handle.readline()
         # if we have result rows, parse it
@@ -112,9 +89,41 @@ class InfernalTabParser(_BaseInfernalParser):
             yield from self._parse_qresult()
 
 
+    def _find_tabular_format(self, cols):
+        """Identify the tabular file format (PRIVATE)."""
+        if len(cols) < 18: 
+            raise ValueError("Less columns than expected for Infernal tabular output.")
+
+        # ignore the first five columns as we cannot be certain of 
+        # what they contain
+        offset = 4
+        cols = cols[offset:]
+
+        # get the index of the inclusion column, this value must always
+        # be ! or ?, so we can use this information to determine the format
+        if '?' in cols:
+            idx = cols.index('?')
+        else:
+            idx = cols.index('!')
+        
+        # infer the format based on the index of the inclusion column
+        # fmt 3 cannot reliably be differenciate from fmt 1, so it's 
+        # unsupported at this time
+        fmt = 0
+        if idx == _TAB_FORMAT[1].index("inc")-offset:
+            fmt = 1
+        elif idx == _TAB_FORMAT[2].index("inc")-offset:
+            fmt = 2
+        assert fmt != 0
+        return fmt 
+        
+
     def _parse_row(self):
         """Return a dictionary of parsed row values (PRIVATE)."""
         cols = [x for x in self.line.strip().split(" ") if x]
+        # get the tabular format when reading the first row
+        if self.fmt is None:
+            self.fmt = self._find_tabular_format(cols)
         if len(cols) < len(_TAB_FORMAT[self.fmt]):
             raise ValueError("Less columns than expected for format {}, only {}".format(self.fmt, len(cols)))
         # combine extra description columns into one string
