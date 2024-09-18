@@ -1088,8 +1088,9 @@ class FastqIteratorAbstractBaseClass(SequenceIterator[str]):
         id = descr.split()[0]
         name = id
         record = SeqRecord(Seq(seq_string), id=id, name=name, description=descr)
+        q_mapping = self.q_mapping
         try:
-            qualities = [self.q_mapping[letter2] for letter2 in quality_string]
+            qualities = [q_mapping[letter2] for letter2 in quality_string]
         except KeyError:
             raise ValueError("Invalid character in quality string") from None
         # For speed, will now use a dirty trick to speed up assigning the
