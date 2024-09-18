@@ -5,7 +5,7 @@
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # query CM file:                         RF00001.cm
 # target sequence database:              GCA_000146045.2.fasta
-# tabular output of hits:                5S_Yeast.tbl
+# tabular output of hits:                cmsearch_114_5S_Yeast.tbl
 # sequence reporting threshold:          score >= 38
 # number of worker threads:              56
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

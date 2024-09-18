@@ -1,11 +1,12 @@
 # cmsearch :: search CM(s) against a sequence database
-# INFERNAL 1.1.5 (Sep 2023)
-# Copyright (C) 2023 Howard Hughes Medical Institute.
+# INFERNAL 1.1.4 (Dec 2020)
+# Copyright (C) 2020 Howard Hughes Medical Institute.
 # Freely distributed under the BSD open source license.
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # query CM file:                         RF00004.cm
 # target sequence database:              BK006936_7-8.fasta
-# number of worker threads:              4
+# tabular output of hits:                cmsearch_114_U2_Yeast_shuffled.tbl
+# number of worker threads:              56
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 Query:       U2  [CLEN=193]
@@ -177,6 +178,6 @@ Envelopes passing glocal HMM envelope defn filter:             298  (0.01273); e
 Envelopes passing  local CM  CYK           filter:              19  (0.0004309); expected (0.0001)
 Total CM hits reported:                                          6  (0.000177); includes 0 truncated hit(s)
 
-# CPU time: 30.84u 0.50s 00:00:31.34 Elapsed: 00:00:08.41
+# CPU time: 46.66u 1.60s 00:00:48.26 Elapsed: 00:00:03.11
 //
 [ok]

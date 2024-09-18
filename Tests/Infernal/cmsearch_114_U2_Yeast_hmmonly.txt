@@ -1,13 +1,13 @@
 # cmsearch :: search CM(s) against a sequence database
-# INFERNAL 1.1.5 (Sep 2023)
-# Copyright (C) 2023 Howard Hughes Medical Institute.
+# INFERNAL 1.1.4 (Dec 2020)
+# Copyright (C) 2020 Howard Hughes Medical Institute.
 # Freely distributed under the BSD open source license.
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # query CM file:                         RF00004.cm
 # target sequence database:              GCA_000146045.2.fasta
 # sequence reporting threshold:          score >= 46
 # HMM-only mode (for all models):        on [CM will not be used]
-# number of worker threads:              4
+# number of worker threads:              56
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 Query:       U2  [CLEN=193]
@@ -49,6 +49,6 @@ Windows passing local HMM Viterbi  filter:             143  (0.001824); expected
 Windows passing local HMM Forward  filter:              29  (0.000422); expected (1e-05)
 Total HMM hits reported:                                 1  (3.894e-06)
 
-# CPU time: 1.28u 0.02s 00:00:01.30 Elapsed: 00:00:00.32
+# CPU time: 1.51u 0.14s 00:00:01.65 Elapsed: 00:00:00.27
 //
 [ok]
