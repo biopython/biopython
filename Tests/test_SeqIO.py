@@ -68,7 +68,7 @@ class SeqIOTestBaseClass(unittest.TestCase):
                     SeqIO.read(stream, fmt)
                 except StreamModeError:
                     continue
-                except BiopythonDeprecationWarning:
+                except BiopythonDeprecationWarning:  # uniprot-xml
                     continue
                 except ValueError:  # SeqIO.read will complain that the stream is empty
                     pass
