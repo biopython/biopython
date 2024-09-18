@@ -145,6 +145,8 @@ def _read_feature(handle, record):
 class XdnaIterator(SequenceIterator):
     """Parser for Xdna files."""
 
+    modes = "b"
+
     def __init__(self, source):
         """Parse a Xdna file and return a SeqRecord object.
 
@@ -154,7 +156,7 @@ class XdnaIterator(SequenceIterator):
         contain a single sequence.
 
         """
-        super().__init__(source, mode="b", fmt="Xdna")
+        super().__init__(source, fmt="Xdna")
         header = self.stream.read(112)
         if not header:
             raise ValueError("Empty file.")

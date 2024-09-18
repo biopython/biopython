@@ -13,18 +13,20 @@ from seq_tests_common import SeqRecordTestBaseClass
 from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
 
+from Bio import BiopythonDeprecationWarning
+
 
 class ParserTests(SeqRecordTestBaseClass):
     """Tests Uniprot XML parser."""
 
-    def test_uni001(self):
+    def check_uni001(self, mode):
         """Parsing Uniprot file uni001."""
         filename = "uni001"
         # test the record parser
 
         datafile = os.path.join("SwissProt", filename)
 
-        with open(datafile, "rb") as handle:
+        with open(datafile, mode) as handle:
             seq_record = SeqIO.read(handle, "uniprot-xml")
 
         self.assertIsInstance(seq_record, SeqRecord)
@@ -132,6 +134,12 @@ class ParserTests(SeqRecordTestBaseClass):
         )
         self.assertEqual(seq_record.annotations["sequence_version"], 1)
         self.assertEqual(seq_record.annotations["proteinExistence"], ["Predicted"])
+
+    def test_uni001(self):
+        """Parsing Uniprot file uni001 in text mode and in binary mode."""
+        self.check_uni001("rb")
+        with self.assertWarns(BiopythonDeprecationWarning):
+            self.check_uni001("rt")
 
     def test_uni003(self):
         """Parsing Uniprot file uni003."""

@@ -347,9 +347,11 @@ def _get_string_tag(opt_bytes_value, default=None):
 class AbiIterator(SequenceIterator):
     """Parser for Abi files."""
 
+    modes = "b"
+
     def __init__(self, source, trim=False):
         """Return an iterator for the Abi file format."""
-        super().__init__(source, mode="b", fmt="ABI")
+        super().__init__(source, fmt="ABI")
         # check if input file is a valid Abi file
         marker = self.stream.read(4)
         if not marker:

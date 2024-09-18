@@ -73,13 +73,15 @@ def _read_p4string(stream):
 class GckIterator(SequenceIterator):
     """Parser for GCK files."""
 
+    modes = "b"
+
     def __init__(self, source):
         """Break up a GCK file into SeqRecord objects.
 
         Note that a GCK file can only contain one sequence, so this
         iterator will always return a single record.
         """
-        super().__init__(source, mode="b", fmt="GCK")
+        super().__init__(source, fmt="GCK")
         # Skip file header
         # GCK files start with a 24-bytes header. Bytes 4 and 8 seem to
         # always be 12, maybe this could act as a magic cookie. Bytes

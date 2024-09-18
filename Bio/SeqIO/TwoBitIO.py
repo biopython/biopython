@@ -170,9 +170,11 @@ class _TwoBitSequenceData(SequenceDataAbstractBaseClass):
 class TwoBitIterator(SequenceIterator):
     """Parser for UCSC twoBit (.2bit) files."""
 
+    modes = "b"
+
     def __init__(self, source):
         """Read the file index."""
-        super().__init__(source, mode="b", fmt="twoBit")
+        super().__init__(source, fmt="twoBit")
         # wait to close the file until the TwoBitIterator goes out of scope:
         self.should_close_stream = False
         stream = self.stream

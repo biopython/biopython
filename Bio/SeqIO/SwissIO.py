@@ -27,6 +27,8 @@ from .Interfaces import SequenceIterator
 class SwissIterator(SequenceIterator):
     """Parser to break up a Swiss-Prot/UniProt file into SeqRecord objects."""
 
+    modes = "t"
+
     def __init__(self, source: _TextIOSource) -> None:
         """Iterate over a Swiss-Prot file and return SeqRecord objects.
 
@@ -47,7 +49,7 @@ class SwissIterator(SequenceIterator):
         Rather than calling it directly, you are expected to use this
         parser via Bio.SeqIO.parse(..., format="swiss") instead.
         """
-        super().__init__(source, mode="t", fmt="SwissProt")
+        super().__init__(source, fmt="SwissProt")
 
     def __next__(self):
         swiss_record = SwissProt._read(self.stream)

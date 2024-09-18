@@ -441,6 +441,8 @@ class SeqXmlIterator(SequenceIterator):
     method calls.
     """
 
+    modes = "b"
+
     # Small block size can be a problem with libexpat 2.6.0 onwards:
     BLOCK = 1024
 
@@ -451,7 +453,7 @@ class SeqXmlIterator(SequenceIterator):
         # if the text handle was opened with a different encoding than the
         # one specified in the XML file. With a binary handle, the correct
         # encoding is picked up by the parser from the XML file.
-        super().__init__(stream_or_path, mode="b", fmt="SeqXML")
+        super().__init__(stream_or_path, fmt="SeqXML")
         stream = self.stream
         parser = sax.make_parser()
         content_handler = ContentHandler()

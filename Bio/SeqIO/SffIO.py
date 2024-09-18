@@ -749,6 +749,8 @@ def _sff_read_raw_record(handle, number_of_flows_per_read):
 class SffIterator(SequenceIterator):
     """Parser for Standard Flowgram Format (SFF) files."""
 
+    modes = "b"
+
     # the read header format (fixed part):
     # read_header_length     H
     # name_length            H
@@ -829,7 +831,7 @@ class SffIterator(SequenceIterator):
         """
         if alphabet is not None:
             raise ValueError("The alphabet argument is no longer supported")
-        super().__init__(source, mode="b", fmt="SFF")
+        super().__init__(source, fmt="SFF")
         self.trim = trim
         stream = self.stream
         (

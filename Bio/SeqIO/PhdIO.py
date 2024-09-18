@@ -67,6 +67,8 @@ from .QualityIO import _get_phred_quality
 class PhdIterator(SequenceIterator):
     """Parser for PHD files."""
 
+    modes = "t"
+
     def __init__(self, source: _TextIOSource) -> None:
         """Return SeqRecord objects from a PHD file.
 
@@ -75,7 +77,7 @@ class PhdIterator(SequenceIterator):
 
         This uses the Bio.Sequencing.Phd module to do the hard work.
         """
-        super().__init__(source, mode="t", fmt="PHD")
+        super().__init__(source, fmt="PHD")
 
     def __next__(self):
         phd_record = Phd._read(self.stream)

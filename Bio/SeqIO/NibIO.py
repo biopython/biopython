@@ -53,6 +53,8 @@ from .Interfaces import SequenceWriter
 class NibIterator(SequenceIterator):
     """Parser for nib files."""
 
+    modes = "b"
+
     def __init__(self, source):
         """Iterate over a nib file and yield a SeqRecord.
 
@@ -79,7 +81,7 @@ class NibIterator(SequenceIterator):
         nAGAAGagccgcNGgCActtGAnTAtCGTCgcCacCaGncGncTtGNtGG 50
 
         """
-        super().__init__(source, mode="b", fmt="Nib")
+        super().__init__(source, fmt="Nib")
         word = self.stream.read(4)
         if not word:
             raise ValueError("Empty file.")

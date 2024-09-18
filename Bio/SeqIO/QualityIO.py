@@ -996,6 +996,8 @@ def FastqGeneralIterator(source: _TextIOSource) -> Iterator[tuple[str, str, str]
 class FastqIteratorAbstractBaseClass(SequenceIterator[str]):
     """Abstract base class for FASTQ file parsers."""
 
+    modes = "t"
+
     @abstractproperty
     def q_mapping(self):
         """Dictionary that maps letters in the quality string to quality values."""
@@ -1015,7 +1017,7 @@ class FastqIteratorAbstractBaseClass(SequenceIterator[str]):
         The quality values are stored in the `letter_annotations` dictionary
         attribute under the key `q_key`.
         """
-        super().__init__(source, mode="t", fmt="Fastq")
+        super().__init__(source, fmt="Fastq")
         self.line = None
 
     def __next__(self) -> SeqRecord:
@@ -1421,6 +1423,8 @@ class FastqIlluminaIterator(FastqIteratorAbstractBaseClass):
 class QualPhredIterator(SequenceIterator):
     """Parser for QUAL files with PHRED quality scores but no sequence."""
 
+    modes = "t"
+
     def __init__(
         self,
         source: _TextIOSource,
@@ -1481,7 +1485,7 @@ class QualPhredIterator(SequenceIterator):
         """
         if alphabet is not None:
             raise ValueError("The alphabet argument is no longer supported")
-        super().__init__(source, mode="t", fmt="QUAL")
+        super().__init__(source, fmt="QUAL")
         # Skip any text before the first record (e.g. blank lines, comments)
         for line in self.stream:
             if line[0] == ">":

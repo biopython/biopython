@@ -22,6 +22,8 @@ from .Interfaces import SequenceIterator
 class AceIterator(SequenceIterator):
     """Return SeqRecord objects from an ACE file."""
 
+    modes = "t"
+
     def __init__(
         self,
         source: _TextIOSource,
@@ -69,8 +71,8 @@ class AceIterator(SequenceIterator):
         90
 
         """
-        super().__init__(source, mode="t", fmt="ACE")
-        self.ace_contigs = Ace._parse(self.stream)
+        super().__init__(source, fmt="ACE")
+        self.ace_contigs = Ace.parse(self.stream)
 
     def __next__(self):
         try:

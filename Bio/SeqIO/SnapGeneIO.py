@@ -291,6 +291,8 @@ def _get_child_value(node, name, default=None, error=None):
 class SnapGeneIterator(SequenceIterator):
     """Parser for SnapGene files."""
 
+    modes = "b"
+
     def __init__(self, source):
         """Parse a SnapGene file and return a SeqRecord object.
 
@@ -299,7 +301,7 @@ class SnapGeneIterator(SequenceIterator):
         Note that a SnapGene file can only contain one sequence, so this
         iterator will always return a single record.
         """
-        super().__init__(source, mode="b", fmt="SnapGene")
+        super().__init__(source, fmt="SnapGene")
         self.packets = _iterate(self.stream)
         try:
             packet_type, length, data = next(self.packets)

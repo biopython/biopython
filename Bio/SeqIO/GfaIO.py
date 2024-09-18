@@ -119,6 +119,8 @@ class Gfa1Iterator(SequenceIterator):
     Documentation: https://gfa-spec.github.io/GFA-spec/GFA1.html
     """
 
+    modes = "t"
+
     def __init__(
         self,
         source: _TextIOSource,
@@ -128,7 +130,7 @@ class Gfa1Iterator(SequenceIterator):
         Arguments:
          - source - input stream opened in text mode, or a path to a file
         """
-        super().__init__(source, mode="t", fmt="GFA 1.0")
+        super().__init__(source, fmt="GFA 1.0")
 
     def __next__(self):
         for line in self.stream:
@@ -164,6 +166,8 @@ class Gfa2Iterator(SequenceIterator):
     Documentation for version 2: https://gfa-spec.github.io/GFA-spec/GFA2.html
     """
 
+    modes = "t"
+
     def __init__(
         self,
         source: _TextIOSource,
@@ -173,7 +177,7 @@ class Gfa2Iterator(SequenceIterator):
         Arguments:
          - source - input stream opened in text mode, or a path to a file
         """
-        super().__init__(source, mode="t", fmt="GFA 2.0")
+        super().__init__(source, fmt="GFA 2.0")
 
     def __next__(self):
         for line in self.stream:
