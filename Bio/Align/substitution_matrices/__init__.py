@@ -265,11 +265,6 @@ class Array(np.ndarray):
         """Return the alphabet property."""
         return self._alphabet
 
-    def copy(self):
-        """Create and return a copy of the array."""
-        other = Array(alphabet=self._alphabet, data=self)
-        return other
-
     def get(self, key, value=None):
         """Return the value of the key if found; return value otherwise."""
         try:
@@ -278,7 +273,7 @@ class Array(np.ndarray):
             return value
 
     def items(self):
-        """Return an iterator  of (key, value) pairs in the array."""
+        """Return an iterator of (key, value) pairs in the array."""
         dims = len(self.shape)
         if dims == 1:
             for index, key in enumerate(self._alphabet):
