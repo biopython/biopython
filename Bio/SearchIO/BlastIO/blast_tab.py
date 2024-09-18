@@ -545,7 +545,7 @@ class BlastTabIndexer(SearchIndexer):
                     "Custom fields is missing an ID column. One of these must be "
                     "present: 'qseqid', 'qacc', or 'qaccver'."
                 )
-
+                
     def __iter__(self):
         """Iterate over the file handle; yields key, start offset, and length."""
         handle = self._handle
