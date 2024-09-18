@@ -244,6 +244,7 @@ _INDEXER_MAP = {
     "hmmer3-tab": ("HmmerIO", "Hmmer3TabIndexer"),
     "hmmscan3-domtab": ("HmmerIO", "Hmmer3DomtabHmmhitIndexer"),
     "hmmsearch3-domtab": ("HmmerIO", "Hmmer3DomtabHmmqueryIndexer"),
+    "infernal-tab": ("InfernalIO", "InfernalTabIndexer"),
     "phmmer3-domtab": ("HmmerIO", "Hmmer3DomtabHmmqueryIndexer"),
 }
 
