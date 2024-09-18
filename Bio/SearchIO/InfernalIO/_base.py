@@ -43,3 +43,4 @@ class _BaseInfernalParser:
                 setattr(hit, attr, value)
             hit_list.append(hit)
         return hit_list
+
