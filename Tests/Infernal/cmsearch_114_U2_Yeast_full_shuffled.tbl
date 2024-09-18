@@ -8,11 +8,11 @@ ENA|BK006948|BK006948.2 -         U2                   RF00004    cm        1   
 ENA|BK006948|BK006948.2 -         U2                   RF00004    cm        1      193  1073786  1073950      +    no    1 0.33   0.5   11.9       8.3 ?   -
 #
 # Program:         cmsearch
-# Version:         1.1.5 (Sep 2023)
+# Version:         1.1.4 (Dec 2020)
 # Pipeline mode:   SEARCH
 # Query file:      RF00004.cm
 # Target file:     BK006936_7-8.fasta
-# Option settings: cmsearch --tblout U2_Yeast-shuf.tbl RF00004.cm BK006936_7-8.fasta 
+# Option settings: cmsearch --tblout cmsearch_114_U2_Yeast_shuffled.tbl RF00004.cm BK006936_7-8.fasta 
 # Current dir:     /analysis/BioPython/Testing
-# Date:            Tue Sep 17 08:23:50 2024
+# Date:            Wed Sep 18 11:47:45 2024
 # [ok]

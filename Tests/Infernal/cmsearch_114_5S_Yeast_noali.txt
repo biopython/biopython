@@ -1,13 +1,13 @@
 # cmsearch :: search CM(s) against a sequence database
-# INFERNAL 1.1.5 (Sep 2023)
-# Copyright (C) 2023 Howard Hughes Medical Institute.
+# INFERNAL 1.1.4 (Dec 2020)
+# Copyright (C) 2020 Howard Hughes Medical Institute.
 # Freely distributed under the BSD open source license.
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # query CM file:                         RF00001.cm
 # target sequence database:              GCA_000146045.2.fasta
 # show alignments in output:             no
 # sequence reporting threshold:          score >= 46
-# number of worker threads:              4
+# number of worker threads:              56
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 Query:       5S_rRNA  [CLEN=119]
@@ -40,6 +40,6 @@ Envelopes passing glocal HMM envelope defn filter:              61  (0.0003446);
 Envelopes passing  local CM  CYK           filter:              15  (6.52e-05); expected (0.0001)
 Total CM hits reported:                                          6  (3.006e-05); includes 0 truncated hit(s)
 
-# CPU time: 2.88u 0.05s 00:00:02.93 Elapsed: 00:00:00.71
+# CPU time: 3.95u 0.28s 00:00:04.23 Elapsed: 00:00:00.36
 //
 [ok]

@@ -7,11 +7,13 @@
 
 """Tests for SearchIO InfernalIO infernal-text parser."""
 
+
 import os
 import unittest
 import itertools
 
 from Bio.SearchIO import parse
+
 
 # test case files are in the Blast directory
 TEST_DIR = "Infernal"
@@ -32,9 +34,9 @@ class CmscanCases(unittest.TestCase):
     """Test parsing cmsearch output."""
 
     
-    def test_cmscan_mq(self):
+    def test_cmscan(self):
         """Test parsing infernal-text, cmscan, multiple queries"""
-        tab_file = get_file("IRES_5S_U2_Yeast-cmscan.txt")
+        tab_file = get_file("cmscan_115_IRES_5S_U2_Yeast.txt")
         qresults = parse(tab_file, FMT)
         counter = itertools.count(start=1)
 
@@ -117,8 +119,8 @@ class CmsearchCases(unittest.TestCase):
 
 
     def test_cmsearch_1q_0m(self):
-        """Test parsing infernal-text, cmsearch, single query, no hits"""
-        text_file = get_file("IRES_Yeast.txt")
+        """Test parsing infernal-text, cmsearch, single query, no hits (IRES_Yeast)"""
+        text_file = get_file("cmsearch_114_IRES_Yeast.txt")
         qresults = parse(text_file, FMT)
         counter = itertools.count(start=1)
 
@@ -137,9 +139,9 @@ class CmsearchCases(unittest.TestCase):
         self.assertEqual(1, count)
 
 
-    def test_cmsearch_1q_1m_1h_1f(self):
-        """Test parsing infernal-text, cmsearch, one queries, one hit, one hsp, two fragments"""
-        tab_file = get_file("U2_Yeast-threshold.txt")
+    def test_cmsearch_1q_1m_1h(self):
+        """Test parsing infernal-text, cmsearch, one queries, one hit, one hsp, multiple fragments (U2_Yeast)"""
+        tab_file = get_file("cmsearch_114_U2_Yeast.txt")
         qresults = parse(tab_file, FMT)
         counter = itertools.count(start=1)
 
@@ -217,9 +219,9 @@ class CmsearchCases(unittest.TestCase):
         self.assertEqual(1, count)
 
 
-    def test_cmsearch_1q_mm_1h_mf(self):
-        """Test parsing infernal-text, cmsearch, one queries, multiple hits, one hsp, multiple fragments"""
-        tab_file = get_file("U2_Yeast.txt")
+    def test_cmsearch_1q_mm_1h(self):
+        """Test parsing infernal-text, cmsearch, one queries, multiple hits, one hsp, multiple fragments (U2_Yeast_full)"""
+        tab_file = get_file("cmsearch_114_U2_Yeast_full.txt")
         qresults = parse(tab_file, FMT)
         counter = itertools.count(start=1)
 
@@ -348,9 +350,9 @@ class CmsearchCases(unittest.TestCase):
         self.assertEqual(1, count)
 
 
-    def test_cmsearch_1q_mm_1h_mf_shuf(self):
-        """Test parsing infernal-text, cmsearch, one queries, multiple non-consecutive hits, one hsp, multiple fragments"""
-        tab_file = get_file("U2_Yeast-shuf.txt")
+    def test_cmsearch_1q_mm_1h_shuffled(self):
+        """Test parsing infernal-text, cmsearch, one queries, multiple non-consecutive hits, one hsp, multiple fragments (U2_Yeast_full_shuffled)"""
+        tab_file = get_file("cmsearch_114_U2_Yeast_full_shuffled.txt")
         qresults = parse(tab_file, FMT)
         counter = itertools.count(start=1)
 
@@ -361,7 +363,7 @@ class CmsearchCases(unittest.TestCase):
         self.assertEqual(qresult.accession, "RF00004")
         self.assertEqual(qresult.description, "U2 spliceosomal RNA")
         self.assertEqual(qresult.program, "cmsearch")
-        self.assertEqual(qresult.version, "1.1.5")
+        self.assertEqual(qresult.version, "1.1.4")
         self.assertEqual(qresult.target, "BK006936_7-8.fasta")
         # first hit (3 hsps at rank 1,3 and 4)
         hit = qresult[0]
@@ -417,9 +419,9 @@ class CmsearchCases(unittest.TestCase):
         self.assertEqual(1, count)
 
 
-    def test_cmsearch_1q_mm_mh_1f(self):
-        """Test parsing infernal-text, cmsearch, one queries, one hit, multiple hsp, one fragment"""
-        tab_file = get_file("5S_Yeast.txt")
+    def test_cmsearch_1q_mm_mh(self):
+        """Test parsing infernal-text, cmsearch, one queries, one hit, multiple hsp, one fragment (5S_Yeast)"""
+        tab_file = get_file("cmsearch_114_5S_Yeast.txt")
         qresults = parse(tab_file, FMT)
         counter = itertools.count(start=1)
 
@@ -473,8 +475,8 @@ class CmsearchCases(unittest.TestCase):
 
 
     def test_cmsearch_1q_1m_1h_noali(self):
-        """Test parsing infernal-text, cmsearch, one queries, one hit, one hsp, noali"""
-        tab_file = get_file("U2_Yeast-threshold-noali.txt")
+        """Test parsing infernal-text, cmsearch, one queries, one hit, one hsp, noali (U2_Yeast_noali)"""
+        tab_file = get_file("cmsearch_114_U2_Yeast_noali.txt")
         qresults = parse(tab_file, FMT)
         counter = itertools.count(start=1)
 
@@ -515,8 +517,8 @@ class CmsearchCases(unittest.TestCase):
 
 
     def test_cmsearch_1q_1m_mh_noali(self):
-        """Test parsing infernal-text, cmsearch, one queries, one hit, multiple hsp, noali"""
-        tab_file = get_file("5S_Yeast-noali.txt")
+        """Test parsing infernal-text, cmsearch, one queries, one hit, multiple hsp, noali (5S_Yeast_noali)"""
+        tab_file = get_file("cmsearch_114_5S_Yeast_noali.txt")
         qresults = parse(tab_file, FMT)
         counter = itertools.count(start=1)
         
@@ -527,7 +529,7 @@ class CmsearchCases(unittest.TestCase):
         self.assertEqual(qresult.accession, "RF00001")
         self.assertEqual(qresult.description, "5S ribosomal RNA")
         self.assertEqual(qresult.program, "cmsearch")
-        self.assertEqual(qresult.version, "1.1.5")
+        self.assertEqual(qresult.version, "1.1.4")
         self.assertEqual(qresult.target, "GCA_000146045.2.fasta")
         hit = qresult[0]
         self.assertEqual(6, len(hit))
@@ -573,8 +575,8 @@ class CmsearchCases(unittest.TestCase):
 
 
     def test_cmsearch_1q_1m_mh_noali_inc(self):
-        """Test parsing infernal-text, cmsearch, one queries, one hit, multiple hsp, noali, inclusion threshold"""
-        tab_file = get_file("U2_Yeast-noali.txt")
+        """Test parsing infernal-text, cmsearch, one queries, one hit, multiple hsp, noali, inclusion threshold (U2_Yeast_full_noali)"""
+        tab_file = get_file("cmsearch_114_U2_Yeast_full_noali.txt")
         qresults = parse(tab_file, FMT)
         counter = itertools.count(start=1)
         
@@ -585,7 +587,7 @@ class CmsearchCases(unittest.TestCase):
         self.assertEqual(qresult.accession, "RF00004")
         self.assertEqual(qresult.description, "U2 spliceosomal RNA")
         self.assertEqual(qresult.program, "cmsearch")
-        self.assertEqual(qresult.version, "1.1.5")
+        self.assertEqual(qresult.version, "1.1.4")
         self.assertEqual(qresult.target, "GCA_000146045.2.fasta")
         # first hit
         hit = qresult[0]
@@ -656,9 +658,9 @@ class CmsearchCases(unittest.TestCase):
         self.assertEqual(1, count)
 
 
-    def test_cmsearch_1q_1m_1h_1f_hmmonly(self):
-        """Test parsing infernal-text, cmsearch, one queries, one hit, one hsp, one fragments, hmmonly"""
-        tab_file = get_file("U2_Yeast-hmmonly.txt")
+    def test_cmsearch_1q_1m_1h_hmmonly(self):
+        """Test parsing infernal-text, cmsearch, one queries, one hit, one hsp, one fragments, hmmonly (U2_Yeast_hmmonly)"""
+        tab_file = get_file("cmsearch_114_U2_Yeast_hmmonly.txt")
         qresults = parse(tab_file, FMT)
         counter = itertools.count(start=1)
 
@@ -669,7 +671,7 @@ class CmsearchCases(unittest.TestCase):
         self.assertEqual(qresult.accession, "RF00004")
         self.assertEqual(qresult.description, "U2 spliceosomal RNA")
         self.assertEqual(qresult.program, "cmsearch")
-        self.assertEqual(qresult.version, "1.1.5")
+        self.assertEqual(qresult.version, "1.1.4")
         self.assertEqual(qresult.target, "GCA_000146045.2.fasta")
         hit = qresult[0]
         self.assertEqual(1, len(hit))
@@ -712,7 +714,7 @@ class CmsearchCases(unittest.TestCase):
 
     def test_cmsearch_mq(self):
         """Test parsing infernal-text, cmsearch, multiple queries"""
-        tab_file = get_file("IRES_5S_U2_Yeast.txt")
+        tab_file = get_file("cmsearch_114_IRES_5S_U2_Yeast.txt")
         qresults = parse(tab_file, FMT)
         counter = itertools.count(start=1)
 

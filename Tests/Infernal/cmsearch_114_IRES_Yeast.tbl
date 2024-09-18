@@ -6,7 +6,7 @@
 # Pipeline mode:   SEARCH
 # Query file:      RF00061.cm
 # Target file:     GCA_000146045.2.fasta
-# Option settings: cmsearch --tblout IRES_Yeast.tbl -T 298.2 RF00061.cm GCA_000146045.2.fasta 
+# Option settings: cmsearch --tblout cmsearch_114_IRES_Yeast.tbl -T 298.2 RF00061.cm GCA_000146045.2.fasta 
 # Current dir:     /analysis/BioPython/Testing
 # Date:            Tue Sep 10 11:02:58 2024
 # [ok]

@@ -36,8 +36,8 @@ class CmscanCases(unittest.TestCase):
 
     
     def test_cmscan_mq_mm(self):
-        """Test parsing infernal-tab, cmscan, multiple queries, multiple match, one hsp, default format"""
-        tab_file = get_file("IRES_5S_U2_Yeast-cmscan.tbl")
+        """Test parsing infernal-tab, cmscan, multiple queries, multiple match, one hsp, default format (IRES_5S_U2_Yeast)"""
+        tab_file = get_file("cmscan_115_IRES_5S_U2_Yeast.tbl")
         qresults = parse(tab_file, FMT)
         counter = itertools.count(start=1)
 
@@ -163,8 +163,8 @@ class CmscanCases(unittest.TestCase):
 
     
     def test_cmscan_mq_mm_fmt2(self):
-        """Test parsing infernal-tab, cmscan, multiple queries, multiple match, one hsp, fmt 2"""
-        tab_file = get_file("IRES_5S_U2_Yeast-cmscan-fmt_2.tbl")
+        """Test parsing infernal-tab, cmscan, multiple queries, multiple match, one hsp, fmt 2 (IRES_5S_U2_Yeast_fmt_2)"""
+        tab_file = get_file("cmscan_115_IRES_5S_U2_Yeast_fmt_2.tbl")
         qresults = parse(tab_file, FMT)
         counter = itertools.count(start=1)
 
@@ -209,8 +209,8 @@ class CmscanCases(unittest.TestCase):
     
     @unittest.skip("Unsupported format")
     def test_cmscan_mq_mm_fmt3(self):
-        """Test parsing infernal-tab, cmscan, multiple queries, multiple match, one hsp, fmt 3"""
-        tab_file = get_file("IRES_5S_U2_Yeast-cmscan-fmt_3.tbl")
+        """Test parsing infernal-tab, cmscan, multiple queries, multiple match, one hsp, fmt 3 (IRES_5S_U2_Yeast_fmt_3)"""
+        tab_file = get_file("cmscan_115_IRES_5S_U2_Yeast_fmt_3.tbl")
         qresults = parse(tab_file, FMT)
         counter = itertools.count(start=1)
 
@@ -250,16 +250,16 @@ class CmsearchCases(unittest.TestCase):
 
 
     def test_1q_0m(self):
-        """Test parsing infernal-tab, cmsearch, single query, no hits"""
-        tab_file = get_file("IRES_Yeast.tbl")
+        """Test parsing infernal-tab, cmsearch, single query, no hits (IRES_Yeast)"""
+        tab_file = get_file("cmsearch_114_IRES_Yeast.tbl")
         qresults = parse(tab_file, FMT)
 
         self.assertRaises(StopIteration, next, qresults)
 
 
     def test_cmsearch_1q_1m(self):
-        """Test parsing infernal-tab, cmsearch, one queries, one match, one hsp"""
-        tab_file = get_file("U2_Yeast-threshold.tbl")
+        """Test parsing infernal-tab, cmsearch, one queries, one match, one hsp (U2_Yeast)"""
+        tab_file = get_file("cmsearch_114_U2_Yeast.tbl")
         qresults = parse(tab_file, FMT)
         counter = itertools.count(start=1)
 
@@ -297,8 +297,8 @@ class CmsearchCases(unittest.TestCase):
 
 
     def test_cmsearch_1q_mm(self):
-        """Test parsing infernal-tab, cmsearch, one queries, multiple match, one hsp"""
-        tab_file = get_file("5S_Yeast.tbl")
+        """Test parsing infernal-tab, cmsearch, one queries, multiple match, one hsp (5S_Yeast)"""
+        tab_file = get_file("cmsearch_114_5S_Yeast.tbl")
         qresults = parse(tab_file, FMT)
         counter = itertools.count(start=1)
 
@@ -351,8 +351,8 @@ class CmsearchCases(unittest.TestCase):
 
 
     def test_cmsearch_1q_mm_shuf(self):
-        """Test parsing infernal-tab, cmsearch, one queries, multiple non-consecutive hits, one hsp"""
-        tab_file = get_file("U2_Yeast-shuf.tbl")
+        """Test parsing infernal-tab, cmsearch, one queries, multiple non-consecutive hits, one hsp (U2_Yeast_full_shuffled)"""
+        tab_file = get_file("cmsearch_114_U2_Yeast_full_shuffled.tbl")
         qresults = parse(tab_file, FMT)
         counter = itertools.count(start=1)
 
