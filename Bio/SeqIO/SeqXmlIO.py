@@ -484,37 +484,32 @@ class SeqXmlIterator(SequenceIterator):
         parser = self.parser
         content_handler = parser.getContentHandler()
         records = content_handler.records
-        try:
-            if records is None:
-                raise StopIteration
-            stream = self.stream
-            BLOCK = self.BLOCK
-            while True:
-                if len(records) > 1:
-                    # Then at least the first record is finished
-                    record = records.pop(0)
-                    return record
-                # Read in another block of the file...
-                text = stream.read(BLOCK)
-                if not text:
-                    # Closing the parser ensures that all XML data fed
-                    # into it are processed
-                    parser.close()
-                    break
-                parser.feed(text)
-            # We have reached the end of the XML file;
-            # send out the remaining records
-            try:
+        if records is None:
+            raise StopIteration
+        stream = self.stream
+        BLOCK = self.BLOCK
+        while True:
+            if len(records) > 1:
+                # Then at least the first record is finished
                 record = records.pop(0)
-            except IndexError:
-                self.records = None
-                raise StopIteration
-            else:
                 return record
-        except Exception:
-            if self.should_close_stream:
-                self.stream.close()
-            raise
+            # Read in another block of the file...
+            text = stream.read(BLOCK)
+            if not text:
+                # Closing the parser ensures that all XML data fed
+                # into it are processed
+                parser.close()
+                break
+            parser.feed(text)
+        # We have reached the end of the XML file;
+        # send out the remaining records
+        try:
+            record = records.pop(0)
+        except IndexError:
+            self.records = None
+            raise StopIteration
+        else:
+            return record
 
 
 class SeqXmlWriter(SequenceWriter):

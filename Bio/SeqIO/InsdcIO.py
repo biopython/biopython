@@ -106,12 +106,7 @@ class GenBankIterator(SequenceIterator):
 
     def __next__(self):
         """Return the next SeqRecord."""
-        try:
-            return next(self.records)
-        except Exception:
-            if self.should_close_stream:
-                self.stream.close()
-            raise
+        return next(self.records)
 
 
 class EmblIterator(SequenceIterator):
@@ -167,12 +162,7 @@ class EmblIterator(SequenceIterator):
 
     def __next__(self):
         """Return the next SeqRecord."""
-        try:
-            return next(self.records)
-        except Exception:
-            if self.should_close_stream:
-                self.stream.close()
-            raise
+        return next(self.records)
 
 
 class ImgtIterator(SequenceIterator):
@@ -195,12 +185,7 @@ class ImgtIterator(SequenceIterator):
 
     def __next__(self):
         """Return the next SeqRecord."""
-        try:
-            return next(self.records)
-        except Exception:
-            if self.should_close_stream:
-                self.stream.close()
-            raise
+        return next(self.records)
 
 
 class GenBankCdsFeatureIterator(SequenceIterator):
@@ -222,12 +207,7 @@ class GenBankCdsFeatureIterator(SequenceIterator):
 
     def __next__(self):
         """Return the next SeqRecord."""
-        try:
-            return next(self.records)
-        except Exception:
-            if self.should_close_stream:
-                self.stream.close()
-            raise
+        return next(self.records)
 
 
 class EmblCdsFeatureIterator(SequenceIterator):
@@ -249,12 +229,7 @@ class EmblCdsFeatureIterator(SequenceIterator):
 
     def __next__(self):
         """Return the next SeqRecord."""
-        try:
-            return next(self.records)
-        except Exception:
-            if self.should_close_stream:
-                self.stream.close()
-            raise
+        return next(self.records)
 
 
 def _insdc_feature_position_string(pos, offset=0):

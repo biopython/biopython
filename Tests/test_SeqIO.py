@@ -13,6 +13,7 @@ from io import StringIO
 
 from Bio import AlignIO
 from Bio import BiopythonParserWarning
+from Bio import BiopythonDeprecationWarning
 from Bio import BiopythonWarning
 from Bio import SeqIO
 from Bio import StreamModeError
@@ -61,12 +62,16 @@ class SeqIOTestBaseClass(unittest.TestCase):
         if mode is not None:
             return mode
         for mode, stream in (("t", StringIO()), ("b", BytesIO())):
-            try:
-                SeqIO.read(stream, fmt)
-            except StreamModeError:
-                continue
-            except ValueError:  # SeqIO.read will complain that the stream is empty
-                pass
+            with warnings.catch_warnings():
+                warnings.simplefilter("error")
+                try:
+                    SeqIO.read(stream, fmt)
+                except StreamModeError:
+                    continue
+                except BiopythonDeprecationWarning:
+                    continue
+                except ValueError:  # SeqIO.read will complain that the stream is empty
+                    pass
             cls.modes[fmt] = mode
             return mode
         raise RuntimeError(f"Failed to find file mode for {fmt}")
