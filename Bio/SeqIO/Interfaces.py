@@ -12,12 +12,10 @@ use this module.  It provides base classes to try and simplify things.
 
 from abc import ABC
 from abc import abstractmethod
-from abc import abstractproperty
 from os import PathLike
 from typing import AnyStr
 from typing import Generic
 from typing import IO
-from collections.abc import Iterator
 from typing import Optional
 from typing import Union
 
@@ -42,7 +40,8 @@ class SequenceIterator(ABC, Generic[AnyStr]):
     file stream modes.
     """
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def modes(self):
         """File modes (binary or text) that the parser can handle.
 
