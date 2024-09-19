@@ -4387,7 +4387,7 @@ static PyGetSetDef Aligner_getset[] = {
 
 struct fogsaa_cell {
     double present_score, lower, upper;
-    int type, filled;
+    int type, filled, is_left_gap;
 };
 
 struct fogsaa_queue {
@@ -4424,22 +4424,49 @@ struct fogsaa_queue_node {
     } \
   }
 
-#define FOGSAA_CALCULATE_SCORE(curr_score, lower, upper, pA, pB) \
+/* This doesn't always work if the gap score is less than the mismatch score */
+#define FOGSAA_CALCULATE_SCORE(curr_score, curr_type, lower, upper, pA, pB) \
     if (nA - (pA) <= nB - (pB)) { \
-        lower = curr_score + (nA - (pA)) * mismatch + gap_open_A + gap_extend_A * ((nB - (pB)) - (nA - (pA)) - 1); \
-        upper = curr_score + (nA - (pA)) * match + gap_open_A + gap_extend_A * ((nB - (pB)) - (nA - (pA)) - 1); \
-        if (pA == nA) { \
-            /* If we're already at the end, a gap is already open */ \
-            lower -= gap_open_A; \
-            upper -= gap_open_A; \
+        if (pA == nA && (curr_type) == FOGSAA_CELL_GAP_A) { \
+            /* If we're already at the end and a gap is already open */ \
+            lower = curr_score + right_gap_extend_A * (nB - (pB)); \
+            upper = curr_score + right_gap_extend_A * (nB - (pB)); \
+        } else { \
+            lower = curr_score + (nA - (pA)) * mismatch; \
+            upper = curr_score + (nA - (pA)) * match; \
+            t = right_gap_open_A + right_gap_extend_A * ((nB - (pB)) - (nA - (pA)) - 1); \
+            t2 =  gap_extend_A * ((nB - (pB)) - (nA - (pA))); \
+            if ((curr_type) == FOGSAA_CELL_GAP_A && t2 > t) { \
+                /* if we already have a gap open, then we can just extend */ \
+                /* from the open gap and match/mismatch later. we don't */ \
+                /* need to open a new one */ \
+                lower += t2; \
+                upper += t2; \
+            } else { \
+                lower += t; \
+                upper += t; \
+            } \
         } \
     } else { \
-        lower = curr_score + (nB - (pB)) * mismatch + gap_open_B + gap_extend_B * ((nA - (pA)) - (nB - (pB)) - 1); \
-        upper = curr_score + (nB - (pB)) * match + gap_open_B + gap_extend_B * ((nA - (pA)) - (nB - (pB)) - 1); \
-        if (pB == nB) { \
-            /* If we're already at the end, a gap is already open */ \
-            lower -= gap_open_B; \
-            upper -= gap_open_B; \
+        if (pB == nB && (curr_type) == FOGSAA_CELL_GAP_B) { \
+            /* If we're already at the end and a gap is already open */ \
+            lower = curr_score + right_gap_extend_B * (nA - (pA)); \
+            upper = curr_score + right_gap_extend_B * (nA - (pA)); \
+        } else { \
+            lower = curr_score + (nB - (pB)) * mismatch; \
+            upper = curr_score + (nB - (pB)) * match; \
+            t = right_gap_open_B + right_gap_extend_B * ((nA - (pA)) - (nB - (pB)) - 1); \
+            t2 =  gap_extend_B * ((nA - (pA)) - (nB - (pB))); \
+            if ((curr_type) == FOGSAA_CELL_GAP_B && t2 > t) { \
+                /* if we already have a gap open, then we can just extend */ \
+                /* from the open gap and match/mismatch later. we don't */ \
+                /* need to open a new one */ \
+                lower += t2; \
+                upper += t2; \
+            } else { \
+                lower += t; \
+                upper += t; \
+            } \
         } \
     }
 
@@ -4456,6 +4483,7 @@ int fogsaa_queue_insert(struct fogsaa_queue *queue, int pA, int pB,
     struct fogsaa_queue_node temp;
     int i;
 
+    printf("\tINSERT QUEUE (%d, %d, type %d and total %d) WITH LOWER %f UPPER %f\n", pA, pB, next_type, type_total, next_lower, next_upper); \
     if (queue->size + 1 >= queue->capacity) {
         struct fogsaa_queue_node *old_array = queue->array;
         queue->array = PyMem_Realloc(queue->array,
@@ -5970,10 +5998,11 @@ exit: \
 
 #define FOGSAA_ENTER \
     int i, j; \
-    double t; \
+    double t, t2; /* temporary variables */ \
     int kA, kB; \
     int curpA = 0, curpB = 0; /* optimal and current pointers */ \
     int pathend = 1, child_types[3]; \
+    /* int expanded = 0; */ /* useful for debugging */ \
     double lower_bound, child_lbounds[3], child_ubounds[3]; \
     /* pathend denotes if the current path is active, expanded is the number of \
      * expanded nodes, lower_bound contains the global lower_bound, a and b \
@@ -5987,39 +6016,43 @@ exit: \
     const double gap_extend_B = self->query_internal_extend_gap_score; \
     struct fogsaa_cell* matrix = NULL; \
     struct fogsaa_queue queue; \
-    /* double left_gap_open_A; */ \
-    /* double left_gap_open_B; */ \
-    /* double left_gap_extend_A; */ \
-    /* double left_gap_extend_B; */ \
-    /* double right_gap_open_A; */ \
-    /* double right_gap_open_B; */ \
-    /* double right_gap_extend_A; */ \
-    /* double right_gap_extend_B; */ \
-    /* switch (strand) { */ \
-    /*     case '+': */ \
-    /*         left_gap_open_A = self->target_left_open_gap_score; */ \
-    /*         left_gap_open_B = self->query_left_open_gap_score; */ \
-    /*         left_gap_extend_A = self->target_left_extend_gap_score; */ \
-    /*         left_gap_extend_B = self->query_left_extend_gap_score; */ \
-    /*         right_gap_open_A = self->target_right_open_gap_score; */ \
-    /*         right_gap_open_B = self->query_right_open_gap_score; */ \
-    /*         right_gap_extend_A = self->target_right_extend_gap_score; */ \
-    /*         right_gap_extend_B = self->query_right_extend_gap_score; */ \
-    /*         break; */ \
-    /*     case '-': */ \
-    /*         left_gap_open_A = self->target_right_open_gap_score; */ \
-    /*         left_gap_open_B = self->query_right_open_gap_score; */ \
-    /*         left_gap_extend_A = self->target_right_extend_gap_score; */ \
-    /*         left_gap_extend_B = self->query_right_extend_gap_score; */ \
-    /*         right_gap_open_A = self->target_left_open_gap_score; */ \
-    /*         right_gap_open_B = self->query_left_open_gap_score; */ \
-    /*         right_gap_extend_A = self->target_left_extend_gap_score; */ \
-    /*         right_gap_extend_B = self->query_left_extend_gap_score; */ \
-    /*         break; */ \
-    /*     default: */ \
-    /*         PyErr_SetString(PyExc_RuntimeError, "strand was neither '+' nor '-'"); */ \
-    /*         return NULL; */ \
-    /* } */
+    double left_gap_open_A; \
+    double left_gap_open_B; \
+    double left_gap_extend_A; \
+    double left_gap_extend_B; \
+    double right_gap_open_A; \
+    double right_gap_open_B; \
+    double right_gap_extend_A; \
+    double right_gap_extend_B; \
+    switch (strand) { \
+        case '+': \
+            left_gap_open_A = self->target_left_open_gap_score; \
+            left_gap_open_B = self->query_left_open_gap_score; \
+            left_gap_extend_A = self->target_left_extend_gap_score; \
+            left_gap_extend_B = self->query_left_extend_gap_score; \
+            right_gap_open_A = self->target_right_open_gap_score; \
+            right_gap_open_B = self->query_right_open_gap_score; \
+            right_gap_extend_A = self->target_right_extend_gap_score; \
+            right_gap_extend_B = self->query_right_extend_gap_score; \
+            break; \
+        case '-': \
+            left_gap_open_A = self->target_right_open_gap_score; \
+            left_gap_open_B = self->query_right_open_gap_score; \
+            left_gap_extend_A = self->target_right_extend_gap_score; \
+            left_gap_extend_B = self->query_right_extend_gap_score; \
+            right_gap_open_A = self->target_left_open_gap_score; \
+            right_gap_open_B = self->query_left_open_gap_score; \
+            right_gap_extend_A = self->target_left_extend_gap_score; \
+            right_gap_extend_B = self->query_left_extend_gap_score; \
+            break; \
+        default: \
+            PyErr_SetString(PyExc_RuntimeError, "strand was neither '+' nor '-'"); \
+            return NULL; \
+    } \
+    printf("left open: (A) %f, (B) %f\n", left_gap_open_A, left_gap_open_B); \
+    printf("left extend: (A) %f, (B) %f\n", left_gap_extend_A, left_gap_extend_B); \
+    printf("right open: (A) %f, (B) %f\n", right_gap_open_A, right_gap_open_B); \
+    printf("right extend: (A) %f, (B) %f\n", right_gap_extend_A, right_gap_extend_B); \
 
 #define FOGSAA_DO(align_score) \
     /* allocate and initialize matrix */ \
@@ -6028,7 +6061,8 @@ exit: \
         return PyErr_NoMemory(); \
     MATRIX(0, 0).present_score = 0; \
     MATRIX(0, 0).type = FOGSAA_CELL_UNDEF; \
-    FOGSAA_CALCULATE_SCORE(MATRIX(0, 0).present_score, MATRIX(0, 0).lower, MATRIX(0, 0).upper, 0, 0); \
+    FOGSAA_CALCULATE_SCORE(MATRIX(0, 0).present_score, FOGSAA_CELL_UNDEF, MATRIX(0, 0).lower, MATRIX(0, 0).upper, 0, 0); \
+    MATRIX(0, 0).is_left_gap = 1; \
     lower_bound = MATRIX(0, 0).lower; \
     \
     /* initialize queue */ \
@@ -6039,7 +6073,7 @@ exit: \
     do { \
         pathend = 1; \
         while (curpA < nA || curpB < nB) { \
-            struct fogsaa_cell* curr = &(MATRIX(curpA, curpB)); \
+            struct fogsaa_cell *curr = &(MATRIX(curpA, curpB)); \
             if (type_total == FOGSAA_CELL_MATCH_MISMATCH || type_total == FOGSAA_CELL_GAP_A || type_total == FOGSAA_CELL_GAP_B) { \
                 /* current is a 1st child */ \
                 if (curpA <= nA - 1 && curpB <= nB - 1) { \
@@ -6048,40 +6082,70 @@ exit: \
                     kB = sB[curpB]; \
                     double p = align_score; \
                     /* score the match/mismatch */ \
-                    FOGSAA_CALCULATE_SCORE(curr->present_score + p, child_lbounds[0], child_ubounds[0], curpA + 1, curpB + 1); \
+                    FOGSAA_CALCULATE_SCORE(curr->present_score + p, FOGSAA_CELL_MATCH_MISMATCH, child_lbounds[0], child_ubounds[0], curpA + 1, curpB + 1); \
                     /* score the gaps */ \
                     if (curr->type == FOGSAA_CELL_MATCH_MISMATCH || curr->type == FOGSAA_CELL_UNDEF) { \
-                        FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_A, child_lbounds[1], child_ubounds[1], curpA, curpB + 1) \
-                        FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_B, child_lbounds[2], child_ubounds[2], curpA + 1, curpB) \
+                        if (!curr->is_left_gap) { \
+                            FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_A, FOGSAA_CELL_GAP_A, child_lbounds[1], child_ubounds[1], curpA, curpB + 1) \
+                            FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_B, FOGSAA_CELL_GAP_B, child_lbounds[2], child_ubounds[2], curpA + 1, curpB) \
+                        } else { \
+                            FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_open_A, FOGSAA_CELL_GAP_A, child_lbounds[1], child_ubounds[1], curpA, curpB + 1) \
+                            FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_open_B, FOGSAA_CELL_GAP_B, child_lbounds[2], child_ubounds[2], curpA + 1, curpB) \
+                        } \
                     } else if (curr->type == FOGSAA_CELL_GAP_A) { \
                         /* gap is already opened in the first chain */ \
-                        FOGSAA_CALCULATE_SCORE(curr->present_score + gap_extend_A, child_lbounds[1], child_ubounds[1], curpA, curpB + 1) \
-                        FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_B, child_lbounds[2], child_ubounds[2], curpA + 1, curpB) \
+                        if (!curr->is_left_gap) { \
+                            FOGSAA_CALCULATE_SCORE(curr->present_score + gap_extend_A, FOGSAA_CELL_GAP_A, child_lbounds[1], child_ubounds[1], curpA, curpB + 1) \
+                            FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_B, FOGSAA_CELL_GAP_B, child_lbounds[2], child_ubounds[2], curpA + 1, curpB) \
+                        } else { \
+                            FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_extend_A, FOGSAA_CELL_GAP_A, child_lbounds[1], child_ubounds[1], curpA, curpB + 1) \
+                            FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_open_B, FOGSAA_CELL_GAP_B, child_lbounds[2], child_ubounds[2], curpA + 1, curpB) \
+                        } \
                     } else { \
                         /* gap is already opened in the 2nd chain */ \
-                        FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_A, child_lbounds[1], child_ubounds[1], curpA, curpB + 1) \
-                        FOGSAA_CALCULATE_SCORE(curr->present_score + gap_extend_B, child_lbounds[2], child_ubounds[2], curpA + 1, curpB) \
+                        if (!curr->is_left_gap) { \
+                            FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_A, FOGSAA_CELL_GAP_A, child_lbounds[1], child_ubounds[1], curpA, curpB + 1) \
+                            FOGSAA_CALCULATE_SCORE(curr->present_score + gap_extend_B, FOGSAA_CELL_GAP_B, child_lbounds[2], child_ubounds[2], curpA + 1, curpB) \
+                        } else { \
+                            FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_open_A, FOGSAA_CELL_GAP_A, child_lbounds[1], child_ubounds[1], curpA, curpB + 1) \
+                            FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_extend_B, FOGSAA_CELL_GAP_B, child_lbounds[2], child_ubounds[2], curpA + 1, curpB) \
+                        } \
                     } \
                     \
                     /* sort and select the best new child as the new type */ \
+                    printf("\t\tC: type %d, lower %f, upper %f\n", child_types[0], child_lbounds[0], child_ubounds[0]); \
+                    printf("\t\tC: type %d, lower %f, upper %f\n", child_types[1], child_lbounds[1], child_ubounds[1]); \
+                    printf("\t\tC: type %d, lower %f, upper %f\n", child_types[2], child_lbounds[2], child_ubounds[2]); \
                     FOGSAA_SORT() \
                     \
                     new_type = child_types[0]; \
+                    printf("\tchild 0 (new curr): type %d, lower %f, upper %f\n", child_types[0], child_lbounds[0], child_ubounds[0]); \
+                    printf("\tchild 1 (new curr): type %d, lower %f, upper %f\n", child_types[1], child_lbounds[1], child_ubounds[1]); \
+                    printf("\tchild 2 (new curr): type %d, lower %f, upper %f\n", child_types[2], child_lbounds[2], child_ubounds[2]); \
                     if (new_type == FOGSAA_CELL_MATCH_MISMATCH) { \
+                        printf("DIAG\n");\
                         npA = curpA + 1; \
                         npB = curpB + 1; \
                         new_score = curr->present_score + p; \
                     } else if (new_type == FOGSAA_CELL_GAP_A) { \
                         npA = curpA; \
                         npB = curpB + 1; \
-                        new_score = curr->present_score + (curr->type == FOGSAA_CELL_GAP_A ? gap_extend_A : gap_open_A); \
+                        if (curr->is_left_gap) { \
+                            new_score = curr->present_score + (curr->type == FOGSAA_CELL_GAP_A ? left_gap_extend_A : left_gap_open_A); \
+                        } else { \
+                            new_score = curr->present_score + (curr->type == FOGSAA_CELL_GAP_A ? gap_extend_A : gap_open_A); \
+                        } \
                     } else { \
                         /* new_type is FOGSAA_CELL_GAP_B */ \
                         npA = curpA + 1; \
                         npB = curpB; \
-                        new_score = curr->present_score + (curr->type == FOGSAA_CELL_GAP_B ? gap_extend_B : gap_open_B); \
+                        if (curr->is_left_gap) { \
+                            new_score = curr->present_score + (curr->type == FOGSAA_CELL_GAP_B ? left_gap_extend_B : left_gap_open_B); \
+                        } else { \
+                            new_score = curr->present_score + (curr->type == FOGSAA_CELL_GAP_B ? gap_extend_B : gap_open_B); \
+                        } \
                     } \
-                    if (child_ubounds[1] >= lower_bound) { \
+                    if (child_ubounds[1] >= MATRIX(0, 0).lower) { \
                         /* insert 2nd best new child to the queue */ \
                         if (!fogsaa_queue_insert(&queue, curpA, curpB, new_type + child_types[1], child_types[1], child_lbounds[1], child_ubounds[1])) \
                             return PyErr_NoMemory(); \
@@ -6091,13 +6155,13 @@ exit: \
                     new_type = FOGSAA_CELL_GAP_B; \
                     npA = curpA + 1; \
                     npB = curpB; \
-                    new_score = curr->present_score + (curr->type == FOGSAA_CELL_GAP_B ? gap_extend_B : gap_open_B); \
+                    new_score = curr->present_score + (curr->type == FOGSAA_CELL_GAP_B ? right_gap_extend_B : right_gap_open_B); \
                 } else { \
                     /* we're at the end of A, so must put a gap in A */ \
                     new_type = FOGSAA_CELL_GAP_A; \
                     npA = curpA; \
                     npB = curpB + 1; \
-                    new_score = curr->present_score + (curr->type == FOGSAA_CELL_GAP_A ? gap_extend_A : gap_open_A); \
+                    new_score = curr->present_score + (curr->type == FOGSAA_CELL_GAP_A ? right_gap_extend_A : right_gap_open_A); \
                 } \
             } else if (type_total == FOGSAA_CELL_MATCH_MISMATCH + FOGSAA_CELL_GAP_A || \
                     type_total == FOGSAA_CELL_MATCH_MISMATCH + FOGSAA_CELL_GAP_B || \
@@ -6111,16 +6175,32 @@ exit: \
                     /* NOTE: FOGSAA_CELL_MATCH_MISMATCH + FOGSAA_CELL_GAP_A + FOGSAA_CELL_GAP_B = 7 */ \
                     if (7 - type_total == FOGSAA_CELL_GAP_A) { \
                         if (curr->type != FOGSAA_CELL_GAP_A) { \
-                            FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_A, next_lower, next_upper, curpA, curpB + 1) \
+                            if (curr->is_left_gap) { \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_open_A, FOGSAA_CELL_GAP_A, next_lower, next_upper, curpA, curpB + 1) \
+                            } else { \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_A, FOGSAA_CELL_GAP_A, next_lower, next_upper, curpA, curpB + 1) \
+                            } \
                         } else { \
-                            FOGSAA_CALCULATE_SCORE(curr->present_score + gap_extend_A, next_lower, next_upper, curpA, curpB + 1) \
+                            if (curr->is_left_gap) { \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_extend_A, FOGSAA_CELL_GAP_A, next_lower, next_upper, curpA, curpB + 1) \
+                            } else { \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + gap_extend_A, FOGSAA_CELL_GAP_A, next_lower, next_upper, curpA, curpB + 1) \
+                            } \
                         } \
                     } else { \
                         /* 3rd child was FOGSAA_CELL_GAP_B */ \
                         if (curr->type != FOGSAA_CELL_GAP_B) { \
-                            FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_B, next_lower, next_upper, curpA + 1, curpB) \
+                            if (curr->is_left_gap) { \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_open_B, FOGSAA_CELL_GAP_B, next_lower, next_upper, curpA, curpB + 1) \
+                            } else { \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_B, FOGSAA_CELL_GAP_B, next_lower, next_upper, curpA, curpB + 1) \
+                            } \
                         } else { \
-                            FOGSAA_CALCULATE_SCORE(curr->present_score + gap_extend_B, next_lower, next_upper, curpA + 1, curpB) \
+                            if (curr->is_left_gap) { \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_extend_B, FOGSAA_CELL_GAP_B, next_lower, next_upper, curpA, curpB + 1) \
+                            } else { \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + gap_extend_B, FOGSAA_CELL_GAP_B, next_lower, next_upper, curpA, curpB + 1) \
+                            } \
                         } \
                     } \
                 } else if (new_type == FOGSAA_CELL_GAP_A) { \
@@ -6131,13 +6211,21 @@ exit: \
                     if (7 - type_total == FOGSAA_CELL_MATCH_MISMATCH) { \
                         kA = sA[curpA]; \
                         kB = sB[curpB]; \
-                        FOGSAA_CALCULATE_SCORE(curr->present_score + (align_score), next_lower, next_upper, curpA + 1, curpB + 1); \
+                        FOGSAA_CALCULATE_SCORE(curr->present_score + (align_score), FOGSAA_CELL_MATCH_MISMATCH, next_lower, next_upper, curpA + 1, curpB + 1); \
                     } else { \
                         /* 3rd child was FOGSAA_CELL_GAP_B */ \
                         if (curr->type != FOGSAA_CELL_GAP_B) { \
-                            FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_B, next_lower, next_upper, curpA + 1, curpB) \
+                            if (curr->is_left_gap) { \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_open_B, FOGSAA_CELL_GAP_B, next_lower, next_upper, curpA, curpB + 1) \
+                            } else { \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_B, FOGSAA_CELL_GAP_B, next_lower, next_upper, curpA, curpB + 1) \
+                            } \
                         } else { \
-                            FOGSAA_CALCULATE_SCORE(curr->present_score + gap_extend_B, next_lower, next_upper, curpA + 1, curpB) \
+                            if (curr->is_left_gap) { \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_extend_B, FOGSAA_CELL_GAP_B, next_lower, next_upper, curpA, curpB + 1) \
+                            } else { \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + gap_extend_B, FOGSAA_CELL_GAP_B, next_lower, next_upper, curpA, curpB + 1) \
+                            } \
                         } \
                     } \
                 } else { \
@@ -6149,17 +6237,25 @@ exit: \
                     if (7 - type_total == FOGSAA_CELL_MATCH_MISMATCH) { \
                         kA = sA[curpA]; \
                         kB = sB[curpB]; \
-                        FOGSAA_CALCULATE_SCORE(curr->present_score + (align_score), next_lower, next_upper, curpA + 1, curpB + 1); \
+                        FOGSAA_CALCULATE_SCORE(curr->present_score + (align_score), FOGSAA_CELL_MATCH_MISMATCH, next_lower, next_upper, curpA + 1, curpB + 1); \
                     } else { \
                         /* 3rd child was FOGSAA_CELL_GAP_A */ \
                         if (curr->type != FOGSAA_CELL_GAP_A) { \
-                            FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_A, next_lower, next_upper, curpA, curpB + 1) \
+                            if (curr->is_left_gap) { \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_open_A, FOGSAA_CELL_GAP_A, next_lower, next_upper, curpA, curpB + 1) \
+                            } else { \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_A, FOGSAA_CELL_GAP_A, next_lower, next_upper, curpA, curpB + 1) \
+                            } \
                         } else { \
-                            FOGSAA_CALCULATE_SCORE(curr->present_score + gap_extend_A, next_lower, next_upper, curpA, curpB + 1) \
+                            if (curr->is_left_gap) { \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_extend_A, FOGSAA_CELL_GAP_A, next_lower, next_upper, curpA, curpB + 1) \
+                            } else { \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + gap_extend_A, FOGSAA_CELL_GAP_A, next_lower, next_upper, curpA, curpB + 1) \
+                            } \
                         } \
                     } \
                 } \
-                if (next_upper >= lower_bound) { \
+                if (next_upper >= MATRIX(0, 0).lower) { \
                     if (!fogsaa_queue_insert(&queue, curpA, curpB, 7, 7 - type_total, next_lower, next_upper)) \
                         return PyErr_NoMemory(); \
                 } \
@@ -6174,12 +6270,20 @@ exit: \
                 } else if (new_type == FOGSAA_CELL_GAP_A) { \
                     npA = curpA; \
                     npB = curpB + 1; \
-                    new_score = curr->present_score + (curr->type == FOGSAA_CELL_GAP_A ? gap_extend_A : gap_open_A); \
+                    if (curr->type != FOGSAA_CELL_GAP_A) { \
+                        new_score = curr->present_score + (curr->is_left_gap ? left_gap_open_A : gap_open_A); \
+                    } else { \
+                        new_score = curr->present_score + (curr->is_left_gap ? left_gap_extend_A : gap_extend_A); \
+                    } \
                 } else { \
                     /* new_type is FOGSAA_CELL_GAP_B */ \
                     npA = curpA + 1; \
                     npB = curpB; \
-                    new_score = curr->present_score + (curr->type == FOGSAA_CELL_GAP_B ? gap_extend_B : gap_open_B); \
+                    if (curr->type != FOGSAA_CELL_GAP_B) { \
+                        new_score = curr->present_score + (curr->is_left_gap ? left_gap_open_B : gap_open_B); \
+                    } else { \
+                        new_score = curr->present_score + (curr->is_left_gap ? left_gap_extend_B : gap_extend_B); \
+                    } \
                 } \
                 /* no more nodes to insert into the queue */ \
             } \
@@ -6189,12 +6293,18 @@ exit: \
                 pathend = 0; \
                 break; \
             } else { \
-                FOGSAA_CALCULATE_SCORE(new_score, new_lower, new_upper, npA, npB) \
+                FOGSAA_CALCULATE_SCORE(new_score, new_type, new_lower, new_upper, npA, npB) \
+                /* printf("\tUPPER IS NOW %f (%d, %d, type %d)\n", new_upper, npA, npB, new_type); \ */ \
                 MATRIX(npA, npB).present_score = new_score; \
                 MATRIX(npA, npB).lower = new_lower; \
                 MATRIX(npA, npB).upper = new_upper; \
                 MATRIX(npA, npB).type = new_type; \
                 MATRIX(npA, npB).filled = 1; \
+                if (new_type == FOGSAA_CELL_GAP_A || new_type == FOGSAA_CELL_GAP_B) { \
+                    MATRIX(npA, npB).is_left_gap = curr->is_left_gap; \
+                } else { \
+                    MATRIX(npA, npB).is_left_gap = 0; \
+                } \
             } \
             \
             /* make the child the new current node */ \
@@ -6206,6 +6316,7 @@ exit: \
                 pathend = 0; \
                 break; \
             } \
+            /* expanded += 1; */ \
         } \
         \
         if (MATRIX(curpA, curpB).present_score > lower_bound && pathend == 1) { \
@@ -6222,21 +6333,131 @@ exit: \
             new_lower = root.next_lower; \
             new_upper = root.next_upper; \
             new_type = root.next_type; \
+            printf("\tPOPPED FROM QUEUE (%d, %d, type %d) AND NEW UPPER IS NOW %f\n", curpA, curpB, new_type, new_upper); \
+        } else { \
+            printf("BOUNDS\n\t"); \
+            for (j = 0; j <= nB; j++) { \
+                printf("%c\t", sB[j]); \
+            } \
+            printf("\n"); \
+            for (i = 0; i <= nA; i++) { \
+                printf("%c\t", sA[i]); \
+                for (j = 0; j <= nB; j++) { \
+                    if (MATRIX(i, j).filled || (i == 0 && j == 0)) \
+                        printf("%.2g:%.2g\t", MATRIX(i, j).lower, MATRIX(i, j).upper); \
+                    else \
+                        printf("X\t"); \
+                } \
+                printf("\n"); \
+            } \
+            printf("SCORES\n\t"); \
+            for (j = 0; j <= nB; j++) { \
+                printf("%c\t", sB[j]); \
+            } \
+            printf("\n"); \
+            for (i = 0; i <= nA; i++) { \
+                printf("%c\t", sA[i]); \
+                for (j = 0; j <= nB; j++) { \
+                    if (MATRIX(i, j).filled || (i == 0 && j == 0)) \
+                        printf("%.2g\t", MATRIX(i, j).present_score); \
+                    else \
+                        printf("X\t"); \
+                } \
+                printf("\n"); \
+            } \
+            printf("round lower: %f; round upper: %f\n", lower_bound, new_upper); \
+            break; \
         } \
         \
+        printf("BOUNDS\n\t"); \
+        for (j = 0; j <= nB; j++) { \
+            printf("%c\t", sB[j]); \
+        } \
+        printf("\n"); \
+        for (i = 0; i <= nA; i++) { \
+            printf("%c\t", sA[i]); \
+            for (j = 0; j <= nB; j++) { \
+                if (MATRIX(i, j).filled || (i == 0 && j == 0)) \
+                    printf("%.2g:%.2g\t", MATRIX(i, j).lower, MATRIX(i, j).upper); \
+                else \
+                    printf("X\t"); \
+            } \
+            printf("\n"); \
+        } \
+        printf("SCORES\n\t"); \
+        for (j = 0; j <= nB; j++) { \
+            printf("%c\t", sB[j]); \
+        } \
+        printf("\n"); \
+        for (i = 0; i <= nA; i++) { \
+            printf("%c\t", sA[i]); \
+            for (j = 0; j <= nB; j++) { \
+                if (MATRIX(i, j).filled || (i == 0 && j == 0)) \
+                    printf("%.2g\t", MATRIX(i, j).present_score); \
+                else \
+                    printf("X\t"); \
+            } \
+            printf("\n"); \
+        } \
+        printf("round lower: %f; round upper: %f\n", lower_bound, new_upper); \
     } while (lower_bound < new_upper); \
     \
     /* cleanup and return */ \
+    /* printf("nodes expanded: %d\n", expanded); */ \
     PyMem_Free(queue.array);
 
 
 #define FOGSAA_EXIT_SCORE \
+    /* if (lower_bound != new_upper) { */ \
+    if (lower_bound < new_upper) { \
+        printf("lower: %f, upper: %f\n", lower_bound, new_upper); \
+        PyErr_SetString(PyExc_RuntimeError, "Algorithm ended incomplete. Report this as a bug."); \
+        return NULL; \
+    } \
     t = MATRIX(nA, nB).present_score; \
     PyMem_Free(matrix); \
     return PyFloat_FromDouble((double)t);
 
+/*
+        printf("BOUNDS\n\t"); \
+        for (j = 0; j <= nB; j++) { \
+            printf("%c\t", sB[j]); \
+        } \
+        printf("\n"); \
+        for (i = 0; i <= nA; i++) { \
+            printf("%c\t", sA[i]); \
+            for (j = 0; j <= nB; j++) { \
+                if (MATRIX(i, j).filled || (i == 0 && j == 0)) \
+                    printf("%.2g:%.2g\t", MATRIX(i, j).lower, MATRIX(i, j).upper); \
+                else \
+                    printf("X\t"); \
+            } \
+            printf("\n"); \
+        } \
+        printf("SCORES\n\t"); \
+        for (j = 0; j <= nB; j++) { \
+            printf("%c\t", sB[j]); \
+        } \
+        printf("\n"); \
+        for (i = 0; i <= nA; i++) { \
+            printf("%c\t", sA[i]); \
+            for (j = 0; j <= nB; j++) { \
+                if (MATRIX(i, j).filled || (i == 0 && j == 0)) \
+                    printf("%.2g\t", MATRIX(i, j).present_score); \
+                else \
+                    printf("X\t"); \
+            } \
+            printf("\n"); \
+        } \
+        printf("round lower: %f; round upper: %f\n", lower_bound, new_upper); \
+*/
 
 #define FOGSAA_EXIT_ALIGN \
+    if (lower_bound < new_upper) { \
+        printf("lower: %f, upper: %f\n", lower_bound, new_upper); \
+        PyErr_SetString(PyExc_RuntimeError, "Algorithm ended incomplete. Report this as a bug."); \
+        return NULL; \
+    } \
     paths = PathGenerator_create_FOGSAA(nA, nB, strand); \
     M = paths->M; \
     if (!paths) return NULL; \
@@ -6949,6 +7170,31 @@ Aligner_watermansmithbeyer_local_align_matrix(Aligner* self,
     WATERMANSMITHBEYER_EXIT_ALIGN;
 }
 
+#define FOGSAA_CHECK_SCORES \
+    if (mismatch >= match) { \
+        PyErr_SetString(PyExc_ValueError, "algorithm requires match score to be greater than mismatch score"); \
+        return NULL; \
+    } \
+    /* if (mismatch > 0) { \ */ \
+    /*     PyErr_SetString(PyExc_ValueError, "algorithm requires non-positive mismatch and gap scores"); \ */ \
+    /*     return NULL; \ */ \
+    /* } \ */  \
+    if (self->query_left_open_gap_score > mismatch || \
+            self->query_internal_open_gap_score > mismatch || \
+            self->query_right_open_gap_score > mismatch || \
+            self->target_left_open_gap_score > mismatch || \
+            self->target_internal_open_gap_score > mismatch || \
+            self->target_right_open_gap_score > mismatch || \
+            self->query_left_extend_gap_score > mismatch || \
+            self->query_internal_extend_gap_score > mismatch || \
+            self->query_right_extend_gap_score > mismatch || \
+            self->target_left_extend_gap_score > mismatch || \
+            self->target_internal_extend_gap_score > mismatch || \
+            self->target_right_extend_gap_score > mismatch) { \
+        PyErr_SetString(PyExc_ValueError, "algorithm requires gap scores to be less than mismatch scores"); \
+        return NULL; \
+    }
+
 static PyObject*
 Aligner_fogsaa_score_compare(Aligner* self,
                                  const int* sA, int nA,
@@ -6960,15 +7206,7 @@ Aligner_fogsaa_score_compare(Aligner* self,
     const int wildcard = self->wildcard;
     FOGSAA_ENTER
 
-    if (self->match < 0) {
-        PyErr_SetString(PyExc_ValueError, "algorithm requires non-negative match score");
-        return NULL;
-    }
-    if (self->mismatch > 0) {
-        PyErr_SetString(PyExc_ValueError, "algorithm requires non-positive mismatch and gap scores");
-        return NULL;
-    }
-
+    FOGSAA_CHECK_SCORES
 
     FOGSAA_DO(COMPARE_SCORE)
     /* printf("BOUNDS\n\t"); */
@@ -6979,7 +7217,10 @@ Aligner_fogsaa_score_compare(Aligner* self,
     /* for (i = 0; i <= nA; i++) { */
     /*     printf("%c\t", sA[i]); */
     /*     for (j = 0; j <= nB; j++) { */
-    /*         printf("%.2g:%.2g\t", MATRIX(i, j).lower, MATRIX(i, j).upper); */
+    /*         if (MATRIX(i, j).filled || (i == 0 && j == 0)) */
+    /*             printf("%.2g:%.2g\t", MATRIX(i, j).lower, MATRIX(i, j).upper); */
+    /*         else */
+    /*             printf("X\t"); */
     /*     } */
     /*     printf("\n"); */
     /* } */
@@ -6992,7 +7233,10 @@ Aligner_fogsaa_score_compare(Aligner* self,
     /* for (i = 0; i <= nA; i++) { */
     /*     printf("%c\t", sA[i]); */
     /*     for (j = 0; j <= nB; j++) { */
-    /*         printf("%.2g\t", MATRIX(i, j).present_score); */
+    /*         if (MATRIX(i, j).filled) */
+    /*             printf("%.2g\t", MATRIX(i, j).present_score); */
+    /*         else */
+    /*             printf("X\t"); */
     /*     } */
     /*     printf("\n"); */
     /* } */
@@ -7005,7 +7249,10 @@ Aligner_fogsaa_score_compare(Aligner* self,
     /* for (i = 0; i <= nA; i++) { */
     /*     printf("%c\t", sA[i]); */
     /*     for (j = 0; j <= nB; j++) { */
-    /*         printf("%d\t", MATRIX(i, j).type); */
+    /*         if (MATRIX(i, j).filled) */
+    /*             printf("%d\t", MATRIX(i, j).type); */
+    /*         else */
+    /*             printf("X\t"); */
     /*     } */
     /*     printf("\n"); */
     /* } */
@@ -7035,6 +7282,8 @@ Aligner_fogsaa_score_matrix(Aligner* self,
             mismatch = scores[i];
     }
 
+    /* FOGSAA_CHECK_SCORES */
+
     FOGSAA_DO(MATRIX_SCORE)
     if (MATRIX(nA, nB).type == 0) {
         PyErr_SetString(PyExc_RuntimeError, "Could not complete algorithm. Report this as a bug.");
@@ -7056,14 +7305,7 @@ Aligner_fogsaa_align_compare(Aligner* self,
     Trace** M;
     FOGSAA_ENTER
 
-    if (self->match < 0) {
-        PyErr_SetString(PyExc_ValueError, "algorithm requires non-negative match score");
-        return NULL;
-    }
-    if (self->mismatch > 0) {
-        PyErr_SetString(PyExc_ValueError, "algorithm requires non-positive mismatch and gap scores");
-        return NULL;
-    }
+    FOGSAA_CHECK_SCORES
 
     FOGSAA_DO(COMPARE_SCORE)
     if (MATRIX(nA, nB).type == 0) {
@@ -7094,6 +7336,9 @@ Aligner_fogsaa_align_matrix(Aligner* self,
         else if (scores[i] < mismatch)
             mismatch = scores[i];
     }
+
+    /* FOGSAA_CHECK_SCORES */
+
     FOGSAA_DO(MATRIX_SCORE)
     if (MATRIX(nA, nB).type == 0) {
         PyErr_SetString(PyExc_RuntimeError, "Could not complete algorithm. Report this as a bug.");
