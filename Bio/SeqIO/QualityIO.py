@@ -361,7 +361,7 @@ are approximately equal.
 
 import warnings
 from math import log
-from abc import abstractproperty
+from abc import abstractmethod
 from typing import Callable
 from typing import IO
 from collections.abc import Iterator
@@ -998,12 +998,14 @@ class FastqIteratorAbstractBaseClass(SequenceIterator[str]):
 
     modes = "t"
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def q_mapping(self):
         """Dictionary that maps letters in the quality string to quality values."""
         pass
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def q_key(self):
         """Key name (string) of the quality values in record.letter_annotations."""
         pass
