@@ -73,8 +73,7 @@ class SeqIOTestBaseClass(unittest.TestCase):
                 except ValueError as exception:
                     # If the mode is correct, then SeqIO.read will complain
                     # that the stream is empty,
-                    if str(exception) in ("Empty file.",
-                                          "No records found in handle"):
+                    if str(exception) in ("Empty file.", "No records found in handle"):
                         cls.modes[fmt] = mode
                         return mode
                     # Some other ValueEror was caught
