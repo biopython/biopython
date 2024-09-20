@@ -223,6 +223,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Luca Monari <https://github.com/Lucandia>
 - Lucas Sinclair <https://github.com/xapple>
 - Lukasz Walejko <https://github.com/lwalejko>
+- Lyn H. <http://github.com/flaar94>
 - Manuel Lera Ramirez <https://github.com/manulera>
 - Manuel Nuno Melo <https://github.com/mnmelo>
 - Marc Colosimo <mcolosimo at domain mitre.org>
