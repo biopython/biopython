@@ -119,7 +119,7 @@ class CmsearchCases(unittest.TestCase):
 
 
     def test_cmsearch_1q_0m(self):
-        """Test parsing infernal-text, cmsearch, single query, no hits (IRES_Yeast)"""
+        """Test parsing infernal-text, cmsearch, one query, no hits (IRES_Yeast)"""
         text_file = get_file("cmsearch_114_IRES_Yeast.txt")
         qresults = parse(text_file, FMT)
         counter = itertools.count(start=1)

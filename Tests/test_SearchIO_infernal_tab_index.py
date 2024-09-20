@@ -63,26 +63,26 @@ class InfernalTabIndexCases(CheckIndex):
     fmt = "infernal-tab"
 
 
-    def test_infernal_tab_single(self):
-        """Test infernal-tab indexing, cmsearch, single query."""
+    def test_infernal_tab_1q(self):
+        """Test infernal-tab indexing, cmsearch, one query, one hit."""
         filename = os.path.join("Infernal", "cmsearch_114_U2_Yeast.tbl")
         self.check_index(filename, self.fmt)
 
     
-    def test_infernal_tab_single_no_hit(self):
-        """Test infernal-tab indexing, cmsearch, single query."""
+    def test_infernal_tab_1q_0m(self):
+        """Test infernal-tab indexing, cmsearch, single query, not hits."""
         filename = os.path.join("Infernal", "cmsearch_114_IRES_Yeast.tbl")
         self.check_index(filename, self.fmt)
 
 
-    def test_infernal_tab_single_multiple_hit(self):
-        """Test infernal-tab indexing, cmsearch, single query."""
+    def test_infernal_tab_1q_mm(self):
+        """Test infernal-tab indexing, cmsearch, single query, multiple hits."""
         filename = os.path.join("Infernal", "cmsearch_114_5S_Yeast.tbl")
         self.check_index(filename, self.fmt)
     
 
-    def test_infernal_tab_multiple_multiple_hit(self):
-        """Test infernal-tab indexing, cmscan, multiple query."""
+    def test_infernal_tab_mq_mm(self):
+        """Test infernal-tab indexing, cmscan, multiple query, multiple matches."""
         filename = os.path.join("Infernal", "cmscan_115_IRES_5S_U2_Yeast.tbl")
         self.check_index(filename, self.fmt)
 
