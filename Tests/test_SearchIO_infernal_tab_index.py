@@ -25,7 +25,7 @@ class InfernalTabRawCases(CheckRaw):
         self.check_raw(filename, "U2", raw)
 
     
-    def test_infernal_tab_single_first(self):
+    def test_infernal_tab_multiple_first(self):
         """Test infernal-tab raw string retrieval, cmsearch, multiple queries, first."""
         filename = os.path.join("Infernal", "cmscan_115_IRES_5S_U2_Yeast.tbl")
         raw = """U2                   RF00004   ENA|BK006935|BK006935.2 -          cm        1      193    52929    53083      +    no    1 0.44   0.0   13.5      0.91 ?   U2 spliceosomal RNA
