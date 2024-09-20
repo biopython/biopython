@@ -75,10 +75,10 @@ class SequenceIterator(ABC, Generic[AnyStr]):
         if alphabet is not None:
             raise ValueError("The alphabet argument is no longer supported")
         modes = self.modes
+        self.source = source
         if isinstance(source, _PathLikeTypes):
             mode = modes[0]
             self.stream = open(source, "r" + mode)
-            self.should_close_stream = True
         else:
             value = source.read(0)
             if value == "":
@@ -96,7 +96,6 @@ class SequenceIterator(ABC, Generic[AnyStr]):
             else:
                 raise RuntimeError("Failed to read from input data") from None
             self.stream = source
-            self.should_close_stream = False
         self.mode = mode
 
     @abstractmethod
@@ -120,6 +119,19 @@ class SequenceIterator(ABC, Generic[AnyStr]):
         This method SHOULD NOT be overridden by any subclass.
         """
         return self
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, exc_traceback):
+        try:
+            stream = self.stream
+        except AttributeError:
+            return
+        if self.stream is not self.source:
+            self.stream.close()
+        del self.stream
+        return False
 
 
 def _get_seq_string(record: SeqRecord) -> str:
