@@ -8,10 +8,10 @@
 
 """Bio.SearchIO parser for Infernal plain text output format."""
 
-
 import re
 import operator
 
+from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import HSP
 from Bio.SearchIO._model import HSPFragment
 from Bio.SearchIO._model import QueryResult
@@ -19,9 +19,7 @@ from Bio.SearchIO._utils import read_forward
 
 from ._base import _BaseInfernalParser
 
-
-__all__ = ("InfernalTextParser")
-
+__all__ = ("InfernalTextParser", "InfernalTextIndexer")
 
 # precompile regex patterns for faster processing
 # program name
@@ -59,7 +57,6 @@ _DIV_ALIGNMENT_START = ">> "
 
 
 class InfernalTextParser(_BaseInfernalParser):
-
 
     def __init__(self, handle):
         """Initialize the class."""
@@ -452,6 +449,68 @@ class InfernalTextParser(_BaseInfernalParser):
             assert gap_len > 0
         return gap_len
     
+
+class InfernalTextIndexer(SearchIndexer):
+    """Indexer class for Infernal plain text output."""
+    _parser = InfernalTextParser
+
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._preamble = b""
+
+
+    def __iter__(self):
+        """Iterate over InfernalTextIndexer; yields query results' key, offsets, 0."""
+        handle = self._handle
+        handle.seek(0)
+        start_offset = handle.tell()
+
+        while True:
+            line = read_forward(handle)
+            end_offset = handle.tell()
+
+            if line.startswith(_DIV_QUERY_START.encode()):
+                qresult_key = line.strip().split()[1]
+                # qresult start offset is the offset of this line
+                # (starts with the start mark)
+                start_offset = end_offset - len(line)
+            elif line.startswith(_DIV_QUERY_END.encode()):
+                yield qresult_key.decode(), start_offset, 0
+                start_offset = end_offset
+            elif not line:
+                break
+
+
+    def get_raw(self, offset):
+        """Return the raw record from the file as a bytes string."""
+        handle = self._handle
+        qresult_raw = b""
+
+        # read header
+        if not self._preamble:
+            handle.seek(0)
+            while True:
+                line = handle.readline()
+                if line.startswith(_DIV_QUERY_START.encode()):
+                    break
+                self._preamble += line
+        
+        qresult_raw += self._preamble
+
+        # read the qresult raw string
+        handle.seek(offset)
+        while True:
+            # preserve whitespace, don't use read_forward
+            line = handle.readline()
+            qresult_raw += line
+
+            # break when we've reached qresult end
+            if line.startswith(_DIV_QUERY_END.encode()) or not line:
+                break
+
+        return qresult_raw
+
 
 # if not used as a module, run the doctest
 if __name__ == "__main__":

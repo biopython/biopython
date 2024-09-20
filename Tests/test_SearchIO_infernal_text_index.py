@@ -507,12 +507,13 @@ Total CM hits reported:                                          5  (3.063e-05);
 
 class Hmmer3TextIndexCases(CheckIndex):
     fmt = "infernal-text"
-
+    
     def test_infernal_text_1q_0m(self):
         """Test infernal-text indexing, cmsearch, one queries, no hits"""
         filename = os.path.join("Infernal", "cmsearch_114_IRES_Yeast.txt")
         self.check_index(filename, self.fmt)
 
+    
     def test_infernal_text_1q_mm(self):
         """Test infernal-text indexing, cmsearch, one queries, multiple hits"""
         filename = os.path.join("Infernal", "cmsearch_114_5S_Yeast.txt")
