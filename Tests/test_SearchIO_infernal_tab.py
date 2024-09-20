@@ -8,18 +8,15 @@
 
 """Tests for SearchIO InfernalIO infernal-tab parser."""
 
-
 import os
 import unittest
 import itertools
 
 from Bio.SearchIO import parse
 
-
 # test case files are in the Blast directory
 TEST_DIR = "Infernal"
 FMT = "infernal-tab"
-
 
 def get_file(filename):
     """Return the path of a test file."""
@@ -34,7 +31,6 @@ def next_result(qresults, counter):
 class CmscanCases(unittest.TestCase):
     """Test parsing cmscan output."""
 
-    
     def test_cmscan_mq_mm(self):
         """Test parsing infernal-tab, cmscan, multiple queries, multiple match, one hsp, default format (IRES_5S_U2_Yeast)"""
         tab_file = get_file("cmscan_115_IRES_5S_U2_Yeast.tbl")
@@ -246,8 +242,7 @@ class CmscanCases(unittest.TestCase):
 
 class CmsearchCases(unittest.TestCase):
     """Test parsing cmsearch output."""
-
-
+    
     def test_1q_0m(self):
         """Test parsing infernal-tab, cmsearch, single query, no hits (IRES_Yeast)"""
         tab_file = get_file("cmsearch_114_IRES_Yeast.tbl")
