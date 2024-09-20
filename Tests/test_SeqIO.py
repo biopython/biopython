@@ -70,10 +70,15 @@ class SeqIOTestBaseClass(unittest.TestCase):
                     continue
                 except BiopythonDeprecationWarning:  # uniprot-xml
                     continue
-                except ValueError:  # SeqIO.read will complain that the stream is empty
-                    pass
-            cls.modes[fmt] = mode
-            return mode
+                except ValueError as exception:
+                    # If the mode is correct, then SeqIO.read will complain
+                    # that the stream is empty,
+                    if str(exception) in ("Empty file.",
+                                          "No records found in handle"):
+                        cls.modes[fmt] = mode
+                        return mode
+                    # Some other ValueEror was caught
+                    raise
         raise RuntimeError(f"Failed to find file mode for {fmt}")
 
     def compare_record(self, old, new, *args, msg=None, **kwargs):
