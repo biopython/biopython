@@ -180,6 +180,8 @@ class PirIterator(SequenceIterator):
 class PirWriter(SequenceWriter):
     """Class to write PIR format files."""
 
+    modes = "t"
+
     def __init__(self, handle, wrap=60, record2title=None, code=None):
         """Create a PIR writer.
 

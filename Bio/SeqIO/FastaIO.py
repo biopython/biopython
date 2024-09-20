@@ -499,6 +499,8 @@ class FastaWriter(SequenceWriter):
     ``Bio.SeqIO.write()`` function instead using ``format="fasta"``.
     """
 
+    modes = "t"
+
     def __init__(self, target, wrap=60, record2title=None):
         """Create a Fasta writer (OBSOLETE).
 

@@ -113,6 +113,8 @@ class PhdIterator(SequenceIterator):
 class PhdWriter(SequenceWriter):
     """Class to write Phd format files."""
 
+    modes = "t"
+
     def __init__(self, handle: _IOSource) -> None:
         """Initialize the class."""
         super().__init__(handle)

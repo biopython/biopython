@@ -1582,6 +1582,8 @@ class FastqPhredWriter(SequenceWriter):
     >>> os.remove("Quality/temp.fastq")
     """
 
+    modes = "t"
+
     def write_record(self, record: SeqRecord) -> None:
         """Write a single FASTQ record to the file."""
         self._record_written = True
@@ -1660,6 +1662,8 @@ class QualPhredWriter(SequenceWriter):
     >>> import os
     >>> os.remove("Quality/temp.qual")
     """
+
+    modes = "t"
 
     def __init__(
         self,
@@ -1838,6 +1842,8 @@ class FastqSolexaWriter(SequenceWriter):
     >>> os.remove("Quality/temp.fastq")
     """
 
+    modes = "t"
+
     def write_record(self, record: SeqRecord) -> None:
         """Write a single FASTQ record to the file."""
         self._record_written = True
@@ -1919,6 +1925,8 @@ class FastqIlluminaWriter(SequenceWriter):
     encoded as ASCII 126, the tilde. If your quality scores are truncated to fit, a
     warning is issued.
     """
+
+    modes = "t"
 
     def write_record(self, record: SeqRecord) -> None:
         """Write a single FASTQ record to the file."""

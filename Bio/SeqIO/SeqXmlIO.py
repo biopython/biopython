@@ -520,6 +520,8 @@ class SeqXmlWriter(SequenceWriter):
     "protein".
     """
 
+    modes = "b"
+
     def __init__(
         self, target, source=None, source_version=None, species=None, ncbiTaxId=None
     ):
@@ -536,7 +538,7 @@ class SeqXmlWriter(SequenceWriter):
          - ncbiTaxId - The NCBI taxonomy identifier of the species of origin.
 
         """
-        super().__init__(target, "wb")
+        super().__init__(target)
         handle = self.handle
         self.xml_generator = XMLGenerator(handle, "utf-8")
         self.xml_generator.startDocument()

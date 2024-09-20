@@ -7817,6 +7817,7 @@ KEYWORDS    """,
         f2 = record.features[1]
         f1.qualifiers["note"][0] = '"Should" now "be" escaped in "file"'
         f2.qualifiers["note"][0] = '"Should also be escaped in file"'
+        genbank_out = "GenBank/qualifier_escaping_write.test.gb"
         SeqIO.write(record, genbank_out, "gb")
         # Read newly escaped qualifiers and test
         record = SeqIO.read(genbank_out, "gb")

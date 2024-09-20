@@ -122,6 +122,8 @@ class NibIterator(SequenceIterator):
 class NibWriter(SequenceWriter):
     """Nib file writer."""
 
+    modes = "b"
+
     def __init__(self, target):
         """Initialize a Nib writer object.
 
@@ -129,7 +131,7 @@ class NibWriter(SequenceWriter):
          - target - output stream opened in binary mode, or a path to a file
 
         """
-        super().__init__(target, mode="wb")
+        super().__init__(target)
 
     def write_header(self):
         """Write the file header."""

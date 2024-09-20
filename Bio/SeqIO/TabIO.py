@@ -110,6 +110,8 @@ class TabWriter(SequenceWriter):
     with ``format="tab"``.
     """
 
+    modes = "t"
+
     def write_record(self, record):
         """Write a single tab line to the file."""
         assert self._header_written

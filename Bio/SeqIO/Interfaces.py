@@ -169,37 +169,45 @@ class SequenceWriter:
     the number of records.
     """
 
-    def __init__(self, target: _IOSource, mode: str = "w") -> None:
-        """Create the writer object."""
-        if mode == "w":
-            if isinstance(target, _PathLikeTypes):
-                # target is a path
-                handle = open(target, mode)
-            else:
-                try:
-                    handle = target
-                    target.write("")
-                except TypeError:
-                    # target was opened in binary mode
-                    raise StreamModeError("File must be opened in text mode.") from None
-        elif mode == "wb":
-            if isinstance(target, _PathLikeTypes):
-                # target is a path
-                handle = open(target, mode)
-            else:
-                handle = target
-                try:
-                    target.write(b"")
-                except TypeError:
-                    # target was opened in text mode
-                    raise StreamModeError(
-                        "File must be opened in binary mode."
-                    ) from None
-        else:
-            raise RuntimeError(f"Unknown mode '{mode}'")
+    @property
+    @abstractmethod
+    def modes(self):
+        """File modes (binary or text) that the writer can handle.
 
-        self._target = target
-        self.handle = handle
+        This property must be "t" (for text mode only), "b" (for binary mode
+        only), "tb" (if both text and binary mode are accepted, but text mode
+        is preferred), or "bt" (if both text and binary mode are accepted, but
+        binary mode is preferred).
+        """
+        pass
+
+    def __init__(self, target: _IOSource) -> None:
+        """Create the writer object."""
+        if isinstance(target, _PathLikeTypes):
+            mode = self.modes[0]
+            stream = open(target, "w" + mode)
+        else:
+            stream = target
+            modes = "tb"
+            values = ("", b"")
+            for mode, value in zip(modes, values):
+                try:
+                    stream.write(value)
+                except TypeError:
+                    continue
+                else:
+                    break
+            else:
+                raise RuntimeError("Failed to read from input data") from None
+            if mode not in self.modes:
+                if mode == "t":
+                    # target was opened in text mode
+                    raise StreamModeError("File must be opened in binary mode.")
+                elif mode == "b":
+                    # target was opened in binary mode
+                    raise StreamModeError("File must be opened in text mode.")
+        self.target = target
+        self.handle = stream
 
     def clean(self, text: str) -> str:
         """Use this to avoid getting newlines in the output."""
@@ -269,7 +277,7 @@ class SequenceWriter:
             count = self.write_records(records, maxcount)
             self.write_footer()
         finally:
-            if self.handle is not self._target:
+            if self.handle is not self.target:
                 self.handle.close()
         if count < mincount:
             if mincount == 1:  # Common case
