@@ -7,7 +7,6 @@
 
 """Bio.SearchIO parser for Infernal tabular output format."""
 
-
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import HSP
 from Bio.SearchIO._model import HSPFragment
@@ -16,9 +15,7 @@ from Bio.SearchIO.HmmerIO import Hmmer3TabParser
 
 from ._base import _BaseInfernalParser
 
-
 __all__ = ("InfernalTabParser", "InfernalTabIndexer")
-
 
 # tabular format column names
 _TAB_FORMAT = {
@@ -26,7 +23,7 @@ _TAB_FORMAT = {
     2: ("idx", "target_name", "target_acc", "query_name", "query_acc", "clan", "mdl", "mdl_from", "mdl_to", "seq_from", "seq_to", "strand", "trunc", "pass", "gc", "bias", "score", "evalue", "inc", "olp", "anyidx", "afrct1", "afrct2", "winidx", "wfrct1", "wfrct2", "mdl_len", "seq_len", "description"),
     3: ("target_name", "target_acc", "query_name", "query_acc", "mdl", "mdl_from", "mdl_to", "seq_from", "seq_to", "strand", "trunc", "pass", "gc", "bias", "score", "evalue", "inc", "mdl_len", "seq_len", "description")
 }
-
+_DEFAULT_TAB_FORMAT = 1
 
 # column to class attribute map
 _COLUMN_QRESULT = {
@@ -71,12 +68,15 @@ _COLUMN_FRAG = {
 class InfernalTabParser(_BaseInfernalParser):
     """Parser for the Infernal tabular format."""
 
-
-    def __init__(self, handle):
+    def __init__(self, handle, fmt=_DEFAULT_TAB_FORMAT):
         """Initialize the class."""
         self.handle = handle
         self.line = self.handle.readline().strip()
-        self.fmt = None
+        if not isinstance(fmt, int):
+            raise TypeError
+        if not 1 <= fmt <= 3:
+            raise ValueError("Invalid tabular format number, must be 1, 2 or 3.")
+        self.fmt = fmt
 
 
     def __iter__(self):
@@ -87,43 +87,11 @@ class InfernalTabParser(_BaseInfernalParser):
         # if we have result rows, parse it
         if self.line:
             yield from self._parse_qresult()
-
-
-    def _find_tabular_format(self, cols):
-        """Identify the tabular file format (PRIVATE)."""
-        if len(cols) < 18: 
-            raise ValueError("Less columns than expected for Infernal tabular output.")
-
-        # ignore the first five columns as we cannot be certain of 
-        # what they contain
-        offset = 4
-        cols = cols[offset:]
-
-        # get the index of the inclusion column, this value must always
-        # be ! or ?, so we can use this information to determine the format
-        if '?' in cols:
-            idx = cols.index('?')
-        else:
-            idx = cols.index('!')
-        
-        # infer the format based on the index of the inclusion column
-        # fmt 3 cannot reliably be differenciate from fmt 1, so it's 
-        # unsupported at this time
-        fmt = 0
-        if idx == _TAB_FORMAT[1].index("inc")-offset:
-            fmt = 1
-        elif idx == _TAB_FORMAT[2].index("inc")-offset:
-            fmt = 2
-        assert fmt != 0
-        return fmt 
         
 
     def _parse_row(self):
         """Return a dictionary of parsed row values (PRIVATE)."""
         cols = [x for x in self.line.strip().split(" ") if x]
-        # get the tabular format when reading the first row
-        if self.fmt is None:
-            self.fmt = self._find_tabular_format(cols)
         if len(cols) < len(_TAB_FORMAT[self.fmt]):
             raise ValueError("Less columns than expected for format {}, only {}".format(self.fmt, len(cols)))
         # combine extra description columns into one string
@@ -250,13 +218,10 @@ class InfernalTabParser(_BaseInfernalParser):
 
             self.line = self.handle.readline()
 
-
 class InfernalTabIndexer(SearchIndexer):
     """Indexer class for Infernal tabular output."""
 
-
     _parser = InfernalTabParser
-
 
     def __iter__(self):
         """Iterate over the file handle; yields key, start offset, and length."""
@@ -345,5 +310,4 @@ class InfernalTabIndexer(SearchIndexer):
 # if not used as a module, run the doctest
 if __name__ == "__main__":
     from Bio._utils import run_doctest
-
     run_doctest()
