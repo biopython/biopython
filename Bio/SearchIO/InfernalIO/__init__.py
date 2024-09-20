@@ -9,6 +9,7 @@
 from .infernal_tab import InfernalTabParser
 from .infernal_tab import InfernalTabIndexer
 from .infernal_text import InfernalTextParser
+from .infernal_text import InfernalTextIndexer
 
 
 # if not used as a module, run the doctest
