@@ -218,55 +218,48 @@ class InfernalTabParser(_BaseInfernalParser):
 
             self.line = self.handle.readline()
 
+
 class InfernalTabIndexer(SearchIndexer):
     """Indexer class for Infernal tabular output."""
 
     _parser = InfernalTabParser
+
+    def __init__(self, filename, fmt=_DEFAULT_TAB_FORMAT):
+        """Initialize the class."""
+        SearchIndexer.__init__(self, filename, fmt=fmt)
+        self._query_id_idx = 3 if fmt == 2 else 2
+
 
     def __iter__(self):
         """Iterate over the file handle; yields key, start offset, and length."""
         handle = self._handle
         handle.seek(0)
         qresult_key = None
-        query_id_idx = None
-        # mark for the comments
-        comment_mark = b"#"
-        # mark for the row names line
-        row_names_mark = b"#target name"
-        row_names_mark_fmt_2 = b"#idx"
-        split_mark = b" "
+        start_offset = handle.tell()
 
-        # set line with initial mock value, to emulate header
-        line = comment_mark
-        
-        # read through header and get the query index position based on the
-        # tabular output format
-        while line.startswith(comment_mark):
+        # set line with initial mock value
+        line = b"#"
+
+        # read through header
+        while line.startswith(b"#"):
             start_offset = handle.tell()
             line = handle.readline()
-            if line.startswith(row_names_mark):
-                query_id_idx = 2
-            elif line.startswith(row_names_mark_fmt_2):
-                query_id_idx = 3
-
-        assert query_id_idx is not None
-
-        # handle empty file
-        if not line:
-            return
 
         # index the qresults
         while True:
             # get end offset here since we only know a qresult ends after
             # encountering the next one
             end_offset = handle.tell()
+
+            if not line:
+                break
+
+            cols = [x for x in line.strip().split(b" ") if x]
             
-            # process the previous line
-            cols = [x for x in line.strip().split(split_mark) if x]
             if qresult_key is None:
-                qresult_key = cols[query_id_idx]
+                qresult_key = cols[self._query_id_idx]
             else:
-                curr_key = cols[query_id_idx]
+                curr_key = cols[self._query_id_idx]
                 if curr_key != qresult_key:
                     adj_end = end_offset - len(line)
                     yield (qresult_key.decode(), start_offset, adj_end - start_offset)
@@ -274,7 +267,7 @@ class InfernalTabIndexer(SearchIndexer):
                     start_offset = adj_end
 
             line = handle.readline()
-            if not line or line.startswith(comment_mark):
+            if not line or line.startswith(b"#"):
                 yield (qresult_key.decode(), start_offset, end_offset - start_offset)
                 break
 
@@ -282,28 +275,24 @@ class InfernalTabIndexer(SearchIndexer):
     def get_raw(self, offset):
         """Return the raw bytes string of a QueryResult object from the given offset."""
         handle = self._handle
-        handle.seek(offset)
-        query_id_idx = 2
         qresult_key = None
         qresult_raw = b""
-        split_mark = b" "
-        comment_mark = b"#"
 
+        # read the qresult raw string
+        handle.seek(offset)
         while True:
             line = handle.readline()
-            if not line or line.startswith(comment_mark):
+            if not line or line.startswith(b"#"):
                 break
-            cols = [x for x in line.strip().split(split_mark) if x]
+            cols = [x for x in line.strip().split(b" ") if x]
             if qresult_key is None:
-                qresult_key = cols[query_id_idx]
+                qresult_key = cols[self._query_id_idx]
             else:
-                curr_key = cols[query_id_idx]
+                curr_key = cols[self._query_id_idx]
                 if curr_key != qresult_key:
                     break
             qresult_raw += line
-
-
-
+        
         return qresult_raw
 
 
