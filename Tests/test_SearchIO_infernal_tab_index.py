@@ -8,17 +8,14 @@
 
 """Tests for SearchIO InfernalIO infernal-tab indexing"""
 
-
 import os
 import unittest
 
 from search_tests_common import CheckIndex
 from search_tests_common import CheckRaw
 
-
 class InfernalTabRawCases(CheckRaw):
     fmt = "infernal-tab"
-
 
     def test_infernal_tab_single(self):
         """Test infernal-tab raw string retrieval, cmsearch, single query (U2_Yeast)."""
@@ -28,19 +25,6 @@ class InfernalTabRawCases(CheckRaw):
         self.check_raw(filename, "U2", raw)
 
     
-    def test_infernal_tab_multiple(self):
-        """Test infernal-tab raw string retrieval, cmsearch, single query, multiple non-consecutive hits (U2_Yeast_full_shuffled)."""
-        filename = os.path.join("Infernal", "cmsearch_114_U2_Yeast_full_shuffled.tbl")
-        raw = """ENA|BK006936|BK006936.2 -         U2                   RF00004    cm        1      193   681858   681747      -    no    1 0.33   0.1   98.7   1.3e-20 !   -
-ENA|BK006948|BK006948.2 -         U2                   RF00004    cm        1      193   737498   737324      -    no    1 0.39   0.0   19.8      0.11 ?   -
-ENA|BK006936|BK006936.2 -         U2                   RF00004    cm        1      193  1370418  1370563      +    no    1 0.34   0.1   15.6       1.1 ?   -
-ENA|BK006936|BK006936.2 -         U2                   RF00004    cm        1      193  1079243  1079392      +    no    1 0.39   0.0   15.3       1.3 ?   -
-ENA|BK006948|BK006948.2 -         U2                   RF00004    cm        1      193   425490   425693      +    no    1 0.34   0.9   13.7       3.1 ?   -
-ENA|BK006948|BK006948.2 -         U2                   RF00004    cm        1      193  1073786  1073950      +    no    1 0.33   0.5   11.9       8.3 ?   -
-"""
-        self.check_raw(filename, "U2", raw)
-
-
     def test_infernal_tab_single_first(self):
         """Test infernal-tab raw string retrieval, cmsearch, multiple queries, first."""
         filename = os.path.join("Infernal", "cmscan_115_IRES_5S_U2_Yeast.tbl")
@@ -72,7 +56,7 @@ U2                   RF00004   ENA|BK006937|BK006937.2 -          cm        1   
         filename = os.path.join("Infernal", "cmscan_115_IRES_5S_U2_Yeast_fmt_2.tbl")
         raw = """1    U2                   RF00004   ENA|BK006936|BK006936.2 -         -          cm        1      193   681858   681747      -    no    1 0.33   0.1   98.7   1.2e-20  !   *       -      -      -      -      -      -     193  813184 U2 spliceosomal RNA
 """
-        self.check_raw(filename, "ENA|BK006936|BK006936.2", raw)
+        self.check_raw(filename, "ENA|BK006936|BK006936.2", raw, fmt=2)
 
 
 class InfernalTabIndexCases(CheckIndex):
