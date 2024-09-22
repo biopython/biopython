@@ -200,6 +200,7 @@
 <!ELEMENT	description		%T_string;>
 <!ELEMENT	last_evaluated		%T_date;>
 <!ELEMENT	review_status		%T_string;>
+<!ELEMENT	fda_recognized_database		%T_string;>
 <!ELEMENT	trait_set		%T_TraitSetType;>
 
 <!-- Definition of Structure type: T_ClassificationType -->
@@ -210,6 +211,7 @@
 			description?,
 			last_evaluated?,
 			review_status?,
+			fda_recognized_database?,
 			trait_set?
 			)
 			">
@@ -263,7 +265,9 @@
 <!ELEMENT	genes		%T_GenesType;>
 <!ELEMENT	molecular_consequence_list		%T_MolecularConsequenceListType;>
 <!ELEMENT	protein_change		%T_string;>
-<!ELEMENT	fda_recognized_database		%T_string;>
+<!-- Already defined ...
+	fda_recognized_database	 as 	%T_string;
+ ... Already defined -->
 <!ELEMENT	error		%T_string;>
 
 <!-- Definition of Structure type: T_DocSum -->
@@ -312,3 +316,4 @@
 ~~-->
 
 <!ELEMENT eSummaryResult (DocumentSummarySet?)>
+
