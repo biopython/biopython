@@ -290,7 +290,7 @@ RESIDUE_ORDER = {'CYS': ['N', 'CA', 'C', 'O', 'CB', 'SG'],
                  'MET': ['N', 'CA', 'C', 'O', 'CB', 'CG', 'SD', 'CE']}
 
 
-def load_rotamers(rotamer_loc="{}/dunbrack_reduced.gz".format(DATA_DIR)):
+def load_rotamers(rotamer_loc=f"{DATA_DIR}/dunbrack_reduced.gz"):
     """
     Load the Dunbrack rotamer library
     """
@@ -299,11 +299,11 @@ def load_rotamers(rotamer_loc="{}/dunbrack_reduced.gz".format(DATA_DIR)):
         for line in fn:
             if line.startswith("#"):
                 continue
-            if not line.split()[0] in _dunbrack:
+            if line.split()[0] not in _dunbrack:
                 _dunbrack[line.split()[0]] = {}
-            if not int(line.split()[1]) in _dunbrack[line.split()[0]]:
+            if int(line.split()[1]) not in _dunbrack[line.split()[0]]:
                 _dunbrack[line.split()[0]][int(line.split()[1])] = {}
-            if not int(line.split()[2]) in _dunbrack[line.split()[0]][int(line.split()[1])]:
+            if int(line.split()[2]) not in _dunbrack[line.split()[0]][int(line.split()[1])]:
                 _dunbrack[line.split()[0]][int(line.split()[1])][int(line.split()[2])] = []
             _dunbrack[line.split()[0]][int(line.split()[1])][int(line.split()[2])].append({
                 'prob': float(line.split()[3]),
@@ -357,7 +357,7 @@ def distance(x, y):
 
 def read_sample_residue(residue_name):
     sample_residue = {}
-    with open('{}/{}.pdb'.format(DATA_DIR, residue_name.upper())) as fn:
+    with open(f'{DATA_DIR}/{residue_name.upper()}.pdb') as fn:
         for line in fn:
             sample_residue[line[12:16].strip()] = np.array([float(line[30:38]), float(line[38:46]), float(line[46:54])])
     return sample_residue
@@ -435,7 +435,7 @@ def mutate(pdb_obj, chain, res_num, mutate_to, rotamer_lib=None, mutation_type="
     for atom in list(_residue.get_atoms()):  # Create a copy to remove from
         if not is_backbone(atom):
             atom.parent.detach_child(atom.id)
-    phi, psi = [round(np.rad2deg(y), -1) if y else 0 for y in [_residue.xtra[x] for x in ['PHI', 'PSI']]]
+    phi, psi = (round(np.rad2deg(y), -1) if y else 0 for y in [_residue.xtra[x] for x in ['PHI', 'PSI']])
     logging.debug(f"Torsion angles: {phi}, {psi}")
     # GET_ATR IS WRONG
     sample_residue = read_sample_residue(mutate_to)
