@@ -224,6 +224,8 @@ class XdnaIterator(SequenceIterator):
 class XdnaWriter(SequenceWriter):
     """Write files in the Xdna format."""
 
+    modes = "b"
+
     def __init__(self, target):
         """Initialize an Xdna writer object.
 
@@ -231,7 +233,7 @@ class XdnaWriter(SequenceWriter):
          - target - Output stream opened in binary mode, or a path to a file.
 
         """
-        super().__init__(target, mode="wb")
+        super().__init__(target)
 
     def write_file(self, records):
         """Write the specified record to a Xdna file.

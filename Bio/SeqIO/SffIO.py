@@ -1121,6 +1121,8 @@ class _SffTrimIterator(SffIterator):
 class SffWriter(SequenceWriter):
     """SFF file writer."""
 
+    modes = "b"
+
     def __init__(self, target, index=True, xml=None):
         """Initialize an SFF writer object.
 
@@ -1132,7 +1134,7 @@ class SffWriter(SequenceWriter):
            reading this data).
 
         """
-        super().__init__(target, "wb")
+        super().__init__(target)
         self._xml = xml
         if index:
             self._index = []

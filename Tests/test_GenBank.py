@@ -11,6 +11,7 @@
 
 import os
 import sys
+import tempfile
 import unittest
 import warnings
 from datetime import datetime
@@ -7811,15 +7812,17 @@ KEYWORDS    """,
     def test_qualifier_escaping_write(self):
         """Check qualifier escaping is preserved when writing."""
         # Write some properly escaped qualifiers and test
-        genbank_out = "GenBank/qualifier_escaping_write.gb"
-        record = SeqIO.read(genbank_out, "gb")
+        genbank_in = "GenBank/qualifier_escaping_write.gb"
+        record = SeqIO.read(genbank_in, "gb")
         f1 = record.features[0]
         f2 = record.features[1]
         f1.qualifiers["note"][0] = '"Should" now "be" escaped in "file"'
         f2.qualifiers["note"][0] = '"Should also be escaped in file"'
-        SeqIO.write(record, genbank_out, "gb")
-        # Read newly escaped qualifiers and test
-        record = SeqIO.read(genbank_out, "gb")
+        with tempfile.NamedTemporaryFile("w+") as genbank_out:
+            SeqIO.write(record, genbank_out, "gb")
+            genbank_out.seek(0)
+            # Read newly escaped qualifiers and test
+            record = SeqIO.read(genbank_out, "gb")
         f1 = record.features[0]
         f2 = record.features[1]
         self.assertEqual(

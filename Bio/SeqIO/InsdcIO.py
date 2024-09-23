@@ -391,6 +391,8 @@ class _InsdcWriter(SequenceWriter):
         "transl_table",
     )
 
+    modes = "t"
+
     def _write_feature_qualifier(self, key, value=None, quote=None):
         if not _allowed_table_component_name_chars.issuperset(key):
             warnings.warn(
