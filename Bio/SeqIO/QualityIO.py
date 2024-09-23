@@ -1592,7 +1592,6 @@ class FastqPhredWriter(SequenceWriter):
 
     def write_record(self, record: SeqRecord) -> None:
         """Write a single FASTQ record to the file."""
-        self._record_written = True
         # TODO - Is an empty sequence allowed in FASTQ format?
         seq = record.seq
         if seq is None:
@@ -1706,8 +1705,6 @@ class QualPhredWriter(SequenceWriter):
 
     def write_record(self, record: SeqRecord) -> None:
         """Write a single QUAL record to the file."""
-        self._record_written = True
-
         handle = self.handle
         wrap = self.wrap
 
@@ -1852,8 +1849,6 @@ class FastqSolexaWriter(SequenceWriter):
 
     def write_record(self, record: SeqRecord) -> None:
         """Write a single FASTQ record to the file."""
-        self._record_written = True
-
         # TODO - Is an empty sequence allowed in FASTQ format?
         seq = record.seq
         if seq is None:
@@ -1936,8 +1931,6 @@ class FastqIlluminaWriter(SequenceWriter):
 
     def write_record(self, record: SeqRecord) -> None:
         """Write a single FASTQ record to the file."""
-        self._record_written = True
-
         # TODO - Is an empty sequence allowed in FASTQ format?
         seq = record.seq
         if seq is None:

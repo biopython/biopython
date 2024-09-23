@@ -116,7 +116,6 @@ class TabWriter(SequenceWriter):
         """Write a single tab line to the file."""
         assert self._header_written
         assert not self._footer_written
-        self._record_written = True
         self.handle.write(as_tab(record))
 
 
