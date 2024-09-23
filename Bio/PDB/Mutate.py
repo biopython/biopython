@@ -316,6 +316,9 @@ def load_rotamers(rotamer_loc=f"{DATA_DIR}/dunbrack_reduced.gz"):
 
 
 def rotation_matrix(axis, theta):
+    """
+    Calculates a rotational matrix alongside an axis with an andle theta
+    """
     axis = np.asarray(axis)
     axis = axis / np.linalg.norm(axis)
 
@@ -356,6 +359,9 @@ def distance(x, y):
 
 
 def read_sample_residue(residue_name):
+    """
+    Reads a sample PDB residue
+    """
     sample_residue = {}
     with open(f'{DATA_DIR}/{residue_name.upper()}.pdb') as fn:
         for line in fn:
@@ -364,11 +370,17 @@ def read_sample_residue(residue_name):
 
 
 def is_backbone(atom):
+    """
+    Checks weather a given residue is backbone or not
+    """
     return atom.get_id() in ['C', 'N', 'CA', 'O']
 
 
 def select_best_rotamer_based_on_clashes(pdb_object, chain, res_num, mutate_to, sample_residue, rotamers,
                                          skip_own_chain=False):
+    """
+    Calculates the best rotamer based on VdW energy
+    """
     best_rotamer = None
     lowest_energy = float('inf')
     for rotamer in rotamers:
@@ -424,6 +436,9 @@ def select_best_rotamer_based_on_clashes(pdb_object, chain, res_num, mutate_to, 
 
 
 def mutate(pdb_obj, chain, res_num, mutate_to, rotamer_lib=None, mutation_type="best", verbose='info'):
+    """
+    Mutates a given residue based on the best fitting rotamers
+    """
     level = logging.getLevelName(verbose.upper())
     logging.getLogger().setLevel(level)
     Polypeptide.Polypeptide(
