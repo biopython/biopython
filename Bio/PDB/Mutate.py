@@ -7,7 +7,7 @@ The tool makes in place modification on a PDB structure object.
 
 from Bio.PDB.Atom import Atom
 from Bio.PDB import Polypeptide
-import NeighborSearch
+from Bio.PDB.NeighborSearch import NeighborSearch
 from Bio.PDB.Selection import unfold_entities
 from Bio import SVDSuperimposer
 import numpy as np
