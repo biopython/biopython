@@ -18,7 +18,7 @@ import gzip
 logging.basicConfig(format="%(asctime)s | %(levelname)s | %(message)s", datefmt="%H:%M")
 
 DATA_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), "rotamers")
-
+DUNBRACK_FILTERED = f"{DATA_DIR}/dunbrack_reduced.gz"
 VW_RADII = {
     "ALA": {"N": 1.7, "CA": 2.0, "C": 1.7, "O": 1.4, "CB": 2.0},
     "CYS": {"N": 1.7, "CA": 2.0, "C": 1.7, "O": 1.4, "CB": 2.0, "SG": 1.8},
@@ -269,7 +269,7 @@ RESIDUE_ORDER = {
 }
 
 
-def load_rotamers(rotamer_loc=f"{DATA_DIR}/dunbrack_reduced.gz"):
+def load_rotamers(rotamer_loc=DUNBRACK_FILTERED):
     """
     Load the Dunbrack rotamer library
     """
