@@ -51,14 +51,14 @@ Hit alignments:
 
                                                                                                       v           NC
                                  ::::::<<<-<<<<____>>>>->>>,,,,,,,,,,,,,,,,,,,,<<<<<<________>>>>>>,<<<<<<<___>>> CS
-                       U2      1 AUacCUUCucgGCcUUUUgGCuaaGAUCAAGUGUAGUAUCUGUUCUUauCAGUuUAAuAuCUGauAuggcccccAuuggg 80
+                       U2      1 AUacCUUCucgGCcUUUUgGCuaaGAUCAAGUGUAGUAUCUGUUCUUauCAGUuUAAuAuCUGauAuggcccccAuuggg 80    
                                  AU+   UCU+:GCCUUUUGGC:+AGAUCAAGUGUAGUAUCUGUUCUU:UCAGU+UAA+A+CUGA:AUG: CC:CA+UG:G
   ENA|BK006936|BK006936.2 681858 AUC---UCUUUGCCUUUUGGCUUAGAUCAAGUGUAGUAUCUGUUCUUUUCAGUGUAACAACUGAAAUGA-CCUCAAUGAG 681783
                                  ***...************************************************************999.********** PP
 
                                   v                                                   NC
                                  >>>>,,,.,,,,,,,,,,,,,,,,,,,,,,,,,~~~~~~~~~~~~::::::: CS
-                       U2     81 ggccaau.uauaUUAaauuaAUUUUUggaacua*[34]**[40]*Acccuuu 193
+                       U2     81 ggccaau.uauaUUAaauuaAUUUUUggaacua*[34]**[40]*Acccuuu 193   
                                  G+:CA+U   U+UUAA+UU                          AC +UUU
   ENA|BK006936|BK006936.2 681782 GCUCAUUaCCUUUUAAUUUG-------------*[ 6]**[ 3]*ACAUUUU 681747
                                  ******86555555555443................7.....9..******* PP
@@ -163,7 +163,7 @@ Hit scores:
   (5) !   4.4e-17   83.2   0.0  ENA|BK006945|BK006945.2 482045 482165 +  cm    no 0.53  TPA_inf: Saccharomyces cerevisiae S288C chromosome XII
   (6) !   4.4e-17   83.2   0.0  ENA|BK006945|BK006945.2 485697 485817 +  cm    no 0.53  TPA_inf: Saccharomyces cerevisiae S288C chromosome XII
  ------ inclusion threshold ------
-  (7) ?      0.56   20.9   0.0  ENA|BK006943|BK006943.2 357031 357144 +  cm    no 0.46  TPA_inf: Saccharomyces cerevisiae S288C chromosome X,
+  (7) ?      0.56   20.9   0.0  ENA|BK006943|BK006943.2 357031 357144 +  cm    no 0.46  TPA_inf: Saccharomyces cerevisiae S288C chromosome X, 
   (8) ?       6.6   16.7   0.3  ENA|BK006947|BK006947.3   7085   6968 -  cm    no 0.41  TPA_inf: Saccharomyces cerevisiae S288C chromosome XIV
 
 
@@ -175,14 +175,14 @@ Hit alignments:
 
                                                                                                                 v NC
                                  (((((((((,,,,<<-<<<<<---<<--<<<<<<______>>-->>>.>-->>---->>>>>-->><<<-<<---.-<-< CS
-                  5S_rRNA      1 gccuGcggcCAUAccagcgcgaAagcACcgGauCCCAUCcGaACuCc.gAAguUAAGcgcgcUugggCcagggUA.GUAc 78
-                                 G::UGC:GCCAUA:C :C::GAAAGCACCG :UCCC+UCCGA C: C G AGUUAAGC::G: +G:GCC G:    GUA
+                  5S_rRNA      1 gccuGcggcCAUAccagcgcgaAagcACcgGauCCCAUCcGaACuCc.gAAguUAAGcgcgcUugggCcagggUA.GUAc 78    
+                                 G::UGC:GCCAUA:C :C::GAAAGCACCG :UCCC+UCCGA C: C G AGUUAAGC::G: +G:GCC G:    GUA 
   ENA|BK006945|BK006945.2 459676 GGUUGCGGCCAUAUCUACCAGAAAGCACCGUUUCCCGUCCGAUCAACuGUAGUUAAGCUGGUAAGAGCCUGACCGaGUAG 459755
                                  ***********************************************99***********************8756**** PP
 
                                  v                  vv                     NC
                                  <-----<<____>>----->>->-->>->>>))))))))): CS
-                  5S_rRNA     79 uagGaUGgGuGAcCuCcUGggAAgaccagGugccgCaggcc 119
+                  5S_rRNA     79 uagGaUGgGuGAcCuCcUGggAAgaccagGugccgCaggcc 119   
                                   +  +UGGGUGACC+   G  AA  :CAGGUGC:GCA::C+
   ENA|BK006945|BK006945.2 459756 UGUAGUGGGUGACCAUACGCGAAACUCAGGUGCUGCAAUCU 459796
                                  ***********************9***************** PP
@@ -194,14 +194,14 @@ Hit alignments:
 
                                                                                                                 v NC
                                  (((((((((,,,,<<-<<<<<---<<--<<<<<<______>>-->>>.>-->>---->>>>>-->><<<-<<---.-<-< CS
-                  5S_rRNA      1 gccuGcggcCAUAccagcgcgaAagcACcgGauCCCAUCcGaACuCc.gAAguUAAGcgcgcUugggCcagggUA.GUAc 78
-                                 G::UGC:GCCAUA:C :C::GAAAGCACCG :UCCC+UCCGA C: C G AGUUAAGC::G: +G:GCC G:    GUA
+                  5S_rRNA      1 gccuGcggcCAUAccagcgcgaAagcACcgGauCCCAUCcGaACuCc.gAAguUAAGcgcgcUugggCcagggUA.GUAc 78    
+                                 G::UGC:GCCAUA:C :C::GAAAGCACCG :UCCC+UCCGA C: C G AGUUAAGC::G: +G:GCC G:    GUA 
   ENA|BK006945|BK006945.2 489349 GGUUGCGGCCAUAUCUACCAGAAAGCACCGUUUCCCGUCCGAUCAACuGUAGUUAAGCUGGUAAGAGCCUGACCGaGUAG 489428
                                  ***********************************************99***********************8756**** PP
 
                                  v                  vv                     NC
                                  <-----<<____>>----->>->-->>->>>))))))))): CS
-                  5S_rRNA     79 uagGaUGgGuGAcCuCcUGggAAgaccagGugccgCaggcc 119
+                  5S_rRNA     79 uagGaUGgGuGAcCuCcUGggAAgaccagGugccgCaggcc 119   
                                   +  +UGGGUGACC+   G  AA  :CAGGUGC:GCA::C+
   ENA|BK006945|BK006945.2 489429 UGUAGUGGGUGACCAUACGCGAAACUCAGGUGCUGCAAUCU 489469
                                  ***********************9***************** PP
@@ -213,15 +213,15 @@ Hit alignments:
 
                                                                                                                 v NC
                                  (((((((((,,,,<<-<<<<<---<<--<<<<<<______>>-->>>.>-->>---->>>>>-->><<<-<<---.-<-< CS
-                  5S_rRNA      1 gccuGcggcCAUAccagcgcgaAagcACcgGauCCCAUCcGaACuCc.gAAguUAAGcgcgcUugggCcagggUA.GUAc 78
-                                  : UGC:GCCAUA:C :C::GAAAGCACCG :UCCC+UCCGA C: C G AGUUAAGC::G: +G:GCC G:    GUA
+                  5S_rRNA      1 gccuGcggcCAUAccagcgcgaAagcACcgGauCCCAUCcGaACuCc.gAAguUAAGcgcgcUugggCcagggUA.GUAc 78    
+                                  : UGC:GCCAUA:C :C::GAAAGCACCG :UCCC+UCCGA C: C G AGUUAAGC::G: +G:GCC G:    GUA 
   ENA|BK006945|BK006945.2 468813 GGUUGCGGCCAUAUCUACCAGAAAGCACCGUUUCCCGUCCGAUCAACuGUAGUUAAGCUGGUAAGAGCCUGACCGaGUAG 468892
                                  ***********************************************99***********************8756**** PP
 
                                  v                  vv                     NC
                                  <-----<<____>>----->>->-->>->>>))))))))): CS
-                  5S_rRNA     79 uagGaUGgGuGAcCuCcUGggAAgaccagGugccgCaggcc 119
-                                  +  +UGGGUGACC+   G  AA  :CAGGUGC:GCA :
+                  5S_rRNA     79 uagGaUGgGuGAcCuCcUGggAAgaccagGugccgCaggcc 119   
+                                  +  +UGGGUGACC+   G  AA  :CAGGUGC:GCA :  
   ENA|BK006945|BK006945.2 468893 UGUAGUGGGUGACCAUACGCGAAACUCAGGUGCUGCAGUUG 468933
                                  ***********************9***************** PP
 
@@ -232,15 +232,15 @@ Hit alignments:
 
                                                                                                                 v NC
                                  (((((((((,,,,<<-<<<<<---<<--<<<<<<______>>-->>>.>-->>---->>>>>-->><<<-<<---.-<-< CS
-                  5S_rRNA      1 gccuGcggcCAUAccagcgcgaAagcACcgGauCCCAUCcGaACuCc.gAAguUAAGcgcgcUugggCcagggUA.GUAc 78
-                                  : UGC:GCCAUA:C :C::GAAAGCACCG :UCCC+UCCGA C: C G AGUUAAGC::G: +G:GCC G:    GUA
+                  5S_rRNA      1 gccuGcggcCAUAccagcgcgaAagcACcgGauCCCAUCcGaACuCc.gAAguUAAGcgcgcUugggCcagggUA.GUAc 78    
+                                  : UGC:GCCAUA:C :C::GAAAGCACCG :UCCC+UCCGA C: C G AGUUAAGC::G: +G:GCC G:    GUA 
   ENA|BK006945|BK006945.2 472465 GGUUGCGGCCAUAUCUACCAGAAAGCACCGUUUCCCGUCCGAUCAACuGUAGUUAAGCUGGUAAGAGCCUGACCGaGUAG 472544
                                  ***********************************************99***********************8756**** PP
 
                                  v                  vv                     NC
                                  <-----<<____>>----->>->-->>->>>))))))))): CS
-                  5S_rRNA     79 uagGaUGgGuGAcCuCcUGggAAgaccagGugccgCaggcc 119
-                                  +  +UGGGUGACC+   G  AA  :CAGGUGC:GCA :
+                  5S_rRNA     79 uagGaUGgGuGAcCuCcUGggAAgaccagGugccgCaggcc 119   
+                                  +  +UGGGUGACC+   G  AA  :CAGGUGC:GCA :  
   ENA|BK006945|BK006945.2 472545 UGUAGUGGGUGACCAUACGCGAAACUCAGGUGCUGCAGUUG 472585
                                  ***********************9***************** PP
 
@@ -251,15 +251,15 @@ Hit alignments:
 
                                                                                                                 v NC
                                  (((((((((,,,,<<-<<<<<---<<--<<<<<<______>>-->>>.>-->>---->>>>>-->><<<-<<---.-<-< CS
-                  5S_rRNA      1 gccuGcggcCAUAccagcgcgaAagcACcgGauCCCAUCcGaACuCc.gAAguUAAGcgcgcUugggCcagggUA.GUAc 78
-                                  : UGC:GCCAUA:C :C::GAAAGCACCG :UCCC+UCCGA C: C G AGUUAAGC::G: +G:GCC G:    GUA
+                  5S_rRNA      1 gccuGcggcCAUAccagcgcgaAagcACcgGauCCCAUCcGaACuCc.gAAguUAAGcgcgcUugggCcagggUA.GUAc 78    
+                                  : UGC:GCCAUA:C :C::GAAAGCACCG :UCCC+UCCGA C: C G AGUUAAGC::G: +G:GCC G:    GUA 
   ENA|BK006945|BK006945.2 482045 GGUUGCGGCCAUAUCUACCAGAAAGCACCGUUUCCCGUCCGAUCAACuGUAGUUAAGCUGGUAAGAGCCUGACCGaGUAG 482124
                                  ***********************************************99***********************8756**** PP
 
                                  v                  vv                     NC
                                  <-----<<____>>----->>->-->>->>>))))))))): CS
-                  5S_rRNA     79 uagGaUGgGuGAcCuCcUGggAAgaccagGugccgCaggcc 119
-                                  +  +UGGGUGACC+   G  AA  :CAGGUGC:GCA :
+                  5S_rRNA     79 uagGaUGgGuGAcCuCcUGggAAgaccagGugccgCaggcc 119   
+                                  +  +UGGGUGACC+   G  AA  :CAGGUGC:GCA :  
   ENA|BK006945|BK006945.2 482125 UGUAGUGGGUGACCAUACGCGAAACUCAGGUGCUGCAGUUG 482165
                                  ***********************9***************** PP
 
@@ -270,15 +270,15 @@ Hit alignments:
 
                                                                                                                 v NC
                                  (((((((((,,,,<<-<<<<<---<<--<<<<<<______>>-->>>.>-->>---->>>>>-->><<<-<<---.-<-< CS
-                  5S_rRNA      1 gccuGcggcCAUAccagcgcgaAagcACcgGauCCCAUCcGaACuCc.gAAguUAAGcgcgcUugggCcagggUA.GUAc 78
-                                  : UGC:GCCAUA:C :C::GAAAGCACCG :UCCC+UCCGA C: C G AGUUAAGC::G: +G:GCC G:    GUA
+                  5S_rRNA      1 gccuGcggcCAUAccagcgcgaAagcACcgGauCCCAUCcGaACuCc.gAAguUAAGcgcgcUugggCcagggUA.GUAc 78    
+                                  : UGC:GCCAUA:C :C::GAAAGCACCG :UCCC+UCCGA C: C G AGUUAAGC::G: +G:GCC G:    GUA 
   ENA|BK006945|BK006945.2 485697 GGUUGCGGCCAUAUCUACCAGAAAGCACCGUUUCCCGUCCGAUCAACuGUAGUUAAGCUGGUAAGAGCCUGACCGaGUAG 485776
                                  ***********************************************99***********************8756**** PP
 
                                  v                  vv                     NC
                                  <-----<<____>>----->>->-->>->>>))))))))): CS
-                  5S_rRNA     79 uagGaUGgGuGAcCuCcUGggAAgaccagGugccgCaggcc 119
-                                  +  +UGGGUGACC+   G  AA  :CAGGUGC:GCA :
+                  5S_rRNA     79 uagGaUGgGuGAcCuCcUGggAAgaccagGugccgCaggcc 119   
+                                  +  +UGGGUGACC+   G  AA  :CAGGUGC:GCA :  
   ENA|BK006945|BK006945.2 485777 UGUAGUGGGUGACCAUACGCGAAACUCAGGUGCUGCAGUUG 485817
                                  ***********************9***************** PP
 
@@ -289,14 +289,14 @@ Hit alignments:
 
                                          v        vv      v      vv      vv         v       vv     vv             NC
                                  (((((((((,,,,<<-<<<<<---<<--<<<<<<______>>-->>>>-.->>---->>>>>-->><<<-<<----<-<< CS
-                  5S_rRNA      1 gccuGcggcCAUAccagcgcgaAagcACcgGauCCCAUCcGaACuCcgA.AguUAAGcgcgcUugggCcagggUAGUAcu 79
+                  5S_rRNA      1 gccuGcggcCAUAccagcgcgaAagcACcgGauCCCAUCcGaACuCcgA.AguUAAGcgcgcUugggCcagggUAGUAcu 79    
                                  ::: GC:G CA A:: G  :G+AA: AC::  ++ CAU     C  ::A A :UAAGC:  CU+::  C G:G  GUACU
   ENA|BK006943|BK006943.2 357031 CAGGGCUGGCAGAGGUGUCGGGAAAAACAAGGAU-CAUAU--CCUUUUAcAAUUAAGCCAUCUACCACCUGAG--GUACU 357105
                                  ****************************888743.44433..555555579**********************..***** PP
 
                                        v    v                vvv           NC
                                  -----<<____>>----->>->-->>->>>)))))).))): CS
-                  5S_rRNA     80 agGaUGgGuGAcCuCcUGggAAgaccagGugccgCa.ggcc 119
+                  5S_rRNA     80 agGaUGgGuGAcCuCcUGggAAgaccagGugccgCa.ggcc 119   
                                  A  + G      CU C GGGAA+A:C+G   C:GC  :::+
   ENA|BK006943|BK006943.2 357106 AAAG-G-AAAGGCUACCGGGAAUAUCUGAAACAGCUgCUGU 357144
                                  9994.3.33334778889****************9879*** PP
@@ -308,14 +308,14 @@ Hit alignments:
 
                                v             v  v                 v        v                 v   v                  NC
                                (((((((((,,,,<<-<<.<<<.---<<--<<<<.<<______>>-->>>>-->>---->>>>>-->><<<-<<----<-<<-- CS
-                  5S_rRNA    1 gccuGcggcCAUAccagc.gcg.aAagcACcgGa.uCCCAUCcGaACuCcgAAguUAAGcgcgcUugggCcagggUAGUAcuag 81
+                  5S_rRNA    1 gccuGcggcCAUAccagc.gcg.aAagcACcgGa.uCCCAUCcGaACuCcgAAguUAAGcgcgcUugggCcagggUAGUAcuag 81  
                                 : :: ::: AUAC +   ::     G:AC::::  CC AUC+G   ::::AA:U AAG ::  U+ GGC:  :G  GUA U+G
   ENA|BK006947|BK006947.3 7085 GAGAUGGUAUAUACUGUAgCAUcCGUGUACGUAUgACCGAUCAGA--AUACAAGUGAAGGUGAGUAUGGCAUGUG--GUAGUGG 7006
                                **************976325541459999****989999999999..89**********9999999*********..******* PP
 
                                                                     v  NC
                                ---<<____>>----->>->-->>->>>.))))))))): CS
-                  5S_rRNA   82 GaUGgGuGAcCuCcUGggAAgaccagGu.gccgCaggcc 119
+                  5S_rRNA   82 GaUGgGuGAcCuCcUGggAAgaccagGu.gccgCaggcc 119 
                                GAU :G G :     GG AAG+: A:GU ::: :: : C
   ENA|BK006947|BK006947.3 7005 GAUUAGAG-UGGUAGGGUAAGUAUAUGUgUAUUAUUUAC 6968
                                ***99988.689999************************ PP
@@ -368,7 +368,7 @@ Hit scores:
   (2) ?      0.49   19.8   0.0  ENA|BK006948|BK006948.2 737498 737324 -  cm    no 0.39  TPA_inf: Saccharomyces cerevisiae S288C chromosome XV,
   (3) ?       5.7   15.3   0.0  ENA|BK006947|BK006947.3 266059 266208 +  cm    no 0.39  TPA_inf: Saccharomyces cerevisiae S288C chromosome XIV
   (4) ?       6.6   15.1   0.4  ENA|BK006949|BK006949.2 443393 443253 -  cm    no 0.32  TPA_inf: Saccharomyces cerevisiae S288C chromosome XVI
-  (5) ?       7.1   14.9   0.0  ENA|BK006939|BK006939.2 190882 191043 +  cm    no 0.41  TPA_inf: Saccharomyces cerevisiae S288C chromosome V,
+  (5) ?       7.1   14.9   0.0  ENA|BK006939|BK006939.2 190882 191043 +  cm    no 0.41  TPA_inf: Saccharomyces cerevisiae S288C chromosome V, 
 
 
 Hit alignments:
@@ -379,14 +379,14 @@ Hit alignments:
 
                                                                                                       v           NC
                                  ::::::<<<-<<<<____>>>>->>>,,,,,,,,,,,,,,,,,,,,<<<<<<________>>>>>>,<<<<<<<___>>> CS
-                       U2      1 AUacCUUCucgGCcUUUUgGCuaaGAUCAAGUGUAGUAUCUGUUCUUauCAGUuUAAuAuCUGauAuggcccccAuuggg 80
+                       U2      1 AUacCUUCucgGCcUUUUgGCuaaGAUCAAGUGUAGUAUCUGUUCUUauCAGUuUAAuAuCUGauAuggcccccAuuggg 80    
                                  AU+   UCU+:GCCUUUUGGC:+AGAUCAAGUGUAGUAUCUGUUCUU:UCAGU+UAA+A+CUGA:AUG: CC:CA+UG:G
   ENA|BK006936|BK006936.2 681858 AUC---UCUUUGCCUUUUGGCUUAGAUCAAGUGUAGUAUCUGUUCUUUUCAGUGUAACAACUGAAAUGA-CCUCAAUGAG 681783
                                  ***...************************************************************999.********** PP
 
                                   v                                                   NC
                                  >>>>,,,.,,,,,,,,,,,,,,,,,,,,,,,,,~~~~~~~~~~~~::::::: CS
-                       U2     81 ggccaau.uauaUUAaauuaAUUUUUggaacua*[34]**[40]*Acccuuu 193
+                       U2     81 ggccaau.uauaUUAaauuaAUUUUUggaacua*[34]**[40]*Acccuuu 193   
                                  G+:CA+U   U+UUAA+UU                          AC +UUU
   ENA|BK006936|BK006936.2 681782 GCUCAUUaCCUUUUAAUUUG-------------*[ 6]**[ 3]*ACAUUUU 681747
                                  ******86555555555443................7.....9..******* PP
@@ -398,14 +398,14 @@ Hit alignments:
 
                                                                                                                   NC
                                  ::::::<<<-<<<<____>>>>->>>,,,,,,,,,,,,,,,,,,,,<<<<<<~~~~~~>>>>>>,<<<<<<<___>>>>> CS
-                       U2      1 AUacCUUCucgGCcUUUUgGCuaaGAUCAAGUGUAGUAUCUGUUCUUauCAG*[ 8]*CUGauAuggcccccAuuggggg 82
+                       U2      1 AUacCUUCucgGCcUUUUgGCuaaGAUCAAGUGUAGUAUCUGUUCUUauCAG*[ 8]*CUGauAuggcccccAuuggggg 82    
                                  AU+CC U U+ GCC U  GGC +A AU AAGU UA UA C GUUCU:A::A        U::U:  ::::::A U:::::
   ENA|BK006948|BK006948.2 737498 AUCCCAUAUUUGCCAUC-GGCAUAUAUUAAGUAUAUUAGCAGUUCUAAUUAC*[88]*GUAGUUGGAAGGAUACUAUCCU 737338
                                  **************999.*******************************996...*..6999999999999999999999 PP
 
                                                                                    NC
                                  >>,,,,,,,,,,,,,,,,,,,,,,,,,,,,~~~~~~~~~~~~::::::: CS
-                       U2     83 ccaauuauaUUAaauuaAUUUUUggaacua*[34]**[40]*Acccuuu 193
+                       U2     83 ccaauuauaUUAaauuaAUUUUUggaacua*[34]**[40]*Acccuuu 193   
                                  : A+                                      A CC++U
   ENA|BK006948|BK006948.2 737337 UUAU--------------------------*[ 2]**[ 1]*AUCCCCU 737324
                                  9987.............................6.....9..******* PP
@@ -417,14 +417,14 @@ Hit alignments:
 
                                              v          v                                                     v   NC
                                  ::::::.<<<.-<<<<____>>>>->>>,,,,.,,,,,,~~~~~~,,,,,,,,,,,,,,,,,,,,,,,,,,,,<<<<<<< CS
-                       U2      1 AUacCU.UCu.cgGCcUUUUgGCuaaGAUCAA.GUGUAG*[48]*aauuauaUUAaauuaAUUUUUggaacuaGuggggg 119
+                       U2      1 AUacCU.UCu.cgGCcUUUUgGCuaaGAUCAA.GUGUAG*[48]*aauuauaUUAaauuaAUUUUUggaacuaGuggggg 119   
                                  AU     UCU + G C  UUG C  AGAU A  GUGUAG        UUAUAU   +UU AU UUU G   +A:: : G:
   ENA|BK006947|BK006947.3 266059 AUGUUGaUCUaUCGUCAAUUGACCCAGAUGAUaGUGUAG*[ 1]*-GUUAUAUAGUUUUGAUAUUUUGGCGAAAAGUUGA 266132
                                  *****9****999****************9988999987...5...3377778888888888888888888888888888 PP
 
                                                           v      v  v     v v             v v      v  v        NC
                                  <----.<<<<<__>>>>>-..->>>>>>>>,,<<<<<<-<<<<<<___________>>>>>>-->>>>>>::::::: CS
-                       U2    120 cauuu.uggGCUUGCccau..ugcccccaCacggguugaccuggcaUUGCAcUaccgccagguucagcccAcccuuu 193
+                       U2    120 cauuu.uggGCUUGCccau..ugcccccaCacggguugaccuggcaUUGCAcUaccgccagguucagcccAcccuuu 193   
                                  :A+U+ U :GCUUGC: AU  +::C : ::   G:  :AC: G   U GCA UA+   C :GU+:  :C    +U +
   ENA|BK006947|BK006947.3 266133 GAAUAuUGCGCUUGCGUAUauAUUCCAUUUGAGGUGGCACUAGAGCUCGCAUUAU-UACCAGUAGUGGCAGGAUUGC 266208
                                  888888**************99999******************************.99******************* PP
@@ -436,22 +436,22 @@ Hit alignments:
 
                                                                                          v  v   v  v              NC
                                  ::::::<<<-<<<<____>>>>->>>,,,,,,,,,,,,,,,,,,,,~~~~~~,<<<<<<<___>>>>>>>,,,..,,,,, CS
-                       U2      1 AUacCUUCucgGCcUUUUgGCuaaGAUCAAGUGUAGUAUCUGUUCU*[20]*uggcccccAuugggggccaau..uauaU 92
-                                   A  U C:+G  C    G  UA:G UCAAG  UAGUAU UGUUCU       ::: C  A+   G :::++U
+                       U2      1 AUacCUUCucgGCcUUUUgGCuaaGAUCAAGUGUAGUAUCUGUUCU*[20]*uggcccccAuugggggccaau..uauaU 92    
+                                   A  U C:+G  C    G  UA:G UCAAG  UAGUAU UGUUCU       ::: C  A+   G :::++U       
   ENA|BK006949|BK006949.2 443393 CCAUUUACAUGAACCCCAGUUUAUGUUCAAG--UAGUAUAUGUUCU*[ 4]*-UCAACGCAAACUGCUGAUUUcaCC--- 443322
                                  ***************999************6..7**********98...4...222222222222222222222222... PP
 
                                                          v           v  v         v      v   v    v               NC
                                  ,,,,,,,,,,,,,,,,,,,,<<<<<<<<----<<<<<__>>>>>-->>>>>>>>,,<<<<<<-<<<<<<___________ CS
-                       U2     93 UAaauuaAUUUUUggaacuaGugggggcauuuuggGCUUGCccauugcccccaCacggguugaccuggcaUUGCAcUacc 172
-                                                     :U : :::+U U     UU+      ::: : A:A+ ::: G+C: : :A U CAC AC
+                       U2     93 UAaauuaAUUUUUggaacuaGugggggcauuuuggGCUUGCccauugcccccaCacggguugaccuggcaUUGCAcUacc 172   
+                                                     :U : :::+U U     UU+      ::: : A:A+ ::: G+C: : :A U CAC AC 
   ENA|BK006949|BK006949.2 443321 --------------------AUUGAAUAUUGU-----UUA------UAUAUGAUAUAUACCGUCAAAUUACUUCACGAC- 443274
                                  ....................222222222222.....221......3333345599***********************. PP
 
                                     v     v   v        NC
                                  >>>>>>-->>>>>>::::::: CS
-                       U2    173 gccagguucagcccAcccuuu 193
-                                 : : :G++C :::  +  U+
+                       U2    173 gccagguucagcccAcccuuu 193   
+                                 : : :G++C :::  +  U+ 
   ENA|BK006949|BK006949.2 443273 AGUGUGAACUGUGAUAAAUCA 443253
                                  ********************* PP
 
@@ -462,21 +462,21 @@ Hit alignments:
 
                                              v        v                                                           NC
                                  ::::::<<<.-<<<<____>>>>->>>,,,,,,,,,,,,,,,,,,,,~~~~~~~~~~~~,,,,,,,,,,,,,,,,,,,,, CS
-                       U2      1 AUacCUUCu.cgGCcUUUUgGCuaaGAUCAAGUGUAGUAUCUGUUCU*[20]**[18]*aauuauaUUAaauuaAUUUUU 105
+                       U2      1 AUacCUUCu.cgGCcUUUUgGCuaaGAUCAAGUGUAGUAUCUGUUCU*[20]**[18]*aauuauaUUAaauuaAUUUUU 105   
                                  AU CC U : +: C: UUU:G : : AUCA                             AA ++U+UUAAAU AA UUUU
   ENA|BK006939|BK006939.2 190882 AUUCCAUGAuUUCCUGUUUAGCU-UCAUCA-----------------*[ 4]**[ 4]*AACAUUUUUAAAUGAAAUUUU 190939
                                  *******9955678899999976.799997....................9.....9..77699**************** PP
 
                                             vv v                             v vv              v                  NC
                                  ,,,,,,,<<<<<<<<----.<<<<<_._>>>>>-.........->>>>>>>>,,<<<<<<-<<<<<<__________... CS
-                       U2    106 ggaacuaGugggggcauuu.uggGCU.UGCccau.........ugcccccaCacggguugaccuggcaUUGCAcUac... 171
-                                  +  + +GU::  : AUU  :G:GCU UGC:C:          + :  ::ACA+ :: :: : ::::  U CAC AC
+                       U2    106 ggaacuaGugggggcauuu.uggGCU.UGCccau.........ugcccccaCacggguugaccuggcaUUGCAcUac... 171   
+                                  +  + +GU::  : AUU  :G:GCU UGC:C:          + :  ::ACA+ :: :: : ::::  U CAC AC   
   ENA|BK006939|BK006939.2 190940 AAUGUCUGUUUCCUUAUUGaAGAGCUuUGCUCUGgauuuuccaACAUUAAACAUGCCGCCGAGGCCUCCUCCACCACcac 191019
                                  ***********9999998899999964799999999999999999999**************************999888 PP
 
                                         v                 NC
                                  .._>>>>>>-->>>>>>::::::: CS
-                       U2    172 ..cgccagguucagcccAcccuuu 193
+                       U2    172 ..cgccagguucagcccAcccuuu 193   
                                    +:::: :UU:: ::  + CU+U
   ENA|BK006939|BK006939.2 191020 caUUGGCAUUUGGUGGUGAACUAU 191043
                                  988********************* PP
