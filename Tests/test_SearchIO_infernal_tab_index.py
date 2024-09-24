@@ -14,6 +14,7 @@ import unittest
 from search_tests_common import CheckIndex
 from search_tests_common import CheckRaw
 
+
 class InfernalTabRawCases(CheckRaw):
     fmt = "infernal-tab"
 
@@ -24,7 +25,6 @@ class InfernalTabRawCases(CheckRaw):
 """
         self.check_raw(filename, "U2", raw)
 
-    
     def test_infernal_tab_multiple_first(self):
         """Test infernal-tab raw string retrieval, cmsearch, multiple queries, first."""
         filename = os.path.join("Infernal", "cmscan_115_IRES_5S_U2_Yeast.tbl")
@@ -33,14 +33,12 @@ U2                   RF00004   ENA|BK006935|BK006935.2 -          cm        1   
 """
         self.check_raw(filename, "ENA|BK006935|BK006935.2", raw)
 
-    
     def test_infernal_tab_multiple_middle(self):
         """Test infernal-tab raw string retrieval, cmsearch, multiple queries, middle."""
         filename = os.path.join("Infernal", "cmscan_115_IRES_5S_U2_Yeast.tbl")
         raw = """U2                   RF00004   ENA|BK006936|BK006936.2 -          cm        1      193   681858   681747      -    no    1 0.33   0.1   98.7   1.2e-20 !   U2 spliceosomal RNA
 """
         self.check_raw(filename, "ENA|BK006936|BK006936.2", raw)
-
 
     def test_infernal_tab_multiple_last(self):
         """Test infernal-tab raw string retrieval, cmsearch, multiple queries, last."""
@@ -50,7 +48,6 @@ U2                   RF00004   ENA|BK006937|BK006937.2 -          cm        1   
 """
         self.check_raw(filename, "ENA|BK006937|BK006937.2", raw)
 
-    
     def test_infernal_tab_multiple_fmt_2(self):
         """Test infernal-tab raw string retrieval, cmsearch, multiple queries, fmt 2."""
         filename = os.path.join("Infernal", "cmscan_115_IRES_5S_U2_Yeast_fmt_2.tbl")
@@ -62,24 +59,20 @@ U2                   RF00004   ENA|BK006937|BK006937.2 -          cm        1   
 class InfernalTabIndexCases(CheckIndex):
     fmt = "infernal-tab"
 
-
     def test_infernal_tab_1q(self):
         """Test infernal-tab indexing, cmsearch, one query, one hit."""
         filename = os.path.join("Infernal", "cmsearch_114_U2_Yeast.tbl")
         self.check_index(filename, self.fmt)
 
-    
     def test_infernal_tab_1q_0m(self):
         """Test infernal-tab indexing, cmsearch, single query, not hits."""
         filename = os.path.join("Infernal", "cmsearch_114_IRES_Yeast.tbl")
         self.check_index(filename, self.fmt)
 
-
     def test_infernal_tab_1q_mm(self):
         """Test infernal-tab indexing, cmsearch, single query, multiple hits."""
         filename = os.path.join("Infernal", "cmsearch_114_5S_Yeast.tbl")
         self.check_index(filename, self.fmt)
-    
 
     def test_infernal_tab_mq_mm(self):
         """Test infernal-tab indexing, cmscan, multiple query, multiple matches."""
