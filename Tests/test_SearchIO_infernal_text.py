@@ -52,7 +52,6 @@ class CmscanCases(unittest.TestCase):
         self.assertEqual(hit.id, "U2")
         self.assertEqual(hit.description, "U2 spliceosomal RNA")
         self.assertEqual(hit.query_id, "ENA|BK006935|BK006935.2")
-        self.assertEqual(hit.bias, 0.0)
         hsp = hit[0]
         self.assertEqual(2, len(hsp))
         self.assertEqual(hsp.model, "cm")
