@@ -6,6 +6,9 @@
 # package.
 
 
+"""TODO add module docstring."""
+
+
 from .infernal_tab import InfernalTabParser
 from .infernal_tab import InfernalTabIndexer
 from .infernal_text import InfernalTextParser
