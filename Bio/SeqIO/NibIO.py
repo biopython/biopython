@@ -162,9 +162,19 @@ class NibWriter(SequenceWriter):
         indices = nucleotides.translate(table)
         handle.write(binascii.unhexlify(indices))
 
-    def write_file(self, records):
-        """Write the complete file with the records, and return the number of records."""
-        count = super().write_file(records, mincount=1, maxcount=1)
+    def write_records(self, records):
+        """Write records to the output file, and return the number of records.
+
+        records - A list or iterator returning SeqRecord objects
+        """
+        count = 0
+        for record in records:
+            if count == 1:
+                raise ValueError("More than one sequence found")
+            self.write_record(record)
+            count += 1
+        if count != 1:
+            raise ValueError("Must have one sequence")
         return count
 
 
