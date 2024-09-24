@@ -1,3 +1,9 @@
+"""
+A tool that introduces a point mutation to a given residue based on the Dunbrack rotamer library.
+The tool uses sample residues stored in small PDB files, and uses a reduced rotamer library
+to save space (only rotamers with higher than 5% probability are present).
+The tool makes in place modification on a PDB structure object.
+"""
 from Bio.PDB.Atom import Atom
 from Bio.PDB import Polypeptide, NeighborSearch
 from Bio.PDB.Selection import unfold_entities
@@ -355,6 +361,9 @@ def dihedral_from_vectors(v1, v2, v3, v4):
 
 
 def distance(x, y):
+    """
+    Calculates the euclidian distance in 3D space
+    """
     return np.sqrt((x[0] - y[0]) ** 2 + (x[1] - y[1]) ** 2 + (x[2] - y[2]) ** 2)
 
 
