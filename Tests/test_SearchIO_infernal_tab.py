@@ -18,6 +18,7 @@ from Bio.SearchIO import parse
 TEST_DIR = "Infernal"
 FMT = "infernal-tab"
 
+
 def get_file(filename):
     """Return the path of a test file."""
     return os.path.join(TEST_DIR, filename)
@@ -38,7 +39,7 @@ class CmscanCases(unittest.TestCase):
         counter = itertools.count(start=1)
 
         # first qresult
-        qresult, count  = next_result(qresults, counter)
+        qresult, count = next_result(qresults, counter)
         self.assertEqual(1, len(qresult))
         self.assertEqual("ENA|BK006935|BK006935.2", qresult.id)
         self.assertEqual("-", qresult.accession)
@@ -82,7 +83,7 @@ class CmscanCases(unittest.TestCase):
         self.assertEqual(-1, frag.hit_strand)
 
         # second qresult
-        qresult, count  = next_result(qresults, counter)
+        qresult, count = next_result(qresults, counter)
         self.assertEqual(1, len(qresult))
         self.assertEqual("ENA|BK006936|BK006936.2", qresult.id)
         self.assertEqual("-", qresult.accession)
@@ -109,7 +110,7 @@ class CmscanCases(unittest.TestCase):
         self.assertEqual(-1, frag.hit_strand)
 
         # third qresult
-        qresult, count  = next_result(qresults, counter)
+        qresult, count = next_result(qresults, counter)
         self.assertEqual(2, len(qresult))
         self.assertEqual("ENA|BK006937|BK006937.2", qresult.id)
         self.assertEqual("-", qresult.accession)
@@ -157,7 +158,6 @@ class CmscanCases(unittest.TestCase):
         self.assertEqual(229986, frag.hit_end)
         self.assertEqual(-1, frag.hit_strand)
 
-    
     def test_cmscan_mq_mm_fmt2(self):
         """Test parsing infernal-tab, cmscan, multiple queries, multiple hit, one hsp, fmt 2 (IRES_5S_U2_Yeast_fmt_2)"""
         tab_file = get_file("cmscan_115_IRES_5S_U2_Yeast_fmt_2.tbl")
@@ -165,7 +165,7 @@ class CmscanCases(unittest.TestCase):
         counter = itertools.count(start=1)
 
         # first qresult
-        qresult, count  = next_result(qresults, counter)
+        qresult, count = next_result(qresults, counter)
         self.assertEqual(1, len(qresult))
         self.assertEqual("ENA|BK006936|BK006936.2", qresult.id)
         self.assertEqual("-", qresult.accession)
@@ -202,7 +202,6 @@ class CmscanCases(unittest.TestCase):
         self.assertEqual(681858, frag.hit_end)
         self.assertEqual(-1, frag.hit_strand)
 
-    
     def test_cmscan_mq_mm_fmt3(self):
         """Test parsing infernal-tab, cmscan, multiple queries, multiple hit, one hsp, fmt 3 (IRES_5S_U2_Yeast_fmt_3)"""
         tab_file = get_file("cmscan_115_IRES_5S_U2_Yeast_fmt_3.tbl")
@@ -210,7 +209,7 @@ class CmscanCases(unittest.TestCase):
         counter = itertools.count(start=1)
 
         # first qresult
-        qresult, count  = next_result(qresults, counter)
+        qresult, count = next_result(qresults, counter)
         self.assertEqual(1, len(qresult))
         self.assertEqual("ENA|BK006936|BK006936.2", qresult.id)
         self.assertEqual("-", qresult.accession)
@@ -242,7 +241,7 @@ class CmscanCases(unittest.TestCase):
 
 class CmsearchCases(unittest.TestCase):
     """Test parsing cmsearch output."""
-    
+
     def test_1q_0m(self):
         """Test parsing infernal-tab, cmsearch, one query, no hits (IRES_Yeast)"""
         tab_file = get_file("cmsearch_114_IRES_Yeast.tbl")
@@ -250,14 +249,13 @@ class CmsearchCases(unittest.TestCase):
 
         self.assertRaises(StopIteration, next, qresults)
 
-
     def test_cmsearch_1q_1m(self):
         """Test parsing infernal-tab, cmsearch, one queries, one hit, one hsp (U2_Yeast)"""
         tab_file = get_file("cmsearch_114_U2_Yeast.tbl")
         qresults = parse(tab_file, FMT)
         counter = itertools.count(start=1)
 
-        qresult, count  = next_result(qresults, counter)
+        qresult, count = next_result(qresults, counter)
         self.assertEqual(1, len(qresult))
         self.assertEqual("U2", qresult.id)
         self.assertEqual("RF00004", qresult.accession)
@@ -266,8 +264,11 @@ class CmsearchCases(unittest.TestCase):
         self.assertEqual(1, len(hit))
         self.assertEqual("ENA|BK006936|BK006936.2", hit.id)
         self.assertEqual("-", hit.accession)
-        self.assertEqual("TPA_inf: Saccharomyces cerevisiae S288C chromosome II, complete sequence.", hit.description)
-        
+        self.assertEqual(
+            "TPA_inf: Saccharomyces cerevisiae S288C chromosome II, complete sequence.",
+            hit.description,
+        )
+
         hsp = hit[0]
         self.assertEqual(1, len(hsp))
         self.assertEqual(5.9e-20, hsp.evalue)
@@ -289,14 +290,13 @@ class CmsearchCases(unittest.TestCase):
         self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, count)
 
-
     def test_cmsearch_1q_mm(self):
         """Test parsing infernal-tab, cmsearch, one queries, multiple hit, one hsp (5S_Yeast)"""
         tab_file = get_file("cmsearch_114_5S_Yeast.tbl")
         qresults = parse(tab_file, FMT)
         counter = itertools.count(start=1)
 
-        qresult, count  = next_result(qresults, counter)
+        qresult, count = next_result(qresults, counter)
         self.assertEqual(1, len(qresult))
         self.assertEqual("5S_rRNA", qresult.id)
         self.assertEqual("RF00001", qresult.accession)
@@ -306,7 +306,10 @@ class CmsearchCases(unittest.TestCase):
         self.assertEqual(6, len(hit))
         self.assertEqual("ENA|BK006945|BK006945.2", hit.id)
         self.assertEqual("-", hit.accession)
-        self.assertEqual("TPA_inf: Saccharomyces cerevisiae S288C chromosome XII, complete sequence.", hit.description)
+        self.assertEqual(
+            "TPA_inf: Saccharomyces cerevisiae S288C chromosome XII, complete sequence.",
+            hit.description,
+        )
         hsp = hit[0]
         self.assertEqual(1, len(hsp))
         self.assertEqual(1.6e-18, hsp.evalue)
@@ -343,14 +346,13 @@ class CmsearchCases(unittest.TestCase):
         self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, count)
 
-
     def test_cmsearch_1q_mm_shuf(self):
         """Test parsing infernal-tab, cmsearch, one queries, multiple non-consecutive hits, one hsp (U2_Yeast_full_shuffled)"""
         tab_file = get_file("cmsearch_114_U2_Yeast_full_shuffled.tbl")
         qresults = parse(tab_file, FMT)
         counter = itertools.count(start=1)
 
-        qresult, count  = next_result(qresults, counter)
+        qresult, count = next_result(qresults, counter)
         self.assertEqual(2, len(qresult))
         self.assertEqual(qresult.id, "U2")
         self.assertEqual(qresult.accession, "RF00004")
@@ -379,7 +381,7 @@ class CmsearchCases(unittest.TestCase):
         self.assertEqual(hsp.query_end, 193)
         self.assertEqual(hsp.hit_start, 1079243)
         self.assertEqual(hsp.hit_end, 1079392)
-        # second hit 
+        # second hit
         hit = qresult[1]
         self.assertEqual(3, len(hit))
         self.assertEqual(hit.id, "ENA|BK006948|BK006948.2")
