@@ -219,11 +219,8 @@ class InfernalTabParser(_BaseInfernalParser):
         state_EOF = 0
         state_QRES_NEW = 1
         state_QRES_SAME = 3
-        state_HIT_NEW = 2
-        state_HIT_SAME = 4
         # dummies for initial states
         qres_state = None
-        hit_state = None
         file_state = None
         cur_qid = None
         cur_hid = None
@@ -255,11 +252,6 @@ class InfernalTabParser(_BaseInfernalParser):
                 qres_state = state_QRES_NEW
             else:
                 qres_state = state_QRES_SAME
-            # new hits are hits with different id or hits in a new qresult
-            if prev_hid != cur_hid or qres_state == state_QRES_NEW:
-                hit_state = state_HIT_NEW
-            else:
-                hit_state = state_HIT_SAME
 
             # creating objects for the previously parsed line(s), so nothing is done
             # in the first parsed line (prev == None)
