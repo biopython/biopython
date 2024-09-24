@@ -183,8 +183,8 @@ Support for parsing and indexing:
  - hmmer2-text      - HMMER2 regular text output format. Supported HMMER2
                       subprograms are hmmpfam, hmmsearch.
  - infernal-tab     - Infernal tabular output.
- - infernal-text    - Infernal regular text output. Supported Infernal 
-                      subprograms are cmsearch and cmscan. 
+ - infernal-text    - Infernal regular text output. Supported Infernal
+                      subprograms are cmsearch and cmscan.
 
 Support for parsing:
 
