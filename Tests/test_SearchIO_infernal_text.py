@@ -39,7 +39,7 @@ class CmscanCases(unittest.TestCase):
 
         # first qresult
         qresult, count = next_result(qresults, counter)
-        self.assertEqual(1, len(qresult))
+        self.assertEqual(len(qresult), 1)
         self.assertEqual(qresult.id, "ENA|BK006935|BK006935.2")
         self.assertEqual(qresult.seq_len, 230218)
         self.assertEqual(qresult.description, "<unknown description>")
@@ -48,12 +48,12 @@ class CmscanCases(unittest.TestCase):
         self.assertEqual(qresult.target, "IRES_5S_U2.cm")
         # first hit
         hit = qresult[0]
-        self.assertEqual(2, len(hit))
+        self.assertEqual(len(hit), 2)
         self.assertEqual(hit.id, "U2")
         self.assertEqual(hit.description, "U2 spliceosomal RNA")
         self.assertEqual(hit.query_id, "ENA|BK006935|BK006935.2")
         hsp = hit[0]
-        self.assertEqual(2, len(hsp))
+        self.assertEqual(len(hsp), 2)
         self.assertEqual(hsp.model, "cm")
         self.assertEqual(hsp.truncated, "no")
         self.assertEqual(hsp.gc, 0.44)
@@ -90,11 +90,11 @@ class CmscanCases(unittest.TestCase):
         self.assertEqual(hsp.hit_end, 196571)
         # second qresult
         qresult, count = next_result(qresults, counter)
-        self.assertEqual(1, len(qresult))
+        self.assertEqual(len(qresult), 1)
         self.assertEqual(qresult.id, "ENA|BK006936|BK006936.2")
         # first hit
         hit = qresult[0]
-        self.assertEqual(1, len(hit))
+        self.assertEqual(len(hit), 1)
         self.assertEqual(hit.id, "U2")
         self.assertEqual(hit.description, "U2 spliceosomal RNA")
         hsp = hit[0]
@@ -121,7 +121,7 @@ class CmsearchCases(unittest.TestCase):
         counter = itertools.count(start=1)
 
         qresult, count = next_result(qresults, counter)
-        self.assertEqual(0, len(qresult))
+        self.assertEqual(len(qresult), 0)
         self.assertEqual(qresult.id, "IRES_HCV")
         self.assertEqual(qresult.seq_len, 352)
         self.assertEqual(qresult.accession, "RF00061")
@@ -143,7 +143,7 @@ class CmsearchCases(unittest.TestCase):
         counter = itertools.count(start=1)
 
         qresult, count = next_result(qresults, counter)
-        self.assertEqual(1, len(qresult))
+        self.assertEqual(len(qresult), 1)
         self.assertEqual(qresult.id, "U2")
         self.assertEqual(qresult.seq_len, 193)
         self.assertEqual(qresult.accession, "RF00004")
@@ -152,7 +152,7 @@ class CmsearchCases(unittest.TestCase):
         self.assertEqual(qresult.version, "1.1.4")
         self.assertEqual(qresult.target, "GCA_000146045.2.fasta")
         hit = qresult[0]
-        self.assertEqual(1, len(hit))
+        self.assertEqual(len(hit), 1)
         self.assertEqual(hit.id, "ENA|BK006936|BK006936.2")
         self.assertEqual(
             hit.description,
@@ -160,14 +160,14 @@ class CmsearchCases(unittest.TestCase):
         )
         self.assertEqual(hit.query_id, "U2")
         hsp = hit[0]
-        self.assertEqual(2, len(hsp))
+        self.assertEqual(len(hsp), 2)
         self.assertEqual(hsp.model, "cm")
         self.assertEqual(hsp.truncated, "no")
         self.assertEqual(hsp.gc, 0.33)
         self.assertEqual(hsp.evalue, 5.9e-20)
         self.assertEqual(hsp.bitscore, 98.7)
         self.assertEqual(hsp.bias, 0.1)
-        self.assertEqual(hsp.is_included, True)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(hsp.query_start, 1)
         self.assertEqual(hsp.query_end, 193)
         self.assertEqual(hsp.query_endtype, "[]")
@@ -231,7 +231,7 @@ class CmsearchCases(unittest.TestCase):
         counter = itertools.count(start=1)
 
         qresult, count = next_result(qresults, counter)
-        self.assertEqual(5, len(qresult))
+        self.assertEqual(len(qresult), 5)
         self.assertEqual(qresult.id, "U2")
         self.assertEqual(qresult.seq_len, 193)
         self.assertEqual(qresult.accession, "RF00004")
@@ -242,7 +242,7 @@ class CmsearchCases(unittest.TestCase):
         # skip first hit (equivalent to test_cmsearch_1q_1m)
         # second hit (3 hsp, reverse strand)
         hit = qresult[1]
-        self.assertEqual(1, len(hit))
+        self.assertEqual(len(hit), 1)
         self.assertEqual(hit.id, "ENA|BK006948|BK006948.2")
         self.assertEqual(
             hit.description,
@@ -250,14 +250,14 @@ class CmsearchCases(unittest.TestCase):
         )
         self.assertEqual(hit.query_id, "U2")
         hsp = hit[0]
-        self.assertEqual(3, len(hsp))
+        self.assertEqual(len(hsp), 3)
         self.assertEqual(hsp.model, "cm")
         self.assertEqual(hsp.truncated, "no")
         self.assertEqual(hsp.gc, 0.39)
         self.assertEqual(hsp.evalue, 0.49)
         self.assertEqual(hsp.bitscore, 19.8)
         self.assertEqual(hsp.bias, 0.0)
-        self.assertEqual(hsp.is_included, False)
+        self.assertFalse(hsp.is_included)
         self.assertEqual(hsp.query_start, 1)
         self.assertEqual(hsp.query_end, 193)
         self.assertEqual(hsp.query_endtype, "[]")
@@ -338,7 +338,7 @@ class CmsearchCases(unittest.TestCase):
         self.assertEqual(frag.aln_annotation["similarity"], "A CC++U")
         # third hit (2 hsp, forward strand)
         hit = qresult[2]
-        self.assertEqual(1, len(hit))
+        self.assertEqual(len(hit), 1)
         self.assertEqual(hit.id, "ENA|BK006947|BK006947.3")
         self.assertEqual(
             hit.description,
@@ -346,14 +346,14 @@ class CmsearchCases(unittest.TestCase):
         )
         self.assertEqual(hit.query_id, "U2")
         hsp = hit[0]
-        self.assertEqual(2, len(hsp))
+        self.assertEqual(len(hsp), 2)
         self.assertEqual(hsp.model, "cm")
         self.assertEqual(hsp.truncated, "no")
         self.assertEqual(hsp.gc, 0.39)
         self.assertEqual(hsp.evalue, 5.7)
         self.assertEqual(hsp.bitscore, 15.3)
         self.assertEqual(hsp.bias, 0.0)
-        self.assertEqual(hsp.is_included, False)
+        self.assertFalse(hsp.is_included)
         self.assertEqual(hsp.query_start, 1)
         self.assertEqual(hsp.query_end, 193)
         self.assertEqual(hsp.query_endtype, "[]")
@@ -425,7 +425,7 @@ class CmsearchCases(unittest.TestCase):
         counter = itertools.count(start=1)
 
         qresult, count = next_result(qresults, counter)
-        self.assertEqual(2, len(qresult))
+        self.assertEqual(len(qresult), 2)
         self.assertEqual(qresult.id, "U2")
         self.assertEqual(qresult.seq_len, 193)
         self.assertEqual(qresult.accession, "RF00004")
@@ -435,7 +435,7 @@ class CmsearchCases(unittest.TestCase):
         self.assertEqual(qresult.target, "BK006936_7-8.fasta")
         # first hit (3 hsps at rank 1,3 and 4)
         hit = qresult[0]
-        self.assertEqual(3, len(hit))
+        self.assertEqual(len(hit), 3)
         self.assertEqual(hit.id, "ENA|BK006936|BK006936.2")
         self.assertEqual(hit.description, "")
         self.assertEqual(hit.query_id, "U2")
@@ -459,7 +459,7 @@ class CmsearchCases(unittest.TestCase):
         self.assertEqual(hsp.hit_end, 1079392)
         # second hit
         hit = qresult[1]
-        self.assertEqual(3, len(hit))
+        self.assertEqual(len(hit), 3)
         self.assertEqual(hit.id, "ENA|BK006948|BK006948.2")
         self.assertEqual(hit.description, "")
         self.assertEqual(hit.query_id, "U2")
@@ -493,7 +493,7 @@ class CmsearchCases(unittest.TestCase):
         counter = itertools.count(start=1)
 
         qresult, count = next_result(qresults, counter)
-        self.assertEqual(1, len(qresult))
+        self.assertEqual(len(qresult), 1)
         self.assertEqual(qresult.id, "5S_rRNA")
         self.assertEqual(qresult.seq_len, 119)
         self.assertEqual(qresult.accession, "RF00001")
@@ -502,7 +502,7 @@ class CmsearchCases(unittest.TestCase):
         self.assertEqual(qresult.version, "1.1.4")
         self.assertEqual(qresult.target, "GCA_000146045.2.fasta")
         hit = qresult[0]
-        self.assertEqual(6, len(hit))
+        self.assertEqual(len(hit), 6)
         self.assertEqual(hit.id, "ENA|BK006945|BK006945.2")
         self.assertEqual(
             hit.description,
@@ -511,14 +511,14 @@ class CmsearchCases(unittest.TestCase):
         self.assertEqual(hit.query_id, "5S_rRNA")
         # first hit
         hsp = hit[0]
-        self.assertEqual(1, len(hsp))
+        self.assertEqual(len(hsp), 1)
         self.assertEqual(hsp.model, "cm")
         self.assertEqual(hsp.truncated, "no")
         self.assertEqual(hsp.gc, 0.52)
         self.assertEqual(hsp.evalue, 1.6e-18)
         self.assertEqual(hsp.bitscore, 88.8)
         self.assertEqual(hsp.bias, 0.0)
-        self.assertEqual(hsp.is_included, True)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(hsp.query_start, 1)
         self.assertEqual(hsp.query_end, 119)
         self.assertEqual(hsp.query_endtype, "[]")
@@ -568,7 +568,7 @@ class CmsearchCases(unittest.TestCase):
         counter = itertools.count(start=1)
 
         qresult, count = next_result(qresults, counter)
-        self.assertEqual(1, len(qresult))
+        self.assertEqual(len(qresult), 1)
         self.assertEqual(qresult.id, "U2")
         self.assertEqual(qresult.seq_len, 193)
         self.assertEqual(qresult.accession, "RF00004")
@@ -577,21 +577,21 @@ class CmsearchCases(unittest.TestCase):
         self.assertEqual(qresult.version, "1.1.4")
         self.assertEqual(qresult.target, "GCA_000146045.2.fasta")
         hit = qresult[0]
-        self.assertEqual(1, len(hit))
+        self.assertEqual(len(hit), 1)
         self.assertEqual(hit.id, "ENA|BK006936|BK006936.2")
         self.assertEqual(
             hit.description, "TPA_inf: Saccharomyces cerevisiae S288C chromosome II,"
         )
         self.assertEqual(hit.query_id, "U2")
         hsp = hit[0]
-        self.assertEqual(1, len(hsp))
+        self.assertEqual(len(hsp), 1)
         self.assertEqual(hsp.model, "cm")
         self.assertEqual(hsp.truncated, "no")
         self.assertEqual(hsp.gc, 0.33)
         self.assertEqual(hsp.evalue, 5.9e-20)
         self.assertEqual(hsp.bitscore, 98.7)
         self.assertEqual(hsp.bias, 0.1)
-        self.assertEqual(hsp.is_included, True)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(hsp.hit_start, 681747)
         self.assertEqual(hsp.hit_end, 681858)
         # first fragment
@@ -611,7 +611,7 @@ class CmsearchCases(unittest.TestCase):
         counter = itertools.count(start=1)
 
         qresult, count = next_result(qresults, counter)
-        self.assertEqual(1, len(qresult))
+        self.assertEqual(len(qresult), 1)
         self.assertEqual(qresult.id, "5S_rRNA")
         self.assertEqual(qresult.seq_len, 119)
         self.assertEqual(qresult.accession, "RF00001")
@@ -620,7 +620,7 @@ class CmsearchCases(unittest.TestCase):
         self.assertEqual(qresult.version, "1.1.4")
         self.assertEqual(qresult.target, "GCA_000146045.2.fasta")
         hit = qresult[0]
-        self.assertEqual(6, len(hit))
+        self.assertEqual(len(hit), 6)
         self.assertEqual(hit.id, "ENA|BK006945|BK006945.2")
         self.assertEqual(
             hit.description, "TPA_inf: Saccharomyces cerevisiae S288C chromosome XII"
@@ -628,14 +628,14 @@ class CmsearchCases(unittest.TestCase):
         self.assertEqual(hit.query_id, "5S_rRNA")
         # first hsp
         hsp = hit[0]
-        self.assertEqual(1, len(hsp))
+        self.assertEqual(len(hsp), 1)
         self.assertEqual(hsp.model, "cm")
         self.assertEqual(hsp.truncated, "no")
         self.assertEqual(hsp.gc, 0.52)
         self.assertEqual(hsp.evalue, 1.6e-18)
         self.assertEqual(hsp.bitscore, 88.8)
         self.assertEqual(hsp.bias, 0.0)
-        self.assertEqual(hsp.is_included, True)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(hsp.hit_start, 459676)
         self.assertEqual(hsp.hit_end, 459796)
         frag = hsp[0]
@@ -644,14 +644,14 @@ class CmsearchCases(unittest.TestCase):
         self.assertEqual(frag.hit_strand, 0)
         # last hsp
         hsp = hit[-1]
-        self.assertEqual(1, len(hsp))
+        self.assertEqual(len(hsp), 1)
         self.assertEqual(hsp.model, "cm")
         self.assertEqual(hsp.truncated, "no")
         self.assertEqual(hsp.gc, 0.53)
         self.assertEqual(hsp.evalue, 4.4e-17)
         self.assertEqual(hsp.bitscore, 83.2)
         self.assertEqual(hsp.bias, 0.0)
-        self.assertEqual(hsp.is_included, True)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(hsp.hit_start, 485697)
         self.assertEqual(hsp.hit_end, 485817)
         frag = hsp[0]
@@ -670,7 +670,7 @@ class CmsearchCases(unittest.TestCase):
         counter = itertools.count(start=1)
 
         qresult, count = next_result(qresults, counter)
-        self.assertEqual(5, len(qresult))
+        self.assertEqual(len(qresult), 5)
         self.assertEqual(qresult.id, "U2")
         self.assertEqual(qresult.seq_len, 193)
         self.assertEqual(qresult.accession, "RF00004")
@@ -680,21 +680,21 @@ class CmsearchCases(unittest.TestCase):
         self.assertEqual(qresult.target, "GCA_000146045.2.fasta")
         # first hit
         hit = qresult[0]
-        self.assertEqual(1, len(hit))
+        self.assertEqual(len(hit), 1)
         self.assertEqual(hit.id, "ENA|BK006936|BK006936.2")
         self.assertEqual(
             hit.description, "TPA_inf: Saccharomyces cerevisiae S288C chromosome II,"
         )
         self.assertEqual(hit.query_id, "U2")
         hsp = hit[0]
-        self.assertEqual(1, len(hsp))
+        self.assertEqual(len(hsp), 1)
         self.assertEqual(hsp.model, "cm")
         self.assertEqual(hsp.truncated, "no")
         self.assertEqual(hsp.gc, 0.33)
         self.assertEqual(hsp.evalue, 5.9e-20)
         self.assertEqual(hsp.bitscore, 98.7)
         self.assertEqual(hsp.bias, 0.1)
-        self.assertEqual(hsp.is_included, True)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(hsp.hit_start, 681747)
         self.assertEqual(hsp.hit_end, 681858)
         frag = hsp[0]
@@ -703,21 +703,21 @@ class CmsearchCases(unittest.TestCase):
         self.assertEqual(frag.hit_strand, -1)
         # second hit
         hit = qresult[1]
-        self.assertEqual(1, len(hit))
+        self.assertEqual(len(hit), 1)
         self.assertEqual(hit.id, "ENA|BK006948|BK006948.2")
         self.assertEqual(
             hit.description, "TPA_inf: Saccharomyces cerevisiae S288C chromosome XV,"
         )
         self.assertEqual(hit.query_id, "U2")
         hsp = hit[0]
-        self.assertEqual(1, len(hsp))
+        self.assertEqual(len(hsp), 1)
         self.assertEqual(hsp.model, "cm")
         self.assertEqual(hsp.truncated, "no")
         self.assertEqual(hsp.gc, 0.39)
         self.assertEqual(hsp.evalue, 0.49)
         self.assertEqual(hsp.bitscore, 19.8)
         self.assertEqual(hsp.bias, 0.0)
-        self.assertEqual(hsp.is_included, False)
+        self.assertFalse(hsp.is_included)
         self.assertEqual(hsp.hit_start, 737324)
         self.assertEqual(hsp.hit_end, 737498)
         frag = hsp[0]
@@ -726,21 +726,21 @@ class CmsearchCases(unittest.TestCase):
         self.assertEqual(frag.hit_strand, -1)
         # last hit
         hit = qresult[-1]
-        self.assertEqual(1, len(hit))
+        self.assertEqual(len(hit), 1)
         self.assertEqual(hit.id, "ENA|BK006939|BK006939.2")
         self.assertEqual(
             hit.description, "TPA_inf: Saccharomyces cerevisiae S288C chromosome V,"
         )
         self.assertEqual(hit.query_id, "U2")
         hsp = hit[0]
-        self.assertEqual(1, len(hsp))
+        self.assertEqual(len(hsp), 1)
         self.assertEqual(hsp.model, "cm")
         self.assertEqual(hsp.truncated, "no")
         self.assertEqual(hsp.gc, 0.41)
         self.assertEqual(hsp.evalue, 7.1)
         self.assertEqual(hsp.bitscore, 14.9)
         self.assertEqual(hsp.bias, 0.0)
-        self.assertEqual(hsp.is_included, False)
+        self.assertFalse(hsp.is_included)
         self.assertEqual(hsp.hit_start, 190882)
         self.assertEqual(hsp.hit_end, 191043)
         frag = hsp[0]
@@ -759,7 +759,7 @@ class CmsearchCases(unittest.TestCase):
         counter = itertools.count(start=1)
 
         qresult, count = next_result(qresults, counter)
-        self.assertEqual(1, len(qresult))
+        self.assertEqual(len(qresult), 1)
         self.assertEqual(qresult.id, "U2")
         self.assertEqual(qresult.seq_len, 193)
         self.assertEqual(qresult.accession, "RF00004")
@@ -768,7 +768,7 @@ class CmsearchCases(unittest.TestCase):
         self.assertEqual(qresult.version, "1.1.4")
         self.assertEqual(qresult.target, "GCA_000146045.2.fasta")
         hit = qresult[0]
-        self.assertEqual(1, len(hit))
+        self.assertEqual(len(hit), 1)
         self.assertEqual(hit.id, "ENA|BK006936|BK006936.2")
         self.assertEqual(
             hit.description,
@@ -776,14 +776,14 @@ class CmsearchCases(unittest.TestCase):
         )
         self.assertEqual(hit.query_id, "U2")
         hsp = hit[0]
-        self.assertEqual(1, len(hsp))
+        self.assertEqual(len(hsp), 1)
         self.assertEqual(hsp.model, "hmm")
         self.assertEqual(hsp.truncated, "-")
         self.assertEqual(hsp.gc, 0.35)
         self.assertEqual(hsp.evalue, 1.5e-19)
         self.assertEqual(hsp.bitscore, 73.1)
         self.assertEqual(hsp.bias, 2.7)
-        self.assertEqual(hsp.is_included, True)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(hsp.query_start, 7)
         self.assertEqual(hsp.query_end, 100)
         self.assertEqual(hsp.query_endtype, "..")
@@ -831,10 +831,10 @@ class CmsearchCases(unittest.TestCase):
 
         # First qresult (empty)
         qresult, count = next_result(qresults, counter)
-        self.assertEqual(0, len(qresult))
+        self.assertEqual(len(qresult), 0)
         # Second qresult (5S, multiple hits)
         qresult, count = next_result(qresults, counter)
-        self.assertEqual(3, len(qresult))
+        self.assertEqual(len(qresult), 3)
         self.assertEqual(qresult.id, "5S_rRNA")
         self.assertEqual(qresult.seq_len, 119)
         self.assertEqual(qresult.accession, "RF00001")
@@ -844,7 +844,7 @@ class CmsearchCases(unittest.TestCase):
         self.assertEqual(qresult.target, "GCA_000146045.2.fasta")
         # first hit
         hit = qresult[0]
-        self.assertEqual(6, len(hit))
+        self.assertEqual(len(hit), 6)
         self.assertEqual(hit.id, "ENA|BK006945|BK006945.2")
         self.assertEqual(
             hit.description,
@@ -852,14 +852,14 @@ class CmsearchCases(unittest.TestCase):
         )
         self.assertEqual(hit.query_id, "5S_rRNA")
         hsp = hit[0]
-        self.assertEqual(1, len(hsp))
+        self.assertEqual(len(hsp), 1)
         self.assertEqual(hsp.model, "cm")
         self.assertEqual(hsp.truncated, "no")
         self.assertEqual(hsp.gc, 0.52)
         self.assertEqual(hsp.evalue, 1.6e-18)
         self.assertEqual(hsp.bitscore, 88.8)
         self.assertEqual(hsp.bias, 0.0)
-        self.assertEqual(hsp.is_included, True)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(hsp.query_start, 1)
         self.assertEqual(hsp.query_end, 119)
         self.assertEqual(hsp.query_endtype, "[]")
@@ -900,7 +900,7 @@ class CmsearchCases(unittest.TestCase):
         # last hit
         hsp = hit[-1]
         hit = qresult[-1]
-        self.assertEqual(1, len(hit))
+        self.assertEqual(len(hit), 1)
         self.assertEqual(hit.id, "ENA|BK006947|BK006947.3")
         self.assertEqual(
             hit.description,
@@ -908,14 +908,14 @@ class CmsearchCases(unittest.TestCase):
         )
         self.assertEqual(hit.query_id, "5S_rRNA")
         hsp = hit[0]
-        self.assertEqual(1, len(hsp))
+        self.assertEqual(len(hsp), 1)
         self.assertEqual(hsp.model, "cm")
         self.assertEqual(hsp.truncated, "no")
         self.assertEqual(hsp.gc, 0.41)
         self.assertEqual(hsp.evalue, 6.6)
         self.assertEqual(hsp.bitscore, 16.7)
         self.assertEqual(hsp.bias, 0.3)
-        self.assertEqual(hsp.is_included, False)
+        self.assertFalse(hsp.is_included)
         self.assertEqual(hsp.query_start, 1)
         self.assertEqual(hsp.query_end, 119)
         self.assertEqual(hsp.query_endtype, "[]")
@@ -955,7 +955,7 @@ class CmsearchCases(unittest.TestCase):
         )
         # third qresult (U2, multiple hits)
         qresult, count = next_result(qresults, counter)
-        self.assertEqual(5, len(qresult))
+        self.assertEqual(len(qresult), 5)
 
         # test if we've properly finished iteration
         self.assertRaises(StopIteration, next, qresults)
