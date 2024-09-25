@@ -151,7 +151,7 @@ def _clean(text: str) -> str:
     return text.replace("\n", " ").replace("\r", " ")
 
 
-class SequenceWriter:
+class SequenceWriter(ABC, Generic[AnyStr]):
     """Base class for sequence writers. This class should be subclassed.
 
     It is intended for sequential file formats with an (optional)
