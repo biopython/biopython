@@ -100,7 +100,6 @@ _COLUMN_QRESULT = {
     "query_acc": ("accession", str),
     "seq_len": ("seq_len", int),
     "clan": ("clan", str),
-    "mdl": ("model", str),
 }
 _COLUMN_HIT = {
     "target_name": ("id", str),
@@ -114,6 +113,7 @@ _COLUMN_HSP = {
     "evalue": ("evalue", float),
     "bias": ("bias", float),
     "gc": ("gc", float),
+    "mdl": ("model", str),
     "trunc": ("truncated", str),
     "pass": ("pipeline_pass", int),
     "inc": ("is_included", str),
