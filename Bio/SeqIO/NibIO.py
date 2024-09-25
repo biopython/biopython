@@ -135,7 +135,6 @@ class NibWriter(SequenceWriter):
 
     def write_header(self):
         """Write the file header."""
-        super().write_header()
         handle = self.handle
         byteorder = sys.byteorder
         if byteorder == "little":  # little-endian
@@ -167,6 +166,7 @@ class NibWriter(SequenceWriter):
 
         records - A list or iterator returning SeqRecord objects
         """
+        self.write_header()
         count = 0
         for record in records:
             if count == 1:

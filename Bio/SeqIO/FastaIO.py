@@ -527,11 +527,9 @@ class FastaWriter(SequenceWriter):
 
             handle = open(filename, "w")
             writer = FastaWriter(handle)
-            writer.write_header() # does nothing for Fasta files
             ...
             Multiple writer.write_record() and/or writer.write_records() calls
             ...
-            writer.write_footer() # does nothing for Fasta files
             handle.close()
 
         """
@@ -607,11 +605,9 @@ class FastaTwoLineWriter(FastaWriter):
 
             handle = open(filename, "w")
             writer = FastaWriter(handle)
-            writer.write_header() # does nothing for Fasta files
             ...
             Multiple writer.write_record() and/or writer.write_records() calls
             ...
-            writer.write_footer() # does nothing for Fasta files
             handle.close()
 
         """

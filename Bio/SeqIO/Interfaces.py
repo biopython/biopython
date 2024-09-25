@@ -160,13 +160,6 @@ class SequenceWriter:
 
     The user may call the write_file() method to write a complete
     file containing the sequences.
-
-    Alternatively, users may call the write_header(), followed
-    by multiple calls to write_record() and/or write_records(),
-    followed finally by write_footer().
-
-    Note that write_header() cannot require any assumptions about
-    the number of records.
     """
 
     @property
@@ -213,26 +206,11 @@ class SequenceWriter:
         """Use this to avoid getting newlines in the output."""
         return text.replace("\n", " ").replace("\r", " ")
 
-    def write_header(self):
-        """Write the file header to the output file."""
-        ##################################################
-        # You MUST implement this method in the subclass #
-        # if the file format defines a file header.      #
-        ##################################################
-
-    def write_footer(self):
-        """Write the file footer to the output file."""
-        ##################################################
-        # You MUST implement this method in the subclass #
-        # if the file format defines a file footer.      #
-        ##################################################
-
     def write_record(self, record):
         """Write a single record to the output file.
 
         record - a SeqRecord object
         """
-        raise NotImplementedError("This method should be implemented")
         ##################################################
         # You MUST implement this method in the subclass #
         # for sequential file formats.                   #
@@ -243,6 +221,10 @@ class SequenceWriter:
 
         records - A list or iterator returning SeqRecord objects
         """
+        ##################################################
+        # You MUST implement this method in the subclass #
+        # for interlaced file formats.                   #
+        ##################################################
         count = 0
         for record in records:
             self.write_record(record)
@@ -254,14 +236,8 @@ class SequenceWriter:
 
         records - A list or iterator returning SeqRecord objects
         """
-        ##################################################
-        # You MUST implement this method in the subclass #
-        # for interlaced file formats.                   #
-        ##################################################
         try:
-            self.write_header()
             count = self.write_records(records)
-            self.write_footer()
         finally:
             if self.handle is not self.target:
                 self.handle.close()
