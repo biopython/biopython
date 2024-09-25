@@ -154,12 +154,13 @@ def _clean(text: str) -> str:
 class SequenceWriter(ABC, Generic[AnyStr]):
     """Base class for sequence writers. This class should be subclassed.
 
-    It is intended for sequential file formats with an (optional)
-    header, repeated records, and an (optional) footer, as well
-    as for interlaced file formats such as Clustal.
-
     The user may call the write_file() method to write a complete
     file containing the sequences.
+
+    Most subclasses will only need to implement the write_record method.
+    Subclasses must implement the write_records method to include a file
+    header or footer, for file formats that only allow one record, or for
+    file formats that cannot be written sequentially.
     """
 
     @property
@@ -211,20 +212,12 @@ class SequenceWriter(ABC, Generic[AnyStr]):
 
         record - a SeqRecord object
         """
-        ##################################################
-        # You MUST implement this method in the subclass #
-        # for sequential file formats.                   #
-        ##################################################
 
     def write_records(self, records):
         """Write records to the output file, and return the number of records.
 
         records - A list or iterator returning SeqRecord objects
         """
-        ##################################################
-        # You MUST implement this method in the subclass #
-        # for interlaced file formats.                   #
-        ##################################################
         count = 0
         for record in records:
             self.write_record(record)

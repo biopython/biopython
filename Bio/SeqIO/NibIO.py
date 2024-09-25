@@ -124,15 +124,6 @@ class NibWriter(SequenceWriter):
 
     modes = "b"
 
-    def __init__(self, target):
-        """Initialize a Nib writer object.
-
-        Arguments:
-         - target - output stream opened in binary mode, or a path to a file
-
-        """
-        super().__init__(target)
-
     def write_header(self):
         """Write the file header."""
         handle = self.handle
