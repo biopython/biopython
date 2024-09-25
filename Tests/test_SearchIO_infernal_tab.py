@@ -43,7 +43,6 @@ class CmscanCases(unittest.TestCase):
         self.assertEqual(1, len(qresult))
         self.assertEqual("ENA|BK006935|BK006935.2", qresult.id)
         self.assertEqual("-", qresult.accession)
-        self.assertEqual("cm", qresult.model)
         hit = qresult[0]
         self.assertEqual(2, len(hit))
         self.assertEqual("U2", hit.id)
@@ -57,6 +56,7 @@ class CmscanCases(unittest.TestCase):
         self.assertEqual(0.0, hsp.bias)
         self.assertEqual(0.44, hsp.gc)
         self.assertEqual("no", hsp.truncated)
+        self.assertEqual("cm", hsp.model)
         self.assertEqual(1, hsp.pipeline_pass)
         self.assertEqual(False, hsp.is_included)
         frag = hsp[0]
@@ -87,7 +87,6 @@ class CmscanCases(unittest.TestCase):
         self.assertEqual(1, len(qresult))
         self.assertEqual("ENA|BK006936|BK006936.2", qresult.id)
         self.assertEqual("-", qresult.accession)
-        self.assertEqual("cm", qresult.model)
         hit = qresult[0]
         self.assertEqual(1, len(hit))
         self.assertEqual("U2", hit.id)
@@ -100,6 +99,7 @@ class CmscanCases(unittest.TestCase):
         self.assertEqual(0.1, hsp.bias)
         self.assertEqual(0.33, hsp.gc)
         self.assertEqual("no", hsp.truncated)
+        self.assertEqual("cm", hsp.model)
         self.assertEqual(1, hsp.pipeline_pass)
         self.assertEqual(True, hsp.is_included)
         frag = hsp[0]
@@ -114,7 +114,6 @@ class CmscanCases(unittest.TestCase):
         self.assertEqual(2, len(qresult))
         self.assertEqual("ENA|BK006937|BK006937.2", qresult.id)
         self.assertEqual("-", qresult.accession)
-        self.assertEqual("cm", qresult.model)
         # first hit
         hit = qresult[0]
         self.assertEqual(1, len(hit))
@@ -128,6 +127,7 @@ class CmscanCases(unittest.TestCase):
         self.assertEqual(0.3, hsp.bias)
         self.assertEqual(0.41, hsp.gc)
         self.assertEqual("no", hsp.truncated)
+        self.assertEqual("cm", hsp.model)
         self.assertEqual(1, hsp.pipeline_pass)
         self.assertEqual(False, hsp.is_included)
         frag = hsp[0]
@@ -169,7 +169,6 @@ class CmscanCases(unittest.TestCase):
         self.assertEqual(1, len(qresult))
         self.assertEqual("ENA|BK006936|BK006936.2", qresult.id)
         self.assertEqual("-", qresult.accession)
-        self.assertEqual("cm", qresult.model)
         self.assertEqual("-", qresult.clan)
         self.assertEqual(813184, qresult.seq_len)
         hit = qresult[0]
@@ -186,6 +185,7 @@ class CmscanCases(unittest.TestCase):
         self.assertEqual(0.1, hsp.bias)
         self.assertEqual(0.33, hsp.gc)
         self.assertEqual("no", hsp.truncated)
+        self.assertEqual("cm", hsp.model)
         self.assertEqual(1, hsp.pipeline_pass)
         self.assertEqual(True, hsp.is_included)
         self.assertEqual("*", hsp.olp)
@@ -213,7 +213,6 @@ class CmscanCases(unittest.TestCase):
         self.assertEqual(1, len(qresult))
         self.assertEqual("ENA|BK006936|BK006936.2", qresult.id)
         self.assertEqual("-", qresult.accession)
-        self.assertEqual("cm", qresult.model)
         self.assertEqual(813184, qresult.seq_len)
         hit = qresult[0]
         self.assertEqual(1, len(hit))
@@ -229,6 +228,7 @@ class CmscanCases(unittest.TestCase):
         self.assertEqual(0.1, hsp.bias)
         self.assertEqual(0.33, hsp.gc)
         self.assertEqual("no", hsp.truncated)
+        self.assertEqual("cm", hsp.model)
         self.assertEqual(1, hsp.pipeline_pass)
         self.assertEqual(True, hsp.is_included)
         frag = hsp[0]
@@ -259,7 +259,6 @@ class CmsearchCases(unittest.TestCase):
         self.assertEqual(1, len(qresult))
         self.assertEqual("U2", qresult.id)
         self.assertEqual("RF00004", qresult.accession)
-        self.assertEqual("cm", qresult.model)
         hit = qresult[0]
         self.assertEqual(1, len(hit))
         self.assertEqual("ENA|BK006936|BK006936.2", hit.id)
@@ -275,9 +274,9 @@ class CmsearchCases(unittest.TestCase):
         self.assertEqual(98.7, hsp.bitscore)
         self.assertEqual(0.1, hsp.bias)
         self.assertEqual(True, hsp.is_included)
-
         self.assertEqual(0.33, hsp.gc)
         self.assertEqual("no", hsp.truncated)
+        self.assertEqual("cm", hsp.model)
         self.assertEqual(1, hsp.pipeline_pass)
         frag = hsp[0]
         self.assertEqual(1, frag.query_start)
@@ -300,7 +299,6 @@ class CmsearchCases(unittest.TestCase):
         self.assertEqual(1, len(qresult))
         self.assertEqual("5S_rRNA", qresult.id)
         self.assertEqual("RF00001", qresult.accession)
-        self.assertEqual("cm", qresult.model)
         # first hit
         hit = qresult[0]
         self.assertEqual(6, len(hit))
@@ -317,6 +315,7 @@ class CmsearchCases(unittest.TestCase):
         self.assertEqual(0.0, hsp.bias)
         self.assertEqual(0.52, hsp.gc)
         self.assertEqual("no", hsp.truncated)
+        self.assertEqual("cm", hsp.model)
         self.assertEqual(1, hsp.pipeline_pass)
         self.assertEqual(True, hsp.is_included)
         frag = hsp[0]
