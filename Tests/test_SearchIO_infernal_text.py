@@ -224,6 +224,94 @@ class CmsearchCases(unittest.TestCase):
         self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, count)
 
+    def test_cmsearch_1q_1m_1h_notextw(self):
+        """Test parsing infernal-text, cmsearch, one queries, one hit, one hsp, multiple fragments, notextw (U2_Yeast)"""
+        tab_file = get_file("cmsearch_114_U2_Yeast.txt")
+        qresults = parse(tab_file, FMT)
+        counter = itertools.count(start=1)
+
+        qresult, count = next_result(qresults, counter)
+        self.assertEqual(len(qresult), 1)
+        self.assertEqual(qresult.id, "U2")
+        self.assertEqual(qresult.seq_len, 193)
+        self.assertEqual(qresult.accession, "RF00004")
+        self.assertEqual(qresult.description, "U2 spliceosomal RNA")
+        self.assertEqual(qresult.program, "cmsearch")
+        self.assertEqual(qresult.version, "1.1.4")
+        self.assertEqual(qresult.target, "GCA_000146045.2.fasta")
+        hit = qresult[0]
+        self.assertEqual(len(hit), 1)
+        self.assertEqual(hit.id, "ENA|BK006936|BK006936.2")
+        self.assertEqual(
+            hit.description,
+            "TPA_inf: Saccharomyces cerevisiae S288C chromosome II, complete sequence.",
+        )
+        self.assertEqual(hit.query_id, "U2")
+        hsp = hit[0]
+        self.assertEqual(len(hsp), 2)
+        self.assertEqual(hsp.model, "cm")
+        self.assertEqual(hsp.truncated, "no")
+        self.assertEqual(hsp.gc, 0.33)
+        self.assertEqual(hsp.evalue, 5.9e-20)
+        self.assertEqual(hsp.bitscore, 98.7)
+        self.assertEqual(hsp.bias, 0.1)
+        self.assertTrue(hsp.is_included)
+        self.assertEqual(hsp.query_start, 1)
+        self.assertEqual(hsp.query_end, 193)
+        self.assertEqual(hsp.query_endtype, "[]")
+        self.assertEqual(hsp.hit_start, 681747)
+        self.assertEqual(hsp.hit_end, 681858)
+        self.assertEqual(hsp.hit_endtype, "..")
+        self.assertEqual(hsp.avg_acc, 0.91)
+        # first fragment
+        frag = hsp[0]
+        self.assertEqual(frag.query_start, 1)
+        self.assertEqual(frag.query_end, 112)
+        self.assertEqual(frag.hit_start, 681763)
+        self.assertEqual(frag.hit_end, 681858)
+        self.assertEqual(frag.hit_strand, -1)
+        self.assertEqual(
+            frag.query.seq,
+            "AUacCUUCucgGCcUUUUgGCuaaGAUCAAGUGUAGUAUCUGUUCUUauCAGUuUAAuAuCUGauAuggcccccAuugggggccaau-uauaUUAaauuaAUUUUUggaacua",
+        )
+        self.assertEqual(
+            frag.hit.seq,
+            "AUC---UCUUUGCCUUUUGGCUUAGAUCAAGUGUAGUAUCUGUUCUUUUCAGUGUAACAACUGAAAUGA-CCUCAAUGAGGCUCAUUaCCUUUUAAUUUG-------------",
+        )
+        self.assertEqual(
+            frag.aln_annotation["PP"],
+            "***...************************************************************999.****************86555555555443.............",
+        )
+        self.assertEqual(
+            frag.aln_annotation["NC"],
+            "                                                                     v           v                               ",
+        )
+        self.assertEqual(
+            frag.aln_annotation["CS"],
+            "::::::<<<-<<<<____>>>>->>>,,,,,,,,,,,,,,,,,,,,<<<<<<________>>>>>>,<<<<<<<___>>>>>>>,,,.,,,,,,,,,,,,,,,,,,,,,,,,,",
+        )
+        self.assertEqual(
+            frag.aln_annotation["similarity"],
+            "AU+   UCU+:GCCUUUUGGC:+AGAUCAAGUGUAGUAUCUGUUCUU:UCAGU+UAA+A+CUGA:AUG: CC:CA+UG:GG+:CA+U   U+UUAA+UU              ",
+        )
+        # second fragment
+        frag = hsp[1]
+        self.assertEqual(frag.query_start, 186)
+        self.assertEqual(frag.query_end, 193)
+        self.assertEqual(frag.hit_start, 681747)
+        self.assertEqual(frag.hit_end, 681754)
+        self.assertEqual(frag.hit_strand, -1)
+        self.assertEqual(frag.query.seq, "Acccuuu")
+        self.assertEqual(frag.hit.seq, "ACAUUUU")
+        self.assertEqual(frag.aln_annotation["PP"], "*******")
+        self.assertEqual(frag.aln_annotation["NC"], "       ")
+        self.assertEqual(frag.aln_annotation["CS"], ":::::::")
+        self.assertEqual(frag.aln_annotation["similarity"], "AC +UUU")
+
+        # test if we've properly finished iteration
+        self.assertRaises(StopIteration, next, qresults)
+        self.assertEqual(1, count)
+
     def test_cmsearch_1q_mm_1h(self):
         """Test parsing infernal-text, cmsearch, one queries, multiple hits, one hsp, multiple fragments (U2_Yeast_full)"""
         tab_file = get_file("cmsearch_114_U2_Yeast_full.txt")
