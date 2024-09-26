@@ -296,6 +296,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Ryan Stecher <https://github.com/rystecher>
 - Sacha Laurent <https://github.com/Cashalow>
 - Saket Choudhary <https://github.com/saketkc>
+- Samuel Prince <https://github.com/drs>
 - Sean Aubin <https://github.com/seanny123>
 - Sean Davis <https://github.com/seandavi>
 - Sean Johnson <https://github.com/seanrjohnson>
