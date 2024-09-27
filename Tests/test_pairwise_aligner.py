@@ -439,7 +439,8 @@ query             3 GA--T 0
         self.assertEqual(
             aligner.algorithm, "Fast Optimal Global Sequence Alignment Algorithm"
         )
-        score = aligner.score(seq1, seq2)
+        with self.assertWarns(BiopythonWarning):
+            score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 17.0)
 
 
@@ -5549,13 +5550,13 @@ class TestAlgorithmRestrictions(unittest.TestCase):
     def test_fogsaa_restrictions(self):
         aligner = Align.PairwiseAligner(mode="fogsaa")
         aligner.match_score = -1
-        with self.assertRaises(ValueError):
+        with self.assertWarns(BiopythonWarning):
             aligner.score("AAAAAAAAAAAA", "AAAAATAAAAAA")
         aligner.mismatch_score = 1
-        with self.assertRaises(ValueError):
+        with self.assertWarns(BiopythonWarning):
             aligner.score("AAAAAAAAAAAA", "AAAAATAAAAAA")
         aligner.gap_score = 1
-        with self.assertRaises(ValueError):
+        with self.assertWarns(BiopythonWarning):
             aligner.score("AAAAAAAAAAAA", "AAAAATAAAAAA")
 
 

@@ -4483,7 +4483,6 @@ int fogsaa_queue_insert(struct fogsaa_queue *queue, int pA, int pB,
     struct fogsaa_queue_node temp;
     int i;
 
-    printf("\tINSERT QUEUE (%d, %d, type %d and total %d) WITH LOWER %f UPPER %f\n", pA, pB, next_type, type_total, next_lower, next_upper); \
     if (queue->size + 1 >= queue->capacity) {
         struct fogsaa_queue_node *old_array = queue->array;
         queue->array = PyMem_Realloc(queue->array,
@@ -6002,7 +6001,6 @@ exit: \
     int kA, kB; \
     int curpA = 0, curpB = 0; /* optimal and current pointers */ \
     int pathend = 1, child_types[3]; \
-    /* int expanded = 0; */ /* useful for debugging */ \
     double lower_bound, child_lbounds[3], child_ubounds[3]; \
     /* pathend denotes if the current path is active, expanded is the number of \
      * expanded nodes, lower_bound contains the global lower_bound, a and b \
@@ -6049,10 +6047,6 @@ exit: \
             PyErr_SetString(PyExc_RuntimeError, "strand was neither '+' nor '-'"); \
             return NULL; \
     } \
-    printf("left open: (A) %f, (B) %f\n", left_gap_open_A, left_gap_open_B); \
-    printf("left extend: (A) %f, (B) %f\n", left_gap_extend_A, left_gap_extend_B); \
-    printf("right open: (A) %f, (B) %f\n", right_gap_open_A, right_gap_open_B); \
-    printf("right extend: (A) %f, (B) %f\n", right_gap_extend_A, right_gap_extend_B); \
 
 #define FOGSAA_DO(align_score) \
     /* allocate and initialize matrix */ \
@@ -6113,17 +6107,9 @@ exit: \
                     } \
                     \
                     /* sort and select the best new child as the new type */ \
-                    printf("\t\tC: type %d, lower %f, upper %f\n", child_types[0], child_lbounds[0], child_ubounds[0]); \
-                    printf("\t\tC: type %d, lower %f, upper %f\n", child_types[1], child_lbounds[1], child_ubounds[1]); \
-                    printf("\t\tC: type %d, lower %f, upper %f\n", child_types[2], child_lbounds[2], child_ubounds[2]); \
                     FOGSAA_SORT() \
-                    \
                     new_type = child_types[0]; \
-                    printf("\tchild 0 (new curr): type %d, lower %f, upper %f\n", child_types[0], child_lbounds[0], child_ubounds[0]); \
-                    printf("\tchild 1 (new curr): type %d, lower %f, upper %f\n", child_types[1], child_lbounds[1], child_ubounds[1]); \
-                    printf("\tchild 2 (new curr): type %d, lower %f, upper %f\n", child_types[2], child_lbounds[2], child_ubounds[2]); \
                     if (new_type == FOGSAA_CELL_MATCH_MISMATCH) { \
-                        printf("DIAG\n");\
                         npA = curpA + 1; \
                         npB = curpB + 1; \
                         new_score = curr->present_score + p; \
@@ -6294,7 +6280,6 @@ exit: \
                 break; \
             } else { \
                 FOGSAA_CALCULATE_SCORE(new_score, new_type, new_lower, new_upper, npA, npB) \
-                /* printf("\tUPPER IS NOW %f (%d, %d, type %d)\n", new_upper, npA, npB, new_type); \ */ \
                 MATRIX(npA, npB).present_score = new_score; \
                 MATRIX(npA, npB).lower = new_lower; \
                 MATRIX(npA, npB).upper = new_upper; \
@@ -6316,7 +6301,6 @@ exit: \
                 pathend = 0; \
                 break; \
             } \
-            /* expanded += 1; */ \
         } \
         \
         if (MATRIX(curpA, curpB).present_score > lower_bound && pathend == 1) { \
@@ -6333,128 +6317,28 @@ exit: \
             new_lower = root.next_lower; \
             new_upper = root.next_upper; \
             new_type = root.next_type; \
-            printf("\tPOPPED FROM QUEUE (%d, %d, type %d) AND NEW UPPER IS NOW %f\n", curpA, curpB, new_type, new_upper); \
         } else { \
-            printf("BOUNDS\n\t"); \
-            for (j = 0; j <= nB; j++) { \
-                printf("%c\t", sB[j]); \
-            } \
-            printf("\n"); \
-            for (i = 0; i <= nA; i++) { \
-                printf("%c\t", sA[i]); \
-                for (j = 0; j <= nB; j++) { \
-                    if (MATRIX(i, j).filled || (i == 0 && j == 0)) \
-                        printf("%.2g:%.2g\t", MATRIX(i, j).lower, MATRIX(i, j).upper); \
-                    else \
-                        printf("X\t"); \
-                } \
-                printf("\n"); \
-            } \
-            printf("SCORES\n\t"); \
-            for (j = 0; j <= nB; j++) { \
-                printf("%c\t", sB[j]); \
-            } \
-            printf("\n"); \
-            for (i = 0; i <= nA; i++) { \
-                printf("%c\t", sA[i]); \
-                for (j = 0; j <= nB; j++) { \
-                    if (MATRIX(i, j).filled || (i == 0 && j == 0)) \
-                        printf("%.2g\t", MATRIX(i, j).present_score); \
-                    else \
-                        printf("X\t"); \
-                } \
-                printf("\n"); \
-            } \
-            printf("round lower: %f; round upper: %f\n", lower_bound, new_upper); \
             break; \
         } \
-        \
-        printf("BOUNDS\n\t"); \
-        for (j = 0; j <= nB; j++) { \
-            printf("%c\t", sB[j]); \
-        } \
-        printf("\n"); \
-        for (i = 0; i <= nA; i++) { \
-            printf("%c\t", sA[i]); \
-            for (j = 0; j <= nB; j++) { \
-                if (MATRIX(i, j).filled || (i == 0 && j == 0)) \
-                    printf("%.2g:%.2g\t", MATRIX(i, j).lower, MATRIX(i, j).upper); \
-                else \
-                    printf("X\t"); \
-            } \
-            printf("\n"); \
-        } \
-        printf("SCORES\n\t"); \
-        for (j = 0; j <= nB; j++) { \
-            printf("%c\t", sB[j]); \
-        } \
-        printf("\n"); \
-        for (i = 0; i <= nA; i++) { \
-            printf("%c\t", sA[i]); \
-            for (j = 0; j <= nB; j++) { \
-                if (MATRIX(i, j).filled || (i == 0 && j == 0)) \
-                    printf("%.2g\t", MATRIX(i, j).present_score); \
-                else \
-                    printf("X\t"); \
-            } \
-            printf("\n"); \
-        } \
-        printf("round lower: %f; round upper: %f\n", lower_bound, new_upper); \
     } while (lower_bound < new_upper); \
     \
     /* cleanup and return */ \
-    /* printf("nodes expanded: %d\n", expanded); */ \
     PyMem_Free(queue.array);
 
 
 #define FOGSAA_EXIT_SCORE \
-    /* if (lower_bound != new_upper) { */ \
     if (lower_bound < new_upper) { \
-        printf("lower: %f, upper: %f\n", lower_bound, new_upper); \
-        PyErr_SetString(PyExc_RuntimeError, "Algorithm ended incomplete. Report this as a bug."); \
+        printf("score exit lower bound: %f, upper bound: %f\n", lower_bound, new_upper); \
+        PyErr_Format(PyExc_RuntimeError, "Algorithm ended incomplete. Report this as a bug."); \
         return NULL; \
     } \
     t = MATRIX(nA, nB).present_score; \
     PyMem_Free(matrix); \
     return PyFloat_FromDouble((double)t);
 
-/*
-        printf("BOUNDS\n\t"); \
-        for (j = 0; j <= nB; j++) { \
-            printf("%c\t", sB[j]); \
-        } \
-        printf("\n"); \
-        for (i = 0; i <= nA; i++) { \
-            printf("%c\t", sA[i]); \
-            for (j = 0; j <= nB; j++) { \
-                if (MATRIX(i, j).filled || (i == 0 && j == 0)) \
-                    printf("%.2g:%.2g\t", MATRIX(i, j).lower, MATRIX(i, j).upper); \
-                else \
-                    printf("X\t"); \
-            } \
-            printf("\n"); \
-        } \
-        printf("SCORES\n\t"); \
-        for (j = 0; j <= nB; j++) { \
-            printf("%c\t", sB[j]); \
-        } \
-        printf("\n"); \
-        for (i = 0; i <= nA; i++) { \
-            printf("%c\t", sA[i]); \
-            for (j = 0; j <= nB; j++) { \
-                if (MATRIX(i, j).filled || (i == 0 && j == 0)) \
-                    printf("%.2g\t", MATRIX(i, j).present_score); \
-                else \
-                    printf("X\t"); \
-            } \
-            printf("\n"); \
-        } \
-        printf("round lower: %f; round upper: %f\n", lower_bound, new_upper); \
-*/
-
 #define FOGSAA_EXIT_ALIGN \
     if (lower_bound < new_upper) { \
-        printf("lower: %f, upper: %f\n", lower_bound, new_upper); \
+        printf("align exit lower bound: %f, upper bound: %f\n", lower_bound, new_upper); \
         PyErr_SetString(PyExc_RuntimeError, "Algorithm ended incomplete. Report this as a bug."); \
         return NULL; \
     } \
@@ -7172,13 +7056,16 @@ Aligner_watermansmithbeyer_local_align_matrix(Aligner* self,
 
 #define FOGSAA_CHECK_SCORES \
     if (mismatch >= match) { \
-        PyErr_SetString(PyExc_ValueError, "algorithm requires match score to be greater than mismatch score"); \
-        return NULL; \
+        PyObject *Bio_module = PyImport_ImportModule("Bio"); \
+        PyObject *BiopythonWarning = PyObject_GetAttrString(Bio_module, "BiopythonWarning"); \
+        Py_DECREF(Bio_module); \
+        if (PyErr_WarnEx(BiopythonWarning, \
+                    "Match score is less than mismatch score. Algorithm may return incorrect results.", 1)) { \
+            Py_DECREF(BiopythonWarning); \
+            return NULL; \
+        } \
+        Py_DECREF(BiopythonWarning); \
     } \
-    /* if (mismatch > 0) { \ */ \
-    /*     PyErr_SetString(PyExc_ValueError, "algorithm requires non-positive mismatch and gap scores"); \ */ \
-    /*     return NULL; \ */ \
-    /* } \ */  \
     if (self->query_left_open_gap_score > mismatch || \
             self->query_internal_open_gap_score > mismatch || \
             self->query_right_open_gap_score > mismatch || \
@@ -7191,8 +7078,15 @@ Aligner_watermansmithbeyer_local_align_matrix(Aligner* self,
             self->target_left_extend_gap_score > mismatch || \
             self->target_internal_extend_gap_score > mismatch || \
             self->target_right_extend_gap_score > mismatch) { \
-        PyErr_SetString(PyExc_ValueError, "algorithm requires gap scores to be less than mismatch scores"); \
-        return NULL; \
+        PyObject *Bio_module = PyImport_ImportModule("Bio"); \
+        PyObject *BiopythonWarning = PyObject_GetAttrString(Bio_module, "BiopythonWarning"); \
+        Py_DECREF(Bio_module); \
+        if (PyErr_WarnEx(BiopythonWarning, \
+                    "One or more gap scores are less than mismatch score. Algorithm may return incorrect results.", 1)) { \
+            Py_DECREF(BiopythonWarning); \
+            return NULL; \
+        } \
+        Py_DECREF(BiopythonWarning); \
     }
 
 static PyObject*
@@ -7209,57 +7103,6 @@ Aligner_fogsaa_score_compare(Aligner* self,
     FOGSAA_CHECK_SCORES
 
     FOGSAA_DO(COMPARE_SCORE)
-    /* printf("BOUNDS\n\t"); */
-    /* for (j = 0; j <= nB; j++) { */
-    /*     printf("%c\t", sB[j]); */
-    /* } */
-    /* printf("\n"); */
-    /* for (i = 0; i <= nA; i++) { */
-    /*     printf("%c\t", sA[i]); */
-    /*     for (j = 0; j <= nB; j++) { */
-    /*         if (MATRIX(i, j).filled || (i == 0 && j == 0)) */
-    /*             printf("%.2g:%.2g\t", MATRIX(i, j).lower, MATRIX(i, j).upper); */
-    /*         else */
-    /*             printf("X\t"); */
-    /*     } */
-    /*     printf("\n"); */
-    /* } */
-
-    /* printf("SCORES\n\t"); */
-    /* for (j = 0; j <= nB; j++) { */
-    /*     printf("%c\t", sB[j]); */
-    /* } */
-    /* printf("\n"); */
-    /* for (i = 0; i <= nA; i++) { */
-    /*     printf("%c\t", sA[i]); */
-    /*     for (j = 0; j <= nB; j++) { */
-    /*         if (MATRIX(i, j).filled) */
-    /*             printf("%.2g\t", MATRIX(i, j).present_score); */
-    /*         else */
-    /*             printf("X\t"); */
-    /*     } */
-    /*     printf("\n"); */
-    /* } */
-
-    /* printf("TYPES\n\t"); */
-    /* for (j = 0; j <= nB; j++) { */
-    /*     printf("%c\t", sB[j]); */
-    /* } */
-    /* printf("\n"); */
-    /* for (i = 0; i <= nA; i++) { */
-    /*     printf("%c\t", sA[i]); */
-    /*     for (j = 0; j <= nB; j++) { */
-    /*         if (MATRIX(i, j).filled) */
-    /*             printf("%d\t", MATRIX(i, j).type); */
-    /*         else */
-    /*             printf("X\t"); */
-    /*     } */
-    /*     printf("\n"); */
-    /* } */
-    if (MATRIX(nA, nB).type == 0) {
-        PyErr_SetString(PyExc_RuntimeError, "Could not complete algorithm. Report this as a bug.");
-        return NULL;
-    }
     FOGSAA_EXIT_SCORE
 }
 
@@ -7281,14 +7124,9 @@ Aligner_fogsaa_score_matrix(Aligner* self,
         else if (scores[i] < mismatch)
             mismatch = scores[i];
     }
-
-    /* FOGSAA_CHECK_SCORES */
+    FOGSAA_CHECK_SCORES
 
     FOGSAA_DO(MATRIX_SCORE)
-    if (MATRIX(nA, nB).type == 0) {
-        PyErr_SetString(PyExc_RuntimeError, "Could not complete algorithm. Report this as a bug.");
-        return NULL;
-    }
     FOGSAA_EXIT_SCORE
 }
 
@@ -7308,10 +7146,6 @@ Aligner_fogsaa_align_compare(Aligner* self,
     FOGSAA_CHECK_SCORES
 
     FOGSAA_DO(COMPARE_SCORE)
-    if (MATRIX(nA, nB).type == 0) {
-        PyErr_SetString(PyExc_RuntimeError, "Could not complete algorithm. Report this as a bug.");
-        return NULL;
-    }
     FOGSAA_EXIT_ALIGN
 }
 
@@ -7336,14 +7170,9 @@ Aligner_fogsaa_align_matrix(Aligner* self,
         else if (scores[i] < mismatch)
             mismatch = scores[i];
     }
-
-    /* FOGSAA_CHECK_SCORES */
+    FOGSAA_CHECK_SCORES
 
     FOGSAA_DO(MATRIX_SCORE)
-    if (MATRIX(nA, nB).type == 0) {
-        PyErr_SetString(PyExc_RuntimeError, "Could not complete algorithm. Report this as a bug.");
-        return NULL;
-    }
     FOGSAA_EXIT_ALIGN
 }
 
