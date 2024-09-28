@@ -6275,7 +6275,8 @@ exit: \
             } \
             \
             /* write the new node to the matrix, but skip if there's already a better path there */ \
-            if (MATRIX(npA, npB).filled == 1 && MATRIX(npA, npB).type <= 4 && MATRIX(npA, npB).present_score >= new_score) { \
+            if (MATRIX(npA, npB).filled == 1 && MATRIX(npA, npB).type <= 4 && \
+                    MATRIX(npA, npB).present_score >= new_score) { \
                 pathend = 0; \
                 break; \
             } else { \
@@ -6297,13 +6298,16 @@ exit: \
             curpB = npB; \
             type_total = 1; \
             \
-            if (MATRIX(npA, npB).upper < lower_bound) { \
+            if (MATRIX(npA, npB).upper < lower_bound && \
+                    lower_bound - MATRIX(npA, npB).upper > self->epsilon) { \
                 pathend = 0; \
                 break; \
             } \
         } \
         \
-        if (MATRIX(curpA, curpB).present_score > lower_bound && pathend == 1) { \
+        if (MATRIX(curpA, curpB).present_score > lower_bound && \
+                MATRIX(curpA, curpB).present_score - lower_bound > self->epsilon && \
+                pathend == 1) { \
             /* if this is the best score and we've fully expanded the branch, set it as the new lower bound */ \
             lower_bound = MATRIX(curpA, curpB).present_score; \
         } \
@@ -6320,15 +6324,14 @@ exit: \
         } else { \
             break; \
         } \
-    } while (lower_bound < new_upper); \
+    } while (lower_bound < new_upper && new_upper - lower_bound > self->epsilon); \
     \
     /* cleanup and return */ \
     PyMem_Free(queue.array);
 
 
 #define FOGSAA_EXIT_SCORE \
-    if (lower_bound < new_upper) { \
-        printf("score exit lower bound: %f, upper bound: %f\n", lower_bound, new_upper); \
+    if (lower_bound < new_upper && new_upper - lower_bound > self->epsilon) { \
         PyErr_Format(PyExc_RuntimeError, "Algorithm ended incomplete. Report this as a bug."); \
         return NULL; \
     } \
@@ -6337,8 +6340,7 @@ exit: \
     return PyFloat_FromDouble((double)t);
 
 #define FOGSAA_EXIT_ALIGN \
-    if (lower_bound < new_upper) { \
-        printf("align exit lower bound: %f, upper bound: %f\n", lower_bound, new_upper); \
+    if (lower_bound < new_upper && new_upper - lower_bound > self->epsilon) { \
         PyErr_SetString(PyExc_RuntimeError, "Algorithm ended incomplete. Report this as a bug."); \
         return NULL; \
     } \
