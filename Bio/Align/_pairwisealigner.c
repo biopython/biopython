@@ -1617,19 +1617,9 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
 static PyObject*
 PathGenerator_next_FOGSAA(PathGenerator* self)
 {
-    int i = self->nA;
-    int j = self->nB;
-    Trace** M = self->M;
-    int trace = 0;
+    /* No need to create path because FOGSAA only finds one optimal alignment
+     * the .path fields should be populated by FOGSAA_EXIT_ALIGN */
 
-    /* Follow the traceback until we reach the origin. */
-    while (1) {
-        trace = M[i][j].trace;
-        if (trace & HORIZONTAL) M[i][--j].path = HORIZONTAL;
-        else if (trace & VERTICAL) M[--i][j].path = VERTICAL;
-        else if (trace & DIAGONAL) M[--i][--j].path = DIAGONAL;
-        else break;
-    }
     return PathGenerator_create_path(self, 0, 0);
 }
 
@@ -6347,29 +6337,34 @@ exit: \
     paths = PathGenerator_create_FOGSAA(nA, nB, strand); \
     M = paths->M; \
     if (!paths) return NULL; \
-    /* copy matrix cells to traces */ \
-    for (i = 0; i <= nA; i++) { \
-        for (j = 0; j <= nB; j++) { \
-            switch (MATRIX(i, j).type) { \
-            case 0: \
-            case FOGSAA_CELL_UNDEF: \
-                M[i][j].trace = 0; \
-                break; \
-            case FOGSAA_CELL_MATCH_MISMATCH: \
-                M[i][j].trace = DIAGONAL; \
-                break; \
-            case FOGSAA_CELL_GAP_A: \
-                M[i][j].trace = HORIZONTAL; \
-                break; \
-            case FOGSAA_CELL_GAP_B: \
-                M[i][j].trace = VERTICAL; \
-                break; \
-            default: \
-                PyErr_SetString(PyExc_RuntimeError, "Unexpected FOGSAA cell type"); \
-                return NULL;\
-            } \
+    \
+    /* copy only the cells of the optimal path to trace and path */ \
+    i = nA; \
+    j = nB; \
+    while (1) { \
+        switch (MATRIX(i, j).type) { \
+        case 0: \
+        case FOGSAA_CELL_UNDEF: \
+            M[i][j].trace = 0; \
+            goto end_loop; \
+        case FOGSAA_CELL_MATCH_MISMATCH: \
+            M[i][j].trace = DIAGONAL; \
+            M[--i][--j].path = DIAGONAL; \
+            break; \
+        case FOGSAA_CELL_GAP_A: \
+            M[i][j].trace = HORIZONTAL; \
+            M[i][--j].path = HORIZONTAL; \
+            break; \
+        case FOGSAA_CELL_GAP_B: \
+            M[i][j].trace = VERTICAL; \
+            M[--i][j].path = VERTICAL; \
+            break; \
+        default: \
+            PyErr_SetString(PyExc_RuntimeError, "Unexpected FOGSAA cell type. Report this as a bug."); \
+            return NULL; \
         } \
     } \
+end_loop: \
     M[nA][nB].path = 0; \
     t = MATRIX(nA, nB).present_score; \
     PyMem_Free(matrix); \
