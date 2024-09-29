@@ -10,7 +10,6 @@
 #define PY_SSIZE_T_CLEAN
 #include "Python.h"
 #include <float.h>
-#include <math.h>
 
 
 #define HORIZONTAL 0x1
@@ -23,10 +22,6 @@
 #define Iy_MATRIX 0x4
 #define DONE 0x3
 #define NONE 0x7
-#define FOGSAA_CELL_UNDEF -1
-#define FOGSAA_CELL_MATCH_MISMATCH 1
-#define FOGSAA_CELL_GAP_A 2
-#define FOGSAA_CELL_GAP_B 4
 
 #define OVERFLOW_ERROR -1
 #define MEMORY_ERROR -2
@@ -4393,9 +4388,6 @@ struct fogsaa_queue_node {
 #define MATRIX(a, b) matrix[a * (nB+1) + b]
 
 #define FOGSAA_SORT() \
-  child_types[0] = 1; \
-  child_types[1] = 2; \
-  child_types[2] = 4; \
   for (i = 0; i < 2; i++) { \
     for (j = 0; j < 2 - i; j++) { \
       if ((child_lbounds[j] < child_lbounds[j + 1]) || ((child_lbounds[j] == child_lbounds[j + 1]) && (child_ubounds[j] < child_ubounds[j + 1]))) { \
@@ -4417,7 +4409,7 @@ struct fogsaa_queue_node {
 /* This doesn't always work if the gap score is less than the mismatch score */
 #define FOGSAA_CALCULATE_SCORE(curr_score, curr_type, lower, upper, pA, pB) \
     if (nA - (pA) <= nB - (pB)) { \
-        if (pA == nA && (curr_type) == FOGSAA_CELL_GAP_A) { \
+        if (pA == nA && (curr_type) == HORIZONTAL) { \
             /* If we're already at the end and a gap is already open */ \
             lower = curr_score + right_gap_extend_A * (nB - (pB)); \
             upper = curr_score + right_gap_extend_A * (nB - (pB)); \
@@ -4426,7 +4418,7 @@ struct fogsaa_queue_node {
             upper = curr_score + (nA - (pA)) * match; \
             t = right_gap_open_A + right_gap_extend_A * ((nB - (pB)) - (nA - (pA)) - 1); \
             t2 =  gap_extend_A * ((nB - (pB)) - (nA - (pA))); \
-            if ((curr_type) == FOGSAA_CELL_GAP_A && t2 > t) { \
+            if ((curr_type) == HORIZONTAL && t2 > t) { \
                 /* if we already have a gap open, then we can just extend */ \
                 /* from the open gap and match/mismatch later. we don't */ \
                 /* need to open a new one */ \
@@ -4438,7 +4430,7 @@ struct fogsaa_queue_node {
             } \
         } \
     } else { \
-        if (pB == nB && (curr_type) == FOGSAA_CELL_GAP_B) { \
+        if (pB == nB && (curr_type) == VERTICAL) { \
             /* If we're already at the end and a gap is already open */ \
             lower = curr_score + right_gap_extend_B * (nA - (pA)); \
             upper = curr_score + right_gap_extend_B * (nA - (pA)); \
@@ -4447,7 +4439,7 @@ struct fogsaa_queue_node {
             upper = curr_score + (nB - (pB)) * match; \
             t = right_gap_open_B + right_gap_extend_B * ((nA - (pA)) - (nB - (pB)) - 1); \
             t2 =  gap_extend_B * ((nA - (pA)) - (nB - (pB))); \
-            if ((curr_type) == FOGSAA_CELL_GAP_B && t2 > t) { \
+            if ((curr_type) == VERTICAL && t2 > t) { \
                 /* if we already have a gap open, then we can just extend */ \
                 /* from the open gap and match/mismatch later. we don't */ \
                 /* need to open a new one */ \
@@ -6044,8 +6036,8 @@ exit: \
     if (!matrix) \
         return PyErr_NoMemory(); \
     MATRIX(0, 0).present_score = 0; \
-    MATRIX(0, 0).type = FOGSAA_CELL_UNDEF; \
-    FOGSAA_CALCULATE_SCORE(MATRIX(0, 0).present_score, FOGSAA_CELL_UNDEF, MATRIX(0, 0).lower, MATRIX(0, 0).upper, 0, 0); \
+    MATRIX(0, 0).type = STARTPOINT; \
+    FOGSAA_CALCULATE_SCORE(MATRIX(0, 0).present_score, STARTPOINT, MATRIX(0, 0).lower, MATRIX(0, 0).upper, 0, 0); \
     MATRIX(0, 0).is_left_gap = 1; \
     lower_bound = MATRIX(0, 0).lower; \
     \
@@ -6058,7 +6050,7 @@ exit: \
         pathend = 1; \
         while (curpA < nA || curpB < nB) { \
             struct fogsaa_cell *curr = &(MATRIX(curpA, curpB)); \
-            if (type_total == FOGSAA_CELL_MATCH_MISMATCH || type_total == FOGSAA_CELL_GAP_A || type_total == FOGSAA_CELL_GAP_B) { \
+            if (type_total == DIAGONAL || type_total == HORIZONTAL || type_total == VERTICAL) { \
                 /* current is a 1st child */ \
                 if (curpA <= nA - 1 && curpB <= nB - 1) { \
                     /* neither sequence is at the end, so we can advance in both sequences */ \
@@ -6066,59 +6058,62 @@ exit: \
                     kB = sB[curpB]; \
                     double p = align_score; \
                     /* score the match/mismatch */ \
-                    FOGSAA_CALCULATE_SCORE(curr->present_score + p, FOGSAA_CELL_MATCH_MISMATCH, child_lbounds[0], child_ubounds[0], curpA + 1, curpB + 1); \
+                    FOGSAA_CALCULATE_SCORE(curr->present_score + p, DIAGONAL, child_lbounds[0], child_ubounds[0], curpA + 1, curpB + 1); \
                     /* score the gaps */ \
-                    if (curr->type == FOGSAA_CELL_MATCH_MISMATCH || curr->type == FOGSAA_CELL_UNDEF) { \
+                    if (curr->type == DIAGONAL || curr->type == STARTPOINT) { \
                         if (!curr->is_left_gap) { \
-                            FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_A, FOGSAA_CELL_GAP_A, child_lbounds[1], child_ubounds[1], curpA, curpB + 1) \
-                            FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_B, FOGSAA_CELL_GAP_B, child_lbounds[2], child_ubounds[2], curpA + 1, curpB) \
+                            FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_A, HORIZONTAL, child_lbounds[1], child_ubounds[1], curpA, curpB + 1) \
+                            FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_B, VERTICAL, child_lbounds[2], child_ubounds[2], curpA + 1, curpB) \
                         } else { \
-                            FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_open_A, FOGSAA_CELL_GAP_A, child_lbounds[1], child_ubounds[1], curpA, curpB + 1) \
-                            FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_open_B, FOGSAA_CELL_GAP_B, child_lbounds[2], child_ubounds[2], curpA + 1, curpB) \
+                            FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_open_A, HORIZONTAL, child_lbounds[1], child_ubounds[1], curpA, curpB + 1) \
+                            FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_open_B, VERTICAL, child_lbounds[2], child_ubounds[2], curpA + 1, curpB) \
                         } \
-                    } else if (curr->type == FOGSAA_CELL_GAP_A) { \
+                    } else if (curr->type == HORIZONTAL) { \
                         /* gap is already opened in the first chain */ \
                         if (!curr->is_left_gap) { \
-                            FOGSAA_CALCULATE_SCORE(curr->present_score + gap_extend_A, FOGSAA_CELL_GAP_A, child_lbounds[1], child_ubounds[1], curpA, curpB + 1) \
-                            FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_B, FOGSAA_CELL_GAP_B, child_lbounds[2], child_ubounds[2], curpA + 1, curpB) \
+                            FOGSAA_CALCULATE_SCORE(curr->present_score + gap_extend_A, HORIZONTAL, child_lbounds[1], child_ubounds[1], curpA, curpB + 1) \
+                            FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_B, VERTICAL, child_lbounds[2], child_ubounds[2], curpA + 1, curpB) \
                         } else { \
-                            FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_extend_A, FOGSAA_CELL_GAP_A, child_lbounds[1], child_ubounds[1], curpA, curpB + 1) \
-                            FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_open_B, FOGSAA_CELL_GAP_B, child_lbounds[2], child_ubounds[2], curpA + 1, curpB) \
+                            FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_extend_A, HORIZONTAL, child_lbounds[1], child_ubounds[1], curpA, curpB + 1) \
+                            FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_open_B, VERTICAL, child_lbounds[2], child_ubounds[2], curpA + 1, curpB) \
                         } \
                     } else { \
                         /* gap is already opened in the 2nd chain */ \
                         if (!curr->is_left_gap) { \
-                            FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_A, FOGSAA_CELL_GAP_A, child_lbounds[1], child_ubounds[1], curpA, curpB + 1) \
-                            FOGSAA_CALCULATE_SCORE(curr->present_score + gap_extend_B, FOGSAA_CELL_GAP_B, child_lbounds[2], child_ubounds[2], curpA + 1, curpB) \
+                            FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_A, HORIZONTAL, child_lbounds[1], child_ubounds[1], curpA, curpB + 1) \
+                            FOGSAA_CALCULATE_SCORE(curr->present_score + gap_extend_B, VERTICAL, child_lbounds[2], child_ubounds[2], curpA + 1, curpB) \
                         } else { \
-                            FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_open_A, FOGSAA_CELL_GAP_A, child_lbounds[1], child_ubounds[1], curpA, curpB + 1) \
-                            FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_extend_B, FOGSAA_CELL_GAP_B, child_lbounds[2], child_ubounds[2], curpA + 1, curpB) \
+                            FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_open_A, HORIZONTAL, child_lbounds[1], child_ubounds[1], curpA, curpB + 1) \
+                            FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_extend_B, VERTICAL, child_lbounds[2], child_ubounds[2], curpA + 1, curpB) \
                         } \
                     } \
                     \
                     /* sort and select the best new child as the new type */ \
+                    child_types[0] = DIAGONAL; \
+                    child_types[1] = HORIZONTAL; \
+                    child_types[2] = VERTICAL; \
                     FOGSAA_SORT() \
                     new_type = child_types[0]; \
-                    if (new_type == FOGSAA_CELL_MATCH_MISMATCH) { \
+                    if (new_type == DIAGONAL) { \
                         npA = curpA + 1; \
                         npB = curpB + 1; \
                         new_score = curr->present_score + p; \
-                    } else if (new_type == FOGSAA_CELL_GAP_A) { \
+                    } else if (new_type == HORIZONTAL) { \
                         npA = curpA; \
                         npB = curpB + 1; \
                         if (curr->is_left_gap) { \
-                            new_score = curr->present_score + (curr->type == FOGSAA_CELL_GAP_A ? left_gap_extend_A : left_gap_open_A); \
+                            new_score = curr->present_score + (curr->type == HORIZONTAL ? left_gap_extend_A : left_gap_open_A); \
                         } else { \
-                            new_score = curr->present_score + (curr->type == FOGSAA_CELL_GAP_A ? gap_extend_A : gap_open_A); \
+                            new_score = curr->present_score + (curr->type == HORIZONTAL ? gap_extend_A : gap_open_A); \
                         } \
                     } else { \
-                        /* new_type is FOGSAA_CELL_GAP_B */ \
+                        /* new_type is VERTICAL */ \
                         npA = curpA + 1; \
                         npB = curpB; \
                         if (curr->is_left_gap) { \
-                            new_score = curr->present_score + (curr->type == FOGSAA_CELL_GAP_B ? left_gap_extend_B : left_gap_open_B); \
+                            new_score = curr->present_score + (curr->type == VERTICAL ? left_gap_extend_B : left_gap_open_B); \
                         } else { \
-                            new_score = curr->present_score + (curr->type == FOGSAA_CELL_GAP_B ? gap_extend_B : gap_open_B); \
+                            new_score = curr->present_score + (curr->type == VERTICAL ? gap_extend_B : gap_open_B); \
                         } \
                     } \
                     if (child_ubounds[1] >= MATRIX(0, 0).lower) { \
@@ -6128,105 +6123,105 @@ exit: \
                     } \
                 } else if (curpA <= nA - 1) { \
                     /* we're at the end of B, so must put a gap in B */ \
-                    new_type = FOGSAA_CELL_GAP_B; \
+                    new_type = VERTICAL; \
                     npA = curpA + 1; \
                     npB = curpB; \
-                    new_score = curr->present_score + (curr->type == FOGSAA_CELL_GAP_B ? right_gap_extend_B : right_gap_open_B); \
+                    new_score = curr->present_score + (curr->type == VERTICAL ? right_gap_extend_B : right_gap_open_B); \
                 } else { \
                     /* we're at the end of A, so must put a gap in A */ \
-                    new_type = FOGSAA_CELL_GAP_A; \
+                    new_type = HORIZONTAL; \
                     npA = curpA; \
                     npB = curpB + 1; \
-                    new_score = curr->present_score + (curr->type == FOGSAA_CELL_GAP_A ? right_gap_extend_A : right_gap_open_A); \
+                    new_score = curr->present_score + (curr->type == HORIZONTAL ? right_gap_extend_A : right_gap_open_A); \
                 } \
-            } else if (type_total == FOGSAA_CELL_MATCH_MISMATCH + FOGSAA_CELL_GAP_A || \
-                    type_total == FOGSAA_CELL_MATCH_MISMATCH + FOGSAA_CELL_GAP_B || \
-                    type_total == FOGSAA_CELL_GAP_A + FOGSAA_CELL_GAP_B) { \
+            } else if (type_total == DIAGONAL + HORIZONTAL || \
+                    type_total == DIAGONAL + VERTICAL || \
+                    type_total == HORIZONTAL + VERTICAL) { \
                 /* current is a 2nd child (sum of two types) */ \
-                if (new_type == FOGSAA_CELL_MATCH_MISMATCH) { \
+                if (new_type == DIAGONAL) { \
                     npA = curpA + 1; \
                     npB = curpB + 1; \
                     new_score = curr->present_score + (sA[curpA] == sB[curpB] ? match : mismatch); \
                     /* find what the 3rd child was (will later be added to the queue) */ \
-                    /* NOTE: FOGSAA_CELL_MATCH_MISMATCH + FOGSAA_CELL_GAP_A + FOGSAA_CELL_GAP_B = 7 */ \
-                    if (7 - type_total == FOGSAA_CELL_GAP_A) { \
-                        if (curr->type != FOGSAA_CELL_GAP_A) { \
+                    /* NOTE: DIAGONAL + HORIZONTAL + VERTICAL = 7 */ \
+                    if (7 - type_total == HORIZONTAL) { \
+                        if (curr->type != HORIZONTAL) { \
                             if (curr->is_left_gap) { \
-                                FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_open_A, FOGSAA_CELL_GAP_A, next_lower, next_upper, curpA, curpB + 1) \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_open_A, HORIZONTAL, next_lower, next_upper, curpA, curpB + 1) \
                             } else { \
-                                FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_A, FOGSAA_CELL_GAP_A, next_lower, next_upper, curpA, curpB + 1) \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_A, HORIZONTAL, next_lower, next_upper, curpA, curpB + 1) \
                             } \
                         } else { \
                             if (curr->is_left_gap) { \
-                                FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_extend_A, FOGSAA_CELL_GAP_A, next_lower, next_upper, curpA, curpB + 1) \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_extend_A, HORIZONTAL, next_lower, next_upper, curpA, curpB + 1) \
                             } else { \
-                                FOGSAA_CALCULATE_SCORE(curr->present_score + gap_extend_A, FOGSAA_CELL_GAP_A, next_lower, next_upper, curpA, curpB + 1) \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + gap_extend_A, HORIZONTAL, next_lower, next_upper, curpA, curpB + 1) \
                             } \
                         } \
                     } else { \
-                        /* 3rd child was FOGSAA_CELL_GAP_B */ \
-                        if (curr->type != FOGSAA_CELL_GAP_B) { \
+                        /* 3rd child was VERTICAL */ \
+                        if (curr->type != VERTICAL) { \
                             if (curr->is_left_gap) { \
-                                FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_open_B, FOGSAA_CELL_GAP_B, next_lower, next_upper, curpA, curpB + 1) \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_open_B, VERTICAL, next_lower, next_upper, curpA, curpB + 1) \
                             } else { \
-                                FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_B, FOGSAA_CELL_GAP_B, next_lower, next_upper, curpA, curpB + 1) \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_B, VERTICAL, next_lower, next_upper, curpA, curpB + 1) \
                             } \
                         } else { \
                             if (curr->is_left_gap) { \
-                                FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_extend_B, FOGSAA_CELL_GAP_B, next_lower, next_upper, curpA, curpB + 1) \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_extend_B, VERTICAL, next_lower, next_upper, curpA, curpB + 1) \
                             } else { \
-                                FOGSAA_CALCULATE_SCORE(curr->present_score + gap_extend_B, FOGSAA_CELL_GAP_B, next_lower, next_upper, curpA, curpB + 1) \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + gap_extend_B, VERTICAL, next_lower, next_upper, curpA, curpB + 1) \
                             } \
                         } \
                     } \
-                } else if (new_type == FOGSAA_CELL_GAP_A) { \
+                } else if (new_type == HORIZONTAL) { \
                     npA = curpA; \
                     npB = curpB + 1; \
-                    new_score = curr->present_score + (curr->type == FOGSAA_CELL_GAP_A ? gap_extend_A : gap_open_A); \
+                    new_score = curr->present_score + (curr->type == HORIZONTAL ? gap_extend_A : gap_open_A); \
                     /* again, find what 3rd child was */ \
-                    if (7 - type_total == FOGSAA_CELL_MATCH_MISMATCH) { \
+                    if (7 - type_total == DIAGONAL) { \
                         kA = sA[curpA]; \
                         kB = sB[curpB]; \
-                        FOGSAA_CALCULATE_SCORE(curr->present_score + (align_score), FOGSAA_CELL_MATCH_MISMATCH, next_lower, next_upper, curpA + 1, curpB + 1); \
+                        FOGSAA_CALCULATE_SCORE(curr->present_score + (align_score), DIAGONAL, next_lower, next_upper, curpA + 1, curpB + 1); \
                     } else { \
-                        /* 3rd child was FOGSAA_CELL_GAP_B */ \
-                        if (curr->type != FOGSAA_CELL_GAP_B) { \
+                        /* 3rd child was VERTICAL */ \
+                        if (curr->type != VERTICAL) { \
                             if (curr->is_left_gap) { \
-                                FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_open_B, FOGSAA_CELL_GAP_B, next_lower, next_upper, curpA, curpB + 1) \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_open_B, VERTICAL, next_lower, next_upper, curpA, curpB + 1) \
                             } else { \
-                                FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_B, FOGSAA_CELL_GAP_B, next_lower, next_upper, curpA, curpB + 1) \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_B, VERTICAL, next_lower, next_upper, curpA, curpB + 1) \
                             } \
                         } else { \
                             if (curr->is_left_gap) { \
-                                FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_extend_B, FOGSAA_CELL_GAP_B, next_lower, next_upper, curpA, curpB + 1) \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_extend_B, VERTICAL, next_lower, next_upper, curpA, curpB + 1) \
                             } else { \
-                                FOGSAA_CALCULATE_SCORE(curr->present_score + gap_extend_B, FOGSAA_CELL_GAP_B, next_lower, next_upper, curpA, curpB + 1) \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + gap_extend_B, VERTICAL, next_lower, next_upper, curpA, curpB + 1) \
                             } \
                         } \
                     } \
                 } else { \
-                    /* new_type is FOGSAA_CELL_GAP_B */ \
+                    /* new_type is VERTICAL */ \
                     npA = curpA + 1; \
                     npB = curpB; \
-                    new_score = curr->present_score + (curr->type == FOGSAA_CELL_GAP_B ? gap_extend_B : gap_open_B); \
+                    new_score = curr->present_score + (curr->type == VERTICAL ? gap_extend_B : gap_open_B); \
                     /* again, find what 3rd child was */ \
-                    if (7 - type_total == FOGSAA_CELL_MATCH_MISMATCH) { \
+                    if (7 - type_total == DIAGONAL) { \
                         kA = sA[curpA]; \
                         kB = sB[curpB]; \
-                        FOGSAA_CALCULATE_SCORE(curr->present_score + (align_score), FOGSAA_CELL_MATCH_MISMATCH, next_lower, next_upper, curpA + 1, curpB + 1); \
+                        FOGSAA_CALCULATE_SCORE(curr->present_score + (align_score), DIAGONAL, next_lower, next_upper, curpA + 1, curpB + 1); \
                     } else { \
-                        /* 3rd child was FOGSAA_CELL_GAP_A */ \
-                        if (curr->type != FOGSAA_CELL_GAP_A) { \
+                        /* 3rd child was HORIZONTAL */ \
+                        if (curr->type != HORIZONTAL) { \
                             if (curr->is_left_gap) { \
-                                FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_open_A, FOGSAA_CELL_GAP_A, next_lower, next_upper, curpA, curpB + 1) \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_open_A, HORIZONTAL, next_lower, next_upper, curpA, curpB + 1) \
                             } else { \
-                                FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_A, FOGSAA_CELL_GAP_A, next_lower, next_upper, curpA, curpB + 1) \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_A, HORIZONTAL, next_lower, next_upper, curpA, curpB + 1) \
                             } \
                         } else { \
                             if (curr->is_left_gap) { \
-                                FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_extend_A, FOGSAA_CELL_GAP_A, next_lower, next_upper, curpA, curpB + 1) \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_extend_A, HORIZONTAL, next_lower, next_upper, curpA, curpB + 1) \
                             } else { \
-                                FOGSAA_CALCULATE_SCORE(curr->present_score + gap_extend_A, FOGSAA_CELL_GAP_A, next_lower, next_upper, curpA, curpB + 1) \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + gap_extend_A, HORIZONTAL, next_lower, next_upper, curpA, curpB + 1) \
                             } \
                         } \
                     } \
@@ -6235,27 +6230,27 @@ exit: \
                     if (!fogsaa_queue_insert(&queue, curpA, curpB, 7, 7 - type_total, next_lower, next_upper)) \
                         return PyErr_NoMemory(); \
                 } \
-            } else if (type_total == FOGSAA_CELL_MATCH_MISMATCH + FOGSAA_CELL_GAP_A + FOGSAA_CELL_GAP_B) { \
+            } else if (type_total == DIAGONAL + HORIZONTAL + VERTICAL) { \
                 /* current is a 3rd child */ \
-                if (new_type == FOGSAA_CELL_MATCH_MISMATCH) { \
+                if (new_type == DIAGONAL) { \
                     kA = sA[curpA]; \
                     kB = sB[curpB]; \
                     npA = curpA + 1; \
                     npB = curpB + 1; \
                     new_score = curr->present_score + (align_score); \
-                } else if (new_type == FOGSAA_CELL_GAP_A) { \
+                } else if (new_type == HORIZONTAL) { \
                     npA = curpA; \
                     npB = curpB + 1; \
-                    if (curr->type != FOGSAA_CELL_GAP_A) { \
+                    if (curr->type != HORIZONTAL) { \
                         new_score = curr->present_score + (curr->is_left_gap ? left_gap_open_A : gap_open_A); \
                     } else { \
                         new_score = curr->present_score + (curr->is_left_gap ? left_gap_extend_A : gap_extend_A); \
                     } \
                 } else { \
-                    /* new_type is FOGSAA_CELL_GAP_B */ \
+                    /* new_type is VERTICAL */ \
                     npA = curpA + 1; \
                     npB = curpB; \
-                    if (curr->type != FOGSAA_CELL_GAP_B) { \
+                    if (curr->type != VERTICAL) { \
                         new_score = curr->present_score + (curr->is_left_gap ? left_gap_open_B : gap_open_B); \
                     } else { \
                         new_score = curr->present_score + (curr->is_left_gap ? left_gap_extend_B : gap_extend_B); \
@@ -6276,7 +6271,7 @@ exit: \
                 MATRIX(npA, npB).upper = new_upper; \
                 MATRIX(npA, npB).type = new_type; \
                 MATRIX(npA, npB).filled = 1; \
-                if (new_type == FOGSAA_CELL_GAP_A || new_type == FOGSAA_CELL_GAP_B) { \
+                if (new_type == HORIZONTAL || new_type == VERTICAL) { \
                     MATRIX(npA, npB).is_left_gap = curr->is_left_gap; \
                 } else { \
                     MATRIX(npA, npB).is_left_gap = 0; \
@@ -6344,18 +6339,18 @@ exit: \
     while (1) { \
         switch (MATRIX(i, j).type) { \
         case 0: \
-        case FOGSAA_CELL_UNDEF: \
+        case STARTPOINT: \
             M[i][j].trace = 0; \
             goto end_loop; \
-        case FOGSAA_CELL_MATCH_MISMATCH: \
+        case DIAGONAL: \
             M[i][j].trace = DIAGONAL; \
             M[--i][--j].path = DIAGONAL; \
             break; \
-        case FOGSAA_CELL_GAP_A: \
+        case HORIZONTAL: \
             M[i][j].trace = HORIZONTAL; \
             M[i][--j].path = HORIZONTAL; \
             break; \
-        case FOGSAA_CELL_GAP_B: \
+        case VERTICAL: \
             M[i][j].trace = VERTICAL; \
             M[--i][j].path = VERTICAL; \
             break; \
