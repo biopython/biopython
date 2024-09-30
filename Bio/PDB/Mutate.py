@@ -10,12 +10,11 @@ from Bio.PDB import Polypeptide
 from Bio.PDB.NeighborSearch import NeighborSearch
 from Bio.PDB.Selection import unfold_entities
 from Bio import SVDSuperimposer
+from collections import defaultdict
 import numpy as np
 import os
-import logging
 import gzip
 
-logging.basicConfig(format="%(asctime)s | %(levelname)s | %(message)s", datefmt="%H:%M")
 
 DATA_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), "rotamers")
 DUNBRACK_FILTERED = f"{DATA_DIR}/dunbrack_reduced.gz"
@@ -273,31 +272,19 @@ def load_rotamers(rotamer_loc=DUNBRACK_FILTERED):
     """
     Load the Dunbrack rotamer library
     """
-    _dunbrack = {}
+    _dunbrack = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
     with gzip.open(rotamer_loc, "rt") as fn:
         for line in fn:
             if line.startswith("#"):
                 continue
-            if line.split()[0] not in _dunbrack:
-                _dunbrack[line.split()[0]] = {}
-            if int(line.split()[1]) not in _dunbrack[line.split()[0]]:
-                _dunbrack[line.split()[0]][int(line.split()[1])] = {}
-            if (
-                int(line.split()[2])
-                not in _dunbrack[line.split()[0]][int(line.split()[1])]
-            ):
-                _dunbrack[line.split()[0]][int(line.split()[1])][
-                    int(line.split()[2])
-                ] = []
-            _dunbrack[line.split()[0]][int(line.split()[1])][
-                int(line.split()[2])
-            ].append(
+            amino_acid, angle1, angle2, prob, chi1, chi2, chi3, chi4 = line.split()
+            _dunbrack[amino_acid][int(angle1)][int(angle2)].append(
                 {
-                    "prob": float(line.split()[3]),
-                    "CHI1": float(line.split()[4]),
-                    "CHI2": float(line.split()[5]),
-                    "CHI3": float(line.split()[6]),
-                    "CHI4": float(line.split()[7]),
+                    "prob": float(prob),
+                    "CHI1": float(chi1),
+                    "CHI2": float(chi2),
+                    "CHI3": float(chi3),
+                    "CHI4": float(chi4),
                 }
             )
     return _dunbrack
@@ -305,7 +292,7 @@ def load_rotamers(rotamer_loc=DUNBRACK_FILTERED):
 
 def rotation_matrix(axis, theta):
     """
-    Calculates a rotational matrix alongside an axis with an andle theta
+    Calculates a rotational matrix around an axis with an angle theta
     """
     axis = np.asarray(axis)
     axis = axis / np.linalg.norm(axis)
@@ -367,7 +354,7 @@ def read_sample_residue(residue_name):
 
 def is_backbone(atom):
     """
-    Checks weather a given residue is backbone or not
+    Checks whether a given residue is backbone or not
     """
     return atom.get_id() in ["C", "N", "CA", "O"]
 
@@ -462,13 +449,10 @@ def mutate(
     mutate_to,
     rotamer_lib=None,
     mutation_type="best",
-    verbose="info",
 ):
     """
     Mutates a given residue based on the best fitting rotamers
     """
-    level = logging.getLevelName(verbose.upper())
-    logging.getLogger().setLevel(level)
     Polypeptide.Polypeptide(
         pdb_obj[0][chain]
     ).get_phi_psi_list()  # This generates the xtra attribute for PHI and PSI angles for residues
@@ -483,7 +467,6 @@ def mutate(
         round(np.rad2deg(y), -1) if y else 0
         for y in [_residue.xtra[x] for x in ["PHI", "PSI"]]
     )
-    logging.debug(f"Torsion angles: {phi}, {psi}")
     # GET_ATR IS WRONG
     sample_residue = read_sample_residue(mutate_to)
     starting_points = np.asmatrix(
