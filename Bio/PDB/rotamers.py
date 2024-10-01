@@ -5,7 +5,6 @@ to save space (only rotamers with higher than 5% probability are present).
 The tool makes in place modification on a PDB structure object.
 """
 
-from Bio.PDB.Atom import Atom
 from Bio.PDB import Polypeptide
 from Bio.PDB.NeighborSearch import NeighborSearch
 from Bio.PDB.Selection import unfold_entities
@@ -422,7 +421,6 @@ class RotamerSampling:
         random: Select a random rotamer based on its probability distribution
         bestother: Same as best, but skip the parent chain of the selected residue
         """
-        # GET_ATR IS WRONG
         sample_residue = self.read_sample_residue(mutate_to)
         starting_points = np.asmatrix(
             [sample_residue["N"], sample_residue["CA"], sample_residue["C"]]
