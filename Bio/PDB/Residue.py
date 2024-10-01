@@ -13,7 +13,7 @@ from typing import TypeVar
 from Bio.PDB.Entity import DisorderedEntityWrapper
 from Bio.PDB.Entity import Entity
 from Bio.PDB.PDBExceptions import PDBConstructionException
-from Bio.PDB.rotamers import CHI_ANGLES, RESIDUE_ORDER
+from Bio.PDB.ic_data import CHI_ANGLES, RESIDUE_ORDER
 from Bio.PDB.vectors import calc_dihedral, Vector, rotaxis2m
 from Bio.PDB.Atom import Atom
 
@@ -156,7 +156,7 @@ class Residue(Entity["Chain", "Atom"]):
                         + sample_residue[axis[1]]
                     )
         for atom, coord in sample_residue.items():
-            if atom not in ["C", "N", "CA", "O"]:
+            if atom not in {"C", "N", "CA", "O"}:
                 new_atom = Atom(
                     name=atom,
                     element=atom[0],
