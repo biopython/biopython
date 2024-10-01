@@ -271,6 +271,8 @@ RESIDUE_ORDER = {
 def load_rotamers(rotamer_loc=DUNBRACK_FILTERED):
     """
     Load the Dunbrack rotamer library
+    :param rotamer_loc: Location of the rotamer file to use
+    :returns : Nested defaultdict of the torsion angles for each psi phi angle in the file
     """
     _dunbrack = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
     with gzip.open(rotamer_loc, "rt") as fn:
@@ -293,6 +295,9 @@ def load_rotamers(rotamer_loc=DUNBRACK_FILTERED):
 def rotation_matrix(axis, theta):
     """
     Calculates a rotational matrix around an axis with an angle theta
+    :param axis: Axis to rotate around
+    :param theta: Angle to rotate
+    :returns: Rotation matrix
     """
     axis = np.asarray(axis)
     axis = axis / np.linalg.norm(axis)
@@ -316,8 +321,12 @@ def rotation_matrix(axis, theta):
 
 
 def dihedral_from_vectors(v1, v2, v3, v4):
-    """Praxeolitic formula
-    1 sqrt, 1 cross product"""
+    """
+    Praxeolitic formula 1 sqrt, 1 cross product
+    Calculates dihedral from a set a vectors
+    :param v1, v2, v3, v4: Set of vectors
+    :returns: Dihedral angle
+    """
     b0 = -1.0 * (v2 - v1)
     b1 = v3 - v2
     b2 = v4 - v3
@@ -335,6 +344,8 @@ def dihedral_from_vectors(v1, v2, v3, v4):
 def distance(x, y):
     """
     Calculates the euclidian distance in 3D space
+    :param x, y: Points in 3D space in a form of vectors
+    :returns: Distance of points
     """
     return np.sqrt((x[0] - y[0]) ** 2 + (x[1] - y[1]) ** 2 + (x[2] - y[2]) ** 2)
 
@@ -342,6 +353,8 @@ def distance(x, y):
 def read_sample_residue(residue_name):
     """
     Reads a sample PDB residue
+    :param residue_name 3 letter name of a residue
+    :returns: Formatted residue to use for mutation
     """
     sample_residue = {}
     with open(f"{DATA_DIR}/{residue_name.upper()}.pdb") as fn:
@@ -355,6 +368,8 @@ def read_sample_residue(residue_name):
 def is_backbone(atom):
     """
     Checks whether a given residue is backbone or not
+    :param atom: Bio.PDB Atom object
+    :returns: Boolean whether the atom is backbone or not
     """
     return atom.get_id() in ["C", "N", "CA", "O"]
 
@@ -370,6 +385,13 @@ def select_best_rotamer_based_on_clashes(
 ):
     """
     Calculates the best rotamer based on VdW energy
+    :param pdb_object: Bio.PBD structure object
+    :param chain: Bio.PDB Chain ID string
+    :param res_num: Number of residue to mutate in integer format
+    :param mutate_to: Three letter amino acid code in uppercase letters
+    :param rotamers: Rotamers to use for selection. Obtained from rotamer_lib
+    :param skip_own_chain: Boolean to skip the parent chain of the selected residue. Default: False
+    :returns: Best rotamer from rotamers based on simplified Van der Waals energy.
     """
     best_rotamer = None
     lowest_energy = float("inf")
@@ -452,6 +474,16 @@ def mutate(
 ):
     """
     Mutates a given residue based on the best fitting rotamers
+    :param pdb_object: Bio.PBD structure object
+    :param chain: Bio.PDB Chain ID string
+    :param res_num: Number of residue to mutate in integer format
+    :param mutate_to: Three letter amino acid code in uppercase letters
+    :param rotamer_lib: Formatted rotamer library generated from load_rotamers function.
+    Preload and supply in case of multiple calls.
+    :param mutation_type: How to select the best rotamer in string format. Default: best
+    best: Select the best rotamer based on simplified Van der Waals energy
+    random: Select a random rotamer based on its probability distribution
+    bestother: Same as best, but skip the parent chain of the selected residue
     """
     Polypeptide.Polypeptide(
         pdb_obj[0][chain]
