@@ -13,9 +13,13 @@ from typing import TypeVar
 from Bio.PDB.Entity import DisorderedEntityWrapper
 from Bio.PDB.Entity import Entity
 from Bio.PDB.PDBExceptions import PDBConstructionException
+from Bio.PDB.rotamers import CHI_ANGLES, RESIDUE_ORDER
+from Bio.PDB.vectors import calc_dihedral, Vector, rotaxis2m
+from Bio.PDB.Atom import Atom
+
+import numpy as np
 
 if TYPE_CHECKING:
-    from Bio.PDB.Atom import Atom
     from Bio.PDB.Chain import Chain
 
 _ResidueT = TypeVar("_ResidueT", bound="Residue")
@@ -114,6 +118,59 @@ class Residue(Entity["Chain", "Atom"]):
     def get_atoms(self):
         """Return atoms."""
         yield from self
+
+    def mutate(self, mutate_to, sample_residue, selected_rotamer):
+        """
+        Mutates a given residue based on the best fitting rotamers
+        :param mutate_to: Three letter amino acid code in uppercase letters
+        :param sample_residue: Sample residue generated from a sampler RotamerSampling
+        :param selected_rotamer: Selected rotamer generate from a sampler from RotamerSampling
+        """
+        if mutate_to not in ["ALA", "GLY"]:
+            # Introduce the rotamer
+            for angle in ["CHI1", "CHI2", "CHI3", "CHI4"]:
+                if mutate_to not in CHI_ANGLES[angle]:
+                    continue
+                dihedral_start = calc_dihedral(
+                    *[
+                        Vector(sample_residue[x])
+                        for x in CHI_ANGLES[angle][mutate_to]["ref_plane"]
+                    ]
+                )
+                rotation_angle = dihedral_start - np.deg2rad(selected_rotamer[angle])
+                axis = CHI_ANGLES[angle][mutate_to]["axis"]
+                # print(angle)
+                for atom in RESIDUE_ORDER[mutate_to][
+                    RESIDUE_ORDER[mutate_to].index(axis[1]) + 1 :
+                ]:
+                    sample_residue[atom] = (
+                        np.dot(
+                            rotaxis2m(
+                                rotation_angle,
+                                Vector(
+                                    sample_residue[axis[0]] - sample_residue[axis[1]]
+                                ),
+                            ),
+                            sample_residue[atom] - sample_residue[axis[1]],
+                        )
+                        + sample_residue[axis[1]]
+                    )
+        for atom, coord in sample_residue.items():
+            if atom not in ["C", "N", "CA", "O"]:
+                new_atom = Atom(
+                    name=atom,
+                    element=atom[0],
+                    fullname="{}{}".format(
+                        " " * (4 - len(atom)), atom
+                    ),  # for writing the structure, should be 4-char long
+                    coord=np.asarray(coord),
+                    bfactor=1.0,
+                    altloc=" ",
+                    occupancy=1.0,
+                    serial_number=9999,  # does not matter much, only for writing the struct.
+                )
+                self.add(new_atom)
+        self.resname = mutate_to
 
 
 class DisorderedResidue(DisorderedEntityWrapper):
