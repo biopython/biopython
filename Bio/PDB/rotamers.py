@@ -5,6 +5,7 @@ to save space (only rotamers with higher than 5% probability are present).
 The tool makes in place modification on a PDB structure object.
 """
 
+from Bio.Entrez.Parser import ValidationError
 from Bio.PDB import Polypeptide
 from Bio.PDB.NeighborSearch import NeighborSearch
 from Bio.PDB.Selection import unfold_entities
@@ -19,6 +20,47 @@ import gzip
 
 DATA_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), "rotamers")
 DUNBRACK_FILTERED = f"{DATA_DIR}/dunbrack_reduced.gz"
+
+
+class Rotamer:
+    """
+    Object to store rotamers
+    """
+
+    def __init__(self, resname, psi, phi, chi1, chi2, chi3, chi4, probability):
+        """
+        Init the rotamer with given diherdral angles
+        """
+        self.psi = float(psi)
+        self.phi = float(phi)
+        self.chi1 = float(chi1)
+        self.chi2 = float(chi2)
+        self.chi3 = float(chi3)
+        self.chi4 = float(chi4)
+        self.resname = resname
+        self.probability = float(probability)
+        self.sample_residue = False
+
+    def __getitem__(self, item):
+        """
+        Returns the given angle property of the rotamer
+        """
+        return getattr(self, item.lower())
+
+    def set_sample_residue(self, sample_residue):
+        """
+        Sets a sample residue for the rotamer object
+        This function is only called during RotamerSampling to save memory
+        """
+        self.sample_residue = sample_residue
+
+    def get_sample_residue(self):
+        """
+        Returns the stored sample residue
+        """
+        if self.sample_residue:
+            return self.sample_residue
+        raise ValueError("Sample residue is not set, use RotamerSampling to set it!")
 
 
 class RotamerSampling:
@@ -39,15 +81,10 @@ class RotamerSampling:
                 if line.startswith("#"):
                     continue
                 amino_acid, angle1, angle2, prob, chi1, chi2, chi3, chi4 = line.split()
-                self._rot_lib[amino_acid][int(angle1)][int(angle2)].append(
-                    {
-                        "prob": float(prob),
-                        "CHI1": float(chi1),
-                        "CHI2": float(chi2),
-                        "CHI3": float(chi3),
-                        "CHI4": float(chi4),
-                    }
+                rotamer = Rotamer(
+                    amino_acid, angle1, angle2, chi1, chi2, chi3, chi4, prob
                 )
+                self._rot_lib[amino_acid][int(angle1)][int(angle2)].append(rotamer)
 
     def select_based_on_clashes(
         self,
@@ -229,7 +266,8 @@ class RotamerSampling:
             raise ValueError(
                 f"Unknown mutation type {method}. Possible choices are 'first', 'random', 'best', 'bestother'"
             )
-        return sample_residue, selected_rotamer
+        selected_rotamer.set_sample_residue(sample_residue)
+        return selected_rotamer
 
 
 def distance(x, y):

@@ -10,8 +10,8 @@ class MutateTest(unittest.TestCase):
     structure = parser.get_structure("my_structure", "Mutate/5e0m.pdb")
     residue = structure[0]["A"][44]
     sampler = RotamerSampling(structure)
-    selected_residue, selected_rotamer = sampler.sample(residue, "TYR", method="best")
-    residue.mutate("TYR", selected_residue, selected_rotamer)
+    selected_rotamer = sampler.sample(residue, "TYR", method="best")
+    residue.mutate(selected_rotamer)
 
     def test_point_mutation(self):
         self.assertEqual(self.structure[0]["A"][44].get_resname(), "TYR")
