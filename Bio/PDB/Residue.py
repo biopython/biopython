@@ -15,11 +15,11 @@ from Bio.PDB.Entity import Entity
 from Bio.PDB.PDBExceptions import PDBConstructionException
 from Bio.PDB.ic_data import CHI_ANGLES, RESIDUE_ORDER
 from Bio.PDB.vectors import calc_dihedral, Vector, rotaxis2m
-from Bio.PDB.Atom import Atom
 
 import numpy as np
 
 if TYPE_CHECKING:
+    from Bio.PDB.Atom import Atom
     from Bio.PDB.Chain import Chain
 
 _ResidueT = TypeVar("_ResidueT", bound="Residue")
@@ -126,6 +126,8 @@ class Residue(Entity["Chain", "Atom"]):
         :param sample_residue: Sample residue generated from a sampler RotamerSampling
         :param selected_rotamer: Selected rotamer generate from a sampler from RotamerSampling
         """
+        import Bio.PDB.Atom  # Moved this here to avoid circular import
+
         if mutate_to not in ["ALA", "GLY"]:
             # Introduce the rotamer
             for angle in ["CHI1", "CHI2", "CHI3", "CHI4"]:
@@ -157,7 +159,7 @@ class Residue(Entity["Chain", "Atom"]):
                     )
         for atom, coord in sample_residue.items():
             if atom not in {"C", "N", "CA", "O"}:
-                new_atom = Atom(
+                new_atom = Atom.Atom(
                     name=atom,
                     element=atom[0],
                     fullname="{}{}".format(
