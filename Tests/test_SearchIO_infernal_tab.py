@@ -14,7 +14,7 @@ import itertools
 
 from Bio.SearchIO import parse
 
-# test case files are in the Blast directory
+# test case files are in the Infernal directory
 TEST_DIR = "Infernal"
 FMT = "infernal-tab"
 
