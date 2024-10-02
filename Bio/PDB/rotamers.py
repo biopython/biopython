@@ -45,12 +45,12 @@ class Rotamer:
         self.chi4 = float(chi4)
         self.resname = resname
         self.probability = float(probability)
-        self.sample_residue = False
+        self.sample_residue = None
 
     @property
     def sample_residue(self):
         """Store a sample residue to use for the mutation tool in the Residue class"""
-        if self._sample_residue:
+        if self._sample_residue is not None:
             return self._sample_residue
         raise ValueError("Sample residue is not set, use RotamerSampling to set it!")
 
@@ -60,7 +60,7 @@ class Rotamer:
         self._sample_residue = sample_residue
 
 
-class RotamerSampling:
+class RotamerSampler:
     """
     Object to sample rotamers based on certain criterion to use for mutation
     """

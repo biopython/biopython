@@ -1,7 +1,7 @@
 """Tests for PDB Mutate module."""
 
 import unittest
-from Bio.PDB.rotamers import RotamerSampling
+from Bio.PDB.rotamers import RotamerSampler
 from Bio.PDB import PDBParser
 
 
@@ -9,7 +9,7 @@ class MutateTest(unittest.TestCase):
     parser = PDBParser(QUIET=True)
     structure = parser.get_structure("my_structure", "Mutate/5e0m.pdb")
     residue = structure[0]["A"][44]
-    sampler = RotamerSampling(structure)
+    sampler = RotamerSampler(structure)
     selected_rotamer = sampler.sample(residue, "TYR", method="best")
     residue.mutate(selected_rotamer)
 
