@@ -122,14 +122,12 @@ class Residue(Entity["Chain", "Atom"]):
     def mutate(self, selected_rotamer):
         """
         Mutates a given residue based on the best fitting rotamers
-        :param mutate_to: Three letter amino acid code in uppercase letters
-        :param sample_residue: Sample residue generated from a sampler RotamerSampling
         :param selected_rotamer: Selected rotamer generate from a sampler from RotamerSampling
         """
         import Bio.PDB.Atom  # Moved this here to avoid circular import
 
         mutate_to = selected_rotamer.resname
-        sample_residue = selected_rotamer.get_sample_residue()
+        sample_residue = selected_rotamer.sample_residue
         if mutate_to not in ["ALA", "GLY"]:
             # Introduce the rotamer
             for angle in ["CHI1", "CHI2", "CHI3", "CHI4"]:
@@ -141,7 +139,9 @@ class Residue(Entity["Chain", "Atom"]):
                         for x in CHI_ANGLES[angle][mutate_to]["ref_plane"]
                     ]
                 )
-                rotation_angle = dihedral_start - np.deg2rad(selected_rotamer[angle])
+                rotation_angle = dihedral_start - np.deg2rad(
+                    getattr(selected_rotamer, angle.lower())
+                )
                 axis = CHI_ANGLES[angle][mutate_to]["axis"]
                 # print(angle)
                 for atom in RESIDUE_ORDER[mutate_to][

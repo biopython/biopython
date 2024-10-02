@@ -12,11 +12,17 @@ from Bio.PDB.Selection import unfold_entities
 from Bio.PDB.vectors import calc_dihedral, Vector, rotaxis2m
 from Bio import SVDSuperimposer
 from collections import defaultdict
-from Bio.PDB.ic_data import CHI_ANGLES, RESIDUE_ORDER, VW_RADII
+from Bio.PDB.ic_data import (
+    CHI_ANGLES,
+    RESIDUE_ORDER,
+    VW_RADII,
+    residue_atom_bond_state,
+    ic_data_backbone,
+)
+from Bio.SeqUtils import seq3
 import numpy as np
 import os
 import gzip
-
 
 DATA_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), "rotamers")
 DUNBRACK_FILTERED = f"{DATA_DIR}/dunbrack_reduced.gz"
@@ -41,26 +47,17 @@ class Rotamer:
         self.probability = float(probability)
         self.sample_residue = False
 
-    def __getitem__(self, item):
-        """
-        Returns the given angle property of the rotamer
-        """
-        return getattr(self, item.lower())
-
-    def set_sample_residue(self, sample_residue):
-        """
-        Sets a sample residue for the rotamer object
-        This function is only called during RotamerSampling to save memory
-        """
-        self.sample_residue = sample_residue
-
-    def get_sample_residue(self):
-        """
-        Returns the stored sample residue
-        """
-        if self.sample_residue:
-            return self.sample_residue
+    @property
+    def sample_residue(self):
+        """Store a sample residue to use for the mutation tool in the Residue class"""
+        if self._sample_residue:
+            return self._sample_residue
         raise ValueError("Sample residue is not set, use RotamerSampling to set it!")
+
+    @sample_residue.setter
+    def sample_residue(self, sample_residue):
+        """Property setter for the sample residue"""
+        self._sample_residue = sample_residue
 
 
 class RotamerSampling:
@@ -116,9 +113,10 @@ class RotamerSampling:
                         for x in CHI_ANGLES[angle][mutate_to]["ref_plane"]
                     ]
                 )
-                rotation_angle = dihedral_start - np.deg2rad(rotamer[angle])
+                rotation_angle = dihedral_start - np.deg2rad(
+                    getattr(rotamer, angle.lower())
+                )
                 axis = CHI_ANGLES[angle][mutate_to]["axis"]
-                # print(angle)
                 for atom in RESIDUE_ORDER[mutate_to][
                     RESIDUE_ORDER[mutate_to].index(axis[1]) + 1 :
                 ]:
@@ -144,13 +142,11 @@ class RotamerSampling:
                 for close_atom in close_atoms:
                     close_residue = close_atom.get_parent()
                     chain_if_close_atom = close_residue.get_parent()
-                    print(residue.get_id())
                     if (
                         close_atom.get_parent().get_id()[1] == residue.get_id()[1]
                         and chain_if_close_atom.get_id()
                         == residue.get_parent().get_id()
                     ):
-                        # print("skipping_own_atom")
                         continue
 
                     if (
@@ -158,7 +154,6 @@ class RotamerSampling:
                         and chain_if_close_atom.get_id()
                         == residue.get_parent().get_id()
                     ):
-                        # print("Skipping own chain")
                         continue
                     if (
                         abs(close_residue.get_id()[1] - residue.get_id()[1]) == 1
@@ -209,7 +204,7 @@ class RotamerSampling:
         :param method: How to select the best rotamer in string format. Default: best
         best: Select the best rotamer based on simplified Van der Waals energy
         random: Select a random rotamer based on its probability distribution
-        bestother: Same as best, but skip the parent chain of the selected residue
+        bestother: Same as best, but ignore clashes within the chain of the modified residue
         """
         sample_residue = self.read_sample_residue(mutate_to)
         starting_points = np.asmatrix(
@@ -266,7 +261,7 @@ class RotamerSampling:
             raise ValueError(
                 f"Unknown mutation type {method}. Possible choices are 'first', 'random', 'best', 'bestother'"
             )
-        selected_rotamer.set_sample_residue(sample_residue)
+        selected_rotamer.sample_residue = sample_residue
         return selected_rotamer
 
 
