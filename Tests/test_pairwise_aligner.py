@@ -18,6 +18,7 @@ except ImportError:
         "Install numpy if you want to use Bio.Align."
     ) from None
 
+from Bio import BiopythonWarning
 from Bio import Align
 from Bio import SeqIO
 from Bio.Seq import reverse_complement
@@ -344,6 +345,104 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, -7.0)
 
+    def test_fogsaa_simple1(self):
+        seq1 = "GAACT"
+        seq2 = "GAT"
+        aligner = Align.PairwiseAligner(mode="fogsaa")
+        self.assertEqual(
+            aligner.algorithm, "Fast Optimal Global Sequence Alignment Algorithm"
+        )
+        score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, 3.0)
+        score = aligner.score(seq1, reverse_complement(seq2), "-")
+        self.assertAlmostEqual(score, 3.0)
+        alignments = aligner.align(seq1, seq2)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 3.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 GAACT 5
+                  0 ||--| 5
+query             0 GA--T 3
+""",
+        )
+        self.assertEqual(alignment.shape, (2, 5))
+        self.assertTrue(
+            np.array_equal(
+                alignment.aligned, np.array([[[0, 2], [4, 5]], [[0, 2], [2, 3]]])
+            )
+        )
+
+        alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 3.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 GAACT 5
+                  0 ||--| 5
+query             3 GA--T 0
+""",
+        )
+        self.assertEqual(alignment.shape, (2, 5))
+        self.assertTrue(
+            np.array_equal(
+                alignment.aligned, np.array([[[0, 2], [4, 5]], [[3, 1], [1, 0]]])
+            )
+        )
+
+    def test_fogsaa_affine1(self):
+        seq1 = "CC"
+        seq2 = "ACCT"
+        aligner = Align.PairwiseAligner(mode="fogsaa")
+        aligner.match_score = 0
+        aligner.mismatch_score = -1
+        aligner.open_gap_score = -5
+        aligner.extend_gap_score = -1
+        self.assertEqual(
+            aligner.algorithm, "Fast Optimal Global Sequence Alignment Algorithm"
+        )
+        score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, -7.0)
+        score = aligner.score(seq1, reverse_complement(seq2), strand="-")
+        self.assertAlmostEqual(score, -7.0)
+
+    def test_fogsaa_confirms_needleman_wunsch(self):
+        seq1 = "CCCCC"
+        seq2 = "ACCCCCT"
+
+        aligner_fogsaa = Align.PairwiseAligner(mode="fogsaa")
+        aligner_fogsaa.match_score = 1.1
+        aligner_fogsaa.mismatch_score = -1.83
+        aligner_fogsaa.gap_score = -2
+        self.assertEqual(
+            aligner_fogsaa.algorithm, "Fast Optimal Global Sequence Alignment Algorithm"
+        )
+
+        aligner_nw = Align.PairwiseAligner(mode="global")
+        aligner_nw.match_score = 1.1
+        aligner_nw.mismatch_score = -1.83
+        aligner_nw.gap_score = -2
+        self.assertEqual(aligner_nw.algorithm, "Needleman-Wunsch")
+
+        score_fogsaa = aligner_fogsaa.score(seq1, seq2)
+        score_nw = aligner_nw.score(seq1, seq2)
+        self.assertAlmostEqual(score_fogsaa, score_nw)
+
+    def test_fogsaa_matrix_scoring(self):
+        seq1 = "AAAAAAAAAAA"
+        seq2 = "AAAAAAATAAA"
+        aligner = Align.PairwiseAligner(mode="fogsaa", scoring="blastn")
+        self.assertEqual(
+            aligner.algorithm, "Fast Optimal Global Sequence Alignment Algorithm"
+        )
+        with self.assertWarns(BiopythonWarning):
+            score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, 17.0)
+
 
 class TestPairwiseLocal(unittest.TestCase):
     def test_smithwaterman(self):
@@ -570,6 +669,100 @@ query             4 GAXT 0
         seq2 = "GAA?T"
         aligner = Align.PairwiseAligner()
         aligner.mode = "global"
+        aligner.wildcard = "?"
+        score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, 4.0)
+        score = aligner.score(seq1, reverse_complement(seq2), strand="-")
+        self.assertAlmostEqual(score, 4.0)
+        alignments = aligner.align(seq1, seq2)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 4.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 GA?A-T 5
+                  0 ||-|-| 6
+query             0 GA-A?T 5
+""",
+        )
+        self.assertEqual(alignment.shape, (2, 6))
+        self.assertTrue(
+            np.array_equal(
+                alignment.aligned,
+                np.array([[[0, 2], [3, 4], [4, 5]], [[0, 2], [2, 3], [4, 5]]]),
+            )
+        )
+        alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 4.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 GA?A-T 5
+                  0 ||-|-| 6
+query             5 GA-A?T 0
+""",
+        )
+        self.assertEqual(alignment.shape, (2, 6))
+        self.assertTrue(
+            np.array_equal(
+                alignment.aligned,
+                np.array([[[0, 2], [3, 4], [4, 5]], [[5, 3], [3, 2], [1, 0]]]),
+            )
+        )
+        seq1 = "GAXAT"
+        seq2 = "GAAXT"
+        aligner.wildcard = "X"
+        score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, 4.0)
+        score = aligner.score(seq1, reverse_complement(seq2), strand="-")
+        self.assertAlmostEqual(score, 4.0)
+        alignments = aligner.align(seq1, seq2)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 4.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 GAXA-T 5
+                  0 ||-|-| 6
+query             0 GA-AXT 5
+""",
+        )
+        self.assertEqual(alignment.shape, (2, 6))
+        self.assertTrue(
+            np.array_equal(
+                alignment.aligned,
+                np.array([[[0, 2], [3, 4], [4, 5]], [[0, 2], [2, 3], [4, 5]]]),
+            )
+        )
+        alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 4.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 GAXA-T 5
+                  0 ||-|-| 6
+query             5 GA-AXT 0
+""",
+        )
+        self.assertEqual(alignment.shape, (2, 6))
+        self.assertTrue(
+            np.array_equal(
+                alignment.aligned,
+                np.array([[[0, 2], [3, 4], [4, 5]], [[5, 3], [3, 2], [1, 0]]]),
+            )
+        )
+
+    def test_fogsaa_simple2(self):
+        seq1 = "GA?AT"
+        seq2 = "GAA?T"
+        aligner = Align.PairwiseAligner()
+        aligner.mode = "fogsaa"
         aligner.wildcard = "?"
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 4.0)
@@ -930,6 +1123,79 @@ query             3 GA--T 0
             )
         )
 
+    def test_match_score_open_penalty3_fogsaa(self):
+        aligner = Align.PairwiseAligner()
+        aligner.mode = "fogsaa"
+        aligner.query_open_gap_score = -0.1
+        aligner.query_extend_gap_score = 0.0
+        self.assertEqual(
+            aligner.algorithm, "Fast Optimal Global Sequence Alignment Algorithm"
+        )
+        self.assertEqual(
+            str(aligner),
+            """\
+Pairwise sequence aligner with parameters
+  wildcard: None
+  match_score: 1.000000
+  mismatch_score: 0.000000
+  target_internal_open_gap_score: 0.000000
+  target_internal_extend_gap_score: 0.000000
+  target_left_open_gap_score: 0.000000
+  target_left_extend_gap_score: 0.000000
+  target_right_open_gap_score: 0.000000
+  target_right_extend_gap_score: 0.000000
+  query_internal_open_gap_score: -0.100000
+  query_internal_extend_gap_score: 0.000000
+  query_left_open_gap_score: -0.100000
+  query_left_extend_gap_score: 0.000000
+  query_right_open_gap_score: -0.100000
+  query_right_extend_gap_score: 0.000000
+  mode: fogsaa
+""",
+        )
+        seq1 = "GAACT"
+        seq2 = "GAT"
+        score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, 2.9)
+        score = aligner.score(seq1, reverse_complement(seq2), strand="-")
+        self.assertAlmostEqual(score, 2.9)
+        alignments = aligner.align(seq1, seq2)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 2.9)
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 GAACT 5
+                  0 ||--| 5
+query             0 GA--T 3
+""",
+        )
+        self.assertEqual(alignment.shape, (2, 5))
+        self.assertTrue(
+            np.array_equal(
+                alignment.aligned, np.array([[[0, 2], [4, 5]], [[0, 2], [2, 3]]])
+            )
+        )
+        alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 2.9)
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 GAACT 5
+                  0 ||--| 5
+query             3 GA--T 0
+""",
+        )
+        self.assertEqual(alignment.shape, (2, 5))
+        self.assertTrue(
+            np.array_equal(
+                alignment.aligned, np.array([[[0, 2], [4, 5]], [[3, 1], [1, 0]]])
+            )
+        )
+
     def test_match_score_open_penalty4(self):
         aligner = Align.PairwiseAligner()
         aligner.mode = "global"
@@ -1210,6 +1476,79 @@ query             2 G-T- 0
             )
         )
 
+    def test_extend_penalty2_fogsaa(self):
+        aligner = Align.PairwiseAligner()
+        aligner.mode = "fogsaa"
+        aligner.open_gap_score = -0.2
+        aligner.extend_gap_score = -1.5
+        self.assertEqual(
+            aligner.algorithm, "Fast Optimal Global Sequence Alignment Algorithm"
+        )
+        self.assertEqual(
+            str(aligner),
+            """\
+Pairwise sequence aligner with parameters
+  wildcard: None
+  match_score: 1.000000
+  mismatch_score: 0.000000
+  target_internal_open_gap_score: -0.200000
+  target_internal_extend_gap_score: -1.500000
+  target_left_open_gap_score: -0.200000
+  target_left_extend_gap_score: -1.500000
+  target_right_open_gap_score: -0.200000
+  target_right_extend_gap_score: -1.500000
+  query_internal_open_gap_score: -0.200000
+  query_internal_extend_gap_score: -1.500000
+  query_left_open_gap_score: -0.200000
+  query_left_extend_gap_score: -1.500000
+  query_right_open_gap_score: -0.200000
+  query_right_extend_gap_score: -1.500000
+  mode: fogsaa
+""",
+        )
+        seq1 = "GACT"
+        seq2 = "GT"
+        score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, 0.6)
+        score = aligner.score(seq1, reverse_complement(seq2), strand="-")
+        self.assertAlmostEqual(score, 0.6)
+        alignments = aligner.align(seq1, seq2)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 0.6)
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 GACT 4
+                  0 -.-| 4
+query             0 -G-T 2
+""",
+        )
+        self.assertEqual(alignment.shape, (2, 4))
+        self.assertTrue(
+            np.array_equal(
+                alignment.aligned, np.array([[[1, 2], [3, 4]], [[0, 1], [1, 2]]])
+            )
+        )
+        alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 0.6)
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 GACT 4
+                  0 -.-| 4
+query             2 -G-T 0
+""",
+        )
+        self.assertEqual(alignment.shape, (2, 4))
+        self.assertTrue(
+            np.array_equal(
+                alignment.aligned, np.array([[[1, 2], [3, 4]], [[2, 1], [1, 0]]])
+            )
+        )
+
 
 class TestPairwisePenalizeExtendWhenOpening(unittest.TestCase):
     def test_penalize_extend_when_opening(self):
@@ -1238,6 +1577,79 @@ Pairwise sequence aligner with parameters
   query_right_open_gap_score: -1.700000
   query_right_extend_gap_score: -1.500000
   mode: global
+""",
+        )
+        seq1 = "GACT"
+        seq2 = "GT"
+        score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, -1.2)
+        score = aligner.score(seq1, reverse_complement(seq2), strand="-")
+        self.assertAlmostEqual(score, -1.2)
+        alignments = aligner.align(seq1, seq2)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, -1.2)
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 GACT 4
+                  0 |--| 4
+query             0 G--T 2
+""",
+        )
+        self.assertEqual(alignment.shape, (2, 4))
+        self.assertTrue(
+            np.array_equal(
+                alignment.aligned, np.array([[[0, 1], [3, 4]], [[0, 1], [1, 2]]])
+            )
+        )
+        alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, -1.2)
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 GACT 4
+                  0 |--| 4
+query             2 G--T 0
+""",
+        )
+        self.assertEqual(alignment.shape, (2, 4))
+        self.assertTrue(
+            np.array_equal(
+                alignment.aligned, np.array([[[0, 1], [3, 4]], [[2, 1], [1, 0]]])
+            )
+        )
+
+    def test_penalize_extend_when_opening_fogsaa(self):
+        aligner = Align.PairwiseAligner()
+        aligner.mode = "fogsaa"
+        aligner.open_gap_score = -1.7
+        aligner.extend_gap_score = -1.5
+        self.assertEqual(
+            aligner.algorithm, "Fast Optimal Global Sequence Alignment Algorithm"
+        )
+        self.assertEqual(
+            str(aligner),
+            """\
+Pairwise sequence aligner with parameters
+  wildcard: None
+  match_score: 1.000000
+  mismatch_score: 0.000000
+  target_internal_open_gap_score: -1.700000
+  target_internal_extend_gap_score: -1.500000
+  target_left_open_gap_score: -1.700000
+  target_left_extend_gap_score: -1.500000
+  target_right_open_gap_score: -1.700000
+  target_right_extend_gap_score: -1.500000
+  query_internal_open_gap_score: -1.700000
+  query_internal_extend_gap_score: -1.500000
+  query_left_open_gap_score: -1.700000
+  query_left_extend_gap_score: -1.500000
+  query_right_open_gap_score: -1.700000
+  query_right_extend_gap_score: -1.500000
+  mode: fogsaa
 """,
         )
         seq1 = "GACT"
@@ -1401,6 +1813,80 @@ query             2 G--T 0
             )
         )
         alignment = alignments[2]
+        self.assertAlmostEqual(alignment.score, 1.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 GACT 4
+                  0 |.-- 4
+query             2 GT-- 0
+""",
+        )
+        self.assertEqual(alignment.shape, (2, 4))
+        self.assertTrue(
+            np.array_equal(alignment.aligned, np.array([[[0, 2]], [[2, 0]]]))
+        )
+
+    def test_penalize_end_gaps_fogsaa(self):
+        aligner = Align.PairwiseAligner()
+        aligner.mode = "fogsaa"
+        aligner.open_gap_score = -0.2
+        aligner.extend_gap_score = -0.8
+        end_score = 0.0
+        aligner.target_end_gap_score = end_score
+        aligner.query_end_gap_score = end_score
+        self.assertEqual(
+            str(aligner),
+            """\
+Pairwise sequence aligner with parameters
+  wildcard: None
+  match_score: 1.000000
+  mismatch_score: 0.000000
+  target_internal_open_gap_score: -0.200000
+  target_internal_extend_gap_score: -0.800000
+  target_left_open_gap_score: 0.000000
+  target_left_extend_gap_score: 0.000000
+  target_right_open_gap_score: 0.000000
+  target_right_extend_gap_score: 0.000000
+  query_internal_open_gap_score: -0.200000
+  query_internal_extend_gap_score: -0.800000
+  query_left_open_gap_score: 0.000000
+  query_left_extend_gap_score: 0.000000
+  query_right_open_gap_score: 0.000000
+  query_right_extend_gap_score: 0.000000
+  mode: fogsaa
+""",
+        )
+        self.assertEqual(
+            aligner.algorithm, "Fast Optimal Global Sequence Alignment Algorithm"
+        )
+        seq1 = "GACT"
+        seq2 = "GT"
+        score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, 1.0)
+        score = aligner.score(seq1, reverse_complement(seq2), strand="-")
+        self.assertAlmostEqual(score, 1.0)
+
+        alignments = aligner.align(seq1, seq2)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 1.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 GACT 4
+                  0 |.-- 4
+query             0 GT-- 2
+""",
+        )
+        self.assertEqual(alignment.shape, (2, 4))
+        self.assertTrue(
+            np.array_equal(alignment.aligned, np.array([[[0, 2]], [[0, 2]]]))
+        )
+
+        alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.0)
         self.assertEqual(
             str(alignment),
@@ -2425,6 +2911,39 @@ Pairwise sequence aligner with parameters
   query_right_open_gap_score: -0.300000
   query_right_extend_gap_score: -0.100000
   mode: global
+""",
+        )
+        score = aligner.score("abcde", "c")
+        self.assertAlmostEqual(score, 0.2)
+
+    def test_align_one_char_score3_fogsaa(self):
+        aligner = Align.PairwiseAligner()
+        aligner.mode = "fogsaa"
+        aligner.open_gap_score = -0.3
+        aligner.extend_gap_score = -0.1
+        self.assertEqual(
+            aligner.algorithm, "Fast Optimal Global Sequence Alignment Algorithm"
+        )
+        self.assertEqual(
+            str(aligner),
+            """\
+Pairwise sequence aligner with parameters
+  wildcard: None
+  match_score: 1.000000
+  mismatch_score: 0.000000
+  target_internal_open_gap_score: -0.300000
+  target_internal_extend_gap_score: -0.100000
+  target_left_open_gap_score: -0.300000
+  target_left_extend_gap_score: -0.100000
+  target_right_open_gap_score: -0.300000
+  target_right_extend_gap_score: -0.100000
+  query_internal_open_gap_score: -0.300000
+  query_internal_extend_gap_score: -0.100000
+  query_left_open_gap_score: -0.300000
+  query_left_extend_gap_score: -0.100000
+  query_right_open_gap_score: -0.300000
+  query_right_extend_gap_score: -0.100000
+  mode: fogsaa
 """,
         )
         score = aligner.score("abcde", "c")
@@ -4149,6 +4668,36 @@ class TestUnicodeStrings(unittest.TestCase):
             )
         )
 
+    def test_needlemanwunsch_simple1_fogsaa(self):
+        seq1 = "ĞĀĀČŦ"
+        seq2 = "ĞĀŦ"
+        aligner = Align.PairwiseAligner()
+        aligner.mode = "fogsaa"
+        aligner.alphabet = None
+        self.assertEqual(
+            aligner.algorithm, "Fast Optimal Global Sequence Alignment Algorithm"
+        )
+        score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, 3.0)
+        alignments = aligner.align(seq1, seq2)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 3.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+ĞĀĀČŦ
+||--|
+ĞĀ--Ŧ
+""",
+        )
+        self.assertEqual(alignment.shape, (2, 5))
+        self.assertTrue(
+            np.array_equal(
+                alignment.aligned, np.array([[[0, 2], [4, 5]], [[0, 2], [2, 3]]])
+            )
+        )
+
     def test_align_affine1_score(self):
         aligner = Align.PairwiseAligner()
         aligner.mode = "global"
@@ -4158,6 +4707,20 @@ class TestUnicodeStrings(unittest.TestCase):
         aligner.open_gap_score = -5
         aligner.extend_gap_score = -1
         self.assertEqual(aligner.algorithm, "Gotoh global alignment algorithm")
+        score = aligner.score("いい", "あいいう")
+        self.assertAlmostEqual(score, -7.0)
+
+    def test_align_affine1_score_fogsaa(self):
+        aligner = Align.PairwiseAligner()
+        aligner.mode = "fogsaa"
+        aligner.alphabet = None
+        aligner.match_score = 0
+        aligner.mismatch_score = -1
+        aligner.open_gap_score = -5
+        aligner.extend_gap_score = -1
+        self.assertEqual(
+            aligner.algorithm, "Fast Optimal Global Sequence Alignment Algorithm"
+        )
         score = aligner.score("いい", "あいいう")
         self.assertAlmostEqual(score, -7.0)
 
@@ -4981,6 +5544,20 @@ target	6	23	query	13	-	6	23	0	1	17,	0,
 query	16	target	1	255	6D17M5I	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
 """,
         )
+
+
+class TestAlgorithmRestrictions(unittest.TestCase):
+    def test_fogsaa_restrictions(self):
+        aligner = Align.PairwiseAligner(mode="fogsaa")
+        aligner.match_score = -1
+        with self.assertWarns(BiopythonWarning):
+            aligner.score("AAAAAAAAAAAA", "AAAAATAAAAAA")
+        aligner.mismatch_score = 1
+        with self.assertWarns(BiopythonWarning):
+            aligner.score("AAAAAAAAAAAA", "AAAAATAAAAAA")
+        aligner.gap_score = 1
+        with self.assertWarns(BiopythonWarning):
+            aligner.score("AAAAAAAAAAAA", "AAAAATAAAAAA")
 
 
 if __name__ == "__main__":
