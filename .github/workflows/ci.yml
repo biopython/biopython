@@ -30,7 +30,7 @@ jobs:
     - uses: tj-actions/changed-files@v45
       id: changed-files
 
-    # Cache CI packages
+    # Cache pre-commit's own packages
     - uses: actions/cache@v4
       id: cache-precommit
       with:
@@ -41,6 +41,10 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: 3.9
+        cache: 'pip'
+        cache-dependency-path: |
+          setup.py
+          .pre-commit-config.yaml
 
     - name: Installing pre-commit
       run: |
@@ -55,9 +59,6 @@ jobs:
       run: |
         pre-commit run --files ${{ steps.changed-files.outputs.all_changed_files }}
 
-  # Cache pip & python dependencies for Linux runner
-  # since it is used in most actions.
-  # Adapted from: https://medium.com/ai2-blog/python-caching-in-github-actions-e9452698e98d
   linux_prep:
     needs: [style]
     runs-on: ubuntu-latest
@@ -72,19 +73,16 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
-
-    - uses: actions/cache@v4
-      id: cache-pip
-      with:
-        path: ${{ env.pythonLocation }}
-        key: ${{runner.os}}-${{ env.pythonLocation }}-${{ matrix.python-version }}-v2-${{ hashFiles('setup.py') }}-${{ hashFiles('**/ci-dependencies.txt') }}
+        cache: 'pip'
+        cache-dependency-path: |
+          setup.py
+          ci-dependencies.txt
 
     - name: Install Python packaging tools
       run: |
         python -m pip install --upgrade pip setuptools wheel
 
     - name: Install Python dependencies
-      if: steps.cache-pip.outputs.cache-hit != 'true'
       run: |
         python -m pip install --upgrade --upgrade-strategy eager -r ci-dependencies.txt
 
@@ -102,6 +100,9 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: 3.9
+        cache: 'pip'
+        cache-dependency-path: |
+          setup.py
 
     - name: Install Python packaging tools
       run: |
@@ -126,6 +127,7 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
+        cache: 'pip'
 
     - name: Install Python packaging tools
       run: |
@@ -134,20 +136,6 @@ jobs:
     - name: Build wheel
       run: |
         python setup.py bdist_wheel
-
-    # - name: Archive wheels
-    #   uses: actions/upload-artifact@v2
-    #   with:
-    #     name: biopython_wheels
-    #     path: |
-    #       dist/*whl
-    #
-    # - name: Fetch archived wheels from previous jobs
-    #   uses: actions/download-artifact@v2
-    #   with:
-    #     name: biopython_wheels
-    #     path: dist
-
 
   # Run tests in parallel across Linux, MacOS, and Windows
   # hosts (thus the three steps and not the single matrix entry).
@@ -180,16 +168,12 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
-
-    # Retrieve cache to speed things up
-    - uses: actions/cache@v4
-      id: cache-pip
-      with:
-        path: ${{ env.pythonLocation }}
-        key: ${{runner.os}}-${{ env.pythonLocation }}-${{ matrix.python-version }}-v2-${{ hashFiles('setup.py') }}-${{ hashFiles('**/ci-dependencies.txt') }}
+        cache: 'pip'
+        cache-dependency-path: |
+          setup.py
+          ci-dependencies.txt
 
     - name: Install dependencies
-      if: steps.cache-pip.outputs.cache-hit != 'true'
       run: |
           python -m pip install --upgrade --upgrade-strategy eager -r ci-dependencies.txt
 
@@ -221,6 +205,9 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
+        cache: 'pip'
+        cache-dependency-path: |
+          setup.py
 
     - name: Install Python packaging tools
       run: |
@@ -259,6 +246,9 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
+        cache: 'pip'
+        cache-dependency-path: |
+          setup.py
 
     - name: Install Python packaging tools
       run: |
@@ -295,6 +285,9 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
+        cache: 'pip'
+        cache-dependency-path: |
+          setup.py
 
     - name: Install Python packaging tools
       run: |
@@ -336,19 +329,16 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: 3.9
-
-    - uses: actions/cache@v4
-      id: cache-pip
-      with:
-        path: ${{ env.pythonLocation }}
-        key: ${{runner.os}}-${{ env.pythonLocation }}-${{ matrix.python-version }}-v2-${{ hashFiles('setup.py') }}-${{ hashFiles('**/ci-dependencies.txt') }}
+        cache: 'pip'
+        cache-dependency-path: |
+          setup.py
+          .circleci/requirements-sphinx.txt
 
     - name: Install Python packaging tools
       run: |
         python -m pip install --upgrade pip setuptools wheel
 
     - name: Install dependencies
-      if: steps.cache-pip.outputs.cache-hit != 'true'
       run: |
         python -m pip install --upgrade --upgrade-strategy eager -r .circleci/requirements-sphinx.txt
 
