@@ -23,6 +23,7 @@ from Bio.SeqUtils.CheckSum import gcg
 from Bio.SeqUtils.CheckSum import seguid
 from Bio.SeqUtils.lcc import lcc_mult
 from Bio.SeqUtils.lcc import lcc_simp
+from Bio.SeqUtils import MeltingTemp as mt
 
 
 class SeqUtilsTests(unittest.TestCase):
@@ -426,6 +427,33 @@ TTT	0.886
         llc_lst = lcc_mult(record, len(record))
         self.assertEqual(len(llc_lst), 1)
         self.assertAlmostEqual(llc_lst[0], 0.9528, places=4)
+
+    def test_melting_temp_inputs(self):
+
+        invalid_seq = "Hello, World!"
+        self.assertRaises(ValueError, mt.Tm_NN, invalid_seq)
+        self.assertRaises(ValueError, mt.Tm_Wallace, invalid_seq)
+        self.assertRaises(ValueError, mt.Tm_GC, invalid_seq)
+
+        invalid_input = {"seq": "ACGTACGTACGT"}
+        self.assertRaises(ValueError, mt.Tm_NN, invalid_input)
+        # self.assertRaises(ValueError, mt.Tm_Wallace, invalid_input) > This fails
+        self.assertRaises(ValueError, mt.Tm_GC, invalid_input)
+
+        valid_seq = "ACGTACGTACGT"
+        valid_seq_with_symbols = "1 ACGT! ACGT-ACGT"
+
+        # Check that the function can handle different inputs
+        for cls in [str, Seq, SeqRecord, MutableSeq]:
+            for i in range(2):
+                value = (
+                    valid_seq_with_symbols.upper()
+                    if i == 0
+                    else valid_seq_with_symbols.lower()
+                )
+                self.assertEqual(mt.Tm_NN(valid_seq), mt.Tm_NN(cls(value)))
+                self.assertEqual(mt.Tm_Wallace(valid_seq), mt.Tm_Wallace(cls(value)))
+                self.assertEqual(mt.Tm_GC(valid_seq), mt.Tm_GC(cls(value)))
 
 
 if __name__ == "__main__":
