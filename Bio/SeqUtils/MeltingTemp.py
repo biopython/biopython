@@ -670,8 +670,12 @@ def Tm_Wallace(seq, check=True, strict=True):
 
     """
     if isinstance(seq, SeqRecord):
-        seq = seq.seq
-    seq = str(seq)
+        seq = str(seq.seq)
+    elif isinstance(seq, Seq._SeqAbstractBaseClass):
+        seq = str(seq)
+    elif not isinstance(seq, str):
+        raise ValueError("Invalid input, must be str, Seq or SeqRecord")
+
     if check:
         seq = _check(seq, "Tm_Wallace")
 
@@ -765,8 +769,12 @@ def Tm_GC(
     if saltcorr == 5:
         raise ValueError("salt-correction method 5 not applicable to Tm_GC")
     if isinstance(seq, SeqRecord):
-        seq = seq.seq
-    seq = str(seq)
+        seq = str(seq.seq)
+    elif isinstance(seq, Seq._SeqAbstractBaseClass):
+        seq = str(seq)
+    elif not isinstance(seq, str):
+        raise ValueError("Invalid input, must be str, Seq or SeqRecord")
+
     if check:
         seq = _check(seq, "Tm_GC")
 
@@ -932,8 +940,12 @@ def Tm_NN(
         de_table = DNA_DE1
 
     if isinstance(seq, SeqRecord):
-        seq = seq.seq
-    seq = str(seq)
+        seq = str(seq.seq)
+    elif isinstance(seq, Seq._SeqAbstractBaseClass):
+        seq = str(seq)
+    elif not isinstance(seq, str):
+        raise ValueError("Invalid input, must be str, Seq or SeqRecord")
+
     if not c_seq:
         # c_seq must be provided by user if dangling ends or mismatches should
         # be taken into account. Otherwise take perfect complement.

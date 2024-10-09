@@ -10,7 +10,7 @@ import unittest
 
 from Bio import SeqIO
 from Bio.Seq import MutableSeq
-from Bio.Seq import Seq
+from Bio.Seq import Seq, _SeqAbstractBaseClass
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqUtils import CodonAdaptationIndex
 from Bio.SeqUtils import gc_fraction
@@ -435,7 +435,7 @@ TTT	0.886
         self.assertRaises(ValueError, mt.Tm_Wallace, invalid_seq)
         self.assertRaises(ValueError, mt.Tm_GC, invalid_seq)
 
-        invalid_input = {"seq": "ACGTACGTACGT"}
+        invalid_input = {"ACGT": "ACGTACGTACGT"}
         self.assertRaises(ValueError, mt.Tm_NN, invalid_input)
         self.assertRaises(ValueError, mt.Tm_Wallace, invalid_input)
         self.assertRaises(ValueError, mt.Tm_GC, invalid_input)
