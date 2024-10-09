@@ -447,9 +447,7 @@ def _check(seq, method):
     # Remove all non-alphabetic characters
     seq = re.sub(r"[^A-Z]", "", seq.upper())
     seq = str(Seq.Seq(seq).back_transcribe())
-    if method == "Tm_Wallace":
-        return seq
-    if method == "Tm_GC":
+    if method == "Tm_GC" or method == "Tm_Wallace":
         baseset = (
             "A",
             "B",

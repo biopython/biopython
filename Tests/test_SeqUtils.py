@@ -437,7 +437,7 @@ TTT	0.886
 
         invalid_input = {"seq": "ACGTACGTACGT"}
         self.assertRaises(ValueError, mt.Tm_NN, invalid_input)
-        # self.assertRaises(ValueError, mt.Tm_Wallace, invalid_input) > This fails
+        self.assertRaises(ValueError, mt.Tm_Wallace, invalid_input)
         self.assertRaises(ValueError, mt.Tm_GC, invalid_input)
 
         valid_seq = "ACGTACGTACGT"
