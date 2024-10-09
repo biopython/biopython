@@ -157,6 +157,8 @@ import warnings
 from Bio import BiopythonWarning
 from Bio import Seq
 from Bio import SeqUtils
+from Bio.SeqRecord import SeqRecord
+import re
 
 # Thermodynamic lookup tables (dictionaries):
 # Enthalpy (dH) and entropy (dS) values for nearest neighbors and initiation
@@ -442,7 +444,8 @@ def _check(seq, method):
     'ACGTTGCAAGTCCATGGTAC'
 
     """
-    seq = "".join(seq.split()).upper()
+    # Remove all non-alphabetic characters
+    seq = re.sub(r"[^A-Z]", "", seq.upper())
     seq = str(Seq.Seq(seq).back_transcribe())
     if method == "Tm_Wallace":
         return seq
@@ -468,7 +471,9 @@ def _check(seq, method):
         )
     if method == "Tm_NN":
         baseset = ("A", "C", "G", "T", "I")
-    seq = "".join([base for base in seq if base in baseset])
+
+    if not all(base in baseset for base in seq):
+        raise ValueError("The input sequence is not valid for " + method)
     return seq
 
 
@@ -666,6 +671,8 @@ def Tm_Wallace(seq, check=True, strict=True):
         48.0
 
     """
+    if isinstance(seq, SeqRecord):
+        seq = seq.seq
     seq = str(seq)
     if check:
         seq = _check(seq, "Tm_Wallace")
@@ -759,6 +766,8 @@ def Tm_GC(
     """
     if saltcorr == 5:
         raise ValueError("salt-correction method 5 not applicable to Tm_GC")
+    if isinstance(seq, SeqRecord):
+        seq = seq.seq
     seq = str(seq)
     if check:
         seq = _check(seq, "Tm_GC")
@@ -924,6 +933,8 @@ def Tm_NN(
     if not de_table:
         de_table = DNA_DE1
 
+    if isinstance(seq, SeqRecord):
+        seq = seq.seq
     seq = str(seq)
     if not c_seq:
         # c_seq must be provided by user if dangling ends or mismatches should
