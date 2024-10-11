@@ -3,7 +3,7 @@
 import numpy as np
 from Bio import bgzf
 from io import StringIO, BytesIO
-from typing import NamedTuple, Optional
+from typing import NamedTuple, Optional, Literal, Iterator
 import struct
 from Bio.Align import sam
 
@@ -36,10 +36,11 @@ class _BAMToSamReader(bgzf.BgzfReader):
     """Limited translation reader from BAM to SAM which allows seek(0), read(0), and iteration"""
 
     _references: Optional[list[_ReferenceMetadata]]
+    _header_iterator: Optional[Iterator[str]]
 
-    seq_encoding = bytes.maketrans(bytes(range(16)), b"=ACMGRSVTWYHKDBN")
-    cigar_encoding = bytes.maketrans(b"012345678", b"MIDNSHP=X")
-    qual_mapping = bytes(
+    seq_encoding: bytes = bytes.maketrans(bytes(range(16)), b"=ACMGRSVTWYHKDBN")
+    cigar_encoding: bytes = bytes.maketrans(b"012345678", b"MIDNSHP=X")
+    qual_mapping: bytes = bytes(
         (letter + 33 if 0 <= letter < 94 else 255) for letter in range(256)
     )
 
@@ -50,7 +51,7 @@ class _BAMToSamReader(bgzf.BgzfReader):
         self._references = None
         self._header_iterator = None
 
-    def seek(self, virtual_offset):
+    def seek(self, virtual_offset: Literal[0]) -> int:
         if virtual_offset != 0:
             raise NotImplementedError(
                 f"BAM reader only accepts virtual_offset = 0, but found {virtual_offset=}"
@@ -141,7 +142,14 @@ class _BAMToSamReader(bgzf.BgzfReader):
             if alignment_info.l_seq > 0
             else b"*"
         )
+        if alignment_info.l_seq % 2:
+            # When length is odd, the last nibble is junk
+            seq = seq[:-1]
+
         qual = block.read(alignment_info.l_seq) if alignment_info.l_seq > 0 else b"*"
+        if qual.startswith(b"\xFF"):
+            # If qual is missing, it's filled with just \xFF repeated alignment_info.l_seq times
+            qual = b"*"
 
         alignment_ref_name = (
             self._references[alignment_info.ref_id].name
