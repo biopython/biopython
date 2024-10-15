@@ -1613,9 +1613,18 @@ static PyObject*
 PathGenerator_next_FOGSAA(PathGenerator* self)
 {
     /* No need to create path because FOGSAA only finds one optimal alignment
-     * the .path fields should be populated by FOGSAA_EXIT_ALIGN */
+     * the .path fields should be populated by FOGSAA_EXIT_ALIGN. To indicate
+     * we've exausted the iterator, just set self->M[0][0].path to DONE */
+    Trace *last = &self->M[self->nA][self->nB];
+    PyObject *path;
 
-    return PathGenerator_create_path(self, 0, 0);
+    if (last->path == DONE) {
+        return NULL;
+    }
+
+    path = PathGenerator_create_path(self, 0, 0);
+    last->path = DONE;
+    return path;
 }
 
 static PyObject *
@@ -1692,8 +1701,8 @@ PathGenerator_reset(PathGenerator* self)
             break;
         }
         case FOGSAA_Mode:
-            PyErr_SetString(PyExc_NotImplementedError, "TODO: FOGSAA PathGenerator reset");
-            return NULL;
+            self->M[self->nA][self->nB].path = 0;
+            break;
     }
     Py_INCREF(Py_None);
     return Py_None;
@@ -1941,8 +1950,9 @@ static PyObject*
 Aligner_repr(Aligner* self)
 {
   const char text[] = "Pairwise aligner, implementing the Needleman-Wunsch, "
-      "Smith-Waterman, Gotoh, Waterman-Smith-Beyer, and Fast Optimal Global "
-      "Sequence Alignment Algorithm global and local alignment algorithms";
+      "Smith-Waterman, Gotoh, or Waterman-Smith-Beyer global or local "
+      "alignment algorithm, or the Fast Optimal Global Sequence Alignment "
+      "Algorithm";
   return PyUnicode_FromString(text);
 }
 
@@ -2041,6 +2051,7 @@ Aligner_get_mode(Aligner* self, void* closure)
 static int
 Aligner_set_mode(Aligner* self, PyObject* value, void* closure)
 {
+    self->algorithm = Unknown;
     if (PyUnicode_Check(value)) {
         if (PyUnicode_CompareWithASCIIString(value, "global") == 0) {
             self->mode = Global;

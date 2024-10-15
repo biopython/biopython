@@ -3770,15 +3770,16 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
     and gap scores are negative or zero.  By default, the match score is 1,
     and the mismatch and gap scores are zero.  Based on the values of the gap
     scores, a PairwiseAligner object automatically chooses the appropriate
-    alignment algorithm (the Needleman-Wunsch, Smith-Waterman, Gotoh,
-    Waterman-Smith-Beyer, or Fast Optimal Global Sequence Alignment Algorithm
-    global or local alignment algorithm).
+    alignment algorithm (the Needleman-Wunsch, Smith-Waterman, Gotoh, or
+    Waterman-Smith-Beyer global or local alignment algorithm, or the Fast
+    Optimal Global Sequence Alignment Algorithm).
 
     The Fast Optimal Global Sequence Alignment Algorithm (FOGSAA) will never be
     automatically selected. If you wish to use FOGSAA, you must set the "mode"
     attribute to "fogsaa". As its name suggests, it only finds global
-    alignments and cannot be used for local alignment. A warning will be raised
-    if it is run on sequences that are less than 30% globally similar.
+    alignments and cannot be used for local alignment. FOGSAA will raise a
+    warning and may return incorrect results if the match score is less than
+    the mismatch score or any gap score.
 
     Calling the "score" method on the aligner with two sequences as arguments
     will calculate the alignment score between the two sequences.
