@@ -44,6 +44,8 @@ from .Interfaces import SequenceWriter
 class TabIterator(SequenceIterator):
     """Parser for tab-delimited files."""
 
+    modes = "t"
+
     def __init__(self, source):
         """Iterate over tab separated lines as SeqRecord objects.
 
@@ -75,16 +77,10 @@ class TabIterator(SequenceIterator):
         gi|45478721|ref|NP_995576.1| length 90
 
         """
-        super().__init__(source, mode="t", fmt="Tab-separated plain-text")
+        super().__init__(source, fmt="Tab-separated plain-text")
 
-    def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
-        records = self.iterate(handle)
-        return records
-
-    def iterate(self, handle):
-        """Parse the file and generate SeqRecord objects."""
-        for line in handle:
+    def __next__(self):
+        for line in self.stream:
             try:
                 title, seq = line.split("\t")  # will fail if more than one tab!
             except ValueError:
@@ -98,7 +94,8 @@ class TabIterator(SequenceIterator):
                 ) from None
             title = title.strip()
             seq = seq.strip()  # removes the trailing new line
-            yield SeqRecord(Seq(seq), id=title, name=title, description="")
+            return SeqRecord(Seq(seq), id=title, name=title, description="")
+        raise StopIteration
 
 
 class TabWriter(SequenceWriter):
@@ -113,11 +110,12 @@ class TabWriter(SequenceWriter):
     with ``format="tab"``.
     """
 
+    modes = "t"
+
     def write_record(self, record):
         """Write a single tab line to the file."""
         assert self._header_written
         assert not self._footer_written
-        self._record_written = True
         self.handle.write(as_tab(record))
 
 

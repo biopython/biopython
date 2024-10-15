@@ -420,6 +420,8 @@ _FormatToIterator = {
     "ace": AceIO.AceIterator,
     "fasta": FastaIO.FastaIterator,
     "fasta-2line": FastaIO.FastaTwoLineIterator,
+    "fasta-blast": FastaIO.FastaBlastIterator,
+    "fasta-pearson": FastaIO.FastaPearsonIterator,
     "ig": IgIO.IgIterator,
     "embl": InsdcIO.EmblIterator,
     "embl-cds": InsdcIO.EmblCdsFeatureIterator,
@@ -573,7 +575,6 @@ def parse(handle, format, alphabet=None):
 
     Arguments:
      - handle   - handle to the file, or the filename as a string
-       (note older versions of Biopython only took a handle).
      - format   - lower case string describing the file format.
      - alphabet - no longer used, should be None.
 
@@ -669,16 +670,30 @@ def read(handle, format, alphabet=None):
     Use the Bio.SeqIO.parse(handle, format) function if you want
     to read multiple records from the handle.
     """
-    iterator = parse(handle, format, alphabet)
-    try:
-        record = next(iterator)
-    except StopIteration:
-        raise ValueError("No records found in handle") from None
-    try:
-        next(iterator)
-        raise ValueError("More than one record found in handle")
-    except StopIteration:
-        pass
+    from Bio import AlignIO
+
+    if format in AlignIO._FormatToIterator:
+        records = parse(handle, format, alphabet)
+        try:
+            record = next(records)
+        except StopIteration:
+            raise ValueError("No records found in handle") from None
+        try:
+            next(records)
+            raise ValueError("More than one record found in handle")
+        except StopIteration:
+            pass
+    else:
+        with parse(handle, format, alphabet) as records:
+            try:
+                record = next(records)
+            except StopIteration:
+                raise ValueError("No records found in handle") from None
+            try:
+                next(records)
+                raise ValueError("More than one record found in handle")
+            except StopIteration:
+                pass
     return record
 
 

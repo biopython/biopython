@@ -11,9 +11,9 @@ and confirms they are consistent using our different parsers.
 import unittest
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
-    numpy = None  # type: ignore
+    np = None  # type: ignore
 
 from Bio import BiopythonDeprecationWarning
 from Bio import SeqIO
@@ -245,8 +245,8 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX')"""
         self.assertEqual("BC", self.record[1:3].seq)
         with self.assertRaises(ValueError):
             c = self.record["a"].seq
-        if numpy is not None:
-            start, stop = numpy.array([1, 3])  # numpy integers
+        if np is not None:
+            start, stop = np.array([1, 3])  # numpy integers
             self.assertEqual("B", self.record[start])
             self.assertEqual("BC", self.record[start:stop].seq)
 

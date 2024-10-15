@@ -16,7 +16,6 @@ from os import PathLike
 from typing import AnyStr
 from typing import Generic
 from typing import IO
-from collections.abc import Iterator
 from typing import Optional
 from typing import Union
 
@@ -29,20 +28,34 @@ from Bio.SeqRecord import SeqRecord
 _PathLikeTypes = (PathLike, str, bytes)
 _IOSource = Union[IO[AnyStr], PathLike, str, bytes]
 _TextIOSource = _IOSource[str]
+_BytesIOSource = _IOSource[bytes]
 
 
 class SequenceIterator(ABC, Generic[AnyStr]):
     """Base class for building SeqRecord iterators.
 
-    You should write a parse method that returns a SeqRecord generator.  You
+    You should write a __next__ method that returns the next SeqRecord.  You
     may wish to redefine the __init__ method as well.
+    You must also create a class property `modes` specifying the allowable
+    file stream modes.
     """
+
+    @property
+    @abstractmethod
+    def modes(self):
+        """File modes (binary or text) that the parser can handle.
+
+        This property must be "t" (for text mode only), "b" (for binary mode
+        only), "tb" (if both text and binary mode are accepted, but text mode
+        is preferred), or "bt" (if both text and binary mode are accepted, but
+        binary mode is preferred).
+        """
+        pass
 
     def __init__(
         self,
         source: _IOSource,
         alphabet: None = None,
-        mode: str = "t",
         fmt: Optional[str] = None,
     ) -> None:
         """Create a SequenceIterator object.
@@ -50,6 +63,7 @@ class SequenceIterator(ABC, Generic[AnyStr]):
         Arguments:
         - source - input file stream, or path to input file
         - alphabet - no longer used, should be None
+        - fmt - string, mixed case format name for in error messages
 
         This method MAY be overridden by any subclass.
 
@@ -60,39 +74,36 @@ class SequenceIterator(ABC, Generic[AnyStr]):
         """
         if alphabet is not None:
             raise ValueError("The alphabet argument is no longer supported")
+        modes = self.modes
+        self.source = source
         if isinstance(source, _PathLikeTypes):
+            mode = modes[0]
             self.stream = open(source, "r" + mode)
-            self.should_close_stream = True
         else:
-            if mode == "t":
-                if source.read(0) != "":
-                    raise StreamModeError(
-                        f"{fmt} files must be opened in text mode."
-                    ) from None
-            elif mode == "b":
-                if source.read(0) != b"":
+            value = source.read(0)
+            if value == "":
+                if modes == "b":
                     raise StreamModeError(
                         f"{fmt} files must be opened in binary mode."
                     ) from None
+                mode = "t"
+            elif value == b"":
+                if modes == "t":
+                    raise StreamModeError(
+                        f"{fmt} files must be opened in text mode."
+                    ) from None
+                mode = "b"
             else:
-                raise ValueError(f"Unknown mode '{mode}'") from None
+                raise RuntimeError("Failed to read from input data") from None
             self.stream = source
-            self.should_close_stream = False
-        try:
-            self.records = self.parse(self.stream)
-        except Exception:
-            if self.should_close_stream:
-                self.stream.close()
-            raise
+        self.mode = mode
 
+    @abstractmethod
     def __next__(self):
-        """Return the next entry."""
-        try:
-            return next(self.records)
-        except Exception:
-            if self.should_close_stream:
-                self.stream.close()
-            raise
+        """Return the next SeqRecord.
+
+        This method must be implemented by the subclass.
+        """
 
     def __iter__(self):
         """Iterate over the entries as a SeqRecord objects.
@@ -105,15 +116,22 @@ class SequenceIterator(ABC, Generic[AnyStr]):
                     print(record.id)
                     print(record.seq)
 
-        This method SHOULD NOT be overridden by any subclass. It should be
-        left as is, which will call the subclass implementation of __next__
-        to actually parse the file.
+        This method SHOULD NOT be overridden by any subclass.
         """
         return self
 
-    @abstractmethod
-    def parse(self, handle: IO[AnyStr]) -> Iterator[SeqRecord]:
-        """Start parsing the file, and return a SeqRecord iterator."""
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, exc_traceback):
+        try:
+            stream = self.stream
+        except AttributeError:
+            return
+        if self.stream is not self.source:
+            self.stream.close()
+        del self.stream
+        return False
 
 
 def _get_seq_string(record: SeqRecord) -> str:
@@ -151,37 +169,45 @@ class SequenceWriter:
     the number of records.
     """
 
-    def __init__(self, target: _IOSource, mode: str = "w") -> None:
-        """Create the writer object."""
-        if mode == "w":
-            if isinstance(target, _PathLikeTypes):
-                # target is a path
-                handle = open(target, mode)
-            else:
-                try:
-                    handle = target
-                    target.write("")
-                except TypeError:
-                    # target was opened in binary mode
-                    raise StreamModeError("File must be opened in text mode.") from None
-        elif mode == "wb":
-            if isinstance(target, _PathLikeTypes):
-                # target is a path
-                handle = open(target, mode)
-            else:
-                handle = target
-                try:
-                    target.write(b"")
-                except TypeError:
-                    # target was opened in text mode
-                    raise StreamModeError(
-                        "File must be opened in binary mode."
-                    ) from None
-        else:
-            raise RuntimeError(f"Unknown mode '{mode}'")
+    @property
+    @abstractmethod
+    def modes(self):
+        """File modes (binary or text) that the writer can handle.
 
-        self._target = target
-        self.handle = handle
+        This property must be "t" (for text mode only), "b" (for binary mode
+        only), "tb" (if both text and binary mode are accepted, but text mode
+        is preferred), or "bt" (if both text and binary mode are accepted, but
+        binary mode is preferred).
+        """
+        pass
+
+    def __init__(self, target: _IOSource) -> None:
+        """Create the writer object."""
+        if isinstance(target, _PathLikeTypes):
+            mode = self.modes[0]
+            stream = open(target, "w" + mode)
+        else:
+            stream = target
+            modes = "tb"
+            values = ("", b"")
+            for mode, value in zip(modes, values):
+                try:
+                    stream.write(value)
+                except TypeError:
+                    continue
+                else:
+                    break
+            else:
+                raise RuntimeError("Failed to read from input data") from None
+            if mode not in self.modes:
+                if mode == "t":
+                    # target was opened in text mode
+                    raise StreamModeError("File must be opened in binary mode.")
+                elif mode == "b":
+                    # target was opened in binary mode
+                    raise StreamModeError("File must be opened in text mode.")
+        self.target = target
+        self.handle = stream
 
     def clean(self, text: str) -> str:
         """Use this to avoid getting newlines in the output."""
@@ -212,32 +238,18 @@ class SequenceWriter:
         # for sequential file formats.                   #
         ##################################################
 
-    def write_records(self, records, maxcount=None):
+    def write_records(self, records):
         """Write records to the output file, and return the number of records.
 
         records - A list or iterator returning SeqRecord objects
-        maxcount - The maximum number of records allowed by the
-        file format, or None if there is no maximum.
         """
         count = 0
-        if maxcount is None:
-            for record in records:
-                self.write_record(record)
-                count += 1
-        else:
-            for record in records:
-                if count == maxcount:
-                    if maxcount == 1:
-                        raise ValueError("More than one sequence found")
-                    else:
-                        raise ValueError(
-                            "Number of sequences is larger than %d" % maxcount
-                        )
-                self.write_record(record)
-                count += 1
+        for record in records:
+            self.write_record(record)
+            count += 1
         return count
 
-    def write_file(self, records, mincount=0, maxcount=None):
+    def write_file(self, records):
         """Write a complete file with the records, and return the number of records.
 
         records - A list or iterator returning SeqRecord objects
@@ -248,21 +260,9 @@ class SequenceWriter:
         ##################################################
         try:
             self.write_header()
-            count = self.write_records(records, maxcount)
+            count = self.write_records(records)
             self.write_footer()
         finally:
-            if self.handle is not self._target:
+            if self.handle is not self.target:
                 self.handle.close()
-        if count < mincount:
-            if mincount == 1:  # Common case
-                raise ValueError("Must have one sequence")
-            elif mincount == maxcount:
-                raise ValueError(
-                    "Number of sequences is %d (expected %d)" % (count, mincount)
-                )
-            else:
-                raise ValueError(
-                    "Number of sequences is %d (expected at least %d)"
-                    % (count, mincount)
-                )
         return count

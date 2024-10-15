@@ -104,10 +104,10 @@ typedef struct {
 static double **
 calcDM(pcePoint coords, int len)
 {
-    double **dm = (double **)malloc(sizeof(double *) * len);
+    double **dm = (double **)PyMem_RawMalloc(sizeof(double *) * len);
 
     for (int i = 0; i < len; i++) {
-        dm[i] = (double *)malloc(sizeof(double) * len);
+        dm[i] = (double *)PyMem_RawMalloc(sizeof(double) * len);
     }
     for (int row = 0; row < len; row++) {
         for (int col = row; col < len; col++) {
@@ -190,10 +190,10 @@ calcS(
     // Initialize the 2D similarity matrix
     const int rowCount = lenA - fragmentSize + 1;
     const int colCount = lenB - fragmentSize + 1;
-    double **S = (double **)malloc(sizeof(double *) * rowCount);
+    double **S = (double **)PyMem_RawMalloc(sizeof(double *) * rowCount);
 
     for (int i = 0; i < rowCount; i++) {
-        S[i] = (double *)malloc(sizeof(double) * colCount);
+        S[i] = (double *)PyMem_RawMalloc(sizeof(double) * colCount);
     }
 
     //
@@ -370,7 +370,7 @@ static pcePoint
 getCoords(PyObject *L, int length)
 {
     // Make space for the current coords
-    pcePoint coords = (pcePoint)malloc(sizeof(cePoint) * length);
+    pcePoint coords = (pcePoint)PyMem_RawMalloc(sizeof(cePoint) * length);
 
     if (!coords)
         return NULL;
@@ -448,7 +448,7 @@ findPath(
                 break;
 
             // Initialize current path
-            path curPath = (path)malloc(sizeof(afp) * smaller);
+            path curPath = (path)PyMem_RawMalloc(sizeof(afp) * smaller);
             int curPathLength = 1;
             double curPathSimilarity = S[iA][iB];
 
@@ -575,7 +575,7 @@ findPath(
                 bufferSize += 1;
             }
             else {
-                free(curPath);
+                PyMem_RawFree(curPath);
             }
         } // ROF -- end for iB
     }     // ROF -- end for iA
@@ -703,22 +703,22 @@ PyCealign(PyObject *Py_UNUSED(self), PyObject *args)
     result = (PyObject *)findPath(S, dA, dB, lenA, lenB, fragmentSize, gapMax);
 
     /* release memory */
-    free(coordsA);
-    free(coordsB);
+    PyMem_RawFree(coordsA);
+    PyMem_RawFree(coordsB);
 
     /* distance matrices	 */
     for (int i = 0; i < lenA; i++)
-        free(dA[i]);
-    free(dA);
+        PyMem_RawFree(dA[i]);
+    PyMem_RawFree(dA);
 
     for (int i = 0; i < lenB; i++)
-        free(dB[i]);
-    free(dB);
+        PyMem_RawFree(dB[i]);
+    PyMem_RawFree(dB);
 
     // Similarity matrix
     for (int i = 0; i <= lenA - fragmentSize; i++)
-        free(S[i]);
-    free(S);
+        PyMem_RawFree(S[i]);
+    PyMem_RawFree(S);
 
     return result;
 }

@@ -10,7 +10,11 @@ import xml.etree.ElementTree as ET
 
 from Bio import Align
 from Bio import motifs
-from Bio import Seq
+from Bio.Seq import Seq
+
+
+import warnings
+from Bio import BiopythonDeprecationWarning
 
 
 def read(handle):
@@ -73,12 +77,19 @@ class Motif(motifs.Motif):
         self.alt_id = None
 
 
-class Instance(Seq.Seq):
+class Instance(Seq):
     """A class describing the instances of a MEME motif, and the data thereof."""
 
     def __init__(self, *args, **kwds):
         """Initialize the class."""
-        Seq.Seq.__init__(self, *args, **kwds)
+        warnings.warn(
+            "The class Bio.motifs.meme.Instance is deprecated, as it does not "
+            "provide any real advantages compared to the Seq class from which "
+            "it is derived. Please use the Seq class directly instead of the "
+            "Instance class.",
+            BiopythonDeprecationWarning,
+        )
+        Seq.__init__(self, *args, **kwds)
         self.sequence_name = ""
         self.sequence_id = ""
         self.start = 0
@@ -163,7 +174,7 @@ def __read_motifs(record, xml_tree, sequence_id_name_map):
                 for letter_ref in site_tree.find("site").findall("letter_ref")
             ]
             sequence = "".join(letters)
-            instance = Instance(sequence)
+            instance = Seq(sequence)
             instance.motif_name = motif_tree.get("name")
             instance.sequence_id = site_tree.get("sequence_id")
             instance.sequence_name = sequence_id_name_map[instance.sequence_id]

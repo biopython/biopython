@@ -5,7 +5,7 @@
 #
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
+    rev: v5.0.0
     hooks:
     -   id: check-executables-have-shebangs
         files: \.(py|sh)$
@@ -14,7 +14,7 @@ repos:
         files: \.py$
     -   id: mixed-line-ending
 -   repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.5.0
+    rev: v0.6.9
     hooks:
     # Run the Ruff linter.
     -   id: ruff
@@ -29,19 +29,19 @@ repos:
             '--config=lint.isort.order-by-type=false',
         ]
 -   repo: https://github.com/psf/black
-    rev: 24.4.2
+    rev: 24.10.0
     hooks:
     -   id: black
         args: [--check,--target-version,py39]
 -   repo: https://github.com/PyCQA/flake8
-    rev: 7.1.0
+    rev: 7.1.1
     hooks:
     -   id: flake8
         additional_dependencies: [
             'flake8-rst-docstrings>=0.2.3',
         ]
 -   repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.10.1
+    rev: v1.11.2
     hooks:
     -   id: mypy
         # equivalent to "files" in .mypy.ini
@@ -53,7 +53,7 @@ repos:
         additional_dependencies: [black==24.2.0]
         exclude: ^.github/
 -   repo: https://github.com/rstcheck/rstcheck
-    rev: v6.2.0
+    rev: v6.2.4
     hooks:
     -   id: rstcheck
         args: [
@@ -64,7 +64,7 @@ repos:
             --ignore-messages=Unknown\ target\ name
         ]
 -   repo: https://github.com/PyCQA/doc8
-    rev: v1.1.1
+    rev: v1.1.2
     hooks:
     -   id: doc8
         additional_dependencies: [pygments]
@@ -82,7 +82,7 @@ repos:
             --ignore-regex,
             '(^|\W)([A-Z]{2,3})(\W|$)',
             -L,
-            'ser,hsa,hist,fpr,blosum,ags,manuel,Mian'
+            'ser,hsa,hist,fpr,blosum,ags,manuel,mian,fallin'
         ]
 -   repo: local
     hooks:

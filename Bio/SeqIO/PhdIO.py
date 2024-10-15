@@ -59,20 +59,30 @@ from Bio.Sequencing import Phd
 
 from .Interfaces import _IOSource
 from .Interfaces import _TextIOSource
+from .Interfaces import SequenceIterator
 from .Interfaces import SequenceWriter
 from .QualityIO import _get_phred_quality
 
 
-def PhdIterator(source: _TextIOSource) -> Iterator[SeqRecord]:
-    """Return SeqRecord objects from a PHD file.
+class PhdIterator(SequenceIterator):
+    """Parser for PHD files."""
 
-    Arguments:
-     - source - input stream opened in text mode, or a path to a file
+    modes = "t"
 
-    This uses the Bio.Sequencing.Phd module to do the hard work.
-    """
-    phd_records = Phd.parse(source)
-    for phd_record in phd_records:
+    def __init__(self, source: _TextIOSource) -> None:
+        """Return SeqRecord objects from a PHD file.
+
+        Arguments:
+         - source - input stream opened in text mode, or a path to a file
+
+        This uses the Bio.Sequencing.Phd module to do the hard work.
+        """
+        super().__init__(source, fmt="PHD")
+
+    def __next__(self):
+        phd_record = Phd._read(self.stream)
+        if phd_record is None:
+            raise StopIteration
         # Convert the PHY record into a SeqRecord...
         # The "filename" can contain spaces, e.g. 'HWI-EAS94_4_1_1_602_99 1'
         # from unit test example file phd_solexa.
@@ -97,12 +107,13 @@ def PhdIterator(source: _TextIOSource) -> Iterator[SeqRecord]:
             # peak locations are not always there according to
             # David Gordon (the Consed author)
             pass
-        yield seq_record
-    # All done
+        return seq_record
 
 
 class PhdWriter(SequenceWriter):
     """Class to write Phd format files."""
+
+    modes = "t"
 
     def __init__(self, handle: _IOSource) -> None:
         """Initialize the class."""

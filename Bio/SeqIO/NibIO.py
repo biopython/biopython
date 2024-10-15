@@ -53,6 +53,8 @@ from .Interfaces import SequenceWriter
 class NibIterator(SequenceIterator):
     """Parser for nib files."""
 
+    modes = "b"
+
     def __init__(self, source):
         """Iterate over a nib file and yield a SeqRecord.
 
@@ -79,28 +81,27 @@ class NibIterator(SequenceIterator):
         nAGAAGagccgcNGgCActtGAnTAtCGTCgcCacCaGncGncTtGNtGG 50
 
         """
-        super().__init__(source, mode="b", fmt="Nib")
-
-    def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
-        word = handle.read(4)
+        super().__init__(source, fmt="Nib")
+        word = self.stream.read(4)
         if not word:
             raise ValueError("Empty file.")
         signature = word.hex()
         if signature == "3a3de96b":
-            byteorder = "little"  # little-endian
+            self.byteorder = "little"  # little-endian
         elif signature == "6be93d3a":
-            byteorder = "big"  # big-endian
+            self.byteorder = "big"  # big-endian
         else:
             raise ValueError("unexpected signature in nib header")
-        records = self.iterate(handle, byteorder)
-        return records
 
-    def iterate(self, handle, byteorder):
+    def __next__(self):
         """Iterate over the records in the nib file."""
-        number = handle.read(4)
+        stream = self.stream
+        byteorder = self.byteorder
+        number = stream.read(4)
+        if not number:
+            raise StopIteration
         length = int.from_bytes(number, byteorder)
-        data = handle.read()
+        data = stream.read()
         indices = binascii.hexlify(data)
         if length % 2 == 0:
             if len(indices) != length:
@@ -115,11 +116,13 @@ class NibIterator(SequenceIterator):
         nucleotides = indices.translate(table)
         sequence = Seq(nucleotides)
         record = SeqRecord(sequence)
-        yield record
+        return record
 
 
 class NibWriter(SequenceWriter):
     """Nib file writer."""
+
+    modes = "b"
 
     def __init__(self, target):
         """Initialize a Nib writer object.
@@ -128,7 +131,7 @@ class NibWriter(SequenceWriter):
          - target - output stream opened in binary mode, or a path to a file
 
         """
-        super().__init__(target, mode="wb")
+        super().__init__(target)
 
     def write_header(self):
         """Write the file header."""
@@ -159,9 +162,19 @@ class NibWriter(SequenceWriter):
         indices = nucleotides.translate(table)
         handle.write(binascii.unhexlify(indices))
 
-    def write_file(self, records):
-        """Write the complete file with the records, and return the number of records."""
-        count = super().write_file(records, mincount=1, maxcount=1)
+    def write_records(self, records):
+        """Write records to the output file, and return the number of records.
+
+        records - A list or iterator returning SeqRecord objects
+        """
+        count = 0
+        for record in records:
+            if count == 1:
+                raise ValueError("More than one sequence found")
+            self.write_record(record)
+            count += 1
+        if count != 1:
+            raise ValueError("Must have one sequence")
         return count
 
 

@@ -199,7 +199,9 @@ EXTENSIONS = [
     Extension("Bio.Nexus.cnexus", ["Bio/Nexus/cnexus.c"]),
     Extension("Bio.motifs._pwm", ["Bio/motifs/_pwm.c"]),
     Extension(
-        "Bio.Cluster._cluster", ["Bio/Cluster/cluster.c", "Bio/Cluster/clustermodule.c"]
+        "Bio.Cluster._cluster",
+        ["Bio/Cluster/cluster.c", "Bio/Cluster/clustermodule.c"],
+        extra_compile_args=["-DCLUSTER_USE_PYTHON_MEMORY"],
     ),
     Extension("Bio.PDB.ccealign", ["Bio/PDB/ccealignmodule.c"]),
     Extension("Bio.PDB.kdtrees", ["Bio/PDB/kdtrees.c"]),

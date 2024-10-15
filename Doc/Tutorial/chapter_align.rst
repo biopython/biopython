@@ -4704,11 +4704,11 @@ matches to any unknown nucleotides separately.
 
 .. code:: pycon
 
-   >>> import numpy
+   >>> import numpy as np
    >>> from Bio import Align
    >>> query = "GGTGGGGG"
    >>> target = "AAAAAAAggggGGNGAAAAA"
-   >>> coordinates = numpy.array([[0, 7, 15, 20], [0, 0, 8, 8]])
+   >>> coordinates = np.array([[0, 7, 15, 20], [0, 0, 8, 8]])
    >>> alignment = Align.Alignment([target, query], coordinates)
    >>> print(alignment)
    target            0 AAAAAAAggggGGNGAAAAA 20

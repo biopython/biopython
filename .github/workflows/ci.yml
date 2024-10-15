@@ -27,7 +27,7 @@ jobs:
     - uses: actions/checkout@v4
 
     # Check for changes only on files changed by the PR/push
-    - uses: tj-actions/changed-files@v44
+    - uses: tj-actions/changed-files@v45
       id: changed-files
 
     # Cache CI packages
@@ -199,12 +199,12 @@ jobs:
 
     - name: Install from source
       run: |
-        python -m pip install .
+        CC="gcc -fsanitize=address -fsanitize=undefined -g" python -m pip install .
 
     - name: Run test suite
       run: |
         cd Tests
-        python run_tests.py --offline
+        PYTHONMALLOC=debug LD_PRELOAD="$(realpath "$(gcc -print-file-name=libasan.so)") $(realpath "$(gcc -print-file-name=libstdc++.so)")" ASAN_OPTIONS="detect_leaks=0" python run_tests.py --offline
       shell: bash
 
   test_macos:
@@ -228,7 +228,7 @@ jobs:
 
     - name: Install minimal Python dependencies
       run: |
-        python -m pip install numpy
+        python -m pip install "numpy!=2.1.0"
 
     - name: Debug Info
       run: |
@@ -266,7 +266,7 @@ jobs:
 
     - name: Install minimal Python dependencies
       run: |
-        python -m pip install numpy
+        python -m pip install "numpy!=2.1.0"
 
     - name: Debug Info
       run: |
@@ -302,7 +302,7 @@ jobs:
 
     - name: Install minimal Python dependencies
       run: |
-        python -m pip install numpy
+        python -m pip install "numpy!=2.1.0"
 
     - name: Debug Info
       run: |

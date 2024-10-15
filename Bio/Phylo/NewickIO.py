@@ -143,7 +143,14 @@ class Parser:
 
             if token.startswith("'"):
                 # quoted label; add characters to clade name
-                current_clade.name = token[1:-1]
+                if not current_clade.name:
+                    # This is almost always the case
+                    current_clade.name = token[1:-1]
+                else:
+                    # Hack to support labels with escaped quotes. Escaped quotes
+                    # are two consequtive quotes. To the parser, this just looks
+                    # like two quoted labels next to each other. See issue #4537
+                    current_clade.name += token[:-1]
 
             elif token.startswith("["):
                 # comment
@@ -292,7 +299,7 @@ class Writer:
             if label:
                 unquoted_label = re.match(token_dict["unquoted node label"], label)
                 if (not unquoted_label) or (unquoted_label.end() < len(label)):
-                    label = "'%s'" % label.replace("\\", "\\\\").replace("'", "\\'")
+                    label = "'%s'" % label.replace("'", "''")
 
             if clade.is_terminal():  # terminal
                 return label + make_info_string(clade, terminal=True)

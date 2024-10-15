@@ -635,20 +635,16 @@ class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
             else:
                 raise RuntimeError(f"Unexpected mode {mode}")
             if fmt == "sff":
-                rec2 = SeqIO.SffIO._sff_read_seq_record(
-                    handle,
-                    rec_dict._proxy._flows_per_read,
-                    rec_dict._proxy._flow_chars,
-                    rec_dict._proxy._key_sequence,
-                    trim=False,
+                rec_dict._proxy.trim = False
+                rec_dict._proxy._offset = handle.tell()
+                rec2 = SeqIO.SffIO.SffIterator._sff_read_seq_record(
+                    rec_dict._proxy, handle
                 )
             elif fmt == "sff-trim":
-                rec2 = SeqIO.SffIO._sff_read_seq_record(
-                    handle,
-                    rec_dict._proxy._flows_per_read,
-                    rec_dict._proxy._flow_chars,
-                    rec_dict._proxy._key_sequence,
-                    trim=True,
+                rec_dict._proxy.trim = True
+                rec_dict._proxy._offset = handle.tell()
+                rec2 = SeqIO.SffIO.SffIterator._sff_read_seq_record(
+                    rec_dict._proxy, handle
                 )
             elif fmt == "uniprot-xml":
                 self.assertTrue(raw.startswith(b"<entry "), msg=msg)
@@ -656,7 +652,7 @@ class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
                 # Currently the __getitem__ method uses this
                 # trick too, but we hope to fix that later
                 raw = (
-                    """<?xml version='1.0' encoding='UTF-8'?>
+                    b"""<?xml version='1.0' encoding='UTF-8'?>
                 <uniprot xmlns="http://uniprot.org/uniprot"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xsi:schemaLocation="http://uniprot.org/uniprot
@@ -664,9 +660,9 @@ class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
                 %s
                 </uniprot>
                 """
-                    % raw.decode()
+                    % raw
                 )
-                handle = StringIO(raw)
+                handle = BytesIO(raw)
                 rec2 = SeqIO.read(handle, fmt)
             else:
                 rec2 = SeqIO.read(handle, fmt)

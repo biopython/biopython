@@ -24,11 +24,23 @@ to "" instead of None, when no motif name was found.
 Tests that use assertAlmostEqual calls now use ``places`` parameter with enough
 presision when comparing very small numbers in scientific notation.
 
+``Bio.motifs`` now supports reverse complementing RNA motifs and correctly
+generating degenerate consensus sequences for RNA motifs.
+
+``Bio.motifs.minimal`` now supports parsing RNA motifs and parsing motifs
+for which not all statistics are provided (e.g. missing E-values or nsites).
+
+``Bio.motifs.clusterbuster`` now supports parsing GAP and WEIGHT parameters
+and can optionally write Cluster Buster motif files with floats instead of
+integers, by specifying the ``precision=<int>`` parameter when writing:
+e.g. motifs.write(motifs, "clusterbuster", precision=2)
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - Gert Hulselmans
 - Peter Cock
+- Michiel de Hoon
 
 28 June 2024: Biopython 1.84
 ============================

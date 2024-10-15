@@ -539,7 +539,7 @@ class DBSeqRecord(SeqRecord):
     def __del_seq(self):
         del self._seq
 
-    seq = property(__get_seq, __set_seq, __del_seq, "Seq object")
+    seq = property(__get_seq, __set_seq, __del_seq, "Seq object")  # type: ignore
 
     @property
     def dbxrefs(self) -> list[str]:

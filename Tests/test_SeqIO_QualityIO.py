@@ -992,16 +992,16 @@ class TestSFF(unittest.TestCase):
 
 
 class NonFastqTests(unittest.TestCase):
-    def check_wrong_format(self, filename):
-        for f in ("fastq", "fastq-sanger", "fastq-solexa", "fastq-illumina"):
-            generator = SeqIO.parse(filename, f)
-            self.assertRaises(ValueError, next, generator)
 
     def test_fasta_as_fastq(self):
-        self.check_wrong_format("Fasta/elderberry.nu")
+        for f in ("fastq", "fastq-sanger", "fastq-solexa", "fastq-illumina"):
+            generator = SeqIO.parse("Fasta/elderberry.nu", f)
+            self.assertRaises(ValueError, next, generator)
 
     def test_sff_as_fastq(self):
-        self.check_wrong_format("Roche/greek.sff")
+        for f in ("fastq", "fastq-sanger", "fastq-solexa", "fastq-illumina"):
+            generator = SeqIO.parse("Roche/greek.sff", f)
+            self.assertRaises(ValueError, next, generator)
 
 
 class TestsConverter(SeqIOConverterTestBaseClass, QualityIOTestBaseClass):

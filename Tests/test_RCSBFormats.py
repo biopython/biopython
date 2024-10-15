@@ -12,7 +12,7 @@ import unittest
 import warnings
 
 try:
-    import numpy
+    import numpy as np
     from numpy import dot  # Missing on old PyPy's micronumpy
 
     del dot

@@ -19,7 +19,7 @@ http://www.ncbi.nlm.nih.gov/books/NBK25501/
 
 This module provides a number of functions like ``efetch`` (short for
 Entrez Fetch) which will return the data as a handle object. This is
-a standad interface used in Python for reading data from a file, or
+a standard interface used in Python for reading data from a file, or
 in this case a remote network connection, and provides methods like
 ``.read()`` or offers iteration over the contents line by line. See
 also "What the heck is a handle?" in the Biopython Tutorial and

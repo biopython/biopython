@@ -60,6 +60,29 @@ was deprecated as of Release 1.70.
 Biopython modules, methods, functions
 =====================================
 
+Bio.SeqIO.FastaIO
+-----------------
+Parsing a FASTA file using Bio.SeqIO.parse with ``format='fasta'`` interprets
+lines before the first line starting with '>' as comments and skips them. To be
+consistent with the most common interpretation of the FASTA file format, the
+use of such comment lines at the beginning of the FASTA file was deprecated in
+Biopython Release 1.85.
+As an alternative, you can use ``format='fasta-pearson'`` to specify the FASTA
+file format as defined by William Pearson's FASTA aligner program, allowing for
+comment lines at the top of the FASTA file (lines anywhere in the file starting
+by ';' are also regarded as comment lines and skipped).
+Another option is to use ``format='fasta-blast'``; this follows the FASTA file
+format accepted by BLAST, treating any lines starting with '#', ';', or '!' as
+comment lines and ignoring them.
+
+Bio.SeqIO.UniprotIO
+-------------------
+Parsing a UniProt XML file opened in text mode (if the file was opened using
+``open("myuniprotfile.xml")``) was deprecated in Release 1.85, as this may lead
+to garbled characters.  Please open the file in binary mode (as in
+``open("myuniprotfile.xml", "rb")``), or let ``Bio.SeqIO.parse`` take care of
+opening and closing files by passing the file name instead of a file handle.
+
 Bio.Entrez
 ----------
 The ``egquery`` function wrapping the NCBI EGQuery (Entrez Global Query)
@@ -198,6 +221,9 @@ The ``instances`` attribute of the ``Motif`` class  in ``Bio.motifs`` was
 deprecated in release 1.82. Instead of ``mymotif.instances``, please use
 ``mymotif.alignment.sequences``.
 
+The ``Instance`` class in ``Bio.motifs.meme`` was deprecated in release 1.85.
+This class is a subclass from ``Seq``, but does not provide any additional
+capabilities. Please use a ``Seq`` object instead.
 
 Bio.Restriction.RanaConfig
 --------------------------

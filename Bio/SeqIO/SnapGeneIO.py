@@ -99,7 +99,7 @@ def _parse_notes_packet(length, data, record):
             record.id = record.name
 
 
-def _parse_cookie_packet(length, data, record):
+def _parse_cookie_packet(length, data):
     """Parse a SnapGene cookie packet.
 
     Every SnapGene file starts with a packet of this type. It acts as
@@ -291,6 +291,8 @@ def _get_child_value(node, name, default=None, error=None):
 class SnapGeneIterator(SequenceIterator):
     """Parser for SnapGene files."""
 
+    modes = "b"
+
     def __init__(self, source):
         """Parse a SnapGene file and return a SeqRecord object.
 
@@ -299,32 +301,27 @@ class SnapGeneIterator(SequenceIterator):
         Note that a SnapGene file can only contain one sequence, so this
         iterator will always return a single record.
         """
-        super().__init__(source, mode="b", fmt="SnapGene")
-
-    def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
-        records = self.iterate(handle)
-        return records
-
-    def iterate(self, handle):
-        """Iterate over the records in the SnapGene file."""
-        record = SeqRecord(None)
-        packets = _iterate(handle)
+        super().__init__(source, fmt="SnapGene")
+        self.packets = _iterate(self.stream)
         try:
-            packet_type, length, data = next(packets)
+            packet_type, length, data = next(self.packets)
         except StopIteration:
             raise ValueError("Empty file.") from None
-
         if packet_type != 0x09:
             raise ValueError("The file does not start with a SnapGene cookie packet")
-        _parse_cookie_packet(length, data, record)
+        _parse_cookie_packet(length, data)
 
-        for packet_type, length, data in packets:
+    def __next__(self):
+        packets = self.packets
+        if packets is None:
+            raise StopIteration
+        record = SeqRecord(None)
+        for packet in packets:
+            packet_type, length, data = packet
             handler = _packet_handlers.get(packet_type)
             if handler is not None:
                 handler(length, data, record)
-
         if not record.seq:
             raise ValueError("No DNA packet in file")
-
-        yield record
+        self.packets = None  # A SnapGene file contains only one sequence
+        return record

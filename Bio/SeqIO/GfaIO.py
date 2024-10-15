@@ -14,10 +14,13 @@ import re
 import warnings
 
 from Bio import BiopythonWarning
-from Bio.File import as_handle
 from Bio.Seq import _UndefinedSequenceData
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+
+
+from .Interfaces import _TextIOSource
+from .Interfaces import SequenceIterator
 
 
 def _check_tags(seq, tags):
@@ -110,69 +113,101 @@ def _tags_to_annotations(tags):
     return annotations
 
 
-def Gfa1Iterator(source):
+class Gfa1Iterator(SequenceIterator):
     """Parser for GFA 1.x files.
 
     Documentation: https://gfa-spec.github.io/GFA-spec/GFA1.html
     """
-    with as_handle(source) as handle:
-        for line in handle:
+
+    modes = "t"
+
+    def __init__(
+        self,
+        source: _TextIOSource,
+    ) -> None:
+        """Iterate over a GFA file as SeqRecord objects.
+
+        Arguments:
+         - source - input stream opened in text mode, or a path to a file
+        """
+        super().__init__(source, fmt="GFA 1.0")
+
+    def __next__(self):
+        for line in self.stream:
             if line == "\n":
                 warnings.warn("GFA data has a blank line.", BiopythonWarning)
                 continue
 
             fields = line.strip("\n").split("\t")
-            if fields[0] != "S":
-                continue
-            if len(fields) < 3:
-                raise ValueError(
-                    f"Segment line must have name and sequence fields: {line}."
-                )
+            if fields[0] == "S":
+                break
+        else:
+            raise StopIteration
+        if len(fields) < 3:
+            raise ValueError(
+                f"Segment line must have name and sequence fields: {line}."
+            )
 
-            if fields[2] == "*":
-                seq = Seq(None, length=0)
-            else:
-                seq = Seq(fields[2])
+        if fields[2] == "*":
+            seq = Seq(None, length=0)
+        else:
+            seq = Seq(fields[2])
 
-            tags = fields[3:]
-            _check_tags(seq, tags)
-            annotations = _tags_to_annotations(tags)
+        tags = fields[3:]
+        _check_tags(seq, tags)
+        annotations = _tags_to_annotations(tags)
 
-            yield SeqRecord(seq, id=fields[1], name=fields[1], annotations=annotations)
+        return SeqRecord(seq, id=fields[1], name=fields[1], annotations=annotations)
 
 
-def Gfa2Iterator(source):
+class Gfa2Iterator(SequenceIterator):
     """Parser for GFA 2.0 files.
 
     Documentation for version 2: https://gfa-spec.github.io/GFA-spec/GFA2.html
     """
-    with as_handle(source) as handle:
-        for line in handle:
+
+    modes = "t"
+
+    def __init__(
+        self,
+        source: _TextIOSource,
+    ) -> None:
+        """Iterate over a GFA file as SeqRecord objects.
+
+        Arguments:
+         - source - input stream opened in text mode, or a path to a file
+        """
+        super().__init__(source, fmt="GFA 2.0")
+
+    def __next__(self):
+        for line in self.stream:
             if line == "\n":
                 warnings.warn("GFA data has a blank line.", BiopythonWarning)
                 continue
 
             fields = line.strip("\n").split("\t")
-            if fields[0] != "S":
-                continue
-            if len(fields) < 4:
-                raise ValueError(
-                    f"Segment line must have name, length, and sequence fields: {line}."
-                )
-            try:
-                int(fields[2])
-            except ValueError:
-                raise ValueError(
-                    f"Segment line must have an integer length: {line}."
-                ) from None
+            if fields[0] == "S":
+                break
+        else:
+            raise StopIteration
+        if len(fields) < 4:
+            raise ValueError(
+                f"Segment line must have name, length, and sequence fields: {line}."
+            )
+        try:
+            int(fields[2])
+        except ValueError:
+            raise ValueError(
+                f"Segment line must have an integer length: {line}."
+            ) from None
 
-            if fields[3] == "*":
-                seq = Seq(None, length=0)
-            else:
-                seq = Seq(fields[3])
+        if fields[3] == "*":
+            seq = Seq(None, length=0)
+        else:
+            seq = Seq(fields[3])
 
-            tags = fields[4:]
-            _check_tags(seq, tags)
-            annotations = _tags_to_annotations(tags)
+        tags = fields[4:]
+        _check_tags(seq, tags)
+        annotations = _tags_to_annotations(tags)
 
-            yield SeqRecord(seq, id=fields[1], name=fields[1], annotations=annotations)
+        return SeqRecord(seq, id=fields[1], name=fields[1], annotations=annotations)

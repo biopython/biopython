@@ -15,49 +15,70 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Sequencing import Ace
 
+from .Interfaces import _TextIOSource
+from .Interfaces import SequenceIterator
 
-def AceIterator(source):
-    """Return SeqRecord objects from an ACE file.
 
-    This uses the Bio.Sequencing.Ace module to do the hard work.  Note that
-    by iterating over the file in a single pass, we are forced to ignore any
-    WA, CT, RT or WR footer tags.
+class AceIterator(SequenceIterator):
+    """Return SeqRecord objects from an ACE file."""
 
-    Ace files include the base quality for each position, which are taken
-    to be PHRED style scores. Just as if you had read in a FASTQ or QUAL file
-    using PHRED scores using Bio.SeqIO, these are stored in the SeqRecord's
-    letter_annotations dictionary under the "phred_quality" key.
+    modes = "t"
 
-    >>> from Bio import SeqIO
-    >>> with open("Ace/consed_sample.ace") as handle:
-    ...     for record in SeqIO.parse(handle, "ace"):
-    ...         print("%s %s... %i" % (record.id, record.seq[:10], len(record)))
-    ...         print(max(record.letter_annotations["phred_quality"]))
-    Contig1 agccccgggc... 1475
-    90
+    def __init__(
+        self,
+        source: _TextIOSource,
+    ) -> None:
+        """Iterate over SeqRecord objects read from an ACE file.
 
-    However, ACE files do not include a base quality for any gaps in the
-    consensus sequence, and these are represented in Biopython with a quality
-    of zero. Using zero is perhaps misleading as there may be very strong
-    evidence to support the gap in the consensus. Previous versions of
-    Biopython therefore used None instead, but this complicated usage, and
-    prevented output of the gapped sequence as FASTQ format.
+        Arguments:
+         - source - input stream opened in text mode, or a path to a file
 
-    >>> from Bio import SeqIO
-    >>> with open("Ace/contig1.ace") as handle:
-    ...     for record in SeqIO.parse(handle, "ace"):
-    ...         print("%s ...%s..." % (record.id, record.seq[85:95]))
-    ...         print(record.letter_annotations["phred_quality"][85:95])
-    ...         print(max(record.letter_annotations["phred_quality"]))
-    Contig1 ...AGAGG-ATGC...
-    [57, 57, 54, 57, 57, 0, 57, 72, 72, 72]
-    90
-    Contig2 ...GAATTACTAT...
-    [68, 68, 68, 68, 68, 68, 68, 68, 68, 68]
-    90
+        This uses the Bio.Sequencing.Ace module to do the hard work.  Note that
+        by iterating over the file in a single pass, we are forced to ignore any
+        WA, CT, RT or WR footer tags.
 
-    """
-    for ace_contig in Ace.parse(source):
+        Ace files include the base quality for each position, which are taken to
+        be PHRED style scores. Just as if you had read in a FASTQ or QUAL file
+        using PHRED scores using Bio.SeqIO, these are stored in the SeqRecord's
+        letter_annotations dictionary under the "phred_quality" key.
+
+        >>> from Bio import SeqIO
+        >>> with open("Ace/consed_sample.ace") as handle:
+        ...     for record in SeqIO.parse(handle, "ace"):
+        ...         print("%s %s... %i" % (record.id, record.seq[:10], len(record)))
+        ...         print(max(record.letter_annotations["phred_quality"]))
+        Contig1 agccccgggc... 1475
+        90
+
+        However, ACE files do not include a base quality for any gaps in the
+        consensus sequence, and these are represented in Biopython with quality
+        of zero. Using zero is perhaps misleading as there may be very strong
+        evidence to support the gap in the consensus. Previous versions of
+        Biopython therefore used None instead, but this complicated usage,
+        and prevented output of the gapped sequence as FASTQ format.
+
+        >>> from Bio import SeqIO
+        >>> with open("Ace/contig1.ace") as handle:
+        ...     for record in SeqIO.parse(handle, "ace"):
+        ...         print("%s ...%s..." % (record.id, record.seq[85:95]))
+        ...         print(record.letter_annotations["phred_quality"][85:95])
+        ...         print(max(record.letter_annotations["phred_quality"]))
+        Contig1 ...AGAGG-ATGC...
+        [57, 57, 54, 57, 57, 0, 57, 72, 72, 72]
+        90
+        Contig2 ...GAATTACTAT...
+        [68, 68, 68, 68, 68, 68, 68, 68, 68, 68]
+        90
+
+        """
+        super().__init__(source, fmt="ACE")
+        self.ace_contigs = Ace.parse(self.stream)
+
+    def __next__(self):
+        try:
+            ace_contig = next(self.ace_contigs)
+        except StopIteration:
+            raise StopIteration from None
         # Convert the ACE contig record into a SeqRecord...
         consensus_seq_str = ace_contig.sequence
         if "*" in consensus_seq_str:
@@ -92,8 +113,7 @@ def AceIterator(source):
         assert i == len(ace_contig.quality)
         seq_record.letter_annotations["phred_quality"] = quals
 
-        yield seq_record
-    # All done
+        return seq_record
 
 
 if __name__ == "__main__":

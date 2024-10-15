@@ -13,7 +13,7 @@ black==22.12.0
 coverage
 
 ## Testing
-numpy
+numpy!=2.1.0
 matplotlib
 mmtf-python
 #MySQL testing disabled due to #3834:

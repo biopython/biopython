@@ -16,6 +16,7 @@ http://www6.appliedbiosystems.com/support/software_community/ABIF_File_Format.pd
 """
 
 import datetime
+import io
 import struct
 import sys
 from os.path import basename
@@ -346,26 +347,23 @@ def _get_string_tag(opt_bytes_value, default=None):
 class AbiIterator(SequenceIterator):
     """Parser for Abi files."""
 
+    modes = "b"
+
     def __init__(self, source, trim=False):
         """Return an iterator for the Abi file format."""
-        self.trim = trim
-        super().__init__(source, mode="b", fmt="ABI")
-
-    def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
+        super().__init__(source, fmt="ABI")
         # check if input file is a valid Abi file
-        marker = handle.read(4)
+        marker = self.stream.read(4)
         if not marker:
             # handle empty file gracefully
             raise ValueError("Empty file.")
-
         if marker != b"ABIF":
-            raise OSError(f"File should start ABIF, not {marker!r}")
-        records = self.iterate(handle)
-        return records
+            raise ValueError(f"File should start with ABIF, not {marker!r}")
+        self.trim = trim
 
-    def iterate(self, handle):
+    def __next__(self):
         """Parse the file and generate SeqRecord objects."""
+        stream = self.stream
         # dirty hack for handling time information
         times = {"RUND1": "", "RUND2": "", "RUNT1": "", "RUNT2": ""}
 
@@ -373,7 +371,13 @@ class AbiIterator(SequenceIterator):
         annot = dict(zip(_EXTRACT.values(), [None] * len(_EXTRACT)))
 
         # parse header and extract data from directories
-        header = struct.unpack(_HEADFMT, handle.read(struct.calcsize(_HEADFMT)))
+        size = struct.calcsize(_HEADFMT)
+        data = stream.read(size)
+        if len(data) == 0:
+            raise StopIteration
+        elif len(data) < size:
+            raise ValueError("premature end of file")
+        header = struct.unpack(_HEADFMT, data)
 
         # Set default sample ID value, which we expect to be present in most
         # cases in the SMPL1 tag, but may be missing.
@@ -381,7 +385,7 @@ class AbiIterator(SequenceIterator):
 
         raw = {}
         seq = qual = None
-        for tag_name, tag_number, tag_data in _abi_parse_header(header, handle):
+        for tag_name, tag_number, tag_data in _abi_parse_header(header, stream):
             key = tag_name + str(tag_number)
 
             raw[key] = tag_data
@@ -414,7 +418,7 @@ class AbiIterator(SequenceIterator):
 
         if is_fsa_file:
             try:
-                file_name = basename(handle.name).replace(".fsa", "")
+                file_name = basename(stream.name).replace(".fsa", "")
             except AttributeError:
                 file_name = ""
 
@@ -431,7 +435,7 @@ class AbiIterator(SequenceIterator):
         else:
             # use the file name as SeqRecord.name if available
             try:
-                file_name = basename(handle.name).replace(".ab1", "")
+                file_name = basename(stream.name).replace(".ab1", "")
             except AttributeError:
                 file_name = ""
             record = SeqRecord(
@@ -454,15 +458,17 @@ class AbiIterator(SequenceIterator):
             record = _abi_trim(record)
 
         record.annotations["molecule_type"] = "DNA"
-        yield record
+        # Move to the end of file to indicate that we finished reading
+        stream.seek(0, io.SEEK_END)
+        return record
 
 
-def _AbiTrimIterator(handle):
+def _AbiTrimIterator(stream):
     """Return an iterator for the Abi file format that yields trimmed SeqRecord objects (PRIVATE)."""
-    return AbiIterator(handle, trim=True)
+    return AbiIterator(stream, trim=True)
 
 
-def _abi_parse_header(header, handle):
+def _abi_parse_header(header, stream):
     """Return directory contents (PRIVATE)."""
     # header structure (after ABIF marker):
     # file version, tag name, tag number,
@@ -471,17 +477,15 @@ def _abi_parse_header(header, handle):
     head_elem_size = header[4]
     head_elem_num = header[5]
     head_offset = header[7]
-    index = 0
 
-    while index < head_elem_num:
+    for index in range(head_elem_num):
         start = head_offset + index * head_elem_size
         # add directory offset to tuple
         # to handle directories with data size <= 4 bytes
-        handle.seek(start)
-        dir_entry = struct.unpack(_DIRFMT, handle.read(struct.calcsize(_DIRFMT))) + (
+        stream.seek(start)
+        dir_entry = struct.unpack(_DIRFMT, stream.read(struct.calcsize(_DIRFMT))) + (
             start,
         )
-        index += 1
         # only parse desired dirs
         key = dir_entry[0].decode()
         key += str(dir_entry[1])
@@ -497,8 +501,8 @@ def _abi_parse_header(header, handle):
         # so offset needs to be changed
         if data_size <= 4:
             data_offset = tag_offset + 20
-        handle.seek(data_offset)
-        data = handle.read(data_size)
+        stream.seek(data_offset)
+        data = stream.read(data_size)
         yield tag_name, tag_number, _parse_tag_data(elem_code, elem_num, data)
 
 

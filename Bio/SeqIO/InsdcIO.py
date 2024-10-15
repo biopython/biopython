@@ -62,6 +62,8 @@ _allowed_table_component_name_chars = set(ascii_letters + digits + "_-'*")
 class GenBankIterator(SequenceIterator):
     """Parser for GenBank files."""
 
+    modes = "t"
+
     def __init__(self, source):
         """Break up a Genbank file into SeqRecord objects.
 
@@ -99,16 +101,18 @@ class GenBankIterator(SequenceIterator):
         AF297471.1
 
         """
-        super().__init__(source, mode="t", fmt="GenBank")
+        super().__init__(source, fmt="GenBank")
+        self.records = GenBankScanner(debug=0).parse_records(self.stream)
 
-    def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
-        records = GenBankScanner(debug=0).parse_records(handle)
-        return records
+    def __next__(self):
+        """Return the next SeqRecord."""
+        return next(self.records)
 
 
 class EmblIterator(SequenceIterator):
     """Parser for EMBL files."""
+
+    modes = "t"
 
     def __init__(self, source):
         """Break up an EMBL file into SeqRecord objects.
@@ -153,16 +157,18 @@ class EmblIterator(SequenceIterator):
         CQ797900.1
 
         """
-        super().__init__(source, mode="t", fmt="EMBL")
+        super().__init__(source, fmt="EMBL")
+        self.records = EmblScanner(debug=0).parse_records(self.stream)
 
-    def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
-        records = EmblScanner(debug=0).parse_records(handle)
-        return records
+    def __next__(self):
+        """Return the next SeqRecord."""
+        return next(self.records)
 
 
 class ImgtIterator(SequenceIterator):
     """Parser for IMGT files."""
+
+    modes = "t"
 
     def __init__(self, source):
         """Break up an IMGT file into SeqRecord objects.
@@ -174,16 +180,18 @@ class ImgtIterator(SequenceIterator):
         Note that for genomes or chromosomes, there is typically only
         one record.
         """
-        super().__init__(source, mode="t", fmt="IMGT")
+        super().__init__(source, fmt="IMGT")
+        self.records = _ImgtScanner(debug=0).parse_records(self.stream)
 
-    def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
-        records = _ImgtScanner(debug=0).parse_records(handle)
-        return records
+    def __next__(self):
+        """Return the next SeqRecord."""
+        return next(self.records)
 
 
 class GenBankCdsFeatureIterator(SequenceIterator):
     """Parser for GenBank files, creating a SeqRecord for each CDS feature."""
+
+    modes = "t"
 
     def __init__(self, source):
         """Break up a Genbank file into SeqRecord objects for each CDS feature.
@@ -194,15 +202,18 @@ class GenBankCdsFeatureIterator(SequenceIterator):
         many CDS features.  These are returned as with the stated amino acid
         translation sequence (if given).
         """
-        super().__init__(source, mode="t", fmt="GenBank")
+        super().__init__(source, fmt="GenBank")
+        self.records = GenBankScanner(debug=0).parse_cds_features(self.stream)
 
-    def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
-        return GenBankScanner(debug=0).parse_cds_features(handle)
+    def __next__(self):
+        """Return the next SeqRecord."""
+        return next(self.records)
 
 
 class EmblCdsFeatureIterator(SequenceIterator):
     """Parser for EMBL files, creating a SeqRecord for each CDS feature."""
+
+    modes = "t"
 
     def __init__(self, source):
         """Break up a EMBL file into SeqRecord objects for each CDS feature.
@@ -213,11 +224,12 @@ class EmblCdsFeatureIterator(SequenceIterator):
         many CDS features.  These are returned as with the stated amino acid
         translation sequence (if given).
         """
-        super().__init__(source, mode="t", fmt="EMBL")
+        super().__init__(source, fmt="EMBL")
+        self.records = EmblScanner(debug=0).parse_cds_features(self.stream)
 
-    def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
-        return EmblScanner(debug=0).parse_cds_features(handle)
+    def __next__(self):
+        """Return the next SeqRecord."""
+        return next(self.records)
 
 
 def _insdc_feature_position_string(pos, offset=0):
@@ -378,6 +390,8 @@ class _InsdcWriter(SequenceWriter):
         "transl_except",
         "transl_table",
     )
+
+    modes = "t"
 
     def _write_feature_qualifier(self, key, value=None, quote=None):
         if not _allowed_table_component_name_chars.issuperset(key):

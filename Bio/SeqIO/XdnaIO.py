@@ -145,6 +145,8 @@ def _read_feature(handle, record):
 class XdnaIterator(SequenceIterator):
     """Parser for Xdna files."""
 
+    modes = "b"
+
     def __init__(self, source):
         """Parse a Xdna file and return a SeqRecord object.
 
@@ -154,10 +156,18 @@ class XdnaIterator(SequenceIterator):
         contain a single sequence.
 
         """
-        super().__init__(source, mode="b", fmt="Xdna")
+        super().__init__(source, fmt="Xdna")
+        header = self.stream.read(112)
+        if not header:
+            raise ValueError("Empty file.")
+        if len(header) < 112:
+            raise ValueError("Improper header, cannot read 112 bytes from stream")
+        self._header = header
 
-    def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
+    def __next__(self):
+        if self._header is None:
+            raise StopIteration
+        stream = self.stream
         # Parse fixed-size header and do some rudimentary checks
         #
         # The "neg_length" value is the length of the part of the sequence
@@ -166,57 +176,55 @@ class XdnaIterator(SequenceIterator):
         # Biopython's SeqRecord has no such concept of a sequence origin as far
         # as I know, so we ignore that value. SerialCloner has no such concept
         # either and always generates files with a neg_length of zero.
-        header = handle.read(112)
-        if not header:
-            raise ValueError("Empty file.")
-        if len(header) < 112:
-            raise ValueError("Improper header, cannot read 112 bytes from handle")
-        records = self.iterate(handle, header)
-        return records
-
-    def iterate(self, handle, header):
-        """Parse the file and generate SeqRecord objects."""
         (version, seq_type, topology, length, neg_length, com_length) = unpack(
-            ">BBB25xII60xI12x", header
+            ">BBB25xII60xI12x", self._header
         )
         if version != 0:
             raise ValueError("Unsupported XDNA version")
-        if seq_type not in _seq_types:
-            raise ValueError("Unknown sequence type")
         # Read actual sequence and comment found in all XDNA files
-        sequence = _read(handle, length).decode("ASCII")
-        comment = _read(handle, com_length).decode("ASCII")
+        sequence = _read(stream, length).decode("ASCII")
+        comment = _read(stream, com_length).decode("ASCII")
 
         # Try to derive a name from the first "word" of the comment
         name = comment.split(" ")[0]
 
         # Create record object
         record = SeqRecord(Seq(sequence), description=comment, name=name, id=name)
-        if _seq_types[seq_type]:
-            record.annotations["molecule_type"] = _seq_types[seq_type]
+        try:
+            molecule_type = _seq_types[seq_type]
+        except KeyError:
+            raise ValueError("Unknown sequence type") from None
+        else:
+            record.annotations["molecule_type"] = molecule_type
+        try:
+            topology = _seq_topologies[topology]
+        except KeyError:
+            pass
+        else:
+            record.annotations["topology"] = topology
 
-        if topology in _seq_topologies:
-            record.annotations["topology"] = _seq_topologies[topology]
-
-        if len(handle.read(1)) == 1:
+        if len(stream.read(1)) == 1:
             # This is an XDNA file with an optional annotation section.
 
             # Skip the overhangs as I don't know how to represent
             # them in the SeqRecord model.
-            _read_overhang(handle)  # right-side overhang
-            _read_overhang(handle)  # left-side overhang
+            _read_overhang(stream)  # right-side overhang
+            _read_overhang(stream)  # left-side overhang
 
             # Read the features
-            num_features = unpack(">B", _read(handle, 1))[0]
+            num_features = unpack(">B", _read(stream, 1))[0]
             while num_features > 0:
-                _read_feature(handle, record)
+                _read_feature(stream, record)
                 num_features -= 1
 
-        yield record
+        self._header = None
+        return record
 
 
 class XdnaWriter(SequenceWriter):
     """Write files in the Xdna format."""
+
+    modes = "b"
 
     def __init__(self, target):
         """Initialize an Xdna writer object.
@@ -225,7 +233,7 @@ class XdnaWriter(SequenceWriter):
          - target - Output stream opened in binary mode, or a path to a file.
 
         """
-        super().__init__(target, mode="wb")
+        super().__init__(target)
 
     def write_file(self, records):
         """Write the specified record to a Xdna file.

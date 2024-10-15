@@ -739,7 +739,7 @@ class Motif:
             im = response.read()
             f.write(im)
 
-    def __format__(self, format_spec):
+    def __format__(self, format_spec, **kwargs):
         """Return a string representation of the Motif in the given format.
 
         Currently supported formats:
@@ -763,7 +763,7 @@ class Motif:
             from Bio.motifs import clusterbuster
 
             motifs = [self]
-            return clusterbuster.write(motifs)
+            return clusterbuster.write(motifs, **kwargs)
         elif not format_spec:
             # Follow python convention and default to using __str__
             return str(self)
@@ -783,7 +783,7 @@ class Motif:
         return self.__format__(format_spec)
 
 
-def write(motifs, fmt):
+def write(motifs, fmt, **kwargs):
     """Return a string representation of motifs in the given format.
 
     Currently supported formats (case is ignored):
@@ -805,7 +805,7 @@ def write(motifs, fmt):
     elif fmt == "clusterbuster":
         from Bio.motifs import clusterbuster
 
-        return clusterbuster.write(motifs)
+        return clusterbuster.write(motifs, **kwargs)
     else:
         raise ValueError("Unknown format type %s" % fmt)
 
