@@ -82,7 +82,7 @@ repos:
             --ignore-regex,
             '(^|\W)([A-Z]{2,3})(\W|$)',
             -L,
-            'ser,hsa,hist,fpr,blosum,ags,manuel'
+            'ser,hsa,hist,fpr,blosum,ags,manuel,Mian'
         ]
 -   repo: local
     hooks:

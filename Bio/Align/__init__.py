@@ -3779,7 +3779,8 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
     attribute to "fogsaa". As its name suggests, it only finds global
     alignments and cannot be used for local alignment. FOGSAA will raise a
     warning and may return incorrect results if the match score is less than
-    the mismatch score or any gap score.
+    the mismatch score or any gap score or if any gap score is greater than the
+    mismatch score.
 
     Calling the "score" method on the aligner with two sequences as arguments
     will calculate the alignment score between the two sequences.

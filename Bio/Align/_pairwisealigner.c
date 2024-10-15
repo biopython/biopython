@@ -7085,7 +7085,7 @@ Aligner_watermansmithbeyer_local_align_matrix(Aligner* self,
         PyObject *BiopythonWarning = PyObject_GetAttrString(Bio_module, "BiopythonWarning"); \
         Py_DECREF(Bio_module); \
         if (PyErr_WarnEx(BiopythonWarning, \
-                    "One or more gap scores are less than mismatch score. Algorithm may return incorrect results.", 1)) { \
+                    "One or more gap scores are greater than mismatch score. Algorithm may return incorrect results.", 1)) { \
             Py_DECREF(BiopythonWarning); \
             return NULL; \
         } \
