@@ -1614,7 +1614,7 @@ PathGenerator_next_FOGSAA(PathGenerator* self)
 {
     /* No need to create path because FOGSAA only finds one optimal alignment
      * the .path fields should be populated by FOGSAA_EXIT_ALIGN. To indicate
-     * we've exausted the iterator, just set self->M[0][0].path to DONE */
+     * we've exhausted the iterator, just set self->M[0][0].path to DONE */
     Trace *last = &self->M[self->nA][self->nB];
     PyObject *path;
 
