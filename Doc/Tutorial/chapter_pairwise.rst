@@ -324,11 +324,15 @@ follow the suggestion by Waterman & Eggert
 If `aligner.mode` is set to `"fogsaa"`, then the Fast Optimal Global Alignment
 Algorithm [Chakraborty2013]_ with some modifications is used. This mode
 calculates a global alignment, but it is not like the regular `"global"` mode.
-It is best suited for long alignments between similar sequences. If the the
-match score is less than the mismatch score or any gap score, or if any gap
-score is greater than the mismatch score, then a warning is raised and the
-algorithm may return incorrect results. Unlike other modes that may return more
-than one alignment, FOGSAA always returns only one alignment.
+It is best suited for long alignments between similar sequences. Rather than
+calculating all possible alignments like other algorithms do, FOGSAA uses a
+heuristic to detect steps in an alignment that cannot lead to an optimal
+alignment. This can speed up alignment, however, the heuristic makes
+assumptions about your match, mismatch, and gap scores. If the match score is
+less than the mismatch score or any gap score, or if any gap score is greater
+than the mismatch score, then a warning is raised and the algorithm may return
+incorrect results. Unlike other modes that may return more than one alignment,
+FOGSAA always returns only one alignment.
 
 .. cont-doctest
 
