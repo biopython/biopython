@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<BlastXML2
+    xmlns="http://www.ncbi.nlm.nih.gov"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema-instance"
+    xs:schemaLocation="http://www.ncbi.nlm.nih.gov http://www.ncbi.nlm.nih.gov/data_specs/schema_alt/NCBI_BlastOutput2.xsd"
+>
+<BlastOutput2>
+  <report>
+    <Report>
+      <program>rpsblast</program>
+      <version>RPSBLAST 2.9.0+</version>
+      <reference>Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&amp;auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), &quot;Gapped BLAST and PSI-BLAST: a new generation of protein database search programs&quot;, Nucleic Acids Res. 25:3389-3402.</reference>
+      <search-target>
+        <Target>
+          <db>cdd_delta</db>
+        </Target>
+      </search-target>
+      <params>
+        <Parameters>
+          <matrix>BLOSUM62</matrix>
+          <expect>1</expect>
+          <gap-open>11</gap-open>
+          <gap-extend>1</gap-extend>
+          <filter>F</filter>
+          <cbs>1</cbs>
+        </Parameters>
+      </params>
+      <results>
+        <Results>
+          <search>
+            <Search>
+              <query-id>Query_1</query-id>
+              <query-title>gi|269914405|pdb|3FAJ|A Chain A, Structure of the structural protein P131 of the archaeal virus Acidianus Two-tailed virus (ATV)</query-title>
+              <query-len>151</query-len>
+              <hits>
+                <Hit>
+                  <num>1</num>
+                  <description>
+                    <HitDescr>
+                      <id>gnl|CDD|180983</id>
+                      <accession>180983</accession>
+                      <title>PRK07453, PRK07453, protochlorophyllide oxidoreductase; Validated.</title>
+                    </HitDescr>
+                  </description>
+                  <len>322</len>
+                  <hsps>
+                    <Hsp>
+                      <num>1</num>
+                      <bit-score>31.8842</bit-score>
+                      <score>73</score>
+                      <evalue>0.058599</evalue>
+                      <identity>11</identity>
+                      <positive>17</positive>
+                      <query-from>95</query-from>
+                      <query-to>117</query-to>
+                      <hit-from>254</hit-from>
+                      <hit-to>276</hit-to>
+                      <align-len>23</align-len>
+                      <gaps>0</gaps>
+                      <qseq>GFQSQPIPGEVIAQVTSNPEYQQ</qseq>
+                      <hseq>GYVSQELAGERVAQVVADPEFAQ</hseq>
+                      <midline>G+ SQ + GE +AQV ++PE+ Q</midline>
+                    </Hsp>
+                  </hsps>
+                </Hit>
+                <Hit>
+                  <num>2</num>
+                  <description>
+                    <HitDescr>
+                      <id>gnl|CDD|338745</id>
+                      <accession>338745</accession>
+                      <title>pfam13442, Cytochrome_CBB3, Cytochrome C oxidase, cbb3-type, subunit III.  </title>
+                    </HitDescr>
+                  </description>
+                  <len>67</len>
+                  <hsps>
+                    <Hsp>
+                      <num>1</num>
+                      <bit-score>27.7531</bit-score>
+                      <score>62</score>
+                      <evalue>0.388099</evalue>
+                      <identity>9</identity>
+                      <positive>13</positive>
+                      <query-from>57</query-from>
+                      <query-to>94</query-to>
+                      <hit-from>19</hit-from>
+                      <hit-to>56</hit-to>
+                      <align-len>38</align-len>
+                      <gaps>0</gaps>
+                      <qseq>AGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGS</qseq>
+                      <hseq>GTGGAGPSLAGRAWAPEALVDIIRNGKGAMPAFGGDLS</hseq>
+                      <midline>    A    AG     EA+  I++    AM  +    S</midline>
+                    </Hsp>
+                  </hsps>
+                </Hit>
+              </hits>
+              <stat>
+                <Statistics>
+                  <db-num>29480</db-num>
+                  <db-len>6494941</db-len>
+                  <hsp-len>85</hsp-len>
+                  <eff-space>263283306</eff-space>
+                  <kappa>0.076772628</kappa>
+                  <lambda>0.267</lambda>
+                  <entropy>0.14</entropy>
+                </Statistics>
+              </stat>
+            </Search>
+          </search>
+        </Results>
+      </results>
+    </Report>
+  </report>
+</BlastOutput2>
+</BlastXML2>

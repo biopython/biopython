@@ -1,0 +1,179 @@
+<!-- DocSum DTD for gene database -->
+
+<!--~~ !dtd
+~~json
+   <json type='esummary' version='0.3'>
+       <config lcnames='true'/>
+   </json>
+~~-->
+
+<!ENTITY	 % T_string		"(#PCDATA)">
+<!ENTITY	 % T_int		"(#PCDATA)">
+
+<!-- Definition of List type: T_MimListType -->
+<!ELEMENT	int	%T_int;>
+<!ENTITY	 % T_MimListType	"(int)*">
+
+<!-- Members definition of Structure type: T_GenomicInfoType -->
+<!ELEMENT	ChrLoc		%T_string;>
+<!ELEMENT	ChrAccVer		%T_string;>
+<!--~~ <ChrStart>
+~~json <number/>
+~~-->
+<!ELEMENT	ChrStart		%T_int;>
+<!--~~ <ChrStop>
+~~json <number/>
+~~-->
+<!ELEMENT	ChrStop		%T_int;>
+<!--~~ <ExonCount>
+~~json <number/>
+~~-->
+<!ELEMENT	ExonCount		%T_int;>
+
+<!-- Definition of Structure type: T_GenomicInfoType -->
+<!--~~ <GenomicInfoType>
+~~json <object/>
+~~-->
+<!ENTITY	 % T_GenomicInfoType "(
+			ChrLoc?,
+			ChrAccVer?,
+			ChrStart?,
+			ChrStop?,
+			ExonCount?
+			)
+			">
+
+<!-- Definition of List type: T_GenomicInfoListType -->
+<!ELEMENT	GenomicInfoType	%T_GenomicInfoType;>
+<!ENTITY	 % T_GenomicInfoListType	"(GenomicInfoType)*">
+
+<!-- Members definition of Structure type: T_OrganismType -->
+<!ELEMENT	ScientificName		%T_string;>
+<!ELEMENT	CommonName		%T_string;>
+<!--~~ <TaxID>
+~~json <number/>
+~~-->
+<!ELEMENT	TaxID		%T_int;>
+
+<!-- Definition of Structure type: T_OrganismType -->
+<!--~~ <OrganismType>
+~~json <object/>
+~~-->
+<!ENTITY	 % T_OrganismType "(
+			ScientificName?,
+			CommonName?,
+			TaxID?
+			)
+			">
+
+<!-- Members definition of Structure type: T_LocationHistType -->
+<!ELEMENT	AnnotationRelease		%T_string;>
+<!ELEMENT	AssemblyAccVer		%T_string;>
+<!-- Already defined ...
+	ChrAccVer	 as 	%T_string;
+ ... Already defined -->
+<!-- Already defined ...
+	ChrStart	 as 	%T_int;
+ ... Already defined -->
+<!-- Already defined ...
+	ChrStop	 as 	%T_int;
+ ... Already defined -->
+
+<!-- Definition of Structure type: T_LocationHistType -->
+<!--~~ <LocationHistType>
+~~json <object/>
+~~-->
+<!ENTITY	 % T_LocationHistType "(
+			AnnotationRelease?,
+			AssemblyAccVer?,
+			ChrAccVer?,
+			ChrStart?,
+			ChrStop?
+			)
+			">
+
+<!-- Definition of List type: T_LocationHistListType -->
+<!ELEMENT	LocationHistType	%T_LocationHistType;>
+<!ENTITY	 % T_LocationHistListType	"(LocationHistType)*">
+
+<!-- Members definition of Structure type: T_DocSum -->
+<!ELEMENT	Name		%T_string;>
+<!ELEMENT	Description		%T_string;>
+<!--~~ <Status>
+~~json <number/>
+~~-->
+<!ELEMENT	Status		%T_int;>
+<!--~~ <CurrentID>
+~~json <number/>
+~~-->
+<!ELEMENT	CurrentID		%T_int;>
+<!ELEMENT	Chromosome		%T_string;>
+<!ELEMENT	GeneticSource		%T_string;>
+<!ELEMENT	MapLocation		%T_string;>
+<!ELEMENT	OtherAliases		%T_string;>
+<!ELEMENT	OtherDesignations		%T_string;>
+<!ELEMENT	NomenclatureSymbol		%T_string;>
+<!ELEMENT	NomenclatureName		%T_string;>
+<!ELEMENT	NomenclatureStatus		%T_string;>
+<!ELEMENT	Mim		%T_MimListType;>
+<!ELEMENT	GenomicInfo		%T_GenomicInfoListType;>
+<!--~~ <GeneWeight>
+~~json <number/>
+~~-->
+<!ELEMENT	GeneWeight		%T_int;>
+<!ELEMENT	Summary		%T_string;>
+<!ELEMENT	ChrSort		%T_string;>
+<!-- Already defined ...
+	ChrStart	 as 	%T_int;
+ ... Already defined -->
+<!ELEMENT	Organism		%T_OrganismType;>
+<!ELEMENT	LocationHist		%T_LocationHistListType;>
+<!ELEMENT	error		%T_string;>
+
+<!-- Definition of Structure type: T_DocSum -->
+<!--~~ <DocumentSummary>
+~~json <object name='@uid'/>
+~~-->
+<!ENTITY	 % T_DocSum "((
+			Name?,
+			Description?,
+			Status?,
+			CurrentID?,
+			Chromosome?,
+			GeneticSource?,
+			MapLocation?,
+			OtherAliases?,
+			OtherDesignations?,
+			NomenclatureSymbol?,
+			NomenclatureName?,
+			NomenclatureStatus?,
+			Mim?,
+			GenomicInfo?,
+			GeneWeight?,
+			Summary?,
+			ChrSort?,
+			ChrStart?,
+			Organism?,
+			LocationHist?
+			)
+			| error)
+			">
+
+<!ELEMENT DocumentSummary %T_DocSum;>
+<!ATTLIST DocumentSummary uid CDATA #IMPLIED>
+
+<!ELEMENT DbBuild      %T_string;>
+<!ELEMENT DocumentSummarySet (DbBuild?, DocumentSummary*)>
+<!ATTLIST DocumentSummarySet status CDATA #REQUIRED>
+<!--~~ <DocumentSummarySet>
+~~json
+   <object key="result">
+       <array key="uids" select='DocumentSummary/@uid'/>
+       <members select='DocumentSummary'/>
+   </object>
+~~-->
+<!--~~ <eSummaryResult>
+~~ json <member/>
+~~-->
+
+<!ELEMENT eSummaryResult (DocumentSummarySet?)>

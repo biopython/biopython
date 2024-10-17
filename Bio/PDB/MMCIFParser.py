@@ -5,16 +5,15 @@
 
 """mmCIF parsers."""
 
-
-import numpy
 import warnings
 
-from Bio.File import as_handle
+import numpy as np
 
+from Bio.File import as_handle
 from Bio.PDB.MMCIF2Dict import MMCIF2Dict
-from Bio.PDB.StructureBuilder import StructureBuilder
 from Bio.PDB.PDBExceptions import PDBConstructionException
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
+from Bio.PDB.StructureBuilder import StructureBuilder
 
 
 class MMCIFParser:
@@ -93,7 +92,7 @@ class MMCIFParser:
                 item = val[0]
             except (TypeError, IndexError):
                 continue
-            if item != "?":
+            if item != "?" and item != ".":
                 self.header[target_key] = item
                 break
 
@@ -135,7 +134,6 @@ class MMCIFParser:
         return self.header
 
     def _build_structure(self, structure_id):
-
         # two special chars as placeholders in the mmCIF format
         # for item values that cannot be explicitly assigned
         # see: pdbx/mmcif syntax web page
@@ -202,8 +200,7 @@ class MMCIFParser:
         # so serial_id means the Model ID specified in the file
         current_model_id = -1
         current_serial_id = -1
-        for i in range(0, len(atom_id_list)):
-
+        for i in range(len(atom_id_list)):
             # set the line_counter for 'ATOM' lines only and not
             # as a global line counter found in the PDBParser()
             structure_builder.set_line_counter(i)
@@ -215,8 +212,7 @@ class MMCIFParser:
             except ValueError:
                 serial = atom_serial_list[i]
                 warnings.warn(
-                    "PDBConstructionWarning: "
-                    "Some atom serial numbers are not numerical",
+                    "PDBConstructionWarning: Some atom serial numbers are not numerical",
                     PDBConstructionWarning,
                 )
 
@@ -233,14 +229,11 @@ class MMCIFParser:
                 # Non-existing residue ID
                 try:
                     msg_resseq = mmcif_dict["_atom_site.auth_seq_id"][i]
-                    msg = "Non-existing residue ID in chain '{}', residue '{}'".format(
-                        chainid, msg_resseq
-                    )
+                    msg = f"Non-existing residue ID in chain '{chainid}', residue '{msg_resseq}'"
                 except (KeyError, IndexError):
-                    msg = "Non-existing residue ID in chain '{}'".format(chainid)
+                    msg = f"Non-existing residue ID in chain '{chainid}'"
                 warnings.warn(
-                    "PDBConstructionWarning: ",
-                    msg,
+                    "PDBConstructionWarning: " + msg,
                     PDBConstructionWarning,
                 )
                 continue
@@ -295,7 +288,7 @@ class MMCIFParser:
                 current_resname = resname
                 structure_builder.init_residue(resname, hetatm_flag, int_resseq, icode)
 
-            coord = numpy.array((x, y, z), "f")
+            coord = np.array((x, y, z), "f")
             element = element_list[i].upper() if element_list else None
             structure_builder.init_atom(
                 name,
@@ -317,7 +310,7 @@ class MMCIFParser:
                     aniso_u33[i],
                 )
                 mapped_anisou = [float(_) for _ in u]
-                anisou_array = numpy.array(mapped_anisou, "f")
+                anisou_array = np.array(mapped_anisou, "f")
                 structure_builder.set_anisou(anisou_array)
         # Now try to set the cell
         try:
@@ -327,7 +320,7 @@ class MMCIFParser:
             alpha = float(mmcif_dict["_cell.angle_alpha"][0])
             beta = float(mmcif_dict["_cell.angle_beta"][0])
             gamma = float(mmcif_dict["_cell.angle_gamma"][0])
-            cell = numpy.array((a, b, c, alpha, beta, gamma), "f")
+            cell = np.array((a, b, c, alpha, beta, gamma), "f")
             spacegroup = mmcif_dict["_symmetry.space_group_name_H-M"][0]
             spacegroup = spacegroup[1:-1]  # get rid of quotes!!
             if spacegroup is None:
@@ -401,7 +394,6 @@ class FastMMCIFParser:
     # Private methods
 
     def _build_structure(self, structure_id, filehandle):
-
         # two special chars as placeholders in the mmCIF format
         # for item values that cannot be explicitly assigned
         # see: pdbx/mmcif syntax web page
@@ -503,8 +495,7 @@ class FastMMCIFParser:
         # so serial_id means the Model ID specified in the file
         current_model_id = -1
         current_serial_id = -1
-        for i in range(0, len(atom_id_list)):
-
+        for i in range(len(atom_id_list)):
             # set the line_counter for 'ATOM' lines only and not
             # as a global line counter found in the PDBParser()
             structure_builder.set_line_counter(i)
@@ -524,14 +515,11 @@ class FastMMCIFParser:
                 # Non-existing residue ID
                 try:
                     msg_resseq = mmcif_dict["_atom_site.auth_seq_id"][i]
-                    msg = "Non-existing residue ID in chain '{}', residue '{}'".format(
-                        chainid, msg_resseq
-                    )
+                    msg = f"Non-existing residue ID in chain '{chainid}', residue '{msg_resseq}'"
                 except (KeyError, IndexError):
-                    msg = "Non-existing residue ID in chain '{}'".format(chainid)
+                    msg = f"Non-existing residue ID in chain '{chainid}'"
                 warnings.warn(
-                    "PDBConstructionWarning: ",
-                    msg,
+                    "PDBConstructionWarning: " + msg,
                     PDBConstructionWarning,
                 )
                 continue
@@ -587,7 +575,7 @@ class FastMMCIFParser:
                 current_resname = resname
                 structure_builder.init_residue(resname, hetatm_flag, int_resseq, icode)
 
-            coord = numpy.array((x, y, z), "f")
+            coord = np.array((x, y, z), "f")
             element = element_list[i] if element_list else None
             structure_builder.init_atom(
                 name,
@@ -609,5 +597,5 @@ class FastMMCIFParser:
                     aniso_u33[i],
                 )
                 mapped_anisou = [float(_) for _ in u]
-                anisou_array = numpy.array(mapped_anisou, "f")
+                anisou_array = np.array(mapped_anisou, "f")
                 structure_builder.set_anisou(anisou_array)

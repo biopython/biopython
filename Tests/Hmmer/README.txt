@@ -19,6 +19,7 @@ text_30_hmmscan_007.out      single query, one match, no alignment
 text_30_hmmscan_008.out      single query, multiple matches, no alignment width
 text_30_hmmscan_009.out      single query, alignment block(s) with large gaps (bug 3399 in Redmine)
 text_30_hmmscan_010.out
+text_30_hmmscan_011.out      single query, multiple matches, windows-style hmmscan executable path with whitespace
 text_31b1_hmmsearch_001.out  multiple queries
 text_30_hmmsearch_001.out    single query, no match
 text_30_hmmsearch_002.out    single query, multiple matches, multiple hsps per match

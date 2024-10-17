@@ -4,15 +4,13 @@
 
 """Tests for Affy module."""
 
+import os
+import struct
 import unittest
 
-import struct
-import os
-import sys
-
 try:
-    from numpy import array
     import numpy.testing
+    from numpy import array
 except ImportError:
     from Bio import MissingPythonDependencyError
 
@@ -61,6 +59,10 @@ class AffyTest(unittest.TestCase):
             self.assertEqual(record.DatHeader["scanner-id"], "50205880")
             self.assertEqual(record.DatHeader["scanner-type"], "M10")
             self.assertEqual(record.DatHeader["array-type"], "Tgondii_SNP1.1sq")
+            self.assertEqual(record.DatHeader["filter-wavelength"], 570)
+            self.assertAlmostEqual(record.DatHeader["arc-radius"], 25356.509766)
+            self.assertAlmostEqual(record.DatHeader["laser-spotsize"], 3.5)
+            self.assertAlmostEqual(record.DatHeader["pixel-size"], 1.56)
             self.assertEqual(record.DatHeader["image-orientation"], 6)
             self.assertEqual(record.Algorithm, "Percentile")
             self.assertEqual(len(record.AlgorithmParameters), 16)
@@ -320,9 +322,6 @@ class AffyTest(unittest.TestCase):
             *(preHeaders[header] for header in preHeadersOrder),
         )
 
-        def packData(intensity, sdev, pixel):
-            return struct.pack("< f f h", intensity, sdev, pixel)
-
         f.write(headersEncoded)
         for header in headers:
             try:
@@ -334,9 +333,9 @@ class AffyTest(unittest.TestCase):
         f.write(prePadding)
         f.write(b"\x00" * 15)
         for i in range(25):
-            f.write(packData(float(i), float(-i), 9))
+            f.write(struct.pack("< f f h", i, -i, 9))  # intensity, sdev, pixel
 
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity=0)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

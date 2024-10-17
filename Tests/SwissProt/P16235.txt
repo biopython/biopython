@@ -1,0 +1,491 @@
+ID   LSHR_RAT                Reviewed;         700 AA.
+AC   P16235; P70646; Q63807; Q63808; Q63809; Q6LDI7;
+DT   01-APR-1990, integrated into UniProtKB/Swiss-Prot.
+DT   01-APR-1990, sequence version 1.
+DT   12-OCT-2022, entry version 184.
+DE   RecName: Full=Lutropin-choriogonadotropic hormone receptor;
+DE            Short=LH/CG-R;
+DE   AltName: Full=Luteinizing hormone receptor;
+DE            Short=LSH-R;
+DE   Flags: Precursor;
+GN   Name=Lhcgr;
+OS   Rattus norvegicus (Rat).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Glires; Rodentia; Myomorpha; Muroidea; Muridae;
+OC   Murinae; Rattus.
+OX   NCBI_TaxID=10116;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [MRNA].
+RX   PubMed=2502842; DOI=10.1126/science.2502842;
+RA   McFarland K.C., Sprengel R., Phillips H.S., Koehler M., Rosemblit N.,
+RA   Nikolics K., Segaloff D.L., Seeburg P.H.;
+RT   "Lutropin-choriogonadotropin receptor: an unusual member of the G protein-
+RT   coupled receptor family.";
+RL   Science 245:494-499(1989).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE, AND ALTERNATIVE SPLICING.
+RC   STRAIN=Sprague-Dawley; TISSUE=Ovary;
+RX   PubMed=1353463; DOI=10.1016/0303-7207(92)90079-l;
+RA   Aatsinki J.T., Pietila E.M., Lakkakorpi J.T., Rajaniemi H.J.;
+RT   "Expression of the LH/CG receptor gene in rat ovarian tissue is regulated
+RT   by an extensive alternative splicing of the primary transcript.";
+RL   Mol. Cell. Endocrinol. 84:127-135(1992).
+RN   [3]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RX   PubMed=2019252; DOI=10.1210/endo-128-5-2297;
+RA   Koo Y.B., Slaughter R.G., Ji T.H.;
+RT   "Structure of the luteinizing hormone receptor gene and multiple exons of
+RT   the coding sequence.";
+RL   Endocrinology 128:2297-2308(1991).
+RN   [4]
+RP   NUCLEOTIDE SEQUENCE, AND ALTERNATIVE SPLICING.
+RX   PubMed=1976554; DOI=10.1016/0303-7207(90)90034-6;
+RA   Bernard M.P., Myers R.V., Moyle W.R.;
+RT   "Cloning of rat lutropin (LH) receptor analogs lacking the soybean lectin
+RT   domain.";
+RL   Mol. Cell. Endocrinol. 71:R19-R23(1990).
+RN   [5]
+RP   NUCLEOTIDE SEQUENCE, AND ALTERNATIVE SPLICING.
+RX   PubMed=2281186; DOI=10.1016/b978-0-12-571146-3.50014-6;
+RA   Segaloff D.L., Sprengel R., Nikolics K., Ascoli M.;
+RT   "Structure of the lutropin/choriogonadotropin receptor.";
+RL   Recent Prog. Horm. Res. 46:261-301(1990).
+RN   [6]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA] OF 1-320.
+RC   TISSUE=Liver;
+RX   PubMed=2040640; DOI=10.1016/s0021-9258(18)99170-2;
+RA   Tsai-Morris C.H., Buczko E., Wang W., Xie X.-Z., Dufau M.L.;
+RT   "Structural organization of the rat luteinizing hormone (LH) receptor
+RT   gene.";
+RL   J. Biol. Chem. 266:11355-11359(1991).
+RN   [7]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA] OF 295-700.
+RX   PubMed=2174034; DOI=10.1016/s0021-9258(17)45380-4;
+RA   Tsai-Morris C.H., Buczko E., Wang W., Dufau M.L.;
+RT   "Intronic nature of the rat luteinizing hormone receptor gene defines a
+RT   soluble receptor subspecies with hormone binding activity.";
+RL   J. Biol. Chem. 265:19385-19388(1990).
+RN   [8]
+RP   PROTEIN SEQUENCE OF 27-44.
+RX   PubMed=2601325; DOI=10.1016/0022-4731(89)90482-2;
+RA   Dufau M.L., Minegishi T., Buczko E.S., Delgado C.J., Zhang R.;
+RT   "Characterization and structure of ovarian and testicular LH/hCG
+RT   receptors.";
+RL   J. Steroid Biochem. 33:715-720(1989).
+RN   [9]
+RP   PROTEIN SEQUENCE OF 27-37.
+RX   PubMed=2925659; DOI=10.1016/s0021-9258(18)83790-5;
+RA   Roche P.C., Ryan R.J.;
+RT   "Purification, characterization, and amino-terminal sequence of rat ovarian
+RT   receptor for luteinizing hormone/human choriogonadotropin.";
+RL   J. Biol. Chem. 264:4636-4641(1989).
+RN   [10]
+RP   MUTAGENESIS OF ASP-409; ASP-436; GLU-455 AND ASP-582.
+RX   PubMed=1714448; DOI=10.1016/s0021-9258(18)98570-4;
+RA   Ji I., Ji T.H.;
+RT   "Asp383 in the second transmembrane domain of the lutropin receptor is
+RT   important for high affinity hormone binding and cAMP production.";
+RL   J. Biol. Chem. 266:14953-14957(1991).
+RN   [11]
+RP   PALMITOYLATION AT CYS-647 AND CYS-648, AND MUTAGENESIS OF CYS-647 AND
+RP   CYS-648.
+RX   PubMed=7776964; DOI=10.1210/mend.9.2.7776964;
+RA   Zhu H., Wang H., Ascoli M.;
+RT   "The lutropin/choriogonadotropin receptor is palmitoylated at intracellular
+RT   cysteine residues.";
+RL   Mol. Endocrinol. 9:141-150(1995).
+CC   -!- FUNCTION: Receptor for lutropin-choriogonadotropic hormone. The
+CC       activity of this receptor is mediated by G proteins which activate
+CC       adenylate cyclase. {ECO:0000250|UniProtKB:P22888}.
+CC   -!- SUBCELLULAR LOCATION: Cell membrane {ECO:0000250|UniProtKB:P22888};
+CC       Multi-pass membrane protein {ECO:0000250|UniProtKB:P22888}. Secreted.
+CC       Note=Some isoforms may be secreted.
+CC   -!- ALTERNATIVE PRODUCTS:
+CC       Event=Alternative splicing; Named isoforms=11;
+CC         Comment=Additional isoforms seem to exist.;
+CC       Name=1;
+CC         IsoId=P16235-1; Sequence=Displayed;
+CC       Name=1759;
+CC         IsoId=P16235-2; Sequence=VSP_001969, VSP_001977, VSP_001978;
+CC       Name=1834;
+CC         IsoId=P16235-3; Sequence=VSP_001977, VSP_001978;
+CC       Name=1950;
+CC         IsoId=P16235-4; Sequence=VSP_001968;
+CC       Name=2075;
+CC         IsoId=P16235-5; Sequence=VSP_001971, VSP_001973;
+CC       Name=C1;
+CC         IsoId=P16235-6; Sequence=VSP_001975, VSP_001976;
+CC       Name=C2;
+CC         IsoId=P16235-7; Sequence=VSP_001970;
+CC       Name=EA2;
+CC         IsoId=P16235-8; Sequence=VSP_001972;
+CC       Name=EB;
+CC         IsoId=P16235-9; Sequence=VSP_001972, VSP_001977, VSP_001978;
+CC       Name=B1;
+CC         IsoId=P16235-10; Sequence=VSP_001972, VSP_001974, VSP_001979;
+CC       Name=B3;
+CC         IsoId=P16235-11; Sequence=VSP_001974, VSP_001979;
+CC   -!- PTM: Sulfated. {ECO:0000250|UniProtKB:P22888}.
+CC   -!- SIMILARITY: Belongs to the G-protein coupled receptor 1 family.
+CC       FSH/LSH/TSH subfamily. {ECO:0000255|PROSITE-ProRule:PRU00521}.
+CC   -!- WEB RESOURCE: Name=Sequence-structure-function-analysis of glycoprotein
+CC       hormone receptors;
+CC       URL="http://www.ssfa-gphr.de/";
+CC   ---------------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see https://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution (CC BY 4.0) License
+CC   ---------------------------------------------------------------------------
+DR   EMBL; M26199; AAA41528.1; -; mRNA.
+DR   EMBL; M61212; AAA41527.1; -; Genomic_DNA.
+DR   EMBL; M61211; AAA41527.1; JOINED; Genomic_DNA.
+DR   EMBL; S40803; AAB22680.1; -; Genomic_DNA.
+DR   EMBL; S40787; AAB22680.1; JOINED; Genomic_DNA.
+DR   EMBL; S40903; AAB22680.1; JOINED; Genomic_DNA.
+DR   EMBL; S40904; AAB22680.1; JOINED; Genomic_DNA.
+DR   EMBL; S40905; AAB22680.1; JOINED; Genomic_DNA.
+DR   EMBL; S40907; AAB22680.1; JOINED; Genomic_DNA.
+DR   EMBL; S40909; AAB22680.1; JOINED; Genomic_DNA.
+DR   EMBL; S40918; AAB22680.1; JOINED; Genomic_DNA.
+DR   EMBL; S40920; AAB22680.1; JOINED; Genomic_DNA.
+DR   EMBL; S40795; AAB22680.1; JOINED; Genomic_DNA.
+DR   EMBL; S40798; AAB22680.1; JOINED; Genomic_DNA.
+DR   EMBL; S40795; AAB22681.1; -; Genomic_DNA.
+DR   EMBL; S40787; AAB22681.1; JOINED; Genomic_DNA.
+DR   EMBL; S40903; AAB22681.1; JOINED; Genomic_DNA.
+DR   EMBL; S40904; AAB22681.1; JOINED; Genomic_DNA.
+DR   EMBL; S40905; AAB22681.1; JOINED; Genomic_DNA.
+DR   EMBL; S40907; AAB22681.1; JOINED; Genomic_DNA.
+DR   EMBL; S40909; AAB22681.1; JOINED; Genomic_DNA.
+DR   EMBL; S40918; AAB22681.1; JOINED; Genomic_DNA.
+DR   EMBL; S40920; AAB22681.1; JOINED; Genomic_DNA.
+DR   EMBL; S40803; AAB22682.2; -; Genomic_DNA.
+DR   EMBL; S40787; AAB22682.2; JOINED; Genomic_DNA.
+DR   EMBL; S40903; AAB22682.2; JOINED; Genomic_DNA.
+DR   EMBL; S40907; AAB22682.2; JOINED; Genomic_DNA.
+DR   EMBL; S40909; AAB22682.2; JOINED; Genomic_DNA.
+DR   EMBL; S40918; AAB22682.2; JOINED; Genomic_DNA.
+DR   EMBL; S40920; AAB22682.2; JOINED; Genomic_DNA.
+DR   EMBL; S40795; AAB22682.2; JOINED; Genomic_DNA.
+DR   EMBL; S40798; AAB22682.2; JOINED; Genomic_DNA.
+DR   EMBL; S40803; AAB22683.1; -; Genomic_DNA.
+DR   EMBL; S40787; AAB22683.1; JOINED; Genomic_DNA.
+DR   EMBL; S40903; AAB22683.1; JOINED; Genomic_DNA.
+DR   EMBL; S40904; AAB22683.1; JOINED; Genomic_DNA.
+DR   EMBL; S40905; AAB22683.1; JOINED; Genomic_DNA.
+DR   EMBL; S40907; AAB22683.1; JOINED; Genomic_DNA.
+DR   EMBL; S40909; AAB22683.1; JOINED; Genomic_DNA.
+DR   EMBL; S40918; AAB22683.1; JOINED; Genomic_DNA.
+DR   EMBL; S40920; AAB22683.1; JOINED; Genomic_DNA.
+DR   EMBL; S40795; AAB22683.1; JOINED; Genomic_DNA.
+DR   EMBL; S40798; AAB22683.1; JOINED; Genomic_DNA.
+DR   EMBL; S40803; AAB22684.2; -; Genomic_DNA.
+DR   EMBL; S40787; AAB22684.2; JOINED; Genomic_DNA.
+DR   EMBL; S40903; AAB22684.2; JOINED; Genomic_DNA.
+DR   EMBL; S40904; AAB22684.2; JOINED; Genomic_DNA.
+DR   EMBL; S40905; AAB22684.2; JOINED; Genomic_DNA.
+DR   EMBL; S40909; AAB22684.2; JOINED; Genomic_DNA.
+DR   EMBL; S40918; AAB22684.2; JOINED; Genomic_DNA.
+DR   EMBL; S40920; AAB22684.2; JOINED; Genomic_DNA.
+DR   EMBL; S40795; AAB22684.2; JOINED; Genomic_DNA.
+DR   EMBL; S40798; AAB22684.2; JOINED; Genomic_DNA.
+DR   EMBL; M68928; AAA41529.1; -; Genomic_DNA.
+DR   EMBL; M68917; AAA41529.1; JOINED; Genomic_DNA.
+DR   EMBL; M68918; AAA41529.1; JOINED; Genomic_DNA.
+DR   EMBL; M68919; AAA41529.1; JOINED; Genomic_DNA.
+DR   EMBL; M68920; AAA41529.1; JOINED; Genomic_DNA.
+DR   EMBL; M68921; AAA41529.1; JOINED; Genomic_DNA.
+DR   EMBL; M68922; AAA41529.1; JOINED; Genomic_DNA.
+DR   EMBL; M68923; AAA41529.1; JOINED; Genomic_DNA.
+DR   EMBL; M68925; AAA41529.1; JOINED; Genomic_DNA.
+DR   EMBL; M68926; AAA41529.1; JOINED; Genomic_DNA.
+DR   EMBL; M68927; AAA41529.1; JOINED; Genomic_DNA.
+DR   EMBL; AH004953; AAB42193.1; -; Genomic_DNA.
+DR   PIR; A49744; A49744.
+DR   PIR; I57668; I57668.
+DR   PIR; I77461; I77461.
+DR   RefSeq; NP_037110.1; NM_012978.1. [P16235-1]
+DR   AlphaFoldDB; P16235; -.
+DR   SMR; P16235; -.
+DR   STRING; 10116.ENSRNOP00000022481; -.
+DR   BindingDB; P16235; -.
+DR   ChEMBL; CHEMBL2456; -.
+DR   DrugCentral; P16235; -.
+DR   GlyGen; P16235; 6 sites.
+DR   iPTMnet; P16235; -.
+DR   PhosphoSitePlus; P16235; -.
+DR   SwissPalm; P16235; -.
+DR   PaxDb; P16235; -.
+DR   Ensembl; ENSRNOT00000022481; ENSRNOP00000022481; ENSRNOG00000016712. [P16235-1]
+DR   Ensembl; ENSRNOT00000096915; ENSRNOP00000089069; ENSRNOG00000016712. [P16235-2]
+DR   Ensembl; ENSRNOT00000098297; ENSRNOP00000079785; ENSRNOG00000016712. [P16235-8]
+DR   GeneID; 25477; -.
+DR   KEGG; rno:25477; -.
+DR   UCSC; RGD:3007; rat. [P16235-1]
+DR   CTD; 3973; -.
+DR   RGD; 3007; Lhcgr.
+DR   eggNOG; KOG2087; Eukaryota.
+DR   GeneTree; ENSGT00940000157364; -.
+DR   InParanoid; P16235; -.
+DR   OrthoDB; 257031at2759; -.
+DR   PhylomeDB; P16235; -.
+DR   Reactome; R-RNO-375281; Hormone ligand-binding receptors.
+DR   PRO; PR:P16235; -.
+DR   Proteomes; UP000002494; Chromosome 6.
+DR   GO; GO:0005737; C:cytoplasm; IDA:RGD.
+DR   GO; GO:0005783; C:endoplasmic reticulum; IDA:RGD.
+DR   GO; GO:0005768; C:endosome; IDA:RGD.
+DR   GO; GO:0005615; C:extracellular space; IDA:RGD.
+DR   GO; GO:0005887; C:integral component of plasma membrane; IDA:RGD.
+DR   GO; GO:0031233; C:intrinsic component of external side of plasma membrane; IDA:RGD.
+DR   GO; GO:0005764; C:lysosome; IDA:RGD.
+DR   GO; GO:0005634; C:nucleus; IDA:RGD.
+DR   GO; GO:0005886; C:plasma membrane; IDA:RGD.
+DR   GO; GO:0043235; C:receptor complex; IDA:RGD.
+DR   GO; GO:0051117; F:ATPase binding; IPI:RGD.
+DR   GO; GO:0038106; F:choriogonadotropin hormone binding; ISO:RGD.
+DR   GO; GO:0035472; F:choriogonadotropin hormone receptor activity; ISO:RGD.
+DR   GO; GO:0008528; F:G protein-coupled peptide receptor activity; IDA:RGD.
+DR   GO; GO:0042802; F:identical protein binding; IDA:RGD.
+DR   GO; GO:0004964; F:luteinizing hormone receptor activity; ISS:UniProtKB.
+DR   GO; GO:0017046; F:peptide hormone binding; IDA:RGD.
+DR   GO; GO:0007190; P:activation of adenylate cyclase activity; IDA:RGD.
+DR   GO; GO:0007189; P:adenylate cyclase-activating G protein-coupled receptor signaling pathway; ISO:RGD.
+DR   GO; GO:0007188; P:adenylate cyclase-modulating G protein-coupled receptor signaling pathway; IDA:RGD.
+DR   GO; GO:0050482; P:arachidonic acid secretion; IDA:RGD.
+DR   GO; GO:0071371; P:cellular response to gonadotropin stimulus; ISO:RGD.
+DR   GO; GO:0071373; P:cellular response to luteinizing hormone stimulus; ISS:UniProtKB.
+DR   GO; GO:0007417; P:central nervous system development; IEP:RGD.
+DR   GO; GO:0050890; P:cognition; ISO:RGD.
+DR   GO; GO:0046544; P:development of secondary male sexual characteristics; ISO:RGD.
+DR   GO; GO:0008585; P:female gonad development; ISO:RGD.
+DR   GO; GO:0007186; P:G protein-coupled receptor signaling pathway; ISO:RGD.
+DR   GO; GO:0009755; P:hormone-mediated signaling pathway; IDA:RGD.
+DR   GO; GO:0042700; P:luteinizing hormone signaling pathway; IDA:RGD.
+DR   GO; GO:0008584; P:male gonad development; ISO:RGD.
+DR   GO; GO:0001541; P:ovarian follicle development; ISO:RGD.
+DR   GO; GO:0022602; P:ovulation cycle process; ISO:RGD.
+DR   GO; GO:0007200; P:phospholipase C-activating G protein-coupled receptor signaling pathway; IDA:RGD.
+DR   GO; GO:0010524; P:positive regulation of calcium ion transport into cytosol; IDA:RGD.
+DR   GO; GO:0050850; P:positive regulation of calcium-mediated signaling; IDA:RGD.
+DR   GO; GO:0046886; P:positive regulation of hormone biosynthetic process; IDA:RGD.
+DR   GO; GO:0032962; P:positive regulation of inositol trisphosphate biosynthetic process; ISO:RGD.
+DR   GO; GO:0051281; P:positive regulation of release of sequestered calcium ion into cytosol; IDA:RGD.
+DR   GO; GO:0006622; P:protein targeting to lysosome; IMP:RGD.
+DR   GO; GO:0050810; P:regulation of steroid biosynthetic process; IEP:RGD.
+DR   GO; GO:0090030; P:regulation of steroid hormone biosynthetic process; ISO:RGD.
+DR   GO; GO:0034699; P:response to luteinizing hormone; IDA:CAFA.
+DR   GO; GO:0009410; P:response to xenobiotic stimulus; IEP:RGD.
+DR   GO; GO:0072520; P:seminiferous tubule development; ISO:RGD.
+DR   GO; GO:0007283; P:spermatogenesis; ISO:RGD.
+DR   GO; GO:0060065; P:uterus development; ISO:RGD.
+DR   Gene3D; 3.80.10.10; -; 1.
+DR   InterPro; IPR000276; GPCR_Rhodpsn.
+DR   InterPro; IPR017452; GPCR_Rhodpsn_7TM.
+DR   InterPro; IPR002131; Gphrmn_rcpt_fam.
+DR   InterPro; IPR026906; LRR_5.
+DR   InterPro; IPR032675; LRR_dom_sf.
+DR   InterPro; IPR002273; LSH_rcpt.
+DR   Pfam; PF00001; 7tm_1; 1.
+DR   Pfam; PF13306; LRR_5; 2.
+DR   PRINTS; PR00373; GLYCHORMONER.
+DR   PRINTS; PR00237; GPCRRHODOPSN.
+DR   PRINTS; PR01144; LSHRECEPTOR.
+DR   PROSITE; PS00237; G_PROTEIN_RECEP_F1_1; 1.
+DR   PROSITE; PS50262; G_PROTEIN_RECEP_F1_2; 1.
+PE   1: Evidence at protein level;
+KW   Alternative splicing; Cell membrane; Direct protein sequencing;
+KW   Disulfide bond; G-protein coupled receptor; Glycoprotein;
+KW   Leucine-rich repeat; Lipoprotein; Membrane; Palmitate; Receptor;
+KW   Reference proteome; Repeat; Secreted; Signal; Sulfation; Transducer;
+KW   Transmembrane; Transmembrane helix.
+FT   SIGNAL          1..26
+FT                   /evidence="ECO:0000269|PubMed:2601325,
+FT                   ECO:0000269|PubMed:2925659"
+FT   CHAIN           27..700
+FT                   /note="Lutropin-choriogonadotropic hormone receptor"
+FT                   /id="PRO_0000012783"
+FT   TOPO_DOM        27..362
+FT                   /note="Extracellular"
+FT                   /evidence="ECO:0000255"
+FT   TRANSMEM        363..390
+FT                   /note="Helical; Name=1"
+FT                   /evidence="ECO:0000255"
+FT   TOPO_DOM        391..399
+FT                   /note="Cytoplasmic"
+FT                   /evidence="ECO:0000255"
+FT   TRANSMEM        400..422
+FT                   /note="Helical; Name=2"
+FT                   /evidence="ECO:0000255"
+FT   TOPO_DOM        423..443
+FT                   /note="Extracellular"
+FT                   /evidence="ECO:0000255"
+FT   TRANSMEM        444..466
+FT                   /note="Helical; Name=3"
+FT                   /evidence="ECO:0000255"
+FT   TOPO_DOM        467..486
+FT                   /note="Cytoplasmic"
+FT                   /evidence="ECO:0000255"
+FT   TRANSMEM        487..509
+FT                   /note="Helical; Name=4"
+FT                   /evidence="ECO:0000255"
+FT   TOPO_DOM        510..529
+FT                   /note="Extracellular"
+FT                   /evidence="ECO:0000255"
+FT   TRANSMEM        530..551
+FT                   /note="Helical; Name=5"
+FT                   /evidence="ECO:0000255"
+FT   TOPO_DOM        552..574
+FT                   /note="Cytoplasmic"
+FT                   /evidence="ECO:0000255"
+FT   TRANSMEM        575..598
+FT                   /note="Helical; Name=6"
+FT                   /evidence="ECO:0000255"
+FT   TOPO_DOM        599..609
+FT                   /note="Extracellular"
+FT                   /evidence="ECO:0000255"
+FT   TRANSMEM        610..631
+FT                   /note="Helical; Name=7"
+FT                   /evidence="ECO:0000255"
+FT   TOPO_DOM        632..700
+FT                   /note="Cytoplasmic"
+FT                   /evidence="ECO:0000255"
+FT   REPEAT          126..150
+FT                   /note="LRR 1"
+FT   REPEAT          152..175
+FT                   /note="LRR 2"
+FT   REPEAT          176..200
+FT                   /note="LRR 3"
+FT   REPEAT          202..224
+FT                   /note="LRR 4"
+FT   REPEAT          225..248
+FT                   /note="LRR 5"
+FT   REPEAT          250..271
+FT                   /note="LRR 6"
+FT   MOD_RES         335
+FT                   /note="Sulfotyrosine"
+FT                   /evidence="ECO:0000250|UniProtKB:P22888"
+FT   LIPID           647
+FT                   /note="S-palmitoyl cysteine"
+FT                   /evidence="ECO:0000305|PubMed:7776964"
+FT   LIPID           648
+FT                   /note="S-palmitoyl cysteine"
+FT                   /evidence="ECO:0000305|PubMed:7776964"
+FT   CARBOHYD        103
+FT                   /note="N-linked (GlcNAc...) asparagine"
+FT                   /evidence="ECO:0000255"
+FT   CARBOHYD        178
+FT                   /note="N-linked (GlcNAc...) asparagine"
+FT                   /evidence="ECO:0000255"
+FT   CARBOHYD        199
+FT                   /note="N-linked (GlcNAc...) asparagine"
+FT                   /evidence="ECO:0000255"
+FT   CARBOHYD        295
+FT                   /note="N-linked (GlcNAc...) asparagine"
+FT                   /evidence="ECO:0000255"
+FT   CARBOHYD        303
+FT                   /note="N-linked (GlcNAc...) asparagine"
+FT                   /evidence="ECO:0000255"
+FT   CARBOHYD        317
+FT                   /note="N-linked (GlcNAc...) asparagine"
+FT                   /evidence="ECO:0000255"
+FT   DISULFID        443..518
+FT                   /evidence="ECO:0000255|PROSITE-ProRule:PRU00521"
+FT   VAR_SEQ         83..132
+FT                   /note="Missing (in isoform 1950)"
+FT                   /evidence="ECO:0000305"
+FT                   /id="VSP_001968"
+FT   VAR_SEQ         133..157
+FT                   /note="Missing (in isoform 1759)"
+FT                   /evidence="ECO:0000305"
+FT                   /id="VSP_001969"
+FT   VAR_SEQ         184..700
+FT                   /note="Missing (in isoform C2)"
+FT                   /evidence="ECO:0000305"
+FT                   /id="VSP_001970"
+FT   VAR_SEQ         232..293
+FT                   /note="Missing (in isoform EA2, isoform EB and isoform B1)"
+FT                   /evidence="ECO:0000305"
+FT                   /id="VSP_001972"
+FT   VAR_SEQ         232..251
+FT                   /note="DISSTKLQALPSHGLESIQT -> PCRATGWSPFRRSSPCLPTH (in
+FT                   isoform 2075)"
+FT                   /evidence="ECO:0000305"
+FT                   /id="VSP_001971"
+FT   VAR_SEQ         252..700
+FT                   /note="Missing (in isoform 2075)"
+FT                   /evidence="ECO:0000305"
+FT                   /id="VSP_001973"
+FT   VAR_SEQ         294..367
+FT                   /note="QNFSFSIFENFSKQCESTVRKADNETLYSAIFEENELSGWDYDYGFCSPKTL
+FT                   QCAPEPDAFNPCEDIMGYAFLR -> IFHFPFLKTSPNNAKAQLEKQITRRFIPPSLRR
+FT                   MNSVAGIMIMASVHPRHSNVLQNQMLSTPVKILWAMPSLGS (in isoform B1
+FT                   and isoform B3)"
+FT                   /evidence="ECO:0000305"
+FT                   /id="VSP_001974"
+FT   VAR_SEQ         294
+FT                   /note="Q -> P (in isoform C1)"
+FT                   /evidence="ECO:0000305"
+FT                   /id="VSP_001975"
+FT   VAR_SEQ         295..700
+FT                   /note="Missing (in isoform C1)"
+FT                   /evidence="ECO:0000305"
+FT                   /id="VSP_001976"
+FT   VAR_SEQ         321..342
+FT                   /note="YSAIFEENELSGWDYDYGFCSP -> LHGALPAAHCLRGLPNKRPVL (in
+FT                   isoform 1834, isoform 1759 and isoform EB)"
+FT                   /evidence="ECO:0000305"
+FT                   /id="VSP_001977"
+FT   VAR_SEQ         343..700
+FT                   /note="Missing (in isoform 1834, isoform 1759 and isoform
+FT                   EB)"
+FT                   /evidence="ECO:0000305"
+FT                   /id="VSP_001978"
+FT   VAR_SEQ         368..700
+FT                   /note="Missing (in isoform B1 and isoform B3)"
+FT                   /evidence="ECO:0000305"
+FT                   /id="VSP_001979"
+FT   VARIANT         82
+FT                   /note="I -> M (in isoform 1950)"
+FT   VARIANT         179
+FT                   /note="E -> G (in isoform 1759)"
+FT   VARIANT         233
+FT                   /note="I -> T (in isoform 1950)"
+FT   VARIANT         646
+FT                   /note="G -> S (in isoform 1950)"
+FT   MUTAGEN         409
+FT                   /note="D->N: Significant reduction of binding."
+FT                   /evidence="ECO:0000269|PubMed:1714448"
+FT   MUTAGEN         436
+FT                   /note="D->N: No change in binding or cAMP production."
+FT                   /evidence="ECO:0000269|PubMed:1714448"
+FT   MUTAGEN         455
+FT                   /note="E->Q: No change in binding or cAMP production."
+FT                   /evidence="ECO:0000269|PubMed:1714448"
+FT   MUTAGEN         582
+FT                   /note="D->N: No change in binding or cAMP production."
+FT                   /evidence="ECO:0000269|PubMed:1714448"
+FT   MUTAGEN         647
+FT                   /note="C->A: Trapped intracellularly and does not appear to
+FT                   become mature; when associated with A-648."
+FT                   /evidence="ECO:0000269|PubMed:7776964"
+FT   MUTAGEN         648
+FT                   /note="C->A: Trapped intracellularly and does not appear to
+FT                   become mature; when associated with A-647."
+FT                   /evidence="ECO:0000269|PubMed:7776964"
+FT   CONFLICT        33
+FT                   /note="R -> L (in Ref. 9; AA sequence)"
+FT                   /evidence="ECO:0000305"
+SQ   SEQUENCE   700 AA;  78036 MW;  31807E73BAC94F1F CRC64;
+     MGRRVPALRQ LLVLAVLLLK PSQLQSRELS GSRCPEPCDC APDGALRCPG PRAGLARLSL
+     TYLPVKVIPS QAFRGLNEVV KIEISQSDSL ERIEANAFDN LLNLSELLIQ NTKNLLYIEP
+     GAFTNLPRLK YLSICNTGIR TLPDVTKISS SEFNFILEIC DNLHITTIPG NAFQGMNNES
+     VTLKLYGNGF EEVQSHAFNG TTLISLELKE NIYLEKMHSG AFQGATGPSI LDISSTKLQA
+     LPSHGLESIQ TLIALSSYSL KTLPSKEKFT SLLVATLTYP SHCCAFRNLP KKEQNFSFSI
+     FENFSKQCES TVRKADNETL YSAIFEENEL SGWDYDYGFC SPKTLQCAPE PDAFNPCEDI
+     MGYAFLRVLI WLINILAIFG NLTVLFVLLT SRYKLTVPRF LMCNLSFADF CMGLYLLLIA
+     SVDSQTKGQY YNHAIDWQTG SGCGAAGFFT VFASELSVYT LTVITLERWH TITYAVQLDQ
+     KLRLRHAIPI MLGGWLFSTL IATMPLVGIS NYMKVSICLP MDVESTLSQV YILSILILNV
+     VAFVVICACY IRIYFAVQNP ELTAPNKDTK IAKKMAILIF TDFTCMAPIS FFAISAAFKV
+     PLITVTNSKI LLVLFYPVNS CANPFLYAIF TKAFQRDFLL LLSRFGCCKR RAELYRRKEF
+     SAYTSNCKNG FPGASKPSQA TLKLSTVHCQ QPIPPRALTH
+//

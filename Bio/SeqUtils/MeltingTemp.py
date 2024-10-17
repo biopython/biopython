@@ -18,18 +18,13 @@ temperature of oligonucleotides:
    Correction for mismatches, dangling ends, salt concentration and other
    additives are available.
 
-Tm_staluc is the 'old' NN calculation and is kept for compatibility. It is,
-however, recommended to use Tm_NN instead, since Tm_staluc may be deprecated
-in the future. Also, Tm_NN has much more options. Using Tm_staluc and Tm_NN
-with default parameters gives (essentially) the same results.
-
 General parameters for most Tm methods:
  - seq -- A Biopython sequence object or a string.
  - check -- Checks if the sequence is valid for the given method (default=
    True). In general, whitespaces and non-base characters are removed and
    characters are converted to uppercase. RNA will be backtranscribed.
  - strict -- Do not allow base characters or neighbor duplex keys (e.g.
-   'AT/NA') that could not or not unambigiously be evaluated for the respective
+   'AT/NA') that could not or not unambiguously be evaluated for the respective
    method (default=True). Note that W (= A or T) and S (= C or G) are not
    ambiguous for Tm_Wallace and Tm_GC. If 'False', average values (if
    applicable) will be used.
@@ -66,11 +61,6 @@ For example:
     >>> print('%0.2f' % mt.Tm_NN(myseq))
     60.32
 
-Tm_NN with default values gives same result as 'old' Tm_staluc. However, values
-differ for RNA, since Tm_staluc had some errors for RNA calculation. These
-errors have been fixed in this version.
-
-New Tm_NN can do slightly more:
 Using different thermodynamic tables, e.g. from Breslauer '86 or Sugimoto '96:
 
     >>> print('%0.2f' % mt.Tm_NN(myseq, nn_table=mt.DNA_NN1))  # Breslauer '86
@@ -161,14 +151,12 @@ by '1':
 
 """
 
-
 import math
 import warnings
 
-from Bio import SeqUtils, Seq
 from Bio import BiopythonWarning
-from Bio import BiopythonDeprecationWarning
-
+from Bio import Seq
+from Bio import SeqUtils
 
 # Thermodynamic lookup tables (dictionaries):
 # Enthalpy (dH) and entropy (dS) values for nearest neighbors and initiation
@@ -219,10 +207,10 @@ DNA_NN4 = {
     "init": (0.2, -5.7), "init_A/T": (2.2, 6.9), "init_G/C": (0, 0),
     "init_oneG/C": (0, 0), "init_allA/T": (0, 0), "init_5T/A": (0, 0),
     "sym": (0, -1.4),
-    "AA/TT": (-7.6, -21.3), "AT/TA": (-7.2, -20.4), "TA/AT": (-7.2, -20.4),
+    "AA/TT": (-7.6, -21.3), "AT/TA": (-7.2, -20.4), "TA/AT": (-7.2, -21.3),
     "CA/GT": (-8.5, -22.7), "GT/CA": (-8.4, -22.4), "CT/GA": (-7.8, -21.0),
     "GA/CT": (-8.2, -22.2), "CG/GC": (-10.6, -27.2), "GC/CG": (-9.8, -24.4),
-    "GG/CC": (-8.0, -19.0)}
+    "GG/CC": (-8.0, -19.9)}
 
 # RNA/RNA
 # Freier et al. (1986), Proc Natl Acad Sci USA 83: 9373-9377
@@ -522,14 +510,14 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
 
     Examples
     --------
-    >>> from Bio.SeqUtils import MeltingTemp as mt
-    >>> print('%0.2f' % mt.salt_correction(Na=50, method=1))
+    >>> from Bio.SeqUtils.MeltingTemp import salt_correction
+    >>> print('%0.2f' % salt_correction(Na=50, method=1))
     -21.60
-    >>> print('%0.2f' % mt.salt_correction(Na=50, method=2))
+    >>> print('%0.2f' % salt_correction(Na=50, method=2))
     -21.85
-    >>> print('%0.2f' % mt.salt_correction(Na=100, Tris=20, method=2))
+    >>> print('%0.2f' % salt_correction(Na=100, Tris=20, method=2))
     -16.45
-    >>> print('%0.2f' % mt.salt_correction(Na=100, Tris=20, Mg=1.5, method=2))
+    >>> print('%0.2f' % salt_correction(Na=100, Tris=20, Mg=1.5, method=2))
     -10.99
 
     """
@@ -537,15 +525,13 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
         raise ValueError(
             "sequence is missing (is needed to calculate GC content or sequence length)."
         )
-    if seq:
-        seq = str(seq)
     corr = 0
     if not method:
         return corr
     Mon = Na + K + Tris / 2.0  # Note: all these values are millimolar
     mg = Mg * 1e-3  # Lowercase ions (mg, mon, dntps) are molar
     # Na equivalent according to von Ahsen et al. (2001):
-    if sum((K, Mg, Tris, dNTPs)) > 0 and not method == 7 and dNTPs < Mg:
+    if sum((K, Mg, Tris, dNTPs)) > 0 and method != 7 and dNTPs < Mg:
         # dNTPs bind Mg2+ strongly. If [dNTPs] is larger or equal than
         # [Mg2+], free Mg2+ is considered not to be relevant.
         Mon += 120 * math.sqrt(Mg - dNTPs)
@@ -567,7 +553,7 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
         corr = 0.368 * (len(seq) - 1) * math.log(mon)
     if method == 6:
         corr = (
-            (4.29 * SeqUtils.GC(seq) / 100 - 3.95) * 1e-5 * math.log(mon)
+            (4.29 * SeqUtils.gc_fraction(seq, "ignore") - 3.95) * 1e-5 * math.log(mon)
         ) + 9.40e-6 * math.log(mon) ** 2
     # Turn black code style off
     # fmt: off
@@ -584,7 +570,7 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
         if Mon > 0:
             R = math.sqrt(mg) / mon
             if R < 0.22:
-                corr = (4.29 * SeqUtils.GC(seq) / 100 - 3.95) * \
+                corr = (4.29 * SeqUtils.gc_fraction(seq, "ignore") - 3.95) * \
                     1e-5 * math.log(mon) + 9.40e-6 * math.log(mon) ** 2
                 return corr
             elif R < 6.0:
@@ -593,7 +579,7 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
                             - 8.03e-3 * math.log(mon) ** 2)
                 g = 8.31 * (0.486 - 0.258 * math.log(mon)
                             + 5.25e-3 * math.log(mon) ** 3)
-        corr = (a + b * math.log(mg) + (SeqUtils.GC(seq) / 100)
+        corr = (a + b * math.log(mg) + (SeqUtils.gc_fraction(seq, "ignore"))
                 * (c + d * math.log(mg)) + (1 / (2.0 * (len(seq) - 1)))
                 * (e + f * math.log(mg) + g * math.log(mg) ** 2)) * 1e-5
     # Turn black code style on
@@ -776,19 +762,19 @@ def Tm_GC(
     seq = str(seq)
     if check:
         seq = _check(seq, "Tm_GC")
-    percent_gc = SeqUtils.GC(seq)
-    # Ambiguous bases: add 0.5, 0.67 or 0.33% depending on G+C probability:
-    tmp = (
-        sum(map(seq.count, ("K", "M", "N", "R", "Y"))) * 50.0 / len(seq)
-        + sum(map(seq.count, ("B", "V"))) * 66.67 / len(seq)
-        + sum(map(seq.count, ("D", "H"))) * 33.33 / len(seq)
-    )
-    if strict and tmp:
+
+    if strict and any(x in seq for x in "KMNRYBVDH"):
         raise ValueError(
             "ambiguous bases B, D, H, K, M, N, R, V, Y not allowed when 'strict=True'"
         )
-    else:
-        percent_gc += tmp
+
+    # Ambiguous bases: add 0.5, 0.67 or 0.33% depending on G+C probability:
+    percent_gc = SeqUtils.gc_fraction(seq, "weighted") * 100
+
+    # gc_fraction counts X as 0.5
+    if mismatch:
+        percent_gc -= seq.count("X") * 50.0 / len(seq)
+
     if userset:
         A, B, C, D = userset
     else:
@@ -819,7 +805,7 @@ def Tm_GC(
     if valueset > 8:
         raise ValueError("allowed values for parameter 'valueset' are 0-8.")
 
-    melting_temp = A + B * percent_gc - C / (len(seq) * 1.0)
+    melting_temp = A + B * percent_gc - C / len(seq)
     if saltcorr:
         melting_temp += salt_correction(
             Na=Na, K=K, Tris=Tris, Mg=Mg, dNTPs=dNTPs, seq=seq, method=saltcorr
@@ -1015,7 +1001,7 @@ def Tm_NN(
     delta_s += nn_table["init"][d_s]
 
     # Type: Duplex with no (allA/T) or at least one (oneG/C) GC pair
-    if SeqUtils.GC(seq) == 0:
+    if SeqUtils.gc_fraction(seq, "ignore") == 0:
         delta_h += nn_table["init_allA/T"][d_h]
         delta_s += nn_table["init_allA/T"][d_s]
     else:
@@ -1082,52 +1068,6 @@ def Tm_NN(
         melting_temp = 1 / (1 / (melting_temp + 273.15) + corr) - 273.15
 
     return melting_temp
-
-
-def Tm_staluc(s, dnac=50, saltc=50, rna=0):
-    """Return DNA/DNA Tm using nearest neighbor thermodynamics (OBSOLETE).
-
-    This method may be deprecated in the future. Use Tm_NN instead. Tm_NN
-    with default values gives the same result as Tm_staluc.
-
-    s is the sequence as string or Seq object
-    dnac is DNA concentration [nM]
-    saltc is salt concentration [mM].
-    rna=0 is for DNA/DNA (default), use 1 for RNA/RNA hybridisation.
-
-    For DNA/DNA, see Allawi & SantaLucia (1997), Biochemistry 36: 10581-10594
-    For RNA/RNA, see Xia et al (1998), Biochemistry 37: 14719-14735
-
-    Examples
-    --------
-    >>> print("%0.2f" % Tm_staluc('CAGTCAGTACGTACGTGTACTGCCGTA'))
-    59.87
-    >>> print("%0.2f" % Tm_staluc('CAGTCAGTACGTACGTGTACTGCCGTA', rna=True))
-    77.90
-
-    You can also use a Seq object instead of a string,
-
-    >>> from Bio.Seq import Seq
-    >>> s = Seq('CAGTCAGTACGTACGTGTACTGCCGTA')
-    >>> print("%0.2f" % Tm_staluc(s))
-    59.87
-    >>> print("%0.2f" % Tm_staluc(s, rna=True))
-    77.90
-
-    """
-    # Original method was by Sebastian Bassi <sbassi@genesdigitales.com>. It is
-    # now superseded by Tm_NN.
-
-    warnings.warn(
-        "Tm_staluc is deprecated; please use Tm_NN instead.",
-        BiopythonDeprecationWarning,
-    )
-    if not rna:
-        return Tm_NN(s, dnac1=dnac / 2.0, dnac2=dnac / 2.0, Na=saltc)
-    elif rna == 1:
-        return Tm_NN(s, dnac1=dnac / 2.0, dnac2=dnac / 2.0, Na=saltc, nn_table=RNA_NN2)
-    else:
-        raise ValueError(f"rna={rna} not supported")
 
 
 if __name__ == "__main__":

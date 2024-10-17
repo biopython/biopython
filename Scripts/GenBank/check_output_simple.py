@@ -22,7 +22,6 @@ import sys
 # GenBank stuff to test
 from Bio import GenBank
 
-
 if len(sys.argv) != 2:
     print("Usage ./check_output.py <GenBank file to parse>")
     sys.exit()
@@ -30,7 +29,6 @@ if len(sys.argv) != 2:
 parser = GenBank.FeatureParser(debug_level=2)
 
 with open(sys.argv[1]) as handle:
-
     iterator = GenBank.Iterator(handle, parser)
 
     while True:

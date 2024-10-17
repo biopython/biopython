@@ -21,7 +21,6 @@ for FASTA files with millions of records.
 See also Bio.SeqIO.index_db() and the examples in the main tutorial.
 """
 
-
 from Bio import SeqIO
 
 

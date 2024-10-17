@@ -7,7 +7,6 @@
 
 """Parsing TRANSFAC files."""
 
-
 from Bio import motifs
 
 
@@ -62,11 +61,18 @@ class Motif(motifs.Motif, dict):
     For more information, see the TRANSFAC documentation.
     """
 
-    multiple_value_keys = {"BF", "OV", "HP", "BS", "HC", "DT", "DR"}
+    multiple_value_keys = {"BF", "OV", "HP", "BS", "HC", "DT", "DR", "CC"}
     # These keys can occur multiple times for one motif
 
     reference_keys = {"RX", "RA", "RT", "RL"}
     # These keys occur for references
+
+    def __getitem__(self, key):
+        try:
+            value = super().__getitem__(key)  # motifs.Motif
+        except TypeError:
+            value = super(motifs.Motif, self).__getitem__(key)  # dict
+        return value
 
 
 class Record(list):
@@ -277,7 +283,7 @@ XX
                         )
                         line = line % tuple(
                             [i + 1]
-                            + [motif.counts[l][i] for l in letters]
+                            + [motif.counts[_][i] for _ in letters]
                             + [sequence[i]]
                         )
                         lines.append(line)

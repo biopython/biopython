@@ -5,7 +5,7 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 
-"""General Naive Bayes learner.
+"""General Naive Bayes learner (DEPRECATED).
 
 Naive Bayes is a supervised classification algorithm that uses Bayes
 rule to compute the fit between a new observation and some previously
@@ -28,19 +28,30 @@ Functions:
 
 """
 
+import warnings
+
+from Bio import BiopythonDeprecationWarning
+
+warnings.warn(
+    "The 'Bio.NaiveBayes' module is deprecated and will be removed in a future "
+    "release of Biopython. Consider using scikit-learn instead.",
+    BiopythonDeprecationWarning,
+)
+
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
     from Bio import MissingPythonDependencyError
 
     raise MissingPythonDependencyError(
-        "Install NumPy if you want to use Bio.MaxEntropy."
-    )
+        "Please install NumPy if you want to use Bio.NaiveBayes. "
+        "See http://www.numpy.org/"
+    ) from None
 
 
 def _contents(items):
-    """Return a dictionary where the key is the item and the value is the probablity associated (PRIVATE)."""
+    """Return a dictionary where the key is the item and the value is the probability associated (PRIVATE)."""
     term = 1.0 / len(items)
     counts = {}
     for item in items:
@@ -92,24 +103,24 @@ def calculate(nb, observation, scale=False):
 
     # Calculate log P(observation|class) for every class.
     n = len(nb.classes)
-    lp_observation_class = numpy.zeros(n)  # array of log P(observation|class)
+    lp_observation_class = np.zeros(n)  # array of log P(observation|class)
     for i in range(n):
         # log P(observation|class) = SUM_i log P(observation_i|class)
         probs = [None] * len(observation)
         for j in range(len(observation)):
             probs[j] = nb.p_conditional[i][j].get(observation[j], 0)
-        lprobs = numpy.log(numpy.clip(probs, 1.0e-300, 1.0e300))
+        lprobs = np.log(np.clip(probs, 1.0e-300, 1.0e300))
         lp_observation_class[i] = sum(lprobs)
 
     # Calculate log P(class).
-    lp_prior = numpy.log(nb.p_prior)
+    lp_prior = np.log(nb.p_prior)
 
     # Calculate log P(observation).
     lp_observation = 0.0  # P(observation)
     if scale:  # Only calculate this if requested.
         # log P(observation) = log SUM_i P(observation|class_i)P(class_i)
-        obs = numpy.exp(numpy.clip(lp_prior + lp_observation_class, -700, +700))
-        lp_observation = numpy.log(sum(obs))
+        obs = np.exp(np.clip(lp_prior + lp_observation_class, -700, +700))
+        lp_observation = np.log(sum(obs))
 
     # Calculate log P(class|observation).
     lp_class_observation = {}  # Dict of class : log P(class|observation)
@@ -174,7 +185,7 @@ def train(training_set, results, priors=None, typecode=None):
         percs = class_freq
     nb.classes.sort()  # keep it tidy
 
-    nb.p_prior = numpy.zeros(len(nb.classes))
+    nb.p_prior = np.zeros(len(nb.classes))
     for i in range(len(nb.classes)):
         nb.p_prior[i] = percs[nb.classes[i]]
 
@@ -194,7 +205,7 @@ def train(training_set, results, priors=None, typecode=None):
     # Now make the observations Numeric matrix.
     for i in range(len(observations)):
         # XXX typecode must be specified!
-        observations[i] = numpy.asarray(observations[i], typecode)
+        observations[i] = np.asarray(observations[i], typecode)
 
     # Calculate P(value|class,dim) for every class.
     # This is a good loop to optimize.

@@ -8,8 +8,8 @@
 
 import unittest
 
-from Bio.KEGG import Enzyme
 from Bio.KEGG import Compound
+from Bio.KEGG import Enzyme
 from Bio.KEGG import Map
 from Bio.Pathway import System
 
@@ -120,7 +120,7 @@ class EnzymeTests(unittest.TestCase):
                 "More than one record found in handle", str(context.exception)
             )
             records = Enzyme.parse(handle)
-            for i in range(0, 6):
+            for i in range(6):
                 next(records)
             self.assertRaises(StopIteration, next, records)
 

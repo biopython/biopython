@@ -6,13 +6,22 @@
 # package.
 
 """Deal with representations of Markov Models."""
-# standard modules
+
 import copy
 import math
 import random
+import warnings
 from collections import defaultdict
 
+from Bio import BiopythonDeprecationWarning
 from Bio.Seq import Seq
+
+warnings.warn(
+    "The 'Bio.HMM.MarkovModule' module is deprecated and will be "
+    "removed in a future release of Biopython. Consider using the "
+    "hmmlearn package instead.",
+    BiopythonDeprecationWarning,
+)
 
 
 def _gen_random_array(n):
@@ -225,17 +234,17 @@ class MarkovModelBuilder:
         each set of transitions adds up to 1.
         """
         # set initial state probabilities
-        new_initial_prob = float(1) / float(len(self.transition_prob))
+        new_initial_prob = 1.0 / len(self.transition_prob)
         for state in self._state_alphabet:
             self.initial_prob[state] = new_initial_prob
 
         # set the transitions
-        new_trans_prob = float(1) / float(len(self.transition_prob))
+        new_trans_prob = 1.0 / len(self.transition_prob)
         for key in self.transition_prob:
             self.transition_prob[key] = new_trans_prob
 
         # set the emissions
-        new_emission_prob = float(1) / float(len(self.emission_prob))
+        new_emission_prob = 1.0 / len(self.emission_prob)
         for key in self.emission_prob:
             self.emission_prob[key] = new_emission_prob
 
@@ -517,12 +526,12 @@ class HiddenMarkovModel:
         return self._transition_pseudo
 
     def get_blank_emissions(self):
-        """Get the starting default emmissions for each sequence.
+        """Get the starting default emissions for each sequence.
 
-        This returns a dictionary of the default emmissions for each
+        This returns a dictionary of the default emissions for each
         letter. The dictionary is structured with keys as
-        (seq_letter, emmission_letter) and values as the starting number
-        of emmissions.
+        (seq_letter, emission_letter) and values as the starting number
+        of emissions.
         """
         return self._emission_pseudo
 
@@ -580,7 +589,7 @@ class HiddenMarkovModel:
         # NOTE: My index numbers are one less than what is given in Durbin
         # et al, since we are indexing the sequence going from 0 to
         # (Length - 1) not 1 to Length, like in Durbin et al.
-        for i in range(0, len(sequence)):
+        for i in range(len(sequence)):
             # loop over all of the possible i-th states in the state path
             for cur_state in state_alphabet:
                 # e_{l}(x_{i})

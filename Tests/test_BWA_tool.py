@@ -7,17 +7,22 @@
 
 """Tests for calling BWA."""
 
-from Bio import MissingExternalDependencyError
-import sys
 import os
+import sys
 import unittest
+import warnings
 
-# TODO from Bio.Sequencing.Applications import BwaBwaswCommandline
-from Bio.Sequencing.Applications import BwaIndexCommandline
-from Bio.Sequencing.Applications import BwaAlignCommandline
-from Bio.Sequencing.Applications import BwaSamseCommandline
-from Bio.Sequencing.Applications import BwaSampeCommandline
-from Bio.Sequencing.Applications import BwaMemCommandline
+from Bio import BiopythonDeprecationWarning
+from Bio import MissingExternalDependencyError
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
+    # TODO from Bio.Sequencing.Applications import BwaBwaswCommandline
+    from Bio.Sequencing.Applications import BwaAlignCommandline
+    from Bio.Sequencing.Applications import BwaIndexCommandline
+    from Bio.Sequencing.Applications import BwaMemCommandline
+    from Bio.Sequencing.Applications import BwaSampeCommandline
+    from Bio.Sequencing.Applications import BwaSamseCommandline
 
 
 #################################################################

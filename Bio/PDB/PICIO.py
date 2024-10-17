@@ -1,4 +1,4 @@
-# Copyright 2019-2021 by Robert T. Miller.  All rights reserved.
+# Copyright 2019-2022 by Robert T. Miller.  All rights reserved.
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
@@ -9,45 +9,32 @@
 import re
 from datetime import date
 from io import StringIO
+from typing import Optional
+from typing import TextIO
+from typing import Union
 
-try:
-    import numpy
-except ImportError:
-    from Bio import MissingPythonDependencyError
+import numpy as np
 
-    raise MissingPythonDependencyError(
-        "Install NumPy to build proteins from internal coordinates."
-    )
-
+from Bio import SeqIO
+from Bio.Data.PDBData import protein_letters_1to3
 from Bio.File import as_handle
-from Bio.PDB.StructureBuilder import StructureBuilder
+from Bio.PDB.ic_data import dihedra_primary_defaults
+from Bio.PDB.ic_data import dihedra_secondary_defaults
+from Bio.PDB.ic_data import dihedra_secondary_xoxt_defaults
+from Bio.PDB.ic_data import hedra_defaults
+from Bio.PDB.ic_data import ic_data_backbone
+from Bio.PDB.ic_data import ic_data_sidechains
+from Bio.PDB.internal_coords import AtomKey
+from Bio.PDB.internal_coords import Dihedron
+from Bio.PDB.internal_coords import Edron
+from Bio.PDB.internal_coords import Hedron
+from Bio.PDB.internal_coords import IC_Chain
+from Bio.PDB.internal_coords import IC_Residue
 from Bio.PDB.parse_pdb_header import _parse_pdb_header_list
 from Bio.PDB.PDBExceptions import PDBException
-
-from Bio.PDB.Polypeptide import one_to_three
-
-from Bio.PDB.internal_coords import (
-    IC_Residue,
-    IC_Chain,
-    Edron,
-    Hedron,
-    Dihedron,
-    AtomKey,
-)
-
-from Bio.PDB.ic_data import (
-    ic_data_backbone,
-    ic_data_sidechains,
-    hedra_defaults,
-    dihedra_primary_defaults,
-    dihedra_secondary_defaults,
-    dihedra_secondary_xoxt_defaults,
-)
-
-from typing import TextIO, Set, List, Tuple, Union, Optional
-from Bio.PDB.Structure import Structure
 from Bio.PDB.Residue import Residue
-from Bio import SeqIO
+from Bio.PDB.Structure import Structure
+from Bio.PDB.StructureBuilder import StructureBuilder
 
 
 # @profile
@@ -125,6 +112,16 @@ def read_PIC(
         r"(?P<segid>[a-zA-z\s]{4})(?P<elm>.{2})"
         r"(?P<chg>.{2})?\s*$"
     )
+    pdbx_atm_re = re.compile(
+        r"^ATOM\s\s(?:\s*(?P<ser>\d+))\s(?P<atm>[\w\s]{4})"
+        r"(?P<alc>\w|\s)(?P<res>[\w]{3})\s(?P<chn>.)"
+        r"(?P<pos>[\s\-\d]{4})(?P<icode>[A-Za-z\s])\s\s\s"
+        r"(?P<x>[\s\-\d\.]{10})(?P<y>[\s\-\d\.]{10})"
+        r"(?P<z>[\s\-\d\.]{10})(?P<occ>[\s\d\.]{7})"
+        r"(?P<tfac>[\s\d\.]{6})\s{6}"
+        r"(?P<segid>[a-zA-z\s]{4})(?P<elm>.{2})"
+        r"(?P<chg>.{2})?\s*$"
+    )
     bfac_re = re.compile(
         r"^BFAC:\s([^\s]+\s+[\-\d\.]+)"
         r"\s*([^\s]+\s+[\-\d\.]+)?"
@@ -171,11 +168,11 @@ def read_PIC(
         # akstr: full AtomKey string read from .pic file, includes residue info
         try:
             return akc[akstr]
-        except (KeyError):
+        except KeyError:
             ak = akc[akstr] = AtomKey(akstr)
             return ak
 
-    def link_residues(ppr: List[Residue], pr: List[Residue]) -> None:
+    def link_residues(ppr: list[Residue], pr: list[Residue]) -> None:
         """Set next and prev links between i-1 and i-2 residues."""
         for p_r in pr:
             pric = p_r.internal_coord
@@ -196,12 +193,12 @@ def read_PIC(
         ang: str,
         l23: str,
         ric: IC_Residue,
-    ) -> Tuple:
+    ) -> tuple:
         """Create Hedron on current (sbcic) Chain.internal_coord."""
         ek = (akcache(a1), akcache(a2), akcache(a3))
         atmNdx = AtomKey.fields.atm
-        accpt = IC_Residue.accept_atoms
-        if not all(ek[i].akl[atmNdx] in accpt for i in range(3)):
+        accept = IC_Residue.accept_atoms
+        if not all(ek[i].akl[atmNdx] in accept for i in range(3)):
             return
         hl12[ek] = float(l12)
         ha[ek] = float(ang)
@@ -211,44 +208,48 @@ def read_PIC(
         ak_add(ek, ric)
         return ek
 
-    def default_hedron(ek: Tuple, ric: IC_Residue) -> None:
-        """Create Hedron based on same rdh_class hedra in ref database.
+    def default_hedron(ek: tuple, ric: IC_Residue) -> None:
+        """Create Hedron based on same re_class hedra in ref database.
 
         Adds Hedron to current Chain.internal_coord, see ic_data for default
         values and reference database source.
         """
-        aks = []
+        atomkeys = []
         hkey = None
 
         atmNdx = AtomKey.fields.atm
         resNdx = AtomKey.fields.resname
         resPos = AtomKey.fields.respos
-        aks = [ek[i].akl for i in range(3)]
+        atomkeys = [ek[i].akl for i in range(3)]
 
-        atpl = tuple([aks[i][atmNdx] for i in range(3)])
-        res = aks[0][resNdx]
+        atpl = tuple([atomkeys[i][atmNdx] for i in range(3)])
+        res = atomkeys[0][resNdx]
+
         if (
-            aks[0][resPos] != aks[2][resPos]  # hedra crosses amide bond so not reversed
+            atomkeys[0][resPos]
+            != atomkeys[2][resPos]  # hedra crosses amide bond so not reversed
             or atpl == ("N", "CA", "C")  # or chain start tau
             or atpl in ic_data_backbone  # or found forward hedron in ic_data
             or (res not in ["A", "G"] and atpl in ic_data_sidechains[res])
         ):
             hkey = ek
-            rhcl = [aks[i][resNdx] + aks[i][atmNdx] for i in range(3)]
+            rhcl = [atomkeys[i][resNdx] + atomkeys[i][atmNdx] for i in range(3)]
             try:
                 dflts = hedra_defaults["".join(rhcl)][0]
             except KeyError:
-                if aks[0][resPos] == aks[1][resPos]:
-                    rhcl = [aks[i][resNdx] + aks[i][atmNdx] for i in range(2)]
-                    rhc = "".join(rhcl) + "X" + aks[2][atmNdx]
+                if atomkeys[0][resPos] == atomkeys[1][resPos]:
+                    rhcl = [atomkeys[i][resNdx] + atomkeys[i][atmNdx] for i in range(2)]
+                    rhc = "".join(rhcl) + "X" + atomkeys[2][atmNdx]
                 else:
-                    rhcl = [aks[i][resNdx] + aks[i][atmNdx] for i in range(1, 3)]
-                    rhc = "X" + aks[0][atmNdx] + "".join(rhcl)
+                    rhcl = [
+                        atomkeys[i][resNdx] + atomkeys[i][atmNdx] for i in range(1, 3)
+                    ]
+                    rhc = "X" + atomkeys[0][atmNdx] + "".join(rhcl)
                 dflts = hedra_defaults[rhc][0]
         else:
             # must be reversed or fail
             hkey = ek[::-1]
-            rhcl = [aks[i][resNdx] + aks[i][atmNdx] for i in range(2, -1, -1)]
+            rhcl = [atomkeys[i][resNdx] + atomkeys[i][atmNdx] for i in range(2, -1, -1)]
             dflts = hedra_defaults["".join(rhcl)][0]
 
         process_hedron(
@@ -264,7 +265,7 @@ def read_PIC(
         if verbose:
             print(f" default for {ek}")
 
-    def hedra_check(dk: str, ric: IC_Residue) -> None:
+    def hedra_check(dk: tuple, ric: IC_Residue) -> None:
         """Confirm both hedra present for dihedron key, use default if set."""
         if dk[0:3] not in sbcic.hedra and dk[2::-1] not in sbcic.hedra:
             if defaults:
@@ -279,7 +280,7 @@ def read_PIC(
 
     def process_dihedron(
         a1: str, a2: str, a3: str, a4: str, dangle: str, ric: IC_Residue
-    ) -> Set:
+    ) -> set:
         """Create Dihedron on current Chain.internal_coord."""
         ek = (
             akcache(a1),
@@ -288,9 +289,12 @@ def read_PIC(
             akcache(a4),
         )
         atmNdx = AtomKey.fields.atm
-        accpt = IC_Residue.accept_atoms
-        if not all(ek[i].akl[atmNdx] in accpt for i in range(4)):
+        accept = IC_Residue.accept_atoms
+        if not all(ek[i].akl[atmNdx] in accept for i in range(4)):
             return
+        dangle = float(dangle)
+        dangle = dangle if (dangle <= 180.0) else dangle - 360.0
+        dangle = dangle if (dangle >= -180.0) else dangle + 360.0
         da[ek] = float(dangle)
         sbcic.dihedra[ek] = ric.dihedra[ek] = d = Dihedron(ek)
         d.cic = sbcic
@@ -299,7 +303,7 @@ def read_PIC(
         ak_add(ek, ric)
         return ek
 
-    def default_dihedron(ek: List, ric: IC_Residue) -> None:
+    def default_dihedron(ek: list, ric: IC_Residue) -> None:
         """Create Dihedron based on same residue class dihedra in ref database.
 
         Adds Dihedron to current Chain.internal_coord, see ic_data for default
@@ -362,7 +366,7 @@ def read_PIC(
                 prnum = pr.akl[0][resPos]
                 paKey = [
                     AtomKey(prnum, None, prname, primAngle[x], None, None)
-                    for x in range(0, 2)
+                    for x in range(2)
                 ]
                 paKey.add(
                     [
@@ -377,12 +381,13 @@ def read_PIC(
                 )
 
             if paKey in da:
+                angl = da[paKey] + dihedra_secondary_defaults[rdclass][1]
                 process_dihedron(
                     str(ek[0]),
                     str(ek[1]),
                     str(ek[2]),
                     str(ek[3]),
-                    da[paKey] + dihedra_secondary_defaults[rdclass][1],
+                    angl,
                     ric,
                 )
 
@@ -413,12 +418,13 @@ def read_PIC(
                     )
 
                 if paKey in da:
+                    angl = da[paKey] + offset
                     process_dihedron(
                         str(ek[0]),
                         str(ek[1]),
                         str(ek[2]),
                         str(ek[3]),
-                        da[paKey] + offset,
+                        angl,
                         ric,
                     )
 
@@ -438,9 +444,11 @@ def read_PIC(
 
     def dihedra_check(ric: IC_Residue) -> None:
         """Look for required dihedra in residue, generate defaults if set."""
+        # This method has some internal functions
+
         # rnext should be set
-        def ake_recurse(akList: List) -> List:
-            """Bulid combinatorics of AtomKey lists."""
+        def ake_recurse(akList: list) -> list:
+            """Build combinatorics of AtomKey lists."""
             car = akList[0]
             if len(akList) > 1:
                 retList = []
@@ -458,7 +466,7 @@ def read_PIC(
                     retList = [[ak] for ak in car]
                     return retList
 
-        def ak_expand(eLst: List) -> List:
+        def ak_expand(eLst: list) -> list:
             """Expand AtomKey list with altlocs, all combinatorics."""
             retList = []
             for edron in eLst:
@@ -498,13 +506,15 @@ def read_PIC(
         chkLst.append((sN, sCA, sC, sO))  # locate backbone O
         if ric.lc != "G":
             chkLst.append((sO, sC, sCA, sCB))  # locate CB
+            if ric.lc == "A":
+                chkLst.append((sN, sCA, sCB))  # missed for generate from seq
         if ric.rprev != [] and ric.lc != "P" and proton:
             chkLst.append((sC, sCA, sN, sH))  # amide proton
 
         try:
             for edron in ic_data_sidechains[ric.lc]:
                 if len(edron) > 3:  # dihedra only
-                    if all(not atm[0] == "H" for atm in edron):
+                    if all(atm[0] != "H" for atm in edron):
                         akl = [AtomKey(ric, atm) for atm in edron[0:4]]
                         chkLst.append(akl)
         except KeyError:
@@ -521,7 +531,10 @@ def read_PIC(
                 pass  # ignore missing hydrogens
             elif all(atm.akl[altloc_ndx] is None for atm in dk):
                 if defaults:
-                    default_dihedron(dk, ric)
+                    if len(dk) != 3:
+                        default_dihedron(dk, ric)
+                    else:
+                        default_hedron(dk, ric)  # add ALA N-Ca-Cb
                 else:
                     if verbose:
                         print(f"{ric}-{rn} missing {dk}")
@@ -530,7 +543,7 @@ def read_PIC(
                 pass  # ignore missing combinatoric of altloc atoms
                 # need more here?
 
-    def ak_add(ek: set, ric: IC_Residue) -> None:
+    def ak_add(ek: tuple, ric: IC_Residue) -> None:
         """Allocate edron key AtomKeys to current residue as appropriate.
 
         A hedron or dihedron may span a backbone amide bond, this routine
@@ -569,7 +582,9 @@ def read_PIC(
             sha = {k: ha[k] for k in sorted(ha)}
             shl12 = {k: hl12[k] for k in sorted(hl12)}
             shl23 = {k: hl23[k] for k in sorted(hl23)}
-            sbcic._hedraDict2chain(shl12, sha, shl23, da, bfacs)
+            # da not in order if generated from seq
+            sda = {k: da[k] for k in sorted(da)}
+            sbcic._hedraDict2chain(shl12, sha, shl23, sda, bfacs)
 
     # read_PIC processing starts here:
     with as_handle(file, mode="r") as handle:
@@ -692,6 +707,8 @@ def read_PIC(
                     return None
             elif line.startswith("ATOM "):
                 m = pdb_atm_re.match(line)
+                if not m:
+                    m = pdbx_atm_re.match(line)
                 if m:
                     if sb_res is None:
                         # ATOM without res spec already loaded, not a pic file
@@ -717,7 +734,7 @@ def read_PIC(
                                 line,
                             )
                         return None
-                    coord = numpy.array(
+                    coord = np.array(
                         (
                             float(m.group("x")),
                             float(m.group("y")),
@@ -768,7 +785,7 @@ def read_PIC(
                             m["a2"],
                             m["a3"],
                             m["a4"],
-                            float(m["dihedral"]),
+                            m["dihedral"],
                             sb_res.internal_coord,
                         )
 
@@ -832,7 +849,9 @@ def read_PIC_seq(
 
     ndx = 1
     for r in seqRec.seq:
-        output += f"('{pdbid}', 0, '{chain}', (' ', {ndx}, ' ')) {one_to_three(r)}\n"
+        output += (
+            f"('{pdbid}', 0, '{chain}', (' ', {ndx}, ' ')) {protein_letters_1to3[r]}\n"
+        )
         ndx += 1
 
     sp = StringIO()
@@ -935,6 +954,7 @@ def write_PIC(
     """Write Protein Internal Coordinates (PIC) to file.
 
     See :func:`read_PIC` for file format.
+    See :data:`IC_Residue.pic_accuracy` to vary numeric accuracy.
     Recurses to lower entity levels (M, C, R).
 
     :param Entity entity: Biopython PDB Entity object: S, M, C or R
@@ -959,7 +979,7 @@ def write_PIC(
         * "classic",    # classic_b | chi
         * "hedra",      # all hedra including bond lengths
         * "primary",    # all primary dihedra
-        * "secondary",  # all secondary dihedra
+        * "secondary",  # all secondary dihedra (fixed angle from primary dihedra)
         * "all",        # hedra | primary | secondary
         * "initAtoms",  # XYZ coordinates of initial Tau (N-Ca-C)
         * "bFactors"
@@ -1078,9 +1098,9 @@ def write_PIC(
                             hdr.upper(), (dd or ""), (pdbid or "")
                         )
                     )
-                nam = entity.header.get("name", None)
-                if nam:
-                    fp.write("TITLE     " + nam.upper() + "\n")
+                name = entity.header.get("name", None)
+                if name:
+                    fp.write("TITLE     " + name.upper() + "\n")
                 for mdl in entity:
                     write_PIC(
                         mdl,

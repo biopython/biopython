@@ -6,7 +6,10 @@
 # package.
 """Command line wrapper for the multiple alignment program DIALIGN2-2."""
 
-from Bio.Application import _Option, _Argument, _Switch, AbstractCommandline
+from Bio.Application import _Argument
+from Bio.Application import _Option
+from Bio.Application import _Switch
+from Bio.Application import AbstractCommandline
 
 
 class DialignCommandline(AbstractCommandline):
@@ -206,7 +209,7 @@ class DialignCommandline(AbstractCommandline):
                 r"Maximum number of '\*' characters indicating degree "
                 "of local similarity among sequences. By default, no "
                 "stars are used but numbers between 0 and 9, instead.",
-                checker_function=lambda x: x in range(0, 10),
+                checker_function=lambda x: x in range(10),
                 equate=False,
             ),
             _Switch(["-stdo", "stdo"], "Results written to standard output."),

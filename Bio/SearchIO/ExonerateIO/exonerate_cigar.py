@@ -7,9 +7,9 @@
 
 import re
 
-from ._base import _BaseExonerateParser, _STRAND_MAP
+from ._base import _BaseExonerateParser
+from ._base import _STRAND_MAP
 from .exonerate_vulgar import ExonerateVulgarIndexer
-
 
 __all__ = ("ExonerateCigarParser", "ExonerateCigarIndexer")
 

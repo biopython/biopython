@@ -7,8 +7,12 @@
 
 import re
 
+from Bio.SearchIO._model import Hit
+from Bio.SearchIO._model import HSP
+from Bio.SearchIO._model import HSPFragment
+from Bio.SearchIO._model import QueryResult
 from Bio.SearchIO._utils import read_forward
-from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
+from Bio.SearchIO._utils import removesuffix
 
 from ._base import _BaseHmmerTextIndexer
 
@@ -17,7 +21,7 @@ __all__ = ("Hmmer3TextParser", "Hmmer3TextIndexer")
 
 # precompile regex patterns for faster processing
 # regex for program name capture
-_RE_PROGRAM = re.compile(r"^# (\w*hmm\w+) :: .*$")
+_RE_PROGRAM = re.compile(r"^# .*?(\w?hmm\w+) :: .*$")
 # regex for version string capture
 _RE_VERSION = re.compile(r"# \w+ ([\w+\.]+) .*; http.*$")
 # regex for option string capture
@@ -100,7 +104,6 @@ class Hmmer3TextParser:
         self._read_until(lambda line: line.startswith("Query:"))
 
         while self.line:
-
             regx = re.search(_QRE_ID_LEN, self.line)
 
             while not regx:
@@ -217,9 +220,7 @@ class Hmmer3TextParser:
     def _create_hits(self, hit_attrs, qid, qdesc):
         """Parse a HMMER3 hsp block, beginning with the hsp table (PRIVATE)."""
         # read through until the beginning of the hsp block
-        self._read_until(
-            lambda line: line.startswith("Internal pipeline") or line.startswith(">>")
-        )
+        self._read_until(lambda line: line.startswith(("Internal pipeline", ">>")))
 
         # start parsing the hsp block
         hit_list = []
@@ -234,8 +235,9 @@ class Hmmer3TextParser:
 
             # read through the hsp table header and move one more line
             self._read_until(
-                lambda line: line.startswith(" ---   ------ ----- --------")
-                or line.startswith("   [No individual domains")
+                lambda line: line.startswith(
+                    (" ---   ------ ----- --------", "   [No individual domains")
+                )
             )
             self.line = read_forward(self.handle)
 
@@ -251,7 +253,6 @@ class Hmmer3TextParser:
                     or self.line.startswith("  Alignments for each domain:")
                     or self.line.startswith(">>")
                 ):
-
                     hit_attr = hit_attrs.pop(0)
                     hit = Hit(hsp_list)
                     for attr, value in hit_attr.items():
@@ -344,11 +345,11 @@ class Hmmer3TextParser:
             hmmseq = ""
             aliseq = ""
             annot = {}
+            aln_prefix_len = None
             self.line = self.handle.readline()
 
             # parse all the alignment blocks in the hsp
             while True:
-
                 regx = None
 
                 # check for hit or query line
@@ -356,6 +357,12 @@ class Hmmer3TextParser:
                 # to anticipate special cases where query id == hit id
                 regx = re.search(_HRE_ID_LINE, self.line)
                 if regx:
+                    # Try to capture the block prefix len, to parse the similarity
+                    # string later.
+                    if aln_prefix_len is None:
+                        aln_prefix_len = len(regx.group(1))
+                    else:
+                        assert aln_prefix_len == len(regx.group(1))
                     # the first hit/query self.line we encounter is the hmmseq
                     if len(hmmseq) == len(aliseq):
                         hmmseq += regx.group(2)
@@ -381,11 +388,11 @@ class Hmmer3TextParser:
                     hmmseq = ""
                     aliseq = ""
                     annot = {}
+                    aln_prefix_len = None
                     break
-                # otherwise check if it's an annotation line and parse it
+                # check if it's an annotation line and parse it
                 # len(hmmseq) is only != len(aliseq) when the cursor is parsing
-                # the similarity character. Since we're not parsing that, we
-                # check for when the condition is False (i.e. when it's ==)
+                # the similarity character.
                 elif len(hmmseq) == len(aliseq):
                     regx = re.search(_HRE_ANNOT_LINE, self.line)
                     if regx:
@@ -394,6 +401,22 @@ class Hmmer3TextParser:
                             annot[annot_name] += regx.group(2)
                         else:
                             annot[annot_name] = regx.group(2)
+                # otherwise, assume we are seeing the similarity string (the string
+                # between the two alignments). We do that by checking if we have
+                # defined the aln_prefix_len variable, which is the length of string
+                # from the beginning of the line to the start of the actual alignment
+                # (sans the IDs). We need this string to see how many characters we
+                # should strip from the beginning of the line. We can't call `strip()`
+                # since the similarity string might start with empty characters.
+                elif aln_prefix_len is not None:
+                    similarity = removesuffix(
+                        removesuffix(self.line[aln_prefix_len:], "\n"),
+                        "\r",
+                    )
+                    if "similarity" not in annot:
+                        annot["similarity"] = similarity
+                    else:
+                        annot["similarity"] += similarity
 
                 self.line = self.handle.readline()
 

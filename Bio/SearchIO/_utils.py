@@ -5,6 +5,8 @@
 # package.
 """Common SearchIO utility functions."""
 
+import sys
+
 
 def getattr_str(obj, attr, fmt=None, fallback="?"):
     """Return string of the given object's attribute.
@@ -165,3 +167,16 @@ def fragcascade(attr, seq_type, doc=""):
             setattr(seq, attr, value)
 
     return property(fget=getter, fset=setter, doc=doc)
+
+
+def removesuffix(string, suffix):
+    """Remove the suffix from the string, if it exists."""
+    # This method is a compatibility wrapper for Python 3.8. It should be
+    # removed when support for Python 3.8 is dropped. At the time of writing,
+    # 3.8 is already the oldest supported version.
+    major, minor, *_ = sys.version_info
+    if major == 3 and minor == 8:
+        if suffix and string.endswith(suffix):
+            return string[: -len(suffix)]
+        return string
+    return string.removesuffix(suffix)

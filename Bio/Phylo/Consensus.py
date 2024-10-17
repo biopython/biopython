@@ -12,10 +12,11 @@ searching and some common consensus algorithms such as strict, majority rule and
 adam consensus.
 """
 
-import random
 import itertools
-
+import random
 from ast import literal_eval
+
+from Bio.Align import MultipleSeqAlignment
 from Bio.Phylo import BaseTree
 
 
@@ -256,9 +257,8 @@ def strict_consensus(trees):
             if bs.contains(bitstr):
                 # remove old bitstring
                 del bitstr_clades[bs]
-                # update clade childs
-                new_childs = [child for child in c.clades if child not in clade_terms]
-                c.clades = new_childs
+                # update clade children
+                c.clades = [child for child in c.clades if child not in clade_terms]
                 # set current clade as child of c
                 c.clades.append(clade)
                 # update bitstring
@@ -323,7 +323,7 @@ def majority_consensus(trees, cutoff=0):
         # record its possible parent and child clades.
         compatible = True
         parent_bitstr = None
-        child_bitstrs = []  # multiple independent childs
+        child_bitstrs = []  # multiple independent children
         for bs in bsckeys:
             if not bs.iscompatible(bitstr):
                 compatible = False
@@ -346,7 +346,7 @@ def majority_consensus(trees, cutoff=0):
         if parent_bitstr:
             # insert current clade; remove old bitstring
             parent_clade = bitstr_clades.pop(parent_bitstr)
-            # update parent clade childs
+            # update parent clade children
             parent_clade.clades = [
                 c for c in parent_clade.clades if c not in clade_terms
             ]
@@ -456,15 +456,15 @@ def _sub_clade(clade, term_names):
         for c in sub_clade.find_clades(terminal=False, order="preorder"):
             if c == sub_clade.root:
                 continue
-            childs = set(c.find_clades(terminal=True)) & set(term_clades)
-            if childs:
+            children = set(c.find_clades(terminal=True)) & set(term_clades)
+            if children:
                 for tc in temp_clade.find_clades(terminal=False, order="preorder"):
-                    tc_childs = set(tc.clades)
-                    tc_new_clades = tc_childs - childs
-                    if childs.issubset(tc_childs) and tc_new_clades:
+                    tc_children = set(tc.clades)
+                    tc_new_clades = tc_children - children
+                    if children.issubset(tc_children) and tc_new_clades:
                         tc.clades = list(tc_new_clades)
                         child_clade = BaseTree.Clade()
-                        child_clade.clades.extend(list(childs))
+                        child_clade.clades.extend(list(children))
                         tc.clades.append(child_clade)
         sub_clade = temp_clade
     return sub_clade
@@ -539,7 +539,7 @@ def get_support(target_tree, trees, len_trees=None):
 
 
 def bootstrap(msa, times):
-    """Generate bootstrap replicates from a multiple sequence alignment object.
+    """Generate bootstrap replicates from a multiple sequence alignment (OBSOLETE).
 
     :Parameters:
         msa : MultipleSeqAlignment
@@ -562,11 +562,11 @@ def bootstrap(msa, times):
         yield item
 
 
-def bootstrap_trees(msa, times, tree_constructor):
+def bootstrap_trees(alignment, times, tree_constructor):
     """Generate bootstrap replicate trees from a multiple sequence alignment.
 
     :Parameters:
-        msa : MultipleSeqAlignment
+        alignment : Alignment or MultipleSeqAlignment object
             multiple sequence alignment to generate replicates.
         times : int
             number of bootstrap times.
@@ -574,17 +574,31 @@ def bootstrap_trees(msa, times, tree_constructor):
             tree constructor to be used to build trees.
 
     """
-    msas = bootstrap(msa, times)
-    for aln in msas:
-        tree = tree_constructor.build_tree(aln)
-        yield tree
+    if isinstance(alignment, MultipleSeqAlignment):
+        length = len(alignment[0])
+        for i in range(times):
+            bootstrapped_alignment = None
+            for j in range(length):
+                col = random.randint(0, length - 1)
+                if bootstrapped_alignment is None:
+                    bootstrapped_alignment = alignment[:, col : col + 1]
+                else:
+                    bootstrapped_alignment += alignment[:, col : col + 1]
+            tree = tree_constructor.build_tree(bootstrapped_alignment)
+            yield tree
+    else:
+        n, m = alignment.shape
+        for i in range(times):
+            cols = [random.randint(0, m - 1) for j in range(m)]
+            tree = tree_constructor.build_tree(alignment[:, cols])
+            yield tree
 
 
-def bootstrap_consensus(msa, times, tree_constructor, consensus):
+def bootstrap_consensus(alignment, times, tree_constructor, consensus):
     """Consensus tree of a series of bootstrap trees for a multiple sequence alignment.
 
     :Parameters:
-        msa : MultipleSeqAlignment
+        alignment : Alignment or MultipleSeqAlignment object
             Multiple sequence alignment to generate replicates.
         times : int
             Number of bootstrap times.
@@ -595,8 +609,8 @@ def bootstrap_consensus(msa, times, tree_constructor, consensus):
             ``majority_consensus``, ``adam_consensus``.
 
     """
-    trees = bootstrap_trees(msa, times, tree_constructor)
-    tree = consensus(list(trees))
+    trees = bootstrap_trees(alignment, times, tree_constructor)
+    tree = consensus(trees)
     return tree
 
 

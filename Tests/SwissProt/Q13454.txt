@@ -1,0 +1,396 @@
+ID   TUSC3_HUMAN             Reviewed;         348 AA.
+AC   Q13454; A8MSM0; D3DSP2; Q14911; Q14912; Q96FW0;
+DT   15-JUL-1999, integrated into UniProtKB/Swiss-Prot.
+DT   01-NOV-1996, sequence version 1.
+DT   12-OCT-2022, entry version 184.
+DE   RecName: Full=Tumor suppressor candidate 3;
+DE   AltName: Full=Dolichyl-diphosphooligosaccharide--protein glycosyltransferase subunit TUSC3;
+DE            Short=Oligosaccharyl transferase subunit TUSC3;
+DE   AltName: Full=Magnesium uptake/transporter TUSC3;
+DE   AltName: Full=Protein N33;
+DE   Flags: Precursor;
+GN   Name=TUSC3; Synonyms=N33;
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+OX   NCBI_TaxID=9606;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA / MRNA] (ISOFORMS 1 AND 2).
+RX   PubMed=8661104; DOI=10.1006/geno.1996.0322;
+RA   Macgrogan D., Levy A., Bova G.S., Isaacs W.B., Bookstein R.;
+RT   "Structure and methylation-associated silencing of a gene within a
+RT   homozygously deleted region of human chromosome band 8p22.";
+RL   Genomics 35:55-65(1996).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA] (ISOFORM 1).
+RA   Kalnine N., Chen X., Rolfs A., Halleck A., Hines L., Eisenstein S.,
+RA   Koundinya M., Raphael J., Moreira D., Kelley T., LaBaer J., Lin Y.,
+RA   Phelan M., Farmer A.;
+RT   "Cloning of human full-length CDSs in BD Creator(TM) system donor vector.";
+RL   Submitted (OCT-2004) to the EMBL/GenBank/DDBJ databases.
+RN   [3]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RX   PubMed=16421571; DOI=10.1038/nature04406;
+RA   Nusbaum C., Mikkelsen T.S., Zody M.C., Asakawa S., Taudien S., Garber M.,
+RA   Kodira C.D., Schueler M.G., Shimizu A., Whittaker C.A., Chang J.L.,
+RA   Cuomo C.A., Dewar K., FitzGerald M.G., Yang X., Allen N.R., Anderson S.,
+RA   Asakawa T., Blechschmidt K., Bloom T., Borowsky M.L., Butler J., Cook A.,
+RA   Corum B., DeArellano K., DeCaprio D., Dooley K.T., Dorris L. III,
+RA   Engels R., Gloeckner G., Hafez N., Hagopian D.S., Hall J.L., Ishikawa S.K.,
+RA   Jaffe D.B., Kamat A., Kudoh J., Lehmann R., Lokitsang T., Macdonald P.,
+RA   Major J.E., Matthews C.D., Mauceli E., Menzel U., Mihalev A.H.,
+RA   Minoshima S., Murayama Y., Naylor J.W., Nicol R., Nguyen C., O'Leary S.B.,
+RA   O'Neill K., Parker S.C.J., Polley A., Raymond C.K., Reichwald K.,
+RA   Rodriguez J., Sasaki T., Schilhabel M., Siddiqui R., Smith C.L.,
+RA   Sneddon T.P., Talamas J.A., Tenzin P., Topham K., Venkataraman V., Wen G.,
+RA   Yamazaki S., Young S.K., Zeng Q., Zimmer A.R., Rosenthal A., Birren B.W.,
+RA   Platzer M., Shimizu N., Lander E.S.;
+RT   "DNA sequence and analysis of human chromosome 8.";
+RL   Nature 439:331-335(2006).
+RN   [4]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RA   Mural R.J., Istrail S., Sutton G.G., Florea L., Halpern A.L., Mobarry C.M.,
+RA   Lippert R., Walenz B., Shatkay H., Dew I., Miller J.R., Flanigan M.J.,
+RA   Edwards N.J., Bolanos R., Fasulo D., Halldorsson B.V., Hannenhalli S.,
+RA   Turner R., Yooseph S., Lu F., Nusskern D.R., Shue B.C., Zheng X.H.,
+RA   Zhong F., Delcher A.L., Huson D.H., Kravitz S.A., Mouchard L., Reinert K.,
+RA   Remington K.A., Clark A.G., Waterman M.S., Eichler E.E., Adams M.D.,
+RA   Hunkapiller M.W., Myers E.W., Venter J.C.;
+RL   Submitted (SEP-2005) to the EMBL/GenBank/DDBJ databases.
+RN   [5]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA] (ISOFORM 2).
+RC   TISSUE=Skin;
+RX   PubMed=15489334; DOI=10.1101/gr.2596504;
+RG   The MGC Project Team;
+RT   "The status, quality, and expansion of the NIH full-length cDNA project:
+RT   the Mammalian Gene Collection (MGC).";
+RL   Genome Res. 14:2121-2127(2004).
+RN   [6]
+RP   IDENTIFICATION IN THE OLIGOSACCHARYLTRANSFERASE (OST) COMPLEX, AND TISSUE
+RP   SPECIFICITY.
+RX   PubMed=12887896; DOI=10.1016/s1097-2765(03)00243-0;
+RA   Kelleher D.J., Karaoglu D., Mandon E.C., Gilmore R.;
+RT   "Oligosaccharyltransferase isoforms that contain different catalytic STT3
+RT   subunits have distinct enzymatic properties.";
+RL   Mol. Cell 12:101-111(2003).
+RN   [7]
+RP   INVOLVEMENT IN MRT7.
+RX   PubMed=18455129; DOI=10.1016/j.ajhg.2008.03.021;
+RA   Molinari F., Foulquier F., Tarpey P.S., Morelle W., Boissel S., Teague J.,
+RA   Edkins S., Futreal P.A., Stratton M.R., Turner G., Matthijs G., Gecz J.,
+RA   Munnich A., Colleaux L.;
+RT   "Oligosaccharyltransferase-subunit mutations in nonsyndromic mental
+RT   retardation.";
+RL   Am. J. Hum. Genet. 82:1150-1157(2008).
+RN   [8]
+RP   INVOLVEMENT IN MRT7.
+RX   PubMed=18452889; DOI=10.1016/j.ajhg.2008.03.018;
+RA   Garshasbi M., Hadavi V., Habibi H., Kahrizi K., Kariminejad R., Behjati F.,
+RA   Tzschach A., Najmabadi H., Ropers H.H., Kuss A.W.;
+RT   "A defect in the TUSC3 gene is associated with autosomal recessive mental
+RT   retardation.";
+RL   Am. J. Hum. Genet. 82:1158-1164(2008).
+RN   [9]
+RP   FUNCTION IN MAGNESIUM UPTAKE.
+RX   PubMed=19717468; DOI=10.1073/pnas.0908332106;
+RA   Zhou H., Clapham D.E.;
+RT   "Mammalian MagT1 and TUSC3 are required for cellular magnesium uptake and
+RT   vertebrate embryonic development.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 106:15750-15755(2009).
+RN   [10]
+RP   FUNCTION, AND MUTAGENESIS OF CYS-99 AND CYS-102.
+RX   PubMed=25135935; DOI=10.1083/jcb.201404083;
+RA   Cherepanova N.A., Shrimal S., Gilmore R.;
+RT   "Oxidoreductase activity is necessary for N-glycosylation of cysteine-
+RT   proximal acceptor sites in glycoproteins.";
+RL   J. Cell Biol. 206:525-539(2014).
+RN   [11]
+RP   X-RAY CRYSTALLOGRAPHY (1.10 ANGSTROMS) OF 44-194, DISULFIDE BOND, PROPOSED
+RP   FUNCTION, AND SUBUNIT.
+RX   PubMed=24685145; DOI=10.1016/j.str.2014.02.013;
+RA   Mohorko E., Owen R.L., Malojcic G., Brozzo M.S., Aebi M., Glockshuber R.;
+RT   "Structural basis of substrate specificity of human oligosaccharyl
+RT   transferase subunit N33/Tusc3 and its role in regulating protein N-
+RT   glycosylation.";
+RL   Structure 22:590-601(2014).
+RN   [12]
+RP   VARIANT VAL-247.
+RX   PubMed=23033978; DOI=10.1056/nejmoa1206524;
+RA   de Ligt J., Willemsen M.H., van Bon B.W., Kleefstra T., Yntema H.G.,
+RA   Kroes T., Vulto-van Silfhout A.T., Koolen D.A., de Vries P., Gilissen C.,
+RA   del Rosario M., Hoischen A., Scheffer H., de Vries B.B., Brunner H.G.,
+RA   Veltman J.A., Vissers L.E.;
+RT   "Diagnostic exome sequencing in persons with severe intellectual
+RT   disability.";
+RL   N. Engl. J. Med. 367:1921-1929(2012).
+CC   -!- FUNCTION: Acts as accessory component of the N-oligosaccharyl
+CC       transferase (OST) complex which catalyzes the transfer of a high
+CC       mannose oligosaccharide from a lipid-linked oligosaccharide donor to an
+CC       asparagine residue within an Asn-X-Ser/Thr consensus motif in nascent
+CC       polypeptide chains. Involved in N-glycosylation of STT3B-dependent
+CC       substrates. Specifically required for the glycosylation of a subset of
+CC       acceptor sites that are near cysteine residues; in this function seems
+CC       to act redundantly with MAGT1. In its oxidized form proposed to form
+CC       transient mixed disulfides with a glycoprotein substrate to facilitate
+CC       access of STT3B to the unmodified acceptor site. Has also
+CC       oxidoreductase-independent functions in the STT3B-containing OST
+CC       complex possibly involving substrate recognition.
+CC       {ECO:0000269|PubMed:25135935, ECO:0000305|PubMed:12887896,
+CC       ECO:0000305|PubMed:24685145}.
+CC   -!- FUNCTION: Magnesium transporter. {ECO:0000269|PubMed:19717468}.
+CC   -!- PATHWAY: Protein modification; protein glycosylation.
+CC   -!- SUBUNIT: Accessory component of the STT3B-containing form of the
+CC       oligosaccharyltransferase (OST) complex. OST exists in two different
+CC       complex forms which contain common core subunits RPN1, RPN2, OST48,
+CC       OST4, DAD1 and TMEM258, either STT3A or STT3B as catalytic subunits,
+CC       and form-specific accessory subunits. OST can form stable complexes
+CC       with the Sec61 complex or with both the Sec61 and TRAP complexes. The
+CC       association of TUSC3 or MAGT1 with the STT3B-containing complex seems
+CC       to be mutually exclusvice. {ECO:0000305|PubMed:12887896,
+CC       ECO:0000305|PubMed:24685145}.
+CC   -!- SUBCELLULAR LOCATION: Endoplasmic reticulum membrane {ECO:0000250};
+CC       Multi-pass membrane protein {ECO:0000250}.
+CC   -!- ALTERNATIVE PRODUCTS:
+CC       Event=Alternative splicing; Named isoforms=2;
+CC       Name=1;
+CC         IsoId=Q13454-1; Sequence=Displayed;
+CC       Name=2;
+CC         IsoId=Q13454-2; Sequence=VSP_003776;
+CC   -!- TISSUE SPECIFICITY: Expressed in most non-lymphoid cells and tissues
+CC       examined, including prostate, lung, liver, colon, heart, kidney and
+CC       pancreas. {ECO:0000269|PubMed:12887896}.
+CC   -!- DISEASE: Intellectual developmental disorder, autosomal recessive 7
+CC       (MRT7) [MIM:611093]: A disorder characterized by significantly below
+CC       average general intellectual functioning associated with impairments in
+CC       adaptive behavior and manifested during the developmental period.
+CC       {ECO:0000269|PubMed:18452889, ECO:0000269|PubMed:18455129}. Note=The
+CC       disease is caused by variants affecting the gene represented in this
+CC       entry.
+CC   -!- SIMILARITY: Belongs to the OST3/OST6 family. {ECO:0000305}.
+CC   ---------------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see https://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution (CC BY 4.0) License
+CC   ---------------------------------------------------------------------------
+DR   EMBL; U42349; AAB18374.1; -; mRNA.
+DR   EMBL; U42359; AAB18375.1; -; Genomic_DNA.
+DR   EMBL; U42350; AAB18375.1; JOINED; Genomic_DNA.
+DR   EMBL; U42351; AAB18375.1; JOINED; Genomic_DNA.
+DR   EMBL; U42352; AAB18375.1; JOINED; Genomic_DNA.
+DR   EMBL; U42354; AAB18375.1; JOINED; Genomic_DNA.
+DR   EMBL; U42355; AAB18375.1; JOINED; Genomic_DNA.
+DR   EMBL; U42356; AAB18375.1; JOINED; Genomic_DNA.
+DR   EMBL; U42357; AAB18375.1; JOINED; Genomic_DNA.
+DR   EMBL; U42358; AAB18375.1; JOINED; Genomic_DNA.
+DR   EMBL; U42360; AAB18376.1; -; Genomic_DNA.
+DR   EMBL; U42350; AAB18376.1; JOINED; Genomic_DNA.
+DR   EMBL; U42351; AAB18376.1; JOINED; Genomic_DNA.
+DR   EMBL; U42352; AAB18376.1; JOINED; Genomic_DNA.
+DR   EMBL; U42354; AAB18376.1; JOINED; Genomic_DNA.
+DR   EMBL; U42355; AAB18376.1; JOINED; Genomic_DNA.
+DR   EMBL; U42356; AAB18376.1; JOINED; Genomic_DNA.
+DR   EMBL; U42357; AAB18376.1; JOINED; Genomic_DNA.
+DR   EMBL; U42358; AAB18376.1; JOINED; Genomic_DNA.
+DR   EMBL; BT020002; AAV38805.1; -; mRNA.
+DR   EMBL; AC010656; -; NOT_ANNOTATED_CDS; Genomic_DNA.
+DR   EMBL; AC019292; -; NOT_ANNOTATED_CDS; Genomic_DNA.
+DR   EMBL; AC091559; -; NOT_ANNOTATED_CDS; Genomic_DNA.
+DR   EMBL; AC100850; -; NOT_ANNOTATED_CDS; Genomic_DNA.
+DR   EMBL; CH471080; EAW63837.1; -; Genomic_DNA.
+DR   EMBL; CH471080; EAW63839.1; -; Genomic_DNA.
+DR   EMBL; BC010370; AAH10370.1; -; mRNA.
+DR   CCDS; CCDS5993.1; -. [Q13454-2]
+DR   CCDS; CCDS5994.1; -. [Q13454-1]
+DR   PIR; G02297; G02297.
+DR   RefSeq; NP_006756.2; NM_006765.3. [Q13454-1]
+DR   RefSeq; NP_839952.1; NM_178234.2. [Q13454-2]
+DR   PDB; 4M8G; X-ray; 2.00 A; A/B=44-194.
+DR   PDB; 4M90; X-ray; 1.60 A; A=44-194.
+DR   PDB; 4M91; X-ray; 1.10 A; A=44-194.
+DR   PDB; 4M92; X-ray; 1.60 A; A=44-194.
+DR   PDBsum; 4M8G; -.
+DR   PDBsum; 4M90; -.
+DR   PDBsum; 4M91; -.
+DR   PDBsum; 4M92; -.
+DR   AlphaFoldDB; Q13454; -.
+DR   SMR; Q13454; -.
+DR   BioGRID; 113701; 64.
+DR   CORUM; Q13454; -.
+DR   IntAct; Q13454; 21.
+DR   MINT; Q13454; -.
+DR   STRING; 9606.ENSP00000424544; -.
+DR   TCDB; 1.A.76.1.2; the magnesium transporter1 (magt1) family.
+DR   TCDB; 9.B.142.3.17; the integral membrane glycosyltransferase family 39 (gt39) family.
+DR   iPTMnet; Q13454; -.
+DR   PhosphoSitePlus; Q13454; -.
+DR   BioMuta; TUSC3; -.
+DR   DMDM; 6166601; -.
+DR   EPD; Q13454; -.
+DR   jPOST; Q13454; -.
+DR   MassIVE; Q13454; -.
+DR   MaxQB; Q13454; -.
+DR   PaxDb; Q13454; -.
+DR   PeptideAtlas; Q13454; -.
+DR   PRIDE; Q13454; -.
+DR   ProteomicsDB; 59456; -. [Q13454-1]
+DR   ProteomicsDB; 59457; -. [Q13454-2]
+DR   Antibodypedia; 22197; 183 antibodies from 28 providers.
+DR   DNASU; 7991; -.
+DR   Ensembl; ENST00000382020.8; ENSP00000371450.4; ENSG00000104723.21. [Q13454-2]
+DR   Ensembl; ENST00000503731.6; ENSP00000424544.1; ENSG00000104723.21. [Q13454-1]
+DR   GeneID; 7991; -.
+DR   KEGG; hsa:7991; -.
+DR   MANE-Select; ENST00000503731.6; ENSP00000424544.1; NM_006765.4; NP_006756.2.
+DR   UCSC; uc003wwt.4; human. [Q13454-1]
+DR   CTD; 7991; -.
+DR   DisGeNET; 7991; -.
+DR   GeneCards; TUSC3; -.
+DR   GeneReviews; TUSC3; -.
+DR   HGNC; HGNC:30242; TUSC3.
+DR   HPA; ENSG00000104723; Low tissue specificity.
+DR   MalaCards; TUSC3; -.
+DR   MIM; 601385; gene.
+DR   MIM; 611093; phenotype.
+DR   neXtProt; NX_Q13454; -.
+DR   OpenTargets; ENSG00000104723; -.
+DR   Orphanet; 88616; Autosomal recessive non-syndromic intellectual disability.
+DR   PharmGKB; PA128394537; -.
+DR   VEuPathDB; HostDB:ENSG00000104723; -.
+DR   eggNOG; KOG2603; Eukaryota.
+DR   GeneTree; ENSGT00390000012030; -.
+DR   InParanoid; Q13454; -.
+DR   OMA; NLWAAVS; -.
+DR   OrthoDB; 1460433at2759; -.
+DR   PhylomeDB; Q13454; -.
+DR   TreeFam; TF314850; -.
+DR   PathwayCommons; Q13454; -.
+DR   Reactome; R-HSA-446203; Asparagine N-linked glycosylation.
+DR   Reactome; R-HSA-5223345; Miscellaneous transport and binding events.
+DR   Reactome; R-HSA-9694548; Maturation of spike protein.
+DR   SignaLink; Q13454; -.
+DR   UniPathway; UPA00378; -.
+DR   BioGRID-ORCS; 7991; 106 hits in 1077 CRISPR screens.
+DR   ChiTaRS; TUSC3; human.
+DR   GeneWiki; TUSC3; -.
+DR   GenomeRNAi; 7991; -.
+DR   Pharos; Q13454; Tbio.
+DR   PRO; PR:Q13454; -.
+DR   Proteomes; UP000005640; Chromosome 8.
+DR   RNAct; Q13454; protein.
+DR   Bgee; ENSG00000104723; Expressed in type B pancreatic cell and 185 other tissues.
+DR   ExpressionAtlas; Q13454; baseline and differential.
+DR   Genevisible; Q13454; HS.
+DR   GO; GO:0005789; C:endoplasmic reticulum membrane; TAS:Reactome.
+DR   GO; GO:0005887; C:integral component of plasma membrane; NAS:UniProtKB.
+DR   GO; GO:0005739; C:mitochondrion; ISS:UniProtKB.
+DR   GO; GO:0008250; C:oligosaccharyltransferase complex; IDA:HGNC-UCL.
+DR   GO; GO:0005886; C:plasma membrane; TAS:Reactome.
+DR   GO; GO:0015095; F:magnesium ion transmembrane transporter activity; IMP:UniProtKB.
+DR   GO; GO:0050890; P:cognition; IMP:UniProtKB.
+DR   GO; GO:0015693; P:magnesium ion transport; IMP:UniProtKB.
+DR   GO; GO:0006487; P:protein N-linked glycosylation; NAS:UniProtKB.
+DR   GO; GO:0018279; P:protein N-linked glycosylation via asparagine; IMP:UniProtKB.
+DR   GO; GO:0055085; P:transmembrane transport; TAS:Reactome.
+DR   InterPro; IPR021149; OligosaccharylTrfase_OST3/OST6.
+DR   InterPro; IPR036249; Thioredoxin-like_sf.
+DR   PANTHER; PTHR12692; PTHR12692; 1.
+DR   Pfam; PF04756; OST3_OST6; 1.
+DR   SUPFAM; SSF52833; SSF52833; 1.
+PE   1: Evidence at protein level;
+KW   3D-structure; Alternative splicing; Disulfide bond; Endoplasmic reticulum;
+KW   Intellectual disability; Magnesium; Membrane; Reference proteome; Signal;
+KW   Transmembrane; Transmembrane helix; Transport.
+FT   SIGNAL          1..41
+FT                   /evidence="ECO:0000255"
+FT   CHAIN           42..348
+FT                   /note="Tumor suppressor candidate 3"
+FT                   /id="PRO_0000215300"
+FT   TOPO_DOM        42..196
+FT                   /note="Lumenal"
+FT                   /evidence="ECO:0000255"
+FT   TRANSMEM        197..217
+FT                   /note="Helical"
+FT                   /evidence="ECO:0000255"
+FT   TOPO_DOM        218..221
+FT                   /note="Cytoplasmic"
+FT                   /evidence="ECO:0000255"
+FT   TRANSMEM        222..242
+FT                   /note="Helical"
+FT                   /evidence="ECO:0000255"
+FT   TOPO_DOM        243..276
+FT                   /note="Lumenal"
+FT                   /evidence="ECO:0000255"
+FT   TRANSMEM        277..297
+FT                   /note="Helical"
+FT                   /evidence="ECO:0000255"
+FT   TOPO_DOM        298..312
+FT                   /note="Cytoplasmic"
+FT                   /evidence="ECO:0000255"
+FT   TRANSMEM        313..333
+FT                   /note="Helical"
+FT                   /evidence="ECO:0000255"
+FT   TOPO_DOM        334..348
+FT                   /note="Lumenal"
+FT                   /evidence="ECO:0000255"
+FT   DOMAIN          59..187
+FT                   /note="Thioredoxin"
+FT   DISULFID        99..102
+FT                   /note="Redox-active"
+FT                   /evidence="ECO:0000269|PubMed:24685145,
+FT                   ECO:0007744|PDB:4M8G, ECO:0007744|PDB:4M90"
+FT   VAR_SEQ         344..348
+FT                   /note="DLDFE -> FLIK (in isoform 2)"
+FT                   /evidence="ECO:0000303|PubMed:15489334,
+FT                   ECO:0000303|PubMed:8661104"
+FT                   /id="VSP_003776"
+FT   VARIANT         65
+FT                   /note="I -> V (in dbSNP:rs11545035)"
+FT                   /id="VAR_045836"
+FT   VARIANT         247
+FT                   /note="M -> V"
+FT                   /evidence="ECO:0000269|PubMed:23033978"
+FT                   /id="VAR_069369"
+FT   MUTAGEN         99
+FT                   /note="C->S: Reduces N-glycosylation of cysteine-proximal
+FT                   acceptor sites; when associated with S-102."
+FT                   /evidence="ECO:0000269|PubMed:25135935"
+FT   MUTAGEN         102
+FT                   /note="C->S: Reduces N-glycosylation of cysteine-proximal
+FT                   acceptor sites; when associated with S-99."
+FT                   /evidence="ECO:0000269|PubMed:25135935"
+FT   HELIX           44..62
+FT                   /evidence="ECO:0007829|PDB:4M91"
+FT   STRAND          64..67
+FT                   /evidence="ECO:0007829|PDB:4M91"
+FT   HELIX           70..76
+FT                   /evidence="ECO:0007829|PDB:4M91"
+FT   STRAND          84..91
+FT                   /evidence="ECO:0007829|PDB:4M91"
+FT   HELIX           95..97
+FT                   /evidence="ECO:0007829|PDB:4M91"
+FT   HELIX           100..118
+FT                   /evidence="ECO:0007829|PDB:4M91"
+FT   STRAND          126..132
+FT                   /evidence="ECO:0007829|PDB:4M91"
+FT   TURN            133..135
+FT                   /evidence="ECO:0007829|PDB:4M91"
+FT   HELIX           137..142
+FT                   /evidence="ECO:0007829|PDB:4M91"
+FT   STRAND          150..154
+FT                   /evidence="ECO:0007829|PDB:4M91"
+FT   STRAND          156..158
+FT                   /evidence="ECO:0007829|PDB:4M91"
+FT   HELIX           162..164
+FT                   /evidence="ECO:0007829|PDB:4M91"
+FT   HELIX           168..171
+FT                   /evidence="ECO:0007829|PDB:4M91"
+FT   HELIX           175..186
+FT                   /evidence="ECO:0007829|PDB:4M91"
+SQ   SEQUENCE   348 AA;  39676 MW;  16D97CB1E00C5190 CRC64;
+     MGARGAPSRR RQAGRRLRYL PTGSFPFLLL LLLLCIQLGG GQKKKENLLA EKVEQLMEWS
+     SRRSIFRMNG DKFRKFIKAP PRNYSMIVMF TALQPQRQCS VCRQANEEYQ ILANSWRYSS
+     AFCNKLFFSM VDYDEGTDVF QQLNMNSAPT FMHFPPKGRP KRADTFDLQR IGFAAEQLAK
+     WIADRTDVHI RVFRPPNYSG TIALALLVSL VGGLLYLRRN NLEFIYNKTG WAMVSLCIVF
+     AMTSGQMWNH IRGPPYAHKN PHNGQVSYIH GSSQAQFVAE SHIILVLNAA ITMGMVLLNE
+     AATSKGDVGK RRIICLVGLG LVVFFFSFLL SIFRSKYHGY PYSDLDFE
+//

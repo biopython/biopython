@@ -108,8 +108,10 @@ The following object attributes are provided:
 import re
 
 from Bio.SearchIO._index import SearchIndexer
-from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
-
+from Bio.SearchIO._model import Hit
+from Bio.SearchIO._model import HSP
+from Bio.SearchIO._model import HSPFragment
+from Bio.SearchIO._model import QueryResult
 
 __all__ = ("FastaM10Parser", "FastaM10Indexer")
 
@@ -325,7 +327,6 @@ class FastaM10Parser:
         line = self.line
 
         while True:
-
             # one line before the hit table
             if line.startswith("The best scores are:"):
                 qres_state = state_QRES_HITTAB
@@ -336,7 +337,7 @@ class FastaM10Parser:
             elif not line.startswith(">>>") and ">>>" in line:
                 qres_state = state_QRES_NEW
             # the beginning of the query info and its hits + hsps
-            elif line.startswith(">>>") and not line.strip() == ">>><<<":
+            elif line.startswith(">>>") and line.strip() != ">>><<<":
                 qres_state = state_QRES_CONTENT
             # default qres mark
             else:

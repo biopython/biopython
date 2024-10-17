@@ -23,20 +23,29 @@ mailing list and ask for help.  See:
 http://biopython.org/wiki/Mailing_lists
 """
 
-import sys
+import ast
 import os
+import sys
 
 try:
-    from setuptools import setup
+    from setuptools import __version__ as setuptools_version
     from setuptools import Command
     from setuptools import Extension
+    from setuptools import setup
 except ImportError:
     sys.exit(
         "We need the Python library setuptools to be installed. "
         "Try running: python -m ensurepip"
     )
 
-if "bdist_wheel" in sys.argv:
+
+setuptools_version_tuple = tuple(int(x) for x in setuptools_version.split("."))
+if setuptools_version_tuple < (70, 1) and "bdist_wheel" in sys.argv:
+    # Check for presence of wheel in setuptools < 70.1
+    # Before setuptools 70.1, wheel is needed to make a bdist_wheel.
+    # Since 70.1 was released including
+    # https://github.com/pypa/setuptools/pull/4369,
+    # it is not needed.
     try:
         import wheel  # noqa: F401
     except ImportError:
@@ -47,13 +56,15 @@ if "bdist_wheel" in sys.argv:
 
 
 # Make sure we have the right Python version.
-MIN_PY_VER = (3, 7)
+MIN_PY_VER = (3, 9)
 if sys.version_info[:2] < MIN_PY_VER:
     sys.stderr.write(
         ("ERROR: Biopython requires Python %i.%i or later. " % MIN_PY_VER)
         + ("Python %d.%d detected.\n" % sys.version_info[:2])
     )
     sys.exit(1)
+elif sys.version_info[:2] == (3, 9):
+    sys.stderr.write("WARNING: Biopython support for Python 3.9 is now deprecated.\n")
 
 
 class test_biopython(Command):
@@ -158,7 +169,6 @@ PACKAGES = [
     "Bio.Restriction",
     "Bio.SCOP",
     "Bio.SearchIO",
-    "Bio.SearchIO._legacy",
     "Bio.SearchIO._model",
     "Bio.SearchIO.BlastIO",
     "Bio.SearchIO.HHsuiteIO",
@@ -170,7 +180,6 @@ PACKAGES = [
     "Bio.Sequencing",
     "Bio.Sequencing.Applications",
     "Bio.SVDSuperimposer",
-    "Bio.PDB.QCPSuperimposer",
     "Bio.SwissProt",
     "Bio.TogoWS",
     "Bio.Phylo",
@@ -178,35 +187,38 @@ PACKAGES = [
     "Bio.Phylo.PAML",
     "Bio.UniGene",
     "Bio.UniProt",
-    "Bio.Wise",
     # Other top level packages,
     "BioSQL",
 ]
 
 EXTENSIONS = [
-    Extension("Bio.Align._aligners", ["Bio/Align/_aligners.c"]),
+    Extension("Bio.Align._codonaligner", ["Bio/Align/_codonaligner.c"]),
+    Extension("Bio.Align._pairwisealigner", ["Bio/Align/_pairwisealigner.c"]),
+    Extension("Bio.Align._aligncore", ["Bio/Align/_aligncore.c"]),
     Extension("Bio.cpairwise2", ["Bio/cpairwise2module.c"]),
     Extension("Bio.Nexus.cnexus", ["Bio/Nexus/cnexus.c"]),
-    Extension(
-        "Bio.PDB.QCPSuperimposer.qcprotmodule",
-        ["Bio/PDB/QCPSuperimposer/qcprotmodule.c"],
-    ),
     Extension("Bio.motifs._pwm", ["Bio/motifs/_pwm.c"]),
     Extension(
-        "Bio.Cluster._cluster", ["Bio/Cluster/cluster.c", "Bio/Cluster/clustermodule.c"]
+        "Bio.Cluster._cluster",
+        ["Bio/Cluster/cluster.c", "Bio/Cluster/clustermodule.c"],
+        extra_compile_args=["-DCLUSTER_USE_PYTHON_MEMORY"],
     ),
-    Extension("Bio.PDB.kdtrees", ["Bio/PDB/kdtrees.c"]),
     Extension("Bio.PDB.ccealign", ["Bio/PDB/ccealignmodule.c"]),
+    Extension("Bio.PDB.kdtrees", ["Bio/PDB/kdtrees.c"]),
+    Extension("Bio.PDB._bcif_helper", ["Bio/PDB/bcifhelpermodule.c"]),
     Extension("Bio.SeqIO._twoBitIO", ["Bio/SeqIO/_twoBitIO.c"]),
 ]
 
-# We now define the Biopython version number in Bio/__init__.py
-# Here we can't use "import Bio" then "Bio.__version__" as that would
-# tell us the version of Biopython already installed (if any).
-__version__ = "Undefined"
-for line in open("Bio/__init__.py"):
-    if line.startswith("__version__"):
-        exec(line.strip())
+
+def get_version():
+    """Get version number from __init__.py."""
+    for line in open("Bio/__init__.py"):
+        if line.startswith("__version__ = "):
+            return ast.literal_eval(line.split("=")[1].strip())
+    return "Undefined"
+
+
+__version__ = get_version()
 
 # We now load in our reStructuredText README.rst file to pass explicitly in the
 # metadata, since at time of writing PyPI did not do this for us.
@@ -243,10 +255,11 @@ setup(
         "Operating System :: OS Independent",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         "Topic :: Scientific/Engineering",
         "Topic :: Scientific/Engineering :: Bio-Informatics",
         "Topic :: Software Development :: Libraries :: Python Modules",

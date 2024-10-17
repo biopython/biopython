@@ -4,14 +4,15 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Tests for Bio.SeqIO.FastaIO module."""
-import unittest
 
+import unittest
 from io import StringIO
 
 from Bio import SeqIO
-from Bio.SeqIO.FastaIO import FastaIterator
 from Bio.SeqIO.FastaIO import FastaTwoLineParser
 from Bio.SeqIO.FastaIO import SimpleFastaParser
+
+from Bio import BiopythonDeprecationWarning
 
 
 def title_to_ids(title):
@@ -86,37 +87,11 @@ class TitleFunctions(unittest.TestCase):
         """Test parsing single record FASTA files."""
         msg = f"Test failure parsing file {filename}"
         title, seq = read_title_and_seq(filename)  # crude parser
-        idn, name, descr = title_to_ids(title)
-        # First check using Bio.SeqIO.FastaIO directly with title function.
-        records = FastaIterator(filename, title2ids=title_to_ids)
-        record = next(records)
-        with self.assertRaises(StopIteration):
-            next(records)
-        self.assertEqual(record.id, idn, msg=msg)
-        self.assertEqual(record.name, name, msg=msg)
-        self.assertEqual(record.description, descr, msg=msg)
-        self.assertEqual(record.seq, seq, msg=msg)
-        # Now check using Bio.SeqIO (default settings)
         record = SeqIO.read(filename, "fasta")
         self.assertEqual(record.id, title.split()[0], msg=msg)
         self.assertEqual(record.name, title.split()[0], msg=msg)
         self.assertEqual(record.description, title, msg=msg)
         self.assertEqual(record.seq, seq, msg=msg)
-        # Uncomment this for testing the methods are calling the right files:
-        # print("{%s done}" % filename)
-
-    def multi_check(self, filename):
-        """Test parsing multi-record FASTA files."""
-        msg = f"Test failure parsing file {filename}"
-        re_titled = list(FastaIterator(filename, title2ids=title_to_ids))
-        default = list(SeqIO.parse(filename, "fasta"))
-        self.assertEqual(len(re_titled), len(default), msg=msg)
-        for old, new in zip(default, re_titled):
-            idn, name, descr = title_to_ids(old.description)
-            self.assertEqual(new.id, idn, msg=msg)
-            self.assertEqual(new.name, name, msg=msg)
-            self.assertEqual(new.description, descr, msg=msg)
-            self.assertEqual(new.seq, old.seq, msg=msg)
         # Uncomment this for testing the methods are calling the right files:
         # print("{%s done}" % filename)
 
@@ -145,12 +120,6 @@ class TitleFunctions(unittest.TestCase):
         for path in paths:
             self.simple_check(path)
 
-    def test_multi_dna_files(self):
-        """Test Fasta files containing multiple nucleotide sequences."""
-        paths = ("Quality/example.fasta",)
-        for path in paths:
-            self.multi_check(path)
-
     def test_single_proteino_files(self):
         """Test Fasta files containing a single protein sequence."""
         paths = (
@@ -161,12 +130,6 @@ class TitleFunctions(unittest.TestCase):
         )
         for path in paths:
             self.simple_check(path)
-
-    def test_multi_protein_files(self):
-        """Test Fasta files containing multiple protein sequences."""
-        paths = ("Fasta/f002", "Fasta/fa01")
-        for path in paths:
-            self.multi_check(path)
 
 
 class TestSimpleFastaParsers(unittest.TestCase):
@@ -228,6 +191,45 @@ class TestSimpleFastaParsers(unittest.TestCase):
             handle = StringIO(inp)
             with self.assertRaises(ValueError):
                 list(FastaTwoLineParser(handle))
+
+
+class TestFastaWithComments(unittest.TestCase):
+    """Test FastaBlastIterator and FastaPearsonIterator."""
+
+    expected = SeqIO.read("Fasta/aster.pro", "fasta")
+
+    def test_fasta_blast(self):
+        """Test FastaBlastIterator."""
+
+        expected = self.expected
+
+        record = SeqIO.read("Fasta/aster_blast.pro", "fasta-blast")
+        self.assertEqual(expected.id, record.id)
+        self.assertEqual(expected.name, record.name)
+        self.assertEqual(expected.description, record.description)
+        self.assertEqual(expected.seq, record.seq)
+
+    def test_fasta_pearson(self):
+        """Test FastaPearsonIterator."""
+
+        expected = self.expected
+
+        record = SeqIO.read("Fasta/aster_pearson.pro", "fasta-pearson")
+        self.assertEqual(expected.id, record.id)
+        self.assertEqual(expected.name, record.name)
+        self.assertEqual(expected.description, record.description)
+        self.assertEqual(expected.seq, record.seq)
+
+    def test_valueerrors(self):
+        """Test if ValueErrors are raised if comments are found unexpectedly."""
+
+        self.assertRaises(
+            ValueError, SeqIO.read, "Fasta/aster_pearson.pro", "fasta-blast"
+        )
+        with self.assertWarns(BiopythonDeprecationWarning):
+            record = SeqIO.read("Fasta/aster_pearson.pro", "fasta")
+        with self.assertWarns(BiopythonDeprecationWarning):
+            record = SeqIO.read("Fasta/aster_blast.pro", "fasta")
 
 
 if __name__ == "__main__":

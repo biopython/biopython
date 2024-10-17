@@ -10,24 +10,26 @@ import tempfile
 import time
 import unittest
 
-from io import StringIO
-
 # Hide annoying warnings from things like bonds in GenBank features,
 # or PostgreSQL schema rules. TODO - test these warnings are raised!
 import warnings
+from io import StringIO
+
+from seq_tests_common import SeqRecordTestBaseClass
+
 from Bio import BiopythonWarning
 
 # local stuff
 from Bio import MissingExternalDependencyError
-from Bio.Seq import Seq, MutableSeq, UndefinedSequenceError
-from Bio.SeqFeature import SeqFeature, UnknownPosition, ExactPosition
 from Bio import SeqIO
+from Bio.Seq import MutableSeq
+from Bio.Seq import Seq
+from Bio.Seq import UndefinedSequenceError
+from Bio.SeqFeature import ExactPosition
+from Bio.SeqFeature import SeqFeature
+from Bio.SeqFeature import UnknownPosition
 from Bio.SeqRecord import SeqRecord
-
 from BioSQL import BioSeqDatabase
-from BioSQL import BioSeq
-
-from seq_tests_common import SeqRecordTestBaseClass
 
 if __name__ == "__main__":
     raise RuntimeError("Call this via test_BioSQL_*.py not directly")
@@ -36,6 +38,7 @@ if __name__ == "__main__":
 # DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB, DBSCHEMA, SQL_FILE, SYSTEM
 
 SYSTEM = platform.system()
+DBDRIVER = DBTYPE = DBHOST = DBUSER = DBPASSWD = TESTDB = DBSCHEMA = SQL_FILE = None
 
 
 def load_biosql_ini(DBTYPE):
@@ -88,9 +91,9 @@ def check_config(dbdriver, dbtype, dbhost, dbuser, dbpasswd, testdb):
     if SYSTEM == "Java":
         try:
             if DBDRIVER in ["MySQLdb"]:
-                import com.mysql.jdbc.Driver
+                import com.mysql.jdbc.Driver  # noqa: F401
             elif DBDRIVER in ["psycopg2", "pgdb"]:
-                import org.postgresql.Driver
+                import org.postgresql.Driver  # noqa: F401
         except ImportError:
             message = f"Install the JDBC driver for {DBTYPE} to use BioSQL "
             raise MissingExternalDependencyError(message) from None
@@ -171,7 +174,7 @@ def _do_db_cleanup():
             server.module.OperationalError,
             server.module.Error,
             server.module.DatabaseError,
-        ) as e:  # the database doesn't exist
+        ):  # the database doesn't exist
             pass
         except (
             server.module.IntegrityError,
@@ -204,7 +207,6 @@ def create_database():
                     # Seen this with PyPy 2.1 (and older) on Windows -
                     # which suggests an open handle still exists?
                     print(f"Could not remove {TESTDB!r}")
-                    pass
         # Now pick a new filename - just in case there is a stale handle
         # (which might be happening under Windows...)
         TESTDB = temp_db_filename()
@@ -354,7 +356,7 @@ class MultiReadTest(unittest.TestCase):
         db2 = self.db2
         for db2_id in db2.keys():
             with self.assertRaises(KeyError):
-                rec = db[db2_id]
+                db[db2_id]
 
 
 class ReadTest(unittest.TestCase):
@@ -549,7 +551,6 @@ class SeqInterfaceTest(unittest.TestCase):
             str(cds_feature.location), "join{[103:160](+), [319:390](+), [503:579](+)}"
         )
 
-        msg = f"Missing expected entries, have {cds_feature.qualifiers!r}"
         self.assertIn("gene", cds_feature.qualifiers)
         self.assertIn("protein_id", cds_feature.qualifiers)
         self.assertIn("codon_start", cds_feature.qualifiers)
@@ -972,9 +973,8 @@ class DeleteTest(unittest.TestCase):
     def test_del_db_items(self):
         """Check all associated data is deleted from an item."""
         db = self.db
-        items = list(db.values())
         keys = list(db)
-        length = len(items)
+        self.assertEqual(len(keys), len(list(db.values())))
 
         for seq_id in keys:
             sql = "SELECT seqfeature_id from seqfeature where bioentry_id = '%s'"
@@ -1010,9 +1010,9 @@ class DupLoadTest(unittest.TestCase):
     def tearDown(self):
         self.server.rollback()
         self.server.close()
-        destroy_database()
         del self.db
         del self.server
+        destroy_database()
 
     def test_duplicate_load(self):
         """Make sure can't import a single record twice (in one go)."""
@@ -1072,7 +1072,7 @@ class ClosedLoopTest(SeqRecordTestBaseClass):
     def setUpClass(cls):
         # NOTE - For speed I don't bother to create a new database each time,
         # simply a new unique namespace is used for each test.
-        TESTDB = create_database()
+        TESTDB = create_database()  # noqa: F841
 
     def test_NC_005816(self):
         """From GenBank file to BioSQL and back to a GenBank file, NC_005816."""
@@ -1160,7 +1160,7 @@ class TransferTest(SeqRecordTestBaseClass):
     # simply a new unique namespace is used for each test.
 
     def setUp(self):
-        TESTDB = create_database()
+        TESTDB = create_database()  # noqa: F841
 
     def test_NC_005816(self):
         """From GenBank file to BioSQL, then again to a new namespace, NC_005816."""
@@ -1249,9 +1249,9 @@ class InDepthLoadTest(unittest.TestCase):
 
     def tearDown(self):
         self.server.close()
-        destroy_database()
         del self.db
         del self.server
+        destroy_database()
 
     def test_transfer(self):
         """Make sure can load record into another namespace."""
@@ -1339,14 +1339,14 @@ class InDepthLoadTest(unittest.TestCase):
         # XXX We should be testing complement as well
         test_record = self.db.lookup(accession="AJ237582")
         test_feature = test_record.features[4]  # DNA, no complement
-        self.assertEqual(test_feature.strand, 1)
+        self.assertEqual(test_feature.location.strand, 1)
         for loc in test_feature.location.parts:
             self.assertEqual(loc.strand, 1)
 
         test_record = self.db.lookup(accession="X55053")
         test_feature = test_record.features[0]
         # mRNA, so really cDNA, so the strand should be 1 (not complemented)
-        self.assertEqual(test_feature.strand, 1)
+        self.assertEqual(test_feature.location.strand, 1)
 
 
 #####################################################################
@@ -1361,7 +1361,7 @@ class AutoSeqIOTests(SeqRecordTestBaseClass):
     @classmethod
     def setUpClass(cls):
         # Create and reuse on database for all tests in this class
-        TESTDB = create_database()
+        TESTDB = create_database()  # noqa: F841
 
     def setUp(self):
         """Connect to the database."""
@@ -1450,17 +1450,17 @@ class AutoSeqIOTests(SeqRecordTestBaseClass):
         self.check("fasta", "GFF/NC_001802.fna")
         self.check("fasta", "GFF/multi.fna", 3)
         self.check("fasta", "Registry/seqs.fasta", 2)
-        self.check("swiss", "SwissProt/sp001")
-        self.check("swiss", "SwissProt/sp002")
-        self.check("swiss", "SwissProt/sp003")
+        self.check("swiss", "SwissProt/Q13454.txt")
+        self.check("swiss", "SwissProt/P60904.txt")
+        self.check("swiss", "SwissProt/P62258.txt")
         self.check("swiss", "SwissProt/P0A186.txt")
-        self.check("swiss", "SwissProt/sp005")
-        self.check("swiss", "SwissProt/sp006")
-        self.check("swiss", "SwissProt/sp007")
-        self.check("swiss", "SwissProt/sp008")
-        self.check("swiss", "SwissProt/sp009")
-        self.check("swiss", "SwissProt/sp010")
-        self.check("swiss", "SwissProt/sp011")
+        self.check("swiss", "SwissProt/P68308.txt")
+        self.check("swiss", "SwissProt/P39896.txt")
+        self.check("swiss", "SwissProt/O95832.txt")
+        self.check("swiss", "SwissProt/P04439.txt")
+        self.check("swiss", "SwissProt/O23729.txt")
+        self.check("swiss", "SwissProt/Q13639.txt")
+        self.check("swiss", "SwissProt/P16235.txt")
         self.check("swiss", "SwissProt/sp012")
         self.check("swiss", "SwissProt/sp013")
         self.check("swiss", "SwissProt/P60137.txt")

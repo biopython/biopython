@@ -82,46 +82,18 @@ Notes about the diverses class of the restriction enzyme implementation::
 
 """
 
-
+import itertools
+import re
+import string
 import warnings
 
-import re
-import itertools
-
-from Bio.Seq import Seq, MutableSeq
-from Bio.Restriction.Restriction_Dictionary import rest_dict as enzymedict
-from Bio.Restriction.Restriction_Dictionary import typedict
-from Bio.Restriction.Restriction_Dictionary import suppliers as suppliers_dict
-from Bio.Restriction.PrintFormat import PrintFormat
 from Bio import BiopythonWarning
-
-
-# Used to use Bio.Restriction.DNAUtils.check_bases (and expose it under this
-# namespace), but have deprecated that module.
-
-
-def _check_bases(seq_string):
-    """Check characters in a string (PRIVATE).
-
-    Remove digits and white space present in string. Allows any valid ambiguous
-    IUPAC DNA single letters codes (ABCDGHKMNRSTVWY, lower case are converted).
-
-    Other characters (e.g. symbols) trigger a TypeError.
-
-    Returns the string WITH A LEADING SPACE (!). This is for backwards
-    compatibility, and may in part be explained by the fact that
-    ``Bio.Restriction`` doesn't use zero based counting.
-    """
-    # Remove white space and make upper case:
-    seq_string = "".join(seq_string.split()).upper()
-    # Remove digits
-    for c in "0123456789":
-        seq_string = seq_string.replace(c, "")
-    # Check only allowed IUPAC letters
-    if not set(seq_string).issubset(set("ABCDGHKMNRSTVWY")):
-        raise TypeError(f"Invalid character found in {seq_string!r}")
-    return " " + seq_string
-
+from Bio.Restriction.PrintFormat import PrintFormat
+from Bio.Restriction.Restriction_Dictionary import rest_dict as enzymedict
+from Bio.Restriction.Restriction_Dictionary import suppliers as suppliers_dict
+from Bio.Restriction.Restriction_Dictionary import typedict
+from Bio.Seq import MutableSeq
+from Bio.Seq import Seq
 
 matching = {
     "A": "ARWMHVDN",
@@ -144,6 +116,15 @@ matching = {
 DNA = Seq
 
 
+def _make_FormattedSeq_table() -> bytes:
+    table = bytearray(256)
+    upper_to_lower = ord("A") - ord("a")
+    for c in b"ABCDGHKMNRSTVWY":  # Only allow IUPAC letters
+        table[c] = c  # map uppercase to uppercase
+        table[c - upper_to_lower] = c  # map lowercase to uppercase
+    return bytes(table)
+
+
 class FormattedSeq:
     """A linear or circular sequence object for restriction analysis.
 
@@ -157,6 +138,9 @@ class FormattedSeq:
     circular. Restriction sites are search over the edges of circular sequence.
     """
 
+    _remove_chars = string.whitespace.encode() + string.digits.encode()
+    _table = _make_FormattedSeq_table()
+
     def __init__(self, seq, linear=True):
         """Initialize ``FormattedSeq`` with sequence and topology (optional).
 
@@ -165,10 +149,13 @@ class FormattedSeq:
         will have no effect on the shape of the sequence.
         """
         if isinstance(seq, (Seq, MutableSeq)):
-            stringy = str(seq)
-            self.lower = stringy.islower()
+            self.lower = seq.islower()
+            data = bytes(seq)
+            self.data = data.translate(self._table, delete=self._remove_chars)
+            if 0 in self.data:  # Check if all letters were IUPAC
+                raise TypeError(f"Invalid character found in {data.decode()}")
             # Note this adds a leading space to the sequence (!)
-            self.data = _check_bases(stringy)
+            self.data = " " + self.data.decode("ASCII")
             self.linear = linear
             self.klass = seq.__class__
         elif isinstance(seq, FormattedSeq):
@@ -548,6 +535,35 @@ class AbstractCut(RestrictionType):
         else:
             cls.dna = FormattedSeq(dna, linear)
             return cls._search()
+
+    @classmethod
+    def _drop(cls):
+        """Remove cuts that are outsite of the sequence (PRIVATE).
+
+        For internal use only.
+
+        Drop the site that are situated outside the sequence in linear
+        sequence. Modify the index for site in circular sequences.
+        """
+        length = len(cls.dna)
+        if cls.dna.is_linear():
+
+            def filtering_function(cut_on_watson):
+                cut_on_crick = cut_on_watson - cls.ovhg
+                return (1 < cut_on_watson <= length) and (1 < cut_on_crick <= length)
+
+            cls.results = [cut for cut in cls.results if filtering_function(cut)]
+        else:
+            for index, location in enumerate(cls.results):
+                if location < 1:
+                    cls.results[index] += length
+                else:
+                    break
+            for index, location in enumerate(cls.results[::-1]):
+                if location > length:
+                    cls.results[-(index + 1)] -= length
+                else:
+                    break
 
     @classmethod
     def all_suppliers(cls):
@@ -961,7 +977,7 @@ class Palindromic(AbstractCut):
 
     @classmethod
     def is_palindromic(cls):
-        """Return if the enzyme has a palindromic recoginition site."""
+        """Return if the enzyme has a palindromic recognition site."""
         return True
 
 
@@ -1003,7 +1019,7 @@ class NonPalindromic(AbstractCut):
 
     @classmethod
     def is_palindromic(cls):
-        """Return if the enzyme has a palindromic recoginition site."""
+        """Return if the enzyme has a palindromic recognition site."""
         return False
 
 
@@ -1513,41 +1529,6 @@ class Defined(AbstractCut):
     """
 
     @classmethod
-    def _drop(cls):
-        """Remove cuts that are outsite of the sequence (PRIVATE).
-
-        For internal use only.
-
-        Drop the site that are situated outside the sequence in linear
-        sequence. Modify the index for site in circular sequences.
-        """
-        #
-        #   remove or modify the results that are outside the sequence.
-        #   This is necessary since after finding the site we add the distance
-        #   from the site to the cut with the _modify and _rev_modify methods.
-        #   For linear we will remove these sites altogether.
-        #   For circular sequence, we modify the result rather than _drop it
-        #   since the site is in the sequence.
-        #
-        length = len(cls.dna)
-        drop = itertools.dropwhile
-        take = itertools.takewhile
-        if cls.dna.is_linear():
-            cls.results = list(drop(lambda x: x <= 1, cls.results))
-            cls.results = list(take(lambda x: x <= length, cls.results))
-        else:
-            for index, location in enumerate(cls.results):
-                if location < 1:
-                    cls.results[index] += length
-                else:
-                    break
-            for index, location in enumerate(cls.results[::-1]):
-                if location > length:
-                    cls.results[-(index + 1)] -= length
-                else:
-                    break
-
-    @classmethod
     def is_defined(cls):
         """Return if recognition sequence and cut are defined.
 
@@ -1669,33 +1650,6 @@ class Ambiguous(AbstractCut):
     """
 
     @classmethod
-    def _drop(cls):
-        """Remove cuts that are outsite of the sequence (PRIVATE).
-
-        For internal use only.
-
-        Drop the site that are situated outside the sequence in linear
-        sequence. Modify the index for site in circular sequences.
-        """
-        length = len(cls.dna)
-        drop = itertools.dropwhile
-        take = itertools.takewhile
-        if cls.dna.is_linear():
-            cls.results = list(drop(lambda x: x <= 1, cls.results))
-            cls.results = list(take(lambda x: x <= length, cls.results))
-        else:
-            for index, location in enumerate(cls.results):
-                if location < 1:
-                    cls.results[index] += length
-                else:
-                    break
-            for index, location in enumerate(cls.results[::-1]):
-                if location > length:
-                    cls.results[-(index + 1)] -= length
-                else:
-                    break
-
-    @classmethod
     def is_defined(cls):
         """Return if recognition sequence and cut are defined.
 
@@ -1806,7 +1760,7 @@ class Ambiguous(AbstractCut):
             elif 0 <= f3 + length <= length:
                 re = "N^" + abs(f5) * "N" + site[:f3] + "_" + site[f3:]
             elif f3 + length < 0:
-                re = "N^" * abs(f5) * "N" + "_" + abs(length + f3) * "N" + site
+                re = "N^" + abs(f5) * "N" + "_" + abs(length + f3) * "N" + site
             elif f5 > length:
                 re = site + (f5 - length) * "N" + "^" + (length + f3 - f5) * "N" + "_N"
             else:
@@ -1859,17 +1813,7 @@ class NotDefined(AbstractCut):
         if cls.dna.is_linear():
             return
         else:
-            length = len(cls.dna)
-            for index, location in enumerate(cls.results):
-                if location < 1:
-                    cls.results[index] += length
-                else:
-                    break
-            for index, location in enumerate(cls.results[:-1]):
-                if location > length:
-                    cls.results[-(index + 1)] -= length
-                else:
-                    break
+            super()._drop()
 
     @classmethod
     def is_defined(cls):
@@ -2649,19 +2593,19 @@ for TYPE, (bases, enzymes) in typedict.items():
     #
     #   First eval the bases.
     #
-    bases = tuple(eval(x) for x in bases)
+    bases2 = tuple(eval(x) for x in bases)
     #
     #   now create the particular value of RestrictionType for the classes
     #   in enzymes.
     #
-    T = type.__new__(RestrictionType, "RestrictionType", bases, {})
+    T = type.__new__(RestrictionType, "RestrictionType", bases2, {})
     for k in enzymes:
         #
         #   Now, we go through all the enzymes and assign them their type.
         #   enzymedict[k] contains the values of the attributes for this
         #   particular class (self.site, self.ovhg,....).
         #
-        newenz = T(k, bases, enzymedict[k])
+        newenz = T(k, bases2, enzymedict[k])
         #
         #   we add the enzymes to the corresponding batch.
         #
@@ -2689,4 +2633,4 @@ __all__ = (
     "CommOnly",
     "NonComm",
 ) + tuple(names)
-del k, enzymes, TYPE, bases, names
+del k, enzymes, TYPE, bases, bases2, names

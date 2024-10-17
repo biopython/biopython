@@ -1,0 +1,556 @@
+ID   YTHD3_HUMAN             Reviewed;         585 AA.
+AC   Q7Z739; B3KXL4; Q63Z37; Q659A3;
+DT   04-APR-2006, integrated into UniProtKB/Swiss-Prot.
+DT   01-OCT-2003, sequence version 1.
+DT   03-AUG-2022, entry version 153.
+DE   RecName: Full=YTH domain-containing family protein 3 {ECO:0000305};
+DE            Short=DF3 {ECO:0000303|PubMed:31292544, ECO:0000303|PubMed:32492408};
+GN   Name=YTHDF3 {ECO:0000303|PubMed:28106072,
+GN   ECO:0000312|HGNC:HGNC:26465};
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+OX   NCBI_TaxID=9606;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA].
+RC   TISSUE=Tongue;
+RX   PubMed=14702039; DOI=10.1038/ng1285;
+RA   Ota T., Suzuki Y., Nishikawa T., Otsuki T., Sugiyama T., Irie R.,
+RA   Wakamatsu A., Hayashi K., Sato H., Nagai K., Kimura K., Makita H.,
+RA   Sekine M., Obayashi M., Nishi T., Shibahara T., Tanaka T., Ishii S.,
+RA   Yamamoto J., Saito K., Kawai Y., Isono Y., Nakamura Y., Nagahari K.,
+RA   Murakami K., Yasuda T., Iwayanagi T., Wagatsuma M., Shiratori A., Sudo H.,
+RA   Hosoiri T., Kaku Y., Kodaira H., Kondo H., Sugawara M., Takahashi M.,
+RA   Kanda K., Yokoi T., Furuya T., Kikkawa E., Omura Y., Abe K., Kamihara K.,
+RA   Katsuta N., Sato K., Tanikawa M., Yamazaki M., Ninomiya K., Ishibashi T.,
+RA   Yamashita H., Murakawa K., Fujimori K., Tanai H., Kimata M., Watanabe M.,
+RA   Hiraoka S., Chiba Y., Ishida S., Ono Y., Takiguchi S., Watanabe S.,
+RA   Yosida M., Hotuta T., Kusano J., Kanehori K., Takahashi-Fujii A., Hara H.,
+RA   Tanase T.-O., Nomura Y., Togiya S., Komai F., Hara R., Takeuchi K.,
+RA   Arita M., Imose N., Musashino K., Yuuki H., Oshima A., Sasaki N.,
+RA   Aotsuka S., Yoshikawa Y., Matsunawa H., Ichihara T., Shiohata N., Sano S.,
+RA   Moriya S., Momiyama H., Satoh N., Takami S., Terashima Y., Suzuki O.,
+RA   Nakagawa S., Senoh A., Mizoguchi H., Goto Y., Shimizu F., Wakebe H.,
+RA   Hishigaki H., Watanabe T., Sugiyama A., Takemoto M., Kawakami B.,
+RA   Yamazaki M., Watanabe K., Kumagai A., Itakura S., Fukuzumi Y., Fujimori Y.,
+RA   Komiyama M., Tashiro H., Tanigami A., Fujiwara T., Ono T., Yamada K.,
+RA   Fujii Y., Ozaki K., Hirao M., Ohmori Y., Kawabata A., Hikiji T.,
+RA   Kobatake N., Inagaki H., Ikema Y., Okamoto S., Okitani R., Kawakami T.,
+RA   Noguchi S., Itoh T., Shigeta K., Senba T., Matsumura K., Nakajima Y.,
+RA   Mizuno T., Morinaga M., Sasaki M., Togashi T., Oyama M., Hata H.,
+RA   Watanabe M., Komatsu T., Mizushima-Sugano J., Satoh T., Shirai Y.,
+RA   Takahashi Y., Nakagawa K., Okumura K., Nagase T., Nomura N., Kikuchi H.,
+RA   Masuho Y., Yamashita R., Nakai K., Yada T., Nakamura Y., Ohara O.,
+RA   Isogai T., Sugano S.;
+RT   "Complete sequencing and characterization of 21,243 full-length human
+RT   cDNAs.";
+RL   Nat. Genet. 36:40-45(2004).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA].
+RC   TISSUE=Skeletal muscle, and Spinal cord;
+RX   PubMed=17974005; DOI=10.1186/1471-2164-8-399;
+RA   Bechtel S., Rosenfelder H., Duda A., Schmidt C.P., Ernst U.,
+RA   Wellenreuther R., Mehrle A., Schuster C., Bahr A., Bloecker H., Heubner D.,
+RA   Hoerlein A., Michel G., Wedler H., Koehrer K., Ottenwaelder B., Poustka A.,
+RA   Wiemann S., Schupp I.;
+RT   "The full-ORF clone resource of the German cDNA consortium.";
+RL   BMC Genomics 8:399-399(2007).
+RN   [3]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RA   Mural R.J., Istrail S., Sutton G.G., Florea L., Halpern A.L., Mobarry C.M.,
+RA   Lippert R., Walenz B., Shatkay H., Dew I., Miller J.R., Flanigan M.J.,
+RA   Edwards N.J., Bolanos R., Fasulo D., Halldorsson B.V., Hannenhalli S.,
+RA   Turner R., Yooseph S., Lu F., Nusskern D.R., Shue B.C., Zheng X.H.,
+RA   Zhong F., Delcher A.L., Huson D.H., Kravitz S.A., Mouchard L., Reinert K.,
+RA   Remington K.A., Clark A.G., Waterman M.S., Eichler E.E., Adams M.D.,
+RA   Hunkapiller M.W., Myers E.W., Venter J.C.;
+RL   Submitted (JUL-2005) to the EMBL/GenBank/DDBJ databases.
+RN   [4]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA].
+RC   TISSUE=Testis;
+RX   PubMed=15489334; DOI=10.1101/gr.2596504;
+RG   The MGC Project Team;
+RT   "The status, quality, and expansion of the NIH full-length cDNA project:
+RT   the Mammalian Gene Collection (MGC).";
+RL   Genome Res. 14:2121-2127(2004).
+RN   [5]
+RP   PROTEIN SEQUENCE OF 256-271; 408-414 AND 534-542, AND IDENTIFICATION BY
+RP   MASS SPECTROMETRY.
+RC   TISSUE=Lung carcinoma;
+RA   Bienvenut W.V., Vousden K.H., Lukashchuk N.;
+RL   Submitted (MAR-2008) to UniProtKB.
+RN   [6]
+RP   IDENTIFICATION BY MASS SPECTROMETRY [LARGE SCALE ANALYSIS].
+RC   TISSUE=Cervix carcinoma;
+RX   PubMed=18669648; DOI=10.1073/pnas.0805139105;
+RA   Dephoure N., Zhou C., Villen J., Beausoleil S.A., Bakalarski C.E.,
+RA   Elledge S.J., Gygi S.P.;
+RT   "A quantitative atlas of mitotic phosphorylation.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 105:10762-10767(2008).
+RN   [7]
+RP   ACETYLATION [LARGE SCALE ANALYSIS] AT SER-2, CLEAVAGE OF INITIATOR
+RP   METHIONINE [LARGE SCALE ANALYSIS], AND IDENTIFICATION BY MASS SPECTROMETRY
+RP   [LARGE SCALE ANALYSIS].
+RX   PubMed=19413330; DOI=10.1021/ac9004309;
+RA   Gauci S., Helbig A.O., Slijper M., Krijgsveld J., Heck A.J., Mohammed S.;
+RT   "Lys-N and trypsin cover complementary parts of the phosphoproteome in a
+RT   refined SCX-based approach.";
+RL   Anal. Chem. 81:4493-4501(2009).
+RN   [8]
+RP   PHOSPHORYLATION [LARGE SCALE ANALYSIS] AT SER-23, AND IDENTIFICATION BY
+RP   MASS SPECTROMETRY [LARGE SCALE ANALYSIS].
+RC   TISSUE=Cervix carcinoma;
+RX   PubMed=20068231; DOI=10.1126/scisignal.2000475;
+RA   Olsen J.V., Vermeulen M., Santamaria A., Kumar C., Miller M.L.,
+RA   Jensen L.J., Gnad F., Cox J., Jensen T.S., Nigg E.A., Brunak S., Mann M.;
+RT   "Quantitative phosphoproteomics reveals widespread full phosphorylation
+RT   site occupancy during mitosis.";
+RL   Sci. Signal. 3:RA3-RA3(2010).
+RN   [9]
+RP   IDENTIFICATION BY MASS SPECTROMETRY [LARGE SCALE ANALYSIS].
+RX   PubMed=21269460; DOI=10.1186/1752-0509-5-17;
+RA   Burkard T.R., Planyavsky M., Kaupe I., Breitwieser F.P., Buerckstuemmer T.,
+RA   Bennett K.L., Superti-Furga G., Colinge J.;
+RT   "Initial characterization of the human central proteome.";
+RL   BMC Syst. Biol. 5:17-17(2011).
+RN   [10]
+RP   RNA-BINDING, AND FUNCTION.
+RX   PubMed=22575960; DOI=10.1038/nature11112;
+RA   Dominissini D., Moshitch-Moshkovitz S., Schwartz S., Salmon-Divon M.,
+RA   Ungar L., Osenberg S., Cesarkas K., Jacob-Hirsch J., Amariglio N.,
+RA   Kupiec M., Sorek R., Rechavi G.;
+RT   "Topology of the human and mouse m6A RNA methylomes revealed by m6A-seq.";
+RL   Nature 485:201-206(2012).
+RN   [11]
+RP   ACETYLATION [LARGE SCALE ANALYSIS] AT SER-2, CLEAVAGE OF INITIATOR
+RP   METHIONINE [LARGE SCALE ANALYSIS], AND IDENTIFICATION BY MASS SPECTROMETRY
+RP   [LARGE SCALE ANALYSIS].
+RX   PubMed=22814378; DOI=10.1073/pnas.1210303109;
+RA   Van Damme P., Lasa M., Polevoda B., Gazquez C., Elosegui-Artola A.,
+RA   Kim D.S., De Juan-Pardo E., Demeyer K., Hole K., Larrea E., Timmerman E.,
+RA   Prieto J., Arnesen T., Sherman F., Gevaert K., Aldabe R.;
+RT   "N-terminal acetylome analyses and functional insights of the N-terminal
+RT   acetyltransferase NatB.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 109:12449-12454(2012).
+RN   [12]
+RP   IDENTIFICATION BY MASS SPECTROMETRY [LARGE SCALE ANALYSIS].
+RC   TISSUE=Erythroleukemia;
+RX   PubMed=23186163; DOI=10.1021/pr300630k;
+RA   Zhou H., Di Palma S., Preisinger C., Peng M., Polat A.N., Heck A.J.,
+RA   Mohammed S.;
+RT   "Toward a comprehensive characterization of a human cancer cell
+RT   phosphoproteome.";
+RL   J. Proteome Res. 12:260-271(2013).
+RN   [13]
+RP   RNA-BINDING, AND FUNCTION.
+RX   PubMed=24284625; DOI=10.1038/nature12730;
+RA   Wang X., Lu Z., Gomez A., Hon G.C., Yue Y., Han D., Fu Y., Parisien M.,
+RA   Dai Q., Jia G., Ren B., Pan T., He C.;
+RT   "N-methyladenosine-dependent regulation of messenger RNA stability.";
+RL   Nature 505:117-120(2014).
+RN   [14]
+RP   INDUCTION.
+RX   PubMed=26458103; DOI=10.1038/nature15377;
+RA   Zhou J., Wan J., Gao X., Zhang X., Jaffrey S.R., Qian S.B.;
+RT   "Dynamic m(6)A mRNA methylation directs translational control of heat shock
+RT   response.";
+RL   Nature 526:591-594(2015).
+RN   [15]
+RP   RNA-BINDING, FUNCTION, SUBCELLULAR LOCATION, AND INTERACTION WITH YTHDF1
+RP   AND YTHDF2.
+RX   PubMed=28106072; DOI=10.1038/cr.2017.15;
+RA   Shi H., Wang X., Lu Z., Zhao B.S., Ma H., Hsu P.J., Liu C., He C.;
+RT   "YTHDF3 facilitates translation and decay of N(6)-methyladenosine-modified
+RT   RNA.";
+RL   Cell Res. 27:315-328(2017).
+RN   [16]
+RP   RNA-BINDING, AND FUNCTION.
+RX   PubMed=28106076; DOI=10.1038/cr.2017.10;
+RA   Li A., Chen Y.S., Ping X.L., Yang X., Xiao W., Yang Y., Sun H.Y., Zhu Q.,
+RA   Baidya P., Wang X., Bhattarai D.P., Zhao Y.L., Sun B.F., Yang Y.G.;
+RT   "Cytoplasmic m(6)A reader YTHDF3 promotes mRNA translation.";
+RL   Cell Res. 27:444-447(2017).
+RN   [17]
+RP   RNA-BINDING, AND FUNCTION.
+RX   PubMed=28281539; DOI=10.1038/cr.2017.31;
+RA   Yang Y., Fan X., Mao M., Song X., Wu P., Zhang Y., Jin Y., Yang Y.,
+RA   Chen L., Wang Y., Wong C.C., Xiao X., Wang Z.;
+RT   "Extensive translation of circular RNAs driven by N(6)-methyladenosine.";
+RL   Cell Res. 27:626-641(2017).
+RN   [18]
+RP   FUNCTION.
+RX   PubMed=31388144; DOI=10.1038/s41422-019-0210-3;
+RA   Gao Y., Pei G., Li D., Li R., Shao Y., Zhang Q.C., Li P.;
+RT   "Multivalent m6A motifs promote phase separation of YTHDF proteins.";
+RL   Cell Res. 29:767-769(2019).
+RN   [19]
+RP   FUNCTION, AND DOMAIN.
+RX   PubMed=31292544; DOI=10.1038/s41586-019-1374-1;
+RA   Ries R.J., Zaccara S., Klein P., Olarerin-George A., Namkoong S.,
+RA   Pickering B.F., Patil D.P., Kwak H., Lee J.H., Jaffrey S.R.;
+RT   "m6A enhances the phase separation potential of mRNA.";
+RL   Nature 571:424-428(2019).
+RN   [20]
+RP   FUNCTION, SUBCELLULAR LOCATION, AND INTERACTION WITH THE CCR4-NOT COMPLEX.
+RX   PubMed=32492408; DOI=10.1016/j.cell.2020.05.012;
+RA   Zaccara S., Jaffrey S.R.;
+RT   "A unified model for the function of YTHDF proteins in regulating m6A-
+RT   modified mRNA.";
+RL   Cell 181:1582-1595(2020).
+RN   [21]
+RP   FUNCTION.
+RX   PubMed=32194978; DOI=10.1038/s41421-020-0144-4;
+RA   Zheng Q., Gan H., Yang F., Yao Y., Hao F., Hong L., Jin L.;
+RT   "Cytoplasmic m1A reader YTHDF3 inhibits trophoblast invasion by
+RT   downregulation of m1A-methylated IGF1R.";
+RL   Cell Discov. 6:12-12(2020).
+RN   [22]
+RP   FUNCTION, AND SUBCELLULAR LOCATION.
+RX   PubMed=32451507; DOI=10.1038/s41589-020-0524-y;
+RA   Fu Y., Zhuang X.;
+RT   "m6A-binding YTHDF proteins promote stress granule formation.";
+RL   Nat. Chem. Biol. 16:955-963(2020).
+RN   [23]
+RP   PROTEOLYTIC CLEAVAGE (MICROBIAL INFECTION).
+RX   PubMed=32053707; DOI=10.1371/journal.ppat.1008305;
+RA   Jurczyszak D., Zhang W., Terry S.N., Kehrer T., Bermudez Gonzalez M.C.,
+RA   McGregor E., Mulder L.C.F., Eckwahl M.J., Pan T., Simon V.;
+RT   "HIV protease cleaves the antiviral m6A reader protein YTHDF3 in the viral
+RT   particle.";
+RL   PLoS Pathog. 16:e1008305-e1008305(2020).
+RN   [24] {ECO:0007744|PDB:6ZOT}
+RP   X-RAY CRYSTALLOGRAPHY (2.7 ANGSTROMS) OF 392-571 IN COMPLEX WITH
+RP   N6-METHYLADENOSINE (M6A)-CONTAINING RNA.
+RX   PubMed=33073985; DOI=10.1021/acs.jcim.0c01029;
+RA   Li Y., Bedi R.K., Moroz-Omori E.V., Caflisch A.;
+RT   "Structural and dynamic insights into redundant function of YTHDF
+RT   proteins.";
+RL   J. Chem. Inf. Model. 60:5932-5935(2020).
+CC   -!- FUNCTION: Specifically recognizes and binds N6-methyladenosine (m6A)-
+CC       containing RNAs, and regulates their stability (PubMed:28106072,
+CC       PubMed:28106076, PubMed:28281539, PubMed:32492408). M6A is a
+CC       modification present at internal sites of mRNAs and some non-coding
+CC       RNAs and plays a role in mRNA stability and processing
+CC       (PubMed:22575960, PubMed:24284625, PubMed:28106072, PubMed:28281539,
+CC       PubMed:32492408). Acts as a regulator of mRNA stability by promoting
+CC       degradation of m6A-containing mRNAs via interaction with the CCR4-NOT
+CC       complex or PAN3 (PubMed:32492408). The YTHDF paralogs (YTHDF1, YTHDF2
+CC       and YTHDF3) share m6A-containing mRNAs targets and act redundantly to
+CC       mediate mRNA degradation and cellular differentiation (PubMed:28106072,
+CC       PubMed:28106076, PubMed:32492408). Acts as a negative regulator of type
+CC       I interferon response by down-regulating interferon-stimulated genes
+CC       (ISGs) expression: acts by binding to FOXO3 mRNAs (By similarity).
+CC       Binds to FOXO3 mRNAs independently of METTL3-mediated m6A modification
+CC       (By similarity). Can also act as a regulator of mRNA stability in
+CC       cooperation with YTHDF2 by binding to m6A-containing mRNA and promoting
+CC       their degradation (PubMed:28106072). Recognizes and binds m6A-
+CC       containing circular RNAs (circRNAs); circRNAs are generated through
+CC       back-splicing of pre-mRNAs, a non-canonical splicing process promoted
+CC       by dsRNA structures across circularizing exons (PubMed:28281539).
+CC       Promotes formation of phase-separated membraneless compartments, such
+CC       as P-bodies or stress granules, by undergoing liquid-liquid phase
+CC       separation upon binding to mRNAs containing multiple m6A-modified
+CC       residues: polymethylated mRNAs act as a multivalent scaffold for the
+CC       binding of YTHDF proteins, juxtaposing their disordered regions and
+CC       thereby leading to phase separation (PubMed:31388144, PubMed:31292544,
+CC       PubMed:32451507). The resulting mRNA-YTHDF complexes then partition
+CC       into different endogenous phase-separated membraneless compartments,
+CC       such as P-bodies, stress granules or neuronal RNA granules
+CC       (PubMed:31292544). May also recognize and bind N1-methyladenosine
+CC       (m1A)-containing mRNAs: inhibits trophoblast invasion by binding to
+CC       m1A-methylated transcripts of IGF1R, promoting their degradation
+CC       (PubMed:32194978). {ECO:0000250|UniProtKB:Q8BYK6,
+CC       ECO:0000269|PubMed:22575960, ECO:0000269|PubMed:24284625,
+CC       ECO:0000269|PubMed:28106072, ECO:0000269|PubMed:28106076,
+CC       ECO:0000269|PubMed:28281539, ECO:0000269|PubMed:31292544,
+CC       ECO:0000269|PubMed:31388144, ECO:0000269|PubMed:32194978,
+CC       ECO:0000269|PubMed:32451507, ECO:0000269|PubMed:32492408}.
+CC   -!- FUNCTION: Has some antiviral activity against HIV-1 virus: incorporated
+CC       into HIV-1 particles in a nucleocapsid-dependent manner and reduces
+CC       viral infectivity in the next cycle of infection (PubMed:32053707). May
+CC       interfere with this early step of the viral life cycle by binding to
+CC       N6-methyladenosine (m6A) modified sites on the HIV-1 RNA genome
+CC       (PubMed:32053707). {ECO:0000269|PubMed:32053707}.
+CC   -!- SUBUNIT: Interacts with CNOT1; promoting recruitment of the CCR4-NOT
+CC       complex (PubMed:32492408). Interacts with YTHDF1 (PubMed:28106072).
+CC       Interacts with YTHDF2 (PubMed:28106072). Interacts with PAN3 (By
+CC       similarity). {ECO:0000250|UniProtKB:Q8BYK6,
+CC       ECO:0000269|PubMed:28106072, ECO:0000269|PubMed:32492408}.
+CC   -!- INTERACTION:
+CC       Q7Z739; Q9UNN5: FAF1; NbExp=3; IntAct=EBI-2849837, EBI-718246;
+CC       Q7Z739; PRO_0000038596 [P04591]: gag; Xeno; NbExp=2; IntAct=EBI-2849837, EBI-6179727;
+CC   -!- SUBCELLULAR LOCATION: Cytoplasm, cytosol {ECO:0000269|PubMed:32492408,
+CC       ECO:0000305|PubMed:28106072}. Cytoplasm, P-body
+CC       {ECO:0000269|PubMed:32492408}. Cytoplasm, Stress granule
+CC       {ECO:0000269|PubMed:32451507}.
+CC   -!- INDUCTION: Following heat shock stress. {ECO:0000269|PubMed:26458103}.
+CC   -!- DOMAIN: The disordered regions have the ability to interact with each
+CC       other and to 'phase separate' into liquid droplets within the cytosol
+CC       following binding to mRNAs containing multiple m6A-modified residues
+CC       (PubMed:31292544). This leads to the partition of m6A-containing mRNAs
+CC       into membraneless compartments, where mRNAs may be stored, degraded or
+CC       used to transport mRNAs to dendritic arbors in neurons
+CC       (PubMed:31292544). {ECO:0000269|PubMed:31292544}.
+CC   -!- PTM: (Microbial infection) Proteolytically cleaved by HIV-1 protease
+CC       when incorporated into HIV-1 particles in a nucleocapsid-dependent-
+CC       manner. Cleavage by HIV-1 protease probably ensures optimal infectivity
+CC       of the mature virion. {ECO:0000269|PubMed:32053707}.
+CC   -!- SIMILARITY: Belongs to the YTHDF family. YTHDF3 subfamily.
+CC       {ECO:0000305}.
+CC   -!- CAUTION: Was initially reported to act as a regulator of mRNA
+CC       translation efficiency in cooperation with YTHDF1 by binding to m6A-
+CC       containing mRNAs and interacting with 40S and 60S ribosome subunits
+CC       (PubMed:28106072, PubMed:28106076, PubMed:28281539). These studies
+CC       suggested that the 3 different paralogs (YTHDF1, YTHDF2 and YTHDF3)
+CC       have unique functions with limited redundancy (PubMed:28106072,
+CC       PubMed:28106076, PubMed:28281539). However, later studies showed that
+CC       YTHDF1, YTHDF2 and YTHDF3 paralogs have redundant functions to a
+CC       profound extent and directly promote degradation of m6A-containing
+CC       mRNAs (PubMed:32492408). The effect on translation efficiency observed
+CC       earlier is probably indirect (PubMed:32492408).
+CC       {ECO:0000269|PubMed:28106072, ECO:0000269|PubMed:28106076,
+CC       ECO:0000269|PubMed:28281539, ECO:0000269|PubMed:32492408}.
+CC   -!- WEB RESOURCE: Name=Protein Spotlight; Note=On the benefits of disorder
+CC       - Issue 238 of August 2021;
+CC       URL="https://web.expasy.org/spotlight/back_issues/238/";
+CC   ---------------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see https://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution (CC BY 4.0) License
+CC   ---------------------------------------------------------------------------
+DR   EMBL; AK127574; BAG54526.1; -; mRNA.
+DR   EMBL; AL832005; CAH56224.1; -; mRNA.
+DR   EMBL; BX537996; CAH56480.1; -; mRNA.
+DR   EMBL; CH471068; EAW86867.1; -; Genomic_DNA.
+DR   EMBL; BC052970; AAH52970.1; -; mRNA.
+DR   CCDS; CCDS75747.1; -.
+DR   RefSeq; NP_001264742.1; NM_001277813.1.
+DR   RefSeq; NP_001264743.1; NM_001277814.1.
+DR   RefSeq; NP_001264744.1; NM_001277815.1.
+DR   RefSeq; NP_001264745.1; NM_001277816.1.
+DR   RefSeq; NP_001264746.1; NM_001277817.1.
+DR   RefSeq; NP_001264747.1; NM_001277818.1.
+DR   RefSeq; NP_689971.4; NM_152758.5.
+DR   PDB; 6ZOT; X-ray; 2.70 A; A/B=392-571.
+DR   PDBsum; 6ZOT; -.
+DR   AlphaFoldDB; Q7Z739; -.
+DR   SMR; Q7Z739; -.
+DR   BioGRID; 128997; 226.
+DR   IntAct; Q7Z739; 37.
+DR   MINT; Q7Z739; -.
+DR   STRING; 9606.ENSP00000478490; -.
+DR   GlyConnect; 1905; 4 N-Linked glycans (2 sites), 1 O-Linked glycan (1 site).
+DR   GlyGen; Q7Z739; 15 sites, 3 N-linked glycans (2 sites), 2 O-linked glycans (13 sites).
+DR   iPTMnet; Q7Z739; -.
+DR   MetOSite; Q7Z739; -.
+DR   PhosphoSitePlus; Q7Z739; -.
+DR   BioMuta; YTHDF3; -.
+DR   DMDM; 74738853; -.
+DR   EPD; Q7Z739; -.
+DR   jPOST; Q7Z739; -.
+DR   MassIVE; Q7Z739; -.
+DR   MaxQB; Q7Z739; -.
+DR   PeptideAtlas; Q7Z739; -.
+DR   PRIDE; Q7Z739; -.
+DR   ProteomicsDB; 69483; -.
+DR   Antibodypedia; 24763; 145 antibodies from 22 providers.
+DR   DNASU; 253943; -.
+DR   Ensembl; ENST00000539294.6; ENSP00000473496.2; ENSG00000185728.17.
+DR   GeneID; 253943; -.
+DR   KEGG; hsa:253943; -.
+DR   MANE-Select; ENST00000539294.6; ENSP00000473496.2; NM_152758.6; NP_689971.4.
+DR   UCSC; uc033bnj.2; human.
+DR   CTD; 253943; -.
+DR   DisGeNET; 253943; -.
+DR   GeneCards; YTHDF3; -.
+DR   HGNC; HGNC:26465; YTHDF3.
+DR   HPA; ENSG00000185728; Low tissue specificity.
+DR   MIM; 618669; gene.
+DR   neXtProt; NX_Q7Z739; -.
+DR   OpenTargets; ENSG00000185728; -.
+DR   PharmGKB; PA134976395; -.
+DR   VEuPathDB; HostDB:ENSG00000185728; -.
+DR   eggNOG; KOG1901; Eukaryota.
+DR   GeneTree; ENSGT00940000158777; -.
+DR   HOGENOM; CLU_022715_1_1_1; -.
+DR   InParanoid; Q7Z739; -.
+DR   OMA; GAYRSMG; -.
+DR   OrthoDB; 1523251at2759; -.
+DR   PhylomeDB; Q7Z739; -.
+DR   PathwayCommons; Q7Z739; -.
+DR   SignaLink; Q7Z739; -.
+DR   BioGRID-ORCS; 253943; 9 hits in 264 CRISPR screens.
+DR   ChiTaRS; YTHDF3; human.
+DR   GeneWiki; YTHDF3; -.
+DR   GenomeRNAi; 253943; -.
+DR   Pharos; Q7Z739; Tbio.
+DR   PRO; PR:Q7Z739; -.
+DR   Proteomes; UP000005640; Chromosome 8.
+DR   RNAct; Q7Z739; protein.
+DR   Bgee; ENSG00000185728; Expressed in endothelial cell and 212 other tissues.
+DR   ExpressionAtlas; Q7Z739; baseline and differential.
+DR   Genevisible; Q7Z739; HS.
+DR   GO; GO:0005737; C:cytoplasm; IDA:UniProtKB.
+DR   GO; GO:0010494; C:cytoplasmic stress granule; IDA:UniProtKB.
+DR   GO; GO:0005829; C:cytosol; TAS:UniProtKB.
+DR   GO; GO:0000932; C:P-body; IDA:UniProtKB.
+DR   GO; GO:0003729; F:mRNA binding; IBA:GO_Central.
+DR   GO; GO:1990247; F:N6-methyladenosine-containing RNA binding; IDA:UniProtKB.
+DR   GO; GO:0043022; F:ribosome binding; IDA:UniProtKB.
+DR   GO; GO:0003723; F:RNA binding; IDA:UniProtKB.
+DR   GO; GO:0061157; P:mRNA destabilization; IDA:UniProtKB.
+DR   GO; GO:0060339; P:negative regulation of type I interferon-mediated signaling pathway; ISS:UniProtKB.
+DR   GO; GO:0070925; P:organelle assembly; IDA:UniProtKB.
+DR   GO; GO:0045727; P:positive regulation of translation; IMP:UniProtKB.
+DR   GO; GO:0045948; P:positive regulation of translational initiation; IDA:UniProtKB.
+DR   GO; GO:0043488; P:regulation of mRNA stability; IDA:UniProtKB.
+DR   GO; GO:1901163; P:regulation of trophoblast cell migration; IMP:UniProtKB.
+DR   GO; GO:0034063; P:stress granule assembly; IDA:UniProtKB.
+DR   InterPro; IPR007275; YTH_domain.
+DR   InterPro; IPR045168; YTH_prot.
+DR   PANTHER; PTHR12357; PTHR12357; 1.
+DR   Pfam; PF04146; YTH; 1.
+DR   PROSITE; PS50882; YTH; 1.
+PE   1: Evidence at protein level;
+KW   3D-structure; Acetylation; Cytoplasm; Direct protein sequencing;
+KW   Host-virus interaction; Phosphoprotein; Reference proteome; RNA-binding.
+FT   INIT_MET        1
+FT                   /note="Removed"
+FT                   /evidence="ECO:0007744|PubMed:19413330,
+FT                   ECO:0007744|PubMed:22814378"
+FT   CHAIN           2..585
+FT                   /note="YTH domain-containing family protein 3"
+FT                   /id="PRO_0000230991"
+FT   DOMAIN          416..550
+FT                   /note="YTH"
+FT                   /evidence="ECO:0000255|PROSITE-ProRule:PRU00225"
+FT   REGION          1..52
+FT                   /note="Disordered"
+FT                   /evidence="ECO:0000256|SAM:MobiDB-lite"
+FT   REGION          243..277
+FT                   /note="Disordered"
+FT                   /evidence="ECO:0000256|SAM:MobiDB-lite"
+FT   REGION          304..351
+FT                   /note="Disordered"
+FT                   /evidence="ECO:0000256|SAM:MobiDB-lite"
+FT   COMPBIAS        1..26
+FT                   /note="Polar residues"
+FT                   /evidence="ECO:0000256|SAM:MobiDB-lite"
+FT   COMPBIAS        36..52
+FT                   /note="Polar residues"
+FT                   /evidence="ECO:0000256|SAM:MobiDB-lite"
+FT   COMPBIAS        304..333
+FT                   /note="Pro residues"
+FT                   /evidence="ECO:0000256|SAM:MobiDB-lite"
+FT   COMPBIAS        334..351
+FT                   /note="Polar residues"
+FT                   /evidence="ECO:0000256|SAM:MobiDB-lite"
+FT   BINDING         422..424
+FT                   /ligand="RNA"
+FT                   /ligand_id="ChEBI:CHEBI:33697"
+FT                   /ligand_part="N(6)-methyladenosine 5'-phosphate residue"
+FT                   /ligand_part_id="ChEBI:CHEBI:74449"
+FT                   /evidence="ECO:0000269|PubMed:33073985,
+FT                   ECO:0007744|PDB:6ZOT"
+FT   BINDING         428
+FT                   /ligand="RNA"
+FT                   /ligand_id="ChEBI:CHEBI:33697"
+FT                   /ligand_part="N(6)-methyladenosine 5'-phosphate residue"
+FT                   /ligand_part_id="ChEBI:CHEBI:74449"
+FT                   /evidence="ECO:0000250|UniProtKB:Q9Y5A9"
+FT   BINDING         438..439
+FT                   /ligand="RNA"
+FT                   /ligand_id="ChEBI:CHEBI:33697"
+FT                   /ligand_part="N(6)-methyladenosine 5'-phosphate residue"
+FT                   /ligand_part_id="ChEBI:CHEBI:74449"
+FT                   /evidence="ECO:0000269|PubMed:33073985,
+FT                   ECO:0007744|PDB:6ZOT"
+FT   BINDING         468
+FT                   /ligand="RNA"
+FT                   /ligand_id="ChEBI:CHEBI:33697"
+FT                   /ligand_part="N(6)-methyladenosine 5'-phosphate residue"
+FT                   /ligand_part_id="ChEBI:CHEBI:74449"
+FT                   /evidence="ECO:0000250|UniProtKB:Q9Y5A9"
+FT   BINDING         492
+FT                   /ligand="RNA"
+FT                   /ligand_id="ChEBI:CHEBI:33697"
+FT                   /ligand_part="N(6)-methyladenosine 5'-phosphate residue"
+FT                   /ligand_part_id="ChEBI:CHEBI:74449"
+FT                   /evidence="ECO:0000269|PubMed:33073985,
+FT                   ECO:0007744|PDB:6ZOT"
+FT   BINDING         497
+FT                   /ligand="RNA"
+FT                   /ligand_id="ChEBI:CHEBI:33697"
+FT                   /ligand_part="N(6)-methyladenosine 5'-phosphate residue"
+FT                   /ligand_part_id="ChEBI:CHEBI:74449"
+FT                   /evidence="ECO:0000269|PubMed:33073985,
+FT                   ECO:0007744|PDB:6ZOT"
+FT   SITE            157..158
+FT                   /note="(Microbial infection) Cleavage; by HIV-1 protease"
+FT                   /evidence="ECO:0000269|PubMed:32053707"
+FT   SITE            538..539
+FT                   /note="(Microbial infection) Cleavage; by HIV-1 protease"
+FT                   /evidence="ECO:0000305|PubMed:32053707"
+FT   SITE            570..571
+FT                   /note="(Microbial infection) Cleavage; by HIV-1 protease"
+FT                   /evidence="ECO:0000305|PubMed:32053707"
+FT   MOD_RES         2
+FT                   /note="N-acetylserine"
+FT                   /evidence="ECO:0007744|PubMed:19413330,
+FT                   ECO:0007744|PubMed:22814378"
+FT   MOD_RES         23
+FT                   /note="Phosphoserine"
+FT                   /evidence="ECO:0007744|PubMed:20068231"
+FT   CONFLICT        139
+FT                   /note="S -> R (in Ref. 2; CAH56224)"
+FT                   /evidence="ECO:0000305"
+FT   CONFLICT        381
+FT                   /note="P -> S (in Ref. 2; CAH56224)"
+FT                   /evidence="ECO:0000305"
+FT   CONFLICT        532
+FT                   /note="S -> P (in Ref. 2; CAH56480)"
+FT                   /evidence="ECO:0000305"
+FT   HELIX           393..401
+FT                   /evidence="ECO:0007829|PDB:6ZOT"
+FT   STRAND          417..425
+FT                   /evidence="ECO:0007829|PDB:6ZOT"
+FT   HELIX           426..435
+FT                   /evidence="ECO:0007829|PDB:6ZOT"
+FT   HELIX           442..455
+FT                   /evidence="ECO:0007829|PDB:6ZOT"
+FT   STRAND          461..467
+FT                   /evidence="ECO:0007829|PDB:6ZOT"
+FT   STRAND          470..479
+FT                   /evidence="ECO:0007829|PDB:6ZOT"
+FT   STRAND          484..486
+FT                   /evidence="ECO:0007829|PDB:6ZOT"
+FT   STRAND          492..494
+FT                   /evidence="ECO:0007829|PDB:6ZOT"
+FT   STRAND          500..512
+FT                   /evidence="ECO:0007829|PDB:6ZOT"
+FT   HELIX           513..515
+FT                   /evidence="ECO:0007829|PDB:6ZOT"
+FT   TURN            516..518
+FT                   /evidence="ECO:0007829|PDB:6ZOT"
+FT   TURN            522..525
+FT                   /evidence="ECO:0007829|PDB:6ZOT"
+FT   HELIX           529..531
+FT                   /evidence="ECO:0007829|PDB:6ZOT"
+FT   HELIX           540..552
+FT                   /evidence="ECO:0007829|PDB:6ZOT"
+FT   HELIX           559..562
+FT                   /evidence="ECO:0007829|PDB:6ZOT"
+FT   HELIX           563..568
+FT                   /evidence="ECO:0007829|PDB:6ZOT"
+SQ   SEQUENCE   585 AA;  63861 MW;  C7021FE48DEA441E CRC64;
+     MSATSVDQRP KGQGNKVSVQ NGSIHQKDAV NDDDFEPYLS SQTNQSNSYP PMSDPYMPSY
+     YAPSIGFPYS LGEAAWSTAG DQPMPYLTTY GQMSNGEHHY IPDGVFSQPG ALGNTPPFLG
+     QHGFNFFPGN ADFSTWGTSG SQGQSTQSSA YSSSYGYPPS SLGRAITDGQ AGFGNDTLSK
+     VPGISSIEQG MTGLKIGGDL TAAVTKTVGT ALSSSGMTSI ATNSVPPVSS AAPKPTSWAA
+     IARKPAKPQP KLKPKGNVGI GGSAVPPPPI KHNMNIGTWD EKGSVVKAPP TQPVLPPQTI
+     IQQPQPLIQP PPLVQSQLPQ QQPQPPQPQQ QQGPQPQAQP HQVQPQQQQL QNRWVAPRNR
+     GAGFNQNNGA GSENFGLGVV PVSASPSSVE VHPVLEKLKA INNYNPKDFD WNLKNGRVFI
+     IKSYSEDDIH RSIKYSIWCS TEHGNKRLDA AYRSLNGKGP LYLLFSVNGS GHFCGVAEMK
+     SVVDYNAYAG VWSQDKWKGK FEVKWIFVKD VPNNQLRHIR LENNDNKPVT NSRDTQEVPL
+     EKAKQVLKII ATFKHTTSIF DDFAHYEKRQ EEEEAMRRER NRNKQ
+//

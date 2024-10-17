@@ -137,7 +137,6 @@ class SequentialAlignmentWriter(AlignmentWriter):
         This method should be replaced by any derived class to do something
         useful.
         """
-        pass
 
     def write_footer(self):
         """Use this to write any footer.
@@ -145,7 +144,6 @@ class SequentialAlignmentWriter(AlignmentWriter):
         This method should be replaced by any derived class to do something
         useful.
         """
-        pass
 
     def write_alignment(self, alignment):
         """Use this to write a single alignment.

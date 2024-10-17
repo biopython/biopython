@@ -83,9 +83,19 @@ Note that while Bio.phenotype can read the above file formats, it can only
 write in JSON format.
 """
 
-from Bio.File import as_handle
-from . import phen_micro
+try:
+    # Both phen_micro.py and pm_fitting require NumPy, so require NumPy here
+    import numpy as np
+except ImportError:
+    from Bio import MissingPythonDependencyError
 
+    raise MissingPythonDependencyError(
+        "Please install NumPy if you want to use Bio.phenotype. "
+        "See http://www.numpy.org/"
+    ) from None
+
+from Bio.File import as_handle
+from Bio.phenotype import phen_micro
 
 # Convention for format names is "mainname-format" in lower case.
 
@@ -226,3 +236,9 @@ def read(handle, format):
     if second is not None:
         raise ValueError("More than one record found in handle")
     return first
+
+
+if __name__ == "__main__":
+    from Bio._utils import run_doctest
+
+    run_doctest()

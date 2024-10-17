@@ -6,7 +6,6 @@
 # package.
 """Information about the IUPAC alphabets."""
 
-
 protein_letters = "ACDEFGHIKLMNPQRSTVWY"
 extended_protein_letters = "ACDEFGHIKLMNPQRSTVWYBXZJUO"
 #   B = "Asx";  aspartic acid or asparagine (D or N)

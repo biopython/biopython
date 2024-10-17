@@ -13,14 +13,12 @@
 
 """Unit tests for the Bio.PDB PDBParser module."""
 
-from io import StringIO
-import os
-import tempfile
 import unittest
 import warnings
+from io import StringIO
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
     from Bio import MissingPythonDependencyError
 
@@ -28,9 +26,9 @@ except ImportError:
         "Install NumPy if you want to use Bio.PDB."
     ) from None
 
-from Bio import BiopythonWarning
 from Bio.PDB import PDBParser
-from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarning
+from Bio.PDB.PDBExceptions import PDBConstructionException
+from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
 
 class FlawedPDB_tests(unittest.TestCase):
@@ -64,7 +62,7 @@ class FlawedPDB_tests(unittest.TestCase):
                     "Atom N defined twice in residue <Residue ARG het=  resseq=2 icode= > at line 22.",
                     "disordered atom found with blank altloc before line 34.",
                     "Residue (' ', 4, ' ') redefined at line 44.",
-                    "Blank altlocs in duplicate residue SER (' ', 4, ' ') at line 44.",
+                    "Blank altlocs in duplicate residue SER (' ', 4, ' ') of chain 'A' at line 44.",
                     "Residue (' ', 10, ' ') redefined at line 76.",
                     "Residue (' ', 14, ' ') redefined at line 107.",
                     "Residue (' ', 16, ' ') redefined at line 136.",

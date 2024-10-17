@@ -12,7 +12,8 @@ import re
 import shutil
 import tempfile
 
-from Bio.Application import AbstractCommandline, _Argument
+from Bio.Application import _Argument
+from Bio.Application import AbstractCommandline
 
 
 def _gp_float(tok):
@@ -323,7 +324,7 @@ class GenePopController:
     ):
         """Use Hardy-Weinberg test for heterozygote deficiency.
 
-        Returns a population iterator containing a dictionary wehre
+        Returns a population iterator containing a dictionary where
         dictionary[locus]=(P-val, SE, Fis-WC, Fis-RH, steps).
 
         Some loci have a None if the info is not available.

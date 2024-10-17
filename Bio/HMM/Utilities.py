@@ -11,6 +11,17 @@ This just collects general functions which you might like to use in
 dealing with HMMs.
 """
 
+import warnings
+
+from Bio import BiopythonDeprecationWarning
+
+warnings.warn(
+    "The 'Bio.HMM.Utilities' module is deprecated and will be "
+    "removed in a future release of Biopython. Consider using the "
+    "hmmlearn package instead.",
+    BiopythonDeprecationWarning,
+)
+
 
 def pretty_print_prediction(
     emissions,

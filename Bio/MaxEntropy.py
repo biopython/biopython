@@ -10,16 +10,27 @@ Uses Improved Iterative Scaling.
 """
 # TODO Define terminology
 
+import warnings
 from functools import reduce
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
     from Bio import MissingPythonDependencyError
 
     raise MissingPythonDependencyError(
-        "Install NumPy if you want to use Bio.MaxEntropy."
-    )
+        "Please install NumPy if you want to use Bio.MaxEntropy. "
+        "See http://www.numpy.org/"
+    ) from None
+
+
+from Bio import BiopythonDeprecationWarning
+
+warnings.warn(
+    "The 'Bio.MaxEntropy' module is deprecated and will be removed in a future "
+    "release of Biopython. Consider using scikit-learn instead.",
+    BiopythonDeprecationWarning,
+)
 
 
 class MaxEntropy:
@@ -146,7 +157,7 @@ def _calc_empirical_expects(xs, ys, classes, features):
         s = 0
         for i in range(N):
             s += feature.get((i, ys_i[i]), 0)
-        expect.append(float(s) / N)
+        expect.append(s / N)
     return expect
 
 
@@ -175,7 +186,7 @@ def _calc_p_class_given_x(xs, classes, features, alphas):
     y is the class and x is an instance from the training set.
     Return a XSxCLASSES matrix of probabilities.
     """
-    prob_yx = numpy.zeros((len(xs), len(classes)))
+    prob_yx = np.zeros((len(xs), len(classes)))
 
     # Calculate log P(y, x).
     assert len(features) == len(alphas)
@@ -183,7 +194,7 @@ def _calc_p_class_given_x(xs, classes, features, alphas):
         for (x, y), f in feature.items():
             prob_yx[x][y] += alpha * f
     # Take an exponent to get P(y, x)
-    prob_yx = numpy.exp(prob_yx)
+    prob_yx = np.exp(prob_yx)
     # Divide out the probability over each class, so we get P(y|x).
     for i in range(len(xs)):
         z = sum(prob_yx[i])
@@ -194,7 +205,7 @@ def _calc_p_class_given_x(xs, classes, features, alphas):
 def _calc_f_sharp(N, nclasses, features):
     """Calculate a matrix of f sharp values (PRIVATE)."""
     # f#(x, y) = SUM_i feature(x, y)
-    f_sharp = numpy.zeros((N, nclasses))
+    f_sharp = np.zeros((N, nclasses))
     for feature in features:
         for (i, j), f in feature.items():
             f_sharp[i][j] += f
@@ -211,14 +222,14 @@ def _iis_solve_delta(
     while iters < max_newton_iterations:  # iterate for Newton's method
         f_newton = df_newton = 0.0  # evaluate the function and derivative
         for (i, j), f in feature.items():
-            prod = prob_yx[i][j] * f * numpy.exp(delta * f_sharp[i][j])
+            prod = prob_yx[i][j] * f * np.exp(delta * f_sharp[i][j])
             f_newton += prod
             df_newton += prod * f_sharp[i][j]
         f_newton, df_newton = empirical - f_newton / N, -df_newton / N
 
         ratio = f_newton / df_newton
         delta -= ratio
-        if numpy.fabs(ratio) < newton_converge:  # converged
+        if np.fabs(ratio) < newton_converge:  # converged
             break
         iters = iters + 1
     else:
@@ -317,8 +328,8 @@ def train(
             max_newton_iterations,
             newton_converge,
         )
-        diff = [numpy.fabs(x - y) for x, y in zip(alphas, nalphas)]
-        diff = reduce(numpy.add, diff, 0)
+        diff = [np.fabs(x - y) for x, y in zip(alphas, nalphas)]
+        diff = reduce(np.add, diff, 0)
         alphas = nalphas
 
         me = MaxEntropy()

@@ -7,10 +7,16 @@
 
 import os
 import unittest
+import warnings
 
-from Bio import Phylo
-from Bio.Phylo.Applications import RaxmlCommandline
+from Bio import BiopythonDeprecationWarning
 from Bio import MissingExternalDependencyError
+from Bio import Phylo
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
+    from Bio.Phylo.Applications import RaxmlCommandline
+
 
 raxml_exe = None
 try:

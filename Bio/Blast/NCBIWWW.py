@@ -12,24 +12,36 @@
 
 This module provides code to work with the WWW version of BLAST
 provided by the NCBI. https://blast.ncbi.nlm.nih.gov/
+
+Variables:
+
+    - email        Set the Blast email parameter (default is None).
+    - tool         Set the Blast tool parameter (default is ``biopython``).
+
 """
 
-
-import warnings
-
-from io import StringIO
 import time
-
-from urllib.request import urlopen
+import warnings
+from io import StringIO
 from urllib.parse import urlencode
+from urllib.request import build_opener
+from urllib.request import HTTPBasicAuthHandler
+from urllib.request import HTTPPasswordMgrWithDefaultRealm
+from urllib.request import install_opener
 from urllib.request import Request
+from urllib.request import urlopen
 
 from Bio import BiopythonWarning
+from Bio._utils import function_with_previous
+
+email = None
+tool = "biopython"
 
 
 NCBI_BLAST_URL = "https://blast.ncbi.nlm.nih.gov/Blast.cgi"
 
 
+@function_with_previous
 def qblast(
     program,
     database,
@@ -79,22 +91,18 @@ def qblast(
     megablast=None,
     template_type=None,
     template_length=None,
+    username="blast",
+    password=None,
 ):
-    """BLAST search using NCBI's QBLAST server or a cloud service provider.
+    """BLAST search using NCBI's QBLAST server.
 
     Supports all parameters of the old qblast API for Put and Get.
 
     Please note that NCBI uses the new Common URL API for BLAST searches
-    on the internet (http://ncbi.github.io/blast-cloud/dev/api.html). Thus,
-    some of the parameters used by this function are not (or are no longer)
+    on the internet (https://blast.ncbi.nlm.nih.gov/doc/blast-help/urlapi.html).
+    Thus, some of the parameters used by this function are not (or are no longer)
     officially supported by NCBI. Although they are still functioning, this
     may change in the future.
-
-    The Common URL API (http://ncbi.github.io/blast-cloud/dev/api.html) allows
-    doing BLAST searches on cloud servers. To use this feature, please set
-    ``url_base='http://host.my.cloud.service.provider.com/cgi-bin/blast.cgi'``
-    and ``format_object='Alignment'``. For more details, please see
-    https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=CloudBlast
 
     Some useful parameters:
 
@@ -108,7 +116,7 @@ def qblast(
      - matrix_name    Specify an alt. matrix (PAM30, PAM70, BLOSUM80, BLOSUM45).
      - filter         "none" turns off filtering.  Default no filtering
      - format_type    "HTML", "Text", "ASN.1", or "XML".  Def. "XML".
-     - entrez_query   Entrez query to limit Blast search
+     - entrez_query   Entrez query to limit Blast search - only applies when searching nucleotide BLASTDBs
      - hitlist_size   Number of hits to return. Default 50
      - megablast      TRUE/FALSE whether to use MEga BLAST algorithm (blastn only)
      - short_query    TRUE/FALSE whether to adjust the search parameters for a
@@ -119,7 +127,7 @@ def qblast(
 
     This function does no checking of the validity of the parameters
     and passes the values to the server as is.  More help is available at:
-    https://ncbi.github.io/blast-cloud/dev/api.html
+    https://blast.ncbi.nlm.nih.gov/doc/blast-help/urlapi.html
 
     """
     programs = ["blastn", "blastp", "blastx", "tblastn", "tblastx"]
@@ -152,78 +160,88 @@ def qblast(
     # Additional parameters are taken from http://www.ncbi.nlm.nih.gov/BLAST/Doc/node9.html on 8 Oct 2010
     # To perform a PSI-BLAST or PHI-BLAST search the service ("Put" and "Get" commands) must be specified
     # (e.g. psi_blast = NCBIWWW.qblast("blastp", "refseq_protein", input_sequence, service="psi"))
-    parameters = [
-        ("AUTO_FORMAT", auto_format),
-        ("COMPOSITION_BASED_STATISTICS", composition_based_statistics),
-        ("DATABASE", database),
-        ("DB_GENETIC_CODE", db_genetic_code),
-        ("ENDPOINTS", endpoints),
-        ("ENTREZ_QUERY", entrez_query),
-        ("EXPECT", expect),
-        ("FILTER", filter),
-        ("GAPCOSTS", gapcosts),
-        ("GENETIC_CODE", genetic_code),
-        ("HITLIST_SIZE", hitlist_size),
-        ("I_THRESH", i_thresh),
-        ("LAYOUT", layout),
-        ("LCASE_MASK", lcase_mask),
-        ("MEGABLAST", megablast),
-        ("MATRIX_NAME", matrix_name),
-        ("NUCL_PENALTY", nucl_penalty),
-        ("NUCL_REWARD", nucl_reward),
-        ("OTHER_ADVANCED", other_advanced),
-        ("PERC_IDENT", perc_ident),
-        ("PHI_PATTERN", phi_pattern),
-        ("PROGRAM", program),
-        # ('PSSM',pssm), - It is possible to use PSI-BLAST via this API?
-        ("QUERY", sequence),
-        ("QUERY_FILE", query_file),
-        ("QUERY_BELIEVE_DEFLINE", query_believe_defline),
-        ("QUERY_FROM", query_from),
-        ("QUERY_TO", query_to),
-        # ('RESULTS_FILE',...), - Can we use this parameter?
-        ("SEARCHSP_EFF", searchsp_eff),
-        ("SERVICE", service),
-        ("SHORT_QUERY_ADJUST", short_query),
-        ("TEMPLATE_TYPE", template_type),
-        ("TEMPLATE_LENGTH", template_length),
-        ("THRESHOLD", threshold),
-        ("UNGAPPED_ALIGNMENT", ungapped_alignment),
-        ("WORD_SIZE", word_size),
-        ("CMD", "Put"),
-    ]
-    query = [x for x in parameters if x[1] is not None]
-    message = urlencode(query).encode()
+    parameters = {
+        "AUTO_FORMAT": auto_format,
+        "COMPOSITION_BASED_STATISTICS": composition_based_statistics,
+        "DATABASE": database,
+        "DB_GENETIC_CODE": db_genetic_code,
+        "ENDPOINTS": endpoints,
+        "ENTREZ_QUERY": entrez_query,
+        "EXPECT": expect,
+        "FILTER": filter,
+        "GAPCOSTS": gapcosts,
+        "GENETIC_CODE": genetic_code,
+        "HITLIST_SIZE": hitlist_size,
+        "I_THRESH": i_thresh,
+        "LAYOUT": layout,
+        "LCASE_MASK": lcase_mask,
+        "MEGABLAST": megablast,
+        "MATRIX_NAME": matrix_name,
+        "NUCL_PENALTY": nucl_penalty,
+        "NUCL_REWARD": nucl_reward,
+        "OTHER_ADVANCED": other_advanced,
+        "PERC_IDENT": perc_ident,
+        "PHI_PATTERN": phi_pattern,
+        "PROGRAM": program,
+        # ('PSSM': pssm: - It is possible to use PSI-BLAST via this API?
+        "QUERY": sequence,
+        "QUERY_FILE": query_file,
+        "QUERY_BELIEVE_DEFLINE": query_believe_defline,
+        "QUERY_FROM": query_from,
+        "QUERY_TO": query_to,
+        # 'RESULTS_FILE': ...: - Can we use this parameter?
+        "SEARCHSP_EFF": searchsp_eff,
+        "SERVICE": service,
+        "SHORT_QUERY_ADJUST": short_query,
+        "TEMPLATE_TYPE": template_type,
+        "TEMPLATE_LENGTH": template_length,
+        "THRESHOLD": threshold,
+        "UNGAPPED_ALIGNMENT": ungapped_alignment,
+        "WORD_SIZE": word_size,
+        "CMD": "Put",
+    }
 
+    if password is not None:
+        # handle authentication for BLAST cloud
+        password_mgr = HTTPPasswordMgrWithDefaultRealm()
+        password_mgr.add_password(None, url_base, username, password)
+        handler = HTTPBasicAuthHandler(password_mgr)
+        opener = build_opener(handler)
+        install_opener(opener)
+
+    if url_base == NCBI_BLAST_URL:
+        parameters.update({"email": email, "tool": tool})
+    parameters = {key: value for key, value in parameters.items() if value is not None}
+    message = urlencode(parameters).encode()
+    request = Request(url_base, message, {"User-Agent": "BiopythonClient"})
     # Send off the initial query to qblast.
     # Note the NCBI do not currently impose a rate limit here, other
     # than the request not to make say 50 queries at once using multiple
     # threads.
-    request = Request(url_base, message, {"User-Agent": "BiopythonClient"})
     handle = urlopen(request)
 
     # Format the "Get" command, which gets the formatted results from qblast
     # Parameters taken from http://www.ncbi.nlm.nih.gov/BLAST/Doc/node6.html on 9 July 2007
     rid, rtoe = _parse_qblast_ref_page(handle)
-    parameters = [
-        ("ALIGNMENTS", alignments),
-        ("ALIGNMENT_VIEW", alignment_view),
-        ("DESCRIPTIONS", descriptions),
-        ("ENTREZ_LINKS_NEW_WINDOW", entrez_links_new_window),
-        ("EXPECT_LOW", expect_low),
-        ("EXPECT_HIGH", expect_high),
-        ("FORMAT_ENTREZ_QUERY", format_entrez_query),
-        ("FORMAT_OBJECT", format_object),
-        ("FORMAT_TYPE", format_type),
-        ("NCBI_GI", ncbi_gi),
-        ("RID", rid),
-        ("RESULTS_FILE", results_file),
-        ("SERVICE", service),
-        ("SHOW_OVERVIEW", show_overview),
-        ("CMD", "Get"),
-    ]
-    query = [x for x in parameters if x[1] is not None]
-    message = urlencode(query).encode()
+    parameters = {
+        "ALIGNMENTS": alignments,
+        "ALIGNMENT_VIEW": alignment_view,
+        "DESCRIPTIONS": descriptions,
+        "ENTREZ_LINKS_NEW_WINDOW": entrez_links_new_window,
+        "EXPECT_LOW": expect_low,
+        "EXPECT_HIGH": expect_high,
+        "FORMAT_ENTREZ_QUERY": format_entrez_query,
+        "FORMAT_OBJECT": format_object,
+        "FORMAT_TYPE": format_type,
+        "NCBI_GI": ncbi_gi,
+        "RID": rid,
+        "RESULTS_FILE": results_file,
+        "SERVICE": service,
+        "SHOW_OVERVIEW": show_overview,
+        "CMD": "Get",
+    }
+    parameters = {key: value for key, value in parameters.items() if value is not None}
+    message = urlencode(parameters).encode()
 
     # Poll NCBI until the results are ready.
     # https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=DeveloperInfo
@@ -238,18 +256,26 @@ def qblast(
     # will take longer thus at least 70s with delay. Therefore,
     # start with 20s delay, thereafter once a minute.
     delay = 20  # seconds
+    start_time = time.time()
     while True:
         current = time.time()
-        wait = qblast._previous + delay - current
+        wait = qblast.previous + delay - current
         if wait > 0:
             time.sleep(wait)
-            qblast._previous = current + wait
+            qblast.previous = current + wait
         else:
-            qblast._previous = current
+            qblast.previous = current
         # delay by at least 60 seconds only if running the request against the public NCBI API
         if delay < 60 and url_base == NCBI_BLAST_URL:
             # Wasn't a quick return, must wait at least a minute
             delay = 60
+        elapsed = time.time() - start_time
+        # Throw a warning if search takes longer than ten minutes
+        if elapsed >= 600:
+            warnings.warn(
+                f"BLAST request {rid} is taking longer than 10 minutes, consider re-issuing it",
+                BiopythonWarning,
+            )
 
         request = Request(url_base, message, {"User-Agent": "BiopythonClient"})
         handle = urlopen(request)
@@ -270,7 +296,7 @@ def qblast(
     return StringIO(results)
 
 
-qblast._previous = 0
+qblast.previous = 0
 
 
 def _parse_qblast_ref_page(handle):

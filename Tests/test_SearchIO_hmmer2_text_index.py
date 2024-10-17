@@ -8,11 +8,11 @@
 import os
 import unittest
 
-from search_tests_common import CheckRaw, CheckIndex
+from search_tests_common import CheckIndex
+from search_tests_common import CheckRaw
 
 
 class Hmmer2TextRawCases(CheckRaw):
-
     fmt = "hmmer2-text"
 
     def test_hmmer2text_22_single_hmmsearch(self):
@@ -478,7 +478,6 @@ TFIIB: domain 1 of 1, from 253 to 268: score 2.6, E = 6.1
 
 
 class Hmmer2TextIndexCases(CheckIndex):
-
     fmt = "hmmer2-text"
 
     def test_hmmertext_text_21_hmmpfam_001(self):

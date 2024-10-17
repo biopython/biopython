@@ -15,9 +15,10 @@ Classes:
  - Record - A representation of a KEGG Ligand/Compound.
 """
 
-
-from Bio.KEGG import _default_wrap, _struct_wrap, _wrap_kegg, _write_kegg
-
+from Bio.KEGG import _default_wrap
+from Bio.KEGG import _struct_wrap
+from Bio.KEGG import _wrap_kegg
+from Bio.KEGG import _write_kegg
 
 # Set up line wrapping rules (see Bio.KEGG._wrap_kegg)
 name_wrap = [0, "", (" ", "$", 1, 1), ("-", "$", 1, 1)]
@@ -70,7 +71,7 @@ class Record:
 
     def _name(self):
         return _write_kegg(
-            "NAME", [_wrap_kegg(l, wrap_rule=name_wrap) for l in self.name]
+            "NAME", [_wrap_kegg(line, wrap_rule=name_wrap) for line in self.name]
         )
 
     def _formula(self):
@@ -83,11 +84,13 @@ class Record:
         s = []
         for entry in self.pathway:
             s.append(entry[0] + "  " + entry[1])
-        return _write_kegg("PATHWAY", [_wrap_kegg(l, wrap_rule=id_wrap(16)) for l in s])
+        return _write_kegg(
+            "PATHWAY", [_wrap_kegg(line, wrap_rule=id_wrap(16)) for line in s]
+        )
 
     def _enzyme(self):
         return _write_kegg(
-            "ENZYME", [_wrap_kegg(l, wrap_rule=name_wrap) for l in self.enzyme]
+            "ENZYME", [_wrap_kegg(line, wrap_rule=name_wrap) for line in self.enzyme]
         )
 
     def _structures(self):
@@ -95,14 +98,16 @@ class Record:
         for entry in self.structures:
             s.append(entry[0] + ": " + "  ".join(entry[1]) + "  ")
         return _write_kegg(
-            "STRUCTURES", [_wrap_kegg(l, wrap_rule=struct_wrap(5)) for l in s]
+            "STRUCTURES", [_wrap_kegg(line, wrap_rule=struct_wrap(5)) for line in s]
         )
 
     def _dblinks(self):
         s = []
         for entry in self.dblinks:
             s.append(entry[0] + ": " + " ".join(entry[1]))
-        return _write_kegg("DBLINKS", [_wrap_kegg(l, wrap_rule=id_wrap(9)) for l in s])
+        return _write_kegg(
+            "DBLINKS", [_wrap_kegg(line, wrap_rule=id_wrap(9)) for line in s]
+        )
 
 
 def parse(handle):

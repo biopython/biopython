@@ -8,9 +8,9 @@
 """Tests for the Bio.phenotype module."""
 
 try:
-    import numpy
+    import numpy as np
 
-    del numpy
+    del np
 except ImportError:
     from Bio import MissingExternalDependencyError
 
@@ -20,12 +20,10 @@ except ImportError:
 
 import json
 import unittest
-
+import warnings
 from io import StringIO
 
 from Bio import BiopythonExperimentalWarning
-
-import warnings
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore", BiopythonExperimentalWarning)
@@ -317,15 +315,17 @@ class TestPhenoMicro(unittest.TestCase):
         handle = StringIO(
             '{"csv_data": {"Plate Type": "PM-999"}, "measurements": {"Hour": 9}}'
         )
-        for w in phenotype.phen_micro.JsonIterator(handle):
-            self.assertEqual(w.id, "PM999")
+        with self.assertWarnsRegex(UserWarning, "PM-999"):
+            for w in phenotype.phen_micro.JsonIterator(handle):
+                self.assertEqual(w.id, "PM999")
 
     def test_CsvIterator(self):
         """Test basic functionalities of CsvIterator file parser."""
         # Parse file content big enough to trigger issue #3783
         handle = StringIO('"Data File",3\n"Plate Type",PM-33\n')
-        for w in phenotype.phen_micro.CsvIterator(handle):
-            self.assertEqual(w.id, "PM33")
+        with self.assertWarnsRegex(UserWarning, "PM-33"):
+            for w in phenotype.phen_micro.CsvIterator(handle):
+                self.assertEqual(w.id, "PM33")
 
 
 if __name__ == "__main__":

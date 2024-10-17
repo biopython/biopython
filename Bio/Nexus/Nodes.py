@@ -16,37 +16,35 @@ Subclassed by Nexus.Trees to store phylogenetic trees.
 Bug reports to Frank Kauff (fkauff@biologie.uni-kl.de)
 """
 
+from typing import Optional
+
 
 class ChainException(Exception):
     """Provision for the management of Chain exceptions."""
-
-    pass
 
 
 class NodeException(Exception):
     """Provision for the management of Node exceptions."""
 
-    pass
-
 
 class Chain:
     """Stores a list of nodes that are linked together."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize a node chain."""
-        self.chain = {}
+        self.chain: dict[int, Node] = {}
         self.id = -1
 
-    def _get_id(self):
+    def _get_id(self) -> int:
         """Get a new id for a node in the chain (PRIVATE)."""
         self.id += 1
         return self.id
 
-    def all_ids(self):
+    def all_ids(self) -> list[int]:
         """Return a list of all node ids."""
         return list(self.chain.keys())
 
-    def add(self, node, prev=None):
+    def add(self, node: "Node", prev: Optional[int] = None) -> int:
         """Attach node to another."""
         if prev is not None and prev not in self.chain:
             raise ChainException("Unknown predecessor: " + str(prev))

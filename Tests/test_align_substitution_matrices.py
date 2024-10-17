@@ -5,9 +5,7 @@
 """Tests for Array in the Bio.Align.substitution_matrices module."""
 
 try:
-    import numpy
-
-    del numpy
+    import numpy as np
 except ImportError:
     from Bio import MissingExternalDependencyError
 
@@ -18,14 +16,11 @@ except ImportError:
 
 import os
 import pickle
-from collections import Counter
 import unittest
+from collections import Counter
 
-
-import numpy
 from Bio import SeqIO
 from Bio.Align import substitution_matrices
-
 from Bio.Data import IUPACData
 
 nucleotide_alphabet = IUPACData.unambiguous_dna_letters
@@ -112,7 +107,7 @@ Z  0.0
     def test_read_write(self):
         """Test reading and writing substitution matrices."""
         path = os.path.join("Align", "hg38.chrom.sizes")
-        sizes = substitution_matrices.read(path, numpy.int64)
+        sizes = substitution_matrices.read(path, np.int64)
         # Note that sum(sizes) below is larger than 2147483647, and won't
         # fit in an int on a 32-bits machine.
         self.assertEqual(len(sizes), 455)
@@ -282,7 +277,6 @@ Z  0.0
 class TestScoringMatrices(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-
         from Bio import SeqIO
         from Bio.Align import PairwiseAligner
 
@@ -1546,7 +1540,7 @@ class TestScoringMatrices(unittest.TestCase):
         """Test calculating expected amino acid probabilities."""
         observed = self.observed
         # calculate probabilities expected under a null model
-        probabilities = numpy.sum(observed, 0)  # Be sure to use numpy's sum
+        probabilities = np.sum(observed, 0)  # Be sure to use numpy's sum
         self.assertEqual(probabilities.shape, (20,))
         self.assertAlmostEqual(probabilities["A"], 0.070358306)
         self.assertAlmostEqual(probabilities["C"], 0.024959283)
@@ -1573,7 +1567,7 @@ class TestScoringMatrices(unittest.TestCase):
     def test5_expected_probabilities(self):
         """Test calculating expected amino acid substitution probabilities."""
         probabilities = self.probabilities
-        expected = numpy.dot(probabilities[:, None], probabilities[None, :])
+        expected = np.dot(probabilities[:, None], probabilities[None, :])
         self.assertEqual(expected.alphabet, protein_alphabet)
         self.assertEqual(expected.shape, (20, 20))
         self.assertAlmostEqual(expected["A", "A"], 0.004950291)
@@ -1983,7 +1977,7 @@ class TestScoringMatrices(unittest.TestCase):
         observed = self.observed
         expected = self.expected
         # calculate the log-ratio
-        scores = numpy.log2(observed / expected)
+        scores = np.log2(observed / expected)
         self.assertEqual(scores.alphabet, protein_alphabet)
         self.assertEqual(scores.shape, (20, 20))
         self.assertAlmostEqual(scores["A", "A"], 3.537772309)
@@ -2398,9 +2392,9 @@ class TestScoringMatrices(unittest.TestCase):
 
         m = substitution_matrices.load("BLOSUM62")
         self.assertEqual(alphabet, "ACDEFGHIKLMNPQRSTVWY")
-        match_score = round(numpy.mean([m[c, c] for c in alphabet]))
+        match_score = round(np.mean([m[c, c] for c in alphabet]))
         mismatch_score = round(
-            numpy.mean([m[c1, c2] for c1 in alphabet for c2 in alphabet if c1 != c2])
+            np.mean([m[c1, c2] for c1 in alphabet for c2 in alphabet if c1 != c2])
         )
         self.assertAlmostEqual(match_score, 6.0)
         self.assertAlmostEqual(mismatch_score, -1.0)
@@ -2414,7 +2408,30 @@ class TestLoading(unittest.TestCase):
             try:
                 m = substitution_matrices.load(name)
             except Exception:
-                self.fail(f"Failed to load subsitution matrix '{name}'")
+                self.fail(f"Failed to load substitution matrix '{name}'")
+
+    def test_reading(self):
+        """Confirm matrix reading works with filename or handle."""
+        matrix_name = "BLOSUM62"
+        test_path = os.path.dirname(__file__)
+        parent_dir = os.path.dirname(test_path)
+        sub_mx_dir = os.path.join(
+            parent_dir, "Bio", "Align", "substitution_matrices", "data"
+        )
+        matrix_path = os.path.join(sub_mx_dir, matrix_name)
+
+        fname_matrix = substitution_matrices.read(matrix_path)
+        self.assertAlmostEqual(fname_matrix["A"]["A"], 4.0)
+        self.assertEqual(len(fname_matrix), 24)
+        self.assertEqual(len(fname_matrix[0]), 24)
+
+        with open(matrix_path) as handle:
+            handle_matrix = substitution_matrices.read(handle)
+            self.assertFalse(handle.closed)
+        self.assertTrue(handle.closed)
+        self.assertAlmostEqual(handle_matrix["A"]["A"], 4.0)
+        self.assertEqual(len(handle_matrix), 24)
+        self.assertEqual(len(handle_matrix[0]), 24)
 
 
 if __name__ == "__main__":

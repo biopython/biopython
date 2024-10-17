@@ -7,16 +7,16 @@
 import os
 import unittest
 
-from Bio import SeqIO
-from BioSQL import BioSeqDatabase
-
-from seq_tests_common import SeqRecordTestBaseClass
-
 # Really do want "import *" to get all the test classes:
 from common_BioSQL import *  # noqa: F403
 
 # Import these explicitly to avoid flake8 F405 below:
-from common_BioSQL import load_biosql_ini, check_config, temp_db_filename
+from common_BioSQL import check_config
+from common_BioSQL import temp_db_filename
+from seq_tests_common import SeqRecordTestBaseClass
+
+from Bio import SeqIO
+from BioSQL import BioSeqDatabase
 
 # Constants for the database driver
 DBDRIVER = "sqlite3"
@@ -53,7 +53,7 @@ if False:
 
 class BackwardsCompatibilityTest(SeqRecordTestBaseClass):
     def test_backwards_compatibility(self):
-        """Check can re-use an old BioSQL SQLite3 database."""
+        """Check can reuse an old BioSQL SQLite3 database."""
         original_records = []
         for record in SeqIO.parse("GenBank/cor6_6.gb", "gb"):
             if record.annotations["molecule_type"] == "mRNA":

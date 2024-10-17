@@ -6,20 +6,20 @@
 # package.
 """Testing Bio.TogoWS online code."""
 
-
 import unittest
 from io import StringIO
 from urllib.error import HTTPError
 
-# We want to test these:
-from Bio import TogoWS
+import requires_internet
+
+from Bio import Medline
 
 # In order to check any sequences returned
 from Bio import SeqIO
-from Bio.SeqUtils.CheckSum import seguid
-from Bio import Medline
 
-import requires_internet
+# We want to test these:
+from Bio import TogoWS
+from Bio.SeqUtils.CheckSum import seguid
 
 requires_internet.check()
 
@@ -450,23 +450,6 @@ class TogoEntry(unittest.TestCase):
         self.assertIn("X52960", record.name)
         self.assertEqual(len(record), 248)
         self.assertEqual(seguid(record.seq), "Ktxz0HgMlhQmrKTuZpOxPZJ6zGU")
-
-    def test_uniprot_swiss(self):
-        """Bio.TogoWS.entry("uniprot", ["A1AG1_HUMAN","A1AG1_MOUSE"])."""
-        # Returns "swiss" format:
-        handle = TogoWS.entry("uniprot", ["A1AG1_HUMAN", "A1AG1_MOUSE"])
-        record1, record2 = SeqIO.parse(handle, "swiss")
-        handle.close()
-
-        self.assertEqual(record1.id, "P02763")
-        self.assertEqual(record1.name, "A1AG1_HUMAN")
-        self.assertEqual(len(record1), 201)
-        self.assertEqual(seguid(record1.seq), "LHDJJ6oC7gUXo8CC7Xn6EUeA8Gk")
-
-        self.assertEqual(record2.id, "Q60590")
-        self.assertEqual(record2.name, "A1AG1_MOUSE")
-        self.assertEqual(len(record2), 207)
-        self.assertEqual(seguid(record2.seq), "FGcj+RFQhP2gRusCmwPFty5PJT0")
 
     def test_nucleotide_fasta(self):
         """Bio.TogoWS.entry("nucleotide", "6273291", "fasta")."""

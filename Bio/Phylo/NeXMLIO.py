@@ -19,8 +19,9 @@ from xml.etree import ElementTree
 
 from Bio.Phylo import NeXML
 
-from ._cdao_owl import cdao_elements, cdao_namespaces, resolve_uri
-
+from ._cdao_owl import cdao_elements
+from ._cdao_owl import cdao_namespaces
+from ._cdao_owl import resolve_uri
 
 NAMESPACES = {
     "xsi": "http://www.w3.org/2001/XMLSchema-instance",
@@ -33,20 +34,7 @@ DEFAULT_NAMESPACE = NAMESPACES["nex"]
 VERSION = "0.9"
 SCHEMA = "http://www.nexml.org/2009/nexml/xsd/nexml.xsd"
 
-
-try:
-    register_namespace = ElementTree.register_namespace
-except AttributeError:
-    if not hasattr(ElementTree, "_namespace_map"):
-        # cElementTree needs the pure-Python xml.etree.ElementTree
-        from xml.etree import ElementTree as ET_py
-
-        ElementTree._namespace_map = ET_py._namespace_map
-
-    def register_namespace(prefix, uri):
-        """Set NameSpace map."""
-        ElementTree._namespace_map[uri] = prefix
-
+register_namespace = ElementTree.register_namespace
 
 for prefix, uri in NAMESPACES.items():
     register_namespace(prefix, uri)
@@ -72,8 +60,6 @@ def matches(s):
 
 class NeXMLError(Exception):
     """Exception raised when NeXML object construction cannot continue."""
-
-    pass
 
 
 # ---------------------------------------------------------

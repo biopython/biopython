@@ -19,10 +19,12 @@ a dictionary of colours (if passed an iterable containing the names of
 categories to be coloured).
 """
 
-# standard library
 import colorsys  # colour format conversions
-from math import log, exp, floor, pi
 import random  # for jitter values
+from math import exp
+from math import floor
+from math import log
+from math import pi
 
 
 class ColorSpiral:
@@ -87,7 +89,7 @@ class ColorSpiral:
         """
         # We use the offset to skip a number of similar colours near to HSV axis
         assert offset > 0 and offset < 1, "offset must be in (0,1)"
-        v_rate = (self._v_final - self._v_init) / float(k)
+        v_rate = (self._v_final - self._v_init) / k
         # Generator for colours: we have divided the arc length into sections
         # of equal length, and step along them
         for n in range(1, k + 1):
@@ -187,7 +189,7 @@ def get_colors(k, **kwargs):
     return cs.get_colors(k)
 
 
-def get_color_dict(l, **kwargs):
+def get_color_dict(l, **kwargs):  # noqa: E741
     """Return a dictionary of colours using the provided values as keys.
 
     Returns a dictionary, keyed by the members of iterable l, with a

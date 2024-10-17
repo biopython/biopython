@@ -6,8 +6,9 @@
 # package.
 """Command line wrapper for the multiple alignment program TCOFFEE."""
 
-
-from Bio.Application import _Option, _Switch, AbstractCommandline
+from Bio.Application import _Option
+from Bio.Application import _Switch
+from Bio.Application import AbstractCommandline
 
 
 class TCoffeeCommandline(AbstractCommandline):

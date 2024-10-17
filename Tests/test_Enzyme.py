@@ -8,9 +8,9 @@
 
 import os
 import unittest
+from io import StringIO
 
 from Bio.ExPASy import Enzyme
-from io import StringIO
 
 
 class TestEnzyme(unittest.TestCase):

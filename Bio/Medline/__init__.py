@@ -166,19 +166,26 @@ def parse(handle):
     key = ""
     record = Record()
     for line in handle:
-        line = line.rstrip()
         if line[:6] == "      ":  # continuation line
+            line = line.rstrip()
+            if line == "":
+                # All blank continuation lines should be considered a new line.
+                # See issue #4557
+                line = "      \n"
+
             if key in ["MH", "AD"]:
                 # Multi-line MESH term, want to append to last entry in list
                 record[key][-1] += line[5:]  # including space using line[5:]
             else:
                 record[key].append(line[6:])
-        elif line:
+        elif line != "\n" and line != "\r\n":
+            line = line.rstrip()
             key = line[:4].rstrip()
             if key not in record:
                 record[key] = []
             record[key].append(line[6:])
         elif record:
+            # End of the record
             # Join each list of strings into one string.
             for key in record:
                 if key in textkeys:
@@ -210,3 +217,9 @@ def read(handle):
     """
     records = parse(handle)
     return next(records)
+
+
+if __name__ == "__main__":
+    from Bio._utils import run_doctest
+
+    run_doctest()

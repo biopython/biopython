@@ -11,10 +11,12 @@ functions which return summary type information about alignments should
 be put into classes in this module.
 """
 
-
 import math
 import sys
+import warnings
+from collections import Counter
 
+from Bio import BiopythonDeprecationWarning
 from Bio.Seq import Seq
 
 
@@ -57,6 +59,48 @@ class SummaryInfo:
            not just 1 sequence and gaps).
 
         """
+        warnings.warn(
+            "The `dumb_consensus` method is deprecated and will be removed "
+            "in a future release of Biopython. As an alternative, you can "
+            "convert the multiple sequence alignment object to a new-style "
+            "Alignment object by via its `.alignment` property, and then "
+            "create a Motif object. You can then use the `.consensus` or "
+            "`.degenerate_consensus` property of the Motif object to get a "
+            "consensus sequence. For more control over how the consensus "
+            "sequence is calculated, you can call the `calculate_consensus` "
+            "method on the `.counts` property of the Motif object. This is an "
+            "example for a multiple sequence alignment `msa` of DNA "
+            "nucleotides:"
+            "\n"
+            ">>> from Bio.Seq import Seq\n"
+            ">>> from Bio.SeqRecord import SeqRecord\n"
+            ">>> from Bio.Align import MultipleSeqAlignment\n"
+            ">>> from Bio.Align.AlignInfo import SummaryInfo\n"
+            ">>> msa = MultipleSeqAlignment([SeqRecord(Seq('ACGT')),\n"
+            "...                             SeqRecord(Seq('ATGT')),\n"
+            "...                             SeqRecord(Seq('ATGT'))])\n"
+            ">>> summary = SummaryInfo(msa)\n"
+            ">>> dumb_consensus = summary.dumb_consensus(ambiguous='N')\n"
+            ">>> print(dumb_consensus)\n"
+            "ANGT\n"
+            ">>> alignment = msa.alignment\n"
+            ">>> from Bio.motifs import Motif\n"
+            ">>> motif = Motif('ACGT', alignment)\n"
+            ">>> print(motif.consensus)\n"
+            "ATGT\n"
+            ">>> print(motif.degenerate_consensus)\n"
+            "AYGT\n"
+            ">>> counts = motif.counts\n"
+            ">>> consensus = counts.calculate_consensus(identity=0.7)\n"
+            ">>> print(consensus)\n"
+            "ANGT\n"
+            "\n"
+            "If your multiple sequence alignment object was obtained using "
+            "Bio.AlignIO, then you can obtain a new-style Alignment object "
+            "directly by using Bio.Align.read instead of Bio.AlignIO.read, "
+            "or Bio.Align.parse instead of Bio.AlignIO.parse.",
+            BiopythonDeprecationWarning,
+        )
         # Iddo Friedberg, 1-JUL-2004: changed ambiguous default to "X"
         consensus = ""
 
@@ -66,20 +110,20 @@ class SummaryInfo:
         # go through each seq item
         for n in range(con_len):
             # keep track of the counts of the different atoms we get
-            atom_dict = {}
+            atom_dict = Counter()
             num_atoms = 0
 
             for record in self.alignment:
                 # make sure we haven't run past the end of any sequences
                 # if they are of different lengths
-                if n < len(record.seq):
-                    if record.seq[n] != "-" and record.seq[n] != ".":
-                        if record.seq[n] not in atom_dict:
-                            atom_dict[record.seq[n]] = 1
-                        else:
-                            atom_dict[record.seq[n]] += 1
+                try:
+                    c = record[n]
+                except IndexError:
+                    continue
+                if c != "-" and c != ".":
+                    atom_dict[c] += 1
 
-                        num_atoms = num_atoms + 1
+                    num_atoms += 1
 
             max_atoms = []
             max_size = 0
@@ -93,9 +137,7 @@ class SummaryInfo:
 
             if require_multiple and num_atoms == 1:
                 consensus += ambiguous
-            elif (len(max_atoms) == 1) and (
-                (float(max_size) / float(num_atoms)) >= threshold
-            ):
+            elif len(max_atoms) == 1 and max_size / num_atoms >= threshold:
                 consensus += max_atoms[0]
             else:
                 consensus += ambiguous
@@ -114,6 +156,49 @@ class SummaryInfo:
            it takes the same as input.
 
         """
+        warnings.warn(
+            "The `gap_consensus` method is deprecated and will be removed "
+            "in a future release of Biopython. As an alternative, you can "
+            "convert the multiple sequence alignment object to a new-style "
+            "Alignment object by via its `.alignment` property, and then "
+            "create a Motif object. You can then use the `.consensus` or "
+            "`.degenerate_consensus` property of the Motif object to get a "
+            "consensus sequence. For more control over how the consensus "
+            "sequence is calculated, you can call the `calculate_consensus` "
+            "method on the `.counts` property of the Motif object. This is an "
+            "example for a multiple sequence alignment `msa` of DNA "
+            "nucleotides:"
+            "\n"
+            ">>> from Bio.Seq import Seq\n"
+            ">>> from Bio.SeqRecord import SeqRecord\n"
+            ">>> from Bio.Align import MultipleSeqAlignment\n"
+            ">>> from Bio.Align.AlignInfo import SummaryInfo\n"
+            ">>> msa = MultipleSeqAlignment([SeqRecord(Seq('ACGT')),\n"
+            "...                             SeqRecord(Seq('AT-T')),\n"
+            "...                             SeqRecord(Seq('CT-T')),\n"
+            "...                             SeqRecord(Seq('GT-T'))])\n"
+            ">>> summary = SummaryInfo(msa)\n"
+            ">>> gap_consensus = summary.gap_consensus(ambiguous='N')\n"
+            ">>> print(gap_consensus)\n"
+            "NT-T\n"
+            ">>> alignment = msa.alignment\n"
+            ">>> from Bio.motifs import Motif\n"
+            ">>> motif = Motif('ACGT-', alignment)  # include '-' in alphabet\n"
+            ">>> print(motif.consensus)\n"
+            "AT-T\n"
+            ">>> print(motif.degenerate_consensus)\n"
+            "VT-T\n"
+            ">>> counts = motif.counts\n"
+            ">>> consensus = counts.calculate_consensus(identity=0.7)\n"
+            ">>> print(consensus)\n"
+            "NT-T\n"
+            "\n"
+            "If your multiple sequence alignment object was obtained using "
+            "Bio.AlignIO, then you can obtain a new-style Alignment object "
+            "directly by using Bio.Align.read instead of Bio.AlignIO.read, "
+            "or Bio.Align.parse instead of Bio.AlignIO.parse.",
+            BiopythonDeprecationWarning,
+        )
         consensus = ""
 
         # find the length of the consensus we are creating
@@ -122,19 +207,19 @@ class SummaryInfo:
         # go through each seq item
         for n in range(con_len):
             # keep track of the counts of the different atoms we get
-            atom_dict = {}
+            atom_dict = Counter()
             num_atoms = 0
 
             for record in self.alignment:
                 # make sure we haven't run past the end of any sequences
                 # if they are of different lengths
-                if n < len(record.seq):
-                    if record.seq[n] not in atom_dict:
-                        atom_dict[record.seq[n]] = 1
-                    else:
-                        atom_dict[record.seq[n]] += 1
+                try:
+                    c = record[n]
+                except IndexError:
+                    continue
+                atom_dict[c] += 1
 
-                    num_atoms += 1
+                num_atoms += 1
 
             max_atoms = []
             max_size = 0
@@ -148,9 +233,7 @@ class SummaryInfo:
 
             if require_multiple and num_atoms == 1:
                 consensus += ambiguous
-            elif (len(max_atoms) == 1) and (
-                (float(max_size) / float(num_atoms)) >= threshold
-            ):
+            elif len(max_atoms) == 1 and max_size / num_atoms >= threshold:
                 consensus += max_atoms[0]
             else:
                 consensus += ambiguous
@@ -191,6 +274,25 @@ class SummaryInfo:
            will raise a ValueError
          - letters - An iterable (e.g. a string or list of characters to include.
         """
+        warnings.warn(
+            "The `replacement_dictionary` method is deprecated and will be "
+            "removed in a future release of Biopython. As an alternative, you "
+            "can convert the multiple sequence alignment object to a new-style "
+            "Alignment object by via its `.alignment` property, and then "
+            "use the `.substitutions` property  of the `Alignment` object. "
+            "For example, for a multiple sequence alignment `msa` of DNA "
+            "nucleotides, you would do: "
+            "\n"
+            ">>> alignment = msa.alignment\n"
+            ">>> dictionary = alignment.substitutions\n"
+            "\n"
+            "If your multiple sequence alignment object was obtained using "
+            "Bio.AlignIO, then you can obtain a new-style Alignment object "
+            "directly by using Bio.Align.read instead of Bio.AlignIO.read, "
+            "or Bio.Align.parse instead of Bio.AlignIO.parse.",
+            BiopythonDeprecationWarning,
+        )
+
         if skip_chars is not None:
             raise ValueError(
                 "argument skip_chars has been deprecated; instead, please use 'letters' to specify the characters you want to include"
@@ -259,6 +361,33 @@ class SummaryInfo:
 
         """
         # determine all of the letters we have to deal with
+        warnings.warn(
+            "The `pos_specific_score_matrix` method is deprecated and will be "
+            "removed in a future release of Biopython. As an alternative, you "
+            "can convert the multiple sequence alignment object to a new-style "
+            "Alignment object by via its `.alignment` property, and then "
+            "create a Motif object. For example, for a multiple sequence "
+            "alignment `msa` of DNA nucleotides, you would do: "
+            "\n"
+            ">>> alignment = msa.alignment\n"
+            ">>> from Bio.motifs import Motif\n"
+            ">>> motif = Motif('ACGT', alignment)\n"
+            ">>> counts = motif.counts\n"
+            "\n"
+            "The `counts` object contains the same information as the PSSM "
+            "returned by `pos_specific_score_matrix`, but note that the "
+            "indices are reversed:\n"
+            "\n"
+            ">>> counts[letter][i] == pssm[index][letter]\n"
+            "True\n"
+            "\n"
+            "If your multiple sequence alignment object was obtained using "
+            "Bio.AlignIO, then you can obtain a new-style Alignment object "
+            "directly by using Bio.Align.read instead of Bio.AlignIO.read, "
+            "or Bio.Align.parse instead of Bio.AlignIO.parse.",
+            BiopythonDeprecationWarning,
+        )
+
         all_letters = self._get_all_letters()
         if not all_letters:
             raise ValueError("_get_all_letters returned empty string")
@@ -342,6 +471,31 @@ class SummaryInfo:
         content is calculated.
 
         """
+        warnings.warn(
+            "The `information_content` method and `ic_vector` attribute of the "
+            "`SummaryInfo` class are deprecated and will be removed in a "
+            "future release of Biopython. As an alternative, you can convert "
+            "the multiple sequence alignment object to a new-style Alignment "
+            "object by via its `.alignment` property, and use the "
+            "`information_content` attribute of the Alignment obecjt. "
+            "For example, for a multiple sequence alignment `msa` of "
+            "DNA nucleotides, you would do: "
+            "\n"
+            ">>> alignment = msa.alignment\n"
+            ">>> from Bio.motifs import Motif\n"
+            ">>> motif = Motif('ACGT', alignment)\n"
+            ">>> information_content = motif.information_content\n"
+            "\n"
+            "The `information_content` object contains the same values as the "
+            "`ic_vector` attribute of the `SummaryInfo` object. Its sum is "
+            "equal to the value return by the `information_content` method. "
+            "\n"
+            "If your multiple sequence alignment object was obtained using "
+            "Bio.AlignIO, then you can obtain a new-style Alignment object "
+            "directly by using Bio.Align.read instead of Bio.AlignIO.read, "
+            "or Bio.Align.parse instead of Bio.AlignIO.parse.",
+            BiopythonDeprecationWarning,
+        )
         # if no end was specified, then we default to the end of the sequence
         if end is None:
             end = len(self.alignment[0].seq)
@@ -381,7 +535,7 @@ class SummaryInfo:
         # fill in the ic_vector member: holds IC for each column
         # reset ic_vector to empty list at each call
         self.ic_vector = []
-        for (i, k) in enumerate(info_content):
+        for i, k in enumerate(info_content):
             self.ic_vector.append(info_content[i + start])
         return total_info
 
@@ -561,6 +715,32 @@ class PSSM:
         from the example above, the first few list[0]s would be GTAT...
         list[1] - A dictionary with the letter substitutions and counts.
         """
+        warnings.warn(
+            "The `PSSM` class is deprecated and will be removed in a future "
+            "release of Biopython. As an alternative, you can convert the "
+            "multiple sequence alignment object to a new-style Alignment "
+            "object by via its `.alignment` property, and then create a Motif "
+            "object. For example, for a multiple sequence alignment `msa` of "
+            "DNA nucleotides, you would do: "
+            "\n"
+            ">>> alignment = msa.alignment\n"
+            ">>> from Bio.motifs import Motif\n"
+            ">>> motif = Motif('ACGT', alignment)\n"
+            ">>> counts = motif.counts\n"
+            "\n"
+            "The `counts` object contains the same information as the PSSM "
+            "returned by `pos_specific_score_matrix`, but note that the "
+            "indices are reversed:\n"
+            "\n"
+            ">>> counts[letter][i] == pssm[index][letter]\n"
+            "True\n"
+            "\n"
+            "If your multiple sequence alignment object was obtained using "
+            "Bio.AlignIO, then you can obtain a new-style Alignment object "
+            "directly by using Bio.Align.read instead of Bio.AlignIO.read, "
+            "or Bio.Align.parse instead of Bio.AlignIO.parse.",
+            BiopythonDeprecationWarning,
+        )
         self.pssm = pssm
 
     def __getitem__(self, pos):
@@ -591,9 +771,14 @@ class PSSM:
 
 def print_info_content(summary_info, fout=None, rep_record=0):
     """3 column output: position, aa in representative sequence, ic_vector value."""
+    warnings.warn(
+        "The `print_info_content` function is deprecated and will be removed "
+        "in a future release of Biopython.",
+        BiopythonDeprecationWarning,
+    )
     fout = fout or sys.stdout
     if not summary_info.ic_vector:
         summary_info.information_content()
-    rep_sequence = summary_info.alignment[rep_record].seq
-    for pos, ic in enumerate(summary_info.ic_vector):
-        fout.write("%d %s %.3f\n" % (pos, rep_sequence[pos], ic))
+    rep_sequence = summary_info.alignment[rep_record]
+    for pos, (aa, ic) in enumerate(zip(rep_sequence, summary_info.ic_vector)):
+        fout.write("%d %s %.3f\n" % (pos, aa, ic))

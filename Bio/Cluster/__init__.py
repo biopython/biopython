@@ -15,16 +15,16 @@ M. de Hoon et al. (2004) https://doi.org/10.1093/bioinformatics/bth078
 import numbers
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
     from Bio import MissingPythonDependencyError
 
     raise MissingPythonDependencyError(
-        "Please install numpy if you want to use Bio.Cluster. "
+        "Please install NumPy if you want to use Bio.Cluster. "
         "See http://www.numpy.org/"
     ) from None
 
-from . import _cluster
+from . import _cluster  # type: ignore
 
 __all__ = (
     "Node",
@@ -73,13 +73,13 @@ class Tree(_cluster.Tree):
 
         """
         n = len(self) + 1
-        indices = numpy.ones(n, dtype="intc")
+        indices = np.ones(n, dtype="intc")
         if order is None:
-            order = numpy.ones(n, dtype="d")
-        elif isinstance(order, numpy.ndarray):
-            order = numpy.require(order, dtype="d", requirements="C")
+            order = np.ones(n, dtype="d")
+        elif isinstance(order, np.ndarray):
+            order = np.require(order, dtype="d", requirements="C")
         else:
-            order = numpy.array(order, dtype="d")
+            order = np.array(order, dtype="d")
         _cluster.Tree.sort(self, indices, order)
         return indices
 
@@ -94,7 +94,7 @@ class Tree(_cluster.Tree):
          - nclusters: The desired number of clusters.
         """
         n = len(self) + 1
-        indices = numpy.ones(n, dtype="intc")
+        indices = np.ones(n, dtype="intc")
         if nclusters is None:
             nclusters = n
         _cluster.Tree.cut(self, indices, nclusters)
@@ -155,7 +155,7 @@ def kcluster(
        k-means algorithm is fully deterministic.
 
     Return values:
-     - clusterid: array containing the number of the cluster to which each
+     - clusterid: array containing the index of the cluster to which each
        item was assigned in the best k-means clustering solution that was
        found in the npass runs;
      - error: the within-cluster sum of distances for the returned k-means
@@ -188,10 +188,9 @@ def kmedoids(distance, nclusters=2, npass=1, initialid=None):
     Keyword arguments:
      - distance: The distance matrix between the items. There are three
        ways in which you can pass a distance matrix:
-       1. a 2D Numerical Python array (in which only the left-lower
-       part of the array will be accessed);
-       2. a 1D Numerical Python array containing the distances
-       consecutively;
+       1. a 2D NumPy array (in which only the left-lower part of the array
+       will be accessed);
+       2. a 1D NumPy array containing the distances consecutively;
        3. a list of rows containing the lower-triangular part of
        the distance matrix.
 
@@ -226,10 +225,11 @@ def kmedoids(distance, nclusters=2, npass=1, initialid=None):
        In that case, the k-medoids algorithm is fully deterministic.
 
     Return values:
-     - clusterid: array containing the number of the cluster to which each
-       item was assigned in the best k-means clustering solution that was
-       found in the npass runs;
-     - error: the within-cluster sum of distances for the returned k-means
+     - clusterid: array containing the index of the cluster to which each
+       item was assigned in the best k-medoids clustering solution that was
+       found in the npass runs; note that the index of a cluster is the index
+       of the item that is the medoid of the cluster;
+     - error: the within-cluster sum of distances for the returned k-medoids
        clustering solution;
      - nfound: the number of times this solution was found.
     """
@@ -278,10 +278,9 @@ def treecluster(
        - method == 'a': Average pairwise linkage
      - distancematrix:  The distance matrix between the items. There are
        three ways in which you can pass a distance matrix:
-       1. a 2D Numerical Python array (in which only the left-lower
-       part of the array will be accessed);
-       2. a 1D Numerical Python array containing the distances
-       consecutively;
+       1. a 2D NumPy array (in which only the left-lower part of the array
+       will be accessed);
+       2. a 1D NumPy array containing the distances consecutively;
        3. a list of rows containing the lower-triangular part of
        the distance matrix.
 
@@ -404,8 +403,8 @@ def somcluster(
         raise ValueError("nxgrid should be a positive integer (default is 2)")
     if nygrid < 1:
         raise ValueError("nygrid should be a positive integer (default is 1)")
-    clusterids = numpy.ones((nitems, 2), dtype="intc")
-    celldata = numpy.empty((nxgrid, nygrid, ndata), dtype="d")
+    clusterids = np.ones((nitems, 2), dtype="intc")
+    celldata = np.empty((nxgrid, nygrid, ndata), dtype="d")
     _cluster.somcluster(
         clusterids, celldata, data, mask, weight, transpose, inittau, niter, dist
     )
@@ -503,17 +502,17 @@ def clustercentroids(data, mask=None, clusterid=None, method="a", transpose=Fals
     nrows, ncolumns = data.shape
     if clusterid is None:
         n = ncolumns if transpose else nrows
-        clusterid = numpy.zeros(n, dtype="intc")
+        clusterid = np.zeros(n, dtype="intc")
         nclusters = 1
     else:
-        clusterid = numpy.require(clusterid, dtype="intc", requirements="C")
+        clusterid = np.require(clusterid, dtype="intc", requirements="C")
         nclusters = max(clusterid + 1)
     if transpose:
         shape = (nrows, nclusters)
     else:
         shape = (nclusters, ncolumns)
-    cdata = numpy.zeros(shape, dtype="d")
-    cmask = numpy.zeros(shape, dtype="intc")
+    cdata = np.zeros(shape, dtype="d")
+    cmask = np.zeros(shape, dtype="intc")
     _cluster.clustercentroids(data, mask, clusterid, method, transpose, cdata, cmask)
     return cdata, cmask
 
@@ -554,15 +553,16 @@ def distancematrix(data, mask=None, weight=None, transpose=False, dist="e"):
     ...               [1, 2,  3,  4]])
     >>> distances = distancematrix(data, dist='e')
     >>> distances
-    [array([], dtype=float64), array([ 16.]), array([ 64.,  16.]), array([  1.,   9.,  49.])]
+    [array([], dtype=float64), array([16.]), array([64., 16.]), array([ 1.,  9., 49.])]
 
-    which can be rewritten as
-       distances = [array([], dtype=float64),
-                    array([ 16.]),
-                    array([ 64.,  16.]),
-                    array([  1.,   9.,  49.])]
+    which can be rewritten as::
 
-    This corresponds to the distance matrix:
+        distances = [array([], dtype=float64),
+                     array([ 16.]),
+                     array([ 64.,  16.]),
+                     array([  1.,   9.,  49.])]
+
+    This corresponds to the distance matrix::
 
         [ 0., 16., 64.,  1.]
         [16.,  0., 16.,  9.]
@@ -577,7 +577,7 @@ def distancematrix(data, mask=None, weight=None, transpose=False, dist="e"):
     else:
         nitems, ndata = shape
     weight = __check_weight(weight, ndata)
-    matrix = [numpy.empty(i, dtype="d") for i in range(nitems)]
+    matrix = [np.empty(i, dtype="d") for i in range(nitems)]
     _cluster.distancematrix(data, mask, weight, transpose, dist, matrix)
     return matrix
 
@@ -599,7 +599,7 @@ def pca(data):
     Adding the column means to the dot product of the coordinates and the
     principal components recreates the data matrix:
 
-    >>> from numpy import array, dot, amax, amin
+    >>> from numpy import array, dot
     >>> from Bio.Cluster import pca
     >>> matrix = array([[ 0.,  0.,  0.],
     ...                 [ 1.,  0.,  0.],
@@ -607,17 +607,20 @@ def pca(data):
     ...                 [ 4.,  2.,  6.]])
     >>> columnmean, coordinates, pc, _ = pca(matrix)
     >>> m = matrix - (columnmean + dot(coordinates, pc))
-    >>> amax(m) < 1e-12 and amin(m) > -1e-12
-    True
+    >>> abs(m) < 1e-12
+    array([[ True,  True,  True],
+           [ True,  True,  True],
+           [ True,  True,  True],
+           [ True,  True,  True]])
 
     """
     data = __check_data(data)
     nrows, ncols = data.shape
     nmin = min(nrows, ncols)
-    columnmean = numpy.empty(ncols, dtype="d")
-    pc = numpy.empty((nmin, ncols), dtype="d")
-    coordinates = numpy.empty((nrows, nmin), dtype="d")
-    eigenvalues = numpy.empty(nmin, dtype="d")
+    columnmean = np.empty(ncols, dtype="d")
+    pc = np.empty((nmin, ncols), dtype="d")
+    coordinates = np.empty((nrows, nmin), dtype="d")
+    eigenvalues = np.empty(nmin, dtype="d")
     _cluster.pca(data, columnmean, coordinates, pc, eigenvalues)
     return columnmean, coordinates, pc, eigenvalues
 
@@ -698,11 +701,11 @@ class Record:
                 )
             if line[0] == "EWEIGHT":
                 i = max(cols) + 1
-                self.eweight = numpy.array(line[i:], float)
+                self.eweight = np.array(line[i:], float)
                 continue
             if line[0] == "EORDER":
                 i = max(cols) + 1
-                self.eorder = numpy.array(line[i:], float)
+                self.eorder = np.array(line[i:], float)
                 continue
             rowdata = []
             rowmask = []
@@ -728,15 +731,15 @@ class Record:
                     rowmask.append(1)
             self.data.append(rowdata)
             self.mask.append(rowmask)
-        self.data = numpy.array(self.data)
+        self.data = np.array(self.data)
         if needmask:
-            self.mask = numpy.array(self.mask, int)
+            self.mask = np.array(self.mask, int)
         else:
             self.mask = None
         if self.gweight:
-            self.gweight = numpy.array(self.gweight)
+            self.gweight = np.array(self.gweight)
         if self.gorder:
-            self.gorder = numpy.array(self.gorder)
+            self.gorder = np.array(self.gorder)
 
     def treecluster(self, transpose=False, method="m", dist="e"):
         """Apply hierarchical clustering and return a Tree object.
@@ -1026,19 +1029,19 @@ class Record:
            integers, describing to which cluster a given sample belongs. This
            vector can be calculated by kcluster.
         """
-        (ngenes, nexps) = numpy.shape(self.data)
+        (ngenes, nexps) = np.shape(self.data)
         if self.gorder is None:
-            gorder = numpy.arange(ngenes)
+            gorder = np.arange(ngenes)
         else:
             gorder = self.gorder
         if self.eorder is None:
-            eorder = numpy.arange(nexps)
+            eorder = np.arange(nexps)
         else:
             eorder = self.eorder
         if (
             geneclusters is not None
             and expclusters is not None
-            and type(geneclusters) != type(expclusters)
+            and type(geneclusters) != type(expclusters)  # noqa: E721
         ):
             raise ValueError(
                 "found one k-means and one hierarchical "
@@ -1061,7 +1064,7 @@ class Record:
             geneindex = self._savekmeans(kggfilename, geneclusters, gorder, False)
             postfix = "_G%d" % k
         else:
-            geneindex = numpy.argsort(gorder)
+            geneindex = np.argsort(gorder)
         if isinstance(expclusters, Tree):
             # This is a hierarchical clustering result.
             expindex = self._savetree(jobname, expclusters, eorder, True)
@@ -1074,7 +1077,7 @@ class Record:
             expindex = self._savekmeans(kagfilename, expclusters, eorder, True)
             postfix += "_A%d" % k
         else:
-            expindex = numpy.argsort(eorder)
+            expindex = np.argsort(eorder)
         filename = filename + postfix
         self._savedata(filename, gid, aid, geneindex, expindex)
 
@@ -1090,7 +1093,7 @@ class Record:
         nnodes = len(tree)
         with open(jobname + extension, "w") as outputfile:
             nodeID = [""] * nnodes
-            nodedist = numpy.array([node.distance for node in tree[:]])
+            nodedist = np.array([node.distance for node in tree[:]])
             for nodeindex in range(nnodes):
                 min1 = tree[nodeindex].left
                 min2 = tree[nodeindex].right
@@ -1123,9 +1126,9 @@ class Record:
             names = self.geneid
         with open(filename, "w") as outputfile:
             outputfile.write(label + "\tGROUP\n")
-            index = numpy.argsort(order)
+            index = np.argsort(order)
             n = len(names)
-            sortedindex = numpy.zeros(n, int)
+            sortedindex = np.zeros(n, int)
             counter = 0
             cluster = 0
             while counter < n:
@@ -1143,20 +1146,20 @@ class Record:
             genename = self.geneid
         else:
             genename = self.genename
-        (ngenes, nexps) = numpy.shape(self.data)
+        (ngenes, nexps) = np.shape(self.data)
         with open(jobname + ".cdt", "w") as outputfile:
             if self.mask is not None:
                 mask = self.mask
             else:
-                mask = numpy.ones((ngenes, nexps), int)
+                mask = np.ones((ngenes, nexps), int)
             if self.gweight is not None:
                 gweight = self.gweight
             else:
-                gweight = numpy.ones(ngenes)
+                gweight = np.ones(ngenes)
             if self.eweight is not None:
                 eweight = self.eweight
             else:
-                eweight = numpy.ones(nexps)
+                eweight = np.ones(nexps)
             if gid:
                 outputfile.write("GID\t")
             outputfile.write(self.uniqid)
@@ -1205,34 +1208,34 @@ def read(handle):
 
 
 def __check_data(data):
-    if isinstance(data, numpy.ndarray):
-        data = numpy.require(data, dtype="d", requirements="C")
+    if isinstance(data, np.ndarray):
+        data = np.require(data, dtype="d", requirements="C")
     else:
-        data = numpy.array(data, dtype="d")
+        data = np.array(data, dtype="d")
     if data.ndim != 2:
         raise ValueError("data should be 2-dimensional")
-    if numpy.isnan(data).any():
+    if np.isnan(data).any():
         raise ValueError("data contains NaN values")
     return data
 
 
 def __check_mask(mask, shape):
     if mask is None:
-        return numpy.ones(shape, dtype="intc")
-    elif isinstance(mask, numpy.ndarray):
-        return numpy.require(mask, dtype="intc", requirements="C")
+        return np.ones(shape, dtype="intc")
+    elif isinstance(mask, np.ndarray):
+        return np.require(mask, dtype="intc", requirements="C")
     else:
-        return numpy.array(mask, dtype="intc")
+        return np.array(mask, dtype="intc")
 
 
 def __check_weight(weight, ndata):
     if weight is None:
-        return numpy.ones(ndata, dtype="d")
-    if isinstance(weight, numpy.ndarray):
-        weight = numpy.require(weight, dtype="d", requirements="C")
+        return np.ones(ndata, dtype="d")
+    if isinstance(weight, np.ndarray):
+        weight = np.require(weight, dtype="d", requirements="C")
     else:
-        weight = numpy.array(weight, dtype="d")
-    if numpy.isnan(weight).any():
+        weight = np.array(weight, dtype="d")
+    if np.isnan(weight).any():
         raise ValueError("weight contains NaN values")
     return weight
 
@@ -1241,40 +1244,40 @@ def __check_initialid(initialid, npass, nitems):
     if initialid is None:
         if npass <= 0:
             raise ValueError("npass should be a positive integer")
-        clusterid = numpy.empty(nitems, dtype="intc")
+        clusterid = np.empty(nitems, dtype="intc")
     else:
         npass = 0
-        clusterid = numpy.array(initialid, dtype="intc")
+        clusterid = np.array(initialid, dtype="intc")
     return clusterid, npass
 
 
 def __check_index(index):
     if index is None:
-        return numpy.zeros(1, dtype="intc")
+        return np.zeros(1, dtype="intc")
     elif isinstance(index, numbers.Integral):
-        return numpy.array([index], dtype="intc")
-    elif isinstance(index, numpy.ndarray):
-        return numpy.require(index, dtype="intc", requirements="C")
+        return np.array([index], dtype="intc")
+    elif isinstance(index, np.ndarray):
+        return np.require(index, dtype="intc", requirements="C")
     else:
-        return numpy.array(index, dtype="intc")
+        return np.array(index, dtype="intc")
 
 
 def __check_distancematrix(distancematrix):
     if distancematrix is None:
         return distancematrix
-    if isinstance(distancematrix, numpy.ndarray):
-        distancematrix = numpy.require(distancematrix, dtype="d", requirements="C")
+    if isinstance(distancematrix, np.ndarray):
+        distancematrix = np.require(distancematrix, dtype="d", requirements="C")
     else:
         try:
-            distancematrix = numpy.array(distancematrix, dtype="d")
+            distancematrix = np.array(distancematrix, dtype="d")
         except ValueError:
             n = len(distancematrix)
             d = [None] * n
             for i, row in enumerate(distancematrix):
-                if isinstance(row, numpy.ndarray):
-                    row = numpy.require(row, dtype="d", requirements="C")
+                if isinstance(row, np.ndarray):
+                    row = np.require(row, dtype="d", requirements="C")
                 else:
-                    row = numpy.array(row, dtype="d")
+                    row = np.array(row, dtype="d")
                 if row.ndim != 1:
                     raise ValueError("row %d is not one-dimensional" % i) from None
                 m = len(row)
@@ -1282,10 +1285,10 @@ def __check_distancematrix(distancematrix):
                     raise ValueError(
                         "row %d has incorrect size (%d, expected %d)" % (i, m, i)
                     ) from None
-                if numpy.isnan(row).any():
+                if np.isnan(row).any():
                     raise ValueError("distancematrix contains NaN values") from None
                 d[i] = row
             return d
-    if numpy.isnan(distancematrix).any():
+    if np.isnan(distancematrix).any():
         raise ValueError("distancematrix contains NaN values")
     return distancematrix

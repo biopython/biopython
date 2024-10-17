@@ -261,11 +261,12 @@ static const char bases[][4] = {"TTTT",  /* 00 00 00 00 */
                                };
 
 static int
-extract(const unsigned char* bytes, uint32_t byteSize, uint32_t start, uint32_t end, char sequence[]) {
-    uint32_t i;
-    const uint32_t size = end - start;
-    const uint32_t byteStart = start / 4;
-    const uint32_t byteEnd = (end + 3) / 4;
+extract(const unsigned char* bytes, Py_ssize_t byteSize,
+        Py_ssize_t start, Py_ssize_t end, char sequence[]) {
+    Py_ssize_t i;
+    const Py_ssize_t size = end - start;
+    const Py_ssize_t byteStart = start / 4;
+    const Py_ssize_t byteEnd = (end + 3) / 4;
 
     if (byteSize != byteEnd - byteStart) {
         PyErr_Format(PyExc_RuntimeError,
@@ -295,15 +296,15 @@ extract(const unsigned char* bytes, uint32_t byteSize, uint32_t start, uint32_t 
 }
 
 static void
-applyNs(char sequence[], uint32_t start, uint32_t end, Py_buffer *nBlocks)
+applyNs(char sequence[], Py_ssize_t start, Py_ssize_t end, Py_buffer *nBlocks)
 {
     const Py_ssize_t nBlockCount = nBlocks->shape[0];
     const uint32_t* const nBlockPositions = nBlocks->buf;
 
     Py_ssize_t i;
     for (i = 0; i < nBlockCount; i++) {
-        uint32_t nBlockStart = nBlockPositions[2*i];
-        uint32_t nBlockEnd = nBlockPositions[2*i+1];
+        Py_ssize_t nBlockStart = nBlockPositions[2*i];
+        Py_ssize_t nBlockEnd = nBlockPositions[2*i+1];
         if (nBlockEnd < start) continue;
         if (end < nBlockStart) break;
         if (nBlockStart < start) nBlockStart = start;
@@ -313,7 +314,8 @@ applyNs(char sequence[], uint32_t start, uint32_t end, Py_buffer *nBlocks)
 }
 
 static void
-applyMask(char sequence[], uint32_t start, uint32_t end, Py_buffer* maskBlocks)
+applyMask(char sequence[], Py_ssize_t start, Py_ssize_t end,
+          Py_buffer* maskBlocks)
 {
     const Py_ssize_t maskBlockCount = maskBlocks->shape[0];
     const uint32_t* const maskBlockPositions = maskBlocks->buf;
@@ -321,9 +323,9 @@ applyMask(char sequence[], uint32_t start, uint32_t end, Py_buffer* maskBlocks)
 
     Py_ssize_t i;
     for (i = 0; i < maskBlockCount; i++) {
-        uint32_t j;
-        uint32_t maskBlockStart = maskBlockPositions[2*i];
-        uint32_t maskBlockEnd = maskBlockPositions[2*i+1];
+        Py_ssize_t j;
+        Py_ssize_t maskBlockStart = maskBlockPositions[2*i];
+        Py_ssize_t maskBlockEnd = maskBlockPositions[2*i+1];
         if (maskBlockEnd < start) continue;
         if (end < maskBlockStart) break;
         if (maskBlockStart < start) maskBlockStart = start;
@@ -457,7 +459,7 @@ static struct PyMethodDef _twoBitIO_methods[] = {
      METH_VARARGS | METH_KEYWORDS,
      TwoBit_convert__doc__
     },
-    {NULL,          NULL, 0, NULL} /* sentinel */
+    {NULL, NULL, 0, NULL} /* sentinel */
 };
 
 

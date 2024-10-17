@@ -10,7 +10,8 @@
 
 from io import StringIO
 
-from Bio.File import _IndexedSeqFileProxy, _open_for_random_access
+from Bio.File import _IndexedSeqFileProxy
+from Bio.File import _open_for_random_access
 
 
 class SearchIndexer(_IndexedSeqFileProxy):

@@ -81,7 +81,7 @@ class IsoelectricPoint:
 
     def __init__(self, protein_sequence, aa_content=None):
         """Initialize the class."""
-        self.sequence = str(protein_sequence).upper()
+        self.sequence = protein_sequence.upper()
         if not aa_content:
             from Bio.SeqUtils.ProtParam import ProteinAnalysis as _PA
 
@@ -159,3 +159,9 @@ class IsoelectricPoint:
             next_pH = (min_ + max_) / 2
             return self.pi(next_pH, min_, max_)
         return pH
+
+
+if __name__ == "__main__":
+    from Bio._utils import run_doctest
+
+    run_doctest()

@@ -36,16 +36,16 @@ hydrogen bonds is at <https://www.thingiverse.com/thing:3957471>.
 """
 # import re
 
-from Bio.File import as_handle
-from Bio.PDB.PDBExceptions import PDBException
+import numpy as np  # type: ignore
 
-from Bio.PDB.internal_coords import IC_Residue, IC_Chain
+from Bio.File import as_handle
+from Bio.PDB.internal_coords import IC_Chain
+from Bio.PDB.internal_coords import IC_Residue
+from Bio.PDB.PDBExceptions import PDBException
 
 # from Bio.PDB.Structure import Structure
 # from Bio.PDB.Residue import Residue
 from Bio.PDB.vectors import homog_scale_mtx
-
-import numpy as np  # type: ignore
 
 
 def _scale_residue(res, scale, scaleMtx):

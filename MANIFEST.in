@@ -37,6 +37,7 @@ recursive-include Doc/images *.svg # e.g. the new logo for the Tutorial
 include Doc/examples/ls_orchid.gbk.gz
 include Doc/examples/ls_orchid.gbk.bz2
 include Doc/examples/ec_5.4.2.2.txt 
+exclude Doc/_build/
 
 # Include Bio.Cluster, Bio.Affy, Bio.phenotype
 # Note setup.py will only install these if Numpy is installed.
@@ -54,6 +55,10 @@ exclude Tests/Gck/DGVC_GCK.zip
 
 # e.g. from running the unit tests, or PyPy, etc
 global-exclude *.pyc *.pyo *.py{} *.py-e
+
+# Include Python type annotation declarations, see PEP-561
+include Bio/py.typed
+include BioSQL/py.typed
 
 # Make sure the required data files are included.
 include Bio/Entrez/DTDs/*.dtd  # Include DTD files for Entrez

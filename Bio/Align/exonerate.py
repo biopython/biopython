@@ -20,35 +20,25 @@ Bio.Align.exonerate was tested on the following Exonerate versions and models:
       - protein2dna                 - protein2genome
       - ungapped                    - ungapped:translated
 
-Although model testing were not exhaustive, ExonerateIO should be able to cope
+Although model testing were not exhaustive, the parser should be able to cope
 with all Exonerate models. Please file a bug report if you stumble upon an
 unparsable file.
 
-More information on Exonerate is available on its home page at
-www.ebi.ac.uk/~guy/exonerate/
-
 You are expected to use this module via the Bio.Align functions.
 """
-import numpy
 
+import numpy as np
 
 from Bio.Align import Alignment
 from Bio.Align import interfaces
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio import BiopythonExperimentalWarning
-
-import warnings
-
-warnings.warn(
-    "Bio.Align.exonerate is an experimental module which may undergo "
-    "significant changes prior to its future official release.",
-    BiopythonExperimentalWarning,
-)
 
 
 class AlignmentWriter(interfaces.AlignmentWriter):
     """Alignment file writer for the Exonerate cigar and vulgar file format."""
+
+    fmt = "Exonerate"
 
     def __init__(self, target, fmt="vulgar"):
         """Create an AlignmentWriter object.
@@ -62,7 +52,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                        Default value is 'vulgar'.
 
         """
-        super().__init__(target, mode="w")
+        super().__init__(target)
         if fmt == "vulgar":
             self.format_alignment = self._format_alignment_vulgar
         elif fmt == "cigar":
@@ -72,22 +62,22 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 "argument fmt should be 'vulgar' or 'cigar' (received %s)" % fmt
             )
 
-    def write_header(self, alignments):
+    def write_header(self, stream, alignments):
         """Write the header."""
         try:
-            commandline = alignments.commandline
+            metadata = alignments.metadata
         except AttributeError:
             commandline = ""
-        try:
-            hostname = alignments.hostname
-        except AttributeError:
             hostname = ""
-        self.stream.write(f"Command line: [{commandline}]\n")
-        self.stream.write(f"Hostname: [{hostname}]\n")
+        else:
+            commandline = metadata.get("Command line", "")
+            hostname = metadata.get("Hostname", "")
+        stream.write(f"Command line: [{commandline}]\n")
+        stream.write(f"Hostname: [{hostname}]\n")
 
-    def write_footer(self):
+    def write_footer(self, stream):
         """Write the footer."""
-        self.stream.write("-- completed exonerate analysis\n")
+        stream.write("-- completed exonerate analysis\n")
 
     def _format_alignment_cigar(self, alignment):
         """Return a string with a single alignment formatted as a cigar line."""
@@ -98,7 +88,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         target_end = coordinates[0, -1]
         query_start = coordinates[1, 0]
         query_end = coordinates[1, -1]
-        steps = coordinates[:, 1:] - coordinates[:, :-1]
+        steps = np.diff(coordinates)
         query = alignment.query
         target = alignment.target
         try:
@@ -131,7 +121,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         elif query_start > query_end:
             query_strand = "-"
             steps[1, :] = -steps[1, :]
-        score = alignment.score
+        score = format(alignment.score, "g")
         words = [
             "cigar:",
             query_id,
@@ -142,7 +132,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             str(target_start),
             str(target_end),
             target_strand,
-            str(score),
+            score,
         ]
         try:
             operations = alignment.operations
@@ -290,7 +280,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         target_end = coordinates[0, -1]
         query_start = coordinates[1, 0]
         query_end = coordinates[1, -1]
-        steps = coordinates[:, 1:] - coordinates[:, :-1]
+        steps = np.diff(coordinates)
         query = alignment.query
         target = alignment.target
         try:
@@ -323,7 +313,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         elif query_start > query_end:
             query_strand = "-"
             steps[1, :] = -steps[1, :]
-        score = alignment.score
+        score = format(alignment.score, "g")
         words = [
             "vulgar:",
             query_id,
@@ -381,7 +371,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                         assert target_molecule_type == "protein"
                     else:
                         raise ValueError(
-                            "Unexpected steps target %d, query %s for operation 'M'"
+                            "Unexpected steps target %d, query %d for operation 'M'"
+                            % (target_step, query_step)
                         )
                 elif operation == "5":  # 5' splice site
                     assert target_step == 2 or query_step == 2
@@ -434,30 +425,25 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     of matches and mismatches are stored as attributes of each alignment.
     """
 
-    def __init__(self, source):
-        """Create an AlignmentIterator object.
+    fmt = "Exonerate"
 
-        Arguments:
-         - source   - input data or file name
-
-        """
-        super().__init__(source, mode="t", fmt="PSL")
-        stream = self.stream
-        self.program = "exonerate"
+    def _read_header(self, stream):
+        self.metadata = {}
+        self.metadata["Program"] = "exonerate"
         line = next(stream)
         prefix = "Command line: "
         assert line.startswith(prefix)
         commandline = line[len(prefix) :].strip()
         assert commandline.startswith("[")
         assert commandline.endswith("]")
-        self.commandline = commandline[1:-1]
+        self.metadata["Command line"] = commandline[1:-1]
         line = next(stream)
         prefix = "Hostname: "
         assert line.startswith(prefix)
         hostname = line[len(prefix) :].strip()
         assert hostname.startswith("[")
         assert hostname.endswith("]")
-        self.hostname = hostname[1:-1]
+        self.metadata["Hostname"] = hostname[1:-1]
 
     @staticmethod
     def _parse_cigar(words):
@@ -469,15 +455,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         target_start = int(words[5])
         target_end = int(words[6])
         target_strand = words[7]
-        score = int(words[8])
-        target_seq = Seq(None, length=target_end)
-        query_seq = Seq(None, length=query_end)
-        target = SeqRecord(target_seq, id=target_id)
-        query = SeqRecord(query_seq, id=query_id)
+        score = float(words[8])
         qs = 0
         ts = 0
         n = (len(words) - 8) // 2
-        coordinates = numpy.empty((2, n + 1), int)
+        coordinates = np.empty((2, n + 1), int)
         coordinates[0, 0] = ts
         coordinates[1, 0] = qs
         for i, (operation, step) in enumerate(zip(words[9::2], words[10::2])):
@@ -501,24 +483,42 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             coordinates[1, i + 1] = qs
         if target_strand == "+":
             coordinates[0, :] += target_start
+            target_length = target_end
+            target_molecule_type = None
         elif target_strand == "-":
             coordinates[0, :] = target_start - coordinates[0, :]
+            target_length = target_start
+            target_molecule_type = None
         elif target_strand == ".":  # protein
             if query_strand != ".":
                 # dna to protein alignment; integer division, but round up:
                 coordinates[0, :] = (coordinates[0, :] + 2) // 3
             coordinates[0, :] += target_start
-            target.annotations["molecule_type"] = "protein"
+            target_molecule_type = "protein"
+            target_length = target_end
         if query_strand == "+":
             coordinates[1, :] += query_start
+            query_length = query_end
+            query_molecule_type = None
         elif query_strand == "-":
             coordinates[1, :] = query_start - coordinates[1, :]
+            query_length = query_start
+            query_molecule_type = None
         elif query_strand == ".":  # protein
             if target_strand != ".":
                 # protein to dna alignment; integer division, but round up:
-                coordinates[1, :] = (coordinates[1, :] + 2) // 3
+                coordinates[1, :] = -(coordinates[1, :] // -3)
             coordinates[1, :] += query_start
-            query.annotations["molecule_type"] = "protein"
+            query_molecule_type = "protein"
+            query_length = query_end
+        target_seq = Seq(None, length=target_length)
+        query_seq = Seq(None, length=query_length)
+        target = SeqRecord(target_seq, id=target_id, description="")
+        query = SeqRecord(query_seq, id=query_id, description="")
+        if target_molecule_type is not None:
+            target.annotations["molecule_type"] = target_molecule_type
+        if query_molecule_type is not None:
+            query.annotations["molecule_type"] = query_molecule_type
         alignment = Alignment([target, query], coordinates)
         alignment.score = score
         return alignment
@@ -533,23 +533,17 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         target_start = int(words[5])
         target_end = int(words[6])
         target_strand = words[7]
-        score = int(words[8])
-        target_seq = Seq(None, length=target_end)
-        query_seq = Seq(None, length=query_end)
-        target = SeqRecord(target_seq, id=target_id)
-        query = SeqRecord(query_seq, id=query_id)
+        score = float(words[8])
         ops = words[9::3]
         qs = 0
         ts = 0
         n = (len(words) - 8) // 3 + ops.count("N")
-        coordinates = numpy.empty((2, n + 1), int)
+        coordinates = np.empty((2, n + 1), int)
         coordinates[0, 0] = ts
         coordinates[1, 0] = qs
         operations = bytearray(n)
         i = 0
-        for (operation, query_step, target_step) in zip(
-            ops, words[10::3], words[11::3]
-        ):
+        for operation, query_step, target_step in zip(ops, words[10::3], words[11::3]):
             query_step = int(query_step)
             target_step = int(target_step)
             if operation == "M":  # Match
@@ -576,7 +570,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         % (query_step, target_step)
                     )
             elif operation == "N":  # Non-equivalenced (unaligned) region
-                operation = "U"  # 'N' is alread used for introns in SAM/BAM
+                operation = "U"  # 'N' is already used for introns in SAM/BAM
                 if target_step > 0:
                     ts += target_step
                     coordinates[0, i + 1] = ts
@@ -604,28 +598,42 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             i += 1
         if target_strand == "+":
             coordinates[0, :] += target_start
+            target_length = target_end
+            target_molecule_type = None
         elif target_strand == "-":
             coordinates[0, :] = target_start - coordinates[0, :]
+            target_length = target_start
+            target_molecule_type = None
         elif target_strand == ".":  # protein
             coordinates[0, :] += target_start
-            target.annotations["molecule_type"] = "protein"
+            target_molecule_type = "protein"
+            target_length = target_end
         if query_strand == "+":
             coordinates[1, :] += query_start
+            query_length = query_end
+            query_molecule_type = None
         elif query_strand == "-":
             coordinates[1, :] = query_start - coordinates[1, :]
+            query_length = query_start
+            query_molecule_type = None
         elif query_strand == ".":  # protein
             coordinates[1, :] += query_start
-            query.annotations["molecule_type"] = "protein"
+            query_molecule_type = "protein"
+            query_length = query_end
+        target_seq = Seq(None, length=target_length)
+        query_seq = Seq(None, length=query_length)
+        target = SeqRecord(target_seq, id=target_id, description="")
+        query = SeqRecord(query_seq, id=query_id, description="")
+        if target_molecule_type is not None:
+            target.annotations["molecule_type"] = target_molecule_type
+        if query_molecule_type is not None:
+            query.annotations["molecule_type"] = query_molecule_type
         alignment = Alignment([target, query], coordinates)
         alignment.operations = operations
         alignment.score = score
         return alignment
 
-    def parse(self, stream):
-        """Parse the next alignment from the stream."""
-        if stream is None:
-            raise StopIteration
-
+    def _read_next_alignment(self, stream):
         for line in stream:
             line = line.strip()
             if line == "-- completed exonerate analysis":
@@ -636,14 +644,13 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 raise ValueError(
                     "Found additional data after 'completed exonerate analysis'; corrupt file?"
                 )
-            elif line.startswith("vulgar: "):
+            if line.startswith("vulgar: "):
                 words = line[8:].split()
                 alignment = self._parse_vulgar(words)
-                yield alignment
             elif line.startswith("cigar: "):
                 words = line[7:].split()
                 alignment = self._parse_cigar(words)
-                yield alignment
+            return alignment
         raise ValueError(
             "Failed to find 'completed exonerate analysis'; truncated file?"
         )

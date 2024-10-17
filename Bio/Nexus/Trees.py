@@ -13,22 +13,24 @@ common ancestors,...) and to manipulate trees (re-root trees, split terminal
 nodes).
 """
 
-
 import random
+import re
 import sys
-from . import Nodes
 
+from . import Nodes
 
 PRECISION_BRANCHLENGTH = 6
 PRECISION_SUPPORT = 6
 NODECOMMENT_START = "[&"
 NODECOMMENT_END = "]"
 
+_re_block_delimiters = re.compile(
+    rf"({re.escape(NODECOMMENT_START)}|{re.escape(NODECOMMENT_END)}|[(),])"
+)
+
 
 class TreeError(Exception):
     """Provision for the management of Tree exceptions."""
-
-    pass
 
 
 class NodeData:
@@ -88,6 +90,7 @@ class Tree(Nodes.Chain):
         # Remove any leading/trailing white space - want any string starting
         # with " (..." should be recognised as a leaf, "(..."
         tree = tree.strip()
+
         if tree.count("(") != tree.count(")"):
             raise TreeError("Parentheses do not match in (sub)tree: " + tree)
         if tree.count("(") == 0:  # a leaf
@@ -95,41 +98,54 @@ class Tree(Nodes.Chain):
             nodecomment = tree.find(NODECOMMENT_START)
             colon = tree.find(":")
             if colon == -1 and nodecomment == -1:  # none
-                return [tree, [None]]
+                branch, comment = tree, [None]
             elif colon == -1 and nodecomment > -1:  # only special comment
-                return [tree[:nodecomment], self._get_values(tree[nodecomment:])]
+                branch, comment = tree[:nodecomment], self._get_values(
+                    tree[nodecomment:]
+                )
             elif colon > -1 and nodecomment == -1:  # only numerical values
-                return [tree[:colon], self._get_values(tree[colon + 1 :])]
+                branch, comment = tree[:colon], self._get_values(tree[colon + 1 :])
             elif (
                 colon < nodecomment
             ):  # taxon name ends at first colon or with special comment
-                return [tree[:colon], self._get_values(tree[colon + 1 :])]
+                branch, comment = tree[:colon], self._get_values(tree[colon + 1 :])
             else:
-                return [tree[:nodecomment], self._get_values(tree[nodecomment:])]
+                branch, comment = tree[:nodecomment], self._get_values(
+                    tree[nodecomment:]
+                )
+
+            return [branch, comment]
         else:
             closing = tree.rfind(")")
             val = self._get_values(tree[closing + 1 :])
             if not val:
                 val = [None]
+
             subtrees = []
             plevel = 0
             prev = 1
             incomment = False
-            for p in range(1, closing):
-                if not incomment and tree[p] == "(":
-                    plevel += 1
-                elif not incomment and tree[p] == ")":
-                    plevel -= 1
-                elif tree[p:].startswith(NODECOMMENT_START):
-                    incomment = True
-                elif incomment and tree[p] == NODECOMMENT_END:
-                    incomment = False
-                elif not incomment and tree[p] == "," and plevel == 0:
-                    subtrees.append(tree[prev:p])
-                    prev = p + 1
 
+            blocks = _re_block_delimiters.split(tree[1:closing])
+
+            for idx, blk in enumerate(blocks):
+                if not incomment:
+                    if blk == "(":
+                        plevel += 1
+                    elif blk == ")":
+                        plevel -= 1
+                    elif blk == NODECOMMENT_START:
+                        incomment = True
+                    elif blk == "," and plevel == 0:
+                        p = sum(len(blk) for blk in blocks[: idx + 1])
+                        subtrees.append(tree[prev:p])
+                        prev = p + 1
+                elif blk == NODECOMMENT_END:
+                    incomment = False
             subtrees.append(tree[prev:closing])
+
             subclades = [self._parse(subtree) for subtree in subtrees]
+
             return [subclades, val]
 
     def _add_subtree(self, parent_id=None, tree=None):
@@ -441,8 +457,8 @@ class Tree(Nodes.Chain):
             and tree2.node(n).data.support >= threshold
         ]
         conflict = []
-        for (st1, sup1) in t1:
-            for (st2, sup2) in t2:
+        for st1, sup1 in t1:
+            for st2, sup2 in t2:
                 if not st1.issubset(st2) and not st2.issubset(
                     st1
                 ):  # don't hiccup on upstream nodes
@@ -537,7 +553,7 @@ class Tree(Nodes.Chain):
         """
         for n in self._walk():
             if self.node(n).data.support:
-                self.node(n).data.support /= float(nrep)
+                self.node(n).data.support /= nrep
 
     def has_support(self, node=None):
         """Return True if any of the nodes has data.support != None."""
@@ -586,7 +602,7 @@ class Tree(Nodes.Chain):
             terminals.remove(newsplit)
         # distribute taxon labels randomly
         random.shuffle(taxon_list)
-        for (node, name) in zip(terminals, taxon_list):
+        for node, name in zip(terminals, taxon_list):
             self.node(node).data.taxon = name
 
     def display(self):
@@ -630,7 +646,9 @@ class Tree(Nodes.Chain):
                         comment,
                     )
                 )
-        print("\n".join("%3s %32s %15s %15s %8s %10s %8s %20s" % l for l in table))
+        print(
+            "\n".join("%3s %32s %15s %15s %8s %10s %8s %20s" % line for line in table)
+        )
         print(f"\nRoot:  {self.root}")
 
     def to_string(
@@ -722,7 +740,7 @@ class Tree(Nodes.Chain):
             treeline.append("a_tree")
         treeline.append("=")
         if self.weight != 1:
-            treeline.append(f"[&W{str(round(float(self.weight), 3))}]")
+            treeline.append(f"[&W{round(float(self.weight), 3)!s}]")
         if self.rooted:
             treeline.append("[&R]")
         succnodes = ladderize_nodes(self.node(self.root).succ)
@@ -915,9 +933,9 @@ def consensus(trees, threshold=0.5, outgroup=None):
             subclade_taxa = sorted(t.get_taxa(st_node))
             subclade_taxa = str(subclade_taxa)  # lists are not hashable
             if subclade_taxa in clades:
-                clades[subclade_taxa] += float(t.weight) / total
+                clades[subclade_taxa] += t.weight / total
             else:
-                clades[subclade_taxa] = float(t.weight) / total
+                clades[subclade_taxa] = t.weight / total
             # if subclade_taxa in countclades:
             #    countclades[subclade_taxa]+=t.weight
             # else:

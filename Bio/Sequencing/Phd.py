@@ -18,7 +18,6 @@ internally.  This will give SeqRecord objects for each contig sequence.
 
 from Bio import Seq
 
-
 CKEYWORDS = [
     "CHROMAT_FILE",
     "ABI_THUMBPRINT",
@@ -197,3 +196,9 @@ def _read(handle):
         record.seq_trimmed = record.seq[first:last]
 
     return record
+
+
+if __name__ == "__main__":
+    from Bio._utils import run_doctest
+
+    run_doctest()

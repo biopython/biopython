@@ -13,19 +13,25 @@
 
 """CircularDrawer module for GenomeDiagram."""
 
-# ReportLab imports
+from math import cos
+from math import pi
+from math import sin
 
-from reportlab.graphics.shapes import Drawing, String, Group, Line, Circle, Polygon
-from reportlab.lib import colors
 from reportlab.graphics.shapes import ArcPath
+from reportlab.graphics.shapes import Circle
+from reportlab.graphics.shapes import Drawing
+from reportlab.graphics.shapes import Group
+from reportlab.graphics.shapes import Line
+from reportlab.graphics.shapes import Polygon
+from reportlab.graphics.shapes import String
+from reportlab.lib import colors
 
-# GenomeDiagram imports
-from ._AbstractDrawer import AbstractDrawer, draw_polygon, intermediate_points
 from ._AbstractDrawer import _stroke_and_fill_colors
+from ._AbstractDrawer import AbstractDrawer
+from ._AbstractDrawer import draw_polygon
+from ._AbstractDrawer import intermediate_points
 from ._FeatureSet import FeatureSet
 from ._GraphSet import GraphSet
-
-from math import pi, cos, sin
 
 
 class CircularDrawer(AbstractDrawer):
@@ -309,7 +315,7 @@ class CircularDrawer(AbstractDrawer):
 
         startangle, startcos, startsin = self.canvas_angle(locstart)
         endangle, endcos, endsin = self.canvas_angle(locend)
-        midangle, midcos, midsin = self.canvas_angle(float(locend + locstart) / 2)
+        midangle, midcos, midsin = self.canvas_angle((locend + locstart) / 2)
 
         # Distribution dictionary for various ways of drawing the feature
         # Each method takes the inner and outer radii, the start and end angle
@@ -339,7 +345,7 @@ class CircularDrawer(AbstractDrawer):
             top,
             startangle,
             endangle,
-            feature.strand,
+            feature.location.strand,
             color=feature.color,
             border=feature.border,
             **kwargs,
@@ -360,7 +366,7 @@ class CircularDrawer(AbstractDrawer):
             if feature.label_strand:
                 strand = feature.label_strand
             else:
-                strand = feature.strand
+                strand = feature.location.strand
             if feature.label_position in ("start", "5'", "left"):
                 # Position the label at the feature's start
                 if strand != -1:
@@ -420,7 +426,7 @@ class CircularDrawer(AbstractDrawer):
             # No label required
             labelgroup = None
         # if locstart > locend:
-        #    print(locstart, locend, feature.strand, sigil, feature.name)
+        #    print(locstart, locend, feature.location.strand, sigil, feature.name)
         # print(locstart, locend, feature.name)
         return sigil, labelgroup
 
@@ -450,7 +456,7 @@ class CircularDrawer(AbstractDrawer):
         assert trackobjA is not None
         assert trackobjB is not None
         if trackobjA == trackobjB:
-            raise NotImplementedError()
+            raise NotImplementedError
 
         if trackobjA.start is not None:
             if endA < trackobjA.start:
@@ -476,7 +482,7 @@ class CircularDrawer(AbstractDrawer):
             if track == trackobjB:
                 trackB = track_level
         if trackA == trackB:
-            raise NotImplementedError()
+            raise NotImplementedError
 
         startangleA, startcosA, startsinA = self.canvas_angle(startA)
         startangleB, startcosB, startsinB = self.canvas_angle(startB)
@@ -1114,7 +1120,7 @@ class CircularDrawer(AbstractDrawer):
 
         strokecolor, color = _stroke_and_fill_colors(color, border)
 
-        if abs(float(endangle - startangle)) > 0.01:
+        if abs(endangle - startangle) > 0.01:
             # Wide arc, must use full curves
             p = ArcPath(strokeColor=strokecolor, fillColor=color, strokewidth=0)
             # Note reportlab counts angles anti-clockwise from the horizontal
@@ -1298,7 +1304,7 @@ class CircularDrawer(AbstractDrawer):
         strokecolor, color = _stroke_and_fill_colors(color, border)
 
         startangle, endangle = min(startangle, endangle), max(startangle, endangle)
-        angle = float(endangle - startangle)
+        angle = endangle - startangle
 
         middle_radius = 0.5 * (inner_radius + outer_radius)
         boxheight = outer_radius - inner_radius
@@ -1421,7 +1427,7 @@ class CircularDrawer(AbstractDrawer):
                 f"Invalid orientation {orientation!r}, should be 'left' or 'right'"
             )
 
-        angle = float(endangle - startangle)  # angle subtended by arc
+        angle = endangle - startangle  # angle subtended by arc
         middle_radius = 0.5 * (inner_radius + outer_radius)
         boxheight = outer_radius - inner_radius
         shaft_height = boxheight * shaft_height_ratio
@@ -1615,7 +1621,7 @@ class CircularDrawer(AbstractDrawer):
         strokecolor, color = _stroke_and_fill_colors(color, border)
 
         startangle, endangle = min(startangle, endangle), max(startangle, endangle)
-        angle = float(endangle - startangle)  # angle subtended by arc
+        angle = endangle - startangle  # angle subtended by arc
         height = outer_radius - inner_radius
 
         assert startangle <= endangle and angle >= 0
@@ -1680,7 +1686,7 @@ class CircularDrawer(AbstractDrawer):
             90 - (tailangle * 180 / pi),
             moveTo=True,
         )
-        for i in range(0, teeth):
+        for i in range(teeth):
             p.addArc(
                 self.xcenter,
                 self.ycenter,
@@ -1704,7 +1710,7 @@ class CircularDrawer(AbstractDrawer):
             90 - (tailangle * 180 / pi),
             reverse=True,
         )
-        for i in range(0, teeth):
+        for i in range(teeth):
             p.addArc(
                 self.xcenter,
                 self.ycenter,

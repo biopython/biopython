@@ -5,7 +5,7 @@ build
 dist
 
 #Ignore backup files from some Unix editors,
-\#*.py\#
+\#*\#
 *~
 *.swp
 *.bak
@@ -89,11 +89,13 @@ Doc/*/*/*.toc
 Doc/*/*/*.haux
 Doc/*/*/*.htoc
 Doc/_minted-Tutorial/
+Doc/_build/
 Doc/Tutorial.txt
 Doc/Tutorial.pdf
 Doc/Tutorial.html
 Doc/Tutorial.pyg
 Doc/biopdb_faq.pdf
+Doc/Biopython_doc.pdf
 Doc/version.sh
 Doc/install/Installation.txt
 Doc/install/Installation.pdf
@@ -123,5 +125,12 @@ Doc/api/*.rst
 #Ignore mypy cache directory
 .mypy_cache
 
-#Ignore virtual environment file
+#Ignore virtual environments
 .env
+.venv
+env/
+venv/
+ENV/
+
+# Testing
+**/.coverage

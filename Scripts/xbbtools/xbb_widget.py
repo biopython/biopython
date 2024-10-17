@@ -11,7 +11,6 @@
 
 """Widget code for graphical Xbbtools tool."""
 
-
 import re
 import sys
 import time
@@ -19,14 +18,14 @@ import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter import filedialog
 
+from xbb_blast import BlastIt
+from xbb_help import xbbtools_help
+from xbb_search import XDNAsearch
+from xbb_translations import xbb_translations
+from xbb_utils import NotePad
+
 from Bio.Data import CodonTable
 from Bio.SeqIO.FastaIO import SimpleFastaParser
-
-from xbb_utils import NotePad
-from xbb_translations import xbb_translations
-from xbb_blast import BlastIt
-from xbb_search import XDNAsearch
-from xbb_help import xbbtools_help
 
 
 class xbb_widget:

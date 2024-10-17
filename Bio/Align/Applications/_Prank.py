@@ -6,7 +6,9 @@
 # package.
 """Command line wrapper for the multiple alignment program PRANK."""
 
-from Bio.Application import _Option, _Switch, AbstractCommandline
+from Bio.Application import _Option
+from Bio.Application import _Switch
+from Bio.Application import AbstractCommandline
 
 
 class PrankCommandline(AbstractCommandline):
@@ -176,14 +178,14 @@ class PrankCommandline(AbstractCommandline):
             _Option(
                 ["-matresize", "matresize"],
                 "Matrix resizing multiplier",
-                checker_function=lambda x: (isinstance(x, float) or isinstance(x, int)),
+                checker_function=lambda x: (isinstance(x, (float, int))),
             ),
             # -matinitsize=# [matrix initial size multiplier]
             # Doesn't specify type but Float and Int work
             _Option(
                 ["-matinitsize", "matinitsize"],
                 "Matrix initial size multiplier",
-                checker_function=lambda x: (isinstance(x, float) or isinstance(x, int)),
+                checker_function=lambda x: (isinstance(x, (float, int))),
             ),
             _Switch(["-longseq", "longseq"], "Save space in pairwise alignments"),
             _Switch(["-pwgenomic", "pwgenomic"], "Do pairwise alignment, no guidetree"),

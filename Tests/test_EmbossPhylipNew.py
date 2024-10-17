@@ -8,15 +8,23 @@
 import os
 import sys
 import unittest
+import warnings
 
-from Bio import MissingExternalDependencyError
 from Bio import AlignIO
+from Bio import BiopythonDeprecationWarning
+from Bio import MissingExternalDependencyError
 from Bio.Nexus import Trees  # One day we should use planned TreeIO module
 
-from Bio.Emboss.Applications import FDNADistCommandline, FNeighborCommandline
-from Bio.Emboss.Applications import FSeqBootCommandline, FProtDistCommandline
-from Bio.Emboss.Applications import FProtParsCommandline, FConsenseCommandline
-from Bio.Emboss.Applications import FTreeDistCommandline, FDNAParsCommandline
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
+    from Bio.Emboss.Applications import FConsenseCommandline
+    from Bio.Emboss.Applications import FDNADistCommandline
+    from Bio.Emboss.Applications import FDNAParsCommandline
+    from Bio.Emboss.Applications import FNeighborCommandline
+    from Bio.Emboss.Applications import FProtDistCommandline
+    from Bio.Emboss.Applications import FProtParsCommandline
+    from Bio.Emboss.Applications import FSeqBootCommandline
+    from Bio.Emboss.Applications import FTreeDistCommandline
 
 # Try to avoid problems when the OS is in another language
 os.environ["LANG"] = "C"

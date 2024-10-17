@@ -19,17 +19,15 @@ default values are often due to low default settings in accall.pars
 use naccess -y, naccess -h or naccess -w to include HETATM records
 """
 
-
 import os
-import tempfile
 import shutil
 import subprocess
+import tempfile
 import warnings
+
+from Bio.PDB.AbstractPropertyMap import AbstractAtomPropertyMap
+from Bio.PDB.AbstractPropertyMap import AbstractResiduePropertyMap
 from Bio.PDB.PDBIO import PDBIO
-from Bio.PDB.AbstractPropertyMap import (
-    AbstractResiduePropertyMap,
-    AbstractAtomPropertyMap,
-)
 
 
 def run_naccess(
@@ -200,7 +198,8 @@ class NACCESS_atomic(AbstractAtomPropertyMap):
 
 if __name__ == "__main__":
     import sys
-    from Bio.PDB import PDBParser
+
+    from Bio.PDB.PDBParser import PDBParser
 
     p = PDBParser()
     s = p.get_structure("X", sys.argv[1])

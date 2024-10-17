@@ -14,7 +14,8 @@
 for likelihood ratio tests.
 """
 
-from math import log, exp
+from math import exp
+from math import log
 
 
 def cdf_chi2(df, stat):

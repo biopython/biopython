@@ -14,66 +14,47 @@ the sequences as SeqRecord objects.
 
 See also Bio.SeqIO.UniprotIO.py which supports the "uniprot-xml" format.
 """
+
 from Bio import SeqFeature
 from Bio import SwissProt
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
-
-def _make_position(location_string, offset=0):
-    """Turn a Swiss location position into a SeqFeature position object (PRIVATE).
-
-    An offset of -1 is used with a start location to make it pythonic.
-    """
-    if location_string == "?":
-        return SeqFeature.UnknownPosition()
-    # Hack so that feature from 0 to 0 becomes 0 to 0, not -1 to 0.
-    try:
-        return SeqFeature.ExactPosition(max(0, offset + int(location_string)))
-    except ValueError:
-        pass
-    if location_string.startswith("<"):
-        try:
-            return SeqFeature.BeforePosition(max(0, offset + int(location_string[1:])))
-        except ValueError:
-            pass
-    elif location_string.startswith(">"):  # e.g. ">13"
-        try:
-            return SeqFeature.AfterPosition(max(0, offset + int(location_string[1:])))
-        except ValueError:
-            pass
-    elif location_string.startswith("?"):  # e.g. "?22"
-        try:
-            return SeqFeature.UncertainPosition(
-                max(0, offset + int(location_string[1:]))
-            )
-        except ValueError:
-            pass
-    raise NotImplementedError(f"Cannot parse location '{location_string}'")
+from .Interfaces import _TextIOSource
+from .Interfaces import SequenceIterator
 
 
-def SwissIterator(source):
-    """Break up a Swiss-Prot/UniProt file into SeqRecord objects.
+class SwissIterator(SequenceIterator):
+    """Parser to break up a Swiss-Prot/UniProt file into SeqRecord objects."""
 
-    Argument source is a file-like object or a path to a file.
+    modes = "t"
 
-    Every section from the ID line to the terminating // becomes
-    a single SeqRecord with associated annotation and features.
+    def __init__(self, source: _TextIOSource) -> None:
+        """Iterate over a Swiss-Prot file and return SeqRecord objects.
 
-    This parser is for the flat file "swiss" format as used by:
-     - Swiss-Prot aka SwissProt
-     - TrEMBL
-     - UniProtKB aka UniProt Knowledgebase
+        Arguments:
+         - source - input stream opened in text mode, or a path to a file
 
-    For consistency with BioPerl and EMBOSS we call this the "swiss"
-    format. See also the SeqIO support for "uniprot-xml" format.
+        Every section from the ID line to the terminating // becomes
+        a single SeqRecord with associated annotation and features.
 
-    Rather than calling it directly, you are expected to use this
-    parser via Bio.SeqIO.parse(..., format="swiss") instead.
-    """
-    swiss_records = SwissProt.parse(source)
+        This parser is for the flat file "swiss" format as used by:
+         - Swiss-Prot aka SwissProt
+         - TrEMBL
+         - UniProtKB aka UniProt Knowledgebase
 
-    for swiss_record in swiss_records:
+        For consistency with BioPerl and EMBOSS we call this the "swiss"
+        format. See also the SeqIO support for "uniprot-xml" format.
+
+        Rather than calling it directly, you are expected to use this
+        parser via Bio.SeqIO.parse(..., format="swiss") instead.
+        """
+        super().__init__(source, fmt="SwissProt")
+
+    def __next__(self):
+        swiss_record = SwissProt._read(self.stream)
+        if swiss_record is None:
+            raise StopIteration
         # Convert the SwissProt record to a SeqRecord
         record = SeqRecord(
             Seq(swiss_record.sequence),
@@ -139,4 +120,4 @@ def SwissIterator(source):
                 annotations["references"].append(feature)
         if swiss_record.keywords:
             record.annotations["keywords"] = swiss_record.keywords
-        yield record
+        return record

@@ -10,7 +10,9 @@ Derived from the help page for RAxML version 7.3 by Alexandros Stamatakis, but
 should work for any version 7.X (and probably earlier for most options).
 """
 
-from Bio.Application import _Option, _Switch, AbstractCommandline
+from Bio.Application import _Option
+from Bio.Application import _Switch
+from Bio.Application import AbstractCommandline
 
 
 class RaxmlCommandline(AbstractCommandline):
@@ -110,7 +112,7 @@ class RaxmlCommandline(AbstractCommandline):
                         e: Optimize model+branch lengths for given input tree under
                         GAMMA/GAMMAI only.
 
-                        g: Compute per site log Likelihoods for one ore more trees
+                        g: Compute per site log Likelihoods for one or more trees
                         passed via '-z' and write them to a file that can be read
                         by CONSEL.
 

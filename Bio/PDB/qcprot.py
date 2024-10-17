@@ -21,14 +21,13 @@ Acta Crystallogr A. 2005 Jul;61(Pt 4):478-80. doi: 10.1107/S0108767305015266.
 Epub 2005 Jun 23. PMID: 15973002.
 """
 
-
 import numpy as np
 
 from Bio.PDB.PDBExceptions import PDBException
 
 
 def qcp(coords1, coords2, natoms):
-    """Implementats of the QCP code in Python.
+    """Implement the QCP code in Python.
 
     Input coordinate arrays must be centered at the origin and have
     shape Nx3.
@@ -96,22 +95,30 @@ def qcp(coords1, coords2, natoms):
         * (negSxymSyx * (SyzpSzy) + (SxzmSzx) * (SxxpSyy - Szz))
     )
 
-    # Newton-Rhapson
-    # Original paper mentions 5 iterations are sufficient (on average)
-    # for convergence up to 10^-6 precision but original code writes 50.
-    # I guess for robustness.
+    # Find largest root of the quaternion polynomial:
+    #   f(x) = x ** 4 + c2 * x ** 2 + c1 * x + c0 = 0 (eq. 8 of Theobald et al.)
+    #   f'(x) = 4 * x ** 3 + 2 * c2 * x + c1
+    #
+    # using Newton-Rhapson and E0 as initial guess. Liu et al. mentions 5
+    # iterations are sufficient (on average) for convergence up to 1e-6
+    # precision but original code writes 50, which we keep.
     nr_it = 50
-    mxEigenV = E0
-    evalprec = 1e-11
+    mxEigenV = E0  # starting guess (x in eqs above)
+    evalprec = 1e-11  # convergence criterion
     for _ in range(nr_it):
         oldg = mxEigenV
+
         x2 = mxEigenV * mxEigenV
         b = (x2 + C2) * mxEigenV
         a = b + C1
-        delta = (a * mxEigenV + C0) / (2.0 * x2 * mxEigenV + b + a)
-        mxEigenV -= delta
-        if abs(mxEigenV - oldg) < abs(evalprec * mxEigenV):
-            break
+
+        f = a * mxEigenV + C0
+        f_prime = 2.0 * x2 * mxEigenV + b + a
+
+        delta = f / (f_prime + evalprec)  # avoid division by zero
+        mxEigenV = abs(mxEigenV - delta)
+        if (mxEigenV - oldg) < (evalprec * mxEigenV):
+            break  # convergence
     else:
         print(f"Newton-Rhapson did not converge after {nr_it} iterations")
 
@@ -200,15 +207,15 @@ def qcp(coords1, coords2, natoms):
     ax = q1 * q2
 
     rot = np.zeros((3, 3))
-    # Transposed rotation matrix.
+
     rot[0][0] = a2 + x2 - y2 - z2
-    rot[1][0] = 2 * (xy + az)
-    rot[2][0] = 2 * (zx - ay)
-    rot[0][1] = 2 * (xy - az)
+    rot[0][1] = 2 * (xy + az)
+    rot[0][2] = 2 * (zx - ay)
+    rot[1][0] = 2 * (xy - az)
     rot[1][1] = a2 - x2 + y2 - z2
-    rot[2][1] = 2 * (yz + ax)
-    rot[0][2] = 2 * (zx + ay)
-    rot[1][2] = 2 * (yz - ax)
+    rot[1][2] = 2 * (yz + ax)
+    rot[2][0] = 2 * (zx + ay)
+    rot[2][1] = 2 * (yz - ax)
     rot[2][2] = a2 - x2 - y2 + z2
 
     return rmsd, rot, (q1, q2, q3, q4)
@@ -312,14 +319,14 @@ class QCPSuperimposer:
         coords_ref = self.reference_coords.copy()
 
         # Center Coordinates
-        com1 = np.mean(coords, axis=0)
-        com2 = np.mean(coords_ref, axis=0)
+        com_coords = np.mean(coords, axis=0)
+        com_ref = np.mean(coords_ref, axis=0)
 
-        coords -= com1
-        coords_ref -= com2
+        coords -= com_coords
+        coords_ref -= com_ref
 
-        (self.rms, self.rot, self.lquart) = qcp(coords_ref, coords, self._natoms)
-        self.tran = com2 - np.dot(com1, self.rot)
+        (self.rms, self.rot, _) = qcp(coords_ref, coords, self._natoms)
+        self.tran = com_ref - np.dot(com_coords, self.rot)
 
     # Getters
     def get_transformed(self):
@@ -346,7 +353,7 @@ class QCPSuperimposer:
 
         if self.init_rms is None:
             diff = self.coords - self.reference_coords
-            self.init_rms = np.sqrt(np.sum(np.dot(diff, diff), axis=0) / self._natoms)
+            self.init_rms = np.sqrt(np.sum(np.sum(diff * diff, axis=1) / self._natoms))
         return self.init_rms
 
     def get_rms(self):

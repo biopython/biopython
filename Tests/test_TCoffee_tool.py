@@ -4,11 +4,19 @@
 # as part of this package.
 """Unittests for Bio.Align.Applications interface for TCOFFEE."""
 
-import sys
 import os
+import sys
 import unittest
-from Bio import AlignIO, SeqIO, MissingExternalDependencyError
-from Bio.Align.Applications import TCoffeeCommandline
+import warnings
+
+from Bio import AlignIO
+from Bio import BiopythonDeprecationWarning
+from Bio import MissingExternalDependencyError
+from Bio import SeqIO
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
+    from Bio.Align.Applications import TCoffeeCommandline
 
 # Try to avoid problems when the OS is in another language
 os.environ["LANG"] = "C"

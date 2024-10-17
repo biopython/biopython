@@ -6,9 +6,8 @@
 
 """Common code for SearchIO tests."""
 
-
-import os
 import gzip
+import os
 import unittest
 
 try:

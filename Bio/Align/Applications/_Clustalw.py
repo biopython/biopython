@@ -6,9 +6,11 @@
 # package.
 """Command line wrapper for the multiple alignment program Clustal W."""
 
-
 import os
-from Bio.Application import _Option, _Switch, AbstractCommandline
+
+from Bio.Application import _Option
+from Bio.Application import _Switch
+from Bio.Application import AbstractCommandline
 
 
 class ClustalwCommandline(AbstractCommandline):
@@ -184,22 +186,22 @@ class ClustalwCommandline(AbstractCommandline):
             _Option(
                 ["-ktuple", "-KTUPLE", "KTUPLE", "ktuple"],
                 "Word size",
-                checker_function=lambda x: (isinstance(x, int) or isinstance(x, float)),
+                checker_function=lambda x: (isinstance(x, (float, int))),
             ),
             _Option(
                 ["-topdiags", "-TOPDIAGS", "TOPDIAGS", "topdiags"],
                 "Number of best diags.",
-                checker_function=lambda x: (isinstance(x, int) or isinstance(x, float)),
+                checker_function=lambda x: (isinstance(x, (float, int))),
             ),
             _Option(
                 ["-window", "-WINDOW", "WINDOW", "window"],
                 "Window around best diags.",
-                checker_function=lambda x: (isinstance(x, int) or isinstance(x, float)),
+                checker_function=lambda x: (isinstance(x, (float, int))),
             ),
             _Option(
                 ["-pairgap", "-PAIRGAP", "PAIRGAP", "pairgap"],
                 "Gap penalty",
-                checker_function=lambda x: (isinstance(x, int) or isinstance(x, float)),
+                checker_function=lambda x: (isinstance(x, (float, int))),
             ),
             _Option(
                 ["-score", "-SCORE", "SCORE", "score"],
@@ -238,12 +240,12 @@ class ClustalwCommandline(AbstractCommandline):
             _Option(
                 ["-pwgapopen", "-PWGAPOPEN", "PWGAPOPEN", "pwgapopen"],
                 "Gap opening penalty",
-                checker_function=lambda x: (isinstance(x, int) or isinstance(x, float)),
+                checker_function=lambda x: (isinstance(x, (float, int))),
             ),
             _Option(
                 ["-pwgapext", "-PWGAPEXT", "PWGAPEXT", "pwgapext"],
                 "Gap extension penalty",
-                checker_function=lambda x: (isinstance(x, int) or isinstance(x, float)),
+                checker_function=lambda x: (isinstance(x, (float, int))),
             ),
             # ***Multiple Alignments:***
             _Option(
@@ -287,12 +289,12 @@ class ClustalwCommandline(AbstractCommandline):
             _Option(
                 ["-gapopen", "-GAPOPEN", "GAPOPEN", "gapopen"],
                 "Gap opening penalty",
-                checker_function=lambda x: (isinstance(x, int) or isinstance(x, float)),
+                checker_function=lambda x: (isinstance(x, (float, int))),
             ),
             _Option(
                 ["-gapext", "-GAPEXT", "GAPEXT", "gapext"],
                 "Gap extension penalty",
-                checker_function=lambda x: (isinstance(x, int) or isinstance(x, float)),
+                checker_function=lambda x: (isinstance(x, (float, int))),
             ),
             _Switch(
                 ["-endgaps", "-ENDGAPS", "ENDGAPS", "endgaps"],
@@ -301,7 +303,7 @@ class ClustalwCommandline(AbstractCommandline):
             _Option(
                 ["-gapdist", "-GAPDIST", "GAPDIST", "gapdist"],
                 "Gap separation pen. range",
-                checker_function=lambda x: (isinstance(x, int) or isinstance(x, float)),
+                checker_function=lambda x: (isinstance(x, (float, int))),
             ),
             _Switch(
                 ["-nopgap", "-NOPGAP", "NOPGAP", "nopgap"], "Residue-specific gaps off"
@@ -314,7 +316,7 @@ class ClustalwCommandline(AbstractCommandline):
             _Option(
                 ["-maxdiv", "-MAXDIV", "MAXDIV", "maxdiv"],
                 "% ident. for delay",
-                checker_function=lambda x: (isinstance(x, int) or isinstance(x, float)),
+                checker_function=lambda x: (isinstance(x, (float, int))),
             ),
             # Already handled in General Settings section, but appears a second
             # time under Multiple Alignments in the help
@@ -325,7 +327,7 @@ class ClustalwCommandline(AbstractCommandline):
             _Option(
                 ["-transweight", "-TRANSWEIGHT", "TRANSWEIGHT", "transweight"],
                 "Transitions weighting",
-                checker_function=lambda x: (isinstance(x, int) or isinstance(x, float)),
+                checker_function=lambda x: (isinstance(x, (float, int))),
             ),
             _Option(
                 ["-iteration", "-ITERATION", "ITERATION", "iteration"],
@@ -410,22 +412,22 @@ class ClustalwCommandline(AbstractCommandline):
             _Option(
                 ["-helixgap", "-HELIXGAP", "HELIXGAP", "helixgap"],
                 "Gap penalty for helix core residues",
-                checker_function=lambda x: (isinstance(x, int) or isinstance(x, float)),
+                checker_function=lambda x: (isinstance(x, (float, int))),
             ),
             _Option(
                 ["-strandgap", "-STRANDGAP", "STRANDGAP", "strandgap"],
                 "gap penalty for strand core residues",
-                checker_function=lambda x: (isinstance(x, int) or isinstance(x, float)),
+                checker_function=lambda x: (isinstance(x, (float, int))),
             ),
             _Option(
                 ["-loopgap", "-LOOPGAP", "LOOPGAP", "loopgap"],
                 "Gap penalty for loop regions",
-                checker_function=lambda x: (isinstance(x, int) or isinstance(x, float)),
+                checker_function=lambda x: (isinstance(x, (float, int))),
             ),
             _Option(
                 ["-terminalgap", "-TERMINALGAP", "TERMINALGAP", "terminalgap"],
                 "Gap penalty for structure termini",
-                checker_function=lambda x: (isinstance(x, int) or isinstance(x, float)),
+                checker_function=lambda x: (isinstance(x, (float, int))),
             ),
             _Option(
                 ["-helixendin", "-HELIXENDIN", "HELIXENDIN", "helixendin"],

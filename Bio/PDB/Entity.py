@@ -9,20 +9,40 @@
 It is a simple container class, with list and dictionary like properties.
 """
 
+import warnings
 from collections import deque
 from copy import copy
+from typing import Any
+from typing import Generic
+from typing import Optional
+from typing import TYPE_CHECKING
+from typing import TypeVar
+from typing import Union
 
 import numpy as np
 
+from Bio import BiopythonWarning
 from Bio.PDB.PDBExceptions import PDBConstructionException
 
+if TYPE_CHECKING:
+    from Bio.PDB.Atom import Atom
 
-class Entity:
+_Child = TypeVar("_Child", bound=Union["Entity", "Atom"])
+_Parent = TypeVar("_Parent", bound=Optional["Entity"])
+_Self = TypeVar("_Self", bound="Entity[Any, Any]")
+
+
+class Entity(Generic[_Parent, _Child]):
     """Basic container object for PDB hierarchy.
 
     Structure, Model, Chain and Residue are subclasses of Entity.
     It deals with storage and lookup.
     """
+
+    parent: Optional[_Parent]
+    child_list: list[_Child]
+    child_dict: dict[Any, _Child]
+    level: str
 
     def __init__(self, id):
         """Initialize the class."""
@@ -171,17 +191,51 @@ class Entity:
         """
         if value == self._id:
             return
-        if self.parent:
+        if self.parent is not None:
             if value in self.parent.child_dict:
-                raise ValueError(
-                    f"Cannot change id from `{self._id}` to `{value}`."
-                    f" The id `{value}` is already used for a sibling of this entity."
+                # See issue 1551 for details on the downgrade.
+                warnings.warn(
+                    f"The id `{value}` is already used for a sibling of this entity. "
+                    f"Changing id from `{self._id}` to `{value}` might create access "
+                    "inconsistencies to children of the parent entity.",
+                    BiopythonWarning,
                 )
             del self.parent.child_dict[self._id]
             self.parent.child_dict[value] = self
 
         self._id = value
         self._reset_full_id()
+
+    def strictly_equals(
+        self: _Self, other: _Self, compare_coordinates: bool = False
+    ) -> bool:
+        """Compare this entity to the other entity for equality.
+
+        Recursively compare the children of this entity to the other entity's children.
+        Compare most properties including names and IDs.
+
+        :param other: The entity to compare this entity with
+        :type other: Entity
+        :param compare_coordinates: Whether to compare atomic coordinates
+        :type compare_coordinates: bool
+        :return: Whether the two entities are strictly equal
+        :rtype: bool
+        """
+        if not isinstance(other, type(self)):
+            return False
+
+        if self.id != other.id:
+            return False
+
+        if len(self.child_list) != len(other.child_list):
+            return False
+
+        for left_child, right_child in zip(self.child_list, other.child_list):
+            assert hasattr(left_child, "strictly_equals")
+            if not left_child.strictly_equals(right_child, compare_coordinates):
+                return False
+
+        return True
 
     def get_level(self):
         """Return level in hierarchy.
@@ -194,7 +248,7 @@ class Entity:
         """
         return self.level
 
-    def set_parent(self, entity):
+    def set_parent(self, entity: _Parent):
         """Set the parent Entity object."""
         self.parent = entity
         self._reset_full_id()
@@ -210,7 +264,7 @@ class Entity:
         del self.child_dict[id]
         self.child_list.remove(child)
 
-    def add(self, entity):
+    def add(self, entity: _Child):
         """Add a child to the Entity."""
         entity_id = entity.get_id()
         if self.has_id(entity_id):
@@ -219,7 +273,7 @@ class Entity:
         self.child_list.append(entity)
         self.child_dict[entity_id] = entity
 
-    def insert(self, pos, entity):
+    def insert(self, pos: int, entity: _Child):
         """Add a child to the Entity at a specified position."""
         entity_id = entity.get_id()
         if self.has_id(entity_id):
@@ -276,10 +330,10 @@ class Entity:
         """Apply rotation and translation to the atomic coordinates.
 
         :param rot: A right multiplying rotation matrix
-        :type rot: 3x3 Numeric array
+        :type rot: 3x3 NumPy array
 
         :param tran: the translation vector
-        :type tran: size 3 Numeric array
+        :type tran: size 3 NumPy array
 
         Examples
         --------
@@ -434,6 +488,43 @@ class DisorderedEntityWrapper:
     def get_id(self):
         """Return the id."""
         return self.id
+
+    def strictly_equals(
+        self, other: "DisorderedEntityWrapper", compare_coordinates: bool = False
+    ) -> bool:
+        """Compare this entity to the other entity using a strict definition of equality.
+
+        Recursively compare the children of this entity to the other entity's children.
+        Compare most properties including the selected child, names, and IDs.
+
+        :param other: The entity to compare this entity with
+        :type other: DisorderedEntityWrapper
+        :param compare_coordinates: Whether to compare atomic coordinates
+        :type compare_coordinates: bool
+        :return: Whether the two entities are strictly equal
+        :rtype: bool
+        """
+        if not isinstance(other, type(self)):
+            return False
+
+        if self.id != other.id:
+            return False
+
+        if not self.selected_child.get_id() == other.selected_child.get_id():
+            return False
+
+        # Check that the children dictionaries have the same keys
+        if self.child_dict.keys() != other.child_dict.keys():
+            return False
+
+        # Compare the children using strictly_equals
+        for key in self.child_dict.keys():
+            if not self.child_dict[key].strictly_equals(
+                other.child_dict[key], compare_coordinates
+            ):
+                return False
+
+        return True
 
     def disordered_has_id(self, id):
         """Check if there is an object present associated with this id."""

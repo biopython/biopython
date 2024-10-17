@@ -9,22 +9,27 @@
 
 """Tests for samtools tool."""
 
-from Bio import MissingExternalDependencyError
-import sys
 import os
+import sys
 import unittest
+import warnings
 
-from Bio.Application import ApplicationError
-from Bio.Sequencing.Applications import SamtoolsViewCommandline
-from Bio.Sequencing.Applications import SamtoolsCalmdCommandline
-from Bio.Sequencing.Applications import SamtoolsCatCommandline
-from Bio.Sequencing.Applications import SamtoolsFaidxCommandline
-from Bio.Sequencing.Applications import SamtoolsIdxstatsCommandline
-from Bio.Sequencing.Applications import SamtoolsIndexCommandline
-from Bio.Sequencing.Applications import SamtoolsMergeCommandline
-from Bio.Sequencing.Applications import SamtoolsMpileupCommandline
-from Bio.Sequencing.Applications import SamtoolsVersion1xSortCommandline
-from Bio.Sequencing.Applications import SamtoolsSortCommandline
+from Bio import BiopythonDeprecationWarning
+from Bio import MissingExternalDependencyError
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
+    from Bio.Application import ApplicationError
+    from Bio.Sequencing.Applications import SamtoolsCalmdCommandline
+    from Bio.Sequencing.Applications import SamtoolsCatCommandline
+    from Bio.Sequencing.Applications import SamtoolsFaidxCommandline
+    from Bio.Sequencing.Applications import SamtoolsIdxstatsCommandline
+    from Bio.Sequencing.Applications import SamtoolsIndexCommandline
+    from Bio.Sequencing.Applications import SamtoolsMergeCommandline
+    from Bio.Sequencing.Applications import SamtoolsMpileupCommandline
+    from Bio.Sequencing.Applications import SamtoolsSortCommandline
+    from Bio.Sequencing.Applications import SamtoolsVersion1xSortCommandline
+    from Bio.Sequencing.Applications import SamtoolsViewCommandline
 
 # TODO from Bio.Sequencing.Applications import SamtoolsPhaseCommandline
 # TODO from Bio.Sequencing.Applications import SamtoolsReheaderCommandline
@@ -71,8 +76,8 @@ else:
 
 if not samtools_exe:
     raise MissingExternalDependencyError(
-        """Install samtools and correctly set the file path to the program
-        if you want to use it from Biopython"""
+        "Install samtools and correctly set the file path to "
+        "the program if you want to use it from Biopython"
     )
 
 
@@ -193,7 +198,6 @@ class SamtoolsTestCase(unittest.TestCase):
     # TODO: def test_fixmate(self):
 
     def test_sort(self):
-
         cmdline = SamtoolsVersion0xSortCommandline(samtools_exe)
         cmdline.set_parameter("input", self.bamfile1)
         cmdline.set_parameter("out_prefix", "SamBam/out")

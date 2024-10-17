@@ -14,25 +14,17 @@ from Bio import BiopythonWarning
 class PDBException(Exception):
     """Define class PDBException."""
 
-    pass
-
 
 # The PDB file cannot be unambiguously represented in the SMCRA
 # data structure
 class PDBConstructionException(Exception):
     """Define class PDBConstructionException."""
 
-    pass
-
 
 class PDBConstructionWarning(BiopythonWarning):
     """Define class PDBConstructionWarning."""
-
-    pass
 
 
 # The SMCRA structure could not be written to file
 class PDBIOException(Exception):
     """Define class PDBIOException."""
-
-    pass

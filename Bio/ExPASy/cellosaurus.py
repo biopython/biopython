@@ -18,20 +18,30 @@ Classes:
 
 Examples
 --------
-You need to download the Cellosaurus database for this examples to
-run, e.g. from ftp://ftp.expasy.org/databases/cellosaurus/cellosaurus.txt
+This example downloads the Cellosaurus database and parses it. Note that
+urlopen returns a stream of bytes, while the parser expects a stream of plain
+string, so we use TextIOWrapper to convert bytes to string using the UTF-8
+encoding. This is not needed if you download the cellosaurus.txt file in
+advance and open it (see the comment below).
 
-    >> from Bio.ExPASy import cellosaurus
-    >> with open('cellosaurus.txt') as handle:
-    ...    records = cellosaurus.parse(handle)
-    ...    for record in records:
-    ...        if 'Homo sapiens' in record['OX'][0]:
-    ...            print(record['ID'])
+    >>> from urllib.request import urlopen
+    >>> from io import TextIOWrapper
+    >>> from Bio.ExPASy import cellosaurus
+    >>> url = "ftp://ftp.expasy.org/databases/cellosaurus/cellosaurus.txt"
+    >>> bytestream = urlopen(url)
+    >>> textstream = TextIOWrapper(bytestream, "UTF-8")
+    >>> # alternatively, use
+    >>> # textstream = open("cellosaurus.txt")
+    >>> # if you downloaded the cellosaurus.txt file in advance.
+    >>> records = cellosaurus.parse(textstream)
+    >>> for record in records:
+    ...     if 'Homo sapiens' in record['OX'][0]:
+    ...         print(record['ID'])  # doctest:+ELLIPSIS
     ...
     #15310-LN
     #W7079
     (L)PC6
-    00136
+    0.5alpha
     ...
 
 """
@@ -77,25 +87,28 @@ class Record(dict):
 
     Each record contains the following keys:
 
-     ---------  ---------------------------     ----------------------
-     Line code  Content                         Occurrence in an entry
-     ---------  ---------------------------     ----------------------
-     ID         Identifier (cell line name)     Once; starts an entry
-     AC         Accession (CVCL_xxxx)           Once
-     AS         Secondary accession number(s)   Optional; once
-     SY         Synonyms                        Optional; once
-     DR         Cross-references                Optional; once or more
-     RX         References identifiers          Optional: once or more
-     WW         Web pages                       Optional; once or more
-     CC         Comments                        Optional; once or more
-     ST         STR profile data                Optional; once or more
-     DI         Diseases                        Optional; once or more
-     OX         Species of origin               Once or more
-     HI         Hierarchy                       Optional; once or more
-     OI         Originate from same individual  Optional; once or more
-     SX         Sex (gender) of cell            Optional; once
-     CA         Category                        Once
-     //         Terminator                      Once; ends an entry
+    =========  ==============================  =======================
+    Line code  Content                         Occurrence in an entry
+    =========  ==============================  =======================
+    ID         Identifier (cell line name)     Once; starts an entry
+    AC         Accession (CVCL_xxxx)           Once
+    AS         Secondary accession number(s)   Optional; once
+    SY         Synonyms                        Optional; once
+    DR         Cross-references                Optional; once or more
+    RX         References identifiers          Optional: once or more
+    WW         Web pages                       Optional; once or more
+    CC         Comments                        Optional; once or more
+    ST         STR profile data                Optional; twice or more
+    DI         Diseases                        Optional; once or more
+    OX         Species of origin               Once or more
+    HI         Hierarchy                       Optional; once or more
+    OI         Originate from same individual  Optional; once or more
+    SX         Sex of cell                     Optional; once
+    AG         Age of donor at sampling        Optional; once
+    CA         Category                        Once
+    DT         Date (entry history)            Once
+    //         Terminator                      Once; ends an entry
+    =========  ==============================  =======================
 
     """
 
@@ -116,7 +129,9 @@ class Record(dict):
         self["HI"] = []
         self["OI"] = []
         self["SX"] = ""
+        self["AG"] = ""
         self["CA"] = ""
+        self["DT"] = ""
 
     def __repr__(self):
         """Return the canonical string representation of the Record object."""
@@ -144,7 +159,9 @@ class Record(dict):
         output += " HI: " + repr(self["HI"])
         output += " OI: " + repr(self["OI"])
         output += " SX: " + self["SX"]
+        output += " AG: " + self["AG"]
         output += " CA: " + self["CA"]
+        output += " DT: " + self["DT"]
         return output
 
 
@@ -155,17 +172,14 @@ def __read(handle):
     record = None
 
     for line in handle:
-
         key, value = line[:2], line[5:].rstrip()
         if key == "ID":
             record = Record()
             record["ID"] = value
-        elif key in ["AC", "AS", "SY", "SX", "CA"]:
+        elif key in ["AC", "AS", "SY", "SX", "AG", "CA", "DT"]:
             record[key] += value
         elif key in [
-            "AC",
-            "AS",
-            "SY",
+            # just append to the fields defined as lists, not to strings
             "RX",
             "WW",
             "CC",
@@ -174,8 +188,6 @@ def __read(handle):
             "OX",
             "HI",
             "OI",
-            "SX",
-            "CA",
         ]:
             record[key].append(value)
         elif key == "DR":
@@ -188,3 +200,9 @@ def __read(handle):
                 continue
     if record:
         raise ValueError("Unexpected end of stream")
+
+
+if __name__ == "__main__":
+    from Bio._utils import run_doctest
+
+    run_doctest()

@@ -26,7 +26,6 @@ Go Annotation files are located here:
 ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/
 """
 
-
 import copy
 
 # GAF: GO Annotation Format

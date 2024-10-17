@@ -28,14 +28,14 @@ BlatIO supports parsing, indexing, and writing for both PSL and PSLX output
 formats, with or without header. To parse, index, or write PSLX files, use the
 'pslx' keyword argument and set it to True.
 
-    # blat-psl defaults to PSL files
+    >>> # blat-psl defaults to PSL files
     >>> from Bio import SearchIO
     >>> psl = 'Blat/psl_34_004.psl'
     >>> qresult = SearchIO.read(psl, 'blat-psl')
     >>> qresult
     QueryResult(id='hg19_dna', 10 hits)
 
-    # set the pslx flag to parse PSLX files
+    >>> # set the pslx flag to parse PSLX files
     >>> pslx = 'Blat/pslx_34_004.pslx'
     >>> qresult = SearchIO.read(pslx, 'blat-psl', pslx=True)
     >>> qresult
@@ -46,10 +46,12 @@ header or not. For writing, if you want to write a header, you can set the
 'header' keyword argument to True. This will write a 'psLayout version 3' header
 to your output file.
 
-    from Bio import SearchIO
-    qresult = SearchIO.read(psl, 'blat-psl')
-    SearchIO.write(qresult, 'header.psl', header=True)
-    <stdout> (1, 10, 19, 23)
+    >>> from Bio import SearchIO
+    >>> qresult = SearchIO.read(psl, "blat-psl")
+    >>> SearchIO.write(qresult, "example.psl", "blat-psl", header=True)
+    (1, 10, 19, 23)
+    >>> import os
+    >>> os.remove("example.psl")
 
 Note that the number of HSPFragments written may exceed the number of HSP
 objects. This is because in PSL files, it is possible to have single matches
@@ -137,7 +139,7 @@ BlatIO provides the following attribute-column mapping:
 |                | query_start_all         | qStarts, start coordinate of each |
 |                |                         | query fragment                    |
 |                +-------------------------+-----------------------------------+
-|                | len [*]_                | block count, the number of blocks |
+|                | len [#]_                | block count, the number of blocks |
 |                |                         | in the alignment                  |
 +----------------+-------------------------+-----------------------------------+
 | HSPFragment    | hit                     | hit sequence, if present          |
@@ -175,16 +177,19 @@ Finally, the default HSP and HSPFragment properties are also provided. See the
 HSP and HSPFragment documentation for more details on these properties.
 
 
-.. [*] You can obtain the number of blocks / fragments in the HSP by invoking
+.. [#] You can obtain the number of blocks / fragments in the HSP by invoking
    ``len`` on the HSP
 
 """
+
 import re
 from math import log
 
 from Bio.SearchIO._index import SearchIndexer
-from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
-
+from Bio.SearchIO._model import Hit
+from Bio.SearchIO._model import HSP
+from Bio.SearchIO._model import HSPFragment
+from Bio.SearchIO._model import QueryResult
 
 __all__ = ("BlatPslParser", "BlatPslIndexer", "BlatPslWriter")
 
@@ -674,7 +679,6 @@ class BlatPslWriter:
 
         for hit in qresult:
             for hsp in hit.hsps:
-
                 query_is_protein = getattr(hsp, "query_is_protein", False)
                 blocksize_multiplier = 3 if query_is_protein else 1
 

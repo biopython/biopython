@@ -8,7 +8,6 @@
 
 import re
 
-
 _pdbid_re = re.compile(r"^(\w\w\w\w)(?:$|\s+|_)(.*)")
 _fragment_re = re.compile(r"\(?(\w:)?(-?\w*)-?(-?\w*)\)?(.*)")
 
@@ -53,18 +52,18 @@ class Residues:
             return
 
         fragments = []
-        for l in str.split(","):
-            m = _fragment_re.match(l)
+        for fragment in str.split(","):
+            m = _fragment_re.match(fragment)
             if m is None:
-                raise ValueError(f"I don't understand the format of {l}")
+                raise ValueError(f"I don't understand the format of {fragment}")
             chain, start, end, postfix = m.groups()
 
             if postfix != "":
-                raise ValueError(f"I don't understand the format of {l}")
+                raise ValueError(f"I don't understand the format of {fragment}")
 
             if chain:
                 if chain[-1] != ":":
-                    raise ValueError(f"I don't understand the chain in {l}")
+                    raise ValueError(f"I don't understand the chain in {fragment}")
                 chain = chain[:-1]  # chop off the ':'
             else:
                 chain = ""

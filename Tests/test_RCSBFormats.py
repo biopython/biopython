@@ -12,11 +12,12 @@ import unittest
 import warnings
 
 try:
-    import numpy
+    import numpy as np
     from numpy import dot  # Missing on old PyPy's micronumpy
 
     del dot
-    from numpy.linalg import svd, det  # Missing in PyPy 2.0 numpypy
+    from numpy.linalg import det  # Missing in PyPy 2.0 numpypy
+    from numpy.linalg import svd  # Missing in PyPy 2.0 numpypy
 except ImportError:
     from Bio import MissingPythonDependencyError
 
@@ -24,16 +25,15 @@ except ImportError:
         "Install NumPy if you want to use Bio.PDB."
     ) from None
 
-from Bio.PDB.MMCIFParser import MMCIFParser
 from Bio.PDB import PDBParser
-from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarning
+from Bio.PDB.MMCIFParser import MMCIFParser
+from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
 
 class CompareStructures(unittest.TestCase):
     """Tests for comparing the same structure parsed by PDB and MMCIF parsers."""
 
     def setUp(self):
-
         # Silence!
         warnings.simplefilter("ignore", PDBConstructionWarning)
 

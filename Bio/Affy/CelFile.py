@@ -7,11 +7,10 @@
 
 """Reading information from Affymetrix CEL files version 3 and 4."""
 
-
 import struct
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
     from Bio import MissingPythonDependencyError
 
@@ -40,17 +39,17 @@ class Record:
     >>> print(c.ncols, c.nrows)
     5 5
     >>> print(c.intensities)
-    [[   234.    170.  22177.    164.  22104.]
-     [   188.    188.  21871.    168.  21883.]
-     [   188.    193.  21455.    198.  21300.]
-     [   188.    182.  21438.    188.  20945.]
-     [   193.  20370.    174.  20605.    168.]]
+    [[  234.   170. 22177.   164. 22104.]
+     [  188.   188. 21871.   168. 21883.]
+     [  188.   193. 21455.   198. 21300.]
+     [  188.   182. 21438.   188. 20945.]
+     [  193. 20370.   174. 20605.   168.]]
     >>> print(c.stdevs)
-    [[   24.     34.5  2669.     19.7  3661.2]
-     [   29.8    29.8  2795.9    67.9  2792.4]
-     [   29.8    88.7  2976.5    62.   2914.5]
-     [   29.8    76.2  2759.5    49.2  2762. ]
-     [   38.8  2611.8    26.6  2810.7    24.1]]
+    [[  24.    34.5 2669.    19.7 3661.2]
+     [  29.8   29.8 2795.9   67.9 2792.4]
+     [  29.8   88.7 2976.5   62.  2914.5]
+     [  29.8   76.2 2759.5   49.2 2762. ]
+     [  38.8 2611.8   26.6 2810.7   24.1]]
     >>> print(c.npix)
     [[25 25 25 25 25]
      [25 25 25 25 25]
@@ -251,9 +250,9 @@ def _read_v4(f):
     structSize = 10
 
     # We initialize the most important: intensities, stdevs and npixs.
-    record.intensities = numpy.empty(record.NumberCells, dtype=float)
-    record.stdevs = numpy.empty(record.NumberCells, dtype=float)
-    record.npix = numpy.empty(record.NumberCells, dtype=int)
+    record.intensities = np.empty(record.NumberCells, dtype=float)
+    record.stdevs = np.empty(record.NumberCells, dtype=float)
+    record.npix = np.empty(record.NumberCells, dtype=int)
 
     b = f.read(structSize * record.NumberCells)
     for i in range(record.NumberCells):
@@ -293,18 +292,18 @@ def _read_v3(handle):
             section = "HEADER"
         elif line.startswith("[INTENSITY]"):
             section = "INTENSITY"
-            record.intensities = numpy.zeros((record.nrows, record.ncols))
-            record.stdevs = numpy.zeros((record.nrows, record.ncols))
-            record.npix = numpy.zeros((record.nrows, record.ncols), int)
+            record.intensities = np.zeros((record.nrows, record.ncols))
+            record.stdevs = np.zeros((record.nrows, record.ncols))
+            record.npix = np.zeros((record.nrows, record.ncols), int)
         elif line.startswith("[MASKS]"):
             section = "MASKS"
-            record.mask = numpy.zeros((record.nrows, record.ncols), bool)
+            record.mask = np.zeros((record.nrows, record.ncols), bool)
         elif line.startswith("[OUTLIERS]"):
             section = "OUTLIERS"
-            record.outliers = numpy.zeros((record.nrows, record.ncols), bool)
+            record.outliers = np.zeros((record.nrows, record.ncols), bool)
         elif line.startswith("[MODIFIED]"):
             section = "MODIFIED"
-            record.modified = numpy.zeros((record.nrows, record.ncols))
+            record.modified = np.zeros((record.nrows, record.ncols))
         elif line.startswith("["):
             raise ParserError("Unknown section found in version 3 CEL file")
         else:  # read the data in a section
@@ -331,76 +330,90 @@ def _read_v3(handle):
                 elif key == "DatHeader":
                     # not sure if all parameters here are interpreted correctly
                     record.DatHeader = {}
-                    index = line.find(":")
-                    _, filename = line[:index].split()
-                    record.DatHeader["filename"] = filename
-                    index += 1
-                    field = line[index : index + 9]
-                    if field[:4] != "CLS=" or field[8] != " ":
-                        raise ValueError(
-                            "Field does not start with 'CLS=' or have a blank space at position 8"
+                    i = value.find(":")
+                    if i >= 0:
+                        min_max_pixel_intensity, filename = value[:i].split()
+                        record.DatHeader["filename"] = filename
+                        assert min_max_pixel_intensity[0] == "["
+                        assert min_max_pixel_intensity[-1] == "]"
+                        (
+                            min_pixel_intensity,
+                            max_pixel_intensity,
+                        ) = min_max_pixel_intensity[1:-1].split("..")
+                        record.DatHeader["min-pixel_intensity"] = int(
+                            min_pixel_intensity
                         )
-                    record.DatHeader["CLS"] = int(field[4:8])
-                    index += 9
-                    field = line[index : index + 9]
-                    if field[:4] != "RWS=" or field[8] != " ":
-                        raise ValueError(
-                            "Field does not start with 'RWS=' or have a blank space at position 8"
+                        record.DatHeader["max-pixel_intensity"] = int(
+                            max_pixel_intensity
                         )
-                    record.DatHeader["RWS"] = int(field[4:8])
-                    index += 9
-                    field = line[index : index + 7]
-                    if field[:4] != "XIN=" or field[6] != " ":
-                        raise ValueError(
-                            "Field does not start with 'XIN=' or have a blank space at position 6"
-                        )
-                    record.DatHeader["XIN"] = int(field[4:6])
-                    index += 7
-                    field = line[index : index + 7]
-                    if field[:4] != "YIN=" or field[6] != " ":
-                        raise ValueError(
-                            "Field does not start with 'YIN=' or have a blank space at poition 6"
-                        )
-                    record.DatHeader["YIN"] = int(field[4:6])
-                    index += 7
-                    field = line[index : index + 6]
-                    if field[:3] != "VE=" or field[5] != " ":
-                        raise ValueError(
-                            "Field does not start with 'VE=' or have a blank space at position 5"
-                        )
-                    record.DatHeader["VE"] = int(field[3:5])
-                    index += 6
-                    field = line[index : index + 7]
-                    if field[6] != " ":
-                        raise ValueError(
-                            "Field value for position 6 isn't a blank space"
-                        )
-                    temperature = field[:6].strip()
-                    if temperature:
-                        record.DatHeader["temperature"] = int(temperature)
-                    else:
-                        record.DatHeader["temperature"] = None
-                    index += 7
-                    field = line[index : index + 4]
-                    if not field.endswith(" "):
-                        raise ValueError("Field doesn't end with a blank space")
-                    record.DatHeader["laser-power"] = float(field)
-                    index += 4
-                    field = line[index : index + 18]
-                    if field[8] != " ":
-                        raise ValueError(
-                            "Field value for position 8 isn't a blank space"
-                        )
-                    record.DatHeader["scan-date"] = field[:8]
-                    if field[17] != " ":
-                        raise ValueError(
-                            "Field value for position 17 isn't a blank space"
-                        )
-                    record.DatHeader["scan-date"] = field[:8]
-                    record.DatHeader["scan-time"] = field[9:17]
-                    index += 18
-                    field = line[index:]
-                    subfields = field.split(" \x14 ")
+                        value = value[i + 1 :]
+                        index = 0
+                        field = value[index : index + 9]
+                        if field[:4] != "CLS=" or field[8] != " ":
+                            raise ValueError(
+                                "Field does not start with 'CLS=' or have a blank space at position 8"
+                            )
+                        record.DatHeader["CLS"] = int(field[4:8])
+                        index += 9
+                        field = value[index : index + 9]
+                        if field[:4] != "RWS=" or field[8] != " ":
+                            raise ValueError(
+                                "Field does not start with 'RWS=' or have a blank space at position 8"
+                            )
+                        record.DatHeader["RWS"] = int(field[4:8])
+                        index += 9
+                        field = value[index : index + 7]
+                        if field[:4] != "XIN=" or field[6] != " ":
+                            raise ValueError(
+                                "Field does not start with 'XIN=' or have a blank space at position 6"
+                            )
+                        record.DatHeader["XIN"] = int(field[4:6])
+                        index += 7
+                        field = value[index : index + 7]
+                        if field[:4] != "YIN=" or field[6] != " ":
+                            raise ValueError(
+                                "Field does not start with 'YIN=' or have a blank space at poition 6"
+                            )
+                        record.DatHeader["YIN"] = int(field[4:6])
+                        index += 7
+                        field = value[index : index + 6]
+                        if field[:3] != "VE=" or field[5] != " ":
+                            raise ValueError(
+                                "Field does not start with 'VE=' or have a blank space at position 5"
+                            )
+                        record.DatHeader["VE"] = int(field[3:5])
+                        index += 6
+                        field = value[index : index + 7]
+                        if field[6] != " ":
+                            raise ValueError(
+                                "Field value for position 6 isn't a blank space"
+                            )
+                        temperature = field[:6].strip()
+                        if temperature:
+                            record.DatHeader["temperature"] = int(temperature)
+                        else:
+                            record.DatHeader["temperature"] = None
+                        index += 7
+                        field = value[index : index + 4]
+                        if not field.endswith(" "):
+                            raise ValueError("Field doesn't end with a blank space")
+                        record.DatHeader["laser-power"] = float(field)
+                        index += 4
+                        field = value[index : index + 18]
+                        if field[8] != " ":
+                            raise ValueError(
+                                "Field value for position 8 isn't a blank space"
+                            )
+                        record.DatHeader["scan-date"] = field[:8]
+                        if field[17] != " ":
+                            raise ValueError(
+                                "Field value for position 17 isn't a blank space"
+                            )
+                        record.DatHeader["scan-date"] = field[:8]
+                        record.DatHeader["scan-time"] = field[9:17]
+                        index += 18
+                        value = value[index:]
+                    subfields = value.split("\x14")
                     if len(subfields) != 12:
                         ValueError("Subfields length isn't 12")
                     subfield = subfields[0]
@@ -408,10 +421,25 @@ def _read_v3(handle):
                         scanner_id, scanner_type = subfield.split()
                     except ValueError:
                         scanner_id = subfield.strip()
+                    else:
+                        record.DatHeader["scanner-type"] = scanner_type
                     record.DatHeader["scanner-id"] = scanner_id
-                    record.DatHeader["scanner-type"] = scanner_type
-                    record.DatHeader["array-type"] = subfields[2]
-                    record.DatHeader["image-orientation"] = int(subfields[11])
+                    record.DatHeader["array-type"] = subfields[2].strip()
+                    field = subfields[7].strip()
+                    if field:
+                        record.DatHeader["filter-wavelength"] = int(field)
+                    field = subfields[8].strip()
+                    if field:
+                        record.DatHeader["arc-radius"] = float(field)
+                    field = subfields[9].strip()
+                    if field:
+                        record.DatHeader["laser-spotsize"] = float(field)
+                    field = subfields[10].strip()
+                    if field:
+                        record.DatHeader["pixel-size"] = float(field)
+                    field = subfields[11].strip()
+                    if field:
+                        record.DatHeader["image-orientation"] = int(field)
                 elif key == "Algorithm":
                     record.Algorithm = value
                 elif key == "AlgorithmParameters":
@@ -426,9 +454,28 @@ def _read_v3(handle):
                             "FullFeatureHeight",
                             "PoolWidthExtenstion",
                             "PoolHeightExtension",
+                            "NumPixelsToUse",
+                            "ExtendPoolWidth",
+                            "ExtendPoolHeight",
+                            "OutlierRatioLowPercentile",
+                            "OutlierRatioHighPercentile",
+                            "HalfCellRowsDivisor",
+                            "HalfCellRowsRemainder",
+                            "HighCutoff",
+                            "LowCutoff",
+                            "featureRows",
+                            "featureColumns",
                         ):
                             values[key] = int(value)
-                        elif key in ("OutlierHigh", "OutlierLow", "StdMult"):
+                        elif key in (
+                            "OutlierHigh",
+                            "OutlierLow",
+                            "StdMult",
+                            "PercentileSpread",
+                            "PairCutoff",
+                            "featureWidth",
+                            "featureHeight",
+                        ):
                             values[key] = float(value)
                         elif key in (
                             "FixedCellSize",
@@ -436,6 +483,8 @@ def _read_v3(handle):
                             "FeatureExtraction",
                             "UseSubgrids",
                             "RandomizePixels",
+                            "ImageCalibration",
+                            "IgnoreShiftRowOutliers",
                         ):
                             if value == "TRUE":
                                 value = True
@@ -444,7 +493,11 @@ def _read_v3(handle):
                             else:
                                 raise ValueError("Unexpected boolean value")
                             values[key] = value
-                        elif key in ("AlgVersion", "ErrorBasis"):
+                        elif key in (
+                            "AlgVersion",
+                            "ErrorBasis",
+                            "CellIntensityCalculationType",
+                        ):
                             values[key] = value
                         else:
                             raise ValueError("Unexpected tag in AlgorithmParameters")

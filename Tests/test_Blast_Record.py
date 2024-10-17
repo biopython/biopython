@@ -6,7 +6,7 @@
 
 import unittest
 
-from Bio.Blast.Record import HSP
+from Bio.Blast.NCBIXML import HSP
 
 
 class TestHsp(unittest.TestCase):
@@ -25,7 +25,7 @@ class TestHsp(unittest.TestCase):
         hsp.align_length = 4
         # Ignore trailing whitespace in output
         self.assertEqual(
-            "\n".join(l.strip() for l in str(hsp).split("\n")),
+            "\n".join(line.strip() for line in str(hsp).split("\n")),
             """Score 1 (2 bits), expectation 3.0e+00, alignment length 4
 Query:    None  None
 

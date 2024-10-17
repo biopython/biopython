@@ -8,8 +8,8 @@
 import os
 import unittest
 
-from Bio.SearchIO import parse, read
-
+from Bio.SearchIO import parse
+from Bio.SearchIO import read
 
 # test case files are in the Blast directory
 TEST_DIR = "Exonerate"
@@ -21,7 +21,6 @@ def get_file(filename):
 
 
 class ExonerateSpcCases(unittest.TestCase):
-
     coord = ("start", "end")
     coords = ("inter_ranges",)
     stype = ("hit_", "query_")
@@ -68,7 +67,6 @@ class ExonerateSpcCases(unittest.TestCase):
 
 
 class ExonerateTextCases(unittest.TestCase):
-
     fmt = "exonerate-text"
 
     def test_exn_22_m_affine_local(self):
@@ -2396,7 +2394,6 @@ class ExonerateTextCases(unittest.TestCase):
 
 
 class ExonerateVulgarCases(unittest.TestCase):
-
     fmt = "exonerate-vulgar"
 
     def test_exn_22_o_vulgar(self):
@@ -2586,7 +2583,6 @@ class ExonerateVulgarCases(unittest.TestCase):
 
 
 class ExonerateCigarCases(unittest.TestCase):
-
     fmt = "exonerate-cigar"
 
     def test_exn_22_o_vulgar_cigar(self):

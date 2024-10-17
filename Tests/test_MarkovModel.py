@@ -11,17 +11,16 @@
 
 """Tests for MarkovModel module."""
 
-import warnings
 import unittest
-
+import warnings
 from io import StringIO
 
 try:
-    from numpy import array
-    from numpy import random  # missing in PyPy's micronumpy
-    from numpy import array_equal
     from numpy import around
+    from numpy import array
+    from numpy import array_equal
     from numpy import log
+    from numpy import random  # missing in PyPy's micronumpy
 except ImportError:
     from Bio import MissingPythonDependencyError
 
@@ -29,10 +28,13 @@ except ImportError:
         "Install NumPy if you want to use Bio.MarkovModel."
     ) from None
 
+from Bio import BiopythonDeprecationWarning
+
 with warnings.catch_warnings():
     # Silence this warning:
     # For optimal speed, please update to Numpy version 1.3 or later
     warnings.simplefilter("ignore", UserWarning)
+    warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
     from Bio import MarkovModel
 
 
@@ -468,17 +470,14 @@ class TestMarkovModel(unittest.TestCase):
         lp_transition = log([[0.7, 0.3], [0.5, 0.5]])
         lp_emission = log([[0.6, 0.1, 0.3], [0.1, 0.7, 0.2]])
 
-        output1 = [0, 1, 0]
-        output2 = -3.968593356916541
-
         viterbi_output = MarkovModel._viterbi(
             len(states), lp_initial, lp_transition, lp_emission, outputs
         )
         self.assertEqual(len(viterbi_output[0][0]), 3)
-        self.assertEqual(viterbi_output[0][0][0], output1[0])
-        self.assertEqual(viterbi_output[0][0][1], output1[1])
-        self.assertEqual(viterbi_output[0][0][2], output1[2])
-        self.assertEqual(float(f"{viterbi_output[0][1]:.3f}"), float(f"{output2:.3f}"))
+        self.assertEqual(viterbi_output[0][0][0], 0)
+        self.assertEqual(viterbi_output[0][0][1], 1)
+        self.assertEqual(viterbi_output[0][0][2], 0)
+        self.assertAlmostEqual(viterbi_output[0][1], -3.968593356916541)
 
     def test_normalize_and_copy_and_check(self):
         matrix_in1 = array([[1.1, 2.2, 3.3], [4.4, 5.5, 6.6], [7.7, 8.8, 9.9]])
@@ -559,23 +558,10 @@ class TestMarkovModel(unittest.TestCase):
         matrix = array([[1.1, 2.2, 3.3], [4.4, 5.5, 6.6], [7.7, 8.8, 9.9]])
         matrix1 = array([1, 2, 3])
 
-        output = 10.304721798
-        output1 = 3.40760596444
-        self.assertEqual(
-            float(f"{MarkovModel._logsum(matrix):.3f}"), float(f"{output:.3f}")
-        )
-        self.assertEqual(
-            float(f"{MarkovModel._logsum(matrix1):.3f}"), float(f"{output1:.3f}")
-        )
-
-        output2 = 29873.342245
-        output3 = 30.1928748506
-        self.assertEqual(
-            float(f"{MarkovModel._exp_logsum(matrix):.3f}"), float(f"{output2:.3f}")
-        )
-        self.assertEqual(
-            float(f"{MarkovModel._exp_logsum(matrix1):.3f}"), float(f"{output3:.3f}")
-        )
+        self.assertAlmostEqual(MarkovModel._logsum(matrix), 10.304721798)
+        self.assertAlmostEqual(MarkovModel._logsum(matrix1), 3.40760596444)
+        self.assertAlmostEqual(MarkovModel._exp_logsum(matrix), 29873.342245)
+        self.assertAlmostEqual(MarkovModel._exp_logsum(matrix1), 30.1928748506)
 
     def test_logvecadd(self):
         vec1 = log(array([1, 2, 3, 4]))

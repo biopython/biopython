@@ -31,13 +31,12 @@ http://togows.dbcls.jp/site/en/soap.html
 http://soapy.sourceforge.net/
 """
 
-
 import io
 import time
-
-from urllib.request import urlopen
 from urllib.parse import quote
+from urllib.request import urlopen
 
+from Bio._utils import function_with_previous
 
 # Constant
 _BASE_URL = "http://togows.dbcls.jp"
@@ -45,9 +44,9 @@ _BASE_URL = "http://togows.dbcls.jp"
 # Caches:
 _search_db_names = None
 _entry_db_names = None
-_entry_db_fields = {}
-_entry_db_formats = {}
-_convert_formats = []
+_entry_db_fields: dict[str, str] = {}
+_entry_db_formats: dict[str, str] = {}
+_convert_formats: list[str] = []
 
 
 def _get_fields(url):
@@ -79,7 +78,7 @@ def entry(db, id, format=None, field=None):
 
     Arguments:
      - db - database (string), see list below.
-     - id - identier (string) or a list of identifiers (either as a list of
+     - id - identifier (string) or a list of identifiers (either as a list of
        strings or a single string with comma separators).
      - format - return data file format (string), options depend on the database
        e.g. "xml", "json", "gff", "fasta", "ttl" (RDF Turtle)
@@ -335,6 +334,7 @@ def convert(data, in_format, out_format):
     return _open(url, post=data)
 
 
+@function_with_previous
 def _open(url, post=None):
     """Build the URL and open a handle to it (PRIVATE).
 

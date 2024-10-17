@@ -4,15 +4,17 @@
 # as part of this package.
 
 """Bio.Align.AlignInfo related tests."""
+import math
 import unittest
 
-from Bio.Align import MultipleSeqAlignment
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 from Bio import AlignIO
+from Bio import BiopythonDeprecationWarning
+from Bio.Align import MultipleSeqAlignment
 from Bio.Align.AlignInfo import SummaryInfo
 from Bio.Data import IUPACData
-import math
+from Bio.motifs import Motif
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
 
 
 class AlignInfoTests(unittest.TestCase):
@@ -20,24 +22,45 @@ class AlignInfoTests(unittest.TestCase):
 
     def assertAlmostEqualList(self, list1, list2, **kwargs):
         self.assertEqual(len(list1), len(list2))
-        for (v1, v2) in zip(list1, list2):
+        for v1, v2 in zip(list1, list2):
             self.assertAlmostEqual(v1, v2, **kwargs)
 
     def test_nucleotides(self):
         filename = "GFF/multi.fna"
         fmt = "fasta"
-        alignment = AlignIO.read(filename, fmt)
-        summary = SummaryInfo(alignment)
+        msa = AlignIO.read(filename, fmt)
+        summary = SummaryInfo(msa)
+        alignment = msa.alignment
+        motif = Motif("ACGT", alignment)
 
-        c = summary.dumb_consensus(ambiguous="N")
+        with self.assertWarns(BiopythonDeprecationWarning):
+            c = summary.dumb_consensus(threshold=0.1, ambiguous="N")
+        # dumb_consensus uses ambiguous if multiple letters have the same score
+        self.assertEqual(c, "ANGNCCCC")
+        c = motif.counts.calculate_consensus(identity=0.1)
+        # Instead, EMBOSS uses the first letter it encounters
+        self.assertEqual(c, "AaGcCCCC")
+        with self.assertWarns(BiopythonDeprecationWarning):
+            c = summary.dumb_consensus(ambiguous="N")
+        self.assertEqual(c, "NNNNNNNN")
+        c = motif.counts.calculate_consensus(identity=0.7)
         self.assertEqual(c, "NNNNNNNN")
 
-        c = summary.gap_consensus(ambiguous="N")
+        with self.assertWarns(BiopythonDeprecationWarning):
+            c = summary.gap_consensus(ambiguous="N")
         self.assertEqual(c, "NNNNNNNN")
 
         expected = {"A": 0.25, "G": 0.25, "T": 0.25, "C": 0.25}
 
-        m = summary.pos_specific_score_matrix(chars_to_ignore=["-"], axis_seq=c)
+        with self.assertWarns(BiopythonDeprecationWarning):
+            m = summary.pos_specific_score_matrix(chars_to_ignore=["-"], axis_seq=c)
+
+        counts = motif.counts
+
+        for i in range(alignment.length):
+            for letter in "ACGT":
+                self.assertAlmostEqual(counts[letter][i], m[i][letter])
+
         self.assertEqual(
             str(m),
             """    A   C   G   T
@@ -53,10 +76,16 @@ N  0.0 2.0 1.0 0.0
         )
 
         # provide the frequencies and chars to ignore explicitly.
-        ic = summary.information_content(e_freq_table=expected, chars_to_ignore=["-"])
-        self.assertAlmostEqual(ic, 7.32029999423075, places=6)
+        with self.assertWarns(BiopythonDeprecationWarning):
+            ic = summary.information_content(
+                e_freq_table=expected, chars_to_ignore=["-"]
+            )
+        self.assertAlmostEqual(ic, 7.32029999423075)
+        ic = sum(motif.relative_entropy)
+        self.assertAlmostEqual(ic, 7.32029999423075)
 
     def test_proteins(self):
+        letters = IUPACData.protein_letters
         a = MultipleSeqAlignment(
             [
                 SeqRecord(Seq("MHQAIFIYQIGYP*LKSGYIQSIRSPEYDNW-"), id="ID001"),
@@ -68,13 +97,32 @@ N  0.0 2.0 1.0 0.0
 
         s = SummaryInfo(a)
 
-        c = s.dumb_consensus(ambiguous="X")
-        self.assertEqual(c, "MHQAIFIYQIGYXXLKSGYIQSIRSPEYDNW*")
+        alignment = a.alignment
+        motif = Motif(letters + "*", alignment)
+        counts = motif.counts
 
-        c = s.gap_consensus(ambiguous="X")
+        with self.assertWarns(BiopythonDeprecationWarning):
+            dumb_consensus = s.dumb_consensus()
+        self.assertEqual(dumb_consensus, "MHQAIFIYQIGYXXLKSGYIQSIRSPEYDNW*")
+        consensus = counts.calculate_consensus(identity=0.7)
+        self.assertEqual(consensus, dumb_consensus)
+
+        with self.assertWarns(BiopythonDeprecationWarning):
+            c = s.gap_consensus(ambiguous="X")
         self.assertEqual(c, "MHXXIFIYQIGYXXLKSGYIQSIRSPEYXNWX")
 
-        m = s.pos_specific_score_matrix(chars_to_ignore=["-", "*"], axis_seq=c)
+        with self.assertWarns(BiopythonDeprecationWarning):
+            m = s.pos_specific_score_matrix(chars_to_ignore=["-", "*"], axis_seq=c)
+        j = 0
+        all_letters = s._get_all_letters()
+        for i in range(alignment.length):
+            for letter in letters:
+                count = counts[letter][i]
+                if letter in all_letters:
+                    self.assertAlmostEqual(count, m[j][letter])
+                else:
+                    self.assertAlmostEqual(count, 0.0)
+            j += 1
         self.assertEqual(
             str(m),
             """    A   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   W   Y
@@ -113,18 +161,21 @@ X  0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0
 """,
         )
 
-        letters = IUPACData.protein_letters
         base_freq = 1.0 / len(letters)
         e_freq_table = {letter: base_freq for letter in letters}
-        ic = s.information_content(
-            e_freq_table=e_freq_table, chars_to_ignore=["-", "*"]
-        )
-        self.assertAlmostEqual(ic, 133.061475107, places=6)
+        with self.assertWarns(BiopythonDeprecationWarning):
+            ic = s.information_content(
+                e_freq_table=e_freq_table, chars_to_ignore=["-", "*"]
+            )
+        self.assertAlmostEqual(ic, 133.061475107)
+        motif = Motif(letters, alignment)
+        ic = sum(motif.relative_entropy)
+        self.assertAlmostEqual(ic, 133.061475107)
 
     def test_pseudo_count(self):
         # use example from
         # http://biologie.univ-mrs.fr/upload/p202/01.4.PSSM_theory.pdf
-        dna_align = MultipleSeqAlignment(
+        msa = MultipleSeqAlignment(
             [
                 SeqRecord(Seq("AACCACGTTTAA"), id="ID001"),
                 SeqRecord(Seq("CACCACGTGGGT"), id="ID002"),
@@ -137,30 +188,36 @@ X  0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0
             ]
         )
 
-        summary = SummaryInfo(dna_align)
+        summary = SummaryInfo(msa)
         expected = {"A": 0.325, "G": 0.175, "T": 0.325, "C": 0.175}
-        ic = summary.information_content(
-            e_freq_table=expected, log_base=math.exp(1), pseudo_count=1
-        )
-        self.assertAlmostEqualList(
-            summary.ic_vector,
-            [
-                0.110,
-                0.090,
-                0.360,
-                1.290,
-                0.800,
-                1.290,
-                1.290,
-                0.80,
-                0.610,
-                0.390,
-                0.470,
-                0.040,
-            ],
-            places=2,
-        )
-        self.assertAlmostEqual(ic, 7.546, places=3)
+        with self.assertWarns(BiopythonDeprecationWarning):
+            ic = summary.information_content(
+                e_freq_table=expected, log_base=math.exp(1), pseudo_count=1
+            )
+        self.assertAlmostEqual(ic, 7.546369561463767)
+        ic_vector = [
+            0.11112361,
+            0.08677812,
+            0.35598044,
+            1.29445419,
+            0.80272907,
+            1.29445419,
+            1.29445419,
+            0.80272907,
+            0.60929642,
+            0.39157892,
+            0.46539767,
+            0.03739368,
+        ]
+        self.assertAlmostEqualList(summary.ic_vector, ic_vector)
+        # One more time, now using a new-style Alignment object:
+        alignment = msa.alignment
+        motif = Motif("ACGT", alignment)
+        motif.background = expected
+        motif.pseudocounts = expected
+        self.assertAlmostEqualList(motif.relative_entropy * math.log(2), ic_vector)
+        ic = sum(ic_vector)
+        self.assertAlmostEqual(ic, 7.546369561463767)
 
 
 if __name__ == "__main__":

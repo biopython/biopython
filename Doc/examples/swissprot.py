@@ -7,7 +7,8 @@
 
 # biopython
 
-from Bio import ExPASy, SwissProt
+from Bio import ExPASy
+from Bio import SwissProt
 
 # 'O23729', 'O23730', 'O23731', Chalcone synthases from Orchid
 

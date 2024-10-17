@@ -25,22 +25,15 @@ As we can see in this example, ``start + size`` will give one more than the
 zero-based end position. We can therefore manipulate ``start`` and
 ``start + size`` as python list slice boundaries.
 """
-import numpy
 
+import sys
+
+import numpy as np
 
 from Bio.Align import Alignment
 from Bio.Align import interfaces
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio import BiopythonExperimentalWarning
-
-import warnings
-
-warnings.warn(
-    "Bio.Align.bed is an experimental module which may undergo "
-    "significant changes prior to its future official release.",
-    BiopythonExperimentalWarning,
-)
 
 
 class AlignmentWriter(interfaces.AlignmentWriter):
@@ -57,7 +50,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         """
         if bedN < 3 or bedN > 12:
             raise ValueError("bedN must be between 3 and 12")
-        super().__init__(target, mode="w")
+        super().__init__(target)
         self.bedN = bedN
 
     def format_alignment(self, alignment):
@@ -73,7 +66,12 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             chrom = target.id
         except AttributeError:
             chrom = "target"
-        assert coordinates[0, 0] < coordinates[0, -1]
+        else:
+            if chrom is None:
+                chrom = "target"
+        if coordinates[0, 0] > coordinates[0, -1]:
+            # read the alignment right-to-left to be consistent with BED
+            coordinates = coordinates[:, ::-1]
         if coordinates[1, 0] > coordinates[1, -1]:
             # DNA/RNA mapped to reverse strand of DNA/RNA
             strand = "-"
@@ -95,8 +93,11 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 blockSizes.append(blockSize)
                 tStart = tEnd
                 qStart = qEnd
-        chromStart = blockStarts[0]  # start of alignment in target
-        chromEnd = blockStarts[-1] + blockSize  # end of alignment in target
+        try:
+            chromStart = blockStarts[0]  # start of alignment in target
+            chromEnd = blockStarts[-1] + blockSize  # end of alignment in target
+        except IndexError:  # no aligned blocks
+            chromStart = chromEnd = tStart
         fields = [chrom, str(chromStart), str(chromEnd)]
         if bedN == 3:
             return "\t".join(fields) + "\n"
@@ -104,6 +105,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             name = query.id
         except AttributeError:
             name = "query"
+        else:
+            if name is None:
+                name = "query"
         fields.append(name)
         if bedN == 4:
             return "\t".join(fields) + "\n"
@@ -111,7 +115,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             score = alignment.score
         except AttributeError:
             score = 0
-        fields.append(str(score))
+        fields.append(format(score, "g"))
         if bedN == 5:
             return "\t".join(fields) + "\n"
         fields.append(strand)
@@ -158,21 +162,13 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     attributes of each alignment.
     """
 
-    def __init__(self, source):
-        """Create an AlignmentIterator object.
+    fmt = "BED"
 
-        Arguments:
-         - source   - input data or file name
-
-        """
-        super().__init__(source, mode="t", fmt="BED")
-
-    def parse(self, stream):
-        """Parse the next alignment from the stream."""
-        if stream is None:
-            raise StopIteration
-
+    def _read_next_alignment(self, stream):
         for line in stream:
+            # note that we cannot extract one line by calling next, as stream
+            # may be iterable but not an iterator (for example, TemporaryFile
+            # or NamedTemporaryFile objects in tempfile).
             words = line.split()
             bedN = len(words)
             if bedN < 3 or bedN > 12:
@@ -206,8 +202,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         "Inconsistent number of block start positions (%d found, expected %d)"
                         % (len(blockStarts), blockCount)
                     )
-                blockSizes = numpy.array(blockSizes)
-                blockStarts = numpy.array(blockStarts)
+                blockSizes = np.array(blockSizes)
+                blockStarts = np.array(blockStarts)
                 tPosition = 0
                 qPosition = 0
                 coordinates = [[tPosition, qPosition]]
@@ -218,16 +214,17 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     tPosition += blockSize
                     qPosition += blockSize
                     coordinates.append([tPosition, qPosition])
-                coordinates = numpy.array(coordinates).transpose()
+                coordinates = np.array(coordinates).transpose()
                 qSize = sum(blockSizes)
             else:
                 blockSize = chromEnd - chromStart
-                coordinates = numpy.array([[0, blockSize], [0, blockSize]])
+                coordinates = np.array([[0, blockSize], [0, blockSize]])
                 qSize = blockSize
             coordinates[0, :] += chromStart
             query_sequence = Seq(None, length=qSize)
-            query_record = SeqRecord(query_sequence, id=name)
-            target_record = SeqRecord(None, id=chrom)
+            query_record = SeqRecord(query_sequence, id=name, description="")
+            target_sequence = Seq(None, length=sys.maxsize)
+            target_record = SeqRecord(target_sequence, id=chrom, description="")
             records = [target_record, query_record]
             if strand == "-":
                 coordinates[1, :] = qSize - coordinates[1, :]
@@ -243,27 +240,20 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 )
             alignment = Alignment(records, coordinates)
             if bedN <= 4:
-                yield alignment
-                continue
+                return alignment
             score = words[4]
             try:
                 score = float(score)
             except ValueError:
                 pass
-            else:
-                if score.is_integer():
-                    score = int(score)
             alignment.score = score
             if bedN <= 6:
-                yield alignment
-                continue
+                return alignment
             alignment.thickStart = int(words[6])
             if bedN <= 7:
-                yield alignment
-                continue
+                return alignment
             alignment.thickEnd = int(words[7])
             if bedN <= 8:
-                yield alignment
-                continue
+                return alignment
             alignment.itemRgb = words[8]
-            yield alignment
+            return alignment

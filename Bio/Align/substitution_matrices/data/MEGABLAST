@@ -1,0 +1,29 @@
+# MEGABLAST default substitution scores.
+# For the default gap scores, as used for MEGABLAST on NCBI Web
+# BLAST, The BLAST documentation shows gap costs a = 0 for opening
+# a gap, and b = 2.5 for each letter in the gap, and defines the
+# total score of a gap of k residues as -(a + b*k). In contrast,
+# Biopython follows the definition given in "Biological Sequence
+# Analysis" (Durbin et al., 1998), for which the total score of a
+# gap of k residues is -d - e * (k - 1), where d is the gap-open
+# penalty and e is the gap-extend penalty. Biopython uses -d as
+# the gap open score and -e as the gap extend penalty:
+# gap open score: -2.5
+# gap extend score: -2.5
+# with the substitution matrix below, as the MEGABLAST score parameters.
+    A   T   G   C   S   W   R   Y   K   M   B   V   H   D   N
+A   1  -2  -2  -2  -2  -1  -1  -2  -2  -1  -2  -1  -1  -1  -1
+T  -2   1  -2  -2  -2  -1  -2  -1  -1  -2  -1  -2  -1  -1  -1
+G  -2  -2   1  -2  -1  -2  -1  -2  -1  -2  -1  -1  -2  -1  -1
+C  -2  -2  -2   1  -1  -2  -2  -1  -2  -1  -1  -1  -1  -2  -1
+S  -2  -2  -1  -1  -1  -2  -1  -1  -1  -1  -1  -1  -1  -1  -1
+W  -1  -1  -2  -2  -2  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1
+R  -1  -2  -1  -2  -1  -1  -1  -2  -1  -1  -1  -1  -1  -1  -1
+Y  -2  -1  -2  -1  -1  -1  -2  -1  -1  -1  -1  -1  -1  -1  -1
+K  -2  -1  -1  -2  -1  -1  -1  -1  -1  -2  -1  -1  -1  -1  -1
+M  -1  -2  -2  -1  -1  -1  -1  -1  -2  -1  -1  -1  -1  -1  -1
+B  -2  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1
+V  -1  -2  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1
+H  -1  -1  -2  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1
+D  -1  -1  -1  -2  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1
+N  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1

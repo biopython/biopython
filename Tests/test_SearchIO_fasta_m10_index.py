@@ -12,7 +12,6 @@ from search_tests_common import CheckIndex
 
 
 class FastaM10IndexCases(CheckIndex):
-
     fmt = "fasta-m10"
 
     def test_output_002(self):

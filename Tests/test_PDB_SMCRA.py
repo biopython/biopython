@@ -13,16 +13,17 @@
 
 """Generic unit tests for the SMCRA classes of the Bio.PDB module."""
 
-from copy import deepcopy
 import unittest
 import warnings
+from copy import deepcopy
 
 try:
-    import numpy
+    import numpy as np
     from numpy import dot  # Missing on old PyPy's micronumpy
 
     del dot
-    from numpy.linalg import svd, det  # Missing in PyPy 2.0 numpypy
+    from numpy.linalg import det  # Missing in PyPy 2.0 numpypy
+    from numpy.linalg import svd  # Missing in PyPy 2.0 numpypy
 
     del svd, det
 except ImportError:
@@ -32,10 +33,12 @@ except ImportError:
         "Install NumPy if you want to use Bio.PDB."
     ) from None
 
-from Bio.PDB import PDBParser
-from Bio.PDB.PDBExceptions import PDBConstructionWarning
-from Bio.PDB import rotmat, Vector
+from Bio import BiopythonWarning
 from Bio.PDB import Atom
+from Bio.PDB import PDBParser
+from Bio.PDB import rotmat
+from Bio.PDB import Vector
+from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
 
 class Atom_Element(unittest.TestCase):
@@ -148,6 +151,55 @@ class Atom_Element(unittest.TestCase):
 class SortingTests(unittest.TestCase):
     """Tests for sorting elements of the SMCRA representation."""
 
+    def test_strict_equality(self):
+        parser = PDBParser()
+        structure = parser.get_structure("example", "PDB/1A8O.pdb")
+        structure2 = parser.get_structure("example", "PDB/1A8O.pdb")
+
+        self.assertTrue(structure.strictly_equals(structure2))
+        self.assertTrue(
+            structure2.strictly_equals(structure)
+        )  # Strict equality should be symmetric
+
+        # Modify an atom
+        structure2[0]["A"][(" ", 200, " ")]["CA"].name = "AC"
+
+        self.assertFalse(structure.strictly_equals(structure2))
+        self.assertFalse(
+            structure2.strictly_equals(structure)
+        )  # Strict equality should be symmetric
+
+        # Remove a chain from a model in the structure
+        structure2[0].detach_child("A")
+
+        self.assertFalse(structure.strictly_equals(structure2))
+        self.assertFalse(
+            structure2.strictly_equals(structure)
+        )  # Strict equality should be symmetric
+
+        # Reset structure2
+        structure2 = parser.get_structure("example", "PDB/1A8O.pdb")
+
+        self.assertTrue(structure.strictly_equals(structure2))
+        self.assertTrue(
+            structure2.strictly_equals(structure)
+        )  # Strict equality should be symmetric
+
+        # Change the coordinates of an atom in structure2
+        structure2[0]["A"][(" ", 180, " ")]["C"].set_coord((0, 0, 0))
+
+        self.assertTrue(structure.strictly_equals(structure2))
+        self.assertTrue(
+            structure2.strictly_equals(structure)
+        )  # Strict equality should be symmetric
+
+        self.assertFalse(
+            structure.strictly_equals(structure2, compare_coordinates=True)
+        )
+        self.assertFalse(
+            structure2.strictly_equals(structure, compare_coordinates=True)
+        )  # Strict equality should be symmetric
+
     def test_residue_sort(self):
         """Test atoms are sorted correctly in residues."""
         parser = PDBParser()
@@ -176,21 +228,21 @@ class SortingTests(unittest.TestCase):
     def test_comparison_entities(self):
         """Test comparing and sorting the several SMCRA objects."""
         parser = PDBParser(QUIET=True)
-        struct = parser.get_structure("example", "PDB/a_structure.pdb")
+        structure = parser.get_structure("example", "PDB/a_structure.pdb")
 
         # Test deepcopy of a structure with disordered atoms
-        struct2 = deepcopy(struct)
+        structure2 = deepcopy(structure)
 
         # Sorting (<, >, <=, <=)
         # Chains (same code as models)
-        model = struct[1]
+        model = structure[1]
         chains = [c.id for c in sorted(model)]
         self.assertEqual(chains, ["A", "B", "C", " "])
         # Residues
-        residues = [r.id[1] for r in sorted(struct[1]["C"])]
+        residues = [r.id[1] for r in sorted(structure[1]["C"])]
         self.assertEqual(residues, [1, 2, 3, 4, 0])
         # Atoms
-        for residue in struct.get_residues():
+        for residue in structure.get_residues():
             old = [a.name for a in residue]
             new = [a.name for a in sorted(residue)]
 
@@ -209,10 +261,10 @@ class SortingTests(unittest.TestCase):
                 f"After N, CA, C, O order Should be alphabetical: {new}",
             )
         # DisorderedResidue
-        residues = [r.id[1] for r in sorted(struct[1]["A"])][79:81]
+        residues = [r.id[1] for r in sorted(structure[1]["A"])][79:81]
         self.assertEqual(residues, [80, 81])
         # Insertion code + hetflag + chain
-        residues = list(struct[1]["B"]) + [struct[1]["A"][44]]
+        residues = list(structure[1]["B"]) + [structure[1]["A"][44]]
         self.assertEqual(
             [("{}" * 4).format(r.parent.id, *r.id) for r in sorted(residues)],
             [
@@ -231,31 +283,30 @@ class SortingTests(unittest.TestCase):
             ],
         )
         # DisorderedAtom
-        atoms = [a.altloc for a in sorted(struct[1]["A"][74]["OD1"])]
+        atoms = [a.altloc for a in sorted(structure[1]["A"][74]["OD1"])]
         self.assertEqual(atoms, ["A", "B"])
 
         # Comparisons
         # Structure
-        self.assertEqual(struct, struct2)
-        self.assertLessEqual(struct, struct2)
-        self.assertGreaterEqual(struct, struct2)
-        struct2.id = "new_id"
-        self.assertNotEqual(struct, struct2)
-        self.assertLess(struct, struct2)
-        self.assertLessEqual(struct, struct2)
-        self.assertGreater(struct2, struct)
-        self.assertGreaterEqual(struct2, struct)
+        self.assertEqual(structure, structure2)
+        self.assertLessEqual(structure, structure2)
+        self.assertGreaterEqual(structure, structure2)
+        structure2.id = "new_id"
+        self.assertNotEqual(structure, structure2)
+        self.assertLess(structure, structure2)
+        self.assertLessEqual(structure, structure2)
+        self.assertGreater(structure2, structure)
+        self.assertGreaterEqual(structure2, structure)
 
         # Model
-
         self.assertEqual(model, model)  # __eq__ same type
-        self.assertNotEqual(struct[0], struct[1])
+        self.assertNotEqual(structure[0], structure[1])
 
-        self.assertNotEqual(struct[0], [])  # __eq__ diff. types
-        self.assertNotEqual(struct, model)
+        self.assertNotEqual(structure[0], [])  # __eq__ diff. types
+        self.assertNotEqual(structure, model)
 
         # residues with same ID string should not be equal if the parent is not equal
-        res1, res2, res3 = residues[0], residues[-1], struct2[1]["A"][44]
+        res1, res2, res3 = residues[0], residues[-1], structure2[1]["A"][44]
         self.assertEqual(res1.id, res2.id)
         self.assertEqual(
             res2, res3
@@ -322,14 +373,14 @@ class ChangingIdTests(unittest.TestCase):
         self.assertIn(2, self.structure)
         self.assertNotIn(0, self.structure)
 
-    def test_change_model_id_raises(self):
-        """Cannot change id to a value already in use by another child."""
+    def test_change_model_id_warns(self):
+        """Warning when changing id to a value already in use by another child."""
         model = next(iter(self.structure))
-        with self.assertRaises(ValueError):
+        with self.assertWarns(BiopythonWarning):
             model.id = 1
-        # Make sure nothing was changed
-        self.assertEqual(model.id, 0)
-        self.assertIn(0, self.structure)
+        # make sure children were not overwritten
+        self.assertEqual(model.id, 1)
+        self.assertEqual(len(self.structure.child_list), 2)
         self.assertIn(1, self.structure)
 
     def test_change_chain_id(self):
@@ -416,7 +467,7 @@ class TransformTests(unittest.TestCase):
         """Sum of positions of atoms in an entity along with the number of atoms."""
         if hasattr(o, "get_coord"):
             return o.get_coord(), 1
-        total_pos = numpy.array((0.0, 0.0, 0.0))
+        total_pos = np.array((0.0, 0.0, 0.0))
         total_count = 0
         for p in o.get_list():
             pos, count = self.get_total_pos(p)
@@ -427,18 +478,18 @@ class TransformTests(unittest.TestCase):
     def get_pos(self, o):
         """Average atom position in an entity."""
         pos, count = self.get_total_pos(o)
-        return 1.0 * pos / count
+        return pos / count
 
     def test_transform(self):
         """Transform entities (rotation and translation)."""
         for o in (self.s, self.m, self.c, self.r, self.a):
             rotation = rotmat(Vector(1, 3, 5), Vector(1, 0, 0))
-            translation = numpy.array((2.4, 0, 1), "f")
+            translation = np.array((2.4, 0, 1), "f")
             oldpos = self.get_pos(o)
             o.transform(rotation, translation)
             newpos = self.get_pos(o)
-            newpos_check = numpy.dot(oldpos, rotation) + translation
-            for i in range(0, 3):
+            newpos_check = np.dot(oldpos, rotation) + translation
+            for i in range(3):
                 self.assertAlmostEqual(newpos[i], newpos_check[i])
 
 
@@ -483,13 +534,13 @@ class CenterOfMassTests(unittest.TestCase):
         """Calculate Structure center of mass."""
         com = self.structure.center_of_mass()
 
-        self.assertTrue(numpy.allclose(com, [19.870, 25.455, 28.753], atol=1e-3))
+        self.assertTrue(np.allclose(com, [19.870, 25.455, 28.753], atol=1e-3))
 
     def test_structure_cog(self):
         """Calculate Structure center of geometry."""
         cog = self.structure.center_of_mass(geometric=True)
 
-        self.assertTrue(numpy.allclose(cog, [19.882, 25.842, 28.333], atol=1e-3))
+        self.assertTrue(np.allclose(cog, [19.882, 25.842, 28.333], atol=1e-3))
 
     def test_chain_cog(self):
         """Calculate center of geometry of individual chains."""
@@ -501,7 +552,7 @@ class CenterOfMassTests(unittest.TestCase):
 
         for chain in self.structure[0].get_chains():  # one model only
             cog = chain.center_of_mass(geometric=True)
-            self.assertTrue(numpy.allclose(cog, expected[chain.id], atol=1e-3))
+            self.assertTrue(np.allclose(cog, expected[chain.id], atol=1e-3))
 
     def test_com_empty_structure(self):
         """Center of mass of empty structure raises ValueError."""

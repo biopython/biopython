@@ -16,8 +16,9 @@ We have decided to remove this module in future, and instead recommend
 building your command and invoking it via the subprocess module directly.
 """
 
-
-from Bio.Application import _Option, _Switch, AbstractCommandline
+from Bio.Application import _Option
+from Bio.Application import _Switch
+from Bio.Application import AbstractCommandline
 
 
 class _EmbossMinimalCommandLine(AbstractCommandline):
@@ -359,9 +360,7 @@ class FDNADistCommandline(_EmbossCommandLine):
             ),
             _Option(["-method", "method"], "sub. model [f,k,j,l,s]", is_required=True),
             _Option(["-gamma", "gamma"], "gamma [g, i,n]"),
-            _Option(
-                ["-ncategories", "ncategories"], "number of rate catergories (1-9)"
-            ),
+            _Option(["-ncategories", "ncategories"], "number of rate categories (1-9)"),
             _Option(["-rate", "rate"], "rate for each category"),
             _Option(
                 ["-categories", "categories"], "File of substitution rate categories"
@@ -372,7 +371,7 @@ class FDNADistCommandline(_EmbossCommandLine):
             ),
             _Option(["-invarfrac", "invarfrac"], "proportoin of invariant sites"),
             _Option(["-ttratio", "ttratio"], "ts/tv ratio"),
-            _Option(["-freqsfrom", "freqsfrom"], "use emprical base freqs"),
+            _Option(["-freqsfrom", "freqsfrom"], "use empirical base freqs"),
             _Option(["-basefreq", "basefreq"], "specify basefreqs"),
             _Option(["-lower", "lower"], "lower triangle matrix (y/N)"),
         ]
@@ -428,7 +427,7 @@ class FNeighborCommandline(_EmbossCommandLine):
             ),
             _Option(
                 ["-matrixtype", "matrixtype"],
-                "is martrix square (S), upper (U) or lower (L)",
+                "is matrix square (S), upper (U) or lower (L)",
             ),
             _Option(["-treetype", "treetype"], "nj or UPGMA tree (n/u)"),
             _Option(["-outgrno", "outgrno"], "taxon to use as OG"),
@@ -580,9 +579,7 @@ class FProtDistCommandline(_EmbossCommandLine):
                 filename=True,
                 is_required=True,
             ),
-            _Option(
-                ["-ncategories", "ncategories"], "number of rate catergories (1-9)"
-            ),
+            _Option(["-ncategories", "ncategories"], "number of rate categories (1-9)"),
             _Option(["-rate", "rate"], "rate for each category"),
             _Option(["-catergories", "catergories"], "file of rates"),
             _Option(["-weights", "weights"], "weights file"),
@@ -597,7 +594,7 @@ class FProtDistCommandline(_EmbossCommandLine):
             ),
             _Option(["-aacateg", "aacateg"], "Choose the category to use [G,C,H]"),
             _Option(["-whichcode", "whichcode"], "genetic code [c,m,v,f,y]"),
-            _Option(["-ease", "ease"], "Pob change catergory (float between -0 and 1)"),
+            _Option(["-ease", "ease"], "Pob change category (float between -0 and 1)"),
             _Option(["-ttratio", "ttratio"], "Transition/transversion ratio (0-1)"),
             _Option(
                 ["-basefreq", "basefreq"], "DNA base frequencies (space separated list)"

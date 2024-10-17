@@ -76,16 +76,14 @@ this, run::
 Local Testing
 -------------
 
-Please always run the style checks (see above) and the full test suite on
-your local computer before submitting a pull request, e.g.::
+Please always run the full test suite locally before submitting a pull
+request, e.g.::
 
-    $ git commit Bio/XXX.py Tests/test_XXX.py  -m "Fixed bug 123"
-    $ python setup.py build
+    $ pip install -e .
     $ python setup.py test
+    $ git commit ...
 
-If you have multiple versions of Python installed, ideally test them all
-(the Python tool ``tox`` can be helpful here).
-
+Have a look at the `related chapter <http://biopython.org/DIST/docs/tutorial/Tutorial.html#chapter%3Atesting>`_ in the documentation for more details.
 
 Continuous Integration
 ----------------------
@@ -99,11 +97,9 @@ optional dependencies included), plus also style checks using ``pre-commit``
 **The continuous integration checks must pass before your pull request will be
 merged.**
 
-The continuous integration tests collect test coverage information via
-CodeCov: https://codecov.io/github/biopython/biopython/
-
-Ideally the CodeCov checks will also pass, but we currently do not insist on
-this when reviewing pull requests.
+We have previously used CodeCov to track test coverage information, and would
+like to restore this - but historically did not insist their test coverage
+checks passed when reviewing  pull requests.
 
 Contributing to the Biopython Tutorial
 --------------------------------------

@@ -24,9 +24,10 @@ Functions:
 
 """
 
-import warnings
-import json
 import csv
+import json
+import warnings
+
 import numpy as np
 
 from Bio import BiopythonParserWarning
@@ -717,10 +718,10 @@ class WellRecord:
                 stop = time.stop
 
             time = np.arange(start, stop, time.step)
-            return list(self._interpolate(time))
+            return [float(value) for value in self._interpolate(time)]
 
-        elif isinstance(time, int) or isinstance(time, float):
-            return self._interpolate(time)
+        elif isinstance(time, (float, int)):
+            return float(self._interpolate(time))
 
         raise ValueError("Invalid index")
 
@@ -879,8 +880,11 @@ class WellRecord:
                 raise ValueError(f"Fitting function {sigmoid_func!r} not supported")
 
         # Parameters that depend on scipy curve_fit
-        from .pm_fitting import fit, get_area
-        from .pm_fitting import logistic, gompertz, richards
+        from .pm_fitting import fit
+        from .pm_fitting import get_area
+        from .pm_fitting import gompertz
+        from .pm_fitting import logistic
+        from .pm_fitting import richards
 
         function_map = {
             "logistic": logistic,

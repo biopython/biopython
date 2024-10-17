@@ -4,19 +4,12 @@
 # as part of this package.
 """Tests for Align.maf module."""
 import unittest
-import warnings
 from io import StringIO
 
-
-from Bio import BiopythonExperimentalWarning
-
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore", BiopythonExperimentalWarning)
-    from Bio.Align import maf
-
+from Bio import Align
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
     from Bio import MissingPythonDependencyError
 
@@ -29,10 +22,43 @@ class TestAlign_reading(unittest.TestCase):
     def test_reading_bundle_without_target(self):
         """Test parsing bundle_without_target.maf."""
         path = "MAF/bundle_without_target.maf"
-        alignments = maf.AlignmentIterator(path)
-        self.assertEqual(alignments.metadata["version"], "1")
-        self.assertEqual(alignments.metadata["scoring"], "autoMZ.v1")
+        alignments = Align.parse(path, "maf")
+        self.assertEqual(alignments.metadata["MAF Version"], "1")
+        self.assertEqual(alignments.metadata["Scoring"], "autoMZ.v1")
         alignment = next(alignments)
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['T', 'C', 'A', 'T', 'A', 'G', 'G', 'T', 'A', 'T', 'T', 'T', 'A',
+           'T', 'T', 'T', 'T', 'T', 'A', 'A', 'A', 'T', 'A', 'T', 'G', 'G',
+           'T', 'T', 'T', 'G', 'C', 'T', 'T', 'T', 'A', 'T', 'G', 'G', 'C',
+           'T', 'A', 'G', 'A', 'A', 'C', 'A', 'C', 'A', 'C', 'C', 'G', 'A',
+           'T', 'T', 'A', 'C', 'T', 'T', 'A', 'A', 'A', 'A', 'T', 'A', 'G',
+           'G', 'A', 'T', 'T', 'A', 'A', 'C', 'C', '-', '-', 'C', 'C', 'C',
+           'A', 'T', 'A', 'C', 'A', 'C', 'T', 'T', 'T', 'A', 'A', 'A', 'A',
+           'A', 'T', 'G', 'A', 'T', 'T', 'A', 'A', 'A', 'C', 'A', 'A', 'C',
+           'A', 'T', 'T', 'T', 'C', 'T', 'G', 'C', 'T', 'G', 'C', 'T', 'C',
+           'G', 'C', 'T', 'C', 'A', 'C', 'A', 'T', 'T', 'C', 'T', 'T', 'C',
+           'A', 'T', 'A', 'G', 'A', 'A', 'G', 'A', 'T', 'G', 'A', 'C', 'A',
+           'T', 'A', 'A', 'T', 'G', 'T', 'A', 'T', 'T', 'T', 'T', 'C', 'C',
+           'T', 'T', 'T', 'T', 'G', 'G', 'T', 'T'],
+          ['T', 'C', 'A', 'C', 'A', 'G', 'A', 'T', 'A', 'T', 'T', 'T', 'A',
+           'C', 'T', 'A', 'T', 'T', 'A', 'A', 'A', 'T', 'A', 'T', 'G', 'G',
+           'T', 'T', 'T', 'G', 'T', 'T', 'A', 'T', 'A', 'T', 'G', 'G', 'T',
+           'T', 'A', 'C', 'G', 'G', 'T', 'T', 'C', 'A', 'T', 'A', 'G', 'G',
+           'T', 'T', 'A', 'C', 'T', 'T', 'G', 'G', 'A', 'A', 'T', 'T', 'G',
+           'G', 'A', 'T', 'T', 'A', 'A', 'C', 'C', 'T', 'T', 'C', 'T', 'T',
+           'A', 'T', 'T', 'C', 'A', 'T', 'T', 'G', 'C', 'A', 'G', 'A', 'A',
+           'T', 'T', 'G', 'G', 'T', 'T', 'A', 'C', 'A', 'C', 'T', 'G', 'T',
+           'G', 'T', 'T', 'C', 'T', 'T', 'G', 'A', 'C', 'C', 'T', 'T', 'T',
+           'G', 'C', 'T', 'T', 'G', 'T', 'T', 'T', 'T', 'C', 'T', 'C', 'C',
+           'A', 'T', 'G', 'G', 'A', 'A', 'A', 'C', 'T', 'G', 'A', 'T', 'G',
+           'T', 'C', 'A', 'A', 'A', 'T', 'A', 'C', 'T', 'T', 'T', 'C', 'C',
+           'C', 'T', 'T', 'T', 'G', 'G', 'T', 'T']], dtype='U')
+                # fmt: on
+            )
+        )
         self.assertRaises(StopIteration, next, alignments)
         self.assertEqual(alignment.score, 6441)
         self.assertEqual(len(alignment.sequences), 2)
@@ -65,23 +91,46 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.sequences[1].annotations["rightStatus"], "N")
         self.assertEqual(alignment.sequences[1].annotations["rightCount"], 0)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[3009319, 3009392, 3009392, 3009481],
-                             [  11087,   11160,   11162,   11251],
-                            ])
+                np.array([[3009319, 3009392, 3009392, 3009481],
+                          [  11087,   11160,   11162,   11251],
+                         ])
                 # fmt: on
             )
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm8.chr10   3009319 TCATAGGTATTTATTTTTAAATATGGTTTGCTTTATGGCTAGAACACACCGATTACTTAA
+                  0 |||.||.||||||.|.||||||||||||||.|.|||||.||.....||..|.||||||..
+oryCun1.s     11087 TCACAGATATTTACTATTAAATATGGTTTGTTATATGGTTACGGTTCATAGGTTACTTGG
 
-    def test_reading_ucsc_mm9_chr10(self):
-        """Test parsing MAF file ucsc_mm9_chr10.maf."""
-        path = "MAF/ucsc_mm9_chr10.maf"
-        alignments = maf.AlignmentIterator(path)
-        self.assertEqual(alignments.metadata["version"], "1")
-        self.assertEqual(alignments.metadata["scoring"], "autoMZ.v1")
+mm8.chr10   3009379 AATAGGATTAACC--CCCATACACTTTAAAAATGATTAAACAACATTTCTGCTGCTCGCT
+                 60 |||.|||||||||--|..||.||.|..|.||.||.|||.||....||..||....|.|||
+oryCun1.s     11147 AATTGGATTAACCTTCTTATTCATTGCAGAATTGGTTACACTGTGTTCTTGACCTTTGCT
+
+mm8.chr10   3009437 CACATTCTTCATAGAAGATGACATAATGTATTTTCCTTTTGGTT 3009481
+                120 ....||||.|||.|||..|||..|.|..||.|||||.|||||||     164
+oryCun1.s     11207 TGTTTTCTCCATGGAAACTGATGTCAAATACTTTCCCTTTGGTT   11251
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=6441.000000
+s mm8.chr10               3009319 162 + 129993255 TCATAGGTATTTATTTTTAAATATGGTTTGCTTTATGGCTAGAACACACCGATTACTTAAAATAGGATTAACC--CCCATACACTTTAAAAATGATTAAACAACATTTCTGCTGCTCGCTCACATTCTTCATAGAAGATGACATAATGTATTTTCCTTTTGGTT
+s oryCun1.scaffold_133159   11087 164 +     13221 TCACAGATATTTACTATTAAATATGGTTTGTTATATGGTTACGGTTCATAGGTTACTTGGAATTGGATTAACCTTCTTATTCATTGCAGAATTGGTTACACTGTGTTCTTGACCTTTGCTTGTTTTCTCCATGGAAACTGATGTCAAATACTTTCCCTTTGGTT
+q oryCun1.scaffold_133159                         99569899999998999999999999999999999999999999999999999999999999999999999757878999975999999999999999979999999999997899999999999997997999999869999996999988997997999999
+i oryCun1.scaffold_133159 N 0 N 0
+
+""",
+        )
+
+    def check_reading_ucsc_mm9_chr10(self, alignments):
+        self.assertEqual(alignments.metadata["MAF Version"], "1")
+        self.assertEqual(alignments.metadata["Scoring"], "autoMZ.v1")
         alignment = next(alignments)
         self.assertEqual(alignment.score, 6441)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -115,12 +164,72 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 2)
         self.assertNotIn("empty", alignment.annotations)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-                numpy.array([[3009319, 3009392, 3009392, 3009481],
+                np.array([[3009319, 3009392, 3009392, 3009481],
                              [  11087,   11160,   11162,   11251],
                             ])
+                # fmt: on
+            )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3009319 TCATAGGTATTTATTTTTAAATATGGTTTGCTTTATGGCTAGAACACACCGATTACTTAA
+                  0 |||.||.||||||.|.||||||||||||||.|.|||||.||.....||..|.||||||..
+oryCun1.s     11087 TCACAGATATTTACTATTAAATATGGTTTGTTATATGGTTACGGTTCATAGGTTACTTGG
+
+mm9.chr10   3009379 AATAGGATTAACC--CCCATACACTTTAAAAATGATTAAACAACATTTCTGCTGCTCGCT
+                 60 |||.|||||||||--|..||.||.|..|.||.||.|||.||....||..||....|.|||
+oryCun1.s     11147 AATTGGATTAACCTTCTTATTCATTGCAGAATTGGTTACACTGTGTTCTTGACCTTTGCT
+
+mm9.chr10   3009437 CACATTCTTCATAGAAGATGACATAATGTATTTTCCTTTTGGTT 3009481
+                120 ....||||.|||.|||..|||..|.|..||.|||||.|||||||     164
+oryCun1.s     11207 TGTTTTCTCCATGGAAACTGATGTCAAATACTTTCCCTTTGGTT   11251
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=6441.000000
+s mm9.chr10               3009319 162 + 129993255 TCATAGGTATTTATTTTTAAATATGGTTTGCTTTATGGCTAGAACACACCGATTACTTAAAATAGGATTAACC--CCCATACACTTTAAAAATGATTAAACAACATTTCTGCTGCTCGCTCACATTCTTCATAGAAGATGACATAATGTATTTTCCTTTTGGTT
+s oryCun1.scaffold_133159   11087 164 +     13221 TCACAGATATTTACTATTAAATATGGTTTGTTATATGGTTACGGTTCATAGGTTACTTGGAATTGGATTAACCTTCTTATTCATTGCAGAATTGGTTACACTGTGTTCTTGACCTTTGCTTGTTTTCTCCATGGAAACTGATGTCAAATACTTTCCCTTTGGTT
+q oryCun1.scaffold_133159                         99569899999998999999999999999999999999999999999999999999999999999999999757878999975999999999999999979999999999997899999999999997997999999869999996999988997997999999
+i oryCun1.scaffold_133159 N 0 N 0
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['T', 'C', 'A', 'T', 'A', 'G', 'G', 'T', 'A', 'T', 'T', 'T', 'A',
+           'T', 'T', 'T', 'T', 'T', 'A', 'A', 'A', 'T', 'A', 'T', 'G', 'G',
+           'T', 'T', 'T', 'G', 'C', 'T', 'T', 'T', 'A', 'T', 'G', 'G', 'C',
+           'T', 'A', 'G', 'A', 'A', 'C', 'A', 'C', 'A', 'C', 'C', 'G', 'A',
+           'T', 'T', 'A', 'C', 'T', 'T', 'A', 'A', 'A', 'A', 'T', 'A', 'G',
+           'G', 'A', 'T', 'T', 'A', 'A', 'C', 'C', '-', '-', 'C', 'C', 'C',
+           'A', 'T', 'A', 'C', 'A', 'C', 'T', 'T', 'T', 'A', 'A', 'A', 'A',
+           'A', 'T', 'G', 'A', 'T', 'T', 'A', 'A', 'A', 'C', 'A', 'A', 'C',
+           'A', 'T', 'T', 'T', 'C', 'T', 'G', 'C', 'T', 'G', 'C', 'T', 'C',
+           'G', 'C', 'T', 'C', 'A', 'C', 'A', 'T', 'T', 'C', 'T', 'T', 'C',
+           'A', 'T', 'A', 'G', 'A', 'A', 'G', 'A', 'T', 'G', 'A', 'C', 'A',
+           'T', 'A', 'A', 'T', 'G', 'T', 'A', 'T', 'T', 'T', 'T', 'C', 'C',
+           'T', 'T', 'T', 'T', 'G', 'G', 'T', 'T'],
+          ['T', 'C', 'A', 'C', 'A', 'G', 'A', 'T', 'A', 'T', 'T', 'T', 'A',
+           'C', 'T', 'A', 'T', 'T', 'A', 'A', 'A', 'T', 'A', 'T', 'G', 'G',
+           'T', 'T', 'T', 'G', 'T', 'T', 'A', 'T', 'A', 'T', 'G', 'G', 'T',
+           'T', 'A', 'C', 'G', 'G', 'T', 'T', 'C', 'A', 'T', 'A', 'G', 'G',
+           'T', 'T', 'A', 'C', 'T', 'T', 'G', 'G', 'A', 'A', 'T', 'T', 'G',
+           'G', 'A', 'T', 'T', 'A', 'A', 'C', 'C', 'T', 'T', 'C', 'T', 'T',
+           'A', 'T', 'T', 'C', 'A', 'T', 'T', 'G', 'C', 'A', 'G', 'A', 'A',
+           'T', 'T', 'G', 'G', 'T', 'T', 'A', 'C', 'A', 'C', 'T', 'G', 'T',
+           'G', 'T', 'T', 'C', 'T', 'T', 'G', 'A', 'C', 'C', 'T', 'T', 'T',
+           'G', 'C', 'T', 'T', 'G', 'T', 'T', 'T', 'T', 'C', 'T', 'C', 'C',
+           'A', 'T', 'G', 'G', 'A', 'A', 'A', 'C', 'T', 'G', 'A', 'T', 'G',
+           'T', 'C', 'A', 'A', 'A', 'T', 'A', 'C', 'T', 'T', 'T', 'C', 'C',
+           'C', 'T', 'T', 'T', 'G', 'G', 'T', 'T']], dtype='U')
                 # fmt: on
             )
         )
@@ -185,9 +294,9 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 4)
         self.assertNotIn("empty", alignment.annotations)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3012076,   3012116,   3012116,   3012141,   3012141,   3012183,
                 3012183,   3012211,   3012211,   3012231,   3012235,   3012286,
@@ -221,6 +330,65 @@ class TestAlign_reading(unittest.TestCase):
                     # fmt: on
                 ),
             )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3012076 AGTCTTTCCAATGGGACCTGTGAGTCCTAACTATGCCAGC-----ACTCCCAACAGCAAG
+ponAbe2.c 158050228 AGTCTTCATAAGTGGAAATATAAGTTTTAATTATTCCAGCCAAATCATCACAGTAAAAAG
+panTro2.c 157529608 AGTCTTCATAAGTGGAAATATAAGTTTTAATTATTCCAGCTAAATCATCACAGTAAAAAG
+hg18.chr6 155039536 AGTCTTCATAAGTGGAAATATAAGTTTTAATTATTCCAGCTAAATCATCACAGTAAAAAG
+
+mm9.chr10   3012131 ACACTAAGTT---------CACTCATCCTTGGTGGATGGGATTTTGCTCCTGGAGTGTCA
+ponAbe2.c 158050168 ATGTTAATATTTATCTCCATACTCATCCTTACCAGATAGCCTTGTGCTCTTGGAATGTCG
+panTro2.c 157529548 ATGTTAATATTTATCTCCATACTCATCCTTACCAGATAGCCTTGTGCTCTTGGAATGTCG
+hg18.chr6 155039476 ATGTTAATATTTATCTCCATACTCATCCTTACCAGATAGCCTTGTGCTCTTGGAATGTCG
+
+mm9.chr10   3012182 C-----CAAATTAAATAACCAGTGAGCAGAGTTG--TGACGAGCATCAGGCTCTGGATTT
+ponAbe2.c 158050108 TACTTATGAAGTGAGCAAGCAGTATTTAGAATAGCATGAGATAGACCAGTCACCAA----
+panTro2.c 157529488 TATTTGTGAAGTGAGCAAGCAGTATGTAGAATAGCATGAGATAGACCAGTCACCAA----
+hg18.chr6 155039416 TATTTGTGAAGTGAGCAAGCAGTATGTAGAATAGCATGAGATAGACCAGTCACCAA----
+
+mm9.chr10   3012235 AGGTGAGAGACCTTAGTGTATGTCTCCTGTAGGTCGCAGCTCCCTATGGAT---------
+ponAbe2.c 158050052 AGGTTGTTGATTTCTAGGAATGTCTCATGCTGGTTGCATCTGTGTGTGAACTGGGAAGTT
+panTro2.c 157529432 AGGTTGTTGATTTCTAGGAATGTCTCATGCTGGTTGCATCTGTGTGTGAACTGGGAAGTT
+hg18.chr6 155039360 AGGTTGTTGATTTCTAGGAATGTCTCATGCTGGTTGCATCTGTGTGTGAACTGGGAAGTT
+
+mm9.chr10   3012286 -----------------GAGTCAAGTGAAGGTCCTGAGACAA------------------
+ponAbe2.c 158049992 GAGATCGCTTTCCACAGAAATTAAGCAAAATCCTGGAGGTAAGTTGTGGA----------
+panTro2.c 157529372 GAGATCGCTTTCCACAGAAATTAAGCAAAATCCTGGAGGTAAGTTGTGGA----------
+hg18.chr6 155039300 GAGATCGCTTTCCACAGAAATTAAGCAAAATCCTGGAGGTAAGTTGTGGATAGGGATGCT
+
+mm9.chr10   3012311 -CAAGTCCTC----GGCTATGTGGGGGTGAGGG-------------ATGC----AG----
+ponAbe2.c 158049942 -TAGGGCTGCTGTAGACTCCCTGACAGCGTAGGAACT--------AGAACTCTGAAGCAA
+panTro2.c 157529322 -TAGGGATGCTGTAGACTCCCTGACAGCATAGGAACTAGAACTCTGAAGC----AAGCCA
+hg18.chr6 155039240 GTAGACTCCCT---GACAGCATAGGAAC-TAGAACTCTGAAGC---AAGC----CA----
+
+mm9.chr10   3012345 ----CTGGAACCTCAGGGA-TCTCTGT-AAGCAGTGGCATAAATGCTTGGCGG--GAGAG
+ponAbe2.c 158049891 GCCACTGGTGCCTAACAAATTCTTTCTAAAGTTGTAGAGTGGATCTGTGGGGGCTGACGT
+panTro2.c 157529267 ----CTGGTGCCTAACAAATTCTTTATAAAGTTGTAGAGTGGATCTGTGGGGGCTGACGT
+hg18.chr6 155039195 ----CTGGTGCCTAACAAATTCTTTATAAAGTTGTAGAGTGGATCCATGGGGGCTGACGT
+
+mm9.chr10   3012397 AGCATGTTAGAGCTCACACGACATAGGAAGCCACTGA--GACACTG   3012441
+ponAbe2.c 158049831 GGCCTCCAACGCCTAACGTGGTTGAAAAGGCCATGGACTTGTGTTC 158049785
+panTro2.c 157529211 GGCCTCCAACGCCTAACATGGTTGAAAAGGCCATGGACTTGTGTTC 157529165
+hg18.chr6 155039139 GGCCTCCAACGCCTAACATGGTTGAAAAGGCCATGGACTTGTGTTC 155039093
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=103072.000000
+s mm9.chr10     3012076 365 + 129993255 AGTCTTTCCAATGGGACCTGTGAGTCCTAACTATGCCAGC-----ACTCCCAACAGCAAGACACTAAGTT---------CACTCATCCTTGGTGGATGGGATTTTGCTCCTGGAGTGTCAC-----CAAATTAAATAACCAGTGAGCAGAGTTG--TGACGAGCATCAGGCTCTGGATTTAGGTGAGAGACCTTAGTGTATGTCTCCTGTAGGTCGCAGCTCCCTATGGAT--------------------------GAGTCAAGTGAAGGTCCTGAGACAA-------------------CAAGTCCTC----GGCTATGTGGGGGTGAGGG-------------ATGC----AG--------CTGGAACCTCAGGGA-TCTCTGT-AAGCAGTGGCATAAATGCTTGGCGG--GAGAGAGCATGTTAGAGCTCACACGACATAGGAAGCCACTGA--GACACTG
+s ponAbe2.chr6 16160203 443 - 174210431 AGTCTTCATAAGTGGAAATATAAGTTTTAATTATTCCAGCCAAATCATCACAGTAAAAAGATGTTAATATTTATCTCCATACTCATCCTTACCAGATAGCCTTGTGCTCTTGGAATGTCGTACTTATGAAGTGAGCAAGCAGTATTTAGAATAGCATGAGATAGACCAGTCACCAA----AGGTTGTTGATTTCTAGGAATGTCTCATGCTGGTTGCATCTGTGTGTGAACTGGGAAGTTGAGATCGCTTTCCACAGAAATTAAGCAAAATCCTGGAGGTAAGTTGTGGA-----------TAGGGCTGCTGTAGACTCCCTGACAGCGTAGGAACT--------AGAACTCTGAAGCAAGCCACTGGTGCCTAACAAATTCTTTCTAAAGTTGTAGAGTGGATCTGTGGGGGCTGACGTGGCCTCCAACGCCTAACGTGGTTGAAAAGGCCATGGACTTGTGTTC
+i ponAbe2.chr6 N 0 C 0
+s panTro2.chr6 16379004 443 - 173908612 AGTCTTCATAAGTGGAAATATAAGTTTTAATTATTCCAGCTAAATCATCACAGTAAAAAGATGTTAATATTTATCTCCATACTCATCCTTACCAGATAGCCTTGTGCTCTTGGAATGTCGTATTTGTGAAGTGAGCAAGCAGTATGTAGAATAGCATGAGATAGACCAGTCACCAA----AGGTTGTTGATTTCTAGGAATGTCTCATGCTGGTTGCATCTGTGTGTGAACTGGGAAGTTGAGATCGCTTTCCACAGAAATTAAGCAAAATCCTGGAGGTAAGTTGTGGA-----------TAGGGATGCTGTAGACTCCCTGACAGCATAGGAACTAGAACTCTGAAGC----AAGCCA----CTGGTGCCTAACAAATTCTTTATAAAGTTGTAGAGTGGATCTGTGGGGGCTGACGTGGCCTCCAACGCCTAACATGGTTGAAAAGGCCATGGACTTGTGTTC
+q panTro2.chr6                          99999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999----99999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999-----------9999999999999999999999999999999999999999999999999----999999----999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
+i panTro2.chr6 N 0 C 0
+s hg18.chr6    15860456 443 - 170899992 AGTCTTCATAAGTGGAAATATAAGTTTTAATTATTCCAGCTAAATCATCACAGTAAAAAGATGTTAATATTTATCTCCATACTCATCCTTACCAGATAGCCTTGTGCTCTTGGAATGTCGTATTTGTGAAGTGAGCAAGCAGTATGTAGAATAGCATGAGATAGACCAGTCACCAA----AGGTTGTTGATTTCTAGGAATGTCTCATGCTGGTTGCATCTGTGTGTGAACTGGGAAGTTGAGATCGCTTTCCACAGAAATTAAGCAAAATCCTGGAGGTAAGTTGTGGATAGGGATGCTGTAGACTCCCT---GACAGCATAGGAAC-TAGAACTCTGAAGC---AAGC----CA--------CTGGTGCCTAACAAATTCTTTATAAAGTTGTAGAGTGGATCCATGGGGGCTGACGTGGCCTCCAACGCCTAACATGGTTGAAAAGGCCATGGACTTGTGTTC
+i hg18.chr6    N 0 C 0
+
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 49128)
@@ -301,9 +469,9 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 5)
         self.assertNotIn("empty", alignment.annotations)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3012441,   3012464,   3012466,   3012497,   3012508,   3012508,
                 3012520,   3012530,   3012539,   3012540,   3012566],
@@ -318,6 +486,103 @@ class TestAlign_reading(unittest.TestCase):
             ]
                     # fmt: on
                 ),
+            )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3012441 TGGGTCCCCTTGGCACATCCAGATCTCCCCAGTTAACCTGTCCTGCTTAGACCACTTACC
+hg18.chr6 155039093 TGGGTTCCTCTAGAATAACCAAG--TCCTCACGTAACCTGGTGTGTATTGACCACCTCTC
+panTro2.c 157529165 TGGGTTCCTCTAGAATAACCAAG--TCCTCACGTAACCTGGTGTGTATTGACCACCTCTC
+ponAbe2.c 158049785 TGGGTTCCTCTAGAATAACCAAG--TCCTCACGTAACCTGGTCTATATTGACCACCTGTC
+otoGar1.s    178939 TGGGCCCCCCTGACCTGGCCAAG--TCCTCACTCACCCGGGTTTACACTGACCACC----
+
+mm9.chr10   3012501 TGAATTG--AATTGGGAGGAGAGAAAGAAGCCAGTTTCCCAGAGAGGGAAAAGGAAAAGC
+hg18.chr6 155039035 TTGACCGCTGATCTTGGGGAG----------CACCTTGCT-GAGGGCCAATGGAAAATGC
+panTro2.c 157529107 TTGACCGCTGATCTTGGGGAG----------CACCTTGCT-GAGGGCCAATGGAAAATGC
+ponAbe2.c 158049727 TTGACTGTTGATCTTGGGGAG----------CACCTTGCT-GAGGGCCAATGGAAAATGC
+otoGar1.s    178885 ---------AAACTTGGGGAG----------CCCTTTGCT-GAGGGGCAACAGCAAACAC
+
+mm9.chr10   3012559 TCGACAC   3012566
+hg18.chr6 155038986 TGGAAGC 155038979
+panTro2.c 157529058 TGGAAGC 157529051
+ponAbe2.c 158049678 TGGAAGC 158049671
+otoGar1.s    178845 GGGAAGC    178838
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=49128.000000
+s mm9.chr10                      3012441 125 + 129993255 TGGGTCCCCTTGGCACATCCAGATCTCCCCAGTTAACCTGTCCTGCTTAGACCACTTACCTGAATTG--AATTGGGAGGAGAGAAAGAAGCCAGTTTCCCAGAGAGGGAAAAGGAAAAGCTCGACAC
+s hg18.chr6                     15860899 114 - 170899992 TGGGTTCCTCTAGAATAACCAAG--TCCTCACGTAACCTGGTGTGTATTGACCACCTCTCTTGACCGCTGATCTTGGGGAG----------CACCTTGCT-GAGGGCCAATGGAAAATGCTGGAAGC
+i hg18.chr6                     C 0 C 0
+s panTro2.chr6                  16379447 114 - 173908612 TGGGTTCCTCTAGAATAACCAAG--TCCTCACGTAACCTGGTGTGTATTGACCACCTCTCTTGACCGCTGATCTTGGGGAG----------CACCTTGCT-GAGGGCCAATGGAAAATGCTGGAAGC
+q panTro2.chr6                                           99999999999999999999999--99999999999999999999999999999999999999999999999999999999----------999999999-99999999999999999999999999
+i panTro2.chr6                  C 0 C 0
+s ponAbe2.chr6                  16160646 114 - 174210431 TGGGTTCCTCTAGAATAACCAAG--TCCTCACGTAACCTGGTCTATATTGACCACCTGTCTTGACTGTTGATCTTGGGGAG----------CACCTTGCT-GAGGGCCAATGGAAAATGCTGGAAGC
+i ponAbe2.chr6                  C 0 C 0
+s otoGar1.scaffold_334.1-359464   180525 101 -    359464 TGGGCCCCCCTGACCTGGCCAAG--TCCTCACTCACCCGGGTTTACACTGACCACC-------------AAACTTGGGGAG----------CCCTTTGCT-GAGGGGCAACAGCAAACACGGGAAGC
+q otoGar1.scaffold_334.1-359464                          99999999999999999999999--9999999999999999999999999999999-------------999999999999----------999999999-99999979999999999999999999
+i otoGar1.scaffold_334.1-359464 N 0 C 0
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['T', 'G', 'G', 'G', 'T', 'C', 'C', 'C', 'C', 'T', 'T', 'G', 'G',
+           'C', 'A', 'C', 'A', 'T', 'C', 'C', 'A', 'G', 'A', 'T', 'C', 'T',
+           'C', 'C', 'C', 'C', 'A', 'G', 'T', 'T', 'A', 'A', 'C', 'C', 'T',
+           'G', 'T', 'C', 'C', 'T', 'G', 'C', 'T', 'T', 'A', 'G', 'A', 'C',
+           'C', 'A', 'C', 'T', 'T', 'A', 'C', 'C', 'T', 'G', 'A', 'A', 'T',
+           'T', 'G', '-', '-', 'A', 'A', 'T', 'T', 'G', 'G', 'G', 'A', 'G',
+           'G', 'A', 'G', 'A', 'G', 'A', 'A', 'A', 'G', 'A', 'A', 'G', 'C',
+           'C', 'A', 'G', 'T', 'T', 'T', 'C', 'C', 'C', 'A', 'G', 'A', 'G',
+           'A', 'G', 'G', 'G', 'A', 'A', 'A', 'A', 'G', 'G', 'A', 'A', 'A',
+           'A', 'G', 'C', 'T', 'C', 'G', 'A', 'C', 'A', 'C'],
+          ['T', 'G', 'G', 'G', 'T', 'T', 'C', 'C', 'T', 'C', 'T', 'A', 'G',
+           'A', 'A', 'T', 'A', 'A', 'C', 'C', 'A', 'A', 'G', '-', '-', 'T',
+           'C', 'C', 'T', 'C', 'A', 'C', 'G', 'T', 'A', 'A', 'C', 'C', 'T',
+           'G', 'G', 'T', 'G', 'T', 'G', 'T', 'A', 'T', 'T', 'G', 'A', 'C',
+           'C', 'A', 'C', 'C', 'T', 'C', 'T', 'C', 'T', 'T', 'G', 'A', 'C',
+           'C', 'G', 'C', 'T', 'G', 'A', 'T', 'C', 'T', 'T', 'G', 'G', 'G',
+           'G', 'A', 'G', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           'C', 'A', 'C', 'C', 'T', 'T', 'G', 'C', 'T', '-', 'G', 'A', 'G',
+           'G', 'G', 'C', 'C', 'A', 'A', 'T', 'G', 'G', 'A', 'A', 'A', 'A',
+           'T', 'G', 'C', 'T', 'G', 'G', 'A', 'A', 'G', 'C'],
+          ['T', 'G', 'G', 'G', 'T', 'T', 'C', 'C', 'T', 'C', 'T', 'A', 'G',
+           'A', 'A', 'T', 'A', 'A', 'C', 'C', 'A', 'A', 'G', '-', '-', 'T',
+           'C', 'C', 'T', 'C', 'A', 'C', 'G', 'T', 'A', 'A', 'C', 'C', 'T',
+           'G', 'G', 'T', 'G', 'T', 'G', 'T', 'A', 'T', 'T', 'G', 'A', 'C',
+           'C', 'A', 'C', 'C', 'T', 'C', 'T', 'C', 'T', 'T', 'G', 'A', 'C',
+           'C', 'G', 'C', 'T', 'G', 'A', 'T', 'C', 'T', 'T', 'G', 'G', 'G',
+           'G', 'A', 'G', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           'C', 'A', 'C', 'C', 'T', 'T', 'G', 'C', 'T', '-', 'G', 'A', 'G',
+           'G', 'G', 'C', 'C', 'A', 'A', 'T', 'G', 'G', 'A', 'A', 'A', 'A',
+           'T', 'G', 'C', 'T', 'G', 'G', 'A', 'A', 'G', 'C'],
+          ['T', 'G', 'G', 'G', 'T', 'T', 'C', 'C', 'T', 'C', 'T', 'A', 'G',
+           'A', 'A', 'T', 'A', 'A', 'C', 'C', 'A', 'A', 'G', '-', '-', 'T',
+           'C', 'C', 'T', 'C', 'A', 'C', 'G', 'T', 'A', 'A', 'C', 'C', 'T',
+           'G', 'G', 'T', 'C', 'T', 'A', 'T', 'A', 'T', 'T', 'G', 'A', 'C',
+           'C', 'A', 'C', 'C', 'T', 'G', 'T', 'C', 'T', 'T', 'G', 'A', 'C',
+           'T', 'G', 'T', 'T', 'G', 'A', 'T', 'C', 'T', 'T', 'G', 'G', 'G',
+           'G', 'A', 'G', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           'C', 'A', 'C', 'C', 'T', 'T', 'G', 'C', 'T', '-', 'G', 'A', 'G',
+           'G', 'G', 'C', 'C', 'A', 'A', 'T', 'G', 'G', 'A', 'A', 'A', 'A',
+           'T', 'G', 'C', 'T', 'G', 'G', 'A', 'A', 'G', 'C'],
+          ['T', 'G', 'G', 'G', 'C', 'C', 'C', 'C', 'C', 'C', 'T', 'G', 'A',
+           'C', 'C', 'T', 'G', 'G', 'C', 'C', 'A', 'A', 'G', '-', '-', 'T',
+           'C', 'C', 'T', 'C', 'A', 'C', 'T', 'C', 'A', 'C', 'C', 'C', 'G',
+           'G', 'G', 'T', 'T', 'T', 'A', 'C', 'A', 'C', 'T', 'G', 'A', 'C',
+           'C', 'A', 'C', 'C', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', 'A', 'A', 'A', 'C', 'T', 'T', 'G', 'G', 'G',
+           'G', 'A', 'G', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           'C', 'C', 'C', 'T', 'T', 'T', 'G', 'C', 'T', '-', 'G', 'A', 'G',
+           'G', 'G', 'G', 'C', 'A', 'A', 'C', 'A', 'G', 'C', 'A', 'A', 'A',
+           'C', 'A', 'C', 'G', 'G', 'G', 'A', 'A', 'G', 'C']], dtype='U')
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -417,9 +682,9 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 6)
         self.assertNotIn("empty", alignment.annotations)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3012566,   3012566,   3012587,   3012587,   3012626,   3012627,
                 3012675,   3012676,   3012695,   3012695,   3012695,   3012695,
@@ -455,6 +720,66 @@ class TestAlign_reading(unittest.TestCase):
                     # fmt: on
                 ),
             )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3012566 --TGTGGGCTCCTCACTTTCCTG-TCTCAGGTGTGTCTGTGAGTTTCGGTGAGTGTCGTA
+hg18.chr6 155038979 CATGAGCCCTCCTTGTATCCCTGATCTTAGATGGGTCTATGGTTTTTGGTGGAAGCCATC
+panTro2.c 157529051 CATGAGCCCTCCTTGTATCCCTGATCTTAGATGGGTCTATGGTTTTTGGTGGAAGCCATC
+ponAbe2.c 158049671 CATGAGCCCTCCTTGTATCCCTGATCTTAGATGGGTCTATGGTTTTTGGTGGAAGCCATC
+otoGar1.s    178838 CACATGCACTCATCGTGTCTCTG-TCTTAGGCGTAGCCCTGGTTTCTGGGGAAAGCTGTC
+cavPor2.s     39622 --TGCGTATCCCTTGCGATCCTGATCCGAGGTGTGGCTGTGGTTTTTGGTGAAAGCCATC
+
+mm9.chr10   3012623 CAGGAAAGAGGGTGAAAACTCAGTCTGAGCTGTCATTCTTGCCAGCTATGTTGCTTTCCT
+hg18.chr6 155038919 CAG-AAACAGCCTCAAAATCCAGTCTGAGTTTTCATTCCTGTCAATCAATCCTCTTATTT
+panTro2.c 157528991 CAG-AAACAGCCTCAAAATCCAGTCTGAGTTTTCATTCCTGTCAATCAATCCTCTTATTT
+ponAbe2.c 158049611 CAG-AAACAGCCTCAAAATCCAGTCTGAGTTGTCATTCCTGTCAATCAATCCTCTTGTTT
+otoGar1.s    178779 CAGAAAACCACCTGAAAACCCAGTCTCTGTGGTCATTGCTGGCAATCAGTCC-CTTATTT
+cavPor2.s     39564 CAGAAAAGAACTTCAAAACCTAGTCTAAATTGTTATTCCCTCCTGCCAATCCTCTTGTTT
+
+mm9.chr10   3012683 GTCCTCTTTAGC-------TTATCTCAGGCAACCTATCTTATTTTGTT-TGCTTTC--AG
+hg18.chr6 155038860 TTTTCCTTCACTACC----TTATTTCTAGCAACACATCTTAC-TTATTCTGTTTTCCCAG
+panTro2.c 157528932 TTTTCCTTCACTACC----TTATTTCTAGCAACACATCTTAC-TTATTTTGTTTTCCCAG
+ponAbe2.c 158049552 TTTTCCTTCATTACC----TTATTTCTAGCAACATATCTTAC-TTATTTTGTTTTCCCAG
+otoGar1.s    178720 TTAGGTTGCCTTG------TTATTTCAGGTGACATAGCTTACTTTGTTTTGTTTTCCCAG
+cavPor2.s     39504 TTACCCCATAGTGACCTCGTTATTGCAA--AACATatcttattttgttctgttttcctgg
+
+mm9.chr10   3012733 AAGGCAAG---CGAtgtgtgtgtgtgtgtgtgtgtgtgtgtgtgtatgtgtgtgtgcgtg
+hg18.chr6 155038805 AAGA-------TGAGTTGTGTATGAGTTTTGG----------------------------
+panTro2.c 157528877 AAGA-------TGAGTTGTGTATGAGTTTTGG----------------------------
+ponAbe2.c 158049497 AAGA-------TGAGTTGTGTATGAGTTTTGG----------------------------
+otoGar1.s    178666 AAGACAAGTGGTGACTTGTGTATGAGTTTTGA----------------------------
+cavPor2.s     39446 aagataaa---tgaattttgtgtgaGTTTGAG----------------------------
+
+mm9.chr10   3012790 CGCGCGCGCGAGCACATGTGCATGCATGCGCACTCGTG   3012828
+hg18.chr6 155038780 -------------------------------------- 155038780
+panTro2.c 157528852 -------------------------------------- 157528852
+ponAbe2.c 158049472 -------------------------------------- 158049472
+otoGar1.s    178634 --------------------------------------    178634
+cavPor2.s     39417 --------------------------------------     39417
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=117109.000000
+s mm9.chr10                      3012566 262 + 129993255 --TGTGGGCTCCTCACTTTCCTG-TCTCAGGTGTGTCTGTGAGTTTCGGTGAGTGTCGTACAGGAAAGAGGGTGAAAACTCAGTCTGAGCTGTCATTCTTGCCAGCTATGTTGCTTTCCTGTCCTCTTTAGC-------TTATCTCAGGCAACCTATCTTATTTTGTT-TGCTTTC--AGAAGGCAAG---CGAtgtgtgtgtgtgtgtgtgtgtgtgtgtgtgtatgtgtgtgtgcgtgCGCGCGCGCGAGCACATGTGCATGCATGCGCACTCGTG
+s hg18.chr6                     15861013 199 - 170899992 CATGAGCCCTCCTTGTATCCCTGATCTTAGATGGGTCTATGGTTTTTGGTGGAAGCCATCCAG-AAACAGCCTCAAAATCCAGTCTGAGTTTTCATTCCTGTCAATCAATCCTCTTATTTTTTTCCTTCACTACC----TTATTTCTAGCAACACATCTTAC-TTATTCTGTTTTCCCAGAAGA-------TGAGTTGTGTATGAGTTTTGG------------------------------------------------------------------
+i hg18.chr6                     C 0 C 0
+s panTro2.chr6                  16379561 199 - 173908612 CATGAGCCCTCCTTGTATCCCTGATCTTAGATGGGTCTATGGTTTTTGGTGGAAGCCATCCAG-AAACAGCCTCAAAATCCAGTCTGAGTTTTCATTCCTGTCAATCAATCCTCTTATTTTTTTCCTTCACTACC----TTATTTCTAGCAACACATCTTAC-TTATTTTGTTTTCCCAGAAGA-------TGAGTTGTGTATGAGTTTTGG------------------------------------------------------------------
+q panTro2.chr6                                           999999999999999999999999999999999999999999999999999999999999999-99999999999999999999999999999999999999999999999999999999999999999999999----99999999999999999999999-999999999999999999999-------999999999999999999999------------------------------------------------------------------
+i panTro2.chr6                  C 0 C 0
+s ponAbe2.chr6                  16160760 199 - 174210431 CATGAGCCCTCCTTGTATCCCTGATCTTAGATGGGTCTATGGTTTTTGGTGGAAGCCATCCAG-AAACAGCCTCAAAATCCAGTCTGAGTTGTCATTCCTGTCAATCAATCCTCTTGTTTTTTTCCTTCATTACC----TTATTTCTAGCAACATATCTTAC-TTATTTTGTTTTCCCAGAAGA-------TGAGTTGTGTATGAGTTTTGG------------------------------------------------------------------
+i ponAbe2.chr6                  C 0 C 0
+s otoGar1.scaffold_334.1-359464   180626 204 -    359464 CACATGCACTCATCGTGTCTCTG-TCTTAGGCGTAGCCCTGGTTTCTGGGGAAAGCTGTCCAGAAAACCACCTGAAAACCCAGTCTCTGTGGTCATTGCTGGCAATCAGTCC-CTTATTTTTAGGTTGCCTTG------TTATTTCAGGTGACATAGCTTACTTTGTTTTGTTTTCCCAGAAGACAAGTGGTGACTTGTGTATGAGTTTTGA------------------------------------------------------------------
+q otoGar1.scaffold_334.1-359464                          99999999999999999999999-9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999-99999999999999999999------9999999999999999999999999999999999999999999999999999999999999999999999999------------------------------------------------------------------
+i otoGar1.scaffold_334.1-359464 C 0 C 0
+s cavPor2.scaffold_290371            310 205 -     39932 --TGCGTATCCCTTGCGATCCTGATCCGAGGTGTGGCTGTGGTTTTTGGTGAAAGCCATCCAGAAAAGAACTTCAAAACCTAGTCTAAATTGTTATTCCCTCCTGCCAATCCTCTTGTTTTTACCCCATAGTGACCTCGTTATTGCAA--AACATatcttattttgttctgttttcctggaagataaa---tgaattttgtgtgaGTTTGAG------------------------------------------------------------------
+q cavPor2.scaffold_290371                                --99999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999997999999999999999999999999999999999999999--99999999999999999999999999999999999999---999999999999999999999------------------------------------------------------------------
+i cavPor2.scaffold_290371       N 0 C 0
+
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 128047)
@@ -571,9 +896,9 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 7)
         self.assertNotIn("empty", alignment.annotations)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3012828,   3012833,   3012902,   3012903,   3012904,   3012908,
                 3012911,   3012915,   3012915,   3012915,   3012921,   3012922,
@@ -607,6 +932,66 @@ class TestAlign_reading(unittest.TestCase):
                     # fmt: on
                 ),
             )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3012828 TTTGCATAGACTCTCTTGGCAACAAAATAACGTTATATTTAAACATCCATTAAAATAATG
+cavPor2.s     39417 -----GTGGGATGTCTTGACAGCTAAATAGTcttatatttaagcatttatGAAAATAATG
+otoGar1.s    178634 -----GTGGACATTCGTGACAGGCAAATAGTGTTCTATTTAAACATTTGTTGAAATGATA
+ponAbe2.c 158049472 -----GTGGACTATCCTGACAACCAAATAGCGTTATATTTAAACATTTATGAAAATAATA
+panTro2.c 157528852 -----GCGGACTATCTTGACAACCAAATAGCGTTATATTTAAACGTTTATGAAAATAATA
+hg18.chr6 155038780 -----GTGGACTATCTTGACAACCAAATAGCGTTATATTTAAACGTTTGTGAAAATAATA
+echTel1.s     87492 TTGGGGTGGATGCTCTTGGCAGTCACACAGTGCTCTATTTTAGGATTTACTAGAACAATG
+
+mm9.chr10   3012888 CACTTAGCACAGCCTGCCCTGAGGGAT----GAACACT--ATTGTTAA-AGAACTATTCC
+cavPor2.s     39362 AGGTTATCATGGTTCGCTCTAGTAGCTCTGAGACCTTT--ATTGTCAGCAAAGCTGTTTA
+otoGar1.s    178579 AACTTAGCTCAGCC--CCTT---AGAAGTG-AGAGGCT--ACTGTCAGGGAAGCGGTTTT
+ponAbe2.c 158049417 AGCTTAGCATAACCTGCCTTGACAGATGTG-GTATGC-------CTAGTGAAGTTGTTTA
+panTro2.c 157528797 AGCTTAGCATAACCTGCCTTGACAGATGTG-GTATGC-------CTAGTGAAGTTGCTTA
+hg18.chr6 155038725 AGCTTAGCATAACCTGCCTTGACAGATGTG-GTATGC-------CTAGTGAAGTTGCTTA
+echTel1.s     87552 AGTTTGTCATAACT-GCCTCCTCCCAAGTG-GGAAGCTGAAGCACCAA-GTACTGACTCA
+
+mm9.chr10   3012941 GCTAAGGCAGCAACCTCTGGATCTTCAGCATTCTGGCGCCATCTGCTGGTCATAT
+cavPor2.s     39304 GC--AGGAGGCAACTTCAGGTTCCGTGGGATTCTAGTGCCATCTGCTGGTCATAT
+otoGar1.s    178527 GCG-GAGCAGCAGCCTCAGGATCTGTGGGATTTTAGCGCCATCTGCTGGTCACAG
+ponAbe2.c 158049365 GCT-AAGGCTCAATCTCAGGATCTGTGGGACTCTAATGCCATCTGCTGGTCACAT
+panTro2.c 157528745 GCT-ATGGCTCAATCTCAGGATCTGTGGGACTCTAATGCCATCTGCTGGTCACAC
+hg18.chr6 155038673 GCT-ATGGCTCAATCTCAGGATCTGTGGGACTCTAATGCCATCTGCTGGTCACAC
+echTel1.s     87609 GC--AGTCCCTGACCTCA-CATCCATGGAAATCTAGTGACATCTGCTGGACACAT
+
+mm9.chr10   3012996
+cavPor2.s     39251
+otoGar1.s    178473
+ponAbe2.c 158049311
+panTro2.c 157528691
+hg18.chr6 155038619
+echTel1.s     87661
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=128047.000000
+s mm9.chr10                      3012828 168 + 129993255 TTTGCATAGACTCTCTTGGCAACAAAATAACGTTATATTTAAACATCCATTAAAATAATGCACTTAGCACAGCCTGCCCTGAGGGAT----GAACACT--ATTGTTAA-AGAACTATTCCGCTAAGGCAGCAACCTCTGGATCTTCAGCATTCTGGCGCCATCTGCTGGTCATAT
+s cavPor2.scaffold_290371            515 166 -     39932 -----GTGGGATGTCTTGACAGCTAAATAGTcttatatttaagcatttatGAAAATAATGAGGTTATCATGGTTCGCTCTAGTAGCTCTGAGACCTTT--ATTGTCAGCAAAGCTGTTTAGC--AGGAGGCAACTTCAGGTTCCGTGGGATTCTAGTGCCATCTGCTGGTCATAT
+q cavPor2.scaffold_290371                                -----999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999--9999999999999999999999--999999999999999999999999999999999999999999999999999
+i cavPor2.scaffold_290371       C 0 C 0
+s otoGar1.scaffold_334.1-359464   180830 161 -    359464 -----GTGGACATTCGTGACAGGCAAATAGTGTTCTATTTAAACATTTGTTGAAATGATAAACTTAGCTCAGCC--CCTT---AGAAGTG-AGAGGCT--ACTGTCAGGGAAGCGGTTTTGCG-GAGCAGCAGCCTCAGGATCTGTGGGATTTTAGCGCCATCTGCTGGTCACAG
+q otoGar1.scaffold_334.1-359464                          -----999999999999999999999999999999999999999999999999999999999999999999999--9999---9999999-9999999--99999999999999999999989-996999999999999999999999999999999999999999999999999
+i otoGar1.scaffold_334.1-359464 C 0 C 0
+s ponAbe2.chr6                  16160959 161 - 174210431 -----GTGGACTATCCTGACAACCAAATAGCGTTATATTTAAACATTTATGAAAATAATAAGCTTAGCATAACCTGCCTTGACAGATGTG-GTATGC-------CTAGTGAAGTTGTTTAGCT-AAGGCTCAATCTCAGGATCTGTGGGACTCTAATGCCATCTGCTGGTCACAT
+i ponAbe2.chr6                  C 0 C 0
+s panTro2.chr6                  16379760 161 - 173908612 -----GCGGACTATCTTGACAACCAAATAGCGTTATATTTAAACGTTTATGAAAATAATAAGCTTAGCATAACCTGCCTTGACAGATGTG-GTATGC-------CTAGTGAAGTTGCTTAGCT-ATGGCTCAATCTCAGGATCTGTGGGACTCTAATGCCATCTGCTGGTCACAC
+q panTro2.chr6                                           -----9999999999999999999999999999999999999999999999999999999999999999999999999999999999999-999999-------9999999999999999999-999999999999999999999999999999999999999999999999999
+i panTro2.chr6                  C 0 C 0
+s hg18.chr6                     15861212 161 - 170899992 -----GTGGACTATCTTGACAACCAAATAGCGTTATATTTAAACGTTTGTGAAAATAATAAGCTTAGCATAACCTGCCTTGACAGATGTG-GTATGC-------CTAGTGAAGTTGCTTAGCT-ATGGCTCAATCTCAGGATCTGTGGGACTCTAATGCCATCTGCTGGTCACAC
+i hg18.chr6                     C 0 C 0
+s echTel1.scaffold_288249          87492 169 +    100002 TTGGGGTGGATGCTCTTGGCAGTCACACAGTGCTCTATTTTAGGATTTACTAGAACAATGAGTTTGTCATAACT-GCCTCCTCCCAAGTG-GGAAGCTGAAGCACCAA-GTACTGACTCAGC--AGTCCCTGACCTCA-CATCCATGGAAATCTAGTGACATCTGCTGGACACAT
+q echTel1.scaffold_288249                                99989999998979665899999999999676899897997899979878899999999999999999999999-999999999999999-99999999999999999-9999999999999--99999999999999-999999999999999999999999999999999999
+i echTel1.scaffold_288249       N 0 I 7564
+
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 98097)
@@ -729,9 +1114,9 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 7)
         self.assertEqual(len(alignment.annotations["empty"]), 1)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3012996,   3013014,   3013014,   3013014,   3013028,   3013028,
                 3013028,   3013031,   3013031,   3013034,   3013036,   3013036,
@@ -787,6 +1172,75 @@ class TestAlign_reading(unittest.TestCase):
                 ),
             )
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3012996 AGATGTCTGCTGTGGAGA-------CCTGGCCAACTTTG----CTT--TCTTC-----AA
+cavPor2.s     39251 TGACGTCTGCAGCCACGG-------GCTGGCTAACTCCA--GTCTT--CCGCG-----CT
+hg18.chr6 155038619 TGATGGCTGCTGCCATCA---CTTTCTTGGCCTACTCTGCTGTCTT--ACTCT-----AT
+panTro2.c 157528691 TGATGGCTGCTGCCATCA---CTTTCTTGGCCTACTCTGCTGTCTT--ATTCT-----AT
+ponAbe2.c 158049311 TGATGGCTGCTGCCATCA---CTTTCTTGGCCTACTAGGCCGTCTT--ACTCT-----AT
+otoGar1.s    178473 GGACGGCCGCCGCCACCACCGCTTTCCCTGCCAACTCCACCGTCTTAAATTCTGCAACAA
+tupBel1.s    331237 TGATGGCTACAGCTGTCA---CTTTCTTGGACCACTCAGCTCTCTC--AAC-------GA
+
+mm9.chr10   3013038 AAAGGCAACAGAAGGTAATCAGTTGAATGCCCACCA-----TTAGGAAGGCGACCTCTAG
+cavPor2.s     39207 AAAGCCGAC--------------------CACACCACATAGTGGGGAGAGTGACCTCTAG
+hg18.chr6 155038569 AAGACTAAC--------------------AGGACCCCATAGTTAGGAGAGCGACCTCTAG
+panTro2.c 157528641 AAGACTAAC--------------------AGGACCCCATGGTTAGGAGAGCGACCTCTAG
+ponAbe2.c 158049261 AAGACTAAC--------------------AGGACCCCATAGTTAGGAGAGCGACCTCTAG
+otoGar1.s    178413 AAGAAAAAT--------------------CGGACCCTGCAGTTACTAGAGCGACCTCTGG
+tupBel1.s    331189 AAGACAAAC--------------------TGGATCCTCCGG---GAGAGGAGACCTCTAG
+
+mm9.chr10   3013093 TGCACAAACCTTGAC-ATTTTCCCTTTTAATGGAA-TTTAACAGAAGTTCAGGATGTTCT
+cavPor2.s     39167 CGGAAAagctttgca-atttttttcttc----gAC-TCTGTCAG--GTTCAGAATTCCAT
+hg18.chr6 155038529 CGAGCAGGCCTTGGC-ATTTTTCTTTTTAATTGAA-TTCATAAA-GGCTTAGAATGCCAT
+panTro2.c 157528601 CGAGCAGGCCTTGGA-ATTTTTCTTTTTAATTAAA-TTCATAAA-GGCTTAGAATGCCAT
+ponAbe2.c 158049221 CGAGCAGGCCTTGGA-ATTTTTCTTTTTAATTGAA-TTCATAAA-GGCTTAGAATGCCAT
+otoGar1.s    178373 TGAACAAGCCTTGGATTTTTTTCTTTTTAATTGAATTTTACAAC-GGCTCAAAATGCAAG
+tupBel1.s    331152 TGAGCAAACCTTGGA-ATTTTTCTTTAAAACAGAA-TTTATAAA-GGTTCA-AATGCCAT
+
+mm9.chr10   3013151 TTGGGTAATTTACAATT---A----GGGGGCAAAAATCAAAAGTATTTCGAGCATATCAA
+cavPor2.s     39115 TTAAACAATTTacagct---a----gaaaaggaaaagcagaggCATTT------------
+hg18.chr6 155038472 TTAGACAATTTGTAATG---GTGGGGGGAGGTAAGAGTAT--------------------
+panTro2.c 157528544 TTAGACAATTTGTAATG---GTGGGGGGAGGTAAGAGTAT--------------------
+ponAbe2.c 158049164 TTAGACAATTTGTAATG---GTGGGGGGAGGTAAGAGTATAAATATTGAATGTAT-TCAA
+otoGar1.s    178314 TTAGACAATTCATAGTGTATGTGTGGGGACCTGAGAGTGCAAATATTGCTGGCAT-TCAG
+tupBel1.s    331096 TTAGACAACTTATAATT---A---------------------------------------
+
+mm9.chr10   3013204 AACTGTTAGCTATG   3013218
+cavPor2.s     39074 --------------     39074
+hg18.chr6 155038435 -------------- 155038435
+panTro2.c 157528507 -------------- 157528507
+ponAbe2.c 158049108 ACCTGTCAATGATG 158049094
+otoGar1.s    178255 CCTTGTTA------    178247
+tupBel1.s    331078 --------------    331078
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=98097.000000
+s mm9.chr10                         3012996  222 + 129993255 AGATGTCTGCTGTGGAGA-------CCTGGCCAACTTTG----CTT--TCTTC-----AAAAAGGCAACAGAAGGTAATCAGTTGAATGCCCACCA-----TTAGGAAGGCGACCTCTAGTGCACAAACCTTGAC-ATTTTCCCTTTTAATGGAA-TTTAACAGAAGTTCAGGATGTTCTTTGGGTAATTTACAATT---A----GGGGGCAAAAATCAAAAGTATTTCGAGCATATCAAAACTGTTAGCTATG
+s cavPor2.scaffold_290371               681  177 -     39932 TGACGTCTGCAGCCACGG-------GCTGGCTAACTCCA--GTCTT--CCGCG-----CTAAAGCCGAC--------------------CACACCACATAGTGGGGAGAGTGACCTCTAGCGGAAAagctttgca-atttttttcttc----gAC-TCTGTCAG--GTTCAGAATTCCATTTAAACAATTTacagct---a----gaaaaggaaaagcagaggCATTT--------------------------
+q cavPor2.scaffold_290371                                    999999999999999999-------99999999999999--99999--99999-----99999999999--------------------9999999999999999999999999999999999999999999999-999999999999----999-99999999--9999999999999999997999999999995---6----99999999999336991774687--------------------------
+i cavPor2.scaffold_290371          C 0 N 0
+s hg18.chr6                        15861373  184 - 170899992 TGATGGCTGCTGCCATCA---CTTTCTTGGCCTACTCTGCTGTCTT--ACTCT-----ATAAGACTAAC--------------------AGGACCCCATAGTTAGGAGAGCGACCTCTAGCGAGCAGGCCTTGGC-ATTTTTCTTTTTAATTGAA-TTCATAAA-GGCTTAGAATGCCATTTAGACAATTTGTAATG---GTGGGGGGAGGTAAGAGTAT----------------------------------
+i hg18.chr6                        C 0 I 14
+s panTro2.chr6                     16379921  184 - 173908612 TGATGGCTGCTGCCATCA---CTTTCTTGGCCTACTCTGCTGTCTT--ATTCT-----ATAAGACTAAC--------------------AGGACCCCATGGTTAGGAGAGCGACCTCTAGCGAGCAGGCCTTGGA-ATTTTTCTTTTTAATTAAA-TTCATAAA-GGCTTAGAATGCCATTTAGACAATTTGTAATG---GTGGGGGGAGGTAAGAGTAT----------------------------------
+q panTro2.chr6                                               999999999999999999---9999999999999999999999999--99999-----99999999999--------------------9999999999999999999999999999999999999999999999-9999999999999999999-99999999-99999999999999999999999999999999---99999999999999999999----------------------------------
+i panTro2.chr6                     C 0 I 14
+s ponAbe2.chr6                     16161120  217 - 174210431 TGATGGCTGCTGCCATCA---CTTTCTTGGCCTACTAGGCCGTCTT--ACTCT-----ATAAGACTAAC--------------------AGGACCCCATAGTTAGGAGAGCGACCTCTAGCGAGCAGGCCTTGGA-ATTTTTCTTTTTAATTGAA-TTCATAAA-GGCTTAGAATGCCATTTAGACAATTTGTAATG---GTGGGGGGAGGTAAGAGTATAAATATTGAATGTAT-TCAAACCTGTCAATGATG
+i ponAbe2.chr6                     C 0 I 2
+s otoGar1.scaffold_334.1-359464      180991  226 -    359464 GGACGGCCGCCGCCACCACCGCTTTCCCTGCCAACTCCACCGTCTTAAATTCTGCAACAAAAGAAAAAT--------------------CGGACCCTGCAGTTACTAGAGCGACCTCTGGTGAACAAGCCTTGGATTTTTTTCTTTTTAATTGAATTTTACAAC-GGCTCAAAATGCAAGTTAGACAATTCATAGTGTATGTGTGGGGACCTGAGAGTGCAAATATTGCTGGCAT-TCAGCCTTGTTA------
+q otoGar1.scaffold_334.1-359464                              999998999999999999999999999999999999999999999999999999999999999999999--------------------999999999999999999999999999999999999999999999999999999999999999999999999999-9999999999999999999999999999999999999999999699999999999999999999999999-999999999999------
+i otoGar1.scaffold_334.1-359464    C 0 I 2931
+s tupBel1.scaffold_114895.1-498454   167217  159 -    498454 TGATGGCTACAGCTGTCA---CTTTCTTGGACCACTCAGCTCTCTC--AAC-------GAAAGACAAAC--------------------TGGATCCTCCGG---GAGAGGAGACCTCTAGTGAGCAAACCTTGGA-ATTTTTCTTTAAAACAGAA-TTTATAAA-GGTTCA-AATGCCATTTAGACAACTTATAATT---A-----------------------------------------------------
+q tupBel1.scaffold_114895.1-498454                           234233433332122232---1582112220212134443324332--133-------23732111754--------------------365002326236---2411112335242535353245936522224-1376645373578253554-58324573-545454-8444565585455465799967999---9-----------------------------------------------------
+i tupBel1.scaffold_114895.1-498454 N 0 I 4145
+e echTel1.scaffold_288249             87661 7564 +    100002 I
+
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 0)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -838,7 +1292,58 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 6)
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, numpy.array([[3013218, 3013437]]))
+            np.array_equal(alignment.coordinates, np.array([[3013218, 3013437]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3013218 agccaggcgtggtggcacacacctttactcccagcatttggggggcagaggcaggtggat
+
+mm9.chr10   3013278 ctgtgagtttgaggccagcctggtctacagagggagtctcaggacagccagagctacaca
+
+mm9.chr10   3013338 gaaataacctgcctagaaaaacaaaacaaaacaaaacatcaaaactcaaaacaaaTAAAA
+
+mm9.chr10   3013398 AAAATAAAAAACCCAACCTAAACCAAATAACAAAACACT 3013437
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=0.000000
+s mm9.chr10                         3013218  219 + 129993255 agccaggcgtggtggcacacacctttactcccagcatttggggggcagaggcaggtggatctgtgagtttgaggccagcctggtctacagagggagtctcaggacagccagagctacacagaaataacctgcctagaaaaacaaaacaaaacaaaacatcaaaactcaaaacaaaTAAAAAAAATAAAAAACCCAACCTAAACCAAATAACAAAACACT
+e tupBel1.scaffold_114895.1-498454   167376 4145 -    498454 I
+e echTel1.scaffold_288249             87661 7564 +    100002 I
+e otoGar1.scaffold_334.1-359464      181217 2931 -    359464 I
+e hg18.chr6                        15861557   14 - 170899992 I
+e panTro2.chr6                     16380105   14 - 173908612 I
+e ponAbe2.chr6                     16161337    2 - 174210431 I
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['a', 'g', 'c', 'c', 'a', 'g', 'g', 'c', 'g', 't', 'g', 'g', 't',
+           'g', 'g', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'c', 't', 't', 't',
+           'a', 'c', 't', 'c', 'c', 'c', 'a', 'g', 'c', 'a', 't', 't', 't',
+           'g', 'g', 'g', 'g', 'g', 'g', 'c', 'a', 'g', 'a', 'g', 'g', 'c',
+           'a', 'g', 'g', 't', 'g', 'g', 'a', 't', 'c', 't', 'g', 't', 'g',
+           'a', 'g', 't', 't', 't', 'g', 'a', 'g', 'g', 'c', 'c', 'a', 'g',
+           'c', 'c', 't', 'g', 'g', 't', 'c', 't', 'a', 'c', 'a', 'g', 'a',
+           'g', 'g', 'g', 'a', 'g', 't', 'c', 't', 'c', 'a', 'g', 'g', 'a',
+           'c', 'a', 'g', 'c', 'c', 'a', 'g', 'a', 'g', 'c', 't', 'a', 'c',
+           'a', 'c', 'a', 'g', 'a', 'a', 'a', 't', 'a', 'a', 'c', 'c', 't',
+           'g', 'c', 'c', 't', 'a', 'g', 'a', 'a', 'a', 'a', 'a', 'c', 'a',
+           'a', 'a', 'a', 'c', 'a', 'a', 'a', 'a', 'c', 'a', 'a', 'a', 'a',
+           'c', 'a', 't', 'c', 'a', 'a', 'a', 'a', 'c', 't', 'c', 'a', 'a',
+           'a', 'a', 'c', 'a', 'a', 'a', 'T', 'A', 'A', 'A', 'A', 'A', 'A',
+           'A', 'A', 'T', 'A', 'A', 'A', 'A', 'A', 'A', 'C', 'C', 'C', 'A',
+           'A', 'C', 'C', 'T', 'A', 'A', 'A', 'C', 'C', 'A', 'A', 'A', 'T',
+           'A', 'A', 'C', 'A', 'A', 'A', 'A', 'C', 'A', 'C', 'T']],
+         dtype='U')
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 40604)
@@ -919,9 +1424,9 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 4)
         self.assertEqual(len(alignment.annotations["empty"]), 3)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3013437,   3013458,   3013509,   3013545,   3013603],
              [157528493, 157528472, 157528421, 157528421, 157528363],
@@ -930,6 +1435,102 @@ class TestAlign_reading(unittest.TestCase):
             ]
                     # fmt: on
                 ),
+            )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3013437 TCCAAAATGGTTAGCTATGCCCAACTCCTTTCACTCCAAGAAAATATCCTAACCATGTAA
+panTro2.c 157528493 TTCAAACCTGTCAATGATGTTCAACTCTTTTCACTGTGGATAAAGATCTTCTAGATGCAA
+hg18.chr6 155038421 TTCAAACCTGTCAATGATGTTCAACTCTTTTCACTGTGGATAAAGATCTTCTAGATGCAA
+ponAbe2.c 158049092 ---------------------CAACTCTTTTCACTGTGGATAAAGATCTTCTAGATGCAA
+
+mm9.chr10   3013497 GAGAGCTAGCCTGTTGGTGGCAGCCAAGCCTGATGGTGGCAGACTAGATTGATGGTGCCA
+panTro2.c 157528433 TAGAATTAGATT------------------------------------TTGGCGATTACA
+hg18.chr6 155038361 TAGAATTAGATT------------------------------------TTGGCGATTACA
+ponAbe2.c 158049053 TAGAATTAGATT------------------------------------TTGGCGATTACA
+
+mm9.chr10   3013557 GACTACTTTATGGCTGTATCATTTTCCATTCATGTGTTGTGTTATA   3013603
+panTro2.c 157528409 TCCTATTTTATGGGTGTATCGTTTTGCATTCATGGGCTGTTTGATA 157528363
+hg18.chr6 155038337 TCCTATTTTATGGGTGTATCGTTTTGCATTCATGGGCTGTTTGATA 155038291
+ponAbe2.c 158049029 TCCTATTTTATGGGTGTATCGTTTTGCATTCATGGGCTGTTTGATA 158048983
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=40604.000000
+s mm9.chr10                         3013437  166 + 129993255 TCCAAAATGGTTAGCTATGCCCAACTCCTTTCACTCCAAGAAAATATCCTAACCATGTAAGAGAGCTAGCCTGTTGGTGGCAGCCAAGCCTGATGGTGGCAGACTAGATTGATGGTGCCAGACTACTTTATGGCTGTATCATTTTCCATTCATGTGTTGTGTTATA
+s panTro2.chr6                     16380119  130 - 173908612 TTCAAACCTGTCAATGATGTTCAACTCTTTTCACTGTGGATAAAGATCTTCTAGATGCAATAGAATTAGATT------------------------------------TTGGCGATTACATCCTATTTTATGGGTGTATCGTTTTGCATTCATGGGCTGTTTGATA
+q panTro2.chr6                                               999999999999999999999999999999999999999999999999999999999999999999999999------------------------------------9999999999999999999999999999999999999099999999999999999999
+i panTro2.chr6                     I 14 I 9106
+s hg18.chr6                        15861571  130 - 170899992 TTCAAACCTGTCAATGATGTTCAACTCTTTTCACTGTGGATAAAGATCTTCTAGATGCAATAGAATTAGATT------------------------------------TTGGCGATTACATCCTATTTTATGGGTGTATCGTTTTGCATTCATGGGCTGTTTGATA
+i hg18.chr6                        I 14 I 9085
+s ponAbe2.chr6                     16161339  109 - 174210431 ---------------------CAACTCTTTTCACTGTGGATAAAGATCTTCTAGATGCAATAGAATTAGATT------------------------------------TTGGCGATTACATCCTATTTTATGGGTGTATCGTTTTGCATTCATGGGCTGTTTGATA
+i ponAbe2.chr6                     I 2 I 8044
+e tupBel1.scaffold_114895.1-498454   167376 4145 -    498454 I
+e echTel1.scaffold_288249             87661 7564 +    100002 I
+e otoGar1.scaffold_334.1-359464      181217 2931 -    359464 I
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['T', 'C', 'C', 'A', 'A', 'A', 'A', 'T', 'G', 'G', 'T', 'T', 'A',
+           'G', 'C', 'T', 'A', 'T', 'G', 'C', 'C', 'C', 'A', 'A', 'C', 'T',
+           'C', 'C', 'T', 'T', 'T', 'C', 'A', 'C', 'T', 'C', 'C', 'A', 'A',
+           'G', 'A', 'A', 'A', 'A', 'T', 'A', 'T', 'C', 'C', 'T', 'A', 'A',
+           'C', 'C', 'A', 'T', 'G', 'T', 'A', 'A', 'G', 'A', 'G', 'A', 'G',
+           'C', 'T', 'A', 'G', 'C', 'C', 'T', 'G', 'T', 'T', 'G', 'G', 'T',
+           'G', 'G', 'C', 'A', 'G', 'C', 'C', 'A', 'A', 'G', 'C', 'C', 'T',
+           'G', 'A', 'T', 'G', 'G', 'T', 'G', 'G', 'C', 'A', 'G', 'A', 'C',
+           'T', 'A', 'G', 'A', 'T', 'T', 'G', 'A', 'T', 'G', 'G', 'T', 'G',
+           'C', 'C', 'A', 'G', 'A', 'C', 'T', 'A', 'C', 'T', 'T', 'T', 'A',
+           'T', 'G', 'G', 'C', 'T', 'G', 'T', 'A', 'T', 'C', 'A', 'T', 'T',
+           'T', 'T', 'C', 'C', 'A', 'T', 'T', 'C', 'A', 'T', 'G', 'T', 'G',
+           'T', 'T', 'G', 'T', 'G', 'T', 'T', 'A', 'T', 'A'],
+          ['T', 'T', 'C', 'A', 'A', 'A', 'C', 'C', 'T', 'G', 'T', 'C', 'A',
+           'A', 'T', 'G', 'A', 'T', 'G', 'T', 'T', 'C', 'A', 'A', 'C', 'T',
+           'C', 'T', 'T', 'T', 'T', 'C', 'A', 'C', 'T', 'G', 'T', 'G', 'G',
+           'A', 'T', 'A', 'A', 'A', 'G', 'A', 'T', 'C', 'T', 'T', 'C', 'T',
+           'A', 'G', 'A', 'T', 'G', 'C', 'A', 'A', 'T', 'A', 'G', 'A', 'A',
+           'T', 'T', 'A', 'G', 'A', 'T', 'T', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', 'T', 'T', 'G', 'G', 'C', 'G', 'A', 'T', 'T',
+           'A', 'C', 'A', 'T', 'C', 'C', 'T', 'A', 'T', 'T', 'T', 'T', 'A',
+           'T', 'G', 'G', 'G', 'T', 'G', 'T', 'A', 'T', 'C', 'G', 'T', 'T',
+           'T', 'T', 'G', 'C', 'A', 'T', 'T', 'C', 'A', 'T', 'G', 'G', 'G',
+           'C', 'T', 'G', 'T', 'T', 'T', 'G', 'A', 'T', 'A'],
+          ['T', 'T', 'C', 'A', 'A', 'A', 'C', 'C', 'T', 'G', 'T', 'C', 'A',
+           'A', 'T', 'G', 'A', 'T', 'G', 'T', 'T', 'C', 'A', 'A', 'C', 'T',
+           'C', 'T', 'T', 'T', 'T', 'C', 'A', 'C', 'T', 'G', 'T', 'G', 'G',
+           'A', 'T', 'A', 'A', 'A', 'G', 'A', 'T', 'C', 'T', 'T', 'C', 'T',
+           'A', 'G', 'A', 'T', 'G', 'C', 'A', 'A', 'T', 'A', 'G', 'A', 'A',
+           'T', 'T', 'A', 'G', 'A', 'T', 'T', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', 'T', 'T', 'G', 'G', 'C', 'G', 'A', 'T', 'T',
+           'A', 'C', 'A', 'T', 'C', 'C', 'T', 'A', 'T', 'T', 'T', 'T', 'A',
+           'T', 'G', 'G', 'G', 'T', 'G', 'T', 'A', 'T', 'C', 'G', 'T', 'T',
+           'T', 'T', 'G', 'C', 'A', 'T', 'T', 'C', 'A', 'T', 'G', 'G', 'G',
+           'C', 'T', 'G', 'T', 'T', 'T', 'G', 'A', 'T', 'A'],
+          ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', 'C', 'A', 'A', 'C', 'T',
+           'C', 'T', 'T', 'T', 'T', 'C', 'A', 'C', 'T', 'G', 'T', 'G', 'G',
+           'A', 'T', 'A', 'A', 'A', 'G', 'A', 'T', 'C', 'T', 'T', 'C', 'T',
+           'A', 'G', 'A', 'T', 'G', 'C', 'A', 'A', 'T', 'A', 'G', 'A', 'A',
+           'T', 'T', 'A', 'G', 'A', 'T', 'T', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', 'T', 'T', 'G', 'G', 'C', 'G', 'A', 'T', 'T',
+           'A', 'C', 'A', 'T', 'C', 'C', 'T', 'A', 'T', 'T', 'T', 'T', 'A',
+           'T', 'G', 'G', 'G', 'T', 'G', 'T', 'A', 'T', 'C', 'G', 'T', 'T',
+           'T', 'T', 'G', 'C', 'A', 'T', 'T', 'C', 'A', 'T', 'G', 'G', 'G',
+           'C', 'T', 'G', 'T', 'T', 'T', 'G', 'A', 'T', 'A']], dtype='U')
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -983,7 +1584,61 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 6)
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, numpy.array([[3013603, 3014644]]))
+            np.array_equal(alignment.coordinates, np.array([[3013603, 3014644]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3013603 CCTTCTTAAGAACACTAGACTCAggactggggagatggctcagcagttaagaatcggtgc
+
+mm9.chr10   3013663 tgttaagagtgggagacaagtttggttcccagctcccacattggtcagctcacagccacc
+
+mm9.chr10   3013723 cgtaactctaagatggtacacacctttaatcccaggagacagaggcaatcagatctgagt
+
+mm9.chr10   3013783 tcaagattcagcctgagacagagcatgttccaaattcaggcatggtgggtcataccttta
+
+mm9.chr10   3013843 atatgggacataccttctgctggaggcctacctaaggacaacggagaaaggaagtattcg
+
+mm9.chr10   3013903 ttcttctcctgcttgcacttacttgccagcgcatctactggaacccacttcttcaggatt
+
+mm9.chr10   3013963 ccagcttatacaggagaccagctgaaatatccagcctctcgggactgaacaagtactaga
+
+mm9.chr10   3014023 gtctcagacttcccattcacagctgcccattgttggttggttgtactacagactgtaagt
+
+mm9.chr10   3014083 cattgtaataatttcccttaatatatagagacattatataagttctgtgactctagagaa
+
+mm9.chr10   3014143 ccctgactagtacaCGTGGCTAACTAGAAAGctctggtatgtgcttacttaatgctgagg
+
+mm9.chr10   3014203 ttttaggcatggccacggtgctctgcttcttatgtgggtgctgggaatgcagactcaggt
+
+mm9.chr10   3014263 cctcatgtgtatgcagcaaacacttcatacactcagctgcttccctaacccTATGCTTGT
+
+mm9.chr10   3014323 GTCTTATTACTAACTTGTGAAAAGCTTTGAGTTTATTTTCTATGTTTTCAACCACTTTCT
+
+mm9.chr10   3014383 TGAGTATGCTCAGCTCGTGGCTTTAAACTGGATTTCCCCCTAATATGTAATGACTATAAG
+
+mm9.chr10   3014443 TATTCCTTAAATAGGACACACTTTTGTTATACTTTTTGTTATCatataaaatatttcaaa
+
+mm9.chr10   3014503 aaaatttttttGCTATTTTTATCTTTGAGCCATTGGTCATTTTGACGTGTATCTCTTGAT
+
+mm9.chr10   3014563 TTTTATAGATGGTAATATTTTATGTATTGCTAGCCAATCTCGTTTTCTTGTTTGCTTGCT
+
+mm9.chr10   3014623 TGTTTGTTTTGGTCAATGCAG 3014644
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=0.000000
+s mm9.chr10                         3013603 1041 + 129993255 CCTTCTTAAGAACACTAGACTCAggactggggagatggctcagcagttaagaatcggtgctgttaagagtgggagacaagtttggttcccagctcccacattggtcagctcacagccacccgtaactctaagatggtacacacctttaatcccaggagacagaggcaatcagatctgagttcaagattcagcctgagacagagcatgttccaaattcaggcatggtgggtcatacctttaatatgggacataccttctgctggaggcctacctaaggacaacggagaaaggaagtattcgttcttctcctgcttgcacttacttgccagcgcatctactggaacccacttcttcaggattccagcttatacaggagaccagctgaaatatccagcctctcgggactgaacaagtactagagtctcagacttcccattcacagctgcccattgttggttggttgtactacagactgtaagtcattgtaataatttcccttaatatatagagacattatataagttctgtgactctagagaaccctgactagtacaCGTGGCTAACTAGAAAGctctggtatgtgcttacttaatgctgaggttttaggcatggccacggtgctctgcttcttatgtgggtgctgggaatgcagactcaggtcctcatgtgtatgcagcaaacacttcatacactcagctgcttccctaacccTATGCTTGTGTCTTATTACTAACTTGTGAAAAGCTTTGAGTTTATTTTCTATGTTTTCAACCACTTTCTTGAGTATGCTCAGCTCGTGGCTTTAAACTGGATTTCCCCCTAATATGTAATGACTATAAGTATTCCTTAAATAGGACACACTTTTGTTATACTTTTTGTTATCatataaaatatttcaaaaaaatttttttGCTATTTTTATCTTTGAGCCATTGGTCATTTTGACGTGTATCTCTTGATTTTTATAGATGGTAATATTTTATGTATTGCTAGCCAATCTCGTTTTCTTGTTTGCTTGCTTGTTTGTTTTGGTCAATGCAG
+e tupBel1.scaffold_114895.1-498454   167376 4145 -    498454 I
+e echTel1.scaffold_288249             87661 7564 +    100002 I
+e otoGar1.scaffold_334.1-359464      181217 2931 -    359464 I
+e hg18.chr6                        15861701 9085 - 170899992 I
+e panTro2.chr6                     16380249 9106 - 173908612 I
+e ponAbe2.chr6                     16161448 8044 - 174210431 I
+
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 19159)
@@ -1083,9 +1738,9 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 5)
         self.assertEqual(len(alignment.annotations["empty"]), 4)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3014644,   3014652,   3014652,   3014653,   3014664,   3014665,
                 3014684,   3014685,   3014689],
@@ -1100,6 +1755,65 @@ class TestAlign_reading(unittest.TestCase):
             ]
                     # fmt: on
                 ),
+            )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3014644 CCTGTACC---CTTTGGTGAGAATTTTTGTTTCAGTGTTAAAAGTTTG   3014689
+hg18.chr6 155029206 CCTATACCTTTCTTTTATGAGAA-TTTTGTTTTAATCCTAAAC-TTTT 155029160
+panTro2.c 157519257 CCTATACCTTTCTTTTATGAGAA-TTTTGTTTTAATCCTAAAC-TTTT 157519211
+calJac1.C      6182 CCTATACCTTTCTTTCATGAGAA-TTTTGTTTGAATCCTAAAC-TTTT      6228
+loxAfr1.s      9407 ------------TTTGGTTAGAA-TTATGCTTTAATTCAAAAC-TTCC      9373
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=19159.000000
+s mm9.chr10                         3014644   45 + 129993255 CCTGTACC---CTTTGGTGAGAATTTTTGTTTCAGTGTTAAAAGTTTG
+s hg18.chr6                        15870786   46 - 170899992 CCTATACCTTTCTTTTATGAGAA-TTTTGTTTTAATCCTAAAC-TTTT
+i hg18.chr6                        I 9085 C 0
+s panTro2.chr6                     16389355   46 - 173908612 CCTATACCTTTCTTTTATGAGAA-TTTTGTTTTAATCCTAAAC-TTTT
+q panTro2.chr6                                               99999999999999999999999-9999999999999999999-9999
+i panTro2.chr6                     I 9106 C 0
+s calJac1.Contig6394                   6182   46 +    133105 CCTATACCTTTCTTTCATGAGAA-TTTTGTTTGAATCCTAAAC-TTTT
+i calJac1.Contig6394               N 0 C 0
+s loxAfr1.scaffold_75566               1167   34 -     10574 ------------TTTGGTTAGAA-TTATGCTTTAATTCAAAAC-TTCC
+q loxAfr1.scaffold_75566                                     ------------99999699899-9999999999999869998-9997
+i loxAfr1.scaffold_75566           N 0 C 0
+e tupBel1.scaffold_114895.1-498454   167376 4145 -    498454 I
+e echTel1.scaffold_288249             87661 7564 +    100002 I
+e otoGar1.scaffold_334.1-359464      181217 2931 -    359464 I
+e ponAbe2.chr6                     16161448 8044 - 174210431 I
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['C', 'C', 'T', 'G', 'T', 'A', 'C', 'C', '-', '-', '-', 'C', 'T',
+           'T', 'T', 'G', 'G', 'T', 'G', 'A', 'G', 'A', 'A', 'T', 'T', 'T',
+           'T', 'T', 'G', 'T', 'T', 'T', 'C', 'A', 'G', 'T', 'G', 'T', 'T',
+           'A', 'A', 'A', 'A', 'G', 'T', 'T', 'T', 'G'],
+          ['C', 'C', 'T', 'A', 'T', 'A', 'C', 'C', 'T', 'T', 'T', 'C', 'T',
+           'T', 'T', 'T', 'A', 'T', 'G', 'A', 'G', 'A', 'A', '-', 'T', 'T',
+           'T', 'T', 'G', 'T', 'T', 'T', 'T', 'A', 'A', 'T', 'C', 'C', 'T',
+           'A', 'A', 'A', 'C', '-', 'T', 'T', 'T', 'T'],
+          ['C', 'C', 'T', 'A', 'T', 'A', 'C', 'C', 'T', 'T', 'T', 'C', 'T',
+           'T', 'T', 'T', 'A', 'T', 'G', 'A', 'G', 'A', 'A', '-', 'T', 'T',
+           'T', 'T', 'G', 'T', 'T', 'T', 'T', 'A', 'A', 'T', 'C', 'C', 'T',
+           'A', 'A', 'A', 'C', '-', 'T', 'T', 'T', 'T'],
+          ['C', 'C', 'T', 'A', 'T', 'A', 'C', 'C', 'T', 'T', 'T', 'C', 'T',
+           'T', 'T', 'C', 'A', 'T', 'G', 'A', 'G', 'A', 'A', '-', 'T', 'T',
+           'T', 'T', 'G', 'T', 'T', 'T', 'G', 'A', 'A', 'T', 'C', 'C', 'T',
+           'A', 'A', 'A', 'C', '-', 'T', 'T', 'T', 'T'],
+          ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'T',
+           'T', 'T', 'G', 'G', 'T', 'T', 'A', 'G', 'A', 'A', '-', 'T', 'T',
+           'A', 'T', 'G', 'C', 'T', 'T', 'T', 'A', 'A', 'T', 'T', 'C', 'A',
+           'A', 'A', 'A', 'C', '-', 'T', 'T', 'C', 'C']], dtype='U')
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1211,9 +1925,9 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 6)
         self.assertEqual(len(alignment.annotations["empty"]), 3)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3014689,   3014702,   3014703,   3014729,   3014729,   3014742],
              [155029160, 155029147, 155029146, 155029120, 155029120, 155029107],
@@ -1224,6 +1938,85 @@ class TestAlign_reading(unittest.TestCase):
             ]
                     # fmt: on
                 ),
+            )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3014689 GGGAGCATAAAACTCTAAATCTGCTAAATGTCTTGTCCCT-TTGGAAAGAGTTG
+hg18.chr6 155029160 GGGATCATAAACCATTTAATCTGTGAAATATCTAATCTTT-TGGGAAATAGTGG
+panTro2.c 157519211 GGGATCATAAACCATTTAATCTGTGAAATATCTAATCTTT-TGGGAAATAGTGG
+calJac1.C      6228 GGGATCATAAGCCATTTAATCTGTGAAATGTGAAATCTTT-TGGGAAACAGTGG
+otoGar1.s    175316 GGAAGCATAAACT-TTTAATCTATGAAATATCAAATCACT-TGGGCAATAGCTG
+loxAfr1.s      9373 GGGAGTATAAACCATTTAGTCTGCGAAATGCCAAATCTTCAGGGGAAAAAGCTG
+
+mm9.chr10   3014742
+hg18.chr6 155029107
+panTro2.c 157519158
+calJac1.C      6281
+otoGar1.s    175264
+loxAfr1.s      9319
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=40840.000000
+s mm9.chr10                         3014689   53 + 129993255 GGGAGCATAAAACTCTAAATCTGCTAAATGTCTTGTCCCT-TTGGAAAGAGTTG
+s hg18.chr6                        15870832   53 - 170899992 GGGATCATAAACCATTTAATCTGTGAAATATCTAATCTTT-TGGGAAATAGTGG
+i hg18.chr6                        C 0 I 401
+s panTro2.chr6                     16389401   53 - 173908612 GGGATCATAAACCATTTAATCTGTGAAATATCTAATCTTT-TGGGAAATAGTGG
+q panTro2.chr6                                               9999999999999999999999999999999999999999-9999999999999
+i panTro2.chr6                     C 0 I 400
+s calJac1.Contig6394                   6228   53 +    133105 GGGATCATAAGCCATTTAATCTGTGAAATGTGAAATCTTT-TGGGAAACAGTGG
+i calJac1.Contig6394               C 0 I 2
+s otoGar1.scaffold_334.1-359464      184148   52 -    359464 GGAAGCATAAACT-TTTAATCTATGAAATATCAAATCACT-TGGGCAATAGCTG
+q otoGar1.scaffold_334.1-359464                              7455455669566-99665699769895555689997599-9984787795599
+i otoGar1.scaffold_334.1-359464    I 2931 I 2
+s loxAfr1.scaffold_75566               1201   54 -     10574 GGGAGTATAAACCATTTAGTCTGCGAAATGCCAAATCTTCAGGGGAAAAAGCTG
+q loxAfr1.scaffold_75566                                     899989799999979999999999999999797999999999999999999999
+i loxAfr1.scaffold_75566           C 0 I 2
+e tupBel1.scaffold_114895.1-498454   167376 4145 -    498454 I
+e echTel1.scaffold_288249             87661 7564 +    100002 I
+e ponAbe2.chr6                     16161448 8044 - 174210431 I
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['G', 'G', 'G', 'A', 'G', 'C', 'A', 'T', 'A', 'A', 'A', 'A', 'C',
+           'T', 'C', 'T', 'A', 'A', 'A', 'T', 'C', 'T', 'G', 'C', 'T', 'A',
+           'A', 'A', 'T', 'G', 'T', 'C', 'T', 'T', 'G', 'T', 'C', 'C', 'C',
+           'T', '-', 'T', 'T', 'G', 'G', 'A', 'A', 'A', 'G', 'A', 'G', 'T',
+           'T', 'G'],
+          ['G', 'G', 'G', 'A', 'T', 'C', 'A', 'T', 'A', 'A', 'A', 'C', 'C',
+           'A', 'T', 'T', 'T', 'A', 'A', 'T', 'C', 'T', 'G', 'T', 'G', 'A',
+           'A', 'A', 'T', 'A', 'T', 'C', 'T', 'A', 'A', 'T', 'C', 'T', 'T',
+           'T', '-', 'T', 'G', 'G', 'G', 'A', 'A', 'A', 'T', 'A', 'G', 'T',
+           'G', 'G'],
+          ['G', 'G', 'G', 'A', 'T', 'C', 'A', 'T', 'A', 'A', 'A', 'C', 'C',
+           'A', 'T', 'T', 'T', 'A', 'A', 'T', 'C', 'T', 'G', 'T', 'G', 'A',
+           'A', 'A', 'T', 'A', 'T', 'C', 'T', 'A', 'A', 'T', 'C', 'T', 'T',
+           'T', '-', 'T', 'G', 'G', 'G', 'A', 'A', 'A', 'T', 'A', 'G', 'T',
+           'G', 'G'],
+          ['G', 'G', 'G', 'A', 'T', 'C', 'A', 'T', 'A', 'A', 'G', 'C', 'C',
+           'A', 'T', 'T', 'T', 'A', 'A', 'T', 'C', 'T', 'G', 'T', 'G', 'A',
+           'A', 'A', 'T', 'G', 'T', 'G', 'A', 'A', 'A', 'T', 'C', 'T', 'T',
+           'T', '-', 'T', 'G', 'G', 'G', 'A', 'A', 'A', 'C', 'A', 'G', 'T',
+           'G', 'G'],
+          ['G', 'G', 'A', 'A', 'G', 'C', 'A', 'T', 'A', 'A', 'A', 'C', 'T',
+           '-', 'T', 'T', 'T', 'A', 'A', 'T', 'C', 'T', 'A', 'T', 'G', 'A',
+           'A', 'A', 'T', 'A', 'T', 'C', 'A', 'A', 'A', 'T', 'C', 'A', 'C',
+           'T', '-', 'T', 'G', 'G', 'G', 'C', 'A', 'A', 'T', 'A', 'G', 'C',
+           'T', 'G'],
+          ['G', 'G', 'G', 'A', 'G', 'T', 'A', 'T', 'A', 'A', 'A', 'C', 'C',
+           'A', 'T', 'T', 'T', 'A', 'G', 'T', 'C', 'T', 'G', 'C', 'G', 'A',
+           'A', 'A', 'T', 'G', 'C', 'C', 'A', 'A', 'A', 'T', 'C', 'T', 'T',
+           'C', 'A', 'G', 'G', 'G', 'G', 'A', 'A', 'A', 'A', 'A', 'G', 'C',
+           'T', 'G']], dtype='U')
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1306,9 +2099,9 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 4)
         self.assertEqual(len(alignment.annotations["empty"]), 5)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[3014742, 3014749, 3014754, 3014756, 3014760, 3014775, 3014778],
              [   6283,    6290,    6290,    6292,    6296,    6311,    6311],
@@ -1317,6 +2110,55 @@ class TestAlign_reading(unittest.TestCase):
             ]
                     # fmt: on
                 ),
+            )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3014742 AAGTTCCCTCCATAATTCCTTCCTCCCACCCCCACA 3014778
+calJac1.C      6283 AAATGTA-----TGATCTCCCCATCCTGCCCTG---    6311
+otoGar1.s    175262 AGATTTC-----TGATGCCCTCACCCCCTCCGTGCA  175231
+loxAfr1.s      9317 AGGCTTA-----TG----CCACCCCCCACCCCCACA    9290
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=411.000000
+s mm9.chr10                         3014742   36 + 129993255 AAGTTCCCTCCATAATTCCTTCCTCCCACCCCCACA
+s calJac1.Contig6394                   6283   28 +    133105 AAATGTA-----TGATCTCCCCATCCTGCCCTG---
+i calJac1.Contig6394               I 2 I 54
+s otoGar1.scaffold_334.1-359464      184202   31 -    359464 AGATTTC-----TGATGCCCTCACCCCCTCCGTGCA
+q otoGar1.scaffold_334.1-359464                              9996999-----965974999999999999999999
+i otoGar1.scaffold_334.1-359464    I 2 I 24
+s loxAfr1.scaffold_75566               1257   27 -     10574 AGGCTTA-----TG----CCACCCCCCACCCCCACA
+q loxAfr1.scaffold_75566                                     9999999-----99----997999999999999999
+i loxAfr1.scaffold_75566           I 2 I 25
+e tupBel1.scaffold_114895.1-498454   167376 4145 -    498454 I
+e echTel1.scaffold_288249             87661 7564 +    100002 I
+e hg18.chr6                        15870885  401 - 170899992 I
+e panTro2.chr6                     16389454  400 - 173908612 I
+e ponAbe2.chr6                     16161448 8044 - 174210431 I
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['A', 'A', 'G', 'T', 'T', 'C', 'C', 'C', 'T', 'C', 'C', 'A', 'T',
+           'A', 'A', 'T', 'T', 'C', 'C', 'T', 'T', 'C', 'C', 'T', 'C', 'C',
+           'C', 'A', 'C', 'C', 'C', 'C', 'C', 'A', 'C', 'A'],
+          ['A', 'A', 'A', 'T', 'G', 'T', 'A', '-', '-', '-', '-', '-', 'T',
+           'G', 'A', 'T', 'C', 'T', 'C', 'C', 'C', 'C', 'A', 'T', 'C', 'C',
+           'T', 'G', 'C', 'C', 'C', 'T', 'G', '-', '-', '-'],
+          ['A', 'G', 'A', 'T', 'T', 'T', 'C', '-', '-', '-', '-', '-', 'T',
+           'G', 'A', 'T', 'G', 'C', 'C', 'C', 'T', 'C', 'A', 'C', 'C', 'C',
+           'C', 'C', 'T', 'C', 'C', 'G', 'T', 'G', 'C', 'A'],
+          ['A', 'G', 'G', 'C', 'T', 'T', 'A', '-', '-', '-', '-', '-', 'T',
+           'G', '-', '-', '-', '-', 'C', 'C', 'A', 'C', 'C', 'C', 'C', 'C',
+           'C', 'A', 'C', 'C', 'C', 'C', 'C', 'A', 'C', 'A']], dtype='U')
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1378,7 +2220,38 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 8)
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, numpy.array([[3014778, 3014795]]))
+            np.array_equal(alignment.coordinates, np.array([[3014778, 3014795]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3014778 TCCCATGTCCACCCTGA 3014795
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=0.000000
+s mm9.chr10                         3014778   17 + 129993255 TCCCATGTCCACCCTGA
+e loxAfr1.scaffold_75566               1284   25 -     10574 I
+e calJac1.Contig6394                   6311   54 +    133105 I
+e tupBel1.scaffold_114895.1-498454   167376 4145 -    498454 I
+e echTel1.scaffold_288249             87661 7564 +    100002 I
+e otoGar1.scaffold_334.1-359464      184233   24 -    359464 I
+e hg18.chr6                        15870885  401 - 170899992 I
+e panTro2.chr6                     16389454  400 - 173908612 I
+e ponAbe2.chr6                     16161448 8044 - 174210431 I
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['T', 'C', 'C', 'C', 'A', 'T', 'G', 'T', 'C', 'C', 'A', 'C', 'C',
+           'C', 'T', 'G', 'A']], dtype='U')
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, -12243)
@@ -1529,9 +2402,9 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 9)
         self.assertEqual(len(alignment.annotations["empty"]), 1)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3014795,   3014798,   3014799,   3014814,   3014815,   3014815,
                 3014815,   3014815,   3014815,   3014821,   3014822,   3014822,
@@ -1563,6 +2436,113 @@ class TestAlign_reading(unittest.TestCase):
             ]
                     # fmt: on
                 ),
+            )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3014795 GTTTCAGGGGCAGCTCGCTG----------------TTAGCAG-CTAAGGCATGGTGTCT
+otoGar1.s    175207 ---TCGGGAACAAGTTGCAGTCATGGATAT-TTGGTTTAGATGGTTTAGGTGGGGTGTAT
+calJac1.C      6365 -------------------GCCATGAATAT-----TTTAGAC-ATGCAGGTGTGGCGTGT
+hg18.chr6 155028706 --------------------------------------------aGCAGGTGTGGCATGT
+panTro2.c 157518758 --------------------------------------------aGCAGGTGTGGCATGT
+ponAbe2.c 158040939 --------------------------------------------aGCAGGTGTGGCATGT
+tupBel1.s    326933 ------------------------------------TTAGAAA-TGTGGGTGTGGCGCAT
+cavPor2.s      2210 ------------------------------------TTAGAAA-TTTAGGTGTGGCATGG
+loxAfr1.s      9265 GTT-TGAGAGCAAGTTTAGGACATCAATACGTTGTTTCAGAAA-TTGAGGTTTGCTGTAT
+
+mm9.chr10   3014838 CTCA   3014842
+otoGar1.s    175151 TTCT    175147
+calJac1.C      6400 TTCT      6404
+hg18.chr6 155028690 TTCT 155028686
+panTro2.c 157518742 TTCT 157518738
+ponAbe2.c 158040923 TTCT 158040919
+tupBel1.s    326910 CGCT    326906
+cavPor2.s      2187 TTC-      2184
+loxAfr1.s      9207 CTCt      9203
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=-12243.000000
+s mm9.chr10                         3014795   47 + 129993255 GTTTCAGGGGCAGCTCGCTG----------------TTAGCAG-CTAAGGCATGGTGTCTCTCA
+s otoGar1.scaffold_334.1-359464      184257   60 -    359464 ---TCGGGAACAAGTTGCAGTCATGGATAT-TTGGTTTAGATGGTTTAGGTGGGGTGTATTTCT
+q otoGar1.scaffold_334.1-359464                              ---899999999999999999999999999-999999999999999999999999999999999
+i otoGar1.scaffold_334.1-359464    I 24 C 0
+s calJac1.Contig6394                   6365   39 +    133105 -------------------GCCATGAATAT-----TTTAGAC-ATGCAGGTGTGGCGTGTTTCT
+i calJac1.Contig6394               I 54 C 0
+s hg18.chr6                        15871286   20 - 170899992 --------------------------------------------aGCAGGTGTGGCATGTTTCT
+i hg18.chr6                        I 401 C 0
+s panTro2.chr6                     16389854   20 - 173908612 --------------------------------------------aGCAGGTGTGGCATGTTTCT
+q panTro2.chr6                                               --------------------------------------------99999999999999999999
+i panTro2.chr6                     I 400 C 0
+s ponAbe2.chr6                     16169492   20 - 174210431 --------------------------------------------aGCAGGTGTGGCATGTTTCT
+i ponAbe2.chr6                     I 8044 C 0
+s tupBel1.scaffold_114895.1-498454   171521   27 -    498454 ------------------------------------TTAGAAA-TGTGGGTGTGGCGCATCGCT
+q tupBel1.scaffold_114895.1-498454                           ------------------------------------9999999-99999989998899999699
+i tupBel1.scaffold_114895.1-498454 I 4145 C 0
+s cavPor2.scaffold_216473              7816   26 -     10026 ------------------------------------TTAGAAA-TTTAGGTGTGGCATGGTTC-
+q cavPor2.scaffold_216473                                    ------------------------------------4255831-1324566557465575854-
+i cavPor2.scaffold_216473          N 0 C 0
+s loxAfr1.scaffold_75566               1309   62 -     10574 GTT-TGAGAGCAAGTTTAGGACATCAATACGTTGTTTCAGAAA-TTGAGGTTTGCTGTATCTCt
+q loxAfr1.scaffold_75566                                     999-999999999999999999999999999999999999999-99999999999999999999
+i loxAfr1.scaffold_75566           I 25 C 0
+e echTel1.scaffold_288249             87661 7564 +    100002 I
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['G', 'T', 'T', 'T', 'C', 'A', 'G', 'G', 'G', 'G', 'C', 'A', 'G',
+           'C', 'T', 'C', 'G', 'C', 'T', 'G', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'T', 'T', 'A',
+           'G', 'C', 'A', 'G', '-', 'C', 'T', 'A', 'A', 'G', 'G', 'C', 'A',
+           'T', 'G', 'G', 'T', 'G', 'T', 'C', 'T', 'C', 'T', 'C', 'A'],
+          ['-', '-', '-', 'T', 'C', 'G', 'G', 'G', 'A', 'A', 'C', 'A', 'A',
+           'G', 'T', 'T', 'G', 'C', 'A', 'G', 'T', 'C', 'A', 'T', 'G', 'G',
+           'A', 'T', 'A', 'T', '-', 'T', 'T', 'G', 'G', 'T', 'T', 'T', 'A',
+           'G', 'A', 'T', 'G', 'G', 'T', 'T', 'T', 'A', 'G', 'G', 'T', 'G',
+           'G', 'G', 'G', 'T', 'G', 'T', 'A', 'T', 'T', 'T', 'C', 'T'],
+          ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', 'G', 'C', 'C', 'A', 'T', 'G', 'A',
+           'A', 'T', 'A', 'T', '-', '-', '-', '-', '-', 'T', 'T', 'T', 'A',
+           'G', 'A', 'C', '-', 'A', 'T', 'G', 'C', 'A', 'G', 'G', 'T', 'G',
+           'T', 'G', 'G', 'C', 'G', 'T', 'G', 'T', 'T', 'T', 'C', 'T'],
+          ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', 'a', 'G', 'C', 'A', 'G', 'G', 'T', 'G',
+           'T', 'G', 'G', 'C', 'A', 'T', 'G', 'T', 'T', 'T', 'C', 'T'],
+          ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', 'a', 'G', 'C', 'A', 'G', 'G', 'T', 'G',
+           'T', 'G', 'G', 'C', 'A', 'T', 'G', 'T', 'T', 'T', 'C', 'T'],
+          ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', 'a', 'G', 'C', 'A', 'G', 'G', 'T', 'G',
+           'T', 'G', 'G', 'C', 'A', 'T', 'G', 'T', 'T', 'T', 'C', 'T'],
+          ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'T', 'T', 'A',
+           'G', 'A', 'A', 'A', '-', 'T', 'G', 'T', 'G', 'G', 'G', 'T', 'G',
+           'T', 'G', 'G', 'C', 'G', 'C', 'A', 'T', 'C', 'G', 'C', 'T'],
+          ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'T', 'T', 'A',
+           'G', 'A', 'A', 'A', '-', 'T', 'T', 'T', 'A', 'G', 'G', 'T', 'G',
+           'T', 'G', 'G', 'C', 'A', 'T', 'G', 'G', 'T', 'T', 'C', '-'],
+          ['G', 'T', 'T', '-', 'T', 'G', 'A', 'G', 'A', 'G', 'C', 'A', 'A',
+           'G', 'T', 'T', 'T', 'A', 'G', 'G', 'A', 'C', 'A', 'T', 'C', 'A',
+           'A', 'T', 'A', 'C', 'G', 'T', 'T', 'G', 'T', 'T', 'T', 'C', 'A',
+           'G', 'A', 'A', 'A', '-', 'T', 'T', 'G', 'A', 'G', 'G', 'T', 'T',
+           'T', 'G', 'C', 'T', 'G', 'T', 'A', 'T', 'C', 'T', 'C', 't']],
+         dtype='U')
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -1732,9 +2712,9 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 10)
         self.assertEqual(len(alignment.annotations["empty"]), 1)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3014842,   3014843,   3014843,   3014843,   3014849,   3014849,
                 3014849,   3014851,   3014852,   3014874,   3014874,   3014875,
@@ -1820,6 +2800,97 @@ class TestAlign_reading(unittest.TestCase):
                     # fmt: on
                 ),
             )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3014842 C--TTGGGA---------TGCTTTATAGTGGAAATGGAAAGCA----A-TTTATTTAGAT
+loxAfr1.s      9203 tatttttgatttttttttttttttaaaGCTGAAGTGAAAGTCACACTG-TTTCTTTTGGC
+cavPor2.s      2184 ---TTTGGA---------TA-TTCACAGTTGGAATGAAAGGCACCCTG-TTTCTTTAGGA
+tupBel1.s    326906 CCTTTTGGA---------TTTTTTACAGCTGAAATAAAAAGCACACTG-TGTCTGTAGGT
+ponAbe2.c 158040919 CCTTTTGGA---------CTTTTTATAGCTGAAATGGAAGGCACACTG-TTTCTTTAGGT
+panTro2.c 157518738 CCTTTTGGA---------CTTTTTATAGCTGAAATGGAAGGCACAATA-TTTCTTTAGGT
+hg18.chr6 155028686 CCTTTTGGA---------CTTTTTATAGCTGAAATGGAAGGCACAATA-TTTCTTTAGGT
+calJac1.C      6404 TCTTTTGTA--------TTTTTTTATAGCTGAAAAGGAAGGCACACTG-TCTCTTTAGGT
+otoGar1.s    175147 TATTTTGGG--------CTTTTTTATGGGTGAAATGAAAGGCACACTG-TTTTTTTAGGA
+ornAna1.c  40046323 --CCTTGGA---------AATGTTACTGCAAAAGTGAAAGGCTCATTGTTTTCTTTCTAT
+
+mm9.chr10   3014886 CTTAAATCATTTT-GAAGGTTAATAAAATGACCATATTAATATTCCCATGAACAAAGCCT
+loxAfr1.s      9144 CATAAATCCCTTT-GAAGTATAATGAAATTTTCACTTTAATATTCCTGTGAACAATACCC
+cavPor2.s      2138 CTTAAATCCTTTT-GAAGTATAATAAAATGATCACATTAATATTCCTACTAACAATGCCC
+tupBel1.s    326856 CTTAAATCCTTTT-GAAGTATAATAAAATGATCACTTTACTATTCCTGTGAACAATGCCC
+ponAbe2.c 158040869 CTTAAATACTTTT-GAAGTATAATAAAACGATCACTTTAATACTCCTGTGAGCAATGTCC
+panTro2.c 157518688 CTTAAATACTTTT-GAAGTATAAAAAAATGATCACTTTAATACTCCTGTGAACAATGCCC
+hg18.chr6 155028636 CTTAAATACTTTT-GAAGTATAAAAAAATGATCACTTTAATACTCCTGTGAACAATGCCC
+calJac1.C      6455 CTTAAATACGTTT-GAAGCATAATAAAATGATCACTTTCATACTCCTGTGAATAATGCCC
+otoGar1.s    175096 CTTAAATCCTTTT-GAAGTATAATAAAACGATTACTTTACTGTTCCTGTGAACAATGCCC
+ornAna1.c  40046274 CTTAAGCCTTTTTAAAAGTGTATTGTAATTATGATCTTCATTTCCCCGCTAACAAAGCCC
+
+mm9.chr10   3014945 TCATTT----TTAAAATATTGCATCCTATAATACACATAA-ATCTTGT-----TCTCGtt
+loxAfr1.s      9085 TCATTT-AAAAAAAAAAATTGGGTTTTATACCACACACAGCATCTTTTCAAAATCTCATT
+cavPor2.s      2079 TCATTT----AAAAAAGTTTGGATTTTGTACCACATACAGCATATTTCCAACATCTCATT
+tupBel1.s    326797 TCATTT---TACAAAATCTGGGATTTTATACCACGTACAGCATATTTCCAAAATCTCATT
+ponAbe2.c 158040810 TCTTTT---AAAAAAATCCTGGATTTTATACCACATGCAGCATATTTCTGAAATCTCATT
+panTro2.c 157518629 TCTTTTT--AAAAAAATCCTGGATTTTATACCACATGCAGCATATTTCTGAAATCCCATT
+hg18.chr6 155028577 TCTTTTT-AAAAAAAATCCTGGATTTTATACCACATGCAGCATATTTCTGAAATCTCATT
+calJac1.C      6514 TCCTTTTAAAAAGAAATCTTGGATTTTATATCACACGCAGCATATTTCTGAAATCTCATT
+otoGar1.s    175037 TCATTT---AAAAAAATCTTGGATTTTATACCAGATCCAGCATATTTCCAAAATCTCATT
+ornAna1.c  40046214 TCATTA----AAATATCTTTGTATTTTA-ACGACATACAGCCCATTTCCAAAATCTTAGT
+
+mm9.chr10   3014995 tttatttttt----tatt-tat-----------------------ttattttttttt---
+loxAfr1.s      9026 CCC-TTTTTAAGCAGGTG-TCT---TAGCAAGTTCACTCTCTCTCTCTTTTTTCATTGAC
+cavPor2.s      2023 TCCTTCTTCTGGCAGGTT-TAt-----------------------tagtctctcttt---
+tupBel1.s    326740 TCC-TTTTTTGGCAGGTT-TAT---TAGCAAGTTCCCT-------TTTTGTCTATTG---
+ponAbe2.c 158040753 TCC-TTTCTTGGCAGGTT-TATTTATAGCAAGTTATCTC------TCTCTCTTATTT---
+panTro2.c 157518571 T-----------------------------------------------------------
+hg18.chr6 155028518 T-----------------------------------------------------------
+calJac1.C      6574 TCC-TTTCCTGGCAGGTT-TATTAATAGCAAGTTCTCTC------TCTTATTTATTT---
+otoGar1.s    174980 T-C-CTTTTTGGCGGGTT-TGT---TAGCAAGTTCTCTCCGGCTTTCTTCTTCTTTT---
+ornAna1.c  40046159 TCC-TTTTTGGGTGCATTGTAT---TAAC----------------CGTTCTCTCTTT---
+
+mm9.chr10   3015024 ---------cttt   3015028
+loxAfr1.s      8971 TTTGGCCAAATCT      8958
+cavPor2.s      1990 ---------ctct      1986
+tupBel1.s    326695 ---------ACTT    326691
+ponAbe2.c 158040704 ---------ACTT 158040700
+panTro2.c 157518570 ------------- 157518570
+hg18.chr6 155028517 ------------- 155028517
+calJac1.C      6623 ---------ATTT      6627
+otoGar1.s    174929 ---------TCTC    174925
+ornAna1.c  40046122 -------------  40046122
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=320596.000000
+s mm9.chr10                         3014842  186 + 129993255 C--TTGGGA---------TGCTTTATAGTGGAAATGGAAAGCA----A-TTTATTTAGATCTTAAATCATTTT-GAAGGTTAATAAAATGACCATATTAATATTCCCATGAACAAAGCCTTCATTT----TTAAAATATTGCATCCTATAATACACATAA-ATCTTGT-----TCTCGtttttatttttt----tatt-tat-----------------------ttattttttttt------------cttt
+s loxAfr1.scaffold_75566               1371  245 -     10574 tatttttgatttttttttttttttaaaGCTGAAGTGAAAGTCACACTG-TTTCTTTTGGCCATAAATCCCTTT-GAAGTATAATGAAATTTTCACTTTAATATTCCTGTGAACAATACCCTCATTT-AAAAAAAAAAATTGGGTTTTATACCACACACAGCATCTTTTCAAAATCTCATTCCC-TTTTTAAGCAGGTG-TCT---TAGCAAGTTCACTCTCTCTCTCTTTTTTCATTGACTTTGGCCAAATCT
+q loxAfr1.scaffold_75566                                     999999999999999999999999999999999999999999999999-999999999999999999999999-9999999999999999999999999999999999999999999999999999-99999999999999999999999999999999999999999999999999999999-99999999999999-999---999999999999999999999999999999999999999999999999
+i loxAfr1.scaffold_75566           C 0 C 0
+s cavPor2.scaffold_216473              7842  198 -     10026 ---TTTGGA---------TA-TTCACAGTTGGAATGAAAGGCACCCTG-TTTCTTTAGGACTTAAATCCTTTT-GAAGTATAATAAAATGATCACATTAATATTCCTACTAACAATGCCCTCATTT----AAAAAAGTTTGGATTTTGTACCACATACAGCATATTTCCAACATCTCATTTCCTTCTTCTGGCAGGTT-TAt-----------------------tagtctctcttt------------ctct
+q cavPor2.scaffold_216473                                    ---610137---------77-200195531236266876425368858-778987956887868956898956-8988778987788768588885664786777656586678636299978766----89979789936989956687867689995888978886997659897789899998996778899997-989-----------------------998799999777------------9899
+i cavPor2.scaffold_216473          C 0 C 0
+s tupBel1.scaffold_114895.1-498454   171548  215 -    498454 CCTTTTGGA---------TTTTTTACAGCTGAAATAAAAAGCACACTG-TGTCTGTAGGTCTTAAATCCTTTT-GAAGTATAATAAAATGATCACTTTACTATTCCTGTGAACAATGCCCTCATTT---TACAAAATCTGGGATTTTATACCACGTACAGCATATTTCCAAAATCTCATTTCC-TTTTTTGGCAGGTT-TAT---TAGCAAGTTCCCT-------TTTTGTCTATTG------------ACTT
+q tupBel1.scaffold_114895.1-498454                           989999999---------899999998999999999999999999999-999999999999999999999999-9999998999999999999999999999999999899999999999999999---998899999999973999999998999999999999999979999999999999-99999997699849-999---9999999999999-------999999999999------------9999
+i tupBel1.scaffold_114895.1-498454 C 0 C 0
+s ponAbe2.chr6                     16169512  219 - 174210431 CCTTTTGGA---------CTTTTTATAGCTGAAATGGAAGGCACACTG-TTTCTTTAGGTCTTAAATACTTTT-GAAGTATAATAAAACGATCACTTTAATACTCCTGTGAGCAATGTCCTCTTTT---AAAAAAATCCTGGATTTTATACCACATGCAGCATATTTCTGAAATCTCATTTCC-TTTCTTGGCAGGTT-TATTTATAGCAAGTTATCTC------TCTCTCTTATTT------------ACTT
+i ponAbe2.chr6                     C 0 C 0
+s panTro2.chr6                     16389874  168 - 173908612 CCTTTTGGA---------CTTTTTATAGCTGAAATGGAAGGCACAATA-TTTCTTTAGGTCTTAAATACTTTT-GAAGTATAAAAAAATGATCACTTTAATACTCCTGTGAACAATGCCCTCTTTTT--AAAAAAATCCTGGATTTTATACCACATGCAGCATATTTCTGAAATCCCATTT------------------------------------------------------------------------
+q panTro2.chr6                                               999999999---------999999999999999999999999999999-999999999999999999999999-99999999999999999999999999999999999999999999999999999--9999999999999999999999999999999999999999999999999999------------------------------------------------------------------------
+i panTro2.chr6                     C 0 C 0
+s hg18.chr6                        15871306  169 - 170899992 CCTTTTGGA---------CTTTTTATAGCTGAAATGGAAGGCACAATA-TTTCTTTAGGTCTTAAATACTTTT-GAAGTATAAAAAAATGATCACTTTAATACTCCTGTGAACAATGCCCTCTTTTT-AAAAAAAATCCTGGATTTTATACCACATGCAGCATATTTCTGAAATCTCATTT------------------------------------------------------------------------
+i hg18.chr6                        C 0 C 0
+s calJac1.Contig6394                   6404  223 +    133105 TCTTTTGTA--------TTTTTTTATAGCTGAAAAGGAAGGCACACTG-TCTCTTTAGGTCTTAAATACGTTT-GAAGCATAATAAAATGATCACTTTCATACTCCTGTGAATAATGCCCTCCTTTTAAAAAGAAATCTTGGATTTTATATCACACGCAGCATATTTCTGAAATCTCATTTCC-TTTCCTGGCAGGTT-TATTAATAGCAAGTTCTCTC------TCTTATTTATTT------------ATTT
+i calJac1.Contig6394               C 0 C 0
+s otoGar1.scaffold_334.1-359464      184317  222 -    359464 TATTTTGGG--------CTTTTTTATGGGTGAAATGAAAGGCACACTG-TTTTTTTAGGACTTAAATCCTTTT-GAAGTATAATAAAACGATTACTTTACTGTTCCTGTGAACAATGCCCTCATTT---AAAAAAATCTTGGATTTTATACCAGATCCAGCATATTTCCAAAATCTCATTT-C-CTTTTTGGCGGGTT-TGT---TAGCAAGTTCTCTCCGGCTTTCTTCTTCTTTT------------TCTC
+q otoGar1.scaffold_334.1-359464                              999999999--------9999999999999999999999997999999-999999999999999999999999-9999999999999999999999999999999999999999999999999999---9999999999999999999999999999999999999999999999999999-9-99999999999999-999---99999999999999999999999999999999------------9999
+i otoGar1.scaffold_334.1-359464    C 0 C 0
+s ornAna1.chr2                     14750994  201 -  54797317 --CCTTGGA---------AATGTTACTGCAAAAGTGAAAGGCTCATTGTTTTCTTTCTATCTTAAGCCTTTTTAAAAGTGTATTGTAATTATGATCTTCATTTCCCCGCTAACAAAGCCCTCATTA----AAATATCTTTGTATTTTA-ACGACATACAGCCCATTTCCAAAATCTTAGTTCC-TTTTTGGGTGCATTGTAT---TAAC----------------CGTTCTCTCTTT----------------
+i ornAna1.chr2                     N 0 I 5690
+e echTel1.scaffold_288249             87661 7564 +    100002 I
+
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, -36127)
@@ -1946,9 +3017,9 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 7)
         self.assertEqual(len(alignment.annotations["empty"]), 4)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3015028,   3015029,   3015035,   3015035,   3015035,   3015035,
                 3015035,   3015036,   3015040,   3015041,   3015066,   3015075,
@@ -1974,6 +3045,103 @@ class TestAlign_reading(unittest.TestCase):
             ]
                     # fmt: on
                 ),
+            )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3015028 ccatttt----------ttattaggtatttagctcatttacatttccaatgctatac---
+loxAfr1.s      8958 TCACTTCTA---------------------------------------CCTCCATTCCTT
+cavPor2.s      1986 ctgtgtc----------t------------------------------------------
+tupBel1.s    326691 T-----------------------------------------------------------
+ponAbe2.c 158040700 TTTTGCCTTTTC------------------------------------------------
+calJac1.C      6627 TGCTTTTTCTCAAATCTCCACT--------------------------------------
+otoGar1.s    174925 TTTTTTCTATT------------GACTTTTGCCAAATATTCACTTCCA------------
+
+mm9.chr10   3015075 -caaaagtcccc   3015086
+loxAfr1.s      8937 ACAAAAGTTCTC      8925
+cavPor2.s      1978 ------------      1978
+tupBel1.s    326690 ------------    326690
+ponAbe2.c 158040688 ------------ 158040688
+calJac1.C      6649 ------------      6649
+otoGar1.s    174889 ------------    174889
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=-36127.000000
+s mm9.chr10                          3015028   58 + 129993255 ccatttt----------ttattaggtatttagctcatttacatttccaatgctatac----caaaagtcccc
+s loxAfr1.scaffold_75566                1616   33 -     10574 TCACTTCTA---------------------------------------CCTCCATTCCTTACAAAAGTTCTC
+q loxAfr1.scaffold_75566                                      999999999---------------------------------------999999999999999999999999
+i loxAfr1.scaffold_75566           C 0 N 0
+s cavPor2.scaffold_216473               8040    8 -     10026 ctgtgtc----------t------------------------------------------------------
+q cavPor2.scaffold_216473                                     6788989----------9------------------------------------------------------
+i cavPor2.scaffold_216473          C 0 I 1372
+s tupBel1.scaffold_114895.1-498454    171763    1 -    498454 T-----------------------------------------------------------------------
+q tupBel1.scaffold_114895.1-498454                            9-----------------------------------------------------------------------
+i tupBel1.scaffold_114895.1-498454 C 0 I 2374
+s ponAbe2.chr6                      16169731   12 - 174210431 TTTTGCCTTTTC------------------------------------------------------------
+i ponAbe2.chr6                     C 0 I 75
+s calJac1.Contig6394                    6627   22 +    133105 TGCTTTTTCTCAAATCTCCACT--------------------------------------------------
+i calJac1.Contig6394               C 0 I 3479
+s otoGar1.scaffold_334.1-359464       184539   36 -    359464 TTTTTTCTATT------------GACTTTTGCCAAATATTCACTTCCA------------------------
+q otoGar1.scaffold_334.1-359464                               99999999999------------9999999999999999999999999------------------------
+i otoGar1.scaffold_334.1-359464    C 0 I 137
+e ornAna1.chr2                      14751195 5690 -  54797317 I
+e echTel1.scaffold_288249              87661 7564 +    100002 I
+e hg18.chr6                        155028517    0 + 170899992 C
+e panTro2.chr6                     157518570    0 + 173908612 C
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['c', 'c', 'a', 't', 't', 't', 't', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', 't', 't', 'a', 't', 't', 'a', 'g', 'g', 't',
+           'a', 't', 't', 't', 'a', 'g', 'c', 't', 'c', 'a', 't', 't', 't',
+           'a', 'c', 'a', 't', 't', 't', 'c', 'c', 'a', 'a', 't', 'g', 'c',
+           't', 'a', 't', 'a', 'c', '-', '-', '-', '-', 'c', 'a', 'a', 'a',
+           'a', 'g', 't', 'c', 'c', 'c', 'c'],
+          ['T', 'C', 'A', 'C', 'T', 'T', 'C', 'T', 'A', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', 'C', 'C', 'T', 'C',
+           'C', 'A', 'T', 'T', 'C', 'C', 'T', 'T', 'A', 'C', 'A', 'A', 'A',
+           'A', 'G', 'T', 'T', 'C', 'T', 'C'],
+          ['c', 't', 'g', 't', 'g', 't', 'c', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', 't', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-'],
+          ['T', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-'],
+          ['T', 'T', 'T', 'T', 'G', 'C', 'C', 'T', 'T', 'T', 'T', 'C', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-'],
+          ['T', 'G', 'C', 'T', 'T', 'T', 'T', 'T', 'C', 'T', 'C', 'A', 'A',
+           'A', 'T', 'C', 'T', 'C', 'C', 'A', 'C', 'T', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-'],
+          ['T', 'T', 'T', 'T', 'T', 'T', 'C', 'T', 'A', 'T', 'T', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'G', 'A', 'C',
+           'T', 'T', 'T', 'T', 'G', 'C', 'C', 'A', 'A', 'A', 'T', 'A', 'T',
+           'T', 'C', 'A', 'C', 'T', 'T', 'C', 'C', 'A', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-']], dtype='U')
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -2045,7 +3213,114 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 9)
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, numpy.array([[3015086, 3017658]]))
+            np.array_equal(alignment.coordinates, np.array([[3015086, 3017658]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3015086 catacccacccacccccactcccctacccgcccactccccctttttggccctggcgttcc
+
+mm9.chr10   3015146 cctgttctggggcatataaagtttgtgtgtccaatgggcctctctttccagtgatggccg
+
+mm9.chr10   3015206 actaggccatcttttgatacatatgcagctagagtcaagagctccggggtactggttagt
+
+mm9.chr10   3015266 tcataatgttgatccacctatagggttgcagatccctttagctccttgggtactttctct
+
+mm9.chr10   3015326 agctcccccattgggagccctgtgatccatccattagctgactgtgggcatccacttctg
+
+mm9.chr10   3015386 tgtttgctaggccccggcatagtctcacaagagacagctacatctgggtcctttcgataa
+
+mm9.chr10   3015446 gatcttgctagtgtatgcaatggtgtcagcgtttggatgctgattatggggtagatccct
+
+mm9.chr10   3015506 ggataaggcagtctctacatggtccatcctttcatctcagctccaaactttgtctctgta
+
+mm9.chr10   3015566 actccttccaagggtgttttgttcccacttctaaggaggggcatagtgtccacacttcag
+
+mm9.chr10   3015626 tcttcatttttcttgagtttcatgtgtttaggaaattgtatcttatatcttgggtatcct
+
+mm9.chr10   3015686 aggttttgggctaatatccacttatcagtgagtacatattgtgtgagttcctttgtgaat
+
+mm9.chr10   3015746 gtgttacctcactcaggatgatgccctccaggtccatccatttggctaggaatttcataa
+
+mm9.chr10   3015806 attaattctttttaatagctgagtagtactccattgtgtagatgtaccacattttctgta
+
+mm9.chr10   3015866 tccattcctctgttgaggggcatctgggttctttccagcttctggctattataaataagg
+
+mm9.chr10   3015926 ctgctatgaacatagtggagcatgtgtccttcttaccagttggggcatcttttggatata
+
+mm9.chr10   3015986 tgcccaggagaggtattgctggatcctccggtagtactatgtccaattttctgaggaacc
+
+mm9.chr10   3016046 gccagacggatttccagagtggttgtacaagcctgcaatcccaccaacaatggaggagtg
+
+mm9.chr10   3016106 ttcctctttctccacatcctcgccagcatctgctgtcacctgaatttttgatcttagcca
+
+mm9.chr10   3016166 ttctgactggtgtgaggtggaatctcagggttgttttgatttgcatttctctgatgatta
+
+mm9.chr10   3016226 aggatgttgaacatgttttcaggtgcttctctgccattcggtattcctcaggtgagaatt
+
+mm9.chr10   3016286 ctttgttcagttctgagccccattttttaatggggttatttgattttctgaagtccacct
+
+mm9.chr10   3016346 tcttgagttctttatatatgttggatattagtcccctatctgatttaggataggtaaaga
+
+mm9.chr10   3016406 tcctttcccaatctgttggtggtctctttgtgttattgacggtgtcttttgccttgcaga
+
+mm9.chr10   3016466 aactttggagtttcattaggtcccatttgtcaattctcgatcttacagcacaagccattg
+
+mm9.chr10   3016526 ctgttctgttcaggaatttttcccctgtgcccatatcttcaaggcttttccccactttct
+
+mm9.chr10   3016586 cctctataagtttcagtgtctctggttttatgtggagttctttgatccatttagatttga
+
+mm9.chr10   3016646 ccttagtacaaggagataagtatggatcgattcgcattcttctacatgataacaaccagt
+
+mm9.chr10   3016706 tgtgccagcaccaattgttgaaaatgctgtctttcttccactggatggttttagctccct
+
+mm9.chr10   3016766 tgtcgaagatcaagtgaccataggtgtgtgggttcatttctgggtcttcaattctattcc
+
+mm9.chr10   3016826 attggtctacttgtctgtctctataccagtaccatgcagtttttaccacaattgctctgt
+
+mm9.chr10   3016886 agtaaagctttaggtcaggcatggtgattccaccagaggttcttttatccttgagaagag
+
+mm9.chr10   3016946 tttttgctatcctaggttttttgttattccagatgaatttgcaaattgctccttctaatt
+
+mm9.chr10   3017006 cgttgaagaattgagttggaattgtgatggggattgcattgaatctgtagattgcttttg
+
+mm9.chr10   3017066 gcaagatagccatttttacaatgttgatcctgccaatccatgagcatgggagagctttcc
+
+mm9.chr10   3017126 atcttctgagatcttctttaatttctttcttcagagacttgaagtttttatcatacagat
+
+mm9.chr10   3017186 ctttcacttccttagttagagtcacgccgagatattttatattatttgtgactattgaga
+
+mm9.chr10   3017246 agggtgttgtttccctaatttctttctcagcctgtttattctttgtgtagagaaaggcca
+
+mm9.chr10   3017306 ttgacttgtttgagttaattttatatccagctacttcaccgaagctgtttatcaggttta
+
+mm9.chr10   3017366 ggagttctctggtggaatttttagggtcacttatatatactatcatatcatctgcaaaaa
+
+mm9.chr10   3017426 gtgatattttgacttcctcctttccaatttgtatccccttgatctccttttgttgtcgaa
+
+mm9.chr10   3017486 ttgctctggctaatacttcaagtactatgttgaaaaggtagggagaaagtgggcagcctt
+
+mm9.chr10   3017546 gtctagtccctgattttagtgagattgcttccagcttctctccatttactttgatgttgg
+
+mm9.chr10   3017606 ctactggtttgctgtagattgcttttatcatgtttaggtatgggTGTTCTCG 3017658
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=0.000000
+s mm9.chr10                          3015086 2572 + 129993255 catacccacccacccccactcccctacccgcccactccccctttttggccctggcgttcccctgttctggggcatataaagtttgtgtgtccaatgggcctctctttccagtgatggccgactaggccatcttttgatacatatgcagctagagtcaagagctccggggtactggttagttcataatgttgatccacctatagggttgcagatccctttagctccttgggtactttctctagctcccccattgggagccctgtgatccatccattagctgactgtgggcatccacttctgtgtttgctaggccccggcatagtctcacaagagacagctacatctgggtcctttcgataagatcttgctagtgtatgcaatggtgtcagcgtttggatgctgattatggggtagatccctggataaggcagtctctacatggtccatcctttcatctcagctccaaactttgtctctgtaactccttccaagggtgttttgttcccacttctaaggaggggcatagtgtccacacttcagtcttcatttttcttgagtttcatgtgtttaggaaattgtatcttatatcttgggtatcctaggttttgggctaatatccacttatcagtgagtacatattgtgtgagttcctttgtgaatgtgttacctcactcaggatgatgccctccaggtccatccatttggctaggaatttcataaattaattctttttaatagctgagtagtactccattgtgtagatgtaccacattttctgtatccattcctctgttgaggggcatctgggttctttccagcttctggctattataaataaggctgctatgaacatagtggagcatgtgtccttcttaccagttggggcatcttttggatatatgcccaggagaggtattgctggatcctccggtagtactatgtccaattttctgaggaaccgccagacggatttccagagtggttgtacaagcctgcaatcccaccaacaatggaggagtgttcctctttctccacatcctcgccagcatctgctgtcacctgaatttttgatcttagccattctgactggtgtgaggtggaatctcagggttgttttgatttgcatttctctgatgattaaggatgttgaacatgttttcaggtgcttctctgccattcggtattcctcaggtgagaattctttgttcagttctgagccccattttttaatggggttatttgattttctgaagtccaccttcttgagttctttatatatgttggatattagtcccctatctgatttaggataggtaaagatcctttcccaatctgttggtggtctctttgtgttattgacggtgtcttttgccttgcagaaactttggagtttcattaggtcccatttgtcaattctcgatcttacagcacaagccattgctgttctgttcaggaatttttcccctgtgcccatatcttcaaggcttttccccactttctcctctataagtttcagtgtctctggttttatgtggagttctttgatccatttagatttgaccttagtacaaggagataagtatggatcgattcgcattcttctacatgataacaaccagttgtgccagcaccaattgttgaaaatgctgtctttcttccactggatggttttagctcccttgtcgaagatcaagtgaccataggtgtgtgggttcatttctgggtcttcaattctattccattggtctacttgtctgtctctataccagtaccatgcagtttttaccacaattgctctgtagtaaagctttaggtcaggcatggtgattccaccagaggttcttttatccttgagaagagtttttgctatcctaggttttttgttattccagatgaatttgcaaattgctccttctaattcgttgaagaattgagttggaattgtgatggggattgcattgaatctgtagattgcttttggcaagatagccatttttacaatgttgatcctgccaatccatgagcatgggagagctttccatcttctgagatcttctttaatttctttcttcagagacttgaagtttttatcatacagatctttcacttccttagttagagtcacgccgagatattttatattatttgtgactattgagaagggtgttgtttccctaatttctttctcagcctgtttattctttgtgtagagaaaggccattgacttgtttgagttaattttatatccagctacttcaccgaagctgtttatcaggtttaggagttctctggtggaatttttagggtcacttatatatactatcatatcatctgcaaaaagtgatattttgacttcctcctttccaatttgtatccccttgatctccttttgttgtcgaattgctctggctaatacttcaagtactatgttgaaaaggtagggagaaagtgggcagccttgtctagtccctgattttagtgagattgcttccagcttctctccatttactttgatgttggctactggtttgctgtagattgcttttatcatgtttaggtatgggTGTTCTCG
+e ornAna1.chr2                      14751195 5690 -  54797317 I
+e calJac1.Contig6394                    6649 3479 +    133105 I
+e tupBel1.scaffold_114895.1-498454    171764 2374 -    498454 I
+e echTel1.scaffold_288249              87661 7564 +    100002 I
+e cavPor2.scaffold_216473               8048 1372 -     10026 I
+e otoGar1.scaffold_334.1-359464       184575  137 -    359464 I
+e hg18.chr6                        155028517    0 + 170899992 C
+e panTro2.chr6                     157518570    0 + 173908612 C
+e ponAbe2.chr6                      16169743   75 - 174210431 I
+
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 12170)
@@ -2136,9 +3411,9 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 3)
         self.assertEqual(len(alignment.annotations["empty"]), 7)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3017658,   3017681,   3017681,   3017699,   3017705,   3017743],
              [155028517, 155028494, 155028490, 155028472, 155028472, 155028434],
@@ -2146,6 +3421,67 @@ class TestAlign_reading(unittest.TestCase):
             ]
                     # fmt: on
                 ),
+            )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3017658 TTTTTATTTGCAGGTTTCTTTAC----AGTTCTCTTTCATTCTTCTCCTCTTTTCTTCTG
+hg18.chr6 155028517 CCTTTCTTGGCAGGGTTATTTATAGCAAGTTATCTCTCTCTCTTA------TTTATTTTT
+panTro2.c 157518570 CCTTTCTTGGCAGGGTTATTTATAGCAAGTTATCTCTCTCTCTTA------TTTATTTTT
+
+mm9.chr10   3017714 TTGACCTTTATCAGATTTCTGCTTTAACC   3017743
+hg18.chr6 155028463 TTGCCTTTTCCCAAATCTCCACTTCCACC 155028434
+panTro2.c 157518516 TTGCCTTTTCCCAAATCTCCACTTCCACC 157518487
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=12170.000000
+s mm9.chr10                         3017658   85 + 129993255 TTTTTATTTGCAGGTTTCTTTAC----AGTTCTCTTTCATTCTTCTCCTCTTTTCTTCTGTTGACCTTTATCAGATTTCTGCTTTAACC
+s hg18.chr6                        15871475   83 - 170899992 CCTTTCTTGGCAGGGTTATTTATAGCAAGTTATCTCTCTCTCTTA------TTTATTTTTTTGCCTTTTCCCAAATCTCCACTTCCACC
+i hg18.chr6                        C 0 I 53
+s panTro2.chr6                     16390042   83 - 173908612 CCTTTCTTGGCAGGGTTATTTATAGCAAGTTATCTCTCTCTCTTA------TTTATTTTTTTGCCTTTTCCCAAATCTCCACTTCCACC
+q panTro2.chr6                                               999999999999999999999999999999999999999999999------99999999999999999999999999999999999999
+i panTro2.chr6                     C 0 I 53
+e ornAna1.chr2                     14751195 5690 -  54797317 I
+e calJac1.Contig6394                   6649 3479 +    133105 I
+e tupBel1.scaffold_114895.1-498454   171764 2374 -    498454 I
+e echTel1.scaffold_288249             87661 7564 +    100002 I
+e cavPor2.scaffold_216473              8048 1372 -     10026 I
+e otoGar1.scaffold_334.1-359464      184575  137 -    359464 I
+e ponAbe2.chr6                     16169743   75 - 174210431 I
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['T', 'T', 'T', 'T', 'T', 'A', 'T', 'T', 'T', 'G', 'C', 'A', 'G',
+           'G', 'T', 'T', 'T', 'C', 'T', 'T', 'T', 'A', 'C', '-', '-', '-',
+           '-', 'A', 'G', 'T', 'T', 'C', 'T', 'C', 'T', 'T', 'T', 'C', 'A',
+           'T', 'T', 'C', 'T', 'T', 'C', 'T', 'C', 'C', 'T', 'C', 'T', 'T',
+           'T', 'T', 'C', 'T', 'T', 'C', 'T', 'G', 'T', 'T', 'G', 'A', 'C',
+           'C', 'T', 'T', 'T', 'A', 'T', 'C', 'A', 'G', 'A', 'T', 'T', 'T',
+           'C', 'T', 'G', 'C', 'T', 'T', 'T', 'A', 'A', 'C', 'C'],
+          ['C', 'C', 'T', 'T', 'T', 'C', 'T', 'T', 'G', 'G', 'C', 'A', 'G',
+           'G', 'G', 'T', 'T', 'A', 'T', 'T', 'T', 'A', 'T', 'A', 'G', 'C',
+           'A', 'A', 'G', 'T', 'T', 'A', 'T', 'C', 'T', 'C', 'T', 'C', 'T',
+           'C', 'T', 'C', 'T', 'T', 'A', '-', '-', '-', '-', '-', '-', 'T',
+           'T', 'T', 'A', 'T', 'T', 'T', 'T', 'T', 'T', 'T', 'G', 'C', 'C',
+           'T', 'T', 'T', 'T', 'C', 'C', 'C', 'A', 'A', 'A', 'T', 'C', 'T',
+           'C', 'C', 'A', 'C', 'T', 'T', 'C', 'C', 'A', 'C', 'C'],
+          ['C', 'C', 'T', 'T', 'T', 'C', 'T', 'T', 'G', 'G', 'C', 'A', 'G',
+           'G', 'G', 'T', 'T', 'A', 'T', 'T', 'T', 'A', 'T', 'A', 'G', 'C',
+           'A', 'A', 'G', 'T', 'T', 'A', 'T', 'C', 'T', 'C', 'T', 'C', 'T',
+           'C', 'T', 'C', 'T', 'T', 'A', '-', '-', '-', '-', '-', '-', 'T',
+           'T', 'T', 'A', 'T', 'T', 'T', 'T', 'T', 'T', 'T', 'G', 'C', 'C',
+           'T', 'T', 'T', 'T', 'C', 'C', 'C', 'A', 'A', 'A', 'T', 'C', 'T',
+           'C', 'C', 'A', 'C', 'T', 'T', 'C', 'C', 'A', 'C', 'C']],
+         dtype='U')
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -2217,7 +3553,84 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 9)
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, numpy.array([[3017743, 3018161]]))
+            np.array_equal(alignment.coordinates, np.array([[3017743, 3018161]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3017743 ACCACAGACCTTCTGTTTAGTCCAAAGGACGCAAATTATGTATCCACTTtagtaggaggc
+
+mm9.chr10   3017803 tgacccgcagcctacatgaaccaggtatttctggaaggcaggctggggttgaaagagaaa
+
+mm9.chr10   3017863 ttagatggtgagaaaagaataatgaggccaagacaaatttttctcttatcaaggcccaag
+
+mm9.chr10   3017923 agagtttactaagagactatgcttaaaagggggaaggcccatcccccccccccctcgcgc
+
+mm9.chr10   3017983 cagtctatccttggtgctttgtcaccatgccatcagcacttggtcggcaggtagcagaat
+
+mm9.chr10   3018043 ctcagggcagttgacacttcaaaagaaaccagccaagtcagaaagctgcactgcaggaga
+
+mm9.chr10   3018103 cctgcactcagtggtgacaaggtctgtaccagcctgcttcaggctgggggaggctaca
+
+mm9.chr10   3018161
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=0.000000
+s mm9.chr10                         3017743  418 + 129993255 ACCACAGACCTTCTGTTTAGTCCAAAGGACGCAAATTATGTATCCACTTtagtaggaggctgacccgcagcctacatgaaccaggtatttctggaaggcaggctggggttgaaagagaaattagatggtgagaaaagaataatgaggccaagacaaatttttctcttatcaaggcccaagagagtttactaagagactatgcttaaaagggggaaggcccatcccccccccccctcgcgccagtctatccttggtgctttgtcaccatgccatcagcacttggtcggcaggtagcagaatctcagggcagttgacacttcaaaagaaaccagccaagtcagaaagctgcactgcaggagacctgcactcagtggtgacaaggtctgtaccagcctgcttcaggctgggggaggctaca
+e ornAna1.chr2                     14751195 5690 -  54797317 I
+e calJac1.Contig6394                   6649 3479 +    133105 I
+e tupBel1.scaffold_114895.1-498454   171764 2374 -    498454 I
+e echTel1.scaffold_288249             87661 7564 +    100002 I
+e cavPor2.scaffold_216473              8048 1372 -     10026 I
+e otoGar1.scaffold_334.1-359464      184575  137 -    359464 I
+e hg18.chr6                        15871558   53 - 170899992 I
+e panTro2.chr6                     16390125   53 - 173908612 I
+e ponAbe2.chr6                     16169743   75 - 174210431 I
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['A', 'C', 'C', 'A', 'C', 'A', 'G', 'A', 'C', 'C', 'T', 'T', 'C',
+           'T', 'G', 'T', 'T', 'T', 'A', 'G', 'T', 'C', 'C', 'A', 'A', 'A',
+           'G', 'G', 'A', 'C', 'G', 'C', 'A', 'A', 'A', 'T', 'T', 'A', 'T',
+           'G', 'T', 'A', 'T', 'C', 'C', 'A', 'C', 'T', 'T', 't', 'a', 'g',
+           't', 'a', 'g', 'g', 'a', 'g', 'g', 'c', 't', 'g', 'a', 'c', 'c',
+           'c', 'g', 'c', 'a', 'g', 'c', 'c', 't', 'a', 'c', 'a', 't', 'g',
+           'a', 'a', 'c', 'c', 'a', 'g', 'g', 't', 'a', 't', 't', 't', 'c',
+           't', 'g', 'g', 'a', 'a', 'g', 'g', 'c', 'a', 'g', 'g', 'c', 't',
+           'g', 'g', 'g', 'g', 't', 't', 'g', 'a', 'a', 'a', 'g', 'a', 'g',
+           'a', 'a', 'a', 't', 't', 'a', 'g', 'a', 't', 'g', 'g', 't', 'g',
+           'a', 'g', 'a', 'a', 'a', 'a', 'g', 'a', 'a', 't', 'a', 'a', 't',
+           'g', 'a', 'g', 'g', 'c', 'c', 'a', 'a', 'g', 'a', 'c', 'a', 'a',
+           'a', 't', 't', 't', 't', 't', 'c', 't', 'c', 't', 't', 'a', 't',
+           'c', 'a', 'a', 'g', 'g', 'c', 'c', 'c', 'a', 'a', 'g', 'a', 'g',
+           'a', 'g', 't', 't', 't', 'a', 'c', 't', 'a', 'a', 'g', 'a', 'g',
+           'a', 'c', 't', 'a', 't', 'g', 'c', 't', 't', 'a', 'a', 'a', 'a',
+           'g', 'g', 'g', 'g', 'g', 'a', 'a', 'g', 'g', 'c', 'c', 'c', 'a',
+           't', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c',
+           't', 'c', 'g', 'c', 'g', 'c', 'c', 'a', 'g', 't', 'c', 't', 'a',
+           't', 'c', 'c', 't', 't', 'g', 'g', 't', 'g', 'c', 't', 't', 't',
+           'g', 't', 'c', 'a', 'c', 'c', 'a', 't', 'g', 'c', 'c', 'a', 't',
+           'c', 'a', 'g', 'c', 'a', 'c', 't', 't', 'g', 'g', 't', 'c', 'g',
+           'g', 'c', 'a', 'g', 'g', 't', 'a', 'g', 'c', 'a', 'g', 'a', 'a',
+           't', 'c', 't', 'c', 'a', 'g', 'g', 'g', 'c', 'a', 'g', 't', 't',
+           'g', 'a', 'c', 'a', 'c', 't', 't', 'c', 'a', 'a', 'a', 'a', 'g',
+           'a', 'a', 'a', 'c', 'c', 'a', 'g', 'c', 'c', 'a', 'a', 'g', 't',
+           'c', 'a', 'g', 'a', 'a', 'a', 'g', 'c', 't', 'g', 'c', 'a', 'c',
+           't', 'g', 'c', 'a', 'g', 'g', 'a', 'g', 'a', 'c', 'c', 't', 'g',
+           'c', 'a', 'c', 't', 'c', 'a', 'g', 't', 'g', 'g', 't', 'g', 'a',
+           'c', 'a', 'a', 'g', 'g', 't', 'c', 't', 'g', 't', 'a', 'c', 'c',
+           'a', 'g', 'c', 'c', 't', 'g', 'c', 't', 't', 'c', 'a', 'g', 'g',
+           'c', 't', 'g', 'g', 'g', 'g', 'g', 'a', 'g', 'g', 'c', 't', 'a',
+           'c', 'a']], dtype='U')
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 22499)
@@ -2316,9 +3729,9 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 4)
         self.assertEqual(len(alignment.annotations["empty"]), 6)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3018161,   3018172,   3018174,   3018176,   3018176,   3018230],
              [157518434, 157518423, 157518423, 157518423, 157518423, 157518369],
@@ -2327,6 +3740,72 @@ class TestAlign_reading(unittest.TestCase):
             ]
                     # fmt: on
                 ),
+            )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3018161 ATCCACAAAAGAGAC-----AAAGAAGAAAACCAAAAGAAAAGATTGTAGCTTAAAACAA
+panTro2.c 157518434 ACCTACAAAGG---------AAAACAATTAACCATAAGAAAAGTTTGTACCATAAAACAA
+hg18.chr6 155028381 ACCTACAAAGG---------AAAACAATTAACCACAAGAAAAGTTTGTACCATAAAACAA
+ponAbe2.c 158040613 -------------ACAAAGGAAAACAATTAACCATAAGAAAAGTTTGTACCATAAAACAA
+
+mm9.chr10   3018216 TTCCATTTTATTGA   3018230
+panTro2.c 157518383 TTTTATTTTATTGA 157518369
+hg18.chr6 155028330 TTTTATTTTATTGA 155028316
+ponAbe2.c 158040566 TTTTATTTTATTGA 158040552
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=22499.000000
+s mm9.chr10                         3018161   69 + 129993255 ATCCACAAAAGAGAC-----AAAGAAGAAAACCAAAAGAAAAGATTGTAGCTTAAAACAATTCCATTTTATTGA
+s panTro2.chr6                     16390178   65 - 173908612 ACCTACAAAGG---------AAAACAATTAACCATAAGAAAAGTTTGTACCATAAAACAATTTTATTTTATTGA
+q panTro2.chr6                                               99999999999---------999999999999999999999999999999999999999999999999999999
+i panTro2.chr6                     I 53 C 0
+s hg18.chr6                        15871611   65 - 170899992 ACCTACAAAGG---------AAAACAATTAACCACAAGAAAAGTTTGTACCATAAAACAATTTTATTTTATTGA
+i hg18.chr6                        I 53 C 0
+s ponAbe2.chr6                     16169818   61 - 174210431 -------------ACAAAGGAAAACAATTAACCATAAGAAAAGTTTGTACCATAAAACAATTTTATTTTATTGA
+i ponAbe2.chr6                     I 75 I 97
+e ornAna1.chr2                     14751195 5690 -  54797317 I
+e calJac1.Contig6394                   6649 3479 +    133105 I
+e tupBel1.scaffold_114895.1-498454   171764 2374 -    498454 I
+e echTel1.scaffold_288249             87661 7564 +    100002 I
+e cavPor2.scaffold_216473              8048 1372 -     10026 I
+e otoGar1.scaffold_334.1-359464      184575  137 -    359464 I
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['A', 'T', 'C', 'C', 'A', 'C', 'A', 'A', 'A', 'A', 'G', 'A', 'G',
+           'A', 'C', '-', '-', '-', '-', '-', 'A', 'A', 'A', 'G', 'A', 'A',
+           'G', 'A', 'A', 'A', 'A', 'C', 'C', 'A', 'A', 'A', 'A', 'G', 'A',
+           'A', 'A', 'A', 'G', 'A', 'T', 'T', 'G', 'T', 'A', 'G', 'C', 'T',
+           'T', 'A', 'A', 'A', 'A', 'C', 'A', 'A', 'T', 'T', 'C', 'C', 'A',
+           'T', 'T', 'T', 'T', 'A', 'T', 'T', 'G', 'A'],
+          ['A', 'C', 'C', 'T', 'A', 'C', 'A', 'A', 'A', 'G', 'G', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', 'A', 'A', 'A', 'A', 'C', 'A',
+           'A', 'T', 'T', 'A', 'A', 'C', 'C', 'A', 'T', 'A', 'A', 'G', 'A',
+           'A', 'A', 'A', 'G', 'T', 'T', 'T', 'G', 'T', 'A', 'C', 'C', 'A',
+           'T', 'A', 'A', 'A', 'A', 'C', 'A', 'A', 'T', 'T', 'T', 'T', 'A',
+           'T', 'T', 'T', 'T', 'A', 'T', 'T', 'G', 'A'],
+          ['A', 'C', 'C', 'T', 'A', 'C', 'A', 'A', 'A', 'G', 'G', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', 'A', 'A', 'A', 'A', 'C', 'A',
+           'A', 'T', 'T', 'A', 'A', 'C', 'C', 'A', 'C', 'A', 'A', 'G', 'A',
+           'A', 'A', 'A', 'G', 'T', 'T', 'T', 'G', 'T', 'A', 'C', 'C', 'A',
+           'T', 'A', 'A', 'A', 'A', 'C', 'A', 'A', 'T', 'T', 'T', 'T', 'A',
+           'T', 'T', 'T', 'T', 'A', 'T', 'T', 'G', 'A'],
+          ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           'A', 'C', 'A', 'A', 'A', 'G', 'G', 'A', 'A', 'A', 'A', 'C', 'A',
+           'A', 'T', 'T', 'A', 'A', 'C', 'C', 'A', 'T', 'A', 'A', 'G', 'A',
+           'A', 'A', 'A', 'G', 'T', 'T', 'T', 'G', 'T', 'A', 'C', 'C', 'A',
+           'T', 'A', 'A', 'A', 'A', 'C', 'A', 'A', 'T', 'T', 'T', 'T', 'A',
+           'T', 'T', 'T', 'T', 'A', 'T', 'T', 'G', 'A']], dtype='U')
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -2418,9 +3897,9 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 3)
         self.assertEqual(len(alignment.annotations["empty"]), 7)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3018230,   3018234,   3018234,   3018249,   3018270,   3018289,
                 3018294,   3018313,   3018323,   3018349,   3018349,   3018359],
@@ -2431,6 +3910,82 @@ class TestAlign_reading(unittest.TestCase):
             ]
                     # fmt: on
                 ),
+            )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3018230 AGGA-CAAAATAATACAGAtttttttttttttttttttttGCAGTACTGGAAATGGAATG
+hg18.chr6 155028316 ATAATCCAATCAATATATAT---------------------CAGAACCTGGCTCCCAATG
+panTro2.c 157518369 ATAATCCAATCAATATATAT---------------------CAGAACCTGGCTCCCAATG
+
+mm9.chr10   3018289 AATGTCCCTCACAATCACTATCAAGGTCCCTATCAAGGCAATCACTCTGTCACCGAGCTA
+hg18.chr6 155028277 -----TTCTGATAGTCATTATGAA----------AAAGAATTTACACATATATAGATTTA
+panTro2.c 157518330 -----TTCTGATAGTCATTGTGAA----------AAAGAatttacacatatatagattta
+
+mm9.chr10   3018349 -CAGCCCCAGC   3018359
+hg18.chr6 155028232 TTAGGTATATG 155028221
+panTro2.c 157518285 ttaggtatatg 157518274
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=4781.000000
+s mm9.chr10                         3018230  129 + 129993255 AGGA-CAAAATAATACAGAtttttttttttttttttttttGCAGTACTGGAAATGGAATGAATGTCCCTCACAATCACTATCAAGGTCCCTATCAAGGCAATCACTCTGTCACCGAGCTA-CAGCCCCAGC
+s hg18.chr6                        15871676   95 - 170899992 ATAATCCAATCAATATATAT---------------------CAGAACCTGGCTCCCAATG-----TTCTGATAGTCATTATGAA----------AAAGAATTTACACATATATAGATTTATTAGGTATATG
+i hg18.chr6                        C 0 C 0
+s panTro2.chr6                     16390243   95 - 173908612 ATAATCCAATCAATATATAT---------------------CAGAACCTGGCTCCCAATG-----TTCTGATAGTCATTGTGAA----------AAAGAatttacacatatatagatttattaggtatatg
+q panTro2.chr6                                               99999999999999999999---------------------9999999999999999999-----9999999999999999999----------9999999999999999999999999999999999999
+i panTro2.chr6                     C 0 C 0
+e ornAna1.chr2                     14751195 5690 -  54797317 I
+e calJac1.Contig6394                   6649 3479 +    133105 I
+e tupBel1.scaffold_114895.1-498454   171764 2374 -    498454 I
+e echTel1.scaffold_288249             87661 7564 +    100002 I
+e cavPor2.scaffold_216473              8048 1372 -     10026 I
+e otoGar1.scaffold_334.1-359464      184575  137 -    359464 I
+e ponAbe2.chr6                     16169879   97 - 174210431 I
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['A', 'G', 'G', 'A', '-', 'C', 'A', 'A', 'A', 'A', 'T', 'A', 'A',
+           'T', 'A', 'C', 'A', 'G', 'A', 't', 't', 't', 't', 't', 't', 't',
+           't', 't', 't', 't', 't', 't', 't', 't', 't', 't', 't', 't', 't',
+           't', 'G', 'C', 'A', 'G', 'T', 'A', 'C', 'T', 'G', 'G', 'A', 'A',
+           'A', 'T', 'G', 'G', 'A', 'A', 'T', 'G', 'A', 'A', 'T', 'G', 'T',
+           'C', 'C', 'C', 'T', 'C', 'A', 'C', 'A', 'A', 'T', 'C', 'A', 'C',
+           'T', 'A', 'T', 'C', 'A', 'A', 'G', 'G', 'T', 'C', 'C', 'C', 'T',
+           'A', 'T', 'C', 'A', 'A', 'G', 'G', 'C', 'A', 'A', 'T', 'C', 'A',
+           'C', 'T', 'C', 'T', 'G', 'T', 'C', 'A', 'C', 'C', 'G', 'A', 'G',
+           'C', 'T', 'A', '-', 'C', 'A', 'G', 'C', 'C', 'C', 'C', 'A', 'G',
+           'C'],
+          ['A', 'T', 'A', 'A', 'T', 'C', 'C', 'A', 'A', 'T', 'C', 'A', 'A',
+           'T', 'A', 'T', 'A', 'T', 'A', 'T', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', 'C', 'A', 'G', 'A', 'A', 'C', 'C', 'T', 'G', 'G', 'C',
+           'T', 'C', 'C', 'C', 'A', 'A', 'T', 'G', '-', '-', '-', '-', '-',
+           'T', 'T', 'C', 'T', 'G', 'A', 'T', 'A', 'G', 'T', 'C', 'A', 'T',
+           'T', 'A', 'T', 'G', 'A', 'A', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', 'A', 'A', 'A', 'G', 'A', 'A', 'T', 'T', 'T', 'A',
+           'C', 'A', 'C', 'A', 'T', 'A', 'T', 'A', 'T', 'A', 'G', 'A', 'T',
+           'T', 'T', 'A', 'T', 'T', 'A', 'G', 'G', 'T', 'A', 'T', 'A', 'T',
+           'G'],
+          ['A', 'T', 'A', 'A', 'T', 'C', 'C', 'A', 'A', 'T', 'C', 'A', 'A',
+           'T', 'A', 'T', 'A', 'T', 'A', 'T', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', 'C', 'A', 'G', 'A', 'A', 'C', 'C', 'T', 'G', 'G', 'C',
+           'T', 'C', 'C', 'C', 'A', 'A', 'T', 'G', '-', '-', '-', '-', '-',
+           'T', 'T', 'C', 'T', 'G', 'A', 'T', 'A', 'G', 'T', 'C', 'A', 'T',
+           'T', 'G', 'T', 'G', 'A', 'A', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', 'A', 'A', 'A', 'G', 'A', 'a', 't', 't', 't', 'a',
+           'c', 'a', 'c', 'a', 't', 'a', 't', 'a', 't', 'a', 'g', 'a', 't',
+           't', 't', 'a', 't', 't', 'a', 'g', 'g', 't', 'a', 't', 'a', 't',
+           'g']], dtype='U')
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -2542,9 +4097,9 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 5)
         self.assertEqual(len(alignment.annotations["empty"]), 5)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3018359,   3018360,   3018361,   3018361,   3018393,   3018393,
                 3018405,   3018405,   3018447,   3018447,   3018447,   3018464,
@@ -2564,6 +4119,113 @@ class TestAlign_reading(unittest.TestCase):
             ]
                     # fmt: on
                 ),
+            )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3018359 TT-CAAACATGCATACATGCATTCATGTCTCATAA-TAATTATTAACA-TTGTCTTAGGC
+panTro2.c 157518274 -tataaatgtacaaatatatgtgtatgtCTCATAAATAATTATTAACAGTCATCTTAGGT
+hg18.chr6 155028221 -TATAAACGTACAAATATATGTGTATGTCTCATAAATAATTATTAACAGTCATCTTAGGT
+otoGar1.s    174752 TT-TATACATGTATGTGTAAATGTAGGTCCTGTAAGTAATTATTAACATTTGTCTTAGGT
+ponAbe2.c 158040455 ---taaatgtacaaatatatgtgtatgtgtcataaataATTATTAACAGTCATCTTAGGT
+
+mm9.chr10   3018416 CAGAGGCTCGACTGCCCCAAAGCAATCCACT-------TAAACTGTCCCTGAGAA-AGTC
+panTro2.c 157518215 CAGTGGCCTGAGTGATACAAACTAAGCCATCCATATTTTATATTCTCTCCGGGAAGGGTC
+hg18.chr6 155028162 CAGTGGCCTGAATGATACAAACTAAGCCATCCATATTTTATATTCTCTCCGGGAAGGGTC
+otoGar1.s    174693 TAGAGGCCCGAGTGACACAAGCTAACCCATCC------TATCCTCCCTGTGTGAAGGGTC
+ponAbe2.c 158040398 CAGTGGCCTGAGTGATAGAAACTAAGCCATCCATATTTTATATTCTCTCTGGGAAGGGTC
+
+mm9.chr10   3018468 Attcctctccctaa   3018482
+panTro2.c 157518155 ATCCTTTTCTTT-- 157518143
+hg18.chr6 155028102 ATCCTTTTCTTT-- 155028090
+otoGar1.s    174639 ATCCTTTCTTCTGA    174625
+ponAbe2.c 158040338 ATCCTTTTCTTT-- 158040326
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=61520.000000
+s mm9.chr10                         3018359  123 + 129993255 TT-CAAACATGCATACATGCATTCATGTCTCATAA-TAATTATTAACA-TTGTCTTAGGCCAGAGGCTCGACTGCCCCAAAGCAATCCACT-------TAAACTGTCCCTGAGAA-AGTCAttcctctccctaa
+s panTro2.chr6                     16390338  131 - 173908612 -tataaatgtacaaatatatgtgtatgtCTCATAAATAATTATTAACAGTCATCTTAGGTCAGTGGCCTGAGTGATACAAACTAAGCCATCCATATTTTATATTCTCTCCGGGAAGGGTCATCCTTTTCTTT--
+q panTro2.chr6                                               -99999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999--
+i panTro2.chr6                     C 0 I 2400
+s hg18.chr6                        15871771  131 - 170899992 -TATAAACGTACAAATATATGTGTATGTCTCATAAATAATTATTAACAGTCATCTTAGGTCAGTGGCCTGAATGATACAAACTAAGCCATCCATATTTTATATTCTCTCCGGGAAGGGTCATCCTTTTCTTT--
+i hg18.chr6                        C 0 I 2402
+s otoGar1.scaffold_334.1-359464      184712  127 -    359464 TT-TATACATGTATGTGTAAATGTAGGTCCTGTAAGTAATTATTAACATTTGTCTTAGGTTAGAGGCCCGAGTGACACAAGCTAACCCATCC------TATCCTCCCTGTGTGAAGGGTCATCCTTTCTTCTGA
+q otoGar1.scaffold_334.1-359464                              99-99999999999999999999999999999999999999999999999999667736999999999999999999999999999995666------677755798899998999967967999999999589
+i otoGar1.scaffold_334.1-359464    I 137 I 2731
+s ponAbe2.chr6                     16169976  129 - 174210431 ---taaatgtacaaatatatgtgtatgtgtcataaataATTATTAACAGTCATCTTAGGTCAGTGGCCTGAGTGATAGAAACTAAGCCATCCATATTTTATATTCTCTCTGGGAAGGGTCATCCTTTTCTTT--
+i ponAbe2.chr6                     I 97 I 2523
+e ornAna1.chr2                     14751195 5690 -  54797317 I
+e calJac1.Contig6394                   6649 3479 +    133105 I
+e tupBel1.scaffold_114895.1-498454   171764 2374 -    498454 I
+e echTel1.scaffold_288249             87661 7564 +    100002 I
+e cavPor2.scaffold_216473              8048 1372 -     10026 I
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['T', 'T', '-', 'C', 'A', 'A', 'A', 'C', 'A', 'T', 'G', 'C', 'A',
+           'T', 'A', 'C', 'A', 'T', 'G', 'C', 'A', 'T', 'T', 'C', 'A', 'T',
+           'G', 'T', 'C', 'T', 'C', 'A', 'T', 'A', 'A', '-', 'T', 'A', 'A',
+           'T', 'T', 'A', 'T', 'T', 'A', 'A', 'C', 'A', '-', 'T', 'T', 'G',
+           'T', 'C', 'T', 'T', 'A', 'G', 'G', 'C', 'C', 'A', 'G', 'A', 'G',
+           'G', 'C', 'T', 'C', 'G', 'A', 'C', 'T', 'G', 'C', 'C', 'C', 'C',
+           'A', 'A', 'A', 'G', 'C', 'A', 'A', 'T', 'C', 'C', 'A', 'C', 'T',
+           '-', '-', '-', '-', '-', '-', '-', 'T', 'A', 'A', 'A', 'C', 'T',
+           'G', 'T', 'C', 'C', 'C', 'T', 'G', 'A', 'G', 'A', 'A', '-', 'A',
+           'G', 'T', 'C', 'A', 't', 't', 'c', 'c', 't', 'c', 't', 'c', 'c',
+           'c', 't', 'a', 'a'],
+          ['-', 't', 'a', 't', 'a', 'a', 'a', 't', 'g', 't', 'a', 'c', 'a',
+           'a', 'a', 't', 'a', 't', 'a', 't', 'g', 't', 'g', 't', 'a', 't',
+           'g', 't', 'C', 'T', 'C', 'A', 'T', 'A', 'A', 'A', 'T', 'A', 'A',
+           'T', 'T', 'A', 'T', 'T', 'A', 'A', 'C', 'A', 'G', 'T', 'C', 'A',
+           'T', 'C', 'T', 'T', 'A', 'G', 'G', 'T', 'C', 'A', 'G', 'T', 'G',
+           'G', 'C', 'C', 'T', 'G', 'A', 'G', 'T', 'G', 'A', 'T', 'A', 'C',
+           'A', 'A', 'A', 'C', 'T', 'A', 'A', 'G', 'C', 'C', 'A', 'T', 'C',
+           'C', 'A', 'T', 'A', 'T', 'T', 'T', 'T', 'A', 'T', 'A', 'T', 'T',
+           'C', 'T', 'C', 'T', 'C', 'C', 'G', 'G', 'G', 'A', 'A', 'G', 'G',
+           'G', 'T', 'C', 'A', 'T', 'C', 'C', 'T', 'T', 'T', 'T', 'C', 'T',
+           'T', 'T', '-', '-'],
+          ['-', 'T', 'A', 'T', 'A', 'A', 'A', 'C', 'G', 'T', 'A', 'C', 'A',
+           'A', 'A', 'T', 'A', 'T', 'A', 'T', 'G', 'T', 'G', 'T', 'A', 'T',
+           'G', 'T', 'C', 'T', 'C', 'A', 'T', 'A', 'A', 'A', 'T', 'A', 'A',
+           'T', 'T', 'A', 'T', 'T', 'A', 'A', 'C', 'A', 'G', 'T', 'C', 'A',
+           'T', 'C', 'T', 'T', 'A', 'G', 'G', 'T', 'C', 'A', 'G', 'T', 'G',
+           'G', 'C', 'C', 'T', 'G', 'A', 'A', 'T', 'G', 'A', 'T', 'A', 'C',
+           'A', 'A', 'A', 'C', 'T', 'A', 'A', 'G', 'C', 'C', 'A', 'T', 'C',
+           'C', 'A', 'T', 'A', 'T', 'T', 'T', 'T', 'A', 'T', 'A', 'T', 'T',
+           'C', 'T', 'C', 'T', 'C', 'C', 'G', 'G', 'G', 'A', 'A', 'G', 'G',
+           'G', 'T', 'C', 'A', 'T', 'C', 'C', 'T', 'T', 'T', 'T', 'C', 'T',
+           'T', 'T', '-', '-'],
+          ['T', 'T', '-', 'T', 'A', 'T', 'A', 'C', 'A', 'T', 'G', 'T', 'A',
+           'T', 'G', 'T', 'G', 'T', 'A', 'A', 'A', 'T', 'G', 'T', 'A', 'G',
+           'G', 'T', 'C', 'C', 'T', 'G', 'T', 'A', 'A', 'G', 'T', 'A', 'A',
+           'T', 'T', 'A', 'T', 'T', 'A', 'A', 'C', 'A', 'T', 'T', 'T', 'G',
+           'T', 'C', 'T', 'T', 'A', 'G', 'G', 'T', 'T', 'A', 'G', 'A', 'G',
+           'G', 'C', 'C', 'C', 'G', 'A', 'G', 'T', 'G', 'A', 'C', 'A', 'C',
+           'A', 'A', 'G', 'C', 'T', 'A', 'A', 'C', 'C', 'C', 'A', 'T', 'C',
+           'C', '-', '-', '-', '-', '-', '-', 'T', 'A', 'T', 'C', 'C', 'T',
+           'C', 'C', 'C', 'T', 'G', 'T', 'G', 'T', 'G', 'A', 'A', 'G', 'G',
+           'G', 'T', 'C', 'A', 'T', 'C', 'C', 'T', 'T', 'T', 'C', 'T', 'T',
+           'C', 'T', 'G', 'A'],
+          ['-', '-', '-', 't', 'a', 'a', 'a', 't', 'g', 't', 'a', 'c', 'a',
+           'a', 'a', 't', 'a', 't', 'a', 't', 'g', 't', 'g', 't', 'a', 't',
+           'g', 't', 'g', 't', 'c', 'a', 't', 'a', 'a', 'a', 't', 'a', 'A',
+           'T', 'T', 'A', 'T', 'T', 'A', 'A', 'C', 'A', 'G', 'T', 'C', 'A',
+           'T', 'C', 'T', 'T', 'A', 'G', 'G', 'T', 'C', 'A', 'G', 'T', 'G',
+           'G', 'C', 'C', 'T', 'G', 'A', 'G', 'T', 'G', 'A', 'T', 'A', 'G',
+           'A', 'A', 'A', 'C', 'T', 'A', 'A', 'G', 'C', 'C', 'A', 'T', 'C',
+           'C', 'A', 'T', 'A', 'T', 'T', 'T', 'T', 'A', 'T', 'A', 'T', 'T',
+           'C', 'T', 'C', 'T', 'C', 'T', 'G', 'G', 'G', 'A', 'A', 'G', 'G',
+           'G', 'T', 'C', 'A', 'T', 'C', 'C', 'T', 'T', 'T', 'T', 'C', 'T',
+           'T', 'T', '-', '-']], dtype='U')
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -2635,7 +4297,54 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 9)
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, numpy.array([[3018482, 3018644]]))
+            np.array_equal(alignment.coordinates, np.array([[3018482, 3018644]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3018482 tcttcatctcctcttttcctccttttttttttctcatttctctttctctttcttttgtcc
+
+mm9.chr10   3018542 ttttccttTATAGCAAGCAAGGCAAGTAGTCTCTATTTAGAAGGCATggagagaatgggg
+
+mm9.chr10   3018602 agaggaggaaaggaggagaggggaggagaggaggggagGTAT 3018644
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=0.000000
+s mm9.chr10                         3018482  162 + 129993255 tcttcatctcctcttttcctccttttttttttctcatttctctttctctttcttttgtccttttccttTATAGCAAGCAAGGCAAGTAGTCTCTATTTAGAAGGCATggagagaatggggagaggaggaaaggaggagaggggaggagaggaggggagGTAT
+e ornAna1.chr2                     14751195 5690 -  54797317 I
+e calJac1.Contig6394                   6649 3479 +    133105 I
+e tupBel1.scaffold_114895.1-498454   171764 2374 -    498454 I
+e echTel1.scaffold_288249             87661 7564 +    100002 I
+e cavPor2.scaffold_216473              8048 1372 -     10026 I
+e otoGar1.scaffold_334.1-359464      184839 2731 -    359464 I
+e hg18.chr6                        15871902 2402 - 170899992 I
+e panTro2.chr6                     16390469 2400 - 173908612 I
+e ponAbe2.chr6                     16170105 2523 - 174210431 I
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['t', 'c', 't', 't', 'c', 'a', 't', 'c', 't', 'c', 'c', 't', 'c',
+           't', 't', 't', 't', 'c', 'c', 't', 'c', 'c', 't', 't', 't', 't',
+           't', 't', 't', 't', 't', 't', 'c', 't', 'c', 'a', 't', 't', 't',
+           'c', 't', 'c', 't', 't', 't', 'c', 't', 'c', 't', 't', 't', 'c',
+           't', 't', 't', 't', 'g', 't', 'c', 'c', 't', 't', 't', 't', 'c',
+           'c', 't', 't', 'T', 'A', 'T', 'A', 'G', 'C', 'A', 'A', 'G', 'C',
+           'A', 'A', 'G', 'G', 'C', 'A', 'A', 'G', 'T', 'A', 'G', 'T', 'C',
+           'T', 'C', 'T', 'A', 'T', 'T', 'T', 'A', 'G', 'A', 'A', 'G', 'G',
+           'C', 'A', 'T', 'g', 'g', 'a', 'g', 'a', 'g', 'a', 'a', 't', 'g',
+           'g', 'g', 'g', 'a', 'g', 'a', 'g', 'g', 'a', 'g', 'g', 'a', 'a',
+           'a', 'g', 'g', 'a', 'g', 'g', 'a', 'g', 'a', 'g', 'g', 'g', 'g',
+           'a', 'g', 'g', 'a', 'g', 'a', 'g', 'g', 'a', 'g', 'g', 'g', 'g',
+           'a', 'g', 'G', 'T', 'A', 'T']], dtype='U')
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1520)
@@ -2724,9 +4433,9 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 2)
         self.assertEqual(len(alignment.annotations["empty"]), 9)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[ 3018644,  3018671,  3018676,  3018687,  3018689,  3018697,
                3018697,  3018716,  3018716,  3018729,  3018731,  3018739,
@@ -2737,6 +4446,87 @@ class TestAlign_reading(unittest.TestCase):
             ]
                     # fmt: on
                 ),
+            )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3018644 AGGGTAGGCCAAGTGCCTTGGGAAGTAGTTGTTGGTAGACTGAAAGTGTGTTC---TGAG
+                  0 ||...||||.||...||.|||||.|.|-----|.|.|.|.|||--||.|.|||---||.|
+canFam2.c  47545836 AGAAAAGGCAAATGCCCCTGGGAGGGA-----TAGCACATTGA--GTTTATTCACATGCG
+
+mm9.chr10   3018701 TGTCAGTGATGTTCA-TGAGATTATCACCAGCAAGGATG--GCTGACGGGAACTG---CA
+                 60 |||.|||||||...|-||||||..||.||--.|||||||--|.|||.||.|.|.|---||
+canFam2.c  47545783 TGTAAGTGATGGATACTGAGATCCTCTCC--TAAGGATGCGGTTGATGGAATCAGAAGCA
+
+mm9.chr10   3018755 AGAGGCATAGCCCTGAGTTCTAAAGGAGAGGGAAACGTCACAGAAAGGATG---------
+                120 |....||....||.||..||||||......|||||..|||..||.||.||.---------
+canFam2.c  47545725 AATACCACCAGCCAGAACTCTAAAATGAGAGGAAAGATCATGGATAGAATAGAATTGTAA
+
+mm9.chr10   3018806 -----------------CACTGTTTCAGCATCT  3018822
+                180 -----------------|.||.||..||.||.|      213
+canFam2.c  47545665 TATGAAATATAAAATTTCCCTATTGAAGAATTT 47545632
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=1520.000000
+s mm9.chr10                         3018644  178 + 129993255 AGGGTAGGCCAAGTGCCTTGGGAAGTAGTTGTTGGTAGACTGAAAGTGTGTTC---TGAGTGTCAGTGATGTTCA-TGAGATTATCACCAGCAAGGATG--GCTGACGGGAACTG---CAAGAGGCATAGCCCTGAGTTCTAAAGGAGAGGGAAACGTCACAGAAAGGATG--------------------------CACTGTTTCAGCATCT
+s canFam2.chr1                     78070420  204 - 125616256 AGAAAAGGCAAATGCCCCTGGGAGGGA-----TAGCACATTGA--GTTTATTCACATGCGTGTAAGTGATGGATACTGAGATCCTCTCC--TAAGGATGCGGTTGATGGAATCAGAAGCAAATACCACCAGCCAGAACTCTAAAATGAGAGGAAAGATCATGGATAGAATAGAATTGTAATATGAAATATAAAATTTCCCTATTGAAGAATTT
+q canFam2.chr1                                               999999999999999999999999999-----99999999999--99999999999999999999999999999999999999999999--99999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
+i canFam2.chr1                     N 0 I 160
+e ornAna1.chr2                     14751195 5690 -  54797317 I
+e calJac1.Contig6394                   6649 3479 +    133105 I
+e tupBel1.scaffold_114895.1-498454   171764 2374 -    498454 I
+e echTel1.scaffold_288249             87661 7564 +    100002 I
+e cavPor2.scaffold_216473              8048 1372 -     10026 I
+e otoGar1.scaffold_334.1-359464      184839 2731 -    359464 I
+e hg18.chr6                        15871902 2402 - 170899992 I
+e panTro2.chr6                     16390469 2400 - 173908612 I
+e ponAbe2.chr6                     16170105 2523 - 174210431 I
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['A', 'G', 'G', 'G', 'T', 'A', 'G', 'G', 'C', 'C', 'A', 'A', 'G',
+           'T', 'G', 'C', 'C', 'T', 'T', 'G', 'G', 'G', 'A', 'A', 'G', 'T',
+           'A', 'G', 'T', 'T', 'G', 'T', 'T', 'G', 'G', 'T', 'A', 'G', 'A',
+           'C', 'T', 'G', 'A', 'A', 'A', 'G', 'T', 'G', 'T', 'G', 'T', 'T',
+           'C', '-', '-', '-', 'T', 'G', 'A', 'G', 'T', 'G', 'T', 'C', 'A',
+           'G', 'T', 'G', 'A', 'T', 'G', 'T', 'T', 'C', 'A', '-', 'T', 'G',
+           'A', 'G', 'A', 'T', 'T', 'A', 'T', 'C', 'A', 'C', 'C', 'A', 'G',
+           'C', 'A', 'A', 'G', 'G', 'A', 'T', 'G', '-', '-', 'G', 'C', 'T',
+           'G', 'A', 'C', 'G', 'G', 'G', 'A', 'A', 'C', 'T', 'G', '-', '-',
+           '-', 'C', 'A', 'A', 'G', 'A', 'G', 'G', 'C', 'A', 'T', 'A', 'G',
+           'C', 'C', 'C', 'T', 'G', 'A', 'G', 'T', 'T', 'C', 'T', 'A', 'A',
+           'A', 'G', 'G', 'A', 'G', 'A', 'G', 'G', 'G', 'A', 'A', 'A', 'C',
+           'G', 'T', 'C', 'A', 'C', 'A', 'G', 'A', 'A', 'A', 'G', 'G', 'A',
+           'T', 'G', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', 'C', 'A', 'C', 'T', 'G', 'T', 'T', 'T', 'C', 'A', 'G',
+           'C', 'A', 'T', 'C', 'T'],
+          ['A', 'G', 'A', 'A', 'A', 'A', 'G', 'G', 'C', 'A', 'A', 'A', 'T',
+           'G', 'C', 'C', 'C', 'C', 'T', 'G', 'G', 'G', 'A', 'G', 'G', 'G',
+           'A', '-', '-', '-', '-', '-', 'T', 'A', 'G', 'C', 'A', 'C', 'A',
+           'T', 'T', 'G', 'A', '-', '-', 'G', 'T', 'T', 'T', 'A', 'T', 'T',
+           'C', 'A', 'C', 'A', 'T', 'G', 'C', 'G', 'T', 'G', 'T', 'A', 'A',
+           'G', 'T', 'G', 'A', 'T', 'G', 'G', 'A', 'T', 'A', 'C', 'T', 'G',
+           'A', 'G', 'A', 'T', 'C', 'C', 'T', 'C', 'T', 'C', 'C', '-', '-',
+           'T', 'A', 'A', 'G', 'G', 'A', 'T', 'G', 'C', 'G', 'G', 'T', 'T',
+           'G', 'A', 'T', 'G', 'G', 'A', 'A', 'T', 'C', 'A', 'G', 'A', 'A',
+           'G', 'C', 'A', 'A', 'A', 'T', 'A', 'C', 'C', 'A', 'C', 'C', 'A',
+           'G', 'C', 'C', 'A', 'G', 'A', 'A', 'C', 'T', 'C', 'T', 'A', 'A',
+           'A', 'A', 'T', 'G', 'A', 'G', 'A', 'G', 'G', 'A', 'A', 'A', 'G',
+           'A', 'T', 'C', 'A', 'T', 'G', 'G', 'A', 'T', 'A', 'G', 'A', 'A',
+           'T', 'A', 'G', 'A', 'A', 'T', 'T', 'G', 'T', 'A', 'A', 'T', 'A',
+           'T', 'G', 'A', 'A', 'A', 'T', 'A', 'T', 'A', 'A', 'A', 'A', 'T',
+           'T', 'T', 'C', 'C', 'C', 'T', 'A', 'T', 'T', 'G', 'A', 'A', 'G',
+           'A', 'A', 'T', 'T', 'T']], dtype='U')
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -2826,9 +4616,9 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 2)
         self.assertEqual(len(alignment.annotations["empty"]), 9)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[ 3018822,  3018862,  3018863,  3018866,  3018866,  3018883,
                3018883,  3018913,  3018913,  3018932],
@@ -2837,6 +4627,69 @@ class TestAlign_reading(unittest.TestCase):
             ]
                     # fmt: on
                 ),
+            )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3018822 CTGCCTTCCATTACGATTTACTGATCACTTACAACCCTCCCACA----GAAGAGAACCTA
+                  0 ||...||.|..|.|...|||.|..|||||||.||..||||-|||----.|||.|||...|
+canFam2.c  47545472 CTTTTTTTCCCTGCCCATTATTACTCACTTAAAATTCTCC-ACATTGTAAAGGGAATTCA
+
+mm9.chr10   3018878 ACTTG-CTTAGGAGCATATGTACAGTTAATCAAGAC-----AAAAATAAGAATGGAGACt
+                 60 |.|.|-|||......||....|||.||.|.|||||.-----|||||||||.|||||.|..
+canFam2.c  47545413 AATCGACTTCTAGAGATGCACACAATTTAGCAAGATCAACTAAAAATAAGTATGGAAAAT
+
+mm9.chr10   3018932 
+                120 
+canFam2.c  47545353 
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=1986.000000
+s mm9.chr10                         3018822  110 + 129993255 CTGCCTTCCATTACGATTTACTGATCACTTACAACCCTCCCACA----GAAGAGAACCTAACTTG-CTTAGGAGCATATGTACAGTTAATCAAGAC-----AAAAATAAGAATGGAGACt
+s canFam2.chr1                     78070784  119 - 125616256 CTTTTTTTCCCTGCCCATTATTACTCACTTAAAATTCTCC-ACATTGTAAAGGGAATTCAAATCGACTTCTAGAGATGCACACAATTTAGCAAGATCAACTAAAAATAAGTATGGAAAAT
+q canFam2.chr1                                               9999999999999999999999999999999999999999-9999999999999999999999999999999999999999999999999999999999999999999999999999999
+i canFam2.chr1                     I 160 C 0
+e ornAna1.chr2                     14751195 5690 -  54797317 I
+e calJac1.Contig6394                   6649 3479 +    133105 I
+e tupBel1.scaffold_114895.1-498454   171764 2374 -    498454 I
+e echTel1.scaffold_288249             87661 7564 +    100002 I
+e cavPor2.scaffold_216473              8048 1372 -     10026 I
+e otoGar1.scaffold_334.1-359464      184839 2731 -    359464 I
+e hg18.chr6                        15871902 2402 - 170899992 I
+e panTro2.chr6                     16390469 2400 - 173908612 I
+e ponAbe2.chr6                     16170105 2523 - 174210431 I
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['C', 'T', 'G', 'C', 'C', 'T', 'T', 'C', 'C', 'A', 'T', 'T', 'A',
+           'C', 'G', 'A', 'T', 'T', 'T', 'A', 'C', 'T', 'G', 'A', 'T', 'C',
+           'A', 'C', 'T', 'T', 'A', 'C', 'A', 'A', 'C', 'C', 'C', 'T', 'C',
+           'C', 'C', 'A', 'C', 'A', '-', '-', '-', '-', 'G', 'A', 'A', 'G',
+           'A', 'G', 'A', 'A', 'C', 'C', 'T', 'A', 'A', 'C', 'T', 'T', 'G',
+           '-', 'C', 'T', 'T', 'A', 'G', 'G', 'A', 'G', 'C', 'A', 'T', 'A',
+           'T', 'G', 'T', 'A', 'C', 'A', 'G', 'T', 'T', 'A', 'A', 'T', 'C',
+           'A', 'A', 'G', 'A', 'C', '-', '-', '-', '-', '-', 'A', 'A', 'A',
+           'A', 'A', 'T', 'A', 'A', 'G', 'A', 'A', 'T', 'G', 'G', 'A', 'G',
+           'A', 'C', 't'],
+          ['C', 'T', 'T', 'T', 'T', 'T', 'T', 'T', 'C', 'C', 'C', 'T', 'G',
+           'C', 'C', 'C', 'A', 'T', 'T', 'A', 'T', 'T', 'A', 'C', 'T', 'C',
+           'A', 'C', 'T', 'T', 'A', 'A', 'A', 'A', 'T', 'T', 'C', 'T', 'C',
+           'C', '-', 'A', 'C', 'A', 'T', 'T', 'G', 'T', 'A', 'A', 'A', 'G',
+           'G', 'G', 'A', 'A', 'T', 'T', 'C', 'A', 'A', 'A', 'T', 'C', 'G',
+           'A', 'C', 'T', 'T', 'C', 'T', 'A', 'G', 'A', 'G', 'A', 'T', 'G',
+           'C', 'A', 'C', 'A', 'C', 'A', 'A', 'T', 'T', 'T', 'A', 'G', 'C',
+           'A', 'A', 'G', 'A', 'T', 'C', 'A', 'A', 'C', 'T', 'A', 'A', 'A',
+           'A', 'A', 'T', 'A', 'A', 'G', 'T', 'A', 'T', 'G', 'G', 'A', 'A',
+           'A', 'A', 'T']], dtype='U')
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -2914,7 +4767,75 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 10)
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, numpy.array([[3018932, 3019271]]))
+            np.array_equal(alignment.coordinates, np.array([[3018932, 3019271]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3018932 gtctgagttagggttttactgctgtgaacagacaccatgaccaaggcatgtcttataaaa
+
+mm9.chr10   3018992 aaaatttaattagggctggcttacagattcagaggttcagtgggagcatcaaggtggggg
+
+mm9.chr10   3019052 catggcagcatccaggcaggcatggtgcaggcagagctgagagttctacatcttcatcca
+
+mm9.chr10   3019112 aaggcttctagtggaagactgacttccaggcacctagggtgagggtcttaagcccacacc
+
+mm9.chr10   3019172 cacagtgacacacctattccaaccaggtcacacctattccaacaaggccatacctccaaa
+
+mm9.chr10   3019232 tggcaccactcctggtccaagaatatacaaaccatgaca 3019271
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=0.000000
+s mm9.chr10                         3018932  339 + 129993255 gtctgagttagggttttactgctgtgaacagacaccatgaccaaggcatgtcttataaaaaaaatttaattagggctggcttacagattcagaggttcagtgggagcatcaaggtgggggcatggcagcatccaggcaggcatggtgcaggcagagctgagagttctacatcttcatccaaaggcttctagtggaagactgacttccaggcacctagggtgagggtcttaagcccacacccacagtgacacacctattccaaccaggtcacacctattccaacaaggccatacctccaaatggcaccactcctggtccaagaatatacaaaccatgaca
+e canFam2.chr1                     47545353    0 + 125616256 C
+e ornAna1.chr2                     14751195 5690 -  54797317 I
+e calJac1.Contig6394                   6649 3479 +    133105 I
+e tupBel1.scaffold_114895.1-498454   171764 2374 -    498454 I
+e echTel1.scaffold_288249             87661 7564 +    100002 I
+e cavPor2.scaffold_216473              8048 1372 -     10026 I
+e otoGar1.scaffold_334.1-359464      184839 2731 -    359464 I
+e hg18.chr6                        15871902 2402 - 170899992 I
+e panTro2.chr6                     16390469 2400 - 173908612 I
+e ponAbe2.chr6                     16170105 2523 - 174210431 I
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['g', 't', 'c', 't', 'g', 'a', 'g', 't', 't', 'a', 'g', 'g', 'g',
+           't', 't', 't', 't', 'a', 'c', 't', 'g', 'c', 't', 'g', 't', 'g',
+           'a', 'a', 'c', 'a', 'g', 'a', 'c', 'a', 'c', 'c', 'a', 't', 'g',
+           'a', 'c', 'c', 'a', 'a', 'g', 'g', 'c', 'a', 't', 'g', 't', 'c',
+           't', 't', 'a', 't', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 't',
+           't', 't', 'a', 'a', 't', 't', 'a', 'g', 'g', 'g', 'c', 't', 'g',
+           'g', 'c', 't', 't', 'a', 'c', 'a', 'g', 'a', 't', 't', 'c', 'a',
+           'g', 'a', 'g', 'g', 't', 't', 'c', 'a', 'g', 't', 'g', 'g', 'g',
+           'a', 'g', 'c', 'a', 't', 'c', 'a', 'a', 'g', 'g', 't', 'g', 'g',
+           'g', 'g', 'g', 'c', 'a', 't', 'g', 'g', 'c', 'a', 'g', 'c', 'a',
+           't', 'c', 'c', 'a', 'g', 'g', 'c', 'a', 'g', 'g', 'c', 'a', 't',
+           'g', 'g', 't', 'g', 'c', 'a', 'g', 'g', 'c', 'a', 'g', 'a', 'g',
+           'c', 't', 'g', 'a', 'g', 'a', 'g', 't', 't', 'c', 't', 'a', 'c',
+           'a', 't', 'c', 't', 't', 'c', 'a', 't', 'c', 'c', 'a', 'a', 'a',
+           'g', 'g', 'c', 't', 't', 'c', 't', 'a', 'g', 't', 'g', 'g', 'a',
+           'a', 'g', 'a', 'c', 't', 'g', 'a', 'c', 't', 't', 'c', 'c', 'a',
+           'g', 'g', 'c', 'a', 'c', 'c', 't', 'a', 'g', 'g', 'g', 't', 'g',
+           'a', 'g', 'g', 'g', 't', 'c', 't', 't', 'a', 'a', 'g', 'c', 'c',
+           'c', 'a', 'c', 'a', 'c', 'c', 'c', 'a', 'c', 'a', 'g', 't', 'g',
+           'a', 'c', 'a', 'c', 'a', 'c', 'c', 't', 'a', 't', 't', 'c', 'c',
+           'a', 'a', 'c', 'c', 'a', 'g', 'g', 't', 'c', 'a', 'c', 'a', 'c',
+           'c', 't', 'a', 't', 't', 'c', 'c', 'a', 'a', 'c', 'a', 'a', 'g',
+           'g', 'c', 'c', 'a', 't', 'a', 'c', 'c', 't', 'c', 'c', 'a', 'a',
+           'a', 't', 'g', 'g', 'c', 'a', 'c', 'c', 'a', 'c', 't', 'c', 'c',
+           't', 'g', 'g', 't', 'c', 'c', 'a', 'a', 'g', 'a', 'a', 't', 'a',
+           't', 'a', 'c', 'a', 'a', 'a', 'c', 'c', 'a', 't', 'g', 'a', 'c',
+           'a']], dtype='U')
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 228)
@@ -3003,9 +4924,9 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 2)
         self.assertEqual(len(alignment.annotations["empty"]), 9)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[ 3019271,  3019276,  3019277,  3019282,  3019282,  3019293,
                3019293,  3019308,  3019310,  3019324,  3019334,  3019377],
@@ -3014,6 +4935,69 @@ class TestAlign_reading(unittest.TestCase):
             ]
                     # fmt: on
                 ),
+            )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3019271 GAGACCAAATG------------TGGCGCTCACG-TGAGGCCAGGAGTAAATCGCACACA
+                  0 |||.|-|||||------------.|..|..||.|-||.|.|||.|.||.|--||||||..
+canFam2.c  47545353 GAGGC-AAATGGAAAATGCCCCACGATGTCCAGGCTGTGTCCATGTGTGA--CGCACATG
+
+mm9.chr10   3019318 CAGCCCATGCTTTCACCATCTGCTAGGGTGCTCTGGAGCAGGGCAGGCTTCTAACCTGG
+                 60 |.|.||----------||.|||||....|.|.||.||.......|||...|.|||||||
+canFam2.c  47545296 CTGTCC----------CACCTGCTTCTATTCACTTGACACACATAGGTCCCAAACCTGG
+
+mm9.chr10   3019377
+                119
+canFam2.c  47545247
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=228.000000
+s mm9.chr10                         3019271  106 + 129993255 GAGACCAAATG------------TGGCGCTCACG-TGAGGCCAGGAGTAAATCGCACACACAGCCCATGCTTTCACCATCTGCTAGGGTGCTCTGGAGCAGGGCAGGCTTCTAACCTGG
+s canFam2.chr1                     78070903  106 - 125616256 GAGGC-AAATGGAAAATGCCCCACGATGTCCAGGCTGTGTCCATGTGTGA--CGCACATGCTGTCC----------CACCTGCTTCTATTCACTTGACACACATAGGTCCCAAACCTGG
+q canFam2.chr1                                               99999-99999999999999999999999999999999999999999999--99999999999999----------9999999999999999999999999999999999999999999
+i canFam2.chr1                     C 0 C 0
+e ornAna1.chr2                     14751195 5690 -  54797317 I
+e calJac1.Contig6394                   6649 3479 +    133105 I
+e tupBel1.scaffold_114895.1-498454   171764 2374 -    498454 I
+e echTel1.scaffold_288249             87661 7564 +    100002 I
+e cavPor2.scaffold_216473              8048 1372 -     10026 I
+e otoGar1.scaffold_334.1-359464      184839 2731 -    359464 I
+e hg18.chr6                        15871902 2402 - 170899992 I
+e panTro2.chr6                     16390469 2400 - 173908612 I
+e ponAbe2.chr6                     16170105 2523 - 174210431 I
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['G', 'A', 'G', 'A', 'C', 'C', 'A', 'A', 'A', 'T', 'G', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'T', 'G', 'G',
+           'C', 'G', 'C', 'T', 'C', 'A', 'C', 'G', '-', 'T', 'G', 'A', 'G',
+           'G', 'C', 'C', 'A', 'G', 'G', 'A', 'G', 'T', 'A', 'A', 'A', 'T',
+           'C', 'G', 'C', 'A', 'C', 'A', 'C', 'A', 'C', 'A', 'G', 'C', 'C',
+           'C', 'A', 'T', 'G', 'C', 'T', 'T', 'T', 'C', 'A', 'C', 'C', 'A',
+           'T', 'C', 'T', 'G', 'C', 'T', 'A', 'G', 'G', 'G', 'T', 'G', 'C',
+           'T', 'C', 'T', 'G', 'G', 'A', 'G', 'C', 'A', 'G', 'G', 'G', 'C',
+           'A', 'G', 'G', 'C', 'T', 'T', 'C', 'T', 'A', 'A', 'C', 'C', 'T',
+           'G', 'G'],
+          ['G', 'A', 'G', 'G', 'C', '-', 'A', 'A', 'A', 'T', 'G', 'G', 'A',
+           'A', 'A', 'A', 'T', 'G', 'C', 'C', 'C', 'C', 'A', 'C', 'G', 'A',
+           'T', 'G', 'T', 'C', 'C', 'A', 'G', 'G', 'C', 'T', 'G', 'T', 'G',
+           'T', 'C', 'C', 'A', 'T', 'G', 'T', 'G', 'T', 'G', 'A', '-', '-',
+           'C', 'G', 'C', 'A', 'C', 'A', 'T', 'G', 'C', 'T', 'G', 'T', 'C',
+           'C', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'C', 'A',
+           'C', 'C', 'T', 'G', 'C', 'T', 'T', 'C', 'T', 'A', 'T', 'T', 'C',
+           'A', 'C', 'T', 'T', 'G', 'A', 'C', 'A', 'C', 'A', 'C', 'A', 'T',
+           'A', 'G', 'G', 'T', 'C', 'C', 'C', 'A', 'A', 'A', 'C', 'C', 'T',
+           'G', 'G']], dtype='U')
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -3121,9 +5105,9 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 3)
         self.assertEqual(len(alignment.annotations["empty"]), 9)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[ 3019377,  3019402,  3019402,  3019434,  3019434,  3019443,
                3019443,  3019456,  3019459,  3019465],
@@ -3134,6 +5118,70 @@ class TestAlign_reading(unittest.TestCase):
             ]
                     # fmt: on
                 ),
+            )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3019377 CCCCAGCATTCTGGCAGACACAGTG-AAAAGAGACAGATGGTCACTAATAAAATCTGT-A
+felCat3.s     46845 CCCAAGTGTTCTGATAGCTAATGTGAAAAAGAAGCATGTGCCCACCAGTAAGCTTTGTGG
+canFam2.c  47545247 CCCAAGTGTTCTGATTGCCTCTGTGAAAAAGAAACATGGGCCCGCTAATAagatttgcaa
+
+mm9.chr10   3019435 TAAATTAG-ATCTCAGAGGATGGATGGACCA  3019465
+felCat3.s     46785 TGAACTAGAATCTCAGAGGATG---GGACTC    46757
+canFam2.c  47545187 tgacctagaatctcagaggatg---ggactc 47545159
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=10938.000000
+s mm9.chr10                         3019377   88 + 129993255 CCCCAGCATTCTGGCAGACACAGTG-AAAAGAGACAGATGGTCACTAATAAAATCTGT-ATAAATTAG-ATCTCAGAGGATGGATGGACCA
+s felCat3.scaffold_205680             72509   88 -    119354 CCCAAGTGTTCTGATAGCTAATGTGAAAAAGAAGCATGTGCCCACCAGTAAGCTTTGTGGTGAACTAGAATCTCAGAGGATG---GGACTC
+q felCat3.scaffold_205680                                    9999999999999999999999999999999999999999999999999999999999999999999999999999999999---999999
+i felCat3.scaffold_205680          N 0 C 0
+s canFam2.chr1                     78071009   88 - 125616256 CCCAAGTGTTCTGATTGCCTCTGTGAAAAAGAAACATGGGCCCGCTAATAagatttgcaatgacctagaatctcagaggatg---ggactc
+q canFam2.chr1                                               9999999999999999999999999999999999999999999999999999999999999999999999999999999999---999999
+i canFam2.chr1                     C 0 C 0
+e ornAna1.chr2                     14751195 5690 -  54797317 I
+e calJac1.Contig6394                   6649 3479 +    133105 I
+e tupBel1.scaffold_114895.1-498454   171764 2374 -    498454 I
+e echTel1.scaffold_288249             87661 7564 +    100002 I
+e cavPor2.scaffold_216473              8048 1372 -     10026 I
+e otoGar1.scaffold_334.1-359464      184839 2731 -    359464 I
+e hg18.chr6                        15871902 2402 - 170899992 I
+e panTro2.chr6                     16390469 2400 - 173908612 I
+e ponAbe2.chr6                     16170105 2523 - 174210431 I
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['C', 'C', 'C', 'C', 'A', 'G', 'C', 'A', 'T', 'T', 'C', 'T', 'G',
+           'G', 'C', 'A', 'G', 'A', 'C', 'A', 'C', 'A', 'G', 'T', 'G', '-',
+           'A', 'A', 'A', 'A', 'G', 'A', 'G', 'A', 'C', 'A', 'G', 'A', 'T',
+           'G', 'G', 'T', 'C', 'A', 'C', 'T', 'A', 'A', 'T', 'A', 'A', 'A',
+           'A', 'T', 'C', 'T', 'G', 'T', '-', 'A', 'T', 'A', 'A', 'A', 'T',
+           'T', 'A', 'G', '-', 'A', 'T', 'C', 'T', 'C', 'A', 'G', 'A', 'G',
+           'G', 'A', 'T', 'G', 'G', 'A', 'T', 'G', 'G', 'A', 'C', 'C', 'A'],
+          ['C', 'C', 'C', 'A', 'A', 'G', 'T', 'G', 'T', 'T', 'C', 'T', 'G',
+           'A', 'T', 'A', 'G', 'C', 'T', 'A', 'A', 'T', 'G', 'T', 'G', 'A',
+           'A', 'A', 'A', 'A', 'G', 'A', 'A', 'G', 'C', 'A', 'T', 'G', 'T',
+           'G', 'C', 'C', 'C', 'A', 'C', 'C', 'A', 'G', 'T', 'A', 'A', 'G',
+           'C', 'T', 'T', 'T', 'G', 'T', 'G', 'G', 'T', 'G', 'A', 'A', 'C',
+           'T', 'A', 'G', 'A', 'A', 'T', 'C', 'T', 'C', 'A', 'G', 'A', 'G',
+           'G', 'A', 'T', 'G', '-', '-', '-', 'G', 'G', 'A', 'C', 'T', 'C'],
+          ['C', 'C', 'C', 'A', 'A', 'G', 'T', 'G', 'T', 'T', 'C', 'T', 'G',
+           'A', 'T', 'T', 'G', 'C', 'C', 'T', 'C', 'T', 'G', 'T', 'G', 'A',
+           'A', 'A', 'A', 'A', 'G', 'A', 'A', 'A', 'C', 'A', 'T', 'G', 'G',
+           'G', 'C', 'C', 'C', 'G', 'C', 'T', 'A', 'A', 'T', 'A', 'a', 'g',
+           'a', 't', 't', 't', 'g', 'c', 'a', 'a', 't', 'g', 'a', 'c', 'c',
+           't', 'a', 'g', 'a', 'a', 't', 'c', 't', 'c', 'a', 'g', 'a', 'g',
+           'g', 'a', 't', 'g', '-', '-', '-', 'g', 'g', 'a', 'c', 't', 'c']],
+         dtype='U')
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -3263,9 +5311,9 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 6)
         self.assertEqual(len(alignment.annotations["empty"]), 6)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3019465,   3019468,   3019472,   3019486,   3019487,   3019512],
              [    10128,     10131,     10135,     10149,     10150,     10175],
@@ -3276,6 +5324,75 @@ class TestAlign_reading(unittest.TestCase):
             ]
                     # fmt: on
                 ),
+            )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3019465 AAGATAGATATTTAGAAGTAGCTTTTTATGTTTTTCTGATGTGTGTT   3019512
+calJac1.C     10128 aacaTCTATATTTTGAAATGGCTTTTCATGTTACTCTGATGTGTGTC     10175
+panTro2.c 157515743 -------atattttgaaatggcttttcatgttattctgatgTGTTTT 157515703
+hg18.chr6 155025688 -------atattttgaaatggcttttcatgttattctgatgTGTTTT 155025648
+canFam2.c  47545159 ---aggtatatttaaaaatagctcttcatgttgttctaatgtgtgtt  47545115
+felCat3.s     46757 ---ACGTGTTTTTAAAAATAG-TTTTCATGTTGTTCTGATGTGTGTT     46714
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=36924.000000
+s mm9.chr10                         3019465   47 + 129993255 AAGATAGATATTTAGAAGTAGCTTTTTATGTTTTTCTGATGTGTGTT
+s calJac1.Contig6394                  10128   47 +    133105 aacaTCTATATTTTGAAATGGCTTTTCATGTTACTCTGATGTGTGTC
+i calJac1.Contig6394               I 3479 C 0
+s panTro2.chr6                     16392869   40 - 173908612 -------atattttgaaatggcttttcatgttattctgatgTGTTTT
+q panTro2.chr6                                               -------9999999999999999999999999999999999999999
+i panTro2.chr6                     I 2400 C 0
+s hg18.chr6                        15874304   40 - 170899992 -------atattttgaaatggcttttcatgttattctgatgTGTTTT
+i hg18.chr6                        I 2402 C 0
+s canFam2.chr1                     78071097   44 - 125616256 ---aggtatatttaaaaatagctcttcatgttgttctaatgtgtgtt
+q canFam2.chr1                                               ---99999999999999999999999999999999999999999999
+i canFam2.chr1                     C 0 C 0
+s felCat3.scaffold_205680             72597   43 -    119354 ---ACGTGTTTTTAAAAATAG-TTTTCATGTTGTTCTGATGTGTGTT
+q felCat3.scaffold_205680                                    ---999999999999999999-9999999999999999999999999
+i felCat3.scaffold_205680          C 0 I 193
+e ornAna1.chr2                     14751195 5690 -  54797317 I
+e tupBel1.scaffold_114895.1-498454   171764 2374 -    498454 I
+e echTel1.scaffold_288249             87661 7564 +    100002 I
+e cavPor2.scaffold_216473              8048 1372 -     10026 I
+e otoGar1.scaffold_334.1-359464      184839 2731 -    359464 I
+e ponAbe2.chr6                     16170105 2523 - 174210431 I
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['A', 'A', 'G', 'A', 'T', 'A', 'G', 'A', 'T', 'A', 'T', 'T', 'T',
+           'A', 'G', 'A', 'A', 'G', 'T', 'A', 'G', 'C', 'T', 'T', 'T', 'T',
+           'T', 'A', 'T', 'G', 'T', 'T', 'T', 'T', 'T', 'C', 'T', 'G', 'A',
+           'T', 'G', 'T', 'G', 'T', 'G', 'T', 'T'],
+          ['a', 'a', 'c', 'a', 'T', 'C', 'T', 'A', 'T', 'A', 'T', 'T', 'T',
+           'T', 'G', 'A', 'A', 'A', 'T', 'G', 'G', 'C', 'T', 'T', 'T', 'T',
+           'C', 'A', 'T', 'G', 'T', 'T', 'A', 'C', 'T', 'C', 'T', 'G', 'A',
+           'T', 'G', 'T', 'G', 'T', 'G', 'T', 'C'],
+          ['-', '-', '-', '-', '-', '-', '-', 'a', 't', 'a', 't', 't', 't',
+           't', 'g', 'a', 'a', 'a', 't', 'g', 'g', 'c', 't', 't', 't', 't',
+           'c', 'a', 't', 'g', 't', 't', 'a', 't', 't', 'c', 't', 'g', 'a',
+           't', 'g', 'T', 'G', 'T', 'T', 'T', 'T'],
+          ['-', '-', '-', '-', '-', '-', '-', 'a', 't', 'a', 't', 't', 't',
+           't', 'g', 'a', 'a', 'a', 't', 'g', 'g', 'c', 't', 't', 't', 't',
+           'c', 'a', 't', 'g', 't', 't', 'a', 't', 't', 'c', 't', 'g', 'a',
+           't', 'g', 'T', 'G', 'T', 'T', 'T', 'T'],
+          ['-', '-', '-', 'a', 'g', 'g', 't', 'a', 't', 'a', 't', 't', 't',
+           'a', 'a', 'a', 'a', 'a', 't', 'a', 'g', 'c', 't', 'c', 't', 't',
+           'c', 'a', 't', 'g', 't', 't', 'g', 't', 't', 'c', 't', 'a', 'a',
+           't', 'g', 't', 'g', 't', 'g', 't', 't'],
+          ['-', '-', '-', 'A', 'C', 'G', 'T', 'G', 'T', 'T', 'T', 'T', 'T',
+           'A', 'A', 'A', 'A', 'A', 'T', 'A', 'G', '-', 'T', 'T', 'T', 'T',
+           'C', 'A', 'T', 'G', 'T', 'T', 'G', 'T', 'T', 'C', 'T', 'G', 'A',
+           'T', 'G', 'T', 'G', 'T', 'G', 'T', 'T']], dtype='U')
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -3399,9 +5516,9 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 5)
         self.assertEqual(len(alignment.annotations["empty"]), 7)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3019512,   3019514,   3019536,   3019536,   3019536,   3019536,
                 3019545,   3019545,   3019555,   3019555,   3019555,   3019582,
@@ -3421,6 +5538,110 @@ class TestAlign_reading(unittest.TestCase):
             ]
                     # fmt: on
                 ),
+            )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3019512 TGCATCATTAAGACTAGAGTTCCT---------------TTCTGTCTT---TGCTTTCTT
+calJac1.C     10175 --CCTCATGAAGGCCCAAGTTCCTAAA-----ACATTAATTCTCTTCC---TATTTCCTA
+panTro2.c 157515703 --CTTCATTAAGGCCCAAGTTCCTAAA-----ACATTCATTCTCTTCC---TCTTTTCTA
+hg18.chr6 155025648 --CTTCATTAAGGCCCAAGTTCCTAAA-----ACATTCATTCTCTTCC---TCTTTTCTA
+canFam2.c  47545115 --CCTCATCTAAACCCAGGTTCTTACAGGCTTATATTTTTTCTTTCTTCAACCCTTCCTC
+
+mm9.chr10   3019554 G--------ACAGGGCCATGCTCGGCAGTCATTCTTAGACTGCTTTTTGTTTgtttgg
+calJac1.C     10225 GCTGTCTCGCCTAGGCCTTGCCCGCCAGCAATTCCC----------------------
+panTro2.c 157515653 G------AAAAGAGGTCTTGCCCGCCAGCAATTCCCACATGGGTATTGG---------
+hg18.chr6 155025598 G------AAAAGAGGTCTTGCCCGCCAGCAATTCCCACATGGGTATTGG---------
+canFam2.c  47545057 A--------TCAGTGTCTTGCCTGCCAGTCATTCCTAC-----------TTTGTTCGG
+
+mm9.chr10   3019604
+calJac1.C     10261
+panTro2.c 157515610
+hg18.chr6 155025555
+canFam2.c  47545018
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=20303.000000
+s mm9.chr10                         3019512   92 + 129993255 TGCATCATTAAGACTAGAGTTCCT---------------TTCTGTCTT---TGCTTTCTTG--------ACAGGGCCATGCTCGGCAGTCATTCTTAGACTGCTTTTTGTTTgtttgg
+s calJac1.Contig6394                  10175   86 +    133105 --CCTCATGAAGGCCCAAGTTCCTAAA-----ACATTAATTCTCTTCC---TATTTCCTAGCTGTCTCGCCTAGGCCTTGCCCGCCAGCAATTCCC----------------------
+i calJac1.Contig6394               C 0 C 0
+s panTro2.chr6                     16392909   93 - 173908612 --CTTCATTAAGGCCCAAGTTCCTAAA-----ACATTCATTCTCTTCC---TCTTTTCTAG------AAAAGAGGTCTTGCCCGCCAGCAATTCCCACATGGGTATTGG---------
+q panTro2.chr6                                               --9999999999999999999999999-----9999999999999999---9999999999------999999999999999999999999999999999999999999---------
+i panTro2.chr6                     C 0 C 0
+s hg18.chr6                        15874344   93 - 170899992 --CTTCATTAAGGCCCAAGTTCCTAAA-----ACATTCATTCTCTTCC---TCTTTTCTAG------AAAAGAGGTCTTGCCCGCCAGCAATTCCCACATGGGTATTGG---------
+i hg18.chr6                        C 0 C 0
+s canFam2.chr1                     78071141   97 - 125616256 --CCTCATCTAAACCCAGGTTCTTACAGGCTTATATTTTTTCTTTCTTCAACCCTTCCTCA--------TCAGTGTCTTGCCTGCCAGTCATTCCTAC-----------TTTGTTCGG
+q canFam2.chr1                                               --99999999999999999999999999999999999999999999999999999999999--------99999999999999999999999999999-----------999999999
+i canFam2.chr1                     C 0 C 0
+e felCat3.scaffold_205680             72640  193 -    119354 I
+e ornAna1.chr2                     14751195 5690 -  54797317 I
+e tupBel1.scaffold_114895.1-498454   171764 2374 -    498454 I
+e echTel1.scaffold_288249             87661 7564 +    100002 I
+e cavPor2.scaffold_216473              8048 1372 -     10026 I
+e otoGar1.scaffold_334.1-359464      184839 2731 -    359464 I
+e ponAbe2.chr6                     16170105 2523 - 174210431 I
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['T', 'G', 'C', 'A', 'T', 'C', 'A', 'T', 'T', 'A', 'A', 'G', 'A',
+           'C', 'T', 'A', 'G', 'A', 'G', 'T', 'T', 'C', 'C', 'T', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           'T', 'T', 'C', 'T', 'G', 'T', 'C', 'T', 'T', '-', '-', '-', 'T',
+           'G', 'C', 'T', 'T', 'T', 'C', 'T', 'T', 'G', '-', '-', '-', '-',
+           '-', '-', '-', '-', 'A', 'C', 'A', 'G', 'G', 'G', 'C', 'C', 'A',
+           'T', 'G', 'C', 'T', 'C', 'G', 'G', 'C', 'A', 'G', 'T', 'C', 'A',
+           'T', 'T', 'C', 'T', 'T', 'A', 'G', 'A', 'C', 'T', 'G', 'C', 'T',
+           'T', 'T', 'T', 'T', 'G', 'T', 'T', 'T', 'g', 't', 't', 't', 'g',
+           'g'],
+          ['-', '-', 'C', 'C', 'T', 'C', 'A', 'T', 'G', 'A', 'A', 'G', 'G',
+           'C', 'C', 'C', 'A', 'A', 'G', 'T', 'T', 'C', 'C', 'T', 'A', 'A',
+           'A', '-', '-', '-', '-', '-', 'A', 'C', 'A', 'T', 'T', 'A', 'A',
+           'T', 'T', 'C', 'T', 'C', 'T', 'T', 'C', 'C', '-', '-', '-', 'T',
+           'A', 'T', 'T', 'T', 'C', 'C', 'T', 'A', 'G', 'C', 'T', 'G', 'T',
+           'C', 'T', 'C', 'G', 'C', 'C', 'T', 'A', 'G', 'G', 'C', 'C', 'T',
+           'T', 'G', 'C', 'C', 'C', 'G', 'C', 'C', 'A', 'G', 'C', 'A', 'A',
+           'T', 'T', 'C', 'C', 'C', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-'],
+          ['-', '-', 'C', 'T', 'T', 'C', 'A', 'T', 'T', 'A', 'A', 'G', 'G',
+           'C', 'C', 'C', 'A', 'A', 'G', 'T', 'T', 'C', 'C', 'T', 'A', 'A',
+           'A', '-', '-', '-', '-', '-', 'A', 'C', 'A', 'T', 'T', 'C', 'A',
+           'T', 'T', 'C', 'T', 'C', 'T', 'T', 'C', 'C', '-', '-', '-', 'T',
+           'C', 'T', 'T', 'T', 'T', 'C', 'T', 'A', 'G', '-', '-', '-', '-',
+           '-', '-', 'A', 'A', 'A', 'A', 'G', 'A', 'G', 'G', 'T', 'C', 'T',
+           'T', 'G', 'C', 'C', 'C', 'G', 'C', 'C', 'A', 'G', 'C', 'A', 'A',
+           'T', 'T', 'C', 'C', 'C', 'A', 'C', 'A', 'T', 'G', 'G', 'G', 'T',
+           'A', 'T', 'T', 'G', 'G', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-'],
+          ['-', '-', 'C', 'T', 'T', 'C', 'A', 'T', 'T', 'A', 'A', 'G', 'G',
+           'C', 'C', 'C', 'A', 'A', 'G', 'T', 'T', 'C', 'C', 'T', 'A', 'A',
+           'A', '-', '-', '-', '-', '-', 'A', 'C', 'A', 'T', 'T', 'C', 'A',
+           'T', 'T', 'C', 'T', 'C', 'T', 'T', 'C', 'C', '-', '-', '-', 'T',
+           'C', 'T', 'T', 'T', 'T', 'C', 'T', 'A', 'G', '-', '-', '-', '-',
+           '-', '-', 'A', 'A', 'A', 'A', 'G', 'A', 'G', 'G', 'T', 'C', 'T',
+           'T', 'G', 'C', 'C', 'C', 'G', 'C', 'C', 'A', 'G', 'C', 'A', 'A',
+           'T', 'T', 'C', 'C', 'C', 'A', 'C', 'A', 'T', 'G', 'G', 'G', 'T',
+           'A', 'T', 'T', 'G', 'G', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-'],
+          ['-', '-', 'C', 'C', 'T', 'C', 'A', 'T', 'C', 'T', 'A', 'A', 'A',
+           'C', 'C', 'C', 'A', 'G', 'G', 'T', 'T', 'C', 'T', 'T', 'A', 'C',
+           'A', 'G', 'G', 'C', 'T', 'T', 'A', 'T', 'A', 'T', 'T', 'T', 'T',
+           'T', 'T', 'C', 'T', 'T', 'T', 'C', 'T', 'T', 'C', 'A', 'A', 'C',
+           'C', 'C', 'T', 'T', 'C', 'C', 'T', 'C', 'A', '-', '-', '-', '-',
+           '-', '-', '-', '-', 'T', 'C', 'A', 'G', 'T', 'G', 'T', 'C', 'T',
+           'T', 'G', 'C', 'C', 'T', 'G', 'C', 'C', 'A', 'G', 'T', 'C', 'A',
+           'T', 'T', 'C', 'C', 'T', 'A', 'C', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', 'T', 'T', 'T', 'G', 'T', 'T', 'C', 'G',
+           'G']], dtype='U')
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -3504,7 +5725,49 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 11)
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, numpy.array([[3019604, 3019702]]))
+            np.array_equal(alignment.coordinates, np.array([[3019604, 3019702]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3019604 tttggtttggtttggttttttcaagacagggtttctttgtatagtcctagctgtcctgga
+
+mm9.chr10   3019664 actcactttgtagaccagactggccttgaactcagaaa 3019702
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=0.000000
+s mm9.chr10                          3019604   98 + 129993255 tttggtttggtttggttttttcaagacagggtttctttgtatagtcctagctgtcctggaactcactttgtagaccagactggccttgaactcagaaa
+e felCat3.scaffold_205680              72640  193 -    119354 I
+e canFam2.chr1                      47545018    0 + 125616256 C
+e ornAna1.chr2                      14751195 5690 -  54797317 I
+e calJac1.Contig6394                   10261    0 +    133105 C
+e tupBel1.scaffold_114895.1-498454    171764 2374 -    498454 I
+e echTel1.scaffold_288249              87661 7564 +    100002 I
+e cavPor2.scaffold_216473               8048 1372 -     10026 I
+e otoGar1.scaffold_334.1-359464       184839 2731 -    359464 I
+e hg18.chr6                        155025555    0 + 170899992 C
+e panTro2.chr6                     157515610    0 + 173908612 C
+e ponAbe2.chr6                      16170105 2523 - 174210431 I
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['t', 't', 't', 'g', 'g', 't', 't', 't', 'g', 'g', 't', 't', 't',
+           'g', 'g', 't', 't', 't', 't', 't', 't', 'c', 'a', 'a', 'g', 'a',
+           'c', 'a', 'g', 'g', 'g', 't', 't', 't', 'c', 't', 't', 't', 'g',
+           't', 'a', 't', 'a', 'g', 't', 'c', 'c', 't', 'a', 'g', 'c', 't',
+           'g', 't', 'c', 'c', 't', 'g', 'g', 'a', 'a', 'c', 't', 'c', 'a',
+           'c', 't', 't', 't', 'g', 't', 'a', 'g', 'a', 'c', 'c', 'a', 'g',
+           'a', 'c', 't', 'g', 'g', 'c', 'c', 't', 't', 'g', 'a', 'a', 'c',
+           't', 'c', 'a', 'g', 'a', 'a', 'a']], dtype='U')
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 45)
@@ -3599,12 +5862,64 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 2)
         self.assertEqual(len(alignment.annotations["empty"]), 10)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-                numpy.array([[3019702, 3019725, 3019725, 3019744],
+                np.array([[3019702, 3019725, 3019725, 3019744],
                              [  46521,   46498,   46466,   46447],
                             ])
+                # fmt: on
+            )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3019702 tctgcctgcctctgcctcccaag--------------------------------tcctg
+                  0 ||||.||..||||..|||.|||.--------------------------------.....
+felCat3.s     46521 tctgtctctctctctctctcaaaaataaacattaaaaaaaaCCAAACAAACAAACTCAAG
+
+mm9.chr10   3019730 ggattaaaggcgtg 3019744
+                 60 ..............      74
+felCat3.s     46461 TTCTTAAAGGTTTA   46447
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=45.000000
+s mm9.chr10                          3019702   42 + 129993255 tctgcctgcctctgcctcccaag--------------------------------tcctgggattaaaggcgtg
+s felCat3.scaffold_205680              72833   74 -    119354 tctgtctctctctctctctcaaaaataaacattaaaaaaaaCCAAACAAACAAACTCAAGTTCTTAAAGGTTTA
+q felCat3.scaffold_205680                                     99999999999999999999999999999999999999999999999999999999999999999999999999
+i felCat3.scaffold_205680          I 193 C 0
+e canFam2.chr1                      47545018    0 + 125616256 C
+e ornAna1.chr2                      14751195 5690 -  54797317 I
+e calJac1.Contig6394                   10261    0 +    133105 C
+e tupBel1.scaffold_114895.1-498454    171764 2374 -    498454 I
+e echTel1.scaffold_288249              87661 7564 +    100002 I
+e cavPor2.scaffold_216473               8048 1372 -     10026 I
+e otoGar1.scaffold_334.1-359464       184839 2731 -    359464 I
+e hg18.chr6                        155025555    0 + 170899992 C
+e panTro2.chr6                     157515610    0 + 173908612 C
+e ponAbe2.chr6                      16170105 2523 - 174210431 I
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['t', 'c', 't', 'g', 'c', 'c', 't', 'g', 'c', 'c', 't', 'c', 't',
+           'g', 'c', 'c', 't', 'c', 'c', 'c', 'a', 'a', 'g', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', 't', 'c', 'c', 't', 'g', 'g', 'g', 'a', 't', 't',
+           'a', 'a', 'a', 'g', 'g', 'c', 'g', 't', 'g'],
+          ['t', 'c', 't', 'g', 't', 'c', 't', 'c', 't', 'c', 't', 'c', 't',
+           'c', 't', 'c', 't', 'c', 't', 'c', 'a', 'a', 'a', 'a', 'a', 't',
+           'a', 'a', 'a', 'c', 'a', 't', 't', 'a', 'a', 'a', 'a', 'a', 'a',
+           'a', 'a', 'C', 'C', 'A', 'A', 'A', 'C', 'A', 'A', 'A', 'C', 'A',
+           'A', 'A', 'C', 'T', 'C', 'A', 'A', 'G', 'T', 'T', 'C', 'T', 'T',
+           'A', 'A', 'A', 'G', 'G', 'T', 'T', 'T', 'A']], dtype='U')
                 # fmt: on
             )
         )
@@ -3748,9 +6063,9 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 7)
         self.assertEqual(len(alignment.annotations["empty"]), 6)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3019744,   3019744,   3019747,   3019757,   3019763,   3019763,
                 3019763,   3019763,   3019764,   3019766,   3019773,   3019777],
@@ -3769,6 +6084,98 @@ class TestAlign_reading(unittest.TestCase):
             ]
                     # fmt: on
                 ),
+            )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3019744 -----------------cgccaccactgccctgcCT------------TAAACTGCTCTT
+ponAbe2.c 158037803 -----------------CGCCAGCAATTCC------------------CACATGGGTATT
+tupBel1.s    324316 ----------------------------------------------------------TT
+calJac1.C     10261 -------------------------------------------------ACATGGCTACT
+otoGar1.s    171894 ---------------------------------------------------ATTGGTGTT
+oryCun1.s      4534 --------------------CACCATTGTCTTGCCTGTC-TCAGGTCCCATAGGGGTGTT
+felCat3.s     46447 TGATTTCTCTTTCTCTTACTCATCAGTGTCTTGTCTTTCAGTCATTCCCACATTGGTGTA
+
+mm9.chr10   3019775 AA   3019777
+ponAbe2.c 158037778 GG 158037776
+tupBel1.s    324314 GA    324312
+calJac1.C     10272 GG     10274
+otoGar1.s    171885 GA    171883
+oryCun1.s      4495 GA      4493
+felCat3.s     46387 GA     46385
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=-16865.000000
+s mm9.chr10                          3019744   33 + 129993255 -----------------cgccaccactgccctgcCT------------TAAACTGCTCTTAA
+s ponAbe2.chr6                      16172628   27 - 174210431 -----------------CGCCAGCAATTCC------------------CACATGGGTATTGG
+i ponAbe2.chr6                     I 2523 C 0
+s tupBel1.scaffold_114895.1-498454    174138    4 -    498454 ----------------------------------------------------------TTGA
+q tupBel1.scaffold_114895.1-498454                            ----------------------------------------------------------9999
+i tupBel1.scaffold_114895.1-498454 I 2374 C 0
+s calJac1.Contig6394                   10261   13 +    133105 -------------------------------------------------ACATGGCTACTGG
+i calJac1.Contig6394               C 0 C 0
+s otoGar1.scaffold_334.1-359464       187570   11 -    359464 ---------------------------------------------------ATTGGTGTTGA
+q otoGar1.scaffold_334.1-359464                               ---------------------------------------------------87784564678
+i otoGar1.scaffold_334.1-359464    I 2731 C 0
+s oryCun1.scaffold_156751                192   41 -      4726 --------------------CACCATTGTCTTGCCTGTC-TCAGGTCCCATAGGGGTGTTGA
+q oryCun1.scaffold_156751                                     --------------------9999999999999999999-9999999999999999999999
+i oryCun1.scaffold_156751          N 0 C 0
+s felCat3.scaffold_205680              72907   62 -    119354 TGATTTCTCTTTCTCTTACTCATCAGTGTCTTGTCTTTCAGTCATTCCCACATTGGTGTAGA
+q felCat3.scaffold_205680                                     99999999999999999999999999999999999999999999999999999999999999
+i felCat3.scaffold_205680          C 0 C 0
+e canFam2.chr1                      47545018    0 + 125616256 C
+e ornAna1.chr2                      14751195 5690 -  54797317 I
+e echTel1.scaffold_288249              87661 7564 +    100002 I
+e cavPor2.scaffold_216473               8048 1372 -     10026 I
+e hg18.chr6                        155025555    0 + 170899992 C
+e panTro2.chr6                     157515610    0 + 173908612 C
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', 'c', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c',
+           't', 'g', 'c', 'c', 'c', 't', 'g', 'c', 'C', 'T', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', 'T', 'A', 'A', 'A',
+           'C', 'T', 'G', 'C', 'T', 'C', 'T', 'T', 'A', 'A'],
+          ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', 'C', 'G', 'C', 'C', 'A', 'G', 'C', 'A', 'A',
+           'T', 'T', 'C', 'C', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', 'C', 'A', 'C', 'A',
+           'T', 'G', 'G', 'G', 'T', 'A', 'T', 'T', 'G', 'G'],
+          ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', 'T', 'T', 'G', 'A'],
+          ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'A', 'C', 'A',
+           'T', 'G', 'G', 'C', 'T', 'A', 'C', 'T', 'G', 'G'],
+          ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'A',
+           'T', 'T', 'G', 'G', 'T', 'G', 'T', 'T', 'G', 'A'],
+          ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', 'C', 'A', 'C', 'C', 'A', 'T',
+           'T', 'G', 'T', 'C', 'T', 'T', 'G', 'C', 'C', 'T', 'G', 'T', 'C',
+           '-', 'T', 'C', 'A', 'G', 'G', 'T', 'C', 'C', 'C', 'A', 'T', 'A',
+           'G', 'G', 'G', 'G', 'T', 'G', 'T', 'T', 'G', 'A'],
+          ['T', 'G', 'A', 'T', 'T', 'T', 'C', 'T', 'C', 'T', 'T', 'T', 'C',
+           'T', 'C', 'T', 'T', 'A', 'C', 'T', 'C', 'A', 'T', 'C', 'A', 'G',
+           'T', 'G', 'T', 'C', 'T', 'T', 'G', 'T', 'C', 'T', 'T', 'T', 'C',
+           'A', 'G', 'T', 'C', 'A', 'T', 'T', 'C', 'C', 'C', 'A', 'C', 'A',
+           'T', 'T', 'G', 'G', 'T', 'G', 'T', 'A', 'G', 'A']], dtype='U')
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -3954,9 +6361,9 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 10)
         self.assertEqual(len(alignment.annotations["empty"]), 3)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3019777,   3019783,   3019786,   3019787,   3019787,   3019789,
                 3019790,   3019793,   3019797,   3019797,   3019802,   3019806,
@@ -4032,6 +6439,89 @@ class TestAlign_reading(unittest.TestCase):
                     # fmt: on
                 ),
             )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3019777 GGCAATGTCA-GGCTATGCGT------TCTAGACAGGGCACAAGAAAAGCTTTTAGCAGC
+oryCun1.s      4493 GGCAACATCATGACCTTATGT------TCTAA----GGGACAGGAAAAGCTTTTTCCAGT
+hg18.chr6 155025555 GGCAACACCATGA-TACATAT------TCAAGATAAAGTACAGGAAAAGCTTTTTGCAGT
+panTro2.c 157515610 GGCAACACCATGA-TACATAT------TCAAGATAAAGTACAGGAAAAGCTTTTTGCAGT
+ponAbe2.c 158037776 GGCAACACCATGA-TACATAT------TCAAGATAAAGTACAGGAAAAGCTTTTTGCGGT
+calJac1.C     10274 GGCAACACCGTGA-TACATAT------CCGAGATAAAGTACAGGAAAAGC-TTTTGCAGT
+otoGar1.s    171883 GGCAACGCCGTGA-TCCTTGCTGTAGATAAAGACAAAGTGCAGGAAAAGCCCTTTACGGT
+tupBel1.s    324312 GGCAATGTCATGA----ATGT------TCTAGATAAAGTACAGGAAAAGCTTTTTGCAGT
+felCat3.s     46385 GACATC---ATAA-AGTACAT------TCTAGATAAAGTGCAGGAAAAGCATTTTG-AGT
+canFam2.c  47545018 ------ATCATGA-TGTAAAT------TCCGGGTAAAGTACAACAAAAGGATTTTG-AAC
+
+mm9.chr10   3019830 AGAATAAACTTTT-AAAGTAAATTACTTTCCTTGATAGCAACTAGACGACCCAATTGA-T
+oryCun1.s      4443 AGAATAAGCCTTT-AGAGGAAACTGCTTCCCTTGCTAGTAATCAAGTGTTCAAAGTGA-T
+hg18.chr6 155025502 GGAATAAAATGTT-AAAGGGAATTGCTTTCCTTGATAGCAATCAGGTCACCAAAGTGA-G
+panTro2.c 157515557 GGAATAAAATGTT-AAAGGAAATTGCTTTCCTTGATAGCAATCAGGTCACCAAAGTGA-G
+ponAbe2.c 158037723 GGAATAAAATGTT-AAAGGAAATTGCTTTCCTTGATAGCAATCAGGTCACCAAAGTGA-G
+calJac1.C     10326 GGACGAAAATGTT-GAAGGAAATTGCTTTTCTTGATAGCAATCAGGTCACCAAAGTGA-G
+otoGar1.s    171824 AGAATAAAAGGTT-AAAGGAAATTGCTTTTCTTGATAGCAATCAGGTGACCAAAGTGATT
+tupBel1.s    324262 AGGATAAACTTTT-AAAGGAAATTGCCTTCCTTGACAGCAATCAGGTGACCAAAGTCATA
+felCat3.s     46336 AGAATAAAATGTT-GTAGGAAATTGCTTTCTTCAAGAGACATTAGGTGATTAAAGTAA-T
+canFam2.c  47544972 AGGATAAAATGTTAATAGGAAATTACTTTCTTTGAGAGCAATCAGGTGATTGAAGGAA-T
+
+mm9.chr10   3019888 ACAGT------GGAAAG-----A----------GGCCTTTGAGAAT---GCATGAGAGAA
+oryCun1.s      4385 ACAACAAAGAAAAAAAA-----A----------GCCTTTTGGGAAT-CAGGATGGAATAA
+hg18.chr6 155025444 ATGA-------AGAAAA-----A----------TTTTTTTGAGAATGCAGGATAGAATAA
+panTro2.c 157515499 ATGA-------AGAAAA-----A---------TTTTTTTTGAGAATGCAGGATAGAATAA
+ponAbe2.c 158037665 ATGA-------AGAAAA-----A---------TTCTTTTTGAGAATGCAGCACAGAATAA
+calJac1.C     10384 ATGA-------AGAAA-----------------GTTTTTTGAGAATGTGGGATAGAATAA
+otoGar1.s    171765 ATAA-------AGAAAA-----A----------ATGTTTTGAGAATGCTGGAAAGAATAA
+tupBel1.s    324203 CTGA-------AAAAAA-----AAACAAAAACAAACTTTTGTGGATGCAGTATAGAAGCA
+felCat3.s     46278 ATAA-------AGGGAA-----T----------TTTTTTTGAGAATACAGGATACAATAA
+canFam2.c  47544913 ATAA-------AGGGAAAAAACA----------AAGTTCAGTGAATCCAAGTTAGAATAA
+
+mm9.chr10   3019924 TAT---TTCCTGTA------AGAGTTGAACAATTTAGAATTTACc   3019960
+oryCun1.s      4341 TATTACTTCCCCTATTTCTCAGAGCTAAATAGTTTAGGATT----      4300
+hg18.chr6 155025406 TATTATTTCCCTTATTTCTAAGAGTTAAACAATTTAGGATT---- 155025365
+panTro2.c 157515460 TATTATTTCCCTTATTTCTAAGAGTTAAACAATTTAGGATT---- 157515419
+ponAbe2.c 158037626 TATTATTTCCCTTATTTCT-AGAGTTAAACAATTTAGGATT---- 158037586
+calJac1.C     10420 TATTGTTTTCGTTATTTCTAAGAGTTAAACAATTTAGGATT----     10461
+otoGar1.s    171727 TTTTATCCACCCTCCATTTCAGAGTTAAATAATTCAGGATT----    171686
+tupBel1.s    324155 TATTATTTTCCCTATGTCT--AAGTTAAATAACTTGGGCTT----    324116
+felCat3.s     46240 TATTATTTCCCCTACATCTAAGAGttaaataatttaaaatt----     46199
+canFam2.c  47544870 TATTGTTTCCCTTACTTCTAAGAGttaaataatttaaaatttaat  47544825
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=367532.000000
+s mm9.chr10                         3019777  183 + 129993255 GGCAATGTCA-GGCTATGCGT------TCTAGACAGGGCACAAGAAAAGCTTTTAGCAGCAGAATAAACTTTT-AAAGTAAATTACTTTCCTTGATAGCAACTAGACGACCCAATTGA-TACAGT------GGAAAG-----A----------GGCCTTTGAGAAT---GCATGAGAGAATAT---TTCCTGTA------AGAGTTGAACAATTTAGAATTTACc
+s oryCun1.scaffold_156751               233  193 -      4726 GGCAACATCATGACCTTATGT------TCTAA----GGGACAGGAAAAGCTTTTTCCAGTAGAATAAGCCTTT-AGAGGAAACTGCTTCCCTTGCTAGTAATCAAGTGTTCAAAGTGA-TACAACAAAGAAAAAAAA-----A----------GCCTTTTGGGAAT-CAGGATGGAATAATATTACTTCCCCTATTTCTCAGAGCTAAATAGTTTAGGATT----
+q oryCun1.scaffold_156751                                    999999999999999999999------99999----9999999999989999999998999999999999999-99999999999999999999999999999999999998989999-999899799999999999-----9----------9997999999998-978998999999999999999978999999979689999999999999999979----
+i oryCun1.scaffold_156751          C 0 I 37
+s hg18.chr6                        15874437  190 - 170899992 GGCAACACCATGA-TACATAT------TCAAGATAAAGTACAGGAAAAGCTTTTTGCAGTGGAATAAAATGTT-AAAGGGAATTGCTTTCCTTGATAGCAATCAGGTCACCAAAGTGA-GATGA-------AGAAAA-----A----------TTTTTTTGAGAATGCAGGATAGAATAATATTATTTCCCTTATTTCTAAGAGTTAAACAATTTAGGATT----
+i hg18.chr6                        C 0 C 0
+s panTro2.chr6                     16393002  191 - 173908612 GGCAACACCATGA-TACATAT------TCAAGATAAAGTACAGGAAAAGCTTTTTGCAGTGGAATAAAATGTT-AAAGGAAATTGCTTTCCTTGATAGCAATCAGGTCACCAAAGTGA-GATGA-------AGAAAA-----A---------TTTTTTTTGAGAATGCAGGATAGAATAATATTATTTCCCTTATTTCTAAGAGTTAAACAATTTAGGATT----
+q panTro2.chr6                                               9999999999999-9999999------9999999999999999999999999999999999999999999999-99999999999999999999999999999999999999999999-99999-------999999-----9---------999999999999999999999999999999999999999999999999999999999999999999999----
+i panTro2.chr6                     C 0 C 0
+s ponAbe2.chr6                     16172655  190 - 174210431 GGCAACACCATGA-TACATAT------TCAAGATAAAGTACAGGAAAAGCTTTTTGCGGTGGAATAAAATGTT-AAAGGAAATTGCTTTCCTTGATAGCAATCAGGTCACCAAAGTGA-GATGA-------AGAAAA-----A---------TTCTTTTTGAGAATGCAGCACAGAATAATATTATTTCCCTTATTTCT-AGAGTTAAACAATTTAGGATT----
+i ponAbe2.chr6                     C 0 I 21
+s calJac1.Contig6394                  10274  187 +    133105 GGCAACACCGTGA-TACATAT------CCGAGATAAAGTACAGGAAAAGC-TTTTGCAGTGGACGAAAATGTT-GAAGGAAATTGCTTTTCTTGATAGCAATCAGGTCACCAAAGTGA-GATGA-------AGAAA-----------------GTTTTTTGAGAATGTGGGATAGAATAATATTGTTTTCGTTATTTCTAAGAGTTAAACAATTTAGGATT----
+i calJac1.Contig6394               C 0 I 21
+s otoGar1.scaffold_334.1-359464      187581  197 -    359464 GGCAACGCCGTGA-TCCTTGCTGTAGATAAAGACAAAGTGCAGGAAAAGCCCTTTACGGTAGAATAAAAGGTT-AAAGGAAATTGCTTTTCTTGATAGCAATCAGGTGACCAAAGTGATTATAA-------AGAAAA-----A----------ATGTTTTGAGAATGCTGGAAAGAATAATTTTATCCACCCTCCATTTCAGAGTTAAATAATTCAGGATT----
+q otoGar1.scaffold_334.1-359464                              5466765345564-89977768969797886996999557766667768677897764536465578775526-67697777697779896767576676677696675376877786786858-------478887-----7----------56858859779666569356677477759968759378767656876769557597655596536566----
+i otoGar1.scaffold_334.1-359464    C 0 I 358
+s tupBel1.scaffold_114895.1-498454   174142  196 -    498454 GGCAATGTCATGA----ATGT------TCTAGATAAAGTACAGGAAAAGCTTTTTGCAGTAGGATAAACTTTT-AAAGGAAATTGCCTTCCTTGACAGCAATCAGGTGACCAAAGTCATACTGA-------AAAAAA-----AAACAAAAACAAACTTTTGTGGATGCAGTATAGAAGCATATTATTTTCCCTATGTCT--AAGTTAAATAACTTGGGCTT----
+q tupBel1.scaffold_114895.1-498454                           9999999999999----9999------9999999999999999999999999999999999999999999999-99999999999999999999999999999999999999999999999999-------999999-----999999999999999999999999999999999999999999999999999999999--99999999999999999999----
+i tupBel1.scaffold_114895.1-498454 C 0 I 623
+s felCat3.scaffold_205680             72969  186 -    119354 GACATC---ATAA-AGTACAT------TCTAGATAAAGTGCAGGAAAAGCATTTTG-AGTAGAATAAAATGTT-GTAGGAAATTGCTTTCTTCAAGAGACATTAGGTGATTAAAGTAA-TATAA-------AGGGAA-----T----------TTTTTTTGAGAATACAGGATACAATAATATTATTTCCCCTACATCTAAGAGttaaataatttaaaatt----
+q felCat3.scaffold_205680                                    999999---9999-9999999------99999999999999999999999999999-9999999999999999-99999999999999999999999999999999999999999999-99999-------999999-----9----------99999999999999999999999999999999999999999999999999999999999999999999----
+i felCat3.scaffold_205680          C 0 I 27
+s canFam2.chr1                     78071238  193 - 125616256 ------ATCATGA-TGTAAAT------TCCGGGTAAAGTACAACAAAAGGATTTTG-AACAGGATAAAATGTTAATAGGAAATTACTTTCTTTGAGAGCAATCAGGTGATTGAAGGAA-TATAA-------AGGGAAAAAACA----------AAGTTCAGTGAATCCAAGTTAGAATAATATTGTTTCCCTTACTTCTAAGAGttaaataatttaaaatttaat
+q canFam2.chr1                                               ------9999999-9999999------99999999999999999999999999999-9999999999999999999999999999999999999999999999999999999999999-99999-------999999999999----------999999999999999999999999999999999999999999999999999999999999999999999999
+i canFam2.chr1                     C 0 C 0
+e ornAna1.chr2                     14751195 5690 -  54797317 I
+e echTel1.scaffold_288249             87661 7564 +    100002 I
+e cavPor2.scaffold_216473              8048 1372 -     10026 I
+
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 0)
@@ -4120,7 +6610,123 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 12)
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, numpy.array([[3019960, 3020717]]))
+            np.array_equal(alignment.coordinates, np.array([[3019960, 3020717]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3019960 actagggatgggagaggctcccagaacccagtaatgatgacattaagaaatacacaacag
+
+mm9.chr10   3020020 ttgggaaatggaacccaaagagaacacctccagtagataagcatgacccccagttgaggg
+
+mm9.chr10   3020080 atgggcccatgcacccatcttaaaattttggacccagaattattcttctcaaaaggaaat
+
+mm9.chr10   3020140 gcagggatgaaaatggagcagagactggaagaaaggccaaccagagactgccctaactca
+
+mm9.chr10   3020200 ggatccatcgcatgtgcaggcaccaaccccaacactattgctgatgccatgttgtacttg
+
+mm9.chr10   3020260 ctgatggaagcctggcatggctgtcctctgagagtctcaaatgaggcacctgacagatgc
+
+mm9.chr10   3020320 agatacttacagccaaccaatggactgagccccgggacctcaataaaagaatgaggggat
+
+mm9.chr10   3020380 ggcaaccccataggaagaacaacagtatcaactccctggactcctcagagctcccgggga
+
+mm9.chr10   3020440 ctaagccaccaactaaagagcatacataggctgctctgaggccccagatacatatgtagc
+
+mm9.chr10   3020500 agaggactgcctcagtgggaggggatgtgcttggtcttgtgaaggcttgatgctccagag
+
+mm9.chr10   3020560 aaggaggatgctagaggggtgaggtgggagtggatgggtgggtgggcaggggagcaccct
+
+mm9.chr10   3020620 cttagaggacaagggctctggggtgggggagctcatggagggggaactgggaaggaggga
+
+mm9.chr10   3020680 gaacatttgaaatgtaaataaataaaataataaaaaa 3020717
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=0.000000
+s mm9.chr10                          3019960  757 + 129993255 actagggatgggagaggctcccagaacccagtaatgatgacattaagaaatacacaacagttgggaaatggaacccaaagagaacacctccagtagataagcatgacccccagttgagggatgggcccatgcacccatcttaaaattttggacccagaattattcttctcaaaaggaaatgcagggatgaaaatggagcagagactggaagaaaggccaaccagagactgccctaactcaggatccatcgcatgtgcaggcaccaaccccaacactattgctgatgccatgttgtacttgctgatggaagcctggcatggctgtcctctgagagtctcaaatgaggcacctgacagatgcagatacttacagccaaccaatggactgagccccgggacctcaataaaagaatgaggggatggcaaccccataggaagaacaacagtatcaactccctggactcctcagagctcccggggactaagccaccaactaaagagcatacataggctgctctgaggccccagatacatatgtagcagaggactgcctcagtgggaggggatgtgcttggtcttgtgaaggcttgatgctccagagaaggaggatgctagaggggtgaggtgggagtggatgggtgggtgggcaggggagcaccctcttagaggacaagggctctggggtgggggagctcatggagggggaactgggaaggagggagaacatttgaaatgtaaataaataaaataataaaaaa
+e felCat3.scaffold_205680              73155   27 -    119354 I
+e canFam2.chr1                      47544825    0 + 125616256 C
+e ornAna1.chr2                      14751195 5690 -  54797317 I
+e calJac1.Contig6394                   10461   21 +    133105 I
+e tupBel1.scaffold_114895.1-498454    174338  623 -    498454 I
+e echTel1.scaffold_288249              87661 7564 +    100002 I
+e cavPor2.scaffold_216473               8048 1372 -     10026 I
+e otoGar1.scaffold_334.1-359464       187778  358 -    359464 I
+e hg18.chr6                        155025365    0 + 170899992 C
+e panTro2.chr6                     157515419    0 + 173908612 C
+e ponAbe2.chr6                      16172845   21 - 174210431 I
+e oryCun1.scaffold_156751                426   37 -      4726 I
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['a', 'c', 't', 'a', 'g', 'g', 'g', 'a', 't', 'g', 'g', 'g', 'a',
+           'g', 'a', 'g', 'g', 'c', 't', 'c', 'c', 'c', 'a', 'g', 'a', 'a',
+           'c', 'c', 'c', 'a', 'g', 't', 'a', 'a', 't', 'g', 'a', 't', 'g',
+           'a', 'c', 'a', 't', 't', 'a', 'a', 'g', 'a', 'a', 'a', 't', 'a',
+           'c', 'a', 'c', 'a', 'a', 'c', 'a', 'g', 't', 't', 'g', 'g', 'g',
+           'a', 'a', 'a', 't', 'g', 'g', 'a', 'a', 'c', 'c', 'c', 'a', 'a',
+           'a', 'g', 'a', 'g', 'a', 'a', 'c', 'a', 'c', 'c', 't', 'c', 'c',
+           'a', 'g', 't', 'a', 'g', 'a', 't', 'a', 'a', 'g', 'c', 'a', 't',
+           'g', 'a', 'c', 'c', 'c', 'c', 'c', 'a', 'g', 't', 't', 'g', 'a',
+           'g', 'g', 'g', 'a', 't', 'g', 'g', 'g', 'c', 'c', 'c', 'a', 't',
+           'g', 'c', 'a', 'c', 'c', 'c', 'a', 't', 'c', 't', 't', 'a', 'a',
+           'a', 'a', 't', 't', 't', 't', 'g', 'g', 'a', 'c', 'c', 'c', 'a',
+           'g', 'a', 'a', 't', 't', 'a', 't', 't', 'c', 't', 't', 'c', 't',
+           'c', 'a', 'a', 'a', 'a', 'g', 'g', 'a', 'a', 'a', 't', 'g', 'c',
+           'a', 'g', 'g', 'g', 'a', 't', 'g', 'a', 'a', 'a', 'a', 't', 'g',
+           'g', 'a', 'g', 'c', 'a', 'g', 'a', 'g', 'a', 'c', 't', 'g', 'g',
+           'a', 'a', 'g', 'a', 'a', 'a', 'g', 'g', 'c', 'c', 'a', 'a', 'c',
+           'c', 'a', 'g', 'a', 'g', 'a', 'c', 't', 'g', 'c', 'c', 'c', 't',
+           'a', 'a', 'c', 't', 'c', 'a', 'g', 'g', 'a', 't', 'c', 'c', 'a',
+           't', 'c', 'g', 'c', 'a', 't', 'g', 't', 'g', 'c', 'a', 'g', 'g',
+           'c', 'a', 'c', 'c', 'a', 'a', 'c', 'c', 'c', 'c', 'a', 'a', 'c',
+           'a', 'c', 't', 'a', 't', 't', 'g', 'c', 't', 'g', 'a', 't', 'g',
+           'c', 'c', 'a', 't', 'g', 't', 't', 'g', 't', 'a', 'c', 't', 't',
+           'g', 'c', 't', 'g', 'a', 't', 'g', 'g', 'a', 'a', 'g', 'c', 'c',
+           't', 'g', 'g', 'c', 'a', 't', 'g', 'g', 'c', 't', 'g', 't', 'c',
+           'c', 't', 'c', 't', 'g', 'a', 'g', 'a', 'g', 't', 'c', 't', 'c',
+           'a', 'a', 'a', 't', 'g', 'a', 'g', 'g', 'c', 'a', 'c', 'c', 't',
+           'g', 'a', 'c', 'a', 'g', 'a', 't', 'g', 'c', 'a', 'g', 'a', 't',
+           'a', 'c', 't', 't', 'a', 'c', 'a', 'g', 'c', 'c', 'a', 'a', 'c',
+           'c', 'a', 'a', 't', 'g', 'g', 'a', 'c', 't', 'g', 'a', 'g', 'c',
+           'c', 'c', 'c', 'g', 'g', 'g', 'a', 'c', 'c', 't', 'c', 'a', 'a',
+           't', 'a', 'a', 'a', 'a', 'g', 'a', 'a', 't', 'g', 'a', 'g', 'g',
+           'g', 'g', 'a', 't', 'g', 'g', 'c', 'a', 'a', 'c', 'c', 'c', 'c',
+           'a', 't', 'a', 'g', 'g', 'a', 'a', 'g', 'a', 'a', 'c', 'a', 'a',
+           'c', 'a', 'g', 't', 'a', 't', 'c', 'a', 'a', 'c', 't', 'c', 'c',
+           'c', 't', 'g', 'g', 'a', 'c', 't', 'c', 'c', 't', 'c', 'a', 'g',
+           'a', 'g', 'c', 't', 'c', 'c', 'c', 'g', 'g', 'g', 'g', 'a', 'c',
+           't', 'a', 'a', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'a', 'c', 't',
+           'a', 'a', 'a', 'g', 'a', 'g', 'c', 'a', 't', 'a', 'c', 'a', 't',
+           'a', 'g', 'g', 'c', 't', 'g', 'c', 't', 'c', 't', 'g', 'a', 'g',
+           'g', 'c', 'c', 'c', 'c', 'a', 'g', 'a', 't', 'a', 'c', 'a', 't',
+           'a', 't', 'g', 't', 'a', 'g', 'c', 'a', 'g', 'a', 'g', 'g', 'a',
+           'c', 't', 'g', 'c', 'c', 't', 'c', 'a', 'g', 't', 'g', 'g', 'g',
+           'a', 'g', 'g', 'g', 'g', 'a', 't', 'g', 't', 'g', 'c', 't', 't',
+           'g', 'g', 't', 'c', 't', 't', 'g', 't', 'g', 'a', 'a', 'g', 'g',
+           'c', 't', 't', 'g', 'a', 't', 'g', 'c', 't', 'c', 'c', 'a', 'g',
+           'a', 'g', 'a', 'a', 'g', 'g', 'a', 'g', 'g', 'a', 't', 'g', 'c',
+           't', 'a', 'g', 'a', 'g', 'g', 'g', 'g', 't', 'g', 'a', 'g', 'g',
+           't', 'g', 'g', 'g', 'a', 'g', 't', 'g', 'g', 'a', 't', 'g', 'g',
+           'g', 't', 'g', 'g', 'g', 't', 'g', 'g', 'g', 'c', 'a', 'g', 'g',
+           'g', 'g', 'a', 'g', 'c', 'a', 'c', 'c', 'c', 't', 'c', 't', 't',
+           'a', 'g', 'a', 'g', 'g', 'a', 'c', 'a', 'a', 'g', 'g', 'g', 'c',
+           't', 'c', 't', 'g', 'g', 'g', 'g', 't', 'g', 'g', 'g', 'g', 'g',
+           'a', 'g', 'c', 't', 'c', 'a', 't', 'g', 'g', 'a', 'g', 'g', 'g',
+           'g', 'g', 'a', 'a', 'c', 't', 'g', 'g', 'g', 'a', 'a', 'g', 'g',
+           'a', 'g', 'g', 'g', 'a', 'g', 'a', 'a', 'c', 'a', 't', 't', 't',
+           'g', 'a', 'a', 'a', 't', 'g', 't', 'a', 'a', 'a', 't', 'a', 'a',
+           'a', 't', 'a', 'a', 'a', 'a', 't', 'a', 'a', 't', 'a', 'a', 'a',
+           'a', 'a', 'a']], dtype='U')
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 8951)
@@ -4229,9 +6835,9 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 4)
         self.assertEqual(len(alignment.annotations["empty"]), 9)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3020717,   3020721,   3020727,   3020730,   3020733,   3020742,
                 3020742,   3020761],
@@ -4244,6 +6850,63 @@ class TestAlign_reading(unittest.TestCase):
             ]
                     # fmt: on
                 ),
+            )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3020717 TGTCAAACATGCATAAAGATATACT-GAGGAGCCCATGAATTTTA   3020761
+canFam2.c  47544825 tGTT------------TAACATAATAGAGGGGCCCATGAATTTTA  47544792
+panTro2.c 157515419 ----AAAAAT---TTTAAATATACTAGAGGGGTCCATGAATTTTA 157515381
+hg18.chr6 155025365 ----AAAAAT---TTTAAATATACTAGAGGGGTCCATGAATTTTA 155025327
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=8951.000000
+s mm9.chr10                         3020717   44 + 129993255 TGTCAAACATGCATAAAGATATACT-GAGGAGCCCATGAATTTTA
+s canFam2.chr1                     78071431   33 - 125616256 tGTT------------TAACATAATAGAGGGGCCCATGAATTTTA
+q canFam2.chr1                                               9999------------99999999999999999999999999999
+i canFam2.chr1                     C 0 I 9
+s panTro2.chr6                     16393193   38 - 173908612 ----AAAAAT---TTTAAATATACTAGAGGGGTCCATGAATTTTA
+q panTro2.chr6                                               ----999999---99999999999999999999999999999999
+i panTro2.chr6                     C 0 I 11
+s hg18.chr6                        15874627   38 - 170899992 ----AAAAAT---TTTAAATATACTAGAGGGGTCCATGAATTTTA
+i hg18.chr6                        C 0 I 11
+e felCat3.scaffold_205680             73155   27 -    119354 I
+e ornAna1.chr2                     14751195 5690 -  54797317 I
+e calJac1.Contig6394                  10461   21 +    133105 I
+e tupBel1.scaffold_114895.1-498454   174338  623 -    498454 I
+e echTel1.scaffold_288249             87661 7564 +    100002 I
+e cavPor2.scaffold_216473              8048 1372 -     10026 I
+e otoGar1.scaffold_334.1-359464      187778  358 -    359464 I
+e ponAbe2.chr6                     16172845   21 - 174210431 I
+e oryCun1.scaffold_156751               426   37 -      4726 I
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['T', 'G', 'T', 'C', 'A', 'A', 'A', 'C', 'A', 'T', 'G', 'C', 'A',
+           'T', 'A', 'A', 'A', 'G', 'A', 'T', 'A', 'T', 'A', 'C', 'T', '-',
+           'G', 'A', 'G', 'G', 'A', 'G', 'C', 'C', 'C', 'A', 'T', 'G', 'A',
+           'A', 'T', 'T', 'T', 'T', 'A'],
+          ['t', 'G', 'T', 'T', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', 'T', 'A', 'A', 'C', 'A', 'T', 'A', 'A', 'T', 'A',
+           'G', 'A', 'G', 'G', 'G', 'G', 'C', 'C', 'C', 'A', 'T', 'G', 'A',
+           'A', 'T', 'T', 'T', 'T', 'A'],
+          ['-', '-', '-', '-', 'A', 'A', 'A', 'A', 'A', 'T', '-', '-', '-',
+           'T', 'T', 'T', 'A', 'A', 'A', 'T', 'A', 'T', 'A', 'C', 'T', 'A',
+           'G', 'A', 'G', 'G', 'G', 'G', 'T', 'C', 'C', 'A', 'T', 'G', 'A',
+           'A', 'T', 'T', 'T', 'T', 'A'],
+          ['-', '-', '-', '-', 'A', 'A', 'A', 'A', 'A', 'T', '-', '-', '-',
+           'T', 'T', 'T', 'A', 'A', 'A', 'T', 'A', 'T', 'A', 'C', 'T', 'A',
+           'G', 'A', 'G', 'G', 'G', 'G', 'T', 'C', 'C', 'A', 'T', 'G', 'A',
+           'A', 'T', 'T', 'T', 'T', 'A']], dtype='U')
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -4333,7 +6996,57 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 12)
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, numpy.array([[3020761, 3020918]]))
+            np.array_equal(alignment.coordinates, np.array([[3020761, 3020918]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3020761 TATATATGCTATCCGTGTGCTGTGATTTTTGTTTTAAATGTTATTTTATGTATATGcaag
+
+mm9.chr10   3020821 attttgcattgtagcagaaggtggcttcaaactcacgatcctcctgcctcagccttccaa
+
+mm9.chr10   3020881 gtgctgagatcatacctctgcaccatcctgcccACCT 3020918
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=0.000000
+s mm9.chr10                         3020761  157 + 129993255 TATATATGCTATCCGTGTGCTGTGATTTTTGTTTTAAATGTTATTTTATGTATATGcaagattttgcattgtagcagaaggtggcttcaaactcacgatcctcctgcctcagccttccaagtgctgagatcatacctctgcaccatcctgcccACCT
+e felCat3.scaffold_205680             73155   27 -    119354 I
+e canFam2.chr1                     78071464    9 - 125616256 I
+e ornAna1.chr2                     14751195 5690 -  54797317 I
+e calJac1.Contig6394                  10461   21 +    133105 I
+e tupBel1.scaffold_114895.1-498454   174338  623 -    498454 I
+e echTel1.scaffold_288249             87661 7564 +    100002 I
+e cavPor2.scaffold_216473              8048 1372 -     10026 I
+e otoGar1.scaffold_334.1-359464      187778  358 -    359464 I
+e hg18.chr6                        15874665   11 - 170899992 I
+e panTro2.chr6                     16393231   11 - 173908612 I
+e ponAbe2.chr6                     16172845   21 - 174210431 I
+e oryCun1.scaffold_156751               426   37 -      4726 I
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['T', 'A', 'T', 'A', 'T', 'A', 'T', 'G', 'C', 'T', 'A', 'T', 'C',
+           'C', 'G', 'T', 'G', 'T', 'G', 'C', 'T', 'G', 'T', 'G', 'A', 'T',
+           'T', 'T', 'T', 'T', 'G', 'T', 'T', 'T', 'T', 'A', 'A', 'A', 'T',
+           'G', 'T', 'T', 'A', 'T', 'T', 'T', 'T', 'A', 'T', 'G', 'T', 'A',
+           'T', 'A', 'T', 'G', 'c', 'a', 'a', 'g', 'a', 't', 't', 't', 't',
+           'g', 'c', 'a', 't', 't', 'g', 't', 'a', 'g', 'c', 'a', 'g', 'a',
+           'a', 'g', 'g', 't', 'g', 'g', 'c', 't', 't', 'c', 'a', 'a', 'a',
+           'c', 't', 'c', 'a', 'c', 'g', 'a', 't', 'c', 'c', 't', 'c', 'c',
+           't', 'g', 'c', 'c', 't', 'c', 'a', 'g', 'c', 'c', 't', 't', 'c',
+           'c', 'a', 'a', 'g', 't', 'g', 'c', 't', 'g', 'a', 'g', 'a', 't',
+           'c', 'a', 't', 'a', 'c', 'c', 't', 'c', 't', 'g', 'c', 'a', 'c',
+           'c', 'a', 't', 'c', 'c', 't', 'g', 'c', 'c', 'c', 'A', 'C', 'C',
+           'T']], dtype='U')
+                # fmt: on
+            )
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 85471)
@@ -4506,9 +7219,9 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 9)
         self.assertEqual(len(alignment.annotations["empty"]), 4)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3020918,   3020919,   3020921,   3020938,   3020938,   3020938,
                 3020938,   3020938,   3020941,   3020959,   3020971,   3020972,
@@ -4540,6 +7253,151 @@ class TestAlign_reading(unittest.TestCase):
             ]
                     # fmt: on
                 ),
+            )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3020918 GAGGTTTGTGACTTTTAATA----------CTGATTGTTATCTAACATCACAGAATTCTC
+hg18.chr6 155025316 ---------------------------------ATGGTTATTTAATACTGCACAATCCTC
+panTro2.c 157515370 ---------------------------------ATGGTTATTTAATACTGCACAATCCTC
+canFam2.c  47544783 --------------------------TAATAAAATAATTCTGTACCATTATGAAGTTCTC
+felCat3.s     46172 ---GTCCATGAATTTTAATGGTGAAGTAATGAAATAATTCTTTAATATCAC---------
+cavPor2.s       606 GAGTTCTGCAAATtttaata----------ggaaaagaagatTAATATTACAAAGTTTTC
+oryCun1.s      4263 -AGATCCATGAATTTTAATA---AAGCAATGAGATAATTATTTAATGTTGGAAAATCCTC
+calJac1.C     10482 GGGGTCCATGAATTTTAATA-----GTAACAAAATGGTTATTCAATATTGCAAAATCCTC
+ponAbe2.c 158037565 GGGGTCCATGAATTTTAATA-----GTAATAAAATGGTTATTTAATATTGCAAAATCCTC
+
+mm9.chr10   3020968 AGTTCTTAAGGAAACAATTGTTCTGTGTGTTATTTGTCTAGGAGGA   3021014
+hg18.chr6 155025289 AGCTTTTAAGGAAAAACATGTTTGACTTATTAATTATTTAGGACAA 155025243
+panTro2.c 157515343 AGCTTTTAAGGAAAAACATGTTTGACTTATTAATTATTTAGGACAA 157515297
+canFam2.c  47544749 AGCTCTTAAGGAAAAA-----GTGATTTGTTAATTACTTAGGACAA  47544708
+felCat3.s     46124 -------------AAA-----GTAATTTATTAATTATTTAGGACAA     46096
+cavPor2.s       556 AGTTCTGATGGAAaaa----------gtgtgatttttttaaa----       524
+oryCun1.s      4207 AAGTCTTAAGGAAAAAAGTGTTTGACTTGTTAATGACTTGGGATGA      4161
+calJac1.C     10537 AGC-TTTAAGGAAAAACATATTTGATTTGTTAATTATTTAGGACAA     10582
+ponAbe2.c 158037510 AGCTTTTAAGGAAAAACGTGTTTGACTTATTAATTATTTAGGACAA 158037464
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=85471.000000
+s mm9.chr10                         3020918   96 + 129993255 GAGGTTTGTGACTTTTAATA----------CTGATTGTTATCTAACATCACAGAATTCTCAGTTCTTAAGGAAACAATTGTTCTGTGTGTTATTTGTCTAGGAGGA
+s hg18.chr6                        15874676   73 - 170899992 ---------------------------------ATGGTTATTTAATACTGCACAATCCTCAGCTTTTAAGGAAAAACATGTTTGACTTATTAATTATTTAGGACAA
+i hg18.chr6                        I 11 C 0
+s panTro2.chr6                     16393242   73 - 173908612 ---------------------------------ATGGTTATTTAATACTGCACAATCCTCAGCTTTTAAGGAAAAACATGTTTGACTTATTAATTATTTAGGACAA
+q panTro2.chr6                                               ---------------------------------9999999999999999999999999999999999999999999999999999999999999999999999999
+i panTro2.chr6                     I 11 C 0
+s canFam2.chr1                     78071473   75 - 125616256 --------------------------TAATAAAATAATTCTGTACCATTATGAAGTTCTCAGCTCTTAAGGAAAAA-----GTGATTTGTTAATTACTTAGGACAA
+q canFam2.chr1                                               --------------------------99999999999999999999999999999999999999999999999999-----9999999999999999999999999
+i canFam2.chr1                     I 9 C 0
+s felCat3.scaffold_205680             73182   76 -    119354 ---GTCCATGAATTTTAATGGTGAAGTAATGAAATAATTCTTTAATATCAC----------------------AAA-----GTAATTTATTAATTATTTAGGACAA
+q felCat3.scaffold_205680                                    ---999989999999999999999999999999999999999999999999----------------------999-----9999999999999999999999769
+i felCat3.scaffold_205680          I 27 C 0
+s cavPor2.scaffold_216473              9420   82 -     10026 GAGTTCTGCAAATtttaata----------ggaaaagaagatTAATATTACAAAGTTTTCAGTTCTGATGGAAaaa----------gtgtgatttttttaaa----
+q cavPor2.scaffold_216473                                    99679966799668566465----------8567828838346568788268865663676558367765776667----------6965686997776684----
+i cavPor2.scaffold_216473          I 1372 I 28
+s oryCun1.scaffold_156751               463  102 -      4726 -AGATCCATGAATTTTAATA---AAGCAATGAGATAATTATTTAATGTTGGAAAATCCTCAAGTCTTAAGGAAAAAAGTGTTTGACTTGTTAATGACTTGGGATGA
+q oryCun1.scaffold_156751                                    -9999997999999999999---99999999999999999999999999999999998677999969999999999999999999999999999999999999999
+i oryCun1.scaffold_156751          I 37 C 0
+s calJac1.Contig6394                  10482  100 +    133105 GGGGTCCATGAATTTTAATA-----GTAACAAAATGGTTATTCAATATTGCAAAATCCTCAGC-TTTAAGGAAAAACATATTTGATTTGTTAATTATTTAGGACAA
+i calJac1.Contig6394               I 21 C 0
+s ponAbe2.chr6                     16172866  101 - 174210431 GGGGTCCATGAATTTTAATA-----GTAATAAAATGGTTATTTAATATTGCAAAATCCTCAGCTTTTAAGGAAAAACGTGTTTGACTTATTAATTATTTAGGACAA
+i ponAbe2.chr6                     I 21 C 0
+e ornAna1.chr2                     14751195 5690 -  54797317 I
+e tupBel1.scaffold_114895.1-498454   174338  623 -    498454 I
+e echTel1.scaffold_288249             87661 7564 +    100002 I
+e otoGar1.scaffold_334.1-359464      187778  358 -    359464 I
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['G', 'A', 'G', 'G', 'T', 'T', 'T', 'G', 'T', 'G', 'A', 'C', 'T',
+           'T', 'T', 'T', 'A', 'A', 'T', 'A', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', 'C', 'T', 'G', 'A', 'T', 'T', 'G', 'T', 'T',
+           'A', 'T', 'C', 'T', 'A', 'A', 'C', 'A', 'T', 'C', 'A', 'C', 'A',
+           'G', 'A', 'A', 'T', 'T', 'C', 'T', 'C', 'A', 'G', 'T', 'T', 'C',
+           'T', 'T', 'A', 'A', 'G', 'G', 'A', 'A', 'A', 'C', 'A', 'A', 'T',
+           'T', 'G', 'T', 'T', 'C', 'T', 'G', 'T', 'G', 'T', 'G', 'T', 'T',
+           'A', 'T', 'T', 'T', 'G', 'T', 'C', 'T', 'A', 'G', 'G', 'A', 'G',
+           'G', 'A'],
+          ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', 'A', 'T', 'G', 'G', 'T', 'T',
+           'A', 'T', 'T', 'T', 'A', 'A', 'T', 'A', 'C', 'T', 'G', 'C', 'A',
+           'C', 'A', 'A', 'T', 'C', 'C', 'T', 'C', 'A', 'G', 'C', 'T', 'T',
+           'T', 'T', 'A', 'A', 'G', 'G', 'A', 'A', 'A', 'A', 'A', 'C', 'A',
+           'T', 'G', 'T', 'T', 'T', 'G', 'A', 'C', 'T', 'T', 'A', 'T', 'T',
+           'A', 'A', 'T', 'T', 'A', 'T', 'T', 'T', 'A', 'G', 'G', 'A', 'C',
+           'A', 'A'],
+          ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', 'A', 'T', 'G', 'G', 'T', 'T',
+           'A', 'T', 'T', 'T', 'A', 'A', 'T', 'A', 'C', 'T', 'G', 'C', 'A',
+           'C', 'A', 'A', 'T', 'C', 'C', 'T', 'C', 'A', 'G', 'C', 'T', 'T',
+           'T', 'T', 'A', 'A', 'G', 'G', 'A', 'A', 'A', 'A', 'A', 'C', 'A',
+           'T', 'G', 'T', 'T', 'T', 'G', 'A', 'C', 'T', 'T', 'A', 'T', 'T',
+           'A', 'A', 'T', 'T', 'A', 'T', 'T', 'T', 'A', 'G', 'G', 'A', 'C',
+           'A', 'A'],
+          ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           'T', 'A', 'A', 'T', 'A', 'A', 'A', 'A', 'T', 'A', 'A', 'T', 'T',
+           'C', 'T', 'G', 'T', 'A', 'C', 'C', 'A', 'T', 'T', 'A', 'T', 'G',
+           'A', 'A', 'G', 'T', 'T', 'C', 'T', 'C', 'A', 'G', 'C', 'T', 'C',
+           'T', 'T', 'A', 'A', 'G', 'G', 'A', 'A', 'A', 'A', 'A', '-', '-',
+           '-', '-', '-', 'G', 'T', 'G', 'A', 'T', 'T', 'T', 'G', 'T', 'T',
+           'A', 'A', 'T', 'T', 'A', 'C', 'T', 'T', 'A', 'G', 'G', 'A', 'C',
+           'A', 'A'],
+          ['-', '-', '-', 'G', 'T', 'C', 'C', 'A', 'T', 'G', 'A', 'A', 'T',
+           'T', 'T', 'T', 'A', 'A', 'T', 'G', 'G', 'T', 'G', 'A', 'A', 'G',
+           'T', 'A', 'A', 'T', 'G', 'A', 'A', 'A', 'T', 'A', 'A', 'T', 'T',
+           'C', 'T', 'T', 'T', 'A', 'A', 'T', 'A', 'T', 'C', 'A', 'C', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', 'A', 'A', 'A', '-', '-',
+           '-', '-', '-', 'G', 'T', 'A', 'A', 'T', 'T', 'T', 'A', 'T', 'T',
+           'A', 'A', 'T', 'T', 'A', 'T', 'T', 'T', 'A', 'G', 'G', 'A', 'C',
+           'A', 'A'],
+          ['G', 'A', 'G', 'T', 'T', 'C', 'T', 'G', 'C', 'A', 'A', 'A', 'T',
+           't', 't', 't', 'a', 'a', 't', 'a', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', 'g', 'g', 'a', 'a', 'a', 'a', 'g', 'a', 'a',
+           'g', 'a', 't', 'T', 'A', 'A', 'T', 'A', 'T', 'T', 'A', 'C', 'A',
+           'A', 'A', 'G', 'T', 'T', 'T', 'T', 'C', 'A', 'G', 'T', 'T', 'C',
+           'T', 'G', 'A', 'T', 'G', 'G', 'A', 'A', 'a', 'a', 'a', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', 'g', 't', 'g', 't', 'g',
+           'a', 't', 't', 't', 't', 't', 't', 't', 'a', 'a', 'a', '-', '-',
+           '-', '-'],
+          ['-', 'A', 'G', 'A', 'T', 'C', 'C', 'A', 'T', 'G', 'A', 'A', 'T',
+           'T', 'T', 'T', 'A', 'A', 'T', 'A', '-', '-', '-', 'A', 'A', 'G',
+           'C', 'A', 'A', 'T', 'G', 'A', 'G', 'A', 'T', 'A', 'A', 'T', 'T',
+           'A', 'T', 'T', 'T', 'A', 'A', 'T', 'G', 'T', 'T', 'G', 'G', 'A',
+           'A', 'A', 'A', 'T', 'C', 'C', 'T', 'C', 'A', 'A', 'G', 'T', 'C',
+           'T', 'T', 'A', 'A', 'G', 'G', 'A', 'A', 'A', 'A', 'A', 'A', 'G',
+           'T', 'G', 'T', 'T', 'T', 'G', 'A', 'C', 'T', 'T', 'G', 'T', 'T',
+           'A', 'A', 'T', 'G', 'A', 'C', 'T', 'T', 'G', 'G', 'G', 'A', 'T',
+           'G', 'A'],
+          ['G', 'G', 'G', 'G', 'T', 'C', 'C', 'A', 'T', 'G', 'A', 'A', 'T',
+           'T', 'T', 'T', 'A', 'A', 'T', 'A', '-', '-', '-', '-', '-', 'G',
+           'T', 'A', 'A', 'C', 'A', 'A', 'A', 'A', 'T', 'G', 'G', 'T', 'T',
+           'A', 'T', 'T', 'C', 'A', 'A', 'T', 'A', 'T', 'T', 'G', 'C', 'A',
+           'A', 'A', 'A', 'T', 'C', 'C', 'T', 'C', 'A', 'G', 'C', '-', 'T',
+           'T', 'T', 'A', 'A', 'G', 'G', 'A', 'A', 'A', 'A', 'A', 'C', 'A',
+           'T', 'A', 'T', 'T', 'T', 'G', 'A', 'T', 'T', 'T', 'G', 'T', 'T',
+           'A', 'A', 'T', 'T', 'A', 'T', 'T', 'T', 'A', 'G', 'G', 'A', 'C',
+           'A', 'A'],
+          ['G', 'G', 'G', 'G', 'T', 'C', 'C', 'A', 'T', 'G', 'A', 'A', 'T',
+           'T', 'T', 'T', 'A', 'A', 'T', 'A', '-', '-', '-', '-', '-', 'G',
+           'T', 'A', 'A', 'T', 'A', 'A', 'A', 'A', 'T', 'G', 'G', 'T', 'T',
+           'A', 'T', 'T', 'T', 'A', 'A', 'T', 'A', 'T', 'T', 'G', 'C', 'A',
+           'A', 'A', 'A', 'T', 'C', 'C', 'T', 'C', 'A', 'G', 'C', 'T', 'T',
+           'T', 'T', 'A', 'A', 'G', 'G', 'A', 'A', 'A', 'A', 'A', 'C', 'G',
+           'T', 'G', 'T', 'T', 'T', 'G', 'A', 'C', 'T', 'T', 'A', 'T', 'T',
+           'A', 'A', 'T', 'T', 'A', 'T', 'T', 'T', 'A', 'G', 'G', 'A', 'C',
+           'A', 'A']], dtype='U')
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -4701,9 +7559,9 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 10)
         self.assertEqual(len(alignment.annotations["empty"]), 4)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 # fmt: off
-                alignment.coordinates, numpy.array([[  3021014,   3021054],
+                alignment.coordinates, np.array([[  3021014,   3021054],
                                                     [     4161,      4121],
                                                     [   171328,    171288],
                                                     [    10582,     10622],
@@ -4714,6 +7572,104 @@ class TestAlign_reading(unittest.TestCase):
                                                     [    46096,     46056],
                                                     [     7354,      7314],
                                                    ])
+                # fmt: on
+            )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3021014 ACCTTGGTGACGCCACTGGATTTTGTATGACTGAATACTG   3021054
+oryCun1.s      4161 ATCTTGATGAAGTCATTCCAACTTGGATGATTTAGGAATT      4121
+otoGar1.s    171328 ATCTTGGTGAAGTTATTCCAATTTATGTGATTTAGGAATG    171288
+calJac1.C     10582 ATTTTGGTGAAGTTATTCCAACTTGTGTGGCTTAGGAATG     10622
+hg18.chr6 155025243 ATTTTGGTGAAGTTATTCCAACTTGCATGGCTTAGGAATG 155025203
+panTro2.c 157515297 ATTTTGGTGAAGTTATTCCAACTTGCATGGCTTAGGAATG 157515257
+ponAbe2.c 158037464 ATTTTGGTGAAGTTATTCCAACTTGCATGGCTTAGGAATG 158037424
+canFam2.c  47544708 ATCTCAGTGAAGTCATTCTGACTCGCATGATTTAGGAATG  47544668
+felCat3.s     46096 ATCTCAGTGAAGTTATTCTGACTTGCATGATTTAGGTATG     46056
+dasNov1.s      7354 ACATCAGTGAAATCATTCCGACTCGTATGACTGAGCGATG      7314
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=105724.000000
+s mm9.chr10                         3021014   40 + 129993255 ACCTTGGTGACGCCACTGGATTTTGTATGACTGAATACTG
+s oryCun1.scaffold_156751               565   40 -      4726 ATCTTGATGAAGTCATTCCAACTTGGATGATTTAGGAATT
+q oryCun1.scaffold_156751                                    9999999999999969999699999999999999999999
+i oryCun1.scaffold_156751          C 0 C 0
+s otoGar1.scaffold_334.1-359464      188136   40 -    359464 ATCTTGGTGAAGTTATTCCAATTTATGTGATTTAGGAATG
+q otoGar1.scaffold_334.1-359464                              9999999999999999999999999999999999999999
+i otoGar1.scaffold_334.1-359464    I 358 C 0
+s calJac1.Contig6394                  10582   40 +    133105 ATTTTGGTGAAGTTATTCCAACTTGTGTGGCTTAGGAATG
+i calJac1.Contig6394               C 0 C 0
+s hg18.chr6                        15874749   40 - 170899992 ATTTTGGTGAAGTTATTCCAACTTGCATGGCTTAGGAATG
+i hg18.chr6                        C 0 C 0
+s panTro2.chr6                     16393315   40 - 173908612 ATTTTGGTGAAGTTATTCCAACTTGCATGGCTTAGGAATG
+q panTro2.chr6                                               9999999999999999999999999999999999999999
+i panTro2.chr6                     C 0 C 0
+s ponAbe2.chr6                     16172967   40 - 174210431 ATTTTGGTGAAGTTATTCCAACTTGCATGGCTTAGGAATG
+i ponAbe2.chr6                     C 0 C 0
+s canFam2.chr1                     78071548   40 - 125616256 ATCTCAGTGAAGTCATTCTGACTCGCATGATTTAGGAATG
+q canFam2.chr1                                               9999999999999999999999999999999999999999
+i canFam2.chr1                     C 0 C 0
+s felCat3.scaffold_205680             73258   40 -    119354 ATCTCAGTGAAGTTATTCTGACTTGCATGATTTAGGTATG
+q felCat3.scaffold_205680                                    9999989999989988999997999979997996167779
+i felCat3.scaffold_205680          C 0 C 0
+s dasNov1.scaffold_56749               3116   40 -     10470 ACATCAGTGAAATCATTCCGACTCGTATGACTGAGCGATG
+q dasNov1.scaffold_56749                                     9759855999977756667495765475885678385647
+i dasNov1.scaffold_56749           N 0 C 0
+e ornAna1.chr2                     14751195 5690 -  54797317 I
+e tupBel1.scaffold_114895.1-498454   174338  623 -    498454 I
+e echTel1.scaffold_288249             87661 7564 +    100002 I
+e cavPor2.scaffold_216473              9502   28 -     10026 I
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['A', 'C', 'C', 'T', 'T', 'G', 'G', 'T', 'G', 'A', 'C', 'G', 'C',
+           'C', 'A', 'C', 'T', 'G', 'G', 'A', 'T', 'T', 'T', 'T', 'G', 'T',
+           'A', 'T', 'G', 'A', 'C', 'T', 'G', 'A', 'A', 'T', 'A', 'C', 'T',
+           'G'],
+          ['A', 'T', 'C', 'T', 'T', 'G', 'A', 'T', 'G', 'A', 'A', 'G', 'T',
+           'C', 'A', 'T', 'T', 'C', 'C', 'A', 'A', 'C', 'T', 'T', 'G', 'G',
+           'A', 'T', 'G', 'A', 'T', 'T', 'T', 'A', 'G', 'G', 'A', 'A', 'T',
+           'T'],
+          ['A', 'T', 'C', 'T', 'T', 'G', 'G', 'T', 'G', 'A', 'A', 'G', 'T',
+           'T', 'A', 'T', 'T', 'C', 'C', 'A', 'A', 'T', 'T', 'T', 'A', 'T',
+           'G', 'T', 'G', 'A', 'T', 'T', 'T', 'A', 'G', 'G', 'A', 'A', 'T',
+           'G'],
+          ['A', 'T', 'T', 'T', 'T', 'G', 'G', 'T', 'G', 'A', 'A', 'G', 'T',
+           'T', 'A', 'T', 'T', 'C', 'C', 'A', 'A', 'C', 'T', 'T', 'G', 'T',
+           'G', 'T', 'G', 'G', 'C', 'T', 'T', 'A', 'G', 'G', 'A', 'A', 'T',
+           'G'],
+          ['A', 'T', 'T', 'T', 'T', 'G', 'G', 'T', 'G', 'A', 'A', 'G', 'T',
+           'T', 'A', 'T', 'T', 'C', 'C', 'A', 'A', 'C', 'T', 'T', 'G', 'C',
+           'A', 'T', 'G', 'G', 'C', 'T', 'T', 'A', 'G', 'G', 'A', 'A', 'T',
+           'G'],
+          ['A', 'T', 'T', 'T', 'T', 'G', 'G', 'T', 'G', 'A', 'A', 'G', 'T',
+           'T', 'A', 'T', 'T', 'C', 'C', 'A', 'A', 'C', 'T', 'T', 'G', 'C',
+           'A', 'T', 'G', 'G', 'C', 'T', 'T', 'A', 'G', 'G', 'A', 'A', 'T',
+           'G'],
+          ['A', 'T', 'T', 'T', 'T', 'G', 'G', 'T', 'G', 'A', 'A', 'G', 'T',
+           'T', 'A', 'T', 'T', 'C', 'C', 'A', 'A', 'C', 'T', 'T', 'G', 'C',
+           'A', 'T', 'G', 'G', 'C', 'T', 'T', 'A', 'G', 'G', 'A', 'A', 'T',
+           'G'],
+          ['A', 'T', 'C', 'T', 'C', 'A', 'G', 'T', 'G', 'A', 'A', 'G', 'T',
+           'C', 'A', 'T', 'T', 'C', 'T', 'G', 'A', 'C', 'T', 'C', 'G', 'C',
+           'A', 'T', 'G', 'A', 'T', 'T', 'T', 'A', 'G', 'G', 'A', 'A', 'T',
+           'G'],
+          ['A', 'T', 'C', 'T', 'C', 'A', 'G', 'T', 'G', 'A', 'A', 'G', 'T',
+           'T', 'A', 'T', 'T', 'C', 'T', 'G', 'A', 'C', 'T', 'T', 'G', 'C',
+           'A', 'T', 'G', 'A', 'T', 'T', 'T', 'A', 'G', 'G', 'T', 'A', 'T',
+           'G'],
+          ['A', 'C', 'A', 'T', 'C', 'A', 'G', 'T', 'G', 'A', 'A', 'A', 'T',
+           'C', 'A', 'T', 'T', 'C', 'C', 'G', 'A', 'C', 'T', 'C', 'G', 'T',
+           'A', 'T', 'G', 'A', 'C', 'T', 'G', 'A', 'G', 'C', 'G', 'A', 'T',
+           'G']], dtype='U')
                 # fmt: on
             )
         )
@@ -4918,9 +7874,9 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 11)
         self.assertEqual(len(alignment.annotations["empty"]), 3)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3021054,   3021072,   3021073,   3021075,   3021083,   3021091,
                 3021091,   3021091,   3021091,   3021100,   3021104],
@@ -4947,6 +7903,145 @@ class TestAlign_reading(unittest.TestCase):
             ]
                     # fmt: on
                 ),
+            )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3021054 CTCATTTGGGAACTTACAGGTCAGCAAAGGCTTCCAG--------------------GAC
+cavPor2.s       496 CTCATTTGGGAGTTCAGAGTT--------GCTATAAA--------------------TAC
+oryCun1.s      4121 CTAATTTGGGCTCTTACATTTTATAACTGCCTAATGGAGTCTTCTTTTTTCCT-CCTTAA
+otoGar1.s    171288 CTAACTTGGGGACACAGG-TTCATAAAGGCTTAATGGAGCCCACTGGTCCCTTCCCCAGA
+calJac1.C     10622 CCAGTTTGGGGACTTAGATTTTCTAACTGCCTAATGAAGTCTGCTCTTTCCTTCCCTAGC
+hg18.chr6 155025203 ACAATTTGGGGATTTACATTTCCTAACTGCCTAATGAAGTCTGCTCCTTCCTTCCCTAGA
+panTro2.c 157515257 CCAATTTGGGGATTTACATTTCCTAACTGCCTAATGAAGTCTGCTCTTTCCTTCCCTAGA
+ponAbe2.c 158037424 CCAATTTGGGGATTTACATTTCCTAACTGCCTAATGAAGTCTGCTCTTTCCTTCCCTAGA
+canFam2.c  47544668 CTAATTTGGTGACTCAAATTTCATAATTGCTTAATGAAAGCTGATGTTTTCTTCCCTACA
+felCat3.s     46056 CTAATTTGGTGACTTGAATTTCATAATTGCTTAAGGAAGCCTGCTGTTTCCTTCCCAAGA
+dasNov1.s      7314 CTAATTGGGGGACTCACATTTTAAAATTGCTAACCGAAGCCTGCTGTTTTCTTCTCTAGA
+
+mm9.chr10   3021094 TTACATGCAG   3021104
+cavPor2.s       464 TTGTGA----       458
+oryCun1.s      4062 TTACACGTAT      4052
+otoGar1.s    171229 CTCTATGTAC    171219
+calJac1.C     10682 CTATATGTAT     10692
+hg18.chr6 155025143 CTATATGTAT 155025133
+panTro2.c 157515197 CTATATGTAT 157515187
+ponAbe2.c 158037364 CTATATGTAT 158037354
+canFam2.c  47544608 CCATATGTAT  47544598
+felCat3.s     45996 CTATATGCAT     45986
+dasNov1.s      7254 CTATAAGTAT      7244
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=115790.000000
+s mm9.chr10                         3021054   50 + 129993255 CTCATTTGGGAACTTACAGGTCAGCAAAGGCTTCCAG--------------------GACTTACATGCAG
+s cavPor2.scaffold_216473              9530   38 -     10026 CTCATTTGGGAGTTCAGAGTT--------GCTATAAA--------------------TACTTGTGA----
+q cavPor2.scaffold_216473                                    788777667898846665666--------98766677--------------------876665669----
+i cavPor2.scaffold_216473          I 28 C 0
+s oryCun1.scaffold_156751               605   69 -      4726 CTAATTTGGGCTCTTACATTTTATAACTGCCTAATGGAGTCTTCTTTTTTCCT-CCTTAATTACACGTAT
+q oryCun1.scaffold_156751                                    99999999999997999799999999999999999999999799799999997-9979999999495999
+i oryCun1.scaffold_156751          C 0 C 0
+s otoGar1.scaffold_334.1-359464      188176   69 -    359464 CTAACTTGGGGACACAGG-TTCATAAAGGCTTAATGGAGCCCACTGGTCCCTTCCCCAGACTCTATGTAC
+q otoGar1.scaffold_334.1-359464                              999999999999999999-999999999999999999998999999689999999999999999999999
+i otoGar1.scaffold_334.1-359464    C 0 C 0
+s calJac1.Contig6394                  10622   70 +    133105 CCAGTTTGGGGACTTAGATTTTCTAACTGCCTAATGAAGTCTGCTCTTTCCTTCCCTAGCCTATATGTAT
+i calJac1.Contig6394               C 0 C 0
+s hg18.chr6                        15874789   70 - 170899992 ACAATTTGGGGATTTACATTTCCTAACTGCCTAATGAAGTCTGCTCCTTCCTTCCCTAGACTATATGTAT
+i hg18.chr6                        C 0 C 0
+s panTro2.chr6                     16393355   70 - 173908612 CCAATTTGGGGATTTACATTTCCTAACTGCCTAATGAAGTCTGCTCTTTCCTTCCCTAGACTATATGTAT
+q panTro2.chr6                                               9999999999999999999999999999999999999999999999999999999999999999999999
+i panTro2.chr6                     C 0 C 0
+s ponAbe2.chr6                     16173007   70 - 174210431 CCAATTTGGGGATTTACATTTCCTAACTGCCTAATGAAGTCTGCTCTTTCCTTCCCTAGACTATATGTAT
+i ponAbe2.chr6                     C 0 C 0
+s canFam2.chr1                     78071588   70 - 125616256 CTAATTTGGTGACTCAAATTTCATAATTGCTTAATGAAAGCTGATGTTTTCTTCCCTACACCATATGTAT
+q canFam2.chr1                                               9999999999999999999999999999999999999999999999999999999999999999999999
+i canFam2.chr1                     C 0 C 0
+s felCat3.scaffold_205680             73298   70 -    119354 CTAATTTGGTGACTTGAATTTCATAATTGCTTAAGGAAGCCTGCTGTTTCCTTCCCAAGACTATATGCAT
+q felCat3.scaffold_205680                                    9769999999975699868977669777966666596959759669595666758736585676666655
+i felCat3.scaffold_205680          C 0 C 0
+s dasNov1.scaffold_56749               3156   70 -     10470 CTAATTGGGGGACTCACATTTTAAAATTGCTAACCGAAGCCTGCTGTTTTCTTCTCTAGACTATAAGTAT
+q dasNov1.scaffold_56749                                     5556576999664654656985688667655565647767537567688856666555556565555656
+i dasNov1.scaffold_56749           C 0 C 0
+e ornAna1.chr2                     14751195 5690 -  54797317 I
+e tupBel1.scaffold_114895.1-498454   174338  623 -    498454 I
+e echTel1.scaffold_288249             87661 7564 +    100002 I
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['C', 'T', 'C', 'A', 'T', 'T', 'T', 'G', 'G', 'G', 'A', 'A', 'C',
+           'T', 'T', 'A', 'C', 'A', 'G', 'G', 'T', 'C', 'A', 'G', 'C', 'A',
+           'A', 'A', 'G', 'G', 'C', 'T', 'T', 'C', 'C', 'A', 'G', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', 'G', 'A', 'C', 'T', 'T', 'A', 'C', 'A',
+           'T', 'G', 'C', 'A', 'G'],
+          ['C', 'T', 'C', 'A', 'T', 'T', 'T', 'G', 'G', 'G', 'A', 'G', 'T',
+           'T', 'C', 'A', 'G', 'A', 'G', 'T', 'T', '-', '-', '-', '-', '-',
+           '-', '-', '-', 'G', 'C', 'T', 'A', 'T', 'A', 'A', 'A', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', 'T', 'A', 'C', 'T', 'T', 'G', 'T', 'G',
+           'A', '-', '-', '-', '-'],
+          ['C', 'T', 'A', 'A', 'T', 'T', 'T', 'G', 'G', 'G', 'C', 'T', 'C',
+           'T', 'T', 'A', 'C', 'A', 'T', 'T', 'T', 'T', 'A', 'T', 'A', 'A',
+           'C', 'T', 'G', 'C', 'C', 'T', 'A', 'A', 'T', 'G', 'G', 'A', 'G',
+           'T', 'C', 'T', 'T', 'C', 'T', 'T', 'T', 'T', 'T', 'T', 'C', 'C',
+           'T', '-', 'C', 'C', 'T', 'T', 'A', 'A', 'T', 'T', 'A', 'C', 'A',
+           'C', 'G', 'T', 'A', 'T'],
+          ['C', 'T', 'A', 'A', 'C', 'T', 'T', 'G', 'G', 'G', 'G', 'A', 'C',
+           'A', 'C', 'A', 'G', 'G', '-', 'T', 'T', 'C', 'A', 'T', 'A', 'A',
+           'A', 'G', 'G', 'C', 'T', 'T', 'A', 'A', 'T', 'G', 'G', 'A', 'G',
+           'C', 'C', 'C', 'A', 'C', 'T', 'G', 'G', 'T', 'C', 'C', 'C', 'T',
+           'T', 'C', 'C', 'C', 'C', 'A', 'G', 'A', 'C', 'T', 'C', 'T', 'A',
+           'T', 'G', 'T', 'A', 'C'],
+          ['C', 'C', 'A', 'G', 'T', 'T', 'T', 'G', 'G', 'G', 'G', 'A', 'C',
+           'T', 'T', 'A', 'G', 'A', 'T', 'T', 'T', 'T', 'C', 'T', 'A', 'A',
+           'C', 'T', 'G', 'C', 'C', 'T', 'A', 'A', 'T', 'G', 'A', 'A', 'G',
+           'T', 'C', 'T', 'G', 'C', 'T', 'C', 'T', 'T', 'T', 'C', 'C', 'T',
+           'T', 'C', 'C', 'C', 'T', 'A', 'G', 'C', 'C', 'T', 'A', 'T', 'A',
+           'T', 'G', 'T', 'A', 'T'],
+          ['A', 'C', 'A', 'A', 'T', 'T', 'T', 'G', 'G', 'G', 'G', 'A', 'T',
+           'T', 'T', 'A', 'C', 'A', 'T', 'T', 'T', 'C', 'C', 'T', 'A', 'A',
+           'C', 'T', 'G', 'C', 'C', 'T', 'A', 'A', 'T', 'G', 'A', 'A', 'G',
+           'T', 'C', 'T', 'G', 'C', 'T', 'C', 'C', 'T', 'T', 'C', 'C', 'T',
+           'T', 'C', 'C', 'C', 'T', 'A', 'G', 'A', 'C', 'T', 'A', 'T', 'A',
+           'T', 'G', 'T', 'A', 'T'],
+          ['C', 'C', 'A', 'A', 'T', 'T', 'T', 'G', 'G', 'G', 'G', 'A', 'T',
+           'T', 'T', 'A', 'C', 'A', 'T', 'T', 'T', 'C', 'C', 'T', 'A', 'A',
+           'C', 'T', 'G', 'C', 'C', 'T', 'A', 'A', 'T', 'G', 'A', 'A', 'G',
+           'T', 'C', 'T', 'G', 'C', 'T', 'C', 'T', 'T', 'T', 'C', 'C', 'T',
+           'T', 'C', 'C', 'C', 'T', 'A', 'G', 'A', 'C', 'T', 'A', 'T', 'A',
+           'T', 'G', 'T', 'A', 'T'],
+          ['C', 'C', 'A', 'A', 'T', 'T', 'T', 'G', 'G', 'G', 'G', 'A', 'T',
+           'T', 'T', 'A', 'C', 'A', 'T', 'T', 'T', 'C', 'C', 'T', 'A', 'A',
+           'C', 'T', 'G', 'C', 'C', 'T', 'A', 'A', 'T', 'G', 'A', 'A', 'G',
+           'T', 'C', 'T', 'G', 'C', 'T', 'C', 'T', 'T', 'T', 'C', 'C', 'T',
+           'T', 'C', 'C', 'C', 'T', 'A', 'G', 'A', 'C', 'T', 'A', 'T', 'A',
+           'T', 'G', 'T', 'A', 'T'],
+          ['C', 'T', 'A', 'A', 'T', 'T', 'T', 'G', 'G', 'T', 'G', 'A', 'C',
+           'T', 'C', 'A', 'A', 'A', 'T', 'T', 'T', 'C', 'A', 'T', 'A', 'A',
+           'T', 'T', 'G', 'C', 'T', 'T', 'A', 'A', 'T', 'G', 'A', 'A', 'A',
+           'G', 'C', 'T', 'G', 'A', 'T', 'G', 'T', 'T', 'T', 'T', 'C', 'T',
+           'T', 'C', 'C', 'C', 'T', 'A', 'C', 'A', 'C', 'C', 'A', 'T', 'A',
+           'T', 'G', 'T', 'A', 'T'],
+          ['C', 'T', 'A', 'A', 'T', 'T', 'T', 'G', 'G', 'T', 'G', 'A', 'C',
+           'T', 'T', 'G', 'A', 'A', 'T', 'T', 'T', 'C', 'A', 'T', 'A', 'A',
+           'T', 'T', 'G', 'C', 'T', 'T', 'A', 'A', 'G', 'G', 'A', 'A', 'G',
+           'C', 'C', 'T', 'G', 'C', 'T', 'G', 'T', 'T', 'T', 'C', 'C', 'T',
+           'T', 'C', 'C', 'C', 'A', 'A', 'G', 'A', 'C', 'T', 'A', 'T', 'A',
+           'T', 'G', 'C', 'A', 'T'],
+          ['C', 'T', 'A', 'A', 'T', 'T', 'G', 'G', 'G', 'G', 'G', 'A', 'C',
+           'T', 'C', 'A', 'C', 'A', 'T', 'T', 'T', 'T', 'A', 'A', 'A', 'A',
+           'T', 'T', 'G', 'C', 'T', 'A', 'A', 'C', 'C', 'G', 'A', 'A', 'G',
+           'C', 'C', 'T', 'G', 'C', 'T', 'G', 'T', 'T', 'T', 'T', 'C', 'T',
+           'T', 'C', 'T', 'C', 'T', 'A', 'G', 'A', 'C', 'T', 'A', 'T', 'A',
+           'A', 'G', 'T', 'A', 'T']], dtype='U')
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -5119,9 +8214,9 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 12)
         self.assertEqual(len(alignment.annotations["empty"]), 2)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3021104,   3021109,   3021113,   3021115,   3021120,   3021120,
                 3021129,   3021136],
@@ -5150,6 +8245,106 @@ class TestAlign_reading(unittest.TestCase):
             ]
                     # fmt: on
                 ),
+            )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3021104 CTGTTAGTGCTGTTTT---AATGTACCTCGCAGTA   3021136
+cavPor2.s       458 -----ATTACTTTCTT---AATGTAAATTTTTATA       431
+oryCun1.s      4052 TTGCTAGTA--TTCTC---AATGTAATATTTTATA      4022
+otoGar1.s    171219 TTGCTGGTGTTCCCTT---AATATAATGTTTTATA    171187
+calJac1.C     10692 TTACTCGTG--CCCTT---AATATAGCATTTTATA     10722
+hg18.chr6 155025133 TTGCTGGTA--CTCTT---AATATCACATTTTATA 155025103
+panTro2.c 157515187 TTGCTGGTA--CTCTT---AATATCACATTTTATA 157515157
+ponAbe2.c 158037354 TTGCTGGTG--CTCTT---AATATAACATTTTATA 158037324
+canFam2.c  47544598 TTGCTGGTGCTCTCAA---AATGTAGCA-------  47544573
+felCat3.s     45986 TTGCTGGTGCTCTCAA---AATATAACA-------     45961
+dasNov1.s      7244 TTGCTGGTG--ATCTGATTAATGTAACATTTTATG      7211
+echTel1.s     95225 CTGTTAATG--CTCTG------------TTTTATG     95246
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=44222.000000
+s mm9.chr10                         3021104   32 + 129993255 CTGTTAGTGCTGTTTT---AATGTACCTCGCAGTA
+s cavPor2.scaffold_216473              9568   27 -     10026 -----ATTACTTTCTT---AATGTAAATTTTTATA
+q cavPor2.scaffold_216473                                    -----55455868746---7957999989884575
+i cavPor2.scaffold_216473          C 0 C 0
+s oryCun1.scaffold_156751               674   30 -      4726 TTGCTAGTA--TTCTC---AATGTAATATTTTATA
+q oryCun1.scaffold_156751                                    999979999--96665---6999999999999999
+i oryCun1.scaffold_156751          C 0 C 0
+s otoGar1.scaffold_334.1-359464      188245   32 -    359464 TTGCTGGTGTTCCCTT---AATATAATGTTTTATA
+q otoGar1.scaffold_334.1-359464                              9999999999999999---9999999999999999
+i otoGar1.scaffold_334.1-359464    C 0 C 0
+s calJac1.Contig6394                  10692   30 +    133105 TTACTCGTG--CCCTT---AATATAGCATTTTATA
+i calJac1.Contig6394               C 0 C 0
+s hg18.chr6                        15874859   30 - 170899992 TTGCTGGTA--CTCTT---AATATCACATTTTATA
+i hg18.chr6                        C 0 C 0
+s panTro2.chr6                     16393425   30 - 173908612 TTGCTGGTA--CTCTT---AATATCACATTTTATA
+q panTro2.chr6                                               999999999--99999---9999999999999999
+i panTro2.chr6                     C 0 C 0
+s ponAbe2.chr6                     16173077   30 - 174210431 TTGCTGGTG--CTCTT---AATATAACATTTTATA
+i ponAbe2.chr6                     C 0 C 0
+s canFam2.chr1                     78071658   25 - 125616256 TTGCTGGTGCTCTCAA---AATGTAGCA-------
+q canFam2.chr1                                               9999999999999999---999999999-------
+i canFam2.chr1                     C 0 I 196
+s felCat3.scaffold_205680             73368   25 -    119354 TTGCTGGTGCTCTCAA---AATATAACA-------
+q felCat3.scaffold_205680                                    8677668566555658---876555655-------
+i felCat3.scaffold_205680          C 0 I 6
+s dasNov1.scaffold_56749               3226   33 -     10470 TTGCTGGTG--ATCTGATTAATGTAACATTTTATG
+q dasNov1.scaffold_56749                                     856647736--775356546747663745776545
+i dasNov1.scaffold_56749           C 0 C 0
+s echTel1.scaffold_288249             95225   21 +    100002 CTGTTAATG--CTCTG------------TTTTATG
+q echTel1.scaffold_288249                                    999999999--99999------------9999999
+i echTel1.scaffold_288249          I 7564 C 0
+e ornAna1.chr2                     14751195 5690 -  54797317 I
+e tupBel1.scaffold_114895.1-498454   174338  623 -    498454 I
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['C', 'T', 'G', 'T', 'T', 'A', 'G', 'T', 'G', 'C', 'T', 'G', 'T',
+           'T', 'T', 'T', '-', '-', '-', 'A', 'A', 'T', 'G', 'T', 'A', 'C',
+           'C', 'T', 'C', 'G', 'C', 'A', 'G', 'T', 'A'],
+          ['-', '-', '-', '-', '-', 'A', 'T', 'T', 'A', 'C', 'T', 'T', 'T',
+           'C', 'T', 'T', '-', '-', '-', 'A', 'A', 'T', 'G', 'T', 'A', 'A',
+           'A', 'T', 'T', 'T', 'T', 'T', 'A', 'T', 'A'],
+          ['T', 'T', 'G', 'C', 'T', 'A', 'G', 'T', 'A', '-', '-', 'T', 'T',
+           'C', 'T', 'C', '-', '-', '-', 'A', 'A', 'T', 'G', 'T', 'A', 'A',
+           'T', 'A', 'T', 'T', 'T', 'T', 'A', 'T', 'A'],
+          ['T', 'T', 'G', 'C', 'T', 'G', 'G', 'T', 'G', 'T', 'T', 'C', 'C',
+           'C', 'T', 'T', '-', '-', '-', 'A', 'A', 'T', 'A', 'T', 'A', 'A',
+           'T', 'G', 'T', 'T', 'T', 'T', 'A', 'T', 'A'],
+          ['T', 'T', 'A', 'C', 'T', 'C', 'G', 'T', 'G', '-', '-', 'C', 'C',
+           'C', 'T', 'T', '-', '-', '-', 'A', 'A', 'T', 'A', 'T', 'A', 'G',
+           'C', 'A', 'T', 'T', 'T', 'T', 'A', 'T', 'A'],
+          ['T', 'T', 'G', 'C', 'T', 'G', 'G', 'T', 'A', '-', '-', 'C', 'T',
+           'C', 'T', 'T', '-', '-', '-', 'A', 'A', 'T', 'A', 'T', 'C', 'A',
+           'C', 'A', 'T', 'T', 'T', 'T', 'A', 'T', 'A'],
+          ['T', 'T', 'G', 'C', 'T', 'G', 'G', 'T', 'A', '-', '-', 'C', 'T',
+           'C', 'T', 'T', '-', '-', '-', 'A', 'A', 'T', 'A', 'T', 'C', 'A',
+           'C', 'A', 'T', 'T', 'T', 'T', 'A', 'T', 'A'],
+          ['T', 'T', 'G', 'C', 'T', 'G', 'G', 'T', 'G', '-', '-', 'C', 'T',
+           'C', 'T', 'T', '-', '-', '-', 'A', 'A', 'T', 'A', 'T', 'A', 'A',
+           'C', 'A', 'T', 'T', 'T', 'T', 'A', 'T', 'A'],
+          ['T', 'T', 'G', 'C', 'T', 'G', 'G', 'T', 'G', 'C', 'T', 'C', 'T',
+           'C', 'A', 'A', '-', '-', '-', 'A', 'A', 'T', 'G', 'T', 'A', 'G',
+           'C', 'A', '-', '-', '-', '-', '-', '-', '-'],
+          ['T', 'T', 'G', 'C', 'T', 'G', 'G', 'T', 'G', 'C', 'T', 'C', 'T',
+           'C', 'A', 'A', '-', '-', '-', 'A', 'A', 'T', 'A', 'T', 'A', 'A',
+           'C', 'A', '-', '-', '-', '-', '-', '-', '-'],
+          ['T', 'T', 'G', 'C', 'T', 'G', 'G', 'T', 'G', '-', '-', 'A', 'T',
+           'C', 'T', 'G', 'A', 'T', 'T', 'A', 'A', 'T', 'G', 'T', 'A', 'A',
+           'C', 'A', 'T', 'T', 'T', 'T', 'A', 'T', 'G'],
+          ['C', 'T', 'G', 'T', 'T', 'A', 'A', 'T', 'G', '-', '-', 'C', 'T',
+           'C', 'T', 'G', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', 'T', 'T', 'T', 'T', 'A', 'T', 'G']], dtype='U')
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -5383,9 +8578,9 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 13)
         self.assertEqual(len(alignment.annotations["empty"]), 2)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3021136,   3021138,   3021139,   3021152,   3021153,   3021154,
                 3021156,   3021156,   3021158,   3021163,   3021163,   3021165,
@@ -5442,6 +8637,166 @@ class TestAlign_reading(unittest.TestCase):
             ]
                     # fmt: on
                 ),
+            )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3021136 AGGCAAATGAGGTGATAAGA-------TTGTGTT-----TAC----TCCCTCTGTGC---
+cavPor2.s       431 AG-CAGATGAGATAACAGTG-------ATATATT-----cat----tctctgtgtgt---
+oryCun1.s      4022 AAGCAAATGAGGTGATGAGG---------GCATC-----TAT----TTCTTATTTGT---
+otoGar1.s    171187 AAACAAATGAGATCACA-GG-------ACATATG-----TA--CTTGTCCCCCACGT---
+calJac1.C     10722 AAGCAAATGAGATCACA----------GCACATG-----TATATTTTTTCTCCGTGT---
+hg18.chr6 155025103 AAACAAATGAGATCACAAGG-------GCATATA-----TGT-TTTTTTCTCTGTGT---
+panTro2.c 157515157 AAACAAATGAGATCACAAGG-------GCATATA-----TGT-TTTTTTCTCTGTGT---
+ponAbe2.c 158037324 AAACAAATGAGATCACAAGG-------GCATATG-----TAT-TTTTTTCTCTGTGT---
+eriEur1.s       358 taaataataagataagatgaaagCATAGCATGTA-----TTTTCTtgccctctccttctc
+canFam2.c  47544377 tAGAAAATGAGATACC-----------GTGTGTA-----TATGCTTTCTCTCTGTGT---
+felCat3.s     45955 AAGCAAATGAGATAAG-----------ACACGTG-----TATTCTTCCTCTCTGTGT---
+dasNov1.s      7211 AGGAAAGTGAGAGGACCAGG-------GCAAATA-----AATATTCTTTCTCTGTGT---
+echTel1.s     95246 AAGAAGGTGAGATGACAAGG-------GTGTATAGATAGGATATTCTTGCTTTGGGT---
+
+mm9.chr10   3021177 -------TTG   3021180
+cavPor2.s       391 -------atg       388
+oryCun1.s      3983 -------GTG      3980
+otoGar1.s    171145 -------GTG    171142
+calJac1.C     10764 -------GTG     10767
+hg18.chr6 155025059 -------GTG 155025056
+panTro2.c 157515113 -------GTG 157515110
+ponAbe2.c 158037280 -------GTG 158037277
+eriEur1.s       413 tgtctctgtc       423
+canFam2.c  47544336 GGGGTCTGTG  47544326
+felCat3.s     45914 GGTGTCTGTG     45904
+dasNov1.s      7166 -------A--      7165
+echTel1.s     95296 -------G--     95297
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=43757.000000
+s mm9.chr10                         3021136   44 + 129993255 AGGCAAATGAGGTGATAAGA-------TTGTGTT-----TAC----TCCCTCTGTGC----------TTG
+s cavPor2.scaffold_216473              9595   43 -     10026 AG-CAGATGAGATAACAGTG-------ATATATT-----cat----tctctgtgtgt----------atg
+q cavPor2.scaffold_216473                                    49-96766988786798889-------8679566-----756----66896967579----------888
+i cavPor2.scaffold_216473          C 0 C 0
+s oryCun1.scaffold_156751               704   42 -      4726 AAGCAAATGAGGTGATGAGG---------GCATC-----TAT----TTCTTATTTGT----------GTG
+q oryCun1.scaffold_156751                                    99998999999999999999---------99999-----999----99999999999----------999
+i oryCun1.scaffold_156751          C 0 C 0
+s otoGar1.scaffold_334.1-359464      188277   45 -    359464 AAACAAATGAGATCACA-GG-------ACATATG-----TA--CTTGTCCCCCACGT----------GTG
+q otoGar1.scaffold_334.1-359464                              99999999999999999-99-------9999999-----99--99939999999999----------999
+i otoGar1.scaffold_334.1-359464    C 0 I 15
+s calJac1.Contig6394                  10722   45 +    133105 AAGCAAATGAGATCACA----------GCACATG-----TATATTTTTTCTCCGTGT----------GTG
+i calJac1.Contig6394               C 0 I 15
+s hg18.chr6                        15874889   47 - 170899992 AAACAAATGAGATCACAAGG-------GCATATA-----TGT-TTTTTTCTCTGTGT----------GTG
+i hg18.chr6                        C 0 I 15
+s panTro2.chr6                     16393455   47 - 173908612 AAACAAATGAGATCACAAGG-------GCATATA-----TGT-TTTTTTCTCTGTGT----------GTG
+q panTro2.chr6                                               99999999999999999999-------9999999-----999-99999999999999----------999
+i panTro2.chr6                     C 0 I 15
+s ponAbe2.chr6                     16173107   47 - 174210431 AAACAAATGAGATCACAAGG-------GCATATG-----TAT-TTTTTTCTCTGTGT----------GTG
+i ponAbe2.chr6                     C 0 I 15
+s eriEur1.scaffold_266115               358   65 +      4589 taaataataagataagatgaaagCATAGCATGTA-----TTTTCTtgccctctccttctctgtctctgtc
+q eriEur1.scaffold_266115                                    9999999999999999999999999999999999-----9999999999999999999999999999999
+i eriEur1.scaffold_266115          N 0 I 9
+s canFam2.chr1                     78071879   51 - 125616256 tAGAAAATGAGATACC-----------GTGTGTA-----TATGCTTTCTCTCTGTGT---GGGGTCTGTG
+q canFam2.chr1                                               9999999999999999-----------9999999-----999999999999999999---9999999999
+i canFam2.chr1                     I 196 I 9
+s felCat3.scaffold_205680             73399   51 -    119354 AAGCAAATGAGATAAG-----------ACACGTG-----TATTCTTCCTCTCTGTGT---GGTGTCTGTG
+q felCat3.scaffold_205680                                    9755596656454353-----------5346324-----243451535354422233---3635339999
+i felCat3.scaffold_205680          I 6 I 9
+s dasNov1.scaffold_56749               3259   46 -     10470 AGGAAAGTGAGAGGACCAGG-------GCAAATA-----AATATTCTTTCTCTGTGT----------A--
+q dasNov1.scaffold_56749                                     55569764556657658568-------6768555-----858686457859535656----------5--
+i dasNov1.scaffold_56749           C 0 C 0
+s echTel1.scaffold_288249             95246   51 +    100002 AAGAAGGTGAGATGACAAGG-------GTGTATAGATAGGATATTCTTGCTTTGGGT----------G--
+q echTel1.scaffold_288249                                    99999999999999999999-------999999999999999999999999999999----------9--
+i echTel1.scaffold_288249          C 0 C 0
+e ornAna1.chr2                     14751195 5690 -  54797317 I
+e tupBel1.scaffold_114895.1-498454   174338  623 -    498454 I
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['A', 'G', 'G', 'C', 'A', 'A', 'A', 'T', 'G', 'A', 'G', 'G', 'T',
+           'G', 'A', 'T', 'A', 'A', 'G', 'A', '-', '-', '-', '-', '-', '-',
+           '-', 'T', 'T', 'G', 'T', 'G', 'T', 'T', '-', '-', '-', '-', '-',
+           'T', 'A', 'C', '-', '-', '-', '-', 'T', 'C', 'C', 'C', 'T', 'C',
+           'T', 'G', 'T', 'G', 'C', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', 'T', 'T', 'G'],
+          ['A', 'G', '-', 'C', 'A', 'G', 'A', 'T', 'G', 'A', 'G', 'A', 'T',
+           'A', 'A', 'C', 'A', 'G', 'T', 'G', '-', '-', '-', '-', '-', '-',
+           '-', 'A', 'T', 'A', 'T', 'A', 'T', 'T', '-', '-', '-', '-', '-',
+           'c', 'a', 't', '-', '-', '-', '-', 't', 'c', 't', 'c', 't', 'g',
+           't', 'g', 't', 'g', 't', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', 'a', 't', 'g'],
+          ['A', 'A', 'G', 'C', 'A', 'A', 'A', 'T', 'G', 'A', 'G', 'G', 'T',
+           'G', 'A', 'T', 'G', 'A', 'G', 'G', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', 'G', 'C', 'A', 'T', 'C', '-', '-', '-', '-', '-',
+           'T', 'A', 'T', '-', '-', '-', '-', 'T', 'T', 'C', 'T', 'T', 'A',
+           'T', 'T', 'T', 'G', 'T', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', 'G', 'T', 'G'],
+          ['A', 'A', 'A', 'C', 'A', 'A', 'A', 'T', 'G', 'A', 'G', 'A', 'T',
+           'C', 'A', 'C', 'A', '-', 'G', 'G', '-', '-', '-', '-', '-', '-',
+           '-', 'A', 'C', 'A', 'T', 'A', 'T', 'G', '-', '-', '-', '-', '-',
+           'T', 'A', '-', '-', 'C', 'T', 'T', 'G', 'T', 'C', 'C', 'C', 'C',
+           'C', 'A', 'C', 'G', 'T', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', 'G', 'T', 'G'],
+          ['A', 'A', 'G', 'C', 'A', 'A', 'A', 'T', 'G', 'A', 'G', 'A', 'T',
+           'C', 'A', 'C', 'A', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', 'G', 'C', 'A', 'C', 'A', 'T', 'G', '-', '-', '-', '-', '-',
+           'T', 'A', 'T', 'A', 'T', 'T', 'T', 'T', 'T', 'T', 'C', 'T', 'C',
+           'C', 'G', 'T', 'G', 'T', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', 'G', 'T', 'G'],
+          ['A', 'A', 'A', 'C', 'A', 'A', 'A', 'T', 'G', 'A', 'G', 'A', 'T',
+           'C', 'A', 'C', 'A', 'A', 'G', 'G', '-', '-', '-', '-', '-', '-',
+           '-', 'G', 'C', 'A', 'T', 'A', 'T', 'A', '-', '-', '-', '-', '-',
+           'T', 'G', 'T', '-', 'T', 'T', 'T', 'T', 'T', 'T', 'C', 'T', 'C',
+           'T', 'G', 'T', 'G', 'T', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', 'G', 'T', 'G'],
+          ['A', 'A', 'A', 'C', 'A', 'A', 'A', 'T', 'G', 'A', 'G', 'A', 'T',
+           'C', 'A', 'C', 'A', 'A', 'G', 'G', '-', '-', '-', '-', '-', '-',
+           '-', 'G', 'C', 'A', 'T', 'A', 'T', 'A', '-', '-', '-', '-', '-',
+           'T', 'G', 'T', '-', 'T', 'T', 'T', 'T', 'T', 'T', 'C', 'T', 'C',
+           'T', 'G', 'T', 'G', 'T', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', 'G', 'T', 'G'],
+          ['A', 'A', 'A', 'C', 'A', 'A', 'A', 'T', 'G', 'A', 'G', 'A', 'T',
+           'C', 'A', 'C', 'A', 'A', 'G', 'G', '-', '-', '-', '-', '-', '-',
+           '-', 'G', 'C', 'A', 'T', 'A', 'T', 'G', '-', '-', '-', '-', '-',
+           'T', 'A', 'T', '-', 'T', 'T', 'T', 'T', 'T', 'T', 'C', 'T', 'C',
+           'T', 'G', 'T', 'G', 'T', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', 'G', 'T', 'G'],
+          ['t', 'a', 'a', 'a', 't', 'a', 'a', 't', 'a', 'a', 'g', 'a', 't',
+           'a', 'a', 'g', 'a', 't', 'g', 'a', 'a', 'a', 'g', 'C', 'A', 'T',
+           'A', 'G', 'C', 'A', 'T', 'G', 'T', 'A', '-', '-', '-', '-', '-',
+           'T', 'T', 'T', 'T', 'C', 'T', 't', 'g', 'c', 'c', 'c', 't', 'c',
+           't', 'c', 'c', 't', 't', 'c', 't', 'c', 't', 'g', 't', 'c', 't',
+           'c', 't', 'g', 't', 'c'],
+          ['t', 'A', 'G', 'A', 'A', 'A', 'A', 'T', 'G', 'A', 'G', 'A', 'T',
+           'A', 'C', 'C', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', 'G', 'T', 'G', 'T', 'G', 'T', 'A', '-', '-', '-', '-', '-',
+           'T', 'A', 'T', 'G', 'C', 'T', 'T', 'T', 'C', 'T', 'C', 'T', 'C',
+           'T', 'G', 'T', 'G', 'T', '-', '-', '-', 'G', 'G', 'G', 'G', 'T',
+           'C', 'T', 'G', 'T', 'G'],
+          ['A', 'A', 'G', 'C', 'A', 'A', 'A', 'T', 'G', 'A', 'G', 'A', 'T',
+           'A', 'A', 'G', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', 'A', 'C', 'A', 'C', 'G', 'T', 'G', '-', '-', '-', '-', '-',
+           'T', 'A', 'T', 'T', 'C', 'T', 'T', 'C', 'C', 'T', 'C', 'T', 'C',
+           'T', 'G', 'T', 'G', 'T', '-', '-', '-', 'G', 'G', 'T', 'G', 'T',
+           'C', 'T', 'G', 'T', 'G'],
+          ['A', 'G', 'G', 'A', 'A', 'A', 'G', 'T', 'G', 'A', 'G', 'A', 'G',
+           'G', 'A', 'C', 'C', 'A', 'G', 'G', '-', '-', '-', '-', '-', '-',
+           '-', 'G', 'C', 'A', 'A', 'A', 'T', 'A', '-', '-', '-', '-', '-',
+           'A', 'A', 'T', 'A', 'T', 'T', 'C', 'T', 'T', 'T', 'C', 'T', 'C',
+           'T', 'G', 'T', 'G', 'T', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', 'A', '-', '-'],
+          ['A', 'A', 'G', 'A', 'A', 'G', 'G', 'T', 'G', 'A', 'G', 'A', 'T',
+           'G', 'A', 'C', 'A', 'A', 'G', 'G', '-', '-', '-', '-', '-', '-',
+           '-', 'G', 'T', 'G', 'T', 'A', 'T', 'A', 'G', 'A', 'T', 'A', 'G',
+           'G', 'A', 'T', 'A', 'T', 'T', 'C', 'T', 'T', 'G', 'C', 'T', 'T',
+           'T', 'G', 'G', 'G', 'T', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', 'G', '-', '-']], dtype='U')
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -5662,9 +9017,9 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 14)
         self.assertEqual(len(alignment.annotations["empty"]), 1)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3021180,   3021180,   3021180,   3021180,   3021184,   3021184,
                 3021184,   3021195,   3021195,   3021198,   3021199,   3021204],
@@ -5697,6 +9052,149 @@ class TestAlign_reading(unittest.TestCase):
             ]
                     # fmt: on
                 ),
+            )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3021180 -------------------TCCC-------AGAGAGTCTGA-TAGGAGGAG
+cavPor2.s       388 -------------------tgcctTTGTATAGTGGCTCTGAGTATAAAGTA
+oryCun1.s      3980 -------------------TGCCTGTGTATAGCATTTCTGAATATA-----
+ponAbe2.c 158037262 -----------------------TCTG---AGTGTGTATGAATATGAAGTA
+panTro2.c 157515095 -----------------------TCTG---AGTATGTATGAATATGAAGTA
+hg18.chr6 155025041 -----------------------TCTG---AGTATGTATGAATATGAAGTA
+calJac1.C     10782 -----------------------TCTG---AGTATGTCTGAATATGAAGTG
+otoGar1.s    171127 -----------------------TCTA---AGTGTGTCTGAACATGATGTG
+tupBel1.s    323493 -----------------------TCTC---TGAGTGTCTGAACTTGAGGTA
+eriEur1.s       432 -----------------------TCTC---AGTGTGTCTGACCAG------
+canFam2.c  47544317 -----------------------TCTG---AGTGTGTCTGAATGTGAGGTA
+felCat3.s     45895 -----------------------TCTG---AGTGTTCCTGAATGTGAGGTG
+dasNov1.s      7165 T-TGTGTGCCTTTGCGGAGCATTTCTG---AGCGTGTCTGAACTTGAGGTA
+echTel1.s     95297 TGCCCAGGACTGCGCATGGTATTTCTT---GGTGTGTCTGAAGGTGAGATA
+
+mm9.chr10   3021204
+cavPor2.s       356
+oryCun1.s      3953
+ponAbe2.c 158037237
+panTro2.c 157515070
+hg18.chr6 155025016
+calJac1.C     10807
+otoGar1.s    171102
+tupBel1.s    323468
+eriEur1.s       451
+canFam2.c  47544292
+felCat3.s     45870
+dasNov1.s      7118
+echTel1.s     95345
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=32886.000000
+s mm9.chr10                         3021180   24 + 129993255 -------------------TCCC-------AGAGAGTCTGA-TAGGAGGAG
+s cavPor2.scaffold_216473              9638   32 -     10026 -------------------tgcctTTGTATAGTGGCTCTGAGTATAAAGTA
+q cavPor2.scaffold_216473                                    -------------------67576649966655666885655548785776
+i cavPor2.scaffold_216473          C 0 C 0
+s oryCun1.scaffold_156751               746   27 -      4726 -------------------TGCCTGTGTATAGCATTTCTGAATATA-----
+q oryCun1.scaffold_156751                                    -------------------999999999999999999999999999-----
+i oryCun1.scaffold_156751          C 0 C 0
+s ponAbe2.chr6                     16173169   25 - 174210431 -----------------------TCTG---AGTGTGTATGAATATGAAGTA
+i ponAbe2.chr6                     I 15 C 0
+s panTro2.chr6                     16393517   25 - 173908612 -----------------------TCTG---AGTATGTATGAATATGAAGTA
+q panTro2.chr6                                               -----------------------9999---999999999999999999999
+i panTro2.chr6                     I 15 C 0
+s hg18.chr6                        15874951   25 - 170899992 -----------------------TCTG---AGTATGTATGAATATGAAGTA
+i hg18.chr6                        I 15 C 0
+s calJac1.Contig6394                  10782   25 +    133105 -----------------------TCTG---AGTATGTCTGAATATGAAGTG
+i calJac1.Contig6394               I 15 C 0
+s otoGar1.scaffold_334.1-359464      188337   25 -    359464 -----------------------TCTA---AGTGTGTCTGAACATGATGTG
+q otoGar1.scaffold_334.1-359464                              -----------------------9999---999999999999999999999
+i otoGar1.scaffold_334.1-359464    I 15 C 0
+s tupBel1.scaffold_114895.1-498454   174961   25 -    498454 -----------------------TCTC---TGAGTGTCTGAACTTGAGGTA
+q tupBel1.scaffold_114895.1-498454                           -----------------------9999---999999999999999999999
+i tupBel1.scaffold_114895.1-498454 I 623 C 0
+s eriEur1.scaffold_266115               432   19 +      4589 -----------------------TCTC---AGTGTGTCTGACCAG------
+q eriEur1.scaffold_266115                                    -----------------------9999---999999999999999------
+i eriEur1.scaffold_266115          I 9 C 0
+s canFam2.chr1                     78071939   25 - 125616256 -----------------------TCTG---AGTGTGTCTGAATGTGAGGTA
+q canFam2.chr1                                               -----------------------9999---999999999999999999999
+i canFam2.chr1                     I 9 C 0
+s felCat3.scaffold_205680             73459   25 -    119354 -----------------------TCTG---AGTGTTCCTGAATGTGAGGTG
+q felCat3.scaffold_205680                                    -----------------------9999---999999999999999999999
+i felCat3.scaffold_205680          I 9 C 0
+s dasNov1.scaffold_56749               3305   47 -     10470 T-TGTGTGCCTTTGCGGAGCATTTCTG---AGCGTGTCTGAACTTGAGGTA
+q dasNov1.scaffold_56749                                     7-3659557766555777595699547---965955937797755656587
+i dasNov1.scaffold_56749           C 0 C 0
+s echTel1.scaffold_288249             95297   48 +    100002 TGCCCAGGACTGCGCATGGTATTTCTT---GGTGTGTCTGAAGGTGAGATA
+q echTel1.scaffold_288249                                    999999999999999999999999999---999999999999999999999
+i echTel1.scaffold_288249          C 0 C 0
+e ornAna1.chr2                     14751195 5690 -  54797317 I
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', 'T', 'C', 'C', 'C', '-', '-', '-',
+           '-', '-', '-', '-', 'A', 'G', 'A', 'G', 'A', 'G', 'T', 'C', 'T',
+           'G', 'A', '-', 'T', 'A', 'G', 'G', 'A', 'G', 'G', 'A', 'G'],
+          ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', 't', 'g', 'c', 'c', 't', 'T', 'T',
+           'G', 'T', 'A', 'T', 'A', 'G', 'T', 'G', 'G', 'C', 'T', 'C', 'T',
+           'G', 'A', 'G', 'T', 'A', 'T', 'A', 'A', 'A', 'G', 'T', 'A'],
+          ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', 'T', 'G', 'C', 'C', 'T', 'G', 'T',
+           'G', 'T', 'A', 'T', 'A', 'G', 'C', 'A', 'T', 'T', 'T', 'C', 'T',
+           'G', 'A', 'A', 'T', 'A', 'T', 'A', '-', '-', '-', '-', '-'],
+          ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'T', 'C', 'T',
+           'G', '-', '-', '-', 'A', 'G', 'T', 'G', 'T', 'G', 'T', 'A', 'T',
+           'G', 'A', 'A', 'T', 'A', 'T', 'G', 'A', 'A', 'G', 'T', 'A'],
+          ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'T', 'C', 'T',
+           'G', '-', '-', '-', 'A', 'G', 'T', 'A', 'T', 'G', 'T', 'A', 'T',
+           'G', 'A', 'A', 'T', 'A', 'T', 'G', 'A', 'A', 'G', 'T', 'A'],
+          ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'T', 'C', 'T',
+           'G', '-', '-', '-', 'A', 'G', 'T', 'A', 'T', 'G', 'T', 'A', 'T',
+           'G', 'A', 'A', 'T', 'A', 'T', 'G', 'A', 'A', 'G', 'T', 'A'],
+          ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'T', 'C', 'T',
+           'G', '-', '-', '-', 'A', 'G', 'T', 'A', 'T', 'G', 'T', 'C', 'T',
+           'G', 'A', 'A', 'T', 'A', 'T', 'G', 'A', 'A', 'G', 'T', 'G'],
+          ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'T', 'C', 'T',
+           'A', '-', '-', '-', 'A', 'G', 'T', 'G', 'T', 'G', 'T', 'C', 'T',
+           'G', 'A', 'A', 'C', 'A', 'T', 'G', 'A', 'T', 'G', 'T', 'G'],
+          ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'T', 'C', 'T',
+           'C', '-', '-', '-', 'T', 'G', 'A', 'G', 'T', 'G', 'T', 'C', 'T',
+           'G', 'A', 'A', 'C', 'T', 'T', 'G', 'A', 'G', 'G', 'T', 'A'],
+          ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'T', 'C', 'T',
+           'C', '-', '-', '-', 'A', 'G', 'T', 'G', 'T', 'G', 'T', 'C', 'T',
+           'G', 'A', 'C', 'C', 'A', 'G', '-', '-', '-', '-', '-', '-'],
+          ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'T', 'C', 'T',
+           'G', '-', '-', '-', 'A', 'G', 'T', 'G', 'T', 'G', 'T', 'C', 'T',
+           'G', 'A', 'A', 'T', 'G', 'T', 'G', 'A', 'G', 'G', 'T', 'A'],
+          ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'T', 'C', 'T',
+           'G', '-', '-', '-', 'A', 'G', 'T', 'G', 'T', 'T', 'C', 'C', 'T',
+           'G', 'A', 'A', 'T', 'G', 'T', 'G', 'A', 'G', 'G', 'T', 'G'],
+          ['T', '-', 'T', 'G', 'T', 'G', 'T', 'G', 'C', 'C', 'T', 'T', 'T',
+           'G', 'C', 'G', 'G', 'A', 'G', 'C', 'A', 'T', 'T', 'T', 'C', 'T',
+           'G', '-', '-', '-', 'A', 'G', 'C', 'G', 'T', 'G', 'T', 'C', 'T',
+           'G', 'A', 'A', 'C', 'T', 'T', 'G', 'A', 'G', 'G', 'T', 'A'],
+          ['T', 'G', 'C', 'C', 'C', 'A', 'G', 'G', 'A', 'C', 'T', 'G', 'C',
+           'G', 'C', 'A', 'T', 'G', 'G', 'T', 'A', 'T', 'T', 'T', 'C', 'T',
+           'T', '-', '-', '-', 'G', 'G', 'T', 'G', 'T', 'G', 'T', 'C', 'T',
+           'G', 'A', 'A', 'G', 'G', 'T', 'G', 'A', 'G', 'A', 'T', 'A']],
+         dtype='U')
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -5960,9 +9458,9 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 15)
         self.assertEqual(len(alignment.annotations["empty"]), 1)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3021204,   3021205,   3021206,   3021210,   3021218,   3021218,
                 3021233,   3021236,   3021246,   3021246,   3021264,   3021265,
@@ -6013,6 +9511,90 @@ class TestAlign_reading(unittest.TestCase):
                     # fmt: on
                 ),
             )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3021204 TGCACTGGTTTTCC-TGCAGTGGTTCTCAGTAATAGGAAGACA-ACAGAATTTGAAGTAT
+echTel1.s     95345 GGCATTGGTTTTTAGAGAGAGAACCCACATAAGTAGGAAAACATTTTGAATTTATAGTAA
+dasNov1.s      7118 TGCATTGATTTTCAGTGAGGGAAATCACAC---TAAGAGAGCATTTTGAATTTATAATAA
+felCat3.s     45870 TGCATTGATTTTCA-TGCATTGATTCACATGAATAGGAATGCATTTTGAAATTATAGCAA
+canFam2.c  47544292 TGCATTAATTTTCA-TGCGTTGATTCACATGAATAGGAATACA-TTTGAATTTATAGGAA
+eriEur1.s       451 -GCACTGATTCTCG-AGGGTTGATTCCCAGTAAGAGGAAACTG-CGTGAGTTTACAGTAC
+sorAra1.s      1685 TGCATTGATTTTTA-AGTATTGATTCACATGAAAAGGAAAGCA-CTTCAATTTATGATAA
+tupBel1.s    323468 TGCATTGAATTCCA-TGTGTTATGTCACATTAATAGGAAACGA-TTCTAATTGATAGGAA
+otoGar1.s    171102 TG----GATTTTTA-CACATTGATTCACCTTAACGGGAAAACA-TGTGAATTTGTAGGAA
+calJac1.C     10807 TGCATTGGTTTTTA-TGCCTTGATTCACATGAATAGGAAAACG-TTTGAATTTATAGGAA
+hg18.chr6 155025016 TGCTTTGATTTTTA-TGCATTGATTTACATGAATAGGAAAATG-TTTGAATTTATAGTAA
+panTro2.c 157515070 TGCTTTGATTTTTA-TGCATTGATTTACATGAATAGGAAAACA-TTTGAATTTATAGTAA
+ponAbe2.c 158037237 TGCTTTGATTTTTA-TGCATTGATTTACATGGATAGGAAAACG-TTTGAATTTATAGTAA
+oryCun1.s      3953 ------TCTTTACA-TACTTTGATTTACATCGACGGGAAAACA-TTTGCATTTATAGCAA
+cavPor2.s       356 GGCATTGATTTCCA-TGCATTAATTCACATTAATAGGAAAACA-GTCCAATTTATAGTAA
+
+mm9.chr10   3021262 CCGGCTTTGGCCA   3021275
+echTel1.s     95405 ATATTCTTGGCTA     95418
+dasNov1.s      7061 ATGCTCTTGGCTA      7048
+felCat3.s     45811 ATGTTTTTGGCTG     45798
+canFam2.c  47544234 ATGCTTTTGGCTG  47544221
+eriEur1.s       508 ATGGGCTTGGCTG       521
+sorAra1.s      1627 AT-GATTTGGCCA      1615
+tupBel1.s    323410 ATGCTTCTGACCA    323397
+otoGar1.s    171048 AGGCATTTGGCCA    171035
+calJac1.C     10865 ATGGTTTTGGCCA     10878
+hg18.chr6 155024958 ATGGTTTTGGCCA 155024945
+panTro2.c 157515012 ATGGTTTTGGCCA 157514999
+ponAbe2.c 158037179 ATGGTTTTGGCCA 158037166
+oryCun1.s      3901 TGGCTTTTGGTCA      3888
+cavPor2.s       298 ATGGTTTTGGCCA       285
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=309116.000000
+s mm9.chr10                         3021204   71 + 129993255 TGCACTGGTTTTCC-TGCAGTGGTTCTCAGTAATAGGAAGACA-ACAGAATTTGAAGTATCCGGCTTTGGCCA
+s echTel1.scaffold_288249             95345   73 +    100002 GGCATTGGTTTTTAGAGAGAGAACCCACATAAGTAGGAAAACATTTTGAATTTATAGTAAATATTCTTGGCTA
+q echTel1.scaffold_288249                                    9999999999999999999999999999999999999999999999999999999999999999999999999
+i echTel1.scaffold_288249          C 0 C 0
+s dasNov1.scaffold_56749               3352   70 -     10470 TGCATTGATTTTCAGTGAGGGAAATCACAC---TAAGAGAGCATTTTGAATTTATAATAAATGCTCTTGGCTA
+q dasNov1.scaffold_56749                                     579663579997957596666783594865---8458696597898258979678997999677999997699
+i dasNov1.scaffold_56749           C 0 C 0
+s felCat3.scaffold_205680             73484   72 -    119354 TGCATTGATTTTCA-TGCATTGATTCACATGAATAGGAATGCATTTTGAAATTATAGCAAATGTTTTTGGCTG
+q felCat3.scaffold_205680                                    99999999999999-9999999999999999999999999999999999999999999999999999999999
+i felCat3.scaffold_205680          C 0 C 0
+s canFam2.chr1                     78071964   71 - 125616256 TGCATTAATTTTCA-TGCGTTGATTCACATGAATAGGAATACA-TTTGAATTTATAGGAAATGCTTTTGGCTG
+q canFam2.chr1                                               99999999999999-9999999999999999999999999999-99999999999999999999999999999
+i canFam2.chr1                     C 0 C 0
+s eriEur1.scaffold_266115               451   70 +      4589 -GCACTGATTCTCG-AGGGTTGATTCCCAGTAAGAGGAAACTG-CGTGAGTTTACAGTACATGGGCTTGGCTG
+q eriEur1.scaffold_266115                                    -9999999999999-9999999999999999999999999999-99999999999999999999999999799
+i eriEur1.scaffold_266115          C 0 C 0
+s sorAra1.scaffold_2476                3312   70 -      4997 TGCATTGATTTTTA-AGTATTGATTCACATGAAAAGGAAAGCA-CTTCAATTTATGATAAAT-GATTTGGCCA
+q sorAra1.scaffold_2476                                      89999999999989-9999999999999999999999999999-999999999799999999-9999999999
+i sorAra1.scaffold_2476            N 0 C 0
+s tupBel1.scaffold_114895.1-498454   174986   71 -    498454 TGCATTGAATTCCA-TGTGTTATGTCACATTAATAGGAAACGA-TTCTAATTGATAGGAAATGCTTCTGACCA
+q tupBel1.scaffold_114895.1-498454                           99999899899999-9999999999999999999999999999-99999999999999999999999999997
+i tupBel1.scaffold_114895.1-498454 C 0 C 0
+s otoGar1.scaffold_334.1-359464      188362   67 -    359464 TG----GATTTTTA-CACATTGATTCACCTTAACGGGAAAACA-TGTGAATTTGTAGGAAAGGCATTTGGCCA
+q otoGar1.scaffold_334.1-359464                              88----99999999-9899999899943848888999999999-66359999569699999923799351281
+i otoGar1.scaffold_334.1-359464    C 0 I 6280
+s calJac1.Contig6394                  10807   71 +    133105 TGCATTGGTTTTTA-TGCCTTGATTCACATGAATAGGAAAACG-TTTGAATTTATAGGAAATGGTTTTGGCCA
+i calJac1.Contig6394               C 0 C 0
+s hg18.chr6                        15874976   71 - 170899992 TGCTTTGATTTTTA-TGCATTGATTTACATGAATAGGAAAATG-TTTGAATTTATAGTAAATGGTTTTGGCCA
+i hg18.chr6                        C 0 C 0
+s panTro2.chr6                     16393542   71 - 173908612 TGCTTTGATTTTTA-TGCATTGATTTACATGAATAGGAAAACA-TTTGAATTTATAGTAAATGGTTTTGGCCA
+q panTro2.chr6                                               99999999999999-9999999999999999999999999999-99999999999999999999999999999
+i panTro2.chr6                     C 0 C 0
+s ponAbe2.chr6                     16173194   71 - 174210431 TGCTTTGATTTTTA-TGCATTGATTTACATGGATAGGAAAACG-TTTGAATTTATAGTAAATGGTTTTGGCCA
+i ponAbe2.chr6                     C 0 C 0
+s oryCun1.scaffold_156751               773   65 -      4726 ------TCTTTACA-TACTTTGATTTACATCGACGGGAAAACA-TTTGCATTTATAGCAATGGCTTTTGGTCA
+q oryCun1.scaffold_156751                                    ------99999994-9999999999999899999999999999-99999999999999899999999999999
+i oryCun1.scaffold_156751          C 0 C 0
+s cavPor2.scaffold_216473              9670   71 -     10026 GGCATTGATTTCCA-TGCATTAATTCACATTAATAGGAAAACA-GTCCAATTTATAGTAAATGGTTTTGGCCA
+q cavPor2.scaffold_216473                                    77888768786695-3886758796446556688656665478-68687676669688688666687574686
+i cavPor2.scaffold_216473          C 0 C 0
+e ornAna1.chr2                     14751195 5690 -  54797317 I
+
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 891219)
@@ -6271,9 +9853,9 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 15)
         self.assertEqual(len(alignment.annotations["empty"]), 1)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3021275,   3021308,   3021308,   3021333,   3021334,   3021344,
                 3021357,   3021358,   3021359,   3021369,   3021369,   3021369,
@@ -6324,6 +9906,105 @@ class TestAlign_reading(unittest.TestCase):
                     # fmt: on
                 ),
             )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3021275 CTTTCTCTGACATTACTGTAACTGAAGTAGCTC-AGAAGCACAAAAGGTCACATCATGCA
+cavPor2.s       285 CCTTTGCTGATGTTACTGTAAGCGAACTAGCTG-AAAAGCACAAAAGGTCATGTCAGGCA
+oryCun1.s      3888 TCGTCTCTGATGTTACTCTAGCTGAAAGCGCTC-CAAAGCACAAAAGGCCATGGCAGGCA
+ponAbe2.c 158037166 CCTTCTCTGATGTTACTGTAACTGAAATAGCTC-AAAAGCACAAAAGGTCATGGGAGGCA
+panTro2.c 157514999 CCTTCTCTGATGTTACTGTAACTGAAATAGCTC-AAAAGCACAAAAGGTCATGGGAGGCA
+hg18.chr6 155024945 CCTTCTCTGATGTTACTGTAACTGAAATAGCTC-AAAAGCACAAAAGGTCATGGGAGGCA
+calJac1.C     10878 CCTTCTCTGATATTACTGTAACTGAAATAGCTC-AAAAGCACAAAAGGTCATGGCAGGCA
+tupBel1.s    323397 TCCTCTCAGATGTTCCTGTAACCAAAGTAGCTC-AGAAGCACAAAAGGTCATGCCAGGCA
+sorAra1.s      1615 CCTTCTCTGATGTTACTGTAACTGAGGTAGCTCAAAAAGCACAAAAGGTCATGTCAGGCA
+eriEur1.s       521 CCTTCTCTGATCTGACTGTAACCGAAGTCTCTC-GAAAGCACAAAAGCTCACGGCAGGCC
+canFam2.c  47544221 CTGTCTCTGATGTTACTGTAACTGAAGTAGCTC-AAAAGCACAAAAGGTCATGTCAGGC-
+felCat3.s     45798 CTGTCTCTGATGTTACTGTAACTGAAATAGTTC-AAAAGCACAAAAGGTGATGTCAGGCA
+dasNov1.s      7048 CCTTCTCTGATGTTACTGTAACTGAAGAGGCTC-AAAAGCACAAAAGGTCATGTCGGGCA
+echTel1.s     95418 CCATCTCTGATATTACTGTAATGGAATTACTTT-GAAAGCACAAAAGGTCAGGACAAGCG
+ornAna1.c  40040432 CCACCTCTGATATCACTGTAACTCAGCTACCCA-GAAGATAGGAAAGGTCATATCAGCCA
+
+mm9.chr10   3021334 TCCATGCAGAATCCACTGAAGCTGTTTGGAAAGGC-----------------------CA
+cavPor2.s       226 TTTATGCAAAATTTACTAGTTCCGTTCATAAAGGCACCTCGCATTTTATTACTTAGTTCA
+oryCun1.s      3829 TTTATGTCAAATGTACTAGCACTGTTTATAACAGCACCTTGTGTTGTATTACTTTGTTCA
+ponAbe2.c 158037107 TTCATGTAAAACTTACTAGTGCTGTTTATAAGGGTACCTTGTGTTTTATTACTTTGTTAA
+panTro2.c 157514940 TTTATGTAAAACTTACTAGTGCTGTTTATAAGGGTACCTTGTGTTTTATTACTTTGTTAA
+hg18.chr6 155024886 TTTATGTAAAACTTACTAGTGCTGTTTATAAGGGTATCTTGTGTTTTATTACTTTGTTAA
+calJac1.C     10937 TTTATGTAAAACTTACTAGTGCTGTTTATAAAGGCACCTTGTGTTTTATTACTTTGTTAA
+tupBel1.s    323338 TTGATGTAAA-------------GTTTCTGAAGGCATCTCGTGTTTTATTACTTTGTTCA
+sorAra1.s      1555 TTGATGTAAAATATACCAGTGCTGTTTATAAAGACCCCTTGCATATAATGTTGTTGATCA
+eriEur1.s       580 TTTCTGTAAAATACAGCGGCGCTGCTTCCAAAGGCaccttgca------gatgtctctca
+canFam2.c  47544163 TTTATGTAAAATTTACTAGAGCTGTTTATAAAGGCACCTCGTGTAATATTGCTTTGTTCA
+felCat3.s     45739 TTTATGTAAAATTTACTAGTGCTGTTTATAAAGGTACCTTGTGTATTATTGCTTTGTTCA
+dasNov1.s      6989 TTGATGTAAAATTTACTAGTGCTG-TTTATAAAGGACCTTGTGTTCTATTACTTTTTCTA
+echTel1.s     95477 TGTATGTGAAATTTCCTAGAGCTGTTTTCCTGCACACCTTGGATTTTATTGCTTAGTTCA
+ornAna1.c  40040373 ATCATGTGCAACTTAATAGCCCTGTTCATAAAGCTGCTTTGTGTTTTATGAGGCTATTCA
+
+mm9.chr10   3021371 CGTGTCTTCCCAGAAGGCCAGTTACACCATCATTTCCTTCCATGTTTCAG   3021421
+cavPor2.s       166 TGTGTCTCGCAGGAAATCCAGTCACGCCATCATTTCCTTCCATATTTCAA       116
+oryCun1.s      3769 -----------GGAAATCCAGTCACGCCGCGATTTCCTTCCACATTTCAA      3730
+ponAbe2.c 158037047 TGTATCTTTCAGGAAATTCAGTCACGCCATCATTTCCTTCCATATTTCAT 158036997
+panTro2.c 157514880 TGTACCTTTCAGGAAATCCAGTCATGCCATCATTTCCTTCCATATTTCAT 157514830
+hg18.chr6 155024826 TGTACCTTTCAGGAAATCCAGTCATGCCATCATTTCCTTCCATATTTCAT 155024776
+calJac1.C     10997 TGTACCTTTCAGGAAATCCAGTCATGCCATCATTTCCTTCCATATTTCAT     11047
+tupBel1.s    323291 TGTGCCTTACAGGAAATCCAGTCGGGCCATCATTTCCTTCCATATCTCAG    323241
+sorAra1.s      1495 TGAACTTTTCCGGAAATCCTGTAATCTCATCATTTCCTCCCATATTCCAG      1445
+eriEur1.s       634 cgcATTTGGCAGGAGTCCCTGTCACTCGGCCAGTTCC-------TTCCTG       677
+canFam2.c  47544103 TGTACTTTACAGGAAATCCTGTCATCCTGTTACTTCCTTCCATATTTCAA  47544053
+felCat3.s     45679 TGCACTTTATAGGAAATCCTGTCATCCTGTCATTTCCTTCCATAGTTCAG     45629
+dasNov1.s      6930 TCCCCCTTACAGGAAATCCTGTCATACCATCATTTCCTTCCATAAGTCAC      6880
+echTel1.s     95537 TTTGCTTTCCCAGAAATCCCGCCATGCCATCATTTCCTTCCACATCTCAG     95587
+ornAna1.c  40040313 TTCACCTTAGGGGAAATCCTGTCAAGCCATCATTTCCTTCCATATCTTCA  40040263
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=891219.000000
+s mm9.chr10                         3021275  146 + 129993255 CTTTCTCTGACATTACTGTAACTGAAGTAGCTC-AGAAGCACAAAAGGTCACATCATGCATCCATGCAGAATCCACTGAAGCTGTTTGGAAAGGC-----------------------CACGTGTCTTCCCAGAAGGCCAGTTACACCATCATTTCCTTCCATGTTTCAG
+s cavPor2.scaffold_216473              9741  169 -     10026 CCTTTGCTGATGTTACTGTAAGCGAACTAGCTG-AAAAGCACAAAAGGTCATGTCAGGCATTTATGCAAAATTTACTAGTTCCGTTCATAAAGGCACCTCGCATTTTATTACTTAGTTCATGTGTCTCGCAGGAAATCCAGTCACGCCATCATTTCCTTCCATATTTCAA
+q cavPor2.scaffold_216473                                    668536545547664539866666666666668-8787886799997788875886655536666688786768476688854689668876558688874778656675665668746666788474786888875667457786687996867886548798845555
+i cavPor2.scaffold_216473          C 0 C 0
+s oryCun1.scaffold_156751               838  158 -      4726 TCGTCTCTGATGTTACTCTAGCTGAAAGCGCTC-CAAAGCACAAAAGGCCATGGCAGGCATTTATGTCAAATGTACTAGCACTGTTTATAACAGCACCTTGTGTTGTATTACTTTGTTCA-----------GGAAATCCAGTCACGCCGCGATTTCCTTCCACATTTCAA
+q oryCun1.scaffold_156751                                    999999879999999999999999999997999-99999799999999898999999988999999988999999989996999999999988897996999999999999979999987-----------899998987999799998998999999999777999899
+i oryCun1.scaffold_156751          C 0 C 0
+s ponAbe2.chr6                     16173265  169 - 174210431 CCTTCTCTGATGTTACTGTAACTGAAATAGCTC-AAAAGCACAAAAGGTCATGGGAGGCATTCATGTAAAACTTACTAGTGCTGTTTATAAGGGTACCTTGTGTTTTATTACTTTGTTAATGTATCTTTCAGGAAATTCAGTCACGCCATCATTTCCTTCCATATTTCAT
+i ponAbe2.chr6                     C 0 C 0
+s panTro2.chr6                     16393613  169 - 173908612 CCTTCTCTGATGTTACTGTAACTGAAATAGCTC-AAAAGCACAAAAGGTCATGGGAGGCATTTATGTAAAACTTACTAGTGCTGTTTATAAGGGTACCTTGTGTTTTATTACTTTGTTAATGTACCTTTCAGGAAATCCAGTCATGCCATCATTTCCTTCCATATTTCAT
+q panTro2.chr6                                               999999999999999999999999999999999-9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
+i panTro2.chr6                     C 0 C 0
+s hg18.chr6                        15875047  169 - 170899992 CCTTCTCTGATGTTACTGTAACTGAAATAGCTC-AAAAGCACAAAAGGTCATGGGAGGCATTTATGTAAAACTTACTAGTGCTGTTTATAAGGGTATCTTGTGTTTTATTACTTTGTTAATGTACCTTTCAGGAAATCCAGTCATGCCATCATTTCCTTCCATATTTCAT
+i hg18.chr6                        C 0 C 0
+s calJac1.Contig6394                  10878  169 +    133105 CCTTCTCTGATATTACTGTAACTGAAATAGCTC-AAAAGCACAAAAGGTCATGGCAGGCATTTATGTAAAACTTACTAGTGCTGTTTATAAAGGCACCTTGTGTTTTATTACTTTGTTAATGTACCTTTCAGGAAATCCAGTCATGCCATCATTTCCTTCCATATTTCAT
+i calJac1.Contig6394               C 0 C 0
+s tupBel1.scaffold_114895.1-498454   175057  156 -    498454 TCCTCTCAGATGTTCCTGTAACCAAAGTAGCTC-AGAAGCACAAAAGGTCATGCCAGGCATTGATGTAAA-------------GTTTCTGAAGGCATCTCGTGTTTTATTACTTTGTTCATGTGCCTTACAGGAAATCCAGTCGGGCCATCATTTCCTTCCATATCTCAG
+q tupBel1.scaffold_114895.1-498454                           999999999999999999999999999999999-999999999999999999999999999999999999-------------999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
+i tupBel1.scaffold_114895.1-498454 C 0 C 0
+s sorAra1.scaffold_2476                3382  170 -      4997 CCTTCTCTGATGTTACTGTAACTGAGGTAGCTCAAAAAGCACAAAAGGTCATGTCAGGCATTGATGTAAAATATACCAGTGCTGTTTATAAAGACCCCTTGCATATAATGTTGTTGATCATGAACTTTTCCGGAAATCCTGTAATCTCATCATTTCCTCCCATATTCCAG
+q sorAra1.scaffold_2476                                      99999999999999997999999999999999999999999999999999999999999999999999999999999979999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
+i sorAra1.scaffold_2476            C 0 C 0
+s eriEur1.scaffold_266115               521  156 +      4589 CCTTCTCTGATCTGACTGTAACCGAAGTCTCTC-GAAAGCACAAAAGCTCACGGCAGGCCTTTCTGTAAAATACAGCGGCGCTGCTTCCAAAGGCaccttgca------gatgtctctcacgcATTTGGCAGGAGTCCCTGTCACTCGGCCAGTTCC-------TTCCTG
+q eriEur1.scaffold_266115                                    999999999999999999999999999999999-999999999999999999999999799999999999999999999998987999899999999999999------999999999999999999999999999999999999999999999998-------999989
+i eriEur1.scaffold_266115          C 0 C 0
+s canFam2.chr1                     78072035  168 - 125616256 CTGTCTCTGATGTTACTGTAACTGAAGTAGCTC-AAAAGCACAAAAGGTCATGTCAGGC-TTTATGTAAAATTTACTAGAGCTGTTTATAAAGGCACCTCGTGTAATATTGCTTTGTTCATGTACTTTACAGGAAATCCTGTCATCCTGTTACTTCCTTCCATATTTCAA
+q canFam2.chr1                                               999999999999999999999999999999999-9999999999999999999999999-99999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
+i canFam2.chr1                     C 0 C 0
+s felCat3.scaffold_205680             73556  169 -    119354 CTGTCTCTGATGTTACTGTAACTGAAATAGTTC-AAAAGCACAAAAGGTGATGTCAGGCATTTATGTAAAATTTACTAGTGCTGTTTATAAAGGTACCTTGTGTATTATTGCTTTGTTCATGCACTTTATAGGAAATCCTGTCATCCTGTCATTTCCTTCCATAGTTCAG
+q felCat3.scaffold_205680                                    999999999999999999999999999999999-9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
+i felCat3.scaffold_205680          C 0 I 34165
+s dasNov1.scaffold_56749               3422  168 -     10470 CCTTCTCTGATGTTACTGTAACTGAAGAGGCTC-AAAAGCACAAAAGGTCATGTCGGGCATTGATGTAAAATTTACTAGTGCTG-TTTATAAAGGACCTTGTGTTCTATTACTTTTTCTATCCCCCTTACAGGAAATCCTGTCATACCATCATTTCCTTCCATAAGTCAC
+q dasNov1.scaffold_56749                                     989999999999999937699999999999999-79999999999999999999999999999999999999999999999999-9999999999999999999999999999999999999999999999999999999999999999999999999999999999999
+i dasNov1.scaffold_56749           C 0 C 0
+s echTel1.scaffold_288249             95418  169 +    100002 CCATCTCTGATATTACTGTAATGGAATTACTTT-GAAAGCACAAAAGGTCAGGACAAGCGTGTATGTGAAATTTCCTAGAGCTGTTTTCCTGCACACCTTGGATTTTATTGCTTAGTTCATTTGCTTTCCCAGAAATCCCGCCATGCCATCATTTCCTTCCACATCTCAG
+q echTel1.scaffold_288249                                    999999999999999999999999999999999-9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
+i echTel1.scaffold_288249          C 0 C 0
+s ornAna1.chr2                     14756885  169 -  54797317 CCACCTCTGATATCACTGTAACTCAGCTACCCA-GAAGATAGGAAAGGTCATATCAGCCAATCATGTGCAACTTAATAGCCCTGTTCATAAAGCTGCTTTGTGTTTTATGAGGCTATTCATTCACCTTAGGGGAAATCCTGTCAAGCCATCATTTCCTTCCATATCTTCA
+i ornAna1.chr2                     I 5690 C 0
+e otoGar1.scaffold_334.1-359464      188429 6280 -    359464 I
+
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, 30254)
@@ -6570,9 +10251,9 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 14)
         self.assertEqual(len(alignment.annotations["empty"]), 2)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3021421,   3021421,   3021424,   3021425,   3021435,   3021435,
                 3021435,   3021435,   3021438,   3021439,   3021440,   3021443,
@@ -6634,6 +10315,85 @@ class TestAlign_reading(unittest.TestCase):
                     # fmt: on
                 ),
             )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3021421 -ACGTTGCTCATTGT-----AATTGAAGCATTTATTACCAA--------TG---------
+cavPor2.s       116 -CTGTTCCTTGTTACA----AATAAAAGTATGTTTTGCTGA--------CG-------G-
+oryCun1.s      3730 -TGGTTCCTCATTATG----GATTAAAGCATTCACTGCTAA--------T----------
+ponAbe2.c 158036997 -CTGTTGCTCATTATA----AATAAAAGTGTTTATTGCTAA--------T----------
+panTro2.c 157514830 -CTGTTCCTCATTATA----AATAAAAGTGTTTATTGCTAA--------C----------
+hg18.chr6 155024776 -CTGTTCCTCATTATA----AATAAAAGTGTTTATTGCTAA--------C----------
+calJac1.C     11047 -CTGTTTCTCATTATA----AAT--AAGTGTTTATTGCTAA--------C----------
+tupBel1.s    323241 -CTGCTCCTCATGATA----AAT-ATAGCGTTTGTTGCTAA-------------------
+sorAra1.s      1445 -CTGTTCCTTCTTAGATTaaaaaaaGAGCGTTTATGACCAG--------CA-------GG
+eriEur1.s       677 -CTCCTTGTTCTTGAAGC----------CGTTTTTTATTGT--------CA-------GT
+canFam2.c  47544053 -CTGTTTCTCATTATA----AATAAAAGCATTTATTGCTAA--------TG-------T-
+dasNov1.s      6880 -CTGTTCCTCTTTAT-----AATAAAAGCATTTACTGCTAA--------CGGCTCCTC--
+echTel1.s     95587 -CTGATCCTCATTATA----AATAAAAGTGTTTGTTACTAA--------TG---------
+ornAna1.c  40040263 ACTG-TCCTCATTGTA----CAGGGACTCTTTTATTACTAAAGATCCCCC----------
+
+mm9.chr10   3021458 -----CCTTCCC   3021465
+cavPor2.s        77 ----CCCCTCTG        69
+oryCun1.s      3693 ------------      3693
+ponAbe2.c 158036960 ----GCTTTCTC 158036952
+panTro2.c 157514793 ----GCTTTCTC 157514785
+hg18.chr6 155024739 ----GCTTTCTC 155024731
+calJac1.C     11082 ----GCTTTCTC     11090
+tupBel1.s    323206 ------------    323206
+sorAra1.s      1401 TTCC--------      1397
+eriEur1.s       711 G-----------       712
+canFam2.c  47544014 -----------C  47544013
+dasNov1.s      6836 ------------      6836
+echTel1.s     95625 ------------     95625
+ornAna1.c  40040218 ------------  40040218
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=30254.000000
+s mm9.chr10                         3021421    44 + 129993255 -ACGTTGCTCATTGT-----AATTGAAGCATTTATTACCAA--------TG--------------CCTTCCC
+s cavPor2.scaffold_216473              9910    47 -     10026 -CTGTTCCTTGTTACA----AATAAAAGTATGTTTTGCTGA--------CG-------G-----CCCCTCTG
+q cavPor2.scaffold_216473                                     -476754645667788----868678677444665235455--------76-------4-----36669356
+i cavPor2.scaffold_216473          C 0 C 0
+s oryCun1.scaffold_156751               996    37 -      4726 -TGGTTCCTCATTATG----GATTAAAGCATTCACTGCTAA--------T----------------------
+q oryCun1.scaffold_156751                                     -999999999899999----887999999999999999999--------9----------------------
+i oryCun1.scaffold_156751          C 0 I 2345
+s ponAbe2.chr6                     16173434    45 - 174210431 -CTGTTGCTCATTATA----AATAAAAGTGTTTATTGCTAA--------T--------------GCTTTCTC
+i ponAbe2.chr6                     C 0 I 4
+s panTro2.chr6                     16393782    45 - 173908612 -CTGTTCCTCATTATA----AATAAAAGTGTTTATTGCTAA--------C--------------GCTTTCTC
+q panTro2.chr6                                                -999999999999999----999999999999999999999--------9--------------99999999
+i panTro2.chr6                     C 0 I 4
+s hg18.chr6                        15875216    45 - 170899992 -CTGTTCCTCATTATA----AATAAAAGTGTTTATTGCTAA--------C--------------GCTTTCTC
+i hg18.chr6                        C 0 I 4
+s calJac1.Contig6394                  11047    43 +    133105 -CTGTTTCTCATTATA----AAT--AAGTGTTTATTGCTAA--------C--------------GCTTTCTC
+i calJac1.Contig6394               C 0 I 701
+s tupBel1.scaffold_114895.1-498454   175213    35 -    498454 -CTGCTCCTCATGATA----AAT-ATAGCGTTTGTTGCTAA-------------------------------
+q tupBel1.scaffold_114895.1-498454                            -999999999999999----999-99999999999999999-------------------------------
+i tupBel1.scaffold_114895.1-498454 C 0 I 10695
+s sorAra1.scaffold_2476                3552    48 -      4997 -CTGTTCCTTCTTAGATTaaaaaaaGAGCGTTTATGACCAG--------CA-------GGTTCC--------
+q sorAra1.scaffold_2476                                       -9999999999999999999999999999999997669755--------99-------999999--------
+i sorAra1.scaffold_2476            C 0 N 0
+s eriEur1.scaffold_266115               677    35 +      4589 -CTCCTTGTTCTTGAAGC----------CGTTTTTTATTGT--------CA-------GTG-----------
+q eriEur1.scaffold_266115                                     -98959997997999999----------9999999999999--------89-------999-----------
+i eriEur1.scaffold_266115          C 0 N 0
+s canFam2.chr1                     78072203    40 - 125616256 -CTGTTTCTCATTATA----AATAAAAGCATTTATTGCTAA--------TG-------T------------C
+q canFam2.chr1                                                -999999999999999----999999999999999999999--------99-------9------------9
+i canFam2.chr1                     C 0 C 0
+s dasNov1.scaffold_56749               3590    44 -     10470 -CTGTTCCTCTTTAT-----AATAAAAGCATTTACTGCTAA--------CGGCTCCTC--------------
+q dasNov1.scaffold_56749                                      -99999999999999-----999999999999999999999--------999999999--------------
+i dasNov1.scaffold_56749           C 0 I 904
+s echTel1.scaffold_288249             95587    38 +    100002 -CTGATCCTCATTATA----AATAAAAGTGTTTGTTACTAA--------TG---------------------
+q echTel1.scaffold_288249                                     -999999999999999----999999999999999999999--------99---------------------
+i echTel1.scaffold_288249          C 0 N 0
+s ornAna1.chr2                     14757054    45 -  54797317 ACTG-TCCTCATTGTA----CAGGGACTCTTTTATTACTAAAGATCCCCC----------------------
+i ornAna1.chr2                     C 0 C 0
+e felCat3.scaffold_205680             73725 34165 -    119354 I
+e otoGar1.scaffold_334.1-359464      188429  6280 -    359464 I
+
+""",
         )
         alignment = next(alignments)
         self.assertEqual(alignment.score, -9167)
@@ -6773,9 +10533,9 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 7)
         self.assertEqual(len(alignment.annotations["empty"]), 6)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3021465,   3021469,   3021469,   3021470,   3021473,   3021476,
                 3021477,   3021477,   3021494,   3021494],
@@ -6794,6 +10554,97 @@ class TestAlign_reading(unittest.TestCase):
             ]
                     # fmt: on
                 ),
+            )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3021465 CCCT--ACACTGTC----AAGTGGGAGGAGACAGT--------------------
+cavPor2.s        69 AGCC--acactgg-----gggtggggtgggatggt--------------------
+ponAbe2.c 158036948 -------CCCTGTG----GGGGCGATAGGAGCAGC--------------------
+panTro2.c 157514781 -------CCATGTG----GGGGCGATAGGGGCAGC--------------------
+hg18.chr6 155024727 -------CCATGTG----GGGGCGATAGGGGCAGC--------------------
+canFam2.c  47544013 CCCTGAACCACATG----GGGGGTGTGTGTGTGTG--------------------
+ornAna1.c  40040218 ----------TGTGTCATAGGAGTTTGGATGTAGCCCTCTTTCATCTTTGCTGGC
+
+mm9.chr10   3021494
+cavPor2.s        41
+ponAbe2.c 158036924
+panTro2.c 157514757
+hg18.chr6 155024703
+canFam2.c  47543982
+ornAna1.c  40040173
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=-9167.000000
+s mm9.chr10                         3021465    29 + 129993255 CCCT--ACACTGTC----AAGTGGGAGGAGACAGT--------------------
+s cavPor2.scaffold_216473              9957    28 -     10026 AGCC--acactgg-----gggtggggtgggatggt--------------------
+q cavPor2.scaffold_216473                                     7667--6878566-----66544895554554677--------------------
+i cavPor2.scaffold_216473          C 0 N 0
+s ponAbe2.chr6                     16173483    24 - 174210431 -------CCCTGTG----GGGGCGATAGGAGCAGC--------------------
+i ponAbe2.chr6                     I 4 I 9
+s panTro2.chr6                     16393831    24 - 173908612 -------CCATGTG----GGGGCGATAGGGGCAGC--------------------
+q panTro2.chr6                                                -------9999999----99999999999999999--------------------
+i panTro2.chr6                     I 4 I 9
+s hg18.chr6                        15875265    24 - 170899992 -------CCATGTG----GGGGCGATAGGGGCAGC--------------------
+i hg18.chr6                        I 4 I 9
+s canFam2.chr1                     78072243    31 - 125616256 CCCTGAACCACATG----GGGGGTGTGTGTGTGTG--------------------
+q canFam2.chr1                                                99999999999999----99999999999999999--------------------
+i canFam2.chr1                     C 0 I 13
+s ornAna1.chr2                     14757099    45 -  54797317 ----------TGTGTCATAGGAGTTTGGATGTAGCCCTCTTTCATCTTTGCTGGC
+i ornAna1.chr2                     C 0 C 0
+e dasNov1.scaffold_56749               3634   904 -     10470 I
+e felCat3.scaffold_205680             73725 34165 -    119354 I
+e calJac1.Contig6394                  11090   701 +    133105 I
+e tupBel1.scaffold_114895.1-498454   175248 10695 -    498454 I
+e otoGar1.scaffold_334.1-359464      188429  6280 -    359464 I
+e oryCun1.scaffold_156751              1033  2345 -      4726 I
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['C', 'C', 'C', 'T', '-', '-', 'A', 'C', 'A', 'C', 'T', 'G', 'T',
+           'C', '-', '-', '-', '-', 'A', 'A', 'G', 'T', 'G', 'G', 'G', 'A',
+           'G', 'G', 'A', 'G', 'A', 'C', 'A', 'G', 'T', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-'],
+          ['A', 'G', 'C', 'C', '-', '-', 'a', 'c', 'a', 'c', 't', 'g', 'g',
+           '-', '-', '-', '-', '-', 'g', 'g', 'g', 't', 'g', 'g', 'g', 'g',
+           't', 'g', 'g', 'g', 'a', 't', 'g', 'g', 't', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-'],
+          ['-', '-', '-', '-', '-', '-', '-', 'C', 'C', 'C', 'T', 'G', 'T',
+           'G', '-', '-', '-', '-', 'G', 'G', 'G', 'G', 'C', 'G', 'A', 'T',
+           'A', 'G', 'G', 'A', 'G', 'C', 'A', 'G', 'C', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-'],
+          ['-', '-', '-', '-', '-', '-', '-', 'C', 'C', 'A', 'T', 'G', 'T',
+           'G', '-', '-', '-', '-', 'G', 'G', 'G', 'G', 'C', 'G', 'A', 'T',
+           'A', 'G', 'G', 'G', 'G', 'C', 'A', 'G', 'C', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-'],
+          ['-', '-', '-', '-', '-', '-', '-', 'C', 'C', 'A', 'T', 'G', 'T',
+           'G', '-', '-', '-', '-', 'G', 'G', 'G', 'G', 'C', 'G', 'A', 'T',
+           'A', 'G', 'G', 'G', 'G', 'C', 'A', 'G', 'C', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-'],
+          ['C', 'C', 'C', 'T', 'G', 'A', 'A', 'C', 'C', 'A', 'C', 'A', 'T',
+           'G', '-', '-', '-', '-', 'G', 'G', 'G', 'G', 'G', 'T', 'G', 'T',
+           'G', 'T', 'G', 'T', 'G', 'T', 'G', 'T', 'G', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-'],
+          ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'T', 'G', 'T',
+           'G', 'T', 'C', 'A', 'T', 'A', 'G', 'G', 'A', 'G', 'T', 'T', 'T',
+           'G', 'G', 'A', 'T', 'G', 'T', 'A', 'G', 'C', 'C', 'C', 'T', 'C',
+           'T', 'T', 'T', 'C', 'A', 'T', 'C', 'T', 'T', 'T', 'G', 'C', 'T',
+           'G', 'G', 'C']], dtype='U')
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -6907,9 +10758,9 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(len(alignment.sequences), 6)
         self.assertEqual(len(alignment.annotations["empty"]), 6)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3021494,   3021505,   3021505,   3021521,   3021523,   3021532,
                 3021536],
@@ -6928,20 +10779,101 @@ class TestAlign_reading(unittest.TestCase):
                 ),
             )
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3021494 TGTTTAGTACC----ATGCTTAGGAATGATAAACTCACTTAGTGtt   3021536
+ponAbe2.c 158036915 TGTTGCATGTCCTTTATTCTTTGGCGTGATAGGCTCACCCAATCTT 158036869
+panTro2.c 157514748 TGTTGCATATCCTTTATTCTTTGGCGTGATAGGCTCACCCAATCTT 157514702
+hg18.chr6 155024694 TGTTGCATGTCGTTTATTCTTTGGCGTGATAGGCTCACCCAATCTT 155024648
+canFam2.c  47543969 TGTTAAGTCTCACTTGCTGTTCAAAGTGATAGCTTCACTCCATCAT  47543923
+ornAna1.c  40040173 TGTTTAAAATG----ATTGCTAGAACTTCTA--CTCACTGGA----  40040137
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=15763.000000
+s mm9.chr10                         3021494    42 + 129993255 TGTTTAGTACC----ATGCTTAGGAATGATAAACTCACTTAGTGtt
+s ponAbe2.chr6                     16173516    46 - 174210431 TGTTGCATGTCCTTTATTCTTTGGCGTGATAGGCTCACCCAATCTT
+i ponAbe2.chr6                     I 9 I 943
+s panTro2.chr6                     16393864    46 - 173908612 TGTTGCATATCCTTTATTCTTTGGCGTGATAGGCTCACCCAATCTT
+q panTro2.chr6                                                9999999999999999999999999999999999999999999999
+i panTro2.chr6                     I 9 I 10
+s hg18.chr6                        15875298    46 - 170899992 TGTTGCATGTCGTTTATTCTTTGGCGTGATAGGCTCACCCAATCTT
+i hg18.chr6                        I 9 I 931
+s canFam2.chr1                     78072287    46 - 125616256 TGTTAAGTCTCACTTGCTGTTCAAAGTGATAGCTTCACTCCATCAT
+q canFam2.chr1                                                9999999999999999999999999999999999999999999999
+i canFam2.chr1                     I 13 I 1
+s ornAna1.chr2                     14757144    36 -  54797317 TGTTTAAAATG----ATTGCTAGAACTTCTA--CTCACTGGA----
+i ornAna1.chr2                     C 0 C 0
+e dasNov1.scaffold_56749               3634   904 -     10470 I
+e felCat3.scaffold_205680             73725 34165 -    119354 I
+e calJac1.Contig6394                  11090   701 +    133105 I
+e tupBel1.scaffold_114895.1-498454   175248 10695 -    498454 I
+e otoGar1.scaffold_334.1-359464      188429  6280 -    359464 I
+e oryCun1.scaffold_156751              1033  2345 -      4726 I
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['T', 'G', 'T', 'T', 'T', 'A', 'G', 'T', 'A', 'C', 'C', '-', '-',
+           '-', '-', 'A', 'T', 'G', 'C', 'T', 'T', 'A', 'G', 'G', 'A', 'A',
+           'T', 'G', 'A', 'T', 'A', 'A', 'A', 'C', 'T', 'C', 'A', 'C', 'T',
+           'T', 'A', 'G', 'T', 'G', 't', 't'],
+          ['T', 'G', 'T', 'T', 'G', 'C', 'A', 'T', 'G', 'T', 'C', 'C', 'T',
+           'T', 'T', 'A', 'T', 'T', 'C', 'T', 'T', 'T', 'G', 'G', 'C', 'G',
+           'T', 'G', 'A', 'T', 'A', 'G', 'G', 'C', 'T', 'C', 'A', 'C', 'C',
+           'C', 'A', 'A', 'T', 'C', 'T', 'T'],
+          ['T', 'G', 'T', 'T', 'G', 'C', 'A', 'T', 'A', 'T', 'C', 'C', 'T',
+           'T', 'T', 'A', 'T', 'T', 'C', 'T', 'T', 'T', 'G', 'G', 'C', 'G',
+           'T', 'G', 'A', 'T', 'A', 'G', 'G', 'C', 'T', 'C', 'A', 'C', 'C',
+           'C', 'A', 'A', 'T', 'C', 'T', 'T'],
+          ['T', 'G', 'T', 'T', 'G', 'C', 'A', 'T', 'G', 'T', 'C', 'G', 'T',
+           'T', 'T', 'A', 'T', 'T', 'C', 'T', 'T', 'T', 'G', 'G', 'C', 'G',
+           'T', 'G', 'A', 'T', 'A', 'G', 'G', 'C', 'T', 'C', 'A', 'C', 'C',
+           'C', 'A', 'A', 'T', 'C', 'T', 'T'],
+          ['T', 'G', 'T', 'T', 'A', 'A', 'G', 'T', 'C', 'T', 'C', 'A', 'C',
+           'T', 'T', 'G', 'C', 'T', 'G', 'T', 'T', 'C', 'A', 'A', 'A', 'G',
+           'T', 'G', 'A', 'T', 'A', 'G', 'C', 'T', 'T', 'C', 'A', 'C', 'T',
+           'C', 'C', 'A', 'T', 'C', 'A', 'T'],
+          ['T', 'G', 'T', 'T', 'T', 'A', 'A', 'A', 'A', 'T', 'G', '-', '-',
+           '-', '-', 'A', 'T', 'T', 'G', 'C', 'T', 'A', 'G', 'A', 'A', 'C',
+           'T', 'T', 'C', 'T', 'A', '-', '-', 'C', 'T', 'C', 'A', 'C', 'T',
+           'G', 'G', 'A', '-', '-', '-', '-']], dtype='U')
+                # fmt: on
+            )
+        )
+        self.assertRaises(StopIteration, next, alignments)
+
+    def test_reading_ucsc_mm9_chr10(self):
+        """Test parsing MAF file ucsc_mm9_chr10.maf."""
+        path = "MAF/ucsc_mm9_chr10.maf"
+        alignments = Align.parse(path, "maf")
+        self.check_reading_ucsc_mm9_chr10(alignments)
+        self.assertRaises(StopIteration, next, alignments)
+        alignments = iter(alignments)
+        self.check_reading_ucsc_mm9_chr10(alignments)
+        self.assertRaises(StopIteration, next, alignments)
+        alignments = alignments[:]
+        self.check_reading_ucsc_mm9_chr10(alignments)
 
     def test_reading_missing_signature(self):
         """Test parsing MAF file ucsc_mm9_chr10_big.maf with missing signature."""
         path = "MAF/ucsc_mm9_chr10_big.maf"
         with self.assertRaises(ValueError) as cm:
-            maf.AlignmentIterator(path)
+            Align.parse(path, "maf")
         self.assertEqual(str(cm.exception), "header line does not start with ##maf")
 
     def test_reading_ucsc_mm9_chr10_bad(self):
         """Test parsing MAF file ucsc_mm9_chr10_bad.maf with incorrect sequence size."""
         path = "MAF/ucsc_mm9_chr10_bad.maf"
-        alignments = maf.AlignmentIterator(path)
-        self.assertEqual(alignments.metadata["version"], "1")
-        self.assertEqual(alignments.metadata["scoring"], "autoMZ.v1")
+        alignments = Align.parse(path, "maf")
+        self.assertEqual(alignments.metadata["MAF Version"], "1")
+        self.assertEqual(alignments.metadata["Scoring"], "autoMZ.v1")
         next(alignments)
         next(alignments)
         next(alignments)
@@ -6957,9 +10889,9 @@ class TestAlign_reading(unittest.TestCase):
     def test_reading_length_coords_mismatch(self):
         """Test parsing inconsistent MAF file length_coords_mismatch.maf."""
         path = "MAF/length_coords_mismatch.maf"
-        alignments = maf.AlignmentIterator(path)
-        self.assertEqual(alignments.metadata["version"], "1")
-        self.assertEqual(alignments.metadata["scoring"], "autoMZ.v1")
+        alignments = Align.parse(path, "maf")
+        self.assertEqual(alignments.metadata["MAF Version"], "1")
+        self.assertEqual(alignments.metadata["Scoring"], "autoMZ.v1")
         alignment = next(alignments)
         self.assertEqual(alignment.score, 6441)
         self.assertEqual(len(alignment.sequences), 2)
@@ -6991,6 +10923,33 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.sequences[1].annotations["leftCount"], 0)
         self.assertEqual(alignment.sequences[1].annotations["rightStatus"], "N")
         self.assertEqual(alignment.sequences[1].annotations["rightCount"], 0)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm8.chr10   3009319 TCATAGGTATTTATTTTTAAATATGGTTTGCTTTATGGCTAGAACACACCGATTACTTAA
+                  0 |||.||.||||||.|.||||||||||||||.|.|||||.||.....||..|.||||||..
+oryCun1.s     11087 TCACAGATATTTACTATTAAATATGGTTTGTTATATGGTTACGGTTCATAGGTTACTTGG
+
+mm8.chr10   3009379 AATAGGATTAACC--CCCATACACTTTAAAAATGATTAAACAACATTTCTGCTGCTCGCT
+                 60 |||.|||||||||--|..||.||.|..|.||.||.|||.||....||..||....|.|||
+oryCun1.s     11147 AATTGGATTAACCTTCTTATTCATTGCAGAATTGGTTACACTGTGTTCTTGACCTTTGCT
+
+mm8.chr10   3009437 CACATTCTTCATAGAAGATGACATAATGTATTTTCCTTTTGGTT 3009481
+                120 ....||||.|||.|||..|||..|.|..||.|||||.|||||||     164
+oryCun1.s     11207 TGTTTTCTCCATGGAAACTGATGTCAAATACTTTCCCTTTGGTT   11251
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=6441.000000
+s mm8.chr10               3009319 162 + 129993255 TCATAGGTATTTATTTTTAAATATGGTTTGCTTTATGGCTAGAACACACCGATTACTTAAAATAGGATTAACC--CCCATACACTTTAAAAATGATTAAACAACATTTCTGCTGCTCGCTCACATTCTTCATAGAAGATGACATAATGTATTTTCCTTTTGGTT
+s oryCun1.scaffold_133159   11087 164 +     13221 TCACAGATATTTACTATTAAATATGGTTTGTTATATGGTTACGGTTCATAGGTTACTTGGAATTGGATTAACCTTCTTATTCATTGCAGAATTGGTTACACTGTGTTCTTGACCTTTGCTTGTTTTCTCCATGGAAACTGATGTCAAATACTTTCCCTTTGGTT
+q oryCun1.scaffold_133159                         99569899999998999999999999999999999999999999999999999999999999999999999757878999975999999999999999979999999999997899999999999997997999999869999996999988997997999999
+i oryCun1.scaffold_133159 N 0 N 0
+
+""",
+        )
         with self.assertRaises(ValueError) as cm:
             next(alignments)
         self.assertEqual(
@@ -7000,14 +10959,30 @@ class TestAlign_reading(unittest.TestCase):
     def test_reading_bug2453(self):
         """Test parsing bug2453.maf."""
         path = "MAF/bug2453.maf"
-        alignments = maf.AlignmentIterator(path)
+        alignments = Align.parse(path, "maf")
         self.assertEqual(len(alignments.metadata), 3)
-        self.check_ucsc_test(alignments)
+        self.check_alignments(alignments)
 
     def test_reading_ucsc_test(self):
         """Test parsing ucsc_test.maf."""
         path = "MAF/ucsc_test.maf"
-        alignments = maf.AlignmentIterator(path)
+        alignments = Align.parse(path, "maf")
+        self.check_header(alignments)
+        self.check_alignments(alignments)
+        alignments = iter(alignments)
+        self.check_header(alignments)
+        self.check_alignments(alignments)
+        with Align.parse(path, "maf") as alignments:
+            self.check_header(alignments)
+            self.check_alignments(alignments)
+        with self.assertRaises(AttributeError):
+            alignments._stream
+        with Align.parse(path, "maf") as alignments:
+            pass
+        with self.assertRaises(AttributeError):
+            alignments._stream
+
+    def check_header(self, alignments):
         self.assertEqual(len(alignments.metadata), 9)
         self.assertEqual(alignments.metadata["name"], "euArc")
         self.assertEqual(alignments.metadata["visibility"], "pack")
@@ -7018,13 +10993,12 @@ class TestAlign_reading(unittest.TestCase):
             ["hg16", "panTro1", "baboon", "mm4", "rn3"],
         )
         self.assertEqual(alignments.metadata["description"], "A sample alignment")
-        self.check_ucsc_test(alignments)
 
-    def check_ucsc_test(self, alignments):
-        self.assertEqual(alignments.metadata["version"], "1")
-        self.assertEqual(alignments.metadata["scoring"], "tba.v8")
+    def check_alignments(self, alignments):
+        self.assertEqual(alignments.metadata["MAF Version"], "1")
+        self.assertEqual(alignments.metadata["Scoring"], "tba.v8")
         self.assertEqual(
-            alignments.metadata["comments"],
+            alignments.metadata["Comments"],
             [
                 "tba.v8 (((human chimp) baboon) (mouse rat))",
                 "multiz.v7",
@@ -7071,9 +11045,9 @@ class TestAlign_reading(unittest.TestCase):
         )
         self.assertEqual(alignment[4], "-AA-GGGGATGCTAAGCCAATGAGTTGTTGTCTCTCAATGTG")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     [
                         # fmt: off
         [27578828, 27578829, 27578831, 27578831, 27578850, 27578850, 27578866],
@@ -7084,6 +11058,55 @@ class TestAlign_reading(unittest.TestCase):
                         # fmt: on
                     ]
                 ),
+            )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+hg16.chr7  27578828 AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG 27578866
+panTro1.c  28741140 AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG 28741178
+baboon       116834 AAA-GGGAATGTTAACCAAATGA---GTTGTCTCTTATGGTG   116872
+mm4.chr6   53215344 -AATGGGAATGTTAAGCAAACGA---ATTGTCTCTCAGTGTG 53215382
+rn3.chr4   81344243 -AA-GGGGATGCTAAGCCAATGAGTTGTTGTCTCTCAATGTG 81344283
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=23262.000000
+s hg16.chr7    27578828 38 + 158545518 AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG
+s panTro1.chr6 28741140 38 + 161576975 AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG
+s baboon         116834 38 +   4622798 AAA-GGGAATGTTAACCAAATGA---GTTGTCTCTTATGGTG
+s mm4.chr6     53215344 38 + 151104725 -AATGGGAATGTTAAGCAAACGA---ATTGTCTCTCAGTGTG
+s rn3.chr4     81344243 40 + 187371129 -AA-GGGGATGCTAAGCCAATGAGTTGTTGTCTCTCAATGTG
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['A', 'A', 'A', '-', 'G', 'G', 'G', 'A', 'A', 'T', 'G', 'T', 'T',
+           'A', 'A', 'C', 'C', 'A', 'A', 'A', 'T', 'G', 'A', '-', '-', '-',
+           'A', 'T', 'T', 'G', 'T', 'C', 'T', 'C', 'T', 'T', 'A', 'C', 'G',
+           'G', 'T', 'G'],
+          ['A', 'A', 'A', '-', 'G', 'G', 'G', 'A', 'A', 'T', 'G', 'T', 'T',
+           'A', 'A', 'C', 'C', 'A', 'A', 'A', 'T', 'G', 'A', '-', '-', '-',
+           'A', 'T', 'T', 'G', 'T', 'C', 'T', 'C', 'T', 'T', 'A', 'C', 'G',
+           'G', 'T', 'G'],
+          ['A', 'A', 'A', '-', 'G', 'G', 'G', 'A', 'A', 'T', 'G', 'T', 'T',
+           'A', 'A', 'C', 'C', 'A', 'A', 'A', 'T', 'G', 'A', '-', '-', '-',
+           'G', 'T', 'T', 'G', 'T', 'C', 'T', 'C', 'T', 'T', 'A', 'T', 'G',
+           'G', 'T', 'G'],
+          ['-', 'A', 'A', 'T', 'G', 'G', 'G', 'A', 'A', 'T', 'G', 'T', 'T',
+           'A', 'A', 'G', 'C', 'A', 'A', 'A', 'C', 'G', 'A', '-', '-', '-',
+           'A', 'T', 'T', 'G', 'T', 'C', 'T', 'C', 'T', 'C', 'A', 'G', 'T',
+           'G', 'T', 'G'],
+          ['-', 'A', 'A', '-', 'G', 'G', 'G', 'G', 'A', 'T', 'G', 'C', 'T',
+           'A', 'A', 'G', 'C', 'C', 'A', 'A', 'T', 'G', 'A', 'G', 'T', 'T',
+           'G', 'T', 'T', 'G', 'T', 'C', 'T', 'C', 'T', 'C', 'A', 'A', 'T',
+           'G', 'T', 'G']], dtype='U')
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -7110,9 +11133,9 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignment.sequences[4].seq[81444246 : 81444246 + 6], "taagga")
         self.assertEqual(alignment[4], "taagga")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     [
                         # fmt: off
                              [27699739, 27699745],
@@ -7123,6 +11146,40 @@ class TestAlign_reading(unittest.TestCase):
                         # fmt: on
                     ]
                 ),
+            )
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+hg16.chr7  27699739 TAAAGA 27699745
+panTro1.c  28862317 TAAAGA 28862323
+baboon       241163 TAAAGA   241169
+mm4.chr6   53303881 TAAAGA 53303887
+rn3.chr4   81444246 taagga 81444252
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=5062.000000
+s hg16.chr7    27699739 6 + 158545518 TAAAGA
+s panTro1.chr6 28862317 6 + 161576975 TAAAGA
+s baboon         241163 6 +   4622798 TAAAGA
+s mm4.chr6     53303881 6 + 151104725 TAAAGA
+s rn3.chr4     81444246 6 + 187371129 taagga
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['T', 'A', 'A', 'A', 'G', 'A'],
+          ['T', 'A', 'A', 'A', 'G', 'A'],
+          ['T', 'A', 'A', 'A', 'G', 'A'],
+          ['T', 'A', 'A', 'A', 'G', 'A'],
+          ['t', 'a', 'a', 'g', 'g', 'a']], dtype='U')
+                # fmt: on
             )
         )
         alignment = next(alignments)
@@ -7153,9 +11210,9 @@ class TestAlign_reading(unittest.TestCase):
         )
         self.assertEqual(alignment[3], "ACAGCTGAAAATA")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     [
                         # fmt: off
                     [27707221, 27707234],
@@ -7167,6 +11224,38 @@ class TestAlign_reading(unittest.TestCase):
                 ),
             )
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+hg16.chr7  27707221 gcagctgaaaaca 27707234
+panTro1.c  28869787 gcagctgaaaaca 28869800
+baboon       249182 gcagctgaaaaca   249195
+mm4.chr6   53310102 ACAGCTGAAAATA 53310115
+""",
+        )
+        self.assertEqual(
+            format(alignment, "maf"),
+            """\
+a score=6636.000000
+s hg16.chr7    27707221 13 + 158545518 gcagctgaaaaca
+s panTro1.chr6 28869787 13 + 161576975 gcagctgaaaaca
+s baboon         249182 13 +   4622798 gcagctgaaaaca
+s mm4.chr6     53310102 13 + 151104725 ACAGCTGAAAATA
+
+""",
+        )
+        self.assertTrue(
+            np.array_equal(
+                np.array(alignment, "U"),
+                # fmt: off
+np.array([['g', 'c', 'a', 'g', 'c', 't', 'g', 'a', 'a', 'a', 'a', 'c', 'a'],
+          ['g', 'c', 'a', 'g', 'c', 't', 'g', 'a', 'a', 'a', 'a', 'c', 'a'],
+          ['g', 'c', 'a', 'g', 'c', 't', 'g', 'a', 'a', 'a', 'a', 'c', 'a'],
+          ['A', 'C', 'A', 'G', 'C', 'T', 'G', 'A', 'A', 'A', 'A', 'T', 'A']],
+         dtype='U')
+                # fmt: on
+            )
+        )
         self.assertRaises(StopIteration, next, alignments)
 
 
@@ -7174,10 +11263,9 @@ class TestAlign_writing(unittest.TestCase):
     def test_writing_ucsc_test(self):
         """Test reading and writing ucsc_test.maf."""
         path = "MAF/ucsc_test.maf"
-        alignments = maf.AlignmentIterator(path)
+        alignments = Align.parse(path, "maf")
         output = StringIO()
-        writer = maf.AlignmentWriter(output)
-        writer.write_file(alignments)
+        n = Align.write(alignments, output, "maf")
         output.seek(0)
         with open(path) as stream:
             line1 = next(output)
@@ -7202,10 +11290,10 @@ class TestAlign_writing(unittest.TestCase):
     def test_writing_bug2453(self):
         """Test reading and writing bug2453.maf."""
         path = "MAF/bug2453.maf"
-        alignments = maf.AlignmentIterator(path)
+        alignments = Align.parse(path, "maf")
         output = StringIO()
-        writer = maf.AlignmentWriter(output)
-        writer.write_file(alignments)
+        n = Align.write(alignments, output, "maf")
+        self.assertEqual(n, 3)
         output.seek(0)
         with open(path) as stream:
             for line1, line2 in zip(output, stream):
@@ -7220,10 +11308,10 @@ class TestAlign_writing(unittest.TestCase):
     def test_writing_bundle_without_target(self):
         """Test reading and writing bundle_without_target.maf."""
         path = "MAF/bundle_without_target.maf"
-        alignments = maf.AlignmentIterator(path)
+        alignments = Align.parse(path, "maf")
         output = StringIO()
-        writer = maf.AlignmentWriter(output)
-        writer.write_file(alignments)
+        n = Align.write(alignments, output, "maf")
+        self.assertEqual(n, 1)
         output.seek(0)
         with open(path) as stream:
             for line1, line2 in zip(output, stream):
@@ -7232,10 +11320,10 @@ class TestAlign_writing(unittest.TestCase):
     def test_writing_ucsc_mm9_chr10(self):
         """Test reading and writing ucsc_mm9_chr10.maf."""
         path = "MAF/ucsc_mm9_chr10.maf"
-        alignments = maf.AlignmentIterator(path)
+        alignments = Align.parse(path, "maf")
         output = StringIO()
-        writer = maf.AlignmentWriter(output)
-        writer.write_file(alignments)
+        n = Align.write(alignments, output, "maf")
+        self.assertEqual(n, 48)
         output.seek(0)
         with open(path) as stream:
             for line1, line2 in zip(output, stream):

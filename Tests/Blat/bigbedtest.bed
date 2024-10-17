@@ -1,0 +1,8 @@
+chr1	10	100	name1	1	+
+chr1	29	39	name2	2	-
+chr1	200	300	name3	3	+
+chr2	50	50	name4	6	+
+chr2	100	110	name5	4	+
+chr2	200	210	name6	5	+
+chr2	220	220	name7	6	+
+chr3    0       0       name8   7       -

@@ -10,8 +10,8 @@
 from itertools import chain
 
 from Bio.Nexus import Nexus
-from Bio.Phylo import Newick, NewickIO
-
+from Bio.Phylo import Newick
+from Bio.Phylo import NewickIO
 
 # Structure of a Nexus tree-only file
 NEX_TEMPLATE = """\

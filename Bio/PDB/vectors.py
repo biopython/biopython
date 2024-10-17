@@ -7,9 +7,9 @@
 
 """Vector class, including rotation-related functions."""
 
+from typing import Optional
 
-import numpy  # type: ignore
-from typing import Tuple, Optional
+import numpy as np  # type: ignore
 
 
 def m2rotaxis(m):
@@ -37,19 +37,19 @@ def m2rotaxis(m):
         ):
             angle = 0
         else:
-            angle = numpy.pi
+            angle = np.pi
     else:
         # Angle always between 0 and pi
         # Sense of rotation is defined by axis orientation
-        t = 0.5 * (numpy.trace(m) - 1)
+        t = 0.5 * (np.trace(m) - 1)
         t = max(-1, t)
         t = min(1, t)
-        angle = numpy.arccos(t)
+        angle = np.arccos(t)
 
     if angle < 1e-15:
         # Angle is 0
         return 0.0, Vector(1, 0, 0)
-    elif angle < numpy.pi:
+    elif angle < np.pi:
         # Angle is smaller than pi
         x = m[2, 1] - m[1, 2]
         y = m[0, 2] - m[2, 0]
@@ -63,20 +63,20 @@ def m2rotaxis(m):
         m11 = m[1, 1]
         m22 = m[2, 2]
         if m00 > m11 and m00 > m22:
-            x = numpy.sqrt(m00 - m11 - m22 + 0.5)
+            x = np.sqrt(m00 - m11 - m22 + 0.5)
             y = m[0, 1] / (2 * x)
             z = m[0, 2] / (2 * x)
         elif m11 > m00 and m11 > m22:
-            y = numpy.sqrt(m11 - m00 - m22 + 0.5)
+            y = np.sqrt(m11 - m00 - m22 + 0.5)
             x = m[0, 1] / (2 * y)
             z = m[1, 2] / (2 * y)
         else:
-            z = numpy.sqrt(m22 - m00 - m11 + 0.5)
+            z = np.sqrt(m22 - m00 - m11 + 0.5)
             x = m[0, 2] / (2 * z)
             y = m[1, 2] / (2 * z)
         axis = Vector(x, y, z)
         axis.normalize()
-        return numpy.pi, axis
+        return np.pi, axis
 
 
 def vector_to_axis(line, point):
@@ -95,7 +95,7 @@ def vector_to_axis(line, point):
     line = line.normalized()
     np = point.norm()
     angle = line.angle(point)
-    return point - line ** (np * numpy.cos(angle))
+    return point - line ** (np * np.cos(angle))
 
 
 def rotaxis2m(theta, vector):
@@ -110,7 +110,7 @@ def rotaxis2m(theta, vector):
     :type vector: L{Vector}
     :param vector: the rotation axis
 
-    :return: The rotation matrix, a 3x3 Numeric array.
+    :return: The rotation matrix, a 3x3 NumPy array.
 
     Examples
     --------
@@ -123,11 +123,11 @@ def rotaxis2m(theta, vector):
 
     """
     vector = vector.normalized()
-    c = numpy.cos(theta)
-    s = numpy.sin(theta)
+    c = np.cos(theta)
+    s = np.sin(theta)
     t = 1 - c
     x, y, z = vector.get_array()
-    rot = numpy.zeros((3, 3))
+    rot = np.zeros((3, 3))
     # 1st row
     rot[0, 0] = t * x * x + c
     rot[0, 1] = t * x * y - s * z
@@ -150,7 +150,7 @@ def refmat(p, q):
     """Return a (left multiplying) matrix that mirrors p onto q.
 
     :type p,q: L{Vector}
-    :return: The mirror operation, a 3x3 Numeric array.
+    :return: The mirror operation, a 3x3 NumPy array.
 
     Examples
     --------
@@ -167,13 +167,13 @@ def refmat(p, q):
     p = p.normalized()
     q = q.normalized()
     if (p - q).norm() < 1e-5:
-        return numpy.identity(3)
+        return np.identity(3)
     pq = p - q
     pq.normalize()
     b = pq.get_array()
     b.shape = (3, 1)
-    i = numpy.identity(3)
-    ref = i - 2 * numpy.dot(b, numpy.transpose(b))
+    i = np.identity(3)
+    ref = i - 2 * np.dot(b, np.transpose(b))
     return ref
 
 
@@ -187,7 +187,7 @@ def rotmat(p, q):
     :type q: L{Vector}
 
     :return: rotation matrix that rotates p onto q
-    :rtype: 3x3 Numeric array
+    :rtype: 3x3 NumPy array
 
     Examples
     --------
@@ -202,7 +202,7 @@ def rotmat(p, q):
     <Vector 1.21, 1.82, 3.03>
 
     """
-    rot = numpy.dot(refmat(q, -p), refmat(p, -p))
+    rot = np.dot(refmat(q, -p), refmat(p, -p))
     return rot
 
 
@@ -259,10 +259,10 @@ class Vector:
             # Array, list, tuple...
             if len(x) != 3:
                 raise ValueError("Vector: x is not a list/tuple/array of 3 numbers")
-            self._ar = numpy.array(x, "d")
+            self._ar = np.array(x, "d")
         else:
             # Three numbers
-            self._ar = numpy.array((x, y, z), "d")
+            self._ar = np.array((x, y, z), "d")
 
     def __repr__(self):
         """Return vector 3D coordinates."""
@@ -279,7 +279,7 @@ class Vector:
         if isinstance(other, Vector):
             a = self._ar + other._ar
         else:
-            a = self._ar + numpy.array(other)
+            a = self._ar + np.array(other)
         return Vector(a)
 
     def __sub__(self, other):
@@ -287,7 +287,7 @@ class Vector:
         if isinstance(other, Vector):
             a = self._ar - other._ar
         else:
-            a = self._ar - numpy.array(other)
+            a = self._ar - np.array(other)
         return Vector(a)
 
     def __mul__(self, other):
@@ -296,7 +296,7 @@ class Vector:
 
     def __truediv__(self, x):
         """Return Vector(coords/a)."""
-        a = self._ar / numpy.array(x)
+        a = self._ar / np.array(x)
         return Vector(a)
 
     def __pow__(self, other):
@@ -304,12 +304,12 @@ class Vector:
         if isinstance(other, Vector):
             a, b, c = self._ar
             d, e, f = other._ar
-            c1 = numpy.linalg.det(numpy.array(((b, c), (e, f))))
-            c2 = -numpy.linalg.det(numpy.array(((a, c), (d, f))))
-            c3 = numpy.linalg.det(numpy.array(((a, b), (d, e))))
+            c1 = np.linalg.det(np.array(((b, c), (e, f))))
+            c2 = -np.linalg.det(np.array(((a, c), (d, f))))
+            c3 = np.linalg.det(np.array(((a, b), (d, e))))
             return Vector(c1, c2, c3)
         else:
-            a = self._ar * numpy.array(other)
+            a = self._ar * np.array(other)
             return Vector(a)
 
     def __getitem__(self, i):
@@ -326,7 +326,7 @@ class Vector:
 
     def norm(self):
         """Return vector norm."""
-        return numpy.sqrt(sum(self._ar * self._ar))
+        return np.sqrt(sum(self._ar * self._ar))
 
     def normsq(self):
         """Return square of vector norm."""
@@ -359,20 +359,20 @@ class Vector:
         # Take care of roundoff errors
         c = min(c, 1)
         c = max(-1, c)
-        return numpy.arccos(c)
+        return np.arccos(c)
 
     def get_array(self):
         """Return (a copy of) the array of coordinates."""
-        return numpy.array(self._ar)
+        return np.array(self._ar)
 
     def left_multiply(self, matrix):
         """Return Vector=Matrix x Vector."""
-        a = numpy.dot(matrix, self._ar)
+        a = np.dot(matrix, self._ar)
         return Vector(a)
 
     def right_multiply(self, matrix):
         """Return Vector=Vector x Matrix."""
-        a = numpy.dot(self._ar, matrix)
+        a = np.dot(self._ar, matrix)
         return Vector(a)
 
     def copy(self):
@@ -388,103 +388,103 @@ Robert T. Miller 2019
 """
 
 
-def homog_rot_mtx(angle_rads: float, axis: str) -> numpy.array:
-    """Generate a 4x4 single-axis numpy rotation matrix.
+def homog_rot_mtx(angle_rads: float, axis: str) -> np.ndarray:
+    """Generate a 4x4 single-axis NumPy rotation matrix.
 
     :param float angle_rads: the desired rotation angle in radians
     :param char axis: character specifying the rotation axis
     """
-    cosang = numpy.cos(angle_rads)
-    sinang = numpy.sin(angle_rads)
+    cosang = np.cos(angle_rads)
+    sinang = np.sin(angle_rads)
 
     if "z" == axis:
-        return numpy.array(
+        return np.array(
             (
                 (cosang, -sinang, 0, 0),
                 (sinang, cosang, 0, 0),
                 (0, 0, 1, 0),
                 (0, 0, 0, 1),
             ),
-            dtype=numpy.float64,
+            dtype=np.float64,
         )
     elif "y" == axis:
-        return numpy.array(
+        return np.array(
             (
                 (cosang, 0, sinang, 0),
                 (0, 1, 0, 0),
                 (-sinang, 0, cosang, 0),
                 (0, 0, 0, 1),
             ),
-            dtype=numpy.float64,
+            dtype=np.float64,
         )
     else:
-        return numpy.array(
+        return np.array(
             (
                 (1, 0, 0, 0),
                 (0, cosang, -sinang, 0),
                 (0, sinang, cosang, 0),
                 (0, 0, 0, 1),
             ),
-            dtype=numpy.float64,
+            dtype=np.float64,
         )
 
 
-def set_Z_homog_rot_mtx(angle_rads: float, mtx: numpy.ndarray):
+def set_Z_homog_rot_mtx(angle_rads: float, mtx: np.ndarray):
     """Update existing Z rotation matrix to new angle."""
-    cosang = numpy.cos(angle_rads)
-    sinang = numpy.sin(angle_rads)
+    cosang = np.cos(angle_rads)
+    sinang = np.sin(angle_rads)
 
     mtx[0][0] = mtx[1][1] = cosang
     mtx[1][0] = sinang
     mtx[0][1] = -sinang
 
 
-def set_Y_homog_rot_mtx(angle_rads: float, mtx: numpy.ndarray):
+def set_Y_homog_rot_mtx(angle_rads: float, mtx: np.ndarray):
     """Update existing Y rotation matrix to new angle."""
-    cosang = numpy.cos(angle_rads)
-    sinang = numpy.sin(angle_rads)
+    cosang = np.cos(angle_rads)
+    sinang = np.sin(angle_rads)
 
     mtx[0][0] = mtx[2][2] = cosang
     mtx[0][2] = sinang
     mtx[2][0] = -sinang
 
 
-def set_X_homog_rot_mtx(angle_rads: float, mtx: numpy.ndarray):
+def set_X_homog_rot_mtx(angle_rads: float, mtx: np.ndarray):
     """Update existing X rotation matrix to new angle."""
-    cosang = numpy.cos(angle_rads)
-    sinang = numpy.sin(angle_rads)
+    cosang = np.cos(angle_rads)
+    sinang = np.sin(angle_rads)
 
     mtx[1][1] = mtx[2][2] = cosang
     mtx[2][1] = sinang
     mtx[1][2] = -sinang
 
 
-def homog_trans_mtx(x: float, y: float, z: float) -> numpy.array:
-    """Generate a 4x4 numpy translation matrix.
+def homog_trans_mtx(x: float, y: float, z: float) -> np.ndarray:
+    """Generate a 4x4 NumPy translation matrix.
 
     :param x, y, z: translation in each axis
     """
-    return numpy.array(
+    return np.array(
         ((1, 0, 0, x), (0, 1, 0, y), (0, 0, 1, z), (0, 0, 0, 1)),
-        dtype=numpy.float64,
+        dtype=np.float64,
     )
 
 
-def set_homog_trans_mtx(x: float, y: float, z: float, mtx: numpy.ndarray):
+def set_homog_trans_mtx(x: float, y: float, z: float, mtx: np.ndarray):
     """Update existing translation matrix to new values."""
     mtx[0][3] = x
     mtx[1][3] = y
     mtx[2][3] = z
 
 
-def homog_scale_mtx(scale: float) -> numpy.array:
-    """Generate a 4x4 numpy scaling matrix.
+def homog_scale_mtx(scale: float) -> np.ndarray:
+    """Generate a 4x4 NumPy scaling matrix.
 
     :param float scale: scale multiplier
     """
-    return numpy.array(
+    return np.array(
         [[scale, 0, 0, 0], [0, scale, 0, 0], [0, 0, scale, 0], [0, 0, 0, 1]],
-        dtype=numpy.float64,
+        dtype=np.float64,
     )
 
 
@@ -492,40 +492,40 @@ def _get_azimuth(x: float, y: float) -> float:
     sign_y = -1.0 if y < 0.0 else 1.0
     sign_x = -1.0 if x < 0.0 else 1.0
     return (
-        numpy.arctan2(y, x)
+        np.arctan2(y, x)
         if (0 != x and 0 != y)
-        else (numpy.pi / 2.0 * sign_y)  # +/-90 if X=0, Y!=0
-        if 0 != y
-        else numpy.pi
-        if sign_x < 0.0  # 180 if Y=0, X < 0
-        else 0.0  # 0 if Y=0, X >= 0
+        else (
+            (np.pi / 2.0 * sign_y)  # +/-90 if X=0, Y!=0
+            if 0 != y
+            else np.pi if sign_x < 0.0 else 0.0  # 180 if Y=0, X < 0
+        )  # 0 if Y=0, X >= 0
     )
 
 
-def get_spherical_coordinates(xyz: numpy.array) -> Tuple[float, float, float]:
+def get_spherical_coordinates(xyz: np.ndarray) -> tuple[float, float, float]:
     """Compute spherical coordinates (r, azimuth, polar_angle) for X,Y,Z point.
 
-    :param array xyz: column vector (3 row x 1 column numpy array)
+    :param array xyz: column vector (3 row x 1 column NumPy array)
     :return: tuple of r, azimuth, polar_angle for input coordinate
     """
-    r = numpy.linalg.norm(xyz)
+    r = float(np.linalg.norm(xyz))
     if 0 == r:
         return (0, 0, 0)
     azimuth = _get_azimuth(xyz[0], xyz[1])
-    polar_angle = numpy.arccos(xyz[2] / r)
+    polar_angle: float = np.arccos(xyz[2] / r)
 
     return (r, azimuth, polar_angle)
 
 
-gtm = numpy.identity(4, dtype=numpy.float64)
-gmrz = numpy.identity(4, dtype=numpy.float64)
-gmry = numpy.identity(4, dtype=numpy.float64)
-gmrz2 = numpy.identity(4, dtype=numpy.float64)
+gtm = np.identity(4, dtype=np.float64)
+gmrz = np.identity(4, dtype=np.float64)
+gmry = np.identity(4, dtype=np.float64)
+gmrz2 = np.identity(4, dtype=np.float64)
 
 
 def coord_space(
-    a0: numpy.ndarray, a1: numpy.ndarray, a2: numpy.ndarray, rev: bool = False
-) -> Tuple[numpy.ndarray, Optional[numpy.ndarray]]:
+    a0: np.ndarray, a1: np.ndarray, a2: np.ndarray, rev: bool = False
+) -> tuple[np.ndarray, Optional[np.ndarray]]:
     """Generate transformation matrix to coordinate space defined by 3 points.
 
     New coordinate space will have:
@@ -533,10 +533,10 @@ def coord_space(
         acs[1] origin
         acs[2] on +Z axis
 
-    :param numpy column array x3 acs: X,Y,Z column input coordinates x3
+    :param NumPy column array x3 acs: X,Y,Z column input coordinates x3
     :param bool rev: if True, also return reverse transformation matrix
         (to return from coord_space)
-    :returns: 4x4 numpy array, x2 if rev=True
+    :returns: 4x4 NumPy array, x2 if rev=True
     """
     # dbg = False
     # if dbg:
@@ -629,43 +629,43 @@ def coord_space(
 
     # mr = tm @ mrz @ mry @ mrz2
     mr = gtm.dot(gmrz.dot(gmry.dot(gmrz2)))
-    # mr = numpy.dot(tm, numpy.dot(mrz, numpy.dot(mry, mrz2)))
+    # mr = np.dot(tm, np.dot(mrz, np.dot(mry, mrz2)))
 
     return mt, mr
 
 
-def multi_rot_Z(angle_rads: numpy.ndarray) -> numpy.ndarray:
-    """Create [entries] numpy Z rotation matrices for [entries] angles.
+def multi_rot_Z(angle_rads: np.ndarray) -> np.ndarray:
+    """Create [entries] NumPy Z rotation matrices for [entries] angles.
 
     :param entries: int number of matrices generated.
-    :param angle_rads: numpy array of angles
+    :param angle_rads: NumPy array of angles
     :returns: entries x 4 x 4 homogeneous rotation matrices
     """
-    rz = numpy.empty((angle_rads.shape[0], 4, 4))
-    rz[...] = numpy.identity(4)
-    rz[:, 0, 0] = rz[:, 1, 1] = numpy.cos(angle_rads)
-    rz[:, 1, 0] = numpy.sin(angle_rads)
+    rz = np.empty((angle_rads.shape[0], 4, 4))
+    rz[...] = np.identity(4)
+    rz[:, 0, 0] = rz[:, 1, 1] = np.cos(angle_rads)
+    rz[:, 1, 0] = np.sin(angle_rads)
     rz[:, 0, 1] = -rz[:, 1, 0]
     return rz
 
 
-def multi_rot_Y(angle_rads: numpy.ndarray) -> numpy.ndarray:
-    """Create [entries] numpy Y rotation matrices for [entries] angles.
+def multi_rot_Y(angle_rads: np.ndarray) -> np.ndarray:
+    """Create [entries] NumPy Y rotation matrices for [entries] angles.
 
     :param entries: int number of matrices generated.
-    :param angle_rads: numpy array of angles
+    :param angle_rads: NumPy array of angles
     :returns: entries x 4 x 4 homogeneous rotation matrices
     """
-    ry = numpy.empty((angle_rads.shape[0], 4, 4))
-    ry[...] = numpy.identity(4)
-    ry[:, 0, 0] = ry[:, 2, 2] = numpy.cos(angle_rads)
-    ry[:, 0, 2] = numpy.sin(angle_rads)
+    ry = np.empty((angle_rads.shape[0], 4, 4))
+    ry[...] = np.identity(4)
+    ry[:, 0, 0] = ry[:, 2, 2] = np.cos(angle_rads)
+    ry[:, 0, 2] = np.sin(angle_rads)
     ry[:, 2, 0] = -ry[:, 0, 2]
 
     return ry
 
 
-def multi_coord_space(a3: numpy.ndarray, dLen: int, rev: bool = False) -> numpy.ndarray:
+def multi_coord_space(a3: np.ndarray, dLen: int, rev: bool = False) -> np.ndarray:
     """Generate [dLen] transform matrices to coord space defined by 3 points.
 
     New coordinate space will have:
@@ -673,25 +673,25 @@ def multi_coord_space(a3: numpy.ndarray, dLen: int, rev: bool = False) -> numpy.
         acs[1] origin
         acs[2] on +Z axis
 
-    :param numpy array [entries]x3x3 [entries] XYZ coords for 3 atoms
+    :param NumPy array [entries]x3x3 [entries] XYZ coords for 3 atoms
     :param bool rev: if True, also return reverse transformation matrix
     (to return from coord_space)
-    :returns: [entries] 4x4 numpy arrays, x2 if rev=True
+    :returns: [entries] 4x4 NumPy arrays, x2 if rev=True
 
     """
     # build tm translation matrix: atom1 to origin
 
-    tm = numpy.empty((dLen, 4, 4))
-    tm[...] = numpy.identity(4)
+    tm = np.empty((dLen, 4, 4))
+    tm[...] = np.identity(4)
     tm[:, 0:3, 3] = -a3[:, 1, 0:3]
 
     # directly translate a2 into new space using a1
     p = a3[:, 2] - a3[:, 1]
 
     # get spherical coords of translated a2 (p)
-    r = numpy.linalg.norm(p, axis=1)
-    azimuth = numpy.arctan2(p[:, 1], p[:, 0])
-    polar_angle = numpy.arccos(numpy.divide(p[:, 2], r, where=r != 0))
+    r = np.linalg.norm(p, axis=1)
+    azimuth = np.arctan2(p[:, 1], p[:, 0])
+    polar_angle = np.arccos(np.divide(p[:, 2], r, where=r != 0))
 
     # build rz rotation matrix: translated a2 -azimuth around Z
     # (enables next step rotating around Y to align with Z)
@@ -701,24 +701,24 @@ def multi_coord_space(a3: numpy.ndarray, dLen: int, rev: bool = False) -> numpy.
     ry = multi_rot_Y(-polar_angle)
 
     # mt completes a1-a2 on Z-axis, still need to align a0 with XZ plane
-    mt = numpy.matmul(ry, numpy.matmul(rz, tm))
+    mt = np.matmul(ry, np.matmul(rz, tm))
 
     # transform a0 to mt space
-    p = numpy.matmul(mt, a3[:, 0].reshape(-1, 4, 1)).reshape(-1, 4)
+    p = np.matmul(mt, a3[:, 0].reshape(-1, 4, 1)).reshape(-1, 4)
     # print(f"mt[0]:\n{mt[0]}\na3[0][0] (a0):\n{a3[0][0]}\np[0]:\n{p[0]}")
 
     # get azimuth of translated a0
-    azimuth2 = numpy.arctan2(p[:, 1], p[:, 0])
+    azimuth2 = np.arctan2(p[:, 1], p[:, 0])
 
     # build rotation matrix rz2 to rotate a0 -azimuth about Z to align with X
     rz2 = multi_rot_Z(-azimuth2)
 
     # update mt to be complete transform into hedron coordinate space
     if not rev:
-        return numpy.matmul(rz2, mt[:])
+        return np.matmul(rz2, mt[:])
 
     # rev=True, so generate the reverse transformation
-    mt = numpy.matmul(rz2, mt[:])
+    mt = np.matmul(rz2, mt[:])
 
     # rotate a0 theta about Z, reversing alignment with X
     mrz2 = multi_rot_Z(azimuth2)
@@ -734,4 +734,4 @@ def multi_coord_space(a3: numpy.ndarray, dLen: int, rev: bool = False) -> numpy.
 
     mr = tm @ mrz @ mry @ mrz2  # tm.dot(mrz.dot(mry.dot(mrz2)))
 
-    return numpy.array([mt, mr])
+    return np.array([mt, mr])

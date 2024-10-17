@@ -104,7 +104,7 @@ def parse(handle):
     record = None
     primer = None
     while True:
-        if line.startswith("# EPRIMER3") or line.startswith("# PRIMER3"):
+        if line.startswith(("# EPRIMER3", "# PRIMER3")):
             # Record data
             if record is not None:
                 yield record

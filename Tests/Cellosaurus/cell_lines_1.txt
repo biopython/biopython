@@ -1,14 +1,22 @@
 ID   #15310-LN
 AC   CVCL_E548
-SY   15310-LN; TER461
+SY   15310-LN; TER461; TER-461; Ter 461; TER479; TER-479; Ter 479; Extract 519
 DR   dbMHC; 48439
 DR   ECACC; 94050311
-DR   IHW; IHW9326
-DR   IMGT/HLA; 10074
-WW   http://bioinformatics.hsanmartino.it/ecbr/cl326.html
+DR   IHW; IHW09326
+DR   IPD-IMGT/HLA; 10074
+DR   Wikidata; Q54398957
+WW   http://pathology.ucla.edu/workfiles/360cx.pdf
+WW   http://pathology.ucla.edu/workfiles/370cx.pdf
 CC   Part of: 12th International Histocompatibility Workshop (12IHW) cell line panel.
-CC   Transformant: EBV.
-OX   NCBI_TaxID=9606; ! Homo sapiens
+CC   Population: Caucasian; French Canadian.
+CC   HLA typing: A*03,25; B*37:01:01:01,47:01:01:03; C*06; DPA1*01; DPB1*04:01:01; DQA1*01:01:01:01,01:03:01; DQB1*05:01:01;06:03:01:02; DRB1*01:01:01,14:17; DRB3*01:01 (IPD-IMGT/HLA=10074).
+CC   Transformant: NCBI_TaxID; 10376; Epstein-Barr virus (EBV).
+CC   Derived from site: In situ; Peripheral blood; UBERON=UBERON_0000178.
+CC   Cell type: B-cell; CL=CL_0000236.
+OX   NCBI_TaxID=9606; ! Homo sapiens (Human)
 SX   Female
+AG   Age unspecified
 CA   Transformed cell line
+DT   Created: 22-10-12; Last updated: 30-01-24; Version: 18
 //

@@ -10,7 +10,6 @@ import unittest
 
 from Bio.SearchIO import parse
 
-
 # test case files are in the Blast directory
 TEST_DIR = "Blat"
 FMT = "blat-psl"

@@ -7,11 +7,11 @@
 
 import unittest
 
-from search_tests_common import CheckRaw, CheckIndex
+from search_tests_common import CheckIndex
+from search_tests_common import CheckRaw
 
 
 class Hmmer3TextRawCases(CheckRaw):
-
     fmt = "hmmer3-text"
 
     def test_hmmer3text_30_multiple_first(self):
@@ -301,7 +301,6 @@ Domain search space  (domZ):               1  [number of targets reported over t
 
 
 class Hmmer3TextIndexCases(CheckIndex):
-
     fmt = "hmmer3-text"
 
     def test_hmmertext_text_30_hmmscan_001(self):

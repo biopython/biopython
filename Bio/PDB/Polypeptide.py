@@ -52,38 +52,18 @@ last residues) have been shown as M (methionine) by the get_sequence method.
 
 import warnings
 
-from Bio.Data import SCOPData
-from Bio.Seq import Seq
+from Bio.Data.PDBData import nucleic_letters_3to1
+from Bio.Data.PDBData import nucleic_letters_3to1_extended
+from Bio.Data.PDBData import protein_letters_3to1
+from Bio.Data.PDBData import protein_letters_3to1_extended
 from Bio.PDB.PDBExceptions import PDBException
-from Bio.PDB.vectors import calc_dihedral, calc_angle
+from Bio.PDB.vectors import calc_angle
+from Bio.PDB.vectors import calc_dihedral
+from Bio.Seq import Seq
 
-
-standard_aa_names = [
-    "ALA",
-    "CYS",
-    "ASP",
-    "GLU",
-    "PHE",
-    "GLY",
-    "HIS",
-    "ILE",
-    "LYS",
-    "LEU",
-    "MET",
-    "ASN",
-    "PRO",
-    "GLN",
-    "ARG",
-    "SER",
-    "THR",
-    "VAL",
-    "TRP",
-    "TYR",
-]
-
-
-aa1 = "ACDEFGHIKLMNPQRSTVWY"
-aa3 = standard_aa_names
+# Sorted by 1-letter code
+aa3, aa1 = zip(*sorted(protein_letters_3to1.items(), key=lambda x: x[1]))
+standard_aa_names = aa3
 
 d1_to_index = {}
 dindex_to_1 = {}
@@ -91,7 +71,7 @@ d3_to_index = {}
 dindex_to_3 = {}
 
 # Create some lookup tables
-for i in range(0, 20):
+for i in range(20):
     n1 = aa1[i]
     n3 = aa3[i]
     d1_to_index[n1] = i
@@ -144,37 +124,6 @@ def three_to_index(s):
     return d3_to_index[s]
 
 
-def three_to_one(s):
-    """Three letter code to one letter code.
-
-    >>> three_to_one('ALA')
-    'A'
-    >>> three_to_one('TYR')
-    'Y'
-
-    For non-standard amino acids, you get a KeyError:
-
-    >>> three_to_one('MSE')
-    Traceback (most recent call last):
-       ...
-    KeyError: 'MSE'
-    """
-    i = d3_to_index[s]
-    return dindex_to_1[i]
-
-
-def one_to_three(s):
-    """One letter code to three letter code.
-
-    >>> one_to_three('A')
-    'ALA'
-    >>> one_to_three('Y')
-    'TYR'
-    """
-    i = d1_to_index[s]
-    return dindex_to_3[i]
-
-
 def is_aa(residue, standard=False):
     """Return True if residue object/string is an amino acid.
 
@@ -194,14 +143,45 @@ def is_aa(residue, standard=False):
     >>> is_aa('FME', standard=True)
     False
     """
-    # TODO - What about special cases like XXX, can they appear in PDB files?
     if not isinstance(residue, str):
-        residue = residue.get_resname()
+        residue = f"{residue.get_resname():<3s}"
     residue = residue.upper()
     if standard:
-        return residue in d3_to_index
+        return residue in protein_letters_3to1
     else:
-        return residue in SCOPData.protein_letters_3to1
+        return residue in protein_letters_3to1_extended
+
+
+def is_nucleic(residue, standard=False):
+    """Return True if residue object/string is a nucleic acid.
+
+    :param residue: a L{Residue} object OR a three letter code
+    :type residue: L{Residue} or string
+
+    :param standard: flag to check for the 8 (DNA + RNA) canonical bases.
+        Default is False.
+    :type standard: boolean
+
+    >>> is_nucleic('DA ')
+    True
+
+    >>> is_nucleic('A  ')
+    True
+
+    Known three letter codes for modified nucleotides are supported,
+
+    >>> is_nucleic('A2L')
+    True
+    >>> is_nucleic('A2L', standard=True)
+    False
+    """
+    if not isinstance(residue, str):
+        residue = f"{residue.get_resname():<3s}"
+    residue = residue.upper()
+    if standard:
+        return residue in nucleic_letters_3to1
+    else:
+        return residue in nucleic_letters_3to1_extended
 
 
 class Polypeptide(list):
@@ -223,7 +203,7 @@ class Polypeptide(list):
         """Return the list of phi/psi dihedral angles."""
         ppl = []
         lng = len(self)
-        for i in range(0, lng):
+        for i in range(lng):
             res = self[i]
             try:
                 n = res["N"].get_vector()
@@ -268,7 +248,7 @@ class Polypeptide(list):
         """List of tau torsions angles for all 4 consecutive Calpha atoms."""
         ca_list = self.get_ca_list()
         tau_list = []
-        for i in range(0, len(ca_list) - 3):
+        for i in range(len(ca_list) - 3):
             atom_list = (ca_list[i], ca_list[i + 1], ca_list[i + 2], ca_list[i + 3])
             v1, v2, v3, v4 = (a.get_vector() for a in atom_list)
             tau = calc_dihedral(v1, v2, v3, v4)
@@ -282,7 +262,7 @@ class Polypeptide(list):
         """List of theta angles for all 3 consecutive Calpha atoms."""
         theta_list = []
         ca_list = self.get_ca_list()
-        for i in range(0, len(ca_list) - 2):
+        for i in range(len(ca_list) - 2):
             atom_list = (ca_list[i], ca_list[i + 1], ca_list[i + 2])
             v1, v2, v3 = (a.get_vector() for a in atom_list)
             theta = calc_angle(v1, v2, v3)
@@ -299,7 +279,7 @@ class Polypeptide(list):
         :rtype: L{Seq}
         """
         s = "".join(
-            SCOPData.protein_letters_3to1.get(res.get_resname(), "X") for res in self
+            protein_letters_3to1_extended.get(res.get_resname(), "X") for res in self
         )
         return Seq(s)
 

@@ -9,16 +9,33 @@ This is used by the PDBParser and MMCIFparser classes.
 """
 
 import warnings
+from typing import Optional
+
+import numpy as np
+
+from Bio.PDB.Atom import Atom
+from Bio.PDB.Atom import DisorderedAtom
+from Bio.PDB.Chain import Chain
+from Bio.PDB.Model import Model
+from Bio.PDB.PDBExceptions import PDBConstructionException
+from Bio.PDB.PDBExceptions import PDBConstructionWarning
+from Bio.PDB.Residue import DisorderedResidue
+from Bio.PDB.Residue import Residue
 
 # SMCRA hierarchy
 from Bio.PDB.Structure import Structure
-from Bio.PDB.Model import Model
-from Bio.PDB.Chain import Chain
-from Bio.PDB.Residue import Residue, DisorderedResidue
-from Bio.PDB.Atom import Atom, DisorderedAtom
 
-from Bio.PDB.PDBExceptions import PDBConstructionException
-from Bio.PDB.PDBExceptions import PDBConstructionWarning
+
+def _is_completely_disordered(residue: Residue) -> bool:
+    """Return whether all atoms in the residue have a non-blank altloc (PRIVATE)."""
+    atom_list = residue.get_unpacked_list()
+
+    for atom in atom_list:
+        altloc = atom.get_altloc()
+        if altloc == " ":
+            return False
+
+    return True
 
 
 class StructureBuilder:
@@ -29,18 +46,15 @@ class StructureBuilder:
     """
 
     def __init__(self):
-        """Initialize the class."""
-        self.line_counter = 0
+        """Initialize this instance."""
+        self.atom = None
+        self.chain = None
         self.header = {}
-
-    def _is_completely_disordered(self, residue):
-        """Return 1 if all atoms in the residue have a non blank altloc (PRIVATE)."""
-        atom_list = residue.get_unpacked_list()
-        for atom in atom_list:
-            altloc = atom.get_altloc()
-            if altloc == " ":
-                return 0
-        return 1
+        self.line_counter = 0
+        self.model = None
+        self.residue = None
+        self.segid = None
+        self.structure = None
 
     # Public methods called by the Parser classes
 
@@ -48,7 +62,7 @@ class StructureBuilder:
         """Set header."""
         self.header = header
 
-    def set_line_counter(self, line_counter):
+    def set_line_counter(self, line_counter: int):
         """Tracks line in the PDB file that is being parsed.
 
         Arguments:
@@ -57,32 +71,29 @@ class StructureBuilder:
         """
         self.line_counter = line_counter
 
-    def init_structure(self, structure_id):
+    def init_structure(self, structure_id: str):
         """Initialize a new Structure object with given id.
 
         Arguments:
-         - id - string
-
+         - structure_id - string
         """
         self.structure = Structure(structure_id)
 
-    def init_model(self, model_id, serial_num=None):
+    def init_model(self, model_id: int, serial_num: Optional[int] = None):
         """Create a new Model object with given id.
 
         Arguments:
          - id - int
          - serial_num - int
-
         """
         self.model = Model(model_id, serial_num)
         self.structure.add(self.model)
 
-    def init_chain(self, chain_id):
+    def init_chain(self, chain_id: str):
         """Create a new Chain object with given id.
 
         Arguments:
          - chain_id - string
-
         """
         if self.model.has_id(chain_id):
             self.chain = self.model[chain_id]
@@ -95,16 +106,15 @@ class StructureBuilder:
             self.chain = Chain(chain_id)
             self.model.add(self.chain)
 
-    def init_seg(self, segid):
+    def init_seg(self, segid: str):
         """Flag a change in segid.
 
         Arguments:
          - segid - string
-
         """
         self.segid = segid
 
-    def init_residue(self, resname, field, resseq, icode):
+    def init_residue(self, resname: str, field: str, resseq: int, icode: str):
         """Create a new Residue object.
 
         Arguments:
@@ -158,12 +168,12 @@ class StructureBuilder:
                     # the Residue objects with the id (field, resseq, icode) in it.
                     # These residues each should have non-blank altlocs for all their atoms.
                     # If not, the PDB file probably contains an error.
-                    if not self._is_completely_disordered(duplicate_residue):
+                    if not _is_completely_disordered(duplicate_residue):
                         # if this exception is ignored, a residue will be missing
                         self.residue = None
                         raise PDBConstructionException(
-                            "Blank altlocs in duplicate residue %s ('%s', %i, '%s')"
-                            % (resname, field, resseq, icode)
+                            "Blank altlocs in duplicate residue %s ('%s', %i, '%s') of chain '%s'"
+                            % (resname, field, resseq, icode, self.chain.id)
                         )
                     self.chain.detach_child(res_id)
                     new_residue = Residue(res_id, resname, self.segid)
@@ -178,23 +188,23 @@ class StructureBuilder:
 
     def init_atom(
         self,
-        name,
-        coord,
-        b_factor,
-        occupancy,
-        altloc,
-        fullname,
+        name: str,
+        coord: np.ndarray,
+        b_factor: float,
+        occupancy: float,
+        altloc: str,
+        fullname: str,
         serial_number=None,
-        element=None,
-        pqr_charge=None,
-        radius=None,
-        is_pqr=False,
+        element: Optional[str] = None,
+        pqr_charge: Optional[float] = None,
+        radius: Optional[float] = None,
+        is_pqr: bool = False,
     ):
         """Create a new Atom object.
 
         Arguments:
          - name - string, atom name, e.g. CA, spaces should be stripped
-         - coord - Numeric array (Float0, size 3), atomic coordinates
+         - coord - NumPy array (Float0, length 3), atomic coordinates
          - b_factor - float, B factor
          - occupancy - float
          - altloc - string, alternative location specifier
@@ -203,7 +213,6 @@ class StructureBuilder:
          - pqr_charge - float, atom charge (PQR format)
          - radius - float, atom radius (PQR format)
          - is_pqr - boolean, flag to specify if a .pqr file is being parsed
-
         """
         residue = self.residue
         # if residue is None, an exception was generated during
@@ -227,18 +236,7 @@ class StructureBuilder:
                     % (duplicate_fullname, fullname, self.line_counter),
                     PDBConstructionWarning,
                 )
-        if not is_pqr:
-            self.atom = Atom(
-                name,
-                coord,
-                b_factor,
-                occupancy,
-                altloc,
-                fullname,
-                serial_number,
-                element,
-            )
-        elif is_pqr:
+        if is_pqr:
             self.atom = Atom(
                 name,
                 coord,
@@ -250,6 +248,17 @@ class StructureBuilder:
                 element,
                 pqr_charge,
                 radius,
+            )
+        else:
+            self.atom = Atom(
+                name,
+                coord,
+                b_factor,
+                occupancy,
+                altloc,
+                fullname,
+                serial_number,
+                element,
             )
         if altloc != " ":
             # The atom is disordered
@@ -310,4 +319,3 @@ class StructureBuilder:
 
     def set_symmetry(self, spacegroup, cell):
         """Set symmetry."""
-        pass

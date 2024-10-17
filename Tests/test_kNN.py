@@ -9,11 +9,12 @@
 """Tests for kNN module."""
 
 import unittest
+import warnings
 
 try:
-    import numpy
+    import numpy as np
 
-    del numpy
+    del np
     from numpy import asarray
 
     del asarray
@@ -24,7 +25,11 @@ except ImportError:
         "Install NumPy if you want to use Bio.kNN."
     ) from None
 
-from Bio import kNN
+from Bio import BiopythonDeprecationWarning
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
+    from Bio import kNN
 
 xs = [
     [-53, -200.78],

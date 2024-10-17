@@ -14,8 +14,7 @@
 
 import os
 
-
-_dbutils = {}
+_dbutils: dict[str, type["Generic_dbutils"]] = {}
 
 
 class Generic_dbutils:
@@ -23,7 +22,6 @@ class Generic_dbutils:
 
     def __init__(self):
         """Create a Generic_dbutils object."""
-        pass
 
     def tname(self, table):
         """Return the name of the table."""
@@ -52,7 +50,6 @@ class Generic_dbutils:
     def autocommit(self, conn, y=1):
         """Set autocommit on the database connection."""
         # Let's hope it was not really needed
-        pass
 
 
 class Sqlite_dbutils(Generic_dbutils):

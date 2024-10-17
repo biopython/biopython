@@ -7,51 +7,33 @@
 # package.
 """Bio.Align support for GCG MSF format.
 
-The file format was produced by the GCG PileUp and and LocalPileUp tools,
-and later tools such as T-COFFEE and MUSCLE support it as an optional
-output format.
+The file format was produced by the GCG PileUp and LocalPileUp tools, and later
+tools such as T-COFFEE and MUSCLE support it as an optional output format.
 
 You are expected to use this module via the Bio.Align functions.
 """
+
+import warnings
+
+from Bio import BiopythonParserWarning
 from Bio.Align import Alignment
 from Bio.Align import interfaces
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
-from Bio import BiopythonParserWarning
-from Bio import BiopythonExperimentalWarning
-
-import warnings
-
-warnings.warn(
-    "Bio.Align.bed is an experimental module which may undergo "
-    "significant changes prior to its future official release.",
-    BiopythonExperimentalWarning,
-)
-
 
 class AlignmentIterator(interfaces.AlignmentIterator):
     """GCG MSF alignment iterator."""
 
-    def __init__(self, source):
-        """Create an AlignmentIterator object.
+    fmt = "MSF"
 
-        Arguments:
-         - source   - input data or file name
-
-        """
-        super().__init__(source, mode="t", fmt="MSF")
-        stream = self.stream
-
-    def parse(self, stream):
-        """Parse the next alignment from the stream."""
-        if stream is None:
-            raise StopIteration
-
+    def _read_next_alignment(self, stream):
         try:
             line = next(stream)
         except StopIteration:
-            raise ValueError("Empty file.") from None
+            if stream.tell() == 0:
+                raise ValueError("Empty file.") from None
+            return
         # Whitelisted headers we know about.
         known_headers = ["!!NA_MULTIPLE_ALIGNMENT", "!!AA_MULTIPLE_ALIGNMENT", "PileUp"]
         # Examples in "Molecular Biology Software Training Manual GCG version 10"
@@ -219,12 +201,17 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         else:
             raise ValueError("End of file where expecting sequence data.")
 
+        # skip any remaining empty lines
+        for line in stream:
+            assert line.strip() == ""
+
         length = max(len(seq) for seq in seqs)
         if length != aln_length:
             warnings.warn(
                 "GCG MSF headers said alignment length %i, but found %i"
                 % (aln_length, length),
                 BiopythonParserWarning,
+                stacklevel=2,
             )
             aln_length = length
 
@@ -235,11 +222,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 seq += "-" * (aln_length - len(seq))
             seqs[index] = seq
 
-        coordinates = Alignment.infer_coordinates(seqs)
-        seqs = (Seq(seq.replace("-", "")) for seq in seqs)
+        seqs = [seq.encode() for seq in seqs]
+        seqs, coordinates = Alignment.parse_printed_alignment(seqs)
         records = [
             SeqRecord(
-                seq,
+                Seq(seq),
                 id=name,
                 name=name,
                 description=name,
@@ -250,10 +237,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
         alignment = Alignment(records, coordinates)
         # This will check alignment lengths are self-consistent:
-        rows, columns = alignment.shape
+        columns = alignment.length
         if columns != aln_length:
             raise ValueError(
                 "GCG MSF headers said alignment length %i, but found %i"
                 % (aln_length, columns)
             )
-        yield alignment
+        return alignment

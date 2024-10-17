@@ -14,18 +14,11 @@ and position-specific scoring matrices.
 import math
 import numbers
 
-try:
-    import numpy as np
-except ImportError:
-    from Bio import MissingPythonDependencyError
-
-    raise MissingPythonDependencyError(
-        "Install NumPy if you want to use Bio.motifs.matrix."
-    )
+import numpy as np
 
 from Bio.Seq import Seq
 
-from . import _pwm
+from . import _pwm  # type: ignore
 
 
 class GenericPositionMatrix(dict):
@@ -39,7 +32,8 @@ class GenericPositionMatrix(dict):
                 self.length = len(values[letter])
             elif self.length != len(values[letter]):
                 raise Exception("data has inconsistent lengths")
-            self[letter] = list(values[letter])
+            # Cast any numpy floats into Python floats:
+            self[letter] = [float(_) for _ in values[letter]]
         self.alphabet = alphabet
 
     def __str__(self):
@@ -180,23 +174,31 @@ class GenericPositionMatrix(dict):
             "C": "C",
             "G": "G",
             "T": "T",
+            "U": "U",
             "AC": "M",
             "AG": "R",
             "AT": "W",
+            "AU": "W",
             "CG": "S",
             "CT": "Y",
+            "CU": "Y",
             "GT": "K",
+            "GU": "K",
             "ACG": "V",
             "ACT": "H",
+            "ACU": "H",
             "AGT": "D",
+            "AGU": "D",
             "CGT": "B",
+            "CGU": "B",
             "ACGT": "N",
+            "ACGU": "N",
         }
         sequence = ""
         for i in range(self.length):
 
             def get(nucleotide):
-                return self[nucleotide][i]
+                return self[nucleotide][i]  # noqa: B023
 
             nucleotides = sorted(self, key=get, reverse=True)
             counts = [self[c][i] for c in nucleotides]
@@ -212,6 +214,76 @@ class GenericPositionMatrix(dict):
             nucleotide = degenerate_nucleotide.get(key, key)
             sequence += nucleotide
         return Seq(sequence)
+
+    def calculate_consensus(
+        self, substitution_matrix=None, plurality=None, identity=0, setcase=None
+    ):
+        """Return the consensus sequence (as a string) for the given parameters.
+
+        This function largely follows the conventions of the EMBOSS `cons` tool.
+
+        Arguments:
+         - substitution_matrix - the scoring matrix used when comparing
+           sequences. By default, it is None, in which case we simply count the
+           frequency of each letter.
+           Instead of the default value, you can use the substitution matrices
+           available in Bio.Align.substitution_matrices. Common choices are
+           BLOSUM62 (also known as EBLOSUM62) for protein, and NUC.4.4 (also
+           known as EDNAFULL) for nucleotides. NOTE: This has not yet been
+           implemented.
+         - plurality           - threshold value for the number of positive
+           matches, divided by the total count in a column, required to reach
+           consensus. If substitution_matrix is None, then this argument must
+           be None, and is ignored; a ValueError is raised otherwise. If
+           substitution_matrix is not None, then the default value of the
+           plurality is 0.5.
+         - identity            - number of identities, divided by the total
+           count in a column, required to define a consensus value. If the
+           number of identities is less than identity * total count in a column,
+           then the undefined character ('N' for nucleotides and 'X' for amino
+           acid sequences) is used in the consensus sequence. If identity is
+           1.0, then only columns of identical letters contribute to the
+           consensus. Default value is zero.
+         - setcase             - threshold for the positive matches, divided by
+           the total count in a column, above which the consensus is is
+           upper-case and below which the consensus is in lower-case. By
+           default, this is equal to 0.5.
+        """
+        alphabet = self.alphabet
+        if set(alphabet).union("ACGTUN-") == set("ACGTUN-"):
+            undefined = "N"
+        else:
+            undefined = "X"
+        if substitution_matrix is None:
+            if plurality is not None:
+                raise ValueError(
+                    "plurality must be None if substitution_matrix is None"
+                )
+            sequence = ""
+            for i in range(self.length):
+                maximum = 0
+                total = 0
+                for letter in alphabet:
+                    count = self[letter][i]
+                    total += count
+                    if count > maximum:
+                        maximum = count
+                        consensus_letter = letter
+                if maximum < identity * total:
+                    consensus_letter = undefined
+                else:
+                    if setcase is None:
+                        setcase_threshold = total / 2
+                    else:
+                        setcase_threshold = setcase * total
+                    if maximum <= setcase_threshold:
+                        consensus_letter = consensus_letter.lower()
+                sequence += consensus_letter
+        else:
+            raise NotImplementedError(
+                "calculate_consensus currently only supports substitution_matrix=None"
+            )
+        return sequence
 
     @property
     def gc_content(self):
@@ -280,7 +352,7 @@ class PositionWeightMatrix(GenericPositionMatrix):
         """Initialize the class."""
         GenericPositionMatrix.__init__(self, alphabet, counts)
         for i in range(self.length):
-            total = sum(float(self[letter][i]) for letter in alphabet)
+            total = sum(self[letter][i] for letter in alphabet)
             for letter in alphabet:
                 self[letter][i] /= total
         for letter in alphabet:
@@ -421,7 +493,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         """
         score = 0.0
         letters = self.alphabet
-        for position in range(0, self.length):
+        for position in range(self.length):
             score += max(self[letter][position] for letter in letters)
         return score
 
@@ -433,7 +505,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         """
         score = 0.0
         letters = self.alphabet
-        for position in range(0, self.length):
+        for position in range(self.length):
             score += min(self[letter][position] for letter in letters)
         return score
 

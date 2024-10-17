@@ -19,6 +19,7 @@ with the rest of ``Bio.AlignIO``.
 You are expected to use this module via the Bio.AlignIO functions (or the
 Bio.SeqIO functions if you want to work directly with the gapped sequences).
 """
+
 from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -245,9 +246,11 @@ class MsfIterator(AlignmentIterator):
                                 "Expected GCG MSF coordinate line %i to %i, got: %r"
                                 % (
                                     completed_length + 1,
-                                    completed_length + 50
-                                    if completed_length + 50 < aln_length
-                                    else aln_length,
+                                    (
+                                        completed_length + 50
+                                        if completed_length + 50 < aln_length
+                                        else aln_length
+                                    ),
                                     line,
                                 )
                             )
@@ -306,6 +309,7 @@ class MsfIterator(AlignmentIterator):
                 seqs[idx] = s + "-" * (aln_length - len(s))
         if padded:
             import warnings
+
             from Bio import BiopythonParserWarning
 
             warnings.warn(

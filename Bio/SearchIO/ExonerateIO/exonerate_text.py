@@ -8,15 +8,11 @@
 import re
 from itertools import chain
 
-
-from ._base import (
-    _BaseExonerateParser,
-    _BaseExonerateIndexer,
-    _STRAND_MAP,
-    _parse_hit_or_query_line,
-)
+from ._base import _BaseExonerateIndexer
+from ._base import _BaseExonerateParser
+from ._base import _parse_hit_or_query_line
+from ._base import _STRAND_MAP
 from .exonerate_vulgar import _RE_VULGAR
-
 
 __all__ = ("ExonerateTextParser", "ExonerateTextIndexer")
 
@@ -401,7 +397,6 @@ class ExonerateTextParser(_BaseExonerateParser):
 
         # compute start and end coords for each block
         for seq_type in ("query", "hit"):
-
             # ner blocks and intron blocks require different adjustments
             if not has_ner:
                 opp_type = "hit" if seq_type == "query" else "query"
@@ -449,7 +444,6 @@ class ExonerateTextParser(_BaseExonerateParser):
         # flag for vulgar line, if present, we can parse coordinates from it
         vulgar_comp = None
         while True:
-
             match = re.search(_RE_ALN_ROW, self.line.strip())
             # if we have a match, set flags and values
             if match and not in_aln_row:

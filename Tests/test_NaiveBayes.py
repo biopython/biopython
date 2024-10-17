@@ -7,25 +7,30 @@
 
 import copy
 import unittest
+import warnings
 
-from Bio import NaiveBayes
+from Bio import BiopythonDeprecationWarning
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
+    from Bio import NaiveBayes
 
 # Importing NaiveBayes will itself raise MissingPythonDependencyError
 # if NumPy is unavailable.
-import numpy
+import numpy as np
 
 try:
-    hash(numpy.float64(123.456))
+    hash(np.float64(123.456))
 except TypeError:
-    # Due to a bug in NumPy 1.12.1, this is unhashable under
-    # PyPy3.5 v5.7 beta - it has been fixed in NumPy
+    # Due to a bug in np 1.12.1, this is unhashable under
+    # PyPy3.5 v5.7 beta - it has been fixed in np
     from Bio import MissingPythonDependencyError
 
     raise MissingPythonDependencyError(
         "Please update NumPy if you want to use Bio.NaiveBayes "
-        "(under this version numpy.float64 is unhashable)."
+        "(under this version np.float64 is unhashable)."
     ) from None
-del numpy
+del np
 
 
 class CarTest(unittest.TestCase):

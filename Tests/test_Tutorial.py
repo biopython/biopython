@@ -1,34 +1,38 @@
-# Copyright 2011-2016 by Peter Cock.  All rights reserved.
+# Copyright 2011-2023 by Peter Cock.  All rights reserved.
+# Revisions copyright 2019 by Anil Tuncel. All rights reserved.
+#
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 #
-# This script looks for entries in the LaTeX source for the
+# This script looks for entries in the RST source for the
 # Biopython Tutorial which can be turned into Python doctests,
 # e.g.
 #
-# %doctest
-# \begin{minted}{pycon}
-# >>> from Bio.Seq import Seq
-# >>> s = Seq("ACGT")
-# >>> len(s)
-# 4
-# \end{minted}
+# .. doctest
+#
+# .. code:: pycon
+#
+#    >>> from Bio.Seq import Seq
+#    >>> s = Seq("ACGT")
+#    >>> len(s)
+#    4
 #
 # Code snippets can be extended using a similar syntax, which
 # will create a single combined doctest:
 #
-# %cont-doctest
-# \begin{minted}{pycon}
-# >>> s == "ACGT"
-# True
-# \end{minted}
+# .. cont-doctest
 #
-# The %doctest line also supports a relative working directory,
+# .. code:: pycon
+#
+#   >>> s == "ACGT"
+#   True
+#
+# The doctest comment line also supports a relative working directory,
 # and listing multiple Python dependencies as lib:XXX which will
 # ensure "import XXX" works before using the test. e.g.
 #
-# %doctest examples lib:numpy lib:scipy
+# .. doctest examples lib:numpy lib:scipy
 #
 # Additionally after the path, special keyword 'internet' is
 # used to flag online tests.
@@ -37,9 +41,9 @@
 # include a relative path to the working directory, just use '.'
 # for the default path, e.g.
 #
-# %doctest . lib:reportlab
+# .. doctest . lib:reportlab
 #
-# %doctest . internet
+# .. doctest . internet
 #
 # TODO: Adding bin:XXX for checking binary XXX is on $PATH?
 #
@@ -47,21 +51,21 @@
 # itself.
 
 
-# This future import will apply to all the doctests too:
 """Tests for Tutorial module."""
 
-import unittest
 import doctest
 import os
 import sys
+import unittest
 import warnings
-
-
-from Bio import BiopythonExperimentalWarning, MissingExternalDependencyError
 
 # This is the same mechanism used for run_tests.py --offline
 # to skip tests requiring the network.
 import requires_internet
+
+from Bio import BiopythonDeprecationWarning
+from Bio import BiopythonExperimentalWarning
+from Bio import MissingExternalDependencyError
 
 try:
     requires_internet.check()
@@ -72,89 +76,106 @@ if "--offline" in sys.argv:
     # Allow manual override via "python test_Tutorial.py --offline"
     online = False
 
-warnings.simplefilter("ignore", BiopythonExperimentalWarning)
-
 # Cache this to restore the cwd at the end of the tests
 original_path = os.path.abspath(".")
 
 if os.path.basename(sys.argv[0]) == "test_Tutorial.py":
-    # sys.argv[0] will be (relative) path to test_Turorial.py - use this to allow, e.g.
+    # sys.argv[0] will be (relative) path to test_Tutorial.py - use this to allow, e.g.
     # [base]$ python Tests/test_Tutorial.py
     # [Tests/]$ python test_Tutorial.py
     tutorial_base = os.path.abspath(
         os.path.join(os.path.dirname(sys.argv[0]), "../Doc/")
     )
-    tutorial = os.path.join(tutorial_base, "Tutorial.tex")
+    tutorial = os.path.join(tutorial_base, "Tutorial/index.rst")
 else:
     # Probably called via run_tests.py so current directory should (now) be Tests/
     # but may have been changed by run_tests.py so can't infer from sys.argv[0] with e.g.
     # [base]$ python Tests/run_tests.py test_Tutorial
     tutorial_base = os.path.abspath("../Doc/")
-    tutorial = os.path.join(tutorial_base, "Tutorial.tex")
+    tutorial = os.path.join(tutorial_base, "Tutorial/index.rst")
 if not os.path.isfile(tutorial):
     from Bio import MissingExternalDependencyError
 
-    raise MissingExternalDependencyError("Could not find ../Doc/Tutorial.tex file")
+    raise MissingExternalDependencyError(
+        "Could not find ../Doc/Tutorial/index.rst file"
+    )
 
-# Build a list of all the Tutorial LaTeX files:
-files = [tutorial]
-for latex in os.listdir(os.path.join(tutorial_base, "Tutorial/")):
-    if latex.startswith("chapter_") and latex.endswith(".tex"):
-        files.append(os.path.join(tutorial_base, "Tutorial", latex))
+# Build a list of all the Tutorial RST files:
+files = []
+for rst in os.listdir(os.path.join(tutorial_base, "Tutorial/")):
+    if rst.startswith("chapter_") and rst.endswith(".rst"):
+        files.append(os.path.join(tutorial_base, "Tutorial", rst))
 
 
 def _extract(handle):
     line = handle.readline()
-    if line != "\\begin{minted}{pycon}\n":
-        if not (line.startswith("\\begin{minted}[") and line.endswith("]{pycon}\n")):
-            raise ValueError(
-                "Any '%doctest' or '%cont-doctest' line should be followed by '\\begin{minted}{pycon}' or '\\begin{minted}[options]{pycon}'"
-            )
+    if line != "\n":
+        raise ValueError(
+            "Any '.. doctest' or '.. cont-doctest' line should "
+            "be followed by an empty line"
+        )
+
+    line = handle.readline()
+    if line.lstrip() != ".. code:: pycon\n":
+        raise ValueError(
+            "Any '.. doctest' or '.. cont-doctest' line should "
+            r"be followed by '\n.. code:: pycon\n\n"
+        )
+
+    line = handle.readline()
+    if line != "\n":
+        raise ValueError(
+            "Any '.. doctest' or '.. cont-doctest' line should "
+            r"be followed by '\n.. code:: pycon\n\n"
+        )
+
     lines = []
     while True:
         line = handle.readline()
         if not line:
             if lines:
-                print("".join(lines[:30]))
-                raise ValueError("Didn't find end of test starting: %r", lines[0])
+                # print("".join(lines[:30]))
+                break
             else:
-                raise ValueError("Didn't find end of test!")
-        elif line.startswith("\\end{minted}"):
+                raise ValueError("Didn't find lines!")
+        elif line == "\n":
             break
         else:
             lines.append(line)
     return lines
 
 
-def extract_doctests(latex_filename):
-    """Scan LaTeX file and pull out marked doctests as strings.
+def extract_doctests(rst_filename):
+    """Scan RST file and pull out marked doctests as strings.
 
     This is a generator, yielding one tuple per doctest.
     """
-    base_name = os.path.splitext(os.path.basename(latex_filename))[0]
+    base_name = os.path.splitext(os.path.basename(rst_filename))[0]
+    name = None
     deps = ""
     folder = ""
-    with open(latex_filename) as handle:
+    with open(rst_filename, encoding="utf8") as handle:
         line_number = 0
         lines = []
-        name = None
         while True:
             line = handle.readline()
             line_number += 1
             if not line:
                 # End of file
                 break
-            elif line.startswith("%cont-doctest"):
+            elif line.lstrip().startswith(".. cont-doctest"):
                 x = _extract(handle)
                 lines.extend(x)
                 line_number += len(x) + 2
-            elif line.startswith("%doctest"):
+            elif line.lstrip().startswith(".. doctest"):
                 if lines:
-                    if not lines[0].startswith(">>> "):
-                        raise ValueError(f"Should start '>>> ' not {lines[0]!r}")
+                    if not lines[0].lstrip().startswith(">>> "):
+                        raise ValueError(
+                            f"Should start with '>>> ' (indented), not {lines[0]!r}"
+                        )
                     yield name, "".join(lines), folder, deps
                     lines = []
-                deps = [x.strip() for x in line.split()[1:]]
+                deps = [x.strip() for x in line.split()[2:]]
                 if deps:
                     folder = deps[0]
                     deps = deps[1:]
@@ -165,7 +186,9 @@ def extract_doctests(latex_filename):
                 lines.extend(x)
                 line_number += len(x) + 2
     if lines:
-        if not lines[0].startswith(">>> "):
+        if not name:
+            raise ValueError(f"Unanchored doctest in {rst_filename}: {lines}")
+        if not lines[0].lstrip().startswith(">>> "):
             raise ValueError(f"Should start '>>> ' not {lines[0]!r}")
         yield name, "".join(lines), folder, deps
     # yield "dummy", ">>> 2 + 2\n5\n"
@@ -173,8 +196,6 @@ def extract_doctests(latex_filename):
 
 class TutorialDocTestHolder:
     """Python doctests extracted from the Biopython Tutorial."""
-
-    pass
 
 
 def check_deps(dependencies):
@@ -197,9 +218,10 @@ def check_deps(dependencies):
 
 # Create dummy methods on the object purely to hold doctests
 missing_deps = set()
-for latex in files:
-    # print("Extracting doctests from %s" % latex)
-    for name, example, folder, deps in extract_doctests(latex):
+for rst in files:
+    # print("Extracting doctests from %s" % rst)
+    for name, example, folder, deps in extract_doctests(rst):
+        assert name, rst
         missing = check_deps(deps)
         if missing:
             missing_deps.update(missing)
@@ -233,13 +255,16 @@ class TutorialTestCase(unittest.TestCase):
         """Run tutorial doctests."""
         runner = doctest.DocTestRunner()
         failures = []
-        for test in doctest.DocTestFinder().find(TutorialDocTestHolder):
-            failed, success = runner.run(test)
-            if failed:
-                name = test.name
-                assert name.startswith("TutorialDocTestHolder.doctest_")
-                failures.append(name[30:])
-                # raise ValueError("Tutorial doctest %s failed" % test.name[30:])
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonDeprecationWarning)
+            warnings.simplefilter("ignore", BiopythonExperimentalWarning)
+            for test in doctest.DocTestFinder().find(TutorialDocTestHolder):
+                failed, success = runner.run(test)
+                if failed:
+                    name = test.name
+                    assert name.startswith("TutorialDocTestHolder.doctest_")
+                    failures.append(name[30:])
+                    # raise ValueError("Tutorial doctest %s failed" % test.name[30:])
         if failures:
             raise ValueError(
                 "%i Tutorial doctests failed: %s" % (len(failures), ", ".join(failures))
@@ -250,7 +275,7 @@ class TutorialTestCase(unittest.TestCase):
         os.chdir(original_path)
         # files currently don't get created during test with python3.5 and pypy
         # remove files created from chapter_phylo.tex
-        delete_phylo_tutorial = ["examples/tree1.nwk", "examples/other_trees.nwk"]
+        delete_phylo_tutorial = ["examples/tree1.nwk", "examples/other_trees.xml"]
         for file in delete_phylo_tutorial:
             if os.path.exists(os.path.join(tutorial_base, file)):
                 os.remove(os.path.join(tutorial_base, file))
@@ -276,7 +301,10 @@ if __name__ == "__main__":
         for dep in sorted(missing_deps):
             print(f" - {dep}")
     print("Running Tutorial doctests...")
-    tests = doctest.testmod()
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", BiopythonDeprecationWarning)
+        warnings.simplefilter("ignore", BiopythonExperimentalWarning)
+        tests = doctest.testmod()
     if tests.failed:
         raise RuntimeError("%i/%i tests failed" % tests)
     print("Tests done")

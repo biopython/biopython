@@ -3,16 +3,18 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Tests for AlignIO module."""
+import string
 import unittest
 import warnings
-
 from io import StringIO
 
 from Bio import AlignIO
+from Bio import BiopythonDeprecationWarning
 from Bio import SeqIO
 from Bio.Align import AlignInfo
 from Bio.Align import MultipleSeqAlignment
 from Bio.Data import IUPACData
+from Bio.motifs import Motif
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
@@ -24,7 +26,6 @@ test_write_read_align_with_seq_count = test_write_read_alignment_formats + [
 
 
 class TestAlignIO_exceptions(unittest.TestCase):
-
     t_formats = list(AlignIO._FormatToWriter) + list(SeqIO._FormatToWriter)
 
     def test_phylip_reject_duplicate(self):
@@ -241,47 +242,140 @@ class TestAlignIO_reading(unittest.TestCase):
         if alignment_len > 5:
             self.assertEqual(alignment[:, -1], columns[-1])
 
-    def check_summary_simple(self, alignment):
-        summary = AlignInfo.SummaryInfo(alignment)
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
+    def check_summary_simple(self, msa):
+        summary = AlignInfo.SummaryInfo(msa)
+        with self.assertWarns(BiopythonDeprecationWarning):
+            dumb_consensus = summary.dumb_consensus(threshold=0.7)
+        all_letters = summary._get_all_letters()
+        letters = all_letters.replace("-", "")
+        alignment = msa.alignment
+        motif = Motif(letters, alignment)
+        gaps = "-" * len(alignment)
+        dumb_consensus = "".join(
+            [
+                letter
+                for index, letter in enumerate(dumb_consensus)
+                if msa[:, index] != gaps
+            ]
+        )
+        consensus = motif.counts.calculate_consensus(identity=0.7)
+        self.assertEqual(dumb_consensus, consensus)
 
-    def check_summary(self, alignment, molecule_type):
+    def check_summary(self, msa, molecule_type):
         # Check AlignInfo.SummaryInfo likes the alignment; smoke test only
         if molecule_type == "DNA":
             letters = IUPACData.unambiguous_dna_letters
-            all_letters = IUPACData.ambiguous_dna_letters
+            ambiguous_letters = IUPACData.ambiguous_dna_letters
+            ambiguous = "N"
         elif molecule_type == "RNA":
             letters = IUPACData.unambiguous_rna_letters
-            all_letters = IUPACData.ambiguous_rna_letters
+            ambiguous_letters = IUPACData.ambiguous_rna_letters
+            ambiguous = "N"
         elif molecule_type == "protein":
             letters = IUPACData.protein_letters
-            all_letters = IUPACData.protein_letters
+            ambiguous_letters = IUPACData.protein_letters
+            ambiguous = "X"
         else:
             raise ValueError(f"Unknown molecule type '{molecule_type}'")
-        summary = AlignInfo.SummaryInfo(alignment)
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary(skip_chars=None, letters=letters)
-        e_freq = 1.0 / len(letters)
-        all_letters = all_letters.upper() + all_letters.lower()
-        e_freq_table = dict.fromkeys(all_letters, e_freq)
-        info_content = summary.information_content(
-            e_freq_table=e_freq_table, chars_to_ignore=["N", "X"]
+        chars_to_ignore = set("-" + string.ascii_uppercase).difference(letters)
+        for record in msa:
+            record.seq = record.seq.upper()
+        summary = AlignInfo.SummaryInfo(msa)
+        alignment = msa.alignment  # New-style alignment
+        alignment.sequences = [sequence.upper() for sequence in alignment.sequences]
+        all_letters = summary._get_all_letters()
+        motif_letters = "".join(set(all_letters).union(letters))
+        motif_letters = motif_letters.replace("-", "")
+        if set(motif_letters) == set("CGYTWAR"):
+            ambiguous = "X"
+        motif = Motif(motif_letters, alignment)
+        counts = motif.counts
+        with self.assertWarns(BiopythonDeprecationWarning):
+            dumb_consensus = summary.dumb_consensus(ambiguous=ambiguous)
+        consensus = counts.calculate_consensus(identity=0.7)
+        # skip columns consisting of gaps only:
+        gaps = "-" * len(alignment)
+        dumb_consensus = "".join(
+            [
+                letter
+                for index, letter in enumerate(dumb_consensus)
+                if msa[:, index] != gaps
+            ]
         )
+        self.assertEqual(consensus, dumb_consensus)
+        with self.assertWarns(BiopythonDeprecationWarning):
+            pssm = summary.pos_specific_score_matrix()
+        all_letters = summary._get_all_letters()
+        j = 0
+        for i in range(alignment.length):
+            while set(msa[:, j]) == set("-"):
+                j += 1
+            for letter in letters:
+                count = counts[letter][i]
+                if letter in all_letters:
+                    self.assertAlmostEqual(count, pssm[j][letter])
+                else:
+                    self.assertAlmostEqual(count, 0.0)
+            j += 1
+        with self.assertWarns(BiopythonDeprecationWarning):
+            rep_dict = summary.replacement_dictionary(skip_chars=None, letters=letters)
+        rep_dict = alignment.substitutions
+        e_freq = 1.0 / len(letters)
+        ambiguous_letters = ambiguous_letters.upper() + ambiguous_letters.lower()
+        motif = Motif(letters, alignment)
+        e_freq_table = dict.fromkeys(ambiguous_letters, e_freq)
+        with self.assertWarns(BiopythonDeprecationWarning):
+            info_content = summary.information_content(
+                e_freq_table=e_freq_table, chars_to_ignore=chars_to_ignore
+            )
+        motif.background = e_freq_table
+        relative_entropy = sum(motif.relative_entropy)
+        self.assertAlmostEqual(info_content, relative_entropy)
 
-    def check_summary_pir(self, alignment):
+    def check_summary_pir(self, msa):
         letters = IUPACData.unambiguous_dna_letters
-        summary = AlignInfo.SummaryInfo(alignment)
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary(skip_chars=None, letters=letters)
+        summary = AlignInfo.SummaryInfo(msa)
+        all_letters = summary._get_all_letters()
+        alignment = msa.alignment
+        motif = Motif(letters, alignment)
+        counts = motif.counts
+        with self.assertWarns(BiopythonDeprecationWarning):
+            dumb_consensus = summary.dumb_consensus(ambiguous="N")
+        gaps = "-" * len(alignment)
+        dumb_consensus = "".join(
+            [
+                letter
+                for index, letter in enumerate(dumb_consensus)
+                if msa[:, index] != gaps
+            ]
+        )
+        consensus = counts.calculate_consensus(identity=0.7)
+        self.assertEqual(consensus, dumb_consensus)
+        with self.assertWarns(BiopythonDeprecationWarning):
+            pssm = summary.pos_specific_score_matrix()
+        j = 0
+        for i in range(alignment.length):
+            while set(msa[:, j]) == set("-"):
+                j += 1
+            for letter in letters:
+                count = counts[letter][i]
+                if letter in all_letters:
+                    self.assertAlmostEqual(count, pssm[j][letter])
+                else:
+                    self.assertAlmostEqual(count, 0.0)
+            j += 1
+        with self.assertWarns(BiopythonDeprecationWarning):
+            rep_dict = summary.replacement_dictionary(skip_chars=None, letters=letters)
+        rep_dict = alignment.substitutions
         e_freq = 1.0 / len(letters)
         all_letters = letters.upper() + letters.lower()
         e_freq_table = dict.fromkeys(all_letters, e_freq)
-        info_content = summary.information_content(e_freq_table=e_freq_table)
+        with self.assertWarns(BiopythonDeprecationWarning):
+            info_content = summary.information_content(
+                e_freq_table=e_freq_table, chars_to_ignore=["-"]
+            )
+        relative_entropy = sum(motif.relative_entropy)
+        self.assertAlmostEqual(info_content, relative_entropy)
 
     def test_reading_alignments_clustal1(self):
         path = "Clustalw/clustalw.aln"

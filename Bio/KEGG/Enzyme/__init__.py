@@ -13,9 +13,10 @@ Classes:
  - Record - Holds the information from a KEGG Enzyme record.
 """
 
-
-from Bio.KEGG import _default_wrap, _struct_wrap, _wrap_kegg, _write_kegg
-
+from Bio.KEGG import _default_wrap
+from Bio.KEGG import _struct_wrap
+from Bio.KEGG import _wrap_kegg
+from Bio.KEGG import _write_kegg
 
 # Set up line wrapping rules (see Bio.KEGG._wrap_kegg)
 rxn_wrap = [
@@ -100,7 +101,7 @@ class Record:
 
     def _name(self):
         return _write_kegg(
-            "NAME", [_wrap_kegg(l, wrap_rule=name_wrap) for l in self.name]
+            "NAME", [_wrap_kegg(line, wrap_rule=name_wrap) for line in self.name]
         )
 
     def _classname(self):
@@ -108,68 +109,78 @@ class Record:
 
     def _sysname(self):
         return _write_kegg(
-            "SYSNAME", [_wrap_kegg(l, wrap_rule=name_wrap) for l in self.sysname]
+            "SYSNAME", [_wrap_kegg(line, wrap_rule=name_wrap) for line in self.sysname]
         )
 
     def _reaction(self):
         return _write_kegg(
-            "REACTION", [_wrap_kegg(l, wrap_rule=rxn_wrap) for l in self.reaction]
+            "REACTION", [_wrap_kegg(line, wrap_rule=rxn_wrap) for line in self.reaction]
         )
 
     def _substrate(self):
         return _write_kegg(
-            "SUBSTRATE", [_wrap_kegg(l, wrap_rule=name_wrap) for l in self.substrate]
+            "SUBSTRATE",
+            [_wrap_kegg(line, wrap_rule=name_wrap) for line in self.substrate],
         )
 
     def _product(self):
         return _write_kegg(
-            "PRODUCT", [_wrap_kegg(l, wrap_rule=name_wrap) for l in self.product]
+            "PRODUCT", [_wrap_kegg(line, wrap_rule=name_wrap) for line in self.product]
         )
 
     def _inhibitor(self):
         return _write_kegg(
-            "INHIBITOR", [_wrap_kegg(l, wrap_rule=name_wrap) for l in self.inhibitor]
+            "INHIBITOR",
+            [_wrap_kegg(line, wrap_rule=name_wrap) for line in self.inhibitor],
         )
 
     def _cofactor(self):
         return _write_kegg(
-            "COFACTOR", [_wrap_kegg(l, wrap_rule=name_wrap) for l in self.cofactor]
+            "COFACTOR",
+            [_wrap_kegg(line, wrap_rule=name_wrap) for line in self.cofactor],
         )
 
     def _effector(self):
         return _write_kegg(
-            "EFFECTOR", [_wrap_kegg(l, wrap_rule=name_wrap) for l in self.effector]
+            "EFFECTOR",
+            [_wrap_kegg(line, wrap_rule=name_wrap) for line in self.effector],
         )
 
     def _comment(self):
         return _write_kegg(
-            "COMMENT", [_wrap_kegg(l, wrap_rule=id_wrap(0)) for l in self.comment]
+            "COMMENT", [_wrap_kegg(line, wrap_rule=id_wrap(0)) for line in self.comment]
         )
 
     def _pathway(self):
         s = []
         for entry in self.pathway:
             s.append(entry[0] + ": " + entry[1] + "  " + entry[2])
-        return _write_kegg("PATHWAY", [_wrap_kegg(l, wrap_rule=id_wrap(16)) for l in s])
+        return _write_kegg(
+            "PATHWAY", [_wrap_kegg(line, wrap_rule=id_wrap(16)) for line in s]
+        )
 
     def _genes(self):
         s = []
         for entry in self.genes:
             s.append(entry[0] + ": " + " ".join(entry[1]))
-        return _write_kegg("GENES", [_wrap_kegg(l, wrap_rule=id_wrap(5)) for l in s])
+        return _write_kegg(
+            "GENES", [_wrap_kegg(line, wrap_rule=id_wrap(5)) for line in s]
+        )
 
     def _disease(self):
         s = []
         for entry in self.disease:
             s.append(entry[0] + ": " + entry[1] + "  " + entry[2])
-        return _write_kegg("DISEASE", [_wrap_kegg(l, wrap_rule=id_wrap(13)) for l in s])
+        return _write_kegg(
+            "DISEASE", [_wrap_kegg(line, wrap_rule=id_wrap(13)) for line in s]
+        )
 
     def _structures(self):
         s = []
         for entry in self.structures:
             s.append(entry[0] + ": " + "  ".join(entry[1]) + "  ")
         return _write_kegg(
-            "STRUCTURES", [_wrap_kegg(l, wrap_rule=struct_wrap(5)) for l in s]
+            "STRUCTURES", [_wrap_kegg(line, wrap_rule=struct_wrap(5)) for line in s]
         )
 
     def _dblinks(self):

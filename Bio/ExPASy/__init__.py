@@ -17,8 +17,8 @@ Functions:
 """
 
 import io
-from urllib.request import urlopen
 from urllib.error import HTTPError
+from urllib.request import urlopen
 
 
 def get_prodoc_entry(
@@ -85,7 +85,14 @@ def get_prosite_raw(id, cgi=None):
     ValueError: Failed to find entry 'DOES_NOT_EXIST' on ExPASy
 
     """
-    handle = _open(f"https://prosite.expasy.org/{id}.txt")
+    try:
+        handle = _open(f"https://prosite.expasy.org/{id}.txt")
+    except HTTPError as exception:
+        if exception.code == 404:
+            raise ValueError("Failed to find entry '%s' on ExPASy" % id) from None
+        else:
+            raise
+    # This has happened historically, redirected to main page:
     if handle.url == "https://www.expasy.org/":
         raise ValueError(f"Failed to find entry '{id}' on ExPASy") from None
     return handle
@@ -116,7 +123,7 @@ def get_sprot_raw(id):
     try:
         handle = _open(f"http://www.uniprot.org/uniprot/{id}.txt")
     except HTTPError as exception:
-        if exception.code == 404:
+        if exception.code in (400, 404):
             raise ValueError(f"Failed to find SwissProt entry '{id}'") from None
         else:
             raise

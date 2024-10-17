@@ -11,10 +11,16 @@ import os
 import shutil
 import sys
 import unittest
+import warnings
+
+from Bio import BiopythonDeprecationWarning
 from Bio import MissingExternalDependencyError
 from Bio import SeqIO
-from Bio.Application import ApplicationError
-from Bio.motifs.applications import XXmotifCommandline
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
+    from Bio.Application import ApplicationError
+    from Bio.motifs.applications import XXmotifCommandline
 
 
 # Try to avoid problems when the OS is in another language

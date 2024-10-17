@@ -8,15 +8,26 @@
 
 """Tests for mmtf module."""
 
-import unittest
-import warnings
 import os
 import tempfile
-from Bio.PDB import PDBParser, Select
-from Bio.PDB.mmtf import MMTFParser, MMTFIO
+import unittest
+import warnings
+
+try:
+    import mmtf
+except ImportError:
+    from Bio import MissingPythonDependencyError
+
+    raise MissingPythonDependencyError(
+        "Install mmtf-python to use Bio.PDB.mmtf"
+    ) from None
+
+from Bio.PDB import PDBParser
+from Bio.PDB import Select
 from Bio.PDB.MMCIFParser import MMCIFParser
+from Bio.PDB.mmtf import MMTFIO
+from Bio.PDB.mmtf import MMTFParser
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
-import mmtf
 
 
 class ParseMMTF(unittest.TestCase):
@@ -128,9 +139,9 @@ class WriteMMTF(unittest.TestCase):
     def test_write(self):
         """Test a simple structure object is written out correctly to MMTF."""
         parser = MMCIFParser()
-        struc = parser.get_structure("1A8O", "PDB/1A8O.cif")
+        structure = parser.get_structure("1A8O", "PDB/1A8O.cif")
         io = MMTFIO()
-        io.set_structure(struc)
+        io.set_structure(structure)
         filenumber, filename = tempfile.mkstemp()
         os.close(filenumber)
         try:
@@ -177,9 +188,9 @@ class WriteMMTF(unittest.TestCase):
     def test_multi_model_write(self):
         """Test multiple models are written out correctly to MMTF."""
         parser = PDBParser()
-        struc = parser.get_structure("1SSU_mod", "PDB/1SSU_mod.pdb")
+        structure = parser.get_structure("1SSU_mod", "PDB/1SSU_mod.pdb")
         io = MMTFIO()
-        io.set_structure(struc)
+        io.set_structure(structure)
         filenumber, filename = tempfile.mkstemp()
         os.close(filenumber)
         try:
@@ -206,9 +217,9 @@ class WriteMMTF(unittest.TestCase):
 
     def test_selection_write(self):
         """Test the use of a Select subclass when writing MMTF files."""
-        struc = MMTFParser.get_structure("PDB/4CUP.mmtf")
+        structure = MMTFParser.get_structure("PDB/4CUP.mmtf")
         io = MMTFIO()
-        io.set_structure(struc)
+        io.set_structure(structure)
         filenumber, filename = tempfile.mkstemp()
         os.close(filenumber)
 

@@ -6,7 +6,7 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-"""General mechanisms to access applications in Biopython (OBSOLETE).
+"""General mechanisms to access applications in Biopython (DEPRECATED).
 
 This module is not intended for direct use. It provides the basic objects which
 are subclassed by our command line wrappers, such as:
@@ -26,11 +26,28 @@ wrappers up to date, we have decided to deprecate and eventually remove them.
 We instead now recommend building your command line and invoking it directly
 with the subprocess module.
 """
+
 import os
 import platform
-import sys
-import subprocess
 import re
+import subprocess
+import sys
+import warnings
+
+from Bio import BiopythonDeprecationWarning
+
+warnings.warn(
+    """\
+The Bio.Application modules and modules relying on it have been deprecated.
+
+Due to the on going maintenance burden of keeping command line application
+wrappers up to date, we have decided to deprecate and eventually remove these
+modules.
+
+We instead now recommend building your command line and invoking it directly
+with the subprocess module.""",
+    BiopythonDeprecationWarning,
+)
 
 
 # Use this regular expression to test the property names are going to

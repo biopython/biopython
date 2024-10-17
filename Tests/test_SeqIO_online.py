@@ -13,6 +13,7 @@ Goals:
     - May catch some format changes early too.
 
 """
+
 import unittest
 
 import requires_internet
@@ -84,7 +85,7 @@ for database, formats, entry, length, checksum in [
     ),
 ]:
 
-    def funct(d, f, e, l, c):
+    def funct(d, f, e, l, c):  # noqa: E741
         method = lambda x: x.simple(d, f, e, l, c)  # noqa: E731
         method.__doc__ = f"Bio.Entrez.efetch({d!r}, id={e!r}, ...)"
         return method

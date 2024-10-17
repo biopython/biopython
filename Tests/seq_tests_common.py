@@ -5,14 +5,19 @@
 """Common code for SeqRecord object tests."""
 
 import unittest
-
-from Bio.Seq import UnknownSeq, UndefinedSequenceError
-from Bio.SeqUtils.CheckSum import seguid
-from Bio.SeqFeature import ExactPosition, UnknownPosition
-from Bio.SeqFeature import FeatureLocation, CompoundLocation, SeqFeature
-from Bio.SeqRecord import SeqRecord
+import warnings
 
 from test_SeqIO import SeqIOTestBaseClass
+
+from Bio import BiopythonDeprecationWarning
+from Bio.Seq import UndefinedSequenceError
+from Bio.SeqFeature import CompoundLocation
+from Bio.SeqFeature import ExactPosition
+from Bio.SeqFeature import SeqFeature
+from Bio.SeqFeature import SimpleLocation
+from Bio.SeqFeature import UnknownPosition
+from Bio.SeqRecord import SeqRecord
+from Bio.SeqUtils.CheckSum import seguid
 
 
 class SeqRecordTestBaseClass(unittest.TestCase):
@@ -50,8 +55,8 @@ class SeqRecordTestBaseClass(unittest.TestCase):
         else:
             # BioSQL can only store ONE location!
             # TODO - Check BioPerl with a GenBank file with multiple ref locations
-            self.assertIsInstance(r1.location[0], FeatureLocation)
-            self.assertIsInstance(r2.location[0], FeatureLocation)
+            self.assertIsInstance(r1.location[0], SimpleLocation)
+            self.assertIsInstance(r2.location[0], SimpleLocation)
             self.assertEqual(r1.location[0].start, r2.location[0].start)
             self.assertEqual(r1.location[0].end, r2.location[0].end)
 
@@ -60,9 +65,15 @@ class SeqRecordTestBaseClass(unittest.TestCase):
         self.assertIsInstance(old_f, SeqFeature)
         self.assertIsInstance(new_f, SeqFeature)
         self.assertEqual(old_f.type, new_f.type)
-        self.assertEqual(old_f.strand, new_f.strand)
-        self.assertEqual(old_f.ref, new_f.ref)
-        self.assertEqual(old_f.ref_db, new_f.ref_db)
+        self.assertEqual(old_f.location.strand, new_f.location.strand)
+        self.assertEqual(old_f.location.ref, new_f.location.ref)
+        self.assertEqual(old_f.location.ref_db, new_f.location.ref_db)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
+            self.assertEqual(old_f.location.strand, new_f.strand)
+            self.assertEqual(old_f.location.ref, new_f.ref)
+            self.assertEqual(old_f.location.ref_db, new_f.ref_db)
+
         # TODO - BioSQL does not store/retrieve feature's id (Bug 2526)
         if new_f.id != "<unknown id>":
             self.assertEqual(old_f.id, new_f.id)
@@ -99,9 +110,16 @@ class SeqRecordTestBaseClass(unittest.TestCase):
 
         self.assertEqual(len(old_f.location.parts), len(new_f.location.parts))
         for old_sub, new_sub in zip(old_f.location.parts, new_f.location.parts):
-            # These are FeatureLocation objects
-            self.assertEqual(old_sub.nofuzzy_start, new_sub.nofuzzy_start)
-            self.assertEqual(old_sub.nofuzzy_end, new_sub.nofuzzy_end)
+            # These are SimpleLocation objects
+            # Note UnknownPosition != UnknownPosition (just like NaN != NaN)
+            if isinstance(old_sub.start, UnknownPosition):
+                self.assertIsInstance(new_sub.start, UnknownPosition)
+            else:
+                self.assertEqual(old_sub.start, new_sub.start)
+            if isinstance(old_sub.end, UnknownPosition):
+                self.assertIsInstance(new_sub.end, UnknownPosition)
+            else:
+                self.assertEqual(old_sub.end, new_sub.end)
             self.assertEqual(old_sub.strand, new_sub.strand)
 
         self.assertCountEqual(old_f.qualifiers, new_f.qualifiers)
@@ -129,11 +147,6 @@ class SeqRecordTestBaseClass(unittest.TestCase):
     def compare_sequence(self, old, new):
         """Compare two Seq objects."""
         self.assertEqual(len(old), len(new))
-
-        if isinstance(old, UnknownSeq):
-            self.assertIsInstance(new, UnknownSeq)
-        else:
-            self.assertNotIsInstance(new, UnknownSeq)
 
         self.assertEqual(len(old), len(new))
         try:
@@ -220,7 +233,7 @@ class SeqRecordTestBaseClass(unittest.TestCase):
         )
         missing_keys = set(old.annotations).difference(new.annotations)
         missing_keys = missing_keys.difference(
-            ["ncbi_taxid", "structured_comment"]  # Can't store chimeras
+            ["gene_name", "ncbi_taxid", "structured_comment"]  # Can't store chimeras
         )
         self.assertEqual(
             len(missing_keys),
@@ -257,10 +270,7 @@ class SeqRecordTestBaseClass(unittest.TestCase):
                 # If there is a taxon id recorded, these fields get overwritten
                 # by data from the taxon/taxon_name tables.  There is no
                 # guarantee that they will be identical after a load/retrieve.
-                self.assertTrue(
-                    isinstance(new.annotations[key], str)
-                    or isinstance(new.annotations[key], list)
-                )
+                self.assertTrue(isinstance(new.annotations[key], (list, str)))
             elif isinstance(old.annotations[key], type(new.annotations[key])):
                 self.assertEqual(
                     old.annotations[key],

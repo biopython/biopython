@@ -6,14 +6,18 @@
 """Unit tests for the PhyloXML and PhyloXMLIO modules."""
 
 import os
+import platform  # for Windows hack, see issue #3944
+import sys  # for Windows hack
 import tempfile
 import unittest
 from itertools import chain
 
+from Bio.Align import Alignment
+from Bio.Align import MultipleSeqAlignment
+from Bio.Phylo import PhyloXML as PX
+from Bio.Phylo import PhyloXMLIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Align import MultipleSeqAlignment
-from Bio.Phylo import PhyloXML as PX, PhyloXMLIO
 
 # Example PhyloXML files
 EX_APAF = "PhyloXML/apaf.xml"
@@ -92,13 +96,13 @@ class ParseTests(unittest.TestCase):
     test_read_apaf = _test_read_factory(EX_APAF, (1, 0))
     test_read_bcl2 = _test_read_factory(EX_BCL2, (1, 0))
     test_read_made = _test_read_factory(EX_MADE, (6, 0))
-    test_read_phylo = _test_read_factory(EX_PHYLO, (13, 1))
+    test_read_phylo = _test_read_factory(EX_PHYLO, (14, 1))
     test_read_dollo = _test_read_factory(EX_DOLLO, (1, 0))
 
     test_parse_apaf = _test_parse_factory(EX_APAF, 1)
     test_parse_bcl2 = _test_parse_factory(EX_BCL2, 1)
     test_parse_made = _test_parse_factory(EX_MADE, 6)
-    test_parse_phylo = _test_parse_factory(EX_PHYLO, 13)
+    test_parse_phylo = _test_parse_factory(EX_PHYLO, 14)
     test_parse_dollo = _test_parse_factory(EX_DOLLO, 1)
 
     # lvl-2 clades, sub-clade counts, lvl-3 clades
@@ -509,6 +513,12 @@ class WriterTests(unittest.TestCase):
         for cls, tests in test_cases:
             inst = cls("setUp")
             for test in tests:
+                if (
+                    test == "test_Distribution"
+                    and platform.system() == "Windows"
+                    and sys.version_info.minor > 8
+                ):
+                    continue  # Skip, see issue #3944
                 getattr(inst, test)()
 
     def test_apaf(self):
@@ -695,6 +705,41 @@ class MethodTests(unittest.TestCase):
         self.assertIsInstance(aln, MultipleSeqAlignment)
         self.assertEqual(len(aln), 3)
         self.assertEqual(aln.get_alignment_length(), 7)
+
+    def test_alignment(self):
+        tree = self.phyloxml.phylogenies[0]
+        aln = tree.alignment
+        self.assertIsInstance(aln, Alignment)
+        self.assertEqual(len(aln), 0)
+        self.assertEqual(aln.shape, (0, 0))
+        # Add sequences to the terminals
+        for tip, seqstr in zip(tree.get_terminals(), ("AA--TTA", "AA--TTG", "AACCTTC")):
+            tip.sequences.append(
+                PX.Sequence.from_seqrecord(
+                    SeqRecord(Seq(seqstr), id=str(tip)), is_aligned=True
+                )
+            )
+        # Check the alignment
+        aln = tree.alignment
+        self.assertIsInstance(aln, Alignment)
+        self.assertEqual(aln.shape, (3, 7))
+        self.assertEqual(aln.sequences[0].id, ":A")
+        self.assertEqual(aln.sequences[1].id, ":B")
+        self.assertEqual(aln.sequences[2].id, ":C")
+        self.assertEqual(aln.sequences[0].seq, "AATTA")
+        self.assertEqual(aln.sequences[1].seq, "AATTG")
+        self.assertEqual(aln.sequences[2].seq, "AACCTTC")
+        self.assertEqual(aln[0], "AA--TTA")
+        self.assertEqual(aln[1], "AA--TTG")
+        self.assertEqual(aln[2], "AACCTTC")
+        self.assertEqual(
+            str(aln),
+            """\
+:A                0 AA--TTA 5
+:B                0 AA--TTG 5
+:C                0 AACCTTC 7
+""",
+        )
 
     # Syntax sugar
 

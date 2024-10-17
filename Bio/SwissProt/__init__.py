@@ -16,18 +16,12 @@ Functions:
 
 """
 
-
 import io
+import re
 
-from Bio.SeqFeature import (
-    SeqFeature,
-    FeatureLocation,
-    ExactPosition,
-    BeforePosition,
-    AfterPosition,
-    UncertainPosition,
-    UnknownPosition,
-)
+from Bio.SeqFeature import Position
+from Bio.SeqFeature import SeqFeature
+from Bio.SeqFeature import SimpleLocation
 
 
 class SwissProtParserError(ValueError):
@@ -52,7 +46,8 @@ class Record:
      - sequence_update   A tuple of (date, release).
      - annotation_update A tuple of (date, release).
      - description       Free-format description.
-     - gene_name         Gene name.  See userman.txt for description.
+     - gene_name         A list of dictionaries with keys 'Name', 'Synonyms',
+                         'OrderedLocusNames' and 'ORFNames'.
      - organism          The source of the sequence.
      - organelle         The origin of the sequence.
      - organism_classification  The taxonomy classification.  List of strings.
@@ -74,21 +69,21 @@ class Record:
     Examples
     --------
     >>> from Bio import SwissProt
-    >>> example_filename = "SwissProt/sp008"
+    >>> example_filename = "SwissProt/P68308.txt"
     >>> with open(example_filename) as handle:
     ...     records = SwissProt.parse(handle)
     ...     for record in records:
     ...         print(record.entry_name)
-    ...         print(",".join(record.accessions))
+    ...         print(record.accessions)
     ...         print(record.keywords)
-    ...         print(repr(record.organism))
+    ...         print(record.organism)
     ...         print(record.sequence[:20] + "...")
     ...
-    1A02_HUMAN
-    P01892,P06338,P30514,P30444,P30445,P30446,Q29680,Q29899,Q95352,Q29837,Q95380
-    ['MHC I', 'Transmembrane', 'Glycoprotein', 'Signal', 'Polymorphism', '3D-structure']
-    'Homo sapiens (Human).'
-    MAVMAPRTLVLLLSGALALT...
+    NU3M_BALPH
+    ['P68308', 'P24973']
+    ['Electron transport', 'Membrane', 'Mitochondrion', 'Mitochondrion inner membrane', 'NAD', 'Respiratory chain', 'Translocase', 'Transmembrane', 'Transmembrane helix', 'Transport', 'Ubiquinone']
+    Balaenoptera physalus (Fin whale) (Balaena physalus).
+    MNLLLTLLTNTTLALLLVFI...
 
     """
 
@@ -105,7 +100,7 @@ class Record:
         self.annotation_update = None
 
         self.description = []
-        self.gene_name = ""
+        self.gene_name = []
         self.organism = []
         self.organelle = ""
         self.organism_classification = []
@@ -156,7 +151,7 @@ class FeatureTable(SeqFeature):
     attributes are used as follows:
 
      - ``location``: location of the feature on the canonical or isoform
-       sequence; the location is stored as an instance of FeatureLocation,
+       sequence; the location is stored as an instance of SimpleLocation,
        defined in Bio.SeqFeature, with the ref attribute set to the isoform
        ID referring to the canonical or isoform sequence on which the feature
        is defined
@@ -218,7 +213,7 @@ class FeatureTable(SeqFeature):
           frameshifting
         - ZN_FING:  zinc finger region
 
-     - qualifiers   A dictionary of additional information, which may include
+     - ``qualifiers``: a dictionary of additional information, which may include
        the feature evidence and free-text notes. While SwissProt includes the
        feature identifier code (FTId) as a qualifier, it is stored as the
        attribute ID of the FeatureTable object.
@@ -311,9 +306,12 @@ def _read(handle):
         elif key == "DE":
             record.description.append(value.strip())
         elif key == "GN":
-            if record.gene_name:
-                record.gene_name += " "
-            record.gene_name += value
+            if value == "and":
+                record.gene_name.append("")
+            else:
+                if len(record.gene_name) == 0:
+                    record.gene_name.append("")
+                record.gene_name[-1] += value + " "
         elif key == "OS":
             record.organism.append(value)
         elif key == "OG":
@@ -377,6 +375,7 @@ def _read(handle):
         elif key == "  ":
             _sequence_lines.append(value.replace(" ", "").rstrip())
         elif key == "//":
+            _read_gn(record)
             # Join multiline data into one string
             record.description = " ".join(record.description)
             record.organism = " ".join(record.organism)
@@ -408,9 +407,25 @@ def _read(handle):
             # **HA SAM; Annotated by PicoHamap 1.88; MF_01138.1; 09-NOV-2003.
             pass
         else:
-            raise SwissProtParserError(f"Unknown keyword '{key}' found", line=line)
+            raise SwissProtParserError(f"Unknown keyword {key!r} found", line=line)
     if record:
         raise ValueError("Unexpected end of stream.")
+
+
+def _read_gn(record):
+    for i, text in enumerate(record.gene_name):
+        tokens = text.rstrip("; ").split("; ")
+        gene_name = {}
+        for token in tokens:
+            # value may include an equals sign, e.g.
+            # GN   Name=Lacc1=POX4 {ECO:0000313|EMBL:KDQ27217.1};
+            key, value = token.strip().split("=", 1)
+            if key == "Name":
+                gene_name["Name"] = value
+            else:
+                assert key in ("Synonyms", "OrderedLocusNames", "ORFNames")
+                gene_name[key] = value.split(", ")
+        record.gene_name[i] = gene_name
 
 
 def _read_id(record, line):
@@ -435,13 +450,13 @@ def _read_id(record, line):
     # check if the data class is one of the allowed values
     allowed = ("STANDARD", "PRELIMINARY", "IPI", "Reviewed", "Unreviewed")
     if record.data_class not in allowed:
-        message = f"Unrecognized data class '{record.data_class}'"
+        message = f"Unrecognized data class {record.data_class!r}"
         raise SwissProtParserError(message, line=line)
 
     # molecule_type should be 'PRT' for PRoTein
     # Note that has been removed in recent releases (set to None)
     if record.molecule_type not in (None, "PRT"):
-        message = f"Unrecognized molecule type '{record.molecule_type}'"
+        message = f"Unrecognized molecule type {record.molecule_type!r}"
         raise SwissProtParserError(message, line=line)
 
 
@@ -531,7 +546,7 @@ def _read_dt(record, line):
             version = 0
         date = cols[0].rstrip(",")
 
-        # Re-use the historical property names, even though
+        # Reuse the historical property names, even though
         # the meaning has changed slightly:
         if "INTEGRATED" in uprline:
             record.created = date, version
@@ -658,6 +673,7 @@ def _read_rx(reference, value):
             reference.references.append((cols[0].rstrip(";"), cols[1].rstrip(".")))
     if warn:
         import warnings
+
         from Bio import BiopythonParserWarning
 
         warnings.warn(f"Possibly corrupt RX line {value!r}", BiopythonParserWarning)
@@ -724,32 +740,12 @@ def _read_ft(record, line):
             isoform_id = None
             description = line[34:75].rstrip()
             qualifiers = {"description": description}
-        if from_res == "?":
-            from_res = UnknownPosition()
-        elif from_res.startswith("?"):
-            position = int(from_res[1:]) - 1  # Python zero-based counting
-            from_res = UncertainPosition(position)
-        elif from_res.startswith("<"):
-            position = int(from_res[1:]) - 1  # Python zero-based counting
-            from_res = BeforePosition(position)
-        else:
-            position = int(from_res) - 1  # Python zero-based counting
-            from_res = ExactPosition(position)
+        from_res = Position.fromstring(from_res, -1)
         if to_res == "":
-            position = from_res + 1
-            to_res = ExactPosition(position)
-        elif to_res == "?":
-            to_res = UnknownPosition()
-        elif to_res.startswith("?"):
-            position = int(to_res[1:])
-            to_res = UncertainPosition(position)
-        elif to_res.startswith(">"):
-            position = int(to_res[1:])
-            to_res = AfterPosition(position)
+            to_res = from_res + 1
         else:
-            position = int(to_res)
-            to_res = ExactPosition(position)
-        location = FeatureLocation(from_res, to_res, ref=isoform_id)
+            to_res = Position.fromstring(to_res)
+        location = SimpleLocation(from_res, to_res, ref=isoform_id)
         feature = FeatureTable(
             location=location, type=name, id=None, qualifiers=qualifiers
         )
@@ -796,32 +792,26 @@ def _read_ft(record, line):
         feature.qualifiers["description"] = description
     else:  # new-style FT line
         value = line[21:].rstrip()
-        if value.startswith("/id="):
-            qualifier_type = "id"
-            value = value[4:]
-            assert value.startswith('"')
-            assert value.endswith('"')
-            feature.id = value[1:-1]
-            return
-        elif value.startswith("/evidence="):
-            value = value[10:]
-            assert value.startswith('"')
-            if value.endswith('"'):
-                value = value[1:-1]
-            else:  # continues on the next line
-                value = value[1:]
-            assert "evidence" not in feature.qualifiers
-            feature.qualifiers["evidence"] = value
-            return
-        elif value.startswith("/note="):
-            value = value[6:]
-            assert value.startswith('"')
-            if value.endswith('"'):
-                value = value[1:-1]
-            else:  # continues on the next line
-                value = value[1:]
-            assert "note" not in feature.qualifiers
-            feature.qualifiers["note"] = value
+        match = re.match(r"^/([a-z_]+)=", value)
+        if match:
+            qualifier_type = match.group(1)
+            value = value[len(match.group(0)) :]
+            if not value.startswith('"'):
+                raise ValueError("Missing starting quote in feature")
+            if qualifier_type == "id":
+                if not value.endswith('"'):
+                    raise ValueError("Missing closing quote for id")
+                feature.id = value[1:-1]
+            else:
+                if value.endswith('"'):
+                    value = value[1:-1]
+                else:  # continues on the next line
+                    value = value[1:]
+                if qualifier_type in feature.qualifiers:
+                    raise ValueError(
+                        f"Feature qualifier {qualifier_type!r} already exists for feature"
+                    )
+                feature.qualifiers[qualifier_type] = value
             return
         # this line is a continuation of the description of the previous feature
         keys = list(feature.qualifiers.keys())

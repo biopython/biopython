@@ -29,9 +29,11 @@ http://imgt.cines.fr/download/LIGM-DB/ftable_doc.html
 http://www.ebi.ac.uk/imgt/hla/docs/manual.html
 
 """
-import warnings
 
+import warnings
 from datetime import datetime
+from string import ascii_letters
+from string import digits
 
 from Bio import BiopythonWarning
 from Bio import SeqFeature
@@ -40,12 +42,14 @@ from Bio.GenBank.Scanner import _ImgtScanner
 from Bio.GenBank.Scanner import EmblScanner
 from Bio.GenBank.Scanner import GenBankScanner
 from Bio.Seq import UndefinedSequenceError
-from Bio.Seq import UnknownSeq
 
 from .Interfaces import _get_seq_string
 from .Interfaces import SequenceIterator
 from .Interfaces import SequenceWriter
 
+# Set containing all characters allowed in feature qualifier keys. See
+# https://www.insdc.org/submitting-standards/feature-table/#3.1
+_allowed_table_component_name_chars = set(ascii_letters + digits + "_-'*")
 
 # NOTE
 # ====
@@ -57,6 +61,8 @@ from .Interfaces import SequenceWriter
 
 class GenBankIterator(SequenceIterator):
     """Parser for GenBank files."""
+
+    modes = "t"
 
     def __init__(self, source):
         """Break up a Genbank file into SeqRecord objects.
@@ -95,16 +101,18 @@ class GenBankIterator(SequenceIterator):
         AF297471.1
 
         """
-        super().__init__(source, mode="t", fmt="GenBank")
+        super().__init__(source, fmt="GenBank")
+        self.records = GenBankScanner(debug=0).parse_records(self.stream)
 
-    def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
-        records = GenBankScanner(debug=0).parse_records(handle)
-        return records
+    def __next__(self):
+        """Return the next SeqRecord."""
+        return next(self.records)
 
 
 class EmblIterator(SequenceIterator):
     """Parser for EMBL files."""
+
+    modes = "t"
 
     def __init__(self, source):
         """Break up an EMBL file into SeqRecord objects.
@@ -149,16 +157,18 @@ class EmblIterator(SequenceIterator):
         CQ797900.1
 
         """
-        super().__init__(source, mode="t", fmt="EMBL")
+        super().__init__(source, fmt="EMBL")
+        self.records = EmblScanner(debug=0).parse_records(self.stream)
 
-    def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
-        records = EmblScanner(debug=0).parse_records(handle)
-        return records
+    def __next__(self):
+        """Return the next SeqRecord."""
+        return next(self.records)
 
 
 class ImgtIterator(SequenceIterator):
     """Parser for IMGT files."""
+
+    modes = "t"
 
     def __init__(self, source):
         """Break up an IMGT file into SeqRecord objects.
@@ -170,16 +180,18 @@ class ImgtIterator(SequenceIterator):
         Note that for genomes or chromosomes, there is typically only
         one record.
         """
-        super().__init__(source, mode="t", fmt="IMGT")
+        super().__init__(source, fmt="IMGT")
+        self.records = _ImgtScanner(debug=0).parse_records(self.stream)
 
-    def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
-        records = _ImgtScanner(debug=0).parse_records(handle)
-        return records
+    def __next__(self):
+        """Return the next SeqRecord."""
+        return next(self.records)
 
 
 class GenBankCdsFeatureIterator(SequenceIterator):
     """Parser for GenBank files, creating a SeqRecord for each CDS feature."""
+
+    modes = "t"
 
     def __init__(self, source):
         """Break up a Genbank file into SeqRecord objects for each CDS feature.
@@ -190,15 +202,18 @@ class GenBankCdsFeatureIterator(SequenceIterator):
         many CDS features.  These are returned as with the stated amino acid
         translation sequence (if given).
         """
-        super().__init__(source, mode="t", fmt="GenBank")
+        super().__init__(source, fmt="GenBank")
+        self.records = GenBankScanner(debug=0).parse_cds_features(self.stream)
 
-    def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
-        return GenBankScanner(debug=0).parse_cds_features(handle)
+    def __next__(self):
+        """Return the next SeqRecord."""
+        return next(self.records)
 
 
 class EmblCdsFeatureIterator(SequenceIterator):
     """Parser for EMBL files, creating a SeqRecord for each CDS feature."""
+
+    modes = "t"
 
     def __init__(self, source):
         """Break up a EMBL file into SeqRecord objects for each CDS feature.
@@ -209,11 +224,12 @@ class EmblCdsFeatureIterator(SequenceIterator):
         many CDS features.  These are returned as with the stated amino acid
         translation sequence (if given).
         """
-        super().__init__(source, mode="t", fmt="EMBL")
+        super().__init__(source, fmt="EMBL")
+        self.records = EmblScanner(debug=0).parse_cds_features(self.stream)
 
-    def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
-        return EmblScanner(debug=0).parse_cds_features(handle)
+    def __next__(self):
+        """Return the next SeqRecord."""
+        return next(self.records)
 
 
 def _insdc_feature_position_string(pos, offset=0):
@@ -222,26 +238,28 @@ def _insdc_feature_position_string(pos, offset=0):
     Use offset=1 to add one to convert a start position from python counting.
     """
     if isinstance(pos, SeqFeature.ExactPosition):
-        return "%i" % (pos.position + offset)
+        return "%i" % (pos + offset)
     elif isinstance(pos, SeqFeature.WithinPosition):
+        # TODO - avoid private variables
         return "(%i.%i)" % (
-            pos.position + offset,
-            pos.position + pos.extension + offset,
+            pos._left + offset,
+            pos._right + offset,
         )
     elif isinstance(pos, SeqFeature.BetweenPosition):
+        # TODO - avoid private variables
         return "(%i^%i)" % (
-            pos.position + offset,
-            pos.position + pos.extension + offset,
+            pos._left + offset,
+            pos._right + offset,
         )
     elif isinstance(pos, SeqFeature.BeforePosition):
-        return "<%i" % (pos.position + offset)
+        return "<%i" % (pos + offset)
     elif isinstance(pos, SeqFeature.AfterPosition):
-        return ">%i" % (pos.position + offset)
+        return ">%i" % (pos + offset)
     elif isinstance(pos, SeqFeature.OneOfPosition):
         return "one-of(%s)" % ",".join(
             _insdc_feature_position_string(p, offset) for p in pos.position_choices
         )
-    elif isinstance(pos, SeqFeature.AbstractPosition):
+    elif isinstance(pos, SeqFeature.Position):
         raise NotImplementedError("Please report this as a bug in Biopython.")
     else:
         raise ValueError("Expected a SeqFeature position object.")
@@ -256,25 +274,25 @@ def _insdc_location_string_ignoring_strand_and_subfeatures(location, rec_length)
     if (
         isinstance(location.start, SeqFeature.ExactPosition)
         and isinstance(location.end, SeqFeature.ExactPosition)
-        and location.start.position == location.end.position
+        and location.start == location.end
     ):
         # Special case, for 12:12 return 12^13
         # (a zero length slice, meaning the point between two letters)
-        if location.end.position == rec_length:
+        if location.end == rec_length:
             # Very special case, for a between position at the end of a
             # sequence (used on some circular genomes, Bug 3098) we have
             # N:N so return N^1
             return "%s%i^1" % (ref, rec_length)
         else:
-            return "%s%i^%i" % (ref, location.end.position, location.end.position + 1)
+            return "%s%i^%i" % (ref, location.end, location.end + 1)
     if (
         isinstance(location.start, SeqFeature.ExactPosition)
         and isinstance(location.end, SeqFeature.ExactPosition)
-        and location.start.position + 1 == location.end.position
+        and location.start + 1 == location.end
     ):
         # Special case, for 11:12 return 12 rather than 12..12
         # (a length one slice, meaning a single letter)
-        return "%s%i" % (ref, location.end.position)
+        return "%s%i" % (ref, location.end)
     elif isinstance(location.start, SeqFeature.UnknownPosition) or isinstance(
         location.end, SeqFeature.UnknownPosition
     ):
@@ -289,7 +307,7 @@ def _insdc_location_string_ignoring_strand_and_subfeatures(location, rec_length)
             # Treat the unknown start position as a BeforePosition
             return "%s<%i..%s" % (
                 ref,
-                location.nofuzzy_end,
+                location.end,
                 _insdc_feature_position_string(location.end),
             )
         else:
@@ -297,7 +315,7 @@ def _insdc_location_string_ignoring_strand_and_subfeatures(location, rec_length)
             return "%s%s..>%i" % (
                 ref,
                 _insdc_feature_position_string(location.start, +1),
-                location.nofuzzy_start + 1,
+                location.start + 1,
             )
     else:
         # Typical case, e.g. 12..15 gets mapped to 11:15
@@ -310,19 +328,19 @@ def _insdc_location_string_ignoring_strand_and_subfeatures(location, rec_length)
 
 
 def _insdc_location_string(location, rec_length):
-    """Build a GenBank/EMBL location from a (Compound) FeatureLocation (PRIVATE).
+    """Build a GenBank/EMBL location from a (Compound) SimpleLocation (PRIVATE).
 
     There is a choice of how to show joins on the reverse complement strand,
     GenBank used "complement(join(1,10),(20,100))" while EMBL used to use
     "join(complement(20,100),complement(1,10))" instead (but appears to have
     now adopted the GenBank convention). Notice that the order of the entries
     is reversed! This function therefore uses the first form. In this situation
-    we expect the CompoundFeatureLocation and its parts to all be marked as
+    we expect the CompoundLocation and its parts to all be marked as
     strand == -1, and to be in the order 19:100 then 0:10.
     """
     try:
         parts = location.parts
-        # CompoundFeatureLocation
+        # CompoundLocation
         if location.strand == -1:
             # Special case, put complement outside the join/order/... and reverse order
             return "complement(%s(%s))" % (
@@ -340,7 +358,7 @@ def _insdc_location_string(location, rec_length):
                 ",".join(_insdc_location_string(p, rec_length) for p in parts),
             )
     except AttributeError:
-        # Simple FeatureLocation
+        # SimpleLocation
         loc = _insdc_location_string_ignoring_strand_and_subfeatures(
             location, rec_length
         )
@@ -373,13 +391,28 @@ class _InsdcWriter(SequenceWriter):
         "transl_table",
     )
 
+    modes = "t"
+
     def _write_feature_qualifier(self, key, value=None, quote=None):
+        if not _allowed_table_component_name_chars.issuperset(key):
+            warnings.warn(
+                f"Feature qualifier key '{key}' contains characters not"
+                " allowed by standard.",
+                BiopythonWarning,
+            )
+        if len(key) > 20:
+            warnings.warn(
+                f"Feature qualifier key '{key}' is longer than maximum length"
+                " specified by standard (20 characters).",
+                BiopythonWarning,
+            )
+
         if value is None:
             # Value-less entry like /pseudo
             self.handle.write(f"{self.QUALIFIER_INDENT_STR}/{key}\n")
             return
 
-        if type(value) == str:
+        if isinstance(value, str):
             value = value.replace(
                 '"', '""'
             )  # NCBI says escape " as "" in qualifier values
@@ -437,8 +470,22 @@ class _InsdcWriter(SequenceWriter):
     def _write_feature(self, feature, record_length):
         """Write a single SeqFeature object to features table (PRIVATE)."""
         assert feature.type, feature
-        location = _insdc_location_string(feature.location, record_length)
+
         f_type = feature.type.replace(" ", "_")
+        if not _allowed_table_component_name_chars.issuperset(f_type):
+            warnings.warn(
+                f"Feature key '{f_type}' contains characters not allowed by"
+                " standard.",
+                BiopythonWarning,
+            )
+        if len(f_type) > 15:
+            warnings.warn(
+                f"Feature key '{f_type}' is longer than maximum length"
+                " specified by standard (15 characters).",
+                BiopythonWarning,
+            )
+
+        location = _insdc_location_string(feature.location, record_length)
         line = (
             (self.QUALIFIER_INDENT_TMP % f_type)[: self.QUALIFIER_INDENT]
             + self._wrap_location(location)
@@ -796,7 +843,7 @@ class GenBankWriter(_InsdcWriter):
                 )
 
             if not (
-                splitline[4].strip() == ""
+                splitline[3].strip() == "aa"
                 or "DNA" in splitline[4].strip().upper()
                 or "RNA" in splitline[4].strip().upper()
             ):
@@ -884,8 +931,8 @@ class GenBankWriter(_InsdcWriter):
                     units = "bases"
                 data += "  (%s %i to %i)" % (
                     units,
-                    ref.location[0].nofuzzy_start + 1,
-                    ref.location[0].nofuzzy_end,
+                    ref.location[0].start + 1,
+                    ref.location[0].end,
                 )
             self._write_single_line("REFERENCE", data)
             if ref.authors:
@@ -959,15 +1006,9 @@ class GenBankWriter(_InsdcWriter):
         # Loosely based on code from Howard Salis
         # TODO - Force lower case?
 
-        if isinstance(record.seq, UnknownSeq):
-            data = None
-        else:
-            try:
-                data = _get_seq_string(record)
-            except UndefinedSequenceError:
-                data = None
-
-        if data is None:
+        try:
+            data = _get_seq_string(record)
+        except UndefinedSequenceError:
             # We have already recorded the length, and there is no need
             # to record a long sequence of NNNNNNN...NNN or whatever.
             if "contig" in record.annotations:
@@ -1146,15 +1187,9 @@ class EmblWriter(_InsdcWriter):
     def _write_sequence(self, record):
         handle = self.handle  # save looking up this multiple times
 
-        if isinstance(record.seq, UnknownSeq):
-            data = None
-        else:
-            try:
-                data = _get_seq_string(record)
-            except UndefinedSequenceError:
-                data = None
-
-        if data is None:
+        try:
+            data = _get_seq_string(record)
+        except UndefinedSequenceError:
             # We have already recorded the length, and there is no need
             # to record a long sequence of NNNNNNN...NNN or whatever.
             if "contig" in record.annotations:
@@ -1183,7 +1218,7 @@ class EmblWriter(_InsdcWriter):
         else:
             handle.write("SQ   \n")
 
-        for line_number in range(0, seq_len // self.LETTERS_PER_LINE):
+        for line_number in range(seq_len // self.LETTERS_PER_LINE):
             handle.write("    ")  # Just four, not five
             for block in range(self.BLOCKS_PER_LINE):
                 index = (
@@ -1248,7 +1283,14 @@ class EmblWriter(_InsdcWriter):
         mol_type = record.annotations.get("molecule_type")
         if mol_type is None:
             raise ValueError("missing molecule_type in annotations")
-        if mol_type not in ("DNA", "RNA", "protein"):
+        if mol_type not in (
+            "DNA",
+            "genomic DNA",
+            "unassigned DNA",
+            "mRNA",
+            "RNA",
+            "protein",
+        ):
             warnings.warn(f"Non-standard molecule type: {mol_type}", BiopythonWarning)
         mol_type_upper = mol_type.upper()
         if "DNA" in mol_type_upper:
@@ -1364,8 +1406,7 @@ class EmblWriter(_InsdcWriter):
             if ref.location and len(ref.location) == 1:
                 self._write_single_line(
                     "RP",
-                    "%i-%i"
-                    % (ref.location[0].nofuzzy_start + 1, ref.location[0].nofuzzy_end),
+                    "%i-%i" % (ref.location[0].start + 1, ref.location[0].end),
                 )
             # TODO - record any DOI or AGRICOLA identifier in the reference object?
             if ref.pubmed_id:

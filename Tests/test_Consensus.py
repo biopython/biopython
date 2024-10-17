@@ -6,18 +6,18 @@
 """Unit tests for the Bio.Phylo.Consensus module."""
 
 import os
-import unittest
 import tempfile
+import unittest
 
 # from io import StringIO
+from Bio import Align
 from Bio import AlignIO
 from Bio import Phylo
 from Bio.Phylo import BaseTree
-from Bio.Phylo.TreeConstruction import DistanceCalculator
-from Bio.Phylo.TreeConstruction import DistanceTreeConstructor
 from Bio.Phylo import Consensus
 from Bio.Phylo.Consensus import _BitString
-
+from Bio.Phylo.TreeConstruction import DistanceCalculator
+from Bio.Phylo.TreeConstruction import DistanceTreeConstructor
 
 temp_dir = tempfile.mkdtemp()
 
@@ -135,6 +135,7 @@ class BootstrapTest(unittest.TestCase):
 
     def setUp(self):
         self.msa = AlignIO.read("TreeConstruction/msa.phy", "phylip")
+        self.alignment = Align.read("TreeConstruction/msa.phy", "phylip")
 
     def test_bootstrap(self):
         msa_list = list(Consensus.bootstrap(self.msa, 100))
@@ -142,18 +143,34 @@ class BootstrapTest(unittest.TestCase):
         self.assertEqual(len(msa_list[0]), len(self.msa))
         self.assertEqual(len(msa_list[0][0]), len(self.msa[0]))
 
-    def test_bootstrap_trees(self):
+    def test_bootstrap_trees_msa(self):
         calculator = DistanceCalculator("blosum62")
         constructor = DistanceTreeConstructor(calculator)
         trees = list(Consensus.bootstrap_trees(self.msa, 100, constructor))
         self.assertEqual(len(trees), 100)
         self.assertIsInstance(trees[0], BaseTree.Tree)
 
-    def test_bootstrap_consensus(self):
+    def test_bootstrap_trees(self):
+        calculator = DistanceCalculator("blosum62")
+        constructor = DistanceTreeConstructor(calculator)
+        trees = list(Consensus.bootstrap_trees(self.alignment, 100, constructor))
+        self.assertEqual(len(trees), 100)
+        self.assertIsInstance(trees[0], BaseTree.Tree)
+
+    def test_bootstrap_consensus_msa(self):
         calculator = DistanceCalculator("blosum62")
         constructor = DistanceTreeConstructor(calculator, "nj")
         tree = Consensus.bootstrap_consensus(
             self.msa, 100, constructor, Consensus.majority_consensus
+        )
+        self.assertIsInstance(tree, BaseTree.Tree)
+        Phylo.write(tree, os.path.join(temp_dir, "bootstrap_consensus.tre"), "newick")
+
+    def test_bootstrap_consensus(self):
+        calculator = DistanceCalculator("blosum62")
+        constructor = DistanceTreeConstructor(calculator, "nj")
+        tree = Consensus.bootstrap_consensus(
+            self.alignment, 100, constructor, Consensus.majority_consensus
         )
         self.assertIsInstance(tree, BaseTree.Tree)
         Phylo.write(tree, os.path.join(temp_dir, "bootstrap_consensus.tre"), "newick")

@@ -8,20 +8,11 @@
 
 You are expected to use this module via the Bio.Align functions.
 """
+
 from Bio.Align import Alignment
 from Bio.Align import interfaces
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio import BiopythonExperimentalWarning
-
-import warnings
-
-warnings.warn(
-    "Bio.Align.phylip is an experimental module which may undergo "
-    "significant changes prior to its future official release.",
-    BiopythonExperimentalWarning,
-)
-
 
 _PHYLIP_ID_WIDTH = 10
 
@@ -29,16 +20,23 @@ _PHYLIP_ID_WIDTH = 10
 class AlignmentWriter(interfaces.AlignmentWriter):
     """Clustalw alignment writer."""
 
+    fmt = "PHYLIP"
+
     def format_alignment(self, alignment):
         """Return a string with a single alignment in the Phylip format."""
         names = []
         for record in alignment.sequences:
-            name = record.id.strip()
-            for char in "[](),":
-                name = name.replace(char, "")
-            for char in ":;":
-                name = name.replace(char, "|")
-            name = name[:_PHYLIP_ID_WIDTH]
+            try:
+                name = record.id
+            except AttributeError:
+                name = ""
+            else:
+                name = name.strip()
+                for char in "[](),":
+                    name = name.replace(char, "")
+                for char in ":;":
+                    name = name.replace(char, "|")
+                name = name[:_PHYLIP_ID_WIDTH]
             names.append(name)
 
         lines = []
@@ -75,15 +73,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     http://evolution.genetics.washington.edu/phylip/doc/main.html#inputfiles
     """
 
-    def __init__(self, source):
-        """Create an AlignmentIterator object.
+    fmt = "PHYLIP"
 
-        Arguments:
-         - source   - input data or file name
-
-        """
-        super().__init__(source, mode="t", fmt="PHYLIP")
-        stream = self.stream
+    def _read_header(self, stream):
         try:
             line = next(stream)
         except StopIteration:
@@ -92,8 +84,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         words = line.split()
         if len(words) == 2:
             try:
-                self.number_of_seqs = int(words[0])
-                self.length_of_seqs = int(words[1])
+                self._number_of_seqs = int(words[0])
+                self._length_of_seqs = int(words[1])
                 return
             except ValueError:
                 pass
@@ -114,13 +106,13 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         for line in stream:
             line = line.rstrip()
             if not line:
-                assert i == self.number_of_seqs
+                assert i == self._number_of_seqs
                 i = 0
             else:
                 seq = line.replace(" ", "")
                 seqs[i].append(seq)
                 i += 1
-        if i != 0 and i != self.number_of_seqs:
+        if i != 0 and i != self._number_of_seqs:
             raise ValueError("Unexpected file format")
 
     def _parse_sequential(self, lines, seqs, names, length):
@@ -136,14 +128,14 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             seq = seq.replace(" ", "")
             seqs[-1].append(seq)
             length += len(seq)
-            if length == self.length_of_seqs:
+            if length == self._length_of_seqs:
                 length = 0
         return length
 
     def _read_file(self, stream):
         names = []
         seqs = []
-        lines = [next(stream) for i in range(self.number_of_seqs)]
+        lines = [next(stream) for i in range(self._number_of_seqs)]
         try:
             line = next(stream)
         except StopIteration:
@@ -160,27 +152,35 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         self._parse_interleaved_other_blocks(stream, seqs)
         return names, seqs
 
-    def parse(self, stream):
-        """Parse the next alignment from the stream."""
+    def _read_next_alignment(self, stream):
+        try:
+            self._number_of_seqs
+        except AttributeError:
+            return
         names, seqs = self._read_file(stream)
 
         seqs = ["".join(seq) for seq in seqs]
-        if len(seqs) != self.number_of_seqs:
+        if len(seqs) != self._number_of_seqs:
             raise ValueError(
                 "Found %i records in this alignment, told to expect %i"
-                % (len(seqs), self.number_of_seqs)
+                % (len(seqs), self._number_of_seqs)
             )
         for seq in seqs:
-            if len(seq) != self.length_of_seqs:
+            if len(seq) != self._length_of_seqs:
                 raise ValueError(
                     "Expected all sequences to have length %d; found %d"
-                    % (self.length_of_seqs, len(seq))
+                    % (self._length_of_seqs, len(seq))
                 )
             if "." in seq:
                 raise ValueError("PHYLIP format no longer allows dots in sequence")
 
-        coordinates = Alignment.infer_coordinates(seqs)
-        seqs = [seq.replace("-", "") for seq in seqs]
-        records = [SeqRecord(Seq(seq), id=name) for (name, seq) in zip(names, seqs)]
+        seqs = [seq.encode() for seq in seqs]
+        seqs, coordinates = Alignment.parse_printed_alignment(seqs)
+        records = [
+            SeqRecord(Seq(seq), id=name, description="")
+            for (name, seq) in zip(names, seqs)
+        ]
         alignment = Alignment(records, coordinates)
-        yield alignment
+        del self._number_of_seqs
+        del self._length_of_seqs
+        return alignment

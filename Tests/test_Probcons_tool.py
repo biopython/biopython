@@ -4,12 +4,20 @@
 # as part of this package.
 """Unittests for Bio.Align.Applications interface for PROBCONS."""
 
-import sys
 import os
+import sys
 import unittest
+import warnings
 from io import StringIO
-from Bio import AlignIO, SeqIO, MissingExternalDependencyError
-from Bio.Align.Applications import ProbconsCommandline
+
+from Bio import AlignIO
+from Bio import BiopythonDeprecationWarning
+from Bio import MissingExternalDependencyError
+from Bio import SeqIO
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
+    from Bio.Align.Applications import ProbconsCommandline
 
 # Try to avoid problems when the OS is in another language
 os.environ["LANG"] = "C"

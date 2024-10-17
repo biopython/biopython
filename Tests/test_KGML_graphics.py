@@ -1,4 +1,3 @@
-#
 # Copyright 2013, 2014 by Leighton Pritchard.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -10,17 +9,17 @@
 import os
 import unittest
 
-# Biopython
-from Bio.Graphics.ColorSpiral import ColorSpiral
-
 # Do we have ReportLab?  Raise error if not present.
 from Bio import MissingExternalDependencyError
 
+# Biopython
+from Bio.Graphics.ColorSpiral import ColorSpiral
+
 try:
     # Not actually using these imports directly:
-    from reportlab.pdfgen.canvas import Canvas
-    from reportlab.lib.pagesizes import A4
     from reportlab.lib.colors import HexColor
+    from reportlab.lib.pagesizes import A4
+    from reportlab.pdfgen.canvas import Canvas
 except ImportError:
     raise MissingExternalDependencyError(
         "Install reportlab if you want to use Bio.Graphics."
@@ -47,8 +46,8 @@ except ImportError:
 
 
 # Biopython Bio.KEGG.KGML
-from Bio.KEGG.KGML.KGML_parser import read
 from Bio.Graphics.KGML_vis import KGMLCanvas
+from Bio.KEGG.KGML.KGML_parser import read
 
 
 # The PathwayData class is also imported by the online test module in
@@ -85,27 +84,24 @@ class KGMLPathwayTest(unittest.TestCase):
             PathwayData("01100", (3628, 1726, 1746, 149)),
             PathwayData("03070", (81, 72, 8, 1), True),
         ]
-        # A list of KO IDs that we're going to use to modify pathway
+        # A set of KO IDs that we're going to use to modify pathway
         # appearance. These are KO IDs for reactions that take part in ko00020,
         # the TCA cycle
         # Turn black code style off
         # fmt: off
         self.ko_ids = {
-            "ko:K00239", "ko:K00240", "ko:K00241", "ko:K00242", "ko:K00244",
-            "ko:K00245", "ko:K00246", "ko:K00247", "ko:K00174", "ko:K00175",
-            "ko:K00177", "ko:K00176", "ko:K00382", "ko:K00164", "ko:K00164",
-            "ko:K00658", "ko:K01902", "ko:K01903", "ko:K01899", "ko:K01900",
-            "ko:K01899", "ko:K01900", "ko:K00031", "ko:K00030", "ko:K00031",
-            "ko:K01648", "ko:K00234", "ko:K00235", "ko:K00236", "ko:K00237",
-            "ko:K01676", "ko:K01677", "ko:K01678", "ko:K01679", "ko:K01681",
-            "ko:K01682", "ko:K01681", "ko:K01682", "ko:K01647", "ko:K00025",
-            "ko:K00026", "ko:K00024", "ko:K01958", "ko:K01959", "ko:K01960",
-            "ko:K00163", "ko:K00161", "ko:K00162", "ko:K00163", "ko:K00161",
-            "ko:K00162", "ko:K00382", "ko:K00627", "ko:K00169", "ko:K00170",
-            "ko:K00172", "ko:K00171", "ko:K01643", "ko:K01644", "ko:K01646",
-            "ko:K01610", "ko:K01596"
+            "ko:K00024", "ko:K00025", "ko:K00026", "ko:K00030", "ko:K00031",
+            "ko:K00161", "ko:K00162", "ko:K00163", "ko:K00164", "ko:K00169",
+            "ko:K00170", "ko:K00171", "ko:K00172", "ko:K00174", "ko:K00175",
+            "ko:K00176", "ko:K00177", "ko:K00234", "ko:K00235", "ko:K00236",
+            "ko:K00237", "ko:K00239", "ko:K00240", "ko:K00241", "ko:K00242",
+            "ko:K00244", "ko:K00245", "ko:K00246", "ko:K00247", "ko:K00382",
+            "ko:K00627", "ko:K00658", "ko:K01596", "ko:K01610", "ko:K01643",
+            "ko:K01644", "ko:K01646", "ko:K01647", "ko:K01648", "ko:K01676",
+            "ko:K01677", "ko:K01678", "ko:K01679", "ko:K01681", "ko:K01682",
+            "ko:K01899", "ko:K01900", "ko:K01902", "ko:K01903", "ko:K01958",
+            "ko:K01959", "ko:K01960"
         }
-        # Turn black code style on
         # fmt: on
 
     def test_render_KGML_basic(self):

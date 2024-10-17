@@ -24,12 +24,9 @@ For drawing capabilities, this module uses reportlab to draw and write
 the diagram: http://www.reportlab.com
 """
 
-
-# GenomeDiagram
-from ._Feature import Feature
-
-# Builtins
 import re
+
+from ._Feature import Feature
 
 
 class FeatureSet:

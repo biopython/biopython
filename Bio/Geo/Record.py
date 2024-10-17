@@ -55,9 +55,7 @@ class Record:
                 output += f"{key}: {contents[:40]}\n"
                 output += out_block(contents[40:])
             else:
-                print(contents)
-                output += f"{key}: {contents[:40]}\n"
-                output += out_block(contents[40:])
+                raise RuntimeError(f"unexpected contents of type {type(contents)}")
         col_keys = sorted(self.col_defs)
         output += "Column Header Definitions\n"
         for key in col_keys:

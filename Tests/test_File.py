@@ -4,7 +4,6 @@
 # as part of this package.
 """Tests for Bio.File module."""
 
-
 import os.path
 import shutil
 import tempfile

@@ -1,7 +1,0 @@
-# See https://github.com/codecov/support/wiki/Codecov-Yaml
-# and https://codecov.io/gh/biopython/biopython which is
-# updated via our TravisCI and AppVeyor testing.
-
-coverage:
-  ignore:
-   - "Tests/*"

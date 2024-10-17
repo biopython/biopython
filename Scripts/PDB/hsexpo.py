@@ -17,20 +17,17 @@ A PDB file can be written out with the exposure in the B factor field.
 See --help for all args.
 """
 
-
 import argparse
 import sys
 
-from Bio.PDB import (
-    DSSP,
-    ExposureCN,
-    HSExposureCA,
-    HSExposureCB,
-    PDBParser,
-    PDBIO,
-    ResidueDepth,
-    Selection,
-)
+from Bio.PDB import DSSP
+from Bio.PDB import ExposureCN
+from Bio.PDB import HSExposureCA
+from Bio.PDB import HSExposureCB
+from Bio.PDB import PDBIO
+from Bio.PDB import PDBParser
+from Bio.PDB import ResidueDepth
+from Bio.PDB import Selection
 
 ap = argparse.ArgumentParser(description=__doc__)
 ap.add_argument("pdbfile", help="Input structure in PDB format.")
@@ -123,9 +120,7 @@ else:
 residue_list = Selection.unfold_entities(m, "R")
 
 for r in residue_list:
-
     if k in r.xtra:
-
         exposure = r.xtra[k]
 
         if args.exp == "DSSPR":

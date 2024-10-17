@@ -4,7 +4,6 @@
 # as part of this package.
 """Tests for Bio.AlignIO.ClustalIO module."""
 import unittest
-
 from io import StringIO
 
 from Bio.AlignIO.ClustalIO import ClustalIterator
@@ -239,7 +238,7 @@ class TestClustalIO(unittest.TestCase):
         self.assertEqual(2, len(alignments[1]))
         self.assertEqual(210, alignments[1].get_alignment_length())
 
-    def test_empy(self):
+    def test_empty(self):
         """Checking empty file."""
         self.assertEqual(0, len(list(ClustalIterator(StringIO("")))))
 

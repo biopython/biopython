@@ -39,7 +39,7 @@ OR PERFORMANCE OF THIS SOFTWARE.
 BSD 3-Clause License
 --------------------
 
-Copyright (c) 1999-2021, The Biopython Contributors
+Copyright (c) 1999-2024, The Biopython Contributors
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without

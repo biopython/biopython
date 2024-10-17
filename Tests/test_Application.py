@@ -11,8 +11,14 @@ stdin/stdout/stderr handling.
 
 import os
 import unittest
+import warnings
 
-from Bio.Application import AbstractCommandline, _Argument
+from Bio import BiopythonDeprecationWarning
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
+    from Bio.Application import _Argument
+    from Bio.Application import AbstractCommandline
 
 
 class EchoApp(AbstractCommandline):

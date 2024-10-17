@@ -1,4 +1,4 @@
-# Copyright 2019-2021 by Robert T. Miller.  All rights reserved.
+# Copyright 2019-2022 by Robert T. Miller.  All rights reserved.
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
@@ -7,45 +7,50 @@
 """Convert XYZ Structure to internal coordinates and back, test result."""
 
 import re
-
-from itertools import zip_longest
-
-try:
-    import numpy
-except ImportError:
-    from Bio import MissingPythonDependencyError
-
-    raise MissingPythonDependencyError(
-        "Install NumPy to build proteins from internal coordinates."
-    )
-
-from Bio.PDB.PDBExceptions import PDBException
 from io import StringIO
+from itertools import zip_longest
+from typing import Any
+from typing import Union
+
+import numpy as np
+
 from Bio.File import as_handle
-from Bio.PDB.PDBIO import PDBIO
-
-from Bio.PDB.Structure import Structure
-from Bio.PDB.internal_coords import IC_Residue
-from Bio.PDB.PICIO import write_PIC, read_PIC, enumerate_atoms, pdb_date
-
-# for typing
-from typing import Dict, Union, Any, Tuple
 from Bio.PDB.Atom import Atom
-from Bio.PDB.Residue import Residue, DisorderedResidue
-from Bio.PDB.Model import Model
 from Bio.PDB.Chain import Chain
+from Bio.PDB.internal_coords import IC_Residue
+from Bio.PDB.Model import Model
+from Bio.PDB.PDBExceptions import PDBException
+from Bio.PDB.PDBIO import PDBIO
+from Bio.PDB.PICIO import enumerate_atoms
+from Bio.PDB.PICIO import pdb_date
+from Bio.PDB.PICIO import read_PIC
+from Bio.PDB.PICIO import write_PIC
+from Bio.PDB.Residue import DisorderedResidue
+from Bio.PDB.Residue import Residue
+from Bio.PDB.Structure import Structure
 
 
-def structure_rebuild_test(entity, verbose: bool = False, quick: bool = False) -> Dict:
+def structure_rebuild_test(entity, verbose: bool = False, quick: bool = False) -> dict:
     """Test rebuild PDB structure from internal coordinates.
+
+    Generates internal coordinates for entity and writes to a .pic file in
+    memory, then generates XYZ coordinates from the .pic file and compares the
+    resulting entity against the original.
+
+    See :data:`IC_Residue.pic_accuracy` to vary numeric accuracy of the
+    intermediate .pic file if the only issue is small differences in coordinates.
+
+    Note that with default settings, deuterated initial structures will fail
+    the comparison, as will structures loaded with alternate `IC_Residue.accept_atoms`
+    settings.  Use `quick=True` and/or variations on `AtomKey.d2h` and
+    `IC_Residue.accept_atoms` settings.
 
     :param Entity entity: Biopython Structure, Model or Chain.
         Structure to test
     :param bool verbose: default False.
         print extra messages
     :param bool quick: default False.
-        only check atomArrays are identical
-        in internal_to_atom_coords computation
+        only check the internal coords atomArrays are identical
     :returns: dict
         comparison dict from :func:`.compare_residues`
     """
@@ -66,9 +71,9 @@ def structure_rebuild_test(entity, verbose: bool = False, quick: bool = False) -
 
 def report_IC(
     entity: Union[Structure, Model, Chain, Residue],
-    reportDict: Dict[str, Any] = None,
+    reportDict: dict[str, Any] = None,
     verbose: bool = False,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Generate dict with counts of ic data elements for each entity level.
 
     reportDict entries are:
@@ -101,9 +106,7 @@ def report_IC(
     try:
         if "A" == entity.level:
             raise PDBException("No IC output at Atom level")
-        elif isinstance(entity, Residue) or isinstance(
-            entity, DisorderedResidue
-        ):  # "R" == entity.level:
+        elif isinstance(entity, (DisorderedResidue, Residue)):  # "R" == entity.level:
             if entity.internal_coord:
                 reportDict["res"] += 1
                 dlen = len(entity.internal_coord.dihedra)
@@ -132,8 +135,8 @@ def report_IC(
                 hdr = entity.header.get("head", None)
                 if hdr:
                     reportDict["hdr"] += 1
-                nam = entity.header.get("name", None)
-                if nam:
+                name = entity.header.get("name", None)
+                if name:
                     reportDict["hdr"] += 1
             for mdl in entity:
                 reportDict = report_IC(mdl, reportDict)
@@ -169,7 +172,7 @@ def IC_duplicate(entity) -> Structure:
     Calls :meth:`.Chain.atom_to_internal_coordinates` if needed.
 
     :param Entity entity: Biopython PDB Entity (will fail for Atom)
-    :returns: Biopython PDBStructure, no Atom objects
+    :returns: Biopython PDBStructure, no Atom objects except initial coords
     """
     sp = StringIO()
     hasInternalCoords = False
@@ -193,7 +196,7 @@ def IC_duplicate(entity) -> Structure:
     return read_PIC(sp)
 
 
-def _atmfid_d2h(atm: Atom) -> Tuple:
+def _atmfid_d2h(atm: Atom) -> tuple:
     afid = list(atm.get_full_id())
     afid4 = list(afid[4])
     afid40 = re.sub("D", "H", afid4[0], count=1)
@@ -207,7 +210,7 @@ def _cmp_atm(
     a0: Atom,
     a1: Atom,
     verbose: bool,
-    cmpdict: Dict,
+    cmpdict: dict,
     rtol: float = None,
     atol: float = None,
 ) -> None:
@@ -241,13 +244,13 @@ def _cmp_atm(
             )
         ac_rslt = False
         if rtol is None and atol is None:
-            a0c = numpy.round(a0.get_coord(), 3)
-            a1c = numpy.round(a1.get_coord(), 3)
-            ac_rslt = numpy.array_equal(a0c, a1c)
+            a0c = np.round(a0.get_coord(), 3)
+            a1c = np.round(a1.get_coord(), 3)
+            ac_rslt = np.array_equal(a0c, a1c)
         else:
             a0c = a0.get_coord()
             a1c = a1.get_coord()
-            ac_rslt = numpy.allclose(a0c, a1c, rtol=rtol, atol=atol)
+            ac_rslt = np.allclose(a0c, a1c, rtol=rtol, atol=atol)
 
         if ac_rslt:
             cmpdict["aCoordMatchCount"] += 1
@@ -267,7 +270,7 @@ def _cmp_res(
     r0: Residue,
     r1: Residue,
     verbose: bool,
-    cmpdict: Dict,
+    cmpdict: dict,
     rtol: float = None,
     atol: float = None,
 ) -> None:
@@ -284,10 +287,10 @@ def _cmp_res(
     if hasattr(r0, "internal_coord") and r0.internal_coord is not None:
         ric0 = r0.internal_coord
         ric1 = r1.internal_coord
-        r0prev = sorted((ric.rbase for ric in ric0.rprev))
-        r1prev = sorted((ric.rbase for ric in ric1.rprev))
-        r0next = sorted((ric.rbase for ric in ric0.rnext))
-        r1next = sorted((ric.rbase for ric in ric1.rnext))
+        r0prev = sorted(ric.rbase for ric in ric0.rprev)
+        r1prev = sorted(ric.rbase for ric in ric1.rprev)
+        r0next = sorted(ric.rbase for ric in ric0.rnext)
+        r1next = sorted(ric.rbase for ric in ric1.rnext)
 
         if r0prev != r1prev:
             if verbose:
@@ -343,7 +346,7 @@ def compare_residues(
     quick: bool = False,
     rtol: float = None,
     atol: float = None,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Compare full IDs and atom coordinates for 2 Biopython PDB entities.
 
     Skip DNA and HETATMs.
@@ -354,16 +357,16 @@ def compare_residues(
         Whether to print mismatch info, default False
     :param bool quick: default False.
         Only check atomArrays are identical, aCoordMatchCount=0 if different
-    :param float rtol, atol: default 1e-03, 1e-05 or round to 3 places.
-        Numpy allclose parameters; default is to round atom coordinates to 3
+    :param float rtol, atol: default 1e-03, 1e-03 or round to 3 places.
+        NumPy allclose parameters; default is to round atom coordinates to 3
         places and test equal.  For 'quick' will use defaults above for
-        comparing ataomArrays
+        comparing atomArrays
     :returns dict:
         Result counts for Residues, Full ID match Residues, Atoms,
         Full ID match atoms, and Coordinate match atoms; report string;
         error status (bool)
     """
-    cmpdict: Dict[str, Any] = {}
+    cmpdict: dict[str, Any] = {}
     cmpdict["chains"] = []  # list of chain IDs (union over both structures)
     cmpdict["residues"] = 0  # count of not HETATM residues in longest chain
     cmpdict["rCount"] = 0  # Biopython Residues (includes HETATMs, waters)
@@ -380,30 +383,49 @@ def compare_residues(
 
     if quick:
         if isinstance(e0, Chain):
-            if numpy.allclose(
-                e0.internal_coord.atomArray,
-                e1.internal_coord.atomArray,
-                rtol=1e-03 if rtol is None else rtol,
-                atol=1e-05 if atol is None else atol,
+            if (
+                e0.internal_coord.atomArray is not None
+                and np.shape(e0.internal_coord.atomArray)
+                == np.shape(e1.internal_coord.atomArray)
+                and np.allclose(
+                    e0.internal_coord.atomArray,
+                    e1.internal_coord.atomArray,
+                    rtol=1e-03 if rtol is None else rtol,
+                    atol=1e-03 if atol is None else atol,
+                )
             ):
-                cmpdict["pass"] = True
-                cmpdict["aCoordMatchCount"] = numpy.size(e0.internal_coord.atomArray, 0)
+                cmpdict["aCount"] = np.size(e0.internal_coord.atomArray, 0)
+                cmpdict["aCoordMatchCount"] = np.size(e0.internal_coord.atomArray, 0)
+                if cmpdict["aCoordMatchCount"] > 0:
+                    cmpdict["pass"] = True
+                else:
+                    cmpdict["pass"] = False
             else:
+                cmpdict["aCount"] = (
+                    0
+                    if e0.internal_coord.atomArray is None
+                    else np.size(e0.internal_coord.atomArray, 0)
+                )
                 cmpdict["pass"] = False
         else:
             cmpdict["pass"] = True
             for c0, c1 in zip_longest(e0.get_chains(), e1.get_chains()):
-                if numpy.allclose(
-                    c0.internal_coord.atomArray,
-                    c1.internal_coord.atomArray,
-                    rtol=1e-03 if rtol is None else rtol,
-                    atol=1e-05 if atol is None else atol,
-                ):
-                    cmpdict["aCoordMatchCount"] += numpy.size(
-                        c0.internal_coord.atomArray, 0
-                    )
-                else:
-                    cmpdict["pass"] = False
+                if c0.internal_coord.atomArray is not None:
+                    if np.allclose(
+                        c0.internal_coord.atomArray,
+                        c1.internal_coord.atomArray,
+                        rtol=1e-03 if rtol is None else rtol,
+                        atol=1e-03 if atol is None else atol,
+                    ):
+                        cmpdict["aCoordMatchCount"] += np.size(
+                            c0.internal_coord.atomArray, 0
+                        )
+                    else:
+                        cmpdict["pass"] = False
+                    cmpdict["aCount"] += np.size(c0.internal_coord.atomArray, 0)
+            if cmpdict["aCoordMatchCount"] < cmpdict["aCount"]:
+                cmpdict["pass"] = False
+
     else:
         for r0, r1 in zip_longest(e0.get_residues(), e1.get_residues()):
             if 2 == r0.is_disordered() == r1.is_disordered():
@@ -471,9 +493,9 @@ def write_PDB(
                             hdr.upper(), (dd or ""), (pdbid or "")
                         )
                     )
-                nam = entity.header.get("name", None)
-                if nam:
-                    fp.write("TITLE     " + nam.upper() + "\n")
+                name = entity.header.get("name", None)
+                if name:
+                    fp.write("TITLE     " + name.upper() + "\n")
             io = PDBIO()
             io.set_structure(entity)
             io.save(fp, preserve_atom_numbering=True)

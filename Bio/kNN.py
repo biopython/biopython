@@ -5,7 +5,7 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-"""Code for doing k-nearest-neighbors classification.
+"""Code for doing k-nearest-neighbors classification (DEPRECATED).
 
 k Nearest Neighbors is a supervised learning algorithm that classifies
 a new observation based the classes in its surrounding neighborhood.
@@ -26,9 +26,28 @@ Functions:
 Weighting Functions:
  - equal_weight    Every example is given a weight of 1.
 
+This module has been deprecated, please consider an alternative like scikit-learn
+instead.
 """
 
-import numpy
+import warnings
+
+try:
+    import numpy as np
+except ImportError:
+    from Bio import MissingPythonDependencyError
+
+    raise MissingPythonDependencyError(
+        "Please install NumPy if you want to use Bio.kNN. See http://www.numpy.org/"
+    ) from None
+
+from Bio import BiopythonDeprecationWarning
+
+warnings.warn(
+    "The 'Bio.kNN' module is deprecated and will be removed in a future "
+    "release of Biopython. Consider using scikit-learn instead.",
+    BiopythonDeprecationWarning,
+)
 
 
 class kNN:
@@ -65,7 +84,7 @@ def train(xs, ys, k, typecode=None):
     """
     knn = kNN()
     knn.classes = set(ys)
-    knn.xs = numpy.asarray(xs, typecode)
+    knn.xs = np.asarray(xs, typecode)
     knn.ys = ys
     knn.k = k
     return knn
@@ -87,7 +106,7 @@ def calculate(knn, x, weight_fn=None, distance_fn=None):
     if weight_fn is None:
         weight_fn = equal_weight
 
-    x = numpy.asarray(x)
+    x = np.asarray(x)
 
     order = []  # list of (distance, index)
     if distance_fn:
@@ -96,12 +115,12 @@ def calculate(knn, x, weight_fn=None, distance_fn=None):
             order.append((dist, i))
     else:
         # Default: Use a fast implementation of the Euclidean distance
-        temp = numpy.zeros(len(x))
+        temp = np.zeros(len(x))
         # Predefining temp allows reuse of this array, making this
         # function about twice as fast.
         for i in range(len(knn.xs)):
             temp[:] = x - knn.xs[i]
-            dist = numpy.sqrt(numpy.dot(temp, temp))
+            dist = np.sqrt(np.dot(temp, temp))
             order.append((dist, i))
     order.sort()
 

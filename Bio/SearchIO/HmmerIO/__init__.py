@@ -15,8 +15,8 @@ Bio.SearchIO.HmmerIO was tested on the following HMMER versions and flavors:
     - HMMER2 flavors: hmmpfam, hmmsearch
 
 More information on HMMER are available through these links:
-  - Web page: http://hmmer.janelia.org/
-  - User guide: ftp://selab.janelia.org/pub/software/hmmer3/3.0/Userguide.pdf
+  - Web page: http://hmmer.org
+  - User guide: http://eddylab.org/software/hmmer/Userguide.pdf
 
 
 Supported formats
@@ -285,17 +285,20 @@ The following SearchIO objects attributes are provided:
 
 """
 
-from .hmmer2_text import Hmmer2TextParser, Hmmer2TextIndexer
-from .hmmer3_domtab import (
-    Hmmer3DomtabParser,
-    Hmmer3DomtabHmmhitParser,
-    Hmmer3DomtabHmmqueryParser,
-)
-from .hmmer3_domtab import Hmmer3DomtabHmmhitIndexer, Hmmer3DomtabHmmqueryIndexer
-from .hmmer3_domtab import Hmmer3DomtabHmmhitWriter, Hmmer3DomtabHmmqueryWriter
-from .hmmer3_text import Hmmer3TextParser, Hmmer3TextIndexer
-from .hmmer3_tab import Hmmer3TabParser, Hmmer3TabIndexer, Hmmer3TabWriter
-
+from .hmmer2_text import Hmmer2TextIndexer
+from .hmmer2_text import Hmmer2TextParser
+from .hmmer3_domtab import Hmmer3DomtabHmmhitIndexer
+from .hmmer3_domtab import Hmmer3DomtabHmmhitParser
+from .hmmer3_domtab import Hmmer3DomtabHmmhitWriter
+from .hmmer3_domtab import Hmmer3DomtabHmmqueryIndexer
+from .hmmer3_domtab import Hmmer3DomtabHmmqueryParser
+from .hmmer3_domtab import Hmmer3DomtabHmmqueryWriter
+from .hmmer3_domtab import Hmmer3DomtabParser
+from .hmmer3_tab import Hmmer3TabIndexer
+from .hmmer3_tab import Hmmer3TabParser
+from .hmmer3_tab import Hmmer3TabWriter
+from .hmmer3_text import Hmmer3TextIndexer
+from .hmmer3_text import Hmmer3TextParser
 
 # if not used as a module, run the doctest
 if __name__ == "__main__":

@@ -7,10 +7,15 @@
 
 """The structure class, representing a macromolecular structure."""
 
+from typing import TYPE_CHECKING
+
 from Bio.PDB.Entity import Entity
 
+if TYPE_CHECKING:
+    from Bio.PDB.Model import Model
 
-class Structure(Entity):
+
+class Structure(Entity[None, "Model"]):
     """The Structure class contains a collection of Model instances."""
 
     def __init__(self, id):

@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"  standalone="no" ?>
+<UniRef xmlns="http://uniprot.org/uniref" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://uniprot.org/uniref http://www.uniprot.org/docs/uniref.xsd">
+<entry id="UniRef90_P99999" updated="2023-09-13" xmlns="http://uniprot.org/uniref">
+  <name>Cluster: Cytochrome c</name>
+  <property type="member count" value="27"/>
+  <property type="common taxon" value="Catarrhini"/>
+  <property type="common taxon ID" value="9526"/>
+  <representativeMember>
+    <dbReference type="UniProtKB ID" id="CYC_HUMAN">
+      <property type="source organism" value="Homo sapiens (Human)"/>
+      <property type="NCBI taxonomy" value="9606"/>
+      <property type="protein name" value="Cytochrome c"/>
+      <property type="UniParc ID" value="UPI000013EAA0"/>
+      <property type="UniRef100 ID" value="UniRef100_P99999"/>
+      <property type="UniRef50 ID" value="UniRef50_P99999"/>
+      <property type="UniProtKB accession" value="P99999"/>
+      <property type="UniProtKB accession" value="A4D166"/>
+      <property type="UniProtKB accession" value="B2R4I1"/>
+      <property type="UniProtKB accession" value="P00001"/>
+      <property type="UniProtKB accession" value="Q6NUR2"/>
+      <property type="UniProtKB accession" value="Q6NX69"/>
+      <property type="UniProtKB accession" value="Q96BV4"/>
+      <property type="length" value="105"/>
+    </dbReference>
+    <sequence length="105" checksum="8EE9689E0102506B">MGDVEKGKKIFIMKCSQCHTVEKGGKHKTGPNLHGLFGRKTGQAPGYSYTAANKNKGIIWGEDTLMEYLENPKKYIPGTKMIFVGIKKKEERADLIAYLKKATNE</sequence>
+  </representativeMember>
+  <member>
+    <dbReference type="UniProtKB ID" id="CYC_GORGO">
+      <property type="source organism" value="Gorilla gorilla gorilla (Western lowland gorilla)"/>
+      <property type="NCBI taxonomy" value="9595"/>
+      <property type="protein name" value="Cytochrome c"/>
+      <property type="UniParc ID" value="UPI000013EAA0"/>
+      <property type="UniRef100 ID" value="UniRef100_P99999"/>
+      <property type="UniProtKB accession" value="Q6WUX8"/>
+      <property type="length" value="105"/>
+    </dbReference>
+  </member>
+  <member>
+    <dbReference type="UniProtKB ID" id="CYC_PANTR">
+      <property type="source organism" value="Pan troglodytes (Chimpanzee)"/>
+      <property type="NCBI taxonomy" value="9598"/>
+      <property type="protein name" value="Cytochrome c"/>
+      <property type="UniParc ID" value="UPI000013EAA0"/>
+      <property type="UniRef100 ID" value="UniRef100_P99999"/>
+      <property type="UniProtKB accession" value="P99998"/>
+      <property type="UniProtKB accession" value="P00001"/>
+      <property type="UniProtKB accession" value="Q96BV4"/>
+      <property type="length" value="105"/>
+    </dbReference>
+  </member>
+  <member>
+    <dbReference type="UniProtKB ID" id="CYC_PONAB">
+      <property type="source organism" value="Pongo abelii (Sumatran orangutan) (Pongo pygmaeus abelii)"/>
+      <property type="NCBI taxonomy" value="9601"/>
+      <property type="protein name" value="Cytochrome c"/>
+      <property type="UniParc ID" value="UPI000013EAA0"/>
+      <property type="UniRef100 ID" value="UniRef100_P99999"/>
+      <property type="UniProtKB accession" value="Q5RFH4"/>
+      <property type="length" value="105"/>
+    </dbReference>
+  </member>
+  <member>
+    <dbReference type="UniProtKB ID" id="G4XXL9_HUMAN">
+      <property type="source organism" value="Homo sapiens (Human)"/>
+      <property type="NCBI taxonomy" value="9606"/>
+      <property type="protein name" value="Cytochrome c"/>
+      <property type="UniParc ID" value="UPI000013EAA0"/>
+      <property type="UniRef100 ID" value="UniRef100_P99999"/>
+      <property type="UniProtKB accession" value="G4XXL9"/>
+      <property type="length" value="105"/>
+    </dbReference>
+  </member>
+  <member>
+    <dbReference type="UniProtKB ID" id="A0A2J8VDX6_PONAB">
+      <property type="source organism" value="Pongo abelii (Sumatran orangutan) (Pongo pygmaeus abelii)"/>
+      <property type="NCBI taxonomy" value="9601"/>
+      <property type="protein name" value="Cytochrome c"/>
+      <property type="UniParc ID" value="UPI000013EAA0"/>
+      <property type="UniRef100 ID" value="UniRef100_P99999"/>
+      <property type="UniProtKB accession" value="A0A2J8VDX6"/>
+      <property type="length" value="105"/>
+    </dbReference>
+  </member>
+  <member>
+    <dbReference type="UniProtKB ID" id="K7CAI8_PANTR">
+      <property type="source organism" value="Pan troglodytes (Chimpanzee)"/>
+      <property type="NCBI taxonomy" value="9598"/>
+      <property type="protein name" value="Cytochrome c"/>
+      <property type="UniParc ID" value="UPI000013EAA0"/>
+      <property type="UniRef100 ID" value="UniRef100_P99999"/>
+      <property type="UniProtKB accession" value="K7CAI8"/>
+      <property type="UniProtKB accession" value="A0A2J8KZA8"/>
+      <property type="length" value="105"/>
+    </dbReference>
+  </member>
+  <member>
+    <dbReference type="UniProtKB ID" id="A0A663D840_PANTR">
+      <property type="source organism" value="Pan troglodytes (Chimpanzee)"/>
+      <property type="NCBI taxonomy" value="9598"/>
+      <property type="protein name" value="Cytochrome c"/>
+      <property type="UniParc ID" value="UPI000013EAA0"/>
+      <property type="UniRef100 ID" value="UniRef100_P99999"/>
+      <property type="UniProtKB accession" value="A0A663D840"/>
+      <property type="length" value="105"/>
+    </dbReference>
+  </member>
+  <member>
+    <dbReference type="UniProtKB ID" id="G4XXM0_PANPA">
+      <property type="source organism" value="Pan paniscus (Pygmy chimpanzee) (Bonobo)"/>
+      <property type="NCBI taxonomy" value="9597"/>
+      <property type="protein name" value="Cytochrome c"/>
+      <property type="UniParc ID" value="UPI000013EAA0"/>
+      <property type="UniRef100 ID" value="UniRef100_P99999"/>
+      <property type="UniProtKB accession" value="G4XXM0"/>
+      <property type="length" value="105"/>
+    </dbReference>
+  </member>
+  <member>
+    <dbReference type="UniProtKB ID" id="G4XXM2_9PRIM">
+      <property type="source organism" value="Gorilla gorilla (western gorilla)"/>
+      <property type="NCBI taxonomy" value="9593"/>
+      <property type="protein name" value="Cytochrome c"/>
+      <property type="UniParc ID" value="UPI000013EAA0"/>
+      <property type="UniRef100 ID" value="UniRef100_P99999"/>
+      <property type="UniProtKB accession" value="G4XXM2"/>
+      <property type="length" value="105"/>
+    </dbReference>
+  </member>
+  <member>
+    <dbReference type="UniProtKB ID" id="G4XXM4_HYLAG">
+      <property type="source organism" value="Hylobates agilis (Agile gibbon)"/>
+      <property type="NCBI taxonomy" value="9579"/>
+      <property type="protein name" value="Cytochrome c"/>
+      <property type="UniParc ID" value="UPI000013EAA0"/>
+      <property type="UniRef100 ID" value="UniRef100_P99999"/>
+      <property type="UniProtKB accession" value="G4XXM4"/>
+      <property type="length" value="105"/>
+    </dbReference>
+  </member>
+  <member>
+    <dbReference type="UniProtKB ID" id="G1RY04_NOMLE">
+      <property type="source organism" value="Nomascus leucogenys (Northern white-cheeked gibbon) (Hylobates leucogenys)"/>
+      <property type="NCBI taxonomy" value="61853"/>
+      <property type="protein name" value="Cytochrome c"/>
+      <property type="UniParc ID" value="UPI000013EAA0"/>
+      <property type="UniRef100 ID" value="UniRef100_P99999"/>
+      <property type="UniProtKB accession" value="G1RY04"/>
+      <property type="length" value="105"/>
+    </dbReference>
+  </member>
+  <member>
+    <dbReference type="UniProtKB ID" id="G4XXM3_9PRIM">
+      <property type="source organism" value="Pongo sp"/>
+      <property type="NCBI taxonomy" value="9603"/>
+      <property type="protein name" value="Cytochrome c"/>
+      <property type="UniParc ID" value="UPI000013EAA0"/>
+      <property type="UniRef100 ID" value="UniRef100_P99999"/>
+      <property type="UniProtKB accession" value="G4XXM3"/>
+      <property type="length" value="105"/>
+    </dbReference>
+  </member>
+  <member>
+    <dbReference type="UniProtKB ID" id="G4XXM6_HYLLA">
+      <property type="source organism" value="Hylobates lar (Lar gibbon) (White-handed gibbon)"/>
+      <property type="NCBI taxonomy" value="9580"/>
+      <property type="protein name" value="Cytochrome c"/>
+      <property type="UniParc ID" value="UPI000013EAA0"/>
+      <property type="UniRef100 ID" value="UniRef100_P99999"/>
+      <property type="UniProtKB accession" value="G4XXM6"/>
+      <property type="length" value="105"/>
+    </dbReference>
+  </member>
+  <member>
+    <dbReference type="UniProtKB ID" id="C9JFR7_HUMAN">
+      <property type="source organism" value="Homo sapiens (Human)"/>
+      <property type="NCBI taxonomy" value="9606"/>
+      <property type="protein name" value="Cytochrome c (Fragment)"/>
+      <property type="UniParc ID" value="UPI0001881474"/>
+      <property type="UniRef100 ID" value="UniRef100_P99999"/>
+      <property type="UniProtKB accession" value="C9JFR7"/>
+      <property type="length" value="101"/>
+    </dbReference>
+  </member>
+  <member>
+    <dbReference type="UniProtKB ID" id="A0A2J8VE06_PONAB">
+      <property type="source organism" value="Pongo abelii (Sumatran orangutan) (Pongo pygmaeus abelii)"/>
+      <property type="NCBI taxonomy" value="9601"/>
+      <property type="protein name" value="Cytochrome c (Fragment)"/>
+      <property type="UniParc ID" value="UPI0001881474"/>
+      <property type="UniRef100 ID" value="UniRef100_P99999"/>
+      <property type="UniProtKB accession" value="A0A2J8VE06"/>
+      <property type="length" value="101"/>
+    </dbReference>
+  </member>
+  <member>
+    <dbReference type="UniProtKB ID" id="A0A2J8KZC0_PANTR">
+      <property type="source organism" value="Pan troglodytes (Chimpanzee)"/>
+      <property type="NCBI taxonomy" value="9598"/>
+      <property type="protein name" value="Cytochrome c (Fragment)"/>
+      <property type="UniParc ID" value="UPI0001881474"/>
+      <property type="UniRef100 ID" value="UniRef100_P99999"/>
+      <property type="UniProtKB accession" value="A0A2J8KZC0"/>
+      <property type="length" value="101"/>
+    </dbReference>
+  </member>
+  <member>
+    <dbReference type="UniProtKB ID" id="A0A2I3H5G3_NOMLE">
+      <property type="source organism" value="Nomascus leucogenys (Northern white-cheeked gibbon) (Hylobates leucogenys)"/>
+      <property type="NCBI taxonomy" value="61853"/>
+      <property type="protein name" value="Cytochrome c"/>
+      <property type="UniParc ID" value="UPI000C2E177C"/>
+      <property type="UniRef100 ID" value="UniRef100_A0A2I3H5G3"/>
+      <property type="UniRef50 ID" value="UniRef50_P99999"/>
+      <property type="UniProtKB accession" value="A0A2I3H5G3"/>
+      <property type="length" value="107"/>
+    </dbReference>
+  </member>
+  <member>
+    <dbReference type="UniProtKB ID" id="G4XXM5_SYMSY">
+      <property type="source organism" value="Symphalangus syndactylus (Siamang) (Hylobates syndactylus)"/>
+      <property type="NCBI taxonomy" value="9590"/>
+      <property type="protein name" value="Cytochrome c"/>
+      <property type="UniParc ID" value="UPI00022BDD3D"/>
+      <property type="UniRef100 ID" value="UniRef100_G4XXM5"/>
+      <property type="UniRef50 ID" value="UniRef50_P99999"/>
+      <property type="UniProtKB accession" value="G4XXM5"/>
+      <property type="length" value="105"/>
+    </dbReference>
+  </member>
+  <member>
+    <dbReference type="UniProtKB ID" id="A0A2I3GKA8_NOMLE">
+      <property type="source organism" value="Nomascus leucogenys (Northern white-cheeked gibbon) (Hylobates leucogenys)"/>
+      <property type="NCBI taxonomy" value="61853"/>
+      <property type="protein name" value="Cytochrome c"/>
+      <property type="UniParc ID" value="UPI00020ACF7D"/>
+      <property type="UniRef100 ID" value="UniRef100_A0A2I3GKA8"/>
+      <property type="UniRef50 ID" value="UniRef50_P99999"/>
+      <property type="UniProtKB accession" value="A0A2I3GKA8"/>
+      <property type="length" value="105"/>
+    </dbReference>
+  </member>
+  <member>
+    <dbReference type="UniParc ID" id="UPI0024428584">
+      <property type="source organism" value="Symphalangus syndactylus"/>
+      <property type="NCBI taxonomy" value="9590"/>
+      <property type="protein name" value="cytochrome c isoform X1"/>
+      <property type="UniRef100 ID" value="UniRef100_P99999"/>
+      <property type="length" value="112"/>
+      <property type="isSeed" value="true"/>
+    </dbReference>
+  </member>
+  <member>
+    <dbReference type="UniParc ID" id="UPI0000128BBF">
+      <property type="source organism" value="Homo sapiens"/>
+      <property type="NCBI taxonomy" value="9606"/>
+      <property type="protein name" value="Cytochrome c"/>
+      <property type="UniRef100 ID" value="UniRef100_P99999"/>
+      <property type="length" value="104"/>
+    </dbReference>
+  </member>
+  <member>
+    <dbReference type="UniParc ID" id="UPI001E2547C2">
+      <property type="source organism" value="Macaca fascicularis"/>
+      <property type="NCBI taxonomy" value="9541"/>
+      <property type="protein name" value="cytochrome c-like"/>
+      <property type="UniRef100 ID" value="UniRef100_UPI001E2547C2"/>
+      <property type="UniRef50 ID" value="UniRef50_P99999"/>
+      <property type="length" value="110"/>
+    </dbReference>
+  </member>
+  <member>
+    <dbReference type="UniParc ID" id="UPI002442E06B">
+      <property type="source organism" value="Symphalangus syndactylus"/>
+      <property type="NCBI taxonomy" value="9590"/>
+      <property type="protein name" value="cytochrome c-like"/>
+      <property type="UniRef100 ID" value="UniRef100_UPI002442E06B"/>
+      <property type="UniRef50 ID" value="UniRef50_P99999"/>
+      <property type="length" value="108"/>
+    </dbReference>
+  </member>
+  <member>
+    <dbReference type="UniParc ID" id="UPI0005F4224E">
+      <property type="source organism" value="Colobus angolensis palliatus"/>
+      <property type="NCBI taxonomy" value="336983"/>
+      <property type="protein name" value="cytochrome c-like"/>
+      <property type="UniRef100 ID" value="UniRef100_UPI0005F4224E"/>
+      <property type="UniRef50 ID" value="UniRef50_P99999"/>
+      <property type="length" value="96"/>
+    </dbReference>
+  </member>
+  <member>
+    <dbReference type="UniParc ID" id="UPI00122DAE92">
+      <property type="source organism" value="Nomascus leucogenys"/>
+      <property type="NCBI taxonomy" value="61853"/>
+      <property type="protein name" value="cytochrome c-like"/>
+      <property type="UniRef100 ID" value="UniRef100_UPI00122DAE92"/>
+      <property type="UniRef50 ID" value="UniRef50_P99999"/>
+      <property type="length" value="93"/>
+    </dbReference>
+  </member>
+  <member>
+    <dbReference type="UniParc ID" id="UPI002441379E">
+      <property type="source organism" value="Symphalangus syndactylus"/>
+      <property type="NCBI taxonomy" value="9590"/>
+      <property type="protein name" value="cytochrome c-like"/>
+      <property type="UniRef100 ID" value="UniRef100_UPI002441379E"/>
+      <property type="UniRef50 ID" value="UniRef50_P99999"/>
+      <property type="length" value="90"/>
+    </dbReference>
+  </member>
+</entry>
+
+</UniRef>

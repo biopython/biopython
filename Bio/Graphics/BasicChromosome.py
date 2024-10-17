@@ -33,18 +33,20 @@ This provides nice output in PDF, SVG and postscript.  If you have
 reportlab's renderPM module installed you can also use PNG etc.
 """
 
-# reportlab
+from reportlab.graphics.shapes import ArcPath
+from reportlab.graphics.shapes import Drawing
+from reportlab.graphics.shapes import Line
+from reportlab.graphics.shapes import Rect
+from reportlab.graphics.shapes import String
+from reportlab.graphics.shapes import Wedge
+from reportlab.graphics.widgetbase import Widget
+from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
-from reportlab.lib import colors
 from reportlab.pdfbase.pdfmetrics import stringWidth
-
-from reportlab.graphics.shapes import Drawing, String, Line, Rect, Wedge, ArcPath
-from reportlab.graphics.widgetbase import Widget
 
 from Bio.Graphics import _write
 from Bio.Graphics.GenomeDiagram import _Colors
-
 
 _color_trans = _Colors.ColorTranslator()
 
@@ -178,7 +180,6 @@ class Organism(_ChromosomeComponent):
         Subclasses should implement this (see also self._legend_height) to
         provide specialized legends.
         """
-        pass
 
 
 class Chromosome(_ChromosomeComponent):
@@ -350,7 +351,7 @@ class Chromosome(_ChromosomeComponent):
                 "start",
             ),
         ]:
-            for (y1, y2, color, back_color, name) in labels:
+            for y1, y2, color, back_color, name in labels:
                 cur_drawing.add(
                     Line(x1, y1, x2, y2, strokeColor=color, strokeWidth=0.25)
                 )
@@ -445,7 +446,6 @@ class ChromosomeSegment(_ChromosomeComponent):
         This should be overridden in derived classes if there are
         subcomponents to be drawn.
         """
-        pass
 
     def _draw_segment(self, cur_drawing):
         """Draw the current chromosome segment (PRIVATE)."""
@@ -484,7 +484,6 @@ class ChromosomeSegment(_ChromosomeComponent):
         This should be overridden in derived classes if there are
         subcomponents to be drawn.
         """
-        pass
 
     def _draw_label(self, cur_drawing):
         """Add a label to the chromosome segment (PRIVATE).
@@ -494,7 +493,6 @@ class ChromosomeSegment(_ChromosomeComponent):
         This may be overlapped by any sub-feature labels on other segments!
         """
         if self.label is not None:
-
             label_x = 0.5 * (self.start_x_position + self.end_x_position) + (
                 self.chr_percent + 0.05
             ) * (self.end_x_position - self.start_x_position)
@@ -538,10 +536,11 @@ def _spring_layout(desired, minimum, maximum, gap=0):
             "Data %f to %f out of bounds (%f to %f)"
             % (min(desired), max(desired), minimum, maximum)
         )
-    equal_step = float(maximum - minimum) / (count - 1)
+    equal_step = (maximum - minimum) / (count - 1)
 
     if equal_step < gap:
         import warnings
+
         from Bio import BiopythonWarning
 
         warnings.warn("Too many labels to avoid overlap", BiopythonWarning)
@@ -691,7 +690,7 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
                 # Assume SeqFeature objects
                 start = f.location.start
                 end = f.location.end
-                strand = f.strand
+                strand = f.location.strand
                 try:
                     # Handles Artemis colour integers, HTML colors, etc
                     color = _color_trans.translate(f.qualifiers["color"][0])
@@ -818,4 +817,3 @@ class SpacerSegment(ChromosomeSegment):
         so this method therefore does nothing, but is defined
         to match the expected API of the other segment objects.
         """
-        pass

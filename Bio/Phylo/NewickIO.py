@@ -21,8 +21,6 @@ from Bio.Phylo import Newick
 class NewickError(Exception):
     """Exception raised when Newick object construction cannot continue."""
 
-    pass
-
 
 tokens = [
     (r"\(", "open parens"),
@@ -145,7 +143,14 @@ class Parser:
 
             if token.startswith("'"):
                 # quoted label; add characters to clade name
-                current_clade.name = token[1:-1]
+                if not current_clade.name:
+                    # This is almost always the case
+                    current_clade.name = token[1:-1]
+                else:
+                    # Hack to support labels with escaped quotes. Escaped quotes
+                    # are two consequtive quotes. To the parser, this just looks
+                    # like two quoted labels next to each other. See issue #4537
+                    current_clade.name += token[:-1]
 
             elif token.startswith("["):
                 # comment
@@ -198,8 +203,10 @@ class Parser:
                 # unquoted node label
                 current_clade.name = token
 
-        if not lp_count == rp_count:
-            raise NewickError("Number of open/close parentheses do not match.")
+        if lp_count != rp_count:
+            raise NewickError(
+                f"Mismatch, {lp_count} open vs {rp_count} close parentheses."
+            )
 
         # if ; token broke out of for loop, there should be no remaining tokens
         try:
@@ -292,7 +299,7 @@ class Writer:
             if label:
                 unquoted_label = re.match(token_dict["unquoted node label"], label)
                 if (not unquoted_label) or (unquoted_label.end() < len(label)):
-                    label = "'%s'" % label.replace("\\", "\\\\").replace("'", "\\'")
+                    label = "'%s'" % label.replace("'", "''")
 
             if clade.is_terminal():  # terminal
                 return label + make_info_string(clade, terminal=True)

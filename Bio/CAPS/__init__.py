@@ -13,6 +13,9 @@ be found in the paper `Konieczny and Ausubel (1993)`_ (PMID 8106085).
 
 """
 
+from Bio.Align import MultipleSeqAlignment
+from Bio.Seq import Seq
+
 
 class DifferentialCutsite:
     """Differential enzyme cutsite in an alignment.
@@ -45,8 +48,6 @@ class DifferentialCutsite:
 class AlignmentHasDifferentLengthsError(Exception):
     """Exception where sequences in alignment have different lengths."""
 
-    pass
-
 
 class CAPSMap:
     """A map of an alignment showing all possible dcuts.
@@ -71,12 +72,16 @@ class CAPSMap:
         """
         if enzymes is None:
             enzymes = []
-        self.sequences = [rec.seq for rec in alignment]
-        self.size = len(self.sequences)
-        self.length = len(self.sequences[0])
-        for seq in self.sequences:
-            if len(seq) != self.length:
-                raise AlignmentHasDifferentLengthsError
+        if isinstance(alignment, MultipleSeqAlignment):
+            self.sequences = [rec.seq for rec in alignment]
+            self.size = len(self.sequences)
+            self.length = len(self.sequences[0])
+            for seq in self.sequences:
+                if len(seq) != self.length:
+                    raise AlignmentHasDifferentLengthsError
+        else:  # Alignment object
+            self.sequences = [Seq(s) for s in alignment]
+            self.size, self.length = alignment.shape
 
         self.alignment = alignment
         self.enzymes = enzymes
@@ -86,42 +91,32 @@ class CAPSMap:
 
     def _digest_with(self, enzyme):
         cuts = []  # list of lists, one per sequence
-        all = []
+        all_seq_cuts = []
 
         # go through each sequence
         for seq in self.sequences:
             # grab all the cuts in the sequence
             seq_cuts = [cut - enzyme.fst5 for cut in enzyme.search(seq)]
             # maintain a list of all cuts in all sequences
-            all.extend(seq_cuts)
+            all_seq_cuts.extend(seq_cuts)
             cuts.append(seq_cuts)
 
         # we sort the all list and remove duplicates
-        all.sort()
+        all_seq_cuts = sorted(set(all_seq_cuts))
 
-        last = -999
-        new = []
-        for cut in all:
-            if cut != last:
-                new.append(cut)
-            last = cut
-        all = new
-        # all now has indices for all sequences in the alignment
-
-        for cut in all:
+        for cut in all_seq_cuts:
             # test for dcuts
 
             cuts_in = []
             blocked_in = []
 
-            for i in range(0, self.size):
-                seq = self.sequences[i]
+            for i, seq in enumerate(self.sequences):
                 if cut in cuts[i]:
                     cuts_in.append(i)
                 else:
                     blocked_in.append(i)
 
-            if cuts_in != [] and blocked_in != []:
+            if cuts_in and blocked_in:
                 self.dcuts.append(
                     DifferentialCutsite(
                         start=cut, enzyme=enzyme, cuts_in=cuts_in, blocked_in=blocked_in

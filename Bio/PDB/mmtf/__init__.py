@@ -5,8 +5,10 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 """Support for loading 3D structures stored in MMTF files."""
+
 try:
-    from mmtf import fetch, parse
+    from mmtf import fetch
+    from mmtf import parse
 except ImportError:
     from Bio import MissingPythonDependencyError
 
@@ -14,6 +16,7 @@ except ImportError:
         "Install mmtf to use Bio.PDB.mmtf (e.g. pip install mmtf-python)"
     ) from None
 from Bio.PDB.mmtf.DefaultParser import StructureDecoder
+
 from .mmtfio import MMTFIO
 
 

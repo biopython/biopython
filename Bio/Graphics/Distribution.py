@@ -13,18 +13,17 @@ or anything similar.
 
 Reportlab is used for producing the graphical output.
 """
-# standard library
+
 import math
 
-# reportlab
+from reportlab.graphics.charts.barcharts import BarChartProperties
+from reportlab.graphics.charts.barcharts import VerticalBarChart
+from reportlab.graphics.shapes import Drawing
+from reportlab.graphics.shapes import String
+from reportlab.graphics.widgetbase import TypedPropertyCollection
+from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
-from reportlab.lib import colors
-
-from reportlab.graphics.shapes import Drawing, String
-from reportlab.graphics.charts.barcharts import VerticalBarChart
-from reportlab.graphics.charts.barcharts import BarChartProperties
-from reportlab.graphics.widgetbase import TypedPropertyCollection
 
 from Bio.Graphics import _write
 
@@ -66,10 +65,8 @@ class DistributionPage:
         end_x_pos = width - inch * 0.5
         cur_y_pos = height - 1.5 * inch
         end_y_pos = 0.5 * inch
-        x_pos_change = (end_x_pos - cur_x_pos) / float(self.number_of_columns)
-        num_y_rows = math.ceil(
-            float(len(self.distributions)) / float(self.number_of_columns)
-        )
+        x_pos_change = (end_x_pos - cur_x_pos) / self.number_of_columns
+        num_y_rows = math.ceil(len(self.distributions) / self.number_of_columns)
         y_pos_change = (cur_y_pos - end_y_pos) / num_y_rows
 
         self._draw_distributions(
@@ -136,7 +133,6 @@ class DistributionPage:
 
         Subclasses can implement to provide a specialized legend.
         """
-        pass
 
 
 class BarChartDistribution:
@@ -251,8 +247,6 @@ class LineDistribution:
 
     def __init__(self):
         """Initialize the class."""
-        pass
 
     def draw(self, cur_drawing, start_x, start_y, end_x, end_y):
         """Draw a line distribution into the current drawing."""
-        pass

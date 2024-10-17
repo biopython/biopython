@@ -7,9 +7,8 @@
 
 """Query PubMed and print MEDLINE format results."""
 
-
-import sys
 import getopt
+import sys
 
 from Bio import Entrez
 

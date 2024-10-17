@@ -41,24 +41,25 @@ identifier (sid).
 This module also provides code to access SCOP over the WWW.
 
 Functions:
- - search        -- Access the main CGI script.
+ - search        -- Access the main CGI script (DEPRECATED, no longer available)..
  - _open         -- Internally used function.
 
 """
 
-
 import os
 import re
-
+import warnings
 from urllib.parse import urlencode
 from urllib.request import urlopen
 
-from . import Des
-from . import Cla
-from . import Hie
-from . import Residues
+from Bio import BiopythonDeprecationWarning
 from Bio import SeqIO
 from Bio.Seq import Seq
+
+from . import Cla
+from . import Des
+from . import Hie
+from . import Residues
 
 # Turn black code style off
 # fmt: off
@@ -258,7 +259,6 @@ class Scop:
                     n = sunidDict[record.sunid]
 
                     if record.parent != "":  # Not root node
-
                         if record.parent not in sunidDict:
                             raise ValueError("Incomplete data?")
 
@@ -899,7 +899,7 @@ class Astral:
         for dom in self.fasta_dict:
             cur.execute(
                 "INSERT INTO astral (sid,seq) values (%s,%s)",
-                (dom, self.fasta_dict[dom].seq.data),
+                (dom, self.fasta_dict[dom].seq),
             )
 
         for i in astralBibIds:
@@ -928,7 +928,7 @@ def search(
     cgi="http://scop.mrc-lmb.cam.ac.uk/legacy/search.cgi",
     **keywds,
 ):
-    """Access SCOP search and return a handle to the results.
+    """Access SCOP search and return a handle to the results (DEPRECATED).
 
     Access search.cgi and return a handle to the results.  See the
     online help file for an explanation of the parameters:
@@ -936,7 +936,15 @@ def search(
 
     Raises an IOError if there's a network error.
 
+    This function is now DEPRECATED and will be removed in a future
+    release of Biopython because this search.cgi API is no longer
+    available with SCOP now hosted the the EBI.
     """
+    warnings.warn(
+        "The SCOP search function is deprecated and will be removed"
+        " as the CGI based SCOP search is no longer availble online.",
+        BiopythonDeprecationWarning,
+    )
     params = {"pdb": pdb, "key": key, "sid": sid, "disp": disp, "dir": dir, "loc": loc}
     variables = {}
     for k, v in params.items():

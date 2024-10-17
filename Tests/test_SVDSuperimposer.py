@@ -8,11 +8,12 @@
 import unittest
 
 try:
-    from numpy import array
-    from numpy import dot  # missing in old PyPy's micronumpy
-    from numpy import array_equal
     from numpy import around
-    from numpy.linalg import svd, det  # Missing in PyPy 2.0 numpypy
+    from numpy import array
+    from numpy import array_equal
+    from numpy import dot  # missing in old PyPy's micronumpy
+    from numpy.linalg import det  # Missing in PyPy 2.0 numpypy
+    from numpy.linalg import svd  # Missing in PyPy 2.0 numpypy
 except ImportError:
     from Bio import MissingPythonDependencyError
 
@@ -51,10 +52,7 @@ class SVDSuperimposerTest(unittest.TestCase):
         y = array([[1.91, 1.82, 1.73], [1.64, 1.55, 1.46], [1.37, 1.28, 1.19]])
         self.sup.set(x, y)
         self.assertIsNone(self.sup.init_rms)
-        init_rms = 0.8049844719
-        self.assertTrue(
-            float(f"{self.sup.get_init_rms():.3f}"), float(f"{init_rms:.3f}")
-        )
+        self.assertAlmostEqual(self.sup.get_init_rms(), 0.8049844719)
 
     def test_oldTest(self):
         self.assertTrue(
@@ -98,8 +96,7 @@ class SVDSuperimposerTest(unittest.TestCase):
         self.assertIsNone(self.sup.rms)
         self.assertIsNone(self.sup.init_rms)
 
-        rms = 0.00304266526014
-        self.assertEqual(float(f"{self.sup.get_rms():.3f}"), float(f"{rms:.3f}"))
+        self.assertAlmostEqual(self.sup.get_rms(), 0.00304266526014)
 
         rot_get, tran_get = self.sup.get_rotran()
         self.assertTrue(

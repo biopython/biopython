@@ -1,0 +1,47 @@
+########################################
+# Program: water
+# Rundate: Sat 22 Oct 2022 23:47:41
+# Commandline: water
+#    -asequence seqA.fa
+#    -bsequence seqB.fa
+#    -gapopen 0.001
+#    -gapextend 0.001
+#    -sreverse1
+#    -outfile water_reverse1.txt
+# Align_format: srspair
+# Report_file: water_reverse1.txt
+########################################
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: seqA
+# 2: seqB
+# Matrix: EDNAFULL
+# Gap_penalty: 0.001
+# Extend_penalty: 0.001
+#
+# Length: 121
+# Identity:      32/121 (26.4%)
+# Similarity:    32/121 (26.4%)
+# Gaps:          89/121 (73.6%)
+# Score: 159.911
+# 
+#
+#=======================================
+
+seqA             121 GGGGGGGGGGGGGGGGGGGTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT     72
+                     |||||||||||||||||||                               
+seqB               1 GGGGGGGGGGGGGGGGGGG-------------------------------     19
+
+seqA              71 TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT     22
+                                                                       
+seqB              19 --------------------------------------------------     19
+
+seqA              21 TTTTTTTTCCCCCCCCCCCCC      1
+                             |||||||||||||
+seqB              20 --------CCCCCCCCCCCCC     32
+
+
+#---------------------------------------
+#---------------------------------------

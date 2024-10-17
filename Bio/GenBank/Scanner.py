@@ -27,16 +27,15 @@ Feature Table Documentation:
 # for more details of this format, and an example.
 # Added by Ying Huang & Iddo Friedberg
 
-
-import warnings
 import re
 import sys
+import warnings
 from collections import defaultdict
 
+from Bio import BiopythonParserWarning
 from Bio.File import as_handle
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio import BiopythonParserWarning
 
 
 class InsdcScanner:
@@ -397,7 +396,6 @@ class InsdcScanner:
 
         Used by the parse_records() and parse() methods.
         """
-        pass
 
     def _feed_header_lines(self, consumer, lines):
         """Handle the header lines (list of strings), passing data to the consumer (PRIVATE).
@@ -406,7 +404,6 @@ class InsdcScanner:
 
         Used by the parse_records() and parse() methods.
         """
-        pass
 
     @staticmethod
     def _feed_feature_table(consumer, feature_tuples):
@@ -431,7 +428,6 @@ class InsdcScanner:
 
         Used by the parse_records() and parse() methods.
         """
-        pass
 
     def feed(self, handle, consumer, do_features=True):
         """Feed a set of data into the consumer.
@@ -576,7 +572,7 @@ class InsdcScanner:
                         # sub features...
                         annotations["raw_location"] = location_string.replace(" ", "")
 
-                        for (qualifier_name, qualifier_data) in qualifiers:
+                        for qualifier_name, qualifier_data in qualifiers:
                             if (
                                 qualifier_data is not None
                                 and qualifier_data[0] == '"'
@@ -1171,7 +1167,7 @@ class GenBankScanner(InsdcScanner):
     RECORD_START = "LOCUS       "
     HEADER_WIDTH = 12
     FEATURE_START_MARKERS = ["FEATURES             Location/Qualifiers", "FEATURES"]
-    FEATURE_END_MARKERS = []
+    FEATURE_END_MARKERS: list[str] = []
     FEATURE_QUALIFIER_INDENT = 21
     FEATURE_QUALIFIER_SPACER = " " * FEATURE_QUALIFIER_INDENT
     SEQUENCE_HEADERS = [
@@ -1706,7 +1702,21 @@ class GenBankScanner(InsdcScanner):
                     while True:
                         line = next(line_iter)
                         if line[0 : self.GENBANK_INDENT] == self.GENBANK_SPACER:
-                            if lineage_data or ";" in line:
+                            if (
+                                lineage_data
+                                or ";" in line
+                                or line[self.GENBANK_INDENT :].strip()
+                                in (
+                                    "Bacteria.",
+                                    "Archaea.",
+                                    "Eukaryota.",
+                                    "Unclassified.",
+                                    "Viruses.",
+                                    "cellular organisms.",
+                                    "other sequences.",
+                                    "unclassified sequences.",
+                                )
+                            ):
                                 lineage_data += " " + line[self.GENBANK_INDENT :]
                             elif line[self.GENBANK_INDENT :].strip() == ".":
                                 # No lineage data, just . place holder
@@ -1752,9 +1762,7 @@ class GenBankScanner(InsdcScanner):
                         data = line[self.GENBANK_INDENT :]
                         if line[0 : self.GENBANK_INDENT] == self.GENBANK_SPACER:
                             if self.STRUCTURED_COMMENT_START in data:
-                                regex = r"([^#]+){}$".format(
-                                    self.STRUCTURED_COMMENT_START
-                                )
+                                regex = rf"([^#]+){self.STRUCTURED_COMMENT_START}$"
                                 structured_comment_key = re.search(regex, data)
                                 if structured_comment_key is not None:
                                     structured_comment_key = (
@@ -1764,12 +1772,10 @@ class GenBankScanner(InsdcScanner):
                                     comment_list.append(data)
                             elif (
                                 structured_comment_key is not None
-                                and self.STRUCTURED_COMMENT_DELIM in data
+                                and self.STRUCTURED_COMMENT_DELIM.strip() in data
                             ):
                                 match = re.search(
-                                    r"(.+?)\s*{}\s*(.+)".format(
-                                        self.STRUCTURED_COMMENT_DELIM
-                                    ),
+                                    rf"(.+?)\s*{self.STRUCTURED_COMMENT_DELIM.strip()}\s*(.*)",
                                     data,
                                 )
                                 structured_comment_dict[structured_comment_key][
@@ -1789,8 +1795,7 @@ class GenBankScanner(InsdcScanner):
                                     not in structured_comment_dict
                                 ):
                                     warnings.warn(
-                                        "Structured comment not parsed for %s. Is it malformed?"
-                                        % consumer.data.name,
+                                        f"Structured comment not parsed on malformed header line: {line}",
                                         BiopythonParserWarning,
                                     )
                                     continue

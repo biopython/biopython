@@ -10,25 +10,23 @@ except ImportError:
     # Try to run what tests we can in case sqlite3 was not installed
     sqlite3 = None
 
+import gzip
 import os
-import unittest
 import tempfile
 import threading
-import gzip
+import unittest
 import warnings
 from io import BytesIO
 from io import StringIO
-
-from Bio.SeqRecord import SeqRecord
-from Bio import SeqIO
-from Bio.SeqIO._index import _FormatToRandomAccess
-
-from Bio import BiopythonParserWarning
-from Bio import MissingPythonDependencyError
+from pathlib import Path
 
 from seq_tests_common import SeqRecordTestBaseClass
 from test_SeqIO import SeqIOTestBaseClass
 
+from Bio import BiopythonParserWarning
+from Bio import SeqIO
+from Bio.SeqIO._index import _FormatToRandomAccess
+from Bio.SeqRecord import SeqRecord
 
 CUR_DIR = os.getcwd()
 
@@ -82,6 +80,11 @@ if sqlite3:
             d = SeqIO.index_db("Roche/triple_sff.idx")
             self.assertEqual(54, len(d))
             self.assertRaises(FileNotFoundError, d.get_raw, "alpha")
+
+        def test_pathobj(self):
+            """Load existing index from a pathlib.Path object."""
+            d = SeqIO.index_db(Path("Roche/triple_sff.idx"))
+            self.assertEqual(54, len(d))
 
         def test_old_check_same_thread(self):
             """Setting check_same_thread to False doesn't raise an exception."""
@@ -331,7 +334,6 @@ if sqlite3:
 
 
 class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
-
     tests = [
         ("Ace/contig1.ace", "ace"),
         ("Ace/consed_sample.ace", "ace"),
@@ -373,8 +375,8 @@ class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
         ("NBRF/B_nuc.pir", "pir"),
         ("NBRF/Cw_prot.pir", "pir"),
         ("NBRF/clustalw.pir", "pir"),
-        ("SwissProt/sp001", "swiss"),
-        ("SwissProt/sp010", "swiss"),
+        ("SwissProt/Q13454.txt", "swiss"),
+        ("SwissProt/Q13639.txt", "swiss"),
         ("SwissProt/sp016", "swiss"),
         ("SwissProt/multi_ex.txt", "swiss"),
         ("SwissProt/multi_ex.xml", "uniprot-xml"),
@@ -441,7 +443,7 @@ class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
             id_list = [rec.id for rec in SeqIO.parse(filename, fmt)]
 
         with warnings.catch_warnings():
-            if "_alt_index_" in filename:
+            if "_alt_index_" in str(filename):
                 # BiopythonParserWarning: Could not parse the SFF index:
                 # Unknown magic number b'.diy' in SFF index header:
                 # b'.diy1.00'
@@ -516,7 +518,7 @@ class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
         key_list = [self.add_prefix(id) for id in id_list]
 
         with warnings.catch_warnings():
-            if "_alt_index_" in filename:
+            if "_alt_index_" in str(filename):
                 # BiopythonParserWarning: Could not parse the SFF index:
                 # Unknown magic number b'.diy' in SFF index header:
                 # b'.diy1.00'
@@ -544,9 +546,14 @@ class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
             rec_dict.close()
 
             # Saving to file...
-            index_tmp = filename + ".key.idx"
-            if os.path.isfile(index_tmp):
-                os.remove(index_tmp)
+            index_tmp = None
+            if isinstance(filename, str):
+                index_tmp = filename + ".key.idx"
+            elif isinstance(filename, Path):
+                index_tmp = filename.with_suffix(".key.idx")
+
+            if os.path.isfile(str(index_tmp)):
+                os.remove(str(index_tmp))
             rec_dict = SeqIO.index_db(
                 index_tmp, [filename], fmt, key_function=self.add_prefix
             )
@@ -567,7 +574,7 @@ class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
             self.check_dict_methods(rec_dict, key_list, id_list, msg=msg)
             rec_dict.close()
             rec_dict._con.close()  # hack for PyPy
-            os.remove(index_tmp)
+            os.remove(str(index_tmp))
             # Done
 
     def get_raw_check(self, filename, fmt, comp):
@@ -628,20 +635,16 @@ class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
             else:
                 raise RuntimeError(f"Unexpected mode {mode}")
             if fmt == "sff":
-                rec2 = SeqIO.SffIO._sff_read_seq_record(
-                    handle,
-                    rec_dict._proxy._flows_per_read,
-                    rec_dict._proxy._flow_chars,
-                    rec_dict._proxy._key_sequence,
-                    trim=False,
+                rec_dict._proxy.trim = False
+                rec_dict._proxy._offset = handle.tell()
+                rec2 = SeqIO.SffIO.SffIterator._sff_read_seq_record(
+                    rec_dict._proxy, handle
                 )
             elif fmt == "sff-trim":
-                rec2 = SeqIO.SffIO._sff_read_seq_record(
-                    handle,
-                    rec_dict._proxy._flows_per_read,
-                    rec_dict._proxy._flow_chars,
-                    rec_dict._proxy._key_sequence,
-                    trim=True,
+                rec_dict._proxy.trim = True
+                rec_dict._proxy._offset = handle.tell()
+                rec2 = SeqIO.SffIO.SffIterator._sff_read_seq_record(
+                    rec_dict._proxy, handle
                 )
             elif fmt == "uniprot-xml":
                 self.assertTrue(raw.startswith(b"<entry "), msg=msg)
@@ -649,7 +652,7 @@ class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
                 # Currently the __getitem__ method uses this
                 # trick too, but we hope to fix that later
                 raw = (
-                    """<?xml version='1.0' encoding='UTF-8'?>
+                    b"""<?xml version='1.0' encoding='UTF-8'?>
                 <uniprot xmlns="http://uniprot.org/uniprot"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xsi:schemaLocation="http://uniprot.org/uniprot
@@ -657,9 +660,9 @@ class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
                 %s
                 </uniprot>
                 """
-                    % raw.decode()
+                    % raw
                 )
-                handle = StringIO(raw)
+                handle = BytesIO(raw)
                 rec2 = SeqIO.read(handle, fmt)
             else:
                 rec2 = SeqIO.read(handle, fmt)
@@ -715,6 +718,15 @@ class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
             for filename2, comp in tasks:
                 self.simple_check(filename2, fmt, comp)
 
+    def test_simple_checks_with_pathobj(self):
+        for filename1, fmt in self.tests:
+            assert fmt in _FormatToRandomAccess
+            tasks = [(filename1, None)]
+            if os.path.isfile(filename1 + ".bgz"):
+                tasks.append((filename1 + ".bgz", "bgzf"))
+            for filename2, comp in tasks:
+                self.simple_check(Path(filename2), fmt, comp)
+
     def test_key_checks(self):
         for filename1, fmt in self.tests:
             assert fmt in _FormatToRandomAccess
@@ -724,6 +736,15 @@ class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
             for filename2, comp in tasks:
                 self.key_check(filename2, fmt, comp)
 
+    def test_key_checks_with_pathobj(self):
+        for filename1, fmt in self.tests:
+            assert fmt in _FormatToRandomAccess
+            tasks = [(filename1, None)]
+            if os.path.isfile(filename1 + ".bgz"):
+                tasks.append((filename1 + ".bgz", "bgzf"))
+            for filename2, comp in tasks:
+                self.key_check(Path(filename2), fmt, comp)
+
     def test_raw_checks(self):
         for filename1, fmt in self.tests:
             assert fmt in _FormatToRandomAccess
@@ -732,6 +753,15 @@ class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
                 tasks.append((filename1 + ".bgz", "bgzf"))
             for filename2, comp in tasks:
                 self.get_raw_check(filename2, fmt, comp)
+
+    def test_raw_checks_with_pathobj(self):
+        for filename1, fmt in self.tests:
+            assert fmt in _FormatToRandomAccess
+            tasks = [(filename1, None)]
+            if os.path.isfile(filename1 + ".bgz"):
+                tasks.append((filename1 + ".bgz", "bgzf"))
+            for filename2, comp in tasks:
+                self.get_raw_check(Path(filename2), fmt, comp)
 
 
 class IndexOrderingSingleFile(unittest.TestCase):

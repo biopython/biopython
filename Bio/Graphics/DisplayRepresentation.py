@@ -9,13 +9,11 @@
 Classes in this module are designed to hold information in a way that
 makes it easy to draw graphical figures.
 """
-# reportlab
+
 from reportlab.lib import colors
 
-# local stuff
 from Bio.Graphics.BasicChromosome import ChromosomeSegment
 from Bio.Graphics.BasicChromosome import TelomereSegment
-
 
 # --- constants
 # This is a default color scheme based on the light spectrum.
@@ -88,9 +86,7 @@ class ChromosomeCounts:
         are instead counts divided by some number.
         """
         try:
-            self._count_info[segment_name] = float(
-                self._count_info[segment_name]
-            ) / float(scale_value)
+            self._count_info[segment_name] /= scale_value
         except KeyError:
             raise KeyError(f"Segment name {segment_name} not found.") from None
 

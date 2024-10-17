@@ -15,12 +15,12 @@
 This provides interfaces for loading biological objects from a relational
 database, and is compatible with the BioSQL standards.
 """
+
 import os
 
 from . import BioSeq
-from . import Loader
 from . import DBUtils
-
+from . import Loader
 
 _POSTGRES_RULES_PRESENT = False  # Hack for BioSQL Bug 2839
 
@@ -126,6 +126,7 @@ def open_database(driver="MySQLdb", **kwargs):
         )
         if server.adaptor.execute_and_fetchall(sql):
             import warnings
+
             from Bio import BiopythonWarning
 
             warnings.warn(
@@ -312,7 +313,7 @@ class _CursorWrapper:
         """Decode any bytestrings present in the row (PRIVATE)."""
         tuple_list = list(tuple_)
         for i, elem in enumerate(tuple_list):
-            if type(elem) is bytes:
+            if isinstance(elem, bytes):
                 tuple_list[i] = elem.decode("utf-8")
         return tuple(tuple_list)
 

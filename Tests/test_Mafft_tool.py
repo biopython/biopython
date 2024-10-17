@@ -3,12 +3,18 @@
 # as part of this package.
 """Unittests for Bio.Align.Applications interface for MAFFT."""
 
-import sys
 import os
-import unittest
 import subprocess
+import sys
+import unittest
+import warnings
+
+from Bio import BiopythonDeprecationWarning
 from Bio import MissingExternalDependencyError
-from Bio.Align.Applications import MafftCommandline
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
+    from Bio.Align.Applications import MafftCommandline
 
 # Try to avoid problems when the OS is in another language
 os.environ["LANG"] = "C"
@@ -128,9 +134,7 @@ class MafftApplication(unittest.TestCase):
             stdoutdata, stderrdata = cmdline()
             # e.g. " 3 706\n" or " 3 681" but allow some variation in the column count
             self.assertTrue(
-                stdoutdata.startswith(" 3 68")
-                or stdoutdata.startswith(" 3 69")
-                or stdoutdata.startswith(" 3 70"),
+                stdoutdata.startswith((" 3 68", " 3 69", " 3 70")),
                 stdoutdata,
             )
             self.assertIn("gi|1348912 ", stdoutdata, stdoutdata)
@@ -146,9 +150,7 @@ class MafftApplication(unittest.TestCase):
             stdoutdata, stderrdata = cmdline()
             # e.g. " 3 706\n" or " 3 681" but allow some variation in the column count
             self.assertTrue(
-                stdoutdata.startswith(" 3 68")
-                or stdoutdata.startswith(" 3 69")
-                or stdoutdata.startswith(" 3 70"),
+                stdoutdata.startswith((" 3 68", " 3 69", " 3 70")),
                 stdoutdata,
             )
             self.assertIn("gi|1348912|gb|G26680|G26680", stdoutdata, stdoutdata)

@@ -9,11 +9,11 @@
 import unittest
 from os import path
 
-from Bio.SearchIO import parse, read
+from Bio.SearchIO import parse
+from Bio.SearchIO import read
 
 
 class HmmpfamTests(unittest.TestCase):
-
     fmt = "hmmer2-text"
 
     def test_hmmpfam_21(self):
@@ -31,7 +31,7 @@ class HmmpfamTests(unittest.TestCase):
         self.assertEqual("SEED", hit.id)
         self.assertEqual("<unknown description>", hit.description)
         self.assertAlmostEqual(146.1, hit.bitscore)
-        self.assertAlmostEqual(6.3e-40, hit.evalue)
+        self.assertAlmostEqual(6.3e-40, hit.evalue, places=41)
         self.assertEqual(2, hit.domain_obs_num)
         self.assertEqual(2, len(hit))
 
@@ -44,7 +44,7 @@ class HmmpfamTests(unittest.TestCase):
         self.assertEqual(103, hsp.query_end)
         self.assertEqual("..", hsp.query_endtype)
         self.assertAlmostEqual(71.2, hsp.bitscore)
-        self.assertAlmostEqual(2.2e-17, hsp.evalue)
+        self.assertAlmostEqual(2.2e-17, hsp.evalue, places=18)
         self.assertEqual(
             "lfVgNLppdvteedLkdlFskfGpivsikivrDiiekpketgkskGfaFVeFeseedAekAlealnG.kelggrklrv",
             hsp.hit.seq,
@@ -67,7 +67,7 @@ class HmmpfamTests(unittest.TestCase):
         self.assertEqual(194, hsp.query_end)
         self.assertEqual("..", hsp.query_endtype)
         self.assertAlmostEqual(75.5, hsp.bitscore)
-        self.assertAlmostEqual(1.1e-18, hsp.evalue)
+        self.assertAlmostEqual(1.1e-18, hsp.evalue, places=19)
         self.assertEqual(
             "lfVgNLppdvteedLkdlFskfGpivsikivrDiiekpketgkskGfaFVeFeseedAekAlealnGkelggrklrv",
             hsp.hit.seq,
@@ -152,7 +152,7 @@ class HmmpfamTests(unittest.TestCase):
         self.assertEqual("Glu_synthase", hit.id)
         self.assertEqual("Conserved region in glutamate synthas", hit.description)
         self.assertAlmostEqual(858.6, hit.bitscore)
-        self.assertAlmostEqual(3.6e-255, hit.evalue)
+        self.assertAlmostEqual(3.6e-255, hit.evalue, places=256)
         self.assertEqual(2, hit.domain_obs_num)
         self.assertEqual(2, len(hit))
 
@@ -181,7 +181,7 @@ class HmmpfamTests(unittest.TestCase):
         self.assertEqual(1216, hsp.query_end)
         self.assertEqual("..", hsp.query_endtype)
         self.assertAlmostEqual(857.3, hsp.bitscore)
-        self.assertAlmostEqual(9e-255, hsp.evalue)
+        self.assertAlmostEqual(9e-255, hsp.evalue, places=255)
 
     def test_hmmpfam_23_no_match(self):
         """Test parsing hmmpfam 2.3 file (text_23_hmmpfam_002.out)."""
@@ -284,7 +284,7 @@ class HmmpfamTests(unittest.TestCase):
         self.assertEqual("Xpo1", hit.id)
         self.assertEqual("Exportin 1-like protein", hit.description)
         self.assertAlmostEqual(170.1, hit.bitscore)
-        self.assertAlmostEqual(5.1e-48, hit.evalue)
+        self.assertAlmostEqual(5.1e-48, hit.evalue, places=49)
         self.assertEqual(1, hit.domain_obs_num)
         self.assertEqual(1, len(hit))
 
@@ -292,7 +292,7 @@ class HmmpfamTests(unittest.TestCase):
         hsp = hit[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertAlmostEqual(170.1, hsp.bitscore)
-        self.assertAlmostEqual(5.1e-148, hsp.evalue)
+        self.assertAlmostEqual(5.1e-48, hsp.evalue, places=49)
         self.assertEqual(108, hsp.query_start)
         self.assertEqual(271, hsp.query_end)
         self.assertEqual("..", hsp.query_endtype)
@@ -353,7 +353,6 @@ class HmmpfamTests(unittest.TestCase):
 
 
 class HmmsearchTests(unittest.TestCase):
-
     fmt = "hmmer2-text"
 
     def test_hmmsearch_20(self):
@@ -373,7 +372,7 @@ class HmmsearchTests(unittest.TestCase):
         self.assertEqual("PAB2_ARATH", hit.id)
         self.assertEqual("P42731 POLYADENYLATE-BINDING PROTEIN 2 (PO", hit.description)
         self.assertAlmostEqual(393.8, hit.bitscore)
-        self.assertAlmostEqual(6.1e-114, hit.evalue)
+        self.assertAlmostEqual(6.1e-114, hit.evalue, places=145)
         self.assertEqual(4, hit.domain_obs_num)
         self.assertEqual(4, len(hit))
 
@@ -387,7 +386,7 @@ class HmmsearchTests(unittest.TestCase):
         )
         self.assertEqual(3, hsp.domain_index)
         self.assertAlmostEqual(109.1, hsp.bitscore)
-        self.assertAlmostEqual(3e-28, hsp.evalue)
+        self.assertAlmostEqual(3e-28, hsp.evalue, places=28)
         self.assertEqual(0, hsp.query_start)
         self.assertEqual(77, hsp.query_end)
         self.assertEqual("[]", hsp.query_endtype)
@@ -405,7 +404,7 @@ class HmmsearchTests(unittest.TestCase):
         )
         self.assertEqual(1, hsp.domain_index)
         self.assertAlmostEqual(92.1, hsp.bitscore)
-        self.assertAlmostEqual(3.9e-23, hsp.evalue)
+        self.assertAlmostEqual(3.9e-23, hsp.evalue, places=24)
         self.assertEqual(0, hsp.query_start)
         self.assertEqual(77, hsp.query_end)
         self.assertEqual("[]", hsp.query_endtype)
@@ -457,7 +456,7 @@ class HmmsearchTests(unittest.TestCase):
         self.assertEqual("CATL_RAT", hit.id)
         self.assertEqual("<unknown description>", hit.description)
         self.assertAlmostEqual(449.4, hit.bitscore)
-        self.assertAlmostEqual(2e-135, hit.evalue)
+        self.assertAlmostEqual(2e-135, hit.evalue, places=135)
         self.assertEqual(1, hit.domain_obs_num)
         self.assertEqual(1, len(hit))
 
@@ -469,7 +468,7 @@ class HmmsearchTests(unittest.TestCase):
         self.assertEqual("<unknown description>", hit.description)
         self.assertEqual(1, hsp.domain_index)
         self.assertAlmostEqual(449.4, hsp.bitscore)
-        self.assertAlmostEqual(2e-135, hsp.evalue)
+        self.assertAlmostEqual(2e-135, hsp.evalue, places=135)
         self.assertEqual(0, hsp.query_start)
         self.assertEqual(337, hsp.query_end)
         self.assertEqual("[]", hsp.query_endtype)
@@ -498,7 +497,7 @@ class HmmsearchTests(unittest.TestCase):
         self.assertEqual("PAPA_CARPA", hit.id)
         self.assertEqual("<unknown description>", hit.description)
         self.assertAlmostEqual(337.7, hit.bitscore)
-        self.assertAlmostEqual(9e-102, hit.evalue)
+        self.assertAlmostEqual(9e-102, hit.evalue, places=102)
         self.assertEqual(1, hit.domain_obs_num)
         self.assertEqual(1, len(hit))
 
@@ -510,7 +509,7 @@ class HmmsearchTests(unittest.TestCase):
         self.assertEqual("<unknown description>", hit.description)
         self.assertEqual(1, hsp.domain_index)
         self.assertAlmostEqual(337.7, hsp.bitscore)
-        self.assertAlmostEqual(9e-102, hsp.evalue)
+        self.assertAlmostEqual(9e-102, hsp.evalue, places=102)
         self.assertEqual(0, hsp.query_start)
         self.assertEqual(337, hsp.query_end)
         self.assertEqual("[]", hsp.query_endtype)

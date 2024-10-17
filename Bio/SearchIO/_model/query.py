@@ -5,7 +5,6 @@
 # package.
 """Bio.SearchIO object to model search results from a single query."""
 
-
 from copy import deepcopy
 from itertools import chain
 

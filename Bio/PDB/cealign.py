@@ -22,8 +22,7 @@ import numpy as np
 
 from Bio.PDB.ccealign import run_cealign
 from Bio.PDB.PDBExceptions import PDBException
-from Bio.PDB.QCPSuperimposer import QCPSuperimposer
-
+from Bio.PDB.qcprot import QCPSuperimposer
 
 _RESID_SORTER = lambda r: r.id[1]  # noqa: E731
 
@@ -52,6 +51,10 @@ class CEAligner:
         self.max_gap = max_gap
 
         self.rms = None
+        self._rigid_motion = None
+        self.refcoord = None
+        self._coord = None
+        self._superimposer = QCPSuperimposer()
 
     def get_guide_coord_from_structure(self, structure):
         """Return the coordinates of guide atoms in the structure.
@@ -86,7 +89,7 @@ class CEAligner:
             )
             raise PDBException(msg)
 
-    def align(self, structure, transform=True):
+    def align(self, structure, transform=True, *, final_optimization=True):
         """Align the input structure onto the reference structure.
 
         Parameters
@@ -96,10 +99,15 @@ class CEAligner:
             the RMSD between the two structures to the input structure. If
             False, the structure is not modified but the optimal RMSD will
             still be calculated.
+        final_optimization: bool, optional
+            If True (default), apply additional optimization to statistically
+            significant alignments.
         """
         self.rms = None  # clear before aligning
+        self._rigid_motion = None
 
         coord = self.get_guide_coord_from_structure(structure)
+        self._coord = coord
 
         if len(coord) < self.window_size * 2:
             n_atoms = len(coord)
@@ -110,36 +118,76 @@ class CEAligner:
             raise PDBException(msg)
 
         # Run CEAlign
-        # CEAlign returns the best N paths, where each path is a pair of lists
-        # with aligned atom indices. Paths are not guaranteed to be unique.
-        paths = run_cealign(self.refcoord, coord, self.window_size, self.max_gap)
-        unique_paths = {(tuple(pA), tuple(pB)) for pA, pB in paths}
+        # CEAlign returns the best N paths, sorted descending by length,
+        # where each path is a pair of lists with aligned atom indices.
+        alignments = run_cealign(self.refcoord, coord, self.window_size, self.max_gap)
+        longest_alignments = [
+            alignment
+            for alignment in alignments
+            if alignment.length == alignments[0].length
+        ]
 
-        # Iterate over unique paths and find the one that gives the lowest
+        # Iterate over paths and find the one that gives the lowest
         # corresponding RMSD. Use QCP to align the molecules.
-        best_rmsd, best_u = 1e6, None
-        for u_path in unique_paths:
-            idxA, idxB = u_path
+        self.rms = float("inf")
+        superimposer = self._superimposer
+        best_alignment = None
+        for alignment in longest_alignments:
+            idxA, idxB = alignment.path
 
             coordsA = np.array([self.refcoord[i] for i in idxA])
             coordsB = np.array([coord[i] for i in idxB])
 
-            aln = QCPSuperimposer()
-            aln.set(coordsA, coordsB)
-            aln.run()
-            if aln.rms < best_rmsd:
-                best_rmsd = aln.rms
-                best_u = (aln.rot, aln.tran)
+            superimposer.set(coordsA, coordsB)
+            superimposer.run()
+            if superimposer.rms < self.rms:
+                best_alignment = alignment
+                self.rms = superimposer.rms
+                self._rigid_motion = (superimposer.rot, superimposer.tran)
 
-        if best_u is None:
+        if best_alignment is None:
             raise RuntimeError("Failed to find a suitable alignment.")
+
+        # Gap optimization
+        if final_optimization and best_alignment.z_score >= 3.5:
+            self._optimize(best_alignment)
 
         if transform:
             # Transform all atoms
-            rotmtx, trvec = best_u
+            rotmtx, trvec = self._rigid_motion
             for chain in structure.get_chains():
                 for resid in chain.get_unpacked_list():
                     for atom in resid.get_unpacked_list():
                         atom.transform(rotmtx, trvec)
 
-        self.rms = best_rmsd
+    def _optimize(self, alignment):
+        best_path = alignment.path
+        superimposer = self._superimposer
+
+        for ab_index in [0, 1]:
+            for index in range(1, len(best_path[ab_index]) - 1):
+                best_shift = 0
+                left = best_path[ab_index][index - 1]
+                center = best_path[ab_index][index]
+                right = best_path[ab_index][index + 1]
+
+                for shift in range(
+                    max(-self.window_size // 2, left - center + 1),
+                    min(self.window_size // 2 + 1, right - center),
+                ):
+                    best_path[ab_index][index] += shift
+                    idxA, idxB = best_path
+
+                    coordsA = np.array([self.refcoord[i] for i in idxA])
+                    coordsB = np.array([self._coord[i] for i in idxB])
+
+                    superimposer.set(coordsA, coordsB)
+                    superimposer.run()
+                    best_path[ab_index][index] -= shift
+
+                    if superimposer.rms < self.rms:
+                        best_shift = shift
+                        self.rms = superimposer.rms
+                        self._rigid_motion = (superimposer.rot, superimposer.tran)
+
+                best_path[ab_index][index] += best_shift

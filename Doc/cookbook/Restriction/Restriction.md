@@ -131,7 +131,7 @@ other standard codes like S for C or G, and V for A, C or G.
 
 ``` pycon
 >>> from Bio.Seq import Seq
->>> my_seq = Seq('AAAAAAAAAAAAAA')
+>>> my_seq = Seq("AAAAAAAAAAAAAA")
 ```
 
 Searching a sequence for the presence of restriction site for your preferred
@@ -213,7 +213,7 @@ the linearised sequence. The beginning sequence has been shifted to take this
 fact into account. Moreover we can see another difference:
 
 ``` pycon
->>> new_seq = Seq('TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA')
+>>> new_seq = Seq("TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA")
 >>> EcoRI.search(new_seq)
 []
 >>> EcoRI.search(new_seq, linear=False)
@@ -271,31 +271,31 @@ Let's use `Acc65I` and its isoschizomers as example:
 >>> # for each pair of enzymes:
 >>>
 >>> ############# x == y  (x is y)
->>> Acc65I == Acc65I    # same enzyme => True
+>>> Acc65I == Acc65I  # same enzyme => True
 True
->>> Acc65I == KpnI      # all other cases => False
+>>> Acc65I == KpnI  # all other cases => False
 False
 >>> Acc65I == Asp718I
 False
 >>> Acc65I == EcoRI
 False
 >>> ############ x != y  (x and y are not true isoschizomers)
->>> Acc65I != Acc65I    # same enzyme => False
+>>> Acc65I != Acc65I  # same enzyme => False
 False
->>> Acc65I != Asp718I   # different enzymes, but cut same manner => False
+>>> Acc65I != Asp718I  # different enzymes, but cut same manner => False
 False
->>> Acc65I != KpnI      # all other cases => True
+>>> Acc65I != KpnI  # all other cases => True
 True
 >>> Acc65I != EcoRI
 True
 >>> ###########  x >> y (x is neoschizomer of y)
->>> Acc65I >> Acc65I    # same enzyme => False
+>>> Acc65I >> Acc65I  # same enzyme => False
 False
->>> Acc65I >> Asp718I   # same site, same cut => False
+>>> Acc65I >> Asp718I  # same site, same cut => False
 False
->>> Acc65I >> EcoRI     # different site => False
+>>> Acc65I >> EcoRI  # different site => False
 False
->>> Acc65I >> KpnI      # same site, different cut => True
+>>> Acc65I >> KpnI  # same site, different cut => True
 True
 >>> ########### x % y   (fragments produced by x and fragments produced by y
 >>> #            can be directly ligated to each other)
@@ -303,7 +303,7 @@ True
 True
 >>> Acc65I % Acc65I
 True
->>> Acc65I % KpnI   # KpnI -> '3 overhang, Acc65I-> 5' overhang => False
+>>> Acc65I % KpnI  # KpnI -> '3 overhang, Acc65I-> 5' overhang => False
 False
 >>>
 >>> SunI.elucidate()
@@ -316,7 +316,7 @@ True
 False
 >>> SunI % Acc65I  # different site, same overhang (5' GTAC) => True
 True
->>> SmaI % EcoRV   # 2 Blunt enzymes, all blunt enzymes are compatible => True
+>>> SmaI % EcoRV  # 2 Blunt enzymes, all blunt enzymes are compatible => True
 True
 ```
 
@@ -378,9 +378,9 @@ function `len()`:
 12
 >>> FokI.site
 'GGATG'
->>> FokI.elucidate()    # FokI cut well outside its recognition site
+>>> FokI.elucidate()  # FokI cut well outside its recognition site
 'GGATGNNNNNNNNN^NNNN_N'
->>> len(FokI)       # its length is the length of the recognition site
+>>> len(FokI)  # its length is the length of the recognition site
 5
 ```
 
@@ -441,7 +441,7 @@ names as argument.
 >>> rb = RestrictionBatch([EcoRI])
 >>> rb
 RestrictionBatch(['EcoRI'])
->>> rb2 = RestrictionBatch(['EcoRI'])
+>>> rb2 = RestrictionBatch(["EcoRI"])
 >>> rb2
 RestrictionBatch(['EcoRI'])
 >>> rb == rb2
@@ -476,8 +476,26 @@ of this facility. You can produce a `RestrictionBatch` containing only enzymes
 from one or a few supplier(s). Here is how to do it:
 
 ``` pycon
->>> rb_supp = RestrictionBatch(first=[], suppliers=['C','B','E','I','K','J','M',
-'O','N','Q','S','R','V','Y','X'])
+>>> rb_supp = RestrictionBatch(
+...     first=[],
+...     suppliers=[
+...         "C",
+...         "B",
+...         "E",
+...         "I",
+...         "K",
+...         "J",
+...         "M",
+...         "O",
+...         "N",
+...         "Q",
+...         "S",
+...         "R",
+...         "V",
+...         "Y",
+...         "X",
+...     ],
+... )
 >>> # This will create a RestrictionBatch with the all enzymes which possess a s
 upplier.
 >>> len(rb_supp)  # May 2020
@@ -567,10 +585,10 @@ KeyError: EcoRI
 >>> rb3 += EcoRI
 >>> rb3
 RestrictionBatch(['EcoRI', 'EcoRV', 'KpnI', 'SmaI'])
->>> rb3.remove('EcoRI')
+>>> rb3.remove("EcoRI")
 >>> rb3
 RestrictionBatch(['EcoRV', 'KpnI', 'SmaI'])
->>> rb3.remove('spam')
+>>> rb3.remove("spam")
 
 Traceback (most recent call last):
   File "<pyshell#18>", line 1, in -toplevel-
@@ -629,7 +647,7 @@ implement a `catalyse` method, as it would not have a real meaning when used
 with large batch.
 
 ``` pycon
->>> new_seq = Seq('TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA')
+>>> new_seq = Seq("TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA")
 >>> rb.search(new_seq)
 {'KpnI': [], 'EcoRV': [], 'EcoRI': []}
 >>> rb.search(new_seq, linear=False)
@@ -678,7 +696,7 @@ command. You can use these two batch as any other batch.
 778
 >>> len(CommOnly)
 622
->>> AllEnzymes.search(new_seq) ...
+>>> AllEnzymes.search(new_seq)
 ```
 
 There is not a lot to say about them apart the fact that they are present. They
@@ -703,7 +721,7 @@ If the third argument is not provided, `Analysis` will assume the sequence is
 linear.
 
 ``` pycon
->>> new_seq = Seq('TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA')
+>>> new_seq = Seq("TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA")
 >>> rb = RestrictionBatch([EcoRI, KpnI, EcoRV])
 >>> Ana = Analysis(rb, new_seq, linear=False)
 >>> Ana
@@ -728,12 +746,23 @@ will get a more easy to read output with `print_that` used without argument:
 ``` pycon
 >>> # let's create a something a bit more complex to analyse.
 >>>
->>> rb = RestrictionBatch([], ['C'])  # we will explain the meaning of the
->>>                               # double list argument later.
+>>> rb = RestrictionBatch([], ["C"])  # we will explain the meaning of the
+>>> # double list argument later.
 >>>
->>> multi_site = Seq.Seq('AAA' + EcoRI.site + 'G' + KpnI.site + EcoRV.site +
-                     'CT' + SmaI.site + 'GT' + FokI.site + 'GAAAGGGC' +
-                      EcoRI.site + 'ACGT')
+>>> multi_site = Seq.Seq(
+...     "AAA"
+...     + EcoRI.site
+...     + "G"
+...     + KpnI.site
+...     + EcoRV.site
+...     + "CT"
+...     + SmaI.site
+...     + "GT"
+...     + FokI.site
+...     + "GAAAGGGC"
+...     + EcoRI.site
+...     + "ACGT"
+... )
 >>> Analong = Analysis(rb, multi_site)
 >>> Analong.full()
 {BglI: [], BstEII: [], AsuII: [], HinfI: [], SfiI: [], PspPI: [], BsiSI: [27], S
@@ -776,7 +805,7 @@ do not cut the sequence', by setting the two optional arguments of `print_that`,
 include the newline (`\n`) as you see fit:
 
 ``` pycon
->>> Analong.print_that(None, title='sequence = multi_site\n\n')
+>>> Analong.print_that(None, title="sequence = multi_site\n\n")
 
 sequence = multi_site
 
@@ -796,8 +825,7 @@ PstI      PvuII     SalI      ScaI      SgrBI     SlaI      SnaBI     SphI
 SseBI     SspI      SstI      StyI      XbaI      BstEII    NotI      BglI
 SfiI
 
->>> Analong.print_that(None, title='sequence = multi_site\n\n',
-                   s1='\n no site:\n\n')
+>>> Analong.print_that(None, title="sequence = multi_site\n\n", s1="\n no site:\n\n")
 
 sequence = multi_site
 
@@ -829,7 +857,7 @@ are strings: `'map'`, `'number'` or `'alpha'`. As you have seen previously the
 default behaviour is an alphabetical list (`'alpha'`).
 
 ``` pycon
->>> Analong.print_as('map')
+>>> Analong.print_as("map")
 >>> Analong.print_that()
 
     5 EcoRI
@@ -861,7 +889,7 @@ PstI      PvuII     SalI      ScaI      SgrBI     SlaI      SnaBI     SphI
 SseBI     SspI      SstI      StyI      XbaI      BstEII    NotI      BglI
 SfiI
 
->>> Analong.print_as('number')
+>>> Analong.print_as("number")
 >>> Analong.print_that()
 
 
@@ -894,7 +922,7 @@ SfiI
 To come back to the previous behaviour:
 
 ``` pycon
->>> Analong.print_as('alpha')
+>>> Analong.print_as("alpha")
 >>> Analong.print_that()
 
 BsiSI      :  27.
@@ -933,7 +961,7 @@ do_not_cut(self, start, end, dct=None)
 Using these methods is simple:
 
 ``` pycon
->>> new_seq = Seq('TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA')
+>>> new_seq = Seq("TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA")
 >>> rb = RestrictionBatch([EcoRI, KpnI, EcoRV])
 >>> Ana = Analysis(rb, new_seq, linear=False)
 >>> Ana
@@ -1053,7 +1081,7 @@ linear:
 ``` pycon
 >>> from Bio.Restriction import *
 >>> from Bio.Seq import Seq
->>> seq = Seq('TTCAAAAAAAAAAGAATTCAAAAGAA')
+>>> seq = Seq("TTCAAAAAAAAAAGAATTCAAAAGAA")
 >>> linear_fseq = FormattedSeq(seq, linear=True)
 >>> default_fseq = FormattedSeq(seq)
 >>> circular_fseq = FormattedSeq(seq, linear=False)
@@ -1127,7 +1155,7 @@ FormatedSeq(Seq('TTCAAAAAAAAAAGAATTCAAAAGAA'), linear=True)
 True
 >>> circular_fseq == linear_fseq
 True
->>> EcoRI.search(circular_fseq) # which is now linear
+>>> EcoRI.search(circular_fseq)  # which is now linear
 [15]
 ```
 
@@ -1137,11 +1165,11 @@ Not having to specify the shape of the sequence to analyse gives you the
 opportunity to use the shorthand '/' and '//' with restriction enzymes:
 
 ``` pycon
->>> EcoRI/linear_fseq  # <=> EcoRI.search(linear_fseq)
+>>> EcoRI / linear_fseq  # <=> EcoRI.search(linear_fseq)
 [15]
->>> linear_fseq/EcoRI  # <=> EcoRI.search(linear_fseq)
+>>> linear_fseq / EcoRI  # <=> EcoRI.search(linear_fseq)
 [15]
->>> EcoRI//linear_fseq # <=> linear_fseq//EcoRI <=> EcoRI.catalyse(linear_fseq)
+>>> EcoRI // linear_fseq  # <=> linear_fseq//EcoRI <=> EcoRI.catalyse(linear_fseq)
 (Seq('TTCAAAAAAAAAAG'), Seq('AATTCAAAAGAA'))
 ```
 
@@ -1334,91 +1362,98 @@ a rather useless `Analysis` class:
 
 ``` pycon
 >>> class UselessAnalysis(Analysis):
-
-    def __init__(self, rb=RestrictionBatch(), seq=Seq(''), lin=True):
-    """UselessAnalysis -> A class that waste your time"""
-    #
-    #    Unless you want to do something more fancy all
-    #    you need to do here is instantiate Analysis.
-    #    Don't forget the self in __init__
-    #
-        Analysis.__init__(self, rb, seq, lin)
-
-    def make_format(self, cut=[], t='', nc=[], s=''):
-    """not funny"""
-    #
-    #    Generally, you don't need to do anything else here
-    #    This will tell to your new class to default to the
-    #    _make_joke format.
-    #
-        return self._make_joke(cut, t, nc, s)
-
-    def print_as(self, what='joke'):
-    """Never know somebody might want to change the behaviour of
-    this class."""
-    #
-    #    add your new option to print_as
-    #
-        if what == 'joke':
-        self.make_format = self._make_joke
-            return
-    else:
-        #
-        #   The other options will be treated as before
-        #
-        return Analysis.print_as(self, what)
-
-    def _make_joke(self, cut=[], title='', nc=[], s1=''):
-    """UA._make_joke(cut, t, nc, s) -> new analysis output"""
-    #
-    #    starting your new method with '_make_'
-    #    will give a hint to what it is suppose to do
-    #
-    #    We will not process the non-cutting enzymes
-    #    Their names are in nc
-    #    s1 is the string printed before them
-    #
-    if not title:
-        title = '\nYou have guessed right the following enzymes:\n\n'
-    for name, sites in cut:
-        #
-        #    cut contains:
-        #    - the name of the enzymes which cut the sequence (name)
-        #    - a list of the site positions (sites)
-        #
-        guess = raw_input("next enzyme is %s, Guess how many sites ?\n>>> "%name)
-            try:
-                guess = int(guess)
-            except:
-                guess = None
-            if guess == len(sites):
-                print 'You did guess right. Good. Next.'
-        result = '%i site' % guess
-        if guess > 1:
-            result += 's'
-
-        #
-        #    now we format the line. See the PrintFormat module
-        #    for some examples
-        #   PrintFormat.__section_list and _make_map are good start.
-        #
-                title=''.join((title, str(name).ljust(self.NameWidth),
-                ' :  ', result, '.\n'))
-    print '\nNo more enzyme.'
-        return  title
-    #
-    #    I you want to print the non cutting enzymes use
-    #    the following return instead of the previous one:
-    #
-    #return  title + t + self._make_nocut_only(nc,s1)
-
+...     def __init__(self, rb=RestrictionBatch(), seq=Seq(""), lin=True):
+...         """UselessAnalysis -> A class that waste your time"""
+...         #
+...         #    Unless you want to do something more fancy all
+...         #    you need to do here is instantiate Analysis.
+...         #    Don't forget the self in __init__
+...         #
+...         Analysis.__init__(self, rb, seq, lin)
+...     def make_format(self, cut=[], t="", nc=[], s=""):
+...         """not funny"""
+...         #
+...         #    Generally, you don't need to do anything else here
+...         #    This will tell to your new class to default to the
+...         #    _make_joke format.
+...         #
+...         return self._make_joke(cut, t, nc, s)
+...     def print_as(self, what="joke"):
+...         """Somebody might want to change the behaviour of this class."""
+...         #
+...         #    add your new option to print_as
+...         #
+...         if what == "joke":
+...             self.make_format = self._make_joke
+...             return
+...         else:
+...             #
+...             #   The other options will be treated as before
+...             #
+...             return Analysis.print_as(self, what)
+...     def _make_joke(self, cut=[], title="", nc=[], s1=""):
+...         """UA._make_joke(cut, t, nc, s) -> new analysis output"""
+...         #
+...         #    starting your new method with '_make_'
+...         #    will give a hint to what it is suppose to do
+...         #
+...         #    We will not process the non-cutting enzymes
+...         #    Their names are in nc
+...         #    s1 is the string printed before them
+...         #
+...         if not title:
+...             title = "\nYou have guessed right the following enzymes:\n\n"
+...         for name, sites in cut:
+...             #
+...             #    cut contains:
+...             #    - the name of the enzymes which cut the sequence (name)
+...             #    - a list of the site positions (sites)
+...             guess = raw_input("next enzyme is %s, Guess how many sites ?\n>>> " % name)
+...             try:
+...                 guess = int(guess)
+...             except:
+...                 guess = None
+...             if guess == len(sites):
+...                 print("You did guess right. Good. Next.")
+...             result = "%i site" % guess
+...             if guess > 1:
+...                 result += "s"
+...             #
+...             #    now we format the line. See the PrintFormat module
+...             #    for some examples
+...             #   PrintFormat.__section_list and _make_map are good start.
+...             #
+...             title = "".join(
+...                 (title, str(name).ljust(self.NameWidth), " :  ", result, ".\n")
+...             )
+...         print("\nNo more enzyme.")
+...
+..          return title
+...         #
+...         #    I you want to print the non cutting enzymes use
+...         #    the following return instead of the previous one:
+...         #
+...         # return  title + t + self._make_nocut_only(nc,s1)
+...
 >>> # You initiate and use it as before
->>> rb = RestrictionBatch([], ['A'])
->>> multi_site = Seq('AAA' + EcoRI.site +'G' + KpnI.site + EcoRV.site + 'CT' +\
-SmaI.site + 'GT' + FokI.site + 'GAAAGGGC' + EcoRI.site + 'ACGT')
+>>> rb = RestrictionBatch([], ["A"])
+>>> multi_site = Seq(
+...     "AAA"
+...     + EcoRI.site
+...     + "G"
+...     + KpnI.site
+...     + EcoRV.site
+...     + "CT"
+...     + SmaI.site
+...     + "GT"
+...     + FokI.site
+...     + "GAAAGGGC"
+...     + EcoRI.site
+...     + "ACGT"
+... )
 >>>
 >>> b = UselessAnalysis(rb, multi_site)
->>> b.print_that() # Well, I let you discover if you haven't already guessed
+>>> b.print_that()  # Well, I let you discover if you haven't already guessed
 ```
 
 Using this example, as a template you should now be able to subclass `Analysis`
@@ -1458,10 +1493,10 @@ recognised at all. Degenerated sequences will not be analysed. If your sequence
 is not fully sequenced, you will certainly miss restriction sites:
 
 ``` pycon
->>> a = Seq('nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnGAATTCrrrrrrrrrrr')
+>>> a = Seq("nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnGAATTCrrrrrrrrrrr")
 >>> EcoRI.search(a)
 [36]
->>> b = Seq('nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnGAAnTCrrrrrrrrrrr')
+>>> b = Seq("nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnGAAnTCrrrrrrrrrrr")
 >>> EcoRI.search(b)
 []
 ```
@@ -1478,7 +1513,7 @@ fragments, upper case sequences upper case fragments), but mixed case will
 return upper case fragments:
 
 ``` pycon
->>> c = Seq('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxGAANTCrrrrrrrrrrr')
+>>> c = Seq("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxGAANTCrrrrrrrrrrr")
 >>> EcoRI.search(c)
 
 Traceback (most recent call last):
@@ -1490,9 +1525,9 @@ Traceback (most recent call last):
   File "/usr/lib/python3.6/site-packages/Bio/Restriction/Restriction.py", line 122, in _check_bases
     raise TypeError("Invalid character found in %s" % repr(seq_string))
 TypeError: Invalid character found in 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXGAANTCRRRRRRRRRRR'
->>> d = Seq('1 nnnnn nnnnn nnnnn nnnnn nnnnn \n\
-26 nnnnn nnnnG AATTC rrrrr rrrrr \n\
-51 r')
+>>> d = Seq(
+...     "1 nnnnn nnnnn nnnnn nnnnn nnnnn \n" "26 nnnnn nnnnG AATTC rrrrr rrrrr \n" "51 r"
+... )
 >>> d
 Seq('1 nnnnn nnnnn nnnnn nnnnn nnnnn \n26 nnnnn nnnnG AATTC rrrrr rrrrr \n51 r')
 >>> EcoRI.search(d)
@@ -1500,9 +1535,9 @@ Seq('1 nnnnn nnnnn nnnnn nnnnn nnnnn \n26 nnnnn nnnnG AATTC rrrrr rrrrr \n51 r')
 >>> EcoRI.catalyse(d)
 (Seq('AATTCRRRRRRRRRRR'), Seq('NNNNNNNNNNNNNNNNNNNNNNNNNNNN
 NNNNNNG'))
->>> e = Seq('nnnnGAATTCrr')
->>> f = Seq('NNNNGAATTCRR')
->>> g = Seq('nnnngaattcrr')
+>>> e = Seq("nnnnGAATTCrr")
+>>> f = Seq("NNNNGAATTCRR")
+>>> g = Seq("nnnngaattcrr")
 >>> EcoRI.catalyse(e)
 (Seq('NNNNG'), Seq('AATTCRR'))
 >>> EcoRI.catalyse(f)
@@ -1521,12 +1556,12 @@ done to try to determine if a restriction site at the end of a linear sequence
 is valid:
 
 ``` pycon
->>> d = Seq('GAATTCAAAAAAAAAAAAAAAAAAAAAAAAAAGGATG')
->>> FokI.site           # site present
+>>> d = Seq("GAATTCAAAAAAAAAAAAAAAAAAAAAAAAAAGGATG")
+>>> FokI.site  # site present
 'GGATG'
->>> FokI.elucidate()        # but cut outside the sequence
+>>> FokI.elucidate()  # but cut outside the sequence
 'GGATGNNNNNNNNN^NNNN_N'
->>> FokI.search(d)      # therefore no site found
+>>> FokI.search(d)  # therefore no site found
 []
 >>> EcoRI.search(d)
 [2]
@@ -1550,13 +1585,13 @@ not a bug.
 ``` pycon
 >>> AloI.cut_twice()
 True
->>> AloI.fst5              # first cut
+>>> AloI.fst5  # first cut
 -7
->>> AloI.scd5          # second cut
+>>> AloI.scd5  # second cut
 25
 >>> AloI.site
 'GAACNNNNNNTCC'
->>> b = Seq('AAAAAAAAAAA'+ AloI.site + 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
+>>> b = Seq("AAAAAAAAAAA" + AloI.site + "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
 >>> b
 Seq('AAAAAAAAAAAGAACNNNNNNTCCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
 >>> AloI.search(b)  # one site, two cuts -> two positions
@@ -1573,30 +1608,30 @@ little hack to get some sanity back when using dir() in those conditions:
 >>> # we will change the builtin dir() function to get ride of the enzyme names.
 >>> import sys
 >>> def dir(object=None):
-    """dir([object]) -> list of string.
-
-    over-ride the built-in function to get some clarity."""
-    if object:
-        # we only want to modify dir(),
-        # so here we return the result of the builtin function.
-        return __builtins__.dir(object)
-    else:
-        # now the part we want to modify.
-        # All the enzymes are in a RestrictionBatch (we will talk about
-        # that later, for the moment simply believe me).
-        # So if we remove from the results of dir() everything which is
-        # in AllEnzymes we will get a much shorter list when we do dir()
-        #
-        # the current level is __main__ ie dir() is equivalent to
-        # ask what's in __main__ at the moment.
-        # we can't access __main__ directly.
-        # so we will use sys.modules['__main__'] to reach it.
-        # the following list comprehension remove from the result of
-        # dir() everything which is also present in AllEnzymes.
-        #
-        return [x for x in __builtins__.dir(sys.modules['__main__'])
-            if not x in AllEnzymes]
-
+...     """dir([object]) -> list of string.
+...     over-ride the built-in function to get some clarity."""
+...     if object:
+...         # we only want to modify dir(),
+...         # so here we return the result of the builtin function.
+...         return __builtins__.dir(object)
+...     else:
+...         # now the part we want to modify.
+...         # All the enzymes are in a RestrictionBatch (we will talk about
+...         # that later, for the moment simply believe me).
+...         # So if we remove from the results of dir() everything which is
+...         # in AllEnzymes we will get a much shorter list when we do dir()
+...         #
+...         # the current level is __main__ ie dir() is equivalent to
+...         # ask what's in __main__ at the moment.
+...         # we can't access __main__ directly.
+...         # so we will use sys.modules['__main__'] to reach it.
+...         # the following list comprehension remove from the result of
+...         # dir() everything which is also present in AllEnzymes.
+...         #
+...         return [
+...             x for x in __builtins__.dir(sys.modules["__main__"]) if not x in AllEnzymes
+...         ]
+...
 >>> # now let's see if it works.
 >>> dir()
 ['AllEnzymes', 'Analysis', 'CommOnly', 'NonComm', 'PrintFormat', 'RanaConfig',

@@ -11,9 +11,9 @@ We have decided to remove this module in future, and instead recommend
 building your command and invoking it via the subprocess module directly.
 """
 
+from ._Fasttree import FastTreeCommandline
 from ._Phyml import PhymlCommandline
 from ._Raxml import RaxmlCommandline
-from ._Fasttree import FastTreeCommandline
 
 # Make this explicit, then they show up in the API docs
 __all__ = ("PhymlCommandline", "RaxmlCommandline", "FastTreeCommandline")

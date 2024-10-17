@@ -1,0 +1,474 @@
+<?xml version="1.0"?>
+<BlastXML2
+    xmlns="http://www.ncbi.nlm.nih.gov"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema-instance"
+    xs:schemaLocation="http://www.ncbi.nlm.nih.gov http://www.ncbi.nlm.nih.gov/data_specs/schema_alt/NCBI_BlastOutput2.xsd"
+>
+<BlastOutput2>
+  <report>
+    <Report>
+      <program>blastp</program>
+      <version>BLASTP 2.15.0+</version>
+      <reference>Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&amp;auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), &quot;Gapped BLAST and PSI-BLAST: a new generation of protein database search programs&quot;, Nucleic Acids Res. 25:3389-3402.</reference>
+      <search-target>
+        <Target>
+          <db>nr</db>
+        </Target>
+      </search-target>
+      <params>
+        <Parameters>
+          <matrix>BLOSUM62</matrix>
+          <expect>0.05</expect>
+          <gap-open>11</gap-open>
+          <gap-extend>1</gap-extend>
+          <filter>F</filter>
+          <cbs>2</cbs>
+        </Parameters>
+      </params>
+      <results>
+        <Results>
+          <search>
+            <Search>
+              <query-id>WXX52402.1</query-id>
+              <query-title>RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]</query-title>
+              <query-len>239</query-len>
+              <hits>
+                <Hit>
+                  <num>1</num>
+                  <description>
+                    <HitDescr>
+                      <id>ref|WP_003221446.1|</id>
+                      <accession>WP_003221446</accession>
+                      <title>MULTISPECIES: RNA polymerase sporulation sigma factor SigE [Bacillales]</title>
+                      <taxid>1385</taxid>
+                      <sciname>Bacillales</sciname>
+                    </HitDescr>
+                    <HitDescr>
+                      <id>ref|NP_389415.2|</id>
+                      <accession>NP_389415</accession>
+                      <title>RNA polymerase sporulation-specific sigma-29 factor (sigma-E) [Bacillus subtilis subsp. subtilis str. 168]</title>
+                      <taxid>224308</taxid>
+                      <sciname>Bacillus subtilis subsp. subtilis str. 168</sciname>
+                    </HitDescr>
+                    <HitDescr>
+                      <id>sp|P06222.1|</id>
+                      <accession>P06222</accession>
+                      <title>RecName: Full=RNA polymerase sigma-E factor; AltName: Full=P31; AltName: Full=Sigma-29; AltName: Full=Stage II sporulation protein GB; Flags: Precursor [Bacillus subtilis subsp. subtilis str. 168]</title>
+                      <taxid>224308</taxid>
+                      <sciname>Bacillus subtilis subsp. subtilis str. 168</sciname>
+                    </HitDescr>
+                    <HitDescr>
+                      <id>gb|KFI04694.1|</id>
+                      <accession>KFI04694</accession>
+                      <title>sporulation sigma factor SigE [Bacillus sp. BSC154]</title>
+                      <taxid>1549811</taxid>
+                      <sciname>Bacillus sp. BSC154</sciname>
+                    </HitDescr>
+                    <HitDescr>
+                      <id>gb|MDZ5720185.1|</id>
+                      <accession>MDZ5720185</accession>
+                      <title>RNA polymerase sporulation sigma factor SigE [Bacillus sp. X(2023)]</title>
+                      <taxid>3106047</taxid>
+                      <sciname>Bacillus sp. X(2023)</sciname>
+                    </HitDescr>
+                    <HitDescr>
+                      <id>gb|POO83984.1|</id>
+                      <accession>POO83984</accession>
+                      <title>RNA polymerase sporulation sigma factor SigE [Bacillus sp. MBGLi97]</title>
+                      <taxid>2070760</taxid>
+                      <sciname>Bacillus sp. MBGLi97</sciname>
+                    </HitDescr>
+                    <HitDescr>
+                      <id>dbj|BAM52179.1|</id>
+                      <accession>BAM52179</accession>
+                      <title>sporulation sigma factor SigE [Bacillus subtilis BEST7613]</title>
+                      <taxid>1204343</taxid>
+                      <sciname>Bacillus subtilis BEST7613</sciname>
+                    </HitDescr>
+                    <HitDescr>
+                      <id>gb|ADM37626.1|</id>
+                      <accession>ADM37626</accession>
+                      <title>sporulation-specific sigma factor sigma-E [Bacillus spizizenii str. W23]</title>
+                      <taxid>655816</taxid>
+                      <sciname>Bacillus spizizenii str. W23</sciname>
+                    </HitDescr>
+                  </description>
+                  <len>239</len>
+                  <hsps>
+                    <Hsp>
+                      <num>1</num>
+                      <bit-score>477.248</bit-score>
+                      <score>1227</score>
+                      <evalue>2.44722e-169</evalue>
+                      <identity>239</identity>
+                      <positive>239</positive>
+                      <query-from>1</query-from>
+                      <query-to>239</query-to>
+                      <hit-from>1</hit-from>
+                      <hit-to>239</hit-to>
+                      <align-len>239</align-len>
+                      <gaps>0</gaps>
+                      <qseq>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</qseq>
+                      <hseq>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</hseq>
+                      <midline>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</midline>
+                    </Hsp>
+                  </hsps>
+                </Hit>
+                <Hit>
+                  <num>2</num>
+                  <description>
+                    <HitDescr>
+                      <id>dbj|BAI85158.2|</id>
+                      <accession>BAI85158</accession>
+                      <title>sporulation sigma factor SigE [Bacillus subtilis subsp. natto BEST195]</title>
+                      <taxid>645657</taxid>
+                      <sciname>Bacillus subtilis subsp. natto BEST195</sciname>
+                    </HitDescr>
+                  </description>
+                  <len>260</len>
+                  <hsps>
+                    <Hsp>
+                      <num>1</num>
+                      <bit-score>477.248</bit-score>
+                      <score>1227</score>
+                      <evalue>3.91488e-169</evalue>
+                      <identity>239</identity>
+                      <positive>239</positive>
+                      <query-from>1</query-from>
+                      <query-to>239</query-to>
+                      <hit-from>22</hit-from>
+                      <hit-to>260</hit-to>
+                      <align-len>239</align-len>
+                      <gaps>0</gaps>
+                      <qseq>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</qseq>
+                      <hseq>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</hseq>
+                      <midline>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</midline>
+                    </Hsp>
+                  </hsps>
+                </Hit>
+                <Hit>
+                  <num>3</num>
+                  <description>
+                    <HitDescr>
+                      <id>ref|WP_120028072.1|</id>
+                      <accession>WP_120028072</accession>
+                      <title>RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]</title>
+                      <taxid>1423</taxid>
+                      <sciname>Bacillus subtilis</sciname>
+                    </HitDescr>
+                    <HitDescr>
+                      <id>gb|RJS52520.1|</id>
+                      <accession>RJS52520</accession>
+                      <title>RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]</title>
+                      <taxid>1423</taxid>
+                      <sciname>Bacillus subtilis</sciname>
+                    </HitDescr>
+                  </description>
+                  <len>239</len>
+                  <hsps>
+                    <Hsp>
+                      <num>1</num>
+                      <bit-score>476.478</bit-score>
+                      <score>1225</score>
+                      <evalue>4.00949e-169</evalue>
+                      <identity>238</identity>
+                      <positive>239</positive>
+                      <query-from>1</query-from>
+                      <query-to>239</query-to>
+                      <hit-from>1</hit-from>
+                      <hit-to>239</hit-to>
+                      <align-len>239</align-len>
+                      <gaps>0</gaps>
+                      <qseq>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</qseq>
+                      <hseq>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLIGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</hseq>
+                      <midline>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGL+GEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</midline>
+                    </Hsp>
+                  </hsps>
+                </Hit>
+                <Hit>
+                  <num>4</num>
+                  <description>
+                    <HitDescr>
+                      <id>ref|WP_326121348.1|</id>
+                      <accession>WP_326121348</accession>
+                      <title>RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]</title>
+                      <taxid>1423</taxid>
+                      <sciname>Bacillus subtilis</sciname>
+                    </HitDescr>
+                    <HitDescr>
+                      <id>gb|MEC0320584.1|</id>
+                      <accession>MEC0320584</accession>
+                      <title>RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]</title>
+                      <taxid>1423</taxid>
+                      <sciname>Bacillus subtilis</sciname>
+                    </HitDescr>
+                  </description>
+                  <len>239</len>
+                  <hsps>
+                    <Hsp>
+                      <num>1</num>
+                      <bit-score>476.093</bit-score>
+                      <score>1224</score>
+                      <evalue>5.63375e-169</evalue>
+                      <identity>238</identity>
+                      <positive>239</positive>
+                      <query-from>1</query-from>
+                      <query-to>239</query-to>
+                      <hit-from>1</hit-from>
+                      <hit-to>239</hit-to>
+                      <align-len>239</align-len>
+                      <gaps>0</gaps>
+                      <qseq>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</qseq>
+                      <hseq>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLIMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</hseq>
+                      <midline>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVL+MKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</midline>
+                    </Hsp>
+                  </hsps>
+                </Hit>
+                <Hit>
+                  <num>5</num>
+                  <description>
+                    <HitDescr>
+                      <id>ref|WP_128473893.1|</id>
+                      <accession>WP_128473893</accession>
+                      <title>RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]</title>
+                      <taxid>1423</taxid>
+                      <sciname>Bacillus subtilis</sciname>
+                    </HitDescr>
+                    <HitDescr>
+                      <id>gb|QAR61557.1|</id>
+                      <accession>QAR61557</accession>
+                      <title>RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]</title>
+                      <taxid>1423</taxid>
+                      <sciname>Bacillus subtilis</sciname>
+                    </HitDescr>
+                  </description>
+                  <len>239</len>
+                  <hsps>
+                    <Hsp>
+                      <num>1</num>
+                      <bit-score>476.093</bit-score>
+                      <score>1224</score>
+                      <evalue>5.6959e-169</evalue>
+                      <identity>238</identity>
+                      <positive>239</positive>
+                      <query-from>1</query-from>
+                      <query-to>239</query-to>
+                      <hit-from>1</hit-from>
+                      <hit-to>239</hit-to>
+                      <align-len>239</align-len>
+                      <gaps>0</gaps>
+                      <qseq>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</qseq>
+                      <hseq>MKKLKLRLTHLWYKLLMKLGMKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</hseq>
+                      <midline>MKKLKLRLTHLWYKLLMKLG+KSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</midline>
+                    </Hsp>
+                  </hsps>
+                </Hit>
+                <Hit>
+                  <num>6</num>
+                  <description>
+                    <HitDescr>
+                      <id>ref|WP_174228079.1|</id>
+                      <accession>WP_174228079</accession>
+                      <title>RNA polymerase sporulation sigma factor SigE [Bacillus tequilensis]</title>
+                      <taxid>227866</taxid>
+                      <sciname>Bacillus tequilensis</sciname>
+                    </HitDescr>
+                    <HitDescr>
+                      <id>gb|NTU26438.1|</id>
+                      <accession>NTU26438</accession>
+                      <title>RNA polymerase sporulation sigma factor SigE [Bacillus tequilensis]</title>
+                      <taxid>227866</taxid>
+                      <sciname>Bacillus tequilensis</sciname>
+                    </HitDescr>
+                  </description>
+                  <len>239</len>
+                  <hsps>
+                    <Hsp>
+                      <num>1</num>
+                      <bit-score>476.093</bit-score>
+                      <score>1224</score>
+                      <evalue>7.17171e-169</evalue>
+                      <identity>238</identity>
+                      <positive>239</positive>
+                      <query-from>1</query-from>
+                      <query-to>239</query-to>
+                      <hit-from>1</hit-from>
+                      <hit-to>239</hit-to>
+                      <align-len>239</align-len>
+                      <gaps>0</gaps>
+                      <qseq>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</qseq>
+                      <hseq>MKKLKLRLTHLWYRLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</hseq>
+                      <midline>MKKLKLRLTHLWY+LLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</midline>
+                    </Hsp>
+                  </hsps>
+                </Hit>
+                <Hit>
+                  <num>7</num>
+                  <description>
+                    <HitDescr>
+                      <id>ref|WP_315947263.1|</id>
+                      <accession>WP_315947263</accession>
+                      <title>RNA polymerase sporulation sigma factor SigE [Bacillus cabrialesii]</title>
+                      <taxid>2487276</taxid>
+                      <sciname>Bacillus cabrialesii</sciname>
+                    </HitDescr>
+                    <HitDescr>
+                      <id>gb|MDU0153406.1|</id>
+                      <accession>MDU0153406</accession>
+                      <title>RNA polymerase sporulation sigma factor SigE [Bacillus cabrialesii]</title>
+                      <taxid>2487276</taxid>
+                      <sciname>Bacillus cabrialesii</sciname>
+                    </HitDescr>
+                  </description>
+                  <len>239</len>
+                  <hsps>
+                    <Hsp>
+                      <num>1</num>
+                      <bit-score>476.093</bit-score>
+                      <score>1224</score>
+                      <evalue>7.17171e-169</evalue>
+                      <identity>238</identity>
+                      <positive>239</positive>
+                      <query-from>1</query-from>
+                      <query-to>239</query-to>
+                      <hit-from>1</hit-from>
+                      <hit-to>239</hit-to>
+                      <align-len>239</align-len>
+                      <gaps>0</gaps>
+                      <qseq>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</qseq>
+                      <hseq>MKKLKLRLTHLWYKLLMRLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</hseq>
+                      <midline>MKKLKLRLTHLWYKLLM+LGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</midline>
+                    </Hsp>
+                  </hsps>
+                </Hit>
+                <Hit>
+                  <num>8</num>
+                  <description>
+                    <HitDescr>
+                      <id>ref|WP_219912761.1|</id>
+                      <accession>WP_219912761</accession>
+                      <title>RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]</title>
+                      <taxid>1423</taxid>
+                      <sciname>Bacillus subtilis</sciname>
+                    </HitDescr>
+                    <HitDescr>
+                      <id>emb|COM82207.1|</id>
+                      <accession>COM82207</accession>
+                      <title>RNA polymerase sigma factor RpoD [Bacillus subtilis]</title>
+                      <taxid>1423</taxid>
+                      <sciname>Bacillus subtilis</sciname>
+                    </HitDescr>
+                  </description>
+                  <len>239</len>
+                  <hsps>
+                    <Hsp>
+                      <num>1</num>
+                      <bit-score>475.707</bit-score>
+                      <score>1223</score>
+                      <evalue>7.49345e-169</evalue>
+                      <identity>238</identity>
+                      <positive>239</positive>
+                      <query-from>1</query-from>
+                      <query-to>239</query-to>
+                      <hit-from>1</hit-from>
+                      <hit-to>239</hit-to>
+                      <align-len>239</align-len>
+                      <gaps>0</gaps>
+                      <qseq>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</qseq>
+                      <hseq>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYSSRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</hseq>
+                      <midline>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATY+SRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</midline>
+                    </Hsp>
+                  </hsps>
+                </Hit>
+                <Hit>
+                  <num>9</num>
+                  <description>
+                    <HitDescr>
+                      <id>ref|WP_038828182.1|</id>
+                      <accession>WP_038828182</accession>
+                      <title>RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]</title>
+                      <taxid>1423</taxid>
+                      <sciname>Bacillus subtilis</sciname>
+                    </HitDescr>
+                  </description>
+                  <len>239</len>
+                  <hsps>
+                    <Hsp>
+                      <num>1</num>
+                      <bit-score>475.707</bit-score>
+                      <score>1223</score>
+                      <evalue>7.49345e-169</evalue>
+                      <identity>238</identity>
+                      <positive>239</positive>
+                      <query-from>1</query-from>
+                      <query-to>239</query-to>
+                      <hit-from>1</hit-from>
+                      <hit-to>239</hit-to>
+                      <align-len>239</align-len>
+                      <gaps>0</gaps>
+                      <qseq>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</qseq>
+                      <hseq>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARSILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</hseq>
+                      <midline>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAAR+ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</midline>
+                    </Hsp>
+                  </hsps>
+                </Hit>
+                <Hit>
+                  <num>10</num>
+                  <description>
+                    <HitDescr>
+                      <id>ref|WP_326211018.1|</id>
+                      <accession>WP_326211018</accession>
+                      <title>RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]</title>
+                      <taxid>1423</taxid>
+                      <sciname>Bacillus subtilis</sciname>
+                    </HitDescr>
+                    <HitDescr>
+                      <id>gb|MEC1541690.1|</id>
+                      <accession>MEC1541690</accession>
+                      <title>RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]</title>
+                      <taxid>1423</taxid>
+                      <sciname>Bacillus subtilis</sciname>
+                    </HitDescr>
+                  </description>
+                  <len>239</len>
+                  <hsps>
+                    <Hsp>
+                      <num>1</num>
+                      <bit-score>475.707</bit-score>
+                      <score>1223</score>
+                      <evalue>8.36237e-169</evalue>
+                      <identity>238</identity>
+                      <positive>239</positive>
+                      <query-from>1</query-from>
+                      <query-to>239</query-to>
+                      <hit-from>1</hit-from>
+                      <hit-to>239</hit-to>
+                      <align-len>239</align-len>
+                      <gaps>0</gaps>
+                      <qseq>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</qseq>
+                      <hseq>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMM</hseq>
+                      <midline>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKM+</midline>
+                    </Hsp>
+                  </hsps>
+                </Hit>
+              </hits>
+              <stat>
+                <Statistics>
+                  <db-num>718658123</db-num>
+                  <db-len>277418989154</db-len>
+                  <hsp-len>161</hsp-len>
+                  <eff-space>12613772445378</eff-space>
+                  <kappa>0.041</kappa>
+                  <lambda>0.267</lambda>
+                  <entropy>0.14</entropy>
+                </Statistics>
+              </stat>
+            </Search>
+          </search>
+        </Results>
+      </results>
+    </Report>
+  </report>
+</BlastOutput2>
+</BlastXML2>
+

@@ -8,9 +8,9 @@
 import os
 import unittest
 
-from Bio import SearchIO
-
 from search_tests_common import SearchTestBaseClass
+
+from Bio import SearchIO
 
 
 class WriteCases(SearchTestBaseClass):
@@ -39,7 +39,6 @@ class WriteCases(SearchTestBaseClass):
 
 
 class BlastXmlWriteCases(WriteCases):
-
     fmt = "blast-xml"
     out = os.path.join("Blast", "test_write.xml")
 
@@ -56,7 +55,6 @@ class BlastXmlWriteCases(WriteCases):
 
 
 class BlastTabWriteCases(WriteCases):
-
     fmt = "blast-tab"
     out = os.path.join("Blast", "test_write.txt")
 
@@ -141,7 +139,6 @@ class BlastTabWriteCases(WriteCases):
 
 
 class HmmerTabWriteCases(WriteCases):
-
     fmt = "hmmer3-tab"
     out = os.path.join("Hmmer", "test_write.txt")
 
@@ -158,7 +155,6 @@ class HmmerTabWriteCases(WriteCases):
 
 
 class HmmerDomtabWriteCases(WriteCases):
-
     out = os.path.join("Hmmer", "test_write.txt")
 
     def test_write_single_from_hmmscandomtab(self):
@@ -183,7 +179,6 @@ class HmmerDomtabWriteCases(WriteCases):
 
 
 class BlatPslWriteCases(WriteCases):
-
     fmt = "blat-psl"
     out = os.path.join("Blat", "test_write.txt")
 

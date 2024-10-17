@@ -9,14 +9,15 @@
 The SnapGene binary format is the native format used by the SnapGene program
 from GSL Biotech LLC.
 """
+
 from datetime import datetime
 from re import sub
 from struct import unpack
 from xml.dom.minidom import parseString
 
 from Bio.Seq import Seq
-from Bio.SeqFeature import FeatureLocation
 from Bio.SeqFeature import SeqFeature
+from Bio.SeqFeature import SimpleLocation
 from Bio.SeqRecord import SeqRecord
 
 from .Interfaces import SequenceIterator
@@ -98,7 +99,7 @@ def _parse_notes_packet(length, data, record):
             record.id = record.name
 
 
-def _parse_cookie_packet(length, data, record):
+def _parse_cookie_packet(length, data):
     """Parse a SnapGene cookie packet.
 
     Every SnapGene file starts with a packet of this type. It acts as
@@ -109,17 +110,22 @@ def _parse_cookie_packet(length, data, record):
         raise ValueError("The file is not a valid SnapGene file")
 
 
-def _parse_location(rangespec, strand, record):
+def _parse_location(rangespec, strand, record, is_primer=False):
     start, end = (int(x) for x in rangespec.split("-"))
     # Account for SnapGene's 1-based coordinates
     start = start - 1
+    if is_primer:
+        # Primers' coordinates in SnapGene files are shifted by -1
+        # for some reasons
+        start += 1
+        end += 1
     if start > end:
         # Range wrapping the end of the sequence
-        l1 = FeatureLocation(start, len(record), strand=strand)
-        l2 = FeatureLocation(0, end, strand=strand)
+        l1 = SimpleLocation(start, len(record), strand=strand)
+        l2 = SimpleLocation(0, end, strand=strand)
         location = l1 + l2
     else:
-        location = FeatureLocation(start, end, strand=strand)
+        location = SimpleLocation(start, end, strand=strand)
     return location
 
 
@@ -217,6 +223,7 @@ def _parse_primers_packet(length, data, record):
         if name:
             quals["label"] = [name]
 
+        locations = []
         for site in primer.getElementsByTagName("BindingSite"):
             rng = _get_attribute_value(
                 site, "location", error="Missing binding site location"
@@ -227,8 +234,15 @@ def _parse_primers_packet(length, data, record):
             else:
                 strand = +1
 
+            location = _parse_location(rng, strand, record, is_primer=True)
+            simplified = int(_get_attribute_value(site, "simplified", default="0")) == 1
+            if simplified and location in locations:
+                # Duplicate "simplified" binding site, ignore
+                continue
+
+            locations.append(location)
             feature = SeqFeature(
-                _parse_location(rng, strand, record),
+                location,
                 type="primer_bind",
                 qualifiers=quals,
             )
@@ -277,6 +291,8 @@ def _get_child_value(node, name, default=None, error=None):
 class SnapGeneIterator(SequenceIterator):
     """Parser for SnapGene files."""
 
+    modes = "b"
+
     def __init__(self, source):
         """Parse a SnapGene file and return a SeqRecord object.
 
@@ -285,32 +301,27 @@ class SnapGeneIterator(SequenceIterator):
         Note that a SnapGene file can only contain one sequence, so this
         iterator will always return a single record.
         """
-        super().__init__(source, mode="b", fmt="SnapGene")
-
-    def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
-        records = self.iterate(handle)
-        return records
-
-    def iterate(self, handle):
-        """Iterate over the records in the SnapGene file."""
-        record = SeqRecord(None)
-        packets = _iterate(handle)
+        super().__init__(source, fmt="SnapGene")
+        self.packets = _iterate(self.stream)
         try:
-            packet_type, length, data = next(packets)
+            packet_type, length, data = next(self.packets)
         except StopIteration:
             raise ValueError("Empty file.") from None
-
         if packet_type != 0x09:
             raise ValueError("The file does not start with a SnapGene cookie packet")
-        _parse_cookie_packet(length, data, record)
+        _parse_cookie_packet(length, data)
 
-        for (packet_type, length, data) in packets:
+    def __next__(self):
+        packets = self.packets
+        if packets is None:
+            raise StopIteration
+        record = SeqRecord(None)
+        for packet in packets:
+            packet_type, length, data = packet
             handler = _packet_handlers.get(packet_type)
             if handler is not None:
                 handler(length, data, record)
-
         if not record.seq:
             raise ValueError("No DNA packet in file")
-
-        yield record
+        self.packets = None  # A SnapGene file contains only one sequence
+        return record

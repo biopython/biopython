@@ -5,6 +5,8 @@
 # package.
 """Abstract base classes for the SearchIO object model."""
 
+from typing import Tuple
+from typing import Union
 
 from Bio.SearchIO._utils import getattr_str
 
@@ -12,7 +14,7 @@ from Bio.SearchIO._utils import getattr_str
 class _BaseSearchObject:
     """Abstract class for SearchIO objects."""
 
-    _NON_STICKY_ATTRS = ()
+    _NON_STICKY_ATTRS: Union[Tuple, Tuple[str]] = ()
 
     def _transfer_attrs(self, obj):
         """Transfer instance attributes to the given object (PRIVATE).

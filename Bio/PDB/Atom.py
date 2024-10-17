@@ -10,13 +10,18 @@
 import copy
 import sys
 import warnings
+from typing import Optional
+from typing import TypeVar
 
 import numpy as np
 
+from Bio.Data import IUPACData
 from Bio.PDB.Entity import DisorderedEntityWrapper
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 from Bio.PDB.vectors import Vector
-from Bio.Data import IUPACData
+from Bio.PDB.Residue import Residue
+
+_AtomT = TypeVar("_AtomT", bound="Atom")
 
 
 class Atom:
@@ -33,16 +38,16 @@ class Atom:
 
     def __init__(
         self,
-        name,
-        coord,
-        bfactor,
-        occupancy,
-        altloc,
-        fullname,
+        name: str,
+        coord: np.ndarray,
+        bfactor: Optional[float],
+        occupancy: Optional[float],
+        altloc: str,
+        fullname: str,
         serial_number,
-        element=None,
-        pqr_charge=None,
-        radius=None,
+        element: Optional[str] = None,
+        pqr_charge: Optional[float] = None,
+        radius: Optional[float] = None,
     ):
         """Initialize Atom object.
 
@@ -50,7 +55,7 @@ class Atom:
         :type name: string
 
         :param coord: atomic coordinates (x,y,z)
-        :type coord: Numeric array (Float0, size 3)
+        :type coord: NumPy array (Float0, length 3)
 
         :param bfactor: isotropic B factor
         :type bfactor: number
@@ -76,7 +81,7 @@ class Atom:
         """
         self.level = "A"
         # Reference to the residue
-        self.parent = None
+        self.parent: Optional[Residue] = None
         # the atomic data
         self.name = name  # eg. CA, spaces are removed from atom name
         self.fullname = fullname  # e.g. " CA ", spaces included
@@ -92,7 +97,7 @@ class Atom:
         self.sigatm_array = None
         self.serial_number = serial_number
         # Dictionary that keeps additional properties
-        self.xtra = {}
+        self.xtra: dict = {}
         assert not element or element == element.upper(), element
         self.element = self._assign_element(element)
         self.mass = self._assign_atom_mass()
@@ -233,7 +238,7 @@ class Atom:
 
         return element
 
-    def _assign_atom_mass(self):
+    def _assign_atom_mass(self) -> float:
         """Return atom weight (PRIVATE)."""
         try:
             return IUPACData.atom_weights[self.element.capitalize()]
@@ -262,29 +267,60 @@ class Atom:
         diff = self.coord - other.coord
         return np.sqrt(np.dot(diff, diff))
 
+    def strictly_equals(
+        self: _AtomT, other: _AtomT, compare_coordinates: bool = False
+    ) -> bool:
+        """Compare this atom to the other atom using a strict definition of equality.
+
+        Indicates whether the atoms have the same name, B factor, occupancy,
+        alternate location indicator (altloc), fullname, element, charge, and radius.
+        If ``compare_coordinates`` is true, then the coordinates are also compared.
+
+        :param other: The atom to compare this atom with
+        :type other: Atom
+        :param compare_coordinates: Whether to compare the coordinates of the atoms
+        :type compare_coordinates: bool
+        :return: Whether the atoms are strictly equal
+        :rtype: bool
+        """
+        if not isinstance(other, type(self)):
+            return False
+
+        return (
+            self.name == other.name
+            and np.isclose(self.bfactor, other.bfactor)
+            and np.isclose(self.occupancy, other.occupancy)
+            and self.altloc == other.altloc
+            and self.fullname == other.fullname
+            and (np.allclose(self.coord, other.coord) if compare_coordinates else True)
+            and getattr(self, "element", None) == getattr(self, "element", None)
+            and getattr(self, "pqr_charge", None) == getattr(self, "pqr_charge", None)
+            and getattr(self, "radius", None) == getattr(self, "radius", None)
+        )
+
     # set methods
 
     def set_serial_number(self, n):
         """Set serial number."""
         self.serial_number = n
 
-    def set_bfactor(self, bfactor):
+    def set_bfactor(self, bfactor: Optional[float]):
         """Set isotroptic B factor."""
         self.bfactor = bfactor
 
-    def set_coord(self, coord):
+    def set_coord(self, coord: np.ndarray):
         """Set coordinates."""
         self.coord = coord
 
-    def set_altloc(self, altloc):
+    def set_altloc(self, altloc: str):
         """Set alternative location specifier."""
         self.altloc = altloc
 
-    def set_occupancy(self, occupancy):
+    def set_occupancy(self, occupancy: Optional[float]):
         """Set occupancy."""
         self.occupancy = occupancy
 
-    def set_sigatm(self, sigatm_array):
+    def set_sigatm(self, sigatm_array: Optional[np.ndarray]):
         """Set standard deviation of atomic parameters.
 
         The standard deviation of atomic parameters consists
@@ -292,31 +328,31 @@ class Atom:
         deviation.
 
         :param sigatm_array: standard deviations of atomic parameters.
-        :type sigatm_array: Numeric array (length 5)
+        :type sigatm_array: NumPy array (length 5)
         """
         self.sigatm_array = sigatm_array
 
-    def set_siguij(self, siguij_array):
+    def set_siguij(self, siguij_array: Optional[np.ndarray]):
         """Set standard deviations of anisotropic temperature factors.
 
         :param siguij_array: standard deviations of anisotropic temperature factors.
-        :type siguij_array: Numeric array (length 6)
+        :type siguij_array: NumPy array (length 6)
         """
         self.siguij_array = siguij_array
 
-    def set_anisou(self, anisou_array):
+    def set_anisou(self, anisou_array: Optional[np.ndarray]):
         """Set anisotropic B factor.
 
         :param anisou_array: anisotropic B factor.
-        :type anisou_array: Numeric array (length 6)
+        :type anisou_array: NumPy array (length 6)
         """
         self.anisou_array = anisou_array
 
-    def set_charge(self, pqr_charge):
+    def set_charge(self, pqr_charge: Optional[float]):
         """Set charge."""
         self.pqr_charge = pqr_charge
 
-    def set_radius(self, radius):
+    def set_radius(self, radius: Optional[float]):
         """Set radius."""
         self.radius = radius
 
@@ -329,7 +365,7 @@ class Atom:
         """
         self.disordered_flag = 1
 
-    def is_disordered(self):
+    def is_disordered(self) -> int:
         """Return the disordered flag (1 if disordered, 0 otherwise)."""
         return self.disordered_flag
 
@@ -347,19 +383,19 @@ class Atom:
         """Remove reference to parent."""
         self.parent = None
 
-    def get_sigatm(self):
+    def get_sigatm(self) -> Optional[np.ndarray]:
         """Return standard deviation of atomic parameters."""
         return self.sigatm_array
 
-    def get_siguij(self):
+    def get_siguij(self) -> Optional[np.ndarray]:
         """Return standard deviations of anisotropic temperature factors."""
         return self.siguij_array
 
-    def get_anisou(self):
+    def get_anisou(self) -> Optional[np.ndarray]:
         """Return anisotropic B factor."""
         return self.anisou_array
 
-    def get_parent(self):
+    def get_parent(self) -> Optional[Residue]:
         """Return parent residue."""
         return self.parent
 
@@ -367,11 +403,11 @@ class Atom:
         """Return the serial number."""
         return self.serial_number
 
-    def get_name(self):
+    def get_name(self) -> str:
         """Return atom name."""
         return self.name
 
-    def get_id(self):
+    def get_id(self) -> str:
         """Return the id of the atom (which is its atom name)."""
         return self.id
 
@@ -387,46 +423,46 @@ class Atom:
         except AttributeError:
             return (None, None, None, None, self.name, self.altloc)
 
-    def get_coord(self):
+    def get_coord(self) -> np.ndarray:
         """Return atomic coordinates."""
         return self.coord
 
-    def get_bfactor(self):
+    def get_bfactor(self) -> Optional[float]:
         """Return B factor."""
         return self.bfactor
 
-    def get_occupancy(self):
+    def get_occupancy(self) -> Optional[float]:
         """Return occupancy."""
         return self.occupancy
 
-    def get_fullname(self):
+    def get_fullname(self) -> str:
         """Return the atom name, including leading and trailing spaces."""
         return self.fullname
 
-    def get_altloc(self):
+    def get_altloc(self) -> str:
         """Return alternative location specifier."""
         return self.altloc
 
-    def get_level(self):
+    def get_level(self) -> str:
         """Return level."""
         return self.level
 
-    def get_charge(self):
+    def get_charge(self) -> Optional[float]:
         """Return charge."""
         return self.pqr_charge
 
-    def get_radius(self):
+    def get_radius(self) -> Optional[float]:
         """Return radius."""
         return self.radius
 
-    def transform(self, rot, tran):
+    def transform(self, rot: np.ndarray, tran: np.ndarray):
         """Apply rotation and translation to the atomic coordinates.
 
         :param rot: A right multiplying rotation matrix
-        :type rot: 3x3 Numeric array
+        :type rot: 3x3 NumPy array
 
         :param tran: the translation vector
-        :type tran: size 3 Numeric array
+        :type tran: size 3 NumPy array
 
         Examples
         --------
@@ -441,7 +477,7 @@ class Atom:
         """
         self.coord = np.dot(self.coord, rot) + tran
 
-    def get_vector(self):
+    def get_vector(self) -> Vector:
         """Return coordinates as Vector.
 
         :return: coordinates as 3D vector
@@ -474,7 +510,7 @@ class DisorderedAtom(DisorderedEntityWrapper):
     method.
     """
 
-    def __init__(self, id):
+    def __init__(self, id: str):
         """Create DisorderedAtom.
 
         Arguments:
@@ -514,7 +550,7 @@ class DisorderedAtom(DisorderedEntityWrapper):
         coords = np.asarray([a.coord for a in children], dtype=np.float32)
         return np.average(coords, axis=0, weights=None)
 
-    def disordered_get_list(self):
+    def disordered_get_list(self) -> list[Atom]:
         """Return list of atom instances.
 
         Sorts children by altloc (empty, then alphabetical).
@@ -535,7 +571,7 @@ class DisorderedAtom(DisorderedEntityWrapper):
             self.last_occupancy = occupancy
             self.disordered_select(altloc)
 
-    def disordered_remove(self, altloc):
+    def disordered_remove(self, altloc: str):
         """Remove a child atom altloc from the DisorderedAtom.
 
         Arguments:
@@ -557,7 +593,7 @@ class DisorderedAtom(DisorderedEntityWrapper):
             self.selected_child = None
             self.last_occupancy = -sys.maxsize
 
-    def transform(self, rot, tran):
+    def transform(self, rot: np.ndarray, tran: np.ndarray):
         """Apply rotation and translation to all children.
 
         See the documentation of Atom.transform for details.

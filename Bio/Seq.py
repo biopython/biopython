@@ -1,7 +1,7 @@
 # Copyright 2000 Andrew Dalke.
 # Copyright 2000-2002 Brad Chapman.
 # Copyright 2004-2005, 2010 by M de Hoon.
-# Copyright 2007-2020 by Peter Cock.
+# Copyright 2007-2023 by Peter Cock.
 # All rights reserved.
 #
 # This file is part of the Biopython distribution and governed by your
@@ -19,14 +19,16 @@ See also the Seq_ wiki and the chapter in our tutorial:
 .. _`PDF Tutorial`: http://biopython.org/DIST/docs/tutorial/Tutorial.pdf
 
 """
-import array
+
+import collections
 import numbers
 import warnings
-
 from abc import ABC
 from abc import abstractmethod
+from typing import Optional
+from typing import overload
+from typing import Union
 
-from Bio import BiopythonDeprecationWarning
 from Bio import BiopythonWarning
 from Bio.Data import CodonTable
 from Bio.Data import IUPACData
@@ -159,6 +161,7 @@ class SequenceDataAbstractBaseClass(ABC):
         """Return the number of non-overlapping occurrences of sub in data[start:end].
 
         Optional arguments start and end are interpreted as in slice notation.
+        This method behaves as the count method of Python strings.
         """
         return bytes(self).count(sub, start, end)
 
@@ -272,6 +275,32 @@ class SequenceDataAbstractBaseClass(ABC):
         If the argument is omitted or None, strip trailing ASCII whitespace.
         """
         return bytes(self).rstrip(chars)
+
+    def removeprefix(self, prefix):
+        """Remove the prefix if present."""
+        # Want to do just this, but need Python 3.9+
+        # return bytes(self).removeprefix(prefix)
+        data = bytes(self)
+        try:
+            return data.removeprefix(prefix)
+        except AttributeError:
+            if data.startswith(prefix):
+                return data[len(prefix) :]
+            else:
+                return data
+
+    def removesuffix(self, suffix):
+        """Remove the suffix if present."""
+        # Want to do just this, but need Python 3.9+
+        # return bytes(self).removesuffix(suffix)
+        data = bytes(self)
+        try:
+            return data.removesuffix(suffix)
+        except AttributeError:
+            if data.startswith(suffix):
+                return data[: -len(suffix)]
+            else:
+                return data
 
     def upper(self):
         """Return a copy of data with all ASCII characters converted to uppercase."""
@@ -465,6 +494,12 @@ class _SeqAbstractBaseClass(ABC):
     def __iter__(self):
         """Return an iterable of the sequence."""
         return self._data.decode("ASCII").__iter__()
+
+    @overload
+    def __getitem__(self, index: int) -> str: ...
+
+    @overload
+    def __getitem__(self, index: slice) -> "Seq": ...
 
     def __getitem__(self, index):
         """Return a subsequence as a single letter or as a sequence object.
@@ -765,6 +800,9 @@ class _SeqAbstractBaseClass(ABC):
 
         >>> my_rna.find("AUG", 4)
         15
+
+        See the ``search`` method to find the locations of multiple subsequences
+        at the same time.
         """
         if isinstance(sub, _SeqAbstractBaseClass):
             sub = bytes(sub)
@@ -803,6 +841,9 @@ class _SeqAbstractBaseClass(ABC):
 
         >>> my_rna.rfind("AUG", end=15)
         3
+
+        See the ``search`` method to find the locations of multiple subsequences
+        at the same time.
         """
         if isinstance(sub, _SeqAbstractBaseClass):
             sub = bytes(sub)
@@ -843,7 +884,7 @@ class _SeqAbstractBaseClass(ABC):
         15
 
         This method performs the same search as the ``find`` method.  However,
-        if the subsequence is not found, ``find`` returns -1 which ``index``
+        if the subsequence is not found, ``find`` returns -1 while ``index``
         raises a ValueError:
 
         >>> my_rna.index("T")
@@ -852,6 +893,9 @@ class _SeqAbstractBaseClass(ABC):
         ValueError: ...
         >>> my_rna.find("T")
         -1
+
+        See the ``search`` method to find the locations of multiple subsequences
+        at the same time.
         """
         if isinstance(sub, MutableSeq):
             sub = sub._data
@@ -903,6 +947,9 @@ class _SeqAbstractBaseClass(ABC):
         ValueError: ...
         >>> my_rna.rfind("T")
         -1
+
+        See the ``search`` method to find the locations of multiple subsequences
+        at the same time.
         """
         if isinstance(sub, MutableSeq):
             sub = sub._data
@@ -916,6 +963,47 @@ class _SeqAbstractBaseClass(ABC):
                 % type(sub)
             )
         return self._data.rindex(sub, start, end)
+
+    def search(self, subs):
+        """Search the substrings subs in self and yield the index and substring found.
+
+        Arguments:
+         - subs - a list of strings, Seq, MutableSeq, bytes, or bytearray
+           objects containing the substrings to search for.
+
+        >>> from Bio.Seq import Seq
+        >>> dna = Seq("GTCATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAGTTG")
+        >>> matches = dna.search(["CC", Seq("ATTG"), "ATTG", Seq("CCC")])
+        >>> for index, substring in matches:
+        ...     print(index, substring)
+        ...
+        7 CC
+        9 ATTG
+        20 CC
+        34 CC
+        34 CCC
+        35 CC
+        """
+        subdict = collections.defaultdict(set)
+        for index, sub in enumerate(subs):
+            if isinstance(sub, (_SeqAbstractBaseClass, bytearray)):
+                sub = bytes(sub)
+            elif isinstance(sub, str):
+                sub = sub.encode("ASCII")
+            elif not isinstance(sub, bytes):
+                raise TypeError(
+                    "subs[%d]: a Seq, MutableSeq, str, bytes, or bytearray object is required, not '%s'"
+                    % (index, type(sub))
+                )
+            length = len(sub)
+            subdict[length].add(sub)
+        for start in range(len(self) - 1):
+            for length, subs in subdict.items():
+                stop = start + length
+                for sub in subs:
+                    if self._data[start:stop] == sub:
+                        yield (start, sub.decode())
+                        break
 
     def startswith(self, prefix, start=None, end=None):
         """Return True if the sequence starts with the given prefix, False otherwise.
@@ -1087,7 +1175,7 @@ class _SeqAbstractBaseClass(ABC):
         in-place and returned.
 
         >>> seq = MutableSeq(" ACGT ")
-        >>> seq.strip(inplace=False)
+        >>> seq.strip()
         MutableSeq('ACGT')
         >>> seq
         MutableSeq(' ACGT ')
@@ -1116,8 +1204,6 @@ class _SeqAbstractBaseClass(ABC):
                 raise TypeError("Sequence is immutable")
             self._data[:] = data
             return self
-        elif isinstance(self, UnknownSeq):
-            return Seq(data)
         else:
             return self.__class__(data)
 
@@ -1144,7 +1230,7 @@ class _SeqAbstractBaseClass(ABC):
         in-place and returned.
 
         >>> seq = MutableSeq(" ACGT ")
-        >>> seq.lstrip(inplace=False)
+        >>> seq.lstrip()
         MutableSeq('ACGT ')
         >>> seq
         MutableSeq(' ACGT ')
@@ -1173,8 +1259,6 @@ class _SeqAbstractBaseClass(ABC):
                 raise TypeError("Sequence is immutable")
             self._data[:] = data
             return self
-        elif isinstance(self, UnknownSeq):
-            return Seq(data)
         else:
             return self.__class__(data)
 
@@ -1201,7 +1285,7 @@ class _SeqAbstractBaseClass(ABC):
         in-place and returned.
 
         >>> seq = MutableSeq(" ACGT ")
-        >>> seq.rstrip(inplace=False)
+        >>> seq.rstrip()
         MutableSeq(' ACGT')
         >>> seq
         MutableSeq(' ACGT ')
@@ -1230,8 +1314,91 @@ class _SeqAbstractBaseClass(ABC):
                 raise TypeError("Sequence is immutable")
             self._data[:] = data
             return self
-        elif isinstance(self, UnknownSeq):
-            return Seq(data)
+        else:
+            return self.__class__(data)
+
+    def removeprefix(self, prefix, inplace=False):
+        """Return a new Seq object with prefix (left) removed.
+
+        This behaves like the python string method of the same name.
+
+        e.g. Removing a start Codon:
+
+        >>> from Bio.Seq import Seq
+        >>> my_seq = Seq("ATGGTGTGTGT")
+        >>> my_seq
+        Seq('ATGGTGTGTGT')
+        >>> my_seq.removeprefix('ATG')
+        Seq('GTGTGTGT')
+
+        As ``Seq`` objects are immutable, a ``TypeError`` is raised if
+        ``removeprefix`` is called on a ``Seq`` object with ``inplace=True``.
+
+        See also the removesuffix method.
+        """
+        if isinstance(prefix, _SeqAbstractBaseClass):
+            prefix = bytes(prefix)
+        elif isinstance(prefix, str):
+            prefix = prefix.encode("ASCII")
+        try:
+            data = self._data.removeprefix(prefix)
+        except TypeError:
+            raise TypeError(
+                "argument must be a string, Seq, MutableSeq, or bytes-like object"
+            ) from None
+        except AttributeError:
+            # Fall back for pre-Python 3.9
+            data = self._data
+            if data.startswith(prefix):
+                data = data[len(prefix) :]
+        if inplace:
+            if not isinstance(self._data, bytearray):
+                raise TypeError("Sequence is immutable")
+            self._data[:] = data
+            return self
+        else:
+            return self.__class__(data)
+
+    def removesuffix(self, suffix, inplace=False):
+        """Return a new Seq object with suffix (right) removed.
+
+        This behaves like the python string method of the same name.
+
+        e.g. Removing a stop codon:
+
+        >>> from Bio.Seq import Seq
+        >>> my_seq = Seq("GTGTGTGTTAG")
+        >>> my_seq
+        Seq('GTGTGTGTTAG')
+        >>> stop_codon = Seq("TAG")
+        >>> my_seq.removesuffix(stop_codon)
+        Seq('GTGTGTGT')
+
+        As ``Seq`` objects are immutable, a ``TypeError`` is raised if
+        ``removesuffix`` is called on a ``Seq`` object with ``inplace=True``.
+
+        See also the removeprefix method.
+        """
+        if isinstance(suffix, _SeqAbstractBaseClass):
+            suffix = bytes(suffix)
+        elif isinstance(suffix, str):
+            suffix = suffix.encode("ASCII")
+        try:
+            data = self._data.removesuffix(suffix)
+        except TypeError:
+            raise TypeError(
+                "argument must be a string, Seq, MutableSeq, or bytes-like object"
+            ) from None
+        except AttributeError:
+            # Fall back for pre-Python 3.9
+            data = self._data
+            if data.endswith(suffix):
+                data = data[: -len(suffix)]
+        if inplace:
+            if not isinstance(self._data, bytearray):
+                raise TypeError("Sequence is immutable")
+            self._data[:] = data
+            return self
         else:
             return self.__class__(data)
 
@@ -1453,7 +1620,7 @@ class _SeqAbstractBaseClass(ABC):
             _translate_str(str(self), table, stop_symbol, to_stop, cds, gap=gap)
         )
 
-    def complement(self, inplace=None):
+    def complement(self, inplace=False):
         """Return the complement as a DNA sequence.
 
         >>> Seq("CGA").complement()
@@ -1461,7 +1628,7 @@ class _SeqAbstractBaseClass(ABC):
 
         Any U in the sequence is treated as a T:
 
-        >>> Seq("CGAUT").complement(inplace=False)
+        >>> Seq("CGAUT").complement()
         Seq('GCTAA')
 
         In contrast, ``complement_rna`` returns an RNA sequence:
@@ -1474,7 +1641,7 @@ class _SeqAbstractBaseClass(ABC):
         >>> my_seq = MutableSeq("CGA")
         >>> my_seq
         MutableSeq('CGA')
-        >>> my_seq.complement(inplace=False)
+        >>> my_seq.complement()
         MutableSeq('GCT')
         >>> my_seq
         MutableSeq('CGA')
@@ -1489,54 +1656,6 @@ class _SeqAbstractBaseClass(ABC):
         """
         ttable = _dna_complement_table
         try:
-            if inplace is None:
-                # deprecated
-                if isinstance(self._data, bytearray):  # MutableSeq
-                    warnings.warn(
-                        "mutable_seq.complement() will change in the near "
-                        "future and will no longer change the sequence in-"
-                        "place by default. Please use\n"
-                        "\n"
-                        "mutable_seq.complement(inplace=True)\n"
-                        "\n"
-                        "if you want to continue to use this method to change "
-                        "a mutable sequence in-place.",
-                        BiopythonDeprecationWarning,
-                    )
-                    inplace = True
-                if isinstance(self._data, _PartiallyDefinedSequenceData):
-                    for seq in self._data._data.values():
-                        if b"U" in seq or b"u" in seq:
-                            warnings.warn(
-                                "seq.complement() will change in the near "
-                                "future to always return DNA nucleotides only. "
-                                "Please use\n"
-                                "\n"
-                                "seq.complement_rna()\n"
-                                "\n"
-                                "if you want to receive an RNA sequence instead.",
-                                BiopythonDeprecationWarning,
-                            )
-                            for seq in self._data._data.values():
-                                if b"t" in seq or b"T" in seq:
-                                    raise ValueError("Mixed RNA/DNA found")
-                            ttable = _rna_complement_table
-                            break
-
-                elif b"U" in self._data or b"u" in self._data:
-                    warnings.warn(
-                        "seq.complement() will change in the near future to "
-                        "always return DNA nucleotides only. "
-                        "Please use\n"
-                        "\n"
-                        "seq.complement_rna()\n"
-                        "\n"
-                        "if you want to receive an RNA sequence instead.",
-                        BiopythonDeprecationWarning,
-                    )
-                    if b"t" in self._data or b"T" in self._data:
-                        raise ValueError("Mixed RNA/DNA found")
-                    ttable = _rna_complement_table
             data = self._data.translate(ttable)
         except UndefinedSequenceError:
             # complement of an undefined sequence is an undefined sequence
@@ -1596,15 +1715,15 @@ class _SeqAbstractBaseClass(ABC):
             return self
         return self.__class__(data)
 
-    def reverse_complement(self, inplace=None):
+    def reverse_complement(self, inplace=False):
         """Return the reverse complement as a DNA sequence.
 
-        >>> Seq("CGA").reverse_complement(inplace=False)
+        >>> Seq("CGA").reverse_complement()
         Seq('TCG')
 
         Any U in the sequence is treated as a T:
 
-        >>> Seq("CGAUT").reverse_complement(inplace=False)
+        >>> Seq("CGAUT").reverse_complement()
         Seq('AATCG')
 
         In contrast, ``reverse_complement_rna`` returns an RNA sequence:
@@ -1617,7 +1736,7 @@ class _SeqAbstractBaseClass(ABC):
         >>> my_seq = MutableSeq("CGA")
         >>> my_seq
         MutableSeq('CGA')
-        >>> my_seq.reverse_complement(inplace=False)
+        >>> my_seq.reverse_complement()
         MutableSeq('TCG')
         >>> my_seq
         MutableSeq('CGA')
@@ -1632,54 +1751,6 @@ class _SeqAbstractBaseClass(ABC):
         ``inplace=True``.
         """
         try:
-            if inplace is None:
-                # deprecated
-                if isinstance(self._data, bytearray):  # MutableSeq
-                    warnings.warn(
-                        "mutable_seq.reverse_complement() will change in the "
-                        "near future and will no longer change the sequence in-"
-                        "place by default. Please use\n"
-                        "\n"
-                        "mutable_seq.reverse_complement(inplace=True)\n"
-                        "\n"
-                        "if you want to continue to use this method to change "
-                        "a mutable sequence in-place.",
-                        BiopythonDeprecationWarning,
-                    )
-                    inplace = True
-                else:
-                    inplace = False
-                if isinstance(self._data, _PartiallyDefinedSequenceData):
-                    for seq in self._data._data.values():
-                        if b"U" in seq or b"u" in seq:
-                            warnings.warn(
-                                "seq.reverse_complement() will change in the near "
-                                "future to always return DNA nucleotides only. "
-                                "Please use\n"
-                                "\n"
-                                "seq.reverse_complement_rna()\n"
-                                "\n"
-                                "if you want to receive an RNA sequence instead.",
-                                BiopythonDeprecationWarning,
-                            )
-                            for seq in self._data._data.values():
-                                if b"t" in seq or b"T" in seq:
-                                    raise ValueError("Mixed RNA/DNA found")
-                            return self.reverse_complement_rna(inplace=inplace)
-                elif b"U" in self._data or b"u" in self._data:
-                    warnings.warn(
-                        "seq.reverse_complement() will change in the near "
-                        "future to always return DNA nucleotides only. "
-                        "Please use\n"
-                        "\n"
-                        "seq.reverse_complement_rna()\n"
-                        "\n"
-                        "if you want to receive an RNA sequence instead.",
-                        BiopythonDeprecationWarning,
-                    )
-                    if b"t" in self._data or b"T" in self._data:
-                        raise ValueError("Mixed RNA/DNA found")
-                    return self.reverse_complement_rna(inplace=inplace)
             data = self._data.translate(_dna_complement_table)
         except UndefinedSequenceError:
             # reverse complement of an undefined sequence is an undefined sequence
@@ -1705,7 +1776,7 @@ class _SeqAbstractBaseClass(ABC):
 
         In contrast, ``reverse_complement`` returns a DNA sequence:
 
-        >>> Seq("CGA").reverse_complement(inplace=False)
+        >>> Seq("CGA").reverse_complement()
         Seq('TCG')
 
         The sequence is modified in-place and returned if inplace is True:
@@ -1742,6 +1813,10 @@ class _SeqAbstractBaseClass(ABC):
 
     def transcribe(self, inplace=False):
         """Transcribe a DNA sequence into RNA and return the RNA sequence as a new Seq object.
+
+        Following the usual convention, the sequence is interpreted as the
+        coding strand of the DNA double helix, not the template strand. This
+        means we can get the RNA sequence just by switching T to U.
 
         >>> from Bio.Seq import Seq
         >>> coding_dna = Seq("ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG")
@@ -1963,7 +2038,21 @@ class Seq(_SeqAbstractBaseClass):
     not applicable to protein sequences).
     """
 
-    def __init__(self, data, length=None):
+    _data: Union[bytes, SequenceDataAbstractBaseClass]
+
+    def __init__(
+        self,
+        data: Union[
+            str,
+            bytes,
+            bytearray,
+            _SeqAbstractBaseClass,
+            SequenceDataAbstractBaseClass,
+            dict,
+            None,
+        ],
+        length: Optional[int] = None,
+    ):
         """Create a Seq object.
 
         Arguments:
@@ -2039,9 +2128,10 @@ class Seq(_SeqAbstractBaseClass):
             elif length < 0:
                 raise ValueError("length must not be negative.")
             else:
+                current = 0  # not needed here, but it keeps mypy happy
                 end = -1
                 starts = sorted(data.keys())
-                _data = {}
+                _data: dict[int, bytes] = {}
                 for start in starts:
                     seq = data[start]
                     if isinstance(seq, str):
@@ -2082,650 +2172,6 @@ class Seq(_SeqAbstractBaseClass):
         """
         return hash(self._data)
 
-    def tomutable(self):
-        """Return the full sequence as a MutableSeq object.
-
-        >>> from Bio.Seq import Seq
-        >>> my_seq = Seq("MKQHKAMIVALIVICITAVVAAL")
-        >>> my_seq
-        Seq('MKQHKAMIVALIVICITAVVAAL')
-        >>> my_seq.tomutable()
-        MutableSeq('MKQHKAMIVALIVICITAVVAAL')
-        """
-        warnings.warn(
-            "myseq.tomutable() is deprecated; please use MutableSeq(myseq) instead.",
-            BiopythonDeprecationWarning,
-        )
-        return MutableSeq(self)
-
-    def encode(self, encoding="utf-8", errors="strict"):
-        """Return an encoded version of the sequence as a bytes object.
-
-        The Seq object aims to match the interface of a Python string.
-
-        This is essentially to save you doing str(my_seq).encode() when
-        you need a bytes string, for example for computing a hash:
-
-        >>> from Bio.Seq import Seq
-        >>> Seq("ACGT").encode("ascii")
-        b'ACGT'
-        """
-        warnings.warn(
-            "myseq.encode has been deprecated; please use bytes(myseq) instead.",
-            BiopythonDeprecationWarning,
-        )
-        return str(self).encode(encoding, errors)
-
-    def ungap(self, gap="-"):
-        """Return a copy of the sequence without the gap character(s) (OBSOLETE).
-
-        The gap character now defaults to the minus sign, and can only
-        be specified via the method argument. This is no longer possible
-        via the sequence's alphabet (as was possible up to Biopython 1.77):
-
-        >>> from Bio.Seq import Seq
-        >>> my_dna = Seq("-ATA--TGAAAT-TTGAAAA")
-        >>> my_dna
-        Seq('-ATA--TGAAAT-TTGAAAA')
-        >>> my_dna.ungap("-")
-        Seq('ATATGAAATTTGAAAA')
-
-        This method is OBSOLETE; please use my_dna.replace(gap, "") instead.
-        """
-        if not gap:
-            raise ValueError("Gap character required.")
-        elif len(gap) != 1 or not isinstance(gap, str):
-            raise ValueError(f"Unexpected gap character, {gap!r}")
-        return self.replace(gap, b"")
-
-
-class UnknownSeq(Seq):
-    """Read-only sequence object of known length but unknown contents (DEPRECATED).
-
-    If you have an unknown sequence, you can represent this with a normal
-    Seq object, for example:
-
-    >>> my_seq = Seq("N"*5)
-    >>> my_seq
-    Seq('NNNNN')
-    >>> len(my_seq)
-    5
-    >>> print(my_seq)
-    NNNNN
-
-    However, this is rather wasteful of memory (especially for large
-    sequences), which is where this class is most useful:
-
-    >>> unk_five = UnknownSeq(5)
-    >>> unk_five
-    UnknownSeq(5, character='?')
-    >>> len(unk_five)
-    5
-    >>> print(unk_five)
-    ?????
-
-    You can add unknown sequence together. Provided the characters are the
-    same, you get another memory saving UnknownSeq:
-
-    >>> unk_four = UnknownSeq(4)
-    >>> unk_four
-    UnknownSeq(4, character='?')
-    >>> unk_four + unk_five
-    UnknownSeq(9, character='?')
-
-    If the characters are different, addition gives an ordinary Seq object:
-
-    >>> unk_nnnn = UnknownSeq(4, character="N")
-    >>> unk_nnnn
-    UnknownSeq(4, character='N')
-    >>> unk_nnnn + unk_four
-    Seq('NNNN????')
-
-    Combining with a real Seq gives a new Seq object:
-
-    >>> known_seq = Seq("ACGT")
-    >>> unk_four + known_seq
-    Seq('????ACGT')
-    >>> known_seq + unk_four
-    Seq('ACGT????')
-
-    Although originally intended for unknown sequences (thus the class name),
-    this can be used for homopolymer sequences like AAAAAA, and the biological
-    methods will respect this:
-
-    >>> homopolymer = UnknownSeq(6, character="A")
-    >>> homopolymer.complement()
-    UnknownSeq(6, character='T')
-    >>> homopolymer.complement_rna()
-    UnknownSeq(6, character='U')
-    >>> homopolymer.translate()
-    UnknownSeq(2, character='K')
-    """
-
-    def __init__(self, length, alphabet=None, character="?"):
-        """Create a new UnknownSeq object.
-
-        Arguments:
-         - length - Integer, required.
-         - alphabet - no longer used, must be None.
-         - character - single letter string, default "?". Typically "N"
-           for nucleotides, "X" for proteins, and "?" otherwise.
-        """
-        warnings.warn(
-            "UnknownSeq(length) is deprecated; please use Seq(None, length) instead.",
-            BiopythonDeprecationWarning,
-        )
-        if alphabet is not None:
-            raise ValueError("The alphabet argument is no longer supported")
-        self._length = int(length)
-        if self._length < 0:
-            # TODO - Block zero length UnknownSeq?  You can just use a Seq!
-            raise ValueError("Length must not be negative.")
-        if not character or len(character) != 1:
-            raise ValueError("character argument should be a single letter string.")
-        self._character = character
-
-    def __len__(self):
-        """Return the stated length of the unknown sequence."""
-        return self._length
-
-    def __bytes__(self):
-        """Return the unknown sequence as full string of the given length."""
-        return self._character.encode("ASCII") * self._length
-
-    @property
-    def _data(self):
-        return self._character.encode("ASCII") * self._length
-
-    def __str__(self):
-        """Return the unknown sequence as full string of the given length."""
-        return self._character * self._length
-
-    def __repr__(self):
-        """Return (truncated) representation of the sequence for debugging."""
-        return f"UnknownSeq({self._length}, character={self._character!r})"
-
-    def __add__(self, other):
-        """Add another sequence or string to this sequence.
-
-        Adding two UnknownSeq objects returns another UnknownSeq object
-        provided the character is the same.
-
-        >>> from Bio.Seq import UnknownSeq
-        >>> UnknownSeq(10, character='X') + UnknownSeq(5, character='X')
-        UnknownSeq(15, character='X')
-
-        If the characters differ, an UnknownSeq object cannot be used, so a
-        Seq object is returned:
-
-        >>> from Bio.Seq import UnknownSeq
-        >>> UnknownSeq(10, character='X') + UnknownSeq(5, character="x")
-        Seq('XXXXXXXXXXxxxxx')
-
-        If adding a string to an UnknownSeq, a new Seq is returned:
-
-        >>> from Bio.Seq import UnknownSeq
-        >>> UnknownSeq(5, character='X') + "LV"
-        Seq('XXXXXLV')
-        """
-        if isinstance(other, UnknownSeq) and other._character == self._character:
-            return UnknownSeq(len(self) + len(other), character=self._character)
-        # Offload to the base class...
-        return Seq(bytes(self)) + other
-
-    def __radd__(self, other):
-        """Add a sequence on the left."""
-        # If other is an UnknownSeq, then __add__ would be called.
-        # Offload to the base class...
-        return other + Seq(bytes(self))
-
-    def __mul__(self, other):
-        """Multiply UnknownSeq by integer.
-
-        >>> from Bio.Seq import UnknownSeq
-        >>> UnknownSeq(3) * 2
-        UnknownSeq(6, character='?')
-        >>> UnknownSeq(3, character="N") * 2
-        UnknownSeq(6, character='N')
-        """
-        if not isinstance(other, int):
-            raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
-        return self.__class__(len(self) * other, character=self._character)
-
-    def __rmul__(self, other):
-        """Multiply integer by UnknownSeq.
-
-        >>> from Bio.Seq import UnknownSeq
-        >>> 2 * UnknownSeq(3)
-        UnknownSeq(6, character='?')
-        >>> 2 * UnknownSeq(3, character="N")
-        UnknownSeq(6, character='N')
-        """
-        if not isinstance(other, int):
-            raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
-        return self.__class__(len(self) * other, character=self._character)
-
-    def __imul__(self, other):
-        """Multiply UnknownSeq in-place.
-
-        >>> from Bio.Seq import UnknownSeq
-        >>> seq = UnknownSeq(3, character="N")
-        >>> seq *= 2
-        >>> seq
-        UnknownSeq(6, character='N')
-        """
-        if not isinstance(other, int):
-            raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
-        return self.__class__(len(self) * other, character=self._character)
-
-    def __getitem__(self, index):
-        """Get a subsequence from the UnknownSeq object.
-
-        >>> unk = UnknownSeq(8, character="N")
-        >>> print(unk[:])
-        NNNNNNNN
-        >>> print(unk[5:3])
-        <BLANKLINE>
-        >>> print(unk[1:-1])
-        NNNNNN
-        >>> print(unk[1:-1:2])
-        NNN
-        """
-        if isinstance(index, numbers.Integral):
-            if index >= -self._length and index < self._length:
-                return self._character
-            raise IndexError("sequence index out of range")
-        start, stop, stride = index.indices(self._length)
-        length = len(range(start, stop, stride))
-        return UnknownSeq(length, character=self._character)
-
-    def count(self, sub, start=None, end=None):
-        """Return a non-overlapping count, like that of a python string.
-
-        This behaves like the python string (and Seq object) method of the
-        same name, which does a non-overlapping count!
-
-        For an overlapping search use the newer count_overlap() method.
-
-        Returns an integer, the number of occurrences of substring
-        argument sub in the (sub)sequence given by [start:end].
-        Optional arguments start and end are interpreted as in slice
-        notation.
-
-        Arguments:
-         - sub - a string or another Seq object to look for
-         - start - optional integer, slice start
-         - end - optional integer, slice end
-
-        >>> "NNNN".count("N")
-        4
-        >>> Seq("NNNN").count("N")
-        4
-        >>> UnknownSeq(4, character="N").count("N")
-        4
-        >>> UnknownSeq(4, character="N").count("A")
-        0
-        >>> UnknownSeq(4, character="N").count("AA")
-        0
-
-        HOWEVER, please note because that python strings and Seq objects (and
-        MutableSeq objects) do a non-overlapping search, this may not give
-        the answer you expect:
-
-        >>> UnknownSeq(4, character="N").count("NN")
-        2
-        >>> UnknownSeq(4, character="N").count("NNN")
-        1
-        """
-        if isinstance(sub, _SeqAbstractBaseClass):
-            sub = str(sub)
-        elif not isinstance(sub, str):
-            raise TypeError(
-                f"a Seq, MutableSeq, or string object is required, not '{type(sub)}'"
-            )
-        # Handling case where subsequence not in self
-        if set(sub) != set(self._character):
-            return 0
-        start, stop, stride = slice(start, end, len(sub)).indices(self._length)
-        return len(range(start, stop - len(sub) + 1, stride))
-
-    def count_overlap(self, sub, start=None, end=None):
-        """Return an overlapping count.
-
-        For a non-overlapping search use the count() method.
-
-        Returns an integer, the number of occurrences of substring
-        argument sub in the (sub)sequence given by [start:end].
-        Optional arguments start and end are interpreted as in slice
-        notation.
-
-        Arguments:
-         - sub - a string or another Seq object to look for
-         - start - optional integer, slice start
-         - end - optional integer, slice end
-
-        e.g.
-
-        >>> from Bio.Seq import UnknownSeq
-        >>> UnknownSeq(4, character="N").count_overlap("NN")
-        3
-        >>> UnknownSeq(4, character="N").count_overlap("NNN")
-        2
-
-        Where substrings do not overlap, should behave the same as
-        the count() method:
-
-        >>> UnknownSeq(4, character="N").count_overlap("N")
-        4
-        >>> UnknownSeq(4, character="N").count_overlap("N") == UnknownSeq(4, character="N").count("N")
-        True
-        >>> UnknownSeq(4, character="N").count_overlap("A")
-        0
-        >>> UnknownSeq(4, character="N").count_overlap("A") == UnknownSeq(4, character="N").count("A")
-        True
-        >>> UnknownSeq(4, character="N").count_overlap("AA")
-        0
-        >>> UnknownSeq(4, character="N").count_overlap("AA") == UnknownSeq(4, character="N").count("AA")
-        True
-        """
-        if isinstance(sub, _SeqAbstractBaseClass):
-            sub = str(sub)
-        elif not isinstance(sub, str):
-            raise TypeError(
-                f"a Seq, MutableSeq, or string object is required, not '{type(sub)}'"
-            )
-        # Handling case where subsequence not in self
-        if set(sub) != set(self._character):
-            return 0
-        start, stop, stride = slice(start, end).indices(self._length)
-        return len(range(start, stop - len(sub) + 1, stride))
-
-    def complement(self):
-        """Return the complement assuming it is DNA.
-
-        In typical usage this will return the same unknown sequence:
-
-        >>> my_nuc = UnknownSeq(8, character='N')
-        >>> my_nuc
-        UnknownSeq(8, character='N')
-        >>> print(my_nuc)
-        NNNNNNNN
-        >>> my_nuc.complement()
-        UnknownSeq(8, character='N')
-        >>> print(my_nuc.complement())
-        NNNNNNNN
-
-        If your sequence isn't actually unknown, and has a nucleotide letter
-        other than N, the appropriate DNA complement base is used:
-
-        >>> UnknownSeq(8, character="A").complement()
-        UnknownSeq(8, character='T')
-        """
-        s = complement(self._character)
-        return UnknownSeq(self._length, character=s)
-
-    def complement_rna(self):
-        """Return the complement assuming it is RNA.
-
-        In typical usage this will return the same unknown sequence. If your
-        sequence isn't actually unknown, the appropriate RNA complement base
-        is used:
-
-        >>> UnknownSeq(8, character="A").complement_rna()
-        UnknownSeq(8, character='U')
-        """
-        s = complement_rna(self._character)
-        return UnknownSeq(self._length, character=s)
-
-    def reverse_complement(self):
-        """Return the reverse complement assuming it is DNA.
-
-        In typical usage this will return the same unknown sequence:
-
-        >>> from Bio.Seq import UnknownSeq
-        >>> example = UnknownSeq(6, character="N")
-        >>> print(example)
-        NNNNNN
-        >>> print(example.reverse_complement())
-        NNNNNN
-
-        If your sequence isn't actually unknown, the appropriate DNA
-        complement base is used:
-
-        >>> UnknownSeq(8, character="A").reverse_complement()
-        UnknownSeq(8, character='T')
-        """
-        return self.complement()
-
-    def reverse_complement_rna(self):
-        """Return the reverse complement assuming it is RNA.
-
-        In typical usage this will return the same unknown sequence. If your
-        sequence isn't actually unknown, the appropriate RNA complement base
-        is used:
-
-        >>> UnknownSeq(8, character="A").reverse_complement_rna()
-        UnknownSeq(8, character='U')
-        """
-        return self.complement_rna()
-
-    def transcribe(self):
-        """Return an unknown RNA sequence from an unknown DNA sequence.
-
-        >>> my_dna = UnknownSeq(10, character="N")
-        >>> my_dna
-        UnknownSeq(10, character='N')
-        >>> print(my_dna)
-        NNNNNNNNNN
-        >>> my_rna = my_dna.transcribe()
-        >>> my_rna
-        UnknownSeq(10, character='N')
-        >>> print(my_rna)
-        NNNNNNNNNN
-
-        In typical usage this will return the same unknown sequence. If your
-        sequence isn't actually unknown, but a homopolymer of T, the standard
-        DNA to RNA transcription is done, replacing T with U:
-
-        >>> UnknownSeq(9, character="t").transcribe()
-        UnknownSeq(9, character='u')
-        """
-        s = transcribe(self._character)
-        return UnknownSeq(self._length, character=s)
-
-    def back_transcribe(self):
-        """Return an unknown DNA sequence from an unknown RNA sequence.
-
-        >>> my_rna = UnknownSeq(20, character="N")
-        >>> my_rna
-        UnknownSeq(20, character='N')
-        >>> print(my_rna)
-        NNNNNNNNNNNNNNNNNNNN
-        >>> my_dna = my_rna.back_transcribe()
-        >>> my_dna
-        UnknownSeq(20, character='N')
-        >>> print(my_dna)
-        NNNNNNNNNNNNNNNNNNNN
-
-        In typical usage this will return the same unknown sequence. If your
-        sequence is actually a U homopolymer, the standard RNA to DNA back
-        translation applies, replacing U with T:
-
-        >>> UnknownSeq(9, character="U").back_transcribe()
-        UnknownSeq(9, character='T')
-        """
-        s = back_transcribe(self._character)
-        return UnknownSeq(self._length, character=s)
-
-    def upper(self):
-        """Return an upper case copy of the sequence.
-
-        >>> from Bio.Seq import UnknownSeq
-        >>> my_seq = UnknownSeq(20, character="n")
-        >>> my_seq
-        UnknownSeq(20, character='n')
-        >>> print(my_seq)
-        nnnnnnnnnnnnnnnnnnnn
-        >>> my_seq.upper()
-        UnknownSeq(20, character='N')
-        >>> print(my_seq.upper())
-        NNNNNNNNNNNNNNNNNNNN
-
-        See also the lower method.
-        """
-        return UnknownSeq(self._length, character=self._character.upper())
-
-    def lower(self):
-        """Return a lower case copy of the sequence.
-
-        >>> from Bio.Seq import UnknownSeq
-        >>> my_seq = UnknownSeq(20, character="X")
-        >>> my_seq
-        UnknownSeq(20, character='X')
-        >>> print(my_seq)
-        XXXXXXXXXXXXXXXXXXXX
-        >>> my_seq.lower()
-        UnknownSeq(20, character='x')
-        >>> print(my_seq.lower())
-        xxxxxxxxxxxxxxxxxxxx
-
-        See also the upper method.
-        """
-        return UnknownSeq(self._length, character=self._character.lower())
-
-    def translate(
-        self, table="Standard", stop_symbol="*", to_stop=False, cds=False, gap="-"
-    ):
-        """Translate an unknown nucleotide sequence into an unknown protein.
-
-        If your sequence makes sense as codons (e.g. a poly-A tail AAAAAA),
-        it will be translated accordingly:
-
-        >>> UnknownSeq(7, character='A').translate()
-        UnknownSeq(2, character='K')
-
-        Otherwise, it will be translated as X for unknown amino acid:
-
-        >>> UnknownSeq(7).translate()
-        UnknownSeq(2, character='X')
-        """
-        try:
-            s = translate(
-                self._character * 3,
-                table=table,
-                stop_symbol=stop_symbol,
-                to_stop=to_stop,
-                cds=cds,
-                gap=gap,
-            )
-        except CodonTable.TranslationError:
-            # Preserve historic behaviour, ??? (default character) and XXX -> X
-            s = "X"
-        # Don't worry about to_stop - no known stop codon is three bases the same,
-        return UnknownSeq(self._length // 3, character=s)
-
-    def ungap(self, gap="-"):
-        """Return a copy of the sequence without the gap character(s).
-
-        The gap character now defaults to the minus sign, and can only
-        be specified via the method argument. This is no longer possible
-        via the sequence's alphabet (as was possible up to Biopython 1.77):
-
-        >>> from Bio.Seq import UnknownSeq
-        >>> my_dna = UnknownSeq(20, character='N')
-        >>> my_dna
-        UnknownSeq(20, character='N')
-        >>> my_dna.ungap()  # using default
-        UnknownSeq(20, character='N')
-        >>> my_dna.ungap("-")
-        UnknownSeq(20, character='N')
-
-        If the UnknownSeq is using the gap character, then an empty Seq is
-        returned:
-
-        >>> my_gap = UnknownSeq(20, character="-")
-        >>> my_gap
-        UnknownSeq(20, character='-')
-        >>> my_gap.ungap()  # using default
-        Seq('')
-        >>> my_gap.ungap("-")
-        Seq('')
-        """
-        if self._character == gap:
-            return Seq("")
-        else:
-            return UnknownSeq(self._length, character=self._character)
-
-    def join(self, other):
-        """Return a merge of the sequences in other, spaced by the sequence from self.
-
-        Accepts either a Seq or string (and iterates over the letters), or an
-        iterable containing Seq or string objects. These arguments will be
-        concatenated with the calling sequence as the spacer:
-
-        >>> concatenated = UnknownSeq(5).join([Seq("AAA"), Seq("TTT"), Seq("PPP")])
-        >>> concatenated
-        Seq('AAA?????TTT?????PPP')
-
-        If all the inputs are also UnknownSeq using the same character, then it
-        returns a new UnknownSeq:
-
-        >>> UnknownSeq(5).join([UnknownSeq(3), UnknownSeq(3), UnknownSeq(3)])
-        UnknownSeq(19, character='?')
-
-        Examples taking a single sequence and joining the letters:
-
-        >>> UnknownSeq(3).join("ACGT")
-        Seq('A???C???G???T')
-        >>> UnknownSeq(3).join(UnknownSeq(4))
-        UnknownSeq(13, character='?')
-
-        Will only return an UnknownSeq object if all of the objects to be joined are
-        also UnknownSeqs with the same character as the spacer, similar to how the
-        addition of an UnknownSeq and another UnknownSeq would work.
-        """
-        from Bio.SeqRecord import SeqRecord  # Lazy to avoid circular imports
-
-        if isinstance(other, (str, _SeqAbstractBaseClass)):
-            if isinstance(other, UnknownSeq) and self._character == other._character:
-                # Special case, can return an UnknownSeq
-                return self.__class__(
-                    len(other) + len(self) * (len(other) - 1), character=self._character
-                )
-            return Seq(str(self).join(str(other)))
-        if isinstance(other, SeqRecord):
-            raise TypeError("Iterable cannot be a SeqRecord")
-
-        for c in other:
-            if isinstance(c, SeqRecord):
-                raise TypeError("Iterable cannot contain SeqRecords")
-            elif not isinstance(c, (str, _SeqAbstractBaseClass)):
-                raise TypeError("Input must be an iterable of Seqs or Strings")
-        temp_data = str(self).join([str(_) for _ in other])
-        if temp_data.count(self._character) == len(temp_data):
-            # Can return an UnknownSeq
-            return self.__class__(len(temp_data), character=self._character)
-        return Seq(temp_data)
-
-    @property
-    def defined(self):
-        """Return True if the sequence is defined, False if undefined or partially defined.
-
-        Zero-length sequences are always considered to be defined.
-        """
-        if self._length == 0:
-            return True
-        return False
-
-    @property
-    def defined_ranges(self):
-        """Return a tuple of the ranges where the sequence contents is defined.
-
-        As the sequence contents of an UnknownSeq object is fully undefined,
-        the return value is always an empty tuple.
-        """
-        return ()
-
 
 class MutableSeq(_SeqAbstractBaseClass):
     """An editable sequence object.
@@ -2757,18 +2203,6 @@ class MutableSeq(_SeqAbstractBaseClass):
 
     def __init__(self, data):
         """Create a MutableSeq object."""
-        if isinstance(data, array.array):
-            if data.typecode != "u":
-                raise ValueError(
-                    "data should be a string, array of characters, Seq object, "
-                    "or MutableSeq object"
-                )
-            warnings.warn(
-                "Initializing a MutableSeq by an array has been deprecated; please "
-                "use a bytearray object instead.",
-                BiopythonDeprecationWarning,
-            )
-            data = data.tounicode()
         if isinstance(data, bytearray):
             self._data = data
         elif isinstance(data, bytes):
@@ -2785,28 +2219,6 @@ class MutableSeq(_SeqAbstractBaseClass):
                 "data should be a string, bytearray object, Seq object, or a "
                 "MutableSeq object"
             )
-
-    @property
-    def data(self):
-        """Get the data."""
-        warnings.warn(
-            "Accessing MutableSeq.data has been deprecated, as it is now a private "
-            "attribute. Please use indexing to access the sequence contents of "
-            "a MutableSeq object.",
-            BiopythonDeprecationWarning,
-        )
-        return array.array("u", self._data.decode("ASCII"))
-
-    @data.setter
-    def data(self, value):
-        """Set the data."""
-        warnings.warn(
-            "Accessing MutableSeq.data has been deprecated, as it is now a private "
-            "attribute. Please use indexing to access the sequence contents of "
-            "a MutableSeq object.",
-            BiopythonDeprecationWarning,
-        )
-        self.__init__(value)
 
     def __setitem__(self, index, value):
         """Set a subsequence of single letter via value parameter.
@@ -2935,22 +2347,6 @@ class MutableSeq(_SeqAbstractBaseClass):
         else:
             raise TypeError("expected a string, Seq or MutableSeq")
 
-    def toseq(self):
-        """Return the full sequence as a new immutable Seq object.
-
-        >>> from Bio.Seq import MutableSeq
-        >>> my_mseq = MutableSeq("MKQHKAMIVALIVICITAVVAAL")
-        >>> my_mseq
-        MutableSeq('MKQHKAMIVALIVICITAVVAAL')
-        >>> my_mseq.toseq()
-        Seq('MKQHKAMIVALIVICITAVVAAL')
-        """
-        warnings.warn(
-            "myseq.toseq() is deprecated; please use Seq(myseq) instead.",
-            BiopythonDeprecationWarning,
-        )
-        return Seq(self)
-
 
 class UndefinedSequenceError(ValueError):
     """Sequence contents is undefined."""
@@ -2977,7 +2373,7 @@ class _UndefinedSequenceData(SequenceDataAbstractBaseClass):
         self._length = length
         super().__init__()
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: slice) -> Union[bytes, "_UndefinedSequenceData"]:
         if isinstance(key, slice):
             start, end, step = key.indices(self._length)
             size = len(range(start, end, step))
@@ -3087,7 +2483,9 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
         self._data = data
         super().__init__()
 
-    def __getitem__(self, key):
+    def __getitem__(
+        self, key: Union[slice, int]
+    ) -> Union[bytes, SequenceDataAbstractBaseClass]:
         if isinstance(key, slice):
             start, end, step = key.indices(self._length)
             size = len(range(start, end, step))
@@ -3096,7 +2494,8 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
             data = {}
             for s, d in self._data.items():
                 indices = range(-s, -s + self._length)[key]
-                e = indices.stop
+                e: Optional[int] = indices.stop
+                assert e is not None
                 if step > 0:
                     if e <= 0:
                         continue
@@ -3122,7 +2521,7 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
                 return _UndefinedSequenceData(size)
             # merge adjacent sequence segments
             end = -1
-            previous = None  # not needed here, but it keeps flake happy
+            previous = 0  # not needed here, but it keeps flake happy
             items = data.items()
             data = {}
             for start, seq in items:
@@ -3207,7 +2606,7 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
         items = self._data.items()
         data = {}
         end = -1
-        previous = None  # not needed here, but it keeps flake happy
+        previous = 0  # not needed here, but it keeps flake happy
         for i in range(other):
             for start, seq in items:
                 start += i * length
@@ -3294,6 +2693,10 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
 
 def transcribe(dna):
     """Transcribe a DNA sequence into RNA.
+
+    Following the usual convention, the sequence is interpreted as the
+    coding strand of the DNA double helix, not the template strand. This
+    means we can get the RNA sequence just by switching T to U.
 
     If given a string, returns a new string object.
 
@@ -3395,7 +2798,7 @@ def _translate_str(
     >>> _translate_str("ATGCCCTAGCCCTAG", table, cds=True)
     Traceback (most recent call last):
        ...
-    Bio.Data.CodonTable.TranslationError: Extra in frame stop codon found.
+    Bio.Data.CodonTable.TranslationError: Extra in frame stop codon 'TAG' found.
     """
     try:
         table_id = int(table)
@@ -3493,7 +2896,7 @@ def _translate_str(
             if codon in codon_table.stop_codons:
                 if cds:
                     raise CodonTable.TranslationError(
-                        "Extra in frame stop codon found."
+                        f"Extra in frame stop codon '{codon}' found."
                     ) from None
                 if to_stop:
                     break
@@ -3615,7 +3018,7 @@ def translate(
         return _translate_str(sequence, table, stop_symbol, to_stop, cds, gap=gap)
 
 
-def reverse_complement(sequence, inplace=None):
+def reverse_complement(sequence, inplace=False):
     """Return the reverse complement as a DNA sequence.
 
     If given a string, returns a new string object.
@@ -3624,20 +3027,20 @@ def reverse_complement(sequence, inplace=None):
     Given a SeqRecord object, returns a new SeqRecord object.
 
     >>> my_seq = "CGA"
-    >>> reverse_complement(my_seq, inplace=False)
+    >>> reverse_complement(my_seq)
     'TCG'
     >>> my_seq = Seq("CGA")
-    >>> reverse_complement(my_seq, inplace=False)
+    >>> reverse_complement(my_seq)
     Seq('TCG')
     >>> my_seq = MutableSeq("CGA")
-    >>> reverse_complement(my_seq, inplace=False)
+    >>> reverse_complement(my_seq)
     MutableSeq('TCG')
     >>> my_seq
     MutableSeq('CGA')
 
     Any U in the sequence is treated as a T:
 
-    >>> reverse_complement(Seq("CGAUT"), inplace=False)
+    >>> reverse_complement(Seq("CGAUT"))
     Seq('AATCG')
 
     In contrast, ``reverse_complement_rna`` returns an RNA sequence:
@@ -3648,7 +3051,7 @@ def reverse_complement(sequence, inplace=None):
     Supports and lower- and upper-case characters, and unambiguous and
     ambiguous nucleotides. All other characters are not converted:
 
-    >>> reverse_complement("ACGTUacgtuXYZxyz", inplace=False)
+    >>> reverse_complement("ACGTUacgtuXYZxyz")
     'zrxZRXaacgtAACGT'
 
     The sequence is modified in-place and returned if inplace is True:
@@ -3665,50 +3068,6 @@ def reverse_complement(sequence, inplace=None):
     """
     from Bio.SeqRecord import SeqRecord  # Lazy to avoid circular imports
 
-    if inplace is None:
-        # deprecated
-        if isinstance(sequence, Seq):
-            if b"U" in sequence._data or b"u" in sequence._data:
-                warnings.warn(
-                    "reverse_complement(sequence) will change in the "
-                    "near future to always return DNA nucleotides only. "
-                    "Please use\n"
-                    "\n"
-                    "reverse_complement_rna(sequence)\n"
-                    "\n"
-                    "if you want to receive an RNA sequence instead.",
-                    BiopythonDeprecationWarning,
-                )
-                if b"T" in sequence._data or b"t" in sequence._data:
-                    raise ValueError("Mixed RNA/DNA found")
-                return sequence.reverse_complement_rna()
-        elif isinstance(sequence, MutableSeq):
-            # Return a Seq
-            # Don't use the MutableSeq reverse_complement method as it is
-            # 'in place'.
-            warnings.warn(
-                "reverse_complement(mutable_seq) will change in the near "
-                "future to return a MutableSeq object instead of a Seq object.",
-                BiopythonDeprecationWarning,
-            )
-            return Seq(sequence).reverse_complement()
-        else:  # str
-            if "U" in sequence or "u" in sequence:
-                warnings.warn(
-                    "reverse_complement(sequence) will change in the "
-                    "near future to always return DNA nucleotides only. "
-                    "Please use\n"
-                    "\n"
-                    "reverse_complement_rna(sequence)\n"
-                    "\n"
-                    "if you want to receive an RNA sequence instead.",
-                    BiopythonDeprecationWarning,
-                )
-                if "T" in sequence or "t" in sequence:
-                    raise ValueError("Mixed RNA/DNA found")
-                sequence = sequence.encode("ASCII")
-                sequence = sequence.translate(_rna_complement_table)
-                return sequence.decode("ASCII")[::-1]
     if isinstance(sequence, (Seq, MutableSeq)):
         return sequence.reverse_complement(inplace)
     if isinstance(sequence, SeqRecord):
@@ -3789,7 +3148,7 @@ def reverse_complement_rna(sequence, inplace=False):
     return sequence[::-1]
 
 
-def complement(sequence, inplace=None):
+def complement(sequence, inplace=False):
     """Return the complement as a DNA sequence.
 
     If given a string, returns a new string object.
@@ -3798,20 +3157,20 @@ def complement(sequence, inplace=None):
     Given a SeqRecord object, returns a new SeqRecord object.
 
     >>> my_seq = "CGA"
-    >>> complement(my_seq, inplace=False)
+    >>> complement(my_seq)
     'GCT'
     >>> my_seq = Seq("CGA")
-    >>> complement(my_seq, inplace=False)
+    >>> complement(my_seq)
     Seq('GCT')
     >>> my_seq = MutableSeq("CGA")
-    >>> complement(my_seq, inplace=False)
+    >>> complement(my_seq)
     MutableSeq('GCT')
     >>> my_seq
     MutableSeq('CGA')
 
     Any U in the sequence is treated as a T:
 
-    >>> complement(Seq("CGAUT"), inplace=False)
+    >>> complement(Seq("CGAUT"))
     Seq('GCTAA')
 
     In contrast, ``complement_rna`` returns an RNA sequence:
@@ -3822,7 +3181,7 @@ def complement(sequence, inplace=None):
     Supports and lower- and upper-case characters, and unambiguous and
     ambiguous nucleotides. All other characters are not converted:
 
-    >>> complement("ACGTUacgtuXYZxyz", inplace=False)
+    >>> complement("ACGTUacgtuXYZxyz")
     'TGCAAtgcaaXRZxrz'
 
     The sequence is modified in-place and returned if inplace is True:
@@ -3839,52 +3198,6 @@ def complement(sequence, inplace=None):
     """
     from Bio.SeqRecord import SeqRecord  # Lazy to avoid circular imports
 
-    if inplace is None:
-        # deprecated
-        if isinstance(sequence, Seq):
-            # Return a Seq
-            if b"U" in sequence._data or b"u" in sequence._data:
-                warnings.warn(
-                    "complement(sequence) will change in the near "
-                    "future to always return DNA nucleotides only. "
-                    "Please use\n"
-                    "\n"
-                    "complement_rna(sequence)\n"
-                    "\n"
-                    "if you want to receive an RNA sequence instead.",
-                    BiopythonDeprecationWarning,
-                )
-                if b"T" in sequence._data or b"t" in sequence._data:
-                    raise ValueError("Mixed RNA/DNA found")
-                return sequence.complement_rna()
-        elif isinstance(sequence, MutableSeq):
-            # Return a Seq
-            # Don't use the MutableSeq reverse_complement method as it is
-            # 'in place'.
-            warnings.warn(
-                "complement(mutable_seq) will change in the near future"
-                "to return a MutableSeq object instead of a Seq object.",
-                BiopythonDeprecationWarning,
-            )
-            return Seq(sequence).complement()
-        else:
-            if "U" in sequence or "u" in sequence:
-                warnings.warn(
-                    "complement(sequence) will change in the near "
-                    "future to always return DNA nucleotides only. "
-                    "Please use\n"
-                    "\n"
-                    "complement_rna(sequence)\n"
-                    "\n"
-                    "if you want to receive an RNA sequence instead.",
-                    BiopythonDeprecationWarning,
-                )
-                if "T" in sequence or "t" in sequence:
-                    raise ValueError("Mixed RNA/DNA found")
-                ttable = _rna_complement_table
-                sequence = sequence.encode("ASCII")
-                sequence = sequence.translate(ttable)
-                return sequence.decode("ASCII")
     if isinstance(sequence, (Seq, MutableSeq)):
         return sequence.complement(inplace)
     if isinstance(sequence, SeqRecord):
@@ -3892,7 +3205,7 @@ def complement(sequence, inplace=None):
             raise TypeError("SeqRecords are immutable")
         return sequence.complement()
     # Assume it's a string.
-    if inplace:
+    if inplace is True:
         raise TypeError("strings are immutable")
     sequence = sequence.encode("ASCII")
     sequence = sequence.translate(_dna_complement_table)
@@ -3926,7 +3239,7 @@ def complement_rna(sequence, inplace=False):
 
     In contrast, ``complement`` returns a DNA sequence:
 
-    >>> complement(Seq("CGAUT"),inplace=False)
+    >>> complement(Seq("CGAUT"))
     Seq('GCTAA')
 
     Supports and lower- and upper-case characters, and unambiguous and

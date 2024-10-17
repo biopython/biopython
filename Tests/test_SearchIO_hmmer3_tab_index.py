@@ -8,11 +8,11 @@
 import os
 import unittest
 
-from search_tests_common import CheckRaw, CheckIndex
+from search_tests_common import CheckIndex
+from search_tests_common import CheckRaw
 
 
 class Hmmer3TabRawCases(CheckRaw):
-
     fmt = "hmmer3-tab"
 
     def test_hmmer3tab_30_multiple_first(self):
@@ -51,7 +51,6 @@ Ig_2                 PF13895.1  gi|126362951:116-221 -            3.5e-05   23.7
 
 
 class Hmmer3TabIndexCases(CheckIndex):
-
     fmt = "hmmer3-tab"
 
     def test_hmmer3tab_30_hmmscan_001(self):

@@ -1,0 +1,44 @@
+# BLASTP default substitution scores.
+# For the default gap scores, as used for BLASTP on NCBI Web
+# BLAST, The BLAST documentation shows gap costs a = 11 for opening
+# a gap, and b = 1 for each letter in the gap, and defines the
+# total score of a gap of k residues as -(a + b*k). In contrast,
+# Biopython follows the definition given in "Biological Sequence
+# Analysis" (Durbin et al., 1998), for which the total score of a
+# gap of k residues is -d - e * (k - 1), where d is the gap-open
+# penalty and e is the gap-extend penalty. Biopython uses -d as
+# the gap open score and -e as the gap extend penalty:
+# gap open score: -12
+# gap extend score: -1
+# with the substitution matrix below, as the BLASTP score parameters.
+# The substitution matrix is identical to BLOSUM62, except for some
+# values of the ambiguous amino acids B, Z, and X; the values for
+# the ambiguous amino acids U, O, and J are not included in BLOSUM62.
+    A   B   C   D   E   F   G   H   I   J   K   L   M   N   O   P   Q   R   S   T   U   V   W   X   Y   Z   *
+A   4  -2   0  -2  -1  -2   0  -2  -1  -1  -1  -1  -1  -2  -1  -1  -1  -1   1   0   0   0  -3  -1  -2  -1  -4
+B  -2   4  -3   4   1  -3  -1   0  -3  -3   0  -4  -3   4  -1  -2   0  -1   0  -1  -3  -3  -4  -1  -3   0  -4
+C   0  -3   9  -3  -4  -2  -3  -3  -1  -1  -3  -1  -1  -3  -1  -3  -3  -3  -1  -1   9  -1  -2  -1  -2  -3  -4
+D  -2   4  -3   6   2  -3  -1  -1  -3  -3  -1  -4  -3   1  -1  -1   0  -2   0  -1  -3  -3  -4  -1  -3   1  -4
+E  -1   1  -4   2   5  -3  -2   0  -3  -3   1  -3  -2   0  -1  -1   2   0   0  -1  -4  -2  -3  -1  -2   4  -4
+F  -2  -3  -2  -3  -3   6  -3  -1   0   0  -3   0   0  -3  -1  -4  -3  -3  -2  -2  -2  -1   1  -1   3  -3  -4
+G   0  -1  -3  -1  -2  -3   6  -2  -4  -4  -2  -4  -3   0  -1  -2  -2  -2   0  -2  -3  -3  -2  -1  -3  -2  -4
+H  -2   0  -3  -1   0  -1  -2   8  -3  -3  -1  -3  -2   1  -1  -2   0   0  -1  -2  -3  -3  -2  -1   2   0  -4
+I  -1  -3  -1  -3  -3   0  -4  -3   4   3  -3   2   1  -3  -1  -3  -3  -3  -2  -1  -1   3  -3  -1  -1  -3  -4
+J  -1  -3  -1  -3  -3   0  -4  -3   3   3  -3   3   2  -3  -1  -3  -2  -2  -2  -1  -1   2  -2  -1  -1  -3  -4
+K  -1   0  -3  -1   1  -3  -2  -1  -3  -3   5  -2  -1   0  -1  -1   1   2   0  -1  -3  -2  -3  -1  -2   1  -4
+L  -1  -4  -1  -4  -3   0  -4  -3   2   3  -2   4   2  -3  -1  -3  -2  -2  -2  -1  -1   1  -2  -1  -1  -3  -4
+M  -1  -3  -1  -3  -2   0  -3  -2   1   2  -1   2   5  -2  -1  -2   0  -1  -1  -1  -1   1  -1  -1  -1  -1  -4
+N  -2   4  -3   1   0  -3   0   1  -3  -3   0  -3  -2   6  -1  -2   0   0   1   0  -3  -3  -4  -1  -2   0  -4
+O  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -4
+P  -1  -2  -3  -1  -1  -4  -2  -2  -3  -3  -1  -3  -2  -2  -1   7  -1  -2  -1  -1  -3  -2  -4  -1  -3  -1  -4
+Q  -1   0  -3   0   2  -3  -2   0  -3  -2   1  -2   0   0  -1  -1   5   1   0  -1  -3  -2  -2  -1  -1   4  -4
+R  -1  -1  -3  -2   0  -3  -2   0  -3  -2   2  -2  -1   0  -1  -2   1   5  -1  -1  -3  -3  -3  -1  -2   0  -4
+S   1   0  -1   0   0  -2   0  -1  -2  -2   0  -2  -1   1  -1  -1   0  -1   4   1  -1  -2  -3  -1  -2   0  -4
+T   0  -1  -1  -1  -1  -2  -2  -2  -1  -1  -1  -1  -1   0  -1  -1  -1  -1   1   5  -1   0  -2  -1  -2  -1  -4
+U   0  -3   9  -3  -4  -2  -3  -3  -1  -1  -3  -1  -1  -3  -1  -3  -3  -3  -1  -1   9  -1  -2  -1  -2  -3  -4
+V   0  -3  -1  -3  -2  -1  -3  -3   3   2  -2   1   1  -3  -1  -2  -2  -3  -2   0  -1   4  -3  -1  -1  -2  -4
+W  -3  -4  -2  -4  -3   1  -2  -2  -3  -2  -3  -2  -1  -4  -1  -4  -2  -3  -3  -2  -2  -3  11  -1   2  -2  -4
+X  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -4
+Y  -2  -3  -2  -3  -2   3  -3   2  -1  -1  -2  -1  -1  -2  -1  -3  -1  -2  -2  -2  -2  -1   2  -1   7  -2  -4
+Z  -1   0  -3   1   4  -3  -2   0  -3  -3   1  -3  -1   0  -1  -1   4   0   0  -1  -3  -2  -2  -1  -2   4  -4
+*  -4  -4  -4  -4  -4  -4  -4  -4  -4  -4  -4  -4  -4  -4  -4  -4  -4  -4  -4  -4  -4  -4  -4  -4  -4  -4   1

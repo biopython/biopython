@@ -10,7 +10,7 @@
 """Provides code to access the REST-style KEGG online API.
 
 This module aims to make the KEGG online REST-style API easier to use. See:
-http://www.kegg.jp/kegg/rest/keggapi.html
+https://www.kegg.jp/kegg/rest/keggapi.html
 
 The KEGG REST-style API provides simple access to a range of KEGG databases.
 This works using simple URLs (which this module will construct for you),
@@ -30,11 +30,24 @@ Nucleic Acids Res. 28, 29-34 (2000).
 """
 
 import io
+import time
 from urllib.request import urlopen
 
+from Bio._utils import function_with_previous
 
+
+@function_with_previous
 def _q(op, arg1, arg2=None, arg3=None):
-    URL = "http://rest.kegg.jp/%s"
+    delay = 0.333333333  # one third of a second
+    current = time.time()
+    wait = _q.previous + delay - current
+    if wait > 0:
+        time.sleep(wait)
+        _q.previous = current + wait
+    else:
+        _q.previous = current
+
+    URL = "https://rest.kegg.jp/%s"
     if arg2 and arg3:
         args = f"{op}/{arg1}/{arg2}/{arg3}"
     elif arg2:
@@ -51,7 +64,10 @@ def _q(op, arg1, arg2=None, arg3=None):
     return handle
 
 
-# http://www.kegg.jp/kegg/rest/keggapi.html
+_q.previous = 0
+
+
+# https://www.kegg.jp/kegg/rest/keggapi.html
 def kegg_info(database):
     """KEGG info - Displays the current statistics of a given database.
 
@@ -62,14 +78,14 @@ def kegg_info(database):
     (e.g. 'hsa' or 'T01001' for human).
 
     A valid list of organism codes and their T numbers can be obtained
-    via kegg_info('organism') or http://rest.kegg.jp/list/organism
+    via kegg_info('organism') or https://rest.kegg.jp/list/organism
 
     """
     # TODO - return a string (rather than the handle?)
     # TODO - cache and validate the organism code / T numbers?
     # TODO - can we parse the somewhat formatted output?
     #
-    # http://rest.kegg.jp/info/<database>
+    # https://rest.kegg.jp/info/<database>
     #
     # <database> = pathway | brite | module | disease | drug | environ |
     #              ko | genome |<org> | compound | glycan | reaction |
@@ -90,7 +106,7 @@ def kegg_list(database, org=None):
     """
     # TODO - split into two functions (dbentries seems separate)?
     #
-    #  http://rest.kegg.jp/list/<database>/<org>
+    #  https://rest.kegg.jp/list/<database>/<org>
     #
     #  <database> = pathway | module
     #  <org> = KEGG organism code
@@ -99,7 +115,7 @@ def kegg_list(database, org=None):
     elif isinstance(database, str) and database and org:
         raise ValueError("Invalid database arg for kegg list request.")
 
-    # http://rest.kegg.jp/list/<database>
+    # https://rest.kegg.jp/list/<database>
     #
     # <database> = pathway | brite | module | disease | drug | environ |
     #              ko | genome | <org> | compound | glycan | reaction |
@@ -107,7 +123,7 @@ def kegg_list(database, org=None):
     # <org> = KEGG organism code or T number
     #
     #
-    # http://rest.kegg.jp/list/<dbentries>
+    # https://rest.kegg.jp/list/<dbentries>
     #
     # <dbentries> = KEGG database entries involving the following <database>
     # <database> = pathway | brite | module | disease | drug | environ |
@@ -146,7 +162,7 @@ def kegg_find(database, query, option=None):
     """
     # TODO - return list of tuples?
     #
-    # http://rest.kegg.jp/find/<database>/<query>/<option>
+    # https://rest.kegg.jp/find/<database>/<query>/<option>
     #
     # <database> = compound | drug
     # <option> = formula | exact_mass | mol_weight
@@ -159,7 +175,7 @@ def kegg_find(database, query, option=None):
     elif option:
         raise ValueError("Invalid option arg for kegg find request.")
 
-    # http://rest.kegg.jp/find/<database>/<query>
+    # https://rest.kegg.jp/find/<database>/<query>
     #
     # <database> = pathway | module | disease | drug | environ | ko |
     #              genome | <org> | compound | glycan | reaction | rpair |
@@ -190,7 +206,7 @@ def kegg_get(dbentries, option=None):
     elif isinstance(dbentries, list) and len(dbentries) > 10:
         raise ValueError("Maximum number of dbentries is 10 for kegg get query")
 
-    # http://rest.kegg.jp/get/<dbentries>[/<option>]
+    # https://rest.kegg.jp/get/<dbentries>[/<option>]
     #
     # <dbentries> = KEGG database entries involving the following <database>
     # <database> = pathway | brite | module | disease | drug | environ |
@@ -200,7 +216,6 @@ def kegg_get(dbentries, option=None):
     #
     # <option> = aaseq | ntseq | mol | kcf | image
     if option in ["aaseq", "ntseq", "mol", "kcf", "image", "kgml", "json"]:
-
         resp = _q("get", dbentries, option)
     elif option:
         raise ValueError("Invalid option arg for kegg get request.")
@@ -219,7 +234,7 @@ def kegg_conv(target_db, source_db, option=None):
      - option - Can be "turtle" or "n-triple" (string).
 
     """
-    # http://rest.kegg.jp/conv/<target_db>/<source_db>[/<option>]
+    # https://rest.kegg.jp/conv/<target_db>/<source_db>[/<option>]
     #
     # (<target_db> <source_db>) = (<kegg_db> <outside_db>) |
     #                             (<outside_db> <kegg_db>)
@@ -235,7 +250,7 @@ def kegg_conv(target_db, source_db, option=None):
     #
     # <option> = turtle | n-triple
     #
-    # http://rest.kegg.jp/conv/<target_db>/<dbentries>[/<option>]
+    # https://rest.kegg.jp/conv/<target_db>/<dbentries>[/<option>]
     #
     # For gene identifiers:
     # <dbentries> = database entries involving the following <database>
@@ -265,7 +280,6 @@ def kegg_conv(target_db, source_db, option=None):
             and source_db in ["drug", "compound", "glycan"]
         )
     ):
-
         if option:
             resp = _q("conv", target_db, source_db, option)
         else:
@@ -283,7 +297,7 @@ def kegg_link(target_db, source_db, option=None):
     source_db_or_dbentries - source database
     option - Can be "turtle" or "n-triple" (string).
     """
-    # http://rest.kegg.jp/link/<target_db>/<source_db>[/<option>]
+    # https://rest.kegg.jp/link/<target_db>/<source_db>[/<option>]
     #
     # <target_db> = <database>
     # <source_db> = <database>
@@ -293,7 +307,7 @@ def kegg_link(target_db, source_db, option=None):
     #              drug | dgroup | environ
     #
     # <option> = turtle | n-triple
-    # http://rest.kegg.jp/link/<target_db>/<dbentries>[/<option>]
+    # https://rest.kegg.jp/link/<target_db>/<dbentries>[/<option>]
     #
     # <dbentries> = KEGG database entries involving the following <database>
     # <database> = pathway | brite | module | ko | genome | <org> | compound |

@@ -29,7 +29,7 @@ Direct MSMS interface, typical use::
     from Bio.PDB.ResidueDepth import get_surface
     surface = get_surface(model)
 
-The surface is a Numeric array with all the surface vertices.
+The surface is a NumPy array with all the surface vertices.
 
 Distance to surface::
 
@@ -55,14 +55,13 @@ import subprocess
 import tempfile
 import warnings
 
-import numpy
+import numpy as np
 
+from Bio import BiopythonWarning
 from Bio.PDB import PDBParser
 from Bio.PDB import Selection
 from Bio.PDB.AbstractPropertyMap import AbstractPropertyMap
 from Bio.PDB.Polypeptide import is_aa
-
-from Bio import BiopythonWarning
 
 # Table 1: Atom Type to radius
 _atomic_radii = {
@@ -292,7 +291,7 @@ def _get_atom_radius(atom, rtype="united"):
         return _atomic_radii[2][typekey]
     elif resname == "VAL" and at_name in {"CG1", "CG2"}:
         return _atomic_radii[9][typekey]
-    elif at_name in {"CD", "CD"}:
+    elif at_name == "CD":
         return _atomic_radii[8][typekey]
     # Co-factors, and other weirdos
     elif (
@@ -493,23 +492,23 @@ def _get_atom_radius(atom, rtype="united"):
 
 
 def _read_vertex_array(filename):
-    """Read the vertex list into a Numeric array (PRIVATE)."""
+    """Read the vertex list into a NumPy array (PRIVATE)."""
     with open(filename) as fp:
         vertex_list = []
-        for l in fp:
-            sl = l.split()
+        for line in fp:
+            sl = line.split()
             if len(sl) != 9:
                 # skip header
                 continue
             vl = [float(x) for x in sl[0:3]]
             vertex_list.append(vl)
-    return numpy.array(vertex_list)
+    return np.array(vertex_list)
 
 
 def get_surface(model, MSMS="msms"):
     """Represent molecular surface as a vertex list array.
 
-    Return a Numpy array that represents the vertex list of the
+    Return a NumPy array that represents the vertex list of the
     molecular surface.
 
     Arguments:
@@ -557,8 +556,8 @@ def get_surface(model, MSMS="msms"):
 def min_dist(coord, surface):
     """Return minimum distance between coord and surface."""
     d = surface - coord
-    d2 = numpy.sum(d * d, 1)
-    return numpy.sqrt(min(d2))
+    d2 = np.sum(d * d, 1)
+    return np.sqrt(min(d2))
 
 
 def residue_depth(residue, surface):

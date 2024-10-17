@@ -13,16 +13,18 @@ to all formats.
 
 import pickle
 import unittest
-from io import BytesIO
 from copy import deepcopy
+from io import BytesIO
 
 from search_tests_common import SearchTestBaseClass
 
 from Bio.Align import MultipleSeqAlignment
-from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
+from Bio.SearchIO._model import Hit
+from Bio.SearchIO._model import HSP
+from Bio.SearchIO._model import HSPFragment
+from Bio.SearchIO._model import QueryResult
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-
 
 # mock HSPFragments
 frag111 = HSPFragment("hit1", "query1", hit="ATGCGCAT", query="ATGCGCAT")

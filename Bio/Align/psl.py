@@ -25,27 +25,27 @@ As we can see in this example, ``start + size`` will give one more than the
 zero-based end position. We can therefore manipulate ``start`` and
 ``start + size`` as python list slice boundaries.
 """
-from itertools import chain
-import numpy
 
+from itertools import chain
+
+import numpy as np
 
 from Bio.Align import Alignment
 from Bio.Align import interfaces
-from Bio.Seq import Seq, reverse_complement, UndefinedSequenceError
+from Bio.Seq import reverse_complement
+from Bio.Seq import Seq
+from Bio.Seq import UndefinedSequenceError
+from Bio.SeqFeature import CompoundLocation
+from Bio.SeqFeature import ExactPosition
+from Bio.SeqFeature import SeqFeature
+from Bio.SeqFeature import SimpleLocation
 from Bio.SeqRecord import SeqRecord
-from Bio import BiopythonExperimentalWarning
-
-import warnings
-
-warnings.warn(
-    "Bio.Align.psl is an experimental module which may undergo "
-    "significant changes prior to its future official release.",
-    BiopythonExperimentalWarning,
-)
 
 
 class AlignmentWriter(interfaces.AlignmentWriter):
     """Alignment file writer for the Pattern Space Layout (PSL) file format."""
+
+    fmt = "PSL"
 
     def __init__(self, target, header=True, mask=None, wildcard="N"):
         """Create an AlignmentWriter object.
@@ -71,7 +71,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                        Default value is 'N'.
 
         """
-        super().__init__(target, mode="w")
+        super().__init__(target)
         self.header = header
         if wildcard is not None:
             if mask == "upper":
@@ -81,7 +81,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         self.wildcard = wildcard
         self.mask = mask
 
-    def write_header(self, alignments):
+    def write_header(self, stream, alignments):
         """Write the PSL header."""
         if not self.header:
             return
@@ -90,9 +90,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         except AttributeError:
             version = "3"
         else:
-            version = metadata.get("version", "3")
+            version = metadata.get("psLayout version", "3")
         # fmt: off
-        self.stream.write(
+        stream.write(
             f"""\
 psLayout version {version}
 
@@ -129,25 +129,35 @@ match	mis- 	rep. 	N's	Q gap	Q gap	T gap	T gap	strand	Q        	Q   	Q    	Q  	T 
             pass
         tSize = len(target)
         qSize = len(query)
-        # fmt: off
-        dnax = None  # set to True for translated DNA aligned to protein,
-                     # and to False for DNA/RNA aligned to DNA/RNA  # noqa: E114, E116
-        if coordinates[1, 0] > coordinates[1, -1]:
-            # DNA/RNA mapped to reverse strand of DNA/RNA
-            strand = "-"
-            query = reverse_complement(query, inplace=False)
-            coordinates = coordinates.copy()
-            coordinates[1, :] = qSize - coordinates[1, :]
-        elif coordinates[0, 0] > coordinates[0, -1]:
-            # protein mapped to reverse strand of DNA
-            strand = "-"
-            target = reverse_complement(target, inplace=False)
-            coordinates = coordinates.copy()
-            coordinates[0, :] = tSize - coordinates[0, :]
+        steps = abs(np.diff(coordinates, 1))
+        aligned = steps.min(0) > 0
+        tCount, qCount = steps[:, aligned].sum(1)
+        if tCount == qCount:
+            dnax = False
+            if coordinates[0, 0] > coordinates[0, -1]:
+                coordinates = coordinates[:, ::-1]
+            if coordinates[1, 0] > coordinates[1, -1]:
+                # DNA/RNA mapped to reverse strand of DNA/RNA
+                strand = "-"
+                query = reverse_complement(query)
+                coordinates = coordinates.copy()
+                coordinates[1, :] = qSize - coordinates[1, :]
+            else:
+                # mapped to forward strand
+                strand = "+"
+        elif tCount == 3 * qCount:
             dnax = True
+            if coordinates[0, 0] > coordinates[0, -1]:
+                # protein mapped to reverse strand of DNA
+                strand = "-"
+                target = reverse_complement(target)
+                coordinates = coordinates.copy()
+                coordinates[0, :] = tSize - coordinates[0, :]
+            else:
+                # mapped to forward strand
+                strand = "+"
         else:
-            # mapped to forward strand
-            strand = "+"
+            raise ValueError("inconsistent step sizes %d, %d" % (tCount, qCount))
         # fmt: on
         wildcard = self.wildcard
         mask = self.mask
@@ -182,14 +192,12 @@ match	mis- 	rep. 	N's	Q gap	Q gap	T gap	T gap	strand	Q        	Q   	Q    	Q  	T 
                 qStarts.append(qStart)
                 blockSizes.append(qCount)
                 if tCount == qCount:
-                    assert dnax is not True
-                    dnax = False
+                    assert dnax is False
                 else:
                     # translated DNA aligned to protein, typically generated by
                     # blat -t=dnax -q=prot
                     assert tCount == 3 * qCount
-                    assert dnax is not False
-                    dnax = True
+                    assert dnax is True
                 tSeq = target[tStart:tEnd]
                 qSeq = query[qStart:qEnd]
                 try:
@@ -307,46 +315,40 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     of matches and mismatches are stored as attributes of each alignment.
     """
 
-    def __init__(self, source):
-        """Create an AlignmentIterator object.
+    fmt = "PSL"
 
-        Arguments:
-         - source   - input data or file name
-
-        """
-        super().__init__(source, mode="t", fmt="PSL")
-        stream = self.stream
+    def _read_header(self, stream):
         line = next(stream)
         if line.startswith("psLayout "):
             words = line.split()
             if words[1] != "version":
                 raise ValueError("Unexpected word '%s' in header line" % words[1])
-            self.metadata = {"version": words[2]}
+            self.metadata = {"psLayout version": words[2]}
             line = next(stream)
             line = next(stream)
             line = next(stream)
             line = next(stream)
             if line.lstrip("-").strip() != "":
                 raise ValueError("End of header not found")
-            self.line = None
         else:
-            self.line = line
+            self._line = line
 
-    def parse(self, stream):
-        """Parse the next alignment from the stream."""
-        if stream is None:
-            raise StopIteration
-
-        line = self.line
-        self.line = None
-        if line is not None:
-            lines = chain([line], stream)
-        else:
+    def _read_next_alignment(self, stream):
+        try:
+            line = self._line
+        except AttributeError:
             lines = stream
+        else:
+            del self._line
+            lines = chain([line], stream)
         for line in lines:
             words = line.split()
-            if len(words) != 21:
-                raise ValueError("line has %d columns; expected 21" % len(words))
+            if len(words) == 23:
+                pslx = True
+            elif len(words) == 21:
+                pslx = False
+            else:
+                raise ValueError("line has %d columns; expected 21 or 23" % len(words))
             strand = words[8]
             qName = words[9]
             qSize = int(words[10])
@@ -373,14 +375,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     "Inconsistent number of target start positions (%d found, expected %d)"
                     % (len(tStarts), blockCount)
                 )
-            target_sequence = Seq(None, length=tSize)
-            target_record = SeqRecord(target_sequence, id=tName)
-            query_sequence = Seq(None, length=qSize)
-            query_record = SeqRecord(query_sequence, id=qName)
-            records = [target_record, query_record]
-            qBlockSizes = numpy.array(blockSizes)
-            qStarts = numpy.array(qStarts)
-            tStarts = numpy.array(tStarts)
+            qStarts = np.array(qStarts)
+            tStarts = np.array(tStarts)
+            qBlockSizes = np.array(blockSizes)
             if strand in ("++", "+-"):
                 # protein sequence aligned against translated DNA sequence
                 tBlockSizes = 3 * qBlockSizes
@@ -401,7 +398,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 tPosition += tBlockSize
                 qPosition += qBlockSize
                 coordinates.append([tPosition, qPosition])
-            coordinates = numpy.array(coordinates).transpose()
+            coordinates = np.array(coordinates).transpose()
             qNumInsert = 0
             qBaseInsert = 0
             tNumInsert = 0
@@ -473,9 +470,72 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     "Inconsistent qEnd found (%d, expected %d)"
                     % (qEnd, coordinates[1, -1])
                 )
+            feature = None
+            if pslx is True:
+                qSeqs = words[21].rstrip(",").split(",")
+                tSeqs = words[22].rstrip(",").split(",")
+                qSeq = dict(zip(qStarts, qSeqs))
+                if strand in ("++", "+-"):
+                    # protein sequence aligned against translated DNA sequence
+                    target_sequence = Seq(None, length=tSize)
+                    query_sequence = Seq(qSeq, length=qSize)
+                    if strand == "++":
+                        tStart, qStart = coordinates[:, 0]
+                        locations = []
+                        for tEnd, qEnd in coordinates[:, 1:].transpose():
+                            if qStart < qEnd and tStart < tEnd:
+                                location = SimpleLocation(
+                                    ExactPosition(tStart),
+                                    ExactPosition(tEnd),
+                                    strand=+1,
+                                )
+                                locations.append(location)
+                            qStart = qEnd
+                            tStart = tEnd
+                        if len(locations) > 1:
+                            location = CompoundLocation(locations, "join")
+                        tSeq = "".join(tSeqs)
+                        qualifiers = {"translation": [tSeq]}
+                        feature = SeqFeature(
+                            location, type="CDS", qualifiers=qualifiers
+                        )
+                    elif strand == "+-":
+                        tEnd, qStart = coordinates[:, 0]
+                        locations = []
+                        for tStart, qEnd in coordinates[:, 1:].transpose():
+                            if qStart < qEnd and tStart < tEnd:
+                                location = SimpleLocation(
+                                    ExactPosition(tStart),
+                                    ExactPosition(tEnd),
+                                    strand=-1,
+                                )
+                                locations.append(location)
+                            tEnd = tStart
+                            qStart = qEnd
+                        if len(locations) > 1:
+                            location = CompoundLocation(locations, "join")
+                        tSeq = "".join(tSeqs)
+                        qualifiers = {"translation": [tSeq]}
+                        feature = SeqFeature(
+                            location, type="CDS", qualifiers=qualifiers
+                        )
+                else:
+                    tSeq = dict(zip(tStarts, tSeqs))
+                    target_sequence = Seq(tSeq, length=tSize)
+                    query_sequence = Seq(qSeq, length=qSize)
+                    if strand == "-":
+                        query_sequence = query_sequence.reverse_complement()
+            else:
+                target_sequence = Seq(None, length=tSize)
+                query_sequence = Seq(None, length=qSize)
+            target_record = SeqRecord(target_sequence, id=tName, description="")
+            query_record = SeqRecord(query_sequence, id=qName, description="")
+            if feature is not None:
+                target_record.features.append(feature)
+            records = [target_record, query_record]
             alignment = Alignment(records, coordinates)
             alignment.matches = int(words[0])
             alignment.misMatches = int(words[1])
             alignment.repMatches = int(words[2])
             alignment.nCount = int(words[3])
-            yield alignment
+            return alignment

@@ -9,34 +9,42 @@
 You are expected to use this module via the Bio.Align functions.
 """
 
-from Bio.Align import interfaces, Alignment
-from Bio.Seq import Seq, reverse_complement
+from Bio.Align import Alignment
+from Bio.Align import interfaces
+from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio import BiopythonExperimentalWarning
-
-
-import warnings
-
-warnings.warn(
-    "Bio.Align.mauve is an experimental module which may undergo "
-    "significant changes prior to its future official release.",
-    BiopythonExperimentalWarning,
-)
 
 
 class AlignmentWriter(interfaces.AlignmentWriter):
-    """Mauve/XMFA alignment writer."""
+    """Mauve xmfa alignment writer."""
 
-    def write_header(self, alignments):
+    fmt = "Mauve"
+
+    def __init__(self, target, metadata=None, identifiers=None):
+        """Create an AlignmentWriter object.
+
+        Arguments:
+         - target       - output stream or file name
+         - metadata     - metadata to be included in the output. If metadata
+                          is None, then the alignments object to be written
+                          must have an attribute `metadata`.
+         - identifiers  - list of the IDs of the sequences included in the
+                          alignment. Sequences will be numbered according to
+                          their index in this list. If identifiers is None,
+                          then the alignments object to be written must have
+                          an attribute `identifiers`.
+        """
+        super().__init__(target)
+        self._metadata = metadata
+        self._identifiers = identifiers
+
+    def write_header(self, stream, alignments):
         """Write the file header to the output file."""
-        stream = self.stream
-        metadata = alignments.metadata
+        metadata = self._metadata
         format_version = metadata.get("FormatVersion", "Mauve1")
         line = f"#FormatVersion {format_version}\n"
         stream.write(line)
-        alignment = alignments[0]
-        # first alignment always seems to contain all sequences
-        identifiers = [sequence.id for sequence in alignment.sequences]
+        identifiers = self._identifiers
         filename = metadata.get("File")
         if filename is None:
             # sequences came from separate files
@@ -46,7 +54,6 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 stream.write(line)
                 line = f"#Sequence{number}Format\tFastA\n"
                 stream.write(line)
-            self._filenames = identifiers
         else:
             # sequences came from one combined file
             for number, identifier in enumerate(identifiers):
@@ -58,32 +65,38 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 stream.write(line)
                 line = f"#Sequence{number}Format\tFastA\n"
                 stream.write(line)
-        backbone_file = metadata.get("BackboneFile", None)
+        backbone_file = metadata.get("BackboneFile")
         if backbone_file is not None:
             line = f"#BackboneFile\t{backbone_file}\n"
             stream.write(line)
 
-    def write_file(self, alignments):
+    def write_file(self, stream, alignments):
         """Write a file with the alignments, and return the number of alignments.
 
         alignments - A Bio.Align.mauve.AlignmentIterator object.
         """
-
-        class ListWithAttributes(list):
-            pass
-
-        try:
-            metadata = alignments.metadata
-        except AttributeError:
-            metadata = {}
-        alignments = ListWithAttributes(alignments)
-        alignments.metadata = metadata
-        self._filename = metadata.get("File")
-        count = interfaces.AlignmentWriter.write_file(self, alignments)
+        metadata = self._metadata
+        if metadata is None:
+            try:
+                metadata = alignments.metadata
+            except AttributeError:
+                raise ValueError("alignments do not have an attribute `metadata`")
+            else:
+                self._metadata = metadata
+        identifiers = self._identifiers
+        if identifiers is None:
+            try:
+                identifiers = alignments.identifiers
+            except AttributeError:
+                raise ValueError("alignments do not have an attribute `identifiers`")
+            else:
+                self._identifiers = identifiers
+        count = interfaces.AlignmentWriter.write_file(self, stream, alignments)
         return count
 
     def format_alignment(self, alignment):
         """Return a string with a single alignment in the Mauve format."""
+        metadata = self._metadata
         n, m = alignment.shape
 
         if n == 0:
@@ -91,7 +104,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         if m == 0:
             raise ValueError("Non-empty sequences are required")
 
-        filename = self._filename
+        filename = metadata.get("File")
         lines = []
         for i in range(n):
             identifier = alignment.sequences[i].id
@@ -109,7 +122,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             sequence = alignment[i]
             if filename is None:
                 number = (
-                    self._filenames.index(identifier) + 1
+                    self._identifiers.index(identifier) + 1
                 )  # Switch to 1-based counting
                 line = f"> {number}:{start}-{end} {strand} {identifier}\n"
             else:
@@ -125,15 +138,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
 class AlignmentIterator(interfaces.AlignmentIterator):
     """Mauve xmfa alignment iterator."""
 
-    def __init__(self, source):
-        """Create an AlignmentIterator object.
+    fmt = "Mauve"
 
-        Arguments:
-         - source   - input data or file name
-
-        """
-        super().__init__(source, mode="t", fmt="Mauve")
-        stream = self.stream
+    def _read_header(self, stream):
         metadata = {}
         prefix = "Sequence"
         suffixes = ("File", "Entry", "Format")
@@ -165,12 +172,12 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             # A single file containing all sequences was provided as input;
             # store the file name once, and use the entry number as ID
             metadata["File"] = id_info["File"][0]
-            self._identifiers = [str(entry) for entry in id_info["Entry"]]
+            self.identifiers = [str(entry) for entry in id_info["Entry"]]
         else:
             assert len(set(id_info["File"])) == len(id_info["File"])
             # Separate files for each of the sequences were provided as input;
             # use the sequence file as ID
-            self._identifiers = id_info["File"]
+            self.identifiers = id_info["File"]
         self.metadata = metadata
 
     def _parse_description(self, line):
@@ -178,7 +185,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         locus, strand, comments = line[1:].split(None, 2)
         seq_num, start_end = locus.split(":")
         seq_num = int(seq_num) - 1  # python counting
-        identifier = self._identifiers[seq_num]
+        identifier = self.identifiers[seq_num]
         assert strand in "+-"
         start, end = start_end.split("-")
         start = int(start)
@@ -189,52 +196,54 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             start -= 1  # python counting
         return (identifier, start, end, strand, comments)
 
-    def parse(self, stream):
-        """Parse the next alignment from the stream."""
-        if stream is None:
-            return
-
+    def _read_next_alignment(self, stream):
         descriptions = []
         seqs = []
 
-        line = self._line
-        del self._line
-        description = self._parse_description(line)
-        identifier, start, end, strand, comments = description
-        descriptions.append(description)
-        seqs.append("")
+        try:
+            line = self._line
+        except AttributeError:
+            pass
+        else:
+            del self._line
+            description = self._parse_description(line)
+            identifier, start, end, strand, comments = description
+            descriptions.append(description)
+            seqs.append("")
 
         for line in stream:
             line = line.strip()
             if line.startswith("="):
                 # There may be more data, but we've reached the end of this
                 # alignment
-                coordinates = Alignment.infer_coordinates(seqs)
+                seqs = [seq.encode() for seq in seqs]
+                seqs, coordinates = Alignment.parse_printed_alignment(seqs)
                 records = []
                 for index, (description, seq) in enumerate(zip(descriptions, seqs)):
                     identifier, start, end, strand, comments = description
-                    length = end - start
-                    seq = seq.replace("-", "")
                     assert len(seq) == end - start
                     if strand == "+":
                         pass
                     elif strand == "-":
-                        seq = reverse_complement(seq, inplace=False)
                         coordinates[index, :] = len(seq) - coordinates[index, :]
                     else:
                         raise ValueError("Unexpected strand '%s'" % strand)
                     coordinates[index] += start
                     if start == 0:
                         seq = Seq(seq)
+                        if strand == "-":
+                            seq = seq.reverse_complement()
                     else:
-                        seq = Seq({start: seq}, length=end)
+                        if strand == "+":
+                            seq = Seq({start: seq}, length=end)
+                        else:  # strand == "-"
+                            seq = Seq({0: seq}, length=end)
+                            seq = seq.reverse_complement()
                     record = SeqRecord(seq, id=identifier, description=comments)
                     records.append(record)
 
-                yield Alignment(records, coordinates)
+                return Alignment(records, coordinates)
 
-                descriptions = []
-                seqs = []
             elif line.startswith(">"):
                 description = self._parse_description(line)
                 identifier, start, end, strand, comments = description

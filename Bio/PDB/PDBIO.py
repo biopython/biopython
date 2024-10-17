@@ -5,19 +5,13 @@
 
 """Output of PDB files."""
 
-
+import os
 import warnings
 
-# Exceptions and Warnings
 from Bio import BiopythonWarning
-from Bio.PDB.PDBExceptions import PDBIOException
-
-# To allow saving of chains, residues, etc..
-from Bio.PDB.StructureBuilder import StructureBuilder
-
-# Allowed Elements
 from Bio.Data.IUPACData import atom_weights
-
+from Bio.PDB.PDBExceptions import PDBIOException
+from Bio.PDB.StructureBuilder import StructureBuilder
 
 _ATOM_FORMAT_STRING = (
     "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%s%6.2f      %4s%2s%2s\n"
@@ -67,7 +61,6 @@ class StructureIO:
 
     def __init__(self):
         """Initialise."""
-        pass
 
     def set_structure(self, pdb_object):
         """Check what the user is providing and build a structure."""
@@ -295,6 +288,32 @@ class PDBIO(StructureIO):
 
             return _PQR_ATOM_FORMAT_STRING % args
 
+    @staticmethod
+    def _revert_write(handle, truncate_to=None, delete_file=False):
+        """Revert data written to file by removing the file or truncating it.
+
+        This method is used when the writer throws an exception, to avoid
+        writing incomplete files that might confuse users or workflows.
+        """
+        if delete_file:
+            try:
+                handle.close()
+                os.remove(handle.name)
+            except OSError as err:
+                # Windows can be finnicky with closing
+                # file and deleting them, raising PermissionError
+                pass
+        elif truncate_to is not None:
+            # If the user gave a file handle, seek back to the
+            # starting position and truncate the file from there
+            # on. Note that the truncation depends on how we
+            # opened the file, but we assume the file was opened
+            # for writing/appending anyway.
+            handle.seek(truncate_to)
+            handle.truncate()
+        else:
+            raise Exception("One of 'truncate_to' or 'delete_file' must be provided")
+
     # Public methods
     def save(self, file, select=_select, write_end=True, preserve_atom_numbering=False):
         """Save structure to a file.
@@ -322,89 +341,108 @@ class PDBIO(StructureIO):
             fhandle = open(file, "w")
         else:
             # filehandle, I hope :-)
+            fd_position = file.tell()
             fhandle = file
 
-        with fhandle:
-            get_atom_line = self._get_atom_line
+        get_atom_line = self._get_atom_line
 
-            # multiple models?
-            if len(self.structure) > 1 or self.use_model_flag:
-                model_flag = 1
-            else:
-                model_flag = 0
+        # multiple models?
+        if len(self.structure) > 1 or self.use_model_flag:
+            model_flag = 1
+        else:
+            model_flag = 0
 
-            for model in self.structure.get_list():
-                if not select.accept_model(model):
+        for model in self.structure.get_list():
+            if not select.accept_model(model):
+                continue
+            # necessary for ENDMDL
+            # do not write ENDMDL if no residues were written
+            # for this model
+            model_residues_written = 0
+            if not preserve_atom_numbering:
+                atom_number = 1
+            if model_flag:
+                fhandle.write(f"MODEL      {model.serial_num}\n")
+
+            for chain in model.get_list():
+                if not select.accept_chain(chain):
                     continue
-                # necessary for ENDMDL
-                # do not write ENDMDL if no residues were written
-                # for this model
-                model_residues_written = 0
-                if not preserve_atom_numbering:
-                    atom_number = 1
-                if model_flag:
-                    fhandle.write(f"MODEL      {model.serial_num}\n")
+                chain_id = chain.id
+                if len(chain_id) > 1:
+                    if isinstance(file, str):
+                        self._revert_write(fhandle, delete_file=True)
+                    else:
+                        self._revert_write(fhandle, truncate_to=fd_position)
+                    raise PDBIOException(
+                        f"Chain id ('{chain_id}') exceeds PDB format limit."
+                    )
 
-                for chain in model.get_list():
-                    if not select.accept_chain(chain):
+                # necessary for TER
+                # do not write TER if no residues were written
+                # for this chain
+                chain_residues_written = 0
+
+                for residue in chain.get_unpacked_list():
+                    if not select.accept_residue(residue):
                         continue
-                    chain_id = chain.id
-                    if len(chain_id) > 1:
-                        e = f"Chain id ('{chain_id}') exceeds PDB format limit."
-                        raise PDBIOException(e)
+                    hetfield, resseq, icode = residue.id
+                    resname = residue.resname
+                    segid = residue.segid
+                    resid = residue.id[1]
+                    if resid > 9999:
+                        if isinstance(file, str):
+                            self._revert_write(fhandle, delete_file=True)
+                        else:
+                            self._revert_write(fhandle, truncate_to=fd_position)
 
-                    # necessary for TER
-                    # do not write TER if no residues were written
-                    # for this chain
-                    chain_residues_written = 0
-
-                    for residue in chain.get_unpacked_list():
-                        if not select.accept_residue(residue):
-                            continue
-                        hetfield, resseq, icode = residue.id
-                        resname = residue.resname
-                        segid = residue.segid
-                        resid = residue.id[1]
-                        if resid > 9999:
-                            e = f"Residue number ('{resid}') exceeds PDB format limit."
-                            raise PDBIOException(e)
-
-                        for atom in residue.get_unpacked_list():
-                            if not select.accept_atom(atom):
-                                continue
-                            chain_residues_written = 1
-                            model_residues_written = 1
-                            if preserve_atom_numbering:
-                                atom_number = atom.serial_number
-
-                            try:
-                                s = get_atom_line(
-                                    atom,
-                                    hetfield,
-                                    segid,
-                                    atom_number,
-                                    resname,
-                                    resseq,
-                                    icode,
-                                    chain_id,
-                                )
-                            except Exception as err:
-                                # catch and re-raise with more information
-                                raise PDBIOException(
-                                    f"Error when writing atom {atom.full_id}"
-                                ) from err
-                            else:
-                                fhandle.write(s)
-                                # inconsequential if preserve_atom_numbering is True
-                                atom_number += 1
-
-                    if chain_residues_written:
-                        fhandle.write(
-                            _TER_FORMAT_STRING
-                            % (atom_number, resname, chain_id, resseq, icode)
+                        raise PDBIOException(
+                            f"Residue number ('{resid}') exceeds PDB format limit."
                         )
 
-                if model_flag and model_residues_written:
-                    fhandle.write("ENDMDL\n")
-            if write_end:
-                fhandle.write("END   \n")
+                    for atom in residue.get_unpacked_list():
+                        if not select.accept_atom(atom):
+                            continue
+                        chain_residues_written = 1
+                        model_residues_written = 1
+                        if preserve_atom_numbering:
+                            atom_number = atom.serial_number
+
+                        try:
+                            s = get_atom_line(
+                                atom,
+                                hetfield,
+                                segid,
+                                atom_number,
+                                resname,
+                                resseq,
+                                icode,
+                                chain_id,
+                            )
+                        except Exception as err:
+                            if isinstance(file, str):
+                                self._revert_write(fhandle, delete_file=True)
+                            else:
+                                self._revert_write(fhandle, truncate_to=fd_position)
+
+                            # catch and re-raise with more information
+                            raise PDBIOException(
+                                f"Error when writing atom {atom.full_id}: {err}"
+                            ) from err
+                        else:
+                            fhandle.write(s)
+                            # inconsequential if preserve_atom_numbering is True
+                            atom_number += 1
+
+                if chain_residues_written:
+                    fhandle.write(
+                        _TER_FORMAT_STRING
+                        % (atom_number, resname, chain_id, resseq, icode)
+                    )
+
+            if model_flag and model_residues_written:
+                fhandle.write("ENDMDL\n")
+        if write_end:
+            fhandle.write("END   \n")
+
+        if isinstance(file, str):
+            fhandle.close()

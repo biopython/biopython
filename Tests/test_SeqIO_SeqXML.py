@@ -3,9 +3,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Tests for SeqIO SeqXML module."""
-import sys
-import unittest
 
+import unittest
 from io import BytesIO
 
 from Bio import SeqIO
@@ -27,7 +26,6 @@ class TestSimpleRead(unittest.TestCase):
 
 
 class TestDetailedRead(unittest.TestCase):
-
     records = {}
 
     def setUp(self):
@@ -176,7 +174,6 @@ class TestReadAndWrite(unittest.TestCase):
         self._write_parse_and_compare(read1_records)
 
     def _write_parse_and_compare(self, read1_records):
-
         handle = BytesIO()
 
         SeqIO.write(read1_records, handle, "seqxml")
@@ -221,6 +218,7 @@ class TestReadCorruptFiles(unittest.TestCase):
         # Since one block is likely large enough to cover the first few
         # entries in the file, the ValueError may be raised after we call
         # SeqIO.parse, before we start iterating over the file.
+
         def f(path):
             records = SeqIO.parse(path, "seqxml")
             for record in records:
@@ -228,6 +226,29 @@ class TestReadCorruptFiles(unittest.TestCase):
 
         self.assertRaises(ValueError, f, "SeqXML/corrupt_example1.xml")
         self.assertRaises(ValueError, f, "SeqXML/corrupt_example2.xml")
+        self.assertRaises(ValueError, f, "SeqXML/corrupt_example3.xml")
+
+
+class TestOldVersions(unittest.TestCase):
+    def test_version01(self):
+        """Test for version 0.1 specific features."""
+        records = list(SeqIO.parse("SeqXML/version_01_example.xml", "seqxml"))
+        self.assertEqual(records[0].seq, "AAAAAACGTAAA")
+        self.assertEqual(records[0].dbxrefs[0], "db:1")
+        self.assertEqual(records[1].seq, "AAAUUUUCTGAA")
+        self.assertEqual(records[2].seq, "GAKKVFIEDVSKEFVEEFIWPAVQSSALYE")
+
+    def test_wrong_version(self):
+        """Handling of wrong versions."""
+
+        def f(path):
+            records = SeqIO.parse(path, "seqxml")
+            for record in records:
+                pass
+
+        self.assertRaises(ValueError, f, "SeqXML/wrong_version1.xml")
+        self.assertRaises(ValueError, f, "SeqXML/wrong_version2.xml")
+        self.assertRaises(ValueError, f, "SeqXML/wrong_version3.xml")
 
 
 if __name__ == "__main__":

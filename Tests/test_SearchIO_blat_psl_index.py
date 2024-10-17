@@ -12,7 +12,6 @@ from search_tests_common import CheckIndex
 
 
 class BlatPslIndexCases(CheckIndex):
-
     fmt = "blat-psl"
 
     def test_psl_34_001(self):

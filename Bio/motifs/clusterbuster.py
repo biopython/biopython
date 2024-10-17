@@ -23,28 +23,39 @@ class Record(list):
 def read(handle):
     """Read motifs in Cluster Buster position frequency matrix format from a file handle.
 
-    Cluster Buster motif format: http://zlab.bu.edu/cluster-buster/help/cis-format.html
+    Cluster Buster motif format: https://bu.wenglab.org/cluster-buster/help/cis-format.html
     """
     motif_nbr = 0
     record = Record()
     nucleotide_counts = {"A": [], "C": [], "G": [], "T": []}
     motif_name = ""
+    motif_gap = None
+    motif_weight = None
 
     for line in handle:
         line = line.strip()
         if line:
             if line.startswith(">"):
-
                 if motif_nbr != 0:
                     motif = motifs.Motif(alphabet="GATC", counts=nucleotide_counts)
                     motif.name = motif_name
+                    motif.gap = motif_gap
+                    motif.weight = motif_weight
                     record.append(motif)
 
                 motif_name = line[1:].strip()
                 nucleotide_counts = {"A": [], "C": [], "G": [], "T": []}
+                motif_gap = None
+                motif_weight = None
                 motif_nbr += 1
             else:
-                if line.startswith("#"):
+                if line.startswith("# GAP"):
+                    motif_gap = float(line.split()[2])
+                    continue
+                elif line.startswith("# WEIGHT"):
+                    motif_weight = float(line.split()[2])
+                    continue
+                elif line.startswith("#"):
                     continue
 
                 matrix_columns = line.split()
@@ -59,21 +70,36 @@ def read(handle):
 
     motif = motifs.Motif(alphabet="GATC", counts=nucleotide_counts)
     motif.name = motif_name
+    motif.gap = motif_gap
+    motif.weight = motif_weight
     record.append(motif)
 
     return record
 
 
-def write(motifs):
-    """Return the representation of motifs in Cluster Buster position frequency matrix format."""
+def write(motifs, precision=0):
+    """Return the representation of motifs in Cluster Buster position frequency matrix format.
+
+    By default (`precision=0`) Cluster Buster position frequency matrices will be written
+    with integer values.
+    If a higher precision value is set, Cluster Buster position frequency matrices will be
+    written as floats with `x` decimal places.
+    """
     lines = []
     for m in motifs:
-        line = f">{m.name}\n"
-        lines.append(line)
+        lines.append(f">{m.name}\n")
+        if m.weight:
+            lines.append(f"# WEIGHT: {m.weight}\n")
+        if m.gap:
+            lines.append(f"# GAP: {m.gap}\n")
         for ACGT_counts in zip(
             m.counts["A"], m.counts["C"], m.counts["G"], m.counts["T"]
         ):
-            lines.append("{:0.0f}\t{:0.0f}\t{:0.0f}\t{:0.0f}\n".format(*ACGT_counts))
+            lines.append(
+                "{:0.0f}\t{:0.0f}\t{:0.0f}\t{:0.0f}\n".replace(
+                    "0f", str(int(precision)) + "f"
+                ).format(*ACGT_counts)
+            )
 
     # Finished; glue the lines together.
     text = "".join(lines)

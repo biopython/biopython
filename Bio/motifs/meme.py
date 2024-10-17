@@ -8,8 +8,13 @@
 
 import xml.etree.ElementTree as ET
 
-from Bio import Seq
+from Bio import Align
 from Bio import motifs
+from Bio.Seq import Seq
+
+
+import warnings
+from Bio import BiopythonDeprecationWarning
 
 
 def read(handle):
@@ -21,8 +26,8 @@ def read(handle):
     >>> with open("motifs/meme.INO_up800.classic.oops.xml") as f:
     ...     record = meme.read(f)
     >>> for motif in record:
-    ...     for instance in motif.instances:
-    ...         print(instance.motif_name, instance.sequence_name, instance.sequence_id, instance.strand, instance.pvalue)
+    ...     for sequence in motif.alignment.sequences:
+    ...         print(sequence.motif_name, sequence.sequence_name, sequence.sequence_id, sequence.strand, sequence.pvalue)
     GSKGCATGTGAAA INO1 sequence_5 + 1.21e-08
     GSKGCATGTGAAA FAS1 sequence_2 - 1.87e-08
     GSKGCATGTGAAA ACC1 sequence_4 - 6.62e-08
@@ -62,9 +67,9 @@ class Motif(motifs.Motif):
     of occurrences.
     """
 
-    def __init__(self, alphabet=None, instances=None):
+    def __init__(self, alphabet=None, alignment=None):
         """Initialize the class."""
-        motifs.Motif.__init__(self, alphabet, instances)
+        motifs.Motif.__init__(self, alphabet, alignment)
         self.evalue = 0.0
         self.num_occurrences = 0
         self.name = None
@@ -72,12 +77,19 @@ class Motif(motifs.Motif):
         self.alt_id = None
 
 
-class Instance(Seq.Seq):
+class Instance(Seq):
     """A class describing the instances of a MEME motif, and the data thereof."""
 
     def __init__(self, *args, **kwds):
         """Initialize the class."""
-        Seq.Seq.__init__(self, *args, **kwds)
+        warnings.warn(
+            "The class Bio.motifs.meme.Instance is deprecated, as it does not "
+            "provide any real advantages compared to the Seq class from which "
+            "it is derived. Please use the Seq class directly instead of the "
+            "Instance class.",
+            BiopythonDeprecationWarning,
+        )
+        Seq.__init__(self, *args, **kwds)
         self.sequence_name = ""
         self.sequence_id = ""
         self.start = 0
@@ -162,7 +174,7 @@ def __read_motifs(record, xml_tree, sequence_id_name_map):
                 for letter_ref in site_tree.find("site").findall("letter_ref")
             ]
             sequence = "".join(letters)
-            instance = Instance(sequence)
+            instance = Seq(sequence)
             instance.motif_name = motif_tree.get("name")
             instance.sequence_id = site_tree.get("sequence_id")
             instance.sequence_name = sequence_id_name_map[instance.sequence_id]
@@ -172,8 +184,8 @@ def __read_motifs(record, xml_tree, sequence_id_name_map):
             instance.strand = __convert_strand(site_tree.get("strand"))
             instance.length = len(sequence)
             instances.append(instance)
-        instances = motifs.Instances(instances, record.alphabet)
-        motif = Motif(record.alphabet, instances)
+        alignment = Align.Alignment(instances)
+        motif = Motif(record.alphabet, alignment)
         motif.id = motif_tree.get("id")
         motif.name = motif_tree.get("name")
         motif.alt_id = motif_tree.get("alt")
@@ -193,3 +205,9 @@ def __convert_strand(strand):
         return "-"
     if strand == "plus" or strand == "none":
         return "+"
+
+
+if __name__ == "__main__":
+    from Bio._utils import run_doctest
+
+    run_doctest()

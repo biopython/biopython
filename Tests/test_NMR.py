@@ -6,12 +6,12 @@
 # package.
 """Unit tests for the Bio.NMR Module."""
 
-import unittest
-import tempfile
 import os
+import tempfile
+import unittest
 
-from Bio.NMR import xpktools
 from Bio.NMR import NOEtools
+from Bio.NMR import xpktools
 
 
 class NmrTests(unittest.TestCase):

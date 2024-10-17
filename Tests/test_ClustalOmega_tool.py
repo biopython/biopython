@@ -7,17 +7,20 @@
 
 """Tests for ClustalOmega tool."""
 
-import sys
 import os
 import unittest
-
+import warnings
 from subprocess import getoutput
 
+from Bio import Align
+from Bio import BiopythonDeprecationWarning
 from Bio import MissingExternalDependencyError
 from Bio import SeqIO
-from Bio import AlignIO
-from Bio.Align.Applications import ClustalOmegaCommandline
-from Bio.Application import ApplicationError
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
+    from Bio.Align.Applications import ClustalOmegaCommandline
+    from Bio.Application import ApplicationError
 
 #################################################################
 
@@ -65,16 +68,13 @@ class ClustalOmegaTestCase(unittest.TestCase):
         # Test if ClustalOmega executed successfully.
         self.assertTrue(
             error.strip() == ""
-            or error.startswith("WARNING: Sequence type is DNA.")
-            or error.startswith("WARNING: DNA alignment is still experimental.")
+            or error.startswith(
+                (
+                    "WARNING: Sequence type is DNA.",
+                    "WARNING: DNA alignment is still experimental.",
+                )
+            )
         )
-
-        # Check the output...
-        align = AlignIO.read(cline.outfile, "clustal")
-        output_records = SeqIO.to_dict(SeqIO.parse(cline.outfile, "clustal"))
-        self.assertEqual(len(input_records), len(output_records))
-        for record in align:
-            self.assertEqual(record.seq, output_records[record.id].seq)
 
         # TODO - Try and parse this with Bio.Nexus?
         if cline.guidetree_out:
@@ -148,6 +148,35 @@ class ClustalOmegaTestNormalConditions(ClustalOmegaTestCase):
         )
 
         self.standard_test_procedure(cline)
+        alignment = Align.read(cline.outfile, "clustal")
+        self.assertEqual(
+            str(alignment),
+            """\
+gi|134891         0 GATCCCTACCCTTNCCGTTGGTCTCTNTCGCTGACTCGAGGCACCTAACATCCATTCACA
+                  0 ---------..-........|......|....|......|..............|.----
+gi|129628         0 ---------MP-VVVVASSKGGAGKSTTAVVLGTELAHKGVPVTMLDCDPNRSLTI----
+
+gi|134891        60 CCCAACACAGGCCAGCGACTTCTGGGGCTCAGCCACAGACATGGTTTGTNACTNTTGAGC
+                 60 -----.|.||.......|....|-------------------......|.......||..
+gi|129628        46 -----WANAGEVPENITALSDVT-------------------ESSIVKTIKQHDVDGAVV
+
+gi|134891       120 TTCTGTTCCTAGAGAATCCTAGAGGCTTGATTGGCCCAGGCTGCTGTNTGTNCTGGAGG-
+                120 ...--------..|.|......|..............|...|..............|..-
+gi|129628        82 IVD--------LEGVASRMVSRAISQADLVLIPMRPKALDATIGAQSLQLIAEEEEAIDR
+
+gi|134891       179 -CAAAGAATCCCTACCTCCTAGGGGTGAAAGGAAATNAAAATGGAAAGTTCTTGTAGCGC
+                180 -.|.|...|....|.......|........|------------...........||....
+gi|129628       134 KIAHAVVFTMVSPAIRSHEYTGIKASLIENG------------VEIIEPPLVERTAYSAL
+
+gi|134891       238 AAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTTC 285
+                240 ...|..........|..........|.|-----.|.....|.|..-- 287
+gi|129628       182 FQFGGNLHSMKSKQGNMAAAIENAEAFA-----MAIFKKLTEALR-- 222
+""",
+        )
+        self.assertEqual(
+            alignment.column_annotations["clustal_consensus"],
+            "                    *      *    *      *              *           * **       *    *                         *       **               * *      *              *   *              *     * *   *    *       *        *                       **       *          *          * *      *     * *    ",
+        )
 
     def test_properties(self):
         """Test setting options via properties."""
@@ -160,6 +189,35 @@ class ClustalOmegaTestNormalConditions(ClustalOmegaTestCase):
         cline.outfmt = "clustal"
 
         self.standard_test_procedure(cline)
+        alignment = Align.read(cline.outfile, "clustal")
+        self.assertEqual(
+            str(alignment),
+            """\
+gi|134891         0 GATCCCTACCCTTNCCGTTGGTCTCTNTCGCTGACTCGAGGCACCTAACATCCATTCACA
+                  0 ---------..-........|......|....|......|..............|.----
+gi|129628         0 ---------MP-VVVVASSKGGAGKSTTAVVLGTELAHKGVPVTMLDCDPNRSLTI----
+
+gi|134891        60 CCCAACACAGGCCAGCGACTTCTGGGGCTCAGCCACAGACATGGTTTGTNACTNTTGAGC
+                 60 -----.|.||.......|....|-------------------......|.......||..
+gi|129628        46 -----WANAGEVPENITALSDVT-------------------ESSIVKTIKQHDVDGAVV
+
+gi|134891       120 TTCTGTTCCTAGAGAATCCTAGAGGCTTGATTGGCCCAGGCTGCTGTNTGTNCTGGAGG-
+                120 ...--------..|.|......|..............|...|..............|..-
+gi|129628        82 IVD--------LEGVASRMVSRAISQADLVLIPMRPKALDATIGAQSLQLIAEEEEAIDR
+
+gi|134891       179 -CAAAGAATCCCTACCTCCTAGGGGTGAAAGGAAATNAAAATGGAAAGTTCTTGTAGCGC
+                180 -.|.|...|....|.......|........|------------...........||....
+gi|129628       134 KIAHAVVFTMVSPAIRSHEYTGIKASLIENG------------VEIIEPPLVERTAYSAL
+
+gi|134891       238 AAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTTC 285
+                240 ...|..........|..........|.|-----.|.....|.|..-- 287
+gi|129628       182 FQFGGNLHSMKSKQGNMAAAIENAEAFA-----MAIFKKLTEALR-- 222
+""",
+        )
+        self.assertEqual(
+            alignment.column_annotations["clustal_consensus"],
+            "                    *      *    *      *              *           * **       *    *                         *       **               * *      *              *   *              *     * *   *    *       *        *                       **       *          *          * *      *     * *    ",
+        )
 
     def test_input_filename_with_space(self):
         """Test an input filename containing a space."""
@@ -174,6 +232,26 @@ class ClustalOmegaTestNormalConditions(ClustalOmegaTestCase):
 
         self.add_file_to_clean(input_file)
         self.standard_test_procedure(cline)
+        alignment = Align.read(cline.outfile, "clustal")
+        self.assertEqual(
+            str(alignment),
+            """\
+A                 0 -CACACACAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAA 40
+B                 0 -CACACAACAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAA 40
+C                 0 -CACAACAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAA 40
+D                 0 -CAACAAAACAAAAAAAAACAAAAAAAAAAAAAAAAAAAAA 40
+E                 0 -CAACAAAAACAAAAAAAACAAAAAAAAAAAAAAAAAAAAA 40
+F                 0 ACAAAAAAAACACACAAAACAAAAAAAAAAAAAAAAAAAA- 40
+G                 0 ACAAAAAAAACACAACAAACAAAAAAAAAAAAAAAAAAAA- 40
+H                 0 ACAAAAAAAACAACAAAAACAAAAAAAAAAAAAAAAAAAA- 40
+I                 0 ACAAAAAAAAACAAAACAACAAAAAAAAAAAAAAAAAAAA- 40
+J                 0 ACAAAAAAAAACAAAAACACAAAAAAAAAAAAAAAAAAAA- 40
+""",
+        )
+        self.assertEqual(
+            alignment.column_annotations["clustal_consensus"],
+            " **               ********************** ",
+        )
 
     def test_output_filename_with_spaces(self):
         """Test an output filename containing spaces."""
@@ -183,8 +261,36 @@ class ClustalOmegaTestNormalConditions(ClustalOmegaTestCase):
         cline = ClustalOmegaCommandline(
             clustalo_exe, infile=input_file, outfile=output_file, outfmt="clustal"
         )
-
         self.standard_test_procedure(cline)
+        alignment = Align.read(cline.outfile, "clustal")
+        self.assertEqual(
+            str(alignment),
+            """\
+gi|134891         0 GATCCCTACCCTTNCCGTTGGTCTCTNTCGCTGACTCGAGGCACCTAACATCCATTCACA
+                  0 ---------..-........|......|....|......|..............|.----
+gi|129628         0 ---------MP-VVVVASSKGGAGKSTTAVVLGTELAHKGVPVTMLDCDPNRSLTI----
+
+gi|134891        60 CCCAACACAGGCCAGCGACTTCTGGGGCTCAGCCACAGACATGGTTTGTNACTNTTGAGC
+                 60 -----.|.||.......|....|-------------------......|.......||..
+gi|129628        46 -----WANAGEVPENITALSDVT-------------------ESSIVKTIKQHDVDGAVV
+
+gi|134891       120 TTCTGTTCCTAGAGAATCCTAGAGGCTTGATTGGCCCAGGCTGCTGTNTGTNCTGGAGG-
+                120 ...--------..|.|......|..............|...|..............|..-
+gi|129628        82 IVD--------LEGVASRMVSRAISQADLVLIPMRPKALDATIGAQSLQLIAEEEEAIDR
+
+gi|134891       179 -CAAAGAATCCCTACCTCCTAGGGGTGAAAGGAAATNAAAATGGAAAGTTCTTGTAGCGC
+                180 -.|.|...|....|.......|........|------------...........||....
+gi|129628       134 KIAHAVVFTMVSPAIRSHEYTGIKASLIENG------------VEIIEPPLVERTAYSAL
+
+gi|134891       238 AAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTTC 285
+                240 ...|..........|..........|.|-----.|.....|.|..-- 287
+gi|129628       182 FQFGGNLHSMKSKQGNMAAAIENAEAFA-----MAIFKKLTEALR-- 222
+""",
+        )
+        self.assertEqual(
+            alignment.column_annotations["clustal_consensus"],
+            "                    *      *    *      *              *           * **       *    *                         *       **               * *      *              *   *              *     * *   *    *       *        *                       **       *          *          * *      *     * *    ",
+        )
 
     def test_large_fasta_file(self):
         """Test a large fasta input file."""
@@ -206,12 +312,63 @@ class ClustalOmegaTestNormalConditions(ClustalOmegaTestCase):
 
         self.add_file_to_clean(input_file)
         self.standard_test_procedure(cline)
+        alignment = Align.read(cline.outfile, "clustal")
 
     def test_newtree_files(self):
         """Test requesting a guide tree."""
         input_file = "Fasta/f002"
         output_file = "temp_test.aln"
         newtree_file = "temp_test.dnd"
+        alignment_text = """\
+gi|134891         0 CGGACCAGACGGACACAGGGAGAAGCTAGTTTCTTTCATGTGATTGANATNATGACTCTA
+gi|134891         0 ---------CGGAGCCAGCGAGCATAT---------------------------------
+gi|159293         0 ------------------------------------------------------------
+
+gi|134891        60 CTCCTAAAAGGGAAAAANCAATATCCTTGTTTACAGAAGAGAAACAAACAAGCCCCACTC
+gi|134891        18 ----------------------------------------------------GCTGCATG
+gi|159293         0 --------------------------------------------GATCAAATCTGCACTG
+
+gi|134891       120 AGCTCAGTCACAGGAGAGANCACAGAAAGTCTTAGGATCATGANCTCTGAA-AAAAAGAG
+gi|134891        26 -------------------------AGGACCTTTCTATCTTACATTATGGC-TGGGAATC
+gi|159293        16 TGTCTACATATAGGAAAGGTCCTGGTGTGTGCTAATGTTCCCAATGCAGGACTTGAGGAA
+
+gi|134891       179 AAACCTTATCTTTNCTTTGTGGTTCCTTTAAACACACTCACACACACTTGGTCAGAGATG
+gi|134891        60 TTACTCTTTCATCTG-------ATACCTTGTTCAGATTTCAAAATAGTTGTAGCCTTATC
+gi|159293        76 GAGCTCTGTTATATGTTTCCATTTCTCTTTATCAAAGATAACCAAACCTTATGGCCCTT-
+
+gi|134891       239 CTGTGCTTCTTGGAAGCAAGGNCTCAAAGGCAAGGTGCACGC----------AGAGGGAC
+gi|134891       113 CTGGTTTTACAGATGTGAAACTT----TCAAGAGATTTACTGACTTTCCTAGAATA----
+gi|159293       135 ---ATAACAATGGAGGCACTGGCTGCCTCTTAATTTTCAATCATGGACCTAAAGAAGTAC
+
+gi|134891       289 GTTTGA--GTCTGGGATGAAGCATGTNCGTATTATTTATATGATGGAATTTCACGTTTTT
+gi|134891       165 --------GT--------------TTCTCTACTGGAAACCTGATGCTTTTATAAGCCATT
+gi|159293       192 TCTGAAGGGTCTCAACAATGCCAGGTGGGGACAGATATACTCAGAGATTATCCAGGTCTG
+
+gi|134891       347 ATGTNAAGCNTGACAACACCAGGCAGGTATGAGAGGA-AAGCAAGGCCCGTCCATNGCTG
+gi|134891       203 GTGATTAGGATGACTGTTACAGGCTTAGCTTTGTGTGAAANCCAGTCACCTTT------C
+gi|159293       252 CCTCCCAGCGAGCC-----------TGGA------GT-ACACCAGACCCTCCTAGAGAAA
+
+gi|134891       406 TCCGTACNCTTACGGNTTGCTTGTNGGAGNCATTTNGGTATTGTTTGTTGTAANANCCAA
+gi|134891       257 TCCTAGGTAATGAGTAGTGCTGTTCATATTACTNT-------AAGTTCTATAGCATACTT
+gi|159293       294 TCTGTT------------------------------------ATAATTTACCACCCACTT
+
+gi|134891       466 AANGGGCTTTGGNNTGGNAAAA----GGGCAGANNGGGGGGGTTGGTGTNGTTTTTTGG-
+gi|134891       310 GCNATCCTTTANCCATGCTTATCATANGTACCATTTGAGGAATTGNTT-----TGCCCTT
+gi|159293       318 ATCCACCTTTAAACTTGGGGAA----GGNNGCN------TTTCAAATTAAATTTAATCNT
+
+gi|134891       521 GGGGANNNTTTNGATTTGG-------TNCCGGGNTTTNGTTTNCCNCGGNACCGGNTTTT
+gi|134891       365 TTG-GGTTTNTTNTTGGTAA--ANNNTTCCCGGGTGGGGGNGGTNNNGAAA---------
+gi|159293       368 NGGGGGNTTTTAAACTTTAACCCTTTTNCCNTTNTNGGGGTNGGNANTTGNCCCCNTTAA
+
+gi|134891       574 GGTTGGGGNCCATTTNTGNGGGGCNTTGGNGTTNCNTTNCCCNNNTNNGANTGGTTTNA
+gi|134891       413 -----------------------------------------------------------
+gi|159293       428 AGGGGGNNCCCCT-NCNNGGGGGAATAA-AACAA----------NTTNNTTT--TTT--
+
+gi|134891       633
+gi|134891       413
+gi|159293       471
+"""
+        clustal_consensus = "                                                                                                                      *                                 *    *          *              *  * *  *           *   **   ** *       * *  *         *            *     *              *  *  *             *               **               *    *         * *     *     *   *       **   * *                        *  * ** * *           **                                              *        *        ****      *   *      *                  *      *        *     * *               * **    *   *                                                                                "
 
         cline = ClustalOmegaCommandline(
             clustalo_exe,
@@ -222,8 +379,19 @@ class ClustalOmegaTestNormalConditions(ClustalOmegaTestCase):
         )
 
         self.standard_test_procedure(cline)
+        alignment = Align.read(cline.outfile, "clustal")
+        self.assertEqual(str(alignment), alignment_text)
+        self.assertEqual(
+            alignment.column_annotations["clustal_consensus"], clustal_consensus
+        )
+
         cline.guidetree_out = "temp with space.dnd"
         self.standard_test_procedure(cline)
+        alignment = Align.read(cline.outfile, "clustal")
+        self.assertEqual(str(alignment), alignment_text)
+        self.assertEqual(
+            alignment.column_annotations["clustal_consensus"], clustal_consensus
+        )
 
 
 if __name__ == "__main__":

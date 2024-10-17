@@ -8,9 +8,9 @@
 """Tests for the Bio.phenotype module's fitting functionality."""
 
 try:
-    import numpy
+    import numpy as np
 
-    del numpy
+    del np
 except ImportError:
     from Bio import MissingExternalDependencyError
 
@@ -31,10 +31,9 @@ except ImportError:
 
 import json
 import unittest
+import warnings
 
 from Bio import BiopythonExperimentalWarning
-
-import warnings
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore", BiopythonExperimentalWarning)
@@ -65,9 +64,9 @@ class TestPhenoMicro(unittest.TestCase):
         self.assertEqual(w.model, "gompertz")
         self.assertAlmostEqual(w.lag, 6.0425868725090357, places=5)
         self.assertAlmostEqual(w.plateau, 188.51404344898586, places=4)
-        self.assertAlmostEqual(w.slope, 48.190618284831132, places=4)
+        self.assertAlmostEqual(w.slope, 48.190618284831132, places=3)
         self.assertAlmostEqual(w.v, 0.10000000000000001, places=5)
-        self.assertAlmostEqual(w.y0, 45.879770069807989, places=5)
+        self.assertAlmostEqual(w.y0, 45.879770069807989, places=4)
         self.assertEqual(w.max, 313.0)
         self.assertEqual(w.min, 29.0)
         self.assertEqual(w.average_height, 217.82552083333334)

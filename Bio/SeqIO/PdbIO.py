@@ -5,21 +5,22 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 """Bio.SeqIO support for accessing sequences in PDB and mmCIF files."""
+
 import collections
 import warnings
 
 from Bio import BiopythonParserWarning
-from Bio.Data.IUPACData import protein_letters_3to1_extended as iupac_3to1_ext
-from Bio.Data.SCOPData import protein_letters_3to1 as scop_3to1
+from Bio.Data.PDBData import protein_letters_3to1
+from Bio.Data.PDBData import protein_letters_3to1_extended
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
+from .Interfaces import _TextIOSource
 from .Interfaces import SequenceIterator
 
-
 _aa3to1_dict = {}
-_aa3to1_dict.update(iupac_3to1_ext)
-_aa3to1_dict.update(scop_3to1)
+_aa3to1_dict.update(protein_letters_3to1)
+_aa3to1_dict.update(protein_letters_3to1_extended)
 
 
 def _res2aacode(residue, undef_code="X"):
@@ -113,8 +114,10 @@ def AtomIterator(pdb_id, structure):
 class PdbSeqresIterator(SequenceIterator):
     """Parser for PDB files."""
 
-    def __init__(self, source):
-        """Return SeqRecord objects for each chain in a PDB file.
+    modes = "t"
+
+    def __init__(self, source: _TextIOSource) -> None:
+        """Iterate over chains in a PDB file as SeqRecord objects.
 
         Arguments:
          - source - input stream opened in text mode, or a path to a file
@@ -150,187 +153,206 @@ class PdbSeqresIterator(SequenceIterator):
         Note the chain is recorded in the annotations dictionary, and any PDB DBREF
         lines are recorded in the database cross-references list.
         """
-        super().__init__(source, mode="t", fmt="PDB")
+        super().__init__(source, fmt="PDB")
+        self.cache = None
 
-    def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
-        records = self.iterate(handle)
-        return records
-
-    def iterate(self, handle):
+    def __next__(self):
         """Iterate over the records in the PDB file."""
-        chains = collections.defaultdict(list)
-        metadata = collections.defaultdict(list)
+        if self.cache is None:
+            chains = collections.defaultdict(list)
+            metadata = collections.defaultdict(list)
 
-        rec_name = None
-        for line in handle:
-            rec_name = line[0:6].strip()
-            if rec_name == "SEQRES":
-                # NB: We only actually need chain ID and the residues here;
-                # commented bits are placeholders from the wwPDB spec.
-                # Serial number of the SEQRES record for the current chain.
-                # Starts at 1 and increments by one each line.
-                # Reset to 1 for each chain.
-                # ser_num = int(line[8:10])
-                # Chain identifier. This may be any single legal character,
-                # including a blank which is used if there is only one chain.
-                chn_id = line[11]
-                # Number of residues in the chain (repeated on every record)
-                # num_res = int(line[13:17])
-                residues = [_res2aacode(res) for res in line[19:].split()]
-                chains[chn_id].extend(residues)
-            elif rec_name == "DBREF":
-                #  ID code of this entry (PDB ID)
-                pdb_id = line[7:11]
-                # Chain identifier.
-                chn_id = line[12]
-                # Initial sequence number of the PDB sequence segment.
-                # seq_begin = int(line[14:18])
-                # Initial insertion code of the PDB sequence segment.
-                # icode_begin = line[18]
-                # Ending sequence number of the PDB sequence segment.
-                # seq_end = int(line[20:24])
-                # Ending insertion code of the PDB sequence segment.
-                # icode_end = line[24]
-                # Sequence database name.
-                database = line[26:32].strip()
-                # Sequence database accession code.
-                db_acc = line[33:41].strip()
-                # Sequence database identification code.
-                db_id_code = line[42:54].strip()
-                # Initial sequence number of the database seqment.
-                # db_seq_begin = int(line[55:60])
-                # Insertion code of initial residue of the segment, if PDB is the
-                # reference.
-                # db_icode_begin = line[60]
-                # Ending sequence number of the database segment.
-                # db_seq_end = int(line[62:67])
-                # Insertion code of the ending residue of the segment, if PDB is the
-                # reference.
-                # db_icode_end = line[67]
-                metadata[chn_id].append(
-                    {
-                        "pdb_id": pdb_id,
-                        "database": database,
-                        "db_acc": db_acc,
-                        "db_id_code": db_id_code,
-                    }
-                )
-            elif rec_name == "DBREF1":
-                # ID code of this entry (PDB ID)
-                pdb_id = line[7:11]
-                # Chain identifier.
-                chn_id = line[12]
-                # Sequence database name.
-                database = line[26:32].strip()
-                # Sequence database identification code.
-                db_id_code = line[47:67].strip()
-            elif rec_name == "DBREF2":
-                # Ensure ID code and chain are consistent:
-                if pdb_id != line[7:11] or chn_id != line[12]:
-                    raise ValueError("DBREF2 identifiers do not match")
-                # Sequence database accession code.
-                db_acc = line[18:40].strip()
-                metadata[chn_id].append(
-                    {
-                        "pdb_id": pdb_id,
-                        "database": database,
-                        "db_acc": db_acc,
-                        "db_id_code": db_id_code,
-                    }
-                )
-            # ENH: 'SEQADV' 'MODRES'
-
-        if rec_name is None:
-            raise ValueError("Empty file.")
-
-        for chn_id, residues in sorted(chains.items()):
-            record = SeqRecord(Seq("".join(residues)))
-            record.annotations = {"chain": chn_id}
-            # TODO: Test PDB files with DNA and RNA too:
-            record.annotations["molecule_type"] = "protein"
-            if chn_id in metadata:
-                m = metadata[chn_id][0]
-                record.id = record.name = f"{m['pdb_id']}:{chn_id}"
-                record.description = f"{m['database']}:{m['db_acc']} {m['db_id_code']}"
-                for melem in metadata[chn_id]:
-                    record.dbxrefs.extend(
-                        [
-                            f"{melem['database']}:{melem['db_acc']}",
-                            f"{melem['database']}:{melem['db_id_code']}",
-                        ]
+            rec_name = None
+            for line in self.stream:
+                rec_name = line[0:6].strip()
+                if rec_name == "SEQRES":
+                    # NB: We only actually need chain ID and the residues here;
+                    # commented bits are placeholders from the wwPDB spec.
+                    # Serial number of the SEQRES record for the current chain.
+                    # Starts at 1 and increments by one each line.
+                    # Reset to 1 for each chain.
+                    # ser_num = int(line[8:10])
+                    # Chain identifier. This may be any single legal character,
+                    # including a blank which is used if there is only one
+                    # chain.
+                    chn_id = line[11]
+                    # Number of residues in the chain (repeated on every record)
+                    # num_res = int(line[13:17])
+                    residues = [_res2aacode(res) for res in line[19:].split()]
+                    chains[chn_id].extend(residues)
+                elif rec_name == "DBREF":
+                    #  ID code of this entry (PDB ID)
+                    pdb_id = line[7:11]
+                    # Chain identifier.
+                    chn_id = line[12]
+                    # Initial sequence number of the PDB sequence segment.
+                    # seq_begin = int(line[14:18])
+                    # Initial insertion code of the PDB sequence segment.
+                    # icode_begin = line[18]
+                    # Ending sequence number of the PDB sequence segment.
+                    # seq_end = int(line[20:24])
+                    # Ending insertion code of the PDB sequence segment.
+                    # icode_end = line[24]
+                    # Sequence database name.
+                    database = line[26:32].strip()
+                    # Sequence database accession code.
+                    db_acc = line[33:41].strip()
+                    # Sequence database identification code.
+                    db_id_code = line[42:54].strip()
+                    # Initial sequence number of the database seqment.
+                    # db_seq_begin = int(line[55:60])
+                    # Insertion code of initial residue of the segment, if PDB
+                    # is the reference.
+                    # db_icode_begin = line[60]
+                    # Ending sequence number of the database segment.
+                    # db_seq_end = int(line[62:67])
+                    # Insertion code of the ending residue of the segment, if
+                    # PDB is the reference.
+                    # db_icode_end = line[67]
+                    metadata[chn_id].append(
+                        {
+                            "pdb_id": pdb_id,
+                            "database": database,
+                            "db_acc": db_acc,
+                            "db_id_code": db_id_code,
+                        }
                     )
-            else:
-                record.id = chn_id
-            yield record
+                elif rec_name == "DBREF1":
+                    # ID code of this entry (PDB ID)
+                    pdb_id = line[7:11]
+                    # Chain identifier.
+                    chn_id = line[12]
+                    # Sequence database name.
+                    database = line[26:32].strip()
+                    # Sequence database identification code.
+                    db_id_code = line[47:67].strip()
+                elif rec_name == "DBREF2":
+                    # Ensure ID code and chain are consistent:
+                    if pdb_id != line[7:11] or chn_id != line[12]:
+                        raise ValueError("DBREF2 identifiers do not match")
+                    # Sequence database accession code.
+                    db_acc = line[18:40].strip()
+                    metadata[chn_id].append(
+                        {
+                            "pdb_id": pdb_id,
+                            "database": database,
+                            "db_acc": db_acc,
+                            "db_id_code": db_id_code,
+                        }
+                    )
+                # ENH: 'SEQADV' 'MODRES'
+
+            if rec_name is None:
+                raise ValueError("Empty file.")
+
+            self.cache = []
+            for chn_id, residues in sorted(chains.items()):
+                record = SeqRecord(Seq("".join(residues)))
+                record.annotations = {"chain": chn_id}
+                # TODO: Test PDB files with DNA and RNA too:
+                record.annotations["molecule_type"] = "protein"
+                if chn_id in metadata:
+                    m = metadata[chn_id][0]
+                    record.id = record.name = f"{m['pdb_id']}:{chn_id}"
+                    record.description = (
+                        f"{m['database']}:{m['db_acc']} {m['db_id_code']}"
+                    )
+                    for melem in metadata[chn_id]:
+                        record.dbxrefs.extend(
+                            [
+                                f"{melem['database']}:{melem['db_acc']}",
+                                f"{melem['database']}:{melem['db_id_code']}",
+                            ]
+                        )
+                else:
+                    record.id = chn_id
+                self.cache.append(record)
+        try:
+            record = self.cache.pop(0)
+        except IndexError:
+            raise StopIteration
+        else:
+            return record
 
 
-def PdbAtomIterator(source):
-    """Return SeqRecord objects for each chain in a PDB file.
+class PdbAtomIterator(SequenceIterator):
+    """Parser for structures in a PDB files."""
 
-    Argument source is a file-like object or a path to a file.
+    modes = "t"
 
-    The sequences are derived from the 3D structure (ATOM records), not the
-    SEQRES lines in the PDB file header.
+    def __init__(self, source: _TextIOSource) -> None:
+        """Iterate over structures in a PDB file as SeqRecord objects.
 
-    Unrecognised three letter amino acid codes (e.g. "CSD") from HETATM entries
-    are converted to "X" in the sequence.
+        Argument source is a file-like object or a path to a file.
 
-    In addition to information from the PDB header (which is the same for all
-    records), the following chain specific information is placed in the
-    annotation:
+        The sequences are derived from the 3D structure (ATOM records), not the
+        SEQRES lines in the PDB file header.
 
-    record.annotations["residues"] = List of residue ID strings
-    record.annotations["chain"] = Chain ID (typically A, B ,...)
-    record.annotations["model"] = Model ID (typically zero)
+        Unrecognised three letter amino acid codes (e.g. "CSD") from HETATM
+        entries are converted to "X" in the sequence.
 
-    Where amino acids are missing from the structure, as indicated by residue
-    numbering, the sequence is filled in with 'X' characters to match the size
-    of the missing region, and  None is included as the corresponding entry in
-    the list record.annotations["residues"].
+        In addition to information from the PDB header (which is the same for
+        all records), the following chain specific information is placed in the
+        annotation:
 
-    This function uses the Bio.PDB module to do most of the hard work. The
-    annotation information could be improved but this extra parsing should be
-    done in parse_pdb_header, not this module.
+        record.annotations["residues"] = List of residue ID strings
+        record.annotations["chain"] = Chain ID (typically A, B ,...)
+        record.annotations["model"] = Model ID (typically zero)
 
-    This gets called internally via Bio.SeqIO for the atom based interpretation
-    of the PDB file format:
+        Where amino acids are missing from the structure, as indicated by
+        residue numbering, the sequence is filled in with 'X' characters to
+        match the size of the missing region, and  None is included as the
+        corresponding entry in the list record.annotations["residues"].
 
-    >>> from Bio import SeqIO
-    >>> for record in SeqIO.parse("PDB/1A8O.pdb", "pdb-atom"):
-    ...     print("Record id %s, chain %s" % (record.id, record.annotations["chain"]))
-    ...
-    Record id 1A8O:A, chain A
+        This function uses the Bio.PDB module to do most of the hard work. The
+        annotation information could be improved but this extra parsing should
+        be done in parse_pdb_header, not this module.
 
-    Equivalently,
+        This gets called internally via Bio.SeqIO for the atom based
+        interpretation of the PDB file format:
 
-    >>> with open("PDB/1A8O.pdb") as handle:
-    ...     for record in PdbAtomIterator(handle):
-    ...         print("Record id %s, chain %s" % (record.id, record.annotations["chain"]))
-    ...
-    Record id 1A8O:A, chain A
+        >>> from Bio import SeqIO
+        >>> for record in SeqIO.parse("PDB/1A8O.pdb", "pdb-atom"):
+        ...     print("Record id %s, chain %s" % (record.id, record.annotations["chain"]))
+        ...
+        Record id 1A8O:A, chain A
 
-    """
-    # TODO - Add record.annotations to the doctest, esp the residues (not working?)
+        Equivalently,
 
-    # Only import PDB when needed, to avoid/delay NumPy dependency in SeqIO
-    from Bio.PDB import PDBParser
+        >>> with open("PDB/1A8O.pdb") as handle:
+        ...     for record in PdbAtomIterator(handle):
+        ...         print("Record id %s, chain %s" % (record.id, record.annotations["chain"]))
+        ...
+        Record id 1A8O:A, chain A
 
-    structure = PDBParser().get_structure(None, source)
-    pdb_id = structure.header["idcode"]
-    if not pdb_id:
-        warnings.warn(
-            "'HEADER' line not found; can't determine PDB ID.", BiopythonParserWarning
-        )
-        pdb_id = "????"
+        """
+        # TODO - Add record.annotations to the doctest, esp the residues (not working?)
 
-    for record in AtomIterator(pdb_id, structure):
-        # The PDB header was loaded as a dictionary, so let's reuse it all
-        record.annotations.update(structure.header)
+        # Only import PDB when needed, to avoid/delay NumPy dependency in SeqIO
+        from Bio.PDB.PDBParser import PDBParser
 
-        # ENH - add letter annotations -- per-residue info, e.g. numbers
+        structure = PDBParser().get_structure(None, source)
+        pdb_id = structure.header["idcode"]
+        if not pdb_id:
+            warnings.warn(
+                "'HEADER' line not found; can't determine PDB ID.",
+                BiopythonParserWarning,
+            )
+            pdb_id = "????"
 
-        yield record
+        records = []
+        for record in AtomIterator(pdb_id, structure):
+            # The PDB header was loaded as a dictionary, so let's reuse it all
+            record.annotations.update(structure.header)
+
+            # ENH - add letter annotations -- per-residue info, e.g. numbers
+
+            records.append(record)
+
+        self.records = iter(records)
+
+    def __next__(self):
+        return next(self.records)
 
 
 PDBX_POLY_SEQ_SCHEME_FIELDS = (
@@ -352,176 +374,198 @@ STRUCT_REF_SEQ_FIELDS = (
 )
 
 
-def CifSeqresIterator(source):
-    """Return SeqRecord objects for each chain in an mmCIF file.
+class CifSeqresIterator(SequenceIterator):
+    """Parser for chains in an mmCIF files."""
 
-    Argument source is a file-like object or a path to a file.
+    modes = "t"
 
-    The sequences are derived from the _entity_poly_seq entries in the mmCIF
-    file, not the atoms of the 3D structure.
+    def __init__(self, source: _TextIOSource) -> None:
+        """Iterate over chains in an mmCIF file as SeqRecord objects.
 
-    Specifically, these mmCIF records are handled: _pdbx_poly_seq_scheme and
-    _struct_ref_seq. The _pdbx_poly_seq records contain sequence information,
-    and the _struct_ref_seq records contain database cross-references.
+        Argument source is a file-like object or a path to a file.
 
-    See:
-    http://mmcif.wwpdb.org/dictionaries/mmcif_pdbx_v40.dic/Categories/pdbx_poly_seq_scheme.html
-    and
-    http://mmcif.wwpdb.org/dictionaries/mmcif_pdbx_v50.dic/Categories/struct_ref_seq.html
+        The sequences are derived from the _entity_poly_seq entries in the
+        mmCIF file, not the atoms of the 3D structure.
 
-    This gets called internally via Bio.SeqIO for the sequence-based
-    interpretation of the mmCIF file format:
+        Specifically, these mmCIF records are handled: _pdbx_poly_seq_scheme
+        and _struct_ref_seq. The _pdbx_poly_seq records contain sequence
+        information, and the _struct_ref_seq records contain database
+        cross-references.
 
-    >>> from Bio import SeqIO
-    >>> for record in SeqIO.parse("PDB/1A8O.cif", "cif-seqres"):
-    ...     print("Record id %s, chain %s" % (record.id, record.annotations["chain"]))
-    ...     print(record.dbxrefs)
-    ...
-    Record id 1A8O:A, chain A
-    ['UNP:P12497', 'UNP:POL_HV1N5']
+        See:
+        http://mmcif.wwpdb.org/dictionaries/mmcif_pdbx_v40.dic/Categories/pdbx_poly_seq_scheme.html
+        and
+        http://mmcif.wwpdb.org/dictionaries/mmcif_pdbx_v50.dic/Categories/struct_ref_seq.html
 
-    Equivalently,
+        This gets called internally via Bio.SeqIO for the sequence-based
+        interpretation of the mmCIF file format:
 
-    >>> with open("PDB/1A8O.cif") as handle:
-    ...     for record in CifSeqresIterator(handle):
-    ...         print("Record id %s, chain %s" % (record.id, record.annotations["chain"]))
-    ...         print(record.dbxrefs)
-    ...
-    Record id 1A8O:A, chain A
-    ['UNP:P12497', 'UNP:POL_HV1N5']
+        >>> from Bio import SeqIO
+        >>> for record in SeqIO.parse("PDB/1A8O.cif", "cif-seqres"):
+        ...     print("Record id %s, chain %s" % (record.id, record.annotations["chain"]))
+        ...     print(record.dbxrefs)
+        ...
+        Record id 1A8O:A, chain A
+        ['UNP:P12497', 'UNP:POL_HV1N5']
 
-    Note the chain is recorded in the annotations dictionary, and any mmCIF
-    _struct_ref_seq entries are recorded in the database cross-references list.
-    """
-    # Only import PDB when needed, to avoid/delay NumPy dependency in SeqIO
-    from Bio.PDB.MMCIF2Dict import MMCIF2Dict
+        Equivalently,
 
-    chains = collections.defaultdict(list)
-    metadata = collections.defaultdict(list)
-    records = MMCIF2Dict(source)
+        >>> with open("PDB/1A8O.cif") as handle:
+        ...     for record in CifSeqresIterator(handle):
+        ...         print("Record id %s, chain %s" % (record.id, record.annotations["chain"]))
+        ...         print(record.dbxrefs)
+        ...
+        Record id 1A8O:A, chain A
+        ['UNP:P12497', 'UNP:POL_HV1N5']
 
-    # Explicitly convert records to list (See #1533).
-    # If an item is not present, use an empty list
-    for field in (
-        PDBX_POLY_SEQ_SCHEME_FIELDS + STRUCT_REF_SEQ_FIELDS + STRUCT_REF_FIELDS
-    ):
-        if field not in records:
-            records[field] = []
-        elif not isinstance(records[field], list):
-            records[field] = [records[field]]
+        Note the chain is recorded in the annotations dictionary, and any mmCIF
+        _struct_ref_seq entries are recorded in the database cross-references
+        list.
+        """
 
-    for asym_id, mon_id in zip(
-        records["_pdbx_poly_seq_scheme.asym_id"],
-        records["_pdbx_poly_seq_scheme.mon_id"],
-    ):
-        mon_id_1l = _res2aacode(mon_id)
-        chains[asym_id].append(mon_id_1l)
+        # Only import PDB when needed, to avoid/delay NumPy dependency in SeqIO
+        from Bio.PDB.MMCIF2Dict import MMCIF2Dict
 
-    # Build a dict of _struct_ref records, indexed by the id field:
-    struct_refs = {}
-    for ref_id, db_name, db_code, db_acc in zip(
-        records["_struct_ref.id"],
-        records["_struct_ref.db_name"],
-        records["_struct_ref.db_code"],
-        records["_struct_ref.pdbx_db_accession"],
-    ):
-        struct_refs[ref_id] = {
-            "database": db_name,
-            "db_id_code": db_code,
-            "db_acc": db_acc,
-        }
+        chains = collections.defaultdict(list)
+        metadata = collections.defaultdict(list)
+        records = MMCIF2Dict(source)
 
-    # Look through _struct_ref_seq records, look up the corresponding
-    # _struct_ref and add an entry to the metadata list for this chain.
-    for ref_id, pdb_id, chain_id in zip(
-        records["_struct_ref_seq.ref_id"],
-        records["_struct_ref_seq.pdbx_PDB_id_code"],
-        records["_struct_ref_seq.pdbx_strand_id"],
-    ):
-        struct_ref = struct_refs[ref_id]
+        # Explicitly convert records to list (See #1533).
+        # If an item is not present, use an empty list
+        for field in (
+            PDBX_POLY_SEQ_SCHEME_FIELDS + STRUCT_REF_SEQ_FIELDS + STRUCT_REF_FIELDS
+        ):
+            if field not in records:
+                records[field] = []
+            elif not isinstance(records[field], list):
+                records[field] = [records[field]]
 
-        # The names here mirror those in PdbIO
-        metadata[chain_id].append({"pdb_id": pdb_id})
-        metadata[chain_id][-1].update(struct_ref)
+        for asym_id, mon_id in zip(
+            records["_pdbx_poly_seq_scheme.asym_id"],
+            records["_pdbx_poly_seq_scheme.mon_id"],
+        ):
+            mon_id_1l = _res2aacode(mon_id)
+            chains[asym_id].append(mon_id_1l)
 
-    for chn_id, residues in sorted(chains.items()):
-        record = SeqRecord(Seq("".join(residues)))
-        record.annotations = {"chain": chn_id}
-        # TODO: Test PDB files with DNA and RNA too:
-        record.annotations["molecule_type"] = "protein"
-        if chn_id in metadata:
-            m = metadata[chn_id][0]
-            record.id = record.name = f"{m['pdb_id']}:{chn_id}"
-            record.description = f"{m['database']}:{m['db_acc']} {m['db_id_code']}"
-            for melem in metadata[chn_id]:
-                record.dbxrefs.extend(
-                    [
-                        f"{melem['database']}:{melem['db_acc']}",
-                        f"{melem['database']}:{melem['db_id_code']}",
-                    ]
-                )
-        else:
-            record.id = chn_id
-        yield record
+        # Build a dict of _struct_ref records, indexed by the id field:
+        struct_refs = {}
+        for ref_id, db_name, db_code, db_acc in zip(
+            records["_struct_ref.id"],
+            records["_struct_ref.db_name"],
+            records["_struct_ref.db_code"],
+            records["_struct_ref.pdbx_db_accession"],
+        ):
+            struct_refs[ref_id] = {
+                "database": db_name,
+                "db_id_code": db_code,
+                "db_acc": db_acc,
+            }
+
+        # Look through _struct_ref_seq records, look up the corresponding
+        # _struct_ref and add an entry to the metadata list for this chain.
+        for ref_id, pdb_id, chain_id in zip(
+            records["_struct_ref_seq.ref_id"],
+            records["_struct_ref_seq.pdbx_PDB_id_code"],
+            records["_struct_ref_seq.pdbx_strand_id"],
+        ):
+            struct_ref = struct_refs[ref_id]
+
+            # The names here mirror those in PdbIO
+            metadata[chain_id].append({"pdb_id": pdb_id})
+            metadata[chain_id][-1].update(struct_ref)
+
+        records = []  # type: ignore
+        for chn_id, residues in sorted(chains.items()):
+            record = SeqRecord(Seq("".join(residues)))
+            record.annotations = {"chain": chn_id}
+            # TODO: Test PDB files with DNA and RNA too:
+            record.annotations["molecule_type"] = "protein"
+            if chn_id in metadata:
+                m = metadata[chn_id][0]
+                record.id = record.name = f"{m['pdb_id']}:{chn_id}"
+                record.description = f"{m['database']}:{m['db_acc']} {m['db_id_code']}"
+                for melem in metadata[chn_id]:
+                    record.dbxrefs.extend(
+                        [
+                            f"{melem['database']}:{melem['db_acc']}",
+                            f"{melem['database']}:{melem['db_id_code']}",
+                        ]
+                    )
+            else:
+                record.id = chn_id
+            records.append(record)  # type: ignore
+
+        self.records = iter(records)
+
+    def __next__(self):
+        return next(self.records)
 
 
-def CifAtomIterator(source):
-    """Return SeqRecord objects for each chain in an mmCIF file.
+class CifAtomIterator(SequenceIterator):
+    """Parser for structures in an mmCIF files."""
 
-    Argument source is a file-like object or a path to a file.
+    modes = "t"
 
-    The sequences are derived from the 3D structure (_atom_site.* fields)
-    in the mmCIF file.
+    def __init__(self, source: _TextIOSource) -> None:
+        """Iterate over structures in an mmCIF file as SeqRecord objects.
 
-    Unrecognised three letter amino acid codes (e.g. "CSD") from HETATM entries
-    are converted to "X" in the sequence.
+        Argument source is a file-like object or a path to a file.
 
-    In addition to information from the PDB header (which is the same for all
-    records), the following chain specific information is placed in the
-    annotation:
+        The sequences are derived from the 3D structure (_atom_site.* fields)
+        in the mmCIF file.
 
-    record.annotations["residues"] = List of residue ID strings
-    record.annotations["chain"] = Chain ID (typically A, B ,...)
-    record.annotations["model"] = Model ID (typically zero)
+        Unrecognised three letter amino acid codes (e.g. "CSD") from HETATM
+        entries are converted to "X" in the sequence.
 
-    Where amino acids are missing from the structure, as indicated by residue
-    numbering, the sequence is filled in with 'X' characters to match the size
-    of the missing region, and  None is included as the corresponding entry in
-    the list record.annotations["residues"].
+        In addition to information from the PDB header (which is the same for
+        all records), the following chain specific information is placed in the
+        annotation:
 
-    This function uses the Bio.PDB module to do most of the hard work. The
-    annotation information could be improved but this extra parsing should be
-    done in parse_pdb_header, not this module.
+        record.annotations["residues"] = List of residue ID strings
+        record.annotations["chain"] = Chain ID (typically A, B ,...)
+        record.annotations["model"] = Model ID (typically zero)
 
-    This gets called internally via Bio.SeqIO for the atom based interpretation
-    of the PDB file format:
+        Where amino acids are missing from the structure, as indicated by
+        residue numbering, the sequence is filled in with 'X' characters to
+        match the size of the missing region, and  None is included as the
+        corresponding entry in the list record.annotations["residues"].
 
-    >>> from Bio import SeqIO
-    >>> for record in SeqIO.parse("PDB/1A8O.cif", "cif-atom"):
-    ...     print("Record id %s, chain %s" % (record.id, record.annotations["chain"]))
-    ...
-    Record id 1A8O:A, chain A
+        This function uses the Bio.PDB module to do most of the hard work. The
+        annotation information could be improved but this extra parsing should
+        be done in parse_pdb_header, not this module.
 
-    Equivalently,
+        This gets called internally via Bio.SeqIO for the atom based
+        interpretation of the PDB file format:
 
-    >>> with open("PDB/1A8O.cif") as handle:
-    ...     for record in CifAtomIterator(handle):
-    ...         print("Record id %s, chain %s" % (record.id, record.annotations["chain"]))
-    ...
-    Record id 1A8O:A, chain A
+        >>> from Bio import SeqIO
+        >>> for record in SeqIO.parse("PDB/1A8O.cif", "cif-atom"):
+        ...     print("Record id %s, chain %s" % (record.id, record.annotations["chain"]))
+        ...
+        Record id 1A8O:A, chain A
 
-    """
-    # TODO - Add record.annotations to the doctest, esp the residues (not working?)
+        Equivalently,
 
-    # Only import parser when needed, to avoid/delay NumPy dependency in SeqIO
-    from Bio.PDB.MMCIFParser import MMCIFParser
+        >>> with open("PDB/1A8O.cif") as handle:
+        ...     for record in CifAtomIterator(handle):
+        ...         print("Record id %s, chain %s" % (record.id, record.annotations["chain"]))
+        ...
+        Record id 1A8O:A, chain A
 
-    structure = MMCIFParser().get_structure(None, source)
-    pdb_id = structure.header["idcode"]
-    if not pdb_id:
-        warnings.warn("Could not determine the PDB ID.", BiopythonParserWarning)
-        pdb_id = "????"
-    yield from AtomIterator(pdb_id, structure)
+        """
+        # TODO - Add record.annotations to the doctest, esp the residues (not working?)
+
+        # Only import parser when needed, to avoid/delay NumPy dependency in SeqIO
+        from Bio.PDB.MMCIFParser import MMCIFParser
+
+        structure = MMCIFParser().get_structure(None, source)
+        pdb_id = structure.header["idcode"]
+        if not pdb_id:
+            warnings.warn("Could not determine the PDB ID.", BiopythonParserWarning)
+            pdb_id = "????"
+        self.records = AtomIterator(pdb_id, structure)
+
+    def __next__(self):
+        return next(self.records)
 
 
 if __name__ == "__main__":

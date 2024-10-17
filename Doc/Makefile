@@ -1,56 +1,27 @@
-subdirs :=
-BP_VERSION := $(shell python -c "`grep ^__version__ ../Bio/__init__.py`; print('dev' if 'dev' in __version__ else __version__)")
+# Minimal makefile for Sphinx documentation
+#
 
-all:  Tutorial.html Tutorial.txt pdf $(subdirs)
-pdf:  Tutorial.pdf biopdb_faq.pdf
+# You can set these variables from the command line.
+SPHINXOPTS    = -W --keep-going
+SPHINXBUILD   = sphinx-build
+SPHINXPROJ    = Bio
+SOURCEDIR     = .
+BUILDDIR      = _build
 
-Tutorial.pdf: Tutorial.tex Tutorial/chapter_*.tex
-	pdflatex --shell-escape "\def\bpversion{${BP_VERSION}}\input{Tutorial}"
-	pdflatex --shell-escape "\def\bpversion{${BP_VERSION}}\input{Tutorial}"
-	pdflatex --shell-escape "\def\bpversion{${BP_VERSION}}\input{Tutorial}"
+# Put it first so that "make" without argument is like "make help".
+help:
+	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
-biopdb_faq.pdf: biopdb_faq.tex
-	pdflatex biopdb_faq.tex
-	pdflatex biopdb_faq.tex
-	pdflatex biopdb_faq.tex
+.PHONY: help Makefile
 
-Tutorial.html: Tutorial.tex Tutorial/chapter_*.tex version.sh
-	hevea -exec ./version.sh -exec xxdate.exe -fix Tutorial.tex
+# Catch-all target: route all unknown targets to Sphinx using the new
+# "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
+%: Makefile
+	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
-Tutorial.txt: Tutorial.tex Tutorial/chapter_*.tex version.sh
-	hevea -exec ./version.sh -exec xxdate.exe -fix -text Tutorial.tex
-
-version.sh: version.in
-	sed "s/\@VERSION\@/${BP_VERSION}/g" version.in > version.sh
-	chmod +x version.sh
-
-clean-subdirs: $(subdirs)
-	( for f in $^ ; do $(MAKE) clean -C $$f ; done )
-
-clean: clean-subdirs
-	rm -f Tutorial.aux
-	rm -f Tutorial.toc
-	rm -f Tutorial.log
-	rm -f Tutorial.out
-	rm -f Tutorial.haux
-	rm -f Tutorial.htoc
-	rm -f biopdb_faq.aux
-	rm -f biopdb_faq.log
-	rm -f biopdb_faq.out
-	rm -f Tutorial/*.aux
-
-distclean-subdirs: $(subdirs)
-	( for f in $^ ; do $(MAKE) distclean -C $$f ; done )
-
-distclean: clean distclean-subdirs
-	rm -f version.sh
-	rm -f biopdb_faq.pdf
-	rm -f Tutorial.pdf
-	rm -f Tutorial.html
-	rm -f Tutorial.txt
-	rm -f *_motif.gif #output from hacha
-
-.PHONY: $(subdirs)
-$(subdirs):
-	$(MAKE) -C $@
+clean:
+	-rm -f api/Bio*.rst
+	-rm -rf _build/doctrees
+	-rm -rf _build/html
+	-rm -rf _build/latex
 

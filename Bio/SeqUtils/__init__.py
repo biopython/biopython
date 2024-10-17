@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # Copyright 2002 by Thomas Sicheritz-Ponten and Cecilia Alsmark.
+# Copyright 2003 Yair Benita.
 # Revisions copyright 2014 by Markus Piotrowski.
 # Revisions copyright 2014-2016 by Peter Cock.
 # All rights reserved.
@@ -9,38 +10,141 @@
 # package.
 """Miscellaneous functions for dealing with sequences."""
 
-
 import re
-from math import pi, sin, cos
+from math import cos
+from math import exp
+from math import log
+from math import pi
+from math import sin
 
-from Bio.Seq import Seq, complement, complement_rna
 from Bio.Data import IUPACData
-
+from Bio.Data.CodonTable import standard_dna_table
+from Bio.Seq import complement
+from Bio.Seq import complement_rna
+from Bio.Seq import Seq
+from Bio.Seq import translate
 
 ######################################
 # DNA
 ######################
-# {{{
+# {
+
+_gc_values = {
+    "G": 1.000,
+    "C": 1.000,
+    "A": 0.000,
+    "T": 0.000,
+    "U": 0.000,
+    "S": 1.000,  # Strong interaction (3 H bonds) (G or C)
+    "W": 0.000,  # Weak interaction (2 H bonds) (A or T)
+    "M": 0.500,  # Amino (A or C)
+    "R": 0.500,  # Purine (A or G)
+    "Y": 0.500,  # Pyrimidine (T or C)
+    "K": 0.500,  # Keto (G or T)
+    "V": 2 / 3,  # Not T or U (A or C or G)
+    "B": 2 / 3,  # Not A (C or G or T)
+    "H": 1 / 3,  # Not G (A or C or T)
+    "D": 1 / 3,  # Not C (A or G or T)
+    "X": 0.500,  # Any nucleotide (A or C or G or T)
+    "N": 0.500,  # Any nucleotide (A or C or G or T)
+}
 
 
-def GC(seq):
-    """Calculate G+C content, return percentage (as float between 0 and 100).
+def gc_fraction(seq, ambiguous="remove"):
+    """Calculate G+C percentage in seq (float between 0 and 1).
 
-    Copes mixed case sequences, and with the ambiguous nucleotide S (G or C)
-    when counting the G and C content.  The percentage is calculated against
-    the full length, e.g.:
+    Copes with mixed case sequences. Ambiguous Nucleotides in this context are
+    those different from ATCGSWU (S is G or C, and W is A or T).
 
-    >>> from Bio.SeqUtils import GC
-    >>> GC("ACTGN")
-    40.0
+    If ambiguous equals "remove" (default), will only count GCS and will only
+    include ACTGSWU when calculating the sequence length. Equivalent to removing
+    all characters in the set BDHKMNRVXY before calculating the GC content, as
+    each of these ambiguous nucleotides can either be in (A,T) or in (C,G).
+
+    If ambiguous equals "ignore", it will treat only unambiguous nucleotides (GCS)
+    as counting towards the GC percentage, but will include all ambiguous and
+    unambiguous nucleotides when calculating the sequence length.
+
+    If ambiguous equals "weighted", will use a "mean" value when counting the
+    ambiguous characters, for example, G and C will be counted as 1, N and X will
+    be counted as 0.5, D will be counted as 0.33 etc. See Bio.SeqUtils._gc_values
+    for a full list.
+
+    Will raise a ValueError for any other value of the ambiguous parameter.
+
+
+    >>> from Bio.SeqUtils import gc_fraction
+    >>> seq = "ACTG"
+    >>> print(f"GC content of {seq} : {gc_fraction(seq):.2f}")
+    GC content of ACTG : 0.50
+
+    Example with an RNA sequence:
+
+    >>> seq = "GGAUCUUCGGAUCU"
+    >>> print(f"GC content of {seq} : {gc_fraction(seq):.2f}")
+    GC content of GGAUCUUCGGAUCU : 0.50
+
+    S and W are ambiguous for the purposes of calculating the GC content.
+
+    >>> seq = "ACTGSSSS"
+    >>> gc = gc_fraction(seq, "remove")
+    >>> print(f"GC content of {seq} : {gc:.2f}")
+    GC content of ACTGSSSS : 0.75
+    >>> gc = gc_fraction(seq, "ignore")
+    >>> print(f"GC content of {seq} : {gc:.2f}")
+    GC content of ACTGSSSS : 0.75
+    >>> gc = gc_fraction(seq, "weighted")
+    >>> print(f"GC content with ambiguous counting: {gc:.2f}")
+    GC content with ambiguous counting: 0.75
+
+    Some examples with ambiguous nucleotides.
+
+    >>> seq = "ACTGN"
+    >>> gc = gc_fraction(seq, "ignore")
+    >>> print(f"GC content of {seq} : {gc:.2f}")
+    GC content of ACTGN : 0.40
+    >>> gc = gc_fraction(seq, "weighted")
+    >>> print(f"GC content with ambiguous counting: {gc:.2f}")
+    GC content with ambiguous counting: 0.50
+    >>> gc = gc_fraction(seq, "remove")
+    >>> print(f"GC content with ambiguous removing: {gc:.2f}")
+    GC content with ambiguous removing: 0.50
+
+    Ambiguous nucleotides are also removed from the length of the sequence.
+
+    >>> seq = "GDVV"
+    >>> gc = gc_fraction(seq, "ignore")
+    >>> print(f"GC content of {seq} : {gc:.2f}")
+    GC content of GDVV : 0.25
+    >>> gc = gc_fraction(seq, "weighted")
+    >>> print(f"GC content with ambiguous counting: {gc:.4f}")
+    GC content with ambiguous counting: 0.6667
+    >>> gc = gc_fraction(seq, "remove")
+    >>> print(f"GC content with ambiguous removing: {gc:.2f}")
+    GC content with ambiguous removing: 1.00
+
 
     Note that this will return zero for an empty sequence.
     """
-    gc = sum(seq.count(x) for x in ["G", "C", "g", "c", "S", "s"])
-    try:
-        return gc * 100.0 / len(seq)
-    except ZeroDivisionError:
-        return 0.0
+    if ambiguous not in ("weighted", "remove", "ignore"):
+        raise ValueError(f"ambiguous value '{ambiguous}' not recognized")
+
+    gc = sum(seq.count(x) for x in "CGScgs")
+
+    if ambiguous == "remove":
+        length = gc + sum(seq.count(x) for x in "ATWUatwu")
+    else:
+        length = len(seq)
+
+    if ambiguous == "weighted":
+        gc += sum(
+            (seq.count(x) + seq.count(x.lower())) * _gc_values[x] for x in "BDHKMNRVXY"
+        )
+
+    if length == 0:
+        return 0
+
+    return gc / length
 
 
 def GC123(seq):
@@ -64,14 +168,14 @@ def GC123(seq):
         codon = seq[i : i + 3]
         if len(codon) < 3:
             codon += "  "
-        for pos in range(0, 3):
+        for pos in range(3):
             for nt in ["A", "T", "G", "C"]:
                 if codon[pos] == nt or codon[pos] == nt.lower():
                     d[nt][pos] += 1
     gc = {}
     gcall = 0
     nall = 0
-    for i in range(0, 3):
+    for i in range(3):
         try:
             n = d["G"][i] + d["C"][i] + d["T"][i] + d["A"][i]
             gc[i] = (d["G"][i] + d["C"][i]) * 100.0 / n
@@ -102,7 +206,7 @@ def GC_skew(seq, window=100):
         g = s.count("G") + s.count("g")
         c = s.count("C") + s.count("c")
         try:
-            skew = (g - c) / float(g + c)
+            skew = (g - c) / (g + c)
         except ZeroDivisionError:
             skew = 0.0
         values.append(skew)
@@ -134,7 +238,7 @@ def xGC_skew(seq, window=1000, zoom=100, r=300, px=100, py=100):
     ty = Y0
     canvas.create_text(X0, ty, text="%s...%s (%d nt)" % (seq[:7], seq[-7:], len(seq)))
     ty += 20
-    canvas.create_text(X0, ty, text=f"GC {GC(seq):3.2f}%")
+    canvas.create_text(X0, ty, text=f"GC {gc_fraction(seq):3.2f}%")
     ty += 20
     canvas.create_text(X0, ty, text="GC Skew", fill="blue")
     ty += 20
@@ -171,7 +275,7 @@ def xGC_skew(seq, window=1000, zoom=100, r=300, px=100, py=100):
 
 
 def nt_search(seq, subseq):
-    """Search for a DNA subseq in sequence, return list of [subseq, positions].
+    """Search for a DNA subseq in seq, return list of [subseq, positions].
 
     Use ambiguous values (like N = A or T or C or G, R = A or G etc.),
     searches only on forward strand.
@@ -322,7 +426,7 @@ def molecular_weight(
     have a 5' phosphate.
 
     Arguments:
-     - seq: String or Biopython sequence object.
+     - seq: string, Seq, or SeqRecord object.
      - seq_type: The default is to assume DNA; override this with a string
        "DNA", "RNA", or "protein".
      - double_stranded: Calculate the mass for the double stranded molecule?
@@ -344,8 +448,10 @@ def molecular_weight(
     249.29
 
     """
-    # Rewritten by Markus Piotrowski, 2014
-
+    try:
+        seq = seq.seq
+    except AttributeError:  # not a  SeqRecord object
+        pass
     seq = "".join(str(seq).split()).upper()  # Do the minimum formatting
 
     if seq_type == "DNA":
@@ -377,14 +483,14 @@ def molecular_weight(
             weight -= water
     except KeyError as e:
         raise ValueError(
-            f"{e} is not a valid unambiguous letter for {seq_type}"
+            f"'{e}' is not a valid unambiguous letter for {seq_type}"
         ) from None
 
     if double_stranded:
         if seq_type == "protein":
             raise ValueError("protein sequences cannot be double-stranded")
         elif seq_type == "DNA":
-            seq = complement(seq, inplace=False)  # TODO: remove inplace=False
+            seq = complement(seq)
         elif seq_type == "RNA":
             seq = complement_rna(seq)
         weight += sum(weight_table[x] for x in seq) - (len(seq) - 1) * water
@@ -419,16 +525,17 @@ def six_frame_translations(seq, genetic_code=1):
     <BLANKLINE>
 
     """  # noqa for pep8 W291 trailing whitespace
-    from Bio.Seq import reverse_complement, reverse_complement_rna, translate
+    from Bio.Seq import reverse_complement
+    from Bio.Seq import reverse_complement_rna
 
     if "u" in seq.lower():
         anti = reverse_complement_rna(seq)
     else:
-        anti = reverse_complement(seq, inplace=False)  # TODO: remove inplace=False
+        anti = reverse_complement(seq)
     comp = anti[::-1]
     length = len(seq)
     frames = {}
-    for i in range(0, 3):
+    for i in range(3):
         fragment_length = 3 * ((length - i) // 3)
         frames[i + 1] = translate(seq[i : i + fragment_length], genetic_code)
         frames[-(i + 1)] = translate(anti[i : i + fragment_length], genetic_code)[::-1]
@@ -442,10 +549,11 @@ def six_frame_translations(seq, genetic_code=1):
     for nt in ["a", "t", "g", "c"]:
         header += " %s:%d" % (nt, seq.count(nt.upper()))
 
+    gc = 100 * gc_fraction(seq, ambiguous="ignore")
     header += "\nSequence: %s, %d nt, %0.2f %%GC\n\n\n" % (
         short.lower(),
         length,
-        GC(seq),
+        gc,
     )
     res = header
 
@@ -458,13 +566,164 @@ def six_frame_translations(seq, genetic_code=1):
         res += " " + "  ".join(frames[2][p : p + 20]) + "\n"
         res += "  ".join(frames[1][p : p + 20]) + "\n"
         # seq
-        res += subseq.lower() + "%5d %%\n" % int(GC(subseq))
+        res += subseq.lower() + "%5d %%\n" % int(gc)
         res += csubseq.lower() + "\n"
         # - frames
         res += "  ".join(frames[-2][p : p + 20]) + "\n"
         res += " " + "  ".join(frames[-1][p : p + 20]) + "\n"
         res += "  " + "  ".join(frames[-3][p : p + 20]) + "\n\n"
     return res
+
+
+class CodonAdaptationIndex(dict):
+    """A codon adaptation index (CAI) implementation.
+
+    Implements the codon adaptation index (CAI) described by Sharp and
+    Li (Nucleic Acids Res. 1987 Feb 11;15(3):1281-95).
+    """
+
+    def __init__(self, sequences, table=standard_dna_table):
+        """Generate a codon adaptiveness table from the coding DNA sequences.
+
+        This calculates the relative adaptiveness of each codon (w_ij) as
+        defined by Sharp & Li (Nucleic Acids Research 15(3): 1281-1295 (1987))
+        from the provided codon DNA sequences.
+
+        Arguments:
+         - sequences: An iterable over DNA sequences, which may be plain
+                      strings, Seq objects, MutableSeq objects, or SeqRecord
+                      objects.
+         - table:     A Bio.Data.CodonTable.CodonTable object defining the
+                      genetic code. By default, the standard genetic code is
+                      used.
+        """
+        self._table = table
+        codons = {aminoacid: [] for aminoacid in table.protein_alphabet}
+        for codon, aminoacid in table.forward_table.items():
+            codons[aminoacid].append(codon)
+        synonymous_codons = tuple(list(codons.values()) + [table.stop_codons])
+
+        # count codon occurrences in the sequences.
+        counts = {c1 + c2 + c3: 0 for c1 in "ACGT" for c2 in "ACGT" for c3 in "ACGT"}
+        self.update(counts)  # just to ensure that the dictionary is sorted
+
+        # iterate over sequence and count the codons
+        for sequence in sequences:
+            try:  # SeqRecord
+                name = sequence.id
+                sequence = sequence.seq
+            except AttributeError:  # str, Seq, or MutableSeq
+                name = None
+            sequence = sequence.upper()
+            for i in range(0, len(sequence), 3):
+                codon = sequence[i : i + 3]
+                try:
+                    counts[codon] += 1
+                except KeyError:
+                    if name is None:
+                        message = f"illegal codon '{codon}'"
+                    else:
+                        message = f"illegal codon '{codon}' in gene {name}"
+                    raise ValueError(message) from None
+
+        # Following the description in the original paper, we use a value
+        # of 0.5 for codons that do not appear in the reference sequences.
+        for codon, count in counts.items():
+            if count == 0:
+                counts[codon] = 0.5
+
+        for codons in synonymous_codons:
+            denominator = max(counts[codon] for codon in codons)
+            for codon in codons:
+                self[codon] = counts[codon] / denominator
+
+    def calculate(self, sequence):
+        """Calculate and return the CAI (float) for the provided DNA sequence."""
+        cai_value, cai_length = 0, 0
+
+        try:
+            sequence = sequence.seq  # SeqRecord
+        except AttributeError:
+            pass  # str, Seq, or MutableSeq
+        sequence = sequence.upper()
+
+        for i in range(0, len(sequence), 3):
+            codon = sequence[i : i + 3]
+            if codon in ["ATG", "TGG"]:
+                # Exclude these two codons as their index is always one.
+                continue
+            try:
+                cai_value += log(self[codon])
+            except KeyError:
+                if codon in ["TGA", "TAA", "TAG"]:
+                    # Stop codon, which is valid but may be missing from the index.
+                    continue
+                raise TypeError(f"illegal codon in sequence: {codon}") from None
+            else:
+                cai_length += 1
+
+        return exp(cai_value / cai_length)
+
+    def optimize(self, sequence, seq_type="DNA", strict=True):
+        """Return a new DNA sequence with preferred codons only.
+
+        Uses the codon adaptiveness table defined by the CodonAdaptationIndex
+        object to generate DNA sequences with only preferred codons.
+        May be useful when designing DNA sequences for transgenic protein
+        expression or codon-optimized proteins like fluorophores.
+
+        Arguments:
+            - sequence: DNA, RNA, or protein sequence to codon-optimize.
+                        Supplied as a str, Seq, or SeqRecord object.
+            - seq_type: String specifying type of sequence provided.
+                        Options are "DNA", "RNA", and "protein". Default is "DNA".
+            - strict:   Determines whether an exception should be raised when
+                        two codons are equally preferred for a given amino acid.
+        Returns:
+            Seq object with DNA encoding the same protein as the sequence argument,
+            but using only preferred codons as defined by the codon adaptation index.
+            If multiple codons are equally preferred, a warning is issued
+            and one codon is chosen for use in the optimized sequence.
+        """
+        try:  # If seq record is provided, convert to sequence
+            sequence = sequence.seq
+        except AttributeError:  # not a  SeqRecord object
+            pass
+        seq = sequence.upper()
+        # Make dict with amino acids referencing preferred codons
+        pref_codons = {}
+        for codon, aminoacid in self._table.forward_table.items():
+            if self[codon] == 1.0:
+                if aminoacid in pref_codons:
+                    msg = f"{pref_codons[aminoacid]} and {codon} are equally preferred."
+                    if strict:
+                        raise ValueError(msg)
+                pref_codons[aminoacid] = codon
+        for codon in self._table.stop_codons:
+            if self[codon] == 1.0:
+                pref_codons["*"] = codon
+        # Create amino acid sequence if DNA was provided
+        if seq_type == "DNA" or seq_type == "RNA":
+            aa_seq = translate(seq)
+        elif seq_type == "protein":
+            aa_seq = seq
+        else:
+            raise ValueError(
+                f"Allowed seq_types are DNA, RNA or protein, not {seq_type!r}"
+            )
+        # Un-translate in loop using only preferred codons
+        try:
+            optimized = "".join(pref_codons[aa] for aa in aa_seq)
+        except KeyError as ex:
+            raise KeyError(f"Unrecognized amino acid: {ex}") from None
+        return Seq(optimized)
+
+    def __str__(self):
+        lines = []
+        for codon, value in self.items():
+            line = f"{codon}\t{value:.3f}"
+            lines.append(line)
+        return "\n".join(lines) + "\n"
 
 
 if __name__ == "__main__":

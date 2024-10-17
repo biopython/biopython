@@ -13,18 +13,24 @@ See also the Bio.Nexus module (which this code calls internally),
 as this offers more than just accessing the alignment or its
 sequences as SeqRecord objects.
 """
+
+from typing import IO
+from collections.abc import Iterator
+from typing import Optional
+
 from Bio.Align import MultipleSeqAlignment
 from Bio.AlignIO.Interfaces import AlignmentWriter
 from Bio.Nexus import Nexus
 from Bio.SeqRecord import SeqRecord
-
 
 # You can get a couple of example files here:
 # http://www.molecularevolution.org/resources/fileformats/
 
 
 # This is a generator function!
-def NexusIterator(handle, seq_count=None):
+def NexusIterator(
+    handle: IO[str], seq_count: Optional[int] = None
+) -> Iterator[MultipleSeqAlignment]:
     """Return SeqRecord objects from a Nexus file.
 
     Thus uses the Bio.Nexus module to do the hard work.
@@ -51,6 +57,7 @@ def NexusIterator(handle, seq_count=None):
         )
 
     # TODO - Can we extract any annotation too?
+    annotations: Optional[SeqRecord._AnnotationsDict]
     if n.datatype in ("dna", "nucleotide"):
         annotations = {"molecule_type": "DNA"}
     elif n.datatype == "rna":

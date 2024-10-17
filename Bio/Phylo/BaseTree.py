@@ -16,10 +16,6 @@ import copy
 import itertools
 import random
 import re
-import warnings
-
-from Bio import BiopythonDeprecationWarning
-
 
 # General tree-traversal algorithms
 
@@ -217,10 +213,7 @@ def _combine_args(first, *rest):
     # of cases where either style is more convenient, so let's support both
     # (for backward compatibility and consistency between methods).
     if hasattr(first, "__iter__") and not (
-        isinstance(first, TreeElement)
-        or isinstance(first, type)
-        or isinstance(first, str)
-        or isinstance(first, dict)
+        isinstance(first, (TreeElement, dict, str, type))
     ):
         # terminals is an iterable of targets
         if rest:
@@ -240,7 +233,7 @@ def _combine_args(first, *rest):
 class TreeElement:
     """Base class for all Bio.Phylo classes."""
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """Show this object's constructor with its primitive arguments."""
 
         def pair_as_kwarg_string(key, val):
@@ -258,7 +251,8 @@ class TreeElement:
             ),
         )
 
-    __str__ = __repr__
+    def __str__(self) -> str:
+        return self.__repr__()
 
 
 class TreeMixin:
@@ -666,8 +660,8 @@ class TreeMixin:
     def prune(self, target=None, **kwargs):
         """Prunes a terminal clade from the tree.
 
-        If taxon is from a bifurcation, the connecting node will be collapsed
-        and its branch length added to remaining terminal node. This might be no
+        If the taxon is from a bifurcation, the connecting node will be collapsed
+        and its branch length added to remaining terminal node. This might no
         longer be a meaningful value.
 
         :returns: parent clade of the pruned target
@@ -685,17 +679,14 @@ class TreeMixin:
         parent.clades.remove(path[-1])
         if len(parent) == 1:
             # We deleted a branch from a bifurcation
-            if parent == self.root:
+            child = parent.clades[0]
+            if child.branch_length is not None:
+                child.branch_length += parent.branch_length or 0.0
+            if len(path) == 1:
                 # If we're at the root, move the root upwards
-                # NB: This loses the length of the original branch
-                newroot = parent.clades[0]
-                newroot.branch_length = None
-                parent = self.root = newroot
+                parent = self.root = child
             else:
                 # If we're not at the root, collapse this parent
-                child = parent.clades[0]
-                if child.branch_length is not None:
-                    child.branch_length += parent.branch_length or 0.0
                 if len(path) < 3:
                     grandparent = self.root
                 else:
@@ -963,6 +954,7 @@ class Tree(TreeElement, TreeMixin):
         """
         if format_spec:
             from io import StringIO
+
             from Bio.Phylo import _io
 
             handle = StringIO()
@@ -972,26 +964,18 @@ class Tree(TreeElement, TreeMixin):
             # Follow python convention and default to using __str__
             return str(self)
 
-    def format(self, fmt=None, format=None):
+    def format(self, fmt=None):
         """Serialize the tree as a string in the specified file format.
 
         :param fmt: a lower-case string supported by ``Bio.Phylo.write``
             as an output file format.
 
         """
-        if format is not None:
-            if fmt is not None:
-                raise ValueError("The ``format`` argument has been renamed to ``fmt``.")
-            warnings.warn(
-                "The ``format`` argument has been renamed to ``fmt``.",
-                BiopythonDeprecationWarning,
-            )
-            fmt = format
         return self.__format__(fmt)
 
     # Pretty-printer for the entire tree hierarchy
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Return a string representation of the entire tree.
 
         Serialize each sub-clade recursively using ``repr`` to create a summary
@@ -1098,7 +1082,7 @@ class Clade(TreeElement, TreeMixin):
         """
         return True
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Return name of the class instance."""
         if self.name:
             return self.name[:37] + "..." if len(self.name) > 40 else self.name
@@ -1234,7 +1218,7 @@ class BranchColor:
         """
         return (self.red, self.green, self.blue)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """Preserve the standard RGB order when representing this object."""
         return "%s(red=%d, green=%d, blue=%d)" % (
             self.__class__.__name__,
@@ -1243,6 +1227,6 @@ class BranchColor:
             self.blue,
         )
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Show the color's RGB values."""
         return "(%d, %d, %d)" % (self.red, self.green, self.blue)

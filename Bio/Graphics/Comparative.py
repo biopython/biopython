@@ -10,16 +10,19 @@ This file contains high level plots which are designed to be used to
 compare different types of information. The most basic example is comparing
 two variables in a traditional scatter plot.
 """
-# reportlab
-from reportlab.lib import colors
+
 from reportlab.graphics.charts.lineplots import LinePlot
+from reportlab.graphics.charts.markers import makeEmptyCircle
+from reportlab.graphics.charts.markers import makeEmptySquare
+from reportlab.graphics.charts.markers import makeFilledCircle
+from reportlab.graphics.charts.markers import makeFilledDiamond
+from reportlab.graphics.charts.markers import makeFilledSquare
+from reportlab.graphics.charts.markers import makeSmiley
+from reportlab.graphics.shapes import Drawing
+from reportlab.graphics.shapes import String
+from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
-
-from reportlab.graphics.shapes import Drawing, String
-from reportlab.graphics.charts.markers import makeEmptySquare, makeFilledSquare
-from reportlab.graphics.charts.markers import makeFilledDiamond, makeSmiley
-from reportlab.graphics.charts.markers import makeFilledCircle, makeEmptyCircle
 
 from Bio.Graphics import _write
 

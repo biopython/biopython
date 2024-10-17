@@ -5,60 +5,84 @@
 #
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.1.0
+    rev: v5.0.0
     hooks:
     -   id: check-executables-have-shebangs
         files: \.(py|sh)$
     -   id: check-json
-    -   id: debug-statements
     -   id: end-of-file-fixer
         files: \.py$
     -   id: mixed-line-ending
+-   repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.6.9
+    hooks:
+    # Run the Ruff linter.
+    -   id: ruff
+        args: [
+            '--fix',
+            '--extend-select=B,C4,D,ISC,UP',
+            '--extend-ignore=E501,F401,F841,D105,D2,D4',
+            '--extend-ignore=B007,B009,B010,B018,B028,B904,UP031',
+            '--extend-per-file-ignores=Tests/*.py:D101,Tests/*.py:D102,Tests/*.py:D103',
+            '--extend-per-file-ignores=Tests/*.py:B015',
+            '--config=lint.isort.force-single-line=true',
+            '--config=lint.isort.order-by-type=false',
+        ]
 -   repo: https://github.com/psf/black
-    rev: 22.3.0
+    rev: 24.10.0
     hooks:
     -   id: black
-        args: [--check,--target-version,py37]
+        args: [--check,--target-version,py39]
 -   repo: https://github.com/PyCQA/flake8
-    rev: 4.0.1
+    rev: 7.1.1
     hooks:
     -   id: flake8
         additional_dependencies: [
-            'flake8-blind-except',
-            'flake8-bugbear',
-            'flake8-comprehensions',
-            'flake8-docstrings',
-            'flake8-implicit-str-concat',
             'flake8-rst-docstrings>=0.2.3',
-            'pydocstyle>=6.0.0',
         ]
+-   repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.11.2
+    hooks:
+    -   id: mypy
+        # equivalent to "files" in .mypy.ini
+        files: '^(Bio|BioSQL)/'
 -   repo: https://github.com/asottile/blacken-docs
-    rev: v1.12.1
+    rev: 1.18.0
     hooks:
     -   id: blacken-docs
-        additional_dependencies: [black==22.3.0]
+        additional_dependencies: [black==24.2.0]
         exclude: ^.github/
--   repo: https://github.com/myint/rstcheck
-    rev: 3f92957478422df87bd730abde66f089cc1ee19b
+-   repo: https://github.com/rstcheck/rstcheck
+    rev: v6.2.4
     hooks:
     -   id: rstcheck
-        args: [--report=warning]
+        args: [
+            '--ignore-roles=ref,numref,py:mod',
+            --ignore-directives=toctree,
+            --ignore-substitutions=version,
+            --report-level=warning,
+            --ignore-messages=Unknown\ target\ name
+        ]
 -   repo: https://github.com/PyCQA/doc8
-    rev: 0.11.1
+    rev: v1.1.2
     hooks:
     -   id: doc8
         additional_dependencies: [pygments]
-        args: [--quiet,--ignore-path=Doc/examples/ec_*.txt, --ignore=D004]
+        args: [
+        --quiet,
+        --ignore-path=Doc/examples/ec_*.txt,
+        '--ignore=D000,D001,D002,D004'
+    ]
 -   repo: https://github.com/codespell-project/codespell
-    rev: v2.1.0
+    rev: v2.3.0
     hooks:
     -   id: codespell
-        files: \.(rst|md|tex)$
+        files: \.(rst|md)$
         args: [
             --ignore-regex,
             '(^|\W)([A-Z]{2,3})(\W|$)',
             -L,
-            'ser,hsa,hist,fpr'
+            'ser,hsa,hist,fpr,blosum,ags,manuel,mian,fallin'
         ]
 -   repo: local
     hooks:
@@ -68,13 +92,28 @@ repos:
         entry: '(?i)(doi:|dx\.doi\.org|http://doi\.org)'
         language: pygrep
         files: \.(rst|tex)$
+    -   id: contrib-sort
+        name: Contributor sorting
+        description: Confirms alphabetical sorting of the CONTRIB.rst file
+        entry: bash -c 'for n in $(seq 0 "$#"); do grep "^- " "${!n}" | LC_ALL=C sort -u -c -f; done'
+        #entry: 'grep "^- " CONTRIB.rst | LC_ALL=C sort -u -c -f'
+        language: system
+        files: ^CONTRIB\.rst$
 ci:
     # Settings for the https://pre-commit.ci/ continuous integration service
-    autofix_prs: false
+    autofix_prs: true
     # Default message is more verbose
     autoupdate_commit_msg: '[pre-commit.ci] autoupdate'
     # Default is weekly
     autoupdate_schedule: quarterly
-    # Currently pre-commit.ci checks all files, and flake8 takes too long
-    # and causes a timeout - so as a short-term workaround, skip it:
-    skip: [flake8]
+    # Currently pre-commit.ci checks all files, and all hooks takes too long
+    # and causes a timeout - so as a short-term workaround, skip flake8 etc:
+    skip: [
+        check-json,
+        mixed-line-ending,
+        flake8,
+        rstcheck,
+        doc8,
+        codespell,
+        doi-link-style
+    ]

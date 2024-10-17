@@ -371,7 +371,7 @@ in the python working space):
    >>> print(dN, dS)
    0.0193877676103 0.0217247139962
 
-If you are using maximum likelihood methdo to estimate dN and dS, you
+If you are using maximum likelihood method to estimate dN and dS, you
 are also able to specify equilibrium codon frequency to ``cfreq``
 argument. Available options include ``F1x4``, ``F3x4`` and ``F61``.
 

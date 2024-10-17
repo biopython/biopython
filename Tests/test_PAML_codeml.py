@@ -5,14 +5,13 @@
 
 """Tests for PAML codeml module."""
 
-import unittest
+import itertools
 import os
 import os.path
-import itertools
+import unittest
 
 from Bio.Phylo.PAML import codeml
 from Bio.Phylo.PAML._paml import PamlError
-
 
 # Some constants to assist with testing:
 # This is the number of parameters that should be parsed for each
@@ -24,7 +23,6 @@ SITECLASSES = {0: None, 1: 2, 2: 3, 3: 3, 7: 10, 8: 11, 22: 3}
 
 
 class ModTest(unittest.TestCase):
-
     align_dir = os.path.join("PAML", "Alignments")
     tree_dir = os.path.join("PAML", "Trees")
     ctl_dir = os.path.join("PAML", "Control_files")

@@ -43,7 +43,9 @@ def _write(drawing, output_file, format, dpi=72):
 
     No return value.
     """
-    from reportlab.graphics import renderPS, renderPDF, renderSVG
+    from reportlab.graphics import renderPDF
+    from reportlab.graphics import renderPS
+    from reportlab.graphics import renderSVG
 
     try:
         from reportlab.graphics import renderPM

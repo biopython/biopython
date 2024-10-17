@@ -2,6 +2,7 @@ data_1SSU
 #
 _refine.ls_d_res_high                            . 
 _refine.ls_d_res_low                             ? 
+_em_3d_reconstruction.resolution 4.1
 #
 loop_
 _atom_site.group_PDB

@@ -12,19 +12,19 @@ Based upon 'NEXUS: An extensible file format for systematic information'
 Maddison, Swofford, Maddison. 1997. Syst. Biol. 46(4):590-621
 """
 
-from functools import reduce
 import copy
 import math
 import random
 import sys
+import warnings
+from functools import reduce
 
+from Bio import BiopythonWarning
 from Bio import File
 from Bio.Data import IUPACData
-from Bio.Seq import Seq
-
 from Bio.Nexus.StandardData import StandardData
 from Bio.Nexus.Trees import Tree
-
+from Bio.Seq import Seq
 
 INTERLEAVE = 70
 SPECIAL_COMMANDS = [
@@ -60,8 +60,6 @@ DEFAULTNEXUS = (
 
 class NexusError(Exception):
     """Provision for the management of Nexus exceptions."""
-
-    pass
 
 
 class CharBuffer:
@@ -217,7 +215,7 @@ class StepMatrix:
         total = self.sum()
         if total != 0:
             for k in self.data:
-                self.data[k] = self.data[k] / float(total)
+                self.data[k] /= total
         return self
 
     def weighting(self):
@@ -309,9 +307,9 @@ def _sort_keys_by_values(p):
     return sorted((pn for pn in p if p[pn]), key=lambda pn: p[pn])
 
 
-def _make_unique(l):
+def _make_unique(values):
     """Check all values in list are unique and return a pruned and sorted list (PRIVATE)."""
-    return sorted(set(l))
+    return sorted(set(values))
 
 
 def _unique_label(previous_labels, label):
@@ -665,16 +663,6 @@ class Nexus:
         else:
             self.read(DEFAULTNEXUS)
 
-    def get_original_taxon_order(self):
-        """Included for backwards compatibility (DEPRECATED)."""
-        return self.taxlabels
-
-    def set_original_taxon_order(self, value):
-        """Included for backwards compatibility (DEPRECATED)."""
-        self.taxlabels = value
-
-    original_taxon_order = property(get_original_taxon_order, set_original_taxon_order)
-
     def read(self, input):
         """Read and parse NEXUS input (a filename, file-handle, or string)."""
         # 1. Assume we have the name of a file in the execution dir or a
@@ -690,7 +678,6 @@ class Nexus:
                 file_contents = input
                 self.filename = "input_string"
             else:
-                print(input.strip()[:50])
                 raise NexusError(f"Unrecognized input: {input[:100]} ...") from None
         file_contents = file_contents.strip()
         if file_contents.startswith("#NEXUS"):
@@ -889,7 +876,6 @@ class Nexus:
         Thus, we ignore the taxlabels command to make handling of duplicate
         taxon names easier.
         """
-        pass
         # self.taxlabels = []
         # opts = CharBuffer(options)
         # while True:
@@ -1822,7 +1808,7 @@ class Nexus:
         with open(filename, "w") as fh:
             fh.write("%d %d\n" % (self.ntax, self.nchar))
             for taxon in self.taxlabels:
-                fh.write(f"{safename(taxon)} {str(self.matrix[taxon])}\n")
+                fh.write(f"{safename(taxon)} {self.matrix[taxon]!s}\n")
         return filename
 
     def constant(self, matrix=None, delete=(), exclude=()):
@@ -2117,8 +2103,12 @@ class Nexus:
 
 
 try:
-    import cnexus
-except ImportError:
+    from . import cnexus  # type: ignore
+except ImportError as ex:
+    warnings.warn(
+        f"Import of C module failed ({ex}). Falling back to slow Python implementation",
+        BiopythonWarning,
+    )
 
     def _get_command_lines(file_contents):
         lines = _kill_comments_and_break_lines(file_contents)

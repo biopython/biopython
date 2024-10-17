@@ -12,7 +12,6 @@ import time
 # set up the connection
 from BioSQL import BioSeqDatabase
 
-
 server = BioSeqDatabase.open_database(
     host="192.168.0.192", user="root", passwd="", db="test_biosql"
 )
@@ -33,7 +32,7 @@ elapsed_time = end_time - start_time
 print("Fasta")
 print(
     "\tDid %s records in %s seconds for\n\t%f records per second"
-    % (num_records, elapsed_time, float(num_records) / float(elapsed_time))
+    % (num_records, elapsed_time, num_records / elapsed_time)
 )
 
 # -- do the "EMBL" timing part
@@ -55,5 +54,5 @@ elapsed_time = end_time - start_time
 print("EMBL")
 print(
     "\tDid %s records in %s seconds for\n\t%f records per second"
-    % (num_records, elapsed_time, float(num_records) / float(elapsed_time))
+    % (num_records, elapsed_time, num_records / elapsed_time)
 )

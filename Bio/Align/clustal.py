@@ -9,39 +9,29 @@
 You are expected to use this module via the Bio.Align functions (or the
 Bio.SeqIO functions if you are interested in the sequences only).
 """
+
 import Bio
 from Bio.Align import Alignment
 from Bio.Align import interfaces
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio import BiopythonExperimentalWarning
-
-
-import warnings
-
-warnings.warn(
-    "Bio.Align.clustal is an experimental module which may undergo "
-    "significant changes prior to its future official release.",
-    BiopythonExperimentalWarning,
-)
 
 
 class AlignmentWriter(interfaces.AlignmentWriter):
     """Clustalw alignment writer."""
 
-    def write_header(self, alignments):
+    fmt = "Clustal"
+
+    def write_header(self, stream, alignments):
         """Use this to write the file header."""
-        stream = self.stream
         try:
-            program = alignments.program
-        except AttributeError:
+            metadata = alignments.metadata
+            program = metadata["Program"]
+        except (AttributeError, KeyError):
             program = "Biopython"
             version = Bio.__version__
         else:
-            try:
-                version = alignments.version
-            except AttributeError:
-                version = ""
+            version = metadata.get("Version", "")
         line = f"{program} {version} multiple sequence alignment\n"
         stream.write(line)
         stream.write("\n")
@@ -68,7 +58,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             try:
                 name = sequence.id
             except AttributeError:
-                name = "sequence_%d" % i
+                name = "sequence_%d" % i  # Clustal format doesn't allow an empty string
             else:
                 # when we output, we do a nice 80 column output, although
                 # this may result in truncation of the ids.  Also, make sure
@@ -105,20 +95,15 @@ class AlignmentWriter(interfaces.AlignmentWriter):
 class AlignmentIterator(interfaces.AlignmentIterator):
     """Clustalw alignment iterator."""
 
-    def __init__(self, source):
-        """Create an AlignmentIterator object.
+    fmt = "Clustal"
 
-        Arguments:
-         - source   - input data or file name
-
-        """
-        super().__init__(source, mode="t", fmt="Clustal")
-        stream = self.stream
+    def _read_header(self, stream):
         try:
             line = next(stream)
         except StopIteration:
             raise ValueError("Empty file.") from None
 
+        self.metadata = {}
         # Whitelisted programs we know about
         words = line.split()
         known_programs = [
@@ -135,28 +120,21 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 "%s is not known to generate CLUSTAL files: %s"
                 % (program, ", ".join(known_programs))
             )
-        self.program = program
+        self.metadata["Program"] = program
 
         # find the clustal version in the header line
         for word in words:
             if word[0] == "(" and word[-1] == ")":
                 word = word[1:-1]
-            if word[0] in "0123456789":
-                self.version = word
+            if word[0].isdigit():
+                self.metadata["Version"] = word
                 break
-        else:
-            self.version = None
 
-    def parse(self, stream):
-        """Parse the next alignment from the stream."""
-        if stream is None:
-            raise StopIteration
-
+    def _read_next_alignment(self, stream):
         # If the alignment contains entries with the same sequence
         # identifier (not a good idea - but seems possible), then this
         # dictionary based parser will merge their sequences.  Fix this?
         ids = []
-        seqs = []
         aligned_seqs = []
         consensus = ""
         index = None  # Used to extract the consensus
@@ -182,8 +160,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 seqid, aligned_seq = fields[:2]
                 ids.append(seqid)
                 aligned_seqs.append(aligned_seq)
-                seq = aligned_seq.replace("-", "")
-                seqs.append(seq)
 
                 # Record the sequence position to get the consensus
                 if index is None:
@@ -192,21 +168,21 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 if len(fields) == 3:
                     # This MAY be an old style file with a letter count...
                     try:
-                        letters = int(fields[2])
+                        count = int(fields[2])
                     except ValueError:
                         raise ValueError(
-                            "Could not parse line, bad sequence number:\n%s" % line
+                            "Could not parse line, bad sequence count:\n%s" % line
                         ) from None
-                    if len(seq) != letters:
+                    if len(aligned_seq) - aligned_seq.count("-") != count:
                         raise ValueError(
-                            "Could not parse line, invalid sequence number:\n%s" % line
-                        )
+                            "Could not parse line, incorrect sequence count:\n%s" % line
+                        ) from None
             else:
                 # no consensus line
                 if index:
                     break
         else:
-            raise StopIteration
+            return
 
         assert index is not None
 
@@ -217,7 +193,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         if consensus:
             assert len(consensus) == length
 
-        n = len(seqs)
+        n = len(aligned_seqs)
         i = 0
         # Loop over any remaining blocks...
         for line in stream:
@@ -240,42 +216,36 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 assert seqid == fields[0]
                 aligned_seq = fields[1]
                 aligned_seqs[i] += aligned_seq
-                seq = aligned_seq.replace("-", "")
-                seqs[i] += seq
 
                 if len(fields) == 3:
                     # This MAY be an old style file with a letter count...
                     try:
-                        letters = int(fields[2])
+                        count = int(fields[2])
                     except ValueError:
                         raise ValueError(
                             "Could not parse line, bad sequence number:\n%s" % line
                         ) from None
-                    if len(seqs[i]) != letters:
+                    if len(aligned_seqs[i]) - aligned_seqs[i].count("-") != count:
                         raise ValueError(
-                            "Could not parse line, invalid sequence number:\n%s" % line
-                        )
+                            "Could not parse line, incorrect sequence count:\n%s" % line
+                        ) from None
                 i += 1
                 if i == n:
                     i = 0
-
+        aligned_seqs = [s.encode() for s in aligned_seqs]
+        seqs, coordinates = Alignment.parse_printed_alignment(aligned_seqs)
         records = [
-            SeqRecord(Seq(seq), id=seqid, description=seqid)
+            SeqRecord(Seq(seq), id=seqid, description="")
             for (seqid, seq) in zip(ids, seqs)
         ]
-        coordinates = Alignment.infer_coordinates(aligned_seqs)
         alignment = Alignment(records, coordinates)
-        # TODO - Handle alignment annotation better, for now
-        # mimic the old parser in Bio.Clustalw
         if consensus:
-            rows, columns = alignment.shape
+            columns = alignment.length
             if len(consensus) != columns:
-                for aligned_seq in aligned_seqs:
-                    print(aligned_seq, len(aligned_seq))
                 raise ValueError(
                     "Alignment has %i columns, consensus length is %i, '%s'"
                     % (columns, len(consensus), consensus)
                 )
             alignment.column_annotations = {}
             alignment.column_annotations["clustal_consensus"] = consensus
-        yield alignment
+        return alignment

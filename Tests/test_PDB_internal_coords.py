@@ -1,4 +1,4 @@
-# Copyright 2020-2021 by Robert T. Miller.  All rights reserved.
+# Copyright 2020-2022 by Robert T. Miller.  All rights reserved.
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
@@ -6,38 +6,38 @@
 
 """Unit tests for internal_coords module of Bio.PDB."""
 
-
-import unittest
-import re
-import warnings
 import copy
+import re
+import unittest
+import warnings
 
 try:
     import numpy as np  # noqa F401
 except ImportError:
     from Bio import MissingPythonDependencyError
 
-    raise MissingPythonDependencyError("Install NumPy if you want to use Bio.PDB.")
-
-from Bio.PDB.ic_rebuild import (
-    structure_rebuild_test,
-    IC_duplicate,
-    compare_residues,
-)
-from Bio.PDB.PDBParser import PDBParser
-from Bio.PDB.MMCIFParser import MMCIFParser
-from Bio.PDB.mmtf import MMTFParser
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use Bio.PDB."
+    ) from None
 
 from io import StringIO
-from Bio.PDB.SCADIO import write_SCAD
-from Bio.PDB.PICIO import read_PIC_seq
 
 from Bio.File import as_handle
-
-from Bio.PDB.internal_coords import IC_Residue, IC_Chain, Dihedron, AtomKey
-
+from Bio.PDB.ic_rebuild import compare_residues
+from Bio.PDB.ic_rebuild import IC_duplicate
+from Bio.PDB.ic_rebuild import structure_rebuild_test
+from Bio.PDB.internal_coords import AtomKey
+from Bio.PDB.internal_coords import Dihedron
+from Bio.PDB.internal_coords import IC_Chain
+from Bio.PDB.internal_coords import IC_Residue
+from Bio.PDB.MMCIFParser import MMCIFParser
+from Bio.PDB.mmtf import MMTFParser
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
-from Bio import SeqIO
+from Bio.PDB.PDBParser import PDBParser
+from Bio.PDB.PICIO import read_PIC_seq
+from Bio.PDB.SCADIO import write_SCAD
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
 
 
 class Rebuild(unittest.TestCase):
@@ -51,7 +51,9 @@ class Rebuild(unittest.TestCase):
     # cif_1A7G2 = CIF_parser.get_structure("1A7G", "PDB/1A7G.cif")
     pdb_2XHE = PDB_parser.get_structure("2XHE", "PDB/2XHE.pdb")
     pdb_2XHE2 = PDB_parser.get_structure("2XHE", "PDB/2XHE.pdb")
+    pdb_1A8O = PDB_parser.get_structure("1A8O", "PDB/1A8O.pdb")
     cif_3JQH = CIF_parser.get_structure("3JQH", "PDB/3JQH.cif")
+    cif_3JQH2 = CIF_parser.get_structure("3JQH", "PDB/3JQH.cif")
     cif_4CUP = CIF_parser.get_structure("4CUP", "PDB/4CUP.cif")
     cif_4CUP2 = CIF_parser.get_structure("4CUP", "PDB/4CUP.cif")
     cif_4ZHL = CIF_parser.get_structure("4ZHL", "PDB/4ZHL.cif")
@@ -64,6 +66,28 @@ class Rebuild(unittest.TestCase):
         chain = next(self.mmtf_1A8O.get_chains())
         ic_chain = IC_Chain(chain)
         self.assertEqual(len(ic_chain.ordered_aa_ic_list), 70)
+
+    def test_rebuild_1a8o(self):
+        """Duplicate tutorial doctests which fail under linux."""
+        IC_Chain.MaxPeptideBond = 4.0
+        r = structure_rebuild_test(self.pdb_1A8O, False)
+        self.assertTrue(r["pass"])
+
+        cic = list(self.pdb_1A8O.get_chains())[0].internal_coord
+        distances = cic.distance_plot()
+        chirality = cic.dihedral_signs()
+        c2 = IC_duplicate(cic.chain)[0]["A"]
+        cic2 = c2.internal_coord
+        cic2.atomArray = np.zeros((cic2.AAsiz, 4), dtype=np.float64)
+        cic2.dihedraAngle[:] = 0.0
+        cic2.hedraAngle[:] = 0.0
+        cic2.hedraL12[:] = 0.0
+        cic2.hedraL23[:] = 0.0
+        cic2.copy_initNCaCs(cic)
+        cic2.distplot_to_dh_arrays(distances, chirality)
+        cic2.distance_to_internal_coordinates()
+        c2.internal_to_atom_coordinates()
+        np.allclose(cic2.atomArray, cic.atomArray)
 
     def test_rebuild_multichain_missing(self):
         """Convert multichain missing atom struct to, from internal coords."""
@@ -82,6 +106,7 @@ class Rebuild(unittest.TestCase):
         """Convert disordered protein to internal coordinates and back."""
         # 3jqh has both disordered residues
         # and disordered atoms in ordered residues
+
         with warnings.catch_warnings(record=True):
             warnings.simplefilter("always", PDBConstructionWarning)
             r = structure_rebuild_test(self.cif_3JQH, False)
@@ -94,6 +119,14 @@ class Rebuild(unittest.TestCase):
         self.assertEqual(r["aCoordMatchCount"], 217)
         self.assertEqual(len(r["chains"]), 1)
         self.assertTrue(r["pass"])
+
+        IC_Residue.no_altloc = True
+        with warnings.catch_warnings(record=True):
+            warnings.simplefilter("always", PDBConstructionWarning)
+            r = structure_rebuild_test(self.cif_3JQH2, verbose=False, quick=True)
+        self.assertEqual(r["aCoordMatchCount"], 167, msg="no_altloc fail")
+        self.assertTrue(r["pass"], msg="no_altloc fail")
+        IC_Residue.no_altloc = False
 
     def test_no_crosstalk(self):
         """Deep copy, change few internal coords, test nothing else changes."""
@@ -186,6 +219,26 @@ class Rebuild(unittest.TestCase):
         dsum = ddelta.sum()
         self.assertEqual(dsum, 0.0)
 
+        # test hedron len12, angle, len23 setters and getters
+        hed = list(cic0.hedra.values())[10]
+        val = hed.len12 + 0.5
+        hed.len12 = val
+        self.assertEqual(hed.len12, val)
+        val = hed.len23 + 0.5
+        hed.len23 = val
+        self.assertEqual(hed.len23, val)
+        val = hed.angle + 1
+        hed.angle = val
+        self.assertEqual(hed.angle, val)
+        dihed = list(cic0.dihedra.values())[10]
+        val = dihed.angle + 196
+        dihed.angle = val
+        if val > 180.0:
+            val -= 360.0
+        if val < -180.0:
+            val += 360.0
+        self.assertEqual(dihed.angle, val)
+
     def test_model_change_internal_coords(self):
         """Get model internal coords, modify psi and chi1 values and check."""
         mdl = self.pdb_1LCD[1]
@@ -198,7 +251,9 @@ class Rebuild(unittest.TestCase):
         nvc1 = {}
         nvpsi = {}
         nvlen = {}
+        nvlen2 = {}
         tcount = 0
+        l2count = 0
         c1count = 0
         psicount = 0
         lcount = 0
@@ -212,6 +267,12 @@ class Rebuild(unittest.TestCase):
                     nv = tau + 0.5
                     ric.set_angle("tau", nv)
                     nvt[str(r)] = nv
+                    l2count += 1
+                    leng2 = ric.get_length("N:CA")
+                    nv = leng2 + 0.05
+                    ric.set_length("N:CA", nv)
+                    nvlen2[str(r)] = nv
+
                 # sidechain dihedron change
                 chi1 = ric.get_angle("chi1")
                 if chi1 is not None:
@@ -253,6 +314,7 @@ class Rebuild(unittest.TestCase):
 
         mdl.atom_to_internal_coordinates()
         ttcount = 0
+        l2tcount = 0
         c1tcount = 0
         psitcount = 0
         ltcount = 0
@@ -264,6 +326,9 @@ class Rebuild(unittest.TestCase):
                     ttcount += 1
                     # print(str(r), "tau", tau, nvt[str(r)])
                     self.assertAlmostEqual(tau, nvt[str(r)], places=3)
+                    l2tcount += 1
+                    l2 = ric.get_length("N:CA")
+                    self.assertAlmostEqual(l2, nvlen2[str(r)], places=3)
                 chi1 = ric.get_angle("chi1")
                 if chi1 is not None:
                     c1tcount += 1
@@ -280,6 +345,7 @@ class Rebuild(unittest.TestCase):
                     self.assertAlmostEqual(leng, nvlen[str(r)], places=3)
 
         self.assertEqual(tcount, ttcount)
+        self.assertEqual(l2count, l2tcount)
         self.assertEqual(c1count, c1tcount)
         self.assertEqual(psicount, psitcount)
         self.assertEqual(lcount, ltcount)
@@ -325,7 +391,7 @@ class Rebuild(unittest.TestCase):
                         r"\s+(-?\d+\.\d+)\s+\]", aline
                     )
                     if ms:
-                        for i in range(0, 3):
+                        for i in range(3):
                             self.assertAlmostEqual(float(ms[i]), target[i], places=0)
                     else:
                         self.fail("transform not found")
@@ -371,7 +437,7 @@ class Rebuild(unittest.TestCase):
                     target = [15.33630, 110.17513, 15.13861]
                     ms = re.findall(r"\s+(-?\d+\.\d+)", aline)
                     if ms:
-                        for i in range(0, 3):
+                        for i in range(3):
                             self.assertAlmostEqual(float(ms[i]), target[i], places=0)
                     else:
                         self.fail("Cbeta internal coords not found")
@@ -447,12 +513,13 @@ class Rebuild(unittest.TestCase):
         cic2 = _chn2.internal_coord = IC_Chain(_chn2)
         cic2.init_edra()
         # load relevant interatomic distances from chn1 distance plot
-        cic2.distplot_to_dh_arrays(dplot1)
+        cic2.distplot_to_dh_arrays(dplot1, dsigns)
         # compute di/hedra angles from dh_arrays
-        cic2.distance_to_internal_coordinates(dsigns)
+        cic2.distance_to_internal_coordinates()
 
         # clear chn2 atom coordinates
-        cic2.atomArrayValid[:] = False
+        # cic2.atomArrayValid[:] = False  # done in distance_to_internal_coordinates
+
         # initialize values but this is redundant to Valid=False above
         cic2.atomArray = np.zeros((cic2.AAsiz, 4), dtype=np.float64)
         cic2.atomArray[:, 3] = 1.0
@@ -470,20 +537,66 @@ class Rebuild(unittest.TestCase):
         self.assertTrue(np.amax(dpdiff) < 0.000001)
 
     def test_seq_as_PIC(self):
-        """Read protein sequence, generate default PIC data, test various."""
-        seqIter = SeqIO.parse("Fasta/f001", "fasta")
-        for _record in seqIter:
-            break
-        pdb_structure = read_PIC_seq(_record)
-        pdb_structure.internal_to_atom_coordinates()
-        for _chn in pdb_structure.get_chains():
-            break
-        cic = _chn.internal_coord
-        self.assertEqual(
-            len(cic.atomArrayValid), 575, msg="wrong number atoms from Fasta/f001"
+        """Read seq as PIC data, extend chain, set each chi angle, check various."""
+        pdb_structure = read_PIC_seq(
+            SeqRecord(
+                Seq("GAVLIMFPSTCNQYWDEHKR"),
+                id="1RND",
+                description="my 20aa sequence",
+            )
         )
+        chn = next(pdb_structure.get_chains())
+        cic = chn.internal_coord
+        cic.make_extended()
+        for chi in range(1, 6):
+            for ric in chn.internal_coord.ordered_aa_ic_list:
+                targ = "chi" + str(chi)
+                rchi = ric.get_angle(targ)
+                if rchi is not None:
+                    nangl = rchi + 60.0
+                    # nangl = nangl if (nangl <= 180.0) else nangl - 360.0
+                    ric.set_angle(targ, nangl)
+                    # ric.bond_set("chi1", nangl)
+
+        pdb_structure.internal_to_atom_coordinates()
+
+        self.assertEqual(
+            len(cic.atomArrayValid), 168, msg="wrong number atoms from sequence"
+        )
+
+        # test make_extended and each sequential chi rotation places selected
+        # atom from each sidechain where expected.
+        posnDict = {
+            "1_G_CA": [0.000, 0.000, 0.000, 1.000],
+            "2_A_CB": [-0.411, 2.505, 4.035, 1.000],
+            "3_V_CG2": [-2.246, -2.942, 4.865, 1.000],
+            "4_L_CD2": [-4.673, 2.124, 6.060, 1.000],
+            "5_I_CD1": [-4.260, -4.000, 10.546, 1.000],
+            "6_M_CE": [-10.035, 4.220, 12.322, 1.000],
+            "7_F_CE2": [-5.835, -1.076, 15.391, 1.000],
+            "8_P_CD": [-15.060, -2.368, 17.751, 1.000],
+            "9_S_OG": [-12.733, 0.388, 24.504, 1.000],
+            "10_T_CG2": [-19.084, -0.423, 22.650, 1.000],
+            "11_C_SG": [-15.455, 2.166, 27.172, 1.000],
+            "12_N_ND2": [-20.734, -3.990, 27.233, 1.000],
+            "13_Q_NE2": [-19.362, 4.465, 30.847, 1.000],
+            "14_Y_CE2": [-20.685, -3.571, 32.854, 1.000],
+            "15_W_CH2": [-23.295, 1.706, 32.883, 1.000],
+            "16_D_OD2": [-24.285, -3.683, 40.620, 1.000],
+            "17_E_OE2": [-31.719, 2.385, 38.887, 1.000],
+            "18_H_NE2": [-25.763, -0.071, 46.356, 1.000],
+            "19_K_NZ": [-36.073, -0.926, 42.383, 1.000],
+            "20_R_NH2": [-28.792, 3.687, 51.738, 1.000],
+        }
+
+        for k, v in posnDict.items():
+            atm = AtomKey(k)
+            ndx = cic.atomArrayIndex[atm]
+            coord = np.round(cic.atomArray[ndx], 3)
+            self.assertTrue(np.array_equal(coord, v), msg=f"position error on atom {k}")
+
         cic.update_dCoordSpace()
-        rt = cic.ordered_aa_ic_list[10]  # pick a residue
+        rt = cic.ordered_aa_ic_list[5]  # pick a residue
         chi1 = rt.pick_angle("chi1")  # chi1 coord space puts CA at origin
         rt.applyMtx(chi1.cst)
         coord = rt.residue.child_dict["CA"].coord  # Biopython API Atom coords
@@ -491,13 +604,15 @@ class Rebuild(unittest.TestCase):
             np.allclose(coord, [0.0, 0.0, 0.0]), msg="dCoordSpace transform error"
         )
 
+        # test Dihedron repr and all that leads into it
         psi = rt.pick_angle("psi")
 
         self.assertEqual(
             psi.__repr__(),
-            "4-11_M_N:11_M_CA:11_M_C:12_A_N MNMCAMCAN 179.0 ('gi|3318709|pdb|1A91|', 0, 'A', (' ', 11, ' '))",
-            msg="dihedron __repr__ error for M11 psi",
+            "4-6_M_N:6_M_CA:6_M_C:7_F_N MNMCAMCFN 123.0 ('1RND', 0, 'A', (' ', 6, ' '))",
+            msg="dihedron __repr__ error for M6 psi",
         )
+
         m = "Edron rich comparison failed"
         self.assertTrue(chi1 != psi, msg=m)
         self.assertFalse(chi1 == psi, msg=m)
@@ -506,14 +621,26 @@ class Rebuild(unittest.TestCase):
         self.assertTrue(chi1 > psi, msg=m)
         self.assertTrue(chi1 >= psi, msg=m)
 
+        self.assertTrue(
+            chi1.cre_class == "NsbCsbCsbCsb",
+            msg="covalent radii assignment error for chi1",
+        )
+
+        # dihedron atomkeys are all in residue atomkeys as expected, including
+        # i+1 N for psi.
+        self.assertTrue(all(ak in rt for ak in chi1.atomkeys))
+        self.assertFalse(all(ak in rt for ak in psi.atomkeys))
+
+        # test Hedron repr and all that leads into it
         tau = rt.pick_angle("tau")
         self.assertEqual(
             tau.__repr__(),
-            "3-11_M_N:11_M_CA:11_M_C MNMCAMC 1.46091 110.97184 1.52499",
+            "3-6_M_N:6_M_CA:6_M_C MNMCAMC 1.46091 110.97184 1.52499",
             msg="hedron __repr__ error for M11 tau",
         )
-        # some specific AtomKey compsrisons missed in other tests
-        a0, a1 = tau.aks[0], tau.aks[1]
+
+        # some specific AtomKey comparisons missed in other tests
+        a0, a1 = tau.atomkeys[0], tau.atomkeys[1]
         m = "AtomKey rich comparison failed"
         self.assertTrue(a1 > a0, msg=m)
         self.assertTrue(a1 >= a0, msg=m)
