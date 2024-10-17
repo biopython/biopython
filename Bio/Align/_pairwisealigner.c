@@ -25,6 +25,7 @@
 
 #define OVERFLOW_ERROR -1
 #define MEMORY_ERROR -2
+#define OTHER_ERROR -3
 
 #define MISSING_LETTER -1
 
@@ -40,9 +41,16 @@
 typedef enum {NeedlemanWunschSmithWaterman,
               Gotoh,
               WatermanSmithBeyer,
+              FOGSAA,
               Unknown} Algorithm;
 
-typedef enum {Global, Local} Mode;
+typedef enum {Global, Local, FOGSAA_Mode} Mode;
+
+#define ERR_UNEXPECTED_MODE \
+    PyErr_Format(PyExc_RuntimeError, "mode has unexpected value (in "__FILE__" on line %d)", __LINE__);
+
+#define ERR_UNEXPECTED_ALGORITHM \
+    PyErr_Format(PyExc_RuntimeError, "algorithm has unexpected value (in "__FILE__" on line %d)", __LINE__);
 
 typedef struct {
     unsigned char trace : 5;
@@ -612,6 +620,13 @@ exit:
     return count;
 }
 
+
+static Py_ssize_t
+PathGenerator_fogsaa_length(PathGenerator* self)
+{
+    return 1;
+}
+
 static Py_ssize_t PathGenerator_length(PathGenerator* self) {
     Py_ssize_t length = self->length;
     if (length == 0) {
@@ -628,8 +643,8 @@ static Py_ssize_t PathGenerator_length(PathGenerator* self) {
                         /* should not happen, but some compilers complain that
                          * that length can be used uninitialized.
                          */
-                        PyErr_SetString(PyExc_RuntimeError, "Unknown mode");
-                        return -1;
+                        ERR_UNEXPECTED_MODE
+                        return OTHER_ERROR;
                 }
                 break;
             case Gotoh:
@@ -644,8 +659,8 @@ static Py_ssize_t PathGenerator_length(PathGenerator* self) {
                         /* should not happen, but some compilers complain that
                          * that length can be used uninitialized.
                          */
-                        PyErr_SetString(PyExc_RuntimeError, "Unknown mode");
-                        return -1;
+                        ERR_UNEXPECTED_MODE
+                        return OTHER_ERROR;
                 }
                 break;
             case WatermanSmithBeyer:
@@ -660,14 +675,21 @@ static Py_ssize_t PathGenerator_length(PathGenerator* self) {
                         /* should not happen, but some compilers complain that
                          * that length can be used uninitialized.
                          */
-                        PyErr_SetString(PyExc_RuntimeError, "Unknown mode");
-                        return -1;
+                        ERR_UNEXPECTED_MODE
+                        return OTHER_ERROR;
                 }
+                break;
+            case FOGSAA:
+                if (self->mode != FOGSAA_Mode) {
+                    ERR_UNEXPECTED_MODE
+                    return OTHER_ERROR;
+                }
+                length = PathGenerator_fogsaa_length(self);
                 break;
             case Unknown:
             default:
-                PyErr_SetString(PyExc_RuntimeError, "Unknown algorithm");
-                return -1;
+                ERR_UNEXPECTED_ALGORITHM
+                return OTHER_ERROR;
         }
         self->length = length;
     }
@@ -680,6 +702,7 @@ static Py_ssize_t PathGenerator_length(PathGenerator* self) {
         case MEMORY_ERROR:
             PyErr_SetNone(PyExc_MemoryError);
             break;
+        case OTHER_ERROR:
         default:
             break;
     }
@@ -702,6 +725,7 @@ PathGenerator_dealloc(PathGenerator* self)
     }
     switch (algorithm) {
         case NeedlemanWunschSmithWaterman:
+        case FOGSAA:
             break;
         case Gotoh: {
             TraceGapsGotoh** gaps = self->gaps.gotoh;
@@ -1585,6 +1609,24 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
     }
 }
 
+static PyObject*
+PathGenerator_next_FOGSAA(PathGenerator* self)
+{
+    /* No need to create path because FOGSAA only finds one optimal alignment
+     * the .path fields should be populated by FOGSAA_EXIT_ALIGN. To indicate
+     * we've exhausted the iterator, just set self->M[0][0].path to DONE */
+    Trace *last = &self->M[self->nA][self->nB];
+    PyObject *path;
+
+    if (last->path == DONE) {
+        return NULL;
+    }
+
+    path = PathGenerator_create_path(self, 0, 0);
+    last->path = DONE;
+    return path;
+}
+
 static PyObject *
 PathGenerator_next(PathGenerator* self)
 {
@@ -1597,6 +1639,9 @@ PathGenerator_next(PathGenerator* self)
                     return PathGenerator_next_needlemanwunsch(self);
                 case Local:
                     return PathGenerator_next_smithwaterman(self);
+                default:
+                    ERR_UNEXPECTED_MODE
+                    return NULL;
             }
         case Gotoh:
             switch (mode) {
@@ -1604,6 +1649,9 @@ PathGenerator_next(PathGenerator* self)
                     return PathGenerator_next_gotoh_global(self);
                 case Local:
                     return PathGenerator_next_gotoh_local(self);
+                default:
+                    ERR_UNEXPECTED_MODE
+                    return NULL;
             }
         case WatermanSmithBeyer:
             switch (mode) {
@@ -1611,10 +1659,16 @@ PathGenerator_next(PathGenerator* self)
                     return PathGenerator_next_waterman_smith_beyer_global(self);
                 case Local:
                     return PathGenerator_next_waterman_smith_beyer_local(self);
+                default:
+                    ERR_UNEXPECTED_MODE
+                    return NULL;
             }
+        case FOGSAA:
+            return PathGenerator_next_FOGSAA(self);
+            break;
         case Unknown:
         default:
-            PyErr_SetString(PyExc_RuntimeError, "Unknown algorithm");
+            ERR_UNEXPECTED_ALGORITHM
             return NULL;
     }
 }
@@ -1644,7 +1698,11 @@ PathGenerator_reset(PathGenerator* self)
                 default:
                     break;
             }
+            break;
         }
+        case FOGSAA_Mode:
+            self->M[self->nA][self->nB].path = 0;
+            break;
     }
     Py_INCREF(Py_None);
     return Py_None;
@@ -1814,6 +1872,40 @@ set_alphabet(Aligner* self, PyObject* alphabet)
     return size;
 }
 
+static Algorithm _get_algorithm(Aligner* self)
+{
+    Algorithm algorithm = self->algorithm;
+    if (algorithm == Unknown) {
+        const double target_gap_open = self->target_internal_open_gap_score;
+        const double query_gap_open = self->query_internal_open_gap_score;
+        const double target_gap_extend = self->target_internal_extend_gap_score;
+        const double query_gap_extend = self->query_internal_extend_gap_score;
+        const double target_left_open = self->target_left_open_gap_score;
+        const double target_left_extend = self->target_left_extend_gap_score;
+        const double query_left_open = self->query_left_open_gap_score;
+        const double target_right_open = self->target_right_open_gap_score;
+        const double query_right_open = self->query_right_open_gap_score;
+        const double target_right_extend = self->target_right_extend_gap_score;
+        const double query_left_extend = self->query_left_extend_gap_score;
+        const double query_right_extend = self->query_right_extend_gap_score;
+        if (self->mode == FOGSAA_Mode)
+            algorithm = FOGSAA;
+        else if (self->target_gap_function || self->query_gap_function)
+            algorithm = WatermanSmithBeyer;
+        else if (target_gap_open == target_gap_extend
+              && query_gap_open == query_gap_extend
+              && target_left_open == target_left_extend
+              && target_right_open == target_right_extend
+              && query_left_open == query_left_extend
+              && query_right_open == query_right_extend)
+            algorithm = NeedlemanWunschSmithWaterman;
+        else
+            algorithm = Gotoh;
+        self->algorithm = algorithm;
+    }
+    return algorithm;
+}
+
 static int
 Aligner_init(Aligner *self, PyObject *args, PyObject *kwds)
 {
@@ -1857,7 +1949,10 @@ Aligner_dealloc(Aligner* self)
 static PyObject*
 Aligner_repr(Aligner* self)
 {
-  const char text[] = "Pairwise aligner, implementing the Needleman-Wunsch, Smith-Waterman, Gotoh, and Waterman-Smith-Beyer global and local alignment algorithms";
+  const char text[] = "Pairwise aligner, implementing the Needleman-Wunsch, "
+      "Smith-Waterman, Gotoh, or Waterman-Smith-Beyer global or local "
+      "alignment algorithm, or the Fast Optimal Global Sequence Alignment "
+      "Algorithm";
   return PyUnicode_FromString(text);
 }
 
@@ -1930,13 +2025,17 @@ Aligner_str(Aligner* self)
     switch (self->mode) {
         case Global: sprintf(p, "  mode: global\n"); break;
         case Local: sprintf(p, "  mode: local\n"); break;
+        case FOGSAA_Mode: sprintf(p, "  mode: fogsaa\n"); break;
+        default:
+            ERR_UNEXPECTED_MODE
+            return NULL;
     }
     s = PyUnicode_FromFormat(text, args[0], args[1], args[2]);
     Py_XDECREF(wildcard);
     return s;
 }
 
-static char Aligner_mode__doc__[] = "alignment mode ('global' or 'local')";
+static char Aligner_mode__doc__[] = "alignment mode ('global', 'local', 'fogsaa')";
 
 static PyObject*
 Aligner_get_mode(Aligner* self, void* closure)
@@ -1944,6 +2043,7 @@ Aligner_get_mode(Aligner* self, void* closure)
     switch (self->mode) {
         case Global: message = "global"; break;
         case Local: message = "local"; break;
+        case FOGSAA_Mode: message = "fogsaa"; break;
     }
     return PyUnicode_FromString(message);
 }
@@ -1951,6 +2051,7 @@ Aligner_get_mode(Aligner* self, void* closure)
 static int
 Aligner_set_mode(Aligner* self, PyObject* value, void* closure)
 {
+    self->algorithm = Unknown;
     if (PyUnicode_Check(value)) {
         if (PyUnicode_CompareWithASCIIString(value, "global") == 0) {
             self->mode = Global;
@@ -1960,9 +2061,13 @@ Aligner_set_mode(Aligner* self, PyObject* value, void* closure)
             self->mode = Local;
             return 0;
         }
+        if (PyUnicode_CompareWithASCIIString(value, "fogsaa") == 0) {
+            self->mode = FOGSAA_Mode;
+            return 0;
+        }
     }
     PyErr_SetString(PyExc_ValueError,
-                    "invalid mode (expected 'global' or 'local'");
+                    "invalid mode (expected 'global', 'local', or 'fogsaa'");
     return -1;
 }
 
@@ -3688,6 +3793,8 @@ Aligner_set_epsilon(Aligner* self, PyObject* value, void* closure)
     return 0;
 }
 
+static char Aligner_wildcard__doc__[] = "wildcard character";
+
 static PyObject*
 Aligner_get_wildcard(Aligner* self, void* closure)
 {
@@ -3722,41 +3829,6 @@ Aligner_set_wildcard(Aligner* self, PyObject* value, void* closure)
     return 0;
 }
 
-static char Aligner_wildcard__doc__[] = "wildcard character";
-
-static Algorithm _get_algorithm(Aligner* self)
-{
-    Algorithm algorithm = self->algorithm;
-    if (algorithm == Unknown) {
-        const double target_gap_open = self->target_internal_open_gap_score;
-        const double query_gap_open = self->query_internal_open_gap_score;
-        const double target_gap_extend = self->target_internal_extend_gap_score;
-        const double query_gap_extend = self->query_internal_extend_gap_score;
-        const double target_left_open = self->target_left_open_gap_score;
-        const double target_left_extend = self->target_left_extend_gap_score;
-        const double query_left_open = self->query_left_open_gap_score;
-        const double target_right_open = self->target_right_open_gap_score;
-        const double query_right_open = self->query_right_open_gap_score;
-        const double target_right_extend = self->target_right_extend_gap_score;
-        const double query_left_extend = self->query_left_extend_gap_score;
-        const double query_right_extend = self->query_right_extend_gap_score;
-        if (self->target_gap_function || self->query_gap_function)
-            algorithm = WatermanSmithBeyer;
-        else if (target_gap_open == target_gap_extend
-              && query_gap_open == query_gap_extend
-              && target_left_open == target_left_extend
-              && target_right_open == target_right_extend
-              && query_left_open == query_left_extend
-              && query_right_open == query_right_extend)
-            algorithm = NeedlemanWunschSmithWaterman;
-        else
-            algorithm = Gotoh;
-        self->algorithm = algorithm;
-    }
-    return algorithm;
-}
-
-
 static char Aligner_algorithm__doc__[] = "alignment algorithm";
 
 static PyObject*
@@ -3774,6 +3846,9 @@ Aligner_get_algorithm(Aligner* self, void* closure)
                 case Local:
                     s = "Smith-Waterman";
                     break;
+                default:
+                    ERR_UNEXPECTED_MODE
+                    return NULL;
             }
             break;
         case Gotoh:
@@ -3784,6 +3859,9 @@ Aligner_get_algorithm(Aligner* self, void* closure)
                 case Local:
                     s = "Gotoh local alignment algorithm";
                     break;
+                default:
+                    ERR_UNEXPECTED_MODE
+                    return NULL;
             }
             break;
         case WatermanSmithBeyer:
@@ -3794,7 +3872,14 @@ Aligner_get_algorithm(Aligner* self, void* closure)
                 case Local:
                     s = "Waterman-Smith-Beyer local alignment algorithm";
                     break;
+                default:
+                    ERR_UNEXPECTED_MODE
+                    return NULL;
             }
+            break;
+        case FOGSAA:
+            // self->mode must be FOGSAA_Mode
+            s = "Fast Optimal Global Sequence Alignment Algorithm";
             break;
         case Unknown:
         default:
@@ -4295,6 +4380,156 @@ static PyGetSetDef Aligner_getset[] = {
     } \
     M_row[i][j] = score; \
     M[i][j].trace = trace;
+
+struct fogsaa_cell {
+    double present_score, lower, upper;
+    int type, filled, is_left_gap;
+};
+
+struct fogsaa_queue {
+    struct fogsaa_queue_node *array;
+    int size, capacity;
+};
+
+struct fogsaa_queue_node {
+    int pA, pB, type_upto_next, next_type;
+    double next_lower, next_upper;
+};
+
+#define MATRIX(a, b) matrix[a * (nB+1) + b]
+
+#define FOGSAA_SORT() \
+  for (i = 0; i < 2; i++) { \
+    for (j = 0; j < 2 - i; j++) { \
+      if ((child_lbounds[j] < child_lbounds[j + 1]) || ((child_lbounds[j] == child_lbounds[j + 1]) && (child_ubounds[j] < child_ubounds[j + 1]))) { \
+        t = child_lbounds[j]; \
+        child_lbounds[j] = child_lbounds[j + 1]; \
+        child_lbounds[j + 1] = t; \
+        \
+        t = child_types[j]; \
+        child_types[j] = child_types[j + 1]; \
+        child_types[j + 1] = t; \
+        \
+        t = child_ubounds[j]; \
+        child_ubounds[j] = child_ubounds[j + 1]; \
+        child_ubounds[j + 1] = t; \
+      } \
+    } \
+  }
+
+/* This doesn't always work if the gap score is less than the mismatch score */
+#define FOGSAA_CALCULATE_SCORE(curr_score, curr_type, lower, upper, pA, pB) \
+    if (nA - (pA) <= nB - (pB)) { \
+        if (pA == nA && (curr_type) == HORIZONTAL) { \
+            /* If we're already at the end and a gap is already open */ \
+            lower = curr_score + right_gap_extend_A * (nB - (pB)); \
+            upper = curr_score + right_gap_extend_A * (nB - (pB)); \
+        } else { \
+            lower = curr_score + (nA - (pA)) * mismatch; \
+            upper = curr_score + (nA - (pA)) * match; \
+            t = right_gap_open_A + right_gap_extend_A * ((nB - (pB)) - (nA - (pA)) - 1); \
+            t2 =  gap_extend_A * ((nB - (pB)) - (nA - (pA))); \
+            if ((curr_type) == HORIZONTAL && t2 > t) { \
+                /* if we already have a gap open, then we can just extend */ \
+                /* from the open gap and match/mismatch later. we don't */ \
+                /* need to open a new one */ \
+                lower += t2; \
+                upper += t2; \
+            } else { \
+                lower += t; \
+                upper += t; \
+            } \
+        } \
+    } else { \
+        if (pB == nB && (curr_type) == VERTICAL) { \
+            /* If we're already at the end and a gap is already open */ \
+            lower = curr_score + right_gap_extend_B * (nA - (pA)); \
+            upper = curr_score + right_gap_extend_B * (nA - (pA)); \
+        } else { \
+            lower = curr_score + (nB - (pB)) * mismatch; \
+            upper = curr_score + (nB - (pB)) * match; \
+            t = right_gap_open_B + right_gap_extend_B * ((nA - (pA)) - (nB - (pB)) - 1); \
+            t2 =  gap_extend_B * ((nA - (pA)) - (nB - (pB))); \
+            if ((curr_type) == VERTICAL && t2 > t) { \
+                /* if we already have a gap open, then we can just extend */ \
+                /* from the open gap and match/mismatch later. we don't */ \
+                /* need to open a new one */ \
+                lower += t2; \
+                upper += t2; \
+            } else { \
+                lower += t; \
+                upper += t; \
+            } \
+        } \
+    }
+
+// node has higher priority if upper bound is higher, or if upper bounds are
+// equal, if lower bound is higher
+#define FOGSAA_QUEUE_HEAP_COND(a, b) \
+    (queue->array[a].next_upper > queue->array[b].next_upper || \
+     (queue->array[a].next_upper == queue->array[b].next_upper && \
+      queue->array[a].next_lower > queue->array[b].next_lower))
+
+int fogsaa_queue_insert(struct fogsaa_queue *queue, int pA, int pB,
+        int type_total, int next_type, double next_lower, double next_upper) {
+    // max heap implementation for the priority queue by next_upper
+    struct fogsaa_queue_node temp;
+    int i;
+
+    if (queue->size + 1 >= queue->capacity) {
+        struct fogsaa_queue_node *old_array = queue->array;
+        queue->array = PyMem_Realloc(queue->array,
+                sizeof(struct fogsaa_queue_node) * (queue->capacity + 1) * 2);
+        if (queue->array == NULL) {
+            PyMem_Free(old_array);
+            return 0; // caller should return PyErr_NoMemory();
+        }
+        queue->capacity = (queue->capacity + 1) * 2;
+    }
+
+    i = queue->size;
+    queue->array[i].pA = pA;
+    queue->array[i].pB = pB;
+    queue->array[i].next_type = next_type;
+    queue->array[i].next_lower = next_lower;
+    queue->array[i].type_upto_next = type_total;
+    queue->array[i].next_upper = next_upper;
+
+    while (i != 0 && !FOGSAA_QUEUE_HEAP_COND((i-1)/2, i)) {
+        // swap the child and the smaller parent
+        temp = queue->array[i];
+        queue->array[i] = queue->array[(i-1)/2];
+        queue->array[(i-1)/2] = temp;
+        i = (i-1)/2;
+    }
+    queue->size += 1;
+    return 1;
+}
+
+struct fogsaa_queue_node fogsaa_queue_pop(struct fogsaa_queue *queue) {
+    // caller code must check queue is not empty
+    struct fogsaa_queue_node temp, root = queue->array[0];
+    int largest_child, i = 0;
+    queue->size -= 1;
+    queue->array[i] = queue->array[queue->size];
+    while (1) {
+        largest_child = i;
+        if (2*i+1 < queue->size && !FOGSAA_QUEUE_HEAP_COND(i, 2*i+1))
+            largest_child = 2*i+1;
+        if (2*i+2 < queue->size && !FOGSAA_QUEUE_HEAP_COND(largest_child, 2*i+2))
+            largest_child = 2*i+2;
+        if (largest_child != i) {
+            // swap the parent and the larger child
+            temp = queue->array[i];
+            queue->array[i] = queue->array[largest_child];
+            queue->array[largest_child] = temp;
+            i = largest_child;
+        } else {
+            break;
+        }
+    }
+    return root;
+}
 
 /* ----------------- alignment algorithms ----------------- */
 
@@ -5753,6 +5988,395 @@ exit: \
     return NULL; \
 
 
+#define FOGSAA_ENTER \
+    int i, j; \
+    double t, t2; /* temporary variables */ \
+    int kA, kB; \
+    int curpA = 0, curpB = 0; /* optimal and current pointers */ \
+    int pathend = 1, child_types[3]; \
+    double lower_bound, child_lbounds[3], child_ubounds[3]; \
+    /* pathend denotes if the current path is active, expanded is the number of \
+     * expanded nodes, lower_bound contains the global lower_bound, a and b \
+     * contain the lower bounds for the current cell. ch contains the types of \
+     * the potential children */ \
+    int type_total = 1, new_type, npA, npB; \
+    double new_score, new_lower, new_upper, next_lower, next_upper; \
+    const double gap_open_A = self->target_internal_open_gap_score; \
+    const double gap_open_B = self->query_internal_open_gap_score; \
+    const double gap_extend_A = self->target_internal_extend_gap_score; \
+    const double gap_extend_B = self->query_internal_extend_gap_score; \
+    struct fogsaa_cell* matrix = NULL; \
+    struct fogsaa_queue queue; \
+    double left_gap_open_A; \
+    double left_gap_open_B; \
+    double left_gap_extend_A; \
+    double left_gap_extend_B; \
+    double right_gap_open_A; \
+    double right_gap_open_B; \
+    double right_gap_extend_A; \
+    double right_gap_extend_B; \
+    switch (strand) { \
+        case '+': \
+            left_gap_open_A = self->target_left_open_gap_score; \
+            left_gap_open_B = self->query_left_open_gap_score; \
+            left_gap_extend_A = self->target_left_extend_gap_score; \
+            left_gap_extend_B = self->query_left_extend_gap_score; \
+            right_gap_open_A = self->target_right_open_gap_score; \
+            right_gap_open_B = self->query_right_open_gap_score; \
+            right_gap_extend_A = self->target_right_extend_gap_score; \
+            right_gap_extend_B = self->query_right_extend_gap_score; \
+            break; \
+        case '-': \
+            left_gap_open_A = self->target_right_open_gap_score; \
+            left_gap_open_B = self->query_right_open_gap_score; \
+            left_gap_extend_A = self->target_right_extend_gap_score; \
+            left_gap_extend_B = self->query_right_extend_gap_score; \
+            right_gap_open_A = self->target_left_open_gap_score; \
+            right_gap_open_B = self->query_left_open_gap_score; \
+            right_gap_extend_A = self->target_left_extend_gap_score; \
+            right_gap_extend_B = self->query_left_extend_gap_score; \
+            break; \
+        default: \
+            PyErr_SetString(PyExc_RuntimeError, "strand was neither '+' nor '-'"); \
+            return NULL; \
+    } \
+
+#define FOGSAA_DO(align_score) \
+    /* allocate and initialize matrix */ \
+    matrix = PyMem_Calloc((nA+1) * (nB+1), sizeof(struct fogsaa_cell)); \
+    if (!matrix) \
+        return PyErr_NoMemory(); \
+    MATRIX(0, 0).present_score = 0; \
+    MATRIX(0, 0).type = STARTPOINT; \
+    FOGSAA_CALCULATE_SCORE(MATRIX(0, 0).present_score, STARTPOINT, MATRIX(0, 0).lower, MATRIX(0, 0).upper, 0, 0); \
+    MATRIX(0, 0).is_left_gap = 1; \
+    lower_bound = MATRIX(0, 0).lower; \
+    \
+    /* initialize queue */ \
+    queue.array = NULL; \
+    queue.size = 0; \
+    queue.capacity = 0; \
+    /* main loop */ \
+    do { \
+        pathend = 1; \
+        while (curpA < nA || curpB < nB) { \
+            struct fogsaa_cell *curr = &(MATRIX(curpA, curpB)); \
+            if (type_total == DIAGONAL || type_total == HORIZONTAL || type_total == VERTICAL) { \
+                /* current is a 1st child */ \
+                if (curpA <= nA - 1 && curpB <= nB - 1) { \
+                    /* neither sequence is at the end, so we can advance in both sequences */ \
+                    kA = sA[curpA]; \
+                    kB = sB[curpB]; \
+                    double p = align_score; \
+                    /* score the match/mismatch */ \
+                    FOGSAA_CALCULATE_SCORE(curr->present_score + p, DIAGONAL, child_lbounds[0], child_ubounds[0], curpA + 1, curpB + 1); \
+                    /* score the gaps */ \
+                    if (curr->type == DIAGONAL || curr->type == STARTPOINT) { \
+                        if (!curr->is_left_gap) { \
+                            FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_A, HORIZONTAL, child_lbounds[1], child_ubounds[1], curpA, curpB + 1) \
+                            FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_B, VERTICAL, child_lbounds[2], child_ubounds[2], curpA + 1, curpB) \
+                        } else { \
+                            FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_open_A, HORIZONTAL, child_lbounds[1], child_ubounds[1], curpA, curpB + 1) \
+                            FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_open_B, VERTICAL, child_lbounds[2], child_ubounds[2], curpA + 1, curpB) \
+                        } \
+                    } else if (curr->type == HORIZONTAL) { \
+                        /* gap is already opened in the first chain */ \
+                        if (!curr->is_left_gap) { \
+                            FOGSAA_CALCULATE_SCORE(curr->present_score + gap_extend_A, HORIZONTAL, child_lbounds[1], child_ubounds[1], curpA, curpB + 1) \
+                            FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_B, VERTICAL, child_lbounds[2], child_ubounds[2], curpA + 1, curpB) \
+                        } else { \
+                            FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_extend_A, HORIZONTAL, child_lbounds[1], child_ubounds[1], curpA, curpB + 1) \
+                            FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_open_B, VERTICAL, child_lbounds[2], child_ubounds[2], curpA + 1, curpB) \
+                        } \
+                    } else { \
+                        /* gap is already opened in the 2nd chain */ \
+                        if (!curr->is_left_gap) { \
+                            FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_A, HORIZONTAL, child_lbounds[1], child_ubounds[1], curpA, curpB + 1) \
+                            FOGSAA_CALCULATE_SCORE(curr->present_score + gap_extend_B, VERTICAL, child_lbounds[2], child_ubounds[2], curpA + 1, curpB) \
+                        } else { \
+                            FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_open_A, HORIZONTAL, child_lbounds[1], child_ubounds[1], curpA, curpB + 1) \
+                            FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_extend_B, VERTICAL, child_lbounds[2], child_ubounds[2], curpA + 1, curpB) \
+                        } \
+                    } \
+                    \
+                    /* sort and select the best new child as the new type */ \
+                    child_types[0] = DIAGONAL; \
+                    child_types[1] = HORIZONTAL; \
+                    child_types[2] = VERTICAL; \
+                    FOGSAA_SORT() \
+                    new_type = child_types[0]; \
+                    if (new_type == DIAGONAL) { \
+                        npA = curpA + 1; \
+                        npB = curpB + 1; \
+                        new_score = curr->present_score + p; \
+                    } else if (new_type == HORIZONTAL) { \
+                        npA = curpA; \
+                        npB = curpB + 1; \
+                        if (curr->is_left_gap) { \
+                            new_score = curr->present_score + (curr->type == HORIZONTAL ? left_gap_extend_A : left_gap_open_A); \
+                        } else { \
+                            new_score = curr->present_score + (curr->type == HORIZONTAL ? gap_extend_A : gap_open_A); \
+                        } \
+                    } else { \
+                        /* new_type is VERTICAL */ \
+                        npA = curpA + 1; \
+                        npB = curpB; \
+                        if (curr->is_left_gap) { \
+                            new_score = curr->present_score + (curr->type == VERTICAL ? left_gap_extend_B : left_gap_open_B); \
+                        } else { \
+                            new_score = curr->present_score + (curr->type == VERTICAL ? gap_extend_B : gap_open_B); \
+                        } \
+                    } \
+                    if (child_ubounds[1] >= MATRIX(0, 0).lower) { \
+                        /* insert 2nd best new child to the queue */ \
+                        if (!fogsaa_queue_insert(&queue, curpA, curpB, new_type + child_types[1], child_types[1], child_lbounds[1], child_ubounds[1])) \
+                            return PyErr_NoMemory(); \
+                    } \
+                } else if (curpA <= nA - 1) { \
+                    /* we're at the end of B, so must put a gap in B */ \
+                    new_type = VERTICAL; \
+                    npA = curpA + 1; \
+                    npB = curpB; \
+                    new_score = curr->present_score + (curr->type == VERTICAL ? right_gap_extend_B : right_gap_open_B); \
+                } else { \
+                    /* we're at the end of A, so must put a gap in A */ \
+                    new_type = HORIZONTAL; \
+                    npA = curpA; \
+                    npB = curpB + 1; \
+                    new_score = curr->present_score + (curr->type == HORIZONTAL ? right_gap_extend_A : right_gap_open_A); \
+                } \
+            } else if (type_total == DIAGONAL + HORIZONTAL || \
+                    type_total == DIAGONAL + VERTICAL || \
+                    type_total == HORIZONTAL + VERTICAL) { \
+                /* current is a 2nd child (sum of two types) */ \
+                if (new_type == DIAGONAL) { \
+                    npA = curpA + 1; \
+                    npB = curpB + 1; \
+                    new_score = curr->present_score + (sA[curpA] == sB[curpB] ? match : mismatch); \
+                    /* find what the 3rd child was (will later be added to the queue) */ \
+                    /* NOTE: DIAGONAL + HORIZONTAL + VERTICAL = 7 */ \
+                    if (7 - type_total == HORIZONTAL) { \
+                        if (curr->type != HORIZONTAL) { \
+                            if (curr->is_left_gap) { \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_open_A, HORIZONTAL, next_lower, next_upper, curpA, curpB + 1) \
+                            } else { \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_A, HORIZONTAL, next_lower, next_upper, curpA, curpB + 1) \
+                            } \
+                        } else { \
+                            if (curr->is_left_gap) { \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_extend_A, HORIZONTAL, next_lower, next_upper, curpA, curpB + 1) \
+                            } else { \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + gap_extend_A, HORIZONTAL, next_lower, next_upper, curpA, curpB + 1) \
+                            } \
+                        } \
+                    } else { \
+                        /* 3rd child was VERTICAL */ \
+                        if (curr->type != VERTICAL) { \
+                            if (curr->is_left_gap) { \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_open_B, VERTICAL, next_lower, next_upper, curpA, curpB + 1) \
+                            } else { \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_B, VERTICAL, next_lower, next_upper, curpA, curpB + 1) \
+                            } \
+                        } else { \
+                            if (curr->is_left_gap) { \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_extend_B, VERTICAL, next_lower, next_upper, curpA, curpB + 1) \
+                            } else { \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + gap_extend_B, VERTICAL, next_lower, next_upper, curpA, curpB + 1) \
+                            } \
+                        } \
+                    } \
+                } else if (new_type == HORIZONTAL) { \
+                    npA = curpA; \
+                    npB = curpB + 1; \
+                    new_score = curr->present_score + (curr->type == HORIZONTAL ? gap_extend_A : gap_open_A); \
+                    /* again, find what 3rd child was */ \
+                    if (7 - type_total == DIAGONAL) { \
+                        kA = sA[curpA]; \
+                        kB = sB[curpB]; \
+                        FOGSAA_CALCULATE_SCORE(curr->present_score + (align_score), DIAGONAL, next_lower, next_upper, curpA + 1, curpB + 1); \
+                    } else { \
+                        /* 3rd child was VERTICAL */ \
+                        if (curr->type != VERTICAL) { \
+                            if (curr->is_left_gap) { \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_open_B, VERTICAL, next_lower, next_upper, curpA, curpB + 1) \
+                            } else { \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_B, VERTICAL, next_lower, next_upper, curpA, curpB + 1) \
+                            } \
+                        } else { \
+                            if (curr->is_left_gap) { \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_extend_B, VERTICAL, next_lower, next_upper, curpA, curpB + 1) \
+                            } else { \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + gap_extend_B, VERTICAL, next_lower, next_upper, curpA, curpB + 1) \
+                            } \
+                        } \
+                    } \
+                } else { \
+                    /* new_type is VERTICAL */ \
+                    npA = curpA + 1; \
+                    npB = curpB; \
+                    new_score = curr->present_score + (curr->type == VERTICAL ? gap_extend_B : gap_open_B); \
+                    /* again, find what 3rd child was */ \
+                    if (7 - type_total == DIAGONAL) { \
+                        kA = sA[curpA]; \
+                        kB = sB[curpB]; \
+                        FOGSAA_CALCULATE_SCORE(curr->present_score + (align_score), DIAGONAL, next_lower, next_upper, curpA + 1, curpB + 1); \
+                    } else { \
+                        /* 3rd child was HORIZONTAL */ \
+                        if (curr->type != HORIZONTAL) { \
+                            if (curr->is_left_gap) { \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_open_A, HORIZONTAL, next_lower, next_upper, curpA, curpB + 1) \
+                            } else { \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + gap_open_A, HORIZONTAL, next_lower, next_upper, curpA, curpB + 1) \
+                            } \
+                        } else { \
+                            if (curr->is_left_gap) { \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + left_gap_extend_A, HORIZONTAL, next_lower, next_upper, curpA, curpB + 1) \
+                            } else { \
+                                FOGSAA_CALCULATE_SCORE(curr->present_score + gap_extend_A, HORIZONTAL, next_lower, next_upper, curpA, curpB + 1) \
+                            } \
+                        } \
+                    } \
+                } \
+                if (next_upper >= MATRIX(0, 0).lower) { \
+                    if (!fogsaa_queue_insert(&queue, curpA, curpB, 7, 7 - type_total, next_lower, next_upper)) \
+                        return PyErr_NoMemory(); \
+                } \
+            } else if (type_total == DIAGONAL + HORIZONTAL + VERTICAL) { \
+                /* current is a 3rd child */ \
+                if (new_type == DIAGONAL) { \
+                    kA = sA[curpA]; \
+                    kB = sB[curpB]; \
+                    npA = curpA + 1; \
+                    npB = curpB + 1; \
+                    new_score = curr->present_score + (align_score); \
+                } else if (new_type == HORIZONTAL) { \
+                    npA = curpA; \
+                    npB = curpB + 1; \
+                    if (curr->type != HORIZONTAL) { \
+                        new_score = curr->present_score + (curr->is_left_gap ? left_gap_open_A : gap_open_A); \
+                    } else { \
+                        new_score = curr->present_score + (curr->is_left_gap ? left_gap_extend_A : gap_extend_A); \
+                    } \
+                } else { \
+                    /* new_type is VERTICAL */ \
+                    npA = curpA + 1; \
+                    npB = curpB; \
+                    if (curr->type != VERTICAL) { \
+                        new_score = curr->present_score + (curr->is_left_gap ? left_gap_open_B : gap_open_B); \
+                    } else { \
+                        new_score = curr->present_score + (curr->is_left_gap ? left_gap_extend_B : gap_extend_B); \
+                    } \
+                } \
+                /* no more nodes to insert into the queue */ \
+            } \
+            \
+            /* write the new node to the matrix, but skip if there's already a better path there */ \
+            if (MATRIX(npA, npB).filled == 1 && MATRIX(npA, npB).type <= 4 && \
+                    MATRIX(npA, npB).present_score >= new_score) { \
+                pathend = 0; \
+                break; \
+            } else { \
+                FOGSAA_CALCULATE_SCORE(new_score, new_type, new_lower, new_upper, npA, npB) \
+                MATRIX(npA, npB).present_score = new_score; \
+                MATRIX(npA, npB).lower = new_lower; \
+                MATRIX(npA, npB).upper = new_upper; \
+                MATRIX(npA, npB).type = new_type; \
+                MATRIX(npA, npB).filled = 1; \
+                if (new_type == HORIZONTAL || new_type == VERTICAL) { \
+                    MATRIX(npA, npB).is_left_gap = curr->is_left_gap; \
+                } else { \
+                    MATRIX(npA, npB).is_left_gap = 0; \
+                } \
+            } \
+            \
+            /* make the child the new current node */ \
+            curpA = npA; \
+            curpB = npB; \
+            type_total = 1; \
+            \
+            if (MATRIX(npA, npB).upper < lower_bound && \
+                    lower_bound - MATRIX(npA, npB).upper > self->epsilon) { \
+                pathend = 0; \
+                break; \
+            } \
+        } \
+        \
+        if (MATRIX(curpA, curpB).present_score > lower_bound && \
+                MATRIX(curpA, curpB).present_score - lower_bound > self->epsilon && \
+                pathend == 1) { \
+            /* if this is the best score and we've fully expanded the branch, set it as the new lower bound */ \
+            lower_bound = MATRIX(curpA, curpB).present_score; \
+        } \
+        \
+        /* If possible, pop the next best from the queue */ \
+        if (queue.size > 0) { \
+            struct fogsaa_queue_node root = fogsaa_queue_pop(&queue); \
+            curpA = root.pA; \
+            curpB = root.pB; \
+            type_total = root.type_upto_next; \
+            new_lower = root.next_lower; \
+            new_upper = root.next_upper; \
+            new_type = root.next_type; \
+        } else { \
+            break; \
+        } \
+    } while (lower_bound < new_upper && new_upper - lower_bound > self->epsilon); \
+    \
+    /* cleanup and return */ \
+    PyMem_Free(queue.array);
+
+
+#define FOGSAA_EXIT_SCORE \
+    if (lower_bound < new_upper && new_upper - lower_bound > self->epsilon) { \
+        PyErr_Format(PyExc_RuntimeError, "Algorithm ended incomplete. Report this as a bug."); \
+        return NULL; \
+    } \
+    t = MATRIX(nA, nB).present_score; \
+    PyMem_Free(matrix); \
+    return PyFloat_FromDouble((double)t);
+
+#define FOGSAA_EXIT_ALIGN \
+    if (lower_bound < new_upper && new_upper - lower_bound > self->epsilon) { \
+        PyErr_SetString(PyExc_RuntimeError, "Algorithm ended incomplete. Report this as a bug."); \
+        return NULL; \
+    } \
+    paths = PathGenerator_create_FOGSAA(nA, nB, strand); \
+    M = paths->M; \
+    if (!paths) return NULL; \
+    \
+    /* copy only the cells of the optimal path to trace and path */ \
+    i = nA; \
+    j = nB; \
+    while (1) { \
+        switch (MATRIX(i, j).type) { \
+        case 0: \
+        case STARTPOINT: \
+            M[i][j].trace = 0; \
+            goto end_loop; \
+        case DIAGONAL: \
+            M[i][j].trace = DIAGONAL; \
+            M[--i][--j].path = DIAGONAL; \
+            break; \
+        case HORIZONTAL: \
+            M[i][j].trace = HORIZONTAL; \
+            M[i][--j].path = HORIZONTAL; \
+            break; \
+        case VERTICAL: \
+            M[i][j].trace = VERTICAL; \
+            M[--i][j].path = VERTICAL; \
+            break; \
+        default: \
+            PyErr_SetString(PyExc_RuntimeError, "Unexpected FOGSAA cell type. Report this as a bug."); \
+            return NULL; \
+        } \
+    } \
+end_loop: \
+    M[nA][nB].path = 0; \
+    t = MATRIX(nA, nB).present_score; \
+    PyMem_Free(matrix); \
+    return Py_BuildValue("fN", (double)t, paths);
+
+
 /* -------------- allocation & deallocation ------------- */
 
 static PathGenerator*
@@ -5784,6 +6408,9 @@ PathGenerator_create_NWSW(int nA, int nB, Mode mode, unsigned char strand)
     switch (mode) {
         case Global: trace = VERTICAL; break;
         case Local: trace = STARTPOINT; break;
+        default:
+            ERR_UNEXPECTED_MODE
+            return NULL;
     }
     for (i = 0; i <= nA; i++) {
         M[i] = PyMem_Malloc((nB+1)*sizeof(Trace));
@@ -5816,13 +6443,7 @@ PathGenerator_create_Gotoh(int nA, int nB, Mode mode, unsigned char strand)
         case Global: trace = 0; break;
         case Local: trace = STARTPOINT; break;
         default:
-            /* Should not happen, but the compiler has no way of knowing that,
-             * as the enum Mode does not restrict the value of mode, which can
-             * be any integer. Include default: here to prevent compiler
-             * warnings.
-             */
-            PyErr_Format(PyExc_RuntimeError,
-                         "mode has unexpected value %d", mode);
+            ERR_UNEXPECTED_MODE
             return NULL;
     }
 
@@ -5951,6 +6572,9 @@ PathGenerator_create_WSB(int nA, int nB, Mode mode, unsigned char strand)
             case Local:
                 M[i][0].trace = STARTPOINT;
                 break;
+            default:
+                ERR_UNEXPECTED_MODE
+                return NULL;
         }
     }
     for (i = 1; i <= nB; i++) {
@@ -5970,6 +6594,9 @@ PathGenerator_create_WSB(int nA, int nB, Mode mode, unsigned char strand)
             case Local:
                 M[0][i].trace = STARTPOINT;
                 break;
+            default:
+                ERR_UNEXPECTED_MODE
+                return NULL;
         }
     }
     M[0][0].path = 0;
@@ -5979,6 +6606,44 @@ exit:
     PyErr_SetNone(PyExc_MemoryError);
     return NULL;
 }
+
+static PathGenerator*
+PathGenerator_create_FOGSAA(int nA, int nB, unsigned char strand)
+{
+    int i;
+    Trace** M;
+    PathGenerator* paths;
+
+    paths = (PathGenerator*)PyType_GenericAlloc(&PathGenerator_Type, 0);
+    if (!paths) return NULL;
+
+    paths->iA = 0;
+    paths->iB = 0;
+    paths->nA = nA;
+    paths->nB = nB;
+    paths->M = NULL;
+    paths->gaps.gotoh = NULL;
+    paths->gaps.waterman_smith_beyer = NULL;
+    paths->algorithm = FOGSAA;
+    paths->mode = FOGSAA_Mode;
+    paths->length = 0;
+    paths->strand = strand;
+
+    M = PyMem_Malloc((nA+1)*sizeof(Trace*));
+    paths->M = M;
+    if (!M) goto exit;
+    for (i = 0; i <= nA; i++) {
+        M[i] = PyMem_Malloc((nB+1)*sizeof(Trace));
+        if (!M[i]) goto exit;
+    }
+    M[0][0].path = 0;
+    return paths;
+exit:
+    Py_DECREF(paths);
+    PyErr_SetNone(PyExc_MemoryError);
+    return NULL;
+}
+
 
 /* ----------------- alignment algorithms ----------------- */
 
@@ -6392,6 +7057,128 @@ Aligner_watermansmithbeyer_local_align_matrix(Aligner* self,
     WATERMANSMITHBEYER_EXIT_ALIGN;
 }
 
+#define FOGSAA_CHECK_SCORES \
+    if (mismatch >= match) { \
+        PyObject *Bio_module = PyImport_ImportModule("Bio"); \
+        PyObject *BiopythonWarning = PyObject_GetAttrString(Bio_module, "BiopythonWarning"); \
+        Py_DECREF(Bio_module); \
+        if (PyErr_WarnEx(BiopythonWarning, \
+                    "Match score is less than mismatch score. Algorithm may return incorrect results.", 1)) { \
+            Py_DECREF(BiopythonWarning); \
+            return NULL; \
+        } \
+        Py_DECREF(BiopythonWarning); \
+    } \
+    if (self->query_left_open_gap_score > mismatch || \
+            self->query_internal_open_gap_score > mismatch || \
+            self->query_right_open_gap_score > mismatch || \
+            self->target_left_open_gap_score > mismatch || \
+            self->target_internal_open_gap_score > mismatch || \
+            self->target_right_open_gap_score > mismatch || \
+            self->query_left_extend_gap_score > mismatch || \
+            self->query_internal_extend_gap_score > mismatch || \
+            self->query_right_extend_gap_score > mismatch || \
+            self->target_left_extend_gap_score > mismatch || \
+            self->target_internal_extend_gap_score > mismatch || \
+            self->target_right_extend_gap_score > mismatch) { \
+        PyObject *Bio_module = PyImport_ImportModule("Bio"); \
+        PyObject *BiopythonWarning = PyObject_GetAttrString(Bio_module, "BiopythonWarning"); \
+        Py_DECREF(Bio_module); \
+        if (PyErr_WarnEx(BiopythonWarning, \
+                    "One or more gap scores are greater than mismatch score. Algorithm may return incorrect results.", 1)) { \
+            Py_DECREF(BiopythonWarning); \
+            return NULL; \
+        } \
+        Py_DECREF(BiopythonWarning); \
+    }
+
+static PyObject*
+Aligner_fogsaa_score_compare(Aligner* self,
+                                 const int* sA, int nA,
+                                 const int* sB, int nB,
+                                 unsigned char strand)
+{
+    const double match = self->match;
+    const double mismatch = self->mismatch;
+    const int wildcard = self->wildcard;
+    FOGSAA_ENTER
+
+    FOGSAA_CHECK_SCORES
+
+    FOGSAA_DO(COMPARE_SCORE)
+    FOGSAA_EXIT_SCORE
+}
+
+static PyObject*
+Aligner_fogsaa_score_matrix(Aligner* self,
+                                 const int* sA, int nA,
+                                 const int* sB, int nB,
+                                 unsigned char strand)
+{
+    const Py_ssize_t n = self->substitution_matrix.shape[0];
+    const double* scores = self->substitution_matrix.buf;
+    double match = scores[0], mismatch = scores[0];
+    FOGSAA_ENTER
+
+    // for prediction purposes, maximum score is match and minimum score is mismatch
+    for (i = 0; i < n*n; i++) {
+        if (scores[i] > match)
+            match = scores[i];
+        else if (scores[i] < mismatch)
+            mismatch = scores[i];
+    }
+    FOGSAA_CHECK_SCORES
+
+    FOGSAA_DO(MATRIX_SCORE)
+    FOGSAA_EXIT_SCORE
+}
+
+static PyObject*
+Aligner_fogsaa_align_compare(Aligner* self,
+                                 const int* sA, int nA,
+                                 const int* sB, int nB,
+                                 unsigned char strand)
+{
+    const double match = self->match;
+    const double mismatch = self->mismatch;
+    const int wildcard = self->wildcard;
+    PathGenerator* paths;
+    Trace** M;
+    FOGSAA_ENTER
+
+    FOGSAA_CHECK_SCORES
+
+    FOGSAA_DO(COMPARE_SCORE)
+    FOGSAA_EXIT_ALIGN
+}
+
+static PyObject*
+Aligner_fogsaa_align_matrix(Aligner* self,
+                                 const int* sA, int nA,
+
+                                 const int* sB, int nB,
+                                 unsigned char strand)
+{
+    const Py_ssize_t n = self->substitution_matrix.shape[0];
+    const double* scores = self->substitution_matrix.buf;
+    double match = scores[0], mismatch = scores[0];
+    PathGenerator* paths;
+    Trace** M;
+    FOGSAA_ENTER
+
+    // for prediction purposes, maximum score is match and minimum score is mismatch
+    for (i = 0; i < n*n; i++) {
+        if (scores[i] > match)
+            match = scores[i];
+        else if (scores[i] < mismatch)
+            mismatch = scores[i];
+    }
+    FOGSAA_CHECK_SCORES
+
+    FOGSAA_DO(MATRIX_SCORE)
+    FOGSAA_EXIT_ALIGN
+}
+
 static int*
 convert_1bytes_to_ints(const int mapping[], Py_ssize_t n, const unsigned char s[])
 {
@@ -6750,6 +7537,9 @@ Aligner_score(Aligner* self, PyObject* args, PyObject* keywords)
                     else
                         result = Aligner_smithwaterman_score_compare(self, sA, nA, sB, nB);
                     break;
+                default:
+                    ERR_UNEXPECTED_MODE
+                    return NULL;
             }
             break;
         case Gotoh:
@@ -6766,6 +7556,9 @@ Aligner_score(Aligner* self, PyObject* args, PyObject* keywords)
                     else
                         result = Aligner_gotoh_local_score_compare(self, sA, nA, sB, nB);
                     break;
+                default:
+                    ERR_UNEXPECTED_MODE
+                    return NULL;
             }
             break;
         case WatermanSmithBeyer:
@@ -6782,11 +7575,24 @@ Aligner_score(Aligner* self, PyObject* args, PyObject* keywords)
                     else
                         result = Aligner_watermansmithbeyer_local_score_compare(self, sA, nA, sB, nB, strand);
                     break;
+                default:
+                    ERR_UNEXPECTED_MODE
+                    return NULL;
             }
+            break;
+        case FOGSAA:
+            if (mode != FOGSAA_Mode) {
+                ERR_UNEXPECTED_MODE
+                return NULL;
+            }
+            if (substitution_matrix)
+                result = Aligner_fogsaa_score_matrix(self, sA, nA, sB, nB, strand);
+            else
+                result = Aligner_fogsaa_score_compare(self, sA, nA, sB, nB, strand);
             break;
         case Unknown:
         default:
-            PyErr_SetString(PyExc_RuntimeError, "unknown algorithm");
+            ERR_UNEXPECTED_ALGORITHM
             break;
     }
 
@@ -6849,6 +7655,9 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
                     else
                         result = Aligner_smithwaterman_align_compare(self, sA, nA, sB, nB, strand);
                     break;
+                default:
+                    ERR_UNEXPECTED_MODE
+                    return NULL;
             }
             break;
         case Gotoh:
@@ -6865,6 +7674,9 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
                     else
                         result = Aligner_gotoh_local_align_compare(self, sA, nA, sB, nB, strand);
                     break;
+                default:
+                    ERR_UNEXPECTED_MODE
+                    return NULL;
             }
             break;
         case WatermanSmithBeyer:
@@ -6881,11 +7693,24 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
                     else
                         result = Aligner_watermansmithbeyer_local_align_compare(self, sA, nA, sB, nB, strand);
                     break;
+                default:
+                    ERR_UNEXPECTED_MODE
+                    return NULL;
             }
+            break;
+        case FOGSAA:
+            if (mode != FOGSAA_Mode) {
+                ERR_UNEXPECTED_MODE
+                return NULL;
+            }
+            if (substitution_matrix)
+                result = Aligner_fogsaa_align_matrix(self, sA, nA, sB, nB, strand);
+            else
+                result = Aligner_fogsaa_align_compare(self, sA, nA, sB, nB, strand);
             break;
         case Unknown:
         default:
-            PyErr_SetString(PyExc_RuntimeError, "unknown algorithm");
+            ERR_UNEXPECTED_ALGORITHM
             break;
     }
 
