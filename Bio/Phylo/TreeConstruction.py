@@ -745,15 +745,8 @@ class DistanceTreeConstructor(TreeConstructor):
             inner_clade.clades.append(clade1)
             inner_clade.clades.append(clade2)
             # assign branch length
-            if clade1.is_terminal():
-                clade1.branch_length = min_dist / 2
-            else:
-                clade1.branch_length = min_dist / 2 - self._height_of(clade1)
-
-            if clade2.is_terminal():
-                clade2.branch_length = min_dist / 2
-            else:
-                clade2.branch_length = min_dist / 2 - self._height_of(clade2)
+            clade1.branch_length = min_dist * 1.0 / 2 - self._height_of(clade1)
+            clade2.branch_length = min_dist * 1.0 / 2 - self._height_of(clade2)
 
             # update node list
             clades[min_j] = inner_clade
@@ -876,11 +869,11 @@ class DistanceTreeConstructor(TreeConstructor):
 
     def _height_of(self, clade):
         """Calculate clade height -- the longest path to any terminal (PRIVATE)."""
-        height = 0
         if clade.is_terminal():
-            height = clade.branch_length
+            height = 0
         else:
-            height = height + max(self._height_of(c) for c in clade.clades)
+            height = max(self._height_of(c) + c.branch_length for c in clade.clades)
+
         return height
 
 
