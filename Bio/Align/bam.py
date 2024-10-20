@@ -88,7 +88,7 @@ class _BAMToSamReader(bgzf.BgzfReader):
         # Convert to SAM operation characters
         translated_op = np.strings.translate(op.astype(np.bytes_), cls.cigar_encoding)
         # interweave op_len and op
-        cigar = b"".join(np.ravel(np.column_stack((op_len, translated_op))))
+        cigar = (np.char.array(op_len) + translated_op).tobytes().replace(b"\00", b"")
         return cigar
 
     def __next__(self):
