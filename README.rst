@@ -19,6 +19,9 @@
 .. image:: http://depsy.org/api/package/pypi/biopython/badge.svg
    :alt: Research software impact on Depsy
    :target: http://depsy.org/package/python/biopython
+.. image:: https://img.shields.io/badge/Gurubase-Ask%20Biopython%20Guru-006BFF
+   :alt: Biopython Guru
+   :target: https://gurubase.io/g/biopython
 
 .. image:: https://github.com/biopython/biopython/raw/master/Doc/images/biopython_logo_m.png
    :alt: The Biopython Project
