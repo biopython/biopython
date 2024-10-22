@@ -1256,65 +1256,67 @@ def parse(handle, debug=0):
         # NO DATA FOUND!
         raise ValueError("Your XML file was empty")
 
-    while text:
-        # We are now starting a new XML file
-        if not text.startswith(XML_START):
-            raise ValueError(
-                "Your XML file did not start with %r... but instead %r"
-                % (XML_START, text[:20])
-            )
+    try:
+        while text:
+            # We are now starting a new XML file
+            if not text.startswith(XML_START):
+                raise ValueError(
+                    "Your XML file did not start with %r... but instead %r"
+                    % (XML_START, text[:20])
+                )
 
-        expat_parser = expat.ParserCreate()
-        blast_parser = BlastParser(debug)
-        expat_parser.StartElementHandler = blast_parser.startElement
-        expat_parser.EndElementHandler = blast_parser.endElement
-        expat_parser.CharacterDataHandler = blast_parser.characters
+            expat_parser = expat.ParserCreate()
+            blast_parser = BlastParser(debug)
+            expat_parser.StartElementHandler = blast_parser.startElement
+            expat_parser.EndElementHandler = blast_parser.endElement
+            expat_parser.CharacterDataHandler = blast_parser.characters
 
-        expat_parser.Parse(text, False)
-        while blast_parser._records:
-            record = blast_parser._records[0]
-            blast_parser._records = blast_parser._records[1:]
-            yield record
+            expat_parser.Parse(text, False)
+            while blast_parser._records:
+                record = blast_parser._records[0]
+                blast_parser._records = blast_parser._records[1:]
+                yield record
 
-        while True:
-            # Read in another block of the file...
-            text, pending = pending + handle.read(BLOCK), ""
-            if not text:
-                # End of the file!
-                expat_parser.Parse(NULL, True)  # End of XML record
-                break
+            while True:
+                # Read in another block of the file...
+                text, pending = pending + handle.read(BLOCK), ""
+                if not text:
+                    # End of the file!
+                    break
 
-            # Now read a little bit more so we can check for the
-            # start of another XML file...
-            pending = handle.read(MARGIN)
+                # Now read a little bit more so we can check for the
+                # start of another XML file...
+                pending = handle.read(MARGIN)
 
-            if (NEW_LINE + XML_START) not in (text + pending):
-                # Good - still dealing with the same XML file
-                expat_parser.Parse(text, False)
-                while blast_parser._records:
-                    yield blast_parser._records.pop(0)
-            else:
-                # This is output from pre 2.2.14 BLAST,
-                # one XML file for each query!
+                if (NEW_LINE + XML_START) not in (text + pending):
+                    # Good - still dealing with the same XML file
+                    expat_parser.Parse(text, False)
+                    while blast_parser._records:
+                        yield blast_parser._records.pop(0)
+                else:
+                    # This is output from pre 2.2.14 BLAST,
+                    # one XML file for each query!
 
-                # Finish the old file:
-                text, pending = (text + pending).split(NEW_LINE + XML_START, 1)
-                pending = XML_START + pending
+                    # Finish the old file:
+                    text, pending = (text + pending).split(NEW_LINE + XML_START, 1)
+                    pending = XML_START + pending
 
-                expat_parser.Parse(text, True)  # End of XML record
-                while blast_parser._records:
-                    yield blast_parser._records.pop(0)
+                    expat_parser.Parse(text, True)  # End of XML record
+                    while blast_parser._records:
+                        yield blast_parser._records.pop(0)
 
-                # Now we are going to re-loop, reset the
-                # parsers and start reading the next XML file
-                text, pending = pending, NULL
-                break
+                    # Now we are going to re-loop, reset the
+                    # parsers and start reading the next XML file
+                    text, pending = pending, NULL
+                    break
 
-        # At this point we have finished the first XML record.
-        # If the file is from an old version of blast, it may
-        # contain more XML records (check if text=="").
-        assert not pending, pending
-        assert len(blast_parser._records) == 0, len(blast_parser._records)
+            # At this point we have finished the first XML record.
+            # If the file is from an old version of blast, it may
+            # contain more XML records (check if text=="").
+            assert not pending, pending
+            assert len(blast_parser._records) == 0, len(blast_parser._records)
+    finally:
+        expat_parser.Parse(NULL, True)
 
     # We should have finished the file!
     assert not text, text
