@@ -762,6 +762,17 @@ class Records(UserList):
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
         try:
+            self._parser.Parse(b"", True)
+            del self._parser
+        except AttributeError:
+            pass
+
+        try:
+            del self._cache
+        except AttributeError:
+            pass
+
+        try:
             stream = self._stream
         except AttributeError:
             return
@@ -797,8 +808,6 @@ class Records(UserList):
             # Read in another block of data from the file.
             data = stream.read(BLOCK)
             if data == b"":
-                del self._cache
-                del self._parser
                 if parser.StartElementHandler is not None:
                     raise ValueError(
                         f"premature end of XML file (after reading {parser.CurrentByteIndex} bytes)"
