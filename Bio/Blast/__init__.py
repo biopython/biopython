@@ -729,12 +729,21 @@ class Records(UserList):
                     except AttributeError:
                         break
                     else:
-                        raise ValueError(
-                            f"premature end of XML file (after reading {parser.CurrentByteIndex} bytes)"
-                        )
+                        try:
+                            parser.Parse(b"", True)
+                        except expat.ExpatError as e:
+                            if parser.StartElementHandler is not None:
+                                raise ValueError(
+                                    f"premature end of XML file: line {e.lineno}, column {e.offset}"
+                                )
+                            raise e
                 try:
                     parser.Parse(data, False)
                 except expat.ExpatError as e:
+                    try:
+                        parser.Parse(b"", True)
+                    except expat.ExpatError:
+                        pass
                     if parser.StartElementHandler:
                         # We saw the initial <!xml declaration, so we can be
                         # sure that we are parsing XML data. Most likely, the
@@ -764,7 +773,7 @@ class Records(UserList):
         try:
             self._parser.Parse(b"", True)
             del self._parser
-        except AttributeError:
+        except (AttributeError, expat.ExpatError):
             pass
 
         try:
@@ -808,10 +817,18 @@ class Records(UserList):
             # Read in another block of data from the file.
             data = stream.read(BLOCK)
             if data == b"":
-                if parser.StartElementHandler is not None:
-                    raise ValueError(
-                        f"premature end of XML file (after reading {parser.CurrentByteIndex} bytes)"
-                    )
+                try:
+                    del self._parser
+                    try:
+                        parser.Parse(b"", True)
+                    except expat.ExpatError as e:
+                        if parser.StartElementHandler is not None:
+                            raise ValueError(
+                                f"premature end of XML file: line {e.lineno}, column {e.offset}"
+                            )
+                        raise e
+                except AttributeError:
+                    pass
                 raise StopIteration
             try:
                 parser.Parse(data, False)

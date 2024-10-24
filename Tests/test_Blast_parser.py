@@ -14716,7 +14716,7 @@ class TestBlastErrors(unittest.TestCase):
 
     def test_premature_end_header(self):
         """Try to parse an XML file terminating in the header."""
-        message = r"^premature end of XML file \(after reading [1-9]\d* bytes\)$"
+        message = r"^premature end of XML file: line [0-9]\d*, column [0-9]\d*$"
         filename = "broken1.xml"
         path = os.path.join("Blast", filename)
         with open(path, "rb") as stream:
@@ -14736,7 +14736,7 @@ class TestBlastErrors(unittest.TestCase):
 
     def test_premature_end_first_block(self):
         """Try to parse an XML file terminating within the first block."""
-        message = r"^premature end of XML file \(after reading [1-9]\d* bytes\)$"
+        message = r"^premature end of XML file: line [0-9]\d*, column [0-9]\d*$"
         filename = "broken2.xml"
         path = os.path.join("Blast", filename)
         with open(path, "rb") as stream:
@@ -14758,7 +14758,7 @@ class TestBlastErrors(unittest.TestCase):
 
     def test_premature_end_second_block(self):
         """Try to parse an XML file terminating in the second block."""
-        message = r"^premature end of XML file \(after reading [1-9]\d* bytes\)$"
+        message = r"^premature end of XML file: line [0-9]\d*, column [0-9]\d*$"
         filename = "broken3.xml"
         path = os.path.join("Blast", filename)
         with open(path, "rb") as stream:
@@ -14780,7 +14780,7 @@ class TestBlastErrors(unittest.TestCase):
 
     def test_premature_end_after_one_record(self):
         """Try to parse an XML file terminating after the first record."""
-        message = r"^premature end of XML file \(after reading [1-9]\d* bytes\)$"
+        message = r"^premature end of XML file: line [0-9]\d*, column [0-9]\d*$"
         filename = "broken4.xml"
         path = os.path.join("Blast", filename)
         with open(path, "rb") as stream:
