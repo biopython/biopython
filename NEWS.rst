@@ -50,12 +50,8 @@ to the test suite and type annotations.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
-<<<<<<< HEAD
 - Alan Medlar
 - Carlos Peña
-=======
-- Samuel Prince (first contribution)
->>>>>>> 2b07d91f0 (Update NEWS.rst)
 - Gert Hulselmans
 - Peter Cock
 - Michiel de Hoon
