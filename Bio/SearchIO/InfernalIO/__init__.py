@@ -136,6 +136,7 @@ cmscan tabular output files formats 1 (default), 2 and 3. Non-default format mus
 be passed to the parser.
 
     >>> # set a non-default cmscan tabular output format
+    >>> from Bio import SearchIO
     >>> file = 'Infernal/cmscan_115_IRES_5S_U2_Yeast_fmt_2.tbl'
     >>> qresult = SearchIO.read(file, 'infernal-tab', fmt=2)
     >>> qresult
