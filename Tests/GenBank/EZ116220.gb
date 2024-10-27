@@ -1,0 +1,43 @@
+LOCUS       EZ116220                 440 bp    mRNA    linear   TSA 10-JUN-2010
+DEFINITION  TSA: Rhagoletis pomonella contig00001, mRNA sequence.
+ACCESSION   EZ116220
+VERSION     EZ116220.1
+DBLINK      BioProject: PRJNA39555
+            Sequence Read Archive: SRX001885, SRX001121, SRX001531, SRX001530,
+            SRX001529
+KEYWORDS    TSA; Transcriptome Shotgun Assembly.
+SOURCE      Rhagoletis pomonella (apple maggot)
+  ORGANISM  Rhagoletis pomonella
+            Eukaryota; Metazoa; Ecdysozoa; Arthropoda; Hexapoda; Insecta;
+            Pterygota; Neoptera; Endopterygota; Diptera; Brachycera;
+            Muscomorpha; Tephritoidea; Tephritidae; Rhagoletis.
+REFERENCE   1  (bases 1 to 440)
+  AUTHORS   Schwarz,D., Robertson,H.M., Feder,J.L., Varala,K., Hudson,M.E.,
+            Ragland,G.J., Hahn,D.A. and Berlocher,S.H.
+  TITLE     Sympatric ecological speciation meets pyrosequencing: sampling the
+            transcriptome of the apple maggot Rhagoletis pomonella
+  JOURNAL   BMC Genomics 10, 633 (2009)
+   PUBMED   20035631
+  REMARK    Publication Status: Online-Only
+REFERENCE   2  (bases 1 to 440)
+  AUTHORS   Schwarz,D., Robertson,H.R., Feder,J.L. and Berlocher,S.H.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (21-JUL-2009) Department of Entomology, University of
+            Illinois, 320 Morrill Hall, 505 S. Goodwin Ave., Urbana, IL 61801,
+            USA
+FEATURES             Location/Qualifiers
+     source          1..440
+                     /organism="Rhagoletis pomonella"
+                     /mol_type="mRNA"
+                     /db_xref="taxon:28610"
+ORIGIN      
+        1 agtttacaat aaaatataca tataatatgt atgtacatac atacatacat accatattta
+       61 agaaaaatat acgaaaggat gtttacatca ttccattaaa aacgtatgtg tatttaaaaa
+      121 ttgatatatt taaaataaaa cacatataaa tatgtaagca tattaatact cagaaaatgt
+      181 agaaatcact gcgttcatga aatttattgt atgaagtaaa ataaggaaaa ctatagaaaa
+      241 aataaagtta ggcaaattca catgttgcag acattttaaa gtataaaaac gtacatacat
+      301 acatacatcc atacttcgag acattcgtat ataaattgtt gttcattgta aggaaagttc
+      361 aaaaacgaat agttatattc tttactgttt atcgcatgag atacttatta aaaaatgaaa
+      421 taaaatggtt gctatatnaa
+//
+
