@@ -452,7 +452,7 @@ def _check(seq, method):
     seq = re.sub(r"[^A-Z]", "", seq.upper())
     seq = str(Seq.Seq(seq).back_transcribe())
     if method == "Tm_GC" or method == "Tm_Wallace":
-        baseset = (
+        baseset = {
             "A",
             "B",
             "C",
@@ -470,12 +470,16 @@ def _check(seq, method):
             "W",
             "X",
             "Y",
+        }
+    elif method == "Tm_NN":
+        baseset = {"A", "C", "G", "T", "I"}
+    else:
+        raise NotImplementedError(
+            f"Only methods Tm_GC, Tm_Wallace, or Tm_NN are accepted but got {method}"
         )
-    if method == "Tm_NN":
-        baseset = ("A", "C", "G", "T", "I")
 
-    if not all(base in baseset for base in seq):
-        raise ValueError("The input sequence is not valid for " + method)
+    if not set(seq).issubset(baseset):
+        raise ValueError(f"The input sequence is not valid for {method}")
     return seq
 
 
