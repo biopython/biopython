@@ -547,6 +547,16 @@ class SeqXmlWriter(SequenceWriter):
         self.species = species
         self.ncbiTaxId = ncbiTaxId
 
+    def write_records(self, records):
+        """Write records to the output file, and return the number of records.
+
+        records - A list or iterator returning SeqRecord objects
+        """
+        self.write_header()
+        count = super().write_records(records)
+        self.write_footer()
+        return count
+
     def write_header(self):
         """Write root node with document metadata."""
         attrs = {

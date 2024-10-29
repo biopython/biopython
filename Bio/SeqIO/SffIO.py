@@ -1141,8 +1141,11 @@ class SffWriter(SequenceWriter):
         else:
             self._index = None
 
-    def write_file(self, records):
-        """Use this to write an entire file containing the given records."""
+    def write_records(self, records):
+        """Write records to the output file, and return the number of records.
+
+        records - A list or iterator returning SeqRecord objects
+        """
         try:
             self._number_of_reads = len(records)
         except TypeError:
