@@ -34,7 +34,6 @@ build_script:
   - ps: Start-FileDownload "https://repo.continuum.io/miniconda/Miniconda$env:PY_MAJOR_VER-latest-Windows-$env:PYTHON_ARCH.exe" C:\Miniconda.exe; echo "Finished downloading miniconda"
   - ps: start -Wait -FilePath C:\Miniconda.exe -ArgumentList "/S /D=C:\Py"
   - SET PATH=C:\Py;C:\Py\Scripts;C:\Py\Library\bin;%PATH%
-  - conda config --remove channels defaults
   - conda config --set always_yes yes
   - conda update conda
   - python -m pip install --upgrade coverage setuptools "numpy!=2.1.0"

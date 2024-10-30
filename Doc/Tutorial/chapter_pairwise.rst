@@ -8,9 +8,10 @@ each other by optimizing the similarity score between them. The
 ``Bio.Align`` module contains the ``PairwiseAligner`` class for global
 and local alignments using the Needleman-Wunsch, Smith-Waterman, Gotoh
 (three-state), and Waterman-Smith-Beyer global and local pairwise
-alignment algorithms, with numerous options to change the alignment
-parameters. We refer to Durbin *et al.* [Durbin1998]_
-for in-depth information on sequence alignment algorithms.
+alignment algorithms, and the Fast Optimal Global Alignment Algorithm (FOGSAA),
+with numerous options to change the alignment parameters. We refer to Durbin
+*et al.* [Durbin1998]_ for in-depth information on sequence alignment
+algorithms.
 
 .. _`sec:pairwise-basic`:
 
@@ -319,6 +320,34 @@ Note that there is some ambiguity in the definition of the best local
 alignments if segments with a score 0 can be added to the alignment. We
 follow the suggestion by Waterman & Eggert
 [Waterman1987]_ and disallow such extensions.
+
+If `aligner.mode` is set to `"fogsaa"`, then the Fast Optimal Global Alignment
+Algorithm [Chakraborty2013]_ with some modifications is used. This mode
+calculates a global alignment, but it is not like the regular `"global"` mode.
+It is best suited for long alignments between similar sequences. Rather than
+calculating all possible alignments like other algorithms do, FOGSAA uses a
+heuristic to detect steps in an alignment that cannot lead to an optimal
+alignment. This can speed up alignment, however, the heuristic makes
+assumptions about your match, mismatch, and gap scores. If the match score is
+less than the mismatch score or any gap score, or if any gap score is greater
+than the mismatch score, then a warning is raised and the algorithm may return
+incorrect results. Unlike other modes that may return more than one alignment,
+FOGSAA always returns only one alignment.
+
+.. cont-doctest
+
+.. code:: pycon
+
+   >>> aligner.mode = "fogsaa"
+   >>> aligner.mismatch_score = -10
+   >>> alignments = aligner.align("AAACAAA", "AAAGAAA")
+   >>> len(alignments)
+   1
+   >>> print(alignments[0])
+   target            0 AAAC-AAA 7
+                     0 |||--||| 8
+   query             0 AAA-GAAA 7
+   <BLANKLINE>
 
 .. _`sec:pairwise-aligner`:
 

@@ -238,32 +238,18 @@ class SequenceWriter:
         # for sequential file formats.                   #
         ##################################################
 
-    def write_records(self, records, maxcount=None):
+    def write_records(self, records):
         """Write records to the output file, and return the number of records.
 
         records - A list or iterator returning SeqRecord objects
-        maxcount - The maximum number of records allowed by the
-        file format, or None if there is no maximum.
         """
         count = 0
-        if maxcount is None:
-            for record in records:
-                self.write_record(record)
-                count += 1
-        else:
-            for record in records:
-                if count == maxcount:
-                    if maxcount == 1:
-                        raise ValueError("More than one sequence found")
-                    else:
-                        raise ValueError(
-                            "Number of sequences is larger than %d" % maxcount
-                        )
-                self.write_record(record)
-                count += 1
+        for record in records:
+            self.write_record(record)
+            count += 1
         return count
 
-    def write_file(self, records, mincount=0, maxcount=None):
+    def write_file(self, records):
         """Write a complete file with the records, and return the number of records.
 
         records - A list or iterator returning SeqRecord objects
@@ -274,21 +260,9 @@ class SequenceWriter:
         ##################################################
         try:
             self.write_header()
-            count = self.write_records(records, maxcount)
+            count = self.write_records(records)
             self.write_footer()
         finally:
             if self.handle is not self.target:
                 self.handle.close()
-        if count < mincount:
-            if mincount == 1:  # Common case
-                raise ValueError("Must have one sequence")
-            elif mincount == maxcount:
-                raise ValueError(
-                    "Number of sequences is %d (expected %d)" % (count, mincount)
-                )
-            else:
-                raise ValueError(
-                    "Number of sequences is %d (expected at least %d)"
-                    % (count, mincount)
-                )
         return count

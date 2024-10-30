@@ -9,6 +9,7 @@ import os
 import tempfile
 import unittest
 from io import StringIO
+from itertools import combinations
 
 from Bio import Align
 from Bio import AlignIO
@@ -232,7 +233,13 @@ class DistanceTreeConstructorTest(unittest.TestCase):
         # Phylo.write(tree, tree_file, 'newick')
         ref_tree = Phylo.read("./TreeConstruction/upgma.tre", "newick")
         self.assertTrue(Consensus._equal_topology(tree, ref_tree))
-        # ref_tree.close()
+        # check for equal distance of all terminal nodes from the root
+        ref_tree.root_at_midpoint()
+        for len1, len2 in combinations(
+            [depth for node, depth in ref_tree.depths().items() if node.is_terminal()],
+            2,
+        ):
+            self.assertAlmostEqual(len1, len2)
 
     def test_nj_msa(self):
         tree = self.constructor.nj(self.dm_msa)

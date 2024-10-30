@@ -217,7 +217,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
     """Alignment file writer for the bigBed file format."""
 
     fmt = "bigBed"
-    mode = "wb"
+    mode = "b"
 
     def __init__(
         self,
