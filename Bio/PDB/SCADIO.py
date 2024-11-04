@@ -310,7 +310,7 @@ rotate([-90,0,0])  // convenient for default location (no N-Ca-C start coordinat
 // top-level OpenSCAD $fn for visible surfaces.  Rotatable bonds use $fn=8
 // inside, regardless of this setting.
 
-$fn = 8;  // $n=8 should print with minimal support
+$fn = 20;  // $fn=8 should print with minimal support
 
 tubes=false;     // style: render atoms and bonds as constant diameter cylinders, preferred for rotatable bonds / h-bonds
 support=false;   // enable print-in-place internal support for rotatable bonds
