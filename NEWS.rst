@@ -43,8 +43,12 @@ on the majority of uses, as b-factor values are generally small (less than 100).
 999_999 are now clamped. The justification for this is the rise in the b-factor field
 being used for additional metadata, typically from computational tools.
 
-``Bio.PDB.PDBIO`` will now raise module specific warnings: ``Bio.PDB.PDBExceptions.PDBIOWarning``.
+``Bio.PDB.PDBIO`` will now raise module specific warnings:
+``Bio.PDB.PDBExceptions.PDBIOWarning``.
 
+``Bio.PDB.SCADIO`` now supports object selection by color in the OpenSCAD
+output file.  This enables generation of separate STL files for each color for
+printing protein structures on multi-material 3D printers.
 
 The ``iplotx`` library is mentioned in the Tutorial as an option to visualise
 trees using complex style options.
