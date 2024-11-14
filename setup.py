@@ -56,6 +56,7 @@ if setuptools_version_tuple < (70, 1) and "bdist_wheel" in sys.argv:
 
 
 # Make sure we have the right Python version.
+# Note: Update trove classifiers below if you bump the minimum version.
 MIN_PY_VER = (3, 9)
 if sys.version_info[:2] < MIN_PY_VER:
     sys.stderr.write(
@@ -255,7 +256,6 @@ setup(
         "Operating System :: OS Independent",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
