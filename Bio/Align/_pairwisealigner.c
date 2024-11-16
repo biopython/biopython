@@ -5636,9 +5636,9 @@ exit: \
     const double epsilon = self->epsilon; \
     Trace** M; \
     TraceGapsWatermanSmithBeyer** gaps; \
-    double** M_row; \
-    double** Ix_row; \
-    double** Iy_row; \
+    double** M_row = NULL; \
+    double** Ix_row = NULL; \
+    double** Iy_row = NULL; \
     int ng; \
     int nm; \
     double score; \
