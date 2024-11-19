@@ -860,11 +860,14 @@ class XMLHandler:
             pass
         elif program in ("blastx", "tblastx") and query_frame in (-3, -2, -1, 1, 2, 3):
             pass
-        elif program in ("blastp", "tblastn", "rpsblast") and query_frame == 0:
+        elif (
+            program in ("blastp", "tblastn", "rpsblast", "psiblast")
+            and query_frame == 0
+        ):
             pass
         else:
             raise ValueError(
-                f"unexpected value {query_frame} in tag <Hsp_query-frame> for program {self._program}"
+                f"unexpected value {query_frame} in tag <Hsp_query-frame> for program {program}"
             )
         self._hsp.query_frame = query_frame
         self._characters = ""
@@ -874,20 +877,13 @@ class XMLHandler:
         program = self._program
         if program in ("blastn", "megablast") and hit_frame in (-1, 1):
             pass
-        elif program in ("blastp", "blastx", "rpsblast") and hit_frame == 0:
+        elif program in ("blastp", "blastx", "rpsblast", "psiblast") and hit_frame == 0:
             pass
-        elif program in ("tblastn", "tblastx") and hit_frame in (
-            -3,
-            -2,
-            -1,
-            1,
-            2,
-            3,
-        ):
+        elif program in ("tblastn", "tblastx") and hit_frame in (-3, -2, -1, 1, 2, 3):
             pass
         else:
             raise ValueError(
-                f"unexpected value {hit_frame} in tag <Hsp_hit-frame> for program {self._program}"
+                f"unexpected value {hit_frame} in tag <Hsp_hit-frame> for program {program}"
             )
         self._hsp.hit_frame = hit_frame
         self._characters = ""
@@ -1005,7 +1001,7 @@ class XMLHandler:
                 target_seq_data = {target_length - target_end: target_seq_data}
                 seq = Seq(target_seq_data, target_length)
                 target.seq = seq.reverse_complement()
-        elif program in ("blastp", "blastx", "rpsblast"):
+        elif program in ("blastp", "blastx", "rpsblast", "psiblast"):
             target_start = hsp.hit_from - 1
             target_end = hsp.hit_to
             coordinates[0, :] += target_start
