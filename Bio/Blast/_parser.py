@@ -860,7 +860,10 @@ class XMLHandler:
             pass
         elif program in ("blastx", "tblastx") and query_frame in (-3, -2, -1, 1, 2, 3):
             pass
-        elif program in ("blastp", "tblastn", "rpsblast", "psiblast") and query_frame == 0:
+        elif (
+            program in ("blastp", "tblastn", "rpsblast", "psiblast")
+            and query_frame == 0
+        ):
             pass
         else:
             raise ValueError(
