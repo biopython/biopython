@@ -5636,9 +5636,9 @@ exit: \
     const double epsilon = self->epsilon; \
     Trace** M; \
     TraceGapsWatermanSmithBeyer** gaps; \
-    double** M_row; \
-    double** Ix_row; \
-    double** Iy_row; \
+    double** M_row = NULL; \
+    double** Ix_row = NULL; \
+    double** Iy_row = NULL; \
     int ng; \
     int nm; \
     double score; \
@@ -5999,8 +5999,13 @@ exit: \
      * expanded nodes, lower_bound contains the global lower_bound, a and b \
      * contain the lower bounds for the current cell. ch contains the types of \
      * the potential children */ \
-    int type_total = 1, new_type, npA, npB; \
-    double new_score, new_lower, new_upper, next_lower, next_upper; \
+    int type_total = 1; \
+    /* The initial values for new_type, npA, npB, new_score, new_lower, \
+    new_upper, next_lower, and next_upper don't mean anything; they're never \
+    used and are only initialized to stop compiler warnings */ \
+    int new_type = 0, npA = 0, npB = 0; \
+    double new_score = 0, new_lower = 0, new_upper = 0, next_lower = 0, \
+        next_upper = 0; \
     const double gap_open_A = self->target_internal_open_gap_score; \
     const double gap_open_B = self->query_internal_open_gap_score; \
     const double gap_extend_A = self->target_internal_extend_gap_score; \
