@@ -2056,7 +2056,7 @@ Program: BLASTP 2.15.0+
             'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
         )
         self.assertEqual(records.db, "nr")
-        if xml2 is False:
+        if not xml2:
             self.assertIsInstance(records.query, SeqRecord)
             self.assertEqual(records.query.id, "WXX52402.1")
             self.assertEqual(
@@ -2069,11 +2069,11 @@ Program: BLASTP 2.15.0+
         self.assertEqual(records.param["gap-open"], 11)
         self.assertEqual(records.param["gap-extend"], 1)
         self.assertEqual(records.param["filter"], "F")
-        if xml2 is False:
-            self.assertEqual(len(records.param), 5)
-        else:
+        if xml2:
             self.assertEqual(records.param["cbs"], 2)
             self.assertEqual(len(records.param), 6)
+        else:
+            self.assertEqual(len(records.param), 5)
         record = next(records)
         self.assertRaises(StopIteration, next, records)
         self.check_xml_21500_blastp_001_record(record, xml2=xml2)
@@ -2087,7 +2087,7 @@ Program: BLASTP 2.15.0+
         self.assertEqual(target.name, "WP_003221446")
         seq = target.seq
         self.assertEqual(repr(seq), "Seq(None, length=239)")
-        if xml2 is True:
+        if xml2:
             self.assertEqual(
                 target.description,
                 "MULTISPECIES: RNA polymerase sporulation sigma factor SigE [Bacillales]",
@@ -2233,7 +2233,7 @@ Program: BLASTP 2.15.0+
             repr(hsp),
             "<Bio.Blast.HSP target.id='ref|WP_003221446.1|' query.id='WXX52402.1'; 2 rows x 239 columns>",
         )
-        if xml2 is True:
+        if xml2:
             self.assertEqual(
                 str(hsp),
                 """\
@@ -2408,7 +2408,7 @@ WXX52402.       239
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "ref|WP_120028072.1|")
         self.assertEqual(hit.target.name, "WP_120028072")
-        if xml2 is True:
+        if xml2:
             self.assertEqual(
                 hit.target.description,
                 "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
@@ -2464,7 +2464,7 @@ WXX52402.       239
             repr(hsp),
             "<Bio.Blast.HSP target.id='ref|WP_120028072.1|' query.id='WXX52402.1'; 2 rows x 239 columns>",
         )
-        if xml2 is True:
+        if xml2:
             self.assertEqual(
                 str(hsp),
                 """\
@@ -2539,7 +2539,7 @@ WXX52402.       239
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "ref|WP_326121348.1|")
         self.assertEqual(hit.target.name, "WP_326121348")
-        if xml2 is True:
+        if xml2:
             self.assertEqual(
                 hit.target.description,
                 "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
@@ -2595,7 +2595,7 @@ WXX52402.       239
             repr(hsp),
             "<Bio.Blast.HSP target.id='ref|WP_326121348.1|' query.id='WXX52402.1'; 2 rows x 239 columns>",
         )
-        if xml2 is True:
+        if xml2:
             self.assertEqual(
                 str(hsp),
                 """\
@@ -2670,7 +2670,7 @@ WXX52402.       239
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "ref|WP_128473893.1|")
         self.assertEqual(hit.target.name, "WP_128473893")
-        if xml2 is True:
+        if xml2:
             self.assertEqual(
                 hit.target.description,
                 "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
@@ -2726,7 +2726,7 @@ WXX52402.       239
             repr(hsp),
             "<Bio.Blast.HSP target.id='ref|WP_128473893.1|' query.id='WXX52402.1'; 2 rows x 239 columns>",
         )
-        if xml2 is True:
+        if xml2:
             self.assertEqual(
                 str(hsp),
                 """\
@@ -2801,7 +2801,7 @@ WXX52402.       239
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "ref|WP_174228079.1|")
         self.assertEqual(hit.target.name, "WP_174228079")
-        if xml2 is True:
+        if xml2:
             self.assertEqual(
                 hit.target.description,
                 "RNA polymerase sporulation sigma factor SigE [Bacillus tequilensis]",
@@ -2857,7 +2857,7 @@ WXX52402.       239
             repr(hsp),
             "<Bio.Blast.HSP target.id='ref|WP_174228079.1|' query.id='WXX52402.1'; 2 rows x 239 columns>",
         )
-        if xml2 is True:
+        if xml2:
             self.assertEqual(
                 str(hsp),
                 """\
@@ -2932,7 +2932,7 @@ WXX52402.       239
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "ref|WP_315947263.1|")
         self.assertEqual(hit.target.name, "WP_315947263")
-        if xml2 is True:
+        if xml2:
             self.assertEqual(
                 hit.target.description,
                 "RNA polymerase sporulation sigma factor SigE [Bacillus cabrialesii]",
@@ -2988,7 +2988,7 @@ WXX52402.       239
             repr(hsp),
             "<Bio.Blast.HSP target.id='ref|WP_315947263.1|' query.id='WXX52402.1'; 2 rows x 239 columns>",
         )
-        if xml2 is True:
+        if xml2:
             self.assertEqual(
                 str(hsp),
                 """\
@@ -3063,7 +3063,7 @@ WXX52402.       239
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "ref|WP_219912761.1|")
         self.assertEqual(hit.target.name, "WP_219912761")
-        if xml2 is True:
+        if xml2:
             self.assertEqual(
                 hit.target.description,
                 "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
@@ -3119,7 +3119,7 @@ WXX52402.       239
             repr(hsp),
             "<Bio.Blast.HSP target.id='ref|WP_219912761.1|' query.id='WXX52402.1'; 2 rows x 239 columns>",
         )
-        if xml2 is True:
+        if xml2:
             self.assertEqual(
                 str(hsp),
                 """\
@@ -3284,7 +3284,7 @@ WXX52402.       239
         self.assertIsInstance(hit.target, SeqRecord)
         self.assertEqual(hit.target.id, "ref|WP_326211018.1|")
         self.assertEqual(hit.target.name, "WP_326211018")
-        if xml2 is True:
+        if xml2:
             self.assertEqual(
                 hit.target.description,
                 "RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]",
@@ -3340,7 +3340,7 @@ WXX52402.       239
             repr(hsp),
             "<Bio.Blast.HSP target.id='ref|WP_326211018.1|' query.id='WXX52402.1'; 2 rows x 239 columns>",
         )
-        if xml2 is True:
+        if xml2:
             self.assertEqual(
                 str(hsp),
                 """\
@@ -3452,7 +3452,7 @@ WXX52402.       239
         self.assertEqual(len(record.stat), 7)
         self.assertEqual(record.stat["db-num"], 718658123)
         self.assertEqual(record.stat["db-len"], 277418989154)
-        if xml2 is True:
+        if xml2:
             self.assertEqual(record.stat["hsp-len"], 161)
             self.assertEqual(record.stat["eff-space"], 12613772445378)
         else:
@@ -3552,7 +3552,7 @@ Program: BLASTN 2.15.0+
             'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
         )
         self.assertEqual(records.db, "genomic/10090/GCF_000001635.26")
-        if xml2 is False:
+        if not xml2:
             self.assertIsInstance(records.query, SeqRecord)
             self.assertEqual(records.query.id, "Query_78041")
             self.assertEqual(
@@ -3572,7 +3572,7 @@ Program: BLASTN 2.15.0+
         self.check_xml_21500_blastn_001_record(record, xml2=xml2)
 
     def check_xml_21500_blastn_001_record(self, record, xml2=False):
-        if xml2 is False:
+        if not xml2:
             self.assertEqual(record.num, 1)
         self.assertIsInstance(record.query, SeqRecord)
         self.assertEqual(record.query.id, "Query_78041")
@@ -3585,7 +3585,7 @@ Program: BLASTN 2.15.0+
         self.assertEqual(len(record.stat), 7)
         self.assertEqual(record.stat["db-num"], 239)
         self.assertEqual(record.stat["db-len"], 2818974565)
-        if xml2 is True:
+        if xml2:
             self.assertEqual(record.stat["hsp-len"], 31)
             self.assertEqual(record.stat["eff-space"], 716017657624)
         else:
@@ -3604,7 +3604,7 @@ Program: BLASTN 2.15.0+
             hit.target.description,
             "Mus musculus strain C57BL/6J chromosome 3, GRCm38.p6 C57BL/6J",
         )
-        if xml2 is True:
+        if xml2:
             self.assertEqual(hit.target.annotations["taxid"], 10090)
             self.assertEqual(hit.target.annotations["sciname"], "Mus musculus")
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=160039680)")
@@ -3615,7 +3615,7 @@ Program: BLASTN 2.15.0+
         self.assertAlmostEqual(hsp.annotations["bit score"], 40.9604)
         self.assertAlmostEqual(hsp.annotations["evalue"], 0.334664)
         self.assertEqual(hsp.annotations["identity"], 30)
-        if xml2 is False:
+        if not xml2:
             self.assertEqual(hsp.annotations["positive"], 30)
         self.assertEqual(hsp.annotations["gaps"], 1)
         self.assertTrue(
@@ -3647,14 +3647,14 @@ Program: BLASTN 2.15.0+
             hsp.target.description,
             "Mus musculus strain C57BL/6J chromosome 3, GRCm38.p6 C57BL/6J",
         )
-        if xml2 is True:
+        if xml2:
             self.assertEqual(hit.target.annotations["taxid"], 10090)
             self.assertEqual(hit.target.annotations["sciname"], "Mus musculus")
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(
             hsp.annotations["midline"], "|||||||||||||| || |||||| || ||||||"
         )
-        if xml2 is True:
+        if xml2:
             self.assertEqual(
                 str(hsp),
                 """\
@@ -3699,7 +3699,7 @@ Query_780       133 GAATCCTAGAGGCTTGATTGGCCCAGG-CTGCTG       166
             hit.target.description,
             "Mus musculus strain C57BL/6J chromosome 7, GRCm38.p6 C57BL/6J",
         )
-        if xml2 is True:
+        if xml2:
             self.assertEqual(hit.target.annotations["taxid"], 10090)
             self.assertEqual(hit.target.annotations["sciname"], "Mus musculus")
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=145441459)")
@@ -3710,7 +3710,7 @@ Query_780       133 GAATCCTAGAGGCTTGATTGGCCCAGG-CTGCTG       166
         self.assertAlmostEqual(hsp.annotations["bit score"], 40.9604)
         self.assertAlmostEqual(hsp.annotations["evalue"], 0.334664)
         self.assertEqual(hsp.annotations["identity"], 26)
-        if xml2 is False:
+        if not xml2:
             self.assertEqual(hsp.annotations["positive"], 26)
         self.assertEqual(hsp.annotations["gaps"], 0)
         self.assertTrue(
@@ -3744,7 +3744,7 @@ Query_780       133 GAATCCTAGAGGCTTGATTGGCCCAGG-CTGCTG       166
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(hsp.annotations["midline"], "|||||||||  ||||||||||||||| ||")
-        if xml2 is True:
+        if xml2:
             self.assertEqual(
                 str(hsp),
                 """\
@@ -3789,7 +3789,7 @@ Query_780       204 GAAAGGAAATNAAAATGGAAAGTTCTTGT       233
             hit.target.description,
             "Mus musculus strain C57BL/6J chromosome 4, GRCm38.p6 C57BL/6J",
         )
-        if xml2 is True:
+        if xml2:
             self.assertEqual(hit.target.annotations["taxid"], 10090)
             self.assertEqual(hit.target.annotations["sciname"], "Mus musculus")
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=156508116)")
@@ -3800,7 +3800,7 @@ Query_780       204 GAAAGGAAATNAAAATGGAAAGTTCTTGT       233
         self.assertAlmostEqual(hsp.annotations["bit score"], 40.0587)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.16809)
         self.assertEqual(hsp.annotations["identity"], 23)
-        if xml2 is False:
+        if not xml2:
             self.assertEqual(hsp.annotations["positive"], 23)
         self.assertEqual(hsp.annotations["gaps"], 0)
         self.assertTrue(
@@ -3833,7 +3833,7 @@ Query_780       204 GAAAGGAAATNAAAATGGAAAGTTCTTGT       233
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(hsp.annotations["midline"], "|||||||||||||||| |||||||")
-        if xml2 is True:
+        if xml2:
             self.assertEqual(
                 str(hsp),
                 """\
@@ -3875,7 +3875,7 @@ Query_780        61 CCAACACAGGCCAGCGACTTCTGG      85
         self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
         self.assertAlmostEqual(hsp.annotations["evalue"], 4.07705)
         self.assertEqual(hsp.annotations["identity"], 28)
-        if xml2 is False:
+        if not xml2:
             self.assertEqual(hsp.annotations["positive"], 28)
         self.assertEqual(hsp.annotations["gaps"], 1)
         self.assertTrue(
@@ -3909,7 +3909,7 @@ Query_780        61 CCAACACAGGCCAGCGACTTCTGG      85
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(hsp.annotations["midline"], "||||| ||||  ||| ||||||||||||||||")
-        if xml2 is True:
+        if xml2:
             self.assertEqual(
                 str(hsp),
                 """\
@@ -3954,7 +3954,7 @@ Query_780       241 GCCTGACATGG-GTAGCTGCTCAATAAATGCT       272
             hit.target.description,
             "Mus musculus strain C57BL/6J chromosome 2, GRCm38.p6 C57BL/6J",
         )
-        if xml2 is True:
+        if xml2:
             self.assertEqual(hit.target.annotations["taxid"], 10090)
             self.assertEqual(hit.target.annotations["sciname"], "Mus musculus")
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=182113224)")
@@ -3965,7 +3965,7 @@ Query_780       241 GCCTGACATGG-GTAGCTGCTCAATAAATGCT       272
         self.assertAlmostEqual(hsp.annotations["bit score"], 39.157)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.16809)
         self.assertEqual(hsp.annotations["identity"], 27)
-        if xml2 is False:
+        if not xml2:
             self.assertEqual(hsp.annotations["positive"], 27)
         self.assertEqual(hsp.annotations["gaps"], 0)
         self.assertTrue(
@@ -3999,7 +3999,7 @@ Query_780       241 GCCTGACATGG-GTAGCTGCTCAATAAATGCT       272
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(hsp.annotations["midline"], "||| |||| |||| |||| ||||||||||||")
-        if xml2 is True:
+        if xml2:
             self.assertEqual(
                 str(hsp),
                 """\
@@ -4041,7 +4041,7 @@ Query_780       238 AAGGCCTGACATGGGTAGCTGCTCAATAAAT     269
         self.assertAlmostEqual(hsp.annotations["bit score"], 38.2554)
         self.assertAlmostEqual(hsp.annotations["evalue"], 4.07705)
         self.assertEqual(hsp.annotations["identity"], 23)
-        if xml2 is False:
+        if not xml2:
             self.assertEqual(hsp.annotations["positive"], 23)
         self.assertEqual(hsp.annotations["gaps"], 0)
         self.assertTrue(
@@ -4074,7 +4074,7 @@ Query_780       238 AAGGCCTGACATGGGTAGCTGCTCAATAAAT     269
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(hsp.annotations["midline"], "|||| |||||||||||||||| |||")
-        if xml2 is True:
+        if xml2:
             self.assertEqual(
                 str(hsp),
                 """\
@@ -4119,7 +4119,7 @@ Query_780       210 AAATNAAAATGGAAAGTTCTTGTAG      235
             hit.target.description,
             "Mus musculus strain C57BL/6J chromosome 13, GRCm38.p6 C57BL/6J",
         )
-        if xml2 is True:
+        if xml2:
             self.assertEqual(hit.target.annotations["taxid"], 10090)
             self.assertEqual(hit.target.annotations["sciname"], "Mus musculus")
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=120421639)")
@@ -4130,7 +4130,7 @@ Query_780       210 AAATNAAAATGGAAAGTTCTTGTAG      235
         self.assertAlmostEqual(hsp.annotations["bit score"], 39.157)
         self.assertAlmostEqual(hsp.annotations["evalue"], 1.16809)
         self.assertEqual(hsp.annotations["identity"], 25)
-        if xml2 is False:
+        if not xml2:
             self.assertEqual(hsp.annotations["positive"], 25)
         self.assertEqual(hsp.annotations["gaps"], 0)
         self.assertTrue(
@@ -4164,7 +4164,7 @@ Query_780       210 AAATNAAAATGGAAAGTTCTTGTAG      235
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(hsp.annotations["midline"], "||||| || |||||||||||||||| ||")
-        if xml2 is True:
+        if xml2:
             self.assertEqual(
                 str(hsp),
                 """\
@@ -4206,7 +4206,7 @@ Query_780       206 AAGGAAATNAAAATGGAAAGTTCTTGTA      234
         self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
         self.assertAlmostEqual(hsp.annotations["evalue"], 4.07705)
         self.assertEqual(hsp.annotations["identity"], 32)
-        if xml2 is False:
+        if not xml2:
             self.assertEqual(hsp.annotations["positive"], 32)
         self.assertEqual(hsp.annotations["gaps"], 0)
         self.assertTrue(
@@ -4242,7 +4242,7 @@ Query_780       206 AAGGAAATNAAAATGGAAAGTTCTTGTA      234
         self.assertEqual(
             hsp.annotations["midline"], "||||||||||||||||| || |  || ||| | ||| |||"
         )
-        if xml2 is True:
+        if xml2:
             self.assertEqual(
                 str(hsp),
                 """\
@@ -4287,7 +4287,7 @@ Query_780       233 AGCGCAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTA      273
             hit.target.description,
             "Mus musculus strain C57BL/6J chromosome 12, GRCm38.p6 C57BL/6J",
         )
-        if xml2 is True:
+        if xml2:
             self.assertEqual(hit.target.annotations["taxid"], 10090)
             self.assertEqual(hit.target.annotations["sciname"], "Mus musculus")
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=120129022)")
@@ -4298,7 +4298,7 @@ Query_780       233 AGCGCAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTA      273
         self.assertAlmostEqual(hsp.annotations["bit score"], 38.2554)
         self.assertAlmostEqual(hsp.annotations["evalue"], 4.07705)
         self.assertEqual(hsp.annotations["identity"], 22)
-        if xml2 is False:
+        if not xml2:
             self.assertEqual(hsp.annotations["positive"], 22)
         self.assertEqual(hsp.annotations["gaps"], 0)
         self.assertTrue(
@@ -4331,7 +4331,7 @@ Query_780       233 AGCGCAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTA      273
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(hsp.annotations["midline"], "|||||||||||||||| ||||||")
-        if xml2 is True:
+        if xml2:
             self.assertEqual(
                 str(hsp),
                 """\
@@ -4373,7 +4373,7 @@ Query_780        48 CATCCATTCACACCCAACACAGG        71
         self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
         self.assertAlmostEqual(hsp.annotations["evalue"], 4.07705)
         self.assertEqual(hsp.annotations["identity"], 28)
-        if xml2 is False:
+        if not xml2:
             self.assertEqual(hsp.annotations["positive"], 28)
         self.assertEqual(hsp.annotations["gaps"], 1)
         self.assertTrue(
@@ -4407,7 +4407,7 @@ Query_780        48 CATCCATTCACACCCAACACAGG        71
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(hsp.annotations["midline"], "|||||| | ||||||||||||||| |||| ||")
-        if xml2 is True:
+        if xml2:
             self.assertEqual(
                 str(hsp),
                 """\
@@ -4452,7 +4452,7 @@ Query_780       230 TGTAGCGCAAGGCCTGACATGGGTAGCTGCTC       262
             hit.target.description,
             "Mus musculus strain 129S1/SvImJ chromosome 16 genomic scaffold, GRCm38.p6 alternate locus group 129S1/SvImJ 129S1/SVIMJ_MMCHR16_CTG2",
         )
-        if xml2 is True:
+        if xml2:
             self.assertEqual(hit.target.annotations["taxid"], 10090)
             self.assertEqual(hit.target.annotations["sciname"], "Mus musculus")
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=250595)")
@@ -4463,7 +4463,7 @@ Query_780       230 TGTAGCGCAAGGCCTGACATGGGTAGCTGCTC       262
         self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
         self.assertAlmostEqual(hsp.annotations["evalue"], 4.07705)
         self.assertEqual(hsp.annotations["identity"], 43)
-        if xml2 is False:
+        if not xml2:
             self.assertEqual(hsp.annotations["positive"], 43)
         self.assertEqual(hsp.annotations["gaps"], 2)
         self.assertTrue(
@@ -4500,7 +4500,7 @@ Query_780       230 TGTAGCGCAAGGCCTGACATGGGTAGCTGCTC       262
             hsp.annotations["midline"],
             "||||||||||||||||||| |  | |  | ||| || |||   |||||||||| ||",
         )
-        if xml2 is True:
+        if xml2:
             self.assertEqual(
                 str(hsp),
                 """\
@@ -4555,7 +4555,7 @@ Query_780       228
             hit.target.description,
             "Mus musculus strain C57BL/6J chromosome 1, GRCm38.p6 C57BL/6J",
         )
-        if xml2 is True:
+        if xml2:
             self.assertEqual(hit.target.annotations["taxid"], 10090)
             self.assertEqual(hit.target.annotations["sciname"], "Mus musculus")
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=195471971)")
@@ -4566,7 +4566,7 @@ Query_780       228
         self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
         self.assertAlmostEqual(hsp.annotations["evalue"], 4.07705)
         self.assertEqual(hsp.annotations["identity"], 35)
-        if xml2 is False:
+        if not xml2:
             self.assertEqual(hsp.annotations["positive"], 35)
         self.assertEqual(hsp.annotations["gaps"], 2)
         self.assertTrue(
@@ -4602,7 +4602,7 @@ Query_780       228
         self.assertEqual(
             hsp.annotations["midline"], "||||||||||| ||||||||| | | | |||||  ||| ||||"
         )
-        if xml2 is True:
+        if xml2:
             self.assertEqual(
                 str(hsp),
                 """\
@@ -4647,7 +4647,7 @@ Query_780        86 GCTCAGCCACAGACATGGTTTGTNACTNTTGAGCTTCTGTTCC      129
             hit.target.description,
             "Mus musculus strain C57BL/6J chromosome 9, GRCm38.p6 C57BL/6J",
         )
-        if xml2 is True:
+        if xml2:
             self.assertEqual(hit.target.annotations["taxid"], 10090)
             self.assertEqual(hit.target.annotations["sciname"], "Mus musculus")
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=124595110)")
@@ -4658,7 +4658,7 @@ Query_780        86 GCTCAGCCACAGACATGGTTTGTNACTNTTGAGCTTCTGTTCC      129
         self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
         self.assertAlmostEqual(hsp.annotations["evalue"], 4.07705)
         self.assertEqual(hsp.annotations["identity"], 36)
-        if xml2 is False:
+        if not xml2:
             self.assertEqual(hsp.annotations["positive"], 36)
         self.assertEqual(hsp.annotations["gaps"], 0)
         self.assertTrue(
@@ -4695,7 +4695,7 @@ Query_780        86 GCTCAGCCACAGACATGGTTTGTNACTNTTGAGCTTCTGTTCC      129
             hsp.annotations["midline"],
             "||| |||||||| |  |  ||||||||||||| ||| | | || |||",
         )
-        if xml2 is True:
+        if xml2:
             self.assertEqual(
                 str(hsp),
                 """\
@@ -4740,7 +4740,7 @@ Query_780       237 CAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTT      284
             hit.target.description,
             "Mus musculus strain C57BL/6J chromosome 10, GRCm38.p6 C57BL/6J",
         )
-        if xml2 is True:
+        if xml2:
             self.assertEqual(hit.target.annotations["taxid"], 10090)
             self.assertEqual(hit.target.annotations["sciname"], "Mus musculus")
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=130694993)")
@@ -4751,7 +4751,7 @@ Query_780       237 CAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTT      284
         self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
         self.assertAlmostEqual(hsp.annotations["evalue"], 4.07705)
         self.assertEqual(hsp.annotations["identity"], 20)
-        if xml2 is False:
+        if not xml2:
             self.assertEqual(hsp.annotations["positive"], 20)
         self.assertEqual(hsp.annotations["gaps"], 0)
         self.assertTrue(
@@ -4784,7 +4784,7 @@ Query_780       237 CAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTT      284
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(hsp.annotations["midline"], "||||||||||||||||||||")
-        if xml2 is True:
+        if xml2:
             self.assertEqual(
                 str(hsp),
                 """\
@@ -4829,7 +4829,7 @@ Query_780       254 AGCTGCTCAATAAATGCTAG       274
             hit.target.description,
             "Mus musculus strain C57BL/6J chromosome 16, GRCm38.p6 C57BL/6J",
         )
-        if xml2 is True:
+        if xml2:
             self.assertEqual(hit.target.annotations["taxid"], 10090)
             self.assertEqual(hit.target.annotations["sciname"], "Mus musculus")
         self.assertEqual(repr(hit.target.seq), "Seq(None, length=98207768)")
@@ -4840,7 +4840,7 @@ Query_780       254 AGCTGCTCAATAAATGCTAG       274
         self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
         self.assertAlmostEqual(hsp.annotations["evalue"], 4.07705)
         self.assertEqual(hsp.annotations["identity"], 43)
-        if xml2 is False:
+        if not xml2:
             self.assertEqual(hsp.annotations["positive"], 43)
         self.assertEqual(hsp.annotations["gaps"], 2)
         self.assertTrue(
@@ -4877,7 +4877,7 @@ Query_780       254 AGCTGCTCAATAAATGCTAG       274
             hsp.annotations["midline"],
             "||||||||||||||||||| |  | |  | ||| || |||   |||||||||| ||",
         )
-        if xml2 is True:
+        if xml2:
             self.assertEqual(
                 str(hsp),
                 """\
@@ -10248,7 +10248,9 @@ Program: BLASTX 2.15.0+
             'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
         )
         self.assertEqual(records.db, "nr")
-        if xml2 is False:
+        if xml2:
+            self.assertEqual(len(records.param), 7)
+        else:
             self.assertIsInstance(records.query, SeqRecord)
             self.assertEqual(records.query.id, "AI021773.1")
             self.assertEqual(
@@ -10256,16 +10258,13 @@ Program: BLASTX 2.15.0+
                 "MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence",
             )
             self.assertEqual(repr(records.query.seq), "Seq(None, length=365)")
-        if xml2 is True:
-            self.assertEqual(len(records.param), 7)
-        else:
             self.assertEqual(len(records.param), 5)
         self.assertEqual(records.param["matrix"], "BLOSUM62")
         self.assertAlmostEqual(records.param["expect"], 10.0)
         self.assertEqual(records.param["gap-open"], 11)
         self.assertEqual(records.param["gap-extend"], 1)
         self.assertEqual(records.param["filter"], "F")
-        if xml2 is True:
+        if xml2:
             self.assertEqual(records.param["cbs"], 2)
             self.assertEqual(records.param["query-gencode"], 1)
         record = next(records)
@@ -10273,7 +10272,7 @@ Program: BLASTX 2.15.0+
         self.check_xml_21500_blastx_001_record(record, xml2)
 
     def check_xml_21500_blastx_001_record(self, record, xml2):
-        if xml2 is False:
+        if not xml2:
             self.assertEqual(record.num, 1)
         self.assertIsInstance(record.query, SeqRecord)
         self.assertEqual(record.query.id, "AI021773.1")
@@ -10286,7 +10285,7 @@ Program: BLASTX 2.15.0+
         self.assertEqual(len(record.stat), 7)
         self.assertEqual(record.stat["db-num"], 718367499)
         self.assertEqual(record.stat["db-len"], 277248733561)
-        if xml2 is True:
+        if xml2:
             self.assertEqual(record.stat["hsp-len"], 89)
             self.assertEqual(record.stat["eff-space"], 6826048836800)
         else:
@@ -10475,7 +10474,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTELHCIRKP 115
         self.assertEqual(target.name, "XP_009175831")
         seq = target.seq
         self.assertEqual(repr(seq), "Seq(None, length=246)")
-        if xml2 is True:
+        if xml2:
             self.assertEqual(
                 target.description,
                 "hypothetical protein T265_11027 [Opisthorchis viverrini]",
@@ -10546,7 +10545,7 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTELHCIRKP 115
             hsp.annotations["midline"],
             "MADEEVQALVVDNGSGMCKAG       ++  P               G KDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE",
         )
-        if xml2 is True:
+        if xml2:
             self.assertEqual(
                 str(hsp),
                 """\
@@ -11287,7 +11286,9 @@ Program: TBLASTN 2.15.0+
             'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
         )
         self.assertEqual(records.db, "nt")
-        if xml2 is False:
+        if xml2:
+            self.assertEqual(len(records.param), 7)
+        else:
             self.assertIsInstance(records.query, SeqRecord)
             self.assertEqual(records.query.id, "CAJ99216.1")
             self.assertEqual(
@@ -11295,14 +11296,12 @@ Program: TBLASTN 2.15.0+
             )
             self.assertEqual(repr(records.query.seq), "Seq(None, length=234)")
             self.assertEqual(len(records.param), 5)
-        else:
-            self.assertEqual(len(records.param), 7)
         self.assertEqual(records.param["matrix"], "BLOSUM62")
         self.assertAlmostEqual(records.param["expect"], 10.0)
         self.assertEqual(records.param["gap-open"], 11)
         self.assertEqual(records.param["gap-extend"], 1)
         self.assertEqual(records.param["filter"], "L;")
-        if xml2 is True:
+        if xml2:
             self.assertEqual(records.param["cbs"], 2)
             self.assertEqual(records.param["db-gencode"], 1)
         record = next(records)
@@ -11310,7 +11309,7 @@ Program: TBLASTN 2.15.0+
         self.check_xml_21500_tblastn_001_record(record, xml2)
 
     def check_xml_21500_tblastn_001_record(self, record, xml2):
-        if xml2 is False:
+        if not xml2:
             self.assertEqual(record.num, 1)
         self.assertIsInstance(record.query, SeqRecord)
         self.assertEqual(record.query.id, "CAJ99216.1")
@@ -11318,7 +11317,7 @@ Program: TBLASTN 2.15.0+
             record.query.description, "tim [Helicobacter acinonychis str. Sheeba]"
         )
         self.assertEqual(repr(record.query.seq), "Seq(None, length=234)")
-        if xml2 is True:
+        if xml2:
             self.assertEqual(len(record.query.features), 1)
             feature = record.query.features[0]
             self.assertEqual(feature.type, "masking")
@@ -11329,7 +11328,7 @@ Program: TBLASTN 2.15.0+
         self.assertEqual(len(record.stat), 7)
         self.assertEqual(record.stat["db-num"], 104338276)
         self.assertEqual(record.stat["db-len"], 348058846)
-        if xml2 is True:
+        if xml2:
             self.assertEqual(record.stat["hsp-len"], 168)
             self.assertEqual(record.stat["eff-space"], 34567702523838)
         else:
@@ -11404,37 +11403,8 @@ Program: TBLASTN 2.15.0+
             hsp.annotations["midline"],
             "MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQNAYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNFLKEKFDFFKDKKFKIVYCIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHGFLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL",
         )
-        if xml2 is False:
-            self.assertEqual(
-                str(hsp),
-                """\
-Query : CAJ99216.1 Length: 234 Strand: Plus
-        tim [Helicobacter acinonychis str. Sheeba]
-Target: gi|109713861|emb|AM260522.1| Length: 234 Strand: Plus
-        Helicobacter acinonychis str. Sheeba complete genome, strain Sheeba
-
-Score:442 bits(1137), Expect:1e-138,
-Identities:234/234(100%),  Positives:234/234(100%),  Gaps:0.234(0%)
-
-gi|109713         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
-                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
-
-gi|109713        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNFLKEKFDFFKDKKFKIVY
-                 60 ||||||||||||||||||||||||||||||||||||||||||...............|||
-CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVY
-
-gi|109713       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
-                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
-
-gi|109713       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
-                180 |||||||||||||||||||||||||||||||||||||||||||||||||||||| 234
-CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
-
-""",
-            )
-        else:  # XML2 is True
+        if xml2:
+            # xml2 is True
             self.assertEqual(
                 str(hsp),
                 """\
@@ -11453,6 +11423,37 @@ CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
 gi|109713        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNFLKEKFDFFKDKKFKIVY
                  60 ||||||||||||||||||||||||||||||||||||||||||...............|||
 CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNflkekfdffkdkkfkIVY
+
+gi|109713       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+
+gi|109713       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+                180 |||||||||||||||||||||||||||||||||||||||||||||||||||||| 234
+CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+
+""",
+            )
+        else:
+            # xml2 is False
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : CAJ99216.1 Length: 234 Strand: Plus
+        tim [Helicobacter acinonychis str. Sheeba]
+Target: gi|109713861|emb|AM260522.1| Length: 234 Strand: Plus
+        Helicobacter acinonychis str. Sheeba complete genome, strain Sheeba
+
+Score:442 bits(1137), Expect:1e-138,
+Identities:234/234(100%),  Positives:234/234(100%),  Gaps:0.234(0%)
+
+gi|109713         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+
+gi|109713        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNFLKEKFDFFKDKKFKIVY
+                 60 ||||||||||||||||||||||||||||||||||||||||||...............|||
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVY
 
 gi|109713       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
                 120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
@@ -11528,37 +11529,8 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
             hsp.annotations["midline"],
             "MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQNAYPKDCGAFTGEITSKHLEELKINTLLIGHSERR LLKESPNFLKEKFDFFKDKKFKIVYCIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHGFLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGS SLELENFKTIISFL",
         )
-        if xml2 is False:
-            self.assertEqual(
-                str(hsp),
-                """\
-Query : CAJ99216.1 Length: 234 Strand: Plus
-        tim [Helicobacter acinonychis str. Sheeba]
-Target: gi|1336928286|emb|LT900055.1| Length: 234 Strand: Plus
-        Helicobacter acinonychis isolate 212_9 genome assembly, chromosome: I
-
-Score:439 bits(1128), Expect:2e-137,
-Identities:232/234(99%),  Positives:232/234(99%),  Gaps:0.234(0%)
-
-gi|133692         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
-                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
-
-gi|133692        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRALLKESPNFLKEKFDFFKDKKFKIVY
-                 60 ||||||||||||||||||||||||||||||||||.|||||||...............|||
-CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVY
-
-gi|133692       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
-                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
-
-gi|133692       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSASLELENFKTIISFL 234
-                180 |||||||||||||||||||||||||||||||||||||||.|||||||||||||| 234
-CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
-
-""",
-            )
-        else:  # XML2 is True
+        if xml2:
+            # xml2 is True
             self.assertEqual(
                 str(hsp),
                 """\
@@ -11577,6 +11549,37 @@ CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
 gi|133692        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRALLKESPNFLKEKFDFFKDKKFKIVY
                  60 ||||||||||||||||||||||||||||||||||.|||||||...............|||
 CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNflkekfdffkdkkfkIVY
+
+gi|133692       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+
+gi|133692       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSASLELENFKTIISFL 234
+                180 |||||||||||||||||||||||||||||||||||||||.|||||||||||||| 234
+CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+
+""",
+            )
+        else:
+            # xml2 is False
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : CAJ99216.1 Length: 234 Strand: Plus
+        tim [Helicobacter acinonychis str. Sheeba]
+Target: gi|1336928286|emb|LT900055.1| Length: 234 Strand: Plus
+        Helicobacter acinonychis isolate 212_9 genome assembly, chromosome: I
+
+Score:439 bits(1128), Expect:2e-137,
+Identities:232/234(99%),  Positives:232/234(99%),  Gaps:0.234(0%)
+
+gi|133692         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+
+gi|133692        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRALLKESPNFLKEKFDFFKDKKFKIVY
+                 60 ||||||||||||||||||||||||||||||||||.|||||||...............|||
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVY
 
 gi|133692       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
                 120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
@@ -11650,37 +11653,8 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
             hsp.annotations["midline"],
             "MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLG QNAYPKDCGAFTGEITSKHLEELKINTLLIGHSERR LLKESP+FLKEKFDFFKDK FKI+YCIGEDLKTREKGL AVKEFLNEQLENIDL Y NLIVAYEPIWAIGT KSASLEDIYLTHGFLKQ LNQK PLLYGGSVNTQNAKEILGIDSVDGLL+GS SLELENFKTIISFL",
         )
-        if xml2 is False:
-            self.assertEqual(
-                str(hsp),
-                """\
-Query : CAJ99216.1 Length: 234 Strand: Plus
-        tim [Helicobacter acinonychis str. Sheeba]
-Target: gi|1033012332|gb|CP011486.1| Length: 234 Strand: Plus
-        Helicobacter pylori strain K26A1, complete genome
-
-Score:419 bits(1076), Expect:2e-130,
-Identities:221/234(94%),  Positives:224/234(96%),  Gaps:0.234(0%)
-
-gi|103301         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGAQN
-                  0 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||.||
-CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
-
-gi|103301        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRTLLKESPSFLKEKFDFFKDKNFKIIY
-                 60 ||||||||||||||||||||||||||||||||||.||||||................|.|
-CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVY
-
-gi|103301       120 CIGEDLKTREKGLAAVKEFLNEQLENIDLSYHNLIVAYEPIWAIGTKKSASLEDIYLTHG
-                120 |||||||||||||.|||||||||||||||.|.||||||||||||||.|||||||||||||
-CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
-
-gi|103301       180 FLKQILNQKTPLLYGGSVNTQNAKEILGIDSVDGLLVGSASLELENFKTIISFL 234
-                180 ||||.||||.||||||||||||||||||||||||||.||.|||||||||||||| 234
-CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
-
-""",
-            )
-        else:  # xml2 is True
+        if xml2:
+            # xml2 is True
             self.assertEqual(
                 str(hsp),
                 """\
@@ -11699,6 +11673,37 @@ CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
 gi|103301        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRTLLKESPSFLKEKFDFFKDKNFKIIY
                  60 ||||||||||||||||||||||||||||||||||.||||||................|.|
 CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNflkekfdffkdkkfkIVY
+
+gi|103301       120 CIGEDLKTREKGLAAVKEFLNEQLENIDLSYHNLIVAYEPIWAIGTKKSASLEDIYLTHG
+                120 |||||||||||||.|||||||||||||||.|.||||||||||||||.|||||||||||||
+CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+
+gi|103301       180 FLKQILNQKTPLLYGGSVNTQNAKEILGIDSVDGLLVGSASLELENFKTIISFL 234
+                180 ||||.||||.||||||||||||||||||||||||||.||.|||||||||||||| 234
+CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+
+""",
+            )
+        else:
+            # xml2 is False
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : CAJ99216.1 Length: 234 Strand: Plus
+        tim [Helicobacter acinonychis str. Sheeba]
+Target: gi|1033012332|gb|CP011486.1| Length: 234 Strand: Plus
+        Helicobacter pylori strain K26A1, complete genome
+
+Score:419 bits(1076), Expect:2e-130,
+Identities:221/234(94%),  Positives:224/234(96%),  Gaps:0.234(0%)
+
+gi|103301         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGAQN
+                  0 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||.||
+CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+
+gi|103301        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRTLLKESPSFLKEKFDFFKDKNFKIIY
+                 60 ||||||||||||||||||||||||||||||||||.||||||................|.|
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVY
 
 gi|103301       120 CIGEDLKTREKGLAAVKEFLNEQLENIDLSYHNLIVAYEPIWAIGTKKSASLEDIYLTHG
                 120 |||||||||||||.|||||||||||||||.|.||||||||||||||.|||||||||||||
@@ -11774,37 +11779,8 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
             hsp.annotations["midline"],
             "MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCD+VFVFPDFLGLLPNAFLHFTLG QNAYPKDCGAFTGEITSKHLEELKI+TLLIGHSERR LLKESP+FLKEKFDFFKDK FKIVYCIGEDLKTREKGLGAVKEFLNEQLENIDL Y NLIVAYEPIWAIGT KSASLEDIYLTHGFLKQ LNQK PLLYGGSVN QNAKEILGIDSVDGLLIGS SLELENFKTIISFL",
         )
-        if xml2 is False:
-            self.assertEqual(
-                str(hsp),
-                """\
-Query : CAJ99216.1 Length: 234 Strand: Plus
-        tim [Helicobacter acinonychis str. Sheeba]
-Target: gi|2641533851|gb|CP078169.1| Length: 234 Strand: Plus
-        Helicobacter pylori strain HpGP-ZAF-006 chromosome, complete genome
-
-Score:416 bits(1069), Expect:2e-129,
-Identities:221/234(94%),  Positives:224/234(96%),  Gaps:0.234(0%)
-
-gi|264153         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDKVFVFPDFLGLLPNAFLHFTLGAQN
-                  0 |||||||||||||||||||||||||||||||||||.|||||||||||||||||||||.||
-CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
-
-gi|264153        60 AYPKDCGAFTGEITSKHLEELKIHTLLIGHSERRALLKESPSFLKEKFDFFKDKNFKIVY
-                 60 |||||||||||||||||||||||.||||||||||.||||||................|||
-CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVY
-
-gi|264153       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLSYHNLIVAYEPIWAIGTKKSASLEDIYLTHG
-                120 |||||||||||||||||||||||||||||.|.||||||||||||||.|||||||||||||
-CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
-
-gi|264153       180 FLKQILNQKTPLLYGGSVNAQNAKEILGIDSVDGLLIGSASLELENFKTIISFL 234
-                180 ||||.||||.|||||||||.|||||||||||||||||||.|||||||||||||| 234
-CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
-
-""",
-            )
-        else:  # xml2 is True
+        if xml2:
+            # xml2 is True
             self.assertEqual(
                 str(hsp),
                 """\
@@ -11823,6 +11799,37 @@ CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
 gi|264153        60 AYPKDCGAFTGEITSKHLEELKIHTLLIGHSERRALLKESPSFLKEKFDFFKDKNFKIVY
                  60 |||||||||||||||||||||||.||||||||||.||||||................|||
 CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNflkekfdffkdkkfkIVY
+
+gi|264153       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLSYHNLIVAYEPIWAIGTKKSASLEDIYLTHG
+                120 |||||||||||||||||||||||||||||.|.||||||||||||||.|||||||||||||
+CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+
+gi|264153       180 FLKQILNQKTPLLYGGSVNAQNAKEILGIDSVDGLLIGSASLELENFKTIISFL 234
+                180 ||||.||||.|||||||||.|||||||||||||||||||.|||||||||||||| 234
+CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+
+""",
+            )
+        else:
+            # xml2 is False
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : CAJ99216.1 Length: 234 Strand: Plus
+        tim [Helicobacter acinonychis str. Sheeba]
+Target: gi|2641533851|gb|CP078169.1| Length: 234 Strand: Plus
+        Helicobacter pylori strain HpGP-ZAF-006 chromosome, complete genome
+
+Score:416 bits(1069), Expect:2e-129,
+Identities:221/234(94%),  Positives:224/234(96%),  Gaps:0.234(0%)
+
+gi|264153         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDKVFVFPDFLGLLPNAFLHFTLGAQN
+                  0 |||||||||||||||||||||||||||||||||||.|||||||||||||||||||||.||
+CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+
+gi|264153        60 AYPKDCGAFTGEITSKHLEELKIHTLLIGHSERRALLKESPSFLKEKFDFFKDKNFKIVY
+                 60 |||||||||||||||||||||||.||||||||||.||||||................|||
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVY
 
 gi|264153       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLSYHNLIVAYEPIWAIGTKKSASLEDIYLTHG
                 120 |||||||||||||||||||||||||||||.|.||||||||||||||.|||||||||||||
@@ -11898,37 +11905,8 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
             hsp.annotations["midline"],
             "MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCD+VFVFPDFLGLLPNAFLHFTLG QNAYPKDCGAFTGEITSKHLEELKI+TLLIGHSERR LLKESP+FLKEKFDFFKDKKFKI+YCIGEDLKTREKGLGAVKEFLNEQLENIDL Y +LIVAYEPIWAIGT KSASLEDIYLTHGFLKQ LNQK PLLYGGSVNTQNAKEILGIDSVDGLL+GS SLELENFKTIISFL",
         )
-        if xml2 is False:
-            self.assertEqual(
-                str(hsp),
-                """\
-Query : CAJ99216.1 Length: 234 Strand: Plus
-        tim [Helicobacter acinonychis str. Sheeba]
-Target: gi|2641529532|gb|CP078166.1| Length: 234 Strand: Plus
-        Helicobacter pylori strain HpGP-ZAF-009 chromosome, complete genome
-
-Score:415 bits(1067), Expect:3e-129,
-Identities:220/234(94%),  Positives:226/234(97%),  Gaps:0.234(0%)
-
-gi|264152         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDKVFVFPDFLGLLPNAFLHFTLGAQN
-                  0 |||||||||||||||||||||||||||||||||||.|||||||||||||||||||||.||
-CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
-
-gi|264152        60 AYPKDCGAFTGEITSKHLEELKIHTLLIGHSERRTLLKESPSFLKEKFDFFKDKKFKIIY
-                 60 |||||||||||||||||||||||.||||||||||.||||||................|.|
-CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVY
-
-gi|264152       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLSYHHLIVAYEPIWAIGTKKSASLEDIYLTHG
-                120 |||||||||||||||||||||||||||||.|..|||||||||||||.|||||||||||||
-CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
-
-gi|264152       180 FLKQILNQKTPLLYGGSVNTQNAKEILGIDSVDGLLVGSASLELENFKTIISFL 234
-                180 ||||.||||.||||||||||||||||||||||||||.||.|||||||||||||| 234
-CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
-
-""",
-            )
-        else:  # xml2 is True
+        if xml2:
+            # xml2 is True
             self.assertEqual(
                 str(hsp),
                 """\
@@ -11947,6 +11925,37 @@ CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
 gi|264152        60 AYPKDCGAFTGEITSKHLEELKIHTLLIGHSERRTLLKESPSFLKEKFDFFKDKKFKIIY
                  60 |||||||||||||||||||||||.||||||||||.||||||................|.|
 CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNflkekfdffkdkkfkIVY
+
+gi|264152       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLSYHHLIVAYEPIWAIGTKKSASLEDIYLTHG
+                120 |||||||||||||||||||||||||||||.|..|||||||||||||.|||||||||||||
+CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+
+gi|264152       180 FLKQILNQKTPLLYGGSVNTQNAKEILGIDSVDGLLVGSASLELENFKTIISFL 234
+                180 ||||.||||.||||||||||||||||||||||||||.||.|||||||||||||| 234
+CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+
+""",
+            )
+        else:
+            # xml2 is False
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : CAJ99216.1 Length: 234 Strand: Plus
+        tim [Helicobacter acinonychis str. Sheeba]
+Target: gi|2641529532|gb|CP078166.1| Length: 234 Strand: Plus
+        Helicobacter pylori strain HpGP-ZAF-009 chromosome, complete genome
+
+Score:415 bits(1067), Expect:3e-129,
+Identities:220/234(94%),  Positives:226/234(97%),  Gaps:0.234(0%)
+
+gi|264152         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDKVFVFPDFLGLLPNAFLHFTLGAQN
+                  0 |||||||||||||||||||||||||||||||||||.|||||||||||||||||||||.||
+CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+
+gi|264152        60 AYPKDCGAFTGEITSKHLEELKIHTLLIGHSERRTLLKESPSFLKEKFDFFKDKKFKIIY
+                 60 |||||||||||||||||||||||.||||||||||.||||||................|.|
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVY
 
 gi|264152       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLSYHHLIVAYEPIWAIGTKKSASLEDIYLTHG
                 120 |||||||||||||||||||||||||||||.|..|||||||||||||.|||||||||||||
@@ -12020,37 +12029,8 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
             hsp.annotations["midline"],
             "MTKIAMANFKS+MPIFKSHAYLKELEKTLKPQHCD+VFVFPDFLGLLPNAFLHFTLG QNAYPKDCGAFTGEITSKHLEELKI+TLLIGHSERRVLLKESP+FLKEKFDFFKDKKFKIVYCIGEDLKTREKGLGAVKEFLNEQLENIDL+Y +LIVAYEPIWAIGT KSASLEDIYLTHGFLKQ LNQK PLLYGGSVN QNAKEILGIDSVDGLL+GS SLELENFKTIISFL",
         )
-        if xml2 is False:
-            self.assertEqual(
-                str(hsp),
-                """\
-Query : CAJ99216.1 Length: 234 Strand: Plus
-        tim [Helicobacter acinonychis str. Sheeba]
-Target: gi|1033009499|gb|CP011484.1| Length: 234 Strand: Plus
-        Helicobacter pylori strain CC33C, complete genome
-
-Score:415 bits(1066), Expect:4e-129,
-Identities:220/234(94%),  Positives:227/234(97%),  Gaps:0.234(0%)
-
-gi|103300         0 MTKIAMANFKSSMPIFKSHAYLKELEKTLKPQHCDKVFVFPDFLGLLPNAFLHFTLGAQN
-                  0 |||||||||||.|||||||||||||||||||||||.|||||||||||||||||||||.||
-CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
-
-gi|103300        60 AYPKDCGAFTGEITSKHLEELKIHTLLIGHSERRVLLKESPSFLKEKFDFFKDKKFKIVY
-                 60 |||||||||||||||||||||||.|||||||||||||||||................|||
-CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVY
-
-gi|103300       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLNYHHLIVAYEPIWAIGTKKSASLEDIYLTHG
-                120 |||||||||||||||||||||||||||||.|..|||||||||||||.|||||||||||||
-CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
-
-gi|103300       180 FLKQILNQKTPLLYGGSVNAQNAKEILGIDSVDGLLVGSASLELENFKTIISFL 234
-                180 ||||.||||.|||||||||.||||||||||||||||.||.|||||||||||||| 234
-CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
-
-""",
-            )
-        else:  # xml2 is True
+        if xml2:
+            # xml2 is True
             self.assertEqual(
                 str(hsp),
                 """\
@@ -12069,6 +12049,37 @@ CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
 gi|103300        60 AYPKDCGAFTGEITSKHLEELKIHTLLIGHSERRVLLKESPSFLKEKFDFFKDKKFKIVY
                  60 |||||||||||||||||||||||.|||||||||||||||||................|||
 CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNflkekfdffkdkkfkIVY
+
+gi|103300       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLNYHHLIVAYEPIWAIGTKKSASLEDIYLTHG
+                120 |||||||||||||||||||||||||||||.|..|||||||||||||.|||||||||||||
+CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+
+gi|103300       180 FLKQILNQKTPLLYGGSVNAQNAKEILGIDSVDGLLVGSASLELENFKTIISFL 234
+                180 ||||.||||.|||||||||.||||||||||||||||.||.|||||||||||||| 234
+CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+
+""",
+            )
+        else:
+            # xml2 is False
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : CAJ99216.1 Length: 234 Strand: Plus
+        tim [Helicobacter acinonychis str. Sheeba]
+Target: gi|1033009499|gb|CP011484.1| Length: 234 Strand: Plus
+        Helicobacter pylori strain CC33C, complete genome
+
+Score:415 bits(1066), Expect:4e-129,
+Identities:220/234(94%),  Positives:227/234(97%),  Gaps:0.234(0%)
+
+gi|103300         0 MTKIAMANFKSSMPIFKSHAYLKELEKTLKPQHCDKVFVFPDFLGLLPNAFLHFTLGAQN
+                  0 |||||||||||.|||||||||||||||||||||||.|||||||||||||||||||||.||
+CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+
+gi|103300        60 AYPKDCGAFTGEITSKHLEELKIHTLLIGHSERRVLLKESPSFLKEKFDFFKDKKFKIVY
+                 60 |||||||||||||||||||||||.|||||||||||||||||................|||
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVY
 
 gi|103300       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLNYHHLIVAYEPIWAIGTKKSASLEDIYLTHG
                 120 |||||||||||||||||||||||||||||.|..|||||||||||||.|||||||||||||
@@ -12144,37 +12155,8 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
             hsp.annotations["midline"],
             "MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCD+VFVFPDFLGLLPNAFLHFTLG QNAYPKD GAFTGEITSKHLEELKINTLLIGHSERRVLLKESP+FLKEKFDFFKDKKFKI+YCIGEDLKTREKGLGAVKEFLNEQLENIDL Y +LIVAYEPIWAIGT KSASLEDIYLTHGFLKQ LNQK PLLYGGSVNTQNAKEILGIDSVDGLL+GS SLELENFKTIISFL",
         )
-        if xml2 is False:
-            self.assertEqual(
-                str(hsp),
-                """\
-Query : CAJ99216.1 Length: 234 Strand: Plus
-        tim [Helicobacter acinonychis str. Sheeba]
-Target: gi|317010283|gb|CP002336.1| Length: 234 Strand: Plus
-        Helicobacter pylori SouthAfrica7, complete genome
-
-Score:415 bits(1066), Expect:5e-129,
-Identities:221/234(94%),  Positives:226/234(97%),  Gaps:0.234(0%)
-
-gi|317010         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDKVFVFPDFLGLLPNAFLHFTLGAQN
-                  0 |||||||||||||||||||||||||||||||||||.|||||||||||||||||||||.||
-CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
-
-gi|317010        60 AYPKDYGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPSFLKEKFDFFKDKKFKIIY
-                 60 |||||.|||||||||||||||||||||||||||||||||||................|.|
-CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVY
-
-gi|317010       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLSYHHLIVAYEPIWAIGTKKSASLEDIYLTHG
-                120 |||||||||||||||||||||||||||||.|..|||||||||||||.|||||||||||||
-CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
-
-gi|317010       180 FLKQILNQKTPLLYGGSVNTQNAKEILGIDSVDGLLVGSASLELENFKTIISFL 234
-                180 ||||.||||.||||||||||||||||||||||||||.||.|||||||||||||| 234
-CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
-
-""",
-            )
-        else:  # xml2 is True
+        if xml2:
+            # xml2 is True
             self.assertEqual(
                 str(hsp),
                 """\
@@ -12193,6 +12175,37 @@ CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
 gi|317010        60 AYPKDYGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPSFLKEKFDFFKDKKFKIIY
                  60 |||||.|||||||||||||||||||||||||||||||||||................|.|
 CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNflkekfdffkdkkfkIVY
+
+gi|317010       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLSYHHLIVAYEPIWAIGTKKSASLEDIYLTHG
+                120 |||||||||||||||||||||||||||||.|..|||||||||||||.|||||||||||||
+CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+
+gi|317010       180 FLKQILNQKTPLLYGGSVNTQNAKEILGIDSVDGLLVGSASLELENFKTIISFL 234
+                180 ||||.||||.||||||||||||||||||||||||||.||.|||||||||||||| 234
+CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+
+""",
+            )
+        else:
+            # xml2 is False
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : CAJ99216.1 Length: 234 Strand: Plus
+        tim [Helicobacter acinonychis str. Sheeba]
+Target: gi|317010283|gb|CP002336.1| Length: 234 Strand: Plus
+        Helicobacter pylori SouthAfrica7, complete genome
+
+Score:415 bits(1066), Expect:5e-129,
+Identities:221/234(94%),  Positives:226/234(97%),  Gaps:0.234(0%)
+
+gi|317010         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDKVFVFPDFLGLLPNAFLHFTLGAQN
+                  0 |||||||||||||||||||||||||||||||||||.|||||||||||||||||||||.||
+CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+
+gi|317010        60 AYPKDYGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPSFLKEKFDFFKDKKFKIIY
+                 60 |||||.|||||||||||||||||||||||||||||||||||................|.|
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVY
 
 gi|317010       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLSYHHLIVAYEPIWAIGTKKSASLEDIYLTHG
                 120 |||||||||||||||||||||||||||||.|..|||||||||||||.|||||||||||||
@@ -12268,37 +12281,8 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
             hsp.annotations["midline"],
             "MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCD+VFVFPDFLGLLPNAFLHFTLG QNAYPKDCGAFTGEITSKHLEELKI+TLLIGHSERR LLKESP+FLKEKFDFFKDKKFKI+YCIGEDLKTREKGLGAVKEFLNEQLENIDL Y +LIVAYEPIWAIGT KSASLEDIYLTHGFLKQ LNQK PLLYGGSVN QNAKEILGIDSVDGLL+GS SLELENFKTIISFL",
         )
-        if xml2 is False:
-            self.assertEqual(
-                str(hsp),
-                """\
-Query : CAJ99216.1 Length: 234 Strand: Plus
-        tim [Helicobacter acinonychis str. Sheeba]
-Target: gi|2641538240|gb|CP078172.1| Length: 234 Strand: Plus
-        Helicobacter pylori strain HpGP-ZAF-001 chromosome, complete genome
-
-Score:413 bits(1062), Expect:1e-128,
-Identities:219/234(94%),  Positives:225/234(96%),  Gaps:0.234(0%)
-
-gi|264153         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDKVFVFPDFLGLLPNAFLHFTLGAQN
-                  0 |||||||||||||||||||||||||||||||||||.|||||||||||||||||||||.||
-CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
-
-gi|264153        60 AYPKDCGAFTGEITSKHLEELKIHTLLIGHSERRTLLKESPSFLKEKFDFFKDKKFKIIY
-                 60 |||||||||||||||||||||||.||||||||||.||||||................|.|
-CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVY
-
-gi|264153       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLSYHHLIVAYEPIWAIGTKKSASLEDIYLTHG
-                120 |||||||||||||||||||||||||||||.|..|||||||||||||.|||||||||||||
-CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
-
-gi|264153       180 FLKQILNQKTPLLYGGSVNAQNAKEILGIDSVDGLLVGSASLELENFKTIISFL 234
-                180 ||||.||||.|||||||||.||||||||||||||||.||.|||||||||||||| 234
-CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
-
-""",
-            )
-        else:  # xml2 is True
+        if xml2:
+            # xml2 is True
             self.assertEqual(
                 str(hsp),
                 """\
@@ -12317,6 +12301,37 @@ CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
 gi|264153        60 AYPKDCGAFTGEITSKHLEELKIHTLLIGHSERRTLLKESPSFLKEKFDFFKDKKFKIIY
                  60 |||||||||||||||||||||||.||||||||||.||||||................|.|
 CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNflkekfdffkdkkfkIVY
+
+gi|264153       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLSYHHLIVAYEPIWAIGTKKSASLEDIYLTHG
+                120 |||||||||||||||||||||||||||||.|..|||||||||||||.|||||||||||||
+CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+
+gi|264153       180 FLKQILNQKTPLLYGGSVNAQNAKEILGIDSVDGLLVGSASLELENFKTIISFL 234
+                180 ||||.||||.|||||||||.||||||||||||||||.||.|||||||||||||| 234
+CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+
+""",
+            )
+        else:
+            # xml2 is False
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : CAJ99216.1 Length: 234 Strand: Plus
+        tim [Helicobacter acinonychis str. Sheeba]
+Target: gi|2641538240|gb|CP078172.1| Length: 234 Strand: Plus
+        Helicobacter pylori strain HpGP-ZAF-001 chromosome, complete genome
+
+Score:413 bits(1062), Expect:1e-128,
+Identities:219/234(94%),  Positives:225/234(96%),  Gaps:0.234(0%)
+
+gi|264153         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDKVFVFPDFLGLLPNAFLHFTLGAQN
+                  0 |||||||||||||||||||||||||||||||||||.|||||||||||||||||||||.||
+CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+
+gi|264153        60 AYPKDCGAFTGEITSKHLEELKIHTLLIGHSERRTLLKESPSFLKEKFDFFKDKKFKIIY
+                 60 |||||||||||||||||||||||.||||||||||.||||||................|.|
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVY
 
 gi|264153       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLSYHHLIVAYEPIWAIGTKKSASLEDIYLTHG
                 120 |||||||||||||||||||||||||||||.|..|||||||||||||.|||||||||||||
@@ -12392,37 +12407,8 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
             hsp.annotations["midline"],
             "MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQH DRVFVFPDFLGLLPNAFLHFTLGVQNAYP+DCGAFTGEITSKHLEELKI+TLLIGHSERRVLLKESP+FLKEKFDFFKDK FKIVYCIGEDLKTREKG  AVKEFL+EQLENIDL+Y NLIVAYEPIWAIGT KSASLEDIYLTHGFLKQ LNQK PLLYGGSVNTQNAKEILGIDSVDGLLIGS SLELENFKTIISFL",
         )
-        if xml2 is False:
-            self.assertEqual(
-                str(hsp),
-                """\
-Query : CAJ99216.1 Length: 234 Strand: Plus
-        tim [Helicobacter acinonychis str. Sheeba]
-Target: gi|2640367186|gb|CP079077.1| Length: 234 Strand: Plus
-        Helicobacter pylori strain HpGP-ARG-001 chromosome, complete genome
-
-Score:412 bits(1059), Expect:4e-128,
-Identities:220/234(94%),  Positives:225/234(96%),  Gaps:0.234(0%)
-
-gi|264036         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHFDRVFVFPDFLGLLPNAFLHFTLGVQN
-                  0 |||||||||||||||||||||||||||||||||.||||||||||||||||||||||||||
-CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
-
-gi|264036        60 AYPRDCGAFTGEITSKHLEELKIHTLLIGHSERRVLLKESPSFLKEKFDFFKDKNFKIVY
-                 60 |||.|||||||||||||||||||.|||||||||||||||||................|||
-CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVY
-
-gi|264036       120 CIGEDLKTREKGFKAVKEFLSEQLENIDLNYSNLIVAYEPIWAIGTKKSASLEDIYLTHG
-                120 ||||||||||||..||||||.||||||||.|.||||||||||||||.|||||||||||||
-CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
-
-gi|264036       180 FLKQILNQKTPLLYGGSVNTQNAKEILGIDSVDGLLIGSASLELENFKTIISFL 234
-                180 ||||.||||.|||||||||||||||||||||||||||||.|||||||||||||| 234
-CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
-
-""",
-            )
-        else:  # xml2 is True
+        if xml2:
+            # xml2 is True
             self.assertEqual(
                 str(hsp),
                 """\
@@ -12441,6 +12427,36 @@ CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
 gi|264036        60 AYPRDCGAFTGEITSKHLEELKIHTLLIGHSERRVLLKESPSFLKEKFDFFKDKNFKIVY
                  60 |||.|||||||||||||||||||.|||||||||||||||||................|||
 CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNflkekfdffkdkkfkIVY
+
+gi|264036       120 CIGEDLKTREKGFKAVKEFLSEQLENIDLNYSNLIVAYEPIWAIGTKKSASLEDIYLTHG
+                120 ||||||||||||..||||||.||||||||.|.||||||||||||||.|||||||||||||
+CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+
+gi|264036       180 FLKQILNQKTPLLYGGSVNTQNAKEILGIDSVDGLLIGSASLELENFKTIISFL 234
+                180 ||||.||||.|||||||||||||||||||||||||||||.|||||||||||||| 234
+CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+
+""",
+            )
+        else:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : CAJ99216.1 Length: 234 Strand: Plus
+        tim [Helicobacter acinonychis str. Sheeba]
+Target: gi|2640367186|gb|CP079077.1| Length: 234 Strand: Plus
+        Helicobacter pylori strain HpGP-ARG-001 chromosome, complete genome
+
+Score:412 bits(1059), Expect:4e-128,
+Identities:220/234(94%),  Positives:225/234(96%),  Gaps:0.234(0%)
+
+gi|264036         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHFDRVFVFPDFLGLLPNAFLHFTLGVQN
+                  0 |||||||||||||||||||||||||||||||||.||||||||||||||||||||||||||
+CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+
+gi|264036        60 AYPRDCGAFTGEITSKHLEELKIHTLLIGHSERRVLLKESPSFLKEKFDFFKDKNFKIVY
+                 60 |||.|||||||||||||||||||.|||||||||||||||||................|||
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVY
 
 gi|264036       120 CIGEDLKTREKGFKAVKEFLSEQLENIDLNYSNLIVAYEPIWAIGTKKSASLEDIYLTHG
                 120 ||||||||||||..||||||.||||||||.|.||||||||||||||.|||||||||||||
@@ -12514,37 +12530,8 @@ CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
             hsp.annotations["midline"],
             "MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCD+VFVFPDFLGLLPNAFLHFTLG QNAYPKDCGAFTGEITSKHLEELKI+TLLIGHSERRVLLKESP+FLKEKFDFFKDKKFKI+YCIGEDLKTREKG  AVKEFLNEQLENIDL+Y +LIVAYEPIWAIGT KSASLEDIYLTHGFLKQ LNQK PLLYGGSVN QNAKEILGIDSVDGLL+GS SLELENFKTIISFL",
         )
-        if xml2 is False:
-            self.assertEqual(
-                str(hsp),
-                """\
-Query : CAJ99216.1 Length: 234 Strand: Plus
-        tim [Helicobacter acinonychis str. Sheeba]
-Target: gi|532105813|gb|CP006691.1| Length: 234 Strand: Plus
-        Helicobacter pylori SouthAfrica20, complete genome
-
-Score:411 bits(1057), Expect:8e-128,
-Identities:218/234(93%),  Positives:225/234(96%),  Gaps:0.234(0%)
-
-gi|532105         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDKVFVFPDFLGLLPNAFLHFTLGAQN
-                  0 |||||||||||||||||||||||||||||||||||.|||||||||||||||||||||.||
-CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
-
-gi|532105        60 AYPKDCGAFTGEITSKHLEELKIHTLLIGHSERRVLLKESPSFLKEKFDFFKDKKFKIIY
-                 60 |||||||||||||||||||||||.|||||||||||||||||................|.|
-CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVY
-
-gi|532105       120 CIGEDLKTREKGFNAVKEFLNEQLENIDLNYHHLIVAYEPIWAIGTKKSASLEDIYLTHG
-                120 ||||||||||||..|||||||||||||||.|..|||||||||||||.|||||||||||||
-CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
-
-gi|532105       180 FLKQILNQKTPLLYGGSVNAQNAKEILGIDSVDGLLVGSASLELENFKTIISFL 234
-                180 ||||.||||.|||||||||.||||||||||||||||.||.|||||||||||||| 234
-CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
-
-""",
-            )
-        else:  # xml2 is True
+        if xml2:
+            # xml2 is True
             self.assertEqual(
                 str(hsp),
                 """\
@@ -12563,6 +12550,36 @@ CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
 gi|532105        60 AYPKDCGAFTGEITSKHLEELKIHTLLIGHSERRVLLKESPSFLKEKFDFFKDKKFKIIY
                  60 |||||||||||||||||||||||.|||||||||||||||||................|.|
 CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNflkekfdffkdkkfkIVY
+
+gi|532105       120 CIGEDLKTREKGFNAVKEFLNEQLENIDLNYHHLIVAYEPIWAIGTKKSASLEDIYLTHG
+                120 ||||||||||||..|||||||||||||||.|..|||||||||||||.|||||||||||||
+CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+
+gi|532105       180 FLKQILNQKTPLLYGGSVNAQNAKEILGIDSVDGLLVGSASLELENFKTIISFL 234
+                180 ||||.||||.|||||||||.||||||||||||||||.||.|||||||||||||| 234
+CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+
+""",
+            )
+        else:
+            self.assertEqual(
+                str(hsp),
+                """\
+Query : CAJ99216.1 Length: 234 Strand: Plus
+        tim [Helicobacter acinonychis str. Sheeba]
+Target: gi|532105813|gb|CP006691.1| Length: 234 Strand: Plus
+        Helicobacter pylori SouthAfrica20, complete genome
+
+Score:411 bits(1057), Expect:8e-128,
+Identities:218/234(93%),  Positives:225/234(96%),  Gaps:0.234(0%)
+
+gi|532105         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDKVFVFPDFLGLLPNAFLHFTLGAQN
+                  0 |||||||||||||||||||||||||||||||||||.|||||||||||||||||||||.||
+CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+
+gi|532105        60 AYPKDCGAFTGEITSKHLEELKIHTLLIGHSERRVLLKESPSFLKEKFDFFKDKKFKIIY
+                 60 |||||||||||||||||||||||.|||||||||||||||||................|.|
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVY
 
 gi|532105       120 CIGEDLKTREKGFNAVKEFLNEQLENIDLNYHHLIVAYEPIWAIGTKKSASLEDIYLTHG
                 120 ||||||||||||..|||||||||||||||.|..|||||||||||||.|||||||||||||
@@ -13392,7 +13409,7 @@ Program: TBLASTX 2.15.0+
             'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
         )
         self.assertEqual(records.db, "refseq_rna")
-        if xml2 is False:
+        if not xml2:
             self.assertIsInstance(records.query, SeqRecord)
             self.assertEqual(records.query.id, "Query_949527")
             self.assertEqual(
@@ -13404,18 +13421,18 @@ Program: TBLASTX 2.15.0+
         self.assertEqual(records.param["matrix"], "BLOSUM62")
         self.assertAlmostEqual(records.param["expect"], 0.05)
         self.assertEqual(records.param["filter"], "L;")
-        if xml2 is False:
-            self.assertEqual(records.param["gap-open"], 11)
-            self.assertEqual(records.param["gap-extend"], 1)
-        else:
+        if xml2:
             self.assertEqual(records.param["query-gencode"], 1)
             self.assertEqual(records.param["db-gencode"], 1)
+        else:
+            self.assertEqual(records.param["gap-open"], 11)
+            self.assertEqual(records.param["gap-extend"], 1)
         record = next(records)
         self.assertRaises(StopIteration, next, records)
         self.check_xml_21500_tblastx_001_record(record, xml2)
 
     def check_xml_21500_tblastx_001_record(self, record, xml2):
-        if xml2 is False:
+        if not xml2:
             self.assertEqual(record.num, 1)
         self.assertIsInstance(record.query, SeqRecord)
         self.assertEqual(record.query.id, "Query_949527")
@@ -13424,7 +13441,7 @@ Program: TBLASTX 2.15.0+
             "NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168 complete genome",
         )
         self.assertEqual(repr(record.query.seq), "Seq(None, length=804)")
-        if xml2 is True:
+        if xml2:
             self.assertEqual(len(record.query.features), 1)
             feature = record.query.features[0]
             self.assertEqual(feature.type, "masking")
@@ -13435,7 +13452,7 @@ Program: TBLASTX 2.15.0+
         self.assertEqual(len(record.stat), 7)
         self.assertEqual(record.stat["db-num"], 60837734)
         self.assertEqual(record.stat["db-len"], 161330429008)
-        if xml2 is True:
+        if xml2:
             self.assertEqual(record.stat["hsp-len"], 66)
             self.assertEqual(record.stat["eff-space"], 10051826883450)
             self.assertEqual(record.stat["kappa"], -1)
@@ -13503,7 +13520,7 @@ Program: TBLASTX 2.15.0+
             hsp.target.description,
             "PREDICTED: Rhagoletis zephyria response regulator PleD-like (LOC108364862), partial mRNA",
         )
-        if xml2 is True:
+        if xml2:
             self.assertEqual(len(record.query.features), 1)
             feature = record.query.features[0]
             self.assertEqual(feature.type, "masking")
@@ -14548,7 +14565,7 @@ class TestRPSBlast(unittest.TestCase):
             'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
         )
         self.assertEqual(records.db, "Cdd")
-        if xml2 is False:
+        if not xml2:
             self.assertIsInstance(records.query, SeqRecord)
             self.assertEqual(records.query.id, "Query_1")
             self.assertEqual(
@@ -14561,7 +14578,7 @@ class TestRPSBlast(unittest.TestCase):
         self.assertEqual(records.param["gap-open"], 11)
         self.assertEqual(records.param["gap-extend"], 1)
         self.assertEqual(records.param["filter"], "F")
-        if xml2 is True:
+        if xml2:
             self.assertEqual(records.param["cbs"], 1)
             self.assertEqual(len(records.param), 6)
         else:
@@ -14571,7 +14588,7 @@ class TestRPSBlast(unittest.TestCase):
         self.check_xml_21500_rpsblast_001_record(record, xml2)
 
     def check_xml_21500_rpsblast_001_record(self, record, xml2=False):
-        if xml2 is False:
+        if not xml2:
             self.assertEqual(record.num, 1)
         self.assertEqual(
             repr(record),
@@ -14696,6 +14713,327 @@ class TestRPSBlast(unittest.TestCase):
         )
         self.assertEqual(len(hsp.target.features), 0)
         self.assertEqual(hsp.annotations["midline"], "VPR     K  P KG+Y        +MFENG")
+
+
+class TestPSIBlast(unittest.TestCase):
+    """Test the Blast XML parser for psiblast output."""
+
+    def test_xml_21500_psiblast_001_parser(self):
+        """Parsing PSIBLAST 2.15.0+ (xml_21500_psiblast_001.xml)."""
+        filename = "xml_21500_psiblast_001.xml"
+        path = os.path.join("Blast", filename)
+        with open(path, "rb") as stream:
+            records = Blast.parse(stream)
+            self.check_xml_21500_psiblast_001_records(records)
+        with Blast.parse(path) as records:
+            self.check_xml_21500_psiblast_001_records(records)
+        with open(path, "rb") as stream:
+            record = Blast.read(stream)
+        self.check_xml_21500_psiblast_001_record(record)
+        record = Blast.read(path)
+        self.check_xml_21500_psiblast_001_record(record)
+
+    def test_xml2_21500_psiblast_001_parser(self):
+        """Parsing PSIBLAST 2.15.0+ (xml2_21500_psiblast_001.xml)."""
+        filename = "xml2_21500_psiblast_001.xml"
+        path = os.path.join("Blast", filename)
+        with open(path, "rb") as stream:
+            records = Blast.parse(stream)
+            self.check_xml_21500_psiblast_001_records(records, xml2=True)
+        with Blast.parse(path) as records:
+            self.check_xml_21500_psiblast_001_records(records, xml2=True)
+        with open(path, "rb") as stream:
+            record = Blast.read(stream)
+        self.check_xml_21500_psiblast_001_record(record, xml2=True)
+        record = Blast.read(path)
+        self.check_xml_21500_psiblast_001_record(record, xml2=True)
+
+    def test_xml_21500_psiblast_001_writer(self):
+        """Writing psiblast 2.15.0+ (xml_21500_psiblast_001.xml)."""
+        filename = "xml_21500_psiblast_001.xml"
+        path = os.path.join("Blast", filename)
+        with Blast.parse(path) as records:
+            stream = io.BytesIO()
+            n = Blast.write(records, stream)
+            self.assertEqual(n, 1)
+            stream.seek(0)
+            written_records = Blast.parse(stream)
+            self.check_xml_21500_psiblast_001_records(written_records)
+
+    def test_xml2_21500_psiblast_001_writer(self):
+        """Writing psiblast 2.9.0+ XML2 (xml2_21500_psiblast_001_v2.xml)."""
+        filename = "xml2_21500_psiblast_001.xml"
+        path = os.path.join("Blast", filename)
+        with Blast.parse(path) as records:
+            stream = io.BytesIO()
+            n = Blast.write(records, stream, fmt="XML2")
+            self.assertEqual(n, 1)
+            stream.seek(0)
+            written_records = Blast.parse(stream)
+            self.check_xml_21500_psiblast_001_records(written_records, xml2=True)
+
+    def check_xml_21500_psiblast_001_records(self, records, xml2=False):
+        self.assertEqual(records.program, "psiblast")
+        self.assertEqual(records.version, "PSIBLAST 2.15.0+")
+        self.assertEqual(
+            records.reference,
+            'Alejandro A. Schäffer, L. Aravind, Thomas L. Madden, Sergei Shavirin, John L. Spouge, Yuri I. Wolf, Eugene V. Koonin, and Stephen F. Altschul (2001), "Improving the accuracy of PSI-BLAST protein database searches with composition-based statistics and other refinements", Nucleic Acids Res. 29:2994-3005.',
+        )
+        self.assertEqual(records.db, "swissprot")
+        if not xml2:
+            self.assertIsInstance(records.query, SeqRecord)
+            self.assertEqual(records.query.id, "Query_1")
+            self.assertEqual(
+                records.query.description,
+                "WP_001234791.1 Sec-independent protein translocase subunit TatA [Shigella flexneri]",
+            )
+            self.assertEqual(repr(records.query.seq), "Seq(None, length=103)")
+        self.assertEqual(records.param["matrix"], "BLOSUM62")
+        self.assertAlmostEqual(records.param["expect"], 1e-30, places=36)
+        self.assertEqual(records.param["gap-open"], 11)
+        self.assertEqual(records.param["gap-extend"], 1)
+        self.assertEqual(records.param["filter"], "F")
+        if xml2:
+            self.assertEqual(records.param["cbs"], 2)
+            self.assertEqual(len(records.param), 6)
+        else:
+            self.assertEqual(len(records.param), 5)
+        record = next(records)
+        self.assertRaises(StopIteration, next, records)
+        self.check_xml_21500_psiblast_001_record(record, xml2)
+
+    def check_xml_21500_psiblast_001_record(self, record, xml2=False):
+        self.assertEqual(record.num, 1)
+        self.assertEqual(
+            repr(record),
+            "<Bio.Blast.Record query.id='%s'; 2 hits>" % record.query.id,
+        )
+        self.assertIsInstance(record.query, SeqRecord)
+        if xml2:
+            self.assertEqual(record.query.id, "lcl|Query_1")
+        else:
+            self.assertEqual(record.query.id, "Query_1")
+            self.assertEqual(
+                record.query.description,
+                "WP_001234791.1 Sec-independent protein translocase subunit TatA [Shigella flexneri]",
+            )
+        self.assertEqual(repr(record.query.seq), "Seq(None, length=103)")
+        self.assertEqual(len(record.stat), 7)
+        self.assertEqual(record.stat["db-num"], 482816)
+        self.assertEqual(record.stat["db-len"], 183558113)
+        self.assertEqual(record.stat["hsp-len"], 72)
+        self.assertEqual(record.stat["eff-space"], 4627826878)
+        self.assertAlmostEqual(record.stat["kappa"], 0.041)
+        self.assertAlmostEqual(record.stat["lambda"], 0.267)
+        self.assertAlmostEqual(record.stat["entropy"], 0.14)
+        self.assertEqual(len(record), 2)
+        hit = record[0]
+        self.assertEqual(hit.num, 1)
+        target = hit.target
+        self.assertIsInstance(target, SeqRecord)
+        self.assertEqual(target.id, "sp|P69428.1|")
+        self.assertEqual(target.name, "P69428")
+        seq = target.seq
+        self.assertEqual(repr(seq), "Seq(None, length=89)")
+        if xml2:
+            self.assertEqual(
+                target.description,
+                "RecName: Full=Sec-independent protein translocase protein TatA [Escherichia coli K-12]",
+            )
+            self.assertEqual(target.annotations["taxid"], 83333)
+            self.assertIs(target, hit.targets[0])
+            self.assertEqual(len(hit.targets), 4)
+            target = hit.targets[1]
+            self.assertIsInstance(target, SeqRecord)
+            self.assertEqual(target.id, "sp|P69429.1|")
+            self.assertEqual(target.name, "P69429")
+            self.assertIs(target.seq, seq)
+            self.assertEqual(
+                target.description,
+                "RecName: Full=Sec-independent protein translocase protein TatA [Escherichia coli CFT073]",
+            )
+            self.assertEqual(target.annotations["taxid"], 199310)
+            target = hit.targets[2]
+            self.assertIsInstance(target, SeqRecord)
+            self.assertEqual(target.id, "sp|P69430.1|")
+            self.assertEqual(target.name, "P69430")
+            self.assertIs(target.seq, seq)
+            self.assertEqual(
+                target.description,
+                "RecName: Full=Sec-independent protein translocase protein TatA [Escherichia coli O157:H7]",
+            )
+            self.assertEqual(target.annotations["taxid"], 83334)
+            target = hit.targets[3]
+            self.assertIsInstance(target, SeqRecord)
+            self.assertEqual(target.id, "sp|P69431.1|")
+            self.assertEqual(target.name, "P69431")
+            self.assertIs(target.seq, seq)
+            self.assertEqual(
+                target.description,
+                "RecName: Full=Sec-independent protein translocase protein TatA [Shigella flexneri]",
+            )
+            self.assertEqual(target.annotations["taxid"], 623)
+        else:
+            self.assertEqual(
+                target.description,
+                "RecName: Full=Sec-independent protein translocase protein TatA [Escherichia coli K-12] >sp|P69429.1| RecName: Full=Sec-independent protein translocase protein TatA [Escherichia coli CFT073] >sp|P69430.1| RecName: Full=Sec-independent protein translocase protein TatA [Escherichia coli O157:H7] >sp|P69431.1| RecName: Full=Sec-independent protein translocase protein TatA [Shigella flexneri]",
+            )
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 448.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 177.178)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 2.3039e-58, places=64)
+        self.assertEqual(hsp.annotations["identity"], 89)
+        if xml2:
+            self.assertEqual(hsp.shape, (2, 0))
+        else:
+            self.assertEqual(hsp.annotations["positive"], 89)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[ 0,  89],
+                              [14, 103]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.shape, (2, 89))
+        if xml2:
+            self.assertEqual(repr(hsp.query.seq), "Seq(None, length=103)")
+            self.assertEqual(hsp.query.id, "lcl|Query_1")
+        else:
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq({14: 'MGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTS...EQV'}, length=103)",
+            )
+            self.assertEqual(hsp.query.id, "Query_1")
+            self.assertEqual(
+                hsp.query.description,
+                "WP_001234791.1 Sec-independent protein translocase subunit TatA [Shigella flexneri]",
+            )
+        self.assertEqual(len(hsp.query.features), 0)
+        if xml2:
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq(None, length=89)",
+            )
+        else:
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('MGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTS...EQV')",
+            )
+        self.assertEqual(hsp.target.id, "sp|P69428.1|")
+        if xml2:
+            self.assertEqual(
+                hsp.target.description,
+                "RecName: Full=Sec-independent protein translocase protein TatA [Escherichia coli K-12]",
+            )
+        else:
+            self.assertEqual(
+                hsp.target.description,
+                "RecName: Full=Sec-independent protein translocase protein TatA [Escherichia coli K-12] >sp|P69429.1| RecName: Full=Sec-independent protein translocase protein TatA [Escherichia coli CFT073] >sp|P69430.1| RecName: Full=Sec-independent protein translocase protein TatA [Escherichia coli O157:H7] >sp|P69431.1| RecName: Full=Sec-independent protein translocase protein TatA [Shigella flexneri]",
+            )
+        self.assertEqual(len(hsp.target.features), 0)
+        if not xml2:
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDADFTAKTIADKQADTNQEQAKTEDAKRHDKEQV",
+            )
+        hit = record[1]
+        self.assertEqual(hit.num, 2)
+        target = hit.target
+        self.assertIsInstance(target, SeqRecord)
+        self.assertEqual(target.id, "sp|P0A2H3.1|")
+        self.assertEqual(target.name, "P0A2H3")
+        seq = target.seq
+        self.assertEqual(repr(seq), "Seq(None, length=84)")
+        if xml2:
+            self.assertEqual(
+                target.description,
+                "RecName: Full=Sec-independent protein translocase protein TatA [Salmonella enterica subsp. enterica serovar Typhimurium str. LT2]",
+            )
+            self.assertEqual(target.annotations["taxid"], 99287)
+            self.assertIs(target, hit.targets[0])
+            self.assertEqual(len(hit.targets), 2)
+            target = hit.targets[1]
+            self.assertIsInstance(target, SeqRecord)
+            self.assertEqual(target.id, "sp|P0A2H4.1|")
+            self.assertEqual(target.name, "P0A2H4")
+            self.assertIs(target.seq, seq)
+            self.assertEqual(
+                target.description,
+                "RecName: Full=Sec-independent protein translocase protein TatA [Salmonella enterica subsp. enterica serovar Typhi]",
+            )
+            self.assertEqual(target.annotations["taxid"], 90370)
+        else:
+            self.assertEqual(
+                hit.target.description,
+                "RecName: Full=Sec-independent protein translocase protein TatA [Salmonella enterica subsp. enterica serovar Typhimurium str. LT2] >sp|P0A2H4.1| RecName: Full=Sec-independent protein translocase protein TatA [Salmonella enterica subsp. enterica serovar Typhi]",
+            )
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertEqual(hsp.num, 1)
+        self.assertAlmostEqual(hsp.score, 358.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 142.51)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 1.0691e-44, places=50)
+        self.assertEqual(hsp.annotations["identity"], 75)
+        if xml2:
+            self.assertEqual(hsp.shape, (2, 0))
+        else:
+            self.assertEqual(hsp.annotations["positive"], 79)
+            self.assertEqual(hsp.annotations["gaps"], 5)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 69, 69,  84],
+                              [ 14, 83, 88, 103]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.shape, (2, 89))
+        if xml2:
+            self.assertEqual(repr(hsp.query.seq), "Seq(None, length=103)")
+        else:
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq({14: 'MGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTS...EQV'}, length=103)",
+            )
+        if xml2:
+            self.assertEqual(hsp.query.id, "lcl|Query_1")
+        else:
+            self.assertEqual(hsp.query.id, "Query_1")
+            self.assertEqual(
+                hsp.query.description,
+                "WP_001234791.1 Sec-independent protein translocase subunit TatA [Shigella flexneri]",
+            )
+        self.assertEqual(len(hsp.query.features), 0)
+        if xml2:
+            self.assertEqual(repr(hsp.target.seq), "Seq(None, length=84)")
+        else:
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('MGGISIWQLLIVAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDDAKQDKTS...EQV')",
+            )
+        self.assertEqual(hsp.target.id, "sp|P0A2H3.1|")
+        if xml2:
+            self.assertEqual(
+                hsp.target.description,
+                "RecName: Full=Sec-independent protein translocase protein TatA [Salmonella enterica subsp. enterica serovar Typhimurium str. LT2]",
+            )
+        else:
+            self.assertEqual(
+                hsp.target.description,
+                "RecName: Full=Sec-independent protein translocase protein TatA [Salmonella enterica subsp. enterica serovar Typhimurium str. LT2] >sp|P0A2H4.1| RecName: Full=Sec-independent protein translocase protein TatA [Salmonella enterica subsp. enterica serovar Typhi]",
+            )
+        self.assertEqual(len(hsp.target.features), 0)
+        if not xml2:
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MGGISIWQLLI+AVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDD+ KQDKTSQDADFTAK+IADKQ      +AK EDAK  DKEQV",
+            )
 
 
 class TestBlastErrors(unittest.TestCase):

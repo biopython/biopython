@@ -1,0 +1,137 @@
+<?xml version="1.0"?>
+<BlastXML2
+    xmlns="http://www.ncbi.nlm.nih.gov"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema-instance"
+    xs:schemaLocation="http://www.ncbi.nlm.nih.gov http://www.ncbi.nlm.nih.gov/data_specs/schema_alt/NCBI_BlastOutput2.xsd"
+>
+<BlastOutput2>
+  <report>
+    <Report>
+      <program>psiblast</program>
+      <version>PSIBLAST 2.15.0+</version>
+      <reference>Alejandro A. Sch&amp;auml;ffer, L. Aravind, Thomas L. Madden, Sergei Shavirin, John L. Spouge, Yuri I. Wolf, Eugene V. Koonin, and Stephen F. Altschul (2001), &quot;Improving the accuracy of PSI-BLAST protein database searches with composition-based statistics and other refinements&quot;, Nucleic Acids Res. 29:2994-3005.</reference>
+      <search-target>
+        <Target>
+          <db>swissprot</db>
+        </Target>
+      </search-target>
+      <params>
+        <Parameters>
+          <matrix>BLOSUM62</matrix>
+          <expect>1e-30</expect>
+          <gap-open>11</gap-open>
+          <gap-extend>1</gap-extend>
+          <filter>F</filter>
+          <cbs>2</cbs>
+        </Parameters>
+      </params>
+      <results>
+        <Results>
+          <iterations>
+            <Iteration>
+              <iter-num>1</iter-num>
+              <search>
+                <Search>
+                  <query-id>lcl|Query_1</query-id>
+                  <query-len>103</query-len>
+                  <hits>
+                    <Hit>
+                      <num>1</num>
+                      <description>
+                        <HitDescr>
+                          <id>sp|P69428.1|</id>
+                          <accession>P69428</accession>
+                          <title>RecName: Full=Sec-independent protein translocase protein TatA [Escherichia coli K-12]</title>
+                          <taxid>83333</taxid>
+                        </HitDescr>
+                        <HitDescr>
+                          <id>sp|P69429.1|</id>
+                          <accession>P69429</accession>
+                          <title>RecName: Full=Sec-independent protein translocase protein TatA [Escherichia coli CFT073]</title>
+                          <taxid>199310</taxid>
+                        </HitDescr>
+                        <HitDescr>
+                          <id>sp|P69430.1|</id>
+                          <accession>P69430</accession>
+                          <title>RecName: Full=Sec-independent protein translocase protein TatA [Escherichia coli O157:H7]</title>
+                          <taxid>83334</taxid>
+                        </HitDescr>
+                        <HitDescr>
+                          <id>sp|P69431.1|</id>
+                          <accession>P69431</accession>
+                          <title>RecName: Full=Sec-independent protein translocase protein TatA [Shigella flexneri]</title>
+                          <taxid>623</taxid>
+                        </HitDescr>
+                      </description>
+                      <len>89</len>
+                      <hsps>
+                        <Hsp>
+                          <num>1</num>
+                          <bit-score>177.178</bit-score>
+                          <score>448</score>
+                          <evalue>2.3039e-58</evalue>
+                          <identity>89</identity>
+                          <query-from>0</query-from>
+                          <query-to>0</query-to>
+                          <hit-from>0</hit-from>
+                          <hit-to>0</hit-to>
+                          <qseq></qseq>
+                          <hseq></hseq>
+                        </Hsp>
+                      </hsps>
+                    </Hit>
+                    <Hit>
+                      <num>2</num>
+                      <description>
+                        <HitDescr>
+                          <id>sp|P0A2H3.1|</id>
+                          <accession>P0A2H3</accession>
+                          <title>RecName: Full=Sec-independent protein translocase protein TatA [Salmonella enterica subsp. enterica serovar Typhimurium str. LT2]</title>
+                          <taxid>99287</taxid>
+                        </HitDescr>
+                        <HitDescr>
+                          <id>sp|P0A2H4.1|</id>
+                          <accession>P0A2H4</accession>
+                          <title>RecName: Full=Sec-independent protein translocase protein TatA [Salmonella enterica subsp. enterica serovar Typhi]</title>
+                          <taxid>90370</taxid>
+                        </HitDescr>
+                      </description>
+                      <len>84</len>
+                      <hsps>
+                        <Hsp>
+                          <num>1</num>
+                          <bit-score>142.51</bit-score>
+                          <score>358</score>
+                          <evalue>1.0691e-44</evalue>
+                          <identity>75</identity>
+                          <query-from>0</query-from>
+                          <query-to>0</query-to>
+                          <hit-from>0</hit-from>
+                          <hit-to>0</hit-to>
+                          <qseq></qseq>
+                          <hseq></hseq>
+                        </Hsp>
+                      </hsps>
+                    </Hit>
+                  </hits>
+                  <stat>
+                    <Statistics>
+                      <db-num>482816</db-num>
+                      <db-len>183558113</db-len>
+                      <hsp-len>72</hsp-len>
+                      <eff-space>4627826878</eff-space>
+                      <kappa>0.041</kappa>
+                      <lambda>0.267</lambda>
+                      <entropy>0.14</entropy>
+                    </Statistics>
+                  </stat>
+                </Search>
+              </search>
+            </Iteration>
+          </iterations>
+        </Results>
+      </results>
+    </Report>
+  </report>
+</BlastOutput2>
+</BlastXML2>
