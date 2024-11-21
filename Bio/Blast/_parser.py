@@ -30,6 +30,8 @@ from Bio.SeqFeature import SeqFeature
 from Bio.SeqFeature import SimpleLocation
 from Bio.SeqRecord import SeqRecord
 
+import numpy as np
+
 
 class DTDHandler:
     """Parser for the BLAST XML DTD file."""
@@ -132,7 +134,6 @@ class SchemaHandler:
                 "message",
                 "subjects",
                 "bl2seq",
-                "iter-num",
             ):
                 pass  # TBD
             else:
@@ -351,6 +352,9 @@ class XMLHandler:
         self._characters = ""
 
     def _start_iteration(self, name, attributes):
+        if self._program == "psiblast" and name == "http://www.ncbi.nlm.nih.gov Search":
+            # PSIBLAST XML2 uses both <Iteration> and <Search>; ignore one
+            return
         record = Record()
         self._record = record
 
@@ -714,6 +718,9 @@ class XMLHandler:
     def _end_iteration(self, name):
         assert self._characters.strip() == ""
         self._characters = ""
+        if self._program == "psiblast" and name == "http://www.ncbi.nlm.nih.gov Search":
+            # PSIBLAST XML2 uses both <Iteration> and <Search>; ignore one
+            return
         self._records._cache.append(self._record)
         del self._record
 
@@ -926,106 +933,117 @@ class XMLHandler:
         hsp = self._hsp
         del self._hsp
         program = self._program
-        align_len = hsp.align_len
         query = self._record.query
         if query is None:
             query = self._records.query
         query_id = query.id
         query_description = query.description
         query_length = len(query.seq)
-        query_seq_aligned = hsp.qseq.encode()
-        assert len(query_seq_aligned) == align_len
-        target_seq_aligned = hsp.hseq.encode()
-        assert len(target_seq_aligned) == align_len
-        (target_seq_data, query_seq_data), coordinates = (
-            Alignment.parse_printed_alignment([target_seq_aligned, query_seq_aligned])
-        )
         query = SeqRecord(None, query_id, description=query_description)
-        query_start = hsp.query_from - 1
-        query_end = hsp.query_to
-        if program in ("blastx", "tblastx"):
-            assert query_end - query_start == 3 * len(query_seq_data)
-            location = SimpleLocation(0, len(query_seq_data))
-            coded_by = f"{query_id}:{hsp.query_from}..{hsp.query_to}"
-            query_frame = hsp.query_frame
-            if query_frame > 0:
-                assert query_start % 3 == query_frame - 1
-            elif query_frame < 0:
-                assert (query_length - query_end) % 3 == -query_frame - 1
-                coded_by = f"complement({coded_by})"
-            qualifiers = {"coded_by": coded_by}
-            feature = SeqFeature(location, type="CDS", qualifiers=qualifiers)
-            query.features.append(feature)
-        else:
-            coordinates[1, :] += query_start
-            assert query_end - query_start == len(query_seq_data)
-            query_seq_data = {query_start: query_seq_data}
-            if program == "blastn":
-                try:
-                    query_strand = hsp.query_strand
-                except AttributeError:
-                    # v1 XML
-                    pass
-                else:
-                    # v2 XML
-                    assert query_strand == "Plus"
-        query.seq = Seq(query_seq_data, query_length)
         target = self._alignments.target
         target_id = target.id
         target_name = target.name
         target_description = target.description
         target_length = len(target.seq)
         target = SeqRecord(None, target_id, target_name, description=target_description)
-        if program in ("blastn", "megablast"):
-            try:
-                target_strand = hsp.hit_strand
-            except AttributeError:
-                # v1 XML
-                target_frame = hsp.hit_frame
-                if target_frame == +1:
-                    target_strand = "Plus"
-                elif target_frame == -1:
-                    target_strand = "Minus"
-            if target_strand == "Plus":
+        query_seq_aligned = hsp.qseq.encode()
+        target_seq_aligned = hsp.hseq.encode()
+        try:
+            align_len = hsp.align_len
+        except AttributeError:  # PSIBLAST XML2
+            assert len(query_seq_aligned) == 0
+            assert len(target_seq_aligned) == 0
+            query_seq_data = None
+            target.seq = Seq(None, target_length)
+            coordinates = np.empty((2, 0), dtype=int)
+        else:
+            assert len(query_seq_aligned) == align_len
+            assert len(target_seq_aligned) == align_len
+            (
+                target_seq_data,
+                query_seq_data,
+            ), coordinates = Alignment.parse_printed_alignment(
+                [target_seq_aligned, query_seq_aligned]
+            )
+            query_start = hsp.query_from - 1
+            query_end = hsp.query_to
+            if program in ("blastx", "tblastx"):
+                assert query_end - query_start == 3 * len(query_seq_data)
+                location = SimpleLocation(0, len(query_seq_data))
+                coded_by = f"{query_id}:{hsp.query_from}..{hsp.query_to}"
+                query_frame = hsp.query_frame
+                if query_frame > 0:
+                    assert query_start % 3 == query_frame - 1
+                elif query_frame < 0:
+                    assert (query_length - query_end) % 3 == -query_frame - 1
+                    coded_by = f"complement({coded_by})"
+                qualifiers = {"coded_by": coded_by}
+                feature = SeqFeature(location, type="CDS", qualifiers=qualifiers)
+                query.features.append(feature)
+            else:
+                coordinates[1, :] += query_start
+                assert query_end - query_start == len(query_seq_data)
+                query_seq_data = {query_start: query_seq_data}
+                if program == "blastn":
+                    try:
+                        query_strand = hsp.query_strand
+                    except AttributeError:
+                        # v1 XML
+                        pass
+                    else:
+                        # v2 XML
+                        assert query_strand == "Plus"
+            if program in ("blastn", "megablast"):
+                try:
+                    target_strand = hsp.hit_strand
+                except AttributeError:
+                    # v1 XML
+                    target_frame = hsp.hit_frame
+                    if target_frame == +1:
+                        target_strand = "Plus"
+                    elif target_frame == -1:
+                        target_strand = "Minus"
+                if target_strand == "Plus":
+                    target_start = hsp.hit_from - 1
+                    target_end = hsp.hit_to
+                    coordinates[0, :] += target_start
+                    assert target_end - target_start == len(target_seq_data)
+                    target_seq_data = {target_start: target_seq_data}
+                    target.seq = Seq(target_seq_data, target_length)
+                elif target_strand == "Minus":
+                    target_start = hsp.hit_to - 1
+                    target_end = hsp.hit_from
+                    coordinates[0, :] = target_end - coordinates[0, :]
+                    assert target_end - target_start == len(target_seq_data)
+                    target_seq_data = {target_length - target_end: target_seq_data}
+                    seq = Seq(target_seq_data, target_length)
+                    target.seq = seq.reverse_complement()
+            elif program in ("blastp", "blastx", "rpsblast", "psiblast"):
                 target_start = hsp.hit_from - 1
                 target_end = hsp.hit_to
                 coordinates[0, :] += target_start
                 assert target_end - target_start == len(target_seq_data)
                 target_seq_data = {target_start: target_seq_data}
                 target.seq = Seq(target_seq_data, target_length)
-            elif target_strand == "Minus":
-                target_start = hsp.hit_to - 1
-                target_end = hsp.hit_from
-                coordinates[0, :] = target_end - coordinates[0, :]
-                assert target_end - target_start == len(target_seq_data)
-                target_seq_data = {target_length - target_end: target_seq_data}
-                seq = Seq(target_seq_data, target_length)
-                target.seq = seq.reverse_complement()
-        elif program in ("blastp", "blastx", "rpsblast", "psiblast"):
-            target_start = hsp.hit_from - 1
-            target_end = hsp.hit_to
-            coordinates[0, :] += target_start
-            assert target_end - target_start == len(target_seq_data)
-            target_seq_data = {target_start: target_seq_data}
-            target.seq = Seq(target_seq_data, target_length)
-        elif program in ("tblastn", "tblastx"):
-            target_start = hsp.hit_from - 1
-            target_end = hsp.hit_to
-            assert target_end - target_start == 3 * len(target_seq_data)
-            location = SimpleLocation(0, target_length)
-            coded_by = f"{target_id}:{hsp.hit_from}..{hsp.hit_to}"
-            target_frame = hsp.hit_frame
-            if target_frame >= 0:
-                assert target_start % 3 == target_frame - 1
-            elif target_frame < 0:
-                assert (target_length - target_end) % 3 == -target_frame - 1
-                coded_by = f"complement({coded_by})"
-            qualifiers = {"coded_by": coded_by}
-            feature = SeqFeature(location, type="CDS", qualifiers=qualifiers)
-            target.features.append(feature)
-            target.seq = Seq(target_seq_data, target_length)
-        else:
-            raise RuntimeError("Unexpected program name '%s'" % program)
+            elif program in ("tblastn", "tblastx"):
+                target_start = hsp.hit_from - 1
+                target_end = hsp.hit_to
+                assert target_end - target_start == 3 * len(target_seq_data)
+                location = SimpleLocation(0, target_length)
+                coded_by = f"{target_id}:{hsp.hit_from}..{hsp.hit_to}"
+                target_frame = hsp.hit_frame
+                if target_frame >= 0:
+                    assert target_start % 3 == target_frame - 1
+                elif target_frame < 0:
+                    assert (target_length - target_end) % 3 == -target_frame - 1
+                    coded_by = f"complement({coded_by})"
+                qualifiers = {"coded_by": coded_by}
+                feature = SeqFeature(location, type="CDS", qualifiers=qualifiers)
+                target.features.append(feature)
+                target.seq = Seq(target_seq_data, target_length)
+            else:
+                raise RuntimeError("Unexpected program name '%s'" % program)
+        query.seq = Seq(query_seq_data, query_length)
         sequences = [target, query]
         alignment = HSP(sequences, coordinates)
         alignment.num = hsp.num
@@ -1044,7 +1062,11 @@ class XMLHandler:
         except AttributeError:
             # missing in legacy megablast
             pass
-        annotations["midline"] = hsp.midline
+        try:
+            annotations["midline"] = hsp.midline
+        except AttributeError:
+            # missing in psiblast for XML2
+            pass
         alignment.annotations = annotations
         self._alignments.append(alignment)
 
