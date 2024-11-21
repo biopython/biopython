@@ -115,10 +115,6 @@ class PhdWriter(SequenceWriter):
 
     modes = "t"
 
-    def __init__(self, handle: _IOSource) -> None:
-        """Initialize the class."""
-        super().__init__(handle)
-
     def write_record(self, record):
         """Write a single Phd record to the file."""
         assert record.seq, "No sequence present in SeqRecord"
