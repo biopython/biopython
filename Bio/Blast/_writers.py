@@ -965,17 +965,16 @@ class XML2Writer(BaseXMLWriter):
         )
 
     def _start_iteration(self, record):
-        if self._program == "psiblast":
-            self.stream.write(
-                b"""\
-            <Iteration>
-"""
-            )
         try:
             num = record.num
         except AttributeError:
             pass
         else:  # PSIBLAST
+            self.stream.write(
+                b"""\
+            <Iteration>
+"""
+            )
             self._write_iteration_num(num)
         self.stream.write(
             b"""\
