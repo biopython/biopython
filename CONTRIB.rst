@@ -150,6 +150,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Hussein Faara <https://github.com/hfaara18>
 - Hye-Shik Chang <perky at domain fallin.lv>
 - Iddo Friedberg <https://github.com/idoerg>
+- Igor S. Gerasimov <https://github.com/foxtran>
 - Ilya Flyamer <https://github.com/Phlya>
 - Isaac Ellmen <https://github.com/Ellmen>
 - Ivan Antonov <https://github.com/vanya-antonov>
