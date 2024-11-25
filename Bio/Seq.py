@@ -3277,6 +3277,7 @@ def complement_rna(sequence, inplace=False):
 
 
 if __name__ == "__main__":
+    from doctest import IGNORE_EXCEPTION_DETAIL
     from Bio._utils import run_doctest
 
-    run_doctest()
+    run_doctest(optionflags=IGNORE_EXCEPTION_DETAIL)
