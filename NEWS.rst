@@ -35,6 +35,10 @@ and can optionally write Cluster Buster motif files with floats instead of
 integers, by specifying the ``precision=<int>`` parameter when writing:
 e.g. motifs.write(motifs, "clusterbuster", precision=2)
 
+``Bio.PDB.SCADIO`` now supports object selection by color in the OpenSCAD
+output file.  This enables generation of separate STL files for each color for
+printing protein structures on multi-material 3D printers.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
