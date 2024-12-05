@@ -17,6 +17,9 @@ This release of Biopython supports Python 3.9, 3.10, 3.11 and 3.12. It
 has also been tested on PyPy3.9 v7.3.13. Python 3.9 is approaching end of
 life, our support for it is now deprecated.
 
+Added ``Bio.SearchIO.InfernalIO`` module for parsing Infernal (v1.0.0+) cmsearch and
+cmscan tabular and plain text output.
+
 ``Bio.motifs`` now supports reading PFM from Cys2His2 Zinc Finger Proteins PWM
 Predictor and reading motifs in ``pfm-four-columns`` format will set motif name
 to "" instead of None, when no motif name was found.
@@ -38,6 +41,7 @@ e.g. motifs.write(motifs, "clusterbuster", precision=2)
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Samuel Prince (first contribution)
 - Gert Hulselmans
 - Peter Cock
 - Michiel de Hoon
