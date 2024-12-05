@@ -260,6 +260,7 @@ setup(
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
         "Topic :: Scientific/Engineering",
         "Topic :: Scientific/Engineering :: Bio-Informatics",
         "Topic :: Software Development :: Libraries :: Python Modules",
@@ -269,5 +270,5 @@ setup(
     ext_modules=EXTENSIONS,
     include_package_data=True,  # done via MANIFEST.in under setuptools
     install_requires=REQUIRES,
-    python_requires=">=%i.%i" % MIN_PY_VER,
+    python_requires=">=3.6, <4",
 )
