@@ -442,8 +442,7 @@ def _load_bgzf_block(handle, text_mode=False):
         raise StopIteration
     if magic != _bgzf_magic:
         raise ValueError(
-            r"A BGZF (e.g. a BAM file) block should start with "
-            r"%r, not %r; handle.tell() now says %r"
+            r"A BGZF block should start with %r, not %r; handle.tell() now says %r"
             % (_bgzf_magic, magic, handle.tell())
         )
     gzip_mod_time, gzip_extra_flags, gzip_os, extra_len = struct.unpack(
