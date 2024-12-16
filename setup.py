@@ -39,7 +39,7 @@ except ImportError:
     )
 
 
-setuptools_version_tuple = tuple(int(x) for x in setuptools_version.split("."))
+setuptools_version_tuple = tuple(int(x) for x in setuptools_version.split(".")[:2])
 if setuptools_version_tuple < (70, 1) and "bdist_wheel" in sys.argv:
     # Check for presence of wheel in setuptools < 70.1
     # Before setuptools 70.1, wheel is needed to make a bdist_wheel.
