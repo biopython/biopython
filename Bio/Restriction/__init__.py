@@ -11,6 +11,9 @@
 
 Examples
 --------
+
+.. code-block:: python
+
     >>> from Bio.Seq import Seq
     >>> from Bio.Restriction import *
     >>> pBs_mcs = 'GGTACCGGGCCCCCCCTCGAGGTCGACGGTATCGATAAGCTTGATATCGAATTCCTG'
