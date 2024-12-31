@@ -212,11 +212,9 @@ class PirWriter(SequenceWriter):
 
             handle = open(filename, "w")
             writer = PirWriter(handle)
-            writer.write_header() # does nothing for PIR files
             ...
             Multiple writer.write_record() and/or writer.write_records() calls
             ...
-            writer.write_footer() # does nothing for PIR files
             handle.close()
 
         """
