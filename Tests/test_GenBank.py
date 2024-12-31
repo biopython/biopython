@@ -7635,7 +7635,7 @@ class GenBankTests(unittest.TestCase):
                 "join{[5399:5600](+), [5699:6100](+), [0:100](-), [<6800:7000](-)}",
             )
 
-    def test_implicit_orign_wrap_extract_and_translate(self):
+    def test_implicit_origin_wrap_extract_and_translate(self):
         """Test that features wrapped around origin give expected data."""
         path = "GenBank/bad_origin_wrap_CDS.gb"
         with warnings.catch_warnings():
