@@ -1028,20 +1028,22 @@ class SimpleLocation(Location):
             # Attempt to fix features that span the origin
             s_pos = Position.fromstring(s, -1)
             e_pos = Position.fromstring(e)
-            if s_pos >= e_pos:
-                # There is likely a problem with origin wrapping.
+            # We have seen Ensembl data in "GenBank Format" with length zero in the LOCUS
+            # and variation features with s_pos >= e_pos - they are not origin wrapping!
+            if e_pos <= s_pos and length and s_pos < length:
+                # Assuming this is meant to be origin wrapping.
                 # Create a CompoundLocation of the wrapped feature,
                 # consisting of two SimpleLocation objects to extend to
                 # the list of feature locations.
                 if not circular:
                     raise LocationParserError(
-                        f"it appears that '{text}' is a feature that spans the origin, but the sequence topology is undefined"
+                        f"it appears that '{text}' is a feature that spans the"
+                        " origin, but the sequence topology is undefined"
                     )
                 warnings.warn(
-                    "Attempting to fix invalid location %r as "
-                    "it looks like incorrect origin wrapping. "
-                    "Please fix input file, this could have "
-                    "unintended behavior." % text,
+                    f"Attempting to fix invalid location {text!r} as it looks"
+                    " like incorrect origin wrapping. Please fix input file,"
+                    " this could have unintended behavior.",
                     BiopythonParserWarning,
                 )
 
