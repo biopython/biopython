@@ -247,7 +247,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         if gc:
             alignment.column_annotations = {}
             for key, value in gc.items():
-                if skipped_columns:
+                if skipped_columns.size > 0:
                     value = "".join(
                         letter
                         for index, letter in enumerate(value)
