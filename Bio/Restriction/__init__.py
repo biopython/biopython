@@ -16,11 +16,11 @@ Examples
 
     >>> from Bio.Seq import Seq
     >>> from Bio.Restriction import *
-    >>> pBs_mcs = 'GGTACCGGGCCCCCCCTCGAGGTCGACGGTATCGATAAGCTTGATATCGAATTCCTG'
-    >>> pBs_mcs += 'CAGCCCGGGGGATCCACTAGTTCTAGAGCGGCCGCCACCGCGGTGGAGCTC'
+    >>> pBs_mcs = "GGTACCGGGCCCCCCCTCGAGGTCGACGGTATCGATAAGCTTGATATCGAATTCCTG"
+    >>> pBs_mcs += "CAGCCCGGGGGATCCACTAGTTCTAGAGCGGCCGCCACCGCGGTGGAGCTC"
     >>> seq = Seq(pBs_mcs)  # Multiple-cloning site of pBluescript SK(-)
     >>> a = Analysis(AllEnzymes, seq)
-    >>> a.print_that()              # no argument -> print all the results
+    >>> a.print_that()  # no argument -> print all the results
     AbaSI      :  10, 12, 13, 16, 17, 18, 19, 20, 22, 23, 24, 25, 25, 26, 27...
     BmeDI      :  7, 8, 8, 9, 9, 13, 14, 15, 16, 17, 18, 19, 19, 21, 21...
     YkrI       :  10, 12, 13, 16, 16, 17, 19, 20, 21, 22, 23, 24, 25, 25, 26...
