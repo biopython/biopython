@@ -12,7 +12,7 @@
 Examples
 --------
 
-.. code-block:: python
+.. code-block:: pycon
 
     >>> from Bio.Seq import Seq
     >>> from Bio.Restriction import *
