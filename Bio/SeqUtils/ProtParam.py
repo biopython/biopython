@@ -175,25 +175,34 @@ class ProteinAnalysis:
         a window=9. The parameters used are optimized for determining the
         flexibility.
         """
-        flexibilities = ProtParamData.Flex
+        bnorm = ProtParamData.Flex
+        bnorm_0 = ProtParamData.Flex_0
+        bnorm_1 = ProtParamData.Flex_1
+        bnorm_2 = ProtParamData.Flex_2
         window_size = 9
+        bnorm_nc = [0] * (self.length - 2)
         weights = [0.25, 0.4375, 0.625, 0.8125, 1]
         scores = []
 
-        for i in range(self.length - window_size):
-            subsequence = self.sequence[i : i + window_size]
+        # Calculate neighbor-correlated B_norm values first
+        for i, res in enumerate(self.sequence[1 : self.length - 1]):
+            bnorm_nc[i] = bnorm_0[res]
+            if bnorm[self.sequence[i]] >= 1 and bnorm[self.sequence[i + 2]] >= 1:
+                bnorm_nc[i] = bnorm_0[res]
+            elif bnorm[self.sequence[i]] < 1 and bnorm[self.sequence[i + 2]] < 1:
+                bnorm_nc[i] = bnorm_2[res]
+            else:
+                bnorm_nc[i] = bnorm_1[res]
+
+        # Use neighbor-correlated B_norm values to predict flexibility
+        for i in range(self.length - window_size - 1):
             score = 0.0
-
             for j in range(window_size // 2):
-                front = subsequence[j]
-                back = subsequence[window_size - j - 1]
-                score += (flexibilities[front] + flexibilities[back]) * weights[j]
-
-            middle = subsequence[window_size // 2 + 1]
-            score += flexibilities[middle]
-
+                score += (
+                    bnorm_nc[i + j] + bnorm_nc[i + window_size - 1 - j]
+                ) * weights[j]
+            score += bnorm_nc[i + window_size // 2]
             scores.append(score / 5.25)
-
         return scores
 
     def gravy(self, scale="KyteDoolitle"):
