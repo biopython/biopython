@@ -35,7 +35,7 @@ Examples
     HhaI      Hin1II    Hin6I     HinP1I    HpyCH4IV  HpySE526I Hsp92II   HspAI
     MaeII     MseI      NlaIII    SaqAI     TaiI      Tru1I     Tru9I...
     <BLANKLINE>
-    >>> b = a.blunt()  # Analysis with blunt enzmyes
+    >>> b = a.blunt()  # Analysis with blunt enzymes
     >>> a.print_that(b)  # Print results for blunt cutters
     AccII      :  98.
     AfaI       :  4.
