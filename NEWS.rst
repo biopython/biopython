@@ -38,6 +38,7 @@ e.g. motifs.write(motifs, "clusterbuster", precision=2)
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Carlos Peña
 - Gert Hulselmans
 - Peter Cock
 - Michiel de Hoon
