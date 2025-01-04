@@ -43,6 +43,6 @@ test_script:
   - python -c "import sys; print(sys.version)"
   - cd Tests
   - cp biosql.ini.appveyor biosql.ini
-  - coverage run --source=".." run_tests.py --offline
+  - coverage run --source="..Bio/,../BioSQL/" run_tests.py --offline
   - coverage xml
   - cd ..
