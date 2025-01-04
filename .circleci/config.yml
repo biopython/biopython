@@ -8,7 +8,7 @@
 
 version: 2.1
 orbs:
-  codecov: codecov/codecov@1.0.2
+  codecov: codecov/codecov@5.0.3
 jobs:
   build:
     docker:
@@ -55,4 +55,4 @@ jobs:
       - codecov/upload:
           name: Linux CircleIO
           disable_search: true
-          file: biopython-*/coverage.xml
+          files: biopython-*/coverage.xml
