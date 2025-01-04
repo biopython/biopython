@@ -37,7 +37,7 @@ jobs:
           name: Sphinx
           command: |
             make -C Doc/ html
-      - deploy:
+      - run:
           name: Deploy Sphinx documentation
           command: |
             bash .github/deploy_docs.sh
