@@ -232,7 +232,7 @@ jobs:
 
     - name: Install Python packaging tools
       run: |
-        python -m pip install --upgrade pip setuptools wheel
+        python -m pip install --upgrade pip setuptools wheel coverage
 
     - name: Install minimal Python dependencies
       run: |
@@ -278,7 +278,7 @@ jobs:
 
     - name: Install Python packaging tools
       run: |
-        python -m pip install --upgrade pip setuptools wheel
+        python -m pip install --upgrade pip setuptools wheel coverage
 
     - name: Install minimal Python dependencies
       run: |
