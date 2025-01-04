@@ -20,7 +20,7 @@ jobs:
           command: |
             python --version
             pip install -r .circleci/requirements-sphinx.txt
-            pip install coverage "numpy!=2.1.0" scipy mmtf-python mysqlclient mysql-connector-python rdflib networkx matplotlib
+            pip install coverage numpy scipy mmtf-python mysqlclient mysql-connector-python rdflib networkx matplotlib
             echo "Python dependencies installed"
       - run:
           name: Installation
@@ -53,6 +53,6 @@ jobs:
             echo "Overall test coverage:"
             coverage report --format=total
       - codecov/upload:
-          upload_name: Linux CircleIO
+          upload_name: CircleCI
           disable_search: true
           files: biopython-*/coverage.xml
