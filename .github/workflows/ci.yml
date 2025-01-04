@@ -205,7 +205,8 @@ jobs:
       run: |
         cd Tests
         PYTHONMALLOC=debug LD_PRELOAD="$(realpath "$(gcc -print-file-name=libasan.so)") $(realpath "$(gcc -print-file-name=libstdc++.so)")" ASAN_OPTIONS="detect_leaks=0" coverage run --source="..Bio/,../BioSQL/" run_tests.py --offline
-        coverage xml
+        cd ..
+        coverage xml --data-file Tests/.coverage
       shell: bash
 
     - name: Upload coverage to codecov
@@ -296,7 +297,8 @@ jobs:
       run: |
         cd Tests
         coverage run --source="..Bio/,../BioSQL/" run_tests.py --offline
-        coverage xml
+        cd ..
+        coverage xml --data-file Tests/.coverage
 
     - name: Upload coverage to codecov
       uses: codecov/codecov-action@v5
