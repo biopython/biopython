@@ -215,7 +215,6 @@ jobs:
         name: Linux GitHub Actions ${{ matrix.python-version }}
         disable_search: true
         files: coverage.xml
-        gcov: false
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
@@ -263,7 +262,6 @@ jobs:
         name: macOS GitHub Actions ${{ matrix.python-version }}
         disable_search: true
         files: coverage.xml
-        gcov: false
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
@@ -313,7 +311,6 @@ jobs:
         name: Windows GitHub Actions ${{ matrix.python-version }}
         disable_search: true
         files: coverage.xml
-        gcov: false
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
