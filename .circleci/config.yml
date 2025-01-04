@@ -51,4 +51,7 @@ jobs:
             cd ..
             coverage xml
       - codecov/upload:
-          file: biopython-*/coverage.xml
+          name: Linux CircleIO
+          disable_search: true
+          filed: biopython-*/coverage.xml
+          gcov: false
