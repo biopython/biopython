@@ -46,13 +46,12 @@ jobs:
           command: |
             # Use the unzipped tar-ball where built wheel
             cd biopython-*/Tests/
-            coverage run --data-file "../.coverage" run_tests.py --offline
+            coverage run run_tests.py --offline
             echo "Tests run"
-            cd ..
             coverage xml
             echo "Overall test coverage:"
-            coverage report --format=total
+            coverage report
       - codecov/upload:
           upload_name: CircleCI
           disable_search: true
-          files: biopython-*/coverage.xml
+          files: biopython-*/Tests/coverage.xml

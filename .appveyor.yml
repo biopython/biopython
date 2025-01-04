@@ -43,10 +43,9 @@ test_script:
   - python -c "import sys; print(sys.version)"
   - cd Tests
   - cp biosql.ini.appveyor biosql.ini
-  - coverage run --data-file "../.coverage" run_tests.py --offline
-  - cd ..
+  - coverage run run_tests.py --offline
   - coverage xml
   - echo "Overall AppVeyor coverage:"
-  - coverage report --format=total
+  - coverage report
   # Assumes $CODECOV_TOKEN has been set
   - codecovcli upload-process -n "AppVeyor Coverage" -f coverage.xml
