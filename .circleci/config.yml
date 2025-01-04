@@ -46,7 +46,7 @@ jobs:
           command: |
             # Use the unzipped tar-ball where built wheel
             cd biopython-*/Tests/
-            coverage run --data-file "../.coverage" --source="../Bio/,../BioSQL/" run_tests.py --offline
+            coverage run --data-file "../.coverage" run_tests.py --offline
             echo "Tests run"
             cd ..
             coverage xml

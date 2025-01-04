@@ -305,7 +305,7 @@ jobs:
     - name: Run test suite
       run: |
         cd Tests
-        coverage run --data-file "../.coverage" --source="../Bio/,../BioSQL/" run_tests.py --offline
+        coverage run --data-file "../.coverage" run_tests.py --offline
         cd ..
         coverage xml
         echo "Overall Windows GitHub Actions ${{ matrix.python-version }} coverage:"
