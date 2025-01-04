@@ -241,7 +241,7 @@ jobs:
 
     - name: Install minimal Python dependencies
       run: |
-        python -m pip install "numpy!=2.1.0"
+        python -m pip install numpy
 
     - name: Debug Info
       run: |
@@ -292,7 +292,7 @@ jobs:
 
     - name: Install minimal Python dependencies
       run: |
-        python -m pip install "numpy!=2.1.0"
+        python -m pip install numpy
 
     - name: Debug Info
       run: |
@@ -341,7 +341,7 @@ jobs:
 
     - name: Install minimal Python dependencies
       run: |
-        python -m pip install "numpy!=2.1.0"
+        python -m pip install numpy
 
     - name: Debug Info
       run: |
