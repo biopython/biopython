@@ -253,6 +253,7 @@ jobs:
       run: |
         cd Tests
         coverage run  --data-file "../.coverage" --source="../Bio/,../BioSQL/" run_tests.py --offline
+        cd ..
         coverage xml
 
     - name: Upload coverage to codecov
