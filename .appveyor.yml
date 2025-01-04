@@ -36,7 +36,7 @@ build_script:
   - SET PATH=C:\Py;C:\Py\Scripts;C:\Py\Library\bin;%PATH%
   - conda config --set always_yes yes
   - conda update conda --channel conda-forge --override-channels
-  - python -m pip install --upgrade coverage setuptools "numpy!=2.1.0"
+  - python -m pip install --upgrade coverage setuptools numpy codecov-cli
   - python -m pip install .
 
 test_script:
@@ -48,3 +48,5 @@ test_script:
   - coverage xml
   - echo "Overall AppVeyor coverage:"
   - coverage report --format=total
+  # Assumes $CODECOV_TOKEN has been set
+  - codecov-cli upload-process -n "AppVeyor Coverage" -f coverage.xml
