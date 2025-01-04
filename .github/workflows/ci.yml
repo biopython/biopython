@@ -212,6 +212,8 @@ jobs:
     - name: Upload coverage to codecov
       uses: codecov/codecov-action@v5
       with:
+        name: Linux GitHub Actions ${{ matrix.python-version }}
+        disable_search: true
         files: coverage.xml
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
@@ -256,6 +258,8 @@ jobs:
     - name: Upload coverage to codecov
       uses: codecov/codecov-action@v5
       with:
+        name: macOS GitHub Actions ${{ matrix.python-version }}
+        disable_search: true
         files: coverage.xml
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
@@ -303,6 +307,8 @@ jobs:
     - name: Upload coverage to codecov
       uses: codecov/codecov-action@v5
       with:
+        name: Windows GitHub Actions ${{ matrix.python-version }}
+        disable_search: true
         files: coverage.xml
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
