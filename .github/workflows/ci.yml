@@ -212,7 +212,7 @@ jobs:
     - name: Upload coverage to codecov
       uses: codecov/codecov-action@v5
       with:
-        files: Tests/coverage.xml
+        files: coverage.xml
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
@@ -256,7 +256,7 @@ jobs:
     - name: Upload coverage to codecov
       uses: codecov/codecov-action@v5
       with:
-        files: Tests/coverage.xml
+        files: coverage.xml
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
@@ -303,7 +303,7 @@ jobs:
     - name: Upload coverage to codecov
       uses: codecov/codecov-action@v5
       with:
-        files: Tests/coverage.xml
+        files: coverage.xml
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
