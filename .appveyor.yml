@@ -49,4 +49,4 @@ test_script:
   - echo "Overall AppVeyor coverage:"
   - coverage report --format=total
   # Assumes $CODECOV_TOKEN has been set
-  - codecov-cli upload-process -n "AppVeyor Coverage" -f coverage.xml
+  - codecovcli upload-process -n "AppVeyor Coverage" -f coverage.xml
