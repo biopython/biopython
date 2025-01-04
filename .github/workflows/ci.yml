@@ -204,9 +204,9 @@ jobs:
     - name: Run test suite
       run: |
         cd Tests
-        PYTHONMALLOC=debug LD_PRELOAD="$(realpath "$(gcc -print-file-name=libasan.so)") $(realpath "$(gcc -print-file-name=libstdc++.so)")" ASAN_OPTIONS="detect_leaks=0" coverage run --source="..Bio/,../BioSQL/" run_tests.py --offline
+        PYTHONMALLOC=debug LD_PRELOAD="$(realpath "$(gcc -print-file-name=libasan.so)") $(realpath "$(gcc -print-file-name=libstdc++.so)")" ASAN_OPTIONS="detect_leaks=0" coverage run --data-file "../.coverage" --source="..Bio/,../BioSQL/" run_tests.py --offline
         cd ..
-        coverage xml --data-file Tests/.coverage
+        coverage xml
       shell: bash
 
     - name: Upload coverage to codecov
@@ -250,7 +250,7 @@ jobs:
     - name: Run test suite
       run: |
         cd Tests
-        coverage run --source="..Bio/,../BioSQL/" run_tests.py --offline
+        coverage run  --data-file "../.coverage" --source="..Bio/,../BioSQL/" run_tests.py --offline
         coverege xml
 
     - name: Upload coverage to codecov
@@ -296,9 +296,9 @@ jobs:
     - name: Run test suite
       run: |
         cd Tests
-        coverage run --source="..Bio/,../BioSQL/" run_tests.py --offline
+        coverage run --data-file "../.coverage" --source="..Bio/,../BioSQL/" run_tests.py --offline
         cd ..
-        coverage xml --data-file Tests/.coverage
+        coverage xml
 
     - name: Upload coverage to codecov
       uses: codecov/codecov-action@v5
