@@ -50,6 +50,8 @@ jobs:
             echo "Tests run"
             cd ..
             coverage xml
+            echo "Overall test coverage:"
+            coverage report --format=total
       - codecov/upload:
           name: Linux CircleIO
           disable_search: true
