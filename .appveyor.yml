@@ -36,13 +36,12 @@ build_script:
   - SET PATH=C:\Py;C:\Py\Scripts;C:\Py\Library\bin;%PATH%
   - conda config --set always_yes yes
   - conda update conda --channel conda-forge --override-channels
-  - python -m pip install --upgrade coverage setuptools "numpy!=2.1.0"
+  - python -m pip install --upgrade coverage setuptools numpy
   - python -m pip install .
 
 test_script:
   - python -c "import sys; print(sys.version)"
   - cd Tests
   - cp biosql.ini.appveyor biosql.ini
-  - coverage run --source=".." run_tests.py --offline
+  - coverage run --source Bio,BioSQL run_tests.py --offline
   - coverage xml
-  - cd ..

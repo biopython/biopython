@@ -204,8 +204,18 @@ jobs:
     - name: Run test suite
       run: |
         cd Tests
-        PYTHONMALLOC=debug LD_PRELOAD="$(realpath "$(gcc -print-file-name=libasan.so)") $(realpath "$(gcc -print-file-name=libstdc++.so)")" ASAN_OPTIONS="detect_leaks=0" python run_tests.py --offline
+        PYTHONMALLOC=debug LD_PRELOAD="$(realpath "$(gcc -print-file-name=libasan.so)") $(realpath "$(gcc -print-file-name=libstdc++.so)")" ASAN_OPTIONS="detect_leaks=0" coverage run --source Bio,BioSQL run_tests.py --offline
+        coverage xml
       shell: bash
+
+    - name: Upload coverage to codecov
+      uses: codecov/codecov-action@v5
+      with:
+        name: Linux GitHub Actions ${{ matrix.python-version }}
+        disable_search: true
+        files: Tests/coverage.xml
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   test_macos:
     timeout-minutes: 15
@@ -224,11 +234,11 @@ jobs:
 
     - name: Install Python packaging tools
       run: |
-        python -m pip install --upgrade pip setuptools wheel
+        python -m pip install --upgrade pip setuptools wheel coverage
 
     - name: Install minimal Python dependencies
       run: |
-        python -m pip install "numpy!=2.1.0"
+        python -m pip install numpy
 
     - name: Debug Info
       run: |
@@ -241,7 +251,17 @@ jobs:
     - name: Run test suite
       run: |
         cd Tests
-        python run_tests.py --offline
+        coverage run --source Bio,BioSQL run_tests.py --offline
+        coverage xml
+
+    - name: Upload coverage to codecov
+      uses: codecov/codecov-action@v5
+      with:
+        name: macOS GitHub Actions ${{ matrix.python-version }}
+        disable_search: true
+        files: Tests/coverage.xml
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   test_windows:
     timeout-minutes: 15
@@ -262,11 +282,11 @@ jobs:
 
     - name: Install Python packaging tools
       run: |
-        python -m pip install --upgrade pip setuptools wheel
+        python -m pip install --upgrade pip setuptools wheel coverage
 
     - name: Install minimal Python dependencies
       run: |
-        python -m pip install "numpy!=2.1.0"
+        python -m pip install numpy
 
     - name: Debug Info
       run: |
@@ -279,7 +299,17 @@ jobs:
     - name: Run test suite
       run: |
         cd Tests
-        python run_tests.py --offline
+        coverage run --source Bio,BioSQL run_tests.py --offline
+        coverage xml
+
+    - name: Upload coverage to codecov
+      uses: codecov/codecov-action@v5
+      with:
+        name: Windows GitHub Actions ${{ matrix.python-version }}
+        disable_search: true
+        files: Tests/coverage.xml
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   test_pypy:
     timeout-minutes: 20  # a little more time
@@ -302,7 +332,7 @@ jobs:
 
     - name: Install minimal Python dependencies
       run: |
-        python -m pip install "numpy!=2.1.0"
+        python -m pip install numpy
 
     - name: Debug Info
       run: |
