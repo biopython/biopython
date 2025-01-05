@@ -46,7 +46,7 @@ jobs:
           command: |
             # Use the unzipped tar-ball where built wheel
             cd biopython-*/Tests/
-            coverage run run_tests.py --offline
+            coverage run --source Bio,BioSQL --source Bio,BioSQL run_tests.py --offline
             echo "Tests run"
             coverage xml
             echo "Overall test coverage:"

@@ -43,7 +43,7 @@ test_script:
   - python -c "import sys; print(sys.version)"
   - cd Tests
   - cp biosql.ini.appveyor biosql.ini
-  - coverage run run_tests.py --offline
+  - coverage run --source Bio,BioSQL run_tests.py --offline
   - coverage xml
   - echo "Overall AppVeyor coverage:"
   - coverage report
