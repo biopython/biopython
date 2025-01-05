@@ -49,8 +49,6 @@ jobs:
             coverage run --source Bio,BioSQL --source Bio,BioSQL run_tests.py --offline
             echo "Tests run"
             coverage xml
-            echo "Overall test coverage:"
-            coverage report
       - codecov/upload:
           upload_name: CircleCI
           disable_search: true

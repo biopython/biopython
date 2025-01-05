@@ -206,8 +206,6 @@ jobs:
         cd Tests
         PYTHONMALLOC=debug LD_PRELOAD="$(realpath "$(gcc -print-file-name=libasan.so)") $(realpath "$(gcc -print-file-name=libstdc++.so)")" ASAN_OPTIONS="detect_leaks=0" coverage run --source Bio,BioSQL run_tests.py --offline
         coverage xml
-        echo "Overall Linux GitHub Actions ${{ matrix.python-version }} coverage:"
-        coverage report
       shell: bash
 
     - name: Upload coverage to codecov
@@ -255,8 +253,6 @@ jobs:
         cd Tests
         coverage run --source Bio,BioSQL run_tests.py --offline
         coverage xml
-        echo "Overall macOS GitHub Actions ${{ matrix.python-version }} coverage:"
-        coverage report
 
     - name: Upload coverage to codecov
       uses: codecov/codecov-action@v5
@@ -305,8 +301,6 @@ jobs:
         cd Tests
         coverage run --source Bio,BioSQL run_tests.py --offline
         coverage xml
-        echo "Overall Windows GitHub Actions ${{ matrix.python-version }} coverage:"
-        coverage report
 
     - name: Upload coverage to codecov
       uses: codecov/codecov-action@v5
