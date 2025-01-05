@@ -16,6 +16,9 @@
 .. image:: https://img.shields.io/github/actions/workflow/status/biopython/biopython/ci.yml?logo=github-actions
    :alt: GitHub workflow status
    :target: https://github.com/biopython/biopython/actions
+.. image:: https://img.shields.io/codecov/c/github/biopython/biopython/master.svg?logo=codecov
+   :alt: Test coverage on CodeCov
+   :target: https://codecov.io/github/biopython/biopython/
 .. image:: http://depsy.org/api/package/pypi/biopython/badge.svg
    :alt: Research software impact on Depsy
    :target: http://depsy.org/package/python/biopython
