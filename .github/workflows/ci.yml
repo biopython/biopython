@@ -161,7 +161,7 @@ jobs:
 
   # Linux is where the thorough tests run. Install all dependencies and run all (offline) tests.
   test_linux:
-    timeout-minutes: 15
+    timeout-minutes: 20
     needs: [style, build, build_wheels, linux_prep]
     runs-on: ubuntu-latest
     strategy:
