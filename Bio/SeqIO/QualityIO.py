@@ -368,7 +368,8 @@ from collections.abc import Iterator
 from collections.abc import Mapping
 from typing import Optional
 from collections.abc import Sequence
-from typing import Union, Iterable
+from typing import Union
+from collections.abc import Iterable
 import array
 from dataclasses import dataclass
 
