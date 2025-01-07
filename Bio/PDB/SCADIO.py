@@ -23,6 +23,13 @@ for specific print customizations relevant to 3D printing (such as rotatable
 bond mechanisms or hydrogen bond magnets).  Alternatively, use e.g. Chimera to
 render a structure as ribbons or similar for printing as a single object.
 
+OpenSCAD does not currently (2024) support multi-color or multi-material
+output for 3D printing.  As a workaround, use the `colorSelect` variable in
+the OpenSCAD output to render each color separately and generate separate STL
+files to combine in the slicer.  See Jeff Bar,
+<https://nextjeff.com/creating-multi-extruder-designs-in-openscad-for-3d-printing-6c43a002ef64>
+for development of this technique.
+
 I suggest generating your initial model using the OpenSCAD script provided
 here, then modifying that script according to your needs.  Changing the
 atomScale and bondRadius values can simplify the model by removing gaps and
@@ -288,6 +295,9 @@ peptide_scad = """
 //    special handling.  Also see the per hedron render options in the hedra[]
 //    array.
 //
+//  Use the colorSel variable to restrict rendered objects by assigned color,
+       and thereby separate STL files for a multi-material printer.
+
 //  If you modify this file, you may find it useful to generate the data
 //    matrices without this OpenSCAD code by calling write_SCAD() with the
 //    includeCode=False option, then use the OpenSCAD 'include <>' facility at
@@ -299,21 +309,24 @@ rotate([-90,0,0])  // convenient for default location (no N-Ca-C start coordinat
 
 // top-level OpenSCAD $fn for visible surfaces.  Rotatable bonds use $fn=8
 // inside, regardless of this setting.
-$fn = 0;  // 0 yields OpenSCAD default of 30.  $n=8 should print with minimal support
+
+$fn = 20;  // $fn=8 should print with minimal support
 
 tubes=false;     // style: render atoms and bonds as constant diameter cylinders, preferred for rotatable bonds / h-bonds
 support=false;   // enable print-in-place internal support for rotatable bonds
 // N.B. rotatable bonds must be parallel to build plate for internal support
 // structures to be generated correctly by slicer
 
-// output parameters
+// output parameters:
+
 atomScale=1.0;  // 0.8 better for rotatable bonds
 defaultAtomRadius = 0.77;  // used if tubes = true
 
 bondRadius = (tubes ? defaultAtomRadius * atomScale : 0.4);
 jBondRadius = defaultAtomRadius * atomScale;  // radius for rotatable bonds
 
-// general printer, slicer, print settings
+// general printer, slicer, print settings:
+
 layerHeight=0.15;  // must match slicer setting for print-in-place support
 clearance=0.3;     // sliding clearance - can be smaller (0.2) if not doing print-in-place
 pClearance=0.2;    // press-fit clearance (magnets for h-bonds)
@@ -321,11 +334,12 @@ shim=0.05;         // extra to make OpenSCAD surfaces distinct in difference()
 nozzleDiameter=0.4;
 
 // need one magnet for each side of hydrogen bond, suggest 3mm x 5mm e.g. from eBay
-// use compass to identify poles if you care, North pointing (red) repels compass North pointing
+// use compass to identify poles if you care, North pointing (red) repels compass North pointer
 magR=3/2;    // magnet radius
 magL=5;      // magnet length
 
-// for $fn=8 which works nice on fdm printer
+// for $fn=8 which works nice on fdm printer:
+
 oRot = 22.5;              // 45/2, rotate to make fn=8 spheres and cylinders flat on build plate
 apmFac = cos(180/8);      // apothem factor - multiply by radius for center to octagon side distance
 octSide = 2* tan(180/8);  // multiply by radius to get length of octagon side
@@ -341,6 +355,23 @@ joinerStep = 1;           // radius difference between rotatable bond axle and e
 
 caTop = false;     // only make top of N_C-alpha_C hedron plus C-beta (see hedron() and hedron_dispatch() examples)
 
+colorSel = "all";  // [all, red, green, blue, gray, yellow, black, white]
+bondColor = "white";  // [black, white, green]
+
+/*
+//
+// Selector to restrict output according to assigned color.
+// See https://nextjeff.com/creating-multi-extruder-designs-in-openscad-for-3d-printing-6c43a002ef64
+//
+*/
+module colorSelect(Color) {
+    color(Color) {
+        if (colorSel == "all" || colorSel == Color) {
+            children();
+        }
+    }
+}
+
 /*
 //
 // Generate a sphere to represent an atom.
@@ -355,7 +386,7 @@ caTop = false;     // only make top of N_C-alpha_C hedron plus C-beta (see hedro
 module atom(a,scal,clr=0)
 {
     ad = atomData[search([a],atomData)[0]];
-    color(ad[1]) {
+    colorSelect(ad[1]) {
         rotate([0,0,fnRot]) sphere(r=((ad[2]*atomScale)*scal)+clr);
     }
 }
@@ -381,12 +412,12 @@ function hFlip(h,rev) =
 */
 module joinUnit(cOuterLen, cOuterRad, cInnerLen, cInnerRad, male=false) {
     if (male) {
-        rotate([0,0,oRot]) {
+        colorSelect(bondColor) rotate([0,0,oRot]) {
             cylinder(h=cInnerLen, r=cInnerRad, center=false, $fn=8);
             cylinder(h=cOuterLen, r=cOuterRad, center=false, $fn=8);
         }
     } else {
-        rotate([0,0,fnRot]) {
+        colorSelect(bondColor) rotate([0,0,fnRot]) {
             cylinder(h=cInnerLen, r=cInnerRad, center=false, $fn=30);
             cylinder(h=cOuterLen, r=cOuterRad, center=false, $fn=30);
         }
@@ -426,7 +457,7 @@ module joiner(bondlen, scal, male=0, ver=0, supportSelect=0) {  // ver = differe
                 if (supportSelect) {
                     rotate([0,0,i*180]) {
                         translate([0,(cOuterRad*apmFac)-0.5*layerHeight,cOuterLen/2]) {
-                                cube([oside+2*shim,layerHeight+shim,cOuterLen+2*shim],center=true);
+                            cube([oside+2*shim,layerHeight+shim,cOuterLen+2*shim],center=true);
                         }
                     }
                 }
@@ -436,7 +467,7 @@ module joiner(bondlen, scal, male=0, ver=0, supportSelect=0) {  // ver = differe
                     translate([0,(cOuterRad*apmFac)-0.5*layerHeight,cOuterLen/2]) {
                         for (j=[0:1]) {
                             rotate([0,(j?60:-60),0])
-                                cube([wid,layerHeight,2*nozzleDiameter],center=true);
+                                colorSelect(bondColor) cube([wid,layerHeight,2*nozzleDiameter],center=true);
                         }
                     }
                 }
@@ -450,7 +481,7 @@ module joiner(bondlen, scal, male=0, ver=0, supportSelect=0) {  // ver = differe
                 for(j=[0:1]) {
                     rotate([0,0,j*180]) {
                         translate([0,(cOuterRad*apmFac),cOuterLen/2]) {
-                            cube([oside+2*shim,supHeight+shim,cOuterLen+2*shim],center=true);
+                            colorSelect(bondColor) cube([oside+2*shim,supHeight+shim,cOuterLen+2*shim],center=true);
                         }
                     }
                 }
@@ -494,9 +525,10 @@ module bond(bl, br, scal, key, atm, ver, supportSel=0) {
         rotate([0,0,fnRot]) {
             difference() {
                 union() {
-                    cylinder(h=bl,r=br,center=false);
+                    colorSelect(bondColor) cylinder(h=bl,r=br,center=false);
                     if (key == HBond) {  // make extension collar for h-bond magnet
-                        rotate([0,0,oRot-fnRot]) cylinder(h=bhblen-1,r=(magR + clearance +wall),center=false, $fn=8);
+                        rotate([0,0,oRot-fnRot]) 
+                            colorSelect(bondColor) cylinder(h=bhblen-1,r=(magR + clearance +wall),center=false, $fn=8);
                     }
                 }
                 atom(atm,scal,-clearance);  // remove overlap with atom to clear area for female join
@@ -592,7 +624,7 @@ module hedron(h,rev=0,scal,split=0, supportSel) {
             cside = 7* defaultAtomRadius * atomScale * scal / 12 + (caTop ? pClearance : -pClearance);
             difference() {
                 translate([-Xdim,((rev || caTop) ? 0 : -thick),-Zdim]) {
-                    cube([2*Xdim,thick,2*Zdim]);
+                    colorSelect(bondColor) cube([2*Xdim,thick,2*Zdim]);
                 }
                 if (!caTop) {
                     rotate([0,(rev ? h[1] : 0),0])
@@ -604,7 +636,7 @@ module hedron(h,rev=0,scal,split=0, supportSel) {
                 //translate([tx+cside,0,tx+cside])
                     rotate([0,(rev ? h[1] : 0),0])
                         rotate([45,0,0])
-                        cube([cside, cside, cside], center=true);
+                        colorSelect(bondColor) cube([cside, cside, cside], center=true);
             }
         }
 
@@ -656,7 +688,7 @@ amideOnly = false; // make only the first amide
             if (h[h_class] == "NCAC") {
                 hedron(h, rev, scal, 1);
             } else if (h[h_class] == "CBCAC") {
-                color("yellow") {  // ca-cb
+                colorSelect("yellow") {  // ca-cb
                     hedron(h, rev, scal);
                 }
             }
@@ -672,20 +704,20 @@ amideOnly = false; // make only the first amide
     } else if (amideOnly) {
         if (h[h_seqpos] == 1) {
             if (h[h_class] == "CACN") {
-                color("darkgray") {
+                colorSelect("darkgray") {
                     hedron(h, rev, scal);
                 }
             }  else if (h[h_class] == "CACO") {
-                color("red") {   // c=o
+                colorSelect("red") {   // c=o
                     hedron(h, rev, scal);
                 }
             }  else if (h[h_class] == "CNCA") {
-                color("cyan") {  // h=n
+                colorSelect("cyan") {  // h=n
                     hedron(h, rev, scal);
                 }
             }
         } else if ((h[h_seqpos] == 2) && (h[h_class] == "HNCA")) {
-            color("cyan") {  // h=n
+            colorSelect("cyan") {  // h=n
                 hedron(h, rev, scal);
             }
         }
@@ -704,7 +736,7 @@ amideOnly = false; // make only the first amide
                 hedron(h, rev, scal, 0, (support ? 2 : 0));
             }
         } else if (h[h_class] == "CBCAC") {
-            color("yellow") {                     // ca-cb -- color yellow in OpenSCAD renderer
+            colorSelect("yellow") {                     // ca-cb -- color yellow in OpenSCAD renderer
                 if (h[h_seqpos] == 1 ) {         // don't make here for N-term
                 } else if (h[h_seqpos] == 5 ) {  // don't make here for C-term
                 } else {
@@ -712,7 +744,7 @@ amideOnly = false; // make only the first amide
                 }
             }
         } else if (h[h_class] == "HNCA") {
-            color("cyan") { // color h-n in OenSCAD renderer
+            colorSelect("cyan") { // color h-n in OenSCAD renderer
                 if (h[h_seqpos] == 1) {
                     if (NCap) {                      // only make at N term if variable NCap is true
                         hedron(h, rev, scal, 0, (support ? 1 : 0));
@@ -722,11 +754,11 @@ amideOnly = false; // make only the first amide
                 }
             }
         } else if (h[h_residue] == "P") {
-            color("darkgray")   // highlight Prolines in OpenSCAD renderer
+            colorSelect("darkgray")   // highlight Prolines in OpenSCAD renderer
                 hedron(h, rev, scal);
         } else {
             echo("unrecognised hedron", h[h_class]);
-            color("pink")
+            colorSelect("pink")
                 hedron(h, rev, scal, 0, (support ? 1 : 0));
         }
     }
