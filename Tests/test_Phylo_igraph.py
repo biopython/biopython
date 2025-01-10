@@ -31,7 +31,7 @@ class UtilTests(unittest.TestCase):
         """Tree to Graph conversion, simple tree."""
         tree = Phylo.read(StringIO("()()"), format="newick")
         for i, elem in enumerate(tree.find_clades()):
-            elem.name = f"elem_{i+1}"
+            elem.name = f"elem_{i + 1}"
             elem.width = f"width_{i}"
         graph = Phylo.to_igraph(tree, vertex_attributes=["name"])
         self.assertEqual(graph.vs["name"], ["elem_1", "elem_2", "elem_3"])
