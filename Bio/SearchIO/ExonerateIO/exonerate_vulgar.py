@@ -6,7 +6,6 @@
 """Bio.SearchIO parser for Exonerate vulgar output format."""
 
 import re
-from typing import Type
 
 from ._base import _BaseExonerateIndexer
 from ._base import _BaseExonerateParser
@@ -177,7 +176,7 @@ class ExonerateVulgarParser(_BaseExonerateParser):
 class ExonerateVulgarIndexer(_BaseExonerateIndexer):
     """Indexer class for exonerate vulgar lines."""
 
-    _parser: Type[_BaseExonerateParser] = ExonerateVulgarParser
+    _parser: type[_BaseExonerateParser] = ExonerateVulgarParser
     _query_mark = b"vulgar"
 
     def get_qresult_id(self, pos):

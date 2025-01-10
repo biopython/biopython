@@ -10,7 +10,6 @@ from abc import ABC
 from abc import abstractmethod
 from functools import reduce
 from typing import Optional
-from typing import Type
 
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import Hit
@@ -530,7 +529,7 @@ class _BaseExonerateParser(ABC):
 class _BaseExonerateIndexer(SearchIndexer):
     """Indexer class for Exonerate plain text."""
 
-    _parser: Optional[Type[_BaseExonerateParser]] = (
+    _parser: Optional[type[_BaseExonerateParser]] = (
         None  # should be defined by subclass
     )
     _query_mark: Optional[bytes] = None  # this one too

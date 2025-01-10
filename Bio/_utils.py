@@ -11,7 +11,6 @@ import os
 from typing import Any
 from typing import Callable
 from typing import cast
-from typing import Dict
 from typing import Optional
 from typing import Protocol
 from typing import TypeVar
@@ -74,7 +73,7 @@ def run_doctest(target_dir: Optional[str] = None, *args: Any, **kwargs: Any) -> 
     import doctest
 
     # default doctest options
-    doctest_attributes: Dict[str, Any] = {"optionflags": doctest.ELLIPSIS}
+    doctest_attributes: dict[str, Any] = {"optionflags": doctest.ELLIPSIS}
     doctest_attributes.update(kwargs)
 
     cur_dir = os.path.abspath(os.curdir)
