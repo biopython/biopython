@@ -35,14 +35,18 @@ and can optionally write Cluster Buster motif files with floats instead of
 integers, by specifying the ``precision=<int>`` parameter when writing:
 e.g. motifs.write(motifs, "clusterbuster", precision=2)
 
+The function ``flexibility`` in ``Bio.SeqUtils.ProtParam`` is re-implemented
+as to the Vihinen 1994 paper.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - Alan Medlar
 - Carlos Peña
 - Gert Hulselmans
-- Peter Cock
 - Michiel de Hoon
+- Peter Cock
+- Ruibin Liu (first contribution)
 
 28 June 2024: Biopython 1.84
 ============================

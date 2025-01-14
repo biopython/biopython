@@ -291,6 +291,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Rodrigo Dorantes-Gilardi <https://github.com/rodogi>
 - Rona Costello <https://github.com/RonaCostello>
 - Rudolf Koopmann <https://github.com/koopmann>
+- Ruibin Liu <https://github.com/Ruibin-Liu>
 - Ryan Stecher <https://github.com/rystecher>
 - Sacha Laurent <https://github.com/Cashalow>
 - Saket Choudhary <https://github.com/saketkc>
