@@ -11,8 +11,6 @@ import shutil
 import sys
 import tempfile
 
-from sphinx.ext import autodoc
-
 from Bio import __version__
 
 # -- General configuration ------------------------------------------------
