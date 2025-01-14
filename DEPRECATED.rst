@@ -97,10 +97,10 @@ wrapped is no longer available since SCOP moved to the EBI website.
 Bio.AlignInfo
 -------------
 The ``pos_specific_score_matrix`` method of the ``SummaryInfo`` class and the
-``PSSM`` class were deprecated in release 1.82. As an alternative, please use
-the ``alignment`` property of a ``MultipleSeqAlignment`` object to obtains a
-new-style ``Alignment`` object, and use it to create a ``Bio.motifs.Motif``
-object. For example,
+``PSSM`` class were deprecated in release 1.82, and removed in release 1.85. As
+an alternative, please use the ``alignment`` property of a ``MultipleSeqAlignment``
+object to obtains a new-style ``Alignment`` object, and use it to create a
+``Bio.motifs.Motif`` object. For example,
 
 >>> alignment = msa.alignment
 >>> from Bio.motifs import Motif
@@ -114,17 +114,17 @@ The ``counts`` object contains the same information as the PSSM returned by
 True
 
 The ``information_content`` method and the ``ic_vector`` attribute of the
-``SummaryInfo`` class were deprecated in release 1.82. As an alternative,
-please use the ``relative_entropy`` attribute of the ``motif`` instance (see
-above); it contains the same values as the ``ic_vector`` attribute, while
-``sum(relative_entropy)`` is equal to the value returned by
+``SummaryInfo`` class were deprecated in release 1.82, and removed in release 1.85.
+As an alternative, please use the ``relative_entropy`` attribute of the ``motif``
+instance (see above); it contains the same values as the ``ic_vector`` attribute,
+while ``sum(relative_entropy)`` is equal to the value returned by
 ``information_content``.
 
 The ``replacement_dictionary`` method of the ``SummaryInfo`` class was
-deprecated in release 1.82. As an alternative, please use the ``alignment``
-property of the ``MultipleSeqAlignment`` object to obtain a new-style
-``Alignment`` object, and use its ``substitutions`` attribute to obtain the
-replacement dictionary:
+deprecated in release 1.82, and removed in release 1.85. As an alternative, please
+use the ``alignment`` property of the ``MultipleSeqAlignment`` object to obtain a
+new-style ``Alignment`` object, and use its ``substitutions`` attribute to obtain
+the replacement dictionary:
 
 >>> alignment = msa.alignment
 >>> dictionary = alignment.substitutions
@@ -135,10 +135,10 @@ by using ``Bio.Align.read`` instead of ``Bio.AlignIO.read``, or
 ``Bio.Align.parse`` instead of ``Bio.AlignIO.parse``.
 
 The ``dumb_consensus`` and ``gap_consensus`` methods of the ``SummaryInfo``
-class were deprecated in Release 1.82.
+class were deprecated in release 1.82, and removed in release 1.85.
 
 The ``print_info_content`` function in ``Bio.Align.AlignInfo`` was deprecated
-in Release 1.82.
+in release 1.82, and removed in release 1.85.
 
 Bio.kNN
 -------
