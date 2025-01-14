@@ -367,7 +367,7 @@ gi|671626|emb|CAA85685.1|           -
         counts = motif.counts
         self.assertEqual(
             counts.calculate_consensus(identity=0.7),
-            "TATACATTAAAGNAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATATATATAATATATTTCAAATTNCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA"
+            "TATACATTAAAGNAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATATATATAATATATTTCAAATTNCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA",
         )
         self.assertEqual(
             str(counts),
@@ -910,8 +910,7 @@ EAS54_6_R         0 GTTGCTTCTGGCGTGGGTGGGGGGG 25
 """,
         )
         self.assertEqual(
-            motif.counts.calculate_consensus(identity=0.6),
-            "NTNGCNTNNNNNGNNGGNTGGNTCN"
+            motif.counts.calculate_consensus(identity=0.6), "NTNGCNTNNNNNGNNGGNTGGNTCN"
         )
 
 
