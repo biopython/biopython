@@ -10,10 +10,16 @@ https://www.open-bio.org/category/obf-projects/biopython/
 
 The latest news is at the top of this file.
 
+(In progress, not yet released): Biopython 1.86
+===============================================
+
+This release of Biopython supports Python 3.10, 3.11, 3.12 and 3.13.  It
+has also been tested on PyPy3.10 v7.3.17.
+
 15 January 2025: Biopython 1.85
 ===============================
 
-This release of Biopython supports Python 3.9, 3.10, 3.11 and 3.12. It
+This release of Biopython supports Python 3.9, 3.10, 3.11, 3.12 and 3.13. It
 has also been tested on PyPy3.9 v7.3.13. Python 3.9 is approaching end of
 life, our support for it is now deprecated.
 
