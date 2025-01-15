@@ -866,8 +866,8 @@ def _wpr(
     pdbid,
     chainid,
     picFlags: int = IC_Residue.picFlagsDefault,
-    hCut: float | None | None = None,
-    pCut: float | None | None = None,
+    hCut: float | None = None,
+    pCut: float | None = None,
 ):
     if entity.internal_coord:
         if not chainid or not pdbid:
@@ -948,8 +948,8 @@ def write_PIC(
     pdbid=None,
     chainid=None,
     picFlags: int = IC_Residue.picFlagsDefault,
-    hCut: float | None | None = None,
-    pCut: float | None | None = None,
+    hCut: float | None = None,
+    pCut: float | None = None,
 ):
     """Write Protein Internal Coordinates (PIC) to file.
 
