@@ -452,6 +452,10 @@ removed in Release 1.64.
 Class SequentialSequenceWriter was declared obsolete in Release 1.77,
 deprecated in Release 1.78, and removed in Release 1.80.
 
+Optional mode argument to the ``SequenceIterator``` and ``SequenceWriter``
+initialisation was removed in Biopython 1.85. See new ``.modes`` property
+instead.
+
 Bio.HotRand
 -----------
 Obsolete file Bio/HotRand.py was deprecated in Release 1.61, and removed in
