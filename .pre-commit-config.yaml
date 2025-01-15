@@ -32,7 +32,7 @@ repos:
     rev: 24.10.0
     hooks:
     -   id: black
-        args: [--check,--target-version,py39]
+        args: [--check,--target-version,py310]
 -   repo: https://github.com/PyCQA/flake8
     rev: 7.1.1
     hooks:
