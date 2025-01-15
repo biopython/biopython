@@ -2002,7 +2002,7 @@ class IC_Chain:
                 fp.write(" ]")
         fp.write("\n   ]\n")
 
-    def distance_plot(self, filter: np.ndarray | None | None = None) -> np.ndarray:
+    def distance_plot(self, filter: np.ndarray | None = None) -> np.ndarray:
         """Generate 2D distance plot from atomArray.
 
         Default is to calculate distances for all atoms.  To generate the
@@ -2073,9 +2073,7 @@ class IC_Chain:
         self.dihedraL14 = distplot[da[:, 0], da[:, 3]]
         self.dihedra_signs = dihedra_signs
 
-    def distance_to_internal_coordinates(
-        self, resetAtoms: bool | None | None = True
-    ) -> None:
+    def distance_to_internal_coordinates(self, resetAtoms: bool | None = True) -> None:
         """Compute chain di/hedra from from distance and chirality data.
 
         Distance properties on hedra L12, L23, L13 and dihedra L14 configured
@@ -3434,8 +3432,8 @@ class IC_Residue:
         pdbid: str = "0PDB",
         chainid: str = "A",
         picFlags: int = picFlagsDefault,
-        hCut: float | None | None = None,
-        pCut: float | None | None = None,
+        hCut: float | None = None,
+        pCut: float | None = None,
     ) -> str:
         """Write PIC format lines for this residue.
 
