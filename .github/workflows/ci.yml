@@ -40,7 +40,7 @@ jobs:
     - name: Setup Python
       uses: actions/setup-python@v5
       with:
-        python-version: 3.10
+        python-version: "3.10"
 
     - name: Installing pre-commit
       run: |
@@ -101,7 +101,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: 3.9
+        python-version: "3.10"
 
     - name: Install Python packaging tools
       run: |
@@ -363,7 +363,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: 3.10
+        python-version: "3.10"
 
     - uses: actions/cache@v4
       id: cache-pip
