@@ -195,8 +195,8 @@ class Chain(Entity["Model", "Residue"]):
     def internal_to_atom_coordinates(
         self,
         verbose: bool = False,
-        start: Optional[int] = None,
-        fin: Optional[int] = None,
+        start: int | None = None,
+        fin: int | None = None,
     ):
         """Create/update atom coordinates from internal coordinates.
 

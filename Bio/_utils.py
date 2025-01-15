@@ -9,7 +9,7 @@
 
 import os
 from typing import Any
-from typing import Callable
+from collections.abc import Callable
 from typing import cast
 from typing import Optional
 from typing import Protocol
@@ -21,7 +21,7 @@ F = TypeVar("F", bound=Callable[..., object])
 
 
 class _FunctionWithPrevious(Protocol[F]):
-    previous: Optional[int]
+    previous: int | None
     __call__: F
 
 
@@ -33,7 +33,7 @@ def function_with_previous(func: F) -> _FunctionWithPrevious[F]:
     return function_with_previous
 
 
-def find_test_dir(start_dir: Optional[str] = None) -> str:
+def find_test_dir(start_dir: str | None = None) -> str:
     """Find the absolute path of Biopython's Tests directory.
 
     Arguments:
@@ -68,7 +68,7 @@ def find_test_dir(start_dir: Optional[str] = None) -> str:
     )
 
 
-def run_doctest(target_dir: Optional[str] = None, *args: Any, **kwargs: Any) -> None:
+def run_doctest(target_dir: str | None = None, *args: Any, **kwargs: Any) -> None:
     """Run doctest for the importing module."""
     import doctest
 

@@ -362,7 +362,8 @@ are approximately equal.
 import warnings
 from math import log
 from abc import abstractmethod
-from typing import Callable, Any
+from typing import Any
+from collections.abc import Callable
 from typing import IO
 from collections.abc import Iterator
 from collections.abc import Mapping
@@ -536,7 +537,7 @@ def phred_quality_from_solexa(solexa_quality: float) -> float:
     return 10 * log(10 ** (solexa_quality / 10.0) + 1, 10)
 
 
-def _get_phred_quality(record: SeqRecord) -> Union[list[float], list[int]]:
+def _get_phred_quality(record: SeqRecord) -> list[float] | list[int]:
     """Extract PHRED qualities from a SeqRecord's letter_annotations (PRIVATE).
 
     If there are no PHRED qualities, but there are Solexa qualities, those are
@@ -1709,7 +1710,7 @@ class QualPhredWriter(SequenceWriter):
         self,
         handle: _TextIOSource,
         wrap: int = 60,
-        record2title: Optional[Callable[[SeqRecord], str]] = None,
+        record2title: Callable[[SeqRecord], str] | None = None,
     ) -> None:
         """Create a QUAL writer.
 
@@ -1731,7 +1732,7 @@ class QualPhredWriter(SequenceWriter):
         """
         super().__init__(handle)
         # self.handle = handle
-        self.wrap: Optional[int] = None
+        self.wrap: int | None = None
         if wrap:
             if wrap < 1:
                 raise ValueError
@@ -2128,7 +2129,7 @@ def PairedFastaQualIterator(
 def _fastq_generic(
     in_file: _TextIOSource,
     out_file: _TextIOSource,
-    mapping: Union[Sequence[str], Mapping[int, Optional[Union[str, int]]]],
+    mapping: Sequence[str] | Mapping[int, str | int | None],
 ) -> int:
     """FASTQ helper function where can't have data loss by truncation (PRIVATE)."""
     # For real speed, don't even make SeqRecord and Seq objects!
@@ -2154,7 +2155,7 @@ def _fastq_generic(
 def _fastq_generic2(
     in_file: _TextIOSource,
     out_file: _TextIOSource,
-    mapping: Union[Sequence[str], Mapping[int, Optional[Union[str, int]]]],
+    mapping: Sequence[str] | Mapping[int, str | int | None],
     truncate_char: str,
     truncate_msg: str,
 ) -> int:

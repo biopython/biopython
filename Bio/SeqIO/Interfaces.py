@@ -56,7 +56,7 @@ class SequenceIterator(ABC, Generic[AnyStr]):
         self,
         source: _IOSource,
         alphabet: None = None,
-        fmt: Optional[str] = None,
+        fmt: str | None = None,
     ) -> None:
         """Create a SequenceIterator object.
 

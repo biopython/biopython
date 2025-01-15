@@ -26,7 +26,7 @@ from urllib.request import urlopen
 _re_next_link = re.compile(r'<(.+)>; rel="next"')
 
 
-def _get_next_link(response: HTTPResponse) -> Optional[str]:
+def _get_next_link(response: HTTPResponse) -> str | None:
     headers = response.headers
 
     if "Link" in headers and headers["Link"]:
@@ -115,7 +115,7 @@ class _UniProtSearchResults:
 
 
 def search(
-    query: str, fields: Optional[list[str]] = None, batch_size: int = 500
+    query: str, fields: list[str] | None = None, batch_size: int = 500
 ) -> _UniProtSearchResults:
     """Search the UniProt database.
 

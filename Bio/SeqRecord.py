@@ -178,18 +178,18 @@ class SeqRecord:
 
     annotations: _AnnotationsDict
     dbxrefs: list[str]
-    _per_letter_annotations: Optional[_RestrictedDict]
+    _per_letter_annotations: _RestrictedDict | None
 
     def __init__(
         self,
-        seq: Optional[Union["Seq", "MutableSeq"]],
-        id: Optional[str] = "<unknown id>",
+        seq: Union["Seq", "MutableSeq"] | None,
+        id: str | None = "<unknown id>",
         name: str = "<unknown name>",
         description: str = "<unknown description>",
-        dbxrefs: Optional[list[str]] = None,
-        features: Optional[list["SeqFeature"]] = None,
-        annotations: Optional[_AnnotationsDict] = None,
-        letter_annotations: Optional[dict[str, Sequence[Any]]] = None,
+        dbxrefs: list[str] | None = None,
+        features: list["SeqFeature"] | None = None,
+        annotations: _AnnotationsDict | None = None,
+        letter_annotations: dict[str, Sequence[Any]] | None = None,
     ) -> None:
         """Create a SeqRecord.
 
@@ -343,7 +343,7 @@ class SeqRecord:
         dict.update(self._per_letter_annotations, value)  # type: ignore
 
     @property
-    def seq(self) -> Optional[Union["Seq", "MutableSeq"]]:
+    def seq(self) -> Union["Seq", "MutableSeq"] | None:
         """The sequence itself, as a Seq or MutableSeq object."""
         return self._seq
 
@@ -375,14 +375,14 @@ class SeqRecord:
     @classmethod
     def _from_validated(
         cls,
-        seq: Optional[Union[Seq, MutableSeq]],
-        id: Optional[str] = "<unknown id>",
+        seq: Seq | MutableSeq | None,
+        id: str | None = "<unknown id>",
         name: str = "<unknown name>",
         description: str = "<unknown description>",
-        dbxrefs: Optional[list[str]] = None,
-        features: Optional[list["SeqFeature"]] = None,
-        annotations: Optional[dict[str, Union[str, int]]] = None,
-        letter_annotations: Optional[dict[str, Sequence]] = None,
+        dbxrefs: list[str] | None = None,
+        features: list["SeqFeature"] | None = None,
+        annotations: dict[str, str | int] | None = None,
+        letter_annotations: dict[str, Sequence] | None = None,
     ) -> "SeqRecord":
         """Faster constructor for post-validated data like copies or validated parsed data"""
 
@@ -1437,7 +1437,7 @@ class SeqRecord:
         stop_symbol: str = "*",
         to_stop: bool = False,
         cds: bool = False,
-        gap: Optional[str] = None,
+        gap: str | None = None,
         # SeqRecord annotation arguments:
         id: bool = False,
         name: bool = False,

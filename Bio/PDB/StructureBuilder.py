@@ -79,7 +79,7 @@ class StructureBuilder:
         """
         self.structure = Structure(structure_id)
 
-    def init_model(self, model_id: int, serial_num: Optional[int] = None):
+    def init_model(self, model_id: int, serial_num: int | None = None):
         """Create a new Model object with given id.
 
         Arguments:
@@ -190,14 +190,14 @@ class StructureBuilder:
         self,
         name: str,
         coord: np.ndarray,
-        b_factor: Optional[float],
-        occupancy: Optional[float],
+        b_factor: float | None,
+        occupancy: float | None,
         altloc: str,
         fullname: str,
         serial_number=None,
-        element: Optional[str] = None,
-        pqr_charge: Optional[float] = None,
-        radius: Optional[float] = None,
+        element: str | None = None,
+        pqr_charge: float | None = None,
+        radius: float | None = None,
         is_pqr: bool = False,
     ):
         """Create a new Atom object.

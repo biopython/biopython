@@ -30,7 +30,7 @@ def get_predictions(qualifier: str) -> Iterator[dict]:
 
 
 def _get_mmcif_file_path_for(
-    prediction: dict, directory: Optional[Union[str, bytes, PathLike]] = None
+    prediction: dict, directory: str | bytes | PathLike | None = None
 ) -> str:
     """Get the path to the mmCIF file for an AlphaFold prediction.
 
@@ -51,7 +51,7 @@ def _get_mmcif_file_path_for(
 
 
 def download_cif_for(
-    prediction: dict, directory: Optional[Union[str, bytes, PathLike]] = None
+    prediction: dict, directory: str | bytes | PathLike | None = None
 ) -> str:
     """Download the mmCIF file for an AlphaFold prediction.
 
@@ -86,8 +86,8 @@ def download_cif_for(
 
 def get_structural_models_for(
     qualifier: str,
-    mmcif_parser: Optional[MMCIFParser] = None,
-    directory: Optional[Union[str, bytes, PathLike]] = None,
+    mmcif_parser: MMCIFParser | None = None,
+    directory: str | bytes | PathLike | None = None,
 ) -> Iterator[StructuralModel]:
     """Get the PDB structures for a UniProt accession.
 

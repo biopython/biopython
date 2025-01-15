@@ -70,7 +70,7 @@ def structure_rebuild_test(entity, verbose: bool = False, quick: bool = False) -
 
 
 def report_IC(
-    entity: Union[Structure, Model, Chain, Residue],
+    entity: Structure | Model | Chain | Residue,
     reportDict: dict[str, Any] = None,
     verbose: bool = False,
 ) -> dict[str, Any]:
@@ -340,8 +340,8 @@ def _cmp_res(
 
 
 def compare_residues(
-    e0: Union[Structure, Model, Chain],
-    e1: Union[Structure, Model, Chain],
+    e0: Structure | Model | Chain,
+    e1: Structure | Model | Chain,
     verbose: bool = False,
     quick: bool = False,
     rtol: float = None,

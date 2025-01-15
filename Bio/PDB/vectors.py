@@ -525,7 +525,7 @@ gmrz2 = np.identity(4, dtype=np.float64)
 
 def coord_space(
     a0: np.ndarray, a1: np.ndarray, a2: np.ndarray, rev: bool = False
-) -> tuple[np.ndarray, Optional[np.ndarray]]:
+) -> tuple[np.ndarray, np.ndarray | None]:
     """Generate transformation matrix to coordinate space defined by 3 points.
 
     New coordinate space will have:

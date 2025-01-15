@@ -346,7 +346,7 @@ def _get_strand_from_desc(desc, is_protein, modify_desc=True):
 class _BaseExonerateParser(ABC):
     """Abstract base class iterator for exonerate format."""
 
-    _ALN_MARK: Optional[str] = None
+    _ALN_MARK: str | None = None
 
     def __init__(self, handle):
         self.handle = handle
@@ -529,10 +529,8 @@ class _BaseExonerateParser(ABC):
 class _BaseExonerateIndexer(SearchIndexer):
     """Indexer class for Exonerate plain text."""
 
-    _parser: Optional[type[_BaseExonerateParser]] = (
-        None  # should be defined by subclass
-    )
-    _query_mark: Optional[bytes] = None  # this one too
+    _parser: type[_BaseExonerateParser] | None = None  # should be defined by subclass
+    _query_mark: bytes | None = None  # this one too
 
     def get_qresult_id(self, pos):
         raise NotImplementedError("Should be defined by subclass")

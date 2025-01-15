@@ -29,7 +29,7 @@ from Bio.SeqRecord import SeqRecord
 
 # This is a generator function!
 def NexusIterator(
-    handle: IO[str], seq_count: Optional[int] = None
+    handle: IO[str], seq_count: int | None = None
 ) -> Iterator[MultipleSeqAlignment]:
     """Return SeqRecord objects from a Nexus file.
 
@@ -57,7 +57,7 @@ def NexusIterator(
         )
 
     # TODO - Can we extract any annotation too?
-    annotations: Optional[SeqRecord._AnnotationsDict]
+    annotations: SeqRecord._AnnotationsDict | None
     if n.datatype in ("dna", "nucleotide"):
         annotations = {"molecule_type": "DNA"}
     elif n.datatype == "rna":

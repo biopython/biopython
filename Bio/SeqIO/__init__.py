@@ -376,7 +376,7 @@ making up each alignment as SeqRecords.
 #
 # --Peter
 
-from typing import Callable
+from collections.abc import Callable
 from collections.abc import Iterable
 from typing import Union
 
@@ -491,7 +491,7 @@ _FormatToWriter = {
 
 
 def write(
-    sequences: Union[Iterable[SeqRecord], SeqRecord],
+    sequences: Iterable[SeqRecord] | SeqRecord,
     handle: _TextIOSource,
     format: str,
 ) -> int:

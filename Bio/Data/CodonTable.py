@@ -56,8 +56,8 @@ class CodonTable:
     # Not always called from derived classes!
     def __init__(
         self,
-        nucleotide_alphabet: Optional[str] = None,
-        protein_alphabet: Optional[str] = None,
+        nucleotide_alphabet: str | None = None,
+        protein_alphabet: str | None = None,
         forward_table: dict[str, str] = forward_table,
         back_table: dict[str, str] = back_table,
         start_codons: list[str] = start_codons,
@@ -164,7 +164,7 @@ def make_back_table(table, default_stop_codon):
 class NCBICodonTable(CodonTable):
     """Codon table for generic nucleotide sequences."""
 
-    nucleotide_alphabet: Optional[str] = None
+    nucleotide_alphabet: str | None = None
     protein_alphabet = IUPACData.protein_letters
 
     def __init__(self, id, names, table, start_codons, stop_codons):
