@@ -142,24 +142,28 @@ in Release 1.82.
 
 Bio.kNN
 -------
-Deprecated in release 1.82, consider using scikit-learn instead.
+Deprecated in release 1.82, and removed in release 1.85.  Consider using
+scikit-learn instead.
 
 Bio.LogisticRegression
 ----------------------
-Deprecated in release 1.82, consider using scikit-learn instead.
+Deprecated in release 1.82, and removed in release 1.85.  Consider using
+scikit-learn instead.
 
 Bio.NaiveBayes
 --------------
-Deprecated in release 1.82, consider using skikit-learn instead.
+Deprecated in release 1.82, and removed in release 1.85.  Consider using
+skikit-learn instead.
 
 Bio.MaxEntropy
 --------------
-Deprecated in release 1.82, consider using scikit-learn instead.
+Deprecated in release 1.82, and removed in release 1.85.  Consider using
+scikit-learn instead.
 
 Bio.MarkovModel
 ---------------
-Deprecated in release 1.82, consider using hmmlearn
-(https://pypi.org/project/hmmlearn/) instead.
+Deprecated in release 1.82, and removed in release 1.85.  Consider using
+hmmlearn (https://pypi.org/project/hmmlearn/) instead.
 
 Bio.HMM
 -------
