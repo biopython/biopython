@@ -8,8 +8,9 @@ Python
 
 Python 3.9
 ----------
-First supported in release 1.79, although it was mostly working in 1.78.
-Support deprecated as of Release 1.84.
+No longer supported as of Release 1.86, having triggered a deprecation
+warning as of Release 1.84. First supported in release 1.79, although
+it was mostly working in 1.78.
 
 Python 3.8
 ----------

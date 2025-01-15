@@ -56,15 +56,13 @@ if setuptools_version_tuple < (70, 1) and "bdist_wheel" in sys.argv:
 
 
 # Make sure we have the right Python version.
-MIN_PY_VER = (3, 9)
+MIN_PY_VER = (3, 10)
 if sys.version_info[:2] < MIN_PY_VER:
     sys.stderr.write(
         ("ERROR: Biopython requires Python %i.%i or later. " % MIN_PY_VER)
         + ("Python %d.%d detected.\n" % sys.version_info[:2])
     )
     sys.exit(1)
-elif sys.version_info[:2] == (3, 9):
-    sys.stderr.write("WARNING: Biopython support for Python 3.9 is now deprecated.\n")
 
 
 class test_biopython(Command):
@@ -255,7 +253,6 @@ setup(
         "Operating System :: OS Independent",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
