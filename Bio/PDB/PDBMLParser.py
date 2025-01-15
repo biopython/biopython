@@ -23,7 +23,7 @@ from Bio.PDB.StructureBuilder import StructureBuilder
 
 def _parse_resolution_from(
     tree: ElementTree, namespaces: dict[str, str]
-) -> Union[float, None]:
+) -> float | None:
     for candidate in [
         "PDBx:refineCategory/PDBx:refine/PDBx:ls_d_res_high",
         "PDBx:refine_histCategory/PDBx:refine_hist/PDBx:d_res_high",
@@ -39,7 +39,7 @@ def _parse_resolution_from(
 
 def _parse_header_from(
     tree: ElementTree, namespaces: dict[str, str]
-) -> dict[str, Union[str, float]]:
+) -> dict[str, str | float]:
     return {
         "name": tree.find(
             "PDBx:structCategory/PDBx:struct/PDBx:title", namespaces
@@ -112,9 +112,7 @@ class PDBMLParser:
         """Initialize a PDBML parser."""
         self.structure_builder = StructureBuilder()
 
-    def get_structure(
-        self, source: Union[int, str, bytes, PathLike, TextIO]
-    ) -> Structure:
+    def get_structure(self, source: int | str | bytes | PathLike | TextIO) -> Structure:
         """Parse and return the PDB structure from XML source.
 
         :param Union[int, str, bytes, PathLike, TextIO] source: The XML representation of the PDB structure

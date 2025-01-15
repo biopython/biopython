@@ -13,7 +13,7 @@ from Bio.SearchIO._utils import getattr_str
 class _BaseSearchObject:
     """Abstract class for SearchIO objects."""
 
-    _NON_STICKY_ATTRS: Union[tuple, tuple[str]] = ()
+    _NON_STICKY_ATTRS: tuple | tuple[str] = ()
 
     def _transfer_attrs(self, obj):
         """Transfer instance attributes to the given object (PRIVATE).

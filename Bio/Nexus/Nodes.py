@@ -44,7 +44,7 @@ class Chain:
         """Return a list of all node ids."""
         return list(self.chain.keys())
 
-    def add(self, node: "Node", prev: Optional[int] = None) -> int:
+    def add(self, node: "Node", prev: int | None = None) -> int:
         """Attach node to another."""
         if prev is not None and prev not in self.chain:
             raise ChainException("Unknown predecessor: " + str(prev))

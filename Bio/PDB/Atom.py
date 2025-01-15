@@ -40,14 +40,14 @@ class Atom:
         self,
         name: str,
         coord: np.ndarray,
-        bfactor: Optional[float],
-        occupancy: Optional[float],
+        bfactor: float | None,
+        occupancy: float | None,
         altloc: str,
         fullname: str,
         serial_number,
-        element: Optional[str] = None,
-        pqr_charge: Optional[float] = None,
-        radius: Optional[float] = None,
+        element: str | None = None,
+        pqr_charge: float | None = None,
+        radius: float | None = None,
     ):
         """Initialize Atom object.
 
@@ -81,7 +81,7 @@ class Atom:
         """
         self.level = "A"
         # Reference to the residue
-        self.parent: Optional[Residue] = None
+        self.parent: Residue | None = None
         # the atomic data
         self.name = name  # eg. CA, spaces are removed from atom name
         self.fullname = fullname  # e.g. " CA ", spaces included
@@ -304,7 +304,7 @@ class Atom:
         """Set serial number."""
         self.serial_number = n
 
-    def set_bfactor(self, bfactor: Optional[float]):
+    def set_bfactor(self, bfactor: float | None):
         """Set isotroptic B factor."""
         self.bfactor = bfactor
 
@@ -316,11 +316,11 @@ class Atom:
         """Set alternative location specifier."""
         self.altloc = altloc
 
-    def set_occupancy(self, occupancy: Optional[float]):
+    def set_occupancy(self, occupancy: float | None):
         """Set occupancy."""
         self.occupancy = occupancy
 
-    def set_sigatm(self, sigatm_array: Optional[np.ndarray]):
+    def set_sigatm(self, sigatm_array: np.ndarray | None):
         """Set standard deviation of atomic parameters.
 
         The standard deviation of atomic parameters consists
@@ -332,7 +332,7 @@ class Atom:
         """
         self.sigatm_array = sigatm_array
 
-    def set_siguij(self, siguij_array: Optional[np.ndarray]):
+    def set_siguij(self, siguij_array: np.ndarray | None):
         """Set standard deviations of anisotropic temperature factors.
 
         :param siguij_array: standard deviations of anisotropic temperature factors.
@@ -340,7 +340,7 @@ class Atom:
         """
         self.siguij_array = siguij_array
 
-    def set_anisou(self, anisou_array: Optional[np.ndarray]):
+    def set_anisou(self, anisou_array: np.ndarray | None):
         """Set anisotropic B factor.
 
         :param anisou_array: anisotropic B factor.
@@ -348,11 +348,11 @@ class Atom:
         """
         self.anisou_array = anisou_array
 
-    def set_charge(self, pqr_charge: Optional[float]):
+    def set_charge(self, pqr_charge: float | None):
         """Set charge."""
         self.pqr_charge = pqr_charge
 
-    def set_radius(self, radius: Optional[float]):
+    def set_radius(self, radius: float | None):
         """Set radius."""
         self.radius = radius
 
@@ -383,19 +383,19 @@ class Atom:
         """Remove reference to parent."""
         self.parent = None
 
-    def get_sigatm(self) -> Optional[np.ndarray]:
+    def get_sigatm(self) -> np.ndarray | None:
         """Return standard deviation of atomic parameters."""
         return self.sigatm_array
 
-    def get_siguij(self) -> Optional[np.ndarray]:
+    def get_siguij(self) -> np.ndarray | None:
         """Return standard deviations of anisotropic temperature factors."""
         return self.siguij_array
 
-    def get_anisou(self) -> Optional[np.ndarray]:
+    def get_anisou(self) -> np.ndarray | None:
         """Return anisotropic B factor."""
         return self.anisou_array
 
-    def get_parent(self) -> Optional[Residue]:
+    def get_parent(self) -> Residue | None:
         """Return parent residue."""
         return self.parent
 
@@ -427,11 +427,11 @@ class Atom:
         """Return atomic coordinates."""
         return self.coord
 
-    def get_bfactor(self) -> Optional[float]:
+    def get_bfactor(self) -> float | None:
         """Return B factor."""
         return self.bfactor
 
-    def get_occupancy(self) -> Optional[float]:
+    def get_occupancy(self) -> float | None:
         """Return occupancy."""
         return self.occupancy
 
@@ -447,11 +447,11 @@ class Atom:
         """Return level."""
         return self.level
 
-    def get_charge(self) -> Optional[float]:
+    def get_charge(self) -> float | None:
         """Return charge."""
         return self.pqr_charge
 
-    def get_radius(self) -> Optional[float]:
+    def get_radius(self) -> float | None:
         """Return radius."""
         return self.radius
 

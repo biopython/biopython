@@ -239,7 +239,7 @@ class BinaryCIFParser:
             for index in range(len(serial_numbers))
         ]
 
-    def get_structure(self, id: Optional[str], source: str) -> Structure:
+    def get_structure(self, id: str | None, source: str) -> Structure:
         """Parse and return the PDB structure from a BinaryCIF file.
 
         :param str id: the PDB code for this structure

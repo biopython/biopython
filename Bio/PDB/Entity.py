@@ -39,7 +39,7 @@ class Entity(Generic[_Parent, _Child]):
     It deals with storage and lookup.
     """
 
-    parent: Optional[_Parent]
+    parent: _Parent | None
     child_list: list[_Child]
     child_dict: dict[Any, _Child]
     level: str

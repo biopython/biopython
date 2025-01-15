@@ -2038,20 +2038,20 @@ class Seq(_SeqAbstractBaseClass):
     not applicable to protein sequences).
     """
 
-    _data: Union[bytes, SequenceDataAbstractBaseClass]
+    _data: bytes | SequenceDataAbstractBaseClass
 
     def __init__(
         self,
-        data: Union[
-            str,
-            bytes,
-            bytearray,
-            _SeqAbstractBaseClass,
-            SequenceDataAbstractBaseClass,
-            dict,
-            None,
-        ],
-        length: Optional[int] = None,
+        data: (
+            str
+            | bytes
+            | bytearray
+            | _SeqAbstractBaseClass
+            | SequenceDataAbstractBaseClass
+            | dict
+            | None
+        ),
+        length: int | None = None,
     ):
         """Create a Seq object.
 
@@ -2483,9 +2483,7 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
         self._data = data
         super().__init__()
 
-    def __getitem__(
-        self, key: Union[slice, int]
-    ) -> Union[bytes, SequenceDataAbstractBaseClass]:
+    def __getitem__(self, key: slice | int) -> bytes | SequenceDataAbstractBaseClass:
         if isinstance(key, slice):
             start, end, step = key.indices(self._length)
             size = len(range(start, end, step))
@@ -2494,7 +2492,7 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
             data = {}
             for s, d in self._data.items():
                 indices = range(-s, -s + self._length)[key]
-                e: Optional[int] = indices.stop
+                e: int | None = indices.stop
                 assert e is not None
                 if step > 0:
                     if e <= 0:
