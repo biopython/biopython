@@ -14,7 +14,7 @@ repos:
         files: \.py$
     -   id: mixed-line-ending
 -   repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.8.6
+    rev: v0.9.1
     hooks:
     # Run the Ruff linter.
     -   id: ruff
