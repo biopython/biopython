@@ -10,12 +10,15 @@ https://www.open-bio.org/category/obf-projects/biopython/
 
 The latest news is at the top of this file.
 
-(In progress, not yet released): Biopython 1.85
-===============================================
+15 January 2025: Biopython 1.85
+===============================
 
 This release of Biopython supports Python 3.9, 3.10, 3.11 and 3.12. It
 has also been tested on PyPy3.9 v7.3.13. Python 3.9 is approaching end of
 life, our support for it is now deprecated.
+
+Some optimisation work was done for ``Bio.SeqIO`` including avoiding nested
+iterators, and speeding up both FASTA and FASTQ parsing.
 
 ``Bio.motifs`` now supports reading PFM from Cys2His2 Zinc Finger Proteins PWM
 Predictor and reading motifs in ``pfm-four-columns`` format will set motif name
@@ -34,6 +37,9 @@ for which not all statistics are provided (e.g. missing E-values or nsites).
 and can optionally write Cluster Buster motif files with floats instead of
 integers, by specifying the ``precision=<int>`` parameter when writing:
 e.g. motifs.write(motifs, "clusterbuster", precision=2)
+
+Additionally, a number of small bugs and typos have been fixed with additions
+to the test suite and type annotations.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
