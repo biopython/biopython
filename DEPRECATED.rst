@@ -115,14 +115,14 @@ The ``counts`` object contains the same information as the PSSM returned by
 True
 
 The ``information_content`` method and the ``ic_vector`` attribute of the
-``SummaryInfo`` class were deprecated in release 1.82, and removed in release 1.85.
+``SummaryInfo`` class were deprecated in release 1.82, and removed in release 1.86.
 As an alternative, please use the ``relative_entropy`` attribute of the ``motif``
 instance (see above); it contains the same values as the ``ic_vector`` attribute,
 while ``sum(relative_entropy)`` is equal to the value returned by
 ``information_content``.
 
 The ``replacement_dictionary`` method of the ``SummaryInfo`` class was
-deprecated in release 1.82, and removed in release 1.85. As an alternative, please
+deprecated in release 1.82, and removed in release 1.86. As an alternative, please
 use the ``alignment`` property of the ``MultipleSeqAlignment`` object to obtain a
 new-style ``Alignment`` object, and use its ``substitutions`` attribute to obtain
 the replacement dictionary:
@@ -136,34 +136,34 @@ by using ``Bio.Align.read`` instead of ``Bio.AlignIO.read``, or
 ``Bio.Align.parse`` instead of ``Bio.AlignIO.parse``.
 
 The ``dumb_consensus`` and ``gap_consensus`` methods of the ``SummaryInfo``
-class were deprecated in release 1.82, and removed in release 1.85.
+class were deprecated in release 1.82, and removed in release 1.86.
 
 The ``print_info_content`` function in ``Bio.Align.AlignInfo`` was deprecated
-in release 1.82, and removed in release 1.85.
+in release 1.82, and removed in release 1.86.
 
 Bio.kNN
 -------
-Deprecated in release 1.82, and removed in release 1.85.  Consider using
+Deprecated in release 1.82, and removed in release 1.86.  Consider using
 scikit-learn instead.
 
 Bio.LogisticRegression
 ----------------------
-Deprecated in release 1.82, and removed in release 1.85.  Consider using
+Deprecated in release 1.82, and removed in release 1.86.  Consider using
 scikit-learn instead.
 
 Bio.NaiveBayes
 --------------
-Deprecated in release 1.82, and removed in release 1.85.  Consider using
+Deprecated in release 1.82, and removed in release 1.86.  Consider using
 skikit-learn instead.
 
 Bio.MaxEntropy
 --------------
-Deprecated in release 1.82, and removed in release 1.85.  Consider using
+Deprecated in release 1.82, and removed in release 1.86.  Consider using
 scikit-learn instead.
 
 Bio.MarkovModel
 ---------------
-Deprecated in release 1.82, and removed in release 1.85.  Consider using
+Deprecated in release 1.82, and removed in release 1.86.  Consider using
 hmmlearn (https://pypi.org/project/hmmlearn/) instead.
 
 Bio.HMM
@@ -226,7 +226,7 @@ The ``instances`` attribute of the ``Motif`` class  in ``Bio.motifs`` was
 deprecated in release 1.82. Instead of ``mymotif.instances``, please use
 ``mymotif.alignment.sequences``.
 
-The ``Instance`` class in ``Bio.motifs.meme`` was deprecated in release 1.85.
+The ``Instance`` class in ``Bio.motifs.meme`` was deprecated in release 1.86.
 This class is a subclass from ``Seq``, but does not provide any additional
 capabilities. Please use a ``Seq`` object instead.
 
