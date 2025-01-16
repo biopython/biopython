@@ -3580,7 +3580,9 @@ class Alignment:
                     # Don't count seq1 vs seq2 and seq2 vs seq1
                     break
                 for a, b in zip(seq1, seq2):
-                    if a == "-" or b == "-":
+                    if a == "-" and b == "-":
+                        pass
+                    elif a == "-" or b == "-":
                         gaps += 1
                     elif a == b:
                         identities += 1
