@@ -181,7 +181,7 @@ Bio.Data.PDBData instead.
 Bio.Application and the command line wrappers using it
 ------------------------------------------------------
 Declared obsolete in release 1.79, deprecated in release 1.82, and removed
-tn release 1.85. Please use the standard library subprocess module directly
+in release 1.86. Please use the standard library subprocess module directly
 instead.
 
 Bio.Index
@@ -497,7 +497,7 @@ BlastpgpCommandline and RpsBlastCommandline were declared obsolete in Release
 1.53, deprecated in Release 1.61, and removed in Release 1.64, having been
 replaced with wrappers for the new NCBI BLAST+ tools (e.g.
 NcbiblastpCommandline and NcbipsiblastCommandline). This module was removed
-in release 1.85 as it relied on Bio.Application, which was being removed.
+in release 1.86 as it relied on Bio.Application, which was being removed.
 
 Bio.Blast.ParseBlastTable
 -------------------------
