@@ -606,7 +606,7 @@ customized.
                      0 AGGTTT-- 6
    <BLANKLINE>
    >>> alignment.counts()
-   AlignmentCounts(gaps=8, identities=14, mismatches=2)
+   AlignmentCounts(gaps=6, identities=14, mismatches=2)
 
 Letter frequencies
 ~~~~~~~~~~~~~~~~~~
