@@ -1465,7 +1465,7 @@ The expected frequency of residue pairs is then
 
 Here, ``background[:, None]`` creates a 2D array consisting of a single
 column with the values of ``expected_frequencies``, and
-``rxpected_frequencies[None, :]`` a 2D array with these values as a
+``expected_frequencies[None, :]`` a 2D array with these values as a
 single row. Taking their dot product (inner product) creates a matrix of
 expected frequencies where each entry consists of two
 ``expected_frequencies`` values multiplied with each other. For example,
