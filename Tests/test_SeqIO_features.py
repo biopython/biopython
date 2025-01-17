@@ -15,7 +15,6 @@ from io import StringIO
 
 from test_SeqIO import SeqIOTestBaseClass
 
-from Bio import BiopythonDeprecationWarning
 from Bio import BiopythonWarning
 from Bio import SeqIO
 from Bio.Data.CodonTable import TranslationError
@@ -95,15 +94,8 @@ class SeqIOFeatureTestBaseClass(SeqIOTestBaseClass):
         self.assertEqual(old.location.start, new.location.start, msg=msg)
         if old.location.strand is not None:
             self.assertEqual(old.location.strand, new.location.strand, msg=msg)
-            with warnings.catch_warnings():
-                warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
-                self.assertEqual(old.location.strand, new.strand)
         self.assertEqual(old.location.ref, new.location.ref, msg=msg)
         self.assertEqual(old.location.ref_db, new.location.ref_db, msg=msg)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
-            self.assertEqual(old.location.ref, new.ref)
-            self.assertEqual(old.location.ref_db, new.ref_db)
         self.assertEqual(
             getattr(old.location, "operator", None),
             getattr(new.location, "operator", None),
