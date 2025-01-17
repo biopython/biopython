@@ -8,8 +8,8 @@
 
 """Bio.SearchIO parser for Infernal plain text output format."""
 
-import re
 import operator
+import re
 
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import HSP
