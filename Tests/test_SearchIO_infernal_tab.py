@@ -210,10 +210,98 @@ class CmscanCases(unittest.TestCase):
         self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(count, 1)
 
+    def test_cmscan_mq_mm_fmt2_infer(self):
+        """Test parsing infernal-tab, cmscan, multiple queries, multiple hit, one hsp, fmt 2, inferred (IRES_5S_U2_Yeast_fmt_2)"""
+        tab_file = get_file("cmscan_115_IRES_5S_U2_Yeast_fmt_2.tbl")
+        qresults = parse(tab_file, FMT)
+        counter = itertools.count(start=1)
+
+        # first qresult
+        qresult, count = next_result(qresults, counter)
+        self.assertEqual(len(qresult), 1)
+        self.assertEqual(qresult.id, "ENA|BK006936|BK006936.2")
+        self.assertEqual(qresult.accession, "-")
+        self.assertEqual(qresult.clan, "-")
+        self.assertEqual(qresult.seq_len, 813184)
+        hit = qresult[0]
+        self.assertEqual(len(hit), 1)
+        self.assertEqual(hit.id, "U2")
+        self.assertEqual(hit.accession, "RF00004")
+        self.assertEqual(hit.description, "U2 spliceosomal RNA")
+        self.assertEqual(hit.seq_len, 193)
+        # first hsp
+        hsp = hit[0]
+        self.assertEqual(len(hsp), 1)
+        self.assertEqual(hsp.evalue, 1.2e-20)
+        self.assertEqual(hsp.bitscore, 98.7)
+        self.assertEqual(hsp.bias, 0.1)
+        self.assertEqual(hsp.gc, 0.33)
+        self.assertEqual(hsp.truncated, "no")
+        self.assertEqual(hsp.model, "cm")
+        self.assertEqual(hsp.pipeline_pass, 1)
+        self.assertTrue(hsp.is_included)
+        self.assertEqual("*", hsp.olp)
+        self.assertEqual("-", hsp.anyidx)
+        self.assertEqual("-", hsp.afrct1)
+        self.assertEqual("-", hsp.afrct2)
+        self.assertEqual("-", hsp.winidx)
+        self.assertEqual("-", hsp.wfrct1)
+        self.assertEqual("-", hsp.wfrct2)
+        frag = hsp[0]
+        self.assertEqual(frag.query_start, 1)
+        self.assertEqual(frag.query_end, 193)
+        self.assertEqual(frag.hit_start, 681747)
+        self.assertEqual(frag.hit_end, 681858)
+        self.assertEqual(frag.hit_strand, -1)
+
+        # test if we've properly finished iteration
+        self.assertRaises(StopIteration, next, qresults)
+        self.assertEqual(count, 1)
+
     def test_cmscan_mq_mm_fmt3(self):
         """Test parsing infernal-tab, cmscan, multiple queries, multiple hit, one hsp, fmt 3 (IRES_5S_U2_Yeast_fmt_3)"""
         tab_file = get_file("cmscan_115_IRES_5S_U2_Yeast_fmt_3.tbl")
         qresults = parse(tab_file, FMT, fmt=3)
+        counter = itertools.count(start=1)
+
+        # first qresult
+        qresult, count = next_result(qresults, counter)
+        self.assertEqual(len(qresult), 1)
+        self.assertEqual("ENA|BK006936|BK006936.2", qresult.id)
+        self.assertEqual(qresult.accession, "-")
+        self.assertEqual(813184, qresult.seq_len)
+        hit = qresult[0]
+        self.assertEqual(len(hit), 1)
+        self.assertEqual(hit.id, "U2")
+        self.assertEqual(hit.accession, "RF00004")
+        self.assertEqual(hit.description, "U2 spliceosomal RNA")
+        self.assertEqual(193, hit.seq_len)
+        # first hsp
+        hsp = hit[0]
+        self.assertEqual(len(hsp), 1)
+        self.assertEqual(hsp.evalue, 1.2e-20)
+        self.assertEqual(hsp.bitscore, 98.7)
+        self.assertEqual(hsp.bias, 0.1)
+        self.assertEqual(hsp.gc, 0.33)
+        self.assertEqual(hsp.truncated, "no")
+        self.assertEqual(hsp.model, "cm")
+        self.assertEqual(hsp.pipeline_pass, 1)
+        self.assertTrue(hsp.is_included)
+        frag = hsp[0]
+        self.assertEqual(frag.query_start, 1)
+        self.assertEqual(frag.query_end, 193)
+        self.assertEqual(frag.hit_start, 681747)
+        self.assertEqual(frag.hit_end, 681858)
+        self.assertEqual(frag.hit_strand, -1)
+
+        # test if we've properly finished iteration
+        self.assertRaises(StopIteration, next, qresults)
+        self.assertEqual(count, 1)
+
+    def test_cmscan_mq_mm_fmt3_infer(self):
+        """Test parsing infernal-tab, cmscan, multiple queries, multiple hit, one hsp, fmt 3, inferred (IRES_5S_U2_Yeast_fmt_3)"""
+        tab_file = get_file("cmscan_115_IRES_5S_U2_Yeast_fmt_3.tbl")
+        qresults = parse(tab_file, FMT)
         counter = itertools.count(start=1)
 
         # first qresult

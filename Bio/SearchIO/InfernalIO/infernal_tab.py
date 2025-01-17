@@ -92,7 +92,80 @@ _TAB_FORMAT = {
         "description",
     ),
 }
-_DEFAULT_TAB_FORMAT = 1
+
+_TABULAR_FMT_1_HEADER_FIELDS = [
+    "target name",
+    "accession",
+    "query name",
+    "accession",
+    "mdl",
+    "mdl from",
+    "mdl to",
+    "seq from",
+    "seq to",
+    "strand",
+    "trunc",
+    "pass",
+    "gc",
+    "bias",
+    "score",
+    "E-value",
+    "inc",
+    "description of target",
+]
+_TABULAR_FMT_2_HEADER_FIELDS = [
+    "idx",
+    "target name",
+    "accession",
+    "query name",
+    "accession",
+    "clan name",
+    "mdl",
+    "mdl from",
+    "mdl to",
+    "seq from",
+    "seq to",
+    "strand",
+    "trunc",
+    "pass",
+    "gc",
+    "bias",
+    "score",
+    "E-value",
+    "inc",
+    "olp",
+    "anyidx",
+    "afrct1",
+    "afrct2",
+    "winidx",
+    "wfrct1",
+    "wfrct2",
+    "mdl len",
+    "seq len",
+    "description of target",
+]
+_TABULAR_FMT_3_HEADER_FIELDS = [
+    "target name",
+    "accession",
+    "query name",
+    "accession",
+    "mdl",
+    "mdl from",
+    "mdl to",
+    "seq from",
+    "seq to",
+    "strand",
+    "trunc",
+    "pass",
+    "gc",
+    "bias",
+    "score",
+    "E-value",
+    "inc",
+    "mdl len",
+    "seq len",
+    "description of target",
+]
 
 # column to class attribute map
 _COLUMN_QRESULT = {
@@ -134,25 +207,77 @@ _COLUMN_FRAG = {
 }
 
 
+def tabular_format_from_header(header_label, header_delim):
+    """Determine the tabular format based on the header (PRIVATE)."""
+    # infernal tabular output columns are space separated files with spaces in
+    # column names, ex:
+    # #target name         accession
+    # #------------------- ---------
+    # so we use the second line of the header where the is not spaces to
+    # determine the position of the headers labels. Then we can get the label names
+    # and compare the the different tabular format names. This label comparison is done
+    # (instead of counting fields) to avoid issues if future tabular format have the
+    # same number of fields, but with different signification
+
+    # get the indices of the spaces fields delimiter from the second header line
+    # the end of the file is added to the indices to process the last field
+    indices = [idx for idx, char in enumerate(header_delim) if char == " "] + [
+        len(header_delim)
+    ]
+    prev_idx = 1
+    fields = []
+    for idx in indices:
+        fields.append(header_label[prev_idx:idx].strip())
+        prev_idx = idx
+
+    # compare the headers fields to the possible fields to determine the format
+    if fields == _TABULAR_FMT_1_HEADER_FIELDS:
+        return 1
+    elif fields == _TABULAR_FMT_2_HEADER_FIELDS:
+        return 2
+    elif fields == _TABULAR_FMT_3_HEADER_FIELDS:
+        return 3
+    else:
+        raise ValueError(
+            "Cannot determine the tabular format from the header. \
+                         The tabular file is likely incorrect or its format is unsupported. \
+                         Tabular format 1, 2 and 3 are currently supported)."
+        )
+
+
 class InfernalTabParser(_BaseInfernalParser):
     """Parser for the Infernal tabular format."""
 
-    def __init__(self, handle, fmt=_DEFAULT_TAB_FORMAT):
+    def __init__(self, handle, fmt=None):
         """Initialize the class."""
         self.handle = handle
-        self.line = self.handle.readline().strip()
-        if not isinstance(fmt, int):
-            raise TypeError
-        if not 1 <= fmt <= 3:
-            raise ValueError("Invalid tabular format number, must be 1, 2 or 3.")
-        self.fmt = fmt
+        # if a tabular fmt is specified, set its value
+        if isinstance(fmt, int):
+            if not 1 <= fmt <= 3:
+                raise ValueError(
+                    "Unsupported tabular format. Format 1, 2 and 3 are currently supported."
+                )
+            self.fmt = fmt
+        # if the format is not provided by the user, guess the format
+        else:
+            self.line = self.handle.readline().strip()
+            header_label = self.line
+            self.line = self.handle.readline().strip()
+            header_delim = self.line
+            if header_label == "" or header_delim == "":
+                raise ValueError(
+                    "Unexpected empty line in the header of Infernal tabular output."
+                )
+
+            self.fmt = tabular_format_from_header(header_label, header_delim)
 
     def __iter__(self):
         """Iterate over InfernalTabParser, yields query results."""
-        # read through the header and footer
+        # read through the header (and footer if there is no results)
+        self.line = self.handle.readline()
         while self.line.startswith("#"):
             self.line = self.handle.readline()
-        # if we have result rows, parse it
+        # if we have result rows, parse them
         if self.line:
             yield from self._parse_qresult()
 
@@ -281,15 +406,52 @@ class InfernalTabParser(_BaseInfernalParser):
             self.line = self.handle.readline()
 
 
-class InfernalTabIndexer(SearchIndexer):
+class InfernalTabIndexer(SearchIndexer, _BaseInfernalParser):
     """Indexer class for Infernal tabular output."""
 
     _parser = InfernalTabParser
+    # tabular format is guessed from the header, so we need to keep it while iterating
+    # over the file handle, and add it to the raw bytes string
+    _header = b""
 
-    def __init__(self, filename, fmt=_DEFAULT_TAB_FORMAT):
+    def __init__(self, filename, fmt=None):
         """Initialize the class."""
         SearchIndexer.__init__(self, filename, fmt=fmt)
-        self._query_id_idx = 3 if fmt == 2 else 2
+        self._parse_header()
+
+        # the index of the query id column in the tabular file varies depending on the fmt
+        # we need to use the format set by the user, or infer the format to parse the records
+        if isinstance(fmt, int):
+            if not 1 <= fmt <= 3:
+                raise ValueError(
+                    "Unsupported tabular format. Format 1, 2 and 3 are currently supported."
+                )
+            self._query_id_idx = 3 if fmt == 2 else 2
+        # if the format is not provided by the user, infer the format
+        else:
+            header = self._header.strip().split(b"\n")
+            if len(header) < 2:
+                print(header)
+                raise ValueError(
+                    "Unexpected header format. Cannot infer Infernal tabular format for this file, \
+                                 please set the format manually."
+                )
+            self._query_id_idx = (
+                3
+                if tabular_format_from_header(header[0].decode(), header[1].decode())
+                == 2
+                else 2
+            )
+
+    def _parse_header(self):
+        """Save the content of the header of the tabular file for downstream processing (PRIVATE)."""
+        handle = self._handle
+        handle.seek(0)
+        while True:
+            line = handle.readline()
+            if not line or not line.startswith(b"#"):
+                break
+            self._header += line
 
     def __iter__(self):
         """Iterate over the file handle; yields key, start offset, and length."""
@@ -298,7 +460,7 @@ class InfernalTabIndexer(SearchIndexer):
         qresult_key = None
         start_offset = handle.tell()
 
-        # set line with initial mock value
+        # set line with mock value
         line = b"#"
 
         # read through header
@@ -336,7 +498,7 @@ class InfernalTabIndexer(SearchIndexer):
         """Return the raw bytes string of a QueryResult object from the given offset."""
         handle = self._handle
         qresult_key = None
-        qresult_raw = b""
+        qresult_raw = self._header
 
         # read the qresult raw string
         handle.seek(offset)
