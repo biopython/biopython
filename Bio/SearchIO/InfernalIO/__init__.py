@@ -181,7 +181,7 @@ Rows marked with '*' denotes attributes not available in the default format (fmt
 |                 |                         | (5', 3' or both) or not          |
 |                 +-------------------------+----------------------------------+
 |                 | pipeline_pass           | pipeline pass at which the hit   |
-|                 |                         | was identifie                    |
+|                 |                         | was identified                   |
 |                 +-------------------------+----------------------------------+
 |                 | olp*                    | overlap status of this hit       |
 |                 +-------------------------+----------------------------------+
