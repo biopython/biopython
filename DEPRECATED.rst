@@ -407,8 +407,9 @@ Bio.SeqFeature
 --------------
 
 Release 1.82 unfortunately removed the ``.strand``, ``.ref``, and ``.ref_db``
-attributes of the ``SeqFeature`` without a deprecation period. Release 1.83
-restored but deprecated them. Please use ``.location.strand`` etc instead.
+attributes of the ``SeqFeature`` without a deprecation period. These attributes
+were restored but deprecated in Release 1.83, and removed in Release 1.86.
+Please use ``.location.strand`` etc instead.
 
 With the introduction of the CompoundLocation in Release 1.62, the SeqFeature
 attribute sub_features was deprecated. It was removed in Release 1.68.

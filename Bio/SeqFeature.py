@@ -67,7 +67,6 @@ import warnings
 from abc import ABC
 from abc import abstractmethod
 
-from Bio import BiopythonDeprecationWarning
 from Bio import BiopythonParserWarning
 from Bio.Seq import MutableSeq
 from Bio.Seq import reverse_complement
@@ -224,92 +223,6 @@ class SeqFeature:
             self.qualifiers.update(qualifiers)
         if sub_features is not None:
             raise TypeError("Rather than sub_features, use a CompoundLocation")
-
-    def _get_strand(self):
-        """Get function for the strand property (PRIVATE)."""
-        warnings.warn(
-            "Please use .location.strand rather than .strand",
-            BiopythonDeprecationWarning,
-        )
-        return self.location.strand
-
-    def _set_strand(self, value):
-        """Set function for the strand property (PRIVATE)."""
-        warnings.warn(
-            "Please use .location.strand rather than .strand",
-            BiopythonDeprecationWarning,
-        )
-        try:
-            self.location.strand = value
-        except AttributeError:
-            if self.location is None:
-                if value is not None:
-                    raise ValueError("Can't set strand without a location.") from None
-            else:
-                raise
-
-    strand = property(
-        fget=_get_strand,
-        fset=_set_strand,
-        doc="Alias for the location's strand (DEPRECATED).",
-    )
-
-    def _get_ref(self):
-        """Get function for the reference property (PRIVATE)."""
-        warnings.warn(
-            "Please use .location.ref rather than .ref",
-            BiopythonDeprecationWarning,
-        )
-        try:
-            return self.location.ref
-        except AttributeError:
-            return None
-
-    def _set_ref(self, value):
-        """Set function for the reference property (PRIVATE)."""
-        warnings.warn(
-            "Please use .location.ref rather than .ref",
-            BiopythonDeprecationWarning,
-        )
-        try:
-            self.location.ref = value
-        except AttributeError:
-            if self.location is None:
-                if value is not None:
-                    raise ValueError("Can't set ref without a location.") from None
-            else:
-                raise
-
-    ref = property(
-        fget=_get_ref,
-        fset=_set_ref,
-        doc="Alias for the location's ref (DEPRECATED).",
-    )
-
-    def _get_ref_db(self):
-        """Get function for the database reference property (PRIVATE)."""
-        warnings.warn(
-            "Please use .location.ref_db rather than .ref_db",
-            BiopythonDeprecationWarning,
-        )
-        try:
-            return self.location.ref_db
-        except AttributeError:
-            return None
-
-    def _set_ref_db(self, value):
-        """Set function for the database reference property (PRIVATE)."""
-        warnings.warn(
-            "Please use .location.ref_db rather than .ref_db",
-            BiopythonDeprecationWarning,
-        )
-        self.location.ref_db = value
-
-    ref_db = property(
-        fget=_get_ref_db,
-        fset=_set_ref_db,
-        doc="Alias for the location's ref_db (DEPRECATED).",
-    )
 
     def __eq__(self, other):
         """Check if two SeqFeature objects should be considered equal."""
