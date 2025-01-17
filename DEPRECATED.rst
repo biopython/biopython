@@ -203,15 +203,16 @@ The ``format`` method of the ``Motif`` class in ``Bio.motifs`` was deprecated
 in release 1.77, in favor of a ``__format__`` method that can be used from the
 ``format`` built-in function. This decision was reversed in release 1.79.
 The ``search`` method of the ``Instances`` class in ``Bio.motifs`` was
-deprecated in release 1.82. Instead of ``instances.search(sequence)``,
-``sequence.search(instances)`` can be used, where sequence is a Seq object.
-This allows instances to have different lengths.
+deprecated in release 1.82, and removed in release 1.86. Instead of
+``instances.search(sequence)``, ``sequence.search(instances)`` can be used,
+where sequence is a Seq object. This allows instances to have different lengths.
 The ``version`` parameter of the ``weblogo`` method of the ``Motif`` class in
 ``Bio.motifs`` was deprecated in release 1.83. Using the parameter has no
 effect.
 
 The ``Instances`` class and the ``instances`` argument of the ``Motif`` class
-initializer in ``Bio.motifs`` were deprecated in release 1.82. Instead of
+initializer in ``Bio.motifs`` were deprecated in release 1.82, and removed in
+release 1.86. Instead of
 
 >>> from Bio.motifs import Instances
 >>> instances = Instances([Seq('ACGT'), Seq('ACCT'), Seq('AAGT')])
@@ -224,10 +225,10 @@ please use
 >>> motif = Motif(alphabet='ACGT', alignment=alignment)
 
 The ``instances`` attribute of the ``Motif`` class  in ``Bio.motifs`` was
-deprecated in release 1.82. Instead of ``mymotif.instances``, please use
-``mymotif.alignment.sequences``.
+deprecated in release 1.82, and removed in release 1.86. Instead of
+``mymotif.instances``, please use ``mymotif.alignment.sequences``.
 
-The ``Instance`` class in ``Bio.motifs.meme`` was deprecated in release 1.86.
+The ``Instance`` class in ``Bio.motifs.meme`` was deprecated in release 1.85.
 This class is a subclass from ``Seq``, but does not provide any additional
 capabilities. Please use a ``Seq`` object instead.
 

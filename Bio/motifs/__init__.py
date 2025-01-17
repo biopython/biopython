@@ -31,7 +31,6 @@ except ImportError:
 
 from Bio import BiopythonDeprecationWarning
 from Bio.Align import Alignment
-from Bio.Seq import reverse_complement, reverse_complement_rna
 
 
 def create(instances, alphabet="ACGT"):
@@ -187,163 +186,14 @@ def read(handle, fmt, strict=True):
     return motif
 
 
-class Instances(list):
-    """Class containing a list of sequences that made the motifs."""
-
-    def __init__(self, instances=None, alphabet="ACGT"):
-        """Initialize the class."""
-        from Bio.Seq import MutableSeq
-        from Bio.Seq import Seq
-
-        warnings.warn(
-            "The Instances class has been deprecated; please use the\n"
-            "Alignment class in Bio.Align instead.\n"
-            "To create a Motif instance, instead of"
-            "\n"
-            ">>> from Bio.motifs import Instances\n"
-            ">>> instances = Instances([Seq('ACGT'), Seq('ACCT'), Seq('AAGT')])\n"
-            ">>> motif = Motif(alphabet='ACGT', instances=instances)\n"
-            "\n"
-            "please use\n"
-            "\n"
-            ">>> from Bio.Align import Alignment\n"
-            ">>> alignment = Alignment([Seq('ACGT'), Seq('ACCT'), Seq('AAGT')])\n"
-            ">>> motif = Motif(alphabet='ACGT', alignment=alignment)\n",
-            BiopythonDeprecationWarning,
-        )
-        if isinstance(instances, (Seq, MutableSeq, str)):
-            raise TypeError(
-                "instances should be iterator of Seq objects or strings. "
-                "If a single sequence is given, will treat each character "
-                "as a separate sequence."
-            )
-
-        length = None
-        if instances is not None:
-            sequences = []
-            for instance in instances:
-                if length is None:
-                    length = len(instance)
-                elif length != len(instance):
-                    message = (
-                        "All instances should have the same length (%d found, %d expected)"
-                        % (len(instance), length)
-                    )
-                    raise ValueError(message)
-                if not isinstance(instance, Seq):
-                    instance = Seq(str(instance))
-                sequences.append(instance)
-            # no errors were raised; store the instances:
-            self.extend(sequences)
-        self.length = length
-        self.alphabet = alphabet
-
-    def __str__(self):
-        """Return a string containing the sequences of the motif."""
-        text = ""
-        for instance in self:
-            text += str(instance) + "\n"
-        return text
-
-    def count(self):
-        """Count nucleotides in a position."""
-        counts = {}
-        for letter in self.alphabet:
-            counts[letter] = [0] * self.length
-        for instance in self:
-            for position, letter in enumerate(instance):
-                counts[letter][position] += 1
-        return counts
-
-    def search(self, sequence):
-        """Find positions of motifs in a given sequence.
-
-        This is a generator function, returning found positions of motif
-        instances in a given sequence.
-        """
-        warnings.warn(
-            """instances.search(sequence) has been deprecated. Please use sequence.search(instances) instead, where sequence is a Seq object.""",
-            BiopythonDeprecationWarning,
-        )
-        for pos in range(len(sequence) - self.length + 1):
-            for instance in self:
-                if instance == sequence[pos : pos + self.length]:
-                    yield (pos, instance)
-                    break  # no other instance will fit (we don't want to return multiple hits)
-
-    def reverse_complement(self):
-        """Compute reverse complement of sequences."""
-        from Bio.Seq import MutableSeq
-        from Bio.Seq import Seq
-        from Bio.SeqRecord import SeqRecord
-
-        instances = Instances(alphabet=self.alphabet)
-        instances.length = self.length
-        if sorted(self.alphabet) == ["A", "C", "G", "T"]:
-            for instance in self:
-                if isinstance(instance, (Seq, MutableSeq, SeqRecord)):
-                    instance = instance.reverse_complement()
-                elif isinstance(instance, str):
-                    instance = reverse_complement(instance)
-                else:
-                    raise RuntimeError(
-                        "instance has unexpected type %s" % type(instance)
-                    )
-                instances.append(instance)
-        elif sorted(self.alphabet) == ["A", "C", "G", "U"]:
-            for instance in self:
-                if isinstance(instance, (Seq, MutableSeq, SeqRecord)):
-                    instance = instance.reverse_complement_rna()
-                elif isinstance(instance, str):
-                    instance = reverse_complement_rna(instance)
-                else:
-                    raise RuntimeError(
-                        "instance has unexpected type %s" % type(instance)
-                    )
-                instances.append(instance)
-        else:
-            raise ValueError(
-                "Calculating reverse complement only works for DNA and RNA instances"
-            )
-        return instances
-
-
 class Motif:
     """A class representing sequence motifs."""
 
-    def __init__(self, alphabet="ACGT", alignment=None, counts=None, instances=None):
+    def __init__(self, alphabet="ACGT", alignment=None, counts=None):
         """Initialize the class."""
         from . import matrix
 
         self.name = ""
-        if instances is not None and alignment is not None:
-            raise Exception(
-                ValueError, "Specify either alignment or instances, don't specify both"
-            )
-        if isinstance(alignment, Instances):
-            instances = alignment
-            alignment = None
-        if instances is not None:
-            warnings.warn(
-                "The instances argument has been deprecated.\n"
-                "Instead of"
-                "\n"
-                ">>> instances = [Seq('ACGT'), Seq('ACCT'), Seq('AAGT')]\n"
-                ">>> motif = Motif(alphabet='ACGT', instances=instances)\n"
-                "\n"
-                "please use\n"
-                "\n"
-                ">>> from Bio.Align import Alignment\n"
-                ">>> alignment = Alignment([Seq('ACGT'), Seq('ACCT'), Seq('AAGT')])\n"
-                ">>> motif = Motif(alphabet='ACGT', alignment=alignment)\n",
-                BiopythonDeprecationWarning,
-            )
-            if counts is not None:
-                raise Exception(
-                    ValueError, "Specify either counts or instances, don't specify both"
-                )
-            alignment = Alignment(instances)
-            alphabet = instances.alphabet
         if counts is not None and alignment is not None:
             raise Exception(
                 ValueError, "Specify either counts or an alignment, don't specify both"
@@ -493,17 +343,6 @@ class Motif:
     def pssm(self):
         """Calculate and return the position specific scoring matrix for this motif."""
         return self.pwm.log_odds(self._background)
-
-    @property
-    def instances(self):
-        """Return the sequences from which the motif was built."""
-        warnings.warn(
-            """The instances attribute has been deprecated. Instead of mymotif.instances, please use mymotif.alignment.sequences.""",
-            BiopythonDeprecationWarning,
-        )
-        if self.alignment is None:
-            return None
-        return self.alignment.sequences
 
     def __str__(self, masked=False):
         """Return string representation of a motif."""
