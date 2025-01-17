@@ -11,7 +11,6 @@ import warnings
 from copy import deepcopy
 from os import path
 
-from Bio import BiopythonDeprecationWarning
 from Bio import BiopythonParserWarning
 from Bio import Seq
 from Bio import SeqIO
@@ -203,19 +202,6 @@ class TestSeqFeature(unittest.TestCase):
         f.qualifiers["transl_table"] = [11]
         with self.assertRaises(TranslationError):
             f.translate(seq)
-
-    def test_location_aliases(self):
-        f = SeqFeature(None, type="CDS")
-        with warnings.catch_warnings(record=True) as w:
-            warnings.simplefilter("ignore", BiopythonDeprecationWarning)
-            with self.assertRaisesRegex(
-                AttributeError,
-                # "The .strand alias is only available when .location is defined.",
-                "'NoneType' object has no attribute 'strand'",
-            ):
-                f.strand
-            self.assertEqual(None, f.ref)
-            self.assertEqual(None, f.ref_db)
 
 
 class TestLocations(unittest.TestCase):
