@@ -15,7 +15,6 @@ try:
 except ImportError:
     np = None  # type: ignore
 
-from Bio import BiopythonDeprecationWarning
 from Bio import SeqIO
 from Bio.Seq import MutableSeq
 from Bio.Seq import Seq
@@ -129,11 +128,6 @@ class SeqRecordCreation(unittest.TestCase):
     def test_valid_features(self):
         with self.assertRaises(TypeError):
             SeqRecord(Seq("ACGT"), features={})
-
-    def test_deprecated_string_seq(self):
-        with self.assertWarns(BiopythonDeprecationWarning):
-            record = SeqRecord("ACGT")
-            self.assertTrue(isinstance(record._seq, Seq))
 
 
 class SeqRecordMethods(unittest.TestCase):
