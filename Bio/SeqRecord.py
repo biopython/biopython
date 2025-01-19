@@ -13,7 +13,6 @@
 # In particular, the SeqRecord and BioSQL.BioSeq.DBSeqRecord classes
 # need to be in sync (this is the BioSQL "Database SeqRecord").
 import numbers
-import warnings
 from io import StringIO
 from typing import Any
 from typing import cast
@@ -25,7 +24,6 @@ from collections.abc import Sequence
 from typing import TYPE_CHECKING
 from typing import Union
 
-from Bio import BiopythonDeprecationWarning
 from Bio import StreamModeError
 from Bio.Seq import MutableSeq
 from Bio.Seq import Seq
@@ -216,6 +214,8 @@ class SeqRecord:
         You can create a 'blank' SeqRecord object, and then populate the
         attributes later.
         """
+        if seq is not None and not isinstance(seq, (Seq, MutableSeq)):
+            raise TypeError("seq argument should be a Seq or MutableSeq object")
         if id is not None and not isinstance(id, str):
             # Lots of existing code uses id=None... this may be a bad idea.
             raise TypeError("id argument should be a string")
@@ -223,14 +223,6 @@ class SeqRecord:
             raise TypeError("name argument should be a string")
         if not isinstance(description, str):
             raise TypeError("description argument should be a string")
-
-        if seq is not None and not isinstance(seq, (Seq, MutableSeq)):
-            warnings.warn(
-                "Using a string as the sequence is deprecated and will raise a"
-                " TypeError in future. It has been converted to a Seq object.",
-                BiopythonDeprecationWarning,
-            )
-            seq = Seq(seq)
 
         self._seq = seq
         self.id = id
@@ -350,14 +342,8 @@ class SeqRecord:
     @seq.setter
     def seq(self, value: Union["Seq", "MutableSeq"]) -> None:
         # Adding this here for users who are not type-checking their code.
-        if not isinstance(value, (Seq, MutableSeq)):
-            warnings.warn(
-                "Using a string as the sequence is deprecated and will raise a"
-                " TypeError in future. It has been converted to a Seq object.",
-                BiopythonDeprecationWarning,
-            )
-            value = Seq(value)
-
+        if value is not None and not isinstance(value, (Seq, MutableSeq)):
+            raise TypeError("seq must be a Seq or MutableSeq object")
         # TODO - Add a deprecation warning that the seq should be write only?
         if self._per_letter_annotations:
             if len(self) != len(value):

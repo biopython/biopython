@@ -172,7 +172,6 @@ The `Bio.HMM.DynamicProgramming`, `Bio.HMM.Trainer`, `Bio.HMM.MarkovModel`, and
 `Bio.HMM.Utilities` modules were deprecated in release 1.82. Consider using
 hmmlearn (https://pypi.org/project/hmmlearn/) instead.
 
-
 Bio.Data.SCOPData
 -----------------
 Deprecated in release 1.80, and removed in release 1.82. Please use
@@ -287,6 +286,12 @@ Bio.CodonAlign
 --------------
 This new experimental module included in Biopython 1.64 was renamed to
 Bio.codonalign in Biopython 1.65 to follow PEP8 module naming rules.
+
+Bio.SeqRecord
+-------------
+Creating a SeqRecord with a plain string as the seq argument was deprecated in
+release 1.82, and removed in release 1.86. A TypeError will be raised if seq is
+not a Seq or MutableSeq object.
 
 Bio.SeqRecord equality
 ----------------------
