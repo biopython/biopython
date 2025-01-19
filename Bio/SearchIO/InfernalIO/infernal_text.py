@@ -74,8 +74,7 @@ class InfernalTextParser(_BaseInfernalParser):
         while True:
             if not self.line or bool_func(self.line):
                 return
-            else:
-                self.line = read_forward(self.handle)
+            self.line = read_forward(self.handle)
 
     def _parse_header(self):
         """Parse Infernal header (PRIVATE)."""
