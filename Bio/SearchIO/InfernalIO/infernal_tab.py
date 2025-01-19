@@ -192,12 +192,12 @@ _COLUMN_HSP = {
     "pass": ("pipeline_pass", int),
     "inc": ("is_included", lambda x: True if x == "!" else False),
     "olp": ("olp", str),
-    "anyidx": ("anyidx", str),
-    "afrct1": ("afrct1", str),
-    "afrct2": ("afrct2", str),
-    "winidx": ("winidx", str),
-    "wfrct1": ("wfrct1", str),
-    "wfrct2": ("wfrct2", str),
+    "anyidx": ("anyidx", lambda x: None if x == "-" else int(x)),
+    "afrct1": ("afrct1", lambda x: None if x == "-" else float(x)),
+    "afrct2": ("afrct2", lambda x: None if x == "-" else float(x)),
+    "winidx": ("winidx", lambda x: None if (x == "-" or x == '"') else int(x)),
+    "wfrct1": ("wfrct1", lambda x: None if (x == "-" or x == '"') else float(x)),
+    "wfrct2": ("wfrct2", lambda x: None if (x == "-" or x == '"') else float(x)),
 }
 _COLUMN_FRAG = {
     "mdl_from": ("query_start", int),
