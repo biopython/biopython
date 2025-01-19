@@ -1,0 +1,14 @@
+#idx target name          accession query name              accession clan name mdl mdl from   mdl to seq from   seq to strand trunc pass   gc  bias  score   E-value inc olp anyidx afrct1 afrct2 winidx wfrct1 wfrct2 mdl len seq len description of target
+#--- -------------------- --------- ----------------------- --------- --------- --- -------- -------- -------- -------- ------ ----- ---- ---- ----- ------ --------- --- --- ------ ------ ------ ------ ------ ------ ------- ------- ---------------------
+1    SSU_rRNA_eukarya     RF01960   ENA|BK006945|BK006945.2 -         CL00111    cm        1     1831   457732   455933      -    no    1 0.45   9.5 1817.8         0  !   ^       -      -      -      -      -      -    1831 1078177 Eukaryotic small subunit ribosomal RNA
+3    SSU_rRNA_archaea     RF01959   ENA|BK006945|BK006945.2 -         CL00111    cm        1     1478   457732   455930      -    no    1 0.45   9.7  633.9  5.8e-187  !   =       1  0.998  1.000      "      "      "    1478 1078177 Archaeal small subunit ribosomal RNA
+#
+# Program:         cmscan
+# Version:         1.1.5 (Sep 2023)
+# Pipeline mode:   SCAN
+# Query file:      GCA_000146045.2.fasta
+# Target file:     SSU_rRNA.cm
+# Option settings: cmscan --tblout SSU_clan-cmscan-fmt_2.tbl --fmt 2 --clanin Rfam.clanin --cpu 8 SSU_rRNA.cm GCA_000146045.2.fasta 
+# Current dir:     /analysis/BioPython/Testing
+# Date:            Sun Jan 19 10:33:20 2025
+# [ok]
