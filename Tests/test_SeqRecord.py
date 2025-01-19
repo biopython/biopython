@@ -113,6 +113,10 @@ class SeqRecordCreation(unittest.TestCase):
         with self.assertRaises(TypeError):
             SeqRecord(Seq("ACGT"), name={})
 
+    def test_valid_seq(self):
+        with self.assertRaises(TypeError):
+            SeqRecord("ACGT")
+
     def test_valid_description(self):
         with self.assertRaises(TypeError):
             SeqRecord(Seq("ACGT"), description={})
