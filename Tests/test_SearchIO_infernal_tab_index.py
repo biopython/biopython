@@ -55,6 +55,13 @@ U2                   RF00004   ENA|BK006937|BK006937.2 -          cm        1   
 """
         self.check_raw(filename, "ENA|BK006936|BK006936.2", raw, fmt=2)
 
+    def test_infernal_tab_multiple_fmt_2_infer(self):
+        """Test infernal-tab raw string retrieval, cmsearch, multiple queries, fmt 2, inferred."""
+        filename = os.path.join("Infernal", "cmscan_115_IRES_5S_U2_Yeast_fmt_2.tbl")
+        raw = """1    U2                   RF00004   ENA|BK006936|BK006936.2 -         -          cm        1      193   681858   681747      -    no    1 0.33   0.1   98.7   1.2e-20  !   *       -      -      -      -      -      -     193  813184 U2 spliceosomal RNA
+"""
+        self.check_raw(filename, "ENA|BK006936|BK006936.2", raw)
+
 
 class InfernalTabIndexCases(CheckIndex):
     fmt = "infernal-tab"
@@ -65,7 +72,7 @@ class InfernalTabIndexCases(CheckIndex):
         self.check_index(filename, self.fmt)
 
     def test_infernal_tab_1q_0m(self):
-        """Test infernal-tab indexing, cmsearch, single query, not hits."""
+        """Test infernal-tab indexing, cmsearch, single query, no hits."""
         filename = os.path.join("Infernal", "cmsearch_114_IRES_Yeast.tbl")
         self.check_index(filename, self.fmt)
 
