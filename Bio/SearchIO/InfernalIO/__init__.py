@@ -183,26 +183,33 @@ Rows marked with '*' denotes attributes not available in the default format (fmt
 |                 | pipeline_pass           | pipeline pass at which the hit   |
 |                 |                         | was identified                   |
 |                 +-------------------------+----------------------------------+
-|                 | olp*                    | overlap status of this hit       |
+|                 | olp*                    | overlap status of this hit ('*', |
+|                 |                         | '^', '$' or '=')                 |
 |                 +-------------------------+----------------------------------+
 |                 | anyidx*                 | index of the best scoring        |
-|                 |                         | overlapping hit                  |
+|                 |                         | overlapping hit (or none if      |
+|                 |                         | there are no overlap)            |
 |                 +-------------------------+----------------------------------+
 |                 | afrct1*                 | fraction of this hit that        |
-|                 |                         | overlap with anyidx hit          |
+|                 |                         | overlap with anyidx hit (or none |
+|                 |                         | if there are no overlap)         |
 |                 +-------------------------+----------------------------------+
 |                 | afrct2*                 | fraction of anyidx hit           |
-|                 |                         | with this hit                    |
+|                 |                         | with this hit (or none if there  |
+|                 |                         | are no overlap)                  |
 |                 +-------------------------+----------------------------------+
-|                 | winidx*                 | best scoring hit that overlaps   |
-|                 |                         | with this hit that is marked     |
-|                 |                         | as '^'                           |
+|                 | winidx*                 | index of the best scoring hit    |
+|                 |                         | that overlaps with this hit that |
+|                 |                         | is marked as '^' (or none if     |
+|                 |                         | there are no overlap)            |
 |                 +-------------------------+----------------------------------+
 |                 | wfrct1*                 | fraction of this hit that        |
-|                 |                         | overlap with winidx hit          |
+|                 |                         | overlap with winidx hit (or none |
+|                 |                         | if there are no overlap)         |
 |                 +-------------------------+----------------------------------+
 |                 | wfrct2*                 | fraction of winidx hit           |
-|                 |                         | with this hit                    |
+|                 |                         | with this hit (or none if there  |
+|                 |                         | are no overlap)                  |
 +-----------------+-------------------------+----------------------------------+
 | HSPFragment     | hit_start               | local alignment sequence start   |
 | (also via HSP)  |                         | coordinate (seq from)            |
