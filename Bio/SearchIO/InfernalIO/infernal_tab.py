@@ -190,7 +190,7 @@ _COLUMN_HSP = {
     "mdl": ("model", str),
     "trunc": ("truncated", str),
     "pass": ("pipeline_pass", int),
-    "inc": ("is_included", str),
+    "inc": ("is_included", lambda x: True if x == "!" else False),
     "olp": ("olp", str),
     "anyidx": ("anyidx", str),
     "afrct1": ("afrct1", str),
@@ -319,8 +319,6 @@ class InfernalTabParser(_BaseInfernalParser):
 
         # adjust start and end coordinates according to strand
         self._adjust_coords(frag)
-        # convert inclusion string to a bool
-        self._inclusion_str_to_bool(hsp)
 
         return {"qresult": qresult, "hit": hit, "hsp": hsp, "frag": frag}
 
@@ -337,11 +335,6 @@ class InfernalTabParser(_BaseInfernalParser):
             frag["hit_strand"] = -1
         else:
             frag["hit_strand"] = 0
-
-    def _inclusion_str_to_bool(self, hsp):
-        """Convert inclusion string to a bool (PRIVATE)."""
-        is_included = hsp["is_included"]
-        hsp["is_included"] = True if is_included == "!" else False
 
     def _parse_qresult(self):
         """Yield QueryResult objects (PRIVATE)."""
