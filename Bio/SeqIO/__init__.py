@@ -496,13 +496,21 @@ class AlignmentSequenceIterator(SequenceIterator):
 
     def __init__(self, source: _IOSource) -> None:
         super().__init__(source, fmt="clustal")
-        self.iterator = (record for alignment in AlignIO.parse(self.stream, "clustal") for record in alignment)
+        alignment_iterator = AlignIO._FormatToIterator["clustal"]
+        alignments = alignment_iterator(self.stream, None)
+        self.iterator = (record for alignment in alignments for record in alignment)
 
     def __next__(self):
         return next(self.iterator)
 
 
 _FormatToIterator["clustal"] = AlignmentSequenceIterator
+
+
+# for fmt, writer_class in AlignIO._FormatToWriter.items():
+    # name = fmt.replace("-", " ").title().replace(" ", "") + "Writer"
+    # cls = type(name, (AlignmentSequenceWriter,), {"writer_class": writer_class})
+    # _FormatToWriter[fmt] = cls  # type: ignore
 
 
 class AlignmentSequenceWriter(SequenceWriter):
