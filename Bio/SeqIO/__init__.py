@@ -404,7 +404,7 @@ from Bio.SeqIO import UniprotIO
 from Bio.SeqIO import XdnaIO
 from Bio.SeqRecord import SeqRecord
 
-from .Interfaces import _TextIOSource, SequenceWriter
+from .Interfaces import _IOSource, _TextIOSource, SequenceIterator, SequenceWriter
 
 # Convention for format names is "mainname-subtype" in lower case.
 # Please use the same names as BioPerl or EMBOSS where possible.
@@ -489,6 +489,20 @@ _FormatToWriter = {
     "tab": TabIO.TabWriter,
     "xdna": XdnaIO.XdnaWriter,
 }
+
+class AlignmentSequenceIterator(SequenceIterator):
+
+    modes = "t"
+
+    def __init__(self, source: _IOSource) -> None:
+        super().__init__(source, fmt="clustal")
+        self.iterator = (record for alignment in AlignIO.parse(self.stream, "clustal") for record in alignment)
+
+    def __next__(self):
+        return next(self.iterator)
+
+
+_FormatToIterator["clustal"] = AlignmentSequenceIterator
 
 
 class AlignmentSequenceWriter(SequenceWriter):
