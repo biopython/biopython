@@ -380,6 +380,7 @@ from collections.abc import Callable
 from collections.abc import Iterable
 from typing import Union
 
+from Bio import AlignIO
 from Bio.File import as_handle
 from Bio.SeqIO import AbiIO
 from Bio.SeqIO import AceIO
@@ -490,8 +491,8 @@ _FormatToWriter = {
 }
 
 
-class ClustalWriter(SequenceWriter):
-    """Clustal file writer."""
+class AlignmentSequenceWriter(SequenceWriter):
+    """Writes sequences as an alignment."""
 
     modes = "t"
 
@@ -501,10 +502,9 @@ class ClustalWriter(SequenceWriter):
         records - A list or iterator returning SeqRecord objects
         """
         from Bio.Align import MultipleSeqAlignment
-        from Bio import AlignIO
 
         alignment = MultipleSeqAlignment(records)
-        alignment_count = AlignIO.write([alignment], self.handle, "clustal")
+        alignment_count = self.writer_class(self.handle).write_file([alignment])
         if alignment_count != 1:
             raise RuntimeError(
                 "Internal error - the underlying writer "
@@ -514,182 +514,10 @@ class ClustalWriter(SequenceWriter):
         return count
 
 
-class MafWriter(SequenceWriter):
-    """Multiple Alignment Format file writer."""
-
-    modes = "t"
-
-    def write_records(self, records):
-        """Write records to the output file, and return the number of records.
-
-        records - A list or iterator returning SeqRecord objects
-        """
-        from Bio.Align import MultipleSeqAlignment
-        from Bio import AlignIO
-
-        alignment = MultipleSeqAlignment(records)
-        alignment_count = AlignIO.write([alignment], self.handle, "maf")
-        if alignment_count != 1:
-            raise RuntimeError(
-                "Internal error - the underlying writer "
-                "should have returned 1, not %r" % alignment_count
-            )
-        count = len(alignment)
-        return count
-
-
-class MauveWriter(SequenceWriter):
-    """Mauve file writer."""
-
-    modes = "t"
-
-    def write_records(self, records):
-        """Write records to the output file, and return the number of records.
-
-        records - A list or iterator returning SeqRecord objects
-        """
-        from Bio.Align import MultipleSeqAlignment
-        from Bio import AlignIO
-
-        alignment = MultipleSeqAlignment(records)
-        alignment_count = AlignIO.write([alignment], self.handle, "mauve")
-        if alignment_count != 1:
-            raise RuntimeError(
-                "Internal error - the underlying writer "
-                "should have returned 1, not %r" % alignment_count
-            )
-        count = len(alignment)
-        return count
-
-
-class NexusWriter(SequenceWriter):
-    """Nexus file writer."""
-
-    modes = "t"
-
-    def write_records(self, records):
-        """Write records to the output file, and return the number of records.
-
-        records - A list or iterator returning SeqRecord objects
-        """
-        from Bio.Align import MultipleSeqAlignment
-        from Bio import AlignIO
-
-        alignment = MultipleSeqAlignment(records)
-        alignment_count = AlignIO.write([alignment], self.handle, "nexus")
-        if alignment_count != 1:
-            raise RuntimeError(
-                "Internal error - the underlying writer "
-                "should have returned 1, not %r" % alignment_count
-            )
-        count = len(alignment)
-        return count
-
-
-class PhylipWriter(SequenceWriter):
-    """Phylip file writer."""
-
-    modes = "t"
-
-    def write_records(self, records):
-        """Write records to the output file, and return the number of records.
-
-        records - A list or iterator returning SeqRecord objects
-        """
-        from Bio.Align import MultipleSeqAlignment
-        from Bio import AlignIO
-
-        alignment = MultipleSeqAlignment(records)
-        alignment_count = AlignIO.write([alignment], self.handle, "phylip")
-        if alignment_count != 1:
-            raise RuntimeError(
-                "Internal error - the underlying writer "
-                "should have returned 1, not %r" % alignment_count
-            )
-        count = len(alignment)
-        return count
-
-
-class SequentialPhylipWriter(SequenceWriter):
-    """Sequential phylip file writer."""
-
-    modes = "t"
-
-    def write_records(self, records):
-        """Write records to the output file, and return the number of records.
-
-        records - A list or iterator returning SeqRecord objects
-        """
-        from Bio.Align import MultipleSeqAlignment
-        from Bio import AlignIO
-
-        alignment = MultipleSeqAlignment(records)
-        alignment_count = AlignIO.write([alignment], self.handle, "phylip-sequential")
-        if alignment_count != 1:
-            raise RuntimeError(
-                "Internal error - the underlying writer "
-                "should have returned 1, not %r" % alignment_count
-            )
-        count = len(alignment)
-        return count
-
-
-class RelaxedPhylipWriter(SequenceWriter):
-    """Relaxes Phylip file writer."""
-
-    modes = "t"
-
-    def write_records(self, records):
-        """Write records to the output file, and return the number of records.
-
-        records - A list or iterator returning SeqRecord objects
-        """
-        from Bio.Align import MultipleSeqAlignment
-        from Bio import AlignIO
-
-        alignment = MultipleSeqAlignment(records)
-        alignment_count = AlignIO.write([alignment], self.handle, "phylip-relaxed")
-        if alignment_count != 1:
-            raise RuntimeError(
-                "Internal error - the underlying writer "
-                "should have returned 1, not %r" % alignment_count
-            )
-        count = len(alignment)
-        return count
-
-
-class StockholmWriter(SequenceWriter):
-    """Stockholm file writer."""
-
-    modes = "t"
-
-    def write_records(self, records):
-        """Write records to the output file, and return the number of records.
-
-        records - A list or iterator returning SeqRecord objects
-        """
-        from Bio.Align import MultipleSeqAlignment
-        from Bio import AlignIO
-
-        alignment = MultipleSeqAlignment(records)
-        alignment_count = AlignIO.write([alignment], self.handle, "stockholm")
-        if alignment_count != 1:
-            raise RuntimeError(
-                "Internal error - the underlying writer "
-                "should have returned 1, not %r" % alignment_count
-            )
-        count = len(alignment)
-        return count
-
-
-_FormatToWriter["clustal"] = ClustalWriter
-_FormatToWriter["maf"] = MafWriter
-_FormatToWriter["mauve"] = MauveWriter
-_FormatToWriter["nexus"] = NexusWriter
-_FormatToWriter["phylip"] = PhylipWriter
-_FormatToWriter["phylip-sequential"] = SequentialPhylipWriter
-_FormatToWriter["phylip-relaxed"] = RelaxedPhylipWriter
-_FormatToWriter["stockholm"] = StockholmWriter
+for fmt, writer_class in AlignIO._FormatToWriter.items():
+    name = fmt.replace("-", " ").title().replace(" ", "") + "Writer"
+    cls = type(name, (AlignmentSequenceWriter,), {"writer_class": writer_class})
+    _FormatToWriter[fmt] = cls  # type: ignore
 
 
 def write(
