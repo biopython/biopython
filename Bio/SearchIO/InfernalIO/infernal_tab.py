@@ -208,55 +208,64 @@ _COLUMN_FRAG = {
 }
 
 
-def tabular_format_from_header(handle, is_byte=False):
-    """Determine the tabular format based on the header (PRIVATE)."""
-    # infernal tabular output columns are space separated files with spaces in
-    # column names, ex:
-    # #target name         accession
-    # #------------------- ---------
-    # so we use the second line of the header where the is not spaces to
-    # determine the position of the headers labels. Then we can get the label names
-    # and compare the the different tabular format names. This label comparison is done
-    # (instead of counting fields) to avoid issues if future tabular format have the
-    # same number of fields, but with different signification
+def _validate_or_infer_tabular_format(fmt, handle, is_byte=False):
+    """Validate a user provided tabular format or infer from the tabular file header and
+    return the valid format or raise a ValueError. (PRIVATE)"""
 
-    def process_line(handle, is_byte):
-        """Process a line from the handle, decoding byte stream."""
-        line = handle.readline().strip()
-        return line.decode() if is_byte else line
+    # The `isinstance` check below allows us to provide a consistent error
+    # message, even when e.g. `fmt` happens to be unhashable.
+    if isinstance(fmt, int) and fmt in {1, 2, 3}:
+        return fmt
+    elif fmt is None:
+        # infernal tabular output columns are space separated files with spaces in
+        # column names, ex:
+        # #target name         accession
+        # #------------------- ---------
+        # so we use the second line of the header where the is not spaces to
+        # determine the position of the headers labels. Then we can get the label names
+        # and compare the the different tabular format names. This label comparison is done
+        # (instead of counting fields) to avoid issues if future tabular format have the
+        # same number of fields, but with different signification
 
-    header_label = process_line(handle, is_byte)
-    header_delim = process_line(handle, is_byte)
+        def process_line(handle, is_byte):
+            """Process a line from the handle, decoding byte stream."""
+            line = handle.readline().strip()
+            return line.decode() if is_byte else line
 
-    if header_label == "" or header_delim == "":
-        raise ValueError(
-            "Unexpected empty line in the header of Infernal tabular output."
-        )
+        header_label = process_line(handle, is_byte)
+        header_delim = process_line(handle, is_byte)
 
-    # get the indices of the spaces fields delimiter from the second header line
-    # the end of the file is added to the indices to process the last field
-    indices = [idx for idx, char in enumerate(header_delim) if char == " "] + [
-        len(header_delim)
-    ]
-    prev_idx = 1
-    fields = []
-    for idx in indices:
-        fields.append(header_label[prev_idx:idx].strip())
-        prev_idx = idx
+        if header_label == "" or header_delim == "":
+            raise ValueError(
+                "Unexpected empty line in the header of Infernal tabular output."
+            )
 
-    # compare the headers fields to the possible fields to determine the format
-    if fields == _TABULAR_FMT_1_HEADER_FIELDS:
-        return 1
-    elif fields == _TABULAR_FMT_2_HEADER_FIELDS:
-        return 2
-    elif fields == _TABULAR_FMT_3_HEADER_FIELDS:
-        return 3
+        # get the indices of the spaces fields delimiter from the second header line
+        # the end of the file is added to the indices to process the last field
+        indices = [idx for idx, char in enumerate(header_delim) if char == " "] + [
+            len(header_delim)
+        ]
+        prev_idx = 1
+        fields = []
+        for idx in indices:
+            fields.append(header_label[prev_idx:idx].strip())
+            prev_idx = idx
+
+        # compare the headers fields to the possible fields to determine the format
+        if fields == _TABULAR_FMT_1_HEADER_FIELDS:
+            return 1
+        elif fields == _TABULAR_FMT_2_HEADER_FIELDS:
+            return 2
+        elif fields == _TABULAR_FMT_3_HEADER_FIELDS:
+            return 3
+        else:
+            raise ValueError(
+                "Cannot determine the tabular format from the header. \
+                            The tabular file is likely incorrect or its format is unsupported. \
+                            Tabular format 1, 2 and 3 are currently supported)."
+            )
     else:
-        raise ValueError(
-            "Cannot determine the tabular format from the header. \
-                         The tabular file is likely incorrect or its format is unsupported. \
-                         Tabular format 1, 2 and 3 are currently supported)."
-        )
+        raise ValueError("Unsupported tabular format. Format 1, 2 and 3 are supported.")
 
 
 class InfernalTabParser(_BaseInfernalParser):
@@ -265,16 +274,7 @@ class InfernalTabParser(_BaseInfernalParser):
     def __init__(self, handle, fmt=None):
         """Initialize the class."""
         self.handle = handle
-        # if a tabular fmt is specified, set its value
-        if isinstance(fmt, int):
-            if not 1 <= fmt <= 3:
-                raise ValueError(
-                    "Unsupported tabular format. Format 1, 2 and 3 are currently supported."
-                )
-            self.fmt = fmt
-        # if the format is not provided by the user, guess the format
-        else:
-            self.fmt = tabular_format_from_header(handle)
+        self.fmt = _validate_or_infer_tabular_format(fmt, handle=handle)
 
     def __iter__(self):
         """Iterate over InfernalTabParser, yields query results."""
@@ -413,17 +413,9 @@ class InfernalTabIndexer(SearchIndexer):
         """Initialize the class."""
         # the index of the query id column in the tabular file varies depending on the fmt
         # we need to use the format set by the user, or infer the format to parse the records
-        if isinstance(fmt, int):
-            if not 1 <= fmt <= 3:
-                raise ValueError(
-                    "Unsupported tabular format. Format 1, 2 and 3 are currently supported."
-                )
-            self._query_id_idx = 3 if fmt == 2 else 2
-        # if the format is not provided by the user, infer the format
-        else:
-            handle = _open_for_random_access(filename)
-            fmt = tabular_format_from_header(handle, is_byte=True)
-            self._query_id_idx = 3 if fmt == 2 else 2
+        with _open_for_random_access(filename) as handle:
+            fmt = _validate_or_infer_tabular_format(fmt, handle, is_byte=True)
+        self._query_id_idx = 3 if fmt == 2 else 2
 
         SearchIndexer.__init__(self, filename, fmt=fmt)
 
