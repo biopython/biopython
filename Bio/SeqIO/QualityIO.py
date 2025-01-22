@@ -1952,6 +1952,30 @@ class FastqIlluminaWriter(SequenceWriter):
 
     modes = "t"
 
+    @classmethod
+    def to_string(cls, record: SeqRecord) -> str:
+        """Turn a SeqRecord into an Illumina FASTQ formatted string.
+
+        This is used internally by the SeqRecord's .format("fastq-illumina")
+        method and by the SeqIO.write(..., ..., "fastq-illumina") function.
+        """
+        seq_str = _get_seq_string(record)
+        qualities_str = _get_illumina_quality_str(record)
+        if len(qualities_str) != len(seq_str):
+            raise ValueError(
+                "Record %s has sequence length %i but %i quality scores"
+                % (record.id, len(seq_str), len(qualities_str))
+            )
+        id_ = _clean(record.id) if record.id else ""
+        description = _clean(record.description)
+        if description and description.split(None, 1)[0] == id_:
+            title = description
+        elif description:
+            title = f"{id_} {description}"
+        else:
+            title = id_
+        return f"@{title}\n{seq_str}\n+\n{qualities_str}\n"
+
     def write_record(self, record: SeqRecord) -> None:
         """Write a single FASTQ record to the file."""
         # TODO - Is an empty sequence allowed in FASTQ format?
@@ -1981,27 +2005,8 @@ class FastqIlluminaWriter(SequenceWriter):
 
 
 def as_fastq_illumina(record: SeqRecord) -> str:
-    """Turn a SeqRecord into an Illumina FASTQ formatted string.
-
-    This is used internally by the SeqRecord's .format("fastq-illumina")
-    method and by the SeqIO.write(..., ..., "fastq-illumina") function.
-    """
-    seq_str = _get_seq_string(record)
-    qualities_str = _get_illumina_quality_str(record)
-    if len(qualities_str) != len(seq_str):
-        raise ValueError(
-            "Record %s has sequence length %i but %i quality scores"
-            % (record.id, len(seq_str), len(qualities_str))
-        )
-    id_ = _clean(record.id) if record.id else ""
-    description = _clean(record.description)
-    if description and description.split(None, 1)[0] == id_:
-        title = description
-    elif description:
-        title = f"{id_} {description}"
-    else:
-        title = id_
-    return f"@{title}\n{seq_str}\n+\n{qualities_str}\n"
+    """Turn a SeqRecord into an Illumina FASTQ formatted string."""
+    return FastqIlluminaWriter.to_string(record)
 
 
 def PairedFastaQualIterator(
