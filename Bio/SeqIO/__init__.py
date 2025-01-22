@@ -458,8 +458,6 @@ _FormatToIterator = {
 }
 
 _FormatToString: dict[str, Callable[[SeqRecord], str]] = {
-    "fastq": QualityIO.as_fastq,
-    "fastq-sanger": QualityIO.as_fastq,
     "fastq-solexa": QualityIO.as_fastq_solexa,
     "fastq-illumina": QualityIO.as_fastq_illumina,
     "qual": QualityIO.as_qual,
