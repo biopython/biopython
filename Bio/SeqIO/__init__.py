@@ -667,7 +667,6 @@ def parse(handle, format, alphabet=None):
     # NOTE - The above docstring has some raw \n characters needed
     # for the StringIO example, hence the whole docstring is in raw
     # string mode (see the leading r before the opening quote).
-    from Bio import AlignIO
 
     # Try and give helpful error messages:
     if not isinstance(format, str):
@@ -682,9 +681,7 @@ def parse(handle, format, alphabet=None):
     iterator_generator = _FormatToIterator.get(format)
     if iterator_generator:
         return iterator_generator(handle)
-    if format in AlignIO._FormatToIterator:
-        # Use Bio.AlignIO to read in the alignments
-        return (r for alignment in AlignIO.parse(handle, format) for r in alignment)
+
     raise ValueError(f"Unknown format '{format}'")
 
 
