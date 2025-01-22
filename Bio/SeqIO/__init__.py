@@ -376,6 +376,7 @@ making up each alignment as SeqRecords.
 #
 # --Peter
 
+from abc import ABC, abstractmethod
 from collections.abc import Callable
 from collections.abc import Iterable
 from typing import Union
@@ -496,10 +497,15 @@ class AlignmentSequenceIterator(SequenceIterator):
 
     modes = "t"
 
+    @property
+    @abstractmethod
+    def fmt(self):
+        """Alignment file format name."""
+
     def __init__(self, source: _IOSource) -> None:
         """Hello."""
-        super().__init__(source, fmt=self.fmt)  # type: ignore
-        alignment_iterator = AlignIO._FormatToIterator[self.fmt]  # type: ignore
+        super().__init__(source, fmt=self.fmt)
+        alignment_iterator = AlignIO._FormatToIterator[self.fmt]
         alignments = alignment_iterator(self.stream, None)
         self.iterator = (record for alignment in alignments for record in alignment)
 
