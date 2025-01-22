@@ -376,6 +376,7 @@ from dataclasses import dataclass
 
 from Bio import BiopythonParserWarning
 from Bio import BiopythonWarning
+from Bio import BiopythonDeprecationWarning
 from Bio import StreamModeError
 from Bio.File import as_handle
 from Bio.Seq import Seq
@@ -1579,7 +1580,7 @@ assert SANGER_SCORE_OFFSET == ord("!")
 
 
 class FastqPhredWriter(SequenceWriter):
-    """Class to write standard FASTQ format files (using PHRED quality scores) (OBSOLETE).
+    """Class to write standard FASTQ format files (using PHRED quality scores).
 
     Although you can use this class directly, you are strongly encouraged
     to use the top level ``Bio.SeqIO.write()`` function instead via the format
@@ -1654,11 +1655,25 @@ class FastqPhredWriter(SequenceWriter):
 
 def as_fastq(record: SeqRecord) -> str:
     """Turn a SeqRecord into a Sanger FASTQ formatted string, and return it."""
+    warnings.warn(
+        """\
+QualityIO.as_fastq is deprecated.
+
+Instead of
+
+QualityIO.as_fastq(record)
+
+please use
+
+format(record, "fastq")
+""",
+        DeprecationWarning,
+    )
     return FastqPhredWriter.to_string(record)
 
 
 class QualPhredWriter(SequenceWriter):
-    """Class to write QUAL format files (using PHRED quality scores) (OBSOLETE).
+    """Class to write QUAL format files (using PHRED quality scores).
 
     Although you can use this class directly, you are strongly encouraged
     to use the top level ``Bio.SeqIO.write()`` function instead.
@@ -1806,6 +1821,20 @@ class QualPhredWriter(SequenceWriter):
 
 def as_qual(record: SeqRecord) -> str:
     """Turn a SeqRecord into a QUAL formatted string."""
+    warnings.warn(
+        """\
+QualityIO.as_qual is deprecated.
+
+Instead of
+
+QualityIO.as_qual(record)
+
+please use
+
+format(record, "qual")
+""",
+        DeprecationWarning,
+    )
     return QualPhredWriter.to_string(record)
 
 
@@ -1894,11 +1923,25 @@ class FastqSolexaWriter(SequenceWriter):
 
 def as_fastq_solexa(record: SeqRecord) -> str:
     """Turn a SeqRecord into a Solexa FASTQ formatted string."""
+    warnings.warn(
+        """\
+QualityIO.as_fastq_solexa is deprecated.
+
+Instead of
+
+QualityIO.as_fastq_solexa(record)
+
+please use
+
+format(record, "fastq-solexa")
+""",
+        DeprecationWarning,
+    )
     return FastqSolexaWriter.to_string(record)
 
 
 class FastqIlluminaWriter(SequenceWriter):
-    r"""Write Illumina 1.3+ FASTQ format files (with PHRED quality scores) (OBSOLETE).
+    r"""Write Illumina 1.3+ FASTQ format files (with PHRED quality scores).
 
     This outputs FASTQ files like those from the Solexa/Illumina 1.3+ pipeline,
     using PHRED scores and an ASCII offset of 64. Note these files are NOT
@@ -1958,6 +2001,20 @@ class FastqIlluminaWriter(SequenceWriter):
 
 def as_fastq_illumina(record: SeqRecord) -> str:
     """Turn a SeqRecord into an Illumina FASTQ formatted string."""
+    warnings.warn(
+        """\
+QualityIO.as_fastq_illumina is deprecated.
+
+Instead of
+
+QualityIO.as_fastq_illumina(record)
+
+please use
+
+format(record, "fastq-illumina")
+""",
+        DeprecationWarning,
+    )
     return FastqIlluminaWriter.to_string(record)
 
 

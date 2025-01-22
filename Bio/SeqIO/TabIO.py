@@ -34,11 +34,14 @@ example above.
 
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+from Bio import BiopythonDeprecationWarning
 
 from .Interfaces import _clean
 from .Interfaces import _get_seq_string
 from .Interfaces import SequenceIterator
 from .Interfaces import SequenceWriter
+
+import warnings
 
 
 class TabIterator(SequenceIterator):
@@ -106,8 +109,7 @@ class TabWriter(SequenceWriter):
     Any description, name or other annotation is not recorded.
 
     This class is not intended to be used directly. Instead, please use
-    the function ``as_tab``, or the top level ``Bio.SeqIO.write()`` function
-    with ``format="tab"``.
+    the top level ``Bio.SeqIO.write()`` function with ``format="tab"``.
     """
 
     modes = "t"
@@ -132,6 +134,20 @@ class TabWriter(SequenceWriter):
 
 def as_tab(record):
     """Return record as tab separated (id(tab)seq) string."""
+    warnings.warn(
+        """\
+TabIO.as_tab is deprecated.
+
+Instead of
+
+TabIO.as_tab(record)
+
+please use
+
+format(record, "tab")
+""",
+        DeprecationWarning,
+    )
     return TabWriter.to_string(record)
 
 
