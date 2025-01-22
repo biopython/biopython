@@ -592,18 +592,15 @@ class FastaWriter(SequenceWriter):
 
 
 class FastaTwoLineWriter(FastaWriter):
-    """Class to write 2-line per record Fasta format files (OBSOLETE).
+    """Class to write 2-line per record Fasta format files.
 
     This means we write the sequence information  without line
     wrapping, and will always write a blank line for an empty
     sequence.
-
-    Please use the ``as_fasta_2line`` function instead, or the top level
-    ``Bio.SeqIO.write()`` function instead using ``format="fasta"``.
     """
 
     def __init__(self, handle, record2title=None):
-        """Create a 2-line per record Fasta writer (OBSOLETE).
+        """Create a 2-line per record Fasta writer.
 
         Arguments:
          - handle - Handle to an output file, e.g. as returned
@@ -633,6 +630,27 @@ class FastaTwoLineWriter(FastaWriter):
         """
         super().__init__(handle, wrap=None, record2title=record2title)
 
+    @classmethod
+    def to_string(record):
+        """Return a string in FASTA format with the sequence as one line."""
+        id = _clean(record.id)
+        description = _clean(record.description)
+        if description and description.split(None, 1)[0] == id:
+            # The description includes the id at the start
+            title = description
+        elif description:
+            title = f"{id} {description}"
+        else:
+            title = id
+        assert "\n" not in title
+        assert "\r" not in title
+
+        data = _get_seq_string(record)  # Catches sequence being None
+        assert "\n" not in data
+        assert "\r" not in data
+
+        return f">{title}\n{data}\n"
+
 
 def as_fasta(record):
     """Turn a SeqRecord into a FASTA formatted string."""
@@ -640,28 +658,8 @@ def as_fasta(record):
 
 
 def as_fasta_2line(record):
-    """Turn a SeqRecord into a two-line FASTA formatted string.
-
-    This is used internally by the SeqRecord's .format("fasta-2line")
-    method and by the SeqIO.write(..., ..., "fasta-2line") function.
-    """
-    id = _clean(record.id)
-    description = _clean(record.description)
-    if description and description.split(None, 1)[0] == id:
-        # The description includes the id at the start
-        title = description
-    elif description:
-        title = f"{id} {description}"
-    else:
-        title = id
-    assert "\n" not in title
-    assert "\r" not in title
-
-    data = _get_seq_string(record)  # Catches sequence being None
-    assert "\n" not in data
-    assert "\r" not in data
-
-    return f">{title}\n{data}\n"
+    """Turn a SeqRecord into a two-line FASTA formatted string."""
+    return FastaTwoLineWriter.to_string(record)
 
 
 if __name__ == "__main__":
