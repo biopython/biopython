@@ -560,14 +560,10 @@ cls = type(name, (AlignmentSequenceIterator,), {"fmt": fmt, "_alignment_iterator
 _FormatToIterator[fmt] = cls  # type: ignore
 
 
-class MafAlignmentSequenceIterator(OldAlignmentSequenceIterator):
-    """Hello."""
-
-    fmt = "maf"
-
-
-cls = MafAlignmentSequenceIterator  # type: ignore
-_FormatToIterator["maf"] = cls  # type: ignore
+fmt = "maf"
+name = fmt.replace("-", " ").title().replace(" ", "") + "AlignmentSequenceIterator"
+cls = type(name, (AlignmentSequenceIterator,), {"fmt": fmt, "_alignment_iterator_class": AlignIO._FormatToIterator[fmt]})  # type: ignore
+_FormatToIterator[fmt] = cls  # type: ignore
 
 
 class MauveAlignmentSequenceIterator(OldAlignmentSequenceIterator):
