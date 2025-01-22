@@ -539,16 +539,10 @@ class AlignmentSequenceIterator(SequenceIterator):
         return next(self.iterator)
 
 
-class ClustalAlignmentSequenceIterator(AlignmentSequenceIterator):
-    """Hello."""
-
-    fmt = "clustal"
-
-    _alignment_iterator_class = AlignIO._FormatToIterator[fmt]
-
-
-cls = ClustalAlignmentSequenceIterator  # type: ignore
-_FormatToIterator["clustal"] = cls  # type: ignore
+fmt = "clustal"
+name = fmt.replace("-", " ").title().replace(" ", "") + "AlignmentSequenceIterator"
+cls = type(name, (AlignmentSequenceIterator,), {"fmt": fmt, "_alignment_iterator_class": AlignIO._FormatToIterator[fmt]})  # type: ignore
+_FormatToIterator[fmt] = cls  # type: ignore
 
 
 class EmbossAlignmentSequenceIterator(OldAlignmentSequenceIterator):
