@@ -460,7 +460,6 @@ _FormatToIterator = {
 _FormatToString: dict[str, Callable[[SeqRecord], str]] = {
     "fastq-solexa": QualityIO.as_fastq_solexa,
     "fastq-illumina": QualityIO.as_fastq_illumina,
-    "qual": QualityIO.as_qual,
 }
 
 # This could exclude file formats covered by _FormatToString?

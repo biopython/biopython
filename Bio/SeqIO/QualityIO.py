@@ -1661,8 +1661,7 @@ class QualPhredWriter(SequenceWriter):
     """Class to write QUAL format files (using PHRED quality scores) (OBSOLETE).
 
     Although you can use this class directly, you are strongly encouraged
-    to use the ``as_qual`` function, or top level ``Bio.SeqIO.write()``
-    function instead.
+    to use the top level ``Bio.SeqIO.write()`` function instead.
 
     For example, this code reads in a FASTQ file and saves the quality scores
     into a QUAL file:
@@ -1717,6 +1716,38 @@ class QualPhredWriter(SequenceWriter):
             self.wrap = wrap
         self.record2title = record2title
 
+    @classmethod
+    def to_string(cls, record: SeqRecord) -> str:
+        """Turn a SeqRecord into a QUAL formatted string."""
+        id_ = _clean(record.id) if record.id else ""
+        description = _clean(record.description)
+        if description and description.split(None, 1)[0] == id_:
+            title = description
+        elif description:
+            title = f"{id_} {description}"
+        else:
+            title = id_
+        lines = [f">{title}\n"]
+
+        qualities = _get_phred_quality(record)
+        try:
+            # This rounds to the nearest integer.
+            # TODO - can we record a float in a qual file?
+            qualities_strs = [("%i" % round(q, 0)) for q in qualities]
+        except TypeError:
+            if None in qualities:
+                raise TypeError("A quality value of None was found") from None
+            else:
+                raise
+
+        # Safe wrapping
+        while qualities_strs:
+            line = qualities_strs.pop(0)
+            while qualities_strs and len(line) + 1 + len(qualities_strs[0]) < 60:
+                line += " " + qualities_strs.pop(0)
+            lines.append(line + "\n")
+        return "".join(lines)
+
     def write_record(self, record: SeqRecord) -> None:
         """Write a single QUAL record to the file."""
         handle = self.handle
@@ -1731,7 +1762,7 @@ class QualPhredWriter(SequenceWriter):
                 # The description includes the id at the start
                 title = description
             elif description:
-                title = f"{id} {description}"
+                title = f"{id_} {description}"
             else:
                 title = id_
         handle.write(f">{title}\n")
@@ -1779,34 +1810,7 @@ def as_qual(record: SeqRecord) -> str:
     This is used internally by the SeqRecord's .format("qual")
     method and by the SeqIO.write(..., ..., "qual") function.
     """
-    id_ = _clean(record.id) if record.id else ""
-    description = _clean(record.description)
-    if description and description.split(None, 1)[0] == id_:
-        title = description
-    elif description:
-        title = f"{id_} {description}"
-    else:
-        title = id_
-    lines = [f">{title}\n"]
-
-    qualities = _get_phred_quality(record)
-    try:
-        # This rounds to the nearest integer.
-        # TODO - can we record a float in a qual file?
-        qualities_strs = [("%i" % round(q, 0)) for q in qualities]
-    except TypeError:
-        if None in qualities:
-            raise TypeError("A quality value of None was found") from None
-        else:
-            raise
-
-    # Safe wrapping
-    while qualities_strs:
-        line = qualities_strs.pop(0)
-        while qualities_strs and len(line) + 1 + len(qualities_strs[0]) < 60:
-            line += " " + qualities_strs.pop(0)
-        lines.append(line + "\n")
-    return "".join(lines)
+    return QualPhredWriter.to_string(record)
 
 
 class FastqSolexaWriter(SequenceWriter):
