@@ -505,7 +505,7 @@ class AlignmentSequenceIterator(SequenceIterator):
     @property
     @abstractmethod
     def _alignment_iterator_class(self):
-        """Alignment iterator_class."""
+        """Alignment iterator class."""
 
     def __init__(self, source: _IOSource) -> None:
         """Hello."""
@@ -540,6 +540,11 @@ class AlignmentSequenceWriter(SequenceWriter):
 
     modes = "t"
 
+    @property
+    @abstractmethod
+    def _alignment_writer_class(self):
+        """Alignment writer class."""
+
     def write_records(self, records):
         """Write records to the output file, and return the number of records.
 
@@ -548,7 +553,9 @@ class AlignmentSequenceWriter(SequenceWriter):
         from Bio.Align import MultipleSeqAlignment
 
         alignment = MultipleSeqAlignment(records)
-        alignment_count = self.writer_class(self.handle).write_file([alignment])
+        alignment_writer_class = self._alignment_writer_class
+        alignment_writer = alignment_writer_class(self.handle)
+        alignment_count = alignment_writer.write_file([alignment])
         if alignment_count != 1:
             raise RuntimeError(
                 "Internal error - the underlying writer "
@@ -558,9 +565,13 @@ class AlignmentSequenceWriter(SequenceWriter):
         return count
 
 
-for fmt, writer_class in AlignIO._FormatToWriter.items():
+for fmt, alignment_writer_class in AlignIO._FormatToWriter.items():
     name = fmt.replace("-", " ").title().replace(" ", "") + "AlignmentSequenceWriter"
-    cls = type(name, (AlignmentSequenceWriter,), {"writer_class": writer_class})
+    cls = type(
+        name,
+        (AlignmentSequenceWriter,),
+        {"_alignment_writer_class": alignment_writer_class},
+    )
     _FormatToWriter[fmt] = cls  # type: ignore
 
 
