@@ -382,7 +382,6 @@ from collections.abc import Iterable
 from typing import Union
 
 from Bio import AlignIO
-from Bio.File import as_handle
 from Bio.SeqIO import AbiIO
 from Bio.SeqIO import AceIO
 from Bio.SeqIO import FastaIO
@@ -457,12 +456,6 @@ _FormatToIterator = {
     "xdna": XdnaIO.XdnaIterator,
 }
 
-_FormatToString: dict[str, Callable[[SeqRecord], str]] = {
-    "fastq-solexa": QualityIO.as_fastq_solexa,
-    "fastq-illumina": QualityIO.as_fastq_illumina,
-}
-
-# This could exclude file formats covered by _FormatToString?
 # Right now used in the unit tests as proxy for all supported outputs...
 _FormatToWriter = {
     "fasta": FastaIO.FastaWriter,
@@ -609,16 +602,6 @@ def write(
     if isinstance(sequences, SeqRecord):
         # This raised an exception in older versions of Biopython
         sequences = [sequences]
-
-    # Map the file format to a writer function/class
-    format_function = _FormatToString.get(format)
-    if format_function is not None:
-        count = 0
-        with as_handle(handle, "w") as fp:
-            for record in sequences:
-                fp.write(format_function(record))
-                count += 1
-        return count
 
     writer_class = _FormatToWriter.get(format)
     if writer_class is not None:
