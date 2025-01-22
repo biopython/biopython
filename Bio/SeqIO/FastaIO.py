@@ -631,7 +631,7 @@ class FastaTwoLineWriter(FastaWriter):
         super().__init__(handle, wrap=None, record2title=record2title)
 
     @classmethod
-    def to_string(record):
+    def to_string(cls, record):
         """Return a string in FASTA format with the sequence as one line."""
         id = _clean(record.id)
         description = _clean(record.description)
