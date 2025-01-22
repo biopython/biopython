@@ -1805,11 +1805,7 @@ class QualPhredWriter(SequenceWriter):
 
 
 def as_qual(record: SeqRecord) -> str:
-    """Turn a SeqRecord into a QUAL formatted string.
-
-    This is used internally by the SeqRecord's .format("qual")
-    method and by the SeqIO.write(..., ..., "qual") function.
-    """
+    """Turn a SeqRecord into a QUAL formatted string."""
     return QualPhredWriter.to_string(record)
 
 
@@ -1872,6 +1868,7 @@ class FastqSolexaWriter(SequenceWriter):
         This is used internally by the SeqRecord's .format("fastq-solexa")
         method and by the SeqIO.write(..., ..., "fastq-solexa") function.
         """
+        # TODO - Is an empty sequence allowed in FASTQ format?
         seq_str = _get_seq_string(record)
         qualities_str = _get_solexa_quality_str(record)
         if len(qualities_str) != len(seq_str):
@@ -1892,30 +1889,7 @@ class FastqSolexaWriter(SequenceWriter):
 
     def write_record(self, record: SeqRecord) -> None:
         """Write a single FASTQ record to the file."""
-        # TODO - Is an empty sequence allowed in FASTQ format?
-        seq = record.seq
-        if seq is None:
-            raise ValueError(f"No sequence for record {record.id}")
-        qualities_str = _get_solexa_quality_str(record)
-        if len(qualities_str) != len(seq):
-            raise ValueError(
-                "Record %s has sequence length %i but %i quality scores"
-                % (record.id, len(seq), len(qualities_str))
-            )
-
-        # FASTQ files can include a description, just like FASTA files
-        # (at least, this is what the NCBI Short Read Archive does)
-        id_ = self.clean(record.id) if record.id else ""
-        description = self.clean(record.description)
-        if description and description.split(None, 1)[0] == id_:
-            # The description includes the id at the start
-            title = description
-        elif description:
-            title = f"{id_} {description}"
-        else:
-            title = id_
-
-        self.handle.write(f"@{title}\n{seq}\n+\n{qualities_str}\n")
+        self.handle.write(self.to_string(record))
 
 
 def as_fastq_solexa(record: SeqRecord) -> str:
