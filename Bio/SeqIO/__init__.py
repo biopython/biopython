@@ -492,7 +492,7 @@ _FormatToWriter = {
 }
 
 
-class AlignmentSequenceIterator(SequenceIterator):
+class OldAlignmentSequenceIterator(SequenceIterator):
     """Hello."""
 
     modes = "t"
@@ -513,17 +513,45 @@ class AlignmentSequenceIterator(SequenceIterator):
         return next(self.iterator)
 
 
+class AlignmentSequenceIterator(SequenceIterator):
+    """Hello."""
+
+    modes = "t"
+
+    @property
+    @abstractmethod
+    def fmt(self):
+        """Alignment file format name."""
+
+    @property
+    @abstractmethod
+    def _alignment_iterator_class(self):
+        """Alignment iterator_class."""
+
+    def __init__(self, source: _IOSource) -> None:
+        """Hello."""
+        super().__init__(source, fmt=self.fmt)
+        alignment_iterator_class = self._alignment_iterator_class
+        alignments = alignment_iterator_class(self.stream, None)
+        self.iterator = (record for alignment in alignments for record in alignment)
+
+    def __next__(self):
+        return next(self.iterator)
+
+
 class ClustalAlignmentSequenceIterator(AlignmentSequenceIterator):
     """Hello."""
 
     fmt = "clustal"
+
+    _alignment_iterator_class = AlignIO._FormatToIterator[fmt]
 
 
 cls = ClustalAlignmentSequenceIterator  # type: ignore
 _FormatToIterator["clustal"] = cls  # type: ignore
 
 
-class EmbossAlignmentSequenceIterator(AlignmentSequenceIterator):
+class EmbossAlignmentSequenceIterator(OldAlignmentSequenceIterator):
     """Hello."""
 
     fmt = "emboss"
@@ -533,7 +561,7 @@ cls = EmbossAlignmentSequenceIterator  # type: ignore
 _FormatToIterator["emboss"] = cls  # type: ignore
 
 
-class FastaM10AlignmentSequenceIterator(AlignmentSequenceIterator):
+class FastaM10AlignmentSequenceIterator(OldAlignmentSequenceIterator):
     """Hello."""
 
     fmt = "fasta-m10"
@@ -543,7 +571,7 @@ cls = FastaM10AlignmentSequenceIterator  # type: ignore
 _FormatToIterator["fasta-m10"] = cls  # type: ignore
 
 
-class MafAlignmentSequenceIterator(AlignmentSequenceIterator):
+class MafAlignmentSequenceIterator(OldAlignmentSequenceIterator):
     """Hello."""
 
     fmt = "maf"
@@ -553,7 +581,7 @@ cls = MafAlignmentSequenceIterator  # type: ignore
 _FormatToIterator["maf"] = cls  # type: ignore
 
 
-class MauveAlignmentSequenceIterator(AlignmentSequenceIterator):
+class MauveAlignmentSequenceIterator(OldAlignmentSequenceIterator):
     """Hello."""
 
     fmt = "mauve"
@@ -563,7 +591,7 @@ cls = MauveAlignmentSequenceIterator  # type: ignore
 _FormatToIterator["mauve"] = cls  # type: ignore
 
 
-class MsfAlignmentSequenceIterator(AlignmentSequenceIterator):
+class MsfAlignmentSequenceIterator(OldAlignmentSequenceIterator):
     """Hello."""
 
     fmt = "msf"
@@ -573,7 +601,7 @@ cls = MsfAlignmentSequenceIterator  # type: ignore
 _FormatToIterator["msf"] = cls  # type: ignore
 
 
-class NexusAlignmentSequenceIterator(AlignmentSequenceIterator):
+class NexusAlignmentSequenceIterator(OldAlignmentSequenceIterator):
     """Hello."""
 
     fmt = "nexus"
@@ -583,7 +611,7 @@ cls = NexusAlignmentSequenceIterator  # type: ignore
 _FormatToIterator["nexus"] = cls  # type: ignore
 
 
-class PhylipAlignmentSequenceIterator(AlignmentSequenceIterator):
+class PhylipAlignmentSequenceIterator(OldAlignmentSequenceIterator):
     """Hello."""
 
     fmt = "phylip"
@@ -593,7 +621,7 @@ cls = PhylipAlignmentSequenceIterator  # type: ignore
 _FormatToIterator["phylip"] = cls  # type: ignore
 
 
-class PhylipSequentialAlignmentSequenceIterator(AlignmentSequenceIterator):
+class PhylipSequentialAlignmentSequenceIterator(OldAlignmentSequenceIterator):
     """Hello."""
 
     fmt = "phylip-sequential"
@@ -603,7 +631,7 @@ cls = PhylipSequentialAlignmentSequenceIterator  # type: ignore
 _FormatToIterator["phylip-sequential"] = cls  # type: ignore
 
 
-class PhylipRelaxedAlignmentSequenceIterator(AlignmentSequenceIterator):
+class PhylipRelaxedAlignmentSequenceIterator(OldAlignmentSequenceIterator):
     """Hello."""
 
     fmt = "phylip-relaxed"
@@ -613,7 +641,7 @@ cls = PhylipRelaxedAlignmentSequenceIterator  # type: ignore
 _FormatToIterator["phylip-relaxed"] = cls  # type: ignore
 
 
-class StockholmAlignmentSequenceIterator(AlignmentSequenceIterator):
+class StockholmAlignmentSequenceIterator(OldAlignmentSequenceIterator):
     """Hello."""
 
     fmt = "stockholm"
