@@ -491,10 +491,16 @@ _FormatToWriter = {
 }
 
 
-class ClustalAlignmentSequenceIterator(SequenceIterator):
+class AlignmentSequenceIterator(SequenceIterator):
     """Hello."""
 
     modes = "t"
+
+
+class ClustalAlignmentSequenceIterator(AlignmentSequenceIterator):
+    """Hello."""
+
+    fmt = "clustal"
 
     def __init__(self, source: _IOSource) -> None:
         """Hello."""
@@ -510,10 +516,10 @@ class ClustalAlignmentSequenceIterator(SequenceIterator):
 _FormatToIterator["clustal"] = ClustalAlignmentSequenceIterator
 
 
-class EmbossAlignmentSequenceIterator(SequenceIterator):
+class EmbossAlignmentSequenceIterator(AlignmentSequenceIterator):
     """Hello."""
 
-    modes = "t"
+    fmt = "emboss"
 
     def __init__(self, source: _IOSource) -> None:
         """Hello."""
@@ -529,10 +535,10 @@ class EmbossAlignmentSequenceIterator(SequenceIterator):
 _FormatToIterator["emboss"] = EmbossAlignmentSequenceIterator
 
 
-class FastaM10AlignmentSequenceIterator(SequenceIterator):
+class FastaM10AlignmentSequenceIterator(AlignmentSequenceIterator):
     """Hello."""
 
-    modes = "t"
+    fmt = "fasta-m10"
 
     def __init__(self, source: _IOSource) -> None:
         """Hello."""
@@ -548,10 +554,10 @@ class FastaM10AlignmentSequenceIterator(SequenceIterator):
 _FormatToIterator["fasta-m10"] = FastaM10AlignmentSequenceIterator
 
 
-class MafAlignmentSequenceIterator(SequenceIterator):
+class MafAlignmentSequenceIterator(AlignmentSequenceIterator):
     """Hello."""
 
-    modes = "t"
+    fmt = "maf"
 
     def __init__(self, source: _IOSource) -> None:
         """Hello."""
@@ -567,10 +573,10 @@ class MafAlignmentSequenceIterator(SequenceIterator):
 _FormatToIterator["maf"] = MafAlignmentSequenceIterator
 
 
-class MauveAlignmentSequenceIterator(SequenceIterator):
+class MauveAlignmentSequenceIterator(AlignmentSequenceIterator):
     """Hello."""
 
-    modes = "t"
+    fmt = "mauve"
 
     def __init__(self, source: _IOSource) -> None:
         """Hello."""
@@ -586,10 +592,10 @@ class MauveAlignmentSequenceIterator(SequenceIterator):
 _FormatToIterator["mauve"] = MauveAlignmentSequenceIterator
 
 
-class MsfAlignmentSequenceIterator(SequenceIterator):
+class MsfAlignmentSequenceIterator(AlignmentSequenceIterator):
     """Hello."""
 
-    modes = "t"
+    fmt = "msf"
 
     def __init__(self, source: _IOSource) -> None:
         """Hello."""
@@ -605,10 +611,10 @@ class MsfAlignmentSequenceIterator(SequenceIterator):
 _FormatToIterator["msf"] = MsfAlignmentSequenceIterator
 
 
-class NexusAlignmentSequenceIterator(SequenceIterator):
+class NexusAlignmentSequenceIterator(AlignmentSequenceIterator):
     """Hello."""
 
-    modes = "t"
+    fmt = "nexus"
 
     def __init__(self, source: _IOSource) -> None:
         """Hello."""
@@ -624,10 +630,10 @@ class NexusAlignmentSequenceIterator(SequenceIterator):
 _FormatToIterator["nexus"] = NexusAlignmentSequenceIterator
 
 
-class PhylipAlignmentSequenceIterator(SequenceIterator):
+class PhylipAlignmentSequenceIterator(AlignmentSequenceIterator):
     """Hello."""
 
-    modes = "t"
+    fmt = "phylip"
 
     def __init__(self, source: _IOSource) -> None:
         """Hello."""
@@ -643,10 +649,10 @@ class PhylipAlignmentSequenceIterator(SequenceIterator):
 _FormatToIterator["phylip"] = PhylipAlignmentSequenceIterator
 
 
-class PhylipSequentialAlignmentSequenceIterator(SequenceIterator):
+class PhylipSequentialAlignmentSequenceIterator(AlignmentSequenceIterator):
     """Hello."""
 
-    modes = "t"
+    fmt = "phylip-sequential"
 
     def __init__(self, source: _IOSource) -> None:
         """Hello."""
@@ -662,10 +668,10 @@ class PhylipSequentialAlignmentSequenceIterator(SequenceIterator):
 _FormatToIterator["phylip-sequential"] = PhylipSequentialAlignmentSequenceIterator
 
 
-class PhylipRelaxedAlignmentSequenceIterator(SequenceIterator):
+class PhylipRelaxedAlignmentSequenceIterator(AlignmentSequenceIterator):
     """Hello."""
 
-    modes = "t"
+    fmt = "phylip-relaxed"
 
     def __init__(self, source: _IOSource) -> None:
         """Hello."""
@@ -681,10 +687,10 @@ class PhylipRelaxedAlignmentSequenceIterator(SequenceIterator):
 _FormatToIterator["phylip-relaxed"] = PhylipRelaxedAlignmentSequenceIterator
 
 
-class StockholmAlignmentSequenceIterator(SequenceIterator):
+class StockholmAlignmentSequenceIterator(AlignmentSequenceIterator):
     """Hello."""
 
-    modes = "t"
+    fmt = "stockholm"
 
     def __init__(self, source: _IOSource) -> None:
         """Hello."""
