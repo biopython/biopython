@@ -493,16 +493,12 @@ class FastaPearsonIterator(SequenceIterator):
 
 
 class FastaWriter(SequenceWriter):
-    """Class to write Fasta format files (OBSOLETE).
-
-    Please use the ``as_fasta`` function instead, or the top level
-    ``Bio.SeqIO.write()`` function instead using ``format="fasta"``.
-    """
+    """FASTA file writer."""
 
     modes = "t"
 
     def __init__(self, target, wrap=60, record2title=None):
-        """Create a Fasta writer (OBSOLETE).
+        """Create a Fasta writer.
 
         Arguments:
          - target - Output stream opened in text mode, or a path to a file.
@@ -539,6 +535,30 @@ class FastaWriter(SequenceWriter):
                 raise ValueError
         self.wrap = wrap
         self.record2title = record2title
+
+    @classmethod
+    def to_string(cls, record):
+        """Turn a SeqRecord into a FASTA formatted string, and return it."""
+        id = _clean(record.id)
+        description = _clean(record.description)
+        if description and description.split(None, 1)[0] == id:
+            # The description includes the id at the start
+            title = description
+        elif description:
+            title = f"{id} {description}"
+        else:
+            title = id
+        assert "\n" not in title
+        assert "\r" not in title
+        lines = [f">{title}\n"]
+
+        data = _get_seq_string(record)  # Catches sequence being None
+        assert "\n" not in data
+        assert "\r" not in data
+        for i in range(0, len(data), 60):
+            lines.append(data[i : i + 60] + "\n")
+
+        return "".join(lines)
 
     def write_record(self, record):
         """Write a single Fasta record to the file."""
@@ -615,31 +635,8 @@ class FastaTwoLineWriter(FastaWriter):
 
 
 def as_fasta(record):
-    """Turn a SeqRecord into a FASTA formatted string.
-
-    This is used internally by the SeqRecord's .format("fasta")
-    method and by the SeqIO.write(..., ..., "fasta") function.
-    """
-    id = _clean(record.id)
-    description = _clean(record.description)
-    if description and description.split(None, 1)[0] == id:
-        # The description includes the id at the start
-        title = description
-    elif description:
-        title = f"{id} {description}"
-    else:
-        title = id
-    assert "\n" not in title
-    assert "\r" not in title
-    lines = [f">{title}\n"]
-
-    data = _get_seq_string(record)  # Catches sequence being None
-    assert "\n" not in data
-    assert "\r" not in data
-    for i in range(0, len(data), 60):
-        lines.append(data[i : i + 60] + "\n")
-
-    return "".join(lines)
+    """Turn a SeqRecord into a FASTA formatted string."""
+    return FastaWriter.to_string(record)
 
 
 def as_fasta_2line(record):
