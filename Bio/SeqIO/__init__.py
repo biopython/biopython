@@ -566,74 +566,45 @@ cls = type(name, (AlignmentSequenceIterator,), {"fmt": fmt, "_alignment_iterator
 _FormatToIterator[fmt] = cls  # type: ignore
 
 
-class MauveAlignmentSequenceIterator(OldAlignmentSequenceIterator):
-    """Hello."""
-
-    fmt = "mauve"
-
-
-cls = MauveAlignmentSequenceIterator  # type: ignore
-_FormatToIterator["mauve"] = cls  # type: ignore
+fmt = "mauve"
+name = fmt.replace("-", " ").title().replace(" ", "") + "AlignmentSequenceIterator"
+cls = type(name, (AlignmentSequenceIterator,), {"fmt": fmt, "_alignment_iterator_class": AlignIO._FormatToIterator[fmt]})  # type: ignore
+_FormatToIterator[fmt] = cls  # type: ignore
 
 
-class MsfAlignmentSequenceIterator(OldAlignmentSequenceIterator):
-    """Hello."""
-
-    fmt = "msf"
-
-
-cls = MsfAlignmentSequenceIterator  # type: ignore
-_FormatToIterator["msf"] = cls  # type: ignore
+fmt = "msf"
+name = fmt.replace("-", " ").title().replace(" ", "") + "AlignmentSequenceIterator"
+cls = type(name, (AlignmentSequenceIterator,), {"fmt": fmt, "_alignment_iterator_class": AlignIO._FormatToIterator[fmt]})  # type: ignore
+_FormatToIterator[fmt] = cls  # type: ignore
 
 
-class NexusAlignmentSequenceIterator(OldAlignmentSequenceIterator):
-    """Hello."""
-
-    fmt = "nexus"
-
-
-cls = NexusAlignmentSequenceIterator  # type: ignore
-_FormatToIterator["nexus"] = cls  # type: ignore
+fmt = "nexus"
+name = fmt.replace("-", " ").title().replace(" ", "") + "AlignmentSequenceIterator"
+cls = type(name, (AlignmentSequenceIterator,), {"fmt": fmt, "_alignment_iterator_class": AlignIO._FormatToIterator[fmt]})  # type: ignore
+_FormatToIterator[fmt] = cls  # type: ignore
 
 
-class PhylipAlignmentSequenceIterator(OldAlignmentSequenceIterator):
-    """Hello."""
-
-    fmt = "phylip"
-
-
-cls = PhylipAlignmentSequenceIterator  # type: ignore
-_FormatToIterator["phylip"] = cls  # type: ignore
+fmt = "phylip"
+name = fmt.replace("-", " ").title().replace(" ", "") + "AlignmentSequenceIterator"
+cls = type(name, (AlignmentSequenceIterator,), {"fmt": fmt, "_alignment_iterator_class": AlignIO._FormatToIterator[fmt]})  # type: ignore
+_FormatToIterator[fmt] = cls  # type: ignore
 
 
-class PhylipSequentialAlignmentSequenceIterator(OldAlignmentSequenceIterator):
-    """Hello."""
-
-    fmt = "phylip-sequential"
-
-
-cls = PhylipSequentialAlignmentSequenceIterator  # type: ignore
-_FormatToIterator["phylip-sequential"] = cls  # type: ignore
+fmt = "phylip-sequential"
+name = fmt.replace("-", " ").title().replace(" ", "") + "AlignmentSequenceIterator"
+cls = type(name, (AlignmentSequenceIterator,), {"fmt": fmt, "_alignment_iterator_class": AlignIO._FormatToIterator[fmt]})  # type: ignore
+_FormatToIterator[fmt] = cls  # type: ignore
 
 
-class PhylipRelaxedAlignmentSequenceIterator(OldAlignmentSequenceIterator):
-    """Hello."""
+fmt = "phylip-relaxed"
+name = fmt.replace("-", " ").title().replace(" ", "") + "AlignmentSequenceIterator"
+cls = type(name, (AlignmentSequenceIterator,), {"fmt": fmt, "_alignment_iterator_class": AlignIO._FormatToIterator[fmt]})  # type: ignore
+_FormatToIterator[fmt] = cls  # type: ignore
 
-    fmt = "phylip-relaxed"
-
-
-cls = PhylipRelaxedAlignmentSequenceIterator  # type: ignore
-_FormatToIterator["phylip-relaxed"] = cls  # type: ignore
-
-
-class StockholmAlignmentSequenceIterator(OldAlignmentSequenceIterator):
-    """Hello."""
-
-    fmt = "stockholm"
-
-
-cls = StockholmAlignmentSequenceIterator  # type: ignore
-_FormatToIterator["stockholm"] = cls  # type: ignore
+fmt = "stockholm"
+name = fmt.replace("-", " ").title().replace(" ", "") + "AlignmentSequenceIterator"
+cls = type(name, (AlignmentSequenceIterator,), {"fmt": fmt, "_alignment_iterator_class": AlignIO._FormatToIterator[fmt]})  # type: ignore
+_FormatToIterator[fmt] = cls  # type: ignore
 
 
 class AlignmentSequenceWriter(SequenceWriter):
