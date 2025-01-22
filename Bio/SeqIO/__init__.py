@@ -509,14 +509,14 @@ class AlignmentSequenceIterator(SequenceIterator):
         alignments = alignment_iterator(self.stream, None)
         self.iterator = (record for alignment in alignments for record in alignment)
 
+    def __next__(self):
+        return next(self.iterator)
+
 
 class ClustalAlignmentSequenceIterator(AlignmentSequenceIterator):
     """Hello."""
 
     fmt = "clustal"
-
-    def __next__(self):
-        return next(self.iterator)
 
 
 _FormatToIterator["clustal"] = ClustalAlignmentSequenceIterator
@@ -527,9 +527,6 @@ class EmbossAlignmentSequenceIterator(AlignmentSequenceIterator):
 
     fmt = "emboss"
 
-    def __next__(self):
-        return next(self.iterator)
-
 
 _FormatToIterator["emboss"] = EmbossAlignmentSequenceIterator
 
@@ -538,9 +535,6 @@ class FastaM10AlignmentSequenceIterator(AlignmentSequenceIterator):
     """Hello."""
 
     fmt = "fasta-m10"
-
-    def __next__(self):
-        return next(self.iterator)
 
 
 _FormatToIterator["fasta-m10"] = FastaM10AlignmentSequenceIterator
@@ -551,9 +545,6 @@ class MafAlignmentSequenceIterator(AlignmentSequenceIterator):
 
     fmt = "maf"
 
-    def __next__(self):
-        return next(self.iterator)
-
 
 _FormatToIterator["maf"] = MafAlignmentSequenceIterator
 
@@ -562,9 +553,6 @@ class MauveAlignmentSequenceIterator(AlignmentSequenceIterator):
     """Hello."""
 
     fmt = "mauve"
-
-    def __next__(self):
-        return next(self.iterator)
 
 
 _FormatToIterator["mauve"] = MauveAlignmentSequenceIterator
@@ -575,9 +563,6 @@ class MsfAlignmentSequenceIterator(AlignmentSequenceIterator):
 
     fmt = "msf"
 
-    def __next__(self):
-        return next(self.iterator)
-
 
 _FormatToIterator["msf"] = MsfAlignmentSequenceIterator
 
@@ -586,9 +571,6 @@ class NexusAlignmentSequenceIterator(AlignmentSequenceIterator):
     """Hello."""
 
     fmt = "nexus"
-
-    def __next__(self):
-        return next(self.iterator)
 
 
 _FormatToIterator["nexus"] = NexusAlignmentSequenceIterator
@@ -599,9 +581,6 @@ class PhylipAlignmentSequenceIterator(AlignmentSequenceIterator):
 
     fmt = "phylip"
 
-    def __next__(self):
-        return next(self.iterator)
-
 
 _FormatToIterator["phylip"] = PhylipAlignmentSequenceIterator
 
@@ -610,9 +589,6 @@ class PhylipSequentialAlignmentSequenceIterator(AlignmentSequenceIterator):
     """Hello."""
 
     fmt = "phylip-sequential"
-
-    def __next__(self):
-        return next(self.iterator)
 
 
 _FormatToIterator["phylip-sequential"] = PhylipSequentialAlignmentSequenceIterator
@@ -623,9 +599,6 @@ class PhylipRelaxedAlignmentSequenceIterator(AlignmentSequenceIterator):
 
     fmt = "phylip-relaxed"
 
-    def __next__(self):
-        return next(self.iterator)
-
 
 _FormatToIterator["phylip-relaxed"] = PhylipRelaxedAlignmentSequenceIterator
 
@@ -634,9 +607,6 @@ class StockholmAlignmentSequenceIterator(AlignmentSequenceIterator):
     """Hello."""
 
     fmt = "stockholm"
-
-    def __next__(self):
-        return next(self.iterator)
 
 
 _FormatToIterator["stockholm"] = StockholmAlignmentSequenceIterator
