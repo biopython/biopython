@@ -493,7 +493,7 @@ _FormatToWriter = {
 
 
 class AlignmentSequenceIterator(SequenceIterator):
-    """Hello."""
+    """Pareses an alignment file and yields sequence records."""
 
     modes = "t"
 
@@ -508,7 +508,7 @@ class AlignmentSequenceIterator(SequenceIterator):
         """Alignment iterator class."""
 
     def __init__(self, source: _IOSource) -> None:
-        """Hello."""
+        """Initialize the iterator."""
         super().__init__(source, fmt=self.fmt)
         # We need type(self) here, because _alignment_iterator_class is
         # actually a function instead of a class for some formats in
