@@ -532,7 +532,7 @@ for fmt, alignment_iterator_class in AlignIO._FormatToIterator.items():
             "_alignment_iterator_class": alignment_iterator_class,
         },
     )
-    _FormatToIterator[fmt] = cls  # type: ignore
+    _FormatToIterator[fmt] = cls
 
 
 class AlignmentSequenceWriter(SequenceWriter):
