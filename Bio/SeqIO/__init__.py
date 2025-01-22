@@ -560,7 +560,7 @@ class AlignmentSequenceWriter(SequenceWriter):
 
 for fmt, writer_class in AlignIO._FormatToWriter.items():
     name = fmt.replace("-", " ").title().replace(" ", "") + "AlignmentSequenceWriter"
-    cls = type(name, (AlignmentSequenceWriter,), {"writer_class": writer_class})  # type: ignore
+    cls = type(name, (AlignmentSequenceWriter,), {"writer_class": writer_class})
     _FormatToWriter[fmt] = cls  # type: ignore
 
 
