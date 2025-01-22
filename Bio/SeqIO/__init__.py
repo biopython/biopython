@@ -531,8 +531,12 @@ class AlignmentSequenceIterator(SequenceIterator):
     def __init__(self, source: _IOSource) -> None:
         """Hello."""
         super().__init__(source, fmt=self.fmt)
-        alignment_iterator_class = self._alignment_iterator_class
-        alignments = alignment_iterator_class(self.stream, None)
+        # We need type(self) here, because _alignment_iterator_class is
+        # actually a function instead of a class for some formats in
+        # Bio.AlignIO, and Python will turn the function into a bound method
+        # with self as the first argument.
+        alignment_iterator_class = type(self)._alignment_iterator_class
+        alignments = alignment_iterator_class(self.stream, None)  # type: ignore
         self.iterator = (record for alignment in alignments for record in alignment)
 
     def __next__(self):
@@ -544,25 +548,16 @@ name = fmt.replace("-", " ").title().replace(" ", "") + "AlignmentSequenceIterat
 cls = type(name, (AlignmentSequenceIterator,), {"fmt": fmt, "_alignment_iterator_class": AlignIO._FormatToIterator[fmt]})  # type: ignore
 _FormatToIterator[fmt] = cls  # type: ignore
 
-
-class EmbossAlignmentSequenceIterator(OldAlignmentSequenceIterator):
-    """Hello."""
-
-    fmt = "emboss"
-
-
-cls = EmbossAlignmentSequenceIterator  # type: ignore
-_FormatToIterator["emboss"] = cls  # type: ignore
+fmt = "emboss"
+name = fmt.replace("-", " ").title().replace(" ", "") + "AlignmentSequenceIterator"
+cls = type(name, (AlignmentSequenceIterator,), {"fmt": fmt, "_alignment_iterator_class": AlignIO._FormatToIterator[fmt]})  # type: ignore
+_FormatToIterator[fmt] = cls  # type: ignore
 
 
-class FastaM10AlignmentSequenceIterator(OldAlignmentSequenceIterator):
-    """Hello."""
-
-    fmt = "fasta-m10"
-
-
-cls = FastaM10AlignmentSequenceIterator  # type: ignore
-_FormatToIterator["fasta-m10"] = cls  # type: ignore
+fmt = "fasta-m10"
+name = fmt.replace("-", " ").title().replace(" ", "") + "AlignmentSequenceIterator"
+cls = type(name, (AlignmentSequenceIterator,), {"fmt": fmt, "_alignment_iterator_class": AlignIO._FormatToIterator[fmt]})  # type: ignore
+_FormatToIterator[fmt] = cls  # type: ignore
 
 
 class MafAlignmentSequenceIterator(OldAlignmentSequenceIterator):
