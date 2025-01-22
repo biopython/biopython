@@ -531,7 +531,7 @@ for fmt, alignment_iterator_class in AlignIO._FormatToIterator.items():
             "fmt": fmt,
             "_alignment_iterator_class": alignment_iterator_class,
         },
-    )  # type: ignore
+    )
     _FormatToIterator[fmt] = cls  # type: ignore
 
 
