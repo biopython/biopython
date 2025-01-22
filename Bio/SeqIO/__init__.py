@@ -725,10 +725,7 @@ def read(handle, format, alphabet=None):
     Use the Bio.SeqIO.parse(handle, format) function if you want
     to read multiple records from the handle.
     """
-    from Bio import AlignIO
-
-    if format in AlignIO._FormatToIterator:
-        records = parse(handle, format, alphabet)
+    with parse(handle, format, alphabet) as records:
         try:
             record = next(records)
         except StopIteration:
@@ -738,17 +735,6 @@ def read(handle, format, alphabet=None):
             raise ValueError("More than one record found in handle")
         except StopIteration:
             pass
-    else:
-        with parse(handle, format, alphabet) as records:
-            try:
-                record = next(records)
-            except StopIteration:
-                raise ValueError("No records found in handle") from None
-            try:
-                next(records)
-                raise ValueError("More than one record found in handle")
-            except StopIteration:
-                pass
     return record
 
 
