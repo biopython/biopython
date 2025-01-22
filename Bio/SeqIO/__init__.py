@@ -490,11 +490,14 @@ _FormatToWriter = {
     "xdna": XdnaIO.XdnaWriter,
 }
 
-class AlignmentSequenceIterator(SequenceIterator):
+
+class ClustalAlignmentSequenceIterator(SequenceIterator):
+    """Hello."""
 
     modes = "t"
 
     def __init__(self, source: _IOSource) -> None:
+        """Hello."""
         super().__init__(source, fmt="clustal")
         alignment_iterator = AlignIO._FormatToIterator["clustal"]
         alignments = alignment_iterator(self.stream, None)
@@ -504,13 +507,197 @@ class AlignmentSequenceIterator(SequenceIterator):
         return next(self.iterator)
 
 
-_FormatToIterator["clustal"] = AlignmentSequenceIterator
+_FormatToIterator["clustal"] = ClustalAlignmentSequenceIterator
 
 
-# for fmt, writer_class in AlignIO._FormatToWriter.items():
-    # name = fmt.replace("-", " ").title().replace(" ", "") + "Writer"
-    # cls = type(name, (AlignmentSequenceWriter,), {"writer_class": writer_class})
-    # _FormatToWriter[fmt] = cls  # type: ignore
+class EmbossAlignmentSequenceIterator(SequenceIterator):
+    """Hello."""
+
+    modes = "t"
+
+    def __init__(self, source: _IOSource) -> None:
+        """Hello."""
+        super().__init__(source, fmt="emboss")
+        alignment_iterator = AlignIO._FormatToIterator["emboss"]
+        alignments = alignment_iterator(self.stream, None)
+        self.iterator = (record for alignment in alignments for record in alignment)
+
+    def __next__(self):
+        return next(self.iterator)
+
+
+_FormatToIterator["emboss"] = EmbossAlignmentSequenceIterator
+
+
+class FastaM10AlignmentSequenceIterator(SequenceIterator):
+    """Hello."""
+
+    modes = "t"
+
+    def __init__(self, source: _IOSource) -> None:
+        """Hello."""
+        super().__init__(source, fmt="fasta-m10")
+        alignment_iterator = AlignIO._FormatToIterator["fasta-m10"]
+        alignments = alignment_iterator(self.stream, None)
+        self.iterator = (record for alignment in alignments for record in alignment)
+
+    def __next__(self):
+        return next(self.iterator)
+
+
+_FormatToIterator["fasta-m10"] = FastaM10AlignmentSequenceIterator
+
+
+class MafAlignmentSequenceIterator(SequenceIterator):
+    """Hello."""
+
+    modes = "t"
+
+    def __init__(self, source: _IOSource) -> None:
+        """Hello."""
+        super().__init__(source, fmt="maf")
+        alignment_iterator = AlignIO._FormatToIterator["maf"]
+        alignments = alignment_iterator(self.stream, None)
+        self.iterator = (record for alignment in alignments for record in alignment)
+
+    def __next__(self):
+        return next(self.iterator)
+
+
+_FormatToIterator["maf"] = MafAlignmentSequenceIterator
+
+
+class MauveAlignmentSequenceIterator(SequenceIterator):
+    """Hello."""
+
+    modes = "t"
+
+    def __init__(self, source: _IOSource) -> None:
+        """Hello."""
+        super().__init__(source, fmt="mauve")
+        alignment_iterator = AlignIO._FormatToIterator["mauve"]
+        alignments = alignment_iterator(self.stream, None)
+        self.iterator = (record for alignment in alignments for record in alignment)
+
+    def __next__(self):
+        return next(self.iterator)
+
+
+_FormatToIterator["mauve"] = MauveAlignmentSequenceIterator
+
+
+class MsfAlignmentSequenceIterator(SequenceIterator):
+    """Hello."""
+
+    modes = "t"
+
+    def __init__(self, source: _IOSource) -> None:
+        """Hello."""
+        super().__init__(source, fmt="msf")
+        alignment_iterator = AlignIO._FormatToIterator["msf"]
+        alignments = alignment_iterator(self.stream, None)
+        self.iterator = (record for alignment in alignments for record in alignment)
+
+    def __next__(self):
+        return next(self.iterator)
+
+
+_FormatToIterator["msf"] = MsfAlignmentSequenceIterator
+
+
+class NexusAlignmentSequenceIterator(SequenceIterator):
+    """Hello."""
+
+    modes = "t"
+
+    def __init__(self, source: _IOSource) -> None:
+        """Hello."""
+        super().__init__(source, fmt="nexus")
+        alignment_iterator = AlignIO._FormatToIterator["nexus"]
+        alignments = alignment_iterator(self.stream, None)
+        self.iterator = (record for alignment in alignments for record in alignment)
+
+    def __next__(self):
+        return next(self.iterator)
+
+
+_FormatToIterator["nexus"] = NexusAlignmentSequenceIterator
+
+
+class PhylipAlignmentSequenceIterator(SequenceIterator):
+    """Hello."""
+
+    modes = "t"
+
+    def __init__(self, source: _IOSource) -> None:
+        """Hello."""
+        super().__init__(source, fmt="phylip")
+        alignment_iterator = AlignIO._FormatToIterator["phylip"]
+        alignments = alignment_iterator(self.stream, None)
+        self.iterator = (record for alignment in alignments for record in alignment)
+
+    def __next__(self):
+        return next(self.iterator)
+
+
+_FormatToIterator["phylip"] = PhylipAlignmentSequenceIterator
+
+
+class PhylipSequentialAlignmentSequenceIterator(SequenceIterator):
+    """Hello."""
+
+    modes = "t"
+
+    def __init__(self, source: _IOSource) -> None:
+        """Hello."""
+        super().__init__(source, fmt="phylip-sequential")
+        alignment_iterator = AlignIO._FormatToIterator["phylip-sequential"]
+        alignments = alignment_iterator(self.stream, None)
+        self.iterator = (record for alignment in alignments for record in alignment)
+
+    def __next__(self):
+        return next(self.iterator)
+
+
+_FormatToIterator["phylip-sequential"] = PhylipSequentialAlignmentSequenceIterator
+
+
+class PhylipRelaxedAlignmentSequenceIterator(SequenceIterator):
+    """Hello."""
+
+    modes = "t"
+
+    def __init__(self, source: _IOSource) -> None:
+        """Hello."""
+        super().__init__(source, fmt="phylip-relaxed")
+        alignment_iterator = AlignIO._FormatToIterator["phylip-relaxed"]
+        alignments = alignment_iterator(self.stream, None)
+        self.iterator = (record for alignment in alignments for record in alignment)
+
+    def __next__(self):
+        return next(self.iterator)
+
+
+_FormatToIterator["phylip-relaxed"] = PhylipRelaxedAlignmentSequenceIterator
+
+
+class StockholmAlignmentSequenceIterator(SequenceIterator):
+    """Hello."""
+
+    modes = "t"
+
+    def __init__(self, source: _IOSource) -> None:
+        """Hello."""
+        super().__init__(source, fmt="stockholm")
+        alignment_iterator = AlignIO._FormatToIterator["stockholm"]
+        alignments = alignment_iterator(self.stream, None)
+        self.iterator = (record for alignment in alignments for record in alignment)
+
+    def __next__(self):
+        return next(self.iterator)
+
+
+_FormatToIterator["stockholm"] = StockholmAlignmentSequenceIterator
 
 
 class AlignmentSequenceWriter(SequenceWriter):
@@ -537,7 +724,7 @@ class AlignmentSequenceWriter(SequenceWriter):
 
 
 for fmt, writer_class in AlignIO._FormatToWriter.items():
-    name = fmt.replace("-", " ").title().replace(" ", "") + "Writer"
+    name = fmt.replace("-", " ").title().replace(" ", "") + "AlignmentSequenceWriter"
     cls = type(name, (AlignmentSequenceWriter,), {"writer_class": writer_class})
     _FormatToWriter[fmt] = cls  # type: ignore
 
