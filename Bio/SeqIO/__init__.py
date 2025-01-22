@@ -496,18 +496,18 @@ class AlignmentSequenceIterator(SequenceIterator):
 
     modes = "t"
 
+    def __init__(self, source: _IOSource, fmt=None) -> None:  # type: ignore
+        """Hello."""
+        super().__init__(source, fmt=self.fmt)  # type: ignore
+        alignment_iterator = AlignIO._FormatToIterator[self.fmt]  # type: ignore
+        alignments = alignment_iterator(self.stream, None)
+        self.iterator = (record for alignment in alignments for record in alignment)
+
 
 class ClustalAlignmentSequenceIterator(AlignmentSequenceIterator):
     """Hello."""
 
     fmt = "clustal"
-
-    def __init__(self, source: _IOSource) -> None:
-        """Hello."""
-        super().__init__(source, fmt=self.fmt)
-        alignment_iterator = AlignIO._FormatToIterator[self.fmt]
-        alignments = alignment_iterator(self.stream, None)
-        self.iterator = (record for alignment in alignments for record in alignment)
 
     def __next__(self):
         return next(self.iterator)
