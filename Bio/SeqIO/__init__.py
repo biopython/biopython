@@ -564,6 +564,9 @@ for fmt, writer_class in AlignIO._FormatToWriter.items():
     _FormatToWriter[fmt] = cls  # type: ignore
 
 
+del AlignIO
+
+
 def write(
     sequences: Iterable[SeqRecord] | SeqRecord,
     handle: _TextIOSource,
@@ -622,7 +625,7 @@ def write(
             )
         return count
 
-    if format in _FormatToIterator or format in AlignIO._FormatToIterator:
+    if format in _FormatToIterator:
         raise ValueError(f"Reading format '{format}' is supported, but not writing")
 
     raise ValueError(f"Unknown format '{format}'")
