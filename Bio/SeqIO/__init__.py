@@ -504,8 +504,8 @@ class ClustalAlignmentSequenceIterator(AlignmentSequenceIterator):
 
     def __init__(self, source: _IOSource) -> None:
         """Hello."""
-        super().__init__(source, fmt="clustal")
-        alignment_iterator = AlignIO._FormatToIterator["clustal"]
+        super().__init__(source, fmt=self.fmt)
+        alignment_iterator = AlignIO._FormatToIterator[self.fmt]
         alignments = alignment_iterator(self.stream, None)
         self.iterator = (record for alignment in alignments for record in alignment)
 
@@ -523,8 +523,8 @@ class EmbossAlignmentSequenceIterator(AlignmentSequenceIterator):
 
     def __init__(self, source: _IOSource) -> None:
         """Hello."""
-        super().__init__(source, fmt="emboss")
-        alignment_iterator = AlignIO._FormatToIterator["emboss"]
+        super().__init__(source, fmt=self.fmt)
+        alignment_iterator = AlignIO._FormatToIterator[self.fmt]
         alignments = alignment_iterator(self.stream, None)
         self.iterator = (record for alignment in alignments for record in alignment)
 
@@ -542,8 +542,8 @@ class FastaM10AlignmentSequenceIterator(AlignmentSequenceIterator):
 
     def __init__(self, source: _IOSource) -> None:
         """Hello."""
-        super().__init__(source, fmt="fasta-m10")
-        alignment_iterator = AlignIO._FormatToIterator["fasta-m10"]
+        super().__init__(source, fmt=self.fmt)
+        alignment_iterator = AlignIO._FormatToIterator[self.fmt]
         alignments = alignment_iterator(self.stream, None)
         self.iterator = (record for alignment in alignments for record in alignment)
 
@@ -561,8 +561,8 @@ class MafAlignmentSequenceIterator(AlignmentSequenceIterator):
 
     def __init__(self, source: _IOSource) -> None:
         """Hello."""
-        super().__init__(source, fmt="maf")
-        alignment_iterator = AlignIO._FormatToIterator["maf"]
+        super().__init__(source, fmt=self.fmt)
+        alignment_iterator = AlignIO._FormatToIterator[self.fmt]
         alignments = alignment_iterator(self.stream, None)
         self.iterator = (record for alignment in alignments for record in alignment)
 
@@ -580,8 +580,8 @@ class MauveAlignmentSequenceIterator(AlignmentSequenceIterator):
 
     def __init__(self, source: _IOSource) -> None:
         """Hello."""
-        super().__init__(source, fmt="mauve")
-        alignment_iterator = AlignIO._FormatToIterator["mauve"]
+        super().__init__(source, fmt=self.fmt)
+        alignment_iterator = AlignIO._FormatToIterator[self.fmt]
         alignments = alignment_iterator(self.stream, None)
         self.iterator = (record for alignment in alignments for record in alignment)
 
@@ -599,8 +599,8 @@ class MsfAlignmentSequenceIterator(AlignmentSequenceIterator):
 
     def __init__(self, source: _IOSource) -> None:
         """Hello."""
-        super().__init__(source, fmt="msf")
-        alignment_iterator = AlignIO._FormatToIterator["msf"]
+        super().__init__(source, fmt=self.fmt)
+        alignment_iterator = AlignIO._FormatToIterator[self.fmt]
         alignments = alignment_iterator(self.stream, None)
         self.iterator = (record for alignment in alignments for record in alignment)
 
@@ -618,8 +618,8 @@ class NexusAlignmentSequenceIterator(AlignmentSequenceIterator):
 
     def __init__(self, source: _IOSource) -> None:
         """Hello."""
-        super().__init__(source, fmt="nexus")
-        alignment_iterator = AlignIO._FormatToIterator["nexus"]
+        super().__init__(source, fmt=self.fmt)
+        alignment_iterator = AlignIO._FormatToIterator[self.fmt]
         alignments = alignment_iterator(self.stream, None)
         self.iterator = (record for alignment in alignments for record in alignment)
 
@@ -637,8 +637,8 @@ class PhylipAlignmentSequenceIterator(AlignmentSequenceIterator):
 
     def __init__(self, source: _IOSource) -> None:
         """Hello."""
-        super().__init__(source, fmt="phylip")
-        alignment_iterator = AlignIO._FormatToIterator["phylip"]
+        super().__init__(source, fmt=self.fmt)
+        alignment_iterator = AlignIO._FormatToIterator[self.fmt]
         alignments = alignment_iterator(self.stream, None)
         self.iterator = (record for alignment in alignments for record in alignment)
 
@@ -656,8 +656,8 @@ class PhylipSequentialAlignmentSequenceIterator(AlignmentSequenceIterator):
 
     def __init__(self, source: _IOSource) -> None:
         """Hello."""
-        super().__init__(source, fmt="phylip-sequential")
-        alignment_iterator = AlignIO._FormatToIterator["phylip-sequential"]
+        super().__init__(source, fmt=self.fmt)
+        alignment_iterator = AlignIO._FormatToIterator[self.fmt]
         alignments = alignment_iterator(self.stream, None)
         self.iterator = (record for alignment in alignments for record in alignment)
 
@@ -675,8 +675,8 @@ class PhylipRelaxedAlignmentSequenceIterator(AlignmentSequenceIterator):
 
     def __init__(self, source: _IOSource) -> None:
         """Hello."""
-        super().__init__(source, fmt="phylip-relaxed")
-        alignment_iterator = AlignIO._FormatToIterator["phylip-relaxed"]
+        super().__init__(source, fmt=self.fmt)
+        alignment_iterator = AlignIO._FormatToIterator[self.fmt]
         alignments = alignment_iterator(self.stream, None)
         self.iterator = (record for alignment in alignments for record in alignment)
 
@@ -694,8 +694,8 @@ class StockholmAlignmentSequenceIterator(AlignmentSequenceIterator):
 
     def __init__(self, source: _IOSource) -> None:
         """Hello."""
-        super().__init__(source, fmt="stockholm")
-        alignment_iterator = AlignIO._FormatToIterator["stockholm"]
+        super().__init__(source, fmt=self.fmt)
+        alignment_iterator = AlignIO._FormatToIterator[self.fmt]
         alignments = alignment_iterator(self.stream, None)
         self.iterator = (record for alignment in alignments for record in alignment)
 
