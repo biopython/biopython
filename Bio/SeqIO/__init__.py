@@ -376,11 +376,12 @@ making up each alignment as SeqRecords.
 #
 # --Peter
 
+from abc import ABC, abstractmethod
 from collections.abc import Callable
 from collections.abc import Iterable
 from typing import Union
 
-from Bio.File import as_handle
+from Bio import AlignIO
 from Bio.SeqIO import AbiIO
 from Bio.SeqIO import AceIO
 from Bio.SeqIO import FastaIO
@@ -403,7 +404,7 @@ from Bio.SeqIO import UniprotIO
 from Bio.SeqIO import XdnaIO
 from Bio.SeqRecord import SeqRecord
 
-from .Interfaces import _TextIOSource
+from .Interfaces import _IOSource, _TextIOSource, SequenceIterator, SequenceWriter
 
 # Convention for format names is "mainname-subtype" in lower case.
 # Please use the same names as BioPerl or EMBOSS where possible.
@@ -455,18 +456,6 @@ _FormatToIterator = {
     "xdna": XdnaIO.XdnaIterator,
 }
 
-_FormatToString: dict[str, Callable[[SeqRecord], str]] = {
-    "fasta": FastaIO.as_fasta,
-    "fasta-2line": FastaIO.as_fasta_2line,
-    "tab": TabIO.as_tab,
-    "fastq": QualityIO.as_fastq,
-    "fastq-sanger": QualityIO.as_fastq,
-    "fastq-solexa": QualityIO.as_fastq_solexa,
-    "fastq-illumina": QualityIO.as_fastq_illumina,
-    "qual": QualityIO.as_qual,
-}
-
-# This could exclude file formats covered by _FormatToString?
 # Right now used in the unit tests as proxy for all supported outputs...
 _FormatToWriter = {
     "fasta": FastaIO.FastaWriter,
@@ -488,6 +477,92 @@ _FormatToWriter = {
     "tab": TabIO.TabWriter,
     "xdna": XdnaIO.XdnaWriter,
 }
+
+
+class AlignmentSequenceIterator(SequenceIterator):
+    """Pareses an alignment file and yields sequence records."""
+
+    modes = "t"
+
+    @property
+    @abstractmethod
+    def fmt(self):
+        """Alignment file format name."""
+
+    @property
+    @abstractmethod
+    def _alignment_iterator_class(self):
+        """Alignment iterator class."""
+
+    def __init__(self, source: _IOSource) -> None:
+        """Initialize the iterator."""
+        super().__init__(source, fmt=self.fmt)
+        # We need type(self) here, because _alignment_iterator_class is
+        # actually a function instead of a class for some formats in
+        # Bio.AlignIO, and Python will turn the function into a bound method
+        # with self as the first argument.
+        alignment_iterator_class = type(self)._alignment_iterator_class
+        alignments = alignment_iterator_class(self.stream, None)  # type: ignore
+        self.iterator = (record for alignment in alignments for record in alignment)
+
+    def __next__(self):
+        return next(self.iterator)
+
+
+for fmt, alignment_iterator_class in AlignIO._FormatToIterator.items():
+    name = fmt.replace("-", " ").title().replace(" ", "") + "AlignmentSequenceIterator"
+    cls = type(
+        name,
+        (AlignmentSequenceIterator,),
+        {
+            "fmt": fmt,
+            "_alignment_iterator_class": alignment_iterator_class,
+        },
+    )
+    _FormatToIterator[fmt] = cls
+
+
+class AlignmentSequenceWriter(SequenceWriter):
+    """Writes sequences as an alignment."""
+
+    modes = "t"
+
+    @property
+    @abstractmethod
+    def _alignment_writer_class(self):
+        """Alignment writer class."""
+
+    def write_records(self, records):
+        """Write records to the output file, and return the number of records.
+
+        records - A list or iterator returning SeqRecord objects
+        """
+        from Bio.Align import MultipleSeqAlignment
+
+        alignment = MultipleSeqAlignment(records)
+        alignment_writer_class = self._alignment_writer_class
+        alignment_writer = alignment_writer_class(self.handle)
+        alignment_count = alignment_writer.write_file([alignment])
+        if alignment_count != 1:
+            raise RuntimeError(
+                "Internal error - the underlying writer "
+                "should have returned 1, not %r" % alignment_count
+            )
+        count = len(alignment)
+        return count
+
+
+for fmt, alignment_writer_class in AlignIO._FormatToWriter.items():
+    name = fmt.replace("-", " ").title().replace(" ", "") + "AlignmentSequenceWriter"
+    cls = type(
+        name,
+        (AlignmentSequenceWriter,),
+        {"_alignment_writer_class": alignment_writer_class},
+    )
+    _FormatToWriter[fmt] = cls  # type: ignore
+
+
+del AlignIO
 
 
 def write(
@@ -528,16 +603,6 @@ def write(
         # This raised an exception in older versions of Biopython
         sequences = [sequences]
 
-    # Map the file format to a writer function/class
-    format_function = _FormatToString.get(format)
-    if format_function is not None:
-        count = 0
-        with as_handle(handle, "w") as fp:
-            for record in sequences:
-                fp.write(format_function(record))
-                count += 1
-        return count
-
     writer_class = _FormatToWriter.get(format)
     if writer_class is not None:
         count = writer_class(handle).write_file(sequences)
@@ -548,23 +613,7 @@ def write(
             )
         return count
 
-    if format in AlignIO._FormatToWriter:
-        # Try and turn all the records into a single alignment,
-        # and write that using Bio.AlignIO
-        # Using a lazy import as most users won't need this loaded:
-        from Bio.Align import MultipleSeqAlignment
-
-        alignment = MultipleSeqAlignment(sequences)
-        alignment_count = AlignIO.write([alignment], handle, format)
-        if alignment_count != 1:
-            raise RuntimeError(
-                "Internal error - the underlying writer "
-                "should have returned 1, not %r" % alignment_count
-            )
-        count = len(alignment)
-        return count
-
-    if format in _FormatToIterator or format in AlignIO._FormatToIterator:
+    if format in _FormatToIterator:
         raise ValueError(f"Reading format '{format}' is supported, but not writing")
 
     raise ValueError(f"Unknown format '{format}'")
@@ -609,7 +658,6 @@ def parse(handle, format, alphabet=None):
     # NOTE - The above docstring has some raw \n characters needed
     # for the StringIO example, hence the whole docstring is in raw
     # string mode (see the leading r before the opening quote).
-    from Bio import AlignIO
 
     # Try and give helpful error messages:
     if not isinstance(format, str):
@@ -624,9 +672,7 @@ def parse(handle, format, alphabet=None):
     iterator_generator = _FormatToIterator.get(format)
     if iterator_generator:
         return iterator_generator(handle)
-    if format in AlignIO._FormatToIterator:
-        # Use Bio.AlignIO to read in the alignments
-        return (r for alignment in AlignIO.parse(handle, format) for r in alignment)
+
     raise ValueError(f"Unknown format '{format}'")
 
 
@@ -670,10 +716,7 @@ def read(handle, format, alphabet=None):
     Use the Bio.SeqIO.parse(handle, format) function if you want
     to read multiple records from the handle.
     """
-    from Bio import AlignIO
-
-    if format in AlignIO._FormatToIterator:
-        records = parse(handle, format, alphabet)
+    with parse(handle, format, alphabet) as records:
         try:
             record = next(records)
         except StopIteration:
@@ -683,17 +726,6 @@ def read(handle, format, alphabet=None):
             raise ValueError("More than one record found in handle")
         except StopIteration:
             pass
-    else:
-        with parse(handle, format, alphabet) as records:
-            try:
-                record = next(records)
-            except StopIteration:
-                raise ValueError("No records found in handle") from None
-            try:
-                next(records)
-                raise ValueError("More than one record found in handle")
-            except StopIteration:
-                pass
     return record
 
 

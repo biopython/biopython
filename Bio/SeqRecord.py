@@ -13,7 +13,6 @@
 # In particular, the SeqRecord and BioSQL.BioSeq.DBSeqRecord classes
 # need to be in sync (this is the BioSQL "Database SeqRecord").
 import numbers
-from io import StringIO
 from typing import Any
 from typing import cast
 from collections.abc import Iterator
@@ -848,20 +847,14 @@ class SeqRecord:
             return str(self)
         from Bio import SeqIO
 
-        # Easy case, can call string-building function directly
-        if format_spec in SeqIO._FormatToString:
-            return SeqIO._FormatToString[format_spec](self)
-
-        # Harder case, make a temp handle instead
-        handle = StringIO()
+        cls = SeqIO._FormatToWriter[format_spec]
         try:
-            SeqIO.write(self, handle, format_spec)
+            return cls.to_string(self)  # type: ignore
         except StreamModeError:
             raise ValueError(
                 "Binary format %s cannot be used with SeqRecord format method"
                 % format_spec
             ) from None
-        return handle.getvalue()
 
     def __len__(self) -> int:
         """Return the length of the sequence.

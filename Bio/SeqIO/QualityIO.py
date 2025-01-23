@@ -376,6 +376,7 @@ from dataclasses import dataclass
 
 from Bio import BiopythonParserWarning
 from Bio import BiopythonWarning
+from Bio import BiopythonDeprecationWarning
 from Bio import StreamModeError
 from Bio.File import as_handle
 from Bio.Seq import Seq
@@ -1579,11 +1580,11 @@ assert SANGER_SCORE_OFFSET == ord("!")
 
 
 class FastqPhredWriter(SequenceWriter):
-    """Class to write standard FASTQ format files (using PHRED quality scores) (OBSOLETE).
+    """Class to write standard FASTQ format files (using PHRED quality scores).
 
     Although you can use this class directly, you are strongly encouraged
-    to use the ``as_fastq`` function, or top level ``Bio.SeqIO.write()``
-    function instead via the format name "fastq" or the alias "fastq-sanger".
+    to use the top level ``Bio.SeqIO.write()`` function instead via the format
+    name "fastq" or the alias "fastq-sanger".
 
     For example, this code reads in a standard Sanger style FASTQ file
     (using PHRED scores) and re-saves it as another Sanger style FASTQ file:
@@ -1626,65 +1627,56 @@ class FastqPhredWriter(SequenceWriter):
 
     modes = "t"
 
-    def write_record(self, record: SeqRecord) -> None:
-        """Write a single FASTQ record to the file."""
+    @classmethod
+    def to_string(cls, record):
+        """Turn a SeqRecord into a Sanger FASTQ formatted string, and return it."""
         # TODO - Is an empty sequence allowed in FASTQ format?
-        seq = record.seq
-        if seq is None:
-            raise ValueError(f"No sequence for record {record.id}")
+        seq_str = _get_seq_string(record)
         qualities_str = _get_sanger_quality_str(record)
-        if len(qualities_str) != len(seq):
+        if len(qualities_str) != len(seq_str):
             raise ValueError(
                 "Record %s has sequence length %i but %i quality scores"
-                % (record.id, len(seq), len(qualities_str))
+                % (record.id, len(seq_str), len(qualities_str))
             )
-
-        # FASTQ files can include a description, just like FASTA files
-        # (at least, this is what the NCBI Short Read Archive does)
-        id_ = self.clean(record.id) if record.id else ""
-        description = self.clean(record.description)
+        id_ = _clean(record.id) if record.id else ""
+        description = _clean(record.description)
         if description and description.split(None, 1)[0] == id_:
-            # The description includes the id at the start
             title = description
         elif description:
             title = f"{id_} {description}"
         else:
             title = id_
+        return f"@{title}\n{seq_str}\n+\n{qualities_str}\n"
 
-        self.handle.write(f"@{title}\n{seq}\n+\n{qualities_str}\n")
+    def write_record(self, record: SeqRecord) -> None:
+        """Write a single FASTQ record to the file."""
+        self.handle.write(self.to_string(record))
 
 
 def as_fastq(record: SeqRecord) -> str:
-    """Turn a SeqRecord into a Sanger FASTQ formatted string.
+    """Turn a SeqRecord into a Sanger FASTQ formatted string, and return it."""
+    warnings.warn(
+        """\
+QualityIO.as_fastq is deprecated.
 
-    This is used internally by the SeqRecord's .format("fastq")
-    method and by the SeqIO.write(..., ..., "fastq") function,
-    and under the format alias "fastq-sanger" as well.
-    """
-    seq_str = _get_seq_string(record)
-    qualities_str = _get_sanger_quality_str(record)
-    if len(qualities_str) != len(seq_str):
-        raise ValueError(
-            "Record %s has sequence length %i but %i quality scores"
-            % (record.id, len(seq_str), len(qualities_str))
-        )
-    id_ = _clean(record.id) if record.id else ""
-    description = _clean(record.description)
-    if description and description.split(None, 1)[0] == id_:
-        title = description
-    elif description:
-        title = f"{id_} {description}"
-    else:
-        title = id_
-    return f"@{title}\n{seq_str}\n+\n{qualities_str}\n"
+Instead of
+
+QualityIO.as_fastq(record)
+
+please use
+
+format(record, "fastq")
+""",
+        DeprecationWarning,
+    )
+    return FastqPhredWriter.to_string(record)
 
 
 class QualPhredWriter(SequenceWriter):
-    """Class to write QUAL format files (using PHRED quality scores) (OBSOLETE).
+    """Class to write QUAL format files (using PHRED quality scores).
 
     Although you can use this class directly, you are strongly encouraged
-    to use the ``as_qual`` function, or top level ``Bio.SeqIO.write()``
-    function instead.
+    to use the top level ``Bio.SeqIO.write()`` function instead.
 
     For example, this code reads in a FASTQ file and saves the quality scores
     into a QUAL file:
@@ -1739,6 +1731,38 @@ class QualPhredWriter(SequenceWriter):
             self.wrap = wrap
         self.record2title = record2title
 
+    @classmethod
+    def to_string(cls, record: SeqRecord) -> str:
+        """Turn a SeqRecord into a QUAL formatted string."""
+        id_ = _clean(record.id) if record.id else ""
+        description = _clean(record.description)
+        if description and description.split(None, 1)[0] == id_:
+            title = description
+        elif description:
+            title = f"{id_} {description}"
+        else:
+            title = id_
+        lines = [f">{title}\n"]
+
+        qualities = _get_phred_quality(record)
+        try:
+            # This rounds to the nearest integer.
+            # TODO - can we record a float in a qual file?
+            qualities_strs = [("%i" % round(q, 0)) for q in qualities]
+        except TypeError:
+            if None in qualities:
+                raise TypeError("A quality value of None was found") from None
+            else:
+                raise
+
+        # Safe wrapping
+        while qualities_strs:
+            line = qualities_strs.pop(0)
+            while qualities_strs and len(line) + 1 + len(qualities_strs[0]) < 60:
+                line += " " + qualities_strs.pop(0)
+            lines.append(line + "\n")
+        return "".join(lines)
+
     def write_record(self, record: SeqRecord) -> None:
         """Write a single QUAL record to the file."""
         handle = self.handle
@@ -1753,7 +1777,7 @@ class QualPhredWriter(SequenceWriter):
                 # The description includes the id at the start
                 title = description
             elif description:
-                title = f"{id} {description}"
+                title = f"{id_} {description}"
             else:
                 title = id_
         handle.write(f">{title}\n")
@@ -1796,43 +1820,26 @@ class QualPhredWriter(SequenceWriter):
 
 
 def as_qual(record: SeqRecord) -> str:
-    """Turn a SeqRecord into a QUAL formatted string.
+    """Turn a SeqRecord into a QUAL formatted string."""
+    warnings.warn(
+        """\
+QualityIO.as_qual is deprecated.
 
-    This is used internally by the SeqRecord's .format("qual")
-    method and by the SeqIO.write(..., ..., "qual") function.
-    """
-    id_ = _clean(record.id) if record.id else ""
-    description = _clean(record.description)
-    if description and description.split(None, 1)[0] == id_:
-        title = description
-    elif description:
-        title = f"{id_} {description}"
-    else:
-        title = id_
-    lines = [f">{title}\n"]
+Instead of
 
-    qualities = _get_phred_quality(record)
-    try:
-        # This rounds to the nearest integer.
-        # TODO - can we record a float in a qual file?
-        qualities_strs = [("%i" % round(q, 0)) for q in qualities]
-    except TypeError:
-        if None in qualities:
-            raise TypeError("A quality value of None was found") from None
-        else:
-            raise
+QualityIO.as_qual(record)
 
-    # Safe wrapping
-    while qualities_strs:
-        line = qualities_strs.pop(0)
-        while qualities_strs and len(line) + 1 + len(qualities_strs[0]) < 60:
-            line += " " + qualities_strs.pop(0)
-        lines.append(line + "\n")
-    return "".join(lines)
+please use
+
+format(record, "qual")
+""",
+        DeprecationWarning,
+    )
+    return QualPhredWriter.to_string(record)
 
 
 class FastqSolexaWriter(SequenceWriter):
-    r"""Write old style Solexa/Illumina FASTQ format files (with Solexa qualities) (OBSOLETE).
+    r"""Write old style Solexa/Illumina FASTQ format files (with Solexa qualities).
 
     This outputs FASTQ files like those from the early Solexa/Illumina
     pipeline, using Solexa scores and an ASCII offset of 64. These are
@@ -1883,23 +1890,23 @@ class FastqSolexaWriter(SequenceWriter):
 
     modes = "t"
 
-    def write_record(self, record: SeqRecord) -> None:
-        """Write a single FASTQ record to the file."""
+    @classmethod
+    def to_string(cls, record: SeqRecord) -> str:
+        """Turn a SeqRecord into a Solexa FASTQ formatted string.
+
+        This is used internally by the SeqRecord's .format("fastq-solexa")
+        method and by the SeqIO.write(..., ..., "fastq-solexa") function.
+        """
         # TODO - Is an empty sequence allowed in FASTQ format?
-        seq = record.seq
-        if seq is None:
-            raise ValueError(f"No sequence for record {record.id}")
+        seq_str = _get_seq_string(record)
         qualities_str = _get_solexa_quality_str(record)
-        if len(qualities_str) != len(seq):
+        if len(qualities_str) != len(seq_str):
             raise ValueError(
                 "Record %s has sequence length %i but %i quality scores"
-                % (record.id, len(seq), len(qualities_str))
+                % (record.id, len(seq_str), len(qualities_str))
             )
-
-        # FASTQ files can include a description, just like FASTA files
-        # (at least, this is what the NCBI Short Read Archive does)
-        id_ = self.clean(record.id) if record.id else ""
-        description = self.clean(record.description)
+        id_ = _clean(record.id) if record.id else ""
+        description = _clean(record.description)
         if description and description.split(None, 1)[0] == id_:
             # The description includes the id at the start
             title = description
@@ -1907,37 +1914,34 @@ class FastqSolexaWriter(SequenceWriter):
             title = f"{id_} {description}"
         else:
             title = id_
+        return f"@{title}\n{seq_str}\n+\n{qualities_str}\n"
 
-        self.handle.write(f"@{title}\n{seq}\n+\n{qualities_str}\n")
+    def write_record(self, record: SeqRecord) -> None:
+        """Write a single FASTQ record to the file."""
+        self.handle.write(self.to_string(record))
 
 
 def as_fastq_solexa(record: SeqRecord) -> str:
-    """Turn a SeqRecord into a Solexa FASTQ formatted string.
+    """Turn a SeqRecord into a Solexa FASTQ formatted string."""
+    warnings.warn(
+        """\
+QualityIO.as_fastq_solexa is deprecated.
 
-    This is used internally by the SeqRecord's .format("fastq-solexa")
-    method and by the SeqIO.write(..., ..., "fastq-solexa") function.
-    """
-    seq_str = _get_seq_string(record)
-    qualities_str = _get_solexa_quality_str(record)
-    if len(qualities_str) != len(seq_str):
-        raise ValueError(
-            "Record %s has sequence length %i but %i quality scores"
-            % (record.id, len(seq_str), len(qualities_str))
-        )
-    id_ = _clean(record.id) if record.id else ""
-    description = _clean(record.description)
-    if description and description.split(None, 1)[0] == id_:
-        # The description includes the id at the start
-        title = description
-    elif description:
-        title = f"{id_} {description}"
-    else:
-        title = id_
-    return f"@{title}\n{seq_str}\n+\n{qualities_str}\n"
+Instead of
+
+QualityIO.as_fastq_solexa(record)
+
+please use
+
+format(record, "fastq-solexa")
+""",
+        DeprecationWarning,
+    )
+    return FastqSolexaWriter.to_string(record)
 
 
 class FastqIlluminaWriter(SequenceWriter):
-    r"""Write Illumina 1.3+ FASTQ format files (with PHRED quality scores) (OBSOLETE).
+    r"""Write Illumina 1.3+ FASTQ format files (with PHRED quality scores).
 
     This outputs FASTQ files like those from the Solexa/Illumina 1.3+ pipeline,
     using PHRED scores and an ASCII offset of 64. Note these files are NOT
@@ -1965,56 +1969,53 @@ class FastqIlluminaWriter(SequenceWriter):
 
     modes = "t"
 
-    def write_record(self, record: SeqRecord) -> None:
-        """Write a single FASTQ record to the file."""
+    @classmethod
+    def to_string(cls, record: SeqRecord) -> str:
+        """Turn a SeqRecord into an Illumina FASTQ formatted string.
+
+        This is used internally by the SeqRecord's .format("fastq-illumina")
+        method and by the SeqIO.write(..., ..., "fastq-illumina") function.
+        """
         # TODO - Is an empty sequence allowed in FASTQ format?
-        seq = record.seq
-        if seq is None:
-            raise ValueError(f"No sequence for record {record.id}")
+        seq_str = _get_seq_string(record)
         qualities_str = _get_illumina_quality_str(record)
-        if len(qualities_str) != len(seq):
+        if len(qualities_str) != len(seq_str):
             raise ValueError(
                 "Record %s has sequence length %i but %i quality scores"
-                % (record.id, len(seq), len(qualities_str))
+                % (record.id, len(seq_str), len(qualities_str))
             )
-
-        # FASTQ files can include a description, just like FASTA files
-        # (at least, this is what the NCBI Short Read Archive does)
-        id_ = self.clean(record.id) if record.id else ""
-        description = self.clean(record.description)
+        id_ = _clean(record.id) if record.id else ""
+        description = _clean(record.description)
         if description and description.split(None, 1)[0] == id_:
-            # The description includes the id at the start
             title = description
         elif description:
             title = f"{id_} {description}"
         else:
             title = id_
+        return f"@{title}\n{seq_str}\n+\n{qualities_str}\n"
 
-        self.handle.write(f"@{title}\n{seq}\n+\n{qualities_str}\n")
+    def write_record(self, record: SeqRecord) -> None:
+        """Write a single FASTQ record to the file."""
+        self.handle.write(self.to_string(record))
 
 
 def as_fastq_illumina(record: SeqRecord) -> str:
-    """Turn a SeqRecord into an Illumina FASTQ formatted string.
+    """Turn a SeqRecord into an Illumina FASTQ formatted string."""
+    warnings.warn(
+        """\
+QualityIO.as_fastq_illumina is deprecated.
 
-    This is used internally by the SeqRecord's .format("fastq-illumina")
-    method and by the SeqIO.write(..., ..., "fastq-illumina") function.
-    """
-    seq_str = _get_seq_string(record)
-    qualities_str = _get_illumina_quality_str(record)
-    if len(qualities_str) != len(seq_str):
-        raise ValueError(
-            "Record %s has sequence length %i but %i quality scores"
-            % (record.id, len(seq_str), len(qualities_str))
-        )
-    id_ = _clean(record.id) if record.id else ""
-    description = _clean(record.description)
-    if description and description.split(None, 1)[0] == id_:
-        title = description
-    elif description:
-        title = f"{id_} {description}"
-    else:
-        title = id_
-    return f"@{title}\n{seq_str}\n+\n{qualities_str}\n"
+Instead of
+
+QualityIO.as_fastq_illumina(record)
+
+please use
+
+format(record, "fastq-illumina")
+""",
+        DeprecationWarning,
+    )
+    return FastqIlluminaWriter.to_string(record)
 
 
 def PairedFastaQualIterator(

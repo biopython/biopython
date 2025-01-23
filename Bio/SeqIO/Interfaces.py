@@ -12,6 +12,7 @@ use this module.  It provides base classes to try and simplify things.
 
 from abc import ABC
 from abc import abstractmethod
+from io import StringIO
 from os import PathLike
 from typing import AnyStr
 from typing import Generic
@@ -206,6 +207,15 @@ class SequenceWriter(ABC, Generic[AnyStr]):
     def clean(self, text: str) -> str:
         """Use this to avoid getting newlines in the output."""
         return text.replace("\n", " ").replace("\r", " ")
+
+    @classmethod
+    def to_string(cls, record):
+        """Format the record and return the string."""
+        handle = StringIO()
+        writer = cls(handle)
+        records = [record]
+        writer.write_file(records)
+        return handle.getvalue()
 
     def write_record(self, record):
         """Write a single record to the output file.
