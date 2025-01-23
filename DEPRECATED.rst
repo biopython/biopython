@@ -90,7 +90,7 @@ Please use ``format(record, "fastq")``, ``format(record, "fastq-solexa")``,
 Bio.SeqIO.TabIO
 -------------------
 The function ``as_tab`` in ``Bio.SeqIO.TabIO`` was deprecated in release 1.86.
-Please use ``format(record, "qual")`` instead.
+Please use ``format(record, "tab")`` instead.
 
 Bio.SeqIO.UniprotIO
 -------------------
