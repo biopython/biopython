@@ -186,7 +186,13 @@ gi|671626|emb|CAA85685.1|           -
 
 """,  # noqa: W293
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 129)
+        self.assertEqual(counts.identities, 64)
+        self.assertEqual(counts.mismatches, 408)
 
     def test_msaprobs(self):
         path = "Clustalw/msaprobs.aln"
@@ -405,7 +411,13 @@ HISJ_E_COLI                         GMGLRK--EDNELREALNKAFAEMRADGTYEKLAKKYFDFDVYG
 
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 608)
+        self.assertEqual(counts.identities, 2353)
+        self.assertEqual(counts.mismatches, 4595)
         self.check_reading_writing(path)
 
     def test_muscle(self):
@@ -582,7 +594,13 @@ AT3G20900.1-CDS                     CAGCACCGCTGCTGGGGATGGAGAGGGAACAGAGTAG
 
 """,  # noqa: W293
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 962)
+        self.assertEqual(counts.identities, 974)
+        self.assertEqual(counts.mismatches, 60)
         self.check_reading_writing(path)
 
     def test_kalign(self):
@@ -635,7 +653,13 @@ AT3G20900                           GCTGGGGATGGAGAGGGAACAGAGTAG
 
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 1)
+        self.assertEqual(counts.identities, 25)
+        self.assertEqual(counts.mismatches, 1)
         self.check_reading_writing(path)
 
     def test_probcons(self):
@@ -792,7 +816,13 @@ azup_achcy                          V
 
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 72)
+        self.assertEqual(counts.identities, 427)
+        self.assertEqual(counts.mismatches, 477)
         self.check_reading_writing(path)
 
     def test_empty(self):
