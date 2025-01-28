@@ -576,6 +576,8 @@ alignment are indicated by -1:
     array([ 0,  1,  3,  4,  5, -1, -1]),
     array([0, 1, 2, 3, 4, 5])]
 
+.. _`paragraph:alignment_counts`:
+
 Counting identities, mismatches, and gaps
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -598,15 +600,29 @@ customized.
                      0 .|-|||-- 8
    query             0 AG-TTT-- 5
    <BLANKLINE>
-   >>> pairwise_alignment.counts()
-   AlignmentCounts(identities=4, mismatches=1, insertions=0, deletions=3)
+   >>> counts = pairwise_alignment.counts()
+   >>> counts.identities
+   4
+   >>> counts.mismatches
+   1
+   >>> counts.gaps
+   3
    >>> print(alignment)
                      1 CGGTTTTT 9
                      0 AG-TTT-- 5
                      0 AGGTTT-- 6
    <BLANKLINE>
-   >>> alignment.counts()
-   AlignmentCounts(identities=14, mismatches=2, insertions=1, deletions=5)
+   >>> counts = alignment.counts()
+   >>> counts.identities
+   14
+   >>> counts.mismatches
+   2
+   >>> counts.gaps
+   6
+   >>> counts.insertions
+   1
+   >>> counts.deletions
+   5
 
 Letter frequencies
 ~~~~~~~~~~~~~~~~~~
@@ -2574,11 +2590,22 @@ calling the ``counts`` method on the ``alignment`` object:
 
 .. code:: pycon
 
-   >>> alignment.counts()
-   AlignmentCounts(identities=112, mismatches=0, insertions=0, deletions=19)
+   >>> counts = alignment.counts()
 
-where ``AlignmentCounts`` is a ``namedtuple`` in the ``collections``
-module in Python’s standard library.
+where the ``counts`` variable is an ``AlignmentCounts`` object collecting
+information on the number of gaps, matches, and mismatches in the alignment
+library (see :ref:`paragraph:alignment_counts`)):
+
+.. cont-doctest
+
+.. code:: pycon
+
+   >>> counts.identities
+   112
+   >>> counts.mismatches
+   0
+   >>> counts.gaps
+   19
 
 The consensus line shown between the two sequences is stored in the
 ``column_annotations`` attribute:

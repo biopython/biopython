@@ -56,16 +56,26 @@ from Bio.SeqRecord import SeqRecord
 
 
 class AlignmentCounts:
-    __slots__ = ("_identities", "_mismatches", "_insertions", "_deletions")
+    __slots__ = ("_identities", "_mismatches",
+                 "_left_insertions", "_left_deletions",
+                 "_right_insertions", "_right_deletions",
+                 "_internal_insertions", "_internal_deletions")
 
-    def __init__(self, identities, mismatches, insertions, deletions):
+    def __init__(self, identities, mismatches,
+                       left_insertions, left_deletions,
+                       right_insertions, right_deletions,
+                       internal_insertions, internal_deletions):
         self._identities = identities
         self._mismatches = mismatches
-        self._insertions = insertions
-        self._deletions = deletions
+        self._left_insertions = left_insertions
+        self._left_deletions = left_deletions
+        self._right_insertions = right_insertions
+        self._right_deletions = right_deletions
+        self._internal_insertions = internal_insertions
+        self._internal_deletions = internal_deletions
 
     def __repr__(self):
-        return "AlignmentCounts(identities=%d, mismatches=%d, insertions=%d, deletions=%d)" % (self._identities, self._mismatches, self._insertions, self._deletions)
+        return "AlignmentCounts(identities=%d, mismatches=%d, left_insertions=%d, left_deletions=%d, internal_insertions=%d, internal_deletions=%d, right_insertions=%d, right_deletions=%d)" % (self._identities, self._mismatches, self._left_insertions, self._left_deletions, self._right_insertions, self._right_deletions, self._internal_insertions, self._internal_deletions)
 
     @property
     def identities(self):
@@ -77,15 +87,51 @@ class AlignmentCounts:
 
     @property
     def insertions(self):
-        return self._insertions
+        return self._left_insertions + self._internal_insertions + self._right_insertions
 
     @property
     def deletions(self):
-        return self._deletions
+        return self._left_deletions + self._internal_deletions + self._right_deletions
+
+    @property
+    def left_insertions(self):
+        return self._left_insertions
+
+    @property
+    def left_deletions(self):
+        return self._left_deletions
+
+    @property
+    def right_insertions(self):
+        return self._right_insertions
+
+    @property
+    def right_deletions(self):
+        return self._right_deletions
+
+    @property
+    def internal_insertions(self):
+        return self._internal_insertions
+
+    @property
+    def internal_deletions(self):
+        return self._internal_deletions
+
+    @property
+    def left_gaps(self):
+        return self._left_insertions + self._left_deletions
+
+    @property
+    def right_gaps(self):
+        return self._right_insertions + self._right_deletions
+
+    @property
+    def internal_gaps(self):
+        return self._internal_insertions + self._internal_deletions
 
     @property
     def gaps(self):
-        return self._insertions + self._deletions
+        return self._left_insertions + self._left_deletions + self._internal_insertions + self._internal_deletions + self._right_insertions + self._right_deletions
 
 
 class MultipleSeqAlignment:
@@ -3602,12 +3648,17 @@ class Alignment:
         alignment.
         """
         identities = mismatches = insertions = deletions = 0
+        left_insertions = left_deletions = 0
+        right_insertions = right_deletions = 0
+        internal_insertions = internal_deletions = 0
         for j, seq2 in enumerate(self):
             for i, seq1 in enumerate(self):
                 # seq2 comes after seq1 in the alignment
                 if i == j:
                     # Don't count seq1 vs seq2 and seq2 vs seq1
                     break
+                if seq1 == [] or seq2 == []:
+                    continue
                 for a, b in zip(seq1, seq2):
                     if a == "-" and b == "-":
                         pass
@@ -3619,7 +3670,19 @@ class Alignment:
                         identities += 1
                     else:
                         mismatches += 1
-        return AlignmentCounts(identities, mismatches, insertions, deletions)
+                left_insertions = len(a) - len(a.lstrip("-"))
+                left_deletions = len(b) - len(b.lstrip("-"))
+                left_both = min(left_insertions, left_deletions)
+                left_insertions -= left_both
+                left_deletions -= left_both
+                right_insertions = len(a) - len(a.rstrip("-"))
+                right_deletions = len(b) - len(b.rstrip("-"))
+                right_both = min(right_insertions, right_deletions)
+                right_insertions -= right_both
+                right_deletions -= right_both
+                internal_insertions = insertions - left_insertions - right_insertions
+                internal_deletions = deletions - left_deletions - right_deletions
+        return AlignmentCounts(identities, mismatches, left_insertions, left_deletions, right_insertions, right_deletions, internal_insertions, internal_deletions)
 
     def reverse_complement(self):
         """Reverse-complement the alignment and return it.
