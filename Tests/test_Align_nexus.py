@@ -232,7 +232,13 @@ np.array([['A', '-', 'C', '-', 'G', '-', 'T', 'c', 'g', 't', 'g', 't', 'g',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 596)
+        self.assertEqual(counts.identities, 256)
+        self.assertEqual(counts.mismatches, 606)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -286,7 +292,13 @@ np.array([['A', 'A', 'A', 'A', 'A', 'G', 'G', 'C', 'A', 'T', 'T', 'G', 'T',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 9)
         with self.assertRaises(StopIteration):
             next(alignments)
         self.check_reading_writing(path)

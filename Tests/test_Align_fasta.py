@@ -134,7 +134,13 @@ MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTEEELLRRLQQIKEGPPPQSPD
 ---------MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPG-----------------VPPEEAGAAVAAESSTGT---------WTTVWTDGLTSLDRYKG-----RCYHIEPVPG-------------------EKDQCICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGLSAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYLNATAG-----------------------TCEEMIKRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAVIDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSRGIYFTQDWVSLPGVIPVASG-----------------------------GIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVANRVA-----------VEACVKARNEG---RDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD---
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 129)
+        self.assertEqual(counts.identities, 64)
+        self.assertEqual(counts.mismatches, 408)
 
     def test_msaprobs(self):
         path = "Clustalw/msaprobs.fa"
@@ -303,7 +309,13 @@ MKSVL-------KVS----LAALTLA--FAVSSH---------A----------ADKKLVVATDTAFVPFEFKQ--GDKY
 MKKLVL------SLS----LV---LA--FSSATA---------------A-FAAIPQNIRIGTDPTYAPFESKNS-QGELVGFDIDLAKELCKRINTQCTFVENPLDALIPSLKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLVVAK-NSDIQPTVESLKGKRVGVLQGTTQETFGNEHWAPKGIEIVSYQGQDNIYSDLTAGRIDAAFQDEVAASEGFLKQPVGKDYKFGGPSVKDEKLFGVGTGMGLRK--EDNELREALNKAFAEMRADGTYEKLAKKYFDFDVYG---G
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 608)
+        self.assertEqual(counts.identities, 2353)
+        self.assertEqual(counts.mismatches, 4595)
         self.check_reading_writing(path)
 
     def test_muscle(self):
@@ -408,7 +420,13 @@ ATGAACAAAGTAGCGAGGAAGAACAAAACATCAGGTGAACAAAAAAAAAACTCAATCCACATCAAAGTTACAATAACTGA
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ATGAACAAAGTAGCGAGGAAGAA------------------------------CAAAACATC----------------------------------------------------------------------------------------------------------------------------------------------------------------------------AGCAAAGAAAACGATCTGTCTCCGTCGTAACACACAGTTTTTCGAGACCCTTTGCTTCTTCGGCGCCGGTGGACACGTCAGCATCTCCGGTATCCTAGACTTCTTGGCTTTCGGGGTACAACAACCGCCTGGTGACGTCAGCACCGCTGCTGGGGATGGAGAGGGAACAGAGTAG
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 962)
+        self.assertEqual(counts.identities, 974)
+        self.assertEqual(counts.mismatches, 60)
         self.check_reading_writing(path)
 
     def test_kalign(self):
@@ -458,7 +476,13 @@ GCTGGGGATGGAGAGGGAACAGAGT-T
 GCTGGGGATGGAGAGGGAACAGAGTAG
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 1)
+        self.assertEqual(counts.identities, 25)
+        self.assertEqual(counts.mismatches, 1)
         self.check_reading_writing(path)
 
     def test_probcons(self):
@@ -598,7 +622,13 @@ VQIKMGTDKYAPLYEPKALSISAGDTVEFVMNKVGPHNVIFDK--VPAG-ES-APALSNTKLRIAPGSFYSVTLGT---P
 VHMLNKGKDGAMVFEPASLKVAPGDTVTFIPTDK-GHNVETIKGMIPDG-AE-A-------FKSKINENYKVTFTA---PGVYGVKCTPHYGMGMVGVVEV
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 72)
+        self.assertEqual(counts.identities, 427)
+        self.assertEqual(counts.mismatches, 477)
         self.check_reading_writing(path)
 
     def test_empty(self):

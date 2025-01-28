@@ -151,7 +151,13 @@ np.array([['A', 'A', 'G', 'C', 'C', 'C', 'T', 'C', 'C', 'T', 'A', 'G', 'C',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 98)
+        self.assertEqual(counts.identities, 39)
+        self.assertEqual(counts.mismatches, 7)
         alignment = next(alignments)
         saved_alignments.append(alignment)
         self.assertEqual(len(alignment), 1)
@@ -181,7 +187,13 @@ G
         self.assertTrue(
             np.array_equal(np.array(alignment, "U"), np.array([["G"]], dtype="U"))
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.identities, 0)
+        self.assertEqual(counts.mismatches, 0)
         alignment = next(alignments)
         saved_alignments.append(alignment)
         self.assertEqual(len(alignment), 1)
@@ -211,7 +223,13 @@ A
         self.assertTrue(
             np.array_equal(np.array(alignment, "U"), np.array([["A"]], dtype="U"))
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.identities, 0)
+        self.assertEqual(counts.mismatches, 0)
         alignment = next(alignments)
         saved_alignments.append(alignment)
         self.assertEqual(len(alignment), 1)
@@ -251,7 +269,13 @@ np.array([['G', 'A', 'A', 'G', 'A', 'G', 'G', 'A', 'A', 'A', 'A', 'G', 'T',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.identities, 0)
+        self.assertEqual(counts.mismatches, 0)
         alignment = next(alignments)
         saved_alignments.append(alignment)
         self.assertEqual(len(alignment), 1)
@@ -281,7 +305,13 @@ C
         self.assertTrue(
             np.array_equal(np.array(alignment, "U"), np.array([["C"]], dtype="U"))
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.identities, 0)
+        self.assertEqual(counts.mismatches, 0)
         alignment = next(alignments)
         saved_alignments.append(alignment)
         self.assertEqual(len(alignment), 1)
@@ -311,7 +341,13 @@ C
         self.assertTrue(
             np.array_equal(np.array(alignment, "U"), np.array([["C"]], dtype="U"))
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.identities, 0)
+        self.assertEqual(counts.mismatches, 0)
         self.assertRaises(StopIteration, next, alignments)
         # As each nucleotide in each sequence is stored exactly once in an XMFA
         # file, we can reconstitute the full sequences:
@@ -524,7 +560,13 @@ np.array([['T', 'A', 'A', 'G', 'C', 'C', 'C', 'T', 'C', 'C', 'T', 'A', 'G',
                     # fmt: on
                 )
             )
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 68)
+            self.assertEqual(counts.identities, 68)
+            self.assertEqual(counts.mismatches, 16)
             alignment = next(alignments)
             saved_alignments.append(alignment)
             self.assertEqual(len(alignment), 1)
@@ -563,7 +605,13 @@ np.array([['C', 'T', 'G', 'G', 'C', 'G', 'T', 'C', 'C', 'G', 'G',
                     # fmt: on
                 )
             )
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             self.assertRaises(StopIteration, next, alignments)
         # As each nucleotide in each sequence is stored exactly once in an XMFA
         # file, we can reconstitute the full sequences:

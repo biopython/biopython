@@ -109,7 +109,13 @@ np.array([['T', 'S', 'P', 'A', 'S', 'I', 'R', 'P', 'P', 'A', 'G', 'P', 'S', 'S',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 19)
+        self.assertEqual(counts.identities, 112)
+        self.assertEqual(counts.mismatches, 0)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -172,7 +178,13 @@ np.array([['C', 'G', 'T', 'T', 'T', 'G', 'A', 'G', 'T', '-', 'C', 'T', 'G',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 1)
+        self.assertEqual(counts.identities, 17)
+        self.assertEqual(counts.mismatches, 0)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -236,7 +248,13 @@ np.array([['G', 'P', 'P', 'P', 'Q', 'S', 'P', 'D', 'E', 'N', 'R', 'A', 'G',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.identities, 7)
+        self.assertEqual(counts.mismatches, 9)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -359,7 +377,13 @@ np.array([['L', 'S', 'P', 'A', 'D', 'K', 'T', 'N', 'V', 'K', 'A', 'A', 'W',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 8)
+        self.assertEqual(counts.identities, 63)
+        self.assertEqual(counts.mismatches, 74)
         alignment = next(alignments)
         self.assertEqual(alignment.annotations["Matrix"], "EBLOSUM62")
         self.assertAlmostEqual(alignment.annotations["Gap_penalty"], 14)
@@ -408,7 +432,13 @@ np.array([['K', 'K', 'V', 'A', 'D', 'A', 'L', 'T', 'N', 'A', 'V', 'A', 'H'],
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.identities, 6)
+        self.assertEqual(counts.mismatches, 7)
         alignment = next(alignments)
         self.assertEqual(alignment.annotations["Matrix"], "EBLOSUM62")
         self.assertAlmostEqual(alignment.annotations["Gap_penalty"], 14)
@@ -458,7 +488,13 @@ np.array([['K', 'L', 'R', 'V', 'D', 'P', 'V', 'N', 'F', 'K', 'L', 'L', 'S',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.identities, 7)
+        self.assertEqual(counts.mismatches, 11)
         alignment = next(alignments)
         self.assertEqual(alignment.annotations["Matrix"], "EBLOSUM62")
         self.assertAlmostEqual(alignment.annotations["Gap_penalty"], 14)
@@ -504,7 +540,13 @@ np.array([['L', 'S', 'A', 'L', 'S', 'D', 'L', 'H', 'A', 'H'],
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.identities, 6)
+        self.assertEqual(counts.mismatches, 4)
         alignment = next(alignments)
         self.assertEqual(alignment.annotations["Matrix"], "EBLOSUM62")
         self.assertAlmostEqual(alignment.annotations["Gap_penalty"], 14)
@@ -550,7 +592,13 @@ np.array([['V', 'K', 'A', 'A', 'W', 'G', 'K', 'V', 'G', 'A'],
                 # fmt: on
             )
         )
-	# ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.identities, 6)
+        self.assertEqual(counts.mismatches, 4)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -656,7 +704,13 @@ np.array([['T', 'S', 'P', 'A', 'S', 'I', 'R', 'P', 'P', 'A', 'G', 'P', 'S',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 19)
+        self.assertEqual(counts.identities, 112)
+        self.assertEqual(counts.mismatches, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.annotations["Matrix"], "EBLOSUM62")
         self.assertAlmostEqual(alignment.annotations["Gap_penalty"], 10.0)
@@ -744,7 +798,13 @@ np.array([['T', 'S', 'P', 'A', 'S', 'I', 'R', 'P', 'P', 'A', 'G', 'P', 'S',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 4)
+        self.assertEqual(counts.identities, 120)
+        self.assertEqual(counts.mismatches, 7)
         alignment = next(alignments)
         self.assertEqual(alignment.annotations["Matrix"], "EBLOSUM62")
         self.assertAlmostEqual(alignment.annotations["Gap_penalty"], 10.0)
@@ -834,7 +894,13 @@ np.array([['T', 'S', 'P', 'A', 'S', 'I', 'R', 'P', 'P', 'A', 'G', 'P', 'S',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 7)
+        self.assertEqual(counts.identities, 119)
+        self.assertEqual(counts.mismatches, 5)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -935,7 +1001,13 @@ np.array([['K', 'I', 'L', 'I', 'V', 'D', 'D', '-', '-', '-', '-', 'Q', 'Y',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 17)
+        self.assertEqual(counts.identities, 32)
+        self.assertEqual(counts.mismatches, 75)
         alignment = next(alignments)
         self.assertEqual(alignment.annotations["Matrix"], "EBLOSUM62")
         self.assertAlmostEqual(alignment.annotations["Gap_penalty"], 10.0)
@@ -1016,7 +1088,13 @@ np.array([['K', 'I', 'L', 'I', 'V', 'D', 'D', 'Q', 'Y', 'G', 'I', 'R', 'I',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 9)
+        self.assertEqual(counts.identities, 34)
+        self.assertEqual(counts.mismatches, 76)
         alignment = next(alignments)
         self.assertEqual(alignment.annotations["Matrix"], "EBLOSUM62")
         self.assertAlmostEqual(alignment.annotations["Gap_penalty"], 10.0)
@@ -1097,7 +1175,13 @@ np.array([['-', 'K', 'I', 'L', 'I', 'V', 'D', 'D', 'Q', 'Y', 'G', 'I', 'R',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 9)
+        self.assertEqual(counts.identities, 29)
+        self.assertEqual(counts.mismatches, 82)
         alignment = next(alignments)
         self.assertEqual(alignment.annotations["Matrix"], "EBLOSUM62")
         self.assertAlmostEqual(alignment.annotations["Gap_penalty"], 10.0)
@@ -1184,7 +1268,13 @@ np.array([['K', 'I', 'L', 'I', 'V', 'D', 'D', 'Q', 'Y', 'G', 'I', 'R', 'I',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 9)
+        self.assertEqual(counts.identities, 30)
+        self.assertEqual(counts.mismatches, 79)
         alignment = next(alignments)
         self.assertEqual(alignment.annotations["Matrix"], "EBLOSUM62")
         self.assertAlmostEqual(alignment.annotations["Gap_penalty"], 10.0)
@@ -1271,7 +1361,13 @@ np.array([['K', 'I', 'L', 'I', 'V', 'D', 'D', 'Q', 'Y', 'G', 'I', 'R', 'I',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 18)
+        self.assertEqual(counts.identities, 35)
+        self.assertEqual(counts.mismatches, 72)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1387,7 +1483,13 @@ asis            608 TAATAGC 615
 asis            311 ------- 311
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 408)
+        self.assertEqual(counts.identities, 210)
+        self.assertEqual(counts.mismatches, 49)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1723,7 +1825,13 @@ asis           3493 CTTAATTTTAGWGGGRGTGTTTATTTTTATTCTAATAAAAAGGATCCGTTGAA 3546
 asis           2507 CTTAATTTTAGAGG--ATGTTTATTTTTATTCTAATAAAAAGGATCCGTTGAA 2558
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 1202)
+        self.assertEqual(counts.identities, 2296)
+        self.assertEqual(counts.mismatches, 155)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1797,7 +1905,13 @@ seqA              1 C   0
 seqB             31 C  32
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 89)
+        self.assertEqual(counts.identities, 32)
+        self.assertEqual(counts.mismatches, 0)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1870,7 +1984,13 @@ seqA            120 C 121
 seqB              1 C   0
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 89)
+        self.assertEqual(counts.identities, 32)
+        self.assertEqual(counts.mismatches, 0)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1930,7 +2050,13 @@ seqA             20 TTTTTTTAAA-CCGGGCCC  2
 seqB              2 TTTTTTT--ACCCGGGCCC 19
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 3)
+        self.assertEqual(counts.identities, 16)
+        self.assertEqual(counts.mismatches, 0)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1989,7 +2115,13 @@ seqA              2 GGGCCCGGTT-TAAAAAAA 20
 seqB             19 GGGCCCGG--GTAAAAAAA  2
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 3)
+        self.assertEqual(counts.identities, 16)
+        self.assertEqual(counts.mismatches, 0)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -2185,7 +2317,13 @@ hg38_chrX      1440 CAGTTACAAA 1450
 mm10_chrX       593 CAGTTATAAA  603
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 847)
+        self.assertEqual(counts.identities, 441)
+        self.assertEqual(counts.mismatches, 162)
         with self.assertRaises(StopIteration):
             next(alignments)
 

@@ -42,7 +42,13 @@ class TestPhylipReading(unittest.TestCase):
         self.assertTrue(
             np.array_equal(alignment.coordinates, saved_alignment.coordinates)
         )
-	# ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.identities, 230)
+        self.assertEqual(counts.mismatches, 190)
 
     def test_one(self):
         path = "Phylip/one.dat"
@@ -253,7 +259,13 @@ Deinococcu-MKKSLLSLKLSGLLVPSVLALS--------LSACSSPSSTLNQGTLKIAMEGTYPPFTSKNE-QGELVG
 HISJ_E_COLMKKLVLSLSLVLAFSSATAAF-------------------AAIPQNIRIGTDPTYAPFESKNS-QGELVGFDIDLAKELCKRINTQCTFVENPLDALIPSLKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLVVAKNSDIQP-TVESLKGKRVGVLQGTTQETFGNEHWAPKGIEIVSYQGQDNIYSDLTAGRIDAAFQDEVAASEGFLKQPVGKDYKFGGPSVKDEKLFGVGTGMGLRKED--NELREALNKAFAEMRADGTYEKLAKKYFDFDVYGG---
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 548)
+        self.assertEqual(counts.identities, 2258)
+        self.assertEqual(counts.mismatches, 4720)
 
     def test_two_and_three(self):
         paths = ("Phylip/two.dat", "Phylip/three.dat")
@@ -348,7 +360,13 @@ Tax4      TCATCTCATGGTCAATAAGATACTCCTGCTTTTGGCGGGAAATGGTCAATCTTAAAAGGT
 Tax5      CCATCTCACGGTCGGTAAGATACACCTGCTTTTGGCGGGAAATGGTCAATATTAAAAGGT
 """,
             )
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 535)
+            self.assertEqual(counts.mismatches, 65)
 
     def test_four(self):
         path = "Phylip/four.dat"
@@ -445,7 +463,13 @@ Chimp     AAACCCTTGCCGTTACGCTTAAACCGAGGCCGGGACACTCAT
 Gorilla   AAACCCTTGCCGGTACGCTTAAACCATTGCCGGTACGCTTAA
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.identities, 230)
+        self.assertEqual(counts.mismatches, 190)
 
     def test_five_and_six(self):
         paths = ("Phylip/five.dat", "Phylip/six.dat")
@@ -514,7 +538,13 @@ Gorilla   AAACCCTTGCCGGTACGCTTAAACCATTGCCGGTACGCTTAA
 """,
             )
             self.check_reading_writing(path)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 230)
+            self.assertEqual(counts.mismatches, 190)
 
     def test_interlaced(self):
         path = "Phylip/interlaced.phy"
@@ -644,7 +674,13 @@ ALEU_HORVUMAHARVLLLALAVLATAAVAVASSSSFADSNPIRPVTDRAASTLESAVLGALGRTRHALRFARFAVRYGK
 CATH_HUMAN------MWATLPLLCAGAWLLGV--------PVCGAAELSVNSLEK------------FHFKSWMSKHRKTY-STEEYHHRLQTFASNWRKINAHN----NGNHTFKMALNQFSDMSFAEIKHKYLWSEPQNCSAT--KSNYLRGT--GPYPPSVDWRKKGNFVSPVKNQGACGSCWTFSTTGALESAIAIATGKMLSLAEQQLVDCAQDFNNY--------GCQGGLPSQAFEYILYNKGIMGEDTYPYQGKDGY-CKFQPGKAIGFVKDVANITIYDEEAMVEAVALYNPVSFAFEVTQDFMMYRTGIYSSTSCHKTPDKVNHAVLAVGYGEKNGI-----PYWIVKNSWGPQWGMNGYFLIERGKNMCGLAACASYPIPLV
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 130)
+        self.assertEqual(counts.identities, 400)
+        self.assertEqual(counts.mismatches, 575)
 
     def test_interlaced2(self):
         path = "Phylip/interlaced2.phy"
@@ -765,7 +801,13 @@ IXI_236   TSPASIRPPAGPSSRPAMVSSR--RPSPPPPRRPPGRPCCSAAPPRPQATGGWKTCSGTCTTSTSTRHRG
 IXI_237   TSPASLRPPAGPSSRPAMVSSRR-RPSPPGPRRPT----CSAAPRRPQATGGYKTCSGTCTTSTSTRHRGRSGYSARTTTAACLRASRKSMRAACSR--GSRPNRFAPTLMSSCLTSTTGPPAYAGDRSHE
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 78)
+        self.assertEqual(counts.identities, 667)
+        self.assertEqual(counts.mismatches, 35)
 
 
 if __name__ == "__main__":

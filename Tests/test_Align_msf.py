@@ -188,7 +188,13 @@ W*05:01          60 SKPTCREGGRSGSAKSLRMGRRGCSAQNPKDSHDPPPHL 99
             alignment[10],
             "GLTPSSGYTAATWTRTAVSSVGMNIPYHGASYLVRNQELRSWTAADKAAQMPWRRNRQSCSKPTCREGGRSGSAKSLRMGRRGCSAQNPKDSHDPPPHL",
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 168)
+        self.assertEqual(counts.identities, 5029)
+        self.assertEqual(counts.mismatches, 212)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -403,7 +409,13 @@ DOA*01:04        62 ----------  62
             alignment[11],
             "MALRAGLVLGFHTLMTLLSPQEAGATKADHMGSYGPPSTSLTAPRASSPMNLMRNSCSLWTX--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------",
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 2628)
+        self.assertEqual(counts.identities, 13538)
+        self.assertEqual(counts.mismatches, 306)
         with self.assertRaises(StopIteration):
             next(alignments)
 

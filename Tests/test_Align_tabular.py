@@ -152,7 +152,13 @@ np.array([['M', 'P', 'M', 'I', 'L', 'G', 'Y', 'W', 'D', 'I', 'R', 'G', 'L',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.identities, 170)
+        self.assertEqual(counts.mismatches, 48)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 29.76)
@@ -255,7 +261,13 @@ np.array([['V', 'L', 'H', 'Y', 'F', 'N', 'A', 'R', 'G', 'R', 'M', 'E', 'C',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 18)
+        self.assertEqual(counts.identities, 61)
+        self.assertEqual(counts.mismatches, 144)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 27.03)
@@ -309,7 +321,13 @@ np.array([['S', 'F', 'P', 'T', 'T', 'K', 'T', 'Y', 'F', 'P', 'H', 'F', 'D',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 2)
+        self.assertEqual(counts.identities, 10)
+        self.assertEqual(counts.mismatches, 27)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 24.29)
@@ -378,7 +396,13 @@ np.array([['I', 'Y', 'E', 'M', 'A', 'A', 'G', 'Y', 'P', 'P', 'F', 'F', 'A',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 2)
+        self.assertEqual(counts.identities, 17)
+        self.assertEqual(counts.mismatches, 53)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 57.14)
@@ -421,7 +445,13 @@ np.array([['Y', 'W', 'D', 'L', 'W', 'G', 'L'],
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 3)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 45.00)
@@ -483,7 +513,13 @@ np.array([['G', 'D', 'R', 'V', 'T', 'I', 'T', 'C', 'Q', 'A', 'S', 'Q', 'D',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 10)
+        self.assertEqual(counts.identities, 18)
+        self.assertEqual(counts.mismatches, 22)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 31.03)
@@ -554,7 +590,13 @@ np.array([['K', 'T', 'G', 'P', 'N', 'L', 'H', 'G', 'L', 'F', 'G', 'R', 'K',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 10)
+        self.assertEqual(counts.identities, 18)
+        self.assertEqual(counts.mismatches, 40)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 31.11)
@@ -616,7 +658,13 @@ np.array([['S', 'E', 'E', 'M', 'I', 'A', 'E', 'F', 'K', 'A', 'A', 'F', 'D',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 9)
+        self.assertEqual(counts.identities, 14)
+        self.assertEqual(counts.mismatches, 31)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 66.67)
@@ -666,7 +714,13 @@ np.array([['C', '-', 'N', 'P', 'H', '-', 'P', 'K', 'Q', 'R', 'P'],
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 2)
+        self.assertEqual(counts.identities, 6)
+        self.assertEqual(counts.mismatches, 3)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 50.00)
@@ -712,7 +766,13 @@ np.array([['K', 'P', 'E', 'C'],
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 2)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 28.95)
@@ -763,7 +823,13 @@ np.array([['N', 'R', 'V', 'I', 'E', 'K', 'T', 'N', 'E', 'K', 'F', 'H', 'Q',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 1)
+        self.assertEqual(counts.identities, 11)
+        self.assertEqual(counts.mismatches, 27)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 19.40)
@@ -831,7 +897,13 @@ np.array([['P', 'S', 'D', 'E', 'Q', 'L', 'K', 'S', 'G', 'T', 'A', 'S', 'V',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 4)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 54)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -944,7 +1016,13 @@ np.array([['M', 'P', 'M', 'I', 'L', 'G', 'Y', 'W', 'D', 'I', 'R', 'G', 'L',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.identities, 170)
+        self.assertEqual(counts.mismatches, 48)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 29.76)
@@ -1047,7 +1125,13 @@ np.array([['V', 'L', 'H', 'Y', 'F', 'N', 'A', 'R', 'G', 'R', 'M', 'E', 'C',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 18)
+        self.assertEqual(counts.identities, 61)
+        self.assertEqual(counts.mismatches, 144)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 27.03)
@@ -1101,7 +1185,13 @@ np.array([['S', 'F', 'P', 'T', 'T', 'K', 'T', 'Y', 'F', 'P', 'H', 'F', 'D',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 2)
+        self.assertEqual(counts.identities, 10)
+        self.assertEqual(counts.mismatches, 27)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 24.29)
@@ -1170,7 +1260,13 @@ np.array([['I', 'Y', 'E', 'M', 'A', 'A', 'G', 'Y', 'P', 'P', 'F', 'F', 'A',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 2)
+        self.assertEqual(counts.identities, 17)
+        self.assertEqual(counts.mismatches, 53)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 57.14)
@@ -1213,7 +1309,13 @@ np.array([['Y', 'W', 'D', 'L', 'W', 'G', 'L'],
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 3)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 45.00)
@@ -1275,7 +1377,13 @@ np.array([['G', 'D', 'R', 'V', 'T', 'I', 'T', 'C', 'Q', 'A', 'S', 'Q', 'D',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 10)
+        self.assertEqual(counts.identities, 18)
+        self.assertEqual(counts.mismatches, 22)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 31.03)
@@ -1346,7 +1454,13 @@ np.array([['K', 'T', 'G', 'P', 'N', 'L', 'H', 'G', 'L', 'F', 'G', 'R', 'K',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 10)
+        self.assertEqual(counts.identities, 18)
+        self.assertEqual(counts.mismatches, 40)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 31.11)
@@ -1407,7 +1521,13 @@ np.array([['S', 'E', 'E', 'M', 'I', 'A', 'E', 'F', 'K', 'A', 'A', 'F', 'D',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 9)
+        self.assertEqual(counts.identities, 14)
+        self.assertEqual(counts.mismatches, 31)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 66.67)
@@ -1457,7 +1577,13 @@ np.array([['C', '-', 'N', 'P', 'H', '-', 'P', 'K', 'Q', 'R', 'P'],
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 2)
+        self.assertEqual(counts.identities, 6)
+        self.assertEqual(counts.mismatches, 3)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 28.95)
@@ -1511,7 +1637,13 @@ np.array([['N', 'R', 'V', 'I', 'E', 'K', 'T', 'N', 'E', 'K', 'F', 'H', 'Q',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 1)
+        self.assertEqual(counts.identities, 11)
+        self.assertEqual(counts.mismatches, 27)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 50.00)
@@ -1557,7 +1689,13 @@ np.array([['K', 'P', 'E', 'C'],
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 2)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 19.40)
@@ -1625,7 +1763,13 @@ np.array([['P', 'S', 'D', 'E', 'Q', 'L', 'K', 'S', 'G', 'T', 'A', 'S', 'V',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 4)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 54)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1735,7 +1879,13 @@ pGT875          600 ????????????????????????????????????????????????????????? 65
             "ATGCCTATGATACTGGGATACTGGAACGTCCGCGGACTGACACACCCGATCCGCATGCTCCTGGAATACACAGACTCAAGCTATGATGAGAAGAGATACACCATGGGTGACGCTCCCGACTTTGACAGAAGCCAGTGGCTGAATGAGAAGTTCAAGCTGGGCCTGGACTTTCCCAATCTGCCTTACTTGATCGATGGATCACACAAGATCACCCAGAGCAATGCCATCCTGCGCTACCTTGCCCGAAAGCACCACCTGGATGGAGAGACAGAGGAGGAGAGGATCCGTGCAGACATTGTGGAGAACCAGGTCATGGACACCCGCATGCAGCTCATCATGCTCTGTTACAACCCTGACTTTGAGAAGCAGAAGCCAGAGTTCTTGAAGACCATCCCTGAGAAAATGAAGCTCTACTCTGAGTTCCTGGGCAAGAGGCCATGGTTTGCAGGGGACAAGGTCACCTATGTGGATTTCCTTGCTTATGACATTCTTGACCAGTACCGTATGTTTGAGCCCAAGTGCCTGGACGCCTTCCCAAACCTGAGGGACTTCCTGGCCCGCTTCGAGGGCCTCAAGAAGATCTCTGCCTACATGAAGAGTAGCCGCTACATCGCAACACCTATATTTTCAAAGATGGCCCACTGGAGTAACAAGTAG",
         )
         # pGT875   RABGLTR
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.identities, 657)
+        self.assertEqual(counts.mismatches, 0)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 79.10)
@@ -1818,7 +1968,13 @@ pGT875          600 ?????????????????????????????????????????????? 646
             "ATGCCTATGATACTGGGATACTGGAACGTCCGCGGACTGACACACCCGATCCGCATGCTCCTGGAATACACAGACTCAAGCTATGATGAGAAGAGATACACCATGGGTGACGCTCCCGACTTTGACAGAAGCCAGTGGCTGAATGAGAAGTTCAAGCTGGGCCTGGACTTTCCCAATCTGCCTTACTTGATCGATGGATCACACAAGATCACCCAGAGCAATGCCATCCTGCGCTACCTTGCCCGAAAGCACCACCTGGATGGAGAGACAGAGGAGGAGAGGATCCGTGCAGACATTGTGGAGAACCAGGTCATGGACACCCGCATGCAGCTCATCATGCTCTGTTACAACCCTGACTTTGAGAAGCAGAAGCCAGAGTTCTTGAAGACCATCCCTGAGAAAATGAAGCTCTACTCTGAGTTCCTGGGCAAGAGGCCATGGTTTGCAGGGGACAAGGTCACCTATGTGGATTTCCTTGCTTATGACATTCTTGACCAGTACCGTATGTTTGAGCCCAAGTGCCTGGACGCCTTCCCAAACCTGAGGGACTTCCTGGCCCGCTTCGAGGGCCTCAAGAAGATCTCTGCCTACATGAAGAGTAGCCGCTACATCGCAACACCTATATTTTCAAAGATGGCCCACTGGA",
         )
         # pGT875   BTGST
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.identities, 511)
+        self.assertEqual(counts.mismatches, 135)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 59.56)
@@ -1969,7 +2125,13 @@ np.array([['A', 'G', 'C', 'T', 'C', 'C', 'C', 'C', 'A', 'A', 'G', 'T', 'T',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 21)
+        self.assertEqual(counts.identities, 246)
+        self.assertEqual(counts.mismatches, 167)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 66.93)
@@ -2054,7 +2216,13 @@ np.array([['G', 'G', 'G', 'T', 'A', 'T', 'T', 'G', 'A', 'T', 'G', 'T', 'T',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 8)
+        self.assertEqual(counts.identities, 85)
+        self.assertEqual(counts.mismatches, 42)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 91.30)
@@ -2106,7 +2274,13 @@ np.array([['A', 'G', 'A', 'C', 'A', 'G', 'A', 'G', 'G', 'A', 'G', 'G', 'A',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 1)
+        self.assertEqual(counts.identities, 21)
+        self.assertEqual(counts.mismatches, 2)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 76.19)
@@ -2161,7 +2335,13 @@ np.array([['G', 'C', 'T', 'G', 'G', 'A', 'G', 'A', 'G', 'A', 'G', 'C', 'C',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 4)
+        self.assertEqual(counts.identities, 32)
+        self.assertEqual(counts.mismatches, 10)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 100.00)
@@ -2208,7 +2388,13 @@ np.array([['C', 'C', 'A', 'T', 'G', 'A', 'C', 'C', 'T', 'G', 'G', 'T'],
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.identities, 12)
+        self.assertEqual(counts.mismatches, 0)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 100.00)
@@ -2255,7 +2441,13 @@ np.array([['C', 'C', 'A', 'T', 'G', 'A', 'C', 'C', 'T', 'G', 'G', 'T'],
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.identities, 12)
+        self.assertEqual(counts.mismatches, 0)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 87.50)
@@ -2303,7 +2495,13 @@ np.array([['C', 'C', 'T', 'G', 'G', 'T', 'T', 'G', 'A', 'A', 'C', 'T', 'T',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.identities, 14)
+        self.assertEqual(counts.mismatches, 2)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 53.57)
@@ -2371,7 +2569,13 @@ np.array([['G', 'C', 'A', 'T', 'G', 'G', 'C', 'T', 'G', 'G', 'G', 'T', 'G',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.identities, 45)
+        self.assertEqual(counts.mismatches, 39)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 100.00)
@@ -2417,7 +2621,13 @@ np.array([['C', 'C', 'T', 'G', 'G', 'T', 'T', 'C', 'T', 'C'],
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.identities, 10)
+        self.assertEqual(counts.mismatches, 0)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 59.15)
@@ -2485,7 +2695,13 @@ np.array([['C', 'T', 'G', 'C', 'G', 'G', 'C', 'A', 'C', 'C', 'T', 'G', 'G',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 3)
+        self.assertEqual(counts.identities, 42)
+        self.assertEqual(counts.mismatches, 29)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -2585,7 +2801,13 @@ pGT875          600 ????????????????????????????????????????????????????????? 65
             "ATGCCTATGATACTGGGATACTGGAACGTCCGCGGACTGACACACCCGATCCGCATGCTCCTGGAATACACAGACTCAAGCTATGATGAGAAGAGATACACCATGGGTGACGCTCCCGACTTTGACAGAAGCCAGTGGCTGAATGAGAAGTTCAAGCTGGGCCTGGACTTTCCCAATCTGCCTTACTTGATCGATGGATCACACAAGATCACCCAGAGCAATGCCATCCTGCGCTACCTTGCCCGAAAGCACCACCTGGATGGAGAGACAGAGGAGGAGAGGATCCGTGCAGACATTGTGGAGAACCAGGTCATGGACACCCGCATGCAGCTCATCATGCTCTGTTACAACCCTGACTTTGAGAAGCAGAAGCCAGAGTTCTTGAAGACCATCCCTGAGAAAATGAAGCTCTACTCTGAGTTCCTGGGCAAGAGGCCATGGTTTGCAGGGGACAAGGTCACCTATGTGGATTTCCTTGCTTATGACATTCTTGACCAGTACCGTATGTTTGAGCCCAAGTGCCTGGACGCCTTCCCAAACCTGAGGGACTTCCTGGCCCGCTTCGAGGGCCTCAAGAAGATCTCTGCCTACATGAAGAGTAGCCGCTACATCGCAACACCTATATTTTCAAAGATGGCCCACTGGAGTAACAAGTAG",
         )
         # pGT875   RABGLTR
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.identities, 657)
+        self.assertEqual(counts.mismatches, 0)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 79.10)
@@ -2668,7 +2890,13 @@ pGT875          600 ?????????????????????????????????????????????? 646
             "ATGCCTATGATACTGGGATACTGGAACGTCCGCGGACTGACACACCCGATCCGCATGCTCCTGGAATACACAGACTCAAGCTATGATGAGAAGAGATACACCATGGGTGACGCTCCCGACTTTGACAGAAGCCAGTGGCTGAATGAGAAGTTCAAGCTGGGCCTGGACTTTCCCAATCTGCCTTACTTGATCGATGGATCACACAAGATCACCCAGAGCAATGCCATCCTGCGCTACCTTGCCCGAAAGCACCACCTGGATGGAGAGACAGAGGAGGAGAGGATCCGTGCAGACATTGTGGAGAACCAGGTCATGGACACCCGCATGCAGCTCATCATGCTCTGTTACAACCCTGACTTTGAGAAGCAGAAGCCAGAGTTCTTGAAGACCATCCCTGAGAAAATGAAGCTCTACTCTGAGTTCCTGGGCAAGAGGCCATGGTTTGCAGGGGACAAGGTCACCTATGTGGATTTCCTTGCTTATGACATTCTTGACCAGTACCGTATGTTTGAGCCCAAGTGCCTGGACGCCTTCCCAAACCTGAGGGACTTCCTGGCCCGCTTCGAGGGCCTCAAGAAGATCTCTGCCTACATGAAGAGTAGCCGCTACATCGCAACACCTATATTTTCAAAGATGGCCCACTGGA",
         )
         # pGT875   BTGST
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.identities, 511)
+        self.assertEqual(counts.mismatches, 135)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 59.56)
@@ -2819,7 +3047,13 @@ np.array([['A', 'G', 'C', 'T', 'C', 'C', 'C', 'C', 'A', 'A', 'G', 'T', 'T',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 21)
+        self.assertEqual(counts.identities, 246)
+        self.assertEqual(counts.mismatches, 167)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 66.93)
@@ -2904,7 +3138,13 @@ np.array([['G', 'G', 'G', 'T', 'A', 'T', 'T', 'G', 'A', 'T', 'G', 'T', 'T',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 8)
+        self.assertEqual(counts.identities, 85)
+        self.assertEqual(counts.mismatches, 42)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 91.30)
@@ -2956,7 +3196,13 @@ np.array([['A', 'G', 'A', 'C', 'A', 'G', 'A', 'G', 'G', 'A', 'G', 'G', 'A',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 1)
+        self.assertEqual(counts.identities, 21)
+        self.assertEqual(counts.mismatches, 2)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 76.19)
@@ -3011,7 +3257,13 @@ np.array([['G', 'C', 'T', 'G', 'G', 'A', 'G', 'A', 'G', 'A', 'G', 'C', 'C',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 4)
+        self.assertEqual(counts.identities, 32)
+        self.assertEqual(counts.mismatches, 10)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 100.00)
@@ -3058,7 +3310,13 @@ np.array([['C', 'C', 'A', 'T', 'G', 'A', 'C', 'C', 'T', 'G', 'G', 'T'],
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.identities, 12)
+        self.assertEqual(counts.mismatches, 0)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 100.00)
@@ -3105,7 +3363,13 @@ np.array([['C', 'C', 'A', 'T', 'G', 'A', 'C', 'C', 'T', 'G', 'G', 'T'],
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.identities, 12)
+        self.assertEqual(counts.mismatches, 0)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 87.50)
@@ -3153,7 +3417,13 @@ np.array([['C', 'C', 'T', 'G', 'G', 'T', 'T', 'G', 'A', 'A', 'C', 'T', 'T',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.identities, 14)
+        self.assertEqual(counts.mismatches, 2)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 53.57)
@@ -3221,7 +3491,13 @@ np.array([['G', 'C', 'A', 'T', 'G', 'G', 'C', 'T', 'G', 'G', 'G', 'T', 'G',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.identities, 45)
+        self.assertEqual(counts.mismatches, 39)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 100.00)
@@ -3267,7 +3543,13 @@ np.array([['C', 'C', 'T', 'G', 'G', 'T', 'T', 'C', 'T', 'C'],
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.identities, 10)
+        self.assertEqual(counts.mismatches, 0)
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertAlmostEqual(alignment.annotations["% identity"], 59.15)
@@ -3335,7 +3617,13 @@ np.array([['C', 'T', 'G', 'C', 'G', 'G', 'C', 'A', 'C', 'C', 'T', 'G', 'G',
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        gaps = counts.gaps
+        identities = counts.identities
+        mismatches = counts.mismatches
+        self.assertEqual(counts.gaps, 3)
+        self.assertEqual(counts.identities, 42)
+        self.assertEqual(counts.mismatches, 29)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -3394,7 +3682,13 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.annotations["alignment length"], 43)
             self.assertEqual(alignment.annotations["mismatches"], 28)
             self.assertEqual(alignment.annotations["gap opens"], 0)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|16080617|ref|NP_391444.1|")
             self.assertEqual(alignment.target.id, "gi|72012412|ref|XM_777959.1|")
@@ -3408,7 +3702,13 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.annotations["alignment length"], 59)
             self.assertEqual(alignment.annotations["mismatches"], 31)
             self.assertEqual(alignment.annotations["gap opens"], 1)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|16080617|ref|NP_391444.1|")
             self.assertEqual(alignment.target.id, "gi|115975252|ref|XM_001180111.1|")
@@ -3422,7 +3722,13 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.annotations["alignment length"], 59)
             self.assertEqual(alignment.annotations["mismatches"], 31)
             self.assertEqual(alignment.annotations["gap opens"], 1)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|350596019|ref|XM_003360601.2|")
@@ -3437,7 +3743,13 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.annotations["alignment length"], 98)
             self.assertEqual(alignment.annotations["mismatches"], 4)
             self.assertEqual(alignment.annotations["gap opens"], 0)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|350596019|ref|XM_003360601.2|")
@@ -3452,7 +3764,13 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.annotations["alignment length"], 71)
             self.assertEqual(alignment.annotations["mismatches"], 46)
             self.assertEqual(alignment.annotations["gap opens"], 2)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|301779869|ref|XM_002925302.1|")
@@ -3467,7 +3785,13 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.annotations["alignment length"], 98)
             self.assertEqual(alignment.annotations["mismatches"], 2)
             self.assertEqual(alignment.annotations["gap opens"], 0)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|301779869|ref|XM_002925302.1|")
@@ -3482,7 +3806,13 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.annotations["alignment length"], 100)
             self.assertEqual(alignment.annotations["mismatches"], 64)
             self.assertEqual(alignment.annotations["gap opens"], 2)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|296223671|ref|XM_002757683.1|")
@@ -3497,7 +3827,13 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.annotations["alignment length"], 98)
             self.assertEqual(alignment.annotations["mismatches"], 2)
             self.assertEqual(alignment.annotations["gap opens"], 0)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|296223671|ref|XM_002757683.1|")
@@ -3512,7 +3848,13 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.annotations["alignment length"], 100)
             self.assertEqual(alignment.annotations["mismatches"], 64)
             self.assertEqual(alignment.annotations["gap opens"], 2)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|338714227|ref|XM_001492113.3|")
@@ -3527,7 +3869,13 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.annotations["alignment length"], 98)
             self.assertEqual(alignment.annotations["mismatches"], 2)
             self.assertEqual(alignment.annotations["gap opens"], 0)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|338714227|ref|XM_001492113.3|")
@@ -3542,7 +3890,13 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.annotations["alignment length"], 100)
             self.assertEqual(alignment.annotations["mismatches"], 63)
             self.assertEqual(alignment.annotations["gap opens"], 2)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|365982352|ref|XM_003667962.1|")
@@ -3557,7 +3911,13 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.annotations["alignment length"], 52)
             self.assertEqual(alignment.annotations["mismatches"], 27)
             self.assertEqual(alignment.annotations["gap opens"], 1)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             with self.assertRaises(StopIteration):
                 next(alignments)
 
@@ -3585,7 +3945,13 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.annotations["alignment length"], 43)
             self.assertEqual(alignment.annotations["mismatches"], 28)
             self.assertEqual(alignment.annotations["gap opens"], 0)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|16080617|ref|NP_391444.1|")
             self.assertEqual(alignment.target.id, "gi|72012412|ref|XM_777959.1|")
@@ -3603,7 +3969,13 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.annotations["alignment length"], 59)
             self.assertEqual(alignment.annotations["mismatches"], 31)
             self.assertEqual(alignment.annotations["gap opens"], 1)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|16080617|ref|NP_391444.1|")
             self.assertEqual(alignment.target.id, "gi|115975252|ref|XM_001180111.1|")
@@ -3621,7 +3993,13 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.annotations["alignment length"], 59)
             self.assertEqual(alignment.annotations["mismatches"], 31)
             self.assertEqual(alignment.annotations["gap opens"], 1)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             with self.assertRaises(StopIteration):
                 next(alignments)
 
@@ -3647,7 +4025,13 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.annotations["alignment length"], 98)
             self.assertEqual(alignment.annotations["mismatches"], 4)
             self.assertEqual(alignment.annotations["gap opens"], 0)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|350596019|ref|XM_003360601.2|")
@@ -3662,7 +4046,13 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.annotations["alignment length"], 71)
             self.assertEqual(alignment.annotations["mismatches"], 46)
             self.assertEqual(alignment.annotations["gap opens"], 2)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|301779869|ref|XM_002925302.1|")
@@ -3677,7 +4067,13 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.annotations["alignment length"], 98)
             self.assertEqual(alignment.annotations["mismatches"], 2)
             self.assertEqual(alignment.annotations["gap opens"], 0)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|301779869|ref|XM_002925302.1|")
@@ -3692,7 +4088,13 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.annotations["alignment length"], 100)
             self.assertEqual(alignment.annotations["mismatches"], 64)
             self.assertEqual(alignment.annotations["gap opens"], 2)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|296223671|ref|XM_002757683.1|")
@@ -3707,7 +4109,13 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.annotations["alignment length"], 98)
             self.assertEqual(alignment.annotations["mismatches"], 2)
             self.assertEqual(alignment.annotations["gap opens"], 0)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|296223671|ref|XM_002757683.1|")
@@ -3722,7 +4130,13 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.annotations["alignment length"], 100)
             self.assertEqual(alignment.annotations["mismatches"], 64)
             self.assertEqual(alignment.annotations["gap opens"], 2)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|338714227|ref|XM_001492113.3|")
@@ -3737,7 +4151,13 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.annotations["alignment length"], 98)
             self.assertEqual(alignment.annotations["mismatches"], 2)
             self.assertEqual(alignment.annotations["gap opens"], 0)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|338714227|ref|XM_001492113.3|")
@@ -3752,7 +4172,13 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.annotations["alignment length"], 100)
             self.assertEqual(alignment.annotations["mismatches"], 63)
             self.assertEqual(alignment.annotations["gap opens"], 2)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|365982352|ref|XM_003667962.1|")
@@ -3767,7 +4193,13 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.annotations["alignment length"], 52)
             self.assertEqual(alignment.annotations["mismatches"], 27)
             self.assertEqual(alignment.annotations["gap opens"], 1)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             with self.assertRaises(StopIteration):
                 next(alignments)
 
@@ -3790,73 +4222,145 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.id, "gi|145479850|ref|XM_001425911.1|")
             self.assertAlmostEqual(alignment.annotations["evalue"], 1e-05)
             self.assertAlmostEqual(alignment.annotations["bit score"], 34.7)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|16080617|ref|NP_391444.1|")
             self.assertEqual(alignment.target.id, "gi|72012412|ref|XM_777959.1|")
             self.assertAlmostEqual(alignment.annotations["evalue"], 1e-04)
             self.assertAlmostEqual(alignment.annotations["bit score"], 31.6)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|16080617|ref|NP_391444.1|")
             self.assertEqual(alignment.target.id, "gi|115975252|ref|XM_001180111.1|")
             self.assertAlmostEqual(alignment.annotations["evalue"], 1e-04)
             self.assertAlmostEqual(alignment.annotations["bit score"], 31.6)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|350596019|ref|XM_003360601.2|")
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-67, places=67)
             self.assertAlmostEqual(alignment.annotations["bit score"], 199)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|350596019|ref|XM_003360601.2|")
             self.assertAlmostEqual(alignment.annotations["evalue"], 4e-05)
             self.assertAlmostEqual(alignment.annotations["bit score"], 32.7)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|301779869|ref|XM_002925302.1|")
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-67, places=67)
             self.assertAlmostEqual(alignment.annotations["bit score"], 202)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|301779869|ref|XM_002925302.1|")
             self.assertAlmostEqual(alignment.annotations["evalue"], 3e-09, places=9)
             self.assertAlmostEqual(alignment.annotations["bit score"], 45.1)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|296223671|ref|XM_002757683.1|")
             self.assertAlmostEqual(alignment.annotations["evalue"], 4e-67, places=67)
             self.assertAlmostEqual(alignment.annotations["bit score"], 202)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|296223671|ref|XM_002757683.1|")
             self.assertAlmostEqual(alignment.annotations["evalue"], 3e-09, places=9)
             self.assertAlmostEqual(alignment.annotations["bit score"], 45.1)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|338714227|ref|XM_001492113.3|")
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-66, places=66)
             self.assertAlmostEqual(alignment.annotations["bit score"], 202)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|338714227|ref|XM_001492113.3|")
             self.assertAlmostEqual(alignment.annotations["evalue"], 1e-09, places=9)
             self.assertAlmostEqual(alignment.annotations["bit score"], 46.6)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|365982352|ref|XM_003667962.1|")
             self.assertAlmostEqual(alignment.annotations["evalue"], 1.7)
             self.assertAlmostEqual(alignment.annotations["bit score"], 19.6)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             with self.assertRaises(StopIteration):
                 next(alignments)
 
@@ -3932,7 +4436,13 @@ gi|160806        30 PDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLD 73
             self.assertEqual(alignment.annotations["query/sbjct frames"], "0/1")
             self.assertEqual(alignment.query.annotations["frame"], "0")
             self.assertEqual(alignment.target.annotations["frame"], "1")
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 15)
+            self.assertEqual(counts.mismatches, 28)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|16080617|ref|NP_391444.1|")
             self.assertEqual(
@@ -4005,7 +4515,13 @@ gi|160806        94
             self.assertEqual(alignment.annotations["query/sbjct frames"], "0/1")
             self.assertEqual(alignment.query.annotations["frame"], "0")
             self.assertEqual(alignment.target.annotations["frame"], "1")
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 8)
+            self.assertEqual(counts.identities, 20)
+            self.assertEqual(counts.mismatches, 31)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|16080617|ref|NP_391444.1|")
             self.assertEqual(
@@ -4079,7 +4595,13 @@ gi|160806        94
             self.assertEqual(alignment.annotations["query/sbjct frames"], "0/1")
             self.assertEqual(alignment.query.annotations["frame"], "0")
             self.assertEqual(alignment.target.annotations["frame"], "1")
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 8)
+            self.assertEqual(counts.identities, 20)
+            self.assertEqual(counts.mismatches, 31)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.query.description, "pleckstrin [Mus musculus]")
@@ -4142,7 +4664,13 @@ gi|114649        60 KRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK 98
             self.assertEqual(alignment.annotations["query/sbjct frames"], "0/2")
             self.assertEqual(alignment.query.annotations["frame"], "0")
             self.assertEqual(alignment.target.annotations["frame"], "2")
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 94)
+            self.assertEqual(counts.mismatches, 4)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.query.description, "pleckstrin [Mus musculus]")
@@ -4211,7 +4739,13 @@ gi|114649        85 RDAWVRDIKKA 96
             self.assertEqual(alignment.annotations["query/sbjct frames"], "0/2")
             self.assertEqual(alignment.query.annotations["frame"], "0")
             self.assertEqual(alignment.target.annotations["frame"], "2")
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 4)
+            self.assertEqual(counts.identities, 21)
+            self.assertEqual(counts.mismatches, 46)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.query.description, "pleckstrin [Mus musculus]")
@@ -4277,7 +4811,13 @@ gi|114649        60 KRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK 98
             self.assertEqual(alignment.annotations["query/sbjct frames"], "0/3")
             self.assertEqual(alignment.query.annotations["frame"], "0")
             self.assertEqual(alignment.target.annotations["frame"], "3")
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 96)
+            self.assertEqual(counts.mismatches, 2)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.query.description, "pleckstrin [Mus musculus]")
@@ -4346,7 +4886,13 @@ gi|114649        56 QDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA  96
             self.assertEqual(alignment.annotations["query/sbjct frames"], "0/3")
             self.assertEqual(alignment.query.annotations["frame"], "0")
             self.assertEqual(alignment.target.annotations["frame"], "3")
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 6)
+            self.assertEqual(counts.identities, 30)
+            self.assertEqual(counts.mismatches, 64)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.query.description, "pleckstrin [Mus musculus]")
@@ -4412,7 +4958,13 @@ gi|114649        60 KRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK 98
             self.assertEqual(alignment.annotations["query/sbjct frames"], "0/2")
             self.assertEqual(alignment.query.annotations["frame"], "0")
             self.assertEqual(alignment.target.annotations["frame"], "2")
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 96)
+            self.assertEqual(counts.mismatches, 2)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.query.description, "pleckstrin [Mus musculus]")
@@ -4481,7 +5033,13 @@ gi|114649        60 KRMF----VLKITTTKQQDHFFQAAFLEERDAWVRDIKKA  96
             self.assertEqual(alignment.annotations["query/sbjct frames"], "0/2")
             self.assertEqual(alignment.query.annotations["frame"], "0")
             self.assertEqual(alignment.target.annotations["frame"], "2")
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 6)
+            self.assertEqual(counts.identities, 30)
+            self.assertEqual(counts.mismatches, 64)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.query.description, "pleckstrin [Mus musculus]")
@@ -4547,7 +5105,13 @@ gi|114649        60 KRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK 98
             self.assertEqual(alignment.annotations["query/sbjct frames"], "0/2")
             self.assertEqual(alignment.query.annotations["frame"], "0")
             self.assertEqual(alignment.target.annotations["frame"], "2")
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 96)
+            self.assertEqual(counts.mismatches, 2)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.query.description, "pleckstrin [Mus musculus]")
@@ -4616,7 +5180,13 @@ gi|114649        56 QDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA  96
             self.assertEqual(alignment.annotations["query/sbjct frames"], "0/2")
             self.assertEqual(alignment.query.annotations["frame"], "0")
             self.assertEqual(alignment.target.annotations["frame"], "2")
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 6)
+            self.assertEqual(counts.identities, 31)
+            self.assertEqual(counts.mismatches, 63)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.query.description, "pleckstrin [Mus musculus]")
@@ -4681,7 +5251,13 @@ gi|114649        11 GSVFNTWKPMWVVLL---------EDGIEFYKKKSDNSPKGMIPLKGSTLTS 54
             self.assertEqual(alignment.annotations["query/sbjct frames"], "0/1")
             self.assertEqual(alignment.query.annotations["frame"], "0")
             self.assertEqual(alignment.target.annotations["frame"], "1")
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 9)
+            self.assertEqual(counts.identities, 16)
+            self.assertEqual(counts.mismatches, 27)
             with self.assertRaises(StopIteration):
                 next(alignments)
 
@@ -4707,7 +5283,13 @@ gi|114649        11 GSVFNTWKPMWVVLL---------EDGIEFYKKKSDNSPKGMIPLKGSTLTS 54
             self.assertEqual(alignment.annotations["alignment length"], 43)
             self.assertEqual(alignment.annotations["mismatches"], 28)
             self.assertEqual(alignment.annotations["gap opens"], 0)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|16080617|ref|NP_391444.1|")
             self.assertEqual(alignment.target.id, "gi|115975252|ref|XM_001180111.1|")
@@ -4721,7 +5303,13 @@ gi|114649        11 GSVFNTWKPMWVVLL---------EDGIEFYKKKSDNSPKGMIPLKGSTLTS 54
             self.assertEqual(alignment.annotations["alignment length"], 59)
             self.assertEqual(alignment.annotations["mismatches"], 31)
             self.assertEqual(alignment.annotations["gap opens"], 1)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|16080617|ref|NP_391444.1|")
             self.assertEqual(alignment.target.id, "gi|390342090|ref|XM_777959.2|")
@@ -4735,7 +5323,13 @@ gi|114649        11 GSVFNTWKPMWVVLL---------EDGIEFYKKKSDNSPKGMIPLKGSTLTS 54
             self.assertEqual(alignment.annotations["alignment length"], 59)
             self.assertEqual(alignment.annotations["mismatches"], 31)
             self.assertEqual(alignment.annotations["gap opens"], 1)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|354480463|ref|XM_003502378.1|")
@@ -4750,7 +5344,13 @@ gi|114649        11 GSVFNTWKPMWVVLL---------EDGIEFYKKKSDNSPKGMIPLKGSTLTS 54
             self.assertEqual(alignment.annotations["alignment length"], 98)
             self.assertEqual(alignment.annotations["mismatches"], 0)
             self.assertEqual(alignment.annotations["gap opens"], 0)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|354480463|ref|XM_003502378.1|")
@@ -4765,7 +5365,13 @@ gi|114649        11 GSVFNTWKPMWVVLL---------EDGIEFYKKKSDNSPKGMIPLKGSTLTS 54
             self.assertEqual(alignment.annotations["alignment length"], 100)
             self.assertEqual(alignment.annotations["mismatches"], 64)
             self.assertEqual(alignment.annotations["gap opens"], 3)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|350596019|ref|XM_003360601.2|")
@@ -4780,7 +5386,13 @@ gi|114649        11 GSVFNTWKPMWVVLL---------EDGIEFYKKKSDNSPKGMIPLKGSTLTS 54
             self.assertEqual(alignment.annotations["alignment length"], 98)
             self.assertEqual(alignment.annotations["mismatches"], 4)
             self.assertEqual(alignment.annotations["gap opens"], 0)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|350596019|ref|XM_003360601.2|")
@@ -4795,7 +5407,13 @@ gi|114649        11 GSVFNTWKPMWVVLL---------EDGIEFYKKKSDNSPKGMIPLKGSTLTS 54
             self.assertEqual(alignment.annotations["alignment length"], 71)
             self.assertEqual(alignment.annotations["mismatches"], 46)
             self.assertEqual(alignment.annotations["gap opens"], 2)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|301779869|ref|XM_002925302.1|")
@@ -4810,7 +5428,13 @@ gi|114649        11 GSVFNTWKPMWVVLL---------EDGIEFYKKKSDNSPKGMIPLKGSTLTS 54
             self.assertEqual(alignment.annotations["alignment length"], 98)
             self.assertEqual(alignment.annotations["mismatches"], 2)
             self.assertEqual(alignment.annotations["gap opens"], 0)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|301779869|ref|XM_002925302.1|")
@@ -4825,7 +5449,13 @@ gi|114649        11 GSVFNTWKPMWVVLL---------EDGIEFYKKKSDNSPKGMIPLKGSTLTS 54
             self.assertEqual(alignment.annotations["alignment length"], 100)
             self.assertEqual(alignment.annotations["mismatches"], 64)
             self.assertEqual(alignment.annotations["gap opens"], 2)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|338714227|ref|XM_001492113.3|")
@@ -4840,7 +5470,13 @@ gi|114649        11 GSVFNTWKPMWVVLL---------EDGIEFYKKKSDNSPKGMIPLKGSTLTS 54
             self.assertEqual(alignment.annotations["alignment length"], 98)
             self.assertEqual(alignment.annotations["mismatches"], 2)
             self.assertEqual(alignment.annotations["gap opens"], 0)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|338714227|ref|XM_001492113.3|")
@@ -4855,7 +5491,13 @@ gi|114649        11 GSVFNTWKPMWVVLL---------EDGIEFYKKKSDNSPKGMIPLKGSTLTS 54
             self.assertEqual(alignment.annotations["alignment length"], 100)
             self.assertEqual(alignment.annotations["mismatches"], 63)
             self.assertEqual(alignment.annotations["gap opens"], 2)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|11464971:4-101")
             self.assertEqual(alignment.target.id, "gi|390474391|ref|XM_002757683.2|")
@@ -4870,7 +5512,13 @@ gi|114649        11 GSVFNTWKPMWVVLL---------EDGIEFYKKKSDNSPKGMIPLKGSTLTS 54
             self.assertEqual(alignment.annotations["alignment length"], 98)
             self.assertEqual(alignment.annotations["mismatches"], 2)
             self.assertEqual(alignment.annotations["gap opens"], 0)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             with self.assertRaises(StopIteration):
                 next(alignments)
 
@@ -4891,7 +5539,13 @@ gi|114649        11 GSVFNTWKPMWVVLL---------EDGIEFYKKKSDNSPKGMIPLKGSTLTS 54
                 "gi|148227873|ref|NM_001095167.1|;gi|55250552|gb|BC086280.1|",
             )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|148227874|ref|NP_001088636.1|")
             self.assertEqual(alignment.query.description, "sirtuin 2 [Xenopus laevis]")
@@ -4899,7 +5553,13 @@ gi|114649        11 GSVFNTWKPMWVVLL---------EDGIEFYKKKSDNSPKGMIPLKGSTLTS 54
                 alignment.target.annotations["ids"], "gi|512812550|ref|XM_002935781.2|"
             )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|148227874|ref|NP_001088636.1|")
             self.assertEqual(alignment.query.description, "sirtuin 2 [Xenopus laevis]")
@@ -4907,7 +5567,13 @@ gi|114649        11 GSVFNTWKPMWVVLL---------EDGIEFYKKKSDNSPKGMIPLKGSTLTS 54
                 alignment.target.annotations["ids"], "gi|512812554|ref|XM_004910718.1|"
             )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|148227874|ref|NP_001088636.1|")
             self.assertEqual(alignment.query.description, "sirtuin 2 [Xenopus laevis]")
@@ -4915,7 +5581,13 @@ gi|114649        11 GSVFNTWKPMWVVLL---------EDGIEFYKKKSDNSPKGMIPLKGSTLTS 54
                 alignment.target.annotations["ids"], "gi|327289356|ref|XM_003229343.1|"
             )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|148227874|ref|NP_001088636.1|")
             self.assertEqual(alignment.query.description, "sirtuin 2 [Xenopus laevis]")
@@ -4923,7 +5595,13 @@ gi|114649        11 GSVFNTWKPMWVVLL---------EDGIEFYKKKSDNSPKGMIPLKGSTLTS 54
                 alignment.target.annotations["ids"], "gi|602661018|ref|XM_007436108.1|"
             )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|148227874|ref|NP_001088636.1|")
             self.assertEqual(alignment.query.description, "sirtuin 2 [Xenopus laevis]")
@@ -4931,7 +5609,13 @@ gi|114649        11 GSVFNTWKPMWVVLL---------EDGIEFYKKKSDNSPKGMIPLKGSTLTS 54
                 alignment.target.annotations["ids"], "gi|564242014|ref|XM_006277753.1|"
             )
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|148227874|ref|NP_001088636.1|")
             self.assertEqual(alignment.query.description, "sirtuin 2 [Xenopus laevis]")
@@ -4939,7 +5623,13 @@ gi|114649        11 GSVFNTWKPMWVVLL---------EDGIEFYKKKSDNSPKGMIPLKGSTLTS 54
                 alignment.target.annotations["ids"], "gi|591387858|ref|XM_007068281.1|"
             )
             self.assertAlmostEqual(alignment.annotations["evalue"], 2e-180, places=180)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|148227874|ref|NP_001088636.1|")
             self.assertEqual(alignment.query.description, "sirtuin 2 [Xenopus laevis]")
@@ -4947,7 +5637,13 @@ gi|114649        11 GSVFNTWKPMWVVLL---------EDGIEFYKKKSDNSPKGMIPLKGSTLTS 54
                 alignment.target.annotations["ids"], "gi|558185265|ref|XM_006128143.1|"
             )
             self.assertAlmostEqual(alignment.annotations["evalue"], 8e-180, places=180)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|148227874|ref|NP_001088636.1|")
             self.assertEqual(alignment.query.description, "sirtuin 2 [Xenopus laevis]")
@@ -4955,7 +5651,13 @@ gi|114649        11 GSVFNTWKPMWVVLL---------EDGIEFYKKKSDNSPKGMIPLKGSTLTS 54
                 alignment.target.annotations["ids"], "gi|573878747|ref|XM_006627536.1|"
             )
             self.assertAlmostEqual(alignment.annotations["evalue"], 5e-173, places=173)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(alignment.query.id, "gi|148227874|ref|NP_001088636.1|")
             self.assertEqual(alignment.query.description, "sirtuin 2 [Xenopus laevis]")
@@ -4963,7 +5665,13 @@ gi|114649        11 GSVFNTWKPMWVVLL---------EDGIEFYKKKSDNSPKGMIPLKGSTLTS 54
                 alignment.target.annotations["ids"], "gi|410910671|ref|XM_003968765.1|"
             )
             self.assertAlmostEqual(alignment.annotations["evalue"], 8e-173, places=173)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 0)
+            self.assertEqual(counts.mismatches, 0)
             with self.assertRaises(StopIteration):
                 next(alignments)
 
@@ -5062,7 +5770,13 @@ gi|296147        60 SLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K 116
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 99)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 116)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -5150,7 +5864,13 @@ gi|296147        60 DVFLAPQNYVLFSISQWIYH*HGEWLNFFFSIRKIKNAILLQVAFAWSQTLQCSWP 116
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 99)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 116)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -5238,7 +5958,13 @@ gi|296147        60 MSF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLPLHGVKPSSVHGH 116
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 99)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 116)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -5326,7 +6052,13 @@ gi|296147        60 PFRVGLPIKEC*NDDPGNAMPTGTVNRSIYSSKPAV*NFGCLH*GYSSRDGDSIKS 116
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 99)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 116)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -5414,7 +6146,13 @@ gi|296147        60 GCLSSSSKLCTLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESNPPVFMA 116
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 99)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 116)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -5502,7 +6240,13 @@ gi|296147        60 PRSRLSEILDAFIEATHLAMEIQLK 85
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 73)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 85)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -5580,7 +6324,13 @@ gi|296147         0 MAMNTGGFDSMQRQ 14
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 12)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 14)
+            self.assertEqual(counts.mismatches, 0)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -5665,7 +6415,13 @@ gi|296147        60 PRSRLSEILDAFIEATHLAMEIQLK 85
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 94)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 73)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 62)
+            self.assertEqual(counts.mismatches, 23)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -5740,7 +6496,13 @@ gi|296147         0 FRIEKKKFNHSPC* 14
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 94)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 12)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 11)
+            self.assertEqual(counts.mismatches, 3)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -5821,7 +6583,13 @@ gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTK 55
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 94)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 47)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 34)
+            self.assertEqual(counts.mismatches, 21)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -5900,7 +6668,13 @@ gi|296147         0 LFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESN 39
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 94)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 33)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 24)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -5985,7 +6759,13 @@ gi|296147        60 *RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K 103
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 94)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 88)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 36)
+            self.assertEqual(counts.mismatches, 67)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -6070,7 +6850,13 @@ gi|296147        60 FRFGR 65
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 94)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 28)
+            self.assertEqual(counts.mismatches, 37)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -6155,7 +6941,13 @@ gi|296147        60 PRSRLSEILDAFIEATHLAMEIQLK 85
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 73)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 58)
+            self.assertEqual(counts.mismatches, 27)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -6236,7 +7028,13 @@ gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANT 54
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 46)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 30)
+            self.assertEqual(counts.mismatches, 24)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -6311,7 +7109,13 @@ gi|296147         0 LFNISMDLSLAWRMVEFLLFDSEDKERNSASSC 33
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 28)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 20)
+            self.assertEqual(counts.mismatches, 13)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -6396,7 +7200,13 @@ gi|296147        60 SF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLPLHGVKPSSVHGH 115
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 99)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 38)
+            self.assertEqual(counts.mismatches, 77)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -6481,7 +7291,13 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 73)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 72)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 55)
+            self.assertEqual(counts.mismatches, 29)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -6562,7 +7378,13 @@ gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTK 55
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 73)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 47)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 25)
+            self.assertEqual(counts.mismatches, 30)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -6647,7 +7469,13 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 96)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 72)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 57)
+            self.assertEqual(counts.mismatches, 27)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -6727,7 +7555,13 @@ gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLD 49
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 96)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 42)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 27)
+            self.assertEqual(counts.mismatches, 22)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -6806,7 +7640,13 @@ gi|296147         0 TLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESNPP 42
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 96)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 36)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 20)
+            self.assertEqual(counts.mismatches, 22)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -6891,7 +7731,13 @@ gi|296147        60 GNAMPTGTVNRSIYSSKPAV*NFGCLH*GYSSRDGDSIK 99
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 96)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 85)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 31)
+            self.assertEqual(counts.mismatches, 68)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -6976,7 +7822,13 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 72)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 56)
+            self.assertEqual(counts.mismatches, 28)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -7061,7 +7913,13 @@ gi|296147        60 SLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K 116
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 99)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 49)
+            self.assertEqual(counts.mismatches, 67)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -7146,7 +8004,13 @@ gi|296147        60 MSF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLPLHGVKPSSVHGH 116
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 99)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 49)
+            self.assertEqual(counts.mismatches, 67)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -7225,7 +8089,13 @@ gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAF 47
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 40)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 26)
+            self.assertEqual(counts.mismatches, 21)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -7310,7 +8180,13 @@ gi|296147        60
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 51)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 27)
+            self.assertEqual(counts.mismatches, 33)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -7395,7 +8271,13 @@ gi|296147        60 *NDDPGNAMPTGTVNRSIYSSKPAV*NFGCLH*GYSSRDGDSIKS 105
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 90)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 40)
+            self.assertEqual(counts.mismatches, 65)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -7470,7 +8352,13 @@ gi|296147         0 TLFNISMDLSLAWRMVEFLLFDSEDKERNSASSC 34
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 29)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 18)
+            self.assertEqual(counts.mismatches, 16)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -7555,7 +8443,13 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 90)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 72)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 52)
+            self.assertEqual(counts.mismatches, 32)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -7640,7 +8534,13 @@ gi|296147        60 GCLSSSSKLCTLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCL 105
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 90)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 90)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 52)
+            self.assertEqual(counts.mismatches, 53)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -7725,7 +8625,13 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 94)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 72)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 52)
+            self.assertEqual(counts.mismatches, 32)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -7810,7 +8716,13 @@ gi|296147        60 GCLSSSSKLCTLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESN 110
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 94)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 94)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 49)
+            self.assertEqual(counts.mismatches, 61)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -7895,7 +8807,13 @@ gi|296147        60 MSF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLP 104
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 94)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 89)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 37)
+            self.assertEqual(counts.mismatches, 67)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -7980,7 +8898,13 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 90)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 72)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 51)
+            self.assertEqual(counts.mismatches, 33)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -8059,7 +8983,13 @@ gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFL 48
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 90)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 41)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 27)
+            self.assertEqual(counts.mismatches, 21)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -8134,7 +9064,13 @@ gi|296147         0 LFNISMDLSLAWRMVEFLLFDSEDKERNSASSCL 34
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 90)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 29)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 16)
+            self.assertEqual(counts.mismatches, 18)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -8219,7 +9155,13 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 82)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 72)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 50)
+            self.assertEqual(counts.mismatches, 34)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -8300,7 +9242,13 @@ gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTK 55
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 82)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 47)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 28)
+            self.assertEqual(counts.mismatches, 27)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -8375,7 +9323,13 @@ gi|296147         0 LFNISMDLSLAWRMVEFLLFDSEDK 25
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 82)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 21)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 13)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -8460,7 +9414,13 @@ gi|296147        60
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 82)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 51)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 25)
+            self.assertEqual(counts.mismatches, 35)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -8545,7 +9505,13 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 89)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 72)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 51)
+            self.assertEqual(counts.mismatches, 33)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -8626,7 +9592,13 @@ gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTK 55
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 89)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 47)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 28)
+            self.assertEqual(counts.mismatches, 27)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -8701,7 +9673,13 @@ gi|296147         0 TLFNISMDLSLAWRMVEFLLFDSED 25
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 89)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 21)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 14)
+            self.assertEqual(counts.mismatches, 11)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -8786,7 +9764,13 @@ gi|296147        60 FGR*RTQFCFKL 72
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 89)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 62)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 32)
+            self.assertEqual(counts.mismatches, 40)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -8867,7 +9851,13 @@ gi|296147         0 *HSLIGKPTRKGVRNPDVFLAPQNYVLFSISQWIYH*HGEWLNFFFSIRK 50
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 89)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 43)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 24)
+            self.assertEqual(counts.mismatches, 26)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -8952,7 +9942,13 @@ gi|296147        60 TGTVNRSIY 69
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 89)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 59)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 28)
+            self.assertEqual(counts.mismatches, 41)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -9037,7 +10033,13 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 96)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 72)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 52)
+            self.assertEqual(counts.mismatches, 32)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -9118,7 +10120,13 @@ gi|296147         0 NPDVFLAPQNYVLFSISQWIYH*HGEWLNFFFSIRKIKNAILLQVAFAWSQTLQ 54
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 96)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 46)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 25)
+            self.assertEqual(counts.mismatches, 29)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -9197,7 +10205,13 @@ gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILA 46
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 96)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 39)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 21)
+            self.assertEqual(counts.mismatches, 25)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -9282,7 +10296,13 @@ gi|296147        60 TMYSFQYLNGFITSMANG*ISSFRFGR*RTQ 91
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 96)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 78)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 33)
+            self.assertEqual(counts.mismatches, 58)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -9361,7 +10381,13 @@ gi|296147         0 QNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRI 42
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 96)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 36)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 20)
+            self.assertEqual(counts.mismatches, 22)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -9446,7 +10472,13 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 90)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 72)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 44)
+            self.assertEqual(counts.mismatches, 40)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -9527,7 +10559,13 @@ gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQ 51
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 90)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 44)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 25)
+            self.assertEqual(counts.mismatches, 26)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -9604,7 +10642,13 @@ gi|296147         0 TLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCL 35
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 90)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 30)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 20)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -9689,7 +10733,13 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 72)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 72)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 43)
+            self.assertEqual(counts.mismatches, 41)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -9774,7 +10824,13 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 67)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 67)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 31)
+            self.assertEqual(counts.mismatches, 47)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -9859,7 +10915,13 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 67)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 67)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 32)
+            self.assertEqual(counts.mismatches, 46)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -9944,7 +11006,13 @@ gi|296147        60 MEIQLK 66
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 57)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 57)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 28)
+            self.assertEqual(counts.mismatches, 38)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -10029,7 +11097,13 @@ gi|296147        60 EIQLK 65
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 30)
+            self.assertEqual(counts.mismatches, 35)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -10114,7 +11188,13 @@ gi|296147        60 EIQLK 65
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 29)
+            self.assertEqual(counts.mismatches, 36)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -10199,7 +11279,13 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 67)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 67)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 31)
+            self.assertEqual(counts.mismatches, 47)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -10284,7 +11370,13 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 67)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 67)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 28)
+            self.assertEqual(counts.mismatches, 50)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -10369,7 +11461,13 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 67)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 67)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 28)
+            self.assertEqual(counts.mismatches, 50)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -10454,7 +11552,13 @@ gi|296147        60 EIQLK 65
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 28)
+            self.assertEqual(counts.mismatches, 37)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -10539,7 +11643,13 @@ gi|296147        60 EIQLK 65
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 28)
+            self.assertEqual(counts.mismatches, 37)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -10624,7 +11734,13 @@ gi|296147        60 EIQLK 65
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 29)
+            self.assertEqual(counts.mismatches, 36)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -10709,7 +11825,13 @@ gi|296147        60 EIQLK 65
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 28)
+            self.assertEqual(counts.mismatches, 37)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -10794,7 +11916,13 @@ gi|296147        60 EIQLK 65
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 27)
+            self.assertEqual(counts.mismatches, 38)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -10879,7 +12007,13 @@ gi|296147        60 EIQLK 65
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 28)
+            self.assertEqual(counts.mismatches, 37)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -10964,7 +12098,13 @@ gi|296147        60 EIQLK 65
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 29)
+            self.assertEqual(counts.mismatches, 36)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -11049,7 +12189,13 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 67)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 67)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 26)
+            self.assertEqual(counts.mismatches, 52)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -11134,7 +12280,13 @@ gi|296147        60 EIQLK 65
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 29)
+            self.assertEqual(counts.mismatches, 36)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -11219,7 +12371,13 @@ gi|296147        60 EIQLK 65
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 28)
+            self.assertEqual(counts.mismatches, 37)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -11304,7 +12462,13 @@ gi|296147        60 EIQLK 65
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 29)
+            self.assertEqual(counts.mismatches, 36)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -11389,7 +12553,13 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 67)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 67)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 26)
+            self.assertEqual(counts.mismatches, 52)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -11474,7 +12644,13 @@ gi|296147        60 EIQLK 65
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 27)
+            self.assertEqual(counts.mismatches, 38)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -11559,7 +12735,13 @@ gi|296147        60 MEIQLK 66
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 57)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 57)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 28)
+            self.assertEqual(counts.mismatches, 38)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -11644,7 +12826,13 @@ gi|296147        60 EIQLK 65
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 27)
+            self.assertEqual(counts.mismatches, 38)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -11729,7 +12917,13 @@ gi|296147        60 EIQLK 65
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 27)
+            self.assertEqual(counts.mismatches, 38)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -11814,7 +13008,13 @@ gi|296147        60 EIQLK 65
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 24)
+            self.assertEqual(counts.mismatches, 41)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -11899,7 +13099,13 @@ gi|296147        60 EIQLK 65
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 28)
+            self.assertEqual(counts.mismatches, 37)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -11984,7 +13190,13 @@ gi|296147        60 EIQLK 65
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 25)
+            self.assertEqual(counts.mismatches, 40)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -12069,7 +13281,13 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 67)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 67)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 27)
+            self.assertEqual(counts.mismatches, 51)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -12154,7 +13372,13 @@ gi|296147        60 EATHLAMEIQLK 72
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 62)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 62)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 23)
+            self.assertEqual(counts.mismatches, 49)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -12239,7 +13463,13 @@ gi|296147        59
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 51)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 51)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 23)
+            self.assertEqual(counts.mismatches, 36)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -12320,7 +13550,13 @@ gi|296147         0 PFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 55
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 47)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 47)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 23)
+            self.assertEqual(counts.mismatches, 32)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -12397,7 +13633,13 @@ gi|296147         0 KRVHSFEELERHPDFALPFVLACQSRNAKMTTLAM 35
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 52)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 30)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 23)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -12472,7 +13714,13 @@ gi|296147         0 IPRSRLSEILDAFIEATHLAMEIQLK 26
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 52)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 22)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 13)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -12557,7 +13805,13 @@ gi|296147        60 RSRLSEILDAFIEATHLAME 80
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 69)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 69)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 25)
+            self.assertEqual(counts.mismatches, 55)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -12642,7 +13896,13 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 67)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 67)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 21)
+            self.assertEqual(counts.mismatches, 57)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -12727,7 +13987,13 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 67)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 67)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 21)
+            self.assertEqual(counts.mismatches, 57)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -12808,7 +14074,13 @@ gi|296147         0 ACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 51
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 44)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 44)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 20)
+            self.assertEqual(counts.mismatches, 31)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -12893,7 +14165,13 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 67)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 67)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 22)
+            self.assertEqual(counts.mismatches, 56)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -12974,7 +14252,13 @@ gi|296147         0 PFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 55
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 62)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 47)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 19)
+            self.assertEqual(counts.mismatches, 36)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -13049,7 +14333,13 @@ gi|296147         0 CVLYLPNRKEEIQPFAM 17
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 62)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 15)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 7)
+            self.assertEqual(counts.mismatches, 10)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -13134,7 +14424,13 @@ gi|296147        60 RSRLSEILDAFIEATHLAME 80
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 69)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 69)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 22)
+            self.assertEqual(counts.mismatches, 58)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -13219,7 +14515,13 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEI 81
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 69)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 69)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 22)
+            self.assertEqual(counts.mismatches, 59)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -13304,7 +14606,13 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEI 81
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 69)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 69)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 23)
+            self.assertEqual(counts.mismatches, 58)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -13385,7 +14693,13 @@ gi|296147         0 ALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 57
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 49)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 49)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 20)
+            self.assertEqual(counts.mismatches, 37)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -13470,7 +14784,13 @@ gi|296147        60 RSRLSEILDAFIEATHLAME 80
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 69)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 69)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 21)
+            self.assertEqual(counts.mismatches, 59)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -13555,7 +14875,13 @@ gi|296147        60 RSRLSEILDAFIEATHLAME 80
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 69)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 69)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 21)
+            self.assertEqual(counts.mismatches, 59)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -13640,7 +14966,13 @@ gi|296147        60 PRSRLSEIL 69
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 59)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 59)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 20)
+            self.assertEqual(counts.mismatches, 49)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -13725,7 +15057,13 @@ gi|296147        60 RSRLSEILDAFIEATHLAME 80
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 69)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 69)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 22)
+            self.assertEqual(counts.mismatches, 58)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -13810,7 +15148,13 @@ gi|296147        60 RSRLSEILDAFIEATHLA 78
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 67)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 67)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 22)
+            self.assertEqual(counts.mismatches, 56)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -13895,7 +15239,13 @@ gi|296147        60 RSRLSEILDAFIEA 74
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 63)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 63)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 20)
+            self.assertEqual(counts.mismatches, 54)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -13975,7 +15325,13 @@ gi|296147         0 ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL 49
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 42)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 42)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 19)
+            self.assertEqual(counts.mismatches, 30)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -14060,7 +15416,13 @@ gi|296147        60 PRSRLSEILDAFIEATHLAMEI 82
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 70)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 70)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 20)
+            self.assertEqual(counts.mismatches, 62)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -14141,7 +15503,13 @@ gi|296147         0 PFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 55
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 47)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 47)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 19)
+            self.assertEqual(counts.mismatches, 36)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -14226,7 +15594,13 @@ gi|296147        59
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 51)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 51)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 18)
+            self.assertEqual(counts.mismatches, 41)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -14311,7 +15685,13 @@ gi|296147        60 RSRLSEILDAFIEATHLAME 80
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 69)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 69)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 20)
+            self.assertEqual(counts.mismatches, 60)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -14396,7 +15776,13 @@ gi|296147        60 RSRLSEIL 68
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 58)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 58)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 20)
+            self.assertEqual(counts.mismatches, 48)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -14481,7 +15867,13 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEI 81
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 69)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 69)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 19)
+            self.assertEqual(counts.mismatches, 62)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -14566,7 +15958,13 @@ gi|296147        60 RSRLSEIL 68
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 58)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 58)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 19)
+            self.assertEqual(counts.mismatches, 49)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -14651,7 +16049,13 @@ gi|296147        60 RSRLSEIL 68
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 58)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 58)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 17)
+            self.assertEqual(counts.mismatches, 51)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -14730,7 +16134,13 @@ gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 35)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 35)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 17)
+            self.assertEqual(counts.mismatches, 24)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -14809,7 +16219,13 @@ gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 35)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 35)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 16)
+            self.assertEqual(counts.mismatches, 25)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -14894,7 +16310,13 @@ gi|296147        60 LSEILDAFI 69
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 59)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 59)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 19)
+            self.assertEqual(counts.mismatches, 50)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -14975,7 +16397,13 @@ gi|296147         0 VLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEI 50
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 43)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 43)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 16)
+            self.assertEqual(counts.mismatches, 34)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -15050,7 +16478,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 15)
+            self.assertEqual(counts.mismatches, 12)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -15131,7 +16565,13 @@ gi|296147         0 LACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 52
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 45)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 45)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 15)
+            self.assertEqual(counts.mismatches, 37)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -15210,7 +16650,13 @@ gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 35)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 35)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 15)
+            self.assertEqual(counts.mismatches, 26)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -15285,7 +16731,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 14)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -15360,7 +16812,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 14)
+            self.assertEqual(counts.mismatches, 13)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -15435,7 +16893,13 @@ gi|296147         0 LQGLSTVPSIPRSRLSEILDAFIEATHLAMEI 32
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 42)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 27)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 10)
+            self.assertEqual(counts.mismatches, 22)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -15510,7 +16974,13 @@ gi|296147         0 SIEILKRVHSFEELERH 17
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 42)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 15)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 8)
+            self.assertEqual(counts.mismatches, 9)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -15589,7 +17059,13 @@ gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 35)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 35)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 15)
+            self.assertEqual(counts.mismatches, 26)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -15668,7 +17144,13 @@ gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 35)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 35)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 15)
+            self.assertEqual(counts.mismatches, 26)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -15743,7 +17225,13 @@ gi|296147         0 LPFVLACQSRNAKMTTLAMQCLQGL 25
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 21)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 21)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 14)
+            self.assertEqual(counts.mismatches, 11)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -15818,7 +17306,13 @@ gi|296147         0 LPFVLACQSRNAKMTTLAMQCLQGL 25
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 21)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 21)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 14)
+            self.assertEqual(counts.mismatches, 11)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -15897,7 +17391,13 @@ gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 35)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 35)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 15)
+            self.assertEqual(counts.mismatches, 26)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -15976,7 +17476,13 @@ gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 35)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 35)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 15)
+            self.assertEqual(counts.mismatches, 26)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -16055,7 +17561,13 @@ gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 35)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 35)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 15)
+            self.assertEqual(counts.mismatches, 26)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -16130,7 +17642,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 14)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -16215,7 +17733,13 @@ gi|296147        60 RSRLSEIL 68
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 58)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 58)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 16)
+            self.assertEqual(counts.mismatches, 52)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -16294,7 +17818,13 @@ gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 35)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 35)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 15)
+            self.assertEqual(counts.mismatches, 26)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -16373,7 +17903,13 @@ gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 35)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 35)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 15)
+            self.assertEqual(counts.mismatches, 26)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -16448,7 +17984,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 14)
+            self.assertEqual(counts.mismatches, 13)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -16523,7 +18065,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 14)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -16598,7 +18146,13 @@ gi|296147         0 LQGLSTVPSIPRSRLSEILDAFIEATHLAMEI 32
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 43)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 27)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 10)
+            self.assertEqual(counts.mismatches, 22)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -16673,7 +18227,13 @@ gi|296147         0 KSIEILKRVHSFEELERH 18
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 43)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 15)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 8)
+            self.assertEqual(counts.mismatches, 10)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -16748,7 +18308,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 14)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -16823,7 +18389,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 14)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -16902,7 +18474,13 @@ gi|296147         0 PFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEI 38
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 33)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 33)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 14)
+            self.assertEqual(counts.mismatches, 24)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -16977,7 +18555,13 @@ gi|296147         0 AGCLKFWMPSLRLLISRWRF 20
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 17)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 17)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 7)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -17052,7 +18636,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -17131,7 +18721,13 @@ gi|296147         0 EGIQNFRQPASRNRWNG*QSL*ALHCQGRHFSIP*LAS 38
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 33)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 33)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 14)
+            self.assertEqual(counts.mismatches, 24)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -17206,7 +18802,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 14)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -17281,7 +18883,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 14)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -17356,7 +18964,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 14)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -17431,7 +19045,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -17506,7 +19126,13 @@ gi|296147         0 AGCLKFWMPSLRLLISRWRF 20
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 17)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 17)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 7)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -17581,7 +19207,13 @@ gi|296147         0 AGCLKFWMPSLRLLISRWRF 20
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 17)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 17)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 7)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -17656,7 +19288,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 14)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -17731,7 +19369,13 @@ gi|296147         0 AGCLKFWMPSLRLLISRWRF 20
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 17)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 17)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 7)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -17806,7 +19450,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 14)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -17881,7 +19531,13 @@ gi|296147         0 AGCLKFWMPSLRLLISRWRF 20
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 17)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 17)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 7)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -17956,7 +19612,13 @@ gi|296147         0 AGCLKFWMPSLRLLISRWRF 20
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 17)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 17)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 7)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -18031,7 +19693,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -18106,7 +19774,13 @@ gi|296147         0 PWQCNAYRDCQPFHLFLEAGCLKFWMPSL 29
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 25)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 25)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 17)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -18181,7 +19855,13 @@ gi|296147         0 SFEELERHPDFALPFVLACQSRNAKM 26
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 22)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 22)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 13)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -18256,7 +19936,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 14)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -18331,7 +20017,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 14)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -18406,7 +20098,13 @@ gi|296147         0 DFALPFVLACQSRNAKMTTLAMQCLQGL 28
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 24)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 24)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -18481,7 +20179,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 14)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -18556,7 +20260,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 14)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -18631,7 +20341,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 14)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -18706,7 +20422,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 14)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -18781,7 +20503,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 14)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -18856,7 +20584,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 14)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -18931,7 +20665,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 14)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -19006,7 +20746,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 14)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -19081,7 +20827,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 14)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -19156,7 +20908,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 14)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -19231,7 +20989,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 14)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -19306,7 +21070,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 14)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -19381,7 +21151,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 14)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -19456,7 +21232,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 14)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -19531,7 +21313,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 14)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -19606,7 +21394,13 @@ gi|296147         0 YVLFSISQWIYH*HGEWLNFFFS 23
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 40)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 20)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 8)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -19681,7 +21475,13 @@ gi|296147         0 GEWLNFFFSIRKIKNAILLQVAFAWSQTLQCSW 33
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 40)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 28)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 10)
+            self.assertEqual(counts.mismatches, 23)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -19756,7 +21556,13 @@ gi|296147         0 CQPFHLFLEAGCLKFWMPSLRLL 23
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 33)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 20)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 11)
+            self.assertEqual(counts.mismatches, 12)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -19831,7 +21637,13 @@ gi|296147         0 RNAKMTTLAMQCLQGLSTVPSI 22
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 33)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 19)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 9)
+            self.assertEqual(counts.mismatches, 13)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -19906,7 +21718,13 @@ gi|296147         0 CQPFHLFLEAGCLKFWMPSLRLL 23
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 33)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 20)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 11)
+            self.assertEqual(counts.mismatches, 12)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -19981,7 +21799,13 @@ gi|296147         0 RNAKMTTLAMQCLQGLSTVPSI 22
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 33)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 19)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 9)
+            self.assertEqual(counts.mismatches, 13)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -20056,7 +21880,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -20131,7 +21961,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -20210,7 +22046,13 @@ gi|296147         0 FVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSE 36
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 31)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 31)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 16)
+            self.assertEqual(counts.mismatches, 20)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -20285,7 +22127,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -20364,7 +22212,13 @@ gi|296147         0 RKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSL 37
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 32)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 32)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 15)
+            self.assertEqual(counts.mismatches, 22)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -20443,7 +22297,13 @@ gi|296147         0 RKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSL 37
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 32)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 32)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 15)
+            self.assertEqual(counts.mismatches, 22)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -20522,7 +22382,13 @@ gi|296147         0 RKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSL 37
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 32)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 32)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 15)
+            self.assertEqual(counts.mismatches, 22)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -20601,7 +22467,13 @@ gi|296147         0 RKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSL 37
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 32)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 32)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 15)
+            self.assertEqual(counts.mismatches, 22)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -20680,7 +22552,13 @@ gi|296147         0 CWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWM 38
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 33)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 33)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 15)
+            self.assertEqual(counts.mismatches, 23)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -20755,7 +22633,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -20830,7 +22714,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -20905,7 +22795,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -20980,7 +22876,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -21055,7 +22957,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -21130,7 +23038,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -21205,7 +23119,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -21280,7 +23200,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -21355,7 +23281,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -21430,7 +23362,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -21505,7 +23443,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -21580,7 +23524,13 @@ gi|296147         0 AGCLKFWMPSLRLLISRWRF 20
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 17)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 17)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 7)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -21655,7 +23605,13 @@ gi|296147         0 AGCLKFWMPSLRLLISRWRF 20
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 17)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 17)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 7)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -21730,7 +23686,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -21805,7 +23767,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -21880,7 +23848,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -21955,7 +23929,13 @@ gi|296147         0 AGCLKFWMPSLRLLISRWRF 20
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 17)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 17)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 7)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -22030,7 +24010,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -22105,7 +24091,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -22180,7 +24172,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -22255,7 +24253,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -22330,7 +24334,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -22405,7 +24415,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -22480,7 +24496,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -22555,7 +24577,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -22630,7 +24658,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -22705,7 +24739,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -22780,7 +24820,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -22855,7 +24901,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -22930,7 +24982,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -23005,7 +25063,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -23080,7 +25144,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -23158,7 +25228,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -23239,7 +25315,13 @@ gi|296147         0 RVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL 55
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 47)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 47)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 20)
+            self.assertEqual(counts.mismatches, 35)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -23320,7 +25402,13 @@ gi|296147         0 RVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL 55
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 47)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 47)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 20)
+            self.assertEqual(counts.mismatches, 35)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -23401,7 +25489,13 @@ gi|296147         0 RVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL 55
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 47)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 47)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 20)
+            self.assertEqual(counts.mismatches, 35)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -23482,7 +25576,13 @@ gi|296147         0 RVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL 55
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 47)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 47)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 20)
+            self.assertEqual(counts.mismatches, 35)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -23557,7 +25657,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 14)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -23632,7 +25738,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 14)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -23711,7 +25823,13 @@ gi|296147         0 NISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESNPPVFMA 43
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 37)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 37)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 16)
+            self.assertEqual(counts.mismatches, 27)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -23786,7 +25904,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 14)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -23861,7 +25985,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 12)
+            self.assertEqual(counts.mismatches, 15)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -23936,7 +26066,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 14)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -24011,7 +26147,13 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 11)
+            self.assertEqual(counts.mismatches, 16)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -24090,7 +26232,13 @@ gi|296147         0 QSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFI 37
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 32)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 32)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 24)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -24169,7 +26317,13 @@ gi|296147         0 QSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFI 37
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 32)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 32)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 13)
+            self.assertEqual(counts.mismatches, 24)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -24244,7 +26398,13 @@ gi|296147         0 HSLIGKPTRKGVRNPDVFLAPQNYVLFSIS 30
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 55)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 26)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 11)
+            self.assertEqual(counts.mismatches, 19)
             alignment = next(alignments)
             self.assertEqual(
                 str(alignment),
@@ -24323,7 +26483,13 @@ gi|296147         0 LFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMES 38
             self.assertEqual(alignment.target.annotations["strand"], "N/A")
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 55)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 33)
-            # ADD TEST
+            counts = alignment.counts()
+            gaps = counts.gaps
+            identities = counts.identities
+            mismatches = counts.mismatches
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.identities, 10)
+            self.assertEqual(counts.mismatches, 28)
             with self.assertRaises(StopIteration):
                 next(alignments)
 
