@@ -141,6 +141,7 @@ class TestAlign_dna_rna(unittest.TestCase):
         )
         self.assertEqual(matches, alignment.matches)
         self.assertEqual(repMatches, alignment.repMatches)
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 172)
         self.assertEqual(alignment.misMatches, 1)
@@ -201,6 +202,7 @@ class TestAlign_dna_rna(unittest.TestCase):
         )
         self.assertEqual(matches, alignment.matches)
         self.assertEqual(repMatches, alignment.repMatches)
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 165)
         self.assertEqual(alignment.misMatches, 0)
@@ -257,6 +259,7 @@ class TestAlign_dna_rna(unittest.TestCase):
         )
         self.assertEqual(matches, alignment.matches)
         self.assertEqual(repMatches, alignment.repMatches)
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 162)
         self.assertEqual(alignment.misMatches, 2)
@@ -317,6 +320,7 @@ class TestAlign_dna_rna(unittest.TestCase):
         )
         self.assertEqual(matches, alignment.matches)
         self.assertEqual(repMatches, alignment.repMatches)
+        # ADD TEST
         self.assertRaises(StopIteration, next, alignments)
 
 
@@ -399,6 +403,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 33)
         self.assertEqual(alignment.misMatches, 0)
@@ -428,6 +433,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 35)
         self.assertEqual(alignment.misMatches, 1)
@@ -457,6 +463,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 31)
         self.assertEqual(alignment.misMatches, 3)
@@ -486,6 +493,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 33)
         self.assertEqual(alignment.misMatches, 1)
@@ -515,6 +523,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 33)
         self.assertEqual(alignment.misMatches, 3)
@@ -544,6 +553,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 24)
         self.assertEqual(alignment.misMatches, 1)
@@ -573,6 +583,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 44)
         self.assertEqual(alignment.misMatches, 1)
@@ -602,6 +613,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 39)
         self.assertEqual(alignment.misMatches, 0)
@@ -631,6 +643,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 27)
         self.assertEqual(alignment.misMatches, 1)
@@ -660,6 +673,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 36)
         self.assertEqual(alignment.misMatches, 3)
@@ -689,6 +703,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 34)
         self.assertEqual(alignment.misMatches, 2)
@@ -718,6 +733,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 39)
         self.assertEqual(alignment.misMatches, 0)
@@ -747,6 +763,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 17)
         self.assertEqual(alignment.misMatches, 0)
@@ -776,6 +793,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 35)
         self.assertEqual(alignment.misMatches, 1)
@@ -805,6 +823,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 43)
         self.assertEqual(alignment.misMatches, 1)
@@ -834,6 +853,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 33)
         self.assertEqual(alignment.misMatches, 3)
@@ -863,6 +883,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 35)
         self.assertEqual(alignment.misMatches, 2)
@@ -892,6 +913,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 28)
         self.assertEqual(alignment.misMatches, 0)
@@ -921,6 +943,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 16)
         self.assertEqual(alignment.misMatches, 0)
@@ -950,6 +973,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 41)
         self.assertEqual(alignment.misMatches, 0)
@@ -979,6 +1003,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 38)
         self.assertEqual(alignment.misMatches, 3)
@@ -1008,6 +1033,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         self.assertRaises(StopIteration, next, alignments)
 
     def test_reading_psl_34_003(self):
@@ -1070,6 +1096,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 17)
         self.assertEqual(alignment.misMatches, 0)
@@ -1099,6 +1126,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 16)
         self.assertEqual(alignment.misMatches, 0)
@@ -1128,6 +1156,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         self.assertRaises(StopIteration, next, alignments)
 
     def test_reading_psl_34_004(self):
@@ -1203,6 +1232,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 35)
         self.assertEqual(alignment.misMatches, 1)
@@ -1232,6 +1262,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 31)
         self.assertEqual(alignment.misMatches, 3)
@@ -1261,6 +1292,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 33)
         self.assertEqual(alignment.misMatches, 1)
@@ -1290,6 +1322,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 33)
         self.assertEqual(alignment.misMatches, 3)
@@ -1319,6 +1352,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 24)
         self.assertEqual(alignment.misMatches, 1)
@@ -1348,6 +1382,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 44)
         self.assertEqual(alignment.misMatches, 1)
@@ -1377,6 +1412,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 39)
         self.assertEqual(alignment.misMatches, 0)
@@ -1406,6 +1442,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 27)
         self.assertEqual(alignment.misMatches, 1)
@@ -1435,6 +1472,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 36)
         self.assertEqual(alignment.misMatches, 3)
@@ -1464,6 +1502,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 34)
         self.assertEqual(alignment.misMatches, 2)
@@ -1493,6 +1532,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 39)
         self.assertEqual(alignment.misMatches, 0)
@@ -1522,6 +1562,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 35)
         self.assertEqual(alignment.misMatches, 1)
@@ -1551,6 +1592,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 43)
         self.assertEqual(alignment.misMatches, 1)
@@ -1580,6 +1622,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 33)
         self.assertEqual(alignment.misMatches, 3)
@@ -1609,6 +1652,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 35)
         self.assertEqual(alignment.misMatches, 2)
@@ -1638,6 +1682,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 28)
         self.assertEqual(alignment.misMatches, 0)
@@ -1667,6 +1712,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 41)
         self.assertEqual(alignment.misMatches, 0)
@@ -1696,6 +1742,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 38)
         self.assertEqual(alignment.misMatches, 3)
@@ -1725,6 +1772,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         self.assertRaises(StopIteration, next, alignments)
 
     def test_reading_psl_34_005(self):
@@ -1801,6 +1849,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 33)
         self.assertEqual(alignment.misMatches, 0)
@@ -1830,6 +1879,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 35)
         self.assertEqual(alignment.misMatches, 1)
@@ -1859,6 +1909,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 31)
         self.assertEqual(alignment.misMatches, 3)
@@ -1888,6 +1939,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 33)
         self.assertEqual(alignment.misMatches, 1)
@@ -1917,6 +1969,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 33)
         self.assertEqual(alignment.misMatches, 3)
@@ -1946,6 +1999,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 24)
         self.assertEqual(alignment.misMatches, 1)
@@ -1975,6 +2029,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 44)
         self.assertEqual(alignment.misMatches, 1)
@@ -2004,6 +2059,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 39)
         self.assertEqual(alignment.misMatches, 0)
@@ -2033,6 +2089,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 27)
         self.assertEqual(alignment.misMatches, 1)
@@ -2062,6 +2119,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 36)
         self.assertEqual(alignment.misMatches, 3)
@@ -2091,6 +2149,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 34)
         self.assertEqual(alignment.misMatches, 2)
@@ -2120,6 +2179,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 39)
         self.assertEqual(alignment.misMatches, 0)
@@ -2149,6 +2209,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 17)
         self.assertEqual(alignment.misMatches, 0)
@@ -2178,6 +2239,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 35)
         self.assertEqual(alignment.misMatches, 1)
@@ -2207,6 +2269,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 43)
         self.assertEqual(alignment.misMatches, 1)
@@ -2236,6 +2299,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 33)
         self.assertEqual(alignment.misMatches, 3)
@@ -2265,6 +2329,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 35)
         self.assertEqual(alignment.misMatches, 2)
@@ -2294,6 +2359,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 28)
         self.assertEqual(alignment.misMatches, 0)
@@ -2323,6 +2389,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 16)
         self.assertEqual(alignment.misMatches, 0)
@@ -2352,6 +2419,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 41)
         self.assertEqual(alignment.misMatches, 0)
@@ -2381,6 +2449,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 38)
         self.assertEqual(alignment.misMatches, 3)
@@ -2410,6 +2479,7 @@ class TestAlign_dna(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         self.assertRaises(StopIteration, next, alignments)
 
 
@@ -2476,6 +2546,7 @@ class TestAlign_dnax_prot(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 44)
         self.assertEqual(alignment.misMatches, 0)
@@ -2504,6 +2575,7 @@ class TestAlign_dnax_prot(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 52)
         self.assertEqual(alignment.misMatches, 0)
@@ -2532,6 +2604,7 @@ class TestAlign_dnax_prot(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 16)
         self.assertEqual(alignment.misMatches, 0)
@@ -2560,6 +2633,7 @@ class TestAlign_dnax_prot(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 25)
         self.assertEqual(alignment.misMatches, 0)
@@ -2588,6 +2662,7 @@ class TestAlign_dnax_prot(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 47)
         self.assertEqual(alignment.misMatches, 0)
@@ -2616,6 +2691,7 @@ class TestAlign_dnax_prot(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 37)
         self.assertEqual(alignment.misMatches, 26)
@@ -2644,6 +2720,7 @@ class TestAlign_dnax_prot(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 26)
         self.assertEqual(alignment.misMatches, 8)
@@ -2672,6 +2749,7 @@ class TestAlign_dnax_prot(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         self.assertRaises(StopIteration, next, alignments)
 
     def check_psl_35_002(self, alignments):
@@ -2709,6 +2787,7 @@ class TestAlign_dnax_prot(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 210)
         self.assertEqual(alignment.misMatches, 3)
@@ -2740,6 +2819,7 @@ class TestAlign_dnax_prot(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         self.assertRaises(StopIteration, next, alignments)
 
     def test_reading_psl_35_002(self):
@@ -2832,6 +2912,7 @@ class TestAlign_bigpsl(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mAM992881")
         self.assertEqual(len(alignment.query.features), 1)
@@ -2851,6 +2932,7 @@ class TestAlign_bigpsl(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mAM992878")
         self.assertEqual(len(alignment.query.features), 1)
@@ -2872,6 +2954,7 @@ class TestAlign_bigpsl(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mAM992879")
         self.assertEqual(len(alignment.query.features), 1)
@@ -2891,6 +2974,7 @@ class TestAlign_bigpsl(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mAM992871")
         self.assertEqual(len(alignment.query.features), 1)
@@ -2910,6 +2994,7 @@ class TestAlign_bigpsl(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mAM992872")
         self.assertEqual(len(alignment.query.features), 1)
@@ -2929,6 +3014,7 @@ class TestAlign_bigpsl(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mAM992875")
         self.assertEqual(len(alignment.query.features), 1)
@@ -2948,6 +3034,7 @@ class TestAlign_bigpsl(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mAM992880")
         self.assertEqual(len(alignment.query.features), 1)
@@ -2967,6 +3054,7 @@ class TestAlign_bigpsl(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mBC032353")
         self.assertEqual(len(alignment.query.features), 0)
@@ -2981,6 +3069,7 @@ class TestAlign_bigpsl(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mAM992873")
         self.assertEqual(len(alignment.query.features), 1)
@@ -3000,30 +3089,35 @@ class TestAlign_bigpsl(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD190877")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[12993, 13016], [0, 23]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD167845")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[13001, 13024], [0, 23]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD469098")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[13003, 13024], [2, 23]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD485136")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[13087, 13107], [0, 20]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mBC070227")
         self.assertEqual(len(alignment.query.features), 0)
@@ -3036,60 +3130,70 @@ class TestAlign_bigpsl(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD282506")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[13721, 13745], [0, 24]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD192765")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[13877, 13909], [0, 32]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD191631")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[13932, 13964], [0, 32]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD135207")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[13939, 13971], [0, 32]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD157229")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[14002, 14023], [0, 21]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD199172")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[14241, 14265], [0, 24]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD422311")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[14246, 14278], [0, 32]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD108953")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[14322, 14354], [0, 32]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD227419")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[14378, 14407], [1, 30]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mBC063555")
         self.assertEqual(len(alignment.query.features), 0)
@@ -3108,6 +3212,7 @@ class TestAlign_bigpsl(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mBC063893")
         self.assertEqual(len(alignment.query.features), 0)
@@ -3126,6 +3231,7 @@ class TestAlign_bigpsl(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mBC053987")
         self.assertEqual(len(alignment.query.features), 0)
@@ -3144,6 +3250,7 @@ class TestAlign_bigpsl(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mAL137714")
         self.assertEqual(len(alignment.query.features), 1)
@@ -3185,6 +3292,7 @@ class TestAlign_bigpsl(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mBC048328")
         self.assertEqual(len(alignment.query.features), 0)
@@ -3203,6 +3311,7 @@ class TestAlign_bigpsl(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mBC063470")
         self.assertEqual(len(alignment.query.features), 0)
@@ -3219,6 +3328,7 @@ class TestAlign_bigpsl(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mBX537637")
         self.assertEqual(len(alignment.query.features), 1)
@@ -3257,6 +3367,7 @@ class TestAlign_bigpsl(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mAK024481")
         self.assertEqual(len(alignment.query.features), 1)
@@ -3276,6 +3387,7 @@ class TestAlign_bigpsl(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mAK057951")
         self.assertEqual(len(alignment.query.features), 0)
@@ -3296,6 +3408,7 @@ class TestAlign_bigpsl(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mAK092583")
         self.assertEqual(len(alignment.query.features), 1)
@@ -3319,6 +3432,7 @@ class TestAlign_bigpsl(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mAX747611")
         self.assertEqual(len(alignment.query.features), 0)
@@ -3335,6 +3449,7 @@ class TestAlign_bigpsl(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mAK056232")
         self.assertEqual(len(alignment.query.features), 0)
@@ -3355,6 +3470,7 @@ class TestAlign_bigpsl(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mBC094698")
         self.assertEqual(len(alignment.query.features), 0)
@@ -3371,6 +3487,7 @@ class TestAlign_bigpsl(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mBC041177")
         self.assertEqual(len(alignment.query.features), 0)
@@ -3391,6 +3508,7 @@ class TestAlign_bigpsl(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mAY217347")
         self.assertEqual(len(alignment.query.features), 1)
@@ -3416,42 +3534,49 @@ class TestAlign_bigpsl(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD043865")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[14423, 14455], [32, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD464022")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[14453, 14485], [32, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD464023")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[14455, 14485], [30, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD426250")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[14496, 14528], [32, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD319762")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[14537, 14569], [32, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD439184")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[14538, 14570], [32, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mAK289708")
         self.assertEqual(len(alignment.query.features), 1)
@@ -3477,30 +3602,35 @@ class TestAlign_bigpsl(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mDQ588205")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[14629, 14657], [0, 28]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD033185")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[14643, 14667], [0, 24]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD386972")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[14643, 14667], [24, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD469492")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[14673, 14705], [32, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD371043")
         self.assertEqual(len(alignment.query.features), 0)
@@ -3510,6 +3640,7 @@ class TestAlign_bigpsl(unittest.TestCase):
                 np.array([[14702, 14717, 14720, 14737], [32, 17, 17, 0]]),
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD186991")
         self.assertEqual(len(alignment.query.features), 0)
@@ -3519,78 +3650,91 @@ class TestAlign_bigpsl(unittest.TestCase):
                 np.array([[14703, 14717, 14720, 14738], [32, 18, 18, 0]]),
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD178321")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[14704, 14725], [21, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD371044")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[14705, 14737], [32, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD492409")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[14739, 14771], [32, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD248147")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[14746, 14770], [24, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD044295")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[14785, 14817], [32, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD433165")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[14810, 14842], [32, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD055458")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[14823, 14855], [32, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD131561")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[14828, 14853], [25, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD129847")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[14936, 14956], [20, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD219312")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[14950, 14971], [21, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD546847")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[15086, 15118], [32, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD218460")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[15097, 15129], [32, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mKJ806766")
         self.assertEqual(len(alignment.query.features), 0)
@@ -3600,138 +3744,161 @@ class TestAlign_bigpsl(unittest.TestCase):
                 np.array([[15118, 15122, 15122, 15654], [9, 13, 14, 546]]),
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD131237")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[15187, 15219], [32, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD128091")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[15209, 15241], [32, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD422546")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[15274, 15305], [31, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD153435")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[15292, 15324], [32, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD367640")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[15461, 15493], [32, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD487131")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[15468, 15500], [32, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD493181")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[15480, 15512], [32, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD205712")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[15558, 15590], [32, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD425846")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[15584, 15616], [32, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD219639")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[15603, 15634], [32, 1]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD078677")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[15603, 15635], [32, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD078676")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[15614, 15635], [21, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD253503")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[15643, 15675], [32, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD253504")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[15644, 15675], [31, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD159284")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[15664, 15687], [23, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD115871")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[15675, 15707], [32, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD456634")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[15677, 15709], [32, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD487879")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[15741, 15772], [32, 1]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD080014")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[15741, 15773], [32, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD336830")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[15760, 15792], [32, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD444008")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[15761, 15793], [32, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD460507")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[15812, 15836], [24, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mAK308574")
         self.assertEqual(len(alignment.query.features), 0)
@@ -3748,78 +3915,91 @@ class TestAlign_bigpsl(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD389037")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[15906, 15936], [30, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD521711")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[15947, 15979], [32, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD383617")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[15972, 16004], [32, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD491045")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[15982, 16014], [32, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD318660")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[15985, 16017], [32, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD341280")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[16118, 16150], [32, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD220623")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[16157, 16189], [32, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD465423")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[16165, 16197], [32, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD515432")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[16176, 16208], [32, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD542452")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[16184, 16216], [32, 0]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD507246")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[16201, 16230], [30, 1]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD102852")
         self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[16253, 16274], [21, 0]]))
         )
+        # ADD TEST
         self.assertRaises(StopIteration, next, alignments)
 
 

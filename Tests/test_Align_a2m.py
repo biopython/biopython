@@ -142,6 +142,7 @@ MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTEEELLRRLQQIKEGPPPQSPD
 ---------MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPG-----------------VPPEEAGAAVAAESSTGT---------WTTVWTDGLTSLDRYKG-----RCYHIEPVPG-------------------EKDQCICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGLSAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYLNATAG-----------------------TCEEMIKRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAVIDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSRGIYFTQDWVSLPGVIPVASG-----------------------------GIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVANRVA-----------VEACVKARNEG---RDLAAEGNAIIREACKWSPElAAACEVWKEIKFEFPAMD---
 """,
         )
+        # ADD TEST
 
     def test_msaprobs(self):
         path = "Clustalw/msaprobs.a2m"
@@ -314,6 +315,7 @@ MKSVl.......KVS....LAALTlA..FAVSsh.........a.......---ADKKLVVATDTAFVPFEFKQ..GDKY
 MKKLvl......SLS....LV---lA..FSSAta...............a.FAAIPQNIRIGTDPTYAPFESKNs.QGELVGFDIDLAKELCKRINTQCTFVENPLDALIPSLKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLVVAK.NSDIQPTVESLKGKRVGVLQGTTQETFGNEHWAPKGIEIVSYQGqdNIYSDLTAGRIDAAFQDEVAASEgFLKQPVgKDYKFGGPSVKdeklfGVGTGMGLRK--EDNELREALNKAFAEMRADGTYEKLAKKYFDFDVYG...g
 """,
         )
+        # ADD TEST
         self.check_reading_writing(path)
 
     def test_muscle(self):
@@ -422,6 +424,7 @@ atgaacaaagtagcgaggaagaacaaaacatcaggtgaacaaaaaaaaaactcaatccacatcaaAGTTACAATAACTGA
 .................................................................---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ATGAACAAAGTAGCGAGGAAGAA------------------------------CAAAACATC----------------------------------------------------------------------------------------------------------------------------------------------------------------------------AGCAAAGAAAACGATCTGTCTCCGTCGTAACACACAGTTTTTCGAGACCCTTTGCTTCTTCGGCGCCGGTGGACACGTCAGCATCTCCGGTATCCTAGACTTCTTGGCTTTCGGGGTACAACAACCGCCTGGTGACGTCAGCACCGCTGCTGGGGATGGAGAGGGAACAGAGTAg
 """,
         )
+        # ADD TEST
         self.check_reading_writing(path)
 
     def test_kalign(self):
@@ -475,6 +478,7 @@ np.array([['G', 'C', 'T', 'G', 'G', 'G', 'G', 'A', 'T', 'G', 'G', 'A', 'G', 'A',
                 # fmt: on
             )
         )
+        # ADD TEST
         self.check_reading_writing(path)
 
     def test_probcons(self):
@@ -618,6 +622,7 @@ np.array([['D', '-', 'V', 'L', 'L', 'G', 'A', 'N', 'G', 'G', 'V', 'L', 'V',
                 # fmt: on
             )
         )
+        # ADD TEST
         self.check_reading_writing(path)
 
     def test_empty(self):

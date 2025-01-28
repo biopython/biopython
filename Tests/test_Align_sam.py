@@ -478,6 +478,7 @@ NR_046654        31 CCAGGTATGCATCTGCTGCCAAGCCAGGGAG        0
 NR_046654.1	16	chr3	42530896	0	63M1062N75M468N43M	*	0	0	CGGAAGTACTTCTGGGGGTACATACTCATCGGCTGGGGTATGGTACCAGGGAGGGCTTCCAGGCAGTTCTTCCTTGAGCGTAAGCGGATTGGGAGCACAGTCCTTAGGGATTTGAAGGAGGTAGAGTTCCCGGATGACCTAGCATCCTTCCCAGGTATGCATCTGCTGCCAAGCCAGGGAG	*	AS:i:1000	NM:i:0
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 1714))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -652,6 +653,7 @@ NR_046654        37 TTCCCAGGTATGCATCTGCTGCCAAGCCAGGGAG        3
 NR_046654.1_modified	16	chr3	42530896	0	5S27M3I36M1062N17M2D56M468N43M3S	*	0	0	AAAAACGGAAGTACTTCTGGGGGTACATACTCCCCATCGGCTGGGGTATGGTACCAGGGAGGGCTTCCAGGCAGTTCTTCCTTGAGCGAGCGGATTGGGTGCACAGTCCTTAGGGATTTGAAGGAGGTAGAGTTCCCGGATGACCTAGCATCCTTCCCAGGTATGCATCTGCTGCCAAGCCAGGGAGAAA	*	AS:i:978	NM:i:6
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 5407))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1071,6 +1073,7 @@ NR_111921       197 TAAAAAA      204
 NR_111921.1	0	chr3	48663768	0	46M1827N82M3376N76M12H	*	0	0	CACGAGAGGAGCGGAGGCGAGGGGTGAACGCGGAGCACTCCAATCGCTCCCAACTAGAGGTCCACCCAGGACCCAGAGACCTGGATTTGAGGCTGCTGGGCGGCAGATGGAGCGATCAGAAGACCAGGAGACGGGAGCTGGAGTGCAGTGGCTGTTCACAAGCGTGAAAGCAAAGATTAAAAAATTTGTTTTTATATTAAAAAA	*	AS:i:1000	NM:i:0
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 5409))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1493,6 +1496,7 @@ NR_111921       199 ATTAAAAAA      208
 NR_111921.1_modified	0	chr3	48663768	0	3S28M1D17M1827N76M2I6M3376N76M12H	*	0	0	AAACACGAGAGGAGCGGAGGCGAGGGGTGAAGCGGAGCACTCCAATCGCTCCCAACTAGAGGTCCACCCAGGACCCAGAGACCTGGATTTGAGGCTGCTGCCCGGCAGATGGAGCGATCAGAAGCCACCAGGAGACGGGAGCTGGAGTGCAGTGGCTGTTCACAAGCGTGAAAGCAAAGATTAAAAAATTTGTTTTTATATTAAAAAA	*	AS:i:972	NM:i:5
 """,
         )
+        # ADD TEST
         self.assertRaises(StopIteration, next, alignments)
 
     def test_reading(self):
@@ -1650,6 +1654,7 @@ hg18_dna          0 ????????????????       16
 hg18_dna	0	chr4	61646096	0	11H16M6H	*	0	0	*	*	AS:i:16
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 33))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1684,6 +1689,7 @@ hg18_dna          0 ?????????????????????????????????       33
 hg18_dna	0	chr1	10271784	0	33M	*	0	0	*	*	AS:i:33
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 17))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1718,6 +1724,7 @@ hg18_dna         17 ?????????????????        0
 hg18_dna	16	chr2	53575981	0	8H17M8H	*	0	0	*	*	AS:i:17
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 41))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1752,6 +1759,7 @@ hg19_dna          0 ?????????????????????????????????????????       41
 hg19_dna	0	chr9	85737866	0	9H41M	*	0	0	*	*	AS:i:29
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 41))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1786,6 +1794,7 @@ hg19_dna          0 ?????????????????????????????????????????       41
 hg19_dna	0	chr8	95160480	0	8H41M1H	*	0	0	*	*	AS:i:41
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1820,6 +1829,7 @@ hg19_dna          0 ????????????????????????????????????       36
 hg19_dna	0	chr22	42144401	0	11H36M3H	*	0	0	*	*	AS:i:24
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -1853,6 +1863,7 @@ hg19_dna          0 ????????????????????????????????????????????????        48
 hg19_dna	0	chr2	183925985	0	1H6M4I38M1H	*	0	0	*	*	AS:i:27
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 170))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1895,6 +1906,7 @@ hg19_dna         25 ---------------------------------------???????????       36
 hg19_dna	0	chr19	35483341	0	10H25M134D11M4H	*	0	0	*	*	AS:i:0
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1929,6 +1941,7 @@ hg19_dna          0 ???????????????????????????????????????       39
 hg19_dna	0	chr18	23891311	0	10H39M1H	*	0	0	*	*	AS:i:39
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 28))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1963,6 +1976,7 @@ hg19_dna          0 ????????????????????????????       28
 hg19_dna	0	chr18	43252218	0	21H28M1H	*	0	0	*	*	AS:i:24
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 51))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1997,6 +2011,7 @@ hg19_dna          0 ??????????---??????????????????????????????????????       48
 hg19_dna	0	chr13	52759148	0	1H10M3D38M1H	*	0	0	*	*	AS:i:30
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 50))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2031,6 +2046,7 @@ hg19_dna          0 ??????????????????????????????????????????????????      50
 hg19_dna	0	chr1	1207057	0	50M	*	0	0	*	*	AS:i:50
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 34))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2065,6 +2081,7 @@ hg19_dna          0 ??????????????????????????????????       34
 hg19_dna	0	chr1	61700838	0	1H34M15H	*	0	0	*	*	AS:i:22
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 38))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2099,6 +2116,7 @@ hg19_dna         38 ??????????????????????????????????????        0
 hg19_dna	16	chr4	37558158	0	1H16M4I18M11H	*	0	0	*	*	AS:i:15
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
@@ -2132,6 +2150,7 @@ hg19_dna         37 ?????????????????????????????????????        0
 hg19_dna	16	chr22	48997406	0	1H37M12H	*	0	0	*	*	AS:i:29
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2166,6 +2185,7 @@ hg19_dna         36 ????????????????????????????????????         0
 hg19_dna	16	chr2	120641741	0	1H36M13H	*	0	0	*	*	AS:i:32
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2200,6 +2220,7 @@ hg19_dna         39 ???????????????????????????????????????        0
 hg19_dna	16	chr19	54017131	0	1H39M10H	*	0	0	*	*	AS:i:39
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2234,6 +2255,7 @@ hg19_dna         39 ???????????????????????????????????????      0
 hg19_dna	16	chr19	553743	0	1H39M10H	*	0	0	*	*	AS:i:27
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2268,6 +2290,7 @@ hg19_dna         36 ????????????????????????????????????        0
 hg19_dna	16	chr10	99388556	0	1H36M13H	*	0	0	*	*	AS:i:24
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 25))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2302,6 +2325,7 @@ hg19_dna         25 ?????????????????????????         0
 hg19_dna	16	chr10	112178172	0	15H25M10H	*	0	0	*	*	AS:i:21
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2336,6 +2360,7 @@ hg19_dna         36 ????????????????????????????????????        0
 hg19_dna	16	chr1	39368491	0	1H36M13H	*	0	0	*	*	AS:i:32
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 34))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2370,6 +2395,7 @@ hg19_dna         34 ??????????????????????????????????         0
 hg19_dna	16	chr1	220325688	0	3H34M13H	*	0	0	*	*	AS:i:30
 """,
         )
+        # ADD TEST
         self.assertRaises(StopIteration, next, alignments)
 
     def test_reading_psl_34_001(self):
@@ -2489,6 +2515,7 @@ hg18_dna          0 ????????????????       16
 hg18_dna	0	chr4	61646096	0	11H16M6H	*	0	0	*	*	AS:i:16
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 33))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2523,6 +2550,7 @@ hg18_dna          0 ?????????????????????????????????       33
 hg18_dna	0	chr1	10271784	0	33M	*	0	0	*	*	AS:i:33
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 17))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2557,6 +2585,7 @@ hg18_dna         17 ?????????????????        0
 hg18_dna	16	chr2	53575981	0	8H17M8H	*	0	0	*	*	AS:i:17
 """,
         )
+        # ADD TEST
         self.assertRaises(StopIteration, next, alignments)
 
     def test_reading_psl_34_003(self):
@@ -2676,6 +2705,7 @@ hg19_dna          0 ?????????????????????????????????????????       41
 hg19_dna	0	chr9	85737866	0	9H41M	*	0	0	*	*	AS:i:29
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 41))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2710,6 +2740,7 @@ hg19_dna          0 ?????????????????????????????????????????       41
 hg19_dna	0	chr8	95160480	0	8H41M1H	*	0	0	*	*	AS:i:41
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2744,6 +2775,7 @@ hg19_dna          0 ????????????????????????????????????       36
 hg19_dna	0	chr22	42144401	0	11H36M3H	*	0	0	*	*	AS:i:24
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 48))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2778,6 +2810,7 @@ hg19_dna          0 ????????????????????????????????????????????????        48
 hg19_dna	0	chr2	183925985	0	1H6M4I38M1H	*	0	0	*	*	AS:i:27
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 170))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2820,6 +2853,7 @@ hg19_dna         25 ---------------------------------------???????????       36
 hg19_dna	0	chr19	35483341	0	10H25M134D11M4H	*	0	0	*	*	AS:i:0
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2854,6 +2888,7 @@ hg19_dna          0 ???????????????????????????????????????       39
 hg19_dna	0	chr18	23891311	0	10H39M1H	*	0	0	*	*	AS:i:39
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 28))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2888,6 +2923,7 @@ hg19_dna          0 ????????????????????????????       28
 hg19_dna	0	chr18	43252218	0	21H28M1H	*	0	0	*	*	AS:i:24
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 51))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2922,6 +2958,7 @@ hg19_dna          0 ??????????---??????????????????????????????????????       48
 hg19_dna	0	chr13	52759148	0	1H10M3D38M1H	*	0	0	*	*	AS:i:30
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 50))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2956,6 +2993,7 @@ hg19_dna          0 ??????????????????????????????????????????????????      50
 hg19_dna	0	chr1	1207057	0	50M	*	0	0	*	*	AS:i:50
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 34))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2990,6 +3028,7 @@ hg19_dna          0 ??????????????????????????????????       34
 hg19_dna	0	chr1	61700838	0	1H34M15H	*	0	0	*	*	AS:i:22
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 38))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -3024,6 +3063,7 @@ hg19_dna         38 ??????????????????????????????????????        0
 hg19_dna	16	chr4	37558158	0	1H16M4I18M11H	*	0	0	*	*	AS:i:15
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 37))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -3058,6 +3098,7 @@ hg19_dna         37 ?????????????????????????????????????        0
 hg19_dna	16	chr22	48997406	0	1H37M12H	*	0	0	*	*	AS:i:29
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -3092,6 +3133,7 @@ hg19_dna         36 ????????????????????????????????????         0
 hg19_dna	16	chr2	120641741	0	1H36M13H	*	0	0	*	*	AS:i:32
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -3126,6 +3168,7 @@ hg19_dna         39 ???????????????????????????????????????        0
 hg19_dna	16	chr19	54017131	0	1H39M10H	*	0	0	*	*	AS:i:39
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -3160,6 +3203,7 @@ hg19_dna         39 ???????????????????????????????????????      0
 hg19_dna	16	chr19	553743	0	1H39M10H	*	0	0	*	*	AS:i:27
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -3194,6 +3238,7 @@ hg19_dna         36 ????????????????????????????????????        0
 hg19_dna	16	chr10	99388556	0	1H36M13H	*	0	0	*	*	AS:i:24
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 25))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -3228,6 +3273,7 @@ hg19_dna         25 ?????????????????????????         0
 hg19_dna	16	chr10	112178172	0	15H25M10H	*	0	0	*	*	AS:i:21
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -3262,6 +3308,7 @@ hg19_dna         36 ????????????????????????????????????        0
 hg19_dna	16	chr1	39368491	0	1H36M13H	*	0	0	*	*	AS:i:32
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 34))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -3296,6 +3343,7 @@ hg19_dna         34 ??????????????????????????????????         0
 hg19_dna	16	chr1	220325688	0	3H34M13H	*	0	0	*	*	AS:i:30
 """,
         )
+        # ADD TEST
         self.assertRaises(StopIteration, next, alignments)
 
     def test_reading_psl_34_004(self):
@@ -3415,6 +3463,7 @@ hg18_dna         11 ????????????????       27
 hg18_dna	0	chr4	61646096	0	11S16M6S	*	0	0	*	*	AS:i:16
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 33))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -3449,6 +3498,7 @@ hg18_dna          0 ?????????????????????????????????       33
 hg18_dna	0	chr1	10271784	0	33M	*	0	0	*	*	AS:i:33
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 17))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -3483,6 +3533,7 @@ hg18_dna         25 ?????????????????        8
 hg18_dna	16	chr2	53575981	0	8S17M8S	*	0	0	*	*	AS:i:17
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 41))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -3517,6 +3568,7 @@ hg19_dna          9 ?????????????????????????????????????????       50
 hg19_dna	0	chr9	85737866	0	9S41M	*	0	0	*	*	AS:i:29
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 41))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -3551,6 +3603,7 @@ hg19_dna          8 ?????????????????????????????????????????       49
 hg19_dna	0	chr8	95160480	0	8S41M1S	*	0	0	*	*	AS:i:41
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -3585,6 +3638,7 @@ hg19_dna         11 ????????????????????????????????????       47
 hg19_dna	0	chr22	42144401	0	11S36M3S	*	0	0	*	*	AS:i:24
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 48))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -3619,6 +3673,7 @@ hg19_dna          1 ????????????????????????????????????????????????        49
 hg19_dna	0	chr2	183925985	0	1S6M4I38M1S	*	0	0	*	*	AS:i:27
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 170))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -3661,6 +3716,7 @@ hg19_dna         35 ---------------------------------------???????????       46
 hg19_dna	0	chr19	35483341	0	10S25M134D11M4S	*	0	0	*	*	AS:i:0
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -3695,6 +3751,7 @@ hg19_dna         10 ???????????????????????????????????????       49
 hg19_dna	0	chr18	23891311	0	10S39M1S	*	0	0	*	*	AS:i:39
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 28))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -3729,6 +3786,7 @@ hg19_dna         21 ????????????????????????????       49
 hg19_dna	0	chr18	43252218	0	21S28M1S	*	0	0	*	*	AS:i:24
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 51))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -3763,6 +3821,7 @@ hg19_dna          1 ??????????---??????????????????????????????????????       49
 hg19_dna	0	chr13	52759148	0	1S10M3D38M1S	*	0	0	*	*	AS:i:30
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 50))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -3797,6 +3856,7 @@ hg19_dna          0 ??????????????????????????????????????????????????      50
 hg19_dna	0	chr1	1207057	0	50M	*	0	0	*	*	AS:i:50
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 34))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -3831,6 +3891,7 @@ hg19_dna          1 ??????????????????????????????????       35
 hg19_dna	0	chr1	61700838	0	1S34M15S	*	0	0	*	*	AS:i:22
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 38))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -3865,6 +3926,7 @@ hg19_dna         49 ??????????????????????????????????????       11
 hg19_dna	16	chr4	37558158	0	1S16M4I18M11S	*	0	0	*	*	AS:i:15
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 37))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -3899,6 +3961,7 @@ hg19_dna         49 ?????????????????????????????????????       12
 hg19_dna	16	chr22	48997406	0	1S37M12S	*	0	0	*	*	AS:i:29
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -3933,6 +3996,7 @@ hg19_dna         49 ????????????????????????????????????        13
 hg19_dna	16	chr2	120641741	0	1S36M13S	*	0	0	*	*	AS:i:32
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -3967,6 +4031,7 @@ hg19_dna         49 ???????????????????????????????????????       10
 hg19_dna	16	chr19	54017131	0	1S39M10S	*	0	0	*	*	AS:i:39
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -4001,6 +4066,7 @@ hg19_dna         49 ???????????????????????????????????????     10
 hg19_dna	16	chr19	553743	0	1S39M10S	*	0	0	*	*	AS:i:27
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -4035,6 +4101,7 @@ hg19_dna         49 ????????????????????????????????????       13
 hg19_dna	16	chr10	99388556	0	1S36M13S	*	0	0	*	*	AS:i:24
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 25))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -4069,6 +4136,7 @@ hg19_dna         35 ?????????????????????????        10
 hg19_dna	16	chr10	112178172	0	15S25M10S	*	0	0	*	*	AS:i:21
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -4103,6 +4171,7 @@ hg19_dna         49 ????????????????????????????????????       13
 hg19_dna	16	chr1	39368491	0	1S36M13S	*	0	0	*	*	AS:i:32
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 34))
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -4137,6 +4206,7 @@ hg19_dna         47 ??????????????????????????????????        13
 hg19_dna	16	chr1	220325688	0	3S34M13S	*	0	0	*	*	AS:i:30
 """,
         )
+        # ADD TEST
         self.assertRaises(StopIteration, next, alignments)
 
     def test_reading_psl_34_005(self):
@@ -5070,6 +5140,7 @@ np.array([['C', 'C', 'C', 'C', 'C', 'C'],
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         stream.close()
         self.assertTrue(np.array_equal(alignment.coordinates, coordinates))
@@ -5111,6 +5182,7 @@ np.array([['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'C', 'C', 'C', 'C', 'C',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         stream.close()
         self.assertTrue(np.array_equal(alignment.coordinates, coordinates))
@@ -5152,6 +5224,7 @@ np.array([['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'C', 'C', 'C', 'C', 'C',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         stream.close()
         self.assertTrue(np.array_equal(alignment.coordinates, coordinates))
@@ -5195,6 +5268,7 @@ np.array([['-', '-', '-', '-', '-', '-', '-', '-', 'C', 'C', 'C', 'C', 'C',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         stream.close()
         self.assertTrue(np.array_equal(alignment.coordinates, coordinates))
@@ -5238,6 +5312,7 @@ np.array([['-', '-', '-', '-', '-', '-', '-', '-', 'C', 'C', 'C', 'C', 'C',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         stream.close()
         self.assertTrue(np.array_equal(alignment.coordinates, coordinates))
@@ -5279,6 +5354,7 @@ np.array([['C', 'C', 'C', 'C', 'C', 'C'],
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         stream.close()
         self.assertTrue(np.array_equal(alignment.coordinates, coordinates))
@@ -5322,6 +5398,7 @@ np.array([['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'C', 'C', 'C', 'C', 'C',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         stream.close()
         self.assertTrue(np.array_equal(alignment.coordinates, coordinates))
@@ -5365,6 +5442,7 @@ np.array([['-', '-', '-', '-', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'C',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         stream.close()
         self.assertTrue(np.array_equal(alignment.coordinates, coordinates))
@@ -5406,6 +5484,7 @@ np.array([['C', 'C', 'C', 'C', 'C', 'C'],
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         stream.close()
         self.assertTrue(np.array_equal(alignment.coordinates, coordinates))
@@ -5449,6 +5528,7 @@ np.array([['G', 'G', 'G', 'G', '-', '-', '-', '-', '-', '-', '-', '-', 'C',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         stream.close()
         self.assertTrue(np.array_equal(alignment.coordinates, coordinates))
@@ -5492,6 +5572,7 @@ np.array([['-', '-', '-', '-', '-', '-', '-', '-', 'C', 'C', 'C', 'C', 'C',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         stream.close()
         self.assertTrue(np.array_equal(alignment.coordinates, coordinates))

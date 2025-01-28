@@ -816,6 +816,7 @@ HBB2_TRICR                      .VHLTAEDRKEIAAILGKV--NVDSLGGQCLARLIVVNPWSRRYFHDF
 //
 """,
         )
+        # ADD TEST
 
     def check_alignment_pfam1(self, alignment):
         """Check the alignment obtained by parsing Pfam record 120_Rick_ant."""
@@ -953,6 +954,7 @@ H8K5G2_RICAG/113-350            LAEQKRKEIEEEKEKDKTLSTFFGNPANREFIDKALENPELKKKLESI
 //
 """,
         )
+        # ADD TEST
 
     def check_alignment_pfam2(self, alignment):
         """Check the alignment obtained by parsing Pfam record 7kD_DNA_binding."""
@@ -1122,6 +1124,7 @@ DN7E_SULAC/3-60                 KVRFKYKGEEKEVDTSKIKKVWRVGKMVSFTYDD.NGKTGRGAVSEKD
 //
 """,
         )
+        # ADD TEST
 
     def check_alignment_pfam3(self, alignment):
         """Check the alignment obtained by parsing Pfam record 12TM_1."""
@@ -1379,6 +1382,7 @@ Q6L2L5_PICTO/38-510             TILLYYISNSLSFLFFSIVLNGIYYVKGNTN....DISSFGIILFMYI
 //
 """,
         )
+        # ADD TEST
 
     def check_alignment_pfam4(self, alignment):
         """Check the alignment obtained by parsing Pfam record 3Beta_HSD."""
@@ -1662,6 +1666,7 @@ ERG26_YEAST/8-280               LIIGGSGFLGLHLIQQFFDINP.KPDIHIFD......VRDLPEKLSKQ
 //
 """,
         )
+        # ADD TEST
 
     def check_alignment_pfam5(self, alignment):
         """Check the alignment obtained by parsing Pfam record ArsP_1."""
@@ -1986,6 +1991,7 @@ P73433_SYNY3/6-329              EFNLFLDLLGSALLLSLPWLLLGIIISSTFLIWTDEQKWVANF..PRN
 //
 """,
         )
+        # ADD TEST
 
     def check_alignment_pfam6(self, alignment):
         """Check the alignment obtained by parsing Pfam record COX2_TM."""
@@ -2281,6 +2287,7 @@ A1BA41_PARDP/42-128             .PVNGGMN...FQPASSPLAHDQQWLDHFVLYIITAVTIFVCLLLLIC
 //
 """,
         )
+        # ADD TEST
 
     def check_alignment_pfam7(self, alignment):
         """Check the alignment obtained by parsing Pfam record Alpha_E1_glycop."""
@@ -2506,6 +2513,7 @@ POLS_CHIKS/744-1247             RTAKAATYQEAAVYLWNEQQPLFWLQALIPLAALIVLCNCLRLLPCCC
 //
 """,
         )
+        # ADD TEST
 
     def check_alignment_pfam8(self, alignment):
         """Check the alignment obtained by parsing Pfam record Cyclin_N."""
@@ -4380,6 +4388,7 @@ CCNE_CAEEL/232-360                  KVWSLMVKRDE..IPRATRFLL..GNHPD...MDD.EKRRILID
 //
 """,
         )
+        # ADD TEST
 
     def check_alignment_pfam9(self, alignment):
         """Check the alignment obtained by parsing Pfam record SH3_11."""
@@ -4494,6 +4503,7 @@ POL_SFVCP/1064-1126             RSWSPVVGQLVQERVARPASLRPRWHKPSTVLEVLNPRTVVILDHLGN
 //
 """,
         )
+        # ADD TEST
 
     def check_alignment_rfam1(self, alignment):
         """Check the alignment obtained by parsing Rfam record BTnc005."""
@@ -4665,6 +4675,7 @@ FP929033.1/4930704-4930908            GUAAGUAAAAGUGUAACAGGAAGAAAGUUGCAGCAUAUAUGC
 //
 """,
         )
+        # ADD TEST
 
     def check_alignment_rfam2(self, alignment):
         """Check the alignment obtained by parsing Rfam record SraC_RyeA."""
@@ -4979,6 +4990,7 @@ AALE02000013.1/38-183                   AGUUAAAAAAAGACCGAAUACGAUUCCUA-UAUUCGGUCU
 //
 """,
         )
+        # ADD TEST
 
     def check_alignment_rfam3(self, alignment):
         """Check the alignment obtained by parsing Rfam record McaS."""
@@ -5214,6 +5226,7 @@ CP011132.1/1732716-1732810            ACCCGCCACACGGAAUAAUAACGGGAACACAUG-AAGGAUAA
 //
 """,
         )
+        # ADD TEST
 
     def check_alignment_rfam4(self, alignment):
         """Check the alignment obtained by parsing Rfam record IRES_KSHV."""
@@ -5433,6 +5446,7 @@ U75698.1/123214-122967              UUGCUAUGCCGCGGCAGACUCCUUUUCCCGCCAAGAACUUAUAG
 //
 """,
         )
+        # ADD TEST
 
     def check_alignment_rfam5(self, alignment):
         """Check the alignment obtained by parsing Rfam record BMV3_UPD-PK3."""
@@ -5558,6 +5572,7 @@ X58459.1/659-681                ACUUUGGCUAAGGUUAAAAGCUU
 //
 """,
         )
+        # ADD TEST
 
     def check_alignment_cath1(self, alignment):
         """Check the alignment obtained by parsing CATH record 3.30.160.60/FF/004774."""
@@ -5629,6 +5644,7 @@ L7MZX4/382-398                  GEKPYECLECGKRFTAR
 //
 """,
         )
+        # ADD TEST
 
     def check_alignment_cath2(self, alignment):
         """Check the alignment obtained by parsing CATH record 2.105.10.10/FF/000002."""
@@ -5709,6 +5725,7 @@ P27378/2-64                     ANFNVPKLGVFPVAAVFDIDNVPEDSSATGSRWLPSIYQGGNYWGGGP
 //
 """,
         )
+        # ADD TEST
 
     def check_alignment_cath3(self, alignment):
         """Check the alignment obtained by parsing CATH record 1.10.275.10/FF/000026."""
@@ -5891,6 +5908,7 @@ G4FEQ2/2-92                     VERYSLSPMKDLWTEEAKYRRWLEVELAVTRAYEELGMIPKGVTERIR
 //
 """,
         )
+        # ADD TEST
 
     def test_reading_writing_alignments_globins45(self):
         """Test parsing hmmalign output."""

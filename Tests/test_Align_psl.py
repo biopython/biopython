@@ -242,6 +242,7 @@ NR_046654        31 CCAGGTATGCATCTGCTGCCAAGCCAGGGAG        0
 175	0	6	0	0	0	2	1530	-	NR_046654.1	181	0	181	chr3	198295559	42530895	42532606	3	63,75,43,	0,63,138,	42530895,42532020,42532563,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 172)
         self.assertEqual(alignment.misMatches, 1)
@@ -423,6 +424,7 @@ NR_046654        37 TTCCCAGGTATGCATCTGCTGCCAAGCCAGGGAG        3
 172	1	6	0	1	3	3	1532	-	NR_046654.1_modified	190	3	185	chr3	198295559	42530895	42532606	5	27,36,17,56,43,	5,35,71,88,144,	42530895,42530922,42532020,42532039,42532563,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 165)
         self.assertEqual(alignment.misMatches, 0)
@@ -848,6 +850,7 @@ NR_111921       197 TAAAAAA      204
 165	0	39	0	0	0	2	5203	+	NR_111921.1	216	0	204	chr3	198295559	48663767	48669174	3	46,82,76,	0,46,128,	48663767,48665640,48669098,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 162)
         self.assertEqual(alignment.misMatches, 2)
@@ -1277,6 +1280,7 @@ NR_111921       199 ATTAAAAAA      208
 162	2	39	0	1	2	3	5204	+	NR_111921.1_modified	220	3	208	chr3	198295559	48663767	48669174	5	28,17,76,6,76,	3,31,48,126,132,	48663767,48663796,48665640,48665716,48669098,
 """,
         )
+        # ADD TEST
         self.assertRaises(StopIteration, next, alignments)
 
     def test_writing(self):
@@ -1396,6 +1400,7 @@ np.array([['a', 'g', 'g', 't', 'a', 'a', 'a', 'c', 't', 'g', 'c', 'c', 't',
 16	0	0	0	0	0	0	0	+	hg18_dna	33	11	27	chr4	191154276	61646095	61646111	1	16,	11,	61646095,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 33)
         self.assertEqual(alignment.misMatches, 0)
@@ -1460,6 +1465,7 @@ np.array([['a', 't', 'g', 'a', 'g', 'c', 't', 't', 'c', 'c', 'a', 'a', 'g',
 33	0	0	0	0	0	0	0	+	hg18_dna	33	0	33	chr1	249250621	10271783	10271816	1	33,	0,	10271783,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 17)
         self.assertEqual(alignment.misMatches, 0)
@@ -1523,6 +1529,7 @@ np.array([['a', 'a', 'g', 'g', 'c', 'a', 'g', 't', 't', 't', 'a', 'c', 'c',
 17	0	0	0	0	0	0	0	-	hg18_dna	33	8	25	chr2	243199373	53575980	53575997	1	17,	8,	53575980,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 38)
         self.assertEqual(alignment.misMatches, 3)
@@ -1591,6 +1598,7 @@ np.array([['a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g',
 38	3	0	0	0	0	0	0	+	hg19_dna	50	9	50	chr9	141213431	85737865	85737906	1	41,	9,	85737865,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 41)
         self.assertEqual(alignment.misMatches, 0)
@@ -1659,6 +1667,7 @@ np.array([['c', 'a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g',
 41	0	0	0	0	0	0	0	+	hg19_dna	50	8	49	chr8	146364022	95160479	95160520	1	41,	8,	95160479,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 33)
         self.assertEqual(alignment.misMatches, 3)
@@ -1725,6 +1734,7 @@ np.array([['a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c',
 33	3	0	0	0	0	0	0	+	hg19_dna	50	11	47	chr22	51304566	42144400	42144436	1	36,	11,	42144400,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 43)
         self.assertEqual(alignment.misMatches, 1)
@@ -1782,6 +1792,7 @@ hg19_dna          1 aaaaat????aaaggggctgggcgtggtggctcacacctgtaatccca        49
 43	1	0	0	1	4	0	0	+	hg19_dna	50	1	49	chr2	243199373	183925984	183926028	2	6,38,	1,11,	183925984,183925990,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 34)
         self.assertEqual(alignment.misMatches, 2)
@@ -1851,6 +1862,7 @@ hg19_dna         35 ---------------------------------------cacctgtaatc       46
 34	2	0	0	0	0	1	134	+	hg19_dna	50	10	46	chr19	59128983	35483340	35483510	2	25,11,	10,35,	35483340,35483499,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 39)
         self.assertEqual(alignment.misMatches, 0)
@@ -1918,6 +1930,7 @@ np.array([['c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g',
 39	0	0	0	0	0	0	0	+	hg19_dna	50	10	49	chr18	78077248	23891310	23891349	1	39,	10,	23891310,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 27)
         self.assertEqual(alignment.misMatches, 1)
@@ -1983,6 +1996,7 @@ np.array([['g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
 27	1	0	0	0	0	0	0	+	hg19_dna	50	21	49	chr18	78077248	43252217	43252245	1	28,	21,	43252217,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 44)
         self.assertEqual(alignment.misMatches, 1)
@@ -2048,6 +2062,7 @@ hg19_dna         49
 44	1	0	0	1	3	1	6	+	hg19_dna	50	1	49	chr13	115169878	52759147	52759198	2	7,38,	1,11,	52759147,52759160,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 50)
         self.assertEqual(alignment.misMatches, 0)
@@ -2115,6 +2130,7 @@ np.array([['c', 'a', 'a', 'a', 'a', 'a', 't', 't', 'c', 'a', 'c', 'a', 'a',
 50	0	0	0	0	0	0	0	+	hg19_dna	50	0	50	chr1	249250621	1207056	1207106	1	50,	0,	1207056,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 31)
         self.assertEqual(alignment.misMatches, 3)
@@ -2181,6 +2197,7 @@ np.array([['a', 'a', 'a', 'a', 'a', 't', 'g', 'a', 'a', 'c', 'a', 'a', 'a',
 31	3	0	0	0	0	0	0	+	hg19_dna	50	1	35	chr1	249250621	61700837	61700871	1	34,	1,	61700837,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 28)
         self.assertEqual(alignment.misMatches, 0)
@@ -2237,6 +2254,7 @@ hg19_dna         49 tgggattaca------??????????accacgcccagccccttt       11
 28	0	0	0	1	10	1	6	-	hg19_dna	50	11	49	chr4	191154276	37558157	37558191	2	10,18,	1,21,	37558157,37558173,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 35)
         self.assertEqual(alignment.misMatches, 2)
@@ -2304,6 +2322,7 @@ np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
 35	2	0	0	0	0	0	0	-	hg19_dna	50	12	49	chr22	51304566	48997405	48997442	1	37,	1,	48997405,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 35)
         self.assertEqual(alignment.misMatches, 1)
@@ -2370,6 +2389,7 @@ np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
 35	1	0	0	0	0	0	0	-	hg19_dna	50	13	49	chr2	243199373	120641740	120641776	1	36,	1,	120641740,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 39)
         self.assertEqual(alignment.misMatches, 0)
@@ -2437,6 +2457,7 @@ np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
 39	0	0	0	0	0	0	0	-	hg19_dna	50	10	49	chr19	59128983	54017130	54017169	1	39,	1,	54017130,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 36)
         self.assertEqual(alignment.misMatches, 3)
@@ -2504,6 +2525,7 @@ np.array([['t', 'g', 'g', 'g', 'a', 't', 'g', 'a', 'c', 'a', 'g', 'g', 'g',
 36	3	0	0	0	0	0	0	-	hg19_dna	50	10	49	chr19	59128983	553742	553781	1	39,	1,	553742,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 33)
         self.assertEqual(alignment.misMatches, 3)
@@ -2570,6 +2592,7 @@ np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 't', 'a', 'g', 'g', 'c',
 33	3	0	0	0	0	0	0	-	hg19_dna	50	13	49	chr10	135534747	99388555	99388591	1	36,	1,	99388555,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 24)
         self.assertEqual(alignment.misMatches, 1)
@@ -2634,6 +2657,7 @@ np.array([['t', 'g', 'a', 'g', 't', 'c', 'a', 'c', 'c', 'a', 'c', 'g', 'c',
 24	1	0	0	0	0	0	0	-	hg19_dna	50	10	35	chr10	135534747	112178171	112178196	1	25,	15,	112178171,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 35)
         self.assertEqual(alignment.misMatches, 1)
@@ -2700,6 +2724,7 @@ np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
 35	1	0	0	0	0	0	0	-	hg19_dna	50	13	49	chr1	249250621	39368490	39368526	1	36,	1,	39368490,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 33)
         self.assertEqual(alignment.misMatches, 1)
@@ -2766,6 +2791,7 @@ np.array([['g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c', 'g', 't',
 33	1	0	0	0	0	0	0	-	hg19_dna	50	13	47	chr1	249250621	220325687	220325721	1	34,	3,	220325687,
 """,
         )
+        # ADD TEST
         self.assertRaises(StopIteration, next, alignments)
 
     def test_writing_psl_34_001(self):
@@ -2882,6 +2908,7 @@ np.array([['a', 'g', 'g', 't', 'a', 'a', 'a', 'c', 't', 'g', 'c', 'c', 't',
 16	0	0	0	0	0	0	0	+	hg18_dna	33	11	27	chr4	191154276	61646095	61646111	1	16,	11,	61646095,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 33)
         self.assertEqual(alignment.misMatches, 0)
@@ -2946,6 +2973,7 @@ np.array([['a', 't', 'g', 'a', 'g', 'c', 't', 't', 'c', 'c', 'a', 'a', 'g',
 33	0	0	0	0	0	0	0	+	hg18_dna	33	0	33	chr1	249250621	10271783	10271816	1	33,	0,	10271783,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 17)
         self.assertEqual(alignment.misMatches, 0)
@@ -3009,6 +3037,7 @@ np.array([['a', 'a', 'g', 'g', 'c', 'a', 'g', 't', 't', 't', 'a', 'c', 'c',
 17	0	0	0	0	0	0	0	-	hg18_dna	33	8	25	chr2	243199373	53575980	53575997	1	17,	8,	53575980,
 """,
         )
+        # ADD TEST
         self.assertRaises(StopIteration, next, alignments)
 
     def test_writing_psl_34_003(self):
@@ -3103,6 +3132,7 @@ np.array([['a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g',
 38	3	0	0	0	0	0	0	+	hg19_dna	50	9	50	chr9	141213431	85737865	85737906	1	41,	9,	85737865,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 41)
         self.assertEqual(alignment.misMatches, 0)
@@ -3171,6 +3201,7 @@ np.array([['c', 'a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g',
 41	0	0	0	0	0	0	0	+	hg19_dna	50	8	49	chr8	146364022	95160479	95160520	1	41,	8,	95160479,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 33)
         self.assertEqual(alignment.misMatches, 3)
@@ -3237,6 +3268,7 @@ np.array([['a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c',
 33	3	0	0	0	0	0	0	+	hg19_dna	50	11	47	chr22	51304566	42144400	42144436	1	36,	11,	42144400,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 43)
         self.assertEqual(alignment.misMatches, 1)
@@ -3294,6 +3326,7 @@ hg19_dna          1 aaaaat????aaaggggctgggcgtggtggctcacacctgtaatccca        49
 43	1	0	0	1	4	0	0	+	hg19_dna	50	1	49	chr2	243199373	183925984	183926028	2	6,38,	1,11,	183925984,183925990,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 34)
         self.assertEqual(alignment.misMatches, 2)
@@ -3363,6 +3396,7 @@ hg19_dna         35 ---------------------------------------cacctgtaatc       46
 34	2	0	0	0	0	1	134	+	hg19_dna	50	10	46	chr19	59128983	35483340	35483510	2	25,11,	10,35,	35483340,35483499,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 39)
         self.assertEqual(alignment.misMatches, 0)
@@ -3430,6 +3464,7 @@ np.array([['c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g',
 39	0	0	0	0	0	0	0	+	hg19_dna	50	10	49	chr18	78077248	23891310	23891349	1	39,	10,	23891310,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 27)
         self.assertEqual(alignment.misMatches, 1)
@@ -3495,6 +3530,7 @@ np.array([['g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
 27	1	0	0	0	0	0	0	+	hg19_dna	50	21	49	chr18	78077248	43252217	43252245	1	28,	21,	43252217,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 44)
         self.assertEqual(alignment.misMatches, 1)
@@ -3560,6 +3596,7 @@ hg19_dna         49
 44	1	0	0	1	3	1	6	+	hg19_dna	50	1	49	chr13	115169878	52759147	52759198	2	7,38,	1,11,	52759147,52759160,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 50)
         self.assertEqual(alignment.misMatches, 0)
@@ -3627,6 +3664,7 @@ np.array([['c', 'a', 'a', 'a', 'a', 'a', 't', 't', 'c', 'a', 'c', 'a', 'a',
 50	0	0	0	0	0	0	0	+	hg19_dna	50	0	50	chr1	249250621	1207056	1207106	1	50,	0,	1207056,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 31)
         self.assertEqual(alignment.misMatches, 3)
@@ -3693,6 +3731,7 @@ np.array([['a', 'a', 'a', 'a', 'a', 't', 'g', 'a', 'a', 'c', 'a', 'a', 'a',
 31	3	0	0	0	0	0	0	+	hg19_dna	50	1	35	chr1	249250621	61700837	61700871	1	34,	1,	61700837,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 28)
         self.assertEqual(alignment.misMatches, 0)
@@ -3749,6 +3788,7 @@ hg19_dna         49 tgggattaca------??????????accacgcccagccccttt       11
 28	0	0	0	1	10	1	6	-	hg19_dna	50	11	49	chr4	191154276	37558157	37558191	2	10,18,	1,21,	37558157,37558173,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 35)
         self.assertEqual(alignment.misMatches, 2)
@@ -3816,6 +3856,7 @@ np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
 35	2	0	0	0	0	0	0	-	hg19_dna	50	12	49	chr22	51304566	48997405	48997442	1	37,	1,	48997405,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 35)
         self.assertEqual(alignment.misMatches, 1)
@@ -3882,6 +3923,7 @@ np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
 35	1	0	0	0	0	0	0	-	hg19_dna	50	13	49	chr2	243199373	120641740	120641776	1	36,	1,	120641740,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 39)
         self.assertEqual(alignment.misMatches, 0)
@@ -3949,6 +3991,7 @@ np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
 39	0	0	0	0	0	0	0	-	hg19_dna	50	10	49	chr19	59128983	54017130	54017169	1	39,	1,	54017130,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 36)
         self.assertEqual(alignment.misMatches, 3)
@@ -4016,6 +4059,7 @@ np.array([['t', 'g', 'g', 'g', 'a', 't', 'g', 'a', 'c', 'a', 'g', 'g', 'g',
 36	3	0	0	0	0	0	0	-	hg19_dna	50	10	49	chr19	59128983	553742	553781	1	39,	1,	553742,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 33)
         self.assertEqual(alignment.misMatches, 3)
@@ -4082,6 +4126,7 @@ np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 't', 'a', 'g', 'g', 'c',
 33	3	0	0	0	0	0	0	-	hg19_dna	50	13	49	chr10	135534747	99388555	99388591	1	36,	1,	99388555,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 24)
         self.assertEqual(alignment.misMatches, 1)
@@ -4146,6 +4191,7 @@ np.array([['t', 'g', 'a', 'g', 't', 'c', 'a', 'c', 'c', 'a', 'c', 'g', 'c',
 24	1	0	0	0	0	0	0	-	hg19_dna	50	10	35	chr10	135534747	112178171	112178196	1	25,	15,	112178171,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 35)
         self.assertEqual(alignment.misMatches, 1)
@@ -4212,6 +4258,7 @@ np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
 35	1	0	0	0	0	0	0	-	hg19_dna	50	13	49	chr1	249250621	39368490	39368526	1	36,	1,	39368490,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 33)
         self.assertEqual(alignment.misMatches, 1)
@@ -4278,6 +4325,7 @@ np.array([['g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c', 'g', 't',
 33	1	0	0	0	0	0	0	-	hg19_dna	50	13	47	chr1	249250621	220325687	220325721	1	34,	3,	220325687,
 """,
         )
+        # ADD TEST
         self.assertRaises(StopIteration, next, alignments)
 
     def test_writing_psl_34_004(self):
@@ -4366,6 +4414,7 @@ np.array([['a', 'g', 'g', 't', 'a', 'a', 'a', 'c', 't', 'g', 'c', 'c', 't',
 16	0	0	0	0	0	0	0	+	hg18_dna	33	11	27	chr4	191154276	61646095	61646111	1	16,	11,	61646095,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 33)
         self.assertEqual(alignment.misMatches, 0)
@@ -4430,6 +4479,7 @@ np.array([['a', 't', 'g', 'a', 'g', 'c', 't', 't', 'c', 'c', 'a', 'a', 'g',
 33	0	0	0	0	0	0	0	+	hg18_dna	33	0	33	chr1	249250621	10271783	10271816	1	33,	0,	10271783,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 17)
         self.assertEqual(alignment.misMatches, 0)
@@ -4493,6 +4543,7 @@ np.array([['a', 'a', 'g', 'g', 'c', 'a', 'g', 't', 't', 't', 'a', 'c', 'c',
 17	0	0	0	0	0	0	0	-	hg18_dna	33	8	25	chr2	243199373	53575980	53575997	1	17,	8,	53575980,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 38)
         self.assertEqual(alignment.misMatches, 3)
@@ -4561,6 +4612,7 @@ np.array([['a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g',
 38	3	0	0	0	0	0	0	+	hg19_dna	50	9	50	chr9	141213431	85737865	85737906	1	41,	9,	85737865,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 41)
         self.assertEqual(alignment.misMatches, 0)
@@ -4629,6 +4681,7 @@ np.array([['c', 'a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g',
 41	0	0	0	0	0	0	0	+	hg19_dna	50	8	49	chr8	146364022	95160479	95160520	1	41,	8,	95160479,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 33)
         self.assertEqual(alignment.misMatches, 3)
@@ -4695,6 +4748,7 @@ np.array([['a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c',
 33	3	0	0	0	0	0	0	+	hg19_dna	50	11	47	chr22	51304566	42144400	42144436	1	36,	11,	42144400,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 43)
         self.assertEqual(alignment.misMatches, 1)
@@ -4752,6 +4806,7 @@ hg19_dna          1 aaaaat????aaaggggctgggcgtggtggctcacacctgtaatccca        49
 43	1	0	0	1	4	0	0	+	hg19_dna	50	1	49	chr2	243199373	183925984	183926028	2	6,38,	1,11,	183925984,183925990,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 34)
         self.assertEqual(alignment.misMatches, 2)
@@ -4821,6 +4876,7 @@ hg19_dna         35 ---------------------------------------cacctgtaatc       46
 34	2	0	0	0	0	1	134	+	hg19_dna	50	10	46	chr19	59128983	35483340	35483510	2	25,11,	10,35,	35483340,35483499,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 39)
         self.assertEqual(alignment.misMatches, 0)
@@ -4888,6 +4944,7 @@ np.array([['c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g',
 39	0	0	0	0	0	0	0	+	hg19_dna	50	10	49	chr18	78077248	23891310	23891349	1	39,	10,	23891310,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 27)
         self.assertEqual(alignment.misMatches, 1)
@@ -4953,6 +5010,7 @@ np.array([['g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
 27	1	0	0	0	0	0	0	+	hg19_dna	50	21	49	chr18	78077248	43252217	43252245	1	28,	21,	43252217,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 44)
         self.assertEqual(alignment.misMatches, 1)
@@ -5018,6 +5076,7 @@ hg19_dna         49
 44	1	0	0	1	3	1	6	+	hg19_dna	50	1	49	chr13	115169878	52759147	52759198	2	7,38,	1,11,	52759147,52759160,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 50)
         self.assertEqual(alignment.misMatches, 0)
@@ -5085,6 +5144,7 @@ np.array([['c', 'a', 'a', 'a', 'a', 'a', 't', 't', 'c', 'a', 'c', 'a', 'a',
 50	0	0	0	0	0	0	0	+	hg19_dna	50	0	50	chr1	249250621	1207056	1207106	1	50,	0,	1207056,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 31)
         self.assertEqual(alignment.misMatches, 3)
@@ -5151,6 +5211,7 @@ np.array([['a', 'a', 'a', 'a', 'a', 't', 'g', 'a', 'a', 'c', 'a', 'a', 'a',
 31	3	0	0	0	0	0	0	+	hg19_dna	50	1	35	chr1	249250621	61700837	61700871	1	34,	1,	61700837,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 28)
         self.assertEqual(alignment.misMatches, 0)
@@ -5207,6 +5268,7 @@ hg19_dna         49 tgggattaca------??????????accacgcccagccccttt       11
 28	0	0	0	1	10	1	6	-	hg19_dna	50	11	49	chr4	191154276	37558157	37558191	2	10,18,	1,21,	37558157,37558173,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 35)
         self.assertEqual(alignment.misMatches, 2)
@@ -5274,6 +5336,7 @@ np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
 35	2	0	0	0	0	0	0	-	hg19_dna	50	12	49	chr22	51304566	48997405	48997442	1	37,	1,	48997405,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 35)
         self.assertEqual(alignment.misMatches, 1)
@@ -5340,6 +5403,7 @@ np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
 35	1	0	0	0	0	0	0	-	hg19_dna	50	13	49	chr2	243199373	120641740	120641776	1	36,	1,	120641740,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 39)
         self.assertEqual(alignment.misMatches, 0)
@@ -5407,6 +5471,7 @@ np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
 39	0	0	0	0	0	0	0	-	hg19_dna	50	10	49	chr19	59128983	54017130	54017169	1	39,	1,	54017130,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 36)
         self.assertEqual(alignment.misMatches, 3)
@@ -5474,6 +5539,7 @@ np.array([['t', 'g', 'g', 'g', 'a', 't', 'g', 'a', 'c', 'a', 'g', 'g', 'g',
 36	3	0	0	0	0	0	0	-	hg19_dna	50	10	49	chr19	59128983	553742	553781	1	39,	1,	553742,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 33)
         self.assertEqual(alignment.misMatches, 3)
@@ -5540,6 +5606,7 @@ np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 't', 'a', 'g', 'g', 'c',
 33	3	0	0	0	0	0	0	-	hg19_dna	50	13	49	chr10	135534747	99388555	99388591	1	36,	1,	99388555,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 24)
         self.assertEqual(alignment.misMatches, 1)
@@ -5604,6 +5671,7 @@ np.array([['t', 'g', 'a', 'g', 't', 'c', 'a', 'c', 'c', 'a', 'c', 'g', 'c',
 24	1	0	0	0	0	0	0	-	hg19_dna	50	10	35	chr10	135534747	112178171	112178196	1	25,	15,	112178171,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 35)
         self.assertEqual(alignment.misMatches, 1)
@@ -5670,6 +5738,7 @@ np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
 35	1	0	0	0	0	0	0	-	hg19_dna	50	13	49	chr1	249250621	39368490	39368526	1	36,	1,	39368490,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 33)
         self.assertEqual(alignment.misMatches, 1)
@@ -5736,6 +5805,7 @@ np.array([['g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c', 'g', 't',
 33	1	0	0	0	0	0	0	-	hg19_dna	50	13	47	chr1	249250621	220325687	220325721	1	34,	3,	220325687,
 """,
         )
+        # ADD TEST
         self.assertRaises(StopIteration, next, alignments)
 
     def test_writing_psl_34_005(self):
@@ -5833,6 +5903,7 @@ class TestAlign_dnax_prot(unittest.TestCase):
 52	0	0	0	0	0	0	0	++	CAG33136.1	230	61	113	chr13	114364328	75566694	75566850	1	52,	61,	75566694,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 44)
         self.assertEqual(alignment.misMatches, 0)
@@ -5881,6 +5952,7 @@ class TestAlign_dnax_prot(unittest.TestCase):
 44	0	0	0	0	0	0	0	++	CAG33136.1	230	17	61	chr13	114364328	75560749	75560881	1	44,	17,	75560749,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 44)
         self.assertEqual(alignment.misMatches, 0)
@@ -5937,6 +6009,7 @@ class TestAlign_dnax_prot(unittest.TestCase):
 44	0	0	0	1	98	1	17360	++	CAG33136.1	230	0	142	chr13	114364328	75549820	75567312	2	15,29,	0,113,	75549820,75567225,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 47)
         self.assertEqual(alignment.misMatches, 0)
@@ -5993,6 +6066,7 @@ class TestAlign_dnax_prot(unittest.TestCase):
 47	0	0	0	0	0	1	901	++	CAG33136.1	230	183	230	chr13	114364328	75604767	75605809	2	20,27,	183,203,	75604767,75605728,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 25)
         self.assertEqual(alignment.misMatches, 0)
@@ -6037,6 +6111,7 @@ class TestAlign_dnax_prot(unittest.TestCase):
 25	0	0	0	0	0	0	0	++	CAG33136.1	230	158	183	chr13	114364328	75594914	75594989	1	25,	158,	75594914,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 16)
         self.assertEqual(alignment.misMatches, 0)
@@ -6079,6 +6154,7 @@ class TestAlign_dnax_prot(unittest.TestCase):
 16	0	0	0	0	0	0	0	++	CAG33136.1	230	142	158	chr13	114364328	75569459	75569507	1	16,	142,	75569459,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 26)
         self.assertEqual(alignment.misMatches, 8)
@@ -6126,6 +6202,7 @@ class TestAlign_dnax_prot(unittest.TestCase):
 26	8	0	0	0	0	0	0	++	CAG33136.1	230	76	110	chr4	190214555	41260685	41260787	1	34,	76,	41260685,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 37)
         self.assertEqual(alignment.misMatches, 26)
@@ -6182,6 +6259,7 @@ class TestAlign_dnax_prot(unittest.TestCase):
 37	26	0	0	1	103	1	5496	++	CAG33136.1	230	17	183	chr4	190214555	41257605	41263290	2	42,21,	17,162,	41257605,41263227,
 """,
         )
+        # ADD TEST
         self.assertRaises(StopIteration, next, alignments)
 
     def test_writing_psl_35_001(self):
@@ -6438,6 +6516,7 @@ CAG33136.        60 YEL 63
 210	3	0	0	0	0	6	31299	++	CAG33136.1	230	17	230	KI537979	14052872	9712654	9744592	7	44,52,29,16,25,20,27,	17,61,113,142,158,183,203,	9712654,9715941,9716445,9718374,9739264,9743706,9744511,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 207)
         self.assertEqual(alignment.misMatches, 22)
@@ -6499,6 +6578,7 @@ CAG33136.        60 YEL 63
 207	22	0	0	1	1	1	-1	++	CAG33136.1	230	0	230	KI538594	7819582	2103463	2104149	2	20,209,	0,21,	2103463,2103522,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 204)
         self.assertEqual(alignment.misMatches, 6)
@@ -6560,6 +6640,7 @@ CAG33136.        60 YEL 63
 204	6	0	0	1	20	1	1	+-	CAG33136.1	230	0	230	KI537194	37111980	20872390	20873021	2	183,27,	0,203,	16238959,16239509,
 """,
         )
+        # ADD TEST
         self.assertRaises(StopIteration, next, alignments)
 
     def test_writing_psl_35_002(self):

@@ -232,6 +232,7 @@ chain 176 chr3 198295559 + 42530895 42532606 NR_046654.1 181 - 0 181 1
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 1714))
         self.assertEqual(len(alignment), 2)
@@ -405,6 +406,7 @@ chain 170 chr3 198295559 + 42530895 42532606 NR_046654.1_modified 190 - 5 187 2
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 5407))
         self.assertEqual(len(alignment), 2)
@@ -821,6 +823,7 @@ chain 182 chr3 198295559 + 48663767 48669174 NR_111921.1 216 + 0 204 3
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 5409))
         self.assertEqual(len(alignment), 2)
@@ -1242,6 +1245,7 @@ chain 175 chr3 198295559 + 48663767 48669174 NR_111921.1_modified 220 + 3 208 4
 
 """,
         )
+        # ADD TEST
         self.assertRaises(StopIteration, next, alignments)
 
     def test_writing(self):
@@ -1306,6 +1310,7 @@ chain 16 chr4 191154276 + 61646095 61646111 hg18_dna 33 + 11 27 1
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 33))
         self.assertEqual(len(alignment), 2)
@@ -1340,6 +1345,7 @@ chain 33 chr1 249250621 + 10271783 10271816 hg18_dna 33 + 0 33 2
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 17))
         self.assertEqual(len(alignment), 2)
@@ -1374,6 +1380,7 @@ chain 17 chr2 243199373 + 53575980 53575997 hg18_dna 33 - 8 25 3
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 41))
         self.assertEqual(len(alignment), 2)
@@ -1408,6 +1415,7 @@ chain 35 chr9 141213431 + 85737865 85737906 hg19_dna 50 + 9 50 4
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 41))
         self.assertEqual(len(alignment), 2)
@@ -1442,6 +1450,7 @@ chain 41 chr8 146364022 + 95160479 95160520 hg19_dna 50 + 8 49 5
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertEqual(len(alignment), 2)
@@ -1476,6 +1485,7 @@ chain 30 chr22 51304566 + 42144400 42144436 hg19_dna 50 + 11 47 6
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 48))
         self.assertEqual(len(alignment), 2)
@@ -1511,6 +1521,7 @@ chain 41 chr2 243199373 + 183925984 183926028 hg19_dna 50 + 1 49 7
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 170))
         self.assertEqual(len(alignment), 2)
@@ -1554,6 +1565,7 @@ chain 31 chr19 59128983 + 35483340 35483510 hg19_dna 50 + 10 46 8
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertEqual(len(alignment), 2)
@@ -1588,6 +1600,7 @@ chain 39 chr18 78077248 + 23891310 23891349 hg19_dna 50 + 10 49 9
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 28))
         self.assertEqual(len(alignment), 2)
@@ -1622,6 +1635,7 @@ chain 26 chr18 78077248 + 43252217 43252245 hg19_dna 50 + 21 49 10
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 54))
         self.assertEqual(len(alignment), 2)
@@ -1661,6 +1675,7 @@ chain 41 chr13 115169878 + 52759147 52759198 hg19_dna 50 + 1 49 11
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 50))
         self.assertEqual(len(alignment), 2)
@@ -1695,6 +1710,7 @@ chain 50 chr1 249250621 + 1207056 1207106 hg19_dna 50 + 0 50 12
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 34))
         self.assertEqual(len(alignment), 2)
@@ -1729,6 +1745,7 @@ chain 28 chr1 249250621 + 61700837 61700871 hg19_dna 50 + 1 35 13
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 44))
         self.assertEqual(len(alignment), 2)
@@ -1761,6 +1778,7 @@ hg19_dna         49 ??????????------????????????????????????????       11
 28	0	0	0	1	10	1	6	-	hg19_dna	50	11	49	chr4	191154276	37558157	37558191	2	10,18,	1,21,	37558157,37558173,
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 37))
         self.assertEqual(len(alignment), 2)
@@ -1795,6 +1813,7 @@ chain 33 chr22 51304566 + 48997405 48997442 hg19_dna 50 - 1 38 15
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertEqual(len(alignment), 2)
@@ -1829,6 +1848,7 @@ chain 34 chr2 243199373 + 120641740 120641776 hg19_dna 50 - 1 37 16
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertEqual(len(alignment), 2)
@@ -1863,6 +1883,7 @@ chain 39 chr19 59128983 + 54017130 54017169 hg19_dna 50 - 1 40 17
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertEqual(len(alignment), 2)
@@ -1897,6 +1918,7 @@ chain 33 chr19 59128983 + 553742 553781 hg19_dna 50 - 1 40 18
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertEqual(len(alignment), 2)
@@ -1931,6 +1953,7 @@ chain 30 chr10 135534747 + 99388555 99388591 hg19_dna 50 - 1 37 19
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 25))
         self.assertEqual(len(alignment), 2)
@@ -1965,6 +1988,7 @@ chain 23 chr10 135534747 + 112178171 112178196 hg19_dna 50 - 15 40 20
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertEqual(len(alignment), 2)
@@ -1999,6 +2023,7 @@ chain 34 chr1 249250621 + 39368490 39368526 hg19_dna 50 - 1 37 21
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 34))
         self.assertEqual(len(alignment), 2)
@@ -2033,6 +2058,7 @@ chain 32 chr1 249250621 + 220325687 220325721 hg19_dna 50 - 3 37 22
 
 """,
         )
+        # ADD TEST
         self.assertRaises(StopIteration, next, alignments)
 
     def test_writing_chain_34_001(self):
@@ -2111,6 +2137,7 @@ chain 16 chr4 191154276 + 61646095 61646111 hg18_dna 33 + 11 27 1
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 33))
         self.assertEqual(len(alignment), 2)
@@ -2145,6 +2172,7 @@ chain 33 chr1 249250621 + 10271783 10271816 hg18_dna 33 + 0 33 2
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 17))
         self.assertEqual(len(alignment), 2)
@@ -2179,6 +2207,7 @@ chain 17 chr2 243199373 + 53575980 53575997 hg18_dna 33 - 8 25 3
 
 """,
         )
+        # ADD TEST
         self.assertRaises(StopIteration, next, alignments)
 
     def test_writing_psl_34_003(self):
@@ -2236,6 +2265,7 @@ chain 35 chr9 141213431 + 85737865 85737906 hg19_dna 50 + 9 50 1
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 41))
         self.assertEqual(len(alignment), 2)
@@ -2270,6 +2300,7 @@ chain 41 chr8 146364022 + 95160479 95160520 hg19_dna 50 + 8 49 2
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertEqual(len(alignment), 2)
@@ -2304,6 +2335,7 @@ chain 30 chr22 51304566 + 42144400 42144436 hg19_dna 50 + 11 47 3
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 48))
         self.assertEqual(len(alignment), 2)
@@ -2339,6 +2371,7 @@ chain 41 chr2 243199373 + 183925984 183926028 hg19_dna 50 + 1 49 4
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 170))
         self.assertEqual(len(alignment), 2)
@@ -2382,6 +2415,7 @@ chain 31 chr19 59128983 + 35483340 35483510 hg19_dna 50 + 10 46 5
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertEqual(len(alignment), 2)
@@ -2416,6 +2450,7 @@ chain 39 chr18 78077248 + 23891310 23891349 hg19_dna 50 + 10 49 6
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 28))
         self.assertEqual(len(alignment), 2)
@@ -2450,6 +2485,7 @@ chain 26 chr18 78077248 + 43252217 43252245 hg19_dna 50 + 21 49 7
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 54))
         self.assertEqual(len(alignment), 2)
@@ -2489,6 +2525,7 @@ chain 41 chr13 115169878 + 52759147 52759198 hg19_dna 50 + 1 49 8
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 50))
         self.assertEqual(len(alignment), 2)
@@ -2523,6 +2560,7 @@ chain 50 chr1 249250621 + 1207056 1207106 hg19_dna 50 + 0 50 9
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 34))
         self.assertEqual(len(alignment), 2)
@@ -2557,6 +2595,7 @@ chain 28 chr1 249250621 + 61700837 61700871 hg19_dna 50 + 1 35 10
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 44))
         self.assertEqual(len(alignment), 2)
@@ -2592,6 +2631,7 @@ chain 26 chr4 191154276 + 37558157 37558191 hg19_dna 50 - 1 39 11
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 37))
         self.assertEqual(len(alignment), 2)
@@ -2626,6 +2666,7 @@ chain 33 chr22 51304566 + 48997405 48997442 hg19_dna 50 - 1 38 12
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertEqual(len(alignment), 2)
@@ -2660,6 +2701,7 @@ chain 34 chr2 243199373 + 120641740 120641776 hg19_dna 50 - 1 37 13
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertEqual(len(alignment), 2)
@@ -2694,6 +2736,7 @@ chain 39 chr19 59128983 + 54017130 54017169 hg19_dna 50 - 1 40 14
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertEqual(len(alignment), 2)
@@ -2728,6 +2771,7 @@ chain 33 chr19 59128983 + 553742 553781 hg19_dna 50 - 1 40 15
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertEqual(len(alignment), 2)
@@ -2762,6 +2806,7 @@ chain 30 chr10 135534747 + 99388555 99388591 hg19_dna 50 - 1 37 16
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 25))
         self.assertEqual(len(alignment), 2)
@@ -2796,6 +2841,7 @@ chain 23 chr10 135534747 + 112178171 112178196 hg19_dna 50 - 15 40 17
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertEqual(len(alignment), 2)
@@ -2830,6 +2876,7 @@ chain 34 chr1 249250621 + 39368490 39368526 hg19_dna 50 - 1 37 18
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 34))
         self.assertEqual(len(alignment), 2)
@@ -2864,6 +2911,7 @@ chain 32 chr1 249250621 + 220325687 220325721 hg19_dna 50 - 3 37 19
 
 """,
         )
+        # ADD TEST
         self.assertRaises(StopIteration, next, alignments)
 
     def test_writing_psl_34_004(self):
@@ -2923,6 +2971,7 @@ chain 16 chr4 191154276 + 61646095 61646111 hg18_dna 33 + 11 27 1
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 33))
         self.assertEqual(len(alignment), 2)
@@ -2957,6 +3006,7 @@ chain 33 chr1 249250621 + 10271783 10271816 hg18_dna 33 + 0 33 2
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 17))
         self.assertEqual(len(alignment), 2)
@@ -2991,6 +3041,7 @@ chain 17 chr2 243199373 + 53575980 53575997 hg18_dna 33 - 8 25 3
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 41))
         self.assertEqual(len(alignment), 2)
@@ -3025,6 +3076,7 @@ chain 35 chr9 141213431 + 85737865 85737906 hg19_dna 50 + 9 50 4
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 41))
         self.assertEqual(len(alignment), 2)
@@ -3059,6 +3111,7 @@ chain 41 chr8 146364022 + 95160479 95160520 hg19_dna 50 + 8 49 5
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertEqual(len(alignment), 2)
@@ -3093,6 +3146,7 @@ chain 30 chr22 51304566 + 42144400 42144436 hg19_dna 50 + 11 47 6
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 48))
         self.assertEqual(len(alignment), 2)
@@ -3128,6 +3182,7 @@ chain 41 chr2 243199373 + 183925984 183926028 hg19_dna 50 + 1 49 7
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 170))
         self.assertEqual(len(alignment), 2)
@@ -3171,6 +3226,7 @@ chain 31 chr19 59128983 + 35483340 35483510 hg19_dna 50 + 10 46 8
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertEqual(len(alignment), 2)
@@ -3205,6 +3261,7 @@ chain 39 chr18 78077248 + 23891310 23891349 hg19_dna 50 + 10 49 9
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 28))
         self.assertEqual(len(alignment), 2)
@@ -3239,6 +3296,7 @@ chain 26 chr18 78077248 + 43252217 43252245 hg19_dna 50 + 21 49 10
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 54))
         self.assertEqual(len(alignment), 2)
@@ -3278,6 +3336,7 @@ chain 41 chr13 115169878 + 52759147 52759198 hg19_dna 50 + 1 49 11
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 50))
         self.assertEqual(len(alignment), 2)
@@ -3312,6 +3371,7 @@ chain 50 chr1 249250621 + 1207056 1207106 hg19_dna 50 + 0 50 12
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 34))
         self.assertEqual(len(alignment), 2)
@@ -3346,6 +3406,7 @@ chain 28 chr1 249250621 + 61700837 61700871 hg19_dna 50 + 1 35 13
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 44))
         self.assertEqual(len(alignment), 2)
@@ -3381,6 +3442,7 @@ chain 26 chr4 191154276 + 37558157 37558191 hg19_dna 50 - 1 39 14
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 37))
         self.assertEqual(len(alignment), 2)
@@ -3415,6 +3477,7 @@ chain 33 chr22 51304566 + 48997405 48997442 hg19_dna 50 - 1 38 15
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertEqual(len(alignment), 2)
@@ -3449,6 +3512,7 @@ chain 34 chr2 243199373 + 120641740 120641776 hg19_dna 50 - 1 37 16
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertEqual(len(alignment), 2)
@@ -3483,6 +3547,7 @@ chain 39 chr19 59128983 + 54017130 54017169 hg19_dna 50 - 1 40 17
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertEqual(len(alignment), 2)
@@ -3517,6 +3582,7 @@ chain 33 chr19 59128983 + 553742 553781 hg19_dna 50 - 1 40 18
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertEqual(len(alignment), 2)
@@ -3551,6 +3617,7 @@ chain 30 chr10 135534747 + 99388555 99388591 hg19_dna 50 - 1 37 19
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 25))
         self.assertEqual(len(alignment), 2)
@@ -3585,6 +3652,7 @@ chain 23 chr10 135534747 + 112178171 112178196 hg19_dna 50 - 15 40 20
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertEqual(len(alignment), 2)
@@ -3619,6 +3687,7 @@ chain 34 chr1 249250621 + 39368490 39368526 hg19_dna 50 - 1 37 21
 
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.shape, (2, 34))
         self.assertEqual(len(alignment), 2)
@@ -3653,6 +3722,7 @@ chain 32 chr1 249250621 + 220325687 220325721 hg19_dna 50 - 3 37 22
 
 """,
         )
+        # ADD TEST
         self.assertRaises(StopIteration, next, alignments)
 
     def test_writing_psl_34_005(self):

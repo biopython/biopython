@@ -146,6 +146,7 @@ np.array([['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.92)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.1e-30, places=31)
@@ -255,6 +256,7 @@ np.array([['G', 'X', 'G', 'C', 'X', 'G', 'X', 'X', 'M', 'Y', 'C', 'S', 'T',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.77)
         self.assertAlmostEqual(alignment.annotations["E-value"], 5.2e-24, places=25)
@@ -357,6 +359,7 @@ np.array([['P', 'V', 'C', 'G', 'V', 'R', 'A', 'S', 'G', 'R', 'V', 'C', 'P',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.77)
         self.assertAlmostEqual(alignment.annotations["E-value"], 6.8e-24, places=25)
@@ -459,6 +462,7 @@ np.array([['P', 'V', 'C', 'G', 'V', 'R', 'A', 'S', 'G', 'R', 'V', 'C', 'P',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.72)
         self.assertAlmostEqual(alignment.annotations["E-value"], 9.7e-23, places=24)
@@ -561,6 +565,7 @@ np.array([['R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P', 'N',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.66)
         self.assertAlmostEqual(alignment.annotations["E-value"], 2.4e-21, places=22)
@@ -659,6 +664,7 @@ np.array([['X', 'G', 'C', 'X', 'G', 'X', 'X', 'M', 'Y', 'C', 'S', 'T', 'N',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.31)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.2e-16, places=17)
@@ -751,6 +757,7 @@ np.array([['P', 'E', 'C', 'G', 'E', 'R', 'A', 'S', 'G', 'K', 'R', 'C', 'P',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.26)
         self.assertAlmostEqual(alignment.annotations["E-value"], 3.7e-16, places=17)
@@ -843,6 +850,7 @@ np.array([['E', 'R', 'C', 'G', 'S', 'Q', 'G', 'G', 'G', 'S', 'T', 'C', 'P',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.22)
         self.assertAlmostEqual(alignment.annotations["E-value"], 7.4e-16, places=17)
@@ -935,6 +943,7 @@ np.array([['R', 'C', 'G', 'S', 'Q', 'G', 'G', 'G', 'S', 'T', 'C', 'P', 'G',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.21)
         self.assertAlmostEqual(alignment.annotations["E-value"], 9.6e-16, places=17)
@@ -1027,6 +1036,7 @@ np.array([['E', 'C', 'G', 'E', 'R', 'A', 'S', 'G', 'K', 'R', 'C', 'P', 'N',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.79)
         self.assertAlmostEqual(alignment.annotations["E-value"], 7.7e-09, places=10)
@@ -1100,6 +1110,7 @@ np.array([['Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'D',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.67)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.9e-08, places=9)
@@ -1173,6 +1184,7 @@ np.array([['E', 'T', 'C', 'A', 'S', '-', 'R', 'C', 'P', 'R', 'P', 'C', 'N',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.66)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.9e-08, places=9)
@@ -1246,6 +1258,7 @@ np.array([['T', 'C', 'A', 'S', '-', 'R', 'C', 'P', 'R', 'P', 'C', 'N', 'A',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.65)
         self.assertAlmostEqual(alignment.annotations["E-value"], 2e-08, places=9)
@@ -1320,6 +1333,7 @@ np.array([['E', 'Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.62)
         self.assertAlmostEqual(alignment.annotations["E-value"], 2.4e-08, places=9)
@@ -1393,6 +1407,7 @@ np.array([['Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'A', 'L', 'C', 'P', 'G',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.59)
         self.assertAlmostEqual(alignment.annotations["E-value"], 3e-08, places=9)
@@ -1466,6 +1481,7 @@ np.array([['R', 'C', 'G', 'D', 'Q', 'A', 'R', 'G', 'A', 'K', 'C', 'P', 'N',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.57)
         self.assertAlmostEqual(alignment.annotations["E-value"], 3.3e-08, places=9)
@@ -1539,6 +1555,7 @@ np.array([['E', 'Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'A', 'L', 'C', 'P',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.46)
         self.assertAlmostEqual(alignment.annotations["E-value"], 6.6e-08, places=9)
@@ -1612,6 +1629,7 @@ np.array([['Q', 'R', 'C', 'G', 'D', 'Q', 'A', 'R', 'G', 'A', 'K', 'C', 'P',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.25)
         self.assertAlmostEqual(alignment.annotations["E-value"], 2.2e-07, places=8)
@@ -1682,6 +1700,7 @@ np.array([['P', 'N', 'G', 'Q', 'C', 'G', 'P', 'G', 'W', 'G', '-', '-', 'G',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.13)
         self.assertAlmostEqual(alignment.annotations["E-value"], 4.2e-07, places=8)
@@ -1752,6 +1771,7 @@ np.array([['P', 'N', 'G', 'Q', 'C', 'G', 'P', 'G', 'W', 'G', '-', '-', 'G',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.04)
         self.assertAlmostEqual(alignment.annotations["E-value"], 6.8e-07, places=8)
@@ -1819,6 +1839,7 @@ np.array([['R', 'G', 'R', 'C', 'P', 'S', 'G', 'M', 'C', 'C', 'S', 'Q', 'F',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 96.99)
         self.assertAlmostEqual(alignment.annotations["E-value"], 8.4e-07, places=8)
@@ -1887,6 +1908,7 @@ np.array([['C', 'V', 'R', 'G', 'R', 'C', 'P', 'S', 'G', 'M', 'C', 'C', 'S',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 96.90)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.3e-06)
@@ -1953,6 +1975,7 @@ np.array([['G', 'R', 'C', 'S', 'G', 'G', 'L', 'C', 'C', 'S', 'K', 'Y', 'G',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 96.77)
         self.assertAlmostEqual(alignment.annotations["E-value"], 2.3e-06)
@@ -2021,6 +2044,7 @@ np.array([['Q', 'C', 'Y', '-', '-', '-', '-', 'R', 'G', 'R', 'C', 'S', 'G',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 96.11)
         self.assertAlmostEqual(alignment.annotations["E-value"], 2.5e-05)
@@ -2094,6 +2118,7 @@ np.array([['E', 'Q', 'C', 'G', 'A', 'Q', 'A', 'G', 'G', 'A', 'R', 'C', 'P',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 95.96)
         self.assertAlmostEqual(alignment.annotations["E-value"], 3.8e-05)
@@ -2167,6 +2192,7 @@ np.array([['E', 'Q', 'C', 'G', 'A', 'Q', 'A', 'G', 'G', 'A', 'R', 'C', 'P',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 85.64)
         self.assertAlmostEqual(alignment.annotations["E-value"], 0.043)
@@ -2233,6 +2259,7 @@ np.array([['D', 'H', 'C', 'C', 'S', 'E', 'W', 'G', 'W', 'C', 'G', 'R', 'E',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 80.97)
         self.assertAlmostEqual(alignment.annotations["E-value"], 0.11)
@@ -2336,6 +2363,7 @@ np.array([['X', 'C', 'X', 'X', 'X', 'X', 'C', 'C', 'X', 'X', 'X', 'X', 'X',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 80.29)
         self.assertAlmostEqual(alignment.annotations["E-value"], 0.11)
@@ -2410,6 +2438,7 @@ np.array([['R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P', 'D', 'A', 'N', 'P',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 80.27)
         self.assertAlmostEqual(alignment.annotations["E-value"], 0.11)
@@ -2477,6 +2506,7 @@ np.array([['V', 'D', 'H', 'C', 'C', 'S', 'E', 'W', 'G', 'W', 'C', 'G', 'R',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 79.58)
         self.assertAlmostEqual(alignment.annotations["E-value"], 0.12)
@@ -2551,6 +2581,7 @@ np.array([['G', 'R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P', 'D', 'A', 'N',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 40.43)
         self.assertAlmostEqual(alignment.annotations["E-value"], 2.6)
@@ -2643,6 +2674,7 @@ np.array([['X', 'C', 'X', 'X', 'X', 'X', 'C', 'C', 'X', 'X', 'X', 'X', 'X',
                 # fmt: on
             )
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -2777,6 +2809,7 @@ np.array([['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.95)
         self.assertAlmostEqual(alignment.annotations["E-value"], 2.8e-33, places=34)
@@ -2886,6 +2919,7 @@ np.array([['G', 'X', 'G', 'C', 'X', 'G', 'X', 'X', 'M', 'Y', 'C', 'S', 'T',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.84)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.1e-25, places=26)
@@ -2988,6 +3022,7 @@ np.array([['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.84)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.5e-25, places=26)
@@ -3090,6 +3125,7 @@ np.array([['P', 'V', 'C', 'G', 'V', 'R', 'A', 'S', 'G', 'R', 'V', 'C', 'P',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.82)
         self.assertAlmostEqual(alignment.annotations["E-value"], 6.5e-25, places=26)
@@ -3192,6 +3228,7 @@ np.array([['P', 'V', 'C', 'G', 'V', 'R', 'A', 'S', 'G', 'R', 'V', 'C', 'P',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.78)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.7e-23, places=24)
@@ -3294,6 +3331,7 @@ np.array([['G', 'X', 'G', 'C', 'X', 'G', 'X', 'X', 'M', 'Y', 'C', 'S', 'T',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.54)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.1e-18, places=19)
@@ -3386,6 +3424,7 @@ np.array([['P', 'E', 'C', 'G', 'E', 'R', 'A', 'S', 'G', 'K', 'R', 'C', 'P',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.54)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.2e-18, places=19)
@@ -3478,6 +3517,7 @@ np.array([['R', 'C', 'G', 'S', 'Q', 'G', 'G', 'G', 'S', 'T', 'C', 'P', 'G',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.41)
         self.assertAlmostEqual(alignment.annotations["E-value"], 5.1e-17, places=18)
@@ -3570,6 +3610,7 @@ np.array([['E', 'R', 'C', 'G', 'S', 'Q', 'G', 'G', 'G', 'S', 'T', 'C', 'P',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.38)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1e-16, places=17)
@@ -3662,6 +3703,7 @@ np.array([['E', 'C', 'G', 'E', 'R', 'A', 'S', 'G', 'K', 'R', 'C', 'P', 'N',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 98.20)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.6e-09, places=10)
@@ -3736,6 +3778,7 @@ np.array([['M', 'E', 'Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'A', 'L', 'C',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 98.12)
         self.assertAlmostEqual(alignment.annotations["E-value"], 3.1e-09, places=10)
@@ -3809,6 +3852,7 @@ np.array([['Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'D',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 98.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 8e-09, places=10)
@@ -3883,6 +3927,7 @@ np.array([['Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'A', 'L', 'C', 'P', 'G',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.97)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1e-08, places=9)
@@ -3956,6 +4001,7 @@ np.array([['R', 'C', 'G', 'D', 'Q', 'A', 'R', 'G', 'A', 'K', 'C', 'P', 'N',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.88)
         self.assertAlmostEqual(alignment.annotations["E-value"], 2e-08, places=9)
@@ -4029,6 +4075,7 @@ np.array([['E', 'T', 'C', 'A', '-', 'S', 'R', 'C', 'P', 'R', 'P', 'C', 'N',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.83)
         self.assertAlmostEqual(alignment.annotations["E-value"], 2.8e-08, places=9)
@@ -4097,6 +4144,7 @@ np.array([['E', 'C', 'V', 'R', 'G', 'R', 'C', 'P', 'S', 'G', 'M', 'C', 'C',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.83)
         self.assertAlmostEqual(alignment.annotations["E-value"], 2.9e-08, places=9)
@@ -4170,6 +4218,7 @@ np.array([['T', 'C', 'A', '-', 'S', 'R', 'C', 'P', 'R', 'P', 'C', 'N', 'A',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.76)
         self.assertAlmostEqual(alignment.annotations["E-value"], 4.7e-08, places=9)
@@ -4244,6 +4293,7 @@ np.array([['E', 'Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.58)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.5e-07, places=8)
@@ -4317,6 +4367,7 @@ np.array([['Q', 'R', 'C', 'G', 'D', 'Q', 'A', 'R', 'G', 'A', 'K', 'C', 'P',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.58)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.6e-07, places=8)
@@ -4384,6 +4435,7 @@ np.array([['C', 'Y', 'R', 'G', 'R', 'C', 'S', 'G', 'G', 'L', 'C', 'C', 'S',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.56)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.7e-07, places=8)
@@ -4456,6 +4508,7 @@ np.array([['G', 'P', 'N', 'G', 'Q', 'C', 'G', 'P', 'G', 'W', 'G', '-', '-',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.24)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.1e-06)
@@ -4529,6 +4582,7 @@ np.array([['Q', 'C', 'G', 'A', 'Q', 'A', 'G', 'G', 'A', 'R', 'C', 'P', 'N',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.14)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.9e-06)
@@ -4597,6 +4651,7 @@ np.array([['E', 'C', 'V', 'R', 'G', 'R', 'C', 'P', 'S', 'G', 'M', 'C', 'C',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 97.02)
         self.assertAlmostEqual(alignment.annotations["E-value"], 3.5e-06)
@@ -4665,6 +4720,7 @@ np.array([['Q', 'C', 'Y', '-', '-', '-', '-', 'R', 'G', 'R', 'C', 'S', 'G',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 96.79)
         self.assertAlmostEqual(alignment.annotations["E-value"], 9.9e-06)
@@ -4738,6 +4794,7 @@ np.array([['E', 'Q', 'C', 'G', 'A', 'Q', 'A', 'G', 'G', 'A', 'R', 'C', 'P',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 96.68)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.6e-05)
@@ -4808,6 +4865,7 @@ np.array([['N', 'G', 'Q', 'C', 'G', 'P', 'G', 'W', 'G', '-', '-', 'G', 'C',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 92.12)
         self.assertAlmostEqual(alignment.annotations["E-value"], 0.024)
@@ -4912,6 +4970,7 @@ np.array([['X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C', 'C', 'X', 'X', 'X',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 88.54)
         self.assertAlmostEqual(alignment.annotations["E-value"], 0.1)
@@ -4986,6 +5045,7 @@ np.array([['R', 'S', 'D', 'G', 'R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 88.13)
         self.assertAlmostEqual(alignment.annotations["E-value"], 0.12)
@@ -5060,6 +5120,7 @@ np.array([['D', 'G', 'R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P', 'D', 'A',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 85.66)
         self.assertAlmostEqual(alignment.annotations["E-value"], 0.21)
@@ -5134,6 +5195,7 @@ np.array([['R', 'S', 'D', 'G', 'R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 85.31)
         self.assertAlmostEqual(alignment.annotations["E-value"], 0.23)
@@ -5208,6 +5270,7 @@ np.array([['G', 'R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P', 'D', 'A', 'N',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 72.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.3)
@@ -5306,6 +5369,7 @@ np.array([['X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C', 'C', 'X', 'X', 'X',
                 # fmt: on
             )
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -5386,6 +5450,7 @@ Only X am        38 X 39
                 np.array(alignment, "U"), np.array([["T"], ["X"]], dtype="U")
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 0.04)
         self.assertAlmostEqual(alignment.annotations["E-value"], 3.4e04)
@@ -5442,6 +5507,7 @@ Only X am         3 X  4
                 np.array(alignment, "U"), np.array([["G"], ["X"]], dtype="U")
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 0.04)
         self.assertAlmostEqual(alignment.annotations["E-value"], 3.4e04)
@@ -5498,6 +5564,7 @@ Only X am         3 X 4
                 np.array(alignment, "U"), np.array([["S"], ["X"]], dtype="U")
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 0.04)
         self.assertAlmostEqual(alignment.annotations["E-value"], 3.4e04)
@@ -5554,6 +5621,7 @@ Only X am         3 X  4
                 np.array(alignment, "U"), np.array([["G"], ["X"]], dtype="U")
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 0.04)
         self.assertAlmostEqual(alignment.annotations["E-value"], 3.5e04)
@@ -5610,6 +5678,7 @@ Only X am         3 X 4
                 np.array(alignment, "U"), np.array([["T"], ["X"]], dtype="U")
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 0.04)
         self.assertAlmostEqual(alignment.annotations["E-value"], 3.5e04)
@@ -5666,6 +5735,7 @@ Only X am        37 X 38
                 np.array(alignment, "U"), np.array([["E"], ["X"]], dtype="U")
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 0.04)
         self.assertAlmostEqual(alignment.annotations["E-value"], 3.5e04)
@@ -5722,6 +5792,7 @@ Only X am         1 X 2
                 np.array(alignment, "U"), np.array([["M"], ["X"]], dtype="U")
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 0.03)
         self.assertAlmostEqual(alignment.annotations["E-value"], 3.6e04)
@@ -5776,6 +5847,7 @@ Only X am        35 X 36
                 np.array(alignment, "U"), np.array([["D"], ["X"]], dtype="U")
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 0.03)
         self.assertAlmostEqual(alignment.annotations["E-value"], 3.6e04)
@@ -5832,6 +5904,7 @@ Only X am        35 X 36
                 np.array(alignment, "U"), np.array([["N"], ["X"]], dtype="U")
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 0.03)
         self.assertAlmostEqual(alignment.annotations["E-value"], 3.6e04)
@@ -5888,6 +5961,7 @@ Only X am         3 X 4
                 np.array(alignment, "U"), np.array([["D"], ["X"]], dtype="U")
             )
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -6031,6 +6105,7 @@ np.array([['G', 'S', 'E', 'F', 'M', 'S', 'V', 'A', 'V', 'E', 'T', 'F', 'G',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.88)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.8e-27, places=28)
@@ -6148,6 +6223,7 @@ np.array([['M', 'A', 'N', 'S', 'G', 'L', 'Q', 'L', 'L', 'G', 'Y', 'F', 'L',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.84)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.2e-25, places=26)
@@ -6267,6 +6343,7 @@ np.array([['K', 'G', 'M', 'A', 'S', 'M', 'G', 'L', 'Q', 'V', 'M', 'G', 'I',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.82)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.1e-24, places=25)
@@ -6389,6 +6466,7 @@ np.array([['M', 'G', 'L', 'F', 'D', 'R', 'G', 'V', 'Q', 'M', 'L', 'L', 'T',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.81)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.2e-24, places=25)
@@ -6512,6 +6590,7 @@ np.array([['M', 'S', 'P', 'T', 'E', 'A', 'P', 'K', 'V', 'R', 'V', 'T', 'L',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.79)
         self.assertAlmostEqual(alignment.annotations["E-value"], 5.7e-24, places=25)
@@ -6631,6 +6710,7 @@ np.array([['N', 'S', 'R', 'A', 'V', 'G', 'V', 'M', 'W', 'G', 'T', 'L', 'T',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.53)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.8e-18, places=19)
@@ -6753,6 +6833,7 @@ np.array([['G', 'L', 'F', 'D', 'R', 'G', 'V', 'Q', 'M', 'L', 'L', 'T', 'T',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 52.07)
         self.assertAlmostEqual(alignment.annotations["E-value"], 6.7)
@@ -6824,6 +6905,7 @@ np.array([['R', 'T', 'S', 'V', 'V', 'V', 'S', 'T', 'L', 'L', 'G', 'L', 'V',
                 # fmt: on
             )
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -6971,6 +7053,7 @@ np.array([['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 2.9e-45, places=46)
@@ -7094,6 +7177,7 @@ np.array([['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 4.4e-43, places=44)
@@ -7217,6 +7301,7 @@ np.array([['G', 'P', 'E', 'S', 'I', 'W', 'L', 'W', 'I', 'G', 'T', 'I', 'G',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1e-42, places=43)
@@ -7340,6 +7425,7 @@ np.array([['G', 'R', 'P', 'E', 'T', 'L', 'W', 'L', 'G', 'I', 'G', 'T', 'L',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.3e-42, places=43)
@@ -7463,6 +7549,7 @@ np.array([['E', 'G', 'E', 'A', 'I', 'W', 'L', 'W', 'L', 'G', 'T', 'A', 'G',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 2.2e-42, places=43)
@@ -7586,6 +7673,7 @@ np.array([['E', 'G', 'E', 'G', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'I', 'G',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 4.4e-42, places=43)
@@ -7709,6 +7797,7 @@ np.array([['V', 'G', 'L', 'T', 'T', 'L', 'F', 'W', 'L', 'G', 'A', 'I', 'G',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 4.6e-42, places=43)
@@ -7832,6 +7921,7 @@ np.array([['T', 'E', 'T', 'G', 'M', 'I', 'A', 'Q', 'W', 'I', 'V', 'F', 'A',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.8e-41, places=42)
@@ -7950,6 +8040,7 @@ np.array([['L', 'T', 'T', 'L', 'F', 'W', 'L', 'G', 'A', 'I', 'G', 'M', 'L',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 5e-41, places=42)
@@ -8072,6 +8163,7 @@ np.array([['A', 'Q', 'W', 'V', 'V', 'F', 'A', 'V', 'M', 'A', 'L', 'A', 'A',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.2e-40, places=41)
@@ -8195,6 +8287,7 @@ np.array([['N', 'L', 'E', 'S', 'L', 'L', 'H', 'W', 'I', 'Y', 'V', 'A', 'G',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.4e-40, places=41)
@@ -8320,6 +8413,7 @@ np.array([['S', 'L', 'Y', 'I', 'N', 'I', 'A', 'L', 'A', 'G', 'L', 'S', 'I',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 2.2e-40, places=41)
@@ -8443,6 +8537,7 @@ np.array([['S', 'L', 'W', 'V', 'N', 'V', 'A', 'L', 'A', 'G', 'I', 'A', 'I',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 2.6e-40, places=41)
@@ -8564,6 +8659,7 @@ np.array([['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 4.7e-39, places=40)
@@ -8696,6 +8792,7 @@ np.array([['Y', 'Q', 'F', 'T', 'S', 'H', 'I', 'L', 'T', 'L', 'G', 'Y', 'A',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.3e-38, places=39)
@@ -8822,6 +8919,7 @@ np.array([['K', 'I', 'G', 'A', 'Q', 'V', 'C', 'Q', 'W', 'I', 'A', 'F', 'S',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 3.1e-38, places=39)
@@ -8947,6 +9045,7 @@ np.array([['I', 'S', 'F', 'W', 'L', 'A', 'A', 'A', 'I', 'M', 'L', 'A', 'S',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 3.9e-38, places=39)
@@ -9072,6 +9171,7 @@ np.array([['L', 'L', 'T', 'M', 'G', 'V', 'G', 'V', 'H', 'F', 'A', 'A', 'L',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 4e-38, places=38)
@@ -9196,6 +9296,7 @@ np.array([['V', 'L', 'A', 'T', 'Q', 'Y', 'M', 'F', 'W', 'V', 'G', 'F', 'V',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 4.4e-38, places=39)
@@ -9321,6 +9422,7 @@ np.array([['S', 'D', 'T', 'V', 'G', 'V', 'S', 'F', 'W', 'L', 'V', 'T', 'A',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 6.6e-38, places=39)
@@ -9446,6 +9548,7 @@ np.array([['L', 'S', 'L', 'T', 'I', 'A', 'G', 'M', 'L', 'A', 'A', 'F', 'V',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 7e-38, places=38)
@@ -9573,6 +9676,7 @@ np.array([['M', 'F', 'S', 'F', 'T', 'V', 'A', 'T', 'M', 'T', 'A', 'S', 'F',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 6.1e-37, places=38)
@@ -9698,6 +9802,7 @@ np.array([['N', 'I', 'L', 'Q', 'W', 'I', 'T', 'F', 'A', 'L', 'S', 'A', 'L',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1e-36, places=37)
@@ -9823,6 +9928,7 @@ np.array([['R', 'L', 'F', 'M', 'V', 'A', 'T', 'V', 'G', 'M', 'L', 'A', 'G',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 2.7e-36, places=37)
@@ -9949,6 +10055,7 @@ np.array([['D', 'G', 'I', 'K', 'Y', 'V', 'Q', 'L', '-', '-', '-', 'V', 'M',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
         self.assertAlmostEqual(alignment.annotations["E-value"], 5.8e-36, places=37)
@@ -10076,6 +10183,7 @@ np.array([['G', 'G', 'F', 'G', 'S', 'Q', 'P', 'F', 'I', 'L', 'A', 'Y', 'I',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 99.28)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.4e-15, places=16)
@@ -10167,6 +10275,7 @@ np.array([['R', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V', 'L', 'R', 'N',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 98.44)
         self.assertAlmostEqual(alignment.annotations["E-value"], 2e-10, places=10)
@@ -10258,6 +10367,7 @@ np.array([['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 96.55)
         self.assertAlmostEqual(alignment.annotations["E-value"], 3.3e-05)
@@ -10340,6 +10450,7 @@ np.array([['F', 'W', 'L', 'V', 'T', 'A', 'A', 'L', 'L', 'A', 'S', 'T', 'V',
                 # fmt: on
             )
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -10528,6 +10639,7 @@ np.array([['G', 'M', 'H', 'F', 'S', 'Q', 'S', 'V', 'A', 'I', 'I', 'Q', 'S',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 71.77)
         self.assertAlmostEqual(alignment.annotations["E-value"], 67)
@@ -10646,6 +10758,7 @@ np.array([['I', 'K', 'V', 'T', 'T', 'D', 'Q', 'N', 'H', 'F', 'S', 'G', 'G',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 70.25)
         self.assertAlmostEqual(alignment.annotations["E-value"], 4.9)
@@ -10712,6 +10825,7 @@ np.array([['L', 'Q', 'I', 'G', 'M', 'S', 'E', 'S', 'Q', 'V', 'T', 'Y', 'L',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 68.06)
         self.assertAlmostEqual(alignment.annotations["E-value"], 5.9)
@@ -10782,6 +10896,7 @@ np.array([['I', 'R', 'V', 'G', 'M', 'T', 'Q', 'Q', 'Q', 'V', 'A', 'Y', 'A',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 58.72)
         self.assertAlmostEqual(alignment.annotations["E-value"], 13)
@@ -10848,6 +10963,7 @@ np.array([['L', 'S', 'L', 'G', 'M', 'T', 'R', 'D', 'Q', 'V', 'M', 'T', 'L',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 58.46)
         self.assertAlmostEqual(alignment.annotations["E-value"], 11)
@@ -10918,6 +11034,7 @@ np.array([['L', 'R', 'P', 'G', 'M', 'T', 'K', 'D', 'Q', 'V', 'L', 'L', 'L',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 57.72)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.6e02)
@@ -11029,6 +11146,7 @@ np.array([['I', 'Q', 'F', 'G', 'M', 'D', 'R', 'T', 'L', 'V', 'W', 'Q', 'L',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 57.07)
         self.assertAlmostEqual(alignment.annotations["E-value"], 24)
@@ -11119,6 +11237,7 @@ np.array([['F', 'H', 'I', 'G', 'Q', 'P', 'V', 'S', 'E', 'I', 'Y', 'S', 'S',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 56.37)
         self.assertAlmostEqual(alignment.annotations["E-value"], 14)
@@ -11189,6 +11308,7 @@ np.array([['I', 'R', 'V', 'G', 'M', 'T', 'Q', 'Q', 'Q', 'V', 'A', 'Y', 'A',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 56.24)
         self.assertAlmostEqual(alignment.annotations["E-value"], 30)
@@ -11279,6 +11399,7 @@ np.array([['I', 'G', 'K', 'N', 'A', 'S', 'D', 'L', 'Q', 'V', 'L', 'L', 'G',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 56.21)
         self.assertAlmostEqual(alignment.annotations["E-value"], 14)
@@ -11349,6 +11470,7 @@ np.array([['V', 'E', 'K', 'G', 'M', 'S', 'Q', 'Q', 'E', 'V', 'L', 'R', 'I',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 56.09)
         self.assertAlmostEqual(alignment.annotations["E-value"], 77)
@@ -11440,6 +11562,7 @@ np.array([['P', '-', '-', '-', '-', '-', 'F', 'H', 'I', 'G', 'Q', 'P', 'V',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 53.82)
         self.assertAlmostEqual(alignment.annotations["E-value"], 2.4e02)
@@ -11554,6 +11677,7 @@ np.array([['G', 'K', 'V', 'F', 'N', 'S', '-', '-', '-', 'D', 'F', 'P', 'A',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 52.88)
         self.assertAlmostEqual(alignment.annotations["E-value"], 16)
@@ -11620,6 +11744,7 @@ np.array([['I', 'Q', 'F', 'G', 'M', 'D', 'R', 'T', 'L', 'V', 'W', 'Q', 'L',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 50.88)
         self.assertAlmostEqual(alignment.annotations["E-value"], 27)
@@ -11688,6 +11813,7 @@ np.array([['T', 'Q', 'T', 'G', 'D', 'T', 'K', 'A', 'E', 'V', 'I', 'A', 'K',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 49.44)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.1e02)
@@ -11797,6 +11923,7 @@ np.array([['K', 'I', 'K', 'V', 'T', 'T', 'D', 'Q', 'N', 'H', '-', '-', '-',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 48.69)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.6e02)
@@ -11886,6 +12013,7 @@ np.array([['L', 'T', 'P', 'D', 'K', 'A', 'V', 'E', 'Y', 'L', 'K', 'D', 'N',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 43.68)
         self.assertAlmostEqual(alignment.annotations["E-value"], 24)
@@ -11956,6 +12084,7 @@ np.array([['L', 'Q', 'V', 'G', 'Q', 'S', 'K', 'Q', 'Q', 'V', 'S', 'A', 'L',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 42.97)
         self.assertAlmostEqual(alignment.annotations["E-value"], 29)
@@ -12026,6 +12155,7 @@ np.array([['I', 'Q', 'F', 'G', 'M', 'D', 'R', 'T', 'L', 'V', 'W', 'Q', 'L',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 41.38)
         self.assertAlmostEqual(alignment.annotations["E-value"], 33)
@@ -12096,6 +12226,7 @@ np.array([['I', 'R', 'V', 'G', 'M', 'T', 'Q', 'Q', 'Q', 'V', 'A', 'Y', 'A',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 39.07)
         self.assertAlmostEqual(alignment.annotations["E-value"], 83)
@@ -12192,6 +12323,7 @@ np.array([['I', 'K', 'V', 'T', 'T', 'D', 'Q', 'N', 'H', 'F', 'S', 'G', 'G',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 36.91)
         self.assertAlmostEqual(alignment.annotations["E-value"], 3e02)
@@ -12304,6 +12436,7 @@ np.array([['I', 'K', 'V', 'T', 'T', 'D', 'Q', 'N', 'H', 'F', 'S', 'G', 'G',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 36.62)
         self.assertAlmostEqual(alignment.annotations["E-value"], 88)
@@ -12372,6 +12505,7 @@ np.array([['V', 'F', 'K', 'F', 'D', 'G', 'K', 'V', 'L', 'D', 'D', 'P', 'N',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 36.36)
         self.assertAlmostEqual(alignment.annotations["E-value"], 43)
@@ -12442,6 +12576,7 @@ np.array([['I', 'Q', 'F', 'G', 'M', 'T', 'R', 'Q', 'Q', 'V', 'L', 'D', 'I',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 34.69)
         self.assertAlmostEqual(alignment.annotations["E-value"], 44)
@@ -12512,6 +12647,7 @@ np.array([['T', 'Q', 'T', 'G', 'M', 'T', 'E', 'A', 'Q', 'F', 'W', 'A', 'A',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 34.59)
         self.assertAlmostEqual(alignment.annotations["E-value"], 71)
@@ -12602,6 +12738,7 @@ np.array([['F', 'P', 'A', 'K', 'D', 'T', 'N', 'I', 'D', 'S', 'V', 'E', 'S',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 34.21)
         self.assertAlmostEqual(alignment.annotations["E-value"], 54)
@@ -12668,6 +12805,7 @@ np.array([['L', 'K', 'I', 'G', 'E', 'S', 'Y', 'K', 'K', 'V', 'V', 'E', 'K',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 30.93)
         self.assertAlmostEqual(alignment.annotations["E-value"], 61)
@@ -12738,6 +12876,7 @@ np.array([['T', 'W', 'V', 'G', 'K', 'D', 'I', 'K', 'V', 'L', 'T', 'S', 'K',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 30.07)
         self.assertAlmostEqual(alignment.annotations["E-value"], 3.4e02)
@@ -12827,6 +12966,7 @@ np.array([['G', 'W', 'E', 'H', 'V', 'E', 'L', 'V', 'L', 'P', 'V', 'A', 'P',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 29.78)
         self.assertAlmostEqual(alignment.annotations["E-value"], 6.8e02)
@@ -12949,6 +13089,7 @@ np.array([['I', 'P', 'G', 'E', 'G', 'T', 'G', '-', '-', '-', '-', '-', 'I',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 26.30)
         self.assertAlmostEqual(alignment.annotations["E-value"], 89)
@@ -13019,6 +13160,7 @@ np.array([['L', 'K', 'I', 'G', 'E', 'S', 'Y', 'K', 'K', 'I', 'V', 'E', 'K',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 24.37)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.1e02)
@@ -13089,6 +13231,7 @@ np.array([['V', 'T', 'V', 'G', 'M', 'T', 'R', 'A', 'Q', 'V', 'L', 'A', 'T',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 23.84)
         self.assertAlmostEqual(alignment.annotations["E-value"], 89)
@@ -13155,6 +13298,7 @@ np.array([['T', 'Q', 'T', 'G', 'M', 'T', 'E', 'A', 'Q', 'F', 'W', 'A', 'A',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 21.56)
         self.assertAlmostEqual(alignment.annotations["E-value"], 3.9e02)
@@ -13249,6 +13393,7 @@ np.array([['I', 'Q', 'F', 'G', 'M', 'D', 'R', 'T', 'L', 'V', 'W', 'Q', 'L',
                 # fmt: on
             )
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -13433,6 +13578,7 @@ np.array([['E', 'Q', 'W', 'E', '-', '-', '-', '-', 'F', 'A', 'L', 'G', 'M',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 71.64)
         self.assertAlmostEqual(alignment.annotations["E-value"], 0.97)
@@ -13499,6 +13645,7 @@ np.array([['L', 'Q', 'I', 'G', 'M', 'S', 'E', 'S', 'Q', 'V', 'T', 'Y', 'L',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 53.47)
         self.assertAlmostEqual(alignment.annotations["E-value"], 4.1)
@@ -13565,6 +13712,7 @@ np.array([['L', 'S', 'L', 'G', 'M', 'T', 'R', 'D', 'Q', 'V', 'M', 'T', 'L',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 52.40)
         self.assertAlmostEqual(alignment.annotations["E-value"], 7.5)
@@ -13656,6 +13804,7 @@ np.array([['F', 'P', 'A', 'K', 'D', 'T', 'N', 'I', 'D', 'S', 'V', 'E', 'S',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 48.79)
         self.assertAlmostEqual(alignment.annotations["E-value"], 5.3)
@@ -13724,6 +13873,7 @@ np.array([['A', 'S', 'A', 'L', 'R', 'C', 'D', 'N', 'K', 'I', 'V', 'S', 'E',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 41.13)
         self.assertAlmostEqual(alignment.annotations["E-value"], 9.7)
@@ -13790,6 +13940,7 @@ np.array([['I', 'G', 'K', 'N', 'A', 'S', 'D', 'L', 'Q', 'V', 'L', 'L', 'G',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 41.12)
         self.assertAlmostEqual(alignment.annotations["E-value"], 17)
@@ -13882,6 +14033,7 @@ np.array([['F', 'H', 'I', 'G', 'Q', 'P', 'V', 'S', 'E', 'I', 'Y', 'S', 'S',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 36.58)
         self.assertAlmostEqual(alignment.annotations["E-value"], 21)
@@ -13950,6 +14102,7 @@ np.array([['V', 'F', 'K', 'F', 'D', 'G', 'K', 'V', 'L', 'D', 'D', 'P', 'N',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 35.95)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.3e02)
@@ -14068,6 +14221,7 @@ np.array([['G', 'K', 'V', 'F', 'N', 'S', '-', '-', '-', 'D', 'F', 'P', 'A',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 33.21)
         self.assertAlmostEqual(alignment.annotations["E-value"], 69)
@@ -14157,6 +14311,7 @@ np.array([['G', 'W', 'E', 'H', 'V', 'E', 'L', 'V', 'L', 'P', 'V', 'A', 'P',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 30.70)
         self.assertAlmostEqual(alignment.annotations["E-value"], 18)
@@ -14223,6 +14378,7 @@ np.array([['L', 'K', 'I', 'G', 'E', 'S', 'Y', 'K', 'K', 'V', 'V', 'E', 'K',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 29.70)
         self.assertAlmostEqual(alignment.annotations["E-value"], 83)
@@ -14314,6 +14470,7 @@ np.array([['P', '-', '-', '-', '-', '-', 'F', 'H', 'I', 'G', 'Q', 'P', 'V',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 28.54)
         self.assertAlmostEqual(alignment.annotations["E-value"], 1.2e02)
@@ -14403,6 +14560,7 @@ np.array([['L', 'T', 'P', 'D', 'K', 'A', 'V', 'E', 'Y', 'L', 'K', 'D', 'N',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 26.31)
         self.assertAlmostEqual(alignment.annotations["E-value"], 22)
@@ -14469,6 +14627,7 @@ np.array([['I', 'Q', 'F', 'G', 'M', 'T', 'F', 'D', 'E', 'V', 'W', 'E', 'I',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 25.89)
         self.assertAlmostEqual(alignment.annotations["E-value"], 32)
@@ -14537,6 +14696,7 @@ np.array([['I', 'K', 'V', 'T', 'T', 'D', 'Q', 'N', 'H', 'F', 'S', 'G', 'G',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.annotations["Probab"], 20.88)
         self.assertAlmostEqual(alignment.annotations["E-value"], 78)
@@ -14604,6 +14764,7 @@ np.array([['A', 'P', 'N', 'V', 'I', 'F', 'D', 'Y', 'D', 'A', '-', 'E', 'G',
                 # fmt: on
             )
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -14778,6 +14939,7 @@ query           444 FKPAA 449
                 ),
             )
         )
+        # ADD TEST
 
 
 if __name__ == "__main__":

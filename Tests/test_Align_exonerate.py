@@ -76,6 +76,7 @@ class Exonerate_est2genome(unittest.TestCase):
 cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 1319275 1318045 - 6150 M 1230
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -111,6 +112,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 
 cigar: gi|296143771|ref|NM_001180731.1| 0 346 + gi|330443688|ref|NC_001145.3| 85010 473201 + 439 M 11 I 1 M 15 I 2 M 4 I 1 M 1 I 1 M 8 I 4 M 17 D 168908 M 4 D 1 M 8 I 1 M 3 I 2 M 33 D 1 M 7 D 2 M 102 D 96824 M 14 D 2 M 10 I 2 M 5 D 2 M 10 I 2 M 4 D 1 M 20 I 1 M 15 D 1 M 5 I 3 M 4 D 122118 M 20 D 5 M 6
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -148,6 +150,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 346 + gi|330443688|ref|NC_001145.3| 85
 cigar: gi|296143771|ref|NM_001180731.1| 25 406 + gi|330443688|ref|NC_001145.3| 130198 11338 - 263 M 14 D 1 M 4 I 2 M 25 D 1 M 9 D 6 M 42 I 2 M 16 D 2 M 7 D 1 M 3 I 2 M 23 I 3 M 6 D 9357 M 1 I 1 M 11 D 1 M 12 I 1 M 9 D 1 M 10 I 1 M 18 D 1 M 5 D 109125 M 16 I 4 M 4 I 1 M 11 I 5 M 8 I 1 M 22 D 2 M 4 D 2 M 34 D 1 M 3 D 1 M 41
 """,
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -197,6 +200,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 25 406 + gi|330443688|ref|NC_001145.3| 1
 vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 1319275 1318045 - 6150 M 1230 1230
 """,
             )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -239,6 +243,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10|
 vulgar: gi|296143771|ref|NM_001180731.1| 0 346 + gi|330443688|ref|NC_001145.3| 85010 473201 + 439 M 11 11 G 1 0 M 15 15 G 2 0 M 4 4 G 1 0 M 1 1 G 1 0 M 8 8 G 4 0 M 17 17 5 0 2 I 0 168904 3 0 2 M 4 4 G 0 1 M 8 8 G 1 0 M 3 3 G 2 0 M 33 33 G 0 1 M 7 7 G 0 2 M 102 102 5 0 2 I 0 96820 3 0 2 M 14 14 G 0 2 M 10 10 G 2 0 M 5 5 G 0 2 M 10 10 G 2 0 M 4 4 G 0 1 M 20 20 G 1 0 M 15 15 G 0 1 M 5 5 G 3 0 M 4 4 5 0 2 I 0 122114 3 0 2 M 20 20 G 0 5 M 6 6
 """,
             )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -283,6 +288,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 346 + gi|330443688|ref|NC_001145.3| 8
 vulgar: gi|296143771|ref|NM_001180731.1| 25 406 + gi|330443688|ref|NC_001145.3| 130198 11338 - 263 M 14 14 G 0 1 M 4 4 G 2 0 M 25 25 G 0 1 M 9 9 G 0 6 M 42 42 G 2 0 M 16 16 G 0 2 M 7 7 G 0 1 M 3 3 G 2 0 M 23 23 G 3 0 M 6 6 3 0 2 I 0 9353 5 0 2 M 1 1 G 1 0 M 11 11 G 0 1 M 12 12 G 1 0 M 9 9 G 0 1 M 10 10 G 1 0 M 18 18 G 0 1 M 5 5 3 0 2 I 0 109121 5 0 2 M 16 16 G 4 0 M 4 4 G 1 0 M 11 11 G 5 0 M 8 8 G 1 0 M 22 22 G 0 2 M 4 4 G 0 2 M 34 34 G 0 1 M 3 3 G 0 1 M 41 41
 """,
             )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -330,6 +336,7 @@ class Exonerate_affine_local(unittest.TestCase):
 cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 1319275 1318045 - 6150 M 1230
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -369,6 +376,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 
 cigar: gi|296143771|ref|NM_001180731.1| 83 552 + gi|330443688|ref|NC_001145.3| 253990 254474 + 359 M 34 D 1 M 6 D 2 M 101 D 2 M 6 I 2 M 3 I 1 M 12 D 1 M 9 I 1 M 26 D 1 M 34 D 5 M 13 D 2 M 7 D 1 M 10 D 1 M 14 D 3 M 9 D 1 M 20 D 2 M 2 D 1 M 7 D 1 M 2 D 1 M 6 D 1 M 3 I 1 M 2 I 3 M 10 D 1 M 2 D 3 M 9 I 2 M 9 I 3 M 7 D 1 M 6 I 2 M 8 D 1 M 32 I 2 M 9 I 2 M 9 D 2 M 23
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443715|ref|NC_001146.8|")
@@ -406,6 +414,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 83 552 + gi|330443688|ref|NC_001145.3| 2
 cigar: gi|296143771|ref|NM_001180731.1| 60 517 + gi|330443715|ref|NC_001146.8| 454073 454531 + 219 M 14 I 1 M 7 I 1 M 3 I 1 M 12 D 1 M 23 D 1 M 16 I 2 M 17 D 2 M 6 D 1 M 7 D 1 M 8 I 1 M 12 D 1 M 3 D 1 M 14 D 1 M 10 D 1 M 20 D 1 M 19 D 2 M 9 I 5 M 8 I 1 M 41 I 3 M 42 D 1 M 8 D 3 M 1 D 1 M 26 I 2 M 11 I 3 M 12 D 1 M 18 D 1 M 18 D 1 M 14 D 1 M 30 I 1 M 7
 """,
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -453,6 +462,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 60 517 + gi|330443715|ref|NC_001146.8| 4
 vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 1319275 1318045 - 6150 M 1230 1230
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -499,6 +509,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10|
 vulgar: gi|296143771|ref|NM_001180731.1| 83 552 + gi|330443688|ref|NC_001145.3| 253990 254474 + 359 M 34 34 G 0 1 M 6 6 G 0 2 M 101 101 G 0 2 M 6 6 G 2 0 M 3 3 G 1 0 M 12 12 G 0 1 M 9 9 G 1 0 M 26 26 G 0 1 M 34 34 G 0 5 M 13 13 G 0 2 M 7 7 G 0 1 M 10 10 G 0 1 M 14 14 G 0 3 M 9 9 G 0 1 M 20 20 G 0 2 M 2 2 G 0 1 M 7 7 G 0 1 M 2 2 G 0 1 M 6 6 G 0 1 M 3 3 G 1 0 M 2 2 G 3 0 M 10 10 G 0 1 M 2 2 G 0 3 M 9 9 G 2 0 M 9 9 G 3 0 M 7 7 G 0 1 M 6 6 G 2 0 M 8 8 G 0 1 M 32 32 G 2 0 M 9 9 G 2 0 M 9 9 G 0 2 M 23 23
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443715|ref|NC_001146.8|")
@@ -543,6 +554,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 83 552 + gi|330443688|ref|NC_001145.3| 
 vulgar: gi|296143771|ref|NM_001180731.1| 60 517 + gi|330443715|ref|NC_001146.8| 454073 454531 + 219 M 14 14 G 1 0 M 7 7 G 1 0 M 3 3 G 1 0 M 12 12 G 0 1 M 23 23 G 0 1 M 16 16 G 2 0 M 17 17 G 0 2 M 6 6 G 0 1 M 7 7 G 0 1 M 8 8 G 1 0 M 12 12 G 0 1 M 3 3 G 0 1 M 14 14 G 0 1 M 10 10 G 0 1 M 20 20 G 0 1 M 19 19 G 0 2 M 9 9 G 5 0 M 8 8 G 1 0 M 41 41 G 3 0 M 42 42 G 0 1 M 8 8 G 0 3 M 1 1 G 0 1 M 26 26 G 2 0 M 11 11 G 3 0 M 12 12 G 0 1 M 18 18 G 0 1 M 18 18 G 0 1 M 14 14 G 0 1 M 30 30 G 1 0 M 7 7
 """,
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -596,6 +608,7 @@ class Exonerate_cdna2genome(unittest.TestCase):
 cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 1319275 1318045 - 6146 M 1 M 3 M 1226
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -617,6 +630,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 
 cigar: gi|296143771|ref|NM_001180731.1| 1230 0 - gi|330443520|ref|NC_001136.10| 1318045 1319275 + 6146 M 129 M 3 M 1098
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -658,6 +672,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 1230 0 - gi|330443520|ref|NC_001136.10| 
 cigar: gi|296143771|ref|NM_001180731.1| 0 516 + gi|330443688|ref|NC_001145.3| 85010 667216 + 518 M 11 I 1 M 15 I 2 M 4 I 1 M 1 I 1 M 8 I 4 M 17 D 168908 M 4 D 1 M 8 I 2 M 3 I 1 M 33 D 2 M 7 D 1 M 102 D 96824 M 14 D 2 M 10 I 2 M 5 D 2 M 10 I 2 M 4 D 1 M 20 I 1 M 15 D 1 M 5 I 3 M 4 D 122118 M 20 D 5 M 6 D 193839 M 12 D 2 M 5 I 1 M 7 D 2 M 1 D 1 M 12 M 75 M 6 I 1 M 4 D 1 M 2 D 1 M 3 D 1 M 41
 """,
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -711,6 +726,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 516 + gi|330443688|ref|NC_001145.3| 85
 vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 1319275 1318045 - 6146 M 1 1 C 3 3 M 1226 1226
 """,
             )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -734,6 +750,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10|
 vulgar: gi|296143771|ref|NM_001180731.1| 1230 0 - gi|330443520|ref|NC_001136.10| 1318045 1319275 + 6146 M 129 129 C 3 3 M 1098 1098
 """,
             )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -786,6 +803,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 1230 0 - gi|330443520|ref|NC_001136.10|
 vulgar: gi|296143771|ref|NM_001180731.1| 0 516 + gi|330443688|ref|NC_001145.3| 85010 667216 + 518 M 11 11 G 1 0 M 15 15 G 2 0 M 4 4 G 1 0 M 1 1 G 1 0 M 8 8 G 4 0 M 17 17 5 0 2 I 0 168904 3 0 2 M 4 4 G 0 1 M 8 8 G 2 0 M 3 3 G 1 0 M 33 33 G 0 2 M 7 7 G 0 1 M 102 102 5 0 2 I 0 96820 3 0 2 M 14 14 G 0 2 M 10 10 G 2 0 M 5 5 G 0 2 M 10 10 G 2 0 M 4 4 G 0 1 M 20 20 G 1 0 M 15 15 G 0 1 M 5 5 G 3 0 M 4 4 5 0 2 I 0 122114 3 0 2 M 20 20 G 0 5 M 6 6 5 0 2 I 0 193835 3 0 2 M 12 12 G 0 2 M 5 5 G 1 0 M 7 7 G 0 2 M 1 1 G 0 1 M 12 12 C 75 75 M 6 6 G 1 0 M 4 4 G 0 1 M 2 2 G 0 1 M 3 3 G 0 1 M 41 41
 """,
             )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -835,6 +853,7 @@ class Exonerate_coding2coding(unittest.TestCase):
 cigar: gi|296143771|ref|NM_001180731.1| 1228 1 - gi|330443520|ref|NC_001136.10| 1318047 1319274 + 2151 M 1227
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -852,6 +871,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 1228 1 - gi|330443520|ref|NC_001136.10| 
 cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 1319275 1318045 - 2106 M 1230
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -873,6 +893,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 
 cigar: gi|296143771|ref|NM_001180731.1| 1065 1224 + gi|330443688|ref|NC_001145.3| 255638 255794 + 116 M 105 I 3 M 51
 """,
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -922,6 +943,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 1065 1224 + gi|330443688|ref|NC_001145.3
 vulgar: gi|296143771|ref|NM_001180731.1| 1228 1 - gi|330443520|ref|NC_001136.10| 1318047 1319274 + 2151 C 1227 1227
 """,
             )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -941,6 +963,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 1228 1 - gi|330443520|ref|NC_001136.10|
 vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 1319275 1318045 - 2106 C 1230 1230
 """,
             )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -964,6 +987,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10|
 vulgar: gi|296143771|ref|NM_001180731.1| 1065 1224 + gi|330443688|ref|NC_001145.3| 255638 255794 + 116 C 105 105 G 3 0 C 51 51
 """,
             )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1015,6 +1039,7 @@ class Exonerate_coding2genome(unittest.TestCase):
 cigar: gi|296143771|ref|NM_001180731.1| 1228 1 - gi|330443520|ref|NC_001136.10| 1318047 1319274 + 2151 M 1227
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -1032,6 +1057,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 1228 1 - gi|330443520|ref|NC_001136.10| 
 cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 1319275 1318045 - 2106 M 1230
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -1053,6 +1079,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 
 cigar: gi|296143771|ref|NM_001180731.1| 1065 1224 + gi|330443688|ref|NC_001145.3| 255638 255794 + 116 M 105 I 3 M 51
 """,
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1104,6 +1131,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 1065 1224 + gi|330443688|ref|NC_001145.3
 vulgar: gi|296143771|ref|NM_001180731.1| 1228 1 - gi|330443520|ref|NC_001136.10| 1318047 1319274 + 2151 C 1227 1227
 """,
             )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -1123,6 +1151,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 1228 1 - gi|330443520|ref|NC_001136.10|
 vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 1319275 1318045 - 2106 C 1230 1230
 """,
             )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -1146,6 +1175,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10|
 vulgar: gi|296143771|ref|NM_001180731.1| 1065 1224 + gi|330443688|ref|NC_001145.3| 255638 255794 + 116 C 105 105 G 3 0 C 51 51
 """,
             )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1194,6 +1224,7 @@ class Exonerate_dna2protein(unittest.TestCase):
 cigar: dna 0 93 + protein 313 344 . 105 M 93
 """,
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1241,6 +1272,7 @@ cigar: dna 0 93 + protein 313 344 . 105 M 93
 vulgar: dna 0 93 + protein 313 344 . 105 M 93 31
 """,
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1294,6 +1326,7 @@ class Exonerate_genome2genome(unittest.TestCase):
 cigar: sacCer3_dna 529 0 - gi|330443520|ref|NC_001136.10| 1319997 1319468 - 2641 M 26 M 3 M 500
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sacCer3_dna")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -1317,6 +1350,7 @@ cigar: sacCer3_dna 529 0 - gi|330443520|ref|NC_001136.10| 1319997 1319468 - 2641
 cigar: sacCer3_dna 529 0 - gi|330443520|ref|NC_001136.10| 1319997 1319468 - 2641 M 26 M 3 M 500
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sacCer3_dna")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -1338,6 +1372,7 @@ cigar: sacCer3_dna 529 0 - gi|330443520|ref|NC_001136.10| 1319997 1319468 - 2641
 cigar: sacCer3_dna 0 529 + gi|330443520|ref|NC_001136.10| 1319468 1319997 + 2641 M 90 M 3 M 436
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sacCer3_dna")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -1361,6 +1396,7 @@ cigar: sacCer3_dna 0 529 + gi|330443520|ref|NC_001136.10| 1319468 1319997 + 2641
 cigar: sacCer3_dna 0 529 + gi|330443520|ref|NC_001136.10| 1319468 1319997 + 2641 M 90 M 3 M 436
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sacCer3_dna")
         self.assertEqual(alignment.target.id, "gi|330443489|ref|NC_001135.5|")
@@ -1396,6 +1432,7 @@ cigar: sacCer3_dna 0 529 + gi|330443520|ref|NC_001136.10| 1319468 1319997 + 2641
 cigar: sacCer3_dna 491 162 - gi|330443489|ref|NC_001135.5| 23668 115569 + 267 M 29 D 8983 M 32 D 2 M 2 D 1 M 15 D 9555 M 3 I 1 M 5 D 2 M 3 D 1 M 4 D 1 M 18 M 1 D 55423 M 5 M 22 I 3 M 46 D 17598 M 14 D 1 M 9 I 1 M 15 D 3 M 17 D 3 M 1 D 1 M 13 D 1 M 6 I 1 M 12 D 2 M 45 D 1 M 6
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sacCer3_dna")
         self.assertEqual(alignment.target.id, "gi|330443489|ref|NC_001135.5|")
@@ -1438,6 +1475,7 @@ cigar: sacCer3_dna 491 162 - gi|330443489|ref|NC_001135.5| 23668 115569 + 267 M 
 cigar: sacCer3_dna 491 162 - gi|330443489|ref|NC_001135.5| 23668 115569 + 267 M 29 D 2 D 8979 D 2 M 32 D 2 M 2 D 1 M 15 D 2 D 9551 D 2 M 3 I 1 M 5 D 2 M 3 D 1 M 4 D 1 M 18 D 1 I 1 D 2 D 55419 D 2 D 2 I 2 M 3 M 22 I 3 M 46 D 2 D 17594 D 2 M 14 D 1 M 9 I 1 M 15 D 3 M 17 D 3 M 1 D 1 M 13 D 1 M 6 I 1 M 12 D 2 M 45 D 1 M 6
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sacCer3_dna")
         self.assertEqual(alignment.target.id, "gi|330443667|ref|NC_001143.9|")
@@ -1483,6 +1521,7 @@ cigar: sacCer3_dna 491 162 - gi|330443489|ref|NC_001135.5| 23668 115569 + 267 M 
 cigar: sacCer3_dna 529 78 - gi|330443667|ref|NC_001143.9| 641760 71883 - 267 M 31 I 3 M 4 I 2 M 19 D 3 M 9 D 1 M 6 I 1 M 7 D 154244 I 57 D 47 M 27 I 5 M 4 I 1 M 3 I 3 M 4 I 1 M 9 D 1 M 16 D 101116 I 31 M 25 D 1 M 15 I 1 M 9 I 1 M 2 I 1 M 14 M 20 D 177446 M 13 M 2 D 1 M 24 D 136697 I 7 D 6 I 1 D 1 I 1 D 1 I 1 D 1 I 1 D 1 I 2 D 1 I 1 D 1 I 1 D 1 I 3 D 1 I 2 D 1 I 1 D 1 I 1 D 1 I 2 D 2 I 2 D 2 I 17 M 14 I 2 M 22
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sacCer3_dna")
         self.assertEqual(alignment.target.id, "gi|330443667|ref|NC_001143.9|")
@@ -1539,6 +1578,7 @@ cigar: sacCer3_dna 529 78 - gi|330443667|ref|NC_001143.9| 641760 71883 - 267 M 3
 cigar: sacCer3_dna 529 78 - gi|330443667|ref|NC_001143.9| 641760 71883 - 267 M 31 I 3 M 4 I 2 M 19 D 3 M 9 D 1 M 6 I 1 M 5 M 2 D 154244 I 57 D 47 M 2 M 25 I 5 M 4 I 1 M 3 I 3 M 4 I 1 M 9 D 1 M 14 M 2 D 101116 I 31 M 2 M 23 D 1 M 15 I 1 M 9 I 1 M 2 I 1 M 14 M 18 D 2 I 2 D 2 D 177442 D 2 D 1 I 1 M 12 M 2 D 1 M 22 M 2 D 136697 I 7 D 6 I 1 D 1 I 1 D 1 I 1 D 1 I 1 D 1 I 2 D 1 I 1 D 1 I 1 D 1 I 3 D 1 I 2 D 1 I 1 D 1 I 1 D 1 I 2 D 2 I 2 D 2 I 17 M 2 M 12 I 2 M 22
 """,
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1585,6 +1625,7 @@ cigar: sacCer3_dna 529 78 - gi|330443667|ref|NC_001143.9| 641760 71883 - 267 M 3
 vulgar: sacCer3_dna 529 0 - gi|330443520|ref|NC_001136.10| 1319997 1319468 - 2641 M 26 26 C 3 3 M 500 500
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sacCer3_dna")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -1605,6 +1646,7 @@ vulgar: sacCer3_dna 529 0 - gi|330443520|ref|NC_001136.10| 1319997 1319468 - 264
 vulgar: sacCer3_dna 0 529 + gi|330443520|ref|NC_001136.10| 1319468 1319997 + 2641 M 90 90 C 3 3 M 436 436
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sacCer3_dna")
         self.assertEqual(alignment.target.id, "gi|330443489|ref|NC_001135.5|")
@@ -1647,6 +1689,7 @@ vulgar: sacCer3_dna 0 529 + gi|330443520|ref|NC_001136.10| 1319468 1319997 + 264
 vulgar: sacCer3_dna 491 162 - gi|330443489|ref|NC_001135.5| 23668 115569 + 267 M 29 29 5 0 2 I 0 8979 3 0 2 M 32 32 G 0 2 M 2 2 G 0 1 M 15 15 5 0 2 I 0 9551 3 0 2 M 3 3 G 1 0 M 5 5 G 0 2 M 3 3 G 0 1 M 4 4 G 0 1 M 18 18 S 1 1 5 0 2 I 0 55419 3 0 2 S 2 2 C 3 3 M 22 22 G 3 0 M 46 46 5 0 2 I 0 17594 3 0 2 M 14 14 G 0 1 M 9 9 G 1 0 M 15 15 G 0 3 M 17 17 G 0 3 M 1 1 G 0 1 M 13 13 G 0 1 M 6 6 G 1 0 M 12 12 G 0 2 M 45 45 G 0 1 M 6 6
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sacCer3_dna")
         self.assertEqual(alignment.target.id, "gi|330443667|ref|NC_001143.9|")
@@ -1703,6 +1746,7 @@ vulgar: sacCer3_dna 491 162 - gi|330443489|ref|NC_001135.5| 23668 115569 + 267 M
 vulgar: sacCer3_dna 529 78 - gi|330443667|ref|NC_001143.9| 641760 71883 - 267 M 31 31 G 3 0 M 4 4 G 2 0 M 19 19 G 0 3 M 9 9 G 0 1 M 6 6 G 1 0 M 5 5 5 2 2 I 0 154244 I 57 0 I 0 47 3 2 2 M 25 25 G 5 0 M 4 4 G 1 0 M 3 3 G 3 0 M 4 4 G 1 0 M 9 9 G 0 1 M 14 14 5 2 2 I 0 101116 I 31 0 3 2 2 M 23 23 G 0 1 M 15 15 G 1 0 M 9 9 G 1 0 M 2 2 G 1 0 M 14 14 C 18 18 S 2 2 5 0 2 I 0 177442 3 0 2 S 1 1 C 12 12 M 2 2 G 0 1 M 22 22 5 2 2 I 0 136697 I 7 0 I 0 6 I 1 0 I 0 1 I 1 0 I 0 1 I 1 0 I 0 1 I 1 0 I 0 1 I 2 0 I 0 1 I 1 0 I 0 1 I 1 0 I 0 1 I 3 0 I 0 1 I 2 0 I 0 1 I 1 0 I 0 1 I 1 0 I 0 1 I 2 0 I 0 2 I 2 0 I 0 2 I 17 0 3 2 2 M 12 12 G 2 0 M 22 22
 """,
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1752,6 +1796,7 @@ class Exonerate_ungapped(unittest.TestCase):
 cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 1319275 1318045 - 6150 M 1230
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -1769,6 +1814,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 
 cigar: gi|296143771|ref|NM_001180731.1| 121 236 + gi|330443688|ref|NC_001145.3| 254031 254146 + 233 M 115
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -1786,6 +1832,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 121 236 + gi|330443688|ref|NC_001145.3| 
 cigar: gi|296143771|ref|NM_001180731.1| 1098 1166 + gi|330443688|ref|NC_001145.3| 255671 255739 + 151 M 68
 """,
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1835,6 +1882,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 1098 1166 + gi|330443688|ref|NC_001145.3
 vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 1319275 1318045 - 6150 M 1230 1230
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -1854,6 +1902,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10|
 vulgar: gi|296143771|ref|NM_001180731.1| 121 236 + gi|330443688|ref|NC_001145.3| 254031 254146 + 233 M 115 115
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -1873,6 +1922,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 121 236 + gi|330443688|ref|NC_001145.3|
 vulgar: gi|296143771|ref|NM_001180731.1| 1098 1166 + gi|330443688|ref|NC_001145.3| 255671 255739 + 151 M 68 68
 """,
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1922,6 +1972,7 @@ class Exonerate_ungapped_trans(unittest.TestCase):
 cigar: gi|296143771|ref|NM_001180731.1| 1228 1 - gi|330443520|ref|NC_001136.10| 1318047 1319274 + 2151 M 1227
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -1939,6 +1990,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 1228 1 - gi|330443520|ref|NC_001136.10| 
 cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 1319275 1318045 - 2106 M 1230
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -1956,6 +2008,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 
 cigar: gi|296143771|ref|NM_001180731.1| 1230 0 - gi|330443520|ref|NC_001136.10| 1318045 1319275 + 2072 M 1230
 """,
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -2005,6 +2058,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 1230 0 - gi|330443520|ref|NC_001136.10| 
 vulgar: gi|296143771|ref|NM_001180731.1| 1228 1 - gi|330443520|ref|NC_001136.10| 1318047 1319274 + 2151 C 1227 1227
 """,
             )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -2024,6 +2078,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 1228 1 - gi|330443520|ref|NC_001136.10|
 vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 1319275 1318045 - 2106 C 1230 1230
 """,
             )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -2043,6 +2098,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10|
 vulgar: gi|296143771|ref|NM_001180731.1| 1230 0 - gi|330443520|ref|NC_001136.10| 1318045 1319275 + 2072 C 1230 1230
 """,
             )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -2092,6 +2148,7 @@ class Exonerate_ner(unittest.TestCase):
 cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 1319275 1318045 - 6150 M 1230
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443681|ref|NC_001144.5|")
@@ -2159,6 +2216,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 
 cigar: gi|296143771|ref|NM_001180731.1| 110 1230 + gi|330443681|ref|NC_001144.5| 297910 318994 + 502 M 8 D 28 I 30 M 12 D 12 I 9 M 14 D 8 I 1 M 5 I 1 M 8 D 11 I 29 D 3 M 4 D 1 M 7 D 1 M 7 D 10 I 10 M 7 D 9 I 4 M 19 D 11 I 11 M 13 D 9 M 6 I 1 M 10 D 2 M 4 D 1 M 10 I 368 D 20287 M 9 D 6 I 11 D 2 M 7 D 15 I 9 M 12 I 2 M 10 D 5 I 10 M 20 I 1 M 6 D 3 I 1 D 19 I 1 D 7 I 1 D 1 I 1 D 1 I 3 D 2 I 1 D 1 I 1 D 1 I 1 D 1 I 1 M 6 D 40 I 10 M 14 D 5 I 43 M 8 D 1 I 18 M 7 I 1 M 9 D 4 I 8 M 7 D 15 I 6 M 7 D 3 M 9 D 8 I 10 M 5 I 1 M 9 D 3 I 12 M 10 D 7 M 7 D 6 I 1 M 11 D 1 M 6 D 14 I 6 M 6 I 1 M 15 I 1 M 14 D 12 I 8 M 6 D 11 I 1 M 20 D 18 I 2 M 4 I 1 M 5 D 15 I 2 M 7 D 2 I 16 D 2 M 10 D 10 I 1 M 11 D 4 I 9 M 14 D 1 I 9 M 20
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -2222,6 +2280,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 110 1230 + gi|330443681|ref|NC_001144.5|
 cigar: gi|296143771|ref|NM_001180731.1| 509 1192 + gi|330443520|ref|NC_001136.10| 183946 184603 + 440 M 6 D 8 I 22 D 17 M 11 D 7 I 19 D 7 M 29 D 8 I 11 D 5 M 11 D 4 I 1 D 1 I 2 D 3 I 2 D 1 I 3 D 2 I 10 M 15 D 2 I 16 D 9 M 16 D 3 M 7 D 1 M 6 D 1 M 6 I 1 M 16 D 21 I 18 M 10 D 11 I 1 M 4 D 2 M 4 I 1 M 10 D 1 I 10 M 3 I 1 M 11 D 14 I 5 M 13 D 19 I 5 M 9 I 1 M 9 D 10 I 9 M 6 D 6 I 3 D 3 I 1 D 1 I 8 M 22 D 2 I 19 D 7 M 19 D 1 I 6 M 12 D 12 I 18 D 3 M 6 I 1 M 11 D 1 M 4 D 2 M 11 I 1 M 5 D 6 I 14 M 11 D 13 I 1 M 10 D 7 I 2 D 1 I 1 D 2 I 2 D 1 I 2 D 1 I 11 M 10 I 1 M 19 D 1 I 19 M 10 D 14 I 1 D 2 I 2 D 1 I 10 M 10 D 2 M 9 D 2 I 6 M 8 D 3 I 12 D 2 M 25
 """,
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -2271,6 +2330,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 509 1192 + gi|330443520|ref|NC_001136.10
 vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 1319275 1318045 - 6150 M 1230 1230
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443681|ref|NC_001144.5|")
@@ -2339,6 +2399,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10|
 vulgar: gi|296143771|ref|NM_001180731.1| 110 1230 + gi|330443681|ref|NC_001144.5| 297910 318994 + 502 M 7 7 N 31 29 M 11 11 N 10 13 M 13 13 N 2 9 M 5 5 G 1 0 M 7 7 N 30 15 M 4 4 G 0 1 M 7 7 G 0 1 M 6 6 N 11 11 M 6 6 N 5 10 M 18 18 N 12 12 M 12 12 N 1 10 M 6 6 G 1 0 M 10 10 G 0 2 M 4 4 G 0 1 M 9 9 N 369 20288 M 8 8 N 12 9 M 6 6 N 10 16 M 12 12 G 2 0 M 9 9 N 11 6 M 20 20 G 1 0 M 5 5 N 12 37 M 5 5 N 11 41 M 13 13 N 44 6 M 7 7 N 19 2 M 7 7 G 1 0 M 8 8 N 9 5 M 6 6 N 7 16 M 6 6 N 1 4 M 8 8 N 11 9 M 5 5 G 1 0 M 8 8 N 13 4 M 9 9 N 1 8 M 6 6 N 2 7 M 11 11 G 0 1 M 5 5 N 7 15 M 6 6 G 1 0 M 15 15 G 1 0 M 13 13 N 9 13 M 5 5 N 2 12 M 19 19 N 3 19 M 4 4 G 1 0 M 4 4 N 3 16 M 6 6 N 17 5 M 9 9 N 2 11 M 10 10 N 10 5 M 13 13 N 10 2 M 20 20
 """,
             )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -2399,6 +2460,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 110 1230 + gi|330443681|ref|NC_001144.5
 vulgar: gi|296143771|ref|NM_001180731.1| 509 1192 + gi|330443520|ref|NC_001136.10| 183946 184603 + 440 M 5 5 N 23 26 M 10 10 N 20 15 M 28 28 N 12 14 M 10 10 N 19 12 M 14 14 N 17 12 M 15 15 N 1 4 M 7 7 G 0 1 M 6 6 G 0 1 M 6 6 G 1 0 M 15 15 N 19 22 M 9 9 N 2 12 M 4 4 G 0 2 M 4 4 G 1 0 M 9 9 N 11 2 M 3 3 G 1 0 M 10 10 N 6 15 M 12 12 N 6 20 M 9 9 G 1 0 M 8 8 N 10 11 M 5 5 N 13 11 M 21 21 N 20 10 M 18 18 N 7 2 M 11 11 N 19 16 M 6 6 G 1 0 M 11 11 G 0 1 M 4 4 G 0 2 M 11 11 G 1 0 M 4 4 N 15 7 M 10 10 N 2 14 M 9 9 N 19 13 M 10 10 G 1 0 M 18 18 N 20 2 M 9 9 N 14 18 M 10 10 G 0 2 M 8 8 N 7 3 M 7 7 N 13 6 M 25 25
 """,
             )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -2448,6 +2510,7 @@ class Exonerate_multiple(unittest.TestCase):
 cigar: gi|296142823|ref|NM_001178508.1| 0 897 + gi|330443482|ref|NC_001134.8| 560077 560974 + 4485 M 897
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296142823|ref|NM_001178508.1|")
         self.assertEqual(alignment.target.id, "gi|330443753|ref|NC_001148.4|")
@@ -2491,6 +2554,7 @@ cigar: gi|296142823|ref|NM_001178508.1| 0 897 + gi|330443482|ref|NC_001134.8| 56
 cigar: gi|296142823|ref|NM_001178508.1| 2 896 + gi|330443753|ref|NC_001148.4| 492933 492033 - 941 M 4 I 2 M 21 I 1 M 51 I 2 M 6 I 3 M 11 I 3 M 1 I 1 M 26 I 3 M 102 I 1 M 1 I 1 M 1 I 1 M 55 D 3 M 5 I 2 M 7 D 1 M 4 D 1 M 9 I 1 M 3 D 1 M 2 D 2 M 2 D 3 M 3 D 1 M 22 D 1 M 9 I 1 M 68 D 1 M 3 I 1 M 174 I 1 M 8 D 1 M 154 D 3 M 8 D 1 M 4 D 2 M 9 D 2 M 1 D 1 M 5 D 6 M 53 D 1 M 14 I 1 M 23
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296142823|ref|NM_001178508.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -2536,6 +2600,7 @@ cigar: gi|296142823|ref|NM_001178508.1| 2 896 + gi|330443753|ref|NC_001148.4| 49
 cigar: gi|296142823|ref|NM_001178508.1| 34 721 + gi|330443520|ref|NC_001136.10| 267809 300717 + 651 M 34 I 1 M 8 I 1 M 1 I 2 M 7 D 4 M 4 I 2 M 3 I 3 M 10 I 3 M 28 I 1 M 34 I 1 M 6 D 2 M 10 D 1 M 14 D 1 M 15 I 1 M 12 I 1 M 1 I 1 M 3 I 3 M 28 I 8 M 3 I 2 M 21 I 2 M 7 D 4 M 2 D 2 M 6 D 3 M 13 D 2 M 4 D 1 M 11 I 5 M 6 I 2 M 12 D 1 M 52 I 1 M 7 D 1 M 55 D 1 M 7 I 3 M 13 D 2 M 100 D 1 M 6 I 1 M 40 I 2 M 6 D 2 M 22 D 32238 M 12 D 1 M 18
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -2553,6 +2618,7 @@ cigar: gi|296142823|ref|NM_001178508.1| 34 721 + gi|330443520|ref|NC_001136.10| 
 cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 1319275 1318045 - 6150 M 1230
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -2588,6 +2654,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 
 cigar: gi|296143771|ref|NM_001180731.1| 0 346 + gi|330443688|ref|NC_001145.3| 85010 473201 + 439 M 11 I 1 M 15 I 2 M 4 I 1 M 1 I 1 M 8 I 4 M 17 D 168908 M 4 D 1 M 8 I 1 M 3 I 2 M 33 D 1 M 7 D 2 M 102 D 96824 M 14 D 2 M 10 I 2 M 5 D 2 M 10 I 2 M 4 D 1 M 20 I 1 M 15 D 1 M 5 I 3 M 4 D 122118 M 20 D 5 M 6
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -2625,6 +2692,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 346 + gi|330443688|ref|NC_001145.3| 85
 cigar: gi|296143771|ref|NM_001180731.1| 25 406 + gi|330443688|ref|NC_001145.3| 130198 11338 - 263 M 14 D 1 M 4 I 2 M 25 D 1 M 9 D 6 M 42 I 2 M 16 D 2 M 7 D 1 M 3 I 2 M 23 I 3 M 6 D 9357 M 1 I 1 M 11 D 1 M 12 I 1 M 9 D 1 M 10 I 1 M 18 D 1 M 5 D 109125 M 16 I 4 M 4 I 1 M 11 I 5 M 8 I 1 M 22 D 2 M 4 D 2 M 34 D 1 M 3 D 1 M 41
 """,
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -2674,6 +2742,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 25 406 + gi|330443688|ref|NC_001145.3| 1
 vulgar: gi|296142823|ref|NM_001178508.1| 0 897 + gi|330443482|ref|NC_001134.8| 560077 560974 + 4485 M 897 897
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296142823|ref|NM_001178508.1|")
         self.assertEqual(alignment.target.id, "gi|330443753|ref|NC_001148.4|")
@@ -2724,6 +2793,7 @@ vulgar: gi|296142823|ref|NM_001178508.1| 0 897 + gi|330443482|ref|NC_001134.8| 5
 vulgar: gi|296142823|ref|NM_001178508.1| 2 896 + gi|330443753|ref|NC_001148.4| 492933 492033 - 941 M 4 4 G 2 0 M 21 21 G 1 0 M 51 51 G 2 0 M 6 6 G 3 0 M 11 11 G 3 0 M 1 1 G 1 0 M 26 26 G 3 0 M 102 102 G 1 0 M 1 1 G 1 0 M 1 1 G 1 0 M 55 55 G 0 3 M 5 5 G 2 0 M 7 7 G 0 1 M 4 4 G 0 1 M 9 9 G 1 0 M 3 3 G 0 1 M 2 2 G 0 2 M 2 2 G 0 3 M 3 3 G 0 1 M 22 22 G 0 1 M 9 9 G 1 0 M 68 68 G 0 1 M 3 3 G 1 0 M 174 174 G 1 0 M 8 8 G 0 1 M 154 154 G 0 3 M 8 8 G 0 1 M 4 4 G 0 2 M 9 9 G 0 2 M 1 1 G 0 1 M 5 5 G 0 6 M 53 53 G 0 1 M 14 14 G 1 0 M 23 23
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296142823|ref|NM_001178508.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -2778,6 +2848,7 @@ vulgar: gi|296142823|ref|NM_001178508.1| 2 896 + gi|330443753|ref|NC_001148.4| 4
 vulgar: gi|296142823|ref|NM_001178508.1| 34 721 + gi|330443520|ref|NC_001136.10| 267809 300717 + 651 M 34 34 G 1 0 M 8 8 G 1 0 M 1 1 G 2 0 M 7 7 G 0 4 M 4 4 G 2 0 M 3 3 G 3 0 M 10 10 G 3 0 M 28 28 G 1 0 M 34 34 G 1 0 M 6 6 G 0 2 M 10 10 G 0 1 M 14 14 G 0 1 M 15 15 G 1 0 M 12 12 G 1 0 M 1 1 G 1 0 M 3 3 G 3 0 M 28 28 G 8 0 M 3 3 G 2 0 M 21 21 G 2 0 M 7 7 G 0 4 M 2 2 G 0 2 M 6 6 G 0 3 M 13 13 G 0 2 M 4 4 G 0 1 M 11 11 G 5 0 M 6 6 G 2 0 M 12 12 G 0 1 M 52 52 G 1 0 M 7 7 G 0 1 M 55 55 G 0 1 M 7 7 G 3 0 M 13 13 G 0 2 M 100 100 G 0 1 M 6 6 G 1 0 M 40 40 G 2 0 M 6 6 G 0 2 M 22 22 3 0 2 I 0 32234 5 0 2 M 12 12 G 0 1 M 18 18
 """,
             )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -2797,6 +2868,7 @@ vulgar: gi|296142823|ref|NM_001178508.1| 34 721 + gi|330443520|ref|NC_001136.10|
 vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 1319275 1318045 - 6150 M 1230 1230
 """,
             )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -2839,6 +2911,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10|
 vulgar: gi|296143771|ref|NM_001180731.1| 0 346 + gi|330443688|ref|NC_001145.3| 85010 473201 + 439 M 11 11 G 1 0 M 15 15 G 2 0 M 4 4 G 1 0 M 1 1 G 1 0 M 8 8 G 4 0 M 17 17 5 0 2 I 0 168904 3 0 2 M 4 4 G 0 1 M 8 8 G 1 0 M 3 3 G 2 0 M 33 33 G 0 1 M 7 7 G 0 2 M 102 102 5 0 2 I 0 96820 3 0 2 M 14 14 G 0 2 M 10 10 G 2 0 M 5 5 G 0 2 M 10 10 G 2 0 M 4 4 G 0 1 M 20 20 G 1 0 M 15 15 G 0 1 M 5 5 G 3 0 M 4 4 5 0 2 I 0 122114 3 0 2 M 20 20 G 0 5 M 6 6
 """,
             )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -2883,6 +2956,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 346 + gi|330443688|ref|NC_001145.3| 8
 vulgar: gi|296143771|ref|NM_001180731.1| 25 406 + gi|330443688|ref|NC_001145.3| 130198 11338 - 263 M 14 14 G 0 1 M 4 4 G 2 0 M 25 25 G 0 1 M 9 9 G 0 6 M 42 42 G 2 0 M 16 16 G 0 2 M 7 7 G 0 1 M 3 3 G 2 0 M 23 23 G 3 0 M 6 6 3 0 2 I 0 9353 5 0 2 M 1 1 G 1 0 M 11 11 G 0 1 M 12 12 G 1 0 M 9 9 G 0 1 M 10 10 G 1 0 M 18 18 G 0 1 M 5 5 3 0 2 I 0 109121 5 0 2 M 16 16 G 4 0 M 4 4 G 1 0 M 11 11 G 5 0 M 8 8 G 1 0 M 22 22 G 0 2 M 4 4 G 0 2 M 34 34 G 0 1 M 3 3 G 0 1 M 41 41
 """,
             )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -2936,6 +3010,7 @@ class Exonerate_coding2coding_fshifts(unittest.TestCase):
 cigar: gi|296143771|ref|NM_001180731.1| 0 160 + gi|296143771|ref|NM_001180731.1| 465 630 + 213 M 93 I 1 M 33 D 2 M 12 D 4 M 21
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|296143771|ref|NM_001180731.1|")
@@ -2957,6 +3032,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 160 + gi|296143771|ref|NM_001180731.1|
 cigar: gi|296143771|ref|NM_001180731.1| 158 1 - gi|296143771|ref|NM_001180731.1| 628 466 - 201 M 24 D 6 M 39 I 1 M 93
 """,
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -3010,6 +3086,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 158 1 - gi|296143771|ref|NM_001180731.1|
 vulgar: gi|296143771|ref|NM_001180731.1| 0 160 + gi|296143771|ref|NM_001180731.1| 465 630 + 213 C 93 93 F 1 0 C 33 33 F 0 2 C 12 12 F 0 4 C 21 21
 """,
             )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|296143771|ref|NM_001180731.1|")
@@ -3033,6 +3110,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 160 + gi|296143771|ref|NM_001180731.1
 vulgar: gi|296143771|ref|NM_001180731.1| 158 1 - gi|296143771|ref|NM_001180731.1| 628 466 - 201 C 24 24 G 0 6 C 39 39 F 1 0 C 93 93
 """,
             )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -3082,6 +3160,7 @@ class Exonerate_protein2dna(unittest.TestCase):
 cigar: sp|P24813|YAP2_YEAST 0 409 . gi|330443520|ref|NC_001136.10| 1319275 1318048 - 2105 M 1227
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -3100,6 +3179,7 @@ cigar: sp|P24813|YAP2_YEAST 0 409 . gi|330443520|ref|NC_001136.10| 1319275 13180
 cigar: sp|P24813|YAP2_YEAST 28 120 . gi|330443688|ref|NC_001145.3| 253991 254270 + 205 M 36 D 3 M 240
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -3118,6 +3198,7 @@ cigar: sp|P24813|YAP2_YEAST 28 120 . gi|330443688|ref|NC_001145.3| 253991 254270
 cigar: sp|P24813|YAP2_YEAST 355 408 . gi|330443688|ref|NC_001145.3| 255638 255794 + 116 M 105 I 1 M 51
 """,
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -3167,6 +3248,7 @@ cigar: sp|P24813|YAP2_YEAST 355 408 . gi|330443688|ref|NC_001145.3| 255638 25579
 vulgar: sp|P24813|YAP2_YEAST 0 409 . gi|330443520|ref|NC_001136.10| 1319275 1318048 - 2105 M 409 1227
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -3190,6 +3272,7 @@ vulgar: sp|P24813|YAP2_YEAST 0 409 . gi|330443520|ref|NC_001136.10| 1319275 1318
 vulgar: sp|P24813|YAP2_YEAST 28 120 . gi|330443688|ref|NC_001145.3| 253991 254270 + 205 M 12 36 G 0 3 M 80 240
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -3213,6 +3296,7 @@ vulgar: sp|P24813|YAP2_YEAST 28 120 . gi|330443688|ref|NC_001145.3| 253991 25427
 vulgar: sp|P24813|YAP2_YEAST 355 408 . gi|330443688|ref|NC_001145.3| 255638 255794 + 116 M 35 105 G 1 0 M 17 51
 """,
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -3263,6 +3347,7 @@ class Exonerate_protein2dna_fshifts(unittest.TestCase):
 cigar: sp|P24813|YAP2_YEAST 330 409 . gi|296143771|ref|NM_001180731.1| 216 455 + 367 M 129 D 2 M 108
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|296143771|ref|NM_001180731.1|")
@@ -3278,6 +3363,7 @@ cigar: sp|P24813|YAP2_YEAST 330 409 . gi|296143771|ref|NM_001180731.1| 216 455 +
 cigar: sp|P24813|YAP2_YEAST 6 70 . gi|296143771|ref|NM_001180731.1| 16 208 + 322 M 192
 """,
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -3328,6 +3414,7 @@ cigar: sp|P24813|YAP2_YEAST 6 70 . gi|296143771|ref|NM_001180731.1| 16 208 + 322
 vulgar: sp|P24813|YAP2_YEAST 330 409 . gi|296143771|ref|NM_001180731.1| 216 455 + 367 M 43 129 F 0 2 M 36 108
 """,
             )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|296143771|ref|NM_001180731.1|")
@@ -3345,6 +3432,7 @@ vulgar: sp|P24813|YAP2_YEAST 330 409 . gi|296143771|ref|NM_001180731.1| 216 455 
 vulgar: sp|P24813|YAP2_YEAST 6 70 . gi|296143771|ref|NM_001180731.1| 16 208 + 322 M 64 192
 """,
             )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -3394,6 +3482,7 @@ class Exonerate_protein2genome(unittest.TestCase):
 cigar: sp|P24813|YAP2_YEAST 0 409 . gi|330443520|ref|NC_001136.10| 1319275 1318048 - 2105 M 1227
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -3415,6 +3504,7 @@ cigar: sp|P24813|YAP2_YEAST 0 409 . gi|330443520|ref|NC_001136.10| 1319275 13180
 cigar: sp|P24813|YAP2_YEAST 28 120 . gi|330443688|ref|NC_001145.3| 253991 254270 + 205 M 36 D 3 M 240
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443590|ref|NC_001140.6|")
@@ -3430,6 +3520,7 @@ cigar: sp|P24813|YAP2_YEAST 28 120 . gi|330443688|ref|NC_001145.3| 253991 254270
                 # fmt: on
             )
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -3476,6 +3567,7 @@ cigar: sp|P24813|YAP2_YEAST 28 120 . gi|330443688|ref|NC_001145.3| 253991 254270
 vulgar: sp|P24813|YAP2_YEAST 0 409 . gi|330443520|ref|NC_001136.10| 1319275 1318048 - 2105 M 409 1227
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -3499,6 +3591,7 @@ vulgar: sp|P24813|YAP2_YEAST 0 409 . gi|330443520|ref|NC_001136.10| 1319275 1318
 vulgar: sp|P24813|YAP2_YEAST 28 120 . gi|330443688|ref|NC_001145.3| 253991 254270 + 205 M 12 36 G 0 3 M 80 240
 """,
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443590|ref|NC_001140.6|")
@@ -3524,6 +3617,7 @@ vulgar: sp|P24813|YAP2_YEAST 28 120 . gi|330443688|ref|NC_001145.3| 253991 25427
 vulgar: sp|P24813|YAP2_YEAST 37 125 . gi|330443590|ref|NC_001140.6| 84646 68450 - 122 M 37 111 S 0 2 5 0 2 I 0 15928 3 0 2 S 1 1 M 50 150
 """,
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -3581,6 +3675,7 @@ class Exonerate_protein2genome_revcomp_fshifts(unittest.TestCase):
 cigar: Morus-gene026 69 441 . NODE_2_length_1708_cov_48.590765 1416 331 - 1308 M 36 D 6 M 249 I 5 M 78 I 1 M 303 I 3 M 294 I 4 D 2 M 117
 """,
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -3638,6 +3733,7 @@ cigar: Morus-gene026 69 441 . NODE_2_length_1708_cov_48.590765 1416 331 - 1308 M
 vulgar: Morus-gene026 69 441 . NODE_2_length_1708_cov_48.590765 1416 331 - 1308 M 12 36 G 0 6 M 83 249 G 5 0 M 26 78 G 1 0 M 101 303 G 3 0 M 98 294 G 4 0 F 0 2 M 39 117
 """,
             )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -3689,6 +3785,7 @@ class Exonerate_protein2genome_met_intron(unittest.TestCase):
                 # fmt: on
             )
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -3747,6 +3844,7 @@ class Exonerate_protein2genome_met_intron(unittest.TestCase):
 vulgar: Morus-gene001 48 482 . NODE_1_length_2817_cov_100.387732 2392 388 - 1978 M 37 111 5 0 2 I 0 148 3 0 2 M 33 99 5 0 2 I 0 105 3 0 2 M 37 111 5 0 2 I 0 82 3 0 2 M 101 303 S 0 1 5 0 2 I 0 218 3 0 2 S 1 2 M 46 138 5 0 2 I 0 129 3 0 2 M 179 537
 """,
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 

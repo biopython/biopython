@@ -160,6 +160,7 @@ np.array([['A', 'A', 'A', '-', 'G', 'G', 'G', 'A', 'A', 'T', 'G', 'T', 'T',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 5062.0)
         self.assertEqual(len(alignment.sequences), 5)
@@ -221,6 +222,7 @@ np.array([['T', 'A', 'A', 'A', 'G', 'A'],
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 6636.0)
         self.assertEqual(len(alignment.sequences), 4)
@@ -284,6 +286,7 @@ np.array([['g', 'c', 'a', 'g', 'c', 't', 'g', 'a', 'a', 'a', 'a', 'c', 'a'],
                 # fmt: on
             )
         )
+        # ADD TEST
         self.assertRaises(StopIteration, next, alignments)
 
 
@@ -428,6 +431,7 @@ oryCun1.s     11207 TGTTTTCTCCATGGAAACTGATGTCAAATACTTTCCCTTTGGTT   11251
                 # fmt: on
             )
         )
+        # ADD TEST
 
 
 class TestAlign_ucsc_mm9_chr10(unittest.TestCase):
@@ -562,6 +566,7 @@ np.array([['T', 'C', 'A', 'T', 'A', 'G', 'G', 'T', 'A', 'T', 'T', 'T', 'A',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 103072)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -704,6 +709,7 @@ hg18.chr6 155039139 GGCCTCCAACGCCTAACATGGTTGAAAAGGCCATGGACTTGTGTTC 155039093
                 ),
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 49128)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -881,6 +887,7 @@ np.array([['T', 'G', 'G', 'G', 'T', 'C', 'C', 'C', 'C', 'T', 'T', 'G', 'G',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 117109)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -1056,6 +1063,7 @@ cavPor2.s     39417 --------------------------------------     39417
                 ),
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 128047)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -1244,6 +1252,7 @@ echTel1.s     87661
                 ),
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 98097)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -1467,6 +1476,7 @@ tupBel1.s    331078 --------------    331078
                 ),
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 0)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -1556,6 +1566,7 @@ np.array([['a', 'g', 'c', 'c', 'a', 'g', 'g', 'c', 'g', 't', 'g', 'g', 't',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 40604)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -1726,6 +1737,7 @@ np.array([['T', 'C', 'C', 'A', 'A', 'A', 'A', 'T', 'G', 'G', 'T', 'T', 'A',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 0)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -1819,6 +1831,7 @@ mm9.chr10   3014623 TGTTTGTTTTGGTCAATGCAG 3014644
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[3013603, 3014644]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 19159)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -1973,6 +1986,7 @@ np.array([['C', 'C', 'T', 'G', 'T', 'A', 'C', 'C', '-', '-', '-', 'C', 'T',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 40840)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -2147,6 +2161,7 @@ np.array([['G', 'G', 'G', 'A', 'G', 'C', 'A', 'T', 'A', 'A', 'A', 'A', 'C', 'T',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 411)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -2268,6 +2283,7 @@ np.array([['A', 'A', 'G', 'T', 'T', 'C', 'C', 'C', 'T', 'C', 'C', 'A', 'T',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 0)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -2344,6 +2360,7 @@ np.array([['T', 'C', 'C', 'C', 'A', 'T', 'G', 'T', 'C', 'C', 'A', 'C', 'C',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, -12243)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -2606,6 +2623,7 @@ np.array([['G', 'T', 'T', 'T', 'C', 'A', 'G', 'G', 'G', 'G', 'C', 'A', 'G',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 320596)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -2921,6 +2939,7 @@ ornAna1.c  40046122 -------------  40046122
                 ),
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, -36127)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -3145,6 +3164,7 @@ np.array([['c', 'c', 'a', 't', 't', 't', 't', '-', '-', '-', '-', '-', '-',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 0)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -3306,6 +3326,7 @@ mm9.chr10   3017606 ctactggtttgctgtagattgcttttatcatgtttaggtatgggTGTTCTCG 3017658
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[3015086, 3017658]]))
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 12170)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -3448,6 +3469,7 @@ np.array([['T', 'T', 'T', 'T', 'T', 'A', 'T', 'T', 'T', 'G', 'C', 'A', 'G',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 0)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -3579,6 +3601,7 @@ np.array([['A', 'C', 'C', 'A', 'C', 'A', 'G', 'A', 'C', 'C', 'T', 'T', 'C',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 22499)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -3734,6 +3757,7 @@ np.array([['A', 'T', 'C', 'C', 'A', 'C', 'A', 'A', 'A', 'A', 'G', 'A', 'G',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 4781)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -3891,6 +3915,7 @@ np.array([['A', 'G', 'G', 'A', '-', 'C', 'A', 'A', 'A', 'A', 'T', 'A', 'A', 'T',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 61520)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -4097,6 +4122,7 @@ np.array([['T', 'T', '-', 'C', 'A', 'A', 'A', 'C', 'A', 'T', 'G', 'C', 'A', 'T',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 0)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -4198,6 +4224,7 @@ np.array([['t', 'c', 't', 't', 'c', 'a', 't', 'c', 't', 'c', 'c', 't', 'c',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 1520)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -4361,6 +4388,7 @@ np.array([['A', 'G', 'G', 'G', 'T', 'A', 'G', 'G', 'C', 'C', 'A', 'A', 'G',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 1986)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -4504,6 +4532,7 @@ np.array([['C', 'T', 'G', 'C', 'C', 'T', 'T', 'C', 'C', 'A', 'T', 'T', 'A',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 0)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -4631,6 +4660,7 @@ np.array([['g', 't', 'c', 't', 'g', 'a', 'g', 't', 't', 'a', 'g', 'g', 'g',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 228)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -4774,6 +4804,7 @@ np.array([['G', 'A', 'G', 'A', 'C', 'C', 'A', 'A', 'A', 'T', 'G', '-', '-',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 10938)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -4935,6 +4966,7 @@ np.array([['C', 'C', 'C', 'C', 'A', 'G', 'C', 'A', 'T', 'T', 'C', 'T', 'G',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 36924)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -5119,6 +5151,7 @@ np.array([['A', 'A', 'G', 'A', 'T', 'A', 'G', 'A', 'T', 'A', 'T', 'T', 'T',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 20303)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -5338,6 +5371,7 @@ np.array([['T', 'G', 'C', 'A', 'T', 'C', 'A', 'T', 'T', 'A', 'A', 'G', 'A', 'C',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 0)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -5444,6 +5478,7 @@ np.array([['t', 't', 't', 'g', 'g', 't', 't', 't', 'g', 'g', 't', 't', 't',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 45)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -5577,6 +5612,7 @@ np.array([['t', 'c', 't', 'g', 'c', 'c', 't', 'g', 'c', 'c', 't', 'c', 't',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, -16865)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -5802,6 +5838,7 @@ np.array([['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 367532)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -6112,6 +6149,7 @@ canFam2.c  47544870 TATTGTTTCCCTTACTTCTAAGAGttaaataatttaaaatttaat  47544825
                 ),
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 0)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -6297,6 +6335,7 @@ np.array([['a', 'c', 't', 'a', 'g', 'g', 'g', 'a', 't', 'g', 'g', 'g', 'a',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 8951)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -6453,6 +6492,7 @@ np.array([['T', 'G', 'T', 'C', 'A', 'A', 'A', 'C', 'A', 'T', 'G', 'C', 'A',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 0)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -6572,6 +6612,7 @@ np.array([['T', 'A', 'T', 'A', 'T', 'A', 'T', 'G', 'C', 'T', 'A', 'T', 'C',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 85471)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -6819,6 +6860,7 @@ np.array([['G', 'A', 'G', 'G', 'T', 'T', 'T', 'G', 'T', 'G', 'A', 'C', 'T', 'T',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 105724)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -7044,6 +7086,7 @@ np.array([['A', 'C', 'C', 'T', 'T', 'G', 'G', 'T', 'G', 'A', 'C', 'G', 'C', 'C',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 115790)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -7377,6 +7420,7 @@ np.array([['C', 'T', 'C', 'A', 'T', 'T', 'T', 'G', 'G', 'G', 'A', 'A', 'C',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 44222)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -7640,6 +7684,7 @@ np.array([['C', 'T', 'G', 'T', 'T', 'A', 'G', 'T', 'G', 'C', 'T', 'G', 'T',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 43757)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -8049,6 +8094,7 @@ np.array([['A', 'G', 'G', 'C', 'A', 'A', 'A', 'T', 'G', 'A', 'G', 'G', 'T',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 32886)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -8402,6 +8448,7 @@ np.array([['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 309116)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -8753,6 +8800,7 @@ cavPor2.s       298 ATGGTTTTGGCCA       285
                 ),
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 891219)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -9116,6 +9164,7 @@ ornAna1.c  40040313 TTCACCTTAGGGGAAATCCTGTCAAGCCATCATTTCCTTCCATATCTTCA  40040263
                 ),
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 30254)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -9460,6 +9509,7 @@ ornAna1.c  40040218 ------------  40040218
                 ),
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, -9167)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -9677,6 +9727,7 @@ np.array([['C', 'C', 'C', 'T', '-', '-', 'A', 'C', 'A', 'C', 'T', 'G', 'T', 'C',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 15763)
         self.assertEqual(alignment.sequences[0].id, "mm9.chr10")
@@ -9851,6 +9902,7 @@ np.array([['T', 'G', 'T', 'T', 'T', 'A', 'G', 'T', 'A', 'C', 'C', '-', '-',
                 # fmt: on
             )
         )
+        # ADD TEST
         self.assertRaises(StopIteration, next, alignments)
 
 

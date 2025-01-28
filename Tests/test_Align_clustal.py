@@ -186,6 +186,7 @@ gi|671626|emb|CAA85685.1|           -
 
 """,  # noqa: W293
         )
+        # ADD TEST
 
     def test_msaprobs(self):
         path = "Clustalw/msaprobs.aln"
@@ -404,6 +405,7 @@ HISJ_E_COLI                         GMGLRK--EDNELREALNKAFAEMRADGTYEKLAKKYFDFDVYG
 
 """,
         )
+        # ADD TEST
         self.check_reading_writing(path)
 
     def test_muscle(self):
@@ -580,6 +582,7 @@ AT3G20900.1-CDS                     CAGCACCGCTGCTGGGGATGGAGAGGGAACAGAGTAG
 
 """,  # noqa: W293
         )
+        # ADD TEST
         self.check_reading_writing(path)
 
     def test_kalign(self):
@@ -632,6 +635,7 @@ AT3G20900                           GCTGGGGATGGAGAGGGAACAGAGTAG
 
 """,
         )
+        # ADD TEST
         self.check_reading_writing(path)
 
     def test_probcons(self):
@@ -788,6 +792,7 @@ azup_achcy                          V
 
 """,
         )
+        # ADD TEST
         self.check_reading_writing(path)
 
     def test_empty(self):

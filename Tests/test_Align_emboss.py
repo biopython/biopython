@@ -109,6 +109,7 @@ np.array([['T', 'S', 'P', 'A', 'S', 'I', 'R', 'P', 'P', 'A', 'G', 'P', 'S', 'S',
                 # fmt: on
             )
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -171,6 +172,7 @@ np.array([['C', 'G', 'T', 'T', 'T', 'G', 'A', 'G', 'T', '-', 'C', 'T', 'G',
                 # fmt: on
             )
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -234,6 +236,7 @@ np.array([['G', 'P', 'P', 'P', 'Q', 'S', 'P', 'D', 'E', 'N', 'R', 'A', 'G',
                 # fmt: on
             )
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -356,6 +359,7 @@ np.array([['L', 'S', 'P', 'A', 'D', 'K', 'T', 'N', 'V', 'K', 'A', 'A', 'W',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.annotations["Matrix"], "EBLOSUM62")
         self.assertAlmostEqual(alignment.annotations["Gap_penalty"], 14)
@@ -404,6 +408,7 @@ np.array([['K', 'K', 'V', 'A', 'D', 'A', 'L', 'T', 'N', 'A', 'V', 'A', 'H'],
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.annotations["Matrix"], "EBLOSUM62")
         self.assertAlmostEqual(alignment.annotations["Gap_penalty"], 14)
@@ -453,6 +458,7 @@ np.array([['K', 'L', 'R', 'V', 'D', 'P', 'V', 'N', 'F', 'K', 'L', 'L', 'S',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.annotations["Matrix"], "EBLOSUM62")
         self.assertAlmostEqual(alignment.annotations["Gap_penalty"], 14)
@@ -498,6 +504,7 @@ np.array([['L', 'S', 'A', 'L', 'S', 'D', 'L', 'H', 'A', 'H'],
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.annotations["Matrix"], "EBLOSUM62")
         self.assertAlmostEqual(alignment.annotations["Gap_penalty"], 14)
@@ -543,6 +550,7 @@ np.array([['V', 'K', 'A', 'A', 'W', 'G', 'K', 'V', 'G', 'A'],
                 # fmt: on
             )
         )
+	# ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -648,6 +656,7 @@ np.array([['T', 'S', 'P', 'A', 'S', 'I', 'R', 'P', 'P', 'A', 'G', 'P', 'S',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.annotations["Matrix"], "EBLOSUM62")
         self.assertAlmostEqual(alignment.annotations["Gap_penalty"], 10.0)
@@ -735,6 +744,7 @@ np.array([['T', 'S', 'P', 'A', 'S', 'I', 'R', 'P', 'P', 'A', 'G', 'P', 'S',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.annotations["Matrix"], "EBLOSUM62")
         self.assertAlmostEqual(alignment.annotations["Gap_penalty"], 10.0)
@@ -824,6 +834,7 @@ np.array([['T', 'S', 'P', 'A', 'S', 'I', 'R', 'P', 'P', 'A', 'G', 'P', 'S',
                 # fmt: on
             )
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -924,6 +935,7 @@ np.array([['K', 'I', 'L', 'I', 'V', 'D', 'D', '-', '-', '-', '-', 'Q', 'Y',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.annotations["Matrix"], "EBLOSUM62")
         self.assertAlmostEqual(alignment.annotations["Gap_penalty"], 10.0)
@@ -1004,6 +1016,7 @@ np.array([['K', 'I', 'L', 'I', 'V', 'D', 'D', 'Q', 'Y', 'G', 'I', 'R', 'I',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.annotations["Matrix"], "EBLOSUM62")
         self.assertAlmostEqual(alignment.annotations["Gap_penalty"], 10.0)
@@ -1084,6 +1097,7 @@ np.array([['-', 'K', 'I', 'L', 'I', 'V', 'D', 'D', 'Q', 'Y', 'G', 'I', 'R',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.annotations["Matrix"], "EBLOSUM62")
         self.assertAlmostEqual(alignment.annotations["Gap_penalty"], 10.0)
@@ -1170,6 +1184,7 @@ np.array([['K', 'I', 'L', 'I', 'V', 'D', 'D', 'Q', 'Y', 'G', 'I', 'R', 'I',
                 # fmt: on
             )
         )
+        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.annotations["Matrix"], "EBLOSUM62")
         self.assertAlmostEqual(alignment.annotations["Gap_penalty"], 10.0)
@@ -1256,6 +1271,7 @@ np.array([['K', 'I', 'L', 'I', 'V', 'D', 'D', 'Q', 'Y', 'G', 'I', 'R', 'I',
                 # fmt: on
             )
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1371,6 +1387,7 @@ asis            608 TAATAGC 615
 asis            311 ------- 311
 """,
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1706,6 +1723,7 @@ asis           3493 CTTAATTTTAGWGGGRGTGTTTATTTTTATTCTAATAAAAAGGATCCGTTGAA 3546
 asis           2507 CTTAATTTTAGAGG--ATGTTTATTTTTATTCTAATAAAAAGGATCCGTTGAA 2558
 """,
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1779,6 +1797,7 @@ seqA              1 C   0
 seqB             31 C  32
 """,
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1851,6 +1870,7 @@ seqA            120 C 121
 seqB              1 C   0
 """,
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1910,6 +1930,7 @@ seqA             20 TTTTTTTAAA-CCGGGCCC  2
 seqB              2 TTTTTTT--ACCCGGGCCC 19
 """,
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1968,6 +1989,7 @@ seqA              2 GGGCCCGGTT-TAAAAAAA 20
 seqB             19 GGGCCCGG--GTAAAAAAA  2
 """,
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -2163,6 +2185,7 @@ hg38_chrX      1440 CAGTTACAAA 1450
 mm10_chrX       593 CAGTTATAAA  603
 """,
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 

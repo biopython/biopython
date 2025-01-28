@@ -188,6 +188,7 @@ W*05:01          60 SKPTCREGGRSGSAKSLRMGRRGCSAQNPKDSHDPPPHL 99
             alignment[10],
             "GLTPSSGYTAATWTRTAVSSVGMNIPYHGASYLVRNQELRSWTAADKAAQMPWRRNRQSCSKPTCREGGRSGSAKSLRMGRRGCSAQNPKDSHDPPPHL",
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -402,6 +403,7 @@ DOA*01:04        62 ----------  62
             alignment[11],
             "MALRAGLVLGFHTLMTLLSPQEAGATKADHMGSYGPPSTSLTAPRASSPMNLMRNSCSLWTX--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------",
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 

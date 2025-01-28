@@ -232,6 +232,7 @@ np.array([['A', '-', 'C', '-', 'G', '-', 'T', 'c', 'g', 't', 'g', 't', 'g',
                 # fmt: on
             )
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -285,6 +286,7 @@ np.array([['A', 'A', 'A', 'A', 'A', 'G', 'G', 'C', 'A', 'T', 'T', 'G', 'T',
                 # fmt: on
             )
         )
+        # ADD TEST
         with self.assertRaises(StopIteration):
             next(alignments)
         self.check_reading_writing(path)
