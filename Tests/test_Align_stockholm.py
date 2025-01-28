@@ -818,9 +818,13 @@ HBB2_TRICR                      .VHLTAEDRKEIAAILGKV--NVDSLGGQCLARLIVVNPWSRRYFHDF
         )
         counts = alignment.counts()
         gaps = counts.gaps
+        insertions = counts.insertions
+        deletions = counts.deletions
         identities = counts.identities
         mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 7600)
+        self.assertEqual(counts.insertions, 3500)
+        self.assertEqual(counts.deletions, 4100)
         self.assertEqual(counts.identities, 66291)
         self.assertEqual(counts.mismatches, 73327)
 
@@ -962,9 +966,13 @@ H8K5G2_RICAG/113-350            LAEQKRKEIEEEKEKDKTLSTFFGNPANREFIDKALENPELKKKLESI
         )
         counts = alignment.counts()
         gaps = counts.gaps
+        insertions = counts.insertions
+        deletions = counts.deletions
         identities = counts.identities
         mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 7)
+        self.assertEqual(counts.insertions, 5)
+        self.assertEqual(counts.deletions, 2)
         self.assertEqual(counts.identities, 183)
         self.assertEqual(counts.mismatches, 50)
 
@@ -1138,9 +1146,13 @@ DN7E_SULAC/3-60                 KVRFKYKGEEKEVDTSKIKKVWRVGKMVSFTYDD.NGKTGRGAVSEKD
         )
         counts = alignment.counts()
         gaps = counts.gaps
+        insertions = counts.insertions
+        deletions = counts.deletions
         identities = counts.identities
         mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 2)
+        self.assertEqual(counts.insertions, 1)
+        self.assertEqual(counts.deletions, 1)
         self.assertEqual(counts.identities, 136)
         self.assertEqual(counts.mismatches, 38)
 
@@ -1402,9 +1414,13 @@ Q6L2L5_PICTO/38-510             TILLYYISNSLSFLFFSIVLNGIYYVKGNTN....DISSFGIILFMYI
         )
         counts = alignment.counts()
         gaps = counts.gaps
+        insertions = counts.insertions
+        deletions = counts.deletions
         identities = counts.identities
         mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 1224)
+        self.assertEqual(counts.insertions, 830)
+        self.assertEqual(counts.deletions, 394)
         self.assertEqual(counts.identities, 1651)
         self.assertEqual(counts.mismatches, 7058)
 
@@ -1692,9 +1708,13 @@ ERG26_YEAST/8-280               LIIGGSGFLGLHLIQQFFDINP.KPDIHIFD......VRDLPEKLSKQ
         )
         counts = alignment.counts()
         gaps = counts.gaps
+        insertions = counts.insertions
+        deletions = counts.deletions
         identities = counts.identities
         mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 497)
+        self.assertEqual(counts.insertions, 238)
+        self.assertEqual(counts.deletions, 259)
         self.assertEqual(counts.identities, 2407)
         self.assertEqual(counts.mismatches, 5111)
 
@@ -2023,9 +2043,13 @@ P73433_SYNY3/6-329              EFNLFLDLLGSALLLSLPWLLLGIIISSTFLIWTDEQKWVANF..PRN
         )
         counts = alignment.counts()
         gaps = counts.gaps
+        insertions = counts.insertions
+        deletions = counts.deletions
         identities = counts.identities
         mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 2026)
+        self.assertEqual(counts.insertions, 1075)
+        self.assertEqual(counts.deletions, 951)
         self.assertEqual(counts.identities, 3518)
         self.assertEqual(counts.mismatches, 13024)
 
@@ -2325,9 +2349,13 @@ A1BA41_PARDP/42-128             .PVNGGMN...FQPASSPLAHDQQWLDHFVLYIITAVTIFVCLLLLIC
         )
         counts = alignment.counts()
         gaps = counts.gaps
+        insertions = counts.insertions
+        deletions = counts.deletions
         identities = counts.identities
         mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 264)
+        self.assertEqual(counts.insertions, 113)
+        self.assertEqual(counts.deletions, 151)
         self.assertEqual(counts.identities, 1656)
         self.assertEqual(counts.mismatches, 2967)
 
@@ -2557,9 +2585,13 @@ POLS_CHIKS/744-1247             RTAKAATYQEAAVYLWNEQQPLFWLQALIPLAALIVLCNCLRLLPCCC
         )
         counts = alignment.counts()
         gaps = counts.gaps
+        insertions = counts.insertions
+        deletions = counts.deletions
         identities = counts.identities
         mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 1)
+        self.assertEqual(counts.insertions, 1)
+        self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.identities, 299)
         self.assertEqual(counts.mismatches, 204)
 
@@ -4438,9 +4470,13 @@ CCNE_CAEEL/232-360                  KVWSLMVKRDE..IPRATRFLL..GNHPD...MDD.EKRRILID
         )
         counts = alignment.counts()
         gaps = counts.gaps
+        insertions = counts.insertions
+        deletions = counts.deletions
         identities = counts.identities
         mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 38234)
+        self.assertEqual(counts.insertions, 22973)
+        self.assertEqual(counts.deletions, 15261)
         self.assertEqual(counts.identities, 178277)
         self.assertEqual(counts.mismatches, 375865)
 
@@ -4559,9 +4595,13 @@ POL_SFVCP/1064-1126             RSWSPVVGQLVQERVARPASLRPRWHKPSTVLEVLNPRTVVILDHLGN
         )
         counts = alignment.counts()
         gaps = counts.gaps
+        insertions = counts.insertions
+        deletions = counts.deletions
         identities = counts.identities
         mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.identities, 0)
         self.assertEqual(counts.mismatches, 0)
 
@@ -4737,9 +4777,13 @@ FP929033.1/4930704-4930908            GUAAGUAAAAGUGUAACAGGAAGAAAGUUGCAGCAUAUAUGC
         )
         counts = alignment.counts()
         gaps = counts.gaps
+        insertions = counts.insertions
+        deletions = counts.deletions
         identities = counts.identities
         mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 28)
+        self.assertEqual(counts.insertions, 14)
+        self.assertEqual(counts.deletions, 14)
         self.assertEqual(counts.identities, 487)
         self.assertEqual(counts.mismatches, 102)
 
@@ -5058,9 +5102,13 @@ AALE02000013.1/38-183                   AGUUAAAAAAAGACCGAAUACGAUUCCUA-UAUUCGGUCU
         )
         counts = alignment.counts()
         gaps = counts.gaps
+        insertions = counts.insertions
+        deletions = counts.deletions
         identities = counts.identities
         mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 126)
+        self.assertEqual(counts.insertions, 83)
+        self.assertEqual(counts.deletions, 43)
         self.assertEqual(counts.identities, 9761)
         self.assertEqual(counts.mismatches, 1564)
 
@@ -5300,9 +5348,13 @@ CP011132.1/1732716-1732810            ACCCGCCACACGGAAUAAUAACGGGAACACAUG-AAGGAUAA
         )
         counts = alignment.counts()
         gaps = counts.gaps
+        insertions = counts.insertions
+        deletions = counts.deletions
         identities = counts.identities
         mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 3)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 3)
         self.assertEqual(counts.identities, 480)
         self.assertEqual(counts.mismatches, 93)
 
@@ -5526,9 +5578,13 @@ U75698.1/123214-122967              UUGCUAUGCCGCGGCAGACUCCUUUUCCCGCCAAGAACUUAUAG
         )
         counts = alignment.counts()
         gaps = counts.gaps
+        insertions = counts.insertions
+        deletions = counts.deletions
         identities = counts.identities
         mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.identities, 2462)
         self.assertEqual(counts.mismatches, 18)
 
@@ -5658,9 +5714,13 @@ X58459.1/659-681                ACUUUGGCUAAGGUUAAAAGCUU
         )
         counts = alignment.counts()
         gaps = counts.gaps
+        insertions = counts.insertions
+        deletions = counts.deletions
         identities = counts.identities
         mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.identities, 22)
         self.assertEqual(counts.mismatches, 1)
 
@@ -5736,9 +5796,13 @@ L7MZX4/382-398                  GEKPYECLECGKRFTAR
         )
         counts = alignment.counts()
         gaps = counts.gaps
+        insertions = counts.insertions
+        deletions = counts.deletions
         identities = counts.identities
         mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.identities, 0)
         self.assertEqual(counts.mismatches, 0)
 
@@ -5823,9 +5887,13 @@ P27378/2-64                     ANFNVPKLGVFPVAAVFDIDNVPEDSSATGSRWLPSIYQGGNYWGGGP
         )
         counts = alignment.counts()
         gaps = counts.gaps
+        insertions = counts.insertions
+        deletions = counts.deletions
         identities = counts.identities
         mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.identities, 0)
         self.assertEqual(counts.mismatches, 0)
 
@@ -6012,9 +6080,13 @@ G4FEQ2/2-92                     VERYSLSPMKDLWTEEAKYRRWLEVELAVTRAYEELGMIPKGVTERIR
         )
         counts = alignment.counts()
         gaps = counts.gaps
+        insertions = counts.insertions
+        deletions = counts.deletions
         identities = counts.identities
         mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.identities, 546)
         self.assertEqual(counts.mismatches, 0)
 

@@ -42,13 +42,6 @@ class TestPhylipReading(unittest.TestCase):
         self.assertTrue(
             np.array_equal(alignment.coordinates, saved_alignment.coordinates)
         )
-        counts = alignment.counts()
-        gaps = counts.gaps
-        identities = counts.identities
-        mismatches = counts.mismatches
-        self.assertEqual(counts.gaps, 0)
-        self.assertEqual(counts.identities, 230)
-        self.assertEqual(counts.mismatches, 190)
 
     def test_one(self):
         path = "Phylip/one.dat"
@@ -261,9 +254,13 @@ HISJ_E_COLMKKLVLSLSLVLAFSSATAAF-------------------AAIPQNIRIGTDPTYAPFESKNS-QGELVG
         )
         counts = alignment.counts()
         gaps = counts.gaps
+        insertions = counts.insertions
+        deletions = counts.deletions
         identities = counts.identities
         mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 548)
+        self.assertEqual(counts.insertions, 283)
+        self.assertEqual(counts.deletions, 265)
         self.assertEqual(counts.identities, 2258)
         self.assertEqual(counts.mismatches, 4720)
 
@@ -362,9 +359,13 @@ Tax5      CCATCTCACGGTCGGTAAGATACACCTGCTTTTGGCGGGAAATGGTCAATATTAAAAGGT
             )
             counts = alignment.counts()
             gaps = counts.gaps
+            insertions = counts.insertions
+            deletions = counts.deletions
             identities = counts.identities
             mismatches = counts.mismatches
             self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.insertions, 0)
+            self.assertEqual(counts.deletions, 0)
             self.assertEqual(counts.identities, 535)
             self.assertEqual(counts.mismatches, 65)
 
@@ -465,9 +466,13 @@ Gorilla   AAACCCTTGCCGGTACGCTTAAACCATTGCCGGTACGCTTAA
         )
         counts = alignment.counts()
         gaps = counts.gaps
+        insertions = counts.insertions
+        deletions = counts.deletions
         identities = counts.identities
         mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.identities, 230)
         self.assertEqual(counts.mismatches, 190)
 
@@ -540,9 +545,13 @@ Gorilla   AAACCCTTGCCGGTACGCTTAAACCATTGCCGGTACGCTTAA
             self.check_reading_writing(path)
             counts = alignment.counts()
             gaps = counts.gaps
+            insertions = counts.insertions
+            deletions = counts.deletions
             identities = counts.identities
             mismatches = counts.mismatches
             self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.insertions, 0)
+            self.assertEqual(counts.deletions, 0)
             self.assertEqual(counts.identities, 230)
             self.assertEqual(counts.mismatches, 190)
 
@@ -676,9 +685,13 @@ CATH_HUMAN------MWATLPLLCAGAWLLGV--------PVCGAAELSVNSLEK------------FHFKSWMSKHRK
         )
         counts = alignment.counts()
         gaps = counts.gaps
+        insertions = counts.insertions
+        deletions = counts.deletions
         identities = counts.identities
         mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 130)
+        self.assertEqual(counts.insertions, 57)
+        self.assertEqual(counts.deletions, 73)
         self.assertEqual(counts.identities, 400)
         self.assertEqual(counts.mismatches, 575)
 
@@ -803,9 +816,13 @@ IXI_237   TSPASLRPPAGPSSRPAMVSSRR-RPSPPGPRRPT----CSAAPRRPQATGGYKTCSGTCTTSTSTRHRG
         )
         counts = alignment.counts()
         gaps = counts.gaps
+        insertions = counts.insertions
+        deletions = counts.deletions
         identities = counts.identities
         mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 78)
+        self.assertEqual(counts.insertions, 36)
+        self.assertEqual(counts.deletions, 42)
         self.assertEqual(counts.identities, 667)
         self.assertEqual(counts.mismatches, 35)
 

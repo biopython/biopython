@@ -55,9 +55,37 @@ from Bio.SeqRecord import SeqRecord
 # https://github.com/biopython/biopython/pull/2007
 
 
-AlignmentCounts = collections.namedtuple(
-    "AlignmentCounts", ["gaps", "identities", "mismatches"]
-)
+class AlignmentCounts:
+    __slots__ = ("_identities", "_mismatches", "_insertions", "_deletions")
+
+    def __init__(self, identities, mismatches, insertions, deletions):
+        self._identities = identities
+        self._mismatches = mismatches
+        self._insertions = insertions
+        self._deletions = deletions
+
+    def __repr__(self):
+        return "AlignmentCounts(identities=%d, mismatches=%d, insertions=%d, deletions=%d)" % (self._identities, self._mismatches, self._insertions, self._deletions)
+
+    @property
+    def identities(self):
+        return self._identities
+
+    @property
+    def mismatches(self):
+        return self._mismatches
+
+    @property
+    def insertions(self):
+        return self._insertions
+
+    @property
+    def deletions(self):
+        return self._deletions
+
+    @property
+    def gaps(self):
+        return self._insertions + self._deletions
 
 
 class MultipleSeqAlignment:
@@ -3573,22 +3601,25 @@ class Alignment:
         namedtuple. This is calculated for all the pairs of sequences in the
         alignment.
         """
-        gaps = identities = mismatches = 0
-        for i, seq1 in enumerate(self):
-            for j, seq2 in enumerate(self):
+        identities = mismatches = insertions = deletions = 0
+        for j, seq2 in enumerate(self):
+            for i, seq1 in enumerate(self):
+                # seq2 comes after seq1 in the alignment
                 if i == j:
                     # Don't count seq1 vs seq2 and seq2 vs seq1
                     break
                 for a, b in zip(seq1, seq2):
                     if a == "-" and b == "-":
                         pass
-                    elif a == "-" or b == "-":
-                        gaps += 1
+                    elif a == "-":
+                        insertions += 1
+                    elif b == "-":
+                        deletions += 1
                     elif a == b:
                         identities += 1
                     else:
                         mismatches += 1
-        return AlignmentCounts(gaps, identities, mismatches)
+        return AlignmentCounts(identities, mismatches, insertions, deletions)
 
     def reverse_complement(self):
         """Reverse-complement the alignment and return it.

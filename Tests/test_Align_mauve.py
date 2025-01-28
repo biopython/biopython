@@ -153,9 +153,13 @@ np.array([['A', 'A', 'G', 'C', 'C', 'C', 'T', 'C', 'C', 'T', 'A', 'G', 'C',
         )
         counts = alignment.counts()
         gaps = counts.gaps
+        insertions = counts.insertions
+        deletions = counts.deletions
         identities = counts.identities
         mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 98)
+        self.assertEqual(counts.insertions, 48)
+        self.assertEqual(counts.deletions, 50)
         self.assertEqual(counts.identities, 39)
         self.assertEqual(counts.mismatches, 7)
         alignment = next(alignments)
@@ -189,9 +193,13 @@ G
         )
         counts = alignment.counts()
         gaps = counts.gaps
+        insertions = counts.insertions
+        deletions = counts.deletions
         identities = counts.identities
         mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.identities, 0)
         self.assertEqual(counts.mismatches, 0)
         alignment = next(alignments)
@@ -225,9 +233,13 @@ A
         )
         counts = alignment.counts()
         gaps = counts.gaps
+        insertions = counts.insertions
+        deletions = counts.deletions
         identities = counts.identities
         mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.identities, 0)
         self.assertEqual(counts.mismatches, 0)
         alignment = next(alignments)
@@ -271,9 +283,13 @@ np.array([['G', 'A', 'A', 'G', 'A', 'G', 'G', 'A', 'A', 'A', 'A', 'G', 'T',
         )
         counts = alignment.counts()
         gaps = counts.gaps
+        insertions = counts.insertions
+        deletions = counts.deletions
         identities = counts.identities
         mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.identities, 0)
         self.assertEqual(counts.mismatches, 0)
         alignment = next(alignments)
@@ -307,9 +323,13 @@ C
         )
         counts = alignment.counts()
         gaps = counts.gaps
+        insertions = counts.insertions
+        deletions = counts.deletions
         identities = counts.identities
         mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.identities, 0)
         self.assertEqual(counts.mismatches, 0)
         alignment = next(alignments)
@@ -343,9 +363,13 @@ C
         )
         counts = alignment.counts()
         gaps = counts.gaps
+        insertions = counts.insertions
+        deletions = counts.deletions
         identities = counts.identities
         mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.identities, 0)
         self.assertEqual(counts.mismatches, 0)
         self.assertRaises(StopIteration, next, alignments)
@@ -562,9 +586,13 @@ np.array([['T', 'A', 'A', 'G', 'C', 'C', 'C', 'T', 'C', 'C', 'T', 'A', 'G',
             )
             counts = alignment.counts()
             gaps = counts.gaps
+            insertions = counts.insertions
+            deletions = counts.deletions
             identities = counts.identities
             mismatches = counts.mismatches
             self.assertEqual(counts.gaps, 68)
+            self.assertEqual(counts.insertions, 3)
+            self.assertEqual(counts.deletions, 65)
             self.assertEqual(counts.identities, 68)
             self.assertEqual(counts.mismatches, 16)
             alignment = next(alignments)
@@ -607,9 +635,13 @@ np.array([['C', 'T', 'G', 'G', 'C', 'G', 'T', 'C', 'C', 'G', 'G',
             )
             counts = alignment.counts()
             gaps = counts.gaps
+            insertions = counts.insertions
+            deletions = counts.deletions
             identities = counts.identities
             mismatches = counts.mismatches
             self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.insertions, 0)
+            self.assertEqual(counts.deletions, 0)
             self.assertEqual(counts.identities, 0)
             self.assertEqual(counts.mismatches, 0)
             self.assertRaises(StopIteration, next, alignments)

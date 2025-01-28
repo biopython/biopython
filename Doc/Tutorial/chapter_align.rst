@@ -599,14 +599,14 @@ customized.
    query             0 AG-TTT-- 5
    <BLANKLINE>
    >>> pairwise_alignment.counts()
-   AlignmentCounts(gaps=3, identities=4, mismatches=1)
+   AlignmentCounts(identities=4, mismatches=1, insertions=0, deletions=3)
    >>> print(alignment)
                      1 CGGTTTTT 9
                      0 AG-TTT-- 5
                      0 AGGTTT-- 6
    <BLANKLINE>
    >>> alignment.counts()
-   AlignmentCounts(gaps=6, identities=14, mismatches=2)
+   AlignmentCounts(identities=14, mismatches=2, insertions=1, deletions=5)
 
 Letter frequencies
 ~~~~~~~~~~~~~~~~~~
@@ -2575,7 +2575,7 @@ calling the ``counts`` method on the ``alignment`` object:
 .. code:: pycon
 
    >>> alignment.counts()
-   AlignmentCounts(gaps=19, identities=112, mismatches=0)
+   AlignmentCounts(identities=112, mismatches=0, insertions=0, deletions=19)
 
 where ``AlignmentCounts`` is a ``namedtuple`` in the ``collections``
 module in Python’s standard library.

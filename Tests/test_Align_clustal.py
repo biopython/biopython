@@ -188,9 +188,13 @@ gi|671626|emb|CAA85685.1|           -
         )
         counts = alignment.counts()
         gaps = counts.gaps
+        insertions = counts.insertions
+        deletions = counts.deletions
         identities = counts.identities
         mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 129)
+        self.assertEqual(counts.insertions, 1)
+        self.assertEqual(counts.deletions, 128)
         self.assertEqual(counts.identities, 64)
         self.assertEqual(counts.mismatches, 408)
 
@@ -413,9 +417,13 @@ HISJ_E_COLI                         GMGLRK--EDNELREALNKAFAEMRADGTYEKLAKKYFDFDVYG
         )
         counts = alignment.counts()
         gaps = counts.gaps
+        insertions = counts.insertions
+        deletions = counts.deletions
         identities = counts.identities
         mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 608)
+        self.assertEqual(counts.insertions, 296)
+        self.assertEqual(counts.deletions, 312)
         self.assertEqual(counts.identities, 2353)
         self.assertEqual(counts.mismatches, 4595)
         self.check_reading_writing(path)
@@ -596,9 +604,13 @@ AT3G20900.1-CDS                     CAGCACCGCTGCTGGGGATGGAGAGGGAACAGAGTAG
         )
         counts = alignment.counts()
         gaps = counts.gaps
+        insertions = counts.insertions
+        deletions = counts.deletions
         identities = counts.identities
         mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 962)
+        self.assertEqual(counts.insertions, 67)
+        self.assertEqual(counts.deletions, 895)
         self.assertEqual(counts.identities, 974)
         self.assertEqual(counts.mismatches, 60)
         self.check_reading_writing(path)
@@ -655,9 +667,13 @@ AT3G20900                           GCTGGGGATGGAGAGGGAACAGAGTAG
         )
         counts = alignment.counts()
         gaps = counts.gaps
+        insertions = counts.insertions
+        deletions = counts.deletions
         identities = counts.identities
         mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 1)
+        self.assertEqual(counts.insertions, 1)
+        self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.identities, 25)
         self.assertEqual(counts.mismatches, 1)
         self.check_reading_writing(path)
@@ -818,9 +834,13 @@ azup_achcy                          V
         )
         counts = alignment.counts()
         gaps = counts.gaps
+        insertions = counts.insertions
+        deletions = counts.deletions
         identities = counts.identities
         mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 72)
+        self.assertEqual(counts.insertions, 22)
+        self.assertEqual(counts.deletions, 50)
         self.assertEqual(counts.identities, 427)
         self.assertEqual(counts.mismatches, 477)
         self.check_reading_writing(path)

@@ -190,9 +190,13 @@ W*05:01          60 SKPTCREGGRSGSAKSLRMGRRGCSAQNPKDSHDPPPHL 99
         )
         counts = alignment.counts()
         gaps = counts.gaps
+        insertions = counts.insertions
+        deletions = counts.deletions
         identities = counts.identities
         mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 168)
+        self.assertEqual(counts.insertions, 24)
+        self.assertEqual(counts.deletions, 144)
         self.assertEqual(counts.identities, 5029)
         self.assertEqual(counts.mismatches, 212)
         with self.assertRaises(StopIteration):
@@ -411,9 +415,13 @@ DOA*01:04        62 ----------  62
         )
         counts = alignment.counts()
         gaps = counts.gaps
+        insertions = counts.insertions
+        deletions = counts.deletions
         identities = counts.identities
         mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 2628)
+        self.assertEqual(counts.insertions, 308)
+        self.assertEqual(counts.deletions, 2320)
         self.assertEqual(counts.identities, 13538)
         self.assertEqual(counts.mismatches, 306)
         with self.assertRaises(StopIteration):
