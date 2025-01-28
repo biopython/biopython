@@ -3651,25 +3651,47 @@ class Alignment:
         left_insertions = left_deletions = 0
         right_insertions = right_deletions = 0
         internal_insertions = internal_deletions = 0
-        for j, seq2 in enumerate(self):
-            for i, seq1 in enumerate(self):
+        n = len(self.sequences)
+        coordinates = self.coordinates.copy()
+        steps = np.diff(coordinates, 1)
+        aligned = sum(steps != 0, 0) > 1
+        # True for steps in which at least two sequences align, False if a gap
+        for i in range(n):
+            aligned_steps = steps[i, aligned]
+            if sum(aligned_steps > 0) < sum(aligned_steps < 0):
+                steps[i, :] = -steps[i, :]
+                coordinates[i, :] = len(self.sequences[i]) - coordinates[i, :]
+        coordinates = coordinates.transpose()
+        for i in range(n):
+            for j in range(i+1, n):
+                pair_coordinates = coordinates[:, (i, j)]
+                start1, start2 = pair_coordinates[0]
+                for end1, end2 in pair_coordinates[1:]:
+                    if start1 == end1 and start2 == end2:
+                        pass
+                    elif start1 == end1:
+                        insertions += end2 - start2
+                    elif start2 == end2:
+                        deletions += end1 - start1
+                    start1, start2 = end1, end2
+                seq1 = self[i]
+                seq2 = self[j]
                 # seq2 comes after seq1 in the alignment
-                if i == j:
-                    # Don't count seq1 vs seq2 and seq2 vs seq1
-                    break
                 if seq1 == [] or seq2 == []:
                     continue
                 for a, b in zip(seq1, seq2):
                     if a == "-" and b == "-":
                         pass
                     elif a == "-":
-                        insertions += 1
+                        pass
                     elif b == "-":
-                        deletions += 1
+                        pass
                     elif a == b:
                         identities += 1
                     else:
                         mismatches += 1
+                insertions = int(insertions)
+                deletions = int(deletions)
                 left_insertions = len(a) - len(a.lstrip("-"))
                 left_deletions = len(b) - len(b.lstrip("-"))
                 left_both = min(left_insertions, left_deletions)
