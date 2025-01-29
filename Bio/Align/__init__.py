@@ -3648,7 +3648,6 @@ class Alignment:
         alignment.
         """
         identities = mismatches = insertions = deletions = 0
-        old_insertions = old_deletions = 0
         left_insertions = left_deletions = 0
         right_insertions = right_deletions = 0
         internal_insertions = internal_deletions = 0
@@ -3689,15 +3688,13 @@ class Alignment:
                     if a == "-" and b == "-":
                         pass
                     elif a == "-":
-                        old_insertions += 1 
+                        pass
                     elif b == "-":
-                        old_deletions += 1 
+                        pass
                     elif a == b:
                         identities += 1
                     else:
                         mismatches += 1
-                old_insertions = int(old_insertions)
-                old_deletions = int(old_deletions)
                 left_insertions = len(a) - len(a.lstrip("-"))
                 left_deletions = len(b) - len(b.lstrip("-"))
                 left_both = min(left_insertions, left_deletions)
@@ -3708,9 +3705,10 @@ class Alignment:
                 right_both = min(right_insertions, right_deletions)
                 right_insertions -= right_both
                 right_deletions -= right_both
-                internal_insertions = old_insertions - left_insertions - right_insertions
-                internal_deletions = old_deletions - left_deletions - right_deletions
-        assert insertions == left_insertions + internal_insertions + right_insertions
+                insertions = int(insertions)
+                deletions = int(deletions)
+                internal_insertions = insertions - left_insertions - right_insertions
+                internal_deletions = deletions - left_deletions - right_deletions
         return AlignmentCounts(identities, mismatches, left_insertions, left_deletions, right_insertions, right_deletions, internal_insertions, internal_deletions)
 
     def reverse_complement(self):
