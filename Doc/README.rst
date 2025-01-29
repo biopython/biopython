@@ -27,12 +27,12 @@ This command depends on `Latexmk <https://mg.readthedocs.io/latexmk.html>`_ and 
 
 On Ubuntu, you can install these with the following commands::
 
-    sudo apt install hevea texlive-latex-base texlive-latex-extra python-pygments
+    sudo apt install texlive-latex-base texlive-latex-extra python-pygments
 
 On Fedora (tested for Workstation 33)::
 
     dnf install texlive-scheme-basic texlive-preprint \
-                texlive-comment texlive-minted hevea
+                texlive-comment texlive-minted
 
 Testing code examples
 ------------------------
