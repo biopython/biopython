@@ -3668,6 +3668,8 @@ class Alignment:
         coordinates = coordinates.transpose()
         for i in range(n):
             for j in range(i+1, n):
+                sequence1 = sequences[i]
+                sequence2 = sequences[j]
                 pair_coordinates = coordinates[:, (i, j)]
                 left1, left2 = pair_coordinates[0]
                 right1, right2 = pair_coordinates[-1]
@@ -3689,19 +3691,13 @@ class Alignment:
                             right_deletions += end1 - start1
                         else:
                             internal_deletions += end1 - start1
-                    start1, start2 = end1, end2
-                seq1 = self[i]
-                seq2 = self[j]
-                # seq2 comes after seq1 in the alignment
-                if seq1 == [] or seq2 == []:
-                    continue
-                for a, b in zip(seq1, seq2):
-                    if a == "-" or b == "-":
-                        pass
-                    elif a == b:
-                        identities += 1
                     else:
-                        mismatches += 1
+                        for c1, c2 in zip(sequence1[start1: end1], sequence2[start2: end2]):
+                            if c1 == c2:
+                                identities += 1
+                            else:
+                                mismatches += 1
+                    start1, start2 = end1, end2
         left_insertions = int(left_insertions)
         left_deletions = int(left_deletions)
         right_insertions = int(right_insertions)
