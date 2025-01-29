@@ -3648,10 +3648,12 @@ class Alignment:
         alignment.
         """
         identities = mismatches = insertions = deletions = 0
+        old_insertions = old_deletions = 0
         left_insertions = left_deletions = 0
         right_insertions = right_deletions = 0
         internal_insertions = internal_deletions = 0
         n = len(self.sequences)
+        sequences = list(self.sequences)
         coordinates = self.coordinates.copy()
         steps = np.diff(coordinates, 1)
         aligned = sum(steps != 0, 0) > 1
@@ -3660,7 +3662,11 @@ class Alignment:
             aligned_steps = steps[i, aligned]
             if sum(aligned_steps > 0) < sum(aligned_steps < 0):
                 steps[i, :] = -steps[i, :]
+                start = min(coordinates[i, :])
+                end = max(coordinates[i, :])
                 coordinates[i, :] = len(self.sequences[i]) - coordinates[i, :]
+                coordinates[i, :] -= coordinates[i, 0]
+                sequences[i] = reverse_complement(sequences[i][start:end])
         coordinates = coordinates.transpose()
         for i in range(n):
             for j in range(i+1, n):
@@ -3683,15 +3689,15 @@ class Alignment:
                     if a == "-" and b == "-":
                         pass
                     elif a == "-":
-                        pass
+                        old_insertions += 1 
                     elif b == "-":
-                        pass
+                        old_deletions += 1 
                     elif a == b:
                         identities += 1
                     else:
                         mismatches += 1
-                insertions = int(insertions)
-                deletions = int(deletions)
+                old_insertions = int(old_insertions)
+                old_deletions = int(old_deletions)
                 left_insertions = len(a) - len(a.lstrip("-"))
                 left_deletions = len(b) - len(b.lstrip("-"))
                 left_both = min(left_insertions, left_deletions)
@@ -3702,8 +3708,9 @@ class Alignment:
                 right_both = min(right_insertions, right_deletions)
                 right_insertions -= right_both
                 right_deletions -= right_both
-                internal_insertions = insertions - left_insertions - right_insertions
-                internal_deletions = deletions - left_deletions - right_deletions
+                internal_insertions = old_insertions - left_insertions - right_insertions
+                internal_deletions = old_deletions - left_deletions - right_deletions
+        assert insertions == left_insertions + internal_insertions + right_insertions
         return AlignmentCounts(identities, mismatches, left_insertions, left_deletions, right_insertions, right_deletions, internal_insertions, internal_deletions)
 
     def reverse_complement(self):
