@@ -3648,6 +3648,7 @@ class Alignment:
         alignment.
         """
         identities = mismatches = insertions = deletions = 0
+        old_left_insertions = old_left_deletions = 0
         left_insertions = left_deletions = 0
         right_insertions = right_deletions = 0
         internal_insertions = internal_deletions = 0
@@ -3670,14 +3671,21 @@ class Alignment:
         for i in range(n):
             for j in range(i+1, n):
                 pair_coordinates = coordinates[:, (i, j)]
-                start1, start2 = pair_coordinates[0]
+                left1, left2 = pair_coordinates[0]
+                start1, start2 = left1, left2
                 for end1, end2 in pair_coordinates[1:]:
                     if start1 == end1 and start2 == end2:
                         pass
                     elif start1 == end1:
-                        insertions += end2 - start2
+                        if start1 == left1:
+                            left_insertions += end2 - start2
+                        else:
+                            insertions += end2 - start2
                     elif start2 == end2:
-                        deletions += end1 - start1
+                        if start2 == left2:
+                            left_deletions += end1 - start1
+                        else:
+                            deletions += end1 - start1
                     start1, start2 = end1, end2
                 seq1 = self[i]
                 seq2 = self[j]
@@ -3695,20 +3703,37 @@ class Alignment:
                         identities += 1
                     else:
                         mismatches += 1
-                left_insertions = len(a) - len(a.lstrip("-"))
-                left_deletions = len(b) - len(b.lstrip("-"))
-                left_both = min(left_insertions, left_deletions)
-                left_insertions -= left_both
-                left_deletions -= left_both
-                right_insertions = len(a) - len(a.rstrip("-"))
-                right_deletions = len(b) - len(b.rstrip("-"))
-                right_both = min(right_insertions, right_deletions)
-                right_insertions -= right_both
-                right_deletions -= right_both
-                insertions = int(insertions)
-                deletions = int(deletions)
-                internal_insertions = insertions - left_insertions - right_insertions
-                internal_deletions = deletions - left_deletions - right_deletions
+                s1 = ""
+                s2 = ""
+                for c1, c2 in zip(seq1, seq2):
+                    if c1 == "-" and c2 == "-":
+                        continue
+                    else:
+                        s1 += c1
+                        s2 += c2
+                li = len(s1) - len(s1.lstrip("-"))
+                ld = len(s2) - len(s2.lstrip("-"))
+                left_both = min(li, ld)
+                li -= left_both
+                ld -= left_both
+                ri = len(s1) - len(s1.rstrip("-"))
+                rd = len(s2) - len(s2.rstrip("-"))
+                right_both = min(ri, rd)
+                ri -= right_both
+                rd -= right_both
+                old_left_insertions += li
+                old_left_deletions += ld
+                right_insertions += ri
+                right_deletions += rd
+        assert left_insertions == old_left_insertions
+        assert left_deletions == old_left_deletions
+        left_insertions = int(left_insertions)
+        left_deletions = int(left_deletions)
+        insertions = int(insertions) + left_insertions
+        deletions = int(deletions) + left_deletions
+        left_insertions = int(old_left_insertions)
+        internal_insertions = insertions - left_insertions - right_insertions
+        internal_deletions = deletions - left_deletions - right_deletions
         return AlignmentCounts(identities, mismatches, left_insertions, left_deletions, right_insertions, right_deletions, internal_insertions, internal_deletions)
 
     def reverse_complement(self):
