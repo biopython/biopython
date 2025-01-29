@@ -3647,13 +3647,12 @@ class Alignment:
         namedtuple. This is calculated for all the pairs of sequences in the
         alignment.
         """
-        identities = mismatches = insertions = deletions = 0
-        old_left_insertions = old_left_deletions = 0
+        identities = mismatches = 0
         left_insertions = left_deletions = 0
         right_insertions = right_deletions = 0
         internal_insertions = internal_deletions = 0
-        n = len(self.sequences)
         sequences = list(self.sequences)
+        n = len(sequences)
         coordinates = self.coordinates.copy()
         steps = np.diff(coordinates, 1)
         aligned = sum(steps != 0, 0) > 1
@@ -3661,7 +3660,6 @@ class Alignment:
         for i in range(n):
             aligned_steps = steps[i, aligned]
             if sum(aligned_steps > 0) < sum(aligned_steps < 0):
-                steps[i, :] = -steps[i, :]
                 start = min(coordinates[i, :])
                 end = max(coordinates[i, :])
                 coordinates[i, :] = len(self.sequences[i]) - coordinates[i, :]
@@ -3672,6 +3670,7 @@ class Alignment:
             for j in range(i+1, n):
                 pair_coordinates = coordinates[:, (i, j)]
                 left1, left2 = pair_coordinates[0]
+                right1, right2 = pair_coordinates[-1]
                 start1, start2 = left1, left2
                 for end1, end2 in pair_coordinates[1:]:
                     if start1 == end1 and start2 == end2:
@@ -3679,13 +3678,17 @@ class Alignment:
                     elif start1 == end1:
                         if start1 == left1:
                             left_insertions += end2 - start2
+                        elif end1 == right1:
+                            right_insertions += end2 - start2
                         else:
-                            insertions += end2 - start2
+                            internal_insertions += end2 - start2
                     elif start2 == end2:
                         if start2 == left2:
                             left_deletions += end1 - start1
+                        elif end2 == right2:
+                            right_deletions += end1 - start1
                         else:
-                            deletions += end1 - start1
+                            internal_deletions += end1 - start1
                     start1, start2 = end1, end2
                 seq1 = self[i]
                 seq2 = self[j]
@@ -3693,47 +3696,18 @@ class Alignment:
                 if seq1 == [] or seq2 == []:
                     continue
                 for a, b in zip(seq1, seq2):
-                    if a == "-" and b == "-":
-                        pass
-                    elif a == "-":
-                        pass
-                    elif b == "-":
+                    if a == "-" or b == "-":
                         pass
                     elif a == b:
                         identities += 1
                     else:
                         mismatches += 1
-                s1 = ""
-                s2 = ""
-                for c1, c2 in zip(seq1, seq2):
-                    if c1 == "-" and c2 == "-":
-                        continue
-                    else:
-                        s1 += c1
-                        s2 += c2
-                li = len(s1) - len(s1.lstrip("-"))
-                ld = len(s2) - len(s2.lstrip("-"))
-                left_both = min(li, ld)
-                li -= left_both
-                ld -= left_both
-                ri = len(s1) - len(s1.rstrip("-"))
-                rd = len(s2) - len(s2.rstrip("-"))
-                right_both = min(ri, rd)
-                ri -= right_both
-                rd -= right_both
-                old_left_insertions += li
-                old_left_deletions += ld
-                right_insertions += ri
-                right_deletions += rd
-        assert left_insertions == old_left_insertions
-        assert left_deletions == old_left_deletions
         left_insertions = int(left_insertions)
         left_deletions = int(left_deletions)
-        insertions = int(insertions) + left_insertions
-        deletions = int(deletions) + left_deletions
-        left_insertions = int(old_left_insertions)
-        internal_insertions = insertions - left_insertions - right_insertions
-        internal_deletions = deletions - left_deletions - right_deletions
+        right_insertions = int(right_insertions)
+        right_deletions = int(right_deletions)
+        internal_insertions = int(internal_insertions)
+        internal_deletions = int(internal_deletions)
         return AlignmentCounts(identities, mismatches, left_insertions, left_deletions, right_insertions, right_deletions, internal_insertions, internal_deletions)
 
     def reverse_complement(self):
