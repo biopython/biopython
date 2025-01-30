@@ -3657,14 +3657,18 @@ class Alignment:
         steps = np.diff(coordinates, 1)
         aligned = sum(steps != 0, 0) > 1
         # True for steps in which at least two sequences align, False if a gap
-        for i in range(n):
+        for i, sequence in enumerate(sequences):
+            length = len(sequence)
             aligned_steps = steps[i, aligned]
             if sum(aligned_steps > 0) < sum(aligned_steps < 0):
                 start = min(coordinates[i, :])
                 end = max(coordinates[i, :])
-                coordinates[i, :] = len(self.sequences[i]) - coordinates[i, :]
-                coordinates[i, :] -= coordinates[i, 0]
-                sequences[i] = reverse_complement(sequences[i][start:end])
+                coordinates[i, :] = length - coordinates[i, :]
+                # only take the part of the sequence that is actually needed,
+                # and avoid taking the reverse complement of the full sequence
+                offset = length - end
+                coordinates[i, :] -= offset
+                sequences[i] = reverse_complement(sequence[start:end])
         coordinates = coordinates.transpose()
         for i in range(n):
             for j in range(i+1, n):
