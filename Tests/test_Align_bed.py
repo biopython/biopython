@@ -11,9 +11,6 @@ from io import StringIO
 import numpy as np
 
 from Bio import Align
-from Bio.Align import substitution_matrices
-
-substitution_matrix = substitution_matrices.load("BLOSUM62")
 from Bio import SeqIO
 from Bio.Align import Alignment
 from Bio.Seq import Seq

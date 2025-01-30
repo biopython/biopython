@@ -10,9 +10,6 @@ from io import StringIO
 import numpy as np
 
 from Bio import Align
-from Bio.Align import substitution_matrices
-
-substitution_matrix = substitution_matrices.load("BLOSUM62")
 
 
 class TestAlign_declaration(unittest.TestCase):
