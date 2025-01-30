@@ -151,7 +151,12 @@ table bed
         self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
         # The modified RNAs have gaps in their sequence. As this information is
         # not stored in a BED file, we cannot calculate the substitution matrix.
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 1530)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 1530)
+        self.assertEqual(counts.identities, 175)
+        self.assertEqual(counts.mismatches, 6)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 978)
         self.assertEqual(alignment.shape, (2, 1711))
@@ -173,7 +178,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 5407))
@@ -213,7 +221,12 @@ table bed
             )
         )
         self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 5203)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 5203)
+        self.assertEqual(counts.identities, 165)
+        self.assertEqual(counts.mismatches, 39)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 972)
         self.assertEqual(alignment.shape, (2, 5407))
@@ -235,7 +248,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         self.assertRaises(StopIteration, next, alignments)
 
 
@@ -304,7 +320,6 @@ table bed
         self.assertEqual(alignments.targets[9].id, "chr9")
         self.assertEqual(len(alignments.targets[9]), 141213431)
         self.assertEqual(len(alignments), 22)
-        # ADD TEST
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 50))
@@ -324,7 +339,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 33))
@@ -344,7 +362,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 946)
         self.assertEqual(alignment.shape, (2, 36))
@@ -364,7 +385,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 824)
         self.assertEqual(alignment.shape, (2, 34))
@@ -384,7 +408,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 942)
         self.assertEqual(alignment.shape, (2, 34))
@@ -404,7 +431,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 834)
         self.assertEqual(alignment.shape, (2, 36))
@@ -424,7 +454,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 920)
         self.assertEqual(alignment.shape, (2, 25))
@@ -444,7 +477,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 912)
         self.assertEqual(alignment.shape, (2, 51))
@@ -464,7 +500,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 39))
@@ -484,7 +523,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 930)
         self.assertEqual(alignment.shape, (2, 28))
@@ -504,7 +546,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 848)
         self.assertEqual(alignment.shape, (2, 39))
@@ -524,7 +569,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 890)
         self.assertEqual(alignment.shape, (2, 170))
@@ -544,7 +592,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 39))
@@ -564,7 +615,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 17))
@@ -584,7 +638,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 946)
         self.assertEqual(alignment.shape, (2, 36))
@@ -604,7 +661,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 682)
         self.assertEqual(alignment.shape, (2, 44))
@@ -624,7 +684,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 834)
         self.assertEqual(alignment.shape, (2, 36))
@@ -644,7 +707,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 892)
         self.assertEqual(alignment.shape, (2, 37))
@@ -664,7 +730,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 572)
         self.assertEqual(alignment.shape, (2, 34))
@@ -684,7 +753,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 16))
@@ -704,7 +776,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 41))
@@ -724,7 +799,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 854)
         self.assertEqual(alignment.shape, (2, 41))
@@ -744,7 +822,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         self.assertRaises(StopIteration, next, alignments)
 
     def test_reading_psl_34_001(self):
@@ -813,7 +894,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 17))
@@ -833,7 +917,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 16))
@@ -853,7 +940,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         self.assertRaises(StopIteration, next, alignments)
 
     def test_reading_psl_34_003(self):
@@ -936,7 +1026,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 946)
         self.assertEqual(alignment.shape, (2, 36))
@@ -956,7 +1049,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 824)
         self.assertEqual(alignment.shape, (2, 34))
@@ -976,7 +1072,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 942)
         self.assertEqual(alignment.shape, (2, 34))
@@ -996,7 +1095,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 834)
         self.assertEqual(alignment.shape, (2, 36))
@@ -1016,7 +1118,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 920)
         self.assertEqual(alignment.shape, (2, 25))
@@ -1036,7 +1141,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 912)
         self.assertEqual(alignment.shape, (2, 51))
@@ -1056,7 +1164,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 39))
@@ -1076,7 +1187,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 930)
         self.assertEqual(alignment.shape, (2, 28))
@@ -1096,7 +1210,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 848)
         self.assertEqual(alignment.shape, (2, 39))
@@ -1116,7 +1233,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 890)
         self.assertEqual(alignment.shape, (2, 170))
@@ -1136,7 +1256,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 39))
@@ -1156,7 +1279,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 946)
         self.assertEqual(alignment.shape, (2, 36))
@@ -1176,7 +1302,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 682)
         self.assertEqual(alignment.shape, (2, 44))
@@ -1196,7 +1325,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 834)
         self.assertEqual(alignment.shape, (2, 36))
@@ -1216,7 +1348,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 892)
         self.assertEqual(alignment.shape, (2, 37))
@@ -1236,7 +1371,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 572)
         self.assertEqual(alignment.shape, (2, 34))
@@ -1256,7 +1394,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 41))
@@ -1276,7 +1417,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 854)
         self.assertEqual(alignment.shape, (2, 41))
@@ -1296,7 +1440,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         self.assertRaises(StopIteration, next, alignments)
 
     def test_reading_psl_34_004(self):
@@ -1379,7 +1526,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 33))
@@ -1399,7 +1549,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 946)
         self.assertEqual(alignment.shape, (2, 36))
@@ -1419,7 +1572,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 824)
         self.assertEqual(alignment.shape, (2, 34))
@@ -1439,7 +1595,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 942)
         self.assertEqual(alignment.shape, (2, 34))
@@ -1459,7 +1618,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 834)
         self.assertEqual(alignment.shape, (2, 36))
@@ -1479,7 +1641,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 920)
         self.assertEqual(alignment.shape, (2, 25))
@@ -1499,7 +1664,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 912)
         self.assertEqual(alignment.shape, (2, 51))
@@ -1519,7 +1687,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 39))
@@ -1539,7 +1710,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 930)
         self.assertEqual(alignment.shape, (2, 28))
@@ -1559,7 +1733,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 848)
         self.assertEqual(alignment.shape, (2, 39))
@@ -1579,7 +1756,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 890)
         self.assertEqual(alignment.shape, (2, 170))
@@ -1599,7 +1779,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 39))
@@ -1619,7 +1802,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 17))
@@ -1639,7 +1825,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 946)
         self.assertEqual(alignment.shape, (2, 36))
@@ -1659,7 +1848,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 682)
         self.assertEqual(alignment.shape, (2, 44))
@@ -1679,7 +1871,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 834)
         self.assertEqual(alignment.shape, (2, 36))
@@ -1699,7 +1894,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 892)
         self.assertEqual(alignment.shape, (2, 37))
@@ -1719,7 +1917,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 572)
         self.assertEqual(alignment.shape, (2, 34))
@@ -1739,7 +1940,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 16))
@@ -1759,7 +1963,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 41))
@@ -1779,7 +1986,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 854)
         self.assertEqual(alignment.shape, (2, 41))
@@ -1799,7 +2009,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         self.assertRaises(StopIteration, next, alignments)
 
     def test_reading_psl_34_005(self):
@@ -1874,7 +2087,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1893,7 +2109,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1912,7 +2131,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1931,7 +2153,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1950,7 +2175,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1969,7 +2197,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 166)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -1988,7 +2219,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 530)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -2007,7 +2241,10 @@ table bed
                 # fmt: on
             )
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         self.assertRaises(StopIteration, next, alignments)
 
     def test_reading_psl_35_001(self):
@@ -2389,7 +2626,10 @@ table hg18KGchr7
         )
         self.assertEqual(alignment.annotations["geneSymbol"], ".")
         self.assertEqual(alignment.annotations["spID"], "PDGFA")
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 0)
         self.assertEqual(alignment.thickStart, 506606)
@@ -2410,7 +2650,10 @@ table hg18KGchr7
         )
         self.assertEqual(alignment.annotations["geneSymbol"], "PDGFA")
         self.assertEqual(alignment.annotations["spID"], "P04085")
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 0)
         self.assertEqual(alignment.thickStart, 504726)
@@ -2431,7 +2674,10 @@ table hg18KGchr7
         )
         self.assertEqual(alignment.annotations["geneSymbol"], "PDGFA")
         self.assertEqual(alignment.annotations["spID"], "P04085-2")
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 0)
         self.assertEqual(alignment.thickStart, 507195)
@@ -2452,7 +2698,10 @@ table hg18KGchr7
         )
         self.assertEqual(alignment.annotations["geneSymbol"], "PDGFA")
         self.assertEqual(alignment.annotations["spID"], "Q32M96")
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 0)
         self.assertEqual(alignment.thickStart, 556592)
@@ -2473,7 +2722,10 @@ table hg18KGchr7
         )
         self.assertEqual(alignment.annotations["geneSymbol"], "PRKAR1B")
         self.assertEqual(alignment.annotations["spID"], "Q8N422")
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 0)
         self.assertEqual(alignment.thickStart, 556592)
@@ -2494,7 +2746,10 @@ table hg18KGchr7
         )
         self.assertEqual(alignment.annotations["geneSymbol"], "PRKAR1B")
         self.assertEqual(alignment.annotations["spID"], "Q8N422")
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 0)
         self.assertEqual(alignment.thickStart, 556592)
@@ -2515,7 +2770,10 @@ table hg18KGchr7
         )
         self.assertEqual(alignment.annotations["geneSymbol"], "PRKAR1B")
         self.assertEqual(alignment.annotations["spID"], "Q8N422")
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 0)
         self.assertEqual(alignment.thickStart, 585418)
@@ -2536,7 +2794,10 @@ table hg18KGchr7
         )
         self.assertEqual(alignment.annotations["geneSymbol"], ".")
         self.assertEqual(alignment.annotations["spID"], "PRKAR1B")
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 0)
         self.assertEqual(alignment.thickStart, 733217)
@@ -2557,7 +2818,10 @@ table hg18KGchr7
         )
         self.assertEqual(alignment.annotations["geneSymbol"], ".")
         self.assertEqual(alignment.annotations["spID"], "DKFZp762F1415")
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 0)
         self.assertEqual(alignment.thickStart, 732883)
@@ -2578,7 +2842,10 @@ table hg18KGchr7
         )
         self.assertEqual(alignment.annotations["geneSymbol"], "HEATR2")
         self.assertEqual(alignment.annotations["spID"], "Q86Y56")
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
 
     def test_writing(self):
         """Test writing bigbed_extended.bb."""
@@ -2669,7 +2936,10 @@ table bed
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[10, 100], [0, 90]]))
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 2)
         self.assertEqual(alignment.shape, (2, 10))
@@ -2681,7 +2951,10 @@ table bed
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[29, 39], [10, 0]]))
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 3)
         self.assertEqual(alignment.shape, (2, 100))
@@ -2693,7 +2966,10 @@ table bed
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[200, 300], [0, 100]]))
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 6)
         self.assertEqual(alignment.shape, (2, 0))
@@ -2705,7 +2981,12 @@ table bed
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[50, 50], [0, 0]]))
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
+        self.assertEqual(counts.identities, 0)
+        self.assertEqual(counts.mismatches, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 4)
         self.assertEqual(alignment.shape, (2, 10))
@@ -2717,7 +2998,10 @@ table bed
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[100, 110], [0, 10]]))
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 5)
         self.assertEqual(alignment.shape, (2, 10))
@@ -2729,7 +3013,10 @@ table bed
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[200, 210], [0, 10]]))
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 6)
         self.assertEqual(alignment.shape, (2, 0))
@@ -2741,7 +3028,12 @@ table bed
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[220, 220], [0, 0]]))
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
+        self.assertEqual(counts.identities, 0)
+        self.assertEqual(counts.mismatches, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 7)
         self.assertEqual(alignment.shape, (2, 0))
@@ -2753,7 +3045,12 @@ table bed
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[0, 0], [0, 0]]))
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
+        self.assertEqual(counts.identities, 0)
+        self.assertEqual(counts.mismatches, 0)
 
     def test_reading(self):
         """Test reading bigbedtest.bb."""
