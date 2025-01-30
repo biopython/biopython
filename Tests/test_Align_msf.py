@@ -9,6 +9,9 @@ import warnings
 from io import StringIO
 
 from Bio import Align
+from Bio.Align import substitution_matrices
+
+substitution_matrix = substitution_matrices.load("BLOSUM62")
 from Bio import BiopythonParserWarning
 
 try:
@@ -188,17 +191,13 @@ W*05:01          60 SKPTCREGGRSGSAKSLRMGRRGCSAQNPKDSHDPPPHL 99
             alignment[10],
             "GLTPSSGYTAATWTRTAVSSVGMNIPYHGASYLVRNQELRSWTAADKAAQMPWRRNRQSCSKPTCREGGRSGSAKSLRMGRRGCSAQNPKDSHDPPPHL",
         )
-        counts = alignment.counts()
-        gaps = counts.gaps
-        insertions = counts.insertions
-        deletions = counts.deletions
-        identities = counts.identities
-        mismatches = counts.mismatches
+        counts = alignment.counts(substitution_matrix)
         self.assertEqual(counts.gaps, 168)
         self.assertEqual(counts.insertions, 24)
         self.assertEqual(counts.deletions, 144)
         self.assertEqual(counts.identities, 5029)
         self.assertEqual(counts.mismatches, 212)
+        self.assertEqual(counts.positives, 5063)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -413,17 +412,13 @@ DOA*01:04        62 ----------  62
             alignment[11],
             "MALRAGLVLGFHTLMTLLSPQEAGATKADHMGSYGPPSTSLTAPRASSPMNLMRNSCSLWTX--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------",
         )
-        counts = alignment.counts()
-        gaps = counts.gaps
-        insertions = counts.insertions
-        deletions = counts.deletions
-        identities = counts.identities
-        mismatches = counts.mismatches
+        counts = alignment.counts(substitution_matrix)
         self.assertEqual(counts.gaps, 2628)
         self.assertEqual(counts.insertions, 308)
         self.assertEqual(counts.deletions, 2320)
         self.assertEqual(counts.identities, 13538)
         self.assertEqual(counts.mismatches, 306)
+        self.assertEqual(counts.positives, 13548)
         with self.assertRaises(StopIteration):
             next(alignments)
 

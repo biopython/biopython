@@ -10,6 +10,9 @@ from io import StringIO
 import numpy as np
 
 from Bio import Align
+from Bio.Align import substitution_matrices
+
+substitution_matrix = substitution_matrices.load("BLOSUM62")
 
 
 class TestA2MReadingWriting(unittest.TestCase):
@@ -142,17 +145,13 @@ MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTEEELLRRLQQIKEGPPPQSPD
 ---------MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPG-----------------VPPEEAGAAVAAESSTGT---------WTTVWTDGLTSLDRYKG-----RCYHIEPVPG-------------------EKDQCICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGLSAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYLNATAG-----------------------TCEEMIKRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAVIDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSRGIYFTQDWVSLPGVIPVASG-----------------------------GIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVANRVA-----------VEACVKARNEG---RDLAAEGNAIIREACKWSPElAAACEVWKEIKFEFPAMD---
 """,
         )
-        counts = alignment.counts()
-        gaps = counts.gaps
-        insertions = counts.insertions
-        deletions = counts.deletions
-        identities = counts.identities
-        mismatches = counts.mismatches
+        counts = alignment.counts(substitution_matrix)
         self.assertEqual(counts.gaps, 129)
         self.assertEqual(counts.insertions, 1)
         self.assertEqual(counts.deletions, 128)
         self.assertEqual(counts.identities, 64)
         self.assertEqual(counts.mismatches, 408)
+        self.assertEqual(counts.positives, 126)
 
     def test_msaprobs(self):
         path = "Clustalw/msaprobs.a2m"
@@ -325,17 +324,13 @@ MKSVl.......KVS....LAALTlA..FAVSsh.........a.......---ADKKLVVATDTAFVPFEFKQ..GDKY
 MKKLvl......SLS....LV---lA..FSSAta...............a.FAAIPQNIRIGTDPTYAPFESKNs.QGELVGFDIDLAKELCKRINTQCTFVENPLDALIPSLKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLVVAK.NSDIQPTVESLKGKRVGVLQGTTQETFGNEHWAPKGIEIVSYQGqdNIYSDLTAGRIDAAFQDEVAASEgFLKQPVgKDYKFGGPSVKdeklfGVGTGMGLRK--EDNELREALNKAFAEMRADGTYEKLAKKYFDFDVYG...g
 """,
         )
-        counts = alignment.counts()
-        gaps = counts.gaps
-        insertions = counts.insertions
-        deletions = counts.deletions
-        identities = counts.identities
-        mismatches = counts.mismatches
+        counts = alignment.counts(substitution_matrix)
         self.assertEqual(counts.gaps, 608)
         self.assertEqual(counts.insertions, 296)
         self.assertEqual(counts.deletions, 312)
         self.assertEqual(counts.identities, 2353)
         self.assertEqual(counts.mismatches, 4595)
+        self.assertEqual(counts.positives, 3745)
         self.check_reading_writing(path)
 
     def test_muscle(self):
@@ -445,11 +440,6 @@ atgaacaaagtagcgaggaagaacaaaacatcaggtgaacaaaaaaaaaactcaatccacatcaaAGTTACAATAACTGA
 """,
         )
         counts = alignment.counts()
-        gaps = counts.gaps
-        insertions = counts.insertions
-        deletions = counts.deletions
-        identities = counts.identities
-        mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 962)
         self.assertEqual(counts.insertions, 67)
         self.assertEqual(counts.deletions, 895)
@@ -509,11 +499,6 @@ np.array([['G', 'C', 'T', 'G', 'G', 'G', 'G', 'A', 'T', 'G', 'G', 'A', 'G', 'A',
             )
         )
         counts = alignment.counts()
-        gaps = counts.gaps
-        insertions = counts.insertions
-        deletions = counts.deletions
-        identities = counts.identities
-        mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 1)
         self.assertEqual(counts.insertions, 1)
         self.assertEqual(counts.deletions, 0)
@@ -662,17 +647,13 @@ np.array([['D', '-', 'V', 'L', 'L', 'G', 'A', 'N', 'G', 'G', 'V', 'L', 'V',
                 # fmt: on
             )
         )
-        counts = alignment.counts()
-        gaps = counts.gaps
-        insertions = counts.insertions
-        deletions = counts.deletions
-        identities = counts.identities
-        mismatches = counts.mismatches
+        counts = alignment.counts(substitution_matrix)
         self.assertEqual(counts.gaps, 72)
         self.assertEqual(counts.insertions, 22)
         self.assertEqual(counts.deletions, 50)
         self.assertEqual(counts.identities, 427)
         self.assertEqual(counts.mismatches, 477)
+        self.assertEqual(counts.positives, 554)
         self.check_reading_writing(path)
 
     def test_empty(self):

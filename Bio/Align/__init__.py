@@ -3652,28 +3652,42 @@ class Alignment:
         namedtuple. This is calculated for all the pairs of sequences in the
         alignment.
         """
-        identities = mismatches = 0
         left_insertions = left_deletions = 0
         right_insertions = right_deletions = 0
         internal_insertions = internal_deletions = 0
+        identities = 0
+        mismatches = 0
         if substitution_matrix is None:
             positives = None
         else:
             positives = 0
-        sequences = list(self.sequences)
+        sequences = [None] * len(self.sequences)
         coordinates = self.coordinates.copy()
         steps = np.diff(coordinates, 1)
         aligned = sum(steps != 0, 0) > 1
         # True for steps in which at least two sequences align, False if a gap
-        for i, sequence in enumerate(sequences):
+        for i, sequence in enumerate(self.sequences):
+            start = min(coordinates[i, :])
+            end = max(coordinates[i, :])
+            try:
+                sequence = sequence[start:end]
+            except ValueError:
+                # if sequence is a SeqRecord, and sequence.seq is None
+                continue
             aligned_steps = steps[i, aligned]
-            if sum(aligned_steps > 0) < sum(aligned_steps < 0):
-                # To avoid having to take the reverse complement of the full
-                # sequence only take the part that is actually needed.
-                start = min(coordinates[i, :])
-                end = max(coordinates[i, :])
-                sequences[i] = reverse_complement(sequence[start:end])
+            if sum(aligned_steps > 0) > sum(aligned_steps < 0):
+                coordinates[i, :] = coordinates[i, :] - start
+            else:
+                sequence = reverse_complement(sequence)
                 coordinates[i, :] = end - coordinates[i, :]
+            try:
+                sequences[i] = bytes(sequence)
+            except TypeError:  # sequence is a string
+                sequences[i] = sequence.encode()
+            except UndefinedSequenceError:
+                continue
+        if identities is None and positives is not None:
+            raise ValueError("requested positives score for unknown sequences")
         coordinates = coordinates.transpose()
         n = len(sequences)
         for i in range(n):
@@ -3701,6 +3715,8 @@ class Alignment:
                             right_deletions += end1 - start1
                         else:
                             internal_deletions += end1 - start1
+                    elif sequence1 is None or sequence2 is None:
+                        continue
                     elif substitution_matrix is None:
                         for c1, c2 in zip(sequence1[start1: end1], sequence2[start2: end2]):
                             if c1 == c2:
@@ -3713,7 +3729,7 @@ class Alignment:
                                 identities += 1
                             else:
                                 mismatches += 1
-                            if substitution_matrix[c1, c2] > 0:
+                            if substitution_matrix[chr(c1), chr(c2)] > 0:
                                 positives += 1
                     start1, start2 = end1, end2
         left_insertions = int(left_insertions)

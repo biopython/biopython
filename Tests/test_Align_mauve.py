@@ -9,6 +9,9 @@ import unittest
 from io import StringIO
 
 from Bio import Align
+from Bio.Align import substitution_matrices
+
+substitution_matrix = substitution_matrices.load("BLOSUM62")
 from Bio import SeqIO
 from Bio.Seq import MutableSeq
 from Bio.Seq import Seq
@@ -152,11 +155,6 @@ np.array([['A', 'A', 'G', 'C', 'C', 'C', 'T', 'C', 'C', 'T', 'A', 'G', 'C',
             )
         )
         counts = alignment.counts()
-        gaps = counts.gaps
-        insertions = counts.insertions
-        deletions = counts.deletions
-        identities = counts.identities
-        mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 98)
         self.assertEqual(counts.insertions, 48)
         self.assertEqual(counts.deletions, 50)
@@ -192,11 +190,6 @@ G
             np.array_equal(np.array(alignment, "U"), np.array([["G"]], dtype="U"))
         )
         counts = alignment.counts()
-        gaps = counts.gaps
-        insertions = counts.insertions
-        deletions = counts.deletions
-        identities = counts.identities
-        mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 0)
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
@@ -232,11 +225,6 @@ A
             np.array_equal(np.array(alignment, "U"), np.array([["A"]], dtype="U"))
         )
         counts = alignment.counts()
-        gaps = counts.gaps
-        insertions = counts.insertions
-        deletions = counts.deletions
-        identities = counts.identities
-        mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 0)
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
@@ -282,11 +270,6 @@ np.array([['G', 'A', 'A', 'G', 'A', 'G', 'G', 'A', 'A', 'A', 'A', 'G', 'T',
             )
         )
         counts = alignment.counts()
-        gaps = counts.gaps
-        insertions = counts.insertions
-        deletions = counts.deletions
-        identities = counts.identities
-        mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 0)
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
@@ -322,11 +305,6 @@ C
             np.array_equal(np.array(alignment, "U"), np.array([["C"]], dtype="U"))
         )
         counts = alignment.counts()
-        gaps = counts.gaps
-        insertions = counts.insertions
-        deletions = counts.deletions
-        identities = counts.identities
-        mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 0)
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
@@ -362,11 +340,6 @@ C
             np.array_equal(np.array(alignment, "U"), np.array([["C"]], dtype="U"))
         )
         counts = alignment.counts()
-        gaps = counts.gaps
-        insertions = counts.insertions
-        deletions = counts.deletions
-        identities = counts.identities
-        mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 0)
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
@@ -585,11 +558,6 @@ np.array([['T', 'A', 'A', 'G', 'C', 'C', 'C', 'T', 'C', 'C', 'T', 'A', 'G',
                 )
             )
             counts = alignment.counts()
-            gaps = counts.gaps
-            insertions = counts.insertions
-            deletions = counts.deletions
-            identities = counts.identities
-            mismatches = counts.mismatches
             self.assertEqual(counts.gaps, 68)
             self.assertEqual(counts.insertions, 3)
             self.assertEqual(counts.deletions, 65)
@@ -634,11 +602,6 @@ np.array([['C', 'T', 'G', 'G', 'C', 'G', 'T', 'C', 'C', 'G', 'G',
                 )
             )
             counts = alignment.counts()
-            gaps = counts.gaps
-            insertions = counts.insertions
-            deletions = counts.deletions
-            identities = counts.identities
-            mismatches = counts.mismatches
             self.assertEqual(counts.gaps, 0)
             self.assertEqual(counts.insertions, 0)
             self.assertEqual(counts.deletions, 0)

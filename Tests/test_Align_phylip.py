@@ -8,6 +8,9 @@ import unittest
 from io import StringIO
 
 from Bio import Align
+from Bio.Align import substitution_matrices
+
+substitution_matrix = substitution_matrices.load("BLOSUM62")
 
 try:
     import numpy as np
@@ -252,17 +255,13 @@ Deinococcu-MKKSLLSLKLSGLLVPSVLALS--------LSACSSPSSTLNQGTLKIAMEGTYPPFTSKNE-QGELVG
 HISJ_E_COLMKKLVLSLSLVLAFSSATAAF-------------------AAIPQNIRIGTDPTYAPFESKNS-QGELVGFDIDLAKELCKRINTQCTFVENPLDALIPSLKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLVVAKNSDIQP-TVESLKGKRVGVLQGTTQETFGNEHWAPKGIEIVSYQGQDNIYSDLTAGRIDAAFQDEVAASEGFLKQPVGKDYKFGGPSVKDEKLFGVGTGMGLRKED--NELREALNKAFAEMRADGTYEKLAKKYFDFDVYGG---
 """,
         )
-        counts = alignment.counts()
-        gaps = counts.gaps
-        insertions = counts.insertions
-        deletions = counts.deletions
-        identities = counts.identities
-        mismatches = counts.mismatches
+        counts = alignment.counts(substitution_matrix)
         self.assertEqual(counts.gaps, 548)
         self.assertEqual(counts.insertions, 283)
         self.assertEqual(counts.deletions, 265)
         self.assertEqual(counts.identities, 2258)
         self.assertEqual(counts.mismatches, 4720)
+        self.assertEqual(counts.positives, 3674)
 
     def test_two_and_three(self):
         paths = ("Phylip/two.dat", "Phylip/three.dat")
@@ -358,11 +357,6 @@ Tax5      CCATCTCACGGTCGGTAAGATACACCTGCTTTTGGCGGGAAATGGTCAATATTAAAAGGT
 """,
             )
             counts = alignment.counts()
-            gaps = counts.gaps
-            insertions = counts.insertions
-            deletions = counts.deletions
-            identities = counts.identities
-            mismatches = counts.mismatches
             self.assertEqual(counts.gaps, 0)
             self.assertEqual(counts.insertions, 0)
             self.assertEqual(counts.deletions, 0)
@@ -465,11 +459,6 @@ Gorilla   AAACCCTTGCCGGTACGCTTAAACCATTGCCGGTACGCTTAA
 """,
         )
         counts = alignment.counts()
-        gaps = counts.gaps
-        insertions = counts.insertions
-        deletions = counts.deletions
-        identities = counts.identities
-        mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 0)
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
@@ -544,11 +533,6 @@ Gorilla   AAACCCTTGCCGGTACGCTTAAACCATTGCCGGTACGCTTAA
             )
             self.check_reading_writing(path)
             counts = alignment.counts()
-            gaps = counts.gaps
-            insertions = counts.insertions
-            deletions = counts.deletions
-            identities = counts.identities
-            mismatches = counts.mismatches
             self.assertEqual(counts.gaps, 0)
             self.assertEqual(counts.insertions, 0)
             self.assertEqual(counts.deletions, 0)
@@ -683,17 +667,13 @@ ALEU_HORVUMAHARVLLLALAVLATAAVAVASSSSFADSNPIRPVTDRAASTLESAVLGALGRTRHALRFARFAVRYGK
 CATH_HUMAN------MWATLPLLCAGAWLLGV--------PVCGAAELSVNSLEK------------FHFKSWMSKHRKTY-STEEYHHRLQTFASNWRKINAHN----NGNHTFKMALNQFSDMSFAEIKHKYLWSEPQNCSAT--KSNYLRGT--GPYPPSVDWRKKGNFVSPVKNQGACGSCWTFSTTGALESAIAIATGKMLSLAEQQLVDCAQDFNNY--------GCQGGLPSQAFEYILYNKGIMGEDTYPYQGKDGY-CKFQPGKAIGFVKDVANITIYDEEAMVEAVALYNPVSFAFEVTQDFMMYRTGIYSSTSCHKTPDKVNHAVLAVGYGEKNGI-----PYWIVKNSWGPQWGMNGYFLIERGKNMCGLAACASYPIPLV
 """,
         )
-        counts = alignment.counts()
-        gaps = counts.gaps
-        insertions = counts.insertions
-        deletions = counts.deletions
-        identities = counts.identities
-        mismatches = counts.mismatches
+        counts = alignment.counts(substitution_matrix)
         self.assertEqual(counts.gaps, 130)
         self.assertEqual(counts.insertions, 57)
         self.assertEqual(counts.deletions, 73)
         self.assertEqual(counts.identities, 400)
         self.assertEqual(counts.mismatches, 575)
+        self.assertEqual(counts.positives, 563)
 
     def test_interlaced2(self):
         path = "Phylip/interlaced2.phy"
@@ -814,17 +794,13 @@ IXI_236   TSPASIRPPAGPSSRPAMVSSR--RPSPPPPRRPPGRPCCSAAPPRPQATGGWKTCSGTCTTSTSTRHRG
 IXI_237   TSPASLRPPAGPSSRPAMVSSRR-RPSPPGPRRPT----CSAAPRRPQATGGYKTCSGTCTTSTSTRHRGRSGYSARTTTAACLRASRKSMRAACSR--GSRPNRFAPTLMSSCLTSTTGPPAYAGDRSHE
 """,
         )
-        counts = alignment.counts()
-        gaps = counts.gaps
-        insertions = counts.insertions
-        deletions = counts.deletions
-        identities = counts.identities
-        mismatches = counts.mismatches
+        counts = alignment.counts(substitution_matrix)
         self.assertEqual(counts.gaps, 78)
         self.assertEqual(counts.insertions, 36)
         self.assertEqual(counts.deletions, 42)
         self.assertEqual(counts.identities, 667)
         self.assertEqual(counts.mismatches, 35)
+        self.assertEqual(counts.positives, 681)
 
 
 if __name__ == "__main__":

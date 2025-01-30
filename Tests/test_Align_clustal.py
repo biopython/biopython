@@ -9,6 +9,9 @@ from io import StringIO
 import numpy as np
 
 from Bio import Align
+from Bio.Align import substitution_matrices
+
+substitution_matrix = substitution_matrices.load("BLOSUM62")
 
 
 class TestClustalReadingWriting(unittest.TestCase):
@@ -186,17 +189,13 @@ gi|671626|emb|CAA85685.1|           -
 
 """,  # noqa: W293
         )
-        counts = alignment.counts()
-        gaps = counts.gaps
-        insertions = counts.insertions
-        deletions = counts.deletions
-        identities = counts.identities
-        mismatches = counts.mismatches
+        counts = alignment.counts(substitution_matrix)
         self.assertEqual(counts.gaps, 129)
         self.assertEqual(counts.insertions, 1)
         self.assertEqual(counts.deletions, 128)
         self.assertEqual(counts.identities, 64)
         self.assertEqual(counts.mismatches, 408)
+        self.assertEqual(counts.positives, 126)
 
     def test_msaprobs(self):
         path = "Clustalw/msaprobs.aln"
@@ -415,17 +414,13 @@ HISJ_E_COLI                         GMGLRK--EDNELREALNKAFAEMRADGTYEKLAKKYFDFDVYG
 
 """,
         )
-        counts = alignment.counts()
-        gaps = counts.gaps
-        insertions = counts.insertions
-        deletions = counts.deletions
-        identities = counts.identities
-        mismatches = counts.mismatches
+        counts = alignment.counts(substitution_matrix)
         self.assertEqual(counts.gaps, 608)
         self.assertEqual(counts.insertions, 296)
         self.assertEqual(counts.deletions, 312)
         self.assertEqual(counts.identities, 2353)
         self.assertEqual(counts.mismatches, 4595)
+        self.assertEqual(counts.positives, 3745)
         self.check_reading_writing(path)
 
     def test_muscle(self):
@@ -603,11 +598,6 @@ AT3G20900.1-CDS                     CAGCACCGCTGCTGGGGATGGAGAGGGAACAGAGTAG
 """,  # noqa: W293
         )
         counts = alignment.counts()
-        gaps = counts.gaps
-        insertions = counts.insertions
-        deletions = counts.deletions
-        identities = counts.identities
-        mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 962)
         self.assertEqual(counts.insertions, 67)
         self.assertEqual(counts.deletions, 895)
@@ -666,11 +656,6 @@ AT3G20900                           GCTGGGGATGGAGAGGGAACAGAGTAG
 """,
         )
         counts = alignment.counts()
-        gaps = counts.gaps
-        insertions = counts.insertions
-        deletions = counts.deletions
-        identities = counts.identities
-        mismatches = counts.mismatches
         self.assertEqual(counts.gaps, 1)
         self.assertEqual(counts.insertions, 1)
         self.assertEqual(counts.deletions, 0)
@@ -832,17 +817,13 @@ azup_achcy                          V
 
 """,
         )
-        counts = alignment.counts()
-        gaps = counts.gaps
-        insertions = counts.insertions
-        deletions = counts.deletions
-        identities = counts.identities
-        mismatches = counts.mismatches
+        counts = alignment.counts(substitution_matrix)
         self.assertEqual(counts.gaps, 72)
         self.assertEqual(counts.insertions, 22)
         self.assertEqual(counts.deletions, 50)
         self.assertEqual(counts.identities, 427)
         self.assertEqual(counts.mismatches, 477)
+        self.assertEqual(counts.positives, 554)
         self.check_reading_writing(path)
 
     def test_empty(self):

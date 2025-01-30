@@ -11,6 +11,9 @@ from io import StringIO
 import numpy as np
 
 from Bio import Align
+from Bio.Align import substitution_matrices
+
+substitution_matrix = substitution_matrices.load("BLOSUM62")
 from Bio import SeqIO
 from Bio.Align import Alignment
 from Bio.Seq import Seq
@@ -203,7 +206,12 @@ NR_046654        31 CCAGGTATGCATCTGCTGCCAAGCCAGGGAG        0
 chr3	42530895	42532606	NR_046654.1	1000	-	42530895	42532606	0	3	63,75,43,	0,1125,1668,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 1530)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 1530)
+        self.assertEqual(counts.identities, 175)
+        self.assertEqual(counts.mismatches, 6)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 978)
         self.assertEqual(alignment.shape, (2, 1711))
@@ -351,7 +359,10 @@ NR_046654        31 ???????????????????????????????        0
 chr3	42530895	42532606	NR_046654.1_modified	978	-	42530895	42532606	0	5	27,36,17,56,43,	0,27,1125,1144,1668,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 5407))
@@ -765,7 +776,12 @@ NR_111921       197 TAAAAAA      204
 chr3	48663767	48669174	NR_111921.1	1000	+	48663767	48669174	0	3	46,82,76,	0,1873,5331,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 5203)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 5203)
+        self.assertEqual(counts.identities, 165)
+        self.assertEqual(counts.mismatches, 39)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 972)
         self.assertEqual(alignment.shape, (2, 5407))
@@ -1163,7 +1179,10 @@ NR_111921       196 ???????      203
 chr3	48663767	48669174	NR_111921.1_modified	972	+	48663767	48669174	0	5	28,17,76,6,76,	0,29,1873,1949,5331,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         self.assertRaises(StopIteration, next, alignments)
 
     def test_reading(self):
@@ -1235,7 +1254,10 @@ hg19_dna          0 ????????????????       16
 chr4	61646095	61646111	hg19_dna	1000	+	61646095	61646111	0	1	16,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 33))
@@ -1269,7 +1291,10 @@ hg19_dna          0 ?????????????????????????????????       33
 chr1	10271783	10271816	hg19_dna	1000	+	10271783	10271816	0	1	33,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 17))
@@ -1303,7 +1328,10 @@ hg19_dna         17 ?????????????????        0
 chr2	53575980	53575997	hg19_dna	1000	-	53575980	53575997	0	1	17,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 854)
         self.assertEqual(alignment.shape, (2, 41))
@@ -1337,7 +1365,10 @@ hg19_dna          0 ?????????????????????????????????????????       41
 chr9	85737865	85737906	hg19_dna	854	+	85737865	85737906	0	1	41,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 41))
@@ -1371,7 +1402,10 @@ hg19_dna          0 ?????????????????????????????????????????       41
 chr8	95160479	95160520	hg19_dna	1000	+	95160479	95160520	0	1	41,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 834)
         self.assertEqual(alignment.shape, (2, 36))
@@ -1405,7 +1439,10 @@ hg19_dna          0 ????????????????????????????????????       36
 chr22	42144400	42144436	hg19_dna	834	+	42144400	42144436	0	1	36,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 682)
         self.assertEqual(alignment.shape, (2, 44))
@@ -1439,7 +1476,10 @@ hg19_dna          0 ????????????????????????????????????????????        44
 chr2	183925984	183926028	hg19_dna	682	+	183925984	183926028	0	2	6,38,	0,6,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 890)
         self.assertEqual(alignment.shape, (2, 170))
@@ -1481,7 +1521,10 @@ hg19_dna         25 ---------------------------------------???????????       36
 chr19	35483340	35483510	hg19_dna	890	+	35483340	35483510	0	2	25,11,	0,159,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 39))
@@ -1515,7 +1558,10 @@ hg19_dna          0 ???????????????????????????????????????       39
 chr18	23891310	23891349	hg19_dna	1000	+	23891310	23891349	0	1	39,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 930)
         self.assertEqual(alignment.shape, (2, 28))
@@ -1549,7 +1595,10 @@ hg19_dna          0 ????????????????????????????       28
 chr18	43252217	43252245	hg19_dna	930	+	43252217	43252245	0	1	28,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 912)
         self.assertEqual(alignment.shape, (2, 51))
@@ -1583,7 +1632,10 @@ hg19_dna          0 ???????------??????????????????????????????????????       45
 chr13	52759147	52759198	hg19_dna	912	+	52759147	52759198	0	2	7,38,	0,13,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 50))
@@ -1617,7 +1669,10 @@ hg19_dna          0 ??????????????????????????????????????????????????      50
 chr1	1207056	1207106	hg19_dna	1000	+	1207056	1207106	0	1	50,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 824)
         self.assertEqual(alignment.shape, (2, 34))
@@ -1651,7 +1706,10 @@ hg19_dna          0 ??????????????????????????????????       34
 chr1	61700837	61700871	hg19_dna	824	+	61700837	61700871	0	1	34,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 572)
         self.assertEqual(alignment.shape, (2, 34))
@@ -1685,7 +1743,10 @@ hg19_dna         28 ??????????------??????????????????        0
 chr4	37558157	37558191	hg19_dna	572	-	37558157	37558191	0	2	10,18,	0,16,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 892)
         self.assertEqual(alignment.shape, (2, 37))
@@ -1719,7 +1780,10 @@ hg19_dna         37 ?????????????????????????????????????        0
 chr22	48997405	48997442	hg19_dna	892	-	48997405	48997442	0	1	37,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 946)
         self.assertEqual(alignment.shape, (2, 36))
@@ -1753,7 +1817,10 @@ hg19_dna         36 ????????????????????????????????????         0
 chr2	120641740	120641776	hg19_dna	946	-	120641740	120641776	0	1	36,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 39))
@@ -1787,7 +1854,10 @@ hg19_dna         39 ???????????????????????????????????????        0
 chr19	54017130	54017169	hg19_dna	1000	-	54017130	54017169	0	1	39,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 848)
         self.assertEqual(alignment.shape, (2, 39))
@@ -1821,7 +1891,10 @@ hg19_dna         39 ???????????????????????????????????????      0
 chr19	553742	553781	hg19_dna	848	-	553742	553781	0	1	39,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 834)
         self.assertEqual(alignment.shape, (2, 36))
@@ -1855,7 +1928,10 @@ hg19_dna         36 ????????????????????????????????????        0
 chr10	99388555	99388591	hg19_dna	834	-	99388555	99388591	0	1	36,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 920)
         self.assertEqual(alignment.shape, (2, 25))
@@ -1889,7 +1965,10 @@ hg19_dna         25 ?????????????????????????         0
 chr10	112178171	112178196	hg19_dna	920	-	112178171	112178196	0	1	25,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 946)
         self.assertEqual(alignment.shape, (2, 36))
@@ -1923,7 +2002,10 @@ hg19_dna         36 ????????????????????????????????????        0
 chr1	39368490	39368526	hg19_dna	946	-	39368490	39368526	0	1	36,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 942)
         self.assertEqual(alignment.shape, (2, 34))
@@ -1957,7 +2039,10 @@ hg19_dna         34 ??????????????????????????????????         0
 chr1	220325687	220325721	hg19_dna	942	-	220325687	220325721	0	1	34,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         self.assertRaises(StopIteration, next, alignments)
 
     def test_writing_psl_34_001(self):
@@ -2011,7 +2096,10 @@ hg18_dna          0 ????????????????       16
 chr4	61646095	61646111	hg18_dna	1000	+	61646095	61646111	0	1	16,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 33))
@@ -2045,7 +2133,10 @@ hg18_dna          0 ?????????????????????????????????       33
 chr1	10271783	10271816	hg18_dna	1000	+	10271783	10271816	0	1	33,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 17))
@@ -2079,7 +2170,10 @@ hg18_dna         17 ?????????????????        0
 chr2	53575980	53575997	hg18_dna	1000	-	53575980	53575997	0	1	17,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         self.assertRaises(StopIteration, next, alignments)
 
     def test_writing_psl_34_003(self):
@@ -2133,7 +2227,10 @@ hg19_dna          0 ?????????????????????????????????????????       41
 chr9	85737865	85737906	hg19_dna	854	+	85737865	85737906	0	1	41,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 41))
@@ -2167,7 +2264,10 @@ hg19_dna          0 ?????????????????????????????????????????       41
 chr8	95160479	95160520	hg19_dna	1000	+	95160479	95160520	0	1	41,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 834)
         self.assertEqual(alignment.shape, (2, 36))
@@ -2201,7 +2301,10 @@ hg19_dna          0 ????????????????????????????????????       36
 chr22	42144400	42144436	hg19_dna	834	+	42144400	42144436	0	1	36,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 682)
         self.assertEqual(alignment.shape, (2, 44))
@@ -2235,7 +2338,10 @@ hg19_dna          0 ????????????????????????????????????????????        44
 chr2	183925984	183926028	hg19_dna	682	+	183925984	183926028	0	2	6,38,	0,6,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 890)
         self.assertEqual(alignment.shape, (2, 170))
@@ -2277,7 +2383,10 @@ hg19_dna         25 ---------------------------------------???????????       36
 chr19	35483340	35483510	hg19_dna	890	+	35483340	35483510	0	2	25,11,	0,159,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 39))
@@ -2311,7 +2420,10 @@ hg19_dna          0 ???????????????????????????????????????       39
 chr18	23891310	23891349	hg19_dna	1000	+	23891310	23891349	0	1	39,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 930)
         self.assertEqual(alignment.shape, (2, 28))
@@ -2345,7 +2457,10 @@ hg19_dna          0 ????????????????????????????       28
 chr18	43252217	43252245	hg19_dna	930	+	43252217	43252245	0	1	28,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 912)
         self.assertEqual(alignment.shape, (2, 51))
@@ -2379,7 +2494,10 @@ hg19_dna          0 ???????------??????????????????????????????????????       45
 chr13	52759147	52759198	hg19_dna	912	+	52759147	52759198	0	2	7,38,	0,13,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 50))
@@ -2413,7 +2531,10 @@ hg19_dna          0 ??????????????????????????????????????????????????      50
 chr1	1207056	1207106	hg19_dna	1000	+	1207056	1207106	0	1	50,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 824)
         self.assertEqual(alignment.shape, (2, 34))
@@ -2447,7 +2568,10 @@ hg19_dna          0 ??????????????????????????????????       34
 chr1	61700837	61700871	hg19_dna	824	+	61700837	61700871	0	1	34,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 572)
         self.assertEqual(alignment.shape, (2, 34))
@@ -2481,7 +2605,10 @@ hg19_dna         28 ??????????------??????????????????        0
 chr4	37558157	37558191	hg19_dna	572	-	37558157	37558191	0	2	10,18,	0,16,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 892)
         self.assertEqual(alignment.shape, (2, 37))
@@ -2515,7 +2642,10 @@ hg19_dna         37 ?????????????????????????????????????        0
 chr22	48997405	48997442	hg19_dna	892	-	48997405	48997442	0	1	37,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 946)
         self.assertEqual(alignment.shape, (2, 36))
@@ -2549,7 +2679,10 @@ hg19_dna         36 ????????????????????????????????????         0
 chr2	120641740	120641776	hg19_dna	946	-	120641740	120641776	0	1	36,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 39))
@@ -2583,7 +2716,10 @@ hg19_dna         39 ???????????????????????????????????????        0
 chr19	54017130	54017169	hg19_dna	1000	-	54017130	54017169	0	1	39,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 848)
         self.assertEqual(alignment.shape, (2, 39))
@@ -2617,7 +2753,10 @@ hg19_dna         39 ???????????????????????????????????????      0
 chr19	553742	553781	hg19_dna	848	-	553742	553781	0	1	39,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 834)
         self.assertEqual(alignment.shape, (2, 36))
@@ -2651,7 +2790,10 @@ hg19_dna         36 ????????????????????????????????????        0
 chr10	99388555	99388591	hg19_dna	834	-	99388555	99388591	0	1	36,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 920)
         self.assertEqual(alignment.shape, (2, 25))
@@ -2685,7 +2827,10 @@ hg19_dna         25 ?????????????????????????         0
 chr10	112178171	112178196	hg19_dna	920	-	112178171	112178196	0	1	25,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 946)
         self.assertEqual(alignment.shape, (2, 36))
@@ -2719,7 +2864,10 @@ hg19_dna         36 ????????????????????????????????????        0
 chr1	39368490	39368526	hg19_dna	946	-	39368490	39368526	0	1	36,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 942)
         self.assertEqual(alignment.shape, (2, 34))
@@ -2753,7 +2901,10 @@ hg19_dna         34 ??????????????????????????????????         0
 chr1	220325687	220325721	hg19_dna	942	-	220325687	220325721	0	1	34,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         self.assertRaises(StopIteration, next, alignments)
 
     def test_writing_psl_34_004(self):
@@ -2807,7 +2958,10 @@ hg19_dna          0 ????????????????       16
 chr4	61646095	61646111	hg19_dna	1000	+	61646095	61646111	0	1	16,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 33))
@@ -2841,7 +2995,10 @@ hg19_dna          0 ?????????????????????????????????       33
 chr1	10271783	10271816	hg19_dna	1000	+	10271783	10271816	0	1	33,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 17))
@@ -2875,7 +3032,10 @@ hg19_dna         17 ?????????????????        0
 chr2	53575980	53575997	hg19_dna	1000	-	53575980	53575997	0	1	17,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 854)
         self.assertEqual(alignment.shape, (2, 41))
@@ -2909,7 +3069,10 @@ hg19_dna          0 ?????????????????????????????????????????       41
 chr9	85737865	85737906	hg19_dna	854	+	85737865	85737906	0	1	41,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 41))
@@ -2943,7 +3106,10 @@ hg19_dna          0 ?????????????????????????????????????????       41
 chr8	95160479	95160520	hg19_dna	1000	+	95160479	95160520	0	1	41,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 834)
         self.assertEqual(alignment.shape, (2, 36))
@@ -2977,7 +3143,10 @@ hg19_dna          0 ????????????????????????????????????       36
 chr22	42144400	42144436	hg19_dna	834	+	42144400	42144436	0	1	36,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 682)
         self.assertEqual(alignment.shape, (2, 44))
@@ -3011,7 +3180,10 @@ hg19_dna          0 ????????????????????????????????????????????        44
 chr2	183925984	183926028	hg19_dna	682	+	183925984	183926028	0	2	6,38,	0,6,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 890)
         self.assertEqual(alignment.shape, (2, 170))
@@ -3053,7 +3225,10 @@ hg19_dna         25 ---------------------------------------???????????       36
 chr19	35483340	35483510	hg19_dna	890	+	35483340	35483510	0	2	25,11,	0,159,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 39))
@@ -3087,7 +3262,10 @@ hg19_dna          0 ???????????????????????????????????????       39
 chr18	23891310	23891349	hg19_dna	1000	+	23891310	23891349	0	1	39,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 930)
         self.assertEqual(alignment.shape, (2, 28))
@@ -3121,7 +3299,10 @@ hg19_dna          0 ????????????????????????????       28
 chr18	43252217	43252245	hg19_dna	930	+	43252217	43252245	0	1	28,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 912)
         self.assertEqual(alignment.shape, (2, 51))
@@ -3155,7 +3336,10 @@ hg19_dna          0 ???????------??????????????????????????????????????       45
 chr13	52759147	52759198	hg19_dna	912	+	52759147	52759198	0	2	7,38,	0,13,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 50))
@@ -3189,7 +3373,10 @@ hg19_dna          0 ??????????????????????????????????????????????????      50
 chr1	1207056	1207106	hg19_dna	1000	+	1207056	1207106	0	1	50,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 824)
         self.assertEqual(alignment.shape, (2, 34))
@@ -3223,7 +3410,10 @@ hg19_dna          0 ??????????????????????????????????       34
 chr1	61700837	61700871	hg19_dna	824	+	61700837	61700871	0	1	34,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 572)
         self.assertEqual(alignment.shape, (2, 34))
@@ -3257,7 +3447,10 @@ hg19_dna         28 ??????????------??????????????????        0
 chr4	37558157	37558191	hg19_dna	572	-	37558157	37558191	0	2	10,18,	0,16,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 892)
         self.assertEqual(alignment.shape, (2, 37))
@@ -3291,7 +3484,10 @@ hg19_dna         37 ?????????????????????????????????????        0
 chr22	48997405	48997442	hg19_dna	892	-	48997405	48997442	0	1	37,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 946)
         self.assertEqual(alignment.shape, (2, 36))
@@ -3325,7 +3521,10 @@ hg19_dna         36 ????????????????????????????????????         0
 chr2	120641740	120641776	hg19_dna	946	-	120641740	120641776	0	1	36,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 39))
@@ -3359,7 +3558,10 @@ hg19_dna         39 ???????????????????????????????????????        0
 chr19	54017130	54017169	hg19_dna	1000	-	54017130	54017169	0	1	39,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 848)
         self.assertEqual(alignment.shape, (2, 39))
@@ -3393,7 +3595,10 @@ hg19_dna         39 ???????????????????????????????????????      0
 chr19	553742	553781	hg19_dna	848	-	553742	553781	0	1	39,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 834)
         self.assertEqual(alignment.shape, (2, 36))
@@ -3427,7 +3632,10 @@ hg19_dna         36 ????????????????????????????????????        0
 chr10	99388555	99388591	hg19_dna	834	-	99388555	99388591	0	1	36,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 920)
         self.assertEqual(alignment.shape, (2, 25))
@@ -3461,7 +3669,10 @@ hg19_dna         25 ?????????????????????????         0
 chr10	112178171	112178196	hg19_dna	920	-	112178171	112178196	0	1	25,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 946)
         self.assertEqual(alignment.shape, (2, 36))
@@ -3495,7 +3706,10 @@ hg19_dna         36 ????????????????????????????????????        0
 chr1	39368490	39368526	hg19_dna	946	-	39368490	39368526	0	1	36,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 942)
         self.assertEqual(alignment.shape, (2, 34))
@@ -3529,7 +3743,10 @@ hg19_dna         34 ??????????????????????????????????         0
 chr1	220325687	220325721	hg19_dna	942	-	220325687	220325721	0	1	34,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         self.assertRaises(StopIteration, next, alignments)
 
     def test_writing_psl_34_005(self):
@@ -3592,7 +3809,10 @@ CAG33136.       120 ????????????????????????????????????      156
 chr13	75566694	75566850	CAG33136.1	1000	+	75566694	75566850	0	1	156,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -3633,7 +3853,10 @@ CAG33136.       120 ????????????      132
 chr13	75560749	75560881	CAG33136.1	1000	+	75560749	75560881	0	1	132,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 986)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -4830,7 +5053,10 @@ CAG33136.       100 ????????????????????????????????      132
 chr13	75549820	75567312	CAG33136.1	986	+	75549820	75567312	0	2	45,87,	0,17405,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -4931,7 +5157,10 @@ CAG33136.       119 ??????????????????????      141
 chr13	75604767	75605809	CAG33136.1	1000	+	75604767	75605809	0	2	60,81,	0,961,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -4968,7 +5197,10 @@ CAG33136.        60 ???????????????       75
 chr13	75594914	75594989	CAG33136.1	1000	+	75594914	75594989	0	1	75,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -5001,7 +5233,10 @@ CAG33136.         0 ????????????????????????????????????????????????       48
 chr13	75569459	75569507	CAG33136.1	1000	+	75569459	75569507	0	1	48,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 530)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -5038,7 +5273,10 @@ CAG33136.        60 ??????????????????????????????????????????      102
 chr4	41260685	41260787	CAG33136.1	530	+	41260685	41260787	0	1	102,	0,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 166)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -5447,7 +5685,10 @@ CAG33136.       144 ?????????????????????????????????????????????      189
 chr4	41257605	41263290	CAG33136.1	166	+	41257605	41263290	0	2	126,63,	0,5622,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         self.assertRaises(StopIteration, next, alignments)
 
     def test_writing_psl_35_001(self):
@@ -7630,7 +7871,10 @@ CAG33136.       621 ??????????????????     639
 KI537979	9712654	9744592	CAG33136.1	972	+	9712654	9744592	0	7	132,156,87,48,75,60,81,	0,3287,3791,5720,26610,31052,31857,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 792)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -7711,7 +7955,10 @@ CAG33136.       660 ???????????????????????????     687
 KI538594	2103463	2104149	CAG33136.1	792	+	2103463	2104149	0	2	60,627,	0,59,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 902)
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
@@ -7784,7 +8031,10 @@ CAG33136.        31 ???????????????????????????????        0
 KI537194	20872390	20873021	CAG33136.1	902	-	20872390	20873021	0	2	81,549,	0,82,
 """,
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         self.assertRaises(StopIteration, next, alignments)
 
     def test_writing_psl_35_002(self):
@@ -7869,7 +8119,10 @@ class TestAlign_bed12(unittest.TestCase):
             self.assertEqual(
                 alignment.format("bed", bedN), "\t".join(words[:bedN]) + "\n"
             )
-            # ADD TEST
+            counts = alignment.counts()
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.insertions, 0)
+            self.assertEqual(counts.deletions, 0)
             alignment = next(alignments)
             if bedN >= 5:
                 self.assertEqual(alignment.score, 900, msg=filename)
@@ -7947,7 +8200,10 @@ class TestAlign_bed12(unittest.TestCase):
             self.assertEqual(
                 alignment.format("bed", bedN), "\t".join(words[:bedN]) + "\n"
             )
-            # ADD TEST
+            counts = alignment.counts()
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.insertions, 0)
+            self.assertEqual(counts.deletions, 0)
             with self.assertRaises(StopIteration) as cm:
                 next(alignments)
                 self.fail(f"More than two alignments reported in {filename}")
@@ -8041,7 +8297,10 @@ class TestAlign_searching(unittest.TestCase):
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[10, 100], [0, 90]]))
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 2)
         self.assertEqual(alignment.shape, (2, 10))
@@ -8053,7 +8312,10 @@ class TestAlign_searching(unittest.TestCase):
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[29, 39], [10, 0]]))
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 3)
         self.assertEqual(alignment.shape, (2, 100))
@@ -8065,7 +8327,10 @@ class TestAlign_searching(unittest.TestCase):
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[200, 300], [0, 100]]))
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 6)
         self.assertEqual(alignment.shape, (2, 0))
@@ -8077,7 +8342,12 @@ class TestAlign_searching(unittest.TestCase):
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[50, 50], [0, 0]]))
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
+        self.assertEqual(counts.identities, 0)
+        self.assertEqual(counts.mismatches, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 4)
         self.assertEqual(alignment.shape, (2, 10))
@@ -8089,7 +8359,10 @@ class TestAlign_searching(unittest.TestCase):
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[100, 110], [0, 10]]))
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 5)
         self.assertEqual(alignment.shape, (2, 10))
@@ -8101,7 +8374,10 @@ class TestAlign_searching(unittest.TestCase):
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[200, 210], [0, 10]]))
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 6)
         self.assertEqual(alignment.shape, (2, 0))
@@ -8113,7 +8389,12 @@ class TestAlign_searching(unittest.TestCase):
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[220, 220], [0, 0]]))
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
+        self.assertEqual(counts.identities, 0)
+        self.assertEqual(counts.mismatches, 0)
         alignment = next(alignments)
         self.assertEqual(alignment.score, 7)
         self.assertEqual(alignment.shape, (2, 0))
@@ -8125,7 +8406,12 @@ class TestAlign_searching(unittest.TestCase):
         self.assertTrue(
             np.array_equal(alignment.coordinates, np.array([[0, 0], [0, 0]]))
         )
-        # ADD TEST
+        counts = alignment.counts()
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
+        self.assertEqual(counts.identities, 0)
+        self.assertEqual(counts.mismatches, 0)
 
     def test_reading(self):
         """Test reading bigbedtest.bed."""
