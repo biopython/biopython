@@ -28,6 +28,7 @@ except ImportError:
 
 substitution_matrix = substitution_matrices.load("BLOSUM62")
 
+
 class TestAlign_dna_rna(unittest.TestCase):
     # The PSL file dna_rna.psl was generated using this command:
     # blat -mask=lower hg38.2bit rna.fa dna_rna.unsorted.psl

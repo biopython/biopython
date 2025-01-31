@@ -83,15 +83,30 @@ class AlignmentCounts:
      - gaps                - the total number of gaps in the alignment;
     """
 
-    __slots__ = ("_left_insertions", "_left_deletions",
-                 "_right_insertions", "_right_deletions",
-                 "_internal_insertions", "_internal_deletions",
-                 "_identities", "_mismatches", "_positives")
+    __slots__ = (
+        "_left_insertions",
+        "_left_deletions",
+        "_right_insertions",
+        "_right_deletions",
+        "_internal_insertions",
+        "_internal_deletions",
+        "_identities",
+        "_mismatches",
+        "_positives",
+    )
 
-    def __init__(self, left_insertions, left_deletions,
-                       right_insertions, right_deletions,
-                       internal_insertions, internal_deletions,
-                       identities, mismatches, positives=None):
+    def __init__(
+        self,
+        left_insertions,
+        left_deletions,
+        right_insertions,
+        right_deletions,
+        internal_insertions,
+        internal_deletions,
+        identities,
+        mismatches,
+        positives=None,
+    ):
         """Initialize an AlignmentCount object with the given counts."""
         self._left_insertions = left_insertions
         self._left_deletions = left_deletions
@@ -104,7 +119,20 @@ class AlignmentCounts:
         self._positives = positives
 
     def __repr__(self):
-        return "AlignmentCounts(left_insertions=%d, left_deletions=%d, internal_insertions=%d, internal_deletions=%d, right_insertions=%d, right_deletions=%d, identities=%d, mismatches=%d, positives=%s)" % (self._left_insertions, self._left_deletions, self._right_insertions, self._right_deletions, self._internal_insertions, self._internal_deletions, self._identities, self._mismatches, self._positives)
+        return (
+            "AlignmentCounts(left_insertions=%d, left_deletions=%d, internal_insertions=%d, internal_deletions=%d, right_insertions=%d, right_deletions=%d, identities=%d, mismatches=%d, positives=%s)"
+            % (
+                self._left_insertions,
+                self._left_deletions,
+                self._right_insertions,
+                self._right_deletions,
+                self._internal_insertions,
+                self._internal_deletions,
+                self._identities,
+                self._mismatches,
+                self._positives,
+            )
+        )
 
     @property
     def identities(self):
@@ -169,7 +197,9 @@ class AlignmentCounts:
     @property
     def insertions(self):
         """the total number of insertions."""
-        return self._left_insertions + self._internal_insertions + self._right_insertions
+        return (
+            self._left_insertions + self._internal_insertions + self._right_insertions
+        )
 
     @property
     def deletions(self):
@@ -179,7 +209,14 @@ class AlignmentCounts:
     @property
     def gaps(self):
         """the total number of gaps in the alignment."""
-        return self._left_insertions + self._left_deletions + self._internal_insertions + self._internal_deletions + self._right_insertions + self._right_deletions
+        return (
+            self._left_insertions
+            + self._left_deletions
+            + self._internal_insertions
+            + self._internal_deletions
+            + self._right_insertions
+            + self._right_deletions
+        )
 
 
 class MultipleSeqAlignment:
@@ -3762,7 +3799,7 @@ class Alignment:
         coordinates = coordinates.transpose()
         n = len(sequences)
         for i in range(n):
-            for j in range(i+1, n):
+            for j in range(i + 1, n):
                 sequence1 = sequences[i]
                 sequence2 = sequences[j]
                 pair_coordinates = coordinates[:, (i, j)]
@@ -3789,13 +3826,17 @@ class Alignment:
                     elif sequence1 is None or sequence2 is None:
                         continue
                     elif substitution_matrix is None:
-                        for c1, c2 in zip(sequence1[start1: end1], sequence2[start2: end2]):
+                        for c1, c2 in zip(
+                            sequence1[start1:end1], sequence2[start2:end2]
+                        ):
                             if c1 == c2:
                                 identities += 1
                             else:
                                 mismatches += 1
                     else:
-                        for c1, c2 in zip(sequence1[start1: end1], sequence2[start2: end2]):
+                        for c1, c2 in zip(
+                            sequence1[start1:end1], sequence2[start2:end2]
+                        ):
                             if c1 == c2:
                                 identities += 1
                             else:
@@ -3809,7 +3850,17 @@ class Alignment:
         right_deletions = int(right_deletions)
         internal_insertions = int(internal_insertions)
         internal_deletions = int(internal_deletions)
-        return AlignmentCounts(left_insertions, left_deletions, right_insertions, right_deletions, internal_insertions, internal_deletions, identities, mismatches, positives)
+        return AlignmentCounts(
+            left_insertions,
+            left_deletions,
+            right_insertions,
+            right_deletions,
+            internal_insertions,
+            internal_deletions,
+            identities,
+            mismatches,
+            positives,
+        )
 
     def reverse_complement(self):
         """Reverse-complement the alignment and return it.
