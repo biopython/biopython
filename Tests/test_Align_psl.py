@@ -7,11 +7,9 @@ import unittest
 from io import StringIO
 
 from Bio import Align
-from Bio.Align import substitution_matrices
-
-substitution_matrix = substitution_matrices.load("BLOSUM62")
-from Bio import SeqIO
 from Bio.Align import Alignment
+from Bio.Align import substitution_matrices
+from Bio import SeqIO
 from Bio.Seq import reverse_complement
 from Bio.Seq import Seq
 from Bio.SeqFeature import CompoundLocation
@@ -28,6 +26,7 @@ except ImportError:
         "Install numpy if you want to use Bio.Align.psl."
     ) from None
 
+substitution_matrix = substitution_matrices.load("BLOSUM62")
 
 class TestAlign_dna_rna(unittest.TestCase):
     # The PSL file dna_rna.psl was generated using this command:
