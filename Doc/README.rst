@@ -17,7 +17,7 @@ Read the `Sphix reST Primer <https://www.sphinx-doc.org/en/master/usage/restruct
 Building the documentation
 --------------------------
 
-Build the documentation in HTML by running ``make html`` in the Docs folder.
+Build the documentation in HTML by running ``make html`` in the Doc folder.
 Make sure that you have installed necessary requirements (see instructions above).
 
 To view the generated documentation, open ``Doc/_build/html/index.html`` in your browser.
