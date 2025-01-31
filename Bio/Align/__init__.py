@@ -56,6 +56,33 @@ from Bio.SeqRecord import SeqRecord
 
 
 class AlignmentCounts:
+    """Detailed number of gaps, identities, and mismatches.
+
+    An `AlignCounts` object has the following properties:
+
+     - identities          - the number of identical letters in the alignment;
+     - mismatches          - the number of mismatched letters in the alignment;
+     - positives           - the number of aligned letters with a positive score;
+     - left_insertions     - the number of insertions on the left side of the
+                             alignment;
+     - left_deletions      - the number of deletions on the left side of the
+                             alignment;
+     - right_insertions    - the number of insertions on the right side of the
+                             alignment;
+     - right_deletions     - the number of deletions on the right side of the
+                             alignment;
+     - internal_insertions - the number of insertions in the interior of the
+                             alignment;
+     - internal_deletions  - the number of deletions in the interior of the
+                             alignment;
+     - insertions          - the total number of insertions;
+     - deletions           - the total number of deletions;
+     - left_gaps           - the number of gaps on the left side of the alignment;
+     - right_gaps          - the number of gaps on the right side of the alignment;
+     - internal_gaps       - the number of gaps in the interior of the alignment;
+     - gaps                - the total number of gaps in the alignment;
+    """
+
     __slots__ = ("_left_insertions", "_left_deletions",
                  "_right_insertions", "_right_deletions",
                  "_internal_insertions", "_internal_deletions",
@@ -65,6 +92,7 @@ class AlignmentCounts:
                        right_insertions, right_deletions,
                        internal_insertions, internal_deletions,
                        identities, mismatches, positives=None):
+        """Initialize an AlignmentCount object with the given counts."""
         self._left_insertions = left_insertions
         self._left_deletions = left_deletions
         self._right_insertions = right_insertions
@@ -80,62 +108,77 @@ class AlignmentCounts:
 
     @property
     def identities(self):
+        """the number of identical letters in the alignment."""
         return self._identities
 
     @property
     def mismatches(self):
+        """the number of mismatched letters in the alignment."""
         return self._mismatches
 
     @property
     def positives(self):
+        """the number of aligned letters with a positive score."""
         return self._positives
 
     @property
     def left_insertions(self):
+        """the number of insertions on the left side of the alignment."""
         return self._left_insertions
 
     @property
     def left_deletions(self):
+        """the number of deletions on the left side of the alignment."""
         return self._left_deletions
 
     @property
     def right_insertions(self):
+        """the number of insertions on the right side of the alignment."""
         return self._right_insertions
 
     @property
     def right_deletions(self):
+        """the number of deletions on the right side of the alignment."""
         return self._right_deletions
 
     @property
     def internal_insertions(self):
+        """the number of insertions in the interior of the alignment."""
         return self._internal_insertions
 
     @property
     def internal_deletions(self):
+        """the number of deletions in the interior of the alignment."""
         return self._internal_deletions
 
     @property
     def left_gaps(self):
+        """the number of gaps on the left side of the alignment."""
         return self._left_insertions + self._left_deletions
 
     @property
     def right_gaps(self):
+        """the number of gaps on the right side of the alignment."""
         return self._right_insertions + self._right_deletions
 
     @property
     def internal_gaps(self):
+        """the number of gaps in the interior of the alignment."""
         return self._internal_insertions + self._internal_deletions
 
     @property
     def insertions(self):
+        """the total number of insertions."""
         return self._left_insertions + self._internal_insertions + self._right_insertions
 
     @property
     def deletions(self):
+        """the total number of deletions."""
         return self._left_deletions + self._internal_deletions + self._right_deletions
 
     @property
     def gaps(self):
+        """the total number of gaps in the alignment."""
         return self._left_insertions + self._left_deletions + self._internal_insertions + self._internal_deletions + self._right_insertions + self._right_deletions
 
 
@@ -3623,7 +3666,15 @@ class Alignment:
         return m
 
     def counts(self, substitution_matrix=None):
-        """Return number of identities, mismatches, and gaps of a pairwise alignment.
+        """Calculate the number of identities, mismatches, and gaps of an alignment.
+
+        Arguments:
+         - substitution_matrix - If None (default value), do not calculate the number
+                                 of positive matches in the alignment.
+                                 Otherwise, use the provided substitution matrix
+                                 (typically from the ``Bio.Align.substitution_matrices``
+                                 submodule) to also calculate the number of positive
+                                 matches in an amino acid alignment.
 
         >>> aligner = PairwiseAligner(mode='global', match_score=2, mismatch_score=-1)
         >>> for alignment in aligner.align("TACCG", "ACG"):
@@ -3645,12 +3696,32 @@ class Alignment:
         query             0 -A-CG 3
         <BLANKLINE>
 
-        This classifies each pair of letters in a pairwise alignment into gaps,
-        perfect matches, or mismatches. It has been defined as a method (not a
-        property) so that it may in future take optional argument(s) allowing
-        the behavior to be customized. These three values are returned as a
-        namedtuple. This is calculated for all the pairs of sequences in the
+        The counts are calculated by summing over all pairs of sequences in the
         alignment.
+
+        An `AlignCounts` object has the following properties:
+
+         - identities          - the number of identical letters in the alignment;
+         - mismatches          - the number of mismatched letters in the alignment;
+         - positives           - the number of aligned letters with a positive score;
+         - left_insertions     - the number of insertions on the left side of the
+                                 alignment;
+         - left_deletions      - the number of deletions on the left side of the
+                                 alignment;
+         - right_insertions    - the number of insertions on the right side of the
+                                 alignment;
+         - right_deletions     - the number of deletions on the right side of the
+                                 alignment;
+         - internal_insertions - the number of insertions in the interior of the
+                                 alignment;
+         - internal_deletions  - the number of deletions in the interior of the
+                                 alignment;
+         - insertions          - the total number of insertions;
+         - deletions           - the total number of deletions;
+         - left_gaps           - the number of gaps on the left side of the alignment;
+         - right_gaps          - the number of gaps on the right side of the alignment;
+         - internal_gaps       - the number of gaps in the interior of the alignment;
+         - gaps                - the total number of gaps in the alignment;
         """
         left_insertions = left_deletions = 0
         right_insertions = right_deletions = 0
