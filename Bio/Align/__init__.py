@@ -91,14 +91,6 @@ class AlignmentCounts:
         return self._positives
 
     @property
-    def insertions(self):
-        return self._left_insertions + self._internal_insertions + self._right_insertions
-
-    @property
-    def deletions(self):
-        return self._left_deletions + self._internal_deletions + self._right_deletions
-
-    @property
     def left_insertions(self):
         return self._left_insertions
 
@@ -133,6 +125,14 @@ class AlignmentCounts:
     @property
     def internal_gaps(self):
         return self._internal_insertions + self._internal_deletions
+
+    @property
+    def insertions(self):
+        return self._left_insertions + self._internal_insertions + self._right_insertions
+
+    @property
+    def deletions(self):
+        return self._left_deletions + self._internal_deletions + self._right_deletions
 
     @property
     def gaps(self):
