@@ -58,7 +58,7 @@ from Bio.SeqRecord import SeqRecord
 class AlignmentCounts:
     """Detailed number of gaps, identities, and mismatches.
 
-    An `AlignCounts` object has the following properties:
+    An `AlignmentCounts` object has the following properties:
 
      - identities          - the number of identical letters in the alignment;
      - mismatches          - the number of mismatched letters in the alignment;
@@ -120,7 +120,7 @@ class AlignmentCounts:
 
     def __repr__(self):
         return (
-            "AlignmentCounts(left_insertions=%d, left_deletions=%d, internal_insertions=%d, internal_deletions=%d, right_insertions=%d, right_deletions=%d, identities=%d, mismatches=%d, positives=%s)"
+            "AlignmentCounts(left_insertions=%d, left_deletions=%d, internal_insertions=%d, internal_deletions=%d, right_insertions=%d, right_deletions=%d, identities=%s, mismatches=%s, positives=%s)"
             % (
                 self._left_insertions,
                 self._left_deletions,
@@ -3702,8 +3702,8 @@ class Alignment:
                     start1, start2 = end1, end2
         return m
 
-    def counts(self, substitution_matrix=None):
-        """Calculate the number of identities, mismatches, and gaps of an alignment.
+    def counts(self, substitution_matrix=None, gaps_only=False):
+        """Count the number of identities, mismatches, and gaps of an alignment.
 
         Arguments:
          - substitution_matrix - If None (default value), do not calculate the number
@@ -3712,6 +3712,12 @@ class Alignment:
                                  (typically from the ``Bio.Align.substitution_matrices``
                                  submodule) to also calculate the number of positive
                                  matches in an amino acid alignment.
+         - gaps_only           - If True, do not calculate the number of identities,
+                                 positives, and mismatches, but only calculate the
+                                 number of gaps. This will speed up the calculation.
+                                 Default value: False.
+
+        A ValueError is raised if gaps_only is True and substitution_matrix is not None.
 
         >>> aligner = PairwiseAligner(mode='global', match_score=2, mismatch_score=-1)
         >>> for alignment in aligner.align("TACCG", "ACG"):
@@ -3763,10 +3769,16 @@ class Alignment:
         left_insertions = left_deletions = 0
         right_insertions = right_deletions = 0
         internal_insertions = internal_deletions = 0
-        identities = 0
-        mismatches = 0
+        if gaps_only:
+            identities = None
+            mismatches = None
+        else:
+            identities = 0
+            mismatches = 0
         if substitution_matrix is None:
             positives = None
+        elif gaps_only:
+            raise ValueError("gaps_only cannot be True if substitution_matrix is used")
         else:
             positives = 0
         sequences = [None] * len(self.sequences)
@@ -3777,25 +3789,28 @@ class Alignment:
         for i, sequence in enumerate(self.sequences):
             start = min(coordinates[i, :])
             end = max(coordinates[i, :])
-            try:
-                sequence = sequence[start:end]
-            except ValueError:
-                # if sequence is a SeqRecord, and sequence.seq is None
-                continue
+            if not gaps_only:
+                try:
+                    sequence = sequence[start:end]
+                except ValueError:
+                    # if sequence is a SeqRecord, and sequence.seq is None
+                    continue
             aligned_steps = steps[i, aligned]
             if sum(aligned_steps > 0) > sum(aligned_steps < 0):
                 coordinates[i, :] = coordinates[i, :] - start
             else:
-                sequence = reverse_complement(sequence)
+                if not gaps_only:
+                    sequence = reverse_complement(sequence)
                 coordinates[i, :] = end - coordinates[i, :]
-            try:
-                sequences[i] = bytes(sequence)
-            except TypeError:  # sequence is a string
-                sequences[i] = sequence.encode()
-            except UndefinedSequenceError:
-                continue
-        if identities is None and positives is not None:
-            raise ValueError("requested positives score for unknown sequences")
+            if gaps_only:
+                sequences[i] = None
+            else:
+                try:
+                    sequences[i] = bytes(sequence)
+                except TypeError:  # sequence is a string
+                    sequences[i] = sequence.encode()
+                except UndefinedSequenceError:
+                    continue
         coordinates = coordinates.transpose()
         n = len(sequences)
         for i in range(n):

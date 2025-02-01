@@ -2366,6 +2366,27 @@ T    6.0  14.0   0.0 874.0
         self.assertAlmostEqual(m["C", "T"], 14.0)
         self.assertAlmostEqual(m["T", "C"], 14.0)
 
+    def test_counts(self):
+        from Bio.Align import substitution_matrices
+
+        substitution_matrix = substitution_matrices.load("BLOSUM62")
+        alignment = self.alignment
+        counts = alignment.counts()
+        self.assertEqual(
+            str(counts),
+            "AlignmentCounts(left_insertions=0, left_deletions=0, internal_insertions=0, internal_deletions=0, right_insertions=80, right_deletions=4, identities=3020, mismatches=64, positives=None)",
+        )
+        counts = alignment.counts(gaps_only=True)
+        self.assertEqual(
+            str(counts),
+            "AlignmentCounts(left_insertions=0, left_deletions=0, internal_insertions=0, internal_deletions=0, right_insertions=0, right_deletions=0, identities=None, mismatches=None, positives=None)",
+        )
+        with self.assertRaises(ValueError):
+            alignment.counts(substitution_matrix=substitution_matrix, gaps_only=True)
+        for i, sequence in enumerate(alignment.sequences):
+            length = len(sequence)
+            alignment.sequences[i] = Seq(None, length)
+
     def test_add(self):
         self.assertEqual(
             str(self.alignment[:, 50:60]),
