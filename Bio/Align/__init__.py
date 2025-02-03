@@ -60,6 +60,14 @@ class AlignmentCounts:
 
     An `AlignmentCounts` object has the following properties:
 
+     - aligned             - the number of letters aligned to each other. If
+                             sequences are known, then this is equal to the
+                             number of identities plus the number of mismatches.
+                             Otherwise, the number of aligned letters may be
+                             greater than the number of identities plus the
+                             number of mismatches. The number of aligned letters
+                             is always calculated, even if none of the sequences
+                             are known.
      - identities          - the number of identical letters in the alignment;
      - mismatches          - the number of mismatched letters in the alignment;
      - positives           - the number of aligned letters with a positive score;
@@ -90,6 +98,7 @@ class AlignmentCounts:
         "_right_deletions",
         "_internal_insertions",
         "_internal_deletions",
+        "_aligned",
         "_identities",
         "_mismatches",
         "_positives",
@@ -103,6 +112,7 @@ class AlignmentCounts:
         right_deletions,
         internal_insertions,
         internal_deletions,
+        aligned,
         identities,
         mismatches,
         positives=None,
@@ -114,13 +124,14 @@ class AlignmentCounts:
         self._right_deletions = right_deletions
         self._internal_insertions = internal_insertions
         self._internal_deletions = internal_deletions
+        self._aligned = aligned
         self._identities = identities
         self._mismatches = mismatches
         self._positives = positives
 
     def __repr__(self):
         return (
-            "AlignmentCounts(left_insertions=%d, left_deletions=%d, internal_insertions=%d, internal_deletions=%d, right_insertions=%d, right_deletions=%d, identities=%s, mismatches=%s, positives=%s)"
+            "AlignmentCounts(left_insertions=%d, left_deletions=%d, internal_insertions=%d, internal_deletions=%d, right_insertions=%d, right_deletions=%d, aligned=%d, identities=%s, mismatches=%s, positives=%s)"
             % (
                 self._left_insertions,
                 self._left_deletions,
@@ -128,11 +139,17 @@ class AlignmentCounts:
                 self._right_deletions,
                 self._internal_insertions,
                 self._internal_deletions,
+                self._aligned,
                 self._identities,
                 self._mismatches,
                 self._positives,
             )
         )
+
+    @property
+    def aligned(self):
+        """the number of letters aligned to each other in the alignment."""
+        return self._aligned
 
     @property
     def identities(self):
@@ -3744,6 +3761,8 @@ class Alignment:
 
         An `AlignCounts` object has the following properties:
 
+         - aligned             - the number of letters aligned to each other in the
+                                 alignment;
          - identities          - the number of identical letters in the alignment;
          - mismatches          - the number of mismatched letters in the alignment;
          - positives           - the number of aligned letters with a positive score;
@@ -3769,6 +3788,7 @@ class Alignment:
         left_insertions = left_deletions = 0
         right_insertions = right_deletions = 0
         internal_insertions = internal_deletions = 0
+        aligned = 0
         if gaps_only:
             identities = None
             mismatches = None
@@ -3784,7 +3804,7 @@ class Alignment:
         sequences = [None] * len(self.sequences)
         coordinates = self.coordinates.copy()
         steps = np.diff(coordinates, 1)
-        aligned = sum(steps != 0, 0) > 1
+        aligned_flags = sum(steps != 0, 0) > 1
         # True for steps in which at least two sequences align, False if a gap
         for i, sequence in enumerate(self.sequences):
             start = min(coordinates[i, :])
@@ -3795,7 +3815,7 @@ class Alignment:
                 except ValueError:
                     # if sequence is a SeqRecord, and sequence.seq is None
                     continue
-            aligned_steps = steps[i, aligned]
+            aligned_steps = steps[i, aligned_flags]
             if sum(aligned_steps > 0) > sum(aligned_steps < 0):
                 coordinates[i, :] = coordinates[i, :] - start
             else:
@@ -3839,8 +3859,9 @@ class Alignment:
                         else:
                             internal_deletions += end1 - start1
                     elif sequence1 is None or sequence2 is None:
-                        pass
+                        aligned += end1 - start1
                     elif substitution_matrix is None:
+                        aligned += end1 - start1
                         for c1, c2 in zip(
                             sequence1[start1:end1], sequence2[start2:end2]
                         ):
@@ -3849,6 +3870,7 @@ class Alignment:
                             else:
                                 mismatches += 1
                     else:
+                        aligned += end1 - start1
                         for c1, c2 in zip(
                             sequence1[start1:end1], sequence2[start2:end2]
                         ):
@@ -3859,6 +3881,7 @@ class Alignment:
                             if substitution_matrix[chr(c1), chr(c2)] > 0:
                                 positives += 1
                     start1, start2 = end1, end2
+        aligned = int(aligned)
         left_insertions = int(left_insertions)
         left_deletions = int(left_deletions)
         right_insertions = int(right_insertions)
@@ -3872,6 +3895,7 @@ class Alignment:
             right_deletions,
             internal_insertions,
             internal_deletions,
+            aligned,
             identities,
             mismatches,
             positives,

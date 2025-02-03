@@ -245,6 +245,7 @@ np.array([['A', '-', 'C', '-', 'G', '-', 'T', 'c', 'g', 't', 'g', 't', 'g',
         self.assertEqual(counts.insertions, 440)
         self.assertEqual(counts.deletions, 156)
         self.assertEqual(counts.gaps, 596)
+        self.assertEqual(counts.aligned, 862)
         self.assertEqual(counts.identities, 256)
         self.assertEqual(counts.mismatches, 606)
         with self.assertRaises(StopIteration):
@@ -313,6 +314,7 @@ np.array([['A', 'A', 'A', 'A', 'A', 'G', 'G', 'C', 'A', 'T', 'T', 'G', 'T',
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 22)
         self.assertEqual(counts.identities, 13)
         self.assertEqual(counts.mismatches, 9)
         with self.assertRaises(StopIteration):

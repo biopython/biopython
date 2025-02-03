@@ -89,6 +89,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 1230)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -137,6 +138,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 346 + gi|330443688|ref|NC_001145.3| 85
         self.assertEqual(counts.insertions, 20)
         self.assertEqual(counts.deletions, 387865)
         self.assertEqual(counts.gaps, 387885)
+        self.assertEqual(counts.aligned, 326)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -187,6 +189,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 25 406 + gi|330443688|ref|NC_001145.3| 1
         self.assertEqual(counts.insertions, 23)
         self.assertEqual(counts.deletions, 118502)
         self.assertEqual(counts.gaps, 118525)
+        self.assertEqual(counts.aligned, 358)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -249,6 +252,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10|
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 1230)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -304,6 +308,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 346 + gi|330443688|ref|NC_001145.3| 8
         self.assertEqual(counts.insertions, 20)
         self.assertEqual(counts.deletions, 387865)
         self.assertEqual(counts.gaps, 387885)
+        self.assertEqual(counts.aligned, 326)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -361,6 +366,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 25 406 + gi|330443688|ref|NC_001145.3| 
         self.assertEqual(counts.insertions, 23)
         self.assertEqual(counts.deletions, 118502)
         self.assertEqual(counts.gaps, 118525)
+        self.assertEqual(counts.aligned, 358)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -421,6 +427,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 1230)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -473,6 +480,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 83 552 + gi|330443688|ref|NC_001145.3| 2
         self.assertEqual(counts.insertions, 19)
         self.assertEqual(counts.deletions, 34)
         self.assertEqual(counts.gaps, 53)
+        self.assertEqual(counts.aligned, 450)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443715|ref|NC_001146.8|")
@@ -523,6 +531,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 60 517 + gi|330443715|ref|NC_001146.8| 4
         self.assertEqual(counts.insertions, 21)
         self.assertEqual(counts.deletions, 22)
         self.assertEqual(counts.gaps, 43)
+        self.assertEqual(counts.aligned, 436)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -583,6 +592,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10|
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 1230)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -642,6 +652,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 83 552 + gi|330443688|ref|NC_001145.3| 
         self.assertEqual(counts.insertions, 19)
         self.assertEqual(counts.deletions, 34)
         self.assertEqual(counts.gaps, 53)
+        self.assertEqual(counts.aligned, 450)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443715|ref|NC_001146.8|")
@@ -699,6 +710,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 60 517 + gi|330443715|ref|NC_001146.8| 
         self.assertEqual(counts.insertions, 21)
         self.assertEqual(counts.deletions, 22)
         self.assertEqual(counts.gaps, 43)
+        self.assertEqual(counts.aligned, 436)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -765,6 +777,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 1230)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -799,6 +812,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 1230 0 - gi|330443520|ref|NC_001136.10| 
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 1230)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -853,6 +867,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 516 + gi|330443688|ref|NC_001145.3| 85
         self.assertEqual(counts.insertions, 22)
         self.assertEqual(counts.deletions, 581712)
         self.assertEqual(counts.gaps, 581734)
+        self.assertEqual(counts.aligned, 494)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -919,6 +934,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10|
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 1230)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -955,6 +971,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 1230 0 - gi|330443520|ref|NC_001136.10|
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 1230)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -1020,6 +1037,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 516 + gi|330443688|ref|NC_001145.3| 8
         self.assertEqual(counts.insertions, 22)
         self.assertEqual(counts.deletions, 581712)
         self.assertEqual(counts.gaps, 581734)
+        self.assertEqual(counts.aligned, 494)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1082,6 +1100,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 1228 1 - gi|330443520|ref|NC_001136.10| 
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 1227)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -1112,6 +1131,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 1230)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -1146,6 +1166,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 1065 1224 + gi|330443688|ref|NC_001145.3
         self.assertEqual(counts.insertions, 3)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 3)
+        self.assertEqual(counts.aligned, 156)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1208,6 +1229,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 1228 1 - gi|330443520|ref|NC_001136.10|
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 1227)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -1240,6 +1262,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10|
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 1230)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -1276,6 +1299,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 1065 1224 + gi|330443688|ref|NC_001145.
         self.assertEqual(counts.insertions, 3)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 3)
+        self.assertEqual(counts.aligned, 156)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1340,6 +1364,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 1228 1 - gi|330443520|ref|NC_001136.10| 
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 1227)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -1370,6 +1395,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 1230)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -1404,6 +1430,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 1065 1224 + gi|330443688|ref|NC_001145.3
         self.assertEqual(counts.insertions, 3)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 3)
+        self.assertEqual(counts.aligned, 156)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1468,6 +1495,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 1228 1 - gi|330443520|ref|NC_001136.10|
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 1227)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -1500,6 +1528,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10|
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 1230)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -1536,6 +1565,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 1065 1224 + gi|330443688|ref|NC_001145.
         self.assertEqual(counts.insertions, 3)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 3)
+        self.assertEqual(counts.aligned, 156)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1597,6 +1627,7 @@ cigar: dna 0 93 + protein 313 344 . 105 M 93
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 31)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1657,6 +1688,7 @@ vulgar: dna 0 93 + protein 313 344 . 105 M 93 31
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 31)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1723,6 +1755,7 @@ cigar: sacCer3_dna 529 0 - gi|330443520|ref|NC_001136.10| 1319997 1319468 - 2641
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 529)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sacCer3_dna")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -1759,6 +1792,7 @@ cigar: sacCer3_dna 529 0 - gi|330443520|ref|NC_001136.10| 1319997 1319468 - 2641
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 529)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sacCer3_dna")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -1793,6 +1827,7 @@ cigar: sacCer3_dna 0 529 + gi|330443520|ref|NC_001136.10| 1319468 1319997 + 2641
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 529)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sacCer3_dna")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -1829,6 +1864,7 @@ cigar: sacCer3_dna 0 529 + gi|330443520|ref|NC_001136.10| 1319468 1319997 + 2641
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 529)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sacCer3_dna")
         self.assertEqual(alignment.target.id, "gi|330443489|ref|NC_001135.5|")
@@ -1877,6 +1913,7 @@ cigar: sacCer3_dna 491 162 - gi|330443489|ref|NC_001135.5| 23668 115569 + 267 M 
         self.assertEqual(counts.insertions, 6)
         self.assertEqual(counts.deletions, 91578)
         self.assertEqual(counts.gaps, 91584)
+        self.assertEqual(counts.aligned, 323)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sacCer3_dna")
         self.assertEqual(alignment.target.id, "gi|330443489|ref|NC_001135.5|")
@@ -1932,6 +1969,7 @@ cigar: sacCer3_dna 491 162 - gi|330443489|ref|NC_001135.5| 23668 115569 + 267 M 
         self.assertEqual(counts.insertions, 6)
         self.assertEqual(counts.deletions, 91578)
         self.assertEqual(counts.gaps, 91584)
+        self.assertEqual(counts.aligned, 323)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sacCer3_dna")
         self.assertEqual(alignment.target.id, "gi|330443667|ref|NC_001143.9|")
@@ -1990,6 +2028,7 @@ cigar: sacCer3_dna 529 78 - gi|330443667|ref|NC_001143.9| 641760 71883 - 267 M 3
         self.assertEqual(counts.insertions, 152)
         self.assertEqual(counts.deletions, 569578)
         self.assertEqual(counts.gaps, 569730)
+        self.assertEqual(counts.aligned, 299)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sacCer3_dna")
         self.assertEqual(alignment.target.id, "gi|330443667|ref|NC_001143.9|")
@@ -2059,6 +2098,7 @@ cigar: sacCer3_dna 529 78 - gi|330443667|ref|NC_001143.9| 641760 71883 - 267 M 3
         self.assertEqual(counts.insertions, 152)
         self.assertEqual(counts.deletions, 569578)
         self.assertEqual(counts.gaps, 569730)
+        self.assertEqual(counts.aligned, 299)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -2118,6 +2158,7 @@ vulgar: sacCer3_dna 529 0 - gi|330443520|ref|NC_001136.10| 1319997 1319468 - 264
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 529)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sacCer3_dna")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -2151,6 +2192,7 @@ vulgar: sacCer3_dna 0 529 + gi|330443520|ref|NC_001136.10| 1319468 1319997 + 264
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 529)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sacCer3_dna")
         self.assertEqual(alignment.target.id, "gi|330443489|ref|NC_001135.5|")
@@ -2206,6 +2248,7 @@ vulgar: sacCer3_dna 491 162 - gi|330443489|ref|NC_001135.5| 23668 115569 + 267 M
         self.assertEqual(counts.insertions, 6)
         self.assertEqual(counts.deletions, 91578)
         self.assertEqual(counts.gaps, 91584)
+        self.assertEqual(counts.aligned, 323)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sacCer3_dna")
         self.assertEqual(alignment.target.id, "gi|330443667|ref|NC_001143.9|")
@@ -2275,6 +2318,7 @@ vulgar: sacCer3_dna 529 78 - gi|330443667|ref|NC_001143.9| 641760 71883 - 267 M 
         self.assertEqual(counts.insertions, 152)
         self.assertEqual(counts.deletions, 569578)
         self.assertEqual(counts.gaps, 569730)
+        self.assertEqual(counts.aligned, 299)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -2337,6 +2381,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 1230)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -2367,6 +2412,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 121 236 + gi|330443688|ref|NC_001145.3| 
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 115)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -2397,6 +2443,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 1098 1166 + gi|330443688|ref|NC_001145.3
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 68)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -2459,6 +2506,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10|
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 1230)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -2491,6 +2539,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 121 236 + gi|330443688|ref|NC_001145.3|
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 115)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -2523,6 +2572,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 1098 1166 + gi|330443688|ref|NC_001145.
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 68)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -2585,6 +2635,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 1228 1 - gi|330443520|ref|NC_001136.10| 
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 1227)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -2615,6 +2666,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 1230)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -2645,6 +2697,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 1230 0 - gi|330443520|ref|NC_001136.10| 
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 1230)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -2707,6 +2760,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 1228 1 - gi|330443520|ref|NC_001136.10|
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 1227)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -2739,6 +2793,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10|
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 1230)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -2771,6 +2826,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 1230 0 - gi|330443520|ref|NC_001136.10|
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 1230)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -2833,6 +2889,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 1230)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443681|ref|NC_001144.5|")
@@ -2913,6 +2970,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 110 1230 + gi|330443681|ref|NC_001144.5|
         self.assertEqual(counts.insertions, 675)
         self.assertEqual(counts.deletions, 20639)
         self.assertEqual(counts.gaps, 21314)
+        self.assertEqual(counts.aligned, 445)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -2989,6 +3047,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 509 1192 + gi|330443520|ref|NC_001136.10
         self.assertEqual(counts.insertions, 279)
         self.assertEqual(counts.deletions, 253)
         self.assertEqual(counts.gaps, 532)
+        self.assertEqual(counts.aligned, 404)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -3051,6 +3110,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10|
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 1230)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443681|ref|NC_001144.5|")
@@ -3132,6 +3192,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 110 1230 + gi|330443681|ref|NC_001144.5
         self.assertEqual(counts.insertions, 707)
         self.assertEqual(counts.deletions, 20671)
         self.assertEqual(counts.gaps, 21378)
+        self.assertEqual(counts.aligned, 413)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -3205,6 +3266,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 509 1192 + gi|330443520|ref|NC_001136.1
         self.assertEqual(counts.insertions, 302)
         self.assertEqual(counts.deletions, 276)
         self.assertEqual(counts.gaps, 578)
+        self.assertEqual(counts.aligned, 381)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -3267,6 +3329,7 @@ cigar: gi|296142823|ref|NM_001178508.1| 0 897 + gi|330443482|ref|NC_001134.8| 56
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 897)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296142823|ref|NM_001178508.1|")
         self.assertEqual(alignment.target.id, "gi|330443753|ref|NC_001148.4|")
@@ -3323,6 +3386,7 @@ cigar: gi|296142823|ref|NM_001178508.1| 2 896 + gi|330443753|ref|NC_001148.4| 49
         self.assertEqual(counts.insertions, 25)
         self.assertEqual(counts.deletions, 31)
         self.assertEqual(counts.gaps, 56)
+        self.assertEqual(counts.aligned, 869)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296142823|ref|NM_001178508.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -3381,6 +3445,7 @@ cigar: gi|296142823|ref|NM_001178508.1| 34 721 + gi|330443520|ref|NC_001136.10| 
         self.assertEqual(counts.insertions, 46)
         self.assertEqual(counts.deletions, 32267)
         self.assertEqual(counts.gaps, 32313)
+        self.assertEqual(counts.aligned, 641)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -3411,6 +3476,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 1230)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -3459,6 +3525,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 346 + gi|330443688|ref|NC_001145.3| 85
         self.assertEqual(counts.insertions, 20)
         self.assertEqual(counts.deletions, 387865)
         self.assertEqual(counts.gaps, 387885)
+        self.assertEqual(counts.aligned, 326)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -3509,6 +3576,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 25 406 + gi|330443688|ref|NC_001145.3| 1
         self.assertEqual(counts.insertions, 23)
         self.assertEqual(counts.deletions, 118502)
         self.assertEqual(counts.gaps, 118525)
+        self.assertEqual(counts.aligned, 358)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -3571,6 +3639,7 @@ vulgar: gi|296142823|ref|NM_001178508.1| 0 897 + gi|330443482|ref|NC_001134.8| 5
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 897)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296142823|ref|NM_001178508.1|")
         self.assertEqual(alignment.target.id, "gi|330443753|ref|NC_001148.4|")
@@ -3634,6 +3703,7 @@ vulgar: gi|296142823|ref|NM_001178508.1| 2 896 + gi|330443753|ref|NC_001148.4| 4
         self.assertEqual(counts.insertions, 25)
         self.assertEqual(counts.deletions, 31)
         self.assertEqual(counts.gaps, 56)
+        self.assertEqual(counts.aligned, 869)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296142823|ref|NM_001178508.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -3701,6 +3771,7 @@ vulgar: gi|296142823|ref|NM_001178508.1| 34 721 + gi|330443520|ref|NC_001136.10|
         self.assertEqual(counts.insertions, 46)
         self.assertEqual(counts.deletions, 32267)
         self.assertEqual(counts.gaps, 32313)
+        self.assertEqual(counts.aligned, 641)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
@@ -3733,6 +3804,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10|
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 1230)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -3788,6 +3860,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 346 + gi|330443688|ref|NC_001145.3| 8
         self.assertEqual(counts.insertions, 20)
         self.assertEqual(counts.deletions, 387865)
         self.assertEqual(counts.gaps, 387885)
+        self.assertEqual(counts.aligned, 326)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -3845,6 +3918,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 25 406 + gi|330443688|ref|NC_001145.3| 
         self.assertEqual(counts.insertions, 23)
         self.assertEqual(counts.deletions, 118502)
         self.assertEqual(counts.gaps, 118525)
+        self.assertEqual(counts.aligned, 358)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -3911,6 +3985,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 160 + gi|296143771|ref|NM_001180731.1|
         self.assertEqual(counts.insertions, 1)
         self.assertEqual(counts.deletions, 6)
         self.assertEqual(counts.gaps, 7)
+        self.assertEqual(counts.aligned, 159)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|296143771|ref|NM_001180731.1|")
@@ -3945,6 +4020,7 @@ cigar: gi|296143771|ref|NM_001180731.1| 158 1 - gi|296143771|ref|NM_001180731.1|
         self.assertEqual(counts.insertions, 1)
         self.assertEqual(counts.deletions, 6)
         self.assertEqual(counts.gaps, 7)
+        self.assertEqual(counts.aligned, 156)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -4011,6 +4087,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 160 + gi|296143771|ref|NM_001180731.1
         self.assertEqual(counts.insertions, 1)
         self.assertEqual(counts.deletions, 6)
         self.assertEqual(counts.gaps, 7)
+        self.assertEqual(counts.aligned, 159)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "gi|296143771|ref|NM_001180731.1|")
         self.assertEqual(alignment.target.id, "gi|296143771|ref|NM_001180731.1|")
@@ -4047,6 +4124,7 @@ vulgar: gi|296143771|ref|NM_001180731.1| 158 1 - gi|296143771|ref|NM_001180731.1
         self.assertEqual(counts.insertions, 1)
         self.assertEqual(counts.deletions, 6)
         self.assertEqual(counts.gaps, 7)
+        self.assertEqual(counts.aligned, 156)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -4109,6 +4187,7 @@ cigar: sp|P24813|YAP2_YEAST 0 409 . gi|330443520|ref|NC_001136.10| 1319275 13180
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 1227)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -4140,6 +4219,7 @@ cigar: sp|P24813|YAP2_YEAST 28 120 . gi|330443688|ref|NC_001145.3| 253991 254270
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 3)
         self.assertEqual(counts.gaps, 3)
+        self.assertEqual(counts.aligned, 276)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -4171,6 +4251,7 @@ cigar: sp|P24813|YAP2_YEAST 355 408 . gi|330443688|ref|NC_001145.3| 255638 25579
         self.assertEqual(counts.insertions, 1)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 1)
+        self.assertEqual(counts.aligned, 156)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -4233,6 +4314,7 @@ vulgar: sp|P24813|YAP2_YEAST 0 409 . gi|330443520|ref|NC_001136.10| 1319275 1318
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 1227)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -4269,6 +4351,7 @@ vulgar: sp|P24813|YAP2_YEAST 28 120 . gi|330443688|ref|NC_001145.3| 253991 25427
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 3)
         self.assertEqual(counts.gaps, 3)
+        self.assertEqual(counts.aligned, 276)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -4305,6 +4388,7 @@ vulgar: sp|P24813|YAP2_YEAST 355 408 . gi|330443688|ref|NC_001145.3| 255638 2557
         self.assertEqual(counts.insertions, 1)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 1)
+        self.assertEqual(counts.aligned, 156)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -4368,6 +4452,7 @@ cigar: sp|P24813|YAP2_YEAST 330 409 . gi|296143771|ref|NM_001180731.1| 216 455 +
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 2)
         self.assertEqual(counts.gaps, 2)
+        self.assertEqual(counts.aligned, 237)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|296143771|ref|NM_001180731.1|")
@@ -4396,6 +4481,7 @@ cigar: sp|P24813|YAP2_YEAST 6 70 . gi|296143771|ref|NM_001180731.1| 16 208 + 322
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 192)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -4459,6 +4545,7 @@ vulgar: sp|P24813|YAP2_YEAST 330 409 . gi|296143771|ref|NM_001180731.1| 216 455 
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 2)
         self.assertEqual(counts.gaps, 2)
+        self.assertEqual(counts.aligned, 237)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|296143771|ref|NM_001180731.1|")
@@ -4489,6 +4576,7 @@ vulgar: sp|P24813|YAP2_YEAST 6 70 . gi|296143771|ref|NM_001180731.1| 16 208 + 32
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 192)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -4551,6 +4639,7 @@ cigar: sp|P24813|YAP2_YEAST 0 409 . gi|330443520|ref|NC_001136.10| 1319275 13180
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 1227)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -4585,6 +4674,7 @@ cigar: sp|P24813|YAP2_YEAST 28 120 . gi|330443688|ref|NC_001145.3| 253991 254270
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 3)
         self.assertEqual(counts.gaps, 3)
+        self.assertEqual(counts.aligned, 276)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443590|ref|NC_001140.6|")
@@ -4613,6 +4703,7 @@ cigar: sp|P24813|YAP2_YEAST 28 120 . gi|330443688|ref|NC_001145.3| 253991 254270
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 15934)
         self.assertEqual(counts.gaps, 15934)
+        self.assertEqual(counts.aligned, 262)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -4672,6 +4763,7 @@ vulgar: sp|P24813|YAP2_YEAST 0 409 . gi|330443520|ref|NC_001136.10| 1319275 1318
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 1227)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
@@ -4708,6 +4800,7 @@ vulgar: sp|P24813|YAP2_YEAST 28 120 . gi|330443688|ref|NC_001145.3| 253991 25427
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 3)
         self.assertEqual(counts.gaps, 3)
+        self.assertEqual(counts.aligned, 276)
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "sp|P24813|YAP2_YEAST")
         self.assertEqual(alignment.target.id, "gi|330443590|ref|NC_001140.6|")
@@ -4746,6 +4839,7 @@ vulgar: sp|P24813|YAP2_YEAST 37 125 . gi|330443590|ref|NC_001140.6| 84646 68450 
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 15934)
         self.assertEqual(counts.gaps, 15934)
+        self.assertEqual(counts.aligned, 262)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -4816,6 +4910,7 @@ cigar: Morus-gene026 69 441 . NODE_2_length_1708_cov_48.590765 1416 331 - 1308 M
         self.assertEqual(counts.insertions, 13)
         self.assertEqual(counts.deletions, 8)
         self.assertEqual(counts.gaps, 21)
+        self.assertEqual(counts.aligned, 1077)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -4886,6 +4981,7 @@ vulgar: Morus-gene026 69 441 . NODE_2_length_1708_cov_48.590765 1416 331 - 1308 
         self.assertEqual(counts.insertions, 13)
         self.assertEqual(counts.deletions, 8)
         self.assertEqual(counts.gaps, 21)
+        self.assertEqual(counts.aligned, 1077)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -4950,6 +5046,7 @@ class Exonerate_protein2genome_met_intron(unittest.TestCase):
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 703)
         self.assertEqual(counts.gaps, 703)
+        self.assertEqual(counts.aligned, 1301)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -5021,6 +5118,7 @@ vulgar: Morus-gene001 48 482 . NODE_1_length_2817_cov_100.387732 2392 388 - 1978
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 703)
         self.assertEqual(counts.gaps, 703)
+        self.assertEqual(counts.aligned, 1301)
         with self.assertRaises(StopIteration):
             next(alignments)
 

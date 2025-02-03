@@ -595,6 +595,8 @@ The ``counts`` method counts the number of identities, mismatches, and gaps
    query             0 AG-TTT-- 5
    <BLANKLINE>
    >>> counts = pairwise_alignment.counts()
+   >>> counts.aligned
+   5
    >>> counts.identities
    4
    >>> counts.mismatches
@@ -624,6 +626,8 @@ the alignment.
                      0 AGGTTT-- 6
    <BLANKLINE>
    >>> counts = alignment.counts()
+   >>> counts.aligned
+   16
    >>> counts.identities
    14
    >>> counts.mismatches
@@ -669,6 +673,8 @@ matrix (see Chapter :ref:`sec:substitution_matrices`):
    query             0 GACGSCWTFS 10
    <BLANKLINE>
    >>> counts = protein_alignment.counts(substitution_matrix)
+   >>> counts.aligned
+   10
    >>> counts.identities
    8
    >>> counts.mismatches
@@ -694,21 +700,22 @@ An ``AlignmentCounts`` object has the following properties:
 ========================= =============================================================================================================
 **property**              **description**
 ========================= =============================================================================================================
-``identities``            the number of identical letters in the alignment
-``mismatches``            the number of mismatched letters in the alignment
-``positives``             the number of aligned letters with a positive score
-``left_insertions``       the number of insertions on the left side of the alignment
-``left_deletions``        the number of deletions on the left side of the alignment
-``right_insertions``      the number of insertions on the right side of the alignment
-``right_deletions``       the number of deletions on the right side of the alignment
-``internal_insertions``   the number of insertions in the interior of the alignment
-``internal_deletions``    the number of deletions in the interior of the alignment
-``insertions``            the total number of insertions, equal to ``left_insertions`` + ``right_insertions`` + ``internal_insertions``
-``deletions``             the total number of deletions, equal to ``left_deletions`` + ``right_deletions`` + ``internal_deletions``
-``left_gaps``             the number of gaps on the left side of the alignment, equal to ``left_insertions`` + ``left_deletions``
-``right_gaps``            the number of gaps on the right side of the alignment, equal to ``right_insertions`` + ``right_deletions``
-``internal_gaps``         the number of gaps in the interior of the alignment, equal to ``internal_insertions`` + ``internal_deletions``
-``gaps``                  the total number of gaps in the alignment, equal to ``left_gaps`` + ``right_gaps`` + ``internal_gaps``
+``aligned``               The number of aligned letters in the alignment. This quantity is also calculated if some or all of the sequences are undefined. If all sequences are known, then ``aligned`` = ``identities`` + ``mismatches``. If some sequences are undefined, then ``aligned`` > ``identities`` + ``mismatches``.
+``identities``            The number of identical letters in the alignment
+``mismatches``            The number of mismatched letters in the alignment
+``positives``             The number of aligned letters with a positive score
+``left_insertions``       The number of insertions on the left side of the alignment
+``left_deletions``        The number of deletions on the left side of the alignment
+``right_insertions``      The number of insertions on the right side of the alignment
+``right_deletions``       The number of deletions on the right side of the alignment
+``internal_insertions``   The number of insertions in the interior of the alignment
+``internal_deletions``    The number of deletions in the interior of the alignment
+``insertions``            The total number of insertions, equal to ``left_insertions`` + ``right_insertions`` + ``internal_insertions``
+``deletions``             The total number of deletions, equal to ``left_deletions`` + ``right_deletions`` + ``internal_deletions``
+``left_gaps``             The number of gaps on the left side of the alignment, equal to ``left_insertions`` + ``left_deletions``
+``right_gaps``            The number of gaps on the right side of the alignment, equal to ``right_insertions`` + ``right_deletions``
+``internal_gaps``         The number of gaps in the interior of the alignment, equal to ``internal_insertions`` + ``internal_deletions``
+``gaps``                  The total number of gaps in the alignment, equal to ``left_gaps`` + ``right_gaps`` + ``internal_gaps``
 ========================= =============================================================================================================
 
 

@@ -268,6 +268,7 @@ HISJ_E_COLMKKLVLSLSLVLAFSSATAAF-------------------AAIPQNIRIGTDPTYAPFESKNS-QGELVG
         self.assertEqual(counts.insertions, 283)
         self.assertEqual(counts.deletions, 265)
         self.assertEqual(counts.gaps, 548)
+        self.assertEqual(counts.aligned, 6978)
         self.assertEqual(counts.identities, 2258)
         self.assertEqual(counts.mismatches, 4720)
         self.assertEqual(counts.positives, 3674)
@@ -378,6 +379,7 @@ Tax5      CCATCTCACGGTCGGTAAGATACACCTGCTTTTGGCGGGAAATGGTCAATATTAAAAGGT
             self.assertEqual(counts.insertions, 0)
             self.assertEqual(counts.deletions, 0)
             self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.aligned, 600)
             self.assertEqual(counts.identities, 535)
             self.assertEqual(counts.mismatches, 65)
 
@@ -489,6 +491,7 @@ Gorilla   AAACCCTTGCCGGTACGCTTAAACCATTGCCGGTACGCTTAA
         self.assertEqual(counts.insertions, 0)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 420)
         self.assertEqual(counts.identities, 230)
         self.assertEqual(counts.mismatches, 190)
 
@@ -572,6 +575,7 @@ Gorilla   AAACCCTTGCCGGTACGCTTAAACCATTGCCGGTACGCTTAA
             self.assertEqual(counts.insertions, 0)
             self.assertEqual(counts.deletions, 0)
             self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.aligned, 420)
             self.assertEqual(counts.identities, 230)
             self.assertEqual(counts.mismatches, 190)
 
@@ -716,6 +720,7 @@ CATH_HUMAN------MWATLPLLCAGAWLLGV--------PVCGAAELSVNSLEK------------FHFKSWMSKHRK
         self.assertEqual(counts.insertions, 57)
         self.assertEqual(counts.deletions, 73)
         self.assertEqual(counts.gaps, 130)
+        self.assertEqual(counts.aligned, 975)
         self.assertEqual(counts.identities, 400)
         self.assertEqual(counts.mismatches, 575)
         self.assertEqual(counts.positives, 563)
@@ -852,6 +857,7 @@ IXI_237   TSPASLRPPAGPSSRPAMVSSRR-RPSPPGPRRPT----CSAAPRRPQATGGYKTCSGTCTTSTSTRHRG
         self.assertEqual(counts.insertions, 36)
         self.assertEqual(counts.deletions, 42)
         self.assertEqual(counts.gaps, 78)
+        self.assertEqual(counts.aligned, 702)
         self.assertEqual(counts.identities, 667)
         self.assertEqual(counts.mismatches, 35)
         self.assertEqual(counts.positives, 681)
