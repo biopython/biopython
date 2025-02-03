@@ -8,11 +8,11 @@ import unittest
 import warnings
 from io import StringIO
 
+from Bio import BiopythonParserWarning
 from Bio import Align
 from Bio.Align import substitution_matrices
 
 substitution_matrix = substitution_matrices.load("BLOSUM62")
-from Bio import BiopythonParserWarning
 
 try:
     import numpy as np
