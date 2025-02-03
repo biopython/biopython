@@ -6193,6 +6193,24 @@ G4FEQ2/2-92                     VERYSLSPMKDLWTEEAKYRRWLEVELAVTRAYEELGMIPKGVTERIR
         alignment = next(alignments)
         stream.close()
         self.check_alignment_globins45(alignment)
+        for record in alignment.sequences:
+            record.seq = record.seq.upper()
+        counts = alignment.counts(substitution_matrix)
+        self.assertEqual(counts.left_insertions, 439)
+        self.assertEqual(counts.left_deletions, 233)
+        self.assertEqual(counts.right_insertions, 35)
+        self.assertEqual(counts.right_deletions, 1634)
+        self.assertEqual(counts.internal_insertions, 3026)
+        self.assertEqual(counts.internal_deletions, 2233)
+        self.assertEqual(counts.left_gaps, 672)
+        self.assertEqual(counts.right_gaps, 1669)
+        self.assertEqual(counts.internal_gaps, 5259)
+        self.assertEqual(counts.insertions, 3500)
+        self.assertEqual(counts.deletions, 4100)
+        self.assertEqual(counts.gaps, 7600)
+        self.assertEqual(counts.identities, 66291)
+        self.assertEqual(counts.mismatches, 73327)
+        self.assertEqual(counts.positives, 88585)
 
     def test_reading_writing_alignments_pfam1(self):
         """Test parsing Pfam record 120_Rick_ant."""
