@@ -3839,7 +3839,7 @@ class Alignment:
                         else:
                             internal_deletions += end1 - start1
                     elif sequence1 is None or sequence2 is None:
-                        continue
+                        pass
                     elif substitution_matrix is None:
                         for c1, c2 in zip(
                             sequence1[start1:end1], sequence2[start2:end2]

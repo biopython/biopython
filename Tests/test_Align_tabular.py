@@ -9,6 +9,8 @@ import unittest
 
 from Bio import Align
 from Bio.Align import substitution_matrices
+
+substitution_matrix = substitution_matrices.load("BLOSUM62")
 from Bio import SeqIO
 from Bio.Seq import Seq
 
@@ -20,8 +22,6 @@ except ImportError:
     raise MissingPythonDependencyError(
         "Install numpy if you want to use Bio.Align.emboss."
     ) from None
-
-substitution_matrix = substitution_matrices.load("BLOSUM62")
 
 
 class TestFastaProtein(unittest.TestCase):
