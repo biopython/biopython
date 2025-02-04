@@ -373,7 +373,7 @@ all parameters, use
      extend_internal_insertion_score: 0.000000
      open_left_insertion_score: 0.000000
      extend_left_insertion_score: 0.000000
-     target_right_open_gap_score: 0.000000
+     open_right_insertion_score: 0.000000
      target_right_extend_gap_score: 0.000000
      query_internal_open_gap_score: 0.000000
      query_internal_extend_gap_score: 0.000000
@@ -558,7 +558,7 @@ object:
 ``query_right_open_gap_score``     ``query_right_extend_gap_score``
 ``open_left_insertion_score``      ``extend_left_insertion_score``
 ``open_internal_insertion_score``  ``extend_internal_insertion_score``
-``target_right_open_gap_score``    ``target_right_extend_gap_score``
+``open_right_insertion_score``     ``target_right_extend_gap_score``
 ================================== ====================================
 
 These attributes allow for different gap scores for internal gaps and on
@@ -637,10 +637,10 @@ that refer to a number of these values collectively, as shown
    | ``left_open_gap_score``         | ``open_left_insertion_score``,        |
    |                                 | ``query_left_open_gap_score``         |
    +---------------------------------+---------------------------------------+
-   | ``left_extend_gap_score``       | ``extend_left_insertion_score``,     |
+   | ``left_extend_gap_score``       | ``extend_left_insertion_score``,      |
    |                                 | ``query_left_extend_gap_score``       |
    +---------------------------------+---------------------------------------+
-   | ``right_open_gap_score``        | ``target_right_open_gap_score``,      |
+   | ``right_open_gap_score``        | ``open_right_insertion_score``,       |
    |                                 | ``query_right_open_gap_score``        |
    +---------------------------------+---------------------------------------+
    | ``right_extend_gap_score``      | ``target_right_extend_gap_score``,    |
@@ -648,10 +648,10 @@ that refer to a number of these values collectively, as shown
    +---------------------------------+---------------------------------------+
    | ``target_open_gap_score``       | ``open_internal_insertion_score``,    |
    |                                 | ``open_left_insertion_score``,        |
-   |                                 | ``target_right_open_gap_score``       |
+   |                                 | ``open_right_insertion_score``        |
    +---------------------------------+---------------------------------------+
-   | ``target_extend_gap_score``     | ``extend_internal_insertion_score``, |
-   |                                 | ``extend_left_insertion_score``,     |
+   | ``target_extend_gap_score``     | ``extend_internal_insertion_score``,  |
+   |                                 | ``extend_left_insertion_score``,      |
    |                                 | ``target_right_extend_gap_score``     |
    +---------------------------------+---------------------------------------+
    | ``target_gap_score``            | ``target_open_gap_score``,            |
@@ -675,15 +675,15 @@ that refer to a number of these values collectively, as shown
    |                                 | ``target_end_extend_gap_score``       |
    +---------------------------------+---------------------------------------+
    | ``target_end_open_gap_score``   | ``open_left_insertion_score``,        |
-   |                                 | ``target_right_open_gap_score``       |
+   |                                 | ``open_right_insertion_score``        |
    +---------------------------------+---------------------------------------+
-   | ``target_end_extend_gap_score`` | ``extend_left_insertion_score``,     |
+   | ``target_end_extend_gap_score`` | ``extend_left_insertion_score``,      |
    |                                 | ``target_right_extend_gap_score``     |
    +---------------------------------+---------------------------------------+
    | ``target_left_gap_score``       | ``open_left_insertion_score``,        |
-   |                                 | ``extend_left_insertion_score``      |
+   |                                 | ``extend_left_insertion_score``       |
    +---------------------------------+---------------------------------------+
-   | ``target_right_gap_score``      | ``target_right_open_gap_score``,      |
+   | ``target_right_gap_score``      | ``open_right_insertion_score``,       |
    |                                 | ``target_right_extend_gap_score``     |
    +---------------------------------+---------------------------------------+
    | ``query_end_gap_score``         | ``query_end_open_gap_score``,         |
@@ -778,7 +778,7 @@ BLASTP, respectively.
      extend_internal_insertion_score: -2.000000
      open_left_insertion_score: -7.000000
      extend_left_insertion_score: -2.000000
-     target_right_open_gap_score: -7.000000
+     open_right_insertion_score: -7.000000
      target_right_extend_gap_score: -2.000000
      query_internal_open_gap_score: -7.000000
      query_internal_extend_gap_score: -2.000000
