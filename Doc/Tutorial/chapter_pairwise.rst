@@ -378,7 +378,7 @@ all parameters, use
      query_internal_open_gap_score: 0.000000
      query_internal_extend_gap_score: 0.000000
      open_left_deletion_score: 0.000000
-     query_left_extend_gap_score: 0.000000
+     extend_left_deletion_score: 0.000000
      query_right_open_gap_score: 0.000000
      query_right_extend_gap_score: 0.000000
      mode: local
@@ -553,7 +553,7 @@ object:
 ================================== ====================================
 **Opening scores**                 **Extending scores**
 ================================== ====================================
-``open_left_deletion_score``      ``query_left_extend_gap_score``
+``open_left_deletion_score``       ``extend_left_deletion_score``
 ``query_internal_open_gap_score``  ``query_internal_extend_gap_score``
 ``query_right_open_gap_score``     ``query_right_extend_gap_score``
 ``open_left_insertion_score``      ``extend_left_insertion_score``
@@ -638,7 +638,7 @@ that refer to a number of these values collectively, as shown
    |                                 | ``open_left_deletion_score``         |
    +---------------------------------+---------------------------------------+
    | ``left_extend_gap_score``       | ``extend_left_insertion_score``,      |
-   |                                 | ``query_left_extend_gap_score``       |
+   |                                 | ``extend_left_deletion_score``       |
    +---------------------------------+---------------------------------------+
    | ``right_open_gap_score``        | ``open_right_insertion_score``,       |
    |                                 | ``query_right_open_gap_score``        |
@@ -662,7 +662,7 @@ that refer to a number of these values collectively, as shown
    |                                 | ``query_right_open_gap_score``        |
    +---------------------------------+---------------------------------------+
    | ``query_extend_gap_score``      | ``query_internal_extend_gap_score``,  |
-   |                                 | ``query_left_extend_gap_score``,      |
+   |                                 | ``extend_left_deletion_score``,      |
    |                                 | ``query_right_extend_gap_score``      |
    +---------------------------------+---------------------------------------+
    | ``query_gap_score``             | ``query_open_gap_score``,             |
@@ -692,14 +692,14 @@ that refer to a number of these values collectively, as shown
    | ``query_end_open_gap_score``    | ``open_left_deletion_score``,        |
    |                                 | ``query_right_open_gap_score``        |
    +---------------------------------+---------------------------------------+
-   | ``query_end_extend_gap_score``  | ``query_left_extend_gap_score``,      |
+   | ``query_end_extend_gap_score``  | ``extend_left_deletion_score``,      |
    |                                 | ``query_right_extend_gap_score``      |
    +---------------------------------+---------------------------------------+
    | ``query_internal_gap_score``    | ``query_internal_open_gap_score``,    |
    |                                 | ``query_internal_extend_gap_score``   |
    +---------------------------------+---------------------------------------+
    | ``query_left_gap_score``        | ``open_left_deletion_score``,        |
-   |                                 | ``query_left_extend_gap_score``       |
+   |                                 | ``extend_left_deletion_score``       |
    +---------------------------------+---------------------------------------+
    | ``query_right_gap_score``       | ``query_right_open_gap_score``,       |
    |                                 | ``query_right_extend_gap_score``      |
@@ -783,7 +783,7 @@ BLASTP, respectively.
      query_internal_open_gap_score: -7.000000
      query_internal_extend_gap_score: -2.000000
      open_left_deletion_score: -7.000000
-     query_left_extend_gap_score: -2.000000
+     extend_left_deletion_score: -2.000000
      query_right_open_gap_score: -7.000000
      query_right_extend_gap_score: -2.000000
      mode: global
