@@ -1141,7 +1141,11 @@ class Alignment:
                     )
         self.coordinates = coordinates
 
-    def __array__(self, dtype=None):
+    def __array__(self, dtype=None, copy=None):
+        if copy is False:
+            raise ValueError(
+                "As calling array on an alignment must return a new array, the copy argument cannot be False"
+            )
         coordinates = self.coordinates.copy()
         sequences = list(self.sequences)
         steps = np.diff(self.coordinates, 1)
