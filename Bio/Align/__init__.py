@@ -3957,6 +3957,7 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
                  "target_left_open_gap_score": "open_left_insertion_score",
                  "target_left_extend_gap_score": "extend_left_insertion_score",
                  "target_right_open_gap_score": "open_right_insertion_score",
+                 "target_right_extend_gap_score": "extend_right_insertion_score",
                }
     def __setattr__(self, key, value):
         try:
@@ -4016,7 +4017,7 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
             "open_left_insertion_score": self.open_left_insertion_score,
             "extend_left_insertion_score": self.extend_left_insertion_score,
             "open_right_insertion_score": self.open_right_insertion_score,
-            "target_right_extend_gap_score": self.target_right_extend_gap_score,
+            "extend_right_insertion_score": self.extend_right_insertion_score,
             "query_internal_open_gap_score": self.query_internal_open_gap_score,
             "query_internal_extend_gap_score": self.query_internal_extend_gap_score,
             "query_left_open_gap_score": self.query_left_open_gap_score,
@@ -4039,7 +4040,7 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
         self.open_left_insertion_score = state["open_left_insertion_score"]
         self.extend_left_insertion_score = state["extend_left_insertion_score"]
         self.open_right_insertion_score = state["open_right_insertion_score"]
-        self.target_right_extend_gap_score = state["target_right_extend_gap_score"]
+        self.extend_right_insertion_score = state["extend_right_insertion_score"]
         self.query_internal_open_gap_score = state["query_internal_open_gap_score"]
         self.query_internal_extend_gap_score = state["query_internal_extend_gap_score"]
         self.query_left_open_gap_score = state["query_left_open_gap_score"]
