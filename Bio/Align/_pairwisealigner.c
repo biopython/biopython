@@ -1768,7 +1768,7 @@ typedef struct {
     double epsilon;
     double open_internal_insertion_score;
     double extend_internal_insertion_score;
-    double target_left_open_gap_score;
+    double open_left_insertion_score;
     double target_left_extend_gap_score;
     double target_right_open_gap_score;
     double target_right_extend_gap_score;
@@ -1880,7 +1880,7 @@ static Algorithm _get_algorithm(Aligner* self)
         const double query_gap_open = self->query_internal_open_gap_score;
         const double extend_internal_insertion_score = self->extend_internal_insertion_score;
         const double query_gap_extend = self->query_internal_extend_gap_score;
-        const double target_left_open = self->target_left_open_gap_score;
+        const double target_left_open = self->open_left_insertion_score;
         const double target_left_extend = self->target_left_extend_gap_score;
         const double query_left_open = self->query_left_open_gap_score;
         const double target_right_open = self->target_right_open_gap_score;
@@ -1917,7 +1917,7 @@ Aligner_init(Aligner *self, PyObject *args, PyObject *kwds)
     self->extend_internal_insertion_score = 0;
     self->query_internal_open_gap_score = 0;
     self->query_internal_extend_gap_score = 0;
-    self->target_left_open_gap_score = 0;
+    self->open_left_insertion_score = 0;
     self->target_left_extend_gap_score = 0;
     self->target_right_open_gap_score = 0;
     self->target_right_extend_gap_score = 0;
@@ -1995,8 +1995,8 @@ Aligner_str(Aligner* self)
                      self->open_internal_insertion_score);
         p += sprintf(p, "  extend_internal_insertion_score: %f\n",
                      self->extend_internal_insertion_score);
-        p += sprintf(p, "  target_left_open_gap_score: %f\n",
-                     self->target_left_open_gap_score);
+        p += sprintf(p, "  open_left_insertion_score: %f\n",
+                     self->open_left_insertion_score);
         p += sprintf(p, "  target_left_extend_gap_score: %f\n",
                      self->target_left_extend_gap_score);
         p += sprintf(p, "  target_right_open_gap_score: %f\n",
@@ -2241,7 +2241,7 @@ Aligner_get_gap_score(Aligner* self, void* closure)
     else {
         const double score = self->open_internal_insertion_score;
         if (score != self->extend_internal_insertion_score
-         || score != self->target_left_open_gap_score
+         || score != self->open_left_insertion_score
          || score != self->target_left_extend_gap_score
          || score != self->target_right_open_gap_score
          || score != self->target_right_extend_gap_score
@@ -2281,7 +2281,7 @@ Aligner_set_gap_score(Aligner* self, PyObject* value, void* closure)
         }
         self->open_internal_insertion_score = score;
         self->extend_internal_insertion_score = score;
-        self->target_left_open_gap_score = score;
+        self->open_left_insertion_score = score;
         self->target_left_extend_gap_score = score;
         self->target_right_open_gap_score = score;
         self->target_right_extend_gap_score = score;
@@ -2307,7 +2307,7 @@ Aligner_get_open_gap_score(Aligner* self, void* closure)
     }
     else {
         const double score = self->open_internal_insertion_score;
-        if (score != self->target_left_open_gap_score
+        if (score != self->open_left_insertion_score
          || score != self->target_right_open_gap_score
          || score != self->query_internal_open_gap_score
          || score != self->query_left_open_gap_score
@@ -2332,7 +2332,7 @@ Aligner_set_open_gap_score(Aligner* self, PyObject* value, void* closure)
         self->query_gap_function = NULL;
     }
     self->open_internal_insertion_score = score;
-    self->target_left_open_gap_score = score;
+    self->open_left_insertion_score = score;
     self->target_right_open_gap_score = score;
     self->query_internal_open_gap_score = score;
     self->query_left_open_gap_score = score;
@@ -2508,7 +2508,7 @@ Aligner_get_end_gap_score(Aligner* self, void* closure)
         return NULL;
     }
     else {
-        const double score = self->target_left_open_gap_score;
+        const double score = self->open_left_insertion_score;
         if (score != self->target_left_extend_gap_score
          || score != self->target_right_open_gap_score
          || score != self->target_right_extend_gap_score
@@ -2535,7 +2535,7 @@ Aligner_set_end_gap_score(Aligner* self, PyObject* value, void* closure)
         Py_DECREF(self->query_gap_function);
         self->query_gap_function = NULL;
     }
-    self->target_left_open_gap_score = score;
+    self->open_left_insertion_score = score;
     self->target_left_extend_gap_score = score;
     self->target_right_open_gap_score = score;
     self->target_right_extend_gap_score = score;
@@ -2556,7 +2556,7 @@ Aligner_get_end_open_gap_score(Aligner* self, void* closure)
         return NULL;
     }
     else {
-        const double score = self->target_left_open_gap_score;
+        const double score = self->open_left_insertion_score;
         if (score != self->target_right_open_gap_score
          || score != self->query_left_open_gap_score
          || score != self->query_right_open_gap_score) {
@@ -2579,7 +2579,7 @@ Aligner_set_end_open_gap_score(Aligner* self, PyObject* value, void* closure)
         Py_DECREF(self->query_gap_function);
         self->query_gap_function = NULL;
     }
-    self->target_left_open_gap_score = score;
+    self->open_left_insertion_score = score;
     self->target_right_open_gap_score = score;
     self->query_left_open_gap_score = score;
     self->query_right_open_gap_score = score;
@@ -2636,7 +2636,7 @@ Aligner_get_left_gap_score(Aligner* self, void* closure)
         return NULL;
     }
     else {
-        const double score = self->target_left_open_gap_score;
+        const double score = self->open_left_insertion_score;
         if (score != self->target_left_extend_gap_score
          || score != self->query_left_open_gap_score
          || score != self->query_left_extend_gap_score) {
@@ -2659,7 +2659,7 @@ Aligner_set_left_gap_score(Aligner* self, PyObject* value, void* closure)
         Py_DECREF(self->query_gap_function);
         self->query_gap_function = NULL;
     }
-    self->target_left_open_gap_score = score;
+    self->open_left_insertion_score = score;
     self->target_left_extend_gap_score = score;
     self->query_left_open_gap_score = score;
     self->query_left_extend_gap_score = score;
@@ -2716,7 +2716,7 @@ Aligner_get_left_open_gap_score(Aligner* self, void* closure)
         return NULL;
     }
     else {
-        const double score = self->target_left_open_gap_score;
+        const double score = self->open_left_insertion_score;
         if (score != self->query_left_open_gap_score) {
             PyErr_SetString(PyExc_ValueError, "gap scores are different");
             return NULL;
@@ -2737,7 +2737,7 @@ Aligner_set_left_open_gap_score(Aligner* self, PyObject* value, void* closure)
         Py_DECREF(self->query_gap_function);
         self->query_gap_function = NULL;
     }
-    self->target_left_open_gap_score = score;
+    self->open_left_insertion_score = score;
     self->query_left_open_gap_score = score;
     self->algorithm = Unknown;
     return 0;
@@ -2861,7 +2861,7 @@ Aligner_get_target_open_gap_score(Aligner* self, void* closure)
     }
     else {
         const double score = self->open_internal_insertion_score;
-        if (score != self->target_left_open_gap_score
+        if (score != self->open_left_insertion_score
          || score != self->target_right_open_gap_score) {
             PyErr_SetString(PyExc_ValueError, "gap scores are different");
             return NULL;
@@ -2875,7 +2875,7 @@ Aligner_set_target_open_gap_score(Aligner* self, PyObject* value, void* closure)
 {   const double score = PyFloat_AsDouble(value);
     if (PyErr_Occurred()) return -1;
     self->open_internal_insertion_score = score;
-    self->target_left_open_gap_score = score;
+    self->open_left_insertion_score = score;
     self->target_right_open_gap_score = score;
     if (self->target_gap_function) {
         Py_DECREF(self->target_gap_function);
@@ -2930,7 +2930,7 @@ Aligner_get_target_gap_score(Aligner* self, void* closure)
     else {
         const double score = self->open_internal_insertion_score;
         if (score != self->extend_internal_insertion_score
-         || score != self->target_left_open_gap_score
+         || score != self->open_left_insertion_score
          || score != self->target_left_extend_gap_score
          || score != self->target_right_open_gap_score
          || score != self->target_right_extend_gap_score) {
@@ -2958,7 +2958,7 @@ Aligner_set_target_gap_score(Aligner* self, PyObject* value, void* closure)
         }
         self->open_internal_insertion_score = score;
         self->extend_internal_insertion_score = score;
-        self->target_left_open_gap_score = score;
+        self->open_left_insertion_score = score;
         self->target_left_extend_gap_score = score;
         self->target_right_open_gap_score = score;
         self->target_right_extend_gap_score = score;
@@ -3182,7 +3182,7 @@ Aligner_get_target_end_gap_score(Aligner* self, void* closure)
         return NULL;
     }
     else {
-        const double score = self->target_left_open_gap_score;
+        const double score = self->open_left_insertion_score;
         if (score != self->target_left_extend_gap_score
          || score != self->target_right_open_gap_score
          || score != self->target_right_extend_gap_score) {
@@ -3197,7 +3197,7 @@ static int
 Aligner_set_target_end_gap_score(Aligner* self, PyObject* value, void* closure) {
     const double score = PyFloat_AsDouble(value);
     if (PyErr_Occurred()) return -1;
-    self->target_left_open_gap_score = score;
+    self->open_left_insertion_score = score;
     self->target_left_extend_gap_score = score;
     self->target_right_open_gap_score = score;
     self->target_right_extend_gap_score = score;
@@ -3218,7 +3218,7 @@ Aligner_get_target_end_open_gap_score(Aligner* self, void* closure)
         return NULL;
     }
     else {
-        const double score = self->target_left_open_gap_score;
+        const double score = self->open_left_insertion_score;
         if (score != self->target_right_open_gap_score) {
             PyErr_SetString(PyExc_ValueError, "gap scores are different");
             return NULL;
@@ -3232,7 +3232,7 @@ Aligner_set_target_end_open_gap_score(Aligner* self, PyObject* value,
                                       void* closure)
 {   const double score = PyFloat_AsDouble(value);
     if (PyErr_Occurred()) return -1;
-    self->target_left_open_gap_score = score;
+    self->open_left_insertion_score = score;
     self->target_right_open_gap_score = score;
     if (self->target_gap_function) {
         Py_DECREF(self->target_gap_function);
@@ -3274,22 +3274,22 @@ Aligner_set_target_end_extend_gap_score(Aligner* self, PyObject* value, void* cl
     return 0;
 }
 
-static char Aligner_target_left_open_gap_score__doc__[] = "target left open score";
+static char Aligner_open_left_insertion_score__doc__[] = "target left open score";
 
 static PyObject*
-Aligner_get_target_left_open_gap_score(Aligner* self, void* closure)
+Aligner_get_open_left_insertion_score(Aligner* self, void* closure)
 {   if (self->target_gap_function) {
         PyErr_SetString(PyExc_ValueError, "using a gap score function");
         return NULL;
     }
-    return PyFloat_FromDouble(self->target_left_open_gap_score);
+    return PyFloat_FromDouble(self->open_left_insertion_score);
 }
 
 static int
-Aligner_set_target_left_open_gap_score(Aligner* self, PyObject* value, void* closure)
+Aligner_set_open_left_insertion_score(Aligner* self, PyObject* value, void* closure)
 {   const double score = PyFloat_AsDouble(value);
     if (PyErr_Occurred()) return -1;
-    self->target_left_open_gap_score = score;
+    self->open_left_insertion_score = score;
     if (self->target_gap_function) {
         Py_DECREF(self->target_gap_function);
         self->target_gap_function = NULL;
@@ -3331,7 +3331,7 @@ Aligner_get_target_left_gap_score(Aligner* self, void* closure)
         return NULL;
     }
     else {
-        const double score = self->target_left_open_gap_score;
+        const double score = self->open_left_insertion_score;
         if (score != self->target_left_extend_gap_score) {
             PyErr_SetString(PyExc_ValueError, "gap scores are different");
             return NULL;
@@ -3344,7 +3344,7 @@ static int
 Aligner_set_target_left_gap_score(Aligner* self, PyObject* value, void* closure)
 {   const double score = PyFloat_AsDouble(value);
     if (PyErr_Occurred()) return -1;
-    self->target_left_open_gap_score = score;
+    self->open_left_insertion_score = score;
     self->target_left_extend_gap_score = score;
     if (self->target_gap_function) {
         Py_DECREF(self->target_gap_function);
@@ -4025,10 +4025,10 @@ static PyGetSetDef Aligner_getset[] = {
         (getter)Aligner_get_target_internal_gap_score,
         (setter)Aligner_set_target_internal_gap_score,
         Aligner_target_internal_gap_score__doc__, NULL},
-    {"target_left_open_gap_score",
-        (getter)Aligner_get_target_left_open_gap_score,
-        (setter)Aligner_set_target_left_open_gap_score,
-        Aligner_target_left_open_gap_score__doc__, NULL},
+    {"open_left_insertion_score",
+        (getter)Aligner_get_open_left_insertion_score,
+        (setter)Aligner_set_open_left_insertion_score,
+        Aligner_open_left_insertion_score__doc__, NULL},
     {"target_left_extend_gap_score",
         (getter)Aligner_get_target_left_extend_gap_score,
         (setter)Aligner_set_target_left_extend_gap_score,
@@ -4846,7 +4846,7 @@ struct fogsaa_queue_node fogsaa_queue_pop(struct fogsaa_queue *queue) {
     double Iy_temp; \
     switch (strand) { \
         case '+': \
-            left_gap_open_A = self->target_left_open_gap_score; \
+            left_gap_open_A = self->open_left_insertion_score; \
             left_gap_open_B = self->query_left_open_gap_score; \
             left_gap_extend_A = self->target_left_extend_gap_score; \
             left_gap_extend_B = self->query_left_extend_gap_score; \
@@ -4860,7 +4860,7 @@ struct fogsaa_queue_node fogsaa_queue_pop(struct fogsaa_queue *queue) {
             left_gap_open_B = self->query_right_open_gap_score; \
             left_gap_extend_A = self->target_right_extend_gap_score; \
             left_gap_extend_B = self->query_right_extend_gap_score; \
-            right_gap_open_A = self->target_left_open_gap_score; \
+            right_gap_open_A = self->open_left_insertion_score; \
             right_gap_open_B = self->query_left_open_gap_score; \
             right_gap_extend_A = self->target_left_extend_gap_score; \
             right_gap_extend_B = self->query_left_extend_gap_score; \
@@ -5131,7 +5131,7 @@ exit: \
     PathGenerator* paths; \
     switch (strand) { \
         case '+': \
-            left_gap_open_A = self->target_left_open_gap_score; \
+            left_gap_open_A = self->open_left_insertion_score; \
             left_gap_open_B = self->query_left_open_gap_score; \
             left_gap_extend_A = self->target_left_extend_gap_score; \
             left_gap_extend_B = self->query_left_extend_gap_score; \
@@ -5145,7 +5145,7 @@ exit: \
             left_gap_open_B = self->query_right_open_gap_score; \
             left_gap_extend_A = self->target_right_extend_gap_score; \
             left_gap_extend_B = self->query_right_extend_gap_score; \
-            right_gap_open_A = self->target_left_open_gap_score; \
+            right_gap_open_A = self->open_left_insertion_score; \
             right_gap_open_B = self->query_left_open_gap_score; \
             right_gap_extend_A = self->target_left_extend_gap_score; \
             right_gap_extend_B = self->query_left_extend_gap_score; \
@@ -6022,7 +6022,7 @@ exit: \
     double right_gap_extend_B; \
     switch (strand) { \
         case '+': \
-            left_gap_open_A = self->target_left_open_gap_score; \
+            left_gap_open_A = self->open_left_insertion_score; \
             left_gap_open_B = self->query_left_open_gap_score; \
             left_gap_extend_A = self->target_left_extend_gap_score; \
             left_gap_extend_B = self->query_left_extend_gap_score; \
@@ -6036,7 +6036,7 @@ exit: \
             left_gap_open_B = self->query_right_open_gap_score; \
             left_gap_extend_A = self->target_right_extend_gap_score; \
             left_gap_extend_B = self->query_right_extend_gap_score; \
-            right_gap_open_A = self->target_left_open_gap_score; \
+            right_gap_open_A = self->open_left_insertion_score; \
             right_gap_open_B = self->query_left_open_gap_score; \
             right_gap_extend_A = self->target_left_extend_gap_score; \
             right_gap_extend_B = self->query_left_extend_gap_score; \
@@ -7077,7 +7077,7 @@ Aligner_watermansmithbeyer_local_align_matrix(Aligner* self,
     if (self->query_left_open_gap_score > mismatch || \
             self->query_internal_open_gap_score > mismatch || \
             self->query_right_open_gap_score > mismatch || \
-            self->target_left_open_gap_score > mismatch || \
+            self->open_left_insertion_score > mismatch || \
             self->open_internal_insertion_score > mismatch || \
             self->target_right_open_gap_score > mismatch || \
             self->query_left_extend_gap_score > mismatch || \

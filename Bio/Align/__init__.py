@@ -3952,23 +3952,32 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
         for name, value in kwargs.items():
             setattr(self, name, value)
 
+    new_keys = {"target_internal_open_gap_score": "open_internal_insertion_score",
+                "target_internal_extend_gap_score": "extend_internal_insertion_score",
+                "target_left_open_gap_score": "open_left_insertion_score",
+               }
     def __setattr__(self, key, value):
-        if key == "target_internal_extend_gap_score":
-            key = "extend_internal_insertion_score"
-        elif key == "target_internal_open_gap_score":
-            key = "open_internal_insertion_score"
-        elif key not in dir(_pairwisealigner.PairwiseAligner):
-            # To prevent confusion, don't allow users to create new attributes.
-            # On CPython, __slots__ can be used for this, but currently
-            # __slots__ does not behave the same way on PyPy at least.
-            raise AttributeError("'PairwiseAligner' object has no attribute '%s'" % key)
+        try:
+            key = self.new_keys[key]
+        except KeyError:
+            if key not in dir(_pairwisealigner.PairwiseAligner):
+                # To prevent confusion, don't allow users to create new attributes.
+                # On CPython, __slots__ can be used for this, but currently
+                # __slots__ does not behave the same way on PyPy at least.
+                raise AttributeError("'PairwiseAligner' object has no attribute '%s'" % key)
+        else:
+            # raise deprecation
+            pass
         _pairwisealigner.PairwiseAligner.__setattr__(self, key, value)
 
     def __getattr__(self, key):
-        if key == "target_internal_extend_gap_score":
-            key = "extend_internal_insertion_score"
-        elif key == "target_internal_open_gap_score":
-            key = "open_internal_insertion_score"
+        try:
+            key = self.new_keys[key]
+        except KeyError:
+            pass
+        else:
+            # raise deprecation
+            pass
         return _pairwisealigner.PairwiseAligner.__getattribute__(self, key)
 
     def align(self, seqA, seqB, strand="+"):
@@ -4002,7 +4011,7 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
             "wildcard": self.wildcard,
             "open_internal_insertion_score": self.open_internal_insertion_score,
             "extend_internal_insertion_score": self.extend_internal_insertion_score,
-            "target_left_open_gap_score": self.target_left_open_gap_score,
+            "open_left_insertion_score": self.open_left_insertion_score,
             "target_left_extend_gap_score": self.target_left_extend_gap_score,
             "target_right_open_gap_score": self.target_right_open_gap_score,
             "target_right_extend_gap_score": self.target_right_extend_gap_score,
@@ -4025,7 +4034,7 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
         self.wildcard = state["wildcard"]
         self.open_internal_insertion_score = state["open_internal_insertion_score"]
         self.extend_internal_insertion_score = state["extend_internal_insertion_score"]
-        self.target_left_open_gap_score = state["target_left_open_gap_score"]
+        self.open_left_insertion_score = state["open_left_insertion_score"]
         self.target_left_extend_gap_score = state["target_left_extend_gap_score"]
         self.target_right_open_gap_score = state["target_right_open_gap_score"]
         self.target_right_extend_gap_score = state["target_right_extend_gap_score"]

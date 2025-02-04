@@ -67,7 +67,7 @@ Pairwise sequence aligner with parameters
   mismatch_score: -2.000000
   open_internal_insertion_score: 0.000000
   extend_internal_insertion_score: 0.000000
-  target_left_open_gap_score: 0.000000
+  open_left_insertion_score: 0.000000
   target_left_extend_gap_score: 0.000000
   target_right_open_gap_score: 0.000000
   target_right_extend_gap_score: 0.000000
@@ -110,7 +110,7 @@ Pairwise sequence aligner with parameters
   mismatch_score: 0.000000
   open_internal_insertion_score: -5.000000
   extend_internal_insertion_score: -1.000000
-  target_left_open_gap_score: -3.000000
+  open_left_insertion_score: -3.000000
   target_left_extend_gap_score: -9.000000
   target_right_open_gap_score: -3.000000
   target_right_extend_gap_score: -9.000000
@@ -141,7 +141,7 @@ Pairwise sequence aligner with parameters
         self.assertAlmostEqual(aligner.target_end_open_gap_score, score)
         self.assertAlmostEqual(aligner.target_end_extend_gap_score, score)
         self.assertAlmostEqual(aligner.target_left_gap_score, score)
-        self.assertAlmostEqual(aligner.target_left_open_gap_score, score)
+        self.assertAlmostEqual(aligner.open_left_insertion_score, score)
         self.assertAlmostEqual(aligner.target_left_extend_gap_score, score)
         self.assertAlmostEqual(aligner.target_right_gap_score, score)
         self.assertAlmostEqual(aligner.target_right_open_gap_score, score)
@@ -166,7 +166,7 @@ Pairwise sequence aligner with parameters
   mismatch_score: 0.000000
   open_internal_insertion_score: -3.000000
   extend_internal_insertion_score: -3.000000
-  target_left_open_gap_score: -4.000000
+  open_left_insertion_score: -4.000000
   target_left_extend_gap_score: -4.000000
   target_right_open_gap_score: -4.000000
   target_right_extend_gap_score: -4.000000
@@ -219,7 +219,7 @@ Pairwise sequence aligner with parameters
   mismatch_score: 0.000000
   open_internal_insertion_score: 0.000000
   extend_internal_insertion_score: 0.000000
-  target_left_open_gap_score: 0.000000
+  open_left_insertion_score: 0.000000
   target_left_extend_gap_score: 0.000000
   target_right_open_gap_score: 0.000000
   target_right_extend_gap_score: 0.000000
@@ -327,7 +327,7 @@ Pairwise sequence aligner with parameters
   mismatch_score: -1.000000
   open_internal_insertion_score: -5.000000
   extend_internal_insertion_score: -1.000000
-  target_left_open_gap_score: -5.000000
+  open_left_insertion_score: -5.000000
   target_left_extend_gap_score: -1.000000
   target_right_open_gap_score: -5.000000
   target_right_extend_gap_score: -1.000000
@@ -459,7 +459,7 @@ Pairwise sequence aligner with parameters
   mismatch_score: 0.000000
   open_internal_insertion_score: -0.100000
   extend_internal_insertion_score: -0.100000
-  target_left_open_gap_score: -0.100000
+  open_left_insertion_score: -0.100000
   target_left_extend_gap_score: -0.100000
   target_right_open_gap_score: -0.100000
   target_right_extend_gap_score: -0.100000
@@ -508,7 +508,7 @@ Pairwise sequence aligner with parameters
   mismatch_score: 0.000000
   open_internal_insertion_score: -0.100000
   extend_internal_insertion_score: 0.000000
-  target_left_open_gap_score: -0.100000
+  open_left_insertion_score: -0.100000
   target_left_extend_gap_score: 0.000000
   target_right_open_gap_score: -0.100000
   target_right_extend_gap_score: 0.000000
@@ -871,7 +871,7 @@ Pairwise sequence aligner with parameters
   mismatch_score: -1.000000
   open_internal_insertion_score: -0.100000
   extend_internal_insertion_score: 0.000000
-  target_left_open_gap_score: -0.100000
+  open_left_insertion_score: -0.100000
   target_left_extend_gap_score: 0.000000
   target_right_open_gap_score: -0.100000
   target_right_extend_gap_score: 0.000000
@@ -968,7 +968,7 @@ Pairwise sequence aligner with parameters
   mismatch_score: 0.000000
   open_internal_insertion_score: -0.100000
   extend_internal_insertion_score: 0.000000
-  target_left_open_gap_score: -0.100000
+  open_left_insertion_score: -0.100000
   target_left_extend_gap_score: 0.000000
   target_right_open_gap_score: -0.100000
   target_right_extend_gap_score: 0.000000
@@ -1067,7 +1067,7 @@ Pairwise sequence aligner with parameters
   mismatch_score: 0.000000
   open_internal_insertion_score: 0.000000
   extend_internal_insertion_score: 0.000000
-  target_left_open_gap_score: 0.000000
+  open_left_insertion_score: 0.000000
   target_left_extend_gap_score: 0.000000
   target_right_open_gap_score: 0.000000
   target_right_extend_gap_score: 0.000000
@@ -1140,7 +1140,7 @@ Pairwise sequence aligner with parameters
   mismatch_score: 0.000000
   open_internal_insertion_score: 0.000000
   extend_internal_insertion_score: 0.000000
-  target_left_open_gap_score: 0.000000
+  open_left_insertion_score: 0.000000
   target_left_extend_gap_score: 0.000000
   target_right_open_gap_score: 0.000000
   target_right_extend_gap_score: 0.000000
@@ -1212,7 +1212,7 @@ Pairwise sequence aligner with parameters
   mismatch_score: -2.000000
   open_internal_insertion_score: -0.100000
   extend_internal_insertion_score: 0.000000
-  target_left_open_gap_score: -0.100000
+  open_left_insertion_score: -0.100000
   target_left_extend_gap_score: 0.000000
   target_right_open_gap_score: -0.100000
   target_right_extend_gap_score: 0.000000
@@ -1317,7 +1317,7 @@ Pairwise sequence aligner with parameters
   mismatch_score: 0.000000
   open_internal_insertion_score: -0.200000
   extend_internal_insertion_score: -0.500000
-  target_left_open_gap_score: -0.200000
+  open_left_insertion_score: -0.200000
   target_left_extend_gap_score: -0.500000
   target_right_open_gap_score: -0.200000
   target_right_extend_gap_score: -0.500000
@@ -1388,7 +1388,7 @@ Pairwise sequence aligner with parameters
   mismatch_score: 0.000000
   open_internal_insertion_score: -0.200000
   extend_internal_insertion_score: -1.500000
-  target_left_open_gap_score: -0.200000
+  open_left_insertion_score: -0.200000
   target_left_extend_gap_score: -1.500000
   target_right_open_gap_score: -0.200000
   target_right_extend_gap_score: -1.500000
@@ -1493,7 +1493,7 @@ Pairwise sequence aligner with parameters
   mismatch_score: 0.000000
   open_internal_insertion_score: -0.200000
   extend_internal_insertion_score: -1.500000
-  target_left_open_gap_score: -0.200000
+  open_left_insertion_score: -0.200000
   target_left_extend_gap_score: -1.500000
   target_right_open_gap_score: -0.200000
   target_right_extend_gap_score: -1.500000
@@ -1566,7 +1566,7 @@ Pairwise sequence aligner with parameters
   mismatch_score: 0.000000
   open_internal_insertion_score: -1.700000
   extend_internal_insertion_score: -1.500000
-  target_left_open_gap_score: -1.700000
+  open_left_insertion_score: -1.700000
   target_left_extend_gap_score: -1.500000
   target_right_open_gap_score: -1.700000
   target_right_extend_gap_score: -1.500000
@@ -1639,7 +1639,7 @@ Pairwise sequence aligner with parameters
   mismatch_score: 0.000000
   open_internal_insertion_score: -1.700000
   extend_internal_insertion_score: -1.500000
-  target_left_open_gap_score: -1.700000
+  open_left_insertion_score: -1.700000
   target_left_extend_gap_score: -1.500000
   target_right_open_gap_score: -1.700000
   target_right_extend_gap_score: -1.500000
@@ -1714,7 +1714,7 @@ Pairwise sequence aligner with parameters
   mismatch_score: 0.000000
   open_internal_insertion_score: -0.200000
   extend_internal_insertion_score: -0.800000
-  target_left_open_gap_score: 0.000000
+  open_left_insertion_score: 0.000000
   target_left_extend_gap_score: 0.000000
   target_right_open_gap_score: 0.000000
   target_right_extend_gap_score: 0.000000
@@ -1844,7 +1844,7 @@ Pairwise sequence aligner with parameters
   mismatch_score: 0.000000
   open_internal_insertion_score: -0.200000
   extend_internal_insertion_score: -0.800000
-  target_left_open_gap_score: 0.000000
+  open_left_insertion_score: 0.000000
   target_left_extend_gap_score: 0.000000
   target_right_open_gap_score: 0.000000
   target_right_extend_gap_score: 0.000000
@@ -1928,7 +1928,7 @@ Pairwise sequence aligner with parameters
   mismatch_score: 0.000000
   open_internal_insertion_score: -0.300000
   extend_internal_insertion_score: 0.000000
-  target_left_open_gap_score: -0.300000
+  open_left_insertion_score: -0.300000
   target_left_extend_gap_score: 0.000000
   target_right_open_gap_score: -0.300000
   target_right_extend_gap_score: 0.000000
@@ -2031,7 +2031,7 @@ Pairwise sequence aligner with parameters
   mismatch_score: 0.000000
   open_internal_insertion_score: -0.300000
   extend_internal_insertion_score: 0.000000
-  target_left_open_gap_score: -0.300000
+  open_left_insertion_score: -0.300000
   target_left_extend_gap_score: 0.000000
   target_right_open_gap_score: -0.300000
   target_right_extend_gap_score: 0.000000
@@ -2112,7 +2112,7 @@ Pairwise sequence aligner with parameters
   mismatch_score: 0.000000
   open_internal_insertion_score: -0.100000
   extend_internal_insertion_score: 0.000000
-  target_left_open_gap_score: -0.100000
+  open_left_insertion_score: -0.100000
   target_left_extend_gap_score: 0.000000
   target_right_open_gap_score: -0.100000
   target_right_extend_gap_score: 0.000000
@@ -2255,7 +2255,7 @@ class TestPairwiseMatchDictionary(unittest.TestCase):
   substitution_matrix: <Array object at .*>
   open_internal_insertion_score: -0.500000
   extend_internal_insertion_score: 0.000000
-  target_left_open_gap_score: -0.500000
+  open_left_insertion_score: -0.500000
   target_left_extend_gap_score: 0.000000
   target_right_open_gap_score: -0.500000
   target_right_extend_gap_score: 0.000000
@@ -2357,7 +2357,7 @@ query             3 AT-T 0
   substitution_matrix: <Array object at .*>
   open_internal_insertion_score: -1.000000
   extend_internal_insertion_score: 0.000000
-  target_left_open_gap_score: -1.000000
+  open_left_insertion_score: -1.000000
   target_left_extend_gap_score: 0.000000
   target_right_open_gap_score: -1.000000
   target_right_extend_gap_score: 0.000000
@@ -2427,7 +2427,7 @@ query             3 ATT 0
   substitution_matrix: <Array object at .*>
   open_internal_insertion_score: -1.000000
   extend_internal_insertion_score: 0.000000
-  target_left_open_gap_score: -1.000000
+  open_left_insertion_score: -1.000000
   target_left_extend_gap_score: 0.000000
   target_right_open_gap_score: -1.000000
   target_right_extend_gap_score: 0.000000
@@ -2500,7 +2500,7 @@ query             4 ATA 1
   substitution_matrix: <Array object at .*>
   open_internal_insertion_score: -0.500000
   extend_internal_insertion_score: 0.000000
-  target_left_open_gap_score: -0.500000
+  open_left_insertion_score: -0.500000
   target_left_extend_gap_score: 0.000000
   target_right_open_gap_score: -0.500000
   target_right_extend_gap_score: 0.000000
@@ -2604,7 +2604,7 @@ query             3 AT-T 0
   substitution_matrix: <Array object at .*
   open_internal_insertion_score: -1.000000
   extend_internal_insertion_score: 0.000000
-  target_left_open_gap_score: -1.000000
+  open_left_insertion_score: -1.000000
   target_left_extend_gap_score: 0.000000
   target_right_open_gap_score: -1.000000
   target_right_extend_gap_score: 0.000000
@@ -2676,7 +2676,7 @@ query             3 ATT 0
   substitution_matrix: <Array object at .*>
   open_internal_insertion_score: -1.000000
   extend_internal_insertion_score: 0.000000
-  target_left_open_gap_score: -1.000000
+  open_left_insertion_score: -1.000000
   target_left_extend_gap_score: 0.000000
   target_right_open_gap_score: -1.000000
   target_right_extend_gap_score: 0.000000
@@ -2743,7 +2743,7 @@ Pairwise sequence aligner with parameters
   mismatch_score: 0.000000
   open_internal_insertion_score: -0.300000
   extend_internal_insertion_score: -0.100000
-  target_left_open_gap_score: -0.300000
+  open_left_insertion_score: -0.300000
   target_left_extend_gap_score: -0.100000
   target_right_open_gap_score: -0.300000
   target_right_extend_gap_score: -0.100000
@@ -2790,7 +2790,7 @@ Pairwise sequence aligner with parameters
   mismatch_score: 0.000000
   open_internal_insertion_score: -0.300000
   extend_internal_insertion_score: -0.100000
-  target_left_open_gap_score: -0.300000
+  open_left_insertion_score: -0.300000
   target_left_extend_gap_score: -0.100000
   target_right_open_gap_score: -0.300000
   target_right_extend_gap_score: -0.100000
@@ -2851,7 +2851,7 @@ Pairwise sequence aligner with parameters
   mismatch_score: 0.000000
   open_internal_insertion_score: -0.300000
   extend_internal_insertion_score: -0.100000
-  target_left_open_gap_score: -0.300000
+  open_left_insertion_score: -0.300000
   target_left_extend_gap_score: -0.100000
   target_right_open_gap_score: -0.300000
   target_right_extend_gap_score: -0.100000
@@ -2900,7 +2900,7 @@ Pairwise sequence aligner with parameters
   mismatch_score: 0.000000
   open_internal_insertion_score: -0.300000
   extend_internal_insertion_score: -0.100000
-  target_left_open_gap_score: -0.300000
+  open_left_insertion_score: -0.300000
   target_left_extend_gap_score: -0.100000
   target_right_open_gap_score: -0.300000
   target_right_extend_gap_score: -0.100000
@@ -2933,7 +2933,7 @@ Pairwise sequence aligner with parameters
   mismatch_score: 0.000000
   open_internal_insertion_score: -0.300000
   extend_internal_insertion_score: -0.100000
-  target_left_open_gap_score: -0.300000
+  open_left_insertion_score: -0.300000
   target_left_extend_gap_score: -0.100000
   target_right_open_gap_score: -0.300000
   target_right_extend_gap_score: -0.100000
@@ -4461,7 +4461,7 @@ Pairwise sequence aligner with parameters
   mismatch_score: 0.000000
   open_internal_insertion_score: -0.200000
   extend_internal_insertion_score: -0.100000
-  target_left_open_gap_score: -0.200000
+  open_left_insertion_score: -0.200000
   target_left_extend_gap_score: -0.100000
   target_right_open_gap_score: -0.200000
   target_right_extend_gap_score: -0.100000
@@ -4486,7 +4486,7 @@ class TestPredefinedScoringSchemes(unittest.TestCase):
   substitution_matrix: <Array object at .*
   open_internal_insertion_score: -7.000000
   extend_internal_insertion_score: -2.000000
-  target_left_open_gap_score: -7.000000
+  open_left_insertion_score: -7.000000
   target_left_extend_gap_score: -2.000000
   target_right_open_gap_score: -7.000000
   target_right_extend_gap_score: -2.000000
@@ -4530,7 +4530,7 @@ N -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0
   substitution_matrix: <Array object at .*
   open_internal_insertion_score: -2.500000
   extend_internal_insertion_score: -2.500000
-  target_left_open_gap_score: -2.500000
+  open_left_insertion_score: -2.500000
   target_left_extend_gap_score: -2.500000
   target_right_open_gap_score: -2.500000
   target_right_extend_gap_score: -2.500000
@@ -4574,7 +4574,7 @@ N -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0
   substitution_matrix: <Array object at .*
   open_internal_insertion_score: -12.000000
   extend_internal_insertion_score: -1.000000
-  target_left_open_gap_score: -12.000000
+  open_left_insertion_score: -12.000000
   target_left_extend_gap_score: -1.000000
   target_right_open_gap_score: -12.000000
   target_right_extend_gap_score: -1.000000
