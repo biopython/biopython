@@ -377,7 +377,7 @@ all parameters, use
      extend_right_insertion_score: 0.000000
      query_internal_open_gap_score: 0.000000
      query_internal_extend_gap_score: 0.000000
-     query_left_open_gap_score: 0.000000
+     open_left_deletion_score: 0.000000
      query_left_extend_gap_score: 0.000000
      query_right_open_gap_score: 0.000000
      query_right_extend_gap_score: 0.000000
@@ -553,7 +553,7 @@ object:
 ================================== ====================================
 **Opening scores**                 **Extending scores**
 ================================== ====================================
-``query_left_open_gap_score``      ``query_left_extend_gap_score``
+``open_left_deletion_score``      ``query_left_extend_gap_score``
 ``query_internal_open_gap_score``  ``query_internal_extend_gap_score``
 ``query_right_open_gap_score``     ``query_right_extend_gap_score``
 ``open_left_insertion_score``      ``extend_left_insertion_score``
@@ -635,7 +635,7 @@ that refer to a number of these values collectively, as shown
    |                                 | ``query_right_gap_score``             |
    +---------------------------------+---------------------------------------+
    | ``left_open_gap_score``         | ``open_left_insertion_score``,        |
-   |                                 | ``query_left_open_gap_score``         |
+   |                                 | ``open_left_deletion_score``         |
    +---------------------------------+---------------------------------------+
    | ``left_extend_gap_score``       | ``extend_left_insertion_score``,      |
    |                                 | ``query_left_extend_gap_score``       |
@@ -658,7 +658,7 @@ that refer to a number of these values collectively, as shown
    |                                 | ``target_extend_gap_score``           |
    +---------------------------------+---------------------------------------+
    | ``query_open_gap_score``        | ``query_internal_open_gap_score``,    |
-   |                                 | ``query_left_open_gap_score``,        |
+   |                                 | ``open_left_deletion_score``,        |
    |                                 | ``query_right_open_gap_score``        |
    +---------------------------------+---------------------------------------+
    | ``query_extend_gap_score``      | ``query_internal_extend_gap_score``,  |
@@ -689,7 +689,7 @@ that refer to a number of these values collectively, as shown
    | ``query_end_gap_score``         | ``query_end_open_gap_score``,         |
    |                                 | ``query_end_extend_gap_score``        |
    +---------------------------------+---------------------------------------+
-   | ``query_end_open_gap_score``    | ``query_left_open_gap_score``,        |
+   | ``query_end_open_gap_score``    | ``open_left_deletion_score``,        |
    |                                 | ``query_right_open_gap_score``        |
    +---------------------------------+---------------------------------------+
    | ``query_end_extend_gap_score``  | ``query_left_extend_gap_score``,      |
@@ -698,7 +698,7 @@ that refer to a number of these values collectively, as shown
    | ``query_internal_gap_score``    | ``query_internal_open_gap_score``,    |
    |                                 | ``query_internal_extend_gap_score``   |
    +---------------------------------+---------------------------------------+
-   | ``query_left_gap_score``        | ``query_left_open_gap_score``,        |
+   | ``query_left_gap_score``        | ``open_left_deletion_score``,        |
    |                                 | ``query_left_extend_gap_score``       |
    +---------------------------------+---------------------------------------+
    | ``query_right_gap_score``       | ``query_right_open_gap_score``,       |
@@ -782,7 +782,7 @@ BLASTP, respectively.
      extend_right_insertion_score: -2.000000
      query_internal_open_gap_score: -7.000000
      query_internal_extend_gap_score: -2.000000
-     query_left_open_gap_score: -7.000000
+     open_left_deletion_score: -7.000000
      query_left_extend_gap_score: -2.000000
      query_right_open_gap_score: -7.000000
      query_right_extend_gap_score: -2.000000
