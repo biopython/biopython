@@ -144,16 +144,22 @@ class PirIterator(SequenceIterator):
         line = self._line
         if line is None:
             raise StopIteration
-        stream = self.stream
+
         pir_type = line[1:3]
         if pir_type not in _pir_mol_type or line[3] != ";":
             raise ValueError(
                 "Records should start with '>XX;' where XX is a valid sequence type"
             )
+
         identifier = line[4:].strip()
-        description = next(stream).strip()
+        description = self.stream.readline()
+        if description == "":
+            raise StopIteration
+        else:
+            description = description.strip()
+
         lines = []
-        for line in stream:
+        for line in self.stream:
             if line[0] == ">":
                 self._line = line
                 break
