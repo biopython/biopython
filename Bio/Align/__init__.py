@@ -3955,6 +3955,8 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
     def __setattr__(self, key, value):
         if key == "target_internal_extend_gap_score":
             key = "extend_internal_insertion_score"
+        elif key == "target_internal_open_gap_score":
+            key = "open_internal_insertion_score"
         elif key not in dir(_pairwisealigner.PairwiseAligner):
             # To prevent confusion, don't allow users to create new attributes.
             # On CPython, __slots__ can be used for this, but currently
@@ -3965,6 +3967,8 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
     def __getattr__(self, key):
         if key == "target_internal_extend_gap_score":
             key = "extend_internal_insertion_score"
+        elif key == "target_internal_open_gap_score":
+            key = "open_internal_insertion_score"
         return _pairwisealigner.PairwiseAligner.__getattribute__(self, key)
 
     def align(self, seqA, seqB, strand="+"):
@@ -3996,7 +4000,7 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
     def __getstate__(self):
         state = {
             "wildcard": self.wildcard,
-            "target_internal_open_gap_score": self.target_internal_open_gap_score,
+            "open_internal_insertion_score": self.open_internal_insertion_score,
             "extend_internal_insertion_score": self.extend_internal_insertion_score,
             "target_left_open_gap_score": self.target_left_open_gap_score,
             "target_left_extend_gap_score": self.target_left_extend_gap_score,
@@ -4019,7 +4023,7 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
 
     def __setstate__(self, state):
         self.wildcard = state["wildcard"]
-        self.target_internal_open_gap_score = state["target_internal_open_gap_score"]
+        self.open_internal_insertion_score = state["open_internal_insertion_score"]
         self.extend_internal_insertion_score = state["extend_internal_insertion_score"]
         self.target_left_open_gap_score = state["target_left_open_gap_score"]
         self.target_left_extend_gap_score = state["target_left_extend_gap_score"]

@@ -369,7 +369,7 @@ all parameters, use
      wildcard: None
      match_score: 1.000000
      mismatch_score: 0.000000
-     target_internal_open_gap_score: 0.000000
+     open_internal_insertion_score: 0.000000
      extend_internal_insertion_score: 0.000000
      target_left_open_gap_score: 0.000000
      target_left_extend_gap_score: 0.000000
@@ -557,7 +557,7 @@ object:
 ``query_internal_open_gap_score``  ``query_internal_extend_gap_score``
 ``query_right_open_gap_score``     ``query_right_extend_gap_score``
 ``target_left_open_gap_score``     ``target_left_extend_gap_score``
-``target_internal_open_gap_score`` ``extend_internal_insertion_score``
+``open_internal_insertion_score``  ``extend_internal_insertion_score``
 ``target_right_open_gap_score``    ``target_right_extend_gap_score``
 ================================== ====================================
 
@@ -613,7 +613,7 @@ that refer to a number of these values collectively, as shown
    | ``internal_gap_score``          | ``target_internal_gap_score``,        |
    |                                 | ``query_internal_gap_score``          |
    +---------------------------------+---------------------------------------+
-   | ``internal_open_gap_score``     | ``target_internal_open_gap_score``,   |
+   | ``internal_open_gap_score``     | ``open_internal_insertion_score``,    |
    |                                 | ``query_internal_open_gap_score``     |
    +---------------------------------+---------------------------------------+
    | ``internal_extend_gap_score``   | ``extend_internal_insertion_score``, |
@@ -646,7 +646,7 @@ that refer to a number of these values collectively, as shown
    | ``right_extend_gap_score``      | ``target_right_extend_gap_score``,    |
    |                                 | ``query_right_extend_gap_score``      |
    +---------------------------------+---------------------------------------+
-   | ``target_open_gap_score``       | ``target_internal_open_gap_score``,   |
+   | ``target_open_gap_score``       | ``open_internal_insertion_score``,   |
    |                                 | ``target_left_open_gap_score``,       |
    |                                 | ``target_right_open_gap_score``       |
    +---------------------------------+---------------------------------------+
@@ -668,8 +668,8 @@ that refer to a number of these values collectively, as shown
    | ``query_gap_score``             | ``query_open_gap_score``,             |
    |                                 | ``query_extend_gap_score``            |
    +---------------------------------+---------------------------------------+
-   | ``target_internal_gap_score``   | ``target_internal_open_gap_score``,   |
-   |                                 | ``extend_internal_insertion_score``  |
+   | ``target_internal_gap_score``   | ``open_internal_insertion_score``,    |
+   |                                 | ``extend_internal_insertion_score``   |
    +---------------------------------+---------------------------------------+
    | ``target_end_gap_score``        | ``target_end_open_gap_score``,        |
    |                                 | ``target_end_extend_gap_score``       |
@@ -774,7 +774,7 @@ BLASTP, respectively.
    >>> print(aligner)  # doctest:+ELLIPSIS
    Pairwise sequence aligner with parameters
      substitution_matrix: <Array object at ...>
-     target_internal_open_gap_score: -7.000000
+     open_internal_insertion_score: -7.000000
      extend_internal_insertion_score: -2.000000
      target_left_open_gap_score: -7.000000
      target_left_extend_gap_score: -2.000000
