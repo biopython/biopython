@@ -8,6 +8,9 @@ import unittest
 from io import StringIO
 
 from Bio import Align
+from Bio.Align import substitution_matrices
+
+substitution_matrix = substitution_matrices.load("BLOSUM62")
 
 try:
     import numpy as np
@@ -252,6 +255,23 @@ Deinococcu-MKKSLLSLKLSGLLVPSVLALS--------LSACSSPSSTLNQGTLKIAMEGTYPPFTSKNE-QGELVG
 HISJ_E_COLMKKLVLSLSLVLAFSSATAAF-------------------AAIPQNIRIGTDPTYAPFESKNS-QGELVGFDIDLAKELCKRINTQCTFVENPLDALIPSLKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLVVAKNSDIQP-TVESLKGKRVGVLQGTTQETFGNEHWAPKGIEIVSYQGQDNIYSDLTAGRIDAAFQDEVAASEGFLKQPVGKDYKFGGPSVKDEKLFGVGTGMGLRKED--NELREALNKAFAEMRADGTYEKLAKKYFDFDVYGG---
 """,
         )
+        counts = alignment.counts(substitution_matrix)
+        self.assertEqual(counts.left_insertions, 15)
+        self.assertEqual(counts.left_deletions, 12)
+        self.assertEqual(counts.right_insertions, 16)
+        self.assertEqual(counts.right_deletions, 27)
+        self.assertEqual(counts.internal_insertions, 252)
+        self.assertEqual(counts.internal_deletions, 226)
+        self.assertEqual(counts.left_gaps, 27)
+        self.assertEqual(counts.right_gaps, 43)
+        self.assertEqual(counts.internal_gaps, 478)
+        self.assertEqual(counts.insertions, 283)
+        self.assertEqual(counts.deletions, 265)
+        self.assertEqual(counts.gaps, 548)
+        self.assertEqual(counts.aligned, 6978)
+        self.assertEqual(counts.identities, 2258)
+        self.assertEqual(counts.mismatches, 4720)
+        self.assertEqual(counts.positives, 3674)
 
     def test_two_and_three(self):
         paths = ("Phylip/two.dat", "Phylip/three.dat")
@@ -346,6 +366,22 @@ Tax4      TCATCTCATGGTCAATAAGATACTCCTGCTTTTGGCGGGAAATGGTCAATCTTAAAAGGT
 Tax5      CCATCTCACGGTCGGTAAGATACACCTGCTTTTGGCGGGAAATGGTCAATATTAAAAGGT
 """,
             )
+            counts = alignment.counts()
+            self.assertEqual(counts.left_insertions, 0)
+            self.assertEqual(counts.left_deletions, 0)
+            self.assertEqual(counts.right_insertions, 0)
+            self.assertEqual(counts.right_deletions, 0)
+            self.assertEqual(counts.internal_insertions, 0)
+            self.assertEqual(counts.internal_deletions, 0)
+            self.assertEqual(counts.left_gaps, 0)
+            self.assertEqual(counts.right_gaps, 0)
+            self.assertEqual(counts.internal_gaps, 0)
+            self.assertEqual(counts.insertions, 0)
+            self.assertEqual(counts.deletions, 0)
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.aligned, 600)
+            self.assertEqual(counts.identities, 535)
+            self.assertEqual(counts.mismatches, 65)
 
     def test_four(self):
         path = "Phylip/four.dat"
@@ -442,6 +478,22 @@ Chimp     AAACCCTTGCCGTTACGCTTAAACCGAGGCCGGGACACTCAT
 Gorilla   AAACCCTTGCCGGTACGCTTAAACCATTGCCGGTACGCTTAA
 """,
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.left_insertions, 0)
+        self.assertEqual(counts.left_deletions, 0)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 0)
+        self.assertEqual(counts.internal_insertions, 0)
+        self.assertEqual(counts.internal_deletions, 0)
+        self.assertEqual(counts.left_gaps, 0)
+        self.assertEqual(counts.right_gaps, 0)
+        self.assertEqual(counts.internal_gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 420)
+        self.assertEqual(counts.identities, 230)
+        self.assertEqual(counts.mismatches, 190)
 
     def test_five_and_six(self):
         paths = ("Phylip/five.dat", "Phylip/six.dat")
@@ -510,6 +562,22 @@ Gorilla   AAACCCTTGCCGGTACGCTTAAACCATTGCCGGTACGCTTAA
 """,
             )
             self.check_reading_writing(path)
+            counts = alignment.counts()
+            self.assertEqual(counts.left_insertions, 0)
+            self.assertEqual(counts.left_deletions, 0)
+            self.assertEqual(counts.right_insertions, 0)
+            self.assertEqual(counts.right_deletions, 0)
+            self.assertEqual(counts.internal_insertions, 0)
+            self.assertEqual(counts.internal_deletions, 0)
+            self.assertEqual(counts.left_gaps, 0)
+            self.assertEqual(counts.right_gaps, 0)
+            self.assertEqual(counts.internal_gaps, 0)
+            self.assertEqual(counts.insertions, 0)
+            self.assertEqual(counts.deletions, 0)
+            self.assertEqual(counts.gaps, 0)
+            self.assertEqual(counts.aligned, 420)
+            self.assertEqual(counts.identities, 230)
+            self.assertEqual(counts.mismatches, 190)
 
     def test_interlaced(self):
         path = "Phylip/interlaced.phy"
@@ -639,6 +707,23 @@ ALEU_HORVUMAHARVLLLALAVLATAAVAVASSSSFADSNPIRPVTDRAASTLESAVLGALGRTRHALRFARFAVRYGK
 CATH_HUMAN------MWATLPLLCAGAWLLGV--------PVCGAAELSVNSLEK------------FHFKSWMSKHRKTY-STEEYHHRLQTFASNWRKINAHN----NGNHTFKMALNQFSDMSFAEIKHKYLWSEPQNCSAT--KSNYLRGT--GPYPPSVDWRKKGNFVSPVKNQGACGSCWTFSTTGALESAIAIATGKMLSLAEQQLVDCAQDFNNY--------GCQGGLPSQAFEYILYNKGIMGEDTYPYQGKDGY-CKFQPGKAIGFVKDVANITIYDEEAMVEAVALYNPVSFAFEVTQDFMMYRTGIYSSTSCHKTPDKVNHAVLAVGYGEKNGI-----PYWIVKNSWGPQWGMNGYFLIERGKNMCGLAACASYPIPLV
 """,
         )
+        counts = alignment.counts(substitution_matrix)
+        self.assertEqual(counts.left_insertions, 5)
+        self.assertEqual(counts.left_deletions, 7)
+        self.assertEqual(counts.right_insertions, 4)
+        self.assertEqual(counts.right_deletions, 0)
+        self.assertEqual(counts.internal_insertions, 48)
+        self.assertEqual(counts.internal_deletions, 66)
+        self.assertEqual(counts.left_gaps, 12)
+        self.assertEqual(counts.right_gaps, 4)
+        self.assertEqual(counts.internal_gaps, 114)
+        self.assertEqual(counts.insertions, 57)
+        self.assertEqual(counts.deletions, 73)
+        self.assertEqual(counts.gaps, 130)
+        self.assertEqual(counts.aligned, 975)
+        self.assertEqual(counts.identities, 400)
+        self.assertEqual(counts.mismatches, 575)
+        self.assertEqual(counts.positives, 563)
 
     def test_interlaced2(self):
         path = "Phylip/interlaced2.phy"
@@ -759,6 +844,23 @@ IXI_236   TSPASIRPPAGPSSRPAMVSSR--RPSPPPPRRPPGRPCCSAAPPRPQATGGWKTCSGTCTTSTSTRHRG
 IXI_237   TSPASLRPPAGPSSRPAMVSSRR-RPSPPGPRRPT----CSAAPRRPQATGGYKTCSGTCTTSTSTRHRGRSGYSARTTTAACLRASRKSMRAACSR--GSRPNRFAPTLMSSCLTSTTGPPAYAGDRSHE
 """,
         )
+        counts = alignment.counts(substitution_matrix)
+        self.assertEqual(counts.left_insertions, 0)
+        self.assertEqual(counts.left_deletions, 0)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 0)
+        self.assertEqual(counts.internal_insertions, 36)
+        self.assertEqual(counts.internal_deletions, 42)
+        self.assertEqual(counts.left_gaps, 0)
+        self.assertEqual(counts.right_gaps, 0)
+        self.assertEqual(counts.internal_gaps, 78)
+        self.assertEqual(counts.insertions, 36)
+        self.assertEqual(counts.deletions, 42)
+        self.assertEqual(counts.gaps, 78)
+        self.assertEqual(counts.aligned, 702)
+        self.assertEqual(counts.identities, 667)
+        self.assertEqual(counts.mismatches, 35)
+        self.assertEqual(counts.positives, 681)
 
 
 if __name__ == "__main__":

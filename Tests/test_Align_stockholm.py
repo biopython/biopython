@@ -7,6 +7,9 @@ import unittest
 from io import StringIO
 
 from Bio import Align
+from Bio.Align import substitution_matrices
+
+substitution_matrix = substitution_matrices.load("BLOSUM62")
 
 try:
     import numpy as np
@@ -953,6 +956,23 @@ H8K5G2_RICAG/113-350            LAEQKRKEIEEEKEKDKTLSTFFGNPANREFIDKALENPELKKKLESI
 //
 """,
         )
+        counts = alignment.counts(substitution_matrix)
+        self.assertEqual(counts.left_insertions, 0)
+        self.assertEqual(counts.left_deletions, 0)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 0)
+        self.assertEqual(counts.internal_insertions, 5)
+        self.assertEqual(counts.internal_deletions, 2)
+        self.assertEqual(counts.left_gaps, 0)
+        self.assertEqual(counts.right_gaps, 0)
+        self.assertEqual(counts.internal_gaps, 7)
+        self.assertEqual(counts.insertions, 5)
+        self.assertEqual(counts.deletions, 2)
+        self.assertEqual(counts.gaps, 7)
+        self.assertEqual(counts.aligned, 233)
+        self.assertEqual(counts.identities, 183)
+        self.assertEqual(counts.mismatches, 50)
+        self.assertEqual(counts.positives, 201)
 
     def check_alignment_pfam2(self, alignment):
         """Check the alignment obtained by parsing Pfam record 7kD_DNA_binding."""
@@ -1122,6 +1142,23 @@ DN7E_SULAC/3-60                 KVRFKYKGEEKEVDTSKIKKVWRVGKMVSFTYDD.NGKTGRGAVSEKD
 //
 """,
         )
+        counts = alignment.counts(substitution_matrix)
+        self.assertEqual(counts.left_insertions, 0)
+        self.assertEqual(counts.left_deletions, 0)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 0)
+        self.assertEqual(counts.internal_insertions, 1)
+        self.assertEqual(counts.internal_deletions, 1)
+        self.assertEqual(counts.left_gaps, 0)
+        self.assertEqual(counts.right_gaps, 0)
+        self.assertEqual(counts.internal_gaps, 2)
+        self.assertEqual(counts.insertions, 1)
+        self.assertEqual(counts.deletions, 1)
+        self.assertEqual(counts.gaps, 2)
+        self.assertEqual(counts.aligned, 174)
+        self.assertEqual(counts.identities, 136)
+        self.assertEqual(counts.mismatches, 38)
+        self.assertEqual(counts.positives, 161)
 
     def check_alignment_pfam3(self, alignment):
         """Check the alignment obtained by parsing Pfam record 12TM_1."""
@@ -1379,6 +1416,23 @@ Q6L2L5_PICTO/38-510             TILLYYISNSLSFLFFSIVLNGIYYVKGNTN....DISSFGIILFMYI
 //
 """,
         )
+        counts = alignment.counts(substitution_matrix)
+        self.assertEqual(counts.left_insertions, 0)
+        self.assertEqual(counts.left_deletions, 0)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 0)
+        self.assertEqual(counts.internal_insertions, 830)
+        self.assertEqual(counts.internal_deletions, 394)
+        self.assertEqual(counts.left_gaps, 0)
+        self.assertEqual(counts.right_gaps, 0)
+        self.assertEqual(counts.internal_gaps, 1224)
+        self.assertEqual(counts.insertions, 830)
+        self.assertEqual(counts.deletions, 394)
+        self.assertEqual(counts.gaps, 1224)
+        self.assertEqual(counts.aligned, 8709)
+        self.assertEqual(counts.identities, 1651)
+        self.assertEqual(counts.mismatches, 7058)
+        self.assertEqual(counts.positives, 3390)
 
     def check_alignment_pfam4(self, alignment):
         """Check the alignment obtained by parsing Pfam record 3Beta_HSD."""
@@ -1662,6 +1716,23 @@ ERG26_YEAST/8-280               LIIGGSGFLGLHLIQQFFDINP.KPDIHIFD......VRDLPEKLSKQ
 //
 """,
         )
+        counts = alignment.counts(substitution_matrix)
+        self.assertEqual(counts.left_insertions, 0)
+        self.assertEqual(counts.left_deletions, 0)
+        self.assertEqual(counts.right_insertions, 28)
+        self.assertEqual(counts.right_deletions, 9)
+        self.assertEqual(counts.internal_insertions, 210)
+        self.assertEqual(counts.internal_deletions, 250)
+        self.assertEqual(counts.left_gaps, 0)
+        self.assertEqual(counts.right_gaps, 37)
+        self.assertEqual(counts.internal_gaps, 460)
+        self.assertEqual(counts.insertions, 238)
+        self.assertEqual(counts.deletions, 259)
+        self.assertEqual(counts.gaps, 497)
+        self.assertEqual(counts.aligned, 7518)
+        self.assertEqual(counts.identities, 2407)
+        self.assertEqual(counts.mismatches, 5111)
+        self.assertEqual(counts.positives, 3756)
 
     def check_alignment_pfam5(self, alignment):
         """Check the alignment obtained by parsing Pfam record ArsP_1."""
@@ -1986,6 +2057,23 @@ P73433_SYNY3/6-329              EFNLFLDLLGSALLLSLPWLLLGIIISSTFLIWTDEQKWVANF..PRN
 //
 """,
         )
+        counts = alignment.counts(substitution_matrix)
+        self.assertEqual(counts.left_insertions, 22)
+        self.assertEqual(counts.left_deletions, 26)
+        self.assertEqual(counts.right_insertions, 5)
+        self.assertEqual(counts.right_deletions, 5)
+        self.assertEqual(counts.internal_insertions, 1048)
+        self.assertEqual(counts.internal_deletions, 920)
+        self.assertEqual(counts.left_gaps, 48)
+        self.assertEqual(counts.right_gaps, 10)
+        self.assertEqual(counts.internal_gaps, 1968)
+        self.assertEqual(counts.insertions, 1075)
+        self.assertEqual(counts.deletions, 951)
+        self.assertEqual(counts.gaps, 2026)
+        self.assertEqual(counts.aligned, 16542)
+        self.assertEqual(counts.identities, 3518)
+        self.assertEqual(counts.mismatches, 13024)
+        self.assertEqual(counts.positives, 6962)
 
     def check_alignment_pfam6(self, alignment):
         """Check the alignment obtained by parsing Pfam record COX2_TM."""
@@ -2281,6 +2369,23 @@ A1BA41_PARDP/42-128             .PVNGGMN...FQPASSPLAHDQQWLDHFVLYIITAVTIFVCLLLLIC
 //
 """,
         )
+        counts = alignment.counts(substitution_matrix)
+        self.assertEqual(counts.left_insertions, 10)
+        self.assertEqual(counts.left_deletions, 14)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 0)
+        self.assertEqual(counts.internal_insertions, 103)
+        self.assertEqual(counts.internal_deletions, 137)
+        self.assertEqual(counts.left_gaps, 24)
+        self.assertEqual(counts.right_gaps, 0)
+        self.assertEqual(counts.internal_gaps, 240)
+        self.assertEqual(counts.insertions, 113)
+        self.assertEqual(counts.deletions, 151)
+        self.assertEqual(counts.gaps, 264)
+        self.assertEqual(counts.aligned, 4623)
+        self.assertEqual(counts.identities, 1656)
+        self.assertEqual(counts.mismatches, 2967)
+        self.assertEqual(counts.positives, 2689)
 
     def check_alignment_pfam7(self, alignment):
         """Check the alignment obtained by parsing Pfam record Alpha_E1_glycop."""
@@ -2506,6 +2611,23 @@ POLS_CHIKS/744-1247             RTAKAATYQEAAVYLWNEQQPLFWLQALIPLAALIVLCNCLRLLPCCC
 //
 """,
         )
+        counts = alignment.counts(substitution_matrix)
+        self.assertEqual(counts.left_insertions, 0)
+        self.assertEqual(counts.left_deletions, 0)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 0)
+        self.assertEqual(counts.internal_insertions, 1)
+        self.assertEqual(counts.internal_deletions, 0)
+        self.assertEqual(counts.left_gaps, 0)
+        self.assertEqual(counts.right_gaps, 0)
+        self.assertEqual(counts.internal_gaps, 1)
+        self.assertEqual(counts.insertions, 1)
+        self.assertEqual(counts.deletions, 0)
+        self.assertEqual(counts.gaps, 1)
+        self.assertEqual(counts.aligned, 503)
+        self.assertEqual(counts.identities, 299)
+        self.assertEqual(counts.mismatches, 204)
+        self.assertEqual(counts.positives, 387)
 
     def check_alignment_pfam8(self, alignment):
         """Check the alignment obtained by parsing Pfam record Cyclin_N."""
@@ -4380,6 +4502,23 @@ CCNE_CAEEL/232-360                  KVWSLMVKRDE..IPRATRFLL..GNHPD...MDD.EKRRILID
 //
 """,
         )
+        counts = alignment.counts(substitution_matrix)
+        self.assertEqual(counts.left_insertions, 177)
+        self.assertEqual(counts.left_deletions, 473)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 0)
+        self.assertEqual(counts.internal_insertions, 22796)
+        self.assertEqual(counts.internal_deletions, 14788)
+        self.assertEqual(counts.left_gaps, 650)
+        self.assertEqual(counts.right_gaps, 0)
+        self.assertEqual(counts.internal_gaps, 37584)
+        self.assertEqual(counts.insertions, 22973)
+        self.assertEqual(counts.deletions, 15261)
+        self.assertEqual(counts.gaps, 38234)
+        self.assertEqual(counts.aligned, 554142)
+        self.assertEqual(counts.identities, 178277)
+        self.assertEqual(counts.mismatches, 375865)
+        self.assertEqual(counts.positives, 301836)
 
     def check_alignment_pfam9(self, alignment):
         """Check the alignment obtained by parsing Pfam record SH3_11."""
@@ -4494,6 +4633,23 @@ POL_SFVCP/1064-1126             RSWSPVVGQLVQERVARPASLRPRWHKPSTVLEVLNPRTVVILDHLGN
 //
 """,
         )
+        counts = alignment.counts(substitution_matrix)
+        self.assertEqual(counts.left_insertions, 0)
+        self.assertEqual(counts.left_deletions, 0)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 0)
+        self.assertEqual(counts.internal_insertions, 0)
+        self.assertEqual(counts.internal_deletions, 0)
+        self.assertEqual(counts.left_gaps, 0)
+        self.assertEqual(counts.right_gaps, 0)
+        self.assertEqual(counts.internal_gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 0)
+        self.assertEqual(counts.identities, 0)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.positives, 0)
 
     def check_alignment_rfam1(self, alignment):
         """Check the alignment obtained by parsing Rfam record BTnc005."""
@@ -4665,6 +4821,22 @@ FP929033.1/4930704-4930908            GUAAGUAAAAGUGUAACAGGAAGAAAGUUGCAGCAUAUAUGC
 //
 """,
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.left_insertions, 0)
+        self.assertEqual(counts.left_deletions, 0)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 0)
+        self.assertEqual(counts.internal_insertions, 14)
+        self.assertEqual(counts.internal_deletions, 14)
+        self.assertEqual(counts.left_gaps, 0)
+        self.assertEqual(counts.right_gaps, 0)
+        self.assertEqual(counts.internal_gaps, 28)
+        self.assertEqual(counts.insertions, 14)
+        self.assertEqual(counts.deletions, 14)
+        self.assertEqual(counts.gaps, 28)
+        self.assertEqual(counts.aligned, 589)
+        self.assertEqual(counts.identities, 487)
+        self.assertEqual(counts.mismatches, 102)
 
     def check_alignment_rfam2(self, alignment):
         """Check the alignment obtained by parsing Rfam record SraC_RyeA."""
@@ -4979,6 +5151,22 @@ AALE02000013.1/38-183                   AGUUAAAAAAAGACCGAAUACGAUUCCUA-UAUUCGGUCU
 //
 """,
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.left_insertions, 0)
+        self.assertEqual(counts.left_deletions, 0)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 0)
+        self.assertEqual(counts.internal_insertions, 83)
+        self.assertEqual(counts.internal_deletions, 43)
+        self.assertEqual(counts.left_gaps, 0)
+        self.assertEqual(counts.right_gaps, 0)
+        self.assertEqual(counts.internal_gaps, 126)
+        self.assertEqual(counts.insertions, 83)
+        self.assertEqual(counts.deletions, 43)
+        self.assertEqual(counts.gaps, 126)
+        self.assertEqual(counts.aligned, 11325)
+        self.assertEqual(counts.identities, 9761)
+        self.assertEqual(counts.mismatches, 1564)
 
     def check_alignment_rfam3(self, alignment):
         """Check the alignment obtained by parsing Rfam record McaS."""
@@ -5214,6 +5402,22 @@ CP011132.1/1732716-1732810            ACCCGCCACACGGAAUAAUAACGGGAACACAUG-AAGGAUAA
 //
 """,
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.left_insertions, 0)
+        self.assertEqual(counts.left_deletions, 0)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 0)
+        self.assertEqual(counts.internal_insertions, 0)
+        self.assertEqual(counts.internal_deletions, 3)
+        self.assertEqual(counts.left_gaps, 0)
+        self.assertEqual(counts.right_gaps, 0)
+        self.assertEqual(counts.internal_gaps, 3)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 3)
+        self.assertEqual(counts.gaps, 3)
+        self.assertEqual(counts.aligned, 573)
+        self.assertEqual(counts.identities, 480)
+        self.assertEqual(counts.mismatches, 93)
 
     def check_alignment_rfam4(self, alignment):
         """Check the alignment obtained by parsing Rfam record IRES_KSHV."""
@@ -5433,6 +5637,22 @@ U75698.1/123214-122967              UUGCUAUGCCGCGGCAGACUCCUUUUCCCGCCAAGAACUUAUAG
 //
 """,
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.left_insertions, 0)
+        self.assertEqual(counts.left_deletions, 0)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 0)
+        self.assertEqual(counts.internal_insertions, 0)
+        self.assertEqual(counts.internal_deletions, 0)
+        self.assertEqual(counts.left_gaps, 0)
+        self.assertEqual(counts.right_gaps, 0)
+        self.assertEqual(counts.internal_gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 2480)
+        self.assertEqual(counts.identities, 2462)
+        self.assertEqual(counts.mismatches, 18)
 
     def check_alignment_rfam5(self, alignment):
         """Check the alignment obtained by parsing Rfam record BMV3_UPD-PK3."""
@@ -5558,6 +5778,22 @@ X58459.1/659-681                ACUUUGGCUAAGGUUAAAAGCUU
 //
 """,
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.left_insertions, 0)
+        self.assertEqual(counts.left_deletions, 0)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 0)
+        self.assertEqual(counts.internal_insertions, 0)
+        self.assertEqual(counts.internal_deletions, 0)
+        self.assertEqual(counts.left_gaps, 0)
+        self.assertEqual(counts.right_gaps, 0)
+        self.assertEqual(counts.internal_gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 23)
+        self.assertEqual(counts.identities, 22)
+        self.assertEqual(counts.mismatches, 1)
 
     def check_alignment_cath1(self, alignment):
         """Check the alignment obtained by parsing CATH record 3.30.160.60/FF/004774."""
@@ -5629,6 +5865,23 @@ L7MZX4/382-398                  GEKPYECLECGKRFTAR
 //
 """,
         )
+        counts = alignment.counts(substitution_matrix)
+        self.assertEqual(counts.left_insertions, 0)
+        self.assertEqual(counts.left_deletions, 0)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 0)
+        self.assertEqual(counts.internal_insertions, 0)
+        self.assertEqual(counts.internal_deletions, 0)
+        self.assertEqual(counts.left_gaps, 0)
+        self.assertEqual(counts.right_gaps, 0)
+        self.assertEqual(counts.internal_gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 0)
+        self.assertEqual(counts.identities, 0)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.positives, 0)
 
     def check_alignment_cath2(self, alignment):
         """Check the alignment obtained by parsing CATH record 2.105.10.10/FF/000002."""
@@ -5709,6 +5962,23 @@ P27378/2-64                     ANFNVPKLGVFPVAAVFDIDNVPEDSSATGSRWLPSIYQGGNYWGGGP
 //
 """,
         )
+        counts = alignment.counts(substitution_matrix)
+        self.assertEqual(counts.left_insertions, 0)
+        self.assertEqual(counts.left_deletions, 0)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 0)
+        self.assertEqual(counts.internal_insertions, 0)
+        self.assertEqual(counts.internal_deletions, 0)
+        self.assertEqual(counts.left_gaps, 0)
+        self.assertEqual(counts.right_gaps, 0)
+        self.assertEqual(counts.internal_gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 0)
+        self.assertEqual(counts.identities, 0)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.positives, 0)
 
     def check_alignment_cath3(self, alignment):
         """Check the alignment obtained by parsing CATH record 1.10.275.10/FF/000026."""
@@ -5891,6 +6161,23 @@ G4FEQ2/2-92                     VERYSLSPMKDLWTEEAKYRRWLEVELAVTRAYEELGMIPKGVTERIR
 //
 """,
         )
+        counts = alignment.counts(substitution_matrix)
+        self.assertEqual(counts.left_insertions, 0)
+        self.assertEqual(counts.left_deletions, 0)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 0)
+        self.assertEqual(counts.internal_insertions, 0)
+        self.assertEqual(counts.internal_deletions, 0)
+        self.assertEqual(counts.left_gaps, 0)
+        self.assertEqual(counts.right_gaps, 0)
+        self.assertEqual(counts.internal_gaps, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.deletions, 0)
+        self.assertEqual(counts.gaps, 0)
+        self.assertEqual(counts.aligned, 546)
+        self.assertEqual(counts.identities, 546)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.positives, 546)
 
     def test_reading_writing_alignments_globins45(self):
         """Test parsing hmmalign output."""
@@ -5923,6 +6210,25 @@ G4FEQ2/2-92                     VERYSLSPMKDLWTEEAKYRRWLEVELAVTRAYEELGMIPKGVTERIR
         alignment = next(alignments)
         stream.close()
         self.check_alignment_globins45(alignment)
+        for record in alignment.sequences:
+            record.seq = record.seq.upper()
+        counts = alignment.counts(substitution_matrix)
+        self.assertEqual(counts.left_insertions, 439)
+        self.assertEqual(counts.left_deletions, 233)
+        self.assertEqual(counts.right_insertions, 35)
+        self.assertEqual(counts.right_deletions, 1634)
+        self.assertEqual(counts.internal_insertions, 3026)
+        self.assertEqual(counts.internal_deletions, 2233)
+        self.assertEqual(counts.left_gaps, 672)
+        self.assertEqual(counts.right_gaps, 1669)
+        self.assertEqual(counts.internal_gaps, 5259)
+        self.assertEqual(counts.insertions, 3500)
+        self.assertEqual(counts.deletions, 4100)
+        self.assertEqual(counts.gaps, 7600)
+        self.assertEqual(counts.aligned, 139618)
+        self.assertEqual(counts.identities, 66291)
+        self.assertEqual(counts.mismatches, 73327)
+        self.assertEqual(counts.positives, 88585)
 
     def test_reading_writing_alignments_pfam1(self):
         """Test parsing Pfam record 120_Rick_ant."""

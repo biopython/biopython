@@ -8,8 +8,11 @@ import unittest
 import warnings
 from io import StringIO
 
-from Bio import Align
 from Bio import BiopythonParserWarning
+from Bio import Align
+from Bio.Align import substitution_matrices
+
+substitution_matrix = substitution_matrices.load("BLOSUM62")
 
 try:
     import numpy as np
@@ -188,6 +191,23 @@ W*05:01          60 SKPTCREGGRSGSAKSLRMGRRGCSAQNPKDSHDPPPHL 99
             alignment[10],
             "GLTPSSGYTAATWTRTAVSSVGMNIPYHGASYLVRNQELRSWTAADKAAQMPWRRNRQSCSKPTCREGGRSGSAKSLRMGRRGCSAQNPKDSHDPPPHL",
         )
+        counts = alignment.counts(substitution_matrix)
+        self.assertEqual(counts.left_insertions, 0)
+        self.assertEqual(counts.left_deletions, 0)
+        self.assertEqual(counts.right_insertions, 24)
+        self.assertEqual(counts.right_deletions, 144)
+        self.assertEqual(counts.internal_insertions, 0)
+        self.assertEqual(counts.internal_deletions, 0)
+        self.assertEqual(counts.left_gaps, 0)
+        self.assertEqual(counts.right_gaps, 168)
+        self.assertEqual(counts.internal_gaps, 0)
+        self.assertEqual(counts.insertions, 24)
+        self.assertEqual(counts.deletions, 144)
+        self.assertEqual(counts.gaps, 168)
+        self.assertEqual(counts.aligned, 5241)
+        self.assertEqual(counts.identities, 5029)
+        self.assertEqual(counts.mismatches, 212)
+        self.assertEqual(counts.positives, 5063)
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -402,6 +422,23 @@ DOA*01:04        62 ----------  62
             alignment[11],
             "MALRAGLVLGFHTLMTLLSPQEAGATKADHMGSYGPPSTSLTAPRASSPMNLMRNSCSLWTX--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------",
         )
+        counts = alignment.counts(substitution_matrix)
+        self.assertEqual(counts.left_insertions, 308)
+        self.assertEqual(counts.left_deletions, 252)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 2068)
+        self.assertEqual(counts.internal_insertions, 0)
+        self.assertEqual(counts.internal_deletions, 0)
+        self.assertEqual(counts.left_gaps, 560)
+        self.assertEqual(counts.right_gaps, 2068)
+        self.assertEqual(counts.internal_gaps, 0)
+        self.assertEqual(counts.insertions, 308)
+        self.assertEqual(counts.deletions, 2320)
+        self.assertEqual(counts.gaps, 2628)
+        self.assertEqual(counts.aligned, 13844)
+        self.assertEqual(counts.identities, 13538)
+        self.assertEqual(counts.mismatches, 306)
+        self.assertEqual(counts.positives, 13548)
         with self.assertRaises(StopIteration):
             next(alignments)
 
