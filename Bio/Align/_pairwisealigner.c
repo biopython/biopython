@@ -1773,7 +1773,7 @@ typedef struct {
     double open_right_insertion_score;
     double extend_right_insertion_score;
     double open_internal_deletion_score;
-    double query_internal_extend_gap_score;
+    double extend_internal_deletion_score;
     double open_left_deletion_score;
     double extend_left_deletion_score;
     double query_right_open_gap_score;
@@ -1879,7 +1879,7 @@ static Algorithm _get_algorithm(Aligner* self)
         const double open_internal_insertion_score = self->open_internal_insertion_score;
         const double open_internal_deletion_score = self->open_internal_deletion_score;
         const double extend_internal_insertion_score = self->extend_internal_insertion_score;
-        const double query_gap_extend = self->query_internal_extend_gap_score;
+        const double extend_internal_deletion_score = self->extend_internal_deletion_score;
         const double open_left_insertion_score = self->open_left_insertion_score;
         const double extend_left_insertion_score = self->extend_left_insertion_score;
         const double open_left_deletion_score = self->open_left_deletion_score;
@@ -1893,7 +1893,7 @@ static Algorithm _get_algorithm(Aligner* self)
         else if (self->target_gap_function || self->query_gap_function)
             algorithm = WatermanSmithBeyer;
         else if (open_internal_insertion_score == extend_internal_insertion_score
-              && open_internal_deletion_score == query_gap_extend
+              && open_internal_deletion_score == extend_internal_deletion_score
               && open_left_insertion_score == extend_left_insertion_score
               && open_right_insertion_score == extend_right_insertion_score
               && open_left_deletion_score == extend_left_deletion_score
@@ -1916,7 +1916,7 @@ Aligner_init(Aligner *self, PyObject *args, PyObject *kwds)
     self->open_internal_insertion_score = 0;
     self->extend_internal_insertion_score = 0;
     self->open_internal_deletion_score = 0;
-    self->query_internal_extend_gap_score = 0;
+    self->extend_internal_deletion_score = 0;
     self->open_left_insertion_score = 0;
     self->extend_left_insertion_score = 0;
     self->open_right_insertion_score = 0;
@@ -2011,8 +2011,8 @@ Aligner_str(Aligner* self)
     else {
         p += sprintf(p, "  open_internal_deletion_score: %f\n",
                      self->open_internal_deletion_score);
-        p += sprintf(p, "  query_internal_extend_gap_score: %f\n",
-                     self->query_internal_extend_gap_score);
+        p += sprintf(p, "  extend_internal_deletion_score: %f\n",
+                     self->extend_internal_deletion_score);
         p += sprintf(p, "  open_left_deletion_score: %f\n",
                      self->open_left_deletion_score);
         p += sprintf(p, "  extend_left_deletion_score: %f\n",
@@ -2246,7 +2246,7 @@ Aligner_get_gap_score(Aligner* self, void* closure)
          || score != self->open_right_insertion_score
          || score != self->extend_right_insertion_score
          || score != self->open_internal_deletion_score
-         || score != self->query_internal_extend_gap_score
+         || score != self->extend_internal_deletion_score
          || score != self->open_left_deletion_score
          || score != self->extend_left_deletion_score
          || score != self->query_right_open_gap_score
@@ -2286,7 +2286,7 @@ Aligner_set_gap_score(Aligner* self, PyObject* value, void* closure)
         self->open_right_insertion_score = score;
         self->extend_right_insertion_score = score;
         self->open_internal_deletion_score = score;
-        self->query_internal_extend_gap_score = score;
+        self->extend_internal_deletion_score = score;
         self->open_left_deletion_score = score;
         self->extend_left_deletion_score = score;
         self->query_right_open_gap_score = score;
@@ -2354,7 +2354,7 @@ Aligner_get_extend_gap_score(Aligner* self, void* closure)
         const double score = self->extend_internal_insertion_score;
         if (score != self->extend_left_insertion_score
          || score != self->extend_right_insertion_score
-         || score != self->query_internal_extend_gap_score
+         || score != self->extend_internal_deletion_score
          || score != self->extend_left_deletion_score
          || score != self->query_right_extend_gap_score) {
             PyErr_SetString(PyExc_ValueError, "gap scores are different");
@@ -2379,7 +2379,7 @@ Aligner_set_extend_gap_score(Aligner* self, PyObject* value, void* closure)
     self->extend_internal_insertion_score = score;
     self->extend_left_insertion_score = score;
     self->extend_right_insertion_score = score;
-    self->query_internal_extend_gap_score = score;
+    self->extend_internal_deletion_score = score;
     self->extend_left_deletion_score = score;
     self->query_right_extend_gap_score = score;
     self->algorithm = Unknown;
@@ -2398,7 +2398,7 @@ Aligner_get_internal_gap_score(Aligner* self, void* closure)
         const double score = self->open_internal_insertion_score;
         if (score != self->extend_internal_insertion_score
          || score != self->open_internal_deletion_score
-         || score != self->query_internal_extend_gap_score) {
+         || score != self->extend_internal_deletion_score) {
             PyErr_SetString(PyExc_ValueError, "gap scores are different");
             return NULL;
         }
@@ -2421,7 +2421,7 @@ Aligner_set_internal_gap_score(Aligner* self, PyObject* value, void* closure)
     self->open_internal_insertion_score = score;
     self->extend_internal_insertion_score = score;
     self->open_internal_deletion_score = score;
-    self->query_internal_extend_gap_score = score;
+    self->extend_internal_deletion_score = score;
     self->algorithm = Unknown;
     return 0;
 }
@@ -2472,7 +2472,7 @@ Aligner_get_internal_extend_gap_score(Aligner* self, void* closure)
     }
     else {
         const double score = self->extend_internal_insertion_score;
-        if (score != self->query_internal_extend_gap_score) {
+        if (score != self->extend_internal_deletion_score) {
             PyErr_SetString(PyExc_ValueError, "gap scores are different");
             return NULL;
         }
@@ -2494,7 +2494,7 @@ Aligner_set_internal_extend_gap_score(Aligner* self, PyObject* value,
         self->query_gap_function = NULL;
     }
     self->extend_internal_insertion_score = score;
-    self->query_internal_extend_gap_score = score;
+    self->extend_internal_deletion_score = score;
     self->algorithm = Unknown;
     return 0;
 }
@@ -3014,7 +3014,7 @@ Aligner_get_query_extend_gap_score(Aligner* self, void* closure)
         return NULL;
     }
     else {
-        const double score = self->query_internal_extend_gap_score;
+        const double score = self->extend_internal_deletion_score;
         if (score != self->extend_left_deletion_score
          || score != self->query_right_extend_gap_score) {
             PyErr_SetString(PyExc_ValueError, "gap scores are different");
@@ -3028,7 +3028,7 @@ static int
 Aligner_set_query_extend_gap_score(Aligner* self, PyObject* value, void* closure)
 {   const double score = PyFloat_AsDouble(value);
     if (PyErr_Occurred()) return -1;
-    self->query_internal_extend_gap_score = score;
+    self->extend_internal_deletion_score = score;
     self->extend_left_deletion_score = score;
     self->query_right_extend_gap_score = score;
     if (self->query_gap_function) {
@@ -3051,7 +3051,7 @@ Aligner_get_query_gap_score(Aligner* self, void* closure)
         const double score = self->open_internal_deletion_score;
         if (score != self->open_left_deletion_score
          || score != self->query_right_open_gap_score
-         || score != self->query_internal_extend_gap_score
+         || score != self->extend_internal_deletion_score
          || score != self->extend_left_deletion_score
          || score != self->query_right_extend_gap_score) {
             PyErr_SetString(PyExc_ValueError, "gap scores are different");
@@ -3076,7 +3076,7 @@ Aligner_set_query_gap_score(Aligner* self, PyObject* value, void* closure)
             return -1;
         }
         self->open_internal_deletion_score = score;
-        self->query_internal_extend_gap_score = score;
+        self->extend_internal_deletion_score = score;
         self->open_left_deletion_score = score;
         self->extend_left_deletion_score = score;
         self->query_right_open_gap_score = score;
@@ -3559,23 +3559,23 @@ Aligner_set_open_internal_deletion_score(Aligner* self, PyObject* value,
     return 0;
 }
 
-static char Aligner_query_internal_extend_gap_score__doc__[] = "query internal extend gap score";
+static char Aligner_extend_internal_deletion_score__doc__[] = "query internal extend gap score";
 
 static PyObject*
-Aligner_get_query_internal_extend_gap_score(Aligner* self, void* closure)
+Aligner_get_extend_internal_deletion_score(Aligner* self, void* closure)
 {   if (self->query_gap_function) {
         PyErr_SetString(PyExc_ValueError, "using a gap score function");
         return NULL;
     }
-    return PyFloat_FromDouble(self->query_internal_extend_gap_score);
+    return PyFloat_FromDouble(self->extend_internal_deletion_score);
 }
 
 static int
-Aligner_set_query_internal_extend_gap_score(Aligner* self, PyObject* value,
+Aligner_set_extend_internal_deletion_score(Aligner* self, PyObject* value,
                                             void* closure)
 {   const double score = PyFloat_AsDouble(value);
     if (PyErr_Occurred()) return -1;
-    self->query_internal_extend_gap_score = score;
+    self->extend_internal_deletion_score = score;
     if (self->query_gap_function) {
         Py_DECREF(self->query_gap_function);
         self->query_gap_function = NULL;
@@ -3594,7 +3594,7 @@ Aligner_get_query_internal_gap_score(Aligner* self, void* closure)
     }
     else {
         const double score = self->open_internal_deletion_score;
-        if (score != self->query_internal_extend_gap_score) {
+        if (score != self->extend_internal_deletion_score) {
             PyErr_SetString(PyExc_ValueError, "gap scores are different");
             return NULL;
         }
@@ -3608,7 +3608,7 @@ Aligner_set_query_internal_gap_score(Aligner* self, PyObject* value,
 {   const double score = PyFloat_AsDouble(value);
     if (PyErr_Occurred()) return -1;
     self->open_internal_deletion_score = score;
-    self->query_internal_extend_gap_score = score;
+    self->extend_internal_deletion_score = score;
     if (self->query_gap_function) {
         Py_DECREF(self->query_gap_function);
         self->query_gap_function = NULL;
@@ -4065,10 +4065,10 @@ static PyGetSetDef Aligner_getset[] = {
         (getter)Aligner_get_open_internal_deletion_score,
         (setter)Aligner_set_open_internal_deletion_score,
         Aligner_open_internal_deletion_score__doc__, NULL},
-    {"query_internal_extend_gap_score",
-        (getter)Aligner_get_query_internal_extend_gap_score,
-        (setter)Aligner_set_query_internal_extend_gap_score,
-        Aligner_query_internal_extend_gap_score__doc__, NULL},
+    {"extend_internal_deletion_score",
+        (getter)Aligner_get_extend_internal_deletion_score,
+        (setter)Aligner_set_extend_internal_deletion_score,
+        Aligner_extend_internal_deletion_score__doc__, NULL},
     {"query_internal_gap_score",
         (getter)Aligner_get_query_internal_gap_score,
         (setter)Aligner_set_query_internal_gap_score,
@@ -4539,7 +4539,7 @@ struct fogsaa_queue_node fogsaa_queue_pop(struct fogsaa_queue *queue) {
     int kA; \
     int kB; \
     const double gap_extend_A = self->extend_internal_insertion_score; \
-    const double gap_extend_B = self->query_internal_extend_gap_score; \
+    const double gap_extend_B = self->extend_internal_deletion_score; \
     double score; \
     double temp; \
     double* row; \
@@ -4618,7 +4618,7 @@ struct fogsaa_queue_node fogsaa_queue_pop(struct fogsaa_queue *queue) {
     int kA; \
     int kB; \
     const double gap_extend_A = self->extend_internal_insertion_score; \
-    const double gap_extend_B = self->query_internal_extend_gap_score; \
+    const double gap_extend_B = self->extend_internal_deletion_score; \
     double score; \
     double* row; \
     double temp; \
@@ -4669,7 +4669,7 @@ struct fogsaa_queue_node fogsaa_queue_pop(struct fogsaa_queue *queue) {
     int kA; \
     int kB; \
     const double gap_extend_A = self->extend_internal_insertion_score; \
-    const double gap_extend_B = self->query_internal_extend_gap_score; \
+    const double gap_extend_B = self->extend_internal_deletion_score; \
     const double epsilon = self->epsilon; \
     Trace** M; \
     double score; \
@@ -4743,7 +4743,7 @@ struct fogsaa_queue_node fogsaa_queue_pop(struct fogsaa_queue *queue) {
     int kA; \
     int kB; \
     const double gap_extend_A = self->extend_internal_insertion_score; \
-    const double gap_extend_B = self->query_internal_extend_gap_score; \
+    const double gap_extend_B = self->extend_internal_deletion_score; \
     const double epsilon = self->epsilon; \
     Trace** M = NULL; \
     double maximum = 0; \
@@ -4827,7 +4827,7 @@ struct fogsaa_queue_node fogsaa_queue_pop(struct fogsaa_queue *queue) {
     const double gap_open_A = self->open_internal_insertion_score; \
     const double gap_open_B = self->open_internal_deletion_score; \
     const double gap_extend_A = self->extend_internal_insertion_score; \
-    const double gap_extend_B = self->query_internal_extend_gap_score; \
+    const double gap_extend_B = self->extend_internal_deletion_score; \
     double left_gap_open_A; \
     double left_gap_open_B; \
     double left_gap_extend_A; \
@@ -4996,7 +4996,7 @@ exit: \
     const double gap_open_A = self->open_internal_insertion_score; \
     const double gap_open_B = self->open_internal_deletion_score; \
     const double gap_extend_A = self->extend_internal_insertion_score; \
-    const double gap_extend_B = self->query_internal_extend_gap_score; \
+    const double gap_extend_B = self->extend_internal_deletion_score; \
     double* M_row = NULL; \
     double* Ix_row = NULL; \
     double* Iy_row = NULL; \
@@ -5107,7 +5107,7 @@ exit: \
     const double gap_open_A = self->open_internal_insertion_score; \
     const double gap_open_B = self->open_internal_deletion_score; \
     const double gap_extend_A = self->extend_internal_insertion_score; \
-    const double gap_extend_B = self->query_internal_extend_gap_score; \
+    const double gap_extend_B = self->extend_internal_deletion_score; \
     double left_gap_open_A; \
     double left_gap_open_B; \
     double left_gap_extend_A; \
@@ -5287,7 +5287,7 @@ exit: \
     const double gap_open_A = self->open_internal_insertion_score; \
     const double gap_open_B = self->open_internal_deletion_score; \
     const double gap_extend_A = self->extend_internal_insertion_score; \
-    const double gap_extend_B = self->query_internal_extend_gap_score; \
+    const double gap_extend_B = self->extend_internal_deletion_score; \
     const double epsilon = self->epsilon; \
     Trace** M = NULL; \
     TraceGapsGotoh** gaps = NULL; \
@@ -6009,7 +6009,7 @@ exit: \
     const double gap_open_A = self->open_internal_insertion_score; \
     const double gap_open_B = self->open_internal_deletion_score; \
     const double gap_extend_A = self->extend_internal_insertion_score; \
-    const double gap_extend_B = self->query_internal_extend_gap_score; \
+    const double gap_extend_B = self->extend_internal_deletion_score; \
     struct fogsaa_cell* matrix = NULL; \
     struct fogsaa_queue queue; \
     double left_gap_open_A; \
@@ -6844,7 +6844,7 @@ _call_query_gap_function(Aligner* aligner, int i, int j, double* score)
     PyObject* function = aligner->query_gap_function;
     if (!function)
         value = aligner->open_internal_deletion_score
-              + (j-1) * aligner->query_internal_extend_gap_score;
+              + (j-1) * aligner->extend_internal_deletion_score;
     else {
         result = PyObject_CallFunction(function, "ii", i, j);
         if (result == NULL) return 0;
@@ -7081,7 +7081,7 @@ Aligner_watermansmithbeyer_local_align_matrix(Aligner* self,
             self->open_internal_insertion_score > mismatch || \
             self->open_right_insertion_score > mismatch || \
             self->extend_left_deletion_score > mismatch || \
-            self->query_internal_extend_gap_score > mismatch || \
+            self->extend_internal_deletion_score > mismatch || \
             self->query_right_extend_gap_score > mismatch || \
             self->extend_left_insertion_score > mismatch || \
             self->extend_internal_insertion_score > mismatch || \
