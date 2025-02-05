@@ -1779,7 +1779,7 @@ typedef struct {
     double open_right_deletion_score;
     double extend_right_deletion_score;
     PyObject* insertion_score_function;
-    PyObject* query_gap_function;
+    PyObject* deletion_score_function;
     Py_buffer substitution_matrix;
     PyObject* alphabet;
     int* mapping;
@@ -1890,7 +1890,7 @@ static Algorithm _get_algorithm(Aligner* self)
         const double extend_right_deletion_score = self->extend_right_deletion_score;
         if (self->mode == FOGSAA_Mode)
             algorithm = FOGSAA;
-        else if (self->insertion_score_function || self->query_gap_function)
+        else if (self->insertion_score_function || self->deletion_score_function)
             algorithm = WatermanSmithBeyer;
         else if (open_internal_insertion_score == extend_internal_insertion_score
               && open_internal_deletion_score == extend_internal_deletion_score
@@ -1926,7 +1926,7 @@ Aligner_init(Aligner *self, PyObject *args, PyObject *kwds)
     self->open_right_deletion_score = 0;
     self->extend_right_deletion_score = 0;
     self->insertion_score_function = NULL;
-    self->query_gap_function = NULL;
+    self->deletion_score_function = NULL;
     self->substitution_matrix.obj = NULL;
     self->substitution_matrix.buf = NULL;
     self->algorithm = Unknown;
@@ -1939,7 +1939,7 @@ Aligner_init(Aligner *self, PyObject *args, PyObject *kwds)
 static void
 Aligner_dealloc(Aligner* self)
 {   Py_XDECREF(self->insertion_score_function);
-    Py_XDECREF(self->query_gap_function);
+    Py_XDECREF(self->deletion_score_function);
     if (self->substitution_matrix.obj) PyBuffer_Release(&self->substitution_matrix);
     Py_XDECREF(self->alphabet);
     Py_XDECREF(self->mapping);
@@ -2004,9 +2004,9 @@ Aligner_str(Aligner* self)
         p += sprintf(p, "  extend_right_insertion_score: %f\n",
                      self->extend_right_insertion_score);
     }
-    if (self->query_gap_function) {
-        p += sprintf(p, "  query_gap_function: %%R\n");
-        args[n++] = self->query_gap_function;
+    if (self->deletion_score_function) {
+        p += sprintf(p, "  deletion_score_function: %%R\n");
+        args[n++] = self->deletion_score_function;
     }
     else {
         p += sprintf(p, "  open_internal_deletion_score: %f\n",
@@ -2230,8 +2230,8 @@ static char Aligner_gap_score__doc__[] = "gap score";
 static PyObject*
 Aligner_get_gap_score(Aligner* self, void* closure)
 {   
-    if (self->insertion_score_function || self->query_gap_function) {
-        if (self->insertion_score_function != self->query_gap_function) {
+    if (self->insertion_score_function || self->deletion_score_function) {
+        if (self->insertion_score_function != self->deletion_score_function) {
             PyErr_SetString(PyExc_ValueError, "gap scores are different");
             return NULL;
         }
@@ -2262,11 +2262,11 @@ static int
 Aligner_set_gap_score(Aligner* self, PyObject* value, void* closure)
 {   if (PyCallable_Check(value)) {
         Py_XDECREF(self->insertion_score_function);
-        Py_XDECREF(self->query_gap_function);
+        Py_XDECREF(self->deletion_score_function);
         Py_INCREF(value);
         Py_INCREF(value);
         self->insertion_score_function = value;
-        self->query_gap_function = value;
+        self->deletion_score_function = value;
     }
     else {
         const double score = PyFloat_AsDouble(value);
@@ -2275,9 +2275,9 @@ Aligner_set_gap_score(Aligner* self, PyObject* value, void* closure)
             Py_DECREF(self->insertion_score_function);
             self->insertion_score_function = NULL;
         }
-        if (self->query_gap_function) {
-            Py_DECREF(self->query_gap_function);
-            self->query_gap_function = NULL;
+        if (self->deletion_score_function) {
+            Py_DECREF(self->deletion_score_function);
+            self->deletion_score_function = NULL;
         }
         self->open_internal_insertion_score = score;
         self->extend_internal_insertion_score = score;
@@ -2301,7 +2301,7 @@ static char Aligner_open_gap_score__doc__[] = "internal and end open gap score";
 static PyObject*
 Aligner_get_open_gap_score(Aligner* self, void* closure)
 {   
-    if (self->insertion_score_function || self->query_gap_function) {
+    if (self->insertion_score_function || self->deletion_score_function) {
         PyErr_SetString(PyExc_ValueError, "using a gap score function");
         return NULL;
     }
@@ -2327,9 +2327,9 @@ Aligner_set_open_gap_score(Aligner* self, PyObject* value, void* closure)
         Py_DECREF(self->insertion_score_function);
         self->insertion_score_function = NULL;
     }
-    if (self->query_gap_function) {
-        Py_DECREF(self->query_gap_function);
-        self->query_gap_function = NULL;
+    if (self->deletion_score_function) {
+        Py_DECREF(self->deletion_score_function);
+        self->deletion_score_function = NULL;
     }
     self->open_internal_insertion_score = score;
     self->open_left_insertion_score = score;
@@ -2346,7 +2346,7 @@ static char Aligner_extend_gap_score__doc__[] = "extend gap score";
 static PyObject*
 Aligner_get_extend_gap_score(Aligner* self, void* closure)
 {   
-    if (self->insertion_score_function || self->query_gap_function) {
+    if (self->insertion_score_function || self->deletion_score_function) {
         PyErr_SetString(PyExc_ValueError, "using a gap score function");
         return NULL;
     }
@@ -2372,9 +2372,9 @@ Aligner_set_extend_gap_score(Aligner* self, PyObject* value, void* closure)
         Py_DECREF(self->insertion_score_function);
         self->insertion_score_function = NULL;
     }
-    if (self->query_gap_function) {
-        Py_DECREF(self->query_gap_function);
-        self->query_gap_function = NULL;
+    if (self->deletion_score_function) {
+        Py_DECREF(self->deletion_score_function);
+        self->deletion_score_function = NULL;
     }
     self->extend_internal_insertion_score = score;
     self->extend_left_insertion_score = score;
@@ -2390,7 +2390,7 @@ static char Aligner_internal_gap_score__doc__[] = "internal gap score";
 
 static PyObject*
 Aligner_get_internal_gap_score(Aligner* self, void* closure)
-{   if (self->insertion_score_function || self->query_gap_function) {
+{   if (self->insertion_score_function || self->deletion_score_function) {
         PyErr_SetString(PyExc_ValueError, "using a gap score function");
         return NULL;
     }
@@ -2414,9 +2414,9 @@ Aligner_set_internal_gap_score(Aligner* self, PyObject* value, void* closure)
         Py_DECREF(self->insertion_score_function);
         self->insertion_score_function = NULL;
     }
-    if (self->query_gap_function) {
-        Py_DECREF(self->query_gap_function);
-        self->query_gap_function = NULL;
+    if (self->deletion_score_function) {
+        Py_DECREF(self->deletion_score_function);
+        self->deletion_score_function = NULL;
     }
     self->open_internal_insertion_score = score;
     self->extend_internal_insertion_score = score;
@@ -2430,7 +2430,7 @@ static char Aligner_internal_open_gap_score__doc__[] = "internal open gap score"
 
 static PyObject*
 Aligner_get_internal_open_gap_score(Aligner* self, void* closure)
-{   if (self->insertion_score_function || self->query_gap_function) {
+{   if (self->insertion_score_function || self->deletion_score_function) {
         PyErr_SetString(PyExc_ValueError, "using a gap score function");
         return NULL;
     }
@@ -2452,9 +2452,9 @@ Aligner_set_internal_open_gap_score(Aligner* self, PyObject* value, void* closur
         Py_DECREF(self->insertion_score_function);
         self->insertion_score_function = NULL;
     }
-    if (self->query_gap_function) {
-        Py_DECREF(self->query_gap_function);
-        self->query_gap_function = NULL;
+    if (self->deletion_score_function) {
+        Py_DECREF(self->deletion_score_function);
+        self->deletion_score_function = NULL;
     }
     self->open_internal_insertion_score = score;
     self->open_internal_deletion_score = score;
@@ -2466,7 +2466,7 @@ static char Aligner_internal_extend_gap_score__doc__[] = "internal extend gap sc
 
 static PyObject*
 Aligner_get_internal_extend_gap_score(Aligner* self, void* closure)
-{   if (self->insertion_score_function || self->query_gap_function) {
+{   if (self->insertion_score_function || self->deletion_score_function) {
         PyErr_SetString(PyExc_ValueError, "using a gap score function");
         return NULL;
     }
@@ -2489,9 +2489,9 @@ Aligner_set_internal_extend_gap_score(Aligner* self, PyObject* value,
         Py_DECREF(self->insertion_score_function);
         self->insertion_score_function = NULL;
     }
-    if (self->query_gap_function) {
-        Py_DECREF(self->query_gap_function);
-        self->query_gap_function = NULL;
+    if (self->deletion_score_function) {
+        Py_DECREF(self->deletion_score_function);
+        self->deletion_score_function = NULL;
     }
     self->extend_internal_insertion_score = score;
     self->extend_internal_deletion_score = score;
@@ -2503,7 +2503,7 @@ static char Aligner_end_gap_score__doc__[] = "end gap score";
 
 static PyObject*
 Aligner_get_end_gap_score(Aligner* self, void* closure)
-{   if (self->insertion_score_function || self->query_gap_function) {
+{   if (self->insertion_score_function || self->deletion_score_function) {
         PyErr_SetString(PyExc_ValueError, "using a gap score function");
         return NULL;
     }
@@ -2531,9 +2531,9 @@ Aligner_set_end_gap_score(Aligner* self, PyObject* value, void* closure)
         Py_DECREF(self->insertion_score_function);
         self->insertion_score_function = NULL;
     }
-    if (self->query_gap_function) {
-        Py_DECREF(self->query_gap_function);
-        self->query_gap_function = NULL;
+    if (self->deletion_score_function) {
+        Py_DECREF(self->deletion_score_function);
+        self->deletion_score_function = NULL;
     }
     self->open_left_insertion_score = score;
     self->extend_left_insertion_score = score;
@@ -2551,7 +2551,7 @@ static char Aligner_end_open_gap_score__doc__[] = "end open gap score";
 
 static PyObject*
 Aligner_get_end_open_gap_score(Aligner* self, void* closure)
-{   if (self->insertion_score_function || self->query_gap_function) {
+{   if (self->insertion_score_function || self->deletion_score_function) {
         PyErr_SetString(PyExc_ValueError, "using a gap score function");
         return NULL;
     }
@@ -2575,9 +2575,9 @@ Aligner_set_end_open_gap_score(Aligner* self, PyObject* value, void* closure)
         Py_DECREF(self->insertion_score_function);
         self->insertion_score_function = NULL;
     }
-    if (self->query_gap_function) {
-        Py_DECREF(self->query_gap_function);
-        self->query_gap_function = NULL;
+    if (self->deletion_score_function) {
+        Py_DECREF(self->deletion_score_function);
+        self->deletion_score_function = NULL;
     }
     self->open_left_insertion_score = score;
     self->open_right_insertion_score = score;
@@ -2591,7 +2591,7 @@ static char Aligner_end_extend_gap_score__doc__[] = "end extend gap score";
 
 static PyObject*
 Aligner_get_end_extend_gap_score(Aligner* self, void* closure)
-{   if (self->insertion_score_function || self->query_gap_function) {
+{   if (self->insertion_score_function || self->deletion_score_function) {
         PyErr_SetString(PyExc_ValueError, "using a gap score function");
         return NULL;
     }
@@ -2615,9 +2615,9 @@ Aligner_set_end_extend_gap_score(Aligner* self, PyObject* value, void* closure)
         Py_DECREF(self->insertion_score_function);
         self->insertion_score_function = NULL;
     }
-    if (self->query_gap_function) {
-        Py_DECREF(self->query_gap_function);
-        self->query_gap_function = NULL;
+    if (self->deletion_score_function) {
+        Py_DECREF(self->deletion_score_function);
+        self->deletion_score_function = NULL;
     }
     self->extend_left_insertion_score = score;
     self->extend_right_insertion_score = score;
@@ -2631,7 +2631,7 @@ static char Aligner_left_gap_score__doc__[] = "left gap score";
 
 static PyObject*
 Aligner_get_left_gap_score(Aligner* self, void* closure)
-{   if (self->insertion_score_function || self->query_gap_function) {
+{   if (self->insertion_score_function || self->deletion_score_function) {
         PyErr_SetString(PyExc_ValueError, "using a gap score function");
         return NULL;
     }
@@ -2655,9 +2655,9 @@ Aligner_set_left_gap_score(Aligner* self, PyObject* value, void* closure)
         Py_DECREF(self->insertion_score_function);
         self->insertion_score_function = NULL;
     }
-    if (self->query_gap_function) {
-        Py_DECREF(self->query_gap_function);
-        self->query_gap_function = NULL;
+    if (self->deletion_score_function) {
+        Py_DECREF(self->deletion_score_function);
+        self->deletion_score_function = NULL;
     }
     self->open_left_insertion_score = score;
     self->extend_left_insertion_score = score;
@@ -2671,7 +2671,7 @@ static char Aligner_right_gap_score__doc__[] = "right gap score";
 
 static PyObject*
 Aligner_get_right_gap_score(Aligner* self, void* closure)
-{   if (self->insertion_score_function || self->query_gap_function) {
+{   if (self->insertion_score_function || self->deletion_score_function) {
         PyErr_SetString(PyExc_ValueError, "using a gap score function");
         return NULL;
     }
@@ -2695,9 +2695,9 @@ Aligner_set_right_gap_score(Aligner* self, PyObject* value, void* closure)
         Py_DECREF(self->insertion_score_function);
         self->insertion_score_function = NULL;
     }
-    if (self->query_gap_function) {
-        Py_DECREF(self->query_gap_function);
-        self->query_gap_function = NULL;
+    if (self->deletion_score_function) {
+        Py_DECREF(self->deletion_score_function);
+        self->deletion_score_function = NULL;
     }
     self->open_right_insertion_score = score;
     self->extend_right_insertion_score = score;
@@ -2711,7 +2711,7 @@ static char Aligner_left_open_gap_score__doc__[] = "left open gap score";
 
 static PyObject*
 Aligner_get_left_open_gap_score(Aligner* self, void* closure)
-{   if (self->insertion_score_function || self->query_gap_function) {
+{   if (self->insertion_score_function || self->deletion_score_function) {
         PyErr_SetString(PyExc_ValueError, "using a gap score function");
         return NULL;
     }
@@ -2733,9 +2733,9 @@ Aligner_set_left_open_gap_score(Aligner* self, PyObject* value, void* closure)
         Py_DECREF(self->insertion_score_function);
         self->insertion_score_function = NULL;
     }
-    if (self->query_gap_function) {
-        Py_DECREF(self->query_gap_function);
-        self->query_gap_function = NULL;
+    if (self->deletion_score_function) {
+        Py_DECREF(self->deletion_score_function);
+        self->deletion_score_function = NULL;
     }
     self->open_left_insertion_score = score;
     self->open_left_deletion_score = score;
@@ -2747,7 +2747,7 @@ static char Aligner_left_extend_gap_score__doc__[] = "left extend gap score";
 
 static PyObject*
 Aligner_get_left_extend_gap_score(Aligner* self, void* closure)
-{   if (self->insertion_score_function || self->query_gap_function) {
+{   if (self->insertion_score_function || self->deletion_score_function) {
         PyErr_SetString(PyExc_ValueError, "using a gap score function");
         return NULL;
     }
@@ -2769,9 +2769,9 @@ Aligner_set_left_extend_gap_score(Aligner* self, PyObject* value, void* closure)
         Py_DECREF(self->insertion_score_function);
         self->insertion_score_function = NULL;
     }
-    if (self->query_gap_function) {
-        Py_DECREF(self->query_gap_function);
-        self->query_gap_function = NULL;
+    if (self->deletion_score_function) {
+        Py_DECREF(self->deletion_score_function);
+        self->deletion_score_function = NULL;
     }
     self->extend_left_insertion_score = score;
     self->extend_left_deletion_score = score;
@@ -2783,7 +2783,7 @@ static char Aligner_right_open_gap_score__doc__[] = "right open gap score";
 
 static PyObject*
 Aligner_get_right_open_gap_score(Aligner* self, void* closure)
-{   if (self->insertion_score_function || self->query_gap_function) {
+{   if (self->insertion_score_function || self->deletion_score_function) {
         PyErr_SetString(PyExc_ValueError, "using a gap score function");
         return NULL;
     }
@@ -2805,9 +2805,9 @@ Aligner_set_right_open_gap_score(Aligner* self, PyObject* value, void* closure)
         Py_DECREF(self->insertion_score_function);
         self->insertion_score_function = NULL;
     }
-    if (self->query_gap_function) {
-        Py_DECREF(self->query_gap_function);
-        self->query_gap_function = NULL;
+    if (self->deletion_score_function) {
+        Py_DECREF(self->deletion_score_function);
+        self->deletion_score_function = NULL;
     }
     self->open_right_insertion_score = score;
     self->open_right_deletion_score = score;
@@ -2819,7 +2819,7 @@ static char Aligner_right_extend_gap_score__doc__[] = "right extend gap score";
 
 static PyObject*
 Aligner_get_right_extend_gap_score(Aligner* self, void* closure)
-{   if (self->insertion_score_function || self->query_gap_function) {
+{   if (self->insertion_score_function || self->deletion_score_function) {
         PyErr_SetString(PyExc_ValueError, "using a gap score function");
         return NULL;
     }
@@ -2841,9 +2841,9 @@ Aligner_set_right_extend_gap_score(Aligner* self, PyObject* value, void* closure
         Py_DECREF(self->insertion_score_function);
         self->insertion_score_function = NULL;
     }
-    if (self->query_gap_function) {
-        Py_DECREF(self->query_gap_function);
-        self->query_gap_function = NULL;
+    if (self->deletion_score_function) {
+        Py_DECREF(self->deletion_score_function);
+        self->deletion_score_function = NULL;
     }
     self->extend_right_insertion_score = score;
     self->extend_right_deletion_score = score;
@@ -2975,7 +2975,7 @@ static char Aligner_query_open_gap_score__doc__[] = "query gap open score";
 
 static PyObject*
 Aligner_get_query_open_gap_score(Aligner* self, void* closure)
-{   if (self->query_gap_function) {
+{   if (self->deletion_score_function) {
         PyErr_SetString(PyExc_ValueError, "using a gap score function");
         return NULL;
     }
@@ -2997,9 +2997,9 @@ Aligner_set_query_open_gap_score(Aligner* self, PyObject* value, void* closure)
     self->open_internal_deletion_score = score;
     self->open_left_deletion_score = score;
     self->open_right_deletion_score = score;
-    if (self->query_gap_function) {
-        Py_DECREF(self->query_gap_function);
-        self->query_gap_function = NULL;
+    if (self->deletion_score_function) {
+        Py_DECREF(self->deletion_score_function);
+        self->deletion_score_function = NULL;
     }
     self->algorithm = Unknown;
     return 0;
@@ -3009,7 +3009,7 @@ static char Aligner_query_extend_gap_score__doc__[] = "query gap extend score";
 
 static PyObject*
 Aligner_get_query_extend_gap_score(Aligner* self, void* closure)
-{   if (self->query_gap_function) {
+{   if (self->deletion_score_function) {
         PyErr_SetString(PyExc_ValueError, "using a gap score function");
         return NULL;
     }
@@ -3031,9 +3031,9 @@ Aligner_set_query_extend_gap_score(Aligner* self, PyObject* value, void* closure
     self->extend_internal_deletion_score = score;
     self->extend_left_deletion_score = score;
     self->extend_right_deletion_score = score;
-    if (self->query_gap_function) {
-        Py_DECREF(self->query_gap_function);
-        self->query_gap_function = NULL;
+    if (self->deletion_score_function) {
+        Py_DECREF(self->deletion_score_function);
+        self->deletion_score_function = NULL;
     }
     self->algorithm = Unknown;
     return 0;
@@ -3043,9 +3043,9 @@ static char Aligner_query_gap_score__doc__[] = "query gap score";
 
 static PyObject*
 Aligner_get_query_gap_score(Aligner* self, void* closure)
-{   if (self->query_gap_function) {
-        Py_INCREF(self->query_gap_function);
-        return self->query_gap_function;
+{   if (self->deletion_score_function) {
+        Py_INCREF(self->deletion_score_function);
+        return self->deletion_score_function;
     }
     else {
         const double score = self->open_internal_deletion_score;
@@ -3064,9 +3064,9 @@ Aligner_get_query_gap_score(Aligner* self, void* closure)
 static int
 Aligner_set_query_gap_score(Aligner* self, PyObject* value, void* closure)
 {   if (PyCallable_Check(value)) {
-        Py_XDECREF(self->query_gap_function);
+        Py_XDECREF(self->deletion_score_function);
         Py_INCREF(value);
-        self->query_gap_function = value;
+        self->deletion_score_function = value;
     }
     else {
         const double score = PyFloat_AsDouble(value);
@@ -3081,9 +3081,9 @@ Aligner_set_query_gap_score(Aligner* self, PyObject* value, void* closure)
         self->extend_left_deletion_score = score;
         self->open_right_deletion_score = score;
         self->extend_right_deletion_score = score;
-        if (self->query_gap_function) {
-            Py_DECREF(self->query_gap_function);
-            self->query_gap_function = NULL;
+        if (self->deletion_score_function) {
+            Py_DECREF(self->deletion_score_function);
+            self->deletion_score_function = NULL;
         }
     }
     self->algorithm = Unknown;
@@ -3438,7 +3438,7 @@ static char Aligner_query_end_gap_score__doc__[] = "query end score";
 
 static PyObject*
 Aligner_get_query_end_gap_score(Aligner* self, void* closure)
-{   if (self->query_gap_function) {
+{   if (self->deletion_score_function) {
         PyErr_SetString(PyExc_ValueError, "using a gap score function");
         return NULL;
     }
@@ -3462,9 +3462,9 @@ Aligner_set_query_end_gap_score(Aligner* self, PyObject* value, void* closure)
     self->extend_left_deletion_score = score;
     self->open_right_deletion_score = score;
     self->extend_right_deletion_score = score;
-    if (self->query_gap_function) {
-        Py_DECREF(self->query_gap_function);
-        self->query_gap_function = NULL;
+    if (self->deletion_score_function) {
+        Py_DECREF(self->deletion_score_function);
+        self->deletion_score_function = NULL;
     }
     self->algorithm = Unknown;
     return 0;
@@ -3474,7 +3474,7 @@ static char Aligner_query_end_open_gap_score__doc__[] = "query end open score";
 
 static PyObject*
 Aligner_get_query_end_open_gap_score(Aligner* self, void* closure)
-{   if (self->query_gap_function) {
+{   if (self->deletion_score_function) {
         PyErr_SetString(PyExc_ValueError, "using a gap score function");
         return NULL;
     }
@@ -3494,9 +3494,9 @@ Aligner_set_query_end_open_gap_score(Aligner* self, PyObject* value, void* closu
     if (PyErr_Occurred()) return -1;
     self->open_left_deletion_score = score;
     self->open_right_deletion_score = score;
-    if (self->query_gap_function) {
-        Py_DECREF(self->query_gap_function);
-        self->query_gap_function = NULL;
+    if (self->deletion_score_function) {
+        Py_DECREF(self->deletion_score_function);
+        self->deletion_score_function = NULL;
     }
     self->algorithm = Unknown;
     return 0;
@@ -3506,7 +3506,7 @@ static char Aligner_query_end_extend_gap_score__doc__[] = "query end extend scor
 
 static PyObject*
 Aligner_get_query_end_extend_gap_score(Aligner* self, void* closure)
-{   if (self->query_gap_function) {
+{   if (self->deletion_score_function) {
         PyErr_SetString(PyExc_ValueError, "using a gap score function");
         return NULL;
     }
@@ -3526,9 +3526,9 @@ Aligner_set_query_end_extend_gap_score(Aligner* self, PyObject* value, void* clo
     if (PyErr_Occurred()) return -1;
     self->extend_left_deletion_score = score;
     self->extend_right_deletion_score = score;
-    if (self->query_gap_function) {
-        Py_DECREF(self->query_gap_function);
-        self->query_gap_function = NULL;
+    if (self->deletion_score_function) {
+        Py_DECREF(self->deletion_score_function);
+        self->deletion_score_function = NULL;
     }
     self->algorithm = Unknown;
     return 0;
@@ -3538,7 +3538,7 @@ static char Aligner_open_internal_deletion_score__doc__[] = "query internal open
 
 static PyObject*
 Aligner_get_open_internal_deletion_score(Aligner* self, void* closure)
-{   if (self->query_gap_function) {
+{   if (self->deletion_score_function) {
         PyErr_SetString(PyExc_ValueError, "using a gap score function");
         return NULL;
     }
@@ -3551,9 +3551,9 @@ Aligner_set_open_internal_deletion_score(Aligner* self, PyObject* value,
 {   const double score = PyFloat_AsDouble(value);
     if (PyErr_Occurred()) return -1;
     self->open_internal_deletion_score = score;
-    if (self->query_gap_function) {
-        Py_DECREF(self->query_gap_function);
-        self->query_gap_function = NULL;
+    if (self->deletion_score_function) {
+        Py_DECREF(self->deletion_score_function);
+        self->deletion_score_function = NULL;
     }
     self->algorithm = Unknown;
     return 0;
@@ -3563,7 +3563,7 @@ static char Aligner_extend_internal_deletion_score__doc__[] = "query internal ex
 
 static PyObject*
 Aligner_get_extend_internal_deletion_score(Aligner* self, void* closure)
-{   if (self->query_gap_function) {
+{   if (self->deletion_score_function) {
         PyErr_SetString(PyExc_ValueError, "using a gap score function");
         return NULL;
     }
@@ -3576,9 +3576,9 @@ Aligner_set_extend_internal_deletion_score(Aligner* self, PyObject* value,
 {   const double score = PyFloat_AsDouble(value);
     if (PyErr_Occurred()) return -1;
     self->extend_internal_deletion_score = score;
-    if (self->query_gap_function) {
-        Py_DECREF(self->query_gap_function);
-        self->query_gap_function = NULL;
+    if (self->deletion_score_function) {
+        Py_DECREF(self->deletion_score_function);
+        self->deletion_score_function = NULL;
     }
     self->algorithm = Unknown;
     return 0;
@@ -3588,7 +3588,7 @@ static char Aligner_query_internal_gap_score__doc__[] = "query internal gap scor
 
 static PyObject*
 Aligner_get_query_internal_gap_score(Aligner* self, void* closure)
-{   if (self->query_gap_function) {
+{   if (self->deletion_score_function) {
         PyErr_SetString(PyExc_ValueError, "using a gap score function");
         return NULL;
     }
@@ -3609,9 +3609,9 @@ Aligner_set_query_internal_gap_score(Aligner* self, PyObject* value,
     if (PyErr_Occurred()) return -1;
     self->open_internal_deletion_score = score;
     self->extend_internal_deletion_score = score;
-    if (self->query_gap_function) {
-        Py_DECREF(self->query_gap_function);
-        self->query_gap_function = NULL;
+    if (self->deletion_score_function) {
+        Py_DECREF(self->deletion_score_function);
+        self->deletion_score_function = NULL;
     }
     self->algorithm = Unknown;
     return 0;
@@ -3621,7 +3621,7 @@ static char Aligner_open_left_deletion_score__doc__[] = "query left open score";
 
 static PyObject*
 Aligner_get_open_left_deletion_score(Aligner* self, void* closure)
-{   if (self->query_gap_function) {
+{   if (self->deletion_score_function) {
         PyErr_SetString(PyExc_ValueError, "using a gap score function");
         return NULL;
     }
@@ -3633,9 +3633,9 @@ Aligner_set_open_left_deletion_score(Aligner* self, PyObject* value, void* closu
 {   const double score = PyFloat_AsDouble(value);
     if (PyErr_Occurred()) return -1;
     self->open_left_deletion_score = score;
-    if (self->query_gap_function) {
-        Py_DECREF(self->query_gap_function);
-        self->query_gap_function = NULL;
+    if (self->deletion_score_function) {
+        Py_DECREF(self->deletion_score_function);
+        self->deletion_score_function = NULL;
     }
     self->algorithm = Unknown;
     return 0;
@@ -3645,7 +3645,7 @@ static char Aligner_extend_left_deletion_score__doc__[] = "query left extend sco
 
 static PyObject*
 Aligner_get_extend_left_deletion_score(Aligner* self, void* closure)
-{   if (self->query_gap_function) {
+{   if (self->deletion_score_function) {
         PyErr_SetString(PyExc_ValueError, "using a gap score function");
         return NULL;
     }
@@ -3657,9 +3657,9 @@ Aligner_set_extend_left_deletion_score(Aligner* self, PyObject* value, void* clo
 {   const double score = PyFloat_AsDouble(value);
     if (PyErr_Occurred()) return -1;
     self->extend_left_deletion_score = score;
-    if (self->query_gap_function) {
-        Py_DECREF(self->query_gap_function);
-        self->query_gap_function = NULL;
+    if (self->deletion_score_function) {
+        Py_DECREF(self->deletion_score_function);
+        self->deletion_score_function = NULL;
     }
     self->algorithm = Unknown;
     return 0;
@@ -3669,7 +3669,7 @@ static char Aligner_query_left_gap_score__doc__[] = "query left score";
 
 static PyObject*
 Aligner_get_query_left_gap_score(Aligner* self, void* closure)
-{   if (self->query_gap_function) {
+{   if (self->deletion_score_function) {
         PyErr_SetString(PyExc_ValueError, "using a gap score function");
         return NULL;
     }
@@ -3689,9 +3689,9 @@ Aligner_set_query_left_gap_score(Aligner* self, PyObject* value, void* closure)
     if (PyErr_Occurred()) return -1;
     self->open_left_deletion_score = score;
     self->extend_left_deletion_score = score;
-    if (self->query_gap_function) {
-        Py_DECREF(self->query_gap_function);
-        self->query_gap_function = NULL;
+    if (self->deletion_score_function) {
+        Py_DECREF(self->deletion_score_function);
+        self->deletion_score_function = NULL;
     }
     self->algorithm = Unknown;
     return 0;
@@ -3701,7 +3701,7 @@ static char Aligner_open_right_deletion_score__doc__[] = "query right open score
 
 static PyObject*
 Aligner_get_open_right_deletion_score(Aligner* self, void* closure)
-{   if (self->query_gap_function) {
+{   if (self->deletion_score_function) {
         PyErr_SetString(PyExc_ValueError, "using a gap score function");
         return NULL;
     }
@@ -3713,9 +3713,9 @@ Aligner_set_open_right_deletion_score(Aligner* self, PyObject* value, void* clos
 {   const double score = PyFloat_AsDouble(value);
     if (PyErr_Occurred()) return -1;
     self->open_right_deletion_score = score;
-    if (self->query_gap_function) {
-        Py_DECREF(self->query_gap_function);
-        self->query_gap_function = NULL;
+    if (self->deletion_score_function) {
+        Py_DECREF(self->deletion_score_function);
+        self->deletion_score_function = NULL;
     }
     self->algorithm = Unknown;
     return 0;
@@ -3725,7 +3725,7 @@ static char Aligner_extend_right_deletion_score__doc__[] = "query right extend s
 
 static PyObject*
 Aligner_get_extend_right_deletion_score(Aligner* self, void* closure)
-{   if (self->query_gap_function) {
+{   if (self->deletion_score_function) {
         PyErr_SetString(PyExc_ValueError, "using a gap score function");
         return NULL;
     }
@@ -3737,9 +3737,9 @@ Aligner_set_extend_right_deletion_score(Aligner* self, PyObject* value, void* cl
 {   const double score = PyFloat_AsDouble(value);
     if (PyErr_Occurred()) return -1;
     self->extend_right_deletion_score = score;
-    if (self->query_gap_function) {
-        Py_DECREF(self->query_gap_function);
-        self->query_gap_function = NULL;
+    if (self->deletion_score_function) {
+        Py_DECREF(self->deletion_score_function);
+        self->deletion_score_function = NULL;
     }
     self->algorithm = Unknown;
     return 0;
@@ -3749,7 +3749,7 @@ static char Aligner_query_right_gap_score__doc__[] = "query right score";
 
 static PyObject*
 Aligner_get_query_right_gap_score(Aligner* self, void* closure)
-{   if (self->query_gap_function) {
+{   if (self->deletion_score_function) {
         PyErr_SetString(PyExc_ValueError, "using a gap score function");
         return NULL;
     }
@@ -3769,9 +3769,9 @@ Aligner_set_query_right_gap_score(Aligner* self, PyObject* value, void* closure)
     if (PyErr_Occurred()) return -1;
     self->open_right_deletion_score = score;
     self->extend_right_deletion_score = score;
-    if (self->query_gap_function) {
-        Py_DECREF(self->query_gap_function);
-        self->query_gap_function = NULL;
+    if (self->deletion_score_function) {
+        Py_DECREF(self->deletion_score_function);
+        self->deletion_score_function = NULL;
     }
     self->algorithm = Unknown;
     return 0;
@@ -5507,7 +5507,7 @@ exit: \
     for (i = 1; i <= nA; i++) { \
         M[i][0] = -DBL_MAX; \
         Iy[i][0] = -DBL_MAX; \
-        ok = _call_query_gap_function(self, query_gap_start, i, &score); \
+        ok = _call_deletion_score_function(self, query_gap_start, i, &score); \
         if (!ok) goto exit; \
         Ix[i][0] = score; \
     } \
@@ -5526,7 +5526,7 @@ exit: \
             M[i][j] = score + (align_score); \
             score = -DBL_MAX; \
             for (k = 1; k <= i; k++) { \
-                ok = _call_query_gap_function(self, query_gap_start, k, &gapscore); \
+                ok = _call_deletion_score_function(self, query_gap_start, k, &gapscore); \
                 if (!ok) goto exit; \
                 SELECT_SCORE_WATERMAN_SMITH_BEYER(M[i-k][j], Iy[i-k][j]); \
             } \
@@ -5578,7 +5578,7 @@ exit: \
             } \
             score = 0.0; \
             for (k = 1; k <= i; k++) { \
-                ok = _call_query_gap_function(self, query_gap_start, k, &gapscore); \
+                ok = _call_deletion_score_function(self, query_gap_start, k, &gapscore); \
                 SELECT_SCORE_WATERMAN_SMITH_BEYER(M[i-k][j], Iy[i-k][j]); \
                 if (!ok) goto exit; \
             } \
@@ -5678,7 +5678,7 @@ exit: \
     for (i = 1; i <= nA; i++) { \
         M_row[i][0] = -DBL_MAX; \
         Iy_row[i][0] = -DBL_MAX; \
-        ok = _call_query_gap_function(self, query_gap_start, i, &score); \
+        ok = _call_deletion_score_function(self, query_gap_start, i, &score); \
         if (!ok) goto exit; \
         Ix_row[i][0] = score; \
     } \
@@ -5704,7 +5704,7 @@ exit: \
             ng = 0; \
             score = -DBL_MAX; \
             for (gap = 1; gap <= i; gap++) { \
-                ok = _call_query_gap_function(self, query_gap_start, gap, &gapscore); \
+                ok = _call_deletion_score_function(self, query_gap_start, gap, &gapscore); \
                 if (!ok) goto exit; \
                 SELECT_TRACE_WATERMAN_SMITH_BEYER_GAP(M_row[i-gap][j], \
                                                       Iy_row[i-gap][j]); \
@@ -5822,7 +5822,7 @@ exit: \
             gaps[i][j].IyIx = gapXY; \
             score = -DBL_MAX; \
             for (gap = 1; gap <= i; gap++) { \
-                ok = _call_query_gap_function(self, query_gap_start, gap, &gapscore); \
+                ok = _call_deletion_score_function(self, query_gap_start, gap, &gapscore); \
                 if (!ok) goto exit; \
                 SELECT_TRACE_WATERMAN_SMITH_BEYER_GAP(M_row[i-gap][j], \
                                                       Iy_row[i-gap][j]); \
@@ -6837,11 +6837,11 @@ Aligner_gotoh_local_align_matrix(Aligner* self,
 }
 
 static int
-_call_query_gap_function(Aligner* aligner, int i, int j, double* score)
+_call_deletion_score_function(Aligner* aligner, int i, int j, double* score)
 {
     double value;
     PyObject* result;
-    PyObject* function = aligner->query_gap_function;
+    PyObject* function = aligner->deletion_score_function;
     if (!function)
         value = aligner->open_internal_deletion_score
               + (j-1) * aligner->extend_internal_deletion_score;

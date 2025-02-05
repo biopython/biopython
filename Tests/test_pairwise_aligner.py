@@ -2986,7 +2986,7 @@ class TestPerSiteGapPenalties(unittest.TestCase):
   match_score: 1.000000
   mismatch_score: -1.000000
   insertion_score_function: {nogaps}
-  query_gap_function: {specificgaps}
+  deletion_score_function: {specificgaps}
   mode: global
 """,
         )
@@ -3070,7 +3070,7 @@ query            22 --AABBBAAAACC----------CCAAAABBBAA--  0
   match_score: 1.000000
   mismatch_score: -1.000000
   insertion_score_function: {nogaps}
-  query_gap_function: {specificgaps}
+  deletion_score_function: {specificgaps}
   mode: global
 """,
         )
@@ -3234,7 +3234,7 @@ query             6 TTG--GAA 0
   match_score: 1.000000
   mismatch_score: -10.000000
   insertion_score_function: {gap_score}
-  query_gap_function: {gap_score}
+  deletion_score_function: {gap_score}
   mode: global
 """,
         )
@@ -3411,7 +3411,7 @@ query             6 TTG--GAA 0
   match_score: 1.000000
   mismatch_score: -1.000000
   insertion_score_function: {nogaps}
-  query_gap_function: {specificgaps}
+  deletion_score_function: {specificgaps}
   mode: local
 """,
         )
@@ -3514,7 +3514,7 @@ query            13 CCCCAAAABBBAA  0
   match_score: 1.000000
   mismatch_score: -1.000000
   insertion_score_function: {nogaps}
-  query_gap_function: {specificgaps}
+  deletion_score_function: {specificgaps}
   mode: local
 """,
         )
@@ -3694,7 +3694,7 @@ query             2 AA 0
   match_score: 1.000000
   mismatch_score: -10.000000
   insertion_score_function: {gap_score}
-  query_gap_function: {gap_score}
+  deletion_score_function: {gap_score}
   mode: local
 """,
         )
