@@ -71,7 +71,7 @@ Pairwise sequence aligner with parameters
   extend_left_insertion_score: 0.000000
   open_right_insertion_score: 0.000000
   extend_right_insertion_score: 0.000000
-  query_internal_open_gap_score: 0.000000
+  open_internal_deletion_score: 0.000000
   query_internal_extend_gap_score: 0.000000
   open_left_deletion_score: 0.000000
   extend_left_deletion_score: 0.000000
@@ -114,7 +114,7 @@ Pairwise sequence aligner with parameters
   extend_left_insertion_score: -9.000000
   open_right_insertion_score: -3.000000
   extend_right_insertion_score: -9.000000
-  query_internal_open_gap_score: -6.000000
+  open_internal_deletion_score: -6.000000
   query_internal_extend_gap_score: -7.000000
   open_left_deletion_score: -1.000000
   extend_left_deletion_score: -2.000000
@@ -170,7 +170,7 @@ Pairwise sequence aligner with parameters
   extend_left_insertion_score: -4.000000
   open_right_insertion_score: -4.000000
   extend_right_insertion_score: -4.000000
-  query_internal_open_gap_score: -2.000000
+  open_internal_deletion_score: -2.000000
   query_internal_extend_gap_score: -2.000000
   open_left_deletion_score: -5.000000
   extend_left_deletion_score: -5.000000
@@ -223,7 +223,7 @@ Pairwise sequence aligner with parameters
   extend_left_insertion_score: 0.000000
   open_right_insertion_score: 0.000000
   extend_right_insertion_score: 0.000000
-  query_internal_open_gap_score: 0.000000
+  open_internal_deletion_score: 0.000000
   query_internal_extend_gap_score: 0.000000
   open_left_deletion_score: 0.000000
   extend_left_deletion_score: 0.000000
@@ -331,7 +331,7 @@ Pairwise sequence aligner with parameters
   extend_left_insertion_score: -1.000000
   open_right_insertion_score: -5.000000
   extend_right_insertion_score: -1.000000
-  query_internal_open_gap_score: -5.000000
+  open_internal_deletion_score: -5.000000
   query_internal_extend_gap_score: -1.000000
   open_left_deletion_score: -5.000000
   extend_left_deletion_score: -1.000000
@@ -463,7 +463,7 @@ Pairwise sequence aligner with parameters
   extend_left_insertion_score: -0.100000
   open_right_insertion_score: -0.100000
   extend_right_insertion_score: -0.100000
-  query_internal_open_gap_score: -0.100000
+  open_internal_deletion_score: -0.100000
   query_internal_extend_gap_score: -0.100000
   open_left_deletion_score: -0.100000
   extend_left_deletion_score: -0.100000
@@ -512,7 +512,7 @@ Pairwise sequence aligner with parameters
   extend_left_insertion_score: 0.000000
   open_right_insertion_score: -0.100000
   extend_right_insertion_score: 0.000000
-  query_internal_open_gap_score: -0.100000
+  open_internal_deletion_score: -0.100000
   query_internal_extend_gap_score: 0.000000
   open_left_deletion_score: -0.100000
   extend_left_deletion_score: 0.000000
@@ -875,7 +875,7 @@ Pairwise sequence aligner with parameters
   extend_left_insertion_score: 0.000000
   open_right_insertion_score: -0.100000
   extend_right_insertion_score: 0.000000
-  query_internal_open_gap_score: -0.100000
+  open_internal_deletion_score: -0.100000
   query_internal_extend_gap_score: 0.000000
   open_left_deletion_score: -0.100000
   extend_left_deletion_score: 0.000000
@@ -972,7 +972,7 @@ Pairwise sequence aligner with parameters
   extend_left_insertion_score: 0.000000
   open_right_insertion_score: -0.100000
   extend_right_insertion_score: 0.000000
-  query_internal_open_gap_score: -0.100000
+  open_internal_deletion_score: -0.100000
   query_internal_extend_gap_score: 0.000000
   open_left_deletion_score: -0.100000
   extend_left_deletion_score: 0.000000
@@ -1071,7 +1071,7 @@ Pairwise sequence aligner with parameters
   extend_left_insertion_score: 0.000000
   open_right_insertion_score: 0.000000
   extend_right_insertion_score: 0.000000
-  query_internal_open_gap_score: -0.100000
+  open_internal_deletion_score: -0.100000
   query_internal_extend_gap_score: 0.000000
   open_left_deletion_score: -0.100000
   extend_left_deletion_score: 0.000000
@@ -1144,7 +1144,7 @@ Pairwise sequence aligner with parameters
   extend_left_insertion_score: 0.000000
   open_right_insertion_score: 0.000000
   extend_right_insertion_score: 0.000000
-  query_internal_open_gap_score: -0.100000
+  open_internal_deletion_score: -0.100000
   query_internal_extend_gap_score: 0.000000
   open_left_deletion_score: -0.100000
   extend_left_deletion_score: 0.000000
@@ -1216,7 +1216,7 @@ Pairwise sequence aligner with parameters
   extend_left_insertion_score: 0.000000
   open_right_insertion_score: -0.100000
   extend_right_insertion_score: 0.000000
-  query_internal_open_gap_score: -0.100000
+  open_internal_deletion_score: -0.100000
   query_internal_extend_gap_score: 0.000000
   open_left_deletion_score: -0.100000
   extend_left_deletion_score: 0.000000
@@ -1321,7 +1321,7 @@ Pairwise sequence aligner with parameters
   extend_left_insertion_score: -0.500000
   open_right_insertion_score: -0.200000
   extend_right_insertion_score: -0.500000
-  query_internal_open_gap_score: -0.200000
+  open_internal_deletion_score: -0.200000
   query_internal_extend_gap_score: -0.500000
   open_left_deletion_score: -0.200000
   extend_left_deletion_score: -0.500000
@@ -1392,7 +1392,7 @@ Pairwise sequence aligner with parameters
   extend_left_insertion_score: -1.500000
   open_right_insertion_score: -0.200000
   extend_right_insertion_score: -1.500000
-  query_internal_open_gap_score: -0.200000
+  open_internal_deletion_score: -0.200000
   query_internal_extend_gap_score: -1.500000
   open_left_deletion_score: -0.200000
   extend_left_deletion_score: -1.500000
@@ -1497,7 +1497,7 @@ Pairwise sequence aligner with parameters
   extend_left_insertion_score: -1.500000
   open_right_insertion_score: -0.200000
   extend_right_insertion_score: -1.500000
-  query_internal_open_gap_score: -0.200000
+  open_internal_deletion_score: -0.200000
   query_internal_extend_gap_score: -1.500000
   open_left_deletion_score: -0.200000
   extend_left_deletion_score: -1.500000
@@ -1570,7 +1570,7 @@ Pairwise sequence aligner with parameters
   extend_left_insertion_score: -1.500000
   open_right_insertion_score: -1.700000
   extend_right_insertion_score: -1.500000
-  query_internal_open_gap_score: -1.700000
+  open_internal_deletion_score: -1.700000
   query_internal_extend_gap_score: -1.500000
   open_left_deletion_score: -1.700000
   extend_left_deletion_score: -1.500000
@@ -1643,7 +1643,7 @@ Pairwise sequence aligner with parameters
   extend_left_insertion_score: -1.500000
   open_right_insertion_score: -1.700000
   extend_right_insertion_score: -1.500000
-  query_internal_open_gap_score: -1.700000
+  open_internal_deletion_score: -1.700000
   query_internal_extend_gap_score: -1.500000
   open_left_deletion_score: -1.700000
   extend_left_deletion_score: -1.500000
@@ -1718,7 +1718,7 @@ Pairwise sequence aligner with parameters
   extend_left_insertion_score: 0.000000
   open_right_insertion_score: 0.000000
   extend_right_insertion_score: 0.000000
-  query_internal_open_gap_score: -0.200000
+  open_internal_deletion_score: -0.200000
   query_internal_extend_gap_score: -0.800000
   open_left_deletion_score: 0.000000
   extend_left_deletion_score: 0.000000
@@ -1848,7 +1848,7 @@ Pairwise sequence aligner with parameters
   extend_left_insertion_score: 0.000000
   open_right_insertion_score: 0.000000
   extend_right_insertion_score: 0.000000
-  query_internal_open_gap_score: -0.200000
+  open_internal_deletion_score: -0.200000
   query_internal_extend_gap_score: -0.800000
   open_left_deletion_score: 0.000000
   extend_left_deletion_score: 0.000000
@@ -1932,7 +1932,7 @@ Pairwise sequence aligner with parameters
   extend_left_insertion_score: 0.000000
   open_right_insertion_score: -0.300000
   extend_right_insertion_score: 0.000000
-  query_internal_open_gap_score: -0.800000
+  open_internal_deletion_score: -0.800000
   query_internal_extend_gap_score: 0.000000
   open_left_deletion_score: -0.800000
   extend_left_deletion_score: 0.000000
@@ -2035,7 +2035,7 @@ Pairwise sequence aligner with parameters
   extend_left_insertion_score: 0.000000
   open_right_insertion_score: -0.300000
   extend_right_insertion_score: 0.000000
-  query_internal_open_gap_score: -0.200000
+  open_internal_deletion_score: -0.200000
   query_internal_extend_gap_score: 0.000000
   open_left_deletion_score: -0.200000
   extend_left_deletion_score: 0.000000
@@ -2116,7 +2116,7 @@ Pairwise sequence aligner with parameters
   extend_left_insertion_score: 0.000000
   open_right_insertion_score: -0.100000
   extend_right_insertion_score: 0.000000
-  query_internal_open_gap_score: -0.100000
+  open_internal_deletion_score: -0.100000
   query_internal_extend_gap_score: -0.100000
   open_left_deletion_score: -0.100000
   extend_left_deletion_score: -0.100000
@@ -2259,7 +2259,7 @@ class TestPairwiseMatchDictionary(unittest.TestCase):
   extend_left_insertion_score: 0.000000
   open_right_insertion_score: -0.500000
   extend_right_insertion_score: 0.000000
-  query_internal_open_gap_score: -0.500000
+  open_internal_deletion_score: -0.500000
   query_internal_extend_gap_score: 0.000000
   open_left_deletion_score: -0.500000
   extend_left_deletion_score: 0.000000
@@ -2361,7 +2361,7 @@ query             3 AT-T 0
   extend_left_insertion_score: 0.000000
   open_right_insertion_score: -1.000000
   extend_right_insertion_score: 0.000000
-  query_internal_open_gap_score: -1.000000
+  open_internal_deletion_score: -1.000000
   query_internal_extend_gap_score: 0.000000
   open_left_deletion_score: -1.000000
   extend_left_deletion_score: 0.000000
@@ -2431,7 +2431,7 @@ query             3 ATT 0
   extend_left_insertion_score: 0.000000
   open_right_insertion_score: -1.000000
   extend_right_insertion_score: 0.000000
-  query_internal_open_gap_score: -1.000000
+  open_internal_deletion_score: -1.000000
   query_internal_extend_gap_score: 0.000000
   open_left_deletion_score: -1.000000
   extend_left_deletion_score: 0.000000
@@ -2504,7 +2504,7 @@ query             4 ATA 1
   extend_left_insertion_score: 0.000000
   open_right_insertion_score: -0.500000
   extend_right_insertion_score: 0.000000
-  query_internal_open_gap_score: -0.500000
+  open_internal_deletion_score: -0.500000
   query_internal_extend_gap_score: 0.000000
   open_left_deletion_score: -0.500000
   extend_left_deletion_score: 0.000000
@@ -2608,7 +2608,7 @@ query             3 AT-T 0
   extend_left_insertion_score: 0.000000
   open_right_insertion_score: -1.000000
   extend_right_insertion_score: 0.000000
-  query_internal_open_gap_score: -1.000000
+  open_internal_deletion_score: -1.000000
   query_internal_extend_gap_score: 0.000000
   open_left_deletion_score: -1.000000
   extend_left_deletion_score: 0.000000
@@ -2680,7 +2680,7 @@ query             3 ATT 0
   extend_left_insertion_score: 0.000000
   open_right_insertion_score: -1.000000
   extend_right_insertion_score: 0.000000
-  query_internal_open_gap_score: -1.000000
+  open_internal_deletion_score: -1.000000
   query_internal_extend_gap_score: 0.000000
   open_left_deletion_score: -1.000000
   extend_left_deletion_score: 0.000000
@@ -2747,7 +2747,7 @@ Pairwise sequence aligner with parameters
   extend_left_insertion_score: -0.100000
   open_right_insertion_score: -0.300000
   extend_right_insertion_score: -0.100000
-  query_internal_open_gap_score: -0.300000
+  open_internal_deletion_score: -0.300000
   query_internal_extend_gap_score: -0.100000
   open_left_deletion_score: -0.300000
   extend_left_deletion_score: -0.100000
@@ -2794,7 +2794,7 @@ Pairwise sequence aligner with parameters
   extend_left_insertion_score: -0.100000
   open_right_insertion_score: -0.300000
   extend_right_insertion_score: -0.100000
-  query_internal_open_gap_score: -0.300000
+  open_internal_deletion_score: -0.300000
   query_internal_extend_gap_score: -0.100000
   open_left_deletion_score: -0.300000
   extend_left_deletion_score: -0.100000
@@ -2855,7 +2855,7 @@ Pairwise sequence aligner with parameters
   extend_left_insertion_score: -0.100000
   open_right_insertion_score: -0.300000
   extend_right_insertion_score: -0.100000
-  query_internal_open_gap_score: -0.300000
+  open_internal_deletion_score: -0.300000
   query_internal_extend_gap_score: -0.100000
   open_left_deletion_score: -0.300000
   extend_left_deletion_score: -0.100000
@@ -2904,7 +2904,7 @@ Pairwise sequence aligner with parameters
   extend_left_insertion_score: -0.100000
   open_right_insertion_score: -0.300000
   extend_right_insertion_score: -0.100000
-  query_internal_open_gap_score: -0.300000
+  open_internal_deletion_score: -0.300000
   query_internal_extend_gap_score: -0.100000
   open_left_deletion_score: -0.300000
   extend_left_deletion_score: -0.100000
@@ -2937,7 +2937,7 @@ Pairwise sequence aligner with parameters
   extend_left_insertion_score: -0.100000
   open_right_insertion_score: -0.300000
   extend_right_insertion_score: -0.100000
-  query_internal_open_gap_score: -0.300000
+  open_internal_deletion_score: -0.300000
   query_internal_extend_gap_score: -0.100000
   open_left_deletion_score: -0.300000
   extend_left_deletion_score: -0.100000
@@ -3177,7 +3177,7 @@ query            22 --AABBBAAAACCCCAAAABB----------BAA--  0
   match_score: 1.000000
   mismatch_score: -10.000000
   target_gap_function: {gap_score}
-  query_internal_open_gap_score: 0.000000
+  open_internal_deletion_score: 0.000000
   query_internal_extend_gap_score: 0.000000
   open_left_deletion_score: 0.000000
   extend_left_deletion_score: 0.000000
@@ -3613,7 +3613,7 @@ query            13 CCCCAAAABBBAA  0
   match_score: 1.000000
   mismatch_score: -10.000000
   target_gap_function: {gap_score}
-  query_internal_open_gap_score: 0.000000
+  open_internal_deletion_score: 0.000000
   query_internal_extend_gap_score: 0.000000
   open_left_deletion_score: 0.000000
   extend_left_deletion_score: 0.000000
@@ -4465,7 +4465,7 @@ Pairwise sequence aligner with parameters
   extend_left_insertion_score: -0.100000
   open_right_insertion_score: -0.200000
   extend_right_insertion_score: -0.100000
-  query_internal_open_gap_score: -0.300000
+  open_internal_deletion_score: -0.300000
   query_internal_extend_gap_score: -0.100000
   open_left_deletion_score: -0.300000
   extend_left_deletion_score: -0.100000
@@ -4490,7 +4490,7 @@ class TestPredefinedScoringSchemes(unittest.TestCase):
   extend_left_insertion_score: -2.000000
   open_right_insertion_score: -7.000000
   extend_right_insertion_score: -2.000000
-  query_internal_open_gap_score: -7.000000
+  open_internal_deletion_score: -7.000000
   query_internal_extend_gap_score: -2.000000
   open_left_deletion_score: -7.000000
   extend_left_deletion_score: -2.000000
@@ -4534,7 +4534,7 @@ N -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0
   extend_left_insertion_score: -2.500000
   open_right_insertion_score: -2.500000
   extend_right_insertion_score: -2.500000
-  query_internal_open_gap_score: -2.500000
+  open_internal_deletion_score: -2.500000
   query_internal_extend_gap_score: -2.500000
   open_left_deletion_score: -2.500000
   extend_left_deletion_score: -2.500000
@@ -4578,7 +4578,7 @@ N -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0
   extend_left_insertion_score: -1.000000
   open_right_insertion_score: -12.000000
   extend_right_insertion_score: -1.000000
-  query_internal_open_gap_score: -12.000000
+  open_internal_deletion_score: -12.000000
   query_internal_extend_gap_score: -1.000000
   open_left_deletion_score: -12.000000
   extend_left_deletion_score: -1.000000
