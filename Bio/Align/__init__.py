@@ -3970,6 +3970,8 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
                  "internal_extend_gap_score": "extend_internal_gap_score",
                  "left_open_gap_score": "open_left_gap_score",
                  "left_extend_gap_score": "extend_left_gap_score",
+                 "right_open_gap_score": "open_right_gap_score",
+                 "right_extend_gap_score": "extend_right_gap_score",
                }
     def __setattr__(self, key, value):
         try:

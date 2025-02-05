@@ -2779,10 +2779,10 @@ Aligner_set_extend_left_gap_score(Aligner* self, PyObject* value, void* closure)
     return 0;
 }
 
-static char Aligner_right_open_gap_score__doc__[] = "right open gap score";
+static char Aligner_open_right_gap_score__doc__[] = "open right gap score";
 
 static PyObject*
-Aligner_get_right_open_gap_score(Aligner* self, void* closure)
+Aligner_get_open_right_gap_score(Aligner* self, void* closure)
 {   if (self->insertion_score_function || self->deletion_score_function) {
         PyErr_SetString(PyExc_ValueError, "using a gap score function");
         return NULL;
@@ -2798,7 +2798,7 @@ Aligner_get_right_open_gap_score(Aligner* self, void* closure)
 }
 
 static int
-Aligner_set_right_open_gap_score(Aligner* self, PyObject* value, void* closure)
+Aligner_set_open_right_gap_score(Aligner* self, PyObject* value, void* closure)
 {   const double score = PyFloat_AsDouble(value);
     if (PyErr_Occurred()) return -1;
     if (self->insertion_score_function) {
@@ -2815,10 +2815,10 @@ Aligner_set_right_open_gap_score(Aligner* self, PyObject* value, void* closure)
     return 0;
 }
 
-static char Aligner_right_extend_gap_score__doc__[] = "right extend gap score";
+static char Aligner_extend_right_gap_score__doc__[] = "extend right gap score";
 
 static PyObject*
-Aligner_get_right_extend_gap_score(Aligner* self, void* closure)
+Aligner_get_extend_right_gap_score(Aligner* self, void* closure)
 {   if (self->insertion_score_function || self->deletion_score_function) {
         PyErr_SetString(PyExc_ValueError, "using a gap score function");
         return NULL;
@@ -2834,7 +2834,7 @@ Aligner_get_right_extend_gap_score(Aligner* self, void* closure)
 }
 
 static int
-Aligner_set_right_extend_gap_score(Aligner* self, PyObject* value, void* closure)
+Aligner_set_extend_right_gap_score(Aligner* self, PyObject* value, void* closure)
 {   const double score = PyFloat_AsDouble(value);
     if (PyErr_Occurred()) return -1;
     if (self->insertion_score_function) {
@@ -3969,14 +3969,14 @@ static PyGetSetDef Aligner_getset[] = {
         (getter)Aligner_get_right_gap_score,
         (setter)Aligner_set_right_gap_score,
         Aligner_right_gap_score__doc__, NULL},
-    {"right_open_gap_score",
-        (getter)Aligner_get_right_open_gap_score,
-        (setter)Aligner_set_right_open_gap_score,
-        Aligner_right_open_gap_score__doc__, NULL},
-    {"right_extend_gap_score",
-        (getter)Aligner_get_right_extend_gap_score,
-        (setter)Aligner_set_right_extend_gap_score,
-        Aligner_right_extend_gap_score__doc__, NULL},
+    {"open_right_gap_score",
+        (getter)Aligner_get_open_right_gap_score,
+        (setter)Aligner_set_open_right_gap_score,
+        Aligner_open_right_gap_score__doc__, NULL},
+    {"extend_right_gap_score",
+        (getter)Aligner_get_extend_right_gap_score,
+        (setter)Aligner_set_extend_right_gap_score,
+        Aligner_extend_right_gap_score__doc__, NULL},
     {"target_open_gap_score",
         (getter)Aligner_get_target_open_gap_score,
         (setter)Aligner_set_target_open_gap_score,
