@@ -622,7 +622,7 @@ that refer to a number of these values collectively, as shown
    | ``end_gap_score``               | ``target_end_gap_score``,             |
    |                                 | ``query_end_gap_score``               |
    +---------------------------------+---------------------------------------+
-   | ``end_open_gap_score``          | ``target_end_open_gap_score``,        |
+   | ``open_end_gap_score``          | ``target_end_open_gap_score``,        |
    |                                 | ``query_end_open_gap_score``          |
    +---------------------------------+---------------------------------------+
    | ``end_extend_gap_score``        | ``target_end_extend_gap_score``,      |

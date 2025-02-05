@@ -2426,10 +2426,10 @@ Aligner_set_internal_gap_score(Aligner* self, PyObject* value, void* closure)
     return 0;
 }
 
-static char Aligner_internal_open_gap_score__doc__[] = "internal open gap score";
+static char Aligner_open_internal_gap_score__doc__[] = "open internal gap score";
 
 static PyObject*
-Aligner_get_internal_open_gap_score(Aligner* self, void* closure)
+Aligner_get_open_internal_gap_score(Aligner* self, void* closure)
 {   if (self->insertion_score_function || self->deletion_score_function) {
         PyErr_SetString(PyExc_ValueError, "using a gap score function");
         return NULL;
@@ -2445,7 +2445,7 @@ Aligner_get_internal_open_gap_score(Aligner* self, void* closure)
 }
 
 static int
-Aligner_set_internal_open_gap_score(Aligner* self, PyObject* value, void* closure)
+Aligner_set_open_internal_gap_score(Aligner* self, PyObject* value, void* closure)
 {   const double score = PyFloat_AsDouble(value);
     if (PyErr_Occurred()) return -1;
     if (self->insertion_score_function) {
@@ -2462,10 +2462,10 @@ Aligner_set_internal_open_gap_score(Aligner* self, PyObject* value, void* closur
     return 0;
 }
 
-static char Aligner_internal_extend_gap_score__doc__[] = "internal extend gap score";
+static char Aligner_extend_internal_gap_score__doc__[] = "extend internal gap score";
 
 static PyObject*
-Aligner_get_internal_extend_gap_score(Aligner* self, void* closure)
+Aligner_get_extend_internal_gap_score(Aligner* self, void* closure)
 {   if (self->insertion_score_function || self->deletion_score_function) {
         PyErr_SetString(PyExc_ValueError, "using a gap score function");
         return NULL;
@@ -2481,7 +2481,7 @@ Aligner_get_internal_extend_gap_score(Aligner* self, void* closure)
 }
 
 static int
-Aligner_set_internal_extend_gap_score(Aligner* self, PyObject* value,
+Aligner_set_extend_internal_gap_score(Aligner* self, PyObject* value,
                                       void* closure)
 {   const double score = PyFloat_AsDouble(value);
     if (PyErr_Occurred()) return -1;
@@ -2547,10 +2547,10 @@ Aligner_set_end_gap_score(Aligner* self, PyObject* value, void* closure)
     return 0;
 }
 
-static char Aligner_end_open_gap_score__doc__[] = "end open gap score";
+static char Aligner_open_end_gap_score__doc__[] = "open end gap score";
 
 static PyObject*
-Aligner_get_end_open_gap_score(Aligner* self, void* closure)
+Aligner_get_open_end_gap_score(Aligner* self, void* closure)
 {   if (self->insertion_score_function || self->deletion_score_function) {
         PyErr_SetString(PyExc_ValueError, "using a gap score function");
         return NULL;
@@ -2568,7 +2568,7 @@ Aligner_get_end_open_gap_score(Aligner* self, void* closure)
 }
 
 static int
-Aligner_set_end_open_gap_score(Aligner* self, PyObject* value, void* closure)
+Aligner_set_open_end_gap_score(Aligner* self, PyObject* value, void* closure)
 {   const double score = PyFloat_AsDouble(value);
     if (PyErr_Occurred()) return -1;
     if (self->insertion_score_function) {
@@ -3933,22 +3933,22 @@ static PyGetSetDef Aligner_getset[] = {
         (getter)Aligner_get_internal_gap_score,
         (setter)Aligner_set_internal_gap_score,
         Aligner_internal_gap_score__doc__, NULL},
-    {"internal_open_gap_score",
-        (getter)Aligner_get_internal_open_gap_score,
-        (setter)Aligner_set_internal_open_gap_score,
-        Aligner_internal_open_gap_score__doc__, NULL},
-    {"internal_extend_gap_score",
-        (getter)Aligner_get_internal_extend_gap_score,
-        (setter)Aligner_set_internal_extend_gap_score,
-        Aligner_internal_extend_gap_score__doc__, NULL},
+    {"open_internal_gap_score",
+        (getter)Aligner_get_open_internal_gap_score,
+        (setter)Aligner_set_open_internal_gap_score,
+        Aligner_open_internal_gap_score__doc__, NULL},
+    {"extend_internal_gap_score",
+        (getter)Aligner_get_extend_internal_gap_score,
+        (setter)Aligner_set_extend_internal_gap_score,
+        Aligner_extend_internal_gap_score__doc__, NULL},
     {"end_gap_score",
         (getter)Aligner_get_end_gap_score,
         (setter)Aligner_set_end_gap_score,
         Aligner_end_gap_score__doc__, NULL},
-    {"end_open_gap_score",
-        (getter)Aligner_get_end_open_gap_score,
-        (setter)Aligner_set_end_open_gap_score,
-        Aligner_end_open_gap_score__doc__, NULL},
+    {"open_end_gap_score",
+        (getter)Aligner_get_open_end_gap_score,
+        (setter)Aligner_set_open_end_gap_score,
+        Aligner_open_end_gap_score__doc__, NULL},
     {"end_extend_gap_score",
         (getter)Aligner_get_end_extend_gap_score,
         (setter)Aligner_set_end_extend_gap_score,
