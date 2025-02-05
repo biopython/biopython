@@ -2985,7 +2985,7 @@ class TestPerSiteGapPenalties(unittest.TestCase):
   wildcard: None
   match_score: 1.000000
   mismatch_score: -1.000000
-  target_gap_function: {nogaps}
+  insertion_score_function: {nogaps}
   query_gap_function: {specificgaps}
   mode: global
 """,
@@ -3069,7 +3069,7 @@ query            22 --AABBBAAAACC----------CCAAAABBBAA--  0
   wildcard: None
   match_score: 1.000000
   mismatch_score: -1.000000
-  target_gap_function: {nogaps}
+  insertion_score_function: {nogaps}
   query_gap_function: {specificgaps}
   mode: global
 """,
@@ -3176,7 +3176,7 @@ query            22 --AABBBAAAACCCCAAAABB----------BAA--  0
   wildcard: None
   match_score: 1.000000
   mismatch_score: -10.000000
-  target_gap_function: {gap_score}
+  insertion_score_function: {gap_score}
   open_internal_deletion_score: 0.000000
   extend_internal_deletion_score: 0.000000
   open_left_deletion_score: 0.000000
@@ -3233,7 +3233,7 @@ query             6 TTG--GAA 0
   wildcard: None
   match_score: 1.000000
   mismatch_score: -10.000000
-  target_gap_function: {gap_score}
+  insertion_score_function: {gap_score}
   query_gap_function: {gap_score}
   mode: global
 """,
@@ -3410,7 +3410,7 @@ query             6 TTG--GAA 0
   wildcard: None
   match_score: 1.000000
   mismatch_score: -1.000000
-  target_gap_function: {nogaps}
+  insertion_score_function: {nogaps}
   query_gap_function: {specificgaps}
   mode: local
 """,
@@ -3513,7 +3513,7 @@ query            13 CCCCAAAABBBAA  0
   wildcard: None
   match_score: 1.000000
   mismatch_score: -1.000000
-  target_gap_function: {nogaps}
+  insertion_score_function: {nogaps}
   query_gap_function: {specificgaps}
   mode: local
 """,
@@ -3612,7 +3612,7 @@ query            13 CCCCAAAABBBAA  0
   wildcard: None
   match_score: 1.000000
   mismatch_score: -10.000000
-  target_gap_function: {gap_score}
+  insertion_score_function: {gap_score}
   open_internal_deletion_score: 0.000000
   extend_internal_deletion_score: 0.000000
   open_left_deletion_score: 0.000000
@@ -3693,7 +3693,7 @@ query             2 AA 0
   wildcard: None
   match_score: 1.000000
   mismatch_score: -10.000000
-  target_gap_function: {gap_score}
+  insertion_score_function: {gap_score}
   query_gap_function: {gap_score}
   mode: local
 """,
