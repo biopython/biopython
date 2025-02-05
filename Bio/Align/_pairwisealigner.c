@@ -2885,10 +2885,10 @@ Aligner_set_open_insertion_score(Aligner* self, PyObject* value, void* closure)
     return 0;
 }
 
-static char Aligner_target_extend_gap_score__doc__[] = "target extend gap score";
+static char Aligner_extend_insertion_score__doc__[] = "extend insertion score";
 
 static PyObject*
-Aligner_get_target_extend_gap_score(Aligner* self, void* closure)
+Aligner_get_extend_insertion_score(Aligner* self, void* closure)
 {   if (self->insertion_score_function) {
         PyErr_SetString(PyExc_ValueError, "using a gap score function");
         return NULL;
@@ -2905,7 +2905,7 @@ Aligner_get_target_extend_gap_score(Aligner* self, void* closure)
 }
 
 static int
-Aligner_set_target_extend_gap_score(Aligner* self, PyObject* value, void* closure)
+Aligner_set_extend_insertion_score(Aligner* self, PyObject* value, void* closure)
 {   const double score = PyFloat_AsDouble(value);
     if (PyErr_Occurred()) return -1;
     self->extend_internal_insertion_score = score;
@@ -3981,10 +3981,10 @@ static PyGetSetDef Aligner_getset[] = {
         (getter)Aligner_get_open_insertion_score,
         (setter)Aligner_set_open_insertion_score,
         Aligner_open_insertion_score__doc__, NULL},
-    {"target_extend_gap_score",
-        (getter)Aligner_get_target_extend_gap_score,
-        (setter)Aligner_set_target_extend_gap_score,
-        Aligner_target_extend_gap_score__doc__, NULL},
+    {"extend_insertion_score",
+        (getter)Aligner_get_extend_insertion_score,
+        (setter)Aligner_set_extend_insertion_score,
+        Aligner_extend_insertion_score__doc__, NULL},
     {"target_gap_score",
         (getter)Aligner_get_target_gap_score,
         (setter)Aligner_set_target_gap_score,

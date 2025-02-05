@@ -3975,6 +3975,7 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
                  "end_open_gap_score": "open_end_gap_score",
                  "end_extend_gap_score": "extend_end_gap_score",
                  "target_open_gap_score": "open_insertion_score",
+                 "target_extend_gap_score": "extend_insertion_score",
                }
     def __setattr__(self, key, value):
         try:
