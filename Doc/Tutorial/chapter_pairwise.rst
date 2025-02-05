@@ -380,7 +380,7 @@ all parameters, use
      open_left_deletion_score: 0.000000
      extend_left_deletion_score: 0.000000
      open_right_deletion_score: 0.000000
-     query_right_extend_gap_score: 0.000000
+     extend_right_deletion_score: 0.000000
      mode: local
    <BLANKLINE>
 
@@ -555,7 +555,7 @@ object:
 ================================== ====================================
 ``open_left_deletion_score``       ``extend_left_deletion_score``
 ``open_internal_deletion_score``   ``extend_internal_deletion_score``
-``open_right_deletion_score``      ``query_right_extend_gap_score``
+``open_right_deletion_score``      ``extend_right_deletion_score``
 ``open_left_insertion_score``      ``extend_left_insertion_score``
 ``open_internal_insertion_score``  ``extend_internal_insertion_score``
 ``open_right_insertion_score``     ``extend_right_insertion_score``
@@ -617,7 +617,7 @@ that refer to a number of these values collectively, as shown
    |                                 | ``open_internal_deletion_score``      |
    +---------------------------------+---------------------------------------+
    | ``internal_extend_gap_score``   | ``extend_internal_insertion_score``,  |
-   |                                 | ``extend_internal_deletion_score``   |
+   |                                 | ``extend_internal_deletion_score``    |
    +---------------------------------+---------------------------------------+
    | ``end_gap_score``               | ``target_end_gap_score``,             |
    |                                 | ``query_end_gap_score``               |
@@ -644,7 +644,7 @@ that refer to a number of these values collectively, as shown
    |                                 | ``open_right_deletion_score``         |
    +---------------------------------+---------------------------------------+
    | ``right_extend_gap_score``      | ``extend_right_insertion_score``,     |
-   |                                 | ``query_right_extend_gap_score``      |
+   |                                 | ``extend_right_deletion_score``       |
    +---------------------------------+---------------------------------------+
    | ``target_open_gap_score``       | ``open_internal_insertion_score``,    |
    |                                 | ``open_left_insertion_score``,        |
@@ -661,9 +661,9 @@ that refer to a number of these values collectively, as shown
    |                                 | ``open_left_deletion_score``,         |
    |                                 | ``open_right_deletion_score``         |
    +---------------------------------+---------------------------------------+
-   | ``query_extend_gap_score``      | ``extend_internal_deletion_score``,  |
+   | ``query_extend_gap_score``      | ``extend_internal_deletion_score``,   |
    |                                 | ``extend_left_deletion_score``,       |
-   |                                 | ``query_right_extend_gap_score``      |
+   |                                 | ``extend_right_deletion_score``       |
    +---------------------------------+---------------------------------------+
    | ``query_gap_score``             | ``query_open_gap_score``,             |
    |                                 | ``query_extend_gap_score``            |
@@ -678,7 +678,7 @@ that refer to a number of these values collectively, as shown
    |                                 | ``open_right_insertion_score``        |
    +---------------------------------+---------------------------------------+
    | ``target_end_extend_gap_score`` | ``extend_left_insertion_score``,      |
-   |                                 | ``extend_right_insertion_score``     |
+   |                                 | ``extend_right_insertion_score``      |
    +---------------------------------+---------------------------------------+
    | ``target_left_gap_score``       | ``open_left_insertion_score``,        |
    |                                 | ``extend_left_insertion_score``       |
@@ -693,7 +693,7 @@ that refer to a number of these values collectively, as shown
    |                                 | ``open_right_deletionp_score``        |
    +---------------------------------+---------------------------------------+
    | ``query_end_extend_gap_score``  | ``extend_left_deletion_score``,       |
-   |                                 | ``query_right_extend_gap_score``      |
+   |                                 | ``extend_right_deletion_score``       |
    +---------------------------------+---------------------------------------+
    | ``query_internal_gap_score``    | ``open_internal_deletion_score``,     |
    |                                 | ``extend_internal_deletion_score``    |
@@ -702,7 +702,7 @@ that refer to a number of these values collectively, as shown
    |                                 | ``extend_left_deletion_score``        |
    +---------------------------------+---------------------------------------+
    | ``query_right_gap_score``       | ``open_right_deletionp_score``,       |
-   |                                 | ``query_right_extend_gap_score``      |
+   |                                 | ``extend_right_deletion_score``       |
    +---------------------------------+---------------------------------------+
 
 .. _`sec:pairwise-general-gapscores`:
@@ -785,7 +785,7 @@ BLASTP, respectively.
      open_left_deletion_score: -7.000000
      extend_left_deletion_score: -2.000000
      open_right_deletion_score: -7.000000
-     query_right_extend_gap_score: -2.000000
+     extend_right_deletion_score: -2.000000
      mode: global
    <BLANKLINE>
    >>> print(aligner.substitution_matrix[:, :])

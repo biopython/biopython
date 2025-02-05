@@ -3963,6 +3963,7 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
                  "query_left_open_gap_score": "open_left_deletion_score",
                  "query_left_extend_gap_score": "extend_left_deletion_score",
                  "query_right_open_gap_score": "open_right_deletion_score",
+                 "query_right_extend_gap_score": "extend_right_deletion_score",
                }
     def __setattr__(self, key, value):
         try:
@@ -4028,7 +4029,7 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
             "open_left_deletion_score": self.open_left_deletion_score,
             "extend_left_deletion_score": self.extend_left_deletion_score,
             "open_right_deletion_score": self.open_right_deletion_score,
-            "query_right_extend_gap_score": self.query_right_extend_gap_score,
+            "extend_right_deletion_score": self.extend_right_deletion_score,
             "mode": self.mode,
         }
         if self.substitution_matrix is None:
@@ -4051,7 +4052,7 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
         self.open_left_deletion_score = state["open_left_deletion_score"]
         self.extend_left_deletion_score = state["extend_left_deletion_score"]
         self.open_right_deletion_score = state["open_right_deletion_score"]
-        self.query_right_extend_gap_score = state["query_right_extend_gap_score"]
+        self.extend_right_deletion_score = state["extend_right_deletion_score"]
         self.mode = state["mode"]
         substitution_matrix = state.get("substitution_matrix")
         if substitution_matrix is None:
