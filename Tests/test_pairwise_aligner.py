@@ -75,7 +75,7 @@ Pairwise sequence aligner with parameters
   extend_internal_deletion_score: 0.000000
   open_left_deletion_score: 0.000000
   extend_left_deletion_score: 0.000000
-  query_right_open_gap_score: 0.000000
+  open_right_deletion_score: 0.000000
   query_right_extend_gap_score: 0.000000
   mode: global
 """,
@@ -118,7 +118,7 @@ Pairwise sequence aligner with parameters
   extend_internal_deletion_score: -7.000000
   open_left_deletion_score: -1.000000
   extend_left_deletion_score: -2.000000
-  query_right_open_gap_score: -1.000000
+  open_right_deletion_score: -1.000000
   query_right_extend_gap_score: -2.000000
   mode: global
 """,
@@ -174,7 +174,7 @@ Pairwise sequence aligner with parameters
   extend_internal_deletion_score: -2.000000
   open_left_deletion_score: -5.000000
   extend_left_deletion_score: -5.000000
-  query_right_open_gap_score: -5.000000
+  open_right_deletion_score: -5.000000
   query_right_extend_gap_score: -5.000000
   mode: global
 """,
@@ -227,7 +227,7 @@ Pairwise sequence aligner with parameters
   extend_internal_deletion_score: 0.000000
   open_left_deletion_score: 0.000000
   extend_left_deletion_score: 0.000000
-  query_right_open_gap_score: 0.000000
+  open_right_deletion_score: 0.000000
   query_right_extend_gap_score: 0.000000
   mode: global
 """,
@@ -335,7 +335,7 @@ Pairwise sequence aligner with parameters
   extend_internal_deletion_score: -1.000000
   open_left_deletion_score: -5.000000
   extend_left_deletion_score: -1.000000
-  query_right_open_gap_score: -5.000000
+  open_right_deletion_score: -5.000000
   query_right_extend_gap_score: -1.000000
   mode: global
 """,
@@ -467,7 +467,7 @@ Pairwise sequence aligner with parameters
   extend_internal_deletion_score: -0.100000
   open_left_deletion_score: -0.100000
   extend_left_deletion_score: -0.100000
-  query_right_open_gap_score: -0.100000
+  open_right_deletion_score: -0.100000
   query_right_extend_gap_score: -0.100000
   mode: local
 """,
@@ -516,7 +516,7 @@ Pairwise sequence aligner with parameters
   extend_internal_deletion_score: 0.000000
   open_left_deletion_score: -0.100000
   extend_left_deletion_score: 0.000000
-  query_right_open_gap_score: -0.100000
+  open_right_deletion_score: -0.100000
   query_right_extend_gap_score: 0.000000
   mode: local
 """,
@@ -879,7 +879,7 @@ Pairwise sequence aligner with parameters
   extend_internal_deletion_score: 0.000000
   open_left_deletion_score: -0.100000
   extend_left_deletion_score: 0.000000
-  query_right_open_gap_score: -0.100000
+  open_right_deletion_score: -0.100000
   query_right_extend_gap_score: 0.000000
   mode: global
 """,
@@ -976,7 +976,7 @@ Pairwise sequence aligner with parameters
   extend_internal_deletion_score: 0.000000
   open_left_deletion_score: -0.100000
   extend_left_deletion_score: 0.000000
-  query_right_open_gap_score: -0.100000
+  open_right_deletion_score: -0.100000
   query_right_extend_gap_score: 0.000000
   mode: global
 """,
@@ -1075,7 +1075,7 @@ Pairwise sequence aligner with parameters
   extend_internal_deletion_score: 0.000000
   open_left_deletion_score: -0.100000
   extend_left_deletion_score: 0.000000
-  query_right_open_gap_score: -0.100000
+  open_right_deletion_score: -0.100000
   query_right_extend_gap_score: 0.000000
   mode: global
 """,
@@ -1148,7 +1148,7 @@ Pairwise sequence aligner with parameters
   extend_internal_deletion_score: 0.000000
   open_left_deletion_score: -0.100000
   extend_left_deletion_score: 0.000000
-  query_right_open_gap_score: -0.100000
+  open_right_deletion_score: -0.100000
   query_right_extend_gap_score: 0.000000
   mode: fogsaa
 """,
@@ -1220,7 +1220,7 @@ Pairwise sequence aligner with parameters
   extend_internal_deletion_score: 0.000000
   open_left_deletion_score: -0.100000
   extend_left_deletion_score: 0.000000
-  query_right_open_gap_score: -0.100000
+  open_right_deletion_score: -0.100000
   query_right_extend_gap_score: 0.000000
   mode: global
 """,
@@ -1325,7 +1325,7 @@ Pairwise sequence aligner with parameters
   extend_internal_deletion_score: -0.500000
   open_left_deletion_score: -0.200000
   extend_left_deletion_score: -0.500000
-  query_right_open_gap_score: -0.200000
+  open_right_deletion_score: -0.200000
   query_right_extend_gap_score: -0.500000
   mode: global
 """,
@@ -1396,7 +1396,7 @@ Pairwise sequence aligner with parameters
   extend_internal_deletion_score: -1.500000
   open_left_deletion_score: -0.200000
   extend_left_deletion_score: -1.500000
-  query_right_open_gap_score: -0.200000
+  open_right_deletion_score: -0.200000
   query_right_extend_gap_score: -1.500000
   mode: global
 """,
@@ -1501,7 +1501,7 @@ Pairwise sequence aligner with parameters
   extend_internal_deletion_score: -1.500000
   open_left_deletion_score: -0.200000
   extend_left_deletion_score: -1.500000
-  query_right_open_gap_score: -0.200000
+  open_right_deletion_score: -0.200000
   query_right_extend_gap_score: -1.500000
   mode: fogsaa
 """,
@@ -1574,7 +1574,7 @@ Pairwise sequence aligner with parameters
   extend_internal_deletion_score: -1.500000
   open_left_deletion_score: -1.700000
   extend_left_deletion_score: -1.500000
-  query_right_open_gap_score: -1.700000
+  open_right_deletion_score: -1.700000
   query_right_extend_gap_score: -1.500000
   mode: global
 """,
@@ -1647,7 +1647,7 @@ Pairwise sequence aligner with parameters
   extend_internal_deletion_score: -1.500000
   open_left_deletion_score: -1.700000
   extend_left_deletion_score: -1.500000
-  query_right_open_gap_score: -1.700000
+  open_right_deletion_score: -1.700000
   query_right_extend_gap_score: -1.500000
   mode: fogsaa
 """,
@@ -1722,7 +1722,7 @@ Pairwise sequence aligner with parameters
   extend_internal_deletion_score: -0.800000
   open_left_deletion_score: 0.000000
   extend_left_deletion_score: 0.000000
-  query_right_open_gap_score: 0.000000
+  open_right_deletion_score: 0.000000
   query_right_extend_gap_score: 0.000000
   mode: global
 """,
@@ -1852,7 +1852,7 @@ Pairwise sequence aligner with parameters
   extend_internal_deletion_score: -0.800000
   open_left_deletion_score: 0.000000
   extend_left_deletion_score: 0.000000
-  query_right_open_gap_score: 0.000000
+  open_right_deletion_score: 0.000000
   query_right_extend_gap_score: 0.000000
   mode: fogsaa
 """,
@@ -1936,7 +1936,7 @@ Pairwise sequence aligner with parameters
   extend_internal_deletion_score: 0.000000
   open_left_deletion_score: -0.800000
   extend_left_deletion_score: 0.000000
-  query_right_open_gap_score: -0.800000
+  open_right_deletion_score: -0.800000
   query_right_extend_gap_score: 0.000000
   mode: local
 """,
@@ -2039,7 +2039,7 @@ Pairwise sequence aligner with parameters
   extend_internal_deletion_score: 0.000000
   open_left_deletion_score: -0.200000
   extend_left_deletion_score: 0.000000
-  query_right_open_gap_score: -0.200000
+  open_right_deletion_score: -0.200000
   query_right_extend_gap_score: 0.000000
   mode: local
 """,
@@ -2120,7 +2120,7 @@ Pairwise sequence aligner with parameters
   extend_internal_deletion_score: -0.100000
   open_left_deletion_score: -0.100000
   extend_left_deletion_score: -0.100000
-  query_right_open_gap_score: -0.100000
+  open_right_deletion_score: -0.100000
   query_right_extend_gap_score: -0.100000
   mode: local
 """,
@@ -2263,7 +2263,7 @@ class TestPairwiseMatchDictionary(unittest.TestCase):
   extend_internal_deletion_score: 0.000000
   open_left_deletion_score: -0.500000
   extend_left_deletion_score: 0.000000
-  query_right_open_gap_score: -0.500000
+  open_right_deletion_score: -0.500000
   query_right_extend_gap_score: 0.000000
   mode: local
 $""",
@@ -2365,7 +2365,7 @@ query             3 AT-T 0
   extend_internal_deletion_score: 0.000000
   open_left_deletion_score: -1.000000
   extend_left_deletion_score: 0.000000
-  query_right_open_gap_score: -1.000000
+  open_right_deletion_score: -1.000000
   query_right_extend_gap_score: 0.000000
   mode: local
 $""",
@@ -2435,7 +2435,7 @@ query             3 ATT 0
   extend_internal_deletion_score: 0.000000
   open_left_deletion_score: -1.000000
   extend_left_deletion_score: 0.000000
-  query_right_open_gap_score: -1.000000
+  open_right_deletion_score: -1.000000
   query_right_extend_gap_score: 0.000000
   mode: local
 $""",
@@ -2508,7 +2508,7 @@ query             4 ATA 1
   extend_internal_deletion_score: 0.000000
   open_left_deletion_score: -0.500000
   extend_left_deletion_score: 0.000000
-  query_right_open_gap_score: -0.500000
+  open_right_deletion_score: -0.500000
   query_right_extend_gap_score: 0.000000
   mode: local
 $""",
@@ -2612,7 +2612,7 @@ query             3 AT-T 0
   extend_internal_deletion_score: 0.000000
   open_left_deletion_score: -1.000000
   extend_left_deletion_score: 0.000000
-  query_right_open_gap_score: -1.000000
+  open_right_deletion_score: -1.000000
   query_right_extend_gap_score: 0.000000
   mode: local
 $""",
@@ -2684,7 +2684,7 @@ query             3 ATT 0
   extend_internal_deletion_score: 0.000000
   open_left_deletion_score: -1.000000
   extend_left_deletion_score: 0.000000
-  query_right_open_gap_score: -1.000000
+  open_right_deletion_score: -1.000000
   query_right_extend_gap_score: 0.000000
   mode: local
 $""",
@@ -2751,7 +2751,7 @@ Pairwise sequence aligner with parameters
   extend_internal_deletion_score: -0.100000
   open_left_deletion_score: -0.300000
   extend_left_deletion_score: -0.100000
-  query_right_open_gap_score: -0.300000
+  open_right_deletion_score: -0.300000
   query_right_extend_gap_score: -0.100000
   mode: local
 """,
@@ -2798,7 +2798,7 @@ Pairwise sequence aligner with parameters
   extend_internal_deletion_score: -0.100000
   open_left_deletion_score: -0.300000
   extend_left_deletion_score: -0.100000
-  query_right_open_gap_score: -0.300000
+  open_right_deletion_score: -0.300000
   query_right_extend_gap_score: -0.100000
   mode: local
 """,
@@ -2859,7 +2859,7 @@ Pairwise sequence aligner with parameters
   extend_internal_deletion_score: -0.100000
   open_left_deletion_score: -0.300000
   extend_left_deletion_score: -0.100000
-  query_right_open_gap_score: -0.300000
+  open_right_deletion_score: -0.300000
   query_right_extend_gap_score: -0.100000
   mode: global
 """,
@@ -2908,7 +2908,7 @@ Pairwise sequence aligner with parameters
   extend_internal_deletion_score: -0.100000
   open_left_deletion_score: -0.300000
   extend_left_deletion_score: -0.100000
-  query_right_open_gap_score: -0.300000
+  open_right_deletion_score: -0.300000
   query_right_extend_gap_score: -0.100000
   mode: global
 """,
@@ -2941,7 +2941,7 @@ Pairwise sequence aligner with parameters
   extend_internal_deletion_score: -0.100000
   open_left_deletion_score: -0.300000
   extend_left_deletion_score: -0.100000
-  query_right_open_gap_score: -0.300000
+  open_right_deletion_score: -0.300000
   query_right_extend_gap_score: -0.100000
   mode: fogsaa
 """,
@@ -3181,7 +3181,7 @@ query            22 --AABBBAAAACCCCAAAABB----------BAA--  0
   extend_internal_deletion_score: 0.000000
   open_left_deletion_score: 0.000000
   extend_left_deletion_score: 0.000000
-  query_right_open_gap_score: 0.000000
+  open_right_deletion_score: 0.000000
   query_right_extend_gap_score: 0.000000
   mode: global
 """,
@@ -3617,7 +3617,7 @@ query            13 CCCCAAAABBBAA  0
   extend_internal_deletion_score: 0.000000
   open_left_deletion_score: 0.000000
   extend_left_deletion_score: 0.000000
-  query_right_open_gap_score: 0.000000
+  open_right_deletion_score: 0.000000
   query_right_extend_gap_score: 0.000000
   mode: local
 """,
@@ -4469,7 +4469,7 @@ Pairwise sequence aligner with parameters
   extend_internal_deletion_score: -0.100000
   open_left_deletion_score: -0.300000
   extend_left_deletion_score: -0.100000
-  query_right_open_gap_score: -0.300000
+  open_right_deletion_score: -0.300000
   query_right_extend_gap_score: -0.100000
   mode: local
 """,
@@ -4494,7 +4494,7 @@ class TestPredefinedScoringSchemes(unittest.TestCase):
   extend_internal_deletion_score: -2.000000
   open_left_deletion_score: -7.000000
   extend_left_deletion_score: -2.000000
-  query_right_open_gap_score: -7.000000
+  open_right_deletion_score: -7.000000
   query_right_extend_gap_score: -2.000000
   mode: global
 $""",
@@ -4538,7 +4538,7 @@ N -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0
   extend_internal_deletion_score: -2.500000
   open_left_deletion_score: -2.500000
   extend_left_deletion_score: -2.500000
-  query_right_open_gap_score: -2.500000
+  open_right_deletion_score: -2.500000
   query_right_extend_gap_score: -2.500000
   mode: global
 $""",
@@ -4582,7 +4582,7 @@ N -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0
   extend_internal_deletion_score: -1.000000
   open_left_deletion_score: -12.000000
   extend_left_deletion_score: -1.000000
-  query_right_open_gap_score: -12.000000
+  open_right_deletion_score: -12.000000
   query_right_extend_gap_score: -1.000000
   mode: global
 $""",

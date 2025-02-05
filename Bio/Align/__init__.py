@@ -3958,10 +3958,11 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
                  "target_left_extend_gap_score": "extend_left_insertion_score",
                  "target_right_open_gap_score": "open_right_insertion_score",
                  "target_right_extend_gap_score": "extend_right_insertion_score",
-                 "query_left_open_gap_score": "open_left_deletion_score",
-                 "query_left_extend_gap_score": "extend_left_deletion_score",
                  "query_internal_open_gap_score": "open_internal_deletion_score",
                  "query_internal_extend_gap_score": "extend_internal_deletion_score",
+                 "query_left_open_gap_score": "open_left_deletion_score",
+                 "query_left_extend_gap_score": "extend_left_deletion_score",
+                 "query_right_open_gap_score": "open_right_deletion_score",
                }
     def __setattr__(self, key, value):
         try:
@@ -4026,7 +4027,7 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
             "extend_internal_deletion_score": self.extend_internal_deletion_score,
             "open_left_deletion_score": self.open_left_deletion_score,
             "extend_left_deletion_score": self.extend_left_deletion_score,
-            "query_right_open_gap_score": self.query_right_open_gap_score,
+            "open_right_deletion_score": self.open_right_deletion_score,
             "query_right_extend_gap_score": self.query_right_extend_gap_score,
             "mode": self.mode,
         }
@@ -4049,7 +4050,7 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
         self.extend_internal_deletion_score = state["extend_internal_deletion_score"]
         self.open_left_deletion_score = state["open_left_deletion_score"]
         self.extend_left_deletion_score = state["extend_left_deletion_score"]
-        self.query_right_open_gap_score = state["query_right_open_gap_score"]
+        self.open_right_deletion_score = state["open_right_deletion_score"]
         self.query_right_extend_gap_score = state["query_right_extend_gap_score"]
         self.mode = state["mode"]
         substitution_matrix = state.get("substitution_matrix")
