@@ -3723,7 +3723,7 @@ class Alignment:
                     start1, start2 = end1, end2
         return m
 
-    def counts(self, substitution_matrix=None, gaps_only=False):
+    def counts(self, substitution_matrix=None, ignore_sequences=False):
         """Count the number of identities, mismatches, and gaps of an alignment.
 
         Arguments:
@@ -3733,12 +3733,13 @@ class Alignment:
                                  (typically from the ``Bio.Align.substitution_matrices``
                                  submodule) to also calculate the number of positive
                                  matches in an amino acid alignment.
-         - gaps_only           - If True, do not calculate the number of identities,
+         - ignore_sequences    - If True, do not calculate the number of identities,
                                  positives, and mismatches, but only calculate the
-                                 number of gaps. This will speed up the calculation.
+                                 number of aligned sequences and number of gaps
+                                 to speed up the calculation.
                                  Default value: False.
 
-        A ValueError is raised if gaps_only is True and substitution_matrix is not None.
+        A ValueError is raised if ignore_sequences is True and substitution_matrix is not None.
 
         >>> aligner = PairwiseAligner(mode='global', match_score=2, mismatch_score=-1)
         >>> for alignment in aligner.align("TACCG", "ACG"):
@@ -3793,7 +3794,7 @@ class Alignment:
         right_insertions = right_deletions = 0
         internal_insertions = internal_deletions = 0
         aligned = 0
-        if gaps_only:
+        if ignore_sequences:
             identities = None
             mismatches = None
         else:
@@ -3801,8 +3802,10 @@ class Alignment:
             mismatches = 0
         if substitution_matrix is None:
             positives = None
-        elif gaps_only:
-            raise ValueError("gaps_only cannot be True if substitution_matrix is used")
+        elif ignore_sequences:
+            raise ValueError(
+                "ignore_sequences cannot be True if substitution_matrix is used"
+            )
         else:
             positives = 0
         sequences = [None] * len(self.sequences)
@@ -3813,7 +3816,7 @@ class Alignment:
         for i, sequence in enumerate(self.sequences):
             start = min(coordinates[i, :])
             end = max(coordinates[i, :])
-            if not gaps_only:
+            if not ignore_sequences:
                 try:
                     sequence = sequence[start:end]
                 except ValueError:
@@ -3823,10 +3826,10 @@ class Alignment:
             if sum(aligned_steps > 0) > sum(aligned_steps < 0):
                 coordinates[i, :] = coordinates[i, :] - start
             else:
-                if not gaps_only:
+                if not ignore_sequences:
                     sequence = reverse_complement(sequence)
                 coordinates[i, :] = end - coordinates[i, :]
-            if gaps_only:
+            if ignore_sequences:
                 sequences[i] = None
             else:
                 try:
