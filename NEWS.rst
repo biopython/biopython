@@ -23,8 +23,8 @@ This release of Biopython supports Python 3.9, 3.10, 3.11, 3.12 and 3.13. It
 has also been tested on PyPy3.9 v7.3.13. Python 3.9 is approaching end of
 life, our support for it is now deprecated.
 
-Some optimisation work was done for ``Bio.SeqIO`` including avoiding nested
-iterators, and speeding up both FASTA and FASTQ parsing.
+Added ``Bio.SearchIO.InfernalIO`` module for parsing Infernal (v1.0.0+) cmsearch and
+cmscan tabular and plain text output.
 
 ``Bio.motifs`` now supports reading PFM from Cys2His2 Zinc Finger Proteins PWM
 Predictor and reading motifs in ``pfm-four-columns`` format will set motif name
@@ -50,8 +50,7 @@ to the test suite and type annotations.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
-- Alan Medlar
-- Carlos Peña
+- Samuel Prince (first contribution)
 - Gert Hulselmans
 - Peter Cock
 - Michiel de Hoon
