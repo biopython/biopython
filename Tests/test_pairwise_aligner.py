@@ -572,6 +572,14 @@ query             0 GA?T 4
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 4]], [[0, 4]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 1)
+        counts = alignment.counts(wildcard="?")
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
@@ -588,6 +596,14 @@ query             4 GA?T 0
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 4]], [[4, 0]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 1)
+        counts = alignment.counts(wildcard="?")
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
         seq2 = "GAXT"
         aligner.wildcard = "X"
         score = aligner.score(seq1, seq2)
@@ -610,6 +626,14 @@ query             0 GAXT 4
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 4]], [[0, 4]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 1)
+        counts = alignment.counts(wildcard="X")
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
@@ -626,6 +650,14 @@ query             4 GAXT 0
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 4]], [[4, 0]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 1)
+        counts = alignment.counts(wildcard="X")
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
         aligner.wildcard = None
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 2.0)
@@ -693,6 +725,14 @@ query             0 GA-A?T 5
                 np.array([[[0, 2], [3, 4], [4, 5]], [[0, 2], [2, 3], [4, 5]]]),
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        counts = alignment.counts(wildcard="?")
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
@@ -712,6 +752,14 @@ query             5 GA-A?T 0
                 np.array([[[0, 2], [3, 4], [4, 5]], [[5, 3], [3, 2], [1, 0]]]),
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        counts = alignment.counts(wildcard="?")
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
         seq1 = "GAXAT"
         seq2 = "GAAXT"
         aligner.wildcard = "X"
@@ -738,6 +786,14 @@ query             0 GA-AXT 5
                 np.array([[[0, 2], [3, 4], [4, 5]], [[0, 2], [2, 3], [4, 5]]]),
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        counts = alignment.counts(wildcard="?")
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
@@ -757,6 +813,14 @@ query             5 GA-AXT 0
                 np.array([[[0, 2], [3, 4], [4, 5]], [[5, 3], [3, 2], [1, 0]]]),
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        counts = alignment.counts(wildcard="?")
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
 
     def test_fogsaa_simple2(self):
         seq1 = "GA?AT"
@@ -787,6 +851,14 @@ query             0 GA-A?T 5
                 np.array([[[0, 2], [3, 4], [4, 5]], [[0, 2], [2, 3], [4, 5]]]),
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        counts = alignment.counts(wildcard="?")
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
@@ -806,6 +878,14 @@ query             5 GA-A?T 0
                 np.array([[[0, 2], [3, 4], [4, 5]], [[5, 3], [3, 2], [1, 0]]]),
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        counts = alignment.counts(wildcard="?")
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
         seq1 = "GAXAT"
         seq2 = "GAAXT"
         aligner.wildcard = "X"
@@ -832,6 +912,14 @@ query             0 GA-AXT 5
                 np.array([[[0, 2], [3, 4], [4, 5]], [[0, 2], [2, 3], [4, 5]]]),
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        counts = alignment.counts(wildcard="X")
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
@@ -851,6 +939,14 @@ query             5 GA-AXT 0
                 np.array([[[0, 2], [3, 4], [4, 5]], [[5, 3], [3, 2], [1, 0]]]),
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        counts = alignment.counts(wildcard="X")
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
 
 
 class TestPairwiseOpenPenalty(unittest.TestCase):
@@ -5306,6 +5402,14 @@ query             0 ACGATCGAGCNGCTACG 17
 """,
         )
         self.assertEqual(alignment.shape, (2, 17))
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 17)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 2)
+        counts = alignment.counts(wildcard="N")
+        self.assertEqual(counts.aligned, 17)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 1)
         self.assertEqual(
             alignment.format("psl"),
             """\
@@ -5336,6 +5440,14 @@ query            22 ACGATCGAGCNGCTACG  5
 """,
         )
         self.assertEqual(alignment.shape, (2, 17))
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 17)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 2)
+        counts = alignment.counts(wildcard="N")
+        self.assertEqual(counts.aligned, 17)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 1)
         self.assertEqual(
             alignment.format("psl"),
             """\
@@ -5367,6 +5479,14 @@ query             0 ACGATCGAGCNGCTACG 17
 """,
         )
         self.assertEqual(alignment.shape, (2, 17))
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 17)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 2)
+        counts = alignment.counts(wildcard="N")
+        self.assertEqual(counts.aligned, 17)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 1)
         self.assertEqual(
             alignment.format("psl"),
             """\
@@ -5398,6 +5518,14 @@ target            6 ACGCTCGAGCAGCTACG 23
 query            22 ACGATCGAGCNGCTACG  5
 """,
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 17)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 2)
+        counts = alignment.counts(wildcard="N")
+        self.assertEqual(counts.aligned, 17)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 1)
         self.assertEqual(alignment.shape, (2, 17))
         self.assertEqual(
             alignment.format("psl"),
@@ -5432,6 +5560,14 @@ target            0 TTTTTNACGCTCGAGCAGCTACG----- 23
 query             0 ------ACGATCGAGCNGCTACGCCCNC 22
 """,
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 17)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 2)
+        counts = alignment.counts(wildcard="N")
+        self.assertEqual(counts.aligned, 17)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 1)
         self.assertEqual(alignment.shape, (2, 28))
         self.assertEqual(
             alignment.format("psl"),
@@ -5462,6 +5598,14 @@ target            0 TTTTTNACGCTCGAGCAGCTACG----- 23
 query            22 ------ACGATCGAGCNGCTACGCCCNC  0
 """,
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 17)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 2)
+        counts = alignment.counts(wildcard="N")
+        self.assertEqual(counts.aligned, 17)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 1)
         self.assertEqual(alignment.shape, (2, 28))
         self.assertEqual(
             alignment.format("psl"),
@@ -5493,6 +5637,14 @@ target            0 TTTTTNACGCTCGAGCAGCTACG----- 23
 query             0 ------ACGATCGAGCNGCTACGCCCNC 22
 """,
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 17)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 2)
+        counts = alignment.counts(wildcard="N")
+        self.assertEqual(counts.aligned, 17)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 1)
         self.assertEqual(alignment.shape, (2, 28))
         self.assertEqual(
             alignment.format("psl"),
@@ -5525,6 +5677,14 @@ target            0 TTTTTNACGCTCGAGCAGCTACG----- 23
 query            22 ------ACGATCGAGCNGCTACGCCCNC  0
 """,
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 17)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 2)
+        counts = alignment.counts(wildcard="N")
+        self.assertEqual(counts.aligned, 17)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 1)
         self.assertEqual(alignment.shape, (2, 28))
         self.assertEqual(
             alignment.format("psl"),
