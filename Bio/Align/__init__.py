@@ -3723,7 +3723,7 @@ class Alignment:
                     start1, start2 = end1, end2
         return m
 
-    def counts(self, substitution_matrix=None, ignore_sequences=False):
+    def counts(self, substitution_matrix=None, wildcard=None, ignore_sequences=False):
         """Count the number of identities, mismatches, and gaps of an alignment.
 
         Arguments:
@@ -3733,6 +3733,10 @@ class Alignment:
                                  (typically from the ``Bio.Align.substitution_matrices``
                                  submodule) to also calculate the number of positive
                                  matches in an amino acid alignment.
+         - wildcard            - The wildcard character. This character is
+                                 ignored in the calculation of the number of
+                                 matches, mismatches, and positives.
+                                 Default value: None.
          - ignore_sequences    - If True, do not calculate the number of identities,
                                  positives, and mismatches, but only calculate the
                                  number of aligned sequences and number of gaps
@@ -3790,6 +3794,8 @@ class Alignment:
          - internal_gaps       - the number of gaps in the interior of the alignment;
          - gaps                - the total number of gaps in the alignment;
         """
+        if wildcard is not None:
+            wildcard = ord(wildcard)
         left_insertions = left_deletions = 0
         right_insertions = right_deletions = 0
         internal_insertions = internal_deletions = 0
@@ -3872,7 +3878,9 @@ class Alignment:
                         for c1, c2 in zip(
                             sequence1[start1:end1], sequence2[start2:end2]
                         ):
-                            if c1 == c2:
+                            if c1 == wildcard or c2 == wildcard:
+                                pass
+                            elif c1 == c2:
                                 identities += 1
                             else:
                                 mismatches += 1
@@ -3881,7 +3889,9 @@ class Alignment:
                         for c1, c2 in zip(
                             sequence1[start1:end1], sequence2[start2:end2]
                         ):
-                            if c1 == c2:
+                            if c1 == wildcard or c2 == wildcard:
+                                pass
+                            elif c1 == c2:
                                 identities += 1
                             else:
                                 mismatches += 1

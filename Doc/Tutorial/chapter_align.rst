@@ -615,6 +615,10 @@ as properties.
    >>> counts.right_deletions
    2
 
+Use the ``wildcard`` argument to specify a letter that should be ignored when
+counting identities, positives, and mismatches (e.g. ``wildcard="?"`` or
+``wildcard="N"`` are common choices).
+
 For an alignment of more than two sequences, the number of identities,
 mismatches, and gaps are calculated and summed for all pairs of sequences in
 the alignment.
