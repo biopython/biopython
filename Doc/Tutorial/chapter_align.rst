@@ -278,6 +278,8 @@ An ``Alignment`` object created by the parser in ``Bio.Align`` may have
 additional attributes, depending on the alignment file format from which
 the alignment was read.
 
+.. _`subsec:slicing-indexing-alignment`:
+
 Slicing and indexing an alignment
 ---------------------------------
 

@@ -91,6 +91,17 @@ alignments:
    query             0 G-A-T 3
    <BLANKLINE>
 
+Use indices to get the aligned sequence (see :ref:`subsec:slicing-indexing-alignment`):
+
+.. cont-doctest
+
+.. code:: pycon
+
+   >>> alignment[0]
+   'GAACT'
+   >>> alignment[1]
+   'G-A-T'
+
 Each alignment stores the alignment score:
 
 .. cont-doctest
