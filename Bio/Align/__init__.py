@@ -3980,6 +3980,7 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
         "target_extend_gap_score": "extend_insertion_score",
         "target_end_gap_score": "end_insertion_score",
         "target_end_open_gap_score": "open_end_insertion_score",
+        "target_end_extend_gap_score": "extend_end_insertion_score",
         "query_open_gap_score": "open_deletion_score",
     }
 
