@@ -3958,6 +3958,7 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
         "target_internal_gap_score": "internal_insertion_score",
         "target_left_open_gap_score": "open_left_insertion_score",
         "target_left_extend_gap_score": "extend_left_insertion_score",
+        "target_left_gap_score": "left_insertion_score",
         "target_right_open_gap_score": "open_right_insertion_score",
         "target_right_extend_gap_score": "extend_right_insertion_score",
         "query_internal_open_gap_score": "open_internal_deletion_score",
