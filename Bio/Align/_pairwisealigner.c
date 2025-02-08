@@ -3090,7 +3090,7 @@ Aligner_set_query_gap_score(Aligner* self, PyObject* value, void* closure)
     return 0;
 }
 
-static char Aligner_open_internal_insertion_score__doc__[] = "target internal open gap score";
+static char Aligner_open_internal_insertion_score__doc__[] = "open internal insertion score";
 
 static PyObject*
 Aligner_get_open_internal_insertion_score(Aligner* self, void* closure)
@@ -3115,7 +3115,7 @@ Aligner_set_open_internal_insertion_score(Aligner* self,
     return 0;
 }
 
-static char Aligner_extend_internal_insertion_score__doc__[] = "target internal extend gap score";
+static char Aligner_extend_internal_insertion_score__doc__[] = "extend internal insertion score";
 
 static PyObject*
 Aligner_get_extend_internal_insertion_score(Aligner* self, void* closure)
@@ -3274,7 +3274,7 @@ Aligner_set_extend_end_insertion_score(Aligner* self, PyObject* value, void* clo
     return 0;
 }
 
-static char Aligner_open_left_insertion_score__doc__[] = "target left open score";
+static char Aligner_open_left_insertion_score__doc__[] = "open left insertion score";
 
 static PyObject*
 Aligner_get_open_left_insertion_score(Aligner* self, void* closure)
@@ -3298,7 +3298,7 @@ Aligner_set_open_left_insertion_score(Aligner* self, PyObject* value, void* clos
     return 0;
 }
 
-static char Aligner_extend_left_insertion_score__doc__[] = "target left extend score";
+static char Aligner_extend_left_insertion_score__doc__[] = "extend left insertion score";
 
 static PyObject*
 Aligner_get_extend_left_insertion_score(Aligner* self, void* closure)
@@ -3354,7 +3354,7 @@ Aligner_set_left_insertion_score(Aligner* self, PyObject* value, void* closure)
     return 0;
 }
 
-static char Aligner_target_right_gap_score_open__doc__[] = "target right open score";
+static char Aligner_open_right_insertion_score__doc__[] = "open right insertion score";
 
 static PyObject*
 Aligner_get_open_right_insertion_score(Aligner* self, void* closure)
@@ -3378,7 +3378,7 @@ Aligner_set_open_right_insertion_score(Aligner* self, PyObject* value, void* clo
     return 0;
 }
 
-static char Aligner_extend_right_insertion_score__doc__[] = "target right extend score";
+static char Aligner_extend_right_insertion_score__doc__[] = "extend right insertion score";
 
 static PyObject*
 Aligner_get_extend_right_insertion_score(Aligner* self, void* closure)
@@ -4040,7 +4040,7 @@ static PyGetSetDef Aligner_getset[] = {
     {"open_right_insertion_score",
         (getter)Aligner_get_open_right_insertion_score,
         (setter)Aligner_set_open_right_insertion_score,
-        Aligner_target_right_gap_score_open__doc__, NULL},
+        Aligner_open_right_insertion_score__doc__, NULL},
     {"extend_right_insertion_score",
         (getter)Aligner_get_extend_right_insertion_score,
         (setter)Aligner_set_extend_right_insertion_score,
