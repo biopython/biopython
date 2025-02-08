@@ -3952,32 +3952,35 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
         for name, value in kwargs.items():
             setattr(self, name, value)
 
-    _new_keys = {"target_internal_open_gap_score": "open_internal_insertion_score",
-                 "target_internal_extend_gap_score": "extend_internal_insertion_score",
-                 "target_left_open_gap_score": "open_left_insertion_score",
-                 "target_left_extend_gap_score": "extend_left_insertion_score",
-                 "target_right_open_gap_score": "open_right_insertion_score",
-                 "target_right_extend_gap_score": "extend_right_insertion_score",
-                 "query_internal_open_gap_score": "open_internal_deletion_score",
-                 "query_internal_extend_gap_score": "extend_internal_deletion_score",
-                 "query_left_open_gap_score": "open_left_deletion_score",
-                 "query_left_extend_gap_score": "extend_left_deletion_score",
-                 "query_right_open_gap_score": "open_right_deletion_score",
-                 "query_right_extend_gap_score": "extend_right_deletion_score",
-                 "target_gap_function": "insertion_score_function",
-                 "query_gap_function": "deletion_score_function",
-                 "internal_open_gap_score": "open_internal_gap_score",
-                 "internal_extend_gap_score": "extend_internal_gap_score",
-                 "left_open_gap_score": "open_left_gap_score",
-                 "left_extend_gap_score": "extend_left_gap_score",
-                 "right_open_gap_score": "open_right_gap_score",
-                 "right_extend_gap_score": "extend_right_gap_score",
-                 "end_open_gap_score": "open_end_gap_score",
-                 "end_extend_gap_score": "extend_end_gap_score",
-                 "target_open_gap_score": "open_insertion_score",
-                 "target_extend_gap_score": "extend_insertion_score",
-                 "query_open_gap_score": "open_deletion_score",
-               }
+    _new_keys = {
+        "target_internal_open_gap_score": "open_internal_insertion_score",
+        "target_internal_extend_gap_score": "extend_internal_insertion_score",
+        "target_left_open_gap_score": "open_left_insertion_score",
+        "target_left_extend_gap_score": "extend_left_insertion_score",
+        "target_right_open_gap_score": "open_right_insertion_score",
+        "target_right_extend_gap_score": "extend_right_insertion_score",
+        "query_internal_open_gap_score": "open_internal_deletion_score",
+        "query_internal_extend_gap_score": "extend_internal_deletion_score",
+        "query_left_open_gap_score": "open_left_deletion_score",
+        "query_left_extend_gap_score": "extend_left_deletion_score",
+        "query_right_open_gap_score": "open_right_deletion_score",
+        "query_right_extend_gap_score": "extend_right_deletion_score",
+        "target_gap_function": "insertion_score_function",
+        "query_gap_function": "deletion_score_function",
+        "internal_open_gap_score": "open_internal_gap_score",
+        "internal_extend_gap_score": "extend_internal_gap_score",
+        "left_open_gap_score": "open_left_gap_score",
+        "left_extend_gap_score": "extend_left_gap_score",
+        "right_open_gap_score": "open_right_gap_score",
+        "right_extend_gap_score": "extend_right_gap_score",
+        "end_open_gap_score": "open_end_gap_score",
+        "end_extend_gap_score": "extend_end_gap_score",
+        "target_gap_score": "insertion_score",
+        "target_open_gap_score": "open_insertion_score",
+        "target_extend_gap_score": "extend_insertion_score",
+        "query_open_gap_score": "open_deletion_score",
+    }
+
     def __setattr__(self, key, value):
         try:
             key = self._new_keys[key]
@@ -3986,7 +3989,9 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
                 # To prevent confusion, don't allow users to create new attributes.
                 # On CPython, __slots__ can be used for this, but currently
                 # __slots__ does not behave the same way on PyPy at least.
-                raise AttributeError("'PairwiseAligner' object has no attribute '%s'" % key)
+                raise AttributeError(
+                    "'PairwiseAligner' object has no attribute '%s'" % key
+                )
         else:
             # raise deprecation
             pass
