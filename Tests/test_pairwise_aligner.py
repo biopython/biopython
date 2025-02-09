@@ -1702,9 +1702,7 @@ class TestPairwisePenalizeEndgaps(unittest.TestCase):
         aligner.mode = "global"
         aligner.open_gap_score = -0.2
         aligner.extend_gap_score = -0.8
-        end_score = 0.0
-        aligner.target_end_gap_score = end_score
-        aligner.query_end_gap_score = end_score
+        aligner.end_gap_score = 0.0
         self.assertEqual(
             str(aligner),
             """\
@@ -1832,9 +1830,7 @@ query             2 GT-- 0
         aligner.mode = "fogsaa"
         aligner.open_gap_score = -0.2
         aligner.extend_gap_score = -0.8
-        end_score = 0.0
-        aligner.target_end_gap_score = end_score
-        aligner.query_end_gap_score = end_score
+        aligner.end_gap_score = 0.0
         self.assertEqual(
             str(aligner),
             """\
@@ -1911,13 +1907,9 @@ class TestPairwiseSeparateGapPenalties(unittest.TestCase):
         open_score, extend_score = (-0.3, 0)
         aligner.target_open_gap_score = open_score
         aligner.target_extend_gap_score = extend_score
-        aligner.target_end_open_gap_score = open_score
-        aligner.target_end_extend_gap_score = extend_score
         open_score, extend_score = (-0.8, 0)
         aligner.query_open_gap_score = open_score
         aligner.query_extend_gap_score = extend_score
-        aligner.query_end_open_gap_score = open_score
-        aligner.query_end_extend_gap_score = extend_score
         self.assertEqual(aligner.algorithm, "Gotoh local alignment algorithm")
         self.assertEqual(
             str(aligner),
@@ -2097,8 +2089,6 @@ class TestPairwiseSeparateGapPenaltiesWithExtension(unittest.TestCase):
         open_score, extend_score = (-0.1, 0)
         aligner.target_open_gap_score = open_score
         aligner.target_extend_gap_score = extend_score
-        aligner.target_end_open_gap_score = open_score
-        aligner.target_end_extend_gap_score = extend_score
         score = -0.1
         aligner.query_gap_score = score
         aligner.query_end_gap_score = score
