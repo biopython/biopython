@@ -3584,10 +3584,10 @@ Aligner_set_extend_internal_deletion_score(Aligner* self, PyObject* value,
     return 0;
 }
 
-static char Aligner_query_internal_gap_score__doc__[] = "query internal gap score";
+static char Aligner_internal_deletion_score__doc__[] = "internal deletion score";
 
 static PyObject*
-Aligner_get_query_internal_gap_score(Aligner* self, void* closure)
+Aligner_get_internal_deletion_score(Aligner* self, void* closure)
 {   if (self->deletion_score_function) {
         PyErr_SetString(PyExc_ValueError, "using a gap score function");
         return NULL;
@@ -3603,7 +3603,7 @@ Aligner_get_query_internal_gap_score(Aligner* self, void* closure)
 }
 
 static int
-Aligner_set_query_internal_gap_score(Aligner* self, PyObject* value,
+Aligner_set_internal_deletion_score(Aligner* self, PyObject* value,
                                      void* closure)
 {   const double score = PyFloat_AsDouble(value);
     if (PyErr_Occurred()) return -1;
@@ -4069,10 +4069,10 @@ static PyGetSetDef Aligner_getset[] = {
         (getter)Aligner_get_extend_internal_deletion_score,
         (setter)Aligner_set_extend_internal_deletion_score,
         Aligner_extend_internal_deletion_score__doc__, NULL},
-    {"query_internal_gap_score",
-        (getter)Aligner_get_query_internal_gap_score,
-        (setter)Aligner_set_query_internal_gap_score,
-        Aligner_query_internal_gap_score__doc__, NULL},
+    {"internal_deletion_score",
+        (getter)Aligner_get_internal_deletion_score,
+        (setter)Aligner_set_internal_deletion_score,
+        Aligner_internal_deletion_score__doc__, NULL},
     {"open_left_deletion_score",
         (getter)Aligner_get_open_left_deletion_score,
         (setter)Aligner_set_open_left_deletion_score,
