@@ -3988,6 +3988,7 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
         "query_open_gap_score": "open_deletion_score",
         "query_extend_gap_score": "extend_deletion_score",
         "query_end_gap_score": "end_deletion_score",
+        "query_end_open_gap_score": "open_end_deletion_score",
     }
 
     def __setattr__(self, key, value):
