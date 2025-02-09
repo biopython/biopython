@@ -3005,10 +3005,10 @@ Aligner_set_open_deletion_score(Aligner* self, PyObject* value, void* closure)
     return 0;
 }
 
-static char Aligner_query_extend_gap_score__doc__[] = "query gap extend score";
+static char Aligner_extend_deletion_score__doc__[] = "extend deletion score";
 
 static PyObject*
-Aligner_get_query_extend_gap_score(Aligner* self, void* closure)
+Aligner_get_extend_deletion_score(Aligner* self, void* closure)
 {   if (self->deletion_score_function) {
         PyErr_SetString(PyExc_ValueError, "using a gap score function");
         return NULL;
@@ -3025,7 +3025,7 @@ Aligner_get_query_extend_gap_score(Aligner* self, void* closure)
 }
 
 static int
-Aligner_set_query_extend_gap_score(Aligner* self, PyObject* value, void* closure)
+Aligner_set_extend_deletion_score(Aligner* self, PyObject* value, void* closure)
 {   const double score = PyFloat_AsDouble(value);
     if (PyErr_Occurred()) return -1;
     self->extend_internal_deletion_score = score;
@@ -3039,10 +3039,10 @@ Aligner_set_query_extend_gap_score(Aligner* self, PyObject* value, void* closure
     return 0;
 }
 
-static char Aligner_query_gap_score__doc__[] = "query gap score";
+static char Aligner_deletion_score__doc__[] = "deletion score";
 
 static PyObject*
-Aligner_get_query_gap_score(Aligner* self, void* closure)
+Aligner_get_deletion_score(Aligner* self, void* closure)
 {   if (self->deletion_score_function) {
         Py_INCREF(self->deletion_score_function);
         return self->deletion_score_function;
@@ -3062,7 +3062,7 @@ Aligner_get_query_gap_score(Aligner* self, void* closure)
 }
 
 static int
-Aligner_set_query_gap_score(Aligner* self, PyObject* value, void* closure)
+Aligner_set_deletion_score(Aligner* self, PyObject* value, void* closure)
 {   if (PyCallable_Check(value)) {
         Py_XDECREF(self->deletion_score_function);
         Py_INCREF(value);
@@ -3993,14 +3993,14 @@ static PyGetSetDef Aligner_getset[] = {
         (getter)Aligner_get_open_deletion_score,
         (setter)Aligner_set_open_deletion_score,
         Aligner_open_deletion_score__doc__, NULL},
-    {"query_extend_gap_score",
-        (getter)Aligner_get_query_extend_gap_score,
-        (setter)Aligner_set_query_extend_gap_score,
-        Aligner_query_extend_gap_score__doc__, NULL},
-    {"query_gap_score",
-        (getter)Aligner_get_query_gap_score,
-        (setter)Aligner_set_query_gap_score,
-        Aligner_query_gap_score__doc__, NULL},
+    {"extend_deletion_score",
+        (getter)Aligner_get_extend_deletion_score,
+        (setter)Aligner_set_extend_deletion_score,
+        Aligner_extend_deletion_score__doc__, NULL},
+    {"deletion_score",
+        (getter)Aligner_get_deletion_score,
+        (setter)Aligner_set_deletion_score,
+        Aligner_deletion_score__doc__, NULL},
     {"end_insertion_score",
         (getter)Aligner_get_end_insertion_score,
         (setter)Aligner_set_end_insertion_score,
