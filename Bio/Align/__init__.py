@@ -3859,8 +3859,7 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
 
     >>> aligner.open_gap_score = -0.5
     >>> aligner.extend_gap_score = -0.1
-    >>> aligner.target_end_gap_score = 0.0
-    >>> aligner.query_end_gap_score = 0.0
+    >>> aligner.end_gap_score = 0.0
     >>> for alignment in aligner.align("TACCG", "ACG"):
     ...     print("Score = %.1f:" % alignment.score)
     ...     print(alignment)
