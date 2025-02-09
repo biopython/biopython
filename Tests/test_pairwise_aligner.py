@@ -84,6 +84,113 @@ Pairwise sequence aligner with parameters
     def test_aligner_property_gapscores(self):
         aligner = Align.PairwiseAligner()
         open_score, extend_score = (-5, -1)
+        aligner.open_insertion_score = open_score
+        aligner.extend_insertion_score = extend_score
+        self.assertAlmostEqual(aligner.open_insertion_score, open_score)
+        self.assertAlmostEqual(aligner.extend_insertion_score, extend_score)
+        open_score, extend_score = (-6, -7)
+        aligner.open_deletion_score = open_score
+        aligner.extend_deletion_score = extend_score
+        self.assertAlmostEqual(aligner.open_deletion_score, open_score)
+        self.assertAlmostEqual(aligner.extend_deletion_score, extend_score)
+        open_score, extend_score = (-3, -9)
+        aligner.open_end_insertion_score = open_score
+        aligner.extend_end_insertion_score = extend_score
+        self.assertAlmostEqual(aligner.open_end_insertion_score, open_score)
+        self.assertAlmostEqual(aligner.extend_end_insertion_score, extend_score)
+        open_score, extend_score = (-1, -2)
+        aligner.open_end_deletion_score = open_score
+        aligner.extend_end_deletion_score = extend_score
+        self.assertEqual(
+            str(aligner),
+            """\
+Pairwise sequence aligner with parameters
+  wildcard: None
+  match_score: 1.000000
+  mismatch_score: 0.000000
+  open_internal_insertion_score: -5.000000
+  extend_internal_insertion_score: -1.000000
+  open_left_insertion_score: -3.000000
+  extend_left_insertion_score: -9.000000
+  open_right_insertion_score: -3.000000
+  extend_right_insertion_score: -9.000000
+  open_internal_deletion_score: -6.000000
+  extend_internal_deletion_score: -7.000000
+  open_left_deletion_score: -1.000000
+  extend_left_deletion_score: -2.000000
+  open_right_deletion_score: -1.000000
+  extend_right_deletion_score: -2.000000
+  mode: global
+""",
+        )
+        self.assertAlmostEqual(aligner.open_end_deletion_score, open_score)
+        self.assertAlmostEqual(aligner.extend_end_deletion_score, extend_score)
+        score = -3
+        aligner.insertion_score = score
+        self.assertAlmostEqual(aligner.insertion_score, score)
+        self.assertAlmostEqual(aligner.open_insertion_score, score)
+        self.assertAlmostEqual(aligner.extend_insertion_score, score)
+        score = -2
+        aligner.deletion_score = score
+        self.assertAlmostEqual(aligner.deletion_score, score)
+        self.assertAlmostEqual(aligner.open_deletion_score, score)
+        self.assertAlmostEqual(aligner.extend_deletion_score, score)
+        score = -4
+        aligner.end_insertion_score = score
+        self.assertAlmostEqual(aligner.end_insertion_score, score)
+        self.assertAlmostEqual(aligner.open_end_insertion_score, score)
+        self.assertAlmostEqual(aligner.extend_end_insertion_score, score)
+        self.assertAlmostEqual(aligner.left_insertion_score, score)
+        self.assertAlmostEqual(aligner.open_left_insertion_score, score)
+        self.assertAlmostEqual(aligner.extend_left_insertion_score, score)
+        self.assertAlmostEqual(aligner.right_insertion_score, score)
+        self.assertAlmostEqual(aligner.open_right_insertion_score, score)
+        self.assertAlmostEqual(aligner.extend_right_insertion_score, score)
+        score = -5
+        aligner.end_deletion_score = score
+        self.assertAlmostEqual(aligner.end_deletion_score, score)
+        self.assertAlmostEqual(aligner.open_end_deletion_score, score)
+        self.assertAlmostEqual(aligner.extend_end_deletion_score, score)
+        self.assertAlmostEqual(aligner.left_deletion_score, score)
+        self.assertAlmostEqual(aligner.open_left_deletion_score, score)
+        self.assertAlmostEqual(aligner.extend_left_deletion_score, score)
+        self.assertAlmostEqual(aligner.right_deletion_score, score)
+        self.assertAlmostEqual(aligner.open_right_deletion_score, score)
+        self.assertAlmostEqual(aligner.extend_right_deletion_score, score)
+        self.assertEqual(
+            str(aligner),
+            """\
+Pairwise sequence aligner with parameters
+  wildcard: None
+  match_score: 1.000000
+  mismatch_score: 0.000000
+  open_internal_insertion_score: -3.000000
+  extend_internal_insertion_score: -3.000000
+  open_left_insertion_score: -4.000000
+  extend_left_insertion_score: -4.000000
+  open_right_insertion_score: -4.000000
+  extend_right_insertion_score: -4.000000
+  open_internal_deletion_score: -2.000000
+  extend_internal_deletion_score: -2.000000
+  open_left_deletion_score: -5.000000
+  extend_left_deletion_score: -5.000000
+  open_right_deletion_score: -5.000000
+  extend_right_deletion_score: -5.000000
+  mode: global
+""",
+        )
+        with self.assertRaises(ValueError):
+            aligner.insertion_score = "wrong"
+        with self.assertRaises(ValueError):
+            aligner.deletion_score = "wrong"
+        with self.assertRaises(TypeError):
+            aligner.end_insertion_score = "wrong"
+        with self.assertRaises(TypeError):
+            aligner.end_deletion_score = "wrong"
+
+    def test_aligner_property_gapscores_deprecated(self):
+        aligner = Align.PairwiseAligner()
+        open_score, extend_score = (-5, -1)
         aligner.target_open_gap_score = open_score
         aligner.target_extend_gap_score = extend_score
         self.assertAlmostEqual(aligner.target_open_gap_score, open_score)
