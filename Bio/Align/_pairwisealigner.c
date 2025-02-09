@@ -3534,7 +3534,7 @@ Aligner_set_extend_end_deletion_score(Aligner* self, PyObject* value, void* clos
     return 0;
 }
 
-static char Aligner_open_internal_deletion_score__doc__[] = "query internal open gap score";
+static char Aligner_open_internal_deletion_score__doc__[] = "open internal deletion score";
 
 static PyObject*
 Aligner_get_open_internal_deletion_score(Aligner* self, void* closure)
@@ -3559,7 +3559,7 @@ Aligner_set_open_internal_deletion_score(Aligner* self, PyObject* value,
     return 0;
 }
 
-static char Aligner_extend_internal_deletion_score__doc__[] = "query internal extend gap score";
+static char Aligner_extend_internal_deletion_score__doc__[] = "extend internal deletion score";
 
 static PyObject*
 Aligner_get_extend_internal_deletion_score(Aligner* self, void* closure)
@@ -3617,7 +3617,7 @@ Aligner_set_internal_deletion_score(Aligner* self, PyObject* value,
     return 0;
 }
 
-static char Aligner_open_left_deletion_score__doc__[] = "query left open score";
+static char Aligner_open_left_deletion_score__doc__[] = "open left deletion score";
 
 static PyObject*
 Aligner_get_open_left_deletion_score(Aligner* self, void* closure)
@@ -3641,7 +3641,7 @@ Aligner_set_open_left_deletion_score(Aligner* self, PyObject* value, void* closu
     return 0;
 }
 
-static char Aligner_extend_left_deletion_score__doc__[] = "query left extend score";
+static char Aligner_extend_left_deletion_score__doc__[] = "extend left deletion score";
 
 static PyObject*
 Aligner_get_extend_left_deletion_score(Aligner* self, void* closure)
@@ -3697,7 +3697,7 @@ Aligner_set_left_deletion_score(Aligner* self, PyObject* value, void* closure)
     return 0;
 }
 
-static char Aligner_open_right_deletion_score__doc__[] = "query right open score";
+static char Aligner_open_right_deletion_score__doc__[] = "open right deletion score";
 
 static PyObject*
 Aligner_get_open_right_deletion_score(Aligner* self, void* closure)
@@ -3721,7 +3721,7 @@ Aligner_set_open_right_deletion_score(Aligner* self, PyObject* value, void* clos
     return 0;
 }
 
-static char Aligner_extend_right_deletion_score__doc__[] = "query right extend score";
+static char Aligner_extend_right_deletion_score__doc__[] = "extend right deletion score";
 
 static PyObject*
 Aligner_get_extend_right_deletion_score(Aligner* self, void* closure)
