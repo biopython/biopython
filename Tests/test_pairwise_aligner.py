@@ -1162,8 +1162,8 @@ query             2 GA- 0
     def test_match_score_open_penalty3(self):
         aligner = Align.PairwiseAligner()
         aligner.mode = "global"
-        aligner.query_open_gap_score = -0.1
-        aligner.query_extend_gap_score = 0.0
+        aligner.open_deletion_score = -0.1
+        aligner.extend_deletion_score = 0.0
         self.assertEqual(aligner.algorithm, "Gotoh global alignment algorithm")
         self.assertEqual(
             str(aligner),
@@ -1233,8 +1233,8 @@ query             3 GA--T 0
     def test_match_score_open_penalty3_fogsaa(self):
         aligner = Align.PairwiseAligner()
         aligner.mode = "fogsaa"
-        aligner.query_open_gap_score = -0.1
-        aligner.query_extend_gap_score = 0.0
+        aligner.open_deletion_score = -0.1
+        aligner.extend_deletion_score = 0.0
         self.assertEqual(
             aligner.algorithm, "Fast Optimal Global Sequence Alignment Algorithm"
         )
@@ -2015,8 +2015,8 @@ class TestPairwiseSeparateGapPenalties(unittest.TestCase):
         aligner.open_insertion_score = open_score
         aligner.extend_insertion_score = extend_score
         open_score, extend_score = (-0.8, 0)
-        aligner.query_open_gap_score = open_score
-        aligner.query_extend_gap_score = extend_score
+        aligner.open_deletion_score = open_score
+        aligner.extend_deletion_score = extend_score
         self.assertEqual(aligner.algorithm, "Gotoh local alignment algorithm")
         self.assertEqual(
             str(aligner),
@@ -2118,8 +2118,8 @@ query             4 GTCT 0
         aligner.mode = "local"
         aligner.open_insertion_score = -0.3
         aligner.extend_insertion_score = 0.0
-        aligner.query_open_gap_score = -0.2
-        aligner.query_extend_gap_score = 0.0
+        aligner.open_deletion_score = -0.2
+        aligner.extend_deletion_score = 0.0
         self.assertEqual(aligner.algorithm, "Gotoh local alignment algorithm")
         self.assertEqual(
             str(aligner),
@@ -2197,8 +2197,7 @@ class TestPairwiseSeparateGapPenaltiesWithExtension(unittest.TestCase):
         aligner.open_insertion_score = open_score
         aligner.extend_insertion_score = extend_score
         score = -0.1
-        aligner.query_gap_score = score
-        aligner.query_end_gap_score = score
+        aligner.deletion_score = score
         self.assertEqual(aligner.algorithm, "Gotoh local alignment algorithm")
         self.assertEqual(
             str(aligner),
@@ -3075,7 +3074,7 @@ class TestPerSiteGapPenalties(unittest.TestCase):
         aligner.match_score = 1
         aligner.mismatch_score = -1
         aligner.insertion_score = nogaps
-        aligner.query_gap_score = specificgaps
+        aligner.deletion_score = specificgaps
         self.assertEqual(
             str(aligner),
             f"""Pairwise sequence aligner with parameters
@@ -3159,7 +3158,7 @@ query            22 --AABBBAAAACC----------CCAAAABBBAA--  0
         aligner.match_score = 1
         aligner.mismatch_score = -1
         aligner.insertion_score = nogaps
-        aligner.query_gap_score = specificgaps
+        aligner.deletion_score = specificgaps
         self.assertEqual(
             str(aligner),
             f"""Pairwise sequence aligner with parameters
@@ -3323,7 +3322,7 @@ query             6 TTG--GAA 0
                 alignment.aligned, np.array([[[0, 2], [4, 6]], [[6, 4], [2, 0]]])
             )
         )
-        aligner.query_gap_score = gap_score
+        aligner.deletion_score = gap_score
         self.assertEqual(
             str(aligner),
             f"""Pairwise sequence aligner with parameters
@@ -3497,7 +3496,7 @@ query             6 TTG--GAA 0
         aligner.match_score = 1
         aligner.mismatch_score = -1
         aligner.insertion_score = nogaps
-        aligner.query_gap_score = specificgaps
+        aligner.deletion_score = specificgaps
         self.assertEqual(
             aligner.algorithm, "Waterman-Smith-Beyer local alignment algorithm"
         )
@@ -3603,7 +3602,7 @@ query            13 CCCCAAAABBBAA  0
         aligner.match_score = 1
         aligner.mismatch_score = -1
         aligner.insertion_score = nogaps
-        aligner.query_gap_score = specificgaps
+        aligner.deletion_score = specificgaps
         self.assertEqual(
             str(aligner),
             f"""Pairwise sequence aligner with parameters
@@ -3783,7 +3782,7 @@ query             2 AA 0
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[4, 6]], [[2, 0]]]))
         )
-        aligner.query_gap_score = gap_score
+        aligner.deletion_score = gap_score
         self.assertEqual(
             str(aligner),
             f"""Pairwise sequence aligner with parameters
@@ -3870,7 +3869,7 @@ query             2 AA 0
 
         aligner = Align.PairwiseAligner()
         aligner.insertion_score = gap_score
-        aligner.query_gap_score = -1
+        aligner.deletion_score = -1
         aligner.mode = "global"
         with self.assertRaises(RuntimeError):
             aligner.score(seq1, seq2)
@@ -3894,7 +3893,7 @@ query             2 AA 0
             alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
             alignments = list(alignments)
         aligner.insertion_score = -1
-        aligner.query_gap_score = gap_score
+        aligner.deletion_score = gap_score
         aligner.mode = "global"
         with self.assertRaises(RuntimeError):
             aligner.score(seq1, seq2)
@@ -5043,8 +5042,8 @@ class TestAlignmentFormat(unittest.TestCase):
         chromosome = "ACGATCAGCGAGCATNGAGCACTACGACAGCGAGTGACCACTATTCGCGATCAGGAGCAGATACTTTACGAGCATCGGC"
         transcript = "AGCATCGAGCGACTTGAGTACTATTCATACTTTCGAGC"
         aligner = Align.PairwiseAligner()
-        aligner.query_extend_gap_score = 0
-        aligner.query_open_gap_score = -3
+        aligner.extend_deletion_score = 0
+        aligner.open_deletion_score = -3
         aligner.insertion_score = -3
         aligner.end_gap_score = 0
         aligner.mismatch = -1
