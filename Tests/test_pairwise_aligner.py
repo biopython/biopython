@@ -4968,12 +4968,12 @@ class TestAlignerPickling(unittest.TestCase):
         aligner.extend_left_insertion_score = -3
         aligner.open_right_insertion_score = -4.5
         aligner.extend_right_insertion_score = -4.3
-        aligner.query_internal_open_gap_score = -2
-        aligner.query_internal_extend_gap_score = -2.5
-        aligner.query_left_open_gap_score = -9.1
-        aligner.query_left_extend_gap_score = +1.7
-        aligner.query_right_open_gap_score = -1.9
-        aligner.query_right_extend_gap_score = -2.0
+        aligner.open_internal_deletion_score = -2
+        aligner.extend_internal_deletion_score = -2.5
+        aligner.open_left_deletion_score = -9.1
+        aligner.extend_left_deletion_score = +1.7
+        aligner.open_right_deletion_score = -1.9
+        aligner.extend_right_deletion_score = -2.0
         aligner.mode = "global"
         state = pickle.dumps(aligner)
         pickled_aligner = pickle.loads(state)
@@ -5012,27 +5012,27 @@ class TestAlignerPickling(unittest.TestCase):
             pickled_aligner.extend_right_insertion_score,
         )
         self.assertAlmostEqual(
-            aligner.query_internal_open_gap_score,
-            pickled_aligner.query_internal_open_gap_score,
+            aligner.open_internal_deletion_score,
+            pickled_aligner.open_internal_deletion_score,
         )
         self.assertAlmostEqual(
-            aligner.query_internal_extend_gap_score,
-            pickled_aligner.query_internal_extend_gap_score,
+            aligner.extend_internal_deletion_score,
+            pickled_aligner.extend_internal_deletion_score,
         )
         self.assertAlmostEqual(
-            aligner.query_left_open_gap_score, pickled_aligner.query_left_open_gap_score
+            aligner.open_left_deletion_score, pickled_aligner.open_left_deletion_score
         )
         self.assertAlmostEqual(
-            aligner.query_left_extend_gap_score,
-            pickled_aligner.query_left_extend_gap_score,
+            aligner.extend_left_deletion_score,
+            pickled_aligner.extend_left_deletion_score,
         )
         self.assertAlmostEqual(
-            aligner.query_right_open_gap_score,
-            pickled_aligner.query_right_open_gap_score,
+            aligner.open_right_deletion_score,
+            pickled_aligner.open_right_deletion_score,
         )
         self.assertAlmostEqual(
-            aligner.query_right_extend_gap_score,
-            pickled_aligner.query_right_extend_gap_score,
+            aligner.extend_right_deletion_score,
+            pickled_aligner.extend_right_deletion_score,
         )
         self.assertEqual(aligner.mode, pickled_aligner.mode)
 
