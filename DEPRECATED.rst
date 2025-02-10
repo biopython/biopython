@@ -633,6 +633,11 @@ was deprecated in Release 1.79.
 The PairwiseAlignment class was deprecated in Release 1.80, and removed in
 Release 1.82. Please use the new Alignment class instead.
 
+Attributes of the PairwiseAligner class referring to gap scores were renamed in
+Release 1.86, with the original name still available with a deprecation warning.
+These attributes were renamed to be consistent with the AlignmentCounts class
+and with the common nomenclature in the literature.
+
 Bio.Align.Generic
 -----------------
 This module which defined to original (Multiple-Sequence) Alignment class was

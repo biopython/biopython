@@ -4183,8 +4183,7 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
 
     >>> aligner.open_gap_score = -0.5
     >>> aligner.extend_gap_score = -0.1
-    >>> aligner.target_end_gap_score = 0.0
-    >>> aligner.query_end_gap_score = 0.0
+    >>> aligner.end_gap_score = 0.0
     >>> for alignment in aligner.align("TACCG", "ACG"):
     ...     print("Score = %.1f:" % alignment.score)
     ...     print(alignment)
@@ -4276,13 +4275,86 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
         for name, value in kwargs.items():
             setattr(self, name, value)
 
+    _new_keys = {
+        "target_internal_open_gap_score": "open_internal_insertion_score",
+        "target_internal_extend_gap_score": "extend_internal_insertion_score",
+        "target_internal_gap_score": "internal_insertion_score",
+        "target_left_open_gap_score": "open_left_insertion_score",
+        "target_left_extend_gap_score": "extend_left_insertion_score",
+        "target_left_gap_score": "left_insertion_score",
+        "target_right_open_gap_score": "open_right_insertion_score",
+        "target_right_extend_gap_score": "extend_right_insertion_score",
+        "target_right_gap_score": "right_insertion_score",
+        "query_internal_open_gap_score": "open_internal_deletion_score",
+        "query_internal_extend_gap_score": "extend_internal_deletion_score",
+        "query_left_open_gap_score": "open_left_deletion_score",
+        "query_left_extend_gap_score": "extend_left_deletion_score",
+        "query_right_open_gap_score": "open_right_deletion_score",
+        "query_right_extend_gap_score": "extend_right_deletion_score",
+        "target_gap_function": "insertion_score_function",
+        "query_gap_function": "deletion_score_function",
+        "internal_open_gap_score": "open_internal_gap_score",
+        "internal_extend_gap_score": "extend_internal_gap_score",
+        "left_open_gap_score": "open_left_gap_score",
+        "left_extend_gap_score": "extend_left_gap_score",
+        "right_open_gap_score": "open_right_gap_score",
+        "right_extend_gap_score": "extend_right_gap_score",
+        "end_open_gap_score": "open_end_gap_score",
+        "end_extend_gap_score": "extend_end_gap_score",
+        "target_gap_score": "insertion_score",
+        "target_open_gap_score": "open_insertion_score",
+        "target_extend_gap_score": "extend_insertion_score",
+        "target_end_gap_score": "end_insertion_score",
+        "target_end_open_gap_score": "open_end_insertion_score",
+        "target_end_extend_gap_score": "extend_end_insertion_score",
+        "query_gap_score": "deletion_score",
+        "query_open_gap_score": "open_deletion_score",
+        "query_extend_gap_score": "extend_deletion_score",
+        "query_end_gap_score": "end_deletion_score",
+        "query_end_open_gap_score": "open_end_deletion_score",
+        "query_end_extend_gap_score": "extend_end_deletion_score",
+        "query_internal_gap_score": "internal_deletion_score",
+        "query_left_gap_score": "left_deletion_score",
+        "query_right_gap_score": "right_deletion_score",
+    }
+
     def __setattr__(self, key, value):
-        if key not in dir(_pairwisealigner.PairwiseAligner):
-            # To prevent confusion, don't allow users to create new attributes.
-            # On CPython, __slots__ can be used for this, but currently
-            # __slots__ does not behave the same way on PyPy at least.
-            raise AttributeError("'PairwiseAligner' object has no attribute '%s'" % key)
+        try:
+            new_key = self._new_keys[key]
+        except KeyError:
+            if key not in dir(_pairwisealigner.PairwiseAligner):
+                # To prevent confusion, don't allow users to create new attributes.
+                # On CPython, __slots__ can be used for this, but currently
+                # __slots__ does not behave the same way on PyPy at least.
+                raise AttributeError(
+                    "'PairwiseAligner' object has no attribute '%s'" % key
+                )
+        else:
+            warnings.warn(
+                """\
+The attribute '%s' was renamed to '%s'. This was done to be consistent with the
+AlignmentCounts object returned by the .counts method of an Alignment object."""
+                % (key, new_key),
+                BiopythonDeprecationWarning,
+            )
+            key = new_key
         _pairwisealigner.PairwiseAligner.__setattr__(self, key, value)
+
+    def __getattr__(self, key):
+        try:
+            new_key = self._new_keys[key]
+        except KeyError:
+            pass
+        else:
+            warnings.warn(
+                """\
+The attribute '%s' was renamed to '%s'. This was done to be consistent with the
+AlignmentCounts object returned by the .counts method of an Alignment object."""
+                % (key, new_key),
+                BiopythonDeprecationWarning,
+            )
+            key = new_key
+        return _pairwisealigner.PairwiseAligner.__getattribute__(self, key)
 
     def align(self, seqA, seqB, strand="+"):
         """Return the alignments of two sequences using PairwiseAligner."""
@@ -4313,18 +4385,18 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
     def __getstate__(self):
         state = {
             "wildcard": self.wildcard,
-            "target_internal_open_gap_score": self.target_internal_open_gap_score,
-            "target_internal_extend_gap_score": self.target_internal_extend_gap_score,
-            "target_left_open_gap_score": self.target_left_open_gap_score,
-            "target_left_extend_gap_score": self.target_left_extend_gap_score,
-            "target_right_open_gap_score": self.target_right_open_gap_score,
-            "target_right_extend_gap_score": self.target_right_extend_gap_score,
-            "query_internal_open_gap_score": self.query_internal_open_gap_score,
-            "query_internal_extend_gap_score": self.query_internal_extend_gap_score,
-            "query_left_open_gap_score": self.query_left_open_gap_score,
-            "query_left_extend_gap_score": self.query_left_extend_gap_score,
-            "query_right_open_gap_score": self.query_right_open_gap_score,
-            "query_right_extend_gap_score": self.query_right_extend_gap_score,
+            "open_internal_insertion_score": self.open_internal_insertion_score,
+            "extend_internal_insertion_score": self.extend_internal_insertion_score,
+            "open_left_insertion_score": self.open_left_insertion_score,
+            "extend_left_insertion_score": self.extend_left_insertion_score,
+            "open_right_insertion_score": self.open_right_insertion_score,
+            "extend_right_insertion_score": self.extend_right_insertion_score,
+            "open_internal_deletion_score": self.open_internal_deletion_score,
+            "extend_internal_deletion_score": self.extend_internal_deletion_score,
+            "open_left_deletion_score": self.open_left_deletion_score,
+            "extend_left_deletion_score": self.extend_left_deletion_score,
+            "open_right_deletion_score": self.open_right_deletion_score,
+            "extend_right_deletion_score": self.extend_right_deletion_score,
             "mode": self.mode,
         }
         if self.substitution_matrix is None:
@@ -4336,20 +4408,18 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
 
     def __setstate__(self, state):
         self.wildcard = state["wildcard"]
-        self.target_internal_open_gap_score = state["target_internal_open_gap_score"]
-        self.target_internal_extend_gap_score = state[
-            "target_internal_extend_gap_score"
-        ]
-        self.target_left_open_gap_score = state["target_left_open_gap_score"]
-        self.target_left_extend_gap_score = state["target_left_extend_gap_score"]
-        self.target_right_open_gap_score = state["target_right_open_gap_score"]
-        self.target_right_extend_gap_score = state["target_right_extend_gap_score"]
-        self.query_internal_open_gap_score = state["query_internal_open_gap_score"]
-        self.query_internal_extend_gap_score = state["query_internal_extend_gap_score"]
-        self.query_left_open_gap_score = state["query_left_open_gap_score"]
-        self.query_left_extend_gap_score = state["query_left_extend_gap_score"]
-        self.query_right_open_gap_score = state["query_right_open_gap_score"]
-        self.query_right_extend_gap_score = state["query_right_extend_gap_score"]
+        self.open_internal_insertion_score = state["open_internal_insertion_score"]
+        self.extend_internal_insertion_score = state["extend_internal_insertion_score"]
+        self.open_left_insertion_score = state["open_left_insertion_score"]
+        self.extend_left_insertion_score = state["extend_left_insertion_score"]
+        self.open_right_insertion_score = state["open_right_insertion_score"]
+        self.extend_right_insertion_score = state["extend_right_insertion_score"]
+        self.open_internal_deletion_score = state["open_internal_deletion_score"]
+        self.extend_internal_deletion_score = state["extend_internal_deletion_score"]
+        self.open_left_deletion_score = state["open_left_deletion_score"]
+        self.extend_left_deletion_score = state["extend_left_deletion_score"]
+        self.open_right_deletion_score = state["open_right_deletion_score"]
+        self.extend_right_deletion_score = state["extend_right_deletion_score"]
         self.mode = state["mode"]
         substitution_matrix = state.get("substitution_matrix")
         if substitution_matrix is None:
