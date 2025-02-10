@@ -4006,9 +4006,11 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
                     "'PairwiseAligner' object has no attribute '%s'" % key
                 )
         else:
-            warnings.warn("""\
+            warnings.warn(
+                """\
 The attribute '%s' was renamed to '%s'. This was done to be consistent with the
-AlignmentCounts object returned by the .counts method of an Alignment object.""" % (key, new_key),
+AlignmentCounts object returned by the .counts method of an Alignment object."""
+                % (key, new_key),
                 BiopythonDeprecationWarning,
             )
             key = new_key
@@ -4020,9 +4022,11 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
         except KeyError:
             pass
         else:
-            warnings.warn("""\
+            warnings.warn(
+                """\
 The attribute '%s' was renamed to '%s'. This was done to be consistent with the
-AlignmentCounts object returned by the .counts method of an Alignment object.""" % (key, new_key),
+AlignmentCounts object returned by the .counts method of an Alignment object."""
+                % (key, new_key),
                 BiopythonDeprecationWarning,
             )
             key = new_key

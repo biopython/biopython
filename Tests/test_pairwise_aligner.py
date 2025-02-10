@@ -764,6 +764,7 @@ Pairwise sequence aligner with parameters
 
         def gap_function1(x, y):
             return x + y
+
         with self.assertWarns(BiopythonDeprecationWarning):
             aligner.query_gap_score = gap_function1
         gap_function = aligner.deletion_score
@@ -771,11 +772,13 @@ Pairwise sequence aligner with parameters
 
         def gap_function2(x, y):
             return x * y
+
         aligner.deletion_score = gap_function2
         self.assertEqual(aligner.deletion_score, gap_function2)
 
         def gap_function3(x, y):
             return x / y
+
         aligner.deletion_score = gap_function3
         with self.assertWarns(BiopythonDeprecationWarning):
             gap_function = aligner.query_gap_score
@@ -783,6 +786,7 @@ Pairwise sequence aligner with parameters
 
         def gap_function4(x, y):
             return x / y - 9
+
         with self.assertWarns(BiopythonDeprecationWarning):
             aligner.query_gap_score = gap_function4
         with self.assertWarns(BiopythonDeprecationWarning):
@@ -791,6 +795,7 @@ Pairwise sequence aligner with parameters
 
         def gap_function5(x, y):
             return x + 2 * y
+
         with self.assertWarns(BiopythonDeprecationWarning):
             aligner.target_gap_score = gap_function5
         gap_function = aligner.insertion_score
@@ -798,11 +803,13 @@ Pairwise sequence aligner with parameters
 
         def gap_function6(x, y):
             return x * y + 2
+
         aligner.insertion_score = gap_function6
         self.assertEqual(aligner.insertion_score, gap_function6)
 
         def gap_function7(x, y):
             return x / y - 2
+
         aligner.insertion_score = gap_function7
         with self.assertWarns(BiopythonDeprecationWarning):
             gap_function = aligner.target_gap_score
@@ -810,6 +817,7 @@ Pairwise sequence aligner with parameters
 
         def gap_function8(x, y):
             return x / y * 2
+
         with self.assertWarns(BiopythonDeprecationWarning):
             aligner.target_gap_score = gap_function8
         with self.assertWarns(BiopythonDeprecationWarning):
@@ -818,6 +826,7 @@ Pairwise sequence aligner with parameters
 
         def gap_function9(x, y):
             return x + 9 * y
+
         aligner.gap_score = gap_function9
         gap_function = aligner.gap_score
         self.assertEqual(gap_function, gap_function9)
