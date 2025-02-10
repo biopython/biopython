@@ -3996,7 +3996,7 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
 
     def __setattr__(self, key, value):
         try:
-            key = self._new_keys[key]
+            new_key = self._new_keys[key]
         except KeyError:
             if key not in dir(_pairwisealigner.PairwiseAligner):
                 # To prevent confusion, don't allow users to create new attributes.
@@ -4006,18 +4006,26 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
                     "'PairwiseAligner' object has no attribute '%s'" % key
                 )
         else:
-            # raise deprecation
-            pass
+            warnings.warn("""\
+The attribute '%s' was renamed to '%s'. This was done to be consistent with the
+AlignmentCounts object returned by the .counts method of an Alignment object.""" % (key, new_key),
+                BiopythonDeprecationWarning,
+            )
+            key = new_key
         _pairwisealigner.PairwiseAligner.__setattr__(self, key, value)
 
     def __getattr__(self, key):
         try:
-            key = self._new_keys[key]
+            new_key = self._new_keys[key]
         except KeyError:
             pass
         else:
-            # raise deprecation
-            pass
+            warnings.warn("""\
+The attribute '%s' was renamed to '%s'. This was done to be consistent with the
+AlignmentCounts object returned by the .counts method of an Alignment object.""" % (key, new_key),
+                BiopythonDeprecationWarning,
+            )
+            key = new_key
         return _pairwisealigner.PairwiseAligner.__getattribute__(self, key)
 
     def align(self, seqA, seqB, strand="+"):

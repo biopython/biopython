@@ -18,6 +18,7 @@ except ImportError:
         "Install numpy if you want to use Bio.Align."
     ) from None
 
+from Bio import BiopythonDeprecationWarning
 from Bio import BiopythonWarning
 from Bio import Align
 from Bio import SeqIO
@@ -190,110 +191,627 @@ Pairwise sequence aligner with parameters
 
     def test_aligner_property_gapscores_deprecated(self):
         aligner = Align.PairwiseAligner()
-        open_score, extend_score = (-5, -1)
-        aligner.target_open_gap_score = open_score
-        aligner.target_extend_gap_score = extend_score
-        self.assertAlmostEqual(aligner.target_open_gap_score, open_score)
-        self.assertAlmostEqual(aligner.target_extend_gap_score, extend_score)
-        open_score, extend_score = (-6, -7)
-        aligner.query_open_gap_score = open_score
-        aligner.query_extend_gap_score = extend_score
-        self.assertAlmostEqual(aligner.query_open_gap_score, open_score)
-        self.assertAlmostEqual(aligner.query_extend_gap_score, extend_score)
-        open_score, extend_score = (-3, -9)
-        aligner.target_end_open_gap_score = open_score
-        aligner.target_end_extend_gap_score = extend_score
-        self.assertAlmostEqual(aligner.target_end_open_gap_score, open_score)
-        self.assertAlmostEqual(aligner.target_end_extend_gap_score, extend_score)
-        open_score, extend_score = (-1, -2)
-        aligner.query_end_open_gap_score = open_score
-        aligner.query_end_extend_gap_score = extend_score
-        self.assertEqual(
-            str(aligner),
-            """\
-Pairwise sequence aligner with parameters
-  wildcard: None
-  match_score: 1.000000
-  mismatch_score: 0.000000
-  open_internal_insertion_score: -5.000000
-  extend_internal_insertion_score: -1.000000
-  open_left_insertion_score: -3.000000
-  extend_left_insertion_score: -9.000000
-  open_right_insertion_score: -3.000000
-  extend_right_insertion_score: -9.000000
-  open_internal_deletion_score: -6.000000
-  extend_internal_deletion_score: -7.000000
-  open_left_deletion_score: -1.000000
-  extend_left_deletion_score: -2.000000
-  open_right_deletion_score: -1.000000
-  extend_right_deletion_score: -2.000000
-  mode: global
-""",
-        )
-        self.assertAlmostEqual(aligner.query_end_open_gap_score, open_score)
-        self.assertAlmostEqual(aligner.query_end_extend_gap_score, extend_score)
-        score = -3
-        aligner.target_gap_score = score
-        self.assertAlmostEqual(aligner.target_gap_score, score)
-        self.assertAlmostEqual(aligner.target_open_gap_score, score)
-        self.assertAlmostEqual(aligner.target_extend_gap_score, score)
-        score = -2
-        aligner.query_gap_score = score
-        self.assertAlmostEqual(aligner.query_gap_score, score)
-        self.assertAlmostEqual(aligner.query_open_gap_score, score)
-        self.assertAlmostEqual(aligner.query_extend_gap_score, score)
-        score = -4
-        aligner.target_end_gap_score = score
-        self.assertAlmostEqual(aligner.target_end_gap_score, score)
-        self.assertAlmostEqual(aligner.target_end_open_gap_score, score)
-        self.assertAlmostEqual(aligner.target_end_extend_gap_score, score)
-        self.assertAlmostEqual(aligner.target_left_gap_score, score)
-        self.assertAlmostEqual(aligner.open_left_insertion_score, score)
-        self.assertAlmostEqual(aligner.extend_left_insertion_score, score)
-        self.assertAlmostEqual(aligner.target_right_gap_score, score)
-        self.assertAlmostEqual(aligner.target_right_open_gap_score, score)
-        self.assertAlmostEqual(aligner.target_right_extend_gap_score, score)
-        score = -5
-        aligner.query_end_gap_score = score
-        self.assertAlmostEqual(aligner.query_end_gap_score, score)
-        self.assertAlmostEqual(aligner.query_end_open_gap_score, score)
-        self.assertAlmostEqual(aligner.query_end_extend_gap_score, score)
-        self.assertAlmostEqual(aligner.query_left_gap_score, score)
-        self.assertAlmostEqual(aligner.query_left_open_gap_score, score)
-        self.assertAlmostEqual(aligner.query_left_extend_gap_score, score)
-        self.assertAlmostEqual(aligner.query_right_gap_score, score)
-        self.assertAlmostEqual(aligner.query_right_open_gap_score, score)
-        self.assertAlmostEqual(aligner.query_right_extend_gap_score, score)
-        self.assertEqual(
-            str(aligner),
-            """\
-Pairwise sequence aligner with parameters
-  wildcard: None
-  match_score: 1.000000
-  mismatch_score: 0.000000
-  open_internal_insertion_score: -3.000000
-  extend_internal_insertion_score: -3.000000
-  open_left_insertion_score: -4.000000
-  extend_left_insertion_score: -4.000000
-  open_right_insertion_score: -4.000000
-  extend_right_insertion_score: -4.000000
-  open_internal_deletion_score: -2.000000
-  extend_internal_deletion_score: -2.000000
-  open_left_deletion_score: -5.000000
-  extend_left_deletion_score: -5.000000
-  open_right_deletion_score: -5.000000
-  extend_right_deletion_score: -5.000000
-  mode: global
-""",
-        )
-        with self.assertRaises(ValueError):
-            aligner.target_gap_score = "wrong"
-        with self.assertRaises(ValueError):
-            aligner.query_gap_score = "wrong"
-        with self.assertRaises(TypeError):
-            aligner.target_end_gap_score = "wrong"
-        with self.assertRaises(TypeError):
-            aligner.query_end_gap_score = "wrong"
+        value = 1
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.target_left_open_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.target_left_open_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 2
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.query_left_open_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.query_left_open_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 3
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.left_open_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.left_open_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 4
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.target_internal_open_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.target_internal_open_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 5
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.query_internal_open_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.query_internal_open_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 6
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.internal_open_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.internal_open_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 7
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.target_right_open_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.target_right_open_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 8
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.query_right_open_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.query_right_open_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 9
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.right_open_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.right_open_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 10
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.target_end_open_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.target_end_open_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 11
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.query_end_open_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.query_end_open_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 12
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.end_open_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.end_open_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 13
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.target_open_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.target_open_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 14
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.query_open_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.query_open_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 15
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.target_left_extend_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.target_left_extend_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 16
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.query_left_extend_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.query_left_extend_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 17
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.left_extend_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.left_extend_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 18
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.target_internal_extend_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.target_internal_extend_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 19
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.query_internal_extend_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.query_internal_extend_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 20
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.internal_extend_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.internal_extend_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 21
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.target_right_extend_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.target_right_extend_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 22
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.query_right_extend_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.query_right_extend_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 23
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.right_extend_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.right_extend_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 24
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.target_end_extend_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.target_end_extend_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 25
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.query_end_extend_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.query_end_extend_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 26
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.end_extend_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.end_extend_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 27
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.target_extend_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.target_extend_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 28
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.query_extend_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.query_extend_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 29
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.target_left_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.target_left_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 30
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.query_left_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.query_left_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 31
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.target_internal_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.target_internal_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 32
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.query_internal_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.query_internal_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 33
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.target_right_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.target_right_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 34
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.query_right_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.query_right_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 35
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.target_end_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.target_end_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 36
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.query_end_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.query_end_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 37
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.target_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.target_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 38
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.query_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.query_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 39
+        aligner.open_left_insertion_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.target_left_open_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 40
+        aligner.open_left_deletion_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.query_left_open_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 41
+        aligner.open_left_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.left_open_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 42
+        aligner.open_internal_insertion_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.target_internal_open_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 43
+        aligner.open_internal_deletion_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.query_internal_open_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 44
+        aligner.open_internal_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.internal_open_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 45
+        aligner.open_right_insertion_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.target_right_open_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 46
+        aligner.open_right_deletion_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.query_right_open_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 47
+        aligner.open_right_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.right_open_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 48
+        aligner.open_end_insertion_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.target_end_open_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 49
+        aligner.open_end_deletion_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.query_end_open_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 50
+        aligner.open_end_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.end_open_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 51
+        aligner.open_insertion_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.target_open_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 52
+        aligner.open_deletion_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.query_open_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 53
+        aligner.extend_left_insertion_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.target_left_extend_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 54
+        aligner.extend_left_deletion_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.query_left_extend_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 55
+        aligner.extend_left_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.left_extend_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 56
+        aligner.extend_internal_insertion_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.target_internal_extend_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 57
+        aligner.extend_internal_deletion_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.query_internal_extend_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 58
+        aligner.extend_internal_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.internal_extend_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 59
+        aligner.extend_right_insertion_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.target_right_extend_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 60
+        aligner.extend_right_deletion_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.query_right_extend_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 61
+        aligner.extend_right_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.right_extend_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 62
+        aligner.extend_end_insertion_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.target_end_extend_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 63
+        aligner.extend_end_deletion_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.query_end_extend_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 64
+        aligner.extend_end_gap_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.end_extend_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 65
+        aligner.extend_insertion_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.target_extend_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 66
+        aligner.extend_deletion_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.query_extend_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 67
+        aligner.left_insertion_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.target_left_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 68
+        aligner.left_deletion_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.query_left_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 69
+        aligner.internal_insertion_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.target_internal_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 70
+        aligner.internal_deletion_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.query_internal_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 71
+        aligner.right_insertion_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.target_right_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 72
+        aligner.right_deletion_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.query_right_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 73
+        aligner.end_insertion_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.target_end_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 74
+        aligner.end_deletion_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.query_end_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 75
+        aligner.insertion_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.target_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 76
+        aligner.deletion_score = value
+        with self.assertWarns(BiopythonDeprecationWarning):
+            stored_value = aligner.query_gap_score
+        self.assertAlmostEqual(stored_value, value)
+        value = 77
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.target_left_open_gap_score = value
+        self.assertAlmostEqual(aligner.open_left_insertion_score, value)
+        value = 78
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.query_left_open_gap_score = value
+        self.assertAlmostEqual(aligner.open_left_deletion_score, value)
+        value = 79
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.left_open_gap_score = value
+        self.assertAlmostEqual(aligner.open_left_gap_score, value)
+        value = 80
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.target_internal_open_gap_score = value
+        self.assertAlmostEqual(aligner.open_internal_insertion_score, value)
+        value = 81
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.query_internal_open_gap_score = value
+        self.assertAlmostEqual(aligner.open_internal_deletion_score, value)
+        value = 82
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.internal_open_gap_score = value
+        self.assertAlmostEqual(aligner.open_internal_gap_score, value)
+        value = 83
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.target_right_open_gap_score = value
+        self.assertAlmostEqual(aligner.open_right_insertion_score, value)
+        value = 84
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.query_right_open_gap_score = value
+        self.assertAlmostEqual(aligner.open_right_deletion_score, value)
+        value = 85
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.right_open_gap_score = value
+        self.assertAlmostEqual(aligner.open_right_gap_score, value)
+        value = 86
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.target_end_open_gap_score = value
+        self.assertAlmostEqual(aligner.open_end_insertion_score, value)
+        value = 87
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.query_end_open_gap_score = value
+        self.assertAlmostEqual(aligner.open_end_deletion_score, value)
+        value = 88
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.end_open_gap_score = value
+        self.assertAlmostEqual(aligner.open_end_gap_score, value)
+        value = 89
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.target_open_gap_score = value
+        self.assertAlmostEqual(aligner.open_insertion_score, value)
+        value = 90
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.query_open_gap_score = value
+        self.assertAlmostEqual(aligner.open_deletion_score, value)
+        value = 91
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.target_left_extend_gap_score = value
+        self.assertAlmostEqual(aligner.extend_left_insertion_score, value)
+        value = 92
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.query_left_extend_gap_score = value
+        self.assertAlmostEqual(aligner.extend_left_deletion_score, value)
+        value = 93
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.left_extend_gap_score = value
+        self.assertAlmostEqual(aligner.extend_left_gap_score, value)
+        value = 94
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.target_internal_extend_gap_score = value
+        self.assertAlmostEqual(aligner.extend_internal_insertion_score, value)
+        value = 95
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.query_internal_extend_gap_score = value
+        self.assertAlmostEqual(aligner.extend_internal_deletion_score, value)
+        value = 96
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.internal_extend_gap_score = value
+        self.assertAlmostEqual(aligner.extend_internal_gap_score, value)
+        value = 97
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.target_right_extend_gap_score = value
+        self.assertAlmostEqual(aligner.extend_right_insertion_score, value)
+        value = 98
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.query_right_extend_gap_score = value
+        self.assertAlmostEqual(aligner.extend_right_deletion_score, value)
+        value = 99
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.right_extend_gap_score = value
+        self.assertAlmostEqual(aligner.extend_right_gap_score, value)
+        value = 100
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.target_end_extend_gap_score = value
+        self.assertAlmostEqual(aligner.extend_end_insertion_score, value)
+        value = 101
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.query_end_extend_gap_score = value
+        self.assertAlmostEqual(aligner.extend_end_deletion_score, value)
+        value = 102
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.end_extend_gap_score = value
+        self.assertAlmostEqual(aligner.extend_end_gap_score, value)
+        value = 103
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.target_extend_gap_score = value
+        self.assertAlmostEqual(aligner.extend_insertion_score, value)
+        value = 104
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.query_extend_gap_score = value
+        self.assertAlmostEqual(aligner.extend_deletion_score, value)
+        value = 105
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.target_left_gap_score = value
+        self.assertAlmostEqual(aligner.left_insertion_score, value)
+        value = 106
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.query_left_gap_score = value
+        self.assertAlmostEqual(aligner.left_deletion_score, value)
+        value = 107
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.target_internal_gap_score = value
+        self.assertAlmostEqual(aligner.internal_insertion_score, value)
+        value = 108
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.query_internal_gap_score = value
+        self.assertAlmostEqual(aligner.internal_deletion_score, value)
+        value = 109
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.target_right_gap_score = value
+        self.assertAlmostEqual(aligner.right_insertion_score, value)
+        value = 110
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.query_right_gap_score = value
+        self.assertAlmostEqual(aligner.right_deletion_score, value)
+        value = 111
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.target_end_gap_score = value
+        self.assertAlmostEqual(aligner.end_insertion_score, value)
+        value = 112
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.query_end_gap_score = value
+        self.assertAlmostEqual(aligner.end_deletion_score, value)
+        value = 113
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.target_gap_score = value
+        self.assertAlmostEqual(aligner.insertion_score, value)
+        value = 114
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.query_gap_score = value
+        self.assertAlmostEqual(aligner.deletion_score, value)
+        def gap_function1(x, y):
+            return x + y
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.query_gap_score = gap_function1
+        gap_function = aligner.deletion_score
+        self.assertEqual(gap_function, gap_function1)
+        def gap_function2(x, y):
+            return x * y
+        aligner.deletion_score = gap_function2
+        self.assertEqual(aligner.deletion_score, gap_function2)
+        def gap_function3(x, y):
+            return x / y
+        aligner.deletion_score = gap_function3
+        with self.assertWarns(BiopythonDeprecationWarning):
+            gap_function = aligner.query_gap_score
+        self.assertEqual(gap_function, gap_function3)
+        def gap_function4(x, y):
+            return x / y - 9
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.query_gap_score = gap_function4
+        with self.assertWarns(BiopythonDeprecationWarning):
+            gap_function = aligner.query_gap_score
+        self.assertEqual(gap_function, gap_function4)
+        def gap_function5(x, y):
+            return x + 2 * y
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.target_gap_score = gap_function5
+        gap_function = aligner.insertion_score
+        self.assertEqual(gap_function, gap_function5)
+        def gap_function6(x, y):
+            return x * y + 2
+        aligner.insertion_score = gap_function6
+        self.assertEqual(aligner.insertion_score, gap_function6)
+        def gap_function7(x, y):
+            return x / y - 2
+        aligner.insertion_score = gap_function7
+        with self.assertWarns(BiopythonDeprecationWarning):
+            gap_function = aligner.target_gap_score
+        self.assertEqual(gap_function, gap_function7)
+        def gap_function8(x, y):
+            return x / y * 2
+        with self.assertWarns(BiopythonDeprecationWarning):
+            aligner.target_gap_score = gap_function8
+        with self.assertWarns(BiopythonDeprecationWarning):
+            gap_function = aligner.target_gap_score
+        self.assertEqual(gap_function, gap_function8)
+        def gap_function9(x, y):
+            return x + 9 * y
+        aligner.gap_score = gap_function9
+        gap_function = aligner.gap_score
+        self.assertEqual(gap_function, gap_function9)
 
     def test_aligner_nonexisting_property(self):
         aligner = Align.PairwiseAligner()
