@@ -1084,7 +1084,7 @@ here (see the Python module ``re``). These are an extremely powerful
 supported in lots of programming languages and also command line tools
 like ``grep`` as well). You can find whole books about this topic!
 
-.. _`sec:sequence-parsing-plus-pylab`:
+.. _`sec:sequence-parsing-plus-matplotlib.plt`:
 
 Sequence parsing plus simple plots
 ----------------------------------
@@ -1092,7 +1092,7 @@ Sequence parsing plus simple plots
 This section shows some more examples of sequence parsing, using the
 ``Bio.SeqIO`` module described in
 Chapter :ref:`chapter:seqio`, plus the Python library
-matplotlib’s ``pylab`` plotting interface (see `the matplotlib website
+matplotlib’s ``matplotlib.pyplot`` plotting interface (see `the matplotlib website
 for a tutorial <https://matplotlib.org>`__). Note that to follow these
 examples you will need matplotlib installed - but without it you can
 still try the data parsing bits.
@@ -1129,15 +1129,15 @@ we can use the matplotlib histogram function to display it.
 
    sizes = [len(rec) for rec in SeqIO.parse("ls_orchid.fasta", "fasta")]
 
-   import pylab
+   import matplotlib.pyplot as plt
 
-   pylab.hist(sizes, bins=20)
-   pylab.title(
+   plt.hist(sizes, bins=20)
+   plt.title(
        "%i orchid sequences\nLengths %i to %i" % (len(sizes), min(sizes), max(sizes))
    )
-   pylab.xlabel("Sequence length (bp)")
-   pylab.ylabel("Count")
-   pylab.show()
+   plt.xlabel("Sequence length (bp)")
+   plt.ylabel("Count")
+   plt.show()
 
 .. figure:: ../images/hist_plot.png
    :alt: Histogram of orchid sequence lengths.
@@ -1151,8 +1151,8 @@ That should pop up a new window containing the graph shown in
 sequences are about :math:`740` bp long, and there could be two distinct
 classes of sequence here with a subset of shorter sequences.
 
-*Tip:* Rather than using ``pylab.show()`` to show the plot in a window,
-you can also use ``pylab.savefig(...)`` to save the figure to a file
+*Tip:* Rather than using ``plt.show()`` to show the plot in a window,
+you can also use ``plt.savefig(...)`` to save the figure to a file
 (e.g. as a PNG or PDF).
 
 Plot of sequence GC%
@@ -1184,16 +1184,16 @@ and plot them with matplotlib:
 
 .. code:: python
 
-   import pylab
+   import matplotlib.pyplot as plt
 
-   pylab.plot(gc_values)
-   pylab.title(
+   plt.plot(gc_values)
+   plt.title(
        "%i orchid sequences\nGC%% %0.1f to %0.1f"
        % (len(gc_values), min(gc_values), max(gc_values))
    )
-   pylab.xlabel("Genes")
-   pylab.ylabel("GC%")
-   pylab.show()
+   plt.xlabel("Genes")
+   plt.ylabel("GC%")
+   plt.show()
 
 .. figure:: ../images/gc_plot.png
    :alt: Histogram of orchid sequence lengths.
@@ -1256,20 +1256,20 @@ with a nested list comprehension:
    ]
 
 Note that we have *not* checked for reverse complement matches here. Now
-we’ll use the matplotlib’s ``pylab.imshow()`` function to display this
+we’ll use the matplotlib’s ``plt.imshow()`` function to display this
 data, first requesting the gray color scheme so this is done in black
 and white:
 
 .. code:: python
 
-   import pylab
+   import matplotlib.pyplot as plt
 
-   pylab.gray()
-   pylab.imshow(data)
-   pylab.xlabel("%s (length %i bp)" % (rec_one.id, len(rec_one)))
-   pylab.ylabel("%s (length %i bp)" % (rec_two.id, len(rec_two)))
-   pylab.title("Dot plot using window size %i\n(allowing no mis-matches)" % window)
-   pylab.show()
+   plt.gray()
+   plt.imshow(data)
+   plt.xlabel("%s (length %i bp)" % (rec_one.id, len(rec_one)))
+   plt.ylabel("%s (length %i bp)" % (rec_two.id, len(rec_two)))
+   plt.title("Dot plot using window size %i\n(allowing no mis-matches)" % window)
+   plt.show()
 
 That should pop up a new window showing the graph in
 :numref:`fig:nuc-dot-plot`. As you might have expected, these
@@ -1283,9 +1283,9 @@ off all, this brute force approach to the all against all comparisons is
 very slow. Instead, we’ll compile dictionaries mapping the window sized
 sub-sequences to their locations, and then take the set intersection to
 find those sub-sequences found in both sequences. This uses more memory,
-but is *much* faster. Secondly, the ``pylab.imshow()`` function is
+but is *much* faster. Secondly, the ``plt.imshow()`` function is
 limited in the size of matrix it can display. As an alternative, we’ll
-use the ``pylab.scatter()`` function.
+use the ``plt.scatter()`` function.
 
 We start by creating dictionaries mapping the window-sized sub-sequences
 to locations:
@@ -1309,7 +1309,7 @@ to locations:
    matches = set(dict_one).intersection(dict_two)
    print("%i unique matches" % len(matches))
 
-In order to use the ``pylab.scatter()`` we need separate lists for the
+In order to use the ``plt.scatter()`` we need separate lists for the
 :math:`x` and :math:`y` coordinates:
 
 .. code:: python
@@ -1327,17 +1327,17 @@ We are now ready to draw the revised dot plot as a scatter plot:
 
 .. code:: python
 
-   import pylab
+   import matplotlib.pyplot as plt
 
-   pylab.cla()  # clear any prior graph
-   pylab.gray()
-   pylab.scatter(x, y)
-   pylab.xlim(0, len(rec_one) - window)
-   pylab.ylim(0, len(rec_two) - window)
-   pylab.xlabel("%s (length %i bp)" % (rec_one.id, len(rec_one)))
-   pylab.ylabel("%s (length %i bp)" % (rec_two.id, len(rec_two)))
-   pylab.title("Dot plot using window size %i\n(allowing no mis-matches)" % window)
-   pylab.show()
+   plt.cla()  # clear any prior graph
+   plt.gray()
+   plt.scatter(x, y)
+   plt.xlim(0, len(rec_one) - window)
+   plt.ylim(0, len(rec_two) - window)
+   plt.xlabel("%s (length %i bp)" % (rec_one.id, len(rec_one)))
+   plt.ylabel("%s (length %i bp)" % (rec_two.id, len(rec_two)))
+   plt.title("Dot plot using window size %i\n(allowing no mis-matches)" % window)
+   plt.show()
 
 That should pop up a new window showing the graph in
 :numref:`fig:nuc-dot-plot-scatter`.
@@ -1368,27 +1368,27 @@ ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR001/SRR001666/SRR001666_2.fastq.gz),
 and are from *E. coli* – see
 https://www.ebi.ac.uk/ena/data/view/SRR001666 for details.
 
-In the following code the ``pylab.subplot(...)`` function is used in
+In the following code the ``plt.subplot(...)`` function is used in
 order to show the forward and reverse qualities on two subplots, side by
 side. There is also a little bit of code to only plot the first fifty
 reads.
 
 .. code:: python
 
-   import pylab
+   import matplotlib.pyplot as plt
    from Bio import SeqIO
 
    for subfigure in [1, 2]:
        filename = "SRR001666_%i.fastq" % subfigure
-       pylab.subplot(1, 2, subfigure)
+       plt.subplot(1, 2, subfigure)
        for i, record in enumerate(SeqIO.parse(filename, "fastq")):
            if i >= 50:
                break  # trick!
-           pylab.plot(record.letter_annotations["phred_quality"])
-       pylab.ylim(0, 45)
-       pylab.ylabel("PHRED quality score")
-       pylab.xlabel("Position")
-   pylab.savefig("SRR001666.png")
+           plt.plot(record.letter_annotations["phred_quality"])
+       plt.ylim(0, 45)
+       plt.ylabel("PHRED quality score")
+       plt.xlabel("Position")
+   plt.savefig("SRR001666.png")
    print("Done")
 
 You should note that we are using the ``Bio.SeqIO`` format name
@@ -1398,8 +1398,8 @@ the read lengths, this data was from an Illumina Genome Analyzer and was
 probably originally in one of the two Solexa/Illumina FASTQ variant file
 formats instead.
 
-This example uses the ``pylab.savefig(...)`` function instead of
-``pylab.show(...)``, but as mentioned before both are useful.
+This example uses the ``plt.savefig(...)`` function instead of
+``plt.show(...)``, but as mentioned before both are useful.
 
 .. figure:: ../images/SRR001666.png
    :alt: Quality plot for some paired end reads.
