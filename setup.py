@@ -171,6 +171,7 @@ PACKAGES = [
     "Bio.SearchIO.BlastIO",
     "Bio.SearchIO.HHsuiteIO",
     "Bio.SearchIO.HmmerIO",
+    "Bio.SearchIO.InfernalIO",
     "Bio.SearchIO.ExonerateIO",
     "Bio.SearchIO.InterproscanIO",
     "Bio.SeqIO",
