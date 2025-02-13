@@ -16,6 +16,11 @@ The latest news is at the top of this file.
 This release of Biopython supports Python 3.10, 3.11, 3.12 and 3.13.  It
 has also been tested on PyPy3.10 v7.3.17.
 
+The RCSB PDB deprecated the MMTF format and encouraged users to use BinaryCIF
+instead (`see announcement <https://www.rcsb.org/news/feature/65a1af31c76ca3abcc925d0c>`_).
+Biopython already includes a BinaryCIF parser, so we updated PDBList to support
+retrieving PDB structures in the BinaryCIF format and deprecate the MMTF format.
+
 15 January 2025: Biopython 1.85
 ===============================
 
