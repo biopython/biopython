@@ -111,7 +111,7 @@ can easily do this with the following list comprehension:
 
 There are more examples using ``SeqIO.parse()`` in a list comprehension
 like this in
-Section :ref:`sec:sequence-parsing-plus-pylab`
+Section :ref:`sec:sequence-parsing-plus-pyplot`
 (e.g. for plotting sequence lengths or GC%).
 
 Iterating over the records in a sequence file
