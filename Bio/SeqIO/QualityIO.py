@@ -933,9 +933,9 @@ def FastqGeneralIterator(source: _TextIOSource) -> Iterator[tuple[str, str, str]
     with as_handle(source) as handle:
         if handle.read(0) != "":
             raise StreamModeError("Fastq files must be opened in text mode") from None
-        try:
-            line = next(handle)
-        except StopIteration:
+
+        line = handle.readline()
+        if line == "":
             return  # Premature end of file, or just empty?
 
         while True:
@@ -1031,15 +1031,11 @@ class FastqIteratorAbstractBaseClass(SequenceIterator[str]):
 
     def __next__(self) -> SeqRecord:
         """Parse the file and generate SeqRecord objects."""
+
         line = self.line
         if line is None:
-            try:
-                line = next(self.stream)
-            except StopIteration:  # empty file?
-                self.line = None
-            else:
-                self.line = line
-        if line is None:
+            line = self.stream.readline()
+        if not line:
             raise StopIteration
         if line[0] != "@":
             raise ValueError("Records in Fastq files should start with '@' character")
