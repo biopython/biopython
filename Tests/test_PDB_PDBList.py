@@ -117,10 +117,24 @@ class TestPDBListGetStructure(unittest.TestCase):
             obsolete=True,
         )
 
+    def test_retrieve_pdb_file_obsolete_bcif(self):
+        """Tests retrieving the obsolete molecule in bcif format."""
+        pdb_list = PDBList()
+        with self.assertRaises(
+            AssertionError,
+            msg="PDBList cannot retrieve obsolete structures in BinaryCIF format.",
+        ):
+            pdb_list.retrieve_pdb_file("347d", file_format="bcif", obsolete=True)
+
     def test_retrieve_pdb_file_mmcif(self):
         """Tests retrieving the (non-obsolete) molecule in mmcif format."""
         structure = "127d"
         self.check(structure, os.path.join(structure[1:3], f"{structure}.cif"), "mmCif")
+
+    def test_retrieve_pdb_file_bcif(self):
+        """Tests retrieving the (non-obsolete) molecule in BinaryCIF format."""
+        structure = "127d"
+        self.check(structure, os.path.join(structure[1:3], f"{structure}.bcif"), "bcif")
 
     def test_retrieve_pdb_file_obsolete_xml(self):
         """Tests retrieving the obsolete molecule in mmcif format."""

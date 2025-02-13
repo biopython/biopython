@@ -236,6 +236,7 @@ class PDBList:
             File format. Available options:
 
             * "mmCif" (default, PDBx/mmCif file),
+            * "bcif" (BinaryCIF format),
             * "pdb" (format PDB),
             * "xml" (PDBML/XML format),
             * "bundle" (PDB formatted archive for large structure)
@@ -270,6 +271,7 @@ class PDBList:
         archive_dict = {
             "pdb": f"pdb{pdb_code}.ent.gz",
             "mmCif": f"{pdb_code}.cif.gz",
+            "bcif": f"{pdb_code}.bcif.gz",
             "xml": f"{pdb_code}.xml.gz",
             "bundle": f"{pdb_code}-pdb-bundle.tar.gz",
         }
@@ -298,12 +300,17 @@ class PDBList:
                 self.pdb_server
                 + f"/pub/pdb/data/structures/{pdb_dir}/{file_type}/{pdb_code[1:3]}/{archive}"
             )
-        else:
-            assert file_format == "bundle"
+        elif file_format == "bundle":
             url = (
                 self.pdb_server
                 + f"/pub/pdb/compatible/pdb_bundle/{pdb_code[1:3]}/{pdb_code}/{archive}"
             )
+        else:
+            assert file_format == "bcif"
+            assert (
+                not obsolete
+            ), "PDBList cannot retrieve obsolete structures in BinaryCIF format."
+            url = f"https://models.rcsb.org/{archive}"
 
         # Where does the final PDB file get saved?
         if pdir is None:
@@ -318,6 +325,7 @@ class PDBList:
         final = {
             "pdb": f"pdb{pdb_code}.ent",
             "mmCif": f"{pdb_code}.cif",
+            "bcif": f"{pdb_code}.bcif",
             "xml": f"{pdb_code}.xml",
             "bundle": f"{pdb_code}-pdb-bundle.tar",
         }
@@ -432,6 +440,7 @@ class PDBList:
         :param file_format: File format. Available options:
 
             * "mmCif" (default, PDBx/mmCif file),
+            * "bcif" (BinaryCIF format),
             * "pdb" (format PDB),
             * "xml" (PMDML/XML format),
             * "bundle" (PDB formatted archive for large structure).
