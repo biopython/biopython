@@ -194,9 +194,8 @@ class FastaIterator(SequenceIterator):
         if alphabet is not None:
             raise ValueError("The alphabet argument is no longer supported")
         super().__init__(source, fmt="Fasta")
-        try:
-            line = next(self.stream)
-        except StopIteration:
+        line = self.stream.readline()
+        if not line:
             line = None
         else:
             if not line.startswith(">"):

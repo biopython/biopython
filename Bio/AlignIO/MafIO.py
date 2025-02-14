@@ -140,10 +140,8 @@ def MafIterator(handle, seq_count=None):
 
     while True:
         # allows parsing of the last bundle without duplicating code
-        try:
-            line = next(handle)
-        except StopIteration:
-            line = ""
+        line = handle.readline()
+
         try:
             # Will be in binary mode if called via the indexing code
             # (which needs the raw offsets for cross platform indexing)
