@@ -134,3 +134,9 @@ ENV/
 
 # Testing
 **/.coverage
+
+# Files generated during testing
+other_trees.nex
+other_trees.xml
+tree1.nwk
+tree1.xml
