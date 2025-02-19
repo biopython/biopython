@@ -119,7 +119,9 @@ DNA = Seq
 def _make_FormattedSeq_table() -> bytes:
     table = bytearray(256)
     upper_to_lower = ord("A") - ord("a")
-    for c in b"ABCDEFGHIJKLMNOPQRSTUVWXYZ":  # Only allow alphabetic characters
+    # Only allow alphabetic characters
+    # (although only ACGT are used for finding restriction sites)
+    for c in b"ABCDEFGHIJKLMNOPQRSTUVWXYZ":
         table[c] = c  # map uppercase to uppercase
         table[c - upper_to_lower] = c  # map lowercase to uppercase
     return bytes(table)
