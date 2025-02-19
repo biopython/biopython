@@ -52,10 +52,13 @@ class SequenceTesting(unittest.TestCase):
         EcoRI.search(Seq("ATGC"))
         EcoRI.search(MutableSeq("TCAG"))
 
-    def test_non_iupac_letters(self):
-        """Test if non-IUPAC letters raise a TypeError."""
+    def test_non_allowed_characters(self):
+        """Test if non-allowed characters raise a TypeError."""
+        # Any letter is accepted, even if it's not a nucleotide
+        FormattedSeq(Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ"))
+        # Other characters are not accepted
         with self.assertRaises(TypeError):
-            seq = FormattedSeq(Seq("GATCZ"))
+            FormattedSeq(Seq("GATCZE-"))
 
     def test_formatted_seq(self):
         """Test several methods of FormattedSeq."""
