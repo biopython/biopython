@@ -5,6 +5,7 @@
 """Tests for Align.chain module."""
 import unittest
 from io import StringIO
+from tempfile import NamedTemporaryFile
 
 from Bio import Align
 from Bio import SeqIO
@@ -45,22 +46,6 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.dna = data
         records = SeqIO.parse("Blat/rna.fa", "fasta")
         self.rna = {record.id: record.seq for record in records}
-
-    def test_reading(self):
-        """Test parsing dna_rna.chain."""
-        path = "Blat/dna_rna.chain"
-        alignments = Align.parse(path, "chain")
-        self.check_alignments(alignments)
-        alignments = iter(alignments)
-        self.check_alignments(alignments)
-        with Align.parse(path, "chain") as alignments:
-            self.check_alignments(alignments)
-        with self.assertRaises(AttributeError):
-            alignments._stream
-        with Align.parse(path, "chain") as alignments:
-            pass
-        with self.assertRaises(AttributeError):
-            alignments._stream
 
     def check_alignments(self, alignments):
         alignment = next(alignments)
@@ -1307,6 +1292,29 @@ chain 175 chr3 198295559 + 48663767 48669174 NR_111921.1_modified 220 + 3 208 4
         self.assertEqual(counts.identities, 162)
         self.assertEqual(counts.mismatches, 41)
         self.assertRaises(StopIteration, next, alignments)
+
+    def test_reading(self):
+        """Test parsing dna_rna.chain."""
+        path = "Blat/dna_rna.chain"
+        alignments = Align.parse(path, "chain")
+        self.check_alignments(alignments)
+        alignments = iter(alignments)
+        self.check_alignments(alignments)
+        with Align.parse(path, "chain") as alignments:
+            self.check_alignments(alignments)
+        with self.assertRaises(AttributeError):
+            alignments._stream
+        with Align.parse(path, "chain") as alignments:
+            pass
+        with self.assertRaises(AttributeError):
+            alignments._stream
+        with open(path) as stream:
+            data = stream.read()
+        stream = NamedTemporaryFile("w+t")
+        stream.write(data)
+        stream.seek(0)
+        alignments = Align.parse(stream, "chain")
+        self.check_alignments(alignments)
 
     def test_writing(self):
         """Test writing the alignments in dna_rna.chain."""
