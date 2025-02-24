@@ -26,10 +26,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     fmt = "EMBOSS"
 
     def _read_header(self, stream):
-        try:
-            line = next(stream)
-        except StopIteration:
-            raise ValueError("Empty file.") from None
+        line = stream.readline()
+        if not line:
+            raise ValueError("Empty file.")
         if line.rstrip() != "########################################":
             raise ValueError("Unexpected line: %s") % line
 
