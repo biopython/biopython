@@ -5,6 +5,7 @@
 """Tests for Bio.Align.hhr module."""
 import os
 import unittest
+from tempfile import NamedTemporaryFile
 
 import numpy as np
 
@@ -30,6 +31,13 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
             pass
         with self.assertRaises(AttributeError):
             alignments._stream
+        with open(self.path) as stream:
+            data = stream.read()
+        stream = NamedTemporaryFile("w+t")
+        stream.write(data)
+        stream.seek(0)
+        alignments = Align.parse(stream, "hhr")
+        self.check_alignments(alignments)
 
     def check_alignments(self, alignments):
         self.assertEqual(alignments.metadata["No_of_seqs"], (1560, 4005))

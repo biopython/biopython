@@ -8,6 +8,7 @@
 import io
 import os
 import unittest
+from tempfile import NamedTemporaryFile
 
 from Bio import Align
 
@@ -51,6 +52,13 @@ class Exonerate_est2genome(unittest.TestCase):
             pass
         with self.assertRaises(AttributeError):
             alignments._stream
+        with open(exn_file) as stream:
+            data = stream.read()
+        stream = NamedTemporaryFile("w+t")
+        stream.write(data)
+        stream.seek(0)
+        alignments = Align.parse(stream, "exonerate")
+        self.check_cigar(alignments)
 
     def check_cigar(self, alignments):
         self.assertEqual(alignments.metadata["Program"], "exonerate")

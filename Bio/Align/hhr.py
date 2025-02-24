@@ -50,10 +50,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             else:
                 raise ValueError("Unknown key '%s'" % key)
         self.metadata = metadata
-        try:
-            line = next(stream)
-        except StopIteration:
-            raise ValueError("Truncated file.") from None
+        line = stream.readline()
+        if not line:
+            raise ValueError("Truncated file.")
         assert line.split() == [
             "No",
             "Hit",
@@ -141,7 +140,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 pass
             elif line.startswith(">"):
                 hmm_name, hmm_description = line[1:].split(None, 1)
-                line = next(stream)
+                line = stream.readline()
                 words = line.split()
                 alignment_annotations = {}
                 for word in words:
@@ -153,11 +152,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     value = float(value)
                     alignment_annotations[key] = value
             elif line == "Done!":
-                try:
-                    next(stream)
-                except StopIteration:
-                    pass
-                else:
+                line = stream.readline()
+                if line:
                     raise ValueError(
                         "Found additional data after 'Done!'; corrupt file?"
                     )
