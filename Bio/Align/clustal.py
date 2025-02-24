@@ -98,10 +98,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     fmt = "Clustal"
 
     def _read_header(self, stream):
-        try:
-            line = next(stream)
-        except StopIteration:
-            raise ValueError("Empty file.") from None
+        line = stream.readline()
+        if line == "":
+            raise ValueError("Empty file.")
 
         self.metadata = {}
         # Whitelisted programs we know about

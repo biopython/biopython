@@ -5,6 +5,7 @@
 """Tests for Bio.Align.clustal module."""
 import unittest
 from io import StringIO
+from tempfile import NamedTemporaryFile
 
 import numpy as np
 
@@ -53,6 +54,13 @@ class TestClustalReadingWriting(unittest.TestCase):
         with self.assertRaises(AttributeError):
             alignments._stream
         self.check_reading_writing(path)
+        with open(path) as stream:
+            data = stream.read()
+        stream = NamedTemporaryFile("w+t")
+        stream.write(data)
+        stream.seek(0)
+        alignments = Align.parse(stream, "clustal")
+        self.check_clustalw(alignments)
 
     def check_clustalw(self, alignments):
         self.assertEqual(alignments.metadata["Program"], "CLUSTAL")
