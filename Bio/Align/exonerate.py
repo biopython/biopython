@@ -430,14 +430,14 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     def _read_header(self, stream):
         self.metadata = {}
         self.metadata["Program"] = "exonerate"
-        line = next(stream)
+        line = stream.readline()
         prefix = "Command line: "
         assert line.startswith(prefix)
         commandline = line[len(prefix) :].strip()
         assert commandline.startswith("[")
         assert commandline.endswith("]")
         self.metadata["Command line"] = commandline[1:-1]
-        line = next(stream)
+        line = stream.readline()
         prefix = "Hostname: "
         assert line.startswith(prefix)
         hostname = line[len(prefix) :].strip()
@@ -637,13 +637,12 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         for line in stream:
             line = line.strip()
             if line == "-- completed exonerate analysis":
-                try:
-                    next(stream)
-                except StopIteration:
-                    return
-                raise ValueError(
-                    "Found additional data after 'completed exonerate analysis'; corrupt file?"
-                )
+                line = stream.readline()
+                if line:
+                    raise ValueError(
+                        "Found additional data after 'completed exonerate analysis'; corrupt file?"
+                    )
+                return
             if line.startswith("vulgar: "):
                 words = line[8:].split()
                 alignment = self._parse_vulgar(words)
