@@ -6,6 +6,7 @@
 """Tests for Bio.Align.emboss module."""
 import unittest
 from io import StringIO
+from tempfile import NamedTemporaryFile
 
 from Bio import Align
 from Bio.Align import substitution_matrices
@@ -304,6 +305,13 @@ np.array([['G', 'P', 'P', 'P', 'Q', 'S', 'P', 'D', 'E', 'N', 'R', 'A', 'G',
             pass
         with self.assertRaises(AttributeError):
             alignments._stream
+        with open(path) as stream:
+            data = stream.read()
+        stream = NamedTemporaryFile("w+t")
+        stream.write(data)
+        stream.seek(0)
+        alignments = Align.parse(stream, "emboss")
+        self.check_matcher_pair(alignments)
 
     def check_matcher_pair(self, alignments):
         self.assertEqual(alignments.metadata["Program"], "matcher")

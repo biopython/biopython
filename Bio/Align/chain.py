@@ -175,7 +175,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         self._line = stream.readline()
 
     def _read_next_alignment(self, stream):
-        if self._line == "":
+        if not self._line:
             return
         line = self._line
         self._line = ""
@@ -257,7 +257,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         # tools (e.g. pslToChain) do not include such a blank line in their
         # output.
         line = stream.readline()
-        if line != "" and line.strip() == "":
+        if not line.strip():
             line = stream.readline()
         self._line = line
         return alignment

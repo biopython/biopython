@@ -99,7 +99,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
     def _read_header(self, stream):
         line = stream.readline()
-        if line == "":
+        if not line:
             raise ValueError("Empty file.")
 
         self.metadata = {}
