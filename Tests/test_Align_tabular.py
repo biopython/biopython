@@ -6,6 +6,7 @@
 """Tests for Bio.Align.tabular module."""
 import os
 import unittest
+from tempfile import NamedTemporaryFile
 
 from Bio import Align
 from Bio.Align import substitution_matrices
@@ -50,6 +51,13 @@ class TestFastaProtein(unittest.TestCase):
             pass
         with self.assertRaises(AttributeError):
             alignments._stream
+        with open(path) as stream:
+            data = stream.read()
+        stream = NamedTemporaryFile("w+t")
+        stream.write(data)
+        stream.seek(0)
+        alignments = Align.parse(stream, "tabular")
+        self.check_m8CB(alignments)
 
     def check_m8CB(self, alignments):
         self.assertEqual(
