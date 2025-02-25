@@ -1,6 +1,6 @@
 # BLASTN default substitution scores.
 # For the default gap scores, as used for BLASTN on NCBI Web
-# BLAST, The BLAST documentation shows gap costs a = 5 for opening
+# BLAST, the BLAST documentation shows gap costs a = 5 for opening
 # a gap, and b = 2 for each letter in the gap, and defines the
 # total score of a gap of k residues as -(a + b*k). In contrast,
 # Biopython follows the definition given in "Biological Sequence
