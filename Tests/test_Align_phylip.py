@@ -6,6 +6,7 @@
 """Tests for Bio.Align.phylip module."""
 import unittest
 from io import StringIO
+from tempfile import NamedTemporaryFile
 
 from Bio import Align
 from Bio.Align import substitution_matrices
@@ -62,6 +63,13 @@ class TestPhylipReading(unittest.TestCase):
         with self.assertRaises(AttributeError):
             alignments._stream
         self.check_reading_writing(path)
+        with open(path) as stream:
+            data = stream.read()
+        stream = NamedTemporaryFile("w+t")
+        stream.write(data)
+        stream.seek(0)
+        alignments = Align.parse(stream, "phylip")
+        self.check_one(alignments)
 
     def check_one(self, alignments):
         alignment = next(alignments)
