@@ -318,16 +318,16 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     fmt = "PSL"
 
     def _read_header(self, stream):
-        line = next(stream)
+        line = stream.readline()
         if line.startswith("psLayout "):
             words = line.split()
             if words[1] != "version":
                 raise ValueError("Unexpected word '%s' in header line" % words[1])
             self.metadata = {"psLayout version": words[2]}
-            line = next(stream)
-            line = next(stream)
-            line = next(stream)
-            line = next(stream)
+            line = stream.readline()
+            line = stream.readline()
+            line = stream.readline()
+            line = stream.readline()
             if line.lstrip("-").strip() != "":
                 raise ValueError("End of header not found")
         else:

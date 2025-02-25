@@ -5,6 +5,7 @@
 """Tests for Align.psl module."""
 import unittest
 from io import StringIO
+from tempfile import NamedTemporaryFile
 
 from Bio import Align
 from Bio.Align import substitution_matrices
@@ -65,6 +66,13 @@ class TestAlign_dna_rna(unittest.TestCase):
             pass
         with self.assertRaises(AttributeError):
             alignments._stream
+        with open(path) as stream:
+            data = stream.read()
+        stream = NamedTemporaryFile("w+t")
+        stream.write(data)
+        stream.seek(0)
+        alignments = Align.parse(stream, "psl")
+        self.check_alignments(alignments)
 
     def check_alignments(self, alignments):
         self.assertEqual(alignments.metadata["psLayout version"], "3")
