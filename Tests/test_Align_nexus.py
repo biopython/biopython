@@ -6,6 +6,7 @@
 """Tests for Bio.Align.nexus module."""
 import unittest
 from io import StringIO
+from tempfile import NamedTemporaryFile
 
 from Bio import Align
 
@@ -59,6 +60,13 @@ class TestNexusReading(unittest.TestCase):
         with self.assertRaises(AttributeError):
             alignments._stream
         self.check_reading_writing(path)
+        with open(path) as stream:
+            data = stream.read()
+        stream = NamedTemporaryFile("w+t")
+        stream.write(data)
+        stream.seek(0)
+        alignments = Align.parse(stream, "nexus")
+        self.check_nexus1(alignments)
 
     def check_nexus1(self, alignments):
         alignment = next(alignments)
