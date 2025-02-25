@@ -28,9 +28,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     fmt = "MSF"
 
     def _read_next_alignment(self, stream):
-        try:
-            line = next(stream)
-        except StopIteration:
+        line = stream.readline()
+        if not line:
             if stream.tell() == 0:
                 raise ValueError("Empty file.") from None
             return
@@ -165,9 +164,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         else:
             raise ValueError("End of file while looking for end of header // line.")
 
-        try:
-            line = next(stream)
-        except StopIteration:
+        line = stream.readline()
+        if not line:
             raise ValueError("End of file after // line, expected sequences.") from None
         if line.strip():
             raise ValueError("After // line, expected blank line before sequences.")
