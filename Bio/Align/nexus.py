@@ -153,9 +153,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     fmt = "Nexus"
 
     def _read_header(self, stream):
-        try:
-            line = next(stream)
-        except StopIteration:
+        line = stream.readline()
+        if not line:
             raise ValueError("Empty file.") from None
 
         if line.strip() != "#NEXUS":
