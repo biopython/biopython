@@ -5,6 +5,7 @@
 """Tests for Align.maf module."""
 import unittest
 from io import StringIO
+from tempfile import NamedTemporaryFile
 
 from Bio import Align
 
@@ -11643,6 +11644,13 @@ np.array([['T', 'G', 'T', 'T', 'T', 'A', 'G', 'T', 'A', 'C', 'C', '-', '-',
         self.check_reading_ucsc_mm9_chr10(alignments)
         self.assertRaises(StopIteration, next, alignments)
         alignments = alignments[:]
+        self.check_reading_ucsc_mm9_chr10(alignments)
+        with open(path) as stream:
+            data = stream.read()
+        stream = NamedTemporaryFile("w+t")
+        stream.write(data)
+        stream.seek(0)
+        alignments = Align.parse(stream, "maf")
         self.check_reading_ucsc_mm9_chr10(alignments)
 
     def test_reading_missing_signature(self):

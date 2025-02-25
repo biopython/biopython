@@ -276,7 +276,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
     def _read_header(self, stream):
         metadata = {}
-        line = next(stream)
+        line = stream.readline()
         if line.startswith("track "):
             words = shlex.split(line)
             for word in words[1:]:
@@ -300,7 +300,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 else:
                     raise ValueError("Unexpected variable '%s' in track line" % key)
                 metadata[key] = value
-            line = next(stream)
+            line = stream.readline()
         words = line.split()
         if words[0] != "##maf":
             raise ValueError("header line does not start with ##maf")
