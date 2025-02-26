@@ -4057,7 +4057,7 @@ class PairwiseAlignments(AlignmentsAbstractBaseClass):
         try:
             length = len(self._paths)
         except OverflowError:
-            length = ">" + str(sys.maxsize)
+            length = f">{sys.maxsize} alignments"
         else:
             if length == 1:
                 length = "1 alignment"
