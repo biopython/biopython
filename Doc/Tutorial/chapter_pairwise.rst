@@ -60,17 +60,29 @@ between two sequences:
    >>> score
    3.0
 
-The ``aligner.align`` method returns ``Alignment`` objects, each
-representing one alignment between the two sequences:
+The ``aligner.align`` method returns a ``PairwiseAlignments`` object, which is
+an iterator over the alignments found. The ``PairwiseAlignments`` object will
+tell you how many alignments were found, and what their score is:
 
 .. cont-doctest
 
 .. code:: pycon
 
    >>> alignments = aligner.align(target, query)
+   >>> alignments  # doctest: +ELLIPSIS
+   <PairwiseAlignments object (2 alignments; score=3) at 0x...>
+
+Each alignment between the two sequences is stored in an ``Alignment`` object.
+``Alignment`` objects can be obtained by iterating over the alignments or by
+indexing:
+
+.. cont-doctest
+
+.. code:: pycon
+
    >>> alignment = alignments[0]
    >>> alignment  # doctest: +ELLIPSIS
-   <Alignment object (2 rows x 5 columns) at ...>
+   <Alignment object (2 rows x 5 columns) at 0x...>
 
 Iterate over the ``Alignment`` objects and print them to see the
 alignments:
@@ -122,8 +134,7 @@ as well as pointers to the sequences that were aligned:
    >>> alignment.query
    'GAT'
 
-Internally, the alignment is stored in terms of the sequence
-coordinates:
+Internally, the alignment is stored in terms of the sequence coordinates:
 
 .. cont-doctest
 

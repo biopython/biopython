@@ -7,6 +7,7 @@
 
 import array
 import os
+import sys
 import unittest
 
 try:
@@ -881,6 +882,8 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, reverse_complement(seq2), "-")
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (2 alignments; score=3)>""")
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 3.0)
@@ -916,6 +919,8 @@ query             0 G-A-T 3
             )
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (2 alignments; score=3)>""")
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 3.0)
@@ -1000,6 +1005,8 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, reverse_complement(seq2), "-")
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=3)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 3.0)
@@ -1019,6 +1026,8 @@ query             0 GA--T 3
         )
 
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=3)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 3.0)
@@ -1118,6 +1127,8 @@ Pairwise sequence aligner with parameters
         score = aligner.score("AwBw", "zABz")
         self.assertAlmostEqual(score, 1.9)
         alignments = aligner.align("AwBw", "zABz")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=1.9)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.9)
@@ -1167,6 +1178,8 @@ Pairwise sequence aligner with parameters
         score = aligner.score("AwBw", "zABz")
         self.assertAlmostEqual(score, 1.9)
         alignments = aligner.align("AwBw", "zABz")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=1.9)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.9)
@@ -1200,6 +1213,8 @@ class TestUnknownCharacter(unittest.TestCase):
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=3)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 3.0)
@@ -1224,6 +1239,8 @@ query             0 GA?T 4
         self.assertEqual(counts.identities, 3)
         self.assertEqual(counts.mismatches, 0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=3)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 3.0)
@@ -1254,6 +1271,8 @@ query             4 GA?T 0
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=3)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 3.0)
@@ -1278,6 +1297,8 @@ query             0 GAXT 4
         self.assertEqual(counts.identities, 3)
         self.assertEqual(counts.mismatches, 0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=3)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 3.0)
@@ -1307,6 +1328,8 @@ query             4 GAXT 0
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 2.0)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=2)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 2.0)
@@ -1323,6 +1346,8 @@ query             0 GAXT 4
             np.array_equal(alignment.aligned, np.array([[[0, 4]], [[0, 4]]]))
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=2)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 2.0)
@@ -1350,6 +1375,8 @@ query             4 GAXT 0
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 4.0)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=4)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 4.0)
@@ -1377,6 +1404,8 @@ query             0 GA-A?T 5
         self.assertEqual(counts.identities, 4)
         self.assertEqual(counts.mismatches, 0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=4)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 4.0)
@@ -1411,6 +1440,8 @@ query             5 GA-A?T 0
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 4.0)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=4)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 4.0)
@@ -1438,6 +1469,8 @@ query             0 GA-AXT 5
         self.assertEqual(counts.identities, 4)
         self.assertEqual(counts.mismatches, 0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=4)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 4.0)
@@ -1476,6 +1509,8 @@ query             5 GA-AXT 0
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 4.0)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=4)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 4.0)
@@ -1503,6 +1538,8 @@ query             0 GA-A?T 5
         self.assertEqual(counts.identities, 4)
         self.assertEqual(counts.mismatches, 0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=4)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 4.0)
@@ -1537,6 +1574,8 @@ query             5 GA-A?T 0
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 4.0)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=4)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 4.0)
@@ -1564,6 +1603,8 @@ query             0 GA-AXT 5
         self.assertEqual(counts.identities, 4)
         self.assertEqual(counts.mismatches, 0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=4)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 4.0)
@@ -1630,6 +1671,8 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 1.9)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (2 alignments; score=1.9)>""")
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.9)
@@ -1660,6 +1703,8 @@ query             0 A- 1
             np.array_equal(alignment.aligned, np.array([[[0, 1]], [[0, 1]]]))
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (2 alignments; score=1.9)>""")
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.9)
@@ -1727,6 +1772,8 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 2.9)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (2 alignments; score=2.9)>""")
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 2.9)
@@ -1759,6 +1806,8 @@ query             0 GA- 2
             np.array_equal(alignment.aligned, np.array([[[0, 2]], [[0, 2]]]))
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (2 alignments; score=2.9)>""")
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 2.9)
@@ -1826,6 +1875,8 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 2.9)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=2.9)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 2.9)
@@ -1844,6 +1895,8 @@ query             0 GA--T 3
             )
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=2.9)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 2.9)
@@ -1899,6 +1952,8 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 2.9)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=2.9)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 2.9)
@@ -1917,6 +1972,8 @@ query             0 GA--T 3
             )
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=2.9)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 2.9)
@@ -1971,6 +2028,8 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 1.7)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (2 alignments; score=1.7)>""")
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.7)
@@ -2005,6 +2064,8 @@ query             0 G-ATA 4
             )
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (2 alignments; score=1.7)>""")
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.7)
@@ -2076,6 +2137,8 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 1.3)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=1.3)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.3)
@@ -2094,6 +2157,8 @@ query             0 G--T 2
             )
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=1.3)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.3)
@@ -2147,6 +2212,8 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 0.6)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (2 alignments; score=0.6)>""")
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 0.6)
@@ -2181,6 +2248,8 @@ query             0 G-T- 2
             )
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (2 alignments; score=0.6)>""")
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 0.6)
@@ -2252,6 +2321,8 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 0.6)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=0.6)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 0.6)
@@ -2270,6 +2341,8 @@ query             0 -G-T 2
             )
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=0.6)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 0.6)
@@ -2325,6 +2398,8 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, -1.2)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=-1.2)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, -1.2)
@@ -2343,6 +2418,8 @@ query             0 G--T 2
             )
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=-1.2)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, -1.2)
@@ -2398,6 +2475,8 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, -1.2)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=-1.2)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, -1.2)
@@ -2416,6 +2495,8 @@ query             0 G--T 2
             )
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=-1.2)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, -1.2)
@@ -2472,6 +2553,8 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 1.0)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (3 alignments; score=1)>""")
         self.assertEqual(len(alignments), 3)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.0)
@@ -2518,6 +2601,8 @@ query             0 GT-- 2
             np.array_equal(alignment.aligned, np.array([[[0, 2]], [[0, 2]]]))
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (3 alignments; score=1)>""")
         self.assertEqual(len(alignments), 3)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.0)
@@ -2603,6 +2688,8 @@ Pairwise sequence aligner with parameters
         self.assertAlmostEqual(score, 1.0)
 
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=1)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.0)
@@ -2620,6 +2707,8 @@ query             0 GT-- 2
         )
 
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=1)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.0)
@@ -2677,6 +2766,8 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 1.7)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (2 alignments; score=1.7)>""")
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.7)
@@ -2711,6 +2802,8 @@ query             0 GTCT 4
             )
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (2 alignments; score=1.7)>""")
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.7)
@@ -2782,6 +2875,8 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 1.8)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=1.8)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.8)
@@ -2800,6 +2895,8 @@ query             0 G-T 2
             )
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=1.8)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.8)
@@ -2858,6 +2955,8 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 1.9)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (3 alignments; score=1.9)>""")
         self.assertEqual(len(alignments), 3)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.9)
@@ -2908,6 +3007,8 @@ query             0 GTCCT 5
             )
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (3 alignments; score=1.9)>""")
         self.assertEqual(len(alignments), 3)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.9)
@@ -3001,6 +3102,8 @@ $""",
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (2 alignments; score=3)>""")
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 3.0)
@@ -3033,6 +3136,8 @@ query             0 AT-T 3
             )
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (2 alignments; score=3)>""")
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 3.0)
@@ -3103,6 +3208,8 @@ $""",
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=3)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 3.0)
@@ -3119,6 +3226,8 @@ query             0 ATT 3
             np.array_equal(alignment.aligned, np.array([[[0, 3]], [[0, 3]]]))
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=3)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 3.0)
@@ -3173,6 +3282,8 @@ $""",
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=3)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 3.0)
@@ -3189,6 +3300,8 @@ query             0 ATA 3
             np.array_equal(alignment.aligned, np.array([[[0, 3]], [[0, 3]]]))
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=3)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 3.0)
@@ -3246,6 +3359,8 @@ $""",
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (2 alignments; score=3)>""")
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 3.0)
@@ -3278,6 +3393,8 @@ query             0 AT-T 3
             )
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (2 alignments; score=3)>""")
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 3.0)
@@ -3350,6 +3467,8 @@ $""",
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=3)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 3.0)
@@ -3366,6 +3485,8 @@ query             0 ATT 3
             np.array_equal(alignment.aligned, np.array([[[0, 3]], [[0, 3]]]))
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=3)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 3.0)
@@ -3422,6 +3543,8 @@ $""",
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=3)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 3.0)
@@ -3438,6 +3561,8 @@ query             0 ATA 3
             np.array_equal(alignment.aligned, np.array([[[0, 3]], [[0, 3]]]))
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=3)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 3.0)
@@ -3487,6 +3612,8 @@ Pairwise sequence aligner with parameters
         score = aligner.score("abcde", "c")
         self.assertAlmostEqual(score, 1)
         alignments = aligner.align("abcde", "c")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=1)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1)
@@ -3534,6 +3661,8 @@ Pairwise sequence aligner with parameters
         score = aligner.score("abcce", "c")
         self.assertAlmostEqual(score, 1)
         alignments = aligner.align("abcce", "c")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (2 alignments; score=1)>""")
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1)
@@ -3597,6 +3726,8 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 0.2)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=0.2)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 0.2)
@@ -3726,6 +3857,8 @@ class TestPerSiteGapPenalties(unittest.TestCase):
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 2)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=2)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 2)
@@ -3745,6 +3878,8 @@ query             0 --AABBBAAAACC----------CCAAAABBBAA-- 22
             )
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=2)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 2)
@@ -3810,6 +3945,8 @@ query            22 --AABBBAAAACC----------CCAAAABBBAA--  0
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, -10)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (2 alignments; score=-10)>""")
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, -10)
@@ -3844,6 +3981,8 @@ query             0 AAB------------BBAAAACCCCAAAABBBAA-- 22
             )
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (2 alignments; score=-10)>""")
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, -10)
@@ -3919,6 +4058,8 @@ query            22 --AABBBAAAACCCCAAAABB----------BAA--  0
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 2.0)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=2)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 2.0)
@@ -3937,6 +4078,8 @@ query             0 TTG--GAA 6
             )
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=2)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 2.0)
@@ -3971,6 +4114,8 @@ query             6 TTG--GAA 0
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, -8.0)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (4 alignments; score=-8)>""")
         self.assertEqual(len(alignments), 4)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, -8.0)
@@ -4039,6 +4184,8 @@ query             0 TTG--GAA 6
             )
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (4 alignments; score=-8)>""")
         self.assertEqual(len(alignments), 4)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, -8.0)
@@ -4148,6 +4295,8 @@ query             6 TTG--GAA 0
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 13)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (2 alignments; score=13)>""")
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 13)
@@ -4178,6 +4327,8 @@ query             9 CCCCAAAABBBAA 22
             np.array_equal(alignment.aligned, np.array([[[21, 34]], [[9, 22]]]))
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (2 alignments; score=13)>""")
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 13)
@@ -4254,6 +4405,8 @@ query            13 CCCCAAAABBBAA  0
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 13)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (2 alignments; score=13)>""")
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 13)
@@ -4284,6 +4437,8 @@ query             9 CCCCAAAABBBAA 22
             np.array_equal(alignment.aligned, np.array([[[21, 34]], [[9, 22]]]))
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (2 alignments; score=13)>""")
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 13)
@@ -4355,6 +4510,8 @@ query            13 CCCCAAAABBBAA  0
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 2.0)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (2 alignments; score=2)>""")
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 2.0)
@@ -4385,6 +4542,8 @@ query             4 AA 6
             np.array_equal(alignment.aligned, np.array([[[4, 6]], [[4, 6]]]))
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (2 alignments; score=2)>""")
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 2.0)
@@ -4431,6 +4590,8 @@ query             2 AA 0
         score = aligner.score(seq1, reverse_complement(seq2), strand="-")
         self.assertAlmostEqual(score, 2.0)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (2 alignments; score=2)>""")
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 2.0)
@@ -4461,6 +4622,8 @@ query             4 AA 6
             np.array_equal(alignment.aligned, np.array([[[4, 6]], [[4, 6]]]))
         )
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (2 alignments; score=2)>""")
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 2.0)
@@ -4568,6 +4731,8 @@ class TestAlignerInput(unittest.TestCase):
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (2 alignments; score=3)>""")
         self.assertEqual(len(alignments), 2)
         self.assertEqual(
             str(alignments[0]),
@@ -4593,6 +4758,8 @@ Gly Ala Ala Cys Thr
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (2 alignments; score=3)>""")
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertEqual(
@@ -4671,6 +4838,8 @@ Pro Pro Gly --- Ala --- Thr --- ---
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (2 alignments; score=3)>""")
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertEqual(
@@ -4723,6 +4892,8 @@ Gly Ala Ala Cys Thr
         r1 = SeqRecord(s1, id="first", description="1st sequence")
         r2 = SeqRecord(s2, id="second", description="2nd sequence")
         alignments = aligner.align(t1, t2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=-7)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertEqual(
@@ -4743,6 +4914,8 @@ CGTT
 """,
         )
         alignments = aligner.align(s1, s2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=-7)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertEqual(
@@ -4763,6 +4936,8 @@ CGTT
 """,
         )
         alignments = aligner.align(r1, r2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=-7)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertEqual(
@@ -4891,6 +5066,8 @@ class TestOverflowError(unittest.TestCase):
         record = SeqIO.read(path, "fasta")
         seq2 = record.seq
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (>{sys.maxsize} alignments; score=1286)>""")
         self.assertAlmostEqual(alignments.score, 1286.0)
         message = "^number of optimal alignments is larger than (%d|%d)$" % (
             2147483647,  # on 32-bit systems
@@ -5031,6 +5208,8 @@ query          1534 CCTCCTT---A 1542
         self.assertEqual(alignment.shape, (2, 1811))
         self.assertAlmostEqual(alignment.score, 1286.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (>9223372036854775807 alignments; score=1286)>""")
         self.assertAlmostEqual(alignments.score, 1286.0)
         message = "^number of optimal alignments is larger than (%d|%d)$" % (
             2147483647,  # on 32-bit systems
@@ -5361,6 +5540,8 @@ class TestUnicodeStrings(unittest.TestCase):
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (2 alignments; score=3)>""")
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 3.0)
@@ -5408,6 +5589,8 @@ class TestUnicodeStrings(unittest.TestCase):
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=3)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 3.0)
@@ -5461,6 +5644,8 @@ class TestUnicodeStrings(unittest.TestCase):
         score = aligner.score("ℵℷℶℷ", "ℸℵℶℸ")
         self.assertAlmostEqual(score, 1.9)
         alignments = aligner.align("ℵℷℶℷ", "ℸℵℶℸ")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=1.9)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.9)
@@ -5489,6 +5674,8 @@ class TestUnicodeStrings(unittest.TestCase):
         score = aligner.score("生物科物", "学生科学")
         self.assertAlmostEqual(score, 1.9)
         alignments = aligner.align("生物科物", "学生科学")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=1.9)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.9)
@@ -5680,6 +5867,8 @@ class TestAlignmentFormat(unittest.TestCase):
         aligner.end_gap_score = 0
         aligner.mismatch = -1
         alignments = aligner.align(chromosome, transcript)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=19)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 19.0)
@@ -5717,6 +5906,8 @@ query	0	target	1	255	10D10M1I3M11D12M14D7M1D5M6D	*	0	0	AGCATCGAGCGACTTGAGTACTATT
         alignments = aligner.align(
             chromosome, reverse_complement(transcript), strand="-"
         )
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=19)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 19.0)
@@ -5758,6 +5949,8 @@ query	16	target	1	255	10D10M1I3M11D12M14D7M1D5M6D	*	0	0	AGCATCGAGCGACTTGAGTACTAT
         aligner.end_gap_score = 0
         aligner.mismatch = -10
         alignments = aligner.align("ACGTAGCATCAGC", "CCCCACGTAGCATCAGC")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=13)>""")
         self.assertEqual(len(alignments), 1)
         self.assertAlmostEqual(alignments.score, 13.0)
         alignment = alignments[0]
@@ -5791,6 +5984,8 @@ query	0	target	1	255	4I13M	*	0	0	CCCCACGTAGCATCAGC	*	AS:i:13
         alignments = aligner.align(
             "ACGTAGCATCAGC", reverse_complement("CCCCACGTAGCATCAGC"), strand="-"
         )
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=13)>""")
         self.assertEqual(len(alignments), 1)
         self.assertAlmostEqual(alignments.score, 13.0)
         alignment = alignments[0]
@@ -5822,6 +6017,8 @@ query	16	target	1	255	4I13M	*	0	0	CCCCACGTAGCATCAGC	*	AS:i:13
 """,
         )
         alignments = aligner.align("CCCCACGTAGCATCAGC", "ACGTAGCATCAGC")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=13)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 13.0)
@@ -5855,6 +6052,8 @@ query	0	target	1	255	4D13M	*	0	0	ACGTAGCATCAGC	*	AS:i:13
         alignments = aligner.align(
             "CCCCACGTAGCATCAGC", reverse_complement("ACGTAGCATCAGC"), strand="-"
         )
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=13)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 13.0)
@@ -5886,6 +6085,8 @@ query	16	target	1	255	4D13M	*	0	0	ACGTAGCATCAGC	*	AS:i:13
 """,
         )
         alignments = aligner.align("ACGTAGCATCAGC", "ACGTAGCATCAGCGGGG")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=13)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertEqual(
@@ -5918,6 +6119,8 @@ query	0	target	1	255	13M4I	*	0	0	ACGTAGCATCAGCGGGG	*	AS:i:13
         alignments = aligner.align(
             "ACGTAGCATCAGC", reverse_complement("ACGTAGCATCAGCGGGG"), strand="-"
         )
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=13)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertEqual(
@@ -5948,6 +6151,8 @@ query	16	target	1	255	13M4I	*	0	0	ACGTAGCATCAGCGGGG	*	AS:i:13
 """,
         )
         alignments = aligner.align("ACGTAGCATCAGCGGGG", "ACGTAGCATCAGC")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=13)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 13.0)
@@ -5981,6 +6186,8 @@ query	0	target	1	255	13M4D	*	0	0	ACGTAGCATCAGC	*	AS:i:13
         alignments = aligner.align(
             "ACGTAGCATCAGCGGGG", reverse_complement("ACGTAGCATCAGC"), strand="-"
         )
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=13)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 13.0)
@@ -6024,6 +6231,8 @@ query	16	target	1	255	13M4D	*	0	0	ACGTAGCATCAGC	*	AS:i:13
         # use strings for target and query
         alignments = aligner.align(target, query)
         self.assertEqual(len(alignments), 1)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=13)>""")
         alignment = alignments[0]
         self.assertEqual(
             str(alignment),
@@ -6061,6 +6270,8 @@ query	0	target	7	255	17M5S	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
 """,
         )
         alignments = aligner.align(target, reverse_complement(query), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=13)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertEqual(
@@ -6100,6 +6311,8 @@ query	16	target	7	255	17M5S	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
         )
         # use Seq objects for target and query
         alignments = aligner.align(Seq(target), Seq(query))
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=13)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertEqual(
@@ -6140,6 +6353,8 @@ query	0	target	7	255	17M5S	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
         alignments = aligner.align(
             Seq(target), Seq(query).reverse_complement(), strand="-"
         )
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=13)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertEqual(
@@ -6182,6 +6397,8 @@ query	16	target	7	255	17M5S	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
         aligner.end_gap_score = 0
         # use strings for target and query
         alignments = aligner.align(target, query)
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=13)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertEqual(
@@ -6220,6 +6437,8 @@ query	0	target	1	255	6D17M5I	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
 """,
         )
         alignments = aligner.align(target, reverse_complement(query), strand="-")
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=13)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertEqual(
@@ -6259,6 +6478,8 @@ query	16	target	1	255	6D17M5I	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
         )
         # use Seq objects for target and query
         alignments = aligner.align(Seq(target), Seq(query))
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=13)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertEqual(
@@ -6299,6 +6520,8 @@ query	0	target	1	255	6D17M5I	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
         alignments = aligner.align(
             Seq(target), Seq(query).reverse_complement(), strand="-"
         )
+        self.assertEqual(repr(alignments), f"""\
+<PairwiseAlignments object at {hex(id(alignments))} (1 alignment; score=13)>""")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertEqual(
