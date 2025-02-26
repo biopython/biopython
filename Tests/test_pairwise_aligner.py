@@ -5209,7 +5209,7 @@ query          1534 CCTCCTT---A 1542
         self.assertAlmostEqual(alignment.score, 1286.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(repr(alignments), f"""\
-<PairwiseAlignments object (>9223372036854775807 alignments; score=1286) at {hex(id(alignments))}>""")
+<PairwiseAlignments object (>{sys.maxsize} alignments; score=1286) at {hex(id(alignments))}>""")
         self.assertAlmostEqual(alignments.score, 1286.0)
         message = "^number of optimal alignments is larger than (%d|%d)$" % (
             2147483647,  # on 32-bit systems
