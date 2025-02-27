@@ -200,7 +200,7 @@ X.3 Build a Codon Alignment
 ---------------------------
 
 Building a codon alignment is the first step of many evolutionary
-anaysis. But how to do that? ``Bio.codonalign`` provides you an easy
+analysis. But how to do that? ``Bio.codonalign`` provides you an easy
 function ``build()`` to achieve all. The data you need to prepare in
 advance is a protein alignment and a set of DNA sequences that can be
 translated into the protein sequences in the alignment.
