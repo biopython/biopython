@@ -13,6 +13,7 @@ repos:
     -   id: end-of-file-fixer
         files: \.py$
     -   id: mixed-line-ending
+        exclude: \.bb$
 -   repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.9.7
     hooks:
