@@ -766,7 +766,7 @@ For our example, we find:
    'refseq_rna'
    >>> blast_records.param
    {'expect': 10.0, 'sc-match': 2, 'sc-mismatch': -3, 'gap-open': 5, 'gap-extend': 2, 'filter': 'L;m;'}
-   >>> print(blast_records)  # doctest:+ELLIPSIS
+   >>> print(blast_records)
    Program: BLASTN 2.2.27+
         db: refseq_rna
    <BLANKLINE>
@@ -833,7 +833,7 @@ Continuing with our example,
    SeqRecord(seq=Seq(None, length=61), id='42291', name='<unknown name>', description='mystery_seq', dbxrefs=[])
    >>> blast_record.stat
    {'db-num': 3056429, 'db-len': 673143725, 'hsp-len': 0, 'eff-space': 0, 'kappa': 0.41, 'lambda': 0.625, 'entropy': 0.78}
-   >>> print(blast_record)  # doctest:+ELLIPSIS
+   >>> print(blast_record)
      Query: 42291 (length=61)
             mystery_seq
       Hits: ----  -----  ----------------------------------------------------------
@@ -853,7 +853,7 @@ such. For example, you can iterate over the record:
 
 .. code:: pycon
 
-   >>> for hit in blast_record:  # doctest:+ELLIPSIS
+   >>> for hit in blast_record:
    ...     hit
    ...
    <Bio.Blast.Hit target.id='gi|262205317|ref|NR_030195.1|' query.id='42291'; 1 HSP>
@@ -947,7 +947,7 @@ You can get the full list of keys by using ``.keys()`` as usual:
 
 .. code:: pycon
 
-   >>> blast_record.keys()  # doctest:+ELLIPSIS
+   >>> blast_record.keys()
    ['gi|262205317|ref|NR_030195.1|', 'gi|301171311|ref|NR_035856.1|', 'gi|270133242|ref|NR_032573.1|', ...]
 
 What if you just want to check whether a particular hit is present in the query
@@ -1210,7 +1210,7 @@ greater than a particular threshold:
 .. code:: pycon
 
    >>> E_VALUE_THRESH = 0.04
-   >>> for alignments in blast_record:  # doctest:+ELLIPSIS
+   >>> for alignments in blast_record:
    ...     for alignment in alignments:
    ...         if alignment.annotations["evalue"] < E_VALUE_THRESH:
    ...             print("****Alignment****")

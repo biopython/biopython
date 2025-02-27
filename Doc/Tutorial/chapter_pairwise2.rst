@@ -55,7 +55,7 @@ one of these alignments:
 
    >>> len(alignments)
    80
-   >>> print(alignments[0])  # doctest:+ELLIPSIS
+   >>> print(alignments[0])
    Alignment(seqA='MV-LSPADKTNV---K-A--A-WGKVGAHAG...YR-', seqB='MVHL-----T--PEEKSAVTALWGKV----...Y-H', score=72.0, start=0, end=217)
 
 Each alignment is a named tuple consisting of the two aligned sequences,
@@ -68,7 +68,7 @@ nicer printout:
 
 .. code:: pycon
 
-   >>> print(pairwise2.format_alignment(*alignments[0]))  # doctest:+ELLIPSIS
+   >>> print(pairwise2.format_alignment(*alignments[0]))
    MV-LSPADKTNV---K-A--A-WGKVGAHAG---EY-GA-EALE-RMFLSF----PTTK-TY--F...YR-
    || |     |     | |  | ||||        |  |  |||  |  |      |    |   |...|  
    MVHL-----T--PEEKSAVTALWGKV-----NVDE-VG-GEAL-GR--L--LVVYP---WT-QRF...Y-H

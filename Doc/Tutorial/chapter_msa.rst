@@ -1021,7 +1021,7 @@ NumPy:
    >>> align_array = np.array(alignment)
    >>> print("Array shape %i by %i" % align_array.shape)
    Array shape 7 by 52
-   >>> align_array[:, :10]  # doctest:+ELLIPSIS
+   >>> align_array[:, :10]
    array([['A', 'E', 'P', 'N', 'A', 'A', 'T', 'N', 'Y', 'A'],
           ['A', 'E', 'P', 'N', 'A', 'A', 'T', 'N', 'Y', 'A'],
           ['D', 'G', 'T', 'S', 'T', 'A', 'T', 'S', 'Y', 'A'],
