@@ -252,7 +252,7 @@ colors will show up there, too.
 .. code:: pycon
 
    >>> import sys
-   >>> n = Phylo.write(tree, sys.stdout, "phyloxml")  # doctest:+ELLIPSIS
+   >>> n = Phylo.write(tree, sys.stdout, "phyloxml")
    <phyloxml ...>
      <phylogeny rooted="true">
        <clade>
@@ -310,7 +310,7 @@ tree, or no trees.
 
    >>> from Bio import Phylo
    >>> tree = Phylo.read("Tests/Nexus/int_node_labels.nwk", "newick")
-   >>> print(tree)  # doctest:+ELLIPSIS
+   >>> print(tree)
    Tree(rooted=False, weight=1.0)
        Clade(branch_length=75.0, name='gymnosperm')
            Clade(branch_length=25.0, name='Coniferales')
@@ -332,7 +332,7 @@ function iterates through each of the trees in the given file:
 
    >>> trees = Phylo.parse("Tests/PhyloXML/phyloxml_examples.xml", "phyloxml")
    >>> for tree in trees:
-   ...     print(tree)  # doctest:+ELLIPSIS
+   ...     print(tree)
    ...
    Phylogeny(description='phyloXML allows to use either a "branch_length" attribute...', name='example from Prof. Joe Felsenstein's book "Inferring Phyl...', rooted=True)
        Clade()

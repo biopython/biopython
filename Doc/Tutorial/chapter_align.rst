@@ -370,7 +370,7 @@ object including only sequences ``[i:j:k]`` of the alignment:
 
 .. code:: pycon
 
-   >>> alignment[1:]  # doctest:+ELLIPSIS
+   >>> alignment[1:]
    <Alignment object (2 rows x 6 columns) at ...>
    >>> print(alignment[1:])
    target            0 AG-TTT 5
@@ -388,7 +388,7 @@ Extracting the first 4 columns for the example alignment above gives:
 
 .. code:: pycon
 
-   >>> alignment[:, :4]  # doctest:+ELLIPSIS
+   >>> alignment[:, :4]
    <Alignment object (3 rows x 4 columns) at ...>
    >>> print(alignment[:, :4])
                      1 CGGT 5
@@ -402,7 +402,7 @@ Similarly, extracting the last 6 columns gives:
 
 .. code:: pycon
 
-   >>> alignment[:, -6:]  # doctest:+ELLIPSIS
+   >>> alignment[:, -6:]
    <Alignment object (3 rows x 6 columns) at ...>
    >>> print(alignment[:, -6:])
                      3 GTTTTT 9
@@ -1148,7 +1148,7 @@ transcript against one of the genome assemblies:
    224244399
    >>> import numpy as np
    >>> np.set_printoptions(threshold=5)  # print 5 array elements per row
-   >>> print(chain.coordinates)  # doctest:+ELLIPSIS
+   >>> print(chain.coordinates)
    [[122250000 122250400 122250400 ... 122909818 122909819 122909835]
     [111776384 111776784 111776785 ... 112019962 112019962 112019978]]
 
@@ -1204,7 +1204,7 @@ We swap the target and query of the chain such that the query of
    'chr1'
    >>> len(chain.sequences[1].seq)
    228573443
-   >>> print(chain.coordinates)  # doctest:+ELLIPSIS
+   >>> print(chain.coordinates)
    [[111776384 111776784 111776785 ... 112019962 112019962 112019978]
     [122250000 122250400 122250400 ... 122909818 122909819 122909835]]
    >>> np.set_printoptions(threshold=1000)  # reset the print options

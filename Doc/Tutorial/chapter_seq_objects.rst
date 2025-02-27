@@ -948,7 +948,7 @@ A ``ValueError`` is raised if the subsequence is not found:
 
 .. code:: pycon
 
-   >>> seq.index("ACTG")  # doctest:+ELLIPSIS
+   >>> seq.index("ACTG")
    Traceback (most recent call last):
    ...
    ValueError: ...

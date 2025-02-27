@@ -363,7 +363,7 @@ can do this:
    >>> for seq_record in SeqIO.parse("ls_orchid.fasta", "fasta"):
    ...     all_species.append(seq_record.description.split()[1])
    ...
-   >>> print(all_species)  # doctest:+ELLIPSIS
+   >>> print(all_species)
    ['C.irapeanum', 'C.californicum', 'C.fasciculatum', ..., 'P.barbatum']
 
 The concise alternative using list comprehensions would be:
@@ -377,7 +377,7 @@ The concise alternative using list comprehensions would be:
    ...     seq_record.description.split()[1]
    ...     for seq_record in SeqIO.parse("ls_orchid.fasta", "fasta")
    ... ]
-   >>> print(all_species)  # doctest:+ELLIPSIS
+   >>> print(all_species)
    ['C.irapeanum', 'C.californicum', 'C.fasciculatum', ..., 'P.barbatum']
 
 In general, extracting information from the FASTA description line is

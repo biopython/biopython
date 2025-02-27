@@ -793,7 +793,7 @@ BLASTP, respectively.
 
    >>> from Bio import Align
    >>> aligner = Align.PairwiseAligner(scoring="blastn")
-   >>> print(aligner)  # doctest:+ELLIPSIS
+   >>> print(aligner)
    Pairwise sequence aligner with parameters
      substitution_matrix: <Array object at ...>
      open_internal_insertion_score: -7.000000
