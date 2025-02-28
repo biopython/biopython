@@ -317,10 +317,11 @@ class Tree(Nodes.Chain):
             else:
                 return None
         else:
-            list = []
-            for succ in self.chain[node_id].succ:
-                list.extend(self.get_taxa(succ))
-            return list
+            return [
+                node
+                for succ in self.chain[node_id].succ
+                for node in self.get_taxa(succ)
+            ]
 
     def get_terminals(self):
         """Return a list of all terminal nodes."""
