@@ -4053,6 +4053,20 @@ class PairwiseAlignments(AlignmentsAbstractBaseClass):
     def __len__(self):
         return len(self._paths)
 
+    def __repr__(self):
+        try:
+            length = len(self._paths)
+        except OverflowError:
+            length = f">{sys.maxsize} alignments"
+        else:
+            if length == 1:
+                length = "1 alignment"
+            else:
+                length = f"{length} alignments"
+        pointer = hex(id(self))
+        score = format(self.score, "g")
+        return f"<PairwiseAlignments object ({length}; score={score}) at {pointer}>"
+
     def __getitem__(self, index):
         if not isinstance(index, int):
             raise TypeError(f"index must be an integer, not {index.__class__.__name__}")
