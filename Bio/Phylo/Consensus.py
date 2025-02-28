@@ -274,7 +274,7 @@ def strict_consensus(trees):
 def majority_consensus(trees, cutoff=0):
     """Search majority rule consensus tree from multiple trees.
 
-    This is a extend majority rule method, which means the you can set any
+    This is an extend majority rule method, which means the you can set any
     cutoff between 0 ~ 1 instead of 0.5. The default value of cutoff is 0 to
     create a relaxed binary consensus tree in any condition (as long as one of
     the provided trees is a binary tree). The branch length of each consensus
