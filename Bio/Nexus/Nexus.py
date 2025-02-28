@@ -593,9 +593,7 @@ class Commandline:
                         for n in range(len(options))
                         if options[n] == "=" and n != 0 and n != len(options)
                     ]
-                    indices = []
-                    for sl in valued_indices:
-                        indices.extend(sl)
+                    indices = [index for sl in valued_indices for index in sl]
                     token_indices = [n for n in range(len(options)) if n not in indices]
                     for opt in valued_indices:
                         # self.options[options[opt[0]].lower()] = options[opt[2]].lower()

@@ -1034,11 +1034,8 @@ class IC_Chain:
                 self.initNCaCs.append(tuple(initNCaC))
 
             # next residue NCaCKeys so can do per-residue assemble()
-            ric.NCaCKey = []
-            ric.NCaCKey.extend(
-                ric.split_akl(
-                    (AtomKey(ric, "N"), AtomKey(ric, "CA"), AtomKey(ric, "C"))
-                )
+            ric.NCaCKey = ric.split_akl(
+                (AtomKey(ric, "N"), AtomKey(ric, "CA"), AtomKey(ric, "C"))
             )
             ric._link_dihedra()
 
@@ -2709,11 +2706,8 @@ class IC_Residue:
             self._build_rak_cache()
 
         # initialise NCaCKey here:
-        self.NCaCKey = []
-        self.NCaCKey.extend(
-            self.split_akl(
-                (AtomKey(self, "N"), AtomKey(self, "CA"), AtomKey(self, "C"))
-            )
+        self.NCaCKey = self.split_akl(
+            (AtomKey(self, "N"), AtomKey(self, "CA"), AtomKey(self, "C"))
         )
 
     def set_flexible(self) -> None:

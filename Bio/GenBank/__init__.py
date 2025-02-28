@@ -233,13 +233,12 @@ class _BaseGenBankConsumer:
         else:
             tax_info = taxonomy_string
         tax_list = tax_info.split(";")
-        new_tax_list = []
-        for tax_item in tax_list:
-            new_items = tax_item.split("\n")
-            new_tax_list.extend(new_items)
-        while "" in new_tax_list:
-            new_tax_list.remove("")
-        return [x.strip() for x in new_tax_list]
+        return [
+            item.strip()
+            for tax_item in tax_list
+            for item in tax_item.split("\n")
+            if item
+        ]
 
     @staticmethod
     def _clean_location(location_string):

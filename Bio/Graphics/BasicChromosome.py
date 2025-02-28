@@ -324,11 +324,11 @@ class Chromosome(_ChromosomeComponent):
             self.end_x_position - self.start_x_position - segment_width
         )
 
-        y_limits = []
-        for sub_component in self._sub_components:
-            y_limits.extend(
-                (sub_component.start_y_position, sub_component.end_y_position)
-            )
+        y_limits = [
+            limit
+            for sub_component in self._sub_components
+            for limit in (sub_component.start_y_position, sub_component.end_y_position)
+        ]
         y_min = min(y_limits)
         y_max = max(y_limits)
         del y_limits
