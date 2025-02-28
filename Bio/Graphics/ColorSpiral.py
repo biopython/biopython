@@ -202,7 +202,4 @@ def get_color_dict(l, **kwargs):  # noqa: E741
     """
     cs = ColorSpiral(**kwargs)
     colors = cs.get_colors(len(l))
-    dict = {}
-    for item in l:
-        dict[item] = next(colors)
-    return dict
+    return dict(zip(l, colors))
