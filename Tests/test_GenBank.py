@@ -6088,7 +6088,6 @@ qualifiers:
                 ),
             )
             dbxrefs = []
-            self.maxDiff = None
             self.perform_feature_parser_test(
                 record,
                 seq,
