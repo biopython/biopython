@@ -83,7 +83,6 @@ class SeqUtilsTests(unittest.TestCase):
         self.assertEqual(aa_initial, aa_optimized)
         with self.assertRaises(KeyError):
             cai.optimize("CAU", "protein", strict=False)
-        self.maxDiff = None
         self.assertEqual(
             str(cai),
             """\

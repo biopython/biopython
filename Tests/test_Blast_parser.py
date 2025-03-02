@@ -10357,7 +10357,6 @@ Program: BLASTX 2.15.0+
             hsp.annotations["midline"],
             "MADEEVQALVVDNGSGMCKAG       ++  P               G KDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE",
         )
-        self.maxDiff = None
         self.assertEqual(
             str(hsp),
             """\
