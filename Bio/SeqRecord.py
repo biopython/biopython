@@ -1127,7 +1127,7 @@ class SeqRecord:
             dbxrefs=self.dbxrefs[:],
             features=self.features[:],
             annotations=self.annotations.copy(),
-            letter_annotations=self.letter_annotations.copy(),
+            letter_annotations=self.letter_annotations.copy() or None,
         )
 
     def lower(self) -> "SeqRecord":
@@ -1174,7 +1174,7 @@ class SeqRecord:
             dbxrefs=self.dbxrefs[:],
             features=self.features[:],
             annotations=self.annotations.copy(),
-            letter_annotations=self.letter_annotations.copy(),
+            letter_annotations=self.letter_annotations.copy() or None,
         )
 
     def isupper(self):
