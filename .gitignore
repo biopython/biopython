@@ -134,3 +134,6 @@ ENV/
 
 # Testing
 **/.coverage
+
+# Ignore Pyenv local settings
+.python-version
