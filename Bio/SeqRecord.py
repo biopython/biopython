@@ -1127,7 +1127,7 @@ class SeqRecord:
             dbxrefs=self.dbxrefs[:],
             features=self.features[:],
             annotations=self.annotations.copy(),
-            letter_annotations==None if self.letter_annotations is None else self.letter_annotations.copy(),
+            letter_annotations=None if self.letter_annotations is None else self.letter_annotations.copy(),
         )
 
     def lower(self) -> "SeqRecord":
