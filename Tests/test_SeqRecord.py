@@ -130,8 +130,22 @@ class SeqRecordCreation(unittest.TestCase):
             SeqRecord(Seq("ACGT"), annotations=[])
 
     def test_valid_features(self):
-        with self.assertRaises(TypeError):
-            SeqRecord(Seq("ACGT"), features={})
+        SeqRecord(Seq("ACGT"), features={})
+
+    def test_default_properties(self):
+        seqobj = Seq("A")
+        default__dict__ = {
+            "_seq": seqobj,
+            "id": "<unknown id>",
+            "name": "<unknown name>",
+            "description": "<unknown description>",
+            "dbxrefs": [],
+            "annotations": {},
+            "_per_letter_annotations": None,
+            "features": [],
+        }
+        bsr = SeqRecord(seqobj)
+        self.assertEqual(bsr.__dict__, default__dict__)
 
 
 class SeqRecordMethods(unittest.TestCase):
@@ -226,6 +240,20 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX')"""
 
     def test_upper(self):
         self.assertEqual("ABCDEFGHIJKLMNOPQRSTUVWZYX", self.record.lower().upper().seq)
+        seqobj = Seq("A")
+        default__dict__ = {
+            "_seq": seqobj,
+            "id": "<unknown id>",
+            "name": "<unknown name>",
+            "description": "<unknown description>",
+            "dbxrefs": [],
+            "annotations": {},
+            "_per_letter_annotations": None,
+            "features": [],
+        }
+        bsr = SeqRecord(seqobj)
+        bsru = bsr.upper()
+        self.assertEqual(bsru.__dict__, default__dict__)
 
     def test_lower(self):
         self.assertEqual("abcdefghijklmnopqrstuvwzyx", self.record.lower().seq)
