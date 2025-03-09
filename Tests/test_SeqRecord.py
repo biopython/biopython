@@ -130,7 +130,8 @@ class SeqRecordCreation(unittest.TestCase):
             SeqRecord(Seq("ACGT"), annotations=[])
 
     def test_valid_features(self):
-        SeqRecord(Seq("ACGT"), features={})
+        with self.assertRaises(TypeError):
+            SeqRecord(Seq("ACGT"), features={})
 
     def test_default_properties(self):
         seqobj = Seq("A")
