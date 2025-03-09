@@ -134,3 +134,9 @@ ENV/
 
 # Testing
 **/.coverage
+
+# Ignore the .python-version file used by pyenv
+# This file specifies the Python version for a project,
+# but should not be committed to Git, as different developers
+# may use different Python versions.
+.python-version
