@@ -188,10 +188,16 @@ The `Bio.HMM.DynamicProgramming`, `Bio.HMM.Trainer`, `Bio.HMM.MarkovModel`, and
 `Bio.HMM.Utilities` modules were deprecated in release 1.82. Consider using
 hmmlearn (https://pypi.org/project/hmmlearn/) instead.
 
+Bio.PDB.Polypeptide
+-------------------
+Functions ``three_to_one`` and ``one_to_three`` were deprecated in Release 1.80
+and removed in Release 1.82. Please use the dictionary ``nucleic_letters_3to1``
+instead, available from this module but defined in ``Bio.Data.PDBData``.
+
 Bio.Data.SCOPData
 -----------------
 Deprecated in release 1.80, and removed in release 1.82. Please use
-Bio.Data.PDBData instead.
+``Bio.Data.PDBData`` instead.
 
 Bio.Application and the command line wrappers using it
 ------------------------------------------------------
