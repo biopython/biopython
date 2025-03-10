@@ -4396,10 +4396,14 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
         """Return the alignment score of two sequences using PairwiseAligner."""
         if isinstance(seqA, (Seq, MutableSeq, SeqRecord)):
             seqA = bytes(seqA)
+        elif isinstance(seqA, str):
+            seqA = np.frombuffer(bytearray(seqA, self.codec), dtype="i")
         if strand == "-":
             seqB = reverse_complement(seqB)
         if isinstance(seqB, (Seq, MutableSeq, SeqRecord)):
             seqB = bytes(seqB)
+        elif isinstance(seqB, str):
+            seqB = np.frombuffer(bytearray(seqB, self.codec), dtype="i")
         return super().score(seqA, seqB, strand)
 
     def __getstate__(self):

@@ -7217,72 +7217,6 @@ convert_1bytes_to_ints(const int mapping[], Py_ssize_t n, const unsigned char s[
     return indices;
 }
 
-static int*
-convert_2bytes_to_ints(const int mapping[], Py_ssize_t n, const Py_UCS2 s[])
-{
-    Py_UCS2 c;
-    Py_ssize_t i;
-    int index;
-    int* indices;
-    if (n == 0) {
-        PyErr_SetString(PyExc_ValueError, "sequence has zero length");
-        return NULL;
-    }
-    indices = PyMem_Malloc(n*sizeof(int));
-    if (!indices) {
-        PyErr_NoMemory();
-        return NULL;
-    }
-    if (!mapping) for (i = 0; i < n; i++) indices[i] = s[i];
-    else {
-        for (i = 0; i < n; i++) {
-            c = s[i];
-            index = mapping[(int)c];
-            if (index == MISSING_LETTER) {
-                PyErr_SetString(PyExc_ValueError,
-                    "sequence contains letters not in the alphabet");
-                PyMem_Free(indices);
-                return NULL;
-            }
-            indices[i] = index;
-        }
-    }
-    return indices;
-}
-
-static int*
-convert_4bytes_to_ints(const int mapping[], Py_ssize_t n, const Py_UCS4 s[])
-{
-    unsigned char c;
-    Py_ssize_t i;
-    int index;
-    int* indices;
-    if (n == 0) {
-        PyErr_SetString(PyExc_ValueError, "sequence has zero length");
-        return NULL;
-    }
-    indices = PyMem_Malloc(n*sizeof(int));
-    if (!indices) {
-        PyErr_NoMemory();
-        return NULL;
-    }
-    if (!mapping) for (i = 0; i < n; i++) indices[i] = s[i];
-    else {
-        for (i = 0; i < n; i++) {
-            c = s[i];
-            index = mapping[(int)c];
-            if (index == MISSING_LETTER) {
-                PyErr_SetString(PyExc_ValueError,
-                    "sequence contains letters not in the alphabet");
-                PyMem_Free(indices);
-                return NULL;
-            }
-            indices[i] = index;
-        }
-    }
-    return indices;
-}
-
 static int
 convert_objects_to_ints(Py_buffer* view, PyObject* alphabet, PyObject* sequence)
 {
@@ -7295,7 +7229,7 @@ convert_objects_to_ints(Py_buffer* view, PyObject* alphabet, PyObject* sequence)
 
     view->buf = NULL;
     sequence = PySequence_Fast(sequence,
-                               "argument should support the sequence protocol");
+                               "argument must support the sequence protocol");
     if (!sequence) return 0;
     if (!alphabet) {
         PyErr_SetString(PyExc_ValueError,
@@ -7369,6 +7303,8 @@ sequence_converter(PyObject* argument, void* pointer)
     aligner = (Aligner*)view->obj;
     view->obj = NULL;
 
+    mapping = aligner->mapping;
+
     if (PyObject_GetBuffer(argument, view, flag) == 0) {
         if (view->ndim != 1) {
             PyErr_Format(PyExc_ValueError,
@@ -7403,7 +7339,31 @@ sequence_converter(PyObject* argument, void* pointer)
                 return 0;
             }
             indices = view->buf;
-            if (aligner->substitution_matrix.obj) {
+            if (mapping) {
+                for (i = 0; i < n; i++) {
+                    index = indices[i];
+                    if (index < 0) {
+                        PyErr_Format(PyExc_ValueError,
+                                     "sequence item %zd is negative (%d)",
+                                     i, index);
+                        return 0;
+                    }
+                    if (index >= 1000000000) {
+                        PyErr_Format(PyExc_ValueError,
+                                     "sequence item %zd is out of bound"
+                                     " (%d, should be < %zd)", i, index, 100000000);
+                        return 0;
+                    }
+                    index = mapping[index];
+                    if (index == MISSING_LETTER) {
+                        PyErr_SetString(PyExc_ValueError,
+                            "sequence contains letters not in the alphabet");
+                        return 0;
+                    }
+                    indices[i] = index;
+                }
+            }
+            else if (aligner->substitution_matrix.obj) {
                 const Py_ssize_t m = aligner->substitution_matrix.shape[0];
                 for (i = 0; i < n; i++) {
                     index = indices[i];
@@ -7428,42 +7388,7 @@ sequence_converter(PyObject* argument, void* pointer)
         return 0;
     }
     PyErr_Clear();  /* To clear the exception raised by PyObject_GetBuffer */
-    mapping = aligner->mapping;
     alphabet = aligner->alphabet;
-    if (mapping || !alphabet) {
-        if (!PyUnicode_Check(argument)) {
-            PyErr_Format(PyExc_TypeError, "sequence has unexpected type %s",
-                         Py_TYPE(argument)->tp_name);
-            return 0;
-        }
-        if (PyUnicode_READY(argument) == -1) return 0;
-        n = PyUnicode_GET_LENGTH(argument);
-        switch (PyUnicode_KIND(argument)) {
-            case PyUnicode_1BYTE_KIND: {
-                Py_UCS1* s = PyUnicode_1BYTE_DATA(argument);
-                indices = convert_1bytes_to_ints(mapping, n, (unsigned char*)s);
-                break;
-            }
-            case PyUnicode_2BYTE_KIND: {
-                Py_UCS2* s = PyUnicode_2BYTE_DATA(argument);
-                indices = convert_2bytes_to_ints(mapping, n, s);
-                break;
-            }
-            case PyUnicode_4BYTE_KIND: {
-                Py_UCS4* s = PyUnicode_4BYTE_DATA(argument);
-                indices = convert_4bytes_to_ints(mapping, n, s);
-                break;
-            }
-            default:
-                PyErr_SetString(PyExc_ValueError, "could not interpret unicode data");
-                return 0;
-        }
-        if (!indices) return 0;
-        view->buf = indices;
-        view->itemsize = 1;
-        view->len = n;
-        return Py_CLEANUP_SUPPORTED;
-    }
     if (convert_objects_to_ints(view, alphabet, argument))
         return Py_CLEANUP_SUPPORTED;
     return 0;
