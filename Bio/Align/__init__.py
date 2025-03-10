@@ -4253,6 +4253,8 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
 
     """
 
+    codec = "utf-32-le" if sys.byteorder == "little" else "utf-32-be"
+
     def __init__(self, scoring=None, **kwargs):
         """Initialize a PairwiseAligner as specified by the keyword arguments.
 
@@ -4374,6 +4376,8 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
         """Return the alignments of two sequences using PairwiseAligner."""
         if isinstance(seqA, (Seq, MutableSeq, SeqRecord)):
             sA = bytes(seqA)
+        elif isinstance(seqA, str):
+            sA = np.frombuffer(bytearray(seqA, self.codec), dtype="i")
         else:
             sA = seqA
         if strand == "+":
@@ -4382,6 +4386,8 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
             sB = reverse_complement(seqB)
         if isinstance(seqB, (Seq, MutableSeq, SeqRecord)):
             sB = bytes(sB)
+        elif isinstance(seqB, str):
+            sB = np.frombuffer(bytearray(sB, self.codec), dtype="i")
         score, paths = super().align(sA, sB, strand)
         alignments = PairwiseAlignments(seqA, seqB, score, paths)
         return alignments
