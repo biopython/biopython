@@ -66,6 +66,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Bertrand Frottier <bertrand.frottier at domain free.fr>
 - Bertrand Néron <https://github.com/bneron>
 - Bill Barnard <bill at domain barnard-engineering.com>
+- Björn Johansson <bjorn_johansson@bio.uminho.pt>
 - Blaise Li <https://github.com/blaiseli>
 - Bob Bussell <rgb2003 at domain med.cornell.edu>
 - Bogdan T. <bogdan at pearlgen dot com>
