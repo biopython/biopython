@@ -5223,7 +5223,7 @@ CGTT
 class TestArgumentErrors(unittest.TestCase):
     def test_aligner_string_errors(self):
         aligner = Align.PairwiseAligner()
-        message = "^argument must support the sequence protocol$"
+        message = "^argument is not a sequence$"
         with self.assertRaisesRegex(TypeError, message):
             aligner.score("AAA", 3)
         message = "^sequence has zero length$"
