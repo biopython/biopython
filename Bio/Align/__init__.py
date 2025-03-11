@@ -4253,6 +4253,8 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
 
     """
 
+    codec = "utf-32-le" if sys.byteorder == "little" else "utf-32-be"
+
     def __init__(self, scoring=None, **kwargs):
         """Initialize a PairwiseAligner as specified by the keyword arguments.
 
@@ -4374,14 +4376,28 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
         """Return the alignments of two sequences using PairwiseAligner."""
         if isinstance(seqA, (Seq, MutableSeq, SeqRecord)):
             sA = bytes(seqA)
+        elif isinstance(seqA, str):
+            sA = np.frombuffer(bytearray(seqA, self.codec), dtype="i")
         else:
-            sA = seqA
+            alphabet = self.alphabet
+            if alphabet is None:
+                sA = seqA
+            else:
+                sA = np.fromiter(
+                    map(alphabet.index, seqA), dtype=np.int32, count=len(seqA)
+                )
         if strand == "+":
             sB = seqB
         else:  # strand == "-":
             sB = reverse_complement(seqB)
         if isinstance(seqB, (Seq, MutableSeq, SeqRecord)):
             sB = bytes(sB)
+        elif isinstance(seqB, str):
+            sB = np.frombuffer(bytearray(sB, self.codec), dtype="i")
+        else:
+            alphabet = self.alphabet
+            if alphabet is not None:
+                sB = np.fromiter(map(alphabet.index, sB), dtype=np.int32, count=len(sB))
         score, paths = super().align(sA, sB, strand)
         alignments = PairwiseAlignments(seqA, seqB, score, paths)
         return alignments
@@ -4390,10 +4406,26 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
         """Return the alignment score of two sequences using PairwiseAligner."""
         if isinstance(seqA, (Seq, MutableSeq, SeqRecord)):
             seqA = bytes(seqA)
+        elif isinstance(seqA, str):
+            seqA = np.frombuffer(bytearray(seqA, self.codec), dtype="i")
+        else:
+            alphabet = self.alphabet
+            if alphabet is not None:
+                seqA = np.fromiter(
+                    map(alphabet.index, seqA), dtype=np.int32, count=len(seqA)
+                )
         if strand == "-":
             seqB = reverse_complement(seqB)
         if isinstance(seqB, (Seq, MutableSeq, SeqRecord)):
             seqB = bytes(seqB)
+        elif isinstance(seqB, str):
+            seqB = np.frombuffer(bytearray(seqB, self.codec), dtype="i")
+        else:
+            alphabet = self.alphabet
+            if alphabet is not None:
+                seqB = np.fromiter(
+                    map(alphabet.index, seqB), dtype=np.int32, count=len(seqB)
+                )
         return super().score(seqA, seqB, strand)
 
     def __getstate__(self):

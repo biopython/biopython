@@ -7217,133 +7217,6 @@ convert_1bytes_to_ints(const int mapping[], Py_ssize_t n, const unsigned char s[
     return indices;
 }
 
-static int*
-convert_2bytes_to_ints(const int mapping[], Py_ssize_t n, const Py_UCS2 s[])
-{
-    Py_UCS2 c;
-    Py_ssize_t i;
-    int index;
-    int* indices;
-    if (n == 0) {
-        PyErr_SetString(PyExc_ValueError, "sequence has zero length");
-        return NULL;
-    }
-    indices = PyMem_Malloc(n*sizeof(int));
-    if (!indices) {
-        PyErr_NoMemory();
-        return NULL;
-    }
-    if (!mapping) for (i = 0; i < n; i++) indices[i] = s[i];
-    else {
-        for (i = 0; i < n; i++) {
-            c = s[i];
-            index = mapping[(int)c];
-            if (index == MISSING_LETTER) {
-                PyErr_SetString(PyExc_ValueError,
-                    "sequence contains letters not in the alphabet");
-                PyMem_Free(indices);
-                return NULL;
-            }
-            indices[i] = index;
-        }
-    }
-    return indices;
-}
-
-static int*
-convert_4bytes_to_ints(const int mapping[], Py_ssize_t n, const Py_UCS4 s[])
-{
-    unsigned char c;
-    Py_ssize_t i;
-    int index;
-    int* indices;
-    if (n == 0) {
-        PyErr_SetString(PyExc_ValueError, "sequence has zero length");
-        return NULL;
-    }
-    indices = PyMem_Malloc(n*sizeof(int));
-    if (!indices) {
-        PyErr_NoMemory();
-        return NULL;
-    }
-    if (!mapping) for (i = 0; i < n; i++) indices[i] = s[i];
-    else {
-        for (i = 0; i < n; i++) {
-            c = s[i];
-            index = mapping[(int)c];
-            if (index == MISSING_LETTER) {
-                PyErr_SetString(PyExc_ValueError,
-                    "sequence contains letters not in the alphabet");
-                PyMem_Free(indices);
-                return NULL;
-            }
-            indices[i] = index;
-        }
-    }
-    return indices;
-}
-
-static int
-convert_objects_to_ints(Py_buffer* view, PyObject* alphabet, PyObject* sequence)
-{
-    Py_ssize_t i, j;
-    Py_ssize_t n;
-    Py_ssize_t m;
-    int* indices = NULL;
-    PyObject *obj1, *obj2;
-    int equal;
-
-    view->buf = NULL;
-    sequence = PySequence_Fast(sequence,
-                               "argument should support the sequence protocol");
-    if (!sequence) return 0;
-    if (!alphabet) {
-        PyErr_SetString(PyExc_ValueError,
-                        "alphabet is None; cannot interpret sequence");
-        goto exit;
-    }
-    alphabet = PySequence_Fast(alphabet, NULL); /* should never fail */
-    n = PySequence_Size(sequence);
-    m = PySequence_Size(alphabet);
-    if (m != (int)m) {
-        PyErr_SetString(PyExc_ValueError, "alphabet is too long");
-        goto exit;
-    }
-    indices = PyMem_Malloc(n*sizeof(int));
-    if (!indices) {
-        PyErr_NoMemory();
-        goto exit;
-    }
-    for (i = 0; i < n; i++) {
-        obj1 = PySequence_Fast_GET_ITEM(sequence, i);
-        for (j = 0; j < m; j++) {
-            obj2 = PySequence_Fast_GET_ITEM(alphabet, j);
-            equal = PyObject_RichCompareBool(obj1, obj2, Py_EQ);
-            if (equal == 1) /* obj1 == obj2 */ {
-                indices[i] = (int)j;
-                break;
-            }
-            else if (equal == -1) /* error */ {
-                PyMem_Del(indices);
-                goto exit;
-            }
-            /* else (equal == 0) continue; */ /* not equal */
-        }
-        if (j == m) {
-            PyErr_SetString(PyExc_ValueError, "failed to find object in alphabet");
-            goto exit;
-        }
-    }
-    view->buf = indices;
-    view->itemsize = 1;
-    view->len = n;
-exit:
-    Py_DECREF(sequence);
-    Py_XDECREF(alphabet);
-    if (view->buf) return 1;
-    return 0;
-}
-
 static int
 sequence_converter(PyObject* argument, void* pointer)
 {
@@ -7355,7 +7228,6 @@ sequence_converter(PyObject* argument, void* pointer)
     const int flag = PyBUF_FORMAT | PyBUF_C_CONTIGUOUS;
     Aligner* aligner;
     int* mapping;
-    PyObject* alphabet;
 
     if (argument == NULL) {
         if (view->obj) PyBuffer_Release(view);
@@ -7369,103 +7241,118 @@ sequence_converter(PyObject* argument, void* pointer)
     aligner = (Aligner*)view->obj;
     view->obj = NULL;
 
-    if (PyObject_GetBuffer(argument, view, flag) == 0) {
-        if (view->ndim != 1) {
-            PyErr_Format(PyExc_ValueError,
-                         "sequence has incorrect rank (%d expected 1)", view->ndim);
-            return 0;
-        }
-        n = view->len / view->itemsize;
-        if (n == 0) {
-            PyErr_SetString(PyExc_ValueError, "sequence has zero length");
-            return 0;
-        }
-        if (strcmp(view->format, "c") == 0 || strcmp(view->format, "B") == 0) {
-            if (view->itemsize != sizeof(char)) {
-                PyErr_Format(PyExc_ValueError,
-                            "sequence has unexpected item byte size "
-                            "(%ld, expected %ld)", view->itemsize, sizeof(char));
-                return 0;
-            }
-            indices = convert_1bytes_to_ints(aligner->mapping, n, view->buf);
-            if (!indices) return 0;
-            PyBuffer_Release(view);
-            view->itemsize = 1;
-            view->len = n;
-            view->buf = indices;
-            return Py_CLEANUP_SUPPORTED;
-        }
-        if (strcmp(view->format, "i") == 0 || strcmp(view->format, "l") == 0) {
-            if (view->itemsize != sizeof(int)) {
-                PyErr_Format(PyExc_ValueError,
-                            "sequence has unexpected item byte size "
-                            "(%ld, expected %ld)", view->itemsize, sizeof(int));
-                return 0;
-            }
-            indices = view->buf;
-            if (aligner->substitution_matrix.obj) {
-                const Py_ssize_t m = aligner->substitution_matrix.shape[0];
-                for (i = 0; i < n; i++) {
-                    index = indices[i];
-                    if (index < 0) {
-                        PyErr_Format(PyExc_ValueError,
-                                     "sequence item %zd is negative (%d)",
-                                     i, index);
-                        return 0;
-                    }
-                    if (index >= m) {
-                        PyErr_Format(PyExc_ValueError,
-                                     "sequence item %zd is out of bound"
-                                     " (%d, should be < %zd)", i, index, m);
-                        return 0;
-                    }
-                }
-            }
-            return Py_CLEANUP_SUPPORTED;
-        }
-        PyErr_Format(PyExc_ValueError,
-                     "sequence has incorrect data type '%s'", view->format);
+    mapping = aligner->mapping;
+
+    if (PyObject_GetBuffer(argument, view, flag) != 0) {
+        PyErr_SetString(PyExc_TypeError, "argument is not a sequence");
         return 0;
     }
-    PyErr_Clear();  /* To clear the exception raised by PyObject_GetBuffer */
-    mapping = aligner->mapping;
-    alphabet = aligner->alphabet;
-    if (mapping || !alphabet) {
-        if (!PyUnicode_Check(argument)) {
-            PyErr_Format(PyExc_TypeError, "sequence has unexpected type %s",
-                         Py_TYPE(argument)->tp_name);
+    if (view->ndim != 1) {
+        PyErr_Format(PyExc_ValueError,
+                     "sequence has incorrect rank (%d expected 1)", view->ndim);
+        return 0;
+    }
+    n = view->len / view->itemsize;
+    if (n == 0) {
+        PyErr_SetString(PyExc_ValueError, "sequence has zero length");
+        return 0;
+    }
+    if (strcmp(view->format, "c") == 0 || strcmp(view->format, "B") == 0) {
+        if (view->itemsize != sizeof(char)) {
+            PyErr_Format(PyExc_ValueError,
+                        "sequence has unexpected item byte size "
+                        "(%ld, expected %ld)", view->itemsize, sizeof(char));
             return 0;
         }
-        if (PyUnicode_READY(argument) == -1) return 0;
-        n = PyUnicode_GET_LENGTH(argument);
-        switch (PyUnicode_KIND(argument)) {
-            case PyUnicode_1BYTE_KIND: {
-                Py_UCS1* s = PyUnicode_1BYTE_DATA(argument);
-                indices = convert_1bytes_to_ints(mapping, n, (unsigned char*)s);
-                break;
-            }
-            case PyUnicode_2BYTE_KIND: {
-                Py_UCS2* s = PyUnicode_2BYTE_DATA(argument);
-                indices = convert_2bytes_to_ints(mapping, n, s);
-                break;
-            }
-            case PyUnicode_4BYTE_KIND: {
-                Py_UCS4* s = PyUnicode_4BYTE_DATA(argument);
-                indices = convert_4bytes_to_ints(mapping, n, s);
-                break;
-            }
-            default:
-                PyErr_SetString(PyExc_ValueError, "could not interpret unicode data");
-                return 0;
-        }
+        indices = convert_1bytes_to_ints(aligner->mapping, n, view->buf);
         if (!indices) return 0;
-        view->buf = indices;
+        PyBuffer_Release(view);
         view->itemsize = 1;
         view->len = n;
+        view->buf = indices;
         return Py_CLEANUP_SUPPORTED;
     }
-    if (convert_objects_to_ints(view, alphabet, argument))
+    if (strcmp(view->format, "i") == 0 || strcmp(view->format, "l") == 0) {
+        if (view->itemsize != sizeof(int)) {
+            PyErr_Format(PyExc_ValueError,
+                        "sequence has unexpected item byte size "
+                        "(%ld, expected %ld)", view->itemsize, sizeof(int));
+            return 0;
+        }
+        indices = view->buf;
+        if (mapping) {
+            Py_ssize_t m;
+            int kind;
+            PyObject* alphabet = aligner->alphabet;
+            if (alphabet == NULL || !PyUnicode_Check(alphabet)) {
+                PyErr_SetString(PyExc_RuntimeError, "mapping set without alphabet");
+                return 0;
+            }
+            if (PyUnicode_READY(alphabet) == -1) return 0;
+            kind = PyUnicode_KIND(alphabet);
+            switch (kind) {
+                case PyUnicode_1BYTE_KIND: {
+                    m = 1 << 8 * sizeof(Py_UCS1);
+                    break;
+                }
+                case PyUnicode_2BYTE_KIND: {
+                    m = 1 << 8 * sizeof(Py_UCS2);
+                    break;
+                }
+                case PyUnicode_4BYTE_KIND: {
+                    m = 0x110000;  /* Maximum code point in Unicode 6.0
+                                    * is 0x10ffff = 1114111 */
+                    break;
+                }
+                default:
+                    PyErr_SetString(PyExc_RuntimeError, "could not interpret alphabet");
+                    return 0;
+            }
+            for (i = 0; i < n; i++) {
+                index = indices[i];
+                if (index < 0) {
+                    PyErr_Format(PyExc_ValueError,
+                                 "sequence item %zd is negative (%d)",
+                                 i, index);
+                    return 0;
+                }
+                if (index >= m) {
+                    PyErr_Format(PyExc_ValueError,
+                                 "sequence item %zd is out of bound"
+                                 " (%d, should be < %zd)", i, index, m);
+                    return 0;
+                }
+                index = mapping[index];
+                if (index == MISSING_LETTER) {
+                    PyErr_SetString(PyExc_ValueError,
+                        "sequence contains letters not in the alphabet");
+                    return 0;
+                }
+                indices[i] = index;
+            }
+        }
+        else if (aligner->substitution_matrix.obj) {
+            const Py_ssize_t m = aligner->substitution_matrix.shape[0];
+            for (i = 0; i < n; i++) {
+                index = indices[i];
+                if (index < 0) {
+                    PyErr_Format(PyExc_ValueError,
+                                 "sequence item %zd is negative (%d)",
+                                 i, index);
+                    return 0;
+                }
+                if (index >= m) {
+                    PyErr_Format(PyExc_ValueError,
+                                 "sequence item %zd is out of bound"
+                                 " (%d, should be < %zd)", i, index, m);
+                    return 0;
+                }
+            }
+        }
         return Py_CLEANUP_SUPPORTED;
+    }
+    PyErr_Format(PyExc_ValueError,
+                 "sequence has incorrect data type '%s'", view->format);
     return 0;
 }
  
