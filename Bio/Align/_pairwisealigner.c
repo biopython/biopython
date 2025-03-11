@@ -7281,6 +7281,33 @@ sequence_converter(PyObject* argument, void* pointer)
         }
         indices = view->buf;
         if (mapping) {
+            Py_ssize_t m;
+            int kind;
+            PyObject* alphabet = aligner->alphabet;
+            if (alphabet == NULL || !PyUnicode_Check(alphabet)) {
+                PyErr_SetString(PyExc_RuntimeError, "mapping set without alphabet");
+                return 0;
+            }
+            if (PyUnicode_READY(alphabet) == -1) return 0;
+            kind = PyUnicode_KIND(alphabet);
+            switch (kind) {
+                case PyUnicode_1BYTE_KIND: {
+                    m = 1 << 8 * sizeof(Py_UCS1);
+                    break;
+                }
+                case PyUnicode_2BYTE_KIND: {
+                    m = 1 << 8 * sizeof(Py_UCS2);
+                    break;
+                }
+                case PyUnicode_4BYTE_KIND: {
+                    m = 0x110000;  /* Maximum code point in Unicode 6.0
+                                    * is 0x10ffff = 1114111 */
+                    break;
+                }
+                default:
+                    PyErr_SetString(PyExc_RuntimeError, "could not interpret alphabet");
+                    return 0;
+            }
             for (i = 0; i < n; i++) {
                 index = indices[i];
                 if (index < 0) {
@@ -7289,10 +7316,10 @@ sequence_converter(PyObject* argument, void* pointer)
                                  i, index);
                     return 0;
                 }
-                if (index >= 1000000000) {
+                if (index >= m) {
                     PyErr_Format(PyExc_ValueError,
                                  "sequence item %zd is out of bound"
-                                 " (%d, should be < %zd)", i, index, 100000000);
+                                 " (%d, should be < %zd)", i, index, m);
                     return 0;
                 }
                 index = mapping[index];
