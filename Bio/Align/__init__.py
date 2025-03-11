@@ -4379,7 +4379,13 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
         elif isinstance(seqA, str):
             sA = np.frombuffer(bytearray(seqA, self.codec), dtype="i")
         else:
-            sA = seqA
+            alphabet = self.alphabet
+            if alphabet is None:
+                sA = seqA
+            else:
+                sA = np.fromiter(
+                    map(alphabet.index, seqA), dtype=np.int32, count=len(seqA)
+                )
         if strand == "+":
             sB = seqB
         else:  # strand == "-":
@@ -4388,6 +4394,10 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
             sB = bytes(sB)
         elif isinstance(seqB, str):
             sB = np.frombuffer(bytearray(sB, self.codec), dtype="i")
+        else:
+            alphabet = self.alphabet
+            if alphabet is not None:
+                sB = np.fromiter(map(alphabet.index, sB), dtype=np.int32, count=len(sB))
         score, paths = super().align(sA, sB, strand)
         alignments = PairwiseAlignments(seqA, seqB, score, paths)
         return alignments
@@ -4398,12 +4408,24 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
             seqA = bytes(seqA)
         elif isinstance(seqA, str):
             seqA = np.frombuffer(bytearray(seqA, self.codec), dtype="i")
+        else:
+            alphabet = self.alphabet
+            if alphabet is not None:
+                seqA = np.fromiter(
+                    map(alphabet.index, seqA), dtype=np.int32, count=len(seqA)
+                )
         if strand == "-":
             seqB = reverse_complement(seqB)
         if isinstance(seqB, (Seq, MutableSeq, SeqRecord)):
             seqB = bytes(seqB)
         elif isinstance(seqB, str):
             seqB = np.frombuffer(bytearray(seqB, self.codec), dtype="i")
+        else:
+            alphabet = self.alphabet
+            if alphabet is not None:
+                seqB = np.fromiter(
+                    map(alphabet.index, seqB), dtype=np.int32, count=len(seqB)
+                )
         return super().score(seqA, seqB, strand)
 
     def __getstate__(self):
