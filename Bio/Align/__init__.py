@@ -4376,8 +4376,9 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
         """Return the alignments of two sequences using PairwiseAligner."""
         if isinstance(seqA, (Seq, MutableSeq, SeqRecord)):
             sA = bytes(seqA)
+            sA = np.frombuffer(sA, dtype=np.uint8).astype(np.int32)
         elif isinstance(seqA, str):
-            sA = np.frombuffer(bytearray(seqA, self.codec), dtype="i")
+            sA = np.frombuffer(bytearray(seqA, self.codec), dtype=np.int32)
         else:
             alphabet = self.alphabet
             if alphabet is None:
@@ -4392,8 +4393,9 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
             sB = reverse_complement(seqB)
         if isinstance(seqB, (Seq, MutableSeq, SeqRecord)):
             sB = bytes(sB)
+            sB = np.frombuffer(sB, dtype=np.uint8).astype(np.int32)
         elif isinstance(seqB, str):
-            sB = np.frombuffer(bytearray(sB, self.codec), dtype="i")
+            sB = np.frombuffer(bytearray(sB, self.codec), dtype=np.int32)
         else:
             alphabet = self.alphabet
             if alphabet is not None:
