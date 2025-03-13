@@ -45,6 +45,7 @@ from Bio.Seq import reverse_complement
 from Bio.Seq import Seq
 from Bio.Seq import translate
 from Bio.Seq import UndefinedSequenceError
+from Bio.Seq import SequenceDataAbstractBaseClass
 from Bio.SeqRecord import _RestrictedDict
 from Bio.SeqRecord import SeqRecord
 
@@ -135,10 +136,10 @@ class AlignmentCounts:
             % (
                 self._left_insertions,
                 self._left_deletions,
-                self._right_insertions,
-                self._right_deletions,
                 self._internal_insertions,
                 self._internal_deletions,
+                self._right_insertions,
+                self._right_deletions,
                 self._aligned,
                 self._identities,
                 self._mismatches,
@@ -1282,7 +1283,7 @@ class Alignment:
             nbytes, sequence = parser.feed(line)
             sequences.append(sequence)
         shape = parser.shape
-        coordinates = np.empty(shape, np.int64)
+        coordinates = np.empty(shape, np.intp)
         parser.fill(coordinates)
         return sequences, coordinates
 
@@ -1307,10 +1308,10 @@ class Alignment:
                 pass
             else:
                 if len(lengths) == 0:
-                    coordinates = np.empty((0, 0), dtype=int)
+                    coordinates = np.empty((0, 0), np.intp)
                 elif len(lengths) == 1:
                     length = lengths.pop()
-                    coordinates = np.array([[0, length]] * len(sequences))
+                    coordinates = np.array([[0, length]] * len(sequences), np.intp)
                 else:
                     raise ValueError(
                         "sequences must have the same length if coordinates is None"
@@ -2410,7 +2411,7 @@ class Alignment:
         name_width = 10
         names = []
         seqs = []
-        indices = np.zeros(self.coordinates.shape, int)
+        indices = np.zeros(self.coordinates.shape, np.intp)
         for i, (seq, positions, row) in enumerate(
             zip(self.sequences, self.coordinates, indices)
         ):
@@ -3522,7 +3523,7 @@ class Alignment:
                 qStart2 += size
                 tStart2 += size
             tStart2, qStart2 = tEnd2, qEnd2
-        coordinates = np.array(path).transpose()
+        coordinates = np.array(path, dtype=np.intp).transpose()
         if strand1 != strand2:
             coordinates[1, :] = n2 - coordinates[1, :]
         sequences = [target, query]
@@ -3551,7 +3552,7 @@ class Alignment:
             elif factor != step:
                 raise ValueError("inconsistent step sizes in alignments")
         steps = abs(self.coordinates[:, 1:] - self.coordinates[:, :-1]).max(0).clip(0)
-        coordinates = np.empty((2, len(steps) + 1), int)
+        coordinates = np.empty((2, len(steps) + 1), np.intp)
         coordinates[0, 0] = 0
         coordinates[0, 1:] = factor * np.cumsum(steps)
         sequences = [Seq(None, length=coordinates[0, -1]), None]
@@ -3594,7 +3595,7 @@ class Alignment:
                     raise Exception
             previous = position
         sequences = [alignment.sequences[1] for alignment in alignments]
-        coordinates = np.array(coordinates)
+        coordinates = np.array(coordinates, np.intp)
         alignment = Alignment(sequences, coordinates)
         return alignment
 
@@ -3949,7 +3950,8 @@ class Alignment:
             [
                 len(sequence) - row[::-1]
                 for sequence, row in zip(sequences, self.coordinates)
-            ]
+            ],
+            dtype=np.intp,
         )
         alignment = Alignment(sequences, coordinates)
         try:
@@ -4089,7 +4091,7 @@ class PairwiseAlignments(AlignmentsAbstractBaseClass):
     def __next__(self):
         path = next(self._paths)
         self._index += 1
-        coordinates = np.array(path)
+        coordinates = np.array(path, dtype=np.intp)
         alignment = Alignment(self.sequences, coordinates)
         alignment.score = self.score
         self._alignment = alignment
@@ -4374,7 +4376,7 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
 
     def align(self, seqA, seqB, strand="+"):
         """Return the alignments of two sequences using PairwiseAligner."""
-        if isinstance(seqA, (Seq, MutableSeq, SeqRecord)):
+        if isinstance(seqA, (bytes, Seq, MutableSeq, SeqRecord)):
             sA = bytes(seqA)
             sA = np.frombuffer(sA, dtype=np.uint8).astype(np.int32)
         elif isinstance(seqA, str):
@@ -4391,7 +4393,7 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
             sB = seqB
         else:  # strand == "-":
             sB = reverse_complement(seqB)
-        if isinstance(seqB, (Seq, MutableSeq, SeqRecord)):
+        if isinstance(seqB, (bytes, Seq, MutableSeq, SeqRecord)):
             sB = bytes(sB)
             sB = np.frombuffer(sB, dtype=np.uint8).astype(np.int32)
         elif isinstance(seqB, str):
@@ -4406,7 +4408,7 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
 
     def score(self, seqA, seqB, strand="+"):
         """Return the alignment score of two sequences using PairwiseAligner."""
-        if isinstance(seqA, (Seq, MutableSeq, SeqRecord)):
+        if isinstance(seqA, (bytes, Seq, MutableSeq, SeqRecord)):
             seqA = bytes(seqA)
             seqA = np.frombuffer(seqA, dtype=np.uint8).astype(np.int32)
         elif isinstance(seqA, str):
@@ -4419,7 +4421,7 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
                 )
         if strand == "-":
             seqB = reverse_complement(seqB)
-        if isinstance(seqB, (Seq, MutableSeq, SeqRecord)):
+        if isinstance(seqB, (bytes, Seq, MutableSeq, SeqRecord)):
             seqB = bytes(seqB)
             seqB = np.frombuffer(seqB, dtype=np.uint8).astype(np.int32)
         elif isinstance(seqB, str):
@@ -4431,6 +4433,103 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
                     map(alphabet.index, seqB), dtype=np.int32, count=len(seqB)
                 )
         return super().score(seqA, seqB, strand)
+
+    def calculate(self, alignment, ignore_sequences=False):
+        """Return the matches, mismatches, scores, and gap counts for the alignment.
+
+        Arguments:
+
+         - ignore_sequences    - If True, do not calculate the number of identities,
+                                 positives, and mismatches, but only calculate the
+                                 number of aligned sequences and number of gaps
+                                 to speed up the calculation.
+                                 Default value: False.
+
+        A ValueError is raised if ignore_sequences is True and substitution_matrix is not None.
+        """
+        n = len(alignment.sequences)
+        sequences = [None] * n
+        strands = np.zeros(n, bool)
+        coordinates = alignment.coordinates.copy()
+        steps = np.diff(coordinates, 1)
+        aligned_flags = sum(steps != 0, 0) > 1
+        # True for steps in which at least two sequences align, False if a gap
+        for i, sequence in enumerate(alignment.sequences):
+            start = min(coordinates[i, :])
+            end = max(coordinates[i, :])
+            if not ignore_sequences:
+                try:
+                    sequence = sequence[start:end]
+                except ValueError:
+                    # if sequence is a SeqRecord, and sequence.seq is None
+                    continue
+            aligned_steps = steps[i, aligned_flags]
+            if sum(aligned_steps > 0) > sum(aligned_steps < 0):
+                coordinates[i, :] = coordinates[i, :] - start
+            else:
+                if not ignore_sequences:
+                    sequence = reverse_complement(sequence)
+                coordinates[i, :] = end - coordinates[i, :]
+                strands[i] = True
+            if ignore_sequences:
+                sequences[i] = None
+            else:
+                try:
+                    sequence = sequence.seq  # stupid SeqRecord
+                except AttributeError:
+                    pass
+                try:
+                    data = sequence._data
+                except AttributeError:
+                    data = sequence
+                if isinstance(data, bytes):
+                    sequences[i] = np.frombuffer(data, dtype=np.uint8).astype(np.int32)
+                elif isinstance(data, bytearray):
+                    sequences[i] = np.frombuffer(bytes(data), dtype=np.uint8).astype(
+                        np.int32
+                    )
+                elif isinstance(data, str):
+                    sequences[i] = np.frombuffer(
+                        bytearray(data, self.codec), dtype=np.int32
+                    )
+                elif isinstance(data, SequenceDataAbstractBaseClass):
+                    sequences[i] = data
+                else:
+                    alphabet = self.alphabet
+                    if alphabet is None:
+                        # data is a numpy array of int32
+                        # (to be checked in the C code)
+                        sequences[i] = data
+                    else:
+                        # data are objects chosen from the alphabet
+                        sequences[i] = np.fromiter(
+                            map(alphabet.index, data), dtype=np.int32, count=len(data)
+                        )
+        values = super().calculate(sequences, coordinates, strands)
+        (
+            left_insertions,
+            left_deletions,
+            right_insertions,
+            right_deletions,
+            internal_insertions,
+            internal_deletions,
+            aligned,
+            identities,
+            mismatches,
+            positives,
+        ) = values
+        return AlignmentCounts(
+            left_insertions,
+            left_deletions,
+            right_insertions,
+            right_deletions,
+            internal_insertions,
+            internal_deletions,
+            aligned,
+            identities,
+            mismatches,
+            positives,
+        )
 
     def __getstate__(self):
         state = {

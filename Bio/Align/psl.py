@@ -398,7 +398,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 tPosition += tBlockSize
                 qPosition += qBlockSize
                 coordinates.append([tPosition, qPosition])
-            coordinates = np.array(coordinates).transpose()
+            coordinates = np.array(coordinates, np.intp).transpose()
             qNumInsert = 0
             qBaseInsert = 0
             tNumInsert = 0

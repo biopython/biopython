@@ -5274,14 +5274,30 @@ class TestArgumentErrors(unittest.TestCase):
         s2 = np.array([ord("G"), ord("A"), ord("G")], np.int32)
         score = aligner.score(s1, s2)
         self.assertAlmostEqual(score, 2.0)
+        alignments = aligner.align(s1, s2)
+        self.assertEqual(len(alignments), 5)
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+G  -- G  G
+.  -- .  -
+71 65 71 -
+""",
+        )
+        self.assertAlmostEqual(alignment.score, 2.0)
         s2 = np.array([1.0, 0.0, 1.0])
         message = "^sequence has incorrect data type 'd'$"
         with self.assertRaisesRegex(ValueError, message):
             aligner.score(s1, s2)
+        with self.assertRaisesRegex(ValueError, message):
+            aligner.align(s1, s2)
         s2 = np.zeros((3, 2), np.int32)
         message = "^sequence has incorrect rank \\(2 expected 1\\)$"
         with self.assertRaisesRegex(ValueError, message):
             aligner.score(s1, s2)
+        with self.assertRaisesRegex(ValueError, message):
+            aligner.align(s1, s2)
         s1 = np.array([1, 5, 6], np.int32)
         s2 = np.array([1, 8, 6], np.int32)
         s2a = np.array([1, 8, 99], np.int32)
@@ -5292,29 +5308,87 @@ class TestArgumentErrors(unittest.TestCase):
         aligner.gap_score = -10.0
         score = aligner.score(s1, s2)
         self.assertAlmostEqual(score, 4.0)
-        # the following two are valid as we are using match/mismatch scores
+        alignments = aligner.align(s1, s2)
+        self.assertAlmostEqual(alignments.score, 4.0)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 4.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+1 5 6
+| . |
+1 8 6
+""",
+        )
+        # alignments are valid as we are using match/mismatch scores
         # instead of a substitution matrix:
         score = aligner.score(s1, s2a)
         self.assertAlmostEqual(score, 1.0)
+        alignments = aligner.align(s1, s2a)
+        self.assertEqual(len(alignments), 1)
+        self.assertAlmostEqual(alignments.score, 1.0)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 1.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+1 5 6 
+| . . 
+1 8 99
+""",
+        )
         score = aligner.score(s1, s2b)
         self.assertAlmostEqual(score, 4.0)
+        alignments = aligner.align(s1, s2b)
+        self.assertEqual(len(alignments), 1)
+        self.assertAlmostEqual(alignments.score, 4.0)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 4.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+1 5  6
+| .  |
+1 28 6
+""",
+        )
         # when using a substitution matrix, all indices should be between 0
         # and the size of the substitution matrix:
         m = 5 * np.eye(10)
         aligner.substitution_matrix = m
         score = aligner.score(s1, s2)  # no ValueError
         self.assertAlmostEqual(score, 10.0)
+        alignments = aligner.align(s1, s2)
+        self.assertAlmostEqual(alignments.score, 10.0)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 10.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+1 5 6
+| . |
+1 8 6
+""",
+        )
         message = "^sequence item 2 is negative \\(-6\\)$"
         with self.assertRaisesRegex(ValueError, message):
             aligner.score(s1, s2c)
+        with self.assertRaisesRegex(ValueError, message):
+            aligner.align(s1, s2c)
         message = "^sequence item 1 is out of bound \\(28, should be < 10\\)$"
         with self.assertRaisesRegex(ValueError, message):
             aligner.score(s1, s2b)
+        with self.assertRaisesRegex(ValueError, message):
+            aligner.align(s1, s2b)
         # note that the wildcard character is ignored when using a substitution
         # matrix, so 99 is interpreted as an index here:
         message = "^sequence item 2 is out of bound \\(99, should be < 10\\)$"
         with self.assertRaisesRegex(ValueError, message):
             aligner.score(s1, s2a)
+        with self.assertRaisesRegex(ValueError, message):
+            aligner.align(s1, s2a)
 
 
 class TestOverflowError(unittest.TestCase):
@@ -6906,6 +6980,149 @@ class TestAlgorithmRestrictions(unittest.TestCase):
         aligner.gap_score = 1
         with self.assertWarns(BiopythonWarning):
             aligner.score("AAAAAAAAAAAA", "AAAAATAAAAAA")
+
+
+class TestCounts(unittest.TestCase):
+
+    def check_counts(self, counts):
+        self.assertEqual(counts.left_insertions, 2)
+        self.assertEqual(counts.left_deletions, 0)
+        self.assertEqual(counts.internal_insertions, 0)
+        self.assertEqual(counts.internal_deletions, 1)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 7)
+        self.assertEqual(counts.aligned, 5)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 1)
+
+    def check_counts_and_score(self, counts):
+        self.check_counts(counts)
+
+    def test_string_bytes(self):
+        aligner = Align.PairwiseAligner()
+        aligner.mismatch_score = -1
+        aligner.gap_score = -1
+        alignments = aligner.align("TTACGTCCCCCCC", "ACTTTGT")
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 --TTACGTCCCCCCC 13
+                  0 --||.-||------- 15
+query             0 ACTTT-GT-------  7
+""",
+        )
+        counts = alignment.counts()
+        self.check_counts(counts)
+        counts = aligner.calculate(alignment)
+        self.check_counts_and_score(counts)
+        alignments = aligner.align("TTACGTCCCCCCC", b"ACTTTGT")
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+-- -- T  T  A  C G  T  C C C C C C C
+-- -- .  .  .  - .  .  - - - - - - -
+65 67 84 84 84 - 71 84 - - - - - - -
+""",
+        )
+        counts = alignment.counts()
+        self.check_counts(counts)
+        counts = aligner.calculate(alignment)
+        self.check_counts_and_score(counts)
+        alignments = aligner.align(b"TTACGTCCCCCCC", "ACTTTGT")
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+- - 84 84 65 67 71 84 67 67 67 67 67 67 67
+- - .  .  .  -- .  .  -- -- -- -- -- -- --
+A C T  T  T  -- G  T  -- -- -- -- -- -- --
+""",
+        )
+        counts = alignment.counts()
+        self.check_counts(counts)
+        counts = aligner.calculate(alignment)
+        alignments = aligner.align(b"TTACGTCCCCCCC", b"ACTTTGT")
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+-- -- 84 84 65 67 71 84 67 67 67 67 67 67 67
+-- -- || || .. -- || || -- -- -- -- -- -- --
+65 67 84 84 84 -- 71 84 -- -- -- -- -- -- --
+""",
+        )
+        counts = alignment.counts()
+        self.check_counts(counts)
+        counts = aligner.calculate(alignment)
+        alignments = aligner.align(Seq("TTACGTCCCCCCC"), Seq("ACTTTGT"))
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 --TTACGTCCCCCCC 13
+                  0 --||.-||------- 15
+query             0 ACTTT-GT-------  7
+""",
+        )
+        counts = alignment.counts()
+        self.check_counts(counts)
+        counts = aligner.calculate(alignment)
+        alignments = aligner.align(Seq("TTACGTCCCCCCC"), "ACTTTGT")
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 --TTACGTCCCCCCC 13
+                  0 --||.-||------- 15
+query             0 ACTTT-GT-------  7
+""",
+        )
+        counts = alignment.counts()
+        self.check_counts(counts)
+        counts = aligner.calculate(alignment)
+        counts = aligner.calculate(alignment)
+        alignments = aligner.align("TTACGTCCCCCCC", Seq("ACTTTGT"))
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 --TTACGTCCCCCCC 13
+                  0 --||.-||------- 15
+query             0 ACTTT-GT-------  7
+""",
+        )
+        counts = alignment.counts()
+        self.check_counts(counts)
+        counts = aligner.calculate(alignment)
+        alignments = aligner.align(Seq("TTACGTCCCCCCC"), b"ACTTTGT")
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+-- -- T  T  A  C G  T  C C C C C C C
+-- -- .  .  .  - .  .  - - - - - - -
+65 67 84 84 84 - 71 84 - - - - - - -
+""",
+        )
+        counts = alignment.counts()
+        self.check_counts(counts)
+        counts = aligner.calculate(alignment)
+        counts = aligner.calculate(alignment)
+        alignments = aligner.align(b"TTACGTCCCCCCC", Seq("ACTTTGT"))
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+- - 84 84 65 67 71 84 67 67 67 67 67 67 67
+- - .  .  .  -- .  .  -- -- -- -- -- -- --
+A C T  T  T  -- G  T  -- -- -- -- -- -- --
+""",
+        )
+        counts = alignment.counts()
+        self.check_counts(counts)
+        counts = aligner.calculate(alignment)
 
 
 if __name__ == "__main__":

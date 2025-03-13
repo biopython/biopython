@@ -10,6 +10,7 @@
 #define PY_SSIZE_T_CLEAN
 #include "Python.h"
 #include <float.h>
+#include <stdbool.h>
 
 
 #define HORIZONTAL 0x1
@@ -45,6 +46,25 @@ typedef enum {NeedlemanWunschSmithWaterman,
               Unknown} Algorithm;
 
 typedef enum {Global, Local, FOGSAA_Mode} Mode;
+
+typedef struct {
+    Py_ssize_t open_left_insertions;
+    Py_ssize_t extend_left_insertions;
+    Py_ssize_t open_left_deletions;
+    Py_ssize_t extend_left_deletions;
+    Py_ssize_t open_internal_insertions;
+    Py_ssize_t extend_internal_insertions;
+    Py_ssize_t open_internal_deletions;
+    Py_ssize_t extend_internal_deletions;
+    Py_ssize_t open_right_insertions;
+    Py_ssize_t extend_right_insertions;
+    Py_ssize_t open_right_deletions;
+    Py_ssize_t extend_right_deletions;
+    Py_ssize_t aligned;
+    Py_ssize_t identities;
+    Py_ssize_t mismatches;
+    Py_ssize_t positives;
+} AlignmentCounts;
 
 #define ERR_UNEXPECTED_MODE \
     PyErr_Format(PyExc_RuntimeError, "mode has unexpected value (in "__FILE__" on line %d)", __LINE__);
@@ -6652,7 +6672,7 @@ exit:
 
 /* ----------------- alignment algorithms ----------------- */
 
-#define MATRIX_SCORE scores[kA*n+kB]
+#define MATRIX_SCORE substitution_matrix[kA*n+kB]
 #define COMPARE_SCORE (kA == wildcard || kB == wildcard) ? 0 : (kA == kB) ? match : mismatch
 
 
@@ -6675,7 +6695,7 @@ Aligner_needlemanwunsch_score_matrix(Aligner* self,
                                      unsigned char strand)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
-    const double* scores = self->substitution_matrix.buf;
+    const double* substitution_matrix = self->substitution_matrix.buf;
     NEEDLEMANWUNSCH_SCORE(MATRIX_SCORE);
 }
 
@@ -6696,7 +6716,7 @@ Aligner_smithwaterman_score_matrix(Aligner* self,
                                    const int* sB, int nB)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
-    const double* scores = self->substitution_matrix.buf;
+    const double* substitution_matrix = self->substitution_matrix.buf;
     SMITHWATERMAN_SCORE(MATRIX_SCORE);
 }
 
@@ -6719,7 +6739,7 @@ Aligner_needlemanwunsch_align_matrix(Aligner* self,
                                      unsigned char strand)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
-    const double* scores = self->substitution_matrix.buf;
+    const double* substitution_matrix = self->substitution_matrix.buf;
     NEEDLEMANWUNSCH_ALIGN(MATRIX_SCORE);
 }
 
@@ -6742,7 +6762,7 @@ Aligner_smithwaterman_align_matrix(Aligner* self,
                                    unsigned char strand)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
-    const double* scores = self->substitution_matrix.buf;
+    const double* substitution_matrix = self->substitution_matrix.buf;
     SMITHWATERMAN_ALIGN(MATRIX_SCORE);
 }
 
@@ -6765,7 +6785,7 @@ Aligner_gotoh_global_score_matrix(Aligner* self,
                                   unsigned char strand)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
-    const double* scores = self->substitution_matrix.buf;
+    const double* substitution_matrix = self->substitution_matrix.buf;
     GOTOH_GLOBAL_SCORE(MATRIX_SCORE);
 }
 
@@ -6786,7 +6806,7 @@ Aligner_gotoh_local_score_matrix(Aligner* self,
                                  const int* sB, int nB)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
-    const double* scores = self->substitution_matrix.buf;
+    const double* substitution_matrix = self->substitution_matrix.buf;
     GOTOH_LOCAL_SCORE(MATRIX_SCORE);
 }
 
@@ -6809,7 +6829,7 @@ Aligner_gotoh_global_align_matrix(Aligner* self,
                                   unsigned char strand)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
-    const double* scores = self->substitution_matrix.buf;
+    const double* substitution_matrix = self->substitution_matrix.buf;
     GOTOH_GLOBAL_ALIGN(MATRIX_SCORE);
 }
 
@@ -6832,7 +6852,7 @@ Aligner_gotoh_local_align_matrix(Aligner* self,
                                  unsigned char strand)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
-    const double* scores = self->substitution_matrix.buf;
+    const double* substitution_matrix = self->substitution_matrix.buf;
     GOTOH_LOCAL_ALIGN(MATRIX_SCORE);
 }
 
@@ -6906,7 +6926,7 @@ Aligner_watermansmithbeyer_global_score_matrix(Aligner* self,
                                                unsigned char strand)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
-    const double* scores = self->substitution_matrix.buf;
+    const double* substitution_matrix = self->substitution_matrix.buf;
     WATERMANSMITHBEYER_ENTER_SCORE;
     switch (strand) {
         case '+':
@@ -6950,7 +6970,7 @@ Aligner_watermansmithbeyer_local_score_matrix(Aligner* self,
                                               unsigned char strand)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
-    const double* scores = self->substitution_matrix.buf;
+    const double* substitution_matrix = self->substitution_matrix.buf;
     double maximum = 0.0;
     WATERMANSMITHBEYER_ENTER_SCORE;
     switch (strand) {
@@ -6996,7 +7016,7 @@ Aligner_watermansmithbeyer_global_align_matrix(Aligner* self,
                                                unsigned char strand)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
-    const double* scores = self->substitution_matrix.buf;
+    const double* substitution_matrix = self->substitution_matrix.buf;
     WATERMANSMITHBEYER_ENTER_ALIGN(Global);
     switch (strand) {
         case '+': {
@@ -7044,7 +7064,7 @@ Aligner_watermansmithbeyer_local_align_matrix(Aligner* self,
                                               unsigned char strand)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
-    const double* scores = self->substitution_matrix.buf;
+    const double* substitution_matrix = self->substitution_matrix.buf;
     int im = nA;
     int jm = nB;
     double maximum = 0;
@@ -7121,16 +7141,16 @@ Aligner_fogsaa_score_matrix(Aligner* self,
                                  unsigned char strand)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
-    const double* scores = self->substitution_matrix.buf;
-    double match = scores[0], mismatch = scores[0];
+    const double* substitution_matrix = self->substitution_matrix.buf;
+    double match = substitution_matrix[0], mismatch = substitution_matrix[0];
     FOGSAA_ENTER
 
     // for prediction purposes, maximum score is match and minimum score is mismatch
     for (i = 0; i < n*n; i++) {
-        if (scores[i] > match)
-            match = scores[i];
-        else if (scores[i] < mismatch)
-            mismatch = scores[i];
+        if (substitution_matrix[i] > match)
+            match = substitution_matrix[i];
+        else if (substitution_matrix[i] < mismatch)
+            mismatch = substitution_matrix[i];
     }
     FOGSAA_CHECK_SCORES
 
@@ -7165,18 +7185,18 @@ Aligner_fogsaa_align_matrix(Aligner* self,
                                  unsigned char strand)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
-    const double* scores = self->substitution_matrix.buf;
-    double match = scores[0], mismatch = scores[0];
+    const double* substitution_matrix = self->substitution_matrix.buf;
+    double match = substitution_matrix[0], mismatch = substitution_matrix[0];
     PathGenerator* paths;
     Trace** M;
     FOGSAA_ENTER
 
     // for prediction purposes, maximum score is match and minimum score is mismatch
     for (i = 0; i < n*n; i++) {
-        if (scores[i] > match)
-            match = scores[i];
-        else if (scores[i] < mismatch)
-            mismatch = scores[i];
+        if (substitution_matrix[i] > match)
+            match = substitution_matrix[i];
+        else if (substitution_matrix[i] < mismatch)
+            mismatch = substitution_matrix[i];
     }
     FOGSAA_CHECK_SCORES
 
@@ -7322,6 +7342,44 @@ strand_converter(PyObject* argument, void* pointer)
 error:
     PyErr_SetString(PyExc_ValueError, "strand must be '+' or '-'");
     return 0;
+}
+
+static int
+coordinates_converter(PyObject* argument, void* pointer)
+{
+    Py_buffer* view = pointer;
+    if (argument == NULL) {
+        PyBuffer_Release(view);
+        return 1;
+    }
+
+    if (PyObject_GetBuffer(argument, view, PyBUF_STRIDED) != 0) return 0;
+    if (view->ndim != 2 || view->itemsize != sizeof(Py_ssize_t)) {
+        PyErr_SetString(PyExc_ValueError,
+            "coordinates must be a 2D array of Py_ssize_t integers");
+        PyBuffer_Release(view);
+        return 0;
+    }
+    return Py_CLEANUP_SUPPORTED;
+}
+
+static int
+strands_converter(PyObject* argument, void* pointer)
+{
+    Py_buffer* view = pointer;
+    if (argument == NULL) {
+        PyBuffer_Release(view);
+        return 1;
+    }
+
+    if (PyObject_GetBuffer(argument, view, PyBUF_CONTIG_RO) != 0) return 0;
+    if (view->ndim != 1 || view->itemsize != sizeof(bool)) {
+        PyErr_SetString(PyExc_ValueError,
+            "strands must be a 1D array of bool variables");
+        PyBuffer_Release(view);
+        return 0;
+    }
+    return Py_CLEANUP_SUPPORTED;
 }
 
 static const char Aligner_score__doc__[] = "calculates the alignment score";
@@ -7560,6 +7618,251 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
     return result;
 }
 
+static int
+_aligner_calculate(Aligner* aligner, Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, Py_buffer* strands, AlignmentCounts* counts)
+{
+    Py_ssize_t i, j, k, l1, l2;
+    int cA, cB;
+
+    Py_buffer* sequenceA;
+    Py_buffer* sequenceB;
+    int* sA;
+    int* sB;
+    int wildcard = '\0';
+    double* substitution_matrix = NULL;
+    Py_ssize_t m;
+
+    Py_ssize_t open_left_insertions = 0, extend_left_insertions = 0;
+    Py_ssize_t open_left_deletions = 0, extend_left_deletions = 0;
+    Py_ssize_t open_internal_insertions = 0, extend_internal_insertions = 0;
+    Py_ssize_t open_internal_deletions = 0, extend_internal_deletions = 0;
+    Py_ssize_t open_right_insertions = 0, extend_right_insertions = 0;
+    Py_ssize_t open_right_deletions = 0, extend_right_deletions = 0;
+    Py_ssize_t aligned = 0;
+    Py_ssize_t identities = 0;
+    Py_ssize_t mismatches = 0;
+    Py_ssize_t positives = 0;
+
+    const Py_ssize_t shape2 = coordinates->shape[1];
+    const Py_ssize_t stride1 = coordinates->strides[0] / sizeof(Py_ssize_t);
+    const Py_ssize_t stride2 = coordinates->strides[1] / sizeof(Py_ssize_t);
+    Py_ssize_t left1, left2;
+    Py_ssize_t right1, right2;
+    Py_ssize_t start1, start2;
+    Py_ssize_t end1, end2;
+    Py_ssize_t* buffer = coordinates->buf;
+
+    int path = 0;
+
+    if (aligner->substitution_matrix.obj) {
+        substitution_matrix = aligner->substitution_matrix.buf;
+        m = aligner->substitution_matrix.shape[0];
+    }
+
+    for (i = 0; i < n; i++) {
+        sequenceA = &sequences[i];
+        sA = sequenceA->buf;
+        for (j = i + 1; j < n; j++) {
+            sequenceB = &sequences[j];
+            sB = sequenceB->buf;
+            left1 = buffer[i * stride1 + 0];
+            left2 = buffer[j * stride1 + 0];
+            right1 = buffer[i * stride1 + (shape2 - 1) * stride2];
+            right2 = buffer[j * stride1 + (shape2 - 1) * stride2];
+            start1 = left1;
+            start2 = left2;
+            for (k = 1; k < shape2; k++) {
+                end1 = buffer[i * stride1 + k * stride2];
+                end2 = buffer[j * stride1 + k * stride2];
+                if (start1 == end1 && start2 == end2) {
+                }
+                else if (start1 == end1) {
+                    if (path == HORIZONTAL) {
+                        if (start1 == left1)
+                            extend_left_insertions += end2 - start2;
+                        else if (end1 == right1)
+                            extend_right_insertions += end2 - start2;
+                        else
+                            extend_internal_insertions += end2 - start2;
+                    }
+                    else {
+                        if (start1 == left1)
+                            open_left_insertions += end2 - start2;
+                        else if (end1 == right1)
+                            open_right_insertions += end2 - start2;
+                        else
+                            open_internal_insertions += end2 - start2;
+                        path = HORIZONTAL;
+                    }
+                }
+                else if (start2 == end2) {
+                    if (path == VERTICAL) {
+                        if (start2 == left2) {
+                            extend_left_deletions += end1 - start1;
+}
+                        else if (end2 == right2)
+                            extend_right_deletions += end1 - start1;
+                        else
+                            extend_internal_deletions += end1 - start1;
+                    }
+                    else {
+                        if (start2 == left2)
+                            open_left_deletions += end1 - start1;
+                        else if (end2 == right2)
+                            open_right_deletions += end1 - start1;
+                        else
+                            open_internal_deletions += end1 - start1;
+                        path = VERTICAL;
+                    }
+                }
+                else if (sequenceA->obj == NULL || sequenceB->obj == NULL) {
+                    path = DIAGONAL;
+                    aligned += end1 - start1;
+                }
+                else if (substitution_matrix == NULL) {
+                    path = DIAGONAL;
+                    aligned += end1 - start1;
+                    if (sA && sB) {
+                        for (l1 = start1, l2 = start2;
+                             l1 < end1 && l2 < end2;
+                             l1++, l2++) {
+                            cA = sA[l1];
+                            cB = sB[l2];
+                            if (cA == wildcard || cB == wildcard) ;
+                            else if (cA == cB) identities++;
+                            else mismatches++;
+                        }
+                    }
+                }
+                else {
+                    path = DIAGONAL;
+                    aligned += end1 - start1;
+                    if (sA && sB) {
+                        for (l1 = start1, l2 = start2;
+                             l1 < end1 && l2 < end2;
+                             l1++, l2++) {
+                            cA = sA[l1];
+                            cB = sB[l2];
+                            if (cA == cB) identities++;
+                            else mismatches++;
+                            if (substitution_matrix[cA*m+cB] > 0) positives++;
+                        }
+                    }
+                }
+                start1 = end1;
+                start2 = end2;
+            }
+        }
+    }
+
+    counts->open_left_insertions = open_left_insertions;
+    counts->extend_left_insertions = extend_left_insertions;
+    counts->open_left_deletions = open_left_deletions;
+    counts->extend_left_deletions = extend_left_deletions;
+    counts->open_internal_insertions = open_internal_insertions;
+    counts->extend_internal_insertions = extend_internal_insertions;
+    counts->open_internal_deletions = open_internal_deletions;
+    counts->extend_internal_deletions = extend_internal_deletions;
+    counts->open_right_insertions = open_right_insertions;
+    counts->extend_right_insertions = extend_right_insertions;
+    counts->open_right_deletions = open_right_deletions;
+    counts->extend_right_deletions = extend_right_deletions;
+    counts->aligned = aligned;
+    counts->identities = identities;
+    counts->mismatches = mismatches;
+    counts->positives = positives;
+
+    return 1;
+}
+
+static const char Aligner_calculate__doc__[] = "calculate the matches, mismatches, gaps, and score of the alignment";
+
+static PyObject*
+Aligner_calculate(Aligner* self, PyObject* args, PyObject* keywords)
+{
+    Py_ssize_t i;
+    Py_ssize_t n = 0;
+    PyObject* sequence;
+    PyObject* sequences;
+    Py_buffer* buffers;
+    Py_buffer coordinates = {0};
+    Py_buffer strands = {0};
+    PyObject* result = NULL;
+    AlignmentCounts counts;
+
+    static char *kwlist[] = {"sequences", "coordinates", "strands", NULL};
+
+    if(!PyArg_ParseTupleAndKeywords(args, keywords, "OO&O&", kwlist,
+                                    &sequences,
+                                    coordinates_converter, &coordinates,
+                                    strands_converter , &strands))
+        return NULL;
+
+    if (!PyList_Check(sequences)) {
+        PyErr_SetString(PyExc_TypeError, "sequences must be a list");
+        goto exit;
+    }
+
+    n = PyList_GET_SIZE(sequences);
+    if (n != coordinates.shape[0]) {
+        PyErr_SetString(PyExc_ValueError,
+            "number of rows in coordinates must equal the number of sequences");
+        goto exit;
+    }
+    if (n != strands.shape[0]) {
+        PyErr_SetString(PyExc_ValueError,
+            "size of strands must equal the number of sequences");
+        goto exit;
+    }
+
+    buffers = PyMem_Malloc(n*sizeof(Py_buffer));
+    if (!buffers) goto exit;
+
+    for (i = 0; i < n; i++) {
+        sequence = PyList_GET_ITEM(sequences, i);
+        buffers[i].obj = (PyObject *)self;
+        if (sequence_converter(sequence, &buffers[i])) continue;
+        else if (PySequence_Check(sequence)) buffers[i].obj = sequence;
+        else if (sequence == Py_None) buffers[i].obj = NULL;
+        else break;
+    }
+    if (i < n) {
+        n = i;
+        goto exit;
+    }
+
+    if (_aligner_calculate(self,
+                           n,
+                           buffers,
+                           &coordinates,
+                           &strands,
+                           &counts) == 0) goto exit;
+
+    result = Py_BuildValue("nnnnnnnnnn", counts.open_left_insertions +
+                                         counts.extend_left_insertions,
+                                         counts.open_left_deletions +
+                                         counts.extend_left_deletions,
+                                         counts.open_right_insertions +
+                                         counts.extend_right_insertions,
+                                         counts.open_right_deletions +
+                                         counts.extend_right_deletions,
+                                         counts.open_internal_insertions +
+                                         counts.extend_internal_insertions,
+                                         counts.open_internal_deletions +
+                                         counts.extend_internal_deletions,
+                                         counts.aligned,
+                                         counts.identities,
+                                         counts.mismatches,
+                                         counts.positives);
+
+exit:
+    for (i = 0; i < n; i++) if (buffers[i].buf) PyBuffer_Release(&buffers[i]);
+    coordinates_converter(NULL, &coordinates);
+    strands_converter(NULL, &strands);
+
+    return result;
+}
+
 static char Aligner_doc[] =
 "The PairwiseAligner class implements common algorithms to align two\n"
 "sequences to each other.\n";
@@ -7574,6 +7877,11 @@ static PyMethodDef Aligner_methods[] = {
      (PyCFunction)Aligner_align,
      METH_VARARGS | METH_KEYWORDS,
      Aligner_align__doc__
+    },
+    {"calculate",
+     (PyCFunction)Aligner_calculate,
+     METH_VARARGS | METH_KEYWORDS,
+     Aligner_calculate__doc__
     },
     {NULL, NULL, 0, NULL}  /* Sentinel */
 };

@@ -234,7 +234,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         target_record = SeqRecord(target_sequence, id=tName, description="")
         query_record = SeqRecord(query_sequence, id=qName, description="")
         records = [target_record, query_record]
-        coordinates = np.array([tStarts, qStarts])
+        coordinates = np.array([tStarts, qStarts], np.intp)
         coordinates[0, :] += tStart
         coordinates[1, :] += qStart
         if tStrand == "+":

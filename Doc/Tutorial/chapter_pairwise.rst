@@ -2124,11 +2124,11 @@ the size of the substitution matrix:
    >>> aligner = Align.PairwiseAligner()
    >>> m = np.eye(5)
    >>> m[0, 1:] = m[1:, 0] = -2
-   >>> m[2, 2] = 3
+   >>> m[2, 2] = 6
    >>> print(m)
    [[ 1. -2. -2. -2. -2.]
     [-2.  1.  0.  0.  0.]
-    [-2.  0.  3.  0.  0.]
+    [-2.  0.  6.  0.  0.]
     [-2.  0.  0.  1.  0.]
     [-2.  0.  0.  0.  1.]]
    >>> aligner.substitution_matrix = m
@@ -2149,7 +2149,7 @@ the size of the substitution matrix:
    0 3 2 - 1
    <BLANKLINE>
    >>> print(alignments.score)
-   2.0
+   5.0
 
 .. _`sec:codon_alignments`:
 
