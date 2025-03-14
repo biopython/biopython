@@ -137,10 +137,10 @@ automatically).
 
     >>> # set a non-default cmscan tabular output format
     >>> from Bio import SearchIO
-    >>> file = 'Infernal/cmscan_115_IRES_5S_U2_Yeast.tbl'
-    >>> qresult = SearchIO.read(file, 'infernal-tab')
-    >>> qresult
-    QueryResult(id='ENA|BK006936|BK006936.2', 1 hits)
+    >>> file = 'Infernal/cmscan_115_IRES_5S_U2_Yeast_fmt_2.tbl'
+    >>> qresult = SearchIO.parse(file, 'infernal-tab')
+    >>> next(qresult)
+    QueryResult(id='ENA|BK006935|BK006935.2', 1 hits)
 
 Rows marked with '*' denotes attributes not available in the default format.
 
