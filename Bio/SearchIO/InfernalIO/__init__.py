@@ -132,16 +132,17 @@ infernal-tab
 ============
 
 The Infernal plain text parser supports the standard cmsearch tabular output and
-cmscan tabular output files formats 1, 2 and 3.
+cmscan tabular output files formats 1, 2 and 3 (formats are inferred 
+automatically). 
 
     >>> # set a non-default cmscan tabular output format
     >>> from Bio import SearchIO
-    >>> file = 'Infernal/cmscan_115_IRES_5S_U2_Yeast_fmt_2.tbl'
+    >>> file = 'Infernal/cmscan_115_IRES_5S_U2_Yeast.tbl'
     >>> qresult = SearchIO.read(file, 'infernal-tab')
     >>> qresult
     QueryResult(id='ENA|BK006936|BK006936.2', 1 hits)
 
-Rows marked with '*' denotes attributes not available in the default format (`--fmt 1`).
+Rows marked with '*' denotes attributes not available in the default format.
 
 +-----------------+-------------------------+----------------------------------+
 | Object          | Attribute               | Value                            |
