@@ -165,6 +165,8 @@ class AlignmentCounts:
     @property
     def positives(self):
         """the number of aligned letters with a positive score."""
+        if self._positives == -1:
+            return None
         return self._positives
 
     @property

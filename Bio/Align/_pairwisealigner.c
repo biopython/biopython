@@ -7628,8 +7628,9 @@ _aligner_calculate(Aligner* aligner, Py_ssize_t n, Py_buffer* sequences, Py_buff
     Py_buffer* sequenceB;
     int* sA;
     int* sB;
-    int wildcard = '\0';
+    const int wildcard = aligner->wildcard;
     double* substitution_matrix = NULL;
+    int* mapping;
     Py_ssize_t m;
 
     Py_ssize_t open_left_insertions = 0, extend_left_insertions = 0;
@@ -7641,7 +7642,7 @@ _aligner_calculate(Aligner* aligner, Py_ssize_t n, Py_buffer* sequences, Py_buff
     Py_ssize_t aligned = 0;
     Py_ssize_t identities = 0;
     Py_ssize_t mismatches = 0;
-    Py_ssize_t positives = 0;
+    Py_ssize_t positives = -1;
 
     const Py_ssize_t shape2 = coordinates->shape[1];
     const Py_ssize_t stride1 = coordinates->strides[0] / sizeof(Py_ssize_t);
@@ -7652,11 +7653,16 @@ _aligner_calculate(Aligner* aligner, Py_ssize_t n, Py_buffer* sequences, Py_buff
     Py_ssize_t end1, end2;
     Py_ssize_t* buffer = coordinates->buf;
 
+    PyObject* oA = NULL;
+    PyObject* oB = NULL;
+
     int path = 0;
 
     if (aligner->substitution_matrix.obj) {
         substitution_matrix = aligner->substitution_matrix.buf;
         m = aligner->substitution_matrix.shape[0];
+        mapping = aligner->mapping;
+        positives = 0;
     }
 
     for (i = 0; i < n; i++) {
@@ -7719,33 +7725,149 @@ _aligner_calculate(Aligner* aligner, Py_ssize_t n, Py_buffer* sequences, Py_buff
                     path = DIAGONAL;
                     aligned += end1 - start1;
                 }
-                else if (substitution_matrix == NULL) {
-                    path = DIAGONAL;
-                    aligned += end1 - start1;
-                    if (sA && sB) {
-                        for (l1 = start1, l2 = start2;
-                             l1 < end1 && l2 < end2;
-                             l1++, l2++) {
-                            cA = sA[l1];
-                            cB = sB[l2];
-                            if (cA == wildcard || cB == wildcard) ;
-                            else if (cA == cB) identities++;
-                            else mismatches++;
+                else {
+                    char* bA;
+                    char* bB;
+                    if (sA == NULL) {
+                        oA = PySequence_GetSlice(sequenceA->obj, start1, end1);
+                        if (!oA) goto error;
+                        if (!PyBytes_Check(oA)) {
+                            PyErr_Format(PyExc_ValueError,
+                                "alignment.sequences[%d][%d:%d] did not return a bytes object",
+                                i, start1, end1);
+                            goto error;
+                        }
+                        if (PyBytes_GET_SIZE(oA) != end1 - start1) {
+                            PyErr_Format(PyExc_ValueError,
+                                "alignment.sequences[%d][%d:%d] did not return a bytes object of size %d",
+                                i, start1, end1, end1 - start1);
+                            goto error;
+                        }
+                        bA = PyBytes_AS_STRING(oA);
+                    }
+                    if (sB == NULL) {
+                        oB = PySequence_GetSlice(sequenceB->obj, start2, end2);
+                        if (!oB) goto error;
+                        if (!PyBytes_Check(oB)) {
+                            PyErr_Format(PyExc_ValueError,
+                                "alignment.sequences[%d][%d:%d] did not return a bytes object",
+                                j, start2, end2);
+                            goto error;
+                        }
+                        if (PyBytes_GET_SIZE(oB) != end2 - start2) {
+                            PyErr_Format(PyExc_ValueError,
+                                "alignment.sequences[%d[%d:%d] did not return a bytes object of size %d",
+
+                                j, start2, end2, end2 - start2);
+                            goto error;
+                        }
+                        bB = PyBytes_AS_STRING(oB);
+                    }
+                    if (substitution_matrix == NULL) {
+                        path = DIAGONAL;
+                        aligned += end1 - start1;
+                        if (sA && sB) {
+                            for (l1 = start1, l2 = start2;
+                                 l1 < end1 && l2 < end2;
+                                 l1++, l2++) {
+                                cA = sA[l1];
+                                cB = sB[l2];
+                                if (cA == wildcard || cB == wildcard) ;
+                                else if (cA == cB) identities++;
+                                else mismatches++;
+                            }
+                        }
+                        else if (sA) {
+                            for (l1 = start1, l2 = start2;
+                                 l1 < end1 && l2 < end2;
+                                 l1++, l2++) {
+                                cA = sA[l1];
+                                cB = (int) bB[l2-start2];
+                                if (cA == wildcard || cB == wildcard) ;
+                                else if (cA == cB) identities++;
+                                else mismatches++;
+                            }
+                            Py_DECREF(oB);
+                        }
+                        else if (sB) {
+                            for (l1 = start1, l2 = start2;
+                                 l1 < end1 && l2 < end2;
+                                 l1++, l2++) {
+                                cA = (int) bA[l1-start1];
+                                cB = sB[l2];
+                                if (cA == wildcard || cB == wildcard) ;
+                                else if (cA == cB) identities++;
+                                else mismatches++;
+                            }
+                            Py_DECREF(oA);
+                        }
+                        else {
+                            for (l1 = start1, l2 = start2;
+                                 l1 < end1 && l2 < end2;
+                                 l1++, l2++) {
+                                cA = (int) bA[l1-start1];
+                                cB = (int) bB[l2-start2];
+                                if (cA == wildcard || cB == wildcard) ;
+                                else if (cA == cB) identities++;
+                                else mismatches++;
+                            }
+                            Py_DECREF(oA);
+                            Py_DECREF(oB);
                         }
                     }
-                }
-                else {
-                    path = DIAGONAL;
-                    aligned += end1 - start1;
-                    if (sA && sB) {
-                        for (l1 = start1, l2 = start2;
-                             l1 < end1 && l2 < end2;
-                             l1++, l2++) {
-                            cA = sA[l1];
-                            cB = sB[l2];
-                            if (cA == cB) identities++;
-                            else mismatches++;
-                            if (substitution_matrix[cA*m+cB] > 0) positives++;
+                    else {
+                        path = DIAGONAL;
+                        aligned += end1 - start1;
+                        if (sA && sB) {
+                            for (l1 = start1, l2 = start2;
+                                 l1 < end1 && l2 < end2;
+                                 l1++, l2++) {
+                                cA = sA[l1];
+                                cB = sB[l2];
+                                if (cA == cB) identities++;
+                                else mismatches++;
+                                if (substitution_matrix[cA*m+cB] > 0) positives++;
+                            }
+                        }
+                        else if (sA) {
+                            for (l1 = start1, l2 = start2;
+                                 l1 < end1 && l2 < end2;
+                                 l1++, l2++) {
+                                cA = sA[l1];
+                                cB = mapping[(int) bB[l2-start2]];
+                                if (cA == wildcard || cB == wildcard) ;
+                                else if (cA == cB) identities++;
+                                else mismatches++;
+                                if (substitution_matrix[cA*m+cB] > 0) positives++;
+                            }
+                            Py_DECREF(oB);
+                        }
+                        else if (sB) {
+                            for (l1 = start1, l2 = start2;
+                                 l1 < end1 && l2 < end2;
+                                 l1++, l2++) {
+                                cA = mapping[(int) bA[l1-start1]];
+                                cB = sB[l2];
+                                if (cA == wildcard || cB == wildcard) ;
+                                else if (cA == cB) identities++;
+                                else mismatches++;
+                                if (substitution_matrix[cA*m+cB] > 0) positives++;
+                            }
+                            Py_DECREF(oA);
+                        }
+                        else {
+                            for (l1 = start1, l2 = start2;
+                                 l1 < end1 && l2 < end2;
+                                 l1++, l2++) {
+                                cA = mapping[(int) bA[l1-start1]];
+                                cB = mapping[(int) bB[l2-start2]];
+                                if (cA == wildcard || cB == wildcard) ;
+                                else if (cA == cB) identities++;
+                                else mismatches++;
+                                if (substitution_matrix[cA*m+cB] > 0) positives++;
+                            }
+                            Py_DECREF(oA);
+                            Py_DECREF(oB);
                         }
                     }
                 }
@@ -7754,7 +7876,6 @@ _aligner_calculate(Aligner* aligner, Py_ssize_t n, Py_buffer* sequences, Py_buff
             }
         }
     }
-
     counts->open_left_insertions = open_left_insertions;
     counts->extend_left_insertions = extend_left_insertions;
     counts->open_left_deletions = open_left_deletions;
@@ -7773,6 +7894,11 @@ _aligner_calculate(Aligner* aligner, Py_ssize_t n, Py_buffer* sequences, Py_buff
     counts->positives = positives;
 
     return 1;
+
+error:
+    Py_XDECREF(oA);
+    Py_XDECREF(oB);
+    return 0;
 }
 
 static const char Aligner_calculate__doc__[] = "calculate the matches, mismatches, gaps, and score of the alignment";
@@ -7815,14 +7941,15 @@ Aligner_calculate(Aligner* self, PyObject* args, PyObject* keywords)
         goto exit;
     }
 
-    buffers = PyMem_Malloc(n*sizeof(Py_buffer));
+    buffers = PyMem_Calloc(n, sizeof(Py_buffer));
     if (!buffers) goto exit;
 
     for (i = 0; i < n; i++) {
         sequence = PyList_GET_ITEM(sequences, i);
         buffers[i].obj = (PyObject *)self;
         if (sequence_converter(sequence, &buffers[i])) continue;
-        else if (PySequence_Check(sequence)) buffers[i].obj = sequence;
+        PyErr_Clear();  // to clear the exception raised by PyObject_GetBuffer
+        if (PySequence_Check(sequence)) buffers[i].obj = sequence;
         else if (sequence == Py_None) buffers[i].obj = NULL;
         else break;
     }

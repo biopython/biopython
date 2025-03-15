@@ -7109,7 +7109,6 @@ query             0 ACTTT-GT-------  7
         counts = alignment.counts()
         self.check_counts(counts)
         counts = aligner.calculate(alignment)
-        counts = aligner.calculate(alignment)
         alignments = aligner.align(b"TTACGTCCCCCCC", Seq("ACTTTGT"))
         alignment = alignments[0]
         self.assertEqual(
@@ -7123,6 +7122,220 @@ A C T  T  T  -- G  T  -- -- -- -- -- -- --
         counts = alignment.counts()
         self.check_counts(counts)
         counts = aligner.calculate(alignment)
+
+    def test_incomplete_nucleotide_sequence(self):
+        aligner = Align.PairwiseAligner()
+        aligner_blastn = Align.PairwiseAligner("blastn")
+        seqA = Seq({10: "TTACGT", 20: "CCCCCCC"}, length=50)
+        seqB = Seq("TTACGTCCCCCCC")
+        coordinates = np.array([[10, 16, 20, 27], [0, 6, 6, 13]])
+        alignment = Align.Alignment([seqA, seqB], coordinates)
+        self.assertEqual(
+            str(alignment),
+            """\
+target           10 TTACGT????CCCCCCC 27
+                  0 ||||||----||||||| 17
+query             0 TTACGT----CCCCCCC 13
+""",
+        )
+        counts = aligner.calculate(alignment)
+        self.assertEqual(counts.left_insertions, 0)
+        self.assertEqual(counts.left_deletions, 0)
+        self.assertEqual(counts.internal_insertions, 0)
+        self.assertEqual(counts.internal_deletions, 4)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 0)
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.positives)
+        counts = aligner_blastn.calculate(alignment)
+        self.assertEqual(counts.left_insertions, 0)
+        self.assertEqual(counts.left_deletions, 0)
+        self.assertEqual(counts.internal_insertions, 0)
+        self.assertEqual(counts.internal_deletions, 4)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 0)
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.positives, 13)
+        alignment = Align.Alignment([seqB, seqA], coordinates[::-1])
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 TTACGT----CCCCCCC 13
+                  0 ||||||----||||||| 17
+query            10 TTACGT????CCCCCCC 27
+""",
+        )
+        counts = aligner.calculate(alignment)
+        self.assertEqual(counts.left_insertions, 0)
+        self.assertEqual(counts.left_deletions, 0)
+        self.assertEqual(counts.internal_insertions, 4)
+        self.assertEqual(counts.internal_deletions, 0)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 0)
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.positives)
+        counts = aligner_blastn.calculate(alignment)
+        self.assertEqual(counts.left_insertions, 0)
+        self.assertEqual(counts.left_deletions, 0)
+        self.assertEqual(counts.internal_insertions, 4)
+        self.assertEqual(counts.internal_deletions, 0)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 0)
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.positives, 13)
+        seqA = Seq({10: "TTACGT", 20: "CCCCCCC"}, length=50)
+        seqB = Seq({100: "TTACGTCCCCCCC"}, length=200)
+        coordinates = np.array([[10, 16, 20, 27], [100, 106, 106, 113]])
+        alignment = Align.Alignment([seqA, seqB], coordinates)
+        self.assertEqual(
+            str(alignment),
+            """\
+target           10 TTACGT????CCCCCCC  27
+                  0 ||||||----|||||||  17
+query           100 TTACGT----CCCCCCC 113
+""",
+        )
+        counts = aligner.calculate(alignment)
+        self.assertEqual(counts.left_insertions, 0)
+        self.assertEqual(counts.left_deletions, 0)
+        self.assertEqual(counts.internal_insertions, 0)
+        self.assertEqual(counts.internal_deletions, 4)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 0)
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.positives)
+
+    def test_incomplete_aminoacid_sequence(self):
+        aligner = Align.PairwiseAligner()
+        aligner_blastp = Align.PairwiseAligner("blastp")
+        seqA = Seq(
+            {
+                374: "LHPREDACIPNTNYGVLLIEFFELYGRHFNYLKTGIRIKDGGSYVAKDEVQKNMLDGYRPSMLYIEDPLQPGNDVGRSSYGAMQVKQAFDYAYVVLSHAVSPIAKYYPNNETESILGRIIRVTDEVATYRDWISKQWGLKNRPEPSCNGNGVTLIVDTQQLDKCNNNLSEENEALGKCRSKTSESLSKHSSNSSSGPVSSSSATQSSSSDVDSDATPCKTP"
+            },
+            length=698,
+        )
+        seqB = Seq(
+            {
+                382: "LHPRIDARRANENLGMLLIEFFELYGRNFNYLKTGIRIRDGGAYIAKEEIMKAMANGYRPSMLCIEDPLLPENDVGRSSYGAVQVQQAFDYAYLVLSHSVSPLARSYPNRDTESILGRIIKITQEVIDYRRWIKQKWQSKMDSSQICDTERESQSLCPDVNMKSSLDQCLSISPCSPQPSEPCSSSSSLSGSDIDSDTPPSVTP"
+            },
+            length=742,
+        )
+        coordinates = np.array(
+            [
+                [
+                    374,
+                    507,
+                    508,
+                    510,
+                    510,
+                    514,
+                    529,
+                    535,
+                    537,
+                    539,
+                    542,
+                    544,
+                    544,
+                    549,
+                    551,
+                    554,
+                    554,
+                    557,
+                    557,
+                    562,
+                    564,
+                    568,
+                    568,
+                    576,
+                    579,
+                    580,
+                    580,
+                    595,
+                ],
+                [
+                    382,
+                    515,
+                    515,
+                    517,
+                    518,
+                    522,
+                    522,
+                    528,
+                    528,
+                    530,
+                    530,
+                    532,
+                    533,
+                    538,
+                    538,
+                    541,
+                    544,
+                    547,
+                    549,
+                    554,
+                    554,
+                    558,
+                    561,
+                    569,
+                    569,
+                    570,
+                    571,
+                    586,
+                ],
+            ]
+        )
+        alignment = Align.Alignment([seqA, seqB], coordinates)
+        self.assertEqual(
+            str(alignment),
+            """\
+target          374 LHPREDACIPNTNYGVLLIEFFELYGRHFNYLKTGIRIKDGGSYVAKDEVQKNMLDGYRP
+                  0 ||||.||...|.|.|.|||||||||||.||||||||||.|||.|.||.|..|.|..||||
+query           382 LHPRIDARRANENLGMLLIEFFELYGRNFNYLKTGIRIRDGGAYIAKEEIMKAMANGYRP
+
+target          434 SMLYIEDPLQPGNDVGRSSYGAMQVKQAFDYAYVVLSHAVSPIAKYYPNNETESILGRII
+                 60 |||.|||||.|.||||||||||.||.|||||||.||||.|||.|..|||..|||||||||
+query           442 SMLCIEDPLLPENDVGRSSYGAVQVQQAFDYAYLVLSHSVSPLARSYPNRDTESILGRII
+
+target          494 RVTDEVATYRDWISKQ-WGLKNRPEPSCNGNGVTLIVDTQQLDKCNNNLSE-ENEALGKC
+                120 ..|.||..||.||-||-|..|---------------.|..|.--|.---.|-|...|--|
+query           502 KITQEVIDYRRWI-KQKWQSK---------------MDSSQI--CD---TERESQSL--C
+
+target          552 RS---KTS--ESLSKHSSNSS---SGPVSSSSATQS-SSSDVDSDATPCKTP 595
+                180 ..---|.|--..||.--|..|---|.|.||||---|-|.||.|||..|..|| 232
+query           539 PDVNMKSSLDQCLSI--SPCSPQPSEPCSSSS---SLSGSDIDSDTPPSVTP 586
+""",
+        )
+        counts = aligner.calculate(alignment)
+        self.assertEqual(counts.left_deletions, 0)
+        self.assertEqual(counts.internal_insertions, 11)
+        self.assertEqual(counts.internal_deletions, 28)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 0)
+        self.assertEqual(counts.aligned, 193)
+        self.assertEqual(counts.identities, 131)
+        self.assertEqual(counts.mismatches, 62)
+        self.assertIsNone(counts.positives)
+        counts = aligner_blastp.calculate(alignment)
+        self.assertEqual(counts.left_insertions, 0)
+        self.assertEqual(counts.left_deletions, 0)
+        self.assertEqual(counts.internal_insertions, 11)
+        self.assertEqual(counts.internal_deletions, 28)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 0)
+        self.assertEqual(counts.aligned, 193)
+        self.assertEqual(counts.identities, 131)
+        self.assertEqual(counts.mismatches, 62)
+        self.assertEqual(counts.positives, 159)
 
 
 if __name__ == "__main__":
