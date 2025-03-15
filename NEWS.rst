@@ -16,6 +16,15 @@ The latest news is at the top of this file.
 This release of Biopython supports Python 3.10, 3.11, 3.12 and 3.13.  It
 has also been tested on PyPy3.10 v7.3.17.
 
+``Bio.SearchIO`` now supports parsing the tabular and plain text output of
+`Infernal <http://eddylab.org/infernal/>` (v1.0.0+) RNA search tool. The 
+format are ``infernal-tab`` and ``infernal-text``.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+- Samuel Prince (first contribution)
+
 15 January 2025: Biopython 1.85
 ===============================
 

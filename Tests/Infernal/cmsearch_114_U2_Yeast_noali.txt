@@ -1,0 +1,40 @@
+# cmsearch :: search CM(s) against a sequence database
+# INFERNAL 1.1.4 (Dec 2020)
+# Copyright (C) 2020 Howard Hughes Medical Institute.
+# Freely distributed under the BSD open source license.
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# query CM file:                         RF00004.cm
+# target sequence database:              GCA_000146045.2.fasta
+# show alignments in output:             no
+# sequence reporting threshold:          score >= 46
+# number of worker threads:              56
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Query:       U2  [CLEN=193]
+Accession:   RF00004
+Description: U2 spliceosomal RNA
+Hit scores:
+ rank     E-value  score  bias  sequence                 start    end   mdl trunc   gc  description
+ ----   --------- ------ -----  ----------------------- ------ ------   --- ----- ----  -----------
+  (1) !   5.9e-20   98.7   0.1  ENA|BK006936|BK006936.2 681858 681747 -  cm    no 0.33  TPA_inf: Saccharomyces cerevisiae S288C chromosome II,
+
+
+Internal CM pipeline statistics summary:
+----------------------------------------
+Query model(s):                                                  1  (193 consensus positions)
+Target sequences:                                               16  (24142652 residues searched)
+Target sequences re-searched for truncated hits:                16  (15424 residues re-searched)
+Windows   passing  local HMM SSV           filter:           72732  (0.7978); expected (0.35)
+Windows   passing  local HMM Viterbi       filter:           24175  (0.3233); expected (0.15)
+Windows   passing  local HMM Viterbi  bias filter:            6671  (0.09669); expected (0.15)
+Windows   passing  local HMM Forward       filter:            2037  (0.03161); expected (0.003)
+Windows   passing  local HMM Forward  bias filter:            1133  (0.01757); expected (0.003)
+Windows   passing glocal HMM Forward       filter:             596  (0.01251); expected (0.003)
+Windows   passing glocal HMM Forward  bias filter:             438  (0.009175); expected (0.003)
+Envelopes passing glocal HMM envelope defn filter:             460  (0.00429); expected (0.003)
+Envelopes passing  local CM  CYK           filter:              38  (0.000201); expected (0.0001)
+Total CM hits reported:                                          1  (4.636e-06); includes 0 truncated hit(s)
+
+# CPU time: 65.01u 2.28s 00:01:07.29 Elapsed: 00:00:03.20
+//
+[ok]
