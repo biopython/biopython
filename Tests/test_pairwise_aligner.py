@@ -7215,127 +7215,81 @@ query           100 TTACGT----CCCCCCC 113
         self.assertEqual(counts.mismatches, 0)
         self.assertIsNone(counts.positives)
 
-    def test_incomplete_aminoacid_sequence(self):
+    def check_blastp(self, counts):
+        self.assertEqual(counts.left_insertions, 0)
+        self.assertEqual(counts.left_deletions, 0)
+        self.assertEqual(counts.internal_insertions, 2)
+        self.assertEqual(counts.internal_deletions, 34)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 0)
+        self.assertEqual(counts.aligned, 444)
+        self.assertEqual(counts.identities, 237)
+        self.assertEqual(counts.mismatches, 207)
+        self.assertEqual(counts.gaps, 36)
+
+    def test_blastp(self):
         aligner = Align.PairwiseAligner()
         aligner_blastp = Align.PairwiseAligner("blastp")
-        seqA = Seq(
-            {
-                374: "LHPREDACIPNTNYGVLLIEFFELYGRHFNYLKTGIRIKDGGSYVAKDEVQKNMLDGYRPSMLYIEDPLQPGNDVGRSSYGAMQVKQAFDYAYVVLSHAVSPIAKYYPNNETESILGRIIRVTDEVATYRDWISKQWGLKNRPEPSCNGNGVTLIVDTQQLDKCNNNLSEENEALGKCRSKTSESLSKHSSNSSSGPVSSSSATQSSSSDVDSDATPCKTP"
-            },
-            length=698,
-        )
-        seqB = Seq(
-            {
-                382: "LHPRIDARRANENLGMLLIEFFELYGRNFNYLKTGIRIRDGGAYIAKEEIMKAMANGYRPSMLCIEDPLLPENDVGRSSYGAVQVQQAFDYAYLVLSHSVSPLARSYPNRDTESILGRIIKITQEVIDYRRWIKQKWQSKMDSSQICDTERESQSLCPDVNMKSSLDQCLSISPCSPQPSEPCSSSSSLSGSDIDSDTPPSVTP"
-            },
-            length=742,
-        )
-        coordinates = np.array(
-            [
-                [
-                    374,
-                    507,
-                    508,
-                    510,
-                    510,
-                    514,
-                    529,
-                    535,
-                    537,
-                    539,
-                    542,
-                    544,
-                    544,
-                    549,
-                    551,
-                    554,
-                    554,
-                    557,
-                    557,
-                    562,
-                    564,
-                    568,
-                    568,
-                    576,
-                    579,
-                    580,
-                    580,
-                    595,
-                ],
-                [
-                    382,
-                    515,
-                    515,
-                    517,
-                    518,
-                    522,
-                    522,
-                    528,
-                    528,
-                    530,
-                    530,
-                    532,
-                    533,
-                    538,
-                    538,
-                    541,
-                    544,
-                    547,
-                    549,
-                    554,
-                    554,
-                    558,
-                    561,
-                    569,
-                    569,
-                    570,
-                    571,
-                    586,
-                ],
-            ]
-        )
+        seqA = "MRPRPRSAPGKPRRRSRARLRSSRTPSGGASGGGGSSSSSSTATGGSGSSTGSPGGAASAPAPAPAGMYRSGERLLGSHALPAEQRDFLPLETTNNNNNHHQPGAWARRAGSSASSPPSASSSPHPSAAVPAADPADSASGSSNKRKRDNKASTYGLNYSLLQPSGGRAAGGGRADGGGVVYSGTPWKRRNYNQGVVGLHEEISDFYEYMSPRPEEEKMRMEVVNRIESVIKELWPSADVQIFGSFKTGLYLPTSDIDLVVFGKWENLPLWTLEEALRKHKVADEDSVKVLDKATVPIIKLTDSFTEVKVDISFNVQNGVRAADLIKDFTKKYPVLPYLVLVLKQFLLQRDLNEVFTGGIGSYSLFLMAVSFLQLHPREDACIPNTNYGVLLIEFFELYGRHFNYLKTGIRIKDGGSYVAKDEVQKNMLDGYRPSMLYIEDPLQPGNDVGRSSYGAMQVKQAFDYAYVVLSHAVSPIAKYYPNNETESILGRIIRVTDEVATYRDWISKQWGLKNRPEPSCNGNGVTLIVDTQQLDKCNNNLSEENEALGKCRSKTSESLSKHSSNSSSGPVSSSSATQSSSSDVDSDATPCKTPKQLLCRPSTGNRVGSQDVSLESSQAVGKMQSTQTTNTSNSTNKSQHGSARLFRSSSKGFQGTTQTSHGSLMTNKQHQGKSNNQYYHGKKRKHKRDAPLSDLCR"
+        seqB = "MDPFVGWFQKEQEGPSLCTWLKIWETNAQEMGALLNQQLQQATTINGSTSSSSSSSNSGNNNNNNNNNIINNTITNTTNNTGNNSSAKPYLSRPYSSLNRVLNFRADSLEILQQQQQQQQLNGTTQRNSTNINTTSGGSTSSSADSTTNRDNNSPANSSSTNGPGAGTGTSTGAGGTGTNSPATTASSTAATTTGPATSMSDTSNNPPQSTTTPASRTNSIYYNPSRKKRPENKAGGAHYYMNNHMEMIAKYKGEPWRKPDYPYGEGVIGLHEEIEHFYQYVLPTPCEHAIRNEVVKRIEAVVHSIWPQAVVEIFGSFRTGLFLPTSDIDLVVLGLWEKLPLRTLEFELVSRGIAEACTVRVLDKASVPIIKLTDRETQVKVDISFNMQSGVQSAELIKKFKRDYPVLEKLVLVLKQFLLLRDLNEVFTGGISSYSLILMCISFLQMHPRGIYHDTANLGVLLLEFFELYGRRFNYMKIGISIKNGGRYMPKDELQRDMVDGHRPSLLCIEDPLTPGNDIGRSSYGVFQVQQAFKCAYRVLALAVSPLNLLGIDPRVNSILGRIIHITDDVIDYREWIRENFEHLVVVDRISPLPTAAPTAYATANGAPKYVIMPSGAVVQQLYHHPVQVPTAHGHSHAHSHSHGHAHPGAHLCQPYVTGTTVSAVTTTTTMAVVTVGVSAGGVQQQQQQQNATAHTHSQQQTQNQSQSRHRRGSTSSGDDSEDSKDGDVVETTSSAQEVVDIALSTPNGLANMSMPMPVHAVGMPASNSWSGNGNGNGNSSSSTGSSPEIAHIAAQEMDPELEDQQQQQQHQETSGGNGFIRPGDVGTGSNRGGGDGSGGRNYNQRNNHNSSGYYHQQYYVPPPMQQQLSKSNSSSNYHQQHHHSHSHGNHSHRQQHHHQQQHHHQQRPQHLRVGGGNRYQKSLGGSPIISAGNASNSSSNCSNSSSSSGSNNSRLPPLRGTLVNSSSAISIISISSESSIASSSSSSSRSGQDQQRDER"
+        # fmt: off
+        coordinates = np.array([[ 33,  44,  46,  80,  89,  97, 106, 153, 155,
+                                 170, 181, 192, 192, 378, 379, 511],
+                                [136, 147, 147, 181, 181, 189, 189, 236, 236,
+                                 251, 251, 262, 264, 450, 450, 582]])
+        # fmt: on
         alignment = Align.Alignment([seqA, seqB], coordinates)
         self.assertEqual(
             str(alignment),
             """\
-target          374 LHPREDACIPNTNYGVLLIEFFELYGRHFNYLKTGIRIKDGGSYVAKDEVQKNMLDGYRP
-                  0 ||||.||...|.|.|.|||||||||||.||||||||||.|||.|.||.|..|.|..||||
-query           382 LHPRIDARRANENLGMLLIEFFELYGRNFNYLKTGIRIRDGGAYIAKEEIMKAMANGYRP
+target           33 GGSSSSSSTATGGSGSSTGSPGGAASAPAPAPAGMYRSGERLLGSHALPAEQRDFLPLET
+                  0 |||.|||...|--......||....|...|........|....|...---------|..|
+query           136 GGSTSSSADST--TNRDNNSPANSSSTNGPGAGTGTSTGAGGTGTNS---------PATT
 
-target          434 SMLYIEDPLQPGNDVGRSSYGAMQVKQAFDYAYVVLSHAVSPIAKYYPNNETESILGRII
-                 60 |||.|||||.|.||||||||||.||.|||||||.||||.|||.|..|||..|||||||||
-query           442 SMLCIEDPLLPENDVGRSSYGAVQVQQAFDYAYLVLSHSVSPLARSYPNRDTESILGRII
+target           93 TNNNNNHHQPGAWARRAGSSASSPPSASSSPHPSAAVPAADPADSASGSSNKRKRDNKAS
+                 60 ....---------|......|.|....|..|..|...||..........|.|....|||.
+query           185 ASST---------AATTTGPATSMSDTSNNPPQSTTTPASRTNSIYYNPSRKKRPENKAG
 
-target          494 RVTDEVATYRDWISKQ-WGLKNRPEPSCNGNGVTLIVDTQQLDKCNNNLSE-ENEALGKC
-                120 ..|.||..||.||-||-|..|---------------.|..|.--|.---.|-|...|--|
-query           502 KITQEVIDYRRWI-KQKWQSK---------------MDSSQI--CD---TERESQSL--C
+target          153 TYGLNYSLLQPSGGRAAGGGRADGGGVVYSGTPWKRRNY--NQGVVGLHEEISDFYEYMS
+                120 --|..|.........|.-----------|.|.||....|--..||.||||||..||.|..
+query           236 --GAHYYMNNHMEMIAK-----------YKGEPWRKPDYPYGEGVIGLHEEIEHFYQYVL
 
-target          552 RS---KTS--ESLSKHSSNSS---SGPVSSSSATQS-SSSDVDSDATPCKTP 595
-                180 ..---|.|--..||.--|..|---|.|.||||---|-|.||.|||..|..|| 232
-query           539 PDVNMKSSLDQCLSI--SPCSPQPSEPCSSSS---SLSGSDIDSDTPPSVTP 586
+target          211 PRPEEEKMRMEVVNRIESVIKELWPSADVQIFGSFKTGLYLPTSDIDLVVFGKWENLPLW
+                180 |.|.|...|.|||.|||.|....||.|.|.|||||.|||.||||||||||.|.||.|||.
+query           283 PTPCEHAIRNEVVKRIEAVVHSIWPQAVVEIFGSFRTGLFLPTSDIDLVVLGLWEKLPLR
+
+target          271 TLEEALRKHKVADEDSVKVLDKATVPIIKLTDSFTEVKVDISFNVQNGVRAADLIKDFTK
+                240 |||..|.....|....|.|||||.||||||||..|.||||||||.|.||..|.|||.|..
+query           343 TLEFELVSRGIAEACTVRVLDKASVPIIKLTDRETQVKVDISFNMQSGVQSAELIKKFKR
+
+target          331 KYPVLPYLVLVLKQFLLQRDLNEVFTGGIGSYSLFLMAVSFLQLHPREDACIPNTNYGVL
+                300 .||||..||||||||||.|||||||||||.||||.||..||||.|||-.......|.|||
+query           403 DYPVLEKLVLVLKQFLLLRDLNEVFTGGISSYSLILMCISFLQMHPR-GIYHDTANLGVL
+
+target          391 LIEFFELYGRHFNYLKTGIRIKDGGSYVAKDEVQKNMLDGYRPSMLYIEDPLQPGNDVGR
+                360 |.||||||||.|||.|.||.||.||.|..|||.|..|.||.|||.|.|||||.||||.||
+query           462 LLEFFELYGRRFNYMKIGISIKNGGRYMPKDELQRDMVDGHRPSLLCIEDPLTPGNDIGR
+
+target          451 SSYGAMQVKQAFDYAYVVLSHAVSPIAKYYPNNETESILGRIIRVTDEVATYRDWISKQW
+                420 ||||..||.|||..||.||..||||...........|||||||..||.|..||.||....
+query           522 SSYGVFQVQQAFKCAYRVLALAVSPLNLLGIDPRVNSILGRIIHITDDVIDYREWIRENF
+
+target          511 
+                480 
+query           582 
 """,
         )
         counts = aligner.calculate(alignment)
-        self.assertEqual(counts.left_deletions, 0)
-        self.assertEqual(counts.internal_insertions, 11)
-        self.assertEqual(counts.internal_deletions, 28)
-        self.assertEqual(counts.right_insertions, 0)
-        self.assertEqual(counts.right_deletions, 0)
-        self.assertEqual(counts.aligned, 193)
-        self.assertEqual(counts.identities, 131)
-        self.assertEqual(counts.mismatches, 62)
+        self.check_blastp(counts)
         self.assertIsNone(counts.positives)
         counts = aligner_blastp.calculate(alignment)
-        self.assertEqual(counts.left_insertions, 0)
-        self.assertEqual(counts.left_deletions, 0)
-        self.assertEqual(counts.internal_insertions, 11)
-        self.assertEqual(counts.internal_deletions, 28)
-        self.assertEqual(counts.right_insertions, 0)
-        self.assertEqual(counts.right_deletions, 0)
-        self.assertEqual(counts.aligned, 193)
-        self.assertEqual(counts.identities, 131)
-        self.assertEqual(counts.mismatches, 62)
-        self.assertEqual(counts.positives, 159)
+        self.check_blastp(counts)
+        self.assertEqual(counts.positives, 306)
+        seqA = Seq({33: seqA[33:511]}, length=len(seqA))
+        seqB = Seq({136: seqB[136:582]}, length=len(seqB))
+        alignment = Align.Alignment([seqA, seqB], coordinates)
+        counts = aligner_blastp.calculate(alignment)
+        self.check_blastp(counts)
 
 
 if __name__ == "__main__":
