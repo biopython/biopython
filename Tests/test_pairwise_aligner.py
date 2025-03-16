@@ -7291,6 +7291,29 @@ query           582
         counts = aligner_blastp.calculate(alignment)
         self.check_blastp(counts)
 
+    def test_string(self):
+        aligner = Align.PairwiseAligner()
+        aligner.gap_score = -2
+        seqA = "あいうえおかきくけこ"
+        seqB = "いうきあけ"
+        alignments = aligner.align(seqA, seqB)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertEqual(alignment[0], "あいうえおかきくけこ")
+        self.assertEqual(alignment[1], "-いう---きあけ-")
+        self.assertAlmostEqual(alignment.score, -6.0)
+        counts = aligner.calculate(alignment)
+        self.assertEqual(counts.left_insertions, 0)
+        self.assertEqual(counts.left_deletions, 1)
+        self.assertEqual(counts.internal_insertions, 0)
+        self.assertEqual(counts.internal_deletions, 3)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 1)
+        self.assertEqual(counts.aligned, 5)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.positives)
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

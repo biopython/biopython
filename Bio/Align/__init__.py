@@ -131,6 +131,10 @@ class AlignmentCounts:
         self._positives = positives
 
     def __repr__(self):
+        if self.positives == -1:
+            positives = None
+        else:
+            positives = self._positives
         return (
             "AlignmentCounts(left_insertions=%d, left_deletions=%d, internal_insertions=%d, internal_deletions=%d, right_insertions=%d, right_deletions=%d, aligned=%d, identities=%s, mismatches=%s, positives=%s)"
             % (
@@ -143,7 +147,7 @@ class AlignmentCounts:
                 self._aligned,
                 self._identities,
                 self._mismatches,
-                self._positives,
+                positives,
             )
         )
 
