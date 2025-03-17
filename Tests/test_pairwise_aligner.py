@@ -7123,6 +7123,28 @@ A C T  T  T  -- G  T  -- -- -- -- -- -- --
         self.check_counts(counts)
         counts = aligner.calculate(alignment)
 
+    def check_incomplete_nucleotide_sequence(self, counts):
+        self.assertEqual(counts.left_insertions, 0)
+        self.assertEqual(counts.left_deletions, 0)
+        self.assertEqual(counts.internal_insertions, 0)
+        self.assertEqual(counts.internal_deletions, 4)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 0)
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 0)
+
+    def check_incomplete_nucleotide_sequence_switched(self, counts):
+        self.assertEqual(counts.left_insertions, 0)
+        self.assertEqual(counts.left_deletions, 0)
+        self.assertEqual(counts.internal_insertions, 4)
+        self.assertEqual(counts.internal_deletions, 0)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 0)
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 0)
+
     def test_incomplete_nucleotide_sequence(self):
         aligner = Align.PairwiseAligner()
         aligner_blastn = Align.PairwiseAligner("blastn")
@@ -7139,27 +7161,10 @@ query             0 TTACGT----CCCCCCC 13
 """,
         )
         counts = aligner.calculate(alignment)
-        self.assertEqual(counts.left_insertions, 0)
-        self.assertEqual(counts.left_deletions, 0)
-        self.assertEqual(counts.internal_insertions, 0)
-        self.assertEqual(counts.internal_deletions, 4)
-        self.assertEqual(counts.right_insertions, 0)
-        self.assertEqual(counts.right_deletions, 0)
-        self.assertEqual(counts.aligned, 13)
-        self.assertEqual(counts.identities, 13)
-        self.assertEqual(counts.mismatches, 0)
+        self.check_incomplete_nucleotide_sequence(counts)
         self.assertIsNone(counts.positives)
         counts = aligner_blastn.calculate(alignment)
-        self.assertEqual(counts.left_insertions, 0)
-        self.assertEqual(counts.left_deletions, 0)
-        self.assertEqual(counts.internal_insertions, 0)
-        self.assertEqual(counts.internal_deletions, 4)
-        self.assertEqual(counts.right_insertions, 0)
-        self.assertEqual(counts.right_deletions, 0)
-        self.assertEqual(counts.aligned, 13)
-        self.assertEqual(counts.identities, 13)
-        self.assertEqual(counts.mismatches, 0)
-        self.assertEqual(counts.positives, 13)
+        self.check_incomplete_nucleotide_sequence(counts)
         alignment = Align.Alignment([seqB, seqA], coordinates[::-1])
         self.assertEqual(
             str(alignment),
@@ -7170,26 +7175,10 @@ query            10 TTACGT????CCCCCCC 27
 """,
         )
         counts = aligner.calculate(alignment)
-        self.assertEqual(counts.left_insertions, 0)
-        self.assertEqual(counts.left_deletions, 0)
-        self.assertEqual(counts.internal_insertions, 4)
-        self.assertEqual(counts.internal_deletions, 0)
-        self.assertEqual(counts.right_insertions, 0)
-        self.assertEqual(counts.right_deletions, 0)
-        self.assertEqual(counts.aligned, 13)
-        self.assertEqual(counts.identities, 13)
-        self.assertEqual(counts.mismatches, 0)
+        self.check_incomplete_nucleotide_sequence_switched(counts)
         self.assertIsNone(counts.positives)
         counts = aligner_blastn.calculate(alignment)
-        self.assertEqual(counts.left_insertions, 0)
-        self.assertEqual(counts.left_deletions, 0)
-        self.assertEqual(counts.internal_insertions, 4)
-        self.assertEqual(counts.internal_deletions, 0)
-        self.assertEqual(counts.right_insertions, 0)
-        self.assertEqual(counts.right_deletions, 0)
-        self.assertEqual(counts.aligned, 13)
-        self.assertEqual(counts.identities, 13)
-        self.assertEqual(counts.mismatches, 0)
+        self.check_incomplete_nucleotide_sequence_switched(counts)
         self.assertEqual(counts.positives, 13)
         seqA = Seq({10: "TTACGT", 20: "CCCCCCC"}, length=50)
         seqB = Seq({100: "TTACGTCCCCCCC"}, length=200)
@@ -7204,16 +7193,65 @@ query           100 TTACGT----CCCCCCC 113
 """,
         )
         counts = aligner.calculate(alignment)
-        self.assertEqual(counts.left_insertions, 0)
-        self.assertEqual(counts.left_deletions, 0)
-        self.assertEqual(counts.internal_insertions, 0)
-        self.assertEqual(counts.internal_deletions, 4)
-        self.assertEqual(counts.right_insertions, 0)
-        self.assertEqual(counts.right_deletions, 0)
-        self.assertEqual(counts.aligned, 13)
-        self.assertEqual(counts.identities, 13)
-        self.assertEqual(counts.mismatches, 0)
+        self.check_incomplete_nucleotide_sequence(counts)
         self.assertIsNone(counts.positives)
+        counts = aligner_blastn.calculate(alignment)
+        self.check_incomplete_nucleotide_sequence(counts)
+        self.assertEqual(counts.positives, 13)
+        seqA_rc = seqA.reverse_complement()
+        seqB_rc = seqB.reverse_complement()
+        coordinates_rc = np.array(coordinates)
+        coordinates_rc[0, :] = len(seqA) - coordinates[0, :]
+        alignment = Align.Alignment([seqA_rc, seqB], coordinates_rc)
+        self.assertEqual(
+            str(alignment),
+            """\
+target           40 TTACGT????CCCCCCC  23
+                  0 ||||||----|||||||  17
+query           100 TTACGT----CCCCCCC 113
+""",
+        )
+        counts = aligner.calculate(alignment)
+        self.check_incomplete_nucleotide_sequence(counts)
+        self.assertIsNone(counts.positives)
+        counts = aligner_blastn.calculate(alignment)
+        self.check_incomplete_nucleotide_sequence(counts)
+        self.assertEqual(counts.positives, 13)
+        coordinates_rc = np.array(coordinates)
+        coordinates_rc[1, :] = len(seqB) - coordinates[1, :]
+        alignment = Align.Alignment([seqA, seqB_rc], coordinates_rc)
+        self.assertEqual(
+            str(alignment),
+            """\
+target           10 TTACGT????CCCCCCC 27
+                  0 ||||||----||||||| 17
+query           100 TTACGT----CCCCCCC 87
+""",
+        )
+        counts = aligner.calculate(alignment)
+        self.check_incomplete_nucleotide_sequence(counts)
+        self.assertIsNone(counts.positives)
+        counts = aligner_blastn.calculate(alignment)
+        self.check_incomplete_nucleotide_sequence(counts)
+        self.assertEqual(counts.positives, 13)
+        coordinates_rc = np.array(coordinates)
+        coordinates_rc[0, :] = len(seqA) - coordinates[0, :]
+        coordinates_rc[1, :] = len(seqB) - coordinates[1, :]
+        alignment = Align.Alignment([seqA_rc, seqB_rc], coordinates_rc)
+        self.assertEqual(
+            str(alignment),
+            """\
+target           40 TTACGT????CCCCCCC 23
+                  0 ||||||----||||||| 17
+query           100 TTACGT----CCCCCCC 87
+""",
+        )
+        counts = aligner.calculate(alignment)
+        self.check_incomplete_nucleotide_sequence(counts)
+        self.assertIsNone(counts.positives)
+        counts = aligner_blastn.calculate(alignment)
+        self.check_incomplete_nucleotide_sequence(counts)
+        self.assertEqual(counts.positives, 13)
 
     def check_blastp(self, counts):
         self.assertEqual(counts.left_insertions, 0)
