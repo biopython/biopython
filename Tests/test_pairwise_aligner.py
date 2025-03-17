@@ -22,6 +22,7 @@ except ImportError:
 from Bio import BiopythonDeprecationWarning
 from Bio import BiopythonWarning
 from Bio import Align
+from Bio.Align.substitution_matrices import Array
 from Bio import SeqIO
 from Bio.Seq import reverse_complement
 from Bio.Seq import Seq
@@ -7365,6 +7366,89 @@ query           582
         self.assertEqual(counts.identities, 4)
         self.assertEqual(counts.mismatches, 1)
         self.assertIsNone(counts.positives)
+
+    def test_greek(self):
+        aligner = Align.PairwiseAligner()
+        seqA = "αβγγβα"
+        seqB = "ABCBAαβγ"
+        alignments = aligner.align(seqA, seqB)
+        alignment = alignments[0]
+        self.assertEqual(str(alignment), """\
+-----αβγγβα
+-----|||---
+ABCBAαβγ---
+""")
+        self.assertAlmostEqual(alignment.score, 3.0)
+        counts = aligner.calculate(alignment)
+        self.assertEqual(counts.left_insertions, 5)
+        self.assertEqual(counts.left_deletions, 0)
+        self.assertEqual(counts.internal_insertions, 0)
+        self.assertEqual(counts.internal_deletions, 0)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 3)
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.positives)
+        aligner.alphabet = "ABCαβγ"
+        alignments = aligner.align(seqA, seqB)
+        alignment = alignments[0]
+        self.assertEqual(str(alignment), """\
+-----αβγγβα
+-----|||---
+ABCBAαβγ---
+""")
+        counts = aligner.calculate(alignment)
+        self.assertEqual(counts.left_insertions, 5)
+        self.assertEqual(counts.left_deletions, 0)
+        self.assertEqual(counts.internal_insertions, 0)
+        self.assertEqual(counts.internal_deletions, 0)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 3)
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.positives)
+        substitution_matrix = Array("ABCαβγ", dims=2)
+        for c in aligner.alphabet:
+            substitution_matrix[c, c] = 2.0
+        for c1, c2 in zip(aligner.alphabet[:3], aligner.alphabet[3:]):
+            substitution_matrix[c1, c2] = 1.0
+            substitution_matrix[c2, c1] = 1.0
+        substitution_matrix["B", "β"] = 5.0
+        substitution_matrix["β", "B"] = 5.0
+        substitution_matrix["C", "γ"] = -0.1
+        substitution_matrix["γ", "C"] = -0.1
+        self.assertEqual(str(substitution_matrix), """\
+    A   B    C   α   β    γ
+A 2.0 0.0  0.0 1.0 0.0  0.0
+B 0.0 2.0  0.0 0.0 5.0  0.0
+C 0.0 0.0  2.0 0.0 0.0 -0.1
+α 1.0 0.0  0.0 2.0 0.0  0.0
+β 0.0 5.0  0.0 0.0 2.0  0.0
+γ 0.0 0.0 -0.1 0.0 0.0  2.0
+""")
+        aligner.substitution_matrix = substitution_matrix
+        aligner.gap_score = -1.0
+        alignments = aligner.align(seqA, seqB)
+        alignment = alignments[0]
+        self.assertEqual(str(alignment), """\
+αβγγβ-α--
+...-.-|--
+ABC-BAαβγ
+""")
+        self.assertAlmostEqual(alignment.score, 8.9)
+        counts = aligner.calculate(alignment)
+        self.assertEqual(counts.left_insertions, 0)
+        self.assertEqual(counts.left_deletions, 0)
+        self.assertEqual(counts.internal_insertions, 1)
+        self.assertEqual(counts.internal_deletions, 1)
+        self.assertEqual(counts.right_insertions, 2)
+        self.assertEqual(counts.right_deletions, 0)
+        self.assertEqual(counts.aligned, 5)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 4)
+        self.assertEqual(counts.positives, 4)
 
 
 if __name__ == "__main__":

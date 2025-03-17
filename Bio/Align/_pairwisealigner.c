@@ -1803,6 +1803,7 @@ typedef struct {
     Py_buffer substitution_matrix;
     PyObject* alphabet;
     int* mapping;
+    int mapping_size;
     int wildcard;
 } Aligner;
 
@@ -1825,7 +1826,7 @@ set_alphabet(Aligner* self, PyObject* alphabet)
     else if (PyUnicode_Check(alphabet)) {
         int* mapping;
         int i;
-        int n;
+        int mapping_size;
         int kind;
         void* characters;
         if (PyUnicode_READY(alphabet) == -1) return -1;
@@ -1837,16 +1838,16 @@ set_alphabet(Aligner* self, PyObject* alphabet)
         kind = PyUnicode_KIND(alphabet);
         switch (kind) {
             case PyUnicode_1BYTE_KIND: {
-                n = 1 << 8 * sizeof(Py_UCS1);
+                mapping_size = 1 << 8 * sizeof(Py_UCS1);
                 break;
             }
             case PyUnicode_2BYTE_KIND: {
-                n = 1 << 8 * sizeof(Py_UCS2);
+                mapping_size = 1 << 8 * sizeof(Py_UCS2);
                 break;
             }
             case PyUnicode_4BYTE_KIND: {
-                n = 0x110000;  /* Maximum code point in Unicode 6.0
-                                * is 0x10ffff = 1114111 */
+                mapping_size = 0x110000;  /* Maximum code point in Unicode 6.0
+                                           * is 0x10ffff = 1114111 */
                 break;
             }
             default:
@@ -1854,9 +1855,9 @@ set_alphabet(Aligner* self, PyObject* alphabet)
                 return -1;
         }
         characters = PyUnicode_DATA(alphabet);
-        mapping = PyMem_Malloc(n*sizeof(int));
+        mapping = PyMem_Malloc(mapping_size*sizeof(int));
         if (!mapping) return -1;
-        for (i = 0; i < n; i++) mapping[i] = MISSING_LETTER;
+        for (i = 0; i < mapping_size; i++) mapping[i] = MISSING_LETTER;
         for (i = 0; i < size; i++) {
             Py_UCS4 character = PyUnicode_READ(kind, characters, i);
             if (mapping[character] != MISSING_LETTER) {
@@ -1872,6 +1873,7 @@ set_alphabet(Aligner* self, PyObject* alphabet)
         Py_INCREF(alphabet);
         if (self->mapping) PyMem_Free(self->mapping);
         self->mapping = mapping;
+        self->mapping_size = mapping_size;
     }
     else {
         /* alphabet is not a string; cannot use mapping */
@@ -7253,33 +7255,13 @@ sequence_converter(PyObject* argument, void* pointer)
     }
     indices = view->buf;
     if (mapping) {
-        Py_ssize_t m;
-        int kind;
+        const int mapping_size = aligner->mapping_size;
         PyObject* alphabet = aligner->alphabet;
         if (alphabet == NULL || !PyUnicode_Check(alphabet)) {
             PyErr_SetString(PyExc_RuntimeError, "mapping set without alphabet");
             return 0;
         }
         if (PyUnicode_READY(alphabet) == -1) return 0;
-        kind = PyUnicode_KIND(alphabet);
-        switch (kind) {
-            case PyUnicode_1BYTE_KIND: {
-                m = 1 << 8 * sizeof(Py_UCS1);
-                break;
-            }
-            case PyUnicode_2BYTE_KIND: {
-                m = 1 << 8 * sizeof(Py_UCS2);
-                break;
-            }
-            case PyUnicode_4BYTE_KIND: {
-                m = 0x110000;  /* Maximum code point in Unicode 6.0
-                                * is 0x10ffff = 1114111 */
-                break;
-            }
-            default:
-                PyErr_SetString(PyExc_RuntimeError, "could not interpret alphabet");
-                return 0;
-        }
         for (i = 0; i < n; i++) {
             index = indices[i];
             if (index < 0) {
@@ -7288,10 +7270,10 @@ sequence_converter(PyObject* argument, void* pointer)
                              i, index);
                 return 0;
             }
-            if (index >= m) {
+            if (index >= mapping_size) {
                 PyErr_Format(PyExc_ValueError,
                              "sequence item %zd is out of bound"
-                             " (%d, should be < %zd)", i, index, m);
+                             " (%d, should be < %zd)", i, index, mapping_size);
                 return 0;
             }
             index = mapping[index];
@@ -7631,6 +7613,7 @@ _aligner_calculate(Aligner* aligner, Py_ssize_t n, Py_buffer* sequences, Py_buff
     const int wildcard = aligner->wildcard;
     double* substitution_matrix = NULL;
     int* mapping;
+    int mapping_size;
     Py_ssize_t m;
 
     Py_ssize_t open_left_insertions = 0, extend_left_insertions = 0;
@@ -7657,11 +7640,13 @@ _aligner_calculate(Aligner* aligner, Py_ssize_t n, Py_buffer* sequences, Py_buff
     PyObject* oB = NULL;
 
     int path = 0;
+    int index;
 
     if (aligner->substitution_matrix.obj) {
         substitution_matrix = aligner->substitution_matrix.buf;
         m = aligner->substitution_matrix.shape[0];
         mapping = aligner->mapping;
+        mapping_size = aligner->mapping_size;
         positives = 0;
     }
 
@@ -7834,7 +7819,12 @@ _aligner_calculate(Aligner* aligner, Py_ssize_t n, Py_buffer* sequences, Py_buff
                                  l1 < end1 && l2 < end2;
                                  l1++, l2++) {
                                 cA = sA[l1];
-                                cB = mapping[(int) bB[l2-start2]];
+                                index = (int) bB[l2-start2];
+                                if (index < 0 || index >= mapping_size) {
+                                    Py_DECREF(oB);
+                                    goto error;
+                                }
+                                cB = mapping[index];
                                 if (cA == wildcard || cB == wildcard) ;
                                 else if (cA == cB) identities++;
                                 else mismatches++;
@@ -7846,7 +7836,12 @@ _aligner_calculate(Aligner* aligner, Py_ssize_t n, Py_buffer* sequences, Py_buff
                             for (l1 = start1, l2 = start2;
                                  l1 < end1 && l2 < end2;
                                  l1++, l2++) {
-                                cA = mapping[(int) bA[l1-start1]];
+                                index = (int) bA[l1-start1];
+                                if (index < 0 || index >= mapping_size) {
+                                    Py_DECREF(oA);
+                                    goto error;
+                                }
+                                cA = mapping[index];
                                 cB = sB[l2];
                                 if (cA == wildcard || cB == wildcard) ;
                                 else if (cA == cB) identities++;
@@ -7859,8 +7854,20 @@ _aligner_calculate(Aligner* aligner, Py_ssize_t n, Py_buffer* sequences, Py_buff
                             for (l1 = start1, l2 = start2;
                                  l1 < end1 && l2 < end2;
                                  l1++, l2++) {
-                                cA = mapping[(int) bA[l1-start1]];
-                                cB = mapping[(int) bB[l2-start2]];
+                                index = (int) bA[l1-start1];
+                                if (index < 0 || index >= mapping_size) {
+                                    Py_DECREF(oA);
+                                    Py_DECREF(oB);
+                                    goto error;
+                                }
+                                cA = mapping[index];
+                                index = (int) bB[l2-start2];
+                                if (index < 0 || index >= mapping_size) {
+                                    Py_DECREF(oA);
+                                    Py_DECREF(oB);
+                                    goto error;
+                                }
+                                cB = mapping[index];
                                 if (cA == wildcard || cB == wildcard) ;
                                 else if (cA == cB) identities++;
                                 else mismatches++;

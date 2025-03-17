@@ -131,7 +131,7 @@ class AlignmentCounts:
         self._positives = positives
 
     def __repr__(self):
-        if self.positives == -1:
+        if self._positives == -1:
             positives = None
         else:
             positives = self._positives
