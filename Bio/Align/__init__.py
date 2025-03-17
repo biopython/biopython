@@ -4461,20 +4461,18 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
         aligned_flags = sum(steps != 0, 0) > 1
         # True for steps in which at least two sequences align, False if a gap
         for i, sequence in enumerate(alignment.sequences):
-            start = min(coordinates[i, :])
-            end = max(coordinates[i, :])
-            if not ignore_sequences:
-                try:
-                    sequence = sequence[start:end]
-                except ValueError:
-                    # if sequence is a SeqRecord, and sequence.seq is None
-                    continue
             aligned_steps = steps[i, aligned_flags]
-            if sum(aligned_steps > 0) > sum(aligned_steps < 0):
-                coordinates[i, :] = coordinates[i, :] - start
-            else:
+            if sum(aligned_steps > 0) < sum(aligned_steps < 0):
+                start = min(coordinates[i, :])
+                end = max(coordinates[i, :])
                 if not ignore_sequences:
+                    try:
+                        sequence = sequence[start:end]
+                    except ValueError:
+                        # if sequence is a SeqRecord, and sequence.seq is None
+                        continue
                     sequence = reverse_complement(sequence)
+                    coordinates[i, :] = coordinates[i, :] - start
                 coordinates[i, :] = end - coordinates[i, :]
                 strands[i] = True
             if ignore_sequences:
