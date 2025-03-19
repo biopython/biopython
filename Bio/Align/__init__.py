@@ -3730,7 +3730,7 @@ class Alignment:
                     start1, start2 = end1, end2
         return m
 
-    def counts(self, substitution_matrix=None, wildcard=None, ignore_sequences=False):
+    def counts(self, *args, **kwargs):
         """Count the number of identities, mismatches, and gaps of an alignment.
 
         Arguments:
@@ -3801,8 +3801,46 @@ class Alignment:
          - internal_gaps       - the number of gaps in the interior of the alignment;
          - gaps                - the total number of gaps in the alignment;
         """
-        if wildcard is not None:
-            wildcard = ord(wildcard)
+        substitution_matrix = None
+        wildcard = None
+        ignore_sequences = None
+        for index, value in enumerate(args):
+            if index == 0:
+                if isinstance(value, PairwiseAligner):
+                    aligner = value
+                else:
+                    substitution_matrix = value
+            elif index == 1:
+                wildcard = ord(value)
+            elif index == 2:
+                ignore_sequences = value
+            else:
+                raise TypeError(
+                    f"counts takes at most 3 positional arguments but {len(args)} were given"
+                )
+        for key, value in kwargs.items():
+            if key == "substitution_matrix":
+                if substitution_matrix is not None:
+                    raise TypeError(
+                        "counts got multiple values for argument 'substitution_matrix'"
+                    )
+                substitution_matrix = value
+            elif key == "wildcard":
+                if wildcard is not None:
+                    raise TypeError(
+                        "counts got multiple values for argument 'wildcard'"
+                    )
+                wildcard = ord(value)
+            elif key == "ignore_sequences":
+                if ignore_sequences is not None:
+                    raise TypeError(
+                        "counts got multiple values for argument 'ignore_sequences'"
+                    )
+                ignore_sequences = value
+            else:
+                raise TypeError(f"unexpected argument {key}")
+        if ignore_sequences is None:
+            ignore_sequences = False
         left_insertions = left_deletions = 0
         right_insertions = right_deletions = 0
         internal_insertions = internal_deletions = 0
