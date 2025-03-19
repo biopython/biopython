@@ -7015,7 +7015,7 @@ query             0 ACTTT-GT-------  7
         )
         counts = alignment.counts()
         self.check_counts(counts)
-        counts = aligner.calculate(alignment)
+        counts = alignment.counts(aligner)
         self.check_counts_and_score(counts)
         alignments = aligner.align("TTACGTCCCCCCC", b"ACTTTGT")
         alignment = alignments[0]
@@ -7029,7 +7029,7 @@ query             0 ACTTT-GT-------  7
         )
         counts = alignment.counts()
         self.check_counts(counts)
-        counts = aligner.calculate(alignment)
+        counts = alignment.counts(aligner)
         self.check_counts_and_score(counts)
         alignments = aligner.align(b"TTACGTCCCCCCC", "ACTTTGT")
         alignment = alignments[0]
@@ -7043,7 +7043,7 @@ A C T  T  T  -- G  T  -- -- -- -- -- -- --
         )
         counts = alignment.counts()
         self.check_counts(counts)
-        counts = aligner.calculate(alignment)
+        counts = alignment.counts(aligner)
         alignments = aligner.align(b"TTACGTCCCCCCC", b"ACTTTGT")
         alignment = alignments[0]
         self.assertEqual(
@@ -7056,7 +7056,7 @@ A C T  T  T  -- G  T  -- -- -- -- -- -- --
         )
         counts = alignment.counts()
         self.check_counts(counts)
-        counts = aligner.calculate(alignment)
+        counts = alignment.counts(aligner)
         alignments = aligner.align(Seq("TTACGTCCCCCCC"), Seq("ACTTTGT"))
         alignment = alignments[0]
         self.assertEqual(
@@ -7069,7 +7069,7 @@ query             0 ACTTT-GT-------  7
         )
         counts = alignment.counts()
         self.check_counts(counts)
-        counts = aligner.calculate(alignment)
+        counts = alignment.counts(aligner)
         alignments = aligner.align(Seq("TTACGTCCCCCCC"), "ACTTTGT")
         alignment = alignments[0]
         self.assertEqual(
@@ -7082,8 +7082,7 @@ query             0 ACTTT-GT-------  7
         )
         counts = alignment.counts()
         self.check_counts(counts)
-        counts = aligner.calculate(alignment)
-        counts = aligner.calculate(alignment)
+        counts = alignment.counts(aligner)
         alignments = aligner.align("TTACGTCCCCCCC", Seq("ACTTTGT"))
         alignment = alignments[0]
         self.assertEqual(
@@ -7096,7 +7095,7 @@ query             0 ACTTT-GT-------  7
         )
         counts = alignment.counts()
         self.check_counts(counts)
-        counts = aligner.calculate(alignment)
+        counts = alignment.counts(aligner)
         alignments = aligner.align(Seq("TTACGTCCCCCCC"), b"ACTTTGT")
         alignment = alignments[0]
         self.assertEqual(
@@ -7109,7 +7108,7 @@ query             0 ACTTT-GT-------  7
         )
         counts = alignment.counts()
         self.check_counts(counts)
-        counts = aligner.calculate(alignment)
+        counts = alignment.counts(aligner)
         alignments = aligner.align(b"TTACGTCCCCCCC", Seq("ACTTTGT"))
         alignment = alignments[0]
         self.assertEqual(
@@ -7122,7 +7121,7 @@ A C T  T  T  -- G  T  -- -- -- -- -- -- --
         )
         counts = alignment.counts()
         self.check_counts(counts)
-        counts = aligner.calculate(alignment)
+        counts = alignment.counts(aligner)
 
     def check_incomplete_nucleotide_sequence(self, counts):
         self.assertEqual(counts.left_insertions, 0)
@@ -7161,10 +7160,10 @@ target           10 TTACGT????CCCCCCC 27
 query             0 TTACGT----CCCCCCC 13
 """,
         )
-        counts = aligner.calculate(alignment)
+        counts = alignment.counts(aligner)
         self.check_incomplete_nucleotide_sequence(counts)
         self.assertIsNone(counts.positives)
-        counts = aligner_blastn.calculate(alignment)
+        counts = alignment.counts(aligner_blastn)
         self.check_incomplete_nucleotide_sequence(counts)
         alignment = Align.Alignment([seqB, seqA], coordinates[::-1])
         self.assertEqual(
@@ -7175,10 +7174,10 @@ target            0 TTACGT----CCCCCCC 13
 query            10 TTACGT????CCCCCCC 27
 """,
         )
-        counts = aligner.calculate(alignment)
+        counts = alignment.counts(aligner)
         self.check_incomplete_nucleotide_sequence_switched(counts)
         self.assertIsNone(counts.positives)
-        counts = aligner_blastn.calculate(alignment)
+        counts = alignment.counts(aligner_blastn)
         self.check_incomplete_nucleotide_sequence_switched(counts)
         self.assertEqual(counts.positives, 13)
         seqA = Seq({10: "TTACGT", 20: "CCCCCCC"}, length=50)
@@ -7193,10 +7192,10 @@ target           10 TTACGT????CCCCCCC  27
 query           100 TTACGT----CCCCCCC 113
 """,
         )
-        counts = aligner.calculate(alignment)
+        counts = alignment.counts(aligner)
         self.check_incomplete_nucleotide_sequence(counts)
         self.assertIsNone(counts.positives)
-        counts = aligner_blastn.calculate(alignment)
+        counts = alignment.counts(aligner_blastn)
         self.check_incomplete_nucleotide_sequence(counts)
         self.assertEqual(counts.positives, 13)
         seqA_rc = seqA.reverse_complement()
@@ -7212,10 +7211,10 @@ target           40 TTACGT????CCCCCCC  23
 query           100 TTACGT----CCCCCCC 113
 """,
         )
-        counts = aligner.calculate(alignment)
+        counts = alignment.counts(aligner)
         self.check_incomplete_nucleotide_sequence(counts)
         self.assertIsNone(counts.positives)
-        counts = aligner_blastn.calculate(alignment)
+        counts = alignment.counts(aligner_blastn)
         self.check_incomplete_nucleotide_sequence(counts)
         self.assertEqual(counts.positives, 13)
         coordinates_rc = np.array(coordinates)
@@ -7229,10 +7228,10 @@ target           10 TTACGT????CCCCCCC 27
 query           100 TTACGT----CCCCCCC 87
 """,
         )
-        counts = aligner.calculate(alignment)
+        counts = alignment.counts(aligner)
         self.check_incomplete_nucleotide_sequence(counts)
         self.assertIsNone(counts.positives)
-        counts = aligner_blastn.calculate(alignment)
+        counts = alignment.counts(aligner_blastn)
         self.check_incomplete_nucleotide_sequence(counts)
         self.assertEqual(counts.positives, 13)
         coordinates_rc = np.array(coordinates)
@@ -7247,10 +7246,10 @@ target           40 TTACGT????CCCCCCC 23
 query           100 TTACGT----CCCCCCC 87
 """,
         )
-        counts = aligner.calculate(alignment)
+        counts = alignment.counts(aligner)
         self.check_incomplete_nucleotide_sequence(counts)
         self.assertIsNone(counts.positives)
-        counts = aligner_blastn.calculate(alignment)
+        counts = alignment.counts(aligner_blastn)
         self.check_incomplete_nucleotide_sequence(counts)
         self.assertEqual(counts.positives, 13)
 
@@ -7321,27 +7320,27 @@ target          511
 query           582 
 """,
         )
-        counts = aligner.calculate(alignment)
+        counts = alignment.counts(aligner)
         self.check_blastp(counts)
         self.assertIsNone(counts.positives)
-        counts = aligner_blastp.calculate(alignment)
+        counts = alignment.counts(aligner_blastp)
         self.check_blastp(counts)
         self.assertEqual(counts.positives, 306)
         sequences = [Seq(seqA), Seq(seqB)]
         alignment = Align.Alignment(sequences, coordinates)
-        counts = aligner_blastp.calculate(alignment)
+        counts = alignment.counts(aligner_blastp)
         self.check_blastp(counts)
         sequences = [Seq(seqA), Seq(sB, length=len(seqB))]
         alignment = Align.Alignment(sequences, coordinates)
-        counts = aligner_blastp.calculate(alignment)
+        counts = alignment.counts(aligner_blastp)
         self.check_blastp(counts)
         sequences = [Seq(sA, length=len(seqA)), Seq(seqB)]
         alignment = Align.Alignment(sequences, coordinates)
-        counts = aligner_blastp.calculate(alignment)
+        counts = alignment.counts(aligner_blastp)
         self.check_blastp(counts)
         sequences = [Seq(sA, length=len(seqA)), Seq(sB, length=len(seqB))]
         alignment = Align.Alignment(sequences, coordinates)
-        counts = aligner_blastp.calculate(alignment)
+        counts = alignment.counts(aligner_blastp)
         self.check_blastp(counts)
 
     def test_string(self):
@@ -7355,7 +7354,7 @@ query           582
         self.assertEqual(alignment[0], "あいうえおかきくけこ")
         self.assertEqual(alignment[1], "-いう---きあけ-")
         self.assertAlmostEqual(alignment.score, -6.0)
-        counts = aligner.calculate(alignment)
+        counts = alignment.counts(aligner)
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 1)
         self.assertEqual(counts.internal_insertions, 0)
@@ -7373,13 +7372,16 @@ query           582
         seqB = "ABCBAαβγ"
         alignments = aligner.align(seqA, seqB)
         alignment = alignments[0]
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 -----αβγγβα
 -----|||---
 ABCBAαβγ---
-""")
+""",
+        )
         self.assertAlmostEqual(alignment.score, 3.0)
-        counts = aligner.calculate(alignment)
+        counts = alignment.counts(aligner)
         self.assertEqual(counts.left_insertions, 5)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.internal_insertions, 0)
@@ -7393,12 +7395,15 @@ ABCBAαβγ---
         aligner.alphabet = "ABCαβγ"
         alignments = aligner.align(seqA, seqB)
         alignment = alignments[0]
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 -----αβγγβα
 -----|||---
 ABCBAαβγ---
-""")
-        counts = aligner.calculate(alignment)
+""",
+        )
+        counts = alignment.counts(aligner)
         self.assertEqual(counts.left_insertions, 5)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.internal_insertions, 0)
@@ -7419,7 +7424,9 @@ ABCBAαβγ---
         substitution_matrix["β", "B"] = 5.0
         substitution_matrix["C", "γ"] = -0.1
         substitution_matrix["γ", "C"] = -0.1
-        self.assertEqual(str(substitution_matrix), """\
+        self.assertEqual(
+            str(substitution_matrix),
+            """\
     A   B    C   α   β    γ
 A 2.0 0.0  0.0 1.0 0.0  0.0
 B 0.0 2.0  0.0 0.0 5.0  0.0
@@ -7427,18 +7434,22 @@ C 0.0 0.0  2.0 0.0 0.0 -0.1
 α 1.0 0.0  0.0 2.0 0.0  0.0
 β 0.0 5.0  0.0 0.0 2.0  0.0
 γ 0.0 0.0 -0.1 0.0 0.0  2.0
-""")
+""",
+        )
         aligner.substitution_matrix = substitution_matrix
         aligner.gap_score = -1.0
         alignments = aligner.align(seqA, seqB)
         alignment = alignments[0]
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 αβγγβ-α--
 ...-.-|--
 ABC-BAαβγ
-""")
+""",
+        )
         self.assertAlmostEqual(alignment.score, 8.9)
-        counts = aligner.calculate(alignment)
+        counts = alignment.counts(aligner)
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.internal_insertions, 1)

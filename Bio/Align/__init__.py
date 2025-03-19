@@ -3845,6 +3845,7 @@ class Alignment:
                 substitution_matrix = aligner.substitution_matrix
             if wildcard is None:
                 wildcard = aligner.wildcard
+            return aligner.calculate(self)
         if ignore_sequences is None:
             ignore_sequences = False
         left_insertions = left_deletions = 0
