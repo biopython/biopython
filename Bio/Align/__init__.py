@@ -4501,31 +4501,7 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
                         sequences[i] = np.fromiter(
                             map(alphabet.index, data), dtype=np.int32, count=len(data)
                         )
-        values = super().calculate(sequences, coordinates, strands)
-        (
-            left_insertions,
-            left_deletions,
-            right_insertions,
-            right_deletions,
-            internal_insertions,
-            internal_deletions,
-            aligned,
-            identities,
-            mismatches,
-            positives,
-        ) = values
-        return AlignmentCounts(
-            left_insertions,
-            left_deletions,
-            right_insertions,
-            right_deletions,
-            internal_insertions,
-            internal_deletions,
-            aligned,
-            identities,
-            mismatches,
-            positives,
-        )
+        return super().calculate(sequences, coordinates, strands)
 
     def __getstate__(self):
         state = {
