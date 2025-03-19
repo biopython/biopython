@@ -3801,6 +3801,7 @@ class Alignment:
          - internal_gaps       - the number of gaps in the interior of the alignment;
          - gaps                - the total number of gaps in the alignment;
         """
+        aligner = None
         substitution_matrix = None
         wildcard = None
         ignore_sequences = None
@@ -3839,6 +3840,11 @@ class Alignment:
                 ignore_sequences = value
             else:
                 raise TypeError(f"unexpected argument {key}")
+        if aligner is not None:
+            if substitution_matrix is None:
+                substitution_matrix = aligner.substitution_matrix
+            if wildcard is None:
+                wildcard = aligner.wildcard
         if ignore_sequences is None:
             ignore_sequences = False
         left_insertions = left_deletions = 0
