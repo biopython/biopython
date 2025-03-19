@@ -7990,7 +7990,7 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
 }
 
 static int
-_aligner_calculate(Aligner* aligner, Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, Py_buffer* strands, AlignmentCounts* counts)
+_aligner_calculate(Aligner* aligner, Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, Py_buffer* strands, int wildcard, AlignmentCounts* counts)
 {
     Py_ssize_t i, j, k, l1, l2;
     int cA, cB;
@@ -7999,7 +7999,6 @@ _aligner_calculate(Aligner* aligner, Py_ssize_t n, Py_buffer* sequences, Py_buff
     Py_buffer* sequenceB;
     int* sA;
     int* sB;
-    const int wildcard = aligner->wildcard;
     double* substitution_matrix = NULL;
     int* mapping;
     int mapping_size;
@@ -8361,6 +8360,7 @@ Aligner_calculate(Aligner* self, PyObject* args, PyObject* keywords)
                            buffers,
                            &coordinates,
                            &strands,
+                           self->wildcard,
                            counts) == 0) {
         Py_DECREF(counts);
         counts = NULL;
