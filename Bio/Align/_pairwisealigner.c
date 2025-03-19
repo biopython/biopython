@@ -7990,7 +7990,7 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
 }
 
 static int
-_aligner_calculate(Aligner* aligner, Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, Py_buffer* strands, int wildcard, AlignmentCounts* counts)
+_aligner_calculate(Aligner* aligner, Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, Py_buffer* strands, int wildcard, Py_buffer* substitution_matrix, AlignmentCounts* counts)
 {
     Py_ssize_t i, j, k, l1, l2;
     int cA, cB;
@@ -7999,7 +7999,7 @@ _aligner_calculate(Aligner* aligner, Py_ssize_t n, Py_buffer* sequences, Py_buff
     Py_buffer* sequenceB;
     int* sA;
     int* sB;
-    double* substitution_matrix = NULL;
+    double* sm = NULL;
     int* mapping;
     int mapping_size;
     Py_ssize_t m;
@@ -8030,9 +8030,9 @@ _aligner_calculate(Aligner* aligner, Py_ssize_t n, Py_buffer* sequences, Py_buff
     int path = 0;
     int index;
 
-    if (aligner->substitution_matrix.obj) {
-        substitution_matrix = aligner->substitution_matrix.buf;
-        m = aligner->substitution_matrix.shape[0];
+    if (substitution_matrix->obj) {
+        sm = substitution_matrix->buf;
+        m = substitution_matrix->shape[0];
         mapping = aligner->mapping;
         mapping_size = aligner->mapping_size;
         positives = 0;
@@ -8136,7 +8136,7 @@ _aligner_calculate(Aligner* aligner, Py_ssize_t n, Py_buffer* sequences, Py_buff
                         }
                         bB = PyBytes_AS_STRING(oB);
                     }
-                    if (substitution_matrix == NULL) {
+                    if (sm == NULL) {
                         path = DIAGONAL;
                         aligned += end1 - start1;
                         if (sA && sB) {
@@ -8199,7 +8199,7 @@ _aligner_calculate(Aligner* aligner, Py_ssize_t n, Py_buffer* sequences, Py_buff
                                 cB = sB[l2];
                                 if (cA == cB) identities++;
                                 else mismatches++;
-                                if (substitution_matrix[cA*m+cB] > 0) positives++;
+                                if (sm[cA*m+cB] > 0) positives++;
                             }
                         }
                         else if (sA) {
@@ -8216,7 +8216,7 @@ _aligner_calculate(Aligner* aligner, Py_ssize_t n, Py_buffer* sequences, Py_buff
                                 if (cA == wildcard || cB == wildcard) ;
                                 else if (cA == cB) identities++;
                                 else mismatches++;
-                                if (substitution_matrix[cA*m+cB] > 0) positives++;
+                                if (sm[cA*m+cB] > 0) positives++;
                             }
                             Py_DECREF(oB);
                         }
@@ -8234,7 +8234,7 @@ _aligner_calculate(Aligner* aligner, Py_ssize_t n, Py_buffer* sequences, Py_buff
                                 if (cA == wildcard || cB == wildcard) ;
                                 else if (cA == cB) identities++;
                                 else mismatches++;
-                                if (substitution_matrix[cA*m+cB] > 0) positives++;
+                                if (sm[cA*m+cB] > 0) positives++;
                             }
                             Py_DECREF(oA);
                         }
@@ -8259,7 +8259,7 @@ _aligner_calculate(Aligner* aligner, Py_ssize_t n, Py_buffer* sequences, Py_buff
                                 if (cA == wildcard || cB == wildcard) ;
                                 else if (cA == cB) identities++;
                                 else mismatches++;
-                                if (substitution_matrix[cA*m+cB] > 0) positives++;
+                                if (sm[cA*m+cB] > 0) positives++;
                             }
                             Py_DECREF(oA);
                             Py_DECREF(oB);
@@ -8361,6 +8361,7 @@ Aligner_calculate(Aligner* self, PyObject* args, PyObject* keywords)
                            &coordinates,
                            &strands,
                            self->wildcard,
+                           &self->substitution_matrix,
                            counts) == 0) {
         Py_DECREF(counts);
         counts = NULL;
