@@ -7990,7 +7990,7 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
 }
 
 static int
-_aligner_calculate(Aligner* aligner, Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, Py_buffer* strands, int wildcard, Py_buffer* substitution_matrix, AlignmentCounts* counts)
+_aligner_calculate(Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, Py_buffer* strands, int wildcard, Py_buffer* substitution_matrix, int* mapping, int mapping_size, AlignmentCounts* counts)
 {
     Py_ssize_t i, j, k, l1, l2;
     int cA, cB;
@@ -8000,8 +8000,6 @@ _aligner_calculate(Aligner* aligner, Py_ssize_t n, Py_buffer* sequences, Py_buff
     int* sA;
     int* sB;
     double* sm = NULL;
-    int* mapping;
-    int mapping_size;
     Py_ssize_t m;
 
     Py_ssize_t open_left_insertions = 0, extend_left_insertions = 0;
@@ -8033,8 +8031,6 @@ _aligner_calculate(Aligner* aligner, Py_ssize_t n, Py_buffer* sequences, Py_buff
     if (substitution_matrix->obj) {
         sm = substitution_matrix->buf;
         m = substitution_matrix->shape[0];
-        mapping = aligner->mapping;
-        mapping_size = aligner->mapping_size;
         positives = 0;
     }
 
@@ -8355,13 +8351,14 @@ Aligner_calculate(Aligner* self, PyObject* args, PyObject* keywords)
     counts = (AlignmentCounts*)PyType_GenericAlloc(&AlignmentCounts_Type, 0);
     if (!counts) goto exit;
 
-    if (_aligner_calculate(self,
-                           n,
+    if (_aligner_calculate(n,
                            buffers,
                            &coordinates,
                            &strands,
                            self->wildcard,
                            &self->substitution_matrix,
+                           self->mapping,
+                           self->mapping_size,
                            counts) == 0) {
         Py_DECREF(counts);
         counts = NULL;
