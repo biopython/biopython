@@ -7999,7 +7999,6 @@ _aligner_calculate(Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, P
     Py_buffer* sequenceB;
     int* sA;
     int* sB;
-    double* sm = NULL;
     Py_ssize_t m;
 
     Py_ssize_t open_left_insertions = 0, extend_left_insertions = 0;
@@ -8029,7 +8028,6 @@ _aligner_calculate(Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, P
     int index;
 
     if (substitution_matrix->obj) {
-        sm = substitution_matrix->buf;
         m = substitution_matrix->shape[0];
         positives = 0;
     }
@@ -8132,7 +8130,7 @@ _aligner_calculate(Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, P
                         }
                         bB = PyBytes_AS_STRING(oB);
                     }
-                    if (sm == NULL) {
+                    if (substitution_matrix->buf == NULL) {
                         path = DIAGONAL;
                         aligned += end1 - start1;
                         if (sA && sB) {
@@ -8195,7 +8193,7 @@ _aligner_calculate(Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, P
                                 cB = sB[l2];
                                 if (cA == cB) identities++;
                                 else mismatches++;
-                                if (sm[cA*m+cB] > 0) positives++;
+                                if (((double*)substitution_matrix->buf)[cA*m+cB] > 0) positives++;
                             }
                         }
                         else if (sA) {
@@ -8212,7 +8210,7 @@ _aligner_calculate(Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, P
                                 if (cA == wildcard || cB == wildcard) ;
                                 else if (cA == cB) identities++;
                                 else mismatches++;
-                                if (sm[cA*m+cB] > 0) positives++;
+                                if (((double*)substitution_matrix->buf)[cA*m+cB] > 0) positives++;
                             }
                             Py_DECREF(oB);
                         }
@@ -8230,7 +8228,7 @@ _aligner_calculate(Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, P
                                 if (cA == wildcard || cB == wildcard) ;
                                 else if (cA == cB) identities++;
                                 else mismatches++;
-                                if (sm[cA*m+cB] > 0) positives++;
+                                if (((double*)substitution_matrix->buf)[cA*m+cB] > 0) positives++;
                             }
                             Py_DECREF(oA);
                         }
@@ -8255,7 +8253,7 @@ _aligner_calculate(Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, P
                                 if (cA == wildcard || cB == wildcard) ;
                                 else if (cA == cB) identities++;
                                 else mismatches++;
-                                if (sm[cA*m+cB] > 0) positives++;
+                                if (((double*)substitution_matrix->buf)[cA*m+cB] > 0) positives++;
                             }
                             Py_DECREF(oA);
                             Py_DECREF(oB);
