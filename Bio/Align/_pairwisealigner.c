@@ -7999,7 +7999,6 @@ _aligner_calculate(Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, P
     Py_buffer* sequenceB;
     int* sA;
     int* sB;
-    Py_ssize_t m;
 
     Py_ssize_t open_left_insertions = 0, extend_left_insertions = 0;
     Py_ssize_t open_left_deletions = 0, extend_left_deletions = 0;
@@ -8010,7 +8009,7 @@ _aligner_calculate(Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, P
     Py_ssize_t aligned = 0;
     Py_ssize_t identities = 0;
     Py_ssize_t mismatches = 0;
-    Py_ssize_t positives = -1;
+    Py_ssize_t positives = substitution_matrix->obj ? 0 : -1;
 
     const Py_ssize_t shape2 = coordinates->shape[1];
     const Py_ssize_t stride1 = coordinates->strides[0] / sizeof(Py_ssize_t);
@@ -8026,11 +8025,6 @@ _aligner_calculate(Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, P
 
     int path = 0;
     int index;
-
-    if (substitution_matrix->obj) {
-        m = substitution_matrix->shape[0];
-        positives = 0;
-    }
 
     for (i = 0; i < n; i++) {
         sequenceA = &sequences[i];
@@ -8183,6 +8177,7 @@ _aligner_calculate(Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, P
                         }
                     }
                     else {
+                        double* ptr;
                         path = DIAGONAL;
                         aligned += end1 - start1;
                         if (sA && sB) {
@@ -8193,7 +8188,9 @@ _aligner_calculate(Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, P
                                 cB = sB[l2];
                                 if (cA == cB) identities++;
                                 else mismatches++;
-                                if (((double*)substitution_matrix->buf)[cA*m+cB] > 0) positives++;
+                                ptr = (double*)substitution_matrix->buf
+                                    + cA * substitution_matrix->shape[0] + cB;
+                                if (*(double*)ptr > 0) positives++;
                             }
                         }
                         else if (sA) {
@@ -8210,7 +8207,9 @@ _aligner_calculate(Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, P
                                 if (cA == wildcard || cB == wildcard) ;
                                 else if (cA == cB) identities++;
                                 else mismatches++;
-                                if (((double*)substitution_matrix->buf)[cA*m+cB] > 0) positives++;
+                                ptr = (double*)substitution_matrix->buf
+                                    + cA * substitution_matrix->shape[0] + cB;
+                                if (*(double*)ptr > 0) positives++;
                             }
                             Py_DECREF(oB);
                         }
@@ -8228,7 +8227,9 @@ _aligner_calculate(Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, P
                                 if (cA == wildcard || cB == wildcard) ;
                                 else if (cA == cB) identities++;
                                 else mismatches++;
-                                if (((double*)substitution_matrix->buf)[cA*m+cB] > 0) positives++;
+                                ptr = (double*)substitution_matrix->buf
+                                    + cA * substitution_matrix->shape[0] + cB;
+                                if (*(double*)ptr > 0) positives++;
                             }
                             Py_DECREF(oA);
                         }
@@ -8253,7 +8254,9 @@ _aligner_calculate(Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, P
                                 if (cA == wildcard || cB == wildcard) ;
                                 else if (cA == cB) identities++;
                                 else mismatches++;
-                                if (((double*)substitution_matrix->buf)[cA*m+cB] > 0) positives++;
+                                ptr = (double*)substitution_matrix->buf
+                                    + cA * substitution_matrix->shape[0] + cB;
+                                if (*(double*)ptr > 0) positives++;
                             }
                             Py_DECREF(oA);
                             Py_DECREF(oB);
