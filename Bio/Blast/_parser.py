@@ -205,8 +205,10 @@ class XMLHandler:
 
     def _start_blastxml2(self, name, attributes):
         """Process the XML schema (before processing the element)."""
+        uri, localname = name.split(" ")
+        assert uri == "http://www.ncbi.nlm.nih.gov"
+        assert localname in ("BlastXML2", "BlastOutput2")
         key = "%s schemaLocation" % XMLHandler.schema_namespace
-        assert name == "http://www.ncbi.nlm.nih.gov BlastXML2"
         domain, url = attributes[key].split()
         assert domain == "http://www.ncbi.nlm.nih.gov"
         if XMLHandler._schema_methods is None:
