@@ -74,6 +74,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Brandon Carter  <https://github.com/b-carter>
 - Brandon Invergo <https://github.com/brandoninvergo>
 - Brian Osborne <https://github.com/bosborne>
+- Bryan Brancotte <https://github.com/bryan-brancotte>
 - Bryan Lunt <https://github.com/bryan-lunt>
 - Caio Fontes <https://github.com/Caiofcas>
 - Cam McMenamie <https://github.com/kamurani>

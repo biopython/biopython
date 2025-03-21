@@ -31,7 +31,7 @@ http://www.ebi.ac.uk/imgt/hla/docs/manual.html
 """
 
 import warnings
-from datetime import datetime
+from datetime import datetime, date as datetime_date
 from string import ascii_letters
 from string import digits
 
@@ -633,9 +633,6 @@ class GenBankWriter(_InsdcWriter):
         # Cope with a list of one string:
         if isinstance(date, list) and len(date) == 1:
             date = date[0]
-        if isinstance(date, datetime):
-            date = date.strftime("%d-%b-%Y").upper()
-
         months = [
             "JAN",
             "FEB",
@@ -650,6 +647,8 @@ class GenBankWriter(_InsdcWriter):
             "NOV",
             "DEC",
         ]
+        if isinstance(date, datetime) or isinstance(date, datetime_date):
+            date = f"{date.day:02d}-{months[date.month - 1]}-{date.year}"
         if not isinstance(date, str) or len(date) != 11:
             return default
         try:

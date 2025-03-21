@@ -7,7 +7,8 @@
 Initially this takes matched tests of GenBank and FASTA files from the NCBI
 and confirms they are consistent using our different parsers.
 """
-
+import datetime
+import locale
 import os
 import unittest
 import warnings
@@ -208,6 +209,27 @@ class SeqIOFeatureTestBaseClass(SeqIOTestBaseClass):
                         # Not held in EMBL files
                         self.assertEqual(r1.medline_id, r2.medline_id, msg=msg)
                     self.assertEqual(r1.pubmed_id, r2.pubmed_id, msg=msg)
+            elif key == "date" and (
+                isinstance(old.annotations[key], datetime.datetime)
+                or isinstance(old.annotations[key], datetime.date)
+            ):
+                oa = old.annotations[key]
+                months = [
+                    "JAN",
+                    "FEB",
+                    "MAR",
+                    "APR",
+                    "MAY",
+                    "JUN",
+                    "JUL",
+                    "AUG",
+                    "SEP",
+                    "OCT",
+                    "NOV",
+                    "DEC",
+                ]
+                oa = f"{oa.day:02d}-{months[oa.month - 1]}-{oa.year}"
+                self.assertEqual(oa, new.annotations[key], msg=msg)
             else:
                 self.assertEqual(
                     repr(old.annotations[key]), repr(new.annotations[key]), msg=msg
@@ -1063,6 +1085,32 @@ class FeatureWriting(SeqIOFeatureTestBaseClass):
         self.record.features.append(f)
 
         self.write_read_checks()
+
+    def test_datetime(self):
+        default_locale = locale.setlocale(locale.LC_ALL)
+        for locale_name in [
+            "C",
+            "de_DE.utf8",
+            "fr_FR.utf8",
+            "pt_BR.utf8",
+        ]:
+            try:
+                locale.setlocale(locale.LC_ALL, locale_name)
+                # Why october ? Because it is abbreviated to OKT in DE, OCT. in FR, OUT in BR
+                self.record.annotations["date"] = datetime.datetime.strptime(
+                    "2025-10-01", "%Y-%m-%d"
+                )
+                self.write_read_check("gb")
+            except locale.Error:
+                pass
+        locale.setlocale(locale.LC_ALL, default_locale)
+
+    def test_date(self):
+        for m in [1, 10, 12]:
+            self.record.annotations["date"] = datetime.datetime.strptime(
+                f"2025-{m}-01", "%Y-%m-%d"
+            ).date()
+            self.write_read_check("gb")
 
 
 class NC_000932(SeqIOFeatureTestBaseClass):
