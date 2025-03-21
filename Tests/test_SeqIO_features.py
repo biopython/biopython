@@ -1112,6 +1112,30 @@ class FeatureWriting(SeqIOFeatureTestBaseClass):
             ).date()
             self.write_read_check("gb")
 
+    def test_invalide_date_format(self):
+        # Using a date in the wrong format
+        self.record.annotations["date"] = "04-04-1970"
+        stream = StringIO()
+        with warnings.catch_warnings(record=True) as w:
+            SeqIO.write([self.record], stream, "gb")
+            self.assertEqual(len(w), 1, "a warning should be raised")
+            self.assertIn("Invalide date format", str(w[0].message))
+        stream.seek(0)
+        self.assertIn("1980", stream.getvalue())
+        self.assertNotIn(self.record.annotations["date"], stream.getvalue())
+
+    def test_invalide_date_locale(self):
+        # Using a date not in english which is not accepted by the writer
+        self.record.annotations["date"] = "04-OKT-1970"
+        stream = StringIO()
+        with warnings.catch_warnings(record=True) as w:
+            SeqIO.write([self.record], stream, "gb")
+            self.assertEqual(len(w), 1, "a warning should be raised")
+            self.assertIn("Invalide date", str(w[0].message))
+        stream.seek(0)
+        self.assertIn("1980", stream.getvalue())
+        self.assertNotIn(self.record.annotations["date"], stream.getvalue())
+
 
 class NC_000932(SeqIOFeatureTestBaseClass):
     # This includes an evil dual strand gene
