@@ -647,7 +647,7 @@ class GenBankWriter(_InsdcWriter):
             "NOV",
             "DEC",
         ]
-        if isinstance(date, datetime) or isinstance(date, datetime_date):
+        if isinstance(date, datetime_date):
             date = f"{date.day:02d}-{months[date.month - 1]}-{date.year}"
         if not isinstance(date, str) or len(date) != 11:
             warnings.warn(
