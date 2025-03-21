@@ -651,7 +651,7 @@ class GenBankWriter(_InsdcWriter):
             date = f"{date.day:02d}-{months[date.month - 1]}-{date.year}"
         if not isinstance(date, str) or len(date) != 11:
             warnings.warn(
-                f"Invalide date format provided {record.annotations['date']!r}, using default {default!r}",
+                f"Invalid date format provided {record.annotations['date']!r}, using default {default!r}",
                 BiopythonWarning,
             )
             return default
@@ -659,7 +659,7 @@ class GenBankWriter(_InsdcWriter):
             datetime(int(date[-4:]), months.index(date[3:6]) + 1, int(date[0:2]))
         except ValueError:
             warnings.warn(
-                f"Invalide date provided {record.annotations['date']!r}, using default {default!r}",
+                f"Invalid date provided {record.annotations['date']!r}, using default {default!r}",
                 BiopythonWarning,
             )
             date = default
