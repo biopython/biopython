@@ -942,12 +942,13 @@ PyTree_str(PyTree* self)
     PyObject* temp;
 
     output = PyUnicode_FromString("");
+    if (!output) return NULL;
+
     for (i = 0; i < n; i++) {
         node = self->nodes[i];
         distance = PyOS_double_to_string(node.distance, 'g', 6, 0, NULL);
         if (!distance) {
             Py_DECREF(output);
-            Py_DECREF(line);
             return NULL;
         }
         /* Use PyOS_double_to_string to ensure that the locale does
@@ -962,11 +963,9 @@ PyTree_str(PyTree* self)
             return NULL;
         }
         temp = PyUnicode_Concat(output, line);
-        if (!temp) {
-            Py_DECREF(output);
-            Py_DECREF(line);
-            return NULL;
-        }
+        Py_DECREF(line);
+        Py_DECREF(output);
+        if (!temp) return NULL;
         output = temp;
     }
     return output;
