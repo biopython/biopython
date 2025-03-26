@@ -154,6 +154,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Iddo Friedberg <https://github.com/idoerg>
 - Igor S. Gerasimov <https://github.com/foxtran>
 - Ilya Flyamer <https://github.com/Phlya>
+- Iñaki Amatria-Barral <https://amatria.dev>
 - Isaac Ellmen <https://github.com/Ellmen>
 - Ivan Antonov <https://github.com/vanya-antonov>
 - Jacek Śmietański <https://github.com/dadoskawina>

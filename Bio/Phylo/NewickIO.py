@@ -25,7 +25,7 @@ class NewickError(Exception):
 tokens = [
     (r"\(", "open parens"),
     (r"\)", "close parens"),
-    (r"[^\s\(\)\[\]\'\:\;\,]+", "unquoted node label"),
+    (r"[^\(\)\[\]\'\:\;\,]+", "unquoted node label"),
     (r"\:\ ?[+-]?[0-9]*\.?[0-9]+([eE][+-]?[0-9]+)?", "edge length"),
     (r"\,", "comma"),
     (r"\[(\\.|[^\]])*\]", "comment"),
@@ -36,6 +36,7 @@ tokens = [
 tokenizer = re.compile(f"({'|'.join(token[0] for token in tokens)})")
 token_dict = {name: re.compile(token) for token, name in tokens}
 
+invalid_chars = ["\r", "\n", "\t", "\f", "\v", " "]
 
 # ---------------------------------------------------------
 # Public API
@@ -201,6 +202,9 @@ class Parser:
 
             else:
                 # unquoted node label
+                token_has_invalid_char = any([c in invalid_chars for c in token])
+                if token_has_invalid_char:
+                    raise NewickError(f"Invalid character in node label '{token}'")
                 current_clade.name = token
 
         if lp_count != rp_count:
