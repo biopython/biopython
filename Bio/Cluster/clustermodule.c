@@ -682,8 +682,15 @@ PyNode_repr(PyNode* self)
 {
     char string[64];
 
-    sprintf(string, "(%d, %d): %g",
-                   self->node.left, self->node.right, self->node.distance);
+    /* Use PyOS_double_to_string to ensure that the locale does
+     * not change the decimal point into a comma.
+     */
+    char* value = PyOS_double_to_string(self->node.distance, 'g', 6, 0, NULL);
+    if (!value) return NULL;
+
+    sprintf(string, "(%d, %d): %s", self->node.left, self->node.right, value);
+    PyMem_Free(value);
+
     return PyUnicode_FromString(string);
 }
 
@@ -928,15 +935,27 @@ PyTree_str(PyTree* self)
     int i;
     const int n = self->n;
     char string[128];
+    char* distance;
     Node node;
     PyObject* line;
     PyObject* output;
     PyObject* temp;
 
     output = PyUnicode_FromString("");
+    if (!output) return NULL;
+
     for (i = 0; i < n; i++) {
         node = self->nodes[i];
-        sprintf(string, "(%d, %d): %g", node.left, node.right, node.distance);
+        distance = PyOS_double_to_string(node.distance, 'g', 6, 0, NULL);
+        if (!distance) {
+            Py_DECREF(output);
+            return NULL;
+        }
+        /* Use PyOS_double_to_string to ensure that the locale does
+         * not change the decimal point into a comma.
+         */
+        sprintf(string, "(%d, %d): %s", node.left, node.right, distance);
+        PyMem_Free(distance);
         if (i < n-1) strcat(string, "\n");
         line = PyUnicode_FromString(string);
         if (!line) {
@@ -944,11 +963,9 @@ PyTree_str(PyTree* self)
             return NULL;
         }
         temp = PyUnicode_Concat(output, line);
-        if (!temp) {
-            Py_DECREF(output);
-            Py_DECREF(line);
-            return NULL;
-        }
+        Py_DECREF(line);
+        Py_DECREF(output);
+        if (!temp) return NULL;
         output = temp;
     }
     return output;
