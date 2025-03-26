@@ -1961,11 +1961,12 @@ Aligner_str(Aligner* self)
 {
     char text[1024];
     char* p = text;
+    char* value;
     PyObject* substitution_matrix = self->substitution_matrix.obj;
     void* args[3];
     int n = 0;
     PyObject* wildcard = NULL;
-    PyObject* s;
+    PyObject* s = NULL;
 
     p += sprintf(p, "Pairwise sequence aligner with parameters\n");
     if (substitution_matrix) {
@@ -1983,44 +1984,88 @@ Aligner_str(Aligner* self)
             p += sprintf(p, "  wildcard: '%%U'\n");
             args[n++] = wildcard;
         }
-        p += sprintf(p, "  match_score: %f\n", self->match);
-        p += sprintf(p, "  mismatch_score: %f\n", self->mismatch);
+        /* Use PyOS_double_to_string to ensure that the locale does
+         * not change the decimal point into a comma.
+         */
+        value = PyOS_double_to_string(self->match, 'f', 6, 0, NULL);
+        if (!value) goto exit;
+        p += sprintf(p, "  match_score: %s\n", value);
+        PyMem_Free(value);
+        value = PyOS_double_to_string(self->mismatch, 'f', 6, 0, NULL);
+        if (!value) goto exit;
+        p += sprintf(p, "  mismatch_score: %s\n", value);
+        PyMem_Free(value);
     }
     if (self->insertion_score_function) {
         p += sprintf(p, "  insertion_score_function: %%R\n");
         args[n++] = self->insertion_score_function;
     }
     else {
-        p += sprintf(p, "  open_internal_insertion_score: %f\n",
-                     self->open_internal_insertion_score);
-        p += sprintf(p, "  extend_internal_insertion_score: %f\n",
-                     self->extend_internal_insertion_score);
-        p += sprintf(p, "  open_left_insertion_score: %f\n",
-                     self->open_left_insertion_score);
-        p += sprintf(p, "  extend_left_insertion_score: %f\n",
-                     self->extend_left_insertion_score);
-        p += sprintf(p, "  open_right_insertion_score: %f\n",
-                     self->open_right_insertion_score);
-        p += sprintf(p, "  extend_right_insertion_score: %f\n",
-                     self->extend_right_insertion_score);
+        value = PyOS_double_to_string(self->open_internal_insertion_score,
+                                      'f', 6, 0, NULL);
+        if (!value) goto exit;
+        p += sprintf(p, "  open_internal_insertion_score: %s\n", value);
+        PyMem_Free(value);
+        value = PyOS_double_to_string(self->extend_internal_insertion_score,
+                                      'f', 6, 0, NULL);
+        if (!value) goto exit;
+        p += sprintf(p, "  extend_internal_insertion_score: %s\n", value);
+        PyMem_Free(value);
+        value = PyOS_double_to_string(self->open_left_insertion_score,
+                                      'f', 6, 0, NULL);
+        if (!value) goto exit;
+        p += sprintf(p, "  open_left_insertion_score: %s\n", value);
+        PyMem_Free(value);
+        value = PyOS_double_to_string(self->extend_left_insertion_score,
+                                      'f', 6, 0, NULL);
+        if (!value) goto exit;
+        p += sprintf(p, "  extend_left_insertion_score: %s\n", value);
+        PyMem_Free(value);
+        value = PyOS_double_to_string(self->open_right_insertion_score,
+                                      'f', 6, 0, NULL);
+        if (!value) goto exit;
+        p += sprintf(p, "  open_right_insertion_score: %s\n", value);
+        PyMem_Free(value);
+        value = PyOS_double_to_string(self->extend_right_insertion_score,
+                                      'f', 6, 0, NULL);
+        if (!value) goto exit;
+        p += sprintf(p, "  extend_right_insertion_score: %s\n", value);
+        PyMem_Free(value);
     }
     if (self->deletion_score_function) {
         p += sprintf(p, "  deletion_score_function: %%R\n");
         args[n++] = self->deletion_score_function;
     }
     else {
-        p += sprintf(p, "  open_internal_deletion_score: %f\n",
-                     self->open_internal_deletion_score);
-        p += sprintf(p, "  extend_internal_deletion_score: %f\n",
-                     self->extend_internal_deletion_score);
-        p += sprintf(p, "  open_left_deletion_score: %f\n",
-                     self->open_left_deletion_score);
-        p += sprintf(p, "  extend_left_deletion_score: %f\n",
-                     self->extend_left_deletion_score);
-        p += sprintf(p, "  open_right_deletion_score: %f\n",
-                     self->open_right_deletion_score);
-        p += sprintf(p, "  extend_right_deletion_score: %f\n",
-                     self->extend_right_deletion_score);
+        value = PyOS_double_to_string(self->open_internal_deletion_score,
+                                      'f', 6, 0, NULL);
+        if (!value) goto exit;
+        p += sprintf(p, "  open_internal_deletion_score: %s\n", value);
+        PyMem_Free(value);
+        value = PyOS_double_to_string(self->extend_internal_deletion_score,
+                                      'f', 6, 0, NULL);
+        p += sprintf(p, "  extend_internal_deletion_score: %s\n", value);
+        PyMem_Free(value);
+        value = PyOS_double_to_string(self->open_left_deletion_score,
+                                      'f', 6, 0, NULL);
+        if (!value) goto exit;
+        p += sprintf(p, "  open_left_deletion_score: %s\n", value);
+        PyMem_Free(value);
+        value = PyOS_double_to_string(self->extend_left_deletion_score,
+                                      'f', 6, 0, NULL);
+        if (!value) goto exit;
+        p += sprintf(p, "  extend_left_deletion_score: %s\n", value);
+        PyMem_Free(value);
+        value = PyOS_double_to_string(self->open_right_deletion_score,
+                                      'f', 6, 0, NULL);
+        if (!value) goto exit;
+        p += sprintf(p, "  open_right_deletion_score: %s\n", value);
+        PyMem_Free(value);
+        value = PyOS_double_to_string(self->extend_right_deletion_score,
+                                      'f', 6, 0, NULL);
+        if (!value) goto exit;
+        p += sprintf(p, "  extend_right_deletion_score: %s\n", value);
+        PyMem_Free(value);
     }
     switch (self->mode) {
         case Global: sprintf(p, "  mode: global\n"); break;
@@ -2031,6 +2076,8 @@ Aligner_str(Aligner* self)
             return NULL;
     }
     s = PyUnicode_FromFormat(text, args[0], args[1], args[2]);
+
+exit:
     Py_XDECREF(wildcard);
     return s;
 }
