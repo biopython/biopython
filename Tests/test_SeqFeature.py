@@ -16,7 +16,7 @@ from Bio import Seq
 from Bio import SeqIO
 from Bio import SeqRecord
 from Bio.Data.CodonTable import TranslationError
-from Bio.SeqFeature import AfterPosition
+from Bio.SeqFeature import AfterPosition, Location
 from Bio.SeqFeature import BeforePosition
 from Bio.SeqFeature import BetweenPosition
 from Bio.SeqFeature import CompoundLocation
@@ -242,6 +242,21 @@ class TestLocations(unittest.TestCase):
         self.assertEqual(int(location2.end), 24)
         self.assertEqual(int(location3.start), 10)
         self.assertEqual(int(location3.end), 40)
+
+    def test_fromstring_is_static(self):
+        """Test whether Location.fromstring is static.
+        See `#4984 <https://github.com/biopython/biopython/pull/4984#issuecomment-2758280951>`_.
+        """
+        is_static = isinstance(Location.__dict__["fromstring"], staticmethod)
+        self.assertTrue(is_static)
+        # with old implementation
+        # behaviour of CompoundLocation.fromstring would change
+        # depending on whether we call from instance or class
+        f1 = SimpleLocation(10, 40)
+        f2 = SimpleLocation(50, 59)
+        instance = CompoundLocation([f1, f2])
+        spec = "10..40"
+        self.assertEqual(Location.fromstring(spec), instance.fromstring(spec))
 
 
 class TestPositions(unittest.TestCase):
