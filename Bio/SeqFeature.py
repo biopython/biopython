@@ -625,6 +625,7 @@ class Location(ABC):
         """Represent the Location object as a string for debugging."""
         return f"{self.__class__.__name__}(...)"
 
+    @staticmethod
     def fromstring(text, length=None, circular=False, stranded=True):
         """Create a Location object from a string.
 
