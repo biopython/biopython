@@ -1260,6 +1260,11 @@ query             0 GA?T 4
         self.assertEqual(counts.aligned, 4)
         self.assertEqual(counts.identities, 3)
         self.assertEqual(counts.mismatches, 0)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 3.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),

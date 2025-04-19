@@ -88,7 +88,7 @@ AlignmentCounts_repr(AlignmentCounts* self)
     const Py_ssize_t identities = self->identities;
     const Py_ssize_t mismatches = self->mismatches;
     const Py_ssize_t positives = self->positives;
-    if (Py_IS_NAN(self->score)) {
+    if (isnan(self->score)) {
         if (positives == -1)
             representation = PyUnicode_FromFormat("AlignmentCounts("
 "open_left_insertions=%zd, extend_left_insertions=%zd, "
@@ -219,7 +219,7 @@ AlignmentCounts_str(AlignmentCounts* self)
                                + self->open_right_deletions
                                + self->extend_right_deletions;
     const Py_ssize_t gaps = insertions + deletions;
-    if (Py_IS_NAN(self->score)) {
+    if (isnan(self->score)) {
         if (positives == -1) {
             const char text[] = "Alignment with "
 "%zd aligned letters (%zd identities, %zd mismatches) and "
@@ -295,6 +295,19 @@ AlignmentCounts_get_positives(AlignmentCounts* self, void* closure)
 }
 
 static char AlignmentCounts_positives__doc__[] = "number of characters with a positive substitution score";
+
+static PyObject*
+AlignmentCounts_get_score(AlignmentCounts* self, void* closure)
+{
+    const Py_ssize_t score = self->score;
+    if (isnan(score)) {
+        Py_INCREF(Py_None);
+        return Py_None;
+    }
+    return PyFloat_FromDouble(score);
+}
+
+static char AlignmentCounts_score__doc__[] = "alignment score, or None if unknown";
 
 static PyObject*
 AlignmentCounts_get_left_insertions(AlignmentCounts* self, void* closure)
@@ -401,6 +414,9 @@ static PyGetSetDef AlignmentCounts_getset[] = {
     {"positives",
         (getter)AlignmentCounts_get_positives, NULL,
         AlignmentCounts_positives__doc__, NULL},
+    {"score",
+        (getter)AlignmentCounts_get_score, NULL,
+        AlignmentCounts_score__doc__, NULL},
     {"left_insertions",
         (getter)AlignmentCounts_get_left_insertions, NULL,
         AlignmentCounts_left_insertions__doc__, NULL},
@@ -8384,11 +8400,13 @@ Aligner_calculate(Aligner* self, PyObject* args, PyObject* keywords)
                            self->mapping_size,
                            counts)) {
         double score;
-        if (self->substitution_matrix.buf == NULL) {
-            score = self->match * counts->identities + self->mismatch * counts->mismatches;
-        } else {
-            score = counts->score;
-        }
+        if (counts->identities + counts->mismatches > 0) {
+            if (self->substitution_matrix.buf == NULL) {
+                score = self->match * counts->identities + self->mismatch * counts->mismatches;
+            } else {
+                score = counts->score;
+            }
+        } else score = Py_NAN;
         score += counts->open_left_insertions * self->open_left_insertion_score;
         score += counts->extend_left_insertions * self->extend_left_insertion_score;
         score += counts->open_left_deletions * self->open_left_deletion_score;
