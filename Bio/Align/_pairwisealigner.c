@@ -7998,7 +7998,7 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
 }
 
 static int
-_aligner_calculate(Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, Py_buffer* strands, int wildcard, Py_buffer* substitution_matrix, int* mapping, int mapping_size, AlignmentCounts* counts)
+_aligner_calculate(Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, Py_buffer* strands, int wildcard, double match, double mismatch, Py_buffer* substitution_matrix, int* mapping, int mapping_size, AlignmentCounts* counts)
 {
     Py_ssize_t i, j, k, l1, l2;
     int cA, cB;
@@ -8018,6 +8018,7 @@ _aligner_calculate(Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, P
     Py_ssize_t identities = 0;
     Py_ssize_t mismatches = 0;
     Py_ssize_t positives = substitution_matrix->obj ? 0 : -1;
+    double score = 0.0;
 
     const Py_ssize_t shape2 = coordinates->shape[1];
     const Py_ssize_t stride1 = coordinates->strides[0] / sizeof(Py_ssize_t);
@@ -8186,6 +8187,7 @@ _aligner_calculate(Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, P
                     }
                     else {
                         double* ptr;
+                        double value;
                         path = DIAGONAL;
                         aligned += end1 - start1;
                         if (sA && sB) {
@@ -8198,7 +8200,9 @@ _aligner_calculate(Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, P
                                 else mismatches++;
                                 ptr = (double*)substitution_matrix->buf
                                     + cA * substitution_matrix->shape[0] + cB;
-                                if (*(double*)ptr > 0) positives++;
+                                value = *(double*)ptr;
+                                if (value > 0) positives++;
+                                score += value;
                             }
                         }
                         else if (sA) {
@@ -8217,7 +8221,9 @@ _aligner_calculate(Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, P
                                 else mismatches++;
                                 ptr = (double*)substitution_matrix->buf
                                     + cA * substitution_matrix->shape[0] + cB;
-                                if (*(double*)ptr > 0) positives++;
+                                value = *(double*)ptr;
+                                if (value > 0) positives++;
+                                score += value;
                             }
                             Py_DECREF(oB);
                         }
@@ -8237,7 +8243,9 @@ _aligner_calculate(Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, P
                                 else mismatches++;
                                 ptr = (double*)substitution_matrix->buf
                                     + cA * substitution_matrix->shape[0] + cB;
-                                if (*(double*)ptr > 0) positives++;
+                                value = *(double*)ptr;
+                                if (value > 0) positives++;
+                                score += value;
                             }
                             Py_DECREF(oA);
                         }
@@ -8264,7 +8272,9 @@ _aligner_calculate(Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, P
                                 else mismatches++;
                                 ptr = (double*)substitution_matrix->buf
                                     + cA * substitution_matrix->shape[0] + cB;
-                                if (*(double*)ptr > 0) positives++;
+                                value = *(double*)ptr;
+                                if (value > 0) positives++;
+                                score += value;
                             }
                             Py_DECREF(oA);
                             Py_DECREF(oB);
@@ -8276,6 +8286,7 @@ _aligner_calculate(Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, P
             }
         }
     }
+
     counts->open_left_insertions = open_left_insertions;
     counts->extend_left_insertions = extend_left_insertions;
     counts->open_left_deletions = open_left_deletions;
@@ -8292,6 +8303,7 @@ _aligner_calculate(Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, P
     counts->identities = identities;
     counts->mismatches = mismatches;
     counts->positives = positives;
+    counts->score = score;
 
     return 1;
 
@@ -8365,10 +8377,33 @@ Aligner_calculate(Aligner* self, PyObject* args, PyObject* keywords)
                            &coordinates,
                            &strands,
                            self->wildcard,
+                           self->match,
+                           self->mismatch,
                            &self->substitution_matrix,
                            self->mapping,
                            self->mapping_size,
-                           counts) == 0) {
+                           counts)) {
+        double score;
+        if (self->substitution_matrix.buf == NULL) {
+            score = self->match * counts->identities + self->mismatch * counts->mismatches;
+        } else {
+            score = counts->score;
+        }
+        score += counts->open_left_insertions * self->open_left_insertion_score;
+        score += counts->extend_left_insertions * self->extend_left_insertion_score;
+        score += counts->open_left_deletions * self->open_left_deletion_score;
+        score += counts->extend_left_deletions * self->extend_left_deletion_score;
+        score += counts->open_internal_insertions * self->open_internal_insertion_score;
+        score += counts->extend_internal_insertions * self->extend_internal_insertion_score;
+        score += counts->open_internal_deletions * self->open_internal_deletion_score;
+        score += counts->extend_internal_deletions * self->extend_internal_deletion_score;
+        score += counts->open_right_insertions * self->open_right_insertion_score;
+        score += counts->extend_right_insertions * self->extend_right_insertion_score;
+        score += counts->open_right_deletions * self->open_right_deletion_score;
+        score += counts->extend_right_deletions * self->extend_right_deletion_score;
+        counts->score = score;
+    }
+    else {
         Py_DECREF(counts);
         counts = NULL;
     }
