@@ -8078,32 +8078,43 @@ _aligner_calculate(Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, P
                             extend_internal_insertions += end2 - start2;
                     }
                     else {
-                        if (start1 == left1)
-                            open_left_insertions += end2 - start2;
-                        else if (end1 == right1)
-                            open_right_insertions += end2 - start2;
-                        else
-                            open_internal_insertions += end2 - start2;
+                        if (start1 == left1) {
+                            open_left_insertions++;
+                            extend_left_insertions += end2 - start2 - 1;
+                        }
+                        else if (end1 == right1) {
+                            open_right_insertions++;
+                            extend_right_insertions += end2 - start2 - 1;
+                        }
+                        else {
+                            open_internal_insertions++;
+                            extend_internal_insertions += end2 - start2 - 1;
+                        }
                         path = HORIZONTAL;
                     }
                 }
                 else if (start2 == end2) {
                     if (path == VERTICAL) {
-                        if (start2 == left2) {
+                        if (start2 == left2)
                             extend_left_deletions += end1 - start1;
-}
                         else if (end2 == right2)
                             extend_right_deletions += end1 - start1;
                         else
                             extend_internal_deletions += end1 - start1;
                     }
                     else {
-                        if (start2 == left2)
-                            open_left_deletions += end1 - start1;
-                        else if (end2 == right2)
-                            open_right_deletions += end1 - start1;
-                        else
-                            open_internal_deletions += end1 - start1;
+                        if (start2 == left2) {
+                            open_left_deletions++;
+                            extend_left_deletions += end1 - start1 - 1;
+                        }
+                        else if (end2 == right2) {
+                            open_right_deletions++;
+                            extend_right_deletions += end1 - start1 - 1;
+                        }
+                        else {
+                            open_internal_deletions++;
+                            extend_internal_deletions += end1 - start1 - 1;
+                        }
                         path = VERTICAL;
                     }
                 }

@@ -1294,6 +1294,11 @@ query             4 GA?T 0
         self.assertEqual(counts.aligned, 4)
         self.assertEqual(counts.identities, 3)
         self.assertEqual(counts.mismatches, 0)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 3.0)
         seq2 = "GAXT"
         aligner.wildcard = "X"
         score = aligner.score(seq1, seq2)
@@ -1329,6 +1334,11 @@ query             0 GAXT 4
         self.assertEqual(counts.aligned, 4)
         self.assertEqual(counts.identities, 3)
         self.assertEqual(counts.mismatches, 0)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 3.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -1358,6 +1368,11 @@ query             4 GAXT 0
         self.assertEqual(counts.aligned, 4)
         self.assertEqual(counts.identities, 3)
         self.assertEqual(counts.mismatches, 0)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 3.0)
         aligner.wildcard = None
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 2.0)
@@ -1448,6 +1463,11 @@ query             0 GA-A?T 5
         self.assertEqual(counts.aligned, 4)
         self.assertEqual(counts.identities, 4)
         self.assertEqual(counts.mismatches, 0)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 4.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -1480,6 +1500,11 @@ query             5 GA-A?T 0
         self.assertEqual(counts.aligned, 4)
         self.assertEqual(counts.identities, 4)
         self.assertEqual(counts.mismatches, 0)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 4.0)
         seq1 = "GAXAT"
         seq2 = "GAAXT"
         aligner.wildcard = "X"
@@ -1519,6 +1544,11 @@ query             0 GA-AXT 5
         self.assertEqual(counts.aligned, 4)
         self.assertEqual(counts.identities, 4)
         self.assertEqual(counts.mismatches, 0)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 4.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -1551,6 +1581,11 @@ query             5 GA-AXT 0
         self.assertEqual(counts.aligned, 4)
         self.assertEqual(counts.identities, 4)
         self.assertEqual(counts.mismatches, 0)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 4.0)
 
     def test_fogsaa_simple2(self):
         seq1 = "GA?AT"
@@ -1594,6 +1629,11 @@ query             0 GA-A?T 5
         self.assertEqual(counts.aligned, 4)
         self.assertEqual(counts.identities, 4)
         self.assertEqual(counts.mismatches, 0)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 4.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -1626,6 +1666,11 @@ query             5 GA-A?T 0
         self.assertEqual(counts.aligned, 4)
         self.assertEqual(counts.identities, 4)
         self.assertEqual(counts.mismatches, 0)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 4.0)
         seq1 = "GAXAT"
         seq2 = "GAAXT"
         aligner.wildcard = "X"
@@ -1665,6 +1710,11 @@ query             0 GA-AXT 5
         self.assertEqual(counts.aligned, 4)
         self.assertEqual(counts.identities, 4)
         self.assertEqual(counts.mismatches, 0)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 4.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -1697,6 +1747,11 @@ query             5 GA-AXT 0
         self.assertEqual(counts.aligned, 4)
         self.assertEqual(counts.identities, 4)
         self.assertEqual(counts.mismatches, 0)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 4.0)
 
 
 class TestPairwiseOpenPenalty(unittest.TestCase):
@@ -6619,6 +6674,7 @@ query	16	target	1	255	13M4D	*	0	0	ACGTAGCATCAGC	*	AS:i:13
         aligner.mode = "local"
         # use strings for target and query
         alignments = aligner.align(target, query)
+        self.assertAlmostEqual(alignments.score, 13.0)
         self.assertEqual(len(alignments), 1)
         self.assertEqual(
             repr(alignments),
@@ -6643,6 +6699,11 @@ query             0 ACGATCGAGCNGCTACG 17
         self.assertEqual(counts.aligned, 17)
         self.assertEqual(counts.identities, 15)
         self.assertEqual(counts.mismatches, 1)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 17)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 13.0)
         self.assertEqual(
             alignment.format("psl"),
             """\
@@ -6686,6 +6747,11 @@ query            22 ACGATCGAGCNGCTACG  5
         self.assertEqual(counts.aligned, 17)
         self.assertEqual(counts.identities, 15)
         self.assertEqual(counts.mismatches, 1)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 17)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 13.0)
         self.assertEqual(
             alignment.format("psl"),
             """\
@@ -6730,6 +6796,11 @@ query             0 ACGATCGAGCNGCTACG 17
         self.assertEqual(counts.aligned, 17)
         self.assertEqual(counts.identities, 15)
         self.assertEqual(counts.mismatches, 1)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 17)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 13.0)
         self.assertEqual(
             alignment.format("psl"),
             """\
@@ -6774,6 +6845,11 @@ query            22 ACGATCGAGCNGCTACG  5
         self.assertEqual(counts.aligned, 17)
         self.assertEqual(counts.identities, 15)
         self.assertEqual(counts.mismatches, 1)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 17)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 13.0)
         self.assertEqual(alignment.shape, (2, 17))
         self.assertEqual(
             alignment.format("psl"),
@@ -6821,6 +6897,11 @@ query             0 ------ACGATCGAGCNGCTACGCCCNC 22
         self.assertEqual(counts.aligned, 17)
         self.assertEqual(counts.identities, 15)
         self.assertEqual(counts.mismatches, 1)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 17)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 13.0)
         self.assertEqual(alignment.shape, (2, 28))
         self.assertEqual(
             alignment.format("psl"),
@@ -6864,6 +6945,11 @@ query            22 ------ACGATCGAGCNGCTACGCCCNC  0
         self.assertEqual(counts.aligned, 17)
         self.assertEqual(counts.identities, 15)
         self.assertEqual(counts.mismatches, 1)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 17)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 13.0)
         self.assertEqual(alignment.shape, (2, 28))
         self.assertEqual(
             alignment.format("psl"),
@@ -6908,6 +6994,11 @@ query             0 ------ACGATCGAGCNGCTACGCCCNC 22
         self.assertEqual(counts.aligned, 17)
         self.assertEqual(counts.identities, 15)
         self.assertEqual(counts.mismatches, 1)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 17)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 13.0)
         self.assertEqual(alignment.shape, (2, 28))
         self.assertEqual(
             alignment.format("psl"),
@@ -6953,6 +7044,11 @@ query            22 ------ACGATCGAGCNGCTACGCCCNC  0
         self.assertEqual(counts.aligned, 17)
         self.assertEqual(counts.identities, 15)
         self.assertEqual(counts.mismatches, 1)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 17)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 13.0)
         self.assertEqual(alignment.shape, (2, 28))
         self.assertEqual(
             alignment.format("psl"),
@@ -7003,6 +7099,7 @@ class TestCounts(unittest.TestCase):
 
     def check_counts_and_score(self, counts):
         self.check_counts(counts)
+        self.assertAlmostEqual(counts.score, -7.0)
 
     def test_string_bytes(self):
         aligner = Align.PairwiseAligner()
@@ -7018,6 +7115,7 @@ target            0 --TTACGTCCCCCCC 13
 query             0 ACTTT-GT-------  7
 """,
         )
+        self.assertAlmostEqual(alignment.score, -7.0)
         counts = alignment.counts()
         self.check_counts(counts)
         counts = alignment.counts(aligner)
@@ -7049,6 +7147,7 @@ A C T  T  T  -- G  T  -- -- -- -- -- -- --
         counts = alignment.counts()
         self.check_counts(counts)
         counts = alignment.counts(aligner)
+        self.check_counts_and_score(counts)
         alignments = aligner.align(b"TTACGTCCCCCCC", b"ACTTTGT")
         alignment = alignments[0]
         self.assertEqual(
@@ -7062,6 +7161,7 @@ A C T  T  T  -- G  T  -- -- -- -- -- -- --
         counts = alignment.counts()
         self.check_counts(counts)
         counts = alignment.counts(aligner)
+        self.check_counts_and_score(counts)
         alignments = aligner.align(Seq("TTACGTCCCCCCC"), Seq("ACTTTGT"))
         alignment = alignments[0]
         self.assertEqual(
@@ -7075,6 +7175,7 @@ query             0 ACTTT-GT-------  7
         counts = alignment.counts()
         self.check_counts(counts)
         counts = alignment.counts(aligner)
+        self.check_counts_and_score(counts)
         alignments = aligner.align(Seq("TTACGTCCCCCCC"), "ACTTTGT")
         alignment = alignments[0]
         self.assertEqual(
@@ -7088,6 +7189,7 @@ query             0 ACTTT-GT-------  7
         counts = alignment.counts()
         self.check_counts(counts)
         counts = alignment.counts(aligner)
+        self.check_counts_and_score(counts)
         alignments = aligner.align("TTACGTCCCCCCC", Seq("ACTTTGT"))
         alignment = alignments[0]
         self.assertEqual(
@@ -7101,6 +7203,7 @@ query             0 ACTTT-GT-------  7
         counts = alignment.counts()
         self.check_counts(counts)
         counts = alignment.counts(aligner)
+        self.check_counts_and_score(counts)
         alignments = aligner.align(Seq("TTACGTCCCCCCC"), b"ACTTTGT")
         alignment = alignments[0]
         self.assertEqual(
@@ -7114,6 +7217,7 @@ query             0 ACTTT-GT-------  7
         counts = alignment.counts()
         self.check_counts(counts)
         counts = alignment.counts(aligner)
+        self.check_counts_and_score(counts)
         alignments = aligner.align(b"TTACGTCCCCCCC", Seq("ACTTTGT"))
         alignment = alignments[0]
         self.assertEqual(
@@ -7127,6 +7231,7 @@ A C T  T  T  -- G  T  -- -- -- -- -- -- --
         counts = alignment.counts()
         self.check_counts(counts)
         counts = alignment.counts(aligner)
+        self.check_counts_and_score(counts)
 
     def check_incomplete_nucleotide_sequence(self, counts):
         self.assertEqual(counts.left_insertions, 0)
@@ -7136,8 +7241,8 @@ A C T  T  T  -- G  T  -- -- -- -- -- -- --
         self.assertEqual(counts.right_insertions, 0)
         self.assertEqual(counts.right_deletions, 0)
         self.assertEqual(counts.aligned, 13)
-        self.assertEqual(counts.identities, 13)
-        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.identities, 12)
+        self.assertEqual(counts.mismatches, 1)
 
     def check_incomplete_nucleotide_sequence_switched(self, counts):
         self.assertEqual(counts.left_insertions, 0)
@@ -7147,35 +7252,38 @@ A C T  T  T  -- G  T  -- -- -- -- -- -- --
         self.assertEqual(counts.right_insertions, 0)
         self.assertEqual(counts.right_deletions, 0)
         self.assertEqual(counts.aligned, 13)
-        self.assertEqual(counts.identities, 13)
-        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.identities, 12)
+        self.assertEqual(counts.mismatches, 1)
 
     def test_incomplete_nucleotide_sequence(self):
         aligner = Align.PairwiseAligner()
         aligner_blastn = Align.PairwiseAligner("blastn")
         seqA = Seq({10: "TTACGT", 20: "CCCCCCC"}, length=50)
-        seqB = Seq("TTACGTCCCCCCC")
+        seqB = Seq("TTACGTCCCTCCC")
         coordinates = np.array([[10, 16, 20, 27], [0, 6, 6, 13]])
         alignment = Align.Alignment([seqA, seqB], coordinates)
         self.assertEqual(
             str(alignment),
             """\
 target           10 TTACGT????CCCCCCC 27
-                  0 ||||||----||||||| 17
-query             0 TTACGT----CCCCCCC 13
+                  0 ||||||----|||.||| 17
+query             0 TTACGT----CCCTCCC 13
 """,
         )
         counts = alignment.counts(aligner)
         self.check_incomplete_nucleotide_sequence(counts)
         self.assertIsNone(counts.positives)
+        self.assertAlmostEqual(counts.score, 12.0)
         counts = alignment.counts(aligner_blastn)
         self.check_incomplete_nucleotide_sequence(counts)
+        self.assertEqual(counts.positives, 12)
+        self.assertAlmostEqual(counts.score, 8.0)
         alignment = Align.Alignment([seqB, seqA], coordinates[::-1])
         self.assertEqual(
             str(alignment),
             """\
-target            0 TTACGT----CCCCCCC 13
-                  0 ||||||----||||||| 17
+target            0 TTACGT----CCCTCCC 13
+                  0 ||||||----|||.||| 17
 query            10 TTACGT????CCCCCCC 27
 """,
         )
@@ -7184,25 +7292,27 @@ query            10 TTACGT????CCCCCCC 27
         self.assertIsNone(counts.positives)
         counts = alignment.counts(aligner_blastn)
         self.check_incomplete_nucleotide_sequence_switched(counts)
-        self.assertEqual(counts.positives, 13)
-        seqA = Seq({10: "TTACGT", 20: "CCCCCCC"}, length=50)
+        self.assertEqual(counts.positives, 12)
+        seqA = Seq({10: "TTACGT", 20: "CCCTCCC"}, length=50)
         seqB = Seq({100: "TTACGTCCCCCCC"}, length=200)
         coordinates = np.array([[10, 16, 20, 27], [100, 106, 106, 113]])
         alignment = Align.Alignment([seqA, seqB], coordinates)
         self.assertEqual(
             str(alignment),
             """\
-target           10 TTACGT????CCCCCCC  27
-                  0 ||||||----|||||||  17
+target           10 TTACGT????CCCTCCC  27
+                  0 ||||||----|||.|||  17
 query           100 TTACGT----CCCCCCC 113
 """,
         )
         counts = alignment.counts(aligner)
         self.check_incomplete_nucleotide_sequence(counts)
         self.assertIsNone(counts.positives)
+        self.assertAlmostEqual(counts.score, 12.0)
         counts = alignment.counts(aligner_blastn)
         self.check_incomplete_nucleotide_sequence(counts)
-        self.assertEqual(counts.positives, 13)
+        self.assertEqual(counts.positives, 12)
+        self.assertAlmostEqual(counts.score, 8.0)
         seqA_rc = seqA.reverse_complement()
         seqB_rc = seqB.reverse_complement()
         coordinates_rc = np.array(coordinates)
@@ -7211,34 +7321,38 @@ query           100 TTACGT----CCCCCCC 113
         self.assertEqual(
             str(alignment),
             """\
-target           40 TTACGT????CCCCCCC  23
-                  0 ||||||----|||||||  17
+target           40 TTACGT????CCCTCCC  23
+                  0 ||||||----|||.|||  17
 query           100 TTACGT----CCCCCCC 113
 """,
         )
         counts = alignment.counts(aligner)
         self.check_incomplete_nucleotide_sequence(counts)
         self.assertIsNone(counts.positives)
+        self.assertAlmostEqual(counts.score, 12.0)
         counts = alignment.counts(aligner_blastn)
         self.check_incomplete_nucleotide_sequence(counts)
-        self.assertEqual(counts.positives, 13)
+        self.assertEqual(counts.positives, 12)
+        self.assertAlmostEqual(counts.score, 8.0)
         coordinates_rc = np.array(coordinates)
         coordinates_rc[1, :] = len(seqB) - coordinates[1, :]
         alignment = Align.Alignment([seqA, seqB_rc], coordinates_rc)
         self.assertEqual(
             str(alignment),
             """\
-target           10 TTACGT????CCCCCCC 27
-                  0 ||||||----||||||| 17
+target           10 TTACGT????CCCTCCC 27
+                  0 ||||||----|||.||| 17
 query           100 TTACGT----CCCCCCC 87
 """,
         )
         counts = alignment.counts(aligner)
         self.check_incomplete_nucleotide_sequence(counts)
         self.assertIsNone(counts.positives)
+        self.assertAlmostEqual(counts.score, 12.0)
         counts = alignment.counts(aligner_blastn)
         self.check_incomplete_nucleotide_sequence(counts)
-        self.assertEqual(counts.positives, 13)
+        self.assertEqual(counts.positives, 12)
+        self.assertAlmostEqual(counts.score, 8.0)
         coordinates_rc = np.array(coordinates)
         coordinates_rc[0, :] = len(seqA) - coordinates[0, :]
         coordinates_rc[1, :] = len(seqB) - coordinates[1, :]
@@ -7246,17 +7360,19 @@ query           100 TTACGT----CCCCCCC 87
         self.assertEqual(
             str(alignment),
             """\
-target           40 TTACGT????CCCCCCC 23
-                  0 ||||||----||||||| 17
+target           40 TTACGT????CCCTCCC 23
+                  0 ||||||----|||.||| 17
 query           100 TTACGT----CCCCCCC 87
 """,
         )
         counts = alignment.counts(aligner)
         self.check_incomplete_nucleotide_sequence(counts)
         self.assertIsNone(counts.positives)
+        self.assertAlmostEqual(counts.score, 12.0)
         counts = alignment.counts(aligner_blastn)
         self.check_incomplete_nucleotide_sequence(counts)
-        self.assertEqual(counts.positives, 13)
+        self.assertEqual(counts.positives, 12)
+        self.assertAlmostEqual(counts.score, 8.0)
 
     def check_blastp(self, counts):
         self.assertEqual(counts.left_insertions, 0)
@@ -7328,9 +7444,11 @@ query           582
         counts = alignment.counts(aligner)
         self.check_blastp(counts)
         self.assertIsNone(counts.positives)
+        self.assertAlmostEqual(counts.score, 237.0)
         counts = alignment.counts(aligner_blastp)
         self.check_blastp(counts)
         self.assertEqual(counts.positives, 306)
+        self.assertAlmostEqual(counts.score, 1071.0)
         sequences = [Seq(seqA), Seq(seqB)]
         alignment = Align.Alignment(sequences, coordinates)
         counts = alignment.counts(aligner_blastp)
@@ -7370,6 +7488,7 @@ query           582
         self.assertEqual(counts.identities, 4)
         self.assertEqual(counts.mismatches, 1)
         self.assertIsNone(counts.positives)
+        self.assertAlmostEqual(counts.score, -6.0)
 
     def test_greek(self):
         aligner = Align.PairwiseAligner()
@@ -7397,6 +7516,7 @@ ABCBAαβγ---
         self.assertEqual(counts.identities, 3)
         self.assertEqual(counts.mismatches, 0)
         self.assertIsNone(counts.positives)
+        self.assertAlmostEqual(counts.score, 3.0)
         aligner.alphabet = "ABCαβγ"
         alignments = aligner.align(seqA, seqB)
         alignment = alignments[0]
@@ -7419,6 +7539,7 @@ ABCBAαβγ---
         self.assertEqual(counts.identities, 3)
         self.assertEqual(counts.mismatches, 0)
         self.assertIsNone(counts.positives)
+        self.assertAlmostEqual(counts.score, 3.0)
         substitution_matrix = Array("ABCαβγ", dims=2)
         for c in aligner.alphabet:
             substitution_matrix[c, c] = 2.0
@@ -7465,6 +7586,7 @@ ABC-BAαβγ
         self.assertEqual(counts.identities, 1)
         self.assertEqual(counts.mismatches, 4)
         self.assertEqual(counts.positives, 4)
+        self.assertAlmostEqual(counts.score, 8.0)
 
 
 if __name__ == "__main__":
