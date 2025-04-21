@@ -3907,6 +3907,16 @@ query             0 ATT 3
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 3]], [[0, 3]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 3.0)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 3.0)
         self.assertEqual(
@@ -3923,6 +3933,16 @@ query             0 AT-T 3
                 alignment.aligned, np.array([[[0, 2], [3, 4]], [[0, 2], [2, 3]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 3.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -3944,6 +3964,16 @@ query             3 ATT 0
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 3]], [[3, 0]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 3.0)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 3.0)
         self.assertEqual(
@@ -3960,6 +3990,16 @@ query             3 AT-T 0
                 alignment.aligned, np.array([[[0, 2], [3, 4]], [[3, 1], [1, 0]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 3.0)
 
     def test_match_dictionary2(self):
         try:
@@ -4019,6 +4059,16 @@ query             0 ATT 3
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 3]], [[0, 3]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 3.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -4040,6 +4090,16 @@ query             3 ATT 0
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 3]], [[3, 0]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 3.0)
 
     def test_match_dictionary3(self):
         try:
@@ -4099,6 +4159,16 @@ query             0 ATA 3
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 3]], [[0, 3]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 3.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -4120,6 +4190,16 @@ query             4 ATA 1
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 3]], [[4, 1]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 3.0)
 
     def test_match_dictionary4(self):
         try:
@@ -4182,6 +4262,16 @@ query             0 ATT 3
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 3]], [[0, 3]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 3.0)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 3.0)
         self.assertEqual(
@@ -4198,6 +4288,16 @@ query             0 AT-T 3
                 alignment.aligned, np.array([[[0, 2], [3, 4]], [[0, 2], [2, 3]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 3.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -4219,6 +4319,16 @@ query             3 ATT 0
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 3]], [[3, 0]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 3.0)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 3.0)
         self.assertEqual(
@@ -4235,6 +4345,16 @@ query             3 AT-T 0
                 alignment.aligned, np.array([[[0, 2], [3, 4]], [[3, 1], [1, 0]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 3.0)
 
     def test_match_dictionary5(self):
         try:
@@ -4296,6 +4416,16 @@ query             0 ATT 3
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 3]], [[0, 3]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 3.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -4317,6 +4447,16 @@ query             3 ATT 0
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 3]], [[3, 0]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 3.0)
 
     def test_match_dictionary6(self):
         try:
@@ -4378,6 +4518,16 @@ query             0 ATA 3
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 3]], [[0, 3]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 3.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -4399,6 +4549,16 @@ query             4 ATA 1
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 3]], [[4, 1]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 3.0)
 
 
 class TestPairwiseOneCharacter(unittest.TestCase):
