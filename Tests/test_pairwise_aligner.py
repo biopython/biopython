@@ -4600,7 +4600,7 @@ Pairwise sequence aligner with parameters
         )
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
-        self.assertAlmostEqual(alignment.score, 1)
+        self.assertAlmostEqual(alignment.score, 1.0)
         self.assertEqual(
             str(alignment),
             """\
@@ -4613,6 +4613,16 @@ query             0 c 1
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[2, 3]], [[0, 1]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 1)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 1)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 1.0)
 
     def test_align_one_char2(self):
         aligner = Align.PairwiseAligner()
@@ -4652,7 +4662,7 @@ Pairwise sequence aligner with parameters
         )
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
-        self.assertAlmostEqual(alignment.score, 1)
+        self.assertAlmostEqual(alignment.score, 1.0)
         self.assertEqual(
             str(alignment),
             """\
@@ -4665,8 +4675,18 @@ query             0 c 1
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[2, 3]], [[0, 1]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 1)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 1)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 1.0)
         alignment = alignments[1]
-        self.assertAlmostEqual(alignment.score, 1)
+        self.assertAlmostEqual(alignment.score, 1.0)
         self.assertEqual(
             str(alignment),
             """\
@@ -4679,6 +4699,16 @@ query             0 c 1
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[3, 4]], [[0, 1]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 1)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 1)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 1.0)
 
     def test_align_one_char3(self):
         aligner = Align.PairwiseAligner()
@@ -4733,6 +4763,16 @@ query             0 --c-- 1
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[2, 3]], [[0, 1]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 1)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 1)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 0.2)
 
     def test_align_one_char_score3(self):
         aligner = Align.PairwiseAligner()
@@ -4854,7 +4894,7 @@ class TestPerSiteGapPenalties(unittest.TestCase):
         )
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
-        self.assertAlmostEqual(alignment.score, 2)
+        self.assertAlmostEqual(alignment.score, 2.0)
         self.assertEqual(
             str(alignment),
             """\
@@ -4870,6 +4910,16 @@ query             0 --AABBBAAAACC----------CCAAAABBBAA-- 22
                 np.array([[[2, 13], [23, 34]], [[0, 11], [11, 22]]]),
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 22)
+        self.assertEqual(counts.identities, 22)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 22)
+        self.assertEqual(counts.identities, 22)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 2.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -4878,7 +4928,7 @@ query             0 --AABBBAAAACC----------CCAAAABBBAA-- 22
         )
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
-        self.assertAlmostEqual(alignment.score, 2)
+        self.assertAlmostEqual(alignment.score, 2.0)
         self.assertEqual(
             str(alignment),
             """\
@@ -4894,6 +4944,16 @@ query            22 --AABBBAAAACC----------CCAAAABBBAA--  0
                 np.array([[[2, 13], [23, 34]], [[22, 11], [11, 0]]]),
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 22)
+        self.assertEqual(counts.identities, 22)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 22)
+        self.assertEqual(counts.identities, 22)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 2.0)
 
     def test_gap_here_only_2(self):
         # Force a bad alignment.
@@ -4948,7 +5008,7 @@ query            22 --AABBBAAAACC----------CCAAAABBBAA--  0
         )
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
-        self.assertAlmostEqual(alignment.score, -10)
+        self.assertAlmostEqual(alignment.score, -10.0)
         self.assertEqual(
             str(alignment),
             """\
@@ -4963,8 +5023,18 @@ query             0 --AAB----------BBAAAACCCCAAAABBBAA-- 22
                 alignment.aligned, np.array([[[2, 5], [15, 34]], [[0, 3], [3, 22]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 22)
+        self.assertEqual(counts.identities, 16)
+        self.assertEqual(counts.mismatches, 6)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 22)
+        self.assertEqual(counts.identities, 16)
+        self.assertEqual(counts.mismatches, 6)
+        self.assertAlmostEqual(counts.score, -10.0)
         alignment = alignments[1]
-        self.assertAlmostEqual(alignment.score, -10)
+        self.assertAlmostEqual(alignment.score, -10.0)
         self.assertEqual(
             str(alignment),
             """\
@@ -4979,6 +5049,16 @@ query             0 AAB------------BBAAAACCCCAAAABBBAA-- 22
                 alignment.aligned, np.array([[[0, 3], [15, 34]], [[0, 3], [3, 22]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 22)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 7)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 22)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 7)
+        self.assertAlmostEqual(counts.score, -10.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -4987,7 +5067,7 @@ query             0 AAB------------BBAAAACCCCAAAABBBAA-- 22
         )
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
-        self.assertAlmostEqual(alignment.score, -10)
+        self.assertAlmostEqual(alignment.score, -10.0)
         self.assertEqual(
             str(alignment),
             """\
@@ -5002,8 +5082,21 @@ query            22 --AABBBAAAACCCCAAAABB------------BAA  0
                 alignment.aligned, np.array([[[2, 21], [33, 36]], [[22, 3], [3, 0]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 22)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 7)
+        self.assertIsNone(counts.score)
+        print("Noh dor komt hot")
+        print(aligner)
+        print(alignment)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 22)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 7)
+        self.assertAlmostEqual(counts.score, -10.0)
         alignment = alignments[1]
-        self.assertAlmostEqual(alignment.score, -10)
+        self.assertAlmostEqual(alignment.score, -10.0)
         self.assertEqual(
             str(alignment),
             """\
@@ -5018,6 +5111,16 @@ query            22 --AABBBAAAACCCCAAAABB----------BAA--  0
                 alignment.aligned, np.array([[[2, 21], [31, 34]], [[22, 3], [3, 0]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 22)
+        self.assertEqual(counts.identities, 16)
+        self.assertEqual(counts.mismatches, 6)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 22)
+        self.assertEqual(counts.identities, 16)
+        self.assertEqual(counts.mismatches, 6)
+        self.assertAlmostEqual(counts.score, -10.0)
 
     def test_gap_here_only_3(self):
         # Check if gap open and gap extend penalties are handled correctly.
@@ -5082,6 +5185,16 @@ query             0 TTG--GAA 6
                 alignment.aligned, np.array([[[0, 2], [4, 6]], [[0, 2], [4, 6]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 2.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -5105,6 +5218,16 @@ query             6 TTG--GAA 0
                 alignment.aligned, np.array([[[0, 2], [4, 6]], [[6, 4], [2, 0]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 2.0)
         aligner.deletion_score = gap_score
         self.assertEqual(
             str(aligner),
@@ -5145,6 +5268,16 @@ query             0 TTGG-AA 6
                 np.array([[[0, 2], [2, 3], [4, 6]], [[0, 2], [3, 4], [4, 6]]]),
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 5)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 5)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, -8.0)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, -8.0)
         self.assertEqual(
@@ -5161,6 +5294,16 @@ query             0 TT-GG-AA 6
                 alignment.aligned, np.array([[[0, 2], [4, 6]], [[0, 2], [4, 6]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, -8.0)
         alignment = alignments[2]
         self.assertAlmostEqual(alignment.score, -8.0)
         self.assertEqual(
@@ -5178,6 +5321,16 @@ query             0 TT-GGAA 6
                 np.array([[[0, 2], [3, 4], [4, 6]], [[0, 2], [2, 3], [4, 6]]]),
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 5)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 5)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, -8.0)
         alignment = alignments[3]
         self.assertAlmostEqual(alignment.score, -8.0)
         self.assertEqual(
@@ -5194,6 +5347,16 @@ query             0 TTG--GAA 6
                 alignment.aligned, np.array([[[0, 2], [4, 6]], [[0, 2], [4, 6]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, -8.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -5218,6 +5381,16 @@ query             6 TTGG-AA 0
                 np.array([[[0, 2], [2, 3], [4, 6]], [[6, 4], [3, 2], [2, 0]]]),
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 5)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 5)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, -8.0)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, -8.0)
         self.assertEqual(
@@ -5234,6 +5407,16 @@ query             6 TT-GG-AA 0
                 alignment.aligned, np.array([[[0, 2], [4, 6]], [[6, 4], [2, 0]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, -8.0)
         alignment = alignments[2]
         self.assertAlmostEqual(alignment.score, -8.0)
         self.assertEqual(
@@ -5251,6 +5434,16 @@ query             6 TT-GGAA 0
                 np.array([[[0, 2], [3, 4], [4, 6]], [[6, 4], [4, 3], [2, 0]]]),
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 5)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 5)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, -8.0)
         alignment = alignments[3]
         self.assertAlmostEqual(alignment.score, -8.0)
         self.assertEqual(
@@ -5267,6 +5460,16 @@ query             6 TTG--GAA 0
                 alignment.aligned, np.array([[[0, 2], [4, 6]], [[6, 4], [2, 0]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, -8.0)
 
     def test_gap_here_only_local_1(self):
         seq1 = "AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA"
@@ -5329,8 +5532,18 @@ query             0 AABBBAAAACCCC 13
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[2, 15]], [[0, 13]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 13.0)
         alignment = alignments[1]
-        self.assertAlmostEqual(alignment.score, 13)
+        self.assertAlmostEqual(alignment.score, 13.0)
         self.assertEqual(
             str(alignment),
             """\
@@ -5343,6 +5556,16 @@ query             9 CCCCAAAABBBAA 22
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[21, 34]], [[9, 22]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 13.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -5364,6 +5587,16 @@ query            22 AABBBAAAACCCC  9
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[2, 15]], [[22, 9]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 13.0)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 13)
         self.assertEqual(
@@ -5378,6 +5611,16 @@ query            13 CCCCAAAABBBAA  0
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[21, 34]], [[13, 0]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 13.0)
 
     def test_gap_here_only_local_2(self):
         # Force a bad alignment.
@@ -5445,8 +5688,18 @@ query             0 AABBBAAAACCCC 13
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[2, 15]], [[0, 13]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 13.0)
         alignment = alignments[1]
-        self.assertAlmostEqual(alignment.score, 13)
+        self.assertAlmostEqual(alignment.score, 13.0)
         self.assertEqual(
             str(alignment),
             """\
@@ -5459,6 +5712,16 @@ query             9 CCCCAAAABBBAA 22
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[21, 34]], [[9, 22]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 13.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -5480,6 +5743,16 @@ query            22 AABBBAAAACCCC  9
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[2, 15]], [[22, 9]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 13.0)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 13)
         self.assertEqual(
@@ -5494,6 +5767,16 @@ query            13 CCCCAAAABBBAA  0
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[21, 34]], [[13, 0]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 13.0)
 
     def test_gap_here_only_local_3(self):
         # Check if gap open and gap extend penalties are handled correctly.
@@ -5556,6 +5839,16 @@ query             0 TT 2
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 2]], [[0, 2]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 2.0)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 2.0)
         self.assertEqual(
@@ -5591,6 +5884,16 @@ query             6 TT 4
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 2]], [[6, 4]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 2.0)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 2.0)
         self.assertEqual(
@@ -5605,6 +5908,16 @@ query             2 AA 0
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[4, 6]], [[2, 0]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 2.0)
         aligner.deletion_score = gap_score
         self.assertEqual(
             str(aligner),
@@ -5642,6 +5955,16 @@ query             0 TT 2
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 2]], [[0, 2]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 2.0)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 2.0)
         self.assertEqual(
@@ -5656,6 +5979,16 @@ query             4 AA 6
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[4, 6]], [[4, 6]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 2.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -5677,6 +6010,16 @@ query             6 TT 4
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 2]], [[6, 4]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 2.0)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 2.0)
         self.assertEqual(
@@ -5691,6 +6034,16 @@ query             2 AA 0
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[4, 6]], [[2, 0]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 2.0)
 
     def test_broken_gap_function(self):
         # Check if an Exception is propagated if the gap function raises one

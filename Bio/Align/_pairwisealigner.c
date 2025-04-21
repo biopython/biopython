@@ -8014,8 +8014,16 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
 }
 
 static int
-_aligner_calculate(Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, Py_buffer* strands, int wildcard, double match, double mismatch, Py_buffer* substitution_matrix, int* mapping, int mapping_size, AlignmentCounts* counts)
+_aligner_calculate(Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, Py_buffer* strands, Aligner* aligner, AlignmentCounts* counts)
 {
+    const int wildcard = aligner->wildcard;
+    const Py_buffer* substitution_matrix = &aligner->substitution_matrix;
+    const int* mapping = aligner->mapping;
+    const int mapping_size = aligner->mapping_size;
+
+    PyObject* insertion_score_function = aligner->insertion_score_function;
+    PyObject* deletion_score_function = aligner->deletion_score_function;
+
     Py_ssize_t i, j, k, l1, l2;
     int cA, cB;
 
@@ -8023,6 +8031,8 @@ _aligner_calculate(Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, P
     Py_buffer* sequenceB;
     int* sA;
     int* sB;
+    bool strandA;
+    bool strandB;
 
     Py_ssize_t open_left_insertions = 0, extend_left_insertions = 0;
     Py_ssize_t open_left_deletions = 0, extend_left_deletions = 0;
@@ -8054,9 +8064,11 @@ _aligner_calculate(Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, P
     for (i = 0; i < n; i++) {
         sequenceA = &sequences[i];
         sA = sequenceA->buf;
+        strandA = ((bool*)(strands->buf))[i];
         for (j = i + 1; j < n; j++) {
             sequenceB = &sequences[j];
             sB = sequenceB->buf;
+            strandB = ((bool*)(strands->buf))[j];
             left1 = buffer[i * stride1 + 0];
             left2 = buffer[j * stride1 + 0];
             right1 = buffer[i * stride1 + (shape2 - 1) * stride2];
@@ -8090,6 +8102,21 @@ _aligner_calculate(Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, P
                             open_internal_insertions++;
                             extend_internal_insertions += end2 - start2 - 1;
                         }
+                        if (insertion_score_function) {
+                            double value;
+                            PyObject* result;
+                            if (strandA)
+                                result = PyObject_CallFunction(insertion_score_function,
+                                                               "ii", right1 - start1, end2 - start2);
+                            else
+                                result = PyObject_CallFunction(insertion_score_function,
+                                                               "ii", start1, end2 - start2);
+                            if (result == NULL) return 0;
+                            value = PyFloat_AsDouble(result);
+                            Py_DECREF(result);
+                            if (value == -1.0 && PyErr_Occurred()) goto error;
+                            score += value;
+                        }
                         path = HORIZONTAL;
                     }
                 }
@@ -8114,6 +8141,21 @@ _aligner_calculate(Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, P
                         else {
                             open_internal_deletions++;
                             extend_internal_deletions += end1 - start1 - 1;
+                        }
+                        if (deletion_score_function) {
+                            double value;
+                            PyObject* result;
+                            if (strandB)
+                                result = PyObject_CallFunction(deletion_score_function,
+                                                               "ii", right2 - start2, end1 - start1);
+                            else
+                                result = PyObject_CallFunction(deletion_score_function,
+                                                               "ii", start2, end1 - start1);
+                            if (result == NULL) return 0;
+                            value = PyFloat_AsDouble(result);
+                            Py_DECREF(result);
+                            if (value == -1.0 && PyErr_Occurred()) goto error;
+                            score += value;
                         }
                         path = VERTICAL;
                     }
@@ -8403,33 +8445,31 @@ Aligner_calculate(Aligner* self, PyObject* args, PyObject* keywords)
                            buffers,
                            &coordinates,
                            &strands,
-                           self->wildcard,
-                           self->match,
-                           self->mismatch,
-                           &self->substitution_matrix,
-                           self->mapping,
-                           self->mapping_size,
+                           self,
                            counts)) {
         double score;
         if (counts->identities + counts->mismatches > 0) {
+            score = counts->score;
             if (self->substitution_matrix.buf == NULL) {
-                score = self->match * counts->identities + self->mismatch * counts->mismatches;
-            } else {
-                score = counts->score;
+                score += self->match * counts->identities + self->mismatch * counts->mismatches;
             }
         } else score = Py_NAN;
-        score += counts->open_left_insertions * self->open_left_insertion_score;
-        score += counts->extend_left_insertions * self->extend_left_insertion_score;
-        score += counts->open_left_deletions * self->open_left_deletion_score;
-        score += counts->extend_left_deletions * self->extend_left_deletion_score;
-        score += counts->open_internal_insertions * self->open_internal_insertion_score;
-        score += counts->extend_internal_insertions * self->extend_internal_insertion_score;
-        score += counts->open_internal_deletions * self->open_internal_deletion_score;
-        score += counts->extend_internal_deletions * self->extend_internal_deletion_score;
-        score += counts->open_right_insertions * self->open_right_insertion_score;
-        score += counts->extend_right_insertions * self->extend_right_insertion_score;
-        score += counts->open_right_deletions * self->open_right_deletion_score;
-        score += counts->extend_right_deletions * self->extend_right_deletion_score;
+        if (self->insertion_score_function == NULL) {
+            score += counts->open_left_insertions * self->open_left_insertion_score;
+            score += counts->extend_left_insertions * self->extend_left_insertion_score;
+            score += counts->open_internal_insertions * self->open_internal_insertion_score;
+            score += counts->extend_internal_insertions * self->extend_internal_insertion_score;
+            score += counts->open_right_insertions * self->open_right_insertion_score;
+            score += counts->extend_right_insertions * self->extend_right_insertion_score;
+        }
+        if (self->deletion_score_function == NULL) {
+            score += counts->open_left_deletions * self->open_left_deletion_score;
+            score += counts->extend_left_deletions * self->extend_left_deletion_score;
+            score += counts->open_internal_deletions * self->open_internal_deletion_score;
+            score += counts->extend_internal_deletions * self->extend_internal_deletion_score;
+            score += counts->open_right_deletions * self->open_right_deletion_score;
+            score += counts->extend_right_deletions * self->extend_right_deletion_score;
+        }
         counts->score = score;
     }
     else {
