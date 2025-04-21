@@ -299,7 +299,7 @@ static char AlignmentCounts_positives__doc__[] = "number of characters with a po
 static PyObject*
 AlignmentCounts_get_score(AlignmentCounts* self, void* closure)
 {
-    const Py_ssize_t score = self->score;
+    const double score = self->score;
     if (isnan(score)) {
         Py_INCREF(Py_None);
         return Py_None;

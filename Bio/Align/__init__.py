@@ -90,6 +90,7 @@ class AlignmentCounts:
      - right_gaps          - the number of gaps on the right side of the alignment;
      - internal_gaps       - the number of gaps in the interior of the alignment;
      - gaps                - the total number of gaps in the alignment;
+     - score               - always None.
     """
 
     __slots__ = (
@@ -104,6 +105,8 @@ class AlignmentCounts:
         "_mismatches",
         "_positives",
     )
+
+    score = None
 
     def __init__(
         self,
