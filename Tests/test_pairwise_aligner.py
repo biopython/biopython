@@ -7593,6 +7593,7 @@ target	10	73	query	19	+	10	73	0	5	10,3,12,7,5,	0,10,24,50,58,
 query	0	target	1	255	10D10M1I3M11D12M14D7M1D5M6D	*	0	0	AGCATCGAGCGACTTGAGTACTATTCATACTTTCGAGC	*	AS:i:19
 """,
         )
+        self.assertAlmostEqual(alignment.counts(aligner).score, 19.0)
         alignments = aligner.align(
             chromosome, reverse_complement(transcript), strand="-"
         )
@@ -7635,6 +7636,7 @@ target	10	73	query	19	-	10	73	0	5	10,3,12,7,5,	0,10,24,50,58,
 query	16	target	1	255	10D10M1I3M11D12M14D7M1D5M6D	*	0	0	AGCATCGAGCGACTTGAGTACTATTCATACTTTCGAGC	*	AS:i:19
 """,
         )
+        self.assertAlmostEqual(alignment.counts(aligner).score, 19.0)
 
     def test_alignment_end_gap(self):
         aligner = Align.PairwiseAligner()
@@ -7677,6 +7679,7 @@ target	0	13	query	13	+	0	13	0	1	13,	0,
 query	0	target	1	255	4I13M	*	0	0	CCCCACGTAGCATCAGC	*	AS:i:13
 """,
         )
+        self.assertAlmostEqual(alignment.counts(aligner).score, 13.0)
         alignments = aligner.align(
             "ACGTAGCATCAGC", reverse_complement("CCCCACGTAGCATCAGC"), strand="-"
         )
@@ -7715,6 +7718,7 @@ target	0	13	query	13	-	0	13	0	1	13,	0,
 query	16	target	1	255	4I13M	*	0	0	CCCCACGTAGCATCAGC	*	AS:i:13
 """,
         )
+        self.assertAlmostEqual(alignment.counts(aligner).score, 13.0)
         alignments = aligner.align("CCCCACGTAGCATCAGC", "ACGTAGCATCAGC")
         self.assertEqual(
             repr(alignments),
@@ -7751,6 +7755,7 @@ target	4	17	query	13	+	4	17	0	1	13,	0,
 query	0	target	1	255	4D13M	*	0	0	ACGTAGCATCAGC	*	AS:i:13
 """,
         )
+        self.assertAlmostEqual(alignment.counts(aligner).score, 13.0)
         alignments = aligner.align(
             "CCCCACGTAGCATCAGC", reverse_complement("ACGTAGCATCAGC"), strand="-"
         )
@@ -7789,6 +7794,7 @@ target	4	17	query	13	-	4	17	0	1	13,	0,
 query	16	target	1	255	4D13M	*	0	0	ACGTAGCATCAGC	*	AS:i:13
 """,
         )
+        self.assertAlmostEqual(alignment.counts(aligner).score, 13.0)
         alignments = aligner.align("ACGTAGCATCAGC", "ACGTAGCATCAGCGGGG")
         self.assertEqual(
             repr(alignments),
@@ -7824,6 +7830,7 @@ target	0	13	query	13	+	0	13	0	1	13,	0,
 query	0	target	1	255	13M4I	*	0	0	ACGTAGCATCAGCGGGG	*	AS:i:13
 """,
         )
+        self.assertAlmostEqual(alignment.counts(aligner).score, 13.0)
         alignments = aligner.align(
             "ACGTAGCATCAGC", reverse_complement("ACGTAGCATCAGCGGGG"), strand="-"
         )
@@ -7861,6 +7868,7 @@ target	0	13	query	13	-	0	13	0	1	13,	0,
 query	16	target	1	255	13M4I	*	0	0	ACGTAGCATCAGCGGGG	*	AS:i:13
 """,
         )
+        self.assertAlmostEqual(alignment.counts(aligner).score, 13.0)
         alignments = aligner.align("ACGTAGCATCAGCGGGG", "ACGTAGCATCAGC")
         self.assertEqual(
             repr(alignments),
@@ -7897,6 +7905,7 @@ target	0	13	query	13	+	0	13	0	1	13,	0,
 query	0	target	1	255	13M4D	*	0	0	ACGTAGCATCAGC	*	AS:i:13
 """,
         )
+        self.assertAlmostEqual(alignment.counts(aligner).score, 13.0)
         alignments = aligner.align(
             "ACGTAGCATCAGCGGGG", reverse_complement("ACGTAGCATCAGC"), strand="-"
         )
@@ -7935,6 +7944,7 @@ target	0	13	query	13	-	0	13	0	1	13,	0,
 query	16	target	1	255	13M4D	*	0	0	ACGTAGCATCAGC	*	AS:i:13
 """,
         )
+        self.assertAlmostEqual(alignment.counts(aligner).score, 13.0)
 
     def test_alignment_wildcard(self):
         aligner = Align.PairwiseAligner()
