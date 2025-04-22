@@ -6500,6 +6500,14 @@ G  -- G  G
 """,
         )
         self.assertAlmostEqual(alignment.score, 2.0)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.deletions, 1)
+        self.assertEqual(counts.insertions, 1)
+        self.assertAlmostEqual(counts.score, 2.0)
+
         s2 = np.array([1.0, 0.0, 1.0])
         message = "^sequence has incorrect data type 'd'$"
         with self.assertRaisesRegex(ValueError, message):
@@ -6535,6 +6543,13 @@ G  -- G  G
 1 8 6
 """,
         )
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertEqual(counts.deletions, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertAlmostEqual(counts.score, 4.0)
         # alignments are valid as we are using match/mismatch scores
         # instead of a substitution matrix:
         score = aligner.score(s1, s2a)
@@ -6554,6 +6569,13 @@ G  -- G  G
         )
         score = aligner.score(s1, s2b)
         self.assertAlmostEqual(score, 4.0)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertEqual(counts.deletions, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertAlmostEqual(counts.score, 1.0)
         alignments = aligner.align(s1, s2b)
         self.assertEqual(len(alignments), 1)
         self.assertAlmostEqual(alignments.score, 4.0)
@@ -6567,6 +6589,14 @@ G  -- G  G
 1 28 6
 """,
         )
+        self.assertAlmostEqual(score, 4.0)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertEqual(counts.deletions, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertAlmostEqual(counts.score, 4.0)
         # when using a substitution matrix, all indices should be between 0
         # and the size of the substitution matrix:
         m = 5 * np.eye(10)
@@ -6586,6 +6616,13 @@ G  -- G  G
 1 8 6
 """,
         )
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertEqual(counts.deletions, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertAlmostEqual(counts.score, 10.0)
         message = "^sequence item 2 is negative \\(-6\\)$"
         with self.assertRaisesRegex(ValueError, message):
             aligner.score(s1, s2c)
@@ -6759,6 +6796,13 @@ query          1534 CCTCCTT---A 1542
         )
         self.assertEqual(alignment.shape, (2, 1811))
         self.assertAlmostEqual(alignment.score, 1286.0)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 1286)
+        self.assertEqual(counts.identities, 1286)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.deletions, 269)
+        self.assertEqual(counts.insertions, 256)
+        self.assertAlmostEqual(counts.score, 1286.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -6904,6 +6948,13 @@ query             8 CCTCCTT---A    0
         )
         self.assertAlmostEqual(alignment.score, 1286.0)
         self.assertEqual(alignment.shape, (2, 1811))
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 1286)
+        self.assertEqual(counts.identities, 1286)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.deletions, 269)
+        self.assertEqual(counts.insertions, 256)
+        self.assertAlmostEqual(counts.score, 1286.0)
 
 
 class TestKeywordArgumentsConstructor(unittest.TestCase):
@@ -7117,6 +7168,13 @@ class TestUnicodeStrings(unittest.TestCase):
                 alignment.aligned, np.array([[[0, 2], [4, 5]], [[0, 2], [2, 3]]])
             )
         )
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.deletions, 2)
+        self.assertEqual(counts.insertions, 0)
+        self.assertAlmostEqual(counts.score, 3.0)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 3.0)
         self.assertEqual(
@@ -7134,6 +7192,13 @@ class TestUnicodeStrings(unittest.TestCase):
                 np.array([[[0, 1], [2, 3], [4, 5]], [[0, 1], [1, 2], [2, 3]]]),
             )
         )
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.deletions, 2)
+        self.assertEqual(counts.insertions, 0)
+        self.assertAlmostEqual(counts.score, 3.0)
 
     def test_needlemanwunsch_simple1_fogsaa(self):
         seq1 = "ĞĀĀČŦ"
@@ -7169,6 +7234,13 @@ class TestUnicodeStrings(unittest.TestCase):
                 alignment.aligned, np.array([[[0, 2], [4, 5]], [[0, 2], [2, 3]]])
             )
         )
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.deletions, 2)
+        self.assertEqual(counts.insertions, 0)
+        self.assertAlmostEqual(counts.score, 3.0)
 
     def test_align_affine1_score(self):
         aligner = Align.PairwiseAligner()
@@ -7181,6 +7253,40 @@ class TestUnicodeStrings(unittest.TestCase):
         self.assertEqual(aligner.algorithm, "Gotoh global alignment algorithm")
         score = aligner.score("いい", "あいいう")
         self.assertAlmostEqual(score, -7.0)
+        alignments = aligner.align("いい", "あいいう")
+        self.assertEqual(len(alignments), 2)
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+--いい
+--|.
+あいいう
+""",
+        )
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertEqual(counts.deletions, 0)
+        self.assertEqual(counts.insertions, 2)
+        self.assertAlmostEqual(counts.score, -7.0)
+        alignment = alignments[1]
+        self.assertEqual(
+            str(alignment),
+            """\
+いい--
+.|--
+あいいう
+""",
+        )
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertEqual(counts.deletions, 0)
+        self.assertEqual(counts.insertions, 2)
+        self.assertAlmostEqual(counts.score, -7.0)
 
     def test_align_affine1_score_fogsaa(self):
         aligner = Align.PairwiseAligner()
@@ -7227,6 +7333,13 @@ class TestUnicodeStrings(unittest.TestCase):
                 alignment.aligned, np.array([[[0, 1], [2, 3]], [[1, 2], [2, 3]]])
             )
         )
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.deletions, 1)
+        self.assertEqual(counts.insertions, 0)
+        self.assertAlmostEqual(counts.score, 1.9)
 
     def test_gotoh_local(self):
         aligner = Align.PairwiseAligner()
@@ -7260,6 +7373,13 @@ class TestUnicodeStrings(unittest.TestCase):
                 alignment.aligned, np.array([[[0, 1], [2, 3]], [[1, 2], [2, 3]]])
             )
         )
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.deletions, 1)
+        self.assertEqual(counts.insertions, 0)
+        self.assertAlmostEqual(counts.score, 1.9)
 
 
 class TestAlignerPickling(unittest.TestCase):
