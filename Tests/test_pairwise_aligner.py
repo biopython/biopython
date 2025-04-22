@@ -6100,6 +6100,111 @@ query             2 AA 0
             alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
             alignments = list(alignments)
 
+    def test_mixing_affine_and_function(self):
+        # Check if we can use a gap function for one sequence, and an affine
+        # gap score for the other sequence.
+
+        def gap_score_function(position, length):
+            if position == 4:
+                return 0
+            else:
+                return -100
+
+        aligner = Align.PairwiseAligner()
+        aligner.mismatch_score = -1
+        aligner.deletion_score = gap_score_function
+        aligner.internal_insertion_score = -10
+        seqA = "AAAAAAAAAAA"
+        seqB = "TTAAAAA"
+        alignments = aligner.align(seqA, seqB)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 5.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 --AAAAAAAAAAA 11
+                  0 --||------||| 13
+query             0 TTAA------AAA  7
+""",
+        )
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 5)
+        self.assertEqual(counts.identities, 5)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.insertions, 2)
+        self.assertEqual(counts.deletions, 6)
+        self.assertAlmostEqual(counts.score, 5.0)
+        seqA = "AAAAAAAAAAA"
+        seqB = "AAAAATT"
+        alignments = aligner.align(seqA, seqB)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 5.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 AAAAAAAAAAA-- 11
+                  0 ||||------|-- 13
+query             0 AAAA------ATT  7
+""",
+        )
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 5)
+        self.assertEqual(counts.identities, 5)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.insertions, 2)
+        self.assertEqual(counts.deletions, 6)
+        self.assertAlmostEqual(counts.score, 5.0)
+
+        # Same thing, switching A and B:
+        aligner = Align.PairwiseAligner()
+        aligner.mismatch_score = -1
+        aligner.insertion_score = gap_score_function
+        aligner.internal_deletion_score = -10
+        seqA = "TTAAAAA"
+        seqB = "AAAAAAAAAAA"
+        alignments = aligner.align(seqA, seqB)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 5.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 TTAA------AAA  7
+                  0 --||------||| 13
+query             0 --AAAAAAAAAAA 11
+""",
+        )
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 5)
+        self.assertEqual(counts.identities, 5)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.insertions, 6)
+        self.assertEqual(counts.deletions, 2)
+        self.assertAlmostEqual(counts.score, 5.0)
+        seqA = "AAAAATT"
+        seqB = "AAAAAAAAAAA"
+        alignments = aligner.align(seqA, seqB)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 5.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 AAAA------ATT  7
+                  0 ||||------|-- 13
+query             0 AAAAAAAAAAA-- 11
+""",
+        )
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 5)
+        self.assertEqual(counts.identities, 5)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.insertions, 6)
+        self.assertEqual(counts.deletions, 2)
+        self.assertAlmostEqual(counts.score, 5.0)
+
 
 class TestAlignerInput(unittest.TestCase):
     """Check aligning sequences provided as lists, str, Seq, or SeqRecord objects."""
