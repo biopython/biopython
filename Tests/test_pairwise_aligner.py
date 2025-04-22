@@ -5087,9 +5087,6 @@ query            22 --AABBBAAAACCCCAAAABB------------BAA  0
         self.assertEqual(counts.identities, 15)
         self.assertEqual(counts.mismatches, 7)
         self.assertIsNone(counts.score)
-        print("Noh dor komt hot")
-        print(aligner)
-        print(alignment)
         counts = alignment.counts(aligner)
         self.assertEqual(counts.aligned, 22)
         self.assertEqual(counts.identities, 15)
@@ -6146,6 +6143,21 @@ Gly Ala Ala Cys Thr
         )
         self.assertAlmostEqual(alignments[0].score, 3.0)
         self.assertAlmostEqual(alignments[1].score, 3.0)
+        # counts = alignments[0].counts()
+        # self.assertEqual(counts.aligned, 2)
+        # self.assertEqual(counts.identities, 2)
+        # self.assertEqual(counts.mismatches, 0)
+        # self.assertIsNone(counts.score)
+        counts = alignments[0].counts(aligner)
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 3.0)
+        counts = alignments[1].counts(aligner)
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 3.0)
 
         seq1 = ["Pro", "Pro", "Gly", "Ala", "Thr"]
         seq2 = ["Gly", "Ala", "Ala", "Cys", "Thr", "Asn", "Asn"]
@@ -6189,6 +6201,18 @@ Pro Pro Gly Ala --- --- Thr --- ---
             alignment[1, 1:], [None, "Gly", "Ala", "Ala", "Cys", "Thr", "Asn", "Asn"]
         )
         self.assertEqual(alignment[1, ::2], [None, "Gly", "Ala", "Thr", "Asn"])
+        # counts = alignment.counts()
+        # self.assertEqual(counts.aligned, 2)
+        # self.assertEqual(counts.identities, 2)
+        # self.assertEqual(counts.mismatches, 0)
+        # self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.deletions, 2)
+        self.assertEqual(counts.insertions, 4)
+        self.assertAlmostEqual(counts.score, 3.0)
         alignment = alignments[1]
         self.assertEqual(
             str(alignment),
@@ -6220,6 +6244,13 @@ Pro Pro Gly --- Ala --- Thr --- ---
             alignment[1, 1:-1], [None, "Gly", "Ala", "Ala", "Cys", "Thr", "Asn"]
         )
         self.assertEqual(alignment[1, 1::2], [None, "Ala", "Cys", "Asn"])
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.deletions, 2)
+        self.assertEqual(counts.insertions, 4)
+        self.assertAlmostEqual(counts.score, 3.0)
 
     def test_three_letter_amino_acids_local(self):
         seq1 = ["Asn", "Asn", "Gly", "Ala", "Thr", "Glu", "Glu"]
@@ -6261,6 +6292,13 @@ Gly Ala Ala Cys Thr
         self.assertEqual(alignment[1, 1:], ["Ala", "Ala", "Cys", "Thr"])
         self.assertEqual(alignment[1, :-1], ["Gly", "Ala", "Ala", "Cys"])
         self.assertEqual(alignment[1, ::2], ["Gly", "Ala", "Thr"])
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.deletions, 0)
+        self.assertEqual(counts.insertions, 2)
+        self.assertAlmostEqual(counts.score, 3.0)
         alignment = alignments[1]
         self.assertEqual(
             str(alignment),
@@ -6281,6 +6319,13 @@ Gly Ala Ala Cys Thr
         self.assertEqual(alignment[1, 1:], ["Ala", "Ala", "Cys", "Thr"])
         self.assertEqual(alignment[1, :-1], ["Gly", "Ala", "Ala", "Cys"])
         self.assertEqual(alignment[1, ::2], ["Gly", "Ala", "Thr"])
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.deletions, 0)
+        self.assertEqual(counts.insertions, 2)
+        self.assertAlmostEqual(counts.score, 3.0)
 
     def test_str_seq_seqrecord(self):
         """Test aligning sequences provided as str, Seq, or SeqRecord objects."""
@@ -6316,6 +6361,13 @@ ACGT
 CGTT
 """,
         )
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 3)
+        self.assertEqual(counts.deletions, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertAlmostEqual(counts.score, -7.0)
         alignments = aligner.align(s1, s2)
         self.assertEqual(
             repr(alignments),
@@ -6341,6 +6393,13 @@ ACGT
 CGTT
 """,
         )
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 3)
+        self.assertEqual(counts.deletions, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertAlmostEqual(counts.score, -7.0)
         alignments = aligner.align(r1, r2)
         self.assertEqual(
             repr(alignments),
@@ -6366,6 +6425,13 @@ ACGT
 CGTT
 """,
         )
+        counts = alignment.counts(aligner)
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 3)
+        self.assertEqual(counts.deletions, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertAlmostEqual(counts.score, -7.0)
 
 
 class TestArgumentErrors(unittest.TestCase):

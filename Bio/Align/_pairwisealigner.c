@@ -370,6 +370,44 @@ AlignmentCounts_get_right_deletions(AlignmentCounts* self, void* closure)
 static char AlignmentCounts_right_deletions__doc__[] = "number of characters deleted on the right side of the alignment";
 
 static PyObject*
+AlignmentCounts_get_insertions(AlignmentCounts* self, void* closure)
+{
+    const Py_ssize_t open_left_insertions = self->open_left_insertions;
+    const Py_ssize_t extend_left_insertions = self->extend_left_insertions;
+    const Py_ssize_t open_internal_insertions = self->open_internal_insertions;
+    const Py_ssize_t extend_internal_insertions = self->extend_internal_insertions;
+    const Py_ssize_t open_right_insertions = self->open_right_insertions;
+    const Py_ssize_t extend_right_insertions = self->extend_right_insertions;
+    return PyLong_FromSsize_t(open_left_insertions
+                            + extend_left_insertions
+                            + open_internal_insertions
+                            + extend_internal_insertions
+                            + open_right_insertions
+                            + extend_right_insertions);
+}
+
+static char AlignmentCounts_insertions__doc__[] = "number of characters inserted";
+
+static PyObject*
+AlignmentCounts_get_deletions(AlignmentCounts* self, void* closure)
+{
+    const Py_ssize_t open_left_deletions = self->open_left_deletions;
+    const Py_ssize_t extend_left_deletions = self->extend_left_deletions;
+    const Py_ssize_t open_internal_deletions = self->open_internal_deletions;
+    const Py_ssize_t extend_internal_deletions = self->extend_internal_deletions;
+    const Py_ssize_t open_right_deletions = self->open_right_deletions;
+    const Py_ssize_t extend_right_deletions = self->extend_right_deletions;
+    return PyLong_FromSsize_t(open_left_deletions
+                            + extend_left_deletions
+                            + open_internal_deletions
+                            + extend_internal_deletions
+                            + open_right_deletions
+                            + extend_right_deletions);
+}
+
+static char AlignmentCounts_deletions__doc__[] = "number of characters deleted";
+
+static PyObject*
 AlignmentCounts_get_gaps(AlignmentCounts* self, void* closure)
 {
     const Py_ssize_t open_left_insertions = self->open_left_insertions;
@@ -435,6 +473,12 @@ static PyGetSetDef AlignmentCounts_getset[] = {
     {"right_deletions",
         (getter)AlignmentCounts_get_right_deletions, NULL,
         AlignmentCounts_right_deletions__doc__, NULL},
+    {"insertions",
+        (getter)AlignmentCounts_get_insertions, NULL,
+        AlignmentCounts_insertions__doc__, NULL},
+    {"deletions",
+        (getter)AlignmentCounts_get_deletions, NULL,
+        AlignmentCounts_deletions__doc__, NULL},
     {"gaps",
         (getter)AlignmentCounts_get_gaps, NULL,
         AlignmentCounts_gaps__doc__, NULL},
