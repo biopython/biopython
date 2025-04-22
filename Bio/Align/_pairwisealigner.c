@@ -5986,14 +5986,14 @@ exit: \
     for (i = 1; i <= nA; i++) { \
         M[i][0] = -DBL_MAX; \
         Iy[i][0] = -DBL_MAX; \
-        ok = _call_deletion_score_function(self, query_gap_start, i, &score); \
+        ok = _call_deletion_score_function(self, query_gap_start, i, nB, &score); \
         if (!ok) goto exit; \
         Ix[i][0] = score; \
     } \
     for (j = 1; j <= nB; j++) { \
         M[0][j] = -DBL_MAX; \
         Ix[0][j] = -DBL_MAX; \
-        ok = _call_insertion_score_function(self, 0, j, &score); \
+        ok = _call_insertion_score_function(self, 0, j, nA, &score); \
         if (!ok) goto exit; \
         Iy[0][j] = score; \
     } \
@@ -6005,14 +6005,14 @@ exit: \
             M[i][j] = score + (align_score); \
             score = -DBL_MAX; \
             for (k = 1; k <= i; k++) { \
-                ok = _call_deletion_score_function(self, query_gap_start, k, &gapscore); \
+                ok = _call_deletion_score_function(self, query_gap_start, k, nB, &gapscore); \
                 if (!ok) goto exit; \
                 SELECT_SCORE_WATERMAN_SMITH_BEYER(M[i-k][j], Iy[i-k][j]); \
             } \
             Ix[i][j] = score; \
             score = -DBL_MAX; \
             for (k = 1; k <= j; k++) { \
-                ok = _call_insertion_score_function(self, i, k, &gapscore); \
+                ok = _call_insertion_score_function(self, i, k, nA, &gapscore); \
                 if (!ok) goto exit; \
                 SELECT_SCORE_WATERMAN_SMITH_BEYER(M[i][j-k], Ix[i][j-k]); \
             } \
@@ -6057,7 +6057,7 @@ exit: \
             } \
             score = 0.0; \
             for (k = 1; k <= i; k++) { \
-                ok = _call_deletion_score_function(self, query_gap_start, k, &gapscore); \
+                ok = _call_deletion_score_function(self, query_gap_start, k, nB, &gapscore); \
                 SELECT_SCORE_WATERMAN_SMITH_BEYER(M[i-k][j], Iy[i-k][j]); \
                 if (!ok) goto exit; \
             } \
@@ -6065,7 +6065,7 @@ exit: \
             Ix[i][j] = score; \
             score = 0.0; \
             for (k = 1; k <= j; k++) { \
-                ok = _call_insertion_score_function(self, i, k, &gapscore); \
+                ok = _call_insertion_score_function(self, i, k, nA, &gapscore); \
                 if (!ok) goto exit; \
                 SELECT_SCORE_WATERMAN_SMITH_BEYER(M[i][j-k], Ix[i][j-k]); \
             } \
@@ -6157,14 +6157,14 @@ exit: \
     for (i = 1; i <= nA; i++) { \
         M_row[i][0] = -DBL_MAX; \
         Iy_row[i][0] = -DBL_MAX; \
-        ok = _call_deletion_score_function(self, query_gap_start, i, &score); \
+        ok = _call_deletion_score_function(self, query_gap_start, i, nB, &score); \
         if (!ok) goto exit; \
         Ix_row[i][0] = score; \
     } \
     for (j = 1; j <= nB; j++) { \
         M_row[0][j] = -DBL_MAX; \
         Ix_row[0][j] = -DBL_MAX; \
-        ok = _call_insertion_score_function(self, query_gap_start, j, &score); \
+        ok = _call_insertion_score_function(self, 0, j, nA, &score); \
         if (!ok) goto exit; \
         Iy_row[0][j] = score; \
     } \
@@ -6183,7 +6183,7 @@ exit: \
             ng = 0; \
             score = -DBL_MAX; \
             for (gap = 1; gap <= i; gap++) { \
-                ok = _call_deletion_score_function(self, query_gap_start, gap, &gapscore); \
+                ok = _call_deletion_score_function(self, query_gap_start, gap, nB, &gapscore); \
                 if (!ok) goto exit; \
                 SELECT_TRACE_WATERMAN_SMITH_BEYER_GAP(M_row[i-gap][j], \
                                                       Iy_row[i-gap][j]); \
@@ -6207,7 +6207,7 @@ exit: \
             ng = 0; \
             score = -DBL_MAX; \
             for (gap = 1; gap <= j; gap++) { \
-                ok = _call_insertion_score_function(self, i, gap, &gapscore); \
+                ok = _call_insertion_score_function(self, i, gap, nA, &gapscore); \
                 if (!ok) goto exit; \
                 SELECT_TRACE_WATERMAN_SMITH_BEYER_GAP(M_row[i][j-gap], \
                                                       Ix_row[i][j-gap]); \
@@ -6301,7 +6301,7 @@ exit: \
             gaps[i][j].IyIx = gapXY; \
             score = -DBL_MAX; \
             for (gap = 1; gap <= i; gap++) { \
-                ok = _call_deletion_score_function(self, query_gap_start, gap, &gapscore); \
+                ok = _call_deletion_score_function(self, query_gap_start, gap, nB, &gapscore); \
                 if (!ok) goto exit; \
                 SELECT_TRACE_WATERMAN_SMITH_BEYER_GAP(M_row[i-gap][j], \
                                                       Iy_row[i-gap][j]); \
@@ -6335,7 +6335,7 @@ exit: \
             score = -DBL_MAX; \
             gapM[0] = 0; \
             for (gap = 1; gap <= j; gap++) { \
-                ok = _call_insertion_score_function(self, i, gap, &gapscore); \
+                ok = _call_insertion_score_function(self, i, gap, nA, &gapscore); \
                 if (!ok) goto exit; \
                 SELECT_TRACE_WATERMAN_SMITH_BEYER_GAP(M_row[i][j-gap], \
                                                       Ix_row[i][j-gap]); \
@@ -7316,14 +7316,25 @@ Aligner_gotoh_local_align_matrix(Aligner* self,
 }
 
 static int
-_call_deletion_score_function(Aligner* aligner, int i, int j, double* score)
+_call_deletion_score_function(Aligner* aligner, int i, int j, int n, double* score)
 {
     double value;
     PyObject* result;
     PyObject* function = aligner->deletion_score_function;
-    if (!function)
-        value = aligner->open_internal_deletion_score
-              + (j-1) * aligner->extend_internal_deletion_score;
+    if (!function) {
+        if (i == 0) {
+            value = aligner->open_left_deletion_score
+                  + (j-1) * aligner->extend_left_deletion_score;
+        }
+        else if (i == n) {
+            value = aligner->open_right_deletion_score
+                  + (j-1) * aligner->extend_right_deletion_score;
+        }
+        else {
+            value = aligner->open_internal_deletion_score
+                  + (j-1) * aligner->extend_internal_deletion_score;
+        }
+    }
     else {
         result = PyObject_CallFunction(function, "ii", i, j);
         if (result == NULL) return 0;
@@ -7336,14 +7347,25 @@ _call_deletion_score_function(Aligner* aligner, int i, int j, double* score)
 }
 
 static int
-_call_insertion_score_function(Aligner* aligner, int i, int j, double* score)
+_call_insertion_score_function(Aligner* aligner, int i, int j, int n, double* score)
 {
     double value;
     PyObject* result;
     PyObject* function = aligner->insertion_score_function;
-    if (!function)
-        value = aligner->open_internal_insertion_score
-              + (j-1) * aligner->extend_internal_insertion_score;
+    if (!function) {
+        if (i == 0) {
+            value = aligner->open_left_insertion_score
+                  + (j-1) * aligner->extend_left_insertion_score;
+        }
+        else if (i == n) {
+            value = aligner->open_right_insertion_score
+                  + (j-1) * aligner->extend_right_insertion_score;
+        }
+        else {
+            value = aligner->open_internal_insertion_score
+                  + (j-1) * aligner->extend_internal_insertion_score;
+        }
+    }
     else {
         result = PyObject_CallFunction(function, "ii", i, j);
         if (result == NULL) return 0;
