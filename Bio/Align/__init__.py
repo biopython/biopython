@@ -4549,7 +4549,7 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
                         sequences[i] = np.fromiter(
                             map(alphabet.index, data), dtype=np.int32, count=len(data)
                         )
-        return super().calculate(sequences, coordinates, strands)
+        return _pairwisealigner.calculate(self, sequences, coordinates, strands)
 
     def __getstate__(self):
         state = {
