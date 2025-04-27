@@ -3848,7 +3848,59 @@ class Alignment:
                 substitution_matrix = aligner.substitution_matrix
             if wildcard is None:
                 wildcard = aligner.wildcard
-            return aligner.calculate(self)
+            n = len(self.sequences)
+            sequences = [None] * n
+            strands = np.zeros(n, bool)
+            coordinates = self.coordinates.copy()
+            steps = np.diff(coordinates, 1)
+            aligned_flags = sum(steps != 0, 0) > 1
+            # True for steps in which at least two sequences align, False if a gap
+            for i, sequence in enumerate(self.sequences):
+                aligned_steps = steps[i, aligned_flags]
+                if sum(aligned_steps > 0) < sum(aligned_steps < 0):
+                    if not ignore_sequences:
+                        sequence = reverse_complement(sequence)
+                    coordinates[i, :] = len(sequence) - coordinates[i, :]
+                    strands[i] = True
+                if ignore_sequences:
+                    sequences[i] = None
+                else:
+                    try:
+                        sequence = sequence.seq  # stupid SeqRecord
+                    except AttributeError:
+                        pass
+                    try:
+                        data = sequence._data
+                    except AttributeError:
+                        data = sequence
+                    if isinstance(data, bytes):
+                        sequences[i] = np.frombuffer(data, dtype=np.uint8).astype(
+                            np.int32
+                        )
+                    elif isinstance(data, bytearray):
+                        sequences[i] = np.frombuffer(
+                            bytes(data), dtype=np.uint8
+                        ).astype(np.int32)
+                    elif isinstance(data, str):
+                        sequences[i] = np.frombuffer(
+                            bytearray(data, aligner.codec), dtype=np.int32
+                        )
+                    elif isinstance(data, SequenceDataAbstractBaseClass):
+                        sequences[i] = data
+                    else:
+                        alphabet = aligner.alphabet
+                        if alphabet is None:
+                            # data is a numpy array of int32
+                            # (to be checked in the C code)
+                            sequences[i] = data
+                        else:
+                            # data are objects chosen from the alphabet
+                            sequences[i] = np.fromiter(
+                                map(alphabet.index, data),
+                                dtype=np.int32,
+                                count=len(data),
+                            )
+            return _pairwisealigner.calculate(aligner, sequences, coordinates, strands)
         if ignore_sequences is None:
             ignore_sequences = False
         left_insertions = left_deletions = 0
@@ -4487,69 +4539,6 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
                     map(alphabet.index, seqB), dtype=np.int32, count=len(seqB)
                 )
         return super().score(seqA, seqB, strand)
-
-    def calculate(self, alignment, ignore_sequences=False):
-        """Return the matches, mismatches, scores, and gap counts for the alignment.
-
-        Arguments:
-
-         - ignore_sequences    - If True, do not calculate the number of identities,
-                                 positives, and mismatches, but only calculate the
-                                 number of aligned sequences and number of gaps
-                                 to speed up the calculation.
-                                 Default value: False.
-
-        A ValueError is raised if ignore_sequences is True and substitution_matrix is not None.
-        """
-        n = len(alignment.sequences)
-        sequences = [None] * n
-        strands = np.zeros(n, bool)
-        coordinates = alignment.coordinates.copy()
-        steps = np.diff(coordinates, 1)
-        aligned_flags = sum(steps != 0, 0) > 1
-        # True for steps in which at least two sequences align, False if a gap
-        for i, sequence in enumerate(alignment.sequences):
-            aligned_steps = steps[i, aligned_flags]
-            if sum(aligned_steps > 0) < sum(aligned_steps < 0):
-                if not ignore_sequences:
-                    sequence = reverse_complement(sequence)
-                coordinates[i, :] = len(sequence) - coordinates[i, :]
-                strands[i] = True
-            if ignore_sequences:
-                sequences[i] = None
-            else:
-                try:
-                    sequence = sequence.seq  # stupid SeqRecord
-                except AttributeError:
-                    pass
-                try:
-                    data = sequence._data
-                except AttributeError:
-                    data = sequence
-                if isinstance(data, bytes):
-                    sequences[i] = np.frombuffer(data, dtype=np.uint8).astype(np.int32)
-                elif isinstance(data, bytearray):
-                    sequences[i] = np.frombuffer(bytes(data), dtype=np.uint8).astype(
-                        np.int32
-                    )
-                elif isinstance(data, str):
-                    sequences[i] = np.frombuffer(
-                        bytearray(data, self.codec), dtype=np.int32
-                    )
-                elif isinstance(data, SequenceDataAbstractBaseClass):
-                    sequences[i] = data
-                else:
-                    alphabet = self.alphabet
-                    if alphabet is None:
-                        # data is a numpy array of int32
-                        # (to be checked in the C code)
-                        sequences[i] = data
-                    else:
-                        # data are objects chosen from the alphabet
-                        sequences[i] = np.fromiter(
-                            map(alphabet.index, data), dtype=np.int32, count=len(data)
-                        )
-        return _pairwisealigner.calculate(self, sequences, coordinates, strands)
 
     def __getstate__(self):
         state = {
