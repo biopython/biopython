@@ -8079,9 +8079,130 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
     return result;
 }
 
-static int
-_aligner_calculate(Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, Py_buffer* strands, Aligner* aligner, AlignmentCounts* counts)
+static char Aligner_doc[] =
+"The PairwiseAligner class implements common algorithms to align two\n"
+"sequences to each other.\n";
+
+static PyMethodDef Aligner_methods[] = {
+    {"score",
+     (PyCFunction)Aligner_score,
+     METH_VARARGS | METH_KEYWORDS,
+     Aligner_score__doc__
+    },
+    {"align",
+     (PyCFunction)Aligner_align,
+     METH_VARARGS | METH_KEYWORDS,
+     Aligner_align__doc__
+    },
+    {NULL, NULL, 0, NULL}  /* Sentinel */
+};
+
+static PyTypeObject Aligner_Type = {
+    PyVarObject_HEAD_INIT(NULL, 0)
+    "_pairwisealigner.PairwiseAligner", /* tp_name */
+    sizeof(Aligner),               /* tp_basicsize */
+    0,                             /* tp_itemsize */
+    (destructor)Aligner_dealloc,   /* tp_dealloc */
+    0,                             /* tp_print */
+    0,                             /* tp_getattr */
+    0,                             /* tp_setattr */
+    0,                             /* tp_compare */
+    (reprfunc)Aligner_repr,        /* tp_repr */
+    0,                             /* tp_as_number */
+    0,                             /* tp_as_sequence */
+    0,                             /* tp_as_mapping */
+    0,                             /* tp_hash */
+    0,                             /* tp_call */
+    (reprfunc)Aligner_str,         /* tp_str */
+    0,                             /* tp_getattro */
+    0,                             /* tp_setattro */
+    0,                             /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,        /*tp_flags*/
+    Aligner_doc,                   /* tp_doc */
+    0,                             /* tp_traverse */
+    0,                             /* tp_clear */
+    0,                             /* tp_richcompare */
+    0,                             /* tp_weaklistoffset */
+    0,                             /* tp_iter */
+    0,                             /* tp_iternext */
+    Aligner_methods,               /* tp_methods */
+    0,                             /* tp_members */
+    Aligner_getset,                /* tp_getset */
+    0,                             /* tp_base */
+    0,                             /* tp_dict */
+    0,                             /* tp_descr_get */
+    0,                             /* tp_descr_set */
+    0,                             /* tp_dictoffset */
+    (initproc)Aligner_init,        /* tp_init */
+};
+
+
+/* Module definition */
+
+static char _pairwisealigner__doc__[] =
+"C extension module implementing pairwise alignment algorithms";
+
+static const char _calculate__doc__[] = "calculate the matches, mismatches, gaps, and score of the alignment";
+
+static PyObject*
+_calculate(PyObject* self, PyObject* args, PyObject* keywords)
 {
+    Py_ssize_t i;
+    Py_ssize_t n = 0;
+    PyObject* sequence;
+    Aligner* aligner;
+    PyObject* sequences;
+    Py_buffer* buffers;
+    Py_buffer coordinates = {0};
+    Py_buffer strands = {0};
+    AlignmentCounts* counts = NULL;
+
+    static char *kwlist[] = {"aligner", "sequences", "coordinates", "strands", NULL};
+
+    if(!PyArg_ParseTupleAndKeywords(args, keywords, "OO&O&O!", kwlist,
+                                    &sequences,
+                                    coordinates_converter, &coordinates,
+                                    strands_converter , &strands,
+                                    &Aligner_Type, (PyObject *)&aligner))
+        return NULL;
+
+    if (!PyList_Check(sequences)) {
+        PyErr_SetString(PyExc_TypeError, "sequences must be a list");
+        goto exit;
+    }
+
+    n = PyList_GET_SIZE(sequences);
+    if (n != coordinates.shape[0]) {
+        PyErr_SetString(PyExc_ValueError,
+            "number of rows in coordinates must equal the number of sequences");
+        goto exit;
+    }
+    if (n != strands.shape[0]) {
+        PyErr_SetString(PyExc_ValueError,
+            "size of strands must equal the number of sequences");
+        goto exit;
+    }
+
+    buffers = PyMem_Calloc(n, sizeof(Py_buffer));
+    if (!buffers) goto exit;
+
+    for (i = 0; i < n; i++) {
+        sequence = PyList_GET_ITEM(sequences, i);
+        buffers[i].obj = (PyObject *)aligner;
+        if (sequence_converter(sequence, &buffers[i])) continue;
+        PyErr_Clear();  // to clear the exception raised by PyObject_GetBuffer
+        if (PySequence_Check(sequence)) buffers[i].obj = sequence;
+        else if (sequence == Py_None) buffers[i].obj = NULL;
+        else break;
+    }
+    if (i < n) {
+        n = i;
+        goto exit;
+    }
+
+    counts = (AlignmentCounts*)PyType_GenericAlloc(&AlignmentCounts_Type, 0);
+    if (!counts) goto exit;
+
     const int wildcard = aligner->wildcard;
     const Py_buffer* substitution_matrix = &aligner->substitution_matrix;
     const int* mapping = aligner->mapping;
@@ -8090,7 +8211,7 @@ _aligner_calculate(Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, P
     PyObject* insertion_score_function = aligner->insertion_score_function;
     PyObject* deletion_score_function = aligner->deletion_score_function;
 
-    Py_ssize_t i, j, k, l1, l2;
+    Py_ssize_t j, k, l1, l2;
     int cA, cB;
 
     Py_buffer* sequenceA;
@@ -8112,14 +8233,14 @@ _aligner_calculate(Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, P
     Py_ssize_t positives = substitution_matrix->obj ? 0 : -1;
     double score = 0.0;
 
-    const Py_ssize_t shape2 = coordinates->shape[1];
-    const Py_ssize_t stride1 = coordinates->strides[0] / sizeof(Py_ssize_t);
-    const Py_ssize_t stride2 = coordinates->strides[1] / sizeof(Py_ssize_t);
+    const Py_ssize_t shape2 = coordinates.shape[1];
+    const Py_ssize_t stride1 = coordinates.strides[0] / sizeof(Py_ssize_t);
+    const Py_ssize_t stride2 = coordinates.strides[1] / sizeof(Py_ssize_t);
     Py_ssize_t left1, left2;
     Py_ssize_t right1, right2;
     Py_ssize_t start1, start2;
     Py_ssize_t end1, end2;
-    Py_ssize_t* buffer = coordinates->buf;
+    Py_ssize_t* buffer = coordinates.buf;
 
     PyObject* oA = NULL;
     PyObject* oB = NULL;
@@ -8128,13 +8249,13 @@ _aligner_calculate(Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, P
     int index;
 
     for (i = 0; i < n; i++) {
-        sequenceA = &sequences[i];
+        sequenceA = &buffers[i];
         sA = sequenceA->buf;
-        strandA = ((bool*)(strands->buf))[i];
+        strandA = ((bool*)(strands.buf))[i];
         for (j = i + 1; j < n; j++) {
-            sequenceB = &sequences[j];
+            sequenceB = &buffers[j];
             sB = sequenceB->buf;
-            strandB = ((bool*)(strands->buf))[j];
+            strandB = ((bool*)(strands.buf))[j];
             left1 = buffer[i * stride1 + 0];
             left2 = buffer[j * stride1 + 0];
             right1 = buffer[i * stride1 + (shape2 - 1) * stride2];
@@ -8177,7 +8298,7 @@ _aligner_calculate(Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, P
                             else
                                 result = PyObject_CallFunction(insertion_score_function,
                                                                "ii", start1, end2 - start2);
-                            if (result == NULL) return 0;
+                            if (result == NULL) goto error;
                             value = PyFloat_AsDouble(result);
                             Py_DECREF(result);
                             if (value == -1.0 && PyErr_Occurred()) goto error;
@@ -8440,173 +8561,37 @@ _aligner_calculate(Py_ssize_t n, Py_buffer* sequences, Py_buffer* coordinates, P
     counts->positives = positives;
     counts->score = score;
 
-    return 1;
+    if (counts->identities + counts->mismatches > 0) {
+        score = counts->score;
+        if (aligner->substitution_matrix.buf == NULL) {
+            score += aligner->match * counts->identities + aligner->mismatch * counts->mismatches;
+        }
+    } else score = Py_NAN;
+    if (aligner->insertion_score_function == NULL) {
+        score += counts->open_left_insertions * aligner->open_left_insertion_score;
+        score += counts->extend_left_insertions * aligner->extend_left_insertion_score;
+        score += counts->open_internal_insertions * aligner->open_internal_insertion_score;
+        score += counts->extend_internal_insertions * aligner->extend_internal_insertion_score;
+        score += counts->open_right_insertions * aligner->open_right_insertion_score;
+        score += counts->extend_right_insertions * aligner->extend_right_insertion_score;
+    }
+    if (aligner->deletion_score_function == NULL) {
+        score += counts->open_left_deletions * aligner->open_left_deletion_score;
+        score += counts->extend_left_deletions * aligner->extend_left_deletion_score;
+        score += counts->open_internal_deletions * aligner->open_internal_deletion_score;
+        score += counts->extend_internal_deletions * aligner->extend_internal_deletion_score;
+        score += counts->open_right_deletions * aligner->open_right_deletion_score;
+        score += counts->extend_right_deletions * aligner->extend_right_deletion_score;
+    }
+    counts->score = score;
+
+    goto exit;
 
 error:
     Py_XDECREF(oA);
     Py_XDECREF(oB);
-    return 0;
-}
-
-static char Aligner_doc[] =
-"The PairwiseAligner class implements common algorithms to align two\n"
-"sequences to each other.\n";
-
-static PyMethodDef Aligner_methods[] = {
-    {"score",
-     (PyCFunction)Aligner_score,
-     METH_VARARGS | METH_KEYWORDS,
-     Aligner_score__doc__
-    },
-    {"align",
-     (PyCFunction)Aligner_align,
-     METH_VARARGS | METH_KEYWORDS,
-     Aligner_align__doc__
-    },
-    {NULL, NULL, 0, NULL}  /* Sentinel */
-};
-
-static PyTypeObject Aligner_Type = {
-    PyVarObject_HEAD_INIT(NULL, 0)
-    "_pairwisealigner.PairwiseAligner", /* tp_name */
-    sizeof(Aligner),               /* tp_basicsize */
-    0,                             /* tp_itemsize */
-    (destructor)Aligner_dealloc,   /* tp_dealloc */
-    0,                             /* tp_print */
-    0,                             /* tp_getattr */
-    0,                             /* tp_setattr */
-    0,                             /* tp_compare */
-    (reprfunc)Aligner_repr,        /* tp_repr */
-    0,                             /* tp_as_number */
-    0,                             /* tp_as_sequence */
-    0,                             /* tp_as_mapping */
-    0,                             /* tp_hash */
-    0,                             /* tp_call */
-    (reprfunc)Aligner_str,         /* tp_str */
-    0,                             /* tp_getattro */
-    0,                             /* tp_setattro */
-    0,                             /* tp_as_buffer */
-    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,        /*tp_flags*/
-    Aligner_doc,                   /* tp_doc */
-    0,                             /* tp_traverse */
-    0,                             /* tp_clear */
-    0,                             /* tp_richcompare */
-    0,                             /* tp_weaklistoffset */
-    0,                             /* tp_iter */
-    0,                             /* tp_iternext */
-    Aligner_methods,               /* tp_methods */
-    0,                             /* tp_members */
-    Aligner_getset,                /* tp_getset */
-    0,                             /* tp_base */
-    0,                             /* tp_dict */
-    0,                             /* tp_descr_get */
-    0,                             /* tp_descr_set */
-    0,                             /* tp_dictoffset */
-    (initproc)Aligner_init,        /* tp_init */
-};
-
-
-/* Module definition */
-
-static char _pairwisealigner__doc__[] =
-"C extension module implementing pairwise alignment algorithms";
-
-static const char _calculate__doc__[] = "calculate the matches, mismatches, gaps, and score of the alignment";
-
-static PyObject*
-_calculate(PyObject* self, PyObject* args, PyObject* keywords)
-{
-    Py_ssize_t i;
-    Py_ssize_t n = 0;
-    PyObject* sequence;
-    Aligner* aligner;
-    PyObject* sequences;
-    Py_buffer* buffers;
-    Py_buffer coordinates = {0};
-    Py_buffer strands = {0};
-    AlignmentCounts* counts = NULL;
-
-    static char *kwlist[] = {"aligner", "sequences", "coordinates", "strands", NULL};
-
-    if(!PyArg_ParseTupleAndKeywords(args, keywords, "O!OO&O&", kwlist,
-                                    &Aligner_Type, (PyObject *)&aligner,
-                                    &sequences,
-                                    coordinates_converter, &coordinates,
-                                    strands_converter , &strands))
-        return NULL;
-
-    if (!PyList_Check(sequences)) {
-        PyErr_SetString(PyExc_TypeError, "sequences must be a list");
-        goto exit;
-    }
-
-    n = PyList_GET_SIZE(sequences);
-    if (n != coordinates.shape[0]) {
-        PyErr_SetString(PyExc_ValueError,
-            "number of rows in coordinates must equal the number of sequences");
-        goto exit;
-    }
-    if (n != strands.shape[0]) {
-        PyErr_SetString(PyExc_ValueError,
-            "size of strands must equal the number of sequences");
-        goto exit;
-    }
-
-    buffers = PyMem_Calloc(n, sizeof(Py_buffer));
-    if (!buffers) goto exit;
-
-    for (i = 0; i < n; i++) {
-        sequence = PyList_GET_ITEM(sequences, i);
-        buffers[i].obj = (PyObject *)aligner;
-        if (sequence_converter(sequence, &buffers[i])) continue;
-        PyErr_Clear();  // to clear the exception raised by PyObject_GetBuffer
-        if (PySequence_Check(sequence)) buffers[i].obj = sequence;
-        else if (sequence == Py_None) buffers[i].obj = NULL;
-        else break;
-    }
-    if (i < n) {
-        n = i;
-        goto exit;
-    }
-
-    counts = (AlignmentCounts*)PyType_GenericAlloc(&AlignmentCounts_Type, 0);
-    if (!counts) goto exit;
-
-    if (_aligner_calculate(n,
-                           buffers,
-                           &coordinates,
-                           &strands,
-                           aligner,
-                           counts)) {
-        double score;
-        if (counts->identities + counts->mismatches > 0) {
-            score = counts->score;
-            if (aligner->substitution_matrix.buf == NULL) {
-                score += aligner->match * counts->identities + aligner->mismatch * counts->mismatches;
-            }
-        } else score = Py_NAN;
-        if (aligner->insertion_score_function == NULL) {
-            score += counts->open_left_insertions * aligner->open_left_insertion_score;
-            score += counts->extend_left_insertions * aligner->extend_left_insertion_score;
-            score += counts->open_internal_insertions * aligner->open_internal_insertion_score;
-            score += counts->extend_internal_insertions * aligner->extend_internal_insertion_score;
-            score += counts->open_right_insertions * aligner->open_right_insertion_score;
-            score += counts->extend_right_insertions * aligner->extend_right_insertion_score;
-        }
-        if (aligner->deletion_score_function == NULL) {
-            score += counts->open_left_deletions * aligner->open_left_deletion_score;
-            score += counts->extend_left_deletions * aligner->extend_left_deletion_score;
-            score += counts->open_internal_deletions * aligner->open_internal_deletion_score;
-            score += counts->extend_internal_deletions * aligner->extend_internal_deletion_score;
-            score += counts->open_right_deletions * aligner->open_right_deletion_score;
-            score += counts->extend_right_deletions * aligner->extend_right_deletion_score;
-        }
-        counts->score = score;
-    }
-    else {
-        Py_DECREF(counts);
-        counts = NULL;
-    }
+    Py_DECREF(counts);
+    counts = NULL;
 
 exit:
     for (i = 0; i < n; i++) if (buffers[i].buf) PyBuffer_Release(&buffers[i]);

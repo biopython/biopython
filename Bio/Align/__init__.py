@@ -3900,7 +3900,7 @@ class Alignment:
                                 dtype=np.int32,
                                 count=len(data),
                             )
-            return _pairwisealigner.calculate(aligner, sequences, coordinates, strands)
+            return _pairwisealigner.calculate(sequences, coordinates, strands, aligner)
         if ignore_sequences is None:
             ignore_sequences = False
         left_insertions = left_deletions = 0
