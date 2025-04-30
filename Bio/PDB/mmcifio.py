@@ -281,7 +281,7 @@ class MMCIFIO(StructureIO):
             if not select.accept_model(model):
                 continue
             # mmCIF files with a single model have it specified as model 1
-            model_n = str(model.serial_num + 1)
+            model_n = str(model.serial_num)
             # This is used to write label_entity_id and label_asym_id and
             # increments from 1, changing with each molecule
             entity_id = 0
