@@ -1521,7 +1521,7 @@ class _SeqAbstractBaseClass(ABC):
         return self._data.islower()
 
     def translate(
-        self, table="Standard", stop_symbol="*", to_stop=False, cds=False, gap="-"
+        self, table="Standard", stop_symbol="*", to_stop=False, cds=False, gap="-", ignore_gaps=False, respect_alignment=False
     ):
         """Turn a nucleotide sequence into a protein sequence by creating a new sequence object.
 
@@ -1550,6 +1550,7 @@ class _SeqAbstractBaseClass(ABC):
            If these tests fail, an exception is raised.
          - gap - Single character string to denote symbol used for gaps.
            Defaults to the minus sign.
+         - ignore_gaps - Ignore gap symbols while translating the sequence.
 
         A ``Seq`` object is returned if ``translate`` is called on a ``Seq``
         object; a ``MutableSeq`` object is returned if ``translate`` is called
@@ -1610,14 +1611,14 @@ class _SeqAbstractBaseClass(ABC):
             n = len(self)
             if n % 3 != 0:
                 warnings.warn(
-                    "Partial codon, len(sequence) not a multiple of three. "
-                    "This may become an error in future.",
+                    "Partial codon '%s' in %s, len(sequence) not a multiple of three. "
+                    "This may become an error in future." % (str(self), self.id),
                     BiopythonWarning,
                 )
             return Seq(None, n // 3)
 
         return self.__class__(
-            _translate_str(str(self), table, stop_symbol, to_stop, cds, gap=gap)
+            _translate_str(str(self), table, stop_symbol, to_stop, cds, gap=gap, ignore_gaps=ignore_gaps, respect_alignment=respect_alignment)
         )
 
     def complement(self, inplace=False):
@@ -2734,7 +2735,7 @@ def back_transcribe(rna):
 
 
 def _translate_str(
-    sequence, table, stop_symbol="*", to_stop=False, cds=False, pos_stop="X", gap=None
+    sequence, table, stop_symbol="*", to_stop=False, cds=False, pos_stop="X", gap=None, ignore_gaps=False, respect_alignment=False
 ):
     """Translate nucleotide string into a protein string (PRIVATE).
 
@@ -2758,6 +2759,8 @@ def _translate_str(
        If these tests fail, an exception is raised.
      - gap - Single character string to denote symbol used for gaps.
        Defaults to None.
+     - ignore_gaps - Ignore gap symbols while translating the sequence.
+       This somewhat revives the ungap() function.
 
     Returns a string.
 
@@ -2797,6 +2800,14 @@ def _translate_str(
     Traceback (most recent call last):
        ...
     Bio.Data.CodonTable.TranslationError: Extra in frame stop codon 'TAG' found.
+
+    >>> Seq.translate("AA-A---AAA", gap='-')
+    Traceback (most recent call last):
+       ...
+    Bio.Data.CodonTable.TranslationError: Codon 'AA-' is invalid
+    >>> Seq.translate("AA-A-A-AA", gap='-', ignore_gaps=True)
+    'KK'
+    >>>
     """
     try:
         table_id = int(table)
@@ -2825,7 +2836,10 @@ def _translate_str(
         # Assume it's a table ID
         # The same table can be used for RNA or DNA
         codon_table = CodonTable.ambiguous_generic_by_id[table_id]
-    sequence = sequence.upper()
+    if ignore_gaps and gap:
+        sequence = sequence.upper().replace(gap,'')
+    else:
+        sequence = sequence.upper()
     amino_acids = []
     forward_table = codon_table.forward_table
     stop_codons = codon_table.stop_codons
@@ -2874,10 +2888,11 @@ def _translate_str(
         n -= 6
         amino_acids = ["M"]
     elif n % 3 != 0:
+        missing = 3 - n % 3
         warnings.warn(
-            "Partial codon, len(sequence) not a multiple of three. "
-            "Explicitly trim the sequence or add trailing N before "
-            "translation. This may become an error in future.",
+            "len(sequence) not a multiple of three: '%s'. "
+            "Explicitly trim leading or trailing %s characters from the sequence or add %s trailing N before "
+            "translation. This may become an error in future. Ignoring extraneous nucleotides." % (str(sequence), n % 3, missing),
             BiopythonWarning,
         )
     if gap is not None:
@@ -2905,6 +2920,9 @@ def _translate_str(
             elif gap is not None and codon == gap * 3:
                 # Gapped translation
                 amino_acids.append(gap)
+            elif respect_alignment:
+                # Do not die with an incomplete codon 'AA-' but return 'X'
+                amino_acids.append('X')
             else:
                 raise CodonTable.TranslationError(
                     f"Codon '{codon}' is invalid"
@@ -2913,7 +2931,7 @@ def _translate_str(
 
 
 def translate(
-    sequence, table="Standard", stop_symbol="*", to_stop=False, cds=False, gap=None
+    sequence, table="Standard", stop_symbol="*", to_stop=False, cds=False, gap=None, ignore_gaps=False, respect_alignment=False
 ):
     """Translate a nucleotide sequence into amino acids.
 
@@ -2942,6 +2960,10 @@ def translate(
        If these tests fail, an exception is raised.
      - gap - Single character string to denote symbol used for gaps.
        Defaults to None.
+     - ignore_gaps - Replace internally gap symbols in input sequence
+       by nothing while translating the sequence.
+       This somewhat revives the ungap() function.
+
 
     A simple string example using the default (standard) genetic code:
 
@@ -3013,7 +3035,7 @@ def translate(
         return Seq(sequence).translate(table, stop_symbol, to_stop, cds)
     else:
         # Assume it's a string, return a string
-        return _translate_str(sequence, table, stop_symbol, to_stop, cds, gap=gap)
+        return _translate_str(sequence, table, stop_symbol, to_stop, cds, gap=gap, ignore_gaps=ignore_gaps, respect_alignment=respect_alignment)
 
 
 def reverse_complement(sequence, inplace=False):
