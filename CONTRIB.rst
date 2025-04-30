@@ -237,6 +237,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Mark Amery <https://github.com/ExplodingCabbage>
 - Markus Piotrowski <https://github.com/MarkusPiotrowski>
 - Martin Thoma <https://martin-thoma.com/author/martin-thoma/>
+- Martin Mokrejš <https://github.com/mmokrejs>
 - Marton Langa <https://github.com/martonlanga>
 - Mateusz Korycinski <https://github.com/mkorycinski>
 - Matt Ruffalo <https://github.com/mruffalo>
