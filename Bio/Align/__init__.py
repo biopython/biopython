@@ -3815,7 +3815,7 @@ class Alignment:
                 else:
                     substitution_matrix = value
             elif index == 1:
-                wildcard = ord(value)
+                wildcard = value
             elif index == 2:
                 ignore_sequences = value
             else:
@@ -3834,7 +3834,7 @@ class Alignment:
                     raise TypeError(
                         "counts got multiple values for argument 'wildcard'"
                     )
-                wildcard = ord(value)
+                wildcard = value
             elif key == "ignore_sequences":
                 if ignore_sequences is not None:
                     raise TypeError(
@@ -3843,6 +3843,19 @@ class Alignment:
                 ignore_sequences = value
             else:
                 raise TypeError(f"unexpected argument {key}")
+        if aligner is None:
+            aligner = PairwiseAligner()
+            if substitution_matrix is not None:
+                if ignore_sequences:
+                    raise ValueError(
+                        "ignore_sequences cannot be True if substitution_matrix is used"
+                    )
+                aligner.substitution_matrix = substitution_matrix
+            if wildcard is not None:
+                aligner.wildcard = wildcard
+            flag = False
+        else:
+            flag = True
         if aligner is not None:
             if substitution_matrix is None:
                 substitution_matrix = aligner.substitution_matrix
@@ -3900,7 +3913,7 @@ class Alignment:
                                 dtype=np.int32,
                                 count=len(data),
                             )
-            return _pairwisealigner.calculate(sequences, coordinates, strands, aligner)
+            return _pairwisealigner.calculate(sequences, coordinates, strands, aligner, flag)
         if ignore_sequences is None:
             ignore_sequences = False
         left_insertions = left_deletions = 0

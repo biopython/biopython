@@ -675,9 +675,9 @@ number of aligned sequences):
    >>> counts.aligned
    16
    >>> print(counts.identities)
-   None
+   0
    >>> print(counts.mismatches)
-   None
+   0
    >>> counts.insertions
    1
    >>> counts.deletions

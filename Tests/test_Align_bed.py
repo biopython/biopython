@@ -1291,6 +1291,7 @@ hg19_dna          0 ????????????????       16
 chr4	61646095	61646111	hg19_dna	1000	+	61646095	61646111	0	1	16,	0,
 """,
         )
+        print(alignment.sequences)
         counts = alignment.counts()
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)

@@ -330,6 +330,21 @@ AlignmentCounts_get_left_deletions(AlignmentCounts* self, void* closure)
 static char AlignmentCounts_left_deletions__doc__[] = "number of characters deleted on the left side of the alignment";
 
 static PyObject*
+AlignmentCounts_get_left_gaps(AlignmentCounts* self, void* closure)
+{
+    const Py_ssize_t open_left_insertions = self->open_left_insertions;
+    const Py_ssize_t extend_left_insertions = self->extend_left_insertions;
+    const Py_ssize_t open_left_deletions = self->open_left_deletions;
+    const Py_ssize_t extend_left_deletions = self->extend_left_deletions;
+    return PyLong_FromSsize_t(open_left_insertions
+                            + extend_left_insertions
+                            + open_left_deletions
+                            + extend_left_deletions);
+}
+
+static char AlignmentCounts_left_gaps__doc__[] = "total gap length on the left side of the alignment";
+
+static PyObject*
 AlignmentCounts_get_internal_insertions(AlignmentCounts* self, void* closure)
 {
     const Py_ssize_t open_internal_insertions = self->open_internal_insertions;
@@ -350,6 +365,21 @@ AlignmentCounts_get_internal_deletions(AlignmentCounts* self, void* closure)
 static char AlignmentCounts_internal_deletions__doc__[] = "number of characters deleted from the alignment";
 
 static PyObject*
+AlignmentCounts_get_internal_gaps(AlignmentCounts* self, void* closure)
+{
+    const Py_ssize_t open_internal_insertions = self->open_internal_insertions;
+    const Py_ssize_t extend_internal_insertions = self->extend_internal_insertions;
+    const Py_ssize_t open_internal_deletions = self->open_internal_deletions;
+    const Py_ssize_t extend_internal_deletions = self->extend_internal_deletions;
+    return PyLong_FromSsize_t(open_internal_insertions
+                            + extend_internal_insertions
+                            + open_internal_deletions
+                            + extend_internal_deletions);
+}
+
+static char AlignmentCounts_internal_gaps__doc__[] = "total length of gaps within the alignment";
+
+static PyObject*
 AlignmentCounts_get_right_insertions(AlignmentCounts* self, void* closure)
 {
     const Py_ssize_t open_right_insertions = self->open_right_insertions;
@@ -368,6 +398,21 @@ AlignmentCounts_get_right_deletions(AlignmentCounts* self, void* closure)
 }
 
 static char AlignmentCounts_right_deletions__doc__[] = "number of characters deleted on the right side of the alignment";
+
+static PyObject*
+AlignmentCounts_get_right_gaps(AlignmentCounts* self, void* closure)
+{
+    const Py_ssize_t open_right_insertions = self->open_right_insertions;
+    const Py_ssize_t extend_right_insertions = self->extend_right_insertions;
+    const Py_ssize_t open_right_deletions = self->open_right_deletions;
+    const Py_ssize_t extend_right_deletions = self->extend_right_deletions;
+    return PyLong_FromSsize_t(open_right_insertions
+                            + extend_right_insertions
+                            + open_right_deletions
+                            + extend_right_deletions);
+}
+
+static char AlignmentCounts_right_gaps__doc__[] = "total gap length on the right side of the alignment";
 
 static PyObject*
 AlignmentCounts_get_insertions(AlignmentCounts* self, void* closure)
@@ -461,18 +506,27 @@ static PyGetSetDef AlignmentCounts_getset[] = {
     {"left_deletions",
         (getter)AlignmentCounts_get_left_deletions, NULL,
         AlignmentCounts_left_deletions__doc__, NULL},
+    {"left_gaps",
+        (getter)AlignmentCounts_get_left_gaps, NULL,
+        AlignmentCounts_left_gaps__doc__, NULL},
     {"internal_insertions",
         (getter)AlignmentCounts_get_internal_insertions, NULL,
         AlignmentCounts_internal_insertions__doc__, NULL},
     {"internal_deletions",
         (getter)AlignmentCounts_get_internal_deletions, NULL,
         AlignmentCounts_internal_deletions__doc__, NULL},
+    {"internal_gaps",
+        (getter)AlignmentCounts_get_internal_gaps, NULL,
+        AlignmentCounts_internal_gaps__doc__, NULL},
     {"right_insertions",
         (getter)AlignmentCounts_get_right_insertions, NULL,
         AlignmentCounts_right_insertions__doc__, NULL},
     {"right_deletions",
         (getter)AlignmentCounts_get_right_deletions, NULL,
         AlignmentCounts_right_deletions__doc__, NULL},
+    {"right_gaps",
+        (getter)AlignmentCounts_get_right_gaps, NULL,
+        AlignmentCounts_right_gaps__doc__, NULL},
     {"insertions",
         (getter)AlignmentCounts_get_insertions, NULL,
         AlignmentCounts_insertions__doc__, NULL},
@@ -8353,46 +8407,38 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                     aligned += end1 - start1;
                 }
                 else {
-                    char* bA;
-                    char* bB;
+                    char* bA = NULL;
+                    char* bB = NULL;
+                    path = DIAGONAL;
+                    aligned += end1 - start1;
                     if (sA == NULL) {
                         oA = PySequence_GetSlice(sequenceA->obj, start1, end1);
                         if (!oA) goto error;
-                        if (!PyBytes_Check(oA)) {
-                            PyErr_Format(PyExc_ValueError,
-                                "alignment.sequences[%d][%d:%d] did not return a bytes object",
-                                i, start1, end1);
-                            goto error;
+                        if (PyBytes_Check(oA)) {
+                            if (PyBytes_GET_SIZE(oA) != end1 - start1) {
+                                PyErr_Format(PyExc_ValueError,
+                                    "alignment.sequences[%d][%d:%d] did not return a bytes object of size %d",
+                                    i, start1, end1, end1 - start1);
+                                goto error;
+                            }
+                            bA = PyBytes_AS_STRING(oA);
                         }
-                        if (PyBytes_GET_SIZE(oA) != end1 - start1) {
-                            PyErr_Format(PyExc_ValueError,
-                                "alignment.sequences[%d][%d:%d] did not return a bytes object of size %d",
-                                i, start1, end1, end1 - start1);
-                            goto error;
-                        }
-                        bA = PyBytes_AS_STRING(oA);
                     }
                     if (sB == NULL) {
                         oB = PySequence_GetSlice(sequenceB->obj, start2, end2);
                         if (!oB) goto error;
-                        if (!PyBytes_Check(oB)) {
-                            PyErr_Format(PyExc_ValueError,
-                                "alignment.sequences[%d][%d:%d] did not return a bytes object",
-                                j, start2, end2);
-                            goto error;
-                        }
-                        if (PyBytes_GET_SIZE(oB) != end2 - start2) {
-                            PyErr_Format(PyExc_ValueError,
-                                "alignment.sequences[%d[%d:%d] did not return a bytes object of size %d",
+                        if (PyBytes_Check(oB)) {
+                            if (PyBytes_GET_SIZE(oB) != end2 - start2) {
+                                PyErr_Format(PyExc_ValueError,
+                                    "alignment.sequences[%d[%d:%d] did not return a bytes object of size %d",
 
-                                j, start2, end2, end2 - start2);
-                            goto error;
+                                    j, start2, end2, end2 - start2);
+                                goto error;
+                            }
+                            bB = PyBytes_AS_STRING(oB);
                         }
-                        bB = PyBytes_AS_STRING(oB);
                     }
                     if (substitution_matrix->buf == NULL) {
-                        path = DIAGONAL;
-                        aligned += end1 - start1;
                         if (sA && sB) {
                             for (l1 = start1, l2 = start2;
                                  l1 < end1 && l2 < end2;
@@ -8404,7 +8450,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                 else mismatches++;
                             }
                         }
-                        else if (sA) {
+                        else if (sA && bB) {
                             for (l1 = start1, l2 = start2;
                                  l1 < end1 && l2 < end2;
                                  l1++, l2++) {
@@ -8416,7 +8462,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                             }
                             Py_DECREF(oB);
                         }
-                        else if (sB) {
+                        else if (sB && bA) {
                             for (l1 = start1, l2 = start2;
                                  l1 < end1 && l2 < end2;
                                  l1++, l2++) {
@@ -8428,7 +8474,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                             }
                             Py_DECREF(oA);
                         }
-                        else {
+                        else if (bA && bB) {
                             for (l1 = start1, l2 = start2;
                                  l1 < end1 && l2 < end2;
                                  l1++, l2++) {
@@ -8445,8 +8491,6 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                     else {
                         double* ptr;
                         double value;
-                        path = DIAGONAL;
-                        aligned += end1 - start1;
                         if (sA && sB) {
                             for (l1 = start1, l2 = start2;
                                  l1 < end1 && l2 < end2;
@@ -8462,7 +8506,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                 score += value;
                             }
                         }
-                        else if (sA) {
+                        else if (sA && bB) {
                             for (l1 = start1, l2 = start2;
                                  l1 < end1 && l2 < end2;
                                  l1++, l2++) {
@@ -8484,7 +8528,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                             }
                             Py_DECREF(oB);
                         }
-                        else if (sB) {
+                        else if (sB && bA) {
                             for (l1 = start1, l2 = start2;
                                  l1 < end1 && l2 < end2;
                                  l1++, l2++) {
@@ -8506,7 +8550,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                             }
                             Py_DECREF(oA);
                         }
-                        else {
+                        else if (bA && bB) {
                             for (l1 = start1, l2 = start2;
                                  l1 < end1 && l2 < end2;
                                  l1++, l2++) {
