@@ -3666,64 +3666,63 @@ class Alignment:
             flag = False
         else:
             flag = True
-        if aligner is not None:
-            if substitution_matrix is None:
-                substitution_matrix = aligner.substitution_matrix
-            if wildcard is None:
-                wildcard = aligner.wildcard
-            n = len(self.sequences)
-            sequences = [None] * n
-            strands = np.zeros(n, bool)
-            coordinates = self.coordinates.copy()
-            steps = np.diff(coordinates, 1)
-            aligned_flags = sum(steps != 0, 0) > 1
-            # True for steps in which at least two sequences align, False if a gap
-            for i, sequence in enumerate(self.sequences):
-                aligned_steps = steps[i, aligned_flags]
-                if sum(aligned_steps > 0) < sum(aligned_steps < 0):
-                    if not ignore_sequences:
-                        sequence = reverse_complement(sequence)
-                    coordinates[i, :] = len(sequence) - coordinates[i, :]
-                    strands[i] = True
-                if ignore_sequences:
-                    sequences[i] = None
+        if substitution_matrix is None:
+            substitution_matrix = aligner.substitution_matrix
+        if wildcard is None:
+            wildcard = aligner.wildcard
+        n = len(self.sequences)
+        sequences = [None] * n
+        strands = np.zeros(n, bool)
+        coordinates = self.coordinates.copy()
+        steps = np.diff(coordinates, 1)
+        aligned_flags = sum(steps != 0, 0) > 1
+        # True for steps in which at least two sequences align, False if a gap
+        for i, sequence in enumerate(self.sequences):
+            aligned_steps = steps[i, aligned_flags]
+            if sum(aligned_steps > 0) < sum(aligned_steps < 0):
+                if not ignore_sequences:
+                    sequence = reverse_complement(sequence)
+                coordinates[i, :] = len(sequence) - coordinates[i, :]
+                strands[i] = True
+            if ignore_sequences:
+                sequences[i] = None
+            else:
+                try:
+                    sequence = sequence.seq  # stupid SeqRecord
+                except AttributeError:
+                    pass
+                try:
+                    data = sequence._data
+                except AttributeError:
+                    data = sequence
+                if isinstance(data, bytes):
+                    sequences[i] = np.frombuffer(data, dtype=np.uint8).astype(
+                        np.int32
+                    )
+                elif isinstance(data, bytearray):
+                    sequences[i] = np.frombuffer(
+                        bytes(data), dtype=np.uint8
+                    ).astype(np.int32)
+                elif isinstance(data, str):
+                    sequences[i] = np.frombuffer(
+                        bytearray(data, aligner.codec), dtype=np.int32
+                    )
+                elif isinstance(data, SequenceDataAbstractBaseClass):
+                    sequences[i] = data
                 else:
-                    try:
-                        sequence = sequence.seq  # stupid SeqRecord
-                    except AttributeError:
-                        pass
-                    try:
-                        data = sequence._data
-                    except AttributeError:
-                        data = sequence
-                    if isinstance(data, bytes):
-                        sequences[i] = np.frombuffer(data, dtype=np.uint8).astype(
-                            np.int32
-                        )
-                    elif isinstance(data, bytearray):
-                        sequences[i] = np.frombuffer(
-                            bytes(data), dtype=np.uint8
-                        ).astype(np.int32)
-                    elif isinstance(data, str):
-                        sequences[i] = np.frombuffer(
-                            bytearray(data, aligner.codec), dtype=np.int32
-                        )
-                    elif isinstance(data, SequenceDataAbstractBaseClass):
+                    alphabet = aligner.alphabet
+                    if alphabet is None:
+                        # data is a numpy array of int32
+                        # (to be checked in the C code)
                         sequences[i] = data
                     else:
-                        alphabet = aligner.alphabet
-                        if alphabet is None:
-                            # data is a numpy array of int32
-                            # (to be checked in the C code)
-                            sequences[i] = data
-                        else:
-                            # data are objects chosen from the alphabet
-                            sequences[i] = np.fromiter(
-                                map(alphabet.index, data),
-                                dtype=np.int32,
-                                count=len(data),
-                            )
-            return _pairwisealigner.calculate(sequences, coordinates, strands, aligner, flag)
+                        # data are objects chosen from the alphabet
+                        sequences[i] = np.fromiter(
+                            map(alphabet.index, data),
+                            dtype=np.int32,
+                            count=len(data),
+                        )
+        return _pairwisealigner.calculate(sequences, coordinates, strands, aligner, flag)
 
     def reverse_complement(self):
         """Reverse-complement the alignment and return it.
