@@ -8156,14 +8156,15 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
     Py_buffer coordinates = {0};
     Py_buffer strands = {0};
     AlignmentCounts* counts = NULL;
+    int flag = 1;
 
-    static char *kwlist[] = {"aligner", "sequences", "coordinates", "strands", NULL};
+    static char *kwlist[] = {"sequences", "coordinates", "strands", "aligner", "flag", NULL};
 
-    if(!PyArg_ParseTupleAndKeywords(args, keywords, "OO&O&O!", kwlist,
+    if(!PyArg_ParseTupleAndKeywords(args, keywords, "OO&O&O!|p", kwlist,
                                     &sequences,
                                     coordinates_converter, &coordinates,
                                     strands_converter , &strands,
-                                    &Aligner_Type, (PyObject *)&aligner))
+                                    &Aligner_Type, (PyObject *)&aligner, &flag))
         return NULL;
 
     if (!PyList_Check(sequences)) {
@@ -8583,6 +8584,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
         score += counts->open_right_deletions * aligner->open_right_deletion_score;
         score += counts->extend_right_deletions * aligner->extend_right_deletion_score;
     }
+    if (flag == 0) score = Py_NAN;
     counts->score = score;
 
     goto exit;
