@@ -7789,12 +7789,6 @@ sequence_converter(PyObject* argument, void* pointer)
     indices = view->buf;
     if (mapping) {
         const int mapping_size = aligner->mapping_size;
-        PyObject* alphabet = aligner->alphabet;
-        if (alphabet == NULL || !PyUnicode_Check(alphabet)) {
-            PyErr_SetString(PyExc_RuntimeError, "mapping set without alphabet");
-            return 0;
-        }
-        if (PyUnicode_READY(alphabet) == -1) return 0;
         for (i = 0; i < n; i++) {
             index = indices[i];
             if (index < 0) {
@@ -7916,6 +7910,14 @@ Aligner_score(Aligner* self, PyObject* args, PyObject* keywords)
 
     static char *kwlist[] = {"sequenceA", "sequenceB", "strand", NULL};
 
+    if (self->mapping) {
+        PyObject* alphabet = self->alphabet;
+        if (alphabet == NULL || !PyUnicode_Check(alphabet)) {
+            PyErr_SetString(PyExc_RuntimeError, "mapping set without alphabet");
+            return NULL;
+        }
+    }
+
     bA.obj = (PyObject*)self;
     bB.obj = (PyObject*)self;
     if(!PyArg_ParseTupleAndKeywords(args, keywords, "O&O&O&", kwlist,
@@ -8033,6 +8035,14 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
     PyObject* substitution_matrix = self->substitution_matrix.obj;
 
     static char *kwlist[] = {"sequenceA", "sequenceB", "strand", NULL};
+
+    if (self->mapping) {
+        PyObject* alphabet = self->alphabet;
+        if (alphabet == NULL || !PyUnicode_Check(alphabet)) {
+            PyErr_SetString(PyExc_RuntimeError, "mapping set without alphabet");
+            return NULL;
+        }
+    }
 
     bA.obj = (PyObject*)self;
     bB.obj = (PyObject*)self;
@@ -8220,6 +8230,14 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                     strands_converter , &strands,
                                     &Aligner_Type, (PyObject *)&aligner, &flag))
         return NULL;
+
+    if (aligner->mapping) {
+        PyObject* alphabet = aligner->alphabet;
+        if (alphabet == NULL || !PyUnicode_Check(alphabet)) {
+            PyErr_SetString(PyExc_RuntimeError, "mapping set without alphabet");
+            goto exit;
+        }
+    }
 
     if (!PyList_Check(sequences)) {
         PyErr_SetString(PyExc_TypeError, "sequences must be a list");
