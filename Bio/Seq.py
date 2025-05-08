@@ -2734,7 +2734,7 @@ def back_transcribe(rna):
 
 
 def _translate_str(
-    sequence, table, stop_symbol="*", to_stop=False, cds=False, pos_stop="X", gap=None
+    sequence, table, stop_symbol="*", to_stop=False, cds=False, pos_stop="X", gap="-"
 ):
     """Translate nucleotide string into a protein string (PRIVATE).
 
@@ -2913,7 +2913,7 @@ def _translate_str(
 
 
 def translate(
-    sequence, table="Standard", stop_symbol="*", to_stop=False, cds=False, gap=None
+    sequence, table="Standard", stop_symbol="*", to_stop=False, cds=False, gap="-"
 ):
     """Translate a nucleotide sequence into amino acids.
 
