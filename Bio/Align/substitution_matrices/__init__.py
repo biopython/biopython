@@ -13,9 +13,10 @@ import string
 import numpy as np
 
 from Bio.File import as_handle
+from Bio.Align.substitution_matrices import _arraycore  # type: ignore
 
 
-class Array(np.ndarray):
+class Array(_arraycore.SubstitutionMatrix):
     """numpy array subclass indexed by integers and by letters."""
 
     def __new__(cls, alphabet=None, dims=None, data=None, dtype=float):
