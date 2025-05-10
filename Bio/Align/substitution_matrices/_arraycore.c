@@ -1,29 +1,46 @@
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 
-static Py_ssize_t offset = 0;
+static PyTypeObject *basetype = NULL;
 
 typedef struct {
     int value;  // your custom field
 } Fields;
 
 static int get_value(PyObject* self) {
-    Fields* fields = (Fields*)((intptr_t)self + offset);
+    Fields* fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
     return fields->value;
 }
 
 static PyObject *Array_get_value(PyObject *self, void *closure) {
-    Fields* fields = (Fields*)((intptr_t)self + offset);
+    Fields* fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
     return PyLong_FromLong(fields->value);
 }
 
 static int Array_set_value(PyObject *self, PyObject *arg, void *closure) {
-    Fields* fields = (Fields*)((intptr_t)self + offset);
+    Fields* fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
     long val = PyLong_AsLong(arg);
     if (PyErr_Occurred())
         return -1;
     fields->value = (int)val;
     return 0;
+}
+
+static PyObject*
+Array_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
+{
+    if (!basetype) {
+        PyErr_SetString(PyExc_RuntimeError, "base type was not intialized");
+        return NULL;
+    }
+    if (!basetype->tp_new) {
+        PyErr_SetString(PyExc_RuntimeError, "base type does not have tp_new");
+        return NULL;
+    }
+    PyObject *obj = basetype->tp_new(type, args, kwds);
+    if (!obj)
+        return NULL;
+    return obj;
 }
 
 static PyGetSetDef Array_getset[] = {
@@ -65,13 +82,17 @@ PyInit__arraycore(void)
     // Get the base class
     PyObject *baseclass = PyObject_GetAttrString(basemodule, "ndarray");
     Py_DECREF(basemodule);
-    if (!baseclass)
+    if (!baseclass || !PyType_Check(baseclass)) {
+        Py_XDECREF(basemodule);
+        PyErr_SetString(PyExc_RuntimeError, "Failed to get numpy.ndarray");
         return NULL;
+    }
 
-    PyTypeObject *basetype = (PyTypeObject *)baseclass;
+    basetype = (PyTypeObject *)baseclass;
     if (!(basetype->tp_flags & Py_TPFLAGS_BASETYPE)) {
         PyErr_SetString(PyExc_RuntimeError,
                         "numpy ndarray class is not subclassable");
+        basetype = NULL;
         return NULL;
     }
     if (basetype->tp_itemsize != 0) {
@@ -80,7 +101,11 @@ PyInit__arraycore(void)
                      basetype->tp_itemsize);
         return NULL;
     }
-    offset = basetype->tp_basicsize;
+    if (!basetype->tp_new) {
+        PyErr_SetString(PyExc_RuntimeError,
+                        "numpy ndarray class does not have tp_new");
+        return NULL;
+    }
 
     // Create a tuple of bases
     PyObject *bases = PyTuple_Pack(1, baseclass);
@@ -89,6 +114,7 @@ PyInit__arraycore(void)
         return NULL;
 
     PyType_Slot Array_slots[] = {
+        {Py_tp_new, Array_new},
         {Py_tp_getset, Array_getset},
         {0, 0}
     };
@@ -96,7 +122,7 @@ PyInit__arraycore(void)
     // Define the type spec
     PyType_Spec class_spec = {
         .name = "_arraycore.SubstitutionMatrix",
-        .basicsize = offset + sizeof(Fields),
+        .basicsize = basetype->tp_basicsize + sizeof(Fields),
         .itemsize = 0,
         .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
         .slots = Array_slots,
