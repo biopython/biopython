@@ -162,7 +162,7 @@ class Array(_arraycore.SubstitutionMatrix):
                     raise IndexError("Requesting truncated array")
         elif value.ndim == 1:
             if value.shape[0] != self.shape[0]:
-                value._alphabet = self.alphabet[key]
+                raise IndexError("Requesting truncated array")
         elif value.ndim == 0:
             return value.item()
         return value.view(Array)
