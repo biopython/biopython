@@ -23,9 +23,9 @@ class Array(_arraycore.SubstitutionMatrix):
         """Create a new Array instance."""
         if isinstance(data, dict):
             if alphabet is not None:
-                raise ValueError("alphabet should be None if data is a dict")
+                raise ValueError("alphabet must be None if data is a dict")
             if dims is not None:
-                raise ValueError("dims should be None if data is a dict")
+                raise ValueError("dims must be None if data is a dict")
             alphabet = []
             single_letters = True
             for key in data:
@@ -70,7 +70,7 @@ class Array(_arraycore.SubstitutionMatrix):
                 shape = (n, n)
             else:  # dims is None
                 raise ValueError("data is an empty dictionary")
-            obj = super().__new__(cls, shape, dtype)
+            obj = super().__new__(cls, shape, dtype, alphabet)
             if dims == 1:
                 for i, key in enumerate(alphabet):
                     obj[i] = data.get(letter, 0.0)
@@ -114,7 +114,7 @@ class Array(_arraycore.SubstitutionMatrix):
                         "data shape has inconsistent shape (expected (%s), found (%s))"
                         % (shape, data.shape)
                     )
-        obj = super().__new__(cls, shape, dtype)
+        obj = super().__new__(cls, shape, dtype, alphabet)
         if data is None:
             obj[:] = 0.0
         else:

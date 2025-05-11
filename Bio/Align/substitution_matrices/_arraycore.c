@@ -5,6 +5,7 @@ static PyTypeObject *basetype = NULL;
 
 typedef struct {
     int value;  // your custom field
+    PyObject* alphabet;
 } Fields;
 
 static int get_value(PyObject* self) {
@@ -26,6 +27,13 @@ static int Array_set_value(PyObject *self, PyObject *arg, void *closure) {
     return 0;
 }
 
+static PyObject *Array_get_alphabet(PyObject *self, void *closure) {
+    Fields* fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
+    PyObject* alphabet = fields->alphabet;
+    Py_INCREF(alphabet);
+    return alphabet;
+}
+
 static PyObject*
 Array_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 {
@@ -37,14 +45,78 @@ Array_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
         PyErr_SetString(PyExc_RuntimeError, "base type does not have tp_new");
         return NULL;
     }
+
+    PyObject* alphabet = NULL;
+    if (PyTuple_GET_SIZE(args) != 3) {
+        // shape, dtype, alphabet
+        PyErr_Format(PyExc_TypeError,
+                     "Array() takes 3 positional arguments but %d were given",
+                     PyTuple_GET_SIZE(args));
+        return NULL;
+    }
+
+    alphabet = PyTuple_GET_ITEM(args, 2);
+    if (!alphabet) {
+        PyErr_SetString(PyExc_RuntimeError, "failed to get alphabet argument");
+        return NULL;
+    }
+
+    args = PyTuple_GetSlice(args, 0, PyTuple_GET_SIZE(args) - 1);
+    if (!args)
+        return NULL;
+
     PyObject *obj = basetype->tp_new(type, args, kwds);
+    Py_DECREF(args);
+
     if (!obj)
         return NULL;
+
+    Fields* fields = (Fields*)((intptr_t)obj + basetype->tp_basicsize);
+    Py_INCREF(alphabet);
+    fields->alphabet = alphabet;
+
     return obj;
 }
 
+static void
+Array_dealloc(PyObject *self)
+{
+    Fields* fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
+    /* fields->alphabet may be NULL if this instance was created by numpy
+     * and __array_finalize__ somehow failed.
+     */
+    Py_XDECREF(fields->alphabet);
+    basetype->tp_dealloc(self);
+}
+
+static PyObject *
+Array_finalize(PyObject *self, PyObject *obj)
+{
+    if (obj == Py_None) Py_RETURN_NONE;
+    if (Py_TYPE(self) != Py_TYPE(obj)) {
+        PyErr_SetString(PyExc_RuntimeError,
+                        "__array_finalize__ argument is not an Array object");
+        return NULL;
+    }
+    Fields* self_fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
+    const Fields* obj_fields = (Fields*)((intptr_t)obj + basetype->tp_basicsize);
+    PyObject* alphabet = obj_fields->alphabet;
+    if (alphabet) {
+        Py_INCREF(alphabet);
+        self_fields->alphabet = obj_fields->alphabet;
+    }
+    Py_RETURN_NONE;
+}
+
+static PyMethodDef Array_methods[] = {
+    {"__array_finalize__", (PyCFunction)Array_finalize, METH_O,
+     "Called by NumPy to finalize new views or copies"},
+    {NULL}  /* Sentinel */
+};
+
 static PyGetSetDef Array_getset[] = {
     {"value", (getter)Array_get_value, (setter)Array_set_value, "int value", NULL},
+    {"alphabet", (getter)Array_get_alphabet, NULL, "alphabet", NULL},
     {NULL}
 };
 
@@ -115,6 +187,8 @@ PyInit__arraycore(void)
 
     PyType_Slot Array_slots[] = {
         {Py_tp_new, Array_new},
+        {Py_tp_dealloc, Array_dealloc},
+        {Py_tp_methods, Array_methods},
         {Py_tp_getset, Array_getset},
         {0, 0}
     };
