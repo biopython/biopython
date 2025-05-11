@@ -255,12 +255,6 @@ class Array(_arraycore.SubstitutionMatrix):
 
         self[:, :] = pickle.loads(state)
 
-    def transpose(self, axes=None):
-        """Transpose the array."""
-        other = np.ndarray.transpose(self, axes)
-        other._alphabet = self._alphabet
-        return other
-
     @property
     def alphabet(self):
         """Return the alphabet property."""
