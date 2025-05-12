@@ -34,6 +34,25 @@ static PyObject *Array_get_alphabet(PyObject *self, void *closure) {
     return alphabet;
 }
 
+static int Array_set_alphabet(PyObject *self, PyObject *arg, void *closure) {
+    Fields* fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
+    PyObject* alphabet = fields->alphabet;
+    if (!PySequence_Check(arg)) {
+        PyErr_SetString(PyExc_TypeError,
+                        "argument does not provide the sequence protocol");
+        return -1;
+    }
+    if (PySequence_Size(self) != PySequence_Size(arg)) {
+        PyErr_SetString(PyExc_ValueError,
+                        "alphabet length is not consistent with the array size");
+        return -1;
+    }
+    Py_XDECREF(alphabet);
+    Py_INCREF(arg);
+    fields->alphabet = arg;
+    return 0;
+}
+
 static PyObject*
 Array_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 {
@@ -116,7 +135,7 @@ static PyMethodDef Array_methods[] = {
 
 static PyGetSetDef Array_getset[] = {
     {"value", (getter)Array_get_value, (setter)Array_set_value, "int value", NULL},
-    {"alphabet", (getter)Array_get_alphabet, NULL, "alphabet", NULL},
+    {"alphabet", (getter)Array_get_alphabet, (setter)Array_set_alphabet, "alphabet", NULL},
     {NULL}
 };
 
