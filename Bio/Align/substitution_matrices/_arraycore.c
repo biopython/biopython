@@ -4,27 +4,11 @@
 static PyTypeObject *basetype = NULL;
 
 typedef struct {
-    int value;  // your custom field
     PyObject* alphabet;
 } Fields;
 
 static int get_value(PyObject* self) {
-    Fields* fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
-    return fields->value;
-}
-
-static PyObject *Array_get_value(PyObject *self, void *closure) {
-    Fields* fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
-    return PyLong_FromLong(fields->value);
-}
-
-static int Array_set_value(PyObject *self, PyObject *arg, void *closure) {
-    Fields* fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
-    long val = PyLong_AsLong(arg);
-    if (PyErr_Occurred())
-        return -1;
-    fields->value = (int)val;
-    return 0;
+    return 123;
 }
 
 static PyObject *Array_get_alphabet(PyObject *self, void *closure) {
@@ -162,7 +146,6 @@ static PyMethodDef Array_methods[] = {
 };
 
 static PyGetSetDef Array_getset[] = {
-    {"value", (getter)Array_get_value, (setter)Array_set_value, "int value", NULL},
     {"alphabet", (getter)Array_get_alphabet, (setter)Array_set_alphabet, "alphabet", NULL},
     {NULL}
 };
