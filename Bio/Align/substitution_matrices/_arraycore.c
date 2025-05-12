@@ -30,6 +30,7 @@ static int Array_set_value(PyObject *self, PyObject *arg, void *closure) {
 static PyObject *Array_get_alphabet(PyObject *self, void *closure) {
     Fields* fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
     PyObject* alphabet = fields->alphabet;
+    if (!alphabet) Py_RETURN_NONE;
     Py_INCREF(alphabet);
     return alphabet;
 }

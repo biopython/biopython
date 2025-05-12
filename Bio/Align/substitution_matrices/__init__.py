@@ -80,7 +80,6 @@ class Array(_arraycore.SubstitutionMatrix):
                         key = (letter1, letter2)
                         value = data.get(key, 0.0)
                         obj[i1, i2] = value
-            obj._alphabet = alphabet
             return obj
         if alphabet is None:
             alphabet = string.ascii_uppercase
@@ -119,15 +118,17 @@ class Array(_arraycore.SubstitutionMatrix):
             obj[:] = 0.0
         else:
             obj[:] = data
-        obj._alphabet = alphabet
         return obj
 
     def __array_finalize__(self, obj):
-        if obj is None:
-            return
-        self._alphabet = getattr(obj, "_alphabet", None)
-        if self._alphabet is not None:
-            self.alphabet = self._alphabet
+        try:
+            alphabet = obj.alphabet
+        except AttributeError:
+            # None, or plain numpy array
+            pass
+        else:
+            if alphabet is not None:
+                self.alphabet = alphabet
 
     def _convert_key(self, key):
         if isinstance(key, tuple):
@@ -135,14 +136,14 @@ class Array(_arraycore.SubstitutionMatrix):
             for index in key:
                 if isinstance(index, str):
                     try:
-                        index = self._alphabet.index(index)
+                        index = self.alphabet.index(index)
                     except ValueError:
                         raise IndexError("'%s'" % index) from None
                 indices.append(index)
             key = tuple(indices)
         elif isinstance(key, str):
             try:
-                key = self._alphabet.index(key)
+                key = self.alphabet.index(key)
             except ValueError:
                 raise IndexError("'%s'" % key) from None
         return key
@@ -194,7 +195,7 @@ class Array(_arraycore.SubstitutionMatrix):
 
     def __array_ufunc__(self, ufunc, method, *inputs, **kwargs):
         args = []
-        alphabet = self._alphabet
+        alphabet = self.alphabet
         for arg in inputs:
             if isinstance(arg, Array):
                 if arg.alphabet != alphabet:
@@ -233,12 +234,10 @@ class Array(_arraycore.SubstitutionMatrix):
                 result = raw_result
             elif output is None:
                 result = np.asarray(raw_result).view(Array)
-                result._alphabet = self._alphabet
-                result.alphabet = result._alphabet
+                result.alphabet = self.alphabet
             else:
                 result = output
-                result._alphabet = self._alphabet
-                result.alphabet = result._alphabet
+                result.alphabet = self.alphabet
             results.append(result)
 
         return results[0] if len(results) == 1 else results
@@ -248,7 +247,7 @@ class Array(_arraycore.SubstitutionMatrix):
 
         values = np.array(self)
         state = pickle.dumps(values)
-        alphabet = self._alphabet
+        alphabet = self.alphabet
         dims = len(self.shape)
         dtype = self.dtype
         arguments = (Array, alphabet, dims, None, dtype)
@@ -270,12 +269,12 @@ class Array(_arraycore.SubstitutionMatrix):
         """Return an iterator of (key, value) pairs in the array."""
         dims = len(self.shape)
         if dims == 1:
-            for index, key in enumerate(self._alphabet):
+            for index, key in enumerate(self.alphabet):
                 value = np.ndarray.__getitem__(self, index)
                 yield key, value
         elif dims == 2:
-            for i1, c1 in enumerate(self._alphabet):
-                for i2, c2 in enumerate(self._alphabet):
+            for i1, c1 in enumerate(self.alphabet):
+                for i2, c2 in enumerate(self.alphabet):
                     key = (c1, c2)
                     value = np.ndarray.__getitem__(self, (i1, i2))
                     yield key, value
@@ -285,7 +284,7 @@ class Array(_arraycore.SubstitutionMatrix):
     def keys(self):
         """Return a tuple with the keys associated with the array."""
         dims = len(self.shape)
-        alphabet = self._alphabet
+        alphabet = self.alphabet
         if dims == 1:
             return tuple(alphabet)
         elif dims == 2:
@@ -296,7 +295,7 @@ class Array(_arraycore.SubstitutionMatrix):
     def values(self):
         """Return a tuple with the values stored in the array."""
         dims = len(self.shape)
-        alphabet = self._alphabet
+        alphabet = self.alphabet
         if dims == 1:
             return tuple(self)
         elif dims == 2:
@@ -329,7 +328,7 @@ class Array(_arraycore.SubstitutionMatrix):
         jj = []
         for i, key in enumerate(alphabet):
             try:
-                j = self._alphabet.index(key)
+                j = self.alphabet.index(key)
             except ValueError:
                 continue
             ii.append(i)
@@ -342,8 +341,8 @@ class Array(_arraycore.SubstitutionMatrix):
         return a
 
     def _format_1D(self, fmt):
-        _alphabet = self._alphabet
-        n = len(_alphabet)
+        alphabet = self.alphabet
+        n = len(alphabet)
         words = [None] * n
         lines = []
         try:
@@ -355,7 +354,7 @@ class Array(_arraycore.SubstitutionMatrix):
                 line = "#  %s\n" % line
                 lines.append(line)
         maxwidth = 0
-        for i, key in enumerate(_alphabet):
+        for i, key in enumerate(alphabet):
             value = self[key]
             word = fmt % value
             width = len(word)
@@ -363,7 +362,7 @@ class Array(_arraycore.SubstitutionMatrix):
                 maxwidth = width
             words[i] = word
         fmt2 = " %" + str(maxwidth) + "s"
-        for letter, word in zip(_alphabet, words):
+        for letter, word in zip(alphabet, words):
             word = fmt2 % word
             line = letter + word + "\n"
             lines.append(line)
@@ -440,10 +439,10 @@ class Array(_arraycore.SubstitutionMatrix):
 
     def __repr__(self):
         text = np.ndarray.__repr__(self)
-        alphabet = self._alphabet
+        alphabet = self.alphabet
         if isinstance(alphabet, str):
             assert text.endswith(")")
-            text = text[:-1] + ",\n         alphabet='%s')" % self._alphabet
+            text = text[:-1] + ",\n         alphabet='%s')" % self.alphabet
         return text
 
 
