@@ -126,6 +126,8 @@ class Array(_arraycore.SubstitutionMatrix):
         if obj is None:
             return
         self._alphabet = getattr(obj, "_alphabet", None)
+        if self._alphabet is not None:
+            self.alphabet2 = self._alphabet
 
     def _convert_key(self, key):
         if isinstance(key, tuple):
@@ -232,9 +234,11 @@ class Array(_arraycore.SubstitutionMatrix):
             elif output is None:
                 result = np.asarray(raw_result).view(Array)
                 result._alphabet = self._alphabet
+                result.alphabet2 = result._alphabet
             else:
                 result = output
                 result._alphabet = self._alphabet
+                result.alphabet2 = result._alphabet
             results.append(result)
 
         return results[0] if len(results) == 1 else results
@@ -339,7 +343,7 @@ class Array(_arraycore.SubstitutionMatrix):
         a = Array(alphabet, dims=dims)
         ii = np.ix_(*[ii] * dims)
         jj = np.ix_(*[jj] * dims)
-        a[ii] = np.ndarray.__getitem__(self, jj)
+        a[ii] = self.view(np.ndarray)[jj]
         return a
 
     def _format_1D(self, fmt):

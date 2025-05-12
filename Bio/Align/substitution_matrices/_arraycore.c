@@ -42,11 +42,38 @@ static int Array_set_alphabet(PyObject *self, PyObject *arg, void *closure) {
                         "argument does not provide the sequence protocol");
         return -1;
     }
-    if (PySequence_Size(self) != PySequence_Size(arg)) {
-        PyErr_SetString(PyExc_ValueError,
-                        "alphabet length is not consistent with the array size");
+    const Py_ssize_t length = PySequence_Size(arg);
+    Py_buffer view;
+    const int flag = PyBUF_STRIDES;
+    if (PyObject_GetBuffer(self, &view, flag) != 0) {
+        PyErr_SetString(PyExc_RuntimeError, "failed to access matrix buffer");
         return -1;
     }
+    switch (view.ndim) {
+        case 1:
+            if (view.shape[0] == length) break;
+            PyErr_Format(PyExc_ValueError,
+                "alphabet length %zd is inconsistent with array size "
+                "%zd", length, view.shape[0]);
+            PyBuffer_Release(&view);
+            return -1;
+        case 2:
+            if ((view.shape[0] == length && view.shape[1] == length)
+             || (view.shape[0] == length && view.shape[1] == 1)
+             || (view.shape[0] == 1 && view.shape[1] == length)) break;
+            PyErr_Format(PyExc_ValueError,
+                "alphabet length %zd is inconsistent with array size "
+                "(%zd, %zd)", length, view.shape[0], view.shape[1]);
+            PyBuffer_Release(&view);
+            return -1;
+        default:
+            PyErr_Format(PyExc_ValueError,
+                         "substitution matrix has incorrect rank %d "
+                         "(expected 1 or 2)", view.ndim);
+            PyBuffer_Release(&view);
+            return -1;
+    }
+    PyBuffer_Release(&view);
     Py_XDECREF(alphabet);
     Py_INCREF(arg);
     fields->alphabet = arg;
@@ -135,7 +162,7 @@ static PyMethodDef Array_methods[] = {
 
 static PyGetSetDef Array_getset[] = {
     {"value", (getter)Array_get_value, (setter)Array_set_value, "int value", NULL},
-    {"alphabet", (getter)Array_get_alphabet, (setter)Array_set_alphabet, "alphabet", NULL},
+    {"alphabet2", (getter)Array_get_alphabet, (setter)Array_set_alphabet, "alphabet", NULL},
     {NULL}
 };
 
