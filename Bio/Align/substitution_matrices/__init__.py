@@ -180,10 +180,10 @@ class Array(_arraycore.SubstitutionMatrix):
     def __array_prepare__(self, out_arr, context=None):
         # needed for numpy older than 1.13.0
         ufunc, inputs, i = context
-        alphabet = self.alphabet
+        alphabet = self.alphabet2
         for arg in inputs:
             if isinstance(arg, Array):
-                if arg.alphabet != alphabet:
+                if arg.alphabet2 != alphabet:
                     raise ValueError("alphabets are inconsistent")
         return np.ndarray.__array_prepare__(self, out_arr, context)
 
@@ -197,7 +197,7 @@ class Array(_arraycore.SubstitutionMatrix):
         alphabet = self._alphabet
         for arg in inputs:
             if isinstance(arg, Array):
-                if arg.alphabet != alphabet:
+                if arg.alphabet2 != alphabet:
                     raise ValueError("alphabets are inconsistent")
                 args.append(arg.view(np.ndarray))
             else:
@@ -208,7 +208,7 @@ class Array(_arraycore.SubstitutionMatrix):
             out_args = []
             for arg in outputs:
                 if isinstance(arg, Array):
-                    if arg.alphabet != alphabet:
+                    if arg.alphabet2 != alphabet:
                         raise ValueError("alphabets are inconsistent")
                     out_args.append(arg.view(np.ndarray))
                 else:
