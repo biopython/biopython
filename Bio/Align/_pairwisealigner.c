@@ -7739,56 +7739,12 @@ Aligner_fogsaa_align_matrix(Aligner* self,
     FOGSAA_EXIT_ALIGN
 }
 
-static int
-sequence_converter(PyObject* argument, void* pointer)
-{
-    Py_buffer* view = pointer;
+static int _map_indices(Py_buffer* view, int* mapping, int mapping_size, Py_buffer* substitution_matrix) {
     Py_ssize_t i;
-    Py_ssize_t n;
     int index;
-    int* indices;
-    const int flag = PyBUF_FORMAT | PyBUF_C_CONTIGUOUS;
-    Aligner* aligner;
-    int* mapping;
-
-    if (argument == NULL) {
-        PyBuffer_Release(view);
-        return 1;
-    }
-
-    aligner = (Aligner*)view->obj;
-    view->obj = NULL;
-
-    mapping = aligner->mapping;
-
-    if (PyObject_GetBuffer(argument, view, flag) != 0) {
-        PyErr_SetString(PyExc_TypeError, "argument is not a sequence");
-        return 0;
-    }
-    if (view->ndim != 1) {
-        PyErr_Format(PyExc_ValueError,
-                     "sequence has incorrect rank (%d expected 1)", view->ndim);
-        return 0;
-    }
-    n = view->len / view->itemsize;
-    if (n == 0) {
-        PyErr_SetString(PyExc_ValueError, "sequence has zero length");
-        return 0;
-    }
-    if (strcmp(view->format, "i") != 0 && strcmp(view->format, "l") != 0) {
-        PyErr_Format(PyExc_ValueError,
-                     "sequence has incorrect data type '%s'", view->format);
-        return 0;
-    }
-    if (view->itemsize != sizeof(int)) {
-        PyErr_Format(PyExc_ValueError,
-                    "sequence has unexpected item byte size "
-                    "(%ld, expected %ld)", view->itemsize, sizeof(int));
-        return 0;
-    }
-    indices = view->buf;
+    int* indices = view->buf;
+    const Py_ssize_t n = view->len / view->itemsize;
     if (mapping) {
-        const int mapping_size = aligner->mapping_size;
         for (i = 0; i < n; i++) {
             index = indices[i];
             if (index < 0) {
@@ -7812,8 +7768,8 @@ sequence_converter(PyObject* argument, void* pointer)
             indices[i] = index;
         }
     }
-    else if (aligner->substitution_matrix.obj) {
-        const Py_ssize_t m = aligner->substitution_matrix.shape[0];
+    else if (substitution_matrix->obj) {
+        const Py_ssize_t m = substitution_matrix->shape[0];
         for (i = 0; i < n; i++) {
             index = indices[i];
             if (index < 0) {
@@ -7830,6 +7786,49 @@ sequence_converter(PyObject* argument, void* pointer)
             }
         }
     }
+    return 1;
+}
+
+static int
+sequence_converter(PyObject* argument, void* pointer)
+{
+    Py_buffer* view = pointer;
+    const int flag = PyBUF_FORMAT | PyBUF_C_CONTIGUOUS;
+    Aligner* aligner;
+
+    if (argument == NULL) {
+        PyBuffer_Release(view);
+        return 1;
+    }
+
+    aligner = (Aligner*)view->obj;
+    view->obj = NULL;
+
+    if (PyObject_GetBuffer(argument, view, flag) != 0) {
+        PyErr_SetString(PyExc_TypeError, "argument is not a sequence");
+        return 0;
+    }
+    if (view->ndim != 1) {
+        PyErr_Format(PyExc_ValueError,
+                     "sequence has incorrect rank (%d expected 1)", view->ndim);
+        return 0;
+    }
+    if (view->len == 0) {
+        PyErr_SetString(PyExc_ValueError, "sequence has zero length");
+        return 0;
+    }
+    if (strcmp(view->format, "i") != 0 && strcmp(view->format, "l") != 0) {
+        PyErr_Format(PyExc_ValueError,
+                     "sequence has incorrect data type '%s'", view->format);
+        return 0;
+    }
+    if (view->itemsize != sizeof(int)) {
+        PyErr_Format(PyExc_ValueError,
+                    "sequence has unexpected item byte size "
+                    "(%ld, expected %ld)", view->itemsize, sizeof(int));
+        return 0;
+    }
+    if (!_map_indices(view, aligner->mapping, aligner->mapping_size, &aligner->substitution_matrix)) return 0;
     return Py_CLEANUP_SUPPORTED;
 }
  
