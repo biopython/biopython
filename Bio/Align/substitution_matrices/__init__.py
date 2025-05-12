@@ -376,7 +376,7 @@ class Array(_arraycore.SubstitutionMatrix):
         return text
 
     def _format_2D(self, fmt):
-        alphabet = self.alphabet
+        alphabet = self.alphabet2
         n = len(alphabet)
         words = [[None] * n for _ in range(n)]
         lines = []
