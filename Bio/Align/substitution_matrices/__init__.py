@@ -127,7 +127,7 @@ class Array(_arraycore.SubstitutionMatrix):
             return
         self._alphabet = getattr(obj, "_alphabet", None)
         if self._alphabet is not None:
-            self.alphabet2 = self._alphabet
+            self.alphabet = self._alphabet
 
     def _convert_key(self, key):
         if isinstance(key, tuple):
@@ -180,10 +180,10 @@ class Array(_arraycore.SubstitutionMatrix):
     def __array_prepare__(self, out_arr, context=None):
         # needed for numpy older than 1.13.0
         ufunc, inputs, i = context
-        alphabet = self.alphabet2
+        alphabet = self.alphabet
         for arg in inputs:
             if isinstance(arg, Array):
-                if arg.alphabet2 != alphabet:
+                if arg.alphabet != alphabet:
                     raise ValueError("alphabets are inconsistent")
         return np.ndarray.__array_prepare__(self, out_arr, context)
 
@@ -197,7 +197,7 @@ class Array(_arraycore.SubstitutionMatrix):
         alphabet = self._alphabet
         for arg in inputs:
             if isinstance(arg, Array):
-                if arg.alphabet2 != alphabet:
+                if arg.alphabet != alphabet:
                     raise ValueError("alphabets are inconsistent")
                 args.append(arg.view(np.ndarray))
             else:
@@ -208,7 +208,7 @@ class Array(_arraycore.SubstitutionMatrix):
             out_args = []
             for arg in outputs:
                 if isinstance(arg, Array):
-                    if arg.alphabet2 != alphabet:
+                    if arg.alphabet != alphabet:
                         raise ValueError("alphabets are inconsistent")
                     out_args.append(arg.view(np.ndarray))
                 else:
@@ -234,11 +234,11 @@ class Array(_arraycore.SubstitutionMatrix):
             elif output is None:
                 result = np.asarray(raw_result).view(Array)
                 result._alphabet = self._alphabet
-                result.alphabet2 = result._alphabet
+                result.alphabet = result._alphabet
             else:
                 result = output
                 result._alphabet = self._alphabet
-                result.alphabet2 = result._alphabet
+                result.alphabet = result._alphabet
             results.append(result)
 
         return results[0] if len(results) == 1 else results
@@ -258,11 +258,6 @@ class Array(_arraycore.SubstitutionMatrix):
         import pickle
 
         self[:, :] = pickle.loads(state)
-
-    @property
-    def alphabet(self):
-        """Return the alphabet property."""
-        return self._alphabet
 
     def get(self, key, value=None):
         """Return the value of the key if found; return value otherwise."""
@@ -376,7 +371,7 @@ class Array(_arraycore.SubstitutionMatrix):
         return text
 
     def _format_2D(self, fmt):
-        alphabet = self.alphabet2
+        alphabet = self.alphabet
         n = len(alphabet)
         words = [[None] * n for _ in range(n)]
         lines = []

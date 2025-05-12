@@ -162,7 +162,7 @@ static PyMethodDef Array_methods[] = {
 
 static PyGetSetDef Array_getset[] = {
     {"value", (getter)Array_get_value, (setter)Array_set_value, "int value", NULL},
-    {"alphabet2", (getter)Array_get_alphabet, (setter)Array_set_alphabet, "alphabet", NULL},
+    {"alphabet", (getter)Array_get_alphabet, (setter)Array_set_alphabet, "alphabet", NULL},
     {NULL}
 };
 
