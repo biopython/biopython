@@ -7912,8 +7912,6 @@ Aligner_score(Aligner* self, PyObject* args, PyObject* keywords)
         }
     }
 
-    bA.obj = (PyObject*)self;
-    bB.obj = (PyObject*)self;
     if(!PyArg_ParseTupleAndKeywords(args, keywords, "O&O&O&", kwlist,
                                     sequence_converter, &bA,
                                     sequence_converter, &bB,
@@ -8044,8 +8042,6 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
         }
     }
 
-    bA.obj = (PyObject*)self;
-    bB.obj = (PyObject*)self;
     if(!PyArg_ParseTupleAndKeywords(args, keywords, "O&O&O&", kwlist,
                                     sequence_converter, &bA,
                                     sequence_converter, &bB,
@@ -8267,21 +8263,20 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
 
     for (i = 0; i < n; i++) {
         sequence = PyList_GET_ITEM(sequences, i);
-        buffers[i].obj = (PyObject *)aligner;
         if (sequence_converter(sequence, &buffers[i])) {
             if (!_map_indices(&buffers[i],
                               aligner->mapping, aligner->mapping_size,
                               &aligner->substitution_matrix)) goto exit;
-            continue;
         }
-        PyErr_Clear();  // to clear the exception raised by PyObject_GetBuffer
-        if (PySequence_Check(sequence)) buffers[i].obj = sequence;
-        else if (sequence == Py_None) buffers[i].obj = NULL;
-        else break;
-    }
-    if (i < n) {
-        n = i;
-        goto exit;
+        else {
+            PyErr_Clear();  // to clear the exception raised by PyObject_GetBuffer
+            if (PySequence_Check(sequence)) buffers[i].obj = sequence;
+            else if (sequence == Py_None) buffers[i].obj = NULL;
+            else {
+                n = i;
+                goto exit;
+            }
+        }
     }
 
     counts = (AlignmentCounts*)PyType_GenericAlloc(&AlignmentCounts_Type, 0);
