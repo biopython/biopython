@@ -7794,15 +7794,11 @@ sequence_converter(PyObject* argument, void* pointer)
 {
     Py_buffer* view = pointer;
     const int flag = PyBUF_FORMAT | PyBUF_C_CONTIGUOUS;
-    Aligner* aligner;
 
     if (argument == NULL) {
         PyBuffer_Release(view);
         return 1;
     }
-
-    aligner = (Aligner*)view->obj;
-    view->obj = NULL;
 
     if (PyObject_GetBuffer(argument, view, flag) != 0) {
         PyErr_SetString(PyExc_TypeError, "argument is not a sequence");
@@ -7828,7 +7824,6 @@ sequence_converter(PyObject* argument, void* pointer)
                     "(%ld, expected %ld)", view->itemsize, sizeof(int));
         return 0;
     }
-    if (!_map_indices(view, aligner->mapping, aligner->mapping_size, &aligner->substitution_matrix)) return 0;
     return Py_CLEANUP_SUPPORTED;
 }
  
@@ -7925,13 +7920,18 @@ Aligner_score(Aligner* self, PyObject* args, PyObject* keywords)
                                     strand_converter, &strand))
         return NULL;
 
+    if (!_map_indices(&bA,
+                      self->mapping, self->mapping_size,
+                      &self->substitution_matrix)) goto exit;
+    if (!_map_indices(&bB,
+                      self->mapping, self->mapping_size,
+                      &self->substitution_matrix)) goto exit;
+
     nA = (int) (bA.len / bA.itemsize);
     nB = (int) (bB.len / bB.itemsize);
     if (nA != bA.len / bA.itemsize || nB != bB.len / bB.itemsize) {
-        sequence_converter(NULL, &bA);
-        sequence_converter(NULL, &bB);
         PyErr_SetString(PyExc_ValueError, "sequences too long");
-        return 0;
+        goto exit;
     }
     sA = bA.buf;
     sB = bB.buf;
@@ -7953,7 +7953,7 @@ Aligner_score(Aligner* self, PyObject* args, PyObject* keywords)
                     break;
                 default:
                     ERR_UNEXPECTED_MODE
-                    return NULL;
+                    goto exit;
             }
             break;
         case Gotoh:
@@ -7972,7 +7972,7 @@ Aligner_score(Aligner* self, PyObject* args, PyObject* keywords)
                     break;
                 default:
                     ERR_UNEXPECTED_MODE
-                    return NULL;
+                    goto exit;
             }
             break;
         case WatermanSmithBeyer:
@@ -7991,13 +7991,13 @@ Aligner_score(Aligner* self, PyObject* args, PyObject* keywords)
                     break;
                 default:
                     ERR_UNEXPECTED_MODE
-                    return NULL;
+                    goto exit;
             }
             break;
         case FOGSAA:
             if (mode != FOGSAA_Mode) {
                 ERR_UNEXPECTED_MODE
-                return NULL;
+                goto exit;
             }
             if (substitution_matrix)
                 result = Aligner_fogsaa_score_matrix(self, sA, nA, sB, nB, strand);
@@ -8010,6 +8010,7 @@ Aligner_score(Aligner* self, PyObject* args, PyObject* keywords)
             break;
     }
 
+exit:
     sequence_converter(NULL, &bA);
     sequence_converter(NULL, &bB);
 
@@ -8051,13 +8052,18 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
                                     strand_converter, &strand))
         return NULL;
 
+    if (!_map_indices(&bA,
+                      self->mapping, self->mapping_size,
+                      &self->substitution_matrix)) goto exit;
+    if (!_map_indices(&bB,
+                      self->mapping, self->mapping_size,
+                      &self->substitution_matrix)) goto exit;
+
     nA = (int) (bA.len / bA.itemsize);
     nB = (int) (bB.len / bB.itemsize);
     if (nA != bA.len / bA.itemsize || nB != bB.len / bB.itemsize) {
-        sequence_converter(NULL, &bA);
-        sequence_converter(NULL, &bB);
         PyErr_SetString(PyExc_ValueError, "sequences too long");
-        return 0;
+        goto exit;
     }
     sA = bA.buf;
     sB = bB.buf;
@@ -8079,7 +8085,7 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
                     break;
                 default:
                     ERR_UNEXPECTED_MODE
-                    return NULL;
+                    goto exit;
             }
             break;
         case Gotoh:
@@ -8098,7 +8104,7 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
                     break;
                 default:
                     ERR_UNEXPECTED_MODE
-                    return NULL;
+                    goto exit;
             }
             break;
         case WatermanSmithBeyer:
@@ -8117,13 +8123,13 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
                     break;
                 default:
                     ERR_UNEXPECTED_MODE
-                    return NULL;
+                    goto exit;
             }
             break;
         case FOGSAA:
             if (mode != FOGSAA_Mode) {
                 ERR_UNEXPECTED_MODE
-                return NULL;
+                goto exit;
             }
             if (substitution_matrix)
                 result = Aligner_fogsaa_align_matrix(self, sA, nA, sB, nB, strand);
@@ -8136,6 +8142,7 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
             break;
     }
 
+exit:
     sequence_converter(NULL, &bA);
     sequence_converter(NULL, &bB);
 
@@ -8261,7 +8268,12 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
     for (i = 0; i < n; i++) {
         sequence = PyList_GET_ITEM(sequences, i);
         buffers[i].obj = (PyObject *)aligner;
-        if (sequence_converter(sequence, &buffers[i])) continue;
+        if (sequence_converter(sequence, &buffers[i])) {
+            if (!_map_indices(&buffers[i],
+                              aligner->mapping, aligner->mapping_size,
+                              &aligner->substitution_matrix)) goto exit;
+            continue;
+        }
         PyErr_Clear();  // to clear the exception raised by PyObject_GetBuffer
         if (PySequence_Check(sequence)) buffers[i].obj = sequence;
         else if (sequence == Py_None) buffers[i].obj = NULL;
