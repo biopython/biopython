@@ -1,10 +1,13 @@
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 
+#define MISSING_LETTER -1
+
 static PyTypeObject *basetype = NULL;
 
 typedef struct {
     PyObject* alphabet;
+    int* mapping;
 } Fields;
 
 static int get_value(PyObject* self) {
@@ -24,7 +27,8 @@ static int Array_set_alphabet(PyObject *self, PyObject *arg, void *closure) {
     PyObject* alphabet = fields->alphabet;
     if (!PySequence_Check(arg)) {
         PyErr_SetString(PyExc_TypeError,
-                        "argument does not provide the sequence protocol");
+            "alphabet must support the sequence protocol (e.g.,\n"
+            "strings, lists, and tuples can be valid alphabets).");
         return -1;
     }
     const Py_ssize_t length = PySequence_Size(arg);
@@ -59,54 +63,59 @@ static int Array_set_alphabet(PyObject *self, PyObject *arg, void *closure) {
             return -1;
     }
     PyBuffer_Release(&view);
-    Py_XDECREF(alphabet);
+    if (PyUnicode_Check(arg)) {
+        Py_ssize_t mapping_size;
+        void* characters = PyUnicode_DATA(arg);
+        int kind = PyUnicode_KIND(arg);
+        int* mapping;
+        Py_ssize_t i;
+        switch (kind) {
+            case PyUnicode_1BYTE_KIND: {
+                mapping_size = 1 << 8 * sizeof(Py_UCS1);
+                break;
+            }
+            case PyUnicode_2BYTE_KIND: {
+                mapping_size = 1 << 8 * sizeof(Py_UCS2);
+                break;
+            }
+            case PyUnicode_4BYTE_KIND: {
+                mapping_size = 0x110000;  /* Maximum code point in Unicode 6.0
+                                           * is 0x10ffff = 1114111 */
+                break;
+            }
+            default:
+                PyErr_SetString(PyExc_ValueError, "could not interpret alphabet");
+                return -1;
+        }
+        mapping = PyMem_Malloc(mapping_size*sizeof(int));
+        if (!mapping) return -1;
+        for (i = 0; i < mapping_size; i++) mapping[i] = MISSING_LETTER;
+        for (i = 0; i < length; i++) {
+            Py_UCS4 character = PyUnicode_READ(kind, characters, i);
+            if (mapping[character] != MISSING_LETTER) {
+                PyObject* c = PyUnicode_FromKindAndData(kind, &character, 1);
+                PyErr_Format(PyExc_ValueError,
+                             "alphabet contains '%S' more than once", c);
+                Py_XDECREF(c);
+                PyMem_Free(mapping);
+                return -1;
+            }
+            mapping[character] = i;
+        }
+        if (fields->mapping) PyMem_Free(fields->mapping);
+        fields->mapping = mapping;
+    }
+    else {
+        /* alphabet is not a string; cannot use mapping */
+        if (fields->mapping) {
+            PyMem_Free(fields->mapping);
+            fields->mapping = NULL;
+        }
+    }
     Py_INCREF(arg);
     fields->alphabet = arg;
+    Py_XDECREF(alphabet);
     return 0;
-}
-
-static PyObject*
-Array_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
-{
-    if (!basetype) {
-        PyErr_SetString(PyExc_RuntimeError, "base type was not intialized");
-        return NULL;
-    }
-    if (!basetype->tp_new) {
-        PyErr_SetString(PyExc_RuntimeError, "base type does not have tp_new");
-        return NULL;
-    }
-
-    PyObject* alphabet = NULL;
-    if (PyTuple_GET_SIZE(args) != 3) {
-        // shape, dtype, alphabet
-        PyErr_Format(PyExc_TypeError,
-                     "Array() takes 3 positional arguments but %d were given",
-                     PyTuple_GET_SIZE(args));
-        return NULL;
-    }
-
-    alphabet = PyTuple_GET_ITEM(args, 2);
-    if (!alphabet) {
-        PyErr_SetString(PyExc_RuntimeError, "failed to get alphabet argument");
-        return NULL;
-    }
-
-    args = PyTuple_GetSlice(args, 0, PyTuple_GET_SIZE(args) - 1);
-    if (!args)
-        return NULL;
-
-    PyObject *obj = basetype->tp_new(type, args, kwds);
-    Py_DECREF(args);
-
-    if (!obj)
-        return NULL;
-
-    Fields* fields = (Fields*)((intptr_t)obj + basetype->tp_basicsize);
-    Py_INCREF(alphabet);
-    fields->alphabet = alphabet;
-
-    return obj;
 }
 
 static void
@@ -117,6 +126,7 @@ Array_dealloc(PyObject *self)
      * and __array_finalize__ somehow failed.
      */
     Py_XDECREF(fields->alphabet);
+    if (fields->mapping) PyMem_Free(fields->mapping);
     basetype->tp_dealloc(self);
 }
 
@@ -216,7 +226,6 @@ PyInit__arraycore(void)
         return NULL;
 
     PyType_Slot Array_slots[] = {
-        {Py_tp_new, Array_new},
         {Py_tp_dealloc, Array_dealloc},
         {Py_tp_methods, Array_methods},
         {Py_tp_getset, Array_getset},

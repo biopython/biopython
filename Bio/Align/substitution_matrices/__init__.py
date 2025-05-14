@@ -70,7 +70,7 @@ class Array(_arraycore.SubstitutionMatrix):
                 shape = (n, n)
             else:  # dims is None
                 raise ValueError("data is an empty dictionary")
-            obj = super().__new__(cls, shape, dtype, alphabet)
+            obj = super().__new__(cls, shape, dtype)
             if dims == 1:
                 for i, key in enumerate(alphabet):
                     obj[i] = data.get(letter, 0.0)
@@ -80,44 +80,45 @@ class Array(_arraycore.SubstitutionMatrix):
                         key = (letter1, letter2)
                         value = data.get(key, 0.0)
                         obj[i1, i2] = value
-            return obj
-        if alphabet is None:
-            alphabet = string.ascii_uppercase
-        elif not (isinstance(alphabet, (str, tuple))):
-            raise ValueError("alphabet should be a string or a tuple")
-        n = len(alphabet)
-        if data is None:
-            if dims is None:
-                dims = 1
-            elif dims not in (1, 2):
-                raise ValueError("dims should be 1 or 2 (found %s)" % dims)
-            shape = (n,) * dims
         else:
-            if dims is None:
-                shape = data.shape
-                dims = len(shape)
-                if dims == 1:
-                    pass
-                elif dims == 2:
-                    if shape[0] != shape[1]:
-                        raise ValueError("data array is not square")
-                else:
-                    raise ValueError(
-                        "data array should be 1- or 2- dimensional "
-                        "(found %d dimensions) " % dims
-                    )
-            else:
+            if alphabet is None:
+                alphabet = string.ascii_uppercase
+            elif not (isinstance(alphabet, (str, tuple))):
+                raise ValueError("alphabet should be a string or a tuple")
+            n = len(alphabet)
+            if data is None:
+                if dims is None:
+                    dims = 1
+                elif dims not in (1, 2):
+                    raise ValueError("dims should be 1 or 2 (found %s)" % dims)
                 shape = (n,) * dims
-                if data.shape != shape:
-                    raise ValueError(
-                        "data shape has inconsistent shape (expected (%s), found (%s))"
-                        % (shape, data.shape)
-                    )
-        obj = super().__new__(cls, shape, dtype, alphabet)
-        if data is None:
-            obj[:] = 0.0
-        else:
-            obj[:] = data
+            else:
+                if dims is None:
+                    shape = data.shape
+                    dims = len(shape)
+                    if dims == 1:
+                        pass
+                    elif dims == 2:
+                        if shape[0] != shape[1]:
+                            raise ValueError("data array is not square")
+                    else:
+                        raise ValueError(
+                            "data array should be 1- or 2- dimensional "
+                            "(found %d dimensions) " % dims
+                        )
+                else:
+                    shape = (n,) * dims
+                    if data.shape != shape:
+                        raise ValueError(
+                            "data shape has inconsistent shape (expected (%s), found (%s))"
+                            % (shape, data.shape)
+                        )
+            obj = super().__new__(cls, shape, dtype)
+            if data is None:
+                obj[:] = 0.0
+            else:
+                obj[:] = data
+        obj.alphabet = alphabet
         return obj
 
     def __array_finalize__(self, obj):
