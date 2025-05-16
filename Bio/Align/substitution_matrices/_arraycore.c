@@ -116,11 +116,11 @@ static int Array_set_alphabet(PyObject *self, PyObject *arg, void *closure) {
                               mapping,
                               mapping_size * sizeof(int),
                               0,
-                              PyBUF_ND) == -1) {
+                              PyBUF_SIMPLE) == -1) {
             PyMem_Free(mapping);
             return -1;
         }
-        fields->mapping.shape[0] = mapping_size;
+        fields->mapping.itemsize = sizeof(int);
     }
     Py_INCREF(arg);
     fields->alphabet = arg;
