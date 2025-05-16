@@ -7757,7 +7757,6 @@ static int _map_indices(Py_buffer* view, PyObject* substitution_matrix_obj, int*
                         "buffer size inconsistent with mapping size");
                     return 0;
                 }
-                PyBuffer_Release(mapping_buffer);
             }
         }
         for (i = 0; i < n; i++) {
@@ -7782,6 +7781,7 @@ static int _map_indices(Py_buffer* view, PyObject* substitution_matrix_obj, int*
             }
             indices[i] = index;
         }
+        if (mapping_buffer) PyBuffer_Release(mapping_buffer);
     }
     else if (substitution_matrix->obj) {
         const Py_ssize_t m = substitution_matrix->shape[0];
