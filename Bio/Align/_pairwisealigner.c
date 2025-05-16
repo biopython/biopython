@@ -7757,6 +7757,7 @@ static int _map_indices(Py_buffer* view, PyObject* substitution_matrix_obj, int*
                         "buffer size inconsistent with mapping size");
                     return 0;
                 }
+                mapping = mapping_buffer->buf;
             }
         }
         for (i = 0; i < n; i++) {
