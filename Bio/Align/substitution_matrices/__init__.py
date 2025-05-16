@@ -238,7 +238,6 @@ class Array(_arraycore.SubstitutionMatrix):
                 result.alphabet = self.alphabet
             else:
                 result = output
-                result.alphabet = self.alphabet
             results.append(result)
 
         return results[0] if len(results) == 1 else results

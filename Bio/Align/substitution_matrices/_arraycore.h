@@ -1,1 +1,1 @@
-typedef int (*Array_get_mapping_buffer_signature)(PyObject* self, Py_buffer* view, int flags);
+typedef Py_buffer* (*Array_get_mapping_buffer_signature)(PyObject* self);

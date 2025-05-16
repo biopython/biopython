@@ -8,15 +8,15 @@ static PyTypeObject *basetype = NULL;
 
 typedef struct {
     PyObject* alphabet;
-    int* mapping;
+    Py_buffer mapping;
 } Fields;
 
-static int
-Array_get_mapping_buffer(PyObject* self, Py_buffer* view, int flags) {
-    PyErr_SetString(PyExc_BufferError,
-                    "Failed to get buffer for mapping array");
-    view->obj = NULL;
-    return -1;
+static Py_buffer* Array_get_mapping_buffer(PyObject* self) {
+    Fields* fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
+    Py_buffer* mapping = &fields->mapping;
+    if (mapping->obj == NULL) return NULL;
+    Py_INCREF(mapping->obj);
+    return mapping;
 }
 
 static PyObject *Array_get_alphabet(PyObject *self, void *closure) {
@@ -29,7 +29,10 @@ static PyObject *Array_get_alphabet(PyObject *self, void *closure) {
 
 static int Array_set_alphabet(PyObject *self, PyObject *arg, void *closure) {
     Fields* fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
-    PyObject* alphabet = fields->alphabet;
+    if (fields->alphabet) {
+        PyErr_SetString(PyExc_ValueError, "the alphabet has already been set.");
+        return -1;
+    }
     if (!PySequence_Check(arg)) {
         PyErr_SetString(PyExc_TypeError,
             "alphabet must support the sequence protocol (e.g.,\n"
@@ -69,6 +72,7 @@ static int Array_set_alphabet(PyObject *self, PyObject *arg, void *closure) {
     }
     PyBuffer_Release(&view);
     if (PyUnicode_Check(arg)) {
+        /* we cannot use mapping if alphabet is not a string */
         Py_ssize_t mapping_size;
         void* characters = PyUnicode_DATA(arg);
         int kind = PyUnicode_KIND(arg);
@@ -107,19 +111,18 @@ static int Array_set_alphabet(PyObject *self, PyObject *arg, void *closure) {
             }
             mapping[character] = i;
         }
-        if (fields->mapping) PyMem_Free(fields->mapping);
-        fields->mapping = mapping;
-    }
-    else {
-        /* alphabet is not a string; cannot use mapping */
-        if (fields->mapping) {
-            PyMem_Free(fields->mapping);
-            fields->mapping = NULL;
+        if (PyBuffer_FillInfo(&fields->mapping,
+                              self,
+                              mapping,
+                              mapping_size * sizeof(int),
+                              0,
+                              PyBUF_ND) == -1) {
+            PyMem_Free(mapping);
+            return -1;
         }
     }
     Py_INCREF(arg);
     fields->alphabet = arg;
-    Py_XDECREF(alphabet);
     return 0;
 }
 
@@ -131,7 +134,8 @@ Array_dealloc(PyObject *self)
      * and __array_finalize__ somehow failed.
      */
     Py_XDECREF(fields->alphabet);
-    if (fields->mapping) PyMem_Free(fields->mapping);
+    /* PyBuffer_Release won't do anything if fields->mapping is NULL. */
+    PyBuffer_Release(&fields->mapping);
     basetype->tp_dealloc(self);
 }
 
