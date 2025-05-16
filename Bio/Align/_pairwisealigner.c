@@ -7742,12 +7742,19 @@ Aligner_fogsaa_align_matrix(Aligner* self,
     FOGSAA_EXIT_ALIGN
 }
 
-static int _map_indices(Py_buffer* view, Aligner* aligner, int* mapping, int mapping_size, Py_buffer* substitution_matrix) {
+static int _map_indices(Py_buffer* view, PyObject* substitution_matrix_obj, int* mapping, int mapping_size, Py_buffer* substitution_matrix) {
     Py_ssize_t i;
     int index;
     int* indices = view->buf;
     const Py_ssize_t n = view->len / view->itemsize;
     if (mapping) {
+        Py_buffer* mapping_buffer = NULL;
+        if (substitution_matrix_obj) {
+            mapping_buffer = Array_get_mapping_buffer(substitution_matrix_obj);
+            if (mapping_buffer) {
+                PyBuffer_Release(mapping_buffer);
+            }
+        }
         for (i = 0; i < n; i++) {
             index = indices[i];
             if (index < 0) {
@@ -7922,11 +7929,11 @@ Aligner_score(Aligner* self, PyObject* args, PyObject* keywords)
         return NULL;
 
     if (!_map_indices(&bA,
-                      self,
+                      substitution_matrix,
                       self->mapping, self->mapping_size,
                       &self->substitution_matrix)) goto exit;
     if (!_map_indices(&bB,
-                      self,
+                      substitution_matrix,
                       self->mapping, self->mapping_size,
                       &self->substitution_matrix)) goto exit;
 
@@ -8054,11 +8061,11 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
         return NULL;
 
     if (!_map_indices(&bA,
-                      self,
+                      substitution_matrix,
                       self->mapping, self->mapping_size,
                       &self->substitution_matrix)) goto exit;
     if (!_map_indices(&bB,
-                      self,
+                      substitution_matrix,
                       self->mapping, self->mapping_size,
                       &self->substitution_matrix)) goto exit;
 
@@ -8272,7 +8279,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
         sequence = PyList_GET_ITEM(sequences, i);
         if (sequence_converter(sequence, &buffers[i])) {
             if (!_map_indices(&buffers[i],
-                              aligner,
+                              aligner->substitution_matrix.obj,
                               aligner->mapping, aligner->mapping_size,
                               &aligner->substitution_matrix)) goto exit;
         }
