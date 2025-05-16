@@ -11,6 +11,7 @@
 #include "Python.h"
 #include <float.h>
 #include <stdbool.h>
+#include "substitution_matrices/_arraycore.h"
 
 
 #define HORIZONTAL 0x1
@@ -38,6 +39,8 @@
     } \
 }
 
+static Array_get_mapping_buffer_signature Array_get_mapping_buffer;
+/* this will be set when initializing the module */
 
 typedef enum {NeedlemanWunschSmithWaterman,
               Gotoh,
@@ -8218,7 +8221,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
     PyObject* sequence;
     Aligner* aligner;
     PyObject* sequences;
-    Py_buffer* buffers;
+    Py_buffer* buffers = NULL;
     Py_buffer coordinates = {0};
     Py_buffer strands = {0};
     AlignmentCounts* counts = NULL;
@@ -8664,7 +8667,10 @@ error:
     counts = NULL;
 
 exit:
-    for (i = 0; i < n; i++) if (buffers[i].buf) PyBuffer_Release(&buffers[i]);
+    if (buffers) {
+        for (i = 0; i < n; i++)
+            if (buffers[i].buf) PyBuffer_Release(&buffers[i]);
+    }
     coordinates_converter(NULL, &coordinates);
     strands_converter(NULL, &strands);
 
@@ -8711,6 +8717,29 @@ PyInit__pairwisealigner(void)
      * only if it is successful. */
     if (PyModule_AddObject(module,
                            "PairwiseAligner", (PyObject*) &Aligner_Type) < 0) {
+        Py_DECREF(&Aligner_Type);
+        Py_DECREF(module);
+        return NULL;
+    }
+
+    PyObject *mod = PyImport_ImportModule("Bio.Align.substitution_matrices._arraycore");
+    if (!mod) {
+        Py_DECREF(&Aligner_Type);
+        Py_DECREF(module);
+        return NULL;
+    }
+
+    PyObject *capsule = PyObject_GetAttrString(mod, "mapping_buffer_capsule");
+    Py_DECREF(mod);
+    if (!capsule) {
+        Py_DECREF(&Aligner_Type);
+        Py_DECREF(module);
+        return NULL;
+    }
+    Array_get_mapping_buffer =
+        (Array_get_mapping_buffer_signature)PyCapsule_GetPointer(capsule,
+        "Bio.Align.substitution_matrices._arraycore.mapping_buffer_capsule");
+    if (!Array_get_mapping_buffer) {
         Py_DECREF(&Aligner_Type);
         Py_DECREF(module);
         return NULL;

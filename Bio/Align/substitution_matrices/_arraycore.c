@@ -1,5 +1,6 @@
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
+#include "_arraycore.h"
 
 #define MISSING_LETTER -1
 
@@ -10,8 +11,12 @@ typedef struct {
     int* mapping;
 } Fields;
 
-static int get_value(PyObject* self) {
-    return 123;
+static int
+Array_get_mapping_buffer(PyObject* self, Py_buffer* view, int flags) {
+    PyErr_SetString(PyExc_BufferError,
+                    "Failed to get buffer for mapping array");
+    view->obj = NULL;
+    return -1;
 }
 
 static PyObject *Array_get_alphabet(PyObject *self, void *closure) {
@@ -160,22 +165,12 @@ static PyGetSetDef Array_getset[] = {
     {NULL}
 };
 
-static PyObject *init_capsule(PyObject *self, PyObject *args) {
-    return PyCapsule_New((void *)get_value, "_arraycore.get_value", NULL);
-}
-
-// Define the methods of your class (if any)
-static PyMethodDef methods[] = {
-    {"get_value_function", (PyCFunction)init_capsule, METH_NOARGS, "Get value function capsule"},
-    {NULL, NULL, 0, NULL}
-};
-
 static struct PyModuleDef module = {
     PyModuleDef_HEAD_INIT,
     "_arraycore",
     "Base module defining the SubstitutionMatrix base class",
     -1,
-    methods,
+    NULL,
     NULL, NULL, NULL, NULL
 };
 
@@ -251,6 +246,27 @@ PyInit__arraycore(void)
     if (PyModule_AddObject(mod, "SubstitutionMatrix", class_type) < 0) {
         Py_DECREF(class_type);
         Py_DECREF(mod);
+        return NULL;
+    }
+
+    // Ensure that Array_get_mapping_buffer has the correct signature
+    // by comparing to Array_get_mapping_buffer_signature:
+    // (the compiler will complain if the signature of Array_get_mapping_buffer
+    // is inconsistent with Array_get_mapping_buffer_signature as defined in
+    // the header file):
+    Array_get_mapping_buffer_signature function = Array_get_mapping_buffer;
+    PyObject* capsule = PyCapsule_New((void*)function,
+        "Bio.Align.substitution_matrices._arraycore.mapping_buffer_capsule",
+        NULL);
+    if (!capsule) {
+        Py_DECREF(class_type);
+        Py_DECREF(mod);
+        return NULL;
+    }
+    if (PyModule_AddObject(mod, "mapping_buffer_capsule", capsule) < 0) {
+        Py_DECREF(class_type);
+        Py_DECREF(mod);
+        Py_DECREF(capsule);
         return NULL;
     }
 
