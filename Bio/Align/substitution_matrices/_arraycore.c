@@ -5,6 +5,7 @@
 #define MISSING_LETTER -1
 
 static PyTypeObject *basetype = NULL;
+static PyObject *class_type = NULL;
 
 typedef struct {
     PyObject* alphabet;
@@ -12,10 +13,10 @@ typedef struct {
 } Fields;
 
 static Py_buffer* Array_get_mapping_buffer(PyObject* self) {
+    if (!PyObject_IsInstance(self, class_type)) return NULL;
     Fields* fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
     Py_buffer* mapping = &fields->mapping;
-    if (mapping->obj == NULL) return NULL;
-    Py_INCREF(mapping->obj);
+    Py_XINCREF(mapping->obj);
     return mapping;
 }
 
@@ -121,6 +122,12 @@ static int Array_set_alphabet(PyObject *self, PyObject *arg, void *closure) {
             return -1;
         }
         fields->mapping.itemsize = sizeof(int);
+    }
+    else {
+        Py_INCREF(self);
+        fields->mapping.obj = self;
+        fields->mapping.itemsize = sizeof(int);
+        fields->mapping.len = length * sizeof(int);
     }
     Py_INCREF(arg);
     fields->alphabet = arg;
@@ -242,7 +249,7 @@ PyInit__arraycore(void)
     };
 
     // Create the type
-    PyObject *class_type = PyType_FromSpecWithBases(&class_spec, bases);
+    class_type = PyType_FromSpecWithBases(&class_spec, bases);
     Py_DECREF(bases);
     if (!class_type)
         return NULL;

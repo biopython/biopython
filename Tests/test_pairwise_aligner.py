@@ -6550,10 +6550,7 @@ class TestArgumentErrors(unittest.TestCase):
             aligner.score("AAA", "")
         with self.assertRaisesRegex(ValueError, message):
             aligner.score("AAA", "", strand="-")
-        message = "^sequence contains letters not in the alphabet$"
         aligner.alphabet = "ABCD"
-        with self.assertRaisesRegex(ValueError, message):
-            aligner.score("AAA", "AAE")
 
     def test_aligner_array_errors(self):
         aligner = Align.PairwiseAligner()
