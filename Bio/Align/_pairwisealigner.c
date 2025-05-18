@@ -2320,21 +2320,6 @@ typedef struct {
 } Aligner;
 
 
-static void set_alphabet(Aligner* self, PyObject* alphabet)
-{
-    if (alphabet == Py_None) {
-        if (self->alphabet) {
-            Py_DECREF(self->alphabet);
-            self->alphabet = NULL;
-        }
-    }
-    else {
-        Py_INCREF(alphabet);
-        Py_XDECREF(self->alphabet);
-        self->alphabet = alphabet;
-    }
-}
-
 static Algorithm _get_algorithm(Aligner* self)
 {
     Algorithm algorithm = self->algorithm;
@@ -2551,10 +2536,8 @@ Aligner_set_match_score(Aligner* self, PyObject* value, void* closure)
         PyErr_SetString(PyExc_ValueError, "invalid match score");
         return -1;
     }
-    if (self->substitution_matrix.obj) {
-        set_alphabet(self, Py_None);
-        PyBuffer_Release(&self->substitution_matrix);
-    }
+    PyBuffer_Release(&self->substitution_matrix);
+    /* does nothing if self->substitution_matrix.obj is NULL */
     self->match = match;
     return 0;
 }
@@ -2578,10 +2561,8 @@ Aligner_set_mismatch_score(Aligner* self, PyObject* value, void* closure)
         PyErr_SetString(PyExc_ValueError, "invalid mismatch score");
         return -1;
     }
-    if (self->substitution_matrix.obj) {
-        set_alphabet(self, Py_None);
-        PyBuffer_Release(&self->substitution_matrix);
-    }
+    PyBuffer_Release(&self->substitution_matrix);
+    /* does nothing if self->substitution_matrix.obj is NULL */
     self->mismatch = mismatch;
     return 0;
 }
@@ -2599,7 +2580,6 @@ Aligner_get_substitution_matrix(Aligner* self, void* closure)
 static int
 Aligner_set_substitution_matrix(Aligner* self, PyObject* values, void* closure)
 {
-    PyObject* alphabet;
     Py_buffer view;
     const int flag = PyBUF_FORMAT | PyBUF_ND;
     if (values == Py_None) {
@@ -2644,40 +2624,8 @@ Aligner_set_substitution_matrix(Aligner* self, PyObject* values, void* closure)
         PyBuffer_Release(&view);
         return -1;
     }
-    alphabet = PyObject_GetAttrString(values, "alphabet");
-    if (alphabet) {
-        set_alphabet(self, alphabet);
-        Py_DECREF(alphabet);
-    } else {
-        /* Set a substitution matrix without setting an alphabet; useful
-         * when aligning integers. */
-        PyErr_Clear();
-        set_alphabet(self, Py_None);
-    }
-    if (self->substitution_matrix.obj) PyBuffer_Release(&self->substitution_matrix);
+    PyBuffer_Release(&self->substitution_matrix);
     self->substitution_matrix = view;
-    return 0;
-}
-
-static char Aligner_alphabet__doc__[] = "alphabet";
-
-static PyObject*
-Aligner_get_alphabet(Aligner* self, void* closure)
-{   PyObject* object = self->alphabet;
-    if (!object) object = Py_None;
-    Py_INCREF(object);
-    return object;
-}
-
-static int
-Aligner_set_alphabet(Aligner* self, PyObject* alphabet, void* closure)
-{
-    if (self->substitution_matrix.obj) {
-        PyErr_SetString(PyExc_AttributeError,
-            "can't set alphabet if a substitution matrix is used");
-        return -1;
-    }
-    set_alphabet(self, alphabet);
     return 0;
 }
 
@@ -4369,10 +4317,6 @@ static PyGetSetDef Aligner_getset[] = {
         (getter)Aligner_get_substitution_matrix,
         (setter)Aligner_set_substitution_matrix,
         Aligner_substitution_matrix__doc__, NULL},
-    {"alphabet",
-        (getter)NULL,
-        (setter)Aligner_set_alphabet,
-        Aligner_alphabet__doc__, NULL},
     {"gap_score",
         (getter)Aligner_get_gap_score,
         (setter)Aligner_set_gap_score,

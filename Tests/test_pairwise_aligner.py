@@ -6215,12 +6215,6 @@ class TestAlignerInput(unittest.TestCase):
         seq2 = ["Gly", "Ala", "Ala", "Cys", "Thr"]
         aligner = Align.PairwiseAligner()
         aligner.mode = "global"
-        # fmt: off
-        aligner.alphabet = [
-            "Ala", "Arg", "Asn", "Asp", "Cys", "Gln", "Glu", "Gly", "His", "Ile",
-            "Leu", "Lys", "Met", "Phe", "Pro", "Ser", "Thr", "Trp", "Tyr", "Val",
-        ]
-        # fmt: on
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
@@ -6362,12 +6356,6 @@ Pro Pro Gly --- Ala --- Thr --- ---
         seq2 = ["Pro", "Pro", "Gly", "Ala", "Ala", "Cys", "Thr", "Leu"]
         aligner = Align.PairwiseAligner()
         aligner.mode = "local"
-        # fmt: off
-        aligner.alphabet = [
-            "Ala", "Arg", "Asn", "Asp", "Cys", "Gln", "Glu", "Gly", "His", "Ile",
-            "Leu", "Lys", "Met", "Phe", "Pro", "Ser", "Thr", "Trp", "Tyr", "Val",
-        ]
-        # fmt: on
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
@@ -6550,7 +6538,6 @@ class TestArgumentErrors(unittest.TestCase):
             aligner.score("AAA", "")
         with self.assertRaisesRegex(ValueError, message):
             aligner.score("AAA", "", strand="-")
-        aligner.alphabet = "ABCD"
 
     def test_aligner_array_errors(self):
         aligner = Align.PairwiseAligner()
@@ -7243,7 +7230,6 @@ class TestUnicodeStrings(unittest.TestCase):
         seq2 = "ĞĀŦ"
         aligner = Align.PairwiseAligner()
         aligner.mode = "global"
-        aligner.alphabet = None
         self.assertEqual(aligner.algorithm, "Needleman-Wunsch")
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
@@ -7307,7 +7293,6 @@ class TestUnicodeStrings(unittest.TestCase):
         seq2 = "ĞĀŦ"
         aligner = Align.PairwiseAligner()
         aligner.mode = "fogsaa"
-        aligner.alphabet = None
         self.assertEqual(
             aligner.algorithm, "Fast Optimal Global Sequence Alignment Algorithm"
         )
@@ -7347,7 +7332,6 @@ class TestUnicodeStrings(unittest.TestCase):
     def test_align_affine1_score(self):
         aligner = Align.PairwiseAligner()
         aligner.mode = "global"
-        aligner.alphabet = None
         aligner.match_score = 0
         aligner.mismatch_score = -1
         aligner.open_gap_score = -5
@@ -7393,7 +7377,6 @@ class TestUnicodeStrings(unittest.TestCase):
     def test_align_affine1_score_fogsaa(self):
         aligner = Align.PairwiseAligner()
         aligner.mode = "fogsaa"
-        aligner.alphabet = None
         aligner.match_score = 0
         aligner.mismatch_score = -1
         aligner.open_gap_score = -5
@@ -7407,7 +7390,6 @@ class TestUnicodeStrings(unittest.TestCase):
     def test_smithwaterman(self):
         aligner = Align.PairwiseAligner()
         aligner.mode = "local"
-        aligner.alphabet = None
         aligner.gap_score = -0.1
         self.assertEqual(aligner.algorithm, "Smith-Waterman")
         score = aligner.score("ℵℷℶℷ", "ℸℵℶℸ")
@@ -7445,7 +7427,6 @@ class TestUnicodeStrings(unittest.TestCase):
 
     def test_gotoh_local(self):
         aligner = Align.PairwiseAligner()
-        aligner.alphabet = None
         aligner.mode = "local"
         aligner.open_gap_score = -0.1
         aligner.extend_gap_score = 0.0
@@ -8902,7 +8883,6 @@ ABCBAαβγ---
         self.assertEqual(counts.mismatches, 0)
         self.assertIsNone(counts.positives)
         self.assertAlmostEqual(counts.score, 3.0)
-        aligner.alphabet = "ABCαβγ"
         alignments = aligner.align(seqA, seqB)
         alignment = alignments[0]
         self.assertEqual(

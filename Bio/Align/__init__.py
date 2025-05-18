@@ -4150,6 +4150,14 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
         try:
             new_key = self._new_keys[key]
         except KeyError:
+            if key == "alphabet":
+                warnings.warn(
+                    "The alphabet property is deprecated. The current "
+                    "implementation stores the alphabet, but does not use it.",
+                    BiopythonDeprecationWarning,
+                )
+                _pairwisealigner.PairwiseAligner.__setattr__(self, key, value)
+                return
             if key not in dir(_pairwisealigner.PairwiseAligner):
                 # To prevent confusion, don't allow users to create new attributes.
                 # On CPython, __slots__ can be used for this, but currently
@@ -4172,7 +4180,16 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
         try:
             new_key = self._new_keys[key]
         except KeyError:
-            pass
+            if key == "alphabet":
+                warnings.warn(
+                    "The alphabet property is deprecated. The current "
+                    "implementation stores the alphabet, but does not use it.",
+                    BiopythonDeprecationWarning,
+                )
+                try:
+                    return _pairwisealigner.PairwiseAligner.__getattr__(self, key)
+                except AttributeError:
+                    return None
         else:
             warnings.warn(
                 """\
