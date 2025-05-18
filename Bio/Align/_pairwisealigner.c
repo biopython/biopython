@@ -2317,7 +2317,6 @@ typedef struct {
     Py_buffer substitution_matrix;
     PyObject* alphabet;
     int* mapping;
-    int mapping_size;
     int wildcard;
 } Aligner;
 
@@ -2330,10 +2329,6 @@ set_alphabet(Aligner* self, PyObject* alphabet)
         if (self->alphabet) {
             Py_DECREF(self->alphabet);
             self->alphabet = NULL;
-        }
-        if (self->mapping) {
-            PyMem_Free(self->mapping);
-            self->mapping = NULL;
         }
         return 0;
     }
@@ -2385,9 +2380,6 @@ set_alphabet(Aligner* self, PyObject* alphabet)
             mapping[character] = i;
         }
         Py_INCREF(alphabet);
-        if (self->mapping) PyMem_Free(self->mapping);
-        self->mapping = mapping;
-        self->mapping_size = mapping_size;
     }
     else {
         /* alphabet is not a string; cannot use mapping */
@@ -2397,10 +2389,6 @@ set_alphabet(Aligner* self, PyObject* alphabet)
         if (!sequence) return -1;
         size = PySequence_Fast_GET_SIZE(sequence);
         Py_DECREF(sequence);
-        if (self->mapping) {
-            PyMem_Free(self->mapping);
-            self->mapping = NULL;
-        }
         Py_INCREF(alphabet);
     }
     Py_XDECREF(self->alphabet);
@@ -2467,7 +2455,6 @@ Aligner_init(Aligner *self, PyObject *args, PyObject *kwds)
     self->substitution_matrix.buf = NULL;
     self->algorithm = Unknown;
     self->alphabet = NULL;
-    self->mapping = NULL;
     self->wildcard = -1;
     return 0;
 }
@@ -2478,7 +2465,6 @@ Aligner_dealloc(Aligner* self)
     Py_XDECREF(self->deletion_score_function);
     if (self->substitution_matrix.obj) PyBuffer_Release(&self->substitution_matrix);
     Py_XDECREF(self->alphabet);
-    Py_XDECREF(self->mapping);
     Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
@@ -7912,18 +7898,10 @@ Aligner_score(Aligner* self, PyObject* args, PyObject* keywords)
 
     static char *kwlist[] = {"sequenceA", "sequenceB", "strand", NULL};
 
-    if (self->mapping) {
-        PyObject* alphabet = self->alphabet;
-        if (alphabet == NULL || !PyUnicode_Check(alphabet)) {
-            PyErr_SetString(PyExc_RuntimeError, "mapping set without alphabet");
-            return NULL;
-        }
-    }
-
-    if(!PyArg_ParseTupleAndKeywords(args, keywords, "O&O&O&", kwlist,
-                                    sequence_converter, &bA,
-                                    sequence_converter, &bB,
-                                    strand_converter, &strand))
+    if (!PyArg_ParseTupleAndKeywords(args, keywords, "O&O&O&", kwlist,
+                                     sequence_converter, &bA,
+                                     sequence_converter, &bB,
+                                     strand_converter, &strand))
         return NULL;
 
     if (self->substitution_matrix.obj) {
@@ -8039,14 +8017,6 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
     PyObject* substitution_matrix = self->substitution_matrix.obj;
 
     static char *kwlist[] = {"sequenceA", "sequenceB", "strand", NULL};
-
-    if (self->mapping) {
-        PyObject* alphabet = self->alphabet;
-        if (alphabet == NULL || !PyUnicode_Check(alphabet)) {
-            PyErr_SetString(PyExc_RuntimeError, "mapping set without alphabet");
-            return NULL;
-        }
-    }
 
     if(!PyArg_ParseTupleAndKeywords(args, keywords, "O&O&O&", kwlist,
                                     sequence_converter, &bA,
@@ -8237,14 +8207,6 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                     &Aligner_Type, (PyObject *)&aligner, &flag))
         return NULL;
 
-    if (aligner->mapping) {
-        PyObject* alphabet = aligner->alphabet;
-        if (alphabet == NULL || !PyUnicode_Check(alphabet)) {
-            PyErr_SetString(PyExc_RuntimeError, "mapping set without alphabet");
-            goto exit;
-        }
-    }
-
     if (!PyList_Check(sequences)) {
         PyErr_SetString(PyExc_TypeError, "sequences must be a list");
         goto exit;
@@ -8289,14 +8251,14 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
 
     const int wildcard = aligner->wildcard;
     const Py_buffer* substitution_matrix = &aligner->substitution_matrix;
-    const int* mapping = aligner->mapping;
+    int* mapping = NULL;
     int mapping_size;
 
     if (substitution_matrix->obj) {
         Py_buffer mapping_buffer;
         Array_get_mapping_buffer(substitution_matrix->obj, &mapping_buffer);
         if (mapping_buffer.obj) {
-            const int* mapping = mapping_buffer.buf;
+            mapping = mapping_buffer.buf;
             mapping_size = mapping_buffer.len / mapping_buffer.itemsize;
             PyBuffer_Release(&mapping_buffer);
         }
