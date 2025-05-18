@@ -7742,21 +7742,17 @@ Aligner_fogsaa_align_matrix(Aligner* self,
     FOGSAA_EXIT_ALIGN
 }
 
-static int _map_indices(Py_buffer* view, int* mapping, int mapping_size, Py_buffer* substitution_matrix) {
+static int _map_indices(Py_buffer* view, Py_buffer* substitution_matrix) {
+    if (!substitution_matrix->obj) return 1;  /* nothing to do */
     Py_ssize_t i;
     int index;
     int* indices = view->buf;
     const Py_ssize_t n = view->len / view->itemsize;
-    if (!substitution_matrix->obj) return 1;  /* nothing to do */
     Py_buffer mapping_buffer;
     Array_get_mapping_buffer(substitution_matrix->obj, &mapping_buffer);
-    if (mapping) {
-        if (!mapping_buffer.obj) {
-            PyErr_SetString(PyExc_RuntimeError, "mapping without mapping_buffer");
-            PyBuffer_Release(&mapping_buffer);
-            return 0;
-        }
-        mapping = mapping_buffer.buf;
+    if (mapping_buffer.obj) {
+        const int* mapping = mapping_buffer.buf;
+        const Py_ssize_t m = mapping_buffer.len / mapping_buffer.itemsize;
         for (i = 0; i < n; i++) {
             index = indices[i];
             if (index < 0) {
@@ -7765,10 +7761,10 @@ static int _map_indices(Py_buffer* view, int* mapping, int mapping_size, Py_buff
                              i, index);
                 return 0;
             }
-            if (index >= mapping_size) {
+            if (index >= m) {
                 PyErr_Format(PyExc_ValueError,
                              "sequence item %zd is out of bound"
-                             " (%d, should be < %zd)", i, index, mapping_size);
+                             " (%d, should be < %zd)", i, index, m);
                 return 0;
             }
             index = mapping[index];
@@ -7782,11 +7778,6 @@ static int _map_indices(Py_buffer* view, int* mapping, int mapping_size, Py_buff
         PyBuffer_Release(&mapping_buffer);
     }
     else {
-        if (mapping_buffer.obj) {
-            PyErr_SetString(PyExc_RuntimeError, "mapping_buffer without mapipng");
-            PyBuffer_Release(&mapping_buffer);
-            return 0;
-        }
         const Py_ssize_t m = substitution_matrix->shape[0];
         for (i = 0; i < n; i++) {
             index = indices[i];
@@ -7936,12 +7927,8 @@ Aligner_score(Aligner* self, PyObject* args, PyObject* keywords)
                                     strand_converter, &strand))
         return NULL;
 
-    if (!_map_indices(&bA,
-                      self->mapping, self->mapping_size,
-                      &self->substitution_matrix)) goto exit;
-    if (!_map_indices(&bB,
-                      self->mapping, self->mapping_size,
-                      &self->substitution_matrix)) goto exit;
+    if (!_map_indices(&bA, &self->substitution_matrix)) goto exit;
+    if (!_map_indices(&bB, &self->substitution_matrix)) goto exit;
 
     nA = (int) (bA.len / bA.itemsize);
     nB = (int) (bB.len / bB.itemsize);
@@ -8066,12 +8053,8 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
                                     strand_converter, &strand))
         return NULL;
 
-    if (!_map_indices(&bA,
-                      self->mapping, self->mapping_size,
-                      &self->substitution_matrix)) goto exit;
-    if (!_map_indices(&bB,
-                      self->mapping, self->mapping_size,
-                      &self->substitution_matrix)) goto exit;
+    if (!_map_indices(&bA, &self->substitution_matrix)) goto exit;
+    if (!_map_indices(&bB, &self->substitution_matrix)) goto exit;
 
     nA = (int) (bA.len / bA.itemsize);
     nB = (int) (bB.len / bB.itemsize);
@@ -8283,7 +8266,6 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
         sequence = PyList_GET_ITEM(sequences, i);
         if (sequence_converter(sequence, &buffers[i])) {
             if (!_map_indices(&buffers[i],
-                              aligner->mapping, aligner->mapping_size,
                               &aligner->substitution_matrix)) goto exit;
         }
         else {
