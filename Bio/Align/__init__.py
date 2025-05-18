@@ -3668,6 +3668,8 @@ class Alignment:
             flag = True
         if substitution_matrix is None:
             substitution_matrix = aligner.substitution_matrix
+        if substitution_matrix is None:
+            alphabet = []
         if wildcard is None:
             wildcard = aligner.wildcard
         n = len(self.sequences)
@@ -3696,33 +3698,36 @@ class Alignment:
                 except AttributeError:
                     data = sequence
                 if isinstance(data, bytes):
-                    sequences[i] = np.frombuffer(data, dtype=np.uint8).astype(
+                    sequences[i] = np.frombuffer(data, dtype=np.uint8).astype(np.int32)
+                elif isinstance(data, bytearray):
+                    sequences[i] = np.frombuffer(bytes(data), dtype=np.uint8).astype(
                         np.int32
                     )
-                elif isinstance(data, bytearray):
-                    sequences[i] = np.frombuffer(
-                        bytes(data), dtype=np.uint8
-                    ).astype(np.int32)
                 elif isinstance(data, str):
                     sequences[i] = np.frombuffer(
                         bytearray(data, aligner.codec), dtype=np.int32
                     )
                 elif isinstance(data, SequenceDataAbstractBaseClass):
                     sequences[i] = data
+                elif isinstance(data, np.ndarray):
+                    # data is a numpy array of int32
+                    # (to be checked in the C code)
+                    sequences[i] = data
+                elif data is None:
+                    sequences[i] = data
                 else:
-                    alphabet = aligner.alphabet
-                    if alphabet is None:
-                        # data is a numpy array of int32
-                        # (to be checked in the C code)
-                        sequences[i] = data
+                    if substitution_matrix is None:
+                        for item in data:
+                            if not any(item == letter for letter in alphabet):
+                                alphabet.append(item)
                     else:
-                        # data are objects chosen from the alphabet
-                        sequences[i] = np.fromiter(
-                            map(alphabet.index, data),
-                            dtype=np.int32,
-                            count=len(data),
-                        )
-        return _pairwisealigner.calculate(sequences, coordinates, strands, aligner, flag)
+                        alphabet = substitution_matrix.alphabet
+                    sequences[i] = np.fromiter(
+                        map(alphabet.index, data), dtype=np.int32, count=len(data)
+                    )
+        return _pairwisealigner.calculate(
+            sequences, coordinates, strands, aligner, flag
+        )
 
     def reverse_complement(self):
         """Reverse-complement the alignment and return it.
@@ -4187,13 +4192,22 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
         elif isinstance(seqA, str):
             sA = np.frombuffer(bytearray(seqA, self.codec), dtype=np.int32)
         else:
-            alphabet = self.alphabet
-            if alphabet is None:
-                sA = seqA
-            else:
+            try:
+                memoryview(seqA)
+            except TypeError:
+                substitution_matrix = self.substitution_matrix
+                if substitution_matrix is None:
+                    alphabet = []
+                    for item in seqA:
+                        if not any(item == letter for letter in alphabet):
+                            alphabet.append(item)
+                else:
+                    alphabet = substitution_matrix.alphabet
                 sA = np.fromiter(
                     map(alphabet.index, seqA), dtype=np.int32, count=len(seqA)
                 )
+            else:
+                sA = seqA  # C code will check the dtype
         if strand == "+":
             sB = seqB
         else:  # strand == "-":
@@ -4204,9 +4218,25 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
         elif isinstance(seqB, str):
             sB = np.frombuffer(bytearray(sB, self.codec), dtype=np.int32)
         else:
-            alphabet = self.alphabet
-            if alphabet is not None:
-                sB = np.fromiter(map(alphabet.index, sB), dtype=np.int32, count=len(sB))
+            try:
+                memoryview(seqB)
+            except TypeError:
+                substitution_matrix = self.substitution_matrix
+                if substitution_matrix is None:
+                    try:
+                        alphabet
+                    except NameError:
+                        alphabet = []
+                    for item in seqB:
+                        if not any(item == letter for letter in alphabet):
+                            alphabet.append(item)
+                else:
+                    alphabet = substitution_matrix.alphabet
+                sB = np.fromiter(
+                    map(alphabet.index, seqB), dtype=np.int32, count=len(seqB)
+                )
+            else:
+                sB = seqB  # C code will test the dtype
         score, paths = super().align(sA, sB, strand)
         alignments = PairwiseAlignments(seqA, seqB, score, paths)
         return alignments
@@ -4219,8 +4249,17 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
         elif isinstance(seqA, str):
             seqA = np.frombuffer(bytearray(seqA, self.codec), dtype="i")
         else:
-            alphabet = self.alphabet
-            if alphabet is not None:
+            try:
+                memoryview(seqA)
+            except TypeError:
+                substitution_matrix = self.substitution_matrix
+                if substitution_matrix is None:
+                    alphabet = []
+                    for item in seqA:
+                        if not any(item == letter for letter in alphabet):
+                            alphabet.append(item)
+                else:
+                    alphabet = substitution_matrix.alphabet
                 seqA = np.fromiter(
                     map(alphabet.index, seqA), dtype=np.int32, count=len(seqA)
                 )
@@ -4232,8 +4271,20 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
         elif isinstance(seqB, str):
             seqB = np.frombuffer(bytearray(seqB, self.codec), dtype="i")
         else:
-            alphabet = self.alphabet
-            if alphabet is not None:
+            try:
+                memoryview(seqB)
+            except TypeError:
+                substitution_matrix = self.substitution_matrix
+                if substitution_matrix is None:
+                    try:
+                        alphabet
+                    except NameError:
+                        alphabet = []
+                    for item in seqB:
+                        if not any(item == letter for letter in alphabet):
+                            alphabet.append(item)
+                else:
+                    alphabet = substitution_matrix.alphabet
                 seqB = np.fromiter(
                     map(alphabet.index, seqB), dtype=np.int32, count=len(seqB)
                 )

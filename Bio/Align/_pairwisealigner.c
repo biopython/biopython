@@ -4370,7 +4370,7 @@ static PyGetSetDef Aligner_getset[] = {
         (setter)Aligner_set_substitution_matrix,
         Aligner_substitution_matrix__doc__, NULL},
     {"alphabet",
-        (getter)Aligner_get_alphabet,
+        (getter)NULL,
         (setter)Aligner_set_alphabet,
         Aligner_alphabet__doc__, NULL},
     {"gap_score",

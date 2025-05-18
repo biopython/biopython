@@ -6542,7 +6542,7 @@ CGTT
 class TestArgumentErrors(unittest.TestCase):
     def test_aligner_string_errors(self):
         aligner = Align.PairwiseAligner()
-        message = "^argument is not a sequence$"
+        message = "^'int' object is not iterable$"
         with self.assertRaisesRegex(TypeError, message):
             aligner.score("AAA", 3)
         message = "^sequence has zero length$"
@@ -8926,9 +8926,10 @@ ABCBAαβγ---
         self.assertIsNone(counts.positives)
         self.assertAlmostEqual(counts.score, 3.0)
         substitution_matrix = Array("ABCαβγ", dims=2)
-        for c in aligner.alphabet:
+        alphabet = substitution_matrix.alphabet
+        for c in alphabet:
             substitution_matrix[c, c] = 2.0
-        for c1, c2 in zip(aligner.alphabet[:3], aligner.alphabet[3:]):
+        for c1, c2 in zip(alphabet[:3], alphabet[3:]):
             substitution_matrix[c1, c2] = 1.0
             substitution_matrix[c2, c1] = 1.0
         substitution_matrix["B", "β"] = 5.0
