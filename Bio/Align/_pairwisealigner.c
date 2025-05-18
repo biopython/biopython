@@ -2316,84 +2316,23 @@ typedef struct {
     PyObject* deletion_score_function;
     Py_buffer substitution_matrix;
     PyObject* alphabet;
-    int* mapping;
     int wildcard;
 } Aligner;
 
 
-static Py_ssize_t
-set_alphabet(Aligner* self, PyObject* alphabet)
+static void set_alphabet(Aligner* self, PyObject* alphabet)
 {
-    Py_ssize_t size;
     if (alphabet == Py_None) {
         if (self->alphabet) {
             Py_DECREF(self->alphabet);
             self->alphabet = NULL;
         }
-        return 0;
-    }
-    else if (PyUnicode_Check(alphabet)) {
-        int* mapping;
-        int i;
-        int mapping_size;
-        int kind;
-        void* characters;
-        if (PyUnicode_READY(alphabet) == -1) return -1;
-        size = PyUnicode_GET_LENGTH(alphabet);
-        if (size == 0) {
-            PyErr_SetString(PyExc_ValueError, "alphabet has zero length");
-            return -1;
-        }
-        kind = PyUnicode_KIND(alphabet);
-        switch (kind) {
-            case PyUnicode_1BYTE_KIND: {
-                mapping_size = 1 << 8 * sizeof(Py_UCS1);
-                break;
-            }
-            case PyUnicode_2BYTE_KIND: {
-                mapping_size = 1 << 8 * sizeof(Py_UCS2);
-                break;
-            }
-            case PyUnicode_4BYTE_KIND: {
-                mapping_size = 0x110000;  /* Maximum code point in Unicode 6.0
-                                           * is 0x10ffff = 1114111 */
-                break;
-            }
-            default:
-                PyErr_SetString(PyExc_ValueError, "could not interpret alphabet");
-                return -1;
-        }
-        characters = PyUnicode_DATA(alphabet);
-        mapping = PyMem_Malloc(mapping_size*sizeof(int));
-        if (!mapping) return -1;
-        for (i = 0; i < mapping_size; i++) mapping[i] = MISSING_LETTER;
-        for (i = 0; i < size; i++) {
-            Py_UCS4 character = PyUnicode_READ(kind, characters, i);
-            if (mapping[character] != MISSING_LETTER) {
-                PyObject* c = PyUnicode_FromKindAndData(kind, &character, 1);
-                PyErr_Format(PyExc_ValueError,
-                             "alphabet contains '%S' more than once", c);
-                Py_XDECREF(c);
-                PyMem_Free(mapping);
-                return -1;
-            }
-            mapping[character] = i;
-        }
-        Py_INCREF(alphabet);
     }
     else {
-        /* alphabet is not a string; cannot use mapping */
-        PyObject* sequence = PySequence_Fast(alphabet,
-            "alphabet should support the sequence protocol (e.g.,\n"
-            "strings, lists, and tuples can be valid alphabets).");
-        if (!sequence) return -1;
-        size = PySequence_Fast_GET_SIZE(sequence);
-        Py_DECREF(sequence);
         Py_INCREF(alphabet);
+        Py_XDECREF(self->alphabet);
+        self->alphabet = alphabet;
     }
-    Py_XDECREF(self->alphabet);
-    self->alphabet = alphabet;
-    return size;
 }
 
 static Algorithm _get_algorithm(Aligner* self)
@@ -2613,7 +2552,7 @@ Aligner_set_match_score(Aligner* self, PyObject* value, void* closure)
         return -1;
     }
     if (self->substitution_matrix.obj) {
-        if (set_alphabet(self, Py_None) < 0) return -1;
+        set_alphabet(self, Py_None);
         PyBuffer_Release(&self->substitution_matrix);
     }
     self->match = match;
@@ -2640,7 +2579,7 @@ Aligner_set_mismatch_score(Aligner* self, PyObject* value, void* closure)
         return -1;
     }
     if (self->substitution_matrix.obj) {
-        if (set_alphabet(self, Py_None) < 0) return -1;
+        set_alphabet(self, Py_None);
         PyBuffer_Release(&self->substitution_matrix);
     }
     self->mismatch = mismatch;
@@ -2661,7 +2600,6 @@ static int
 Aligner_set_substitution_matrix(Aligner* self, PyObject* values, void* closure)
 {
     PyObject* alphabet;
-    Py_ssize_t size = -1;
     Py_buffer view;
     const int flag = PyBUF_FORMAT | PyBUF_ND;
     if (values == Py_None) {
@@ -2708,17 +2646,13 @@ Aligner_set_substitution_matrix(Aligner* self, PyObject* values, void* closure)
     }
     alphabet = PyObject_GetAttrString(values, "alphabet");
     if (alphabet) {
-        size = set_alphabet(self, alphabet);
+        set_alphabet(self, alphabet);
         Py_DECREF(alphabet);
     } else {
         /* Set a substitution matrix without setting an alphabet; useful
          * when aligning integers. */
         PyErr_Clear();
-        size = set_alphabet(self, Py_None);
-    }
-    if (size < 0) {
-        PyBuffer_Release(&view);
-        return -1;
+        set_alphabet(self, Py_None);
     }
     if (self->substitution_matrix.obj) PyBuffer_Release(&self->substitution_matrix);
     self->substitution_matrix = view;
@@ -2743,7 +2677,7 @@ Aligner_set_alphabet(Aligner* self, PyObject* alphabet, void* closure)
             "can't set alphabet if a substitution matrix is used");
         return -1;
     }
-    if (set_alphabet(self, alphabet) < 0) return -1;
+    set_alphabet(self, alphabet);
     return 0;
 }
 
