@@ -8290,7 +8290,17 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
     const int wildcard = aligner->wildcard;
     const Py_buffer* substitution_matrix = &aligner->substitution_matrix;
     const int* mapping = aligner->mapping;
-    const int mapping_size = aligner->mapping_size;
+    int mapping_size;
+
+    if (substitution_matrix->obj) {
+        Py_buffer mapping_buffer;
+        Array_get_mapping_buffer(substitution_matrix->obj, &mapping_buffer);
+        if (mapping_buffer.obj) {
+            const int* mapping = mapping_buffer.buf;
+            mapping_size = mapping_buffer.len / mapping_buffer.itemsize;
+            PyBuffer_Release(&mapping_buffer);
+        }
+    }
 
     PyObject* insertion_score_function = aligner->insertion_score_function;
     PyObject* deletion_score_function = aligner->deletion_score_function;
