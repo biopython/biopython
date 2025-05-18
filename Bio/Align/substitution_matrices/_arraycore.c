@@ -12,13 +12,22 @@ typedef struct {
     Py_buffer mapping;
 } Fields;
 
-static Py_buffer* Array_get_mapping_buffer(PyObject* self) {
-    if (!PyObject_IsInstance(self, class_type)) return NULL;
-    Fields* fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
-    Py_buffer* mapping = &fields->mapping;
-    if (!mapping->obj) return NULL;
-    Py_INCREF(mapping->obj);
-    return mapping;
+static void Array_get_mapping_buffer(PyObject* self, Py_buffer* buffer) {
+    if (!PyObject_IsInstance(self, class_type)) {
+        memset(buffer, 0, sizeof(Py_buffer));
+    }
+    else {
+        Fields* fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
+        Py_buffer* mapping = &fields->mapping;
+        PyObject* obj = mapping->obj;
+        if (obj) {
+            memcpy(buffer, mapping, sizeof(Py_buffer));
+            Py_INCREF(obj);
+        }
+        else {
+            memset(buffer, 0, sizeof(Py_buffer));
+        }
+    }
 }
 
 static PyObject *Array_get_alphabet(PyObject *self, void *closure) {
@@ -137,7 +146,7 @@ Array_dealloc(PyObject *self)
      * and __array_finalize__ somehow failed.
      */
     Py_XDECREF(fields->alphabet);
-    /* PyBuffer_Release won't do anything if fields->mapping is NULL. */
+    /* PyBuffer_Release won't do anything if fields->mapping.obj is NULL. */
     PyBuffer_Release(&fields->mapping);
     basetype->tp_dealloc(self);
 }

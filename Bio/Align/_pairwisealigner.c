@@ -7749,17 +7749,9 @@ static int _map_indices(Py_buffer* view, int* mapping, int mapping_size, Py_buff
     const Py_ssize_t n = view->len / view->itemsize;
     if (!substitution_matrix->obj) return 1;  /* nothing to do */
     if (mapping) {
-        Py_buffer* mapping_buffer = NULL;
-        mapping_buffer = Array_get_mapping_buffer(substitution_matrix->obj);
-        if (mapping_buffer) {
-            if (mapping_buffer->len / mapping_buffer->itemsize != mapping_size) {
-                PyErr_Format(PyExc_RuntimeError,
-                    "buffer size %zd inconsistent with mapping size %zd",
-                    mapping_buffer->len / mapping_buffer->itemsize, mapping_size);
-                return 0;
-            }
-            mapping = mapping_buffer->buf;
-        }
+        Py_buffer mapping_buffer;
+        Array_get_mapping_buffer(substitution_matrix->obj, &mapping_buffer);
+        mapping = mapping_buffer.buf;
         for (i = 0; i < n; i++) {
             index = indices[i];
             if (index < 0) {
@@ -7782,14 +7774,14 @@ static int _map_indices(Py_buffer* view, int* mapping, int mapping_size, Py_buff
             }
             indices[i] = index;
         }
-        if (mapping_buffer) PyBuffer_Release(mapping_buffer);
+        PyBuffer_Release(&mapping_buffer);
     }
     else {
-        Py_buffer* mapping_buffer = NULL;
-        mapping_buffer = Array_get_mapping_buffer(substitution_matrix->obj);
-        if (mapping_buffer) {
+        Py_buffer mapping_buffer;
+        Array_get_mapping_buffer(substitution_matrix->obj, &mapping_buffer);
+        if (mapping_buffer.obj) {
             PyErr_SetString(PyExc_RuntimeError, "mapping_buffer without mapipng");
-            PyBuffer_Release(mapping_buffer);
+            PyBuffer_Release(&mapping_buffer);
             return 0;
         }
         const Py_ssize_t m = substitution_matrix->shape[0];
