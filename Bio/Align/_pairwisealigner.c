@@ -7748,9 +7748,14 @@ static int _map_indices(Py_buffer* view, int* mapping, int mapping_size, Py_buff
     int* indices = view->buf;
     const Py_ssize_t n = view->len / view->itemsize;
     if (!substitution_matrix->obj) return 1;  /* nothing to do */
+    Py_buffer mapping_buffer;
+    Array_get_mapping_buffer(substitution_matrix->obj, &mapping_buffer);
     if (mapping) {
-        Py_buffer mapping_buffer;
-        Array_get_mapping_buffer(substitution_matrix->obj, &mapping_buffer);
+        if (!mapping_buffer.obj) {
+            PyErr_SetString(PyExc_RuntimeError, "mapping without mapping_buffer");
+            PyBuffer_Release(&mapping_buffer);
+            return 0;
+        }
         mapping = mapping_buffer.buf;
         for (i = 0; i < n; i++) {
             index = indices[i];
@@ -7777,8 +7782,6 @@ static int _map_indices(Py_buffer* view, int* mapping, int mapping_size, Py_buff
         PyBuffer_Release(&mapping_buffer);
     }
     else {
-        Py_buffer mapping_buffer;
-        Array_get_mapping_buffer(substitution_matrix->obj, &mapping_buffer);
         if (mapping_buffer.obj) {
             PyErr_SetString(PyExc_RuntimeError, "mapping_buffer without mapipng");
             PyBuffer_Release(&mapping_buffer);
