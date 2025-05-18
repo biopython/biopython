@@ -7743,7 +7743,6 @@ Aligner_fogsaa_align_matrix(Aligner* self,
 }
 
 static int _map_indices(Py_buffer* view, Py_buffer* substitution_matrix) {
-    if (!substitution_matrix->obj) return 1;  /* nothing to do */
     Py_ssize_t i;
     int index;
     int* indices = view->buf;
@@ -7927,8 +7926,10 @@ Aligner_score(Aligner* self, PyObject* args, PyObject* keywords)
                                     strand_converter, &strand))
         return NULL;
 
-    if (!_map_indices(&bA, &self->substitution_matrix)) goto exit;
-    if (!_map_indices(&bB, &self->substitution_matrix)) goto exit;
+    if (self->substitution_matrix.obj) {
+        if (!_map_indices(&bA, &self->substitution_matrix)) goto exit;
+        if (!_map_indices(&bB, &self->substitution_matrix)) goto exit;
+    }
 
     nA = (int) (bA.len / bA.itemsize);
     nB = (int) (bB.len / bB.itemsize);
@@ -8053,8 +8054,10 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
                                     strand_converter, &strand))
         return NULL;
 
-    if (!_map_indices(&bA, &self->substitution_matrix)) goto exit;
-    if (!_map_indices(&bB, &self->substitution_matrix)) goto exit;
+    if (self->substitution_matrix.obj) {
+        if (!_map_indices(&bA, &self->substitution_matrix)) goto exit;
+        if (!_map_indices(&bB, &self->substitution_matrix)) goto exit;
+    }
 
     nA = (int) (bA.len / bA.itemsize);
     nB = (int) (bB.len / bB.itemsize);
@@ -8265,8 +8268,10 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
     for (i = 0; i < n; i++) {
         sequence = PyList_GET_ITEM(sequences, i);
         if (sequence_converter(sequence, &buffers[i])) {
-            if (!_map_indices(&buffers[i],
-                              &aligner->substitution_matrix)) goto exit;
+            if (aligner->substitution_matrix.obj) {
+                if (!_map_indices(&buffers[i],
+                                  &aligner->substitution_matrix)) goto exit;
+            }
         }
         else {
             PyErr_Clear();  // to clear the exception raised by PyObject_GetBuffer
