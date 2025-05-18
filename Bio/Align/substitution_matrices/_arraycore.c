@@ -16,7 +16,8 @@ static Py_buffer* Array_get_mapping_buffer(PyObject* self) {
     if (!PyObject_IsInstance(self, class_type)) return NULL;
     Fields* fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
     Py_buffer* mapping = &fields->mapping;
-    Py_XINCREF(mapping->obj);
+    if (!mapping->obj) return NULL;
+    Py_INCREF(mapping->obj);
     return mapping;
 }
 
@@ -73,7 +74,7 @@ static int Array_set_alphabet(PyObject *self, PyObject *arg, void *closure) {
     }
     PyBuffer_Release(&view);
     if (PyUnicode_Check(arg)) {
-        /* we cannot use mapping if alphabet is not a string */
+        /* initialize mapping if alphabet is a string: */
         Py_ssize_t mapping_size;
         void* characters = PyUnicode_DATA(arg);
         int kind = PyUnicode_KIND(arg);
@@ -122,12 +123,6 @@ static int Array_set_alphabet(PyObject *self, PyObject *arg, void *closure) {
             return -1;
         }
         fields->mapping.itemsize = sizeof(int);
-    }
-    else {
-        Py_INCREF(self);
-        fields->mapping.obj = self;
-        fields->mapping.itemsize = sizeof(int);
-        fields->mapping.len = length * sizeof(int);
     }
     Py_INCREF(arg);
     fields->alphabet = arg;

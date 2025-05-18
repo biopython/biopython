@@ -7785,6 +7785,13 @@ static int _map_indices(Py_buffer* view, int* mapping, int mapping_size, Py_buff
         if (mapping_buffer) PyBuffer_Release(mapping_buffer);
     }
     else {
+        Py_buffer* mapping_buffer = NULL;
+        mapping_buffer = Array_get_mapping_buffer(substitution_matrix->obj);
+        if (mapping_buffer) {
+            PyErr_SetString(PyExc_RuntimeError, "mapping_buffer without mapipng");
+            PyBuffer_Release(mapping_buffer);
+            return 0;
+        }
         const Py_ssize_t m = substitution_matrix->shape[0];
         for (i = 0; i < n; i++) {
             index = indices[i];
