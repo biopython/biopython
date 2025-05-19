@@ -341,16 +341,20 @@ class PDBList:
         except HTTPError as e:
             print(
                 f"Failed to download PDB structure: '{pdb_code}':"
-                f" HTTP Error {e.code} - {e.reason}")
+                f" HTTP Error {e.code} - {e.reason}"
+            )
             return None
         except URLError as e:
             print(
                 f"Failed to download PDB structure: '{pdb_code}':"
-                f" URL Error {e.reason}")
+                f" URL Error {e.reason}"
+            )
             return None
         except OSError as e:
-            print(f"Desired structure not found or doesn't exist:"
-                  f" '{pdb_code}': {str(e)}")
+            print(
+                f"Desired structure not found or doesn't exist:"
+                f" '{pdb_code}': {str(e)}"
+            )
             return None
         else:
             with gzip.open(filename, "rb") as gz:
