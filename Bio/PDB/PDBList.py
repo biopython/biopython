@@ -49,6 +49,8 @@ from urllib.request import Request
 from urllib.request import urlcleanup
 from urllib.request import urlopen
 from urllib.request import urlretrieve
+from urllib.error import HTTPError
+from urllib.error import URLError
 
 
 class PDBList:
@@ -336,8 +338,17 @@ class PDBList:
         try:
             urlcleanup()
             urlretrieve(url, filename)
-        except OSError:
-            print("Desired structure doesn't exist")
+        except HTTPError as e:
+            print(
+                f"Failed to download PDB structure: '{pdb_code}':"
+                f" HTTP Error {e.code} - {e.reason}")
+        except URLError as e:
+            print(
+                f"Failed to download PDB structure: '{pdb_code}':"
+                f" URL Error {e.reason}")
+        except OSError as e:
+            print(f"Desired structure not found or doesn't exist:"
+                  f" '{pdb_code}': {str(e)}")
         else:
             with gzip.open(filename, "rb") as gz:
                 with open(final_file, "wb") as out:
