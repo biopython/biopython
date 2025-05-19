@@ -159,6 +159,20 @@ class TestPDBListGetStructure(unittest.TestCase):
             str(context.exception),
         )
 
+    def test_retrieve_pdb_file_not_existing(self):
+        """Tests retrieving a non-existent molecule returns None."""
+        with self.make_temp_directory(os.getcwd()) as tmp:
+            pdblist = PDBList(pdb=tmp)
+            result = pdblist.retrieve_pdb_file("zzzz", file_format="pdb")
+            self.assertIsNone(result)
+
+    def test_retrieve_pdb_file_bad_url(self):
+        """Tests retrieving with bad server URL returns None."""
+        with self.make_temp_directory(os.getcwd()) as tmp:
+            pdblist = PDBList(server="http://invalid.server", pdb=tmp)
+            result = pdblist.retrieve_pdb_file("127d", file_format="pdb")
+            self.assertIsNone(result)
+
 
 class TestPDBListGetAssembly(unittest.TestCase):
     """Test methods responsible for getting assemblies."""
