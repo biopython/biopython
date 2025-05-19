@@ -8078,17 +8078,12 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
 
     static char *kwlist[] = {"sequences", "coordinates", "strands", "aligner", "flag", NULL};
 
-    if(!PyArg_ParseTupleAndKeywords(args, keywords, "OO&O&O!|p", kwlist,
-                                    &sequences,
+    if(!PyArg_ParseTupleAndKeywords(args, keywords, "O!O&O&O!|p", kwlist,
+                                    &PyList_Type, &sequences,
                                     coordinates_converter, &coordinates,
                                     strands_converter , &strands,
                                     &Aligner_Type, (PyObject *)&aligner, &flag))
         return NULL;
-
-    if (!PyList_Check(sequences)) {
-        PyErr_SetString(PyExc_TypeError, "sequences must be a list");
-        goto exit;
-    }
 
     n = PyList_GET_SIZE(sequences);
     if (n != coordinates.shape[0]) {
