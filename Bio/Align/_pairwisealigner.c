@@ -8130,7 +8130,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
     const int wildcard = aligner->wildcard;
     const Py_buffer* substitution_matrix = &aligner->substitution_matrix;
     int* mapping = NULL;
-    int mapping_size;
+    int mapping_size = 0;
 
     if (substitution_matrix->obj) {
         Py_buffer mapping_buffer;
