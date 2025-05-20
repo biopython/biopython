@@ -290,7 +290,9 @@ class PDBList:
             file_type = (
                 "pdb"
                 if file_format == "pdb"
-                else "mmCIF" if file_format == "mmCif" else "XML"
+                else "mmCIF"
+                if file_format == "mmCif"
+                else "XML"
             )
             url = (
                 self.pdb_server
@@ -338,7 +340,7 @@ class PDBList:
             urlretrieve(url, filename)
         except OSError as e:
             print(
-                f"Desired structure not found or doesn't exist:"
+                f"Desired structure not found or download failed."
                 f" '{pdb_code}': {str(e)}"
             )
             return None
