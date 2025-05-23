@@ -500,7 +500,8 @@ class ParserTests(SeqRecordTestBaseClass):
         """Test parsing of <ligand> in UniProt XML (P62330 / P97881)."""
         record = SeqIO.read("SwissProt/P62330.xml", "uniprot-xml")
         ligands = [
-            f for f in record.features
+            f
+            for f in record.features
             if f.type == "binding site" and "ligand_name" in f.qualifiers
         ]
         self.assertTrue(ligands, "No ligand-containing binding site found")
