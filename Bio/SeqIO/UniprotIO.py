@@ -16,19 +16,15 @@ originally introduced by SwissProt ("swiss" format in Bio.SeqIO).
 
 """
 
+import warnings
 from xml.etree import ElementTree
 from xml.parsers.expat import errors
-import warnings
 
-from Bio import SeqFeature
+from Bio import BiopythonDeprecationWarning, SeqFeature
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
-from Bio import BiopythonDeprecationWarning
-
-from .Interfaces import _BytesIOSource
-from .Interfaces import SequenceIterator
-
+from .Interfaces import SequenceIterator, _BytesIOSource
 
 NS = "{http://uniprot.org/uniprot}"
 REFERENCE_JOURNAL = "%(name)s %(volume)s:%(first)s-%(last)s(%(pub_date)s)"
@@ -472,6 +468,20 @@ class UniprotIterator(SequenceIterator):
                 feature.location = SeqFeature.SimpleLocation(
                     start_position, end_position
                 )
+            elif feature_element.tag == NS + "ligand":
+                ligand_name = None
+                db_ref = None
+                for ligand_element in feature_element:
+                    if ligand_element.tag == NS + "name":
+                        ligand_name = (
+                            ligand_element.text.strip() if ligand_element.text else None
+                        )
+                    elif ligand_element.tag == NS + "dbReference":
+                        db_ref = ligand_element.attrib.get("id")
+                if ligand_name:
+                    feature.qualifiers["ligand_name"] = ligand_name
+                if db_ref:
+                    feature.qualifiers["ligand_db_ref"] = db_ref
             else:
                 try:
                     feature.qualifiers[feature_element.tag.replace(NS, "")] = (
