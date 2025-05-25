@@ -499,14 +499,13 @@ class ParserTests(SeqRecordTestBaseClass):
     def test_P62330_ligand(self):
         """Test parsing of <ligand> in UniProt XML (P62330 / P97881)."""
         record = SeqIO.read("SwissProt/P62330.xml", "uniprot-xml")
-        ligands = [
-            f
-            for f in record.features
-            if f.type == "binding site" and "ligand_name" in f.qualifiers
-        ]
-        self.assertTrue(ligands, "No ligand-containing binding site found")
-        self.assertEqual(ligands[0].qualifiers["ligand_name"], "GTP")
-        self.assertEqual(ligands[0].qualifiers["ligand_db_ref"], "CHEBI:37565")
+        # Find any features with parsed ligands
+        sites = [f for f in record.features if "ligands" in f.qualifiers]
+        self.assertTrue(sites, "No feature with ligands found")
+        lig_list = sites[0].qualifiers["ligands"]
+        self.assertIsInstance(lig_list, list)
+        self.assertEqual(lig_list[0]["name"], "GTP")
+        self.assertEqual(lig_list[0]["db_ref"], "CHEBI:37565")
 
     def compare_txt_xml(self, old, new):
         """Compare text and XML based parser output."""

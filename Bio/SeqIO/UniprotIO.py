@@ -469,19 +469,18 @@ class UniprotIterator(SequenceIterator):
                     start_position, end_position
                 )
             elif feature_element.tag == NS + "ligand":
-                ligand_name = None
+                # Support multiple ligand entries per feature
+                name = None
                 db_ref = None
-                for ligand_element in feature_element:
-                    if ligand_element.tag == NS + "name":
-                        ligand_name = (
-                            ligand_element.text.strip() if ligand_element.text else None
-                        )
-                    elif ligand_element.tag == NS + "dbReference":
-                        db_ref = ligand_element.attrib.get("id")
-                if ligand_name:
-                    feature.qualifiers["ligand_name"] = ligand_name
-                if db_ref:
-                    feature.qualifiers["ligand_db_ref"] = db_ref
+                for child in feature_element:
+                    if child.tag == NS + "name":
+                        name = child.text.strip() if child.text else None
+                    elif child.tag == NS + "dbReference":
+                        db_ref = child.attrib.get("id")
+                # Append to a list of ligands in qualifiers
+                lig_list = feature.qualifiers.setdefault("ligands", [])
+                lig_list.append({"name": name, "db_ref": db_ref})
+                continue
             else:
                 try:
                     feature.qualifiers[feature_element.tag.replace(NS, "")] = (
