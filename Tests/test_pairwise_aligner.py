@@ -6460,6 +6460,7 @@ CGTT
         self.assertEqual(counts.mismatches, 3)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.positives, 1)
         self.assertAlmostEqual(counts.score, -7.0)
         alignments = aligner.align(s1, s2)
         self.assertEqual(
@@ -6492,6 +6493,7 @@ CGTT
         self.assertEqual(counts.mismatches, 3)
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.positives, 1)
         self.assertAlmostEqual(counts.score, -7.0)
         alignments = aligner.align(r1, r2)
         self.assertEqual(

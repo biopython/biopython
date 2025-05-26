@@ -3618,6 +3618,7 @@ class Alignment:
         substitution_matrix = None
         wildcard = None
         ignore_sequences = None
+        codec = "utf-32-le" if sys.byteorder == "little" else "utf-32-be"
         for index, value in enumerate(args):
             if index == 0:
                 if isinstance(value, PairwiseAligner):
@@ -3653,24 +3654,14 @@ class Alignment:
                 ignore_sequences = value
             else:
                 raise TypeError(f"unexpected argument {key}")
-        if aligner is None:
-            aligner = PairwiseAligner()
-            if substitution_matrix is not None:
-                if ignore_sequences:
-                    raise ValueError(
-                        "ignore_sequences cannot be True if substitution_matrix is used"
-                    )
-                aligner.substitution_matrix = substitution_matrix
-            if wildcard is not None:
-                aligner.wildcard = wildcard
-            flag = False
-        else:
-            flag = True
-        if substitution_matrix is None:
-            substitution_matrix = aligner.substitution_matrix
+        if substitution_matrix is not None:
+            if ignore_sequences:
+                raise ValueError(
+                    "ignore_sequences cannot be True if substitution_matrix is used"
+                )
         if substitution_matrix is None:
             alphabet = []
-        if wildcard is None:
+        if aligner is not None:
             wildcard = aligner.wildcard
         n = len(self.sequences)
         sequences = [None] * n
@@ -3705,7 +3696,7 @@ class Alignment:
                     )
                 elif isinstance(data, str):
                     sequences[i] = np.frombuffer(
-                        bytearray(data, aligner.codec), dtype=np.int32
+                        bytearray(data, codec), dtype=np.int32
                     )
                 elif isinstance(data, SequenceDataAbstractBaseClass):
                     sequences[i] = data
@@ -3725,9 +3716,18 @@ class Alignment:
                     sequences[i] = np.fromiter(
                         map(alphabet.index, data), dtype=np.int32, count=len(data)
                     )
-        return _pairwisealigner.calculate(
-            sequences, coordinates, strands, aligner, flag
-        )
+        if aligner is not None:
+            return _pairwisealigner.calculate(
+                sequences, coordinates, strands, aligner
+            )
+        elif wildcard is not None:
+            return _pairwisealigner.calculate(
+                sequences, coordinates, strands, wildcard)
+        elif substitution_matrix is not None:
+            return _pairwisealigner.calculate(
+                sequences, coordinates, strands, substitution_matrix)
+        else:
+            return _pairwisealigner.calculate(sequences, coordinates, strands)
 
     def reverse_complement(self):
         """Reverse-complement the alignment and return it.

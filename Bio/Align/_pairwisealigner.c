@@ -2387,7 +2387,7 @@ static void
 Aligner_dealloc(Aligner* self)
 {   Py_XDECREF(self->insertion_score_function);
     Py_XDECREF(self->deletion_score_function);
-    if (self->substitution_matrix.obj) PyBuffer_Release(&self->substitution_matrix);
+    PyBuffer_Release(&self->substitution_matrix);
     Py_XDECREF(self->alphabet);
     Py_TYPE(self)->tp_free((PyObject*)self);
 }
@@ -2578,52 +2578,63 @@ Aligner_get_substitution_matrix(Aligner* self, void* closure)
 }
 
 static int
-Aligner_set_substitution_matrix(Aligner* self, PyObject* values, void* closure)
+substitution_matrix_converter(PyObject* argument, void* pointer)
 {
-    Py_buffer view;
     const int flag = PyBUF_FORMAT | PyBUF_ND;
-    if (values == Py_None) {
-        if (self->substitution_matrix.obj)
-            PyBuffer_Release(&self->substitution_matrix);
+    Py_buffer* view = pointer;
+    if (argument == NULL) {
+        PyBuffer_Release(view);
+        return 1;
+    }
+    if (PyObject_GetBuffer(argument, view, flag) != 0) {
+        PyErr_SetString(PyExc_ValueError, "expected a matrix");
         return 0;
     }
-    if (PyObject_GetBuffer(values, &view, flag) != 0) {
-        PyErr_SetString(PyExc_ValueError, "expected a matrix");
-        return -1;
-    }
-    if (view.ndim != 2) {
+    if (view->ndim != 2) {
         PyErr_Format(PyExc_ValueError,
          "substitution matrix has incorrect rank (%d expected 2)",
-          view.ndim);
-        PyBuffer_Release(&view);
-        return -1;
+          view->ndim);
+        PyBuffer_Release(view);
+        return 0;
     }
-    if (view.len == 0) {
+    if (view->len == 0) {
         PyErr_SetString(PyExc_ValueError, "substitution matrix has zero size");
-        PyBuffer_Release(&view);
-        return -1;
+        PyBuffer_Release(view);
+        return 0;
     }
-    if (strcmp(view.format, "d") != 0) {
+    if (strcmp(view->format, "d") != 0) {
         PyErr_SetString(PyExc_ValueError,
                 "substitution matrix should contain float values");
-        PyBuffer_Release(&view);
-        return -1;
+        PyBuffer_Release(view);
+        return 0;
     }
-    if (view.itemsize != sizeof(double)) {
+    if (view->itemsize != sizeof(double)) {
         PyErr_Format(PyExc_RuntimeError,
                     "substitution matrix has unexpected item byte size "
-                    "(%zd, expected %zd)", view.itemsize, sizeof(double));
-        PyBuffer_Release(&view);
-        return -1;
+                    "(%zd, expected %zd)", view->itemsize, sizeof(double));
+        PyBuffer_Release(view);
+        return 0;
     }
-    if (view.shape[0] != view.shape[1]) {
+    if (view->shape[0] != view->shape[1]) {
         PyErr_Format(PyExc_ValueError,
                     "substitution matrix should be square "
                     "(found a %zd x %zd matrix)",
-                    view.shape[0], view.shape[1]);
-        PyBuffer_Release(&view);
-        return -1;
+                    view->shape[0], view->shape[1]);
+        PyBuffer_Release(view);
+        return 0;
     }
+    return Py_CLEANUP_SUPPORTED;
+}
+
+static int
+Aligner_set_substitution_matrix(Aligner* self, PyObject* values, void* closure)
+{
+    Py_buffer view;
+    if (values == Py_None) {
+        PyBuffer_Release(&self->substitution_matrix);
+        return 0;
+    }
+    if (substitution_matrix_converter(values, &view) == 0) return -1;
     PyBuffer_Release(&self->substitution_matrix);
     self->substitution_matrix = view;
     return 0;
@@ -8068,22 +8079,49 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
     Py_ssize_t i;
     Py_ssize_t n = 0;
     PyObject* sequence;
-    Aligner* aligner;
+    Aligner* aligner = NULL;
     PyObject* sequences;
     Py_buffer* buffers = NULL;
     Py_buffer coordinates = {0};
     Py_buffer strands = {0};
     AlignmentCounts* counts = NULL;
-    int flag = 1;
+    int wildcard = -1;
+    Py_buffer substitution_matrix = {0};
+    PyObject* argument = NULL;
 
-    static char *kwlist[] = {"sequences", "coordinates", "strands", "aligner", "flag", NULL};
+    static char *kwlist[] = {"sequences", "coordinates", "strands", "argument", NULL};
 
-    if(!PyArg_ParseTupleAndKeywords(args, keywords, "O!O&O&O!|p", kwlist,
-                                    &PyList_Type, &sequences,
-                                    coordinates_converter, &coordinates,
-                                    strands_converter , &strands,
-                                    &Aligner_Type, (PyObject *)&aligner, &flag))
-        return NULL;
+    if (!PyArg_ParseTupleAndKeywords(args, keywords, "O!O&O&|O", kwlist,
+                                     &PyList_Type, &sequences,
+                                     coordinates_converter, &coordinates,
+                                     strands_converter , &strands,
+                                     &argument))
+        return 0;
+
+    if (argument == NULL) {
+    }
+    else if (PyObject_TypeCheck(argument, &Aligner_Type)) {
+        aligner = (Aligner*)argument;
+        if (aligner->substitution_matrix.obj) {
+            substitution_matrix = aligner->substitution_matrix;
+            Py_INCREF(substitution_matrix.obj);
+        }
+        wildcard = aligner->wildcard;
+    }
+    else if (PyUnicode_Check(argument)) {
+        if (PyUnicode_READY(argument) == -1) goto exit;
+        if (PyUnicode_GET_LENGTH(argument) != 1) {
+            PyErr_SetString(PyExc_ValueError,
+                            "wildcard should be a single character, or None");
+            goto exit;
+        }
+        wildcard = PyUnicode_READ_CHAR(argument, 0);
+    }
+    else {
+        const int ok = substitution_matrix_converter(argument,
+                                                     &substitution_matrix);
+        if (!ok) goto exit;
+    }
 
     n = PyList_GET_SIZE(sequences);
     if (n != coordinates.shape[0]) {
@@ -8103,9 +8141,8 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
     for (i = 0; i < n; i++) {
         sequence = PyList_GET_ITEM(sequences, i);
         if (sequence_converter(sequence, &buffers[i])) {
-            if (aligner->substitution_matrix.obj) {
-                if (!_map_indices(&buffers[i],
-                                  &aligner->substitution_matrix)) goto exit;
+            if (substitution_matrix.obj) {
+                if (!_map_indices(&buffers[i], &substitution_matrix)) goto exit;
             }
         }
         else {
@@ -8122,14 +8159,12 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
     counts = (AlignmentCounts*)PyType_GenericAlloc(&AlignmentCounts_Type, 0);
     if (!counts) goto exit;
 
-    const int wildcard = aligner->wildcard;
-    const Py_buffer* substitution_matrix = &aligner->substitution_matrix;
     int* mapping = NULL;
     int mapping_size = 0;
 
-    if (substitution_matrix->obj) {
+    if (substitution_matrix.obj) {
         Py_buffer mapping_buffer;
-        Array_get_mapping_buffer(substitution_matrix->obj, &mapping_buffer);
+        Array_get_mapping_buffer(substitution_matrix.obj, &mapping_buffer);
         if (mapping_buffer.obj) {
             mapping = mapping_buffer.buf;
             mapping_size = mapping_buffer.len / mapping_buffer.itemsize;
@@ -8137,8 +8172,12 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
         }
     }
 
-    PyObject* insertion_score_function = aligner->insertion_score_function;
-    PyObject* deletion_score_function = aligner->deletion_score_function;
+    PyObject* insertion_score_function = NULL;
+    PyObject* deletion_score_function = NULL;
+    if (aligner) {
+        insertion_score_function = aligner->insertion_score_function;
+        deletion_score_function = aligner->deletion_score_function;
+    }
 
     Py_ssize_t j, k, l1, l2;
     int cA, cB;
@@ -8159,7 +8198,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
     Py_ssize_t aligned = 0;
     Py_ssize_t identities = 0;
     Py_ssize_t mismatches = 0;
-    Py_ssize_t positives = substitution_matrix->obj ? 0 : -1;
+    Py_ssize_t positives = substitution_matrix.obj ? 0 : -1;
     double score = 0.0;
 
     const Py_ssize_t shape2 = coordinates.shape[1];
@@ -8312,7 +8351,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                             bB = PyBytes_AS_STRING(oB);
                         }
                     }
-                    if (substitution_matrix->buf == NULL) {
+                    if (substitution_matrix.obj == NULL) {
                         if (sA && sB) {
                             for (l1 = start1, l2 = start2;
                                  l1 < end1 && l2 < end2;
@@ -8373,8 +8412,8 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                 cB = sB[l2];
                                 if (cA == cB) identities++;
                                 else mismatches++;
-                                ptr = (double*)substitution_matrix->buf
-                                    + cA * substitution_matrix->shape[0] + cB;
+                                ptr = (double*)substitution_matrix.buf
+                                    + cA * substitution_matrix.shape[0] + cB;
                                 value = *(double*)ptr;
                                 if (value > 0) positives++;
                                 score += value;
@@ -8394,8 +8433,8 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                 if (cA == wildcard || cB == wildcard) ;
                                 else if (cA == cB) identities++;
                                 else mismatches++;
-                                ptr = (double*)substitution_matrix->buf
-                                    + cA * substitution_matrix->shape[0] + cB;
+                                ptr = (double*)substitution_matrix.buf
+                                    + cA * substitution_matrix.shape[0] + cB;
                                 value = *(double*)ptr;
                                 if (value > 0) positives++;
                                 score += value;
@@ -8416,8 +8455,8 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                 if (cA == wildcard || cB == wildcard) ;
                                 else if (cA == cB) identities++;
                                 else mismatches++;
-                                ptr = (double*)substitution_matrix->buf
-                                    + cA * substitution_matrix->shape[0] + cB;
+                                ptr = (double*)substitution_matrix.buf
+                                    + cA * substitution_matrix.shape[0] + cB;
                                 value = *(double*)ptr;
                                 if (value > 0) positives++;
                                 score += value;
@@ -8445,8 +8484,8 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                 if (cA == wildcard || cB == wildcard) ;
                                 else if (cA == cB) identities++;
                                 else mismatches++;
-                                ptr = (double*)substitution_matrix->buf
-                                    + cA * substitution_matrix->shape[0] + cB;
+                                ptr = (double*)substitution_matrix.buf
+                                    + cA * substitution_matrix.shape[0] + cB;
                                 value = *(double*)ptr;
                                 if (value > 0) positives++;
                                 score += value;
@@ -8478,15 +8517,13 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
     counts->identities = identities;
     counts->mismatches = mismatches;
     counts->positives = positives;
-    counts->score = score;
 
-    if (counts->identities + counts->mismatches > 0) {
-        score = counts->score;
-        if (aligner->substitution_matrix.buf == NULL) {
+    if (aligner && counts->identities + counts->mismatches > 0) {
+        if (substitution_matrix.obj == NULL) {
             score += aligner->match * counts->identities + aligner->mismatch * counts->mismatches;
         }
     } else score = Py_NAN;
-    if (aligner->insertion_score_function == NULL) {
+    if (aligner && aligner->insertion_score_function == NULL) {
         score += counts->open_left_insertions * aligner->open_left_insertion_score;
         score += counts->extend_left_insertions * aligner->extend_left_insertion_score;
         score += counts->open_internal_insertions * aligner->open_internal_insertion_score;
@@ -8494,7 +8531,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
         score += counts->open_right_insertions * aligner->open_right_insertion_score;
         score += counts->extend_right_insertions * aligner->extend_right_insertion_score;
     }
-    if (aligner->deletion_score_function == NULL) {
+    if (aligner && aligner->deletion_score_function == NULL) {
         score += counts->open_left_deletions * aligner->open_left_deletion_score;
         score += counts->extend_left_deletions * aligner->extend_left_deletion_score;
         score += counts->open_internal_deletions * aligner->open_internal_deletion_score;
@@ -8502,7 +8539,6 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
         score += counts->open_right_deletions * aligner->open_right_deletion_score;
         score += counts->extend_right_deletions * aligner->extend_right_deletion_score;
     }
-    if (flag == 0) score = Py_NAN;
     counts->score = score;
 
     goto exit;
@@ -8520,6 +8556,7 @@ exit:
     }
     coordinates_converter(NULL, &coordinates);
     strands_converter(NULL, &strands);
+    substitution_matrix_converter(NULL, &substitution_matrix);
 
     return (PyObject*) counts;
 }
