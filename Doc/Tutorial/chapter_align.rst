@@ -663,26 +663,6 @@ number of gaps (= insertions + deletions):
    >>> counts.internal_gaps
    2
 
-To speed up the calculation, you can use ``ignore_sequences=True`` to skip
-counting the number of matches and mismatches (this will still calculate the
-number of aligned sequences):
-
-.. cont-doctest
-
-.. code:: pycon
-
-   >>> counts = alignment.counts(ignore_sequences=True)
-   >>> counts.aligned
-   16
-   >>> print(counts.identities)
-   0
-   >>> print(counts.mismatches)
-   0
-   >>> counts.insertions
-   1
-   >>> counts.deletions
-   5
-
 For protein alignments, in addition to the number of identities and mismatches,
 you can also count the number of positive matches by supplying a substitution
 matrix (see Chapter :ref:`sec:substitution_matrices`):

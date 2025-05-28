@@ -2376,18 +2376,6 @@ T    6.0  14.0   0.0 874.0
             repr(counts),
             "AlignmentCounts(open_left_insertions=0, extend_left_insertions=0, open_left_deletions=0, extend_left_deletions=0, open_internal_insertions=15, extend_internal_insertions=65, open_internal_deletions=2, extend_internal_deletions=2, open_right_insertions=0, extend_right_insertions=0, open_right_deletions=0, extend_right_deletions=0, aligned=3084, identities=3020, mismatches=64)",
         )
-        counts = alignment.counts(ignore_sequences=True)
-        self.assertEqual(
-            repr(counts),
-            "AlignmentCounts(open_left_insertions=0, extend_left_insertions=0, open_left_deletions=0, extend_left_deletions=0, open_internal_insertions=15, extend_internal_insertions=65, open_internal_deletions=2, extend_internal_deletions=2, open_right_insertions=0, extend_right_insertions=0, open_right_deletions=0, extend_right_deletions=0, aligned=3084, identities=0, mismatches=0)",
-        )
-        with self.assertRaises(ValueError):
-            alignment.counts(
-                substitution_matrix=substitution_matrix, ignore_sequences=True
-            )
-        for i, sequence in enumerate(alignment.sequences):
-            length = len(sequence)
-            alignment.sequences[i] = Seq(None, length)
 
     def test_add(self):
         self.assertEqual(

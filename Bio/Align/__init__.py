@@ -3557,18 +3557,11 @@ class Alignment:
                                  ignored in the calculation of the number of
                                  matches, mismatches, and positives.
                                  Default value: None.
-         - ignore_sequences    - If True, do not calculate the number of identities,
-                                 positives, and mismatches, but only calculate the
-                                 number of aligned sequences and number of gaps
-                                 to speed up the calculation.
-                                 Default value: False.
-
-        A ValueError is raised if ignore_sequences is True and substitution_matrix is not None.
 
         >>> aligner = PairwiseAligner(mode='global', match_score=2, mismatch_score=-1)
         >>> for alignment in aligner.align("TACCG", "ACG"):
         ...     print("Score = %.1f:" % alignment.score)
-        ...     c = alignment.counts()  # namedtuple
+        ...     c = alignment.counts()
         ...     print(f"{c.gaps} gaps, {c.identities} identities, {c.mismatches} mismatches")
         ...     print(alignment)
         ...
@@ -3617,7 +3610,6 @@ class Alignment:
         aligner = None
         substitution_matrix = None
         wildcard = None
-        ignore_sequences = None
         codec = "utf-32-le" if sys.byteorder == "little" else "utf-32-be"
         for index, value in enumerate(args):
             if index == 0:
@@ -3627,8 +3619,6 @@ class Alignment:
                     substitution_matrix = value
             elif index == 1:
                 wildcard = value
-            elif index == 2:
-                ignore_sequences = value
             else:
                 raise TypeError(
                     f"counts takes at most 3 positional arguments but {len(args)} were given"
@@ -3646,19 +3636,8 @@ class Alignment:
                         "counts got multiple values for argument 'wildcard'"
                     )
                 wildcard = value
-            elif key == "ignore_sequences":
-                if ignore_sequences is not None:
-                    raise TypeError(
-                        "counts got multiple values for argument 'ignore_sequences'"
-                    )
-                ignore_sequences = value
             else:
                 raise TypeError(f"unexpected argument {key}")
-        if substitution_matrix is not None:
-            if ignore_sequences:
-                raise ValueError(
-                    "ignore_sequences cannot be True if substitution_matrix is used"
-                )
         if substitution_matrix is None:
             alphabet = []
         if aligner is not None:
@@ -3673,49 +3652,45 @@ class Alignment:
         for i, sequence in enumerate(self.sequences):
             aligned_steps = steps[i, aligned_flags]
             if sum(aligned_steps > 0) < sum(aligned_steps < 0):
-                if not ignore_sequences:
-                    sequence = reverse_complement(sequence)
+                sequence = reverse_complement(sequence)
                 coordinates[i, :] = len(sequence) - coordinates[i, :]
                 strands[i] = True
-            if ignore_sequences:
-                sequences[i] = None
+            try:
+                sequence = sequence.seq  # stupid SeqRecord
+            except AttributeError:
+                pass
+            try:
+                data = sequence._data
+            except AttributeError:
+                data = sequence
+            if isinstance(data, bytes):
+                sequences[i] = np.frombuffer(data, dtype=np.uint8).astype(np.int32)
+            elif isinstance(data, bytearray):
+                sequences[i] = np.frombuffer(bytes(data), dtype=np.uint8).astype(
+                    np.int32
+                )
+            elif isinstance(data, str):
+                sequences[i] = np.frombuffer(
+                    bytearray(data, codec), dtype=np.int32
+                )
+            elif isinstance(data, SequenceDataAbstractBaseClass):
+                sequences[i] = data
+            elif isinstance(data, np.ndarray):
+                # data is a numpy array of int32
+                # (to be checked in the C code)
+                sequences[i] = data
+            elif data is None:
+                sequences[i] = data
             else:
-                try:
-                    sequence = sequence.seq  # stupid SeqRecord
-                except AttributeError:
-                    pass
-                try:
-                    data = sequence._data
-                except AttributeError:
-                    data = sequence
-                if isinstance(data, bytes):
-                    sequences[i] = np.frombuffer(data, dtype=np.uint8).astype(np.int32)
-                elif isinstance(data, bytearray):
-                    sequences[i] = np.frombuffer(bytes(data), dtype=np.uint8).astype(
-                        np.int32
-                    )
-                elif isinstance(data, str):
-                    sequences[i] = np.frombuffer(
-                        bytearray(data, codec), dtype=np.int32
-                    )
-                elif isinstance(data, SequenceDataAbstractBaseClass):
-                    sequences[i] = data
-                elif isinstance(data, np.ndarray):
-                    # data is a numpy array of int32
-                    # (to be checked in the C code)
-                    sequences[i] = data
-                elif data is None:
-                    sequences[i] = data
+                if substitution_matrix is None:
+                    for item in data:
+                        if not any(item == letter for letter in alphabet):
+                            alphabet.append(item)
                 else:
-                    if substitution_matrix is None:
-                        for item in data:
-                            if not any(item == letter for letter in alphabet):
-                                alphabet.append(item)
-                    else:
-                        alphabet = substitution_matrix.alphabet
-                    sequences[i] = np.fromiter(
-                        map(alphabet.index, data), dtype=np.int32, count=len(data)
-                    )
+                    alphabet = substitution_matrix.alphabet
+                sequences[i] = np.fromiter(
+                    map(alphabet.index, data), dtype=np.int32, count=len(data)
+                )
         if aligner is not None:
             return _pairwisealigner.calculate(
                 sequences, coordinates, strands, aligner
