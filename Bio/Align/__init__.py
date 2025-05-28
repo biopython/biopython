@@ -3543,20 +3543,25 @@ class Alignment:
                     start1, start2 = end1, end2
         return m
 
-    def counts(self, *args, **kwargs):
+    def counts(self, argument=None):
         """Count the number of identities, mismatches, and gaps of an alignment.
 
-        Arguments:
-         - substitution_matrix - If None (default value), do not calculate the number
-                                 of positive matches in the alignment.
-                                 Otherwise, use the provided substitution matrix
-                                 (typically from the ``Bio.Align.substitution_matrices``
-                                 submodule) to also calculate the number of positive
-                                 matches in an amino acid alignment.
-         - wildcard            - The wildcard character. This character is
-                                 ignored in the calculation of the number of
-                                 matches, mismatches, and positives.
-                                 Default value: None.
+        This method takes a single optional argument, which can be either None
+        (default), a substitution matrix, a wildcard character, or a pairwise
+        aligner object:
+
+         - If the argument is a substitution matrix, (typically from the
+           ``Bio.Align.substitution_matrices`` submodule), then use it to
+           calculate the total substitution score for the alignment, as well as
+           the number of positive matches.
+         - If the argument is a single character, then it is interpreted as the
+           wildcard character. This character is ignored in the calculation of
+           the number of matches, mismatches, and positives.
+         - If the argument is pairwise aligner object, then use it to set the
+           wildcard character (if set) and also calculate the alignment score,
+           the gap scores, and the total substitution score. If the aligner has
+           an associated substitution matrix, then use it to calculate these
+           scores, and also calculate the number of positive matches.
 
         >>> aligner = PairwiseAligner(mode='global', match_score=2, mismatch_score=-1)
         >>> for alignment in aligner.align("TACCG", "ACG"):
@@ -3583,65 +3588,100 @@ class Alignment:
 
         An `AlignCounts` object has the following properties:
 
-         - aligned             - the number of letters aligned to each other in the
-                                 alignment;
-         - identities          - the number of identical letters in the alignment;
-         - mismatches          - the number of mismatched letters in the alignment;
-         - positives           - the number of aligned letters with a positive score;
-         - left_insertions     - the number of insertions on the left side of the
-                                 alignment;
-         - left_deletions      - the number of deletions on the left side of the
-                                 alignment;
-         - right_insertions    - the number of insertions on the right side of the
-                                 alignment;
-         - right_deletions     - the number of deletions on the right side of the
-                                 alignment;
-         - internal_insertions - the number of insertions in the interior of the
-                                 alignment;
-         - internal_deletions  - the number of deletions in the interior of the
-                                 alignment;
-         - insertions          - the total number of insertions;
-         - deletions           - the total number of deletions;
-         - left_gaps           - the number of gaps on the left side of the alignment;
-         - right_gaps          - the number of gaps on the right side of the alignment;
-         - internal_gaps       - the number of gaps in the interior of the alignment;
-         - gaps                - the total number of gaps in the alignment;
+         - score                      - the alignment score (calculated only if the
+                                        argument is a pairwise aligner, and set to None
+                                        otherwise);
+         - aligned                    - the number of letters aligned to each other in
+                                        the alignment;
+         - substitution_score         - the total substitution score of letters aligned
+                                        to each other (calculated only if the argument
+                                        is a pairwise aligner or a substitution matrix,
+                                        and set to None otherwise);
+         - identities                 - the number of identical letters in the
+                                        alignment;
+         - mismatches                 - the number of mismatched letters in the
+                                        alignment;
+         - positives                  - the number of aligned letters with a positive
+                                        score (set to None if no substitution matrix is
+                                        defined);
+         - gap_score                  - the total gap score (calculated only if the
+                                        argument is a pairwise aligner, and set to None
+                                        otherwise);
+         - gaps                       - the total gap length;;
+         - open_gaps                  - the number of gaps opened in the alignment;
+         - extend_gaps                - the number of gap extensions in the alignment;
+         - open_left_gaps             - the number of gaps opened on the left side of
+                                        the alignment;
+         - open_right_gaps            - the number of gaps opened on the right side of
+                                        the alignment;
+         - open_internal_gaps         - the number of gaps opened in the interior of the
+                                        alignment;
+         - extend_left_gaps           - the number of gap extensions on the left side of
+                                        the alignment;
+         - extend_right_gaps          - the number of gap extensions on the right side
+                                        of the alignment;
+         - extend_internal_gaps       - the number of gap extensions in the interior of
+                                        the alignment;
+         - open_left_insertions       - the number of insertion gaps opened on the left
+                                        side of the alignment;
+         - open_left_deletions        - the number of deletion gaps opened on the left
+                                        side of the alignment;
+         - open_right_insertions      - the number of insertion gaps opened on the right
+                                        side of the alignment;
+         - open_right_deletions       - the number of deletion gaps opened on the right
+                                        side of the alignment;
+         - open_internal_insertions   - the number of insertion gaps opaned in the
+                                        interior of the alignment;
+         - open_internal_deletions    - the number of deletion gaps opened in the
+                                        interior of the alignment;
+         - extend_left_insertions     - the number of insertion gap extensions on the
+                                        left side of the alignment;
+         - extend_left_deletions      - the number of deletion gap extensions on the
+                                        left side of the alignment;
+         - extend_right_insertions    - the number of insertion gap extensions on the
+                                        right side of the alignment;
+         - extend_right_deletions     - the number of deletion gap extensions on the
+                                        right side of the alignment;
+         - extend_internal_insertions - the number of insertion gap extensions in the
+                                        interior of the alignment;
+         - extend_internal_deletions  - the number of deletion gap extensions in the
+                                        interior of the alignment;
+         - left_insertions            - the number of letters inserted on the left side
+                                        of the alignment;
+         - left_deletions             - the number of letters deleted on the left side
+                                        of the alignment;
+         - right_insertions           - the number of letters inserted on the right side
+                                        of the alignment;
+         - right_deletions            - the number of letters deleted on the right side
+                                        of the alignment;
+         - internal_insertions        - the number of letters inserted in the interior
+                                        of the alignment;
+         - internal_deletions         - the number of letters deleted in the interior of
+                                        the alignment;
+         - insertions                 - the total number of letters inserted;
+         - deletions                  - the total number of letters deleted;
+         - left_gaps                  - the total gap length on the left side of the
+                                        alignment;
+         - right_gaps                 - the total gap length on the right side of the
+                                        alignment;
+         - internal_gaps              - the total gap length in the interior of the
+                                        alignment.
         """
         aligner = None
-        substitution_matrix = None
         wildcard = None
-        codec = "utf-32-le" if sys.byteorder == "little" else "utf-32-be"
-        for index, value in enumerate(args):
-            if index == 0:
-                if isinstance(value, PairwiseAligner):
-                    aligner = value
-                else:
-                    substitution_matrix = value
-            elif index == 1:
-                wildcard = value
-            else:
-                raise TypeError(
-                    f"counts takes at most 3 positional arguments but {len(args)} were given"
-                )
-        for key, value in kwargs.items():
-            if key == "substitution_matrix":
-                if substitution_matrix is not None:
-                    raise TypeError(
-                        "counts got multiple values for argument 'substitution_matrix'"
-                    )
-                substitution_matrix = value
-            elif key == "wildcard":
-                if wildcard is not None:
-                    raise TypeError(
-                        "counts got multiple values for argument 'wildcard'"
-                    )
-                wildcard = value
-            else:
-                raise TypeError(f"unexpected argument {key}")
+        substitution_matrix = None
+        if isinstance(argument, PairwiseAligner):
+            aligner = argument
+            substitution_matrix = aligner.substitution_matrix
+        elif isinstance(argument, str):
+            wildcard = argument
+        elif isinstance(argument, substitution_matrices.Array):
+            substitution_matrix = argument
+        elif argument is not None:
+            raise ValueError(f"unexpected argument {argument!r}")
         if substitution_matrix is None:
             alphabet = []
-        if aligner is not None:
-            wildcard = aligner.wildcard
+        codec = "utf-32-le" if sys.byteorder == "little" else "utf-32-be"
         n = len(self.sequences)
         sequences = [None] * n
         strands = np.zeros(n, bool)
