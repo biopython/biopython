@@ -11,8 +11,8 @@
 #include "Python.h"
 #include <float.h>
 #include <stdbool.h>
+#include "_pairwisealigner.h"
 #include "substitution_matrices/_arraycore.h"
-
 
 #define HORIZONTAL 0x1
 #define VERTICAL 0x2
@@ -20,15 +20,6 @@
 
 
 #define MISSING_LETTER -1
-
-
-typedef enum {NeedlemanWunschSmithWaterman,
-              Gotoh,
-              WatermanSmithBeyer,
-              FOGSAA,
-              Unknown} Algorithm; // FIXME
-
-typedef enum {Global, Local, FOGSAA_Mode} Mode; // FIXME
 
 
 static Array_get_mapping_buffer_signature Array_get_mapping_buffer;
@@ -911,34 +902,6 @@ static PyTypeObject AlignmentCounts_Type = {
     0,                              /* tp_members */
     AlignmentCounts_getset,         /* tp_getset */
 };
-
-
-typedef struct {
-    PyObject_HEAD
-    Mode mode;
-    Algorithm algorithm;
-    double match;
-    double mismatch;
-    double epsilon;
-    double open_internal_insertion_score;
-    double extend_internal_insertion_score;
-    double open_left_insertion_score;
-    double extend_left_insertion_score;
-    double open_right_insertion_score;
-    double extend_right_insertion_score;
-    double open_internal_deletion_score;
-    double extend_internal_deletion_score;
-    double open_left_deletion_score;
-    double extend_left_deletion_score;
-    double open_right_deletion_score;
-    double extend_right_deletion_score;
-    PyObject* insertion_score_function;
-    PyObject* deletion_score_function;
-    Py_buffer substitution_matrix;
-    PyObject* alphabet;
-    int wildcard;
-} Aligner;
-
 
 static int
 substitution_matrix_converter(PyObject* argument, void* pointer)
