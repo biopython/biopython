@@ -38,6 +38,7 @@ from Bio import BiopythonDeprecationWarning
 from Bio.Align import _aligncore  # type: ignore
 from Bio.Align import _codonaligner  # type: ignore
 from Bio.Align import _pairwisealigner  # type: ignore
+from Bio.Align import _alignmentcounts  # type: ignore
 from Bio.Align import substitution_matrices
 from Bio.Data import CodonTable
 from Bio.Seq import MutableSeq
@@ -3732,17 +3733,17 @@ class Alignment:
                     map(alphabet.index, data), dtype=np.int32, count=len(data)
                 )
         if aligner is not None:
-            return _pairwisealigner.calculate(
+            return _alignmentcounts.calculate(
                 sequences, coordinates, strands, aligner
             )
         elif wildcard is not None:
-            return _pairwisealigner.calculate(
+            return _alignmentcounts.calculate(
                 sequences, coordinates, strands, wildcard)
         elif substitution_matrix is not None:
-            return _pairwisealigner.calculate(
+            return _alignmentcounts.calculate(
                 sequences, coordinates, strands, substitution_matrix)
         else:
-            return _pairwisealigner.calculate(sequences, coordinates, strands)
+            return _alignmentcounts.calculate(sequences, coordinates, strands)
 
     def reverse_complement(self):
         """Reverse-complement the alignment and return it.
