@@ -338,7 +338,7 @@ class PDBList:
             urlretrieve(url, filename)
         except OSError as e:
             print(
-                f"Desired structure not found or download failed."
+                "Desired structure not found or download failed."
                 f" '{pdb_code}': {str(e)}"
             )
             return None
