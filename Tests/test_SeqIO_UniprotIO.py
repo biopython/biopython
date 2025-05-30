@@ -10,8 +10,10 @@ import unittest
 
 from seq_tests_common import SeqRecordTestBaseClass
 
-from Bio import BiopythonDeprecationWarning, SeqIO
+from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
+
+from Bio import BiopythonDeprecationWarning
 
 
 class ParserTests(SeqRecordTestBaseClass):
@@ -497,15 +499,28 @@ class ParserTests(SeqRecordTestBaseClass):
         self.assertEqual(seq_record.annotations["entry_version"], 158)
 
     def test_P62330_ligand(self):
-        """Test parsing of <ligand> in UniProt XML (P62330 / P97881)."""
+        """Test parsing of <ligand> in UniProt XML (P62330)."""
         record = SeqIO.read("SwissProt/P62330.xml", "uniprot-xml")
-        # Find any features with parsed ligands
-        sites = [f for f in record.features if "ligands" in f.qualifiers]
-        self.assertTrue(sites, "No feature with ligands found")
-        lig_list = sites[0].qualifiers["ligands"]
-        self.assertIsInstance(lig_list, list)
-        self.assertEqual(lig_list[0]["name"], "GTP")
-        self.assertEqual(lig_list[0]["db_ref"], "CHEBI:37565")
+        all_ligands = []
+        for f in record.features:
+            all_ligands.extend(f.qualifiers.get("ligands", []))
+        self.assertEqual(len(all_ligands), 5)
+        self.assertEqual(all_ligands[0]["name"], "GTP")
+        self.assertEqual(all_ligands[0]["db_ref"], "CHEBI:37565")
+
+    def test_multiligand_binding_site(self):
+        """Test parsing of binding site with multiple ligands in UniProt XML."""
+        record = SeqIO.read("SwissProt/multiligand.xml", "uniprot-xml")
+        sites = [
+            f
+            for f in record.features
+            if f.type == "binding site" and "ligands" in f.qualifiers
+        ]
+        self.assertTrue(sites, "No binding site with ligands found")
+        self.assertEqual(len(sites[0].qualifiers["ligands"]), 2)
+        ligand_names = {lig["name"] for lig in sites[0].qualifiers["ligands"]}
+        self.assertIn("ATP", ligand_names)
+        self.assertIn("ADP", ligand_names)
 
     def compare_txt_xml(self, old, new):
         """Compare text and XML based parser output."""
