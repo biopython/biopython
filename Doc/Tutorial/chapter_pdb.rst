@@ -1713,49 +1713,6 @@ module ``Bio.PDB.kdtrees``), making it very fast. It also includes a
 fast method to find all point pairs within a certain distance of each
 other.
 
-Superimposing two structures
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Use a ``Superimposer`` object to superimpose two coordinate sets. This
-object calculates the rotation and translation matrix that rotates two
-lists of atoms on top of each other in such a way that their RMSD is
-minimized. Of course, the two lists need to contain the same number of
-atoms. The ``Superimposer`` object can also apply the
-rotation/translation to a list of atoms. The rotation and translation
-are stored as a tuple in the ``rotran`` attribute of the
-``Superimposer`` object (note that the rotation is right multiplying!).
-The RMSD is stored in the ``rmsd`` attribute.
-
-The algorithm used by ``Superimposer`` comes from
-Golub \& Van Loan [Golub1989]_ and makes use of
-singular value decomposition (this is implemented in the general
-``Bio.SVDSuperimposer`` module).
-
-Example:
-
-.. code:: pycon
-
-   >>> sup = Superimposer()
-   # Specify the atom lists
-   # 'fixed' and 'moving' are lists of Atom objects
-   # The moving atoms will be put on the fixed atoms
-   >>> sup.set_atoms(fixed, moving)
-   # Print rotation/translation/rmsd
-   >>> print(sup.rotran)
-   >>> print(sup.rms)
-   # Apply rotation/translation to the moving atoms
-   >>> sup.apply(moving)
-
-To superimpose two structures based on their active sites, use the
-active site atoms to calculate the rotation/translation matrices (as
-above), and apply these to the whole molecule.
-
-Mapping the residues of two related structures onto each other
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-First, create an alignment file in FASTA format, then use the
-``StructureAlignment`` class. This class can also be used for alignments
-with more than two structures.
 
 Calculating the Half Sphere Exposure
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1845,6 +1802,50 @@ Example:
 You can also get access to the molecular surface itself (via the
 ``get_surface`` function), in the form of a Numeric Python array with
 the surface points.
+
+Superimposing two structures
+----------------------------
+
+Use a ``Superimposer`` object to superimpose two coordinate sets. This
+object calculates the rotation and translation matrix that rotates two
+lists of atoms on top of each other in such a way that their RMSD is
+minimized. Of course, the two lists need to contain the same number of
+atoms. The ``Superimposer`` object can also apply the
+rotation/translation to a list of atoms. The rotation and translation
+are stored as a tuple in the ``rotran`` attribute of the
+``Superimposer`` object (note that the rotation is right multiplying!).
+The RMSD is stored in the ``rmsd`` attribute.
+
+The algorithm used by ``Superimposer`` comes from
+Golub \& Van Loan [Golub1989]_ and makes use of
+singular value decomposition (this is implemented in the general
+``Bio.SVDSuperimposer`` module).
+
+Example:
+
+.. code:: pycon
+
+   >>> sup = Superimposer()
+   # Specify the atom lists
+   # 'fixed' and 'moving' are lists of Atom objects
+   # The moving atoms will be put on the fixed atoms
+   >>> sup.set_atoms(fixed, moving)
+   # Print rotation/translation/rmsd
+   >>> print(sup.rotran)
+   >>> print(sup.rms)
+   # Apply rotation/translation to the moving atoms
+   >>> sup.apply(moving)
+
+To superimpose two structures based on their active sites, use the
+active site atoms to calculate the rotation/translation matrices (as
+above), and apply these to the whole molecule.
+
+Mapping the residues of two related structures onto each other
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+First, create an alignment file in FASTA format, then use the
+``StructureAlignment`` class. This class can also be used for alignments
+with more than two structures.
 
 Common problems in PDB files
 ----------------------------
