@@ -3704,12 +3704,8 @@ class Alignment:
                 data = sequence._data
             except AttributeError:
                 data = sequence
-            if isinstance(data, bytes):
-                sequences[i] = np.frombuffer(data, dtype=np.uint8).astype(np.int32)
-            elif isinstance(data, bytearray):
-                sequences[i] = np.frombuffer(bytes(data), dtype=np.uint8).astype(
-                    np.int32
-                )
+            if isinstance(data, (bytes, bytearray)):
+                sequences[i] = data
             elif isinstance(data, str):
                 sequences[i] = np.frombuffer(
                     bytearray(data, codec), dtype=np.int32

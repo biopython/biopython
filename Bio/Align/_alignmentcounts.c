@@ -60,7 +60,7 @@ static int _map_indices(Py_buffer* view, Py_buffer* substitution_matrix) {
                     "sequence contains letters not in the alphabet");
                 return 0;
             }
-            indices[i] = index;
+         //   indices[i] = index;
         }
         PyBuffer_Release(&buffer);
     }
@@ -1121,6 +1121,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
         }
         else {
             PyErr_Clear();  // to clear the exception raised by PyObject_GetBuffer
+            buffers[i].buf = NULL;
             if (PySequence_Check(sequence)) buffers[i].obj = sequence;
             else if (sequence == Py_None) buffers[i].obj = NULL;
             else {
@@ -1300,30 +1301,42 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                     path = DIAGONAL;
                     aligned += end1 - start1;
                     if (sA == NULL) {
-                        oA = PySequence_GetSlice(sequenceA->obj, start1, end1);
-                        if (!oA) goto error;
-                        if (PyBytes_Check(oA)) {
-                            if (PyBytes_GET_SIZE(oA) != end1 - start1) {
-                                PyErr_Format(PyExc_ValueError,
-                                    "alignment.sequences[%d][%d:%d] did not return a bytes object of size %d",
-                                    i, start1, end1, end1 - start1);
-                                goto error;
+                        if (PyBytes_Check(sequenceA->obj)) {
+                            bA = PyBytes_AS_STRING(sequenceA->obj) + start1;
+                            oA = NULL;
+                        }
+                        else {
+                            oA = PySequence_GetSlice(sequenceA->obj, start1, end1);
+                            if (!oA) goto error;
+                            if (PyBytes_Check(oA)) {
+                                if (PyBytes_GET_SIZE(oA) != end1 - start1) {
+                                    PyErr_Format(PyExc_ValueError,
+                                        "alignment.sequences[%d][%d:%d] did not return a bytes object of size %d",
+                                        i, start1, end1, end1 - start1);
+                                    goto error;
+                                }
+                                bA = PyBytes_AS_STRING(oA);
                             }
-                            bA = PyBytes_AS_STRING(oA);
                         }
                     }
                     if (sB == NULL) {
-                        oB = PySequence_GetSlice(sequenceB->obj, start2, end2);
-                        if (!oB) goto error;
-                        if (PyBytes_Check(oB)) {
-                            if (PyBytes_GET_SIZE(oB) != end2 - start2) {
-                                PyErr_Format(PyExc_ValueError,
-                                    "alignment.sequences[%d[%d:%d] did not return a bytes object of size %d",
+                        if (PyBytes_Check(sequenceB->obj)) {
+                            bB = PyBytes_AS_STRING(sequenceB->obj) + start2;
+                            oB = NULL;
+                        }
+                        else {
+                            oB = PySequence_GetSlice(sequenceB->obj, start2, end2);
+                            if (!oB) goto error;
+                            if (PyBytes_Check(oB)) {
+                                if (PyBytes_GET_SIZE(oB) != end2 - start2) {
+                                    PyErr_Format(PyExc_ValueError,
+                                        "alignment.sequences[%d[%d:%d] did not return a bytes object of size %d",
 
-                                    j, start2, end2, end2 - start2);
-                                goto error;
+                                        j, start2, end2, end2 - start2);
+                                    goto error;
+                                }
+                                bB = PyBytes_AS_STRING(oB);
                             }
-                            bB = PyBytes_AS_STRING(oB);
                         }
                     }
                     if (substitution_matrix.obj == NULL) {
@@ -1348,7 +1361,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                 else if (cA == cB) identities++;
                                 else mismatches++;
                             }
-                            Py_DECREF(oB);
+                            Py_XDECREF(oB);
                         }
                         else if (sB && bA) {
                             for (l1 = start1, l2 = start2;
@@ -1360,7 +1373,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                 else if (cA == cB) identities++;
                                 else mismatches++;
                             }
-                            Py_DECREF(oA);
+                            Py_XDECREF(oA);
                         }
                         else if (bA && bB) {
                             for (l1 = start1, l2 = start2;
@@ -1372,8 +1385,8 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                 else if (cA == cB) identities++;
                                 else mismatches++;
                             }
-                            Py_DECREF(oA);
-                            Py_DECREF(oB);
+                            Py_XDECREF(oA);
+                            Py_XDECREF(oB);
                         }
                     }
                     else {
@@ -1385,6 +1398,10 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                  l1++, l2++) {
                                 cA = sA[l1];
                                 cB = sB[l2];
+                                if (mapping) {
+                                    cA = mapping[cA];
+                                    cB = mapping[cB];
+                                }
                                 if (cA == cB) identities++;
                                 else mismatches++;
                                 ptr = (double*)substitution_matrix.buf
@@ -1399,6 +1416,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                  l1 < end1 && l2 < end2;
                                  l1++, l2++) {
                                 cA = sA[l1];
+                                if (mapping) cA = mapping[cA];
                                 index = (int) bB[l2-start2];
                                 if (index < 0 || index >= mapping_size) {
                                     Py_DECREF(oB);
@@ -1414,7 +1432,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                 if (value > 0) positives++;
                                 substitution_score += value;
                             }
-                            Py_DECREF(oB);
+                            Py_XDECREF(oB);
                         }
                         else if (sB && bA) {
                             for (l1 = start1, l2 = start2;
@@ -1427,6 +1445,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                 }
                                 cA = mapping[index];
                                 cB = sB[l2];
+                                if (mapping) cB = mapping[cB];
                                 if (cA == wildcard || cB == wildcard) ;
                                 else if (cA == cB) identities++;
                                 else mismatches++;
@@ -1436,7 +1455,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                 if (value > 0) positives++;
                                 substitution_score += value;
                             }
-                            Py_DECREF(oA);
+                            Py_XDECREF(oA);
                         }
                         else if (bA && bB) {
                             for (l1 = start1, l2 = start2;
@@ -1465,8 +1484,8 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                 if (value > 0) positives++;
                                 substitution_score += value;
                             }
-                            Py_DECREF(oA);
-                            Py_DECREF(oB);
+                            Py_XDECREF(oA);
+                            Py_XDECREF(oB);
                         }
                     }
                 }
