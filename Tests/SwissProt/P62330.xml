@@ -1,0 +1,2343 @@
+<?xml version="1.0" encoding="UTF-8"  standalone="no" ?>
+<uniprot xmlns="http://uniprot.org/uniprot" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://uniprot.org/uniprot http://www.uniprot.org/docs/uniprot.xsd">
+<entry dataset="Swiss-Prot" created="2004-07-05" modified="2025-04-09" version="204" xmlns="http://uniprot.org/uniprot">
+  <accession>P62330</accession>
+  <accession>P26438</accession>
+  <accession>Q6FGZ2</accession>
+  <name>ARF6_HUMAN</name>
+  <protein>
+    <recommendedName>
+      <fullName evidence="37">ADP-ribosylation factor 6</fullName>
+      <ecNumber evidence="31">3.6.5.2</ecNumber>
+    </recommendedName>
+  </protein>
+  <gene>
+    <name evidence="37 39" type="primary">ARF6</name>
+  </gene>
+  <organism>
+    <name type="scientific">Homo sapiens</name>
+    <name type="common">Human</name>
+    <dbReference type="NCBI Taxonomy" id="9606"/>
+    <lineage>
+      <taxon>Eukaryota</taxon>
+      <taxon>Metazoa</taxon>
+      <taxon>Chordata</taxon>
+      <taxon>Craniata</taxon>
+      <taxon>Vertebrata</taxon>
+      <taxon>Euteleostomi</taxon>
+      <taxon>Mammalia</taxon>
+      <taxon>Eutheria</taxon>
+      <taxon>Euarchontoglires</taxon>
+      <taxon>Primates</taxon>
+      <taxon>Haplorrhini</taxon>
+      <taxon>Catarrhini</taxon>
+      <taxon>Hominidae</taxon>
+      <taxon>Homo</taxon>
+    </lineage>
+  </organism>
+  <reference key="1">
+    <citation type="journal article" date="1991" name="J. Biol. Chem." volume="266" first="2772" last="2777">
+      <title>Molecular identification of ADP-ribosylation factor mRNAs and their expression in mammalian cells.</title>
+      <authorList>
+        <person name="Tsuchiya M."/>
+        <person name="Price S.R."/>
+        <person name="Tsai S.-C."/>
+        <person name="Moss J."/>
+        <person name="Vaughan M."/>
+      </authorList>
+      <dbReference type="PubMed" id="1993656"/>
+      <dbReference type="DOI" id="10.1016/s0021-9258(18)49913-9"/>
+    </citation>
+    <scope>NUCLEOTIDE SEQUENCE [MRNA]</scope>
+  </reference>
+  <reference key="2">
+    <citation type="journal article" date="2003" name="DNA Cell Biol." volume="22" first="737" last="741">
+      <title>Sequence, genomic organization, and expression of the human ADP-ribosylation factor 6 (ARF6) gene: a class III ARF.</title>
+      <authorList>
+        <person name="Lebeda R.A."/>
+        <person name="Johnson S.K."/>
+        <person name="Stewart M.I."/>
+        <person name="Haun R.S."/>
+      </authorList>
+      <dbReference type="PubMed" id="14659046"/>
+      <dbReference type="DOI" id="10.1089/104454903770946719"/>
+    </citation>
+    <scope>NUCLEOTIDE SEQUENCE [GENOMIC DNA]</scope>
+    <scope>TISSUE SPECIFICITY</scope>
+  </reference>
+  <reference key="3">
+    <citation type="journal article" date="1998" name="Proc. Natl. Acad. Sci. U.S.A." volume="95" first="8175" last="8180">
+      <title>Identification of genes expressed in human CD34(+) hematopoietic stem/progenitor cells by expressed sequence tags and efficient full-length cDNA cloning.</title>
+      <authorList>
+        <person name="Mao M."/>
+        <person name="Fu G."/>
+        <person name="Wu J.-S."/>
+        <person name="Zhang Q.-H."/>
+        <person name="Zhou J."/>
+        <person name="Kan L.-X."/>
+        <person name="Huang Q.-H."/>
+        <person name="He K.-L."/>
+        <person name="Gu B.-W."/>
+        <person name="Han Z.-G."/>
+        <person name="Shen Y."/>
+        <person name="Gu J."/>
+        <person name="Yu Y.-P."/>
+        <person name="Xu S.-H."/>
+        <person name="Wang Y.-X."/>
+        <person name="Chen S.-J."/>
+        <person name="Chen Z."/>
+      </authorList>
+      <dbReference type="PubMed" id="9653160"/>
+      <dbReference type="DOI" id="10.1073/pnas.95.14.8175"/>
+    </citation>
+    <scope>NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA]</scope>
+    <source>
+      <tissue>Umbilical cord blood</tissue>
+    </source>
+  </reference>
+  <reference key="4">
+    <citation type="submission" date="2002-03" db="EMBL/GenBank/DDBJ databases">
+      <title>cDNA clones of human proteins involved in signal transduction sequenced by the Guthrie cDNA resource center (www.cdna.org).</title>
+      <authorList>
+        <person name="Puhl H.L. III"/>
+        <person name="Ikeda S.R."/>
+        <person name="Aronstam R.S."/>
+      </authorList>
+    </citation>
+    <scope>NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA]</scope>
+    <source>
+      <tissue>Brain</tissue>
+    </source>
+  </reference>
+  <reference key="5">
+    <citation type="journal article" date="2004" name="Nat. Genet." volume="36" first="40" last="45">
+      <title>Complete sequencing and characterization of 21,243 full-length human cDNAs.</title>
+      <authorList>
+        <person name="Ota T."/>
+        <person name="Suzuki Y."/>
+        <person name="Nishikawa T."/>
+        <person name="Otsuki T."/>
+        <person name="Sugiyama T."/>
+        <person name="Irie R."/>
+        <person name="Wakamatsu A."/>
+        <person name="Hayashi K."/>
+        <person name="Sato H."/>
+        <person name="Nagai K."/>
+        <person name="Kimura K."/>
+        <person name="Makita H."/>
+        <person name="Sekine M."/>
+        <person name="Obayashi M."/>
+        <person name="Nishi T."/>
+        <person name="Shibahara T."/>
+        <person name="Tanaka T."/>
+        <person name="Ishii S."/>
+        <person name="Yamamoto J."/>
+        <person name="Saito K."/>
+        <person name="Kawai Y."/>
+        <person name="Isono Y."/>
+        <person name="Nakamura Y."/>
+        <person name="Nagahari K."/>
+        <person name="Murakami K."/>
+        <person name="Yasuda T."/>
+        <person name="Iwayanagi T."/>
+        <person name="Wagatsuma M."/>
+        <person name="Shiratori A."/>
+        <person name="Sudo H."/>
+        <person name="Hosoiri T."/>
+        <person name="Kaku Y."/>
+        <person name="Kodaira H."/>
+        <person name="Kondo H."/>
+        <person name="Sugawara M."/>
+        <person name="Takahashi M."/>
+        <person name="Kanda K."/>
+        <person name="Yokoi T."/>
+        <person name="Furuya T."/>
+        <person name="Kikkawa E."/>
+        <person name="Omura Y."/>
+        <person name="Abe K."/>
+        <person name="Kamihara K."/>
+        <person name="Katsuta N."/>
+        <person name="Sato K."/>
+        <person name="Tanikawa M."/>
+        <person name="Yamazaki M."/>
+        <person name="Ninomiya K."/>
+        <person name="Ishibashi T."/>
+        <person name="Yamashita H."/>
+        <person name="Murakawa K."/>
+        <person name="Fujimori K."/>
+        <person name="Tanai H."/>
+        <person name="Kimata M."/>
+        <person name="Watanabe M."/>
+        <person name="Hiraoka S."/>
+        <person name="Chiba Y."/>
+        <person name="Ishida S."/>
+        <person name="Ono Y."/>
+        <person name="Takiguchi S."/>
+        <person name="Watanabe S."/>
+        <person name="Yosida M."/>
+        <person name="Hotuta T."/>
+        <person name="Kusano J."/>
+        <person name="Kanehori K."/>
+        <person name="Takahashi-Fujii A."/>
+        <person name="Hara H."/>
+        <person name="Tanase T.-O."/>
+        <person name="Nomura Y."/>
+        <person name="Togiya S."/>
+        <person name="Komai F."/>
+        <person name="Hara R."/>
+        <person name="Takeuchi K."/>
+        <person name="Arita M."/>
+        <person name="Imose N."/>
+        <person name="Musashino K."/>
+        <person name="Yuuki H."/>
+        <person name="Oshima A."/>
+        <person name="Sasaki N."/>
+        <person name="Aotsuka S."/>
+        <person name="Yoshikawa Y."/>
+        <person name="Matsunawa H."/>
+        <person name="Ichihara T."/>
+        <person name="Shiohata N."/>
+        <person name="Sano S."/>
+        <person name="Moriya S."/>
+        <person name="Momiyama H."/>
+        <person name="Satoh N."/>
+        <person name="Takami S."/>
+        <person name="Terashima Y."/>
+        <person name="Suzuki O."/>
+        <person name="Nakagawa S."/>
+        <person name="Senoh A."/>
+        <person name="Mizoguchi H."/>
+        <person name="Goto Y."/>
+        <person name="Shimizu F."/>
+        <person name="Wakebe H."/>
+        <person name="Hishigaki H."/>
+        <person name="Watanabe T."/>
+        <person name="Sugiyama A."/>
+        <person name="Takemoto M."/>
+        <person name="Kawakami B."/>
+        <person name="Yamazaki M."/>
+        <person name="Watanabe K."/>
+        <person name="Kumagai A."/>
+        <person name="Itakura S."/>
+        <person name="Fukuzumi Y."/>
+        <person name="Fujimori Y."/>
+        <person name="Komiyama M."/>
+        <person name="Tashiro H."/>
+        <person name="Tanigami A."/>
+        <person name="Fujiwara T."/>
+        <person name="Ono T."/>
+        <person name="Yamada K."/>
+        <person name="Fujii Y."/>
+        <person name="Ozaki K."/>
+        <person name="Hirao M."/>
+        <person name="Ohmori Y."/>
+        <person name="Kawabata A."/>
+        <person name="Hikiji T."/>
+        <person name="Kobatake N."/>
+        <person name="Inagaki H."/>
+        <person name="Ikema Y."/>
+        <person name="Okamoto S."/>
+        <person name="Okitani R."/>
+        <person name="Kawakami T."/>
+        <person name="Noguchi S."/>
+        <person name="Itoh T."/>
+        <person name="Shigeta K."/>
+        <person name="Senba T."/>
+        <person name="Matsumura K."/>
+        <person name="Nakajima Y."/>
+        <person name="Mizuno T."/>
+        <person name="Morinaga M."/>
+        <person name="Sasaki M."/>
+        <person name="Togashi T."/>
+        <person name="Oyama M."/>
+        <person name="Hata H."/>
+        <person name="Watanabe M."/>
+        <person name="Komatsu T."/>
+        <person name="Mizushima-Sugano J."/>
+        <person name="Satoh T."/>
+        <person name="Shirai Y."/>
+        <person name="Takahashi Y."/>
+        <person name="Nakagawa K."/>
+        <person name="Okumura K."/>
+        <person name="Nagase T."/>
+        <person name="Nomura N."/>
+        <person name="Kikuchi H."/>
+        <person name="Masuho Y."/>
+        <person name="Yamashita R."/>
+        <person name="Nakai K."/>
+        <person name="Yada T."/>
+        <person name="Nakamura Y."/>
+        <person name="Ohara O."/>
+        <person name="Isogai T."/>
+        <person name="Sugano S."/>
+      </authorList>
+      <dbReference type="PubMed" id="14702039"/>
+      <dbReference type="DOI" id="10.1038/ng1285"/>
+    </citation>
+    <scope>NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA]</scope>
+    <source>
+      <tissue>Trachea</tissue>
+    </source>
+  </reference>
+  <reference key="6">
+    <citation type="submission" date="2004-06" db="EMBL/GenBank/DDBJ databases">
+      <title>Cloning of human full open reading frames in Gateway(TM) system entry vector (pDONR201).</title>
+      <authorList>
+        <person name="Ebert L."/>
+        <person name="Schick M."/>
+        <person name="Neubert P."/>
+        <person name="Schatten R."/>
+        <person name="Henze S."/>
+        <person name="Korn B."/>
+      </authorList>
+    </citation>
+    <scope>NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA]</scope>
+  </reference>
+  <reference key="7">
+    <citation type="submission" date="2005-09" db="EMBL/GenBank/DDBJ databases">
+      <authorList>
+        <person name="Mural R.J."/>
+        <person name="Istrail S."/>
+        <person name="Sutton G."/>
+        <person name="Florea L."/>
+        <person name="Halpern A.L."/>
+        <person name="Mobarry C.M."/>
+        <person name="Lippert R."/>
+        <person name="Walenz B."/>
+        <person name="Shatkay H."/>
+        <person name="Dew I."/>
+        <person name="Miller J.R."/>
+        <person name="Flanigan M.J."/>
+        <person name="Edwards N.J."/>
+        <person name="Bolanos R."/>
+        <person name="Fasulo D."/>
+        <person name="Halldorsson B.V."/>
+        <person name="Hannenhalli S."/>
+        <person name="Turner R."/>
+        <person name="Yooseph S."/>
+        <person name="Lu F."/>
+        <person name="Nusskern D.R."/>
+        <person name="Shue B.C."/>
+        <person name="Zheng X.H."/>
+        <person name="Zhong F."/>
+        <person name="Delcher A.L."/>
+        <person name="Huson D.H."/>
+        <person name="Kravitz S.A."/>
+        <person name="Mouchard L."/>
+        <person name="Reinert K."/>
+        <person name="Remington K.A."/>
+        <person name="Clark A.G."/>
+        <person name="Waterman M.S."/>
+        <person name="Eichler E.E."/>
+        <person name="Adams M.D."/>
+        <person name="Hunkapiller M.W."/>
+        <person name="Myers E.W."/>
+        <person name="Venter J.C."/>
+      </authorList>
+    </citation>
+    <scope>NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA]</scope>
+  </reference>
+  <reference key="8">
+    <citation type="journal article" date="2004" name="Genome Res." volume="14" first="2121" last="2127">
+      <title>The status, quality, and expansion of the NIH full-length cDNA project: the Mammalian Gene Collection (MGC).</title>
+      <authorList>
+        <consortium name="The MGC Project Team"/>
+      </authorList>
+      <dbReference type="PubMed" id="15489334"/>
+      <dbReference type="DOI" id="10.1101/gr.2596504"/>
+    </citation>
+    <scope>NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA]</scope>
+    <source>
+      <tissue>Skin</tissue>
+      <tissue>Uterus</tissue>
+    </source>
+  </reference>
+  <reference key="9">
+    <citation type="journal article" date="1995" name="Exp. Cell Res." volume="221" first="153" last="159">
+      <title>Myristoylation is required for the intracellular localization and endocytic function of ARF6.</title>
+      <authorList>
+        <person name="D'Souza-Schorey C."/>
+        <person name="Stahl P.D."/>
+      </authorList>
+      <dbReference type="PubMed" id="7589240"/>
+      <dbReference type="DOI" id="10.1006/excr.1995.1362"/>
+    </citation>
+    <scope>MYRISTOYLATION AT GLY-2</scope>
+    <scope>FUNCTION</scope>
+    <scope>SUBCELLULAR LOCATION</scope>
+    <scope>MUTAGENESIS OF GLY-2</scope>
+  </reference>
+  <reference key="10">
+    <citation type="journal article" date="2000" name="J. Cell Biol." volume="151" first="627" last="638">
+      <title>ACAPs are arf6 GTPase-activating proteins that function in the cell periphery.</title>
+      <authorList>
+        <person name="Jackson T.R."/>
+        <person name="Brown F.D."/>
+        <person name="Nie Z."/>
+        <person name="Miura K."/>
+        <person name="Foroni L."/>
+        <person name="Sun J."/>
+        <person name="Hsu V.W."/>
+        <person name="Donaldson J.G."/>
+        <person name="Randazzo P.A."/>
+      </authorList>
+      <dbReference type="PubMed" id="11062263"/>
+      <dbReference type="DOI" id="10.1083/jcb.151.3.627"/>
+    </citation>
+    <scope>ACTIVITY REGULATION</scope>
+    <source>
+      <tissue>Leukocyte</tissue>
+    </source>
+  </reference>
+  <reference key="11">
+    <citation type="journal article" date="2002" name="Biochem. J." volume="365" first="369" last="378">
+      <title>GGA proteins associate with Golgi membranes through interaction between their GGAH domains and ADP-ribosylation factors.</title>
+      <authorList>
+        <person name="Takatsu H."/>
+        <person name="Yoshino K."/>
+        <person name="Toda K."/>
+        <person name="Nakayama K."/>
+      </authorList>
+      <dbReference type="PubMed" id="11950392"/>
+      <dbReference type="DOI" id="10.1042/bj20020428"/>
+    </citation>
+    <scope>INTERACTION WITH GGA1; GGA2 AND GGA3</scope>
+  </reference>
+  <reference key="12">
+    <citation type="journal article" date="2003" name="J. Cell Biol." volume="162" first="113" last="124">
+      <title>ARF6 stimulates clathrin/AP-2 recruitment to synaptic membranes by activating phosphatidylinositol phosphate kinase type Igamma.</title>
+      <authorList>
+        <person name="Krauss M."/>
+        <person name="Kinuta M."/>
+        <person name="Wenk M.R."/>
+        <person name="De Camilli P."/>
+        <person name="Takei K."/>
+        <person name="Haucke V."/>
+      </authorList>
+      <dbReference type="PubMed" id="12847086"/>
+      <dbReference type="DOI" id="10.1083/jcb.200301006"/>
+    </citation>
+    <scope>INTERACTION WITH PIP5K1C</scope>
+  </reference>
+  <reference key="13">
+    <citation type="journal article" date="2004" name="Mol. Cell. Biol." volume="24" first="9752" last="9762">
+      <title>The TBC (Tre-2/Bub2/Cdc16) domain protein TRE17 regulates plasma membrane-endosomal trafficking through activation of Arf6.</title>
+      <authorList>
+        <person name="Martinu L."/>
+        <person name="Masuda-Robens J.M."/>
+        <person name="Robertson S.E."/>
+        <person name="Santy L.C."/>
+        <person name="Casanova J.E."/>
+        <person name="Chou M.M."/>
+      </authorList>
+      <dbReference type="PubMed" id="15509780"/>
+      <dbReference type="DOI" id="10.1128/mcb.24.22.9752-9762.2004"/>
+    </citation>
+    <scope>INTERACTION WITH USP6</scope>
+  </reference>
+  <reference key="14">
+    <citation type="journal article" date="2004" name="Mol. Biol. Cell" volume="15" first="2205" last="2217">
+      <title>Regulation of dendritic branching and filopodia formation in hippocampal neurons by specific acylated protein motifs.</title>
+      <authorList>
+        <person name="Gauthier-Campbell C."/>
+        <person name="Bredt D.S."/>
+        <person name="Murphy T.H."/>
+        <person name="El-Husseini A."/>
+      </authorList>
+      <dbReference type="PubMed" id="14978216"/>
+      <dbReference type="DOI" id="10.1091/mbc.e03-07-0493"/>
+    </citation>
+    <scope>FUNCTION</scope>
+    <scope>SUBCELLULAR LOCATION</scope>
+    <scope>MUTAGENESIS OF THR-27 AND GLN-67</scope>
+  </reference>
+  <reference key="15">
+    <citation type="journal article" date="2005" name="EMBO J." volume="24" first="3389" last="3399">
+      <title>Rab11-FIP3 and FIP4 interact with Arf6 and the exocyst to control membrane traffic in cytokinesis.</title>
+      <authorList>
+        <person name="Fielding A.B."/>
+        <person name="Schonteich E."/>
+        <person name="Matheson J."/>
+        <person name="Wilson G."/>
+        <person name="Yu X."/>
+        <person name="Hickson G.R."/>
+        <person name="Srivastava S."/>
+        <person name="Baldwin S.A."/>
+        <person name="Prekeris R."/>
+        <person name="Gould G.W."/>
+      </authorList>
+      <dbReference type="PubMed" id="16148947"/>
+      <dbReference type="DOI" id="10.1038/sj.emboj.7600803"/>
+    </citation>
+    <scope>INTERACTION WITH RAB11FIP3 AND RAB11FIP4</scope>
+  </reference>
+  <reference key="16">
+    <citation type="journal article" date="2005" name="FEBS Lett." volume="579" first="343" last="348">
+      <title>Requirement of phosphatidylinositol-4,5-bisphosphate for HERC1-mediated guanine nucleotide release from ARF proteins.</title>
+      <authorList>
+        <person name="Garcia-Gonzalo F.R."/>
+        <person name="Bartrons R."/>
+        <person name="Ventura F."/>
+        <person name="Rosa J.L."/>
+      </authorList>
+      <dbReference type="PubMed" id="15642342"/>
+      <dbReference type="DOI" id="10.1016/j.febslet.2004.11.095"/>
+    </citation>
+    <scope>INTERACTION WITH HERC1</scope>
+  </reference>
+  <reference key="17">
+    <citation type="journal article" date="2005" name="Nat. Cell Biol." volume="7" first="353" last="364">
+      <title>Golgi-localized GAP for Cdc42 functions downstream of ARF1 to control Arp2/3 complex and F-actin dynamics.</title>
+      <authorList>
+        <person name="Dubois T."/>
+        <person name="Paleotti O."/>
+        <person name="Mironov A.A. Jr."/>
+        <person name="Fraisier V."/>
+        <person name="Stradal T.E.B."/>
+        <person name="De Matteis M.A."/>
+        <person name="Franco M."/>
+        <person name="Chavrier P."/>
+      </authorList>
+      <dbReference type="PubMed" id="15793564"/>
+      <dbReference type="DOI" id="10.1038/ncb1244"/>
+    </citation>
+    <scope>INTERACTION WITH ARHGAP21</scope>
+  </reference>
+  <reference key="18">
+    <citation type="journal article" date="2006" name="Mol. Cell. Proteomics" volume="5" first="1437" last="1449">
+      <title>Proteomic identification and functional characterization of a novel ARF6 GTPase-activating protein, ACAP4.</title>
+      <authorList>
+        <person name="Fang Z."/>
+        <person name="Miao Y."/>
+        <person name="Ding X."/>
+        <person name="Deng H."/>
+        <person name="Liu S."/>
+        <person name="Wang F."/>
+        <person name="Zhou R."/>
+        <person name="Watson C."/>
+        <person name="Fu C."/>
+        <person name="Hu Q."/>
+        <person name="Lillard J.W. Jr."/>
+        <person name="Powell M."/>
+        <person name="Chen Y."/>
+        <person name="Forte J.G."/>
+        <person name="Yao X."/>
+      </authorList>
+      <dbReference type="PubMed" id="16737952"/>
+      <dbReference type="DOI" id="10.1074/mcp.m600050-mcp200"/>
+    </citation>
+    <scope>FUNCTION</scope>
+    <scope>SUBCELLULAR LOCATION</scope>
+    <scope>MUTAGENESIS OF THR-27 AND GLN-67</scope>
+    <scope>INTERACTION WITH ASAP3</scope>
+  </reference>
+  <reference key="19">
+    <citation type="journal article" date="2006" name="Proc. Natl. Acad. Sci. U.S.A." volume="103" first="15416" last="15421">
+      <title>Structural basis for Rab11-dependent membrane recruitment of a family of Rab11-interacting protein 3 (FIP3)/Arfophilin-1.</title>
+      <authorList>
+        <person name="Shiba T."/>
+        <person name="Koga H."/>
+        <person name="Shin H.-W."/>
+        <person name="Kawasaki M."/>
+        <person name="Kato R."/>
+        <person name="Nakayama K."/>
+        <person name="Wakatsuki S."/>
+      </authorList>
+      <dbReference type="PubMed" id="17030804"/>
+      <dbReference type="DOI" id="10.1073/pnas.0605357103"/>
+    </citation>
+    <scope>INTERACTION WITH RAB11FIP3 AND RAB11FIP4</scope>
+  </reference>
+  <reference key="20">
+    <citation type="journal article" date="2007" name="Curr. Biol." volume="17" first="711" last="716">
+      <title>The Arl4 family of small G proteins can recruit the cytohesin Arf6 exchange factors to the plasma membrane.</title>
+      <authorList>
+        <person name="Hofmann I."/>
+        <person name="Thompson A."/>
+        <person name="Sanderson C.M."/>
+        <person name="Munro S."/>
+      </authorList>
+      <dbReference type="PubMed" id="17398095"/>
+      <dbReference type="DOI" id="10.1016/j.cub.2007.03.007"/>
+    </citation>
+    <scope>MUTAGENESIS OF THR-27</scope>
+    <scope>SUBCELLULAR LOCATION</scope>
+  </reference>
+  <reference key="21">
+    <citation type="journal article" date="2007" name="Eur. J. Cell Biol." volume="86" first="417" last="431">
+      <title>Molecular characterization of Rab11-FIP3 binding to ARF GTPases.</title>
+      <authorList>
+        <person name="Schonteich E."/>
+        <person name="Pilli M."/>
+        <person name="Simon G.C."/>
+        <person name="Matern H.T."/>
+        <person name="Junutula J.R."/>
+        <person name="Sentz D."/>
+        <person name="Holmes R.K."/>
+        <person name="Prekeris R."/>
+      </authorList>
+      <dbReference type="PubMed" id="17628206"/>
+      <dbReference type="DOI" id="10.1016/j.ejcb.2007.05.004"/>
+    </citation>
+    <scope>INTERACTION WITH RAB11FIP3</scope>
+  </reference>
+  <reference key="22">
+    <citation type="journal article" date="2007" name="Traffic" volume="8" first="1080" last="1092">
+      <title>Specificity, promiscuity and localization of ARF protein interactions with NCS-1 and phosphatidylinositol-4 kinase-III beta.</title>
+      <authorList>
+        <person name="Haynes L.P."/>
+        <person name="Sherwood M.W."/>
+        <person name="Dolman N.J."/>
+        <person name="Burgoyne R.D."/>
+      </authorList>
+      <dbReference type="PubMed" id="17555535"/>
+      <dbReference type="DOI" id="10.1111/j.1600-0854.2007.00594.x"/>
+    </citation>
+    <scope>INTERACTION WITH NCS1</scope>
+    <scope>SUBCELLULAR LOCATION</scope>
+  </reference>
+  <reference key="23">
+    <citation type="journal article" date="2008" name="J. Biol. Chem." volume="283" first="14915" last="14926">
+      <title>ASAP3 is a focal adhesion-associated Arf GAP that functions in cell migration and invasion.</title>
+      <authorList>
+        <person name="Ha V.L."/>
+        <person name="Bharti S."/>
+        <person name="Inoue H."/>
+        <person name="Vass W.C."/>
+        <person name="Campa F."/>
+        <person name="Nie Z."/>
+        <person name="de Gramont A."/>
+        <person name="Ward Y."/>
+        <person name="Randazzo P.A."/>
+      </authorList>
+      <dbReference type="PubMed" id="18400762"/>
+      <dbReference type="DOI" id="10.1074/jbc.m709717200"/>
+    </citation>
+    <scope>FUNCTION</scope>
+    <scope>ACTIVITY REGULATION</scope>
+  </reference>
+  <reference key="24">
+    <citation type="journal article" date="2010" name="Am. J. Hum. Genet." volume="87" first="365" last="370">
+      <title>TBC1D24, an ARF6-interacting protein, is mutated in familial infantile myoclonic epilepsy.</title>
+      <authorList>
+        <person name="Falace A."/>
+        <person name="Filipello F."/>
+        <person name="La Padula V."/>
+        <person name="Vanni N."/>
+        <person name="Madia F."/>
+        <person name="De Pietri Tonelli D."/>
+        <person name="de Falco F.A."/>
+        <person name="Striano P."/>
+        <person name="Dagna Bricarelli F."/>
+        <person name="Minetti C."/>
+        <person name="Benfenati F."/>
+        <person name="Fassio A."/>
+        <person name="Zara F."/>
+      </authorList>
+      <dbReference type="PubMed" id="20727515"/>
+      <dbReference type="DOI" id="10.1016/j.ajhg.2010.07.020"/>
+    </citation>
+    <scope>INTERACTION WITH TBC1D24</scope>
+  </reference>
+  <reference key="25">
+    <citation type="journal article" date="2010" name="J. Biol. Chem." volume="285" first="3750" last="3757">
+      <title>AIP1 functions as Arf6-GAP to negatively regulate TLR4 signaling.</title>
+      <authorList>
+        <person name="Wan T."/>
+        <person name="Liu T."/>
+        <person name="Zhang H."/>
+        <person name="Tang S."/>
+        <person name="Min W."/>
+      </authorList>
+      <dbReference type="PubMed" id="19948740"/>
+      <dbReference type="DOI" id="10.1074/jbc.m109.069385"/>
+    </citation>
+    <scope>SUBCELLULAR LOCATION</scope>
+  </reference>
+  <reference key="26">
+    <citation type="journal article" date="2010" name="J. Biol. Chem." volume="285" first="31616" last="31633">
+      <title>A protein interaction network for Ecm29 links the 26 S proteasome to molecular motors and endosomal components.</title>
+      <authorList>
+        <person name="Gorbea C."/>
+        <person name="Pratt G."/>
+        <person name="Ustrell V."/>
+        <person name="Bell R."/>
+        <person name="Sahasrabudhe S."/>
+        <person name="Hughes R.E."/>
+        <person name="Rechsteiner M."/>
+      </authorList>
+      <dbReference type="PubMed" id="20682791"/>
+      <dbReference type="DOI" id="10.1074/jbc.m110.154120"/>
+    </citation>
+    <scope>SUBCELLULAR LOCATION</scope>
+    <scope>INTERACTION WITH ECPAS</scope>
+  </reference>
+  <reference key="27">
+    <citation type="journal article" date="2011" name="BMC Syst. Biol." volume="5" first="17" last="17">
+      <title>Initial characterization of the human central proteome.</title>
+      <authorList>
+        <person name="Burkard T.R."/>
+        <person name="Planyavsky M."/>
+        <person name="Kaupe I."/>
+        <person name="Breitwieser F.P."/>
+        <person name="Buerckstuemmer T."/>
+        <person name="Bennett K.L."/>
+        <person name="Superti-Furga G."/>
+        <person name="Colinge J."/>
+      </authorList>
+      <dbReference type="PubMed" id="21269460"/>
+      <dbReference type="DOI" id="10.1186/1752-0509-5-17"/>
+    </citation>
+    <scope>IDENTIFICATION BY MASS SPECTROMETRY [LARGE SCALE ANALYSIS]</scope>
+  </reference>
+  <reference key="28">
+    <citation type="journal article" date="2012" name="Traffic" volume="13" first="82" last="93">
+      <title>MICAL-L1 is a tubular endosomal membrane hub that connects Rab35 and Arf6 with Rab8a.</title>
+      <authorList>
+        <person name="Rahajeng J."/>
+        <person name="Giridharan S.S."/>
+        <person name="Cai B."/>
+        <person name="Naslavsky N."/>
+        <person name="Caplan S."/>
+      </authorList>
+      <dbReference type="PubMed" id="21951725"/>
+      <dbReference type="DOI" id="10.1111/j.1600-0854.2011.01294.x"/>
+    </citation>
+    <scope>INTERACTION WITH MICALL1</scope>
+    <scope>SUBCELLULAR LOCATION</scope>
+  </reference>
+  <reference key="29">
+    <citation type="journal article" date="2013" name="FEBS Lett." volume="587" first="1617" last="1623">
+      <title>EFA6 activates Arf6 and participates in its targeting to the Flemming body during cytokinesis.</title>
+      <authorList>
+        <person name="Ueda T."/>
+        <person name="Hanai A."/>
+        <person name="Takei T."/>
+        <person name="Kubo K."/>
+        <person name="Ohgi M."/>
+        <person name="Sakagami H."/>
+        <person name="Takahashi S."/>
+        <person name="Shin H.W."/>
+        <person name="Nakayama K."/>
+      </authorList>
+      <dbReference type="PubMed" id="23603394"/>
+      <dbReference type="DOI" id="10.1016/j.febslet.2013.03.042"/>
+    </citation>
+    <scope>SUBCELLULAR LOCATION</scope>
+  </reference>
+  <reference key="30">
+    <citation type="journal article" date="2014" name="J. Proteomics" volume="96" first="253" last="262">
+      <title>An enzyme assisted RP-RPLC approach for in-depth analysis of human liver phosphoproteome.</title>
+      <authorList>
+        <person name="Bian Y."/>
+        <person name="Song C."/>
+        <person name="Cheng K."/>
+        <person name="Dong M."/>
+        <person name="Wang F."/>
+        <person name="Huang J."/>
+        <person name="Sun D."/>
+        <person name="Wang L."/>
+        <person name="Ye M."/>
+        <person name="Zou H."/>
+      </authorList>
+      <dbReference type="PubMed" id="24275569"/>
+      <dbReference type="DOI" id="10.1016/j.jprot.2013.11.014"/>
+    </citation>
+    <scope>IDENTIFICATION BY MASS SPECTROMETRY [LARGE SCALE ANALYSIS]</scope>
+    <source>
+      <tissue>Liver</tissue>
+    </source>
+  </reference>
+  <reference key="31">
+    <citation type="journal article" date="2014" name="Nat. Commun." volume="5" first="4919" last="4919">
+      <title>Global profiling of co- and post-translationally N-myristoylated proteomes in human cells.</title>
+      <authorList>
+        <person name="Thinon E."/>
+        <person name="Serwa R.A."/>
+        <person name="Broncel M."/>
+        <person name="Brannigan J.A."/>
+        <person name="Brassat U."/>
+        <person name="Wright M.H."/>
+        <person name="Heal W.P."/>
+        <person name="Wilkinson A.J."/>
+        <person name="Mann D.J."/>
+        <person name="Tate E.W."/>
+      </authorList>
+      <dbReference type="PubMed" id="25255805"/>
+      <dbReference type="DOI" id="10.1038/ncomms5919"/>
+    </citation>
+    <scope>MYRISTOYLATION AT GLY-2</scope>
+    <scope>CLEAVAGE OF INITIATOR METHIONINE</scope>
+    <scope>IDENTIFICATION BY MASS SPECTROMETRY</scope>
+  </reference>
+  <reference key="32">
+    <citation type="journal article" date="2015" name="Proteomics" volume="15" first="2519" last="2524">
+      <title>N-terminome analysis of the human mitochondrial proteome.</title>
+      <authorList>
+        <person name="Vaca Jacome A.S."/>
+        <person name="Rabilloud T."/>
+        <person name="Schaeffer-Reiss C."/>
+        <person name="Rompais M."/>
+        <person name="Ayoub D."/>
+        <person name="Lane L."/>
+        <person name="Bairoch A."/>
+        <person name="Van Dorsselaer A."/>
+        <person name="Carapito C."/>
+      </authorList>
+      <dbReference type="PubMed" id="25944712"/>
+      <dbReference type="DOI" id="10.1002/pmic.201400617"/>
+    </citation>
+    <scope>IDENTIFICATION BY MASS SPECTROMETRY [LARGE SCALE ANALYSIS]</scope>
+  </reference>
+  <reference key="33">
+    <citation type="journal article" date="2020" name="Nat. Commun." volume="11" first="1067" last="1067">
+      <title>NMT1 and NMT2 are lysine myristoyltransferases regulating the ARF6 GTPase cycle.</title>
+      <authorList>
+        <person name="Kosciuk T."/>
+        <person name="Price I.R."/>
+        <person name="Zhang X."/>
+        <person name="Zhu C."/>
+        <person name="Johnson K.N."/>
+        <person name="Zhang S."/>
+        <person name="Halaby S.L."/>
+        <person name="Komaniecki G.P."/>
+        <person name="Yang M."/>
+        <person name="DeHart C.J."/>
+        <person name="Thomas P.M."/>
+        <person name="Kelleher N.L."/>
+        <person name="Fromme J.C."/>
+        <person name="Lin H."/>
+      </authorList>
+      <dbReference type="PubMed" id="32103017"/>
+      <dbReference type="DOI" id="10.1038/s41467-020-14893-x"/>
+    </citation>
+    <scope>FUNCTION</scope>
+    <scope>CATALYTIC ACTIVITY</scope>
+    <scope>SUBCELLULAR LOCATION</scope>
+    <scope>MYRISTOYLATION AT LYS-3</scope>
+    <scope>MUTAGENESIS OF LYS-3; THR-27 AND GLN-67</scope>
+  </reference>
+  <reference key="34">
+    <citation type="journal article" date="2022" name="J. Cell Sci." volume="135">
+      <title>AMPK promotes Arf6 activation in a kinase-independent manner upon glucose starvation.</title>
+      <authorList>
+        <person name="Chen K.J."/>
+        <person name="Hsu J.W."/>
+        <person name="Lee F.S."/>
+      </authorList>
+      <dbReference type="PubMed" id="36017701"/>
+      <dbReference type="DOI" id="10.1242/jcs.259609"/>
+    </citation>
+    <scope>FUNCTION</scope>
+    <scope>ACTIVITY REGULATION</scope>
+    <scope>SUBCELLULAR LOCATION</scope>
+    <scope>INTERACTION WITH PRKAA2</scope>
+  </reference>
+  <reference key="35">
+    <citation type="journal article" date="2022" name="FASEB J." volume="36" first="e22594" last="e22594">
+      <title>Insulin stimulates atypical protein kinase C-mediated phosphorylation of the neuronal adaptor FE65 to potentiate neurite outgrowth by activating ARF6-Rac1 signaling.</title>
+      <authorList>
+        <person name="Chau D.D."/>
+        <person name="Li W."/>
+        <person name="Chan W.W.R."/>
+        <person name="Sun J.K."/>
+        <person name="Zhai Y."/>
+        <person name="Chow H.M."/>
+        <person name="Lau K.F."/>
+      </authorList>
+      <dbReference type="PubMed" id="36250347"/>
+      <dbReference type="DOI" id="10.1096/fj.202200757r"/>
+    </citation>
+    <scope>FUNCTION</scope>
+    <scope>INTERACTION WITH APBB1</scope>
+  </reference>
+  <reference key="36">
+    <citation type="journal article" date="2023" name="J. Med. Virol." volume="95" first="e28915" last="e28915">
+      <title>Enterovirus 71 enters human brain microvascular endothelial cells through an ARF6-mediated endocytic pathway.</title>
+      <authorList>
+        <person name="Zhu Y."/>
+        <person name="Wang X."/>
+        <person name="He Z."/>
+        <person name="Zhao P."/>
+        <person name="Ren H."/>
+        <person name="Qi Z."/>
+      </authorList>
+      <dbReference type="PubMed" id="37417384"/>
+      <dbReference type="DOI" id="10.1002/jmv.28915"/>
+    </citation>
+    <scope>FUNCTION (MICROBIAL INFECTION)</scope>
+    <scope>INTERACTION WITH ENTEROVIRUS 71 PROTEIN VP1 (MICROBIAL INFECTION)</scope>
+    <scope>SUBCELLULAR LOCATION</scope>
+  </reference>
+  <reference key="37">
+    <citation type="journal article" date="2023" name="J. Cell Sci.">
+      <title>ARF6 plays a general role in targeting palmitoylated proteins from golgi to the plasma membrane.</title>
+      <authorList>
+        <person name="Wang J."/>
+        <person name="Zheng L.F."/>
+        <person name="Ren S."/>
+        <person name="Li D.L."/>
+        <person name="Chen C."/>
+        <person name="Sun H.H."/>
+        <person name="Liu L.Y."/>
+        <person name="Guo H."/>
+        <person name="Zhao T.J."/>
+      </authorList>
+      <dbReference type="PubMed" id="37461827"/>
+      <dbReference type="DOI" id="10.1242/jcs.261319"/>
+    </citation>
+    <scope>FUNCTION</scope>
+    <scope>SUBCELLULAR LOCATION</scope>
+    <scope>INTERACTION WITH CD36</scope>
+  </reference>
+  <reference key="38">
+    <citation type="journal article" date="2000" name="Nat. Struct. Biol." volume="7" first="466" last="469">
+      <title>Structure of Arf6-GDP suggests a basis for guanine nucleotide exchange factors specificity.</title>
+      <authorList>
+        <person name="Menetrey J."/>
+        <person name="Macia E."/>
+        <person name="Pasqualato S."/>
+        <person name="Franco M."/>
+        <person name="Cherfils J."/>
+      </authorList>
+      <dbReference type="PubMed" id="10881192"/>
+      <dbReference type="DOI" id="10.1038/75863"/>
+    </citation>
+    <scope>X-RAY CRYSTALLOGRAPHY (2.28 ANGSTROMS) IN COMPLEX WITH GDP</scope>
+  </reference>
+  <reference key="39">
+    <citation type="journal article" date="2001" name="EMBO Rep." volume="2" first="234" last="238">
+      <title>The structural GDP/GTP cycle of human Arf6.</title>
+      <authorList>
+        <person name="Pasqualato S."/>
+        <person name="Menetrey J."/>
+        <person name="Franco M."/>
+        <person name="Cherfils J."/>
+      </authorList>
+      <dbReference type="PubMed" id="11266366"/>
+      <dbReference type="DOI" id="10.1093/embo-reports/kve043"/>
+    </citation>
+    <scope>X-RAY CRYSTALLOGRAPHY (2.8 ANGSTROMS) IN COMPLEX WITH GTP ANALOG</scope>
+    <scope>FUNCTION</scope>
+  </reference>
+  <reference key="40">
+    <citation type="journal article" date="2005" name="Science" volume="309" first="1093" last="1096">
+      <title>Structural basis for the activation of cholera toxin by human ARF6-GTP.</title>
+      <authorList>
+        <person name="O'Neal C.J."/>
+        <person name="Jobling M.G."/>
+        <person name="Holmes R.K."/>
+        <person name="Hol W.G."/>
+      </authorList>
+      <dbReference type="PubMed" id="16099990"/>
+      <dbReference type="DOI" id="10.1126/science.1113398"/>
+    </citation>
+    <scope>X-RAY CRYSTALLOGRAPHY (1.80 ANGSTROMS) IN COMPLEX WITH GTP AND V.CHOLERAE ENTEROTOXIN SUBUNIT A1</scope>
+    <scope>SUBUNIT</scope>
+    <scope>FUNCTION (MICROBIAL INFECTION)</scope>
+  </reference>
+  <reference key="41">
+    <citation type="journal article" date="2006" name="FEBS Lett." volume="580" first="4296" last="4301">
+      <title>NMR structural studies of the myristoylated N-terminus of ADP ribosylation factor 6 (Arf6).</title>
+      <authorList>
+        <person name="Gizachew D."/>
+        <person name="Oswald R."/>
+      </authorList>
+      <dbReference type="PubMed" id="16839550"/>
+      <dbReference type="DOI" id="10.1016/j.febslet.2006.06.086"/>
+    </citation>
+    <scope>STRUCTURE BY NMR OF 2-11</scope>
+  </reference>
+  <reference key="42">
+    <citation type="journal article" date="2009" name="EMBO J." volume="28" first="2835" last="2845">
+      <title>The structural basis of Arf effector specificity: the crystal structure of ARF6 in a complex with JIP4.</title>
+      <authorList>
+        <person name="Isabet T."/>
+        <person name="Montagnac G."/>
+        <person name="Regazzoni K."/>
+        <person name="Raynal B."/>
+        <person name="El Khadali F."/>
+        <person name="England P."/>
+        <person name="Franco M."/>
+        <person name="Chavrier P."/>
+        <person name="Houdusse A."/>
+        <person name="Menetrey J."/>
+      </authorList>
+      <dbReference type="PubMed" id="19644450"/>
+      <dbReference type="DOI" id="10.1038/emboj.2009.209"/>
+    </citation>
+    <scope>X-RAY CRYSTALLOGRAPHY (1.93 ANGSTROMS) OF 13-175 IN COMPLEX WITH GTP AND SPAG9</scope>
+    <scope>INTERACTION WITH SPAG9</scope>
+  </reference>
+  <reference key="43">
+    <citation type="journal article" date="2010" name="Cell" volume="141" first="812" last="821">
+      <title>The structure of an Arf-ArfGAP complex reveals a Ca2+ regulatory mechanism.</title>
+      <authorList>
+        <person name="Ismail S.A."/>
+        <person name="Vetter I.R."/>
+        <person name="Sot B."/>
+        <person name="Wittinghofer A."/>
+      </authorList>
+      <dbReference type="PubMed" id="20510928"/>
+      <dbReference type="DOI" id="10.1016/j.cell.2010.03.051"/>
+    </citation>
+    <scope>X-RAY CRYSTALLOGRAPHY (3.38 ANGSTROMS) OF 11-175 IN COMPLEX WITH GDP ASAP3 AND CALCIUM IONS</scope>
+    <scope>INTERACTION WITH ASAP3</scope>
+  </reference>
+  <reference key="44">
+    <citation type="journal article" date="2011" name="Nature" volume="469" first="107" last="111">
+      <title>The assembly of a GTPase-kinase signalling complex by a bacterial catalytic scaffold.</title>
+      <authorList>
+        <person name="Selyunin A.S."/>
+        <person name="Sutton S.E."/>
+        <person name="Weigele B.A."/>
+        <person name="Reddick L.E."/>
+        <person name="Orchard R.C."/>
+        <person name="Bresson S.M."/>
+        <person name="Tomchick D.R."/>
+        <person name="Alto N.M."/>
+      </authorList>
+      <dbReference type="PubMed" id="21170023"/>
+      <dbReference type="DOI" id="10.1038/nature09593"/>
+    </citation>
+    <scope>X-RAY CRYSTALLOGRAPHY (2.50 ANGSTROMS) OF 14-175 IN COMPLEX WITH GTP AND E.COLI ESPG</scope>
+    <scope>FUNCTION</scope>
+    <scope>SUBUNIT</scope>
+  </reference>
+  <reference key="45">
+    <citation type="journal article" date="2012" name="Cell" volume="150" first="1029" last="1041">
+      <title>Structurally distinct bacterial TBC-like GAPs link Arf GTPase to Rab1 inactivation to counteract host defenses.</title>
+      <authorList>
+        <person name="Dong N."/>
+        <person name="Zhu Y."/>
+        <person name="Lu Q."/>
+        <person name="Hu L."/>
+        <person name="Zheng Y."/>
+        <person name="Shao F."/>
+      </authorList>
+      <dbReference type="PubMed" id="22939626"/>
+      <dbReference type="DOI" id="10.1016/j.cell.2012.06.050"/>
+    </citation>
+    <scope>X-RAY CRYSTALLOGRAPHY (4.10 ANGSTROMS) OF 14-173 IN COMPLEX WITH GTP; RAB1A AND E.COLI ESPG</scope>
+    <scope>SUBUNIT</scope>
+  </reference>
+  <reference key="46">
+    <citation type="journal article" date="2013" name="Proc. Natl. Acad. Sci. U.S.A." volume="110" first="14213" last="14218">
+      <title>Structural basis for membrane recruitment and allosteric activation of cytohesin family Arf GTPase exchange factors.</title>
+      <authorList>
+        <person name="Malaby A.W."/>
+        <person name="van den Berg B."/>
+        <person name="Lambright D.G."/>
+      </authorList>
+      <dbReference type="PubMed" id="23940353"/>
+      <dbReference type="DOI" id="10.1073/pnas.1301883110"/>
+    </citation>
+    <scope>X-RAY CRYSTALLOGRAPHY (1.85 ANGSTROMS) OF 14-173 IN COMPLEX WITH CYTH3 AND GTP</scope>
+    <scope>SUBUNIT</scope>
+  </reference>
+  <comment type="function">
+    <text evidence="1 2 4 8 12 14 19 25 31 32 33 35 36">GTP-binding protein involved in protein trafficking that regulates endocytic recycling and cytoskeleton remodeling (PubMed:11266366, PubMed:16737952, PubMed:18400762, PubMed:21170023, PubMed:32103017, PubMed:7589240). GTP-bound form plays an important role in the transport of multiple palmitoylated proteins form the Golgi to the plasma membrane (PubMed:37461827). Required for normal completion of mitotic cytokinesis (By similarity). Plays a role in the reorganization of the actin cytoskeleton and the formation of stress fibers (By similarity). Involved in the regulation of dendritic spine development, contributing to the regulation of dendritic branching and filopodia extension (PubMed:14978216). Potentiates the neurite outgrowth in primary neurons by interacting with the molecular adapter APBB1 (PubMed:36250347). Plays an important role in membrane trafficking, during junctional remodeling and epithelial polarization (PubMed:36017701). Regulates surface levels of adherens junction proteins such as CDH1 (By similarity). Required for NTRK1 sorting to the recycling pathway from early endosomes (By similarity).</text>
+  </comment>
+  <comment type="function">
+    <text evidence="12">(Microbial infection) Functions as an allosteric activator of the cholera toxin catalytic subunit, an ADP-ribosyltransferase.</text>
+  </comment>
+  <comment type="function">
+    <text evidence="34">(Microbial infection) Plays a key role in the endocytosis of enterovirus 71 and thus viral entry into brain microvascular endothelial cells.</text>
+  </comment>
+  <comment type="catalytic activity">
+    <reaction evidence="31">
+      <text>GTP + H2O = GDP + phosphate + H(+)</text>
+      <dbReference type="Rhea" id="RHEA:19669"/>
+      <dbReference type="ChEBI" id="CHEBI:15377"/>
+      <dbReference type="ChEBI" id="CHEBI:15378"/>
+      <dbReference type="ChEBI" id="CHEBI:37565"/>
+      <dbReference type="ChEBI" id="CHEBI:43474"/>
+      <dbReference type="ChEBI" id="CHEBI:58189"/>
+      <dbReference type="EC" id="3.6.5.2"/>
+    </reaction>
+    <physiologicalReaction direction="left-to-right" evidence="31">
+      <dbReference type="Rhea" id="RHEA:19670"/>
+    </physiologicalReaction>
+  </comment>
+  <comment type="activity regulation">
+    <text evidence="2 3 19 32">Activation is generally mediated by a guanine exchange factor (GEF), while inactivation through hydrolysis of bound GTP is catalyzed by a GTPase activating protein (GAP). Activated by ASAP3. Inactivated by ACAP1 and ACAP2. Activated by NGF via NTRK1 (By similarity). Activated by PRKAA2 through its C-terminal regulatory domain (PubMed:36017701).</text>
+  </comment>
+  <comment type="subunit">
+    <text evidence="1 2 5 6 9 10 11 13 14 15 17 18 20 22 23 24 26 29 32 33 35">Interacts (when activated) with GGA1, GGA2 and GGA3; the interaction is required for proper subcellular location of GGA1, GGA2 and GGA3 (PubMed:11950392). Interacts with PIP5K1C (PubMed:12847086). Interacts with USP6 (via Rab-GAP TBC domain) (PubMed:15509780). Interacts with RAB11FIP3 and RAB11FIP4 (PubMed:16148947, PubMed:17030804, PubMed:17628206). Interacts with HERC1 (PubMed:15642342). Interacts with ARHGAP21 (PubMed:15793564). Interacts with ASAP3; the interaction is stabilized by calcium ions (PubMed:16737952, PubMed:20510928). Interacts with NCS1/FREQ at the plasma membrane (PubMed:17555535). Interacts with TBC1D24 (PubMed:20727515). Interacts with ECPAS (PubMed:20682791). Interacts with MICALL1 (PubMed:21951725). Interacts with SPAG9 homodimers, forming heterotetramers (PubMed:19644450). Interacts with CYTH3 (PubMed:23940353). Interacts with ASAP2 (By similarity). Interacts with UACA (By similarity). Interacts with KIF23, forming heterodimers and heterotetramers (By similarity). Interacts with C9orf72 (By similarity). Interacts (GTP-bound form) with TJAP1/PILT (By similarity). Interacts with PRKAA2 (PubMed:36017701). Interacts with CD36 (when palmitoylated); this interaction mediates CD36 transport from the Golgi to the plasma membrane (PubMed:37461827). Interacts with APBB1 (PubMed:36250347).</text>
+  </comment>
+  <comment type="subunit">
+    <text evidence="12">(Microbial infection) Interacts with the V.cholerae enterotoxin subunit A1; this causes a conformation change so that the toxin can bind NAD and catalyze the ADP-ribosylation of Gs alpha.</text>
+  </comment>
+  <comment type="subunit">
+    <text evidence="25 27">(Microbial infection) Interacts with EspG from enteropathogenic E.coli.</text>
+  </comment>
+  <comment type="subunit">
+    <text evidence="27">(Microbial infection) Identified in a complex with RAB1A and EspG from enteropathogenic E.coli.</text>
+  </comment>
+  <comment type="subunit">
+    <text evidence="34">(Microbial infection) Interacts with human enterovirus 71 protein VP1.</text>
+  </comment>
+  <comment type="interaction">
+    <interactant intactId="EBI-638181">
+      <id>P62330</id>
+    </interactant>
+    <interactant intactId="EBI-81694">
+      <id>O00213</id>
+      <label>APBB1</label>
+    </interactant>
+    <organismsDiffer>false</organismsDiffer>
+    <experiments>9</experiments>
+  </comment>
+  <comment type="interaction">
+    <interactant intactId="EBI-638181">
+      <id>P62330</id>
+    </interactant>
+    <interactant intactId="EBI-638194">
+      <id>P53365</id>
+      <label>ARFIP2</label>
+    </interactant>
+    <organismsDiffer>false</organismsDiffer>
+    <experiments>4</experiments>
+  </comment>
+  <comment type="interaction">
+    <interactant intactId="EBI-638181">
+      <id>P62330</id>
+    </interactant>
+    <interactant intactId="EBI-988663">
+      <id>P21283</id>
+      <label>ATP6V1C1</label>
+    </interactant>
+    <organismsDiffer>false</organismsDiffer>
+    <experiments>4</experiments>
+  </comment>
+  <comment type="interaction">
+    <interactant intactId="EBI-638181">
+      <id>P62330</id>
+    </interactant>
+    <interactant intactId="EBI-447404">
+      <id>Q9NZ52</id>
+      <label>GGA3</label>
+    </interactant>
+    <organismsDiffer>false</organismsDiffer>
+    <experiments>3</experiments>
+  </comment>
+  <comment type="interaction">
+    <interactant intactId="EBI-638181">
+      <id>P62330</id>
+    </interactant>
+    <interactant intactId="EBI-306852">
+      <id>Q02241</id>
+      <label>KIF23</label>
+    </interactant>
+    <organismsDiffer>false</organismsDiffer>
+    <experiments>23</experiments>
+  </comment>
+  <comment type="interaction">
+    <interactant intactId="EBI-638181">
+      <id>P62330</id>
+    </interactant>
+    <interactant intactId="EBI-16439278">
+      <id>Q6FHY5</id>
+      <label>MEOX2</label>
+    </interactant>
+    <organismsDiffer>false</organismsDiffer>
+    <experiments>3</experiments>
+  </comment>
+  <comment type="interaction">
+    <interactant intactId="EBI-638181">
+      <id>P62330</id>
+    </interactant>
+    <interactant intactId="EBI-13301517">
+      <id>Q96S97</id>
+      <label>MYADM</label>
+    </interactant>
+    <organismsDiffer>false</organismsDiffer>
+    <experiments>2</experiments>
+  </comment>
+  <comment type="interaction">
+    <interactant intactId="EBI-638181">
+      <id>P62330</id>
+    </interactant>
+    <interactant intactId="EBI-21502566">
+      <id>O60271-2</id>
+      <label>SPAG9</label>
+    </interactant>
+    <organismsDiffer>false</organismsDiffer>
+    <experiments>8</experiments>
+  </comment>
+  <comment type="interaction">
+    <interactant intactId="EBI-638181">
+      <id>P62330</id>
+    </interactant>
+    <interactant intactId="EBI-10968870">
+      <id>Q9ULP9-2</id>
+      <label>TBC1D24</label>
+    </interactant>
+    <organismsDiffer>false</organismsDiffer>
+    <experiments>2</experiments>
+  </comment>
+  <comment type="interaction">
+    <interactant intactId="EBI-638181">
+      <id>P62330</id>
+    </interactant>
+    <interactant intactId="EBI-25475891">
+      <id>PRO_0000449632</id>
+      <label>rep</label>
+      <dbReference type="UniProtKB" id="P0DTD1"/>
+    </interactant>
+    <organismsDiffer>true</organismsDiffer>
+    <experiments>3</experiments>
+  </comment>
+  <comment type="subcellular location">
+    <subcellularLocation>
+      <location evidence="14 28 31 32 36">Cytoplasm</location>
+      <location evidence="14 28 31 32 36">Cytosol</location>
+    </subcellularLocation>
+    <subcellularLocation>
+      <location evidence="14 16 17 31 32 34">Cell membrane</location>
+      <topology evidence="31 36">Lipid-anchor</topology>
+    </subcellularLocation>
+    <subcellularLocation>
+      <location evidence="21 23 26">Endosome membrane</location>
+      <topology evidence="31 36">Lipid-anchor</topology>
+    </subcellularLocation>
+    <subcellularLocation>
+      <location evidence="26">Recycling endosome membrane</location>
+      <topology evidence="31 36">Lipid-anchor</topology>
+    </subcellularLocation>
+    <subcellularLocation>
+      <location evidence="8">Cell projection</location>
+      <location evidence="8">Filopodium membrane</location>
+      <topology evidence="31 36">Lipid-anchor</topology>
+    </subcellularLocation>
+    <subcellularLocation>
+      <location evidence="14">Cell projection</location>
+      <location evidence="14">Ruffle</location>
+    </subcellularLocation>
+    <subcellularLocation>
+      <location evidence="28">Cleavage furrow</location>
+    </subcellularLocation>
+    <subcellularLocation>
+      <location evidence="28">Midbody</location>
+      <location evidence="28">Midbody ring</location>
+    </subcellularLocation>
+    <subcellularLocation>
+      <location evidence="1">Early endosome membrane</location>
+      <topology evidence="1">Lipid-anchor</topology>
+    </subcellularLocation>
+    <subcellularLocation>
+      <location evidence="1">Golgi apparatus</location>
+      <location evidence="1">trans-Golgi network membrane</location>
+      <topology evidence="1">Lipid-anchor</topology>
+    </subcellularLocation>
+    <text evidence="16 21 28 31 36">Distributed uniformly on the plasma membrane, as well as throughout the cytoplasm during metaphase. Subsequently concentrated at patches in the equatorial region at the onset of cytokinesis, and becomes distributed in the equatorial region concurrent with cleavage furrow ingression. In late stages of cytokinesis, concentrates at the midbody ring/Flemming body (PubMed:23603394). Recruitment to the midbody ring requires both activation by PSD/EFA6A and interaction with KIF23/MKLP1 (PubMed:23603394). After abscission of the intercellular bridge, incorporated into one of the daughter cells as a midbody remnant and localizes to punctate structures beneath the plasma membrane (PubMed:23603394). Recruited to the cell membrane in association with CYTH2 and ARL4C (PubMed:17398095). Colocalizes with DAB2IP at the plasma membrane and endocytic vesicles (PubMed:19948740). Myristoylation is required for proper localization to membranes: myristoylation on Lys-3 allows ARF6 to remain on membranes during the GTPase cycle (PubMed:32103017, PubMed:7589240).</text>
+  </comment>
+  <comment type="tissue specificity">
+    <text evidence="7">Ubiquitous, with higher levels in heart, substantia nigra, and kidney.</text>
+  </comment>
+  <comment type="PTM">
+    <text evidence="31">GTP-bound form is myristoylated on Lys-3 by NMT1 and NMT2, allowing ARF6 to remain on membranes during the GTPase cycle, thereby promoting its activity (PubMed:32103017). GDP-bound inactive form is demyristoylated on Lys-3 by SIRT2 at early endosomes or endocytic recycling compartment to allow its efficient activation by a guanine exchange factor (GEF) after GDP release (PubMed:32103017).</text>
+  </comment>
+  <comment type="similarity">
+    <text evidence="38">Belongs to the small GTPase superfamily. Arf family.</text>
+  </comment>
+  <dbReference type="EC" id="3.6.5.2" evidence="31"/>
+  <dbReference type="EMBL" id="M57763">
+    <property type="protein sequence ID" value="AAA90928.1"/>
+    <property type="molecule type" value="mRNA"/>
+  </dbReference>
+  <dbReference type="EMBL" id="AY296206">
+    <property type="protein sequence ID" value="AAP50257.1"/>
+    <property type="molecule type" value="Genomic_DNA"/>
+  </dbReference>
+  <dbReference type="EMBL" id="AF047432">
+    <property type="protein sequence ID" value="AAC39877.1"/>
+    <property type="molecule type" value="mRNA"/>
+  </dbReference>
+  <dbReference type="EMBL" id="AF493885">
+    <property type="protein sequence ID" value="AAM12599.1"/>
+    <property type="molecule type" value="mRNA"/>
+  </dbReference>
+  <dbReference type="EMBL" id="AK313790">
+    <property type="protein sequence ID" value="BAG36527.1"/>
+    <property type="molecule type" value="mRNA"/>
+  </dbReference>
+  <dbReference type="EMBL" id="CR541964">
+    <property type="protein sequence ID" value="CAG46762.1"/>
+    <property type="molecule type" value="mRNA"/>
+  </dbReference>
+  <dbReference type="EMBL" id="CH471078">
+    <property type="protein sequence ID" value="EAW65740.1"/>
+    <property type="molecule type" value="Genomic_DNA"/>
+  </dbReference>
+  <dbReference type="EMBL" id="BC002952">
+    <property type="status" value="NOT_ANNOTATED_CDS"/>
+    <property type="molecule type" value="mRNA"/>
+  </dbReference>
+  <dbReference type="EMBL" id="BC008918">
+    <property type="protein sequence ID" value="AAH08918.1"/>
+    <property type="molecule type" value="mRNA"/>
+  </dbReference>
+  <dbReference type="CCDS" id="CCDS9695.1"/>
+  <dbReference type="PIR" id="B23741">
+    <property type="entry name" value="B23741"/>
+  </dbReference>
+  <dbReference type="RefSeq" id="NP_001654.1">
+    <property type="nucleotide sequence ID" value="NM_001663.4"/>
+  </dbReference>
+  <dbReference type="PDB" id="1E0S">
+    <property type="method" value="X-ray"/>
+    <property type="resolution" value="2.28 A"/>
+    <property type="chains" value="A=2-175"/>
+  </dbReference>
+  <dbReference type="PDB" id="2A5D">
+    <property type="method" value="X-ray"/>
+    <property type="resolution" value="1.80 A"/>
+    <property type="chains" value="A=1-175"/>
+  </dbReference>
+  <dbReference type="PDB" id="2A5F">
+    <property type="method" value="X-ray"/>
+    <property type="resolution" value="2.02 A"/>
+    <property type="chains" value="A=1-175"/>
+  </dbReference>
+  <dbReference type="PDB" id="2A5G">
+    <property type="method" value="X-ray"/>
+    <property type="resolution" value="2.66 A"/>
+    <property type="chains" value="A=1-175"/>
+  </dbReference>
+  <dbReference type="PDB" id="2BAO">
+    <property type="method" value="NMR"/>
+    <property type="chains" value="A=2-11"/>
+  </dbReference>
+  <dbReference type="PDB" id="2BAU">
+    <property type="method" value="NMR"/>
+    <property type="chains" value="A=2-11"/>
+  </dbReference>
+  <dbReference type="PDB" id="2J5X">
+    <property type="method" value="X-ray"/>
+    <property type="resolution" value="2.80 A"/>
+    <property type="chains" value="A/B=2-175"/>
+  </dbReference>
+  <dbReference type="PDB" id="2W83">
+    <property type="method" value="X-ray"/>
+    <property type="resolution" value="1.93 A"/>
+    <property type="chains" value="A/B/E=13-175"/>
+  </dbReference>
+  <dbReference type="PDB" id="3LVQ">
+    <property type="method" value="X-ray"/>
+    <property type="resolution" value="3.38 A"/>
+    <property type="chains" value="E=11-175"/>
+  </dbReference>
+  <dbReference type="PDB" id="3LVR">
+    <property type="method" value="X-ray"/>
+    <property type="resolution" value="3.38 A"/>
+    <property type="chains" value="E=11-175"/>
+  </dbReference>
+  <dbReference type="PDB" id="3N5C">
+    <property type="method" value="X-ray"/>
+    <property type="resolution" value="1.82 A"/>
+    <property type="chains" value="A/B=14-175"/>
+  </dbReference>
+  <dbReference type="PDB" id="3PCR">
+    <property type="method" value="X-ray"/>
+    <property type="resolution" value="2.50 A"/>
+    <property type="chains" value="B=14-175"/>
+  </dbReference>
+  <dbReference type="PDB" id="4FME">
+    <property type="method" value="X-ray"/>
+    <property type="resolution" value="4.10 A"/>
+    <property type="chains" value="C/F=14-173"/>
+  </dbReference>
+  <dbReference type="PDB" id="4KAX">
+    <property type="method" value="X-ray"/>
+    <property type="resolution" value="1.85 A"/>
+    <property type="chains" value="A=14-173"/>
+  </dbReference>
+  <dbReference type="PDB" id="6BBP">
+    <property type="method" value="EM"/>
+    <property type="resolution" value="35.00 A"/>
+    <property type="chains" value="A=2-173"/>
+  </dbReference>
+  <dbReference type="PDB" id="6BBQ">
+    <property type="method" value="EM"/>
+    <property type="resolution" value="35.00 A"/>
+    <property type="chains" value="A=2-173"/>
+  </dbReference>
+  <dbReference type="PDB" id="6PAU">
+    <property type="method" value="X-ray"/>
+    <property type="resolution" value="1.93 A"/>
+    <property type="chains" value="C=3-9"/>
+  </dbReference>
+  <dbReference type="PDB" id="7RK3">
+    <property type="method" value="X-ray"/>
+    <property type="resolution" value="2.05 A"/>
+    <property type="chains" value="B=2-9"/>
+  </dbReference>
+  <dbReference type="PDB" id="7XRD">
+    <property type="method" value="EM"/>
+    <property type="resolution" value="3.90 A"/>
+    <property type="chains" value="A/B/C/D=2-175"/>
+  </dbReference>
+  <dbReference type="PDBsum" id="1E0S"/>
+  <dbReference type="PDBsum" id="2A5D"/>
+  <dbReference type="PDBsum" id="2A5F"/>
+  <dbReference type="PDBsum" id="2A5G"/>
+  <dbReference type="PDBsum" id="2BAO"/>
+  <dbReference type="PDBsum" id="2BAU"/>
+  <dbReference type="PDBsum" id="2J5X"/>
+  <dbReference type="PDBsum" id="2W83"/>
+  <dbReference type="PDBsum" id="3LVQ"/>
+  <dbReference type="PDBsum" id="3LVR"/>
+  <dbReference type="PDBsum" id="3N5C"/>
+  <dbReference type="PDBsum" id="3PCR"/>
+  <dbReference type="PDBsum" id="4FME"/>
+  <dbReference type="PDBsum" id="4KAX"/>
+  <dbReference type="PDBsum" id="6BBP"/>
+  <dbReference type="PDBsum" id="6BBQ"/>
+  <dbReference type="PDBsum" id="6PAU"/>
+  <dbReference type="PDBsum" id="7RK3"/>
+  <dbReference type="PDBsum" id="7XRD"/>
+  <dbReference type="AlphaFoldDB" id="P62330"/>
+  <dbReference type="EMDB" id="EMD-33414"/>
+  <dbReference type="EMDB" id="EMD-7077"/>
+  <dbReference type="EMDB" id="EMD-7078"/>
+  <dbReference type="SMR" id="P62330"/>
+  <dbReference type="BioGRID" id="106877">
+    <property type="interactions" value="578"/>
+  </dbReference>
+  <dbReference type="DIP" id="DIP-33352N"/>
+  <dbReference type="IntAct" id="P62330">
+    <property type="interactions" value="63"/>
+  </dbReference>
+  <dbReference type="MINT" id="P62330"/>
+  <dbReference type="STRING" id="9606.ENSP00000298316"/>
+  <dbReference type="BindingDB" id="P62330"/>
+  <dbReference type="ChEMBL" id="CHEMBL5987"/>
+  <dbReference type="DrugBank" id="DB01864">
+    <property type="generic name" value="5'-Guanosine-Diphosphate-Monothiophosphate"/>
+  </dbReference>
+  <dbReference type="DrugBank" id="DB04315">
+    <property type="generic name" value="Guanosine-5'-Diphosphate"/>
+  </dbReference>
+  <dbReference type="DrugBank" id="DB08231">
+    <property type="generic name" value="Myristic acid"/>
+  </dbReference>
+  <dbReference type="GlyGen" id="P62330">
+    <property type="glycosylation" value="1 site, 1 O-linked glycan (1 site)"/>
+  </dbReference>
+  <dbReference type="iPTMnet" id="P62330"/>
+  <dbReference type="PhosphoSitePlus" id="P62330"/>
+  <dbReference type="SwissPalm" id="P62330"/>
+  <dbReference type="BioMuta" id="ARF6"/>
+  <dbReference type="DMDM" id="51316984"/>
+  <dbReference type="jPOST" id="P62330"/>
+  <dbReference type="MassIVE" id="P62330"/>
+  <dbReference type="PaxDb" id="9606-ENSP00000298316"/>
+  <dbReference type="PeptideAtlas" id="P62330"/>
+  <dbReference type="ProteomicsDB" id="57396"/>
+  <dbReference type="Pumba" id="P62330"/>
+  <dbReference type="TopDownProteomics" id="P62330"/>
+  <dbReference type="Antibodypedia" id="3459">
+    <property type="antibodies" value="551 antibodies from 38 providers"/>
+  </dbReference>
+  <dbReference type="DNASU" id="382"/>
+  <dbReference type="Ensembl" id="ENST00000298316.7">
+    <property type="protein sequence ID" value="ENSP00000298316.5"/>
+    <property type="gene ID" value="ENSG00000165527.8"/>
+  </dbReference>
+  <dbReference type="Ensembl" id="ENST00000693319.1">
+    <property type="protein sequence ID" value="ENSP00000510419.1"/>
+    <property type="gene ID" value="ENSG00000165527.8"/>
+  </dbReference>
+  <dbReference type="GeneID" id="382"/>
+  <dbReference type="KEGG" id="hsa:382"/>
+  <dbReference type="MANE-Select" id="ENST00000298316.7">
+    <property type="protein sequence ID" value="ENSP00000298316.5"/>
+    <property type="RefSeq nucleotide sequence ID" value="NM_001663.4"/>
+    <property type="RefSeq protein sequence ID" value="NP_001654.1"/>
+  </dbReference>
+  <dbReference type="UCSC" id="uc001wxg.5">
+    <property type="organism name" value="human"/>
+  </dbReference>
+  <dbReference type="AGR" id="HGNC:659"/>
+  <dbReference type="CTD" id="382"/>
+  <dbReference type="DisGeNET" id="382"/>
+  <dbReference type="GeneCards" id="ARF6"/>
+  <dbReference type="HGNC" id="HGNC:659">
+    <property type="gene designation" value="ARF6"/>
+  </dbReference>
+  <dbReference type="HPA" id="ENSG00000165527">
+    <property type="expression patterns" value="Low tissue specificity"/>
+  </dbReference>
+  <dbReference type="MIM" id="600464">
+    <property type="type" value="gene"/>
+  </dbReference>
+  <dbReference type="neXtProt" id="NX_P62330"/>
+  <dbReference type="OpenTargets" id="ENSG00000165527"/>
+  <dbReference type="PharmGKB" id="PA24942"/>
+  <dbReference type="VEuPathDB" id="HostDB:ENSG00000165527"/>
+  <dbReference type="eggNOG" id="KOG0071">
+    <property type="taxonomic scope" value="Eukaryota"/>
+  </dbReference>
+  <dbReference type="GeneTree" id="ENSGT00940000156593"/>
+  <dbReference type="HOGENOM" id="CLU_040729_9_4_1"/>
+  <dbReference type="InParanoid" id="P62330"/>
+  <dbReference type="OMA" id="GGQISKM"/>
+  <dbReference type="OrthoDB" id="2011769at2759"/>
+  <dbReference type="PhylomeDB" id="P62330"/>
+  <dbReference type="TreeFam" id="TF300808"/>
+  <dbReference type="BRENDA" id="3.6.5.2">
+    <property type="organism ID" value="2681"/>
+  </dbReference>
+  <dbReference type="PathwayCommons" id="P62330"/>
+  <dbReference type="Reactome" id="R-HSA-8854214">
+    <property type="pathway name" value="TBC/RABGAPs"/>
+  </dbReference>
+  <dbReference type="Reactome" id="R-HSA-8856828">
+    <property type="pathway name" value="Clathrin-mediated endocytosis"/>
+  </dbReference>
+  <dbReference type="Reactome" id="R-HSA-8875656">
+    <property type="pathway name" value="MET receptor recycling"/>
+  </dbReference>
+  <dbReference type="SignaLink" id="P62330"/>
+  <dbReference type="SIGNOR" id="P62330"/>
+  <dbReference type="BioGRID-ORCS" id="382">
+    <property type="hits" value="117 hits in 1140 CRISPR screens"/>
+  </dbReference>
+  <dbReference type="ChiTaRS" id="ARF6">
+    <property type="organism name" value="human"/>
+  </dbReference>
+  <dbReference type="EvolutionaryTrace" id="P62330"/>
+  <dbReference type="GeneWiki" id="ARF6"/>
+  <dbReference type="GenomeRNAi" id="382"/>
+  <dbReference type="Pharos" id="P62330">
+    <property type="development level" value="Tbio"/>
+  </dbReference>
+  <dbReference type="PRO" id="PR:P62330"/>
+  <dbReference type="Proteomes" id="UP000005640">
+    <property type="component" value="Chromosome 14"/>
+  </dbReference>
+  <dbReference type="RNAct" id="P62330">
+    <property type="molecule type" value="protein"/>
+  </dbReference>
+  <dbReference type="Bgee" id="ENSG00000165527">
+    <property type="expression patterns" value="Expressed in esophagus squamous epithelium and 213 other cell types or tissues"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0005938">
+    <property type="term" value="C:cell cortex"/>
+    <property type="evidence" value="ECO:0000314"/>
+    <property type="project" value="UniProtKB"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0032154">
+    <property type="term" value="C:cleavage furrow"/>
+    <property type="evidence" value="ECO:0000314"/>
+    <property type="project" value="UniProtKB"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0005737">
+    <property type="term" value="C:cytoplasm"/>
+    <property type="evidence" value="ECO:0000318"/>
+    <property type="project" value="GO_Central"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0005829">
+    <property type="term" value="C:cytosol"/>
+    <property type="evidence" value="ECO:0000314"/>
+    <property type="project" value="UniProtKB"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0031901">
+    <property type="term" value="C:early endosome membrane"/>
+    <property type="evidence" value="ECO:0007669"/>
+    <property type="project" value="UniProtKB-SubCell"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0030139">
+    <property type="term" value="C:endocytic vesicle"/>
+    <property type="evidence" value="ECO:0000314"/>
+    <property type="project" value="UniProtKB"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0005768">
+    <property type="term" value="C:endosome"/>
+    <property type="evidence" value="ECO:0000314"/>
+    <property type="project" value="UniProtKB"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0070062">
+    <property type="term" value="C:extracellular exosome"/>
+    <property type="evidence" value="ECO:0007005"/>
+    <property type="project" value="UniProtKB"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0031527">
+    <property type="term" value="C:filopodium membrane"/>
+    <property type="evidence" value="ECO:0000314"/>
+    <property type="project" value="UniProtKB"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0090543">
+    <property type="term" value="C:Flemming body"/>
+    <property type="evidence" value="ECO:0000314"/>
+    <property type="project" value="UniProtKB"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0005925">
+    <property type="term" value="C:focal adhesion"/>
+    <property type="evidence" value="ECO:0007005"/>
+    <property type="project" value="UniProtKB"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0098978">
+    <property type="term" value="C:glutamatergic synapse"/>
+    <property type="evidence" value="ECO:0007669"/>
+    <property type="project" value="Ensembl"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0005794">
+    <property type="term" value="C:Golgi apparatus"/>
+    <property type="evidence" value="ECO:0000314"/>
+    <property type="project" value="UniProt"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0016020">
+    <property type="term" value="C:membrane"/>
+    <property type="evidence" value="ECO:0000314"/>
+    <property type="project" value="FlyBase"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0030496">
+    <property type="term" value="C:midbody"/>
+    <property type="evidence" value="ECO:0000315"/>
+    <property type="project" value="UniProt"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0005886">
+    <property type="term" value="C:plasma membrane"/>
+    <property type="evidence" value="ECO:0000314"/>
+    <property type="project" value="UniProtKB"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0098794">
+    <property type="term" value="C:postsynapse"/>
+    <property type="evidence" value="ECO:0007669"/>
+    <property type="project" value="Ensembl"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0098793">
+    <property type="term" value="C:presynapse"/>
+    <property type="evidence" value="ECO:0007669"/>
+    <property type="project" value="Ensembl"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0055038">
+    <property type="term" value="C:recycling endosome membrane"/>
+    <property type="evidence" value="ECO:0000314"/>
+    <property type="project" value="UniProtKB"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0001726">
+    <property type="term" value="C:ruffle"/>
+    <property type="evidence" value="ECO:0000314"/>
+    <property type="project" value="UniProtKB"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0003925">
+    <property type="term" value="F:G protein activity"/>
+    <property type="evidence" value="ECO:0000314"/>
+    <property type="project" value="UniProtKB"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0019003">
+    <property type="term" value="F:GDP binding"/>
+    <property type="evidence" value="ECO:0000314"/>
+    <property type="project" value="UniProtKB"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0005525">
+    <property type="term" value="F:GTP binding"/>
+    <property type="evidence" value="ECO:0000314"/>
+    <property type="project" value="UniProtKB"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0003924">
+    <property type="term" value="F:GTPase activity"/>
+    <property type="evidence" value="ECO:0000304"/>
+    <property type="project" value="ProtInc"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0035591">
+    <property type="term" value="F:signaling adaptor activity"/>
+    <property type="evidence" value="ECO:0000314"/>
+    <property type="project" value="UniProt"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0031996">
+    <property type="term" value="F:thioesterase binding"/>
+    <property type="evidence" value="ECO:0000353"/>
+    <property type="project" value="UniProtKB"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0007155">
+    <property type="term" value="P:cell adhesion"/>
+    <property type="evidence" value="ECO:0000304"/>
+    <property type="project" value="UniProtKB"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0030154">
+    <property type="term" value="P:cell differentiation"/>
+    <property type="evidence" value="ECO:0007669"/>
+    <property type="project" value="UniProtKB-KW"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0051301">
+    <property type="term" value="P:cell division"/>
+    <property type="evidence" value="ECO:0007669"/>
+    <property type="project" value="UniProtKB-KW"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:1990090">
+    <property type="term" value="P:cellular response to nerve growth factor stimulus"/>
+    <property type="evidence" value="ECO:0007669"/>
+    <property type="project" value="Ensembl"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0030866">
+    <property type="term" value="P:cortical actin cytoskeleton organization"/>
+    <property type="evidence" value="ECO:0000314"/>
+    <property type="project" value="UniProtKB"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0032456">
+    <property type="term" value="P:endocytic recycling"/>
+    <property type="evidence" value="ECO:0000314"/>
+    <property type="project" value="UniProtKB"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:1902217">
+    <property type="term" value="P:erythrocyte apoptotic process"/>
+    <property type="evidence" value="ECO:0007669"/>
+    <property type="project" value="Ensembl"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0090162">
+    <property type="term" value="P:establishment of epithelial cell polarity"/>
+    <property type="evidence" value="ECO:0007669"/>
+    <property type="project" value="Ensembl"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0097284">
+    <property type="term" value="P:hepatocyte apoptotic process"/>
+    <property type="evidence" value="ECO:0007669"/>
+    <property type="project" value="Ensembl"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0006886">
+    <property type="term" value="P:intracellular protein transport"/>
+    <property type="evidence" value="ECO:0000318"/>
+    <property type="project" value="GO_Central"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0001889">
+    <property type="term" value="P:liver development"/>
+    <property type="evidence" value="ECO:0007669"/>
+    <property type="project" value="Ensembl"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0099562">
+    <property type="term" value="P:maintenance of postsynaptic density structure"/>
+    <property type="evidence" value="ECO:0007669"/>
+    <property type="project" value="Ensembl"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:2000171">
+    <property type="term" value="P:negative regulation of dendrite development"/>
+    <property type="evidence" value="ECO:0007669"/>
+    <property type="project" value="Ensembl"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:2000009">
+    <property type="term" value="P:negative regulation of protein localization to cell surface"/>
+    <property type="evidence" value="ECO:0007669"/>
+    <property type="project" value="Ensembl"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0048261">
+    <property type="term" value="P:negative regulation of receptor-mediated endocytosis"/>
+    <property type="evidence" value="ECO:0000304"/>
+    <property type="project" value="UniProtKB"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0007399">
+    <property type="term" value="P:nervous system development"/>
+    <property type="evidence" value="ECO:0007669"/>
+    <property type="project" value="UniProtKB-KW"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0030838">
+    <property type="term" value="P:positive regulation of actin filament polymerization"/>
+    <property type="evidence" value="ECO:0000315"/>
+    <property type="project" value="UniProtKB"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0120183">
+    <property type="term" value="P:positive regulation of focal adhesion disassembly"/>
+    <property type="evidence" value="ECO:0000250"/>
+    <property type="project" value="ARUK-UCL"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0051549">
+    <property type="term" value="P:positive regulation of keratinocyte migration"/>
+    <property type="evidence" value="ECO:0000250"/>
+    <property type="project" value="ARUK-UCL"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:1903438">
+    <property type="term" value="P:positive regulation of mitotic cytokinetic process"/>
+    <property type="evidence" value="ECO:0000315"/>
+    <property type="project" value="UniProt"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0010976">
+    <property type="term" value="P:positive regulation of neuron projection development"/>
+    <property type="evidence" value="ECO:0000314"/>
+    <property type="project" value="UniProt"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:1903078">
+    <property type="term" value="P:positive regulation of protein localization to plasma membrane"/>
+    <property type="evidence" value="ECO:0000250"/>
+    <property type="project" value="BHF-UCL"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0050714">
+    <property type="term" value="P:positive regulation of protein secretion"/>
+    <property type="evidence" value="ECO:0000315"/>
+    <property type="project" value="UniProtKB"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0034394">
+    <property type="term" value="P:protein localization to cell surface"/>
+    <property type="evidence" value="ECO:0000250"/>
+    <property type="project" value="BHF-UCL"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:1905345">
+    <property type="term" value="P:protein localization to cleavage furrow"/>
+    <property type="evidence" value="ECO:0000315"/>
+    <property type="project" value="UniProt"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0036010">
+    <property type="term" value="P:protein localization to endosome"/>
+    <property type="evidence" value="ECO:0000315"/>
+    <property type="project" value="UniProtKB"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0072659">
+    <property type="term" value="P:protein localization to plasma membrane"/>
+    <property type="evidence" value="ECO:0000314"/>
+    <property type="project" value="UniProt"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0060998">
+    <property type="term" value="P:regulation of dendritic spine development"/>
+    <property type="evidence" value="ECO:0000250"/>
+    <property type="project" value="UniProtKB"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0051489">
+    <property type="term" value="P:regulation of filopodium assembly"/>
+    <property type="evidence" value="ECO:0000314"/>
+    <property type="project" value="UniProtKB"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:1905606">
+    <property type="term" value="P:regulation of presynapse assembly"/>
+    <property type="evidence" value="ECO:0007669"/>
+    <property type="project" value="Ensembl"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0035020">
+    <property type="term" value="P:regulation of Rac protein signal transduction"/>
+    <property type="evidence" value="ECO:0000314"/>
+    <property type="project" value="UniProtKB"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0097178">
+    <property type="term" value="P:ruffle assembly"/>
+    <property type="evidence" value="ECO:0000314"/>
+    <property type="project" value="UniProtKB"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0048488">
+    <property type="term" value="P:synaptic vesicle endocytosis"/>
+    <property type="evidence" value="ECO:0007669"/>
+    <property type="project" value="Ensembl"/>
+  </dbReference>
+  <dbReference type="GO" id="GO:0016192">
+    <property type="term" value="P:vesicle-mediated transport"/>
+    <property type="evidence" value="ECO:0000318"/>
+    <property type="project" value="GO_Central"/>
+  </dbReference>
+  <dbReference type="CDD" id="cd04149">
+    <property type="entry name" value="Arf6"/>
+    <property type="match status" value="1"/>
+  </dbReference>
+  <dbReference type="DisProt" id="DP02815"/>
+  <dbReference type="FunFam" id="3.40.50.300:FF:000286">
+    <property type="entry name" value="ADP-ribosylation factor 6"/>
+    <property type="match status" value="1"/>
+  </dbReference>
+  <dbReference type="Gene3D" id="3.40.50.300">
+    <property type="entry name" value="P-loop containing nucleotide triphosphate hydrolases"/>
+    <property type="match status" value="1"/>
+  </dbReference>
+  <dbReference type="InterPro" id="IPR041838">
+    <property type="entry name" value="Arf6"/>
+  </dbReference>
+  <dbReference type="InterPro" id="IPR027417">
+    <property type="entry name" value="P-loop_NTPase"/>
+  </dbReference>
+  <dbReference type="InterPro" id="IPR005225">
+    <property type="entry name" value="Small_GTP-bd"/>
+  </dbReference>
+  <dbReference type="InterPro" id="IPR024156">
+    <property type="entry name" value="Small_GTPase_ARF"/>
+  </dbReference>
+  <dbReference type="InterPro" id="IPR006689">
+    <property type="entry name" value="Small_GTPase_ARF/SAR"/>
+  </dbReference>
+  <dbReference type="NCBIfam" id="TIGR00231">
+    <property type="entry name" value="small_GTP"/>
+    <property type="match status" value="1"/>
+  </dbReference>
+  <dbReference type="PANTHER" id="PTHR11711">
+    <property type="entry name" value="ADP RIBOSYLATION FACTOR-RELATED"/>
+    <property type="match status" value="1"/>
+  </dbReference>
+  <dbReference type="Pfam" id="PF00025">
+    <property type="entry name" value="Arf"/>
+    <property type="match status" value="1"/>
+  </dbReference>
+  <dbReference type="PRINTS" id="PR00328">
+    <property type="entry name" value="SAR1GTPBP"/>
+  </dbReference>
+  <dbReference type="SMART" id="SM00177">
+    <property type="entry name" value="ARF"/>
+    <property type="match status" value="1"/>
+  </dbReference>
+  <dbReference type="SMART" id="SM00175">
+    <property type="entry name" value="RAB"/>
+    <property type="match status" value="1"/>
+  </dbReference>
+  <dbReference type="SMART" id="SM00178">
+    <property type="entry name" value="SAR"/>
+    <property type="match status" value="1"/>
+  </dbReference>
+  <dbReference type="SUPFAM" id="SSF52540">
+    <property type="entry name" value="P-loop containing nucleoside triphosphate hydrolases"/>
+    <property type="match status" value="1"/>
+  </dbReference>
+  <dbReference type="PROSITE" id="PS51417">
+    <property type="entry name" value="ARF"/>
+    <property type="match status" value="1"/>
+  </dbReference>
+  <proteinExistence type="evidence at protein level"/>
+  <keyword id="KW-0002">3D-structure</keyword>
+  <keyword id="KW-0131">Cell cycle</keyword>
+  <keyword id="KW-0132">Cell division</keyword>
+  <keyword id="KW-1003">Cell membrane</keyword>
+  <keyword id="KW-0966">Cell projection</keyword>
+  <keyword id="KW-0963">Cytoplasm</keyword>
+  <keyword id="KW-0221">Differentiation</keyword>
+  <keyword id="KW-0967">Endosome</keyword>
+  <keyword id="KW-0333">Golgi apparatus</keyword>
+  <keyword id="KW-0342">GTP-binding</keyword>
+  <keyword id="KW-0378">Hydrolase</keyword>
+  <keyword id="KW-0449">Lipoprotein</keyword>
+  <keyword id="KW-0472">Membrane</keyword>
+  <keyword id="KW-0519">Myristate</keyword>
+  <keyword id="KW-0524">Neurogenesis</keyword>
+  <keyword id="KW-0547">Nucleotide-binding</keyword>
+  <keyword id="KW-0653">Protein transport</keyword>
+  <keyword id="KW-1267">Proteomics identification</keyword>
+  <keyword id="KW-1185">Reference proteome</keyword>
+  <keyword id="KW-0813">Transport</keyword>
+  <feature type="initiator methionine" description="Removed" evidence="30">
+    <location>
+      <position position="1"/>
+    </location>
+  </feature>
+  <feature type="chain" id="PRO_0000207400" description="ADP-ribosylation factor 6">
+    <location>
+      <begin position="2"/>
+      <end position="175"/>
+    </location>
+  </feature>
+  <feature type="binding site" evidence="12 20 25 27 29">
+    <location>
+      <begin position="23"/>
+      <end position="28"/>
+    </location>
+    <ligand>
+      <name>GTP</name>
+      <dbReference type="ChEBI" id="CHEBI:37565"/>
+    </ligand>
+  </feature>
+  <feature type="binding site" evidence="12 20 25 27 29">
+    <location>
+      <begin position="41"/>
+      <end position="44"/>
+    </location>
+    <ligand>
+      <name>GTP</name>
+      <dbReference type="ChEBI" id="CHEBI:37565"/>
+    </ligand>
+  </feature>
+  <feature type="binding site" evidence="12 20 25 27 29">
+    <location>
+      <begin position="63"/>
+      <end position="67"/>
+    </location>
+    <ligand>
+      <name>GTP</name>
+      <dbReference type="ChEBI" id="CHEBI:37565"/>
+    </ligand>
+  </feature>
+  <feature type="binding site" evidence="12 20 25 27 29">
+    <location>
+      <begin position="122"/>
+      <end position="125"/>
+    </location>
+    <ligand>
+      <name>GTP</name>
+      <dbReference type="ChEBI" id="CHEBI:37565"/>
+    </ligand>
+  </feature>
+  <feature type="binding site" evidence="12 20 25 27 29">
+    <location>
+      <begin position="155"/>
+      <end position="156"/>
+    </location>
+    <ligand>
+      <name>GTP</name>
+      <dbReference type="ChEBI" id="CHEBI:37565"/>
+    </ligand>
+  </feature>
+  <feature type="lipid moiety-binding region" description="N-myristoyl glycine" evidence="30 36">
+    <location>
+      <position position="2"/>
+    </location>
+  </feature>
+  <feature type="lipid moiety-binding region" description="N6-myristoyl lysine" evidence="31">
+    <location>
+      <position position="3"/>
+    </location>
+  </feature>
+  <feature type="mutagenesis site" description="Fails to associate with membranes." evidence="36">
+    <original>G</original>
+    <variation>A</variation>
+    <location>
+      <position position="2"/>
+    </location>
+  </feature>
+  <feature type="mutagenesis site" description="Abolished lysine-myristoylation, leading to decreased localization to membranes." evidence="31">
+    <original>K</original>
+    <variation>R</variation>
+    <location>
+      <position position="3"/>
+    </location>
+  </feature>
+  <feature type="mutagenesis site" description="Constitutively inactivated. Fails to associate with membranes. Does not inhibit filopodia formation." evidence="8 14 16 31">
+    <original>T</original>
+    <variation>N</variation>
+    <location>
+      <position position="27"/>
+    </location>
+  </feature>
+  <feature type="mutagenesis site" description="Constitutively active. Inhibits filopodia formation and dendritic branching." evidence="8 14 31">
+    <original>Q</original>
+    <variation>L</variation>
+    <location>
+      <position position="67"/>
+    </location>
+  </feature>
+  <feature type="helix" evidence="40">
+    <location>
+      <begin position="3"/>
+      <end position="9"/>
+    </location>
+  </feature>
+  <feature type="strand" evidence="41">
+    <location>
+      <begin position="13"/>
+      <end position="19"/>
+    </location>
+  </feature>
+  <feature type="helix" evidence="41">
+    <location>
+      <begin position="26"/>
+      <end position="35"/>
+    </location>
+  </feature>
+  <feature type="strand" evidence="40">
+    <location>
+      <begin position="39"/>
+      <end position="44"/>
+    </location>
+  </feature>
+  <feature type="strand" evidence="41">
+    <location>
+      <begin position="45"/>
+      <end position="54"/>
+    </location>
+  </feature>
+  <feature type="strand" evidence="41">
+    <location>
+      <begin position="57"/>
+      <end position="64"/>
+    </location>
+  </feature>
+  <feature type="helix" evidence="43">
+    <location>
+      <begin position="65"/>
+      <end position="67"/>
+    </location>
+  </feature>
+  <feature type="helix" evidence="41">
+    <location>
+      <begin position="68"/>
+      <end position="77"/>
+    </location>
+  </feature>
+  <feature type="turn" evidence="40">
+    <location>
+      <begin position="78"/>
+      <end position="80"/>
+    </location>
+  </feature>
+  <feature type="strand" evidence="41">
+    <location>
+      <begin position="83"/>
+      <end position="89"/>
+    </location>
+  </feature>
+  <feature type="helix" evidence="41">
+    <location>
+      <begin position="93"/>
+      <end position="95"/>
+    </location>
+  </feature>
+  <feature type="helix" evidence="41">
+    <location>
+      <begin position="96"/>
+      <end position="107"/>
+    </location>
+  </feature>
+  <feature type="helix" evidence="41">
+    <location>
+      <begin position="110"/>
+      <end position="112"/>
+    </location>
+  </feature>
+  <feature type="strand" evidence="41">
+    <location>
+      <begin position="116"/>
+      <end position="122"/>
+    </location>
+  </feature>
+  <feature type="strand" evidence="42">
+    <location>
+      <begin position="125"/>
+      <end position="128"/>
+    </location>
+  </feature>
+  <feature type="helix" evidence="41">
+    <location>
+      <begin position="132"/>
+      <end position="138"/>
+    </location>
+  </feature>
+  <feature type="helix" evidence="41">
+    <location>
+      <begin position="141"/>
+      <end position="143"/>
+    </location>
+  </feature>
+  <feature type="strand" evidence="41">
+    <location>
+      <begin position="149"/>
+      <end position="153"/>
+    </location>
+  </feature>
+  <feature type="turn" evidence="41">
+    <location>
+      <begin position="156"/>
+      <end position="159"/>
+    </location>
+  </feature>
+  <feature type="helix" evidence="41">
+    <location>
+      <begin position="162"/>
+      <end position="172"/>
+    </location>
+  </feature>
+  <evidence type="ECO:0000250" key="1">
+    <source>
+      <dbReference type="UniProtKB" id="P62331"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0000250" key="2">
+    <source>
+      <dbReference type="UniProtKB" id="P62332"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0000269" key="3">
+    <source>
+      <dbReference type="PubMed" id="11062263"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0000269" key="4">
+    <source>
+      <dbReference type="PubMed" id="11266366"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0000269" key="5">
+    <source>
+      <dbReference type="PubMed" id="11950392"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0000269" key="6">
+    <source>
+      <dbReference type="PubMed" id="12847086"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0000269" key="7">
+    <source>
+      <dbReference type="PubMed" id="14659046"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0000269" key="8">
+    <source>
+      <dbReference type="PubMed" id="14978216"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0000269" key="9">
+    <source>
+      <dbReference type="PubMed" id="15509780"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0000269" key="10">
+    <source>
+      <dbReference type="PubMed" id="15642342"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0000269" key="11">
+    <source>
+      <dbReference type="PubMed" id="15793564"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0000269" key="12">
+    <source>
+      <dbReference type="PubMed" id="16099990"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0000269" key="13">
+    <source>
+      <dbReference type="PubMed" id="16148947"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0000269" key="14">
+    <source>
+      <dbReference type="PubMed" id="16737952"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0000269" key="15">
+    <source>
+      <dbReference type="PubMed" id="17030804"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0000269" key="16">
+    <source>
+      <dbReference type="PubMed" id="17398095"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0000269" key="17">
+    <source>
+      <dbReference type="PubMed" id="17555535"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0000269" key="18">
+    <source>
+      <dbReference type="PubMed" id="17628206"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0000269" key="19">
+    <source>
+      <dbReference type="PubMed" id="18400762"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0000269" key="20">
+    <source>
+      <dbReference type="PubMed" id="19644450"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0000269" key="21">
+    <source>
+      <dbReference type="PubMed" id="19948740"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0000269" key="22">
+    <source>
+      <dbReference type="PubMed" id="20510928"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0000269" key="23">
+    <source>
+      <dbReference type="PubMed" id="20682791"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0000269" key="24">
+    <source>
+      <dbReference type="PubMed" id="20727515"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0000269" key="25">
+    <source>
+      <dbReference type="PubMed" id="21170023"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0000269" key="26">
+    <source>
+      <dbReference type="PubMed" id="21951725"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0000269" key="27">
+    <source>
+      <dbReference type="PubMed" id="22939626"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0000269" key="28">
+    <source>
+      <dbReference type="PubMed" id="23603394"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0000269" key="29">
+    <source>
+      <dbReference type="PubMed" id="23940353"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0000269" key="30">
+    <source>
+      <dbReference type="PubMed" id="25255805"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0000269" key="31">
+    <source>
+      <dbReference type="PubMed" id="32103017"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0000269" key="32">
+    <source>
+      <dbReference type="PubMed" id="36017701"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0000269" key="33">
+    <source>
+      <dbReference type="PubMed" id="36250347"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0000269" key="34">
+    <source>
+      <dbReference type="PubMed" id="37417384"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0000269" key="35">
+    <source>
+      <dbReference type="PubMed" id="37461827"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0000269" key="36">
+    <source>
+      <dbReference type="PubMed" id="7589240"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0000303" key="37">
+    <source ref="6"/>
+  </evidence>
+  <evidence type="ECO:0000305" key="38"/>
+  <evidence type="ECO:0000312" key="39">
+    <source>
+      <dbReference type="HGNC" id="HGNC:659"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0007829" key="40">
+    <source>
+      <dbReference type="PDB" id="1E0S"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0007829" key="41">
+    <source>
+      <dbReference type="PDB" id="2A5D"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0007829" key="42">
+    <source>
+      <dbReference type="PDB" id="3LVQ"/>
+    </source>
+  </evidence>
+  <evidence type="ECO:0007829" key="43">
+    <source>
+      <dbReference type="PDB" id="3N5C"/>
+    </source>
+  </evidence>
+  <sequence length="175" mass="20082" checksum="49E38E59AEA52B98" modified="2007-01-23" version="2">MGKVLSKIFGNKEMRILMLGLDAAGKTTILYKLKLGQSVTTIPTVGFNVETVTYKNVKFNVWDVGGQDKIRPLWRHYYTGTQGLIFVVDCADRDRIDEARQELHRIINDREMRDAIILIFANKQDLPDAMKPHEIQEKLGLTRIRDRNWYVQPSCATSGDGLYEGLTWLTSNYKS</sequence>
+</entry>
+<copyright>
+Copyrighted by the UniProt Consortium, see https://www.uniprot.org/terms Distributed under the Creative Commons Attribution (CC BY 4.0) License
+</copyright>
+</uniprot>
