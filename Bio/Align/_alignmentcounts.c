@@ -22,6 +22,10 @@
 #define MISSING_LETTER -1
 
 
+
+static PyTypeObject* Aligner_Type = NULL;
+
+
 static Array_get_mapping_buffer_signature Array_get_mapping_buffer;
 /* this will be set when initializing the module */
 
@@ -1066,8 +1070,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
 
     if (argument == NULL) {
     }
-/*
-    else if (PyObject_TypeCheck(argument, &Aligner_Type)) {
+    else if (PyObject_TypeCheck(argument, Aligner_Type)) {
         aligner = (Aligner*)argument;
         if (aligner->substitution_matrix.obj) {
             substitution_matrix = aligner->substitution_matrix;
@@ -1075,7 +1078,6 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
         }
         wildcard = aligner->wildcard;
     }
-*/  // FIXME
     else if (PyUnicode_Check(argument)) {
         if (PyUnicode_READY(argument) == -1) goto exit;
         if (PyUnicode_GET_LENGTH(argument) != 1) {
@@ -1088,15 +1090,10 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
     else {
         const int ok = substitution_matrix_converter(argument,
                                                      &substitution_matrix);
-        // if (!ok) goto exit; FIXME
         if (!ok) {
-            PyErr_Clear();
-            aligner = (Aligner*)argument;
-            if (aligner->substitution_matrix.obj) {
-                substitution_matrix = aligner->substitution_matrix;
-                Py_INCREF(substitution_matrix.obj);
-            }
-            wildcard = aligner->wildcard;
+            if (!Aligner_Type) 
+                PyErr_SetString(PyExc_RuntimeError, "Aligner_Type is NULL");
+            goto exit;
         }
     }
 
@@ -1584,7 +1581,8 @@ PyInit__alignmentcounts(void)
     module = PyModule_Create(&moduledef);
     if (!module) return NULL;
 
-    PyObject *mod = PyImport_ImportModule("Bio.Align.substitution_matrices._arraycore");
+    PyObject *mod;
+    mod = PyImport_ImportModule("Bio.Align.substitution_matrices._arraycore");
     if (!mod) {
         Py_DECREF(module);
         return NULL;
@@ -1600,6 +1598,18 @@ PyInit__alignmentcounts(void)
         (Array_get_mapping_buffer_signature)PyCapsule_GetPointer(capsule,
         "Bio.Align.substitution_matrices._arraycore.mapping_buffer_capsule");
     if (!Array_get_mapping_buffer) {
+        Py_DECREF(module);
+        return NULL;
+    }
+
+    mod = PyImport_ImportModule("Bio.Align._pairwisealigner");
+    if (!mod) {
+        Py_DECREF(module);
+        return NULL;
+    }
+    Aligner_Type = (PyTypeObject*)PyObject_GetAttrString(mod, "PairwiseAligner");
+    Py_DECREF(mod);
+    if (!Aligner_Type) {
         Py_DECREF(module);
         return NULL;
     }
