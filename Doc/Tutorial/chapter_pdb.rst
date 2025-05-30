@@ -1806,6 +1806,9 @@ the surface points.
 Superimposing two structures
 ----------------------------
 
+Using the Superimposer module
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Use a ``Superimposer`` object to superimpose two coordinate sets. This
 object calculates the rotation and translation matrix that rotates two
 lists of atoms on top of each other in such a way that their RMSD is
@@ -1815,6 +1818,10 @@ rotation/translation to a list of atoms. The rotation and translation
 are stored as a tuple in the ``rotran`` attribute of the
 ``Superimposer`` object (note that the rotation is right multiplying!).
 The RMSD is stored in the ``rmsd`` attribute.
+
+To reiterate, the ``Superimposer`` object requires two lists of atoms
+that must contain an identical number. To align two chains with similar
+but not identical sequences, use the CEAligner (described below)
 
 The algorithm used by ``Superimposer`` comes from
 Golub \& Van Loan [Golub1989]_ and makes use of
@@ -1846,6 +1853,36 @@ Mapping the residues of two related structures onto each other
 First, create an alignment file in FASTA format, then use the
 ``StructureAlignment`` class. This class can also be used for alignments
 with more than two structures.
+
+Structural alignment with CEAligner
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you want to align two structures that may not have identical sequences or lengths,
+you can use the ``CEAligner`` class, which implements the Combinatorial Extension (CE)
+algorithm for structural alignment. This method automatically finds the best matching
+regions between two structures and superimposes them.
+
+The algorithm used in the ``CEAligner`` class is from Shindyalov \& Bourne [Shindyalov]_
+and uses the ``QCPSuperimposer`` to perform the actual superimposition after discovering
+the best matching regions
+
+Example:
+
+.. code:: pycon
+
+   >>> from Bio.PDB.cealign import CEAligner
+   >>> aligner = CEAligner()
+   >>> aligner.set_reference(structure1)
+   >>> aligner.align(structure2)
+   # Get RMSD of the best alignment
+   >>> print(aligner.rms)
+
+
+This is useful for comparing proteins with similar folds but different sequences.
+
+
+
+################## END OF MY SECTION
 
 Common problems in PDB files
 ----------------------------

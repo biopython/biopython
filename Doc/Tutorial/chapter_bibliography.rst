@@ -43,6 +43,7 @@ Bibliography
 .. [Rice2000] Peter Rice, Ian Longden, Alan Bleasby: EMBOSS: The European Molecular Biology Open Software Suite. *Trends in Genetics* **16** (6): 276--277 (2000). https://doi.org/10.1016/S0168-9525(00)02024-2
 .. [Saldanha2004] Alok Saldanha: Java Treeview---extensible visualization of microarray data. *Bioinformatics* **20** (17): 3246--3248 (2004). https://doi.org/10.1093/bioinformatics/bth349
 .. [Schneider1986] Thomas D. Schneider, Gary D. Stormo, Larry Gold: Information content of binding sites on nucleotide sequences. *Journal of Molecular Biology* **188** (3): 415--431 (1986). https://doi.org/10.1016/0022-2836(86)90165-8
+.. [Shindyalov1998] Shindyalov IN, Bourne PE. Protein structure alignment by incremental combinatorial extension (CE) of the optimal path. *Protein Eng* **11** (9): 739--747 (1998). https://doi.org:10.1093/protein/11.9.739
 .. [Schneider2005] Adrian Schneider, Gina M. Cannarozzi, and Gaston H. Gonnet: Empirical codon substitution matrix. *BMC Bioinformatics* **6**: 134 (2005). https://doi.org/10.1186/1471-2105-6-134
 .. [Sibson1973] Robin Sibson: SLINK: An optimally efficient algorithm for the single-link cluster method. *The Computer Journal* **16** (1): 30--34 (1973). https://doi.org/10.1093/comjnl/16.1.30
 .. [Slater2005] Guy St C. Slater, Ewan Birney: Automated generation of heuristics for biological sequence comparison. *BMC Bioinformatics* **6**: 31 (2005). https://doi.org/10.1186/1471-2105-6-31
