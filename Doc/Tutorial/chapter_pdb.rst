@@ -1806,8 +1806,8 @@ the surface points.
 Superimposing two structures
 ----------------------------
 
-Using the Superimposer module
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Superimposing identical sets of atoms
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Use a ``Superimposer`` object to superimpose two coordinate sets. This
 object calculates the rotation and translation matrix that rotates two
@@ -1817,7 +1817,7 @@ atoms. The ``Superimposer`` object can also apply the
 rotation/translation to a list of atoms. The rotation and translation
 are stored as a tuple in the ``rotran`` attribute of the
 ``Superimposer`` object (note that the rotation is right multiplying!).
-The RMSD is stored in the ``rmsd`` attribute.
+The RMSD is stored in the ``rms`` attribute.
 
 To reiterate, the ``Superimposer`` object requires two lists of atoms
 that must contain an identical number. To align two chains with similar
@@ -1832,6 +1832,7 @@ Example:
 
 .. code:: pycon
 
+   >>> from Bio.PDB import Superimposer
    >>> sup = Superimposer()
    # Specify the atom lists
    # 'fixed' and 'moving' are lists of Atom objects
@@ -1847,6 +1848,31 @@ To superimpose two structures based on their active sites, use the
 active site atoms to calculate the rotation/translation matrices (as
 above), and apply these to the whole molecule.
 
+In addition to using the ``Superimposer`` object, you can also choose
+to use the ``QCPSuperimposer`` object, which is faster than the
+standard ``Superimposer``.
+
+The algorithm for the ``QCPSuperimposer`` comes from Theobald [Theobald2005]_
+and rapidly calculates the minimum RMSD by using the quaternion characteristic
+polynomial (QCP).
+
+The implementation is very similar to the ``Superimposer``
+
+.. code:: pycon
+
+   >>> from Bio.PDB.qcprot import QCPSuperimposer
+   >>> sup = QCPSuperimposer()
+   # Specify the atom lists
+   # 'fixed' and 'moving' are lists of Atom objects
+   # The moving atoms will be put on the fixed atoms
+   >>> sup.set_atoms(fixed, moving)
+   # Print rotation/translation/rmsd
+   >>> print(sup.rotran)
+   >>> print(sup.rms)
+   # Apply rotation/translation to the moving atoms
+   >>> sup.apply(moving)
+
+
 Mapping the residues of two related structures onto each other
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1860,7 +1886,8 @@ Structural alignment with CEAligner
 If you want to align two structures that may not have identical sequences or lengths,
 you can use the ``CEAligner`` class, which implements the Combinatorial Extension (CE)
 algorithm for structural alignment. This method automatically finds the best matching
-regions between two structures and superimposes them.
+regions between two structures and superimposes them by using the C-alpha coordinates
+(for proteins) or C4' (for nucleic acids)
 
 The algorithm used in the ``CEAligner`` class is from Shindyalov \& Bourne [Shindyalov]_
 and uses the ``QCPSuperimposer`` to perform the actual superimposition after discovering
@@ -1877,12 +1904,10 @@ Example:
    # Get RMSD of the best alignment
    >>> print(aligner.rms)
 
-
-This is useful for comparing proteins with similar folds but different sequences.
-
-
-
-################## END OF MY SECTION
+This is useful for comparing proteins with similar folds but different sequences. By default,
+the ``align`` function will apply the transformation to structure2 as well as calculate the
+RMSD. To just calculate optimal RMSD without changing the structure2 coordinates, pass
+``transform=False``.
 
 Common problems in PDB files
 ----------------------------
