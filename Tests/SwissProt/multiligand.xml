@@ -1,0 +1,18 @@
+<uniprot xmlns="http://uniprot.org/uniprot">
+  <entry dataset="Swiss-Prot" created="2024-01-01" modified="2025-01-01" version="1">
+    <name>TEST_PROTEIN</name>
+    <accession>DUMMY123</accession>
+    <sequence length="1" mass="100" version="1">A</sequence>
+    <feature type="binding site">
+      <location><position position="1"/></location>
+      <ligand>
+        <name>ATP</name>
+        <dbReference type="ChEBI" id="CHEBI:15422"/>
+      </ligand>
+      <ligand>
+        <name>ADP</name>
+        <dbReference type="ChEBI" id="CHEBI:16761"/>
+      </ligand>
+    </feature>
+  </entry>
+</uniprot>
