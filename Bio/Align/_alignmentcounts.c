@@ -38,41 +38,12 @@ static int _map_indices(Py_buffer* view, Py_buffer* substitution_matrix) {
     Py_buffer buffer;
     Array_get_mapping_buffer(substitution_matrix->obj, &buffer);
     if (buffer.obj) {
-        const int* mapping = buffer.buf;
-        const Py_ssize_t m = buffer.len / buffer.itemsize;
-        for (i = 0; i < n; i++) {
-            index = indices[i];
-            if (index < 0) {
-                PyErr_Format(PyExc_ValueError,
-                             "sequence item %zd is negative (%d)",
-                             i, index);
-                return 0;
-            } 
-            if (index >= m) {
-                PyErr_Format(PyExc_ValueError,
-                             "sequence item %zd is out of bound"
-                             " (%d, should be < %zd)", i, index, m);
-                return 0;
-            }
-            index = mapping[index];
-            if (index == MISSING_LETTER) {
-                PyErr_SetString(PyExc_ValueError,
-                    "sequence contains letters not in the alphabet");
-                return 0;
-            }
-        }
         PyBuffer_Release(&buffer);
     }
     else {
         const Py_ssize_t m = substitution_matrix->shape[0];
         for (i = 0; i < n; i++) {
             index = indices[i];
-            if (index < 0) {
-                PyErr_Format(PyExc_ValueError,
-                             "sequence item %zd is negative (%d)",
-                             i, index);
-                return 0;
-            }
             if (index >= m) {
                 PyErr_Format(PyExc_ValueError,
                              "sequence item %zd is out of bound"
@@ -1134,16 +1105,17 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
     if (!counts) goto exit;
 
     int* mapping = NULL;
-    int mapping_size = 0;
+    int m = 0;
 
     if (substitution_matrix.obj) {
         Py_buffer mapping_buffer;
         Array_get_mapping_buffer(substitution_matrix.obj, &mapping_buffer);
         if (mapping_buffer.obj) {
             mapping = mapping_buffer.buf;
-            mapping_size = mapping_buffer.len / mapping_buffer.itemsize;
+            m = mapping_buffer.len / mapping_buffer.itemsize;
             PyBuffer_Release(&mapping_buffer);
         }
+        else m = substitution_matrix.shape[0];
     }
 
     PyObject* insertion_score_function = NULL;
@@ -1396,35 +1368,40 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                  l1++, l2++) {
                                 cA = sA[l1];
                                 cB = sB[l2];
+                                if (cA < 0) {
+                                    PyErr_Format(PyExc_ValueError,
+                                        "sequences[%d][%zd] is negative (%d)",
+                                        i, l1, cA);
+                                    goto error;
+                                }
+                                if (cA >= m) {
+                                    PyErr_Format(PyExc_ValueError,
+                                        "sequence[%d][%zd] is out of bound"
+                                        " (%d, should be < %zd)",
+                                        i, l1, cA, m);
+                                    goto error;
+                                }
+                                if (cB < 0) {
+                                    PyErr_Format(PyExc_ValueError,
+                                        "sequences[%d][%zd] is negative (%d)",
+                                        j, l2, cB);
+                                    goto error;
+                                }
+                                if (cB >= m) {
+                                    PyErr_Format(PyExc_ValueError,
+                                        "sequence[%d][%zd] is out of bound"
+                                        " (%d, should be < %zd)",
+                                        j, l2, cB, m);
+                                    goto error;
+                                }
                                 if (mapping) {
-                                    if (cA < 0) {
-                                        PyErr_Format(PyExc_ValueError,
-                                            "sequences[%d][%zd] is negative (%d)",
-                                            i, l1, cA);
-                                        goto error;
-                                    } 
-                                    if (cA >= mapping_size) {
-                                        PyErr_Format(PyExc_ValueError,
-                                            "sequence[%d][%zd] is out of bound"
-                                            " (%d, should be < %zd)",
-                                            i, l1, cA, mapping_size);
-                                        goto error;
-                                    }
-                                    if (cB < 0) {
-                                        PyErr_Format(PyExc_ValueError,
-                                            "sequences[%d][%zd] is negative (%d)",
-                                            j, l2, cB);
-                                        goto error;
-                                    } 
-                                    if (cB >= mapping_size) {
-                                        PyErr_Format(PyExc_ValueError,
-                                            "sequence[%d][%zd] is out of bound"
-                                            " (%d, should be < %zd)",
-                                            j, l2, cB, mapping_size);
-                                        goto error;
-                                    }
                                     cA = mapping[cA];
                                     cB = mapping[cB];
+                                    if (cA == MISSING_LETTER || cB == MISSING_LETTER) {
+                                        PyErr_SetString(PyExc_ValueError,
+                                            "sequence contains letters not in the alphabet");
+                                        goto error;
+                                    }
                                 }
                                 if (cA == cB) identities++;
                                 else mismatches++;
@@ -1441,39 +1418,44 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                  l1++, l2++) {
                                 cA = sA[l1];
                                 cB = (int) bB[l2-start2];
+                                if (cA < 0) {
+                                    PyErr_Format(PyExc_ValueError,
+                                        "sequences[%d][%zd] is negative (%d)",
+                                        i, l1, cA);
+                                    Py_DECREF(oB);
+                                    goto error;
+                                }
+                                if (cA >= m) {
+                                    PyErr_Format(PyExc_ValueError,
+                                        "sequence[%d][%zd] is out of bound"
+                                        " (%d, should be < %zd)",
+                                        i, l1, cA, m);
+                                    Py_DECREF(oB);
+                                    goto error;
+                                }
+                                if (cB < 0) {
+                                    PyErr_Format(PyExc_ValueError,
+                                        "sequences[%d][%zd] is negative (%d)",
+                                        j, l2, cB);
+                                    Py_DECREF(oB);
+                                    goto error;
+                                }
+                                if (cB >= m) {
+                                    PyErr_Format(PyExc_ValueError,
+                                        "sequence[%d][%zd] is out of bound"
+                                        " (%d, should be < %zd)",
+                                        j, l2, cB, m);
+                                    Py_DECREF(oB);
+                                    goto error;
+                                }
                                 if (mapping) {
-                                    if (cA < 0) {
-                                        PyErr_Format(PyExc_ValueError,
-                                            "sequences[%d][%zd] is negative (%d)",
-                                            i, l1, cA);
-                                        Py_DECREF(oB);
-                                        goto error;
-                                    } 
-                                    if (cA >= mapping_size) {
-                                        PyErr_Format(PyExc_ValueError,
-                                            "sequence[%d][%zd] is out of bound"
-                                            " (%d, should be < %zd)",
-                                            i, l1, cA, mapping_size);
-                                        Py_DECREF(oB);
-                                        goto error;
-                                    }
-                                    if (cB < 0) {
-                                        PyErr_Format(PyExc_ValueError,
-                                            "sequences[%d][%zd] is negative (%d)",
-                                            j, l2, cB);
-                                        Py_DECREF(oB);
-                                        goto error;
-                                    } 
-                                    if (cB >= mapping_size) {
-                                        PyErr_Format(PyExc_ValueError,
-                                            "sequence[%d][%zd] is out of bound"
-                                            " (%d, should be < %zd)",
-                                            j, l2, cB, mapping_size);
-                                        Py_DECREF(oB);
-                                        goto error;
-                                    }
                                     cA = mapping[cA];
                                     cB = mapping[cB];
+                                    if (cA == MISSING_LETTER || cB == MISSING_LETTER) {
+                                        PyErr_SetString(PyExc_ValueError,
+                                            "sequence contains letters not in the alphabet");
+                                        goto error;
+                                    }
                                 }
                                 if (cA == wildcard || cB == wildcard) ;
                                 else if (cA == cB) identities++;
@@ -1492,39 +1474,44 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                  l1++, l2++) {
                                 cA = (int) bA[l1-start1];
                                 cB = sB[l2];
+                                if (cA < 0) {
+                                    PyErr_Format(PyExc_ValueError,
+                                        "sequences[%d][%zd] is negative (%d)",
+                                        i, l1, cA);
+                                    Py_DECREF(oA);
+                                    goto error;
+                                }
+                                if (cB < 0) {
+                                    PyErr_Format(PyExc_ValueError,
+                                        "sequences[%d][%zd] is negative (%d)",
+                                        j, l2, cB);
+                                    Py_DECREF(oA);
+                                    goto error;
+                                }
+                                if (cA >= m) {
+                                    PyErr_Format(PyExc_ValueError,
+                                        "sequence[%d][%zd] is out of bound"
+                                        " (%d, should be < %zd)",
+                                        i, l1, cA, m);
+                                    Py_DECREF(oA);
+                                    goto error;
+                                }
+                                if (cB >= m) {
+                                    PyErr_Format(PyExc_ValueError,
+                                        "sequence[%d][%zd] is out of bound"
+                                        " (%d, should be < %zd)",
+                                        j, l2, cB, m);
+                                    Py_DECREF(oA);
+                                    goto error;
+                                }
                                 if (mapping) {
-                                    if (cA < 0) {
-                                        PyErr_Format(PyExc_ValueError,
-                                            "sequences[%d][%zd] is negative (%d)",
-                                            i, l1, cA);
-                                        Py_DECREF(oA);
-                                        goto error;
-                                    } 
-                                    if (cA >= mapping_size) {
-                                        PyErr_Format(PyExc_ValueError,
-                                            "sequence[%d][%zd] is out of bound"
-                                            " (%d, should be < %zd)",
-                                            i, l1, cA, mapping_size);
-                                        Py_DECREF(oA);
-                                        goto error;
-                                    }
-                                    if (cB < 0) {
-                                        PyErr_Format(PyExc_ValueError,
-                                            "sequences[%d][%zd] is negative (%d)",
-                                            j, l2, cB);
-                                        Py_DECREF(oA);
-                                        goto error;
-                                    } 
-                                    if (cB >= mapping_size) {
-                                        PyErr_Format(PyExc_ValueError,
-                                            "sequence[%d][%zd] is out of bound"
-                                            " (%d, should be < %zd)",
-                                            j, l2, cB, mapping_size);
-                                        Py_DECREF(oA);
-                                        goto error;
-                                    }
                                     cA = mapping[cA];
                                     cB = mapping[cB];
+                                    if (cA == MISSING_LETTER || cB == MISSING_LETTER) {
+                                        PyErr_SetString(PyExc_ValueError,
+                                            "sequence contains letters not in the alphabet");
+                                        goto error;
+                                    }
                                 }
                                 if (cA == wildcard || cB == wildcard) ;
                                 else if (cA == cB) identities++;
@@ -1543,43 +1530,48 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                  l1++, l2++) {
                                 cA = (int) bA[l1-start1];
                                 cB = (int) bB[l2-start2];
+                                if (cA < 0) {
+                                    PyErr_Format(PyExc_ValueError,
+                                        "sequences[%d][%zd] is negative (%d)",
+                                        i, l1, cA);
+                                    Py_DECREF(oA);
+                                    Py_DECREF(oB);
+                                    goto error;
+                                }
+                                if (cA >= m) {
+                                    PyErr_Format(PyExc_ValueError,
+                                        "sequence[%d][%zd] is out of bound"
+                                        " (%d, should be < %zd)",
+                                        i, l1, cA, m);
+                                    Py_DECREF(oA);
+                                    Py_DECREF(oB);
+                                    goto error;
+                                }
+                                if (cB < 0) {
+                                    PyErr_Format(PyExc_ValueError,
+                                        "sequences[%d][%zd] is negative (%d)",
+                                        j, l2, cB);
+                                    Py_DECREF(oA);
+                                    Py_DECREF(oB);
+                                    goto error;
+                                }
+                                if (cB >= m) {
+                                    PyErr_Format(PyExc_ValueError,
+                                        "sequence[%d][%zd] is out of bound"
+                                        " (%d, should be < %zd)",
+                                        j, l2, cB, m);
+                                    Py_DECREF(oA);
+                                    Py_DECREF(oB);
+                                    goto error;
+                                }
                                 if (mapping) {
-                                    if (cA < 0) {
-                                        PyErr_Format(PyExc_ValueError,
-                                            "sequences[%d][%zd] is negative (%d)",
-                                            i, l1, cA);
-                                        Py_DECREF(oA);
-                                        Py_DECREF(oB);
-                                        goto error;
-                                    } 
-                                    if (cA >= mapping_size) {
-                                        PyErr_Format(PyExc_ValueError,
-                                            "sequence[%d][%zd] is out of bound"
-                                            " (%d, should be < %zd)",
-                                            i, l1, cA, mapping_size);
-                                        Py_DECREF(oA);
-                                        Py_DECREF(oB);
-                                        goto error;
-                                    }
-                                    if (cB < 0) {
-                                        PyErr_Format(PyExc_ValueError,
-                                            "sequences[%d][%zd] is negative (%d)",
-                                            j, l2, cB);
-                                        Py_DECREF(oA);
-                                        Py_DECREF(oB);
-                                        goto error;
-                                    } 
-                                    if (cB >= mapping_size) {
-                                        PyErr_Format(PyExc_ValueError,
-                                            "sequence[%d][%zd] is out of bound"
-                                            " (%d, should be < %zd)",
-                                            j, l2, cB, mapping_size);
-                                        Py_DECREF(oA);
-                                        Py_DECREF(oB);
-                                        goto error;
-                                    }
                                     cA = mapping[cA];
                                     cB = mapping[cB];
+                                    if (cA == MISSING_LETTER || cB == MISSING_LETTER) {
+                                        PyErr_SetString(PyExc_ValueError,
+                                            "sequence contains letters not in the alphabet");
+                                        goto error;
+                                    }
                                 }
                                 if (cA == wildcard || cB == wildcard) ;
                                 else if (cA == cB) identities++;

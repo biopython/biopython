@@ -6721,6 +6721,16 @@ G  -- G  G
         self.assertEqual(counts.deletions, 0)
         self.assertEqual(counts.insertions, 0)
         self.assertAlmostEqual(counts.score, 10.0)
+        alignment.sequences[1] = s2b
+        with self.assertRaises(ValueError) as cm:
+            alignment.counts(aligner)
+        self.assertEqual(
+            str(cm.exception), "sequence item 1 is out of bound (28, should be < 10)"
+        )
+        alignment.sequences[1] = s2c
+        with self.assertRaises(ValueError) as cm:
+            alignment.counts(aligner)
+        self.assertEqual(str(cm.exception), "sequences[1][2] is negative (-6)")
         message = "^sequence item 2 is negative \\(-6\\)$"
         with self.assertRaisesRegex(ValueError, message):
             aligner.score(s1, s2c)
