@@ -911,11 +911,6 @@ sequence_converter(PyObject* argument, void* pointer)
     Py_buffer* view = pointer;
     const int flag = PyBUF_FORMAT | PyBUF_C_CONTIGUOUS;
 
-    if (argument == NULL) {
-        PyBuffer_Release(view);
-        return 1;
-    }
-
     if (PyObject_GetBuffer(argument, view, flag) != 0) {
         PyErr_SetString(PyExc_TypeError, "argument is not a sequence");
         return 0;
@@ -1060,8 +1055,6 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
     for (i = 0; i < n; i++) {
         sequence = PyList_GET_ITEM(sequences, i);
         if (sequence_converter(sequence, &buffers[i])) {
-            if (substitution_matrix.obj) {
-            }
         }
         else {
             PyErr_Clear();  // to clear the exception raised by PyObject_GetBuffer
