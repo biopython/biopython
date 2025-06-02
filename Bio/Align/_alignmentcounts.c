@@ -911,23 +911,25 @@ sequence_converter(PyObject* argument, void* pointer)
     Py_buffer* view = pointer;
     const int flag = PyBUF_FORMAT | PyBUF_C_CONTIGUOUS;
 
-    if (PyObject_GetBuffer(argument, view, flag) != 0) {
-        PyErr_Clear();
-        return 0;
+    if (PyObject_GetBuffer(argument, view, flag) == 0) {
+        if (view->ndim == 1 && view->len > 0) {
+            if ((strcmp(view->format, "i") == 0
+              || strcmp(view->format, "l") == 0)
+              && view->itemsize == sizeof(int))
+                /* buffer contains int values */ return 1;
+        }
+        PyBuffer_Release(view);
+    } else PyErr_Clear();
+    view->buf = NULL;
+    if (PySequence_Check(argument)) {
+        view->obj = argument;
+        return 1;
     }
-    if (view->ndim != 1) {
-        return 0;
+    else if (argument == Py_None) {
+        view->obj = NULL;
+        return 1;
     }
-    if (view->len == 0) {
-        return 0;
-    }
-    if (strcmp(view->format, "i") != 0 && strcmp(view->format, "l") != 0) {
-        return 0;
-    }
-    if (view->itemsize != sizeof(int)) {
-        return 0;
-    }
-    return 1;
+    else return 0;
 }
  
 static int
@@ -1046,16 +1048,9 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
 
     for (i = 0; i < n; i++) {
         sequence = PyList_GET_ITEM(sequences, i);
-        if (sequence_converter(sequence, &buffers[i])) {
-        }
-        else {
-            buffers[i].buf = NULL;
-            if (PySequence_Check(sequence)) buffers[i].obj = sequence;
-            else if (sequence == Py_None) buffers[i].obj = NULL;
-            else {
-                n = i;
-                goto exit;
-            }
+        if (!sequence_converter(sequence, &buffers[i])) {
+            n = i;
+            goto exit;
         }
     }
 
