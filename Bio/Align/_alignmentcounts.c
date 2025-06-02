@@ -913,29 +913,34 @@ sequence_converter(PyObject* argument, void* pointer)
 
     if (PyObject_GetBuffer(argument, view, flag) != 0) {
         PyErr_SetString(PyExc_TypeError, "argument is not a sequence");
+        PyErr_Clear();  // to clear the exception raised by PyObject_GetBuffer
         return 0;
     }
     if (view->ndim != 1) {
         PyErr_Format(PyExc_ValueError,
                      "sequence has incorrect rank (%d expected 1)", view->ndim);
+        PyErr_Clear();  // to clear the exception raised by PyObject_GetBuffer
         return 0;
     }
     if (view->len == 0) {
         PyErr_SetString(PyExc_ValueError, "sequence has zero length");
+        PyErr_Clear();  // to clear the exception raised by PyObject_GetBuffer
         return 0;
     }
     if (strcmp(view->format, "i") != 0 && strcmp(view->format, "l") != 0) {
         PyErr_Format(PyExc_ValueError,
                      "sequence has incorrect data type '%s'", view->format);
+        PyErr_Clear();  // to clear the exception raised by PyObject_GetBuffer
         return 0;
     }
     if (view->itemsize != sizeof(int)) {
         PyErr_Format(PyExc_ValueError,
                     "sequence has unexpected item byte size "
                     "(%ld, expected %ld)", view->itemsize, sizeof(int));
+        PyErr_Clear();  // to clear the exception raised by PyObject_GetBuffer
         return 0;
     }
-    return Py_CLEANUP_SUPPORTED;
+    return 1;
 }
  
 static int
@@ -1057,7 +1062,6 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
         if (sequence_converter(sequence, &buffers[i])) {
         }
         else {
-            PyErr_Clear();  // to clear the exception raised by PyObject_GetBuffer
             buffers[i].buf = NULL;
             if (PySequence_Check(sequence)) buffers[i].obj = sequence;
             else if (sequence == Py_None) buffers[i].obj = NULL;
