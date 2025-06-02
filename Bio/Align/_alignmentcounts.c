@@ -1225,7 +1225,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                     aligned += end1 - start1;
                     if (sA == NULL) {
                         if (PyBytes_Check(sequenceA->obj)) {
-                            bA = PyBytes_AS_STRING(sequenceA->obj) + start1;
+                            bA = PyBytes_AS_STRING(sequenceA->obj);
                             oA = NULL;
                         }
                         else {
@@ -1238,13 +1238,13 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                         i, start1, end1, end1 - start1);
                                     goto error;
                                 }
-                                bA = PyBytes_AS_STRING(oA);
+                                bA = PyBytes_AS_STRING(oA) - start1;
                             }
                         }
                     }
                     if (sB == NULL) {
                         if (PyBytes_Check(sequenceB->obj)) {
-                            bB = PyBytes_AS_STRING(sequenceB->obj) + start2;
+                            bB = PyBytes_AS_STRING(sequenceB->obj);
                             oB = NULL;
                         }
                         else {
@@ -1258,7 +1258,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                         j, start2, end2, end2 - start2);
                                     goto error;
                                 }
-                                bB = PyBytes_AS_STRING(oB);
+                                bB = PyBytes_AS_STRING(oB) - start2;
                             }
                         }
                     }
@@ -1279,7 +1279,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                  l1 < end1 && l2 < end2;
                                  l1++, l2++) {
                                 cA = sA[l1];
-                                cB = (int) bB[l2-start2];
+                                cB = (int) bB[l2];
                                 if (cA == wildcard || cB == wildcard) ;
                                 else if (cA == cB) identities++;
                                 else mismatches++;
@@ -1290,7 +1290,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                             for (l1 = start1, l2 = start2;
                                  l1 < end1 && l2 < end2;
                                  l1++, l2++) {
-                                cA = (int) bA[l1-start1];
+                                cA = (int) bA[l1];
                                 cB = sB[l2];
                                 if (cA == wildcard || cB == wildcard) ;
                                 else if (cA == cB) identities++;
@@ -1302,8 +1302,8 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                             for (l1 = start1, l2 = start2;
                                  l1 < end1 && l2 < end2;
                                  l1++, l2++) {
-                                cA = (int) bA[l1-start1];
-                                cB = (int) bB[l2-start2];
+                                cA = (int) bA[l1];
+                                cB = (int) bB[l2];
                                 if (cA == wildcard || cB == wildcard) ;
                                 else if (cA == cB) identities++;
                                 else mismatches++;
@@ -1370,7 +1370,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                  l1 < end1 && l2 < end2;
                                  l1++, l2++) {
                                 cA = sA[l1];
-                                cB = (int) bB[l2-start2];
+                                cB = (int) bB[l2];
                                 if (cA < 0) {
                                     PyErr_Format(PyExc_ValueError,
                                         "sequences[%d][%zd] is negative (%d)",
@@ -1426,7 +1426,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                             for (l1 = start1, l2 = start2;
                                  l1 < end1 && l2 < end2;
                                  l1++, l2++) {
-                                cA = (int) bA[l1-start1];
+                                cA = (int) bA[l1];
                                 cB = sB[l2];
                                 if (cA < 0) {
                                     PyErr_Format(PyExc_ValueError,
@@ -1483,8 +1483,8 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                             for (l1 = start1, l2 = start2;
                                  l1 < end1 && l2 < end2;
                                  l1++, l2++) {
-                                cA = (int) bA[l1-start1];
-                                cB = (int) bB[l2-start2];
+                                cA = (int) bA[l1];
+                                cB = (int) bB[l2];
                                 if (cA < 0) {
                                     PyErr_Format(PyExc_ValueError,
                                         "sequences[%d][%zd] is negative (%d)",
