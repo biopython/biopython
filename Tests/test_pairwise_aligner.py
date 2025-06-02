@@ -4000,6 +4000,13 @@ query             3 AT-T 0
         self.assertEqual(counts.identities, 3)
         self.assertEqual(counts.mismatches, 0)
         self.assertAlmostEqual(counts.score, 3.0)
+        self.assertEqual(alignment.sequences[0], "ATAT")
+        alignment.sequences[0] = "ATCG"
+        with self.assertRaises(ValueError) as cm:
+            alignment.counts(aligner)
+        self.assertEqual(
+            str(cm.exception), "sequence contains letters not in the alphabet"
+        )
 
     def test_match_dictionary2(self):
         try:

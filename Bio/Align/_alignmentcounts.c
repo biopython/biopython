@@ -60,7 +60,6 @@ static int _map_indices(Py_buffer* view, Py_buffer* substitution_matrix) {
                     "sequence contains letters not in the alphabet");
                 return 0;
             }
-         //   indices[i] = index;
         }
         PyBuffer_Release(&buffer);
     }
@@ -1190,7 +1189,6 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
     PyObject* oB = NULL;
 
     int path = 0;
-    int index;
 
     for (i = 0; i < n; i++) {
         sequenceA = &buffers[i];
