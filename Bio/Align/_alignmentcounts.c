@@ -24,6 +24,7 @@
 
 
 static PyTypeObject* Aligner_Type = NULL;
+static PyObject *SubstitutionMatrix_Type = NULL;
 
 
 static Array_get_mapping_buffer_signature Array_get_mapping_buffer;
@@ -1661,6 +1662,7 @@ PyInit__alignmentcounts(void)
         Py_DECREF(module);
         return NULL;
     }
+    SubstitutionMatrix_Type = PyObject_GetAttrString(mod, "SubstitutionMatrix");
 
     PyObject *capsule = PyObject_GetAttrString(mod, "mapping_buffer_capsule");
     Py_DECREF(mod);

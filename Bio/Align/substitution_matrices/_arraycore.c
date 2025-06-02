@@ -4,19 +4,15 @@
 
 #define MISSING_LETTER -1
 
-static PyTypeObject *basetype = NULL;
-static PyObject *class_type = NULL;
-
-typedef struct {
-    PyObject* alphabet;
-    Py_buffer mapping;
-} Fields;
+static PyTypeObject *SubstitutionMatrix_Type = NULL;
 
 static void Array_get_mapping_buffer(PyObject* self, Py_buffer* buffer) {
-    if (!PyObject_IsInstance(self, class_type)) {
+    if (!PyObject_IsInstance(self, (PyObject*)SubstitutionMatrix_Type)) {
         memset(buffer, 0, sizeof(Py_buffer));
     }
     else {
+        PyObject* bases = SubstitutionMatrix_Type->tp_bases;
+        PyTypeObject* basetype = (PyTypeObject*)PyTuple_GET_ITEM(bases, 0);
         Fields* fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
         Py_buffer* mapping = &fields->mapping;
         PyObject* obj = mapping->obj;
@@ -31,6 +27,8 @@ static void Array_get_mapping_buffer(PyObject* self, Py_buffer* buffer) {
 }
 
 static PyObject *Array_get_alphabet(PyObject *self, void *closure) {
+    PyObject* bases = SubstitutionMatrix_Type->tp_bases;
+    PyTypeObject* basetype = (PyTypeObject*)PyTuple_GET_ITEM(bases, 0);
     Fields* fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
     PyObject* alphabet = fields->alphabet;
     if (!alphabet) Py_RETURN_NONE;
@@ -39,6 +37,8 @@ static PyObject *Array_get_alphabet(PyObject *self, void *closure) {
 }
 
 static int Array_set_alphabet(PyObject *self, PyObject *arg, void *closure) {
+    PyObject* bases = SubstitutionMatrix_Type->tp_bases;
+    PyTypeObject* basetype = (PyTypeObject*)PyTuple_GET_ITEM(bases, 0);
     Fields* fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
     if (fields->alphabet) {
         PyErr_SetString(PyExc_ValueError, "the alphabet has already been set.");
@@ -141,6 +141,8 @@ static int Array_set_alphabet(PyObject *self, PyObject *arg, void *closure) {
 static void
 Array_dealloc(PyObject *self)
 {
+    PyObject* bases = SubstitutionMatrix_Type->tp_bases;
+    PyTypeObject* basetype = (PyTypeObject*)PyTuple_GET_ITEM(bases, 0);
     Fields* fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
     /* fields->alphabet may be NULL if this instance was created by numpy
      * and __array_finalize__ somehow failed.
@@ -160,6 +162,8 @@ Array_finalize(PyObject *self, PyObject *obj)
                         "__array_finalize__ argument is not an Array object");
         return NULL;
     }
+    PyObject* bases = SubstitutionMatrix_Type->tp_bases;
+    PyTypeObject* basetype = (PyTypeObject*)PyTuple_GET_ITEM(bases, 0);
     Fields* self_fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
     const Fields* obj_fields = (Fields*)((intptr_t)obj + basetype->tp_basicsize);
     PyObject* alphabet = obj_fields->alphabet;
@@ -211,7 +215,7 @@ PyInit__arraycore(void)
         return NULL;
     }
 
-    basetype = (PyTypeObject *)baseclass;
+    PyTypeObject* basetype = (PyTypeObject *)baseclass;
     if (!(basetype->tp_flags & Py_TPFLAGS_BASETYPE)) {
         PyErr_SetString(PyExc_RuntimeError,
                         "numpy ndarray class is not subclassable");
@@ -253,14 +257,24 @@ PyInit__arraycore(void)
     };
 
     // Create the type
-    class_type = PyType_FromSpecWithBases(&class_spec, bases);
+    SubstitutionMatrix_Type = (PyTypeObject*)PyType_FromSpecWithBases(&class_spec, bases);
     Py_DECREF(bases);
-    if (!class_type)
+    if (!SubstitutionMatrix_Type)
         return NULL;
 
+    if (!PyTuple_Check(SubstitutionMatrix_Type->tp_bases)
+      || PyTuple_GET_SIZE(SubstitutionMatrix_Type->tp_bases) != 1
+      || PyTuple_GET_ITEM(SubstitutionMatrix_Type->tp_bases, 0) != (PyObject*)basetype) {
+        PyErr_SetString(PyExc_RuntimeError,
+            "failed to get base class from SubstitutionMatrix type.");
+        return NULL;
+    }
+
     // Add it to the module
-    if (PyModule_AddObject(mod, "SubstitutionMatrix", class_type) < 0) {
-        Py_DECREF(class_type);
+    if (PyModule_AddObject(mod,
+                           "SubstitutionMatrix",
+                           (PyObject*)SubstitutionMatrix_Type) < 0) {
+        Py_DECREF(SubstitutionMatrix_Type);
         Py_DECREF(mod);
         return NULL;
     }
@@ -275,12 +289,12 @@ PyInit__arraycore(void)
         "Bio.Align.substitution_matrices._arraycore.mapping_buffer_capsule",
         NULL);
     if (!capsule) {
-        Py_DECREF(class_type);
+        Py_DECREF(SubstitutionMatrix_Type);
         Py_DECREF(mod);
         return NULL;
     }
     if (PyModule_AddObject(mod, "mapping_buffer_capsule", capsule) < 0) {
-        Py_DECREF(class_type);
+        Py_DECREF(SubstitutionMatrix_Type);
         Py_DECREF(mod);
         Py_DECREF(capsule);
         return NULL;
