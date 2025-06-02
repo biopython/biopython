@@ -30,31 +30,6 @@ static Array_get_mapping_buffer_signature Array_get_mapping_buffer;
 /* this will be set when initializing the module */
 
 
-static int _map_indices(Py_buffer* view, Py_buffer* substitution_matrix) {
-    Py_ssize_t i;
-    int index;
-    int* indices = view->buf;
-    const Py_ssize_t n = view->len / view->itemsize;
-    Py_buffer buffer;
-    Array_get_mapping_buffer(substitution_matrix->obj, &buffer);
-    if (buffer.obj) {
-        PyBuffer_Release(&buffer);
-    }
-    else {
-        const Py_ssize_t m = substitution_matrix->shape[0];
-        for (i = 0; i < n; i++) {
-            index = indices[i];
-            if (index >= m) {
-                PyErr_Format(PyExc_ValueError,
-                             "sequence item %zd is out of bound"
-                             " (%d, should be < %zd)", i, index, m);
-                return 0;
-            }
-        }
-    }
-    return 1;
-}
-
 typedef struct {
     PyObject_HEAD
     Py_ssize_t open_left_insertions;
@@ -1086,7 +1061,6 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
         sequence = PyList_GET_ITEM(sequences, i);
         if (sequence_converter(sequence, &buffers[i])) {
             if (substitution_matrix.obj) {
-                if (!_map_indices(&buffers[i], &substitution_matrix)) goto exit;
             }
         }
         else {
@@ -1454,6 +1428,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                     if (cA == MISSING_LETTER || cB == MISSING_LETTER) {
                                         PyErr_SetString(PyExc_ValueError,
                                             "sequence contains letters not in the alphabet");
+                                        Py_DECREF(oB);
                                         goto error;
                                     }
                                 }
@@ -1510,6 +1485,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                     if (cA == MISSING_LETTER || cB == MISSING_LETTER) {
                                         PyErr_SetString(PyExc_ValueError,
                                             "sequence contains letters not in the alphabet");
+                                        Py_DECREF(oA);
                                         goto error;
                                     }
                                 }
@@ -1570,6 +1546,8 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                     if (cA == MISSING_LETTER || cB == MISSING_LETTER) {
                                         PyErr_SetString(PyExc_ValueError,
                                             "sequence contains letters not in the alphabet");
+                                        Py_DECREF(oA);
+                                        Py_DECREF(oB);
                                         goto error;
                                     }
                                 }

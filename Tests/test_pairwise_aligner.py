@@ -6725,7 +6725,7 @@ G  -- G  G
         with self.assertRaises(ValueError) as cm:
             alignment.counts(aligner)
         self.assertEqual(
-            str(cm.exception), "sequence item 1 is out of bound (28, should be < 10)"
+            str(cm.exception), "sequence[1][1] is out of bound (28, should be < 10)"
         )
         alignment.sequences[1] = s2c
         with self.assertRaises(ValueError) as cm:
