@@ -7,10 +7,7 @@
 static PyTypeObject *SubstitutionMatrix_Type = NULL;
 
 static void Array_get_mapping_buffer(PyObject* self, Py_buffer* buffer) {
-    if (!PyObject_IsInstance(self, (PyObject*)SubstitutionMatrix_Type)) {
-        memset(buffer, 0, sizeof(Py_buffer));
-    }
-    else {
+    if (PyObject_IsInstance(self, (PyObject*)SubstitutionMatrix_Type)) {
         PyObject* bases = SubstitutionMatrix_Type->tp_bases;
         PyTypeObject* basetype = (PyTypeObject*)PyTuple_GET_ITEM(bases, 0);
         Fields* fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
@@ -19,11 +16,10 @@ static void Array_get_mapping_buffer(PyObject* self, Py_buffer* buffer) {
         if (obj) {
             memcpy(buffer, mapping, sizeof(Py_buffer));
             Py_INCREF(obj);
-        }
-        else {
-            memset(buffer, 0, sizeof(Py_buffer));
+            return;
         }
     }
+    memset(buffer, 0, sizeof(Py_buffer));
 }
 
 static PyObject *Array_get_alphabet(PyObject *self, void *closure) {
