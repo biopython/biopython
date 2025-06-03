@@ -7054,57 +7054,69 @@ Aligner_fogsaa_align_matrix(Aligner* self,
     FOGSAA_EXIT_ALIGN
 }
 
-static int _map_indices(Py_buffer* view, Py_buffer* substitution_matrix) {
-    Py_ssize_t i;
-    int index;
-    int* indices = view->buf;
+static int _check_indices(Py_buffer* view, Py_buffer* substitution_matrix) {
+    const Py_ssize_t m = substitution_matrix->shape[0];
+    const int* indices = view->buf;
     const Py_ssize_t n = view->len / view->itemsize;
+    Py_ssize_t i;
+    for (i = 0; i < n; i++) {
+        const int index = indices[i];
+        if (index < 0) {
+            PyErr_Format(PyExc_ValueError,
+                         "sequence item %zd is negative (%d)",
+                         i, index);
+            return 0;
+        }
+        if (index >= m) {
+            PyErr_Format(PyExc_ValueError,
+                         "sequence item %zd is out of bound"
+                         " (%d, should be < %zd)", i, index, m);
+            return 0;
+        }
+    }
+    return 1;
+}
+
+static int _really_map_indices(Py_buffer* view, Py_buffer* buffer) {
+    Py_ssize_t i;
+    const int* mapping = buffer->buf;
+    const Py_ssize_t m = buffer->len / buffer->itemsize;
+    const Py_ssize_t n = view->len / view->itemsize;
+    int* const indices = view->buf;
+    for (i = 0; i < n; i++) {
+        int index = indices[i];
+        if (index < 0) {
+            PyErr_Format(PyExc_ValueError,
+                         "sequence item %zd is negative (%d)",
+                         i, index);
+            return 0;
+        }
+        if (index >= m) {
+            PyErr_Format(PyExc_ValueError,
+                         "sequence item %zd is out of bound"
+                         " (%d, should be < %zd)", i, index, m);
+            return 0;
+        }
+        index = mapping[index];
+        if (index == MISSING_LETTER) {
+            PyErr_SetString(PyExc_ValueError,
+                "sequence contains letters not in the alphabet");
+            return 0;
+        }
+        indices[i] = index;
+    }
+    PyBuffer_Release(buffer);
+    return 1;
+}
+
+static int _map_indices(Py_buffer* view, Py_buffer* substitution_matrix) {
     Py_buffer buffer;
     Array_get_mapping_buffer(substitution_matrix->obj, &buffer);
     if (buffer.obj) {
-        const int* mapping = buffer.buf;
-        const Py_ssize_t m = buffer.len / buffer.itemsize;
-        for (i = 0; i < n; i++) {
-            index = indices[i];
-            if (index < 0) {
-                PyErr_Format(PyExc_ValueError,
-                             "sequence item %zd is negative (%d)",
-                             i, index);
-                return 0;
-            }
-            if (index >= m) {
-                PyErr_Format(PyExc_ValueError,
-                             "sequence item %zd is out of bound"
-                             " (%d, should be < %zd)", i, index, m);
-                return 0;
-            }
-            index = mapping[index];
-            if (index == MISSING_LETTER) {
-                PyErr_SetString(PyExc_ValueError,
-                    "sequence contains letters not in the alphabet");
-                return 0;
-            }
-            indices[i] = index;
-        }
-        PyBuffer_Release(&buffer);
+        return _really_map_indices(view, &buffer);
     }
     else {
-        const Py_ssize_t m = substitution_matrix->shape[0];
-        for (i = 0; i < n; i++) {
-            index = indices[i];
-            if (index < 0) {
-                PyErr_Format(PyExc_ValueError,
-                             "sequence item %zd is negative (%d)",
-                             i, index);
-                return 0;
-            }
-            if (index >= m) {
-                PyErr_Format(PyExc_ValueError,
-                             "sequence item %zd is out of bound"
-                             " (%d, should be < %zd)", i, index, m);
-                return 0;
-            }
-        }
+        return _check_indices(view, substitution_matrix);
     }
     return 1;
 }
