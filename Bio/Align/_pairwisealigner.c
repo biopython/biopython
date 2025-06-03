@@ -7077,7 +7077,7 @@ static int _check_indices(Py_buffer* view, Py_buffer* substitution_matrix) {
     return 1;
 }
 
-static int _really_map_indices(Py_buffer* view, Py_buffer* buffer) {
+static int _map_indices(Py_buffer* view, Py_buffer* buffer) {
     Py_ssize_t i;
     const int* mapping = buffer->buf;
     const Py_ssize_t m = buffer->len / buffer->itemsize;
@@ -7089,36 +7089,25 @@ static int _really_map_indices(Py_buffer* view, Py_buffer* buffer) {
             PyErr_Format(PyExc_ValueError,
                          "sequence item %zd is negative (%d)",
                          i, index);
-            return 0;
+            break;
         }
         if (index >= m) {
             PyErr_Format(PyExc_ValueError,
                          "sequence item %zd is out of bound"
                          " (%d, should be < %zd)", i, index, m);
-            return 0;
+            break;
         }
         index = mapping[index];
         if (index == MISSING_LETTER) {
             PyErr_SetString(PyExc_ValueError,
                 "sequence contains letters not in the alphabet");
-            return 0;
+            break;
         }
         indices[i] = index;
     }
     PyBuffer_Release(buffer);
-    return 1;
-}
-
-static int _map_indices(Py_buffer* view, Py_buffer* substitution_matrix) {
-    Py_buffer buffer;
-    Array_get_mapping_buffer(substitution_matrix->obj, &buffer);
-    if (buffer.obj) {
-        return _really_map_indices(view, &buffer);
-    }
-    else {
-        return _check_indices(view, substitution_matrix);
-    }
-    return 1;
+    if (i == n) return 1;
+    return 0;
 }
 
 static int
@@ -7205,8 +7194,16 @@ Aligner_score(Aligner* self, PyObject* args, PyObject* keywords)
         return NULL;
 
     if (self->substitution_matrix.obj) {
-        if (!_map_indices(&bA, &self->substitution_matrix)) goto exit;
-        if (!_map_indices(&bB, &self->substitution_matrix)) goto exit;
+        Py_buffer buffer;
+        Array_get_mapping_buffer(self->substitution_matrix.obj, &buffer);
+        if (buffer.obj) {
+            if (!_map_indices(&bA, &buffer)) goto exit;
+            if (!_map_indices(&bB, &buffer)) goto exit;
+        }
+        else {
+            if (!_check_indices(&bA, &self->substitution_matrix)) goto exit;
+            if (!_check_indices(&bB, &self->substitution_matrix)) goto exit;
+        }
     }
 
     nA = (int) (bA.len / bA.itemsize);
@@ -7325,8 +7322,16 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
         return NULL;
 
     if (self->substitution_matrix.obj) {
-        if (!_map_indices(&bA, &self->substitution_matrix)) goto exit;
-        if (!_map_indices(&bB, &self->substitution_matrix)) goto exit;
+        Py_buffer buffer;
+        Array_get_mapping_buffer(self->substitution_matrix.obj, &buffer);
+        if (buffer.obj) {
+            if (!_map_indices(&bA, &buffer)) goto exit;
+            if (!_map_indices(&bB, &buffer)) goto exit;
+        }
+        else {
+            if (!_check_indices(&bA, &self->substitution_matrix)) goto exit;
+            if (!_check_indices(&bB, &self->substitution_matrix)) goto exit;
+        }
     }
 
     nA = (int) (bA.len / bA.itemsize);
