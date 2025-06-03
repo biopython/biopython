@@ -6,22 +6,6 @@
 
 static PyTypeObject *SubstitutionMatrix_Type = NULL;
 
-static void Array_get_mapping_buffer(PyObject* self, Py_buffer* buffer) {
-    if (PyObject_IsInstance(self, (PyObject*)SubstitutionMatrix_Type)) {
-        PyObject* bases = SubstitutionMatrix_Type->tp_bases;
-        PyTypeObject* basetype = (PyTypeObject*)PyTuple_GET_ITEM(bases, 0);
-        Fields* fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
-        Py_buffer* mapping = &fields->mapping;
-        PyObject* obj = mapping->obj;
-        if (obj) {
-            memcpy(buffer, mapping, sizeof(Py_buffer));
-            Py_INCREF(obj);
-            return;
-        }
-    }
-    memset(buffer, 0, sizeof(Py_buffer));
-}
-
 static PyObject *Array_get_alphabet(PyObject *self, void *closure) {
     PyObject* bases = SubstitutionMatrix_Type->tp_bases;
     PyTypeObject* basetype = (PyTypeObject*)PyTuple_GET_ITEM(bases, 0);
@@ -272,27 +256,6 @@ PyInit__arraycore(void)
                            (PyObject*)SubstitutionMatrix_Type) < 0) {
         Py_DECREF(SubstitutionMatrix_Type);
         Py_DECREF(mod);
-        return NULL;
-    }
-
-    // Ensure that Array_get_mapping_buffer has the correct signature
-    // by comparing to Array_get_mapping_buffer_signature:
-    // (the compiler will complain if the signature of Array_get_mapping_buffer
-    // is inconsistent with Array_get_mapping_buffer_signature as defined in
-    // the header file):
-    Array_get_mapping_buffer_signature function = Array_get_mapping_buffer;
-    PyObject* capsule = PyCapsule_New((void*)function,
-        "Bio.Align.substitution_matrices._arraycore.mapping_buffer_capsule",
-        NULL);
-    if (!capsule) {
-        Py_DECREF(SubstitutionMatrix_Type);
-        Py_DECREF(mod);
-        return NULL;
-    }
-    if (PyModule_AddObject(mod, "mapping_buffer_capsule", capsule) < 0) {
-        Py_DECREF(SubstitutionMatrix_Type);
-        Py_DECREF(mod);
-        Py_DECREF(capsule);
         return NULL;
     }
 

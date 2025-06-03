@@ -24,11 +24,8 @@
 
 
 static PyTypeObject* Aligner_Type = NULL;
-static PyObject *SubstitutionMatrix_Type = NULL;
-
-
-static Array_get_mapping_buffer_signature Array_get_mapping_buffer;
-/* this will be set when initializing the module */
+static PyTypeObject* SubstitutionMatrix_Type = NULL;
+/* these will be set when initializing the module */
 
 
 typedef struct {
@@ -978,6 +975,22 @@ static char _alignmentcounts__doc__[] =
 
 static const char _calculate__doc__[] = "calculate the matches, mismatches, gaps, and score of the alignment";
 
+static void _get_mapping_buffer(PyObject* self, Py_buffer* buffer) {
+    if (PyObject_IsInstance(self, (PyObject*)SubstitutionMatrix_Type)) {
+        PyObject* bases = SubstitutionMatrix_Type->tp_bases;
+        PyTypeObject* basetype = (PyTypeObject*)PyTuple_GET_ITEM(bases, 0);
+        Fields* fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
+        Py_buffer* mapping = &fields->mapping;
+        PyObject* obj = mapping->obj;
+        if (obj) {
+            memcpy(buffer, mapping, sizeof(Py_buffer));
+            Py_INCREF(obj);
+            return;
+        }
+    }
+    memset(buffer, 0, sizeof(Py_buffer));
+}
+
 static PyObject*
 _calculate(PyObject* self, PyObject* args, PyObject* keywords)
 {
@@ -1063,7 +1076,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
 
     if (substitution_matrix.obj) {
         Py_buffer mapping_buffer;
-        Array_get_mapping_buffer(substitution_matrix.obj, &mapping_buffer);
+        _get_mapping_buffer(substitution_matrix.obj, &mapping_buffer);
         if (mapping_buffer.obj) {
             mapping = mapping_buffer.buf;
             m = mapping_buffer.len / mapping_buffer.itemsize;
@@ -1662,21 +1675,8 @@ PyInit__alignmentcounts(void)
         Py_DECREF(module);
         return NULL;
     }
-    SubstitutionMatrix_Type = PyObject_GetAttrString(mod, "SubstitutionMatrix");
-
-    PyObject *capsule = PyObject_GetAttrString(mod, "mapping_buffer_capsule");
+    SubstitutionMatrix_Type = (PyTypeObject*)PyObject_GetAttrString(mod, "SubstitutionMatrix");
     Py_DECREF(mod);
-    if (!capsule) {
-        Py_DECREF(module);
-        return NULL;
-    }         
-    Array_get_mapping_buffer =
-        (Array_get_mapping_buffer_signature)PyCapsule_GetPointer(capsule,
-        "Bio.Align.substitution_matrices._arraycore.mapping_buffer_capsule");
-    if (!Array_get_mapping_buffer) {
-        Py_DECREF(module);
-        return NULL;
-    }
 
     mod = PyImport_ImportModule("Bio.Align._pairwisealigner");
     if (!mod) {
