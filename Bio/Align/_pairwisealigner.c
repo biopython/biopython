@@ -40,7 +40,7 @@
     } \
 }
 
-static Array_get_mapping_buffer_signature Array_get_mapping_buffer;
+static PyTypeObject *SubstitutionMatrix_Type = NULL;
 /* this will be set when initializing the module */
 
 
@@ -7110,23 +7110,21 @@ static bool _map_indices(Py_buffer* view, Py_buffer* buffer) {
 
 static bool _prepare_indices(Py_buffer* substitution_matrix, Py_buffer* bA, Py_buffer* bB)
 {
-    Py_buffer buffer;
-    Array_get_mapping_buffer(substitution_matrix->obj, &buffer);
-    if (buffer.obj) {
-        if (!_map_indices(bA, &buffer)) {
-            PyBuffer_Release(&buffer);
-            return false;
+    if (PyObject_IsInstance(substitution_matrix->obj,
+                            (PyObject*)SubstitutionMatrix_Type)) {
+        PyObject* bases = SubstitutionMatrix_Type->tp_bases;
+        const PyTypeObject* basetype = (PyTypeObject*)PyTuple_GET_ITEM(bases, 0);
+        const Py_ssize_t offset = basetype->tp_basicsize;
+        Fields* fields = (Fields*)((intptr_t)substitution_matrix->obj + offset);
+        Py_buffer* mapping = &fields->mapping;
+        if (mapping->obj) {
+            if (!_map_indices(bA, mapping)) return false;
+            if (!_map_indices(bB, mapping)) return false;
+            return true;
         }
-        if (!_map_indices(bB, &buffer)) {
-            PyBuffer_Release(&buffer);
-            return false;
-        }
-        PyBuffer_Release(&buffer);
     }
-    else {
-        if (!_check_indices(bA, substitution_matrix)) return false;
-        if (!_check_indices(bB, substitution_matrix)) return false;
-    }
+    if (!_check_indices(bA, substitution_matrix)) return false;
+    if (!_check_indices(bB, substitution_matrix)) return false;
     return true;
 }
 
@@ -7531,17 +7529,10 @@ PyInit__pairwisealigner(void)
         return NULL;
     }
 
-    PyObject *capsule = PyObject_GetAttrString(mod, "mapping_buffer_capsule");
+    SubstitutionMatrix_Type = (PyTypeObject*) PyObject_GetAttrString(mod, "SubstitutionMatrix");
     Py_DECREF(mod);
-    if (!capsule) {
-        Py_DECREF(&Aligner_Type);
-        Py_DECREF(module);
-        return NULL;
-    }
-    Array_get_mapping_buffer =
-        (Array_get_mapping_buffer_signature)PyCapsule_GetPointer(capsule,
-        "Bio.Align.substitution_matrices._arraycore.mapping_buffer_capsule");
-    if (!Array_get_mapping_buffer) {
+
+    if (!SubstitutionMatrix_Type) {
         Py_DECREF(&Aligner_Type);
         Py_DECREF(module);
         return NULL;
