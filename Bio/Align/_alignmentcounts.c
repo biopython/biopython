@@ -975,17 +975,13 @@ static char _alignmentcounts__doc__[] =
 
 static const char _calculate__doc__[] = "calculate the matches, mismatches, gaps, and score of the alignment";
 
-static void _get_mapping_buffer(PyObject* self, Py_buffer* mapping_buffer) {
+static PyObject* _get_mapping_buffer(PyObject* self, Py_buffer* mapping_buffer) {
     PyObject* bases = SubstitutionMatrix_Type->tp_bases;
     PyTypeObject* basetype = (PyTypeObject*)PyTuple_GET_ITEM(bases, 0);
     Fields* fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
     Py_buffer* mapping = &fields->mapping;
     PyObject* obj = mapping->obj;
-    if (obj) {
-        memcpy(mapping_buffer, mapping, sizeof(Py_buffer));
-        Py_INCREF(obj);
-        return;
-    }
+    return obj;
 }
 
 static PyObject*
@@ -1077,7 +1073,17 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
         m = substitution_matrix.shape[0];
         if (PyObject_IsInstance(substitution_matrix.obj,
                                (PyObject*)SubstitutionMatrix_Type)) {
-            _get_mapping_buffer(substitution_matrix.obj, &mapping_buffer);
+            // _get_mapping_buffer(substitution_matrix.obj, &mapping_buffer);
+
+            PyObject* bases = SubstitutionMatrix_Type->tp_bases;
+            PyTypeObject* basetype = (PyTypeObject*)PyTuple_GET_ITEM(bases, 0);
+            Fields* fields = (Fields*)((intptr_t)substitution_matrix.obj + basetype->tp_basicsize);
+            Py_buffer* fields_mapping = &fields->mapping;
+            PyObject* obj = fields_mapping->obj;   
+            if (obj) {
+                memcpy(&mapping_buffer, fields_mapping, sizeof(Py_buffer));
+                Py_INCREF(obj);
+            }
             if (mapping_buffer.obj) {
                 mapping = mapping_buffer.buf;
                 m = mapping_buffer.len / mapping_buffer.itemsize;
