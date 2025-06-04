@@ -7112,8 +7112,7 @@ static bool _prepare_indices(Py_buffer* substitution_matrix, Py_buffer* bA, Py_b
 {
     if (PyObject_IsInstance(substitution_matrix->obj,
                             (PyObject*)SubstitutionMatrix_Type)) {
-        PyObject* bases = SubstitutionMatrix_Type->tp_bases;
-        const PyTypeObject* basetype = (PyTypeObject*)PyTuple_GET_ITEM(bases, 0);
+        const PyTypeObject* basetype = SubstitutionMatrix_Type->tp_base;
         const Py_ssize_t offset = basetype->tp_basicsize;
         Fields* fields = (Fields*)((intptr_t)substitution_matrix->obj + offset);
         Py_buffer* mapping = &fields->mapping;
