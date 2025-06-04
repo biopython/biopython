@@ -975,20 +975,17 @@ static char _alignmentcounts__doc__[] =
 
 static const char _calculate__doc__[] = "calculate the matches, mismatches, gaps, and score of the alignment";
 
-static void _get_mapping_buffer(PyObject* self, Py_buffer* buffer) {
-    if (PyObject_IsInstance(self, (PyObject*)SubstitutionMatrix_Type)) {
-        PyObject* bases = SubstitutionMatrix_Type->tp_bases;
-        PyTypeObject* basetype = (PyTypeObject*)PyTuple_GET_ITEM(bases, 0);
-        Fields* fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
-        Py_buffer* mapping = &fields->mapping;
-        PyObject* obj = mapping->obj;
-        if (obj) {
-            memcpy(buffer, mapping, sizeof(Py_buffer));
-            Py_INCREF(obj);
-            return;
-        }
+static void _get_mapping_buffer(PyObject* self, Py_buffer* mapping_buffer) {
+    PyObject* bases = SubstitutionMatrix_Type->tp_bases;
+    PyTypeObject* basetype = (PyTypeObject*)PyTuple_GET_ITEM(bases, 0);
+    Fields* fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
+    Py_buffer* mapping = &fields->mapping;
+    PyObject* obj = mapping->obj;
+    if (obj) {
+        memcpy(mapping_buffer, mapping, sizeof(Py_buffer));
+        Py_INCREF(obj);
+        return;
     }
-    memset(buffer, 0, sizeof(Py_buffer));
 }
 
 static PyObject*
@@ -1076,13 +1073,17 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
 
     if (substitution_matrix.obj) {
         Py_buffer mapping_buffer;
-        _get_mapping_buffer(substitution_matrix.obj, &mapping_buffer);
-        if (mapping_buffer.obj) {
-            mapping = mapping_buffer.buf;
-            m = mapping_buffer.len / mapping_buffer.itemsize;
-            PyBuffer_Release(&mapping_buffer);
+        memset(&mapping_buffer, 0, sizeof(Py_buffer));
+        m = substitution_matrix.shape[0];
+        if (PyObject_IsInstance(substitution_matrix.obj,
+                               (PyObject*)SubstitutionMatrix_Type)) {
+            _get_mapping_buffer(substitution_matrix.obj, &mapping_buffer);
+            if (mapping_buffer.obj) {
+                mapping = mapping_buffer.buf;
+                m = mapping_buffer.len / mapping_buffer.itemsize;
+                PyBuffer_Release(&mapping_buffer);
+            }
         }
-        else m = substitution_matrix.shape[0];
     }
 
     PyObject* insertion_score_function = NULL;
