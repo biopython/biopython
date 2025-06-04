@@ -7,8 +7,7 @@
 static PyTypeObject *SubstitutionMatrix_Type = NULL;
 
 static PyObject *Array_get_alphabet(PyObject *self, void *closure) {
-    PyObject* bases = SubstitutionMatrix_Type->tp_bases;
-    PyTypeObject* basetype = (PyTypeObject*)PyTuple_GET_ITEM(bases, 0);
+    PyTypeObject* basetype = SubstitutionMatrix_Type->tp_base;
     Fields* fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
     PyObject* alphabet = fields->alphabet;
     if (!alphabet) Py_RETURN_NONE;
@@ -17,8 +16,7 @@ static PyObject *Array_get_alphabet(PyObject *self, void *closure) {
 }
 
 static int Array_set_alphabet(PyObject *self, PyObject *arg, void *closure) {
-    PyObject* bases = SubstitutionMatrix_Type->tp_bases;
-    PyTypeObject* basetype = (PyTypeObject*)PyTuple_GET_ITEM(bases, 0);
+    PyTypeObject* basetype = SubstitutionMatrix_Type->tp_base;
     Fields* fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
     if (fields->alphabet) {
         PyErr_SetString(PyExc_ValueError, "the alphabet has already been set.");
@@ -121,8 +119,7 @@ static int Array_set_alphabet(PyObject *self, PyObject *arg, void *closure) {
 static void
 Array_dealloc(PyObject *self)
 {
-    PyObject* bases = SubstitutionMatrix_Type->tp_bases;
-    PyTypeObject* basetype = (PyTypeObject*)PyTuple_GET_ITEM(bases, 0);
+    PyTypeObject* basetype = SubstitutionMatrix_Type->tp_base;
     Fields* fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
     /* fields->alphabet may be NULL if this instance was created by numpy
      * and __array_finalize__ somehow failed.
@@ -142,8 +139,7 @@ Array_finalize(PyObject *self, PyObject *obj)
                         "__array_finalize__ argument is not an Array object");
         return NULL;
     }
-    PyObject* bases = SubstitutionMatrix_Type->tp_bases;
-    PyTypeObject* basetype = (PyTypeObject*)PyTuple_GET_ITEM(bases, 0);
+    PyTypeObject* basetype = SubstitutionMatrix_Type->tp_base;
     Fields* self_fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
     const Fields* obj_fields = (Fields*)((intptr_t)obj + basetype->tp_basicsize);
     PyObject* alphabet = obj_fields->alphabet;
