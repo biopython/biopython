@@ -1062,8 +1062,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
         m = substitution_matrix.shape[0];
         if (PyObject_IsInstance(substitution_matrix.obj,
                                (PyObject*)SubstitutionMatrix_Type)) {
-            PyObject* bases = SubstitutionMatrix_Type->tp_bases;
-            PyTypeObject* basetype = (PyTypeObject*)PyTuple_GET_ITEM(bases, 0);
+            PyTypeObject* basetype = SubstitutionMatrix_Type->tp_base;
             Fields* fields = (Fields*)((intptr_t)substitution_matrix.obj + basetype->tp_basicsize);
             Py_buffer* mapping_buffer = &fields->mapping;
             if (mapping_buffer->obj) {
