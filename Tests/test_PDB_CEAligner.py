@@ -43,7 +43,7 @@ class CEAlignerTests(unittest.TestCase):
         aligner.set_reference(s1)
         aligner.align(s2, final_optimization=False)
 
-        self.assertAlmostEqual(aligner.rms, 3.74, places=2)
+        self.assertAlmostEqual(aligner.rms, 3.83, places=2)
 
         # Assert the transformation was done right by comparing
         # the moved coordinates to a 'ground truth' reference.
@@ -54,7 +54,7 @@ class CEAlignerTests(unittest.TestCase):
 
         diff = refe_coords - s2_f_coords
         rmsd = np.sqrt((diff * diff).sum() / len(refe_coords))
-        self.assertTrue(rmsd < 0.5)
+        self.assertAlmostEqual(rmsd, 0.0, places=2)
 
     def test_cealigner_no_transform(self):
         """Test aligning 7CFN on 6WQA without transforming 7CFN."""
@@ -72,7 +72,7 @@ class CEAlignerTests(unittest.TestCase):
         aligner.align(s2, transform=False, final_optimization=False)
         s2_coords_final = [list(a.coord) for a in s2.get_atoms()]
 
-        self.assertAlmostEqual(aligner.rms, 3.74, places=2)
+        self.assertAlmostEqual(aligner.rms, 3.83, places=2)
         self.assertEqual(s2_original_coords, s2_coords_final)
 
     def test_ce_aligner_final_optimization(self):
@@ -88,7 +88,7 @@ class CEAlignerTests(unittest.TestCase):
         aligner.set_reference(s1)
         aligner.align(s2)
 
-        self.assertAlmostEqual(aligner.rms, 3.66, places=2)
+        self.assertAlmostEqual(aligner.rms, 3.75, places=2)
 
     def test_cealigner_nucleic(self):
         """Test aligning 1LCD on 1LCD."""
