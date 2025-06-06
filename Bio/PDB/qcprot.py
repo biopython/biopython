@@ -117,7 +117,7 @@ def qcp(coords1, coords2, natoms):
 
         delta = f / (f_prime + evalprec)  # avoid division by zero
         mxEigenV = abs(mxEigenV - delta)
-        if (mxEigenV - oldg) < (evalprec * mxEigenV):
+        if abs(mxEigenV - oldg) < (evalprec * mxEigenV):
             break  # convergence
     else:
         print(f"Newton-Rhapson did not converge after {nr_it} iterations")
