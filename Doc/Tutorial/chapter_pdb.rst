@@ -1889,7 +1889,7 @@ algorithm for structural alignment. This method automatically finds the best mat
 regions between two structures and superimposes them by using the C-alpha coordinates
 (for proteins) or C4' (for nucleic acids)
 
-The algorithm used in the ``CEAligner`` class is from Shindyalov \& Bourne [Shindyalov]_
+The algorithm used in the ``CEAligner`` class is from Shindyalov \& Bourne [Shindyalov1998]_
 and uses the ``QCPSuperimposer`` to perform the actual superimposition after discovering
 the best matching regions
 
