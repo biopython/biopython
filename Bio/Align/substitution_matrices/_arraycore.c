@@ -4,12 +4,12 @@
 
 #define MISSING_LETTER -1
 
-static PyTypeObject SubstitutionMatrix_Type;
+static PyTypeObject Array_Type;
 
 static void
 Array_dealloc(PyObject *self)
 {
-    PyTypeObject* basetype = SubstitutionMatrix_Type.tp_base;
+    PyTypeObject* basetype = Array_Type.tp_base;
     Fields* fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
     /* fields->alphabet may be NULL if this instance was created by numpy
      * and __array_finalize__ somehow failed.
@@ -29,7 +29,7 @@ Array_finalize(PyObject *self, PyObject *obj)
                         "__array_finalize__ argument is not an Array object");
         return NULL;
     }
-    PyTypeObject* basetype = SubstitutionMatrix_Type.tp_base;
+    PyTypeObject* basetype = Array_Type.tp_base;
     Fields* self_fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
     const Fields* obj_fields = (Fields*)((intptr_t)obj + basetype->tp_basicsize);
     PyObject* alphabet = obj_fields->alphabet;
@@ -47,7 +47,7 @@ static PyMethodDef Array_methods[] = {
 };
 
 static PyObject *Array_get_alphabet(PyObject *self, void *closure) {
-    PyTypeObject* basetype = SubstitutionMatrix_Type.tp_base;
+    PyTypeObject* basetype = Array_Type.tp_base;
     Fields* fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
     PyObject* alphabet = fields->alphabet;
     if (!alphabet) Py_RETURN_NONE;
@@ -56,7 +56,7 @@ static PyObject *Array_get_alphabet(PyObject *self, void *closure) {
 }
 
 static int Array_set_alphabet(PyObject *self, PyObject *arg, void *closure) {
-    PyTypeObject* basetype = SubstitutionMatrix_Type.tp_base;
+    PyTypeObject* basetype = Array_Type.tp_base;
     Fields* fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
     if (fields->alphabet) {
         PyErr_SetString(PyExc_ValueError, "the alphabet has already been set.");
@@ -161,9 +161,9 @@ static PyGetSetDef Array_getset[] = {
     {NULL}
 };
 
-static PyTypeObject SubstitutionMatrix_Type = {
+static PyTypeObject Array_Type = {
     PyVarObject_HEAD_INIT(NULL, 0)
-    .tp_name = "_arraycore.SubstitutionMatrix",
+    .tp_name = "_arraycore.Array",
     .tp_flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
     .tp_dealloc = (destructor)Array_dealloc,
     .tp_methods = Array_methods,
@@ -173,7 +173,7 @@ static PyTypeObject SubstitutionMatrix_Type = {
 static struct PyModuleDef module = {
     PyModuleDef_HEAD_INIT,
     "_arraycore",
-    "Base module defining the SubstitutionMatrix base class",
+    "Base module defining the Array base class",
     -1,
     NULL,
     NULL, NULL, NULL, NULL
@@ -219,16 +219,16 @@ PyInit__arraycore(void)
         return NULL;
     }
 
-    SubstitutionMatrix_Type.tp_basicsize = basetype->tp_basicsize + sizeof(Fields);
-    SubstitutionMatrix_Type.tp_base = (PyTypeObject *)baseclass;
-    if (PyType_Ready(&SubstitutionMatrix_Type) < 0)
+    Array_Type.tp_basicsize = basetype->tp_basicsize + sizeof(Fields);
+    Array_Type.tp_base = (PyTypeObject *)baseclass;
+    if (PyType_Ready(&Array_Type) < 0)
         return NULL;
 
     const int result = PyModule_AddObjectRef(mod,
-                                             "SubstitutionMatrix",
-                                             (PyObject*)&SubstitutionMatrix_Type);
+                                             "Array",
+                                             (PyObject*)&Array_Type);
 
-    Py_DECREF(&SubstitutionMatrix_Type);
+    Py_DECREF(&Array_Type);
     if (result == -1) {
         Py_DECREF(mod);
         return NULL;

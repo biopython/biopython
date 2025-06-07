@@ -16,7 +16,7 @@ from Bio.File import as_handle
 from Bio.Align.substitution_matrices import _arraycore  # type: ignore
 
 
-class Array(_arraycore.SubstitutionMatrix):
+class Array(_arraycore.Array):
     """numpy array subclass indexed by integers and by letters."""
 
     def __new__(cls, alphabet=None, dims=None, data=None, dtype=float):

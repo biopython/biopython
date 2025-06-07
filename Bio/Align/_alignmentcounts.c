@@ -24,7 +24,7 @@
 
 
 static PyTypeObject* Aligner_Type = NULL;
-static PyTypeObject* SubstitutionMatrix_Type = NULL;
+static PyTypeObject* Array_Type = NULL;
 /* these will be set when initializing the module */
 
 
@@ -1061,8 +1061,8 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
     if (substitution_matrix.obj) {
         m = substitution_matrix.shape[0];
         if (PyObject_IsInstance(substitution_matrix.obj,
-                               (PyObject*)SubstitutionMatrix_Type)) {
-            PyTypeObject* basetype = SubstitutionMatrix_Type->tp_base;
+                               (PyObject*)Array_Type)) {
+            PyTypeObject* basetype = Array_Type->tp_base;
             Fields* fields = (Fields*)((intptr_t)substitution_matrix.obj + basetype->tp_basicsize);
             Py_buffer* mapping_buffer = &fields->mapping;
             if (mapping_buffer->obj) {
@@ -1662,7 +1662,7 @@ PyInit__alignmentcounts(void)
         Py_DECREF(module);
         return NULL;
     }
-    SubstitutionMatrix_Type = (PyTypeObject*)PyObject_GetAttrString(mod, "SubstitutionMatrix");
+    Array_Type = (PyTypeObject*)PyObject_GetAttrString(mod, "Array");
     Py_DECREF(mod);
 
     mod = PyImport_ImportModule("Bio.Align._pairwisealigner");

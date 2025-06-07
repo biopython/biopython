@@ -40,7 +40,7 @@
     } \
 }
 
-static PyTypeObject *SubstitutionMatrix_Type = NULL;
+static PyTypeObject *Array_Type = NULL;
 /* this will be set when initializing the module */
 
 
@@ -7111,8 +7111,8 @@ static bool _map_indices(Py_buffer* view, Py_buffer* buffer) {
 static bool _prepare_indices(Py_buffer* substitution_matrix, Py_buffer* bA, Py_buffer* bB)
 {
     if (PyObject_IsInstance(substitution_matrix->obj,
-                            (PyObject*)SubstitutionMatrix_Type)) {
-        const PyTypeObject* basetype = SubstitutionMatrix_Type->tp_base;
+                            (PyObject*)Array_Type)) {
+        const PyTypeObject* basetype = Array_Type->tp_base;
         const Py_ssize_t offset = basetype->tp_basicsize;
         Fields* fields = (Fields*)((intptr_t)substitution_matrix->obj + offset);
         Py_buffer* mapping = &fields->mapping;
@@ -7528,10 +7528,10 @@ PyInit__pairwisealigner(void)
         return NULL;
     }
 
-    SubstitutionMatrix_Type = (PyTypeObject*) PyObject_GetAttrString(mod, "SubstitutionMatrix");
+    Array_Type = (PyTypeObject*) PyObject_GetAttrString(mod, "Array");
     Py_DECREF(mod);
 
-    if (!SubstitutionMatrix_Type) {
+    if (!Array_Type) {
         Py_DECREF(&Aligner_Type);
         Py_DECREF(module);
         return NULL;
