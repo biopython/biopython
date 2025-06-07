@@ -4,10 +4,50 @@
 
 #define MISSING_LETTER -1
 
-static PyTypeObject *SubstitutionMatrix_Type = NULL;
+static PyTypeObject SubstitutionMatrix_Type;
+
+static void
+Array_dealloc(PyObject *self)
+{
+    PyTypeObject* basetype = SubstitutionMatrix_Type.tp_base;
+    Fields* fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
+    /* fields->alphabet may be NULL if this instance was created by numpy
+     * and __array_finalize__ somehow failed.
+     */
+    Py_XDECREF(fields->alphabet);
+    /* PyBuffer_Release won't do anything if fields->mapping.obj is NULL. */
+    PyBuffer_Release(&fields->mapping);
+    basetype->tp_dealloc(self);
+}
+
+static PyObject *
+Array_finalize(PyObject *self, PyObject *obj)
+{
+    if (obj == Py_None) Py_RETURN_NONE;
+    if (Py_TYPE(self) != Py_TYPE(obj)) {
+        PyErr_SetString(PyExc_RuntimeError,
+                        "__array_finalize__ argument is not an Array object");
+        return NULL;
+    }
+    PyTypeObject* basetype = SubstitutionMatrix_Type.tp_base;
+    Fields* self_fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
+    const Fields* obj_fields = (Fields*)((intptr_t)obj + basetype->tp_basicsize);
+    PyObject* alphabet = obj_fields->alphabet;
+    if (alphabet) {
+        Py_INCREF(alphabet);
+        self_fields->alphabet = obj_fields->alphabet;
+    }
+    Py_RETURN_NONE;
+}
+
+static PyMethodDef Array_methods[] = {
+    {"__array_finalize__", (PyCFunction)Array_finalize, METH_O,
+     "Called by NumPy to finalize new views or copies"},
+    {NULL}  /* Sentinel */
+};
 
 static PyObject *Array_get_alphabet(PyObject *self, void *closure) {
-    PyTypeObject* basetype = SubstitutionMatrix_Type->tp_base;
+    PyTypeObject* basetype = SubstitutionMatrix_Type.tp_base;
     Fields* fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
     PyObject* alphabet = fields->alphabet;
     if (!alphabet) Py_RETURN_NONE;
@@ -16,7 +56,7 @@ static PyObject *Array_get_alphabet(PyObject *self, void *closure) {
 }
 
 static int Array_set_alphabet(PyObject *self, PyObject *arg, void *closure) {
-    PyTypeObject* basetype = SubstitutionMatrix_Type->tp_base;
+    PyTypeObject* basetype = SubstitutionMatrix_Type.tp_base;
     Fields* fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
     if (fields->alphabet) {
         PyErr_SetString(PyExc_ValueError, "the alphabet has already been set.");
@@ -116,49 +156,18 @@ static int Array_set_alphabet(PyObject *self, PyObject *arg, void *closure) {
     return 0;
 }
 
-static void
-Array_dealloc(PyObject *self)
-{
-    PyTypeObject* basetype = SubstitutionMatrix_Type->tp_base;
-    Fields* fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
-    /* fields->alphabet may be NULL if this instance was created by numpy
-     * and __array_finalize__ somehow failed.
-     */
-    Py_XDECREF(fields->alphabet);
-    /* PyBuffer_Release won't do anything if fields->mapping.obj is NULL. */
-    PyBuffer_Release(&fields->mapping);
-    basetype->tp_dealloc(self);
-}
-
-static PyObject *
-Array_finalize(PyObject *self, PyObject *obj)
-{
-    if (obj == Py_None) Py_RETURN_NONE;
-    if (Py_TYPE(self) != Py_TYPE(obj)) {
-        PyErr_SetString(PyExc_RuntimeError,
-                        "__array_finalize__ argument is not an Array object");
-        return NULL;
-    }
-    PyTypeObject* basetype = SubstitutionMatrix_Type->tp_base;
-    Fields* self_fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
-    const Fields* obj_fields = (Fields*)((intptr_t)obj + basetype->tp_basicsize);
-    PyObject* alphabet = obj_fields->alphabet;
-    if (alphabet) {
-        Py_INCREF(alphabet);
-        self_fields->alphabet = obj_fields->alphabet;
-    }
-    Py_RETURN_NONE;
-}
-
-static PyMethodDef Array_methods[] = {
-    {"__array_finalize__", (PyCFunction)Array_finalize, METH_O,
-     "Called by NumPy to finalize new views or copies"},
-    {NULL}  /* Sentinel */
-};
-
 static PyGetSetDef Array_getset[] = {
     {"alphabet", (getter)Array_get_alphabet, (setter)Array_set_alphabet, "alphabet", NULL},
     {NULL}
+};
+
+static PyTypeObject SubstitutionMatrix_Type = {
+    PyVarObject_HEAD_INIT(NULL, 0)
+    .tp_name = "_arraycore.SubstitutionMatrix",
+    .tp_flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .tp_dealloc = (destructor)Array_dealloc,
+    .tp_methods = Array_methods,
+    .tp_getset = Array_getset,
 };
 
 static struct PyModuleDef module = {
@@ -210,47 +219,17 @@ PyInit__arraycore(void)
         return NULL;
     }
 
-    // Create a tuple of bases
-    PyObject *bases = PyTuple_Pack(1, baseclass);
-    Py_DECREF(baseclass);
-    if (!bases)
+    SubstitutionMatrix_Type.tp_basicsize = basetype->tp_basicsize + sizeof(Fields);
+    SubstitutionMatrix_Type.tp_base = (PyTypeObject *)baseclass;
+    if (PyType_Ready(&SubstitutionMatrix_Type) < 0)
         return NULL;
 
-    PyType_Slot Array_slots[] = {
-        {Py_tp_dealloc, Array_dealloc},
-        {Py_tp_methods, Array_methods},
-        {Py_tp_getset, Array_getset},
-        {0, 0}
-    };
+    const int result = PyModule_AddObjectRef(mod,
+                                             "SubstitutionMatrix",
+                                             (PyObject*)&SubstitutionMatrix_Type);
 
-    // Define the type spec
-    PyType_Spec class_spec = {
-        .name = "_arraycore.SubstitutionMatrix",
-        .basicsize = basetype->tp_basicsize + sizeof(Fields),
-        .itemsize = 0,
-        .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
-        .slots = Array_slots,
-    };
-
-    // Create the type
-    SubstitutionMatrix_Type = (PyTypeObject*)PyType_FromSpecWithBases(&class_spec, bases);
-    Py_DECREF(bases);
-    if (!SubstitutionMatrix_Type)
-        return NULL;
-
-    if (!PyTuple_Check(SubstitutionMatrix_Type->tp_bases)
-      || PyTuple_GET_SIZE(SubstitutionMatrix_Type->tp_bases) != 1
-      || PyTuple_GET_ITEM(SubstitutionMatrix_Type->tp_bases, 0) != (PyObject*)basetype) {
-        PyErr_SetString(PyExc_RuntimeError,
-            "failed to get base class from SubstitutionMatrix type.");
-        return NULL;
-    }
-
-    // Add it to the module
-    if (PyModule_AddObject(mod,
-                           "SubstitutionMatrix",
-                           (PyObject*)SubstitutionMatrix_Type) < 0) {
-        Py_DECREF(SubstitutionMatrix_Type);
+    Py_DECREF(&SubstitutionMatrix_Type);
+    if (result == -1) {
         Py_DECREF(mod);
         return NULL;
     }
