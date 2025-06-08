@@ -1873,17 +1873,18 @@ The implementation is very similar to the ``Superimposer``
    >>> sup.apply(moving)
 
 
-Mapping the residues of two related structures onto each other
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Aligning related structures
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-First, create an alignment file in FASTA format, then use the
-``StructureAlignment`` class. This class can also be used for alignments
-with more than two structures.
+To align two proteins with similar sequences (greater than 50% sequence identity),
+first align the two sequences by making a alignment file in FASTA format, and then
+use the ``StructureAlignment`` class to align the structures. This class can be used
+for alignments with more than two structures.
 
-Structural alignment with CEAligner
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Aligning dissimilar structures
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If you want to align two structures that may not have identical sequences or lengths,
+If you want to align two structures with low sequence identity (less than 50%)
 you can use the ``CEAligner`` class, which implements the Combinatorial Extension (CE)
 algorithm for structural alignment. This method automatically finds the best matching
 regions between two structures and superimposes them by using the C-alpha coordinates
@@ -1904,7 +1905,7 @@ Example:
    # Get RMSD of the best alignment
    >>> print(aligner.rms)
 
-This is useful for comparing proteins with similar folds but different sequences. By default,
+This is useful for comparing proteins with significantly different sequences. By default,
 the ``align`` function will apply the transformation to structure2 as well as calculate the
 RMSD. To just calculate optimal RMSD without changing the structure2 coordinates, pass
 ``transform=False``.
