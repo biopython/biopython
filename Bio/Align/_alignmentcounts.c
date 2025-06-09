@@ -975,8 +975,18 @@ strands_converter(PyObject* argument, void* pointer)
 
 /* Module definition */
 
-static char _alignmentcounts__doc__[] =
-"C extension module implementing the AlignmentCounts class";
+#define GET_LAZY_DATA(o, sequence, start, end, j, b) \
+    o = PySequence_GetSlice(sequence->obj, start, end); \
+    if (!o) goto error; \
+    if (PyBytes_Check(o)) { \
+        if (PyBytes_GET_SIZE(o) != end - start) { \
+            PyErr_Format(PyExc_ValueError, \
+                "alignment.sequences[%d][%d:%d] did not return a bytes object of size %d", \
+                j, start, end, end - start); \
+            goto error; \
+        } \
+        b = PyBytes_AS_STRING(o) - start; \
+    }
 
 static const char _calculate__doc__[] = "calculate the matches, mismatches, gaps, and score of the alignment";
 
@@ -1259,31 +1269,10 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                     path = DIAGONAL;
                     aligned += endA - startA;
                     if (iA == NULL && bA == NULL) {
-                        oA = PySequence_GetSlice(sequenceA->obj, startA, endA);
-                        if (!oA) goto error;
-                        if (PyBytes_Check(oA)) {
-                            if (PyBytes_GET_SIZE(oA) != endA - startA) {
-                                PyErr_Format(PyExc_ValueError,
-                                    "alignment.sequences[%d][%d:%d] did not return a bytes object of size %d",
-                                    jA, startA, endA, endA - startA);
-                                goto error;
-                            }
-                            bA = PyBytes_AS_STRING(oA) - startA;
-                        }
+                        GET_LAZY_DATA(oA, sequenceA, startA, endA, jA, bA)
                     }
                     if (iB == NULL && bB == NULL) {
-                        oB = PySequence_GetSlice(sequenceB->obj, startB, endB);
-                        if (!oB) goto error;
-                        if (PyBytes_Check(oB)) {
-                            if (PyBytes_GET_SIZE(oB) != endB - startB) {
-                                PyErr_Format(PyExc_ValueError,
-                                    "alignment.sequences[%d[%d:%d] did not return a bytes object of size %d",
-
-                                    jB, startB, endB, endB - startB);
-                                goto error;
-                            }
-                            bB = PyBytes_AS_STRING(oB) - startB;
-                        }
+                        GET_LAZY_DATA(oB, sequenceB, startB, endB, jB, bB)
                     }
                     if (substitution_matrix.obj == NULL) {
                         if (iA && iB) {
@@ -1678,6 +1667,9 @@ static PyMethodDef module_functions[] = {
     },
     {NULL, NULL, 0, NULL}  /* Sentinel */
 };
+
+static char _alignmentcounts__doc__[] =
+"C extension module implementing the AlignmentCounts class";
 
 static struct PyModuleDef moduledef = {
         PyModuleDef_HEAD_INIT,
