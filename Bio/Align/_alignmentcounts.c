@@ -915,6 +915,11 @@ sequence_converter(PyObject* argument, void* pointer)
               || strcmp(view->format, "l") == 0)
               && view->itemsize == sizeof(int))
                 /* buffer contains int values */ return 1;
+            if ((strcmp(view->format, "c") == 0
+              || strcmp(view->format, "b") == 0
+              || strcmp(view->format, "B") == 0)
+              && view->itemsize == sizeof(char))
+                /* buffer contains int values */ return 1;
         }
         PyBuffer_Release(view);
     } else PyErr_Clear();
@@ -1084,8 +1089,10 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
 
     Py_buffer* sequenceA;
     Py_buffer* sequenceB;
-    int* sA;
-    int* sB;
+    int* iA = NULL;
+    int* iB = NULL;
+    char* bA = NULL;
+    char* bB = NULL;
     bool strandA;
     bool strandB;
 
@@ -1118,11 +1125,41 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
 
     for (i = 0; i < n; i++) {
         sequenceA = &buffers[i];
-        sA = sequenceA->buf;
+        bA = NULL;
+        iA = NULL;
+        oA = NULL;
+        if (sequenceA->buf) {
+            switch (sequenceA->format[0]) {
+                case 'i':
+                case 'I':
+                    iA = sequenceA->buf;
+                    break;
+                case 'c':
+                case 'b':
+                case 'B':
+                    bA = sequenceA->buf;
+                    break;
+            }
+        }
         strandA = ((bool*)(strands.buf))[i];
         for (j = i + 1; j < n; j++) {
             sequenceB = &buffers[j];
-            sB = sequenceB->buf;
+            bB = NULL;
+            iB = NULL;
+            oB = NULL;
+            if (sequenceB->buf) {
+                switch (sequenceB->format[0]) {
+                    case 'i':
+                    case 'I':
+                        iB = sequenceB->buf;
+                        break;
+                    case 'c':
+                    case 'b':
+                    case 'B':
+                        bB = sequenceB->buf;
+                        break;
+                }
+            }
             strandB = ((bool*)(strands.buf))[j];
             left1 = buffer[i * stride1 + 0];
             left2 = buffer[j * stride1 + 0];
@@ -1220,84 +1257,76 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                     aligned += end1 - start1;
                 }
                 else {
-                    char* bA = NULL;
-                    char* bB = NULL;
                     path = DIAGONAL;
                     aligned += end1 - start1;
-                    if (sA == NULL) {
-                        if (PyBytes_Check(sequenceA->obj)) {
-                            bA = PyBytes_AS_STRING(sequenceA->obj);
-                            oA = NULL;
-                        }
-                        else {
-                            oA = PySequence_GetSlice(sequenceA->obj, start1, end1);
-                            if (!oA) goto error;
-                            if (PyBytes_Check(oA)) {
-                                if (PyBytes_GET_SIZE(oA) != end1 - start1) {
-                                    PyErr_Format(PyExc_ValueError,
-                                        "alignment.sequences[%d][%d:%d] did not return a bytes object of size %d",
-                                        i, start1, end1, end1 - start1);
-                                    goto error;
-                                }
-                                bA = PyBytes_AS_STRING(oA) - start1;
+                    if (iA == NULL && bA == NULL) {
+                        oA = PySequence_GetSlice(sequenceA->obj, start1, end1);
+                        if (!oA) goto error;
+                        if (PyBytes_Check(oA)) {
+                            if (PyBytes_GET_SIZE(oA) != end1 - start1) {
+                                PyErr_Format(PyExc_ValueError,
+                                    "alignment.sequences[%d][%d:%d] did not return a bytes object of size %d",
+                                    i, start1, end1, end1 - start1);
+                                goto error;
                             }
+                            bA = PyBytes_AS_STRING(oA) - start1;
                         }
                     }
-                    if (sB == NULL) {
-                        if (PyBytes_Check(sequenceB->obj)) {
-                            bB = PyBytes_AS_STRING(sequenceB->obj);
-                            oB = NULL;
-                        }
-                        else {
-                            oB = PySequence_GetSlice(sequenceB->obj, start2, end2);
-                            if (!oB) goto error;
-                            if (PyBytes_Check(oB)) {
-                                if (PyBytes_GET_SIZE(oB) != end2 - start2) {
-                                    PyErr_Format(PyExc_ValueError,
-                                        "alignment.sequences[%d[%d:%d] did not return a bytes object of size %d",
+                    if (iB == NULL && bB == NULL) {
+                        oB = PySequence_GetSlice(sequenceB->obj, start2, end2);
+                        if (!oB) goto error;
+                        if (PyBytes_Check(oB)) {
+                            if (PyBytes_GET_SIZE(oB) != end2 - start2) {
+                                PyErr_Format(PyExc_ValueError,
+                                    "alignment.sequences[%d[%d:%d] did not return a bytes object of size %d",
 
-                                        j, start2, end2, end2 - start2);
-                                    goto error;
-                                }
-                                bB = PyBytes_AS_STRING(oB) - start2;
+                                    j, start2, end2, end2 - start2);
+                                goto error;
                             }
+                            bB = PyBytes_AS_STRING(oB) - start2;
                         }
                     }
                     if (substitution_matrix.obj == NULL) {
-                        if (sA && sB) {
+                        if (iA && iB) {
                             for (l1 = start1, l2 = start2;
                                  l1 < end1 && l2 < end2;
                                  l1++, l2++) {
-                                cA = sA[l1];
-                                cB = sB[l2];
+                                cA = iA[l1];
+                                cB = iB[l2];
                                 if (cA == wildcard || cB == wildcard) ;
                                 else if (cA == cB) identities++;
                                 else mismatches++;
                             }
                         }
-                        else if (sA && bB) {
+                        else if (iA && bB) {
                             for (l1 = start1, l2 = start2;
                                  l1 < end1 && l2 < end2;
                                  l1++, l2++) {
-                                cA = sA[l1];
+                                cA = iA[l1];
                                 cB = (int) bB[l2];
                                 if (cA == wildcard || cB == wildcard) ;
                                 else if (cA == cB) identities++;
                                 else mismatches++;
                             }
-                            Py_XDECREF(oB);
+                            if (oB) {
+                                Py_DECREF(oB);
+                                bB = NULL;
+                            }
                         }
-                        else if (sB && bA) {
+                        else if (iB && bA) {
                             for (l1 = start1, l2 = start2;
                                  l1 < end1 && l2 < end2;
                                  l1++, l2++) {
                                 cA = (int) bA[l1];
-                                cB = sB[l2];
+                                cB = iB[l2];
                                 if (cA == wildcard || cB == wildcard) ;
                                 else if (cA == cB) identities++;
                                 else mismatches++;
                             }
-                            Py_XDECREF(oA);
+                            if (oA) {
+                                Py_DECREF(oA);
+                                bA = NULL;
+                            }
                         }
                         else if (bA && bB) {
                             for (l1 = start1, l2 = start2;
@@ -1309,19 +1338,25 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                 else if (cA == cB) identities++;
                                 else mismatches++;
                             }
-                            Py_XDECREF(oA);
-                            Py_XDECREF(oB);
+                            if (oA) {
+                                Py_DECREF(oA);
+                                bA = NULL;
+                            }
+                            if (oB) {
+                                Py_DECREF(oB);
+                                bB = NULL;
+                            }
                         }
                     }
                     else {
                         double* ptr;
                         double value;
-                        if (sA && sB) {
+                        if (iA && iB) {
                             for (l1 = start1, l2 = start2;
                                  l1 < end1 && l2 < end2;
                                  l1++, l2++) {
-                                cA = sA[l1];
-                                cB = sB[l2];
+                                cA = iA[l1];
+                                cB = iB[l2];
                                 if (cA < 0) {
                                     PyErr_Format(PyExc_ValueError,
                                         "sequences[%d][%zd] is negative (%d)",
@@ -1366,11 +1401,11 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                 substitution_score += value;
                             }
                         }
-                        else if (sA && bB) {
+                        else if (iA && bB) {
                             for (l1 = start1, l2 = start2;
                                  l1 < end1 && l2 < end2;
                                  l1++, l2++) {
-                                cA = sA[l1];
+                                cA = iA[l1];
                                 cB = (int) bB[l2];
                                 if (cA < 0) {
                                     PyErr_Format(PyExc_ValueError,
@@ -1421,14 +1456,17 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                 if (value > 0) positives++;
                                 substitution_score += value;
                             }
-                            Py_XDECREF(oB);
+                            if (oB) {
+                                Py_DECREF(oB);
+                                bB = NULL;
+                            }
                         }
-                        else if (sB && bA) {
+                        else if (iB && bA) {
                             for (l1 = start1, l2 = start2;
                                  l1 < end1 && l2 < end2;
                                  l1++, l2++) {
                                 cA = (int) bA[l1];
-                                cB = sB[l2];
+                                cB = iB[l2];
                                 if (cA < 0) {
                                     PyErr_Format(PyExc_ValueError,
                                         "sequences[%d][%zd] is negative (%d)",
@@ -1478,7 +1516,10 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                 if (value > 0) positives++;
                                 substitution_score += value;
                             }
-                            Py_XDECREF(oA);
+                            if (oA) {
+                                Py_DECREF(oA);
+                                bA = NULL;
+                            }
                         }
                         else if (bA && bB) {
                             for (l1 = start1, l2 = start2;
@@ -1540,8 +1581,14 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                 if (value > 0) positives++;
                                 substitution_score += value;
                             }
-                            Py_XDECREF(oA);
-                            Py_XDECREF(oB);
+                            if (oA) {
+                                Py_DECREF(oA);
+                                bA = NULL;
+                            }
+                            if (oB) {
+                                Py_DECREF(oB);
+                                bB = NULL;
+                            }
                         }
                     }
                 }
