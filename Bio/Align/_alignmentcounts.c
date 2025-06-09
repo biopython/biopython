@@ -983,7 +983,7 @@ static const char _calculate__doc__[] = "calculate the matches, mismatches, gaps
 static PyObject*
 _calculate(PyObject* self, PyObject* args, PyObject* keywords)
 {
-    Py_ssize_t i;
+    Py_ssize_t jA, jB;
     Py_ssize_t n = 0;
     PyObject* sequence;
     Aligner* aligner = NULL;
@@ -995,6 +995,18 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
     int wildcard = -1;
     Py_buffer substitution_matrix = {0};
     PyObject* argument = NULL;
+
+    Py_ssize_t k, l1, l2;
+    int cA, cB;
+
+    Py_buffer* sequenceA;
+    Py_buffer* sequenceB;
+    int* iA = NULL;
+    int* iB = NULL;
+    char* bA = NULL;
+    char* bB = NULL;
+    bool strandA;
+    bool strandB;
 
     static char *kwlist[] = {"sequences", "coordinates", "strands", "argument", NULL};
 
@@ -1025,9 +1037,8 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
         wildcard = PyUnicode_READ_CHAR(argument, 0);
     }
     else {
-        const int ok = substitution_matrix_converter(argument,
-                                                     &substitution_matrix);
-        if (!ok) {
+        if (!substitution_matrix_converter(argument,
+                                           &substitution_matrix)) {
             if (!Aligner_Type) 
                 PyErr_SetString(PyExc_RuntimeError, "Aligner_Type is NULL");
             goto exit;
@@ -1049,10 +1060,10 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
     buffers = PyMem_Calloc(n, sizeof(Py_buffer));
     if (!buffers) goto exit;
 
-    for (i = 0; i < n; i++) {
-        sequence = PyList_GET_ITEM(sequences, i);
-        if (!sequence_converter(sequence, &buffers[i])) {
-            n = i;
+    for (k = 0; k < n; k++) {
+        sequence = PyList_GET_ITEM(sequences, k);
+        if (!sequence_converter(sequence, &buffers[k])) {
+            n = k;
             goto exit;
         }
     }
@@ -1084,18 +1095,6 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
         deletion_score_function = aligner->deletion_score_function;
     }
 
-    Py_ssize_t j, k, l1, l2;
-    int cA, cB;
-
-    Py_buffer* sequenceA;
-    Py_buffer* sequenceB;
-    int* iA = NULL;
-    int* iB = NULL;
-    char* bA = NULL;
-    char* bB = NULL;
-    bool strandA;
-    bool strandB;
-
     Py_ssize_t open_left_insertions = 0, extend_left_insertions = 0;
     Py_ssize_t open_left_deletions = 0, extend_left_deletions = 0;
     Py_ssize_t open_internal_insertions = 0, extend_internal_insertions = 0;
@@ -1123,8 +1122,8 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
 
     int path = 0;
 
-    for (i = 0; i < n; i++) {
-        sequenceA = &buffers[i];
+    for (jA = 0; jA < n; jA++) {
+        sequenceA = &buffers[jA];
         bA = NULL;
         iA = NULL;
         oA = NULL;
@@ -1141,9 +1140,9 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                     break;
             }
         }
-        strandA = ((bool*)(strands.buf))[i];
-        for (j = i + 1; j < n; j++) {
-            sequenceB = &buffers[j];
+        strandA = ((bool*)(strands.buf))[jA];
+        for (jB = jA + 1; jB < n; jB++) {
+            sequenceB = &buffers[jB];
             bB = NULL;
             iB = NULL;
             oB = NULL;
@@ -1160,16 +1159,16 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                         break;
                 }
             }
-            strandB = ((bool*)(strands.buf))[j];
-            left1 = buffer[i * stride1 + 0];
-            left2 = buffer[j * stride1 + 0];
-            right1 = buffer[i * stride1 + (shape2 - 1) * stride2];
-            right2 = buffer[j * stride1 + (shape2 - 1) * stride2];
+            strandB = ((bool*)(strands.buf))[jB];
+            left1 = buffer[jA * stride1 + 0];
+            left2 = buffer[jB * stride1 + 0];
+            right1 = buffer[jA * stride1 + (shape2 - 1) * stride2];
+            right2 = buffer[jB * stride1 + (shape2 - 1) * stride2];
             start1 = left1;
             start2 = left2;
             for (k = 1; k < shape2; k++) {
-                end1 = buffer[i * stride1 + k * stride2];
-                end2 = buffer[j * stride1 + k * stride2];
+                end1 = buffer[jA * stride1 + k * stride2];
+                end2 = buffer[jB * stride1 + k * stride2];
                 if (start1 == end1 && start2 == end2) {
                 }
                 else if (start1 == end1) {
@@ -1266,7 +1265,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                             if (PyBytes_GET_SIZE(oA) != end1 - start1) {
                                 PyErr_Format(PyExc_ValueError,
                                     "alignment.sequences[%d][%d:%d] did not return a bytes object of size %d",
-                                    i, start1, end1, end1 - start1);
+                                    jA, start1, end1, end1 - start1);
                                 goto error;
                             }
                             bA = PyBytes_AS_STRING(oA) - start1;
@@ -1280,7 +1279,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                 PyErr_Format(PyExc_ValueError,
                                     "alignment.sequences[%d[%d:%d] did not return a bytes object of size %d",
 
-                                    j, start2, end2, end2 - start2);
+                                    jB, start2, end2, end2 - start2);
                                 goto error;
                             }
                             bB = PyBytes_AS_STRING(oB) - start2;
@@ -1360,27 +1359,27 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                 if (cA < 0) {
                                     PyErr_Format(PyExc_ValueError,
                                         "sequences[%d][%zd] is negative (%d)",
-                                        i, l1, cA);
+                                        jA, l1, cA);
                                     goto error;
                                 }
                                 if (cA >= m) {
                                     PyErr_Format(PyExc_ValueError,
                                         "sequence[%d][%zd] is out of bound"
                                         " (%d, should be < %zd)",
-                                        i, l1, cA, m);
+                                        jA, l1, cA, m);
                                     goto error;
                                 }
                                 if (cB < 0) {
                                     PyErr_Format(PyExc_ValueError,
                                         "sequences[%d][%zd] is negative (%d)",
-                                        j, l2, cB);
+                                        jB, l2, cB);
                                     goto error;
                                 }
                                 if (cB >= m) {
                                     PyErr_Format(PyExc_ValueError,
                                         "sequence[%d][%zd] is out of bound"
                                         " (%d, should be < %zd)",
-                                        j, l2, cB, m);
+                                        jB, l2, cB, m);
                                     goto error;
                                 }
                                 if (mapping) {
@@ -1410,7 +1409,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                 if (cA < 0) {
                                     PyErr_Format(PyExc_ValueError,
                                         "sequences[%d][%zd] is negative (%d)",
-                                        i, l1, cA);
+                                        jA, l1, cA);
                                     Py_DECREF(oB);
                                     goto error;
                                 }
@@ -1418,14 +1417,14 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                     PyErr_Format(PyExc_ValueError,
                                         "sequence[%d][%zd] is out of bound"
                                         " (%d, should be < %zd)",
-                                        i, l1, cA, m);
+                                        jA, l1, cA, m);
                                     Py_DECREF(oB);
                                     goto error;
                                 }
                                 if (cB < 0) {
                                     PyErr_Format(PyExc_ValueError,
                                         "sequences[%d][%zd] is negative (%d)",
-                                        j, l2, cB);
+                                        jB, l2, cB);
                                     Py_DECREF(oB);
                                     goto error;
                                 }
@@ -1433,7 +1432,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                     PyErr_Format(PyExc_ValueError,
                                         "sequence[%d][%zd] is out of bound"
                                         " (%d, should be < %zd)",
-                                        j, l2, cB, m);
+                                        jB, l2, cB, m);
                                     Py_DECREF(oB);
                                     goto error;
                                 }
@@ -1470,14 +1469,14 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                 if (cA < 0) {
                                     PyErr_Format(PyExc_ValueError,
                                         "sequences[%d][%zd] is negative (%d)",
-                                        i, l1, cA);
+                                        jA, l1, cA);
                                     Py_DECREF(oA);
                                     goto error;
                                 }
                                 if (cB < 0) {
                                     PyErr_Format(PyExc_ValueError,
                                         "sequences[%d][%zd] is negative (%d)",
-                                        j, l2, cB);
+                                        jB, l2, cB);
                                     Py_DECREF(oA);
                                     goto error;
                                 }
@@ -1485,7 +1484,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                     PyErr_Format(PyExc_ValueError,
                                         "sequence[%d][%zd] is out of bound"
                                         " (%d, should be < %zd)",
-                                        i, l1, cA, m);
+                                        jA, l1, cA, m);
                                     Py_DECREF(oA);
                                     goto error;
                                 }
@@ -1493,7 +1492,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                     PyErr_Format(PyExc_ValueError,
                                         "sequence[%d][%zd] is out of bound"
                                         " (%d, should be < %zd)",
-                                        j, l2, cB, m);
+                                        jB, l2, cB, m);
                                     Py_DECREF(oA);
                                     goto error;
                                 }
@@ -1530,7 +1529,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                 if (cA < 0) {
                                     PyErr_Format(PyExc_ValueError,
                                         "sequences[%d][%zd] is negative (%d)",
-                                        i, l1, cA);
+                                        jA, l1, cA);
                                     Py_DECREF(oA);
                                     Py_DECREF(oB);
                                     goto error;
@@ -1539,7 +1538,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                     PyErr_Format(PyExc_ValueError,
                                         "sequence[%d][%zd] is out of bound"
                                         " (%d, should be < %zd)",
-                                        i, l1, cA, m);
+                                        jA, l1, cA, m);
                                     Py_DECREF(oA);
                                     Py_DECREF(oB);
                                     goto error;
@@ -1547,7 +1546,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                 if (cB < 0) {
                                     PyErr_Format(PyExc_ValueError,
                                         "sequences[%d][%zd] is negative (%d)",
-                                        j, l2, cB);
+                                        jB, l2, cB);
                                     Py_DECREF(oA);
                                     Py_DECREF(oB);
                                     goto error;
@@ -1556,7 +1555,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                     PyErr_Format(PyExc_ValueError,
                                         "sequence[%d][%zd] is out of bound"
                                         " (%d, should be < %zd)",
-                                        j, l2, cB, m);
+                                        jB, l2, cB, m);
                                     Py_DECREF(oA);
                                     Py_DECREF(oB);
                                     goto error;
@@ -1661,8 +1660,8 @@ error:
 
 exit:
     if (buffers) {
-        for (i = 0; i < n; i++)
-            if (buffers[i].buf) PyBuffer_Release(&buffers[i]);
+        for (k = 0; k < n; k++)
+            if (buffers[k].buf) PyBuffer_Release(&buffers[k]);
     }
     coordinates_converter(NULL, &coordinates);
     strands_converter(NULL, &strands);
