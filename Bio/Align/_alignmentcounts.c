@@ -988,6 +988,67 @@ strands_converter(PyObject* argument, void* pointer)
         b = PyBytes_AS_STRING(o) - start; \
     }
 
+#define ADD_IDENTITIES_MISMATCHES(intA, intB) \
+    for (lA = startA, lB = startB; \
+         lA < endA && lB < endB; \
+         lA++, lB++) { \
+        cA = intA; \
+        cB = intB; \
+        if (cA == wildcard || cB == wildcard) ; \
+        else if (cA == cB) identities++; \
+        else mismatches++; \
+    }
+
+#define ADD_IDENTITIES_MISMATCHES_SCORE(intA, intB) \
+    for (lA = startA, lB = startB; \
+         lA < endA && lB < endB; \
+         lA++, lB++) { \
+        cA = intA; \
+        cB = intB; \
+        if (cA < 0) { \
+            PyErr_Format(PyExc_ValueError, \
+                "sequences[%d][%zd] is negative (%d)", \
+                jA, lA, cA); \
+            goto error; \
+        } \
+        if (cA >= m) { \
+            PyErr_Format(PyExc_ValueError, \
+                "sequence[%d][%zd] is out of bound" \
+                " (%d, should be < %zd)", \
+                jA, lA, cA, m); \
+            goto error; \
+        } \
+        if (cB < 0) { \
+            PyErr_Format(PyExc_ValueError, \
+                "sequences[%d][%zd] is negative (%d)", \
+                jB, lB, cB); \
+            goto error; \
+        } \
+        if (cB >= m) { \
+            PyErr_Format(PyExc_ValueError, \
+                "sequence[%d][%zd] is out of bound" \
+                " (%d, should be < %zd)", \
+                jB, lB, cB, m); \
+            goto error; \
+        } \
+        if (mapping) { \
+            cA = mapping[cA]; \
+            cB = mapping[cB]; \
+            if (cA == MISSING_LETTER || cB == MISSING_LETTER) { \
+                PyErr_SetString(PyExc_ValueError, \
+                    "sequence contains letters not in the alphabet"); \
+                goto error; \
+            } \
+        } \
+        if (cA == cB) identities++; \
+        else mismatches++; \
+        ptr = (double*)substitution_matrix.buf \
+            + cA * substitution_matrix.shape[0] + cB; \
+        value = *(double*)ptr; \
+        if (value > 0) positives++; \
+        substitution_score += value; \
+    }
+
 static const char _calculate__doc__[] = "calculate the matches, mismatches, gaps, and score of the alignment";
 
 static PyObject*
@@ -1276,56 +1337,24 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                     }
                     if (substitution_matrix.obj == NULL) {
                         if (iA && iB) {
-                            for (lA = startA, lB = startB;
-                                 lA < endA && lB < endB;
-                                 lA++, lB++) {
-                                cA = iA[lA];
-                                cB = iB[lB];
-                                if (cA == wildcard || cB == wildcard) ;
-                                else if (cA == cB) identities++;
-                                else mismatches++;
-                            }
+                            ADD_IDENTITIES_MISMATCHES(iA[lA], iB[lB])
                         }
                         else if (iA && bB) {
-                            for (lA = startA, lB = startB;
-                                 lA < endA && lB < endB;
-                                 lA++, lB++) {
-                                cA = iA[lA];
-                                cB = (int) bB[lB];
-                                if (cA == wildcard || cB == wildcard) ;
-                                else if (cA == cB) identities++;
-                                else mismatches++;
-                            }
+                            ADD_IDENTITIES_MISMATCHES(iA[lA], (int) bB[lB])
                             if (oB) {
                                 Py_DECREF(oB);
                                 bB = NULL;
                             }
                         }
                         else if (iB && bA) {
-                            for (lA = startA, lB = startB;
-                                 lA < endA && lB < endB;
-                                 lA++, lB++) {
-                                cA = (int) bA[lA];
-                                cB = iB[lB];
-                                if (cA == wildcard || cB == wildcard) ;
-                                else if (cA == cB) identities++;
-                                else mismatches++;
-                            }
+                            ADD_IDENTITIES_MISMATCHES((int) bA[lA], iB[lB])
                             if (oA) {
                                 Py_DECREF(oA);
                                 bA = NULL;
                             }
                         }
                         else if (bA && bB) {
-                            for (lA = startA, lB = startB;
-                                 lA < endA && lB < endB;
-                                 lA++, lB++) {
-                                cA = (int) bA[lA];
-                                cB = (int) bB[lB];
-                                if (cA == wildcard || cB == wildcard) ;
-                                else if (cA == cB) identities++;
-                                else mismatches++;
-                            }
+                            ADD_IDENTITIES_MISMATCHES((int) bA[lA], (int) bB[lB])
                             if (oA) {
                                 Py_DECREF(oA);
                                 bA = NULL;
@@ -1340,56 +1369,8 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                         double* ptr;
                         double value;
                         if (iA && iB) {
-                            for (lA = startA, lB = startB;
-                                 lA < endA && lB < endB;
-                                 lA++, lB++) {
-                                cA = iA[lA];
-                                cB = iB[lB];
-                                if (cA < 0) {
-                                    PyErr_Format(PyExc_ValueError,
-                                        "sequences[%d][%zd] is negative (%d)",
-                                        jA, lA, cA);
-                                    goto error;
-                                }
-                                if (cA >= m) {
-                                    PyErr_Format(PyExc_ValueError,
-                                        "sequence[%d][%zd] is out of bound"
-                                        " (%d, should be < %zd)",
-                                        jA, lA, cA, m);
-                                    goto error;
-                                }
-                                if (cB < 0) {
-                                    PyErr_Format(PyExc_ValueError,
-                                        "sequences[%d][%zd] is negative (%d)",
-                                        jB, lB, cB);
-                                    goto error;
-                                }
-                                if (cB >= m) {
-                                    PyErr_Format(PyExc_ValueError,
-                                        "sequence[%d][%zd] is out of bound"
-                                        " (%d, should be < %zd)",
-                                        jB, lB, cB, m);
-                                    goto error;
-                                }
-                                if (mapping) {
-                                    cA = mapping[cA];
-                                    cB = mapping[cB];
-                                    if (cA == MISSING_LETTER || cB == MISSING_LETTER) {
-                                        PyErr_SetString(PyExc_ValueError,
-                                            "sequence contains letters not in the alphabet");
-                                        goto error;
-                                    }
-                                }
-                                if (cA == cB) identities++;
-                                else mismatches++;
-                                ptr = (double*)substitution_matrix.buf
-                                    + cA * substitution_matrix.shape[0] + cB;
-                                value = *(double*)ptr;
-                                if (value > 0) positives++;
-                                substitution_score += value;
-                            }
-                        }
-                        else if (iA && bB) {
+                            ADD_IDENTITIES_MISMATCHES_SCORE(iA[lA], iB[lB])
+                        } else if (iA && bB) {
                             for (lA = startA, lB = startB;
                                  lA < endA && lB < endB;
                                  lA++, lB++) {
@@ -1448,8 +1429,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                                 Py_DECREF(oB);
                                 bB = NULL;
                             }
-                        }
-                        else if (iB && bA) {
+                        } else if (iB && bA) {
                             for (lA = startA, lB = startB;
                                  lA < endA && lB < endB;
                                  lA++, lB++) {
