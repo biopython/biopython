@@ -56,6 +56,8 @@ static PyObject *Array_get_alphabet(PyObject *self, void *closure) {
 }
 
 static int Array_set_alphabet(PyObject *self, PyObject *arg, void *closure) {
+    Py_buffer view;
+    const Py_ssize_t length = PySequence_Size(arg);
     PyTypeObject* basetype = Array_Type.tp_base;
     Fields* fields = (Fields*)((intptr_t)self + basetype->tp_basicsize);
     if (fields->alphabet) {
@@ -68,10 +70,7 @@ static int Array_set_alphabet(PyObject *self, PyObject *arg, void *closure) {
             "strings, lists, and tuples can be valid alphabets).");
         return -1;
     }
-    const Py_ssize_t length = PySequence_Size(arg);
-    Py_buffer view;
-    const int flag = PyBUF_STRIDES;
-    if (PyObject_GetBuffer(self, &view, flag) != 0) {
+    if (PyObject_GetBuffer(self, &view, PyBUF_STRIDES) != 0) {
         PyErr_SetString(PyExc_RuntimeError, "failed to access matrix buffer");
         return -1;
     }
@@ -182,17 +181,21 @@ static struct PyModuleDef module = {
 PyMODINIT_FUNC
 PyInit__arraycore(void)
 {
+    int result;
+    PyObject *basemodule;
+    PyObject *baseclass;
+    PyTypeObject* basetype;
+
     PyObject *mod = PyModule_Create(&module);
-    if (!mod)
-        return NULL;
+    if (!mod) return NULL;
 
     // Import the module containing the base class
-    PyObject *basemodule = PyImport_ImportModule("numpy");
+    basemodule = PyImport_ImportModule("numpy");
     if (!basemodule)
         return NULL;
 
     // Get the base class
-    PyObject *baseclass = PyObject_GetAttrString(basemodule, "ndarray");
+    baseclass = PyObject_GetAttrString(basemodule, "ndarray");
     Py_DECREF(basemodule);
     if (!baseclass || !PyType_Check(baseclass)) {
         Py_XDECREF(basemodule);
@@ -200,11 +203,10 @@ PyInit__arraycore(void)
         return NULL;
     }
 
-    PyTypeObject* basetype = (PyTypeObject *)baseclass;
+    basetype = (PyTypeObject *)baseclass;
     if (!(basetype->tp_flags & Py_TPFLAGS_BASETYPE)) {
         PyErr_SetString(PyExc_RuntimeError,
                         "numpy ndarray class is not subclassable");
-        basetype = NULL;
         return NULL;
     }
     if (basetype->tp_itemsize != 0) {
@@ -221,13 +223,11 @@ PyInit__arraycore(void)
 
     Array_Type.tp_basicsize = basetype->tp_basicsize + sizeof(Fields);
     Array_Type.tp_base = (PyTypeObject *)baseclass;
+
     if (PyType_Ready(&Array_Type) < 0)
         return NULL;
 
-    const int result = PyModule_AddObjectRef(mod,
-                                             "Array",
-                                             (PyObject*)&Array_Type);
-
+    result = PyModule_AddObjectRef(mod, "Array", (PyObject*)&Array_Type);
     Py_DECREF(&Array_Type);
     if (result == -1) {
         Py_DECREF(mod);
