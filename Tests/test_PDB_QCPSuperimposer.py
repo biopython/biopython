@@ -99,6 +99,24 @@ class QCPSuperimposerTest(unittest.TestCase):
             np.allclose(svd_sup.get_transformed(), sup.get_transformed(), atol=1e-3)
         )
 
+    def test_compare_to_svd_lines(self):
+        """Compare results of QCP to SVD using simple lines."""
+        ref = np.linspace([0, 0, 0], [10, 10, 10], 5)
+        mob = np.linspace([20, 10, 30], [20, 20, 30], 5)
+
+        sup = QCPSuperimposer()
+        sup.set(ref, mob)
+        sup.run()
+
+        svd_sup = SVDSuperimposer()
+        svd_sup.set(ref, mob)
+        svd_sup.run()
+
+        self.assertAlmostEqual(svd_sup.get_rms(), sup.rms, places=3)
+        self.assertTrue(
+            np.allclose(svd_sup.get_transformed(), sup.get_transformed(), atol=1e-3)
+        )
+
     def test_get_transformed(self):
         """Test transformation of coordinates after QCP."""
         sup = QCPSuperimposer()
@@ -147,6 +165,19 @@ class QCPSuperimposerTest(unittest.TestCase):
         self.assertTrue(np.allclose(sup.rotran[0], rot, atol=1e-3))
         self.assertTrue(np.allclose(sup.rotran[1], -tran, atol=1e-3))
         self.assertAlmostEqual(sup.rms, 0.0, places=6)
+
+    def test_compare_rmsd_to_transformed(self):
+        """Compare RMSD from QCP algorithm to that from transformed"""
+        ref = np.linspace([0, 0, 0], [10, 10, 10], 5)
+        mob = np.linspace([20, 10, 30], [20, 20, 30], 5)
+
+        sup = QCPSuperimposer()
+        sup.set(ref, mob)
+        sup.run()
+        rms = sup.get_rms()
+        mob_fitted = sup.get_transformed()
+        rms_fitted = np.sqrt(((ref - mob_fitted) ** 2).sum() / ref.shape[0])
+        self.assertAlmostEqual(rms, rms_fitted, places=6)
 
 
 if __name__ == "__main__":
