@@ -1163,9 +1163,9 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
     double gap_score = 0.0;
     double substitution_score = 0.0;
 
-    Py_ssize_t shape2;
-    Py_ssize_t strideA;
-    Py_ssize_t strideB;
+    Py_ssize_t n_columns;
+    Py_ssize_t row_stride;
+    Py_ssize_t column_stride;
 
     int path = 0;
 
@@ -1215,9 +1215,9 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
         }
     }
 
-    shape2 = coordinates.shape[1];
-    strideA = coordinates.strides[0] / sizeof(Py_ssize_t);
-    strideB = coordinates.strides[1] / sizeof(Py_ssize_t);
+    n_columns = coordinates.shape[1];
+    row_stride = coordinates.strides[0] / sizeof(Py_ssize_t);
+    column_stride = coordinates.strides[1] / sizeof(Py_ssize_t);
     buffer = coordinates.buf;
 
     if (substitution_matrix.obj) positives = 0;
@@ -1273,15 +1273,15 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
         for (jB = jA + 1; jB < n; jB++) {
             GET_BUFFER(jB, sequenceB, iB, bB, oB)
             strandB = ((bool*)(strands.buf))[jB];
-            leftA = buffer[jA * strideA + 0];
-            leftB = buffer[jB * strideA + 0];
-            rightA = buffer[jA * strideA + (shape2 - 1) * strideB];
-            rightB = buffer[jB * strideA + (shape2 - 1) * strideB];
+            leftA = buffer[jA * row_stride + 0];
+            leftB = buffer[jB * row_stride + 0];
+            rightA = buffer[jA * row_stride + (n_columns - 1) * column_stride];
+            rightB = buffer[jB * row_stride + (n_columns - 1) * column_stride];
             startA = leftA;
             startB = leftB;
-            for (k = 1; k < shape2; k++) {
-                endA = buffer[jA * strideA + k * strideB];
-                endB = buffer[jB * strideA + k * strideB];
+            for (k = 1; k < n_columns; k++) {
+                endA = buffer[jA * row_stride + k * column_stride];
+                endB = buffer[jB * row_stride + k * column_stride];
                 if (startA == endA && startB == endB) {
                 }
                 else if (startA == endA) {
