@@ -1005,6 +1005,46 @@ strands_converter(PyObject* argument, void* pointer)
         b = PyBytes_AS_STRING(o) - start; \
     }
 
+#define ADD_GAPS(first, second, gaptype, direction) \
+    if (path == direction) { \
+        if (start ## first == left ## first) \
+            extend_left_ ## gaptype ## s += end ## second - start ## second; \
+        else if (end ## first == right ## first) \
+            extend_right_ ## gaptype ## s += end ## second - start ## second; \
+        else \
+            extend_internal_ ## gaptype ## s += end ## second - start ## second; \
+    } \
+    else { \
+        if (start ## first== left ## first) { \
+            open_left_ ## gaptype ## s++; \
+            extend_left_ ## gaptype ## s += end ## second - start ## second - 1; \
+        } \
+        else if (end ## first == right ## first) { \
+            open_right_ ## gaptype ## s++; \
+            extend_right_ ## gaptype ## s += end ## second- start ## second - 1; \
+        } \
+        else { \
+            open_internal_ ## gaptype ## s++; \
+            extend_internal_ ## gaptype ## s += end ## second - start ## second - 1; \
+        } \
+        if (gaptype ## _score_function) { \
+            double value; \
+            PyObject* result; \
+            if (strand ## first) \
+                result = PyObject_CallFunction(gaptype ## _score_function, \
+                                               "ii", right ## first- start ## first, end ## second - start ## second); \
+            else \
+                result = PyObject_CallFunction(gaptype ## _score_function, \
+                                               "ii", start ## first, end ## second - start ## second); \
+            if (result == NULL) goto error; \
+            value = PyFloat_AsDouble(result); \
+            Py_DECREF(result); \
+            if (value == -1.0 && PyErr_Occurred()) goto error; \
+            gap_score += value; \
+        } \
+        path = direction; \
+    }
+
 #define ADD_IDENTITIES_MISMATCHES(intA, intB) \
     for (lA = startA, lB = startB; \
          lA < endA && lB < endB; \
@@ -1162,32 +1202,11 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
         }
     }
 
-    counts = (AlignmentCounts*)PyType_GenericAlloc(&AlignmentCounts_Type, 0);
-    if (!counts) goto exit;
-
     int* mapping = NULL;
     int m = 0;
 
-    if (substitution_matrix.obj) {
-        m = substitution_matrix.shape[0];
-        if (PyObject_IsInstance(substitution_matrix.obj,
-                               (PyObject*)Array_Type)) {
-            PyTypeObject* basetype = Array_Type->tp_base;
-            Fields* fields = (Fields*)((intptr_t)substitution_matrix.obj + basetype->tp_basicsize);
-            Py_buffer* mapping_buffer = &fields->mapping;
-            if (mapping_buffer->obj) {
-                mapping = mapping_buffer->buf;
-                m = mapping_buffer->len / mapping_buffer->itemsize;
-            }
-        }
-    }
-
     PyObject* insertion_score_function = NULL;
     PyObject* deletion_score_function = NULL;
-    if (aligner) {
-        insertion_score_function = aligner->insertion_score_function;
-        deletion_score_function = aligner->deletion_score_function;
-    }
 
     Py_ssize_t open_left_insertions = 0, extend_left_insertions = 0;
     Py_ssize_t open_left_deletions = 0, extend_left_deletions = 0;
@@ -1205,6 +1224,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
     const Py_ssize_t shape2 = coordinates.shape[1];
     const Py_ssize_t strideA = coordinates.strides[0] / sizeof(Py_ssize_t);
     const Py_ssize_t strideB = coordinates.strides[1] / sizeof(Py_ssize_t);
+
     Py_ssize_t leftA, leftB;
     Py_ssize_t rightA, rightB;
     Py_ssize_t startA, startB;
@@ -1215,6 +1235,28 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
     PyObject* oB = NULL;
 
     int path = 0;
+
+    if (aligner) {
+        insertion_score_function = aligner->insertion_score_function;
+        deletion_score_function = aligner->deletion_score_function;
+    }
+
+    counts = (AlignmentCounts*)PyType_GenericAlloc(&AlignmentCounts_Type, 0);
+    if (!counts) goto exit;
+
+    if (substitution_matrix.obj) {
+        m = substitution_matrix.shape[0];
+        if (PyObject_IsInstance(substitution_matrix.obj,
+                               (PyObject*)Array_Type)) {
+            PyTypeObject* basetype = Array_Type->tp_base;
+            Fields* fields = (Fields*)((intptr_t)substitution_matrix.obj + basetype->tp_basicsize);
+            Py_buffer* mapping_buffer = &fields->mapping;
+            if (mapping_buffer->obj) {
+                mapping = mapping_buffer->buf;
+                m = mapping_buffer->len / mapping_buffer->itemsize;
+            }
+        }
+    }
 
     for (jA = 0; jA < n; jA++) {
         GET_BUFFER(jA, sequenceA, iA, bA, oA)
@@ -1234,84 +1276,10 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                 if (startA == endA && startB == endB) {
                 }
                 else if (startA == endA) {
-                    if (path == HORIZONTAL) {
-                        if (startA == leftA)
-                            extend_left_insertions += endB - startB;
-                        else if (endA == rightA)
-                            extend_right_insertions += endB - startB;
-                        else
-                            extend_internal_insertions += endB - startB;
-                    }
-                    else {
-                        if (startA == leftA) {
-                            open_left_insertions++;
-                            extend_left_insertions += endB - startB - 1;
-                        }
-                        else if (endA == rightA) {
-                            open_right_insertions++;
-                            extend_right_insertions += endB - startB - 1;
-                        }
-                        else {
-                            open_internal_insertions++;
-                            extend_internal_insertions += endB - startB - 1;
-                        }
-                        if (insertion_score_function) {
-                            double value;
-                            PyObject* result;
-                            if (strandA)
-                                result = PyObject_CallFunction(insertion_score_function,
-                                                               "ii", rightA - startA, endB - startB);
-                            else
-                                result = PyObject_CallFunction(insertion_score_function,
-                                                               "ii", startA, endB - startB);
-                            if (result == NULL) goto error;
-                            value = PyFloat_AsDouble(result);
-                            Py_DECREF(result);
-                            if (value == -1.0 && PyErr_Occurred()) goto error;
-                            gap_score += value;
-                        }
-                        path = HORIZONTAL;
-                    }
+                    ADD_GAPS(A, B, insertion, HORIZONTAL)
                 }
                 else if (startB == endB) {
-                    if (path == VERTICAL) {
-                        if (startB == leftB)
-                            extend_left_deletions += endA - startA;
-                        else if (endB == rightB)
-                            extend_right_deletions += endA - startA;
-                        else
-                            extend_internal_deletions += endA - startA;
-                    }
-                    else {
-                        if (startB == leftB) {
-                            open_left_deletions++;
-                            extend_left_deletions += endA - startA - 1;
-                        }
-                        else if (endB == rightB) {
-                            open_right_deletions++;
-                            extend_right_deletions += endA - startA - 1;
-                        }
-                        else {
-                            open_internal_deletions++;
-                            extend_internal_deletions += endA - startA - 1;
-                        }
-                        if (deletion_score_function) {
-                            double value;
-                            PyObject* result;
-                            if (strandB)
-                                result = PyObject_CallFunction(deletion_score_function,
-                                                               "ii", rightB - startB, endA - startA);
-                            else
-                                result = PyObject_CallFunction(deletion_score_function,
-                                                               "ii", startB, endA - startA);
-                            if (result == NULL) return 0;
-                            value = PyFloat_AsDouble(result);
-                            Py_DECREF(result);
-                            if (value == -1.0 && PyErr_Occurred()) goto error;
-                            gap_score += value;
-                        }
-                        path = VERTICAL;
-                    }
+                    ADD_GAPS(B, A, deletion, VERTICAL)
                 }
                 else if (sequenceA->obj == NULL || sequenceB->obj == NULL) {
                     path = DIAGONAL;
