@@ -1179,29 +1179,6 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
         }
     }
 
-    n = PyList_GET_SIZE(sequences);
-    if (n != coordinates.shape[0]) {
-        PyErr_SetString(PyExc_ValueError,
-            "number of rows in coordinates must equal the number of sequences");
-        goto exit;
-    }
-    if (n != strands.shape[0]) {
-        PyErr_SetString(PyExc_ValueError,
-            "size of strands must equal the number of sequences");
-        goto exit;
-    }
-
-    buffers = PyMem_Calloc(n, sizeof(Py_buffer));
-    if (!buffers) goto exit;
-
-    for (k = 0; k < n; k++) {
-        sequence = PyList_GET_ITEM(sequences, k);
-        if (!sequence_converter(sequence, &buffers[k])) {
-            n = k;
-            goto exit;
-        }
-    }
-
     int* mapping = NULL;
     int m = 0;
 
@@ -1235,6 +1212,29 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
     PyObject* oB = NULL;
 
     int path = 0;
+
+    n = PyList_GET_SIZE(sequences);
+    if (n != coordinates.shape[0]) {
+        PyErr_SetString(PyExc_ValueError,
+            "number of rows in coordinates must equal the number of sequences");
+        goto exit;
+    }
+    if (n != strands.shape[0]) {
+        PyErr_SetString(PyExc_ValueError,
+            "size of strands must equal the number of sequences");
+        goto exit;
+    }
+
+    buffers = PyMem_Calloc(n, sizeof(Py_buffer));
+    if (!buffers) goto exit;
+
+    for (k = 0; k < n; k++) {
+        sequence = PyList_GET_ITEM(sequences, k);
+        if (!sequence_converter(sequence, &buffers[k])) {
+            n = k;
+            goto exit;
+        }
+    }
 
     if (aligner) {
         insertion_score_function = aligner->insertion_score_function;
