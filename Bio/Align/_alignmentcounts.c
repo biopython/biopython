@@ -1163,6 +1163,21 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
     double gap_score = 0.0;
     double substitution_score = 0.0;
 
+    Py_ssize_t shape2;
+    Py_ssize_t strideA;
+    Py_ssize_t strideB;
+
+    int path = 0;
+
+    Py_ssize_t leftA, leftB;
+    Py_ssize_t rightA, rightB;
+    Py_ssize_t startA, startB;
+    Py_ssize_t endA, endB;
+    Py_ssize_t* buffer;
+
+    PyObject* oA = NULL;
+    PyObject* oB = NULL;
+
     static char *kwlist[] = {"sequences", "coordinates", "strands", "argument", NULL};
 
     if (!PyArg_ParseTupleAndKeywords(args, keywords, "O!O&O&|O", kwlist,
@@ -1200,22 +1215,12 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
         }
     }
 
-    const Py_ssize_t shape2 = coordinates.shape[1];
-    const Py_ssize_t strideA = coordinates.strides[0] / sizeof(Py_ssize_t);
-    const Py_ssize_t strideB = coordinates.strides[1] / sizeof(Py_ssize_t);
-
-    Py_ssize_t leftA, leftB;
-    Py_ssize_t rightA, rightB;
-    Py_ssize_t startA, startB;
-    Py_ssize_t endA, endB;
-    Py_ssize_t* buffer = coordinates.buf;
-
-    PyObject* oA = NULL;
-    PyObject* oB = NULL;
+    shape2 = coordinates.shape[1];
+    strideA = coordinates.strides[0] / sizeof(Py_ssize_t);
+    strideB = coordinates.strides[1] / sizeof(Py_ssize_t);
+    buffer = coordinates.buf;
 
     if (substitution_matrix.obj) positives = 0;
-
-    int path = 0;
 
     n = PyList_GET_SIZE(sequences);
     if (n != coordinates.shape[0]) {
