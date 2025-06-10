@@ -1155,6 +1155,14 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
     Py_ssize_t open_right_insertions = 0, extend_right_insertions = 0;
     Py_ssize_t open_right_deletions = 0, extend_right_deletions = 0;
 
+    Py_ssize_t aligned = 0;
+    Py_ssize_t identities = 0;
+    Py_ssize_t mismatches = 0;
+    Py_ssize_t positives = -1;
+
+    double gap_score = 0.0;
+    double substitution_score = 0.0;
+
     static char *kwlist[] = {"sequences", "coordinates", "strands", "argument", NULL};
 
     if (!PyArg_ParseTupleAndKeywords(args, keywords, "O!O&O&|O", kwlist,
@@ -1192,13 +1200,6 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
         }
     }
 
-    Py_ssize_t aligned = 0;
-    Py_ssize_t identities = 0;
-    Py_ssize_t mismatches = 0;
-    Py_ssize_t positives = substitution_matrix.obj ? 0 : -1;
-    double gap_score = 0.0;
-    double substitution_score = 0.0;
-
     const Py_ssize_t shape2 = coordinates.shape[1];
     const Py_ssize_t strideA = coordinates.strides[0] / sizeof(Py_ssize_t);
     const Py_ssize_t strideB = coordinates.strides[1] / sizeof(Py_ssize_t);
@@ -1211,6 +1212,8 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
 
     PyObject* oA = NULL;
     PyObject* oB = NULL;
+
+    if (substitution_matrix.obj) positives = 0;
 
     int path = 0;
 
