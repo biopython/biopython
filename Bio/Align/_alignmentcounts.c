@@ -973,7 +973,24 @@ strands_converter(PyObject* argument, void* pointer)
     return Py_CLEANUP_SUPPORTED;
 }
 
-/* Module definition */
+#define GET_BUFFER(j, sequence, i, b, o) \
+    sequence = &buffers[j]; \
+    i = NULL; \
+    b = NULL; \
+    o = NULL; \
+    if (sequence->buf) { \
+        switch (sequence->format[0]) { \
+            case 'i': \
+            case 'I': \
+                i = sequence->buf; \
+                break; \
+            case 'c': \
+            case 'b': \
+            case 'B': \
+                b = sequence->buf; \
+                break; \
+        } \
+    }
 
 #define GET_LAZY_DATA(o, sequence, start, end, j, b) \
     o = PySequence_GetSlice(sequence->obj, start, end); \
@@ -1200,42 +1217,10 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
     int path = 0;
 
     for (jA = 0; jA < n; jA++) {
-        sequenceA = &buffers[jA];
-        bA = NULL;
-        iA = NULL;
-        oA = NULL;
-        if (sequenceA->buf) {
-            switch (sequenceA->format[0]) {
-                case 'i':
-                case 'I':
-                    iA = sequenceA->buf;
-                    break;
-                case 'c':
-                case 'b':
-                case 'B':
-                    bA = sequenceA->buf;
-                    break;
-            }
-        }
+        GET_BUFFER(jA, sequenceA, iA, bA, oA)
         strandA = ((bool*)(strands.buf))[jA];
         for (jB = jA + 1; jB < n; jB++) {
-            sequenceB = &buffers[jB];
-            bB = NULL;
-            iB = NULL;
-            oB = NULL;
-            if (sequenceB->buf) {
-                switch (sequenceB->format[0]) {
-                    case 'i':
-                    case 'I':
-                        iB = sequenceB->buf;
-                        break;
-                    case 'c':
-                    case 'b':
-                    case 'B':
-                        bB = sequenceB->buf;
-                        break;
-                }
-            }
+            GET_BUFFER(jB, sequenceB, iB, bB, oB)
             strandB = ((bool*)(strands.buf))[jB];
             leftA = buffer[jA * strideA + 0];
             leftB = buffer[jB * strideA + 0];
@@ -1468,6 +1453,8 @@ static PyMethodDef module_functions[] = {
 
 static char _alignmentcounts__doc__[] =
 "C extension module implementing the AlignmentCounts class";
+
+/* Module definition */
 
 static struct PyModuleDef moduledef = {
         PyModuleDef_HEAD_INIT,
