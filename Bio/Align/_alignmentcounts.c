@@ -1142,6 +1142,19 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
     bool strandA;
     bool strandB;
 
+    int* mapping = NULL;
+    int m = 0;
+
+    PyObject* insertion_score_function = NULL;
+    PyObject* deletion_score_function = NULL;
+
+    Py_ssize_t open_left_insertions = 0, extend_left_insertions = 0;
+    Py_ssize_t open_left_deletions = 0, extend_left_deletions = 0;
+    Py_ssize_t open_internal_insertions = 0, extend_internal_insertions = 0;
+    Py_ssize_t open_internal_deletions = 0, extend_internal_deletions = 0;
+    Py_ssize_t open_right_insertions = 0, extend_right_insertions = 0;
+    Py_ssize_t open_right_deletions = 0, extend_right_deletions = 0;
+
     static char *kwlist[] = {"sequences", "coordinates", "strands", "argument", NULL};
 
     if (!PyArg_ParseTupleAndKeywords(args, keywords, "O!O&O&|O", kwlist,
@@ -1179,18 +1192,6 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
         }
     }
 
-    int* mapping = NULL;
-    int m = 0;
-
-    PyObject* insertion_score_function = NULL;
-    PyObject* deletion_score_function = NULL;
-
-    Py_ssize_t open_left_insertions = 0, extend_left_insertions = 0;
-    Py_ssize_t open_left_deletions = 0, extend_left_deletions = 0;
-    Py_ssize_t open_internal_insertions = 0, extend_internal_insertions = 0;
-    Py_ssize_t open_internal_deletions = 0, extend_internal_deletions = 0;
-    Py_ssize_t open_right_insertions = 0, extend_right_insertions = 0;
-    Py_ssize_t open_right_deletions = 0, extend_right_deletions = 0;
     Py_ssize_t aligned = 0;
     Py_ssize_t identities = 0;
     Py_ssize_t mismatches = 0;
