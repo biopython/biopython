@@ -995,45 +995,59 @@ static inline void reset_lazy_data(PyObject* obj, char** b) {
     }
 }
 
-#define ADD_GAPS(first, second, gaptype, direction) \
-    if (path == direction) { \
-        if (start ## first == left ## first) \
-            extend_left_ ## gaptype ## s += end ## second - start ## second; \
-        else if (end ## first == right ## first) \
-            extend_right_ ## gaptype ## s += end ## second - start ## second; \
-        else \
-            extend_internal_ ## gaptype ## s += end ## second - start ## second; \
-    } \
-    else { \
-        if (start ## first== left ## first) { \
-            open_left_ ## gaptype ## s++; \
-            extend_left_ ## gaptype ## s += end ## second - start ## second - 1; \
-        } \
-        else if (end ## first == right ## first) { \
-            open_right_ ## gaptype ## s++; \
-            extend_right_ ## gaptype ## s += end ## second- start ## second - 1; \
-        } \
-        else { \
-            open_internal_ ## gaptype ## s++; \
-            extend_internal_ ## gaptype ## s += end ## second - start ## second - 1; \
-        } \
-        if (gaptype ## _score_function) { \
-            double value; \
-            PyObject* result; \
-            if (strand ## first) \
-                result = PyObject_CallFunction(gaptype ## _score_function, \
-                                               "ii", right ## first- start ## first, end ## second - start ## second); \
-            else \
-                result = PyObject_CallFunction(gaptype ## _score_function, \
-                                               "ii", start ## first, end ## second - start ## second); \
-            if (result == NULL) goto error; \
-            value = PyFloat_AsDouble(result); \
-            Py_DECREF(result); \
-            if (value == -1.0 && PyErr_Occurred()) goto error; \
-            gap_score += value; \
-        } \
-        path = direction; \
+static inline bool add_gaps(int* path, const int direction, bool strand,
+                            PyObject* score_function,
+                            Py_ssize_t start, Py_ssize_t end,
+                            Py_ssize_t left, Py_ssize_t right,
+                            Py_ssize_t gapsize,
+                            Py_ssize_t* open_left_gaps,
+                            Py_ssize_t* extend_left_gaps,
+                            Py_ssize_t* open_internal_gaps,
+                            Py_ssize_t* extend_internal_gaps,
+                            Py_ssize_t* open_right_gaps,
+                            Py_ssize_t* extend_right_gaps,
+                            double* gap_score)
+{
+    if (*path == direction) {
+        if (start == left)
+            *extend_left_gaps += gapsize;
+        else if (end == right)
+            *extend_right_gaps += gapsize;
+        else
+            *extend_internal_gaps += gapsize;
     }
+    else {
+        if (start == left) {
+            (*open_left_gaps)++;
+            *extend_left_gaps += gapsize - 1;
+        }
+        else if (end == right) {
+            (*open_right_gaps)++;
+            *extend_right_gaps += gapsize - 1;
+        }
+        else {
+            (*open_internal_gaps)++;
+            *extend_internal_gaps += gapsize - 1; \
+        } \
+        if (score_function) {
+            double value;
+            PyObject* result;
+            if (strand)
+                result = PyObject_CallFunction(score_function, "ii",
+                                               right - start, gapsize);
+            else
+                result = PyObject_CallFunction(score_function,
+                                               "ii", start, gapsize);
+            if (result == NULL) return false;
+            value = PyFloat_AsDouble(result);
+            Py_DECREF(result);
+            if (value == -1.0 && PyErr_Occurred()) return false;
+            *gap_score += value;
+        }
+        *path = direction;
+    }
+    return true;
+}
 
 #define ADD_IDENTITIES_MISMATCHES(intA, intB) \
     for (lA = startA, lB = startB; \
@@ -1272,10 +1286,28 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                 if (startA == endA && startB == endB) {
                 }
                 else if (startA == endA) {
-                    ADD_GAPS(A, B, insertion, HORIZONTAL)
+                    if (!add_gaps(&path, HORIZONTAL, strandA,
+                                  insertion_score_function,
+                                  startA, endA, leftA, rightA, endB - startB,
+                                  &open_left_insertions,
+                                  &extend_left_insertions,
+                                  &open_internal_insertions,
+                                  &extend_internal_insertions,
+                                  &open_right_insertions,
+                                  &extend_right_insertions,
+                                  &gap_score)) goto error;
                 }
                 else if (startB == endB) {
-                    ADD_GAPS(B, A, deletion, VERTICAL)
+                    if (!add_gaps(&path, VERTICAL, strandB,
+                                  deletion_score_function,
+                                  startB, endB, leftB, rightB, endA - startA,
+                                  &open_left_deletions,
+                                  &extend_left_deletions,
+                                  &open_internal_deletions,
+                                  &extend_internal_deletions,
+                                  &open_right_deletions,
+                                  &extend_right_deletions,
+                                  &gap_score)) goto error;
                 }
                 else if (sequenceA->obj == NULL || sequenceB->obj == NULL) {
                     path = DIAGONAL;
