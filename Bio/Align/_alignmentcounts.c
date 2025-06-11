@@ -973,37 +973,49 @@ strands_converter(PyObject* argument, void* pointer)
     return Py_CLEANUP_SUPPORTED;
 }
 
-#define GET_BUFFER(j, sequence, i, b, o) \
-    sequence = &buffers[j]; \
-    i = NULL; \
-    b = NULL; \
-    o = NULL; \
-    if (sequence->buf) { \
-        switch (sequence->format[0]) { \
-            case 'i': \
-            case 'I': \
-                i = sequence->buf; \
-                break; \
-            case 'c': \
-            case 'b': \
-            case 'B': \
-                b = sequence->buf; \
-                break; \
-        } \
+static inline Py_buffer* get_buffer(Py_buffer *sequence, int** i, char** b)
+{
+    *i = NULL;
+    *b = NULL;
+    if (sequence->buf) {
+        switch (sequence->format[0]) {
+            case 'i':
+            case 'I':
+                *i = sequence->buf;
+                break;
+            case 'c':
+            case 'b':
+            case 'B':
+                *b = sequence->buf;
+                break;
+        }
     }
+    return sequence;
+}
 
-#define GET_LAZY_DATA(o, sequence, start, end, j, b) \
-    o = PySequence_GetSlice(sequence->obj, start, end); \
-    if (!o) goto error; \
-    if (PyBytes_Check(o)) { \
-        if (PyBytes_GET_SIZE(o) != end - start) { \
-            PyErr_Format(PyExc_ValueError, \
-                "alignment.sequences[%d][%d:%d] did not return a bytes object of size %d", \
-                j, start, end, end - start); \
-            goto error; \
-        } \
-        b = PyBytes_AS_STRING(o) - start; \
+static inline PyObject* get_lazy_data(PyObject* sequence, Py_ssize_t start, Py_ssize_t end, Py_ssize_t j, char** b)
+{
+    PyObject* obj = PySequence_GetSlice(sequence, start, end);
+    if (!obj) return NULL;
+    if (PyBytes_Check(obj)) {
+        if (PyBytes_GET_SIZE(obj) == end - start) {
+            *b = PyBytes_AS_STRING(obj) - start;
+            return obj;
+        }
+        PyErr_Format(PyExc_ValueError,
+            "alignment.sequences[%zd][%zd:%zd] did not return a bytes object of size %zd",
+            j, start, end, end - start);
+        Py_DECREF(obj);
     }
+    return obj;
+}
+
+static inline void reset_lazy_data(PyObject* obj, char** b) {
+    if (obj) {
+        Py_DECREF(obj);
+        *b = NULL;
+    }
+}
 
 #define ADD_GAPS(first, second, gaptype, direction) \
     if (path == direction) { \
@@ -1106,11 +1118,6 @@ strands_converter(PyObject* argument, void* pointer)
         substitution_score += value; \
     }
 
-#define RESET_LAZY_DATA(o, b) \
-    if (o) { \
-        Py_DECREF(o); \
-        b = NULL; \
-    } \
 
 static const char _calculate__doc__[] = "calculate the matches, mismatches, gaps, and score of the alignment";
 
@@ -1122,7 +1129,7 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
     PyObject* sequence;
     Aligner* aligner = NULL;
     PyObject* sequences;
-    Py_buffer* buffers = NULL;
+    Py_buffer* sequence_buffers = NULL;
     Py_buffer coordinates = {0};
     Py_buffer strands = {0};
     AlignmentCounts* counts = NULL;
@@ -1234,12 +1241,12 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
         goto exit;
     }
 
-    buffers = PyMem_Calloc(n, sizeof(Py_buffer));
-    if (!buffers) goto exit;
+    sequence_buffers = PyMem_Calloc(n, sizeof(Py_buffer));
+    if (!sequence_buffers) goto exit;
 
     for (k = 0; k < n; k++) {
         sequence = PyList_GET_ITEM(sequences, k);
-        if (!sequence_converter(sequence, &buffers[k])) {
+        if (!sequence_converter(sequence, &sequence_buffers[k])) {
             n = k;
             goto exit;
         }
@@ -1268,10 +1275,12 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
     }
 
     for (jA = 0; jA < n; jA++) {
-        GET_BUFFER(jA, sequenceA, iA, bA, oA)
+        oA = NULL;
+        sequenceA = get_buffer(&sequence_buffers[jA], &iA, &bA);
         strandA = ((bool*)(strands.buf))[jA];
         for (jB = jA + 1; jB < n; jB++) {
-            GET_BUFFER(jB, sequenceB, iB, bB, oB)
+            oB = NULL;
+            sequenceB = get_buffer(&sequence_buffers[jB], &iB, &bB);
             strandB = ((bool*)(strands.buf))[jB];
             leftA = buffer[jA * row_stride + 0];
             leftB = buffer[jB * row_stride + 0];
@@ -1298,10 +1307,12 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                     path = DIAGONAL;
                     aligned += endA - startA;
                     if (iA == NULL && bA == NULL) {
-                        GET_LAZY_DATA(oA, sequenceA, startA, endA, jA, bA)
+                        oA = get_lazy_data(sequenceA->obj, startA, endA, jA, &bA);
+                        if (!oA) goto error;
                     }
                     if (iB == NULL && bB == NULL) {
-                        GET_LAZY_DATA(oB, sequenceB, startB, endB, jB, bB)
+                        oB = get_lazy_data(sequenceB->obj, startB, endB, jB, &bB);
+                        if (!oB) goto error;
                     }
                     if (substitution_matrix.obj == NULL) {
                         if (iA && iB) {
@@ -1309,16 +1320,12 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                         }
                         else if (iA && bB) {
                             ADD_IDENTITIES_MISMATCHES(iA[lA], (int) bB[lB])
-                            RESET_LAZY_DATA(oB, bB)
                         }
                         else if (iB && bA) {
                             ADD_IDENTITIES_MISMATCHES((int) bA[lA], iB[lB])
-                            RESET_LAZY_DATA(oA, bA)
                         }
                         else if (bA && bB) {
                             ADD_IDENTITIES_MISMATCHES((int) bA[lA], (int) bB[lB])
-                            RESET_LAZY_DATA(oA, bA)
-                            RESET_LAZY_DATA(oB, bB)
                         }
                     }
                     else {
@@ -1328,17 +1335,15 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                             ADD_IDENTITIES_MISMATCHES_SCORE(iA[lA], iB[lB])
                         } else if (iA && bB) {
                             ADD_IDENTITIES_MISMATCHES_SCORE(iA[lA], (int)bB[lB])
-                            RESET_LAZY_DATA(oB, bB)
                         } else if (iB && bA) {
                             ADD_IDENTITIES_MISMATCHES_SCORE((int) bA[lA], iB[lB])
-                            RESET_LAZY_DATA(oA, bA)
                         }
                         else if (bA && bB) {
                             ADD_IDENTITIES_MISMATCHES_SCORE((int) bA[lA], (int) bB[lB])
-                            RESET_LAZY_DATA(oA, bA)
-                            RESET_LAZY_DATA(oB, bB)
                         }
                     }
+                    reset_lazy_data(oA, &bA);
+                    reset_lazy_data(oB, &bB);
                 }
                 startA = endA;
                 startB = endB;
@@ -1408,9 +1413,9 @@ error:
     counts = NULL;
 
 exit:
-    if (buffers) {
+    if (sequence_buffers) {
         for (k = 0; k < n; k++)
-            if (buffers[k].buf) PyBuffer_Release(&buffers[k]);
+            if (sequence_buffers[k].buf) PyBuffer_Release(&sequence_buffers[k]);
     }
     coordinates_converter(NULL, &coordinates);
     strands_converter(NULL, &strands);
