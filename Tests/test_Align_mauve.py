@@ -696,7 +696,7 @@ np.array([['C', 'T', 'G', 'G', 'C', 'G', 'T', 'C', 'C', 'G', 'G',
         filenames = set(filenames)
         n = len(filenames)
         self.assertEqual(n, 3)
-        lengths = {filename: 0 for filename in filenames}
+        lengths = dict.fromkeys(filenames, 0)
         for alignment in saved_alignments:
             for record in alignment.sequences:
                 filename = record.id
