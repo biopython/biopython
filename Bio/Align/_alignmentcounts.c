@@ -1049,16 +1049,14 @@ static inline bool add_gaps(int* path, const int direction, bool strand,
     return true;
 }
 
-#define ADD_IDENTITIES_MISMATCHES(intA, intB) \
-    for (lA = startA, lB = startB; \
-         lA < endA && lB < endB; \
-         lA++, lB++) { \
-        cA = intA; \
-        cB = intB; \
-        if (cA == wildcard || cB == wildcard) ; \
-        else if (cA == cB) identities++; \
-        else mismatches++; \
-    }
+static void inline
+add_identities_mismatches(int cA, int cB, int wildcard,
+                          Py_ssize_t* identities, Py_ssize_t* mismatches)
+{
+    if (cA == wildcard || cB == wildcard) return;
+    else if (cA == cB) (*identities)++;
+    else (*mismatches)++;
+}
 
 #define ADD_IDENTITIES_MISMATCHES_SCORE(intA, intB) \
     for (lA = startA, lB = startB; \
@@ -1326,16 +1324,48 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                     }
                     if (substitution_matrix.obj == NULL) {
                         if (iA && iB) {
-                            ADD_IDENTITIES_MISMATCHES(iA[lA], iB[lB])
+                            for (lA = startA, lB = startB;
+                                 lA < endA && lB < endB;
+                                 lA++, lB++) {
+                                add_identities_mismatches(iA[lA],
+                                                          iB[lB],
+                                                          wildcard,
+                                                          &identities,
+                                                          &mismatches);
+                            }
                         }
                         else if (iA && bB) {
-                            ADD_IDENTITIES_MISMATCHES(iA[lA], (int) bB[lB])
+                            for (lA = startA, lB = startB;
+                                 lA < endA && lB < endB;
+                                 lA++, lB++) {
+                                add_identities_mismatches(iA[lA],
+                                                          (int) bB[lB],
+                                                          wildcard,
+                                                          &identities,
+                                                          &mismatches);
+                            }
                         }
                         else if (iB && bA) {
-                            ADD_IDENTITIES_MISMATCHES((int) bA[lA], iB[lB])
+                            for (lA = startA, lB = startB;
+                                 lA < endA && lB < endB;
+                                 lA++, lB++) {
+                                add_identities_mismatches((int) bA[lA],
+                                                          iB[lB],
+                                                          wildcard,
+                                                          &identities,
+                                                          &mismatches);
+                            }
                         }
                         else if (bA && bB) {
-                            ADD_IDENTITIES_MISMATCHES((int) bA[lA], (int) bB[lB])
+                            for (lA = startA, lB = startB;
+                                 lA < endA && lB < endB;
+                                 lA++, lB++) {
+                                add_identities_mismatches((int) bA[lA],
+                                                          (int) bB[lB],
+                                                          wildcard,
+                                                          &identities,
+                                                          &mismatches);
+                            }
                         }
                     }
                     else {
