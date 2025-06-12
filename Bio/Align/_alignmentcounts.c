@@ -51,10 +51,11 @@ typedef struct {
 } AlignmentCounts;
 
 static PyObject*
-AlignmentCounts_repr(AlignmentCounts* self)
+AlignmentCounts_str(AlignmentCounts* self)
 {
-    PyObject* representation = NULL;
-    const double score = self->gap_score + self->substitution_score;
+    const double gap_score = self->gap_score;
+    const double substitution_score = self->substitution_score;
+    const double score = gap_score + substitution_score;
     const Py_ssize_t open_left_insertions = self->open_left_insertions;
     const Py_ssize_t extend_left_insertions = self->extend_left_insertions;
     const Py_ssize_t open_left_deletions = self->open_left_deletions;
@@ -71,176 +72,121 @@ AlignmentCounts_repr(AlignmentCounts* self)
     const Py_ssize_t identities = self->identities;
     const Py_ssize_t mismatches = self->mismatches;
     const Py_ssize_t positives = self->positives;
-    if (isnan(score)) {
-        if (positives == -1)
-            representation = PyUnicode_FromFormat("AlignmentCounts("
-"open_left_insertions=%zd, extend_left_insertions=%zd, "
-"open_left_deletions=%zd, extend_left_deletions=%zd, "
-"open_internal_insertions=%zd, extend_internal_insertions=%zd, "
-"open_internal_deletions=%zd, extend_internal_deletions=%zd, "
-"open_right_insertions=%zd, extend_right_insertions=%zd, "
-"open_right_deletions=%zd, extend_right_deletions=%zd, "
-"aligned=%zd, identities=%zd, mismatches=%zd)",
-                open_left_insertions,
-                extend_left_insertions,
-                open_left_deletions,
-                extend_left_deletions,
-                open_internal_insertions,
-                extend_internal_insertions,
-                open_internal_deletions,
-                extend_internal_deletions,
-                open_right_insertions,
-                extend_right_insertions,
-                open_right_deletions,
-                extend_right_deletions,
-                aligned,
-                identities,
-                mismatches);
-        else
-            representation = PyUnicode_FromFormat("AlignmentCounts("
-"open_left_insertions=%zd, extend_left_insertions=%zd, "
-"open_left_deletions=%zd, extend_left_deletions=%zd, "
-"open_internal_insertions=%zd, extend_internal_insertions=%zd, "
-"open_internal_deletions=%zd, extend_internal_deletions=%zd, "
-"open_right_insertions=%zd, extend_right_insertions=%zd, "
-"open_right_deletions=%zd, extend_right_deletions=%zd, "
-"aligned=%zd, identities=%zd, mismatches=%zd, positives=%zd)",
-                open_left_insertions,
-                extend_left_insertions,
-                open_left_deletions,
-                extend_left_deletions,
-                open_internal_insertions,
-                extend_internal_insertions,
-                open_internal_deletions,
-                extend_internal_deletions,
-                open_right_insertions,
-                extend_right_insertions,
-                open_right_deletions,
-                extend_right_deletions,
-                aligned,
-                identities,
-                mismatches,
-                positives);
+    const Py_ssize_t left_insertions = open_left_insertions
+                                     + extend_left_insertions;
+    const Py_ssize_t internal_insertions = open_internal_insertions
+                                         + extend_internal_insertions;
+    const Py_ssize_t right_insertions = open_right_insertions
+                                      + extend_right_insertions;
+    const Py_ssize_t left_deletions = open_left_deletions
+                                    + extend_left_deletions;
+    const Py_ssize_t internal_deletions = open_internal_deletions
+                                        + extend_internal_deletions;
+    const Py_ssize_t right_deletions = open_right_deletions
+                                     + extend_right_deletions;
+    const Py_ssize_t left_gaps = left_insertions + left_deletions;
+    const Py_ssize_t internal_gaps = internal_insertions + internal_deletions;
+    const Py_ssize_t right_gaps = right_insertions + right_deletions;
+    const Py_ssize_t gaps = left_gaps + internal_gaps + right_gaps;
+    char text[1024];
+    char* p = stpcpy(text, "AlignmentCounts object with\n");
+    if (!isnan(score)) {
+        char* s = PyOS_double_to_string(score, 'f', 6, 0, NULL);
+        if (!s) return NULL;
+        p += sprintf(p, "    score = %s:\n", s);
+        PyMem_Free(s);
     }
-    else {
-        char* score_text = PyOS_double_to_string(score, 'f', 6, 0, NULL);
-        if (!score_text) return NULL;
-        if (positives == -1)
-            representation = PyUnicode_FromFormat("AlignmentCounts("
-"open_left_insertions=%zd, extend_left_insertions=%zd, "
-"open_left_deletions=%zd, extend_left_deletions=%zd, "
-"open_internal_insertions=%zd, extend_internal_insertions=%zd, "
-"open_internal_deletions=%zd, extend_internal_deletions=%zd, "
-"open_right_insertions=%zd, extend_right_insertions=%zd, "
-"open_right_deletions=%zd, extend_right_deletions=%zd, "
-"aligned=%zd, identities=%zd, mismatches=%zd, score=%s)",
-                open_left_insertions,
-                extend_left_insertions,
-                open_left_deletions,
-                extend_left_deletions,
-                open_internal_insertions,
-                extend_internal_insertions,
-                open_internal_deletions,
-                extend_internal_deletions,
-                open_right_insertions,
-                extend_right_insertions,
-                open_right_deletions,
-                extend_right_deletions,
-                aligned,
-                identities,
-                mismatches,
-                score_text);
-        else
-            representation = PyUnicode_FromFormat("AlignmentCounts("
-"open_left_insertions=%zd, extend_left_insertions=%zd, "
-"open_left_deletions=%zd, extend_left_deletions=%zd, "
-"open_internal_insertions=%zd, extend_internal_insertions=%zd, "
-"open_internal_deletions=%zd, extend_internal_deletions=%zd, "
-"open_right_insertions=%zd, extend_right_insertions=%zd, "
-"open_right_deletions=%zd, extend_right_deletions=%zd, "
-"aligned=%zd, identities=%zd, mismatches=%zd, positives=%zd, score=%s)",
-                open_left_insertions,
-                extend_left_insertions,
-                open_left_deletions,
-                extend_left_deletions,
-                open_internal_insertions,
-                extend_internal_insertions,
-                open_internal_deletions,
-                extend_internal_deletions,
-                open_right_insertions,
-                extend_right_insertions,
-                open_right_deletions,
-                extend_right_deletions,
-                aligned,
-                identities,
-                mismatches,
-                positives,
-                score_text);
-        PyMem_Free(score_text);
+    if (!isnan(substitution_score)) {
+        char* s = PyOS_double_to_string(substitution_score, 'f', 6, 0, NULL);
+        if (!s) return NULL;
+        p += sprintf(p, "    substitution_score = %s,\n", s);
+        PyMem_Free(s);
     }
-    return representation;
+    if (!isnan(gap_score)) {
+        char* s = PyOS_double_to_string(gap_score, 'f', 6, 0, NULL);
+        if (!s) return NULL;
+        p += sprintf(p, "    gap_score = %s.\n", s);
+        PyMem_Free(s);
+    }
+    p += sprintf(p, "    aligned = %zd:\n", aligned);
+    p += sprintf(p, "        identities = %zd,\n", identities);
+    if (positives != -1)
+        p += sprintf(p, "        positives = %zd,\n", positives);
+    p += sprintf(p, "        mismatches = %zd.\n", mismatches);
+    p += sprintf(p, "    gaps = %zd:\n", gaps);
+    p += sprintf(p, "        left_gaps = %zd:\n", left_gaps);
+    p += sprintf(p, "            left_insertions = %zd:\n", left_insertions);
+    p += sprintf(p, "                open_left_insertions = %zd,\n", open_left_insertions);
+    p += sprintf(p, "                extend_left_insertions = %zd;\n", extend_left_insertions);
+    p += sprintf(p, "            left_deletions = %zd:\n", left_deletions);
+    p += sprintf(p, "                open_left_deletions = %zd,\n", open_left_deletions);
+    p += sprintf(p, "                extend_left_deletions = %zd;\n", extend_left_deletions);
+    p += sprintf(p, "        internal_gaps = %zd:\n", internal_gaps);
+    p += sprintf(p, "            internal_insertions = %zd:\n", internal_insertions);
+    p += sprintf(p, "                open_internal_insertions = %zd,\n", open_internal_insertions);
+    p += sprintf(p, "                extend_internal_insertions = %zd;\n", extend_internal_insertions);
+    p += sprintf(p, "            internal_deletions = %zd:\n", internal_deletions);
+    p += sprintf(p, "                open_internal_deletions = %zd,\n", open_internal_deletions);
+    p += sprintf(p, "                extend_internal_deletions = %zd;\n", extend_internal_deletions);
+    p += sprintf(p, "        right_gaps = %zd:\n", right_gaps);
+    p += sprintf(p, "            right_insertions = %zd:\n", right_insertions);
+    p += sprintf(p, "                open_right_insertions = %zd,\n", open_right_insertions);
+    p += sprintf(p, "                extend_right_insertions = %zd;\n", extend_right_insertions);
+    p += sprintf(p, "            right_deletions = %zd:\n", right_deletions);
+    p += sprintf(p, "                open_right_deletions = %zd,\n", open_right_deletions);
+    p += sprintf(p, "                extend_right_deletions = %zd.\n", extend_right_deletions);
+    return PyUnicode_FromString(text);
 }
 
 static PyObject*
-AlignmentCounts_str(AlignmentCounts* self)
+AlignmentCounts_repr(AlignmentCounts* self)
 {
-    PyObject* str;
-    const double score = self->gap_score + self->substitution_score;
+    const double substitution_score = self->substitution_score;
+    const double gap_score = self->gap_score;
+    const double score = gap_score + substitution_score;
     const Py_ssize_t aligned = self->aligned;
     const Py_ssize_t identities = self->identities;
     const Py_ssize_t mismatches = self->mismatches;
     const Py_ssize_t positives = self->positives;
-    const Py_ssize_t insertions = self->open_left_insertions
-                                + self->extend_left_insertions
-                                + self->open_internal_insertions
-                                + self->extend_internal_insertions
-                                + self->open_right_insertions
-                                + self->extend_right_insertions;
-    const Py_ssize_t deletions = self->open_left_deletions
-                               + self->extend_left_deletions
-                               + self->open_internal_deletions
-                               + self->extend_internal_deletions
-                               + self->open_right_deletions
-                               + self->extend_right_deletions;
-    const Py_ssize_t gaps = insertions + deletions;
-    if (isnan(score)) {
-        if (positives == -1) {
-            const char text[] = "Alignment with "
-"%zd aligned letters (%zd identities, %zd mismatches) and "
-"%zd gaps (%zd insertions, %zd deletions)";
-            str = PyUnicode_FromFormat(text, aligned, identities, mismatches,
-                                       gaps, insertions, deletions);
-        }
-        else {
-            const char text[] = "Alignment with "
-"%zd aligned letters (%zd identities, %zd mismatches, %zd positives) and "
-"%zd gaps (%zd insertions, %zd deletions)";
-            str = PyUnicode_FromFormat(text, aligned,
-                                       identities, mismatches, positives,
-                                       gaps, insertions, deletions);
-        }
+    const Py_ssize_t gaps = self->open_left_insertions
+                          + self->extend_left_insertions
+                          + self->open_internal_insertions
+                          + self->extend_internal_insertions
+                          + self->open_right_insertions
+                          + self->extend_right_insertions
+                          + self->open_left_deletions
+                          + self->extend_left_deletions
+                          + self->open_internal_deletions
+                          + self->extend_internal_deletions
+                          + self->open_right_deletions
+                          + self->extend_right_deletions;
+    char text[1024];
+    char* p = stpcpy(text, "<AlignmentCounts object (");
+    if (!isnan(score)) {
+        char* s = PyOS_double_to_string(score, 'f', 6, 0, NULL);
+        if (!s) return NULL;
+        p += sprintf(p, "score = %s; ", s);
+        PyMem_Free(s);
     }
-    else {
-        char* score_text = PyOS_double_to_string(score, 'f', 6, 0, NULL);
-        if (!score_text) return NULL;
-        if (positives == -1) {
-            const char text[] = "Alignment with "
-"%zd aligned letters (%zd identities, %zd mismatches) and "
-"%zd gaps (%zd insertions, %zd deletions); alignment score = %s";
-            str = PyUnicode_FromFormat(text, aligned, identities, mismatches,
-                                       gaps, insertions, deletions, score_text);
-        }
-        else {
-            const char text[] = "Alignment with "
-"%zd aligned letters (%zd identities, %zd mismatches, %zd positives) and "
-"%zd gaps (%zd insertions, %zd deletions); alignment score = %s";
-            str = PyUnicode_FromFormat(text, aligned,
-                                       identities, mismatches, positives,
-                                       gaps, insertions, deletions, score_text);
-        }
-        PyMem_Free(score_text);
+    if (!isnan(substitution_score)) {
+        char* s = PyOS_double_to_string(substitution_score, 'f', 6, 0, NULL);
+        if (!s) return NULL;
+        p += sprintf(p, "substitution score = %s; ", s);
+        PyMem_Free(s);
     }
-    return str;
+    if (!isnan(gap_score)) {
+        char* s = PyOS_double_to_string(gap_score, 'f', 6, 0, NULL);
+        if (!s) return NULL;
+        p += sprintf(p, "gap score = %s; ", s);
+        PyMem_Free(s);
+    }
+    p += sprintf(p, "%zd aligned letters; ", aligned);
+    p += sprintf(p, "%zd identities; ", identities);
+    p += sprintf(p, "%zd mismatches; ", mismatches);
+    if (positives != -1)
+        p += sprintf(p, "%zd positives; ", positives);
+    p += sprintf(p, "%zd gaps) at %p>", gaps, self);
+    return PyUnicode_FromString(text);
 }
 
 static char AlignmentCounts_aligned__doc__[] = "number of aligned characters in the alignment";
@@ -1537,35 +1483,40 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
         }
     } else substitution_score = Py_NAN;
     counts->substitution_score = substitution_score;
-    if (aligner && aligner->insertion_score_function == NULL) {
-        gap_score += counts->open_left_insertions
-                   * aligner->open_left_insertion_score
-                   + counts->extend_left_insertions
-                   * aligner->extend_left_insertion_score
-                   + counts->open_internal_insertions
-                   * aligner->open_internal_insertion_score
-                   + counts->extend_internal_insertions
-                   * aligner->extend_internal_insertion_score
-                   + counts->open_right_insertions
-                   * aligner->open_right_insertion_score
-                   + counts->extend_right_insertions
-                   * aligner->extend_right_insertion_score;
+
+    if (aligner) {
+        if (aligner->insertion_score_function == NULL) {
+            gap_score += counts->open_left_insertions
+                       * aligner->open_left_insertion_score
+                       + counts->extend_left_insertions
+                       * aligner->extend_left_insertion_score
+                       + counts->open_internal_insertions
+                       * aligner->open_internal_insertion_score
+                       + counts->extend_internal_insertions
+                       * aligner->extend_internal_insertion_score
+                       + counts->open_right_insertions
+                       * aligner->open_right_insertion_score
+                       + counts->extend_right_insertions
+                       * aligner->extend_right_insertion_score;
+        }
+        if (aligner->deletion_score_function == NULL) {
+            gap_score += counts->open_left_deletions
+                       * aligner->open_left_deletion_score
+                       + counts->extend_left_deletions
+                       * aligner->extend_left_deletion_score
+                       + counts->open_internal_deletions
+                       * aligner->open_internal_deletion_score
+                       + counts->extend_internal_deletions
+                       * aligner->extend_internal_deletion_score
+                       + counts->open_right_deletions
+                       * aligner->open_right_deletion_score
+                       + counts->extend_right_deletions
+                       * aligner->extend_right_deletion_score;
+        }
     }
-    if (aligner && aligner->deletion_score_function == NULL) {
-        gap_score += counts->open_left_deletions
-                   * aligner->open_left_deletion_score
-                   + counts->extend_left_deletions
-                   * aligner->extend_left_deletion_score
-                   + counts->open_internal_deletions
-                   * aligner->open_internal_deletion_score
-                   + counts->extend_internal_deletions
-                   * aligner->extend_internal_deletion_score
-                   + counts->open_right_deletions
-                   * aligner->open_right_deletion_score
-                   + counts->extend_right_deletions
-                   * aligner->extend_right_deletion_score;
-    }
+    else gap_score = Py_NAN;
     counts->gap_score = gap_score;
+
     goto exit;
 
 error:

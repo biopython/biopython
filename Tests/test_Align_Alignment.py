@@ -2374,7 +2374,39 @@ T    6.0  14.0   0.0 874.0
         counts = alignment.counts()
         self.assertEqual(
             repr(counts),
-            "AlignmentCounts(open_left_insertions=0, extend_left_insertions=0, open_left_deletions=0, extend_left_deletions=0, open_internal_insertions=15, extend_internal_insertions=65, open_internal_deletions=2, extend_internal_deletions=2, open_right_insertions=0, extend_right_insertions=0, open_right_deletions=0, extend_right_deletions=0, aligned=3084, identities=3020, mismatches=64)",
+            "<AlignmentCounts object (3084 aligned letters; 3020 identities; 64 mismatches; 84 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 3084:
+        identities = 3020,
+        mismatches = 64.
+    gaps = 84:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 84:
+            internal_insertions = 80:
+                open_internal_insertions = 15,
+                extend_internal_insertions = 65;
+            internal_deletions = 4:
+                open_internal_deletions = 2,
+                extend_internal_deletions = 2;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
         )
 
     def test_add(self):
