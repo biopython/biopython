@@ -1058,56 +1058,52 @@ add_identities_mismatches(int cA, int cB, int wildcard,
     else (*mismatches)++;
 }
 
-#define ADD_IDENTITIES_MISMATCHES_SCORE(intA, intB) \
-    for (lA = startA, lB = startB; \
-         lA < endA && lB < endB; \
-         lA++, lB++) { \
-        cA = intA; \
-        cB = intB; \
-        if (cA < 0) { \
-            PyErr_Format(PyExc_ValueError, \
-                "sequences[%d][%zd] is negative (%d)", \
-                jA, lA, cA); \
-            goto error; \
-        } \
-        if (cA >= m) { \
-            PyErr_Format(PyExc_ValueError, \
-                "sequence[%d][%zd] is out of bound" \
-                " (%d, should be < %zd)", \
-                jA, lA, cA, m); \
-            goto error; \
-        } \
-        if (cB < 0) { \
-            PyErr_Format(PyExc_ValueError, \
-                "sequences[%d][%zd] is negative (%d)", \
-                jB, lB, cB); \
-            goto error; \
-        } \
-        if (cB >= m) { \
-            PyErr_Format(PyExc_ValueError, \
-                "sequence[%d][%zd] is out of bound" \
-                " (%d, should be < %zd)", \
-                jB, lB, cB, m); \
-            goto error; \
-        } \
-        if (mapping) { \
-            cA = mapping[cA]; \
-            cB = mapping[cB]; \
-            if (cA == MISSING_LETTER || cB == MISSING_LETTER) { \
-                PyErr_SetString(PyExc_ValueError, \
-                    "sequence contains letters not in the alphabet"); \
-                goto error; \
-            } \
-        } \
-        if (cA == cB) identities++; \
-        else mismatches++; \
-        ptr = (double*)substitution_matrix.buf \
-            + cA * substitution_matrix.shape[0] + cB; \
-        value = *(double*)ptr; \
-        if (value > 0) positives++; \
-        substitution_score += value; \
+static bool inline
+check_indices(int c, Py_ssize_t j, int l, int m)
+{
+    if (c < 0) {
+        PyErr_Format(PyExc_ValueError,
+            "sequences[%d][%zd] is negative (%d)", j, l, c);
+        return false;
     }
+    if (c >= m) { \
+        PyErr_Format(PyExc_ValueError,
+            "sequence[%d][%zd] is out of bound"
+            " (%d, should be < %zd)", j, l, c, m);
+        return false;
+    }
+    return true;
+}
 
+static bool inline
+map_indices(int* cA, int* cB, int* mapping)
+{
+    *cA = mapping[*cA];
+    *cB = mapping[*cB];
+    if (*cA == MISSING_LETTER || *cB == MISSING_LETTER) {
+        PyErr_SetString(PyExc_ValueError,
+            "sequence contains letters not in the alphabet");
+        return false;
+    }
+    return true;
+}
+
+static void inline
+add_identities_mismatches_score(int cA, int cB, int wildcard,
+                                Py_buffer* substitution_matrix,
+                                Py_ssize_t* identities,
+                                Py_ssize_t* mismatches,
+                                Py_ssize_t* positives,
+                                double* substitution_score)
+{
+    const double value = *((double*)substitution_matrix->buf
+                           + cA * substitution_matrix->shape[0]
+                           + cB);
+    if (cA == cB) (*identities)++;
+    else (*mismatches)++;
+    if (value > 0) (*positives)++;
+    *substitution_score += value;
+}
 
 static const char _calculate__doc__[] = "calculate the matches, mismatches, gaps, and score of the alignment";
 
@@ -1368,18 +1364,144 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
                             }
                         }
                     }
-                    else {
-                        double* ptr;
-                        double value;
+                    else if (mapping == NULL) {
                         if (iA && iB) {
-                            ADD_IDENTITIES_MISMATCHES_SCORE(iA[lA], iB[lB])
+                            for (lA = startA, lB = startB;
+                                 lA < endA && lB < endB;
+                                 lA++, lB++) {
+                                cA = iA[lA];
+                                cB = iB[lB];
+                                if (!check_indices(cA, jA, lA, m)) goto error;
+                                if (!check_indices(cB, jB, lB, m)) goto error;
+                                add_identities_mismatches_score(cA, cB,
+                                    wildcard,
+                                    &substitution_matrix,
+                                    &identities,
+                                    &mismatches,
+                                    &positives,
+                                    &substitution_score);
+                            }
                         } else if (iA && bB) {
-                            ADD_IDENTITIES_MISMATCHES_SCORE(iA[lA], (int)bB[lB])
+                            for (lA = startA, lB = startB;
+                                 lA < endA && lB < endB;
+                                 lA++, lB++) {
+                                cA = iA[lA];
+                                cB = (int)bB[lB];
+                                if (!check_indices(cA, jA, lA, m)) goto error;
+                                if (!check_indices(cB, jB, lB, m)) goto error;
+                                add_identities_mismatches_score(cA, cB,
+                                    wildcard,
+                                    &substitution_matrix,
+                                    &identities,
+                                    &mismatches,
+                                    &positives,
+                                    &substitution_score);
+                            }
                         } else if (iB && bA) {
-                            ADD_IDENTITIES_MISMATCHES_SCORE((int) bA[lA], iB[lB])
+                            for (lA = startA, lB = startB;
+                                 lA < endA && lB < endB;
+                                 lA++, lB++) {
+                                cA = (int) bA[lA];
+                                cB = iB[lB];
+                                if (!check_indices(cA, jA, lA, m)) goto error;
+                                if (!check_indices(cB, jB, lB, m)) goto error;
+                                add_identities_mismatches_score(cA, cB,
+                                    wildcard,
+                                    &substitution_matrix,
+                                    &identities,
+                                    &mismatches,
+                                    &positives,
+                                    &substitution_score);
+                            }
                         }
                         else if (bA && bB) {
-                            ADD_IDENTITIES_MISMATCHES_SCORE((int) bA[lA], (int) bB[lB])
+                            for (lA = startA, lB = startB;
+                                 lA < endA && lB < endB;
+                                 lA++, lB++) {
+                                cA = (int) bA[lA];
+                                cB = (int) bB[lB];
+                                if (!check_indices(cA, jA, lA, m)) goto error;
+                                if (!check_indices(cB, jB, lB, m)) goto error;
+                                add_identities_mismatches_score(cA, cB,
+                                    wildcard,
+                                    &substitution_matrix,
+                                    &identities,
+                                    &mismatches,
+                                    &positives,
+                                    &substitution_score);
+                            }
+                        }
+                    }
+                    else {
+                        if (iA && iB) {
+                            for (lA = startA, lB = startB;
+                                 lA < endA && lB < endB;
+                                 lA++, lB++) {
+                                cA = iA[lA];
+                                cB = iB[lB];
+                                if (!check_indices(cA, jA, lA, m)) goto error;
+                                if (!check_indices(cB, jB, lB, m)) goto error;
+                                if (!map_indices(&cA, &cB, mapping)) goto error;
+                                add_identities_mismatches_score(cA, cB,
+                                    wildcard,
+                                    &substitution_matrix,
+                                    &identities,
+                                    &mismatches,
+                                    &positives,
+                                    &substitution_score);
+                            }
+                        } else if (iA && bB) {
+                            for (lA = startA, lB = startB;
+                                 lA < endA && lB < endB;
+                                 lA++, lB++) {
+                                cA = iA[lA];
+                                cB = (int)bB[lB];
+                                if (!check_indices(cA, jA, lA, m)) goto error;
+                                if (!check_indices(cB, jB, lB, m)) goto error;
+                                if (!map_indices(&cA, &cB, mapping)) goto error;
+                                add_identities_mismatches_score(cA, cB,
+                                    wildcard,
+                                    &substitution_matrix,
+                                    &identities,
+                                    &mismatches,
+                                    &positives,
+                                    &substitution_score);
+                            }
+                        } else if (iB && bA) {
+                            for (lA = startA, lB = startB;
+                                 lA < endA && lB < endB;
+                                 lA++, lB++) {
+                                cA = (int) bA[lA];
+                                cB = iB[lB];
+                                if (!check_indices(cA, jA, lA, m)) goto error;
+                                if (!check_indices(cB, jB, lB, m)) goto error;
+                                if (!map_indices(&cA, &cB, mapping)) goto error;
+                                add_identities_mismatches_score(cA, cB,
+                                    wildcard,
+                                    &substitution_matrix,
+                                    &identities,
+                                    &mismatches,
+                                    &positives,
+                                    &substitution_score);
+                            }
+                        }
+                        else if (bA && bB) {
+                            for (lA = startA, lB = startB;
+                                 lA < endA && lB < endB;
+                                 lA++, lB++) {
+                                cA = (int) bA[lA];
+                                cB = (int) bB[lB];
+                                if (!check_indices(cA, jA, lA, m)) goto error;
+                                if (!check_indices(cB, jB, lB, m)) goto error;
+                                if (!map_indices(&cA, &cB, mapping)) goto error;
+                                add_identities_mismatches_score(cA, cB,
+                                    wildcard,
+                                    &substitution_matrix,
+                                    &identities,
+                                    &mismatches,
+                                    &positives,
+                                    &substitution_score);
+                            }
                         }
                     }
                     reset_lazy_data(oA, &bA);
