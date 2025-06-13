@@ -88,7 +88,7 @@ AlignmentCounts_str(AlignmentCounts* self)
     const Py_ssize_t internal_gaps = internal_insertions + internal_deletions;
     const Py_ssize_t right_gaps = right_insertions + right_deletions;
     const Py_ssize_t gaps = left_gaps + internal_gaps + right_gaps;
-    char text[1024];
+    char text[2048];
     char* p = stpcpy(text, "AlignmentCounts object with\n");
     if (!isnan(score)) {
         char* s = PyOS_double_to_string(score, 'f', 6, 0, NULL);
