@@ -3676,7 +3676,7 @@ class Alignment:
             substitution_matrix = aligner.substitution_matrix
         elif isinstance(argument, str):
             wildcard = argument
-        elif isinstance(argument, substitution_matrices.Array):
+        elif isinstance(argument, (np.ndarray, substitution_matrices.Array)):
             substitution_matrix = argument
         elif argument is not None:
             raise ValueError(f"unexpected argument {argument!r}")
@@ -3707,9 +3707,7 @@ class Alignment:
             if isinstance(data, (bytes, bytearray)):
                 sequences[i] = data
             elif isinstance(data, str):
-                sequences[i] = np.frombuffer(
-                    bytearray(data, codec), dtype=np.int32
-                )
+                sequences[i] = np.frombuffer(bytearray(data, codec), dtype=np.int32)
             elif isinstance(data, SequenceDataAbstractBaseClass):
                 sequences[i] = data
             elif isinstance(data, np.ndarray):
@@ -3729,15 +3727,13 @@ class Alignment:
                     map(alphabet.index, data), dtype=np.int32, count=len(data)
                 )
         if aligner is not None:
-            return _alignmentcounts.calculate(
-                sequences, coordinates, strands, aligner
-            )
+            return _alignmentcounts.calculate(sequences, coordinates, strands, aligner)
         elif wildcard is not None:
-            return _alignmentcounts.calculate(
-                sequences, coordinates, strands, wildcard)
+            return _alignmentcounts.calculate(sequences, coordinates, strands, wildcard)
         elif substitution_matrix is not None:
             return _alignmentcounts.calculate(
-                sequences, coordinates, strands, substitution_matrix)
+                sequences, coordinates, strands, substitution_matrix
+            )
         else:
             return _alignmentcounts.calculate(sequences, coordinates, strands)
 
