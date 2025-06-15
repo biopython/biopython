@@ -1476,12 +1476,13 @@ _calculate(PyObject* self, PyObject* args, PyObject* keywords)
     counts->mismatches = mismatches;
     counts->positives = positives;
 
-    if (aligner && counts->identities + counts->mismatches > 0) {
-        if (substitution_matrix.obj == NULL) {
+    if (substitution_matrix.obj == NULL) {
+        if (aligner) {
             substitution_score = aligner->match * counts->identities
                                + aligner->mismatch * counts->mismatches;
         }
-    } else substitution_score = Py_NAN;
+        else substitution_score = Py_NAN;
+    }
     counts->substitution_score = substitution_score;
 
     if (aligner) {

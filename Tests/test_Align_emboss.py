@@ -116,13 +116,14 @@ np.array([['T', 'S', 'P', 'A', 'S', 'I', 'R', 'P', 'P', 'A', 'G', 'P', 'S', 'S',
         counts = alignment.counts(substitution_matrix)
         self.assertEqual(
             repr(counts),
-            "<AlignmentCounts object (112 aligned letters; 112 identities; 0 mismatches; 112 positives; 19 gaps) at 0x%x>"
+            "<AlignmentCounts object (substitution score = 620.000000; 112 aligned letters; 112 identities; 0 mismatches; 112 positives; 19 gaps) at 0x%x>"
             % id(counts),
         )
         self.assertEqual(
             str(counts),
             """\
 AlignmentCounts object with
+    substitution_score = 620.000000,
     aligned = 112:
         identities = 112,
         positives = 112,
@@ -347,13 +348,14 @@ np.array([['G', 'P', 'P', 'P', 'Q', 'S', 'P', 'D', 'E', 'N', 'R', 'A', 'G',
         counts = alignment.counts(substitution_matrix)
         self.assertEqual(
             repr(counts),
-            "<AlignmentCounts object (16 aligned letters; 7 identities; 9 mismatches; 8 positives; 0 gaps) at 0x%x>"
+            "<AlignmentCounts object (substitution score = 29.000000; 16 aligned letters; 7 identities; 9 mismatches; 8 positives; 0 gaps) at 0x%x>"
             % id(counts),
         )
         self.assertEqual(
             str(counts),
             """\
 AlignmentCounts object with
+    substitution_score = 29.000000,
     aligned = 16:
         identities = 7,
         positives = 8,
@@ -530,13 +532,14 @@ np.array([['L', 'S', 'P', 'A', 'D', 'K', 'T', 'N', 'V', 'K', 'A', 'A', 'W',
         counts = alignment.counts(substitution_matrix)
         self.assertEqual(
             repr(counts),
-            "<AlignmentCounts object (137 aligned letters; 63 identities; 74 mismatches; 88 positives; 8 gaps) at 0x%x>"
+            "<AlignmentCounts object (substitution score = 326.000000; 137 aligned letters; 63 identities; 74 mismatches; 88 positives; 8 gaps) at 0x%x>"
             % id(counts),
         )
         self.assertEqual(
             str(counts),
             """\
 AlignmentCounts object with
+    substitution_score = 326.000000,
     aligned = 137:
         identities = 63,
         positives = 88,
@@ -632,13 +635,14 @@ np.array([['K', 'K', 'V', 'A', 'D', 'A', 'L', 'T', 'N', 'A', 'V', 'A', 'H'],
         counts = alignment.counts(substitution_matrix)
         self.assertEqual(
             repr(counts),
-            "<AlignmentCounts object (13 aligned letters; 6 identities; 7 mismatches; 9 positives; 0 gaps) at 0x%x>"
+            "<AlignmentCounts object (substitution score = 32.000000; 13 aligned letters; 6 identities; 7 mismatches; 9 positives; 0 gaps) at 0x%x>"
             % id(counts),
         )
         self.assertEqual(
             str(counts),
             """\
 AlignmentCounts object with
+    substitution_score = 32.000000,
     aligned = 13:
         identities = 6,
         positives = 9,
@@ -735,13 +739,14 @@ np.array([['K', 'L', 'R', 'V', 'D', 'P', 'V', 'N', 'F', 'K', 'L', 'L', 'S',
         counts = alignment.counts(substitution_matrix)
         self.assertEqual(
             repr(counts),
-            "<AlignmentCounts object (18 aligned letters; 7 identities; 11 mismatches; 10 positives; 0 gaps) at 0x%x>"
+            "<AlignmentCounts object (substitution score = 28.000000; 18 aligned letters; 7 identities; 11 mismatches; 10 positives; 0 gaps) at 0x%x>"
             % id(counts),
         )
         self.assertEqual(
             str(counts),
             """\
 AlignmentCounts object with
+    substitution_score = 28.000000,
     aligned = 18:
         identities = 7,
         positives = 10,
@@ -834,13 +839,14 @@ np.array([['L', 'S', 'A', 'L', 'S', 'D', 'L', 'H', 'A', 'H'],
         counts = alignment.counts(substitution_matrix)
         self.assertEqual(
             repr(counts),
-            "<AlignmentCounts object (10 aligned letters; 6 identities; 4 mismatches; 6 positives; 0 gaps) at 0x%x>"
+            "<AlignmentCounts object (substitution score = 23.000000; 10 aligned letters; 6 identities; 4 mismatches; 6 positives; 0 gaps) at 0x%x>"
             % id(counts),
         )
         self.assertEqual(
             str(counts),
             """\
 AlignmentCounts object with
+    substitution_score = 23.000000,
     aligned = 10:
         identities = 6,
         positives = 6,
@@ -933,13 +939,14 @@ np.array([['V', 'K', 'A', 'A', 'W', 'G', 'K', 'V', 'G', 'A'],
         counts = alignment.counts(substitution_matrix)
         self.assertEqual(
             repr(counts),
-            "<AlignmentCounts object (10 aligned letters; 6 identities; 4 mismatches; 8 positives; 0 gaps) at 0x%x>"
+            "<AlignmentCounts object (substitution score = 23.000000; 10 aligned letters; 6 identities; 4 mismatches; 8 positives; 0 gaps) at 0x%x>"
             % id(counts),
         )
         self.assertEqual(
             str(counts),
             """\
 AlignmentCounts object with
+    substitution_score = 23.000000,
     aligned = 10:
         identities = 6,
         positives = 8,
@@ -1092,13 +1099,14 @@ np.array([['T', 'S', 'P', 'A', 'S', 'I', 'R', 'P', 'P', 'A', 'G', 'P', 'S',
         counts = alignment.counts(substitution_matrix)
         self.assertEqual(
             repr(counts),
-            "<AlignmentCounts object (112 aligned letters; 112 identities; 0 mismatches; 112 positives; 19 gaps) at 0x%x>"
+            "<AlignmentCounts object (substitution score = 620.000000; 112 aligned letters; 112 identities; 0 mismatches; 112 positives; 19 gaps) at 0x%x>"
             % id(counts),
         )
         self.assertEqual(
             str(counts),
             """\
 AlignmentCounts object with
+    substitution_score = 620.000000,
     aligned = 112:
         identities = 112,
         positives = 112,
@@ -1233,13 +1241,14 @@ np.array([['T', 'S', 'P', 'A', 'S', 'I', 'R', 'P', 'P', 'A', 'G', 'P', 'S',
         counts = alignment.counts(substitution_matrix)
         self.assertEqual(
             repr(counts),
-            "<AlignmentCounts object (127 aligned letters; 120 identities; 7 mismatches; 120 positives; 4 gaps) at 0x%x>"
+            "<AlignmentCounts object (substitution score = 639.000000; 127 aligned letters; 120 identities; 7 mismatches; 120 positives; 4 gaps) at 0x%x>"
             % id(counts),
         )
         self.assertEqual(
             str(counts),
             """\
 AlignmentCounts object with
+    substitution_score = 639.000000,
     aligned = 127:
         identities = 120,
         positives = 120,
@@ -1376,13 +1385,14 @@ np.array([['T', 'S', 'P', 'A', 'S', 'I', 'R', 'P', 'P', 'A', 'G', 'P', 'S',
         counts = alignment.counts(substitution_matrix)
         self.assertEqual(
             repr(counts),
-            "<AlignmentCounts object (124 aligned letters; 119 identities; 5 mismatches; 124 positives; 7 gaps) at 0x%x>"
+            "<AlignmentCounts object (substitution score = 641.000000; 124 aligned letters; 119 identities; 5 mismatches; 124 positives; 7 gaps) at 0x%x>"
             % id(counts),
         )
         self.assertEqual(
             str(counts),
             """\
 AlignmentCounts object with
+    substitution_score = 641.000000,
     aligned = 124:
         identities = 119,
         positives = 124,
@@ -1530,13 +1540,14 @@ np.array([['K', 'I', 'L', 'I', 'V', 'D', 'D', '-', '-', '-', '-', 'Q', 'Y',
         counts = alignment.counts(substitution_matrix)
         self.assertEqual(
             repr(counts),
-            "<AlignmentCounts object (107 aligned letters; 32 identities; 75 mismatches; 64 positives; 17 gaps) at 0x%x>"
+            "<AlignmentCounts object (substitution score = 154.000000; 107 aligned letters; 32 identities; 75 mismatches; 64 positives; 17 gaps) at 0x%x>"
             % id(counts),
         )
         self.assertEqual(
             str(counts),
             """\
 AlignmentCounts object with
+    substitution_score = 154.000000,
     aligned = 107:
         identities = 32,
         positives = 64,
@@ -1664,13 +1675,14 @@ np.array([['K', 'I', 'L', 'I', 'V', 'D', 'D', 'Q', 'Y', 'G', 'I', 'R', 'I',
         counts = alignment.counts(substitution_matrix)
         self.assertEqual(
             repr(counts),
-            "<AlignmentCounts object (110 aligned letters; 34 identities; 76 mismatches; 58 positives; 9 gaps) at 0x%x>"
+            "<AlignmentCounts object (substitution score = 154.000000; 110 aligned letters; 34 identities; 76 mismatches; 58 positives; 9 gaps) at 0x%x>"
             % id(counts),
         )
         self.assertEqual(
             str(counts),
             """\
 AlignmentCounts object with
+    substitution_score = 154.000000,
     aligned = 110:
         identities = 34,
         positives = 58,
@@ -1798,13 +1810,14 @@ np.array([['-', 'K', 'I', 'L', 'I', 'V', 'D', 'D', 'Q', 'Y', 'G', 'I', 'R',
         counts = alignment.counts(substitution_matrix)
         self.assertEqual(
             repr(counts),
-            "<AlignmentCounts object (111 aligned letters; 29 identities; 82 mismatches; 53 positives; 9 gaps) at 0x%x>"
+            "<AlignmentCounts object (substitution score = 121.000000; 111 aligned letters; 29 identities; 82 mismatches; 53 positives; 9 gaps) at 0x%x>"
             % id(counts),
         )
         self.assertEqual(
             str(counts),
             """\
 AlignmentCounts object with
+    substitution_score = 121.000000,
     aligned = 111:
         identities = 29,
         positives = 53,
@@ -1938,13 +1951,14 @@ np.array([['K', 'I', 'L', 'I', 'V', 'D', 'D', 'Q', 'Y', 'G', 'I', 'R', 'I',
         counts = alignment.counts(substitution_matrix)
         self.assertEqual(
             repr(counts),
-            "<AlignmentCounts object (109 aligned letters; 30 identities; 79 mismatches; 64 positives; 9 gaps) at 0x%x>"
+            "<AlignmentCounts object (substitution score = 168.000000; 109 aligned letters; 30 identities; 79 mismatches; 64 positives; 9 gaps) at 0x%x>"
             % id(counts),
         )
         self.assertEqual(
             str(counts),
             """\
 AlignmentCounts object with
+    substitution_score = 168.000000,
     aligned = 109:
         identities = 30,
         positives = 64,
@@ -2078,13 +2092,14 @@ np.array([['K', 'I', 'L', 'I', 'V', 'D', 'D', 'Q', 'Y', 'G', 'I', 'R', 'I',
         counts = alignment.counts(substitution_matrix)
         self.assertEqual(
             repr(counts),
-            "<AlignmentCounts object (107 aligned letters; 35 identities; 72 mismatches; 70 positives; 18 gaps) at 0x%x>"
+            "<AlignmentCounts object (substitution score = 190.000000; 107 aligned letters; 35 identities; 72 mismatches; 70 positives; 18 gaps) at 0x%x>"
             % id(counts),
         )
         self.assertEqual(
             str(counts),
             """\
 AlignmentCounts object with
+    substitution_score = 190.000000,
     aligned = 107:
         identities = 35,
         positives = 70,
@@ -2634,13 +2649,14 @@ asis           2507 CTTAATTTTAGAGG--ATGTTTATTTTTATTCTAATAAAAAGGATCCGTTGAA 2558
         counts = alignment.counts(substitution_matrix)
         self.assertEqual(
             repr(counts),
-            "<AlignmentCounts object (2451 aligned letters; 2296 identities; 155 mismatches; 2296 positives; 1202 gaps) at 0x%x>"
+            "<AlignmentCounts object (substitution score = 12769.000000; 2451 aligned letters; 2296 identities; 155 mismatches; 2296 positives; 1202 gaps) at 0x%x>"
             % id(counts),
         )
         self.assertEqual(
             str(counts),
             """\
 AlignmentCounts object with
+    substitution_score = 12769.000000,
     aligned = 2451:
         identities = 2296,
         positives = 2296,

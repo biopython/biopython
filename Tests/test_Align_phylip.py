@@ -266,13 +266,14 @@ HISJ_E_COLMKKLVLSLSLVLAFSSATAAF-------------------AAIPQNIRIGTDPTYAPFESKNS-QGELVG
         counts = alignment.counts(substitution_matrix)
         self.assertEqual(
             repr(counts),
-            "<AlignmentCounts object (6978 aligned letters; 2258 identities; 4720 mismatches; 3674 positives; 548 gaps) at 0x%x>"
+            "<AlignmentCounts object (substitution score = 10177.000000; 6978 aligned letters; 2258 identities; 4720 mismatches; 3674 positives; 548 gaps) at 0x%x>"
             % id(counts),
         )
         self.assertEqual(
             str(counts),
             """\
 AlignmentCounts object with
+    substitution_score = 10177.000000,
     aligned = 6978:
         identities = 2258,
         positives = 3674,
@@ -863,13 +864,14 @@ CATH_HUMAN------MWATLPLLCAGAWLLGV--------PVCGAAELSVNSLEK------------FHFKSWMSKHRK
         counts = alignment.counts(substitution_matrix)
         self.assertEqual(
             repr(counts),
-            "<AlignmentCounts object (975 aligned letters; 400 identities; 575 mismatches; 563 positives; 130 gaps) at 0x%x>"
+            "<AlignmentCounts object (substitution score = 2116.000000; 975 aligned letters; 400 identities; 575 mismatches; 563 positives; 130 gaps) at 0x%x>"
             % id(counts),
         )
         self.assertEqual(
             str(counts),
             """\
 AlignmentCounts object with
+    substitution_score = 2116.000000,
     aligned = 975:
         identities = 400,
         positives = 563,
@@ -1037,13 +1039,14 @@ IXI_237   TSPASLRPPAGPSSRPAMVSSRR-RPSPPGPRRPT----CSAAPRRPQATGGYKTCSGTCTTSTSTRHRG
         counts = alignment.counts(substitution_matrix)
         self.assertEqual(
             repr(counts),
-            "<AlignmentCounts object (702 aligned letters; 667 identities; 35 mismatches; 681 positives; 78 gaps) at 0x%x>"
+            "<AlignmentCounts object (substitution score = 3602.000000; 702 aligned letters; 667 identities; 35 mismatches; 681 positives; 78 gaps) at 0x%x>"
             % id(counts),
         )
         self.assertEqual(
             str(counts),
             """\
 AlignmentCounts object with
+    substitution_score = 3602.000000,
     aligned = 702:
         identities = 667,
         positives = 681,
