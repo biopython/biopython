@@ -9304,11 +9304,11 @@ class TestPairwiseMatchDictionary(unittest.TestCase):
         aligner.open_gap_score = -0.5
         aligner.extend_gap_score = 0.0
         self.assertEqual(aligner.algorithm, "Gotoh local alignment algorithm")
-        self.assertRegex(
+        self.assertEqual(
             str(aligner),
             """\
-^Pairwise sequence aligner with parameters
-  substitution_matrix: <Array object at .*>
+Pairwise sequence aligner with parameters
+  substitution_matrix: <Array object at 0x%x>
   open_internal_insertion_score: -0.500000
   extend_internal_insertion_score: 0.000000
   open_left_insertion_score: -0.500000
@@ -9322,7 +9322,8 @@ class TestPairwiseMatchDictionary(unittest.TestCase):
   open_right_deletion_score: -0.500000
   extend_right_deletion_score: 0.000000
   mode: local
-$""",
+"""
+            % id(substitution_matrix),
         )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
@@ -9923,11 +9924,11 @@ AlignmentCounts object with
         aligner.substitution_matrix = substitution_matrix
         aligner.open_gap_score = -1.0
         aligner.extend_gap_score = 0.0
-        self.assertRegex(
+        self.assertEqual(
             str(aligner),
             """\
-^Pairwise sequence aligner with parameters
-  substitution_matrix: <Array object at .*>
+Pairwise sequence aligner with parameters
+  substitution_matrix: <Array object at 0x%x>
   open_internal_insertion_score: -1.000000
   extend_internal_insertion_score: 0.000000
   open_left_insertion_score: -1.000000
@@ -9941,7 +9942,8 @@ AlignmentCounts object with
   open_right_deletion_score: -1.000000
   extend_right_deletion_score: 0.000000
   mode: local
-$""",
+"""
+            % id(substitution_matrix),
         )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
@@ -10253,11 +10255,11 @@ AlignmentCounts object with
         aligner.substitution_matrix = substitution_matrix
         aligner.open_gap_score = -1.0
         aligner.extend_gap_score = 0.0
-        self.assertRegex(
+        self.assertEqual(
             str(aligner),
             """\
-^Pairwise sequence aligner with parameters
-  substitution_matrix: <Array object at .*>
+Pairwise sequence aligner with parameters
+  substitution_matrix: <Array object at 0x%x>
   open_internal_insertion_score: -1.000000
   extend_internal_insertion_score: 0.000000
   open_left_insertion_score: -1.000000
@@ -10271,7 +10273,8 @@ AlignmentCounts object with
   open_right_deletion_score: -1.000000
   extend_right_deletion_score: 0.000000
   mode: local
-$""",
+"""
+            % id(substitution_matrix),
         )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
@@ -10586,11 +10589,11 @@ AlignmentCounts object with
         aligner.open_gap_score = -0.5
         aligner.extend_gap_score = 0.0
         self.assertEqual(aligner.algorithm, "Gotoh local alignment algorithm")
-        self.assertRegex(
+        self.assertEqual(
             str(aligner),
             """\
-^Pairwise sequence aligner with parameters
-  substitution_matrix: <Array object at .*>
+Pairwise sequence aligner with parameters
+  substitution_matrix: <Array object at 0x%x>
   open_internal_insertion_score: -0.500000
   extend_internal_insertion_score: 0.000000
   open_left_insertion_score: -0.500000
@@ -10604,7 +10607,8 @@ AlignmentCounts object with
   open_right_deletion_score: -0.500000
   extend_right_deletion_score: 0.000000
   mode: local
-$""",
+"""
+            % id(substitution_matrix),
         )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
@@ -11200,11 +11204,11 @@ AlignmentCounts object with
         aligner.substitution_matrix = substitution_matrix
         aligner.open_gap_score = -1.0
         aligner.extend_gap_score = 0.0
-        self.assertRegex(
+        self.assertEqual(
             str(aligner),
             """\
-^Pairwise sequence aligner with parameters
-  substitution_matrix: <Array object at .*
+Pairwise sequence aligner with parameters
+  substitution_matrix: <Array object at 0x%x>
   open_internal_insertion_score: -1.000000
   extend_internal_insertion_score: 0.000000
   open_left_insertion_score: -1.000000
@@ -11218,7 +11222,8 @@ AlignmentCounts object with
   open_right_deletion_score: -1.000000
   extend_right_deletion_score: 0.000000
   mode: local
-$""",
+"""
+            % id(substitution_matrix),
         )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
@@ -11532,11 +11537,11 @@ AlignmentCounts object with
         aligner.substitution_matrix = substitution_matrix
         aligner.open_gap_score = -1.0
         aligner.extend_gap_score = 0.0
-        self.assertRegex(
+        self.assertEqual(
             str(aligner),
             """\
-^Pairwise sequence aligner with parameters
-  substitution_matrix: <Array object at .*>
+Pairwise sequence aligner with parameters
+  substitution_matrix: <Array object at 0x%x>
   open_internal_insertion_score: -1.000000
   extend_internal_insertion_score: 0.000000
   open_left_insertion_score: -1.000000
@@ -11550,7 +11555,8 @@ AlignmentCounts object with
   open_right_deletion_score: -1.000000
   extend_right_deletion_score: 0.000000
   mode: local
-$""",
+"""
+            % id(substitution_matrix),
         )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
@@ -17796,11 +17802,11 @@ Pairwise sequence aligner with parameters
 class TestPredefinedScoringSchemes(unittest.TestCase):
     def test_blastn(self):
         aligner = Align.PairwiseAligner(scoring="blastn")
-        self.assertRegex(
+        self.assertEqual(
             str(aligner),
             """\
-^Pairwise sequence aligner with parameters
-  substitution_matrix: <Array object at .*
+Pairwise sequence aligner with parameters
+  substitution_matrix: <Array object at 0x%x>
   open_internal_insertion_score: -7.000000
   extend_internal_insertion_score: -2.000000
   open_left_insertion_score: -7.000000
@@ -17814,7 +17820,8 @@ class TestPredefinedScoringSchemes(unittest.TestCase):
   open_right_deletion_score: -7.000000
   extend_right_deletion_score: -2.000000
   mode: global
-$""",
+"""
+            % id(aligner.substitution_matrix),
         )
         self.assertEqual(
             str(aligner.substitution_matrix[:, :]),
@@ -17840,11 +17847,11 @@ N -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0
 
     def test_megablast(self):
         aligner = Align.PairwiseAligner(scoring="megablast")
-        self.assertRegex(
+        self.assertEqual(
             str(aligner),
             """\
-^Pairwise sequence aligner with parameters
-  substitution_matrix: <Array object at .*
+Pairwise sequence aligner with parameters
+  substitution_matrix: <Array object at 0x%x>
   open_internal_insertion_score: -2.500000
   extend_internal_insertion_score: -2.500000
   open_left_insertion_score: -2.500000
@@ -17858,7 +17865,8 @@ N -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0
   open_right_deletion_score: -2.500000
   extend_right_deletion_score: -2.500000
   mode: global
-$""",
+"""
+            % id(aligner.substitution_matrix),
         )
         self.assertEqual(
             str(aligner.substitution_matrix[:, :]),
@@ -17884,11 +17892,11 @@ N -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0
 
     def test_blastp(self):
         aligner = Align.PairwiseAligner(scoring="blastp")
-        self.assertRegex(
+        self.assertEqual(
             str(aligner),
             """\
-^Pairwise sequence aligner with parameters
-  substitution_matrix: <Array object at .*
+Pairwise sequence aligner with parameters
+  substitution_matrix: <Array object at 0x%x>
   open_internal_insertion_score: -12.000000
   extend_internal_insertion_score: -1.000000
   open_left_insertion_score: -12.000000
@@ -17902,7 +17910,8 @@ N -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0
   open_right_deletion_score: -12.000000
   extend_right_deletion_score: -1.000000
   mode: global
-$""",
+"""
+            % id(aligner.substitution_matrix),
         )
         self.assertEqual(
             str(aligner.substitution_matrix[:, :]),
