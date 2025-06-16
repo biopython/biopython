@@ -7,28 +7,49 @@
 
 """Map residues of two structures to each other based on a FASTA alignment."""
 
+from typing import Optional
+
+from Bio.Align import Alignment, MultipleSeqAlignment
 from Bio.Data import PDBData
 from Bio.PDB import Selection
+from Bio.PDB.Model import Model
 from Bio.PDB.Polypeptide import is_aa
 
 
 class StructureAlignment:
     """Class to align two structures based on an alignment of their sequences."""
 
-    def __init__(self, fasta_align, m1, m2, si=0, sj=1):
+    def __init__(
+        self,
+        fasta_align: Optional[MultipleSeqAlignment | Alignment] = None,
+        m1: Model | None = None,
+        m2: Model | None = None,
+        si: int = 0,
+        sj: int = 1,
+    ) -> None:
         """Initialize.
 
         Attributes:
-         - fasta_align - Alignment object
-         - m1, m2 - two models
-         - si, sj - the sequences in the Alignment object that
-           correspond to the structures
+         - fasta_align - Alignment object / MSA object or None (if None, one will be generated automatically)
+         - m1, m2 - two models (Bio.PDB.Model.Model objects). Their default values are set to None to maintain legacy code, but they CANNOT be None
+         - si, sj - the sequences in the Alignment object that correspond to the structures
 
         """
-        try:  # MultipleSeqAlignment object
+        if fasta_align is None:
+            raise NotImplementedError(
+                "fasta_align cannot be None for now to pass precommit"
+            )
+            # add code for auto generation
+        elif isinstance(fasta_align, MultipleSeqAlignment):
             ncolumns = fasta_align.get_alignment_length()
-        except AttributeError:  # Alignment object
+        elif isinstance(fasta_align, Alignment):
             nrows, ncolumns = fasta_align.shape
+        else:
+            raise ValueError(
+                "Invalid alignment object, must either be an Alignment object, "
+                "MultipleSeqAlignment object, or None"
+            )
+
         # Get the residues in the models
         rl1 = Selection.unfold_entities(m1, "R")
         rl2 = Selection.unfold_entities(m2, "R")
