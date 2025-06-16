@@ -14,14 +14,6 @@
 #include "_pairwisealigner.h"
 #include "substitution_matrices/_arraycore.h"
 
-#define HORIZONTAL 0x1
-#define VERTICAL 0x2
-#define DIAGONAL 0x4
-
-
-#define MISSING_LETTER -1
-
-
 
 static PyTypeObject* Aligner_Type = NULL;
 static PyTypeObject* Array_Type = NULL;

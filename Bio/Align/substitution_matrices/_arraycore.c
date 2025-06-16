@@ -2,7 +2,6 @@
 #include <Python.h>
 #include "_arraycore.h"
 
-#define MISSING_LETTER -1
 
 static PyTypeObject Array_Type;
 

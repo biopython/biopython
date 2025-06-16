@@ -15,9 +15,6 @@
 #include "substitution_matrices/_arraycore.h"
 
 
-#define HORIZONTAL 0x1
-#define VERTICAL 0x2
-#define DIAGONAL 0x4
 #define STARTPOINT 0x8
 #define ENDPOINT 0x10
 #define M_MATRIX 0x1
@@ -29,8 +26,6 @@
 #define OVERFLOW_ERROR -1
 #define MEMORY_ERROR -2
 #define OTHER_ERROR -3
-
-#define MISSING_LETTER -1
 
 #define SAFE_ADD(t, s) \
 {   if (s != OVERFLOW_ERROR) { \

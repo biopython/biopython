@@ -9,6 +9,9 @@
 #define PY_SSIZE_T_CLEAN
 #include "Python.h"
 
+#define HORIZONTAL 0x1
+#define VERTICAL 0x2
+#define DIAGONAL 0x4
 
 typedef enum {NeedlemanWunschSmithWaterman,
               Gotoh,
