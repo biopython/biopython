@@ -1037,8 +1037,8 @@ static inline Py_buffer* get_buffer(Py_buffer *sequence, int** i, char** b)
     return sequence;
 }
 
-static PyObject*
-_calculate(PyObject* self, PyObject* args, PyObject* keywords)
+static PyObject* 
+AlignmentCounts_new(PyTypeObject *type, PyObject *args, PyObject *keywords)
 {
     Py_ssize_t jA, jB;
     Py_ssize_t n = 0;
@@ -1522,12 +1522,6 @@ exit:
     return (PyObject*) counts;
 }
 
-static PyObject* 
-AlignmentCounts_new(PyTypeObject *type, PyObject *args, PyObject *keywords)
-{
-    return _calculate(type, args, keywords);
-}
-
 static PyTypeObject AlignmentCounts_Type = {
     PyVarObject_HEAD_INIT(NULL, 0)
     .tp_name = "AlignmentCounts",
@@ -1541,20 +1535,6 @@ static PyTypeObject AlignmentCounts_Type = {
 };
 
 
-/* ----------------- alignment algorithms ----------------- */
-
-
-static const char _calculate__doc__[] = "calculate the matches, mismatches, gaps, and score of the alignment";
-
-static PyMethodDef module_functions[] = {
-    {"calculate",
-     (PyCFunction)_calculate,
-     METH_VARARGS | METH_KEYWORDS,
-     _calculate__doc__
-    },
-    {NULL, NULL, 0, NULL}  /* Sentinel */
-};
-
 static char _alignmentcounts__doc__[] =
 "C extension module implementing the AlignmentCounts class";
 
@@ -1565,7 +1545,7 @@ static struct PyModuleDef moduledef = {
         "_alignmentcounts",
         _alignmentcounts__doc__,
         -1,
-        module_functions,
+        NULL,
         NULL,
         NULL,
         NULL,
@@ -1604,5 +1584,14 @@ PyInit__alignmentcounts(void)
         return NULL;
     }
 
+    Py_INCREF(&AlignmentCounts_Type);
+    if (PyModule_AddObject(module,
+                           "AlignmentCounts",
+                           (PyObject*) &AlignmentCounts_Type) < 0) {
+        Py_DECREF(module);
+        Py_DECREF(&AlignmentCounts_Type);
+        return NULL;
+    }
+    
     return module;
 }

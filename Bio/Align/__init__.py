@@ -3727,15 +3727,19 @@ class Alignment:
                     map(alphabet.index, data), dtype=np.int32, count=len(data)
                 )
         if aligner is not None:
-            return _alignmentcounts.calculate(sequences, coordinates, strands, aligner)
+            return _alignmentcounts.AlignmentCounts(
+                sequences, coordinates, strands, aligner
+            )
         elif wildcard is not None:
-            return _alignmentcounts.calculate(sequences, coordinates, strands, wildcard)
+            return _alignmentcounts.AlignmentCounts(
+                sequences, coordinates, strands, wildcard
+            )
         elif substitution_matrix is not None:
-            return _alignmentcounts.calculate(
+            return _alignmentcounts.AlignmentCounts(
                 sequences, coordinates, strands, substitution_matrix
             )
         else:
-            return _alignmentcounts.calculate(sequences, coordinates, strands)
+            return _alignmentcounts.AlignmentCounts(sequences, coordinates, strands)
 
     def reverse_complement(self):
         """Reverse-complement the alignment and return it.
