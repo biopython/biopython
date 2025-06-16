@@ -91,19 +91,19 @@ AlignmentCounts_str(AlignmentCounts* self)
     char text[2048];
     char* p = stpcpy(text, "AlignmentCounts object with\n");
     if (!isnan(score)) {
-        char* s = PyOS_double_to_string(score, 'f', 6, 0, NULL);
+        char* s = PyOS_double_to_string(score, 'g', 6, Py_DTSF_ADD_DOT_0, NULL);
         if (!s) return NULL;
         p += sprintf(p, "    score = %s:\n", s);
         PyMem_Free(s);
     }
     if (!isnan(substitution_score)) {
-        char* s = PyOS_double_to_string(substitution_score, 'f', 6, 0, NULL);
+        char* s = PyOS_double_to_string(substitution_score, 'g', 6, Py_DTSF_ADD_DOT_0, NULL);
         if (!s) return NULL;
         p += sprintf(p, "    substitution_score = %s,\n", s);
         PyMem_Free(s);
     }
     if (!isnan(gap_score)) {
-        char* s = PyOS_double_to_string(gap_score, 'f', 6, 0, NULL);
+        char* s = PyOS_double_to_string(gap_score, 'g', 6, Py_DTSF_ADD_DOT_0, NULL);
         if (!s) return NULL;
         p += sprintf(p, "    gap_score = %s.\n", s);
         PyMem_Free(s);
@@ -163,19 +163,19 @@ AlignmentCounts_repr(AlignmentCounts* self)
     char text[1024];
     char* p = stpcpy(text, "<AlignmentCounts object (");
     if (!isnan(score)) {
-        char* s = PyOS_double_to_string(score, 'f', 6, 0, NULL);
+        char* s = PyOS_double_to_string(score, 'g', 6, Py_DTSF_ADD_DOT_0, NULL);
         if (!s) return NULL;
         p += sprintf(p, "score = %s; ", s);
         PyMem_Free(s);
     }
     if (!isnan(substitution_score)) {
-        char* s = PyOS_double_to_string(substitution_score, 'f', 6, 0, NULL);
+        char* s = PyOS_double_to_string(substitution_score, 'g', 6, Py_DTSF_ADD_DOT_0, NULL);
         if (!s) return NULL;
         p += sprintf(p, "substitution score = %s; ", s);
         PyMem_Free(s);
     }
     if (!isnan(gap_score)) {
-        char* s = PyOS_double_to_string(gap_score, 'f', 6, 0, NULL);
+        char* s = PyOS_double_to_string(gap_score, 'g', 6, Py_DTSF_ADD_DOT_0, NULL);
         if (!s) return NULL;
         p += sprintf(p, "gap score = %s; ", s);
         PyMem_Free(s);
