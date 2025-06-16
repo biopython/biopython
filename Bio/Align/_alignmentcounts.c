@@ -19,6 +19,9 @@ static PyTypeObject* Aligner_Type = NULL;
 static PyTypeObject* Array_Type = NULL;
 /* these will be set when initializing the module */
 
+static PyTypeObject AlignmentCounts_Type;
+/* defined in this module */
+
 
 typedef struct {
     PyObject_HEAD
@@ -186,6 +189,10 @@ AlignmentCounts_repr(AlignmentCounts* self)
     p += sprintf(p, "%zd gaps) at %p>", gaps, self);
     return PyUnicode_FromString(text);
 }
+
+static char AlignmentCounts_doc[] =
+"AlignmentCounts objects store the number of aligned characters, identities,\n"
+"mismatches, gaps, and score of an alignment.\n";
 
 static char AlignmentCounts_aligned__doc__[] = "number of aligned characters in the alignment";
 
@@ -757,74 +764,6 @@ static PyGetSetDef AlignmentCounts_getset[] = {
     {NULL, NULL, 0, NULL}  /* Sentinel */
 };
 
-static char AlignmentCounts_doc[] =
-"AlignmentCounts objects store the number of aligned characters, identities,\n"
-"mismatches, gaps, and score of an alignment.\n";
-
-static PyTypeObject AlignmentCounts_Type = {
-    PyVarObject_HEAD_INIT(NULL, 0)
-    .tp_name = "AlignmentCounts",
-    .tp_basicsize = sizeof(AlignmentCounts),
-    .tp_repr = (reprfunc)AlignmentCounts_repr,
-    .tp_str = (reprfunc)AlignmentCounts_str,
-    .tp_flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
-    .tp_doc = AlignmentCounts_doc,
-    .tp_getset = AlignmentCounts_getset,
-};
-
-static int
-substitution_matrix_converter(PyObject* argument, void* pointer)
-{
-    const int flag = PyBUF_FORMAT | PyBUF_ND;
-    Py_buffer* view = pointer;
-    if (argument == NULL) {
-        PyBuffer_Release(view);
-        return 1;
-    }
-    if (PyObject_GetBuffer(argument, view, flag) != 0) {
-        PyErr_SetString(PyExc_ValueError, "expected a matrix");
-        return 0;
-    }
-    if (view->ndim != 2) {
-        PyErr_Format(PyExc_ValueError,
-         "substitution matrix has incorrect rank (%d expected 2)",
-          view->ndim);
-        PyBuffer_Release(view);
-        return 0;
-    }
-    if (view->len == 0) {
-        PyErr_SetString(PyExc_ValueError, "substitution matrix has zero size");
-        PyBuffer_Release(view);
-        return 0;
-    }
-    if (strcmp(view->format, "d") != 0) {
-        PyErr_SetString(PyExc_ValueError,
-                "substitution matrix should contain float values");
-        PyBuffer_Release(view);
-        return 0;
-    }
-    if (view->itemsize != sizeof(double)) {
-        PyErr_Format(PyExc_RuntimeError,
-                    "substitution matrix has unexpected item byte size "
-                    "(%zd, expected %zd)", view->itemsize, sizeof(double));
-        PyBuffer_Release(view);
-        return 0;
-    }
-    if (view->shape[0] != view->shape[1]) {
-        PyErr_Format(PyExc_ValueError,
-                    "substitution matrix should be square "
-                    "(found a %zd x %zd matrix)",
-                    view->shape[0], view->shape[1]);
-        PyBuffer_Release(view);
-        return 0;
-    }
-    return Py_CLEANUP_SUPPORTED;
-}
-
-
-/* ----------------- alignment algorithms ----------------- */
-
-
 static int
 sequence_converter(PyObject* argument, void* pointer)
 {
@@ -895,24 +834,83 @@ strands_converter(PyObject* argument, void* pointer)
     return Py_CLEANUP_SUPPORTED;
 }
 
-static inline Py_buffer* get_buffer(Py_buffer *sequence, int** i, char** b)
+static int
+substitution_matrix_converter(PyObject* argument, void* pointer)
 {
-    *i = NULL;
-    *b = NULL;
-    if (sequence->buf) {
-        switch (sequence->format[0]) {
-            case 'i':
-            case 'I':
-                *i = sequence->buf;
-                break;
-            case 'c':
-            case 'b':
-            case 'B':
-                *b = sequence->buf;
-                break;
-        }
+    const int flag = PyBUF_FORMAT | PyBUF_ND;
+    Py_buffer* view = pointer;
+    if (argument == NULL) {
+        PyBuffer_Release(view);
+        return 1;
     }
-    return sequence;
+    if (PyObject_GetBuffer(argument, view, flag) != 0) {
+        PyErr_SetString(PyExc_ValueError, "expected a matrix");
+        return 0;
+    }
+    if (view->ndim != 2) {
+        PyErr_Format(PyExc_ValueError,
+         "substitution matrix has incorrect rank (%d expected 2)",
+          view->ndim);
+        PyBuffer_Release(view);
+        return 0;
+    }
+    if (view->len == 0) {
+        PyErr_SetString(PyExc_ValueError, "substitution matrix has zero size");
+        PyBuffer_Release(view);
+        return 0;
+    }
+    if (strcmp(view->format, "d") != 0) {
+        PyErr_SetString(PyExc_ValueError,
+                "substitution matrix should contain float values");
+        PyBuffer_Release(view);
+        return 0;
+    }
+    if (view->itemsize != sizeof(double)) {
+        PyErr_Format(PyExc_RuntimeError,
+                    "substitution matrix has unexpected item byte size "
+                    "(%zd, expected %zd)", view->itemsize, sizeof(double));
+        PyBuffer_Release(view);
+        return 0;
+    }
+    if (view->shape[0] != view->shape[1]) {
+        PyErr_Format(PyExc_ValueError,
+                    "substitution matrix should be square "
+                    "(found a %zd x %zd matrix)",
+                    view->shape[0], view->shape[1]);
+        PyBuffer_Release(view);
+        return 0;
+    }
+    return Py_CLEANUP_SUPPORTED;
+}
+
+static bool inline
+check_indices(int c, Py_ssize_t j, int l, int m)
+{
+    if (c < 0) {
+        PyErr_Format(PyExc_ValueError,
+            "sequences[%d][%zd] is negative (%d)", j, l, c);
+        return false;
+    }
+    if (c >= m) { \
+        PyErr_Format(PyExc_ValueError,
+            "sequence[%d][%zd] is out of bound"
+            " (%d, should be < %zd)", j, l, c, m);
+        return false;
+    }
+    return true;
+}
+
+static bool inline
+map_indices(int* cA, int* cB, int* mapping)
+{
+    *cA = mapping[*cA];
+    *cB = mapping[*cB];
+    if (*cA == MISSING_LETTER || *cB == MISSING_LETTER) {
+        PyErr_SetString(PyExc_ValueError,
+            "sequence contains letters not in the alphabet");
+        return false;
+    }
+    return true;
 }
 
 static inline PyObject* get_lazy_data(PyObject* sequence, Py_ssize_t start, Py_ssize_t end, Py_ssize_t j, char** b)
@@ -937,6 +935,32 @@ static inline void reset_lazy_data(PyObject* obj, char** b) {
         Py_DECREF(obj);
         *b = NULL;
     }
+}
+
+static void inline
+add_identities_mismatches(int cA, int cB, int wildcard,
+                          Py_ssize_t* identities, Py_ssize_t* mismatches)
+{
+    if (cA == wildcard || cB == wildcard) return;
+    else if (cA == cB) (*identities)++;
+    else (*mismatches)++;
+}
+
+static void inline
+add_identities_mismatches_score(int cA, int cB, int wildcard,
+                                Py_buffer* substitution_matrix,
+                                Py_ssize_t* identities,
+                                Py_ssize_t* mismatches,
+                                Py_ssize_t* positives,
+                                double* substitution_score)
+{
+    const double value = *((double*)substitution_matrix->buf
+                           + cA * substitution_matrix->shape[0]
+                           + cB);
+    if (cA == cB) (*identities)++;
+    else (*mismatches)++;
+    if (value > 0) (*positives)++;
+    *substitution_score += value;
 }
 
 static inline bool add_gaps(int* path, const int direction, bool strand,
@@ -993,63 +1017,25 @@ static inline bool add_gaps(int* path, const int direction, bool strand,
     return true;
 }
 
-static void inline
-add_identities_mismatches(int cA, int cB, int wildcard,
-                          Py_ssize_t* identities, Py_ssize_t* mismatches)
+static inline Py_buffer* get_buffer(Py_buffer *sequence, int** i, char** b)
 {
-    if (cA == wildcard || cB == wildcard) return;
-    else if (cA == cB) (*identities)++;
-    else (*mismatches)++;
-}
-
-static bool inline
-check_indices(int c, Py_ssize_t j, int l, int m)
-{
-    if (c < 0) {
-        PyErr_Format(PyExc_ValueError,
-            "sequences[%d][%zd] is negative (%d)", j, l, c);
-        return false;
+    *i = NULL;
+    *b = NULL;
+    if (sequence->buf) {
+        switch (sequence->format[0]) {
+            case 'i':
+            case 'I':
+                *i = sequence->buf;
+                break;
+            case 'c':
+            case 'b':
+            case 'B':
+                *b = sequence->buf;
+                break;
+        }
     }
-    if (c >= m) { \
-        PyErr_Format(PyExc_ValueError,
-            "sequence[%d][%zd] is out of bound"
-            " (%d, should be < %zd)", j, l, c, m);
-        return false;
-    }
-    return true;
+    return sequence;
 }
-
-static bool inline
-map_indices(int* cA, int* cB, int* mapping)
-{
-    *cA = mapping[*cA];
-    *cB = mapping[*cB];
-    if (*cA == MISSING_LETTER || *cB == MISSING_LETTER) {
-        PyErr_SetString(PyExc_ValueError,
-            "sequence contains letters not in the alphabet");
-        return false;
-    }
-    return true;
-}
-
-static void inline
-add_identities_mismatches_score(int cA, int cB, int wildcard,
-                                Py_buffer* substitution_matrix,
-                                Py_ssize_t* identities,
-                                Py_ssize_t* mismatches,
-                                Py_ssize_t* positives,
-                                double* substitution_score)
-{
-    const double value = *((double*)substitution_matrix->buf
-                           + cA * substitution_matrix->shape[0]
-                           + cB);
-    if (cA == cB) (*identities)++;
-    else (*mismatches)++;
-    if (value > 0) (*positives)++;
-    *substitution_score += value;
-}
-
-static const char _calculate__doc__[] = "calculate the matches, mismatches, gaps, and score of the alignment";
 
 static PyObject*
 _calculate(PyObject* self, PyObject* args, PyObject* keywords)
@@ -1535,6 +1521,30 @@ exit:
 
     return (PyObject*) counts;
 }
+
+static PyObject* 
+AlignmentCounts_new(PyTypeObject *type, PyObject *args, PyObject *keywords)
+{
+    return _calculate(type, args, keywords);
+}
+
+static PyTypeObject AlignmentCounts_Type = {
+    PyVarObject_HEAD_INIT(NULL, 0)
+    .tp_name = "AlignmentCounts",
+    .tp_basicsize = sizeof(AlignmentCounts),
+    .tp_repr = (reprfunc)AlignmentCounts_repr,
+    .tp_str = (reprfunc)AlignmentCounts_str,
+    .tp_flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .tp_doc = AlignmentCounts_doc,
+    .tp_getset = AlignmentCounts_getset,
+    .tp_new = (newfunc)AlignmentCounts_new,
+};
+
+
+/* ----------------- alignment algorithms ----------------- */
+
+
+static const char _calculate__doc__[] = "calculate the matches, mismatches, gaps, and score of the alignment";
 
 static PyMethodDef module_functions[] = {
     {"calculate",
