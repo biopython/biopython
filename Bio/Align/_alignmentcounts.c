@@ -90,20 +90,23 @@ AlignmentCounts_str(AlignmentCounts* self)
     const Py_ssize_t gaps = left_gaps + internal_gaps + right_gaps;
     char text[2048];
     char* p = stpcpy(text, "AlignmentCounts object with\n");
+    /* using arguments to PyOS_double_to_string as in
+     * float_repr in the Python C source code.
+     */
     if (!isnan(score)) {
-        char* s = PyOS_double_to_string(score, 'g', 6, Py_DTSF_ADD_DOT_0, NULL);
+        char* s = PyOS_double_to_string(score, 'r', 0, Py_DTSF_ADD_DOT_0, NULL);
         if (!s) return NULL;
         p += sprintf(p, "    score = %s:\n", s);
         PyMem_Free(s);
     }
     if (!isnan(substitution_score)) {
-        char* s = PyOS_double_to_string(substitution_score, 'g', 6, Py_DTSF_ADD_DOT_0, NULL);
+        char* s = PyOS_double_to_string(substitution_score, 'r', 0, Py_DTSF_ADD_DOT_0, NULL);
         if (!s) return NULL;
         p += sprintf(p, "    substitution_score = %s,\n", s);
         PyMem_Free(s);
     }
     if (!isnan(gap_score)) {
-        char* s = PyOS_double_to_string(gap_score, 'g', 6, Py_DTSF_ADD_DOT_0, NULL);
+        char* s = PyOS_double_to_string(gap_score, 'r', 0, Py_DTSF_ADD_DOT_0, NULL);
         if (!s) return NULL;
         p += sprintf(p, "    gap_score = %s.\n", s);
         PyMem_Free(s);
@@ -162,20 +165,23 @@ AlignmentCounts_repr(AlignmentCounts* self)
                           + self->extend_right_deletions;
     char text[1024];
     char* p = stpcpy(text, "<AlignmentCounts object (");
+    /* using arguments to PyOS_double_to_string as in
+     * float_repr in the Python C source code.
+     */
     if (!isnan(score)) {
-        char* s = PyOS_double_to_string(score, 'g', 6, Py_DTSF_ADD_DOT_0, NULL);
+        char* s = PyOS_double_to_string(score, 'r', 0, Py_DTSF_ADD_DOT_0, NULL);
         if (!s) return NULL;
         p += sprintf(p, "score = %s; ", s);
         PyMem_Free(s);
     }
     if (!isnan(substitution_score)) {
-        char* s = PyOS_double_to_string(substitution_score, 'g', 6, Py_DTSF_ADD_DOT_0, NULL);
+        char* s = PyOS_double_to_string(substitution_score, 'r', 0, Py_DTSF_ADD_DOT_0, NULL);
         if (!s) return NULL;
         p += sprintf(p, "substitution score = %s; ", s);
         PyMem_Free(s);
     }
     if (!isnan(gap_score)) {
-        char* s = PyOS_double_to_string(gap_score, 'g', 6, Py_DTSF_ADD_DOT_0, NULL);
+        char* s = PyOS_double_to_string(gap_score, 'r', 0, Py_DTSF_ADD_DOT_0, NULL);
         if (!s) return NULL;
         p += sprintf(p, "gap score = %s; ", s);
         PyMem_Free(s);

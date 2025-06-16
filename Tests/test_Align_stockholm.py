@@ -4771,14 +4771,14 @@ CCNE_CAEEL/232-360                  KVWSLMVKRDE..IPRATRFLL..GNHPD...MDD.EKRRILID
         counts = alignment.counts(substitution_matrix)
         self.assertEqual(
             repr(counts),
-            "<AlignmentCounts object (substitution score = 8.03848e+05; 554142 aligned letters; 178277 identities; 375865 mismatches; 301836 positives; 38234 gaps) at 0x%x>"
+            "<AlignmentCounts object (substitution score = 803848.0; 554142 aligned letters; 178277 identities; 375865 mismatches; 301836 positives; 38234 gaps) at 0x%x>"
             % id(counts),
         )
         self.assertEqual(
             str(counts),
             """\
 AlignmentCounts object with
-    substitution_score = 8.03848e+05,
+    substitution_score = 803848.0,
     aligned = 554142:
         identities = 178277,
         positives = 301836,
@@ -6851,14 +6851,14 @@ AlignmentCounts object with
         counts = alignment.counts(substitution_matrix)
         self.assertEqual(
             repr(counts),
-            "<AlignmentCounts object (substitution score = 3.30454e+05; 139618 aligned letters; 66291 identities; 73327 mismatches; 88585 positives; 7600 gaps) at 0x%x>"
+            "<AlignmentCounts object (substitution score = 330454.0; 139618 aligned letters; 66291 identities; 73327 mismatches; 88585 positives; 7600 gaps) at 0x%x>"
             % id(counts),
         )
         self.assertEqual(
             str(counts),
             """\
 AlignmentCounts object with
-    substitution_score = 3.30454e+05,
+    substitution_score = 330454.0,
     aligned = 139618:
         identities = 66291,
         positives = 88585,

@@ -5195,7 +5195,7 @@ AlignmentCounts object with
         counts = alignment.counts(aligner)
         self.assertEqual(
             repr(counts),
-            "<AlignmentCounts object (score = 1.7; substitution score = 2.0; gap score = -0.3; 2 aligned letters; 2 identities; 0 mismatches; 3 gaps) at 0x%x>"
+            "<AlignmentCounts object (score = 1.7; substitution score = 2.0; gap score = -0.30000000000000004; 2 aligned letters; 2 identities; 0 mismatches; 3 gaps) at 0x%x>"
             % id(counts),
         )
         self.assertEqual(
@@ -5204,7 +5204,7 @@ AlignmentCounts object with
 AlignmentCounts object with
     score = 1.7:
     substitution_score = 2.0,
-    gap_score = -0.3.
+    gap_score = -0.30000000000000004.
     aligned = 2:
         identities = 2,
         mismatches = 0.
@@ -5296,7 +5296,7 @@ AlignmentCounts object with
         counts = alignment.counts(aligner)
         self.assertEqual(
             repr(counts),
-            "<AlignmentCounts object (score = 1.7; substitution score = 2.0; gap score = -0.3; 2 aligned letters; 2 identities; 0 mismatches; 3 gaps) at 0x%x>"
+            "<AlignmentCounts object (score = 1.7; substitution score = 2.0; gap score = -0.30000000000000004; 2 aligned letters; 2 identities; 0 mismatches; 3 gaps) at 0x%x>"
             % id(counts),
         )
         self.assertEqual(
@@ -5305,7 +5305,7 @@ AlignmentCounts object with
 AlignmentCounts object with
     score = 1.7:
     substitution_score = 2.0,
-    gap_score = -0.3.
+    gap_score = -0.30000000000000004.
     aligned = 2:
         identities = 2,
         mismatches = 0.
@@ -5404,7 +5404,7 @@ AlignmentCounts object with
         counts = alignment.counts(aligner)
         self.assertEqual(
             repr(counts),
-            "<AlignmentCounts object (score = 1.7; substitution score = 2.0; gap score = -0.3; 2 aligned letters; 2 identities; 0 mismatches; 3 gaps) at 0x%x>"
+            "<AlignmentCounts object (score = 1.7; substitution score = 2.0; gap score = -0.30000000000000004; 2 aligned letters; 2 identities; 0 mismatches; 3 gaps) at 0x%x>"
             % id(counts),
         )
         self.assertEqual(
@@ -5413,7 +5413,7 @@ AlignmentCounts object with
 AlignmentCounts object with
     score = 1.7:
     substitution_score = 2.0,
-    gap_score = -0.3.
+    gap_score = -0.30000000000000004.
     aligned = 2:
         identities = 2,
         mismatches = 0.
@@ -5505,7 +5505,7 @@ AlignmentCounts object with
         counts = alignment.counts(aligner)
         self.assertEqual(
             repr(counts),
-            "<AlignmentCounts object (score = 1.7; substitution score = 2.0; gap score = -0.3; 2 aligned letters; 2 identities; 0 mismatches; 3 gaps) at 0x%x>"
+            "<AlignmentCounts object (score = 1.7; substitution score = 2.0; gap score = -0.30000000000000004; 2 aligned letters; 2 identities; 0 mismatches; 3 gaps) at 0x%x>"
             % id(counts),
         )
         self.assertEqual(
@@ -5514,7 +5514,7 @@ AlignmentCounts object with
 AlignmentCounts object with
     score = 1.7:
     substitution_score = 2.0,
-    gap_score = -0.3.
+    gap_score = -0.30000000000000004.
     aligned = 2:
         identities = 2,
         mismatches = 0.
@@ -6609,14 +6609,14 @@ AlignmentCounts object with
         counts = alignment.counts(aligner)
         self.assertEqual(
             repr(counts),
-            "<AlignmentCounts object (score = -1.2; substitution score = 2.0; gap score = -3.2; 2 aligned letters; 2 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            "<AlignmentCounts object (score = -1.2000000000000002; substitution score = 2.0; gap score = -3.2; 2 aligned letters; 2 identities; 0 mismatches; 2 gaps) at 0x%x>"
             % id(counts),
         )
         self.assertEqual(
             str(counts),
             """\
 AlignmentCounts object with
-    score = -1.2:
+    score = -1.2000000000000002:
     substitution_score = 2.0,
     gap_score = -3.2.
     aligned = 2:
@@ -6717,14 +6717,14 @@ AlignmentCounts object with
         counts = alignment.counts(aligner)
         self.assertEqual(
             repr(counts),
-            "<AlignmentCounts object (score = -1.2; substitution score = 2.0; gap score = -3.2; 2 aligned letters; 2 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            "<AlignmentCounts object (score = -1.2000000000000002; substitution score = 2.0; gap score = -3.2; 2 aligned letters; 2 identities; 0 mismatches; 2 gaps) at 0x%x>"
             % id(counts),
         )
         self.assertEqual(
             str(counts),
             """\
 AlignmentCounts object with
-    score = -1.2:
+    score = -1.2000000000000002:
     substitution_score = 2.0,
     gap_score = -3.2.
     aligned = 2:
@@ -6862,14 +6862,14 @@ AlignmentCounts object with
         counts = alignment.counts(aligner)
         self.assertEqual(
             repr(counts),
-            "<AlignmentCounts object (score = -1.2; substitution score = 2.0; gap score = -3.2; 2 aligned letters; 2 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            "<AlignmentCounts object (score = -1.2000000000000002; substitution score = 2.0; gap score = -3.2; 2 aligned letters; 2 identities; 0 mismatches; 2 gaps) at 0x%x>"
             % id(counts),
         )
         self.assertEqual(
             str(counts),
             """\
 AlignmentCounts object with
-    score = -1.2:
+    score = -1.2000000000000002:
     substitution_score = 2.0,
     gap_score = -3.2.
     aligned = 2:
@@ -6970,14 +6970,14 @@ AlignmentCounts object with
         counts = alignment.counts(aligner)
         self.assertEqual(
             repr(counts),
-            "<AlignmentCounts object (score = -1.2; substitution score = 2.0; gap score = -3.2; 2 aligned letters; 2 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            "<AlignmentCounts object (score = -1.2000000000000002; substitution score = 2.0; gap score = -3.2; 2 aligned letters; 2 identities; 0 mismatches; 2 gaps) at 0x%x>"
             % id(counts),
         )
         self.assertEqual(
             str(counts),
             """\
 AlignmentCounts object with
-    score = -1.2:
+    score = -1.2000000000000002:
     substitution_score = 2.0,
     gap_score = -3.2.
     aligned = 2:
@@ -12327,16 +12327,16 @@ AlignmentCounts object with
         counts = alignment.counts(aligner)
         self.assertEqual(
             repr(counts),
-            "<AlignmentCounts object (score = 0.2; substitution score = 1.0; gap score = -0.8; 1 aligned letters; 1 identities; 0 mismatches; 4 gaps) at 0x%x>"
+            "<AlignmentCounts object (score = 0.20000000000000007; substitution score = 1.0; gap score = -0.7999999999999999; 1 aligned letters; 1 identities; 0 mismatches; 4 gaps) at 0x%x>"
             % id(counts),
         )
         self.assertEqual(
             str(counts),
             """\
 AlignmentCounts object with
-    score = 0.2:
+    score = 0.20000000000000007:
     substitution_score = 1.0,
-    gap_score = -0.8.
+    gap_score = -0.7999999999999999.
     aligned = 1:
         identities = 1,
         mismatches = 0.
