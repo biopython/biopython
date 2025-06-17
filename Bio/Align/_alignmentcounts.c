@@ -971,16 +971,16 @@ substitution_matrix_converter(PyObject* argument, void* pointer)
 }
 
 static bool inline
-check_indices(int c, Py_ssize_t j, int l, Py_ssize_t m)
+check_indices(int c, Py_ssize_t j, Py_ssize_t l, Py_ssize_t m)
 {
     if (c < 0) {
         PyErr_Format(PyExc_ValueError,
-            "sequences[%d][%zd] is negative (%d)", j, l, c);
+            "sequences[%zd][%zd] is negative (%d)", j, l, c);
         return false;
     }
     if (c >= m) { \
         PyErr_Format(PyExc_ValueError,
-            "sequence[%d][%zd] is out of bound"
+            "sequence[%zd][%zd] is out of bound"
             " (%d, should be < %zd)", j, l, c, m);
         return false;
     }
