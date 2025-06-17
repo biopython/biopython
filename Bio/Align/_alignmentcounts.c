@@ -971,7 +971,7 @@ substitution_matrix_converter(PyObject* argument, void* pointer)
 }
 
 static bool inline
-check_indices(int c, Py_ssize_t j, int l, int m)
+check_indices(int c, Py_ssize_t j, int l, Py_ssize_t m)
 {
     if (c < 0) {
         PyErr_Format(PyExc_ValueError,
