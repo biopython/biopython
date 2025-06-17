@@ -11,6 +11,8 @@
 #include "Python.h"
 #include <float.h>
 #include <stdbool.h>
+#include <stdint.h>
+#include <inttypes.h>
 #include "_pairwisealigner.h"
 #include "substitution_matrices/_arraycore.h"
 
@@ -202,7 +204,8 @@ AlignmentCounts_repr(AlignmentCounts* self)
     p += sprintf(p, "%zd mismatches; ", mismatches);
     if (positives != -1)
         p += sprintf(p, "%zd positives; ", positives);
-    p += sprintf(p, "%zd gaps) at %p>", gaps, self);
+    p += sprintf(p, "%zd gaps) at 0x%" PRIxPTR, gaps, (uintptr_t)self);
+    strcpy(p, ">");
     return PyUnicode_FromString(text);
 }
 
