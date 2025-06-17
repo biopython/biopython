@@ -93,18 +93,32 @@ AlignmentCounts_str(AlignmentCounts* self)
         if (!s) return NULL;
         p += sprintf(p, "    score = %s:\n", s);
         PyMem_Free(s);
+        if (!isnan(substitution_score)) {
+            char* s = PyOS_double_to_string(substitution_score, 'r', 0, Py_DTSF_ADD_DOT_0, NULL);
+            if (!s) return NULL;
+            p += sprintf(p, "        substitution_score = %s,\n", s);
+            PyMem_Free(s);
+        }
+        if (!isnan(gap_score)) {
+            char* s = PyOS_double_to_string(gap_score, 'r', 0, Py_DTSF_ADD_DOT_0, NULL);
+            if (!s) return NULL;
+            p += sprintf(p, "        gap_score = %s.\n", s);
+            PyMem_Free(s);
+        }
     }
-    if (!isnan(substitution_score)) {
-        char* s = PyOS_double_to_string(substitution_score, 'r', 0, Py_DTSF_ADD_DOT_0, NULL);
-        if (!s) return NULL;
-        p += sprintf(p, "    substitution_score = %s,\n", s);
-        PyMem_Free(s);
-    }
-    if (!isnan(gap_score)) {
-        char* s = PyOS_double_to_string(gap_score, 'r', 0, Py_DTSF_ADD_DOT_0, NULL);
-        if (!s) return NULL;
-        p += sprintf(p, "    gap_score = %s.\n", s);
-        PyMem_Free(s);
+    else {
+        if (!isnan(substitution_score)) {
+            char* s = PyOS_double_to_string(substitution_score, 'r', 0, Py_DTSF_ADD_DOT_0, NULL);
+            if (!s) return NULL;
+            p += sprintf(p, "    substitution_score = %s,\n", s);
+            PyMem_Free(s);
+        }
+        if (!isnan(gap_score)) {
+            char* s = PyOS_double_to_string(gap_score, 'r', 0, Py_DTSF_ADD_DOT_0, NULL);
+            if (!s) return NULL;
+            p += sprintf(p, "    gap_score = %s.\n", s);
+            PyMem_Free(s);
+        }
     }
     p += sprintf(p, "    aligned = %zd:\n", aligned);
     p += sprintf(p, "        identities = %zd,\n", identities);
@@ -533,6 +547,46 @@ AlignmentCounts_get_right_gaps(AlignmentCounts* self, void* closure)
                             + extend_right_deletions);
 }
 
+static char AlignmentCounts_open_gaps__doc__[] = "number of geps opened in the alignment";
+
+static PyObject*
+AlignmentCounts_get_open_gaps(AlignmentCounts* self, void* closure)
+{
+    const Py_ssize_t open_left_insertions = self->open_left_insertions;
+    const Py_ssize_t open_left_deletions = self->open_left_deletions;
+    const Py_ssize_t open_internal_insertions = self->open_internal_insertions;
+    const Py_ssize_t open_internal_deletions = self->open_internal_deletions;
+    const Py_ssize_t open_right_insertions = self->open_right_insertions;
+    const Py_ssize_t open_right_deletions = self->open_right_deletions;
+    const Py_ssize_t open_gaps = open_left_insertions
+                               + open_left_deletions
+                               + open_internal_insertions
+                               + open_internal_deletions
+                               + open_right_insertions
+                               + open_right_deletions;
+    return PyLong_FromSsize_t(open_gaps);
+}
+
+static char AlignmentCounts_extend_gaps__doc__[] = "number of gep extensions in the alignment";
+
+static PyObject*
+AlignmentCounts_get_extend_gaps(AlignmentCounts* self, void* closure)
+{
+    const Py_ssize_t extend_left_insertions = self->extend_left_insertions;
+    const Py_ssize_t extend_left_deletions = self->extend_left_deletions;
+    const Py_ssize_t extend_internal_insertions = self->extend_internal_insertions;
+    const Py_ssize_t extend_internal_deletions = self->extend_internal_deletions;
+    const Py_ssize_t extend_right_insertions = self->extend_right_insertions;
+    const Py_ssize_t extend_right_deletions = self->extend_right_deletions;
+    const Py_ssize_t extend_gaps = extend_left_insertions
+                                 + extend_left_deletions
+                                 + extend_internal_insertions
+                                 + extend_internal_deletions
+                                 + extend_right_insertions
+                                 + extend_right_deletions;
+    return PyLong_FromSsize_t(extend_gaps);
+}
+
 static char AlignmentCounts_insertions__doc__[] = "total number of letters inserted";
 
 static PyObject*
@@ -550,6 +604,34 @@ AlignmentCounts_get_insertions(AlignmentCounts* self, void* closure)
                             + extend_internal_insertions
                             + open_right_insertions
                             + extend_right_insertions);
+}
+
+static char AlignmentCounts_open_insertions__doc__[] = "number of insertion geps opened in the alignment";
+
+static PyObject*
+AlignmentCounts_get_open_insertions(AlignmentCounts* self, void* closure)
+{
+    const Py_ssize_t open_left_insertions = self->open_left_insertions;
+    const Py_ssize_t open_internal_insertions = self->open_internal_insertions;
+    const Py_ssize_t open_right_insertions = self->open_right_insertions;
+    const Py_ssize_t open_insertions = open_left_insertions
+                                     + open_internal_insertions
+                                     + open_right_insertions;
+    return PyLong_FromSsize_t(open_insertions);
+}
+
+static char AlignmentCounts_extend_insertions__doc__[] = "number of insertion gap extensions in the alignment";
+
+static PyObject*
+AlignmentCounts_get_extend_insertions(AlignmentCounts* self, void* closure)
+{
+    const Py_ssize_t extend_left_insertions = self->extend_left_insertions;
+    const Py_ssize_t extend_internal_insertions = self->extend_internal_insertions;
+    const Py_ssize_t extend_right_insertions = self->extend_right_insertions;
+    const Py_ssize_t extend_insertions = extend_left_insertions
+                                       + extend_internal_insertions
+                                       + extend_right_insertions;
+    return PyLong_FromSsize_t(extend_insertions);
 }
 
 static char AlignmentCounts_deletions__doc__[] = "total number of letters deleted";
@@ -571,47 +653,35 @@ AlignmentCounts_get_deletions(AlignmentCounts* self, void* closure)
                             + extend_right_deletions);
 }
 
-static char AlignmentCounts_open_gaps__doc__[] =  "number of geps opened in the alignment";
+static char AlignmentCounts_open_deletions__doc__[] = "number of deletion geps opened in the alignment";
 
 static PyObject*
-AlignmentCounts_get_open_gaps(AlignmentCounts* self, void* closure)
+AlignmentCounts_get_open_deletions(AlignmentCounts* self, void* closure)
 {
-    const Py_ssize_t open_left_insertions = self->open_left_insertions;
     const Py_ssize_t open_left_deletions = self->open_left_deletions;
-    const Py_ssize_t open_internal_insertions = self->open_internal_insertions;
     const Py_ssize_t open_internal_deletions = self->open_internal_deletions;
-    const Py_ssize_t open_right_insertions = self->open_right_insertions;
     const Py_ssize_t open_right_deletions = self->open_right_deletions;
-    const Py_ssize_t open_gaps = open_left_insertions
-                               + open_left_deletions
-                               + open_internal_insertions
+    const Py_ssize_t open_gaps = open_left_deletions
                                + open_internal_deletions
-                               + open_right_insertions
                                + open_right_deletions;
     return PyLong_FromSsize_t(open_gaps);
 }
 
-static char AlignmentCounts_extend_gaps__doc__[] =  "number of gep extensions in the alignment";
+static char AlignmentCounts_extend_deletions__doc__[] = "number of deletion gep extensions in the alignment";
 
 static PyObject*
-AlignmentCounts_get_extend_gaps(AlignmentCounts* self, void* closure)
+AlignmentCounts_get_extend_deletions(AlignmentCounts* self, void* closure)
 {
-    const Py_ssize_t extend_left_insertions = self->extend_left_insertions;
     const Py_ssize_t extend_left_deletions = self->extend_left_deletions;
-    const Py_ssize_t extend_internal_insertions = self->extend_internal_insertions;
     const Py_ssize_t extend_internal_deletions = self->extend_internal_deletions;
-    const Py_ssize_t extend_right_insertions = self->extend_right_insertions;
     const Py_ssize_t extend_right_deletions = self->extend_right_deletions;
-    const Py_ssize_t extend_gaps = extend_left_insertions
-                                 + extend_left_deletions
-                                 + extend_internal_insertions
+    const Py_ssize_t extend_gaps = extend_left_deletions
                                  + extend_internal_deletions
-                                 + extend_right_insertions
                                  + extend_right_deletions;
     return PyLong_FromSsize_t(extend_gaps);
 }
 
-static char AlignmentCounts_gaps__doc__[] =  "total gap length";
+static char AlignmentCounts_gaps__doc__[] = "total gap length";
 
 static PyObject*
 AlignmentCounts_get_gaps(AlignmentCounts* self, void* closure)
@@ -749,9 +819,21 @@ static PyGetSetDef AlignmentCounts_getset[] = {
     {"insertions",
         (getter)AlignmentCounts_get_insertions, NULL,
         AlignmentCounts_insertions__doc__, NULL},
+    {"open_insertions",
+        (getter)AlignmentCounts_get_open_insertions, NULL,
+        AlignmentCounts_open_insertions__doc__, NULL},
+    {"extend_insertions",
+        (getter)AlignmentCounts_get_extend_insertions, NULL,
+        AlignmentCounts_extend_insertions__doc__, NULL},
     {"deletions",
         (getter)AlignmentCounts_get_deletions, NULL,
         AlignmentCounts_deletions__doc__, NULL},
+    {"open_deletions",
+        (getter)AlignmentCounts_get_open_deletions, NULL,
+        AlignmentCounts_open_deletions__doc__, NULL},
+    {"extend_deletions",
+        (getter)AlignmentCounts_get_extend_deletions, NULL,
+        AlignmentCounts_extend_deletions__doc__, NULL},
     {"left_gaps",
         (getter)AlignmentCounts_get_left_gaps, NULL,
         AlignmentCounts_left_gaps__doc__, NULL},

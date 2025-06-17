@@ -584,9 +584,8 @@ Counting identities, mismatches, and gaps
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The ``counts`` method counts the number of identities, mismatches, aligned
-letters, and agaps (insertions and deletions) of an alignment.  The return
-value is an ``AlignmentCounts`` object, from which the counts can be obtained
-as properties.
+letters, and gaps (insertions and deletions) in an alignment.  The return
+value is an ``AlignmentCounts`` object:
 
 .. cont-doctest
 
@@ -598,6 +597,51 @@ as properties.
    query             0 AG-TTT-- 5
    <BLANKLINE>
    >>> counts = pairwise_alignment.counts()
+   >>> counts  # doctest: +ELLIPSIS
+   <AlignmentCounts object (5 aligned letters; 4 identities; 1 mismatches; 3 gaps) at ...>
+
+You can print the alignment to get detailed information about the alignment
+statistics:
+
+.. cont-doctest
+
+.. code:: pycon
+
+   >>> print(counts)
+   AlignmentCounts object with
+       aligned = 5:
+           identities = 4,
+           mismatches = 1.
+       gaps = 3:
+           left_gaps = 0:
+               left_insertions = 0:
+                   open_left_insertions = 0,
+                   extend_left_insertions = 0;
+               left_deletions = 0:
+                   open_left_deletions = 0,
+                   extend_left_deletions = 0;
+           internal_gaps = 1:
+               internal_insertions = 0:
+                   open_internal_insertions = 0,
+                   extend_internal_insertions = 0;
+               internal_deletions = 1:
+                   open_internal_deletions = 1,
+                   extend_internal_deletions = 0;
+           right_gaps = 2:
+               right_insertions = 0:
+                   open_right_insertions = 0,
+                   extend_right_insertions = 0;
+               right_deletions = 2:
+                   open_right_deletions = 1,
+                   extend_right_deletions = 1.
+   <BLANKLINE>
+
+These statistics can also be obtained as properties of the ``counts`` object:
+
+.. cont-doctest
+
+.. code:: pycon
+
    >>> counts.aligned
    5
    >>> counts.identities
@@ -614,10 +658,213 @@ as properties.
    1
    >>> counts.right_deletions
    2
+   >>> counts.extend_right_deletions
+   1
 
-Use the ``wildcard`` argument to specify a letter that should be ignored when
-counting identities, positives, and mismatches (e.g. ``wildcard="?"`` or
-``wildcard="N"`` are common choices).
+Use a single character as the argument to ``.counts`` to specify a wildcard
+character, which is ignored when counting identities, positives, and mismatches
+(e.g. ``"?"`` or ``"N"`` are commonly used as wildcard characters):
+
+.. cont-doctest
+
+.. code:: pycon
+
+   >>> pairwise_alignment.sequences[0] = "CCGGT?TTT"
+   >>> print(pairwise_alignment)
+   target            1 CGGT?TTT 9
+                     0 .|-|.|-- 8
+   query             0 AG-TTT-- 5
+   <BLANKLINE>
+   >>> counts = pairwise_alignment.counts()
+   >>> counts.identities
+   3
+   >>> counts.mismatches
+   2
+   >>> counts = pairwise_alignment.counts("?")
+   >>> counts.identities
+   3
+   >>> counts.mismatches
+   1
+
+Here, the alignment between ``?`` and ``T`` is not counted as a mismatch, as
+``?`` is the wildcard character.
+
+Use a substitution matrix (see section :ref:`sec:substitution_matrices`) as the
+argument to also calculate the number of positive matches, and the total
+substitution score:
+
+.. cont-doctest
+
+.. code:: pycon
+
+   >>> protein_alignment = Alignment(
+   ...     ["EPQSDPSVEPPLSQETFSDLWKLLPE", "EPSSETGMDPPLSQETFEDLWSLLPD"]
+   ... )
+   >>> print(protein_alignment)
+   target            0 EPQSDPSVEPPLSQETFSDLWKLLPE 26
+                     0 ||.|.....||||||||.|||.|||. 26
+   query             0 EPSSETGMDPPLSQETFEDLWSLLPD 26
+   <BLANKLINE>
+   >>> counts = protein_alignment.counts()
+   >>> print(counts.identities)
+   17
+   >>> print(counts.mismatches)
+   9
+   >>> print(counts.positives)
+   None
+   >>> print(counts.substitution_score)
+   None
+
+.. cont-doctest
+
+.. code:: pycon
+
+   >>> from Bio.Align import substitution_matrices
+
+.. cont-doctest
+
+.. code:: pycon
+
+   >>> blosum62 = substitution_matrices.load("BLOSUM62")
+   >>> counts = protein_alignment.counts(blosum62)
+   >>> print(counts.identities)
+   17
+   >>> print(counts.mismatches)
+   9
+   >>> print(counts.positives)
+   21
+   >>> print(counts.substitution_score)
+   101.0
+
+.. cont-doctest
+
+.. code:: pycon
+
+   >>> blosum45 = substitution_matrices.load("BLOSUM45")
+   >>> counts = protein_alignment.counts(blosum45)
+   >>> print(counts.identities)
+   17
+   >>> print(counts.mismatches)
+   9
+   >>> print(counts.positives)
+   21
+   >>> print(counts.substitution_score)
+   122.0
+
+.. cont-doctest
+
+.. code:: pycon
+
+   >>> blosum90 = substitution_matrices.load("BLOSUM90")
+   >>> counts = protein_alignment.counts(blosum90)
+   >>> print(counts.identities)
+   17
+   >>> print(counts.mismatches)
+   9
+   >>> print(counts.positives)
+   20
+   >>> print(counts.substitution_score)
+   109.0
+
+Use a pairwise aligner object (see Chapter :ref:`chapter:pairwise`)  to
+also calculate the gap score and the alignment score:
+
+.. cont-doctest
+
+.. code:: pycon
+
+   >>> from Bio.Align import PairwiseAligner
+
+.. cont-doctest
+
+.. code:: pycon
+
+   >>> pairwise_alignment.sequences[0] = "CCGGTTTTT"
+   >>> print(pairwise_alignment)
+   target            1 CGGTTTTT 9
+                     0 .|-|||-- 8
+   query             0 AG-TTT-- 5
+   <BLANKLINE>
+   >>> aligner = PairwiseAligner("blastn")
+   >>> counts = pairwise_alignment.counts(aligner)
+   >>> counts  # doctest: +ELLIPSIS
+   <AlignmentCounts object (score = -11.0; substitution score = 5.0; gap score = -16.0; 5 aligned letters; 4 identities; 1 mismatches; 4 positives; 3 gaps) at ...>
+   >>> print(counts)
+   AlignmentCounts object with
+       score = -11.0:
+           substitution_score = 5.0,
+           gap_score = -16.0.
+       aligned = 5:
+           identities = 4,
+           positives = 4,
+           mismatches = 1.
+       gaps = 3:
+           left_gaps = 0:
+               left_insertions = 0:
+                   open_left_insertions = 0,
+                   extend_left_insertions = 0;
+               left_deletions = 0:
+                   open_left_deletions = 0,
+                   extend_left_deletions = 0;
+           internal_gaps = 1:
+               internal_insertions = 0:
+                   open_internal_insertions = 0,
+                   extend_internal_insertions = 0;
+               internal_deletions = 1:
+                   open_internal_deletions = 1,
+                   extend_internal_deletions = 0;
+           right_gaps = 2:
+               right_insertions = 0:
+                   open_right_insertions = 0,
+                   extend_right_insertions = 0;
+               right_deletions = 2:
+                   open_right_deletions = 1,
+                   extend_right_deletions = 1.
+   <BLANKLINE>
+
+.. cont-doctest
+
+.. code:: pycon
+
+   >>> aligner = PairwiseAligner("blastp")
+   >>> counts = protein_alignment.counts(aligner)
+   >>> counts  # doctest: +ELLIPSIS
+   <AlignmentCounts object (score = 101.0; substitution score = 101.0; gap score = 0.0; 26 aligned letters; 17 identities; 9 mismatches; 21 positives; 0 gaps) at ...>
+   >>> print(counts)
+   AlignmentCounts object with
+       score = 101.0:
+           substitution_score = 101.0,
+           gap_score = 0.0.
+       aligned = 26:
+           identities = 17,
+           positives = 21,
+           mismatches = 9.
+       gaps = 0:
+           left_gaps = 0:
+               left_insertions = 0:
+                   open_left_insertions = 0,
+                   extend_left_insertions = 0;
+               left_deletions = 0:
+                   open_left_deletions = 0,
+                   extend_left_deletions = 0;
+           internal_gaps = 0:
+               internal_insertions = 0:
+                   open_internal_insertions = 0,
+                   extend_internal_insertions = 0;
+               internal_deletions = 0:
+                   open_internal_deletions = 0,
+                   extend_internal_deletions = 0;
+           right_gaps = 0:
+               right_insertions = 0:
+                   open_right_insertions = 0,
+                   extend_right_insertions = 0;
+               right_deletions = 0:
+                   open_right_deletions = 0,
+                   extend_right_deletions = 0.
+   <BLANKLINE>
+
+Note that the pairwise aligner in the argument to ``counts``  does not need to
+be the same as aligner that was used the create the alignment.
 
 For an alignment of more than two sequences, the number of identities,
 mismatches, and gaps are calculated and summed for all pairs of sequences in
@@ -663,67 +910,55 @@ number of gaps (= insertions + deletions):
    >>> counts.internal_gaps
    2
 
-For protein alignments, in addition to the number of identities and mismatches,
-you can also count the number of positive matches by supplying a substitution
-matrix (see Chapter :ref:`sec:substitution_matrices`):
-
-.. cont-doctest
-
-.. code:: pycon
-
-   >>> from Bio.Align import substitution_matrices
-   >>> substitution_matrix = substitution_matrices.load("BLOSUM62")
-   >>> protein_alignment = Alignment(["GQCGSCWSFS", "GACGSCWTFS"])
-   >>> print(protein_alignment)
-   target            0 GQCGSCWSFS 10
-                     0 |.|||||.|| 10
-   query             0 GACGSCWTFS 10
-   <BLANKLINE>
-   >>> counts = protein_alignment.counts(substitution_matrix)
-   >>> counts.aligned
-   10
-   >>> counts.identities
-   8
-   >>> counts.mismatches
-   2
-   >>> counts.positives
-   9
-
-where the number of positives is one higher than the number of identities
-because the mismatch of S against T has a positive score (while the mismatch
-score of Q against A is not positive):
-
-.. cont-doctest
-
-.. code:: pycon
-
-   >>> substitution_matrix["S", "T"]
-   1.0
-   >>> substitution_matrix["Q", "A"]
-   -1.0
-
 An ``AlignmentCounts`` object has the following properties:
 
-========================= =============================================================================================================
-**property**              **description**
-========================= =============================================================================================================
-``aligned``               The number of aligned letters in the alignment. This quantity is also calculated if some or all of the sequences are undefined. If all sequences are known, then ``aligned`` = ``identities`` + ``mismatches``. If some sequences are undefined, then ``aligned`` > ``identities`` + ``mismatches``.
-``identities``            The number of identical letters in the alignment
-``mismatches``            The number of mismatched letters in the alignment
-``positives``             The number of aligned letters with a positive score
-``left_insertions``       The number of insertions on the left side of the alignment
-``left_deletions``        The number of deletions on the left side of the alignment
-``right_insertions``      The number of insertions on the right side of the alignment
-``right_deletions``       The number of deletions on the right side of the alignment
-``internal_insertions``   The number of insertions in the interior of the alignment
-``internal_deletions``    The number of deletions in the interior of the alignment
-``insertions``            The total number of insertions, equal to ``left_insertions`` + ``right_insertions`` + ``internal_insertions``
-``deletions``             The total number of deletions, equal to ``left_deletions`` + ``right_deletions`` + ``internal_deletions``
-``left_gaps``             The number of gaps on the left side of the alignment, equal to ``left_insertions`` + ``left_deletions``
-``right_gaps``            The number of gaps on the right side of the alignment, equal to ``right_insertions`` + ``right_deletions``
-``internal_gaps``         The number of gaps in the interior of the alignment, equal to ``internal_insertions`` + ``internal_deletions``
-``gaps``                  The total number of gaps in the alignment, equal to ``left_gaps`` + ``right_gaps`` + ``internal_gaps``
-========================= =============================================================================================================
+================================ =============================================================================================================
+**property**                     **description**
+================================ =============================================================================================================
+``score``                        Alignment score, or ``None`` if unknown
+``substitution_score``           Total substitution score of letters aligned to each other, or ``None`` if unknown
+``gap_score``                    Total gap score, or ``None`` if unknown
+``aligned``                      The number of aligned letters in the alignment. This quantity is also calculated if some or all of the sequences are undefined. If all sequences are known, then ``aligned`` = ``identities`` + ``mismatches``. If some sequences are undefined, then ``aligned`` > ``identities`` + ``mismatches``.
+``identities``                   Number of matched letters in the alignment
+``mismatches``                   Number of mismatched letters in the alignment
+``positives``                    Number of aligned letters with a positive substitution score
+``gaps``                         Total gap length
+``open_gaps``                    Number of gaps opened in the alignment
+``extend_gaps``                  Number of gap extensions in the alignment
+``insertions``                   Total number of letters inserted
+``open_insertions``              Number of insertion gaps opened in the alignment
+``extend_insertions``            Number of insertion gap extensions in the alignment
+``deletions``                    Total number of letters deleted
+``open_deletions``               Number of deletion gaps opened in the alignment
+``extend_deletions``             Number of deletion gap extensions in the alignment
+``left_gaps``                    Total gap length on the left side of the alignment
+``open_left_gaps``               Number of gaps opened on the left side of the alignment
+``extend_left_gaps``             Number of gap extensions on the left side of the alignment
+``left_insertions``              Number of letters inserted on the left side of the alignment
+``open_left_insertions``         Number of insertion gaps opened on the left side of the alignment
+``extend_left_insertions``       Number of insertion gap extensions on the left side of the alignment
+``left_deletions``               Number of characters deleted on the left side of the alignment
+``open_left_deletions``          The number of deletion gaps opened on the left side of the alignment
+``extend_left_deletions``        Number of deletion gap extensions on the left side of the alignment
+``internal_gaps``                Total length of gaps within the alignment
+``open_internal_gaps``           Number of gaps opened in the interior of the alignment
+``extend_internal_gaps``         Number of gap extensions in the interior of the alignment
+``internal_insertions``          Number of letters inserted in the interior of the alignment
+``open_internal_insertions``     Number of insertion gaps opened in the interior of the alignment
+``extend_internal_insertions``   Number of insertion gas extensions in the interior of the alignment
+``internal_deletions``           Number of characters deleted from the alignment
+``open_internal_deletions``      Number of deletion gaps opened in the interior of the alignment
+``extend_internal_deletions``    Number of deletion gap extensions in the interior of the alignment
+``right_gaps``                   Total gap length on the right side of the alignment
+``open_right_gaps``              Number of gaps opened on the right side of the alignment
+``extend_right_gaps``            Number of gap extensions on the right side of the alignment
+``right_insertions``             Number of letters inserted on the right side of the alignment
+``open_right_insertions``        The number of insertion gaps opened on the right side of the alignment
+``extend_right_insertions``      The number of insertion gap extensions on the right side of the alignment
+``right_deletions``              Number of letters deleted on the right side of the alignment
+``open_right_deletions``         Number of deletion gaps opened on the right side of the alignment
+``extend_right_deletions``       Number of deletion gap extensions on the right side of the alignment
+================================ =============================================================================================================
 
 
 Letter frequencies

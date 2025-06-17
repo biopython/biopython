@@ -1673,8 +1673,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 3.0:
-    substitution_score = 3.0,
-    gap_score = 0.0.
+        substitution_score = 3.0,
+        gap_score = 0.0.
     aligned = 4:
         identities = 3,
         mismatches = 0.
@@ -1820,8 +1820,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 3.0:
-    substitution_score = 3.0,
-    gap_score = 0.0.
+        substitution_score = 3.0,
+        gap_score = 0.0.
     aligned = 4:
         identities = 3,
         mismatches = 0.
@@ -1973,8 +1973,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 3.0:
-    substitution_score = 3.0,
-    gap_score = 0.0.
+        substitution_score = 3.0,
+        gap_score = 0.0.
     aligned = 4:
         identities = 3,
         mismatches = 0.
@@ -2120,8 +2120,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 3.0:
-    substitution_score = 3.0,
-    gap_score = 0.0.
+        substitution_score = 3.0,
+        gap_score = 0.0.
     aligned = 4:
         identities = 3,
         mismatches = 0.
@@ -2272,8 +2272,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 2.0:
-    substitution_score = 2.0,
-    gap_score = 0.0.
+        substitution_score = 2.0,
+        gap_score = 0.0.
     aligned = 4:
         identities = 3,
         mismatches = 1.
@@ -2419,8 +2419,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 2.0:
-    substitution_score = 2.0,
-    gap_score = 0.0.
+        substitution_score = 2.0,
+        gap_score = 0.0.
     aligned = 4:
         identities = 3,
         mismatches = 1.
@@ -2580,8 +2580,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 4.0:
-    substitution_score = 4.0,
-    gap_score = 0.0.
+        substitution_score = 4.0,
+        gap_score = 0.0.
     aligned = 4:
         identities = 4,
         mismatches = 0.
@@ -2730,8 +2730,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 4.0:
-    substitution_score = 4.0,
-    gap_score = 0.0.
+        substitution_score = 4.0,
+        gap_score = 0.0.
     aligned = 4:
         identities = 4,
         mismatches = 0.
@@ -2887,8 +2887,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 4.0:
-    substitution_score = 4.0,
-    gap_score = 0.0.
+        substitution_score = 4.0,
+        gap_score = 0.0.
     aligned = 4:
         identities = 4,
         mismatches = 0.
@@ -3037,8 +3037,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 4.0:
-    substitution_score = 4.0,
-    gap_score = 0.0.
+        substitution_score = 4.0,
+        gap_score = 0.0.
     aligned = 4:
         identities = 4,
         mismatches = 0.
@@ -3198,8 +3198,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 4.0:
-    substitution_score = 4.0,
-    gap_score = 0.0.
+        substitution_score = 4.0,
+        gap_score = 0.0.
     aligned = 4:
         identities = 4,
         mismatches = 0.
@@ -3348,8 +3348,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 4.0:
-    substitution_score = 4.0,
-    gap_score = 0.0.
+        substitution_score = 4.0,
+        gap_score = 0.0.
     aligned = 4:
         identities = 4,
         mismatches = 0.
@@ -3505,8 +3505,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 4.0:
-    substitution_score = 4.0,
-    gap_score = 0.0.
+        substitution_score = 4.0,
+        gap_score = 0.0.
     aligned = 4:
         identities = 4,
         mismatches = 0.
@@ -3655,8 +3655,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 4.0:
-    substitution_score = 4.0,
-    gap_score = 0.0.
+        substitution_score = 4.0,
+        gap_score = 0.0.
     aligned = 4:
         identities = 4,
         mismatches = 0.
@@ -3800,8 +3800,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1.9:
-    substitution_score = 2.0,
-    gap_score = -0.1.
+        substitution_score = 2.0,
+        gap_score = -0.1.
     aligned = 1:
         identities = 1,
         mismatches = 0.
@@ -3899,8 +3899,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1.9:
-    substitution_score = 2.0,
-    gap_score = -0.1.
+        substitution_score = 2.0,
+        gap_score = -0.1.
     aligned = 1:
         identities = 1,
         mismatches = 0.
@@ -4005,8 +4005,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1.9:
-    substitution_score = 2.0,
-    gap_score = -0.1.
+        substitution_score = 2.0,
+        gap_score = -0.1.
     aligned = 1:
         identities = 1,
         mismatches = 0.
@@ -4104,8 +4104,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1.9:
-    substitution_score = 2.0,
-    gap_score = -0.1.
+        substitution_score = 2.0,
+        gap_score = -0.1.
     aligned = 1:
         identities = 1,
         mismatches = 0.
@@ -4249,8 +4249,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 2.9:
-    substitution_score = 3.0,
-    gap_score = -0.1.
+        substitution_score = 3.0,
+        gap_score = -0.1.
     aligned = 2:
         identities = 2,
         mismatches = 0.
@@ -4348,8 +4348,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 2.9:
-    substitution_score = 3.0,
-    gap_score = -0.1.
+        substitution_score = 3.0,
+        gap_score = -0.1.
     aligned = 2:
         identities = 2,
         mismatches = 0.
@@ -4456,8 +4456,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 2.9:
-    substitution_score = 3.0,
-    gap_score = -0.1.
+        substitution_score = 3.0,
+        gap_score = -0.1.
     aligned = 2:
         identities = 2,
         mismatches = 0.
@@ -4555,8 +4555,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 2.9:
-    substitution_score = 3.0,
-    gap_score = -0.1.
+        substitution_score = 3.0,
+        gap_score = -0.1.
     aligned = 2:
         identities = 2,
         mismatches = 0.
@@ -4698,8 +4698,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 2.9:
-    substitution_score = 3.0,
-    gap_score = -0.1.
+        substitution_score = 3.0,
+        gap_score = -0.1.
     aligned = 3:
         identities = 3,
         mismatches = 0.
@@ -4806,8 +4806,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 2.9:
-    substitution_score = 3.0,
-    gap_score = -0.1.
+        substitution_score = 3.0,
+        gap_score = -0.1.
     aligned = 3:
         identities = 3,
         mismatches = 0.
@@ -4951,8 +4951,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 2.9:
-    substitution_score = 3.0,
-    gap_score = -0.1.
+        substitution_score = 3.0,
+        gap_score = -0.1.
     aligned = 3:
         identities = 3,
         mismatches = 0.
@@ -5059,8 +5059,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 2.9:
-    substitution_score = 3.0,
-    gap_score = -0.1.
+        substitution_score = 3.0,
+        gap_score = -0.1.
     aligned = 3:
         identities = 3,
         mismatches = 0.
@@ -5203,8 +5203,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1.7:
-    substitution_score = 2.0,
-    gap_score = -0.30000000000000004.
+        substitution_score = 2.0,
+        gap_score = -0.30000000000000004.
     aligned = 2:
         identities = 2,
         mismatches = 0.
@@ -5304,8 +5304,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1.7:
-    substitution_score = 2.0,
-    gap_score = -0.30000000000000004.
+        substitution_score = 2.0,
+        gap_score = -0.30000000000000004.
     aligned = 2:
         identities = 2,
         mismatches = 0.
@@ -5412,8 +5412,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1.7:
-    substitution_score = 2.0,
-    gap_score = -0.30000000000000004.
+        substitution_score = 2.0,
+        gap_score = -0.30000000000000004.
     aligned = 2:
         identities = 2,
         mismatches = 0.
@@ -5513,8 +5513,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1.7:
-    substitution_score = 2.0,
-    gap_score = -0.30000000000000004.
+        substitution_score = 2.0,
+        gap_score = -0.30000000000000004.
     aligned = 2:
         identities = 2,
         mismatches = 0.
@@ -5658,8 +5658,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1.3:
-    substitution_score = 2.0,
-    gap_score = -0.7.
+        substitution_score = 2.0,
+        gap_score = -0.7.
     aligned = 2:
         identities = 2,
         mismatches = 0.
@@ -5766,8 +5766,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1.3:
-    substitution_score = 2.0,
-    gap_score = -0.7.
+        substitution_score = 2.0,
+        gap_score = -0.7.
     aligned = 2:
         identities = 2,
         mismatches = 0.
@@ -5909,8 +5909,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 0.6:
-    substitution_score = 1.0,
-    gap_score = -0.4.
+        substitution_score = 1.0,
+        gap_score = -0.4.
     aligned = 2:
         identities = 1,
         mismatches = 1.
@@ -6010,8 +6010,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 0.6:
-    substitution_score = 1.0,
-    gap_score = -0.4.
+        substitution_score = 1.0,
+        gap_score = -0.4.
     aligned = 2:
         identities = 1,
         mismatches = 1.
@@ -6118,8 +6118,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 0.6:
-    substitution_score = 1.0,
-    gap_score = -0.4.
+        substitution_score = 1.0,
+        gap_score = -0.4.
     aligned = 2:
         identities = 1,
         mismatches = 1.
@@ -6219,8 +6219,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 0.6:
-    substitution_score = 1.0,
-    gap_score = -0.4.
+        substitution_score = 1.0,
+        gap_score = -0.4.
     aligned = 2:
         identities = 1,
         mismatches = 1.
@@ -6364,8 +6364,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 0.6:
-    substitution_score = 1.0,
-    gap_score = -0.4.
+        substitution_score = 1.0,
+        gap_score = -0.4.
     aligned = 2:
         identities = 1,
         mismatches = 1.
@@ -6472,8 +6472,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 0.6:
-    substitution_score = 1.0,
-    gap_score = -0.4.
+        substitution_score = 1.0,
+        gap_score = -0.4.
     aligned = 2:
         identities = 1,
         mismatches = 1.
@@ -6617,8 +6617,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = -1.2000000000000002:
-    substitution_score = 2.0,
-    gap_score = -3.2.
+        substitution_score = 2.0,
+        gap_score = -3.2.
     aligned = 2:
         identities = 2,
         mismatches = 0.
@@ -6725,8 +6725,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = -1.2000000000000002:
-    substitution_score = 2.0,
-    gap_score = -3.2.
+        substitution_score = 2.0,
+        gap_score = -3.2.
     aligned = 2:
         identities = 2,
         mismatches = 0.
@@ -6870,8 +6870,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = -1.2000000000000002:
-    substitution_score = 2.0,
-    gap_score = -3.2.
+        substitution_score = 2.0,
+        gap_score = -3.2.
     aligned = 2:
         identities = 2,
         mismatches = 0.
@@ -6978,8 +6978,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = -1.2000000000000002:
-    substitution_score = 2.0,
-    gap_score = -3.2.
+        substitution_score = 2.0,
+        gap_score = -3.2.
     aligned = 2:
         identities = 2,
         mismatches = 0.
@@ -7122,8 +7122,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1.0:
-    substitution_score = 1.0,
-    gap_score = 0.0.
+        substitution_score = 1.0,
+        gap_score = 0.0.
     aligned = 2:
         identities = 1,
         mismatches = 1.
@@ -7223,8 +7223,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1.0:
-    substitution_score = 2.0,
-    gap_score = -1.0.
+        substitution_score = 2.0,
+        gap_score = -1.0.
     aligned = 2:
         identities = 2,
         mismatches = 0.
@@ -7322,8 +7322,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1.0:
-    substitution_score = 1.0,
-    gap_score = 0.0.
+        substitution_score = 1.0,
+        gap_score = 0.0.
     aligned = 2:
         identities = 1,
         mismatches = 1.
@@ -7428,8 +7428,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1.0:
-    substitution_score = 1.0,
-    gap_score = 0.0.
+        substitution_score = 1.0,
+        gap_score = 0.0.
     aligned = 2:
         identities = 1,
         mismatches = 1.
@@ -7529,8 +7529,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1.0:
-    substitution_score = 2.0,
-    gap_score = -1.0.
+        substitution_score = 2.0,
+        gap_score = -1.0.
     aligned = 2:
         identities = 2,
         mismatches = 0.
@@ -7628,8 +7628,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1.0:
-    substitution_score = 1.0,
-    gap_score = 0.0.
+        substitution_score = 1.0,
+        gap_score = 0.0.
     aligned = 2:
         identities = 1,
         mismatches = 1.
@@ -7773,8 +7773,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1.0:
-    substitution_score = 1.0,
-    gap_score = 0.0.
+        substitution_score = 1.0,
+        gap_score = 0.0.
     aligned = 2:
         identities = 1,
         mismatches = 1.
@@ -7880,8 +7880,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1.0:
-    substitution_score = 1.0,
-    gap_score = 0.0.
+        substitution_score = 1.0,
+        gap_score = 0.0.
     aligned = 2:
         identities = 1,
         mismatches = 1.
@@ -8029,8 +8029,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1.7:
-    substitution_score = 2.0,
-    gap_score = -0.3.
+        substitution_score = 2.0,
+        gap_score = -0.3.
     aligned = 3:
         identities = 2,
         mismatches = 1.
@@ -8130,8 +8130,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1.7:
-    substitution_score = 2.0,
-    gap_score = -0.3.
+        substitution_score = 2.0,
+        gap_score = -0.3.
     aligned = 3:
         identities = 2,
         mismatches = 1.
@@ -8238,8 +8238,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1.7:
-    substitution_score = 2.0,
-    gap_score = -0.3.
+        substitution_score = 2.0,
+        gap_score = -0.3.
     aligned = 3:
         identities = 2,
         mismatches = 1.
@@ -8339,8 +8339,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1.7:
-    substitution_score = 2.0,
-    gap_score = -0.3.
+        substitution_score = 2.0,
+        gap_score = -0.3.
     aligned = 3:
         identities = 2,
         mismatches = 1.
@@ -8484,8 +8484,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1.8:
-    substitution_score = 2.0,
-    gap_score = -0.2.
+        substitution_score = 2.0,
+        gap_score = -0.2.
     aligned = 2:
         identities = 2,
         mismatches = 0.
@@ -8592,8 +8592,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1.8:
-    substitution_score = 2.0,
-    gap_score = -0.2.
+        substitution_score = 2.0,
+        gap_score = -0.2.
     aligned = 2:
         identities = 2,
         mismatches = 0.
@@ -8740,8 +8740,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1.9:
-    substitution_score = 2.0,
-    gap_score = -0.1.
+        substitution_score = 2.0,
+        gap_score = -0.1.
     aligned = 4:
         identities = 2,
         mismatches = 2.
@@ -8841,8 +8841,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1.9:
-    substitution_score = 2.0,
-    gap_score = -0.1.
+        substitution_score = 2.0,
+        gap_score = -0.1.
     aligned = 4:
         identities = 2,
         mismatches = 2.
@@ -8942,8 +8942,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1.9:
-    substitution_score = 2.0,
-    gap_score = -0.1.
+        substitution_score = 2.0,
+        gap_score = -0.1.
     aligned = 4:
         identities = 2,
         mismatches = 2.
@@ -9050,8 +9050,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1.9:
-    substitution_score = 2.0,
-    gap_score = -0.1.
+        substitution_score = 2.0,
+        gap_score = -0.1.
     aligned = 4:
         identities = 2,
         mismatches = 2.
@@ -9151,8 +9151,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1.9:
-    substitution_score = 2.0,
-    gap_score = -0.1.
+        substitution_score = 2.0,
+        gap_score = -0.1.
     aligned = 4:
         identities = 2,
         mismatches = 2.
@@ -9252,8 +9252,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1.9:
-    substitution_score = 2.0,
-    gap_score = -0.1.
+        substitution_score = 2.0,
+        gap_score = -0.1.
     aligned = 4:
         identities = 2,
         mismatches = 2.
@@ -9441,8 +9441,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 3.0:
-    substitution_score = 3.0,
-    gap_score = 0.0.
+        substitution_score = 3.0,
+        gap_score = 0.0.
     aligned = 3:
         identities = 2,
         positives = 3,
@@ -9582,8 +9582,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 3.0:
-    substitution_score = 3.5,
-    gap_score = -0.5.
+        substitution_score = 3.5,
+        gap_score = -0.5.
     aligned = 3:
         identities = 3,
         positives = 3,
@@ -9728,8 +9728,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 3.0:
-    substitution_score = 3.0,
-    gap_score = 0.0.
+        substitution_score = 3.0,
+        gap_score = 0.0.
     aligned = 3:
         identities = 2,
         positives = 3,
@@ -9869,8 +9869,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 3.0:
-    substitution_score = 3.5,
-    gap_score = -0.5.
+        substitution_score = 3.5,
+        gap_score = -0.5.
     aligned = 3:
         identities = 3,
         positives = 3,
@@ -10061,8 +10061,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 3.0:
-    substitution_score = 3.0,
-    gap_score = 0.0.
+        substitution_score = 3.0,
+        gap_score = 0.0.
     aligned = 3:
         identities = 2,
         positives = 3,
@@ -10207,8 +10207,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 3.0:
-    substitution_score = 3.0,
-    gap_score = 0.0.
+        substitution_score = 3.0,
+        gap_score = 0.0.
     aligned = 3:
         identities = 2,
         positives = 3,
@@ -10392,8 +10392,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 3.0:
-    substitution_score = 3.0,
-    gap_score = 0.0.
+        substitution_score = 3.0,
+        gap_score = 0.0.
     aligned = 3:
         identities = 2,
         positives = 3,
@@ -10538,8 +10538,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 3.0:
-    substitution_score = 3.0,
-    gap_score = 0.0.
+        substitution_score = 3.0,
+        gap_score = 0.0.
     aligned = 3:
         identities = 2,
         positives = 3,
@@ -10726,8 +10726,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 3.0:
-    substitution_score = 3.0,
-    gap_score = 0.0.
+        substitution_score = 3.0,
+        gap_score = 0.0.
     aligned = 3:
         identities = 2,
         positives = 3,
@@ -10867,8 +10867,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 3.0:
-    substitution_score = 3.5,
-    gap_score = -0.5.
+        substitution_score = 3.5,
+        gap_score = -0.5.
     aligned = 3:
         identities = 3,
         positives = 3,
@@ -11013,8 +11013,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 3.0:
-    substitution_score = 3.0,
-    gap_score = 0.0.
+        substitution_score = 3.0,
+        gap_score = 0.0.
     aligned = 3:
         identities = 2,
         positives = 3,
@@ -11154,8 +11154,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 3.0:
-    substitution_score = 3.5,
-    gap_score = -0.5.
+        substitution_score = 3.5,
+        gap_score = -0.5.
     aligned = 3:
         identities = 3,
         positives = 3,
@@ -11341,8 +11341,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 3.0:
-    substitution_score = 3.0,
-    gap_score = 0.0.
+        substitution_score = 3.0,
+        gap_score = 0.0.
     aligned = 3:
         identities = 2,
         positives = 3,
@@ -11487,8 +11487,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 3.0:
-    substitution_score = 3.0,
-    gap_score = 0.0.
+        substitution_score = 3.0,
+        gap_score = 0.0.
     aligned = 3:
         identities = 2,
         positives = 3,
@@ -11674,8 +11674,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 3.0:
-    substitution_score = 3.0,
-    gap_score = 0.0.
+        substitution_score = 3.0,
+        gap_score = 0.0.
     aligned = 3:
         identities = 2,
         positives = 3,
@@ -11820,8 +11820,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 3.0:
-    substitution_score = 3.0,
-    gap_score = 0.0.
+        substitution_score = 3.0,
+        gap_score = 0.0.
     aligned = 3:
         identities = 2,
         positives = 3,
@@ -11960,8 +11960,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1.0:
-    substitution_score = 1.0,
-    gap_score = 0.0.
+        substitution_score = 1.0,
+        gap_score = 0.0.
     aligned = 1:
         identities = 1,
         mismatches = 0.
@@ -12097,8 +12097,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1.0:
-    substitution_score = 1.0,
-    gap_score = 0.0.
+        substitution_score = 1.0,
+        gap_score = 0.0.
     aligned = 1:
         identities = 1,
         mismatches = 0.
@@ -12196,8 +12196,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1.0:
-    substitution_score = 1.0,
-    gap_score = 0.0.
+        substitution_score = 1.0,
+        gap_score = 0.0.
     aligned = 1:
         identities = 1,
         mismatches = 0.
@@ -12335,8 +12335,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 0.20000000000000007:
-    substitution_score = 1.0,
-    gap_score = -0.7999999999999999.
+        substitution_score = 1.0,
+        gap_score = -0.7999999999999999.
     aligned = 1:
         identities = 1,
         mismatches = 0.
@@ -12557,8 +12557,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 2.0:
-    substitution_score = 22.0,
-    gap_score = -20.0.
+        substitution_score = 22.0,
+        gap_score = -20.0.
     aligned = 22:
         identities = 22,
         mismatches = 0.
@@ -12666,8 +12666,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 2.0:
-    substitution_score = 22.0,
-    gap_score = -20.0.
+        substitution_score = 22.0,
+        gap_score = -20.0.
     aligned = 22:
         identities = 22,
         mismatches = 0.
@@ -12820,8 +12820,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = -10.0:
-    substitution_score = 10.0,
-    gap_score = -20.0.
+        substitution_score = 10.0,
+        gap_score = -20.0.
     aligned = 22:
         identities = 16,
         mismatches = 6.
@@ -12921,8 +12921,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = -10.0:
-    substitution_score = 8.0,
-    gap_score = -18.0.
+        substitution_score = 8.0,
+        gap_score = -18.0.
     aligned = 22:
         identities = 15,
         mismatches = 7.
@@ -13029,8 +13029,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = -10.0:
-    substitution_score = 8.0,
-    gap_score = -18.0.
+        substitution_score = 8.0,
+        gap_score = -18.0.
     aligned = 22:
         identities = 15,
         mismatches = 7.
@@ -13130,8 +13130,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = -10.0:
-    substitution_score = 10.0,
-    gap_score = -20.0.
+        substitution_score = 10.0,
+        gap_score = -20.0.
     aligned = 22:
         identities = 16,
         mismatches = 6.
@@ -13279,8 +13279,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 2.0:
-    substitution_score = 4.0,
-    gap_score = -2.0.
+        substitution_score = 4.0,
+        gap_score = -2.0.
     aligned = 4:
         identities = 4,
         mismatches = 0.
@@ -13387,8 +13387,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 2.0:
-    substitution_score = 4.0,
-    gap_score = -2.0.
+        substitution_score = 4.0,
+        gap_score = -2.0.
     aligned = 4:
         identities = 4,
         mismatches = 0.
@@ -13512,8 +13512,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = -8.0:
-    substitution_score = -6.0,
-    gap_score = -2.0.
+        substitution_score = -6.0,
+        gap_score = -2.0.
     aligned = 5:
         identities = 4,
         mismatches = 1.
@@ -13613,8 +13613,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = -8.0:
-    substitution_score = 4.0,
-    gap_score = -12.0.
+        substitution_score = 4.0,
+        gap_score = -12.0.
     aligned = 4:
         identities = 4,
         mismatches = 0.
@@ -13715,8 +13715,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = -8.0:
-    substitution_score = -6.0,
-    gap_score = -2.0.
+        substitution_score = -6.0,
+        gap_score = -2.0.
     aligned = 5:
         identities = 4,
         mismatches = 1.
@@ -13816,8 +13816,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = -8.0:
-    substitution_score = 4.0,
-    gap_score = -12.0.
+        substitution_score = 4.0,
+        gap_score = -12.0.
     aligned = 4:
         identities = 4,
         mismatches = 0.
@@ -13925,8 +13925,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = -8.0:
-    substitution_score = -6.0,
-    gap_score = -2.0.
+        substitution_score = -6.0,
+        gap_score = -2.0.
     aligned = 5:
         identities = 4,
         mismatches = 1.
@@ -14026,8 +14026,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = -8.0:
-    substitution_score = 4.0,
-    gap_score = -12.0.
+        substitution_score = 4.0,
+        gap_score = -12.0.
     aligned = 4:
         identities = 4,
         mismatches = 0.
@@ -14128,8 +14128,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = -8.0:
-    substitution_score = -6.0,
-    gap_score = -2.0.
+        substitution_score = -6.0,
+        gap_score = -2.0.
     aligned = 5:
         identities = 4,
         mismatches = 1.
@@ -14229,8 +14229,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = -8.0:
-    substitution_score = 4.0,
-    gap_score = -12.0.
+        substitution_score = 4.0,
+        gap_score = -12.0.
     aligned = 4:
         identities = 4,
         mismatches = 0.
@@ -14376,8 +14376,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 13.0:
-    substitution_score = 13.0,
-    gap_score = 0.0.
+        substitution_score = 13.0,
+        gap_score = 0.0.
     aligned = 13:
         identities = 13,
         mismatches = 0.
@@ -14475,8 +14475,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 13.0:
-    substitution_score = 13.0,
-    gap_score = 0.0.
+        substitution_score = 13.0,
+        gap_score = 0.0.
     aligned = 13:
         identities = 13,
         mismatches = 0.
@@ -14581,8 +14581,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 13.0:
-    substitution_score = 13.0,
-    gap_score = 0.0.
+        substitution_score = 13.0,
+        gap_score = 0.0.
     aligned = 13:
         identities = 13,
         mismatches = 0.
@@ -14680,8 +14680,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 13.0:
-    substitution_score = 13.0,
-    gap_score = 0.0.
+        substitution_score = 13.0,
+        gap_score = 0.0.
     aligned = 13:
         identities = 13,
         mismatches = 0.
@@ -14832,8 +14832,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 13.0:
-    substitution_score = 13.0,
-    gap_score = 0.0.
+        substitution_score = 13.0,
+        gap_score = 0.0.
     aligned = 13:
         identities = 13,
         mismatches = 0.
@@ -14931,8 +14931,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 13.0:
-    substitution_score = 13.0,
-    gap_score = 0.0.
+        substitution_score = 13.0,
+        gap_score = 0.0.
     aligned = 13:
         identities = 13,
         mismatches = 0.
@@ -15037,8 +15037,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 13.0:
-    substitution_score = 13.0,
-    gap_score = 0.0.
+        substitution_score = 13.0,
+        gap_score = 0.0.
     aligned = 13:
         identities = 13,
         mismatches = 0.
@@ -15136,8 +15136,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 13.0:
-    substitution_score = 13.0,
-    gap_score = 0.0.
+        substitution_score = 13.0,
+        gap_score = 0.0.
     aligned = 13:
         identities = 13,
         mismatches = 0.
@@ -15283,8 +15283,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 2.0:
-    substitution_score = 2.0,
-    gap_score = 0.0.
+        substitution_score = 2.0,
+        gap_score = 0.0.
     aligned = 2:
         identities = 2,
         mismatches = 0.
@@ -15403,8 +15403,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 2.0:
-    substitution_score = 2.0,
-    gap_score = 0.0.
+        substitution_score = 2.0,
+        gap_score = 0.0.
     aligned = 2:
         identities = 2,
         mismatches = 0.
@@ -15502,8 +15502,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 2.0:
-    substitution_score = 2.0,
-    gap_score = 0.0.
+        substitution_score = 2.0,
+        gap_score = 0.0.
     aligned = 2:
         identities = 2,
         mismatches = 0.
@@ -15624,8 +15624,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 2.0:
-    substitution_score = 2.0,
-    gap_score = 0.0.
+        substitution_score = 2.0,
+        gap_score = 0.0.
     aligned = 2:
         identities = 2,
         mismatches = 0.
@@ -15723,8 +15723,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 2.0:
-    substitution_score = 2.0,
-    gap_score = 0.0.
+        substitution_score = 2.0,
+        gap_score = 0.0.
     aligned = 2:
         identities = 2,
         mismatches = 0.
@@ -15829,8 +15829,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 2.0:
-    substitution_score = 2.0,
-    gap_score = 0.0.
+        substitution_score = 2.0,
+        gap_score = 0.0.
     aligned = 2:
         identities = 2,
         mismatches = 0.
@@ -15928,8 +15928,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 2.0:
-    substitution_score = 2.0,
-    gap_score = 0.0.
+        substitution_score = 2.0,
+        gap_score = 0.0.
     aligned = 2:
         identities = 2,
         mismatches = 0.
@@ -16059,8 +16059,8 @@ query             0 TTAA------AAA  7
             """\
 AlignmentCounts object with
     score = 5.0:
-    substitution_score = 5.0,
-    gap_score = 0.0.
+        substitution_score = 5.0,
+        gap_score = 0.0.
     aligned = 5:
         identities = 5,
         mismatches = 0.
@@ -16119,8 +16119,8 @@ query             0 AAAA------ATT  7
             """\
 AlignmentCounts object with
     score = 5.0:
-    substitution_score = 5.0,
-    gap_score = 0.0.
+        substitution_score = 5.0,
+        gap_score = 0.0.
     aligned = 5:
         identities = 5,
         mismatches = 0.
@@ -16185,8 +16185,8 @@ query             0 --AAAAAAAAAAA 11
             """\
 AlignmentCounts object with
     score = 5.0:
-    substitution_score = 5.0,
-    gap_score = 0.0.
+        substitution_score = 5.0,
+        gap_score = 0.0.
     aligned = 5:
         identities = 5,
         mismatches = 0.
@@ -16245,8 +16245,8 @@ query             0 AAAAAAAAAAA-- 11
             """\
 AlignmentCounts object with
     score = 5.0:
-    substitution_score = 5.0,
-    gap_score = 0.0.
+        substitution_score = 5.0,
+        gap_score = 0.0.
     aligned = 5:
         identities = 5,
         mismatches = 0.
@@ -16428,8 +16428,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 3.0:
-    substitution_score = 3.0,
-    gap_score = 0.0.
+        substitution_score = 3.0,
+        gap_score = 0.0.
     aligned = 3:
         identities = 3,
         mismatches = 0.
@@ -16505,8 +16505,8 @@ Pro Pro Gly --- Ala --- Thr --- ---
             """\
 AlignmentCounts object with
     score = 3.0:
-    substitution_score = 3.0,
-    gap_score = 0.0.
+        substitution_score = 3.0,
+        gap_score = 0.0.
     aligned = 3:
         identities = 3,
         mismatches = 0.
@@ -16586,8 +16586,8 @@ Gly Ala Ala Cys Thr
             """\
 AlignmentCounts object with
     score = 3.0:
-    substitution_score = 3.0,
-    gap_score = 0.0.
+        substitution_score = 3.0,
+        gap_score = 0.0.
     aligned = 3:
         identities = 3,
         mismatches = 0.
@@ -16652,8 +16652,8 @@ Gly Ala Ala Cys Thr
             """\
 AlignmentCounts object with
     score = 3.0:
-    substitution_score = 3.0,
-    gap_score = 0.0.
+        substitution_score = 3.0,
+        gap_score = 0.0.
     aligned = 3:
         identities = 3,
         mismatches = 0.
@@ -16733,8 +16733,8 @@ CGTT
             """\
 AlignmentCounts object with
     score = -7.0:
-    substitution_score = -7.0,
-    gap_score = 0.0.
+        substitution_score = -7.0,
+        gap_score = 0.0.
     aligned = 4:
         identities = 1,
         positives = 1,
@@ -16806,8 +16806,8 @@ CGTT
             """\
 AlignmentCounts object with
     score = -7.0:
-    substitution_score = -7.0,
-    gap_score = 0.0.
+        substitution_score = -7.0,
+        gap_score = 0.0.
     aligned = 4:
         identities = 1,
         positives = 1,
@@ -16879,8 +16879,8 @@ CGTT
             """\
 AlignmentCounts object with
     score = -7.0:
-    substitution_score = -7.0,
-    gap_score = 0.0.
+        substitution_score = -7.0,
+        gap_score = 0.0.
     aligned = 4:
         identities = 1,
         positives = 1,
@@ -16990,8 +16990,8 @@ G  -- G  G
             """\
 AlignmentCounts object with
     score = 2.0:
-    substitution_score = 2.0,
-    gap_score = 0.0.
+        substitution_score = 2.0,
+        gap_score = 0.0.
     aligned = 2:
         identities = 2,
         mismatches = 0.
@@ -17072,8 +17072,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 4.0:
-    substitution_score = 4.0,
-    gap_score = 0.0.
+        substitution_score = 4.0,
+        gap_score = 0.0.
     aligned = 3:
         identities = 2,
         mismatches = 1.
@@ -17137,8 +17137,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1.0:
-    substitution_score = 1.0,
-    gap_score = 0.0.
+        substitution_score = 1.0,
+        gap_score = 0.0.
     aligned = 3:
         identities = 1,
         mismatches = 1.
@@ -17197,8 +17197,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 4.0:
-    substitution_score = 4.0,
-    gap_score = 0.0.
+        substitution_score = 4.0,
+        gap_score = 0.0.
     aligned = 3:
         identities = 2,
         mismatches = 1.
@@ -17262,8 +17262,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 10.0:
-    substitution_score = 10.0,
-    gap_score = 0.0.
+        substitution_score = 10.0,
+        gap_score = 0.0.
     aligned = 3:
         identities = 2,
         positives = 2,
@@ -17539,8 +17539,8 @@ query          1534 CCTCCTT---A 1542
             """\
 AlignmentCounts object with
     score = 1286.0:
-    substitution_score = 1286.0,
-    gap_score = 0.0.
+        substitution_score = 1286.0,
+        gap_score = 0.0.
     aligned = 1286:
         identities = 1286,
         mismatches = 0.
@@ -17730,8 +17730,8 @@ query             8 CCTCCTT---A    0
             """\
 AlignmentCounts object with
     score = 1286.0:
-    substitution_score = 1286.0,
-    gap_score = 0.0.
+        substitution_score = 1286.0,
+        gap_score = 0.0.
     aligned = 1286:
         identities = 1286,
         mismatches = 0.
@@ -17991,8 +17991,8 @@ class TestUnicodeStrings(unittest.TestCase):
             """\
 AlignmentCounts object with
     score = 3.0:
-    substitution_score = 3.0,
-    gap_score = 0.0.
+        substitution_score = 3.0,
+        gap_score = 0.0.
     aligned = 3:
         identities = 3,
         mismatches = 0.
@@ -18054,8 +18054,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 3.0:
-    substitution_score = 3.0,
-    gap_score = 0.0.
+        substitution_score = 3.0,
+        gap_score = 0.0.
     aligned = 3:
         identities = 3,
         mismatches = 0.
@@ -18134,8 +18134,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 3.0:
-    substitution_score = 3.0,
-    gap_score = 0.0.
+        substitution_score = 3.0,
+        gap_score = 0.0.
     aligned = 3:
         identities = 3,
         mismatches = 0.
@@ -18202,8 +18202,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = -7.0:
-    substitution_score = -1.0,
-    gap_score = -6.0.
+        substitution_score = -1.0,
+        gap_score = -6.0.
     aligned = 2:
         identities = 1,
         mismatches = 1.
@@ -18257,8 +18257,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = -7.0:
-    substitution_score = -1.0,
-    gap_score = -6.0.
+        substitution_score = -1.0,
+        gap_score = -6.0.
     aligned = 2:
         identities = 1,
         mismatches = 1.
@@ -18347,8 +18347,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1.9:
-    substitution_score = 2.0,
-    gap_score = -0.1.
+        substitution_score = 2.0,
+        gap_score = -0.1.
     aligned = 2:
         identities = 2,
         mismatches = 0.
@@ -18425,8 +18425,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1.9:
-    substitution_score = 2.0,
-    gap_score = -0.1.
+        substitution_score = 2.0,
+        gap_score = -0.1.
     aligned = 2:
         identities = 2,
         mismatches = 0.
@@ -19145,8 +19145,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 13.0:
-    substitution_score = 13.0,
-    gap_score = 0.0.
+        substitution_score = 13.0,
+        gap_score = 0.0.
     aligned = 17:
         identities = 15,
         mismatches = 1.
@@ -19304,8 +19304,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 13.0:
-    substitution_score = 13.0,
-    gap_score = 0.0.
+        substitution_score = 13.0,
+        gap_score = 0.0.
     aligned = 17:
         identities = 15,
         mismatches = 1.
@@ -19464,8 +19464,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 13.0:
-    substitution_score = 13.0,
-    gap_score = 0.0.
+        substitution_score = 13.0,
+        gap_score = 0.0.
     aligned = 17:
         identities = 15,
         mismatches = 1.
@@ -19624,8 +19624,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 13.0:
-    substitution_score = 13.0,
-    gap_score = 0.0.
+        substitution_score = 13.0,
+        gap_score = 0.0.
     aligned = 17:
         identities = 15,
         mismatches = 1.
@@ -19787,8 +19787,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 13.0:
-    substitution_score = 13.0,
-    gap_score = 0.0.
+        substitution_score = 13.0,
+        gap_score = 0.0.
     aligned = 17:
         identities = 15,
         mismatches = 1.
@@ -19946,8 +19946,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 13.0:
-    substitution_score = 13.0,
-    gap_score = 0.0.
+        substitution_score = 13.0,
+        gap_score = 0.0.
     aligned = 17:
         identities = 15,
         mismatches = 1.
@@ -20106,8 +20106,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 13.0:
-    substitution_score = 13.0,
-    gap_score = 0.0.
+        substitution_score = 13.0,
+        gap_score = 0.0.
     aligned = 17:
         identities = 15,
         mismatches = 1.
@@ -20267,8 +20267,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 13.0:
-    substitution_score = 13.0,
-    gap_score = 0.0.
+        substitution_score = 13.0,
+        gap_score = 0.0.
     aligned = 17:
         identities = 15,
         mismatches = 1.
@@ -20416,8 +20416,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = -7.0:
-    substitution_score = 3.0,
-    gap_score = -10.0.
+        substitution_score = 3.0,
+        gap_score = -10.0.
     aligned = 5:
         identities = 4,
         mismatches = 1.
@@ -20505,8 +20505,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = -7.0:
-    substitution_score = 3.0,
-    gap_score = -10.0.
+        substitution_score = 3.0,
+        gap_score = -10.0.
     aligned = 5:
         identities = 4,
         mismatches = 1.
@@ -20594,8 +20594,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = -7.0:
-    substitution_score = 3.0,
-    gap_score = -10.0.
+        substitution_score = 3.0,
+        gap_score = -10.0.
     aligned = 5:
         identities = 4,
         mismatches = 1.
@@ -20683,8 +20683,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = -7.0:
-    substitution_score = 3.0,
-    gap_score = -10.0.
+        substitution_score = 3.0,
+        gap_score = -10.0.
     aligned = 5:
         identities = 4,
         mismatches = 1.
@@ -20772,8 +20772,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = -7.0:
-    substitution_score = 3.0,
-    gap_score = -10.0.
+        substitution_score = 3.0,
+        gap_score = -10.0.
     aligned = 5:
         identities = 4,
         mismatches = 1.
@@ -20861,8 +20861,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = -7.0:
-    substitution_score = 3.0,
-    gap_score = -10.0.
+        substitution_score = 3.0,
+        gap_score = -10.0.
     aligned = 5:
         identities = 4,
         mismatches = 1.
@@ -20950,8 +20950,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = -7.0:
-    substitution_score = 3.0,
-    gap_score = -10.0.
+        substitution_score = 3.0,
+        gap_score = -10.0.
     aligned = 5:
         identities = 4,
         mismatches = 1.
@@ -21039,8 +21039,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = -7.0:
-    substitution_score = 3.0,
-    gap_score = -10.0.
+        substitution_score = 3.0,
+        gap_score = -10.0.
     aligned = 5:
         identities = 4,
         mismatches = 1.
@@ -21128,8 +21128,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = -7.0:
-    substitution_score = 3.0,
-    gap_score = -10.0.
+        substitution_score = 3.0,
+        gap_score = -10.0.
     aligned = 5:
         identities = 4,
         mismatches = 1.
@@ -21207,8 +21207,8 @@ query             0 TTACGT----CCCTCCC 13
             """\
 AlignmentCounts object with
     score = 12.0:
-    substitution_score = 12.0,
-    gap_score = 0.0.
+        substitution_score = 12.0,
+        gap_score = 0.0.
     aligned = 13:
         identities = 12,
         mismatches = 1.
@@ -21250,8 +21250,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 8.0:
-    substitution_score = 21.0,
-    gap_score = -13.0.
+        substitution_score = 21.0,
+        gap_score = -13.0.
     aligned = 13:
         identities = 12,
         positives = 12,
@@ -21303,8 +21303,8 @@ query            10 TTACGT????CCCCCCC 27
             """\
 AlignmentCounts object with
     score = 12.0:
-    substitution_score = 12.0,
-    gap_score = 0.0.
+        substitution_score = 12.0,
+        gap_score = 0.0.
     aligned = 13:
         identities = 12,
         mismatches = 1.
@@ -21345,8 +21345,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 8.0:
-    substitution_score = 21.0,
-    gap_score = -13.0.
+        substitution_score = 21.0,
+        gap_score = -13.0.
     aligned = 13:
         identities = 12,
         positives = 12,
@@ -21400,8 +21400,8 @@ query           100 TTACGT----CCCCCCC 113
             """\
 AlignmentCounts object with
     score = 12.0:
-    substitution_score = 12.0,
-    gap_score = 0.0.
+        substitution_score = 12.0,
+        gap_score = 0.0.
     aligned = 13:
         identities = 12,
         mismatches = 1.
@@ -21443,8 +21443,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 8.0:
-    substitution_score = 21.0,
-    gap_score = -13.0.
+        substitution_score = 21.0,
+        gap_score = -13.0.
     aligned = 13:
         identities = 12,
         positives = 12,
@@ -21500,8 +21500,8 @@ query           100 TTACGT----CCCCCCC 113
             """\
 AlignmentCounts object with
     score = 12.0:
-    substitution_score = 12.0,
-    gap_score = 0.0.
+        substitution_score = 12.0,
+        gap_score = 0.0.
     aligned = 13:
         identities = 12,
         mismatches = 1.
@@ -21543,8 +21543,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 8.0:
-    substitution_score = 21.0,
-    gap_score = -13.0.
+        substitution_score = 21.0,
+        gap_score = -13.0.
     aligned = 13:
         identities = 12,
         positives = 12,
@@ -21598,8 +21598,8 @@ query           100 TTACGT----CCCCCCC 87
             """\
 AlignmentCounts object with
     score = 12.0:
-    substitution_score = 12.0,
-    gap_score = 0.0.
+        substitution_score = 12.0,
+        gap_score = 0.0.
     aligned = 13:
         identities = 12,
         mismatches = 1.
@@ -21641,8 +21641,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 8.0:
-    substitution_score = 21.0,
-    gap_score = -13.0.
+        substitution_score = 21.0,
+        gap_score = -13.0.
     aligned = 13:
         identities = 12,
         positives = 12,
@@ -21697,8 +21697,8 @@ query           100 TTACGT----CCCCCCC 87
             """\
 AlignmentCounts object with
     score = 12.0:
-    substitution_score = 12.0,
-    gap_score = 0.0.
+        substitution_score = 12.0,
+        gap_score = 0.0.
     aligned = 13:
         identities = 12,
         mismatches = 1.
@@ -21740,8 +21740,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 8.0:
-    substitution_score = 21.0,
-    gap_score = -13.0.
+        substitution_score = 21.0,
+        gap_score = -13.0.
     aligned = 13:
         identities = 12,
         positives = 12,
@@ -21852,8 +21852,8 @@ query           582
             """\
 AlignmentCounts object with
     score = 237.0:
-    substitution_score = 237.0,
-    gap_score = 0.0.
+        substitution_score = 237.0,
+        gap_score = 0.0.
     aligned = 444:
         identities = 237,
         mismatches = 207.
@@ -21895,8 +21895,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1071.0:
-    substitution_score = 1184.0,
-    gap_score = -113.0.
+        substitution_score = 1184.0,
+        gap_score = -113.0.
     aligned = 444:
         identities = 237,
         positives = 306,
@@ -21941,8 +21941,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1071.0:
-    substitution_score = 1184.0,
-    gap_score = -113.0.
+        substitution_score = 1184.0,
+        gap_score = -113.0.
     aligned = 444:
         identities = 237,
         positives = 306,
@@ -21985,8 +21985,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1071.0:
-    substitution_score = 1184.0,
-    gap_score = -113.0.
+        substitution_score = 1184.0,
+        gap_score = -113.0.
     aligned = 444:
         identities = 237,
         positives = 306,
@@ -22029,8 +22029,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1071.0:
-    substitution_score = 1184.0,
-    gap_score = -113.0.
+        substitution_score = 1184.0,
+        gap_score = -113.0.
     aligned = 444:
         identities = 237,
         positives = 306,
@@ -22073,8 +22073,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = 1071.0:
-    substitution_score = 1184.0,
-    gap_score = -113.0.
+        substitution_score = 1184.0,
+        gap_score = -113.0.
     aligned = 444:
         identities = 237,
         positives = 306,
@@ -22127,8 +22127,8 @@ AlignmentCounts object with
             """\
 AlignmentCounts object with
     score = -6.0:
-    substitution_score = 4.0,
-    gap_score = -10.0.
+        substitution_score = 4.0,
+        gap_score = -10.0.
     aligned = 5:
         identities = 4,
         mismatches = 1.
@@ -22194,8 +22194,8 @@ ABCBAαβγ---
             """\
 AlignmentCounts object with
     score = 3.0:
-    substitution_score = 3.0,
-    gap_score = 0.0.
+        substitution_score = 3.0,
+        gap_score = 0.0.
     aligned = 3:
         identities = 3,
         mismatches = 0.
@@ -22255,8 +22255,8 @@ ABCBAαβγ---
             """\
 AlignmentCounts object with
     score = 3.0:
-    substitution_score = 3.0,
-    gap_score = 0.0.
+        substitution_score = 3.0,
+        gap_score = 0.0.
     aligned = 3:
         identities = 3,
         mismatches = 0.
@@ -22342,8 +22342,8 @@ ABC-BAαβγ
             """\
 AlignmentCounts object with
     score = 8.9:
-    substitution_score = 12.9,
-    gap_score = -4.0.
+        substitution_score = 12.9,
+        gap_score = -4.0.
     aligned = 5:
         identities = 1,
         positives = 4,
