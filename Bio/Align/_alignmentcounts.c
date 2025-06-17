@@ -970,7 +970,7 @@ substitution_matrix_converter(PyObject* argument, void* pointer)
     return Py_CLEANUP_SUPPORTED;
 }
 
-static bool
+static bool inline
 check_indices(int c, Py_ssize_t j, Py_ssize_t l, Py_ssize_t m)
 {
     if (c < 0) {
