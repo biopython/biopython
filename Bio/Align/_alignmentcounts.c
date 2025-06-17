@@ -84,7 +84,8 @@ AlignmentCounts_str(AlignmentCounts* self)
     const Py_ssize_t right_gaps = right_insertions + right_deletions;
     const Py_ssize_t gaps = left_gaps + internal_gaps + right_gaps;
     char text[2048];
-    char* p = stpcpy(text, "AlignmentCounts object with\n");
+    char* p = text;
+    p += sprintf(p, "AlignmentCounts object with\n");
     /* using arguments to PyOS_double_to_string as in
      * float_repr in the Python C source code.
      */
@@ -173,7 +174,8 @@ AlignmentCounts_repr(AlignmentCounts* self)
                           + self->open_right_deletions
                           + self->extend_right_deletions;
     char text[1024];
-    char* p = stpcpy(text, "<AlignmentCounts object (");
+    char* p = text;
+    p += sprintf(p, "<AlignmentCounts object (");
     /* using arguments to PyOS_double_to_string as in
      * float_repr in the Python C source code.
      */
@@ -1148,7 +1150,7 @@ AlignmentCounts_new(PyTypeObject *type, PyObject *args, PyObject *keywords)
     bool strandB;
 
     int* mapping = NULL;
-    int m = 0;
+    Py_ssize_t m = 0;
 
     PyObject* insertion_score_function = NULL;
     PyObject* deletion_score_function = NULL;
