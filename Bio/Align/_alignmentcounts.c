@@ -1114,7 +1114,7 @@ static inline Py_buffer* get_buffer(Py_buffer *sequence, int** i, char** b)
     if (sequence->buf) {
         switch (sequence->format[0]) {
             case 'i':
-            case 'I':
+            case 'l':
 fprintf(stderr, "In get_buffer sequence->format[0] = %c; setting i to %p\n", sequence->format[0], sequence->buf);
                 *i = sequence->buf;
                 break;
