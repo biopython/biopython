@@ -204,8 +204,7 @@ AlignmentCounts_repr(AlignmentCounts* self)
     p += sprintf(p, "%zd mismatches; ", mismatches);
     if (positives != -1)
         p += sprintf(p, "%zd positives; ", positives);
-    p += sprintf(p, "%zd gaps) at 0x%" PRIxPTR, gaps, (uintptr_t)self);
-    strcpy(p, ">");
+    sprintf(p, "%zd gaps) at 0x%" PRIxPTR ">", gaps, (uintptr_t)self);
     return PyUnicode_FromString(text);
 }
 

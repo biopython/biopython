@@ -1847,9 +1847,9 @@ Aligner_str(Aligner* self)
 
     p += sprintf(p, "Pairwise sequence aligner with parameters\n");
     if (substitution_matrix) {
-        p += sprintf(p, "  substitution_matrix: <%s object at %p>\n",
+        p += sprintf(p, "  substitution_matrix: <%s object at 0x%" PRIxPTR ">\n",
                      Py_TYPE(substitution_matrix)->tp_name,
-                     substitution_matrix);
+                     (uintptr_t)substitution_matrix);
     } else {
         if (self->wildcard == -1) {
             p += sprintf(p, "  wildcard: None\n");
