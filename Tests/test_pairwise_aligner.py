@@ -12284,6 +12284,7 @@ query             0 --c-- 1
             np.array_equal(alignment.aligned, np.array([[[2, 3]], [[0, 1]]]))
         )
         counts = alignment.counts()
+        self.assertEqual(counts.identities, 1)
         self.assertEqual(
             repr(counts),
             "<AlignmentCounts object (1 aligned letters; 1 identities; 0 mismatches; 4 gaps) at 0x%x>"
