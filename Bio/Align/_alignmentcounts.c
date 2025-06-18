@@ -859,7 +859,6 @@ sequence_converter(PyObject* argument, void* pointer)
 
     if (PyObject_GetBuffer(argument, view, flag) == 0) {
         if (view->ndim == 1 && view->len > 0) {
-fprintf(stderr, "view->format = %s view->itemsize = %zd sizeof(int) = %zd\n", view->format, view->itemsize, sizeof(int));
             if ((strcmp(view->format, "i") == 0
               || strcmp(view->format, "l") == 0)
               && view->itemsize == sizeof(int))
@@ -1337,7 +1336,6 @@ AlignmentCounts_new(PyTypeObject *type, PyObject *args, PyObject *keywords)
                         if (!oB) goto error;
                     }
                     if (substitution_matrix.obj == NULL) {
-                        fprintf(stderr, "HERE iA = %p iB = %p\n", iA, iB);
                         if (iA && iB) {
                             for (lA = startA, lB = startB;
                                  lA < endA && lB < endB;
