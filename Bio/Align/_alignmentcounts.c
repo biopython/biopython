@@ -858,12 +858,10 @@ sequence_converter(PyObject* argument, void* pointer)
     const int flag = PyBUF_FORMAT | PyBUF_C_CONTIGUOUS;
 
     if (PyObject_GetBuffer(argument, view, flag) == 0) {
-fprintf(stderr, "view->format = %s, view->itemsize = %zd\n", view->format, view->itemsize);
         if (view->ndim == 1 && view->len > 0) {
             if ((strcmp(view->format, "i") == 0
               || strcmp(view->format, "l") == 0)
               && view->itemsize == sizeof(int)) {
-fprintf(stderr, "OK; returning 1\n");
                 /* buffer contains int values */ return 1;
 }
             if ((strcmp(view->format, "c") == 0
@@ -1115,7 +1113,6 @@ static inline Py_buffer* get_buffer(Py_buffer *sequence, int** i, char** b)
         switch (sequence->format[0]) {
             case 'i':
             case 'l':
-fprintf(stderr, "In get_buffer sequence->format[0] = %c; setting i to %p\n", sequence->format[0], sequence->buf);
                 *i = sequence->buf;
                 break;
             case 'c':
@@ -1284,12 +1281,10 @@ AlignmentCounts_new(PyTypeObject *type, PyObject *args, PyObject *keywords)
     for (jA = 0; jA < n; jA++) {
         oA = NULL;
         sequenceA = get_buffer(&sequence_buffers[jA], &iA, &bA);
-fprintf(stderr, "sequenceA %p get_buffer returning %p %p\n", sequenceA, iA, bA);
         strandA = ((bool*)(strands.buf))[jA];
         for (jB = jA + 1; jB < n; jB++) {
             oB = NULL;
             sequenceB = get_buffer(&sequence_buffers[jB], &iB, &bB);
-fprintf(stderr, "sequenceB %p get_buffer returning %p %p\n", sequenceB, iB, bB);
             strandB = ((bool*)(strands.buf))[jB];
             leftA = buffer[jA * row_stride + 0];
             leftB = buffer[jB * row_stride + 0];
@@ -1341,7 +1336,6 @@ fprintf(stderr, "sequenceB %p get_buffer returning %p %p\n", sequenceB, iB, bB);
                         oB = get_lazy_data(sequenceB->obj, startB, endB, jB, &bB);
                         if (!oB) goto error;
                     }
-fprintf(stderr, "path =  DIAGONAL iA = %p iB = %p\n", iA, iB);
                     if (substitution_matrix.obj == NULL) {
                         if (iA && iB) {
                             for (lA = startA, lB = startB;

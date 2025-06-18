@@ -16985,7 +16985,6 @@ G  -- G  G
             "<AlignmentCounts object (score = 2.0; substitution score = 2.0; gap score = 0.0; 2 aligned letters; 2 identities; 0 mismatches; 2 gaps) at 0x%x>"
             % id(counts),
         )
-        return
         self.assertEqual(
             str(counts),
             """\
