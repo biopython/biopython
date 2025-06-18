@@ -188,9 +188,9 @@ PACKAGES = [
 ]
 
 EXTENSIONS = [
+    Extension("Bio.Align._alignmentcounts", ["Bio/Align/_alignmentcounts.c"]),
     Extension("Bio.Align._codonaligner", ["Bio/Align/_codonaligner.c"]),
     Extension("Bio.Align._pairwisealigner", ["Bio/Align/_pairwisealigner.c"]),
-    Extension("Bio.Align._alignmentcounts", ["Bio/Align/_alignmentcounts.c"]),
     Extension("Bio.Align._aligncore", ["Bio/Align/_aligncore.c"]),
     Extension(
         "Bio.Align.substitution_matrices._arraycore",
