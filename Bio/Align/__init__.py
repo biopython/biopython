@@ -3587,7 +3587,7 @@ class Alignment:
         The counts are calculated by summing over all pairs of sequences in the
         alignment.
 
-        An `AlignCounts` object has the following properties:
+        An `AlignmentCounts` object has the following properties:
 
          - score                      - the alignment score (calculated only if the
                                         argument is a pairwise aligner, and set to None
@@ -3707,7 +3707,7 @@ class Alignment:
             if isinstance(data, (bytes, bytearray)):
                 sequences[i] = data
             elif isinstance(data, str):
-                sequences[i] = np.frombuffer(bytearray(data, codec), dtype=np.int32)
+                sequences[i] = np.frombuffer(bytearray(data, codec), dtype="i")
             elif isinstance(data, SequenceDataAbstractBaseClass):
                 sequences[i] = data
             elif isinstance(data, np.ndarray):
@@ -3724,7 +3724,7 @@ class Alignment:
                 else:
                     alphabet = substitution_matrix.alphabet
                 sequences[i] = np.fromiter(
-                    map(alphabet.index, data), dtype=np.int32, count=len(data)
+                    map(alphabet.index, data), dtype="i", count=len(data)
                 )
         if aligner is not None:
             return _alignmentcounts.AlignmentCounts(
