@@ -858,6 +858,7 @@ sequence_converter(PyObject* argument, void* pointer)
     const int flag = PyBUF_FORMAT | PyBUF_C_CONTIGUOUS;
 
     if (PyObject_GetBuffer(argument, view, flag) == 0) {
+fprintf(stderr, "view->format = %s, view->itemsize = %zd\n", view->format, view->itemsize);
         if (view->ndim == 1 && view->len > 0) {
             if ((strcmp(view->format, "i") == 0
               || strcmp(view->format, "l") == 0)
