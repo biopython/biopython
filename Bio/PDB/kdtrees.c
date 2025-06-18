@@ -101,41 +101,13 @@ static char Point_doc[] =
 
 static PyTypeObject PointType = {
     PyVarObject_HEAD_INIT(NULL, 0)
-    "Point",                   /* tp_name*/
-    sizeof(Point),             /* tp_basicsize*/
-    0,                         /* tp_itemsize*/
-    0,                         /* tp_dealloc*/
-    0,                         /* tp_print*/
-    0,                         /* tp_getattr*/
-    0,                         /* tp_setattr*/
-    0,                         /* tp_compare*/
-    (reprfunc)Point_repr,      /* tp_repr*/
-    0,                         /* tp_as_number*/
-    0,                         /* tp_as_sequence*/
-    0,                         /* tp_as_mapping*/
-    0,                         /* tp_hash */
-    0,                         /* tp_call*/
-    0,                         /* tp_str*/
-    0,                         /* tp_getattro*/
-    0,                         /* tp_setattro*/
-    0,                         /* tp_as_buffer*/
-    Py_TPFLAGS_DEFAULT,        /* tp_flags*/
-    Point_doc,                 /* tp_doc */
-    0,                         /* tp_traverse */
-    0,                         /* tp_clear */
-    0,                         /* tp_richcompare */
-    0,                         /* tp_weaklistoffset */
-    0,                         /* tp_iter */
-    0,                         /* tp_iternext */
-    0,                         /* tp_methods */
-    0,                         /* tp_members */
-    Point_getset,              /* tp_getset */
-    0,                         /* tp_base */
-    0,                         /* tp_dict */
-    0,                         /* tp_descr_get */
-    0,                         /* tp_descr_set */
-    0,                         /* tp_dictoffset */
-    (initproc)Point_init,      /* tp_init */
+    .tp_name = "Point",
+    .tp_basicsize = sizeof(Point),
+    .tp_repr = (reprfunc)Point_repr,
+    .tp_flags = Py_TPFLAGS_DEFAULT,
+    .tp_doc = Point_doc,
+    .tp_getset = Point_getset,
+    .tp_init = (initproc)Point_init,
 };
 
 /* Neighbor */
@@ -210,41 +182,13 @@ static char Neighbor_doc[] =
 
 static PyTypeObject NeighborType = {
     PyVarObject_HEAD_INIT(NULL, 0)
-    "Neighbor",                /* tp_name*/
-    sizeof(Neighbor),          /* tp_basicsize*/
-    0,                         /* tp_itemsize*/
-    0,                         /* tp_dealloc*/
-    0,                         /* tp_print*/
-    0,                         /* tp_getattr*/
-    0,                         /* tp_setattr*/
-    0,                         /* tp_compare*/
-    (reprfunc)Neighbor_repr,   /* tp_repr*/
-    0,                         /* tp_as_number*/
-    0,                         /* tp_as_sequence*/
-    0,                         /* tp_as_mapping*/
-    0,                         /* tp_hash */
-    0,                         /* tp_call*/
-    0,                         /* tp_str*/
-    0,                         /* tp_getattro*/
-    0,                         /* tp_setattro*/
-    0,                         /* tp_as_buffer*/
-    Py_TPFLAGS_DEFAULT,        /* tp_flags*/
-    Neighbor_doc,              /* tp_doc */
-    0,                         /* tp_traverse */
-    0,                         /* tp_clear */
-    0,                         /* tp_richcompare */
-    0,                         /* tp_weaklistoffset */
-    0,                         /* tp_iter */
-    0,                         /* tp_iternext */
-    0,                         /* tp_methods */
-    0,                         /* tp_members */
-    Neighbor_getset,           /* tp_getset */
-    0,                         /* tp_base */
-    0,                         /* tp_dict */
-    0,                         /* tp_descr_get */
-    0,                         /* tp_descr_set */
-    0,                         /* tp_dictoffset */
-    (initproc)Neighbor_init,   /* tp_init */
+    .tp_name = "Neighbor",
+    .tp_basicsize = sizeof(Neighbor),
+    .tp_repr = (reprfunc)Neighbor_repr,
+    .tp_flags = Py_TPFLAGS_DEFAULT,
+    .tp_doc = Neighbor_doc,
+    .tp_getset = Neighbor_getset,
+    .tp_init = (initproc)Neighbor_init,
 };
 
 /* Node */
@@ -1357,43 +1301,13 @@ of each other. As far as I know the algorithm has not been published.");
 
 static PyTypeObject KDTreeType = {
     PyVarObject_HEAD_INIT(NULL, 0)
-    "C KDTree",                  /*tp_name*/
-    sizeof(KDTree),              /*tp_basicsize*/
-    0,                           /*tp_itemsize*/
-    (destructor)KDTree_dealloc,  /*tp_dealloc*/
-    0,                           /*tp_print*/
-    0,                           /*tp_getattr*/
-    0,                           /*tp_setattr*/
-    0,                           /*tp_compare*/
-    0,                           /*tp_repr*/
-    0,                           /*tp_as_number*/
-    0,                           /*tp_as_sequence*/
-    0,                           /*tp_as_mapping*/
-    0,                           /*tp_hash */
-    0,                           /*tp_call*/
-    0,                           /*tp_str*/
-    0,                           /*tp_getattro*/
-    0,                           /*tp_setattro*/
-    0,                           /*tp_as_buffer*/
-    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,          /*tp_flags*/
-    KDTree_doc,                  /* tp_doc */
-    0,                           /* tp_traverse */
-    0,                           /* tp_clear */
-    0,                           /* tp_richcompare */
-    0,                           /* tp_weaklistoffset */
-    0,                           /* tp_iter */
-    0,                           /* tp_iternext */
-    KDTree_methods,              /* tp_methods */
-    NULL,                        /* tp_members */
-    0,                           /* tp_getset */
-    0,                           /* tp_base */
-    0,                           /* tp_dict */
-    0,                           /* tp_descr_get */
-    0,                           /* tp_descr_set */
-    0,                           /* tp_dictoffset */
-    0,                           /* tp_init */
-    0,                           /* tp_alloc */
-    (newfunc)KDTree_new,         /* tp_new */
+    .tp_name = "C KDTree",
+    .tp_basicsize = sizeof(KDTree),
+    .tp_dealloc = (destructor)KDTree_dealloc,
+    .tp_flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .tp_doc = KDTree_doc,
+    .tp_methods = KDTree_methods,
+    .tp_new = (newfunc)KDTree_new,
 };
 
 /* ========================================================================== */
