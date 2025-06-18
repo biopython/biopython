@@ -859,6 +859,7 @@ sequence_converter(PyObject* argument, void* pointer)
 
     if (PyObject_GetBuffer(argument, view, flag) == 0) {
         if (view->ndim == 1 && view->len > 0) {
+fprintf(stderr, "view->itemsize = %zd sizeof(int) = %zd\n", view->itemsize, sizeof(int));
             if ((strcmp(view->format, "i") == 0
               || strcmp(view->format, "l") == 0)
               && view->itemsize == sizeof(int))
