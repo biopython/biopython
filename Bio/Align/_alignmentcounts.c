@@ -1336,6 +1336,7 @@ AlignmentCounts_new(PyTypeObject *type, PyObject *args, PyObject *keywords)
                         oB = get_lazy_data(sequenceB->obj, startB, endB, jB, &bB);
                         if (!oB) goto error;
                     }
+fprintf(stderr, "path =  DIAGONAL iA = %p iB = %p\n", iA, iB);
                     if (substitution_matrix.obj == NULL) {
                         if (iA && iB) {
                             for (lA = startA, lB = startB;
