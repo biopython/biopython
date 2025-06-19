@@ -9,11 +9,14 @@
 
 from typing import Optional
 
-from Bio.Align import Alignment, MultipleSeqAlignment
+from Bio.Align import Alignment, MultipleSeqAlignment, PairwiseAligner
 from Bio.Data import PDBData
 from Bio.PDB import Selection
 from Bio.PDB.Model import Model
 from Bio.PDB.Polypeptide import is_aa
+from Bio.PDB.Residue import Residue
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
 
 
 class StructureAlignment:
@@ -35,12 +38,17 @@ class StructureAlignment:
          - si, sj - the sequences in the Alignment object that correspond to the structures
 
         """
-        if fasta_align is None:
-            raise NotImplementedError(
-                "fasta_align cannot be None for now to pass precommit"
+        # Validate that models are provided
+        if m1 is None or m2 is None:
+            raise ValueError(
+                "Both m1 and m2 models must be provided and cannot be None"
             )
-            # add code for auto generation
-        elif isinstance(fasta_align, MultipleSeqAlignment):
+
+        if fasta_align is None:
+            fasta_align = self._generate_alignment_from_models(
+                m1, m2
+            )  # MultipleSeqAlignment
+        if isinstance(fasta_align, MultipleSeqAlignment):
             ncolumns = fasta_align.get_alignment_length()
         elif isinstance(fasta_align, Alignment):
             nrows, ncolumns = fasta_align.shape
@@ -62,9 +70,13 @@ class StructureAlignment:
         # List of residue pairs (None if -)
         duos = []
         for i in range(ncolumns):
-            column = fasta_align[:, i]
-            aa1 = column[si]
-            aa2 = column[sj]
+            if isinstance(fasta_align, MultipleSeqAlignment):
+                aa1 = fasta_align[si, i]
+                aa2 = fasta_align[sj, i]
+            else:  # Alignment
+                column = fasta_align[:, i]
+                aa1 = column[si]
+                aa2 = column[sj]
             if aa1 != "-":
                 # Position in seq1 is not -
                 while True:
@@ -98,6 +110,49 @@ class StructureAlignment:
         self.map12 = map12
         self.map21 = map21
         self.duos = duos
+
+    def _generate_alignment_from_models(self, m1, m2):
+        """Generate a MultipleSeqAlignment from two protein models .
+
+        Uses Bio.Align.PairwiseAligner to create a proper sequence alignment
+        with gaps, rather than simply placing sequences side-by-side.
+        This ensures that homologous residues are properly aligned.
+        """
+        seq1_record = self._extract_sequence_from_model(m1, "structure1")
+        seq2_record = self._extract_sequence_from_model(m2, "structure2")
+
+        aligner = PairwiseAligner()
+
+        alignments = aligner.align(seq1_record.seq, seq2_record.seq)
+        best_alignment = alignments[0]
+
+        aligned_seq1_str = str(best_alignment[0])
+        aligned_seq2_str = str(best_alignment[1])
+
+        # Convert to SeqRecord objects for MultipleSeqAlignment
+        aligned_seq1 = SeqRecord(Seq(aligned_seq1_str), id="structure1")
+        aligned_seq2 = SeqRecord(Seq(aligned_seq2_str), id="structure2")
+
+        records = [aligned_seq1, aligned_seq2]
+        alignment = MultipleSeqAlignment(records)
+        return alignment
+
+    def _extract_sequence_from_model(self, model, seq_id):
+        """Extract amino acid sequence from a protein model."""
+        residues = Selection.unfold_entities(model, "R")
+        sequence = ""
+
+        for residue in residues:
+            if isinstance(residue, Residue) and is_aa(residue):
+                resname = residue.get_resname()
+                if resname in PDBData.protein_letters_3to1_extended:
+                    aa_code = PDBData.protein_letters_3to1_extended[resname]
+                    sequence += aa_code
+                else:
+                    # Handle unknown residues with 'X'
+                    sequence += "X"
+
+        return SeqRecord(Seq(sequence), id=seq_id)
 
     def _test_equivalence(self, r1, aa1):
         """Test if aa in sequence fits aa in structure (PRIVATE)."""
