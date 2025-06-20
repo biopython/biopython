@@ -186,6 +186,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Jian-Long Huang <https://github.com/jlhg>
 - Jimmy O'Donnell <https://github.com/jimmyodonnell>
 - Joanna & Dominik Kasprzak
+- Joaquim Calvera i Madaula <https://github.com/quim6>
 - Joe Cora <https://github.com/JoeCora>
 - Joe Greener <https://github.com/jgreener64>
 - Joel Ibaceta <https://github.com/joelibaceta>

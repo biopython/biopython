@@ -5026,7 +5026,10 @@ class TestTransfac(unittest.TestCase):
 class MotifTestPWM(unittest.TestCase):
     """PWM motif tests."""
 
-    with open("motifs/SRF.pfm") as stream:
+    import os
+
+    this_dir = os.path.dirname(__file__)
+    with open(os.path.join(this_dir, "motifs", "SRF.pfm")) as stream:
         m = motifs.read(stream, "pfm")
 
     s = Seq("ACGTGTGCGTAGTGCGT")
@@ -5155,6 +5158,222 @@ class MotifTestPWM(unittest.TestCase):
         self.assertAlmostEqual(pseudocounts["C"], 1.695582495781317, places=5)
         self.assertAlmostEqual(pseudocounts["G"], 1.695582495781317, places=5)
         self.assertAlmostEqual(pseudocounts["T"], 1.695582495781317, places=5)
+
+    def test_simple_lookahead(self):
+        """Test if Bio.motifs PWM search using lookahead algorithm works."""
+        counts = self.m.counts
+        pwm = counts.normalize(pseudocounts=0.25)
+        pssm = pwm.log_odds()
+        result = list(pssm.fast_search(self.s, -40, "lookahead", False))
+
+        self.assertEqual(6, len(result))
+        self.assertAlmostEqual(result[0][1], -29.18363571, places=5)
+        self.assertAlmostEqual(result[1][1], -38.3365097, places=5)
+        self.assertAlmostEqual(result[2][1], -29.17756271, places=5)
+        self.assertAlmostEqual(result[3][1], -38.04542542, places=5)
+        self.assertAlmostEqual(result[4][1], -20.3014183, places=5)
+        self.assertAlmostEqual(result[5][1], -25.18009186, places=5)
+        self.assertEqual(result[0][0], 0)
+        self.assertEqual(result[1][0], 1)
+        self.assertEqual(result[2][0], 2)
+        self.assertEqual(result[3][0], 3)
+        self.assertEqual(result[4][0], 4)
+        self.assertEqual(result[5][0], 5)
+
+    def test_with_mixed_case_lookahead(self):
+        """Test if Bio.motifs PWM search using lookahead algorithm works with mixed case."""
+        counts = self.m.counts
+        pwm = counts.normalize(pseudocounts=0.25)
+        pssm = pwm.log_odds()
+        result = list(
+            pssm.fast_search(Seq("AcGTgTGCGtaGTGCGT"), -40, "lookahead", False)
+        )
+
+        self.assertEqual(6, len(result))
+        self.assertAlmostEqual(result[0][1], -29.18363571, places=5)
+        self.assertAlmostEqual(result[1][1], -38.3365097, places=5)
+        self.assertAlmostEqual(result[2][1], -29.17756271, places=5)
+        self.assertAlmostEqual(result[3][1], -38.04542542, places=5)
+        self.assertAlmostEqual(result[4][1], -20.3014183, places=5)
+        self.assertAlmostEqual(result[5][1], -25.18009186, places=5)
+        self.assertEqual(result[0][0], 0)
+        self.assertEqual(result[1][0], 1)
+        self.assertEqual(result[2][0], 2)
+        self.assertEqual(result[3][0], 3)
+        self.assertEqual(result[4][0], 4)
+        self.assertEqual(result[5][0], 5)
+
+    def test_with_bad_char_lookahead(self):
+        """Test if Bio.motifs PWM search using lookahead algorithm works with unexpected letters like N."""
+        counts = self.m.counts
+        pwm = counts.normalize(pseudocounts=0.25)
+        pssm = pwm.log_odds()
+        result = list(
+            pssm.fast_search(Seq("ACGTGTGCGTAGTGCGTN"), -40, "lookahead", False)
+        )
+
+        self.assertEqual(6, len(result))
+        self.assertAlmostEqual(result[0][1], -29.18363571, places=5)
+        self.assertAlmostEqual(result[1][1], -38.3365097, places=5)
+        self.assertAlmostEqual(result[2][1], -29.17756271, places=5)
+        self.assertAlmostEqual(result[3][1], -38.04542542, places=5)
+        self.assertAlmostEqual(result[4][1], -20.3014183, places=5)
+        self.assertAlmostEqual(result[5][1], -25.18009186, places=5)
+        self.assertEqual(result[0][0], 0)
+        self.assertEqual(result[1][0], 1)
+        self.assertEqual(result[2][0], 2)
+        self.assertEqual(result[3][0], 3)
+        self.assertEqual(result[4][0], 4)
+        self.assertEqual(result[5][0], 5)
+
+    def test_simple_permutated_lookahead(self):
+        """Test if Bio.motifs PWM search using permutated lookahead algorithm works."""
+        counts = self.m.counts
+        pwm = counts.normalize(pseudocounts=0.25)
+        pssm = pwm.log_odds()
+        result = list(pssm.fast_search(self.s, -40, "permuted", False))
+
+        self.assertEqual(6, len(result))
+        self.assertAlmostEqual(result[0][1], -29.18363571, places=5)
+        self.assertAlmostEqual(result[1][1], -38.3365097, places=5)
+        self.assertAlmostEqual(result[2][1], -29.17756271, places=5)
+        self.assertAlmostEqual(result[3][1], -38.04542542, places=5)
+        self.assertAlmostEqual(result[4][1], -20.3014183, places=5)
+        self.assertAlmostEqual(result[5][1], -25.18009186, places=5)
+        self.assertEqual(result[0][0], 0)
+        self.assertEqual(result[1][0], 1)
+        self.assertEqual(result[2][0], 2)
+        self.assertEqual(result[3][0], 3)
+        self.assertEqual(result[4][0], 4)
+        self.assertEqual(result[5][0], 5)
+
+    def test_with_mixed_case_permutated_lookahead(self):
+        """Test if Bio.motifs PWM search using permutated lookahead algorithm works with mixed case."""
+        counts = self.m.counts
+        pwm = counts.normalize(pseudocounts=0.25)
+        pssm = pwm.log_odds()
+        result = list(
+            pssm.fast_search(Seq("AcGTgTGCGtaGTGCGT"), -40, "permuted", False)
+        )
+
+        self.assertEqual(6, len(result))
+        self.assertAlmostEqual(result[0][1], -29.18363571, places=5)
+        self.assertAlmostEqual(result[1][1], -38.3365097, places=5)
+        self.assertAlmostEqual(result[2][1], -29.17756271, places=5)
+        self.assertAlmostEqual(result[3][1], -38.04542542, places=5)
+        self.assertAlmostEqual(result[4][1], -20.3014183, places=5)
+        self.assertAlmostEqual(result[5][1], -25.18009186, places=5)
+        self.assertEqual(result[0][0], 0)
+        self.assertEqual(result[1][0], 1)
+        self.assertEqual(result[2][0], 2)
+        self.assertEqual(result[3][0], 3)
+        self.assertEqual(result[4][0], 4)
+        self.assertEqual(result[5][0], 5)
+
+    def test_with_bad_char_permutated_lookahead(self):
+        """Test if Bio.motifs PWM search using permutated lookahead algorithm works with unexpected letters like N."""
+        counts = self.m.counts
+        pwm = counts.normalize(pseudocounts=0.25)
+        pssm = pwm.log_odds()
+        result = list(
+            pssm.fast_search(Seq("ACGTGTGCGTAGTGCGTN"), -40, "permuted", False)
+        )
+
+        self.assertEqual(6, len(result))
+        self.assertAlmostEqual(result[0][1], -29.18363571, places=5)
+        self.assertAlmostEqual(result[1][1], -38.3365097, places=5)
+        self.assertAlmostEqual(result[2][1], -29.17756271, places=5)
+        self.assertAlmostEqual(result[3][1], -38.04542542, places=5)
+        self.assertAlmostEqual(result[4][1], -20.3014183, places=5)
+        self.assertAlmostEqual(result[5][1], -25.18009186, places=5)
+        self.assertEqual(result[0][0], 0)
+        self.assertEqual(result[1][0], 1)
+        self.assertEqual(result[2][0], 2)
+        self.assertEqual(result[3][0], 3)
+        self.assertEqual(result[4][0], 4)
+        self.assertEqual(result[5][0], 5)
+        print(result)
+
+    def test_simple_superalphabet(self):
+        """Test if Bio.motifs PWM search using permutated lookahead algorithm works."""
+        counts = self.m.counts
+        pwm = counts.normalize(pseudocounts=0.25)
+        pssm = pwm.log_odds()
+        result = list(pssm.fast_search(self.s, -40, "superalphabet", False))
+
+        self.assertEqual(6, len(result))
+        self.assertAlmostEqual(result[0][1], -29.18363571, places=5)
+        self.assertAlmostEqual(result[1][1], -38.3365097, places=5)
+        self.assertAlmostEqual(result[2][1], -29.17756271, places=5)
+        self.assertAlmostEqual(result[3][1], -38.04542542, places=5)
+        self.assertAlmostEqual(result[4][1], -20.3014183, places=5)
+        self.assertAlmostEqual(result[5][1], -25.18009186, places=5)
+        self.assertEqual(result[0][0], 0)
+        self.assertEqual(result[1][0], 1)
+        self.assertEqual(result[2][0], 2)
+        self.assertEqual(result[3][0], 3)
+        self.assertEqual(result[4][0], 4)
+        self.assertEqual(result[5][0], 5)
+
+    def test_with_mixed_case_superalphabet(self):
+        """Test if Bio.motifs PWM search using permutated lookahead algorithm works with mixed case."""
+        counts = self.m.counts
+        pwm = counts.normalize(pseudocounts=0.25)
+        pssm = pwm.log_odds()
+        result = list(
+            pssm.fast_search(Seq("AcGTgTGCGtaGTGCGT"), -40, "superalphabet", False)
+        )
+
+        self.assertEqual(6, len(result))
+        self.assertAlmostEqual(result[0][1], -29.18363571, places=5)
+        self.assertAlmostEqual(result[1][1], -38.3365097, places=5)
+        self.assertAlmostEqual(result[2][1], -29.17756271, places=5)
+        self.assertAlmostEqual(result[3][1], -38.04542542, places=5)
+        self.assertAlmostEqual(result[4][1], -20.3014183, places=5)
+        self.assertAlmostEqual(result[5][1], -25.18009186, places=5)
+        self.assertEqual(result[0][0], 0)
+        self.assertEqual(result[1][0], 1)
+        self.assertEqual(result[2][0], 2)
+        self.assertEqual(result[3][0], 3)
+        self.assertEqual(result[4][0], 4)
+        self.assertEqual(result[5][0], 5)
+
+    def test_with_bad_char_superalphabet(self):
+        """Test if Bio.motifs PWM search using permutated lookahead algorithm works with unexpected letters like N."""
+        counts = self.m.counts
+        pwm = counts.normalize(pseudocounts=0.25)
+        pssm = pwm.log_odds()
+        result = list(
+            pssm.fast_search(
+                Seq("ACGTGTGCGTAGTGCGTN"), -40, "superalphabet", False, q=7
+            )
+        )
+
+        # self.assertEqual(6, len(result))
+        self.assertAlmostEqual(result[0][1], -29.18363571, places=5)
+        self.assertAlmostEqual(result[1][1], -38.3365097, places=5)
+        self.assertAlmostEqual(result[2][1], -29.17756271, places=5)
+        self.assertAlmostEqual(result[3][1], -38.04542542, places=5)
+        self.assertAlmostEqual(result[4][1], -20.3014183, places=5)
+        self.assertAlmostEqual(result[5][1], -25.18009186, places=5)
+        self.assertEqual(result[0][0], 0)
+        self.assertEqual(result[1][0], 1)
+        self.assertEqual(result[2][0], 2)
+        self.assertEqual(result[3][0], 3)
+        self.assertEqual(result[4][0], 4)
+        self.assertEqual(result[5][0], 5)
+        print(result)
+
+    def test_invalid_algorithm_name_raises_value_error(self):
+        """Test if Bio.motifs _searchmodule extension raises ValueError if the selected algorithm does not exist"""
+        counts = self.m.counts
+        pwm = counts.normalize(pseudocounts=0.25)
+        pssm = pwm.log_odds()
+        with self.assertRaisesRegex(
+            ValueError,
+            r"Unknown algorithm: 'nonexistent'\. Valid options are: 'lookahead', 'permuted', 'superalphabet'",
+        ):
+            list(pssm.fast_search(self.s, -40, "nonexistent", False))
 
 
 if __name__ == "__main__":
