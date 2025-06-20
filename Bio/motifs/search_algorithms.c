@@ -37,7 +37,7 @@ AlgorithmType parse_algorithm(const char* name){
 *           - If the partial score is less than min_scores[j], break early (prune)
 *       - If the full subsequence score ≥ threshold, store the match.
 *
-* Argsuments:
+* Arguments:
 *   - sequence:   Genomic sequence to be analyzed.
 *   - s:          Length of the sequence.
 *   - matrix:     PSSM matrix.
@@ -173,7 +173,7 @@ void compute_permutation(double* matrix, Py_ssize_t m, const float bkg[4], int* 
 *           - If the partial score is less than min_scores[j], break early (prune)
 *       - If the full subsequence score ≥ threshold, store the match.
 *
-* Argsuments:
+* Arguments:
 *   - sequence:   Genomic sequence to be analyzed.
 *   - s:          Length of the sequence.
 *   - matrix:     Original PWM matrix (using the standard alphabet).
@@ -305,7 +305,7 @@ int compute_mhat(const double* mat, Py_ssize_t m, Py_ssize_t q, double* mhat) {
 *       seq = "CA" (padded to "CAA"): index = 1*4^2 + 0*4^1 + 0*4^0 = 16
 *       
 *
-* Argsuments:
+* Arguments:
 *   - sequence:   Genomic sequence to be analyzed.
 *   - s:          Length of the sequence.
 *   - matrix:     Original PWM matrix (using the standard alphabet).
