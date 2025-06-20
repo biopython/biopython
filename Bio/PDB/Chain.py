@@ -6,6 +6,7 @@
 # package.
 
 """Chain class, used in Structure objects."""
+import numbers
 
 from typing import Optional
 from typing import TYPE_CHECKING
@@ -94,7 +95,7 @@ class Chain(Entity["Model", "Residue"]):
          - id - int, residue resseq
 
         """
-        if isinstance(id, int):
+        if isinstance(id, numbers.Integral):
             id = (" ", id, " ")
         return id
 
@@ -119,6 +120,10 @@ class Chain(Entity["Model", "Residue"]):
          - id - (string, int, string) or int
 
         """
+        try: 
+            id = int(id)
+        except ValueError:
+            pass
         id = self._translate_id(id)
         return Entity.__contains__(self, id)
 
