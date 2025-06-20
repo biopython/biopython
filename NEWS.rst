@@ -20,9 +20,15 @@ has also been tested on PyPy3.10 v7.3.17.
 `Infernal <http://eddylab.org/infernal/>` (v1.0.0+) RNA search tool. The 
 format are ``infernal-tab`` and ``infernal-text``.
 
+The ``Bio.Seq.translate()`` function now defaults to ``gap="-"`` to match the
+``Seq`` object method, meaning the gap codon "---" is translated as "-" rather
+than raising an exception.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Michiel de Hoon
+- Peter Cock
 - Samuel Prince (first contribution)
 
 15 January 2025: Biopython 1.85
@@ -62,8 +68,8 @@ possible, especially the following contributors:
 - Alan Medlar
 - Carlos Peña
 - Gert Hulselmans
-- Peter Cock
 - Michiel de Hoon
+- Peter Cock
 
 28 June 2024: Biopython 1.84
 ============================
