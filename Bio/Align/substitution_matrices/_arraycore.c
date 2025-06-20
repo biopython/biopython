@@ -5,6 +5,7 @@
 
 static PyTypeObject Array_Type;
 
+
 static void
 Array_dealloc(PyObject *self)
 {
