@@ -156,6 +156,7 @@ AlignmentCounts_str(AlignmentCounts* self)
 static PyObject*
 AlignmentCounts_repr(AlignmentCounts* self)
 {
+    uintptr_t id = 0;
     const double substitution_score = self->substitution_score;
     const double gap_score = self->gap_score;
     const double score = gap_score + substitution_score;
@@ -204,7 +205,23 @@ AlignmentCounts_repr(AlignmentCounts* self)
     p += sprintf(p, "%zd mismatches; ", mismatches);
     if (positives != -1)
         p += sprintf(p, "%zd positives; ", positives);
-    sprintf(p, "%zd gaps) at 0x%" PRIxPTR ">", gaps, (uintptr_t)self);
+#ifdef PYPY_VERSION
+    // For PyPy, use PyObject_CallFunction to get id(self)
+    PyObject* builtins = PyEval_GetBuiltins();
+    PyObject* id_func = PyDict_GetItemString(builtins, "id");
+    PyObject* id_result = PyObject_CallFunctionObjArgs(id_func, self, NULL);
+    if (id_result) {
+        if (PyLong_Check(id_result)) {
+            id = (uintptr_t)PyLong_AsUnsignedLongLong(id_result);
+        }
+        Py_DECREF(id_result);
+    }
+#else
+    // In CPython, id(self) is just the address
+    id = (uintptr_t)self;
+#endif
+    sprintf(p, "%zd gaps) at 0x%" PRIxPTR ">", gaps, id);
+
     return PyUnicode_FromString(text);
 }
 

@@ -1837,6 +1837,7 @@ Aligner_repr(Aligner* self)
 static PyObject*
 Aligner_str(Aligner* self)
 {
+    uintptr_t id;
     char text[1024];
     char* p = text;
     PyObject* substitution_matrix = self->substitution_matrix.obj;
@@ -1847,9 +1848,25 @@ Aligner_str(Aligner* self)
 
     p += sprintf(p, "Pairwise sequence aligner with parameters\n");
     if (substitution_matrix) {
+#ifdef PYPY_VERSION
+        // For PyPy, use PyObject_CallFunction to get id(self)
+        PyObject* builtins = PyEval_GetBuiltins();
+        PyObject* id_func = PyDict_GetItemString(builtins, "id");
+        PyObject* id_result = PyObject_CallFunctionObjArgs(id_func,
+                                                           substitution_matrix,
+                                                           NULL);
+        if (id_result) {
+            if (PyLong_Check(id_result)) {
+                id = (uintptr_t)PyLong_AsUnsignedLongLong(id_result);
+            }
+            Py_DECREF(id_result);
+        }
+#else
+        // In CPython, id(self) is just the address
+        id = (uintptr_t)substitution_matrix;
+#endif
         p += sprintf(p, "  substitution_matrix: <%s object at 0x%" PRIxPTR ">\n",
-                     Py_TYPE(substitution_matrix)->tp_name,
-                     (uintptr_t)substitution_matrix);
+                     Py_TYPE(substitution_matrix)->tp_name, id);
     } else {
         if (self->wildcard == -1) {
             p += sprintf(p, "  wildcard: None\n");
