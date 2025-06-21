@@ -1,4 +1,4 @@
-/* Copyright 2023 by Michiel de Hoon.  All rights reserved.
+/* Copyright 2023-2025 by Michiel de Hoon.  All rights reserved.
  * This file is part of the Biopython distribution and governed by your
  * choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
  * Please see the LICENSE file that should have been included as part of this
@@ -289,45 +289,19 @@ static PyMethodDef PathGenerator_methods[] = {
 };
 
 static PySequenceMethods PathGenerator_as_sequence = {
-    (lenfunc)PathGenerator_length,  /* sq_length */
-    NULL,                           /* sq_concat */
-    NULL,                           /* sq_repeat */
-    NULL,                           /* sq_item */
-    NULL,                           /* sq_ass_item */
-    NULL,                           /* sq_contains */
-    NULL,                           /* sq_inplace_concat */
-    NULL,                           /* sq_inplace_repeat */
+    .sq_length = (lenfunc)PathGenerator_length,
 };
 
 static PyTypeObject PathGenerator_Type = {
     PyVarObject_HEAD_INIT(NULL, 0)
-    "Path generator",               /* tp_name */
-    sizeof(PathGenerator),          /* tp_basicsize */
-    0,                              /* tp_itemsize */
-    (destructor)PathGenerator_dealloc,  /* tp_dealloc */
-    0,                              /* tp_print */
-    0,                              /* tp_getattr */
-    0,                              /* tp_setattr */
-    0,                              /* tp_reserved */
-    0,                              /* tp_repr */
-    0,                              /* tp_as_number */
-    &PathGenerator_as_sequence,     /* tp_as_sequence */
-    0,                              /* tp_as_mapping */
-    0,                              /* tp_hash */
-    0,                              /* tp_call */
-    0,                              /* tp_str */
-    0,                              /* tp_getattro */
-    0,                              /* tp_setattro */
-    0,                              /* tp_as_buffer */
-    Py_TPFLAGS_DEFAULT,             /* tp_flags */
-    0,                              /* tp_doc */
-    0,                              /* tp_traverse */
-    0,                              /* tp_clear */
-    0,                              /* tp_richcompare */
-    0,                              /* tp_weaklistoffset */
-    PyObject_SelfIter,              /* tp_iter */
-    (iternextfunc)PathGenerator_next,      /* tp_iternext */
-    PathGenerator_methods,          /* tp_methods */
+    .tp_name = "Path generator",
+    .tp_basicsize = sizeof(PathGenerator),
+    .tp_dealloc = (destructor)PathGenerator_dealloc,
+    .tp_as_sequence = &PathGenerator_as_sequence,
+    .tp_flags = Py_TPFLAGS_DEFAULT,
+    .tp_iter = PyObject_SelfIter,
+    .tp_iternext = (iternextfunc)PathGenerator_next,
+    .tp_methods = PathGenerator_methods,
 };
 
 typedef struct {
@@ -1081,41 +1055,16 @@ static PyMethodDef Aligner_methods[] = {
 
 static PyTypeObject AlignerType = {
     PyVarObject_HEAD_INIT(NULL, 0)
-    "_codonaligner.CodonAligner",  /* tp_name */
-    sizeof(Aligner),               /* tp_basicsize */
-    0,                             /* tp_itemsize */
-    (destructor)Aligner_dealloc,   /* tp_dealloc */
-    0,                             /* tp_print */
-    0,                             /* tp_getattr */
-    0,                             /* tp_setattr */
-    0,                             /* tp_compare */
-    (reprfunc)Aligner_repr,        /* tp_repr */
-    0,                             /* tp_as_number */
-    0,                             /* tp_as_sequence */
-    0,                             /* tp_as_mapping */
-    0,                             /* tp_hash */
-    0,                             /* tp_call */
-    (reprfunc)Aligner_str,         /* tp_str */
-    0,                             /* tp_getattro */
-    0,                             /* tp_setattro */
-    0,                             /* tp_as_buffer */
-    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,        /*tp_flags*/
-    Aligner_doc,                   /* tp_doc */
-    0,                             /* tp_traverse */
-    0,                             /* tp_clear */
-    0,                             /* tp_richcompare */
-    0,                             /* tp_weaklistoffset */
-    0,                             /* tp_iter */
-    0,                             /* tp_iternext */
-    Aligner_methods,               /* tp_methods */
-    0,                             /* tp_members */
-    Aligner_getset,                /* tp_getset */
-    0,                             /* tp_base */
-    0,                             /* tp_dict */
-    0,                             /* tp_descr_get */
-    0,                             /* tp_descr_set */
-    0,                             /* tp_dictoffset */
-    (initproc)Aligner_init,        /* tp_init */
+    .tp_name = "_codonaligner.CodonAligner",
+    .tp_basicsize = sizeof(Aligner),
+    .tp_dealloc = (destructor)Aligner_dealloc,
+    .tp_repr = (reprfunc)Aligner_repr,
+    .tp_str = (reprfunc)Aligner_str,
+    .tp_flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .tp_doc = Aligner_doc,
+    .tp_methods = Aligner_methods,
+    .tp_getset = Aligner_getset,
+    .tp_init = (initproc)Aligner_init,
 };
 
 
