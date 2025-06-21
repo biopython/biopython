@@ -22,6 +22,7 @@ except ImportError:
 from Bio import BiopythonDeprecationWarning
 from Bio import BiopythonWarning
 from Bio import Align
+from Bio.Align.substitution_matrices import Array
 from Bio import SeqIO
 from Bio.Seq import reverse_complement
 from Bio.Seq import Seq
@@ -904,6 +905,47 @@ query             0 GA--T 3
                 alignment.aligned, np.array([[[0, 2], [4, 5]], [[0, 2], [2, 3]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (3 aligned letters; 3 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 3:
+        identities = 3,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 3.0)
         self.assertEqual(
@@ -921,6 +963,47 @@ query             0 G-A-T 3
                 np.array([[[0, 1], [2, 3], [4, 5]], [[0, 1], [1, 2], [2, 3]]]),
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (3 aligned letters; 3 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 3:
+        identities = 3,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 2,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -944,6 +1027,47 @@ query             3 GA--T 0
                 alignment.aligned, np.array([[[0, 2], [4, 5]], [[3, 1], [1, 0]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (3 aligned letters; 3 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 3:
+        identities = 3,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 3.0)
         self.assertEqual(
@@ -961,6 +1085,47 @@ query             3 G-A-T 0
                 np.array([[[0, 1], [2, 3], [4, 5]], [[3, 2], [2, 1], [1, 0]]]),
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (3 aligned letters; 3 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 3:
+        identities = 3,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 2,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
 
     def test_align_affine1_score(self):
         seq1 = "CC"
@@ -1033,6 +1198,47 @@ query             0 GA--T 3
                 alignment.aligned, np.array([[[0, 2], [4, 5]], [[0, 2], [2, 3]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (3 aligned letters; 3 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 3:
+        identities = 3,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
 
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
@@ -1057,6 +1263,47 @@ query             3 GA--T 0
                 alignment.aligned, np.array([[[0, 2], [4, 5]], [[3, 1], [1, 0]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (3 aligned letters; 3 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 3:
+        identities = 3,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
 
     def test_fogsaa_affine1(self):
         seq1 = "CC"
@@ -1161,6 +1408,47 @@ query             1 A-B 3
                 alignment.aligned, np.array([[[0, 1], [2, 3]], [[1, 2], [2, 3]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (2 aligned letters; 2 identities; 0 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
 
     def test_gotoh_local(self):
         aligner = Align.PairwiseAligner()
@@ -1215,6 +1503,47 @@ query             1 A-B 3
                 alignment.aligned, np.array([[[0, 1], [2, 3]], [[1, 2], [2, 3]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (2 aligned letters; 2 identities; 0 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
 
 
 class TestUnknownCharacter(unittest.TestCase):
@@ -1252,13 +1581,131 @@ query             0 GA?T 4
             np.array_equal(alignment.aligned, np.array([[[0, 4]], [[0, 4]]]))
         )
         counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 3 identities; 1 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 3,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 4)
         self.assertEqual(counts.identities, 3)
         self.assertEqual(counts.mismatches, 1)
-        counts = alignment.counts(wildcard="?")
+        self.assertIsNone(counts.score)
+        counts = alignment.counts("?")
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 3 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 3,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 4)
         self.assertEqual(counts.identities, 3)
         self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 3.0; substitution score = 3.0; gap score = 0.0; 4 aligned letters; 3 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 3.0:
+        substitution_score = 3.0,
+        gap_score = 0.0.
+    aligned = 4:
+        identities = 3,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 3.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -1281,13 +1728,131 @@ query             4 GA?T 0
             np.array_equal(alignment.aligned, np.array([[[0, 4]], [[4, 0]]]))
         )
         counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 3 identities; 1 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 3,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 4)
         self.assertEqual(counts.identities, 3)
         self.assertEqual(counts.mismatches, 1)
-        counts = alignment.counts(wildcard="?")
+        self.assertIsNone(counts.score)
+        counts = alignment.counts("?")
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 3 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 3,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 4)
         self.assertEqual(counts.identities, 3)
         self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 3.0; substitution score = 3.0; gap score = 0.0; 4 aligned letters; 3 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 3.0:
+        substitution_score = 3.0,
+        gap_score = 0.0.
+    aligned = 4:
+        identities = 3,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 3.0)
         seq2 = "GAXT"
         aligner.wildcard = "X"
         score = aligner.score(seq1, seq2)
@@ -1316,13 +1881,131 @@ query             0 GAXT 4
             np.array_equal(alignment.aligned, np.array([[[0, 4]], [[0, 4]]]))
         )
         counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 3 identities; 1 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 3,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 4)
         self.assertEqual(counts.identities, 3)
         self.assertEqual(counts.mismatches, 1)
-        counts = alignment.counts(wildcard="X")
+        self.assertIsNone(counts.score)
+        counts = alignment.counts("X")
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 3 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 3,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 4)
         self.assertEqual(counts.identities, 3)
         self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 3.0; substitution score = 3.0; gap score = 0.0; 4 aligned letters; 3 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 3.0:
+        substitution_score = 3.0,
+        gap_score = 0.0.
+    aligned = 4:
+        identities = 3,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 3.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -1345,13 +2028,131 @@ query             4 GAXT 0
             np.array_equal(alignment.aligned, np.array([[[0, 4]], [[4, 0]]]))
         )
         counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 3 identities; 1 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 3,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 4)
         self.assertEqual(counts.identities, 3)
         self.assertEqual(counts.mismatches, 1)
-        counts = alignment.counts(wildcard="X")
+        self.assertIsNone(counts.score)
+        counts = alignment.counts("X")
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 3 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 3,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 4)
         self.assertEqual(counts.identities, 3)
         self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 3.0; substitution score = 3.0; gap score = 0.0; 4 aligned letters; 3 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 3.0:
+        substitution_score = 3.0,
+        gap_score = 0.0.
+    aligned = 4:
+        identities = 3,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 3.0)
         aligner.wildcard = None
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 2.0)
@@ -1378,6 +2179,132 @@ query             0 GAXT 4
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 4]], [[0, 4]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 3 identities; 1 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 3,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts("X")
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 3 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 3,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 2.0; substitution score = 2.0; gap score = 0.0; 4 aligned letters; 3 identities; 1 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 2.0:
+        substitution_score = 2.0,
+        gap_score = 0.0.
+    aligned = 4:
+        identities = 3,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 2.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -1399,6 +2326,132 @@ query             4 GAXT 0
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 4]], [[4, 0]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 3 identities; 1 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 3,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts("X")
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 3 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 3,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 2.0; substitution score = 2.0; gap score = 0.0; 4 aligned letters; 3 identities; 1 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 2.0:
+        substitution_score = 2.0,
+        gap_score = 0.0.
+    aligned = 4:
+        identities = 3,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 2.0)
 
     def test_needlemanwunsch_simple2(self):
         seq1 = "GA?AT"
@@ -1435,13 +2488,131 @@ query             0 GA-A?T 5
             )
         )
         counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 4 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 4,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 4)
         self.assertEqual(counts.identities, 4)
         self.assertEqual(counts.mismatches, 0)
-        counts = alignment.counts(wildcard="?")
+        self.assertIsNone(counts.score)
+        counts = alignment.counts("?")
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 4 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 4,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 4)
         self.assertEqual(counts.identities, 4)
         self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 4.0; substitution score = 4.0; gap score = 0.0; 4 aligned letters; 4 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 4.0:
+        substitution_score = 4.0,
+        gap_score = 0.0.
+    aligned = 4:
+        identities = 4,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 4.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -1467,13 +2638,131 @@ query             5 GA-A?T 0
             )
         )
         counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 4 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 4,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 4)
         self.assertEqual(counts.identities, 4)
         self.assertEqual(counts.mismatches, 0)
-        counts = alignment.counts(wildcard="?")
+        self.assertIsNone(counts.score)
+        counts = alignment.counts("?")
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 4 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 4,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 4)
         self.assertEqual(counts.identities, 4)
         self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 4.0; substitution score = 4.0; gap score = 0.0; 4 aligned letters; 4 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 4.0:
+        substitution_score = 4.0,
+        gap_score = 0.0.
+    aligned = 4:
+        identities = 4,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 4.0)
         seq1 = "GAXAT"
         seq2 = "GAAXT"
         aligner.wildcard = "X"
@@ -1506,13 +2795,131 @@ query             0 GA-AXT 5
             )
         )
         counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 4 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 4,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 4)
         self.assertEqual(counts.identities, 4)
         self.assertEqual(counts.mismatches, 0)
-        counts = alignment.counts(wildcard="?")
+        self.assertIsNone(counts.score)
+        counts = alignment.counts("?")
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 4 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 4,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 4)
         self.assertEqual(counts.identities, 4)
         self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 4.0; substitution score = 4.0; gap score = 0.0; 4 aligned letters; 4 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 4.0:
+        substitution_score = 4.0,
+        gap_score = 0.0.
+    aligned = 4:
+        identities = 4,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 4.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -1538,13 +2945,131 @@ query             5 GA-AXT 0
             )
         )
         counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 4 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 4,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 4)
         self.assertEqual(counts.identities, 4)
         self.assertEqual(counts.mismatches, 0)
-        counts = alignment.counts(wildcard="?")
+        self.assertIsNone(counts.score)
+        counts = alignment.counts("?")
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 4 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 4,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 4)
         self.assertEqual(counts.identities, 4)
         self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 4.0; substitution score = 4.0; gap score = 0.0; 4 aligned letters; 4 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 4.0:
+        substitution_score = 4.0,
+        gap_score = 0.0.
+    aligned = 4:
+        identities = 4,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 4.0)
 
     def test_fogsaa_simple2(self):
         seq1 = "GA?AT"
@@ -1581,13 +3106,131 @@ query             0 GA-A?T 5
             )
         )
         counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 4 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 4,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 4)
         self.assertEqual(counts.identities, 4)
         self.assertEqual(counts.mismatches, 0)
-        counts = alignment.counts(wildcard="?")
+        self.assertIsNone(counts.score)
+        counts = alignment.counts("?")
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 4 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 4,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 4)
         self.assertEqual(counts.identities, 4)
         self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 4.0; substitution score = 4.0; gap score = 0.0; 4 aligned letters; 4 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 4.0:
+        substitution_score = 4.0,
+        gap_score = 0.0.
+    aligned = 4:
+        identities = 4,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 4.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -1613,13 +3256,131 @@ query             5 GA-A?T 0
             )
         )
         counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 4 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 4,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 4)
         self.assertEqual(counts.identities, 4)
         self.assertEqual(counts.mismatches, 0)
-        counts = alignment.counts(wildcard="?")
+        self.assertIsNone(counts.score)
+        counts = alignment.counts("?")
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 4 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 4,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 4)
         self.assertEqual(counts.identities, 4)
         self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 4.0; substitution score = 4.0; gap score = 0.0; 4 aligned letters; 4 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 4.0:
+        substitution_score = 4.0,
+        gap_score = 0.0.
+    aligned = 4:
+        identities = 4,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 4.0)
         seq1 = "GAXAT"
         seq2 = "GAAXT"
         aligner.wildcard = "X"
@@ -1652,13 +3413,131 @@ query             0 GA-AXT 5
             )
         )
         counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 4 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 4,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 4)
         self.assertEqual(counts.identities, 4)
         self.assertEqual(counts.mismatches, 0)
-        counts = alignment.counts(wildcard="X")
+        self.assertIsNone(counts.score)
+        counts = alignment.counts("X")
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 4 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 4,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 4)
         self.assertEqual(counts.identities, 4)
         self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 4.0; substitution score = 4.0; gap score = 0.0; 4 aligned letters; 4 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 4.0:
+        substitution_score = 4.0,
+        gap_score = 0.0.
+    aligned = 4:
+        identities = 4,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 4.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -1684,13 +3563,131 @@ query             5 GA-AXT 0
             )
         )
         counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 4 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 4,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 4)
         self.assertEqual(counts.identities, 4)
         self.assertEqual(counts.mismatches, 0)
-        counts = alignment.counts(wildcard="X")
+        self.assertIsNone(counts.score)
+        counts = alignment.counts("X")
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 4 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 4,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 4)
         self.assertEqual(counts.identities, 4)
         self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 4.0; substitution score = 4.0; gap score = 0.0; 4 aligned letters; 4 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 4.0:
+        substitution_score = 4.0,
+        gap_score = 0.0.
+    aligned = 4:
+        identities = 4,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 4.0)
 
 
 class TestPairwiseOpenPenalty(unittest.TestCase):
@@ -1751,6 +3748,91 @@ query             0 -A 1
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[1, 2]], [[0, 1]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (1 aligned letters; 1 identities; 0 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 1:
+        identities = 1,
+        mismatches = 0.
+    gaps = 1:
+        left_gaps = 1:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 1:
+                open_left_deletions = 1,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 1)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1.9; substitution score = 2.0; gap score = -0.1; 1 aligned letters; 1 identities; 0 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1.9:
+        substitution_score = 2.0,
+        gap_score = -0.1.
+    aligned = 1:
+        identities = 1,
+        mismatches = 0.
+    gaps = 1:
+        left_gaps = 1:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 1:
+                open_left_deletions = 1,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 1)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 1.9)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 1.9)
         self.assertEqual(
@@ -1765,6 +3847,91 @@ query             0 A- 1
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 1]], [[0, 1]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (1 aligned letters; 1 identities; 0 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 1:
+        identities = 1,
+        mismatches = 0.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 1:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 1:
+                open_right_deletions = 1,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 1)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1.9; substitution score = 2.0; gap score = -0.1; 1 aligned letters; 1 identities; 0 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1.9:
+        substitution_score = 2.0,
+        gap_score = -0.1.
+    aligned = 1:
+        identities = 1,
+        mismatches = 0.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 1:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 1:
+                open_right_deletions = 1,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 1)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 1.9)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -1786,6 +3953,91 @@ query             1 -A 0
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[1, 2]], [[1, 0]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (1 aligned letters; 1 identities; 0 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 1:
+        identities = 1,
+        mismatches = 0.
+    gaps = 1:
+        left_gaps = 1:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 1:
+                open_left_deletions = 1,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 1)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1.9; substitution score = 2.0; gap score = -0.1; 1 aligned letters; 1 identities; 0 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1.9:
+        substitution_score = 2.0,
+        gap_score = -0.1.
+    aligned = 1:
+        identities = 1,
+        mismatches = 0.
+    gaps = 1:
+        left_gaps = 1:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 1:
+                open_left_deletions = 1,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 1)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 1.9)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 1.9)
         self.assertEqual(
@@ -1800,6 +4052,91 @@ query             1 A- 0
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 1]], [[1, 0]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (1 aligned letters; 1 identities; 0 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 1:
+        identities = 1,
+        mismatches = 0.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 1:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 1:
+                open_right_deletions = 1,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 1)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1.9; substitution score = 2.0; gap score = -0.1; 1 aligned letters; 1 identities; 0 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1.9:
+        substitution_score = 2.0,
+        gap_score = -0.1.
+    aligned = 1:
+        identities = 1,
+        mismatches = 0.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 1:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 1:
+                open_right_deletions = 1,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 1)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 1.9)
 
     def test_match_score_open_penalty2(self):
         aligner = Align.PairwiseAligner()
@@ -1860,6 +4197,91 @@ query             0 G-A 2
                 alignment.aligned, np.array([[[0, 1], [2, 3]], [[0, 1], [1, 2]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (2 aligned letters; 2 identities; 0 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 2.9; substitution score = 3.0; gap score = -0.1; 2 aligned letters; 2 identities; 0 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 2.9:
+        substitution_score = 3.0,
+        gap_score = -0.1.
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 2.9)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 2.9)
         self.assertEqual(
@@ -1874,6 +4296,91 @@ query             0 GA- 2
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 2]], [[0, 2]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (2 aligned letters; 2 identities; 0 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 1:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 1:
+                open_right_deletions = 1,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 2.9; substitution score = 3.0; gap score = -0.1; 2 aligned letters; 2 identities; 0 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 2.9:
+        substitution_score = 3.0,
+        gap_score = -0.1.
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 1:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 1:
+                open_right_deletions = 1,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 2.9)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -1897,6 +4404,91 @@ query             2 G-A 0
                 alignment.aligned, np.array([[[0, 1], [2, 3]], [[2, 1], [1, 0]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (2 aligned letters; 2 identities; 0 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 2.9; substitution score = 3.0; gap score = -0.1; 2 aligned letters; 2 identities; 0 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 2.9:
+        substitution_score = 3.0,
+        gap_score = -0.1.
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 2.9)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 2.9)
         self.assertEqual(
@@ -1911,6 +4503,91 @@ query             2 GA- 0
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 2]], [[2, 0]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (2 aligned letters; 2 identities; 0 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 1:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 1:
+                open_right_deletions = 1,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 2.9; substitution score = 3.0; gap score = -0.1; 2 aligned letters; 2 identities; 0 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 2.9:
+        substitution_score = 3.0,
+        gap_score = -0.1.
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 1:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 1:
+                open_right_deletions = 1,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 2.9)
 
     def test_match_score_open_penalty3(self):
         aligner = Align.PairwiseAligner()
@@ -1969,6 +4646,91 @@ query             0 GA--T 3
                 alignment.aligned, np.array([[[0, 2], [4, 5]], [[0, 2], [2, 3]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (3 aligned letters; 3 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 3:
+        identities = 3,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 2.9; substitution score = 3.0; gap score = -0.1; 3 aligned letters; 3 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 2.9:
+        substitution_score = 3.0,
+        gap_score = -0.1.
+    aligned = 3:
+        identities = 3,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 2.9)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -1992,6 +4754,91 @@ query             3 GA--T 0
                 alignment.aligned, np.array([[[0, 2], [4, 5]], [[3, 1], [1, 0]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (3 aligned letters; 3 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 3:
+        identities = 3,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 2.9; substitution score = 3.0; gap score = -0.1; 3 aligned letters; 3 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 2.9:
+        substitution_score = 3.0,
+        gap_score = -0.1.
+    aligned = 3:
+        identities = 3,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 2.9)
 
     def test_match_score_open_penalty3_fogsaa(self):
         aligner = Align.PairwiseAligner()
@@ -2052,6 +4899,91 @@ query             0 GA--T 3
                 alignment.aligned, np.array([[[0, 2], [4, 5]], [[0, 2], [2, 3]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (3 aligned letters; 3 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 3:
+        identities = 3,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 2.9; substitution score = 3.0; gap score = -0.1; 3 aligned letters; 3 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 2.9:
+        substitution_score = 3.0,
+        gap_score = -0.1.
+    aligned = 3:
+        identities = 3,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 2.9)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -2075,6 +5007,91 @@ query             3 GA--T 0
                 alignment.aligned, np.array([[[0, 2], [4, 5]], [[3, 1], [1, 0]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (3 aligned letters; 3 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 3:
+        identities = 3,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 2.9; substitution score = 3.0; gap score = -0.1; 3 aligned letters; 3 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 2.9:
+        substitution_score = 3.0,
+        gap_score = -0.1.
+    aligned = 3:
+        identities = 3,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 2.9)
 
     def test_match_score_open_penalty4(self):
         aligner = Align.PairwiseAligner()
@@ -2134,6 +5151,91 @@ query             0 GA-TA 4
                 alignment.aligned, np.array([[[0, 1], [2, 3]], [[0, 1], [2, 3]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (2 aligned letters; 2 identities; 0 mismatches; 3 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 3:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 1:
+            right_insertions = 1:
+                open_right_insertions = 1,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1.7; substitution score = 2.0; gap score = -0.30000000000000004; 2 aligned letters; 2 identities; 0 mismatches; 3 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1.7:
+        substitution_score = 2.0,
+        gap_score = -0.30000000000000004.
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 3:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 1:
+            right_insertions = 1:
+                open_right_insertions = 1,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 1.7)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 1.7)
         self.assertEqual(
@@ -2150,6 +5252,91 @@ query             0 G-ATA 4
                 alignment.aligned, np.array([[[0, 1], [2, 3]], [[0, 1], [2, 3]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (2 aligned letters; 2 identities; 0 mismatches; 3 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 3:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 1:
+            right_insertions = 1:
+                open_right_insertions = 1,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1.7; substitution score = 2.0; gap score = -0.30000000000000004; 2 aligned letters; 2 identities; 0 mismatches; 3 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1.7:
+        substitution_score = 2.0,
+        gap_score = -0.30000000000000004.
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 3:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 1:
+            right_insertions = 1:
+                open_right_insertions = 1,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 1.7)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -2173,6 +5360,91 @@ query             4 GA-TA 0
                 alignment.aligned, np.array([[[0, 1], [2, 3]], [[4, 3], [2, 1]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (2 aligned letters; 2 identities; 0 mismatches; 3 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 3:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 1:
+            right_insertions = 1:
+                open_right_insertions = 1,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1.7; substitution score = 2.0; gap score = -0.30000000000000004; 2 aligned letters; 2 identities; 0 mismatches; 3 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1.7:
+        substitution_score = 2.0,
+        gap_score = -0.30000000000000004.
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 3:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 1:
+            right_insertions = 1:
+                open_right_insertions = 1,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 1.7)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 1.7)
         self.assertEqual(
@@ -2189,6 +5461,91 @@ query             4 G-ATA 0
                 alignment.aligned, np.array([[[0, 1], [2, 3]], [[4, 3], [2, 1]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (2 aligned letters; 2 identities; 0 mismatches; 3 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 3:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 1:
+            right_insertions = 1:
+                open_right_insertions = 1,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1.7; substitution score = 2.0; gap score = -0.30000000000000004; 2 aligned letters; 2 identities; 0 mismatches; 3 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1.7:
+        substitution_score = 2.0,
+        gap_score = -0.30000000000000004.
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 3:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 1:
+            right_insertions = 1:
+                open_right_insertions = 1,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 1.7)
 
 
 class TestPairwiseExtendPenalty(unittest.TestCase):
@@ -2249,6 +5606,91 @@ query             0 G--T 2
                 alignment.aligned, np.array([[[0, 1], [3, 4]], [[0, 1], [1, 2]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (2 aligned letters; 2 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1.3; substitution score = 2.0; gap score = -0.7; 2 aligned letters; 2 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1.3:
+        substitution_score = 2.0,
+        gap_score = -0.7.
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 1.3)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -2272,6 +5714,91 @@ query             2 G--T 0
                 alignment.aligned, np.array([[[0, 1], [3, 4]], [[2, 1], [1, 0]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (2 aligned letters; 2 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1.3; substitution score = 2.0; gap score = -0.7; 2 aligned letters; 2 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1.3:
+        substitution_score = 2.0,
+        gap_score = -0.7.
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 1.3)
 
     def test_extend_penalty2(self):
         aligner = Align.PairwiseAligner()
@@ -2330,6 +5857,91 @@ query             0 -G-T 2
                 alignment.aligned, np.array([[[1, 2], [3, 4]], [[0, 1], [1, 2]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (2 aligned letters; 1 identities; 1 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 2:
+        identities = 1,
+        mismatches = 1.
+    gaps = 2:
+        left_gaps = 1:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 1:
+                open_left_deletions = 1,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 0.6; substitution score = 1.0; gap score = -0.4; 2 aligned letters; 1 identities; 1 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 0.6:
+        substitution_score = 1.0,
+        gap_score = -0.4.
+    aligned = 2:
+        identities = 1,
+        mismatches = 1.
+    gaps = 2:
+        left_gaps = 1:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 1:
+                open_left_deletions = 1,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 0.6)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 0.6)
         self.assertEqual(
@@ -2346,6 +5958,91 @@ query             0 G-T- 2
                 alignment.aligned, np.array([[[0, 1], [2, 3]], [[0, 1], [1, 2]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (2 aligned letters; 1 identities; 1 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 2:
+        identities = 1,
+        mismatches = 1.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 1:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 1:
+                open_right_deletions = 1,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 0.6; substitution score = 1.0; gap score = -0.4; 2 aligned letters; 1 identities; 1 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 0.6:
+        substitution_score = 1.0,
+        gap_score = -0.4.
+    aligned = 2:
+        identities = 1,
+        mismatches = 1.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 1:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 1:
+                open_right_deletions = 1,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 0.6)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -2369,6 +6066,91 @@ query             2 -G-T 0
                 alignment.aligned, np.array([[[1, 2], [3, 4]], [[2, 1], [1, 0]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (2 aligned letters; 1 identities; 1 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 2:
+        identities = 1,
+        mismatches = 1.
+    gaps = 2:
+        left_gaps = 1:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 1:
+                open_left_deletions = 1,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 0.6; substitution score = 1.0; gap score = -0.4; 2 aligned letters; 1 identities; 1 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 0.6:
+        substitution_score = 1.0,
+        gap_score = -0.4.
+    aligned = 2:
+        identities = 1,
+        mismatches = 1.
+    gaps = 2:
+        left_gaps = 1:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 1:
+                open_left_deletions = 1,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 0.6)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 0.6)
         self.assertEqual(
@@ -2385,6 +6167,91 @@ query             2 G-T- 0
                 alignment.aligned, np.array([[[0, 1], [2, 3]], [[2, 1], [1, 0]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (2 aligned letters; 1 identities; 1 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 2:
+        identities = 1,
+        mismatches = 1.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 1:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 1:
+                open_right_deletions = 1,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 0.6; substitution score = 1.0; gap score = -0.4; 2 aligned letters; 1 identities; 1 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 0.6:
+        substitution_score = 1.0,
+        gap_score = -0.4.
+    aligned = 2:
+        identities = 1,
+        mismatches = 1.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 1:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 1:
+                open_right_deletions = 1,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 0.6)
 
     def test_extend_penalty2_fogsaa(self):
         aligner = Align.PairwiseAligner()
@@ -2445,6 +6312,91 @@ query             0 -G-T 2
                 alignment.aligned, np.array([[[1, 2], [3, 4]], [[0, 1], [1, 2]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (2 aligned letters; 1 identities; 1 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 2:
+        identities = 1,
+        mismatches = 1.
+    gaps = 2:
+        left_gaps = 1:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 1:
+                open_left_deletions = 1,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 0.6; substitution score = 1.0; gap score = -0.4; 2 aligned letters; 1 identities; 1 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 0.6:
+        substitution_score = 1.0,
+        gap_score = -0.4.
+    aligned = 2:
+        identities = 1,
+        mismatches = 1.
+    gaps = 2:
+        left_gaps = 1:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 1:
+                open_left_deletions = 1,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 0.6)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -2468,6 +6420,91 @@ query             2 -G-T 0
                 alignment.aligned, np.array([[[1, 2], [3, 4]], [[2, 1], [1, 0]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (2 aligned letters; 1 identities; 1 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 2:
+        identities = 1,
+        mismatches = 1.
+    gaps = 2:
+        left_gaps = 1:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 1:
+                open_left_deletions = 1,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 0.6; substitution score = 1.0; gap score = -0.4; 2 aligned letters; 1 identities; 1 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 0.6:
+        substitution_score = 1.0,
+        gap_score = -0.4.
+    aligned = 2:
+        identities = 1,
+        mismatches = 1.
+    gaps = 2:
+        left_gaps = 1:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 1:
+                open_left_deletions = 1,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 0.6)
 
 
 class TestPairwisePenalizeExtendWhenOpening(unittest.TestCase):
@@ -2528,6 +6565,91 @@ query             0 G--T 2
                 alignment.aligned, np.array([[[0, 1], [3, 4]], [[0, 1], [1, 2]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (2 aligned letters; 2 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = -1.2000000000000002; substitution score = 2.0; gap score = -3.2; 2 aligned letters; 2 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = -1.2000000000000002:
+        substitution_score = 2.0,
+        gap_score = -3.2.
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, -1.2)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -2551,6 +6673,91 @@ query             2 G--T 0
                 alignment.aligned, np.array([[[0, 1], [3, 4]], [[2, 1], [1, 0]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (2 aligned letters; 2 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = -1.2000000000000002; substitution score = 2.0; gap score = -3.2; 2 aligned letters; 2 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = -1.2000000000000002:
+        substitution_score = 2.0,
+        gap_score = -3.2.
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, -1.2)
 
     def test_penalize_extend_when_opening_fogsaa(self):
         aligner = Align.PairwiseAligner()
@@ -2611,6 +6818,91 @@ query             0 G--T 2
                 alignment.aligned, np.array([[[0, 1], [3, 4]], [[0, 1], [1, 2]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (2 aligned letters; 2 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = -1.2000000000000002; substitution score = 2.0; gap score = -3.2; 2 aligned letters; 2 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = -1.2000000000000002:
+        substitution_score = 2.0,
+        gap_score = -3.2.
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, -1.2)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -2634,6 +6926,91 @@ query             2 G--T 0
                 alignment.aligned, np.array([[[0, 1], [3, 4]], [[2, 1], [1, 0]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (2 aligned letters; 2 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = -1.2000000000000002; substitution score = 2.0; gap score = -3.2; 2 aligned letters; 2 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = -1.2000000000000002:
+        substitution_score = 2.0,
+        gap_score = -3.2.
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, -1.2)
 
 
 class TestPairwisePenalizeEndgaps(unittest.TestCase):
@@ -2693,6 +7070,91 @@ query             0 --GT 2
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[2, 4]], [[0, 2]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (2 aligned letters; 1 identities; 1 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 2:
+        identities = 1,
+        mismatches = 1.
+    gaps = 2:
+        left_gaps = 2:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 2:
+                open_left_deletions = 1,
+                extend_left_deletions = 1;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1.0; substitution score = 1.0; gap score = 0.0; 2 aligned letters; 1 identities; 1 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1.0:
+        substitution_score = 1.0,
+        gap_score = 0.0.
+    aligned = 2:
+        identities = 1,
+        mismatches = 1.
+    gaps = 2:
+        left_gaps = 2:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 2:
+                open_left_deletions = 1,
+                extend_left_deletions = 1;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 1.0)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 1.0)
         self.assertEqual(
@@ -2709,6 +7171,91 @@ query             0 G--T 2
                 alignment.aligned, np.array([[[0, 1], [3, 4]], [[0, 1], [1, 2]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (2 aligned letters; 2 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1.0; substitution score = 2.0; gap score = -1.0; 2 aligned letters; 2 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1.0:
+        substitution_score = 2.0,
+        gap_score = -1.0.
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 1.0)
         alignment = alignments[2]
         self.assertAlmostEqual(alignment.score, 1.0)
         self.assertEqual(
@@ -2723,6 +7270,91 @@ query             0 GT-- 2
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 2]], [[0, 2]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (2 aligned letters; 1 identities; 1 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 2:
+        identities = 1,
+        mismatches = 1.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 2:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 2:
+                open_right_deletions = 1,
+                extend_right_deletions = 1.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1.0; substitution score = 1.0; gap score = 0.0; 2 aligned letters; 1 identities; 1 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1.0:
+        substitution_score = 1.0,
+        gap_score = 0.0.
+    aligned = 2:
+        identities = 1,
+        mismatches = 1.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 2:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 2:
+                open_right_deletions = 1,
+                extend_right_deletions = 1.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 1.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -2744,6 +7376,91 @@ query             2 --GT 0
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[2, 4]], [[2, 0]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (2 aligned letters; 1 identities; 1 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 2:
+        identities = 1,
+        mismatches = 1.
+    gaps = 2:
+        left_gaps = 2:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 2:
+                open_left_deletions = 1,
+                extend_left_deletions = 1;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1.0; substitution score = 1.0; gap score = 0.0; 2 aligned letters; 1 identities; 1 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1.0:
+        substitution_score = 1.0,
+        gap_score = 0.0.
+    aligned = 2:
+        identities = 1,
+        mismatches = 1.
+    gaps = 2:
+        left_gaps = 2:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 2:
+                open_left_deletions = 1,
+                extend_left_deletions = 1;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 1.0)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 1.0)
         self.assertEqual(
@@ -2760,6 +7477,91 @@ query             2 G--T 0
                 alignment.aligned, np.array([[[0, 1], [3, 4]], [[2, 1], [1, 0]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (2 aligned letters; 2 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1.0; substitution score = 2.0; gap score = -1.0; 2 aligned letters; 2 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1.0:
+        substitution_score = 2.0,
+        gap_score = -1.0.
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 1.0)
         alignment = alignments[2]
         self.assertAlmostEqual(alignment.score, 1.0)
         self.assertEqual(
@@ -2774,6 +7576,91 @@ query             2 GT-- 0
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 2]], [[2, 0]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (2 aligned letters; 1 identities; 1 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 2:
+        identities = 1,
+        mismatches = 1.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 2:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 2:
+                open_right_deletions = 1,
+                extend_right_deletions = 1.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1.0; substitution score = 1.0; gap score = 0.0; 2 aligned letters; 1 identities; 1 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1.0:
+        substitution_score = 1.0,
+        gap_score = 0.0.
+    aligned = 2:
+        identities = 1,
+        mismatches = 1.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 2:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 2:
+                open_right_deletions = 1,
+                extend_right_deletions = 1.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 1.0)
 
     def test_penalize_end_gaps_fogsaa(self):
         aligner = Align.PairwiseAligner()
@@ -2834,6 +7721,91 @@ query             0 GT-- 2
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 2]], [[0, 2]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (2 aligned letters; 1 identities; 1 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 2:
+        identities = 1,
+        mismatches = 1.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 2:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 2:
+                open_right_deletions = 1,
+                extend_right_deletions = 1.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1.0; substitution score = 1.0; gap score = 0.0; 2 aligned letters; 1 identities; 1 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1.0:
+        substitution_score = 1.0,
+        gap_score = 0.0.
+    aligned = 2:
+        identities = 1,
+        mismatches = 1.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 2:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 2:
+                open_right_deletions = 1,
+                extend_right_deletions = 1.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 1.0)
 
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
@@ -2856,6 +7828,91 @@ query             2 GT-- 0
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 2]], [[2, 0]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (2 aligned letters; 1 identities; 1 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 2:
+        identities = 1,
+        mismatches = 1.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 2:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 2:
+                open_right_deletions = 1,
+                extend_right_deletions = 1.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1.0; substitution score = 1.0; gap score = 0.0; 2 aligned letters; 1 identities; 1 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1.0:
+        substitution_score = 1.0,
+        gap_score = 0.0.
+    aligned = 2:
+        identities = 1,
+        mismatches = 1.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 2:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 2:
+                open_right_deletions = 1,
+                extend_right_deletions = 1.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 1.0)
 
 
 class TestPairwiseSeparateGapPenalties(unittest.TestCase):
@@ -2920,6 +7977,91 @@ query             0 GTCT 4
                 alignment.aligned, np.array([[[0, 1], [1, 3]], [[0, 1], [2, 4]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (3 aligned letters; 2 identities; 1 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 3:
+        identities = 2,
+        mismatches = 1.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1.7; substitution score = 2.0; gap score = -0.3; 3 aligned letters; 2 identities; 1 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1.7:
+        substitution_score = 2.0,
+        gap_score = -0.3.
+    aligned = 3:
+        identities = 2,
+        mismatches = 1.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 1.7)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 1.7)
         self.assertEqual(
@@ -2936,6 +8078,91 @@ query             0 GTCT 4
                 alignment.aligned, np.array([[[0, 2], [2, 3]], [[0, 2], [3, 4]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (3 aligned letters; 2 identities; 1 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 3:
+        identities = 2,
+        mismatches = 1.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1.7; substitution score = 2.0; gap score = -0.3; 3 aligned letters; 2 identities; 1 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1.7:
+        substitution_score = 2.0,
+        gap_score = -0.3.
+    aligned = 3:
+        identities = 2,
+        mismatches = 1.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 1.7)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -2959,6 +8186,91 @@ query             4 GTCT 0
                 alignment.aligned, np.array([[[0, 1], [1, 3]], [[4, 3], [2, 0]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (3 aligned letters; 2 identities; 1 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 3:
+        identities = 2,
+        mismatches = 1.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1.7; substitution score = 2.0; gap score = -0.3; 3 aligned letters; 2 identities; 1 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1.7:
+        substitution_score = 2.0,
+        gap_score = -0.3.
+    aligned = 3:
+        identities = 2,
+        mismatches = 1.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 1.7)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 1.7)
         self.assertEqual(
@@ -2975,6 +8287,91 @@ query             4 GTCT 0
                 alignment.aligned, np.array([[[0, 2], [2, 3]], [[4, 2], [1, 0]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (3 aligned letters; 2 identities; 1 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 3:
+        identities = 2,
+        mismatches = 1.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1.7; substitution score = 2.0; gap score = -0.3; 3 aligned letters; 2 identities; 1 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1.7:
+        substitution_score = 2.0,
+        gap_score = -0.3.
+    aligned = 3:
+        identities = 2,
+        mismatches = 1.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 1.7)
 
     def test_separate_gap_penalties2(self):
         aligner = Align.PairwiseAligner()
@@ -3035,6 +8432,91 @@ query             0 G-T 2
                 alignment.aligned, np.array([[[0, 1], [2, 3]], [[0, 1], [1, 2]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (2 aligned letters; 2 identities; 0 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1.8; substitution score = 2.0; gap score = -0.2; 2 aligned letters; 2 identities; 0 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1.8:
+        substitution_score = 2.0,
+        gap_score = -0.2.
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 1.8)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -3058,6 +8540,91 @@ query             4 G-T 2
                 alignment.aligned, np.array([[[0, 1], [2, 3]], [[4, 3], [3, 2]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (2 aligned letters; 2 identities; 0 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1.8; substitution score = 2.0; gap score = -0.2; 2 aligned letters; 2 identities; 0 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1.8:
+        substitution_score = 2.0,
+        gap_score = -0.2.
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 1.8)
 
 
 class TestPairwiseSeparateGapPenaltiesWithExtension(unittest.TestCase):
@@ -3121,6 +8688,91 @@ query             0 GTCCT 5
                 alignment.aligned, np.array([[[0, 1], [1, 4]], [[0, 1], [2, 5]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 2 identities; 2 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 2,
+        mismatches = 2.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 2)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1.9; substitution score = 2.0; gap score = -0.1; 4 aligned letters; 2 identities; 2 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1.9:
+        substitution_score = 2.0,
+        gap_score = -0.1.
+    aligned = 4:
+        identities = 2,
+        mismatches = 2.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 2)
+        self.assertAlmostEqual(counts.score, 1.9)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 1.9)
         self.assertEqual(
@@ -3137,6 +8789,91 @@ query             0 GTCCT 5
                 alignment.aligned, np.array([[[0, 2], [2, 4]], [[0, 2], [3, 5]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 2 identities; 2 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 2,
+        mismatches = 2.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 2)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1.9; substitution score = 2.0; gap score = -0.1; 4 aligned letters; 2 identities; 2 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1.9:
+        substitution_score = 2.0,
+        gap_score = -0.1.
+    aligned = 4:
+        identities = 2,
+        mismatches = 2.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 2)
+        self.assertAlmostEqual(counts.score, 1.9)
         alignment = alignments[2]
         self.assertAlmostEqual(alignment.score, 1.9)
         self.assertEqual(
@@ -3153,6 +8890,91 @@ query             0 GTCCT 5
                 alignment.aligned, np.array([[[0, 3], [3, 4]], [[0, 3], [4, 5]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 2 identities; 2 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 2,
+        mismatches = 2.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 2)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1.9; substitution score = 2.0; gap score = -0.1; 4 aligned letters; 2 identities; 2 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1.9:
+        substitution_score = 2.0,
+        gap_score = -0.1.
+    aligned = 4:
+        identities = 2,
+        mismatches = 2.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 2)
+        self.assertAlmostEqual(counts.score, 1.9)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -3176,6 +8998,91 @@ query             5 GTCCT 0
                 alignment.aligned, np.array([[[0, 1], [1, 4]], [[5, 4], [3, 0]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 2 identities; 2 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 2,
+        mismatches = 2.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 2)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1.9; substitution score = 2.0; gap score = -0.1; 4 aligned letters; 2 identities; 2 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1.9:
+        substitution_score = 2.0,
+        gap_score = -0.1.
+    aligned = 4:
+        identities = 2,
+        mismatches = 2.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 2)
+        self.assertAlmostEqual(counts.score, 1.9)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 1.9)
         self.assertEqual(
@@ -3192,6 +9099,91 @@ query             5 GTCCT 0
                 alignment.aligned, np.array([[[0, 2], [2, 4]], [[5, 3], [2, 0]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 2 identities; 2 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 2,
+        mismatches = 2.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 2)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1.9; substitution score = 2.0; gap score = -0.1; 4 aligned letters; 2 identities; 2 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1.9:
+        substitution_score = 2.0,
+        gap_score = -0.1.
+    aligned = 4:
+        identities = 2,
+        mismatches = 2.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 2)
+        self.assertAlmostEqual(counts.score, 1.9)
         alignment = alignments[2]
         self.assertAlmostEqual(alignment.score, 1.9)
         self.assertEqual(
@@ -3208,6 +9200,91 @@ query             5 GTCCT 0
                 alignment.aligned, np.array([[[0, 3], [3, 4]], [[5, 2], [1, 0]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 2 identities; 2 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 2,
+        mismatches = 2.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 2)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1.9; substitution score = 2.0; gap score = -0.1; 4 aligned letters; 2 identities; 2 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1.9:
+        substitution_score = 2.0,
+        gap_score = -0.1.
+    aligned = 4:
+        identities = 2,
+        mismatches = 2.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 2)
+        self.assertAlmostEqual(counts.score, 1.9)
 
 
 class TestPairwiseMatchDictionary(unittest.TestCase):
@@ -3227,11 +9304,11 @@ class TestPairwiseMatchDictionary(unittest.TestCase):
         aligner.open_gap_score = -0.5
         aligner.extend_gap_score = 0.0
         self.assertEqual(aligner.algorithm, "Gotoh local alignment algorithm")
-        self.assertRegex(
+        self.assertEqual(
             str(aligner),
             """\
-^Pairwise sequence aligner with parameters
-  substitution_matrix: <Array object at .*>
+Pairwise sequence aligner with parameters
+  substitution_matrix: <Array object at 0x%x>
   open_internal_insertion_score: -0.500000
   extend_internal_insertion_score: 0.000000
   open_left_insertion_score: -0.500000
@@ -3245,7 +9322,8 @@ class TestPairwiseMatchDictionary(unittest.TestCase):
   open_right_deletion_score: -0.500000
   extend_right_deletion_score: 0.000000
   mode: local
-$""",
+"""
+            % id(substitution_matrix),
         )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
@@ -3272,6 +9350,131 @@ query             0 ATT 3
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 3]], [[0, 3]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (3 aligned letters; 2 identities; 1 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 3:
+        identities = 2,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        counts = alignment.counts(substitution_matrix)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (substitution score = 3.0; 3 aligned letters; 2 identities; 1 mismatches; 3 positives; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    substitution_score = 3.0,
+    aligned = 3:
+        identities = 2,
+        positives = 3,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 3.0; substitution score = 3.0; gap score = 0.0; 3 aligned letters; 2 identities; 1 mismatches; 3 positives; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 3.0:
+        substitution_score = 3.0,
+        gap_score = 0.0.
+    aligned = 3:
+        identities = 2,
+        positives = 3,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 3.0)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 3.0)
         self.assertEqual(
@@ -3288,6 +9491,131 @@ query             0 AT-T 3
                 alignment.aligned, np.array([[[0, 2], [3, 4]], [[0, 2], [2, 3]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (3 aligned letters; 3 identities; 0 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 3:
+        identities = 3,
+        mismatches = 0.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(substitution_matrix)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (substitution score = 3.5; 3 aligned letters; 3 identities; 0 mismatches; 3 positives; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    substitution_score = 3.5,
+    aligned = 3:
+        identities = 3,
+        positives = 3,
+        mismatches = 0.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 3.0; substitution score = 3.5; gap score = -0.5; 3 aligned letters; 3 identities; 0 mismatches; 3 positives; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 3.0:
+        substitution_score = 3.5,
+        gap_score = -0.5.
+    aligned = 3:
+        identities = 3,
+        positives = 3,
+        mismatches = 0.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 3.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -3309,6 +9637,131 @@ query             3 ATT 0
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 3]], [[3, 0]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (3 aligned letters; 2 identities; 1 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 3:
+        identities = 2,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(substitution_matrix)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (substitution score = 3.0; 3 aligned letters; 2 identities; 1 mismatches; 3 positives; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    substitution_score = 3.0,
+    aligned = 3:
+        identities = 2,
+        positives = 3,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 3.0; substitution score = 3.0; gap score = 0.0; 3 aligned letters; 2 identities; 1 mismatches; 3 positives; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 3.0:
+        substitution_score = 3.0,
+        gap_score = 0.0.
+    aligned = 3:
+        identities = 2,
+        positives = 3,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 3.0)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 3.0)
         self.assertEqual(
@@ -3325,6 +9778,138 @@ query             3 AT-T 0
                 alignment.aligned, np.array([[[0, 2], [3, 4]], [[3, 1], [1, 0]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (3 aligned letters; 3 identities; 0 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 3:
+        identities = 3,
+        mismatches = 0.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(substitution_matrix)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (substitution score = 3.5; 3 aligned letters; 3 identities; 0 mismatches; 3 positives; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    substitution_score = 3.5,
+    aligned = 3:
+        identities = 3,
+        positives = 3,
+        mismatches = 0.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 3.0; substitution score = 3.5; gap score = -0.5; 3 aligned letters; 3 identities; 0 mismatches; 3 positives; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 3.0:
+        substitution_score = 3.5,
+        gap_score = -0.5.
+    aligned = 3:
+        identities = 3,
+        positives = 3,
+        mismatches = 0.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 3.0)
+        self.assertEqual(alignment.sequences[0], "ATAT")
+        alignment.sequences[0] = "ATCG"
+        with self.assertRaises(ValueError) as cm:
+            alignment.counts(aligner)
+        self.assertEqual(
+            str(cm.exception), "sequence contains letters not in the alphabet"
+        )
 
     def test_match_dictionary2(self):
         try:
@@ -3339,11 +9924,11 @@ query             3 AT-T 0
         aligner.substitution_matrix = substitution_matrix
         aligner.open_gap_score = -1.0
         aligner.extend_gap_score = 0.0
-        self.assertRegex(
+        self.assertEqual(
             str(aligner),
             """\
-^Pairwise sequence aligner with parameters
-  substitution_matrix: <Array object at .*>
+Pairwise sequence aligner with parameters
+  substitution_matrix: <Array object at 0x%x>
   open_internal_insertion_score: -1.000000
   extend_internal_insertion_score: 0.000000
   open_left_insertion_score: -1.000000
@@ -3357,7 +9942,8 @@ query             3 AT-T 0
   open_right_deletion_score: -1.000000
   extend_right_deletion_score: 0.000000
   mode: local
-$""",
+"""
+            % id(substitution_matrix),
         )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
@@ -3384,6 +9970,131 @@ query             0 ATT 3
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 3]], [[0, 3]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (3 aligned letters; 2 identities; 1 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 3:
+        identities = 2,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(substitution_matrix)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (substitution score = 3.0; 3 aligned letters; 2 identities; 1 mismatches; 3 positives; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    substitution_score = 3.0,
+    aligned = 3:
+        identities = 2,
+        positives = 3,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 3.0; substitution score = 3.0; gap score = 0.0; 3 aligned letters; 2 identities; 1 mismatches; 3 positives; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 3.0:
+        substitution_score = 3.0,
+        gap_score = 0.0.
+    aligned = 3:
+        identities = 2,
+        positives = 3,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 3.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -3405,6 +10116,131 @@ query             3 ATT 0
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 3]], [[3, 0]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (3 aligned letters; 2 identities; 1 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 3:
+        identities = 2,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(substitution_matrix)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (substitution score = 3.0; 3 aligned letters; 2 identities; 1 mismatches; 3 positives; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    substitution_score = 3.0,
+    aligned = 3:
+        identities = 2,
+        positives = 3,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 3.0; substitution score = 3.0; gap score = 0.0; 3 aligned letters; 2 identities; 1 mismatches; 3 positives; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 3.0:
+        substitution_score = 3.0,
+        gap_score = 0.0.
+    aligned = 3:
+        identities = 2,
+        positives = 3,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 3.0)
 
     def test_match_dictionary3(self):
         try:
@@ -3419,11 +10255,11 @@ query             3 ATT 0
         aligner.substitution_matrix = substitution_matrix
         aligner.open_gap_score = -1.0
         aligner.extend_gap_score = 0.0
-        self.assertRegex(
+        self.assertEqual(
             str(aligner),
             """\
-^Pairwise sequence aligner with parameters
-  substitution_matrix: <Array object at .*>
+Pairwise sequence aligner with parameters
+  substitution_matrix: <Array object at 0x%x>
   open_internal_insertion_score: -1.000000
   extend_internal_insertion_score: 0.000000
   open_left_insertion_score: -1.000000
@@ -3437,7 +10273,8 @@ query             3 ATT 0
   open_right_deletion_score: -1.000000
   extend_right_deletion_score: 0.000000
   mode: local
-$""",
+"""
+            % id(substitution_matrix),
         )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
@@ -3464,6 +10301,131 @@ query             0 ATA 3
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 3]], [[0, 3]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (3 aligned letters; 2 identities; 1 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 3:
+        identities = 2,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(substitution_matrix)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (substitution score = 3.0; 3 aligned letters; 2 identities; 1 mismatches; 3 positives; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    substitution_score = 3.0,
+    aligned = 3:
+        identities = 2,
+        positives = 3,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 3.0; substitution score = 3.0; gap score = 0.0; 3 aligned letters; 2 identities; 1 mismatches; 3 positives; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 3.0:
+        substitution_score = 3.0,
+        gap_score = 0.0.
+    aligned = 3:
+        identities = 2,
+        positives = 3,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 3.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -3485,6 +10447,131 @@ query             4 ATA 1
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 3]], [[4, 1]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (3 aligned letters; 2 identities; 1 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 3:
+        identities = 2,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(substitution_matrix)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (substitution score = 3.0; 3 aligned letters; 2 identities; 1 mismatches; 3 positives; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    substitution_score = 3.0,
+    aligned = 3:
+        identities = 2,
+        positives = 3,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 3.0; substitution score = 3.0; gap score = 0.0; 3 aligned letters; 2 identities; 1 mismatches; 3 positives; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 3.0:
+        substitution_score = 3.0,
+        gap_score = 0.0.
+    aligned = 3:
+        identities = 2,
+        positives = 3,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 3.0)
 
     def test_match_dictionary4(self):
         try:
@@ -3502,11 +10589,11 @@ query             4 ATA 1
         aligner.open_gap_score = -0.5
         aligner.extend_gap_score = 0.0
         self.assertEqual(aligner.algorithm, "Gotoh local alignment algorithm")
-        self.assertRegex(
+        self.assertEqual(
             str(aligner),
             """\
-^Pairwise sequence aligner with parameters
-  substitution_matrix: <Array object at .*>
+Pairwise sequence aligner with parameters
+  substitution_matrix: <Array object at 0x%x>
   open_internal_insertion_score: -0.500000
   extend_internal_insertion_score: 0.000000
   open_left_insertion_score: -0.500000
@@ -3520,7 +10607,8 @@ query             4 ATA 1
   open_right_deletion_score: -0.500000
   extend_right_deletion_score: 0.000000
   mode: local
-$""",
+"""
+            % id(substitution_matrix),
         )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
@@ -3547,6 +10635,131 @@ query             0 ATT 3
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 3]], [[0, 3]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (3 aligned letters; 2 identities; 1 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 3:
+        identities = 2,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        counts = alignment.counts(substitution_matrix)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (substitution score = 3.0; 3 aligned letters; 2 identities; 1 mismatches; 3 positives; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    substitution_score = 3.0,
+    aligned = 3:
+        identities = 2,
+        positives = 3,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 3.0; substitution score = 3.0; gap score = 0.0; 3 aligned letters; 2 identities; 1 mismatches; 3 positives; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 3.0:
+        substitution_score = 3.0,
+        gap_score = 0.0.
+    aligned = 3:
+        identities = 2,
+        positives = 3,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 3.0)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 3.0)
         self.assertEqual(
@@ -3563,6 +10776,131 @@ query             0 AT-T 3
                 alignment.aligned, np.array([[[0, 2], [3, 4]], [[0, 2], [2, 3]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (3 aligned letters; 3 identities; 0 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 3:
+        identities = 3,
+        mismatches = 0.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(substitution_matrix)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (substitution score = 3.5; 3 aligned letters; 3 identities; 0 mismatches; 3 positives; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    substitution_score = 3.5,
+    aligned = 3:
+        identities = 3,
+        positives = 3,
+        mismatches = 0.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 3.0; substitution score = 3.5; gap score = -0.5; 3 aligned letters; 3 identities; 0 mismatches; 3 positives; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 3.0:
+        substitution_score = 3.5,
+        gap_score = -0.5.
+    aligned = 3:
+        identities = 3,
+        positives = 3,
+        mismatches = 0.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 3.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -3584,6 +10922,131 @@ query             3 ATT 0
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 3]], [[3, 0]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (3 aligned letters; 2 identities; 1 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 3:
+        identities = 2,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(substitution_matrix)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (substitution score = 3.0; 3 aligned letters; 2 identities; 1 mismatches; 3 positives; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    substitution_score = 3.0,
+    aligned = 3:
+        identities = 2,
+        positives = 3,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 3.0; substitution score = 3.0; gap score = 0.0; 3 aligned letters; 2 identities; 1 mismatches; 3 positives; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 3.0:
+        substitution_score = 3.0,
+        gap_score = 0.0.
+    aligned = 3:
+        identities = 2,
+        positives = 3,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 3.0)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 3.0)
         self.assertEqual(
@@ -3600,6 +11063,131 @@ query             3 AT-T 0
                 alignment.aligned, np.array([[[0, 2], [3, 4]], [[3, 1], [1, 0]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (3 aligned letters; 3 identities; 0 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 3:
+        identities = 3,
+        mismatches = 0.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(substitution_matrix)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (substitution score = 3.5; 3 aligned letters; 3 identities; 0 mismatches; 3 positives; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    substitution_score = 3.5,
+    aligned = 3:
+        identities = 3,
+        positives = 3,
+        mismatches = 0.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 3.0; substitution score = 3.5; gap score = -0.5; 3 aligned letters; 3 identities; 0 mismatches; 3 positives; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 3.0:
+        substitution_score = 3.5,
+        gap_score = -0.5.
+    aligned = 3:
+        identities = 3,
+        positives = 3,
+        mismatches = 0.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 3.0)
 
     def test_match_dictionary5(self):
         try:
@@ -3616,11 +11204,11 @@ query             3 AT-T 0
         aligner.substitution_matrix = substitution_matrix
         aligner.open_gap_score = -1.0
         aligner.extend_gap_score = 0.0
-        self.assertRegex(
+        self.assertEqual(
             str(aligner),
             """\
-^Pairwise sequence aligner with parameters
-  substitution_matrix: <Array object at .*
+Pairwise sequence aligner with parameters
+  substitution_matrix: <Array object at 0x%x>
   open_internal_insertion_score: -1.000000
   extend_internal_insertion_score: 0.000000
   open_left_insertion_score: -1.000000
@@ -3634,7 +11222,8 @@ query             3 AT-T 0
   open_right_deletion_score: -1.000000
   extend_right_deletion_score: 0.000000
   mode: local
-$""",
+"""
+            % id(substitution_matrix),
         )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
@@ -3661,6 +11250,131 @@ query             0 ATT 3
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 3]], [[0, 3]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (3 aligned letters; 2 identities; 1 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 3:
+        identities = 2,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(substitution_matrix)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (substitution score = 3.0; 3 aligned letters; 2 identities; 1 mismatches; 3 positives; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    substitution_score = 3.0,
+    aligned = 3:
+        identities = 2,
+        positives = 3,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 3.0; substitution score = 3.0; gap score = 0.0; 3 aligned letters; 2 identities; 1 mismatches; 3 positives; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 3.0:
+        substitution_score = 3.0,
+        gap_score = 0.0.
+    aligned = 3:
+        identities = 2,
+        positives = 3,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 3.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -3682,6 +11396,131 @@ query             3 ATT 0
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 3]], [[3, 0]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (3 aligned letters; 2 identities; 1 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 3:
+        identities = 2,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(substitution_matrix)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (substitution score = 3.0; 3 aligned letters; 2 identities; 1 mismatches; 3 positives; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    substitution_score = 3.0,
+    aligned = 3:
+        identities = 2,
+        positives = 3,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 3.0; substitution score = 3.0; gap score = 0.0; 3 aligned letters; 2 identities; 1 mismatches; 3 positives; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 3.0:
+        substitution_score = 3.0,
+        gap_score = 0.0.
+    aligned = 3:
+        identities = 2,
+        positives = 3,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 3.0)
 
     def test_match_dictionary6(self):
         try:
@@ -3698,11 +11537,11 @@ query             3 ATT 0
         aligner.substitution_matrix = substitution_matrix
         aligner.open_gap_score = -1.0
         aligner.extend_gap_score = 0.0
-        self.assertRegex(
+        self.assertEqual(
             str(aligner),
             """\
-^Pairwise sequence aligner with parameters
-  substitution_matrix: <Array object at .*>
+Pairwise sequence aligner with parameters
+  substitution_matrix: <Array object at 0x%x>
   open_internal_insertion_score: -1.000000
   extend_internal_insertion_score: 0.000000
   open_left_insertion_score: -1.000000
@@ -3716,7 +11555,8 @@ query             3 ATT 0
   open_right_deletion_score: -1.000000
   extend_right_deletion_score: 0.000000
   mode: local
-$""",
+"""
+            % id(substitution_matrix),
         )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
@@ -3743,6 +11583,131 @@ query             0 ATA 3
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 3]], [[0, 3]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (3 aligned letters; 2 identities; 1 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 3:
+        identities = 2,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(substitution_matrix)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (substitution score = 3.0; 3 aligned letters; 2 identities; 1 mismatches; 3 positives; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    substitution_score = 3.0,
+    aligned = 3:
+        identities = 2,
+        positives = 3,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 3.0; substitution score = 3.0; gap score = 0.0; 3 aligned letters; 2 identities; 1 mismatches; 3 positives; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 3.0:
+        substitution_score = 3.0,
+        gap_score = 0.0.
+    aligned = 3:
+        identities = 2,
+        positives = 3,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 3.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -3764,6 +11729,131 @@ query             4 ATA 1
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 3]], [[4, 1]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (3 aligned letters; 2 identities; 1 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 3:
+        identities = 2,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(substitution_matrix)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (substitution score = 3.0; 3 aligned letters; 2 identities; 1 mismatches; 3 positives; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    substitution_score = 3.0,
+    aligned = 3:
+        identities = 2,
+        positives = 3,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 3.0; substitution score = 3.0; gap score = 0.0; 3 aligned letters; 2 identities; 1 mismatches; 3 positives; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 3.0:
+        substitution_score = 3.0,
+        gap_score = 0.0.
+    aligned = 3:
+        identities = 2,
+        positives = 3,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 3.0)
 
 
 class TestPairwiseOneCharacter(unittest.TestCase):
@@ -3805,7 +11895,7 @@ Pairwise sequence aligner with parameters
         )
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
-        self.assertAlmostEqual(alignment.score, 1)
+        self.assertAlmostEqual(alignment.score, 1.0)
         self.assertEqual(
             str(alignment),
             """\
@@ -3818,6 +11908,91 @@ query             0 c 1
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[2, 3]], [[0, 1]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (1 aligned letters; 1 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 1:
+        identities = 1,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 1)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1.0; substitution score = 1.0; gap score = 0.0; 1 aligned letters; 1 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1.0:
+        substitution_score = 1.0,
+        gap_score = 0.0.
+    aligned = 1:
+        identities = 1,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 1)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 1.0)
 
     def test_align_one_char2(self):
         aligner = Align.PairwiseAligner()
@@ -3857,7 +12032,7 @@ Pairwise sequence aligner with parameters
         )
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
-        self.assertAlmostEqual(alignment.score, 1)
+        self.assertAlmostEqual(alignment.score, 1.0)
         self.assertEqual(
             str(alignment),
             """\
@@ -3870,8 +12045,93 @@ query             0 c 1
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[2, 3]], [[0, 1]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (1 aligned letters; 1 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 1:
+        identities = 1,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 1)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1.0; substitution score = 1.0; gap score = 0.0; 1 aligned letters; 1 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1.0:
+        substitution_score = 1.0,
+        gap_score = 0.0.
+    aligned = 1:
+        identities = 1,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 1)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 1.0)
         alignment = alignments[1]
-        self.assertAlmostEqual(alignment.score, 1)
+        self.assertAlmostEqual(alignment.score, 1.0)
         self.assertEqual(
             str(alignment),
             """\
@@ -3884,6 +12144,91 @@ query             0 c 1
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[3, 4]], [[0, 1]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (1 aligned letters; 1 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 1:
+        identities = 1,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 1)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1.0; substitution score = 1.0; gap score = 0.0; 1 aligned letters; 1 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1.0:
+        substitution_score = 1.0,
+        gap_score = 0.0.
+    aligned = 1:
+        identities = 1,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 1)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 1.0)
 
     def test_align_one_char3(self):
         aligner = Align.PairwiseAligner()
@@ -3938,6 +12283,91 @@ query             0 --c-- 1
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[2, 3]], [[0, 1]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (1 aligned letters; 1 identities; 0 mismatches; 4 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 1:
+        identities = 1,
+        mismatches = 0.
+    gaps = 4:
+        left_gaps = 2:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 2:
+                open_left_deletions = 1,
+                extend_left_deletions = 1;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 2:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 2:
+                open_right_deletions = 1,
+                extend_right_deletions = 1.
+""",
+        )
+        self.assertEqual(counts.aligned, 1)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 0.20000000000000007; substitution score = 1.0; gap score = -0.7999999999999999; 1 aligned letters; 1 identities; 0 mismatches; 4 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 0.20000000000000007:
+        substitution_score = 1.0,
+        gap_score = -0.7999999999999999.
+    aligned = 1:
+        identities = 1,
+        mismatches = 0.
+    gaps = 4:
+        left_gaps = 2:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 2:
+                open_left_deletions = 1,
+                extend_left_deletions = 1;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 2:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 2:
+                open_right_deletions = 1,
+                extend_right_deletions = 1.
+""",
+        )
+        self.assertEqual(counts.aligned, 1)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 0.2)
 
     def test_align_one_char_score3(self):
         aligner = Align.PairwiseAligner()
@@ -4059,7 +12489,7 @@ class TestPerSiteGapPenalties(unittest.TestCase):
         )
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
-        self.assertAlmostEqual(alignment.score, 2)
+        self.assertAlmostEqual(alignment.score, 2.0)
         self.assertEqual(
             str(alignment),
             """\
@@ -4075,6 +12505,91 @@ query             0 --AABBBAAAACC----------CCAAAABBBAA-- 22
                 np.array([[[2, 13], [23, 34]], [[0, 11], [11, 22]]]),
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (22 aligned letters; 22 identities; 0 mismatches; 14 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 22:
+        identities = 22,
+        mismatches = 0.
+    gaps = 14:
+        left_gaps = 2:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 2:
+                open_left_deletions = 1,
+                extend_left_deletions = 1;
+        internal_gaps = 10:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 10:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 9;
+        right_gaps = 2:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 2:
+                open_right_deletions = 1,
+                extend_right_deletions = 1.
+""",
+        )
+        self.assertEqual(counts.aligned, 22)
+        self.assertEqual(counts.identities, 22)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 2.0; substitution score = 22.0; gap score = -20.0; 22 aligned letters; 22 identities; 0 mismatches; 14 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 2.0:
+        substitution_score = 22.0,
+        gap_score = -20.0.
+    aligned = 22:
+        identities = 22,
+        mismatches = 0.
+    gaps = 14:
+        left_gaps = 2:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 2:
+                open_left_deletions = 1,
+                extend_left_deletions = 1;
+        internal_gaps = 10:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 10:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 9;
+        right_gaps = 2:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 2:
+                open_right_deletions = 1,
+                extend_right_deletions = 1.
+""",
+        )
+        self.assertEqual(counts.aligned, 22)
+        self.assertEqual(counts.identities, 22)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 2.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -4083,7 +12598,7 @@ query             0 --AABBBAAAACC----------CCAAAABBBAA-- 22
         )
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
-        self.assertAlmostEqual(alignment.score, 2)
+        self.assertAlmostEqual(alignment.score, 2.0)
         self.assertEqual(
             str(alignment),
             """\
@@ -4099,6 +12614,91 @@ query            22 --AABBBAAAACC----------CCAAAABBBAA--  0
                 np.array([[[2, 13], [23, 34]], [[22, 11], [11, 0]]]),
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (22 aligned letters; 22 identities; 0 mismatches; 14 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 22:
+        identities = 22,
+        mismatches = 0.
+    gaps = 14:
+        left_gaps = 2:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 2:
+                open_left_deletions = 1,
+                extend_left_deletions = 1;
+        internal_gaps = 10:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 10:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 9;
+        right_gaps = 2:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 2:
+                open_right_deletions = 1,
+                extend_right_deletions = 1.
+""",
+        )
+        self.assertEqual(counts.aligned, 22)
+        self.assertEqual(counts.identities, 22)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 2.0; substitution score = 22.0; gap score = -20.0; 22 aligned letters; 22 identities; 0 mismatches; 14 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 2.0:
+        substitution_score = 22.0,
+        gap_score = -20.0.
+    aligned = 22:
+        identities = 22,
+        mismatches = 0.
+    gaps = 14:
+        left_gaps = 2:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 2:
+                open_left_deletions = 1,
+                extend_left_deletions = 1;
+        internal_gaps = 10:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 10:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 9;
+        right_gaps = 2:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 2:
+                open_right_deletions = 1,
+                extend_right_deletions = 1.
+""",
+        )
+        self.assertEqual(counts.aligned, 22)
+        self.assertEqual(counts.identities, 22)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 2.0)
 
     def test_gap_here_only_2(self):
         # Force a bad alignment.
@@ -4153,7 +12753,7 @@ query            22 --AABBBAAAACC----------CCAAAABBBAA--  0
         )
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
-        self.assertAlmostEqual(alignment.score, -10)
+        self.assertAlmostEqual(alignment.score, -10.0)
         self.assertEqual(
             str(alignment),
             """\
@@ -4168,8 +12768,93 @@ query             0 --AAB----------BBAAAACCCCAAAABBBAA-- 22
                 alignment.aligned, np.array([[[2, 5], [15, 34]], [[0, 3], [3, 22]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (22 aligned letters; 16 identities; 6 mismatches; 14 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 22:
+        identities = 16,
+        mismatches = 6.
+    gaps = 14:
+        left_gaps = 2:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 2:
+                open_left_deletions = 1,
+                extend_left_deletions = 1;
+        internal_gaps = 10:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 10:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 9;
+        right_gaps = 2:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 2:
+                open_right_deletions = 1,
+                extend_right_deletions = 1.
+""",
+        )
+        self.assertEqual(counts.aligned, 22)
+        self.assertEqual(counts.identities, 16)
+        self.assertEqual(counts.mismatches, 6)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = -10.0; substitution score = 10.0; gap score = -20.0; 22 aligned letters; 16 identities; 6 mismatches; 14 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = -10.0:
+        substitution_score = 10.0,
+        gap_score = -20.0.
+    aligned = 22:
+        identities = 16,
+        mismatches = 6.
+    gaps = 14:
+        left_gaps = 2:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 2:
+                open_left_deletions = 1,
+                extend_left_deletions = 1;
+        internal_gaps = 10:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 10:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 9;
+        right_gaps = 2:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 2:
+                open_right_deletions = 1,
+                extend_right_deletions = 1.
+""",
+        )
+        self.assertEqual(counts.aligned, 22)
+        self.assertEqual(counts.identities, 16)
+        self.assertEqual(counts.mismatches, 6)
+        self.assertAlmostEqual(counts.score, -10.0)
         alignment = alignments[1]
-        self.assertAlmostEqual(alignment.score, -10)
+        self.assertAlmostEqual(alignment.score, -10.0)
         self.assertEqual(
             str(alignment),
             """\
@@ -4184,6 +12869,91 @@ query             0 AAB------------BBAAAACCCCAAAABBBAA-- 22
                 alignment.aligned, np.array([[[0, 3], [15, 34]], [[0, 3], [3, 22]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (22 aligned letters; 15 identities; 7 mismatches; 14 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 22:
+        identities = 15,
+        mismatches = 7.
+    gaps = 14:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 12:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 12:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 11;
+        right_gaps = 2:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 2:
+                open_right_deletions = 1,
+                extend_right_deletions = 1.
+""",
+        )
+        self.assertEqual(counts.aligned, 22)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 7)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = -10.0; substitution score = 8.0; gap score = -18.0; 22 aligned letters; 15 identities; 7 mismatches; 14 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = -10.0:
+        substitution_score = 8.0,
+        gap_score = -18.0.
+    aligned = 22:
+        identities = 15,
+        mismatches = 7.
+    gaps = 14:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 12:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 12:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 11;
+        right_gaps = 2:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 2:
+                open_right_deletions = 1,
+                extend_right_deletions = 1.
+""",
+        )
+        self.assertEqual(counts.aligned, 22)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 7)
+        self.assertAlmostEqual(counts.score, -10.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -4192,7 +12962,7 @@ query             0 AAB------------BBAAAACCCCAAAABBBAA-- 22
         )
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
-        self.assertAlmostEqual(alignment.score, -10)
+        self.assertAlmostEqual(alignment.score, -10.0)
         self.assertEqual(
             str(alignment),
             """\
@@ -4207,8 +12977,93 @@ query            22 --AABBBAAAACCCCAAAABB------------BAA  0
                 alignment.aligned, np.array([[[2, 21], [33, 36]], [[22, 3], [3, 0]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (22 aligned letters; 15 identities; 7 mismatches; 14 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 22:
+        identities = 15,
+        mismatches = 7.
+    gaps = 14:
+        left_gaps = 2:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 2:
+                open_left_deletions = 1,
+                extend_left_deletions = 1;
+        internal_gaps = 12:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 12:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 11;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 22)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 7)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = -10.0; substitution score = 8.0; gap score = -18.0; 22 aligned letters; 15 identities; 7 mismatches; 14 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = -10.0:
+        substitution_score = 8.0,
+        gap_score = -18.0.
+    aligned = 22:
+        identities = 15,
+        mismatches = 7.
+    gaps = 14:
+        left_gaps = 2:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 2:
+                open_left_deletions = 1,
+                extend_left_deletions = 1;
+        internal_gaps = 12:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 12:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 11;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 22)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 7)
+        self.assertAlmostEqual(counts.score, -10.0)
         alignment = alignments[1]
-        self.assertAlmostEqual(alignment.score, -10)
+        self.assertAlmostEqual(alignment.score, -10.0)
         self.assertEqual(
             str(alignment),
             """\
@@ -4223,6 +13078,91 @@ query            22 --AABBBAAAACCCCAAAABB----------BAA--  0
                 alignment.aligned, np.array([[[2, 21], [31, 34]], [[22, 3], [3, 0]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (22 aligned letters; 16 identities; 6 mismatches; 14 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 22:
+        identities = 16,
+        mismatches = 6.
+    gaps = 14:
+        left_gaps = 2:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 2:
+                open_left_deletions = 1,
+                extend_left_deletions = 1;
+        internal_gaps = 10:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 10:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 9;
+        right_gaps = 2:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 2:
+                open_right_deletions = 1,
+                extend_right_deletions = 1.
+""",
+        )
+        self.assertEqual(counts.aligned, 22)
+        self.assertEqual(counts.identities, 16)
+        self.assertEqual(counts.mismatches, 6)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = -10.0; substitution score = 10.0; gap score = -20.0; 22 aligned letters; 16 identities; 6 mismatches; 14 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = -10.0:
+        substitution_score = 10.0,
+        gap_score = -20.0.
+    aligned = 22:
+        identities = 16,
+        mismatches = 6.
+    gaps = 14:
+        left_gaps = 2:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 2:
+                open_left_deletions = 1,
+                extend_left_deletions = 1;
+        internal_gaps = 10:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 10:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 9;
+        right_gaps = 2:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 2:
+                open_right_deletions = 1,
+                extend_right_deletions = 1.
+""",
+        )
+        self.assertEqual(counts.aligned, 22)
+        self.assertEqual(counts.identities, 16)
+        self.assertEqual(counts.mismatches, 6)
+        self.assertAlmostEqual(counts.score, -10.0)
 
     def test_gap_here_only_3(self):
         # Check if gap open and gap extend penalties are handled correctly.
@@ -4287,6 +13227,91 @@ query             0 TTG--GAA 6
                 alignment.aligned, np.array([[[0, 2], [4, 6]], [[0, 2], [4, 6]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 4 identities; 0 mismatches; 4 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 4,
+        mismatches = 0.
+    gaps = 4:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 4:
+            internal_insertions = 2:
+                open_internal_insertions = 2,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 2.0; substitution score = 4.0; gap score = -2.0; 4 aligned letters; 4 identities; 0 mismatches; 4 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 2.0:
+        substitution_score = 4.0,
+        gap_score = -2.0.
+    aligned = 4:
+        identities = 4,
+        mismatches = 0.
+    gaps = 4:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 4:
+            internal_insertions = 2:
+                open_internal_insertions = 2,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 2.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -4310,6 +13335,91 @@ query             6 TTG--GAA 0
                 alignment.aligned, np.array([[[0, 2], [4, 6]], [[6, 4], [2, 0]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 4 identities; 0 mismatches; 4 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 4,
+        mismatches = 0.
+    gaps = 4:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 4:
+            internal_insertions = 2:
+                open_internal_insertions = 2,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 2.0; substitution score = 4.0; gap score = -2.0; 4 aligned letters; 4 identities; 0 mismatches; 4 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 2.0:
+        substitution_score = 4.0,
+        gap_score = -2.0.
+    aligned = 4:
+        identities = 4,
+        mismatches = 0.
+    gaps = 4:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 4:
+            internal_insertions = 2:
+                open_internal_insertions = 2,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 2.0)
         aligner.deletion_score = gap_score
         self.assertEqual(
             str(aligner),
@@ -4350,6 +13460,91 @@ query             0 TTGG-AA 6
                 np.array([[[0, 2], [2, 3], [4, 6]], [[0, 2], [3, 4], [4, 6]]]),
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (5 aligned letters; 4 identities; 1 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 5:
+        identities = 4,
+        mismatches = 1.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 5)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = -8.0; substitution score = -6.0; gap score = -2.0; 5 aligned letters; 4 identities; 1 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = -8.0:
+        substitution_score = -6.0,
+        gap_score = -2.0.
+    aligned = 5:
+        identities = 4,
+        mismatches = 1.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 5)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, -8.0)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, -8.0)
         self.assertEqual(
@@ -4366,6 +13561,91 @@ query             0 TT-GG-AA 6
                 alignment.aligned, np.array([[[0, 2], [4, 6]], [[0, 2], [4, 6]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 4 identities; 0 mismatches; 4 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 4,
+        mismatches = 0.
+    gaps = 4:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 4:
+            internal_insertions = 2:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 1;
+            internal_deletions = 2:
+                open_internal_deletions = 2,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = -8.0; substitution score = 4.0; gap score = -12.0; 4 aligned letters; 4 identities; 0 mismatches; 4 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = -8.0:
+        substitution_score = 4.0,
+        gap_score = -12.0.
+    aligned = 4:
+        identities = 4,
+        mismatches = 0.
+    gaps = 4:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 4:
+            internal_insertions = 2:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 1;
+            internal_deletions = 2:
+                open_internal_deletions = 2,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, -8.0)
         alignment = alignments[2]
         self.assertAlmostEqual(alignment.score, -8.0)
         self.assertEqual(
@@ -4383,6 +13663,91 @@ query             0 TT-GGAA 6
                 np.array([[[0, 2], [3, 4], [4, 6]], [[0, 2], [2, 3], [4, 6]]]),
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (5 aligned letters; 4 identities; 1 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 5:
+        identities = 4,
+        mismatches = 1.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 5)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = -8.0; substitution score = -6.0; gap score = -2.0; 5 aligned letters; 4 identities; 1 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = -8.0:
+        substitution_score = -6.0,
+        gap_score = -2.0.
+    aligned = 5:
+        identities = 4,
+        mismatches = 1.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 5)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, -8.0)
         alignment = alignments[3]
         self.assertAlmostEqual(alignment.score, -8.0)
         self.assertEqual(
@@ -4399,6 +13764,91 @@ query             0 TTG--GAA 6
                 alignment.aligned, np.array([[[0, 2], [4, 6]], [[0, 2], [4, 6]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 4 identities; 0 mismatches; 4 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 4,
+        mismatches = 0.
+    gaps = 4:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 4:
+            internal_insertions = 2:
+                open_internal_insertions = 2,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = -8.0; substitution score = 4.0; gap score = -12.0; 4 aligned letters; 4 identities; 0 mismatches; 4 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = -8.0:
+        substitution_score = 4.0,
+        gap_score = -12.0.
+    aligned = 4:
+        identities = 4,
+        mismatches = 0.
+    gaps = 4:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 4:
+            internal_insertions = 2:
+                open_internal_insertions = 2,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, -8.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -4423,6 +13873,91 @@ query             6 TTGG-AA 0
                 np.array([[[0, 2], [2, 3], [4, 6]], [[6, 4], [3, 2], [2, 0]]]),
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (5 aligned letters; 4 identities; 1 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 5:
+        identities = 4,
+        mismatches = 1.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 5)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = -8.0; substitution score = -6.0; gap score = -2.0; 5 aligned letters; 4 identities; 1 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = -8.0:
+        substitution_score = -6.0,
+        gap_score = -2.0.
+    aligned = 5:
+        identities = 4,
+        mismatches = 1.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 5)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, -8.0)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, -8.0)
         self.assertEqual(
@@ -4439,6 +13974,91 @@ query             6 TT-GG-AA 0
                 alignment.aligned, np.array([[[0, 2], [4, 6]], [[6, 4], [2, 0]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 4 identities; 0 mismatches; 4 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 4,
+        mismatches = 0.
+    gaps = 4:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 4:
+            internal_insertions = 2:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 1;
+            internal_deletions = 2:
+                open_internal_deletions = 2,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = -8.0; substitution score = 4.0; gap score = -12.0; 4 aligned letters; 4 identities; 0 mismatches; 4 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = -8.0:
+        substitution_score = 4.0,
+        gap_score = -12.0.
+    aligned = 4:
+        identities = 4,
+        mismatches = 0.
+    gaps = 4:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 4:
+            internal_insertions = 2:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 1;
+            internal_deletions = 2:
+                open_internal_deletions = 2,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, -8.0)
         alignment = alignments[2]
         self.assertAlmostEqual(alignment.score, -8.0)
         self.assertEqual(
@@ -4456,6 +14076,91 @@ query             6 TT-GGAA 0
                 np.array([[[0, 2], [3, 4], [4, 6]], [[6, 4], [4, 3], [2, 0]]]),
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (5 aligned letters; 4 identities; 1 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 5:
+        identities = 4,
+        mismatches = 1.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 5)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = -8.0; substitution score = -6.0; gap score = -2.0; 5 aligned letters; 4 identities; 1 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = -8.0:
+        substitution_score = -6.0,
+        gap_score = -2.0.
+    aligned = 5:
+        identities = 4,
+        mismatches = 1.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 5)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, -8.0)
         alignment = alignments[3]
         self.assertAlmostEqual(alignment.score, -8.0)
         self.assertEqual(
@@ -4472,6 +14177,91 @@ query             6 TTG--GAA 0
                 alignment.aligned, np.array([[[0, 2], [4, 6]], [[6, 4], [2, 0]]])
             )
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (4 aligned letters; 4 identities; 0 mismatches; 4 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 4:
+        identities = 4,
+        mismatches = 0.
+    gaps = 4:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 4:
+            internal_insertions = 2:
+                open_internal_insertions = 2,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = -8.0; substitution score = 4.0; gap score = -12.0; 4 aligned letters; 4 identities; 0 mismatches; 4 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = -8.0:
+        substitution_score = 4.0,
+        gap_score = -12.0.
+    aligned = 4:
+        identities = 4,
+        mismatches = 0.
+    gaps = 4:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 4:
+            internal_insertions = 2:
+                open_internal_insertions = 2,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, -8.0)
 
     def test_gap_here_only_local_1(self):
         seq1 = "AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA"
@@ -4534,8 +14324,93 @@ query             0 AABBBAAAACCCC 13
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[2, 15]], [[0, 13]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (13 aligned letters; 13 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 13:
+        identities = 13,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 13.0; substitution score = 13.0; gap score = 0.0; 13 aligned letters; 13 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 13.0:
+        substitution_score = 13.0,
+        gap_score = 0.0.
+    aligned = 13:
+        identities = 13,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 13.0)
         alignment = alignments[1]
-        self.assertAlmostEqual(alignment.score, 13)
+        self.assertAlmostEqual(alignment.score, 13.0)
         self.assertEqual(
             str(alignment),
             """\
@@ -4548,6 +14423,91 @@ query             9 CCCCAAAABBBAA 22
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[21, 34]], [[9, 22]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (13 aligned letters; 13 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 13:
+        identities = 13,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 13.0; substitution score = 13.0; gap score = 0.0; 13 aligned letters; 13 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 13.0:
+        substitution_score = 13.0,
+        gap_score = 0.0.
+    aligned = 13:
+        identities = 13,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 13.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -4569,6 +14529,91 @@ query            22 AABBBAAAACCCC  9
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[2, 15]], [[22, 9]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (13 aligned letters; 13 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 13:
+        identities = 13,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 13.0; substitution score = 13.0; gap score = 0.0; 13 aligned letters; 13 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 13.0:
+        substitution_score = 13.0,
+        gap_score = 0.0.
+    aligned = 13:
+        identities = 13,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 13.0)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 13)
         self.assertEqual(
@@ -4583,6 +14628,91 @@ query            13 CCCCAAAABBBAA  0
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[21, 34]], [[13, 0]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (13 aligned letters; 13 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 13:
+        identities = 13,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 13.0; substitution score = 13.0; gap score = 0.0; 13 aligned letters; 13 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 13.0:
+        substitution_score = 13.0,
+        gap_score = 0.0.
+    aligned = 13:
+        identities = 13,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 13.0)
 
     def test_gap_here_only_local_2(self):
         # Force a bad alignment.
@@ -4650,8 +14780,93 @@ query             0 AABBBAAAACCCC 13
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[2, 15]], [[0, 13]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (13 aligned letters; 13 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 13:
+        identities = 13,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 13.0; substitution score = 13.0; gap score = 0.0; 13 aligned letters; 13 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 13.0:
+        substitution_score = 13.0,
+        gap_score = 0.0.
+    aligned = 13:
+        identities = 13,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 13.0)
         alignment = alignments[1]
-        self.assertAlmostEqual(alignment.score, 13)
+        self.assertAlmostEqual(alignment.score, 13.0)
         self.assertEqual(
             str(alignment),
             """\
@@ -4664,6 +14879,91 @@ query             9 CCCCAAAABBBAA 22
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[21, 34]], [[9, 22]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (13 aligned letters; 13 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 13:
+        identities = 13,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 13.0; substitution score = 13.0; gap score = 0.0; 13 aligned letters; 13 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 13.0:
+        substitution_score = 13.0,
+        gap_score = 0.0.
+    aligned = 13:
+        identities = 13,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 13.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -4685,6 +14985,91 @@ query            22 AABBBAAAACCCC  9
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[2, 15]], [[22, 9]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (13 aligned letters; 13 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 13:
+        identities = 13,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 13.0; substitution score = 13.0; gap score = 0.0; 13 aligned letters; 13 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 13.0:
+        substitution_score = 13.0,
+        gap_score = 0.0.
+    aligned = 13:
+        identities = 13,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 13.0)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 13)
         self.assertEqual(
@@ -4699,6 +15084,91 @@ query            13 CCCCAAAABBBAA  0
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[21, 34]], [[13, 0]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (13 aligned letters; 13 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 13:
+        identities = 13,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 13.0; substitution score = 13.0; gap score = 0.0; 13 aligned letters; 13 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 13.0:
+        substitution_score = 13.0,
+        gap_score = 0.0.
+    aligned = 13:
+        identities = 13,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 13)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 13.0)
 
     def test_gap_here_only_local_3(self):
         # Check if gap open and gap extend penalties are handled correctly.
@@ -4761,6 +15231,91 @@ query             0 TT 2
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 2]], [[0, 2]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (2 aligned letters; 2 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 2.0; substitution score = 2.0; gap score = 0.0; 2 aligned letters; 2 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 2.0:
+        substitution_score = 2.0,
+        gap_score = 0.0.
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 2.0)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 2.0)
         self.assertEqual(
@@ -4796,6 +15351,91 @@ query             6 TT 4
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 2]], [[6, 4]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (2 aligned letters; 2 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 2.0; substitution score = 2.0; gap score = 0.0; 2 aligned letters; 2 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 2.0:
+        substitution_score = 2.0,
+        gap_score = 0.0.
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 2.0)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 2.0)
         self.assertEqual(
@@ -4810,6 +15450,91 @@ query             2 AA 0
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[4, 6]], [[2, 0]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (2 aligned letters; 2 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 2.0; substitution score = 2.0; gap score = 0.0; 2 aligned letters; 2 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 2.0:
+        substitution_score = 2.0,
+        gap_score = 0.0.
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 2.0)
         aligner.deletion_score = gap_score
         self.assertEqual(
             str(aligner),
@@ -4847,6 +15572,91 @@ query             0 TT 2
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 2]], [[0, 2]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (2 aligned letters; 2 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 2.0; substitution score = 2.0; gap score = 0.0; 2 aligned letters; 2 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 2.0:
+        substitution_score = 2.0,
+        gap_score = 0.0.
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 2.0)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 2.0)
         self.assertEqual(
@@ -4861,6 +15671,91 @@ query             4 AA 6
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[4, 6]], [[4, 6]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (2 aligned letters; 2 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 2.0; substitution score = 2.0; gap score = 0.0; 2 aligned letters; 2 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 2.0:
+        substitution_score = 2.0,
+        gap_score = 0.0.
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 2.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -4882,6 +15777,91 @@ query             6 TT 4
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[0, 2]], [[6, 4]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (2 aligned letters; 2 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 2.0; substitution score = 2.0; gap score = 0.0; 2 aligned letters; 2 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 2.0:
+        substitution_score = 2.0,
+        gap_score = 0.0.
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 2.0)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 2.0)
         self.assertEqual(
@@ -4896,6 +15876,91 @@ query             2 AA 0
         self.assertTrue(
             np.array_equal(alignment.aligned, np.array([[[4, 6]], [[2, 0]]]))
         )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (2 aligned letters; 2 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 2.0; substitution score = 2.0; gap score = 0.0; 2 aligned letters; 2 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 2.0:
+        substitution_score = 2.0,
+        gap_score = 0.0.
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 2.0)
 
     def test_broken_gap_function(self):
         # Check if an Exception is propagated if the gap function raises one
@@ -4955,6 +16020,267 @@ query             2 AA 0
             alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
             alignments = list(alignments)
 
+    def test_mixing_affine_and_function(self):
+        # Check if we can use a gap function for one sequence, and an affine
+        # gap score for the other sequence.
+
+        def gap_score_function(position, length):
+            if position == 4:
+                return 0
+            else:
+                return -100
+
+        aligner = Align.PairwiseAligner()
+        aligner.mismatch_score = -1
+        aligner.deletion_score = gap_score_function
+        aligner.internal_insertion_score = -10
+        seqA = "AAAAAAAAAAA"
+        seqB = "TTAAAAA"
+        alignments = aligner.align(seqA, seqB)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 5.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 --AAAAAAAAAAA 11
+                  0 --||------||| 13
+query             0 TTAA------AAA  7
+""",
+        )
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 5.0; substitution score = 5.0; gap score = 0.0; 5 aligned letters; 5 identities; 0 mismatches; 8 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 5.0:
+        substitution_score = 5.0,
+        gap_score = 0.0.
+    aligned = 5:
+        identities = 5,
+        mismatches = 0.
+    gaps = 8:
+        left_gaps = 2:
+            left_insertions = 2:
+                open_left_insertions = 1,
+                extend_left_insertions = 1;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 6:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 6:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 5;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 5)
+        self.assertEqual(counts.identities, 5)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.insertions, 2)
+        self.assertEqual(counts.deletions, 6)
+        self.assertAlmostEqual(counts.score, 5.0)
+        seqA = "AAAAAAAAAAA"
+        seqB = "AAAAATT"
+        alignments = aligner.align(seqA, seqB)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 5.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 AAAAAAAAAAA-- 11
+                  0 ||||------|-- 13
+query             0 AAAA------ATT  7
+""",
+        )
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 5.0; substitution score = 5.0; gap score = 0.0; 5 aligned letters; 5 identities; 0 mismatches; 8 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 5.0:
+        substitution_score = 5.0,
+        gap_score = 0.0.
+    aligned = 5:
+        identities = 5,
+        mismatches = 0.
+    gaps = 8:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 6:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 6:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 5;
+        right_gaps = 2:
+            right_insertions = 2:
+                open_right_insertions = 1,
+                extend_right_insertions = 1;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 5)
+        self.assertEqual(counts.identities, 5)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.insertions, 2)
+        self.assertEqual(counts.deletions, 6)
+        self.assertAlmostEqual(counts.score, 5.0)
+
+        # Same thing, switching A and B:
+        aligner = Align.PairwiseAligner()
+        aligner.mismatch_score = -1
+        aligner.insertion_score = gap_score_function
+        aligner.internal_deletion_score = -10
+        seqA = "TTAAAAA"
+        seqB = "AAAAAAAAAAA"
+        alignments = aligner.align(seqA, seqB)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 5.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 TTAA------AAA  7
+                  0 --||------||| 13
+query             0 --AAAAAAAAAAA 11
+""",
+        )
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 5.0; substitution score = 5.0; gap score = 0.0; 5 aligned letters; 5 identities; 0 mismatches; 8 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 5.0:
+        substitution_score = 5.0,
+        gap_score = 0.0.
+    aligned = 5:
+        identities = 5,
+        mismatches = 0.
+    gaps = 8:
+        left_gaps = 2:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 2:
+                open_left_deletions = 1,
+                extend_left_deletions = 1;
+        internal_gaps = 6:
+            internal_insertions = 6:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 5;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 5)
+        self.assertEqual(counts.identities, 5)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.insertions, 6)
+        self.assertEqual(counts.deletions, 2)
+        self.assertAlmostEqual(counts.score, 5.0)
+        seqA = "AAAAATT"
+        seqB = "AAAAAAAAAAA"
+        alignments = aligner.align(seqA, seqB)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 5.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 AAAA------ATT  7
+                  0 ||||------|-- 13
+query             0 AAAAAAAAAAA-- 11
+""",
+        )
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 5.0; substitution score = 5.0; gap score = 0.0; 5 aligned letters; 5 identities; 0 mismatches; 8 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 5.0:
+        substitution_score = 5.0,
+        gap_score = 0.0.
+    aligned = 5:
+        identities = 5,
+        mismatches = 0.
+    gaps = 8:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 6:
+            internal_insertions = 6:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 5;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 2:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 2:
+                open_right_deletions = 1,
+                extend_right_deletions = 1.
+""",
+        )
+        self.assertEqual(counts.aligned, 5)
+        self.assertEqual(counts.identities, 5)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.insertions, 6)
+        self.assertEqual(counts.deletions, 2)
+        self.assertAlmostEqual(counts.score, 5.0)
+
 
 class TestAlignerInput(unittest.TestCase):
     """Check aligning sequences provided as lists, str, Seq, or SeqRecord objects."""
@@ -4965,12 +16291,6 @@ class TestAlignerInput(unittest.TestCase):
         seq2 = ["Gly", "Ala", "Ala", "Cys", "Thr"]
         aligner = Align.PairwiseAligner()
         aligner.mode = "global"
-        # fmt: off
-        aligner.alphabet = [
-            "Ala", "Arg", "Asn", "Asp", "Cys", "Gln", "Glu", "Gly", "His", "Ile",
-            "Leu", "Lys", "Met", "Phe", "Pro", "Ser", "Thr", "Trp", "Tyr", "Val",
-        ]
-        # fmt: on
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
@@ -4998,6 +16318,21 @@ Gly Ala Ala Cys Thr
         )
         self.assertAlmostEqual(alignments[0].score, 3.0)
         self.assertAlmostEqual(alignments[1].score, 3.0)
+        counts = alignments[0].counts()
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignments[0].counts(aligner)
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 3.0)
+        counts = alignments[1].counts(aligner)
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertAlmostEqual(counts.score, 3.0)
 
         seq1 = ["Pro", "Pro", "Gly", "Ala", "Thr"]
         seq2 = ["Gly", "Ala", "Ala", "Cys", "Thr", "Asn", "Asn"]
@@ -5041,6 +16376,93 @@ Pro Pro Gly Ala --- --- Thr --- ---
             alignment[1, 1:], [None, "Gly", "Ala", "Ala", "Cys", "Thr", "Asn", "Asn"]
         )
         self.assertEqual(alignment[1, ::2], [None, "Gly", "Ala", "Thr", "Asn"])
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (3 aligned letters; 3 identities; 0 mismatches; 6 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 3:
+        identities = 3,
+        mismatches = 0.
+    gaps = 6:
+        left_gaps = 2:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 2:
+                open_left_deletions = 1,
+                extend_left_deletions = 1;
+        internal_gaps = 2:
+            internal_insertions = 2:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 1;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 2:
+            right_insertions = 2:
+                open_right_insertions = 1,
+                extend_right_insertions = 1;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.score)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 3.0; substitution score = 3.0; gap score = 0.0; 3 aligned letters; 3 identities; 0 mismatches; 6 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 3.0:
+        substitution_score = 3.0,
+        gap_score = 0.0.
+    aligned = 3:
+        identities = 3,
+        mismatches = 0.
+    gaps = 6:
+        left_gaps = 2:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 2:
+                open_left_deletions = 1,
+                extend_left_deletions = 1;
+        internal_gaps = 2:
+            internal_insertions = 2:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 1;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 2:
+            right_insertions = 2:
+                open_right_insertions = 1,
+                extend_right_insertions = 1;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.deletions, 2)
+        self.assertEqual(counts.insertions, 4)
+        self.assertAlmostEqual(counts.score, 3.0)
         alignment = alignments[1]
         self.assertEqual(
             str(alignment),
@@ -5072,18 +16494,58 @@ Pro Pro Gly --- Ala --- Thr --- ---
             alignment[1, 1:-1], [None, "Gly", "Ala", "Ala", "Cys", "Thr", "Asn"]
         )
         self.assertEqual(alignment[1, 1::2], [None, "Ala", "Cys", "Asn"])
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 3.0; substitution score = 3.0; gap score = 0.0; 3 aligned letters; 3 identities; 0 mismatches; 6 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 3.0:
+        substitution_score = 3.0,
+        gap_score = 0.0.
+    aligned = 3:
+        identities = 3,
+        mismatches = 0.
+    gaps = 6:
+        left_gaps = 2:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 2:
+                open_left_deletions = 1,
+                extend_left_deletions = 1;
+        internal_gaps = 2:
+            internal_insertions = 2:
+                open_internal_insertions = 2,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 2:
+            right_insertions = 2:
+                open_right_insertions = 1,
+                extend_right_insertions = 1;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.deletions, 2)
+        self.assertEqual(counts.insertions, 4)
+        self.assertAlmostEqual(counts.score, 3.0)
 
     def test_three_letter_amino_acids_local(self):
         seq1 = ["Asn", "Asn", "Gly", "Ala", "Thr", "Glu", "Glu"]
         seq2 = ["Pro", "Pro", "Gly", "Ala", "Ala", "Cys", "Thr", "Leu"]
         aligner = Align.PairwiseAligner()
         aligner.mode = "local"
-        # fmt: off
-        aligner.alphabet = [
-            "Ala", "Arg", "Asn", "Asp", "Cys", "Gln", "Glu", "Gly", "His", "Ile",
-            "Leu", "Lys", "Met", "Phe", "Pro", "Ser", "Thr", "Trp", "Tyr", "Val",
-        ]
-        # fmt: on
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
@@ -5113,6 +16575,52 @@ Gly Ala Ala Cys Thr
         self.assertEqual(alignment[1, 1:], ["Ala", "Ala", "Cys", "Thr"])
         self.assertEqual(alignment[1, :-1], ["Gly", "Ala", "Ala", "Cys"])
         self.assertEqual(alignment[1, ::2], ["Gly", "Ala", "Thr"])
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 3.0; substitution score = 3.0; gap score = 0.0; 3 aligned letters; 3 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 3.0:
+        substitution_score = 3.0,
+        gap_score = 0.0.
+    aligned = 3:
+        identities = 3,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 2:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 1;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.deletions, 0)
+        self.assertEqual(counts.insertions, 2)
+        self.assertAlmostEqual(counts.score, 3.0)
         alignment = alignments[1]
         self.assertEqual(
             str(alignment),
@@ -5133,6 +16641,52 @@ Gly Ala Ala Cys Thr
         self.assertEqual(alignment[1, 1:], ["Ala", "Ala", "Cys", "Thr"])
         self.assertEqual(alignment[1, :-1], ["Gly", "Ala", "Ala", "Cys"])
         self.assertEqual(alignment[1, ::2], ["Gly", "Ala", "Thr"])
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 3.0; substitution score = 3.0; gap score = 0.0; 3 aligned letters; 3 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 3.0:
+        substitution_score = 3.0,
+        gap_score = 0.0.
+    aligned = 3:
+        identities = 3,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 2:
+                open_internal_insertions = 2,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.deletions, 0)
+        self.assertEqual(counts.insertions, 2)
+        self.assertAlmostEqual(counts.score, 3.0)
 
     def test_str_seq_seqrecord(self):
         """Test aligning sequences provided as str, Seq, or SeqRecord objects."""
@@ -5168,6 +16722,54 @@ ACGT
 CGTT
 """,
         )
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = -7.0; substitution score = -7.0; gap score = 0.0; 4 aligned letters; 1 identities; 3 mismatches; 1 positives; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = -7.0:
+        substitution_score = -7.0,
+        gap_score = 0.0.
+    aligned = 4:
+        identities = 1,
+        positives = 1,
+        mismatches = 3.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 3)
+        self.assertEqual(counts.deletions, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.positives, 1)
+        self.assertAlmostEqual(counts.score, -7.0)
         alignments = aligner.align(s1, s2)
         self.assertEqual(
             repr(alignments),
@@ -5193,6 +16795,54 @@ ACGT
 CGTT
 """,
         )
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = -7.0; substitution score = -7.0; gap score = 0.0; 4 aligned letters; 1 identities; 3 mismatches; 1 positives; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = -7.0:
+        substitution_score = -7.0,
+        gap_score = 0.0.
+    aligned = 4:
+        identities = 1,
+        positives = 1,
+        mismatches = 3.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 3)
+        self.assertEqual(counts.deletions, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertEqual(counts.positives, 1)
+        self.assertAlmostEqual(counts.score, -7.0)
         alignments = aligner.align(r1, r2)
         self.assertEqual(
             repr(alignments),
@@ -5218,12 +16868,59 @@ ACGT
 CGTT
 """,
         )
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = -7.0; substitution score = -7.0; gap score = 0.0; 4 aligned letters; 1 identities; 3 mismatches; 1 positives; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = -7.0:
+        substitution_score = -7.0,
+        gap_score = 0.0.
+    aligned = 4:
+        identities = 1,
+        positives = 1,
+        mismatches = 3.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 4)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 3)
+        self.assertEqual(counts.deletions, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertAlmostEqual(counts.score, -7.0)
 
 
 class TestArgumentErrors(unittest.TestCase):
     def test_aligner_string_errors(self):
         aligner = Align.PairwiseAligner()
-        message = "^argument is not a sequence$"
+        message = "^'int' object is not iterable$"
         with self.assertRaisesRegex(TypeError, message):
             aligner.score("AAA", 3)
         message = "^sequence has zero length$"
@@ -5231,10 +16928,6 @@ class TestArgumentErrors(unittest.TestCase):
             aligner.score("AAA", "")
         with self.assertRaisesRegex(ValueError, message):
             aligner.score("AAA", "", strand="-")
-        message = "^sequence contains letters not in the alphabet$"
-        aligner.alphabet = "ABCD"
-        with self.assertRaisesRegex(ValueError, message):
-            aligner.score("AAA", "AAE")
 
     def test_aligner_array_errors(self):
         aligner = Align.PairwiseAligner()
@@ -5274,14 +16967,77 @@ class TestArgumentErrors(unittest.TestCase):
         s2 = np.array([ord("G"), ord("A"), ord("G")], np.int32)
         score = aligner.score(s1, s2)
         self.assertAlmostEqual(score, 2.0)
+        alignments = aligner.align(s1, s2)
+        self.assertEqual(len(alignments), 5)
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+G  -- G  G
+.  -- .  -
+71 65 71 -
+""",
+        )
+        self.assertAlmostEqual(alignment.score, 2.0)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 2.0; substitution score = 2.0; gap score = 0.0; 2 aligned letters; 2 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 2.0:
+        substitution_score = 2.0,
+        gap_score = 0.0.
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 1:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 1:
+                open_right_deletions = 1,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.deletions, 1)
+        self.assertEqual(counts.insertions, 1)
+        self.assertAlmostEqual(counts.score, 2.0)
+
         s2 = np.array([1.0, 0.0, 1.0])
         message = "^sequence has incorrect data type 'd'$"
         with self.assertRaisesRegex(ValueError, message):
             aligner.score(s1, s2)
+        with self.assertRaisesRegex(ValueError, message):
+            aligner.align(s1, s2)
         s2 = np.zeros((3, 2), np.int32)
         message = "^sequence has incorrect rank \\(2 expected 1\\)$"
         with self.assertRaisesRegex(ValueError, message):
             aligner.score(s1, s2)
+        with self.assertRaisesRegex(ValueError, message):
+            aligner.align(s1, s2)
         s1 = np.array([1, 5, 6], np.int32)
         s2 = np.array([1, 8, 6], np.int32)
         s2a = np.array([1, 8, 99], np.int32)
@@ -5292,29 +17048,330 @@ class TestArgumentErrors(unittest.TestCase):
         aligner.gap_score = -10.0
         score = aligner.score(s1, s2)
         self.assertAlmostEqual(score, 4.0)
-        # the following two are valid as we are using match/mismatch scores
+        alignments = aligner.align(s1, s2)
+        self.assertAlmostEqual(alignments.score, 4.0)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 4.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+1 5 6
+| . |
+1 8 6
+""",
+        )
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 4.0; substitution score = 4.0; gap score = 0.0; 3 aligned letters; 2 identities; 1 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 4.0:
+        substitution_score = 4.0,
+        gap_score = 0.0.
+    aligned = 3:
+        identities = 2,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertEqual(counts.deletions, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertAlmostEqual(counts.score, 4.0)
+        # alignments are valid as we are using match/mismatch scores
         # instead of a substitution matrix:
         score = aligner.score(s1, s2a)
         self.assertAlmostEqual(score, 1.0)
+        alignments = aligner.align(s1, s2a)
+        self.assertEqual(len(alignments), 1)
+        self.assertAlmostEqual(alignments.score, 1.0)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 1.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+1 5 6 
+| . . 
+1 8 99
+""",
+        )
         score = aligner.score(s1, s2b)
         self.assertAlmostEqual(score, 4.0)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1.0; substitution score = 1.0; gap score = 0.0; 3 aligned letters; 1 identities; 1 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1.0:
+        substitution_score = 1.0,
+        gap_score = 0.0.
+    aligned = 3:
+        identities = 1,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertEqual(counts.deletions, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertAlmostEqual(counts.score, 1.0)
+        alignments = aligner.align(s1, s2b)
+        self.assertEqual(len(alignments), 1)
+        self.assertAlmostEqual(alignments.score, 4.0)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 4.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+1 5  6
+| .  |
+1 28 6
+""",
+        )
+        self.assertAlmostEqual(score, 4.0)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 4.0; substitution score = 4.0; gap score = 0.0; 3 aligned letters; 2 identities; 1 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 4.0:
+        substitution_score = 4.0,
+        gap_score = 0.0.
+    aligned = 3:
+        identities = 2,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertEqual(counts.deletions, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertAlmostEqual(counts.score, 4.0)
         # when using a substitution matrix, all indices should be between 0
         # and the size of the substitution matrix:
         m = 5 * np.eye(10)
         aligner.substitution_matrix = m
         score = aligner.score(s1, s2)  # no ValueError
         self.assertAlmostEqual(score, 10.0)
+        alignments = aligner.align(s1, s2)
+        self.assertAlmostEqual(alignments.score, 10.0)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 10.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+1 5 6
+| . |
+1 8 6
+""",
+        )
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 10.0; substitution score = 10.0; gap score = 0.0; 3 aligned letters; 2 identities; 1 mismatches; 2 positives; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 10.0:
+        substitution_score = 10.0,
+        gap_score = 0.0.
+    aligned = 3:
+        identities = 2,
+        positives = 2,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertEqual(counts.deletions, 0)
+        self.assertEqual(counts.insertions, 0)
+        self.assertAlmostEqual(counts.score, 10.0)
+        counts = alignment.counts(m)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (substitution score = 10.0; 3 aligned letters; 2 identities; 1 mismatches; 2 positives; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    substitution_score = 10.0,
+    aligned = 3:
+        identities = 2,
+        positives = 2,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        alignment.sequences[1] = s2b
+        with self.assertRaises(ValueError) as cm:
+            alignment.counts(m)
+        self.assertEqual(
+            str(cm.exception), "sequence[1][1] is out of bound (28, should be < 10)"
+        )
+        with self.assertRaises(ValueError) as cm:
+            alignment.counts(aligner)
+        self.assertEqual(
+            str(cm.exception), "sequence[1][1] is out of bound (28, should be < 10)"
+        )
+        alignment.sequences[1] = s2c
+        with self.assertRaises(ValueError) as cm:
+            alignment.counts(m)
+        self.assertEqual(str(cm.exception), "sequences[1][2] is negative (-6)")
+        with self.assertRaises(ValueError) as cm:
+            alignment.counts(aligner)
+        self.assertEqual(str(cm.exception), "sequences[1][2] is negative (-6)")
         message = "^sequence item 2 is negative \\(-6\\)$"
         with self.assertRaisesRegex(ValueError, message):
             aligner.score(s1, s2c)
+        with self.assertRaisesRegex(ValueError, message):
+            aligner.align(s1, s2c)
         message = "^sequence item 1 is out of bound \\(28, should be < 10\\)$"
         with self.assertRaisesRegex(ValueError, message):
             aligner.score(s1, s2b)
+        with self.assertRaisesRegex(ValueError, message):
+            aligner.align(s1, s2b)
         # note that the wildcard character is ignored when using a substitution
         # matrix, so 99 is interpreted as an index here:
         message = "^sequence item 2 is out of bound \\(99, should be < 10\\)$"
         with self.assertRaisesRegex(ValueError, message):
             aligner.score(s1, s2a)
+        with self.assertRaisesRegex(ValueError, message):
+            aligner.align(s1, s2a)
 
 
 class TestOverflowError(unittest.TestCase):
@@ -5471,6 +17528,52 @@ query          1534 CCTCCTT---A 1542
         )
         self.assertEqual(alignment.shape, (2, 1811))
         self.assertAlmostEqual(alignment.score, 1286.0)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1286.0; substitution score = 1286.0; gap score = 0.0; 1286 aligned letters; 1286 identities; 0 mismatches; 525 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1286.0:
+        substitution_score = 1286.0,
+        gap_score = 0.0.
+    aligned = 1286:
+        identities = 1286,
+        mismatches = 0.
+    gaps = 525:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 525:
+            internal_insertions = 256:
+                open_internal_insertions = 202,
+                extend_internal_insertions = 54;
+            internal_deletions = 269:
+                open_internal_deletions = 199,
+                extend_internal_deletions = 70;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 1286)
+        self.assertEqual(counts.identities, 1286)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.deletions, 269)
+        self.assertEqual(counts.insertions, 256)
+        self.assertAlmostEqual(counts.score, 1286.0)
         alignments = aligner.align(seq1, reverse_complement(seq2), strand="-")
         self.assertEqual(
             repr(alignments),
@@ -5616,6 +17719,52 @@ query             8 CCTCCTT---A    0
         )
         self.assertAlmostEqual(alignment.score, 1286.0)
         self.assertEqual(alignment.shape, (2, 1811))
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1286.0; substitution score = 1286.0; gap score = 0.0; 1286 aligned letters; 1286 identities; 0 mismatches; 525 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1286.0:
+        substitution_score = 1286.0,
+        gap_score = 0.0.
+    aligned = 1286:
+        identities = 1286,
+        mismatches = 0.
+    gaps = 525:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 525:
+            internal_insertions = 256:
+                open_internal_insertions = 202,
+                extend_internal_insertions = 54;
+            internal_deletions = 269:
+                open_internal_deletions = 199,
+                extend_internal_deletions = 70;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 1286)
+        self.assertEqual(counts.identities, 1286)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.deletions, 269)
+        self.assertEqual(counts.insertions, 256)
+        self.assertAlmostEqual(counts.score, 1286.0)
 
 
 class TestKeywordArgumentsConstructor(unittest.TestCase):
@@ -5653,11 +17802,11 @@ Pairwise sequence aligner with parameters
 class TestPredefinedScoringSchemes(unittest.TestCase):
     def test_blastn(self):
         aligner = Align.PairwiseAligner(scoring="blastn")
-        self.assertRegex(
+        self.assertEqual(
             str(aligner),
             """\
-^Pairwise sequence aligner with parameters
-  substitution_matrix: <Array object at .*
+Pairwise sequence aligner with parameters
+  substitution_matrix: <Array object at 0x%x>
   open_internal_insertion_score: -7.000000
   extend_internal_insertion_score: -2.000000
   open_left_insertion_score: -7.000000
@@ -5671,7 +17820,8 @@ class TestPredefinedScoringSchemes(unittest.TestCase):
   open_right_deletion_score: -7.000000
   extend_right_deletion_score: -2.000000
   mode: global
-$""",
+"""
+            % id(aligner.substitution_matrix),
         )
         self.assertEqual(
             str(aligner.substitution_matrix[:, :]),
@@ -5697,11 +17847,11 @@ N -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0
 
     def test_megablast(self):
         aligner = Align.PairwiseAligner(scoring="megablast")
-        self.assertRegex(
+        self.assertEqual(
             str(aligner),
             """\
-^Pairwise sequence aligner with parameters
-  substitution_matrix: <Array object at .*
+Pairwise sequence aligner with parameters
+  substitution_matrix: <Array object at 0x%x>
   open_internal_insertion_score: -2.500000
   extend_internal_insertion_score: -2.500000
   open_left_insertion_score: -2.500000
@@ -5715,7 +17865,8 @@ N -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0
   open_right_deletion_score: -2.500000
   extend_right_deletion_score: -2.500000
   mode: global
-$""",
+"""
+            % id(aligner.substitution_matrix),
         )
         self.assertEqual(
             str(aligner.substitution_matrix[:, :]),
@@ -5741,11 +17892,11 @@ N -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0
 
     def test_blastp(self):
         aligner = Align.PairwiseAligner(scoring="blastp")
-        self.assertRegex(
+        self.assertEqual(
             str(aligner),
             """\
-^Pairwise sequence aligner with parameters
-  substitution_matrix: <Array object at .*
+Pairwise sequence aligner with parameters
+  substitution_matrix: <Array object at 0x%x>
   open_internal_insertion_score: -12.000000
   extend_internal_insertion_score: -1.000000
   open_left_insertion_score: -12.000000
@@ -5759,7 +17910,8 @@ N -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0
   open_right_deletion_score: -12.000000
   extend_right_deletion_score: -1.000000
   mode: global
-$""",
+"""
+            % id(aligner.substitution_matrix),
         )
         self.assertEqual(
             str(aligner.substitution_matrix[:, :]),
@@ -5802,7 +17954,6 @@ class TestUnicodeStrings(unittest.TestCase):
         seq2 = "ĞĀŦ"
         aligner = Align.PairwiseAligner()
         aligner.mode = "global"
-        aligner.alphabet = None
         self.assertEqual(aligner.algorithm, "Needleman-Wunsch")
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
@@ -5829,6 +17980,52 @@ class TestUnicodeStrings(unittest.TestCase):
                 alignment.aligned, np.array([[[0, 2], [4, 5]], [[0, 2], [2, 3]]])
             )
         )
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 3.0; substitution score = 3.0; gap score = 0.0; 3 aligned letters; 3 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 3.0:
+        substitution_score = 3.0,
+        gap_score = 0.0.
+    aligned = 3:
+        identities = 3,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.deletions, 2)
+        self.assertEqual(counts.insertions, 0)
+        self.assertAlmostEqual(counts.score, 3.0)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 3.0)
         self.assertEqual(
@@ -5846,13 +18043,58 @@ class TestUnicodeStrings(unittest.TestCase):
                 np.array([[[0, 1], [2, 3], [4, 5]], [[0, 1], [1, 2], [2, 3]]]),
             )
         )
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 3.0; substitution score = 3.0; gap score = 0.0; 3 aligned letters; 3 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 3.0:
+        substitution_score = 3.0,
+        gap_score = 0.0.
+    aligned = 3:
+        identities = 3,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 2,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.deletions, 2)
+        self.assertEqual(counts.insertions, 0)
+        self.assertAlmostEqual(counts.score, 3.0)
 
     def test_needlemanwunsch_simple1_fogsaa(self):
         seq1 = "ĞĀĀČŦ"
         seq2 = "ĞĀŦ"
         aligner = Align.PairwiseAligner()
         aligner.mode = "fogsaa"
-        aligner.alphabet = None
         self.assertEqual(
             aligner.algorithm, "Fast Optimal Global Sequence Alignment Algorithm"
         )
@@ -5881,11 +18123,56 @@ class TestUnicodeStrings(unittest.TestCase):
                 alignment.aligned, np.array([[[0, 2], [4, 5]], [[0, 2], [2, 3]]])
             )
         )
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 3.0; substitution score = 3.0; gap score = 0.0; 3 aligned letters; 3 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 3.0:
+        substitution_score = 3.0,
+        gap_score = 0.0.
+    aligned = 3:
+        identities = 3,
+        mismatches = 0.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.deletions, 2)
+        self.assertEqual(counts.insertions, 0)
+        self.assertAlmostEqual(counts.score, 3.0)
 
     def test_align_affine1_score(self):
         aligner = Align.PairwiseAligner()
         aligner.mode = "global"
-        aligner.alphabet = None
         aligner.match_score = 0
         aligner.mismatch_score = -1
         aligner.open_gap_score = -5
@@ -5893,11 +18180,122 @@ class TestUnicodeStrings(unittest.TestCase):
         self.assertEqual(aligner.algorithm, "Gotoh global alignment algorithm")
         score = aligner.score("いい", "あいいう")
         self.assertAlmostEqual(score, -7.0)
+        alignments = aligner.align("いい", "あいいう")
+        self.assertEqual(len(alignments), 2)
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+--いい
+--|.
+あいいう
+""",
+        )
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = -7.0; substitution score = -1.0; gap score = -6.0; 2 aligned letters; 1 identities; 1 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = -7.0:
+        substitution_score = -1.0,
+        gap_score = -6.0.
+    aligned = 2:
+        identities = 1,
+        mismatches = 1.
+    gaps = 2:
+        left_gaps = 2:
+            left_insertions = 2:
+                open_left_insertions = 1,
+                extend_left_insertions = 1;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertEqual(counts.deletions, 0)
+        self.assertEqual(counts.insertions, 2)
+        self.assertAlmostEqual(counts.score, -7.0)
+        alignment = alignments[1]
+        self.assertEqual(
+            str(alignment),
+            """\
+いい--
+.|--
+あいいう
+""",
+        )
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = -7.0; substitution score = -1.0; gap score = -6.0; 2 aligned letters; 1 identities; 1 mismatches; 2 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = -7.0:
+        substitution_score = -1.0,
+        gap_score = -6.0.
+    aligned = 2:
+        identities = 1,
+        mismatches = 1.
+    gaps = 2:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 2:
+            right_insertions = 2:
+                open_right_insertions = 1,
+                extend_right_insertions = 1;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertEqual(counts.deletions, 0)
+        self.assertEqual(counts.insertions, 2)
+        self.assertAlmostEqual(counts.score, -7.0)
 
     def test_align_affine1_score_fogsaa(self):
         aligner = Align.PairwiseAligner()
         aligner.mode = "fogsaa"
-        aligner.alphabet = None
         aligner.match_score = 0
         aligner.mismatch_score = -1
         aligner.open_gap_score = -5
@@ -5911,7 +18309,6 @@ class TestUnicodeStrings(unittest.TestCase):
     def test_smithwaterman(self):
         aligner = Align.PairwiseAligner()
         aligner.mode = "local"
-        aligner.alphabet = None
         aligner.gap_score = -0.1
         self.assertEqual(aligner.algorithm, "Smith-Waterman")
         score = aligner.score("ℵℷℶℷ", "ℸℵℶℸ")
@@ -5939,10 +18336,55 @@ class TestUnicodeStrings(unittest.TestCase):
                 alignment.aligned, np.array([[[0, 1], [2, 3]], [[1, 2], [2, 3]]])
             )
         )
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1.9; substitution score = 2.0; gap score = -0.1; 2 aligned letters; 2 identities; 0 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1.9:
+        substitution_score = 2.0,
+        gap_score = -0.1.
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.deletions, 1)
+        self.assertEqual(counts.insertions, 0)
+        self.assertAlmostEqual(counts.score, 1.9)
 
     def test_gotoh_local(self):
         aligner = Align.PairwiseAligner()
-        aligner.alphabet = None
         aligner.mode = "local"
         aligner.open_gap_score = -0.1
         aligner.extend_gap_score = 0.0
@@ -5972,6 +18414,52 @@ class TestUnicodeStrings(unittest.TestCase):
                 alignment.aligned, np.array([[[0, 1], [2, 3]], [[1, 2], [2, 3]]])
             )
         )
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1.9; substitution score = 2.0; gap score = -0.1; 2 aligned letters; 2 identities; 0 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1.9:
+        substitution_score = 2.0,
+        gap_score = -0.1.
+    aligned = 2:
+        identities = 2,
+        mismatches = 0.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 2)
+        self.assertEqual(counts.identities, 2)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertEqual(counts.deletions, 1)
+        self.assertEqual(counts.insertions, 0)
+        self.assertAlmostEqual(counts.score, 1.9)
 
 
 class TestAlignerPickling(unittest.TestCase):
@@ -6185,6 +18673,7 @@ target	10	73	query	19	+	10	73	0	5	10,3,12,7,5,	0,10,24,50,58,
 query	0	target	1	255	10D10M1I3M11D12M14D7M1D5M6D	*	0	0	AGCATCGAGCGACTTGAGTACTATTCATACTTTCGAGC	*	AS:i:19
 """,
         )
+        self.assertAlmostEqual(alignment.counts(aligner).score, 19.0)
         alignments = aligner.align(
             chromosome, reverse_complement(transcript), strand="-"
         )
@@ -6227,6 +18716,7 @@ target	10	73	query	19	-	10	73	0	5	10,3,12,7,5,	0,10,24,50,58,
 query	16	target	1	255	10D10M1I3M11D12M14D7M1D5M6D	*	0	0	AGCATCGAGCGACTTGAGTACTATTCATACTTTCGAGC	*	AS:i:19
 """,
         )
+        self.assertAlmostEqual(alignment.counts(aligner).score, 19.0)
 
     def test_alignment_end_gap(self):
         aligner = Align.PairwiseAligner()
@@ -6269,6 +18759,7 @@ target	0	13	query	13	+	0	13	0	1	13,	0,
 query	0	target	1	255	4I13M	*	0	0	CCCCACGTAGCATCAGC	*	AS:i:13
 """,
         )
+        self.assertAlmostEqual(alignment.counts(aligner).score, 13.0)
         alignments = aligner.align(
             "ACGTAGCATCAGC", reverse_complement("CCCCACGTAGCATCAGC"), strand="-"
         )
@@ -6307,6 +18798,7 @@ target	0	13	query	13	-	0	13	0	1	13,	0,
 query	16	target	1	255	4I13M	*	0	0	CCCCACGTAGCATCAGC	*	AS:i:13
 """,
         )
+        self.assertAlmostEqual(alignment.counts(aligner).score, 13.0)
         alignments = aligner.align("CCCCACGTAGCATCAGC", "ACGTAGCATCAGC")
         self.assertEqual(
             repr(alignments),
@@ -6343,6 +18835,7 @@ target	4	17	query	13	+	4	17	0	1	13,	0,
 query	0	target	1	255	4D13M	*	0	0	ACGTAGCATCAGC	*	AS:i:13
 """,
         )
+        self.assertAlmostEqual(alignment.counts(aligner).score, 13.0)
         alignments = aligner.align(
             "CCCCACGTAGCATCAGC", reverse_complement("ACGTAGCATCAGC"), strand="-"
         )
@@ -6381,6 +18874,7 @@ target	4	17	query	13	-	4	17	0	1	13,	0,
 query	16	target	1	255	4D13M	*	0	0	ACGTAGCATCAGC	*	AS:i:13
 """,
         )
+        self.assertAlmostEqual(alignment.counts(aligner).score, 13.0)
         alignments = aligner.align("ACGTAGCATCAGC", "ACGTAGCATCAGCGGGG")
         self.assertEqual(
             repr(alignments),
@@ -6416,6 +18910,7 @@ target	0	13	query	13	+	0	13	0	1	13,	0,
 query	0	target	1	255	13M4I	*	0	0	ACGTAGCATCAGCGGGG	*	AS:i:13
 """,
         )
+        self.assertAlmostEqual(alignment.counts(aligner).score, 13.0)
         alignments = aligner.align(
             "ACGTAGCATCAGC", reverse_complement("ACGTAGCATCAGCGGGG"), strand="-"
         )
@@ -6453,6 +18948,7 @@ target	0	13	query	13	-	0	13	0	1	13,	0,
 query	16	target	1	255	13M4I	*	0	0	ACGTAGCATCAGCGGGG	*	AS:i:13
 """,
         )
+        self.assertAlmostEqual(alignment.counts(aligner).score, 13.0)
         alignments = aligner.align("ACGTAGCATCAGCGGGG", "ACGTAGCATCAGC")
         self.assertEqual(
             repr(alignments),
@@ -6489,6 +18985,7 @@ target	0	13	query	13	+	0	13	0	1	13,	0,
 query	0	target	1	255	13M4D	*	0	0	ACGTAGCATCAGC	*	AS:i:13
 """,
         )
+        self.assertAlmostEqual(alignment.counts(aligner).score, 13.0)
         alignments = aligner.align(
             "ACGTAGCATCAGCGGGG", reverse_complement("ACGTAGCATCAGC"), strand="-"
         )
@@ -6527,6 +19024,7 @@ target	0	13	query	13	-	0	13	0	1	13,	0,
 query	16	target	1	255	13M4D	*	0	0	ACGTAGCATCAGC	*	AS:i:13
 """,
         )
+        self.assertAlmostEqual(alignment.counts(aligner).score, 13.0)
 
     def test_alignment_wildcard(self):
         aligner = Align.PairwiseAligner()
@@ -6539,6 +19037,7 @@ query	16	target	1	255	13M4D	*	0	0	ACGTAGCATCAGC	*	AS:i:13
         aligner.mode = "local"
         # use strings for target and query
         alignments = aligner.align(target, query)
+        self.assertAlmostEqual(alignments.score, 13.0)
         self.assertEqual(len(alignments), 1)
         self.assertEqual(
             repr(alignments),
@@ -6556,13 +19055,129 @@ query             0 ACGATCGAGCNGCTACG 17
         )
         self.assertEqual(alignment.shape, (2, 17))
         counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (17 aligned letters; 15 identities; 2 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 17:
+        identities = 15,
+        mismatches = 2.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 17)
         self.assertEqual(counts.identities, 15)
         self.assertEqual(counts.mismatches, 2)
-        counts = alignment.counts(wildcard="N")
+        counts = alignment.counts("N")
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (17 aligned letters; 15 identities; 1 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 17:
+        identities = 15,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 17)
         self.assertEqual(counts.identities, 15)
         self.assertEqual(counts.mismatches, 1)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 13.0; substitution score = 13.0; gap score = 0.0; 17 aligned letters; 15 identities; 1 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 13.0:
+        substitution_score = 13.0,
+        gap_score = 0.0.
+    aligned = 17:
+        identities = 15,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 17)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 13.0)
         self.assertEqual(
             alignment.format("psl"),
             """\
@@ -6599,13 +19214,129 @@ query            22 ACGATCGAGCNGCTACG  5
         )
         self.assertEqual(alignment.shape, (2, 17))
         counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (17 aligned letters; 15 identities; 2 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 17:
+        identities = 15,
+        mismatches = 2.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 17)
         self.assertEqual(counts.identities, 15)
         self.assertEqual(counts.mismatches, 2)
-        counts = alignment.counts(wildcard="N")
+        counts = alignment.counts("N")
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (17 aligned letters; 15 identities; 1 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 17:
+        identities = 15,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 17)
         self.assertEqual(counts.identities, 15)
         self.assertEqual(counts.mismatches, 1)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 13.0; substitution score = 13.0; gap score = 0.0; 17 aligned letters; 15 identities; 1 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 13.0:
+        substitution_score = 13.0,
+        gap_score = 0.0.
+    aligned = 17:
+        identities = 15,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 17)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 13.0)
         self.assertEqual(
             alignment.format("psl"),
             """\
@@ -6643,13 +19374,129 @@ query             0 ACGATCGAGCNGCTACG 17
         )
         self.assertEqual(alignment.shape, (2, 17))
         counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (17 aligned letters; 15 identities; 2 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 17:
+        identities = 15,
+        mismatches = 2.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 17)
         self.assertEqual(counts.identities, 15)
         self.assertEqual(counts.mismatches, 2)
-        counts = alignment.counts(wildcard="N")
+        counts = alignment.counts("N")
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (17 aligned letters; 15 identities; 1 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 17:
+        identities = 15,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 17)
         self.assertEqual(counts.identities, 15)
         self.assertEqual(counts.mismatches, 1)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 13.0; substitution score = 13.0; gap score = 0.0; 17 aligned letters; 15 identities; 1 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 13.0:
+        substitution_score = 13.0,
+        gap_score = 0.0.
+    aligned = 17:
+        identities = 15,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 17)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 13.0)
         self.assertEqual(
             alignment.format("psl"),
             """\
@@ -6687,13 +19534,129 @@ query            22 ACGATCGAGCNGCTACG  5
 """,
         )
         counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (17 aligned letters; 15 identities; 2 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 17:
+        identities = 15,
+        mismatches = 2.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 17)
         self.assertEqual(counts.identities, 15)
         self.assertEqual(counts.mismatches, 2)
-        counts = alignment.counts(wildcard="N")
+        counts = alignment.counts("N")
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (17 aligned letters; 15 identities; 1 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 17:
+        identities = 15,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 17)
         self.assertEqual(counts.identities, 15)
         self.assertEqual(counts.mismatches, 1)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 13.0; substitution score = 13.0; gap score = 0.0; 17 aligned letters; 15 identities; 1 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 13.0:
+        substitution_score = 13.0,
+        gap_score = 0.0.
+    aligned = 17:
+        identities = 15,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 17)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 13.0)
         self.assertEqual(alignment.shape, (2, 17))
         self.assertEqual(
             alignment.format("psl"),
@@ -6734,13 +19697,129 @@ query             0 ------ACGATCGAGCNGCTACGCCCNC 22
 """,
         )
         counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (17 aligned letters; 15 identities; 2 mismatches; 11 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 17:
+        identities = 15,
+        mismatches = 2.
+    gaps = 11:
+        left_gaps = 6:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 6:
+                open_left_deletions = 1,
+                extend_left_deletions = 5;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 5:
+            right_insertions = 5:
+                open_right_insertions = 1,
+                extend_right_insertions = 4;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 17)
         self.assertEqual(counts.identities, 15)
         self.assertEqual(counts.mismatches, 2)
-        counts = alignment.counts(wildcard="N")
+        counts = alignment.counts("N")
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (17 aligned letters; 15 identities; 1 mismatches; 11 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 17:
+        identities = 15,
+        mismatches = 1.
+    gaps = 11:
+        left_gaps = 6:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 6:
+                open_left_deletions = 1,
+                extend_left_deletions = 5;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 5:
+            right_insertions = 5:
+                open_right_insertions = 1,
+                extend_right_insertions = 4;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 17)
         self.assertEqual(counts.identities, 15)
         self.assertEqual(counts.mismatches, 1)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 13.0; substitution score = 13.0; gap score = 0.0; 17 aligned letters; 15 identities; 1 mismatches; 11 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 13.0:
+        substitution_score = 13.0,
+        gap_score = 0.0.
+    aligned = 17:
+        identities = 15,
+        mismatches = 1.
+    gaps = 11:
+        left_gaps = 6:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 6:
+                open_left_deletions = 1,
+                extend_left_deletions = 5;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 5:
+            right_insertions = 5:
+                open_right_insertions = 1,
+                extend_right_insertions = 4;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 17)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 13.0)
         self.assertEqual(alignment.shape, (2, 28))
         self.assertEqual(
             alignment.format("psl"),
@@ -6777,13 +19856,129 @@ query            22 ------ACGATCGAGCNGCTACGCCCNC  0
 """,
         )
         counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (17 aligned letters; 15 identities; 2 mismatches; 11 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 17:
+        identities = 15,
+        mismatches = 2.
+    gaps = 11:
+        left_gaps = 6:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 6:
+                open_left_deletions = 1,
+                extend_left_deletions = 5;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 5:
+            right_insertions = 5:
+                open_right_insertions = 1,
+                extend_right_insertions = 4;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 17)
         self.assertEqual(counts.identities, 15)
         self.assertEqual(counts.mismatches, 2)
-        counts = alignment.counts(wildcard="N")
+        counts = alignment.counts("N")
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (17 aligned letters; 15 identities; 1 mismatches; 11 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 17:
+        identities = 15,
+        mismatches = 1.
+    gaps = 11:
+        left_gaps = 6:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 6:
+                open_left_deletions = 1,
+                extend_left_deletions = 5;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 5:
+            right_insertions = 5:
+                open_right_insertions = 1,
+                extend_right_insertions = 4;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 17)
         self.assertEqual(counts.identities, 15)
         self.assertEqual(counts.mismatches, 1)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 13.0; substitution score = 13.0; gap score = 0.0; 17 aligned letters; 15 identities; 1 mismatches; 11 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 13.0:
+        substitution_score = 13.0,
+        gap_score = 0.0.
+    aligned = 17:
+        identities = 15,
+        mismatches = 1.
+    gaps = 11:
+        left_gaps = 6:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 6:
+                open_left_deletions = 1,
+                extend_left_deletions = 5;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 5:
+            right_insertions = 5:
+                open_right_insertions = 1,
+                extend_right_insertions = 4;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 17)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 13.0)
         self.assertEqual(alignment.shape, (2, 28))
         self.assertEqual(
             alignment.format("psl"),
@@ -6821,13 +20016,129 @@ query             0 ------ACGATCGAGCNGCTACGCCCNC 22
 """,
         )
         counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (17 aligned letters; 15 identities; 2 mismatches; 11 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 17:
+        identities = 15,
+        mismatches = 2.
+    gaps = 11:
+        left_gaps = 6:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 6:
+                open_left_deletions = 1,
+                extend_left_deletions = 5;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 5:
+            right_insertions = 5:
+                open_right_insertions = 1,
+                extend_right_insertions = 4;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 17)
         self.assertEqual(counts.identities, 15)
         self.assertEqual(counts.mismatches, 2)
-        counts = alignment.counts(wildcard="N")
+        counts = alignment.counts("N")
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (17 aligned letters; 15 identities; 1 mismatches; 11 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 17:
+        identities = 15,
+        mismatches = 1.
+    gaps = 11:
+        left_gaps = 6:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 6:
+                open_left_deletions = 1,
+                extend_left_deletions = 5;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 5:
+            right_insertions = 5:
+                open_right_insertions = 1,
+                extend_right_insertions = 4;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 17)
         self.assertEqual(counts.identities, 15)
         self.assertEqual(counts.mismatches, 1)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 13.0; substitution score = 13.0; gap score = 0.0; 17 aligned letters; 15 identities; 1 mismatches; 11 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 13.0:
+        substitution_score = 13.0,
+        gap_score = 0.0.
+    aligned = 17:
+        identities = 15,
+        mismatches = 1.
+    gaps = 11:
+        left_gaps = 6:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 6:
+                open_left_deletions = 1,
+                extend_left_deletions = 5;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 5:
+            right_insertions = 5:
+                open_right_insertions = 1,
+                extend_right_insertions = 4;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 17)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 13.0)
         self.assertEqual(alignment.shape, (2, 28))
         self.assertEqual(
             alignment.format("psl"),
@@ -6866,13 +20177,129 @@ query            22 ------ACGATCGAGCNGCTACGCCCNC  0
 """,
         )
         counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (17 aligned letters; 15 identities; 2 mismatches; 11 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 17:
+        identities = 15,
+        mismatches = 2.
+    gaps = 11:
+        left_gaps = 6:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 6:
+                open_left_deletions = 1,
+                extend_left_deletions = 5;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 5:
+            right_insertions = 5:
+                open_right_insertions = 1,
+                extend_right_insertions = 4;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 17)
         self.assertEqual(counts.identities, 15)
         self.assertEqual(counts.mismatches, 2)
-        counts = alignment.counts(wildcard="N")
+        counts = alignment.counts("N")
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (17 aligned letters; 15 identities; 1 mismatches; 11 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 17:
+        identities = 15,
+        mismatches = 1.
+    gaps = 11:
+        left_gaps = 6:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 6:
+                open_left_deletions = 1,
+                extend_left_deletions = 5;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 5:
+            right_insertions = 5:
+                open_right_insertions = 1,
+                extend_right_insertions = 4;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.aligned, 17)
         self.assertEqual(counts.identities, 15)
         self.assertEqual(counts.mismatches, 1)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 13.0; substitution score = 13.0; gap score = 0.0; 17 aligned letters; 15 identities; 1 mismatches; 11 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 13.0:
+        substitution_score = 13.0,
+        gap_score = 0.0.
+    aligned = 17:
+        identities = 15,
+        mismatches = 1.
+    gaps = 11:
+        left_gaps = 6:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 6:
+                open_left_deletions = 1,
+                extend_left_deletions = 5;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 5:
+            right_insertions = 5:
+                open_right_insertions = 1,
+                extend_right_insertions = 4;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.aligned, 17)
+        self.assertEqual(counts.identities, 15)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertAlmostEqual(counts.score, 13.0)
         self.assertEqual(alignment.shape, (2, 28))
         self.assertEqual(
             alignment.format("psl"),
@@ -6906,6 +20333,2095 @@ class TestAlgorithmRestrictions(unittest.TestCase):
         aligner.gap_score = 1
         with self.assertWarns(BiopythonWarning):
             aligner.score("AAAAAAAAAAAA", "AAAAATAAAAAA")
+
+
+class TestCounts(unittest.TestCase):
+
+    def check_counts(self, counts):
+        self.assertEqual(counts.left_insertions, 2)
+        self.assertEqual(counts.left_deletions, 0)
+        self.assertEqual(counts.internal_insertions, 0)
+        self.assertEqual(counts.internal_deletions, 1)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 7)
+        self.assertEqual(counts.aligned, 5)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 1)
+
+    def check_counts_and_score(self, counts):
+        self.check_counts(counts)
+        self.assertAlmostEqual(counts.score, -7.0)
+
+    def test_string_bytes(self):
+        aligner = Align.PairwiseAligner()
+        aligner.mismatch_score = -1
+        aligner.gap_score = -1
+        alignments = aligner.align("TTACGTCCCCCCC", "ACTTTGT")
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 --TTACGTCCCCCCC 13
+                  0 --||.-||------- 15
+query             0 ACTTT-GT-------  7
+""",
+        )
+        self.assertAlmostEqual(alignment.score, -7.0)
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (5 aligned letters; 4 identities; 1 mismatches; 10 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 5:
+        identities = 4,
+        mismatches = 1.
+    gaps = 10:
+        left_gaps = 2:
+            left_insertions = 2:
+                open_left_insertions = 1,
+                extend_left_insertions = 1;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 7:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 7:
+                open_right_deletions = 1,
+                extend_right_deletions = 6.
+""",
+        )
+        self.check_counts(counts)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = -7.0; substitution score = 3.0; gap score = -10.0; 5 aligned letters; 4 identities; 1 mismatches; 10 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = -7.0:
+        substitution_score = 3.0,
+        gap_score = -10.0.
+    aligned = 5:
+        identities = 4,
+        mismatches = 1.
+    gaps = 10:
+        left_gaps = 2:
+            left_insertions = 2:
+                open_left_insertions = 1,
+                extend_left_insertions = 1;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 7:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 7:
+                open_right_deletions = 1,
+                extend_right_deletions = 6.
+""",
+        )
+        self.check_counts_and_score(counts)
+        alignments = aligner.align("TTACGTCCCCCCC", b"ACTTTGT")
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+-- -- T  T  A  C G  T  C C C C C C C
+-- -- .  .  .  - .  .  - - - - - - -
+65 67 84 84 84 - 71 84 - - - - - - -
+""",
+        )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (5 aligned letters; 4 identities; 1 mismatches; 10 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 5:
+        identities = 4,
+        mismatches = 1.
+    gaps = 10:
+        left_gaps = 2:
+            left_insertions = 2:
+                open_left_insertions = 1,
+                extend_left_insertions = 1;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 7:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 7:
+                open_right_deletions = 1,
+                extend_right_deletions = 6.
+""",
+        )
+        self.check_counts(counts)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = -7.0; substitution score = 3.0; gap score = -10.0; 5 aligned letters; 4 identities; 1 mismatches; 10 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = -7.0:
+        substitution_score = 3.0,
+        gap_score = -10.0.
+    aligned = 5:
+        identities = 4,
+        mismatches = 1.
+    gaps = 10:
+        left_gaps = 2:
+            left_insertions = 2:
+                open_left_insertions = 1,
+                extend_left_insertions = 1;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 7:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 7:
+                open_right_deletions = 1,
+                extend_right_deletions = 6.
+""",
+        )
+        self.check_counts_and_score(counts)
+        alignments = aligner.align(b"TTACGTCCCCCCC", "ACTTTGT")
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+- - 84 84 65 67 71 84 67 67 67 67 67 67 67
+- - .  .  .  -- .  .  -- -- -- -- -- -- --
+A C T  T  T  -- G  T  -- -- -- -- -- -- --
+""",
+        )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (5 aligned letters; 4 identities; 1 mismatches; 10 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 5:
+        identities = 4,
+        mismatches = 1.
+    gaps = 10:
+        left_gaps = 2:
+            left_insertions = 2:
+                open_left_insertions = 1,
+                extend_left_insertions = 1;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 7:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 7:
+                open_right_deletions = 1,
+                extend_right_deletions = 6.
+""",
+        )
+        self.check_counts(counts)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = -7.0; substitution score = 3.0; gap score = -10.0; 5 aligned letters; 4 identities; 1 mismatches; 10 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = -7.0:
+        substitution_score = 3.0,
+        gap_score = -10.0.
+    aligned = 5:
+        identities = 4,
+        mismatches = 1.
+    gaps = 10:
+        left_gaps = 2:
+            left_insertions = 2:
+                open_left_insertions = 1,
+                extend_left_insertions = 1;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 7:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 7:
+                open_right_deletions = 1,
+                extend_right_deletions = 6.
+""",
+        )
+        self.check_counts_and_score(counts)
+        alignments = aligner.align(b"TTACGTCCCCCCC", b"ACTTTGT")
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+-- -- 84 84 65 67 71 84 67 67 67 67 67 67 67
+-- -- || || .. -- || || -- -- -- -- -- -- --
+65 67 84 84 84 -- 71 84 -- -- -- -- -- -- --
+""",
+        )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (5 aligned letters; 4 identities; 1 mismatches; 10 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 5:
+        identities = 4,
+        mismatches = 1.
+    gaps = 10:
+        left_gaps = 2:
+            left_insertions = 2:
+                open_left_insertions = 1,
+                extend_left_insertions = 1;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 7:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 7:
+                open_right_deletions = 1,
+                extend_right_deletions = 6.
+""",
+        )
+        self.check_counts(counts)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = -7.0; substitution score = 3.0; gap score = -10.0; 5 aligned letters; 4 identities; 1 mismatches; 10 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = -7.0:
+        substitution_score = 3.0,
+        gap_score = -10.0.
+    aligned = 5:
+        identities = 4,
+        mismatches = 1.
+    gaps = 10:
+        left_gaps = 2:
+            left_insertions = 2:
+                open_left_insertions = 1,
+                extend_left_insertions = 1;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 7:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 7:
+                open_right_deletions = 1,
+                extend_right_deletions = 6.
+""",
+        )
+        self.check_counts_and_score(counts)
+        alignments = aligner.align(Seq("TTACGTCCCCCCC"), Seq("ACTTTGT"))
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 --TTACGTCCCCCCC 13
+                  0 --||.-||------- 15
+query             0 ACTTT-GT-------  7
+""",
+        )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (5 aligned letters; 4 identities; 1 mismatches; 10 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 5:
+        identities = 4,
+        mismatches = 1.
+    gaps = 10:
+        left_gaps = 2:
+            left_insertions = 2:
+                open_left_insertions = 1,
+                extend_left_insertions = 1;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 7:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 7:
+                open_right_deletions = 1,
+                extend_right_deletions = 6.
+""",
+        )
+        self.check_counts(counts)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = -7.0; substitution score = 3.0; gap score = -10.0; 5 aligned letters; 4 identities; 1 mismatches; 10 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = -7.0:
+        substitution_score = 3.0,
+        gap_score = -10.0.
+    aligned = 5:
+        identities = 4,
+        mismatches = 1.
+    gaps = 10:
+        left_gaps = 2:
+            left_insertions = 2:
+                open_left_insertions = 1,
+                extend_left_insertions = 1;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 7:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 7:
+                open_right_deletions = 1,
+                extend_right_deletions = 6.
+""",
+        )
+        self.check_counts_and_score(counts)
+        alignments = aligner.align(Seq("TTACGTCCCCCCC"), "ACTTTGT")
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 --TTACGTCCCCCCC 13
+                  0 --||.-||------- 15
+query             0 ACTTT-GT-------  7
+""",
+        )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (5 aligned letters; 4 identities; 1 mismatches; 10 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 5:
+        identities = 4,
+        mismatches = 1.
+    gaps = 10:
+        left_gaps = 2:
+            left_insertions = 2:
+                open_left_insertions = 1,
+                extend_left_insertions = 1;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 7:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 7:
+                open_right_deletions = 1,
+                extend_right_deletions = 6.
+""",
+        )
+        self.check_counts(counts)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = -7.0; substitution score = 3.0; gap score = -10.0; 5 aligned letters; 4 identities; 1 mismatches; 10 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = -7.0:
+        substitution_score = 3.0,
+        gap_score = -10.0.
+    aligned = 5:
+        identities = 4,
+        mismatches = 1.
+    gaps = 10:
+        left_gaps = 2:
+            left_insertions = 2:
+                open_left_insertions = 1,
+                extend_left_insertions = 1;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 7:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 7:
+                open_right_deletions = 1,
+                extend_right_deletions = 6.
+""",
+        )
+        self.check_counts_and_score(counts)
+        alignments = aligner.align("TTACGTCCCCCCC", Seq("ACTTTGT"))
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 --TTACGTCCCCCCC 13
+                  0 --||.-||------- 15
+query             0 ACTTT-GT-------  7
+""",
+        )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (5 aligned letters; 4 identities; 1 mismatches; 10 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 5:
+        identities = 4,
+        mismatches = 1.
+    gaps = 10:
+        left_gaps = 2:
+            left_insertions = 2:
+                open_left_insertions = 1,
+                extend_left_insertions = 1;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 7:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 7:
+                open_right_deletions = 1,
+                extend_right_deletions = 6.
+""",
+        )
+        self.check_counts(counts)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = -7.0; substitution score = 3.0; gap score = -10.0; 5 aligned letters; 4 identities; 1 mismatches; 10 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = -7.0:
+        substitution_score = 3.0,
+        gap_score = -10.0.
+    aligned = 5:
+        identities = 4,
+        mismatches = 1.
+    gaps = 10:
+        left_gaps = 2:
+            left_insertions = 2:
+                open_left_insertions = 1,
+                extend_left_insertions = 1;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 7:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 7:
+                open_right_deletions = 1,
+                extend_right_deletions = 6.
+""",
+        )
+        self.check_counts_and_score(counts)
+        alignments = aligner.align(Seq("TTACGTCCCCCCC"), b"ACTTTGT")
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+-- -- T  T  A  C G  T  C C C C C C C
+-- -- .  .  .  - .  .  - - - - - - -
+65 67 84 84 84 - 71 84 - - - - - - -
+""",
+        )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (5 aligned letters; 4 identities; 1 mismatches; 10 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 5:
+        identities = 4,
+        mismatches = 1.
+    gaps = 10:
+        left_gaps = 2:
+            left_insertions = 2:
+                open_left_insertions = 1,
+                extend_left_insertions = 1;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 7:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 7:
+                open_right_deletions = 1,
+                extend_right_deletions = 6.
+""",
+        )
+        self.check_counts(counts)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = -7.0; substitution score = 3.0; gap score = -10.0; 5 aligned letters; 4 identities; 1 mismatches; 10 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = -7.0:
+        substitution_score = 3.0,
+        gap_score = -10.0.
+    aligned = 5:
+        identities = 4,
+        mismatches = 1.
+    gaps = 10:
+        left_gaps = 2:
+            left_insertions = 2:
+                open_left_insertions = 1,
+                extend_left_insertions = 1;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 7:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 7:
+                open_right_deletions = 1,
+                extend_right_deletions = 6.
+""",
+        )
+        self.check_counts_and_score(counts)
+        alignments = aligner.align(b"TTACGTCCCCCCC", Seq("ACTTTGT"))
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+- - 84 84 65 67 71 84 67 67 67 67 67 67 67
+- - .  .  .  -- .  .  -- -- -- -- -- -- --
+A C T  T  T  -- G  T  -- -- -- -- -- -- --
+""",
+        )
+        counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (5 aligned letters; 4 identities; 1 mismatches; 10 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 5:
+        identities = 4,
+        mismatches = 1.
+    gaps = 10:
+        left_gaps = 2:
+            left_insertions = 2:
+                open_left_insertions = 1,
+                extend_left_insertions = 1;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 7:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 7:
+                open_right_deletions = 1,
+                extend_right_deletions = 6.
+""",
+        )
+        self.check_counts(counts)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = -7.0; substitution score = 3.0; gap score = -10.0; 5 aligned letters; 4 identities; 1 mismatches; 10 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = -7.0:
+        substitution_score = 3.0,
+        gap_score = -10.0.
+    aligned = 5:
+        identities = 4,
+        mismatches = 1.
+    gaps = 10:
+        left_gaps = 2:
+            left_insertions = 2:
+                open_left_insertions = 1,
+                extend_left_insertions = 1;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 7:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 7:
+                open_right_deletions = 1,
+                extend_right_deletions = 6.
+""",
+        )
+        self.check_counts_and_score(counts)
+
+    def check_incomplete_nucleotide_sequence(self, counts):
+        self.assertEqual(counts.left_insertions, 0)
+        self.assertEqual(counts.left_deletions, 0)
+        self.assertEqual(counts.internal_insertions, 0)
+        self.assertEqual(counts.internal_deletions, 4)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 0)
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 12)
+        self.assertEqual(counts.mismatches, 1)
+
+    def check_incomplete_nucleotide_sequence_switched(self, counts):
+        self.assertEqual(counts.left_insertions, 0)
+        self.assertEqual(counts.left_deletions, 0)
+        self.assertEqual(counts.internal_insertions, 4)
+        self.assertEqual(counts.internal_deletions, 0)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 0)
+        self.assertEqual(counts.aligned, 13)
+        self.assertEqual(counts.identities, 12)
+        self.assertEqual(counts.mismatches, 1)
+
+    def test_incomplete_nucleotide_sequence(self):
+        aligner = Align.PairwiseAligner()
+        aligner_blastn = Align.PairwiseAligner("blastn")
+        seqA = Seq({10: "TTACGT", 20: "CCCCCCC"}, length=50)
+        seqB = Seq("TTACGTCCCTCCC")
+        coordinates = np.array([[10, 16, 20, 27], [0, 6, 6, 13]])
+        alignment = Align.Alignment([seqA, seqB], coordinates)
+        self.assertEqual(
+            str(alignment),
+            """\
+target           10 TTACGT????CCCCCCC 27
+                  0 ||||||----|||.||| 17
+query             0 TTACGT----CCCTCCC 13
+""",
+        )
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 12.0; substitution score = 12.0; gap score = 0.0; 13 aligned letters; 12 identities; 1 mismatches; 4 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 12.0:
+        substitution_score = 12.0,
+        gap_score = 0.0.
+    aligned = 13:
+        identities = 12,
+        mismatches = 1.
+    gaps = 4:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 4:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 4:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 3;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.check_incomplete_nucleotide_sequence(counts)
+        self.assertIsNone(counts.positives)
+        self.assertAlmostEqual(counts.score, 12.0)
+        counts = alignment.counts(aligner_blastn)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 8.0; substitution score = 21.0; gap score = -13.0; 13 aligned letters; 12 identities; 1 mismatches; 12 positives; 4 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 8.0:
+        substitution_score = 21.0,
+        gap_score = -13.0.
+    aligned = 13:
+        identities = 12,
+        positives = 12,
+        mismatches = 1.
+    gaps = 4:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 4:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 4:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 3;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.check_incomplete_nucleotide_sequence(counts)
+        self.assertEqual(counts.positives, 12)
+        self.assertAlmostEqual(counts.score, 8.0)
+        alignment = Align.Alignment([seqB, seqA], coordinates[::-1])
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 TTACGT----CCCTCCC 13
+                  0 ||||||----|||.||| 17
+query            10 TTACGT????CCCCCCC 27
+""",
+        )
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 12.0; substitution score = 12.0; gap score = 0.0; 13 aligned letters; 12 identities; 1 mismatches; 4 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 12.0:
+        substitution_score = 12.0,
+        gap_score = 0.0.
+    aligned = 13:
+        identities = 12,
+        mismatches = 1.
+    gaps = 4:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 4:
+            internal_insertions = 4:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 3;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.check_incomplete_nucleotide_sequence_switched(counts)
+        self.assertIsNone(counts.positives)
+        counts = alignment.counts(aligner_blastn)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 8.0; substitution score = 21.0; gap score = -13.0; 13 aligned letters; 12 identities; 1 mismatches; 12 positives; 4 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 8.0:
+        substitution_score = 21.0,
+        gap_score = -13.0.
+    aligned = 13:
+        identities = 12,
+        positives = 12,
+        mismatches = 1.
+    gaps = 4:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 4:
+            internal_insertions = 4:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 3;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.check_incomplete_nucleotide_sequence_switched(counts)
+        self.assertEqual(counts.positives, 12)
+        seqA = Seq({10: "TTACGT", 20: "CCCTCCC"}, length=50)
+        seqB = Seq({100: "TTACGTCCCCCCC"}, length=200)
+        coordinates = np.array([[10, 16, 20, 27], [100, 106, 106, 113]])
+        alignment = Align.Alignment([seqA, seqB], coordinates)
+        self.assertEqual(
+            str(alignment),
+            """\
+target           10 TTACGT????CCCTCCC  27
+                  0 ||||||----|||.|||  17
+query           100 TTACGT----CCCCCCC 113
+""",
+        )
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 12.0; substitution score = 12.0; gap score = 0.0; 13 aligned letters; 12 identities; 1 mismatches; 4 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 12.0:
+        substitution_score = 12.0,
+        gap_score = 0.0.
+    aligned = 13:
+        identities = 12,
+        mismatches = 1.
+    gaps = 4:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 4:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 4:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 3;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.check_incomplete_nucleotide_sequence(counts)
+        self.assertIsNone(counts.positives)
+        self.assertAlmostEqual(counts.score, 12.0)
+        counts = alignment.counts(aligner_blastn)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 8.0; substitution score = 21.0; gap score = -13.0; 13 aligned letters; 12 identities; 1 mismatches; 12 positives; 4 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 8.0:
+        substitution_score = 21.0,
+        gap_score = -13.0.
+    aligned = 13:
+        identities = 12,
+        positives = 12,
+        mismatches = 1.
+    gaps = 4:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 4:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 4:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 3;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.check_incomplete_nucleotide_sequence(counts)
+        self.assertEqual(counts.positives, 12)
+        self.assertAlmostEqual(counts.score, 8.0)
+        seqA_rc = seqA.reverse_complement()
+        seqB_rc = seqB.reverse_complement()
+        coordinates_rc = np.array(coordinates)
+        coordinates_rc[0, :] = len(seqA) - coordinates[0, :]
+        alignment = Align.Alignment([seqA_rc, seqB], coordinates_rc)
+        self.assertEqual(
+            str(alignment),
+            """\
+target           40 TTACGT????CCCTCCC  23
+                  0 ||||||----|||.|||  17
+query           100 TTACGT----CCCCCCC 113
+""",
+        )
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 12.0; substitution score = 12.0; gap score = 0.0; 13 aligned letters; 12 identities; 1 mismatches; 4 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 12.0:
+        substitution_score = 12.0,
+        gap_score = 0.0.
+    aligned = 13:
+        identities = 12,
+        mismatches = 1.
+    gaps = 4:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 4:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 4:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 3;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.check_incomplete_nucleotide_sequence(counts)
+        self.assertIsNone(counts.positives)
+        self.assertAlmostEqual(counts.score, 12.0)
+        counts = alignment.counts(aligner_blastn)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 8.0; substitution score = 21.0; gap score = -13.0; 13 aligned letters; 12 identities; 1 mismatches; 12 positives; 4 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 8.0:
+        substitution_score = 21.0,
+        gap_score = -13.0.
+    aligned = 13:
+        identities = 12,
+        positives = 12,
+        mismatches = 1.
+    gaps = 4:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 4:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 4:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 3;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.check_incomplete_nucleotide_sequence(counts)
+        self.assertEqual(counts.positives, 12)
+        self.assertAlmostEqual(counts.score, 8.0)
+        coordinates_rc = np.array(coordinates)
+        coordinates_rc[1, :] = len(seqB) - coordinates[1, :]
+        alignment = Align.Alignment([seqA, seqB_rc], coordinates_rc)
+        self.assertEqual(
+            str(alignment),
+            """\
+target           10 TTACGT????CCCTCCC 27
+                  0 ||||||----|||.||| 17
+query           100 TTACGT----CCCCCCC 87
+""",
+        )
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 12.0; substitution score = 12.0; gap score = 0.0; 13 aligned letters; 12 identities; 1 mismatches; 4 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 12.0:
+        substitution_score = 12.0,
+        gap_score = 0.0.
+    aligned = 13:
+        identities = 12,
+        mismatches = 1.
+    gaps = 4:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 4:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 4:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 3;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.check_incomplete_nucleotide_sequence(counts)
+        self.assertIsNone(counts.positives)
+        self.assertAlmostEqual(counts.score, 12.0)
+        counts = alignment.counts(aligner_blastn)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 8.0; substitution score = 21.0; gap score = -13.0; 13 aligned letters; 12 identities; 1 mismatches; 12 positives; 4 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 8.0:
+        substitution_score = 21.0,
+        gap_score = -13.0.
+    aligned = 13:
+        identities = 12,
+        positives = 12,
+        mismatches = 1.
+    gaps = 4:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 4:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 4:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 3;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.check_incomplete_nucleotide_sequence(counts)
+        self.assertEqual(counts.positives, 12)
+        self.assertAlmostEqual(counts.score, 8.0)
+        coordinates_rc = np.array(coordinates)
+        coordinates_rc[0, :] = len(seqA) - coordinates[0, :]
+        coordinates_rc[1, :] = len(seqB) - coordinates[1, :]
+        alignment = Align.Alignment([seqA_rc, seqB_rc], coordinates_rc)
+        self.assertEqual(
+            str(alignment),
+            """\
+target           40 TTACGT????CCCTCCC 23
+                  0 ||||||----|||.||| 17
+query           100 TTACGT----CCCCCCC 87
+""",
+        )
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 12.0; substitution score = 12.0; gap score = 0.0; 13 aligned letters; 12 identities; 1 mismatches; 4 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 12.0:
+        substitution_score = 12.0,
+        gap_score = 0.0.
+    aligned = 13:
+        identities = 12,
+        mismatches = 1.
+    gaps = 4:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 4:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 4:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 3;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.check_incomplete_nucleotide_sequence(counts)
+        self.assertIsNone(counts.positives)
+        self.assertAlmostEqual(counts.score, 12.0)
+        counts = alignment.counts(aligner_blastn)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 8.0; substitution score = 21.0; gap score = -13.0; 13 aligned letters; 12 identities; 1 mismatches; 12 positives; 4 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 8.0:
+        substitution_score = 21.0,
+        gap_score = -13.0.
+    aligned = 13:
+        identities = 12,
+        positives = 12,
+        mismatches = 1.
+    gaps = 4:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 4:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 4:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 3;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.check_incomplete_nucleotide_sequence(counts)
+        self.assertEqual(counts.positives, 12)
+        self.assertAlmostEqual(counts.score, 8.0)
+
+    def check_blastp(self, counts):
+        self.assertEqual(counts.left_insertions, 0)
+        self.assertEqual(counts.left_deletions, 0)
+        self.assertEqual(counts.internal_insertions, 2)
+        self.assertEqual(counts.internal_deletions, 34)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 0)
+        self.assertEqual(counts.aligned, 444)
+        self.assertEqual(counts.identities, 237)
+        self.assertEqual(counts.mismatches, 207)
+        self.assertEqual(counts.gaps, 36)
+
+    def test_blastp(self):
+        aligner = Align.PairwiseAligner()
+        aligner_blastp = Align.PairwiseAligner("blastp")
+        seqA = "MRPRPRSAPGKPRRRSRARLRSSRTPSGGASGGGGSSSSSSTATGGSGSSTGSPGGAASAPAPAPAGMYRSGERLLGSHALPAEQRDFLPLETTNNNNNHHQPGAWARRAGSSASSPPSASSSPHPSAAVPAADPADSASGSSNKRKRDNKASTYGLNYSLLQPSGGRAAGGGRADGGGVVYSGTPWKRRNYNQGVVGLHEEISDFYEYMSPRPEEEKMRMEVVNRIESVIKELWPSADVQIFGSFKTGLYLPTSDIDLVVFGKWENLPLWTLEEALRKHKVADEDSVKVLDKATVPIIKLTDSFTEVKVDISFNVQNGVRAADLIKDFTKKYPVLPYLVLVLKQFLLQRDLNEVFTGGIGSYSLFLMAVSFLQLHPREDACIPNTNYGVLLIEFFELYGRHFNYLKTGIRIKDGGSYVAKDEVQKNMLDGYRPSMLYIEDPLQPGNDVGRSSYGAMQVKQAFDYAYVVLSHAVSPIAKYYPNNETESILGRIIRVTDEVATYRDWISKQWGLKNRPEPSCNGNGVTLIVDTQQLDKCNNNLSEENEALGKCRSKTSESLSKHSSNSSSGPVSSSSATQSSSSDVDSDATPCKTPKQLLCRPSTGNRVGSQDVSLESSQAVGKMQSTQTTNTSNSTNKSQHGSARLFRSSSKGFQGTTQTSHGSLMTNKQHQGKSNNQYYHGKKRKHKRDAPLSDLCR"
+        seqB = "MDPFVGWFQKEQEGPSLCTWLKIWETNAQEMGALLNQQLQQATTINGSTSSSSSSSNSGNNNNNNNNNIINNTITNTTNNTGNNSSAKPYLSRPYSSLNRVLNFRADSLEILQQQQQQQQLNGTTQRNSTNINTTSGGSTSSSADSTTNRDNNSPANSSSTNGPGAGTGTSTGAGGTGTNSPATTASSTAATTTGPATSMSDTSNNPPQSTTTPASRTNSIYYNPSRKKRPENKAGGAHYYMNNHMEMIAKYKGEPWRKPDYPYGEGVIGLHEEIEHFYQYVLPTPCEHAIRNEVVKRIEAVVHSIWPQAVVEIFGSFRTGLFLPTSDIDLVVLGLWEKLPLRTLEFELVSRGIAEACTVRVLDKASVPIIKLTDRETQVKVDISFNMQSGVQSAELIKKFKRDYPVLEKLVLVLKQFLLLRDLNEVFTGGISSYSLILMCISFLQMHPRGIYHDTANLGVLLLEFFELYGRRFNYMKIGISIKNGGRYMPKDELQRDMVDGHRPSLLCIEDPLTPGNDIGRSSYGVFQVQQAFKCAYRVLALAVSPLNLLGIDPRVNSILGRIIHITDDVIDYREWIRENFEHLVVVDRISPLPTAAPTAYATANGAPKYVIMPSGAVVQQLYHHPVQVPTAHGHSHAHSHSHGHAHPGAHLCQPYVTGTTVSAVTTTTTMAVVTVGVSAGGVQQQQQQQNATAHTHSQQQTQNQSQSRHRRGSTSSGDDSEDSKDGDVVETTSSAQEVVDIALSTPNGLANMSMPMPVHAVGMPASNSWSGNGNGNGNSSSSTGSSPEIAHIAAQEMDPELEDQQQQQQHQETSGGNGFIRPGDVGTGSNRGGGDGSGGRNYNQRNNHNSSGYYHQQYYVPPPMQQQLSKSNSSSNYHQQHHHSHSHGNHSHRQQHHHQQQHHHQQRPQHLRVGGGNRYQKSLGGSPIISAGNASNSSSNCSNSSSSSGSNNSRLPPLRGTLVNSSSAISIISISSESSIASSSSSSSRSGQDQQRDER"
+        sA = {33: seqA[33:511]}
+        sB = {136: seqB[136:582]}
+        # fmt: off
+        coordinates = np.array([[ 33,  44,  46,  80,  89,  97, 106, 153, 155,
+                                 170, 181, 192, 192, 378, 379, 511],
+                                [136, 147, 147, 181, 181, 189, 189, 236, 236,
+                                 251, 251, 262, 264, 450, 450, 582]])
+        # fmt: on
+        sequences = [Seq(seqA), Seq(seqB)]
+        alignment = Align.Alignment(sequences, coordinates)
+        self.assertEqual(
+            str(alignment),
+            """\
+target           33 GGSSSSSSTATGGSGSSTGSPGGAASAPAPAPAGMYRSGERLLGSHALPAEQRDFLPLET
+                  0 |||.|||...|--......||....|...|........|....|...---------|..|
+query           136 GGSTSSSADST--TNRDNNSPANSSSTNGPGAGTGTSTGAGGTGTNS---------PATT
+
+target           93 TNNNNNHHQPGAWARRAGSSASSPPSASSSPHPSAAVPAADPADSASGSSNKRKRDNKAS
+                 60 ....---------|......|.|....|..|..|...||..........|.|....|||.
+query           185 ASST---------AATTTGPATSMSDTSNNPPQSTTTPASRTNSIYYNPSRKKRPENKAG
+
+target          153 TYGLNYSLLQPSGGRAAGGGRADGGGVVYSGTPWKRRNY--NQGVVGLHEEISDFYEYMS
+                120 --|..|.........|.-----------|.|.||....|--..||.||||||..||.|..
+query           236 --GAHYYMNNHMEMIAK-----------YKGEPWRKPDYPYGEGVIGLHEEIEHFYQYVL
+
+target          211 PRPEEEKMRMEVVNRIESVIKELWPSADVQIFGSFKTGLYLPTSDIDLVVFGKWENLPLW
+                180 |.|.|...|.|||.|||.|....||.|.|.|||||.|||.||||||||||.|.||.|||.
+query           283 PTPCEHAIRNEVVKRIEAVVHSIWPQAVVEIFGSFRTGLFLPTSDIDLVVLGLWEKLPLR
+
+target          271 TLEEALRKHKVADEDSVKVLDKATVPIIKLTDSFTEVKVDISFNVQNGVRAADLIKDFTK
+                240 |||..|.....|....|.|||||.||||||||..|.||||||||.|.||..|.|||.|..
+query           343 TLEFELVSRGIAEACTVRVLDKASVPIIKLTDRETQVKVDISFNMQSGVQSAELIKKFKR
+
+target          331 KYPVLPYLVLVLKQFLLQRDLNEVFTGGIGSYSLFLMAVSFLQLHPREDACIPNTNYGVL
+                300 .||||..||||||||||.|||||||||||.||||.||..||||.|||-.......|.|||
+query           403 DYPVLEKLVLVLKQFLLLRDLNEVFTGGISSYSLILMCISFLQMHPR-GIYHDTANLGVL
+
+target          391 LIEFFELYGRHFNYLKTGIRIKDGGSYVAKDEVQKNMLDGYRPSMLYIEDPLQPGNDVGR
+                360 |.||||||||.|||.|.||.||.||.|..|||.|..|.||.|||.|.|||||.||||.||
+query           462 LLEFFELYGRRFNYMKIGISIKNGGRYMPKDELQRDMVDGHRPSLLCIEDPLTPGNDIGR
+
+target          451 SSYGAMQVKQAFDYAYVVLSHAVSPIAKYYPNNETESILGRIIRVTDEVATYRDWISKQW
+                420 ||||..||.|||..||.||..||||...........|||||||..||.|..||.||....
+query           522 SSYGVFQVQQAFKCAYRVLALAVSPLNLLGIDPRVNSILGRIIHITDDVIDYREWIRENF
+
+target          511 
+                480 
+query           582 
+""",
+        )
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 237.0; substitution score = 237.0; gap score = 0.0; 444 aligned letters; 237 identities; 207 mismatches; 36 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 237.0:
+        substitution_score = 237.0,
+        gap_score = 0.0.
+    aligned = 444:
+        identities = 237,
+        mismatches = 207.
+    gaps = 36:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 36:
+            internal_insertions = 2:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 1;
+            internal_deletions = 34:
+                open_internal_deletions = 6,
+                extend_internal_deletions = 28;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.check_blastp(counts)
+        self.assertIsNone(counts.positives)
+        self.assertAlmostEqual(counts.score, 237.0)
+        counts = alignment.counts(aligner_blastp)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1071.0; substitution score = 1184.0; gap score = -113.0; 444 aligned letters; 237 identities; 207 mismatches; 306 positives; 36 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1071.0:
+        substitution_score = 1184.0,
+        gap_score = -113.0.
+    aligned = 444:
+        identities = 237,
+        positives = 306,
+        mismatches = 207.
+    gaps = 36:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 36:
+            internal_insertions = 2:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 1;
+            internal_deletions = 34:
+                open_internal_deletions = 6,
+                extend_internal_deletions = 28;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.check_blastp(counts)
+        self.assertEqual(counts.positives, 306)
+        self.assertAlmostEqual(counts.score, 1071.0)
+        sequences = [Seq(seqA), Seq(seqB)]
+        alignment = Align.Alignment(sequences, coordinates)
+        counts = alignment.counts(aligner_blastp)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1071.0; substitution score = 1184.0; gap score = -113.0; 444 aligned letters; 237 identities; 207 mismatches; 306 positives; 36 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1071.0:
+        substitution_score = 1184.0,
+        gap_score = -113.0.
+    aligned = 444:
+        identities = 237,
+        positives = 306,
+        mismatches = 207.
+    gaps = 36:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 36:
+            internal_insertions = 2:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 1;
+            internal_deletions = 34:
+                open_internal_deletions = 6,
+                extend_internal_deletions = 28;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.check_blastp(counts)
+        sequences = [Seq(seqA), Seq(sB, length=len(seqB))]
+        alignment = Align.Alignment(sequences, coordinates)
+        counts = alignment.counts(aligner_blastp)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1071.0; substitution score = 1184.0; gap score = -113.0; 444 aligned letters; 237 identities; 207 mismatches; 306 positives; 36 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1071.0:
+        substitution_score = 1184.0,
+        gap_score = -113.0.
+    aligned = 444:
+        identities = 237,
+        positives = 306,
+        mismatches = 207.
+    gaps = 36:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 36:
+            internal_insertions = 2:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 1;
+            internal_deletions = 34:
+                open_internal_deletions = 6,
+                extend_internal_deletions = 28;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.check_blastp(counts)
+        sequences = [Seq(sA, length=len(seqA)), Seq(seqB)]
+        alignment = Align.Alignment(sequences, coordinates)
+        counts = alignment.counts(aligner_blastp)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1071.0; substitution score = 1184.0; gap score = -113.0; 444 aligned letters; 237 identities; 207 mismatches; 306 positives; 36 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1071.0:
+        substitution_score = 1184.0,
+        gap_score = -113.0.
+    aligned = 444:
+        identities = 237,
+        positives = 306,
+        mismatches = 207.
+    gaps = 36:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 36:
+            internal_insertions = 2:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 1;
+            internal_deletions = 34:
+                open_internal_deletions = 6,
+                extend_internal_deletions = 28;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.check_blastp(counts)
+        sequences = [Seq(sA, length=len(seqA)), Seq(sB, length=len(seqB))]
+        alignment = Align.Alignment(sequences, coordinates)
+        counts = alignment.counts(aligner_blastp)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 1071.0; substitution score = 1184.0; gap score = -113.0; 444 aligned letters; 237 identities; 207 mismatches; 306 positives; 36 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 1071.0:
+        substitution_score = 1184.0,
+        gap_score = -113.0.
+    aligned = 444:
+        identities = 237,
+        positives = 306,
+        mismatches = 207.
+    gaps = 36:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 36:
+            internal_insertions = 2:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 1;
+            internal_deletions = 34:
+                open_internal_deletions = 6,
+                extend_internal_deletions = 28;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.check_blastp(counts)
+
+    def test_string(self):
+        aligner = Align.PairwiseAligner()
+        aligner.gap_score = -2
+        seqA = "あいうえおかきくけこ"
+        seqB = "いうきあけ"
+        alignments = aligner.align(seqA, seqB)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertEqual(alignment[0], "あいうえおかきくけこ")
+        self.assertEqual(alignment[1], "-いう---きあけ-")
+        self.assertAlmostEqual(alignment.score, -6.0)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = -6.0; substitution score = 4.0; gap score = -10.0; 5 aligned letters; 4 identities; 1 mismatches; 5 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = -6.0:
+        substitution_score = 4.0,
+        gap_score = -10.0.
+    aligned = 5:
+        identities = 4,
+        mismatches = 1.
+    gaps = 5:
+        left_gaps = 1:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 1:
+                open_left_deletions = 1,
+                extend_left_deletions = 0;
+        internal_gaps = 3:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 3:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 2;
+        right_gaps = 1:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 1:
+                open_right_deletions = 1,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.left_insertions, 0)
+        self.assertEqual(counts.left_deletions, 1)
+        self.assertEqual(counts.internal_insertions, 0)
+        self.assertEqual(counts.internal_deletions, 3)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 1)
+        self.assertEqual(counts.aligned, 5)
+        self.assertEqual(counts.identities, 4)
+        self.assertEqual(counts.mismatches, 1)
+        self.assertIsNone(counts.positives)
+        self.assertAlmostEqual(counts.score, -6.0)
+
+    def test_greek(self):
+        aligner = Align.PairwiseAligner()
+        seqA = "αβγγβα"
+        seqB = "ABCBAαβγ"
+        alignments = aligner.align(seqA, seqB)
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+-----αβγγβα
+-----|||---
+ABCBAαβγ---
+""",
+        )
+        self.assertAlmostEqual(alignment.score, 3.0)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 3.0; substitution score = 3.0; gap score = 0.0; 3 aligned letters; 3 identities; 0 mismatches; 8 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 3.0:
+        substitution_score = 3.0,
+        gap_score = 0.0.
+    aligned = 3:
+        identities = 3,
+        mismatches = 0.
+    gaps = 8:
+        left_gaps = 5:
+            left_insertions = 5:
+                open_left_insertions = 1,
+                extend_left_insertions = 4;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 3:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 3:
+                open_right_deletions = 1,
+                extend_right_deletions = 2.
+""",
+        )
+        self.assertEqual(counts.left_insertions, 5)
+        self.assertEqual(counts.left_deletions, 0)
+        self.assertEqual(counts.internal_insertions, 0)
+        self.assertEqual(counts.internal_deletions, 0)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 3)
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.positives)
+        self.assertAlmostEqual(counts.score, 3.0)
+        alignments = aligner.align(seqA, seqB)
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+-----αβγγβα
+-----|||---
+ABCBAαβγ---
+""",
+        )
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 3.0; substitution score = 3.0; gap score = 0.0; 3 aligned letters; 3 identities; 0 mismatches; 8 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 3.0:
+        substitution_score = 3.0,
+        gap_score = 0.0.
+    aligned = 3:
+        identities = 3,
+        mismatches = 0.
+    gaps = 8:
+        left_gaps = 5:
+            left_insertions = 5:
+                open_left_insertions = 1,
+                extend_left_insertions = 4;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 3:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 3:
+                open_right_deletions = 1,
+                extend_right_deletions = 2.
+""",
+        )
+        self.assertEqual(counts.left_insertions, 5)
+        self.assertEqual(counts.left_deletions, 0)
+        self.assertEqual(counts.internal_insertions, 0)
+        self.assertEqual(counts.internal_deletions, 0)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 3)
+        self.assertEqual(counts.aligned, 3)
+        self.assertEqual(counts.identities, 3)
+        self.assertEqual(counts.mismatches, 0)
+        self.assertIsNone(counts.positives)
+        self.assertAlmostEqual(counts.score, 3.0)
+        substitution_matrix = Array("ABCαβγ", dims=2)
+        alphabet = substitution_matrix.alphabet
+        for c in alphabet:
+            substitution_matrix[c, c] = 2.0
+        for c1, c2 in zip(alphabet[:3], alphabet[3:]):
+            substitution_matrix[c1, c2] = 1.0
+            substitution_matrix[c2, c1] = 1.0
+        substitution_matrix["B", "β"] = 5.0
+        substitution_matrix["β", "B"] = 5.0
+        substitution_matrix["C", "γ"] = -0.1
+        substitution_matrix["γ", "C"] = -0.1
+        self.assertEqual(
+            str(substitution_matrix),
+            """\
+    A   B    C   α   β    γ
+A 2.0 0.0  0.0 1.0 0.0  0.0
+B 0.0 2.0  0.0 0.0 5.0  0.0
+C 0.0 0.0  2.0 0.0 0.0 -0.1
+α 1.0 0.0  0.0 2.0 0.0  0.0
+β 0.0 5.0  0.0 0.0 2.0  0.0
+γ 0.0 0.0 -0.1 0.0 0.0  2.0
+""",
+        )
+        aligner.substitution_matrix = substitution_matrix
+        aligner.gap_score = -1.0
+        alignments = aligner.align(seqA, seqB)
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+αβγγβ-α--
+...-.-|--
+ABC-BAαβγ
+""",
+        )
+        self.assertAlmostEqual(alignment.score, 8.9)
+        counts = alignment.counts(aligner)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (score = 8.9; substitution score = 12.9; gap score = -4.0; 5 aligned letters; 1 identities; 4 mismatches; 4 positives; 4 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    score = 8.9:
+        substitution_score = 12.9,
+        gap_score = -4.0.
+    aligned = 5:
+        identities = 1,
+        positives = 4,
+        mismatches = 4.
+    gaps = 4:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 2:
+            right_insertions = 2:
+                open_right_insertions = 1,
+                extend_right_insertions = 1;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
+        self.assertEqual(counts.left_insertions, 0)
+        self.assertEqual(counts.left_deletions, 0)
+        self.assertEqual(counts.internal_insertions, 1)
+        self.assertEqual(counts.internal_deletions, 1)
+        self.assertEqual(counts.right_insertions, 2)
+        self.assertEqual(counts.right_deletions, 0)
+        self.assertEqual(counts.aligned, 5)
+        self.assertEqual(counts.identities, 1)
+        self.assertEqual(counts.mismatches, 4)
+        self.assertEqual(counts.positives, 4)
+        self.assertAlmostEqual(counts.score, 8.9)
+        counts = alignment.counts(substitution_matrix)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (substitution score = 12.9; 5 aligned letters; 1 identities; 4 mismatches; 4 positives; 4 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    substitution_score = 12.9,
+    aligned = 5:
+        identities = 1,
+        positives = 4,
+        mismatches = 4.
+    gaps = 4:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 2:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 2:
+            right_insertions = 2:
+                open_right_insertions = 1,
+                extend_right_insertions = 1;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
 
 
 if __name__ == "__main__":

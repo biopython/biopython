@@ -157,7 +157,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         else:  # mapped to reverse strand
             flag = 16
             query = reverse_complement(query)
-            coordinates = np.array(coordinates)
+            coordinates = np.array(coordinates, np.intp)
             coordinates[:, 1] = qSize - coordinates[:, 1]
             hard_clip_left, hard_clip_right = hard_clip_right, hard_clip_left
         try:
@@ -717,7 +717,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     },
                 )
             if coordinates is not None:
-                coordinates = np.array(coordinates).transpose()
+                coordinates = np.array(coordinates, np.intp).transpose()
                 if strand == "-":
                     coordinates[1, :] = query_pos - coordinates[1, :]
             if query == "*":

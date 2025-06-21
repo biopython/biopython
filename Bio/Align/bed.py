@@ -214,11 +214,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     tPosition += blockSize
                     qPosition += blockSize
                     coordinates.append([tPosition, qPosition])
-                coordinates = np.array(coordinates).transpose()
+                coordinates = np.array(coordinates, np.intp).transpose()
                 qSize = sum(blockSizes)
             else:
                 blockSize = chromEnd - chromStart
-                coordinates = np.array([[0, blockSize], [0, blockSize]])
+                coordinates = np.array([[0, blockSize], [0, blockSize]], np.intp)
                 qSize = blockSize
             coordinates[0, :] += chromStart
             query_sequence = Seq(None, length=qSize)
