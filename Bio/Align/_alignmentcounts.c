@@ -11,7 +11,6 @@
 #include "Python.h"
 #include <float.h>
 #include <stdbool.h>
-#include <stdint.h>
 #include <inttypes.h>
 #include "_pairwisealigner.h"
 #include "substitution_matrices/_arraycore.h"
@@ -156,7 +155,7 @@ AlignmentCounts_str(AlignmentCounts* self)
 static PyObject*
 AlignmentCounts_repr(AlignmentCounts* self)
 {
-    uintptr_t id = 0;
+    Py_uintptr_t id = 0;
     const double substitution_score = self->substitution_score;
     const double gap_score = self->gap_score;
     const double score = gap_score + substitution_score;
@@ -212,13 +211,13 @@ AlignmentCounts_repr(AlignmentCounts* self)
     PyObject* id_result = PyObject_CallFunctionObjArgs(id_func, self, NULL);
     if (id_result) {
         if (PyLong_Check(id_result)) {
-            id = (uintptr_t)PyLong_AsUnsignedLongLong(id_result);
+            id = (Py_uintptr_t)PyLong_AsUnsignedLongLong(id_result);
         }
         Py_DECREF(id_result);
     }
 #else
     // In CPython, id(self) is just the address
-    id = (uintptr_t)self;
+    id = (Py_uintptr_t)self;
 #endif
     sprintf(p, "%zd gaps) at 0x%" PRIxPTR ">", gaps, id);
 

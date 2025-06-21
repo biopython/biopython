@@ -1811,7 +1811,7 @@ Aligner_repr(Aligner* self)
 static PyObject*
 Aligner_str(Aligner* self)
 {
-    uintptr_t id;
+    Py_uintptr_t id;
     char text[1024];
     char* p = text;
     PyObject* substitution_matrix = self->substitution_matrix.obj;
@@ -1831,13 +1831,13 @@ Aligner_str(Aligner* self)
                                                            NULL);
         if (id_result) {
             if (PyLong_Check(id_result)) {
-                id = (uintptr_t)PyLong_AsUnsignedLongLong(id_result);
+                id = (Py_uintptr_t)PyLong_AsUnsignedLongLong(id_result);
             }
             Py_DECREF(id_result);
         }
 #else
         // In CPython, id(self) is just the address
-        id = (uintptr_t)substitution_matrix;
+        id = (Py_uintptr_t)substitution_matrix;
 #endif
         p += sprintf(p, "  substitution_matrix: <%s object at 0x%" PRIxPTR ">\n",
                      Py_TYPE(substitution_matrix)->tp_name, id);
