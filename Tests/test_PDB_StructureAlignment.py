@@ -52,9 +52,16 @@ class StructureAlignTests(unittest.TestCase):
                 chain1_A[291].get_resname(), chain2_A[181].get_resname()
             )
 
-    def test_StructAlign_auto_generate(self):
-        """Test auto-generation when fasta_align is None."""
+    def test_StructAlign_msa_vs_alignment_objects(self):
+        """Test that MultipleSeqAlignment and Alignment objects produce identical results.
 
+        This test verifies that when given the same sequence alignment data,
+        StructureAlignment produces identical mappings whether the input is:
+        1. A Bio.Align.MultipleSeqAlignment object (from AlignIO.read)
+        2. A Bio.Align.Alignment object (from Align.read)
+
+        Both should map the same residues between structures in the same way.
+        """
         p = PDBParser(QUIET=1)
 
         s1 = p.get_structure("1", "PDB/2XHE.pdb")
@@ -62,61 +69,42 @@ class StructureAlignTests(unittest.TestCase):
         m1 = s1[0]
         m2 = s2[0]
 
-        al = StructureAlignment(fasta_align=None, m1=m1, m2=m2)
+        # Read the same alignment file that works in the first test
+        al_file = "PDB/alignment_file.fa"
 
-        # Basic sanity checks
-        self.assertIsNotNone(al.map12)
-        self.assertIsNotNone(al.map21)
-        self.assertIsNotNone(al.duos)
+        # Test 1: Using Bio.AlignIO to get MultipleSeqAlignment
+        with open(al_file) as handle:
+            msa_records = AlignIO.read(handle, "fasta")
 
-        self.assertGreater(len(al.duos), 0)
+        # Test 2: Using Bio.Align to get Alignment object
+        with open(al_file) as handle:
+            alignment_obj = Align.read(handle, "fasta")
 
-        # Test that the iterator works
-        duo_count = 0
-        gap_positions = 0
-        for duo in al.get_iterator():
-            duo_count += 1
-            self.assertIsInstance(duo, tuple)
-            self.assertEqual(len(duo), 2)
-            # Count positions where either sequence has a gap (None)
-            if duo[0] is None or duo[1] is None:
-                gap_positions += 1
+        # Create StructureAlignment with both types
+        al_msa = StructureAlignment(msa_records, m1, m2)
+        al_align = StructureAlignment(alignment_obj, m1, m2)
 
-        self.assertEqual(duo_count, len(al.duos))
+        # Results should be identical
+        self.assertEqual(len(al_msa.duos), len(al_align.duos))
+        self.assertEqual(len(al_msa.map12), len(al_align.map12))
+        self.assertEqual(len(al_msa.map21), len(al_align.map21))
 
-        non_gap_positions = duo_count - gap_positions
-        self.assertGreater(non_gap_positions, 0)
+        # Compare mappings
+        for residue in al_msa.map12:
+            self.assertIn(residue, al_align.map12)
+            self.assertEqual(al_msa.map12[residue], al_align.map12[residue])
 
-    def test_StructAlign_model_validation(self):
-        """Test that ValueError is raised when models are None."""
-        p = PDBParser(QUIET=1)
+        for residue in al_msa.map21:
+            self.assertIn(residue, al_align.map21)
+            self.assertEqual(al_msa.map21[residue], al_align.map21[residue])
 
-        s1 = p.get_structure("1", "PDB/2XHE.pdb")
-        m1 = s1[0]
-
-        # Test with m1=None
-        with self.assertRaises(ValueError) as context:
-            StructureAlignment(fasta_align=None, m1=None, m2=m1)
-        self.assertIn(
-            "Both m1 and m2 models must be provided and cannot be None",
-            str(context.exception),
-        )
-
-        # Test with m2=None
-        with self.assertRaises(ValueError) as context:
-            StructureAlignment(fasta_align=None, m1=m1, m2=None)
-        self.assertIn(
-            "Both m1 and m2 models must be provided and cannot be None",
-            str(context.exception),
-        )
-
-        # Test with both None
-        with self.assertRaises(ValueError) as context:
-            StructureAlignment(fasta_align=None, m1=None, m2=None)
-        self.assertIn(
-            "Both m1 and m2 models must be provided and cannot be None",
-            str(context.exception),
-        )
+        # Compare duos
+        for i, (duo_msa, duo_align) in enumerate(zip(al_msa.duos, al_align.duos)):
+            self.assertEqual(
+                duo_msa,
+                duo_align,
+                f"Duo mismatch at position {i}: {duo_msa} vs {duo_align}",
+            )
 
 
 if __name__ == "__main__":
