@@ -1286,10 +1286,8 @@ AlignmentCounts_new(PyTypeObject *type, PyObject *args, PyObject *keywords)
             PyTypeObject* basetype = Array_Type->tp_base;
             Fields* fields = (Fields*)((intptr_t)substitution_matrix.obj + basetype->tp_basicsize);
             Py_buffer* mapping_buffer = &fields->mapping;
-            if (mapping_buffer->obj) {
-                mapping = mapping_buffer->buf;
-                m = mapping_buffer->len / mapping_buffer->itemsize;
-            }
+            mapping = mapping_buffer->buf;
+            if (mapping) m = mapping_buffer->len / mapping_buffer->itemsize;
         }
     }
 
@@ -1617,6 +1615,7 @@ exit:
     if (sequence_buffers) {
         for (k = 0; k < n; k++)
             if (sequence_buffers[k].buf) PyBuffer_Release(&sequence_buffers[k]);
+        PyMem_Free(sequence_buffers);
     }
     coordinates_converter(NULL, &coordinates);
     strands_converter(NULL, &strands);

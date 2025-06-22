@@ -16,7 +16,7 @@ Array_dealloc(PyObject *self)
      */
     Py_XDECREF(fields->alphabet);
     /* PyBuffer_Release won't do anything if fields->mapping.obj is NULL. */
-    PyBuffer_Release(&fields->mapping);
+    PyMem_Free(fields->mapping.buf);
     basetype->tp_dealloc(self);
 }
 
@@ -140,7 +140,7 @@ static int Array_set_alphabet(PyObject *self, PyObject *arg, void *closure) {
             mapping[character] = i;
         }
         if (PyBuffer_FillInfo(&fields->mapping,
-                              self,
+                              NULL,
                               mapping,
                               mapping_size * sizeof(int),
                               0,

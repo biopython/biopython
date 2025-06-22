@@ -7063,10 +7063,8 @@ static bool _check_indices(Py_buffer* view, Py_buffer* substitution_matrix) {
     return true;
 }
 
-static bool _map_indices(Py_buffer* view, Py_buffer* buffer) {
+static bool _map_indices(Py_buffer* view, const int* mapping, Py_ssize_t m) {
     Py_ssize_t i;
-    const int* mapping = buffer->buf;
-    const Py_ssize_t m = buffer->len / buffer->itemsize;
     const Py_ssize_t n = view->len / view->itemsize;
     int* const indices = view->buf;
     for (i = 0; i < n; i++) {
@@ -7101,10 +7099,12 @@ static bool _prepare_indices(Py_buffer* substitution_matrix, Py_buffer* bA, Py_b
         const PyTypeObject* basetype = Array_Type->tp_base;
         const Py_ssize_t offset = basetype->tp_basicsize;
         Fields* fields = (Fields*)((intptr_t)substitution_matrix->obj + offset);
-        Py_buffer* mapping = &fields->mapping;
-        if (mapping->obj) {
-            if (!_map_indices(bA, mapping)) return false;
-            if (!_map_indices(bB, mapping)) return false;
+        Py_buffer* buffer = &fields->mapping;
+        const int* mapping = buffer->buf;
+        if (mapping) {
+            const Py_ssize_t m = buffer->len / buffer->itemsize;
+            if (!_map_indices(bA, mapping, m)) return false;
+            if (!_map_indices(bB, mapping, m)) return false;
             return true;
         }
     }
@@ -7131,21 +7131,25 @@ sequence_converter(PyObject* argument, void* pointer)
     if (view->ndim != 1) {
         PyErr_Format(PyExc_ValueError,
                      "sequence has incorrect rank (%d expected 1)", view->ndim);
+        PyBuffer_Release(view);
         return 0;
     }
     if (view->len == 0) {
         PyErr_SetString(PyExc_ValueError, "sequence has zero length");
+        PyBuffer_Release(view);
         return 0;
     }
     if (strcmp(view->format, "i") != 0 && strcmp(view->format, "l") != 0) {
         PyErr_Format(PyExc_ValueError,
                      "sequence has incorrect data type '%s'", view->format);
+        PyBuffer_Release(view);
         return 0;
     }
     if (view->itemsize != sizeof(int)) {
         PyErr_Format(PyExc_ValueError,
                     "sequence has unexpected item byte size "
                     "(%ld, expected %ld)", view->itemsize, sizeof(int));
+        PyBuffer_Release(view);
         return 0;
     }
     return Py_CLEANUP_SUPPORTED;
