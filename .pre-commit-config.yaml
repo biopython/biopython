@@ -15,7 +15,7 @@ repos:
     -   id: mixed-line-ending
         exclude: \.bb$
 -   repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.9.7
+    rev: v0.11.4
     hooks:
     # Run the Ruff linter.
     -   id: ruff
@@ -30,12 +30,12 @@ repos:
             '--config=lint.isort.order-by-type=false',
         ]
 -   repo: https://github.com/psf/black
-    rev: 24.10.0
+    rev: 25.1.0
     hooks:
     -   id: black
         args: [--check,--target-version,py310]
 -   repo: https://github.com/PyCQA/flake8
-    rev: 7.1.2
+    rev: 7.2.0
     hooks:
     -   id: flake8
         additional_dependencies: [
