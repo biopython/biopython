@@ -459,7 +459,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         qs = 0
         ts = 0
         n = (len(words) - 8) // 2
-        coordinates = np.empty((2, n + 1), int)
+        coordinates = np.empty((2, n + 1), np.intp)
         coordinates[0, 0] = ts
         coordinates[1, 0] = qs
         for i, (operation, step) in enumerate(zip(words[9::2], words[10::2])):
@@ -538,7 +538,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         qs = 0
         ts = 0
         n = (len(words) - 8) // 3 + ops.count("N")
-        coordinates = np.empty((2, n + 1), int)
+        coordinates = np.empty((2, n + 1), np.intp)
         coordinates[0, 0] = ts
         coordinates[1, 0] = qs
         operations = bytearray(n)

@@ -1,4 +1,4 @@
-/* Copyright 2018-2019 by Michiel de Hoon.  All rights reserved.
+/* Copyright 2018-2025 by Michiel de Hoon.  All rights reserved.
  * This file is part of the Biopython distribution and governed by your
  * choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
  * Please see the LICENSE file that should have been included as part of this
@@ -10,11 +10,11 @@
 #define PY_SSIZE_T_CLEAN
 #include "Python.h"
 #include <float.h>
+#include <stdbool.h>
+#include "_pairwisealigner.h"
+#include "substitution_matrices/_arraycore.h"
 
 
-#define HORIZONTAL 0x1
-#define VERTICAL 0x2
-#define DIAGONAL 0x4
 #define STARTPOINT 0x8
 #define ENDPOINT 0x10
 #define M_MATRIX 0x1
@@ -27,8 +27,6 @@
 #define MEMORY_ERROR -2
 #define OTHER_ERROR -3
 
-#define MISSING_LETTER -1
-
 #define SAFE_ADD(t, s) \
 {   if (s != OVERFLOW_ERROR) { \
         term = t; \
@@ -37,14 +35,9 @@
     } \
 }
 
+static PyTypeObject *Array_Type = NULL;
+/* this will be set when initializing the module */
 
-typedef enum {NeedlemanWunschSmithWaterman,
-              Gotoh,
-              WatermanSmithBeyer,
-              FOGSAA,
-              Unknown} Algorithm;
-
-typedef enum {Global, Local, FOGSAA_Mode} Mode;
 
 #define ERR_UNEXPECTED_MODE \
     PyErr_Format(PyExc_RuntimeError, "mode has unexpected value (in "__FILE__" on line %d)", __LINE__);
@@ -1718,159 +1711,20 @@ static PyMethodDef PathGenerator_methods[] = {
 };
 
 static PySequenceMethods PathGenerator_as_sequence = {
-    (lenfunc)PathGenerator_length,  /* sq_length */
-    NULL,                           /* sq_concat */
-    NULL,                           /* sq_repeat */
-    NULL,                           /* sq_item */
-    NULL,                           /* sq_ass_item */
-    NULL,                           /* sq_contains */
-    NULL,                           /* sq_inplace_concat */
-    NULL,                           /* sq_inplace_repeat */
+    .sq_length = (lenfunc)PathGenerator_length,
 };
 
 static PyTypeObject PathGenerator_Type = {
     PyVarObject_HEAD_INIT(NULL, 0)
-    "Path generator",               /* tp_name */
-    sizeof(PathGenerator),          /* tp_basicsize */
-    0,                              /* tp_itemsize */
-    (destructor)PathGenerator_dealloc,  /* tp_dealloc */
-    0,                              /* tp_print */
-    0,                              /* tp_getattr */
-    0,                              /* tp_setattr */
-    0,                              /* tp_reserved */
-    0,                              /* tp_repr */
-    0,                              /* tp_as_number */
-    &PathGenerator_as_sequence,     /* tp_as_sequence */
-    0,                              /* tp_as_mapping */
-    0,                              /* tp_hash */
-    0,                              /* tp_call */
-    0,                              /* tp_str */
-    0,                              /* tp_getattro */
-    0,                              /* tp_setattro */
-    0,                              /* tp_as_buffer */
-    Py_TPFLAGS_DEFAULT,             /* tp_flags */
-    0,                              /* tp_doc */
-    0,                              /* tp_traverse */
-    0,                              /* tp_clear */
-    0,                              /* tp_richcompare */
-    0,                              /* tp_weaklistoffset */
-    PyObject_SelfIter,              /* tp_iter */
-    (iternextfunc)PathGenerator_next,      /* tp_iternext */
-    PathGenerator_methods,          /* tp_methods */
+    .tp_name = "Path generator",
+    .tp_basicsize = sizeof(PathGenerator),
+    .tp_dealloc = (destructor)PathGenerator_dealloc,
+    .tp_as_sequence = &PathGenerator_as_sequence,
+    .tp_flags = Py_TPFLAGS_DEFAULT,
+    .tp_iter = PyObject_SelfIter,
+    .tp_iternext = (iternextfunc)PathGenerator_next,
+    .tp_methods = PathGenerator_methods,
 };
-
-typedef struct {
-    PyObject_HEAD
-    Mode mode;
-    Algorithm algorithm;
-    double match;
-    double mismatch;
-    double epsilon;
-    double open_internal_insertion_score;
-    double extend_internal_insertion_score;
-    double open_left_insertion_score;
-    double extend_left_insertion_score;
-    double open_right_insertion_score;
-    double extend_right_insertion_score;
-    double open_internal_deletion_score;
-    double extend_internal_deletion_score;
-    double open_left_deletion_score;
-    double extend_left_deletion_score;
-    double open_right_deletion_score;
-    double extend_right_deletion_score;
-    PyObject* insertion_score_function;
-    PyObject* deletion_score_function;
-    Py_buffer substitution_matrix;
-    PyObject* alphabet;
-    int* mapping;
-    int wildcard;
-} Aligner;
-
-
-static Py_ssize_t
-set_alphabet(Aligner* self, PyObject* alphabet)
-{
-    Py_ssize_t size;
-    if (alphabet == Py_None) {
-        if (self->alphabet) {
-            Py_DECREF(self->alphabet);
-            self->alphabet = NULL;
-        }
-        if (self->mapping) {
-            PyMem_Free(self->mapping);
-            self->mapping = NULL;
-        }
-        return 0;
-    }
-    else if (PyUnicode_Check(alphabet)) {
-        int* mapping;
-        int i;
-        int n;
-        int kind;
-        void* characters;
-        if (PyUnicode_READY(alphabet) == -1) return -1;
-        size = PyUnicode_GET_LENGTH(alphabet);
-        if (size == 0) {
-            PyErr_SetString(PyExc_ValueError, "alphabet has zero length");
-            return -1;
-        }
-        kind = PyUnicode_KIND(alphabet);
-        switch (kind) {
-            case PyUnicode_1BYTE_KIND: {
-                n = 1 << 8 * sizeof(Py_UCS1);
-                break;
-            }
-            case PyUnicode_2BYTE_KIND: {
-                n = 1 << 8 * sizeof(Py_UCS2);
-                break;
-            }
-            case PyUnicode_4BYTE_KIND: {
-                n = 0x110000;  /* Maximum code point in Unicode 6.0
-                                * is 0x10ffff = 1114111 */
-                break;
-            }
-            default:
-                PyErr_SetString(PyExc_ValueError, "could not interpret alphabet");
-                return -1;
-        }
-        characters = PyUnicode_DATA(alphabet);
-        mapping = PyMem_Malloc(n*sizeof(int));
-        if (!mapping) return -1;
-        for (i = 0; i < n; i++) mapping[i] = MISSING_LETTER;
-        for (i = 0; i < size; i++) {
-            Py_UCS4 character = PyUnicode_READ(kind, characters, i);
-            if (mapping[character] != MISSING_LETTER) {
-                PyObject* c = PyUnicode_FromKindAndData(kind, &character, 1);
-                PyErr_Format(PyExc_ValueError,
-                             "alphabet contains '%S' more than once", c);
-                Py_XDECREF(c);
-                PyMem_Free(mapping);
-                return -1;
-            }
-            mapping[character] = i;
-        }
-        Py_INCREF(alphabet);
-        if (self->mapping) PyMem_Free(self->mapping);
-        self->mapping = mapping;
-    }
-    else {
-        /* alphabet is not a string; cannot use mapping */
-        PyObject* sequence = PySequence_Fast(alphabet,
-            "alphabet should support the sequence protocol (e.g.,\n"
-            "strings, lists, and tuples can be valid alphabets).");
-        if (!sequence) return -1;
-        size = PySequence_Fast_GET_SIZE(sequence);
-        Py_DECREF(sequence);
-        if (self->mapping) {
-            PyMem_Free(self->mapping);
-            self->mapping = NULL;
-        }
-        Py_INCREF(alphabet);
-    }
-    Py_XDECREF(self->alphabet);
-    self->alphabet = alphabet;
-    return size;
-}
 
 static Algorithm _get_algorithm(Aligner* self)
 {
@@ -1931,7 +1785,6 @@ Aligner_init(Aligner *self, PyObject *args, PyObject *kwds)
     self->substitution_matrix.buf = NULL;
     self->algorithm = Unknown;
     self->alphabet = NULL;
-    self->mapping = NULL;
     self->wildcard = -1;
     return 0;
 }
@@ -1940,9 +1793,8 @@ static void
 Aligner_dealloc(Aligner* self)
 {   Py_XDECREF(self->insertion_score_function);
     Py_XDECREF(self->deletion_score_function);
-    if (self->substitution_matrix.obj) PyBuffer_Release(&self->substitution_matrix);
+    PyBuffer_Release(&self->substitution_matrix);
     Py_XDECREF(self->alphabet);
-    Py_XDECREF(self->mapping);
     Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
@@ -1959,6 +1811,7 @@ Aligner_repr(Aligner* self)
 static PyObject*
 Aligner_str(Aligner* self)
 {
+    Py_uintptr_t id;
     char text[1024];
     char* p = text;
     char* value;
@@ -1970,9 +1823,25 @@ Aligner_str(Aligner* self)
 
     p += sprintf(p, "Pairwise sequence aligner with parameters\n");
     if (substitution_matrix) {
-        p += sprintf(p, "  substitution_matrix: <%s object at %p>\n",
-                     Py_TYPE(substitution_matrix)->tp_name,
-                     substitution_matrix);
+#ifdef PYPY_VERSION
+        // For PyPy, use PyObject_CallFunction to get id(self)
+        PyObject* builtins = PyEval_GetBuiltins();
+        PyObject* id_func = PyDict_GetItemString(builtins, "id");
+        PyObject* id_result = PyObject_CallFunctionObjArgs(id_func,
+                                                           substitution_matrix,
+                                                           NULL);
+        if (id_result) {
+            if (PyLong_Check(id_result)) {
+                id = (Py_uintptr_t)PyLong_AsUnsignedLongLong(id_result);
+            }
+            Py_DECREF(id_result);
+        }
+#else
+        // In CPython, id(self) is just the address
+        id = (Py_uintptr_t)substitution_matrix;
+#endif
+        p += sprintf(p, "  substitution_matrix: <%s object at 0x%" PRIxPTR ">\n",
+                     Py_TYPE(substitution_matrix)->tp_name, id);
     } else {
         if (self->wildcard == -1) {
             p += sprintf(p, "  wildcard: None\n");
@@ -2137,10 +2006,8 @@ Aligner_set_match_score(Aligner* self, PyObject* value, void* closure)
         PyErr_SetString(PyExc_ValueError, "invalid match score");
         return -1;
     }
-    if (self->substitution_matrix.obj) {
-        if (set_alphabet(self, Py_None) < 0) return -1;
-        PyBuffer_Release(&self->substitution_matrix);
-    }
+    PyBuffer_Release(&self->substitution_matrix);
+    /* does nothing if self->substitution_matrix.obj is NULL */
     self->match = match;
     return 0;
 }
@@ -2164,10 +2031,8 @@ Aligner_set_mismatch_score(Aligner* self, PyObject* value, void* closure)
         PyErr_SetString(PyExc_ValueError, "invalid mismatch score");
         return -1;
     }
-    if (self->substitution_matrix.obj) {
-        if (set_alphabet(self, Py_None) < 0) return -1;
-        PyBuffer_Release(&self->substitution_matrix);
-    }
+    PyBuffer_Release(&self->substitution_matrix);
+    /* does nothing if self->substitution_matrix.obj is NULL */
     self->mismatch = mismatch;
     return 0;
 }
@@ -2183,92 +2048,65 @@ Aligner_get_substitution_matrix(Aligner* self, void* closure)
 }
 
 static int
-Aligner_set_substitution_matrix(Aligner* self, PyObject* values, void* closure)
+substitution_matrix_converter(PyObject* argument, void* pointer)
 {
-    PyObject* alphabet;
-    Py_ssize_t size = -1;
-    Py_buffer view;
     const int flag = PyBUF_FORMAT | PyBUF_ND;
-    if (values == Py_None) {
-        if (self->substitution_matrix.obj)
-            PyBuffer_Release(&self->substitution_matrix);
+    Py_buffer* view = pointer;
+    if (argument == NULL) {
+        PyBuffer_Release(view);
+        return 1;
+    }
+    if (PyObject_GetBuffer(argument, view, flag) != 0) {
+        PyErr_SetString(PyExc_ValueError, "expected a matrix");
         return 0;
     }
-    if (PyObject_GetBuffer(values, &view, flag) != 0) {
-        PyErr_SetString(PyExc_ValueError, "expected a matrix");
-        return -1;
-    }
-    if (view.ndim != 2) {
+    if (view->ndim != 2) {
         PyErr_Format(PyExc_ValueError,
          "substitution matrix has incorrect rank (%d expected 2)",
-          view.ndim);
-        PyBuffer_Release(&view);
-        return -1;
+          view->ndim);
+        PyBuffer_Release(view);
+        return 0;
     }
-    if (view.len == 0) {
+    if (view->len == 0) {
         PyErr_SetString(PyExc_ValueError, "substitution matrix has zero size");
-        PyBuffer_Release(&view);
-        return -1;
+        PyBuffer_Release(view);
+        return 0;
     }
-    if (strcmp(view.format, "d") != 0) {
+    if (strcmp(view->format, "d") != 0) {
         PyErr_SetString(PyExc_ValueError,
                 "substitution matrix should contain float values");
-        PyBuffer_Release(&view);
-        return -1;
+        PyBuffer_Release(view);
+        return 0;
     }
-    if (view.itemsize != sizeof(double)) {
+    if (view->itemsize != sizeof(double)) {
         PyErr_Format(PyExc_RuntimeError,
                     "substitution matrix has unexpected item byte size "
-                    "(%zd, expected %zd)", view.itemsize, sizeof(double));
-        PyBuffer_Release(&view);
-        return -1;
+                    "(%zd, expected %zd)", view->itemsize, sizeof(double));
+        PyBuffer_Release(view);
+        return 0;
     }
-    if (view.shape[0] != view.shape[1]) {
+    if (view->shape[0] != view->shape[1]) {
         PyErr_Format(PyExc_ValueError,
                     "substitution matrix should be square "
                     "(found a %zd x %zd matrix)",
-                    view.shape[0], view.shape[1]);
-        PyBuffer_Release(&view);
-        return -1;
+                    view->shape[0], view->shape[1]);
+        PyBuffer_Release(view);
+        return 0;
     }
-    alphabet = PyObject_GetAttrString(values, "alphabet");
-    if (alphabet) {
-        size = set_alphabet(self, alphabet);
-        Py_DECREF(alphabet);
-    } else {
-        /* Set a substitution matrix without setting an alphabet; useful
-         * when aligning integers. */
-        PyErr_Clear();
-        size = set_alphabet(self, Py_None);
-    }
-    if (size < 0) {
-        PyBuffer_Release(&view);
-        return -1;
-    }
-    if (self->substitution_matrix.obj) PyBuffer_Release(&self->substitution_matrix);
-    self->substitution_matrix = view;
-    return 0;
-}
-
-static char Aligner_alphabet__doc__[] = "alphabet";
-
-static PyObject*
-Aligner_get_alphabet(Aligner* self, void* closure)
-{   PyObject* object = self->alphabet;
-    if (!object) object = Py_None;
-    Py_INCREF(object);
-    return object;
+    return Py_CLEANUP_SUPPORTED;
 }
 
 static int
-Aligner_set_alphabet(Aligner* self, PyObject* alphabet, void* closure)
+Aligner_set_substitution_matrix(Aligner* self, PyObject* values, void* closure)
 {
-    if (self->substitution_matrix.obj) {
-        PyErr_SetString(PyExc_AttributeError,
-            "can't set alphabet if a substitution matrix is used");
-        return -1;
+    Py_buffer view;
+    if (values == Py_None) {
+        PyBuffer_Release(&self->substitution_matrix);
+        return 0;
     }
-    if (set_alphabet(self, alphabet) < 0) return -1;
+    if (substitution_matrix_converter(values, &view) == 0) return -1;
+    PyBuffer_Release(&self->substitution_matrix);
+    self->substitution_matrix = view;
     return 0;
 }
 
@@ -3960,10 +3798,6 @@ static PyGetSetDef Aligner_getset[] = {
         (getter)Aligner_get_substitution_matrix,
         (setter)Aligner_set_substitution_matrix,
         Aligner_substitution_matrix__doc__, NULL},
-    {"alphabet",
-        (getter)Aligner_get_alphabet,
-        (setter)Aligner_set_alphabet,
-        Aligner_alphabet__doc__, NULL},
     {"gap_score",
         (getter)Aligner_get_gap_score,
         (setter)Aligner_set_gap_score,
@@ -5554,14 +5388,14 @@ exit: \
     for (i = 1; i <= nA; i++) { \
         M[i][0] = -DBL_MAX; \
         Iy[i][0] = -DBL_MAX; \
-        ok = _call_deletion_score_function(self, query_gap_start, i, &score); \
+        ok = _call_deletion_score_function(self, query_gap_start, i, nB, &score); \
         if (!ok) goto exit; \
         Ix[i][0] = score; \
     } \
     for (j = 1; j <= nB; j++) { \
         M[0][j] = -DBL_MAX; \
         Ix[0][j] = -DBL_MAX; \
-        ok = _call_insertion_score_function(self, 0, j, &score); \
+        ok = _call_insertion_score_function(self, 0, j, nA, &score); \
         if (!ok) goto exit; \
         Iy[0][j] = score; \
     } \
@@ -5573,14 +5407,14 @@ exit: \
             M[i][j] = score + (align_score); \
             score = -DBL_MAX; \
             for (k = 1; k <= i; k++) { \
-                ok = _call_deletion_score_function(self, query_gap_start, k, &gapscore); \
+                ok = _call_deletion_score_function(self, query_gap_start, k, nB, &gapscore); \
                 if (!ok) goto exit; \
                 SELECT_SCORE_WATERMAN_SMITH_BEYER(M[i-k][j], Iy[i-k][j]); \
             } \
             Ix[i][j] = score; \
             score = -DBL_MAX; \
             for (k = 1; k <= j; k++) { \
-                ok = _call_insertion_score_function(self, i, k, &gapscore); \
+                ok = _call_insertion_score_function(self, i, k, nA, &gapscore); \
                 if (!ok) goto exit; \
                 SELECT_SCORE_WATERMAN_SMITH_BEYER(M[i][j-k], Ix[i][j-k]); \
             } \
@@ -5625,7 +5459,7 @@ exit: \
             } \
             score = 0.0; \
             for (k = 1; k <= i; k++) { \
-                ok = _call_deletion_score_function(self, query_gap_start, k, &gapscore); \
+                ok = _call_deletion_score_function(self, query_gap_start, k, nB, &gapscore); \
                 SELECT_SCORE_WATERMAN_SMITH_BEYER(M[i-k][j], Iy[i-k][j]); \
                 if (!ok) goto exit; \
             } \
@@ -5633,7 +5467,7 @@ exit: \
             Ix[i][j] = score; \
             score = 0.0; \
             for (k = 1; k <= j; k++) { \
-                ok = _call_insertion_score_function(self, i, k, &gapscore); \
+                ok = _call_insertion_score_function(self, i, k, nA, &gapscore); \
                 if (!ok) goto exit; \
                 SELECT_SCORE_WATERMAN_SMITH_BEYER(M[i][j-k], Ix[i][j-k]); \
             } \
@@ -5725,14 +5559,14 @@ exit: \
     for (i = 1; i <= nA; i++) { \
         M_row[i][0] = -DBL_MAX; \
         Iy_row[i][0] = -DBL_MAX; \
-        ok = _call_deletion_score_function(self, query_gap_start, i, &score); \
+        ok = _call_deletion_score_function(self, query_gap_start, i, nB, &score); \
         if (!ok) goto exit; \
         Ix_row[i][0] = score; \
     } \
     for (j = 1; j <= nB; j++) { \
         M_row[0][j] = -DBL_MAX; \
         Ix_row[0][j] = -DBL_MAX; \
-        ok = _call_insertion_score_function(self, query_gap_start, j, &score); \
+        ok = _call_insertion_score_function(self, 0, j, nA, &score); \
         if (!ok) goto exit; \
         Iy_row[0][j] = score; \
     } \
@@ -5751,7 +5585,7 @@ exit: \
             ng = 0; \
             score = -DBL_MAX; \
             for (gap = 1; gap <= i; gap++) { \
-                ok = _call_deletion_score_function(self, query_gap_start, gap, &gapscore); \
+                ok = _call_deletion_score_function(self, query_gap_start, gap, nB, &gapscore); \
                 if (!ok) goto exit; \
                 SELECT_TRACE_WATERMAN_SMITH_BEYER_GAP(M_row[i-gap][j], \
                                                       Iy_row[i-gap][j]); \
@@ -5775,7 +5609,7 @@ exit: \
             ng = 0; \
             score = -DBL_MAX; \
             for (gap = 1; gap <= j; gap++) { \
-                ok = _call_insertion_score_function(self, i, gap, &gapscore); \
+                ok = _call_insertion_score_function(self, i, gap, nA, &gapscore); \
                 if (!ok) goto exit; \
                 SELECT_TRACE_WATERMAN_SMITH_BEYER_GAP(M_row[i][j-gap], \
                                                       Ix_row[i][j-gap]); \
@@ -5869,7 +5703,7 @@ exit: \
             gaps[i][j].IyIx = gapXY; \
             score = -DBL_MAX; \
             for (gap = 1; gap <= i; gap++) { \
-                ok = _call_deletion_score_function(self, query_gap_start, gap, &gapscore); \
+                ok = _call_deletion_score_function(self, query_gap_start, gap, nB, &gapscore); \
                 if (!ok) goto exit; \
                 SELECT_TRACE_WATERMAN_SMITH_BEYER_GAP(M_row[i-gap][j], \
                                                       Iy_row[i-gap][j]); \
@@ -5903,7 +5737,7 @@ exit: \
             score = -DBL_MAX; \
             gapM[0] = 0; \
             for (gap = 1; gap <= j; gap++) { \
-                ok = _call_insertion_score_function(self, i, gap, &gapscore); \
+                ok = _call_insertion_score_function(self, i, gap, nA, &gapscore); \
                 if (!ok) goto exit; \
                 SELECT_TRACE_WATERMAN_SMITH_BEYER_GAP(M_row[i][j-gap], \
                                                       Ix_row[i][j-gap]); \
@@ -6699,7 +6533,7 @@ exit:
 
 /* ----------------- alignment algorithms ----------------- */
 
-#define MATRIX_SCORE scores[kA*n+kB]
+#define MATRIX_SCORE substitution_matrix[kA*n+kB]
 #define COMPARE_SCORE (kA == wildcard || kB == wildcard) ? 0 : (kA == kB) ? match : mismatch
 
 
@@ -6722,7 +6556,7 @@ Aligner_needlemanwunsch_score_matrix(Aligner* self,
                                      unsigned char strand)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
-    const double* scores = self->substitution_matrix.buf;
+    const double* substitution_matrix = self->substitution_matrix.buf;
     NEEDLEMANWUNSCH_SCORE(MATRIX_SCORE);
 }
 
@@ -6743,7 +6577,7 @@ Aligner_smithwaterman_score_matrix(Aligner* self,
                                    const int* sB, int nB)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
-    const double* scores = self->substitution_matrix.buf;
+    const double* substitution_matrix = self->substitution_matrix.buf;
     SMITHWATERMAN_SCORE(MATRIX_SCORE);
 }
 
@@ -6766,7 +6600,7 @@ Aligner_needlemanwunsch_align_matrix(Aligner* self,
                                      unsigned char strand)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
-    const double* scores = self->substitution_matrix.buf;
+    const double* substitution_matrix = self->substitution_matrix.buf;
     NEEDLEMANWUNSCH_ALIGN(MATRIX_SCORE);
 }
 
@@ -6789,7 +6623,7 @@ Aligner_smithwaterman_align_matrix(Aligner* self,
                                    unsigned char strand)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
-    const double* scores = self->substitution_matrix.buf;
+    const double* substitution_matrix = self->substitution_matrix.buf;
     SMITHWATERMAN_ALIGN(MATRIX_SCORE);
 }
 
@@ -6812,7 +6646,7 @@ Aligner_gotoh_global_score_matrix(Aligner* self,
                                   unsigned char strand)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
-    const double* scores = self->substitution_matrix.buf;
+    const double* substitution_matrix = self->substitution_matrix.buf;
     GOTOH_GLOBAL_SCORE(MATRIX_SCORE);
 }
 
@@ -6833,7 +6667,7 @@ Aligner_gotoh_local_score_matrix(Aligner* self,
                                  const int* sB, int nB)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
-    const double* scores = self->substitution_matrix.buf;
+    const double* substitution_matrix = self->substitution_matrix.buf;
     GOTOH_LOCAL_SCORE(MATRIX_SCORE);
 }
 
@@ -6856,7 +6690,7 @@ Aligner_gotoh_global_align_matrix(Aligner* self,
                                   unsigned char strand)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
-    const double* scores = self->substitution_matrix.buf;
+    const double* substitution_matrix = self->substitution_matrix.buf;
     GOTOH_GLOBAL_ALIGN(MATRIX_SCORE);
 }
 
@@ -6879,19 +6713,30 @@ Aligner_gotoh_local_align_matrix(Aligner* self,
                                  unsigned char strand)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
-    const double* scores = self->substitution_matrix.buf;
+    const double* substitution_matrix = self->substitution_matrix.buf;
     GOTOH_LOCAL_ALIGN(MATRIX_SCORE);
 }
 
 static int
-_call_deletion_score_function(Aligner* aligner, int i, int j, double* score)
+_call_deletion_score_function(Aligner* aligner, int i, int j, int n, double* score)
 {
     double value;
     PyObject* result;
     PyObject* function = aligner->deletion_score_function;
-    if (!function)
-        value = aligner->open_internal_deletion_score
-              + (j-1) * aligner->extend_internal_deletion_score;
+    if (!function) {
+        if (i == 0) {
+            value = aligner->open_left_deletion_score
+                  + (j-1) * aligner->extend_left_deletion_score;
+        }
+        else if (i == n) {
+            value = aligner->open_right_deletion_score
+                  + (j-1) * aligner->extend_right_deletion_score;
+        }
+        else {
+            value = aligner->open_internal_deletion_score
+                  + (j-1) * aligner->extend_internal_deletion_score;
+        }
+    }
     else {
         result = PyObject_CallFunction(function, "ii", i, j);
         if (result == NULL) return 0;
@@ -6904,14 +6749,25 @@ _call_deletion_score_function(Aligner* aligner, int i, int j, double* score)
 }
 
 static int
-_call_insertion_score_function(Aligner* aligner, int i, int j, double* score)
+_call_insertion_score_function(Aligner* aligner, int i, int j, int n, double* score)
 {
     double value;
     PyObject* result;
     PyObject* function = aligner->insertion_score_function;
-    if (!function)
-        value = aligner->open_internal_insertion_score
-              + (j-1) * aligner->extend_internal_insertion_score;
+    if (!function) {
+        if (i == 0) {
+            value = aligner->open_left_insertion_score
+                  + (j-1) * aligner->extend_left_insertion_score;
+        }
+        else if (i == n) {
+            value = aligner->open_right_insertion_score
+                  + (j-1) * aligner->extend_right_insertion_score;
+        }
+        else {
+            value = aligner->open_internal_insertion_score
+                  + (j-1) * aligner->extend_internal_insertion_score;
+        }
+    }
     else {
         result = PyObject_CallFunction(function, "ii", i, j);
         if (result == NULL) return 0;
@@ -6953,7 +6809,7 @@ Aligner_watermansmithbeyer_global_score_matrix(Aligner* self,
                                                unsigned char strand)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
-    const double* scores = self->substitution_matrix.buf;
+    const double* substitution_matrix = self->substitution_matrix.buf;
     WATERMANSMITHBEYER_ENTER_SCORE;
     switch (strand) {
         case '+':
@@ -6997,7 +6853,7 @@ Aligner_watermansmithbeyer_local_score_matrix(Aligner* self,
                                               unsigned char strand)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
-    const double* scores = self->substitution_matrix.buf;
+    const double* substitution_matrix = self->substitution_matrix.buf;
     double maximum = 0.0;
     WATERMANSMITHBEYER_ENTER_SCORE;
     switch (strand) {
@@ -7043,7 +6899,7 @@ Aligner_watermansmithbeyer_global_align_matrix(Aligner* self,
                                                unsigned char strand)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
-    const double* scores = self->substitution_matrix.buf;
+    const double* substitution_matrix = self->substitution_matrix.buf;
     WATERMANSMITHBEYER_ENTER_ALIGN(Global);
     switch (strand) {
         case '+': {
@@ -7091,7 +6947,7 @@ Aligner_watermansmithbeyer_local_align_matrix(Aligner* self,
                                               unsigned char strand)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
-    const double* scores = self->substitution_matrix.buf;
+    const double* substitution_matrix = self->substitution_matrix.buf;
     int im = nA;
     int jm = nB;
     double maximum = 0;
@@ -7168,16 +7024,16 @@ Aligner_fogsaa_score_matrix(Aligner* self,
                                  unsigned char strand)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
-    const double* scores = self->substitution_matrix.buf;
-    double match = scores[0], mismatch = scores[0];
+    const double* substitution_matrix = self->substitution_matrix.buf;
+    double match = substitution_matrix[0], mismatch = substitution_matrix[0];
     FOGSAA_ENTER
 
     // for prediction purposes, maximum score is match and minimum score is mismatch
     for (i = 0; i < n*n; i++) {
-        if (scores[i] > match)
-            match = scores[i];
-        else if (scores[i] < mismatch)
-            mismatch = scores[i];
+        if (substitution_matrix[i] > match)
+            match = substitution_matrix[i];
+        else if (substitution_matrix[i] < mismatch)
+            mismatch = substitution_matrix[i];
     }
     FOGSAA_CHECK_SCORES
 
@@ -7212,18 +7068,18 @@ Aligner_fogsaa_align_matrix(Aligner* self,
                                  unsigned char strand)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
-    const double* scores = self->substitution_matrix.buf;
-    double match = scores[0], mismatch = scores[0];
+    const double* substitution_matrix = self->substitution_matrix.buf;
+    double match = substitution_matrix[0], mismatch = substitution_matrix[0];
     PathGenerator* paths;
     Trace** M;
     FOGSAA_ENTER
 
     // for prediction purposes, maximum score is match and minimum score is mismatch
     for (i = 0; i < n*n; i++) {
-        if (scores[i] > match)
-            match = scores[i];
-        else if (scores[i] < mismatch)
-            mismatch = scores[i];
+        if (substitution_matrix[i] > match)
+            match = substitution_matrix[i];
+        else if (substitution_matrix[i] < mismatch)
+            mismatch = substitution_matrix[i];
     }
     FOGSAA_CHECK_SCORES
 
@@ -7231,27 +7087,89 @@ Aligner_fogsaa_align_matrix(Aligner* self,
     FOGSAA_EXIT_ALIGN
 }
 
+static bool _check_indices(Py_buffer* view, Py_buffer* substitution_matrix) {
+    const Py_ssize_t m = substitution_matrix->shape[0];
+    const int* indices = view->buf;
+    const Py_ssize_t n = view->len / view->itemsize;
+    Py_ssize_t i;
+    for (i = 0; i < n; i++) {
+        const int index = indices[i];
+        if (index < 0) {
+            PyErr_Format(PyExc_ValueError,
+                         "sequence item %zd is negative (%d)",
+                         i, index);
+            return false;
+        }
+        if (index >= m) {
+            PyErr_Format(PyExc_ValueError,
+                         "sequence item %zd is out of bound"
+                         " (%d, should be < %zd)", i, index, m);
+            return false;
+        }
+    }
+    return true;
+}
+
+static bool _map_indices(Py_buffer* view, const int* mapping, Py_ssize_t m) {
+    Py_ssize_t i;
+    const Py_ssize_t n = view->len / view->itemsize;
+    int* const indices = view->buf;
+    for (i = 0; i < n; i++) {
+        int index = indices[i];
+        if (index < 0) {
+            PyErr_Format(PyExc_ValueError,
+                         "sequence item %zd is negative (%d)",
+                         i, index);
+            return false;
+        }
+        if (index >= m) {
+            PyErr_Format(PyExc_ValueError,
+                         "sequence item %zd is out of bound"
+                         " (%d, should be < %zd)", i, index, m);
+            return false;
+        }
+        index = mapping[index];
+        if (index == MISSING_LETTER) {
+            PyErr_SetString(PyExc_ValueError,
+                "sequence contains letters not in the alphabet");
+            return false;
+        }
+        indices[i] = index;
+    }
+    return true;
+}
+
+static bool _prepare_indices(Py_buffer* substitution_matrix, Py_buffer* bA, Py_buffer* bB)
+{
+    if (PyObject_IsInstance(substitution_matrix->obj,
+                            (PyObject*)Array_Type)) {
+        const PyTypeObject* basetype = Array_Type->tp_base;
+        const Py_ssize_t offset = basetype->tp_basicsize;
+        Fields* fields = (Fields*)((intptr_t)substitution_matrix->obj + offset);
+        Py_buffer* buffer = &fields->mapping;
+        const int* mapping = buffer->buf;
+        if (mapping) {
+            const Py_ssize_t m = buffer->len / buffer->itemsize;
+            if (!_map_indices(bA, mapping, m)) return false;
+            if (!_map_indices(bB, mapping, m)) return false;
+            return true;
+        }
+    }
+    if (!_check_indices(bA, substitution_matrix)) return false;
+    if (!_check_indices(bB, substitution_matrix)) return false;
+    return true;
+}
+
 static int
 sequence_converter(PyObject* argument, void* pointer)
 {
     Py_buffer* view = pointer;
-    Py_ssize_t i;
-    Py_ssize_t n;
-    int index;
-    int* indices;
     const int flag = PyBUF_FORMAT | PyBUF_C_CONTIGUOUS;
-    Aligner* aligner;
-    int* mapping;
 
     if (argument == NULL) {
         PyBuffer_Release(view);
         return 1;
     }
-
-    aligner = (Aligner*)view->obj;
-    view->obj = NULL;
-
-    mapping = aligner->mapping;
 
     if (PyObject_GetBuffer(argument, view, flag) != 0) {
         PyErr_SetString(PyExc_TypeError, "argument is not a sequence");
@@ -7260,93 +7178,26 @@ sequence_converter(PyObject* argument, void* pointer)
     if (view->ndim != 1) {
         PyErr_Format(PyExc_ValueError,
                      "sequence has incorrect rank (%d expected 1)", view->ndim);
+        PyBuffer_Release(view);
         return 0;
     }
-    n = view->len / view->itemsize;
-    if (n == 0) {
+    if (view->len == 0) {
         PyErr_SetString(PyExc_ValueError, "sequence has zero length");
+        PyBuffer_Release(view);
         return 0;
     }
     if (strcmp(view->format, "i") != 0 && strcmp(view->format, "l") != 0) {
         PyErr_Format(PyExc_ValueError,
                      "sequence has incorrect data type '%s'", view->format);
+        PyBuffer_Release(view);
         return 0;
     }
     if (view->itemsize != sizeof(int)) {
         PyErr_Format(PyExc_ValueError,
                     "sequence has unexpected item byte size "
                     "(%ld, expected %ld)", view->itemsize, sizeof(int));
+        PyBuffer_Release(view);
         return 0;
-    }
-    indices = view->buf;
-    if (mapping) {
-        Py_ssize_t m;
-        int kind;
-        PyObject* alphabet = aligner->alphabet;
-        if (alphabet == NULL || !PyUnicode_Check(alphabet)) {
-            PyErr_SetString(PyExc_RuntimeError, "mapping set without alphabet");
-            return 0;
-        }
-        if (PyUnicode_READY(alphabet) == -1) return 0;
-        kind = PyUnicode_KIND(alphabet);
-        switch (kind) {
-            case PyUnicode_1BYTE_KIND: {
-                m = 1 << 8 * sizeof(Py_UCS1);
-                break;
-            }
-            case PyUnicode_2BYTE_KIND: {
-                m = 1 << 8 * sizeof(Py_UCS2);
-                break;
-            }
-            case PyUnicode_4BYTE_KIND: {
-                m = 0x110000;  /* Maximum code point in Unicode 6.0
-                                * is 0x10ffff = 1114111 */
-                break;
-            }
-            default:
-                PyErr_SetString(PyExc_RuntimeError, "could not interpret alphabet");
-                return 0;
-        }
-        for (i = 0; i < n; i++) {
-            index = indices[i];
-            if (index < 0) {
-                PyErr_Format(PyExc_ValueError,
-                             "sequence item %zd is negative (%d)",
-                             i, index);
-                return 0;
-            }
-            if (index >= m) {
-                PyErr_Format(PyExc_ValueError,
-                             "sequence item %zd is out of bound"
-                             " (%d, should be < %zd)", i, index, m);
-                return 0;
-            }
-            index = mapping[index];
-            if (index == MISSING_LETTER) {
-                PyErr_SetString(PyExc_ValueError,
-                    "sequence contains letters not in the alphabet");
-                return 0;
-            }
-            indices[i] = index;
-        }
-    }
-    else if (aligner->substitution_matrix.obj) {
-        const Py_ssize_t m = aligner->substitution_matrix.shape[0];
-        for (i = 0; i < n; i++) {
-            index = indices[i];
-            if (index < 0) {
-                PyErr_Format(PyExc_ValueError,
-                             "sequence item %zd is negative (%d)",
-                             i, index);
-                return 0;
-            }
-            if (index >= m) {
-                PyErr_Format(PyExc_ValueError,
-                             "sequence item %zd is out of bound"
-                             " (%d, should be < %zd)", i, index, m);
-                return 0;
-            }
-        }
     }
     return Py_CLEANUP_SUPPORTED;
 }
@@ -7390,21 +7241,21 @@ Aligner_score(Aligner* self, PyObject* args, PyObject* keywords)
 
     static char *kwlist[] = {"sequenceA", "sequenceB", "strand", NULL};
 
-    bA.obj = (PyObject*)self;
-    bB.obj = (PyObject*)self;
-    if(!PyArg_ParseTupleAndKeywords(args, keywords, "O&O&O&", kwlist,
-                                    sequence_converter, &bA,
-                                    sequence_converter, &bB,
-                                    strand_converter, &strand))
+    if (!PyArg_ParseTupleAndKeywords(args, keywords, "O&O&O&", kwlist,
+                                     sequence_converter, &bA,
+                                     sequence_converter, &bB,
+                                     strand_converter, &strand))
         return NULL;
+
+    if (substitution_matrix) {
+        if (!_prepare_indices(&self->substitution_matrix, &bA, &bB)) goto exit;
+    }
 
     nA = (int) (bA.len / bA.itemsize);
     nB = (int) (bB.len / bB.itemsize);
     if (nA != bA.len / bA.itemsize || nB != bB.len / bB.itemsize) {
-        sequence_converter(NULL, &bA);
-        sequence_converter(NULL, &bB);
         PyErr_SetString(PyExc_ValueError, "sequences too long");
-        return 0;
+        goto exit;
     }
     sA = bA.buf;
     sB = bB.buf;
@@ -7426,7 +7277,7 @@ Aligner_score(Aligner* self, PyObject* args, PyObject* keywords)
                     break;
                 default:
                     ERR_UNEXPECTED_MODE
-                    return NULL;
+                    goto exit;
             }
             break;
         case Gotoh:
@@ -7445,7 +7296,7 @@ Aligner_score(Aligner* self, PyObject* args, PyObject* keywords)
                     break;
                 default:
                     ERR_UNEXPECTED_MODE
-                    return NULL;
+                    goto exit;
             }
             break;
         case WatermanSmithBeyer:
@@ -7464,13 +7315,13 @@ Aligner_score(Aligner* self, PyObject* args, PyObject* keywords)
                     break;
                 default:
                     ERR_UNEXPECTED_MODE
-                    return NULL;
+                    goto exit;
             }
             break;
         case FOGSAA:
             if (mode != FOGSAA_Mode) {
                 ERR_UNEXPECTED_MODE
-                return NULL;
+                goto exit;
             }
             if (substitution_matrix)
                 result = Aligner_fogsaa_score_matrix(self, sA, nA, sB, nB, strand);
@@ -7483,6 +7334,7 @@ Aligner_score(Aligner* self, PyObject* args, PyObject* keywords)
             break;
     }
 
+exit:
     sequence_converter(NULL, &bA);
     sequence_converter(NULL, &bB);
 
@@ -7508,21 +7360,21 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
 
     static char *kwlist[] = {"sequenceA", "sequenceB", "strand", NULL};
 
-    bA.obj = (PyObject*)self;
-    bB.obj = (PyObject*)self;
     if(!PyArg_ParseTupleAndKeywords(args, keywords, "O&O&O&", kwlist,
                                     sequence_converter, &bA,
                                     sequence_converter, &bB,
                                     strand_converter, &strand))
         return NULL;
 
+    if (substitution_matrix) {
+        if (!_prepare_indices(&self->substitution_matrix, &bA, &bB)) goto exit;
+    }
+
     nA = (int) (bA.len / bA.itemsize);
     nB = (int) (bB.len / bB.itemsize);
     if (nA != bA.len / bA.itemsize || nB != bB.len / bB.itemsize) {
-        sequence_converter(NULL, &bA);
-        sequence_converter(NULL, &bB);
         PyErr_SetString(PyExc_ValueError, "sequences too long");
-        return 0;
+        goto exit;
     }
     sA = bA.buf;
     sB = bB.buf;
@@ -7544,7 +7396,7 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
                     break;
                 default:
                     ERR_UNEXPECTED_MODE
-                    return NULL;
+                    goto exit;
             }
             break;
         case Gotoh:
@@ -7563,7 +7415,7 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
                     break;
                 default:
                     ERR_UNEXPECTED_MODE
-                    return NULL;
+                    goto exit;
             }
             break;
         case WatermanSmithBeyer:
@@ -7582,13 +7434,13 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
                     break;
                 default:
                     ERR_UNEXPECTED_MODE
-                    return NULL;
+                    goto exit;
             }
             break;
         case FOGSAA:
             if (mode != FOGSAA_Mode) {
                 ERR_UNEXPECTED_MODE
-                return NULL;
+                goto exit;
             }
             if (substitution_matrix)
                 result = Aligner_fogsaa_align_matrix(self, sA, nA, sB, nB, strand);
@@ -7601,6 +7453,7 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
             break;
     }
 
+exit:
     sequence_converter(NULL, &bA);
     sequence_converter(NULL, &bB);
 
@@ -7625,43 +7478,18 @@ static PyMethodDef Aligner_methods[] = {
     {NULL, NULL, 0, NULL}  /* Sentinel */
 };
 
-static PyTypeObject AlignerType = {
+static PyTypeObject Aligner_Type = {
     PyVarObject_HEAD_INIT(NULL, 0)
-    "_pairwisealigner.PairwiseAligner", /* tp_name */
-    sizeof(Aligner),               /* tp_basicsize */
-    0,                             /* tp_itemsize */
-    (destructor)Aligner_dealloc,   /* tp_dealloc */
-    0,                             /* tp_print */
-    0,                             /* tp_getattr */
-    0,                             /* tp_setattr */
-    0,                             /* tp_compare */
-    (reprfunc)Aligner_repr,        /* tp_repr */
-    0,                             /* tp_as_number */
-    0,                             /* tp_as_sequence */
-    0,                             /* tp_as_mapping */
-    0,                             /* tp_hash */
-    0,                             /* tp_call */
-    (reprfunc)Aligner_str,         /* tp_str */
-    0,                             /* tp_getattro */
-    0,                             /* tp_setattro */
-    0,                             /* tp_as_buffer */
-    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,        /*tp_flags*/
-    Aligner_doc,                   /* tp_doc */
-    0,                             /* tp_traverse */
-    0,                             /* tp_clear */
-    0,                             /* tp_richcompare */
-    0,                             /* tp_weaklistoffset */
-    0,                             /* tp_iter */
-    0,                             /* tp_iternext */
-    Aligner_methods,               /* tp_methods */
-    0,                             /* tp_members */
-    Aligner_getset,                /* tp_getset */
-    0,                             /* tp_base */
-    0,                             /* tp_dict */
-    0,                             /* tp_descr_get */
-    0,                             /* tp_descr_set */
-    0,                             /* tp_dictoffset */
-    (initproc)Aligner_init,        /* tp_init */
+    .tp_name = "_pairwisealigner.PairwiseAligner",
+    .tp_basicsize = sizeof(Aligner),
+    .tp_dealloc = (destructor)Aligner_dealloc,
+    .tp_repr = (reprfunc)Aligner_repr,
+    .tp_str = (reprfunc)Aligner_str,
+    .tp_flags =Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .tp_doc = Aligner_doc,
+    .tp_methods = Aligner_methods,
+    .tp_getset = Aligner_getset,
+    .tp_init = (initproc)Aligner_init,
 };
 
 
@@ -7686,20 +7514,37 @@ PyObject *
 PyInit__pairwisealigner(void)
 {
     PyObject* module;
-    AlignerType.tp_new = PyType_GenericNew;
+    Aligner_Type.tp_new = PyType_GenericNew;
 
-    if (PyType_Ready(&AlignerType) < 0 || PyType_Ready(&PathGenerator_Type) < 0)
+    if (PyType_Ready(&Aligner_Type) < 0
+     || PyType_Ready(&PathGenerator_Type) < 0)
         return NULL;
 
     module = PyModule_Create(&moduledef);
     if (!module) return NULL;
 
-    Py_INCREF(&AlignerType);
-    /* Reference to AlignerType will be stolen by PyModule_AddObject
+    Py_INCREF(&Aligner_Type);
+    /* Reference to Aligner_Type will be stolen by PyModule_AddObject
      * only if it is successful. */
     if (PyModule_AddObject(module,
-                           "PairwiseAligner", (PyObject*) &AlignerType) < 0) {
-        Py_DECREF(&AlignerType);
+                           "PairwiseAligner", (PyObject*) &Aligner_Type) < 0) {
+        Py_DECREF(&Aligner_Type);
+        Py_DECREF(module);
+        return NULL;
+    }
+
+    PyObject *mod = PyImport_ImportModule("Bio.Align.substitution_matrices._arraycore");
+    if (!mod) {
+        Py_DECREF(&Aligner_Type);
+        Py_DECREF(module);
+        return NULL;
+    }
+
+    Array_Type = (PyTypeObject*) PyObject_GetAttrString(mod, "Array");
+    Py_DECREF(mod);
+
+    if (!Array_Type) {
+        Py_DECREF(&Aligner_Type);
         Py_DECREF(module);
         return NULL;
     }

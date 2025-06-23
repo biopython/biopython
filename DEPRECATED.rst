@@ -644,6 +644,10 @@ Release 1.86, with the original name still available with a deprecation warning.
 These attributes were renamed to be consistent with the AlignmentCounts class
 and with the common nomenclature in the literature.
 
+The ``alphabet`` attribute of the PairwiseAligner class was deprecated in
+Release 1.86. The attribute is still being stored, but it is not used in any
+way.
+
 Bio.Align.Generic
 -----------------
 This module which defined to original (Multiple-Sequence) Alignment class was

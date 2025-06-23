@@ -254,6 +254,42 @@ NR_046654        31 CCAGGTATGCATCTGCTGCCAAGCCAGGGAG        0
 """,
         )
         counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (181 aligned letters; 175 identities; 6 mismatches; 1530 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 181:
+        identities = 175,
+        mismatches = 6.
+    gaps = 1530:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1530:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 1530:
+                open_internal_deletions = 2,
+                extend_internal_deletions = 1528;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -451,6 +487,42 @@ NR_046654        37 TTCCCAGGTATGCATCTGCTGCCAAGCCAGGGAG        3
 """,
         )
         counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (179 aligned letters; 172 identities; 7 mismatches; 1535 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 179:
+        identities = 172,
+        mismatches = 7.
+    gaps = 1535:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1535:
+            internal_insertions = 3:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 2;
+            internal_deletions = 1532:
+                open_internal_deletions = 3,
+                extend_internal_deletions = 1529;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -892,6 +964,42 @@ NR_111921       197 TAAAAAA      204
 """,
         )
         counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (204 aligned letters; 165 identities; 39 mismatches; 5203 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 204:
+        identities = 165,
+        mismatches = 39.
+    gaps = 5203:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 5203:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 5203:
+                open_internal_deletions = 2,
+                extend_internal_deletions = 5201;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -1337,6 +1445,42 @@ NR_111921       199 ATTAAAAAA      208
 """,
         )
         counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (203 aligned letters; 162 identities; 41 mismatches; 5206 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 203:
+        identities = 162,
+        mismatches = 41.
+    gaps = 5206:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 5206:
+            internal_insertions = 2:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 1;
+            internal_deletions = 5204:
+                open_internal_deletions = 3,
+                extend_internal_deletions = 5201;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -1472,6 +1616,80 @@ np.array([['a', 'g', 'g', 't', 'a', 'a', 'a', 'c', 't', 'g', 'c', 'c', 't',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (16 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 16:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (16 aligned letters; 16 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 16:
+        identities = 16,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -1550,6 +1768,80 @@ np.array([['a', 't', 'g', 'a', 'g', 'c', 't', 't', 'c', 'c', 'a', 'a', 'g',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (33 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 33:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (33 aligned letters; 33 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 33:
+        identities = 33,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -1627,6 +1919,80 @@ np.array([['a', 'a', 'g', 'g', 'c', 'a', 'g', 't', 't', 't', 'a', 'c', 'c',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (17 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 17:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (17 aligned letters; 17 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 17:
+        identities = 17,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -1709,6 +2075,80 @@ np.array([['a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (41 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 41:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (41 aligned letters; 38 identities; 3 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 41:
+        identities = 38,
+        mismatches = 3.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -1791,6 +2231,80 @@ np.array([['c', 'a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (41 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 41:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (41 aligned letters; 41 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 41:
+        identities = 41,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -1871,6 +2385,80 @@ np.array([['a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (36 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 36:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (36 aligned letters; 33 identities; 3 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 36:
+        identities = 33,
+        mismatches = 3.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -1942,6 +2530,80 @@ hg19_dna          1 aaaaat????aaaggggctgggcgtggtggctcacacctgtaatccca        49
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (44 aligned letters; 0 identities; 0 mismatches; 4 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 44:
+        identities = 0,
+        mismatches = 0.
+    gaps = 4:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 4:
+            internal_insertions = 4:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 3;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (44 aligned letters; 43 identities; 1 mismatches; 4 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 44:
+        identities = 43,
+        mismatches = 1.
+    gaps = 4:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 4:
+            internal_insertions = 4:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 3;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -2025,6 +2687,80 @@ hg19_dna         35 ---------------------------------------cacctgtaatc       46
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (36 aligned letters; 0 identities; 0 mismatches; 134 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 36:
+        identities = 0,
+        mismatches = 0.
+    gaps = 134:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 134:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 134:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 133;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (36 aligned letters; 34 identities; 2 mismatches; 134 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 36:
+        identities = 34,
+        mismatches = 2.
+    gaps = 134:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 134:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 134:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 133;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -2106,6 +2842,80 @@ np.array([['c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (39 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 39:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (39 aligned letters; 39 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 39:
+        identities = 39,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -2185,6 +2995,80 @@ np.array([['g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (28 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 28:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (28 aligned letters; 27 identities; 1 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 28:
+        identities = 27,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -2264,6 +3148,80 @@ hg19_dna         49
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (45 aligned letters; 0 identities; 0 mismatches; 9 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 45:
+        identities = 0,
+        mismatches = 0.
+    gaps = 9:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 9:
+            internal_insertions = 3:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 2;
+            internal_deletions = 6:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 5;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (45 aligned letters; 44 identities; 1 mismatches; 9 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 45:
+        identities = 44,
+        mismatches = 1.
+    gaps = 9:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 9:
+            internal_insertions = 3:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 2;
+            internal_deletions = 6:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 5;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -2345,6 +3303,80 @@ np.array([['c', 'a', 'a', 'a', 'a', 'a', 't', 't', 'c', 'a', 'c', 'a', 'a',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (50 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 50:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (50 aligned letters; 50 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 50:
+        identities = 50,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -2425,6 +3457,80 @@ np.array([['a', 'a', 'a', 'a', 'a', 't', 'g', 'a', 'a', 'c', 'a', 'a', 'a',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (34 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 34:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (34 aligned letters; 31 identities; 3 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 34:
+        identities = 31,
+        mismatches = 3.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -2495,6 +3601,80 @@ hg19_dna         49 tgggattaca------??????????accacgcccagccccttt       11
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (28 aligned letters; 0 identities; 0 mismatches; 16 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 28:
+        identities = 0,
+        mismatches = 0.
+    gaps = 16:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 16:
+            internal_insertions = 10:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 9;
+            internal_deletions = 6:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 5;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (28 aligned letters; 28 identities; 0 mismatches; 16 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 28:
+        identities = 28,
+        mismatches = 0.
+    gaps = 16:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 16:
+            internal_insertions = 10:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 9;
+            internal_deletions = 6:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 5;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -2576,6 +3756,80 @@ np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (37 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 37:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (37 aligned letters; 35 identities; 2 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 37:
+        identities = 35,
+        mismatches = 2.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -2656,6 +3910,80 @@ np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (36 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 36:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (36 aligned letters; 35 identities; 1 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 36:
+        identities = 35,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -2737,6 +4065,80 @@ np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (39 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 39:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (39 aligned letters; 39 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 39:
+        identities = 39,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -2818,6 +4220,80 @@ np.array([['t', 'g', 'g', 'g', 'a', 't', 'g', 'a', 'c', 'a', 'g', 'g', 'g',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (39 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 39:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (39 aligned letters; 36 identities; 3 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 39:
+        identities = 36,
+        mismatches = 3.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -2898,6 +4374,80 @@ np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 't', 'a', 'g', 'g', 'c',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (36 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 36:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (36 aligned letters; 33 identities; 3 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 36:
+        identities = 33,
+        mismatches = 3.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -2976,6 +4526,80 @@ np.array([['t', 'g', 'a', 'g', 't', 'c', 'a', 'c', 'c', 'a', 'c', 'g', 'c',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (25 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 25:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (25 aligned letters; 24 identities; 1 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 25:
+        identities = 24,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -3056,6 +4680,80 @@ np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (36 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 36:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (36 aligned letters; 35 identities; 1 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 36:
+        identities = 35,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -3136,6 +4834,80 @@ np.array([['g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c', 'g', 't',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (34 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 34:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (34 aligned letters; 33 identities; 1 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 34:
+        identities = 33,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -3266,6 +5038,80 @@ np.array([['a', 'g', 'g', 't', 'a', 'a', 'a', 'c', 't', 'g', 'c', 'c', 't',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (16 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 16:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (16 aligned letters; 16 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 16:
+        identities = 16,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -3344,6 +5190,80 @@ np.array([['a', 't', 'g', 'a', 'g', 'c', 't', 't', 'c', 'c', 'a', 'a', 'g',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (33 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 33:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (33 aligned letters; 33 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 33:
+        identities = 33,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -3421,6 +5341,80 @@ np.array([['a', 'a', 'g', 'g', 'c', 'a', 'g', 't', 't', 't', 'a', 'c', 'c',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (17 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 17:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (17 aligned letters; 17 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 17:
+        identities = 17,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -3529,6 +5523,80 @@ np.array([['a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (41 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 41:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (41 aligned letters; 38 identities; 3 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 41:
+        identities = 38,
+        mismatches = 3.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -3611,6 +5679,80 @@ np.array([['c', 'a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (41 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 41:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (41 aligned letters; 41 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 41:
+        identities = 41,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -3691,6 +5833,80 @@ np.array([['a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (36 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 36:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (36 aligned letters; 33 identities; 3 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 36:
+        identities = 33,
+        mismatches = 3.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -3762,6 +5978,80 @@ hg19_dna          1 aaaaat????aaaggggctgggcgtggtggctcacacctgtaatccca        49
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (44 aligned letters; 0 identities; 0 mismatches; 4 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 44:
+        identities = 0,
+        mismatches = 0.
+    gaps = 4:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 4:
+            internal_insertions = 4:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 3;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (44 aligned letters; 43 identities; 1 mismatches; 4 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 44:
+        identities = 43,
+        mismatches = 1.
+    gaps = 4:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 4:
+            internal_insertions = 4:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 3;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -3845,6 +6135,80 @@ hg19_dna         35 ---------------------------------------cacctgtaatc       46
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (36 aligned letters; 0 identities; 0 mismatches; 134 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 36:
+        identities = 0,
+        mismatches = 0.
+    gaps = 134:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 134:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 134:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 133;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (36 aligned letters; 34 identities; 2 mismatches; 134 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 36:
+        identities = 34,
+        mismatches = 2.
+    gaps = 134:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 134:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 134:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 133;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -3926,6 +6290,80 @@ np.array([['c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (39 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 39:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (39 aligned letters; 39 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 39:
+        identities = 39,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -4005,6 +6443,80 @@ np.array([['g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (28 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 28:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (28 aligned letters; 27 identities; 1 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 28:
+        identities = 27,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -4084,6 +6596,80 @@ hg19_dna         49
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (45 aligned letters; 0 identities; 0 mismatches; 9 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 45:
+        identities = 0,
+        mismatches = 0.
+    gaps = 9:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 9:
+            internal_insertions = 3:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 2;
+            internal_deletions = 6:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 5;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (45 aligned letters; 44 identities; 1 mismatches; 9 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 45:
+        identities = 44,
+        mismatches = 1.
+    gaps = 9:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 9:
+            internal_insertions = 3:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 2;
+            internal_deletions = 6:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 5;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -4165,6 +6751,80 @@ np.array([['c', 'a', 'a', 'a', 'a', 'a', 't', 't', 'c', 'a', 'c', 'a', 'a',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (50 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 50:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (50 aligned letters; 50 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 50:
+        identities = 50,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -4245,6 +6905,80 @@ np.array([['a', 'a', 'a', 'a', 'a', 't', 'g', 'a', 'a', 'c', 'a', 'a', 'a',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (34 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 34:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (34 aligned letters; 31 identities; 3 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 34:
+        identities = 31,
+        mismatches = 3.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -4315,6 +7049,80 @@ hg19_dna         49 tgggattaca------??????????accacgcccagccccttt       11
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (28 aligned letters; 0 identities; 0 mismatches; 16 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 28:
+        identities = 0,
+        mismatches = 0.
+    gaps = 16:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 16:
+            internal_insertions = 10:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 9;
+            internal_deletions = 6:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 5;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (28 aligned letters; 28 identities; 0 mismatches; 16 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 28:
+        identities = 28,
+        mismatches = 0.
+    gaps = 16:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 16:
+            internal_insertions = 10:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 9;
+            internal_deletions = 6:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 5;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -4396,6 +7204,80 @@ np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (37 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 37:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (37 aligned letters; 35 identities; 2 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 37:
+        identities = 35,
+        mismatches = 2.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -4476,6 +7358,80 @@ np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (36 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 36:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (36 aligned letters; 35 identities; 1 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 36:
+        identities = 35,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -4557,6 +7513,80 @@ np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (39 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 39:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (39 aligned letters; 39 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 39:
+        identities = 39,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -4638,6 +7668,80 @@ np.array([['t', 'g', 'g', 'g', 'a', 't', 'g', 'a', 'c', 'a', 'g', 'g', 'g',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (39 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 39:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (39 aligned letters; 36 identities; 3 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 39:
+        identities = 36,
+        mismatches = 3.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -4718,6 +7822,80 @@ np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 't', 'a', 'g', 'g', 'c',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (36 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 36:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (36 aligned letters; 33 identities; 3 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 36:
+        identities = 33,
+        mismatches = 3.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -4796,6 +7974,80 @@ np.array([['t', 'g', 'a', 'g', 't', 'c', 'a', 'c', 'c', 'a', 'c', 'g', 'c',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (25 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 25:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (25 aligned letters; 24 identities; 1 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 25:
+        identities = 24,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -4876,6 +8128,80 @@ np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (36 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 36:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (36 aligned letters; 35 identities; 1 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 36:
+        identities = 35,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -4956,6 +8282,80 @@ np.array([['g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c', 'g', 't',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (34 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 34:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (34 aligned letters; 33 identities; 1 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 34:
+        identities = 33,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -5058,6 +8458,80 @@ np.array([['a', 'g', 'g', 't', 'a', 'a', 'a', 'c', 't', 'g', 'c', 'c', 't',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (16 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 16:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (16 aligned letters; 16 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 16:
+        identities = 16,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -5136,6 +8610,80 @@ np.array([['a', 't', 'g', 'a', 'g', 'c', 't', 't', 'c', 'c', 'a', 'a', 'g',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (33 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 33:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (33 aligned letters; 33 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 33:
+        identities = 33,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -5213,6 +8761,80 @@ np.array([['a', 'a', 'g', 'g', 'c', 'a', 'g', 't', 't', 't', 'a', 'c', 'c',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (17 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 17:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (17 aligned letters; 17 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 17:
+        identities = 17,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -5295,6 +8917,80 @@ np.array([['a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (41 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 41:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (41 aligned letters; 38 identities; 3 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 41:
+        identities = 38,
+        mismatches = 3.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -5377,6 +9073,80 @@ np.array([['c', 'a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (41 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 41:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (41 aligned letters; 41 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 41:
+        identities = 41,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -5457,6 +9227,80 @@ np.array([['a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (36 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 36:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (36 aligned letters; 33 identities; 3 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 36:
+        identities = 33,
+        mismatches = 3.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -5528,6 +9372,80 @@ hg19_dna          1 aaaaat????aaaggggctgggcgtggtggctcacacctgtaatccca        49
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (44 aligned letters; 0 identities; 0 mismatches; 4 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 44:
+        identities = 0,
+        mismatches = 0.
+    gaps = 4:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 4:
+            internal_insertions = 4:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 3;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (44 aligned letters; 43 identities; 1 mismatches; 4 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 44:
+        identities = 43,
+        mismatches = 1.
+    gaps = 4:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 4:
+            internal_insertions = 4:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 3;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -5611,6 +9529,80 @@ hg19_dna         35 ---------------------------------------cacctgtaatc       46
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (36 aligned letters; 0 identities; 0 mismatches; 134 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 36:
+        identities = 0,
+        mismatches = 0.
+    gaps = 134:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 134:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 134:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 133;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (36 aligned letters; 34 identities; 2 mismatches; 134 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 36:
+        identities = 34,
+        mismatches = 2.
+    gaps = 134:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 134:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 134:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 133;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -5692,6 +9684,80 @@ np.array([['c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (39 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 39:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (39 aligned letters; 39 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 39:
+        identities = 39,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -5771,6 +9837,80 @@ np.array([['g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (28 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 28:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (28 aligned letters; 27 identities; 1 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 28:
+        identities = 27,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -5850,6 +9990,80 @@ hg19_dna         49
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (45 aligned letters; 0 identities; 0 mismatches; 9 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 45:
+        identities = 0,
+        mismatches = 0.
+    gaps = 9:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 9:
+            internal_insertions = 3:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 2;
+            internal_deletions = 6:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 5;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (45 aligned letters; 44 identities; 1 mismatches; 9 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 45:
+        identities = 44,
+        mismatches = 1.
+    gaps = 9:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 9:
+            internal_insertions = 3:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 2;
+            internal_deletions = 6:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 5;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -5931,6 +10145,80 @@ np.array([['c', 'a', 'a', 'a', 'a', 'a', 't', 't', 'c', 'a', 'c', 'a', 'a',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (50 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 50:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (50 aligned letters; 50 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 50:
+        identities = 50,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -6011,6 +10299,80 @@ np.array([['a', 'a', 'a', 'a', 'a', 't', 'g', 'a', 'a', 'c', 'a', 'a', 'a',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (34 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 34:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (34 aligned letters; 31 identities; 3 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 34:
+        identities = 31,
+        mismatches = 3.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -6081,6 +10443,80 @@ hg19_dna         49 tgggattaca------??????????accacgcccagccccttt       11
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (28 aligned letters; 0 identities; 0 mismatches; 16 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 28:
+        identities = 0,
+        mismatches = 0.
+    gaps = 16:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 16:
+            internal_insertions = 10:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 9;
+            internal_deletions = 6:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 5;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (28 aligned letters; 28 identities; 0 mismatches; 16 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 28:
+        identities = 28,
+        mismatches = 0.
+    gaps = 16:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 16:
+            internal_insertions = 10:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 9;
+            internal_deletions = 6:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 5;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -6162,6 +10598,80 @@ np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (37 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 37:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (37 aligned letters; 35 identities; 2 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 37:
+        identities = 35,
+        mismatches = 2.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -6242,6 +10752,80 @@ np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (36 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 36:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (36 aligned letters; 35 identities; 1 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 36:
+        identities = 35,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -6323,6 +10907,80 @@ np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (39 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 39:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (39 aligned letters; 39 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 39:
+        identities = 39,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -6404,6 +11062,80 @@ np.array([['t', 'g', 'g', 'g', 'a', 't', 'g', 'a', 'c', 'a', 'g', 'g', 'g',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (39 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 39:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (39 aligned letters; 36 identities; 3 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 39:
+        identities = 36,
+        mismatches = 3.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -6484,6 +11216,80 @@ np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 't', 'a', 'g', 'g', 'c',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (36 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 36:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (36 aligned letters; 33 identities; 3 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 36:
+        identities = 33,
+        mismatches = 3.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -6562,6 +11368,80 @@ np.array([['t', 'g', 'a', 'g', 't', 'c', 'a', 'c', 'c', 'a', 'c', 'g', 'c',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (25 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 25:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (25 aligned letters; 24 identities; 1 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 25:
+        identities = 24,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -6642,6 +11522,80 @@ np.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (36 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 36:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (36 aligned letters; 35 identities; 1 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 36:
+        identities = 35,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -6722,6 +11676,80 @@ np.array([['g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c', 'g', 't',
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (34 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 34:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (34 aligned letters; 33 identities; 1 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 34:
+        identities = 33,
+        mismatches = 1.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -6833,6 +11861,80 @@ class TestAlign_dnax_prot(unittest.TestCase):
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (156 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 156:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (156 aligned letters; 2 identities; 50 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 156:
+        identities = 2,
+        mismatches = 50.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -6895,6 +11997,80 @@ class TestAlign_dnax_prot(unittest.TestCase):
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (132 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 132:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (132 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 132:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -6965,6 +12141,80 @@ class TestAlign_dnax_prot(unittest.TestCase):
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (132 aligned letters; 0 identities; 0 mismatches; 17458 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 132:
+        identities = 0,
+        mismatches = 0.
+    gaps = 17458:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 17458:
+            internal_insertions = 98:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 97;
+            internal_deletions = 17360:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 17359;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (132 aligned letters; 0 identities; 0 mismatches; 17458 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 132:
+        identities = 0,
+        mismatches = 0.
+    gaps = 17458:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 17458:
+            internal_insertions = 98:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 97;
+            internal_deletions = 17360:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 17359;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -7035,6 +12285,80 @@ class TestAlign_dnax_prot(unittest.TestCase):
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (141 aligned letters; 0 identities; 0 mismatches; 901 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 141:
+        identities = 0,
+        mismatches = 0.
+    gaps = 901:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 901:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 901:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 900;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (141 aligned letters; 0 identities; 0 mismatches; 901 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 141:
+        identities = 0,
+        mismatches = 0.
+    gaps = 901:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 901:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 901:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 900;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -7093,6 +12417,80 @@ class TestAlign_dnax_prot(unittest.TestCase):
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (75 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 75:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (75 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 75:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -7149,6 +12547,80 @@ class TestAlign_dnax_prot(unittest.TestCase):
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (48 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 48:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (48 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 48:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -7210,6 +12682,80 @@ class TestAlign_dnax_prot(unittest.TestCase):
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (102 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 102:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (102 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 102:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -7280,6 +12826,80 @@ class TestAlign_dnax_prot(unittest.TestCase):
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (189 aligned letters; 0 identities; 0 mismatches; 5599 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 189:
+        identities = 0,
+        mismatches = 0.
+    gaps = 5599:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 5599:
+            internal_insertions = 103:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 102;
+            internal_deletions = 5496:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 5495;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (189 aligned letters; 0 identities; 0 mismatches; 5599 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 189:
+        identities = 0,
+        mismatches = 0.
+    gaps = 5599:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 5599:
+            internal_insertions = 103:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 102;
+            internal_deletions = 5496:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 5495;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -7550,6 +13170,80 @@ CAG33136.        60 YEL 63
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (639 aligned letters; 0 identities; 0 mismatches; 31299 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 639:
+        identities = 0,
+        mismatches = 0.
+    gaps = 31299:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 31299:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 31299:
+                open_internal_deletions = 6,
+                extend_internal_deletions = 31293;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (639 aligned letters; 0 identities; 0 mismatches; 31299 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 639:
+        identities = 0,
+        mismatches = 0.
+    gaps = 31299:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 31299:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 31299:
+                open_internal_deletions = 6,
+                extend_internal_deletions = 31293;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -7625,6 +13319,80 @@ CAG33136.        60 YEL 63
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (687 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 687:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = -1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = -2;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (687 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 687:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = -1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = -2;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -7700,6 +13468,80 @@ CAG33136.        60 YEL 63
 """,
         )
         counts = alignment.counts()
+        if fmt == "psl":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (630 aligned letters; 0 identities; 0 mismatches; 21 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 630:
+        identities = 0,
+        mismatches = 0.
+    gaps = 21:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 21:
+            internal_insertions = 20:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 19;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
+        elif fmt == "pslx":
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (630 aligned letters; 0 identities; 0 mismatches; 21 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 630:
+        identities = 0,
+        mismatches = 0.
+    gaps = 21:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 21:
+            internal_insertions = 20:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 19;
+            internal_deletions = 1:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
