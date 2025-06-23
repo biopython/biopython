@@ -59,8 +59,9 @@ class StructureAlignTests(unittest.TestCase):
         StructureAlignment produces identical mappings whether the input is:
         1. A Bio.Align.MultipleSeqAlignment object (from AlignIO.read)
         2. A Bio.Align.Alignment object (from Align.read)
+        3. Nothing (will be auto generated)
 
-        Both should map the same residues between structures in the same way.
+        All should map the same residues between structures in the same way.
         """
         p = PDBParser(QUIET=1)
 
@@ -80,9 +81,12 @@ class StructureAlignTests(unittest.TestCase):
         with open(al_file) as handle:
             alignment_obj = Align.read(handle, "fasta")
 
-        # Create StructureAlignment with both types
+        # Create StructureAlignment with all 3 types
         al_msa = StructureAlignment(msa_records, m1, m2)
         al_align = StructureAlignment(alignment_obj, m1, m2)
+
+        # Simply check if this works, does not have to be identcial
+        _ = StructureAlignment(m1=m1, m2=m2)
 
         # Results should be identical
         self.assertEqual(len(al_msa.duos), len(al_align.duos))

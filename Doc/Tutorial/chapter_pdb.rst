@@ -1895,7 +1895,8 @@ Example:
 Note that in order to work with legacy code, the first parameter in ``StructureAlignment`` is
 still an alignment object. This means that to use the class correctly, the models must either
 be passed as keyword arguments (as seen in the example above), or the first argument must be
-passed as None.
+passed as None. Also, if you are using an older version of Biopython (<=1.85), you will
+have to generate the sequence alignment manually (``Bio.Align`` module)
 
 Aligning dissimilar structures
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
