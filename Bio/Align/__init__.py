@@ -3608,7 +3608,7 @@ class Alignment:
          - gap_score                  - the total gap score (calculated only if the
                                         argument is a pairwise aligner, and set to None
                                         otherwise);
-         - gaps                       - the total gap length;;
+         - gaps                       - the total gap length;
          - open_gaps                  - the number of gaps opened in the alignment;
          - extend_gaps                - the number of gap extensions in the alignment;
          - open_left_gaps             - the number of gaps opened on the left side of
