@@ -70,13 +70,9 @@ class StructureAlignment:
         # List of residue pairs (None if -)
         duos = []
         for i in range(ncolumns):
-            if isinstance(fasta_align, MultipleSeqAlignment):
-                aa1 = fasta_align[si, i]
-                aa2 = fasta_align[sj, i]
-            else:  # Alignment
-                column = fasta_align[:, i]
-                aa1 = column[si]
-                aa2 = column[sj]
+            aa1 = fasta_align[si, i]
+            aa2 = fasta_align[sj, i]
+
             if aa1 != "-":
                 # Position in seq1 is not -
                 while True:
@@ -121,7 +117,7 @@ class StructureAlignment:
         seq1_record = self._extract_sequence_from_model(m1, "structure1")
         seq2_record = self._extract_sequence_from_model(m2, "structure2")
 
-        aligner = PairwiseAligner()
+        aligner = PairwiseAligner("blastp")
 
         alignments = aligner.align(seq1_record.seq, seq2_record.seq)
         best_alignment = alignments[0]
