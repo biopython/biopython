@@ -79,16 +79,32 @@ class IsoelectricPoint:
 
     """
 
-    def __init__(self, protein_sequence, aa_content=None):
+    def __init__(self, protein_sequence, aa_content=None, ignore_termini=None):
         """Initialize the class."""
         self.sequence = protein_sequence.upper()
+
         if not aa_content:
             from Bio.SeqUtils.ProtParam import ProteinAnalysis as _PA
-
             aa_content = _PA(self.sequence).count_amino_acids()
+           
         self.charged_aas_content = self._select_charged(aa_content)
 
         self.pos_pKs, self.neg_pKs = self._update_pKs_tables()
+
+        if ignore_termini is not None:
+            if ignore_termini == "Nterm":
+                del self.charged_aas_content["Nterm"]
+                del self.pos_pKs["Nterm"]
+
+            if ignore_termini == "Cterm":
+                del self.charged_aas_content["Cterm"]
+                del self.neg_pKs["Cterm"]
+
+            if ignore_termini == "both":
+                del self.charged_aas_content["Nterm"]
+                del self.pos_pKs["Nterm"]
+                del self.charged_aas_content["Cterm"]
+                del self.neg_pKs["Cterm"]
 
     # This function creates a dictionary with the contents of each charged aa,
     # plus Cterm and Nterm.
@@ -134,7 +150,7 @@ class IsoelectricPoint:
 
     # This is the action function, it tries different pH until the charge of
     # the protein is 0 (or close).
-    def pi(self, pH=7.775, min_=4.05, max_=12):
+    def pi(self, pH=7.775, min_=4.05, max_=12.0):
         r"""Calculate and return the isoelectric point as float.
 
         This is a recursive function that uses bisection method.
