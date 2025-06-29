@@ -8,6 +8,7 @@
 """Map residues of two structures to each other based on a FASTA alignment."""
 
 from typing import Optional
+import warnings
 
 from Bio.Align import Alignment, MultipleSeqAlignment, PairwiseAligner
 from Bio.Data import PDBData
@@ -29,6 +30,7 @@ class StructureAlignment:
         m2: Model | None = None,
         si: int = 0,
         sj: int = 1,
+        aligner: Optional[PairwiseAligner] = None,
     ) -> None:
         """Initialize.
 
@@ -36,26 +38,46 @@ class StructureAlignment:
          - fasta_align - Alignment object / MSA object or None (if None, one will be generated automatically)
          - m1, m2 - two models (Bio.PDB.Model.Model objects). Their default values are set to None to maintain legacy code, but they CANNOT be None
          - si, sj - the sequences in the Alignment object that correspond to the structures
+         - aligner - Optional aligner, mutually exclusive with fasta_align, allows for customization of automatic
+           alignment, otherwise blastp defaults will be used
 
         """
+        # Check that fasta_align and aligner are not both provided
+        if fasta_align is not None and aligner is not None:
+            raise ValueError(
+                "fasta_align and aligner cannot be both provided, fasta_align uses precomputed alignments",
+                "while the aligner is to allow a custom alignment tool to be used for automatically aligning",
+                "input sequences",
+            )
+
+        self.aligner = aligner
+
         # Validate that models are provided
         if m1 is None or m2 is None:
-            raise ValueError(
-                "Both m1 and m2 models must be provided and cannot be None"
-            )
+            raise ValueError("Both m1 and m2 models must be provided")
 
         if fasta_align is None:
             fasta_align = self._generate_alignment_from_models(
                 m1, m2
             )  # MultipleSeqAlignment
+        else:
+            # if fasta_align is explicitly provided, raise DeprecationWarning letting user
+            # know that fasta_align is no longer required
+            warnings.warn(
+                "fasta_align is no longer a required argument (will be automatically computed "
+                "if not provided), and the function signature will change in a future release",
+                DeprecationWarning,
+                stacklevel=2,
+            )
+
         if isinstance(fasta_align, MultipleSeqAlignment):
             ncolumns = fasta_align.get_alignment_length()
         elif isinstance(fasta_align, Alignment):
-            nrows, ncolumns = fasta_align.shape
+            _, ncolumns = fasta_align.shape
         else:
             raise ValueError(
-                "Invalid alignment object, must either be an Alignment object, "
-                "MultipleSeqAlignment object, or None"
+                f"Could not infer length from alignment object: {fasta_align}. "
+                "Alignment must be of type MultipleSeqAlignment or Alignment."
             )
 
         # Get the residues in the models
@@ -117,7 +139,12 @@ class StructureAlignment:
         seq1_record = self._extract_sequence_from_model(m1, "structure1")
         seq2_record = self._extract_sequence_from_model(m2, "structure2")
 
-        aligner = PairwiseAligner("blastp")
+        if self.aligner is not None:
+            assert isinstance(
+                self.aligner, PairwiseAligner
+            ), f"custom aligner must be a PairwiseAligner object, not {type(self.aligner)}"
+        else:
+            aligner = PairwiseAligner("blastp")
 
         alignments = aligner.align(seq1_record.seq, seq2_record.seq)
         best_alignment = alignments[0]
@@ -141,12 +168,8 @@ class StructureAlignment:
         for residue in residues:
             if isinstance(residue, Residue) and is_aa(residue):
                 resname = residue.get_resname()
-                if resname in PDBData.protein_letters_3to1_extended:
-                    aa_code = PDBData.protein_letters_3to1_extended[resname]
-                    sequence += aa_code
-                else:
-                    # Handle unknown residues with 'X'
-                    sequence += "X"
+                aa_code = PDBData.protein_letters_3to1_extended.get(resname, "X")
+                sequence += aa_code
 
         return SeqRecord(Seq(sequence), id=seq_id)
 

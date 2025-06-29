@@ -1891,11 +1891,24 @@ Example:
     >>> model_1 = s1[0]
     >>> model_2 = s2[0]
     >>> alignment = StructureAlignment(m1=model_1, m2=model_2)
+    # Currently, the alignment will use the blastp default values to align the structures
+
+    # To use custom values, you can pass in a customized PairwiseAligner
+    >>> aligner = PairwiseAligner(gap_score=-1)
+    >>> alignment = StructureAlignment(m1=model_1, m2=model_2, aligner=aligner)
+
+    # Alternatively, you can also pass a premade fasta alignment
+    >>> fasta_alignment = Bio.AlignIO.read("fasta_alignment_file.fasta", "fasta")
+    # For how to create a sequence alignment from both models, please see the documentation
+    # on ``MultipleSequenceAlignment`` objects
+    >>> alignment = StructureAlignment(m1=model_1, m2=model_2, fasta_align=fasta_alignment)
+
 
 Note that in order to work with legacy code, the first parameter in ``StructureAlignment`` is
 still an alignment object. This means that to use the class correctly, the models must either
 be passed as keyword arguments (as seen in the example above), or the first argument must be
-passed as None. Also, if you are using an older version of Biopython (<=1.85), you will
+passed as None. Now that explicitly passing the alignment object is deprecated, this is subject
+to change in a future release. Also, if you are using an older version of Biopython (<=1.85), you will
 have to generate the sequence alignment manually (``Bio.Align`` module)
 
 Aligning dissimilar structures
