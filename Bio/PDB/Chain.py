@@ -94,6 +94,10 @@ class Chain(Entity["Model", "Residue"]):
          - id - int, residue resseq
 
         """
+        try: 
+            id = int(id)
+        except ValueError:
+            pass
         if isinstance(id, int):
             id = (" ", id, " ")
         return id
@@ -119,10 +123,6 @@ class Chain(Entity["Model", "Residue"]):
          - id - (string, int, string) or int
 
         """
-        try: 
-            id = int(id)
-        except ValueError:
-            pass
         id = self._translate_id(id)
         return Entity.__contains__(self, id)
 
