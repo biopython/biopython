@@ -6,7 +6,6 @@
 # package.
 
 """Chain class, used in Structure objects."""
-import numbers
 
 from typing import Optional
 from typing import TYPE_CHECKING
@@ -95,7 +94,7 @@ class Chain(Entity["Model", "Residue"]):
          - id - int, residue resseq
 
         """
-        if isinstance(id, numbers.Integral):
+        if isinstance(id, int):
             id = (" ", id, " ")
         return id
 
