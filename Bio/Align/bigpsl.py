@@ -564,7 +564,7 @@ class AlignmentIterator(bigbed.AlignmentIterator):
             tPosition += tB
             qPosition += qB
             coordinates.append([tPosition, qPosition])
-        coordinates = np.array(coordinates).transpose()
+        coordinates = np.array(coordinates, np.intp).transpose()
         qStart = int(words[9])
         qEnd = int(words[10])
         if strand == "-":

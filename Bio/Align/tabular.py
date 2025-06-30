@@ -372,7 +372,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     target_coordinates.append(target_coordinates[-1] + length)
                     query_coordinates.append(query_coordinates[-1] + length)
                     state = State.MATCH
-        coordinates = np.array([target_coordinates, query_coordinates])
+        coordinates = np.array([target_coordinates, query_coordinates], np.intp)
         return coordinates
 
     def parse_cigar(self, cigar):
@@ -404,5 +404,5 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 query_coordinate += length
             target_coordinates.append(target_coordinate)
             query_coordinates.append(query_coordinate)
-        coordinates = np.array([target_coordinates, query_coordinates])
+        coordinates = np.array([target_coordinates, query_coordinates], np.intp)
         return coordinates

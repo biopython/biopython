@@ -146,6 +146,44 @@ MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTEEELLRRLQQIKEGPPPQSPD
 """,
         )
         counts = alignment.counts(substitution_matrix)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (substitution score = -34.0; 472 aligned letters; 64 identities; 408 mismatches; 126 positives; 129 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    substitution_score = -34.0,
+    aligned = 472:
+        identities = 64,
+        positives = 126,
+        mismatches = 408.
+    gaps = 129:
+        left_gaps = 9:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 9:
+                open_left_deletions = 1,
+                extend_left_deletions = 8;
+        internal_gaps = 117:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 116:
+                open_internal_deletions = 8,
+                extend_internal_deletions = 108;
+        right_gaps = 3:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 3:
+                open_right_deletions = 1,
+                extend_right_deletions = 2.
+""",
+        )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 9)
         self.assertEqual(counts.right_insertions, 0)
@@ -335,6 +373,44 @@ MKKLvl......SLS....LV---lA..FSSAta...............a.FAAIPQNIRIGTDPTYAPFESKNs.QGEL
 """,
         )
         counts = alignment.counts(substitution_matrix)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (substitution score = 10664.0; 6948 aligned letters; 2353 identities; 4595 mismatches; 3745 positives; 608 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    substitution_score = 10664.0,
+    aligned = 6948:
+        identities = 2353,
+        positives = 3745,
+        mismatches = 4595.
+    gaps = 608:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 578:
+            internal_insertions = 285:
+                open_internal_insertions = 126,
+                extend_internal_insertions = 159;
+            internal_deletions = 293:
+                open_internal_deletions = 125,
+                extend_internal_deletions = 168;
+        right_gaps = 30:
+            right_insertions = 11:
+                open_right_insertions = 8,
+                extend_right_insertions = 3;
+            right_deletions = 19:
+                open_right_deletions = 7,
+                extend_right_deletions = 12.
+""",
+        )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 11)
@@ -460,6 +536,42 @@ atgaacaaagtagcgaggaagaacaaaacatcaggtgaacaaaaaaaaaactcaatccacatcaaAGTTACAATAACTGA
 """,
         )
         counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (1034 aligned letters; 974 identities; 60 mismatches; 962 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 1034:
+        identities = 974,
+        mismatches = 60.
+    gaps = 962:
+        left_gaps = 556:
+            left_insertions = 65:
+                open_left_insertions = 1,
+                extend_left_insertions = 64;
+            left_deletions = 491:
+                open_left_deletions = 2,
+                extend_left_deletions = 489;
+        internal_gaps = 404:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 404:
+                open_internal_deletions = 4,
+                extend_internal_deletions = 400;
+        right_gaps = 2:
+            right_insertions = 2:
+                open_right_insertions = 2,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.left_insertions, 65)
         self.assertEqual(counts.left_deletions, 491)
         self.assertEqual(counts.right_insertions, 2)
@@ -529,6 +641,42 @@ np.array([['G', 'C', 'T', 'G', 'G', 'G', 'G', 'A', 'T', 'G', 'G', 'A', 'G', 'A',
             )
         )
         counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (26 aligned letters; 25 identities; 1 mismatches; 1 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 26:
+        identities = 25,
+        mismatches = 1.
+    gaps = 1:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 1:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -688,6 +836,44 @@ np.array([['D', '-', 'V', 'L', 'L', 'G', 'A', 'N', 'G', 'G', 'V', 'L', 'V',
             )
         )
         counts = alignment.counts(substitution_matrix)
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (substitution score = 2197.0; 904 aligned letters; 427 identities; 477 mismatches; 554 positives; 72 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    substitution_score = 2197.0,
+    aligned = 904:
+        identities = 427,
+        positives = 554,
+        mismatches = 477.
+    gaps = 72:
+        left_gaps = 10:
+            left_insertions = 8:
+                open_left_insertions = 4,
+                extend_left_insertions = 4;
+            left_deletions = 2:
+                open_left_deletions = 2,
+                extend_left_deletions = 0;
+        internal_gaps = 62:
+            internal_insertions = 14:
+                open_internal_insertions = 9,
+                extend_internal_insertions = 5;
+            internal_deletions = 48:
+                open_internal_deletions = 17,
+                extend_internal_deletions = 31;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.left_insertions, 8)
         self.assertEqual(counts.left_deletions, 2)
         self.assertEqual(counts.right_insertions, 0)

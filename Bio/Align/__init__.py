@@ -38,6 +38,7 @@ from Bio import BiopythonDeprecationWarning
 from Bio.Align import _aligncore  # type: ignore
 from Bio.Align import _codonaligner  # type: ignore
 from Bio.Align import _pairwisealigner  # type: ignore
+from Bio.Align import _alignmentcounts  # type: ignore
 from Bio.Align import substitution_matrices
 from Bio.Data import CodonTable
 from Bio.Seq import MutableSeq
@@ -45,6 +46,7 @@ from Bio.Seq import reverse_complement
 from Bio.Seq import Seq
 from Bio.Seq import translate
 from Bio.Seq import UndefinedSequenceError
+from Bio.Seq import SequenceDataAbstractBaseClass
 from Bio.SeqRecord import _RestrictedDict
 from Bio.SeqRecord import SeqRecord
 
@@ -53,187 +55,6 @@ from Bio.SeqRecord import SeqRecord
 # or _codonaligner.pyd or _codonaligner.so) is missing or if the user is
 # importing from within the Biopython source tree, see PR #2007:
 # https://github.com/biopython/biopython/pull/2007
-
-
-class AlignmentCounts:
-    """Detailed number of gaps, identities, and mismatches.
-
-    An `AlignmentCounts` object has the following properties:
-
-     - aligned             - the number of letters aligned to each other. If
-                             sequences are known, then this is equal to the
-                             number of identities plus the number of mismatches.
-                             Otherwise, the number of aligned letters may be
-                             greater than the number of identities plus the
-                             number of mismatches. The number of aligned letters
-                             is always calculated, even if none of the sequences
-                             are known.
-     - identities          - the number of identical letters in the alignment;
-     - mismatches          - the number of mismatched letters in the alignment;
-     - positives           - the number of aligned letters with a positive score;
-     - left_insertions     - the number of insertions on the left side of the
-                             alignment;
-     - left_deletions      - the number of deletions on the left side of the
-                             alignment;
-     - right_insertions    - the number of insertions on the right side of the
-                             alignment;
-     - right_deletions     - the number of deletions on the right side of the
-                             alignment;
-     - internal_insertions - the number of insertions in the interior of the
-                             alignment;
-     - internal_deletions  - the number of deletions in the interior of the
-                             alignment;
-     - insertions          - the total number of insertions;
-     - deletions           - the total number of deletions;
-     - left_gaps           - the number of gaps on the left side of the alignment;
-     - right_gaps          - the number of gaps on the right side of the alignment;
-     - internal_gaps       - the number of gaps in the interior of the alignment;
-     - gaps                - the total number of gaps in the alignment;
-    """
-
-    __slots__ = (
-        "_left_insertions",
-        "_left_deletions",
-        "_right_insertions",
-        "_right_deletions",
-        "_internal_insertions",
-        "_internal_deletions",
-        "_aligned",
-        "_identities",
-        "_mismatches",
-        "_positives",
-    )
-
-    def __init__(
-        self,
-        left_insertions,
-        left_deletions,
-        right_insertions,
-        right_deletions,
-        internal_insertions,
-        internal_deletions,
-        aligned,
-        identities,
-        mismatches,
-        positives=None,
-    ):
-        """Initialize an AlignmentCount object with the given counts."""
-        self._left_insertions = left_insertions
-        self._left_deletions = left_deletions
-        self._right_insertions = right_insertions
-        self._right_deletions = right_deletions
-        self._internal_insertions = internal_insertions
-        self._internal_deletions = internal_deletions
-        self._aligned = aligned
-        self._identities = identities
-        self._mismatches = mismatches
-        self._positives = positives
-
-    def __repr__(self):
-        return (
-            "AlignmentCounts(left_insertions=%d, left_deletions=%d, internal_insertions=%d, internal_deletions=%d, right_insertions=%d, right_deletions=%d, aligned=%d, identities=%s, mismatches=%s, positives=%s)"
-            % (
-                self._left_insertions,
-                self._left_deletions,
-                self._right_insertions,
-                self._right_deletions,
-                self._internal_insertions,
-                self._internal_deletions,
-                self._aligned,
-                self._identities,
-                self._mismatches,
-                self._positives,
-            )
-        )
-
-    @property
-    def aligned(self):
-        """the number of letters aligned to each other in the alignment."""
-        return self._aligned
-
-    @property
-    def identities(self):
-        """the number of identical letters in the alignment."""
-        return self._identities
-
-    @property
-    def mismatches(self):
-        """the number of mismatched letters in the alignment."""
-        return self._mismatches
-
-    @property
-    def positives(self):
-        """the number of aligned letters with a positive score."""
-        return self._positives
-
-    @property
-    def left_insertions(self):
-        """the number of insertions on the left side of the alignment."""
-        return self._left_insertions
-
-    @property
-    def left_deletions(self):
-        """the number of deletions on the left side of the alignment."""
-        return self._left_deletions
-
-    @property
-    def right_insertions(self):
-        """the number of insertions on the right side of the alignment."""
-        return self._right_insertions
-
-    @property
-    def right_deletions(self):
-        """the number of deletions on the right side of the alignment."""
-        return self._right_deletions
-
-    @property
-    def internal_insertions(self):
-        """the number of insertions in the interior of the alignment."""
-        return self._internal_insertions
-
-    @property
-    def internal_deletions(self):
-        """the number of deletions in the interior of the alignment."""
-        return self._internal_deletions
-
-    @property
-    def left_gaps(self):
-        """the number of gaps on the left side of the alignment."""
-        return self._left_insertions + self._left_deletions
-
-    @property
-    def right_gaps(self):
-        """the number of gaps on the right side of the alignment."""
-        return self._right_insertions + self._right_deletions
-
-    @property
-    def internal_gaps(self):
-        """the number of gaps in the interior of the alignment."""
-        return self._internal_insertions + self._internal_deletions
-
-    @property
-    def insertions(self):
-        """the total number of insertions."""
-        return (
-            self._left_insertions + self._internal_insertions + self._right_insertions
-        )
-
-    @property
-    def deletions(self):
-        """the total number of deletions."""
-        return self._left_deletions + self._internal_deletions + self._right_deletions
-
-    @property
-    def gaps(self):
-        """the total number of gaps in the alignment."""
-        return (
-            self._left_insertions
-            + self._left_deletions
-            + self._internal_insertions
-            + self._internal_deletions
-            + self._right_insertions
-            + self._right_deletions
-        )
 
 
 class MultipleSeqAlignment:
@@ -1282,7 +1103,7 @@ class Alignment:
             nbytes, sequence = parser.feed(line)
             sequences.append(sequence)
         shape = parser.shape
-        coordinates = np.empty(shape, np.int64)
+        coordinates = np.empty(shape, np.intp)
         parser.fill(coordinates)
         return sequences, coordinates
 
@@ -1307,10 +1128,10 @@ class Alignment:
                 pass
             else:
                 if len(lengths) == 0:
-                    coordinates = np.empty((0, 0), dtype=int)
+                    coordinates = np.empty((0, 0), np.intp)
                 elif len(lengths) == 1:
                     length = lengths.pop()
-                    coordinates = np.array([[0, length]] * len(sequences))
+                    coordinates = np.array([[0, length]] * len(sequences), np.intp)
                 else:
                     raise ValueError(
                         "sequences must have the same length if coordinates is None"
@@ -2410,7 +2231,7 @@ class Alignment:
         name_width = 10
         names = []
         seqs = []
-        indices = np.zeros(self.coordinates.shape, int)
+        indices = np.zeros(self.coordinates.shape, np.intp)
         for i, (seq, positions, row) in enumerate(
             zip(self.sequences, self.coordinates, indices)
         ):
@@ -3522,7 +3343,7 @@ class Alignment:
                 qStart2 += size
                 tStart2 += size
             tStart2, qStart2 = tEnd2, qEnd2
-        coordinates = np.array(path).transpose()
+        coordinates = np.array(path, dtype=np.intp).transpose()
         if strand1 != strand2:
             coordinates[1, :] = n2 - coordinates[1, :]
         sequences = [target, query]
@@ -3551,7 +3372,7 @@ class Alignment:
             elif factor != step:
                 raise ValueError("inconsistent step sizes in alignments")
         steps = abs(self.coordinates[:, 1:] - self.coordinates[:, :-1]).max(0).clip(0)
-        coordinates = np.empty((2, len(steps) + 1), int)
+        coordinates = np.empty((2, len(steps) + 1), np.intp)
         coordinates[0, 0] = 0
         coordinates[0, 1:] = factor * np.cumsum(steps)
         sequences = [Seq(None, length=coordinates[0, -1]), None]
@@ -3594,7 +3415,7 @@ class Alignment:
                     raise Exception
             previous = position
         sequences = [alignment.sequences[1] for alignment in alignments]
-        coordinates = np.array(coordinates)
+        coordinates = np.array(coordinates, np.intp)
         alignment = Alignment(sequences, coordinates)
         return alignment
 
@@ -3723,32 +3544,30 @@ class Alignment:
                     start1, start2 = end1, end2
         return m
 
-    def counts(self, substitution_matrix=None, wildcard=None, ignore_sequences=False):
+    def counts(self, argument=None):
         """Count the number of identities, mismatches, and gaps of an alignment.
 
-        Arguments:
-         - substitution_matrix - If None (default value), do not calculate the number
-                                 of positive matches in the alignment.
-                                 Otherwise, use the provided substitution matrix
-                                 (typically from the ``Bio.Align.substitution_matrices``
-                                 submodule) to also calculate the number of positive
-                                 matches in an amino acid alignment.
-         - wildcard            - The wildcard character. This character is
-                                 ignored in the calculation of the number of
-                                 matches, mismatches, and positives.
-                                 Default value: None.
-         - ignore_sequences    - If True, do not calculate the number of identities,
-                                 positives, and mismatches, but only calculate the
-                                 number of aligned sequences and number of gaps
-                                 to speed up the calculation.
-                                 Default value: False.
+        This method takes a single optional argument, which can be either None
+        (default), a substitution matrix, a wildcard character, or a pairwise
+        aligner object:
 
-        A ValueError is raised if ignore_sequences is True and substitution_matrix is not None.
+         - If the argument is a substitution matrix, (typically from the
+           ``Bio.Align.substitution_matrices`` submodule), then use it to
+           calculate the total substitution score for the alignment, as well as
+           the number of positive matches.
+         - If the argument is a single character, then it is interpreted as the
+           wildcard character. This character is ignored in the calculation of
+           the number of matches, mismatches, and positives.
+         - If the argument is pairwise aligner object, then use it to set the
+           wildcard character (if set) and also calculate the alignment score,
+           the gap scores, and the total substitution score. If the aligner has
+           an associated substitution matrix, then use it to calculate these
+           scores, and also calculate the number of positive matches.
 
         >>> aligner = PairwiseAligner(mode='global', match_score=2, mismatch_score=-1)
         >>> for alignment in aligner.align("TACCG", "ACG"):
         ...     print("Score = %.1f:" % alignment.score)
-        ...     c = alignment.counts()  # namedtuple
+        ...     c = alignment.counts()
         ...     print(f"{c.gaps} gaps, {c.identities} identities, {c.mismatches} mismatches")
         ...     print(alignment)
         ...
@@ -3768,155 +3587,159 @@ class Alignment:
         The counts are calculated by summing over all pairs of sequences in the
         alignment.
 
-        An `AlignCounts` object has the following properties:
+        An `AlignmentCounts` object has the following properties:
 
-         - aligned             - the number of letters aligned to each other in the
-                                 alignment;
-         - identities          - the number of identical letters in the alignment;
-         - mismatches          - the number of mismatched letters in the alignment;
-         - positives           - the number of aligned letters with a positive score;
-         - left_insertions     - the number of insertions on the left side of the
-                                 alignment;
-         - left_deletions      - the number of deletions on the left side of the
-                                 alignment;
-         - right_insertions    - the number of insertions on the right side of the
-                                 alignment;
-         - right_deletions     - the number of deletions on the right side of the
-                                 alignment;
-         - internal_insertions - the number of insertions in the interior of the
-                                 alignment;
-         - internal_deletions  - the number of deletions in the interior of the
-                                 alignment;
-         - insertions          - the total number of insertions;
-         - deletions           - the total number of deletions;
-         - left_gaps           - the number of gaps on the left side of the alignment;
-         - right_gaps          - the number of gaps on the right side of the alignment;
-         - internal_gaps       - the number of gaps in the interior of the alignment;
-         - gaps                - the total number of gaps in the alignment;
+         - score                      - the alignment score (calculated only if the
+                                        argument is a pairwise aligner, and set to None
+                                        otherwise);
+         - aligned                    - the number of letters aligned to each other in
+                                        the alignment;
+         - substitution_score         - the total substitution score of letters aligned
+                                        to each other (calculated only if the argument
+                                        is a pairwise aligner or a substitution matrix,
+                                        and set to None otherwise);
+         - identities                 - the number of identical letters in the
+                                        alignment;
+         - mismatches                 - the number of mismatched letters in the
+                                        alignment;
+         - positives                  - the number of aligned letters with a positive
+                                        score (set to None if no substitution matrix is
+                                        defined);
+         - gap_score                  - the total gap score (calculated only if the
+                                        argument is a pairwise aligner, and set to None
+                                        otherwise);
+         - gaps                       - the total gap length;
+         - open_gaps                  - the number of gaps opened in the alignment;
+         - extend_gaps                - the number of gap extensions in the alignment;
+         - open_left_gaps             - the number of gaps opened on the left side of
+                                        the alignment;
+         - open_right_gaps            - the number of gaps opened on the right side of
+                                        the alignment;
+         - open_internal_gaps         - the number of gaps opened in the interior of the
+                                        alignment;
+         - extend_left_gaps           - the number of gap extensions on the left side of
+                                        the alignment;
+         - extend_right_gaps          - the number of gap extensions on the right side
+                                        of the alignment;
+         - extend_internal_gaps       - the number of gap extensions in the interior of
+                                        the alignment;
+         - open_left_insertions       - the number of insertion gaps opened on the left
+                                        side of the alignment;
+         - open_left_deletions        - the number of deletion gaps opened on the left
+                                        side of the alignment;
+         - open_right_insertions      - the number of insertion gaps opened on the right
+                                        side of the alignment;
+         - open_right_deletions       - the number of deletion gaps opened on the right
+                                        side of the alignment;
+         - open_internal_insertions   - the number of insertion gaps opaned in the
+                                        interior of the alignment;
+         - open_internal_deletions    - the number of deletion gaps opened in the
+                                        interior of the alignment;
+         - extend_left_insertions     - the number of insertion gap extensions on the
+                                        left side of the alignment;
+         - extend_left_deletions      - the number of deletion gap extensions on the
+                                        left side of the alignment;
+         - extend_right_insertions    - the number of insertion gap extensions on the
+                                        right side of the alignment;
+         - extend_right_deletions     - the number of deletion gap extensions on the
+                                        right side of the alignment;
+         - extend_internal_insertions - the number of insertion gap extensions in the
+                                        interior of the alignment;
+         - extend_internal_deletions  - the number of deletion gap extensions in the
+                                        interior of the alignment;
+         - left_insertions            - the number of letters inserted on the left side
+                                        of the alignment;
+         - left_deletions             - the number of letters deleted on the left side
+                                        of the alignment;
+         - right_insertions           - the number of letters inserted on the right side
+                                        of the alignment;
+         - right_deletions            - the number of letters deleted on the right side
+                                        of the alignment;
+         - internal_insertions        - the number of letters inserted in the interior
+                                        of the alignment;
+         - internal_deletions         - the number of letters deleted in the interior of
+                                        the alignment;
+         - insertions                 - the total number of letters inserted;
+         - deletions                  - the total number of letters deleted;
+         - left_gaps                  - the total gap length on the left side of the
+                                        alignment;
+         - right_gaps                 - the total gap length on the right side of the
+                                        alignment;
+         - internal_gaps              - the total gap length in the interior of the
+                                        alignment.
         """
-        if wildcard is not None:
-            wildcard = ord(wildcard)
-        left_insertions = left_deletions = 0
-        right_insertions = right_deletions = 0
-        internal_insertions = internal_deletions = 0
-        aligned = 0
-        if ignore_sequences:
-            identities = None
-            mismatches = None
-        else:
-            identities = 0
-            mismatches = 0
+        aligner = None
+        wildcard = None
+        substitution_matrix = None
+        if isinstance(argument, PairwiseAligner):
+            aligner = argument
+            substitution_matrix = aligner.substitution_matrix
+        elif isinstance(argument, str):
+            wildcard = argument
+        elif isinstance(argument, (np.ndarray, substitution_matrices.Array)):
+            substitution_matrix = argument
+        elif argument is not None:
+            raise ValueError(f"unexpected argument {argument!r}")
         if substitution_matrix is None:
-            positives = None
-        elif ignore_sequences:
-            raise ValueError(
-                "ignore_sequences cannot be True if substitution_matrix is used"
-            )
-        else:
-            positives = 0
-        sequences = [None] * len(self.sequences)
+            alphabet = []
+        codec = "utf-32-le" if sys.byteorder == "little" else "utf-32-be"
+        n = len(self.sequences)
+        sequences = [None] * n
+        strands = np.zeros(n, bool)
         coordinates = self.coordinates.copy()
         steps = np.diff(coordinates, 1)
         aligned_flags = sum(steps != 0, 0) > 1
         # True for steps in which at least two sequences align, False if a gap
         for i, sequence in enumerate(self.sequences):
-            start = min(coordinates[i, :])
-            end = max(coordinates[i, :])
-            if not ignore_sequences:
-                try:
-                    sequence = sequence[start:end]
-                except ValueError:
-                    # if sequence is a SeqRecord, and sequence.seq is None
-                    continue
             aligned_steps = steps[i, aligned_flags]
-            if sum(aligned_steps > 0) > sum(aligned_steps < 0):
-                coordinates[i, :] = coordinates[i, :] - start
+            if sum(aligned_steps > 0) < sum(aligned_steps < 0):
+                sequence = reverse_complement(sequence)
+                coordinates[i, :] = len(sequence) - coordinates[i, :]
+                strands[i] = True
+            try:
+                sequence = sequence.seq  # stupid SeqRecord
+            except AttributeError:
+                pass
+            try:
+                data = sequence._data
+            except AttributeError:
+                data = sequence
+            if isinstance(data, (bytes, bytearray)):
+                sequences[i] = data
+            elif isinstance(data, str):
+                sequences[i] = np.frombuffer(bytearray(data, codec), dtype="i")
+            elif isinstance(data, SequenceDataAbstractBaseClass):
+                sequences[i] = data
+            elif isinstance(data, np.ndarray):
+                # data is a numpy array of int32
+                # (to be checked in the C code)
+                sequences[i] = data
+            elif data is None:
+                sequences[i] = data
             else:
-                if not ignore_sequences:
-                    sequence = reverse_complement(sequence)
-                coordinates[i, :] = end - coordinates[i, :]
-            if ignore_sequences:
-                sequences[i] = None
-            else:
-                try:
-                    sequences[i] = bytes(sequence)
-                except TypeError:  # sequence is a string
-                    sequences[i] = sequence.encode()
-                except UndefinedSequenceError:
-                    continue
-        coordinates = coordinates.transpose()
-        n = len(sequences)
-        for i in range(n):
-            for j in range(i + 1, n):
-                sequence1 = sequences[i]
-                sequence2 = sequences[j]
-                pair_coordinates = coordinates[:, (i, j)]
-                left1, left2 = pair_coordinates[0]
-                right1, right2 = pair_coordinates[-1]
-                start1, start2 = left1, left2
-                for end1, end2 in pair_coordinates[1:]:
-                    if start1 == end1 and start2 == end2:
-                        pass
-                    elif start1 == end1:
-                        if start1 == left1:
-                            left_insertions += end2 - start2
-                        elif end1 == right1:
-                            right_insertions += end2 - start2
-                        else:
-                            internal_insertions += end2 - start2
-                    elif start2 == end2:
-                        if start2 == left2:
-                            left_deletions += end1 - start1
-                        elif end2 == right2:
-                            right_deletions += end1 - start1
-                        else:
-                            internal_deletions += end1 - start1
-                    elif sequence1 is None or sequence2 is None:
-                        aligned += end1 - start1
-                    elif substitution_matrix is None:
-                        aligned += end1 - start1
-                        for c1, c2 in zip(
-                            sequence1[start1:end1], sequence2[start2:end2]
-                        ):
-                            if c1 == wildcard or c2 == wildcard:
-                                pass
-                            elif c1 == c2:
-                                identities += 1
-                            else:
-                                mismatches += 1
-                    else:
-                        aligned += end1 - start1
-                        for c1, c2 in zip(
-                            sequence1[start1:end1], sequence2[start2:end2]
-                        ):
-                            if c1 == wildcard or c2 == wildcard:
-                                pass
-                            elif c1 == c2:
-                                identities += 1
-                            else:
-                                mismatches += 1
-                            if substitution_matrix[chr(c1), chr(c2)] > 0:
-                                positives += 1
-                    start1, start2 = end1, end2
-        aligned = int(aligned)
-        left_insertions = int(left_insertions)
-        left_deletions = int(left_deletions)
-        right_insertions = int(right_insertions)
-        right_deletions = int(right_deletions)
-        internal_insertions = int(internal_insertions)
-        internal_deletions = int(internal_deletions)
-        return AlignmentCounts(
-            left_insertions,
-            left_deletions,
-            right_insertions,
-            right_deletions,
-            internal_insertions,
-            internal_deletions,
-            aligned,
-            identities,
-            mismatches,
-            positives,
-        )
+                if substitution_matrix is None:
+                    for item in data:
+                        if not any(item == letter for letter in alphabet):
+                            alphabet.append(item)
+                else:
+                    alphabet = substitution_matrix.alphabet
+                sequences[i] = np.fromiter(
+                    map(alphabet.index, data), dtype="i", count=len(data)
+                )
+        if aligner is not None:
+            return _alignmentcounts.AlignmentCounts(
+                sequences, coordinates, strands, aligner
+            )
+        elif wildcard is not None:
+            return _alignmentcounts.AlignmentCounts(
+                sequences, coordinates, strands, wildcard
+            )
+        elif substitution_matrix is not None:
+            return _alignmentcounts.AlignmentCounts(
+                sequences, coordinates, strands, substitution_matrix
+            )
+        else:
+            return _alignmentcounts.AlignmentCounts(sequences, coordinates, strands)
 
     def reverse_complement(self):
         """Reverse-complement the alignment and return it.
@@ -3949,7 +3772,8 @@ class Alignment:
             [
                 len(sequence) - row[::-1]
                 for sequence, row in zip(sequences, self.coordinates)
-            ]
+            ],
+            dtype=np.intp,
         )
         alignment = Alignment(sequences, coordinates)
         try:
@@ -4089,7 +3913,7 @@ class PairwiseAlignments(AlignmentsAbstractBaseClass):
     def __next__(self):
         path = next(self._paths)
         self._index += 1
-        coordinates = np.array(path)
+        coordinates = np.array(path, dtype=np.intp)
         alignment = Alignment(self.sequences, coordinates)
         alignment.score = self.score
         self._alignment = alignment
@@ -4338,6 +4162,14 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
         try:
             new_key = self._new_keys[key]
         except KeyError:
+            if key == "alphabet":
+                warnings.warn(
+                    "The alphabet property is deprecated. The current "
+                    "implementation stores the alphabet, but does not use it.",
+                    BiopythonDeprecationWarning,
+                )
+                _pairwisealigner.PairwiseAligner.__setattr__(self, key, value)
+                return
             if key not in dir(_pairwisealigner.PairwiseAligner):
                 # To prevent confusion, don't allow users to create new attributes.
                 # On CPython, __slots__ can be used for this, but currently
@@ -4360,7 +4192,16 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
         try:
             new_key = self._new_keys[key]
         except KeyError:
-            pass
+            if key == "alphabet":
+                warnings.warn(
+                    "The alphabet property is deprecated. The current "
+                    "implementation stores the alphabet, but does not use it.",
+                    BiopythonDeprecationWarning,
+                )
+                try:
+                    return _pairwisealigner.PairwiseAligner.__getattr__(self, key)
+                except AttributeError:
+                    return None
         else:
             warnings.warn(
                 """\
@@ -4374,59 +4215,105 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
 
     def align(self, seqA, seqB, strand="+"):
         """Return the alignments of two sequences using PairwiseAligner."""
-        if isinstance(seqA, (Seq, MutableSeq, SeqRecord)):
+        if isinstance(seqA, (bytes, Seq, MutableSeq, SeqRecord)):
             sA = bytes(seqA)
             sA = np.frombuffer(sA, dtype=np.uint8).astype(np.int32)
         elif isinstance(seqA, str):
             sA = np.frombuffer(bytearray(seqA, self.codec), dtype=np.int32)
         else:
-            alphabet = self.alphabet
-            if alphabet is None:
-                sA = seqA
-            else:
+            try:
+                memoryview(seqA)
+            except TypeError:
+                substitution_matrix = self.substitution_matrix
+                if substitution_matrix is None:
+                    alphabet = []
+                    for item in seqA:
+                        if not any(item == letter for letter in alphabet):
+                            alphabet.append(item)
+                else:
+                    alphabet = substitution_matrix.alphabet
                 sA = np.fromiter(
                     map(alphabet.index, seqA), dtype=np.int32, count=len(seqA)
                 )
+            else:
+                sA = seqA  # C code will check the dtype
         if strand == "+":
             sB = seqB
         else:  # strand == "-":
             sB = reverse_complement(seqB)
-        if isinstance(seqB, (Seq, MutableSeq, SeqRecord)):
+        if isinstance(seqB, (bytes, Seq, MutableSeq, SeqRecord)):
             sB = bytes(sB)
             sB = np.frombuffer(sB, dtype=np.uint8).astype(np.int32)
         elif isinstance(seqB, str):
             sB = np.frombuffer(bytearray(sB, self.codec), dtype=np.int32)
         else:
-            alphabet = self.alphabet
-            if alphabet is not None:
-                sB = np.fromiter(map(alphabet.index, sB), dtype=np.int32, count=len(sB))
+            try:
+                memoryview(seqB)
+            except TypeError:
+                substitution_matrix = self.substitution_matrix
+                if substitution_matrix is None:
+                    try:
+                        alphabet
+                    except NameError:
+                        alphabet = []
+                    for item in seqB:
+                        if not any(item == letter for letter in alphabet):
+                            alphabet.append(item)
+                else:
+                    alphabet = substitution_matrix.alphabet
+                sB = np.fromiter(
+                    map(alphabet.index, seqB), dtype=np.int32, count=len(seqB)
+                )
+            else:
+                sB = seqB  # C code will test the dtype
         score, paths = super().align(sA, sB, strand)
         alignments = PairwiseAlignments(seqA, seqB, score, paths)
         return alignments
 
     def score(self, seqA, seqB, strand="+"):
         """Return the alignment score of two sequences using PairwiseAligner."""
-        if isinstance(seqA, (Seq, MutableSeq, SeqRecord)):
+        if isinstance(seqA, (bytes, Seq, MutableSeq, SeqRecord)):
             seqA = bytes(seqA)
             seqA = np.frombuffer(seqA, dtype=np.uint8).astype(np.int32)
         elif isinstance(seqA, str):
             seqA = np.frombuffer(bytearray(seqA, self.codec), dtype="i")
         else:
-            alphabet = self.alphabet
-            if alphabet is not None:
+            try:
+                memoryview(seqA)
+            except TypeError:
+                substitution_matrix = self.substitution_matrix
+                if substitution_matrix is None:
+                    alphabet = []
+                    for item in seqA:
+                        if not any(item == letter for letter in alphabet):
+                            alphabet.append(item)
+                else:
+                    alphabet = substitution_matrix.alphabet
                 seqA = np.fromiter(
                     map(alphabet.index, seqA), dtype=np.int32, count=len(seqA)
                 )
         if strand == "-":
             seqB = reverse_complement(seqB)
-        if isinstance(seqB, (Seq, MutableSeq, SeqRecord)):
+        if isinstance(seqB, (bytes, Seq, MutableSeq, SeqRecord)):
             seqB = bytes(seqB)
             seqB = np.frombuffer(seqB, dtype=np.uint8).astype(np.int32)
         elif isinstance(seqB, str):
             seqB = np.frombuffer(bytearray(seqB, self.codec), dtype="i")
         else:
-            alphabet = self.alphabet
-            if alphabet is not None:
+            try:
+                memoryview(seqB)
+            except TypeError:
+                substitution_matrix = self.substitution_matrix
+                if substitution_matrix is None:
+                    try:
+                        alphabet
+                    except NameError:
+                        alphabet = []
+                    for item in seqB:
+                        if not any(item == letter for letter in alphabet):
+                            alphabet.append(item)
+                else:
+                    alphabet = substitution_matrix.alphabet
                 seqB = np.fromiter(
                     map(alphabet.index, seqB), dtype=np.int32, count=len(seqB)
                 )

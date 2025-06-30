@@ -175,7 +175,6 @@ class TestBuildAndIO(unittest.TestCase):
 
     def test_IO(self):
         self.assertEqual(len(self.alns), 6)
-        # print(temp_dir)
         for n, i in enumerate(self.alns):
             aln = i.toMultipleSeqAlignment()
             AlignIO.write(aln, temp_dir + "/aln" + str(n) + ".clw", "clustal")

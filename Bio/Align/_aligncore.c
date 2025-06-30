@@ -80,10 +80,10 @@ array_converter(PyObject* argument, void* pointer)
                      "buffer has incorrect number of columns %zd (expected %zd)",
                       view->shape[1], self->k);
     }
-    else if (view->itemsize != sizeof(int64_t)) {
+    else if (view->itemsize != sizeof(Py_ssize_t)) {
         PyErr_Format(PyExc_RuntimeError,
                     "buffer has unexpected item byte size "
-                    "(%ld, expected %ld)", view->itemsize, sizeof(int64_t));
+                    "(%ld, expected %ld)", view->itemsize, sizeof(Py_ssize_t));
     }
     else return 1;  /* return status 1 to indicate a successful converstion */
 
@@ -232,7 +232,7 @@ PyDoc_STRVAR(
     "Fill in the coordinates array based on the alignment lines fed\n"
     "to the parser so far.\n"
     "\n"
-    "The argument arr must be a 2D numpy array of data type int,\n"
+    "The argument arr must be a 2D numpy array of data type intp,\n"
     "with the number of rows equal to the number of lines fed into\n"
     "the parser so far, and the number of columns equal to the number\n"
     "of columns needed to store the coordinates array.\n"
@@ -254,7 +254,7 @@ Parser_fill(Parser* self, PyObject* args)
     Py_ssize_t* starts = NULL;
     Py_uintptr_t** data = NULL;
     bool* gaps = NULL;
-    int64_t* buffer;
+    Py_ssize_t* buffer;
 
     n = self->n;
     if (n == 0) Py_RETURN_NONE;
@@ -309,7 +309,7 @@ Parser_fill(Parser* self, PyObject* args)
         for (i = 0; i < n; i++) {
             p = i*k+j;
             if (gaps[i] == true) buffer[p] = buffer[p-1];
-            else buffer[i*k+j] = (int64_t) (buffer[p-1] + step);
+            else buffer[i*k+j] = (Py_ssize_t) (buffer[p-1] + step);
             if (end == starts[i]) {
                 data[i]++;
                 gaps[i] = !gaps[i];
@@ -452,7 +452,7 @@ PyDoc_STRVAR(
     ">>> parser.shape\n"
     "(3, 7)\n"
     ">>> import numpy as np\n"
-    ">>> coordinates = np.zeros((3, 7), int)\n"
+    ">>> coordinates = np.zeros((3, 7), np.intp)\n"
     ">>> parser.fill(coordinates)\n"
     ">>> coordinates\n"
     "array([[ 0,  2,  3,  4,  6,  8, 10],\n"

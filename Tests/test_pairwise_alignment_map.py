@@ -28,8 +28,8 @@ from Bio.SeqRecord import SeqRecord
 
 class TestSimple(unittest.TestCase):
     aligner = PairwiseAligner()
-    aligner.internal_open_gap_score = -1
-    aligner.internal_extend_gap_score = -0.0
+    aligner.open_internal_gap_score = -1
+    aligner.extend_internal_gap_score = -0.0
     aligner.match_score = +1
     aligner.mismatch_score = -1
     aligner.mode = "local"
@@ -361,8 +361,8 @@ sequence         10 GGCCCCCGGG  0
 
 class TestComplex(unittest.TestCase):
     aligner = PairwiseAligner()
-    aligner.internal_open_gap_score = -1
-    aligner.internal_extend_gap_score = -0.0
+    aligner.open_internal_gap_score = -1
+    aligner.extend_internal_gap_score = -0.0
     aligner.match_score = +1
     aligner.mismatch_score = -1
     aligner.mode = "local"
@@ -719,8 +719,8 @@ def perform_randomized_tests(n=1000):
     result to that of pslMap.
     """
     aligner = PairwiseAligner()
-    aligner.internal_open_gap_score = -1
-    aligner.internal_extend_gap_score = -0.0
+    aligner.open_internal_gap_score = -1
+    aligner.extend_internal_gap_score = -0.0
     aligner.match_score = +1
     aligner.mismatch_score = -1
     aligner.mode = "local"
