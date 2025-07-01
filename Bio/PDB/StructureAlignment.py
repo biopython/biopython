@@ -129,7 +129,7 @@ class StructureAlignment:
         self.map21 = map21
         self.duos = duos
 
-    def _generate_alignment_from_models(self, m1, m2):
+    def _generate_alignment_from_models(self, m1, m2) -> Alignment:
         """Generate a MultipleSeqAlignment from two protein models .
 
         Uses Bio.Align.PairwiseAligner to create a proper sequence alignment
@@ -149,16 +149,7 @@ class StructureAlignment:
         alignments = aligner.align(seq1_record.seq, seq2_record.seq)
         best_alignment = alignments[0]
 
-        aligned_seq1_str = str(best_alignment[0])
-        aligned_seq2_str = str(best_alignment[1])
-
-        # Convert to SeqRecord objects for MultipleSeqAlignment
-        aligned_seq1 = SeqRecord(Seq(aligned_seq1_str), id="structure1")
-        aligned_seq2 = SeqRecord(Seq(aligned_seq2_str), id="structure2")
-
-        records = [aligned_seq1, aligned_seq2]
-        alignment = MultipleSeqAlignment(records)
-        return alignment
+        return best_alignment
 
     def _extract_sequence_from_model(self, model, seq_id):
         """Extract amino acid sequence from a protein model."""
