@@ -15,7 +15,7 @@ repos:
     -   id: mixed-line-ending
         exclude: \.bb$
 -   repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.9.7
+    rev: v0.12.2
     hooks:
     # Run the Ruff linter.
     -   id: ruff
@@ -30,19 +30,19 @@ repos:
             '--config=lint.isort.order-by-type=false',
         ]
 -   repo: https://github.com/psf/black
-    rev: 24.10.0
+    rev: 25.1.0
     hooks:
     -   id: black
         args: [--check,--target-version,py310]
 -   repo: https://github.com/PyCQA/flake8
-    rev: 7.1.2
+    rev: 7.3.0
     hooks:
     -   id: flake8
         additional_dependencies: [
             'flake8-rst-docstrings>=0.2.3',
         ]
 -   repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.15.0
+    rev: v1.16.1
     hooks:
     -   id: mypy
         # equivalent to "files" in .mypy.ini
@@ -54,7 +54,7 @@ repos:
         additional_dependencies: [black==24.10.0]
         exclude: ^.github/
 -   repo: https://github.com/rstcheck/rstcheck
-    rev: v6.2.4
+    rev: v6.2.5
     hooks:
     -   id: rstcheck
         args: [
@@ -65,7 +65,7 @@ repos:
             --ignore-messages=Unknown\ target\ name
         ]
 -   repo: https://github.com/PyCQA/doc8
-    rev: v1.1.2
+    rev: v2.0.0
     hooks:
     -   id: doc8
         additional_dependencies: [pygments]
