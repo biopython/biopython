@@ -133,7 +133,7 @@ infernal-tab
 
 The Infernal plain text parser supports the standard cmsearch tabular output and
 cmscan tabular output files formats 1, 2 and 3 (inferred automatically from the
-header). 
+header).
 
 Rows marked with '*' denotes attributes not available in the default format.
 
