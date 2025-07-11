@@ -1062,9 +1062,7 @@ The allowed letters are stored in the ``alphabet`` property:
    >>> counts.alphabet
    'ACGT'
 
-This property is read-only; modifying the underlying ``_alphabet``
-attribute may lead to unexpected results. Elements can be accessed both
-by letter and by integer index:
+Elements can be accessed both by letter and by integer index:
 
 .. cont-doctest
 
@@ -1902,8 +1900,8 @@ nucleotides or amino acids. More generally, ``PairwiseAligner`` can also
 be applied to lists or tuples of arbitrary objects. This section will
 describe some examples of such generalized pairwise alignments.
 
-Generalized pairwise alignments using a substitution matrix and alphabet
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Generalized pairwise alignments using a substitution matrix
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Schneider *et al.* [Schneider2005]_ created a
 substitution matrix for aligning three-nucleotide codons (see
@@ -1988,8 +1986,8 @@ compared to ``CTC``, though all three code for leucine:
    >>> print(m["CTC", "TTA"])
    6.5
 
-Generalized pairwise alignments using match/mismatch scores and an alphabet
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Generalized pairwise alignments using match/mismatch scores
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Using the three-letter amino acid symbols, the sequences above translate
 to
@@ -2001,21 +1999,6 @@ to
    >>> s1 = ("Asn", "Leu", "Leu", "Phe")
    >>> s2 = ("Asn", "Leu", "Phe")
 
-We can align these sequences directly to each other by using a
-three-letter amino acid alphabet:
-
-.. cont-doctest
-
-.. code:: pycon
-
-   >>> from Bio import Align
-   >>> aligner = Align.PairwiseAligner()
-   >>> aligner.alphabet = ['Ala', 'Arg', 'Asn', 'Asp', 'Cys',
-   ...                     'Gln', 'Glu', 'Gly', 'His', 'Ile',
-   ...                     'Leu', 'Lys', 'Met', 'Phe', 'Pro',
-   ...                     'Ser', 'Thr', 'Trp', 'Tyr', 'Val']  # fmt: skip
-   ...
-
 We use +6/-1 match and mismatch scores as an approximation of the
 BLOSUM62 matrix, and align these sequences to each other:
 
@@ -2023,6 +2006,8 @@ BLOSUM62 matrix, and align these sequences to each other:
 
 .. code:: pycon
 
+   >>> from Bio import Align
+   >>> aligner = Align.PairwiseAligner()
    >>> aligner.match = +6
    >>> aligner.mismatch = -1
    >>> alignments = aligner.align(s1, s2)
@@ -2044,9 +2029,10 @@ BLOSUM62 matrix, and align these sequences to each other:
 Generalized pairwise alignments using match/mismatch scores and integer sequences
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Internally, the first step when performing an alignment is to replace
-the two sequences by integer arrays consisting of the indices of each
-letter in each sequence in the alphabet associated with the aligner.
+Internally, the first step when performing an alignment is to create a
+temporary alphabet consisting of the letters in the two sequences, and
+replacing the sequences by integer arrays consisting of the indices of each
+letter in the alphabet.
 This step can be bypassed by passing integer arrays directly:
 
 .. doctest . lib:numpy
@@ -2124,11 +2110,11 @@ the size of the substitution matrix:
    >>> aligner = Align.PairwiseAligner()
    >>> m = np.eye(5)
    >>> m[0, 1:] = m[1:, 0] = -2
-   >>> m[2, 2] = 3
+   >>> m[2, 2] = 6
    >>> print(m)
    [[ 1. -2. -2. -2. -2.]
     [-2.  1.  0.  0.  0.]
-    [-2.  0.  3.  0.  0.]
+    [-2.  0.  6.  0.  0.]
     [-2.  0.  0.  1.  0.]
     [-2.  0.  0.  0.  1.]]
    >>> aligner.substitution_matrix = m
@@ -2149,7 +2135,7 @@ the size of the substitution matrix:
    0 3 2 - 1
    <BLANKLINE>
    >>> print(alignments.score)
-   2.0
+   5.0
 
 .. _`sec:codon_alignments`:
 

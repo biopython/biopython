@@ -2373,21 +2373,41 @@ T    6.0  14.0   0.0 874.0
         alignment = self.alignment
         counts = alignment.counts()
         self.assertEqual(
-            str(counts),
-            "AlignmentCounts(left_insertions=0, left_deletions=0, internal_insertions=0, internal_deletions=0, right_insertions=80, right_deletions=4, aligned=3084, identities=3020, mismatches=64, positives=None)",
+            repr(counts),
+            "<AlignmentCounts object (3084 aligned letters; 3020 identities; 64 mismatches; 84 gaps) at 0x%x>"
+            % id(counts),
         )
-        counts = alignment.counts(ignore_sequences=True)
         self.assertEqual(
             str(counts),
-            "AlignmentCounts(left_insertions=0, left_deletions=0, internal_insertions=0, internal_deletions=0, right_insertions=80, right_deletions=4, aligned=3084, identities=None, mismatches=None, positives=None)",
+            """\
+AlignmentCounts object with
+    aligned = 3084:
+        identities = 3020,
+        mismatches = 64.
+    gaps = 84:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 84:
+            internal_insertions = 80:
+                open_internal_insertions = 15,
+                extend_internal_insertions = 65;
+            internal_deletions = 4:
+                open_internal_deletions = 2,
+                extend_internal_deletions = 2;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
         )
-        with self.assertRaises(ValueError):
-            alignment.counts(
-                substitution_matrix=substitution_matrix, ignore_sequences=True
-            )
-        for i, sequence in enumerate(alignment.sequences):
-            length = len(sequence)
-            alignment.sequences[i] = Seq(None, length)
 
     def test_add(self):
         self.assertEqual(

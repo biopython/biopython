@@ -152,6 +152,42 @@ np.array([['A', 'A', 'G', 'C', 'C', 'C', 'T', 'C', 'C', 'T', 'A', 'G', 'C',
             )
         )
         counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (46 aligned letters; 39 identities; 7 mismatches; 98 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 46:
+        identities = 39,
+        mismatches = 7.
+    gaps = 98:
+        left_gaps = 95:
+            left_insertions = 47:
+                open_left_insertions = 1,
+                extend_left_insertions = 46;
+            left_deletions = 48:
+                open_left_deletions = 1,
+                extend_left_deletions = 47;
+        internal_gaps = 3:
+            internal_insertions = 1:
+                open_internal_insertions = 1,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.left_insertions, 47)
         self.assertEqual(counts.left_deletions, 48)
         self.assertEqual(counts.right_insertions, 0)
@@ -197,6 +233,42 @@ G
             np.array_equal(np.array(alignment, "U"), np.array([["G"]], dtype="U"))
         )
         counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (0 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 0:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -242,6 +314,42 @@ A
             np.array_equal(np.array(alignment, "U"), np.array([["A"]], dtype="U"))
         )
         counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (0 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 0:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -297,6 +405,42 @@ np.array([['G', 'A', 'A', 'G', 'A', 'G', 'G', 'A', 'A', 'A', 'A', 'G', 'T',
             )
         )
         counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (0 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 0:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -342,6 +486,42 @@ C
             np.array_equal(np.array(alignment, "U"), np.array([["C"]], dtype="U"))
         )
         counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (0 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 0:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -387,6 +567,42 @@ C
             np.array_equal(np.array(alignment, "U"), np.array([["C"]], dtype="U"))
         )
         counts = alignment.counts()
+        self.assertEqual(
+            repr(counts),
+            "<AlignmentCounts object (0 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+            % id(counts),
+        )
+        self.assertEqual(
+            str(counts),
+            """\
+AlignmentCounts object with
+    aligned = 0:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+        )
         self.assertEqual(counts.left_insertions, 0)
         self.assertEqual(counts.left_deletions, 0)
         self.assertEqual(counts.right_insertions, 0)
@@ -615,6 +831,42 @@ np.array([['T', 'A', 'A', 'G', 'C', 'C', 'C', 'T', 'C', 'C', 'T', 'A', 'G',
                 )
             )
             counts = alignment.counts()
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (84 aligned letters; 68 identities; 16 mismatches; 68 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 84:
+        identities = 68,
+        mismatches = 16.
+    gaps = 68:
+        left_gaps = 63:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 63:
+                open_left_deletions = 2,
+                extend_left_deletions = 61;
+        internal_gaps = 5:
+            internal_insertions = 3:
+                open_internal_insertions = 3,
+                extend_internal_insertions = 0;
+            internal_deletions = 2:
+                open_internal_deletions = 1,
+                extend_internal_deletions = 1;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
             self.assertEqual(counts.left_insertions, 0)
             self.assertEqual(counts.left_deletions, 63)
             self.assertEqual(counts.right_insertions, 0)
@@ -669,6 +921,42 @@ np.array([['C', 'T', 'G', 'G', 'C', 'G', 'T', 'C', 'C', 'G', 'G',
                 )
             )
             counts = alignment.counts()
+            self.assertEqual(
+                repr(counts),
+                "<AlignmentCounts object (0 aligned letters; 0 identities; 0 mismatches; 0 gaps) at 0x%x>"
+                % id(counts),
+            )
+            self.assertEqual(
+                str(counts),
+                """\
+AlignmentCounts object with
+    aligned = 0:
+        identities = 0,
+        mismatches = 0.
+    gaps = 0:
+        left_gaps = 0:
+            left_insertions = 0:
+                open_left_insertions = 0,
+                extend_left_insertions = 0;
+            left_deletions = 0:
+                open_left_deletions = 0,
+                extend_left_deletions = 0;
+        internal_gaps = 0:
+            internal_insertions = 0:
+                open_internal_insertions = 0,
+                extend_internal_insertions = 0;
+            internal_deletions = 0:
+                open_internal_deletions = 0,
+                extend_internal_deletions = 0;
+        right_gaps = 0:
+            right_insertions = 0:
+                open_right_insertions = 0,
+                extend_right_insertions = 0;
+            right_deletions = 0:
+                open_right_deletions = 0,
+                extend_right_deletions = 0.
+""",
+            )
             self.assertEqual(counts.left_insertions, 0)
             self.assertEqual(counts.left_deletions, 0)
             self.assertEqual(counts.right_insertions, 0)
