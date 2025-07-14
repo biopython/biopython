@@ -18084,16 +18084,16 @@ AlignmentCounts object with
             aligner.algorithm, "Fast Optimal Global Sequence Alignment Algorithm"
         )
         score = aligner.score(seq1, seq2)
-        self.assertAlmostEqual(score, 3.0)
+        self.assertAlmostEqual(score, 1.0)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(
             repr(alignments),
             f"""\
-<PairwiseAlignments object (1 alignment; score=3) at {hex(id(alignments))}>""",
+<PairwiseAlignments object (1 alignment; score=1) at {hex(id(alignments))}>""",
         )
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
-        self.assertAlmostEqual(alignment.score, 3.0)
+        self.assertAlmostEqual(alignment.score, 1.0)
         self.assertEqual(
             str(alignment),
             """\
@@ -18111,16 +18111,16 @@ AlignmentCounts object with
         counts = alignment.counts(aligner)
         self.assertEqual(
             repr(counts),
-            "<AlignmentCounts object (score = 3.0; substitution score = 3.0; gap score = 0.0; 3 aligned letters; 3 identities; 0 mismatches; 2 gaps) at 0x%x>"
+            "<AlignmentCounts object (score = 1.0; substitution score = 3.0; gap score = -2.0; 3 aligned letters; 3 identities; 0 mismatches; 2 gaps) at 0x%x>"
             % id(counts),
         )
         self.assertEqual(
             str(counts),
             """\
 AlignmentCounts object with
-    score = 3.0:
+    score = 1.0:
         substitution_score = 3.0,
-        gap_score = 0.0.
+        gap_score = -2.0.
     aligned = 3:
         identities = 3,
         mismatches = 0.
@@ -18153,7 +18153,7 @@ AlignmentCounts object with
         self.assertEqual(counts.mismatches, 0)
         self.assertEqual(counts.deletions, 2)
         self.assertEqual(counts.insertions, 0)
-        self.assertAlmostEqual(counts.score, 3.0)
+        self.assertAlmostEqual(counts.score, 1.0)
 
     def test_align_affine1_score(self):
         aligner = Align.PairwiseAligner()
