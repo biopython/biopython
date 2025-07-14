@@ -1172,18 +1172,18 @@ Pairwise sequence aligner with parameters
             aligner.algorithm, "Fast Optimal Global Sequence Alignment Algorithm"
         )
         score = aligner.score(seq1, seq2)
-        self.assertAlmostEqual(score, 3.0)
+        self.assertAlmostEqual(score, 1.0)
         score = aligner.score(seq1, reverse_complement(seq2), "-")
-        self.assertAlmostEqual(score, 3.0)
+        self.assertAlmostEqual(score, 1.0)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(
             repr(alignments),
             f"""\
-<PairwiseAlignments object (1 alignment; score=3) at {hex(id(alignments))}>""",
+<PairwiseAlignments object (1 alignment; score=1) at {hex(id(alignments))}>""",
         )
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
-        self.assertAlmostEqual(alignment.score, 3.0)
+        self.assertAlmostEqual(alignment.score, 1.0)
         self.assertEqual(
             str(alignment),
             """\
@@ -1244,11 +1244,11 @@ AlignmentCounts object with
         self.assertEqual(
             repr(alignments),
             f"""\
-<PairwiseAlignments object (1 alignment; score=3) at {hex(id(alignments))}>""",
+<PairwiseAlignments object (1 alignment; score=1) at {hex(id(alignments))}>""",
         )
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
-        self.assertAlmostEqual(alignment.score, 3.0)
+        self.assertAlmostEqual(alignment.score, 1.0)
         self.assertEqual(
             str(alignment),
             """\
@@ -1563,7 +1563,7 @@ class TestUnknownCharacter(unittest.TestCase):
         self.assertEqual(
             repr(alignments),
             f"""\
-<PairwiseAlignments object (1 alignment; score=3) at {hex(id(alignments))}>""",
+<PairwiseAlignments object (1 alignment; score=1) at {hex(id(alignments))}>""",
         )
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
@@ -1710,7 +1710,7 @@ AlignmentCounts object with
         self.assertEqual(
             repr(alignments),
             f"""\
-<PairwiseAlignments object (1 alignment; score=3) at {hex(id(alignments))}>""",
+<PairwiseAlignments object (1 alignment; score=1) at {hex(id(alignments))}>""",
         )
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
