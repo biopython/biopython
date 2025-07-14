@@ -58,7 +58,7 @@ between two sequences:
    >>> query = "GAT"
    >>> score = aligner.score(target, query)
    >>> score
-   3.0
+   1.0
 
 The ``aligner.align`` method returns a ``PairwiseAlignments`` object, which is
 an iterator over the alignments found. The ``PairwiseAlignments`` object will
@@ -70,7 +70,7 @@ tell you how many alignments were found, and what their score is:
 
    >>> alignments = aligner.align(target, query)
    >>> alignments  # doctest: +ELLIPSIS
-   <PairwiseAlignments object (2 alignments; score=3) at 0x...>
+   <PairwiseAlignments object (2 alignments; score=1) at 0x...>
 
 Each alignment between the two sequences is stored in an ``Alignment`` object.
 ``Alignment`` objects can be obtained by iterating over the alignments or by
@@ -121,7 +121,7 @@ Each alignment stores the alignment score:
 .. code:: pycon
 
    >>> alignment.score
-   3.0
+   1.0
 
 as well as pointers to the sequences that were aligned:
 
@@ -391,18 +391,18 @@ all parameters, use
      wildcard: None
      match_score: 1.000000
      mismatch_score: 0.000000
-     open_internal_insertion_score: 0.000000
-     extend_internal_insertion_score: 0.000000
-     open_left_insertion_score: 0.000000
-     extend_left_insertion_score: 0.000000
-     open_right_insertion_score: 0.000000
-     extend_right_insertion_score: 0.000000
-     open_internal_deletion_score: 0.000000
-     extend_internal_deletion_score: 0.000000
-     open_left_deletion_score: 0.000000
-     extend_left_deletion_score: 0.000000
-     open_right_deletion_score: 0.000000
-     extend_right_deletion_score: 0.000000
+     open_internal_insertion_score: -1.000000
+     extend_internal_insertion_score: -1.000000
+     open_left_insertion_score: -1.000000
+     extend_left_insertion_score: -1.000000
+     open_right_insertion_score: -1.000000
+     extend_right_insertion_score: -1.000000
+     open_internal_deletion_score: -1.000000
+     extend_internal_deletion_score: -1.000000
+     open_left_deletion_score: -1.000000
+     extend_left_deletion_score: -1.000000
+     open_right_deletion_score: -1.000000
+     extend_right_deletion_score: -1.000000
      mode: local
    <BLANKLINE>
 
@@ -908,7 +908,7 @@ You can perform the following operations on ``alignments``:
    .. code:: pycon
 
       >>> print(alignments.score)
-      2.0
+      1.0
 
 Aligning to the reverse strand
 ------------------------------
@@ -927,6 +927,7 @@ for ``query`` to the reverse strand of ``target``, use ``strand="-"``:
    >>> query = "AACC"
    >>> aligner = Align.PairwiseAligner()
    >>> aligner.mismatch_score = -1
+   >>> aligner.gap_score = 0
    >>> aligner.internal_gap_score = -1
    >>> aligner.score(target, query)  # strand is "+" by default
    4.0
@@ -1767,9 +1768,9 @@ hemoglobin sequences from above (``HBA_HUMAN``, ``HBB_HUMAN``) stored in
    >>> aligner = Align.PairwiseAligner()
    >>> score = aligner.score(seq1.seq, seq2.seq)
    >>> print(score)
-   72.0
+   56.0
 
-showing an alignment score of 72.0. To see the individual alignments, do
+showing an alignment score of 56.0. To see the individual alignments, do
 
 .. cont-doctest
 
@@ -1804,23 +1805,19 @@ alignment itself:
 .. code:: pycon
 
    >>> print(alignment.score)
-   72.0
+   56.0
    >>> print(alignment)
-   target            0 MV-LS-PAD--KTN--VK-AA-WGKV-----GAHAGEYGAEALE-RMFLSF----P-TTK
-                     0 ||-|--|----|----|--|--||||-----|---||--|--|--|--|------|-|--
-   query             0 MVHL-TP--EEK--SAV-TA-LWGKVNVDEVG---GE--A--L-GR--L--LVVYPWT--
+   target            0 MV-LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-DLSHGSAQ---
+                     0 ||-|.|..|..|.|.||||...--|.|.|||.|.....|.|...|..|-|||...|.---
+   query             0 MVHLTPEEKSAVTALWGKVNVD--EVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGN
    <BLANKLINE>
-   target           41 TY--FPHF----DLSHGS---AQVK-G------HGKKV--A--DA-LTNAVAHV-DDMPN
-                    60 ----|--|----|||------|-|--|------|||||--|--|--|--|--|--|---|
-   query            39 --QRF--FESFGDLS---TPDA-V-MGNPKVKAHGKKVLGAFSD-GL--A--H-LD---N
+   target           55 --VKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAH
+                    60 --||.|||||..|.....||.|........||.||..||.|||.||.||...|...||.|
+   query            58 PKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHH
    <BLANKLINE>
-   target           79 ALS----A-LSD-LHAH--KLR-VDPV-NFK-LLSHC---LLVT--LAAHLPA----EFT
-                   120 -|-----|-||--||----||--|||--||--||------|-|---||-|-------|||
-   query            81 -L-KGTFATLS-ELH--CDKL-HVDP-ENF-RLL---GNVL-V-CVLA-H---HFGKEFT
-   <BLANKLINE>
-   target          119 PA-VH-ASLDKFLAS---VSTV------LTS--KYR- 142
-                   180 |--|--|------|----|--|------|----||-- 217
-   query           124 P-PV-QA------A-YQKV--VAGVANAL--AHKY-H 147
+   target          113 LPAEFTPAVHASLDKFLASVSTVLTSKYR 142
+                   120 ...||||.|.|...|..|.|...|..||. 149
+   query           118 FGKEFTPPVQAAYQKVVAGVANALAHKYH 147
    <BLANKLINE>
 
 Better alignments are usually obtained by penalizing gaps: higher costs
@@ -2024,7 +2021,7 @@ BLOSUM62 matrix, and align these sequences to each other:
    Asn --- Leu Phe
    <BLANKLINE>
    >>> print(alignments.score)
-   18.0
+   17.0
 
 Generalized pairwise alignments using match/mismatch scores and integer sequences
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2060,7 +2057,7 @@ This step can be bypassed by passing integer arrays directly:
    2 -- 10 13
    <BLANKLINE>
    >>> print(alignments.score)
-   18.0
+   17.0
 
 Note that the indices should consist of 32-bit integers, as specified in
 this example by ``numpy.int32``.
