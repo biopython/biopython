@@ -68,18 +68,18 @@ Pairwise sequence aligner with parameters
   wildcard: None
   match_score: 3.000000
   mismatch_score: -2.000000
-  open_internal_insertion_score: 0.000000
-  extend_internal_insertion_score: 0.000000
-  open_left_insertion_score: 0.000000
-  extend_left_insertion_score: 0.000000
-  open_right_insertion_score: 0.000000
-  extend_right_insertion_score: 0.000000
-  open_internal_deletion_score: 0.000000
-  extend_internal_deletion_score: 0.000000
-  open_left_deletion_score: 0.000000
-  extend_left_deletion_score: 0.000000
-  open_right_deletion_score: 0.000000
-  extend_right_deletion_score: 0.000000
+  open_internal_insertion_score: -1.000000
+  extend_internal_insertion_score: -1.000000
+  open_left_insertion_score: -1.000000
+  extend_left_insertion_score: -1.000000
+  open_right_insertion_score: -1.000000
+  extend_right_insertion_score: -1.000000
+  open_internal_deletion_score: -1.000000
+  extend_internal_deletion_score: -1.000000
+  open_left_deletion_score: -1.000000
+  extend_left_deletion_score: -1.000000
+  open_right_deletion_score: -1.000000
+  extend_right_deletion_score: -1.000000
   mode: global
 """,
         )
