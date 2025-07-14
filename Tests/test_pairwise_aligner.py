@@ -21836,16 +21836,16 @@ query           582
         counts = alignment.counts(aligner)
         self.assertEqual(
             repr(counts),
-            "<AlignmentCounts object (score = 237.0; substitution score = 237.0; gap score = 0.0; 444 aligned letters; 237 identities; 207 mismatches; 36 gaps) at 0x%x>"
+            "<AlignmentCounts object (score = 201.0; substitution score = 237.0; gap score = -36.0; 444 aligned letters; 237 identities; 207 mismatches; 36 gaps) at 0x%x>"
             % id(counts),
         )
         self.assertEqual(
             str(counts),
             """\
 AlignmentCounts object with
-    score = 237.0:
+    score = 201.0:
         substitution_score = 237.0,
-        gap_score = 0.0.
+        gap_score = -36.0.
     aligned = 444:
         identities = 237,
         mismatches = 207.
@@ -21875,7 +21875,7 @@ AlignmentCounts object with
         )
         self.check_blastp(counts)
         self.assertIsNone(counts.positives)
-        self.assertAlmostEqual(counts.score, 237.0)
+        self.assertAlmostEqual(counts.score, 201.0)
         counts = alignment.counts(aligner_blastp)
         self.assertEqual(
             repr(counts),
