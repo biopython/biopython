@@ -17368,6 +17368,7 @@ AlignmentCounts object with
 class TestOverflowError(unittest.TestCase):
     def test_align_overflow_error(self):
         aligner = Align.PairwiseAligner()
+        aligner.gap_score = 0
         path = os.path.join("Align", "bsubtilis.fa")
         record = SeqIO.read(path, "fasta")
         seq1 = record.seq
