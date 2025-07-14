@@ -4579,6 +4579,7 @@ AlignmentCounts object with
         aligner.mode = "global"
         aligner.open_deletion_score = -0.1
         aligner.extend_deletion_score = 0.0
+        aligner.insertion_score = 0.0
         self.assertEqual(aligner.algorithm, "Gotoh global alignment algorithm")
         self.assertEqual(
             str(aligner),
@@ -4644,7 +4645,7 @@ AlignmentCounts object with
     aligned = 3:
         identities = 3,
         mismatches = 0.
-    gaps = 0:
+    gaps = 2:
         left_gaps = 0:
             left_insertions = 0:
                 open_left_insertions = 0,
@@ -4652,7 +4653,7 @@ AlignmentCounts object with
             left_deletions = 0:
                 open_left_deletions = 0,
                 extend_left_deletions = 0;
-        internal_gaps = 0:
+        internal_gaps = 2:
             internal_insertions = 0:
                 open_internal_insertions = 0,
                 extend_internal_insertions = 0;
@@ -4688,7 +4689,7 @@ AlignmentCounts object with
     aligned = 3:
         identities = 3,
         mismatches = 0.
-    gaps = 0:
+    gaps = 2:
         left_gaps = 0:
             left_insertions = 0:
                 open_left_insertions = 0,
@@ -4696,7 +4697,7 @@ AlignmentCounts object with
             left_deletions = 0:
                 open_left_deletions = 0,
                 extend_left_deletions = 0;
-        internal_gaps = 0:
+        internal_gaps = 2:
             internal_insertions = 0:
                 open_internal_insertions = 0,
                 extend_internal_insertions = 0;
@@ -4752,7 +4753,7 @@ AlignmentCounts object with
     aligned = 3:
         identities = 3,
         mismatches = 0.
-    gaps = 0:
+    gaps = 2:
         left_gaps = 0:
             left_insertions = 0:
                 open_left_insertions = 0,
@@ -4760,7 +4761,7 @@ AlignmentCounts object with
             left_deletions = 0:
                 open_left_deletions = 0,
                 extend_left_deletions = 0;
-        internal_gaps = 0:
+        internal_gaps = 2:
             internal_insertions = 0:
                 open_internal_insertions = 0,
                 extend_internal_insertions = 0;
