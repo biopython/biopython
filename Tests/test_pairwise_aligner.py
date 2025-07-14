@@ -16018,6 +16018,7 @@ AlignmentCounts object with
         aligner = Align.PairwiseAligner()
         aligner.mismatch_score = -1
         aligner.deletion_score = gap_score_function
+        aligner.insertion_score = 0
         aligner.internal_insertion_score = -10
         seqA = "AAAAAAAAAAA"
         seqB = "TTAAAAA"
@@ -16144,6 +16145,7 @@ AlignmentCounts object with
         aligner = Align.PairwiseAligner()
         aligner.mismatch_score = -1
         aligner.insertion_score = gap_score_function
+        aligner.deletion_score = 0
         aligner.internal_deletion_score = -10
         seqA = "TTAAAAA"
         seqB = "AAAAAAAAAAA"
