@@ -16954,6 +16954,7 @@ class TestArgumentErrors(unittest.TestCase):
             return
         aligner = Align.PairwiseAligner()
         aligner.wildcard = chr(99)
+        aligner.gap_score = 0.0
         s1 = "GGG"
         s2 = np.array([ord("G"), ord("A"), ord("G")], np.int32)
         score = aligner.score(s1, s2)
