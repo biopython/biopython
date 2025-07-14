@@ -1563,7 +1563,7 @@ class TestUnknownCharacter(unittest.TestCase):
         self.assertEqual(
             repr(alignments),
             f"""\
-<PairwiseAlignments object (1 alignment; score=1) at {hex(id(alignments))}>""",
+<PairwiseAlignments object (1 alignment; score=3) at {hex(id(alignments))}>""",
         )
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
@@ -1710,7 +1710,7 @@ AlignmentCounts object with
         self.assertEqual(
             repr(alignments),
             f"""\
-<PairwiseAlignments object (1 alignment; score=1) at {hex(id(alignments))}>""",
+<PairwiseAlignments object (1 alignment; score=3) at {hex(id(alignments))}>""",
         )
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
