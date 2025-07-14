@@ -15172,6 +15172,7 @@ AlignmentCounts object with
         aligner.match_score = 1
         aligner.mismatch_score = -10
         aligner.insertion_score = gap_score
+        aligner.deletion_score = 0
         self.assertEqual(
             aligner.algorithm, "Waterman-Smith-Beyer local alignment algorithm"
         )
