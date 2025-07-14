@@ -22162,6 +22162,7 @@ AlignmentCounts object with
 
     def test_greek(self):
         aligner = Align.PairwiseAligner()
+        aligner.gap_score = 0
         seqA = "αβγγβα"
         seqB = "ABCBAαβγ"
         alignments = aligner.align(seqA, seqB)
