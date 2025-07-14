@@ -16282,6 +16282,7 @@ class TestAlignerInput(unittest.TestCase):
         seq2 = ["Gly", "Ala", "Ala", "Cys", "Thr"]
         aligner = Align.PairwiseAligner()
         aligner.mode = "global"
+        aligner.gap_score = 0.0
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
