@@ -16538,6 +16538,7 @@ AlignmentCounts object with
         seq2 = ["Pro", "Pro", "Gly", "Ala", "Ala", "Cys", "Thr", "Leu"]
         aligner = Align.PairwiseAligner()
         aligner.mode = "local"
+        aligner.gap_score = 0.0
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
