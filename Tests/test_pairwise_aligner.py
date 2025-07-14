@@ -4207,8 +4207,8 @@ AlignmentCounts object with
             internal_insertions = 0:
                 open_internal_insertions = 0,
                 extend_internal_insertions = 0;
-            internal_deletions = 0:
-                open_internal_deletions = 0,
+            internal_deletions = 1:
+                open_internal_deletions = 1,
                 extend_internal_deletions = 0;
         right_gaps = 0:
             right_insertions = 0:
@@ -4251,8 +4251,8 @@ AlignmentCounts object with
             internal_insertions = 0:
                 open_internal_insertions = 0,
                 extend_internal_insertions = 0;
-            internal_deletions = 0:
-                open_internal_deletions = 0,
+            internal_deletions = 1:
+                open_internal_deletions = 1,
                 extend_internal_deletions = 0;
         right_gaps = 0:
             right_insertions = 0:
@@ -4414,8 +4414,8 @@ AlignmentCounts object with
             internal_insertions = 0:
                 open_internal_insertions = 0,
                 extend_internal_insertions = 0;
-            internal_deletions = 0:
-                open_internal_deletions = 0,
+            internal_deletions = 1:
+                open_internal_deletions = 1,
                 extend_internal_deletions = 0;
         right_gaps = 0:
             right_insertions = 0:
@@ -4458,8 +4458,8 @@ AlignmentCounts object with
             internal_insertions = 0:
                 open_internal_insertions = 0,
                 extend_internal_insertions = 0;
-            internal_deletions = 0:
-                open_internal_deletions = 0,
+            internal_deletions = 1:
+                open_internal_deletions = 1,
                 extend_internal_deletions = 0;
         right_gaps = 0:
             right_insertions = 0:
