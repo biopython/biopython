@@ -171,11 +171,9 @@ static PyTypeObject Array_Type = {
 
 static struct PyModuleDef module = {
     PyModuleDef_HEAD_INIT,
-    "_arraycore",
-    "Base module defining the Array base class",
-    -1,
-    NULL,
-    NULL, NULL, NULL, NULL
+    .m_name = "_arraycore",
+    .m_doc = "Base module defining the Array base class",
+    .m_size = -1,
 };
 
 PyMODINIT_FUNC
