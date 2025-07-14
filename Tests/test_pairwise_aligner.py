@@ -8676,7 +8676,7 @@ query             0 GTCCT 5
         counts = alignment.counts()
         self.assertEqual(
             repr(counts),
-            "<AlignmentCounts object (5 aligned letters; 2 identities; 2 mismatches; 1 gaps) at 0x%x>"
+            "<AlignmentCounts object (4 aligned letters; 2 identities; 2 mismatches; 1 gaps) at 0x%x>"
             % id(counts),
         )
         self.assertEqual(
@@ -13166,6 +13166,7 @@ AlignmentCounts object with
         aligner.match_score = 1
         aligner.mismatch_score = -10
         aligner.insertion_score = gap_score
+        aligner.deletion_score = 0
         self.assertEqual(
             aligner.algorithm, "Waterman-Smith-Beyer global alignment algorithm"
         )
