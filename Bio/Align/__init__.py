@@ -4096,7 +4096,7 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
             # use default values:
             # match = 1.0
             # mismatch = 0.0
-            # gap_score = 0.0
+            # gap_score = -1.0
             pass
         elif scoring == "blastn":
             self.substitution_matrix = substitution_matrices.load("BLASTN")

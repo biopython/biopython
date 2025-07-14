@@ -1767,18 +1767,18 @@ Aligner_init(Aligner *self, PyObject *args, PyObject *kwds)
     self->match = 1.0;
     self->mismatch = 0.0;
     self->epsilon = 1.e-6;
-    self->open_internal_insertion_score = 0;
-    self->extend_internal_insertion_score = 0;
-    self->open_internal_deletion_score = 0;
-    self->extend_internal_deletion_score = 0;
-    self->open_left_insertion_score = 0;
-    self->extend_left_insertion_score = 0;
-    self->open_right_insertion_score = 0;
-    self->extend_right_insertion_score = 0;
-    self->open_left_deletion_score = 0;
-    self->extend_left_deletion_score = 0;
-    self->open_right_deletion_score = 0;
-    self->extend_right_deletion_score = 0;
+    self->open_internal_insertion_score = -1.0;
+    self->extend_internal_insertion_score = -1.0;
+    self->open_internal_deletion_score = -1.0;
+    self->extend_internal_deletion_score = -1.0;
+    self->open_left_insertion_score = -1.0;
+    self->extend_left_insertion_score = -1.0;
+    self->open_right_insertion_score = -1.0;
+    self->extend_right_insertion_score = -1.0;
+    self->open_left_deletion_score = -1.0;
+    self->extend_left_deletion_score = -1.0;
+    self->open_right_deletion_score = -1.0;
+    self->extend_right_deletion_score = -1.0;
     self->insertion_score_function = NULL;
     self->deletion_score_function = NULL;
     self->substitution_matrix.obj = NULL;
@@ -7499,15 +7499,10 @@ static char _pairwisealigner__doc__[] =
 "C extension module implementing pairwise alignment algorithms";
 
 static struct PyModuleDef moduledef = {
-        PyModuleDef_HEAD_INIT,
-        "_pairwisealigner",
-        _pairwisealigner__doc__,
-        -1,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        NULL
+    PyModuleDef_HEAD_INIT,
+    .m_name = "_pairwisealigner",
+    .m_doc = _pairwisealigner__doc__,
+    .m_size = -1,
 };
 
 PyObject *
