@@ -21191,16 +21191,16 @@ query             0 TTACGT----CCCTCCC 13
         counts = alignment.counts(aligner)
         self.assertEqual(
             repr(counts),
-            "<AlignmentCounts object (score = 12.0; substitution score = 12.0; gap score = 0.0; 13 aligned letters; 12 identities; 1 mismatches; 4 gaps) at 0x%x>"
+            "<AlignmentCounts object (score = 8.0; substitution score = 12.0; gap score = -4.0; 13 aligned letters; 12 identities; 1 mismatches; 4 gaps) at 0x%x>"
             % id(counts),
         )
         self.assertEqual(
             str(counts),
             """\
 AlignmentCounts object with
-    score = 12.0:
+    score = 8.0:
         substitution_score = 12.0,
-        gap_score = 0.0.
+        gap_score = -4.0.
     aligned = 13:
         identities = 12,
         mismatches = 1.
@@ -21230,7 +21230,7 @@ AlignmentCounts object with
         )
         self.check_incomplete_nucleotide_sequence(counts)
         self.assertIsNone(counts.positives)
-        self.assertAlmostEqual(counts.score, 12.0)
+        self.assertAlmostEqual(counts.score, 8.0)
         counts = alignment.counts(aligner_blastn)
         self.assertEqual(
             repr(counts),
@@ -21287,16 +21287,16 @@ query            10 TTACGT????CCCCCCC 27
         counts = alignment.counts(aligner)
         self.assertEqual(
             repr(counts),
-            "<AlignmentCounts object (score = 12.0; substitution score = 12.0; gap score = 0.0; 13 aligned letters; 12 identities; 1 mismatches; 4 gaps) at 0x%x>"
+            "<AlignmentCounts object (score = 8.0; substitution score = 12.0; gap score = -4.0; 13 aligned letters; 12 identities; 1 mismatches; 4 gaps) at 0x%x>"
             % id(counts),
         )
         self.assertEqual(
             str(counts),
             """\
 AlignmentCounts object with
-    score = 12.0:
+    score = 8.0:
         substitution_score = 12.0,
-        gap_score = 0.0.
+        gap_score = -4.0.
     aligned = 13:
         identities = 12,
         mismatches = 1.
@@ -21384,16 +21384,16 @@ query           100 TTACGT----CCCCCCC 113
         counts = alignment.counts(aligner)
         self.assertEqual(
             repr(counts),
-            "<AlignmentCounts object (score = 12.0; substitution score = 12.0; gap score = 0.0; 13 aligned letters; 12 identities; 1 mismatches; 4 gaps) at 0x%x>"
+            "<AlignmentCounts object (score = 8.0; substitution score = 12.0; gap score = -4.0; 13 aligned letters; 12 identities; 1 mismatches; 4 gaps) at 0x%x>"
             % id(counts),
         )
         self.assertEqual(
             str(counts),
             """\
 AlignmentCounts object with
-    score = 12.0:
+    score = 8.0:
         substitution_score = 12.0,
-        gap_score = 0.0.
+        gap_score = -4.0.
     aligned = 13:
         identities = 12,
         mismatches = 1.
@@ -21423,7 +21423,7 @@ AlignmentCounts object with
         )
         self.check_incomplete_nucleotide_sequence(counts)
         self.assertIsNone(counts.positives)
-        self.assertAlmostEqual(counts.score, 12.0)
+        self.assertAlmostEqual(counts.score, 8.0)
         counts = alignment.counts(aligner_blastn)
         self.assertEqual(
             repr(counts),
@@ -21484,16 +21484,16 @@ query           100 TTACGT----CCCCCCC 113
         counts = alignment.counts(aligner)
         self.assertEqual(
             repr(counts),
-            "<AlignmentCounts object (score = 12.0; substitution score = 12.0; gap score = 0.0; 13 aligned letters; 12 identities; 1 mismatches; 4 gaps) at 0x%x>"
+            "<AlignmentCounts object (score = 8.0; substitution score = 12.0; gap score = -4.0; 13 aligned letters; 12 identities; 1 mismatches; 4 gaps) at 0x%x>"
             % id(counts),
         )
         self.assertEqual(
             str(counts),
             """\
 AlignmentCounts object with
-    score = 12.0:
+    score = 8.0:
         substitution_score = 12.0,
-        gap_score = 0.0.
+        gap_score = -4.0.
     aligned = 13:
         identities = 12,
         mismatches = 1.
@@ -21523,7 +21523,7 @@ AlignmentCounts object with
         )
         self.check_incomplete_nucleotide_sequence(counts)
         self.assertIsNone(counts.positives)
-        self.assertAlmostEqual(counts.score, 12.0)
+        self.assertAlmostEqual(counts.score, 8.0)
         counts = alignment.counts(aligner_blastn)
         self.assertEqual(
             repr(counts),
@@ -21582,16 +21582,16 @@ query           100 TTACGT----CCCCCCC 87
         counts = alignment.counts(aligner)
         self.assertEqual(
             repr(counts),
-            "<AlignmentCounts object (score = 12.0; substitution score = 12.0; gap score = 0.0; 13 aligned letters; 12 identities; 1 mismatches; 4 gaps) at 0x%x>"
+            "<AlignmentCounts object (score = 8.0; substitution score = 12.0; gap score = -4.0; 13 aligned letters; 12 identities; 1 mismatches; 4 gaps) at 0x%x>"
             % id(counts),
         )
         self.assertEqual(
             str(counts),
             """\
 AlignmentCounts object with
-    score = 12.0:
+    score = 8.0:
         substitution_score = 12.0,
-        gap_score = 0.0.
+        gap_score = -4.0.
     aligned = 13:
         identities = 12,
         mismatches = 1.
@@ -21621,7 +21621,7 @@ AlignmentCounts object with
         )
         self.check_incomplete_nucleotide_sequence(counts)
         self.assertIsNone(counts.positives)
-        self.assertAlmostEqual(counts.score, 12.0)
+        self.assertAlmostEqual(counts.score, 8.0)
         counts = alignment.counts(aligner_blastn)
         self.assertEqual(
             repr(counts),
@@ -21681,16 +21681,16 @@ query           100 TTACGT----CCCCCCC 87
         counts = alignment.counts(aligner)
         self.assertEqual(
             repr(counts),
-            "<AlignmentCounts object (score = 12.0; substitution score = 12.0; gap score = 0.0; 13 aligned letters; 12 identities; 1 mismatches; 4 gaps) at 0x%x>"
+            "<AlignmentCounts object (score = 8.0; substitution score = 12.0; gap score = -4.0; 13 aligned letters; 12 identities; 1 mismatches; 4 gaps) at 0x%x>"
             % id(counts),
         )
         self.assertEqual(
             str(counts),
             """\
 AlignmentCounts object with
-    score = 12.0:
+    score = 8.0:
         substitution_score = 12.0,
-        gap_score = 0.0.
+        gap_score = -4.0.
     aligned = 13:
         identities = 12,
         mismatches = 1.
@@ -21720,7 +21720,7 @@ AlignmentCounts object with
         )
         self.check_incomplete_nucleotide_sequence(counts)
         self.assertIsNone(counts.positives)
-        self.assertAlmostEqual(counts.score, 12.0)
+        self.assertAlmostEqual(counts.score, 8.0)
         counts = alignment.counts(aligner_blastn)
         self.assertEqual(
             repr(counts),
