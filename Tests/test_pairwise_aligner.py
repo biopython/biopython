@@ -4830,6 +4830,7 @@ AlignmentCounts object with
         aligner.mode = "fogsaa"
         aligner.open_deletion_score = -0.1
         aligner.extend_deletion_score = 0.0
+        aligner.insertion_score = 0.0
         self.assertEqual(
             aligner.algorithm, "Fast Optimal Global Sequence Alignment Algorithm"
         )
