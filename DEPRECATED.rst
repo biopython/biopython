@@ -644,6 +644,20 @@ Release 1.86, with the original name still available with a deprecation warning.
 These attributes were renamed to be consistent with the AlignmentCounts class
 and with the common nomenclature in the literature.
 
+The default value of the gap score of a PairwiseAligner object was changed in
+Release 1.86.  Previously, for consistency with Bio.pairwise2, the gap score
+was 0.  However, this means that a mismatch, an insertion followed by a deletion,
+and a deletion followed by an insertion all get assigned a score of 0.  The
+aligner then finds a large number of alignments that are logically the same,
+but with trivial differences between them.  For example, aligning AAACAAA to
+AAAGAAA previously yielded the following three alignments, all with score 6:
+
+     AAACAAA        AAAC-AAA        AAA-CAAA
+     AAAGAAA        AAA-GAAA        AAAG-AAA
+
+With the new default parameter for the gap score, only the first alignment is
+returned.
+
 The ``alphabet`` attribute of the PairwiseAligner class was deprecated in
 Release 1.86. The attribute is still being stored, but it is not used in any
 way.
