@@ -6,13 +6,15 @@
  */
 
 
-
 #define PY_SSIZE_T_CLEAN
 #include "Python.h"
 #include <float.h>
 #include <stdbool.h>
 #include "_pairwisealigner.h"
 #include "substitution_matrices/_arraycore.h"
+
+
+static bool warned = false;  // FIXME remove once Biopython 1.87 is out.
 
 
 #define STARTPOINT 0x8
@@ -7607,7 +7609,10 @@ static char Aligner_doc[] =
 
 static PyObject*
 Aligner_warn_defaults_changed(Aligner* self)
+// FIXME remove this function once Biopython release 1.87 is out
 {
+    if (warned)
+        Py_RETURN_NONE;
     if (self->open_internal_insertion_score_set
      && self->extend_internal_insertion_score_set
      && self->open_left_insertion_score_set
@@ -7619,8 +7624,31 @@ Aligner_warn_defaults_changed(Aligner* self)
      && self->open_left_deletion_score_set
      && self->extend_left_deletion_score_set
      && self->open_right_deletion_score_set
-     && self->extend_right_deletion_score_set) Py_RETURN_FALSE;
-    else Py_RETURN_TRUE;
+     && self->extend_right_deletion_score_set) {
+        Py_RETURN_NONE;
+    }
+    warned = true;
+    PyErr_WarnEx(PyExc_UserWarning,
+"\n"
+"Note that the default value for the gap score parameter of a\n"
+"PairwiseAligner object has changed.\n"
+"\n"
+"In older versions of Biopython, the pairwise aligner was initialized\n"
+"by default with a match score of +1, a mismatch score of 0, and a gap\n"
+"score of 0.  This choice was made to be consistent with the pairwise\n"
+"alignment code in Bio.pairwise2.\n"
+"\n"
+"However, this scoring scheme tends to produce a large number of alignments\n"
+"with only trivial difference between them.  In particular, a mismatch\n"
+"between two letters, a single insertion followed by a deletion, and a\n"
+"deletion followed by an insertion are all assigned the same score. For long\n"
+"sequences, the number of alignments with such trivial differences can be\n"
+"astronomical.\n"
+"\n"
+"In Biopython 1.86, the default gap score was therefore changed to -1,\n"
+"while the default match score remained +1 and the default mismatch score\n"
+"remained 0.\n", 1);
+    Py_RETURN_NONE;
 }
 
 static PyMethodDef Aligner_methods[] = {
