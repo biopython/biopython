@@ -645,12 +645,13 @@ These attributes were renamed to be consistent with the AlignmentCounts class
 and with the common nomenclature in the literature.
 
 The default value of the gap score of a PairwiseAligner object was changed in
-Release 1.86.  Previously, for consistency with Bio.pairwise2, the gap score
-was 0.  However, this means that a mismatch, an insertion followed by a deletion,
-and a deletion followed by an insertion all get assigned a score of 0.  The
-aligner then finds a large number of alignments that are logically the same,
-but with trivial differences between them.  For example, aligning AAACAAA to
-AAAGAAA previously yielded the following three alignments, all with score 6:
+Release 1.86.  Previously, for consistency with Bio.pairwise2, the default
+value for gap score was 0.  However, this means that a mismatch, an insertion
+followed by a deletion, and a deletion followed by an insertion all get
+assigned a score of 0.  The aligner then finds a large number of alignments
+that are logically the same, but with trivial differences between them.  For
+example, aligning AAACAAA to AAAGAAA previously yielded the following three
+alignments, all with score 6:
 
      AAACAAA        AAAC-AAA        AAA-CAAA
      AAAGAAA        AAA-GAAA        AAAG-AAA
