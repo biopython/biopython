@@ -1,0 +1,88 @@
+LOCUS       Sc_16        7000 bp    DNA             PLN       08-MAY-2000
+DEFINITION  Saccharomyces cerevisiae strain S288C chromosome XVI, partial sequence.
+ACCESSION   Sc_16
+VERSION
+KEYWORDS    .
+SOURCE      baker's yeast.
+  ORGANISM  Saccharomyces cerevisiae
+            Eukaryota; Fungi; Ascomycota; Hemiascomycetes; Saccharomycetales;
+            Saccharomycetaceae; Saccharomyces.
+REFERENCE   1  (bases 1 to 7000)
+  AUTHORS   Goffeau,A., Barrell,B.G., Bussey,H., Davis,R.W., Dujon,B.,
+            Feldmann,H., Galibert,F., Hoheisel,J.D., Jacq,C., Johnston,M.,
+            Louis,E.J., Mewes,H.W., Murakami,Y., Philippsen,P., Tettelin,H. and
+            Oliver,S.G.
+  TITLE     Life with 6000 genes
+  JOURNAL   Science 274 (5287), 546 (1996)
+   PUBMED   8849441
+REFERENCE   2  (bases 1 to 7000)
+  AUTHORS   Ouellette,B.F.F.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (08-MAY-2000) NCBI/NLM, National Institutes of Health,
+            Building 38A, Room 8N805, Bethesda, MD 20894, USA
+FEATURES             Location/Qualifiers
+     source          1..7000
+                     /organism="Saccharomyces cerevisiae"
+                     /strain="S288C"
+                     /chromosome="XVI"
+     mRNA            <1..1050
+                     /gene="ATH1"
+                     /product="acid trehalase"
+     gene            <1..1050
+                     /gene="ATH1"
+     CDS             <1..1009
+                     /gene="ATH1"
+                     /note="Ath1p"
+                     /codon_start=2
+                     /product="acid trehalase"
+                     /translation="DHNGTIVHKSGDVPIHIKIPNRSLIHDQDINFYNGSENERKPNL
+                     ERRDVDRVGDPMRMDRYGTYYLLKPKQELTVQLFKPGLNARNNIAENKQITNLTAGVP
+                     GDVAFSALDGNNYTHWQPLDKIHRAKLLIDLGEYNEKEITKGMILWGQRPAKNISISI
+                     LPHSEKVENLFANVTEIMQNSGNDQLLNETIGQLLDNAGIPVENVIDFDGIEQEDDES
+                     LDDVQALLHWKKEDLAKLIEQIPRLNFLKRKFVKILDNVPVSPSEPYYEASRNQSLIE
+                     ILPSNRTTFTIDYDKLQVGDKGNTDWRKTRYIVVAVQGVYDDYDDDNKGATIKEIVLN
+                     D"
+     mRNA            complement(2420..3253)
+                     /gene="YPR027C"
+                     /product="Ypr027cp"
+     gene            complement(2420..3253)
+                     /gene="YPR027C"
+     CDS             complement(2420..3253)
+                     /gene="YPR027C"
+                     /note="hypothetical protein"
+                     /codon_start=1
+                     /product="Ypr027cp"
+                     /translation="MVGIYRILASFVPLLGLLFAFHDDDMIDTVTIIKTVYETVTSTS
+                     TAPAPAATKSVSEKKLDDTKLTLQVIQTMVSCFSVGENPANMISCGLGVVILMFSLII
+                     ELINKLENDGINEPQRLYDLIKPKYVELPSNYVNEKIKTTFEPLDLYLGVNMNTSGSE
+                     LNQNCLILKLGEKTALPFPGLAQQICYTKGASNEFTNYKLSDIQGNLNENSQGIANGV
+                     FQKISNIRKISGNFKSQLYQISEKITDENWDGSAVGFTAHGREKGPNKSQISVSFYRD
+                     N"
+     gene            complement(4535..4626)
+                     /gene="trnF"
+     tRNA            complement(join(4535..4570,4590..4626))
+                     /product="tRNA-Phe"
+                     /gene="trnF"
+     exon            complement(4535..4570)
+                     /number=1
+     exon            complement(4590..4626)
+                     /number=2
+     mRNA            join(5450..5572,5706..6536)
+                     /gene="YIP2"
+                     /product="Yip2p"
+     gene            5450..6536
+                     /gene="YIP2"
+     CDS             join(5522..5572,5706..6197)
+                     /gene="YIP2"
+                     /note="similar to human polyposis locus protein 1 (YPD)"
+                     /codon_start=1
+                     /product="Yip2p"
+                     /translation="MSEYASSIHSQMKQFDTKYSGNRILQQLENKTNLPKSYLVAGLG
+                     FAYLLLIFINVGGVGEILSNFAGFVLPAYLSLVALKTPTSTDDTQLLTYWIVFSFLSV
+                     IEFWSKAILYLIPFYWFLKTVFLIYIALPQTGGARMIYQKIVAPLTDRYILRDVSKTE
+                     KDEIRASVNEASKATGASVH"
+BASE COUNT     2201 a   1276 c   1255 g   2268 t
+ORIGIN
+        1 cgaccacaat ggtacgattg ttcataaatc aggagatgtt cctattcata taaagatacc
+       61 aaacagatct ctaatacatg accaggatat caacttctat aatggttccg aaaacgaaag
+      121 aaaaccaaat ctagagcgta gagacgtcga ccgtgttggt gatccaatga ggatggatag [etc.]
