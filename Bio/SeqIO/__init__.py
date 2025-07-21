@@ -288,6 +288,8 @@ names are also used in Bio.AlignIO and include the following:
       which encodes PHRED quality scores with an ASCII offset of 64
       (not 33). Note as of version 1.8 of the CASAVA pipeline Illumina
       will produce FASTQ files using the standard Sanger encoding.
+    - feature-table - GenBank's 5-column tab-delimited feature table format
+      used for preparing submissions.
     - gck     - Gene Construction Kit's format.
     - genbank - The GenBank or GenPept flat file format.
     - gb      - An alias for "genbank", for consistency with NCBI Entrez Utilities
@@ -385,6 +387,7 @@ from Bio import AlignIO
 from Bio.SeqIO import AbiIO
 from Bio.SeqIO import AceIO
 from Bio.SeqIO import FastaIO
+from Bio.SeqIO import FeatureTableIO
 from Bio.SeqIO import GckIO
 from Bio.SeqIO import GfaIO
 from Bio.SeqIO import IgIO  # IntelliGenetics or MASE format
@@ -423,6 +426,7 @@ _FormatToIterator = {
     "fasta-2line": FastaIO.FastaTwoLineIterator,
     "fasta-blast": FastaIO.FastaBlastIterator,
     "fasta-pearson": FastaIO.FastaPearsonIterator,
+    "feature-table": FeatureTableIO.FeatureTableIterator,
     "ig": IgIO.IgIterator,
     "embl": InsdcIO.EmblIterator,
     "embl-cds": InsdcIO.EmblCdsFeatureIterator,
