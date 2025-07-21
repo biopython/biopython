@@ -464,6 +464,7 @@ _FormatToIterator = {
 _FormatToWriter = {
     "fasta": FastaIO.FastaWriter,
     "fasta-2line": FastaIO.FastaTwoLineWriter,
+    "feature-table": FeatureTableIO.FeatureTableWriter,
     "gb": InsdcIO.GenBankWriter,
     "genbank": InsdcIO.GenBankWriter,
     "embl": InsdcIO.EmblWriter,
