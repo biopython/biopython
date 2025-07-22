@@ -5,6 +5,8 @@ import unittest
 
 from Bio import BiopythonWarning, BiopythonParserWarning
 from Bio import SeqIO
+from Bio.SeqRecord import SeqRecord
+from Bio.SeqFeature import SeqFeature, Reference, SimpleLocation
 
 
 class TestRead(unittest.TestCase):
@@ -50,13 +52,44 @@ class TestRead(unittest.TestCase):
         self.assertEqual(len(records[3].features), 2)
 
     def test_read_tbl3(self):
-        """Test parsing .tbl files not from documentation."""
+        """Test parsing valid .tbl files not from documentation."""
         with self.assertWarns(BiopythonParserWarning):
             records = list(SeqIO.parse("FeatureTable/example3.tbl", "feature-table"))
         self.assertEqual(len(records), 1)
         self.assertEqual(records[0].id, "Chr_1")
         self.assertNotIn("references", records[0].annotations)
         self.assertEqual(len(records[0].features), 6)
+
+    def test_read_references(self):
+        """Test parsing unusual references."""
+        with self.assertWarns(BiopythonParserWarning):
+            records = list(SeqIO.parse("FeatureTable/references.tbl", "feature-table"))
+        self.assertEqual(len(records), 1)
+        self.assertEqual(len(records[0].annotations["references"]), 2)
+
+    def test_read_invalid(self):
+        """Test parsing invalid .tbl files."""
+        # Invalid sequence id
+        with self.assertRaises(ValueError):
+            records = list(SeqIO.parse("FeatureTable/invalid1.tbl", "feature-table"))
+        # Invalid offset
+        with self.assertRaises(ValueError):
+            records = list(SeqIO.parse("FeatureTable/invalid2.tbl", "feature-table"))
+        # Feature outside of table
+        with self.assertRaises(ValueError):
+            records = list(SeqIO.parse("FeatureTable/invalid3.tbl", "feature-table"))
+        # Empty reference
+        with self.assertRaises(ValueError):
+            records = list(SeqIO.parse("FeatureTable/invalid4.tbl", "feature-table"))
+        # Invalid reference syntax
+        with self.assertRaises(ValueError):
+            records = list(SeqIO.parse("FeatureTable/invalid5.tbl", "feature-table"))
+        # Invalid feature header syntax
+        with self.assertRaises(ValueError):
+            records = list(SeqIO.parse("FeatureTable/invalid6.tbl", "feature-table"))
+        # Invalid qualifier syntax
+        with self.assertRaises(ValueError):
+            records = list(SeqIO.parse("FeatureTable/invalid7.tbl", "feature-table"))
 
 
 class TestWrite(unittest.TestCase):
@@ -88,6 +121,44 @@ class TestWrite(unittest.TestCase):
         self.assertEqual(records[0].id, records2[0].id)
         self.assertEqual(records[0].annotations, records2[0].annotations)
         self.assertEqual(records[0].features, records2[0].features)
+
+    def test_write_invalid(self):
+        """Test writing invalid SeqRecords."""
+        handle = StringIO()
+
+        # Feature with no type
+        rec = SeqRecord(None)
+        rec.features.append(SeqFeature(location=SimpleLocation(1, 100)))
+        with self.assertRaises(TypeError):
+            SeqIO.write([rec], handle, "feature-table")
+
+        # Feature with no location
+        rec = SeqRecord(None)
+        rec.features.append(SeqFeature(type="note"))
+        with self.assertRaises(TypeError):
+            SeqIO.write([rec], handle, "feature-table")
+
+        # Reference with no location
+        rec = SeqRecord(None)
+        rec.annotations["references"] = [Reference()]
+        rec.annotations["references"][0].pubmed_id = "1"
+        with self.assertRaises(TypeError):
+            SeqIO.write([rec], handle, "feature-table")
+
+        # Reference with no pubmed_id or medline_id
+        rec = SeqRecord(None)
+        rec.annotations["references"] = [Reference()]
+        rec.annotations["references"][0].location = [SimpleLocation(1, 100)]
+        with self.assertWarns(BiopythonWarning):
+            SeqIO.write([rec], handle, "feature-table")
+
+        # Reference with no pubmed_id but has a medline_id
+        rec = SeqRecord(None)
+        rec.annotations["references"] = [Reference()]
+        rec.annotations["references"][0].location = [SimpleLocation(1, 100)]
+        rec.annotations["references"][0].medline_id = "1"
+        with self.assertWarns(BiopythonParserWarning):
+            SeqIO.write([rec], handle, "feature-table")
 
 
 if __name__ == "__main__":

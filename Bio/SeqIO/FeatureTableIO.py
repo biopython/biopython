@@ -102,13 +102,10 @@ def FeatureTableIterator(source):
                     )
                 rec = SeqRecord(None, id=parts[1], name=parts[1])
             elif line.startswith("[offset="):
-                try:
-                    matches = re.findall(r"\d+", line)
-                    if len(matches) != 1:
-                        raise ValueError(f"Malformed offset: {line}")
-                    offset = int(matches[0])
-                except IndexError:
+                matches = re.findall(r"\d+", line)
+                if len(matches) != 1:
                     raise ValueError(f"Malformed offset: {line}")
+                offset = int(matches[0])
             elif not (line.startswith("\t") or line.startswith(" ")):
                 # New feature in the current table
                 if rec is None:
@@ -233,10 +230,12 @@ class FeatureTableWriter(SequenceWriter):
 
         if "references" in rec.annotations:
             for ref in rec.annotations["references"]:
+                if ref.location == []:
+                    raise TypeError(f"Reference has no location: {ref}")
                 if ref.pubmed_id == "" and ref.medline_id == "":
                     warnings.warn(
-                        f"Ignoring reference because it has no medline_id or pubmed_id: {ref}",
-                        BiopythonParserWarning,
+                        f"Ignoring reference with no pubmed_id or medline_id: {ref}",
+                        BiopythonWarning,
                     )
                     continue
 
@@ -253,6 +252,11 @@ class FeatureTableWriter(SequenceWriter):
                     self.handle.write(f"\t\t\tMedline\t{self.clean(ref.medline_id)}\n")
 
         for feature in rec.features:
+            if feature.type == "":
+                raise TypeError(f"Feature has no type: {feature}")
+            if feature.location is None:
+                raise TypeError(f"Feature has no location: {feature}")
+
             if feature.type == "source":
                 # Features tables don't care about source
                 continue
