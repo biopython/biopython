@@ -16,6 +16,7 @@ class TestRead(unittest.TestCase):
         # make sure they share every feature they should.
         records = list(SeqIO.parse("FeatureTable/example1.tbl", "feature-table"))
         self.assertEqual(len(records), 1)
+        self.assertEqual(len(records[0]), 7000)
         tbl_record = records[0]
         tbl_record_i = 0
         with self.assertWarns(BiopythonParserWarning):
@@ -79,7 +80,7 @@ class TestRead(unittest.TestCase):
         with self.assertRaises(ValueError):
             records = list(SeqIO.parse("FeatureTable/invalid3.tbl", "feature-table"))
         # Empty reference
-        with self.assertRaises(ValueError):
+        with self.assertWarns(BiopythonParserWarning):
             records = list(SeqIO.parse("FeatureTable/invalid4.tbl", "feature-table"))
         # Invalid reference syntax
         with self.assertRaises(ValueError):
@@ -98,10 +99,12 @@ class TestWrite(unittest.TestCase):
         handle = StringIO()
         records = list(SeqIO.parse("FeatureTable/example1.tbl", "feature-table"))
         self.assertEqual(len(records), 1)
+        self.assertEqual(len(records[0]), 7000)
         SeqIO.write(records, handle, "feature-table")
         handle.seek(0)
         records2 = list(SeqIO.parse(handle, "feature-table"))
         self.assertEqual(len(records), 1)
+        self.assertEqual(len(records[0]), 7000)
         self.assertEqual(records[0].id, records2[0].id)
         self.assertEqual(records[0].annotations, records2[0].annotations)
         self.assertEqual(records[0].features, records2[0].features)
@@ -142,7 +145,7 @@ class TestWrite(unittest.TestCase):
         rec = SeqRecord(None)
         rec.annotations["references"] = [Reference()]
         rec.annotations["references"][0].pubmed_id = "1"
-        with self.assertRaises(TypeError):
+        with self.assertWarns(BiopythonWarning):
             SeqIO.write([rec], handle, "feature-table")
 
         # Reference with no pubmed_id or medline_id
