@@ -536,7 +536,6 @@ class SeqRecordMethodsMore(unittest.TestCase):
         self.assertFalse(t.letter_annotations)
 
     def test_no_side_effects(self):
-        # See issue #5015
         a = SeqRecord(Seq("AA"))
         self.assertIsNone(a._per_letter_annotations)
         a.reverse_complement()
