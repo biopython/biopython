@@ -69,7 +69,7 @@ class Baseml(Paml):
         """Dynamically build a BASEML control file from the options.
 
         The control file is written to the location specified by the
-        ctl_file property of the BASEML class.
+        ctl_file property of the Baseml class.
         """
         # Make sure all paths are relative to the working directory
         self._set_rel_paths()
@@ -100,7 +100,7 @@ class Baseml(Paml):
                 ctl_handle.write(f"{option[0]} = {option[1]}\n")
 
     def read_ctl_file(self, ctl_file):
-        """Parse a control file and load the options into the BASEML instance.
+        """Parse a control file and load the options into the Baseml instance.
 
         Check that the file exists and that the lines in the file are valid.
         Then update each BASEML options to the new option if supplied or None

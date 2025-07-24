@@ -45,7 +45,7 @@ class Yn00(Paml):
         """Dynamically build a yn00 control file from the options.
 
         The control file is written to the location specified by the
-        ctl_file property of the yn00 class.
+        ctl_file property of the Yn00 class.
         """
         # Make sure all paths are relative to the working directory
         self._set_rel_paths()
@@ -61,7 +61,7 @@ class Yn00(Paml):
                 ctl_handle.write(f"{option[0]} = {option[1]}\n")
 
     def read_ctl_file(self, ctl_file):
-        """Parse a control file and load the options into the yn00 instance."""
+        """Parse a control file and load the options into the Yn00 instance."""
         temp_options = {}
         if not os.path.isfile(ctl_file):
             raise FileNotFoundError(f"File not found: {ctl_file!r}")
