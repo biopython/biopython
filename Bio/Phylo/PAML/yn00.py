@@ -5,7 +5,7 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 
-"""Classes for the support of yn00.
+"""Classes for the support of YN00.
 
 Yang and Nielsen 2000,  estimating synonymous and nonsynonymous substitution
 rates in pairwise comparison of protein-coding DNA sequences.
@@ -18,11 +18,11 @@ from ._paml import Paml
 
 
 class Yn00Error(EnvironmentError):
-    """yn00 failed. Run with verbose=True to view yn00's error message."""
+    """YN00 failed. Run with verbose=True to view YN00's error message."""
 
 
 class Yn00(Paml):
-    """An interface to yn00, part of the PAML package."""
+    """An interface to YN00, part of the PAML package."""
 
     def __init__(self, alignment=None, working_dir=None, out_file=None):
         """Initialize the Yn00 instance.
@@ -42,7 +42,7 @@ class Yn00(Paml):
         }
 
     def write_ctl_file(self):
-        """Dynamically build a yn00 control file from the options.
+        """Dynamically build a YN00 control file from the options.
 
         The control file is written to the location specified by the
         ctl_file property of the Yn00 class.
@@ -103,11 +103,11 @@ class Yn00(Paml):
                 self._options[option] = None
 
     def run(self, ctl_file=None, verbose=False, command="yn00", parse=True):
-        """Run yn00 using the current configuration.
+        """Run ``yn00`` using the current configuration.
 
         If parse is True then read and return the result, otherwise
         return None. An exception is raised if the return code of
-        the yn00 command is non-zero.
+        the ``yn00`` command is non-zero.
         """
         Paml.run(self, ctl_file, verbose, command)
         if parse:
@@ -116,7 +116,7 @@ class Yn00(Paml):
 
 
 def read(results_file):
-    """Parse a yn00 results file."""
+    """Parse a YN00 results file."""
     results = {}
     if not os.path.exists(results_file):
         raise FileNotFoundError("Results file does not exist.")

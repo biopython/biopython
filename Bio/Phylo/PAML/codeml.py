@@ -180,15 +180,15 @@ class Codeml(Paml):
             self._rel_tree = os.path.relpath(self.tree, self.working_dir)
 
     def run(self, ctl_file=None, verbose=False, command="codeml", parse=True):
-        """Run CODEML using the current configuration.
+        """Run ``codeml`` using the current configuration.
 
         Check that the tree file is specified and exists, and then
-        run CODEML. If parse is True then read and return the results,
+        run ``codeml``. If parse is True then read and return the results,
         otherwise return None. An exception is raised if the return code
-        of the CODEML command is non-zero.
+        of the ``codeml`` command is non-zero.
 
         The arguments may be passed as either absolute or relative
-        paths, despite the fact that CODEML requires relative paths.
+        paths, despite the fact that ``codeml`` requires relative paths.
         """
         if self.tree is None:
             raise ValueError("Tree file not specified.")
