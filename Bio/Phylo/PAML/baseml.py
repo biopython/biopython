@@ -102,9 +102,9 @@ class Baseml(Paml):
     def read_ctl_file(self, ctl_file):
         """Parse a control file and load the options into the Baseml instance.
 
-        Check that the file exists and that the lines in the file are valid.
-        Then update each BASEML options to the new option if supplied or None
-        if not supplied. Otherwise raise an exception.
+        Update each BASEML option to the new option if supplied or None if
+        not supplied. Raise an exception if the control file does not exist,
+        a line is malformed, or an option is invalid.
         """
         temp_options = {}
         if not os.path.isfile(ctl_file):
@@ -171,9 +171,10 @@ class Baseml(Paml):
     def run(self, ctl_file=None, verbose=False, command="baseml", parse=True):
         """Run baseml using the current configuration.
 
-        Check that the tree attribute is specified and exists, and then
-        run BASEML. If parse is True then read and return the result. If
-        parse is False return None. Otherwise raise an exception.
+        Check that the tree file is specified and exists, and then
+        run BASEML. If parse is True then read and return the results,
+        otherwise return None. An exception is raised if the return code
+        of the BASEML command is non-zero.
 
         The arguments may be passed as either absolute or relative paths,
         despite the fact that BASEML requires relative paths.
@@ -191,9 +192,8 @@ class Baseml(Paml):
 def read(results_file):
     """Parse a BASEML results file.
 
-    Check that the file exits, that the results file is not empty, and then
-    parse the file. Check there is a version in the results and then return
-    the results. Otherwise raise an exception.
+    Parse the file and return the results. Raise an exception if
+    the results file does not exist, is empty, or is invalid.
     """
     results = {}
     if not os.path.exists(results_file):

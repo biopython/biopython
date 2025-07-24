@@ -100,9 +100,9 @@ class Codeml(Paml):
     def read_ctl_file(self, ctl_file):
         """Parse a control file and load the options into the Codeml instance.
 
-        Check that the file exists and that the lines in the file are valid.
-        Then update each CODEML options to the new option if supplied or None
-        if not supplied. Otherwise raise an exception.
+        Update each CODEML option to the new option if supplied or None if
+        not supplied. Raise an exception if the control file does not exist,
+        a line is malformed, or an option is invalid.
         """
         temp_options = {}
         if not os.path.isfile(ctl_file):
@@ -182,9 +182,10 @@ class Codeml(Paml):
     def run(self, ctl_file=None, verbose=False, command="codeml", parse=True):
         """Run CODEML using the current configuration.
 
-        Check that the tree attribute is specified and exists, and then
-        run CODEML. If parse is True then read and return the results. If
-        parse is false return None. Otherwise raise an exception.
+        Check that the tree file is specified and exists, and then
+        run CODEML. If parse is True then read and return the results,
+        otherwise return None. An exception is raised if the return code
+        of the CODEML command is non-zero.
 
         The arguments may be passed as either absolute or relative
         paths, despite the fact that CODEML requires relative paths.
@@ -202,8 +203,8 @@ class Codeml(Paml):
 def read(results_file):
     """Parse a CODEML results file.
 
-    Check that the file exists and is not empty. Return the results
-    if there are any. Otherwise raise an exception.
+    Return the results if there are any. Raise an exception if
+    the results file does not exist, is empty, or is invalid.
     """
     results = {}
     if not os.path.exists(results_file):
