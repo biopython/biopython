@@ -61,7 +61,12 @@ class Yn00(Paml):
                 ctl_handle.write(f"{option[0]} = {option[1]}\n")
 
     def read_ctl_file(self, ctl_file):
-        """Parse a control file and load the options into the Yn00 instance."""
+        """Parse a control file and load the options into the Yn00 instance.
+
+        Update each YN00 option to the new option if supplied or None if
+        not supplied. Raise an exception if the control file does not exist,
+        a line is malformed, or an option is invalid.
+        """
         temp_options = {}
         if not os.path.isfile(ctl_file):
             raise FileNotFoundError(f"File not found: {ctl_file!r}")
@@ -116,7 +121,11 @@ class Yn00(Paml):
 
 
 def read(results_file):
-    """Parse a YN00 results file."""
+    """Parse a YN00 results file.
+
+    Return the results if there are any. Raise an exception if
+    the results file does not exist, is empty, or is invalid.
+    """
     results = {}
     if not os.path.exists(results_file):
         raise FileNotFoundError("Results file does not exist.")
