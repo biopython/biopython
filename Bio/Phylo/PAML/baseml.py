@@ -5,7 +5,7 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 
-"""Classes for the support of baseml.
+"""Classes for the support of BASEML.
 
 Maximum likelihood analysis of nucleotide sequences.
 """
@@ -169,15 +169,15 @@ class Baseml(Paml):
             self._rel_tree = os.path.relpath(self.tree, self.working_dir)
 
     def run(self, ctl_file=None, verbose=False, command="baseml", parse=True):
-        """Run baseml using the current configuration.
+        """Run ``baseml`` using the current configuration.
 
         Check that the tree file is specified and exists, and then
-        run BASEML. If parse is True then read and return the results,
+        run ``baseml``. If parse is True then read and return the results,
         otherwise return None. An exception is raised if the return code
-        of the BASEML command is non-zero.
+        of the ``baseml`` command is non-zero.
 
         The arguments may be passed as either absolute or relative paths,
-        despite the fact that BASEML requires relative paths.
+        despite the fact that ``baseml`` requires relative paths.
         """
         if self.tree is None:
             raise ValueError("Tree file not specified.")
