@@ -4313,16 +4313,13 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(description.num_alignments, 12)
 
     def test_unknown_tag_warning(self):
-    filename = "my_blast_with_unknown_tag.xml"
-    datafile = os.path.join("Blast", filename)
-    
-   
-    with open(datafile) as handle:
+        filename = "my_blast_with_unknown_tag.xml"
+        datafile = os.path.join("Blast", filename)
+        with open(datafile) as handle:
         with self.assertWarns(BiopythonParserWarning) as cm:
             record = next(NCBIXML.parse(handle))
             self.assertRaises(StopIteration, next, NCBIXML.parse(handle))
-
-    self.assertIn("Ignored method: end_SomeMadeUpTagForTesting", str(cm.warning))
+            self.assertIn("Ignored method: end_SomeMadeUpTagForTesting", str(cm.warning))
 
 
        
