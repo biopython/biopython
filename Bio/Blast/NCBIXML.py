@@ -566,7 +566,7 @@ class _XMLparser(ContentHandler):
         elif self._debug > 1:
             # Doesn't exist (yet) and may want to warn about it
             if method not in self._debug_ignore_list:
-                warnings.warn(f"Ignored method: {method} ({self._value})", BiopythonParserWarning stacklevel=2)
+                warnings.warn(f"Ignored method: {method} ({self._value})", BiopythonParserWarning, stacklevel=2)
                 self._debug_ignore_list.append(method)
 
         # Reset character buffer
