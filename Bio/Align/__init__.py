@@ -23,6 +23,7 @@ import warnings
 from abc import ABC
 from abc import abstractmethod
 from itertools import zip_longest
+from collections.abc import Iterable
 
 try:
     import numpy as np
@@ -998,6 +999,66 @@ class MultipleSeqAlignment:
         alignment.annotations = self.annotations
         alignment.column_annotations = self.column_annotations
         return alignment
+
+    @classmethod
+    def from_pairwise_alignments(cls, pwas: Iterable["Alignment"]) -> "MultipleSeqAlignment":
+        """Create a MultipleSeqAlignment from a list of pairwise alignments.
+
+        This method is useful for combining multiple pairwise alignments into
+        a single multiple sequence alignment. All alignments must have exactly two sequences and must share the same
+        reference sequence (ignoring gaps).
+
+        Args:
+            pwas: An iterable of Alignment objects representing pairwise alignments.
+
+        Returns:
+            A MultipleSeqAlignment object containing the combined sequences.
+        """
+
+        # Extract aligned strings and normalize case
+        extracted = []
+        for pwa in pwas:
+            seq_lines = pwa.format("fasta").split()[1::2]
+            if len(seq_lines) != 2:
+                raise ValueError("Expected exactly 2 sequences per alignment.")
+            template, sequence = seq_lines
+            extracted.append([template.upper(), sequence.upper()])
+
+        # Check for empty alignments
+        if not extracted:
+            raise ValueError("No pairwise alignments provided.")
+
+        # Validate that all pairwise alignments share the same ungapped reference
+        ungapped_templates = {t.replace("-", "") for t, _ in extracted}
+        if len(ungapped_templates) != 1:
+            raise ValueError("All reference sequences must match (excluding gaps).")
+
+        # Gap synchronzation across templates
+        i = 0
+        while (any(len(template) > i for template, _ in extracted)):
+            if any(template[i] == "-" for template, _ in extracted):
+                for j, (template, sequence) in enumerate(extracted):
+
+                    # If the template has no gap at position i,
+                    # Insert '-' in both template and sequence at position i
+                    # to maintain alignment with other templates
+                    if (len(template) > i and template[i] != "-"):
+                        extracted[j][0] = template[:i] + "-" + template[i:]
+                        extracted[j][1] = sequence[:i] + "-" + sequence[i:]
+
+            i += 1
+
+        # Build output strings
+        output_rows = [extracted[0][0]] + [seq for _, seq in extracted]
+
+        # Fill the potential gap at the end
+        max_lenth = max(len(seq) for seq in output_rows)
+        output_rows = [seq + "-" * (max_lenth - len(seq)) for seq in output_rows]
+
+        # Convert to MultipleSeqAlignment
+        records = [SeqRecord(Seq(seq),
+                            id=f"seq_{i + 1}") for i, seq in enumerate(output_rows)]
+        return cls(records)
 
 
 class Alignment:
