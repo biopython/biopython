@@ -94,7 +94,7 @@ class Chain(Entity["Model", "Residue"]):
          - id - int, residue resseq
 
         """
-        try: 
+        try:
             id = int(id)
         except ValueError:
             pass
