@@ -30,6 +30,7 @@ from Bio import motifs
 from Bio.Align import AlignInfo
 from Bio.Align import Alignment
 from Bio.Align import MultipleSeqAlignment
+from Bio.Align import PairwiseAligner
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
@@ -913,6 +914,49 @@ EAS54_6_R         0 GTTGCTTCTGGCGTGGGTGGGGGGG 25
         self.assertEqual(
             motif.counts.calculate_consensus(identity=0.6), "NTNGCNTNNNNNGNNGGNTGGNTCN"
         )
+
+
+class TestFromPairwiseAlignments(unittest.TestCase):
+
+    def test_simple(self):
+        """ Test that from_pairwise_alignments creates a MultipleSeqAlignment with correct sequnce count and alignment lengths."""
+        aligner = PairwiseAligner()
+
+        # Input sequences
+        reference_str = "ACGT"
+        seq1_str = "ACGGT"
+        seq2_str = "AT"
+
+        # Generate pairwise alignments
+        pwa1 = next(aligner.align(reference_str, seq1_str))
+        pwa2 = next(aligner.align(reference_str, seq2_str))
+
+        # Use the method being tested
+        msa = MultipleSeqAlignment.from_pairwise_alignments([pwa1, pwa2])
+
+        # Check that the output is of correct type
+        self.assertIsInstance(msa, MultipleSeqAlignment)
+
+        # Check the number of sequences in the MSA
+        self.assertEqual(len(msa), 3)
+
+        # Check that all sequences are the same length
+        lengths = {len(record.seq) for record in msa}
+        self.assertEqual(len(lengths), 1)
+
+    def test_mismatched_references(self):
+        """ Test that mismatched reference sequences raise a ValueError."""
+        aligner = PairwiseAligner()
+        pwa1 = next(aligner.align("ACGT", "ACGGT"))
+        pwa2 = next(aligner.align("ACCT", "AT"))
+
+        with self.assertRaises(ValueError):
+            MultipleSeqAlignment.from_pairwise_alignments([pwa1, pwa2])
+
+    def test_empty_input(self):
+        """ Test that empty input raises a ValueError."""
+        with self.assertRaises(ValueError):
+            MultipleSeqAlignment.from_pairwise_alignments([])
 
 
 if __name__ == "__main__":
