@@ -673,7 +673,7 @@ findPath(
 }
 
 // Main Function
-PyObject *
+static PyObject *
 PyCealign(PyObject *Py_UNUSED(self), PyObject *args)
 {
     int fragmentSize = 8;
