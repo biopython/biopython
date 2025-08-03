@@ -525,7 +525,11 @@ class _XMLparser(ContentHandler):
         elif self._debug > 3:
             # Doesn't exist (yet) and may want to warn about it
             if method not in self._debug_ignore_list:
-                warnings.warn(f"Ignored method: {method} ({self._value})", BiopythonParserWarning, stacklevel=2)
+                warnings.warn(
+                    f"Ignored method: {method} ({self._value})",
+                    BiopythonParserWarning,
+                    stacklevel=2,
+                )
                 self._debug_ignore_list.append(method)
 
         # We don't care about white space in parent tags like Hsp,
@@ -566,7 +570,11 @@ class _XMLparser(ContentHandler):
         elif self._debug > 1:
             # Doesn't exist (yet) and may want to warn about it
             if method not in self._debug_ignore_list:
-                warnings.warn(f"Ignored method: {method} ({self._value})", BiopythonParserWarning, stacklevel=2)
+                warnings.warn(
+                    f"Ignored method: {method} ({self._value})",
+                    BiopythonParserWarning,
+                    stacklevel=2,
+                )
                 self._debug_ignore_list.append(method)
 
         # Reset character buffer
@@ -807,7 +815,9 @@ class BlastParser(_XMLparser):
         self._blast = None
 
         if self._debug:
-            warnings.warn("Added Blast record to results", BiopythonParserWarning, stacklevel=2)
+            warnings.warn(
+                "Added Blast record to results", BiopythonParserWarning, stacklevel=2
+            )
 
     # Header
     def _set_header_application(self):
@@ -973,7 +983,9 @@ class BlastParser(_XMLparser):
         # exist between <Hit> tags, as a result of very large remote
         # BLAST searches.
         if self._value.strip() == "CREATE_VIEW":
-            warnings.warn(f"Ignored value: {self._value!r}", BiopythonParserWarning, stacklevel=2)
+            warnings.warn(
+                f"Ignored value: {self._value!r}", BiopythonParserWarning, stacklevel=2
+            )
             self._value = ""
 
     def _end_hit(self):
