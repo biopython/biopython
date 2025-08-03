@@ -919,7 +919,7 @@ EAS54_6_R         0 GTTGCTTCTGGCGTGGGTGGGGGGG 25
 class TestFromPairwiseAlignments(unittest.TestCase):
 
     def test_simple(self):
-        """ Test that from_pairwise_alignments creates a MultipleSeqAlignment with correct sequnce count and alignment lengths."""
+        """Test that from_pairwise_alignments creates a MultipleSeqAlignment with correct sequnce count and alignment lengths."""
         aligner = PairwiseAligner()
 
         # Input sequences
@@ -940,12 +940,20 @@ class TestFromPairwiseAlignments(unittest.TestCase):
         # Check the number of sequences in the MSA
         self.assertEqual(len(msa), 3)
 
-        # Check that all sequences are the same length
-        lengths = {len(record.seq) for record in msa}
-        self.assertEqual(len(lengths), 1)
+        self.assertEqual(
+            msa.alignment.format("fasta").strip().split("\n"),
+            [
+                ">seq_1 <unknown description>",
+                "ACG-T",
+                ">seq_2 <unknown description>",
+                "ACGGT",
+                ">seq_3 <unknown description>",
+                "A---T",
+            ],
+        )
 
     def test_mismatched_references(self):
-        """ Test that mismatched reference sequences raise a ValueError."""
+        """Test that mismatched reference sequences raise a ValueError."""
         aligner = PairwiseAligner()
         pwa1 = next(aligner.align("ACGT", "ACGGT"))
         pwa2 = next(aligner.align("ACCT", "AT"))
@@ -954,7 +962,7 @@ class TestFromPairwiseAlignments(unittest.TestCase):
             MultipleSeqAlignment.from_pairwise_alignments([pwa1, pwa2])
 
     def test_empty_input(self):
-        """ Test that empty input raises a ValueError."""
+        """Test that empty input raises a ValueError."""
         with self.assertRaises(ValueError):
             MultipleSeqAlignment.from_pairwise_alignments([])
 
