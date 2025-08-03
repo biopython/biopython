@@ -8,7 +8,7 @@ import os
 import unittest
 
 from Bio.Blast import NCBIXML
-
+from Bio import BiopythonParserWarning
 
 class TestNCBIXML(unittest.TestCase):
     """Tests for the NCBI XML parser."""
