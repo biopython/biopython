@@ -940,6 +940,7 @@ class TestFromPairwiseAlignments(unittest.TestCase):
         # Check the number of sequences in the MSA
         self.assertEqual(len(msa), 3)
 
+        # Validate that from_pairwise_alignments gives the right msa
         self.assertEqual(
             msa.alignment.format("fasta").strip().split("\n"),
             [
@@ -949,8 +950,29 @@ class TestFromPairwiseAlignments(unittest.TestCase):
                 "ACGGT",
                 ">seq_3 <unknown description>",
                 "A---T",
-            ],
+            ]
         )
+
+    # *** Fails ***
+    # def test_has_gap_at_start(self):
+    #     """Test that from_pairwise_alignments creates a MultipleSeqAlignment with
+    #     gaps at the start when the sequences of the input Alignments start with gaps."""
+    #     aligner = PairwiseAligner()
+    #     pwa1 = Alignment(["-ATA----", "-ATAAAA-"])
+    #     pwa2 = Alignment(["----ATA-", "-AAAACA-"])
+    #     msa = MultipleSeqAlignment.from_pairwise_alignments([pwa1, pwa2])
+    #     print(msa.alignment.format("fasta").strip())
+    #     self.assertEqual(
+    #         msa.alignment.format("fasta").strip().split("\n"),
+    #         [
+    #             ">seq_1 <unknown description>",
+    #             "----ATA----",
+    #             ">seq_2 <unknown description>",
+    #             "----ATAAAA-",
+    #             ">seq_3 <unknown description>",
+    #             "-AAAACA----",
+    #         ]
+    #     )
 
     def test_mismatched_references(self):
         """Test that mismatched reference sequences raise a ValueError."""
@@ -965,6 +987,18 @@ class TestFromPairwiseAlignments(unittest.TestCase):
         """Test that empty input raises a ValueError."""
         with self.assertRaises(ValueError):
             MultipleSeqAlignment.from_pairwise_alignments([])
+
+    def test_input_with_more_than_two_sequences(self):
+        """Test that input with more than two sequences raises a ValueError"""
+        aligner = PairwiseAligner()
+        pwa = next(aligner.align("ACGT", "ACGGT"))
+
+        not_pairwsise_alignment = Alignment(["ACGT-", "ACGTT", "A---T"])
+
+        with self.assertRaises(ValueError):
+            MultipleSeqAlignment.from_pairwise_alignments(
+                [pwa, not_pairwsise_alignment]
+            )
 
 
 if __name__ == "__main__":
