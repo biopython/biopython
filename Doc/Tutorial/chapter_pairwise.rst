@@ -54,8 +54,8 @@ between two sequences:
 
 .. code:: pycon
 
-   >>> target = "GAACT"
-   >>> query = "GAT"
+   >>> target = "GAACTTT"
+   >>> query = "GATTT"
    >>> score = aligner.score(target, query)
    >>> score
    3.0
@@ -82,7 +82,7 @@ indexing:
 
    >>> alignment = alignments[0]
    >>> alignment  # doctest: +ELLIPSIS
-   <Alignment object (2 rows x 5 columns) at 0x...>
+   <Alignment object (2 rows x 7 columns) at 0x...>
 
 Iterate over the ``Alignment`` objects and print them to see the
 alignments:
@@ -94,13 +94,13 @@ alignments:
    >>> for alignment in alignments:
    ...     print(alignment)
    ...
-   target            0 GAACT 5
-                     0 ||--| 5
-   query             0 GA--T 3
+   target            0 GAACTTT 7
+                     0 ||--||| 7
+   query             0 GA--TTT 5
    <BLANKLINE>
-   target            0 GAACT 5
-                     0 |-|-| 5
-   query             0 G-A-T 3
+   target            0 GAACTTT 7
+                     0 |-|-||| 7
+   query             0 G-A-TTT 5
    <BLANKLINE>
 
 Use indices to get the aligned sequence (see :ref:`subsec:slicing-indexing-alignment`):
@@ -110,9 +110,9 @@ Use indices to get the aligned sequence (see :ref:`subsec:slicing-indexing-align
 .. code:: pycon
 
    >>> alignment[0]
-   'GAACT'
+   'GAACTTT'
    >>> alignment[1]
-   'G-A-T'
+   'G-A-TTT'
 
 Each alignment stores the alignment score:
 
@@ -130,9 +130,9 @@ as well as pointers to the sequences that were aligned:
 .. code:: pycon
 
    >>> alignment.target
-   'GAACT'
+   'GAACTTT'
    >>> alignment.query
-   'GAT'
+   'GATTT'
 
 Internally, the alignment is stored in terms of the sequence coordinates:
 
@@ -142,8 +142,8 @@ Internally, the alignment is stored in terms of the sequence coordinates:
 
    >>> alignment = alignments[0]
    >>> alignment.coordinates
-   array([[0, 2, 4, 5],
-          [0, 2, 2, 3]])
+   array([[0, 2, 4, 7],
+          [0, 2, 2, 5]])
 
 Here, the two rows refer to the target and query sequence. These
 coordinates show that the alignment consists of the following three
@@ -154,7 +154,7 @@ blocks:
 -  ``target[2:4]`` aligned to a gap, since ``query[2:2]`` is an empty
    string (i.e., a deletion);
 
--  ``target[4:5]`` aligned to ``query[2:3]``.
+-  ``target[4:7]`` aligned to ``query[2:5]``.
 
 The number of aligned sequences is always 2 for a pairwise alignment:
 
@@ -175,7 +175,7 @@ query:
 .. code:: pycon
 
    >>> alignment.length
-   5
+   7
 
 The ``aligned`` property, which returns the start and end indices of
 aligned subsequences, returns two tuples of length 2 for the first
@@ -187,10 +187,10 @@ alignment:
 
    >>> alignment.aligned
    array([[[0, 2],
-           [4, 5]],
+           [4, 7]],
    <BLANKLINE>
           [[0, 2],
-           [2, 3]]])
+           [2, 5]]])
 
 while for the alternative alignment, two tuples of length 3 are
 returned:
@@ -201,18 +201,18 @@ returned:
 
    >>> alignment = alignments[1]
    >>> print(alignment)
-   target            0 GAACT 5
-                     0 |-|-| 5
-   query             0 G-A-T 3
+   target            0 GAACTTT 7
+                     0 |-|-||| 7
+   query             0 G-A-TTT 5
    <BLANKLINE>
    >>> alignment.aligned
    array([[[0, 1],
            [2, 3],
-           [4, 5]],
+           [4, 7]],
    <BLANKLINE>
           [[0, 1],
            [1, 2],
-           [2, 3]]])
+           [2, 5]]])
 
 Note that different alignments may have the same subsequences aligned to
 each other. In particular, this may occur if alignments differ from each
@@ -345,16 +345,14 @@ follow the suggestion by Waterman & Eggert
 
 If ``aligner.mode`` is set to ``"fogsaa"``, then the Fast Optimal Global
 Alignment Algorithm [Chakraborty2013]_ with some modifications is used. This
-mode calculates a global alignment, but it is not like the regular `"global"`
-mode.  It is best suited for long alignments between similar sequences. Rather
-than calculating all possible alignments like other algorithms do, FOGSAA uses
-a heuristic to detect steps in an alignment that cannot lead to an optimal
-alignment. This can speed up alignment, however, the heuristic makes
-assumptions about your match, mismatch, and gap scores. If the match score is
-less than the mismatch score or any gap score, or if any gap score is greater
-than the mismatch score, then a warning is raised and the algorithm may return
-incorrect results. Unlike other modes that may return more than one alignment,
-FOGSAA always returns only one alignment.
+mode also calculates a global alignment, but uses a heuristic to detect steps
+in an alignment that cannot lead to an optimal alignment. This can speed up
+alignment and is best suited for long alignments between similar sequences.
+The heuristic makes assumptions about your match, mismatch, and gap scores. If
+the match score is less than the mismatch score or any gap score, or if any gap
+score is greater than the mismatch score, then a warning is raised and the
+algorithm may return incorrect results. Unlike other modes, which may return
+more than one alignment, FOGSAA always returns only one alignment.
 
 .. cont-doctest
 
@@ -391,18 +389,18 @@ all parameters, use
      wildcard: None
      match_score: 1.000000
      mismatch_score: 0.000000
-     open_internal_insertion_score: 0.000000
-     extend_internal_insertion_score: 0.000000
-     open_left_insertion_score: 0.000000
-     extend_left_insertion_score: 0.000000
-     open_right_insertion_score: 0.000000
-     extend_right_insertion_score: 0.000000
-     open_internal_deletion_score: 0.000000
-     extend_internal_deletion_score: 0.000000
-     open_left_deletion_score: 0.000000
-     extend_left_deletion_score: 0.000000
-     open_right_deletion_score: 0.000000
-     extend_right_deletion_score: 0.000000
+     open_internal_insertion_score: -1.000000
+     extend_internal_insertion_score: -1.000000
+     open_left_insertion_score: -1.000000
+     extend_left_insertion_score: -1.000000
+     open_right_insertion_score: -1.000000
+     extend_right_insertion_score: -1.000000
+     open_internal_deletion_score: -1.000000
+     extend_internal_deletion_score: -1.000000
+     open_left_deletion_score: -1.000000
+     extend_left_deletion_score: -1.000000
+     open_right_deletion_score: -1.000000
+     extend_right_deletion_score: -1.000000
      mode: local
    <BLANKLINE>
 
@@ -775,14 +773,25 @@ disallows a deletion after two nucleotides in the query sequence:
 Using a pre-defined substitution matrix and gap scores
 ------------------------------------------------------
 
-By default, a ``PairwiseAligner`` object is initialized with a match
-score of +1.0, a mismatch score of 0.0, and all gap scores equal to 0.0,
-While this has the benefit of being a simple scoring scheme, in general
-it does not give the best performance. Instead, you can use the argument
-``scoring`` to select a predefined scoring scheme when initializing a
-``PairwiseAligner`` object. Currently, the provided scoring schemes are
-``blastn`` and ``megablast``, which are suitable for nucleotide
-alignments, and ``blastp``, which is suitable for protein alignments.
+Currently, a ``PairwiseAligner`` object is initialized by default with a match
+score of +1.0, a mismatch score of 0.0, and all gap scores equal to -1.0.
+Biopython versions 1.85 and older used a default gap score of 0.0 (this choice
+was made to be consistent with the older pairwise aligner in ``Bio.pairwise2``,
+which uses a default gap score of 0.0). However, this scheme assigns the same
+score to a mismatch and a insertion or deletion, e.g.
+
+.. code:: pycon
+
+    A      A-      -A
+    C      -C      C-
+
+are evaluated equally, which tends to result in a large number of alignments
+that are only trivially different from each other. While the current scoring
+scheme avoids this problem, in general you may get better performance using
+a predefined scoring scheme, which you can select using the ``scoring``
+argument when initializing a ``PairwiseAligner`` object. Currently, the
+provided scoring schemes are ``blastn`` and ``megablast``, which are suitable
+for nucleotide alignments, and ``blastp``, suitable for protein alignments.
 Selecting these scoring schemes will initialize the ``PairwiseAligner``
 object to the default scoring parameters used by BLASTN, MegaBLAST, and
 BLASTP, respectively.
@@ -908,7 +917,7 @@ You can perform the following operations on ``alignments``:
    .. code:: pycon
 
       >>> print(alignments.score)
-      2.0
+      1.0
 
 Aligning to the reverse strand
 ------------------------------
@@ -927,6 +936,7 @@ for ``query`` to the reverse strand of ``target``, use ``strand="-"``:
    >>> query = "AACC"
    >>> aligner = Align.PairwiseAligner()
    >>> aligner.mismatch_score = -1
+   >>> aligner.gap_score = 0
    >>> aligner.internal_gap_score = -1
    >>> aligner.score(target, query)  # strand is "+" by default
    4.0
@@ -1767,9 +1777,9 @@ hemoglobin sequences from above (``HBA_HUMAN``, ``HBB_HUMAN``) stored in
    >>> aligner = Align.PairwiseAligner()
    >>> score = aligner.score(seq1.seq, seq2.seq)
    >>> print(score)
-   72.0
+   56.0
 
-showing an alignment score of 72.0. To see the individual alignments, do
+showing an alignment score of 56.0. To see the individual alignments, do
 
 .. cont-doctest
 
@@ -1804,28 +1814,24 @@ alignment itself:
 .. code:: pycon
 
    >>> print(alignment.score)
-   72.0
+   56.0
    >>> print(alignment)
-   target            0 MV-LS-PAD--KTN--VK-AA-WGKV-----GAHAGEYGAEALE-RMFLSF----P-TTK
-                     0 ||-|--|----|----|--|--||||-----|---||--|--|--|--|------|-|--
-   query             0 MVHL-TP--EEK--SAV-TA-LWGKVNVDEVG---GE--A--L-GR--L--LVVYPWT--
+   target            0 MV-LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-DLSHGSAQ---
+                     0 ||-|.|..|..|.|.||||...--|.|.|||.|.....|.|...|..|-|||...|.---
+   query             0 MVHLTPEEKSAVTALWGKVNVD--EVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGN
    <BLANKLINE>
-   target           41 TY--FPHF----DLSHGS---AQVK-G------HGKKV--A--DA-LTNAVAHV-DDMPN
-                    60 ----|--|----|||------|-|--|------|||||--|--|--|--|--|--|---|
-   query            39 --QRF--FESFGDLS---TPDA-V-MGNPKVKAHGKKVLGAFSD-GL--A--H-LD---N
+   target           55 --VKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAH
+                    60 --||.|||||..|.....||.|........||.||..||.|||.||.||...|...||.|
+   query            58 PKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHH
    <BLANKLINE>
-   target           79 ALS----A-LSD-LHAH--KLR-VDPV-NFK-LLSHC---LLVT--LAAHLPA----EFT
-                   120 -|-----|-||--||----||--|||--||--||------|-|---||-|-------|||
-   query            81 -L-KGTFATLS-ELH--CDKL-HVDP-ENF-RLL---GNVL-V-CVLA-H---HFGKEFT
-   <BLANKLINE>
-   target          119 PA-VH-ASLDKFLAS---VSTV------LTS--KYR- 142
-                   180 |--|--|------|----|--|------|----||-- 217
-   query           124 P-PV-QA------A-YQKV--VAGVANAL--AHKY-H 147
+   target          113 LPAEFTPAVHASLDKFLASVSTVLTSKYR 142
+                   120 ...||||.|.|...|..|.|...|..||. 149
+   query           118 FGKEFTPPVQAAYQKVVAGVANALAHKYH 147
    <BLANKLINE>
 
 Better alignments are usually obtained by penalizing gaps: higher costs
 for opening a gap and lower costs for extending an existing gap. For
-amino acid sequences match scores are usually encoded in matrices like
+amino acid sequences, match scores are usually encoded in matrices like
 ``PAM`` or ``BLOSUM``. Thus, a more meaningful alignment for our example
 can be obtained by using the BLOSUM62 matrix, together with a gap open
 penalty of 10 and a gap extension penalty of 0.5:
@@ -2024,7 +2030,7 @@ BLOSUM62 matrix, and align these sequences to each other:
    Asn --- Leu Phe
    <BLANKLINE>
    >>> print(alignments.score)
-   18.0
+   17.0
 
 Generalized pairwise alignments using match/mismatch scores and integer sequences
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2060,7 +2066,7 @@ This step can be bypassed by passing integer arrays directly:
    2 -- 10 13
    <BLANKLINE>
    >>> print(alignments.score)
-   18.0
+   17.0
 
 Note that the indices should consist of 32-bit integers, as specified in
 this example by ``numpy.int32``.
