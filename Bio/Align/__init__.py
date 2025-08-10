@@ -1018,11 +1018,12 @@ class MultipleSeqAlignment:
         # Extract aligned strings and normalize case
         extracted = []
         for pwa in pwas:
-            seq_lines = pwa.format("fasta").split()[1::2]
+            lines = pwa.format("fasta").strip().split("\n")
+            seq_lines = [lines[i + 1].upper() for i in range(0, len(lines), 2)]  # Get every second line
             if len(seq_lines) != 2:
                 raise ValueError("Expected exactly 2 sequences per alignment.")
             template, sequence = seq_lines
-            extracted.append([template.upper(), sequence.upper()])
+            extracted.append([template, sequence])
 
         # Check for empty alignments
         if not extracted:
@@ -1055,9 +1056,40 @@ class MultipleSeqAlignment:
         max_lenth = max(len(seq) for seq in output_rows)
         output_rows = [seq + "-" * (max_lenth - len(seq)) for seq in output_rows]
 
+        # Collect id and description data
+        ids = []
+        descriptions = []
+
+        for i, pwa in enumerate(pwas):
+            fasta_lines = pwa.format("fasta").strip().split("\n")
+            headers = fasta_lines[0::2]
+
+            if i == 0:
+                # Reference sequence metadata from the first header of the first alignment
+                if headers and headers[0].startswith(">"):
+                    parts = headers[0][1:].split(" ", 1)  # Split into id and description
+                    id1 = parts[0] if parts[0] else "reference"
+                    desc1 = parts[1] if len(parts) > 1 else "<unknown description>"
+                else:
+                    id1 = "reference"
+                    desc1 = "<unknown description>"
+                ids.append(id1)
+                descriptions.append(desc1)
+
+            # Metadata for the second sequence in the current alignment
+            if len(headers) > 1 and headers[1].startswith(">"):
+                parts = headers[1][1:].split(" ", 1)
+                id2 = parts[0] if parts[0] else f"seq_{i + 1}"
+                desc2 = parts[1] if len(parts) > 1 else "<unknown description>"
+            else:
+                id2 = f"seq_{i + 1}"
+                desc2 = "<unknown description>"
+            ids.append(id2)
+            descriptions.append(desc2)
+
         # Convert to MultipleSeqAlignment
         records = [SeqRecord(Seq(seq),
-                            id=f"seq_{i + 1}") for i, seq in enumerate(output_rows)]
+                            id=ids[i], description=descriptions[i]) for i, seq in enumerate(output_rows)]
         return cls(records)
 
 

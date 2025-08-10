@@ -918,7 +918,7 @@ EAS54_6_R         0 GTTGCTTCTGGCGTGGGTGGGGGGG 25
 
 class TestFromPairwiseAlignments(unittest.TestCase):
 
-    def test_simple(self):
+    def test_pwas_built_with_strings(self):
         """Test that from_pairwise_alignments creates a MultipleSeqAlignment with correct sequnce count and alignment lengths."""
         aligner = PairwiseAligner()
 
@@ -944,35 +944,83 @@ class TestFromPairwiseAlignments(unittest.TestCase):
         self.assertEqual(
             msa.alignment.format("fasta").strip().split("\n"),
             [
-                ">seq_1 <unknown description>",
+                ">reference <unknown description>",
                 "ACG-T",
-                ">seq_2 <unknown description>",
+                ">seq_1 <unknown description>",
                 "ACGGT",
-                ">seq_3 <unknown description>",
+                ">seq_2 <unknown description>",
                 "A---T",
             ]
         )
 
-    # *** Fails ***
-    # def test_has_gap_at_start(self):
-    #     """Test that from_pairwise_alignments creates a MultipleSeqAlignment with
-    #     gaps at the start when the sequences of the input Alignments start with gaps."""
-    #     aligner = PairwiseAligner()
-    #     pwa1 = Alignment(["-ATA----", "-ATAAAA-"])
-    #     pwa2 = Alignment(["----ATA-", "-AAAACA-"])
-    #     msa = MultipleSeqAlignment.from_pairwise_alignments([pwa1, pwa2])
-    #     print(msa.alignment.format("fasta").strip())
-    #     self.assertEqual(
-    #         msa.alignment.format("fasta").strip().split("\n"),
-    #         [
-    #             ">seq_1 <unknown description>",
-    #             "----ATA----",
-    #             ">seq_2 <unknown description>",
-    #             "----ATAAAA-",
-    #             ">seq_3 <unknown description>",
-    #             "-AAAACA----",
-    #         ]
-    #     )
+    def test_pwas_built_with_seqs(self):
+        """Test that from_pairwise_alignments works with pairwise alignments built with Seq objects."""
+        aligner = PairwiseAligner()
+
+        # Input sequences
+        reference_seq = Seq("ACGT")
+        seq1_seq = Seq("ACGGT")
+        seq2_seq = Seq("AT")
+
+        # Generate pairwise alignments
+        pwa1 = next(aligner.align(reference_seq, seq1_seq))
+        pwa2 = next(aligner.align(reference_seq, seq2_seq))
+
+        # Use the method being tested
+        msa = MultipleSeqAlignment.from_pairwise_alignments([pwa1, pwa2])
+
+        # Check that the output is of correct type
+        self.assertIsInstance(msa, MultipleSeqAlignment)
+
+        # Validate that from_pairwise_alignments gives the right msa
+        self.assertEqual(
+            msa.alignment.format("fasta").strip().split("\n"),
+            [
+                ">reference <unknown description>",
+                "ACG-T",
+                ">seq_1 <unknown description>",
+                "ACGGT",
+                ">seq_2 <unknown description>",
+                "A---T",
+            ]
+        )
+
+    def test_metadata_preservation(self):
+        """Test that sequence metadata (IDs and descriptions) are preserved in the MultipleSeqAlignment.
+
+        Sequence metadata may exist if pairwise alignments are built with SeqRecords.
+        This also tests that from_pairwise_alignments works with pairwise alignments built with SeqRecord objects.
+        """
+        aligner = PairwiseAligner()
+
+        # Input sequences
+        reference_seqr = SeqRecord(Seq("ACGT"), id="reference", description="desc 1")
+        seq1_seqr = SeqRecord(Seq("ACGGT"), id="seq1", description="desc 2")
+        seq2_seqr = SeqRecord(Seq("AT"), id="seq2", description="desc 3")
+
+        # Generate pairwise alignments
+        pwa1 = next(aligner.align(reference_seqr, seq1_seqr))
+        pwa2 = next(aligner.align(reference_seqr, seq2_seqr))
+
+        print("Printing pairwise alignments:")
+        print(pwa1.format("fasta"))
+        print(pwa2.format("fasta"))
+
+        # Use the method being tested
+        msa = MultipleSeqAlignment.from_pairwise_alignments([pwa1, pwa2])
+
+        # Check that id and description are retained
+        self.assertEqual(
+            msa.alignment.format("fasta").strip().split("\n"),
+            [
+                ">reference desc 1",
+                "ACG-T",
+                ">seq1 desc 2",
+                "ACGGT",
+                ">seq2 desc 3",
+                "A---T",
+            ]
+        )
 
     def test_mismatched_references(self):
         """Test that mismatched reference sequences raise a ValueError."""
