@@ -245,7 +245,7 @@ class GenericPositionMatrix(dict):
            1.0, then only columns of identical letters contribute to the
            consensus. Default value is zero.
          - setcase             - threshold for the positive matches, divided by
-           the total count in a column, above which the consensus is is
+           the total count in a column, above which the consensus is in
            upper-case and below which the consensus is in lower-case. By
            default, this is equal to 0.5.
         """
