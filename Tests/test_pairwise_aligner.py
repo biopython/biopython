@@ -18482,6 +18482,7 @@ class TestAlignerPickling(unittest.TestCase):
         aligner.extend_left_deletion_score = +1
         aligner.open_right_deletion_score = -1
         aligner.extend_right_deletion_score = -2
+        aligner.epsilon = 0.5e-6
         aligner.mode = "local"
         state = pickle.dumps(aligner)
         pickled_aligner = pickle.loads(state)
@@ -18626,7 +18627,7 @@ class TestAlignerPickling(unittest.TestCase):
         self.assertEqual(aligner.epsilon, pickled_aligner.epsilon)
         self.assertEqual(aligner.algorithm, pickled_aligner.algorithm)
 
-    def test_pickle_aligner_alignment_symmetry(self):
+    def test_pickle_aligner_alignment_consistent(self):
         import pickle
 
         targ = "MTPSDISGYDYGRVEKSPITDLEFDLLKKTVMLGEEDVMYLKKAADVLKDQVDEILDLAGGWAASNEHLIYYGSNPDTGAPIKEYLERVRARIGAWVL"
