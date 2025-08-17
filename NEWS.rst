@@ -20,10 +20,14 @@ has also been tested on PyPy3.10 v7.3.17.
 `Infernal <http://eddylab.org/infernal/>` (v1.0.0+) RNA search tool. The 
 format are ``infernal-tab`` and ``infernal-text``.
 
+The ``iplotx`` library is mentioned in the Tutorial as an option to visualise
+trees using complex style options.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - Samuel Prince (first contribution)
+- Fabio Zanini
 
 15 January 2025: Biopython 1.85
 ===============================
