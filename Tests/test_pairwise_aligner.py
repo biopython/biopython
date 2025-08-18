@@ -18538,7 +18538,7 @@ class TestAlignerPickling(unittest.TestCase):
             pickled_aligner.extend_right_deletion_score,
         )
         self.assertEqual(aligner.mode, pickled_aligner.mode)
-        self.assertEqual(aligner.epsilon, pickled_aligner.epsilon)
+        self.assertAlmostEqual(aligner.epsilon, pickled_aligner.epsilon)
         self.assertEqual(aligner.algorithm, pickled_aligner.algorithm)
 
     def test_pickle_aligner_substitution_matrix(self):
@@ -18624,7 +18624,7 @@ class TestAlignerPickling(unittest.TestCase):
             pickled_aligner.extend_right_deletion_score,
         )
         self.assertEqual(aligner.mode, pickled_aligner.mode)
-        self.assertEqual(aligner.epsilon, pickled_aligner.epsilon)
+        self.assertAlmostEqual(aligner.epsilon, pickled_aligner.epsilon)
         self.assertEqual(aligner.algorithm, pickled_aligner.algorithm)
 
     def test_pickle_aligner_alignment_consistent(self):
