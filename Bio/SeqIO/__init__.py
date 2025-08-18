@@ -379,6 +379,7 @@ making up each alignment as SeqRecords.
 from abc import ABC, abstractmethod
 from collections.abc import Callable
 from collections.abc import Iterable
+from functools import partial
 from typing import Union
 
 from Bio import AlignIO
@@ -435,7 +436,9 @@ _FormatToIterator = {
     "imgt": InsdcIO.ImgtIterator,
     "nib": NibIO.NibIterator,
     "cif-seqres": PdbIO.CifSeqresIterator,
+    "cif-seqres-author": partial(PdbIO.CifSeqresIterator, use_author_chain_ids=True),
     "cif-atom": PdbIO.CifAtomIterator,
+    "cif-atom-label": partial(PdbIO.CifAtomIterator, use_author_chain_ids=False),
     "pdb-atom": PdbIO.PdbAtomIterator,
     "pdb-seqres": PdbIO.PdbSeqresIterator,
     "phd": PhdIO.PhdIterator,
