@@ -1002,10 +1002,6 @@ class TestFromPairwiseAlignments(unittest.TestCase):
         pwa1 = next(aligner.align(reference_seqr, seq1_seqr))
         pwa2 = next(aligner.align(reference_seqr, seq2_seqr))
 
-        print("Printing pairwise alignments:")
-        print(pwa1.format("fasta"))
-        print(pwa2.format("fasta"))
-
         # Use the method being tested
         msa = MultipleSeqAlignment.from_pairwise_alignments([pwa1, pwa2])
 

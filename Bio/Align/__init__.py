@@ -51,6 +51,7 @@ from Bio.Seq import SequenceDataAbstractBaseClass
 from Bio.SeqRecord import _RestrictedDict
 from Bio.SeqRecord import SeqRecord
 
+
 # Import errors may occur here if a compiled _pairwisealigner.c file or
 # compiled _codonaligner.c file (_pairwisealigner.pyd or _pairwisealigner.so,
 # or _codonaligner.pyd or _codonaligner.so) is missing or if the user is
@@ -1061,31 +1062,51 @@ class MultipleSeqAlignment:
         descriptions = []
 
         for i, pwa in enumerate(pwas):
-            fasta_lines = pwa.format("fasta").strip().split("\n")
-            headers = fasta_lines[0::2]
+            from Bio import SeqIO
+            from io import StringIO
+            fasta_string = pwa.format("fasta")
+
+            # Use StringIO to treat the string as a file
+            with StringIO(fasta_string) as fasta_file:
+                records = list(SeqIO.parse(fasta_file, "fasta"))
+            ref, query = records
 
             if i == 0:
-                # Reference sequence metadata from the first header of the first alignment
-                if headers and headers[0].startswith(">"):
-                    parts = headers[0][1:].split(" ", 1)  # Split into id and description
-                    id1 = parts[0] if parts[0] else "reference"
-                    desc1 = parts[1] if len(parts) > 1 else "<unknown description>"
-                else:
-                    id1 = "reference"
-                    desc1 = "<unknown description>"
-                ids.append(id1)
-                descriptions.append(desc1)
+                # Reference sequence metadata from the first sequence of the first pwa
+                ref_id = ref.id if ref.id else "reference"
+                # Remove ID from description if it exists
+                ref_desc = ref.description.replace(ref.id, "", 1).strip() if ref.description else "<unknown description>"
+                ids.append(ref_id)
+                descriptions.append(ref_desc)
 
-            # Metadata for the second sequence in the current alignment
-            if len(headers) > 1 and headers[1].startswith(">"):
-                parts = headers[1][1:].split(" ", 1)
-                id2 = parts[0] if parts[0] else f"seq_{i + 1}"
-                desc2 = parts[1] if len(parts) > 1 else "<unknown description>"
-            else:
-                id2 = f"seq_{i + 1}"
-                desc2 = "<unknown description>"
-            ids.append(id2)
-            descriptions.append(desc2)
+            # Metadata for the second sequence in the current pwa
+            query_id = query.id if query.id else f"seq_{i + 1}"
+            # Remove ID from description if it exists
+            query_desc = query.description.replace(query.id, "", 1).strip() if query.description else "<unknown description>"
+            ids.append(query_id)
+            descriptions.append(query_desc)
+
+        # for i, pwa in enumerate(pwas):
+        #     from Bio.SeqIO.FastaIO import SimpleFastaParser
+        #     fasta_str = pwa.format("fasta")
+        #     seqs = list(SimpleFastaParser(fasta_str.splitlines()))
+        #     ref_header, ref_seq = seqs[1]
+        #     query_header, query_seq = seqs[2]
+
+        #     if i == 0:
+        #         # Reference sequence metadata from the first sequence of the first pwa
+        #         ref_parts = ref_header.split(" ", 1)  # Split into id and description
+        #         ref_id = ref_parts[0] if ref_parts[0] else "reference"
+        #         ref_desc = ref_parts[1] if len(ref_parts) > 1 else "<unknown description>"
+        #         ids.append(ref_id)
+        #         descriptions.append(ref_desc)
+
+        #     # Metadata for the second sequence in the current pwa
+        #     query_parts = query_header.split(" ", 1)
+        #     query_id = query_parts[0] if query_parts[0] else f"seq_{i + 1}"
+        #     query_desc = query_parts[1] if len(query_parts) > 1 else "<unknown description>"
+        #     ids.append(query_id)
+        #     descriptions.append(query_desc)
 
         # Convert to MultipleSeqAlignment
         records = [SeqRecord(Seq(seq),
