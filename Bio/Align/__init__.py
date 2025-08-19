@@ -4335,6 +4335,7 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
             "open_right_deletion_score": self.open_right_deletion_score,
             "extend_right_deletion_score": self.extend_right_deletion_score,
             "mode": self.mode,
+            "epsilon": self.epsilon,
         }
         if self.substitution_matrix is None:
             state["match_score"] = self.match_score
@@ -4358,6 +4359,7 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
         self.open_right_deletion_score = state["open_right_deletion_score"]
         self.extend_right_deletion_score = state["extend_right_deletion_score"]
         self.mode = state["mode"]
+        self.epsilon = state["epsilon"]
         substitution_matrix = state.get("substitution_matrix")
         if substitution_matrix is None:
             self.match_score = state["match_score"]
