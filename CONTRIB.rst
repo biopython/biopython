@@ -270,6 +270,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Nicolas Fontrodona <https://github.com/NFontrodona>
 - Nigel Delaney <https://github.com/evolvedmicrobe>
 - Noam Kremen <https://github.com/noamkremen>
+- Oliver Schwengers <https://github.com/oschwengers>
 - Olivier Morelle <https://github.com/Oli4>
 - Oscar G. Garcia <https://github.com/oscarmaestre>
 - Osvaldo Zagordi <https://github.com/ozagordi>

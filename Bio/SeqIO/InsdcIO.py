@@ -1313,10 +1313,17 @@ class EmblWriter(_InsdcWriter):
         # Get the taxonomy division
         division = self._get_data_division(record)
 
+        # Get the locus name/id in line with the GenBank output (line 714)
+        locus = record.name
+        if not locus or locus == "<unknown name>":
+            locus = record.id
+        if not locus or locus == "<unknown id>":
+            locus = self._get_annotation_str(record, "accession", just_first=True)
+
         # TODO - Full ID line
         handle = self.handle
         # ID   <1>; SV <2>; <3>; <4>; <5>; <6>; <7> BP.
-        # 1. Primary accession number
+        # 1. Locus name/id
         # 2. Sequence version number
         # 3. Topology: 'circular' or 'linear'
         # 4. Molecule type
@@ -1326,7 +1333,7 @@ class EmblWriter(_InsdcWriter):
         self._write_single_line(
             "ID",
             "%s; %s; %s; %s; ; %s; %i %s."
-            % (accession, version, topology, mol_type, division, len(record), units),
+            % (locus, version, topology, mol_type, division, len(record), units),
         )
         handle.write("XX\n")
         self._write_single_line("AC", accession + ";")
