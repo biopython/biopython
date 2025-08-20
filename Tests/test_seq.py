@@ -1090,16 +1090,14 @@ class TestTranslating(unittest.TestCase):
         seq = "GTGGCCATTGTAATGGGCCGC"
         self.assertEqual("VAIVMGR", Seq.translate(seq))
 
-    def test_translation_of_gapped_string_with_gap_char_given(self):
+    def test_translation_of_gapped_string(self):
         seq = "GTG---GCCATTGTAATGGGCCGC"
         expected = "V-AIVMGR"
         self.assertEqual(expected, Seq.translate(seq, gap="-"))
+        self.assertEqual(expected, Seq.translate(seq))
         self.assertRaises(TypeError, Seq.translate, seq, gap=[])
         self.assertRaises(ValueError, Seq.translate, seq, gap="-*")
-
-    def test_translation_of_gapped_string_no_gap_char_given(self):
-        seq = "GTG---GCCATTGTAATGGGCCGC"
-        self.assertRaises(TranslationError, Seq.translate, seq)
+        self.assertRaises(TranslationError, Seq.translate, seq, gap=None)
 
     def test_translation_to_stop(self):
         for nucleotide_seq in self.test_seqs:
