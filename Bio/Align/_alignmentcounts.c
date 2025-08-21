@@ -1643,15 +1643,10 @@ static char _alignmentcounts__doc__[] =
 /* Module definition */
 
 static struct PyModuleDef moduledef = {
-        PyModuleDef_HEAD_INIT,
-        "_alignmentcounts",
-        _alignmentcounts__doc__,
-        -1,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        NULL
+    PyModuleDef_HEAD_INIT,
+    .m_name = "_alignmentcounts",
+    .m_doc = _alignmentcounts__doc__,
+    .m_size = -1,
 };
 
 PyObject *
