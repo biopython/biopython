@@ -1002,10 +1002,12 @@ class MultipleSeqAlignment:
         return alignment
 
     @classmethod
-    def from_pairwise_alignments(cls, pwas: Iterable["Alignment"]) -> "MultipleSeqAlignment":
+    def from_pairwise_alignments(
+        cls, pwas: Iterable["Alignment"]
+    ) -> "MultipleSeqAlignment":
         """Create a MultipleSeqAlignment from a list of pairwise alignments.
 
-        This method is useful for combining multiple pairwise alignments into
+        This method combines multiple pairwise alignments into
         a single multiple sequence alignment. All alignments must have exactly two sequences and must share the same
         reference sequence (ignoring gaps).
 
@@ -1016,101 +1018,64 @@ class MultipleSeqAlignment:
             A MultipleSeqAlignment object containing the combined sequences.
         """
 
-        # Extract aligned strings and normalize case
-        extracted = []
-        for pwa in pwas:
-            lines = pwa.format("fasta").strip().split("\n")
-            seq_lines = [lines[i + 1].upper() for i in range(0, len(lines), 2)]  # Get every second line
-            if len(seq_lines) != 2:
-                raise ValueError("Expected exactly 2 sequences per alignment.")
-            template, sequence = seq_lines
-            extracted.append([template, sequence])
-
-        # Check for empty alignments
-        if not extracted:
+        if len(pwas) == 0:
             raise ValueError("No pairwise alignments provided.")
 
+        # Extract aligned strings and normalize case
+        original_records = []
+        string_seqs = []
+        for pwa in pwas:
+            if len(pwa.sequences) != 2:
+                raise ValueError("Expected exactly 2 sequences per alignment.")
+            original_records.extend(pwa.sequences)
+            string_seqs.extend([seq_str.upper() for seq_str in pwa])
+
         # Validate that all pairwise alignments share the same ungapped reference
-        ungapped_templates = {t.replace("-", "") for t, _ in extracted}
+        ungapped_templates = {t.replace("-", "") for t in string_seqs[::2]}
         if len(ungapped_templates) != 1:
             raise ValueError("All reference sequences must match (excluding gaps).")
 
+        # Group in pairs
+        paired_strings = [string_seqs[i : i + 2] for i in range(0, len(string_seqs), 2)]
+
         # Gap synchronzation across templates
         i = 0
-        while (any(len(template) > i for template, _ in extracted)):
-            if any(template[i] == "-" for template, _ in extracted):
-                for j, (template, sequence) in enumerate(extracted):
+        while any(len(template) > i for template, _ in paired_strings):
+            if any(template[i] == "-" for template, _ in paired_strings):
+                for j, (template, sequence) in enumerate(paired_strings):
 
                     # If the template has no gap at position i,
                     # Insert '-' in both template and sequence at position i
                     # to maintain alignment with other templates
-                    if (len(template) > i and template[i] != "-"):
-                        extracted[j][0] = template[:i] + "-" + template[i:]
-                        extracted[j][1] = sequence[:i] + "-" + sequence[i:]
+                    if len(template) > i and template[i] != "-":
+                        paired_strings[j][0] = template[:i] + "-" + template[i:]
+                        paired_strings[j][1] = sequence[:i] + "-" + sequence[i:]
 
             i += 1
 
         # Build output strings
-        output_rows = [extracted[0][0]] + [seq for _, seq in extracted]
+        output_string_seqs = [paired_strings[0][0]] + [seq for _, seq in paired_strings]
 
         # Fill the potential gap at the end
-        max_lenth = max(len(seq) for seq in output_rows)
-        output_rows = [seq + "-" * (max_lenth - len(seq)) for seq in output_rows]
+        max_lenth = max(len(seq) for seq in output_string_seqs)
+        output_string_seqs = [
+            seq + "-" * (max_lenth - len(seq)) for seq in output_string_seqs
+        ]
 
-        # Collect id and description data
-        ids = []
-        descriptions = []
-
-        for i, pwa in enumerate(pwas):
-            from Bio import SeqIO
-            from io import StringIO
-            fasta_string = pwa.format("fasta")
-
-            # Use StringIO to treat the string as a file
-            with StringIO(fasta_string) as fasta_file:
-                records = list(SeqIO.parse(fasta_file, "fasta"))
-            ref, query = records
-
-            if i == 0:
-                # Reference sequence metadata from the first sequence of the first pwa
-                ref_id = ref.id if ref.id else "reference"
-                # Remove ID from description if it exists
-                ref_desc = ref.description.replace(ref.id, "", 1).strip() if ref.description else "<unknown description>"
-                ids.append(ref_id)
-                descriptions.append(ref_desc)
-
-            # Metadata for the second sequence in the current pwa
-            query_id = query.id if query.id else f"seq_{i + 1}"
-            # Remove ID from description if it exists
-            query_desc = query.description.replace(query.id, "", 1).strip() if query.description else "<unknown description>"
-            ids.append(query_id)
-            descriptions.append(query_desc)
-
-        # for i, pwa in enumerate(pwas):
-        #     from Bio.SeqIO.FastaIO import SimpleFastaParser
-        #     fasta_str = pwa.format("fasta")
-        #     seqs = list(SimpleFastaParser(fasta_str.splitlines()))
-        #     ref_header, ref_seq = seqs[1]
-        #     query_header, query_seq = seqs[2]
-
-        #     if i == 0:
-        #         # Reference sequence metadata from the first sequence of the first pwa
-        #         ref_parts = ref_header.split(" ", 1)  # Split into id and description
-        #         ref_id = ref_parts[0] if ref_parts[0] else "reference"
-        #         ref_desc = ref_parts[1] if len(ref_parts) > 1 else "<unknown description>"
-        #         ids.append(ref_id)
-        #         descriptions.append(ref_desc)
-
-        #     # Metadata for the second sequence in the current pwa
-        #     query_parts = query_header.split(" ", 1)
-        #     query_id = query_parts[0] if query_parts[0] else f"seq_{i + 1}"
-        #     query_desc = query_parts[1] if len(query_parts) > 1 else "<unknown description>"
-        #     ids.append(query_id)
-        #     descriptions.append(query_desc)
-
-        # Convert to MultipleSeqAlignment
-        records = [SeqRecord(Seq(seq),
-                            id=ids[i], description=descriptions[i]) for i, seq in enumerate(output_rows)]
+        # Restore id and description, if they existed
+        records = []
+        for i, original_seq in enumerate(original_records[:1] + original_records[1::2]):
+            if isinstance(original_seq, SeqRecord):
+                new_record = SeqRecord(
+                    Seq(output_string_seqs[i]),
+                    id=original_seq.id,
+                    description=original_seq.description,
+                    dbxrefs=original_seq.dbxrefs,
+                )
+            else:
+                id_value = "reference" if i == 0 else f"seq_{i}"
+                new_record = SeqRecord(Seq(output_string_seqs[i]), id=id_value)
+            records.append(new_record)
         return cls(records)
 
 
