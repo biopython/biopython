@@ -93,9 +93,9 @@ def vector_to_axis(line, point):
     :param point: vector defining the point
     """
     line = line.normalized()
-    np = point.norm()
+    norm_point = point.norm()
     angle = line.angle(point)
-    return point - line ** (np * np.cos(angle))
+    return point - line ** (norm_point * np.cos(angle))
 
 
 def rotaxis2m(theta, vector):
