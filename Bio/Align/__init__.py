@@ -2176,7 +2176,7 @@ class Alignment:
         """
         return self.format(format_spec)
 
-    def format(self, fmt="", *args, **kwargs):
+    def format(self, fmt="", argument=None, *args, **kwargs):
         """Return the alignment as a string in the specified file format.
 
         Arguments:
@@ -2184,7 +2184,14 @@ class Alignment:
                        create a human-readable representation of the alignment,
                        or any of the alignment file formats supported by
                        `Bio.Align` (some have not yet been implemented).
-
+         - argument  - Optional; default=None
+                       If provided, can be:
+                       - A substitution matrix (typically from the 
+                         `Bio.Align.substitution_matrices` submodule)
+                         used to mark positive matches (:) in the alignment string
+                         when two different residues have a positive score.
+                       - A PairwiseAligner object, in which case its substitution
+                         matrix and settings are used for determining positive matches.
         All other arguments are passed to the format-specific writer functions:
          - mask      - PSL format only. Specify if repeat regions in the target
                        sequence are masked and should be reported in the
@@ -2202,6 +2209,14 @@ class Alignment:
                        the alignment and include it in the output. If False
                        (default), do not include the MD tag in the output.
         """
+        substitution_matrix = None
+        writer_argument = None
+        if isinstance(argument, PairwiseAligner):
+            substitution_matrix = argument.substitution_matrix
+        elif isinstance(argument, (np.ndarray, substitution_matrices.Array)):
+            substitution_matrix = argument
+        else:
+            writer_argument = argument
         if fmt == "":
             return self._format_pretty()
         module = _load(fmt)
@@ -2213,6 +2228,10 @@ class Alignment:
             raise ValueError(
                 f"Formatting alignments has not yet been implemented for the {fmt} format"
             ) from None
+        if writer_argument is None:
+            writer = module.AlignmentWriter(None, *args, **kwargs)
+        else:
+            writer = module.AlignmentWriter(None, writer_argument, *args, **kwargs)
         return writer.format_alignment(self)
 
     def _format_pretty(self):
