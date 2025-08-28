@@ -16,6 +16,9 @@ from Bio.PDB.StructureBuilder import StructureBuilder
 _ATOM_FORMAT_STRING = (
     "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%s%6.2f      %4s%2s%2s\n"
 )
+_ATOM_FORMAT_STRING_HIGH_B_FACTOR = (
+    "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%s%6.1f      %4s%2s%2s\n"
+)
 _PQR_ATOM_FORMAT_STRING = (
     "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f %7s  %6s      %2s\n"
 )
@@ -239,7 +242,19 @@ class PDBIO(StructureIO):
                 element,
                 charge,
             )
-            return _ATOM_FORMAT_STRING % args
+
+            _format_string = (
+                _ATOM_FORMAT_STRING
+                if bfactor < 999
+                else _ATOM_FORMAT_STRING_HIGH_B_FACTOR
+            )
+            if bfactor >= 9999:
+                warnings.warn(
+                    f"Extremely high B-factor ({bfactor}) in atom {atom.full_id}, "
+                    "this will result in an illegal PDB line formatting",
+                    BiopythonWarning,
+                )
+            return _format_string % args
 
         # Write PQR format line
         else:
