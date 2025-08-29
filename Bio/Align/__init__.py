@@ -2218,7 +2218,7 @@ class Alignment:
         else:
             writer_argument = argument
         if fmt == "":
-            return self._format_pretty()
+            return self._format_pretty(substitution_matrix)
         module = _load(fmt)
         if module.AlignmentIterator.mode == "b":
             raise ValueError(f"{fmt} is a binary file format")
@@ -2233,11 +2233,17 @@ class Alignment:
         else:
             writer = module.AlignmentWriter(None, writer_argument, *args, **kwargs)
         return writer.format_alignment(self)
-
-    def _format_pretty(self):
+    def _format_pretty(self, matrix=None):
         """Return default string representation (PRIVATE).
 
         Helper for self.format().
+        
+        Arguments:
+         - matrix  - Optional; default=None 
+                     A substitution matrix (typically from the 
+                     `Bio.Align.substitution_matrices` submodule)
+                     used to mark positive matches (:) in the alignment string
+                     when two different residues have a positive score.
         """
         n = len(self.sequences)
         if n == 2:
@@ -2290,7 +2296,7 @@ class Alignment:
                 row[:] = end - positions
             if isinstance(seq, str):
                 if not seq.isascii():
-                    return self._format_unicode()
+                    return self._format_unicode(matrix)
             elif isinstance(seq, (Seq, MutableSeq)):
                 try:
                     seq = bytes(seq)
@@ -2301,7 +2307,7 @@ class Alignment:
                     seq = s
                 seq = seq.decode()
             else:
-                return self._format_generalized()
+                return self._format_generalized(matrix)
             seqs.append(seq)
         minstep = steps.min(0)
         maxstep = steps.max(0)
@@ -2445,10 +2451,17 @@ class Alignment:
                 blocks.append(block)
             return "\n".join(blocks)
 
-    def _format_unicode(self):
+    def _format_unicode(self, matrix=None):
         """Return default string representation (PRIVATE).
 
         Helper for self.format().
+        
+        Arguments:
+         - matrix  - Optional; default=None 
+                     A substitution matrix (typically from the 
+                     `Bio.Align.substitution_matrices` submodule)
+                     used to mark positive matches (:) in the alignment string
+                     when two different residues have a positive score.
         """
         seqs = []
         names = []
@@ -2456,7 +2469,7 @@ class Alignment:
         for seq, row in zip(self.sequences, coordinates):
             seq = self._convert_sequence_string(seq)
             if seq is None:
-                return self._format_generalized()
+                return self._format_generalized(matrix)
             if row[0] > row[-1]:  # mapped to reverse strand
                 row[:] = len(seq) - row[:]
                 seq = reverse_complement(seq)
@@ -2501,10 +2514,17 @@ class Alignment:
             pattern += c
         return f"{aligned_seq1}\n{pattern}\n{aligned_seq2}\n"
 
-    def _format_generalized(self):
+    def _format_generalized(self, matrix=None):
         """Return generalized string representation (PRIVATE).
 
         Helper for self._format_pretty().
+        
+        Arguments:
+         - matrix  - Optional; default=None 
+                     A substitution matrix (typically from the 
+                     `Bio.Align.substitution_matrices` submodule)
+                     used to mark positive matches (:) in the alignment string
+                     when two different residues have a positive score.
         """
         seq1, seq2 = self.sequences
         aligned_seq1 = []
