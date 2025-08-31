@@ -2406,6 +2406,10 @@ class Alignment:
                         c = "-"
                     else:
                         c = "."
+                        if matrix is not None and c1 != " " and c2 != " ":
+                            c1u, c2u = c1.upper(), c2.upper()
+                            if matrix[c1u, c2u] > 0:
+                                c = ":"
                     pattern += c
                 pattern_line = "          %9d %s" % (position, pattern)
                 pattern_lines.append(pattern_line)
@@ -2511,6 +2515,10 @@ class Alignment:
                 c = "-"
             else:
                 c = "."
+                if matrix is not None and c1 != " " and c2 != " ":
+                            c1u, c2u = c1.upper(), c2.upper()
+                            if matrix[c1u, c2u] > 0:
+                                c = ":"
             pattern += c
         return f"{aligned_seq1}\n{pattern}\n{aligned_seq2}\n"
 
@@ -2579,6 +2587,10 @@ class Alignment:
                         p = "|"
                     else:
                         p = "."
+                        if matrix is not None:
+                            c1u, c2u = c1.upper(), c2.upper()
+                            if matrix[c1u, c2u] > 0:
+                                p = ":" 
                     if m1 < m2:
                         space = (m2 - m1) * " "
                         s1 += space
