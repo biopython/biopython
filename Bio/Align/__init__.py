@@ -2186,11 +2186,13 @@ class Alignment:
                        `Bio.Align` (some have not yet been implemented).
          - argument  - Optional; default=None
                        If provided, can be:
-                       - A substitution matrix (typically from the 
-                         `Bio.Align.substitution_matrices` submodule)
+
+                     - A substitution matrix (typically from the
+                        `Bio.Align.substitution_matrices` submodule)
                          used to mark positive matches (:) in the alignment string
                          when two different residues have a positive score.
-                       - A PairwiseAligner object, in which case its substitution
+
+                     - A PairwiseAligner object, in which case its substitution
                          matrix and settings are used for determining positive matches.
         All other arguments are passed to the format-specific writer functions:
          - mask      - PSL format only. Specify if repeat regions in the target
@@ -2233,14 +2235,15 @@ class Alignment:
         else:
             writer = module.AlignmentWriter(None, writer_argument, *args, **kwargs)
         return writer.format_alignment(self)
+
     def _format_pretty(self, matrix=None):
         """Return default string representation (PRIVATE).
 
         Helper for self.format().
-        
+
         Arguments:
-         - matrix  - Optional; default=None 
-                     A substitution matrix (typically from the 
+         - matrix  - Optional; default=None
+                     A substitution matrix (typically from the
                      `Bio.Align.substitution_matrices` submodule)
                      used to mark positive matches (:) in the alignment string
                      when two different residues have a positive score.
@@ -2459,10 +2462,10 @@ class Alignment:
         """Return default string representation (PRIVATE).
 
         Helper for self.format().
-        
+
         Arguments:
-         - matrix  - Optional; default=None 
-                     A substitution matrix (typically from the 
+         - matrix  - Optional; default=None
+                     A substitution matrix (typically from the
                      `Bio.Align.substitution_matrices` submodule)
                      used to mark positive matches (:) in the alignment string
                      when two different residues have a positive score.
@@ -2516,9 +2519,9 @@ class Alignment:
             else:
                 c = "."
                 if matrix is not None and c1 != " " and c2 != " ":
-                            c1u, c2u = c1.upper(), c2.upper()
-                            if matrix[c1u, c2u] > 0:
-                                c = ":"
+                    c1u, c2u = c1.upper(), c2.upper()
+                    if matrix[c1u, c2u] > 0:
+                        c = ":"
             pattern += c
         return f"{aligned_seq1}\n{pattern}\n{aligned_seq2}\n"
 
@@ -2526,10 +2529,10 @@ class Alignment:
         """Return generalized string representation (PRIVATE).
 
         Helper for self._format_pretty().
-        
+
         Arguments:
-         - matrix  - Optional; default=None 
-                     A substitution matrix (typically from the 
+         - matrix  - Optional; default=None
+                     A substitution matrix (typically from the
                      `Bio.Align.substitution_matrices` submodule)
                      used to mark positive matches (:) in the alignment string
                      when two different residues have a positive score.
@@ -2590,7 +2593,7 @@ class Alignment:
                         if matrix is not None:
                             c1u, c2u = c1.upper(), c2.upper()
                             if matrix[c1u, c2u] > 0:
-                                p = ":" 
+                                p = ":"
                     if m1 < m2:
                         space = (m2 - m1) * " "
                         s1 += space

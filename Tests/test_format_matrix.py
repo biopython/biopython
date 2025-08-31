@@ -1,36 +1,36 @@
 # Tests/test_format_matrix.py
-import re
-import numpy as np
-from Bio.Align import PairwiseAligner
-from Bio.Align.substitution_matrices import load, Array
-
-"""Tests for Alignment.format() when used with substitution matrices.
+"""Unit tests for Alignment.format() with substitution matrices.
 
 These tests cover the behavior of pretty-printed alignments when a
 substitution matrix (e.g., from Bio.Align.substitution_matrices) is
 supplied directly or via a PairwiseAligner object.
 
 Conventions being tested:
-    - '|' (pipe): identity (the same residue on both sequences).
-    - ':' (colon): positive mismatch (substitution with a positive score).
-    - '.' (dot): negative mismatch (substitution with a negative score).
-    - '-' (dash): gap (insertion/deletion).
+* '|' (pipe): identity (the same residue on both sequences).
+* ':' (colon): positive mismatch (substitution with a positive score).
+* '.' (dot): negative mismatch (substitution with a negative score).
+* '-' (dash): gap (insertion/deletion).
 
 Test cases include:
-    * NUC.4.4 matrix, where T–Y is a positive mismatch.
-    * A BLASTN-like artificial matrix with +1 for matches and -1 for mismatches.
-    * Case-insensitivity: lowercase residues behave the same as uppercase.
-    * Handling of gaps in alignments.
-    * A "mixed block" test where all four pattern characters appear at least once.
+* NUC.4.4 matrix, where T~Y is a positive mismatch.
+* A BLASTN-like artificial matrix with +1 for matches and -1 for mismatches.
+* Case-insensitivity: lowercase residues behave the same as uppercase.
+* Handling of gaps in alignments.
+* A "mixed block" test where all four pattern characters appear at least once.
 
 These tests ensure that the new feature of showing ':' for positive
 substitution scores is consistently applied across different input
 styles and substitution matrices.
 """
+# Tests/test_format_matrix.py
+import re
+import numpy as np
+from Bio.Align import PairwiseAligner
+from Bio.Align.substitution_matrices import load, Array
 
 
 def _pattern_from_pretty(s: str) -> str:
-    
+
     for ln in s.splitlines():
         m = re.match(r"^\s*\d+\s+([|:\.\-]+)\s+\d+\s*$", ln)
         if m:
@@ -46,9 +46,10 @@ def _pattern_from_pretty(s: str) -> str:
 
     raise AssertionError("Pattern line not found in pretty output:\n" + s)
 
+
 def _blastn_like_matrix():
-    
-    alphabet = "ACGTY"  
+
+    alphabet = "ACGTY"
     n = len(alphabet)
     data = np.full((n, n), -1, dtype=int)
     np.fill_diagonal(data, 1)
@@ -66,6 +67,7 @@ def test_nuc44_gives_colon_for_positive_mismatch_TY():
     assert ":" in pat
     assert "-" not in pat
 
+
 def test_blastn_like_has_no_colon_only_pipes_for_identities():
     """In a BLASTN-like +1/-1 matrix, mismatches are always negative -> no ':' expected."""
     M = _blastn_like_matrix()
@@ -76,6 +78,7 @@ def test_blastn_like_has_no_colon_only_pipes_for_identities():
     pat = _pattern_from_pretty(aln.format("", M))
     assert ":" not in pat
     assert "|" in pat
+
 
 def test_positive_mismatch_colon_when_passing_aligner_object():
     """Passing the aligner object with a substitution matrix should also yield ':' for positive mismatches."""
@@ -88,6 +91,7 @@ def test_positive_mismatch_colon_when_passing_aligner_object():
     pat = _pattern_from_pretty(aln.format("", aligner))
     assert ":" in pat
 
+
 def test_lowercase_letters_are_handled_case_insensitively_for_matrix_lookup():
     """Matrix lookup should be case-insensitive (e.g., 't' vs 'y' behaves like 'T' vs 'Y')."""
     M = load("NUC.4.4")
@@ -97,6 +101,7 @@ def test_lowercase_letters_are_handled_case_insensitively_for_matrix_lookup():
     aln = next(iter(aligner.align("t", "y")))
     pat = _pattern_from_pretty(aln.format("", M))
     assert pat == ":"
+
 
 def test_negative_mismatch_dot_with_blastn_like_matrix():
     """In the BLASTN-like matrix, mismatches are negative -> expect '.' in the pattern."""
@@ -108,6 +113,7 @@ def test_negative_mismatch_dot_with_blastn_like_matrix():
     pat = _pattern_from_pretty(aln.format("", M))
     assert pat == "."
 
+
 def test_gap_is_dash_in_pattern():
     """Gaps in the alignment should always appear as '-' in the pattern line."""
     M = load("NUC.4.4")
@@ -117,6 +123,7 @@ def test_gap_is_dash_in_pattern():
     aln = next(iter(aligner.align("AC", "AGC")))
     pat = _pattern_from_pretty(aln.format("", M))
     assert "-" in pat
+
 
 def test_mixed_block_contains_all_symbols_when_expected():
     """Construct an alignment that produces all symbols ('|', ':', '.', '-') at least once in the pattern."""
