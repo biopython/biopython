@@ -23,6 +23,7 @@ format are ``infernal-tab`` and ``infernal-text``.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Rachel Stern (first contribution)
 - Samuel Prince (first contribution)
 
 15 January 2025: Biopython 1.85
