@@ -140,3 +140,12 @@ ENV/
 # but should not be committed to Git, as different developers
 # may use different Python versions.
 .python-version
+
+# Files and directories created by our new module
+AFDB_cache/
+my_structures/
+test_cache/
+
+# Specific AlphaFold files (as a failsafe)
+AF-*.pdb
+AF-*.cif
