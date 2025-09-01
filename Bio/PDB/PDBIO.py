@@ -13,12 +13,8 @@ from Bio.Data.IUPACData import atom_weights
 from Bio.PDB.PDBExceptions import PDBIOException
 from Bio.PDB.StructureBuilder import StructureBuilder
 
-_ATOM_FORMAT_STRING = (
-    "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%s%6.2f      %4s%2s%2s\n"
-)
-_ATOM_FORMAT_STRING_HIGH_B_FACTOR = (
-    "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%s%6.1f      %4s%2s%2s\n"
-)
+_ATOM_FORMAT_STRING = "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%s%s     %4s%2s%2s\n"
+
 _PQR_ATOM_FORMAT_STRING = (
     "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f %7s  %6s      %2s\n"
 )
@@ -26,6 +22,27 @@ _PQR_ATOM_FORMAT_STRING = (
 _TER_FORMAT_STRING = (
     "TER   %5i      %3s %c%4i%c                                                      \n"
 )
+
+_MAX_B_FACTOR = 9999.9
+
+
+def __format_b_factor(value: float) -> str:
+    """Returns the b-factor value as a formatted string
+
+    Formarts the b-factor value to fit the wwPDB specification of 6 characters
+    maximum, otherwise truncating to 6 characters if necessary.
+    """
+    if value < 1000:
+        return f"{value:6.2f}"
+    elif value <= _MAX_B_FACTOR:
+        return f"{value:6.1f}"
+    else:
+        warnings.warn(
+            f"Truncated b-value {value!r} to {_MAX_B_FACTOR} to fit wwPDB spec."
+            " Consider using mmCIF instead!",
+            BiopythonWarning,
+        )
+        return f"{_MAX_B_FACTOR:6.1f}"
 
 
 class Select:
@@ -224,6 +241,8 @@ class PDBIO(StructureIO):
                         f"Invalid occupancy value: {atom.occupancy!r}"
                     ) from None
 
+            bfactor = __format_b_factor(bfactor)
+
             args = (
                 record_type,
                 atom_number,
@@ -243,18 +262,7 @@ class PDBIO(StructureIO):
                 charge,
             )
 
-            _format_string = (
-                _ATOM_FORMAT_STRING
-                if bfactor < 999
-                else _ATOM_FORMAT_STRING_HIGH_B_FACTOR
-            )
-            if bfactor >= 9999:
-                warnings.warn(
-                    f"Extremely high B-factor ({bfactor}) in atom {atom.full_id}, "
-                    "this will result in an illegal PDB line formatting",
-                    BiopythonWarning,
-                )
-            return _format_string % args
+            return _ATOM_FORMAT_STRING % args
 
         # Write PQR format line
         else:
