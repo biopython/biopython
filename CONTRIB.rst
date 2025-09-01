@@ -80,6 +80,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Cam McMenamie <https://github.com/kamurani>
 - Carlos Pena <https://github.com/carlosp420>
 - Carlos Ríos <https://github.com/Crosvera>
+- Cassie Bastress <https://githiub.com/Cassiebastress>
 - Catherine Lesuisse <https://github.com/kaskales>
 - Cecilia Alsmark <Cecilia.Alsmark at domain ebc.uu.se>
 - Chad Parmet <https://github.com/cparmet>
