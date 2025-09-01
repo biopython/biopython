@@ -9,10 +9,12 @@ import requests
 
 BASE_URL = "https://alphafold.ebi.ac.uk/files"
 
+
 class AFDBList:
     """
     Interface to download structures from the AlphaFold Database.
     """
+
     def __init__(self, out_dir="AFDB_cache"):
         """
         Initializes the AFDBList object.
@@ -62,6 +64,7 @@ class AFDBList:
         else:
             raise FileNotFoundError(f"Structure not found for UniProt ID: {uniprot_id}")
 
+
 # This part will be used for command-line execution later
 if __name__ == "__main__":
     import argparse
@@ -76,20 +79,20 @@ if __name__ == "__main__":
         "--uniprot",
         type=str,
         required=True,
-        help="UniProt ID(s) to download (e.g., 'P38398' or 'P38398,Q9Y6F2')."
+        help="UniProt ID(s) to download (e.g., 'P38398' or 'P38398,Q9Y6F2').",
     )
     parser.add_argument(
         "--fmt",
         type=str,
         default="pdb",
         choices=["pdb", "cif"],
-        help="Output file format: 'pdb' or 'cif'. Default is 'pdb'."
+        help="Output file format: 'pdb' or 'cif'. Default is 'pdb'.",
     )
     parser.add_argument(
         "--out_dir",
         type=str,
         default="AFDB_cache",
-        help="Directory to save the structures. Default is 'AFDB_cache'."
+        help="Directory to save the structures. Default is 'AFDB_cache'.",
     )
 
     # 3. Parse the arguments from the command line
@@ -99,7 +102,7 @@ if __name__ == "__main__":
     afdb = AFDBList(out_dir=args.out_dir)
 
     # Handle multiple UniProt IDs
-    uniprot_ids = [uid.strip() for uid in args.uniprot.split(',')]
+    uniprot_ids = [uid.strip() for uid in args.uniprot.split(",")]
 
     for uniprot_id in uniprot_ids:
         try:
