@@ -61,10 +61,9 @@ class TestFormatMatrix(unittest.TestCase):
         aligner = PairwiseAligner()
         aligner.open_gap_score = -1
         aligner.extend_gap_score = -0.5
-        aln = next(iter(aligner.align("GATTACAT", "GATYACAC")))
-        pat = _pattern_from_pretty(aln.format("", M))
-        self.assertIn(":", pat)
-        self.assertNotIn("-", pat)
+        aln = aligner.align("GATTACAT", "GATYACAC")[0]
+        pat = _pattern_from_pretty(aln.format("", scoring=M))
+        self.assertEqual(pat, "|||:|||.")
 
     def test_blastn_like_has_no_colon_only_pipes_for_identities(self):
         """In a BLASTN-like +1/-1 matrix, mismatches are always negative -> no ':' expected."""
@@ -72,21 +71,20 @@ class TestFormatMatrix(unittest.TestCase):
         aligner = PairwiseAligner()
         aligner.open_gap_score = -1
         aligner.extend_gap_score = -0.5
-        aln = next(iter(aligner.align("GATTACAT", "GATYACAC")))
-        pat = _pattern_from_pretty(aln.format("", M))
-        self.assertNotIn(":", pat)
-        self.assertIn("|", pat)
+        aln = aligner.align("GATTACAT", "GATYACAC")[0]
+        pat = _pattern_from_pretty(aln.format("", scoring=M))
+        self.assertEqual(pat, "|||.|||.")
 
     def test_positive_mismatch_colon_when_passing_aligner_object(self):
         """Passing the aligner object with a substitution matrix should also yield ':' for positive mismatches."""
         M = load("NUC.4.4")
         aligner = PairwiseAligner()
         aligner.substitution_matrix = M
-        aligner.open_gap_score = -1
-        aligner.extend_gap_score = -0.5
-        aln = next(iter(aligner.align("GATTACAT", "GATYACAC")))
+        aligner.open_gap_score = -10
+        aligner.extend_gap_score = -2
+        aln = aligner.align("GATTACAT", "GATYACAC")[0]
         pat = _pattern_from_pretty(aln.format("", aligner))
-        self.assertIn(":", pat)
+        self.assertEqual(pat, "|||:|||.")
 
     def test_lowercase_letters_are_case_insensitive_for_matrix_lookup(self):
         """Matrix lookup should be case-insensitive (e.g., 't' vs 'y' behaves like 'T' vs 'Y')."""
@@ -94,8 +92,8 @@ class TestFormatMatrix(unittest.TestCase):
         aligner = PairwiseAligner()
         aligner.open_gap_score = -10
         aligner.extend_gap_score = -2
-        aln = next(iter(aligner.align("t", "y")))
-        pat = _pattern_from_pretty(aln.format("", M))
+        aln = aligner.align("t", "y")[0]
+        pat = _pattern_from_pretty(aln.format("", scoring=M))
         self.assertEqual(pat, ":")
 
     def test_negative_mismatch_dot_with_blastn_like_matrix(self):
@@ -104,8 +102,8 @@ class TestFormatMatrix(unittest.TestCase):
         aligner = PairwiseAligner()
         aligner.open_gap_score = -10
         aligner.extend_gap_score = -2
-        aln = next(iter(aligner.align("A", "C")))
-        pat = _pattern_from_pretty(aln.format("", M))
+        aln = aligner.align("A", "C")[0]
+        pat = _pattern_from_pretty(aln.format("", scoring=M))
         self.assertEqual(pat, ".")
 
     def test_gap_is_dash_in_pattern(self):
@@ -114,25 +112,22 @@ class TestFormatMatrix(unittest.TestCase):
         aligner = PairwiseAligner()
         aligner.open_gap_score = -1
         aligner.extend_gap_score = -0.5
-        aln = next(iter(aligner.align("AC", "AGC")))
-        pat = _pattern_from_pretty(aln.format("", M))
-        self.assertIn("-", pat)
+        aln = aligner.align("AC", "AGC")[0]
+        pat = _pattern_from_pretty(aln.format("", scoring=M))
+        self.assertEqual(pat, "|-|")
 
     def test_mixed_block_contains_expected_symbols(self):
         """Construct an alignment that produces all symbols ('|', ':', '.', '-') at least once in the pattern."""
         M = load("NUC.4.4")
         aligner = PairwiseAligner()
         aligner.substitution_matrix = M
-        aligner.open_gap_score = -1
-        aligner.extend_gap_score = -0.5
+        aligner.open_gap_score = -10
+        aligner.extend_gap_score = -2
         seq1 = "TTTG"
         seq2 = "TYGG"
-        aln = next(iter(aligner.align(seq1, seq2)))
-        pat = _pattern_from_pretty(aln.format("", M))
-        needed = set("|:-")
-        self.assertTrue(
-            needed.issubset(set(pat)), f"pattern missing some of {needed}, got: {pat}"
-        )
+        aln = aligner.align(seq1, seq2)[0]
+        pat = _pattern_from_pretty(aln.format("", scoring=M))
+        self.assertEqual(pat, "|:.|")
 
 
 if __name__ == "__main__":
