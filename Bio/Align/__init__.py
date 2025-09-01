@@ -2176,7 +2176,7 @@ class Alignment:
         """
         return self.format(format_spec)
 
-    def format(self, fmt="", argument=None, *args, **kwargs):
+    def format(self, fmt="", *args, **kwargs):
         """Return the alignment as a string in the specified file format.
 
         Arguments:
@@ -2184,7 +2184,7 @@ class Alignment:
                        create a human-readable representation of the alignment,
                        or any of the alignment file formats supported by
                        `Bio.Align` (some have not yet been implemented).
-         - argument  - Optional; default=None
+         - scoring  - Optional keyword-only parameter; default=None.
                        If provided, can be:
 
                      - A substitution matrix (typically from the
@@ -2194,6 +2194,7 @@ class Alignment:
 
                      - A PairwiseAligner object, in which case its substitution
                          matrix and settings are used for determining positive matches.
+
         All other arguments are passed to the format-specific writer functions:
          - mask      - PSL format only. Specify if repeat regions in the target
                        sequence are masked and should be reported in the
@@ -2211,14 +2212,21 @@ class Alignment:
                        the alignment and include it in the output. If False
                        (default), do not include the MD tag in the output.
         """
+        scoring = kwargs.pop("scoring", None)
         substitution_matrix = None
-        writer_argument = None
-        if isinstance(argument, PairwiseAligner):
-            substitution_matrix = argument.substitution_matrix
-        elif isinstance(argument, (np.ndarray, substitution_matrices.Array)):
-            substitution_matrix = argument
-        else:
-            writer_argument = argument
+        if scoring is None and args:
+            first = args[0]
+            if isinstance(first, PairwiseAligner):
+                substitution_matrix = first.substitution_matrix
+                args = args[1:]
+            elif isinstance(first, (np.ndarray, substitution_matrices.Array)):
+                substitution_matrix = first
+                args = args[1:]
+        if substitution_matrix is None and scoring is not None:
+            if isinstance(scoring, PairwiseAligner):
+                substitution_matrix = scoring.substitution_matrix
+            elif isinstance(scoring, (np.ndarray, substitution_matrices.Array)):
+                substitution_matrix = scoring
         if fmt == "":
             return self._format_pretty(substitution_matrix)
         module = _load(fmt)
@@ -2230,10 +2238,6 @@ class Alignment:
             raise ValueError(
                 f"Formatting alignments has not yet been implemented for the {fmt} format"
             ) from None
-        if writer_argument is None:
-            writer = module.AlignmentWriter(None, *args, **kwargs)
-        else:
-            writer = module.AlignmentWriter(None, writer_argument, *args, **kwargs)
         return writer.format_alignment(self)
 
     def _format_pretty(self, matrix=None):
@@ -3598,10 +3602,10 @@ class Alignment:
                     start1, start2 = end1, end2
         return m
 
-    def counts(self, argument=None):
+    def counts(self, scoring=None):
         """Count the number of identities, mismatches, and gaps of an alignment.
 
-        This method takes a single optional argument, which can be either None
+        This method takes a single optional argument named scoring, which can be either None
         (default), a substitution matrix, a wildcard character, or a pairwise
         aligner object:
 
@@ -3685,7 +3689,7 @@ class Alignment:
                                         side of the alignment;
          - open_right_deletions       - the number of deletion gaps opened on the right
                                         side of the alignment;
-         - open_internal_insertions   - the number of insertion gaps opaned in the
+         - open_internal_insertions   - the number of insertion gaps opened in the
                                         interior of the alignment;
          - open_internal_deletions    - the number of deletion gaps opened in the
                                         interior of the alignment;
@@ -3725,15 +3729,15 @@ class Alignment:
         aligner = None
         wildcard = None
         substitution_matrix = None
-        if isinstance(argument, PairwiseAligner):
-            aligner = argument
+        if isinstance(scoring, PairwiseAligner):
+            aligner = scoring
             substitution_matrix = aligner.substitution_matrix
-        elif isinstance(argument, str):
-            wildcard = argument
-        elif isinstance(argument, (np.ndarray, substitution_matrices.Array)):
-            substitution_matrix = argument
-        elif argument is not None:
-            raise ValueError(f"unexpected argument {argument!r}")
+        elif isinstance(scoring, str):
+            wildcard = scoring
+        elif isinstance(scoring, (np.ndarray, substitution_matrices.Array)):
+            substitution_matrix = scoring
+        elif scoring is not None:
+            raise ValueError(f"unexpected argument {scoring!r}")
         if substitution_matrix is None:
             alphabet = []
         codec = "utf-32-le" if sys.byteorder == "little" else "utf-32-be"
