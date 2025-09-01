@@ -1016,6 +1016,61 @@ class MultipleSeqAlignment:
 
         Returns:
             A MultipleSeqAlignment object containing the combined sequences.
+
+        Raises:
+            ValueError: If no pairwise alignments are provided, if any alignment does not have exactly two sequences,
+                        or if the reference sequences do not match across all alignments.
+        Example 1: Basic Usage with Strings
+            >>> from Bio.Seq import Seq
+            >>> from Bio.SeqRecord import SeqRecord
+            >>> from Bio.Align import PairwiseAligner, MultipleSeqAlignment
+
+            Consider the following reference and sequences:
+            >>> reference_str = "ACGT"
+            >>> seq1_str = "ACGGT"
+            >>> seq2_str = "AT"
+
+            To produce pairwise alignments:
+            >>> aligner = PairwiseAligner()
+            >>> pwa1 = next(aligner.align(reference_str, seq1_str))
+            >>> pwa2 = next(aligner.align(reference_str, seq2_str))
+
+            The pairwise alignments would look like
+            >>> print(f"Reference: {pwa1[0]}")
+            >>> print(f"Seq1:      {pwa1[1]}")
+            Reference: ACG-T
+            Seq1:      ACGGT
+            >>> print(f"Reference: {pwa2[0]}")
+            >>> print(f"Seq2:      {pwa2[1]}")
+            Reference: ACGT
+            Seq2:      A--T
+
+            Now, we can combine these pairwise alignments into a multiple sequence alignment:
+            >>> msa = MultipleSeqAlignment.from_pairwise_alignments([pwa1, pwa2])
+            >>> print(msa)
+            Alignment with 3 rows and 5 columns
+            ACG-T <unknown id>
+            ACGGT <unknown id>
+            A--T <unknown id>
+
+        Example 2: Using SeqRecord Objects with Metadata
+            Consider the following reference and sequences with metadata:
+            >>> reference_seqr = SeqRecord(Seq("ACGT"), id="reference", description="desc 1")
+            >>> seq1 = SeqRecord(Seq("ACGGT"), id="seq1", description="desc 2")
+            >>> seq2 = SeqRecord(Seq("AT"), id="seq2", description="desc 3")
+
+            To produce pairwise alignments:
+            >>> aligner = PairwiseAligner()
+            >>> pwa1 = next(aligner.align(reference_seqr, seq1))
+            >>> pwa2 = next(aligner.align(reference_seqr, seq2))
+
+            The msa retainss the metadata from the original SeqRecord objects:
+            >>> msa = MultipleSeqAlignment.from_pairwise_alignments([pwa1, pwa2])
+            >>> print(msa)
+            Alignment with 3 rows and 5 columns
+            ACG-T reference desc 1
+            ACGGT seq1 desc 2
+            A--T seq2 desc 3
         """
 
         if len(pwas) == 0:
