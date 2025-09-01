@@ -14,6 +14,7 @@ from Bio.PDB.AFDB import AFDBList, BASE_URL
 # Mock response for a successful download
 class MockResponse:
     def __init__(self, content, status_code):
+        """Mock a requests.get response."""
         self.content = content
         self.status_code = status_code
 
