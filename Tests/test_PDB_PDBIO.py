@@ -26,7 +26,8 @@ from Bio.PDB import Residue
 from Bio.PDB import Select
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 from Bio.PDB.PDBExceptions import PDBIOException
-from Bio.PDB.PDBIO import _MAX_B_FACTOR, PDBIOWarning
+from Bio.PDB.PDBExceptions import PDBIOWarning
+from Bio.PDB.PDBIO import _MAX_B_FACTOR
 
 
 class WriteTest(unittest.TestCase):
