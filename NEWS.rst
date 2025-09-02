@@ -28,6 +28,8 @@ on the majority of uses, as b-factor values are generally small (less than 100).
 999_999 are now clamped. The justification for this is the rise in the b-factor field
 being used for additional metadata, typically from computational tools.
 
+``Bio.PDB.PDBIO`` will now raise module specific warnings: ``Bio.PDB.PDBExceptions.PDBIOWarning``.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
