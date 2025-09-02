@@ -35,17 +35,15 @@ def _format_b_factor(value: float) -> str:
     """
     _bfactor_str = ""
     if value < _MAX_B_FACTOR_2DP:
-        _rounded = round(value, 2)
-        if len(f"{_rounded:.2f}") > 6:
-            _bfactor_str = f"{_rounded:6.1f}"
+        if len(f"{value:.2f}") > 6:
+            _bfactor_str = f"{value:6.1f}"
         else:
-            _bfactor_str = f"{_rounded:6.2f}"
+            _bfactor_str = f"{value:6.2f}"
     elif value < _MAX_B_FACTOR_1DP:
-        _rounded = round(value, 1)
-        if len(f"{_rounded:.1f}") > 6:
-            _bfactor_str = f"{int(_rounded):6d}"
+        if len(f"{value:.1f}") > 6:
+            _bfactor_str = f"{value:6.0f}"
         else:
-            _bfactor_str = f"{_rounded:6.1f}"
+            _bfactor_str = f"{value:6.1f}"
     elif value < _MAX_B_FACTOR:
         _bfactor_str = f"{int(value):6d}"
     else:
