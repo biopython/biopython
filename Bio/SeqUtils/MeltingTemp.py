@@ -162,7 +162,8 @@ from Bio import SeqUtils
 
 # Try to import accelerated C implementation
 try:
-    from Bio.SeqUtils import _meltingtemp_exact
+    from Bio.SeqUtils import _meltingtemp_exact  # type: ignore[attr-defined]
+
     _USE_ACCELERATED = True
 except ImportError:
     _USE_ACCELERATED = False
@@ -926,16 +927,16 @@ def Tm_NN(
     # Try to use accelerated implementation for simple cases
     # Only accelerate when using default DNA_NN3 table and no mismatches/dangling ends
     can_accelerate = (
-        _USE_ACCELERATED and 
-        not c_seq and  # No complementary sequence (no mismatches)
-        shift == 0 and  # No shift (no dangling ends)
-        nn_table is None and  # Using default DNA_NN3
-        tmm_table is None and  # No terminal mismatches
-        imm_table is None and  # No internal mismatches
-        de_table is None and  # No dangling ends
-        check  # We handle checking in C
+        _USE_ACCELERATED
+        and not c_seq  # No complementary sequence (no mismatches)
+        and shift == 0  # No shift (no dangling ends)
+        and nn_table is None  # Using default DNA_NN3
+        and tmm_table is None  # No terminal mismatches
+        and imm_table is None  # No internal mismatches
+        and de_table is None  # No dangling ends
+        and check  # We handle checking in C
     )
-    
+
     if can_accelerate:
         try:
             seq_str = str(seq)
@@ -943,13 +944,21 @@ def Tm_NN(
                 seq_str = _check(seq_str, "Tm_NN")
             # Use accelerated C implementation
             return _meltingtemp_exact.tm_nn_exact(
-                seq_str, dnac1=dnac1, dnac2=dnac2, selfcomp=selfcomp,
-                Na=Na, K=K, Tris=Tris, Mg=Mg, dNTPs=dNTPs, saltcorr=saltcorr
+                seq_str,
+                dnac1=dnac1,
+                dnac2=dnac2,
+                selfcomp=selfcomp,
+                Na=Na,
+                K=K,
+                Tris=Tris,
+                Mg=Mg,
+                dNTPs=dNTPs,
+                saltcorr=saltcorr,
             )
         except Exception:
             # Fall back to Python implementation silently
             pass
-    
+
     # Set defaults
     if not nn_table:
         nn_table = DNA_NN3

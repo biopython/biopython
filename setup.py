@@ -209,8 +209,11 @@ EXTENSIONS = [
     Extension("Bio.PDB.kdtrees", ["Bio/PDB/kdtrees.c"]),
     Extension("Bio.PDB._bcif_helper", ["Bio/PDB/bcifhelpermodule.c"]),
     Extension("Bio.SeqIO._twoBitIO", ["Bio/SeqIO/_twoBitIO.c"]),
-    Extension("Bio.SeqUtils._meltingtemp_exact", ["Bio/SeqUtils/_meltingtemp_exact.c"],
-              extra_compile_args=["-O3", "-ffast-math"]),
+    Extension(
+        "Bio.SeqUtils._meltingtemp_exact",
+        ["Bio/SeqUtils/_meltingtemp_exact.c"],
+        extra_compile_args=["-O3", "-ffast-math"],
+    ),
 ]
 
 
