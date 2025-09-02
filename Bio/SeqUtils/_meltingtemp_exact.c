@@ -215,6 +215,12 @@ static double calculate_tm_nn_exact(const char* seq, size_t len,
     double corr = 0.0;
     double Mon = Na + K + Tris / 2.0;  /* mM */
     
+    /* Sodium-equivalent concentration (von Ahsen et al. 2001) */
+    /* When Mg2+ is present and dNTPs < Mg, add correction term */
+    if ((K > 0 || Mg > 0 || Tris > 0 || dNTPs > 0) && saltcorr != 7 && dNTPs < Mg) {
+        Mon += 120.0 * sqrt(Mg - dNTPs);
+    }
+    
     if (saltcorr == 5 && Mon > 0) {
         /* Method 5: Correction for deltaS: 0.368 x (N-1) x ln[Na+] */
         /* Mon is in mM, need to convert to M */
@@ -226,6 +232,7 @@ static double calculate_tm_nn_exact(const char* seq, size_t len,
     double melting_temp = (1000.0 * delta_h) / (delta_s + R * log(k)) - 273.15;
     
     /* Apply other salt correction methods */
+    /* Methods 1-4 and 6 use sodium-equivalent concentration */
     if (saltcorr >= 1 && saltcorr <= 4 && Mon > 0) {
         double mon_molar = Mon / 1000.0;
         if (saltcorr == 1) {
@@ -238,6 +245,60 @@ static double calculate_tm_nn_exact(const char* seq, size_t len,
             corr = 11.7 * log10(mon_molar);
         }
         melting_temp += corr;
+    } else if (saltcorr == 6 && Mon > 0) {
+        /* Method 6: Owczarzy et al. 2004 */
+        double mon_molar = Mon / 1000.0;
+        double gc_frac = (double)gc_count / len;
+        corr = ((4.29 * gc_frac - 3.95) * 1e-5 * log(mon_molar)) + 
+               (9.40e-6 * log(mon_molar) * log(mon_molar));
+        /* For method 6, correction is applied as: Tm = 1/(1/Tm + corr) */
+        melting_temp = 1.0 / (1.0 / (melting_temp + 273.15) + corr) - 273.15;
+    } else if (saltcorr == 7) {
+        /* Method 7: Owczarzy et al. 2008 - complex Mg2+ correction */
+        double a = 3.92, b = -0.911, c = 6.26, d = 1.42;
+        double e = -48.2, f = 52.5, g = 8.31;
+        
+        double mon_molar = Mon / 1000.0;
+        double mg_molar = Mg / 1000.0;
+        
+        if (dNTPs > 0) {
+            /* Adjust Mg2+ for dNTP binding */
+            double dntps = dNTPs / 1000.0;
+            double ka = 3e4;  /* Dissociation constant for Mg:dNTP */
+            /* Free Mg2+ calculation */
+            double discriminant = (ka * dntps - ka * mg_molar + 1.0);
+            discriminant = discriminant * discriminant + 4.0 * ka * mg_molar;
+            mg_molar = (-(ka * dntps - ka * mg_molar + 1.0) + sqrt(discriminant)) / (2.0 * ka);
+        }
+        
+        if (mon_molar > 0) {
+            double R = sqrt(mg_molar) / mon_molar;
+            double gc_frac = (double)gc_count / len;
+            
+            if (R < 0.22) {
+                /* Monovalent salt dominant - Python returns early here */
+                corr = (4.29 * gc_frac - 3.95) * 1e-5 * log(mon_molar) + 
+                       9.40e-6 * log(mon_molar) * log(mon_molar);
+                /* For method 7, correction is applied as: Tm = 1/(1/Tm + corr) */
+                melting_temp = 1.0 / (1.0 / (melting_temp + 273.15) + corr) - 273.15;
+                return melting_temp;
+            } else if (R < 6.0) {
+                /* Mixed salt conditions - recalculate a, d, g */
+                a = 3.92 * (0.843 - 0.352 * sqrt(mon_molar) * log(mon_molar));
+                d = 1.42 * (1.279 - 4.03e-3 * log(mon_molar) - 8.03e-3 * log(mon_molar) * log(mon_molar));
+                g = 8.31 * (0.486 - 0.258 * log(mon_molar) + 5.25e-3 * log(mon_molar) * log(mon_molar) * log(mon_molar));
+            }
+            /* Otherwise a, b, c, d, e, f, g remain as initialized */
+        }
+        
+        /* Final calculation for non-early-return cases */
+        double gc_frac = (double)gc_count / len;
+        corr = (a + b * log(mg_molar) + 
+                gc_frac * (c + d * log(mg_molar)) + 
+                (1.0 / (2.0 * (len - 1))) * (e + f * log(mg_molar) + g * log(mg_molar) * log(mg_molar))) * 1e-5;
+        
+        /* For method 7, correction is applied as: Tm = 1/(1/Tm + corr) */
+        melting_temp = 1.0 / (1.0 / (melting_temp + 273.15) + corr) - 273.15;
     }
     
     return melting_temp;
