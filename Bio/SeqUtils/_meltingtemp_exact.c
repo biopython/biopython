@@ -114,7 +114,7 @@ static double calculate_tm_nn_exact(const char* seq, size_t len,
     double delta_s = 0.0;
     
     /* Generate complement sequence */
-    char* complement = malloc(len + 1);
+    char* complement = (char*)PyMem_Malloc(len + 1);
     if (!complement) return -999.0;
     
     for (size_t i = 0; i < len; i++) {
@@ -189,7 +189,7 @@ static double calculate_tm_nn_exact(const char* seq, size_t len,
         }
     }
     
-    free(complement);
+    PyMem_Free(complement);
     
     /* Check for self-complementary */
     if (selfcomp || is_self_complementary(seq, len)) {
