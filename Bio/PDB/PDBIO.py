@@ -8,14 +8,12 @@
 import os
 import warnings
 
-from Bio import BiopythonWarning
 from Bio.Data.IUPACData import atom_weights
-from Bio.PDB.PDBExceptions import PDBIOException
+from Bio.PDB.PDBExceptions import PDBIOException, PDBIOWarning
 from Bio.PDB.StructureBuilder import StructureBuilder
 
-_ATOM_FORMAT_STRING = (
-    "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%s%6.2f      %4s%2s%2s\n"
-)
+_ATOM_FORMAT_STRING = "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%s%s     %4s%2s%2s\n"
+
 _PQR_ATOM_FORMAT_STRING = (
     "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f %7s  %6s      %2s\n"
 )
@@ -23,6 +21,42 @@ _PQR_ATOM_FORMAT_STRING = (
 _TER_FORMAT_STRING = (
     "TER   %5i      %3s %c%4i%c                                                      \n"
 )
+
+_MAX_B_FACTOR_2DP = 1_000
+_MAX_B_FACTOR_1DP = 10_000
+_MAX_B_FACTOR = 999_999
+
+
+def _format_b_factor(value: float) -> str:
+    """Returns the b-factor value as a formatted string
+
+    Formats the b-factor value to fit the wwPDB specification of 6 characters
+    maximum, otherwise truncating to 6 characters if necessary.
+    """
+    _bfactor_str = ""
+    if value < _MAX_B_FACTOR_2DP:
+        if len(f"{value:.2f}") > 6:
+            _bfactor_str = f"{value:6.1f}"
+        else:
+            _bfactor_str = f"{value:6.2f}"
+    elif value < _MAX_B_FACTOR_1DP:
+        if len(f"{value:.1f}") > 6:
+            _bfactor_str = f"{value:6.0f}"
+        else:
+            _bfactor_str = f"{value:6.1f}"
+    elif value < _MAX_B_FACTOR:
+        _bfactor_str = f"{int(value):6d}"
+    else:
+        warnings.warn(
+            f"Truncated bfactor {value!r} to {_MAX_B_FACTOR} to fit wwPDB spec."
+            " Consider using mmCIF instead!",
+            PDBIOWarning,
+        )
+        _bfactor_str = f"{_MAX_B_FACTOR:6d}"
+
+    assert len(_bfactor_str) <= 6
+
+    return _bfactor_str
 
 
 class Select:
@@ -214,12 +248,14 @@ class PDBIO(StructureIO):
                     occupancy = " " * 6
                     warnings.warn(
                         f"Missing occupancy in atom {atom.full_id!r} written as blank",
-                        BiopythonWarning,
+                        PDBIOWarning,
                     )
                 else:
                     raise ValueError(
                         f"Invalid occupancy value: {atom.occupancy!r}"
                     ) from None
+
+            bfactor = _format_b_factor(bfactor)
 
             args = (
                 record_type,
@@ -239,6 +275,7 @@ class PDBIO(StructureIO):
                 element,
                 charge,
             )
+
             return _ATOM_FORMAT_STRING % args
 
         # Write PQR format line
@@ -250,7 +287,7 @@ class PDBIO(StructureIO):
                     pqr_charge = " " * 7
                     warnings.warn(
                         f"Missing PQR charge in atom {atom.full_id} written as blank",
-                        BiopythonWarning,
+                        PDBIOWarning,
                     )
                 else:
                     raise ValueError(
@@ -264,7 +301,7 @@ class PDBIO(StructureIO):
                     radius = " " * 6
                     warnings.warn(
                         f"Missing radius in atom {atom.full_id} written as blank",
-                        BiopythonWarning,
+                        PDBIOWarning,
                     )
                 else:
                     raise ValueError(f"Invalid radius value: {atom.radius}") from None

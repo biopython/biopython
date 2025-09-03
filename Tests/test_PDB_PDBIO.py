@@ -26,6 +26,8 @@ from Bio.PDB import Residue
 from Bio.PDB import Select
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 from Bio.PDB.PDBExceptions import PDBIOException
+from Bio.PDB.PDBExceptions import PDBIOWarning
+from Bio.PDB.PDBIO import _MAX_B_FACTOR
 
 
 class WriteTest(unittest.TestCase):
@@ -380,6 +382,42 @@ class WriteTest(unittest.TestCase):
         with self.assertRaises(PDBIOException):
             self.io.save(filename)
         self.assertFalse(os.path.exists(filename))
+
+    def test_pdbio_write_high_b_factor(self):
+        def check_pdb(filename, expected_bfactor):
+            struct = self.parser.get_structure("high_b", filename)
+            atom = next(struct.get_atoms())
+            self.assertEqual(atom.bfactor, expected_bfactor)
+
+        def test_b_factor(
+            b_factor: float, expected_bfactor: float, assert_warn: bool = False
+        ) -> None:
+            struct = self.structure
+            atom = next(struct.get_atoms())
+            atom.bfactor = b_factor
+            self.io.set_structure(struct)
+            filenumber, filename = tempfile.mkstemp()
+            os.close(filenumber)
+            if assert_warn:
+                with self.assertWarns(PDBIOWarning):
+                    self.io.save(filename)
+            else:
+                self.io.save(filename)
+
+            try:
+                check_pdb(filename, expected_bfactor)
+            finally:
+                os.remove(filename)
+
+        test_b_factor(99.999999, 100)
+        test_b_factor(999.99999, 1000)
+        test_b_factor(9999.9999, 10000)
+
+        test_b_factor(424.4242, 424.42)
+        test_b_factor(4242.4242, 4242.4)
+        test_b_factor(42424.4242, 42424)
+
+        test_b_factor(_MAX_B_FACTOR + 10, _MAX_B_FACTOR, assert_warn=True)
 
     # Test revert_write
     def test_pdbio_revert_write_on_filename(self):
