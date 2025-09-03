@@ -1001,138 +1001,6 @@ class MultipleSeqAlignment:
         alignment.column_annotations = self.column_annotations
         return alignment
 
-    @classmethod
-    def from_pairwise_alignments(
-        cls, pwas: Iterable["Alignment"]
-    ) -> "MultipleSeqAlignment":
-        """Create a MultipleSeqAlignment from a list of pairwise alignments.
-
-        This method combines multiple pairwise alignments into
-        a single multiple sequence alignment. All alignments must have exactly two sequences and must share the same
-        reference sequence (ignoring gaps).
-
-        Args:
-            pwas: An iterable of Alignment objects representing pairwise alignments.
-
-        Returns:
-            A MultipleSeqAlignment object containing the combined sequences.
-
-        Raises:
-            ValueError: If no pairwise alignments are provided, if any alignment does not have exactly two sequences,
-                        or if the reference sequences do not match across all alignments.
-        Example 1: Basic Usage with Strings
-            >>> from Bio.Seq import Seq
-            >>> from Bio.SeqRecord import SeqRecord
-            >>> from Bio.Align import PairwiseAligner, MultipleSeqAlignment
-
-            Consider the following reference and sequences:
-            >>> reference_str = "ACGT"
-            >>> seq1_str = "ACGGT"
-            >>> seq2_str = "AT"
-
-            To produce pairwise alignments:
-            >>> aligner = PairwiseAligner()
-            >>> pwa1 = next(aligner.align(reference_str, seq1_str))
-            >>> pwa2 = next(aligner.align(reference_str, seq2_str))
-
-            The pairwise alignments would look like
-            >>> print(f"Reference: {pwa1[0]}")
-            >>> print(f"Seq1:      {pwa1[1]}")
-            Reference: ACG-T
-            Seq1:      ACGGT
-            >>> print(f"Reference: {pwa2[0]}")
-            >>> print(f"Seq2:      {pwa2[1]}")
-            Reference: ACGT
-            Seq2:      A--T
-
-            Now, we can combine these pairwise alignments into a multiple sequence alignment:
-            >>> msa = MultipleSeqAlignment.from_pairwise_alignments([pwa1, pwa2])
-            >>> print(msa)
-            Alignment with 3 rows and 5 columns
-            ACG-T <unknown id>
-            ACGGT <unknown id>
-            A--T <unknown id>
-
-        Example 2: Using SeqRecord Objects with Metadata
-            Consider the following reference and sequences with metadata:
-            >>> reference_seqr = SeqRecord(Seq("ACGT"), id="reference", description="desc 1")
-            >>> seq1 = SeqRecord(Seq("ACGGT"), id="seq1", description="desc 2")
-            >>> seq2 = SeqRecord(Seq("AT"), id="seq2", description="desc 3")
-
-            To produce pairwise alignments:
-            >>> aligner = PairwiseAligner()
-            >>> pwa1 = next(aligner.align(reference_seqr, seq1))
-            >>> pwa2 = next(aligner.align(reference_seqr, seq2))
-
-            The msa retainss the metadata from the original SeqRecord objects:
-            >>> msa = MultipleSeqAlignment.from_pairwise_alignments([pwa1, pwa2])
-            >>> print(msa)
-            Alignment with 3 rows and 5 columns
-            ACG-T reference desc 1
-            ACGGT seq1 desc 2
-            A--T seq2 desc 3
-        """
-
-        if len(pwas) == 0:
-            raise ValueError("No pairwise alignments provided.")
-
-        # Extract aligned strings and normalize case
-        original_records = []
-        string_seqs = []
-        for pwa in pwas:
-            if len(pwa.sequences) != 2:
-                raise ValueError("Expected exactly 2 sequences per alignment.")
-            original_records.extend(pwa.sequences)
-            string_seqs.extend([seq_str.upper() for seq_str in pwa])
-
-        # Validate that all pairwise alignments share the same ungapped reference
-        ungapped_templates = {t.replace("-", "") for t in string_seqs[::2]}
-        if len(ungapped_templates) != 1:
-            raise ValueError("All reference sequences must match (excluding gaps).")
-
-        # Group in pairs
-        paired_strings = [string_seqs[i : i + 2] for i in range(0, len(string_seqs), 2)]
-
-        # Gap synchronzation across templates
-        i = 0
-        while any(len(template) > i for template, _ in paired_strings):
-            if any(template[i] == "-" for template, _ in paired_strings):
-                for j, (template, sequence) in enumerate(paired_strings):
-
-                    # If the template has no gap at position i,
-                    # Insert '-' in both template and sequence at position i
-                    # to maintain alignment with other templates
-                    if len(template) > i and template[i] != "-":
-                        paired_strings[j][0] = template[:i] + "-" + template[i:]
-                        paired_strings[j][1] = sequence[:i] + "-" + sequence[i:]
-
-            i += 1
-
-        # Build output strings
-        output_string_seqs = [paired_strings[0][0]] + [seq for _, seq in paired_strings]
-
-        # Fill the potential gap at the end
-        max_lenth = max(len(seq) for seq in output_string_seqs)
-        output_string_seqs = [
-            seq + "-" * (max_lenth - len(seq)) for seq in output_string_seqs
-        ]
-
-        # Restore id and description, if they existed
-        records = []
-        for i, original_seq in enumerate(original_records[:1] + original_records[1::2]):
-            if isinstance(original_seq, SeqRecord):
-                new_record = SeqRecord(
-                    Seq(output_string_seqs[i]),
-                    id=original_seq.id,
-                    description=original_seq.description,
-                    dbxrefs=original_seq.dbxrefs,
-                )
-            else:
-                id_value = "reference" if i == 0 else f"seq_{i}"
-                new_record = SeqRecord(Seq(output_string_seqs[i]), id=id_value)
-            records.append(new_record)
-        return cls(records)
-
 
 class Alignment:
     """Represents a sequence alignment.
@@ -1201,6 +1069,155 @@ class Alignment:
         coordinates = np.empty(shape, np.intp)
         parser.fill(coordinates)
         return sequences, coordinates
+
+    @classmethod
+    def from_pairwise_alignments(
+        cls, pwas: Iterable["Alignment"]
+    ) -> "Alignment":
+        """Create an Alignment from a list of pairwise alignments.
+
+        This method combines multiple pairwise alignments into
+        a single multiple sequence alignment. All alignments must have exactly two sequences and must share the same
+        reference sequence (ignoring gaps).
+
+        Args:
+            pwas: An iterable of Alignment objects representing pairwise alignments.
+
+        Returns:
+            An Alignment object representing a multiple sequence alignment.
+
+        Raises:
+            ValueError: If no pairwise alignments are provided, if any alignment does not have exactly two sequences,
+                        or if the reference sequences do not match across all alignments.
+        Example 1: Basic Usage with Strings
+            >>> from Bio.Seq import Seq
+            >>> from Bio.SeqRecord import SeqRecord
+            >>> from Bio.Align import PairwiseAligner, Alignment
+
+            Consider the following reference and sequences:
+            >>> reference_str = "ACGT"
+            >>> seq1_str = "ACGGT"
+            >>> seq2_str = "AT"
+
+            To produce pairwise alignments:
+            >>> aligner = PairwiseAligner()
+            >>> pwa1 = next(aligner.align(reference_str, seq1_str))
+            >>> pwa2 = next(aligner.align(reference_str, seq2_str))
+
+            The pairwise alignments would look like
+            >>> print(f"Reference: {pwa1[0]}")
+            >>> print(f"Seq1:      {pwa1[1]}")
+            Reference: ACG-T
+            Seq1:      ACGGT
+            >>> print(f"Reference: {pwa2[0]}")
+            >>> print(f"Seq2:      {pwa2[1]}")
+            Reference: ACGT
+            Seq2:      A--T
+
+            Now, we can combine these pairwise alignments into a multiple sequence alignment:
+            >>> msa = Alignment.from_pairwise_alignments([pwa1, pwa2])
+            >>> print(msa)
+            Alignment with 3 rows and 5 columns
+            ACG-T <unknown id>
+            ACGGT <unknown id>
+            A--T <unknown id>
+
+        Example 2: Using SeqRecord Objects with Metadata
+            Consider the following reference and sequences with metadata:
+            >>> reference_seqr = SeqRecord(Seq("ACGT"), id="reference", description="desc 1")
+            >>> seq1 = SeqRecord(Seq("ACGGT"), id="seq1", description="desc 2")
+            >>> seq2 = SeqRecord(Seq("AT"), id="seq2", description="desc 3")
+
+            To produce pairwise alignments:
+            >>> aligner = PairwiseAligner()
+            >>> pwa1 = next(aligner.align(reference_seqr, seq1))
+            >>> pwa2 = next(aligner.align(reference_seqr, seq2))
+
+            The msa retainss the metadata from the original SeqRecord objects:
+            >>> msa = Alignment.from_pairwise_alignments([pwa1, pwa2])
+            >>> print(msa)
+            Alignment with 3 rows and 5 columns
+            ACG-T reference desc 1
+            ACGGT seq1 desc 2
+            A--T seq2 desc 3
+        """
+
+        if len(pwas) == 0:
+            raise ValueError("No pairwise alignments provided.")
+
+        # Extract aligned strings and normalize case
+        original_records = []
+        string_seqs = []
+        for pwa in pwas:
+            if len(pwa.sequences) != 2:
+                raise ValueError("Expected exactly 2 sequences per alignment.")
+            original_records.extend(pwa.sequences)
+            string_seqs.extend([seq_str.upper() for seq_str in pwa])
+
+        # Validate that all pairwise alignments share the same ungapped reference
+        ungapped_templates = {t.replace("-", "") for t in string_seqs[::2]}
+        if len(ungapped_templates) != 1:
+            raise ValueError("All reference sequences must match (excluding gaps).")
+
+        # Group in pairs
+        paired_strings = [string_seqs[i : i + 2] for i in range(0, len(string_seqs), 2)]
+
+        # Gap synchronzation across templates
+        i = 0
+        while any(len(template) > i for template, _ in paired_strings):
+            if any(template[i] == "-" for template, _ in paired_strings):
+                for j, (template, sequence) in enumerate(paired_strings):
+
+                    # If the template has no gap at position i,
+                    # Insert '-' in both template and sequence at position i
+                    # to maintain alignment with other templates
+                    if len(template) > i and template[i] != "-":
+                        paired_strings[j][0] = template[:i] + "-" + template[i:]
+                        paired_strings[j][1] = sequence[:i] + "-" + sequence[i:]
+
+            i += 1
+
+        # Build output strings
+        output_string_seqs = [paired_strings[0][0]] + [seq for _, seq in paired_strings]
+
+        # Fill the potential gap at the end
+        max_lenth = max(len(seq) for seq in output_string_seqs)
+        output_string_seqs = [
+            seq + "-" * (max_lenth - len(seq)) for seq in output_string_seqs
+        ]
+
+        # Build coordinates
+        coordinates = []
+        for seq in output_string_seqs:
+            coords = [0]
+            pos = 0
+            for char in seq:
+                if char != "-":
+                    pos += 1
+                coords.append(pos)
+            coordinates.append(coords)
+
+        coordinates = np.array(coordinates, np.intp)
+
+        # Extract ungapped sequences
+        ungapped_sequences = [seq.replace("-", "") for seq in output_string_seqs]
+
+        # Create records with ungapped sequences
+        records = []
+        for i, original_seq in enumerate(original_records[:1] + original_records[1::2]):
+            if isinstance(original_seq, SeqRecord):
+                new_record = SeqRecord(
+                    Seq(ungapped_sequences[i]),
+                    id=original_seq.id,
+                    description=original_seq.description,
+                    dbxrefs=original_seq.dbxrefs,
+                )
+            else:
+                id_value = "reference" if i == 0 else f"seq_{i}"
+                new_record = SeqRecord(Seq(output_string_seqs[i]), id=id_value)
+            records.append(new_record)
+
+        return cls(records, coordinates)
 
     def __init__(self, sequences, coordinates=None):
         """Initialize a new Alignment object.

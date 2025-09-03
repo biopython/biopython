@@ -919,7 +919,7 @@ EAS54_6_R         0 GTTGCTTCTGGCGTGGGTGGGGGGG 25
 class TestFromPairwiseAlignments(unittest.TestCase):
 
     def test_pwas_built_with_strings(self):
-        """Test that from_pairwise_alignments creates a MultipleSeqAlignment with correct sequnce count and alignment lengths."""
+        """Test that from_pairwise_alignments creates an Alignment with correct sequence count and alignment lengths."""
         aligner = PairwiseAligner()
 
         # Input sequences
@@ -932,26 +932,28 @@ class TestFromPairwiseAlignments(unittest.TestCase):
         pwa2 = next(aligner.align(reference_str, seq2_str))
 
         # Use the method being tested
-        msa = MultipleSeqAlignment.from_pairwise_alignments([pwa1, pwa2])
+        msa = Alignment.from_pairwise_alignments([pwa1, pwa2])
 
         # Check that the output is of correct type
-        self.assertIsInstance(msa, MultipleSeqAlignment)
+        self.assertIsInstance(msa, Alignment)
 
         # Check the number of sequences in the MSA
         self.assertEqual(len(msa), 3)
 
         # Validate that from_pairwise_alignments gives the right msa
-        self.assertEqual(
-            msa.alignment.format("fasta").strip().split("\n"),
-            [
-                ">reference <unknown description>",
-                "ACG-T",
-                ">seq_1 <unknown description>",
-                "ACGGT",
-                ">seq_2 <unknown description>",
-                "A---T",
-            ]
-        )
+        print("Printing MSA")
+        print(msa)
+        self.assertEqual(str(msa[0]), "ACG-T")
+        self.assertEqual(str(msa[1]), "ACGGT")
+        self.assertEqual(str(msa[2]), "A---T")
+
+        # Validate metadata
+        self.assertEqual(msa.sequences[0].id, "reference")
+        self.assertEqual(msa.sequences[1].id, "seq_1")
+        self.assertEqual(msa.sequences[2].id, "seq_2")
+        self.assertEqual(msa.sequences[0].description, "<unknown description>")
+        self.assertEqual(msa.sequences[1].description, "<unknown description>")
+        self.assertEqual(msa.sequences[2].description, "<unknown description>")
 
     def test_pwas_built_with_seqs(self):
         """Test that from_pairwise_alignments works with pairwise alignments built with Seq objects."""
@@ -967,26 +969,26 @@ class TestFromPairwiseAlignments(unittest.TestCase):
         pwa2 = next(aligner.align(reference_seq, seq2_seq))
 
         # Use the method being tested
-        msa = MultipleSeqAlignment.from_pairwise_alignments([pwa1, pwa2])
+        msa = Alignment.from_pairwise_alignments([pwa1, pwa2])
 
         # Check that the output is of correct type
-        self.assertIsInstance(msa, MultipleSeqAlignment)
+        self.assertIsInstance(msa, Alignment)
 
         # Validate that from_pairwise_alignments gives the right msa
-        self.assertEqual(
-            msa.alignment.format("fasta").strip().split("\n"),
-            [
-                ">reference <unknown description>",
-                "ACG-T",
-                ">seq_1 <unknown description>",
-                "ACGGT",
-                ">seq_2 <unknown description>",
-                "A---T",
-            ]
-        )
+        self.assertEqual(str(msa[0]), "ACG-T")
+        self.assertEqual(str(msa[1]), "ACGGT")
+        self.assertEqual(str(msa[2]), "A---T")
+
+        # Validate metadata
+        self.assertEqual(msa.sequences[0].id, "reference")
+        self.assertEqual(msa.sequences[1].id, "seq_1")
+        self.assertEqual(msa.sequences[2].id, "seq_2")
+        self.assertEqual(msa.sequences[0].description, "<unknown description>")
+        self.assertEqual(msa.sequences[1].description, "<unknown description>")
+        self.assertEqual(msa.sequences[2].description, "<unknown description>")
 
     def test_metadata_preservation(self):
-        """Test that sequence metadata (IDs and descriptions) are preserved in the MultipleSeqAlignment.
+        """Test that sequence metadata (IDs and descriptions) are preserved in the Alignment.
 
         Sequence metadata may exist if pairwise alignments are built with SeqRecords.
         This also tests that from_pairwise_alignments works with pairwise alignments built with SeqRecord objects.
@@ -1003,20 +1005,16 @@ class TestFromPairwiseAlignments(unittest.TestCase):
         pwa2 = next(aligner.align(reference_seqr, seq2_seqr))
 
         # Use the method being tested
-        msa = MultipleSeqAlignment.from_pairwise_alignments([pwa1, pwa2])
+        msa = Alignment.from_pairwise_alignments([pwa1, pwa2])
+        print("Printing MSA")
+        print(msa)
 
         # Check that id and description are retained
-        self.assertEqual(
-            msa.alignment.format("fasta").strip().split("\n"),
-            [
-                ">reference desc 1",
-                "ACG-T",
-                ">seq1 desc 2",
-                "ACGGT",
-                ">seq2 desc 3",
-                "A---T",
-            ]
-        )
+        self.assertEqual(msa.sequences[0].id, "reference")
+        self.assertEqual(msa.sequences[1].id, "seq1")
+        self.assertEqual(msa.sequences[2].id, "seq2")
+        self.assertEqual(msa.sequences[0].description, "desc 1")
+        self.assertEqual(msa.sequences[1].description, "desc 2")
 
     def test_mismatched_references(self):
         """Test that mismatched reference sequences raise a ValueError."""
@@ -1025,12 +1023,12 @@ class TestFromPairwiseAlignments(unittest.TestCase):
         pwa2 = next(aligner.align("ACCT", "AT"))
 
         with self.assertRaises(ValueError):
-            MultipleSeqAlignment.from_pairwise_alignments([pwa1, pwa2])
+            Alignment.from_pairwise_alignments([pwa1, pwa2])
 
     def test_empty_input(self):
         """Test that empty input raises a ValueError."""
         with self.assertRaises(ValueError):
-            MultipleSeqAlignment.from_pairwise_alignments([])
+            Alignment.from_pairwise_alignments([])
 
     def test_input_with_more_than_two_sequences(self):
         """Test that input with more than two sequences raises a ValueError"""
@@ -1040,7 +1038,7 @@ class TestFromPairwiseAlignments(unittest.TestCase):
         not_pairwsise_alignment = Alignment(["ACGT-", "ACGTT", "A---T"])
 
         with self.assertRaises(ValueError):
-            MultipleSeqAlignment.from_pairwise_alignments(
+            Alignment.from_pairwise_alignments(
                 [pwa, not_pairwsise_alignment]
             )
 
