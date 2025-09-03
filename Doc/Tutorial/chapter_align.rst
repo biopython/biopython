@@ -3234,6 +3234,7 @@ line will reflect the substitution scores:
    target            0 GATTACAT 8
                      |||:|||.
    query             0 GATYACAC 8
+   <BLANKLINE>
 
 Using the ``format`` method allows us to request either a vulgar line
 (default) or a cigar line:
