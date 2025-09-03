@@ -3227,6 +3227,8 @@ line will reflect the substitution scores:
    >>> from Bio.Align import substitution_matrices
    >>> M = substitution_matrices.load("NUC.4.4")
    >>> aligner = PairwiseAligner()
+   >>> aligner.open_gap_score = -100
+   >>> aligner.extend_gap_score = -100
    >>> aln = aligner.align("GATTACAT", "GATYACAC")[0]
    >>> print(aln.format("", scoring=M))
    target            0 GATTACAT 8
