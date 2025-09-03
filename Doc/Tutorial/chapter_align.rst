@@ -3232,7 +3232,7 @@ line will reflect the substitution scores:
    >>> aln = aligner.align("GATTACAT", "GATYACAC")[0]
    >>> print(aln.format("", scoring=M))
    target            0 GATTACAT 8
-                     |||:|||.
+                     |||:|||.   8
    query             0 GATYACAC 8
    <BLANKLINE>
 
