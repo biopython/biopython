@@ -3219,17 +3219,19 @@ line will reflect the substitution scores:
 * ``.`` for substitutions with a negative score,
 * ``-`` for gaps.
 
+.. cont-doctest
+
 .. code:: pycon
 
    >>> from Bio.Align import PairwiseAligner
    >>> from Bio.Align import substitution_matrices
    >>> M = substitution_matrices.load("NUC.4.4")
    >>> aligner = PairwiseAligner()
-   >>> aln = aligner.align("GATTACA", "GATYACA")[0]
+   >>> aln = aligner.align("GATTACAT", "GATYACAC")[0]
    >>> print(aln.format("", scoring=M))
-   target            0 GATTACA 7
-                     ||||:|||
-   query             0 GATYACA 7
+   target            0 GATTACAT 8
+                     |||:|||.
+   query             0 GATYACAC 8
 
 Using the ``format`` method allows us to request either a vulgar line
 (default) or a cigar line:
