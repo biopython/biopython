@@ -28,14 +28,6 @@ from Bio.Align import PairwiseAligner
 from Bio.Align.substitution_matrices import load, Array
 
 
-def _blastn_like_matrix():
-    alphabet = "ACGTY"
-    n = len(alphabet)
-    data = np.full((n, n), -1, dtype=int)
-    np.fill_diagonal(data, 1)
-    return Array(alphabet=alphabet, dims=2, data=data)
-
-
 class TestFormatMatrix(unittest.TestCase):
     """Unit tests for Alignment.format() with substitution matrices."""
 
@@ -47,7 +39,7 @@ class TestFormatMatrix(unittest.TestCase):
         aligner.extend_gap_score = -0.5
         aln = aligner.align("GATTACAT", "GATYACAC")[0]
         self.assertEqual(
-            aln.format("", scoring=M),
+            aln.format(scoring=M),
             """\
 target            0 GATTACAT 8
                   0 |||:|||. 8
@@ -57,13 +49,13 @@ query             0 GATYACAC 8
 
     def test_blastn_like_has_no_colon_only_pipes_for_identities(self):
         """In a BLASTN-like +1/-1 matrix, mismatches are always negative -> no ':' expected."""
-        M = _blastn_like_matrix()
+        M = load("BLASTN")
         aligner = PairwiseAligner()
         aligner.open_gap_score = -1
         aligner.extend_gap_score = -0.5
         aln = aligner.align("GATTACAT", "GATYACAC")[0]
         self.assertEqual(
-            aln.format("", scoring=M),
+            aln.format(scoring=M),
             """\
 target            0 GATTACAT 8
                   0 |||.|||. 8
@@ -80,7 +72,7 @@ query             0 GATYACAC 8
         aligner.extend_gap_score = -2
         aln = aligner.align("GATTACAT", "GATYACAC")[0]
         self.assertEqual(
-            aln.format("", scoring=M),
+            aln.format(scoring=M),
             """\
 target            0 GATTACAT 8
                   0 |||:|||. 8
@@ -96,7 +88,7 @@ query             0 GATYACAC 8
         aligner.extend_gap_score = -2
         aln = aligner.align("t", "y")[0]
         self.assertEqual(
-            aln.format("", scoring=M),
+            aln.format(scoring=M),
             """\
 target            0 t 1
                   0 : 1
@@ -106,13 +98,13 @@ query             0 y 1
 
     def test_negative_mismatch_dot_with_blastn_like_matrix(self):
         """In the BLASTN-like matrix, mismatches are negative -> expect '.' in the pattern."""
-        M = _blastn_like_matrix()
+        M = load("BLASTN")
         aligner = PairwiseAligner()
         aligner.open_gap_score = -10
         aligner.extend_gap_score = -2
         aln = aligner.align("A", "C")[0]
         self.assertEqual(
-            aln.format("", scoring=M),
+            aln.format(scoring=M),
             """\
 target            0 A 1
                   0 . 1
@@ -128,7 +120,7 @@ query             0 C 1
         aligner.extend_gap_score = -0.5
         aln = aligner.align("AC", "AGC")[0]
         self.assertEqual(
-            aln.format("", scoring=M),
+            aln.format(scoring=M),
             """\
 target            0 A-C 2
                   0 |-| 3
@@ -147,7 +139,7 @@ query             0 AGC 3
         seq2 = "TYGG"
         aln = aligner.align(seq1, seq2)[0]
         self.assertEqual(
-            aln.format("", scoring=M),
+            aln.format(scoring=M),
             """\
 target            0 TTTG 4
                   0 |:.| 4
