@@ -42,7 +42,7 @@ class TestSimple(unittest.TestCase):
         transcript.id = "transcript"
         sequence = Seq("GGCCCCCGGG")
         sequence.id = "sequence"
-        alignments1 = aligner.align(chromosome, transcript)  # HIER
+        alignments1 = aligner.align(chromosome, transcript)
         self.assertEqual(len(alignments1), 1)
         alignment1 = alignments1[0]
         self.assertTrue(
@@ -98,7 +98,7 @@ sequence          0 GGCCCCCGGG 10
         transcript.id = "transcript"
         sequence = Seq("GGGGGCCCCCGGG")
         sequence.id = "sequence"
-        alignments1 = aligner.align(chromosome, transcript)  # HIER
+        alignments1 = aligner.align(chromosome, transcript)
         self.assertEqual(len(alignments1), 1)
         alignment1 = alignments1[0]
         self.assertEqual(
@@ -148,7 +148,7 @@ sequence          2 GGGCCCCCGGG 13
         transcript.id = "transcript"
         sequence = Seq("GGCCCCCGGGGG")
         sequence.id = "sequence"
-        alignments1 = aligner.align(chromosome, transcript)  # HIER
+        alignments1 = aligner.align(chromosome, transcript)
         self.assertEqual(len(alignments1), 1)
         alignment1 = alignments1[0]
         self.assertEqual(
@@ -198,7 +198,7 @@ sequence          0 GGCCCCCGGG 10
         transcript.id = "transcript"
         sequence = Seq("GGCCCCCGGG")
         sequence.id = "sequence"
-        alignments1 = aligner.align(chromosome, transcript, strand="-")  # HIER
+        alignments1 = aligner.align(chromosome, transcript, strand="-")
         self.assertEqual(len(alignments1), 1)
         alignment1 = alignments1[0]
         self.assertTrue(
@@ -254,7 +254,7 @@ sequence          0 GGCCCCCGGG 10
         transcript.id = "transcript"
         sequence = Seq("CCCGGGGGCC")
         sequence.id = "sequence"
-        alignments1 = aligner.align(chromosome, transcript)  # HIER
+        alignments1 = aligner.align(chromosome, transcript)
         self.assertEqual(len(alignments1), 1)
         alignment1 = alignments1[0]
         self.assertTrue(
@@ -310,7 +310,7 @@ sequence         10 GGCCCCCGGG  0
         transcript.id = "transcript"
         sequence = Seq("CCCGGGGGCC")
         sequence.id = "sequence"
-        alignments1 = aligner.align(chromosome, transcript, "-")  # HIER
+        alignments1 = aligner.align(chromosome, transcript, "-")
         self.assertEqual(len(alignments1), 1)
         alignment1 = alignments1[0]
         self.assertTrue(
@@ -381,7 +381,7 @@ class TestComplex(unittest.TestCase):
             "TCCAAGGGGCCCCAGCACAGCACATTTTTAACGCGGGGACAGTTGATCCCATCCGCCTTTTACGAATTCATACCGTGGTAGGCGGCATAGTACGACGAAGCGGTTGGGTCGAAAAACAGGTTGCCGTCATATCGGTGGGTTC"
         )
         sequence.id = "sequence"
-        alignments1 = aligner.align(chromosome, transcript)  # HIER
+        alignments1 = aligner.align(chromosome, transcript)
         alignment1 = alignments1[0]
         self.assertEqual(alignment1.coordinates.shape[1], 164)
         self.assertEqual(
@@ -511,7 +511,7 @@ sequence        132 CGGTGG----G--TTC 142
             "TCCCCTTCTAATGGAATCCCCCTCCGAAGGTCGCAGAAGCGGCCACGCCGGAGATACCAGTTCCACGCCTCAGGTTGGACTTGTCACACTTGTACGCGAT"
         )
         sequence.id = "sequence"
-        alignments1 = aligner.align(chromosome, transcript)  # HIER
+        alignments1 = aligner.align(chromosome, transcript)
         alignment1 = alignments1[0]
         self.assertEqual(alignment1.coordinates.shape[1], 126)
         self.assertEqual(
