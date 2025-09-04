@@ -2191,6 +2191,16 @@ class Alignment:
                        create a human-readable representation of the alignment,
                        or any of the alignment file formats supported by
                        `Bio.Align` (some have not yet been implemented).
+         - scoring  - Optional keyword-only parameter; default=None.
+                       If provided, can be:
+
+                     - A substitution matrix (typically from the
+                        `Bio.Align.substitution_matrices` submodule)
+                         used to mark positive matches (:) in the alignment string
+                         when two different residues have a positive score.
+
+                     - A PairwiseAligner object, in which case its substitution
+                         matrix and settings are used for determining positive matches.
 
         All other arguments are passed to the format-specific writer functions:
          - mask      - PSL format only. Specify if repeat regions in the target
@@ -2209,8 +2219,23 @@ class Alignment:
                        the alignment and include it in the output. If False
                        (default), do not include the MD tag in the output.
         """
+        scoring = kwargs.pop("scoring", None)
+        substitution_matrix = None
+        if scoring is None and args:
+            first = args[0]
+            if isinstance(first, PairwiseAligner):
+                substitution_matrix = first.substitution_matrix
+                args = args[1:]
+            elif isinstance(first, (np.ndarray, substitution_matrices.Array)):
+                substitution_matrix = first
+                args = args[1:]
+        if substitution_matrix is None and scoring is not None:
+            if isinstance(scoring, PairwiseAligner):
+                substitution_matrix = scoring.substitution_matrix
+            elif isinstance(scoring, (np.ndarray, substitution_matrices.Array)):
+                substitution_matrix = scoring
         if fmt == "":
-            return self._format_pretty()
+            return self._format_pretty(substitution_matrix)
         module = _load(fmt)
         if module.AlignmentIterator.mode == "b":
             raise ValueError(f"{fmt} is a binary file format")
@@ -2222,10 +2247,17 @@ class Alignment:
             ) from None
         return writer.format_alignment(self)
 
-    def _format_pretty(self):
+    def _format_pretty(self, matrix=None):
         """Return default string representation (PRIVATE).
 
         Helper for self.format().
+
+        Arguments:
+         - matrix  - Optional; default=None
+                     A substitution matrix (typically from the
+                     `Bio.Align.substitution_matrices` submodule)
+                     used to mark positive matches (:) in the alignment string
+                     when two different residues have a positive score.
         """
         n = len(self.sequences)
         if n == 2:
@@ -2278,7 +2310,7 @@ class Alignment:
                 row[:] = end - positions
             if isinstance(seq, str):
                 if not seq.isascii():
-                    return self._format_unicode()
+                    return self._format_unicode(matrix)
             elif isinstance(seq, (Seq, MutableSeq)):
                 try:
                     seq = bytes(seq)
@@ -2289,7 +2321,7 @@ class Alignment:
                     seq = s
                 seq = seq.decode()
             else:
-                return self._format_generalized()
+                return self._format_generalized(matrix)
             seqs.append(seq)
         minstep = steps.min(0)
         maxstep = steps.max(0)
@@ -2388,6 +2420,10 @@ class Alignment:
                         c = "-"
                     else:
                         c = "."
+                        if matrix is not None and c1 != " " and c2 != " ":
+                            c1u, c2u = c1.upper(), c2.upper()
+                            if matrix[c1u, c2u] > 0:
+                                c = ":"
                     pattern += c
                 pattern_line = "          %9d %s" % (position, pattern)
                 pattern_lines.append(pattern_line)
@@ -2433,10 +2469,17 @@ class Alignment:
                 blocks.append(block)
             return "\n".join(blocks)
 
-    def _format_unicode(self):
+    def _format_unicode(self, matrix=None):
         """Return default string representation (PRIVATE).
 
         Helper for self.format().
+
+        Arguments:
+         - matrix  - Optional; default=None
+                     A substitution matrix (typically from the
+                     `Bio.Align.substitution_matrices` submodule)
+                     used to mark positive matches (:) in the alignment string
+                     when two different residues have a positive score.
         """
         seqs = []
         names = []
@@ -2444,7 +2487,7 @@ class Alignment:
         for seq, row in zip(self.sequences, coordinates):
             seq = self._convert_sequence_string(seq)
             if seq is None:
-                return self._format_generalized()
+                return self._format_generalized(matrix)
             if row[0] > row[-1]:  # mapped to reverse strand
                 row[:] = len(seq) - row[:]
                 seq = reverse_complement(seq)
@@ -2486,13 +2529,24 @@ class Alignment:
                 c = "-"
             else:
                 c = "."
+                if matrix is not None and c1 != " " and c2 != " ":
+                    c1u, c2u = c1.upper(), c2.upper()
+                    if matrix[c1u, c2u] > 0:
+                        c = ":"
             pattern += c
         return f"{aligned_seq1}\n{pattern}\n{aligned_seq2}\n"
 
-    def _format_generalized(self):
+    def _format_generalized(self, matrix=None):
         """Return generalized string representation (PRIVATE).
 
         Helper for self._format_pretty().
+
+        Arguments:
+         - matrix  - Optional; default=None
+                     A substitution matrix (typically from the
+                     `Bio.Align.substitution_matrices` submodule)
+                     used to mark positive matches (:) in the alignment string
+                     when two different residues have a positive score.
         """
         seq1, seq2 = self.sequences
         aligned_seq1 = []
@@ -2547,6 +2601,10 @@ class Alignment:
                         p = "|"
                     else:
                         p = "."
+                        if matrix is not None:
+                            c1u, c2u = c1.upper(), c2.upper()
+                            if matrix[c1u, c2u] > 0:
+                                p = ":"
                     if m1 < m2:
                         space = (m2 - m1) * " "
                         s1 += space
@@ -3575,10 +3633,10 @@ class Alignment:
                     start1, start2 = end1, end2
         return m
 
-    def counts(self, argument=None):
+    def counts(self, scoring=None):
         """Count the number of identities, mismatches, and gaps of an alignment.
 
-        This method takes a single optional argument, which can be either None
+        This method takes a single optional argument named scoring, which can be either None
         (default), a substitution matrix, a wildcard character, or a pairwise
         aligner object:
 
@@ -3662,7 +3720,7 @@ class Alignment:
                                         side of the alignment;
          - open_right_deletions       - the number of deletion gaps opened on the right
                                         side of the alignment;
-         - open_internal_insertions   - the number of insertion gaps opaned in the
+         - open_internal_insertions   - the number of insertion gaps opened in the
                                         interior of the alignment;
          - open_internal_deletions    - the number of deletion gaps opened in the
                                         interior of the alignment;
@@ -3702,15 +3760,15 @@ class Alignment:
         aligner = None
         wildcard = None
         substitution_matrix = None
-        if isinstance(argument, PairwiseAligner):
-            aligner = argument
+        if isinstance(scoring, PairwiseAligner):
+            aligner = scoring
             substitution_matrix = aligner.substitution_matrix
-        elif isinstance(argument, str):
-            wildcard = argument
-        elif isinstance(argument, (np.ndarray, substitution_matrices.Array)):
-            substitution_matrix = argument
-        elif argument is not None:
-            raise ValueError(f"unexpected argument {argument!r}")
+        elif isinstance(scoring, str):
+            wildcard = scoring
+        elif isinstance(scoring, (np.ndarray, substitution_matrices.Array)):
+            substitution_matrix = scoring
+        elif scoring is not None:
+            raise ValueError(f"unexpected argument {scoring!r}")
         if substitution_matrix is None:
             alphabet = []
         codec = "utf-32-le" if sys.byteorder == "little" else "utf-32-be"
@@ -4368,6 +4426,7 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
             "open_right_deletion_score": self.open_right_deletion_score,
             "extend_right_deletion_score": self.extend_right_deletion_score,
             "mode": self.mode,
+            "epsilon": self.epsilon,
         }
         if self.substitution_matrix is None:
             state["match_score"] = self.match_score
@@ -4391,6 +4450,7 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
         self.open_right_deletion_score = state["open_right_deletion_score"]
         self.extend_right_deletion_score = state["extend_right_deletion_score"]
         self.mode = state["mode"]
+        self.epsilon = state["epsilon"]
         substitution_matrix = state.get("substitution_matrix")
         if substitution_matrix is None:
             self.match_score = state["match_score"]

@@ -17,7 +17,7 @@ This release of Biopython supports Python 3.10, 3.11, 3.12 and 3.13.  It
 has also been tested on PyPy3.10 v7.3.17.
 
 ``Bio.SearchIO`` now supports parsing the tabular and plain text output of
-`Infernal <http://eddylab.org/infernal/>` (v1.0.0+) RNA search tool. The 
+`Infernal <http://eddylab.org/infernal/>` (v1.0.0+) RNA search tool. The
 format are ``infernal-tab`` and ``infernal-text``.
 
 The default value of the gap score of a ``PairwiseAligner`` object was changed
@@ -35,10 +35,21 @@ alignments, all with score 6:
 With the new default parameter for the gap score, only the first alignment is
 returned.
 
+``Bio.PDB.PDBIO`` now ensures that b-factor values are always at most 6 characters to
+ensure that we do not violate the wwPDB specification. This should not have an impact
+on the majority of uses, as b-factor values are generally small (less than 100). When
+1000 \<= b-factor \< 10_000, the value is rounded to a single decimal place. When,
+10_000 \<= b-factor \< 999_999, the value is rounded to zero decimal place. Values above
+999_999 are now clamped. The justification for this is the rise in the b-factor field
+being used for additional metadata, typically from computational tools.
+
+``Bio.PDB.PDBIO`` will now raise module specific warnings: ``Bio.PDB.PDBExceptions.PDBIOWarning``.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Rachel Stern (first contribution)
+- Oliver Wissett (first contribution)
 - Samuel Prince (first contribution)
 
 15 January 2025: Biopython 1.85
