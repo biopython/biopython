@@ -33,6 +33,7 @@ being used for additional metadata, typically from computational tools.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Rachel Stern (first contribution)
 - Oliver Wissett (first contribution)
 - Samuel Prince (first contribution)
 

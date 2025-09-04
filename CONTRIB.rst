@@ -287,6 +287,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Philip Capel <https://github.com/pcapel>
 - Phillip Garland <pgarland at gmail>
 - Pol Estecha <https://github.com/poleshe>
+- Rachel Stern <https://github.com/RachelStern20>
 - Ralf Stephan <https://github.com/rwst>
 - Rasmus Fonseca <https://github.com/RasmusFonseca>
 - rht <https://github.com/rht>
