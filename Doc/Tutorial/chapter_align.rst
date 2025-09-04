@@ -1980,8 +1980,8 @@ the substitution scores as follows:
    1.0
    >>> M["T", "C"]
    -4.0
-   >>> alignment = Align.Alignment(["GATTACAT", "GATYACAC"])
-   >>> print(alignment.format(scoring=M))
+   >>> aln = Align.Alignment(["GATTACAT", "GATYACAC"])
+   >>> print(aln.format(scoring=M))
    target            0 GATTACAT 8
                      0 |||:|||. 8
    query             0 GATYACAC 8
