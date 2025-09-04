@@ -1940,6 +1940,58 @@ the string representation of the alignment:
                      0 AG-TTT-- 5
    <BLANKLINE>
 
+As optional keyword arguments cannot be used with Python’s built-in
+``format`` function or with formatted strings, the ``Alignment`` class
+has a ``format`` method with optional arguments to customize the
+alignment format. For example, you can use the optional ``scoring`` argument
+to provide a substitution matrix (see Section
+:ref:`sec:pairwise-substitution-scores`) to let the printed alignment reflect
+the substitution scores as follows:
+
+* ``|`` for identical residues,
+* ``:`` for substitutions with a positive score,
+* ``.`` for substitutions with a negative score,
+* ``-`` for gaps.
+
+.. cont-doctest
+
+.. code:: pycon
+
+   >>> M = substitution_matrices.load("NUC.4.4")
+   >>> print(M[:, :])
+        A    T    G    C    S    W    R    Y    K    M    B    V    H    D    N
+   A  5.0 -4.0 -4.0 -4.0 -4.0  1.0  1.0 -4.0 -4.0  1.0 -4.0 -1.0 -1.0 -1.0 -2.0
+   T -4.0  5.0 -4.0 -4.0 -4.0  1.0 -4.0  1.0  1.0 -4.0 -1.0 -4.0 -1.0 -1.0 -2.0
+   G -4.0 -4.0  5.0 -4.0  1.0 -4.0  1.0 -4.0  1.0 -4.0 -1.0 -1.0 -4.0 -1.0 -2.0
+   C -4.0 -4.0 -4.0  5.0  1.0 -4.0 -4.0  1.0 -4.0  1.0 -1.0 -1.0 -1.0 -4.0 -2.0
+   S -4.0 -4.0  1.0  1.0 -1.0 -4.0 -2.0 -2.0 -2.0 -2.0 -1.0 -1.0 -3.0 -3.0 -1.0
+   W  1.0  1.0 -4.0 -4.0 -4.0 -1.0 -2.0 -2.0 -2.0 -2.0 -3.0 -3.0 -1.0 -1.0 -1.0
+   R  1.0 -4.0  1.0 -4.0 -2.0 -2.0 -1.0 -4.0 -2.0 -2.0 -3.0 -1.0 -3.0 -1.0 -1.0
+   Y -4.0  1.0 -4.0  1.0 -2.0 -2.0 -4.0 -1.0 -2.0 -2.0 -1.0 -3.0 -1.0 -3.0 -1.0
+   K -4.0  1.0  1.0 -4.0 -2.0 -2.0 -2.0 -2.0 -1.0 -4.0 -1.0 -3.0 -3.0 -1.0 -1.0
+   M  1.0 -4.0 -4.0  1.0 -2.0 -2.0 -2.0 -2.0 -4.0 -1.0 -3.0 -1.0 -1.0 -3.0 -1.0
+   B -4.0 -1.0 -1.0 -1.0 -1.0 -3.0 -3.0 -1.0 -1.0 -3.0 -1.0 -2.0 -2.0 -2.0 -1.0
+   V -1.0 -4.0 -1.0 -1.0 -1.0 -3.0 -1.0 -3.0 -3.0 -1.0 -2.0 -1.0 -2.0 -2.0 -1.0
+   H -1.0 -1.0 -4.0 -1.0 -3.0 -1.0 -3.0 -1.0 -3.0 -1.0 -2.0 -2.0 -1.0 -2.0 -1.0
+   D -1.0 -1.0 -1.0 -4.0 -3.0 -1.0 -1.0 -3.0 -1.0 -3.0 -2.0 -2.0 -2.0 -1.0 -1.0
+   N -2.0 -2.0 -2.0 -2.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0
+   <BLANKLINE>
+   >>> M["T", "Y"]
+   1.0
+   >>> M["T", "C"]
+   -4.0
+   >>> alignment = Align.Alignment(["GATTACAT", "GATYACAC"])
+   >>> print(alignment.format(scoring=M))
+   target            0 GATTACAT 8
+                     0 |||:|||. 8
+   query             0 GATYACAC 8
+   <BLANKLINE>
+
+
+Instead of the substitution matrix, you can also use a ``PairwiseAligner``
+object (see Chapter :ref:`chapter:pairwise`) as the ``scoring`` argument
+to use the substitution matrix associated with the aligner.
+
 By specifying one of the formats shown in
 Section :ref:`sec:alignformats`, ``format`` will create a string
 showing the alignment in the requested format:
@@ -1976,13 +2028,8 @@ showing the alignment in the requested format:
    <BLANKLINE>
    <BLANKLINE>
 
-As optional keyword arguments cannot be used with Python’s built-in
-``format`` function or with formatted strings, the ``Alignment`` class
-has a ``format`` method with optional arguments to customize the
-alignment format, as described in the subsections below. For example, we
-can print the alignment in BED format (see
-section :ref:`subsec:align_bed`) with a specific number of
-columns:
+As another example, we can print the alignment in BED format (see
+section :ref:`subsec:align_bed`) with a specific number of columns:
 
 .. cont-doctest
 
@@ -3207,33 +3254,6 @@ using Python’s built-in ``format`` function writes a vulgar line:
 
    >>> print(format(alignment, "exonerate"))
    vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 1319275 1318045 - 6146 M 1 1 C 3 3 M 1226 1226
-   <BLANKLINE>
-
-The ``Alignment.format()`` method also accepts an optional ``scoring`` argument.
-If you provide a substitution matrix (for example, ``scoring=M`` where
-``M = Bio.Align.substitution_matrices.load("NUC.4.4")``), the middle pattern
-line will reflect the substitution scores:
-
-* ``|`` for identical residues,
-* ``:`` for substitutions with a positive score,
-* ``.`` for substitutions with a negative score,
-* ``-`` for gaps.
-
-.. cont-doctest
-
-.. code:: pycon
-
-   >>> from Bio.Align import PairwiseAligner
-   >>> from Bio.Align import substitution_matrices
-   >>> M = substitution_matrices.load("NUC.4.4")
-   >>> aligner = PairwiseAligner()
-   >>> aligner.open_gap_score = -100
-   >>> aligner.extend_gap_score = -100
-   >>> aln = aligner.align("GATTACAT", "GATYACAC")[0]
-   >>> print(aln.format("", scoring=M))
-   target            0 GATTACAT 8
-                     0 |||:|||. 8
-   query             0 GATYACAC 8
    <BLANKLINE>
 
 Using the ``format`` method allows us to request either a vulgar line
