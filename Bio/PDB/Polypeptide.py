@@ -194,7 +194,7 @@ def is_nucleic(residue, standard=False):
 class Polypeptide(list):
     """A polypeptide is simply a list of L{Residue} objects."""
 
-    def get_ca_list(self) -> list[Atom]:
+    def get_ca_list(self) -> list["Atom"]:
         """Get list of C-alpha atoms in the polypeptide.
 
         :return: the list of C-alpha atoms

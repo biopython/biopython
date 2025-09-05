@@ -14,12 +14,9 @@ from reportlab.lib import colors
 
 from Bio.Graphics.BasicChromosome import ChromosomeSegment
 from Bio.Graphics.BasicChromosome import TelomereSegment
+from Bio.Graphics.ColorSpiral import Color
 
 from typing import Any
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from Bio.Graphics.ColorSpiral import Color
 
 # --- constants
 # This is a default color scheme based on the light spectrum.

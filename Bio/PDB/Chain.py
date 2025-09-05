@@ -173,11 +173,11 @@ class Chain(Entity["Model", "Residue"]):
 
     # Public
 
-    def get_residues(self) -> Generator[Residue, None, None]:
+    def get_residues(self) -> Generator["Residue", None, None]:
         """Return residues."""
         yield from self
 
-    def get_atoms(self) -> Generator[Atom, None, None]:
+    def get_atoms(self) -> Generator["Atom", None, None]:
         """Return atoms from residues."""
         for r in self.get_residues():
             yield from r

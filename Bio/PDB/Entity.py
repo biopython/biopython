@@ -272,7 +272,7 @@ class Entity(Generic[_Parent, _Child]):
         entity_id = entity.get_id()
         if self.has_id(entity_id):
             raise PDBConstructionException(f"{entity_id} defined twice")
-        entity.set_parent(self)
+        entity.set_parent(self)  # type: ignore[arg-type]
         self.child_list.append(entity)
         self.child_dict[entity_id] = entity
 
@@ -281,7 +281,7 @@ class Entity(Generic[_Parent, _Child]):
         entity_id = entity.get_id()
         if self.has_id(entity_id):
             raise PDBConstructionException(f"{entity_id} defined twice")
-        entity.set_parent(self)
+        entity.set_parent(self)  # type: ignore[arg-type]
         self.child_list[pos:pos] = [entity]
         self.child_dict[entity_id] = entity
 

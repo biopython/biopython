@@ -32,21 +32,21 @@ class Structure(Entity[None, "Model"]):
         """Return the structure identifier."""
         return f"<Structure id={self.get_id()}>"
 
-    def get_models(self) -> Generator[Model, None, None]:
+    def get_models(self) -> Generator["Model", None, None]:
         """Return models."""
         yield from self
 
-    def get_chains(self) -> Generator[Chain, None, None]:
+    def get_chains(self) -> Generator["Chain", None, None]:
         """Return chains from models."""
         for m in self.get_models():
             yield from m
 
-    def get_residues(self) -> Generator[Residue, None, None]:
+    def get_residues(self) -> Generator["Residue", None, None]:
         """Return residues from chains."""
         for c in self.get_chains():
             yield from c
 
-    def get_atoms(self) -> Generator[Atom, None, None]:
+    def get_atoms(self) -> Generator["Atom", None, None]:
         """Return atoms from residue."""
         for r in self.get_residues():
             yield from r

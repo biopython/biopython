@@ -12,6 +12,7 @@ import sys
 import warnings
 from typing import Optional
 from typing import TypeVar
+from typing import TYPE_CHECKING
 
 import numpy as np
 
@@ -19,7 +20,9 @@ from Bio.Data import IUPACData
 from Bio.PDB.Entity import DisorderedEntityWrapper, EntityID
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 from Bio.PDB.vectors import Vector
-from Bio.PDB.Residue import Residue
+
+if TYPE_CHECKING:
+    from Bio.PDB.Residue import Residue
 
 _AtomT = TypeVar("_AtomT", bound="Atom")
 
@@ -81,7 +84,7 @@ class Atom:
         """
         self.level = "A"
         # Reference to the residue
-        self.parent: Residue | None = None
+        self.parent: Optional[Residue] = None
         # the atomic data
         self.name = name  # eg. CA, spaces are removed from atom name
         self.fullname = fullname  # e.g. " CA ", spaces included
@@ -371,7 +374,7 @@ class Atom:
         """Return the disordered flag (1 if disordered, 0 otherwise)."""
         return self.disordered_flag
 
-    def set_parent(self, parent):
+    def set_parent(self, parent: "Residue"):
         """Set the parent residue.
 
         Arguments:
@@ -397,7 +400,7 @@ class Atom:
         """Return anisotropic B factor."""
         return self.anisou_array
 
-    def get_parent(self) -> Residue | None:
+    def get_parent(self) -> Optional["Residue"]:
         """Return parent residue."""
         return self.parent
 

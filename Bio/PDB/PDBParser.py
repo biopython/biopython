@@ -14,12 +14,9 @@ from Bio.PDB.parse_pdb_header import _parse_pdb_header_list
 from Bio.PDB.PDBExceptions import PDBConstructionException
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 from Bio.PDB.StructureBuilder import StructureBuilder
+from Bio.PDB.Structure import Structure
 
 from typing import Optional
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from Bio.PDB.Structure import Structure
 
 # If PDB spec says "COLUMNS 18-20" this means line[17:20]
 

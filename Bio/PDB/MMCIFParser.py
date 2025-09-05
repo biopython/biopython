@@ -15,12 +15,9 @@ from Bio.PDB.PDBExceptions import PDBConstructionException
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 from Bio.PDB.StructureBuilder import StructureBuilder
 from Bio.PDB.Structure import Structure
+from Bio.SeqIO.Interfaces import _TextIOSource
 
 from typing import Optional
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from Bio.SeqIO.Interfaces import _TextIOSource
 
 
 class MMCIFParser:

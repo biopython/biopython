@@ -23,11 +23,7 @@ import numpy as np
 from Bio.PDB.ccealign import run_cealign
 from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.qcprot import QCPSuperimposer
-
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from Bio.PDB.Structure import Structure
+from Bio.PDB.Structure import Structure
 
 _RESID_SORTER = lambda r: r.id[1]  # noqa: E731
 

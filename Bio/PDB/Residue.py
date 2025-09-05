@@ -14,9 +14,9 @@ from collections.abc import Generator
 from Bio.PDB.Entity import DisorderedEntityWrapper
 from Bio.PDB.Entity import Entity
 from Bio.PDB.PDBExceptions import PDBConstructionException
+from Bio.PDB.Atom import Atom, DisorderedAtom
 
 if TYPE_CHECKING:
-    from Bio.PDB.Atom import Atom, DisorderedAtom
     from Bio.PDB.Chain import Chain
 
 _ResidueT = TypeVar("_ResidueT", bound="Residue")
