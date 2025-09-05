@@ -16,7 +16,7 @@ from typing import TypeVar
 import numpy as np
 
 from Bio.Data import IUPACData
-from Bio.PDB.Entity import DisorderedEntityWrapper
+from Bio.PDB.Entity import DisorderedEntityWrapper, EntityID
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 from Bio.PDB.vectors import Vector
 from Bio.PDB.Residue import Residue
@@ -89,7 +89,9 @@ class Atom:
         self.bfactor = bfactor
         self.occupancy = occupancy
         self.altloc = altloc
-        self.full_id = None  # (structure id, model id, chain id, residue id, atom id)
+        self.full_id: Optional[EntityID] = (
+            None  # (structure id, model id, chain id, residue id, atom id)
+        )
         self.id = name  # id of atom is the atom name (e.g. "CA")
         self.disordered_flag = 0
         self.anisou_array = None
@@ -399,7 +401,7 @@ class Atom:
         """Return parent residue."""
         return self.parent
 
-    def get_serial_number(self):
+    def get_serial_number(self) -> int | None:
         """Return the serial number."""
         return self.serial_number
 

@@ -97,7 +97,7 @@ def _read_fragments(size, length, dir="."):
 class Fragment:
     """Represent a polypeptide C-alpha fragment."""
 
-    def __init__(self, length, fid):
+    def __init__(self, length: int, fid: int):
         """Initialize fragment object.
 
         :param length: length of the fragment
@@ -110,12 +110,12 @@ class Fragment:
         self.length = length
         # nr of residues added
         self.counter = 0
-        self.resname_list = []
+        self.resname_list: list[str] = []
         # CA coordinate matrix
         self.coords_ca = np.zeros((length, 3), "d")
         self.fid = fid
 
-    def get_resname_list(self):
+    def get_resname_list(self) -> list[str]:
         """Get residue list.
 
         :return: the residue names
@@ -123,7 +123,7 @@ class Fragment:
         """
         return self.resname_list
 
-    def get_id(self):
+    def get_id(self) -> int:
         """Get identifier for the fragment.
 
         :return: id for the fragment
@@ -131,7 +131,7 @@ class Fragment:
         """
         return self.fid
 
-    def get_coords(self):
+    def get_coords(self) -> np.ndarray:
         """Get the CA coordinates in the fragment.
 
         :return: the CA coords in the fragment

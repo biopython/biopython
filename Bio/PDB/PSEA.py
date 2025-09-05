@@ -67,7 +67,7 @@ def psea(pname):
     return ss
 
 
-def psea2HEC(pseq):
+def psea2HEC(pseq) -> list[str]:
     """Translate PSEA secondary structure string into HEC."""
     seq = []
     for ss in pseq:
@@ -111,6 +111,6 @@ class PSEA:
         annotate(model, ss_seq)
         self.ss_seq = ss_seq
 
-    def get_seq(self):
+    def get_seq(self) -> list[str]:
         """Return secondary structure string."""
         return self.ss_seq

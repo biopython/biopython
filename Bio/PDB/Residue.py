@@ -9,17 +9,19 @@
 
 from typing import TYPE_CHECKING
 from typing import TypeVar
+from collections.abc import Generator
 
 from Bio.PDB.Entity import DisorderedEntityWrapper
 from Bio.PDB.Entity import Entity
 from Bio.PDB.PDBExceptions import PDBConstructionException
 
 if TYPE_CHECKING:
-    from Bio.PDB.Atom import Atom
+    from Bio.PDB.Atom import Atom, DisorderedAtom
     from Bio.PDB.Chain import Chain
 
 _ResidueT = TypeVar("_ResidueT", bound="Residue")
 
+ResidueID = tuple[str, int, str, tuple[str, int, str]]
 
 _atom_name_dict = {}
 _atom_name_dict["N"] = 1
@@ -31,14 +33,14 @@ _atom_name_dict["O"] = 4
 class Residue(Entity["Chain", "Atom"]):
     """Represents a residue. A Residue object stores atoms."""
 
-    def __init__(self, id, resname, segid):
+    def __init__(self, id, resname: str, segid: str):
         """Initialize the class."""
         self.level = "R"
         self.disordered = 0
         self.resname = resname
         self.segid = segid
         self.internal_coord = None
-        Entity.__init__(self, id)
+        super().__init__(id)
 
     def __repr__(self):
         """Return the residue full id."""
@@ -88,11 +90,11 @@ class Residue(Entity["Chain", "Atom"]):
         """Set the disordered flag."""
         self.disordered = 1
 
-    def is_disordered(self):
+    def is_disordered(self) -> int:
         """Return 1 if the residue contains disordered atoms."""
         return self.disordered
 
-    def get_resname(self):
+    def get_resname(self) -> str:
         """Return the residue name."""
         return self.resname
 
@@ -107,11 +109,11 @@ class Residue(Entity["Chain", "Atom"]):
                 undisordered_atom_list.append(atom)
         return undisordered_atom_list
 
-    def get_segid(self):
+    def get_segid(self) -> str:
         """Return the segment identifier."""
         return self.segid
 
-    def get_atoms(self):
+    def get_atoms(self) -> Generator[Atom, None, None]:
         """Return atoms."""
         yield from self
 

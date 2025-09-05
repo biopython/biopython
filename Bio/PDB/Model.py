@@ -6,12 +6,16 @@
 """Model class, used in Structure objects."""
 
 from typing import TYPE_CHECKING
+from typing import Optional
+from collections.abc import Generator
 
 from Bio.PDB.Entity import Entity
 from Bio.PDB.internal_coords import IC_Chain
 
 if TYPE_CHECKING:
     from Bio.PDB.Chain import Chain
+    from Bio.PDB.Residue import Residue
+    from Bio.PDB.Atom import Atom
     from Bio.PDB.Structure import Structure
 
 
@@ -23,7 +27,7 @@ class Model(Entity["Structure", "Chain"]):
     structures normally contain many different models.
     """
 
-    def __init__(self, id, serial_num=None):
+    def __init__(self, id: int, serial_num: Optional[int] = None):
         """Initialize.
 
         Arguments:
@@ -37,22 +41,22 @@ class Model(Entity["Structure", "Chain"]):
         else:
             self.serial_num = serial_num
 
-        Entity.__init__(self, id)
+        super().__init__(id)
 
     def __repr__(self):
         """Return model identifier."""
         return f"<Model id={self.get_id()}>"
 
-    def get_chains(self):
+    def get_chains(self) -> Generator[Chain, None, None]:
         """Return chains."""
         yield from self
 
-    def get_residues(self):
+    def get_residues(self) -> Generator[Residue, None, None]:
         """Return residues."""
         for c in self.get_chains():
             yield from c
 
-    def get_atoms(self):
+    def get_atoms(self) -> Generator[Atom, None, None]:
         """Return atoms."""
         for r in self.get_residues():
             yield from r

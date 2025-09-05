@@ -51,6 +51,7 @@ last residues) have been shown as M (methionine) by the get_sequence method.
 """
 
 import warnings
+from abc import ABC, abstractmethod
 
 from Bio.Data.PDBData import nucleic_letters_3to1
 from Bio.Data.PDBData import nucleic_letters_3to1_extended
@@ -60,6 +61,12 @@ from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.vectors import calc_angle
 from Bio.PDB.vectors import calc_dihedral
 from Bio.Seq import Seq
+
+from typing import Optional
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from Bio.PDB.Atom import Atom
 
 # Sorted by 1-letter code
 aa3, aa1 = zip(*sorted(protein_letters_3to1.items(), key=lambda x: x[1]))
@@ -187,7 +194,7 @@ def is_nucleic(residue, standard=False):
 class Polypeptide(list):
     """A polypeptide is simply a list of L{Residue} objects."""
 
-    def get_ca_list(self):
+    def get_ca_list(self) -> list[Atom]:
         """Get list of C-alpha atoms in the polypeptide.
 
         :return: the list of C-alpha atoms
@@ -199,9 +206,9 @@ class Polypeptide(list):
             ca_list.append(ca)
         return ca_list
 
-    def get_phi_psi_list(self):
+    def get_phi_psi_list(self) -> list[tuple[Optional[float], Optional[float]]]:
         """Return the list of phi/psi dihedral angles."""
-        ppl = []
+        ppl: list[tuple[float | None, float | None]] = []
         lng = len(self)
         for i in range(lng):
             res = self[i]
@@ -244,8 +251,8 @@ class Polypeptide(list):
             res.xtra["PSI"] = psi
         return ppl
 
-    def get_tau_list(self):
-        """List of tau torsions angles for all 4 consecutive Calpha atoms."""
+    def get_tau_list(self) -> list[float]:
+        """list of tau torsions angles for all 4 consecutive Calpha atoms."""
         ca_list = self.get_ca_list()
         tau_list = []
         for i in range(len(ca_list) - 3):
@@ -255,11 +262,13 @@ class Polypeptide(list):
             tau_list.append(tau)
             # Put tau in xtra dict of residue
             res = ca_list[i + 2].get_parent()
+            if res is None:
+                raise ValueError("Residue not found")
             res.xtra["TAU"] = tau
         return tau_list
 
-    def get_theta_list(self):
-        """List of theta angles for all 3 consecutive Calpha atoms."""
+    def get_theta_list(self) -> list[float]:
+        """list of theta angles for all 3 consecutive Calpha atoms."""
         theta_list = []
         ca_list = self.get_ca_list()
         for i in range(len(ca_list) - 2):
@@ -269,10 +278,12 @@ class Polypeptide(list):
             theta_list.append(theta)
             # Put tau in xtra dict of residue
             res = ca_list[i + 1].get_parent()
+            if res is None:
+                raise ValueError("Residue not found")
             res.xtra["THETA"] = theta
         return theta_list
 
-    def get_sequence(self):
+    def get_sequence(self) -> Seq:
         """Return the AA sequence as a Seq object.
 
         :return: polypeptide sequence
@@ -294,7 +305,7 @@ class Polypeptide(list):
         return f"<Polypeptide start={start} end={end}>"
 
 
-class _PPBuilder:
+class _PPBuilder(ABC):
     """Base class to extract polypeptides.
 
     It checks if two consecutive residues in a chain are connected.
@@ -303,7 +314,7 @@ class _PPBuilder:
     This assumes you want both standard and non-standard amino acids.
     """
 
-    def __init__(self, radius):
+    def __init__(self, radius: float):
         """Initialize the base class.
 
         :param radius: distance
@@ -311,7 +322,12 @@ class _PPBuilder:
         """
         self.radius = radius
 
-    def _accept(self, residue, standard_aa_only):
+    @abstractmethod
+    def _is_connected(self, prev_res, next_res) -> bool:
+        """Check if two residues are connected (PRIVATE)."""
+        raise NotImplementedError
+
+    def _accept(self, residue, standard_aa_only) -> bool:
         """Check if the residue is an amino acid (PRIVATE)."""
         if is_aa(residue, standard=standard_aa_only):
             return True
@@ -328,7 +344,7 @@ class _PPBuilder:
             # not a standard AA so skip
             return False
 
-    def build_peptides(self, entity, aa_only=1):
+    def build_peptides(self, entity, aa_only=1) -> list[Polypeptide]:
         """Build and return a list of Polypeptide objects.
 
         :param entity: polypeptides are searched for in this object
@@ -337,7 +353,6 @@ class _PPBuilder:
         :param aa_only: if 1, the residue needs to be a standard AA
         :type aa_only: int
         """
-        is_connected = self._is_connected
         accept = self._accept
         level = entity.get_level()
         # Decide which entity we are dealing with
@@ -365,7 +380,7 @@ class _PPBuilder:
                 if (
                     accept(prev_res, aa_only)
                     and accept(next_res, aa_only)
-                    and is_connected(prev_res, next_res)
+                    and self._is_connected(prev_res, next_res)
                 ):
                     if pp is None:
                         pp = Polypeptide()
@@ -383,7 +398,7 @@ class _PPBuilder:
 class CaPPBuilder(_PPBuilder):
     """Use CA--CA distance to find polypeptides."""
 
-    def __init__(self, radius=4.3):
+    def __init__(self, radius: float = 4.3):
         """Initialize the class."""
         _PPBuilder.__init__(self, radius)
 
@@ -412,11 +427,11 @@ class CaPPBuilder(_PPBuilder):
 class PPBuilder(_PPBuilder):
     """Use C--N distance to find polypeptides."""
 
-    def __init__(self, radius=1.8):
+    def __init__(self, radius: float = 1.8):
         """Initialize the class."""
         _PPBuilder.__init__(self, radius)
 
-    def _is_connected(self, prev_res, next_res):
+    def _is_connected(self, prev_res, next_res) -> bool:
         if not prev_res.has_id("C"):
             return False
         if not next_res.has_id("N"):

@@ -8,6 +8,7 @@
 """Chain class, used in Structure objects."""
 
 from typing import Optional
+from collections.abc import Generator
 from typing import TYPE_CHECKING
 
 from Bio.PDB.Entity import Entity
@@ -16,6 +17,7 @@ from Bio.PDB.internal_coords import IC_Chain
 if TYPE_CHECKING:
     from Bio.PDB.Model import Model
     from Bio.PDB.Residue import Residue
+    from Bio.PDB.Atom import Atom
 
 
 class Chain(Entity["Model", "Residue"]):
@@ -154,7 +156,7 @@ class Chain(Entity["Model", "Residue"]):
                 unpacked_list.append(residue)
         return unpacked_list
 
-    def has_id(self, id):
+    def has_id(self, id) -> bool:
         """Return 1 if a residue with given id is present.
 
         The id of a residue is (hetero flag, sequence identifier, insertion code).
@@ -171,11 +173,11 @@ class Chain(Entity["Model", "Residue"]):
 
     # Public
 
-    def get_residues(self):
+    def get_residues(self) -> Generator[Residue, None, None]:
         """Return residues."""
         yield from self
 
-    def get_atoms(self):
+    def get_atoms(self) -> Generator[Atom, None, None]:
         """Return atoms from residues."""
         for r in self.get_residues():
             yield from r

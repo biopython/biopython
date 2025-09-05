@@ -15,6 +15,12 @@ from Bio.PDB.PDBExceptions import PDBConstructionException
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 from Bio.PDB.StructureBuilder import StructureBuilder
 
+from typing import Optional
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from Bio.PDB.Structure import Structure
+
 # If PDB spec says "COLUMNS 18-20" this means line[17:20]
 
 
@@ -23,11 +29,11 @@ class PDBParser:
 
     def __init__(
         self,
-        PERMISSIVE=True,
-        get_header=False,
-        structure_builder=None,
-        QUIET=False,
-        is_pqr=False,
+        PERMISSIVE: bool = True,
+        get_header: bool = False,
+        structure_builder: Optional[StructureBuilder] = None,
+        QUIET: bool = False,
+        is_pqr: bool = False,
     ):
         """Create a PDBParser object.
 
@@ -56,8 +62,8 @@ class PDBParser:
             self.structure_builder = structure_builder
         else:
             self.structure_builder = StructureBuilder()
-        self.header = None
-        self.trailer = None
+        self.header: Optional[dict] = None
+        self.trailer: Optional[list] = None
         self.line_counter = 0
         self.PERMISSIVE = bool(PERMISSIVE)
         self.QUIET = bool(QUIET)
@@ -65,7 +71,7 @@ class PDBParser:
 
     # Public methods
 
-    def get_structure(self, id, file):
+    def get_structure(self, id, file) -> Structure | None:
         """Return the structure.
 
         Arguments:
@@ -94,11 +100,11 @@ class PDBParser:
 
         return structure
 
-    def get_header(self):
+    def get_header(self) -> Optional[dict]:
         """Return the header."""
         return self.header
 
-    def get_trailer(self):
+    def get_trailer(self) -> Optional[list]:
         """Return the trailer."""
         return self.trailer
 

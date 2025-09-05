@@ -12,6 +12,7 @@ import math
 import random
 import warnings
 from collections import defaultdict
+from collections.abc import Iterable
 
 from Bio import BiopythonDeprecationWarning
 from Bio.Seq import Seq
@@ -465,13 +466,13 @@ class HiddenMarkovModel:
 
     def __init__(
         self,
-        state_alphabet,
-        emission_alphabet,
-        initial_prob,
-        transition_prob,
-        emission_prob,
-        transition_pseudo,
-        emission_pseudo,
+        state_alphabet: tuple,
+        emission_alphabet: tuple,
+        initial_prob: dict,
+        transition_prob: dict,
+        emission_prob: dict,
+        transition_pseudo: dict,
+        emission_pseudo: dict,
     ):
         """Initialize a Markov Model.
 
@@ -515,7 +516,7 @@ class HiddenMarkovModel:
         # from which the destination is reachable via a transition
         self._transitions_to = _calculate_to_transitions(self.transition_prob)
 
-    def get_blank_transitions(self):
+    def get_blank_transitions(self) -> dict:
         """Get the default transitions for the model.
 
         Returns a dictionary of all of the default transitions between any
@@ -525,7 +526,7 @@ class HiddenMarkovModel:
         """
         return self._transition_pseudo
 
-    def get_blank_emissions(self):
+    def get_blank_emissions(self) -> dict:
         """Get the starting default emissions for each sequence.
 
         This returns a dictionary of the default emissions for each
@@ -561,7 +562,7 @@ class HiddenMarkovModel:
         else:
             return []
 
-    def viterbi(self, sequence, state_alphabet):
+    def viterbi(self, sequence: Seq, state_alphabet: Iterable) -> tuple[Seq, float]:
         """Calculate the most probable state path using the Viterbi algorithm.
 
         This implements the Viterbi algorithm (see pgs 55-57 in Durbin et
@@ -581,8 +582,8 @@ class HiddenMarkovModel:
         log_trans = self._log_transform(self.transition_prob)
         log_emission = self._log_transform(self.emission_prob)
 
-        viterbi_probs = {}
-        pred_state_seq = {}
+        viterbi_probs: dict[tuple[str, int], float] = {}
+        pred_state_seq: dict[tuple[int, str], str] = {}
 
         # --- recursion
         # loop over the training sequence (i = 1 .. L)
@@ -634,7 +635,7 @@ class HiddenMarkovModel:
             # v_{k}(L)
             all_probs[state] = viterbi_probs[(state, len(sequence) - 1)]
 
-        state_path_prob = max(all_probs.values())
+        state_path_prob: float = max(all_probs.values())
 
         # find the last pointer we need to trace back from
         last_state = ""
@@ -662,9 +663,9 @@ class HiddenMarkovModel:
 
         # put the traceback sequence in the proper orientation
         traceback_seq.reverse()
-        traceback_seq = "".join(traceback_seq)
+        traceback_seq_str: str = "".join(traceback_seq)
 
-        return Seq(traceback_seq), state_path_prob
+        return Seq(traceback_seq_str), state_path_prob
 
     def _log_transform(self, probability):
         """Return log transform of the given probability dictionary (PRIVATE).

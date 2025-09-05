@@ -26,6 +26,12 @@ from math import floor
 from math import log
 from math import pi
 
+from typing import Any
+from collections.abc import Generator
+
+Color = tuple[float, float, float]
+ColorDict = dict[Any, Color]
+
 
 class ColorSpiral:
     """Implement a spiral path through HSV colour space.
@@ -76,7 +82,7 @@ class ColorSpiral:
         self.v_final = v_final
         self.jitter = jitter
 
-    def get_colors(self, k, offset=0.1):
+    def get_colors(self, k: int, offset: float = 0.1) -> Generator[Color, None, None]:
         """Generate k different RBG colours evenly-space on the spiral.
 
         A generator returning the RGB colour space values for k
@@ -177,7 +183,9 @@ class ColorSpiral:
 
 # Convenience functions for those who don't want to bother with a
 # ColorSpiral object
-def get_colors(k, **kwargs):
+
+
+def get_colors(k: int, **kwargs: Any) -> Generator[Color, None, None]:
     """Return k colours selected by the ColorSpiral object, as a generator.
 
     Arguments:
@@ -189,7 +197,7 @@ def get_colors(k, **kwargs):
     return cs.get_colors(k)
 
 
-def get_color_dict(l, **kwargs):  # noqa: E741
+def get_color_dict(l: list, **kwargs: Any) -> ColorDict:  # noqa: E741
     """Return a dictionary of colours using the provided values as keys.
 
     Returns a dictionary, keyed by the members of iterable l, with a

@@ -18,6 +18,7 @@ from typing import Optional
 from typing import TYPE_CHECKING
 from typing import TypeVar
 from typing import Union
+from collections.abc import Generator
 
 import numpy as np
 
@@ -30,6 +31,8 @@ if TYPE_CHECKING:
 _Child = TypeVar("_Child", bound=Union["Entity", "Atom"])
 _Parent = TypeVar("_Parent", bound=Optional["Entity"])
 _Self = TypeVar("_Self", bound="Entity[Any, Any]")
+
+EntityID = tuple[str, int, str, tuple[str, int, str]]
 
 
 class Entity(Generic[_Parent, _Child]):
@@ -47,7 +50,7 @@ class Entity(Generic[_Parent, _Child]):
     def __init__(self, id):
         """Initialize the class."""
         self._id = id
-        self.full_id = None
+        self.full_id: Optional[tuple[EntityID]] = None
         self.parent = None
         self.child_list = []
         self.child_dict = {}
@@ -157,7 +160,7 @@ class Entity(Generic[_Parent, _Child]):
                 pass  # Atoms do not cache their full ids.
         self.full_id = self._generate_full_id()
 
-    def _generate_full_id(self):
+    def _generate_full_id(self) -> tuple[EntityID]:
         """Generate full_id (PRIVATE).
 
         Generate the full_id of the Entity based on its
@@ -237,7 +240,7 @@ class Entity(Generic[_Parent, _Child]):
 
         return True
 
-    def get_level(self):
+    def get_level(self) -> str:
         """Return level in hierarchy.
 
         A - atom
@@ -282,19 +285,19 @@ class Entity(Generic[_Parent, _Child]):
         self.child_list[pos:pos] = [entity]
         self.child_dict[entity_id] = entity
 
-    def get_iterator(self):
+    def get_iterator(self) -> Generator[_Child, None, None]:
         """Return iterator over children."""
         yield from self.child_list
 
-    def get_list(self):
+    def get_list(self) -> list[_Child]:
         """Return a copy of the list of children."""
         return copy(self.child_list)
 
-    def has_id(self, id):
+    def has_id(self, id) -> bool:
         """Check if a child with given id exists."""
         return id in self.child_dict
 
-    def get_parent(self):
+    def get_parent(self) -> _Parent | None:
         """Return the parent Entity object."""
         return self.parent
 
@@ -302,7 +305,7 @@ class Entity(Generic[_Parent, _Child]):
         """Return the id."""
         return self.id
 
-    def get_full_id(self):
+    def get_full_id(self) -> tuple[EntityID]:
         """Return the full id.
 
         The full id is a tuple containing all id's starting from

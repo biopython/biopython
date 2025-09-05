@@ -74,7 +74,7 @@ class Pathway:
         self._reactions = {}
         self._relations = set()
 
-    def get_KGML(self):
+    def get_KGML(self) -> str:
         """Return the pathway as a string in prettified KGML format."""
         header = "\n".join(
             [

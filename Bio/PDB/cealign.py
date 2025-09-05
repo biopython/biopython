@@ -24,6 +24,11 @@ from Bio.PDB.ccealign import run_cealign
 from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.qcprot import QCPSuperimposer
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from Bio.PDB.Structure import Structure
+
 _RESID_SORTER = lambda r: r.id[1]  # noqa: E731
 
 
@@ -56,14 +61,14 @@ class CEAligner:
         self._coord = None
         self._superimposer = QCPSuperimposer()
 
-    def get_guide_coord_from_structure(self, structure):
+    def get_guide_coord_from_structure(self, structure: Structure) -> list[list[float]]:
         """Return the coordinates of guide atoms in the structure.
 
         We use guide atoms (C-alpha and C4' atoms) since it is much faster than
         using all atoms in the calculation without a significant loss in
         accuracy.
         """
-        coords = []
+        coords: list[list[float]] = []
         # CE algorithm is sensitive to atom ordering. To reproduce Pymol
         # results, sort atoms by chain and then residue number.
         for chain in sorted(structure.get_chains()):

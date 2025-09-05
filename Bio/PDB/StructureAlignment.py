@@ -11,6 +11,8 @@ from Bio.Data import PDBData
 from Bio.PDB import Selection
 from Bio.PDB.Polypeptide import is_aa
 
+from collections.abc import Generator
+
 
 class StructureAlignment:
     """Class to align two structures based on an alignment of their sequences."""
@@ -38,7 +40,7 @@ class StructureAlignment:
         # Map equivalent residues to each other
         map12 = {}
         map21 = {}
-        # List of residue pairs (None if -)
+        # list of residue pairs (None if -)
         duos = []
         for i in range(ncolumns):
             column = fasta_align[:, i]
@@ -84,7 +86,7 @@ class StructureAlignment:
         resname = PDBData.protein_letters_3to1_extended[resname]
         assert aa1 == resname
 
-    def get_maps(self):
+    def get_maps(self) -> tuple[dict, dict]:
         """Map residues between the structures.
 
         Return two dictionaries that map a residue in one structure to
@@ -92,7 +94,7 @@ class StructureAlignment:
         """
         return self.map12, self.map21
 
-    def get_iterator(self):
+    def get_iterator(self) -> Generator[list[tuple]]:
         """Create an iterator over all residue pairs."""
         for i in range(len(self.duos)):
             yield self.duos[i]

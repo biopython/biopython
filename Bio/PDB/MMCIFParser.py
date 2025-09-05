@@ -14,13 +14,24 @@ from Bio.PDB.MMCIF2Dict import MMCIF2Dict
 from Bio.PDB.PDBExceptions import PDBConstructionException
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 from Bio.PDB.StructureBuilder import StructureBuilder
+from Bio.PDB.Structure import Structure
+
+from typing import Optional
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from Bio.SeqIO.Interfaces import _TextIOSource
 
 
 class MMCIFParser:
     """Parse a mmCIF file and return a Structure object."""
 
     def __init__(
-        self, structure_builder=None, auth_chains=True, auth_residues=True, QUIET=False
+        self,
+        structure_builder: Optional[StructureBuilder] = None,
+        auth_chains: bool = True,
+        auth_residues: bool = True,
+        QUIET: bool = False,
     ):
         """Create a PDBParser object.
 
@@ -48,7 +59,7 @@ class MMCIFParser:
             self._structure_builder = structure_builder
         else:
             self._structure_builder = StructureBuilder()
-        self.header = None
+        self.header: Optional[dict] = None
         # self.trailer = None
         self.line_counter = 0
         self.build_structure = None
@@ -58,7 +69,9 @@ class MMCIFParser:
 
     # Public methods
 
-    def get_structure(self, structure_id, filename):
+    def get_structure(
+        self, structure_id: Optional[str], filename: _TextIOSource
+    ) -> Structure | None:
         """Return the structure.
 
         Arguments:
@@ -334,7 +347,11 @@ class FastMMCIFParser:
     """Parse an MMCIF file and return a Structure object."""
 
     def __init__(
-        self, structure_builder=None, auth_chains=True, auth_residues=True, QUIET=False
+        self,
+        structure_builder: Optional[StructureBuilder] = None,
+        auth_chains: bool = True,
+        auth_residues: bool = True,
+        QUIET: bool = False,
     ):
         """Create a FastMMCIFParser object.
 
@@ -375,7 +392,7 @@ class FastMMCIFParser:
 
     # Public methods
 
-    def get_structure(self, structure_id, filename):
+    def get_structure(self, structure_id, filename) -> Structure | None:
         """Return the structure.
 
         Arguments:

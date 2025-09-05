@@ -332,7 +332,10 @@ class PdbAtomIterator(SequenceIterator):
         from Bio.PDB.PDBParser import PDBParser
 
         structure = PDBParser().get_structure(None, source)
-        pdb_id = structure.header["idcode"]
+        if structure is None:
+            pdb_id = None
+        else:
+            pdb_id = structure.header["idcode"]
         if not pdb_id:
             warnings.warn(
                 "'HEADER' line not found; can't determine PDB ID.",
@@ -343,7 +346,8 @@ class PdbAtomIterator(SequenceIterator):
         records = []
         for record in AtomIterator(pdb_id, structure):
             # The PDB header was loaded as a dictionary, so let's reuse it all
-            record.annotations.update(structure.header)
+            header = structure.header if structure is not None else {}
+            record.annotations.update(header)
 
             # ENH - add letter annotations -- per-residue info, e.g. numbers
 
@@ -558,7 +562,7 @@ class CifAtomIterator(SequenceIterator):
         from Bio.PDB.MMCIFParser import MMCIFParser
 
         structure = MMCIFParser().get_structure(None, source)
-        pdb_id = structure.header["idcode"]
+        pdb_id = structure.header["idcode"] if structure is not None else None
         if not pdb_id:
             warnings.warn("Could not determine the PDB ID.", BiopythonParserWarning)
             pdb_id = "????"

@@ -15,6 +15,12 @@ from reportlab.lib import colors
 from Bio.Graphics.BasicChromosome import ChromosomeSegment
 from Bio.Graphics.BasicChromosome import TelomereSegment
 
+from typing import Any
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from Bio.Graphics.ColorSpiral import Color
+
 # --- constants
 # This is a default color scheme based on the light spectrum.
 # Based on my vague recollections from biology, this is our friend ROY G. BIV
@@ -41,7 +47,11 @@ class ChromosomeCounts:
     want to pick those out.
     """
 
-    def __init__(self, segment_names, color_scheme=RAINBOW_COLORS):
+    def __init__(
+        self,
+        segment_names: str,
+        color_scheme: dict[tuple[int, int], Color] = RAINBOW_COLORS,
+    ) -> None:
         """Initialize a representation of chromosome counts.
 
         Arguments:
@@ -54,9 +64,9 @@ class ChromosomeCounts:
 
         """
         self._names = segment_names
-        self._count_info = {}
-        self._label_info = {}
-        self._scale_info = {}
+        self._count_info: dict[str, float | int] = {}
+        self._label_info: dict[str, Any] = {}
+        self._scale_info: dict[str, float | int] = {}
         for name in self._names:
             self._count_info[name] = 0
             self._label_info[name] = None
@@ -64,7 +74,7 @@ class ChromosomeCounts:
 
         self._color_scheme = color_scheme
 
-    def add_count(self, segment_name, count=1):
+    def add_count(self, segment_name: str, count: int = 1) -> None:
         """Add counts to the given segment name.
 
         Arguments:
@@ -113,7 +123,7 @@ class ChromosomeCounts:
         else:
             raise KeyError(f"Segment name {segment_name} not found.")
 
-    def get_segment_info(self):
+    def get_segment_info(self) -> list[tuple[float | int, float | int]]:
         """Retrieve the color and label info about the segments.
 
         Returns a list consisting of two tuples specifying the counts and
@@ -121,7 +131,7 @@ class ChromosomeCounts:
         original listing of names. Labels are set as None if no label
         was specified.
         """
-        order_info = []
+        order_info: list[tuple[float | int, float | int]] = []
 
         for seg_name in self._names:
             order_info.append((self._count_info[seg_name], self._label_info[seg_name]))

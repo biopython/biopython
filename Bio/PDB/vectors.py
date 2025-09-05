@@ -146,7 +146,7 @@ def rotaxis2m(theta, vector):
 rotaxis = rotaxis2m
 
 
-def refmat(p, q):
+def refmat(p, q) -> np.ndarray:
     """Return a (left multiplying) matrix that mirrors p onto q.
 
     :type p,q: L{Vector}
@@ -177,7 +177,7 @@ def refmat(p, q):
     return ref
 
 
-def rotmat(p, q):
+def rotmat(p, q) -> np.ndarray:
     """Return a (left multiplying) matrix that rotates p onto q.
 
     :param p: moving vector
@@ -206,7 +206,7 @@ def rotmat(p, q):
     return rot
 
 
-def calc_angle(v1, v2, v3):
+def calc_angle(v1, v2, v3) -> float:
     """Calculate angle method.
 
     Calculate the angle between 3 vectors
@@ -223,7 +223,7 @@ def calc_angle(v1, v2, v3):
     return v1.angle(v3)
 
 
-def calc_dihedral(v1, v2, v3, v4):
+def calc_dihedral(v1, v2, v3, v4) -> float:
     """Calculate dihedral angle method.
 
     Calculate the dihedral angle between 4 vectors
@@ -361,7 +361,7 @@ class Vector:
         c = max(-1, c)
         return np.arccos(c)
 
-    def get_array(self):
+    def get_array(self) -> np.ndarray:
         """Return (a copy of) the array of coordinates."""
         return np.array(self._ar)
 

@@ -25,6 +25,8 @@ import numpy as np
 
 from Bio.PDB.PDBExceptions import PDBException
 
+from typing import Optional
+
 
 def qcp(coords1, coords2, natoms):
     """Implement the QCP code in Python.
@@ -246,13 +248,13 @@ class QCPSuperimposer:
 
     def _reset_properties(self):
         """Reset all relevant properties to None to avoid conflicts between runs."""
-        self.reference_coords = None
-        self.coords = None
-        self.transformed_coords = None
-        self.rot = None
-        self.tran = None
-        self.rms = None
-        self.init_rms = None
+        self.reference_coords: Optional[np.ndarray] = None
+        self.coords: Optional[np.ndarray] = None
+        self.transformed_coords: Optional[np.ndarray] = None
+        self.rot: Optional[np.ndarray] = None
+        self.tran: Optional[np.ndarray] = None
+        self.rms: Optional[float] = None
+        self.init_rms: Optional[float] = None
 
     # Public methods
     def set_atoms(self, fixed, moving):
@@ -329,7 +331,7 @@ class QCPSuperimposer:
         self.tran = com_ref - np.dot(com_coords, self.rot)
 
     # Getters
-    def get_transformed(self):
+    def get_transformed(self) -> np.ndarray:
         """Get the transformed coordinate set."""
         if self.coords is None or self.reference_coords is None:
             raise PDBException("No coordinates set.")
@@ -340,13 +342,13 @@ class QCPSuperimposer:
         self.transformed_coords = np.dot(self.coords, self.rot) + self.tran
         return self.transformed_coords
 
-    def get_rotran(self):
+    def get_rotran(self) -> tuple[np.ndarray, np.ndarray]:
         """Return right multiplying rotation matrix and translation vector."""
         if self.rot is None:
             raise PDBException("Nothing is superimposed yet.")
         return self.rot, self.tran
 
-    def get_init_rms(self):
+    def get_init_rms(self) -> float:
         """Return the root mean square deviation of untransformed coordinates."""
         if self.coords is None:
             raise PDBException("No coordinates set yet.")
@@ -356,7 +358,7 @@ class QCPSuperimposer:
             self.init_rms = np.sqrt(np.sum(np.sum(diff * diff, axis=1) / self._natoms))
         return self.init_rms
 
-    def get_rms(self):
+    def get_rms(self) -> float:
         """Root mean square deviation of superimposed coordinates."""
         if self.rms is None:
             raise PDBException("Nothing superimposed yet.")
