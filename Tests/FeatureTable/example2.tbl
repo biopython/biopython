@@ -1,0 +1,22 @@
+>Feature Seq1
+1     1210    CDS
+                        product        acid trehalase 1
+>Feature Seq2                        
+<1    >1050    gene
+                        gene           ATH2
+<1    >1050    CDS
+                        product        acid trehalase 2
+                        codon_start    3
+>Feature Seq3                        
+<1    1600    gene
+                        gene           ATH4
+<1    9       5'UTR                         
+10    1550    CDS
+                        product        acid trehalase 4                         
+1551  1600    3'UTR
+>Feature Seq4                        
+1150  1       gene
+                        gene           ATH3
+1150  1       CDS        
+                        product        acid trehalase 3
+                        note           alternatively spliced
