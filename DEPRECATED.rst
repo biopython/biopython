@@ -184,9 +184,10 @@ hmmlearn (https://pypi.org/project/hmmlearn/) instead.
 
 Bio.HMM
 -------
-The `Bio.HMM.DynamicProgramming`, `Bio.HMM.Trainer`, `Bio.HMM.MarkovModel`, and
-`Bio.HMM.Utilities` modules were deprecated in release 1.82. Consider using
-hmmlearn (https://pypi.org/project/hmmlearn/) instead.
+All the submodules `Bio.HMM.DynamicProgramming`, `Bio.HMM.Trainer`,
+`Bio.HMM.MarkovModel`, and `Bio.HMM.Utilities` were deprecated in release 1.82,
+and removed in 1.86. The empty `Bio.HMM` module remains as a placeholder.
+Consider using hmmlearn (https://pypi.org/project/hmmlearn/) instead.
 
 Bio.PDB.Polypeptide
 -------------------
