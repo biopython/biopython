@@ -404,7 +404,7 @@ class MultipleSeqAlignment:
         """
         return len(self._records)
 
-    def get_alignment_length(self):
+    def get_alignment_length(self) -> int:
         """Return the maximum length of the alignment.
 
         All objects in the alignment should (hopefully) have the same

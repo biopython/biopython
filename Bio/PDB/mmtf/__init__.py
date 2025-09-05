@@ -19,8 +19,13 @@ from Bio.PDB.mmtf.DefaultParser import StructureDecoder
 
 from .mmtfio import MMTFIO
 
+from typing import TYPE_CHECKING
 
-def get_from_decoded(decoder):
+if TYPE_CHECKING:
+    from Bio.PDB.Structure import Structure
+
+
+def get_from_decoded(decoder) -> Structure:
     """Return structure from decoder."""
     structure_decoder = StructureDecoder()
     decoder.pass_data_on(structure_decoder)
@@ -31,7 +36,7 @@ class MMTFParser:
     """Class to get a Biopython structure from a URL or a filename."""
 
     @staticmethod
-    def get_structure_from_url(pdb_id):
+    def get_structure_from_url(pdb_id) -> Structure:
         """Get a structure from a URL - given a PDB id.
 
         :param pdb_id: the input PDB id
@@ -42,7 +47,7 @@ class MMTFParser:
         return get_from_decoded(decoder)
 
     @staticmethod
-    def get_structure(file_path):
+    def get_structure(file_path) -> Structure:
         """Get a structure from a file - given a file path.
 
         :param file_path: the input file path

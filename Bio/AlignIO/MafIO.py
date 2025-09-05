@@ -662,7 +662,9 @@ class MafIndex:
 
                 yield fetched
 
-    def get_spliced(self, starts, ends, strand=1):
+    def get_spliced(
+        self, starts: list[int], ends: list[int], strand: int = 1
+    ) -> MultipleSeqAlignment:
         """Return a multiple alignment of the exact sequence range provided.
 
         Accepts two lists of start and end positions on target_seqname, representing
@@ -706,7 +708,9 @@ class MafIndex:
         #        value: letter(s) (including letters
         #               aligned to the "-" preceding the letter
         #               at the position in the reference, if any)
-        split_by_position = {seq_name: {} for seq_name in all_seqnames}
+        split_by_position: dict[str, dict[int, str]] = {
+            seq_name: {} for seq_name in all_seqnames
+        }
 
         # keep track of what the total number of (unspliced) letters should be
         total_rec_length = 0
@@ -800,8 +804,8 @@ class MafIndex:
         subseq = {}
 
         for seqid in all_seqnames:
-            seq_split = split_by_position[seqid]
-            seq_splice = []
+            seq_split: dict[int, str] = split_by_position[seqid]
+            seq_splice: list[str] = []
 
             filler_char = "N" if seqid == self._target_seqname else "-"
 
@@ -846,14 +850,17 @@ class MafIndex:
                 )
 
         # finally, build a MultipleSeqAlignment object for our final sequences
-        result_multiseq = []
+        result_multiseq: list[SeqRecord] = []
 
         for seqid, seq in subseq.items():
-            seq = Seq(seq)
+            sequence = Seq(seq)
 
-            seq = seq if strand == ref_first_strand else seq.reverse_complement()
+            if strand != ref_first_strand:
+                sequence = Seq(sequence.reverse_complement())
 
-            result_multiseq.append(SeqRecord(seq, id=seqid, name=seqid, description=""))
+            result_multiseq.append(
+                SeqRecord(sequence, id=seqid, name=seqid, description="")
+            )
 
         return MultipleSeqAlignment(result_multiseq)
 
