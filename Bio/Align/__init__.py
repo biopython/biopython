@@ -1117,10 +1117,9 @@ class Alignment:
             Now, we can combine these pairwise alignments into a multiple sequence alignment:
             >>> msa = Alignment.from_pairwise_alignments([pwa1, pwa2])
             >>> print(msa)
-            Alignment with 3 rows and 5 columns
-            ACG-T <unknown id>
-            ACGGT <unknown id>
-            A--T <unknown id>
+            reference         0 ACG-T 4
+            seq_1             0 ACGGT 5
+            seq_2             0 A---T 2
 
         Example 2: Using SeqRecord Objects with Metadata
             Consider the following reference and sequences with metadata:
@@ -1133,13 +1132,16 @@ class Alignment:
             >>> pwa1 = next(aligner.align(reference_seqr, seq1))
             >>> pwa2 = next(aligner.align(reference_seqr, seq2))
 
-            The msa retainss the metadata from the original SeqRecord objects:
+            The msa retains the metadata from the original SeqRecord objects:
             >>> msa = Alignment.from_pairwise_alignments([pwa1, pwa2])
-            >>> print(msa)
-            Alignment with 3 rows and 5 columns
-            ACG-T reference desc 1
-            ACGGT seq1 desc 2
-            A--T seq2 desc 3
+            >>> print(msa.format("fasta"))
+            >reference desc 1
+            ACG-T
+            >seq1 desc 2
+            ACGGT
+            >seq2 desc 3
+            A---T
+
         """
 
         if len(pwas) == 0:
@@ -1186,17 +1188,9 @@ class Alignment:
             seq + "-" * (max_lenth - len(seq)) for seq in output_string_seqs
         ]
 
-        # Build coordinates
-        coordinates = []
-        for seq in output_string_seqs:
-            coords = [0]
-            pos = 0
-            for char in seq:
-                if char != "-":
-                    pos += 1
-                coords.append(pos)
-            coordinates.append(coords)
-
+        # Infer coordinates using parse_printed_alignment
+        output_string_seqs_bytes = [s.encode() for s in output_string_seqs]
+        _, coordinates = cls.parse_printed_alignment(output_string_seqs_bytes)
         coordinates = np.array(coordinates, np.intp)
 
         # Extract ungapped sequences
@@ -1214,7 +1208,7 @@ class Alignment:
                 )
             else:
                 id_value = "reference" if i == 0 else f"seq_{i}"
-                new_record = SeqRecord(Seq(output_string_seqs[i]), id=id_value)
+                new_record = SeqRecord(Seq(ungapped_sequences[i]), id=id_value)
             records.append(new_record)
 
         return cls(records, coordinates)
