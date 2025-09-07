@@ -1106,12 +1106,12 @@ class Alignment:
 
             The pairwise alignments would look like
             >>> print(f"Reference: {pwa1[0]}")
-            >>> print(f"Seq1:      {pwa1[1]}")
             Reference: ACG-T
+            >>> print(f"Seq1:      {pwa1[1]}")
             Seq1:      ACGGT
             >>> print(f"Reference: {pwa2[0]}")
-            >>> print(f"Seq2:      {pwa2[1]}")
             Reference: ACGT
+            >>> print(f"Seq2:      {pwa2[1]}")
             Seq2:      A--T
 
             Now, we can combine these pairwise alignments into a multiple sequence alignment:
@@ -1120,6 +1120,7 @@ class Alignment:
             reference         0 ACG-T 4
             seq_1             0 ACGGT 5
             seq_2             0 A---T 2
+            <BLANKLINE>
 
         Example 2: Using SeqRecord Objects with Metadata
             Consider the following reference and sequences with metadata:
@@ -1141,6 +1142,7 @@ class Alignment:
             ACGGT
             >seq2 desc 3
             A---T
+            <BLANKLINE>
 
         """
 
