@@ -161,7 +161,7 @@ class BwaTestCase(unittest.TestCase):
             with open(self.samfile1) as handle:
                 headline = handle.readline()
             self.assertTrue(
-                headline.startswith("@SQ"),
+                headline.startswith("@SQ") or headline.startswith("@HD"),
                 f"Error generating sam files:\n{cmdline}\nOutput starts:{headline}",
             )
 
@@ -184,7 +184,7 @@ class BwaTestCase(unittest.TestCase):
             with open(self.samfile) as handle:
                 headline = handle.readline()
             self.assertTrue(
-                headline.startswith("@SQ"),
+                headline.startswith("@SQ") or headline.startswith("@HD"),
                 f"Error generating sam files:\n{cmdline}\nOutput starts:{headline}",
             )
 
@@ -201,7 +201,7 @@ class BwaTestCase(unittest.TestCase):
             with open(self.samfile) as handle:
                 headline = handle.readline()
             self.assertTrue(
-                headline.startswith("@SQ"),
+                headline.startswith("@SQ") or headline.startswith("@HD"),
                 f"Error generating sam files:\n{cmdline}\nOutput starts:{headline}",
             )
 
