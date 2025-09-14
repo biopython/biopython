@@ -243,20 +243,22 @@ root of the tree is.
 Drawing trees with iplotx
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In addition to the interactive ``draw`` function, Bio.Phylo trees can
-be visualised using the external library ``iplotx``:
+For users seeking advanced styling options, Bio.Phylo trees are natively
+supported by the external library ``iplotx``:
 
 https://iplotx.readthedocs.io/en/latest/
 
 ``iplotx`` enables customisation of many aspects of the visualisation,
 including layout, vertex and branch properties, cascading backgrounds,
-and labels. Here is an example:
+and labels. Here is a self-contained example:
 
 .. cont-doctest
 
 .. code:: pycon
 
+   >>> from Bio import Phylo
    >>> import iplotx as ipx
+   >>> tree = Phylo.read("simple.dnd", "newick")
    >>> ipx.tree(
    >>>     tree,
    >>>     layout="horizontal",
@@ -270,6 +272,8 @@ and labels. Here is an example:
    :alt: A colorized tree drawn with ``iplotx.tree``.
    :name: fig:phylo-color-iplotx
    :width: 70.0%
+
+``iplotx`` has an extensive `gallery of examples <https://iplotx.readthedocs.io/en/latest/gallery/index.html>`__.
 
 Writing tree to file
 ~~~~~~~~~~~~~~~~~~~~
