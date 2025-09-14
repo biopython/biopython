@@ -1409,12 +1409,13 @@ class SeqRecord:
         elif annotations:
             # Copy the old annotations,
             answer.annotations = self.annotations.copy()
-        if isinstance(letter_annotations, dict):
-            answer.letter_annotations = letter_annotations
-        elif letter_annotations:
-            # Copy the old per letter annotations, reversing them
-            for key, value in self.letter_annotations.items():
-                answer.letter_annotations[key] = value[::-1]
+        if self._per_letter_annotations is not None:
+            if isinstance(letter_annotations, dict):
+                answer.letter_annotations = letter_annotations
+            elif letter_annotations:
+                # Copy the old per letter annotations, reversing them
+                for key, value in self.letter_annotations.items():
+                    answer.letter_annotations[key] = value[::-1]
         return answer
 
     def translate(
@@ -1519,13 +1520,14 @@ class SeqRecord:
             answer.annotations = self.annotations.copy()
         # Set/update to protein:
         answer.annotations["molecule_type"] = "protein"
-        if isinstance(letter_annotations, dict):
-            answer.letter_annotations = letter_annotations
-        elif letter_annotations:
-            # Does not make sense to copy these as length now wrong
-            raise TypeError(
-                f"Unexpected letter_annotations argument {letter_annotations!r}"
-            )
+        if self._per_letter_annotations is not None:
+            if isinstance(letter_annotations, dict):
+                answer.letter_annotations = letter_annotations
+            elif letter_annotations:
+                # Does not make sense to copy these as length now wrong
+                raise TypeError(
+                    f"Unexpected letter_annotations argument {letter_annotations!r}"
+                )
         return answer
 
 

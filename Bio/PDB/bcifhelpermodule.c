@@ -3,7 +3,7 @@
 #include <math.h>
 #include <stdint.h>
 
-void
+static void
 integer_unpack_u8(Py_buffer *in_view, Py_buffer *out_view)
 {
     Py_ssize_t in_size = in_view->shape[0];
@@ -33,7 +33,7 @@ integer_unpack_u8(Py_buffer *in_view, Py_buffer *out_view)
     }
 }
 
-void
+static void
 integer_unpack_u16(Py_buffer *in_view, Py_buffer *out_view)
 {
     Py_ssize_t in_size = in_view->shape[0];
@@ -63,7 +63,7 @@ integer_unpack_u16(Py_buffer *in_view, Py_buffer *out_view)
     }
 }
 
-void
+static void
 integer_unpack_i8(Py_buffer *in_view, Py_buffer *out_view)
 {
     Py_ssize_t in_size = in_view->shape[0];
@@ -93,7 +93,7 @@ integer_unpack_i8(Py_buffer *in_view, Py_buffer *out_view)
     }
 }
 
-void
+static void
 integer_unpack_i16(Py_buffer *in_view, Py_buffer *out_view)
 {
     Py_ssize_t in_size = in_view->shape[0];

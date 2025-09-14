@@ -535,6 +535,17 @@ class SeqRecordMethodsMore(unittest.TestCase):
         )
         self.assertFalse(t.letter_annotations)
 
+    def test_no_side_effects(self):
+        a = SeqRecord(Seq("AA"))
+        self.assertIsNone(a._per_letter_annotations)
+        a.reverse_complement()
+        self.assertIsNone(a._per_letter_annotations)
+
+        a = SeqRecord(Seq("AA"))
+        self.assertIsNone(a._per_letter_annotations)
+        a.translate()
+        self.assertIsNone(a._per_letter_annotations)
+
     def test_lt_exception(self):
         def lt():
             return SeqRecord(Seq("A")) < SeqRecord(Seq("A"))

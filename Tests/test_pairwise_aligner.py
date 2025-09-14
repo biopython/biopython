@@ -18482,6 +18482,7 @@ class TestAlignerPickling(unittest.TestCase):
         aligner.extend_left_deletion_score = +1
         aligner.open_right_deletion_score = -1
         aligner.extend_right_deletion_score = -2
+        aligner.epsilon = 0.5e-6
         aligner.mode = "local"
         state = pickle.dumps(aligner)
         pickled_aligner = pickle.loads(state)
@@ -18537,6 +18538,8 @@ class TestAlignerPickling(unittest.TestCase):
             pickled_aligner.extend_right_deletion_score,
         )
         self.assertEqual(aligner.mode, pickled_aligner.mode)
+        self.assertAlmostEqual(aligner.epsilon, pickled_aligner.epsilon)
+        self.assertEqual(aligner.algorithm, pickled_aligner.algorithm)
 
     def test_pickle_aligner_substitution_matrix(self):
         try:
@@ -18621,6 +18624,21 @@ class TestAlignerPickling(unittest.TestCase):
             pickled_aligner.extend_right_deletion_score,
         )
         self.assertEqual(aligner.mode, pickled_aligner.mode)
+        self.assertAlmostEqual(aligner.epsilon, pickled_aligner.epsilon)
+        self.assertEqual(aligner.algorithm, pickled_aligner.algorithm)
+
+    def test_pickle_aligner_alignment_consistent(self):
+        import pickle
+
+        targ = "MTPSDISGYDYGRVEKSPITDLEFDLLKKTVMLGEEDVMYLKKAADVLKDQVDEILDLAGGWAASNEHLIYYGSNPDTGAPIKEYLERVRARIGAWVL"
+        query = "MTIKEMPQPKTFGELKNLPLLNTDKPVQALMKIADELGEIFKFEAPGRVTRYLSSQRLIKEACDESRFDKNLSQALKFARDFAGDGLVTSWTHEKNWKKAHNIL"
+        aligner = Align.PairwiseAligner(scoring="blastp")
+        aligner_alignments = aligner.align(targ, query)
+        pickled_aligner = pickle.loads(pickle.dumps(aligner))
+        pickled_aligner_alignments = pickled_aligner.align(targ, query)
+        self.assertEqual(len(aligner_alignments), len(pickled_aligner_alignments))
+        for i in range(len(aligner_alignments)):
+            self.assertEqual(aligner_alignments[i], pickled_aligner_alignments[i])
 
 
 class TestAlignmentFormat(unittest.TestCase):
@@ -20336,7 +20354,6 @@ class TestAlgorithmRestrictions(unittest.TestCase):
 
 
 class TestCounts(unittest.TestCase):
-
     def check_counts(self, counts):
         self.assertEqual(counts.left_insertions, 2)
         self.assertEqual(counts.left_deletions, 0)

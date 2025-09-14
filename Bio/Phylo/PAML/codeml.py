@@ -24,7 +24,7 @@ class Codeml(Paml):
     """An interface to CODEML, part of the PAML package."""
 
     def __init__(self, alignment=None, tree=None, working_dir=None, out_file=None):
-        """Initialize the codeml instance.
+        """Initialize the Codeml instance.
 
         The user may optionally pass in strings specifying the locations
         of the input alignment and tree files, the working directory and
@@ -74,7 +74,7 @@ class Codeml(Paml):
         """Dynamically build a CODEML control file from the options.
 
         The control file is written to the location specified by the
-        ctl_file property of the codeml class.
+        ctl_file property of the Codeml class.
         """
         # Make sure all paths are relative to the working directory
         self._set_rel_paths()
@@ -98,7 +98,12 @@ class Codeml(Paml):
                     ctl_handle.write(f"{option[0]} = {option[1]}\n")
 
     def read_ctl_file(self, ctl_file):
-        """Parse a control file and load the options into the Codeml instance."""
+        """Parse a control file and load the options into the Codeml instance.
+
+        Update each CODEML option to the new option if supplied or None if
+        not supplied. Raise an exception if the control file does not exist,
+        a line is malformed, or an option is invalid.
+        """
         temp_options = {}
         if not os.path.isfile(ctl_file):
             raise FileNotFoundError(f"File not found: {ctl_file!r}")
@@ -175,13 +180,15 @@ class Codeml(Paml):
             self._rel_tree = os.path.relpath(self.tree, self.working_dir)
 
     def run(self, ctl_file=None, verbose=False, command="codeml", parse=True):
-        """Run codeml using the current configuration.
+        """Run ``codeml`` using the current configuration.
 
-        If parse is True then read and return the results, otherwise
-        return None.
+        Check that the tree file is specified and exists, and then
+        run ``codeml``. If parse is True then read and return the results,
+        otherwise return None. An exception is raised if the return code
+        of the ``codeml`` command is non-zero.
 
         The arguments may be passed as either absolute or relative
-        paths, despite the fact that CODEML requires relative paths.
+        paths, despite the fact that ``codeml`` requires relative paths.
         """
         if self.tree is None:
             raise ValueError("Tree file not specified.")
@@ -194,7 +201,11 @@ class Codeml(Paml):
 
 
 def read(results_file):
-    """Parse a CODEML results file."""
+    """Parse a CODEML results file.
+
+    Return the results if there are any. Raise an exception if
+    the results file does not exist, is empty, or is invalid.
+    """
     results = {}
     if not os.path.exists(results_file):
         raise FileNotFoundError("Results file does not exist.")
