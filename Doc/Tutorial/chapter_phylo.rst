@@ -250,23 +250,14 @@ https://iplotx.readthedocs.io/en/latest/
 
 ``iplotx`` enables customisation of many aspects of the visualisation,
 including layout, vertex and branch properties, cascading backgrounds,
-and labels. Here is a self-contained example:
-
-.. cont-doctest
+and labels. Here is a self-contained example.
 
 .. code:: pycon
 
    >>> from Bio import Phylo
    >>> import iplotx as ipx
    >>> tree = Phylo.read("simple.dnd", "newick")
-   >>> ipx.tree(
-   >>>     tree,
-   >>>     layout="horizontal",
-   >>>     layout_orientation="right",
-   >>>     leaf_deep=True,
-   >>>     leaf_labels=True,
-   >>>     style="tree",
-   >>> )
+   >>> ipx.tree(tree, leaf_deep=True, leaf_labels=True, style="tree")
 
 .. figure:: ../images/phylo-color-iplotx.png
    :alt: A colorized tree drawn with ``iplotx.tree``.
