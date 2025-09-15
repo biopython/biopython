@@ -271,6 +271,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Nicolas Fontrodona <https://github.com/NFontrodona>
 - Nigel Delaney <https://github.com/evolvedmicrobe>
 - Noam Kremen <https://github.com/noamkremen>
+- Oliver Wissett <https://github.com/OWissett>
 - Olivier Morelle <https://github.com/Oli4>
 - Oscar G. Garcia <https://github.com/oscarmaestre>
 - Osvaldo Zagordi <https://github.com/ozagordi>
@@ -287,6 +288,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Philip Capel <https://github.com/pcapel>
 - Phillip Garland <pgarland at gmail>
 - Pol Estecha <https://github.com/poleshe>
+- Rachel Stern <https://github.com/RachelStern20>
 - Ralf Stephan <https://github.com/rwst>
 - Rasmus Fonseca <https://github.com/RasmusFonseca>
 - rht <https://github.com/rht>

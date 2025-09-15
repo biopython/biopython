@@ -1940,6 +1940,58 @@ the string representation of the alignment:
                      0 AG-TTT-- 5
    <BLANKLINE>
 
+As optional keyword arguments cannot be used with Python’s built-in
+``format`` function or with formatted strings, the ``Alignment`` class
+has a ``format`` method with optional arguments to customize the
+alignment format. For example, you can use the optional ``scoring`` argument
+to provide a substitution matrix (see Section
+:ref:`sec:pairwise-substitution-scores`) to let the printed alignment reflect
+the substitution scores as follows:
+
+* ``|`` for identical residues,
+* ``:`` for substitutions with a positive score,
+* ``.`` for substitutions with a negative score,
+* ``-`` for gaps.
+
+.. cont-doctest
+
+.. code:: pycon
+
+   >>> M = substitution_matrices.load("NUC.4.4")
+   >>> print(M[:, :])
+        A    T    G    C    S    W    R    Y    K    M    B    V    H    D    N
+   A  5.0 -4.0 -4.0 -4.0 -4.0  1.0  1.0 -4.0 -4.0  1.0 -4.0 -1.0 -1.0 -1.0 -2.0
+   T -4.0  5.0 -4.0 -4.0 -4.0  1.0 -4.0  1.0  1.0 -4.0 -1.0 -4.0 -1.0 -1.0 -2.0
+   G -4.0 -4.0  5.0 -4.0  1.0 -4.0  1.0 -4.0  1.0 -4.0 -1.0 -1.0 -4.0 -1.0 -2.0
+   C -4.0 -4.0 -4.0  5.0  1.0 -4.0 -4.0  1.0 -4.0  1.0 -1.0 -1.0 -1.0 -4.0 -2.0
+   S -4.0 -4.0  1.0  1.0 -1.0 -4.0 -2.0 -2.0 -2.0 -2.0 -1.0 -1.0 -3.0 -3.0 -1.0
+   W  1.0  1.0 -4.0 -4.0 -4.0 -1.0 -2.0 -2.0 -2.0 -2.0 -3.0 -3.0 -1.0 -1.0 -1.0
+   R  1.0 -4.0  1.0 -4.0 -2.0 -2.0 -1.0 -4.0 -2.0 -2.0 -3.0 -1.0 -3.0 -1.0 -1.0
+   Y -4.0  1.0 -4.0  1.0 -2.0 -2.0 -4.0 -1.0 -2.0 -2.0 -1.0 -3.0 -1.0 -3.0 -1.0
+   K -4.0  1.0  1.0 -4.0 -2.0 -2.0 -2.0 -2.0 -1.0 -4.0 -1.0 -3.0 -3.0 -1.0 -1.0
+   M  1.0 -4.0 -4.0  1.0 -2.0 -2.0 -2.0 -2.0 -4.0 -1.0 -3.0 -1.0 -1.0 -3.0 -1.0
+   B -4.0 -1.0 -1.0 -1.0 -1.0 -3.0 -3.0 -1.0 -1.0 -3.0 -1.0 -2.0 -2.0 -2.0 -1.0
+   V -1.0 -4.0 -1.0 -1.0 -1.0 -3.0 -1.0 -3.0 -3.0 -1.0 -2.0 -1.0 -2.0 -2.0 -1.0
+   H -1.0 -1.0 -4.0 -1.0 -3.0 -1.0 -3.0 -1.0 -3.0 -1.0 -2.0 -2.0 -1.0 -2.0 -1.0
+   D -1.0 -1.0 -1.0 -4.0 -3.0 -1.0 -1.0 -3.0 -1.0 -3.0 -2.0 -2.0 -2.0 -1.0 -1.0
+   N -2.0 -2.0 -2.0 -2.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0
+   <BLANKLINE>
+   >>> M["T", "Y"]
+   1.0
+   >>> M["T", "C"]
+   -4.0
+   >>> aln = Align.Alignment(["GATTACAT", "GATYACAC"])
+   >>> print(aln.format(scoring=M))
+   target            0 GATTACAT 8
+                     0 |||:|||. 8
+   query             0 GATYACAC 8
+   <BLANKLINE>
+
+
+Instead of the substitution matrix, you can also use a ``PairwiseAligner``
+object (see Chapter :ref:`chapter:pairwise`) as the ``scoring`` argument
+to use the substitution matrix associated with the aligner.
+
 By specifying one of the formats shown in
 Section :ref:`sec:alignformats`, ``format`` will create a string
 showing the alignment in the requested format:
@@ -1976,13 +2028,8 @@ showing the alignment in the requested format:
    <BLANKLINE>
    <BLANKLINE>
 
-As optional keyword arguments cannot be used with Python’s built-in
-``format`` function or with formatted strings, the ``Alignment`` class
-has a ``format`` method with optional arguments to customize the
-alignment format, as described in the subsections below. For example, we
-can print the alignment in BED format (see
-section :ref:`subsec:align_bed`) with a specific number of
-columns:
+As another example, we can print the alignment in BED format (see
+section :ref:`subsec:align_bed`) with a specific number of columns:
 
 .. cont-doctest
 
@@ -2427,8 +2474,8 @@ format used by PFAM:
    #=GF RN   [1]
    #=GF RM   3130377
    #=GF RT   Microsequence analysis of DNA-binding proteins 7a, 7b, and 7e
-   #=GF RT   from the archaebacterium Sulfolobus acidocaldarius. 
-   #=GF RA   Choli T, Wittmann-Liebold B, Reinhardt R; 
+   #=GF RT   from the archaebacterium Sulfolobus acidocaldarius.
+   #=GF RA   Choli T, Wittmann-Liebold B, Reinhardt R;
    #=GF RL   J Biol Chem 1988;263:7087-7093.
    #=GF DR   INTERPRO; IPR003212;
    #=GF DR   SCOP; 1sso; fa;
@@ -2640,26 +2687,26 @@ source distribution):
 .. code:: text
 
     3 384
-   CYS1_DICDI   -----MKVIL LFVLAVFTVF VSS------- --------RG IPPEEQ---- --------SQ 
-                FLEFQDKFNK KY-SHEEYLE RFEIFKSNLG KIEELNLIAI NHKADTKFGV NKFADLSSDE 
-                FKNYYLNNKE AIFTDDLPVA DYLDDEFINS IPTAFDWRTR G-AVTPVKNQ GQCGSCWSFS 
-                TTGNVEGQHF ISQNKLVSLS EQNLVDCDHE CMEYEGEEAC DEGCNGGLQP NAYNYIIKNG 
-                GIQTESSYPY TAETGTQCNF NSANIGAKIS NFTMIP-KNE TVMAGYIVST GPLAIAADAV 
-                E-WQFYIGGV F-DIPCN--P NSLDHGILIV GYSAKNTIFR KNMPYWIVKN SWGADWGEQG 
-                YIYLRRGKNT CGVSNFVSTS II-- 
-   ALEU_HORVU   MAHARVLLLA LAVLATAAVA VASSSSFADS NPIRPVTDRA ASTLESAVLG ALGRTRHALR 
-                FARFAVRYGK SYESAAEVRR RFRIFSESLE EVRSTN---- RKGLPYRLGI NRFSDMSWEE 
-                FQATRL-GAA QTCSATLAGN HLMRDA--AA LPETKDWRED G-IVSPVKNQ AHCGSCWTFS 
-                TTGALEAAYT QATGKNISLS EQQLVDCAGG FNNF------ --GCNGGLPS QAFEYIKYNG 
-                GIDTEESYPY KGVNGV-CHY KAENAAVQVL DSVNITLNAE DELKNAVGLV RPVSVAFQVI 
-                DGFRQYKSGV YTSDHCGTTP DDVNHAVLAV GYGVENGV-- ---PYWLIKN SWGADWGDNG 
-                YFKMEMGKNM CAIATCASYP VVAA 
-   CATH_HUMAN   ------MWAT LPLLCAGAWL LGV------- -PVCGAAELS VNSLEK---- --------FH 
-                FKSWMSKHRK TY-STEEYHH RLQTFASNWR KINAHN---- NGNHTFKMAL NQFSDMSFAE 
-                IKHKYLWSEP QNCSAT--KS NYLRGT--GP YPPSVDWRKK GNFVSPVKNQ GACGSCWTFS 
-                TTGALESAIA IATGKMLSLA EQQLVDCAQD FNNY------ --GCQGGLPS QAFEYILYNK 
-                GIMGEDTYPY QGKDGY-CKF QPGKAIGFVK DVANITIYDE EAMVEAVALY NPVSFAFEVT 
-                QDFMMYRTGI YSSTSCHKTP DKVNHAVLAV GYGEKNGI-- ---PYWIVKN SWGPQWGMNG 
+   CYS1_DICDI   -----MKVIL LFVLAVFTVF VSS------- --------RG IPPEEQ---- --------SQ
+                FLEFQDKFNK KY-SHEEYLE RFEIFKSNLG KIEELNLIAI NHKADTKFGV NKFADLSSDE
+                FKNYYLNNKE AIFTDDLPVA DYLDDEFINS IPTAFDWRTR G-AVTPVKNQ GQCGSCWSFS
+                TTGNVEGQHF ISQNKLVSLS EQNLVDCDHE CMEYEGEEAC DEGCNGGLQP NAYNYIIKNG
+                GIQTESSYPY TAETGTQCNF NSANIGAKIS NFTMIP-KNE TVMAGYIVST GPLAIAADAV
+                E-WQFYIGGV F-DIPCN--P NSLDHGILIV GYSAKNTIFR KNMPYWIVKN SWGADWGEQG
+                YIYLRRGKNT CGVSNFVSTS II--
+   ALEU_HORVU   MAHARVLLLA LAVLATAAVA VASSSSFADS NPIRPVTDRA ASTLESAVLG ALGRTRHALR
+                FARFAVRYGK SYESAAEVRR RFRIFSESLE EVRSTN---- RKGLPYRLGI NRFSDMSWEE
+                FQATRL-GAA QTCSATLAGN HLMRDA--AA LPETKDWRED G-IVSPVKNQ AHCGSCWTFS
+                TTGALEAAYT QATGKNISLS EQQLVDCAGG FNNF------ --GCNGGLPS QAFEYIKYNG
+                GIDTEESYPY KGVNGV-CHY KAENAAVQVL DSVNITLNAE DELKNAVGLV RPVSVAFQVI
+                DGFRQYKSGV YTSDHCGTTP DDVNHAVLAV GYGVENGV-- ---PYWLIKN SWGADWGDNG
+                YFKMEMGKNM CAIATCASYP VVAA
+   CATH_HUMAN   ------MWAT LPLLCAGAWL LGV------- -PVCGAAELS VNSLEK---- --------FH
+                FKSWMSKHRK TY-STEEYHH RLQTFASNWR KINAHN---- NGNHTFKMAL NQFSDMSFAE
+                IKHKYLWSEP QNCSAT--KS NYLRGT--GP YPPSVDWRKK GNFVSPVKNQ GACGSCWTFS
+                TTGALESAIA IATGKMLSLA EQQLVDCAQD FNNY------ --GCQGGLPS QAFEYILYNK
+                GIMGEDTYPY QGKDGY-CKF QPGKAIGFVK DVANITIYDE EAMVEAVALY NPVSFAFEVT
+                QDFMMYRTGI YSSTSCHKTP DKVNHAVLAV GYGEKNGI-- ---PYWIVKN SWGPQWGMNG
                 YFLIERGKNM CGLAACASYP IPLV
 
 In the sequential format, the complete alignment for one sequence is
@@ -2671,32 +2718,32 @@ the Biopython source distribution):
 .. code:: text
 
     3 384
-   CYS1_DICDI   -----MKVIL LFVLAVFTVF VSS------- --------RG IPPEEQ---- --------SQ 
-   ALEU_HORVU   MAHARVLLLA LAVLATAAVA VASSSSFADS NPIRPVTDRA ASTLESAVLG ALGRTRHALR 
-   CATH_HUMAN   ------MWAT LPLLCAGAWL LGV------- -PVCGAAELS VNSLEK---- --------FH 
+   CYS1_DICDI   -----MKVIL LFVLAVFTVF VSS------- --------RG IPPEEQ---- --------SQ
+   ALEU_HORVU   MAHARVLLLA LAVLATAAVA VASSSSFADS NPIRPVTDRA ASTLESAVLG ALGRTRHALR
+   CATH_HUMAN   ------MWAT LPLLCAGAWL LGV------- -PVCGAAELS VNSLEK---- --------FH
 
-                FLEFQDKFNK KY-SHEEYLE RFEIFKSNLG KIEELNLIAI NHKADTKFGV NKFADLSSDE 
-                FARFAVRYGK SYESAAEVRR RFRIFSESLE EVRSTN---- RKGLPYRLGI NRFSDMSWEE 
-                FKSWMSKHRK TY-STEEYHH RLQTFASNWR KINAHN---- NGNHTFKMAL NQFSDMSFAE 
+                FLEFQDKFNK KY-SHEEYLE RFEIFKSNLG KIEELNLIAI NHKADTKFGV NKFADLSSDE
+                FARFAVRYGK SYESAAEVRR RFRIFSESLE EVRSTN---- RKGLPYRLGI NRFSDMSWEE
+                FKSWMSKHRK TY-STEEYHH RLQTFASNWR KINAHN---- NGNHTFKMAL NQFSDMSFAE
 
-                FKNYYLNNKE AIFTDDLPVA DYLDDEFINS IPTAFDWRTR G-AVTPVKNQ GQCGSCWSFS 
-                FQATRL-GAA QTCSATLAGN HLMRDA--AA LPETKDWRED G-IVSPVKNQ AHCGSCWTFS 
-                IKHKYLWSEP QNCSAT--KS NYLRGT--GP YPPSVDWRKK GNFVSPVKNQ GACGSCWTFS 
+                FKNYYLNNKE AIFTDDLPVA DYLDDEFINS IPTAFDWRTR G-AVTPVKNQ GQCGSCWSFS
+                FQATRL-GAA QTCSATLAGN HLMRDA--AA LPETKDWRED G-IVSPVKNQ AHCGSCWTFS
+                IKHKYLWSEP QNCSAT--KS NYLRGT--GP YPPSVDWRKK GNFVSPVKNQ GACGSCWTFS
 
-                TTGNVEGQHF ISQNKLVSLS EQNLVDCDHE CMEYEGEEAC DEGCNGGLQP NAYNYIIKNG 
-                TTGALEAAYT QATGKNISLS EQQLVDCAGG FNNF------ --GCNGGLPS QAFEYIKYNG 
-                TTGALESAIA IATGKMLSLA EQQLVDCAQD FNNY------ --GCQGGLPS QAFEYILYNK 
+                TTGNVEGQHF ISQNKLVSLS EQNLVDCDHE CMEYEGEEAC DEGCNGGLQP NAYNYIIKNG
+                TTGALEAAYT QATGKNISLS EQQLVDCAGG FNNF------ --GCNGGLPS QAFEYIKYNG
+                TTGALESAIA IATGKMLSLA EQQLVDCAQD FNNY------ --GCQGGLPS QAFEYILYNK
 
-                GIQTESSYPY TAETGTQCNF NSANIGAKIS NFTMIP-KNE TVMAGYIVST GPLAIAADAV 
-                GIDTEESYPY KGVNGV-CHY KAENAAVQVL DSVNITLNAE DELKNAVGLV RPVSVAFQVI 
-                GIMGEDTYPY QGKDGY-CKF QPGKAIGFVK DVANITIYDE EAMVEAVALY NPVSFAFEVT 
+                GIQTESSYPY TAETGTQCNF NSANIGAKIS NFTMIP-KNE TVMAGYIVST GPLAIAADAV
+                GIDTEESYPY KGVNGV-CHY KAENAAVQVL DSVNITLNAE DELKNAVGLV RPVSVAFQVI
+                GIMGEDTYPY QGKDGY-CKF QPGKAIGFVK DVANITIYDE EAMVEAVALY NPVSFAFEVT
 
-                E-WQFYIGGV F-DIPCN--P NSLDHGILIV GYSAKNTIFR KNMPYWIVKN SWGADWGEQG 
-                DGFRQYKSGV YTSDHCGTTP DDVNHAVLAV GYGVENGV-- ---PYWLIKN SWGADWGDNG 
-                QDFMMYRTGI YSSTSCHKTP DKVNHAVLAV GYGEKNGI-- ---PYWIVKN SWGPQWGMNG 
+                E-WQFYIGGV F-DIPCN--P NSLDHGILIV GYSAKNTIFR KNMPYWIVKN SWGADWGEQG
+                DGFRQYKSGV YTSDHCGTTP DDVNHAVLAV GYGVENGV-- ---PYWLIKN SWGADWGDNG
+                QDFMMYRTGI YSSTSCHKTP DKVNHAVLAV GYGEKNGI-- ---PYWIVKN SWGPQWGMNG
 
-                YIYLRRGKNT CGVSNFVSTS II-- 
-                YFKMEMGKNM CAIATCASYP VVAA 
+                YIYLRRGKNT CGVSNFVSTS II--
+                YFKMEMGKNM CAIATCASYP VVAA
                 YFLIERGKNM CGLAACASYP IPLV
 
 The parser in ``Bio.Align`` detects from the file contents if it is in
@@ -2843,7 +2890,7 @@ local pairwise sequence alignment (available as ``water.txt`` in the
 
 
    #---------------------------------------
-   #---------------------------------------       
+   #---------------------------------------
 
 As this output file contains only one alignment, we can use
 ``Align.read`` to extract it directly. Here, instead we will use
