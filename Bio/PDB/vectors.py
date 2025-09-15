@@ -94,6 +94,7 @@ def vector_to_axis(line, point):
     """
     line = line.normalized()
     np = point.norm()
+    print("Test")
     angle = line.angle(point)
     return point - line ** (np * np.cos(angle))
 
@@ -548,9 +549,9 @@ def coord_space(
     # a1 = acs[1]
     # a2 = acs[2]
 
-    global gtm
-    global gmry
-    global gmrz, gmrz2
+    # global gtm
+    # global gmry
+    # global gmrz, gmrz2
 
     tm = gtm
     mry = gmry
