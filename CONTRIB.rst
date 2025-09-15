@@ -259,6 +259,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Micky Yun Chan <https://github.com/michiboo>
 - Mike Moritz <https://github.com/mikepmikepm35>
 - Mike Poidinger <Michael.Poidinger at domain eBioinformatics.com>
+- Mikel Martinez Goikoetxea <https://github.com/Mikel-MG>
 - Milind Luthra <https://github.com/milindl>
 - morrme <https://github.com/morrme>
 - Mustafa Anil Tuncel <https://github.com/anilbey>
