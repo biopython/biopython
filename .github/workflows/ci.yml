@@ -27,7 +27,7 @@ jobs:
     - uses: actions/checkout@v5
 
     # Check for changes only on files changed by the PR/push
-    - uses: tj-actions/changed-files@v46
+    - uses: tj-actions/changed-files@v47
       id: changed-files
 
     # Cache CI packages
