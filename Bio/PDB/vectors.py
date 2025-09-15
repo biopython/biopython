@@ -94,7 +94,6 @@ def vector_to_axis(line, point):
     """
     line = line.normalized()
     np = point.norm()
-    print("Test")
     angle = line.angle(point)
     return point - line ** (np * np.cos(angle))
 
