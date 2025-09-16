@@ -40,6 +40,18 @@ typedef struct {
     double extend_left_deletion_score;
     double open_right_deletion_score;
     double extend_right_deletion_score;
+    bool open_internal_insertion_score_set;
+    bool extend_internal_insertion_score_set;
+    bool open_left_insertion_score_set;
+    bool extend_left_insertion_score_set;
+    bool open_right_insertion_score_set;
+    bool extend_right_insertion_score_set;
+    bool open_internal_deletion_score_set;
+    bool extend_internal_deletion_score_set;
+    bool open_left_deletion_score_set;
+    bool extend_left_deletion_score_set;
+    bool open_right_deletion_score_set;
+    bool extend_right_deletion_score_set;
     PyObject* insertion_score_function;
     PyObject* deletion_score_function;
     Py_buffer substitution_matrix;
