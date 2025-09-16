@@ -548,11 +548,6 @@ def coord_space(
     # a1 = acs[1]
     # a2 = acs[2]
 
-    # these global statements incur into an F824 (flake8) complaint
-    # global gtm
-    # global gmry
-    # global gmrz, gmrz2
-
     # the gtm, gmry, gmrz, and gmrz2 variables are read from the global namespace
     tm = gtm
     mry = gmry
