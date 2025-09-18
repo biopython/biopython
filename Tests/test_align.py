@@ -394,7 +394,8 @@ T:   7.00   0.00   7.00   0.00   0.00   0.00   7.00   6.00   0.00   0.00   0.00 
 """,
         )
 
-        align_info = AlignInfo.SummaryInfo(msa)
+        with self.assertWarns(BiopythonDeprecationWarning):
+            align_info = AlignInfo.SummaryInfo(msa)
         self.assertEqual(align_info.get_column(1), "AAAAAAA")
         self.assertEqual(align_info.get_column(7), "TTTATTT")
 
