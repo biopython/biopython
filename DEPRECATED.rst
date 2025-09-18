@@ -114,8 +114,9 @@ wrapped is no longer available since SCOP moved to the EBI website.
 Bio.AlignInfo
 -------------
 The ``pos_specific_score_matrix`` method of the ``SummaryInfo`` class and the
-``PSSM`` class were deprecated in release 1.82, and removed in release 1.85. As
-an alternative, please use the ``alignment`` property of a ``MultipleSeqAlignment``
+``PSSM`` class were deprecated in release 1.82, and removed in release 1.85.
+The ``SummaryInfo`` class itself was deprecated in release 1.86.  As an
+alternative, please use the ``alignment`` property of a ``MultipleSeqAlignment``
 object to obtains a new-style ``Alignment`` object, and use it to create a
 ``Bio.motifs.Motif`` object. For example,
 

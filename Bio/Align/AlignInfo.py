@@ -12,8 +12,14 @@ be put into classes in this module.
 """
 
 
+import warnings
+
+from Bio import BiopythonDeprecationWarning
+
+
+
 class SummaryInfo:
-    """Calculate summary info about the alignment.
+    """Calculate summary info about the alignment.  (DEPRECATED)
 
     This class should be used to calculate information summarizing the
     results of an alignment. This may either be straight consensus info
@@ -25,6 +31,21 @@ class SummaryInfo:
 
         ic_vector attribute. A list of ic content for each column number.
         """
+        warnings.warn("""\
+The class SummaryInfo has been deprecated. Instead of
+
+>>> align_info = AlignInfo.SummaryInfo(msa)
+>>> sequence = align_info.get_column(1)
+
+please use
+
+>>> alignment = msa.alignment  # to get a new-style Alignment object
+>>> sequence = alignment[:, 1]
+
+Here, `msa` is a MultipleSeqAlignment object and `alignment` is an
+`Alignment` object.""",
+            BiopythonDeprecationWarning,
+        )
         self.alignment = alignment
         self.ic_vector = []
 
