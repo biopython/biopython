@@ -1017,48 +1017,6 @@ class Alignment:
     """
 
     @classmethod
-    def infer_coordinates(cls, lines):
-        """Infer the coordinates from a printed alignment (DEPRECATED).
-
-        This method is primarily employed in Biopython's alignment parsers,
-        though it may be useful for other purposes.
-
-        For an alignment consisting of N sequences, printed as N lines with
-        the same number of columns, where gaps are represented by dashes,
-        this method will calculate the sequence coordinates that define the
-        alignment. The coordinates are returned as a NumPy array of integers,
-        and can be used to create an Alignment object.
-
-        This is an example for the alignment of three sequences TAGGCATACGTG,
-        AACGTACGT, and ACGCATACTTG, with gaps in the second and third sequence:
-
-        >>> from Bio.Align import Alignment
-        >>> lines = ["TAGGCATACGTG",
-        ...          "AACG--TACGT-",
-        ...          "-ACGCATACTTG",
-        ...         ]
-        >>> sequences = [line.replace("-", "") for line in lines]
-        >>> sequences
-        ['TAGGCATACGTG', 'AACGTACGT', 'ACGCATACTTG']
-        >>> coordinates = Alignment.infer_coordinates(lines)
-        >>> print(coordinates)
-        [[ 0  1  4  6 11 12]
-         [ 0  1  4  4  9  9]
-         [ 0  0  3  5 10 11]]
-        >>> alignment = Alignment(sequences, coordinates)
-        """
-        warnings.warn(
-            "The method infer_coordinates is deprecated; please use the "
-            "method parse_printed_alignment instead. This method is much "
-            "faster than infer_coordinates, and returns both the sequences "
-            "after removal of the gaps and the coordinates.",
-            BiopythonDeprecationWarning,
-        )
-        lines = [line.encode() for line in lines]
-        seqdata, coordinates = cls.parse_printed_alignment(lines)
-        return coordinates
-
-    @classmethod
     def parse_printed_alignment(cls, lines):
         """Infer the sequences and coordinates from a printed alignment.
 
