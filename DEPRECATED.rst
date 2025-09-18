@@ -108,8 +108,9 @@ NCBI said this API was no longer being maintained.
 
 Bio.SCOP
 --------
-The ``search`` function was deprecated in Release 1.84. The CGI API this
-wrapped is no longer available since SCOP moved to the EBI website.
+The ``search`` function was deprecated in Release 1.84, and removed in Release
+1.86.  The CGI API this wrapped is no longer available since SCOP moved to the
+EBI website.
 
 Bio.AlignInfo
 -------------
@@ -185,8 +186,9 @@ hmmlearn (https://pypi.org/project/hmmlearn/) instead.
 Bio.HMM
 -------
 The `Bio.HMM.DynamicProgramming`, `Bio.HMM.Trainer`, `Bio.HMM.MarkovModel`, and
-`Bio.HMM.Utilities` modules were deprecated in release 1.82. Consider using
-hmmlearn (https://pypi.org/project/hmmlearn/) instead.
+`Bio.HMM.Utilities` modules were deprecated in release 1.82, and removed in
+release 1.86. Consider using hmmlearn (https://pypi.org/project/hmmlearn/)
+instead.
 
 Bio.PDB.Polypeptide
 -------------------
@@ -228,8 +230,7 @@ deprecated in release 1.82, and removed in release 1.86. Instead of
 ``instances.search(sequence)``, ``sequence.search(instances)`` can be used,
 where sequence is a Seq object. This allows instances to have different lengths.
 The ``version`` parameter of the ``weblogo`` method of the ``Motif`` class in
-``Bio.motifs`` was deprecated in release 1.83. Using the parameter has no
-effect.
+``Bio.motifs`` was deprecated in release 1.83, and removed in release 1.86.
 
 The ``Instances`` class and the ``instances`` argument of the ``Motif`` class
 initializer in ``Bio.motifs`` were deprecated in release 1.82, and removed in
@@ -618,9 +619,9 @@ The Bio.SubsMat module was deprecated in Release 1.78, and removed in Release
 Bio.Align
 ---------
 The ``infer_coordinates`` class method of the ``Alignment`` class in
-``Bio.Align`` was deprecated in Release 1.84.  Instead,please use the
-``parse_printed_alignment`` method, which is much faster, and returns both the
-sequences after removing the gaps and the coordinates.
+``Bio.Align`` was deprecated in Release 1.84, and removed in Release 1.86.
+Instead, please use the ``parse_printed_alignment`` method, which is much
+faster, and returns both the coordinates and sequences after removing the gaps.
 
 The ``get_column`` method of the MultipleSeqAlignment was deprecated in
 Release 1.57 and removed in Release 1.69.

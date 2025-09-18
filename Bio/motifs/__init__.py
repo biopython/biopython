@@ -29,7 +29,6 @@ except ImportError:
         "Install NumPy if you want to use Bio.motifs."
     ) from None
 
-from Bio import BiopythonDeprecationWarning
 from Bio.Align import Alignment
 
 
@@ -466,12 +465,10 @@ class Motif:
                 values[mask] += frequencies * np.log2(frequencies / background[letter])
         return values
 
-    def weblogo(self, fname, fmt="PNG", version=None, **kwds):
+    def weblogo(self, fname, fmt="PNG", **kwds):
         """Download and save a weblogo using the Berkeley weblogo service.
 
         Requires an internet connection.
-
-        The version parameter is deprecated and has no effect.
 
         The parameters from ``**kwds`` are passed directly to the weblogo server.
 
@@ -515,12 +512,6 @@ class Motif:
             'color4': '',
 
         """
-        if version is not None:
-            warnings.warn(
-                "The version parameter is deprecated and has no effect.",
-                BiopythonDeprecationWarning,
-            )
-
         if set(self.alphabet) == set("ACDEFGHIKLMNPQRSTVWY"):
             alpha = "alphabet_protein"
         elif set(self.alphabet) == set("ACGU"):
