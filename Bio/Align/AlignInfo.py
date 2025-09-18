@@ -30,7 +30,8 @@ class SummaryInfo:
 
         ic_vector attribute. A list of ic content for each column number.
         """
-        warnings.warn("""\
+        warnings.warn(
+            """\
 The class SummaryInfo has been deprecated. Instead of
 
 >>> align_info = AlignInfo.SummaryInfo(msa)
