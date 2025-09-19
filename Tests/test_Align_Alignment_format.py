@@ -8,6 +8,6 @@ seq2="DVQLQESGPGLVKPSQSQSLTCTVTGYSITSDYAWNWIRQFPGNKLEWMGYMSYSGSTRYNPSLRSRISITRDT
 alignments = aligner.align(seq1, seq2)
 best_alignment=alignments[0]
 best_alignment.terminal_columns = 80
-assert(len(str(best_alignment).split("\n")) == 8, "Expecting alignment to be output as two groups.")
+assert (len(str(best_alignment).split("\n")) == 8), "Expecting alignment to be output as two groups."
 best_alignment.terminal_columns = 200
-assert(len(str(best_alignment).split("\n")) == 4, "Expecting alignment to be output as one group.")
+assert (len(str(best_alignment).split("\n")) == 4), "Expecting alignment to be output as one group."
