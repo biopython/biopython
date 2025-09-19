@@ -20,6 +20,7 @@ import numbers
 import sys
 import types
 import warnings
+import shutil
 from abc import ABC
 from abc import abstractmethod
 from itertools import zip_longest
@@ -2341,7 +2342,13 @@ class Alignment:
                 raise ValueError("Inconsistent coordinates")
         prefix_width = 10
         position_width = 10
-        line_width = 80
+
+        # support custom column size, see issue 5035
+        if self.terminal_columns is None:
+            line_width = shutil.get_terminal_size().columns
+        else:
+            line_width = self.terminal_columns
+
         lines = []
         steps = indices[:, 1:] - indices[:, :-1]
         minstep = steps.min(0)
