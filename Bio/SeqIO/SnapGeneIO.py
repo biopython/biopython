@@ -216,6 +216,15 @@ def _parse_primers_packet(length, data, record):
     with a 'Primers' root node.
     """
     xml = parseString(data.decode("UTF-8"))
+    min_match_length = 0
+    min_melting_temp = 0
+    for param in xml.getElementsByTagName("HybridizationParams"):
+        min_match_length = int(
+            _get_attribute_value(param, "minContinuousMatchLen", default="0")
+        )
+        min_melting_temp = int(
+            _get_attribute_value(param, "minMeltingTemperature", default="0")
+        )
     for primer in xml.getElementsByTagName("Primer"):
         quals = {}
 
@@ -238,6 +247,12 @@ def _parse_primers_packet(length, data, record):
             simplified = int(_get_attribute_value(site, "simplified", default="0")) == 1
             if simplified and location in locations:
                 # Duplicate "simplified" binding site, ignore
+                continue
+            annealed = _get_attribute_value(site, "annealedBases")
+            if annealed is not None and len(annealed) < min_match_length:
+                continue
+            melting_temp = _get_attribute_value(site, "meltingTemperature")
+            if melting_temp is not None and int(melting_temp) < min_melting_temp:
                 continue
 
             locations.append(location)
