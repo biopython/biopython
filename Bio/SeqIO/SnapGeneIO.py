@@ -214,8 +214,25 @@ def _parse_primers_packet(length, data, record):
     A Primers packet is similar to a Features packet but specifically
     stores primer binding features. The data is a XML string starting
     with a 'Primers' root node.
+
+    Within the Primers packet, a primer can have multiple BindingSite
+    elements. However, not all of them are shown to the user when the file is
+    opened SnapGene. This seems to depend on the HybridizationParams element, which
+    stores a minimal hybridization length and Tm. When a SnapGene file is parsed,
+    `primer_bind` features that do not meet the hybridization parameters are dropped,
+    since they are not shown to the user when the file is opened in SnapGene.
+    For more details, see #5053.
     """
     xml = parseString(data.decode("UTF-8"))
+    min_match_length = 0
+    min_melting_temp = 0
+    for param in xml.getElementsByTagName("HybridizationParams"):
+        min_match_length = int(
+            _get_attribute_value(param, "minContinuousMatchLen", default="0")
+        )
+        min_melting_temp = int(
+            _get_attribute_value(param, "minMeltingTemperature", default="0")
+        )
     for primer in xml.getElementsByTagName("Primer"):
         quals = {}
 
@@ -238,6 +255,12 @@ def _parse_primers_packet(length, data, record):
             simplified = int(_get_attribute_value(site, "simplified", default="0")) == 1
             if simplified and location in locations:
                 # Duplicate "simplified" binding site, ignore
+                continue
+            annealed = _get_attribute_value(site, "annealedBases")
+            if annealed is not None and len(annealed) < min_match_length:
+                continue
+            melting_temp = _get_attribute_value(site, "meltingTemperature")
+            if melting_temp is not None and int(melting_temp) < min_melting_temp:
                 continue
 
             locations.append(location)
