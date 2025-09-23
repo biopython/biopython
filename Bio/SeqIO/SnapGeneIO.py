@@ -214,6 +214,14 @@ def _parse_primers_packet(length, data, record):
     A Primers packet is similar to a Features packet but specifically
     stores primer binding features. The data is a XML string starting
     with a 'Primers' root node.
+
+    Within the Primers packet, a primer can have multiple BindingSite
+    elements. However, not all of them are shown to the user when the file is
+    opened SnapGene. This seems to depend on the HybridizationParams element, which
+    stores a minimal hybridization length and Tm. When a SnapGene file is parsed,
+    `primer_bind` features that do not meet the hybridization parameters are dropped,
+    since they are not shown to the user when the file is opened in SnapGene.
+    For more details, see #5053.
     """
     xml = parseString(data.decode("UTF-8"))
     min_match_length = 0
