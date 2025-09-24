@@ -17,10 +17,10 @@ import collections
 import copy
 import importlib
 import numbers
+import shutil
 import sys
 import types
 import warnings
-import shutil
 from abc import ABC
 from abc import abstractmethod
 from itertools import zip_longest
@@ -2343,7 +2343,6 @@ class Alignment:
         prefix_width = 10
         position_width = 10
 
-        # support custom column size, see issue 5035
         if not hasattr(self, 'terminal_columns') or self.terminal_columns is None:
             line_width = shutil.get_terminal_size().columns
         else:
