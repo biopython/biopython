@@ -118,6 +118,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Dimitris Kalafatis <https://github.com/dimi1729>
 - Edward Haigh <lambda at edwardhaigh dot com>
 - Edward Liaw <https://github.com/edliaw>
+- Ee Shan Shirley Liau <https://github.com/shirleyliau>
 - Emmanuel Noutahi <https://github.com/maclandrol>
 - Eric Rasche <https://github.com/erasche>
 - Eric Talevich <https://github.com/etal>
@@ -364,6 +365,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Yair Benita <Y.Benita at domain pharm.uu.nl>
 - Yanbo Ye <https://github.com/lijax>
 - Yasar L. Ahmed <https://github.com/pyahmed>
+- Yen-Chung Chen <https://github.com/chenyenchung>
 - Yi Hsiao <https://github.com/hsiaoyi0504>
 - Yiming Qu <https://github.com/whatever60>
 - Yogesh Kulkarni <https://https://github.com/yogeshhk>
