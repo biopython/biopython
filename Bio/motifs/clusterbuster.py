@@ -93,13 +93,15 @@ def write(motifs, precision=0):
         except AttributeError:
             pass
         else:
-            lines.append(f"# WEIGHT: {weight}\n")
+            if weight:
+                lines.append(f"# WEIGHT: {weight}\n")
         try:
             gap = m.gap
         except AttributeError:
             pass
         else:
-            lines.append(f"# GAP: {gap}\n")
+            if gap:
+                lines.append(f"# GAP: {gap}\n")
         for ACGT_counts in zip(
             m.counts["A"], m.counts["C"], m.counts["G"], m.counts["T"]
         ):
