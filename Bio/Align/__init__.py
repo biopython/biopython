@@ -17,6 +17,7 @@ import collections
 import copy
 import importlib
 import numbers
+from re import S
 import sys
 import types
 import warnings
@@ -1071,9 +1072,7 @@ class Alignment:
         return sequences, coordinates
 
     @classmethod
-    def from_pairwise_alignments(
-        cls, pwas: Iterable["Alignment"]
-    ) -> "Alignment":
+    def from_pairwise_alignments(cls, pwas: Iterable["Alignment"]) -> "Alignment":
         """Create an Alignment from a list of pairwise alignments.
 
         This method combines multiple pairwise alignments into
@@ -1180,6 +1179,27 @@ class Alignment:
                         paired_strings[j][1] = sequence[:i] + "-" + sequence[i:]
 
             i += 1
+
+        all_indices = [pwa.indices for pwa in pwas]
+        i = 0
+        while any(ind.shape[1] > i for ind in all_indices):
+            if any(ind.shape[1] > i and ind[0, i] == -1 for ind in all_indices):
+                for j, ind in enumerate(all_indices):
+                    if ind.shape[1] > i and ind[0, i] != -1:
+                        all_indices[j] = np.insert(ind, i, -1, axis=1)
+            i += 1
+
+        # Concatenate all indices vertically
+        all_indices = np.concatenate(
+            [all_indices[0], *[ind[1:] for ind in all_indices[1:]]], axis=0
+        )
+        # Convert indices to coordinates
+        lines = []
+        for i in range(all_indices.shape[0]):
+            lines.append("".join("N" if v != -1 else "-" for v in all_indices[i, :]))
+        coordinates = Alignment.infer_coordinates(lines)
+        sequences = pwas[0].sequences + sum([pwa.sequences[1:] for pwa in pwas[1:]], [])
+        return cls(sequences, coordinates)
 
         # Build output strings
         output_string_seqs = [paired_strings[0][0]] + [seq for _, seq in paired_strings]
