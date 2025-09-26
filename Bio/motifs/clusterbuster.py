@@ -88,10 +88,18 @@ def write(motifs, precision=0):
     lines = []
     for m in motifs:
         lines.append(f">{m.name}\n")
-        if hasattr(m, 'weight') and m.weight:
-            lines.append(f"# WEIGHT: {m.weight}\n")
-        if hasattr(m, 'gap') and m.gap:
-            lines.append(f"# GAP: {m.gap}\n")
+        try:
+            weight = m.weight
+        except AttributeError:
+            pass
+        else:
+            lines.append(f"# WEIGHT: {weight}\n")
+        try:
+            gap = m.gap
+        except AttributeError:
+            pass
+        else:
+            lines.append(f"# GAP: {gap}\n")
         for ACGT_counts in zip(
             m.counts["A"], m.counts["C"], m.counts["G"], m.counts["T"]
         ):
