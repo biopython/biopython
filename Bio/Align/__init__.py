@@ -1111,7 +1111,7 @@ class Alignment:
         parser.fill(coordinates)
         return sequences, coordinates
 
-    def __init__(self, sequences, coordinates=None):
+    def __init__(self, sequences, coordinates=None, terminal_columns=None):
         """Initialize a new Alignment object.
 
         Arguments:
@@ -1120,6 +1120,7 @@ class Alignment:
          - coordinates - The sequence coordinates that define the alignment.
                          If None (the default value), assume that the sequences
                          align to each other without any gaps.
+         - terminal_columns - The number of columns used to format the alignment
         """
         self.sequences = sequences
         if coordinates is None:
@@ -1141,6 +1142,7 @@ class Alignment:
                         "sequences must have the same length if coordinates is None"
                     )
         self.coordinates = coordinates
+        self.terminal_columns = None
 
     def __array__(self, dtype=None, copy=None):
         if copy is False:
@@ -2343,7 +2345,7 @@ class Alignment:
         prefix_width = 10
         position_width = 10
 
-        if not hasattr(self, "terminal_columns") or self.terminal_columns is None:
+        if self.terminal_columns is None:
             line_width = shutil.get_terminal_size().columns
         else:
             line_width = self.terminal_columns
