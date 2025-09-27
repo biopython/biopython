@@ -17,6 +17,7 @@ import collections
 import copy
 import importlib
 import numbers
+import shutil
 import sys
 import types
 import warnings
@@ -2299,7 +2300,12 @@ class Alignment:
                 raise ValueError("Inconsistent coordinates")
         prefix_width = 10
         position_width = 10
-        line_width = 80
+
+        if not hasattr(self, "terminal_columns") or self.terminal_columns is None:
+            line_width = shutil.get_terminal_size().columns
+        else:
+            line_width = self.terminal_columns
+
         lines = []
         steps = indices[:, 1:] - indices[:, :-1]
         minstep = steps.min(0)
