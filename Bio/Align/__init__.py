@@ -2343,7 +2343,7 @@ class Alignment:
         prefix_width = 10
         position_width = 10
 
-        if not hasattr(self, 'terminal_columns') or self.terminal_columns is None:
+        if not hasattr(self, "terminal_columns") or self.terminal_columns is None:
             line_width = shutil.get_terminal_size().columns
         else:
             line_width = self.terminal_columns
