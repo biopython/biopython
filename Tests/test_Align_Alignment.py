@@ -26,6 +26,8 @@ from Bio.Seq import translate
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqUtils import gc_fraction
 
+Align.Alignment.terminal_columns = 80
+
 
 class TestAlignment(unittest.TestCase):
     def test_empty_alignment(self):
@@ -3706,6 +3708,8 @@ class TestAlignmentFormat(unittest.TestCase):
         # query             0 DVQLQESGPGLVKP--SQSQSLTCTVTGYSITSDYAWNWIRQFP--GNKLEWMGYMS-------Y--------------SGSTRY---NPSLRSRISITRDTSKNQFFLQLKSVTTEDTATYFCARG-W 100
         #
         self.assertEqual(len(str(best_alignment).split("\n")), 4)
+
+        Align.Alignment.terminal_columns = 80
 
 
 if __name__ == "__main__":
